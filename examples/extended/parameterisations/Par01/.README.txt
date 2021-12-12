@@ -1,0 +1,76 @@
+
+///\file "parameterisations/Par01/.README.txt"
+///\brief Example Par01 README page
+
+/*! \page ExamplePar01 Example Par01
+
+Example Par01 provides examples of the use of parameterisation facilities.
+It was moved in extended examples from novice/N05 with removal of
+novice examples. 
+
+Geometry, sensitive detector, hits, processes are defined respectively in:
+- Par01DetectorConstruction
+- Par01CalorimeterSD
+- Par01CalorimeterHit
+
+The particularities are:
+
+- The parameterisation models:
+
+  - Par01EMShowerModel which provides a crude
+    parameterisation for e+/e-/gamma. This model
+    is bound to the EM calorimeter. \n\n
+    
+  - Par01PionShowerModel: an even more crude
+    parameterisation for pi+/pi-. This model
+    is bound to a ghost volume. \n\n
+    
+  Those two models produces "hits": ie the energy
+  of the incident particle is distributed into
+  the volume of the envelope throught energy spots
+  (class Par01EnergySpot), those energy spots being
+  recorded in the sensitive detector at this point
+  if any.  \n\n
+  
+  They are rather similar from a technical point of vue.
+  They both make use of a private G4Navigator to set
+  their energy spots into the sensitive volumes.
+  However, we don't take care of putting every spot into
+  a sensitive (which is recommended in a "serious"
+  parameterisation !).  \n\n
+  
+  Those two models trigger their parameterisation
+  on the first step the particle does in the envelope,
+  but it would be perfectly possible to wait that the
+  particle is far enough from the boundary of the envelope
+  for example.  \n\n
+  
+  - Par01PiModel: just there to show how a parameterisation
+    can create secondaries, but not used.  \n\n
+
+- Par01PhysicsList::AddParameterisation(). A method which
+  sets the G4FastSimulationManagerProcess in the process
+  manager of all the particles. This process provides
+  the INTERFACE between the tracking and the parameterisation
+  models.  \n\n
+
+- In Par01DetectorConstruction::Construct(): the parameterisation
+  models are built and bound to envelopes:  \n\n
+  
+  - Par01EMShowerModel is bound to the electromagnetic
+    calorimeter \n\n
+    
+  - Par01PionShowerModel is bound to a ghost volume
+    which encompasses the electromagnetic and
+    hadronic calorimters  \n\n
+
+- The Physics list used is FTFP_BERT which is augmented using the
+   G4FastSimulationPhysics physics constructor to insert the
+   G4FastSimulationManagerProcess that is making the interface
+   between the fast simulation and the tracking.
+   The configuration is shown in examlePar01.cc.
+
+*/  
+	
+
+

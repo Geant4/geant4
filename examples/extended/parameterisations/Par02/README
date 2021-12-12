@@ -1,0 +1,254 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Example Par02
+                            -------------
+
+ This example is a simplified version of a Geant4-based fast simulation
+ program written by Anna Zaborowska for Future Circular Collider (FCC)
+ studies.
+
+ This example shows how to do "track and energy smearing" in Geant4,
+ in order to have a very fast simulation based on assumed detector
+ resolutions.
+
+ The geometry which is considered is a simplified collider detector set-up,
+ inspired by ALEPH/ATLAS/CMS detectors. Although it is much simpler than
+ a realistic detector, it is anyhow fairly complex and therefore build up
+ from a GDML file, Par02FullDetector.gdml .
+
+ In this example:
+ -  Particles with transverse momentum less than 1 MeV or pseudorapidity
+    larger (in module) than 5.5 are neglected (i.e. the corresponding
+    Geant4 track is killed as soon as it is created).
+ -  Any primary charged particle is smeared in the tracker as follows:
+    its momentum is smeared according to a gaussian, with mean equal to 1.0
+    and sigma taken from the momentum resolution of the CMS tracker 
+    (with ALEPH or ATLAS tracker as a possible alternative), and then placed
+    at the end of the tracker, at the position that it would reach if
+    normally transported (i.e. without smearing).
+ -  Any primary electron, or positron, or gamma is smeared in the 
+    electromagnetic calorimeter as follows: it is killed at the entrance
+    of the electromagnetic calorimeter, with a deposited energy equal to
+    the gaussian smearing (with mean equal to 1.0 and sigma taken from the
+    energy resolution of the CMS electromagnetic calorimeter - with ALEPH or
+    ATLAS electromagnetic calorimeter as a possible alternative) of its
+    kinetic energy (at the entrance of the electromagnetic calorimeter).
+ -  Any primary hadron is smeared in the hadronic calorimeter as follows:
+    it is killed at the entrance of the hadronic calorimeter, with a
+    deposited energy equal to the gaussian smearing (with mean equal to 1.0
+    and sigma taken from the energy resolution of the CMS hadronic 
+    calorimeter - with ALEPH or ATLAS hadronic calorimeter as a possible
+    alternative) of its kinetic energy (at the entrance of the hadronic
+    calorimeter).
+ -  The only competing physical processes with respect to the above physics
+    parametrisations are the decays.
+    Note: no electromagnetic processes;
+          no momentum smearing in the tracker for secondary particles; 
+          secondary electrons, positrons, gammas in the electromagnetic 
+          calorimeter are killed (at the entrance) but without any
+          energy deposition; 
+          secondary hadrons in the hadronic calorimeter are killed (at the
+          entrance) but without any energy deposition.
+
+
+ Below some details.
+
+
+ 1. Detector description
+ -----------------------
+
+ The geometry is read in from a GDML file, Par02FullDetector.gdml .
+
+ The geometry is a simplified collider detector set-up used for the
+ first FCC studies, inspired by ALEPH/ATLAS/CMS detectors.
+ It is made of 4 main parts: 
+ - Tracker
+ - Electromagnetic calorimeter
+ - Hadronic calorimeter
+ - Muon subdetector
+
+ In this example, fast simulation parametrisation models exist for the
+ first three subdetectors, but not for the Muon subdetector.
+ The three parametrisation models:
+ - Par02FastSimModelTracker : in the tracker
+ - Par02FastSimModelEMCal   : in the electromagnetic calorimeter
+ - Par02FastSimModelHCal    : in the hadronic calorimeter
+ are build and bound to the respective subdetector (i.e. Geant4 regions)
+ in the method: Par02DetectorConstruction::Construct() .
+
+ Three configurations are possible for those parametrisation models:
+ CMS-like, ALEPH-like, ATLAS-like. 
+ By default, the CMS configuration is used.
+
+
+ 2. Primary generation
+ ---------------------
+ 
+ In this example we use a very simple primary generation action,
+ Par02PrimaryGeneratorAction, that uses the G4ParticleGun.
+ One single particle type, with a well defined energy, and in one fixed
+ direction is used for each run: the corresponding values can be set via
+ macro commands. See examplePar02.in as an example.
+
+ For the FCC studies, Pythia8 events in HepMC format were used for the
+ generation of the primary particles.
+
+
+ 3. Physics List
+ ---------------
+
+ A special, ad-hoc physics list is used in this example, in order to have
+ an ultra-fast parametrised simulation: for all particles, the only two
+ physics processes that are assigned are the decay process and the fast
+ simulation process. 
+ The following three fast simulation models are defined:
+
+ - Par02FastSimModelTracker : 
+   - bound to the tracker
+     (see the method Par02DetectorConstruction::Construct )
+   - applicable to all charged particles
+     (see the method Par02FastSimModelTracker::IsApplicable )
+   - triggered in all cases (i.e. no kinematic constraints)
+     (see the method Par02FastSimModelTracker::ModelTrigger )
+   - does the following: place the particle at the tracking detector exit 
+     (at the place the particle would reach without smearing), and, only
+     if the particle is a primary, it smears the momentum of the particle
+     according to a gaussian, with mean equal to 1.0 and sigma taken from
+     the momentum resolution of the CMS tracker (with ALEPH or ATLAS tracker
+     as a possible alternative)
+     (see the method Par02FastSimModelTracker::DoIt )
+
+ - Par02FastSimModelEMCal : 
+   - bound to the electromagnetic calorimeter
+     (see the method Par02DetectorConstruction::Construct )
+   - applicable to electrons, positrons, gammas
+     (see the method Par02FastSimModelEMCal::IsApplicable )
+   - triggered in all cases (i.e. no kinematic constraints)
+     (see the method Par02FastSimModelEMCal::ModelTrigger )
+   - does the following: kill the particle at the entrance of the
+     electromagnetic calorimeter, and, only if the particle is a primary,
+     it deposits in the electromagnetic calorimeter an energy obtained
+     by a gaussian smearing (with mean equal to 1.0 and sigma taken from the
+     energy resolution of the CMS electromagnetic calorimeter - with ALEPH
+     or ATLAS electromagnetic calorimeter as a possible alternative) of the
+     particle kinetic energy (at the entrance of the electromagnetic
+     calorimeter)
+     (see the method Par02FastSimModelEMCal::DoIt )
+
+ - Par02FastSimModelHCal : 
+   - bound to the hadronic calorimeter
+     (see the method Par02DetectorConstruction::Construct )
+   - applicable to all hadrons (i.e. particles made of quarks)
+     (see the method Par02FastSimModelHCal::IsApplicable )
+   - triggered in all cases (i.e. no kinematic constraints)
+     (see the method Par02FastSimModelHCal::ModelTrigger )
+   - does the following: kill the particle at the entrance of the
+     hadronic calorimeter, and, only if the particle is a primary,
+     it deposits in the hadronic calorimeter an energy obtained by a
+     gaussian smearing (with mean equal to 1.0 and sigma taken from the
+     energy resolution of the CMS hadronic calorimeter - with ALEPH
+     or ATLAS hadronic calorimeter as a possible alternative) of the
+     particle kinetic energy (at the entrance of the hadronic
+     calorimeter)
+     (see the method Par02FastSimModelHCal::DoIt )
+
+
+ 4. User actions, user information and user utility classes 
+ ----------------------------------------------------------
+
+ - Par02RunAction : run action used for initialization and termination
+                    of the run.
+
+ - Par02EventAction : event action used for initialization and termination
+                      of the event.
+
+ - Par02TrackingAction : tracking action used for killing particles with
+                         transverse momentum less than 1 MeV or 
+                         pseudorapidity larger (in module) than 5.5
+                         (see method Par02TrackingAction::PreUserTrackingAction )
+                         and to store the information about the track at
+                         the end of the simulation of such a track
+                         (see method Par02TrackingAction::PostUserTrackingAction ).
+
+ - Par02ActionInitialization : initialization of the primary generator class
+                               and all user-defined actions (i.e. the three
+                               classes above).
+
+ - Par02PrimaryParticleInformation : utility class to store information 
+                                     associated with a primary particle.
+
+ - Par02EventInformation : utility class to store information associated
+                           with a Geant4 event.
+
+ - Par02DetectorParametrisation : a simple class used to provide the detector
+                                  resolution and efficiency, according to the
+                                  type of detector: tracker, electromagnetic
+                                  calorimeter, hadronic calorimeter.
+                                  There are 3 choices: CMS-like (default),
+                                  ALEPH-like and ATLAS-like.
+                                  The efficiency is currently set to 1.0 in 
+                                  all cases and not used.
+
+ - Par02Smearer : a simple class that does the gaussian smearing, either
+                  of the momentum (in the tracker detector) or in energy
+                  (in the electromagnetic or hadronic calorimeter).
+
+
+ 5. Output
+ ---------
+
+ The execution of the program (examplePar02) produces in output, at the end
+ of a run, a Root file, by default named DefaultOutput.root, which contains
+ 3 histograms and one ntuple.
+
+ The macro file  examplePar02.in  specifies one run made of 1000 events
+ each consisting of one 50 GeV electron.
+ By editing the file, one could select alternatively a run made of 1000
+ events each consisting of one 100 GeV muon, or a run made of 1000 events
+ each consisting of one 20 GeV pion- .
+
+ See the class Par02Output for the definition of the 3 histograms and the
+ ntuples. Here is a quick summary:
+ - histogram of the ratio of the momentum smeared and the original momentum
+   in the tracker (for primary charged particles);
+ - histogram of the ratio of the smeared energy deposited and the original
+   energy at the entrance in the electromagnetic calorimeter (for primary
+   electrons, positrons and gammas);
+ - histogram of the ratio of the smeared energy deposited and the original
+   energy at the entrance in the hadronic calorimeter (for primary hadrons);
+ - ntuple containing the "Monte-Carlo true" information regarding the
+   primary, and the resolution, efficiency, smeared momentum (tracker),
+   smeared energy (calorimeter) and impact position (calorimeter) of each
+   subdetector (tracker, electromagnetic calorimeter, hadronic calorimeter)
+   where the primary is parametrised (tracker and electromagnetic calorimeter
+   in the case of primary electrons, positrons and gammas; tracker and
+   hadronic calorimeter in the case of primary hadrons; tracker only for
+   all other primary charged particles, e.g. muons).
+
+ Note:
+ - you do not need to have the Root package available to run this example,
+   but you need it if you want to look at the histograms and the ntuple
+   contained in the Root output file;
+ - sensitive detectors and hits are not used in this example.
+
+
+ 6. How to build and run the example
+ -----------------------------------
+
+- You need to have built the Geant4 persistency/gdml module by having set
+  the  -DGEANT4_USE_GDML=ON  flag during the CMAKE configuration step, 
+  as well as the  -DXERCESC_ROOT_DIR=<path_to_xercesc>  flag pointing to 
+  the path where the XercesC XML parser package is installed in your system.
+ 
+- Compile and link to generate the executable (in your CMAKE build directory):
+  %  make
+
+- Execute the application:
+  %  examplePar02  examplePar02.in
+
+  which produces one Root file: DefaultOutput.root .
+

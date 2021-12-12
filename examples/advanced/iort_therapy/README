@@ -1,0 +1,233 @@
+
+ 	     =========================================================
+                     Text version of the iort_therapy README file
+             =========================================================
+
+ Main Authors:
+ G.Russo(a,b), C.Casarino*(c), G.C. Candiano(c), G.A.P. Cirrone(d), F.Romano(d)
+ 
+ Contributor Authors:
+ S.Guatelli(e)
+
+ Past Authors:
+ G.Arnetta(c), S.E.Mazzaglia(d)
+
+ (a) Fondazione Istituto San Raffaele G.Giglio, Cefalù, Italy
+
+ (b) IBFM-CNR , Segrate (Milano), Italy
+
+ (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
+ 
+ (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
+
+ (e) University of Wollongong, Australia
+
+
+  *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
+-------------------------------------------------------------------------------------------------
+
+iort_therapy:
+
+WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE          
+
+iort_therapy is a Geant4-based application specifically developed to address typical needs related to the Intra-Operative Radio-Therapy (IORT) technique. 
+ 
+iort_therapy is capable to simulate a well specified intra-operative electron radio-therapy facility: the collimator beam line system of a typical medical mobile linac and the relative target (water-phantom). iort_therapy application is currently used by the G.Russo team in clinical and research activities carried out in Fondazione Istituto San Raffaele G.Giglio Hospital (Cefalù, Italy) where a NOVAC7 linac is installed.
+
+iort_therapy, is flexible and show many capabilities. Its geometrical set-up, for example, is completely interchangeable permitting a simple switch between different geometrical collimator system configurations; the possibility to simulate a composite metallic shielding disc inside the water-phantom was also implemented.
+
+
+Folder structure of iort_therapy
+
+iort_therapy distribution contain these sub-folders:
+
+\src: where source .cc files are stored
+\include: where header .hh files are stored
+
+Currently this folders structure is in development and in the meanwhile new features and capabilities will be added. 
+
+
+DOWNLOAD AND INSTALLATION
+
+iort_therapy source code is released inside the official distribution of the Geant4 toolkit in the $G4INSTALL/examples/AdvancedExamples folder.
+
+To run iort_therapy you must first install the Geant4 package. Once Geant4 is installed the example must be first compiled (with the command gmake inside the
+../iort_therapy folder). When compilation is completed the program can be executed.
+
+A CMakeLists.txt file is provided together with a standard GNUmakefile for compilation. 
+
+A complete guide for the Geant4 installation in different operating systems can be found inside the official installation Geant4 pages.
+
+
+GEOMETRICAL SET-UP
+
+The idea of iort_therapy is to provide a tool useful for Users interested in the field of electron intra-operative radio-therapy. These can include the simple calculation of dose distribution curves in water or other materials, the possibility to study and plan dose distribution in the tumor treatment region with different clinical set-up, and to optimize radio-protection of normal patient tissues simulating a composite metallic shielding disc.
+
+The main component of the simulation is the collimator beam line system, the phantom, the detector and the composite metallic shielding disc.
+
+
+COLLIMATOR BEAM LINE SYSTEM
+
+At moment iort_therapy include the simulation of a collimator beam line system, based on a typical medical mobile linac structure us the NOVAC7. This  collimator beam line is elaborated in the files CollimatorXXBeamLine.cc , where XX may be 40, 50, 60, 70 ,80 or 100 (mm) depending on the diameter collimator set-up chosen. 
+In fact, there is also a facility in iort_therapy that allows the user to make a choice, via macro, between alternative collimator beam line set-up. This can be done by using command:
+
+/geometrySetup/selectGeometry <name>
+
+where <name> is coll40, coll50, coll60, coll70, coll80 or coll100 depending on the diameter collimator set-up chosen (40mm, 50mm, 60mm, 70mm, 80mm or 100mm). The standard "default" geometry is coll60.
+
+The Collimator beam line system class file
+
+The following is the description of the elements of the collimator beam line system from the accelerator head to the final collimator. This line is completely simulated inside this class.
+
+The main elements are the accelerator head and the applicator.
+The accelerator head performs as a primary collimator system. It consists of titanium exit window and a cylindrical PMMA structure where two monitor chambers are installed.
+The applicator consists of a cylindrical PMMA tube (the final collimator). In the order we have implemented the following functions:
+
+  IortBeamLineVacuumSource();
+  IortBeamLineTitaniumWindows();
+  IortBeamLineMonitorChambers();
+  IortBeamLineBlocks() ;
+  IortBeamLineJunctions(); 
+  IortBeamLineFinalCollimator();
+
+The user has now the possibility to vary, via messenger, the inner and outer radius of the final collimator.
+
+
+THE PHANTOM 
+
+At the end of the beam line a phantom (a box of 20cmx20cmx20cm default dimensions) is reproduced.
+Inside it, a user-defined region (the detector) is divided (via the ROGeomtry classes of Geant4) in cubic and identical voxels. The voxels size can be varied as well as the voxelized region.
+At the end of a simulation run the dose deposited by primaries and secondaries in each voxel is collected. This information is available as an .out file.  
+
+THE DETECTOR
+
+A scoring mesh is set to score the dose in the phantom (see defaultMacro.mac)
+
+As concern the cut and stepMax values, the default configuration implies a cut value of 0.01 mm in the whole  world (use the command /physic/setCuts <length>  in order to set the cut for all, and the command /physic/setDetectorCuts <length> to set the cut for the detector only)  and a stepMax of 0.01 mm just in the phantom (use the command /Step/waterPhantomStepMax 0.01 mm).
+In any case it is strongly recommended to use a stepMax value not bigger than 5% of the dose slice thickness.
+
+
+SHIELDING DISC
+
+Inside the detector is positioned a double layered shielding disc. For both layers it is possible via macro to change the outer and inner radius, the thickness, the position along the beam axis and the material.
+NOTE 1: to delete the disc out the entire geometry the relative macro command must be used!!
+NOTE 2: to re-insert the disc in the entire geometry the relative macro command must be used!!
+  
+
+PHYSICS PROCESSES AND PHYSICS MODELS IMPLEMENTATION
+
+EM Standard option 4 is activated. The user can change the physics list interactively.
+
+
+INTERACTIVE COMMANDS
+
+How to change Phantom, Detector and Shielding Disc geometries
+
+In order to let the end user to change phantom and detector geometries and voxelization, some interactive commands have been provided. All parameters are mandatory, except those inside square brackets.
+
+
+Phantom geometry
+
+(1) The phantom size. As usually, zero or negatives values mean: <<don't change it>>.
+(2) The phantom position respect to the world. In this case specified values refer to the three components of the position of the phantom's center respect to the world's.
+
+Command synopsis:
+
+/changePhantom/size <dimX> <dimY> <dimZ> <[unit]> # 20 20 20 cm
+/changePhantom/position <posX> <posY> <posZ> <[unit]> # 4.5 0 0 cm
+
+
+Detector geometry 
+
+The user can change:
+
+(1) The detector (box) size.
+ 
+(2) The displacement between the phantom and the detector.  Displacement parameters refer to the lower left corner of the detector respect to that of the phantom, by the point of view of the beam. In this case zero or positive values are allowed, while the negatives ones mean: << don't change it>>.
+
+Command synopsis:
+/changeDetector/size <dimX> <dimY> <dimZ> <[unit]>
+/changeDetector/displacement <dispX> <dispY> <dispZ> <[unit]> 
+
+The user has to change the scoring mesh accordingly via UI commands. 
+
+
+Shielding Disc geometry
+
+Command synopsis:
+
+/ProtectionDisc1/OuterRadiusDisc1 <dim>       # default -> 40*mm ; 
+/ProtectionDisc1/InnerRadiusDisc1 <dim>       # default -> 0*mm
+/ProtectionDisc1/HeightDisc1      <dim>       # default -> 2*mm
+/ProtectionDisc1/XPositionDisc1  <dimX>       # default -> -11*mm   
+/ProtectionDisc1/material    <G4_Material>    # default -> G4_WATER ;
+
+/ProtectionDisc2/OuterRadiusDisc2 <dim>       # default -> 40*mm ;
+/ProtectionDisc2/InnerRadiusDisc2 <dim>       # default -> 0*mm
+/ProtectionDisc2/HeightDisc2      <dim>       # default -> 1*mm
+/ProtectionDisc2/XPositionDisc2  <dimX>       # default -> -8*mm
+/ProtectionDisc2/material    <G4_Material>    # default -> G4_WATER ;
+
+
+All   these    commands    must be   followed   by the  command  /changePhantom/update
+in order to check and eventually apply changes to the real geometry.
+Moreover  they  must   be    issued  between   runs  (so   where you   want but   after  the /run/initialize initialization command, or the G4State_Idle Geant4 state machine).
+Obviously all the previous sizes must be set in order to maintain the detector fully inside the phantom, otherwise system complains.
+
+
+To Delete Disc geometry
+
+Command synopsis:
+
+/DeleteProtectionDisc/delete
+
+To Re-insert Disc geometry
+
+Command synopsis:
+
+/InsertProtectionDisc/insert
+
+**** To set initial beam features
+
+By default, the beam propagates along the positive X direction with Gaussian momentum and Y-Z distributions. 
+It is possible to select: particle type, mean energy and relative standard deviation, X,Y and Z coordinates, Y and Z standard deviations and, finally, the beam spread along X direction (Theta). 
+
+Command synopsis:
+
+/gun/particle 
+/beam/energy/meanEnergy 
+/beam/energy/sigmaEnergy  
+/beam/position/Xposition
+/beam/position/Yposition
+/beam/position/Yposition/sigmaY
+/beam/position/Zposition
+/beam/position/Zposition/sigmaZ 
+/beam/momentum/Theta
+ 
+HOW RUN iort_therapy
+
+Run the example in interactive mode                                      
+
+> $G4WORDIR/bin/Linux-g++/iort_therapy
+
+In this case the main file (iort_therapy.cc) performs different operations depending on which environment variable is activated;
+For example, if the environment variable G4UI_USE_TCSH is activated, iort_therapy will start with the TCSH User Interface that has many useful functionalities. On the other hand, if this first variables is not defined, the program will continue searching for the G4UI_USE_QT variable and, finally, will open the standard G4UITerminal.
+
+Run the example using macro files          
+
+iort_therapy can be launched using a macro file:
+
+> $G4WORDIR/bin/Linux-g++/iort_therapy macroFile.mac
+
+The defaultMacro.mac file is contained in the main directory of iort_therapy and is automatically read in case the user launch the executable without a parameter.
+
+
+SIMULATION OUTPUT
+
+Store results in an ASCII file
+
+A .out ASCII file is generated at the end of each run, Dose.out. 
+The file contains four columns; the first three columns represent the voxel indexes (that univocally identify the voxel volume), while the last column represents the dose  in Gray deposited in that given voxel.
+
+
+

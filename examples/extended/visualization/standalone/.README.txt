@@ -1,0 +1,41 @@
+///\file "visualization/standalone/.README.txt"
+///\brief Example standalone README page
+
+/*! \page Examplestandalone Example standalone
+
+examples/extended/visualization/standalone
+
+
+This example illustrates how one might use the Geant Visualization
+System as a "stand alone" graphics library and viewer.  It makes use
+of the "user action" feature of the Geant4 vis manager - for a fuller
+example of the use of this feature see
+examples/extended/visualization/userVisAction.
+
+1) Define a G4VUserVisAction that implements a Draw method.  An
+   example is provided - see StandaloneVisAction.hh/cc.
+   StandaloneVisAction::Draw illustrates:
+   a) a simple box;
+   b) a Boolean solid;
+   c) an alternative way of drawing a solid by obtaining the
+      polyhedral representation.
+   The last is included for interest, not as a recommendation.
+      
+2) In the main () program (see standalone.cc), StandaloneVisAction must be instantiated and
+   its pointer registered with the visualization manager. You may
+   optionally specify an extent at this point to assist the viewers to
+   locate the objects.
+
+3) To visualise, use the usual Geant4 vis commands to create a view
+   and scene, then add the vis action to the scene, optionally with an
+   extent - see standalone.mac.
+
+Note: The system needs an "extent" in order to point the virtual
+camera and adjust its field of view, etc.  This defines the "standard
+view".  You may zoom, etc., from this standard view.  The extent may
+be specified as suggested above or by using /vis/scene/add/extent.
+
+
+John Allison
+27th November 2014
+*/

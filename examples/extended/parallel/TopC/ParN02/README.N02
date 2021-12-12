@@ -1,0 +1,123 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            ParN02
+                            ------
+
+
+	This example simulates a simplified fixe target experiment.
+        Read README for a description of how to run it in parallel.
+
+ 1- GEOMETRY DEFINITION
+ 
+     The setup consists of a target followed by six chambers of increasing
+     transverse size. These chambers are located in a region called Tracker
+     region. Their shape are boxes, constructed as parametrised volumes
+     (ChamberParametrisation class).
+     
+     The default geometry is constructed in DetectorConstruction class.
+     One can change the material of the target and of the chambers
+     interactively via the commands defined in the DetectorMessenger class.
+     
+     In addition a transverse uniform magnetic field can be applied (see
+     N02MagneticField and DetectorMessenger classes). 
+ 
+         
+ 2- PHYSICS LIST
+ 
+     The particle's type and the physic processes which will be available
+     in this example are set in PhysicsList class.
+     
+     In this example, all the so called 'electromagnetic processes' are
+     introduced for gamma, charged leptons, and charged hadrons (see the
+     method PhysicsList::ConstructEM()). 
+     
+     An important data member of this class is the defaultCutValue which
+     defines the production threshold of secondary particles
+     (mainly Ionisation and Bremsstrahlung processes are concerned by this
+     CutValue).
+     Notice that the CutValue must be given in unit of length, corresponding
+     to the stopping range of the particle. It is automatically converted
+     in energy for each material, and a table is printed in the method
+     PhysicsList::SetCuts() 
+ 	
+     In addition the build-in interactive command:
+	         /process/(in)activate processName
+     allows to activate/inactivate the processes one by one.
+
+
+ 3- RUNS and EVENTS
+ 
+     The primary kinematic consists of a single particle which hits the
+     target perpendicular to the input face. The type of the particle
+     and its energy are set in the PrimaryGeneratorAction class, and can
+     be changed via the G4 build-in commands of ParticleGun class.
+
+     A RUN is a set of events.
+     
+     The user has control:
+        -at Begin and End of each run (class RunAction)
+        -at Begin and End of each event (class EventAction)
+        -at Begin and End of each track (class TrackingAction, not used here)
+	-at End of each step (class SteppingAction)
+	
+    The class SteppingVerbose prints some informations step per step,
+    under the control of the command: /tracking/verbose 1
+    It inherits from G4SteppingVerbose, and has been setup here in order
+    to illustrate how to extract informations from the G4 kernel during
+    the tracking of a particle.
+    	
+	
+ 4- DETECTOR RESPONSE
+ 
+     A HIT is a record, track per track (even step per step), of all the 
+     informations needed to simulate and analyse the detector response.
+     
+     In this example the Tracker chambers are considered as the detector.
+     Therefore the chambers are declared 'sensitive detectors' (SD) in
+     the DetectorConstruction class. 
+ 	
+     Then, a Hit is defined as a set of 4 informations per step, inside 
+     the chambers, namely:
+        - the track identifier (an integer),
+	- the chamber number,
+ 	- the total energy deposit in this step,
+ 	- the position of the deposit.
+	
+     A given hit is an instance of the class TrackerHit which is created
+     during the tracking of a particle, step by step, in the method
+     TrackerSD::ProcessHits(). This hit is inserted in a HitsCollection. 
+     
+     The HitsCollection is printed at the end of event (via the method 
+     TrackerSD::EndOfEvent()), under the control of the command: /hits/verbose 1
+
+ 				
+ 5- VISUALIZATION
+ 
+     The Visualization Manager is set in the main().
+     The initialisation of the drawing is done via a set of /vis/ commands
+     in the macro vis.mac. This macro is automatically read from 
+     the main when running in interactive mode.
+ 	
+     The tracks are automatically drawn at the end of event and erased at 
+     the beginning of the next run.
+	
+     The visualization (with OpenGL driver) assumes two things:
+	1- the visualisation & interfaces categories have been compiled
+	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
+	2- ParN02.cc has been compiled with G4VIS_USE_OPENGLX.   
+
+     (The same with DAWNFILE instead of OPENGLX)
+     
+     
+ 6- USER INTERFACES
+  
+      The default command interface, called G4UIterminal, is done via
+      standart cin/G4cout.
+      On Linux and Sun-cc on can use a smarter command interface G4UItcsh.
+      It is enough to set the environment variable G4UI_USE_TCSH before
+      compiling ParN02.cc
+ 

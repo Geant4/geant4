@@ -1,0 +1,118 @@
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm by theme
+                            ---------------
+
+  --------------------------------------------------------------------------
+  |			Check basic quantities				   |	
+  |------------------------------------------------------------------------|
+  | Total cross-sections, mean free paths ...	| Em0 Em13 Em14		   |
+  |------------------------------------------------------------------------|
+  | Stopping power, particle range ...      	| Em0 Em1 Em5 Em11 Em12	   |
+  |------------------------------------------------------------------------|
+  | Final state :				|			   |
+  |  energy spectra, angular distributions ...  | Em14			   |
+  |------------------------------------------------------------------------|
+  | Energy loss fluctuations      		| Em18			   |
+  --------------------------------------------------------------------------
+  
+  
+  -------------------------------------------------------------------------
+  |			Multiple Coulomb scattering			  |
+  |-----------------------------------------------------------------------|
+  | as an isolated mechanism			| Em15			  |
+  |-----------------------------------------------------------------------|
+  | as a result of particle transport     	| Em5			  |
+  -------------------------------------------------------------------------
+  
+  
+  -------------------------------------------------------------------------
+  |			More global verifications			  | 
+  |-----------------------------------------------------------------------|
+  | Single layer :				|			  |
+  |  transmission, absoption, reflexion ... 	| Em5			  |
+  |-----------------------------------------------------------------------|
+  | Bragg curve, tallies      			| Em7			  |
+  |-----------------------------------------------------------------------|
+  | Depth dose distribution			| Em11 Em12		  |
+  |-----------------------------------------------------------------------|
+  | Shower shapes, Moliere radius      		| Em2			  |
+  |-----------------------------------------------------------------------|
+  | Sampling calorimeters, energy flow		| Em3			  |
+  |-----------------------------------------------------------------------|
+  | Crystal calorimeters     			| Em9			  |
+  -------------------------------------------------------------------------
+  
+  
+  -------------------------------------------------------------------------
+  |			Other specialized programs			  | 
+  |-----------------------------------------------------------------------|
+  | High energy muon physics 			| Em17			  |
+  |-----------------------------------------------------------------------|
+  | Other rare, high energy processes      	| Em6			  |
+  |-----------------------------------------------------------------------|
+  | Synchrotron radiation			| Em16		  	  |
+  |-----------------------------------------------------------------------|
+  | Transition radiation     			| Em8			  |
+  |-----------------------------------------------------------------------|
+  | Photo-absorption-ionization model     	| Em10			  |
+  -------------------------------------------------------------------------
+
+
+
+   TestEm0 - how to print cross-sections and stopping power used in input by 
+             the standard EM package
+	      	  
+   TestEm1 - how to count processes, activate/inactivate them and survey 
+             the range of charged particles. How to define a maximum step size
+	  
+   TestEm2 - shower development in an homogeneous material : 
+             longitudinal and lateral profiles
+	  
+   TestEm3 - shower development in a sampling calorimeter : collect energy 
+             deposited, survey energy flow and print stopping power
+	 
+   TestEm4 - 9 MeV point like photon source: plot spectrum of energy 
+             deposited in a single media
+	  
+   TestEm5 - how to study transmission, absorption and reflection of particles
+             through a single, thin or thick, layer.
+	     
+   TestEm6 - physics list for rare, high energy, electromagnetic processes : 
+             gamma conversion and e+ annihilation into pair of muons
+	   
+   TestEm7 - how to produce a Bragg curve in water phantom. 
+             How to compute dose in tallies
+	  
+   TestEm8 - test of photo-absorption-ionisation model in thin absorbers, 
+             and transition radiation
+	  	  
+   TestEm9 - shower development in a crystal calorimeter; cut-per-region
+	  
+   TestEm10 - XTR transition radiation model, investigation of ionisation 
+              in thin absorbers     
+
+   TestEm11 - how to plot a depth dose profile in a rectangular box      
+
+   TestEm12 - how to plot a depth dose profile in spherical geometry : 
+              point like source 
+	  
+   TestEm13 - how to compute cross sections of EM processes from rate of 
+              transmission coefficient
+	  
+   TestEm14 - how to compute cross sections of EM processes from direct 
+              evaluation of the mean-free path. How to plot final state
+	  
+   TestEm15 - compute and plot final state of Multiple Scattering as an 
+              isolated process
+	  
+   TestEm16 - simulation of synchrotron radiation
+	  	 	  	  	  
+   TestEm17 - check the cross sections of high energy muon processes
+	  	 	  	  	  
+   TestEm18 - energy lost by a charged particle in a single layer,
+              due to ionization and bremsstrahlung

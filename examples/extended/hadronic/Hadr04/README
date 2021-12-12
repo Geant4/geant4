@@ -1,0 +1,124 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Hadr04
+                            ------
+
+   This example is focused on neutronHP physics, especially neutron transport,
+   including thermal scattering.
+   See A.R. Garcia, E. Mendoza, D. Cano-Ott presentation at G4 Hadronic group
+   meeting (04/2013) and note on G4NeutronHP package
+	
+ 1- MATERIALS AND GEOMETRY DEFINITION
+ 
+   It is a single box representing a 'quasi infinite' homogeneous medium.
+   Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+ 	
+   The default geometry (1 m3 of pressurized water) is built in 
+   DetectorConstruction, but the above parameters can be changed interactively 
+   via commands defined in DetectorMessenger.
+   
+   A function, and its associated UI command, allows to build a material
+   directly from a single isotope.
+   
+   To be identified by the ThermalScattering module, the elements composing a
+   material must have a specific name (see G4NeutronHPThermalScatteringNames.cc)
+   Examples of such materials are build in DetectorConstruction.
+ 	
+ 2- PHYSICS LIST
+   
+   Only processes of neutronHP package are registered : neutronElastic 
+   (including thermalScattering), neutronInelastic, nCapture; nFission.
+   See class NeutronHPphysics. 
+   No other hadronic nor electromagnetic processes are registered.
+   
+   A command allows to select or not ThermalScattering model.
+ 
+   Several hadronic physics options are controlled by environment variables.
+   To select them, see Hadr04.cc
+   
+   NB. class NeutronHPphysics can be reused with other physicsConstructors,
+   as neutron processes are deleted before to be re-created.	
+	 
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+   The primary kinematic is a single particle randomly shooted at the 
+   centre of the box. The type of the particle and its energy are set in 
+   PrimaryGeneratorAction (neutron 2 MeV), and can be changed via the G4 
+   build-in commands of ParticleGun class (see the macros provided with 
+   this example).
+ 	
+ 4- PHYSICS
+
+   All secondaries are killed in StackingAction. Therefore an event consists of
+   the transport of the primary neutron. Then one survey the thermal and non
+   thermal part of this parcours.
+
+
+ 5- HISTOGRAMS
+         
+   The test contains 7 built-in 1D histograms, which are managed by
+   G4AnalysisManager and its Messenger. The histos can be individually 
+   activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, etc..)
+   (see the macros xxxx.mac).
+   
+            1   "incident neutron: nb of collisions above 1 eV"
+            2   "incident neutron: total track length above 1 eV"
+            3   "incident neutron: time of flight above 1 eV"
+            4   "incident neutron: nb of collisions below 1 eV"
+            5   "incident neutron: total track length below 1*eV"
+	    6   "incident neutron: time of flight below 1 eV"
+            7   "incident neutron: energy distribution below 1*eV"   
+      
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /analysis/setFileName  name  (default Hadr04)
+   
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh
+       
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii (default Hadr04) 
+ 	 				
+ 6- VISUALIZATION
+ 
+   The Visualization Manager is set in the main().
+   The initialisation of the drawing is done via the commands
+   /vis/... in the macro vis.mac. To get visualisation:
+   > /control/execute vis.mac
+ 	
+   The detector has a default view which is a longitudinal view of the box.
+   The tracks are drawn at the end of event, and erased at the end of run.
+	
+ 7- HOW TO START ?
+ 
+   Execute Hadr04 in 'batch' mode from macro files :
+ 	% Hadr04   run01.mac
+ 		
+   Execute Hadr04 in 'interactive mode' with visualization :
+ 	% Hadr04
+	Idle> control/execute vis.mac
+ 	....
+ 	Idle> type your commands
+ 	....
+ 	Idle> exit
+	
+ Macros provided in this example:
+  - graphite.mac: neutron (2 MeV) in graphite
+  - run01.mac: neutron (2 MeV) in Water_ts
+    
+ Macros to be run interactively:
+  - debug.mac: neutron (2 MeV) in Water_ts
+  - vis.mac: To activate visualization

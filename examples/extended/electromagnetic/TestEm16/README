@@ -1,0 +1,124 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm16
+                            --------
+      Simulate synchrotron radiation
+	
+ 1- GEOMETRY DEFINITION
+
+     The geometry consists of a single block of a homogenous material.
+
+     Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+     The default is 500 m of vacuum.
+
+     A transverse uniform magnetic field can be applied.
+
+     The default geometry is constructed in DetectorConstruction class,
+     but all of the above parameters can be changed interactively via
+     the commands defined in the DetectorMessenger class.
+
+ 2- PHYSICS LIST
+
+     The particle list include EM processes for gamma, e+, e-, mu+, mu-,
+     and protons, for the rest of particles only transportation. 
+     Synchrotron radiation is added to all charged particles.
+     To make the synchrotron radiation easily visible, a very low
+     pressure "vaccuum" and a magnetic field of by default 1 Tesla
+     in z-direction is used.
+
+ 3- AN EVENT : THE PRIMARY GENERATOR
+
+     The primary kinematic consists of a single particle which hits the
+     block perpendicular to the input face. The type of the particle
+     and its energy are set in the PrimaryGeneratorAction class, and can
+     changed via the G4 build-in commands of ParticleGun class (see
+     the macros provided with this example).
+     The default is an positron of 10 GeV.
+     	
+     In addition one can choose randomly the impact point of the incident
+     particle. The corresponding interactive command is built in
+     PrimaryGeneratorMessenger class.
+	 	
+     A RUN is a set of events.
+
+
+ 4- VISUALIZATION
+
+     The Visualization Manager is set in the main().
+     The initialisation of the drawing is done via the command
+     > /control/execute vis.mac
+     > /run/beamOn 1
+
+     The detector has a default view which is a longitudinal view of the box.
+
+     The tracks are drawn at the end of event, and erased at the end of run.
+     Optionaly one can choose to draw all particles, only the charged one,
+     or none. This command is defined in EventActionMessenger class.
+
+ 5- PHYSICS DEMO
+
+     The particle's type and the physic processes which will be available
+     in this example are set in PhysicsList class.
+
+     In addition a build-in interactive command (/process/inactivate proname)
+     allows to activate/inactivate the processes one by one.
+
+     The threshold for producing secondaries can be changed.
+     eg: /run/setCut 100 micrometer
+         /run/initialize
+	
+     To visualize the Synchrotron radiation :
+	 /control/execute vis.mac
+		  	
+ 6- HOW TO START ?
+
+     - execute Test  in 'batch' mode from macro files
+ 	% TestEm16    run01.mac
+
+     - execute Test  in 'interactive mode' with visualization
+ 	% TestEm16
+ 		....
+ 	Idle> type your commands
+ 		....
+ 	Idle> exit
+
+ 7 - TRACKING : stepMax and setMaxStepLength
+
+  In order to control the accuracy of the deposition, the user can limit
+  'by hand' the maximum  step size stepMax of charged particles.
+
+  The maximum tracking step length for computing of magnetic field lines
+  is by default set to 1 km.
+  Synchrotron radiation in very weak magnetic fields of the order of 1 Gauss
+  may require longer pathlength.
+  This can be achieved with using setMaxStepLength like
+  /testem/tracking/setMaxStepLength 100 km
+
+8- HISTOGRAMS
+
+  TestEm16 produces 3 histograms which illustrate synchrotron radiation.
+  The photon energy spectrum (photons / energy bin) and the power spectrum
+  (photon spectrum weighted with the photon energy) and a histogram
+  of the path length between photon radiation is produced.
+	 
+  The histograms are managed by G4AnalysisManager and its Messenger.
+     	
+  The histos can be activated individually with the command :
+  /analysis/h1/set id nbBins valMin valMax unit
+  where 'unit' is the desired unit for the histo (MeV or KeV, cm or mm, etc..)
+								  
+  One can control the name of the histograms file with the command:
+  /analysis/setFileName  name  (default testem16)
+   
+  It is possible to choose the format of the histogram file : root (default),
+  xml, csv, by using namespace in HistoManager.hh 	
+   
+  It is also possible to print selected histograms on an ascii file:
+  /analysis/h1/setAscii id
+  All selected histos will be written on a file name.ascii  (default testem16)

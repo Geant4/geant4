@@ -1,0 +1,17 @@
+
+///\file "persistency/.README.txt"
+///\brief Examples persistency README page
+
+/*! \page Examples_persistency  Category "persistency"
+
+This directory contains a set of persistency examples.
+
+   - \link ExampleP01  P01 \endlink   Root I/O example for storing and retrieving calorimeter hits.
+   - \link ExampleP02  P02 \endlink   Root I/O example for storing and reading geometry objects.
+   - \link ExampleP03  P03 \endlink   Example of detector geometry persistency in ASCII text format.
+
+   - \link Examples_gdml gdml \endlink  Set of examples showing usage of the GDML plugin module in Geant4.
+
+See the README page inside each example for more detail.
+
+*/

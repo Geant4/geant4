@@ -1,0 +1,139 @@
+
+///\file "medical/electronScattering/.README.txt"
+///\brief Example electronScattering README page
+
+/*! \page ExampleelectronScattering Example electronScattering
+
+
+ Electron scattering benchmark (T. O'Shea and B. Faddegon)
+	
+\section ExampleelectronScattering_s1 GEOMETRY DEFINITION
+ 
+ The geometry is described in the enclosed documument : NRCC_electron_scat.pdf
+    
+ - A "World" volume contains a "Frame" made of Air. 
+ - The Frame contains : ExitWindow, ScatterFoil, MonitorChbr, Bag.
+ - The Bag contains a Gas volume, which contains 2 aluminium Rings.
+ - The Scoring plane is the end-plane of the Frame
+ 	
+ The default geometry is constructed in DetectorConstruction class.
+ The parameters of the ScatterFoil (material and thickness) must be defined
+ via 2 UI commands : see the macro scatter.mac
+ 
+\section ExampleelectronScattering_s2 PHYSICS LIST
+ 
+ Physics lists can be local (eg. in this example) or from G4 kernel
+ physics_lists subdirectory.
+     
+ Local physics lists:	 
+ - "local"	standard EM physics with current 'best' options setting.
+                these options are explicited in PhysListEmStandard
+ - "standardSS" standard EM physics with single Coulomb scattering 
+                instead of multiple scattering			
+    
+ From geant4/source/physics_lists/builders:	 
+ - "emstandard_opt0"  recommended standard EM physics for LHC
+ - "emstandard_opt1"  best CPU performance standard physics for LHC
+ - "emstandard_opt2"  alternative models    
+ - "emstandard_opt3"  current state of art for EM physics
+                      analog to "local"above
+    
+ Physics lists and options can be (re)set with UI commands
+    
+ Please, notice that options set through G4EmProcessOPtions are global, eg
+ for all particle types. In G4 builders, it is shown how to set options per
+ particle type.
+
+         	
+\section ExampleelectronScattering_s3 PRIMARY GENERATOR : mono-enegetic pencil beam
+ 
+ The primary kinematic consists of a single particle which hits the detector 
+ perpendicular to the input face (ExitWindow). The type of the particle and its
+ energy are set in the PrimaryGeneratorAction class, and can be changed via 
+ the G4 build-in commands of ParticleGun class. 
+ (see the macros provided with this example)
+	
+ The incident beam has a Gaussian-shaped spatial distribution. The rms of the 
+ Gaussian can be define with an UI command built in PrimaryGeneratorMessenger.
+ 
+\section ExampleelectronScattering_s4 VISUALIZATION
+ 
+ The Visualization Manager is set in the main () (see eelectronScattering.cc).
+ The initialisation of the drawing is done via the commands in vis.mac
+ In interactive session:
+\verbatim 
+PreInit or Idle > /control/execute vis.mac
+\endverbatim 
+ 	
+ The example has a default view which is a longitudinal view of the detector.
+ 	
+ The tracks are drawn at the end of event, and erased at the end of run.
+ Optionaly one can choose to draw all particles, only the charged, or none.
+ This command is defined in EventActionMessenger class.
+ 
+\section ExampleelectronScattering_s5 TRACKING
+ 
+ One can  limit 'by hand' the step lenght of the particle. As an example,
+ this limitation is implemented as a 'full' process : see StepMax class and its
+ Messenger. The 'StepMax process' is registered in the Physics List. 
+  	
+\section ExampleelectronScattering_s6 DETECTOR RESPONSE
+  	
+ At the end of a run, from the histogram(s), one can study different
+ physics quantities, via the histograms defined below.
+ 
+ An ascii file corresponding to histo 4 (see below) is automatically written.
+
+ 
+\section ExampleelectronScattering_s7 List of the built-in histograms
+        
+ The test contains 4 built-in 1D histograms, which are managed by the
+ HistoManager class and its Messenger. The histos can be individually activated
+ with the command :
+\verbatim
+/analysis/h1/set id nbBins  valMin valMax unit 
+\endverbatim
+ where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+ (see the macros xxxx.mac).
+ 
+ - 1     "(charged particles): projected angle at Scoring plane"
+ - 2     "(charged particles): dN/dS at Scoring plane"
+ - 3     "(charged particles): d(N/cost)/dS at Scoring plane"
+ - 4     "(charged particles): normalized d(N/cost)/dS at Scoring plane"
+ - 5     "(charged particles); scattering angle theta"
+ - 6     "(charged particles); measured scattering angle theta" 
+
+ The histograms can be viewed using ROOT or PAW.
+ 
+ One can control the name and format of the histograms file with the command:
+\verbatim
+/analysis/setFileName  name  (default nrccBenchmark)
+\endverbatim
+
+ It is possible to choose the format of the histogram file : root (default),
+ xml, csv, by using namespace in HistoManager.hh   
+   
+ It is also possible to print selected histograms on an ascii file:
+\verbatim
+/analysis/h1/setAscii id
+\endverbatim
+ All selected histos will be written on a file name.ascii (default nrccBenchmark)
+
+	
+\section ExampleelectronScattering_s8 HOW TO START ?
+ 
+ - Execute electronScattering in 'batch' mode from macro files e.g.
+\verbatim
+% electronScattering   myMacro.mac
+\endverbatim
+		
+ - Execute electronScattering in 'interactive' mode with visualization e.g.
+\verbatim
+% electronScattering
+Then type your commands, for instance :
+Idle> control/execute vis.mac
+Idle> run/beamOn 5
+....
+\endverbatim
+
+*/

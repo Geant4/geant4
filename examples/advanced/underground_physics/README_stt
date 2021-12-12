@@ -1,0 +1,38 @@
+*******************************************************************************
+*******************************************************************************
+     Readme File for STT of the Underground_Physics Advanced Example, DMX
+*******************************************************************************
+*******************************************************************************
+
+STT testing of DMX should contain the following:
+
+gmake
+DMX stt.mat
+
+this should produce two output files:
+stt.out
+stt_pmt.out
+
+These should be compared with 
+stt_ref.out
+stt_pmt_ref.out
+
+The job should take 
+real	6m0.226s
+user	5m25.870s
+sys	0m2.410s
+on a 850MHz Linux machine.
+
+The memory usage should be around 110Mbytes.
+
+The initialisation time is ~4.5 minutes, requires loading G4EMLOW1.1 and
+G4NDL3.5 via setting G4LEDATA and NeutronHPCrossSections environment variables.
+
+Platforms to be tested on:
+SUN and LINUX, NOT WINDOWS.
+
+Alex Howard
+e-mail: alexander.howard@cern.ch
+
+*******************************************************************************
+*******************************************************************************

@@ -1,0 +1,37 @@
+
+///\file "errorpropagation/.README.txt"
+///\brief Exampleerrorpropagation README page
+
+/*! \page Exampleerrorpropagation Category/example "errorpropagation"
+
+This is an example illustrating the use of the error propagation utility. 
+
+A G4ErrorFreeTrajState is created to simulate a muon track of 20 GeV along the X axis. Then the track is propagated until the target is reached.
+
+The geometry is a simplified typical HEP detector:
+  - An air beamline ( BEAM )
+  - An air central detector ( CDET )
+  - A copper calorimeter, divided in four ( ECAL )
+  - An aluminium calorimeter, divided in ten ( HCAL )
+  - An air muon detector ( MUON )
+
+It is inmersed in a magnetic field along the Z axis with default value -1 kilogauss. This value can be changed with the command "/exerror/setField.
+
+
+The type of target can be chosen with the enviromental variable G4ERROR_TARGET:
+ - PLANE_SURFACE :  use a G4ErrorPlaneSurfaceTarget perpendicular to X at (2241. mm, 0, 0)
+ - CYL_SURFACE : use a G4ErrorCylSurfaceTarget parallel to Z of radius 2220 mm
+ - VOLUME : use a G4ErrorGeomVolumeTarget with volume name "MUON"
+ - TRKLEN : use a G4ErrorTrackLengthTarget with track length 2230 mm
+ 
+
+The user may also choose if the propagation is done forwards (the natural way, loosing energy) or backwards (in opposite direction, gaining energy), with the enviromental variable G4ERROR_MODE:
+ - FORWARDS : propagate in the forward direction
+ - BACKWARDS : propagate in the backward direction
+
+
+There are also two modes of propagation, that can be chosen with the enviromental variable G4ERROR_PROP
+ - UNTIL_TARGET : propagate until target, all steps in one go
+ - STEP_BY_STEP  propagate until target, returning control to the user at each step
+
+*/

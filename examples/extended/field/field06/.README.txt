@@ -1,0 +1,68 @@
+
+///\file "field/field06/.README.txt"
+///\brief Example field06 README page
+
+/*! \page Examplefield06 Example field06
+
+  This example exercises the capability of tracking massive
+  particles in a gravity field.
+
+  Credit goes to Erik Miller (Univ. of Northern British Columbia) and
+  Garry Yan (Univ. of Toronto)
+
+Classes Used
+
+\section field06_s1 main()
+
+ See field06.cc.
+
+\section field06_s2 GEOMETRY DEFINITION
+
+ As simple world G4Box with a G4UniformGravityField propagating momentum
+ (G4EqGravityField) with G4ClassicalRK4(fEquation,8). The example uses the
+ default gravity field on the earth's surface: gy = -9.81*m/s/s/c_light.
+
+\section field06_s3 AN EVENT: THE PRIMARY GENERATOR
+
+ Uses an Ultra Cold Neutron (UCN) and G4ParticleGun with: \n
+ particleEnergy = G4UniformRand()*1e-7*eV
+
+ UCN are launched from (0,0,0) uniform into 4pi
+
+\section field06_s4 PHYSICS
+
+ The simulation knows of only six particles: G4Neutron, G4Proton, 
+ G4Electron, G4AntiNeutrinoE, G4MuonPlus and G4MuonMinus
+\verbatim
+ RegisterPhysics(new G4StepLimiterPhysics());
+\endverbatim
+ G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts
+
+\section field06_s5 HOW TO START ?
+
+   This example handles the program arguments in a new way.
+   It can be run with the following optional arguments:
+\verbatim
+% field06 [-m macro ] [-u UIsession] [-t nThreads] [-r randomSeed]
+\endverbatim
+
+   The -t option is available only in multi-threading mode
+   and it allows the user to override the Geant4 default number of
+   threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
+   environment variable which has the top priority.
+
+  - Execute field06 in 'batch' mode from macro files e.g.
+\verbatim
+% field06 -m field06.in > field06.out &
+\endverbatim
+
+  - Execute field06 in 'interactive' mode with visualization e.g.
+\verbatim
+% field06
+....
+Idle> type your commands, for example:
+Idle> run/beamOn 1
+....
+\endverbatim
+
+*/

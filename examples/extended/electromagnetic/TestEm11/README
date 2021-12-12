@@ -1,0 +1,185 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm11
+                            --------
+
+    How to plot a depth dose profile in a rectangular box.    
+
+	
+ 1- GEOMETRY DEFINITION
+ 
+ The geometry consists of a stack of one or several blocks of homogenous
+ material, called absorbers.
+ Optionally, each absorber can be divided in thinner layers (replica)
+     	
+ A minimum of 5 parameters define the geometry :
+    - the number of absorbers (NbOfAbsor)	
+    - the material of each absorber,
+    - the thickness of each absorber,
+    - the tranverse dimension of the stack (sizeYZ),
+    - the number of divisions of each absorber (NbOfDivisions)
+	 	
+ In addition a transverse uniform magnetic field can be applied.
+     eg: /globalField/setValue 0 0 5 tesla
+ 	
+ The default geometry is constructed in DetectorConstruction class,
+ but all of the above parameters can be changed interactively via
+ the commands defined in the DetectorMessenger class.
+ 	
+ 2- PHYSICS LIST
+
+ Physics Lists are based on modular design. Several modules are instantiated:
+ 1. Transportation
+ 2. EM physics
+ 3. Decays
+ 4. StepMax - for step limitation
+
+ The following options for EM physics using builders from physics_lists
+ sub-package are available:
+ - "emstandard_opt0" recommended standard EM physics for LHC
+ - "emstandard_opt1" best CPU performance standard physics for LHC
+ - "emstandard_opt2" similar fast simulation
+ - "emstandard_opt3" best standard EM options - analog to "local" above
+ - "emstandard_opt4" best current advanced EM options standard + lowenergy
+ - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+ - "emstandardSS"  standard EM physics and single scattering model
+ - "emstandardGS"  standard EM physics and Goudsmit-Saunderson multiple scatt.
+ - "emlivermore"  low-energy EM physics using Livermore data
+ - "empenelope"   low-energy EM physics implementing Penelope models
+ - "emlowenergy"  low-energy EM physics implementing experimental
+                  low-energy models
+ - "emstandardMP" standard EM physics where for e- a new model
+                  G4DiscreteScatteringModel is applied; for this model 
+                  a data set G4GBFPDATA should be requested from EM group
+
+ A local builder, PhysListEmStandard "local" (similar to opt3) is also
+ available.
+      
+ Physics lists and options can be (re)set with UI commands
+    
+ 3- ACTION INITIALIZATION
+
+ A newly introduced class, ActionInitialization, instantiates and registers 
+ to Geant4 kernel all user action classes.
+
+ While in sequential mode the action classes are instantiated just once,
+ via invoking the method:
+    ActionInitialization::Build() 
+ in multi-threading mode the same method is invoked for each thread worker
+ and so all user action classes are defined thread-local.
+
+ A run action class (if present) has to be instantiated both thread-local 
+ and global, which is why its instance has to be created also in the method
+    ActionInitialization::BuildForMaster() 
+ which is invoked only in multi-threading mode.
+  	 
+ 4- AN EVENT : THE PRIMARY GENERATOR
+ 
+ The primary kinematic consists of a single particle starting at the
+ left face of the box. The type of the particle and its energy are set 
+ in the PrimaryGeneratorAction class, and can be changed via the G4 
+ build-in commands of G4ParticleGun class (see the macros provided with 
+ this example).
+	
+ In addition one can choose randomly the impact point of the incident
+ particle. The corresponding interactive command is built in
+ PrimaryGeneratorMessenger class.
+	 	
+ A RUN is a set of events.
+ 	
+ 5- VISUALIZATION
+ 
+ The Visualization Manager is set in the main().
+ The initialisation of the drawing is done via the commands
+ /vis/... in the macro vis.mac. To get visualisation:
+ > /control/execute vis.mac
+ 	
+ The detector has a default view which is a longitudinal view of the box.
+ 	
+ The tracks are drawn at the end of event, and erased at the end of run.
+ Optionally one can choose to draw all particles, only the charged one,
+ or none. This command is defined in EventActionMessenger class.
+ 	
+ 6- HOW TO START ?
+ 
+ - Execute TestEm11 in 'batch' mode from macro files
+ 	% TestEm11   run01.mac
+ 		
+ - Execute TestEm11 in 'interactive mode' with visualization
+ 	% TestEm11
+ 	....
+ 	Idle> type your commands
+ 	....
+ 	Idle> exit
+
+  Macros provided in this example:
+  - alpha.mac: alpha (400 MeV) on water
+  - ionC12.mac: ion C12 (2.4 GeV) on water
+  - multiLayers.mac: gamma (6 MeV) on multi layers
+  - radioactive.mac: radioactive ion on multi layers
+  - range.mac: compute csda range of primary particle
+  - run01.mac: e- (500 keV) on silicon. Step max from histo 1
+  - run02.mac: e- (500 keV) on silicon. Step max from geometry
+  - sandia.mac: to compare with Sandia data
+  - water.mac: e- (4 MeV) on water. No constraint on tracking step  
+
+  Macros to be run interactively:
+  - vis.mac: To activate visualization
+  	
+ 7- TRACKING and STEP MAX
+ 
+ TestEm11 computes the distribution of energy deposited along the trajectory of 
+ the incident particle : the so-called longitudinal energy profile,
+ or depth dose distribution.
+ The energy deposited (edep) is randomly distribued along the step (see
+ SteppingAction).
+     
+ In order to control the accuracy of the deposition, the maximum  step size 
+ of charged particles is computed automatically from the binning of 
+ histograms 1 and 8 (see RunAction).
+     
+ As an example, this limitation is implemented as a 'full' process :
+ see StepMax class and its Messenger. The 'StepMax process' is registered
+ in the Physics List.
+     
+ StepMax is evaluated at RunAction::BeginOfRun(),
+ and passed to the StepMax process. 
+ A boolean UI command allows to deactivate this mechanism.
+ Another UI command allows to define directly a stepMax value.
+     	
+ 8- HISTOGRAMS
+ 
+   TestEm11 has several predefined 1D histograms : 
+  
+      1 : longitudinal energy profile (in MeV/mm and per event)
+      2 : total energy deposited in all absorbers
+      3 : total track length of the primary track
+      4 : step size of the primary track      
+      5 : projected range of the primary track
+      6 : total track length of charged secondary tracks
+      7 : step size of charged secondary tracks      
+      8 : longitudinal energy profile (in MeV.cm2/g), as a function of x/r0
+          where r0 is the range of the primary particle 
+
+      11 : energy deposited in absorber 1
+      12 : energy deposited in absorber 2
+      ...etc........
+
+   The histograms are managed by G4Analysis classes. 
+   The histos can be individually activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /analysis/setFileName  name  (default testem11)
+   
+   It is possible to choose the format of the histogram file : root (default),
+   hbook, xml, csv, by using namespace in HistoManager.hh    
+   
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii  (default testem11) 

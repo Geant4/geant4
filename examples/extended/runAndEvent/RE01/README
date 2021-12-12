@@ -1,0 +1,66 @@
+
+ RE01 - An extended example for run and event
+ --------------------------------------------
+
+ Contact : M.Asai (SLAC) 
+
+1. Introduction
+
+ This example demonstrates how to connect the information between
+primary particles and hits. It also utilize some user-information
+classes.
+
+1.1 Geometry and region information
+
+ It has a quite simple cylindrical tracker of 5 layers and a
+cylindrical calorimeter of lead and scintillator. Dedicated regions
+are assigned to both tracker and calorimeter mother volumes not
+for setting additional production thresholds but for adding some
+more information to these regions. RE01RegionInformation is the
+class for this purpose.
+ A "readout geometry" is attached to the calorimeter to define
+its cells.
+
+1.2 Physics
+
+ This example basically uses QGSP_BERT physics list. In addition 
+to this, RE01UnknownDecayPhysics is used for adding decay process to
+G4UnknownParticle.
+
+1.3 Event generator
+
+ An event sample is attached. This event has a Higgs particle
+which decays into e+e- and mu+mu- pairs through two Z bosons.
+It uses G4HEPEvtInterface. 
+ In this example, by utilizing G4UnknownParticle, all particles
+appear in the primary event are converted to G4Track and then
+to RE01Trajectory. Relation between primary particles and track
+IDs are shown at the end of event execution.
+
+2. "Source track" information
+
+ "Source track" is meant for a track that is either a primary
+particle or a track born is the tracking region. This information
+is stored in RE01TrackInformation class object and copied from
+a parent track to its daughters.
+
+2.1 Track suspension
+
+ All source tracks are suspended for their tracking when they are
+getting into the calorimeter region. Thus, all tracks in the tracker
+region are tracked before generating any shower in the calorimeter.
+
+2.2 Tracker hits associated with primary particle information
+
+ Information kept in RE01TrackInformation is used to connect each
+tracker hit to the primary particle.
+
+2.3 Energy deposition of each source track
+
+ Utilizing RE01StackingAction, shower generation is done for each
+souorce track separately, and thus energy deposition in calorimeter
+cells are shown for each individual source track. With the trajectory
+information, energy deposition for each primary particle can also
+be gotten.
+
+

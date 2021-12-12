@@ -1,0 +1,122 @@
+
+///\file "medical/dna/wholeNuclearDNA/.README.txt"
+///\brief Example wholeNuclearDNA README page
+
+/*! \page ExampleWholeNuclearDNA Example wholeNuclearDNA
+
+\author For any question, please contact: \n
+C. Villagrasa \n
+email: carmen.villagrasa@irsn.fr \n
+
+This example is provided by the Geant4-DNA collaboration
+Any report or published results obtained using the Geant4-DNA software 
+and the DNA geometry given in the Geom_DNA example 
+shall cite the following Geant4-DNA collaboration publications: \n
+[1] NIM B 298 (2013) 47-54 \n
+[2] Med. Phys. 37 (2010) 4692-4708
+[3] Phys. Med. 31 (2015) 861-874
+ 
+\section wholenucleardna_s1 INTRODUCTION
+
+The wholenucleardna example offers the basic tools to simulate the track structure 
+of different charge particles within a
+simplified geometrical model of the DNA molecule contained in a cell nucleus. 
+In this example, the DetectorConstruction file contains the placement of the 
+6 Gbp (base-pairs) of a human cell respecting five compaction levels in the 
+structure of the DNA molecule: double helix, nucleosome, chromatin fiber, 
+simple chromatin fiber loop and complex chromatin fiber loops.
+These complex chromatin fiber loops are then used to fill the chromosome 
+territories using a constant density (~30-31 kbp/µm3.
+Even though this geometry defines different volumes for the DNA base, the 
+back-bone region or the histone proteins, the material filling all these volumes 
+in the simulation is liquid water ("G4_WATER")
+
+In order to simulate all the energy transfer points of the track at nanometric 
+level, the Geant4-DNA physics processes and models are used. 
+These processes and models are further described at:
+http://geant4-dna.org
+
+\section wholenucleardna_s2 GEOMETRY SET-UP
+ 
+As indicated in the introduction, the whole DNA molecule contained in a human 
+cell with 5 different compaction levels is described in this geometry. In order 
+to place the complex chromatin loops in each of the 43 chromosome territories, 
+the files called "chromo-number.dat" are needed. 
+These 43 chromosome territories are then placed in an ellipsoid that has the 
+typical dimensions of a human fibroblast cell nucleus.
+All the volumes in the geometry are made of liquid water (G4_WATER
+material) despite of what they geometrically represent.
+Particles are shot from a random (x,y)position covering the main central part of
+the cell nucleus and at z=2.99 µm from the center of the nucleus. This value 
+allows the primary particle to be either inside the cell nucleus, either not far
+from the entrance surface so its energy loss before the cell nucleus entrance is
+negligible. 
+
+WARNING: By default, the bases are not built. To build the whole geometry, set the 
+flag fBuildBases in DetectorConstruction to true.
+
+\section wholenucleardna_s3 SET-UP 
+                                                                        
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+The variable G4ANALYSIS_USE must be set to 1.
+
+The code can be compiled with gmake.
+
+\section wholenucleardna_s4 HOW TO RUN THE EXAMPLE
+
+In normal mode, without interactivity:
+
+> wholeNuclearDNA
+
+In interactive mode, run:
+
+> wholeNuclearDNA -gui -out
+
+The -gui option launches a user interface for interactivity
+The -out option create a root file (can be changed for other format). This option may also take argument to set the name of the file (name of the application by default):
+
+> wholeNuclearDNA -gui -out MyFile
+
+The macro wholenucleardna.in is executed by default. A proton of 0.1 MeV is shot. This energy has been chosen because only a few minutes are needed for the proton to lose all its energy and thus the event to finish. Nevertheless, one should keep in mind that for this energy, protons do not traverse the whole cell nucleus width.
+
+Visualization (DAWN) is not activated by default in wholenucleardna.mac. To get visualization, make sure to uncomment the #/control/execute vis.mac.
+We would like to warn the users that the time to visualize the whole DNA structure is extremely long.
+
+To build the whole geometry, set the flag fBuildBases in DetectorConstruction to true.
+
+\section wholenucleardna_s5 PHYSICS
+
+This example uses the Geant4-DNA processes, using the G4EmDNAPhysics constructor 
+as in the dnaphysics example.
+
+\section wholenucleardna_s6 SIMULATION OUTPUT AND RESULT ANALYSIS
+
+The output results consist in a wholenucleardna.root file, containing only the 
+information about the energy transfers located in the backbone region of the DNA 
+double helix. Both strands are distinguished with different flags (1 or 2):
+- the type of particle for the current step
+- the type of process for the current step
+- the flag of the strand (1 or 2)
+- the track position of the current energy transfer (in nanometers) 
+- the energy deposit corresponding to the energy transfer (in eV)
+- the total energy loss along the current step (in eV)
+- the step length (in nm)
+
+
+This file can be easily analyzed using for example the provided ROOT macro 
+file plot.C; to do so :
+* be sure to have ROOT installed on your machine
+* be sure to be in the directory containing the ROOT files created by 
+* wholenucleardna
+* copy plot.C into this directory
+* from there, launch ROOT by typing root
+* under your ROOT session, type in : .X plot.C to execute the macro file
+* alternatively you can type directly under your session : root plot.C
+
+The naming scheme on the displayed ROOT plots can be seen in the 
+SteppingAction.cc file.
+
+*/
+
+

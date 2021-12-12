@@ -1,0 +1,98 @@
+
+///\file "medical/dna/wvalue/.README.txt"
+///\brief Example wvalue README page
+
+
+/*! \page Examplewvalue Example wvalue
+
+\author S. Incerti et al. (a, *) \n
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan \n
+(CENBG), IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France \n
+* e-mail:incerti@cenbg.in2p3.fr
+
+\section wvalue_s1 INTRODUCTION.                                                    
+                                                 
+The wvalue example shows how to calculate w in liquid water
+for e- using the Geant4-DNA physics processes and models. 
+
+w is computed as the ratio of the incident particle energy
+and the total number of ionisations.
+
+It is adapted from svalue.
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publication:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+This example is presented in the following paper, which shall also be cited:
+Med. Phys. 42 (2015) 3870-3876 
+
+\section wvalue_s2 GEOMETRY SET-UP
+
+The geometry is a 1 m radius sphere of liquid water (G4_WATER
+material). Particles are shot randomly from the sphere centre.
+
+Radius of the sphere, physics constructor and energy can be 
+controlled by the wvalue.in macro file.
+
+The PrimaryGeneratorAction class is adapted (G4 state dependent) 
+in order to enable generic physics list usage 
+(empty modular physics list).
+
+\section wvalue_s3 SET-UP 
+
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+\section wvalue_s4 HOW TO RUN THE EXAMPLE                                         
+
+In interactive mode, run:
+
+\verbatim
+./wvalue wvalue.in
+\endverbatim
+
+The wvalue.in macro allows a full control of the simulation.
+
+\section wvalue_s5 PHYSICS
+
+You can select Geant4-DNA physics constructor in wvalue.in.
+
+A tracking cut can be applied if requested.
+
+\section wvalue_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
+
+The output results consist in a text file (wvalue.txt), containing :
+- the energy of incident particles (in eV)
+- the mean number of ionisations
+- its rms
+- the w value (in eV)
+- its rms (in eV)
+
+Note: rms values correspond to standard deviation.
+
+In addition, another macro (histo.in) is also provided including 
+a series of histograms :
+- histogram #1 : nb of ionisation interactions per event
+- histogram #2 : total energy deposited in absorber
+- histogram #3 : true track length of the primary particle
+- histogram #4 : true step size of the primary particle
+- histogram #5 : projected range of the primary particle
+- histogram #6 : true track length of charged secondaries
+- histogram #7 : true track length of charged secondaries
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+incerti@cenbg.in2p3.fr
+
+*/

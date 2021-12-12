@@ -1,0 +1,41 @@
+
+///\file "electromagnetic/TestEm0/.README.txt"
+///\brief Example TestEm0 README page
+
+/*! \page ExampleTestEm0 Example TestEm0
+
+  This program is not a simulation. It prints the cross sections and stopping
+  power used by the standard electromagnetic package, via G4EmCalculator
+  which extracts these data from the PhysicsTables.
+	
+  The program can be used in batch or interactively.	
+ 
+  - execute TestEm0 in 'batch' mode from macro files :
+\verbatim
+% TestEm0   TestEm0.in
+\endverbatim
+ 		
+  - Interactively, a typical sequence will be :
+\verbatim
+% TestEm0
+....
+Idle> /run/initialize
+....	
+Idle> /testem/det/setMat Silicon
+Idle> /run/setCut 100 um	
+Idle> /gun/particle e-
+Idle> /gun/energy 10 MeV
+Idle> /run/beamOn
+\endverbatim
+	 
+  The last command triggers BuildPhysicsTable() and executes the program.
+  
+   
+\section TestEm0_s1  DirectAccess
+			    
+  DirectAccess.cc is a small batch program which shows how to compute the same
+  basic data directly from the processes (indeed the models).
+  
+  To run it, change name in the first line on GNUmakefile before to compile.
+
+*/

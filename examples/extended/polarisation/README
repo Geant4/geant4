@@ -1,0 +1,13 @@
+
+        Geant4 extended examples - polarisation
+        ----------------------------------------
+
+ Examples in this directory demonstrate use of physics processes including 
+ polarization.
+ Currently, only one example is provided:
+
+Pol01
+------
+
+This example demonstrates how to compute and plot the QED processes including 
+polarization.

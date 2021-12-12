@@ -1,0 +1,275 @@
+
+///\file "field/field01/.README.txt"
+///\brief Example field01 README page
+
+/*! \page Examplefield01 Example field01
+
+  Example that enables investigation of the accuracy and performance of the
+  tracking in a magnetic field.
+
+   The key Geant4 capabilities demonstrated in this example are:
+   - creating a uniform magnetic field interactively using the field
+     messenger,
+   - choosing the type of Runge Kutta stepper used for integration of the
+     motion of charged particles in the magnetic field,
+   - controlling the thresholds that determine which looping particles are
+     killed by G4Transporation.
+
+  Some of these capabilities are available via interactive commands,
+  implemented in F01FieldMessenger.
+
+  The magnetic field is defined in the F01FieldSetup class which object
+  is created in the ConstructSDandField() function in the F01DetectorConstruction
+  class. The interactive commands are implemented in F01FieldMessenger.
+
+  The magnetic field is defined in F01FieldSetup, which is created in
+  the ConstructSDandField() method in the F01DetectorConstruction class.
+
+ \section field01_s01 Choosing the type of stepper
+
+  The basic capabilities of choosing the stepper type are demonstrated in the
+  field.in macro file:
+  
+\verbatim
+/field/setStepperType  145   ##  Choose a stepper type   ( Tsito
+/field/setStepperType  101   ##  Choose an FSAL stepper  ( FE
+/field/setMinStep 0.1 mm     ##  Smaller steps always s
+/field/update                ##  Initialise using parameters above
+\endverbatim
+  
+  In addition it is possible to choose to use a new type of stepper, known
+  as 'First Same as Last' or FSAL, which in each step obtains the field value 
+  at the step endpoint and evaluates the 'right hand size' of the equation
+  for the next integration step.  This reduces the number of calls to the field
+  evaluation, which can be one the most computationally expensive methods,
+  while providing similar accuracy.
+
+  There are several potential choices of the stepper type. Here are some suggestions:
+\verbatim
+     ===========================================================================
+     Number  Name of Stepper      Comments
+     ===========================================================================
+     Recommended - default since Geant4 10.4:
+     
+       15 - 'DoPri5'  or 
+            Dormand Prince 745 : Uses a pair 4th & 5th order formulae (like other 4/5
+	                         well-known and very efficient embedded method
+				 methods); their difference is the error estimate.
+                                 Highly recommended in literature, including
+                                 Hairer & Wanner, & Numerical Recipes
+                                 Used in several established RK code (e.g. DOPRI5)
+     ===========================================================================     
+     Good choices for reasonably smooth fields:
+
+       45 - BogackiShampine45  : more efficient embedded 4/5 pair
+                                 Used in many applications, including
+                                 RKSUITE suite.
+
+      145 - Tsitouras45        : potentially the most efficient embedded 4/5
+                                 pair - found in expanded search of parameter
+				 space.
+
+       56 - Dormand Prince RK56 : higher order embedded method from authors of DoPri5.
+                                  Uses a pair 5th & 6th order formulae.
+
+       78 - Dormand Prince RK78 : higher order embedded method from authors of DoPri5.
+                                  Uses a pair 7th & 8th order formulae.
+
+        9 - NystromRK4         : a specialised Nystrom method for magnetic fields.
+	                         Reuses the field value at the mid-point of the step,
+				 and also provides an analytical estimation of the
+	                         integration error based on numerical evaluation of
+				 fourth order variation in the equation for
+				 magnetic field.
+     ===========================================================================
+     The new 'First Same as Last' (FSAL) steppers can be chosen in addition:
+        1 - RKFEq1             : FSAL stepper with improved equilibrium properties.
+	                         When kinks or other anomalies are encountered,
+				 and at the start of integration when the best
+				 step size is not known, this type of stepper
+				 converges faster and more smoothly to good
+				 step sizes.
+     ===========================================================================     
+     The old default and old first alternative - 
+      
+        4 - ClassicalRK4       : original Runge-Kutta method, very robust but slower )
+                               ( obtains error estimate by doing 2 half steps )
+                                 Good baseline for comparison - long experience of use.
+				 May be good alternative for less smooth fields.
+				 
+        8 - Cash Karp RKF 45   : The oldest 'embedded' RK method in Geant4 -
+	                         also fairly robust.
+                                 Faster than  ClassicalRK4 for smoother fields,
+				 as it does not need two half steps to estimate error.
+                                 Available since Geant4 1.0
+
+     ===========================================================================
+     Other potential choices for non-smooth fields (with kinks, abrupt changes):
+      
+        3 - SimpleHeum         : low   order, with error obtained from half-steps
+       23 - BogackiShampine23  : lower order embedded method  (new in 10.3-beta)
+     ===========================================================================       
+\endverbatim
+
+\section  field01_s02 Controlling the killing of looping particles
+         
+Occasionally tracks 'looping' in a strong magnetic field, making little
+progress even over hundreds of integration steps.  This is due to a
+combination of a strong magnetic field and a thin material (gas or vacuum)
+in which the size of a physics step is substantially larger than the radius
+of curvature of the track.
+
+Since the amount of CPU time which can be consumed by one or few such tracks
+is very large, it is important to limit the number of integration steps
+spent on these tracks.  The module for propagation in field in Geant4
+flags tracks which take more than a certain number (default 1,000) integration
+steps without reaching the requested end of the step size, which was
+determined by the physics and geometry.
+
+The Geant4 G4Transportation and G4CoupledTransportation processes are tasked
+to select which of the looping tracks are killed and which survive. To
+balance the potential significant cost of integrating looping particles,
+three thresholds exist
+
+- **The 'Warning' Energy**: a track with energy below this value that is found to
+loop is killed silently (no warning.)
+Above the 'Warning Energy', if a track is selected for killing a warning is
+generated.
+	
+- **The 'Important' Energy**: the threshold energy above which a track will survive
+for multiple steps if found looping.
+
+- Number of 'tracking' steps. They will be only be killed only if they still
+loop after than.
+**The number of 'trials'**: the number of steps that 'important' tracks survive.
+
+Note that currently only stable particles are killed. ( Refinements to enable
+toggling whether unstable particles can be killed are in development. )
+
+This example demonstrate choosing different values for these parametes
+in the main () method of field01.cc using one of two techniques.
+
+\subsection  field01_s02_sub1 i) Using G4PhysicsListHelper
+
+The first method is new in Geant4 release 10.5, and uses the G4PhysicsListHelper
+which has methods to choose a pre-selected set of parameter values. The choices
+are between a set each of low and high thresholds.  Either one can be enabled
+by calling correspondingly
+  - G4PhysicsListHelper::GetPhysicsListHelper()->UseLowLooperThresholds();
+   or
+  - G4PhysicsListHelper::GetPhysicsListHelper()->UseHighLooperThresholds();
+
+These methods must be called before the physics is constructed - i.e. typically
+before RunManager's Initialise() method is called.
+This works only if either
+  - a modular physics lists is used, or if
+  - the G4ModularPhysicsList and its AddTransporation method are used to create and register a common transportation process for all particles (one for each thread).
+
+\subsection  field01_s02_sub2 ii) Fine grained control (available in Geant4 versions since 7.0)
+       
+Fine grained control of the Transportation's parameters for looping particles
+is also possible.
+
+This is demonstrated in the F01RunAction::ChangeLooperParameters() method,
+which is called by the BeginOfRunAction.  There the appropriate
+Transportation object for the electron is obtained, and its parameters
+(if valid) are used to overwrite the thresholds in the G4Transportation class.
+
+For example, to ensure that only looping particles with energy 10 keV are
+killed silently we change the value of the 'Warning' Energy:
+\code{.cpp}
+  runAction->SetWarningEnergy( 10.0 * CLHEP::keV );
+\endcode
+[ This is passed along to the registered G4Transportation or
+G4CoupledTransportation object by the F01RunAction's ChangeLooperParameters.]
+
+As a result the killing of any (stable) looping track with energy over 10 keV
+will generate a warning.
+
+A second configurable energy threshold enables tracks above it to survive a
+chosen number of 'tracking' steps.  They will be only be killed only if they
+still loop after than number of tracking steps.  F01RunAction's methods are
+used to configure these parameters:
+\code{.cpp}
+  runAction->SetImportantEnergy( 0.1  * CLHEP::MeV );
+  runAction->SetNumberOfTrials( 30 );
+\endcode
+which the run action passes to the G4Transportation or
+G4CoupledTransportation object registered for the electron.
+
+Note that for all pre-configured and modular physics lists share a single
+Transportation process for all types of particles.  So the parameters for
+killing loopers will be shared by all particle types in this case.
+
+\section field01_s1 Background Information    
+
+\subsection field01_s1_sub1 GEOMETRY DEFINITION
+ 
+ The "Absorber" is a solid made of a given material.                
+
+ Three parameters define the absorber :
+ - the material of the absorber,
+ - the thickness of an absorber,
+ - the transverse size of the absorber (the input face is a square). 
+
+ The volume "World" contains the "Absorber". 
+ In this test the parameters of the "World" can be changed , too.
+
+ In addition a transverse uniform magnetic field can be applied.
+
+ The default geometry is constructed in F01DetectorConstruction class,
+ but all the parameters can be changed via
+ the commands defined in the F01DetectorMessenger class.
+ 	
+\subsection field01_s1_sub2 AN EVENT : THE PRIMARY GENERATOR
+ 
+ The primary kinematic consists of a single particle (electron, Ekin = 0.5 GeV)
+ which hits the
+ absorber perpendicular to the input face. The type of the particle
+ and its energy are set in the F01PrimaryGeneratorAction class, and can
+ be changed via the G4 build-in commands of G4ParticleGun class (see
+ the macros provided with this example).
+
+ It is also possible to change the position of the primary particle vertex
+ or activate its randomization via the commands defined in  the
+ F01PrimaryGeneratorMessenger class.
+
+ A RUN is a set of events.
+ 	
+\subsection field01_s1_sub3 DETECTOR RESPONSE
+
+  The spatial distribution of charged particles transported in magnetic
+  field is envistigated.
+  A HIT is a record, event per event , of all the 
+  informations needed to simulate and analyse the detector response.
+
+  In this example a F01CalorHit is defined as a set of 2 informations:
+  - the total energy deposit in the absorber,
+  - the total tracklength of all charged particles in the absorber,  
+
+  Therefore  the absorber is declared
+  'sensitive detector' (SD), see F01CalorimeterSD, which means they can contribute to the hit.
+ 				
+\subsection field01_s1_sub4 PHYSICS LIST
+ 
+ The particle's type and the physic processes which will be available
+ in this example are set in the FTFP_BERT physics list. This physics list 
+ requires data files for electromagnetic and hadronic processes.
+ See more on installation of the datasets in Geant4 Installation Guide,
+
+\subsection field01_s1_sub5 HOW TO START ?
+ 
+  - Execute field01 in 'batch' mode from macro file e.g.
+\verbatim
+% ./field01 field01.in
+\endverbatim
+		
+  - Execute field01 in 'interactive' mode with visualization e.g.
+\verbatim
+% ./field01
+....
+Idle> /run/beamOn 1
+....
+\endverbatim
+
+*/

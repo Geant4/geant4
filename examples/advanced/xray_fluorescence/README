@@ -1,0 +1,83 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            xray_fluorescence
+                            -----------------
+XrayFluo is an advanced Geant4 example reproducing various setups for PIXE or XRF experiments.
+
+A sample macro (livermore.mac) is provided.
+
+The detector is a monolitic Si(Li) or HPGe detector, with real response functions, stored in response.dat and SILIresponse.dat.
+
+The sample, a simple box whose material can be selected, can be irradiated with different particles, with different spectra for the incident energy and with different shapes of the primary generator. 
+
+Two diaphragms reproducing those used to collimate the incident beam on sample and detector during the test beam are simulated as well
+
+The aim of this advanced example is to illustrate Deexcitation products generation and analysis schemes available in Geant4.
+
+Generation of particles is done via the G4ParticleGun: the example shows how to use it in order to obtain a beam of circular section or a particle source isotropic in space
+
+The example includes the possibility to shoot particles according to a  given energy spectrum: the files B_flare.dat, C_Flare.dat and M_flare.dat store the spectra of photons during solar flares, the files mercury2_flx_solmax.dat and mercury_flx_solmin.dat contain the spectra of protons respectively during solar maximum and solar minimum conditions, and merc2_flx_alp_max.dat merc_flx_alp_min.dat contain  the spectra of alpha particles again respectively during solar maximum and solar minimum conditions. These features are available by changing hard-doced values in XrayFluoRunAction.cc
+
+Histogramming facilities are provided using the built-it g4analysis tools of Geant4.
+
+In order to be able to use any of these packages, prior installation is necessary to configure you environment to get visulaization, as described in geant4 manual.
+
+#path to the lowEnergy data base
+
+setenv G4LEDATA /your/path/to/geant4/data/G4EMLOWXX.XX
+
+#path to Xray_Fluorescence data files, if not set, PWD is assumed:
+
+setenv XRAYDATA /path/to/detector/and/input/spctra/files
+
+1. Run
+After the compilation of the program, to execute a sample simulation type (for example):
+
+$G4WORKDIR/bin/Linux-g++/XrayFluo 
+
+The program gives, at tis point,the user 4 options:
+
+Please Select Simulation Geometrical Set-Up:
+1 - Test Beam
+2 - Infinite Plane
+3 - Planet and Sun
+4 - Phase-Space Production
+
+The first three choices are to choose different experimental set-ups  (a test beam one, an infite plane and a planetary geometry), while the fourth is a simplified version of the first, without a detector, only to generate a tuple with particles genereted or exiting the sample.
+
+In order to run a macro, type the following command:
+
+idle> execute command "/control/execute xxxxx.mac"
+
+If the analysis options are set, histograms will automatically stored in the corresponding files (root, by default)
+
+In order to launch the application in batch mode, it is necessary to specify, after the executable file name, the name of the macro file and the number of the choice:
+
+$G4WORKDIR/bin/Linux-g++/XrayFluo xxxxx.mac 1
+
+2. Detector description 
+The telescope and detector geometry is defined in XrayFluoDetectorConstruction.cc and similar
+
+3. Detector peculiar properties are described in XrayFluoSiLiDetectorType and XrayFluoHPGeDetectorType, both derived from XrayFluoVDetectorType. Other detector types can be added, creating other implementations of XrayFluoVDetectorType objects. Detector type selection is made in  XrayFluoDetectorConstruction, and can be modified trough /apparate/detector command of the UI.  
+Other commands (apparate/sample /apparate/sampleGranularity /apparate/GrainDiameter) are present to simulate sample granulosity: grains are spheres, disposed in a compact cubic structure, i.e superipmposition of planes of maximum density with ABC ABC path. The fundamental cell is of type cubic with centered-faces.
+
+4. Physics processes
+
+Tha user can select the preferred physics list form the pre-built ones producin atomic deexcitation products: livermore, standard (opt 0, 1, 2, 3) and penelope.
+
+5. Event generation
+
+This is done using the G4ParticleGun with some modifications. See XrayFluoParticleGeneratorAction.cc
+
+Event generation is controlled by commands in the /gun/category (see help for further details). In this readme only two commands are undrlined: 
+
+- /gun/loadGunData <filename>: to be used with the setup #1, loads the ntuple created 	in the setup #4. The loaded particles will be generated and will be directed ALL OF THEM to the detector. This can be useful to perform detector studies with encreased efficiency.
+
+- /gun/loadRayleighFlag <true/false> This is used to let the user decide if backscattered primary particles should be loaded and directed toward the detector. This command, in order to be useful, must be used BEFORE the previous one.
+
+
+

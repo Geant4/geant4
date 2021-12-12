@@ -1,0 +1,26 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                Common Classes for Extended Examples
+                -------------------------------------
+
+  In order to reduce code duplication and to reduce the number of variants of 
+  the code of same kind, we define a set of common classes which
+  can be reused in "feature" examples demonstrating just a particular feature.
+  This module may be enhanced in future. Currently it provides 
+  the following sets of classes:
+
+  - Detector construction classes
+    - two simple detector construction classes with a messenger
+  
+  - Physics list classes
+    - GeantinoPhysicsList - physics list with geantino and chargedgeantino only
+  
+  - Primary generator classes
+    - two simple primary generator classes (with G4ParticleGun and
+      G4ParticleGeneralSource)
+
+

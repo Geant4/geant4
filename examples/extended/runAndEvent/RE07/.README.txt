@@ -1,0 +1,54 @@
+///\file "runAndEvent/RE07/.README.txt"
+///\brief Example RE07 README page
+
+/*! \page ExampleRE07 Example RE07
+
+This example is based on extended/electromagnetic/TestEm3 and
+demonstrates how to register specialized tracking managers for
+a particle or a set of particles.
+
+\section RE07_s1 Geometry definition
+
+The geometry of a simplified sampling calorimeter is used as
+in \link ExampleTestEm3 TestEm3 \endlink, please refer to its
+documentation for more details.
+The same UI commands exist for modifying the geometry (number
+of layers and absorbers, material and its thickness), without
+the /testem/ prefix.
+
+In addition to the definition of the volumes, this example adds
+two regions, "Front" and "Back", which contain the front and
+rear half of the calorimeter.
+
+\section RE07_s2 Physics lists
+
+By default, the example uses G4EmStandardPhysics and registers
+processes to the G4ProcessManager. This can be changed with the
+/setMode UI command. Possible values are:
+
+- processes:   use G4EmStandardPhysics, the default
+- tracking:    use the same physics as G4EmStandardPhysics, but
+               implemented as a specialized tracking manager for
+               electrons, positrons, and gammas; see the file
+               EmStandardPhysicsTrackingManager.cc for details.
+- specialized: use a specialized tracking manager for gammas; for
+               the purpose of demonstration,
+               - it uses G4EmStandardPhysics as the basis,
+               - defers processing of gammas with a kinetic energy
+                 of more than 100 MeV,
+               - implement a specialized stepping loop for the
+                 "Back" region of the detector.
+               See the file SpecializedTrackingManager.cc for more
+               details on the exact implementation.
+
+\section RE07_s3 How to start?
+
+This example comes with one macro file for each of the described
+modes that can be passed as a parameter to the executable:
+
+\verbatim
+% exampleRE07 processes.mac
+\endverbatim
+
+*/
+

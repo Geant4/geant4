@@ -1,0 +1,111 @@
+
+     =========================================================
+              Geant4 - ULTRA-based air shower example
+     =========================================================
+
+                             README
+                      ---------------------
+
+------------------------------------------------------------------------
+----> Introduction.                                                     
+                                                                          
+The ULTRA detector is a hybrid 2-component system consisting of:                                  
+                                                                        
+                                                                        
+1) an UV detection system - the UVscope                                 
+2) an array of scintillator detectors - the ETscope                      
+                                                                        
+The UVscope detects Cherenkov light associated to cosmic ray showers    
+when it is diffusively reflected on ground.                             
+The ETscope detects in coincidence the charged particles of the shower. 
+                                                                        
+In the current version only the UVscope simulation is included          
+------------------------------------------------------------------------
+----> Description                                                       
+                                                                        
+The UVscope consists of a Fresnel lens and a PMT located in the focal   
+plane, enclosed in a cylindrical aluminum housing. The lens is 457 mm   
+in diameter and is made of UV transmitting acrylic with 5.6 grooves     
+per mm. The description of the geometry of the Fresnel lens makes use   
+of object parameterisation/replication capabilities.                     
+                                                                      
+The primary vertex generator describes a plane circular source of UV 
+(3eV, about 400 nm) optical photons.                                    
+Depending on the selected detector configuration, the source can be     
+positioned such that the photons are fired                              
+to a reflecting surface or, by default, directly to the UVscope 
+(no reflecting surface is present in this case).                        
+Reflection at the surface can be chosen to be specular or diffuse.
+In both cases the normal to the surface makes an angle of 45 degrees    
+with the UVscope axis and the photons are emitted at an angle of 
+90 degrees with the UVscope axis.                                       
+If none of these variables is set no reflecting surface is used 
+and the photons source is positioned at the UVscope axis. 
+                                                                        
+The definition of the relevant optical boundaries, parameters and       
+processes is made.                                                      
+                                                                        
+------------------------------------------------------------------------
+----> SET-UP 
+                                                                        
+A standard Geant4 example GNUmakefile and a CMakeLists.txt file are 
+provided, for building with cmake                                       
+
+The following environment variable can be set in order to get           
+additional verbosity during program running:                            
+
+ 1) GNUmakefile
+
+  setenv ULTRA_VERBOSE 
+
+or 
+
+ 2) cmake -DULTRA_VERBOSE=ON "path to source"
+
+
+------------------------------------------------------------------------
+
+The analysis is performed using the native Geant4 analysis tools 
+(g4tools). In the default case, the output histograms are written 
+in a ROOT file.
+
+The output file can be written in other formats (csv, xml, hdf5) by
+changing the G4AnalysisManager default file type in UltraRunAction::BeginOfRunAction().
+
+-----------------------------------------------------------------------
+----> How to run the example.                                          
+
+  From the directory where the Ultra binary resides :
+
+  ./Ultra "macro name" for running in batch mode                       
+                                                                                                                    
+  ./Ultra  for running in interative mode.                             
+  The macro VisDirect.mac is executed.                                 
+                                                                        
+  Several macros are available for interactive visualisation.          
+  While in interactive mode type the command                           
+  /control/execute "name_of_macro", 
+  where "name_of_macro" is one of the following:
+
+  Direct.mac - a beam of photons is shot directly to the telescope.    
+  Mirror.mac - the beam is directed to a specular reflecing surface    
+  Ground.mac - the beam is directed to a diffusively reflecting surface
+
+------------------------------------------------------------------------
+----> Simulation output                                                 
+
+the output is ultra.root 		                             
+ It contains:
+ 1)1Dhistogram with the detected photons energy (eV)                    
+ 2)1Dhistogram with the number of detected photons per event            
+
+
+To plot these histograms run the ROOT macro 'do_plots.C' :
+> root do_plots.C
+------------------------------------------------------------------------
+
+for comments and questions: bernardo@lip.pt
+for more info http://www.ge.infn.it/geant4/examples/
+
+last modified:  B. Tome 08/11/2019
+created by   :  B. Tome and M.C. Espirito Santo 20/05/2004

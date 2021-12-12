@@ -1,0 +1,17 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                         Advanced Examples
+                         -----------------
+
+In this directory one can find examples of real complete applications used
+for different simulation studies. The applications included here may require
+third party products for handling of the data produced (visualization,
+analysis or persistency tools). Refer to the README and documentation provided
+in each example for the details.
+These application are made part of the official GEANT4 distribution, however
+their maintenance and updates is under responsibility of the authors.
+

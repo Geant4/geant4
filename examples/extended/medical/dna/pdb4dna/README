@@ -1,0 +1,133 @@
+=================================================================
+                     Geant4 - pdb4dna
+=================================================================
+
+
+Authors: E. Delage *(a), Y. Perrot *(a), Q.T. Pham (a)
+
+(a) Laboratoire de Physique Corpusculaire de Clermont-Ferrand, CNRS/IN2P3 - Clermont University, France
+* Corresponding authors, email to delage@clermont.in2p3.fr, perrot@clermont.in2p3.fr
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+---> 1. A brief description
+
+The PDB4DNA example simulates energy deposits in a target volume generated from a PDB file representing DNA geometry.
+Position of energy deposits are used to compute strand breaks in the DNA geometry.
+Geant4-DNA processes are used. 
+
+The example package contains:
+- source files (src, include, pdb4dna.cc)
+- README
+- .in, analysis.C and visualization macro files
+- 1ZBB.pdb (di nucleosome is loaded by default)
+
+To run the example: see section 4 of this README
+To analyze output: see section 6 of this README
+
+----> 2. Set-up.
+
+The geometry is a 1000 angstrom side cube (World) made of galactic material.
+Before a computation, user loads a PDB file and generates a target volume (the bounding volume) of liquid water, which dimensions are extrapolated from PDB file atom 3D coordinates.
+
+----> 3. Some main features
+
+| MESSENGER LIST |
+-----------------------------------------------------------------
+[1] Load a PDB file (The default atoms visualization is done by sphere that are parametrized with the van der Waals radius).
+CPK coloring.
+- Hydrogen(H) => white sphere,
+- Carbon(C) => gray sphere,
+- Oxygen(O) => red sphere,
+- Nitrogen(N) => dark blue sphere,
+- Sulfur(S) => yellow sphere,
+- Phosphorus(P) => orange sphere,
+- others/undefined => pink sphere.
+/PDB4DNA/det/loadPDB filename.pdb
+-----------------------------------------------------------------
+[2] Build only a bounding volume for computation and draw it :
+/PDB4DNA/det/buildBoundingV
+-----------------------------------------------------------------
+[3] Draw Atoms :  /PDB4DNA/det/drawAtoms
+[4] Draw Nucleotids (sphere representing nucleotids) :  /PDB4DNA/det/drawNucleotides
+[5] Draw Residues 
+- Base => blue sphere,
+- Sugar => yellow sphere,
+- Phosphate => red sphere.
+Spheres are linked by cylinders:
+/PDB4DNA/det/drawResidues
+[6] Draw Atoms with bounding volume : /PDB4DNA/det/drawAtomsWithBounding
+[7] Draw Nucleotides with bounding volume : /PDB4DNA/det/drawNucleotidesWithBounding
+[8] Draw Residues with bounding volume : /PDB4DNA/det/drawResiduesWithBounding
+-----------------------------------------------------------------
+[9] Set energy treshold to compute SSB : /PDB4DNA/event/setEnergyThres 8.22 eV (default value set to 8.22 eV)
+[10] Set distance treshlod to compute DSB : /PDB4DNA/event/setDistanceThres 10    (default value set to 10)
+
+Notes:
+[1] is mandatory for visualization and simulation.
+[2] is needed for simulation.
+
+----> 4. How to run the example.
+
+To get help, run:
+
+> ./pdb4dna(.exe) -h
+
+In interactive mode, run:
+
+> ./pdb4dna(.exe) -gui
+
+"1ZBB.pdb" is the default file and it should be placed into same directory as the executable.
+You can download it here:
+http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId=1ZBB
+
+In batch mode , run:
+
+> ./pdb4dna(.exe) [-mac pdb4dna.in] [-mt numberofThreads]
+
+To get visualization, make sure to uncomment the #/control/execute vis.mac line in the macro.
+
+----> 5. The physics
+
+This example shows how to use the Geant4-DNA processes from constructor
+
+Look at the PhyscisList.cc file.
+
+----> 6. Simulation output 
+
+The output results consists in a pdb_dna.root file, containing for each event:
+- the energy deposit in the bounding box (in electronVolt)
+- the number of single strand break (SSB)
+- the number of double strand break (DSB)
+
+This file can be easily analyzed using for example the provided ROOT macro 
+file analysis.C; to do so :
+* be sure to have ROOT installed on your machine
+* be sure to be in the example directory
+* launch ROOT by typing root
+* under your ROOT session, type in : .X analysis.C to execute the macro file
+* alternatively you can type directly under your session : root analysis.C
+
+----> 7. Contacts
+
+If you have any questions or wish to notify of updates and/or modification please contact:
+ 	
+E. Delage (geometry and visualization referee) at delage@clermont.in2p3.fr
+Y. Perrot (physics and simulation referee) at perrot@clermont.in2p3.fr
+
+
+----> Acknowledgments :
+
+ Jean Orloff (LPC, Clermont-Ferrand, France) for 3D rotation implementation,
+ Michel Maire (G4AI) for /extended/geometry/transforms example,
+ Laurent Garnier (LAL, Orsay, France) for Qt visualisation.
+
+

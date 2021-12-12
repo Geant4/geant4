@@ -1,0 +1,542 @@
+		Example1 for Reverse Monte Carlo
+		--------------------------------
+
+
+Author
+------
+This example code and the adjoint classes in the G4 toolkit  have been developed by L.Desorgher (SpaceIT GmbH)
+under the ESA contract 21435/08/NL/AT. For any (reasonable) question  you may contact the author 
+at the following email address : desorgher@spaceit.ch 
+
+
+Abstract
+--------
+This is the README file for the first G4 example illustrating the use of the Reverse Monte Carlo (RMC) mode in a Geant4 
+application. The  Reverse Monte Carlo method is also known as the Adjoint Monte Carlo (AMC) method  and 
+in this document we will alternate both Reverse and Adjoint terms.
+
+Other documentation
+-------------------
+See also the section 3.7.3 Adjoint/Reverse Monte carlo in the 
+Geant4 User guide for application developers.
+
+
+Table of Contents:
+-----------------
+
+1.Definition of Reverse/Adjoint Monte Carlo 
+
+2.The Reverse Monte Carlo mode in Geant4 (since G4.9.3 release)
+	2.1. Reverse tracking phase
+	2.2. Forward tracking phase
+	2.3. Reverse processes
+	2.4. Remark on Nb of adjoint particle types and G4 events considered in an adjoint simulation
+	2.5. Modifications to bring in a existing G4 application to use the Reverse MC method
+
+3.exampleRMC01
+	3.1. Geometry
+	3.2. Physics
+	3.3. Analysis and output of the code
+	3.4. Run macrofiles
+	3.5. Comparison of adjoint and forward simulation results. Normalization!	
+
+4.Control of the adjoint simulation and the RMC01 code by G4 macro UI commands
+	4.1. G4UI commands in the directory /adjoint
+	4.2.  G4UI commands in the directory /adjoint_physics
+	4.3.  G4UI commands in the directory  /RMC01
+
+5. Known issues
+	5.1. Rare too high weight in the adjoint simulation
+	5.2. Limitation of the reverse bremsstrahlung
+	5.3.Limitation of the reverse multiple scattering
+
+
+
+1. Definition of Reverse/Adjoint Monte Carlo 
+-----------------------------------------
+-----------------------------------------
+When the sensitive part of a detector is small compared  to its entire size and to the size  of the
+external extended primary particle source,  a lot of computing time is spent during a normal Monte Carlo run 
+in the simulation of  particle showers that are not contributing to the detector signal.  
+In such particular case the Reverse Monte Carlo (RMC) method, also known as the 
+Adjoint Monte Carlo method, can be used. 
+In this method  particles are generated  in or on the external surface of the sensitive  volume 
+of the instrument and then are tracked backward in the geometry till they reach  the source surface, 
+or exceed an energy threshold. During the reverse tracking reverse reactions are applied to the particles.
+
+
+
+2. The Reverse Monte Carlo mode in Geant4 (since G4.9.3 release)
+----------------------------------------------------------------
+----------------------------------------------------------------
+(See also the section 3.7.3 Adjoint/Reverse Monte carlo in the 
+Geant4 User guide for application developers.)
+
+Different G4Adjoint classes have been implemented into the Geant4 
+toolkit to run an adjoint/reverse simulation in a Geant4 application.
+In this implementation an adjoint run is divided in a succession 
+of alternative adjoint and forward tracking  of adjoint and normal particles.
+One Geant4 event treats the reverse tracking of an adjoint primary particle 
+and its secondaries, and the forward tracking of a primary particle euqivalent 
+to the adjoint primary as well as its secondaries.
+
+
+2.1. Reverse tracking phase:
+-------------------------
+
+Adjoint particles (adjoint_e-, adjoint_gamma,...) are generated one by one on the so called
+adjoint source with random position, energy (1/E distribution) and direction. The adjoint
+source is the external surface of a user defined volume or of a user defined sphere. The 
+adjoint source should contain one or several sensitive volumes and should be small 
+compared to the entire geometry. The user can set the minimum and maximum energy of the 
+adjoint source. After its generation the adjoint primary particle is tracked backward in
+the geometry till a user defined external surface (spherical or boundary of a volume) 
+or is killed before if it reaches a user defined upper energy limit that represents the
+maximum energy of the external source. During the reverse tracking, reverse processes take 
+place where the adjoint particle being tracked can be either scattered or transformed in 
+another type of adjoint particle. During the reverse tracking the 
+G4AdjointSimulationManager replaces the user defined primary, run, stepping, ... actions, 
+by its own actions.
+
+2.2. Forward tracking phase:
+--------------------------
+
+When an adjoint particle reaches the external surface its weight, type,  position, 
+and direction are registered and a  normal primary particle with a type equivalent 
+to the last generated adjoint primary is generated with the same energy, 
+position but opposite direction  and is  tracked in the forward direction 
+in the sensitive region as in a forward MC simulation. 
+During this forward tracking phase the  event, stacking, stepping, tracking actions defined 
+by the user for its general forward application are used. 
+By this clear separation between adjoint and forward tracking phases, the code of the 
+user developed for a forward simulation should be only slightly 
+modified to adapt it for an adjoint simulation. Indeed  the computation of the signal 
+is done by the same user actions or analysis classes that the one used in the forward 
+simulation mode. Before the G4.10.0 release the reverse and forward tracking mode 
+took place  in separated  events. Since the G4.10.0 release, 
+in order to prepare to  the migration of the 
+ReverseMC to the G4 Multiple Threading mode, the reverse and forward tracking
+phase of corresponding adjoint and forward primaries have been merged in the same 
+event.
+
+
+2.3. Reverse Processes:
+---------------------
+
+During the reverse tracking phase reverse processes act on the adjoint particles.
+The Reverse processes that  are available at the moment in Geant4 are the:
+	- Reverse discrete  Ionization for e-, proton and ions
+	- Continuous gain of energy by ionization and bremsstrahlung for e- and by ionization for protons and ions
+	- Reverse discrete e- bremsstrahlung  
+	- Reverse photoelectric effect 
+	- Reverse Compton scattering
+	- Approximated multiple scattering (MS) (see section 5.3)
+
+For the gamma reverse physics an adjoint gamma reverse forced interaction process has been implemented 
+since GEANT4.10.3. THis process splits a new created gamma in two tracks.
+The first tracks is used to force a free flight of the adjoint gamma through the geometry.
+The second track is used to force a reverse bremsstrahlung or a reverse compton at some random
+position along the free flight track.
+		
+It is important to note that the electromagnetic reverse processes are cut dependent 
+as their equivalent forward processes. The implementation of the reverse processes is
+ based on the forward processes
+implemented in the G4 standard electromagnetic package.		     
+
+
+2.4. Remark on Nb of adjoint particle types and  Nb of G4 events considered in an adjoint simulation:
+---------------------------------------------------------------------------------
+
+The list of type of adjoint and forward particles that are generated on the adjoint source
+and considered in the simulation is a function of the adjoint processes declared in the 
+physics list. For example if only the e- and gamma electromagnetic processes are considered
+, only adjoint e- and adjoint gamma will be considered as primaries. In this case an 
+adjoint event will be divided in two G4 events. The first event will  consist 
+into  the coupled  reverse and forward  tracking of an adjoint e- and its equivalent 
+forward e-, while the second events will process the reverse and forward trackings
+of corresponsing adjoint and forward primary gammas. In this case a 
+run of 100 adjoint events will consist into 200 Geant4 events. If the proton ionization is
+also considered adjoint and forward protons  are also generated as primaries 
+and 300 Geant4 events are processed for 100 adjoint events.
+
+2.5. Modifications to bring in a existing G4 application to use the Reverse MC method
+--------------------------------------------------------------------------------
+(for more details see also the section 3.7.3 Adjoint/Reverse Monte carlo in the 
+Geant4 User guide for application developers.)
+
+Due the clear separation  between the reverse and forward  tracking  phase  only few modifications are needed 
+to an existing  Geant4 application in order to adapt it for the use of the reverse simulation mode.
+Except in the physics list where all the reverse processes and their forward equivalent 
+have to be declared, the principal code modifications  are needed only in the analysis phase at the end 
+of the forward tracking where computed signals have to be multiplied by the weight 
+of the reverse tracks that have reached the external surface of the simulatrion 
+and then normalized to different user defined spectra and angular distribution representing 
+the external source.
+The weight of the adjoint tracks is computed by the G4Adjoint classes and the user needs
+only to multiply them to the primary differential, directional spectrum of its choice. 
+The adjoint weight a the end  of tracks can be also registered if needed in answer matrices.
+ 
+More precisely, in order to be able to use the Reverse MC method in his simulation, the user should modify 
+its code as such:
+  
+  - Adapt its physics list to use Reverse Processes for adjoint particles. An example of such physics list is provided in an extended 
+	  example. 
+  - Create an instance of    G4AdjointSimManager somewhere in the main code.
+  
+  - Modify the analysis part of the code to normalize the signal computed during the forward phase to the weight 
+         of adjoint particle that reached the external surface during the last tracking phase.
+         This is done by using the following method of G4AdjointSimManager.
+	    size_t GetNbOfAdointTracksReachingTheExternalSurface()		 
+	    G4int GetIDOfLastAdjParticleReachingExtSource(size_t i)				     
+  	    G4ThreeVector GetPositionAtEndOfLastAdjointTrack(size_t i)
+	    G4ThreeVector GetDirectionAtEndOfLastAdjointTrack(size_t i)
+	    G4double GetEkinAtEndOfLastAdjointTrack(size_t i)
+	    G4double GetEkinNucAtEndOfLastAdjointTrack(size_t i)
+	    G4double GetWeightAtEndOfLastAdjointTrack(size_t i)
+            G4double GetCosthAtEndOfLastAdjointTrack(size_t i)
+   	    G4String GetFwdParticleNameAtEndOfLastAdjointTrack(size_t i)
+   	    G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(size_t i)
+            G4int GetFwdParticleIndexAtEndOfLastAdjointTrack(size_t i).
+    Since the version Geant4.10.3 several adjoint tracks can arrive on the external surface during the same events.
+    It is therefore important to loop over alll these tracks when normalizing the weights at the end of the event. 
+    The method GetNbOfAdointTracksReachingTheExternalSurface() returns the number of adjoint tracks that reached the 
+    external surface. Ine the other methods the input parameter i allows to get the information of the ith track.
+
+    In order to have a code working for both forward and adjoint simulation mode, the extra code needed in user actions for the adjoint
+    simulation mode can be separated to the code needed only for the normal forward  simulation by using the following method
+	             
+	   G4bool GetAdjointSimMode() that return true if an adjoint simulation is running and false if not!
+
+
+
+3. exampleRMC01
+---------------
+---------------
+The example RMC01 illustrates how to modify a G4 application in order to use 
+both forward and reverse MC modes in the same code.
+	   
+	
+3.1. Geometry:
+-------------- 
+ 
+The following simple geometry is considered:
+   - sensitive Silicon cylinder at the center of an Aluminum spherical shielding with 10 cm  Radius.
+   - two 0.5mm thick Tantalum plates set horizontally above and below the Sensitive Cylinder 
+
+The free parameters of the geometry that can bes set by the user are:
+   - the thickness of the Aluminum shielding  
+   - the height of the sensitive Si cylinder
+   - the radius of the sensitive Si cylinder
+      
+ 
+
+3.2. Physics:
+-------------
+
+The physical processes considered  are:
+	- Reverse and forward discrete  Ionization for e- and  proton	
+	- Continuous gain and loss of energy by ionization and bremsstrahlung for e- and by ionization for protons 
+	- Reverse and forward discrete e- bremsstrahlung  
+	- Reverse and forward photoelectric effect 
+	- Reverse and forward Compton scattering
+	- Reverse and forward Multiple scattering
+
+These processes are implemented in the class G4AdjointPhysicsList distributed with the example. The G4AdjointPhysicsMessenger allows the user
+to switch on/off some processes for testing purpose. By default all processes cited above are considered except the proton ionization that
+has to be specifically switch on in the macro file by the user.
+
+
+
+3.3. Analysis and output of the code:
+----------------------------------
+
+The example computes the energy deposited in the sensitive Si cylinder and the current of e-, protons, and gamma 
+entering this cylinder.
+The Hits are registered in the sensitive detector class RMC01SD that is a typical G4 sensitive detector class 
+used in a forward simulation and is not modified at all
+for the adjoint simulation mode. 
+The analysis of the registered hits during forward events is done by the RMCO1AnalysisManager.
+That is the class that illustrates how to adapt an analysis code of a fwd simulation in order to use it also for 
+an adjoint simulation.
+In this class during a forward simulation the  method EndOfEventForForwardSimulation is used at the end of an event 
+while during an adjoint simulation at the end of fwd tracking event the method EndOfEventForAdjointSimulation is called.
+By looking at the source of RMCO1AnalysisManager and more particularly to its method EndOfEventForAdjointSimulation the user will
+learn how to adapt its G4 analysis code for an adjoint simulation.
+
+The outputs of an adjoint simulation are:
+
+	-The total energy deposited and particle current entering the sensitive cylinder normalized 
+	 automatically to a user defined primary spectrum(exponential or power law) .
+	 These results are stored in the files:
+	 	-Adj_Edep_vs_EkinPrim.txt                            
+		-Adj_ElectronCurrent.txt
+		-Adj_GammaCurrent.txt
+		-Adj_ProtonCurrent.txt
+		-ConvergenceOfAdjointSimulationResults.txt: 
+				The total normalized edep and its relative error registered every 5000 adjoint events
+		
+		
+	-The answer matrix of the energy deposited and particles current on the sensitive cylinder in function of primary energy of e-, gamma and
+	protons. These results are stored in the files Adj********_Answer.txt
+		   	
+		 
+	
+The outputs of a forward simulation are:	 
+	-The mean energy deposited and particle current entering the sensitive cylinder per event.
+	 These results are stored in the files:
+	 	-Fwd_Edep_vs_EkinPrim.txt                            
+		-Fwd_ElectronCurrent.txt
+		-Fwd_GammaCurrent.txt
+		-Fwd_ProtonCurrent.txt
+		-ConvergenceOfAdjointSimulationResults.txt: The total normalized edep and its relative error registered every 5000 adjoint events
+		
+ 
+
+3.4. Run macrofiles:
+------------------
+The following example run macro files are distributed with the code:
+	
+	-run_adjoint_simulation_electron.mac and  run_adjoint_simulation_proton.mac for adjoint simulations 
+	
+	-run_forward_simulation_electron.mac  and run_forward_simulation_proton.mac for forward simulations
+	
+
+3.5. Comparison of adjoint and forward simulation results:
+----------------------------------------------------------
+It is the responsibility of the user to select in the macro file the same external spectrum 
+for both the forward and adjoint simulations  and to normalize the per event results of the forward simulation 
+to the fluence considered in the adjoint  simulation. 
+
+For the macro files that are provided  with the examples it consists into multiplying  the forward results by pi*100.
+This normalization factor is explained by the following:
+	
+	-For the forward simulation the results are given  per number of events. It corresponds  
+	to a normalization to a  fluence of 1 particle emanating from the external source. 
+	
+	-In run_fwd_simulation.mac the source is set on a sphere of 10 cm radius (see /gps commands in
+	 macrofile).Therefore the omnidirectional  fluence for the fwd simulation  is 1./(pi*R^2) with R=10cm. 
+	
+	-The adjoint results  are normalized to a fluence of 1/cm2.
+	    (See command /RMC01/analysis/SetExponentialSpectrumForAdjointSim in macrofile)
+	
+	-In conclusion to compare the adjoint and forward results, the forward results should
+			be multiplied by pi*R^2/cm2= pi*100.
+
+
+
+4. Control of the adjoint simulation and the RMC01 code by G4 macro UI commands:
+-------------------------------------------------------------------------
+Different G4 macro UI commands are provided to control the RMC01 example and the adjoint simulation.
+Some macro commands are provided within the geant4 toolkit and appears in a G4 application when the singleton 
+class G4AdjointSimManager is called somewhere in the code, the other macro commands are 
+declared in the code  distributed within the example.
+
+
+4.1. G4UI commands in the directory /adjoint
+----------------------------------------------- 
+The macro commands in the directory /adjoint appears in a user application when the singleton 
+class G4AdjointSimManager is called somewhere in the code. 
+It allows to control the adjoint source, the external source and start an adjoint simulation.
+
+The command to start an adjoint  run is:
+
+-/adjoint/start_run nb
+	Start an adjoint simulation with a number of events given by nb. It is important to note that the total number of events in the sense of G4 
+	will be nb*2*nb_primary_considered (see  3.4.)
+	
+
+The commands to control the adjoint source are:
+
+-/adjoint/DefineSphericalAdjSource R X Y Z unit_length
+	The adjoint source is set on a sphere with radius R and centered on position (X,Y,Z) 
+				 
+-/adjoint/DefineSphericalAdjSourceCenteredOnAVolume phys_vol_name R unit_length
+	The external source is set on a sphere with radius R and with its center position located at the center of the 
+	the physical volume specified by the name phys_vol_name.
+-/adjoint/DefineAdjSourceOnExtSurfaceOfAVolume phys_vol_name 
+	The external surface is set as the external boundary of a the physical volume with name phys_vol_name
+		 	
+-/adjoint/SetAdjSourceEmin  Emin energy_unit 
+	Set the minimum  energy of the external source
+		
+-/adjoint/SetAdjSourceEmax  Emax energy_unit 
+	Set the maximum  energy of the external source
+			
+-/adjoint/ConsiderAsPrimary  particle_name 
+	The type  of particle specified by  "particle_name" will be added in the list of primary adjoint particles. 
+	The list of candidates depends on the reverse physics processes considered in the simulation. At the most the 
+	potential candidates are (e-, gamma, proton , ion). For this example only e-, gamma, proton
+ 	can be chosen. As the proton ionization is not considered by default, the default list of particles is
+	[e-,gamma]. To have also the proton as candidate the proton ionization should 
+	be switch on (/adjoint_physics/UseProtonIonisation true).
+
+-/adjoint/NeglectAsPrimary  particle_name 
+	The type  of particle specified by  "particle_name" will be removed from the list of primary adjoint particles. 
+	The list of candidates depends on the reverse physics processes considered in the simulation. At the most the 
+	potential candidates are (e-, gamma, proton , ion). For this example only e-, gamma, proton
+ 	can be chosen. As the proton ionization is not considered by default, the default list of particles is
+	[e-,gamma].To have also the proton as candidate the proton ionization should 
+	be switch on (/adjoint_physics/UseProtonIonisation true). 
+		
+
+The commands to control the external source are:
+
+-/adjoint/DefineSphericalExtSource R X Y Z unit_length:
+	The external source is set on a sphere with radius R and centered on position (X,Y,Z) 
+				 
+-/adjoint/DefineSphericalExtSourceCenteredOnAVolume phys_vol_name R unit_length
+	The external source is set on a sphere with radius R and with its center position located at the center of the 
+	the physical volume specified by the name phys_vol_name.
+
+-/adjoint/DefineExtSourceOnExtSurfaceOfAVolume phys_vol_name 
+	The external surface is set as the external boundary of a the physical volume with name phys_vol_name
+
+-/adjoint/SetExtSourceEmax  Emax energy_unit 
+	Set the maximum  energy of the external source. An adjoint track will be stop when a an adjoint particle get an energy higher than this maximum energy.
+	
+
+
+4.2. G4UI commands in the directory /adjoint_physics
+------------------------------------------------------
+These commands allow to control the electromagnetic processes that will be considered in the simulation.
+
+The processes that can be used are:
+	-Reverse and forward e- continuous and discrete  Ionization. Always switch on
+	-Reverse and forward e- Bremsstrahlung. Switch on by default
+	-Reverse and forward Compton scattering. Switch on by default
+	-Reverse and forward photo electric effect. Switch on by default
+	-Reverse and forward photo electric effect. Switch on by default
+	-Reverse and forward multiple scattering. Switch on by default
+	-Reverse and forward proton continuous and discrete  Ionization. Switch off by default	
+	-Forward e-e+ pair production. Switch off by default. 
+	 If switch all the e+ electromagnetic physics is considered.  
+
+
+The commands that can be used to switch on of these processes are:
+
+/adjoint_physics/UseProtonIonisation true/false
+   -Switch on/off the reverse and forward proton ionization. Off by default. 
+
+/adjoint_physics/UseBremsstrahlung true/false
+   -Switch on/off the reverse and forward e- bremsstrahlung. On by default.	
+
+/adjoint_physics/UseCompton true/false
+   -Switch on/off the Compton scattering. On by default.	
+
+
+/adjoint_physics/UseMS true/false
+   -Switch on/off the multiple scattering. On by default.
+   
+
+/adjoint_physics/UseEgainElossFluctuation true/false 
+   -Switch on/off the fluctuation in the continuous energy loss/gain.   On by default. Only for test purpose. 	
+
+/adjoint_physics/UsePEEffect true/false
+   -Switch on/off the photo electric effect. On by default.	
+
+
+/adjoint_physics/UseGammaConversion true/false
+   -Switch on/off the forward e-e+ pair production from gamma. Off by default. When On all the e+
+   electromagnetic physics is considered.
+   
+   
+The user can also fix the maximum energy Emax and minimum energy Emin of the adjoint physical processes used 
+in the simulation. The adjoint process will be applied to particles within the energy range [Emin, Emax] 
+and will produce adjoint secondary only in this energy range. It is recommended to fix Emin to the minimum
+energy  of the adjoint source and fix Emax to the maximum energy of the external source.  
+The commands controlling Emin and Emax are:
+
+/adjoint_physics/SetEminForAdjointModels Emin Energy_unit
+	-Set the minimum energy of the adjoint processes/models.
+	
+/adjoint_physics/SetEmaxForAdjointModels Emin Energy_unit
+	-Set the maximum energy of the adjoint processes/models.
+ 
+   
+4.3. G4UI commands in the directory  /RMC01
+----------------------------------------------
+
+Commands/RMC01/geometry/  to control the geometry:
+
+/RMC01/geometry/SetSensitiveVolumeHeight H length_unit
+	Set the height H of the Si sensitive cylinder.
+	
+
+/RMC01/geometry/SetSensitiveVolumeRadius R length_unit
+	Set the radius R of the Si sensitive cylinder.	
+
+/RMC01/geometry/SetShieldingThickness    D length_unit
+	Set the thickness D of the aluminum shielding.
+   
+Commands /RMC01/analysis/ to control the primary spectrum used for the normalization of the 
+adjoint simulation results and fix the expected precision of the computed Edep:
+
+/RMC01/analysis/SetPowerLawPrimSpectrumForAdjointSim particle_name F F_unit alpha Emin Emax E_unit
+	Set the primary spectrum to which the adjoint simulation results will be normalised to a power law
+	spectrum E^(-alpha) of particle defined by    particle_name, with an omnidirectional fluence F, and
+	energy range [Emin,Emax]. The fluence unit candidates for F_unit  are [1/cm2, 1/m2, cm-2, m-2]. 
+	 
+   
+/RMC01/analysis/SetExponentialSpectrumForAdjointSim particle_name F F_unit E0 Emin Emax E_unit
+	Set the primary spectrum to which the adjoint simulation results will be normalised to an exponential
+	spectrum exp(-E/E0) of particle defined by    particle_name, with an omnidirectional fluence F, and
+	energy range [Emin,Emax]. The fluence unit candidates for F_unit  are [1/cm2, 1/m2, cm-2, m-2]. 
+	  	
+
+ 
+/RMC01/analysis/SetExpectedPrecisionOfResults precision
+	Set the expected precision in % for the computed energy deposited in the sensitive volume 
+	for both the forward and adjoint simulation case. When the relative statistical error 
+	of the  computed energy deposited reach this precision the run is aborted and the results are registered.
+	Otherwise the run continue till the nb of events specified by the user are processed. By default the precision is set
+	to 0. meaning that the run will not be aborted in this case. 
+	  
+	
+
+
+
+
+5. Known issues
+--------------------------------
+--------------------------------
+
+5.1 Rare too high weight in the adjoint simulation
+---------------------------------------------------
+
+In rare cases an adjoint track may get a much too high weight when  reaching the external source.
+While this happen not often it may corrupt the simulation results significantly. The reason  of this high weight is 
+the joint use at low e- and gamma  energy of both  the photoelectric and bremsstrahlung processes.
+Unfortunately we still need some investigations to remove this problem  at the level of physical processes. 
+However  this problem can be solved  at the level of event action in the user code by adding a test on the adjoint 
+weight. Such test has been implemented in the example RMC01. 
+In this implementation  an event is rejected when the relative error of the computed  normalised edep 
+increase during one event by more than 50% when the precision  is already below 10%.
+ 
+
+5.2 Limitation of the reverse bremsstrahlung
+-------------------------------------------
+The difference between the differential cross sections used in the adjoint and forward bremsstrahlung 
+ models is the source of a higher flux of >100 keV gamma in the reverse simulation compared to the forward simulation.
+The adjoint processes/models should make use of the direct differential cross section to sample
+ the adjoint  secondaries and compute the adjoint cross section.
+The differential cross section used in G4AdjointeBremstrahlungModel  is obtained by the numerical derivation
+over the cut energy of the direct cross section provided  by G4eBremsstrahlungModel. 
+This would be a correct procedure if the  distribution of secondary in   G4eBremsstrahlungModel  
+would match this differential cross section. Unfortunately it is not the case as independent  parameterization are used 
+ in   G4eBremsstrahlungModel  for both the cross sections and the sample of secondary. (It means that in the forward case 
+ if one would integrate the effective differential cross section considered  in the simulation we would not find back 
+ the used cross section). 
+ In the future we plan to correct this problem by using an extra weight correction factor after the occurrence of a reverse
+ bremsstrahlung. This weight factor should be the ratio between the differential CS used in the adjoint simulation and the 
+one effectively used in the forward processes. As it is impossible to have access to the forward differential CS 
+ in G4eBremsstrahlungModel we  are investigating the feasibility to use  the differential CS considered in  
+ G4Penelope models. 
+   
+
+5.3 Limitation of the reverse multiple scattering
+-------------------------------------------------
+For the reverse multiple scattering we are using the same models than for the forward case.
+This approximation makes that the discrepancy between the adjoint and forward 
+simulation cases can get to a level of ~ 10-15% relative differences in the test cases that we have considered. 
+In the future we plan to improve   the adjoint multiple scattering models  by forcing the computation of 
+multiple scattering effect at the end of an adjoint step.

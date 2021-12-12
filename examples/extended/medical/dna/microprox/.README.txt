@@ -1,0 +1,70 @@
+//$Id$
+
+///\file "dna/microprox/.README.txt"
+///\brief Example microprox README page
+
+/*! \page Examplemicroprox Example microprox
+
+Author: S. Incerti et al. \n
+Date: MArch 2nd, 2019     \n
+Email: incerti@cenbg.in2p3.fr
+
+(c) The Geant4-DNA collaboration.
+
+This examples shows how to compute proximity functions
+in liquid water using exclusively Geant4-DNA
+physics processes and models.
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+- J. Appl. Phys. (2019) in press
+- Med. Phys. 45  (2018) e722-e739
+- Phys. Med. 31  (2015) 861-874
+- Med. Phys. 37  (2010) 4692-4708
+- Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+
+\section Examplemicroprox_s1 Geometry
+
+An infinite box of liquid water.
+
+\section Examplemicroprox_s2 Incident particles
+
+Particles can be selected from the microprox.in macro
+as well as their incident energy.
+They are shot from the center of the box.
+Tracking cut can also be selected (as energy).
+
+\section Examplemicroprox_s3 Physics
+
+The default Geant4-DNA physics constructor 2 is used in
+the PhysicsList class. Alternative constructor can be
+selected from microprox.in
+
+\section Examplemicroprox_s4 Scoring of enery deposition
+
+Energy depositions are scored in spherical shells from randomly selected hits.
+The user can select the dimensions of the shells as well as radius steps in TrackerSD.cc.
+
+\section Examplemicroprox_s5 Run
+
+The code can be run using:
+\verbatim
+./microprox microprox.in
+\endverbatim
+
+\section Examplemicroprox_s6 Results
+
+Results can be analyzed after the run using:
+\verbatim
+root plot.C
+\endverbatim
+
+The distribution of t is shown by default.
+
+*/
+

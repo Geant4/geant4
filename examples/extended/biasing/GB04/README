@@ -1,0 +1,36 @@
+                Example GB04 : bremsstrahlung splitting
+                ---------------------------------------
+
+    This example illustrates the use of the generic biasing classes to create
+a bremsstrahlung splitting technique.
+    Note that the EM package also offers a bremsstrahlung splitting, that is
+built-in to the package.
+
+
+                           GB04BOptnBremSplitting
+
+    The bremsstrahlung splitting is implemented in the GB04BOptnBremSplitting
+class (BOptn = Biasing Operation), which acts on the final state creation
+of the bremsstrahlung process.
+
+
+                           GB04BOptrBremSplitting
+
+    Decisions when to apply the GB04BOptnBremSplitting biasing operation are
+taken by the GB04BOptrBremSplitting (BOptr = Biasing Operator) operator. This
+one also configures the biasing operation, setting it the splitting factor
+and its behavior regarding electrons to be biased : only the primary one, or
+all, and only the first bremsstrahlung operation, or all. These are
+controled by this specific example commands:
+
+	  /GB04/biasing/setSplittingFactor [N splitting]
+	  /GB04/biasing/biasPrimaryOnly    [true/false]
+	  /GB04/biasing/biasOnlyOnce       [true/false]
+
+
+    The geometry is minimal : a single volume to which an instance of
+GB04BOptrBremSplitting is attached to.
+
+    The wrapping of physics processes by G4BiasingProcessInterface processes
+is simply handled by the G4GenericBiasingPhysics physics constructor, as shown
+in the main program.

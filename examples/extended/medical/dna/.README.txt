@@ -1,0 +1,55 @@
+
+///\file "medical/dna/.README.txt"
+///\brief Examples dna README page
+
+/*! \page Examples_dna  Category "medical/dna"
+
+This directory contains a set of Geant4-DNA examples.
+
+\section dna_s0 Physics
+   - \link ExampleDnaphysics dnaphysics \endlink  Simulation of track structures in liquid water using the Geant4-DNA physics processes and models.
+
+   - \link Exampleclustering clustering \endlink  Clustering application for direct damage extraction.
+
+   - \link Exampleicsd icsd \endlink Use of cross section models for DNA materials,
+
+   - \link Examplemfp mfp \endlink Simulation of mean free path in liquid water.
+
+   - \link ExampleMicrodosimetry  microdosimetry \endlink  Simulation of the track of a 5 MeV proton in liquid water. Geant4 standard EM models are used in the World volume while Geant4-DNA models are used in a Target volume, declared as a Region.
+
+   - \link Examplemicroprox microprox \endlink Computation of proximity functions in liquid water
+
+   - \link Examplemicroyz  microyz \endlink  Simulation of microdosimetry spectra
+
+   - \link Examplerange  range \endlink  Simulation of ranges.
+
+   - \link ExampleSlowing  slowing \endlink  Simulation of slowing down spectra.
+
+   - \link ExampleSplitting splitting \endlink Use of variance reduction to improve the computational efficiency of ionization.
+
+   - \link Examplespower  spower \endlink  Simulation of stopping power.
+
+   - \link Examplesvalue svalue \endlink Simulation of S-values in spheres of liquid water using the Geant4-DNA physics processes and models.
+
+   - \link Examplewvalue wvalue \endlink Simulation of W-values in liquid water using the Geant4-DNA physics processes and models.
+
+   - \link ExampleAuNP AuNP \endlink Simulation calculates absorbed dose around AuNP.
+
+\section dna_s1 Chemistry
+   - \link ExampleChem1  chem1 \endlink   Simple activation of the chemistry module.
+   - \link ExampleChem2  chem2 \endlink   Usage of TimeStepAction in the chemistry module.
+   - \link ExampleChem3  chem3 \endlink   Activate the full interactivity with the chemistry module.
+   - \link ExampleChem4  chem4 \endlink   Simulation of radiochemical yields with the chemistry module.
+   - \link ExampleChem5  chem5 \endlink   Variation of chem4, using the contructors G4EmDNAPhysics_option8 and G4EmDNAChemistry_option1.
+   - \link ExampleChem6  chem6 \endlink   Based on chem4 example, this example provides to score the radiochemical yield G.
+   - \link Examplescavenger scavenger \endlink Activation of the scavenging process in chemistry.
+
+\section dna_s2 Geometry and other
+   - \link ExamplePdb4dna pdb4dna \endlink  Usage of the Protein Data Bank (PDB) file format to build geometries.
+   - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink  Geometrical description of a full simplified cell nucleus.
+   - \link Examplednadamage1 dnadamage1  \endlink Damage simulation on a chromatin fiber.
+   - \link Exampleneuron  neuron \endlink  Irradiation of a realistic neuron cell.
+
+See the README page inside each example for more detail.
+*/
+

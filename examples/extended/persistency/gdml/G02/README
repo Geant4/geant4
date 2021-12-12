@@ -1,0 +1,47 @@
+-------------------------------------------------------------------
+
+ Example of use GDML reader/writer in  Detector Construction
+ -----------------------------------------------------------
+
+ In this directory you can find a example showing how to use GDML module for
+ reading and writing. It is also shown how to Read STEP Tools files.
+ In this example the DetectorConstruction consists of a Simple Detector, then
+ this Detector is filled/written in GDML.
+ The different options for writing and reading GDML files are shown in the
+ Detector Construction: writing modular files, using different schema location,
+ setting parameters for names in GDML file, etc.
+ For more information, please, refer to the GDML Documentation.
+  
+ The Geometry is a Simple Detector Box with 4 Subdetectors. 
+ This setup shows how to use Reflection Factory, Assembly of Volumes and
+ Parameterisation. 
+ Using commands or macros it possible to read or write GDML file.
+  
+ HOW TO BUILD THE EXAMPLE ?
+ 
+ - You need to have built the persistency/gdml module by having
+   set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
+   as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
+   the path where the XercesC XML parser package is installed in your system.
+ 
+ - Compile and link to generate the executable (in your CMAKE build directory):
+               % make
+ 
+ - Execute the application:
+               % geotest [macro-file].mac
+
+ You can run this application with the following macro file:
+   
+    write_gdml.mac : This macro will write the Geometry defined in file
+                     "test.gdml" and output to a new file wtest.gdml
+                     To change this name you can use command :
+                     /mydet/writeFile FileName.gdml
+
+    read_gdml.mac : This macro will read the Geometry from file "test.gdml"
+                     To change this name you can use command :
+                     /mydet/readFile FileName.gdml
+
+    read_step.mac : This macro will read the STEP Tool files "mbb.geom" and
+                    "mbb.tree" and load them in memory.
+                     To change this name you can use command :
+                     /mydet/StepFile FileName

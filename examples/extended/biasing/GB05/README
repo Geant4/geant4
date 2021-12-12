@@ -1,0 +1,47 @@
+                Example GB05: splitting by cross-section
+                ----------------------------------------
+
+    This example illustrates a technique that uses physics cross-sections to
+determine the splitting [killing] rate in a shielding problem. This technique
+is supposed to be an invention, and this example here is not optimized. The
+technique is applied here to neutrons.
+
+    In the classical treatment of the shielding problem, the shield is divided
+in slices at the boundaries of which particles are splitted[killed] if moving
+forward[backward]. In the present technique, we collect the cross-section of
+"absorbing/destroying" processes : decay, capture, inelastic. We then use the
+generic biasing facilities to create an equivalent of a spitting process, that
+has a "cross-section" which is the sum of the previous ones. This process is
+competing with other processes, as a regular one. The occurence of this process
+is hence the same than the "absorbing/destroying" processes together. When this
+process wins the competition, it splits the track, with a splitting factor 2 (ie
+the original track is kept and a copy of it is created). This splitting is hence
+occuring at the same rate than the absorption, resulting in an expected
+maintained (unweighted) flux.
+
+
+    The geometry is made of a single block of concrete it. Behind it (in the +z
+direction) a thin empty volume is placed to print out the particles which are
+exiting the shield.
+
+    As in any generic biasing use, a biasing operator (taking decisions on what
+biasing to apply) and a biasing operation (applying these decisions) are defined.
+These are:
+	  GB05BOptrSplitAndKillByCrossSection for the operator,
+	  GB05BOptnSplitAndKillByCrossSection for the operation.
+	  
+    The operator is created in the detector construction, and receives here the
+names of the absorbing/destroying processes to counterbalance for.
+    At tracking time, it collects the up to date cross-section of these processes
+in the ProposeNonPhysicsBiasingOperation(...) method, and passes the sum to the
+GB05BOptnSplitAndKillByCrossSection operation.
+
+    The operation uses the cross-section (interaction length) to sample the
+distance to "interaction" with a classical exponential. If it wins the race
+(ie it proposes the smallest of the interaction distances among all processes)
+its GenerateBiasingFinalState(...) method is called, and it applies splitting
+or killing (Russian roulette) if the track moves forward or backward.
+
+
+    
+    

@@ -1,0 +1,127 @@
+-----------------------------------------
+///\file "medical/dna/clustering/.README.txt"
+///\brief Exampleclustering README page
+
+/*! \page Exampleclustering Example clustering
+
+\author Y. Perrot, H. Payno \n
+(a) ysperrot@gmail.com      \n
+(b) henri.payno@gmail.com   \n
+Laboratoire de Physique Corpusculaire de Clermont-Ferrand, CNRS/IN2P3 - Clermont University, France
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:  \n
+Phys. Med. 31 (2015) 861-874    \n
+Med. Phys. 37 (2010) 4692-4708
+
+\section clustering_s1 Introduction
+  
+The clustering example simulates protons tracks in liquid water using Geant4-DNA processes and models.
+Energy deposit are clustered with a dedicated clustering algorithm to assess strand breaks.
+The default parameters of the clustering algorithm have been tuned to reproduce data published by
+Francis et al. 2011 Comput. Meth. Programs. Biomed. 2011 101(3)
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publication:
+Med. Phys. 37 (2010) 4692-4708
+
+\section clustering_s2 Set-up
+ 
+It is similar to the geometry set-up proposed in Francis et al. 2011 Comput. Meth. Programs. Biomed. 2011 101(3).
+It consists in a World volume containing a Target box made of liquid water of  1µm x 1µm x 0.5 µm.
+Energy deposits in the Target are registered (see SteppingAction.cc) and the clustering algorithm is run at the end of each event
+(see EventAction.cc)
+	 	 	
+\section clustering_s3 How to run the example
+  
+To get help, run:
+
+\verbatim
+> ./clustering -h
+\endverbatim
+
+In interactive mode, run:
+
+\verbatim
+> ./clustering -gui
+\endverbatim
+
+In batch mode , run:
+
+\verbatim
+> ./clustering [-mac run.in] [-mt numberofThreads]
+\endverbatim
+
+Two macros are available:
+
+- run.in: shoots 1000 protons of 500 keV
+
+- runOneEvent.in: shoots one proton of 500 keV
+
+All UI clustering commands in these macros are described below in section 'More information'.
+ 	 
+\section clustering_s4 Simulation output
+ 
+The output results consists in a clusters_output.root file, containing for each event:
+- the number of single strand break
+- the number of complex single strand break
+- the number of double strand break
+- the cluster size distribution
+- the absorbed dose in the Target
+
+\section clustering_s5 More information
+
+Specific classes are available in this example:
+
+- ClusteringAlgo: contains the core clustering algorithm
+
+- ClusteringAlgoMessenger: defines all UI commands to tune 
+the clustering algorithm
+
+\verbatim
+/clustering/algo/setMinPts
+\endverbatim
+  Minimal number of points to create a cluster
+
+\verbatim
+/clustering/algo/setSelectionProb
+\endverbatim
+  Probability to select potential damage according to the geometry
+
+\verbatim
+/clustering/algo/setEps
+\endverbatim
+  Maximal distance between points to create a cluster
+
+\verbatim
+/clustering/algo/setEmin
+\endverbatim
+  Energy to have a probability to create a strand break = 0
+
+\verbatim
+/clustering/algo/setEmax
+\endverbatim
+  Energy to have a probability to create a strand break = 1
+allow
+
+- ClusterSBPoints: defines a cluster of strand break points
+
+- CommandLineParser: defines a parser for command line control
+as in other Geant4-DNA examples
+
+- RunInitObserver: allows initializations at new run 
+(as in pdb4dna and microdosimetry)
+
+- SBPoint: defines a class for point of energy deposition
+
+\section clustering_s6 Acknowledgments
+
+Ziad Francis for discussion about clustering algorithm.
+
+*/
+

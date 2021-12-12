@@ -1,0 +1,82 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+
+
+                            field05 Example
+                            ---------------
+
+     This example checks so-called "spin-frozen" condition
+     There is a good example article hep-ph/0012087v1.
+     This article discusses about how to cancel the muon g-2 precession by
+     applying an electric field.
+
+     1) beta is muon velocity,
+     2) B is an uniform magnetic field and \vec{beta}.\vec{B}=0,
+        "." means scalar product,
+     3) Radial electric field (E) in the lab frame and \vec{beta}.\vec{E}=0,
+     4) a=(g-2)/2 is muon anomalous magnetic moment.
+
+     The required electric field to cancel the g-2 precession is,
+     E=a*B*light_c*gamma**2*beta.
+
+     In case of gamma=5 and B=0.24 Tesla, the required electric field is 
+     E=2 MV/m.
+
+     "Spin-frozen" happens when spin rotation cycle and muon rotation cycle 
+     are same. In this case, both cycles should be 149.5 nsec.
+
+     See also:
+     http://research.kek.jp/people/hiromi/MyHomePage/G-2_work_files/SpinStudyinEMfieldByGeant4.pdf
+
+
+     Credit goes to Hiromi Iinuma from KEK.
+
+**************
+*Classes Used*
+**************
+
+ 1 - main()
+  
+    See field05.cc.
+
+ 2- GEOMETRY DEFINITION
+
+    as simple world G4Box with a G4ElectroMagneticField
+    propagating both spin and momentum (G4EqEMFieldWithSpin)
+    with G4ClassicalRK4(fEquation,12) and
+    Bz = 0.24*tesla;
+    Er = 2.113987E+6*volt/m;
+
+ 3- AN EVENT: THE PRIMARY GENERATOR
+
+    use mu+ G4ParticleGun with Pmu = 517.6*MeV/c
+    and aligned spin and momentum direction
+
+ 4- PHYSICS
+
+    RegisterPhysics(new G4SpinDecayPhysics());
+    RegisterPhysics(new G4StepLimiterPhysics());
+
+    G4SpinDecayPhysics defines muon decay modes with spin,
+    G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts.
+
+ 5- User Action Classes
+
+        SteppingAction:
+            G4Exception when the cosine of the angle between
+            the spin and the momentum is < (1.-1.E-7)
+
+ 6- HOW TO START ?
+
+        - Execute field05 in 'batch' mode from macro files e.g.
+                % field05 field05.in > field.out &
+
+        - Execute field05 in 'interactive' mode with visualization e.g.
+                % field05
+                ....
+                Idle> type your commands, for example:
+                Idle> run/beamOn 1
+                ....

@@ -1,0 +1,118 @@
+
+///\file "electromagnetic/TestEm17/.README.txt"
+///\brief Example TestEm17 README page
+
+/*! \page ExampleTestEm17 Example TestEm17
+
+ This example is intended to check implementation of the processes 
+ of muon interactions: ionization, direct (e+,e-) production,
+ bremsstrahlung, mu-nuclear interaction.
+ It allows to compute differential cross sections (as function of the
+ energy transfered to secondaries), total cross sections and to compare
+ with analytic calculations.
+	
+\section TestEm17_s1 GEOMETRY DEFINITION
+ 
+ It is a single box of homogeneous medium.
+ Two parameters define the geometry :
+ - the material of the box,
+ - the (full) size of the box.
+ 
+ The default geometry (1 m of Iron) is constructed in 
+ DetectorConstruction, but the above parameters can be changed 
+ interactively via the commands defined in DetectorMessenger.
+ 	
+\section TestEm17_s2 PHYSICS LIST
+ 
+ The Physics List of the example uses the main local physics constructor
+ (builder) which called "standard". In this builder a limited set 
+ of physics processes are defined for muons, pions and proton:
+ ionisation, bremsstrahlung and e+e- pair production. Energy range 
+ for these processes is from 100*eV to 1000*PeV.
+
+ Optionally "muNucl" builder, MuNuclearBuilder, may be added activating muon-nuclear 
+ inelastic interaction.
+	 	 
+\section TestEm17_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle starting at the edge
+  of the box. The type of the particle and its energy are set in 
+  PrimaryGeneratorAction (mu+ 10 TeV), and can be changed via the G4 
+  build-in commands of ParticleGun class (see the macros provided with 
+  this example).
+ 	
+\section TestEm17_s4 PHYSICS
+ 
+  The incident particle is a muon. During the tracking, secondary
+  particles are killed.
+
+  The number of interactions are plotted as a function of the energy 
+  transfered to the secondaries.
+  The total number of interactions is recorded, and the total cross section
+  computed from this.  
+
+  At RunAction::EndOfRunAction(), the above results are compared with analytic calculations.
+  The functions which compute the theoretical cross sections have been
+  provided by the G4 MEPhI group, and grouped in MuCrossSections class.
+
+\section TestEm17_s5 HISTOGRAMS
+         
+  The test contains 4 built-in 1D histograms, which are managed by the
+  HistoManager class and its Messenger, HistoMessenger.
+
+  - 1 Monte-Carlo relative transferred energy distribution histo
+      (log10(eps/Emu kin) for knock-on electrons (ionization)
+  - 2  ... direct (e+,e-) pair production
+  - 3  ... bremsstrahlung
+  - 4  ... nuclear interaction
+
+  The histos can be activated individually with the command :
+\verbatim
+/testem/histo/setHisto id nbBins  valMin valMax 
+\endverbatim
+    min and max values of log10(eps/Emu kin).
+
+  At RunAction::EndOfRunAction() the corresponding histos for analytic calculations are
+  automatically created and filled (histo 11 to 14).
+                                                    
+  One can control the name and the type of the histograms file with 
+  the command:
+\verbatim
+/testem/histo/setFileName  name  (default testem17)
+\endverbatim
+   
+  It is possible to choose the format of the histogram file :
+  root (default), xml, csv, by using namespace in HistoManager.hh
+     	 				
+\section TestEm17_s6- VISUALIZATION
+ 
+  The Visualization Manager is set in the main () (see TestEm17.cc).
+  The initialisation of the drawing is done via the commands
+  /vis/... in the macro vis.mac. To get visualisation:
+\verbatim
+> /control/execute vis.mac
+\endverbatim
+ 	
+  The detector has a default view which is a longitudinal view of the 
+  box.
+ 
+  The tracks are drawn at the end of event, and erased at the end of run.
+	
+\section TestEm17_s7- HOW TO START ?
+ 
+  - Execute TestEm17 in 'batch' mode from macro files :
+\verbatim
+% TestEm17   allproc.mac
+\endverbatim
+ 		
+  - Execute TestEm17 in 'interactive mode' with visualization :
+\verbatim
+% TestEm17
+Idle> control/execute vis.mac
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+  
+*/

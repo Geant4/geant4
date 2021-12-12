@@ -1,0 +1,87 @@
+-------------------------------------------------------------------
+
+     =========================================================
+               Geant4 - X-Ray Telescope Example
+     =========================================================
+
+
+Introduction
+------------
+XrayTel is an advanced Geant4 example based on a realistic simulation of 
+an X-ray Telescope.  It is based on work carried out by a team of Geant4 
+experts to simulate the interaction between X-ray Telescopes XMM-Newton 
+and Chandra with low energy protons present in the orbital radiation 
+background.  The X-ray mirrors are designed to collect x-ray photons at
+grazing-incidence angles and focus them onto detectors at the focal plane.
+However, this mechanism also seems to work for low energy protons which,
+if they reach the detectors in sufficient numbers, can cause damage.
+In this example, the geometry has been simplified by using a single mirror 
+shell and no baffles, but all the dimensions and materials are realistic.
+
+The aim of this advanced example is to illustrate the use advanced 
+GUI, visualisation, particle generation and analysis schemes available 
+in Geant4:
+
+ - macros are provided to display the geometry and particle tracks with 
+   OpenGL, DAWN Postscript or VRML visualisation
+
+ - the generation of particles is done via the new General Particle Source
+
+ - histograming facilities are available through the G4AnalysisManager tools
+
+In order to be able to use any of these packages, prior installation is 
+necessary and a number of environment variables will have to be set.
+
+
+NOTE: The geometry is refreshed on the viewer at the beginning of each run, 
+      but the tracks are plotted only in case an interesting event occurs. 
+      This is the case only for about 1 every 10**4 events.
+
+
+
+2. Run
+
+To execute a sample simulation with visualisation of proton tracks
+reaching the detector run:
+
+XrayTel 
+
+execute command "/control/execute test.mac"
+
+To enable visualisation, uncomment one line from test.mac:
+/control/execute vis.mac
+
+If the analysis options are set, histograms will
+automatically created and the corresponding files will be created.
+A 1D histogram will display the energy distribution of the protons
+that reach the detector at the end of the run.
+
+
+3. Detector description
+
+The telescope and detector geometry is defined in 
+XrayTelDetectorConstruction.cc
+
+
+4. Physics processes
+
+The physics processes are in XrayTelPhysicsList.cc
+The main process in this example is G4hMultipleScattering for scattering of the protons
+off the mirror surfaces.
+
+
+5. Event generation
+
+This is done using the new General Particle Source. Documentation for 
+this can be found in:
+
+http://reat.space.qinetiq.com/gps/
+
+
+6. Analysis
+
+Relevant information from the simulation is processed in the XrayTelAnalysis
+class and saved, through the G4AnalysisManager interface, to Histograms and 
+Tuples. The output file is written in Root format, but one can easily switch to Xml (or Csv, Hdf5) by changing the G4AnalysisManager default file type in XrayTelAnalysis::book().
+No external software is required (apart from the Hdf5 case).
+

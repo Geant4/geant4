@@ -1,0 +1,119 @@
+
+     ==========================================================================================
+				    Geant4 - GAMMAKNIFE example
+     ==========================================================================================
+
+					   README file
+                          --------------------------------------------
+
+ AUTHORS:
+ F.Romano* (a)
+
+ PAST AUTHORS:
+ J. Pipek (c), A. Varisano (b), G.Russo (e), G.A.P. Cirrone (b), M.Russo (e), G. Cuttone (b),  M.G.Sabini (d)
+
+ (a) INFN - Sezione di Catania, Catania, Italy
+ (b) INFN - Laboratori Nazionali del Sud, Catania, Italy
+ (c) Faculty of Nuclear Sciences and Physical Engineering, Czech Technical University, Czech Republic
+ (d) UOS Fisica Sanitaria, Ospedale Cannizzaro, Catania, Italy
+ (e) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
+
+
+ *Corresponding author, email to francesco.romano@ct.infn.it
+
+-------------------------------------------------------------------------------------------------
+
+
+----> INTRODUCTION.                                                    
+                                                                       
+The GAMMAKNIFE example is a Geant4 application specifically developed to simulate an advanced device for Stereotactic Radiosurgery. In particular, the example reproduces a Leksell Gamma-Knife unit model C, currently active at the Cannizzaro Hospital in Catania. Gamma-Knife Stereotactic Radiosurgery allows in a single session accurate external irradiations with high dose and sharp dose gradient to minimize radiation doses given to adjacent critical brain structures. The unit consists of a cast iron body containing 201 Co60 sources in a hemispherical arrangement. Beams of gamma radiation, coming from different directions focus through a collimation system at the isocentre, where the target volume is positioned.
+
+This example allows to simulate the main components of a Gamma-Knife unit: the source, collimation system and also a spherical phantom used for routinely measurements. All the four available final collimators are reproduced and its dimension can be changed run-time by a macro command. The energy deposited distribution is computed at the end of the simulation in a voxellized geometry, using scoring mesh. GAMMAKNIFE example exploits original solutions for the sources device simulation, providing a very simple configuration of the geometry and primary events: a single source is, indeed, simulated (instead of 201) and the scoring mesh (placed in a spherical water phantom) is rotated at 201 angles correspondent to the real angular displacement of the sources in the device. This is possible thanks to the symmetry of the source positions respect to the isocentre.
+
+The GAMMAKNIFE example has been recently migrated to multi-thread. Thus, according to the number of cores, you can choose the number of threads using the following command:
+ /run/numberOfThreads <nThread>
+
+The GAMMAKNIFE example contains the following subfolders and files:
+- /src: where source .cc files are stored
+- /include: where header .hh files are stored
+- README file
+- MachineAngle.in, where the angular positions of the specific unit model are tabulated
+- defaultMacro.mac, where visualization is included and a simple run with few events is done
+- simulation.mac, where a whole simulation is performed, changing all the 201 angular positions, storing the deposited energy for each run and saving the total energy deposted at the end of the simulation.
+
+
+----> INSTALLATION
+
+GAMMAKNIFE source is currently released inside the official distribution of the Geant4 toolkit in the $G4INSTALL/examples/advanced folder.
+
+To run GAMMAKNIFE you must first install the Geant4 package. Once Geant4 is installed, the example must be first compiled. When compilation has been completed the program can be executed.
+
+A complete guide for the Geant4 installation in different operating systems can be found inside the official installation Geant4 pages.
+
+If some troubles are faced with the Geant4 installation please send an e-mail to us.
+
+
+----> HOW TO RUN THE EXAMPLE                                          
+
+The defaultMacro.mac is executed if no macro file is specified.
+
+For a realistic simulation of the Gamma-Knife device, including the irradiation of all the sources, the macro simulation.mac has to be used, defining the number of particles shooted per each angle (that is, for each "source"). The following commands have to be used to this aim:
+ /gammaknife/loadAngles MachineAngle.in	      --> rotation agles file is called
+ /gammaknife/beamOn <number-of-events>	      --> <number-of-events> are shooted for each angle
+
+
+---->  PRIMARY EVENTS GENERATION
+
+The primary particle beam parameter are:
+- energy of gamma: 1.17 and 1.33 MeV with the same probability 
+- X Y Z positions sampled in a cylinder 20 mm lenght and 1 mm of radius
+- angular biasing within an angle of 3 degree: it has been checked not to influence final results (respect to a 4p isotropic sampling) drastically decreasing computatuin time
+GPS (General Particle Source) class is used to generate the primary events.The GPS.in macro is called and executed when yoo use bot simulation.mac and defaultMacro.mac macro.
+
+
+----> GEOMETRICAL SET-UP.
+ 
+The Gamma-Knife unit consists of a cast-iron body containing the 60Co sources and the collimation system. Sources are displaced along five parallel rings at the same distance from the isocentre. Depending on the specific ring, sources are located with a different spacing, respectively with an angle of 7.6◦, 8◦, 9◦, 9◦ and 10◦. These angles represent the rotation angles of the scoring mesh (contained in the MachineAngle.in file). Gamma radiation (1.17 and 1.33 MeV), emitted by Co60 sources arranged in a hemispherical shape, focuses on the isocentre, located 401 mm far from the source. The radiation beam is collimated by means of fixed and mobile collimation systems in order to obtain four possible beam diameters at the isocentre: 4, 8, 14 and 18 mm.
+
+The elements simulated are:
+
+- cobalt cylinder source (20 mm length, 1 mm radius)
+- a stainless steel covering of the source
+- a first tungsten cylindrical collimator (65 mm length)
+- a second truncate cone lead collimator (92.5 mm lenght)
+- final truncated cone tungsten collimator (60 mm lenght), with four available final apertures simulating the mobile helmet
+- tungsten, iron and stainless steel surrounding the collimation system for shielding
+- a spherical water phantom (8 mm radius) simulating the phantom typically used for dosimetrical measurements and routinely quality check
+
+To change the diameter of the final truncated collimator (mobile helmet) the following command has to be used for chaching the diameter:
+ /calorimeter/helmetSize <diameter in mm>
+Notice that, as in the real device, only four final diameters are allowed: 4, 8, 14 and 18 mm. These are not the physical apertures of the diameter but represent the final diameter of the beam at the isocentre. In the GammaKnifeDetectorConstruction::UpdateHelmet() method more details can be found in this concern.
+
+Important note: the GAMMAKNIFE application is meant as an example of simulation of a device for Stereotactic Radiosurgery. Thus, all the main geometrical features of the Gamma-Knife device are accurately simulated but the geometrical displecement of the some elements is not exactly correspondent to the real one, because covered by a patent. In case you need detailed geometrical information, please contact the Elekta Company.
+
+
+----> PHYSICS
+
+Local PhysicsList is activated by default (GammaKnifePhysicsList.cc), which includes the G4EmStandardPhysics_option3.
+
+Anyhow, it is recommended the use of the Reference Physics List QGSP_BIC_EMY, which is the suggested on for medical applications. 
+
+---->  VISUALISATION
+
+The user can visualise the experimental set-up with OpenGL, DAWN and vrml.
+
+	
+----> SIMULATION OUTPUT                                    
+
+At the end of the simulation the energy deposited in each voxel of the scoring mesh inside the spherical phantom is registered in the eDep_scorer.out file. Default voxelization is 45 x 45 x 45 cubic voxels 1 mm of side. User can change dimension and shape of box the mesh and the voxel.
+Alternatively, the dose deposited can be also stored using the appropriate scoring commands
+
+---------------------------------------------------------------------------
+
+
+For comments, advices and questions please contact: 
+francesco.romano@ct.infn.it
+
+last modified: F.Romano, 03/11/2020
+
+ 

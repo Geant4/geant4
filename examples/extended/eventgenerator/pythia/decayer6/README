@@ -1,0 +1,85 @@
+ ------------------------------------------------------------ 
+
+ Example of the external decayer implementation with PYTHIA6
+ -----------------------------------------------------------
+ 
+ The complete PYTHIA6 documentation can be found at:
+ http://home.thep.lu.se/~torbjorn/pythiaaux/recent.html
+ 
+ The PYTHIA6 external decayer was originally developed within 
+ the AliRoot framework, by Andreas Morsch (CERN).
+ The dependence on the ALICE software was taken off
+ by Christian Holm Christensen,
+ The dependence on the Root framework and the integration in 
+ the Geant4 framework was done by Ivana Hrivnacova (IPN Orsay).
+ 
+ ------------------------------------------------------------ 
+
+ The use of the external decayer is demonstrated with using the 
+ classes from common examples repository, see below their complete list.
+ 
+ The G4Pythia6Decayer class provides the implementation of the
+ G4VExternalDecayer interface with using PYTHIA6. In order
+ to be able to use PYTHIA6, which is written in FORTRAN, 
+ a C++ interface class Pythia6 is provided. This class
+ interfaces only the PYTHIA6 functions relevant to decay.
+
+ The G4Pythia6Decayer is instantiated in the P6DExtDecayerPhysics builder,
+ in the ConstructProcess() function where the external decayer is set
+ to G4Decay process for all particles.
+ To demonstrate the decay with external decayer,
+ the B- meson is defined in ExG4PrimaryGeneratorAction01,
+ as it has no own decay table defined within Geant4.
+ 
+ With PYTHIA6, it is possible to force a selected decay
+ type. This selection can be chosen interactively via 
+ the implemented Geant4 UI command:
+
+ /pythia6Decayer/forceDecayType decayType
+
+ where the available decay types  are listed in the EDecayType 
+ enumaration.
+ 
+ The classes Pythia6, G4Pythia6Decayer, G4Pythia6DecayerMessenger
+ are independent from the example classes and can be reused 
+ in another user application.
+ 
+ Installation:
+ 
+ 1. Download the PYTHIA6 source file from the PYTHIA6 download site:
+    http://www.hepforge.org/downloads/pythia6
+    
+ 2A.) With CMake:  Build pythia6 library
+
+    For a convenience a CMake file for building Pythia6 library from 
+    the source is provided in
+    examples/extended/eventgenerator/CMakeLists.txt.pythia6.
+    Build the pythia6 library following the instructions in this file
+    and then define the environment variables:
+    PYTHIA6          the path where pythia6 library is installed
+    PYTHIA6_VERSION  the pythia version 
+
+ 2B.) With GNUmake: Define the environment variables:
+    PYTHIA6           the path to pythia-versionX.f source code
+    PYTHIA6_VERSION   the pythia version 
+    
+    e.g. If you download pythia-6.4.26.f.gz and unzip it in $HOME,
+         then you have to set:
+    export PYTHIA6=$HOME
+    export PYTHIA6_VERSION="6.4.26"
+    
+    Pythia6 will be then compiled together with example code.
+
+ 3. Compilation:
+    Then the example is compiled in a standard way, see examples/README_HowToRun.
+    Note that with GNUmake build, an additional step 'gmake setup' is 
+    needed before 'gmake'. 
+
+ Execution:
+ 
+ %  pythia6_decayer pythia6_decayer.in
+   
+This example uses the following user action classes from the extended examples common 
+repository available in common subdirectory:
+  DetectorConstruction
+  GunPrimaryGeneratorAction

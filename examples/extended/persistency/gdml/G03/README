@@ -1,0 +1,37 @@
+-------------------------------------------------------------------
+
+ Example of definition of a GDML extension with associated reader and writer
+ ---------------------------------------------------------------------------
+
+ In this directory you can find an example showing how to extend the GDML
+ schema and plug-in a custom reader and writer to the system for handling
+ the extension.
+ For more information, please, refer to the GDML Documentation.
+  
+ The Geometry is a Simple Box to which it is assigned a color as
+ visualization attribute.
+ The entity "color" is defined as part of the "extension" tag and properly
+ implemented in the GDML schema extension placed inside the directory
+ SimpleExtensionSchema.
+ The GDML file implenting the geometry with colors extension is
+ color_extension.gdml, in which the standard "gdml" tag has been replaced
+ by the "gdml_simple_extension" tag, with relative location for the new schema.
+ The GDML file is automatically loaded by the program.
+ It is also possible to use UI commands or macros as arguments to read any
+ standard GDML file.
+  
+ HOW TO BUILD THE EXAMPLE ?
+ 
+ - You need to have built the persistency/gdml module by having
+   set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
+   as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
+   the path where the XercesC XML parser package is installed in your system.
+ 
+ - Compile and link to generate the executable (in your CMAKE build directory):
+               % make
+ 
+ - Execute the application for reading and visualizing the setup:
+               % gdml_ext read_ext.mac
+
+ - Execute the application for also writing the setup:
+               % gdml_ext [write_ext.mac]

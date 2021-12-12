@@ -1,0 +1,145 @@
+-------------------------------------------------------------------
+
+     =========================================================
+                        Geant4 - human_phantom example 
+     =========================================================
+
+                                 README
+                          -----------------------
+
+Past Authors:  G. Guerrieri, S. Guatelli, M. G. Pia (pia@ge.infn.it),INFN Genova, Italy.
+Current authors (since 2007): S. Guatelli (susanna@uow.edu.au), University of Wollongong, Australia.
+Contributions by F. Ambroglini (filippo.ambroglini@pg.infn.it), INFN Perugia, Italy.
+
+The example is based on code developed by G. Guerrieri, University of Genova, Italy.
+
+------> Introduction
+
+The human_phantom example models anthropomorphic phantoms for
+Geant4 simulations.
+Two models are available: MIRD [1] and ORNL [2] (Male and Female for each approach).
+
+[1] W.S. Snyder, et al, "MIRD Pamphlet No. 5 Revised, Estimates of 
+absorbed fractions for monoenergetic photon sources uniformly distributed 
+in various organs of a heterogeneous phantom",
+J. Nucl. Med. Suppl., no. 3, pp. 5-52, 1969.
+
+[2] M. Cristy and K. F. Eckerman, "Specific absorbed fractions of energy 
+at various ages from internal photon sources", ORNL/TM-8381/VI, Apr. 1987.
+
+Note: Currently the ORNL phantom is under review.
+
+-----> Geometry 
+
+The process of building a phantom is handled through the Builder 
+design pattern.
+The creation of coherent models of the human phantom is handled through 
+an Abstract Factory design pattern.
+
+The organs of the MIRD phantom are implemented in hard-code; the organs of 
+the ORNL phantom are handled through GDML (Geometry Description Markup Language,
+www.cern.ch/gdml). The materials of the MIRD model are defined in the
+class G4HumanPhantomMaterial. The materials of the ORNL model are defined in 
+the GDML files.
+If using ORNL phantom model with no GDML set-up a segmentation
+fault will be otained when running the simulation.
+
+*** Parameterized breast ***
+MIRD Female model: a breast is analytical and derives from the MIRD 
+anthropomorphic phantom; the other breast derives from the model [3] and 
+it is voxelised.
+
+[3] D.R. Dance and R. A. Hunt, "Voxel breast phantom to represent breasts 
+of different sizes and glandularities for use with a Monte Carlo simulation 
+program", Report RMTPC 02/1005.
+
+
+-----> Physics
+
+Particles: charged particles, gamma, geantino
+Physics list: electromagnetic processes are modelled.
+The threshold of production of secondary particles is set to 1 * mm.
+
+-----> Primary particles
+
+The G4 General Particle Source is used to generate primary radiation field.
+Macro primary.mac contains the definition of the primary radiation field.   
+
+-----> Energy deposit
+
+The energy deposit is calculated in the organs of the phantom.
+At the end of the execution of the simulation  the summary of the total energy deposit in 
+each organ is print out.
+
+Currently for ORNL model the energy deposition is calculated in the head only.
+
+If the sensitivity is not set ( /bodypart/addBodyPart organName no ), 
+the energy deposit is not calculated in the specific organ.
+
+The energy deposit is calculated in each voxel of the parameterised breast.
+
+-----> Analysis
+To activate the analysis, the application must be built with the option
+WITH_ANALYSIS_USE=ON :
+make -DCMAKE_INSTALL_PREFIX=/path/to/geant4-installation -DWITH_ANALYSIS_USE=ON /path/to/human_phantom/
+
+**** SEQUENTIAL MODE *************
+output file: g4humanphantom.root containing
+an ntuple with the Energy Deposit in each Body Part.
+macro.C is provided to print the content of the ntuple in a ROOT
+interactive analysis session.
+
+**** MULTITHREAD MODE
+output files:
+human_phantom.root_t0
+..
+..
+human_phantom.root_t#
+
+where # is the number of threads
+
+type: source MergeFiles to merge the output of each thread in a single one
+called human_phantom.root
+macro.C is provided to print the content of the ntuple in a ROOT
+interactive analysis session.
+
+----> Macro files: example of different human phantoms
+
+default.mac is executed by default in the simulation, with visualisation
+batch.mac: macro to run in batch mode ( with no visualisation)
+adultMIRDFemale.mac: example to define a MIRD female human phantom
+adultMIRDMale.mac: example to define a MIRD male human phantom
+adultHead.mac: example how to define one piece of the anatomy
+adultORNLFemale.mac: example to define a ORNL female human phantom - THIS NEEDS GDML INSTALLED
+adultORNLMale.mac: example to define a ORNL male human phantom - THIS NEEDS GDML INSTALLED
+adultMIXFemale.mac : example of MIRD human female phantom with 
+	             parameterised breast
+
+-----> How to build the example 
+
+If the user wants to run the example importing geometries via GDML, 
+he/she needs to have built the persistency/gdml module by having
+set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
+as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
+the path where the XercesC XML parser package is installed in your system.
+
+- By default GDML is not configured to be used in the example. If the user wishes
+to use GDML, he/she has to build the example with the following command:
+cmake -DCMAKE_INSTALL_PREFIX=/path/to/geant4-installation -DWITH_GDML_USE=ON /path/to/human_phantom/
+
+- if using GDML, the directory gdmlData must be copied in the directory where 
+the simulation will be launched.
+
+- Compile and link to generate the executable (in your CMAKE build directory):
+ 	      % make
+
+- Execute the application:
+ 	      % ./phantom
+	 
+- Default macro: default.mac (MIRD, Female model) 
+
+- Visualization macros: vrmlVis.mac, dawnVis.mac, openGLVis.mac
+
+- Run simulation in batch mode: batch.mac
+
+---------------------------------------------------------------------------

@@ -1,0 +1,139 @@
+===========================================================
+---------------Geant4 doiPET example---------------------
+===========================================================
+ Author list to be updated, with names of co-authors and contributors from National Institute of Radiological Sciences (NIRS)
+
+ Abdella M. Ahmed (1, 2), Andrew Chacon (1, 2), Harley Rutherford (1, 2),
+ Hideaki Tashima (3), Go Akamatsu (3), Akram Mohammadi (3), Eiji Yoshida (3), Taiga Yamaya (3)
+ Susanna Guatelli (2), and Mitra Safavi-Naeini (1, 2)
+
+*Corresponding authors
+e-mail: abdella.ahmed@health.nsw.gov.au
+        mitras@ansto.gov.au 
+        susanna@uow.edu.au
+
+(1) Australian Nuclear Science and Technology Organisation, Australia
+(2) University of Wollongong, Australia
+(3) National Institute of Radiological Sciences, Japan
+
+================================================================================================
+
+Introduction:
+
+This example simulates depth-of-interaction (doi) enabled positron emission tomography (PET) scanner 
+and NEMA NU phantoms.The example can be executed in a multithreading mode. Some realistic approches 
+of identifying crystal ID are presented.
+  
+   - The center of mass of the position of interaction is identified based on energy weighting 
+   
+  * Note: the following steps are performed if the option for AngerLogic is enabled (ApplyAngerLogic: true) in 
+    the inputParameter.txt
+  - Four ideal photomultiplier tubes (PMTs) are placed at each corner of the crystal block
+  - Perform Anger type calculation method to identify the position of interaction in 2D based
+  - Shift the position response based on the reflector pattern
+  - DOI is identified by using a look-up-table and
+  - Crystal ID in 3D is determined 
+
+The above steps are illustrated figuratively in the supplementary document.
+
+================================================================================================
+1-Geometry and Phantoms
+
+The detector construction has two main parts: constructing the PET system and placing the phantoms.
+
+The PET system is constructed from depth-of-interaction (DOI)detectors blocks. Each detector consisted 
+of 16 x 16 x 4 crystal array constructed from GSO scintillation material. Materials are defined in the 
+DefineMaterials() using Geant4 NIST database. The geometrical specifications are given (and can be changed) 
+in the GlobalParameters.hh file. 
+
+The scanner has 4 ring detectors. The detectors are covered with Aluminum material. Gaps between crystal 
+elements, as well as adjacent rings are introduced.
+
+Various types of NEMA NU phantoms has been provided and are defined in the ConstructPhantom() method. 
+To precisely create the image quality phantom, the G4UnionSolid from the Constructive Solid Geometry (CSG) 
+has been used. The type, position and size of the phantoms can be changed using the macro file when necessary. 
+A macro file is provided for each type of phantom imaging. For example, to run the simulation with image quality 
+phantom, the run_imageQualityPhantom_wholeBody.mac should be used.
+	
+ 2- PHYSICS LIST
+
+The physics list contains standard electromagnetic processes and the radioactiveDecay module for GenericIon. It is 
+defined in the PhysicsList class as a Geant4 modular physics list with registered physics builders provided in Geant4:
+   - G4DecayPhysics - defines all particles and their decay processes
+   - G4RadioactiveDecayPhysics - defines radioactiveDecay for GenericIon
+   - G4EmStandardPhysics_option3 - defines EM standard processes
+    
+ 3- ACTION INITALIZATION
+
+   The ActionInitialization class instantiates and registers to Geant4 kernel all user action classes by invoking the 
+ActionInitialization::Build().
+
+ 4- PRIMARY GENERATOR
+
+The default particle beam is F-18 ion at rest defined in the GPS (General Particle Source). The GPS is used for all types 
+of activity distribution. Various macro files are provided with the name appended on it for specific simulation. The following 
+macro files are provided:
+ 
+run_imageQualityPhantom_wholeBody.mac
+run_imageQualityPhantom_smallAnimal.mac
+run_NECR.mac
+run_sensitivity.mac
+run_spatialResolution.mac
+run_normalization.mac (This one is not given in the NEMA NU manual but it is an important part of image reconstruction) 
+   
+5-EVENT ACTION
+
+At the end of each event, the information is extracted by calling FindInteractingCrystal() function and associative container
+(multimap and set methods) and the containers are cleared by calling the Clear() function.
+
+   		
+ 6- STEPPING ACTION
+
+The SteppingAction class is the one which is used to track the steps. In the stepping action, interaction information of the 
+photon with the crystal and the phantoms are extracted. The interaction information (such as energy deposition, blockID, crystalID, etc)
+is passed into the Analysis.cc class, which outputs the result into an ASCII file. 
+
+Generation of the source (F-18 ion) is confined in the physical volume by killing the event in the SteppingAction class when it is out of 
+the physical volume.
+
+7-ANALYSIS
+
+In the doiPETAnalysis class, several realistic parameters are provided. Deadtime of the detector and/or module, efficiency of the detector, 
+crystal dependent energy resoltion,  etc are provided. The parameters can be changed in the inputparameters.txt file. 
+ 
+***** Geant4 ROOT ANALYSIS
+/Path/doiPET/build/ and type:
+cmake -DWITH_ANALYSIS_USE=ON -DGeant4_DIR=/path/to/geant4_install_dir ../
+
+
+***** How to run a  simulation:
+
+Be in the build director
+/Path/doiPET/build/ cmake ../
+/Path/doiPET/build/ make
+/Path/doiPET/build/ ./doiPET run.mac
+
+Simulation output:
+
+ASCII and ROOT files are created depending on the type of the output format. The following information of the event is written in the output file:
+
+EventID, BlockID, tangentialCrystalID, AxialCrystalID, DOI_ID, time, and Energy deposition in the crystal is written to the file as a list-mode format. 
+
+The user can choose to make the output either in singles or coincidence mode in the inputParameter.txt file as follows:
+
+#Choose the type of output: singlesOutput or coincidenceOutput
+TypeOfOutput: coincidenceOutput
+
+- Use the code analysis.cpp to analyse the raw simulation output data stored in the "resultCoincidence.data" or "resultCoincidence.root" file.
+Before compiling, change the option in the header whether to analyse ASCII or root file (e.g. to use root file #define UseROOT). Then complie the code
+as follows:
+
+
+    Compile: g++ analysis.cpp -o analysis `root-config --cflags --libs`
+    Run: ./analysis
+
+Then, the axial sensitivity will be saved in a CSV file, and the total sensitivty will be displayed in the screen.
+
+The reference data for this example are in: https://bitbucket.org/AbdellaAhmed/doipet_advancedexample_referencedata
+The user can compare his/her simulation results with this data, after elaborating them with the provided analysis scripts.
+=================== end ====================

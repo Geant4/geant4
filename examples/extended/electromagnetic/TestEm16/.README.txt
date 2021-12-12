@@ -1,0 +1,143 @@
+
+///\file "electromagnetic/TestEm16/.README.txt"
+///\brief Example TestEm16 README page
+
+/*! \page ExampleTestEm16 Example TestEm16
+
+ Simulate synchrotron radiation
+	
+\section TestEm16_s1 GEOMETRY DEFINITION
+
+ The geometry consists of a single block of a homogenous material.
+
+ Two parameters define the geometry :
+    - the material of the box,
+    - the (full) size of the box.
+ The default is 500 m of vacuum.
+
+ A transverse uniform magnetic field can be applied.
+
+ The default geometry is constructed in DetectorConstruction class,
+ but all of the above parameters can be changed interactively via
+ the commands defined in the DetectorMessenger class.
+
+\section TestEm16_s2 PHYSICS LIST
+
+ The particle list is the one of novice/exampleN03 and
+ <a href="../../html_TestEm6/html/ExampleTestEm6.html"> TestEm6 </a>
+ with in addition synchrotron radiation.
+ To make the synchrotron radiation easily visible, a very low
+ pressure "vaccuum" and a magnetic field of by default 1 Tesla
+ in z-direction is used.
+
+\section TestEm16_s3- AN EVENT : THE PRIMARY GENERATOR
+
+ The primary kinematic consists of a single particle which hits the
+ block perpendicular to the input face. The type of the particle
+ and its energy are set in the PrimaryGeneratorAction class, and can
+ changed via the G4 build-in commands of G4ParticleGun class (see
+ the macros provided with this example).
+ The default is an positron of 10 GeV.
+    
+ In addition one can choose randomly the impact point of the incident
+ particle. The corresponding interactive command is built in
+ PrimaryGeneratorMessenger class.
+            
+ A RUN is a set of events.
+
+\section TestEm16_s4 VISUALIZATION
+
+ The Visualization Manager is set in the main () (see TestEm16.cc).
+ The initialisation of the drawing is done via the command
+\verbatim
+> /control/execute vis.mac
+> /run/beamOn 1
+\endverbatim
+
+ The detector has a default view which is a longitudinal view of the box.
+
+ The tracks are drawn at the end of event, and erased at the end of run.
+ Optionaly one can choose to draw all particles, only the charged one,
+ or none. This command is defined in EventActionMessenger class.
+
+\section TestEm16_s5 PHYSICS DEMO
+
+ The particle's type and the physic processes which will be available
+ in this example are set in PhysicsList class.
+
+ In addition a build-in interactive command (/process/inactivate proname)
+ allows to activate/inactivate the processes one by one.
+
+ The threshold for producing secondaries can be changed.
+ eg: 
+\verbatim
+ /run/particle/setCut 100 micrometer
+ /run/initialize
+\endverbatim
+	
+ To visualize the Synchrotron radiation :
+\verbatim
+/control/execute vis.mac
+\endverbatim
+		  	
+\section TestEm16_s6- HOW TO START ?
+
+ - Execute Test  in 'batch' mode from macro files
+\verbatim
+% TestEm16    run01.mac
+\endverbatim
+
+ - Execute Test  in 'interactive mode' with visualization
+\verbatim
+% TestEm16
+	....
+Idle> type your commands
+	....
+Idle> exit
+\endverbatim
+
+\section TestEm16_s7 TRACKING : stepMax and setMaxStepLength
+
+  In order to control the accuracy of the deposition, the user can limit
+  'by hand' the maximum  step size stepMax of charged particles.
+
+  The maximum tracking step length for computing of magnetic field lines
+  is by default set to 1 km.
+  Synchrotron radiation in very weak magnetic fields of the order of 1 Gauss
+  may require longer pathlength.
+  This can be achieved with using setMaxStepLength like
+\verbatim
+/testem/tracking/setMaxStepLength 100 km
+\endverbatim
+
+\section TestEm16_s8 HISTOGRAMS
+
+  TestEm16 produces 3 histograms which illustrate synchrotron radiation.
+  The photon energy spectrum (photons / energy bin) and the power spectrum
+  (photon spectrum weighted with the photon energy) and a histogram
+  of the path length between photon radiation is produced.
+	 
+  The histograms are managed by G4AnalysisManager and its messenger,
+  HistoMessenger.
+     	
+  The histos can be activated individually with the command :
+\verbatim
+/analysis/h1/set id nbBins valMin valMax unit
+\endverbatim
+  where 'unit' is the desired unit for the histo (MeV or KeV, cm or mm, etc..)
+								  
+  One can control the name of the histograms file with the command:
+\verbatim
+/analysis/setFileName  name  (default testem16)
+\endverbatim
+   
+  It is possible to choose the format of the histogram file : root (default),
+  xml, csv, by using namespace in HistoManager.hh 	
+   
+  It is also possible to print selected histograms on an ascii file:
+\verbatim
+/analysis/h1/setAscii id
+\endverbatim
+  All selected histos will be written on a file name.ascii  (default testem16)
+  
+*/

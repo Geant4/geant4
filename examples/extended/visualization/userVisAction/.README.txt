@@ -1,0 +1,38 @@
+///\file "visualization/userVisAction/.README.txt"
+///\brief Example userVisAction README page
+
+/*! \page ExampleuserVisAction Example userVisAction
+
+examples/extended/visualization/userVisAction
+
+This example illustrates how to create a "vis action".
+
+The idea is that you register a vis action with the vis manager and
+activate it by a command /vis/scene/add/userAction.  In this case, it
+draws a simple logo.
+
+1) UVA_VisAction.cc defines a G4VUserVisAction and implements a Draw
+   method.
+      
+2) In the main () program (see userVisAction.cc), UVA_VisAction is instantiated and
+   its pointer registerd with the visualization manager. You may
+   optionally specify an extent at this point to assist the viewers to
+   locate the objects.
+
+3) To visualise, use the usual Geant4 vis commands to create a view
+   and scene, then add the vis action to the scene with
+\verbatim
+/vis/scene/add/userAction 
+\endverbatim
+   see vis.mac.
+
+Note: The system needs an "extent" in order to point the virtual
+camera and adjust its field of view, etc.  This defines the "standard
+view".  You may zoom, etc., from this standard view.  The extent may
+be specified as suggested above or by using /vis/scene/add/extent.
+
+
+John Allison
+27th November 2014
+
+*/

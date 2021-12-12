@@ -1,0 +1,70 @@
+
+///\file "medical/GammaTherapy/.README.txt"
+///\brief Example GammaTherapy README page
+
+/*! \page ExampleGammaTherapy Example GammaTherapy
+
+\author I.Gudovska, V.Ivanchenko, S.Larsson \n
+Karolinska Institute & Hospital, Stockholm, Sweden \n
+CERN, Geneva, Switzerland
+
+Electron beam of 50 MeV converted on target. All charged particles removed
+from the beam after the target. Gamma beam irradiate a water phantom.
+In front of the phantom a thin CheckVolume is placed to score gamma
+beam properties. Inside the phantom a score volume is placed to calculate 
+radial radiation dose distribution.
+
+
+\section ExampleGammaTherapy_s1 GEOMETRY
+
+
+GammaTherapy application geometry consists of along z:
+
+-# Generator of electrons directed along z-axis
+-# Target1 (Be, W)
+-# Target2 (W, Cu)
+-# GasVolume (He) :            all charged particles are killed inside 
+-# CheckVolume (Air) :         is sensitive for scoring in front of thephantom
+-# Phantom (H2O) :             is sensitive for radioactive dose calculation
+-# Absorber in Phantom (H2O) : is sensitive for transverse dose calculation
+
+World volume consists of Air.
+
+\section ExampleGammaTherapy_s2 STEERING
+
+Geometry and other parameters can be defined by G4 UI commands.
+
+Following macro files are prepared for different targets used in the real
+setup: be.in (thin Be target), be_w.in (thick BeW target), cu_w.in (thick
+Cu W target).
+
+Only Physics Lists from physics_list kernal library can be activated. 
+Corresponding UI commands are following
+
+\verbatim
+/testem/phys/addPhysics       emstandard
+/testem/phys/addPhysics       emstandard_opt3
+/testem/phys/addPhysics       empenelope
+/testem/phys/addPhysics       emlivermore
+\endverbatim
+
+For interactive mode G4 visualization options and variables should be
+defined, then the example should be recompiled:
+
+\verbatim
+gmake visclean
+gmake
+\endverbatim
+
+The vis.mac file can be used an example of visualization.
+
+\section ExampleGammaTherapy_s3 HISTOGRAMS
+
+Built in histograms are provided. Name of output root file can be
+defined via UI command
+
+\verbatim
+/testem/histoName <myName>
+\endverbatim
+
+*/

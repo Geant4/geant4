@@ -38,4 +38,3 @@ If you think you have found a bug in Geant4, please open a ticket on our `Bugzil
 Contributing to Geant4
 =====
 Please see the main `Contribution Guide <./CONTRIBUTING.rst>`_.
-

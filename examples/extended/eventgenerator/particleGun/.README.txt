@@ -1,0 +1,158 @@
+
+///\file "eventgenerator/particleGun/.README.txt"
+///\brief Example ParticleGun README page
+
+/*! \page ExampleparticleGun Example particleGun 
+			    
+ History:
+ - 10-06-2010 : Makoto Asai - merge into one example
+ - 13-05-2010 : Michel Maire - create as three examples
+  
+ This example demonstrates 5 ways of the usage of G4ParticleGun shooting
+ primary particles in different cases. These are
+ -#  uniform particle direction in a given solid angle
+ -#  Generate several vertices and particles per event
+ -#  Show how to sample a tabulated function (eg. energy spectrum)  
+ -#  Divergent beam in an arbitrary direction 
+ -#  Shooting primaries in spherical coordinates with rotation matrix.
+
+ These usages can be chosen by a UI command
+\verbatim 
+/gunExample/selectGunAction actionID
+\endverbatim 
+ where <i>actionID</i> corresponds to above cases.
+ 	
+\section ParticleGun_s1 Geometry construction
+
+ It is a simple box which represents an 'infinite' homogeneous medium.
+  
+\section ParticleGun_s2 Physics list
+
+PhysicsList.cc defines only geantino and transportation process.
+         	
+\section ParticleGun_s3 Primary generator
+
+ There are 5 concrete primary generator action classes
+ (PrimaryGeneratorActionN, N=0,1,2,3,4) which can be used as an independent sample
+ code. 
+ PrimaryGeneratorAction is the class which uses and switches between these 
+ 5 concrete action classes. Each concrete generator action shoots geantinoes
+ in a distribution decribed below.
+ 
+\subsection ParticleGun_sub_s30 0. Uniform particle direction in a given solid angle
+
+ spherical angles (alpha,psi) respective to z axis
+ Histograms 5,6 show momentum direction in master frame.
+ 
+\subsection ParticleGun_sub_s31 1. Generate several vertices and particles per event
+
+ - particle 1 : a geantino uniformly randomized on a cylinder surface.
+ - particle 2 and 3 : symetric to particle 1.
+ In addition, time_zero of each event is randomized.
+ 
+\subsection ParticleGun_sub_s32 2. Show how to sample a tabulated function (energy spectrum)
+
+ Energy is sampled from a tabulated function defined in InitFunction().
+ The function is assumed positive, linear per segment, continuous.
+ Two sampling methods are illustrated : RejectAccept() and InverseCumul()
+ (see Particle Data book, Monte Carlo techniques).
+
+ Histogram 1 shows generated energy spectrum.
+       
+\subsection ParticleGun_sub_s33 3. Divergent beam in an arbitrary direction with rotation matrix 
+
+ A geantino uniformly randomized around a given direction (theta, phi). 
+ One wants to limit particle direction uniformly around this direction.
+ First, one generates momentum direction in the master frame (eg. World).
+ AlphaMax = opening angle around z axis.
+ Then one rotates momentum in local frame, using rotateUz() function.
+ RotateUz() transforms uz to newUz. It is composition of two simple rotations:
+ theta around oy, then phi around oz (non commutative). \n
+ See:
+ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html \n
+ Histograms 5,6 show momentum direction in local frame.
+  
+\subsection ParticleGun_sub_s34 4. Shooting primaries in spherical coordinates with rotation matrix
+
+ a geantino uniformly randomized within a spherical shell.
+
+ a) Vertex position
+ One wishes to shoot uniformly within a spherical shell.
+ One works in spherical coordinates. One uses inverse cumulative method with
+ analytical formulae. \n
+ Histograms 2,3,4 demonstrate uniform distribution of vertex position.
+
+ b) Momentum direction
+ One wants to limit particle direction uniformly within (alphaMin, alphaMax).
+ First, one generates momentum direction in the master frame (eg. World).
+ Then, one rotates momentum in vertex_position frame, using rotateUz() function.
+ RotateUz() transforms uz to ur. It is composition of two elementary rotations:
+ theta around oy, then phi around oz (non commutative). \n
+ See:
+ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html \n
+ 
+ Histograms 5,6 show momentum direction in vertex_position frame.
+
+\section ParticleGun_s4 Visualisation
+ 
+ Visualization Manager is set in the main () (see particleGun.cc).
+ Initialisation of the drawing is done via the commands
+ /vis/.. in the macro vis.mac. This macro is automatically read from the main 
+ in case of interactive running mode.
+ 
+\section ParticleGun_s5 How to start ?
+ 		
+  - Execute particleGun in 'batch' mode from macro files
+\verbatim 
+% ParticleGun   run1.mac
+\endverbatim 
+ 		
+  - Execute particleGun2 in 'interactive mode' with visualization
+\verbatim 
+% particleGun
+....
+Idle>      ---> type your commands. For instance:
+Idle> /gunExample/selectGunAction 1
+Idle> /run/beamOn 10
+....
+Idle> exit
+\endverbatim 
+	
+\section ParticleGun_s6 Histograms
+ 
+  particleGun produces several 1D histograms which are saved as
+  particleGun.root by default.
+
+    - 1 : energy spectrum dN/dE = f(E)
+    - 2 : vertex position: radial distr dN/dv = f(r)
+    - 3 : vertex position: cos(theta)
+    - 4 : vertex position: phi
+    - 5 : particle direction in local frame: cos(alpha)
+    - 6 : particle direction in local frame: psi      
+
+  Please note that histogram 1 will be filled only if you use 
+  PrimaryGeneratorAction2, histos 5,6 with PrimaryGeneratorAction0 and 3
+  and 2 through 6 will be filled with PrimaryGeneratorAction4.
+
+  The histograms are managed by the HistoManager class and its Messenger. 
+  The histos can be individually activated with the command :
+\verbatim 
+/analysis/h1/set id nbBins  valMin valMax unit 
+\endverbatim 
+  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+  One can control the name of the histograms file with the command:
+\verbatim 
+/analysis/h1/setFileName  name  (default particleGun)
+\endverbatim 
+   
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh
+   
+   It is also possible to print selected histograms on an ascii file:
+\verbatim 
+/analysis/h1/setAscii id
+\endverbatim 
+   All selected histos will be written on a file name.ascii (default gunExample)
+
+*/

@@ -1,0 +1,46 @@
+------------------------------------------------------------------------------
+This file and NEW_APP_INSTALL describe important information if you are
+  planning to create a new parallel Geant4 application, similarly
+  to the examples ParN02 and ParN04.
+This package implements event-level parallelism for Geant4
+  using the free TOP-C distribution.  (TOP-C = Task Oriented Parallel C/C++)
+
+To parallelize an existing sequential Geant4 application, read NEW_APP_INSTALL.
+
+The design goals are:
+1.  No modification of the Geant4 kernel libraries.
+2.  Application sessions should be efficient and reproducible
+     (independently of the number of slave processes and the
+      order in which they are called by TOP-C)
+3.  Setting deterministic random seeds on each slave
+    [ This code assumes that each slave will initialize its random state
+      based on either the event number or a random seed selected
+      on the master.]
+
+This assumes that you have already installed CLHEP, Geant4, and TOP-C
+  TOP-C can be downloaded via its home page:
+                          http://www.ccs.neu.edu/home/gene/topc.html
+
+Other qualifications are:
+1.  It has only been tested under Linux, although it should be
+       portable to any other UNIX supported by Geant4.
+2.  Since Geant4 does not currently support a uniform format for
+       tracker hits, calorimeter hits, etc., on new applications,
+       you may have to write marshalling code for your hits, based
+       on the examples in ParN02 and ParN04.
+3.  This should support histograms as long as AnalysisManager::Step() is
+	is trivial.  However, I have not had the opportunity
+	for careful testing.  Please write to gene@ccs.neu.edu if you
+	are including histograms, and especially if you define
+	 AnalysisManager::Step().
+4.  Currently, this distribution does not support:
+      trajectory stores, n-tuples, track parallelism,
+      interactive input commands (no macrofile)
+    I plan to add those features according to demand.
+       Probably:  a. allowing interactive input
+		  b. track-level parallelism
+                  c. other (trajectory store, PostponeOneEvent(), ...)
+
+Some design assumptions in this ParGeant4 implementation:
+1.  A collectionName for a G4HitsCollection uniquely identifies the
+      G4HitsCollection within a G4HCofThisEvent.

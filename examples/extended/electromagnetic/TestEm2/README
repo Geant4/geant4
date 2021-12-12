@@ -1,0 +1,161 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm2
+                            -------
+			    
+     How to do shower profiles in an homogenous medium, with virtual
+     voxelisation.
+
+ 1- GEOMETRY DEFINITION
+
+     The geometry consists of a cylinder of homogenous material.
+
+     The default geometry is constructed in DetectorConstruction class,
+     but all of the above parameters can be modified interactively via
+     the commands defined in the DetectorMessenger class.
+
+     Material can be choosen: Air Water lAr Al Fe BGO PbWO4 Pb.
+     eg: /testem/det/setMat PbWO4
+     
+     The cylinder is virtually sliced longitudinally (slice) and radially 
+     (ring).  The size of the slices and rings are expressed in radiation 
+     length units and can be changed.
+     eg: /testem/det/setLbin 20   1.    ---> 20 slices of 1. radl
+         /testem/det/setRbin  5   0.25  --->  5 rings of 0.25 radl
+         /testem/det/update             ---> rebuild the geometry
+	 
+     (MaxBin = 500 in both directions)	 
+
+     An uniform magnetic field along the cylinder axis can be set.
+     eg: /globalField/setValue 0 0 5 tesla 
+     
+ 2- PHYSICS LISTS
+
+    Physics lists are based on modular design. Several modules are instantiated:
+    1. Transportation
+    2. EM physics
+    3. Decays
+    4. StepMax - for step limitation
+ 
+    EM physics builders can be local (eg. in this example) or from G4 kernel
+    physics_lists subdirectory.
+ 
+    Local physics builders:	 
+    - "local"	standard EM physics with current 'best' options setting.
+                these options are explicited in PhysListEmStandard
+    
+    From geant4/source/physics_lists/builders:
+     - "emstandard_opt0" recommended standard EM physics for LHC
+     - "emstandard_opt1" best CPU performance standard physics for LHC
+     - "emstandard_opt2" similar fast simulation
+     - "emstandard_opt3" best standard EM options - analog to "local" above
+     - "emstandard_opt4" best current advanced EM options standard + lowenergy
+     - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+     - "emstandardSS"  standard EM physics and single scattering model
+     - "emlivermore"  low-energy EM physics using Livermore data
+     - "empenelope"   low-energy EM physics implementing Penelope models
+     - "emlowenergy"  low-energy EM physics implementing experimental
+                      low-energy models
+
+    Physics lists and options can be (re)set with UI commands
+    
+ 3- AN EVENT : THE PRIMARY GENERATOR
+
+     The primary kinematic consists of a single particle which hits the
+     cylinder perpendicular to the input face. The type of the particle
+     and its energy are set in the PrimaryGeneratorAction class, and can
+     changed via the G4 build-in commands of G4ParticleGun class (see
+     the macros provided with this example).
+
+     A RUN is a set of events.
+
+ 4- VISUALIZATION
+
+     The Visualization Manager is set in the main() (see TestEm2.cc).
+     The initialisation of the drawing is done via the commands
+     /vis/.. in the macro vis.mac. In interactive session:
+     PreInit or Idle > /control/execute vis.mac
+
+     The detector has a default view which is a longitudinal view of the
+     cylinder.
+
+     The tracks are drawn at the end of event, and erased at the end of run.
+     Optionally one can choose to draw all particles, only the charged one,
+     or none. This command is defined in EventActionMessenger class.
+
+ 5- PHYSICS DEMO
+
+     The particle's type and the physics processes which will be available
+     in this example are set in PhysicsList class.
+
+     In addition a build-in interactive command (/process/inactivate procname)
+     allows to activate/inactivate the processes one by one.
+
+     The threshold for producing secondaries can be changed.
+     eg: /testem/phys/setCuts 100 microm
+         /run/initialize
+	 
+     The shower profiles are histogramed, if histograming is activated.
+     They can be also printed with the command /testem/run/verbose 1	 
+
+ 6- HOW TO START ?
+
+     - Execute TestEm2 in 'batch' mode from macro files
+ 		% TestEm2   run01.mac
+
+     - Execute TestEm2 in 'batch' mode using multi-threading
+ 		% TestEm2   run01.mac 4
+       here 4 is number of threads, it should be user defined,
+       optimal value depends on hardware
+
+     - Execute TestEm2 in 'interactive mode' with visualization
+ 		% TestEm2
+ 		....
+ 		Idle> type your commands
+  		....
+ 		Idle> exit
+
+
+     Macros provided in this example:
+     - egs4.mac:
+          Fe; L = 20 radl; R = 5 radl; electron 30 GeV
+          (EGS4 simulation: Particle Data Group - Phys.Rev.D 50-3 - August94)
+     - run01.mac: PbWO4; L = 20 radl; R = 5 radl; electron 5 GeV
+     - run02.mac: Al; L = 13.5 radl; R = 1.35 radl; electron 1 GeV
+          (Electron-induced cascade showers: J&H Crannel - Phys. Rev. 184-2 -    August69)
+     - run03.mac: H2O; L = 9.97 radl; R = 0.665 radl; electron 1 GeV
+          (Electron-induced cascade showers: J&H Crannel - Phys. Rev. 184-2 -    August69)
+     - test.mac: PbWO4; L = 20 radl; R = 5 radl; electron 5 GeV
+     - vis.mac: to activate visualization
+
+ 7- HISTOGRAMS
+
+   TestEm2 produces several histograms:
+
+     Content of these histo:
+
+      1 : energy deposit       per event
+      2 : charged track length per event
+      3 : neutral track length per event
+
+      4 : longitudinal energy profile
+      5 : rms of longitudinal energy profile      
+      6 : cumulated longitudinal energy profile
+      7 : rms of cumulated longitudinal energy profile
+
+      8 : radial energy profile
+      9 : rms of radial energy profile      
+     10 : cumulated radial energy profile
+     11 : rms of cumulated radial energy profile
+
+ To define the output file name with histograms, use the UI command :
+
+   "/analysis/setFileName name"
+   
+ The format of the histogram file can be : root (default),
+ xml, csv, by selecting g4nnn.hh in RunAction.hh 
+ 

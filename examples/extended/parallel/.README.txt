@@ -1,0 +1,29 @@
+
+///\file "parallel/.README.txt"
+///\brief Examples parallel README page
+
+/*! \page Examples_parallel Category "parallel"
+
+This directory includes example applications to demonstrate the usage of
+different techniques for achieving event parallelism with Geant4.
+
+- \link Examples_MPI MPI \endlink is a native interface with MPI libraries. 
+  The directory contains 
+  a Geant4 UI library and a couple of parallelized examples.
+  Using this interface, users applications can be parllelized with 
+  different MPI compliant libraries, such as LAM/MPI, MPICH2, OpenMPI,
+  and so on. 
+  <br><br>
+
+- \link Examples_tbb Examples TBB \endlink demonstrate how to
+  interface a simple application with the Intel Threading Building Blocks
+  library (TBB), and organise MT event-level parallelism as TBB tasks.
+  <br><br>
+
+- TopC examples are Geant4 examples adapted to be run together with 
+  the TOP-C communication layer application on either a cluster of systems 
+  or multi-processor machines. They are based on N02 and N04 examples,
+  originally provided in novice examples (see more in \ref README_novice)
+  <br><br>
+
+*/

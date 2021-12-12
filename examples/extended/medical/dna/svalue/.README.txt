@@ -1,0 +1,82 @@
+
+///\file "medical/dna/svalue/.README.txt"
+///\brief Example svalue README page
+
+
+/*! \page Examplesvalue Example svalue
+
+\author S. Incerti et al. (a, *) \n
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan \n
+(CENBG), IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France \n
+* e-mail:incerti@cenbg.in2p3.fr
+
+\section svalue_s1 INTRODUCTION.                                                    
+                                                 
+The svalue example shows how to calculate monoenergetic S values in liquid water
+using the Geant4-DNA physics processes and models. 
+
+It is adapted from TestEm12.
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+\section svalue_s2 GEOMETRY SET-UP
+
+The geometry is a 10-nm radius sphere of liquid water (G4_WATER
+material). Particles are shot randomly inside the sphere. Surrounding
+medium is not considered.
+
+Radius of the sphere, particle type and energy can be controlled by the 
+svalue.in macro file.
+
+The PrimaryGeneratorAction class is adapted (G4 state dependent) 
+in order to enable generic physics list usage 
+(empty modular physics list).
+
+\section svalue_s3 SET-UP 
+
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+\section svalue_s4 HOW TO RUN THE EXAMPLE                                         
+
+In interactive mode, run:
+
+\verbatim
+./svalue svalue.in
+\endverbatim
+
+The svalue.in macro allows a full control of the simulation.
+
+\section svalue_s5 PHYSICS
+
+You can select Geant4-DNA physics constructor in svalue.in.
+
+A tracking cut can be applied if requested.
+
+\section svalue_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
+
+The output results consist in a text file (s.txt), containing :
+- the radius of the sphere (in nm)
+- the energy of incident particles (in eV)
+- the S value (in Gy/Bq.s)
+- the rms on S value (in Gy/Bq.s)
+
+Note: rms values correspond to standard deviation.
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+incerti@cenbg.in2p3.fr
+
+*/

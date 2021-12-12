@@ -1,0 +1,52 @@
+
+///\file "biasing/GB02/.README.txt"
+///\brief Example GB02 README page
+
+/*! \page ExampleGB02 Example GB02
+
+\section ExampleGB02_s1 Force collision biasing
+
+This example illustrates how to make a force collision biasing in a way
+that is essentially the same than the MCNP one.
+
+Generally speaking, the scheme consists of a G4VBiasingOperator that takes
+decisions on what sort of biasing is to be applied. The operator makes these
+decision on requests of the G4BiasingProcessInterface process. This process
+wraps an actual physics process and asks to the operator about what sort of
+biasing it should apply. This operator selects G4VBiasingOperation objects that
+implement the actual biasing content.
+
+In the present case, we make use of the biasing operator
+- G4BOptrForceCollision
+that implements an "a la MCNP" force collision scheme for one particle type.
+This operator is defined in processes/biasing/generic. It is a non-trivial
+operator.
+It starts by "splitting" the track at the volume entrance. Then this
+track is forced to fly through the volume with no interaction. The
+G4OptnForceFreeFlight biasing operation is used for that.
+The second copy is then forced to interact within the volume, which is
+handled by the G4BOptnForceCommonTruncatedExp operation : it is common as it
+takes care of several processes by itself, and it applies a truncated
+exponential law : ie and exponential law limited to the [0,L] range, L being
+the volume width along the track flight.
+
+To allow several particle types to undergo this force interaction scheme,
+an other operator is defined
+- GB02BOptrMultiParticleForceCollision
+which holds one G4BOptrForceCollision per particle type, and which
+delegates then everything to it.
+
+The geometry is simple : a single volume to which an instance of
+GB02BOptrMultiParticleForceCollision is attached to.
+
+The wrapping of physics processes by G4BiasingProcessInterface processes
+is simply handled by the G4GenericBiasingPhysics physics constructor, as shown
+in the main program.
+
+Then, at whatever level (stepping action, or sensitive detector) the
+statistical weight of the track can be obtained as:
+\verbatim
+w = track->GetWeight() ;
+\endverbatim
+
+*/

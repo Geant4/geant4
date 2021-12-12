@@ -1,0 +1,146 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            fanoCavity2
+                            -----------
+
+    This program computes the dose deposited in an ionization chamber by an
+    extended (one dimensional) monoenergetic electron source.
+    The geometry of the chamber satisfies the conditions of charged particle
+    equilibrium. Hence, under idealized conditions, the ratio of the dose 
+    deposited over the beam energy fluence must be equal to 1.
+    This variante of the Fano cavity test make use of an reciprocity theorem.
+    
+    J.Sempau and P.Andreo, Phys. Med. Biol. 51 (2006) 3533        
+ 
+ 1- GEOMETRY
+ 
+    The chamber is modelized as a cylinder with a cavity in it.
+    
+    5 parameters define the geometry :
+      - the radius of the chamber (must be big)
+      - the material of the wall
+      - the thickness of the wall
+      - the material of the cavity
+      - the thickness of the cavity
+
+    Wall and cavity must be made of the same material, but with different
+    density.
+    Radius must be bigger than range of electrons in cavity. 	 	
+
+    All above parameters can be redifined via the UI commands built in 
+    DetectorMessenger class.
+
+                        _________________
+     radius (infinite)  |     |   |     |
+                        |     |   |     |
+                        |     |   |     |
+                        |     |   |     |
+                        |     | <-+-----+--- cavity
+                        |     |   |     |
+                        |     |   |     |
+                 ---------------------------- cylinder axis = e- source
+                        |     |   |     |
+                        |     |   |     |
+                        |     |   |     |
+                        |wall |   |wall |
+                        |     |   |     |
+                        |     |   |     |
+                        |     |   |     |
+                        -----------------
+
+ 2- BEAM
+  
+    Monoenergetic (E0) incident electron source is uniformly distribued along
+    cylinder axis, within wall and cavity, with constant lineic density
+    per mass: I.
+    An effective wall thickness is defined from the range of e- at energy E0.
+     
+    Beam_energy_fluence is E0*I
+    
+ 3- PURPOSE OF THE PROGRAM
+    
+    The program computes the dose deposited in the cavity and the ratio
+    Dose/Beam_energy_fluence. This ratio must be 1.
+ 
+    The program needs high statistic to reach precision on the computed dose.
+    The UI command /run/printProgress allows to survey the convergence of
+    the dose calculation.
+    
+    The simplest way to study the effect of e- tracking parameters on dose 
+    deposition is to use the command /testem/stepMax.
+    
+ 4- PHYSICS
+ 
+    The physics list contains the standard electromagnetic processes, with few 
+    modifications listed here.
+    
+    - Bremsstrahlung : Fano conditions imply no energy transfer via
+    bremsstrahlung radiation. Therefore this process is not registered in the
+    physics list. However, it is always possible to include it. 
+    See PhysListEm classes.
+    
+    - Ionization : In order to have same stopping power in wall and cavity, one
+    must cancel the density correction term in the dedx formula. This is done in
+    a specific MollerBhabha model (MyMollerBhabhaModel) which inherites from 
+    G4MollerBhabhaModel.
+    
+    To prevent explicit generation of delta-rays, the default production
+    threshold (i.e. cut) is set to 10 km (CSDA condition).
+    
+    The finalRange of the step function is set to 10 um, which more on less
+    correspond to a tracking cut in water of about 20 keV. See emOptions.
+    Once again, the above parameters can be controled via UI commands.
+    
+    - Multiple scattering : is switched in single Coulomb scattering mode near
+    boundaries. This is selected via EM options in PhysicsList, and can be
+    controled with UI commands.
+    
+    - All PhysicsTables are built with 100 bins per decade.  
+     	
+ 5- HISTOGRAMS
+ 
+   fanoCavity2 has several predefined 1D histograms : 
+  
+      1 : emission point of e+-
+      2 : energy spectrum of e+-
+      3 : theta distribution of e+-
+      4 : emission point of e+- hitting cavity
+      5 : energy spectrum of e+- when entering in cavity
+      6 : theta distribution of e+- before enter in cavity
+      7 : theta distribution of e+- at first step in cavity      
+      8 : track segment of e+- in cavity
+      9 : step size of e+- in wall
+     10 : step size of e+- in cavity
+     11 : energy deposit in cavity per track
+   
+   The histograms are managed by G4AnalysisManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /analysis/setFileName  name  (default fanocavity2)
+   
+   It is possible to choose the format of the histogram file :
+   root(default), xml, hbook.  See HistoManager.hh
+   
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii 
+   (default fanocavity2) 
+ 
+ 6- HOW TO START ?
+ 
+    - execute fanoCavity2 in 'batch' mode from macro files
+        % fanoCavity2   run01.mac
+ 
+    - execute fanoCavity2 in 'interactive mode' with visualization
+        % fanoCavity2
+        ....
+        Idle> type your commands
+        ....
+        Idle> exit

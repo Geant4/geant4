@@ -1,0 +1,49 @@
+
+///\file "biasing/GB01/.README.txt"
+///\brief Example GB01 README page
+
+/*! \page ExampleGB01 Example GB01 
+
+\section ExampleGB01_s1 Cross-section biasing
+
+This example illustrates how to bias process cross-sections.
+
+Generally speaking, the scheme consists of a G4VBiasingOperator that takes
+decisions on what sort of biasing is to be applied. The operator makes these
+decision on requests of the G4BiasingProcessInterface process. This process
+wraps an actual physics process and asks to the operator about what sort of
+biasing it should apply. This operator selects G4VBiasingOperation objects that
+implement the actual biasing content.
+
+In the present case, the G4VBiasingOperation objects are
+- G4BOptnChangeCrossSection
+instances. This class is defined in processes/biasing/generic.
+
+A first operator is defined to handle the case of one particle:
+- GB01BOptrChangeCrossSection .
+
+The change of cross-section is generally speaking a change of process occurence.
+G4BOptnChangeCrossSection objets are then selected in the method:
+- G4VBiasingOperation* GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(...)
+
+To allow this same cross-section change to be applied to several particle
+types, an other operator is defined
+- GB01BOptrMultiParticleChangeCrossSection
+which holds one GB01BOptrChangeCrossSection per particle type, and which
+delegates then everything to it.
+
+The geometry is simple : a single volume to which an instance of
+GB01BOptrMultiParticleChangeCrossSection is attached to.
+
+The wrapping of physics processes by G4BiasingProcessInterface processes
+is simply handled by the G4GenericBiasingPhysics physics constructor, as shown
+in the main program (see exampleGB01.cc).
+
+
+Then, at whatever level (stepping action, or sensitive detector) the
+statistical weight of the track can be obtained as:
+\verbatim
+w = track->GetWeight() ;
+\endverbatim
+
+*/

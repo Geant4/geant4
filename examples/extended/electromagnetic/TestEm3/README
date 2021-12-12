@@ -1,0 +1,195 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm3
+                            -------
+  
+ How to collect energy deposition in a sampling calorimeter.
+ How to survey energy flow.
+ how to print stopping power. 
+
+ 1- GEOMETRY DEFINITION
+ 
+  The calorimeter is a box made of a given number of layers.
+  A layer consists of a sequence of various absorbers (maximum MaxAbsor=9).
+  The layer is replicated.
+ 
+  Parameters defining the calorimeter :
+    - the number of layers,
+    - the number of absorbers within a layer,		
+    - the material of the absorbers,
+    - the thickness of the absorbers,
+    - the transverse size of the calorimeter (the input face is a square). 
+ 
+  In addition a transverse uniform magnetic field can be applied.
+ 
+  The default geometry is constructed in DetectorConstruction class, but all
+  of the above parameters can be modified interactively via the commands 
+  defined in the DetectorMessenger class.
+
+
+        |<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+        |           |           |                       |                       |
+        ==========================================================================
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||   abs 1  | abs 2     ||   abs 1  | abs 2     ||   abs 1  | abs 2     ||
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+ beam   ||          |           ||          |           ||          |           ||
+======> ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||   cell 1 | cell 2    ||   cell 3 | cell 4    ||   cell 5 | cell 6    ||
+        ==========================================================================
+        ^           ^           ^           ^           ^           ^           ^
+        pln1        pln2        pln3       pln4        pln5        pln6       pln7
+ 
+  NB. The number of absorbers and the number of layers can be set to 1.
+  In this case we have a unique homogeneous block of matter, which looks like 
+  a bubble chamber rather than a calorimeter ...
+  (see the macro emtutor.mac)
+ 
+ 2- PHYSICS LISTS
+ 
+  Physics lists are based on modular design. Several modules are instantiated:
+  1. Transportation
+  2. EM physics
+  3. Decays
+  4. StepMax - for step limitation
+
+  EM physics builders can be local (eg. in this example) or from G4 kernel
+  physics_lists subdirectory.
+
+  Local physics builders:	 
+  - "local"	standard EM physics with current 'best' options setting.
+              these options are explicited in PhysListEmStandard
+  
+  From geant4/source/physics_lists/builders:	
+  - "emstandard_opt0" recommended standard EM physics for LHC
+  - "emstandard_opt1" best CPU performance standard physics for LHC
+  - "emstandard_opt2" similar fast simulation
+  - "emstandard_opt3" best standard EM options - analog to "local" above
+  - "emstandard_opt4" best current advanced EM options standard + lowenergy
+  - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+  - "emstandardSS"  standard EM physics and single scattering model
+  - "emlivermore"  low-energy EM physics using Livermore data
+  - "empenelope"   low-energy EM physics implementing Penelope models
+  - "emlowenergy"  low-energy EM physics implementing experimental
+                    low-energy models
+      
+  Physics lists and options can be (re)set with UI commands.
+    
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle which hits the calorimeter
+  perpendicular to the input face. The type of the particle and its energy are 
+  set in the PrimaryGeneratorAction class, and can be changed via the 
+  G4 build-in commands of G4ParticleGun class (see the macros provided with this 
+  example).
+ 	
+  In addition one can choose randomly the impact point of the incident particle.
+  The corresponding interactive command is built in PrimaryGeneratorMessenger.
+ 	
+  A RUN is a set of events.
+  
+  TestEm3 computes the energy deposited per absorber and the energy flow through
+  the calorimeter.
+ 				
+ 4- VISUALIZATION
+ 
+  The Visualization Manager is set in the main() (see TestEm3.cc).
+  The initialisation of the drawing is done via the commands :
+  /vis/... in the macro vis.mac. In interactive session:
+  PreInit or Idle > /control/execute vis.mac
+ 	
+  The default view is a longitudinal view of the calorimeter.
+ 	
+  The tracks are drawn at the end of event, and erased at the end of run.
+  Optionally one can choose to draw all particles, only the charged ones, or
+  none. This command is defined in EventActionMessenger class.
+ 	
+ 5- PHYSICS DEMO
+ 
+  The particle's type and the physics processes which will be available
+  in this example are set in PhysicsList class.
+ 	
+  In addition a built-in interactive command (/process/inactivate processName)
+  allows to activate/inactivate the processes one by one.
+  Then one can well visualize the processes one by one, especially 
+  in the bubble chamber setup with a transverse magnetic field.
+ 
+  As a homework try to visualize a gamma conversion alone, 
+  or the effect of the multiple scattering.
+
+  Notice that one can control the maximum step size, via the
+  StepMax process and the command /testem/stepMax
+  (see StepMax and PhysicsList classes)
+ 
+ 6- HOW TO START ?
+ 
+  - Execute TestEm3 in 'batch' mode from macro files
+      % TestEm3   run01.mac
+ 
+  - Execute TestEm3 in 'interactive mode' with visualization
+    % TestEm3
+    ....
+    Idle> type your commands. For instance:
+    Idle> /control/execute run01.mac
+    ....
+    Idle> exit
+
+  Macros provided in this example:
+  - atlashec.mac: ATLAS HEC model
+  - dedx.mac: to control dE/dx calculation: 1 layer; minimum ionizing particle
+  - emtutor.mac: for tutorial; interactivity + visualisation
+  - geom.mac: to play with geometry
+  - ionC12.mac: ion C12, 1 layer
+  - lhcb.mac: LHCB ECAL model
+  - linac.mac: Linac/Ecal from Graham Wilson
+  - lockwood.mac: Al-Au-Al 1 layer (G.L.Lockwood et al. SAND79-0414 (1980))
+  - run01.mac: Lead-liquidArgon 50 layers; electron 1 GeV
+  - run02.mac: Tungsten-Silicon 50 layers; electron 1 GeV
+  - storeTables.mac: show how to store and retrieve physics tables
+  - tileCal.mac: ATLAS tileCal
+  - vis.mac: to activate visualization
+
+ 7- HISTOGRAMS
+ 
+ Testem3 can produce histograms : 
+  histo 1 : energy deposit in absorber 1
+  histo 2 : energy deposit in absorber 2
+  ...etc...........
+    
+  histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV/event)
+  histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV/event)  
+  ...etc...........  
+  
+  histo 21 : energy flow (MeV/event)
+  histo 22 : lateral energy leak (MeV/event)  
+  ...etc...........
+      
+  NB. Numbering scheme for histograms:
+  layer     : from 1 to NbOfLayers (included)
+  absorbers : from 1 to NbOfAbsor (included)
+  planes    : from 1 to NbOfLayers*NbOfAbsor + 1 (included)
+  
+ One can control the binning of the histo with the command:
+  /analysis/h1/set   idAbsor  nbin  Emin  Emax  unit 
+  where unit is the desired energy unit for that histo (see TestEm3.in).
+         
+  One can control the name of the histograms file with the command:
+  /analysis/setFileName  name  (default testem3)
+   
+  It is possible to choose the format of the histogram file : root (default),
+  xml, csv, by using namespace in HistoManager.hh 
+   	
+ It is also possible to print selected histograms on an ascii file:
+ /analysis/h1/setAscii id
+ All selected histos will be written on a file name.ascii  (default testem3)
+    

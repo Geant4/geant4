@@ -1,0 +1,455 @@
+	         =========================================================
+                     	Text version of the Hadrontherapy README file
+                 =========================================================
+
+Last revision: 
+Released with the Geant4 10.7 version (December 2020)
+
+------------------------------------------------------------------------------------------------
+ADVERTISEMENT: this is the text version of the README file of the 'basic' hadrontherapy, 
+as it has been released in the Geant4 10.7 release
+
+Visit the Hadrontherapy web site (https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy) to request 
+the complete version of this program, together with its documentation;
+'hadrontherapy' (both basic and full version) is supported by the Italian INFN
+Institute in the framework of the MC-INFN Group
+
+-------------------------------------------------------------------------------------------------
+
+                     =========================================================
+                    		            HADRONTHERAPY
+                     =========================================================
+==========>    MAIN AUTHORS <==========
+
+   G.A.P. Cirrone(a)*, L. Pandola(a), G.Milluzzo(a), G.Petringa(a)
+
+==========>   PAST AUTHORS  <==========
+
+J.Pipek(a),R. Calcagno(a),  G.Cuttone(a),G.Danielsen (b), F.Di Rosa(a), S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
+A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(e), F.Romano(f), G.Russo(a), M.Russo(a), A.Varisano(a), A. Tramontana (a,f)
+
+
+(a) Laboratori Nazionali del Sud of the INFN, Catania, Italy
+(b) Helsinki Institute of Physics, Helsinki, Finland
+(c) University of Wollongong, Australia
+(d) CERN, (CH)
+(e) INFN Section of Genova, Genova, Italy
+(f) Physics and Astronomy Department, University of Catania, Catania, Italy
+
+  *Corresponding author, email to: cirrone@lns.infn.it
+-------------------------------------------------------------------------------------------------
+
+HADRONTHERAPY:
+WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE
+===================================================
+
+'hadrontherapy' is a Geant4-based application specifically developed to address typical needs related to proton and ion therapy. 
+Its first release was in 2004. At that time 'hadrontherapy' was only capable of simulating a well-specified proton therapy facility: the passive transport beam line installed at Laboratori Nazionali del Sud (INFN) in Catania, Italy.
+
+Today Hadrontherapy, except that it is in continuous development, is more flexible and shows many additional capabilities with respect to the past.
+Its geometrical set-up, for example, is now completely interchangeable permitting a simple switch between different geometrical configurations, which all share the same phantom (sensitive detector) with the related features.
+It is possible to do a simulation of a generic proton/ion transport beam line and laser-driven beam line. In this release, a module for dose average LET and RBE computations have been also included.
+
+The configurations are:
+
+- Passive proton beam line, which is installed at the LNS-INFN facility in Catania for eye tumor treatment with protons at 62 MeV. It is simulated in PassiveProtonBeamLine.cc; (G.A.P. Cirrone et al., IEEE Nuclear Science Symposium Conference Record, 2003, 3, pp. 1756-1758, J2-5) 
+
+- Passive carbon beam line, which is the simulation of the transport beam line at LNS-INFN of Catania for experiments with ion beams (Carbon, Oxygen and Helium). It is simulated in PassiveCarbonBeamLine.cc;
+
+- Laser-driven beam line, which is the simulation of a beam line for the focusing, the handling and the transport of a laser-driven beam, a Faraday Cup is the eligible detector for this class. It is simulated in LaserDrivenBeamLine.cc; 
+(A.Tramontana et al., A transport beamline solution for laser-driven proton beams
+6th International Particle Accelerator Conference, IPAC 2015, 2015, pp. 2515-2518)
+
+ - TIFPA passive proton beam line, which is installed at the Protontherapy Center of Trento (Italy), used for experiments with proton beams. Geometry is implemented in HadrontherapyTIFPAPassiveProtonBeamLine.cc  
+(F.Tommasino et al., A new facility for proton radiobiology at the Trento proton therapy centre: Design and implementation, Physica Medica 58 (2019) 99–106)
+
+- BEST passive proton beam line is the beamline INFN-LNS is developing for the BEST Cyclotron company for eye tumor treatment with 70 MeV protons. The geometry is implemented in BESTPassiveProtonBeamline.cc.
+	
+In PassiveProtonBeamLine.cc, in PassiveCarbonBeamLine.cc, in LaserDrivenBeamLine.cc,in HadrontherapyTIFPAPassiveProtonBeamLine.cc and in  BESTPassiveProtonBeamline.cc, the user can change the geometrical characteristics of beam line elements.
+Alternatively, the user can use the macro file.
+
+Folder structure of 'hadrontherapy'
+
+'hadrontherapy' distribution contain different sub-folders:
+
+\src: where source .cc files are stored
+
+\include: where header .hh files are stored
+
+\macro: where a set of ready-to-use macro files are provided
+
+\field: where a set of ready-to-use.TABLE files are provided. These files are generated from OPERA & COMSOL codes for the laser-driven beam line.
+
+\experimentalData: in this directory, a set of reference (both experimental and analytical) data are stored. 
+
+\data\rbe: contains the file lem1.csv including the alpha and beta values and rbe resulted from the radiobiological Local Effect Model (LEM) for three cell lines ( AG01522, U87 and HSG)
+
+Description of the \macro folder
+
+Inside the "macro" folder, different macro files are provided. 
+In particular, five macro files are related to the different beam lines: 
+
+defaultMacro.mac: permits to run a simulation using the default geometry, i.e. the CATANA proton beam line in Catania. A  62 MeV gaussian proton beam with 0.25 MeV sigma and 0.028° as divergence (sigma) is launched.
+            You can modify by macro the range shifter thickness you  
+            want to select. The entrance of the phantom is positioned at the isocentre ( (0,0,0) 
+            coordinates). LET and RBE computation are activated. 
+
+carbon_beamline.mac: reproduces a simple passive beam line for the use of carbon, oxygen and helium ion beams for multidisciplinary applications (selectGeometry Carbon). A parallel 62 MeV/u carbon beam with 0.740 MeV/u sigma is simulated.
+
+laserDrivenBeamline.mac: simulates a typical laser-driven proton spectrum as input for a beam line made of a quadrupole system, an energy selector and a Faraday Cup (selectGeometry LaserDriven)
+
+
+Trento_parameters.mac: reproduces the experimental  beam line installed at the Trento protontherapy centre and implements a typical source.
+
+BestBeamLine.mac: implements the elements of the beam line developed for the BEST company and simulates a 70 MeV proton beam as input of the simulation. Dose and LET longitudinal distributions are computed at the isocentre and a native dose scorer is also added to retrieve the lateral dose profiles.
+
+3 additional macro files are also included: 
+
+modulatorMacro.mac : allows the reconstruction of the spread out bragg peak modulating the proton beams by means of a rotating modulator wheel. The wheel is rotated of 1 degree at each run and 1000 protons are simulated in each run. 
+stoppingPowers.mac : calculates the stopping power of protons and alpha particles in the energy range between  1 keV up to 200 MeV
+detectorGeometry.mac : example of how to modify the detector geometry
+
+The main folder also includes an additional macro file, batch.mac which runs a simple simulation using the default geometry of the CATANA beamline.This macro is also used during the system testing process.
+
+DOWNLOAD AND INSTALLATION
+===================================================
+
+'hadrontherapy' source code is released inside the distribution of the Geant4 toolkit in the $G4INSTALL/examples/advanced folder.
+
+To run 'hadrontherapy' you must first install the Geant4 package. Once Geant4 is installed, the example must be first compiled. When the compilation is completed the program can be executed.
+
+A complete guide for the Geant4 installation in different operating systems can be found inside the official installation Geant4 pages.
+
+A CMakeLists.txt file (preferred) is provided together with a standard GNUmakefile for compilation.                                                         
+
+GEOMETRIC SET-UP
+===================================================
+
+The idea of 'hadrontherapy' is to provide a tool useful for Users interested in the field of proton and ion therapy. These can include the simple calculation of dose distribution curves in water or other materials, the derivation of important transport parameters (stopping powers, ranges, etc.) in different geometrical set-ups and for different materials, up to the complete simulation of a real transport beam line for therapy.
+The main component of the simulation is the phantom, a box that can be filled with different materials and where the scoring of different information (at moment the dose deposited in voxels) can be performed. A more complete description of the phantom is given in the next subsection.
+
+All these configurations will be set using macro commands.
+
+There is also a feature that allows the user to make a choice between alternative geometry set-ups. This can be done by using the command:
+/geometrySetup/selectGeometry <name>
+where <name> is either "default" for the standard 'hadrontherapy' geometry, "Carbon" for INFN-LNS transport beam line, normally used for interdisciplinary researches at LNS-INFN in Catania with carbon and other ion beams, "LaserDriven" for the laser-driven beam line, "TrentoLine" for the TIFPA beam line and "BESTBeamLine" for the beam line designed for the BEST company.
+
+At the end of the beam line a phantom (a box of uniform material) is reproduced. Inside it, a user-defined region is divided into cubic and identical voxels. The voxel size can be varied as well as the voxelized region.
+At the end of a simulation run, the dose deposited by primaries and secondaries in each voxel is collected. This information is available as an .out file. 
+The default size of the active voxelized region is 40x40x40 mm and actually the default voxel configuration is 200 x 1 x 1, which means 200 slices with 0.2 mm of thickness.
+Of course, this default can be modified in order to obtain, for example, a matrix of 80x80x80 cubic voxels each with a lateral dimension of 0.5 mm.
+
+Concerning the cut and stepMax values, the default configuration implies a cut value of 1 mm in the whole  world (use the command /run/setCut <length>  in order to set the cut for all, and the command /run/setCutForRegion <name> <length> to set the cut for the desired volume (<name>) only)  and a stepMax of 0.01 mm just in the phantom and in other volumes of the laser-driven beam line (use the command /Step/waterPhantomStepMax 0.01 mm).
+In any case, it is strongly recommended to use a stepMax value not bigger than 5% of the dose slice thickness.
+
+THE PROTON PASSIVE LINE CLASS FILE
+===================================================
+
+The following is the description of the elements of the passive proton beam line of the INFN, Laboratori Nazionali del Sud in Catania (I). This line is completely simulated inside this class.
+
+The main elements are:
+
+    * The SCATTERING SYSTEM: to transversally enlarge the original beam
+    * The COLLIMATORS: placed along the beam line to collimate the beam;
+    * The RANGE SHIFTERS: to decrease the energy of the primary proton beam to a specific value;
+    * The MODULATOR WHEEL: to modulate the energy of the primary and mono-energetic beam into a wide spectrum. The energy modulation is necessary to homogeneously irradiate a tumour volume that can extend in depth up to 20 mm;
+    * The MONITOR CHAMBERS: very thin ionisation chamber that permits the dose monitoring during the patient irradiation;
+    * The MOPI detector: microstrips, air-free detector utilised for the check of the beam symmetry during the treatment;
+    * The PATIENT COLLIMATOR: a brass, tumour-shaped collimator able to  confine the proton irradiation field to irradiate just the tumour mass in the transverse direction;
+
+The user can vary, via messenger, almost all the geometrical characteristics of the beam line elements (i.e. their position along the beam line, their thickness, etc.).
+
+The elements simulated in the PassiveBeamLine.cc file are:
+
+1. A scattering system, to spread geometrically the beam;
+
+2. A system of collimators, to avoid the scattering radiation;
+
+3. A modulation system that spreads the beam in energy and produces the so-called spread-out Bragg peak; It is constituted by a rotating wheel of different thicknesses. The wheel rotates around its axis (parallel to the proton beam axis) and its movement can be obtained employing a messenger between runs.
+
+4. A set of monitor chambers (special transmission ionization chambers used to control the particle flux during the irradiation);
+
+5. A final long collimator and a patient collimator defining the final shape of the beam before reaching the patient.
+
+6. A water phantom: it is a box of water where the dose deposit is calculated. The use of the water phantom is required by the international protocol on the measure of dose in the case of proton and ion beams (IAEA 398, 2000).         
+
+THE CARBON PASSIVE LINE CLASS FILE
+===================================================
+
+The PassiveCarbonBeamLine.cc class implements the  Zero Degree (ZD) beamline installed at LNS-INFN and entirely dedicated to in-air irradiation with ion beams (Z > 1, E ≤ 80AMeV ).
+The beam line is composed of an exit 50 um Kapton window which separates the in vacuum pipe from the in air section. The beam then hits a scattering system composed by a 20 um  tantalum foil and a brass central stopper. Moreover, two different systems for the beam modulation energy are simulated reproducing the available systems at LNS-INFN: a ripple filter specifically designed for 62 AMeV carbon ion beams and a ridge filter designed for 62 AMeV helium and oxygen ion beams. A transmission monitor ionization chamber providing the on-line monitoring of the delivered dose is also simulated.
+The final collimator system is then composed by a brass tube (50 cm long and 27 mm in diameter) and a brass collimator with a variable in diameter from a maximum of 27 mm to 1 mm.
+RIDGE FILTER 
+The ridge filter consists in a 2D array of pins, whose the shape and the thickness is optimized to obtain the desired SOBP.
+The developed  and simulated ridge filter is composed of 900 pins, each having a square base of 1.7 x 1.7 mm2 and height of 4.72 mm. The material chosen for its realization was plastic (C21 O4 N24) with a density of 1.18 g/cm3. The filter was designed and produced thanks to a collaboration between the INFN-LNS group and the GSI, Darmstadt(D). The reconstruction of the ridge geometry was obtained by superimposed native structures (with a trapezoid shape) already presented in Geant4 (G4Trp).
+
+RIPPLE FILTERS
+===================================================
+
+Due to the native norrower bragg peak of carbon ions with respect to protons, a configuration with two ripple filters is the most suggested for realizing a SOBP. 
+This solution was adopted at the ZD beam line and implemented in the simulation to obtain a flat longitudinal dose profile with carbon ions: the first filter is positioned at 7 cm from the exit window and the second one at 10 cm from the first. A single structure has a triangular section with a thin base of plexiglass (200 mm x 200 mm x 0.3 mm) and a basis 3 mm in thickness. The material density is 1.19 g/cm3. 
+
+
+LASER DRIVEN PROTON BEAMLINE
+===================================================
+
+Nowadays a big effort is being devoted to optically accelerate charged particles. There are several ion acceleration regimes that are being discussed in literature, but up to now the most experimentally investigated is the Target Normal Sheath Acceleration (TNSA) one.
+The beam transport and focusing as well as the energy selection of these laser produced beams represents one of the critical points in order to make such beams suitable for clinical applications. In fact, in contrast to conventional accelerators, the beams produced by high intensity laser-matter interaction are typically characterized by a wide angular divergence (for example ± 25 degrees) and a 100 % energy spread. 
+Moreover due to the high current, conventional dosimetric systems cannot be used during the experimental sections (saturation issues) and for this reason the faraday cup detector has been proposed as the elegible absolute dosimetric device. 
+
+The following is the description of the elements of the laser-driven beam line. This line is completely simulated inside this class.
+
+The main elements are:
+
+    * The QUADRUPOLES SYSTEM: made of four quadrupoles, to focus/defocus protons with a different energy;   
+    * The COLLIMATORS: placed along the beam line to collimate the beam;
+    * The ENERGY SELECTOR SYSTEM: made of four dipoles, that provide the spatial separation of charged particles with different energies;
+    * The FARADAY CUP: that provide the charge measurement and the distribution of the secondary electrons;
+   
+The user can have the possibility to vary, via messenger, many characteristics of the beam line elements (i.e. their position along the beam line, their thickness, etc.).
+
+ - /LaserDriven/EnergySelector/Disable -> to disable the Energy Selector 
+
+ - /LaserDriven/EnergySelector/FirstCollimator/Radius <value> -> to set the Radius of the first collimator
+ - /LaserDriven/EnergySelector/FirstCollimator/thickness <value> -> to set the Thickness of the first collimator
+ - /LaserDriven/EnergySelector/FirstCollimator/zPosizion <value> -> to set the position of the first collimator hole along the radial plane
+
+ - /LaserDriven/EnergySelector/SecondCollimator/Radius <value> -> to set the Radius of the second collimator
+ - /LaserDriven/EnergySelector/SecondCollimator/thickness <value> -> to set the Thickness of the second collimator
+ - /LaserDriven/EnergySelector/SecondCollimator/zPosizion <value> -> to set the position of the second collimator hole along the radial plane
+
+ - /LaserDriven/EnergySelector/Slit/thickness <value> -> to set the Thickness of the slit, maximum value 10mm for geometric constraintconstrain
+ - /LaserDriven/EnergySelector/Slit/HoleDimensionY <value> -> to set the Y dimension of the Slit Hole
+ - /LaserDriven/EnergySelector/Slit/HoleDimensionZ <value> -> to set the Z dimension of the Slit Hole
+ - /LaserDriven/EnergySelector/Slit/HolePositionZ <value> -> to set the Slit hole position in the Z direction as respect the Slit body center
+
+ - /LaserDriven/Quadrupoles/DisableQuad -> to disable the Quadrupole system
+
+PHYSICS PROCESSES AND PHYSICS MODELS IMPLEMENTATION
+===================================================
+
+ Physics models in 'hadrontherapy', following the Geant4 organization, can be defined using four different approaches:
+
+Particular care is addressed to the simulation of the physics processes.
+Three different approaches can be used for the choose of the physic models.
+
+Approach 1:
+Using the macro command:
+/physic/addPhysics/<physics List name>.
+
+In this case, the models (for electromagnetic, hadronic elastic and hadronic inelastic) can be
+activated directly calling the name of the Physics Lists that are available inside the
+Geant4 kernel in the directory:
+
+$G4INSTALL/source/physics_lists/builders/include
+
+An example of the use of the Physics List can be found in the macro files:
+default_macro.mac and carbon_beamline.mac
+
+Approach 2:
+
+A set of built-in physic lists are also defined and included in the class HadrontherapyPhisicsList.cc and can be activated by macro command:
+
+/physic/addPhysics/<name>.
+
+Two different physics lists can be selected using this approach:
+- HADRONTHERAPY_1: include HP hadronic physics models
+- HADRONTHERAPY_2: HP physics models are switched off
+
+Approach 3:
+We developed this approach in order to simplify the choice of the physic models to
+be used in the application.
+With this approach the user must only insert a command line in his/her .mac file using the: /physics/addPackage <PACKAGE_NAME>
+This permits to switch-on an already built physics package.
+Various packages are already present in the Geant4 tree: they are in the directory: geant4/source/physics_lists/lists/include
+
+Approach 4:
+Directly call a reference physics list by setting the variable PHYSLIST. Ex.:
+ export PHYSLIST=QGSP_BIC_EMY 
+and the export QGSP_BIC_EMY reference physics list will be setted
+
+
+
+INTERACTIVE COMMANDS
+===================================================
+
+How to change Phantom and Detector geometries
+
+In order to let the user change phantom and detector geometries and voxelization, some interactive commands have been provided. All parameters are mandatory, except those inside square brackets.
+
+Detector geometry 
+
+The user can change:
+
+(1) The detector (box) size.
+ 
+(2) The voxels sizes. Changing these parameters, and/or the detector sizes, users should choose values in order to be divisors of the detector correspondent sizes.
+For both above commands, zero or negative values mean << don't change it >>
+
+(3) The displacement between the phantom and the detector.  Displacement parameters refer to the lower-left corner of the detector with respect to that of the phantom, by the point of view of the beam. In this case, zero or positive values are allowed, while the negatives ones mean: << don't change it>>.
+
+Command synopsis: 
+
+/changeDetector/size <dimX> <dimY> <dimZ> <[unit]> 
+/changeDetector/voxelSize <dimX> <dimY> <dimZ> <[unit]> 
+/changeDetector/displacement <dispX> <dispY> <dispZ> <[unit]> 
+
+Default size values are 4x4x4 cm for the detector, 0.2x40x40 mm for any voxel and 0x18x18 cm for the displacement.    
+where the X dimension is that along the beam direction
+
+Phantom geometry
+
+(1) The phantom size. As usually, zero or negative values mean: <<don't change it>>.
+(2) The phantom position respects the world. In this case, specified values refer to the three components of the position of the phantom's centre respect to the world.
+
+Command synopsis:
+
+/changePhantom/size <dimX> <dimY> <dimZ> <[unit]> # 40 40 40 cm
+/changePhantom/position <posX> <posY> <posZ> <[unit]> # 20 0 0 cm
+
+All   these    commands    must be   followed   by the  command  /changePhantom/update
+to check and eventually apply changes to the real geometry.
+Moreover,  they must  be  issued  between   runs  (so   where you   want but   after  the /run/initialize initialization command, or the G4State_Idle Geant4 state machine).
+Obviously, all the previous sizes must be set in order to maintain the detector fully inside the phantom, otherwise, the system will give an error message.
+
+ Some examples follow:
+
+/changeDetector/size 40 0 0 cm 
+# Will extend detector X size to cover in full the phantom X size   
+
+/changeDetector/size 0 4.5 0 cm
+# Will extend the Y size to 4.5 cm (note that voxel size Y is automatically
+#  rounded to 4.5 cm because the default value along Y is 4 cm)
+/changePhantom/update
+# Remember to always update the geometry before the beamOn command!!
+
+/changeDetector/size 0 8 0 cm
+# Will extend the Y size to 8 cm. In this case voxel size Y doesn't change, but 
+# the number of voxels along Y doubles.
+/changePhantom/update
+
+/changeDetector/voxelSize 100 0 0 um 
+# 100 um should be a divisor of detector size X
+# Will change only slabs X size to 100 um, without affecting the other.
+/changePhantom/update
+
+/changeDetector/displacement 0 0 0 # default unit mm
+# Will place the detector in the left lower corner (from the point of view of the beam) of #the  phantom.
+/changePhantom/update
+
+Stopping powers calculation
+
+The end-user can calculate, via macro command, stopping powers only for those materials inserted into G4NistMaterialBuilder class (about 300).
+To get stopping powers user must provide this command line on the idle interactive terminal (or into a macro file) :
+
+/parameter/getstopping <G4_material> <Emin> <Emax> <nPoints> <[particle]> <[output_filename]>
+
+All parameters are mandatory except those inside square brackets [].
+Default values for parameters inside square brackets are respectively proton and standard output (usually the user console terminal).
+
+Parameters are respectively:
+
+The material (NIST) name (something like G4_..., the complete list of elements and materials is available into the G4NistMaterialBuilder class and can be printed  to the terminal screen via the macro command: /parameter/nist )
+Kinetic energy range in MeV and the number of data points to be retrieved (in a logarithmically uniform space)
+The particle name (proton, e+, e-, He3, neutron,... a full list can be produced via the macro command: /particle/list).
+Currently, it does not work with ions.
+The output filename: if users leave this blank then the standard output is used.
+
+Below is an example in order to calculate the stopping power for alphas into Hydrogen between 1 keV to 150 MeV for 15 points:
+
+/parameter/getstopping G4_H 0.001 150 15 alpha 
+
+GEANT4 GENERAL PARTICLE SOURCE
+===================================================
+
+The General Particle Source (GPS, G4 class name: G4GeneralParticleSource) is in the current version of 'hadrontherapy': it enables the user to use standard energy, angular and spatial distributions. The GPS also includes methods to bias the sampling distribution.
+
+The G4GeneralParticleSource can be utilized by typing commands from the /gps command directory, or include the /gps commands in a macro file.
+
+RADIOBIOLOGICAL QUANTITIES: DOSE, LET, RBE
+===================================================
+
+LET calculation
+
+'hadrontherapy' application simulates and calculates the averaged LET-dose and LET-track fully accounting for the contribution of secondary particles generated in the target fragmentation  
+Dependencies as respect to the transport parameters adopted during the Monte Carlo simulations as the production cut of secondaries particles, voxel size and the maximum steps length are minimized in the LET calculation.  The first implementation of LET calculation adopted in hadrontherapy is reported in F. Romano et al.,(2014) Phys Med Biol 59(12): 2863–8. Now, in ‘hadrontherapy’ is implemented the approach reported in G. Petringa et al., (2020) Phys Med Bio. (DOI: 10.1088/1361-6560/abaeb9)
+At run time, data needed to calculate LET are collected. At the end of simulation, LET mean values are calculated and stored into a file.
+
+The Let.out file will be produced at the end of a run, where you can
+find the dose and track  average LET for each tracked particles (both primary and
+secondary ones) and the total mean LET. 
+
+The file is structured as follows:
+	- The first three columns contain the voxel indexes (first index "i" refers to the beam direction);
+	- The fourth and fifth columns contain respectively total mean dose LET (LDT) and total mean track LET (LTT)  
+	- The rest of columns contain LET Dose and Track for each single ion (whose name is in the top row of the file).
+
+To activate the LET computation (HadrontherapyLet.cc), you have to execute
+the following command:
+
+/analysis/secondary true
+/analysis/computeLet
+
+RBE and Survival calculation
+
+A method was developed to assess the biological damages produced by proton and ion beams in terms of survival fraction curves, i.e of the number of cells able to survive after the irradiation at different dose. The approach is based on the combined use of Monte Carlo Geant4 simulations (to calculate the doses deposited and the energy spectra of particles interacting with cells) and of the Survival analytical code (Manganaro L, Russo G, et al. Survival: a simulation toolkit introducing a modular approach for radiobiological evaluations in ion beam therapy. Phys. Med. Biol. 2018;63(8). 08–01).
+The Monte Carlo simulations permit the calculation of the Edep and Ekin distributions that, coupled with the radiobiological response model, allow the final and calculation of a survival curve.
+The kinetic energy and the LET value of any primary ion and of the secondaries generated in each slice of the simulated water phantom are retrieved at each simulation step. The corresponding values of αi and βi, for each specific ion i with a kinetic energy Ei and a released dose Di, are then calculated by direct linear interpolation of the Look-up-tables provided by the Survival analytical code.
+(G.Petringa et al., Physica Medica 58 (2019) 72–80)
+
+The AlphaAndBeta.out and RBE.out files are produced at the end of the run.
+AlphaAndBeta.out contains the average alpha (first column) and beta (second column) parameters calculated for each slice (third column).
+
+RBE.out  contains the following quantities: 
+Dose (Gy): the physical dose;
+ln(S): the natural log of the Survival Fraction;
+Survival Fraction;
+DoseB (Gy): the biological dose;
+RBE: relative biological effectiveness;
+depth (slice): n. of the slice;
+
+To activate the RBE computation (HadrontherapyRBEcc), you have to execute
+the following command:
+
+#you can choose the verbosity level 
+/rbe/verbose 2 
+ 
+#you have to indicate the name of the LUT inside the rbe folder
+/rbe/loadLemTable data/rbe/lem.csv
+ 
+/rbe/calculation 1
+/rbe/accumulate 1
+ 
+#you have to indicate the name of the cell line
+/rbe/cellLine ARPE19 
+/rbe/doseScale 7777770
+
+SIMULATION OUTPUT
+===================================================
+
+Store results in an ASCII file
+
+A .out ASCII file is generated at the end of each run, Dose.out is its default name that can be changed in the HadrontherapyMatrix.cc file.
+The file contains four columns; the first three columns represent the voxel indexes (that unequivocally identify the voxel volume), while the last column represents the dose deposited in that given voxel.
+Alternatively, users can force the store of data to a given filename, after any BeamOn command and before the program ends, by the macro command /analysis/writeDoseFile <myfile.out>.
+
+Moreover, if the macro command /analysis/secondary <true> is given, before the BeamOn command, ordinated dose and fluence, for every secondary produced, is added to the file.
+If the macro command /analysis/computeLet is given, and the ascii file Let.out is written, with the dose and track average LET computations.
+
+Users must take care that any change of the phantom geometry will clear all dose data.
+
+It is also possible to create multiple new output files in the same simulation session. For example:
+
+/beam/energy/meanEnergy 4800 MeV
+/analysis/setAnalysisFile firstRun.root
+/run/beamOn 1000
+/analysis/writeDoseFile firstRun.out # this will write both the .root and the .out file!
+
+/beam/energy/meanEnergy 3000 MeV
+/analysis/setAnalysisFile secondRun.root # this
+/run/beamOn 1000
+/analysis/writeDoseFile secondRun.out
+
+Please contact cirrone@lns.infn.it  for more details or suggestions and feedback on this document.
+
+

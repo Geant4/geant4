@@ -1,0 +1,85 @@
+
+///\file "medical/dna/mfp/.README.txt"
+///\brief Example mfp README page
+
+
+/*! \page Examplemfp Example mfp
+
+\author S. Incerti et al. (a, *) \n
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan  \n
+(CENBG), IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France  \n
+* e-mail:incerti@cenbg.in2p3.fr
+
+\section mfp_s1 INTRODUCTION.                                                    
+                                                 
+The mfp example shows how to calculate mean free path of particles 
+in liquid water using the Geant4-DNA physics processes and models.
+
+It has been adapted from the spower and TestEm14 examples. 
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software 
+shall cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+\section mfp_s2 GEOMETRY SET-UP
+
+The geometry is a 1 m radius sphere of liquid water (G4_WATER
+material). Particles are shot along x from the sphere centre.
+
+Radius of the sphere, physics constructor, primary particle and 
+energy can be controlled by the mfp.in macro file.
+
+\section mfp_s3 SET-UP 
+
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+\section mfp_s4 HOW TO RUN THE EXAMPLE                                         
+
+Use:
+
+\verbatim
+./mfp mfp.in
+\endverbatim
+
+The mfp.in macro allows a full control of the simulation.
+
+The computation of MFP and other quantities is performed in the 
+SteppingAction::UserSteppingAction method.
+
+The histo.in macro shows how to display several quantities 
+(energy spectrum, scattering angle along x) of primary and secondaries.
+
+\section mfp_s5 PHYSICS
+
+G4EmDNAPhysics* constructors are used.
+
+\section mfp_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
+
+The accuracy of results may depend on incident statistics as well as
+on number of steps specified in the SteppingAction::UserSteppingAction 
+method.
+
+The output results consist in a text file (mfp.txt), containing :
+- energy of incident particles (in eV)
+- mfp (in nm)
+- rms (i.e. standard deviation) on mfp (in nm)
+
+Otherwise you may use histo.in to generate ROOT histograms of the
+other quantities.
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+incerti@cenbg.in2p3.fr
+
+*/

@@ -1,0 +1,124 @@
+
+///\file "electromagnetic/TestEm15/.README.txt"
+///\brief Example TestEm15 README page
+
+/*! \page ExampleTestEm15 Example TestEm15
+
+  How to compute and plot the final state of Multiple Scattering 
+  considered as an isolated process.
+  The method is exposed below : see \ref TestEm15_s4. 
+  
+\section TestEm15_s1 GEOMETRY DEFINITION
+ 
+  It is a single box representing a 'semi infinite' homogeneous medium.
+  Two parameters define the geometry :
+  - the material of the box,
+  - the (full) size of the box.
+   
+  The default geometry (100 m of water) is constructed in 
+  DetectorConstruction, but the above parameters can be changed 
+  interactively via the commands defined in DetectorMessenger.
+   
+\section TestEm15_s2 PHYSICS LIST
+ 
+  The physics list contains the standard electromagnetic processes.
+  In order not to introduce 'articicial' constraints on the step size, 
+  there is no limitation from the maximum energy lost per step.  
+    
+\section TestEm15_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle starting at the edge
+  of the box. The type of the particle and its energy are set in 
+  PrimaryGeneratorAction (1 MeV electron), and can be changed via the G4 
+  build-in commands of G4ParticleGun class (see the macros provided with 
+  this example).
+   
+\section TestEm15_s4 PHYSICS
+ 
+  All discrete processes are inactivated (see provided macros),
+  so that Multiple Scattering is 'forced' to determine the first step of 
+  the primary particle. The step size and the final state are computed 
+  and plotted. Then the event is immediately killed.
+  
+  The result is compared with the 'input' data, i.e. with the cross
+  sections stored in the PhysicsTables and used by Geant4.
+  
+  The stepMax command provides an additionnal control of the step size of
+  the multiple scattering.
+   
+
+\section TestEm15_s5 HISTOGRAMS
+         
+  The test contains 9 built-in 1D histograms, which are managed by the
+  HistoManager class and its Messenger. The histos can be individually 
+  activated with the command :
+\verbatim  
+/analysis/h1/set id nbBins  valMin valMax unit 
+\endverbatim  
+  where unit is the desired unit for the histo (MeV or keV, etc..)
+  (see the macros xxxx.mac).
+     
+   - 1 :  Multiple Scattering. True step length
+   - 2 :  Multiple Scattering. Geom step length
+   - 3 :  Multiple Scattering. Ratio geomSl/trueSl
+   - 4 :  Multiple Scattering. Lateral displacement: radius
+   - 5 :  Multiple Scattering. Lateral displac: psi_space
+   - 6 :  Multiple Scattering. Angular distrib: theta_plane
+   - 7 :  Multiple Scattering. Phi-position angle
+   - 8 :  Multiple Scattering. Phi-direction angle
+   - 9 :  Multiple Scattering. Correlation: cos(phiPos-phiDir)
+      
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+\verbatim
+/analysis/h1/set id nbBins  valMin valMax unit 
+\endverbatim
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+\verbatim
+/analysis/setFileName  name  (default testem15)
+\endverbatim
+   
+   It is possible to choose the format of the histogram file : root (default),
+   hbook, xml, csv, by using namespace in HistoManager.hh   
+  
+   It is also possible to print selected histograms on an ascii file:
+\verbatim
+/analysis/h1/setAscii id
+\endverbatim
+   All selected histos will be written on a file name.ascii (default testem15)
+            
+\section TestEm15_s6 VISUALIZATION
+ 
+   The Visualization Manager is set in the main () (see TestEm15.cc).
+   The initialisation of the drawing is done via the commands
+   /vis/... in the macro vis.mac. To get visualisation:
+\verbatim
+> /control/execute vis.mac
+\endverbatim
+   
+   The detector has a default view which is a longitudinal view of the 
+   box.
+   
+   The tracks are drawn at the end of event, and erased at the end of run.
+  
+\section TestEm15_s7- HOW TO START ?
+ 
+  - Execute TestEm15 in 'batch' mode from macro files :
+\verbatim
+% TestEm15   compt.mac
+\endverbatim
+     
+  - Execute TestEm15 in 'interactive mode' with visualization :
+\verbatim
+% TestEm15
+Idle> control/execute vis.mac
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+  
+*/
+ 

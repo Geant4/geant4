@@ -1,0 +1,95 @@
+
+///\file "physicslists/extensibleFactory/.README.txt"
+///\brief Example extensibleFactory README page
+
+/*! \page ExampleextensibleFactory Example extensibleFactory
+
+\author  R. Hatcher  \n
+Fermilab \n
+(based on Hadr00 by V. Ivantchenko, CERN)
+
+Examples in the physicslist category show the possible ways how to define
+a physics list from Geant4 physics constructors. This example demonstrates
+the usage of g4alt::G4PhysListFactory to build a concrete physics list.
+
+Physics List can be defined by its name given by the -p argument of the of the
+run command or by the PHYSLIST environment variable.
+
+\verbatim
+   ./extensibleFactory -m my.macro [ -p QGSP_BERT ] \
+        [ -v | --verbose ] [ -h | --help ]
+\endverbatim
+
+By default, FTFP_BERT Physics List will be instantiated if
+-p argument is not set and the PHYSLIST environment variable is not defined.
+This is the system default, but can be overridden using the
+SetDefaultReferencePhysList() method on the factory (see the code).
+
+The extensible factory allows users to define and register their own physics
+lists. This example shows the addtional a new list "MySpecialPhysList".
+
+\verbatim
+   ./extensibleFactory -m run.mac -p MySpecialPhysList
+\endverbatim
+
+The extensible factory also allows for the extension of lists by adding
+(using "+" as a separator) or replacing (using "_" as a separator)
+specific physics constructors.  These can be specified by
+pre-defining a short name (e.g. RADIO for G4RadioactiveDecayPhysics) or
+providing the full class name.
+
+\verbatim
+   ./extensibleFactory -m run.mac -p FTFP_BERT_EMX+G4OpticalPhysics+RADIO
+\endverbatim
+
+uses the FTFP_BERT physics list as a base
+  - replaces the list's standard EM portion with
+        G4EmStandardPhysics_option2 ( standard EMX extension )
+  - adds G4OpticalPhysics
+  - adds G4RadioactiveDecayPhysics (RADIO defined in code to map to this)
+
+The same experimental setup is used for all examples in the physicslist category:
+
+\section extensibleFactory_s1  Detector description
+
+The geometry (defined in the DetectorConstruction class) consists in a box of scintillator material (CsI) followed by a thin box of air (screen) which is used to simplify scoring.
+
+\section extensibleFactory_s2  Primary generator
+
+The primary generator is defined with usage of G4ParticleGun.
+The default particle is proton which hits the box perpendicular to the input face.
+The type of the particle and its energy are set in the PrimaryGeneratorAction class, and can
+be changed via the G4 built-in commands of the G4ParticleGun class.
+
+
+\section extensibleFactory_s3  Scoring (ntuples)
+
+The screen volume is associated with a sensitive detector, ScreenSD,
+which accounts the following particle properties:
+- trackID
+- particle PDG encoding
+- particle kinetic energy
+- particle X,Y position
+- particle time
+
+The scored quantities are filled in the Screen ntuple, which is defined using G4AnalysisManager
+in RunAction class. The ntuple is saved in a Root file, which name is set to be equal to the
+example name in main () function.
+
+\section extensibleFactory_s4  How to build
+
+An additional step is needed when building the example with GNUmake
+due to using the extra shared directory:
+\verbatim
+ % cd path_to_example/example
+ % gmake setup
+ % gmake
+\endverbatim
+
+This will copy the files from shared in the example include and src;
+to remove these files:
+\verbatim
+ % gmake clean_setup
+\endverbatim
+
+*/

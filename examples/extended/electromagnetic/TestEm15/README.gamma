@@ -1,0 +1,48 @@
+TestEm15 : gamma.mac
+
+-- tests of the 5D gamma -> e+e- conversion model G4BetheHeitler5DModel
+
+All discrete processes are inactivated (see macro),
+so Gamma Conversion is 'forced'.
+
+Histograms :
+
+  10    # Open Angle (rad)* E gamma (MeV)
+The most probable value of the pair opening angle multiplied by the
+photon energy is 1.6 rad*MeV.
+Olsen, Phys. Rev. 131 (1963) 406. See also Fig. 7 of arXiv:1802.08253
+
+  11    # Log10 ( recoil momentum)
+The distribution of the  recoil momentum is described by
+Jost, Phys. Rev. 80 (1950) 189 (no form factor).
+See also Fig. 2 of Astroparticle Physics 88 (2017) 60.
+
+  12    # Phi recoil 
+  13    # Phi positron 
+
+ 14    # Asymmetry 2 * cos(phi_+ + phi_-)
+For a photon propagating along x, polarized along y, the average value of 
+ 2 * cos(phi_+ + phi_-),
+provides a measurement of the polarization asymmetry, A.
+Eq. (12) of Nucl. Instrum. Meth. A 729 (2013) 765 
+The azimuthal angle of the event defined as the bisector angle
+of the azimuthal angles of the positron and of the electron,
+(phi_+ + phi_-)/2,
+provides the optimal measurement of the asymmetry 
+Astroparticle Physics 88 (2017) 30.
+
+For high-energy photons (E >> 20 MeV), the asymptotic expression for A
+can be used for comparison.
+Boldyshev, Yad. Fiz. 14 (1971) 1027, Sov.J.Nucl.Phys. 14 (1972) 576.
+See also eq. (13) of arXiv:1802.08253
+Example : A ~ 0.17 at 100 GeV.
+
+  15    # E plus / E gamma
+x_+ = E plus / E gamma has a more-or-less flat spectrum that extends
+almost from 0. to 1.
+See Fig. 16 page 261 of "The Quantum Theory of Radiation", W. Heitler,
+3rd edition, 1954.
+
+ 16  # Phi of Gamma Polarization
+The phi of polarization vector after transformation into reference system
+ defined by gamma direction (z) , gamma polarization (x).

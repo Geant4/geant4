@@ -1,0 +1,55 @@
+
+ RE03 - An extended example for run and event
+ --------------------------------------------
+
+ Contact : M.Asai (SLAC), A.Kimura (AIT), T.Aso (TNCMT)
+
+1. Introduction
+
+ This example demonstrates how to use UI-command base scoring.
+It create parallel world(s) for defining scoring mesh(es).
+
+ Due to some performance overhead, this functionality is not 
+provided by default. To get it included, the pointer to 
+G4ScoringManager must be accessed. The access to the static 
+method G4ScoringManager::GetScoringManager() activates this 
+functionality. 
+
+1.1 Geometry and primary particle
+
+ It has just one water box in the world volume filled by air.
+No detector in the mass geometry. Particle gun shoots a gamma
+into the water box.
+
+1.2 Physics
+
+ The physics list is taken from referenced physics-list QGS_BIC
+in Geant4.
+
+2. Macro files
+
+ "run1.mac" through "run4.mac" macro files should be used 
+independently. Each macro file create its own scoring parallel
+world(s). "vis.mac", "drawSlices.mac" and "drawCylinderSlices.mac" 
+are used internally. Each macro should work for both interactively 
+and batch, but interactive mode is advised for better visualization.
+
+ IMPORTANT: DO NOT use more than one of these macro files in one
+execution of this example.
+
+3. RE03UserScoreWriter
+
+ G4ScoringManager has a default score writer which dumps every
+entry of one quantity of a mesh for all quantities of the mesh
+one by one in CSV format. To alternate the file format the user
+can implement his/her own score writer deriving from G4VUserScoreWriter
+base class and set it to G4ScoringManager. To demonstrate this,
+RE03UserScoreWriter is included in this example. To use this
+alternative writer, un-comment its instantiation in RE03.cc.
+
+
+
+
+
+
+

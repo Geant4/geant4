@@ -1,0 +1,92 @@
+
+///\file "exoticphysics/channeling/.README.txt"
+///\brief Example channeling README page
+
+/*! \page Examplechanneling Example channeling
+
+\author Enrico Bagli - INFN and University Ferrara (Italy) \n
+ bagli@fe.infn.it
+
+This example shows how channeling in bent crystal can be simulated
+in Geant4
+
+\section channeling_s1 INTRODUCTION
+
+The example simulates the channeling of 400 GeV/c protons in bent
+Si crystal. Channeling occurs when particles enter a crystal aligned
+with atomic planes or axes. In bent crystals, the particles are 
+trapped between atomic planes and follow the crystal curvature 
+being deflected. If the particle direction is tangent to a bent
+crystal plane is reflected to the opposite direction with respect
+to channeling, i.e., it suffer ‘volume reflection’. The example 
+provides the physical model for planar channeling and volume
+reflection in bent crystals.
+
+\section channeling_s2 GEOMETRY
+
+The geometry is a bent Si crystal with three Si detectors placed at
+-9.998 m, -0.320 m and 10.756 m with respect to bent crystal position.
+The Si detectors allows to measure incoming and outgoing angle
+ after the interaction with the Si bent crystal. The
+geometry is all under vacuum.
+
+\section channeling_s3 PRIMARY EVENT
+
+The primary events are 400 GeV/c protons at -1.05 m from the
+crystal with 13.36 microrad x 11.25 microrad divergence.
+
+\section channeling_s4 PHYSICS
+
+In the example the physics of channeling and volume reflection
+has been added to the standard Geant4 physics. The description 
+of the used model can be found in the paper ‘A model for the 
+interaction of high-energy particles in straight and bent 
+crystals implemented in Geant4’ by E. Bagli et al., available
+online at http://arxiv.org/abs/1403.5819
+
+\section channeling_s5 EXECUTION & OUTPUT
+
+The executable must be run from within the source directory of the example
+to ensure that it can find the path for crystal data files.
+
+Data files for Si crystal interplanar potential, nuclei and electron density
+ are stored in a named subdirectory’data’
+
+Upon execution, the macro
+\verbatim
+2009_PLB680_129.mac
+\endverbatim
+will automatically run the
+example with 1000 protons.
+
+Use
+\verbatim
+/xtal/setBR XXX 0. 0. m
+\endverbatim
+To change crystal bending to XXX meters
+
+Use
+\verbatim
+/xtal/setSize 1.0 70. XXX mm
+\endverbatim
+To change crystal length to XXX millimeter
+
+Use
+\verbatim
+/xtal/setEC data/Si220
+\endverbatim
+To select the (110) Si crystal plane of channeling
+
+GPS commands are used for the primary generator.
+
+\subsection channeling_s5_sub1 ExExhCh.root
+
+The output is the ExExhCh.root file with the TTree ExExChTree
+has the leaves:
+- angXin : incoming particle X angle at the crystal
+- angYin : incoming particle Y angle at the crystal
+- posXin : hitting X position of the particle at the crystal
+- posYin : hitting Y position of the particle at the crystal
+- angXout: outgoing particle X angle out of the the crystal
+- angYout: outgoing particle Y angle out of the the crystal
+*/

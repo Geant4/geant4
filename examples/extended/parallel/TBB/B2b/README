@@ -1,0 +1,47 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                           TBB/B2b
+                           --------
+
+This example shows how to integrate Intel Threading Building Block and Geant4 
+to achieve event-level parallelism. 
+
+Note that this is a preliminary version which should not be considered a 
+feature-complete example and which presents some limitations (no merging of
+output, no correct clean-up of heap). It will be substantially improved 
+in 2014.
+
+This example adds to B2b example, originally provided in basic example,
+the TBB based classes:
+
+tbbMasterRunManager:  
+--------------------
+This class implements the master model run manager for TBB bases
+application.
+It is instantiated by user main (or equivalent function) instead
+of G4[MT]RunManager. It controls the creation of tbb::tasks.
+See G4MTRunManager for documentation of methods relative to base
+class. Only class specific methods are documented here.
+
+tbbWorkerRunManager
+--------------------
+This class implements the worker model run manager for TBB based
+application.
+It is instantiated by tbbUserWorkerInitialization and used by
+tbbMasterRunManager.
+See G4WorkerRunManager for documentation of methods relative to
+base class. Only class specific methods are documented here.
+ 
+tbbUserWorkerInitialization
+---------------------------
+This class implements TBB specific worker initialization.
+It is a sub-class of G4UserWorkerThreadInitialization.
+Its role is to instantiate a tbbWorkerRunManager to be used by
+tbb tasks. 
+
+tbbTask
+---------------------------
+This class represents one TBB task.

@@ -1,0 +1,128 @@
+
+///\file "eventgenerator/pythia/py8decayer/.README.txt"
+///\brief Example py8decayer page
+
+/*! \page Examplepy8decayer Example py8decayer 
+
+  This example demonstrates how to outfit Pythia8-based decay features 
+  to those resonances in Geant4 where decay tables are not implemented
+  by default. In addition, it showns how to replace existing
+  Geant4 decay tables to such resonances as tau+/- or B+/- with 
+  the Pythia8-based ones.
+  
+  This example is activated by setting up PYTHIA8 environment variable
+  to point to the area where Pythia8 is installed.
+ 
+  The complete Pythia8 information, including on download, and documentation 
+  is available from the following site:
+  https://pythia.org
+ 
+  The original version of this example has been implemented by Julia Yarba
+  (FNAL, USA)
+  
+  <hr>
+
+  For the complete list of the classes that compose this example please 
+  see later in this document.
+
+  Location of example:
+  
+  examples/extended/eventgenerator/pythia/py8decayer
+  
+
+  Installation of Pythia8: 
+
+  NOTE: As of June 2021, pythia8.3.0.5 is the most current version,
+  this it is used in this example.
+  In the future, please check updates at Pythia8 site: https://pythia.org
+  
+- 1. cd path/to/your/pythia8/area
+
+- 2. Download desired version of Pythia8 and un-tar it, e.g. 
+\verbatim
+wget http://home.thep.lu.se/~torbjorn/pythia8/pythia8305.tgz
+tar xzf pythia8305.tgz
+\endverbatim
+
+- 3. Build/install Pythia8
+\verbatim
+cd pythia8305
+export CXX=\`which g++\`
+./configure --prefix=$PWD --cxx=$CXX
+make
+\endverbatim
+     NOTE: By default, Pythia8 (as of 8.3.0.5) builds with C++11 standards. 
+     If one wants to turn to e.g. C++17 standard, one needs to override flags 
+     via --cxx-common argument to configure script. 
+
+   4. Setup PYTHIA8 environment variable to point to the area where Pythia8
+      is built/installed:
+\verbatim
+export PYTHIA8=$PWD
+\endverbatim
+
+  Building example:
+  
+  Upon setup of PYTHIA8 environment variable to point to the area where 
+  Pythia8 package is installed, the pythia/py8decayer example will be
+  compiled together with several other features of the eventgenerator example.
+
+
+  Description of classes:
+  
+  Py8Decayer class provides implementation of the G4VExternalDecayer interface 
+  with the use of PYTHIA8.
+  It is reasonably annotated, and demonstrates what features of Pythia8 need
+  to be activated and/or disactivated in order to make Pythia8 work only in
+  the decay mode.
+  It also illustrated how to control several other features of Pythia8, including
+  some reduction of Pythia8 verbosity (by default, Pythia8 produces quite a large
+  amount of printouts, thus reducing it could be useful in some cases).
+  Last but not least, it also shown how to deactivate decays of pi0's by Pythia8
+  as the idea is to handle pi0's back to Geant4 for decays.
+  
+  Py8DecayerPhysics class implements a G4VPhysicsConstructor type of component
+  with the use of Py8Decayer; this component can later be used with a ddsired
+  physics list (see main program).
+  Specifically, in the Py8DecayerPhysics::ConstructProcess() the Py8Decayer is
+  instantiated and is used to
+  a) replace existing decay tables of such resonances as tau+/- and B+/-
+  b) supplement decay features to those resonances in Geant4 where the decay
+     tables are not implemnted by defaukt
+    
+  In principle, classes Py8Decayer and Py8DecayerPhysics can be directly reused with 
+  another user application.
+  Alternatively, they can be used as an inspiration to implement similar, or perhaps 
+  even more extensive Pythia8-based functionalities of user's choice.
+  
+  Class DetConstruction demostrates how to implement minimalistic detector geometry.
+  
+  Class SingleParticleGun demonstrates how to implement generaton of the primary
+  particle.
+  
+
+  Main program:
+  
+  pythia8_decayer.cc
+  
+
+  Executable:
+  
+  pythia8_decayer
+  
+
+  Execution:
+  
+  At present, the pythia8_decayer executable does not take any input arguments.
+  Everything, including the choine of primary particle, is hardcoded in the main.
+  Although in the future some configurability may be added.
+
+  By default it'll run 5 single tau events using Pythia8 to decays them. 
+
+  It should print some Pythia8 event information, including on decays. 
+  Once again, please bear in mind that the decay of pi0's by Pythia8 is disabled 
+  (see Py8Decayer constructor) since the idea is to hand the pi0's back to Geant4 
+  and make Geant4 decay them.
+
+
+*/   

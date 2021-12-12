@@ -1,0 +1,124 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            OpNovice
+                            --------
+
+This example presently illustrates the following basic concepts, and in
+particular (indicated with ***), how to use G4 for optical photon
+generation and transport. Other extended example of what is possible
+in Geant4 with optical photons can be found at
+examples/extended/optical/LXe and wls.
+
+main()
+------
+
+ ==> define Random Number generator initial seed
+
+G4Optical Physics
+-----------------
+
+ The G4OpticalPhysics physics class is used. The messenger is the
+ G4OpticalParametersMessenger class.
+
+ ==> define particles; including *** G4OpticalPhoton     ***
+     define processes; including *** G4Cerenkov          ***
+                                 *** G4Scintillation     ***
+                                 *** G4OpAbsorption      ***
+                                 *** G4OpRayleigh        ***
+                                 *** G4OpBoundaryProcess ***
+
+ ==> A messenger command allows to define interactively the 
+     verbose level and the maximum number of Cerenkov photons per step
+     (see for instance OpNovice.in)
+
+G4VUserDetectorConstruction
+---------------------------
+
+ ==> define material: Air and Water
+     define simple G4box geometry
+     *** add G4MaterialPropertiesTable to G4Material       ***
+     *** define G4LogicalSurface(s)                        ***
+     *** define G4OpticalSurface                           ***
+     *** add G4MaterialPropertiesTable to G4OpticalSurface ***
+
+alternatively the Configuration can be read from a gdml file.
+The provided gdml file NoviceExample.gdml corresponds to the detector
+defined in OpNoviceDetectorConstruction.
+
+G4VUserPrimaryGeneratorAction
+-----------------------------
+
+ ==> Use G4ParticleGun to shoot a charge particle into a Cerenkov radiator
+ 
+ ==> A messenger command allows to define interactively the polarization of an
+     primary optical photon (see for instance optPhoton.mac)
+ 
+G4UserRunAction and G4Run
+-------------------------
+
+ Used to accumulate statistics.
+
+G4UserStackingAction and G4UserEventAction
+------------------------------------------
+
+==> show how to count the number of secondary particles in an event
+
+Visualisation
+-------------
+ 
+ The Visualization Manager is set in the main().
+ The initialisation of the drawing is done via a set of /vis/ commands
+ in the macro vis.mac. This macro is automatically read from
+ the main in case of interactive running mode.
+ 
+ The detector has a default view which is a longitudinal view of the tank.
+ The tracks are drawn at the end of event, and erased at the end of run.
+ 
+ HOW TO START
+ ------------
+ 
+ - compile and link to generate an executable
+
+   This example handles the program arguments in a new way.
+   It can be run with the following optional optionaarguments:
+   $ OpNovice [-g gdmlfile] [-m macro ] [-u UIsession] [-t nThreads]
+
+   The -t option is available only in multi-threading mode
+   and it allows the user to override the Geant4 default number of
+   threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
+   environment variable which has the top priority.
+
+ - execute OpNovice in 'batch' mode from macro files
+ 	$ OpNovice -m OpNovice.in
+
+ - execute OpNovice in 'batch' mode from macro files using a gdml file
+   to define the geometry
+ 	$ OpNovice -g NoviceExample.gdml -m OpNovice.in
+	
+ - execute OpNovice in 'interactive mode' with visualization
+ 	$ OpNovice
+ 	....
+ 	Idle> type your commands. For instance:
+ 	Idle> /control/execute optPhoton.mac
+ 	....
+ 	Idle> exit
+
+Macros
+------
+
+ The following macros are provided:
+
+ optPhoton.mac: Shoot optical photons with energy 3 eV
+ OpNovice.in: Shoot positrons with energy 500 keV.
+ gui.mac: Configure the graphical user interface.
+ vis.mac: Configure visualization.ls 
+
+
+gdml files
+----------
+NoviceExample.gdml: example gdml file corresponding to
+OpNoviceDetectorConstruction

@@ -1,0 +1,250 @@
+
+///\file "runAndEvent/RE02/.README.txt"
+///\brief Example RE02 README page
+
+/*! \page ExampleRE02 Example RE02
+
+ This example simulates a simplified water phantom measurement
+ in medical application with demonstration of primitive scorers.
+ This example also demonstrates nested parameterised volume which
+ realizes segmented boxes using a combination of replicated volumes
+ and a parameterised volume.
+
+  ---- (Tips)
+
+ This example creates 100 x 100 x 200 boxes using Nested Parameterised
+ Volume for realistic situation of medical application. 
+ This is very memory consumption if normal Parameterised Volume is used, 
+ and needs roughly more than 1 GB memory for execution. However, 
+ NestedParameterised volume effectively works to reduce the memory consumption,
+ and it only needs less than 100 MB memory for execution.
+
+\section RE02_s1- GEOMETRY DEFINITION
+ 
+  The setup contains a water phantom as target by default. The world volume
+  is 200 cm x 200 cm x 200 cm box filled with air. The water phantom is box shape 
+  and the size of 200 mm x 200 mm x 400 mm. The volume of water phantom is divided
+  into 100 x 100 x 1 towers using replicated volume,(RE02DetectorConstruction), 
+  and then those towers are segmented into 200 boxes with respect to z axis 
+  using nested parameterized volume,(RE02NestedPhantomParameterisation).
+  e.g. The volume of water phantom is divided into 100 x 100 x 200 boxes,
+  and a voxel size is 2.0 mm x 2.0 mm x 2.0 mm.
+
+  For demonstration purpose of the nested parameterised volume,
+  (RE02NestedPhantomParameterisation), materials are assigned as water (lead) 
+  in even (odd) order segments, alternately. 
+  The simulation for homogeneous water phantom is also possible using an option.
+
+  ---- Tips(1)
+  
+  If you want to reduce number of segments of water phantom,
+  please change following numbers which represent number of segments
+  in x, y, z axis, respectively.The following code can be found in
+  exampleRE02.cc.
+\verbatim
+  RE02DetectorConstruction* detector = new RE02DetectorConstruction;
+  detector->SetNumberOfSegmentsInPhantom(100,100,200);
+                                          Nx, Ny, Nz
+\endverbatim
+  ---- Tips(2)
+  
+  If you want to set all materials to water,
+   please use the following method. The following code can be found in
+  exampleRE02.cc.
+\verbatim
+   detector->SetLeadSegment(FALSE); // Homogeneous water phantom
+
+\endverbatim
+
+  The geometry and sensitive detector are constructed in 
+  RE02DetectorConstruction class.
+  (See \ref RE02_s4 "SCORER " for detail descriptions about sensitive detector.)
+         
+\section RE02_s2 PHYSICS LIST
+ 
+  The particle's type and the physic processes which is available
+  in this example are set in PhysicsList class.
+
+  The PhysicsList is originally copied from extended example,
+  (example/extended/analysis/A01).
+  Full set of particles (baryons, bosons and mesons) are created, and
+  Standard EM Physics and Low/High Energy parameterized models 
+  for hadrons are applied. The detail description will be found in 
+  example/extended/analysis/A01/README.
+   Specially, the PhysicsList was modified in this example, 
+  to use Binary cascade model for hadron physics at low energy (<4GeV)
+  and inelastic process for generic ions with BinaryLightIonReaction.
+  The data files for physics processes have to be assigned using 
+  environment variables.
+
+  RE02PhysicsList is optimized for robustness and is not optimized for
+  any particular cases. If you will do precise calculation for your
+  use-case, please consider utilizing hadronic_lists, and defines the 
+  production cut properly.
+   The default CutValue defines the production threshold of secondary 
+  particles (mainly Ionisation and Bremsstrahlung processes are 
+  concerned by this CutValue).
+ 	
+\section RE02_s3 RUNS and EVENTS
+ 
+\subsection RE02_s31 Primary particles
+     
+  The primary kinematics consists of a single particle which hits the
+  target perpendicular to the input face. The default type of the particle
+  and its energy are set in the RE02PrimaryGeneratorAction class.
+  However it can be changed via the G4 build-in commands of ParticleGun 
+  class. 
+   The RE02PrimaryGeneratorAction class introduces a beam spot size 
+  that makes initial particle position of x,y randomized using a Gaussian
+  random function, where the center position is fixed to (0,0). 
+  The standard deviation of the beam spot size is given in 
+  RE02PrimaryGeneratorAction as 10 mm.
+
+  \subsection RE02_s32 Event
+  
+  An EVENT represents a simulation of one primary particle.
+  A RUN is a set of events.
+  
+  The user has control:
+     - at Begin and End of each run   (class RunAction)
+     - at Begin and End of each event (class EventAction)
+     - at Begin and End of each track (class TrackingAction, not used here)
+     - at End of each step (class SteppingAction, not used here)
+	
+\section RE02_s4 SCORER
+
+\subsection RE02_s41 Concrete Scorer
+
+   This example introduces concrete primitive scorer (PS) and filter 
+   classes for easy scoring. Those primitive scorers are registered to
+   MultiFunctionalDetector which is a concrete class of sensitive 
+   detector(SD). Then the MultiFunctionalDetector is attached to 
+   the logical volume of sensitive geometry.
+   A MultiFunctionalDetector, PrimitiveScorers, and SDFilters are
+   created and assigned to the logical volume of water phantom in 
+   DetectorConstruction.
+
+   A primitive scorer can score one kind of physical quantity, and
+   creates one hits collection per event. The quantity is collected in
+   G4THitsMap with the copy number of geometry. Here collection name is 
+   given as "MultiFunctionalDetector Name"/"PrimitiveScorer Name".
+   A primitive scorer can have one filter (SDFilter) for selecting hits 
+   to be used for the quantity.
+
+   Since the geometry is constructed using nested parameterisation,
+   the copy number of geometry is defined as follows,
+\verbatim
+  copy number of geometry =  iy*Nx*Ny+ix*Nz+iz,
+\endverbatim
+
+   where Nx,Ny,Nz is total number of segmentation in x, y, and z axis,respectively,
+   and ix,iy,iz is a copy number of the mother volume, the grand mother volume, 
+   and this volume, respectively.
+    This conversion is described in GetIndex() method in PrimitiveScorer.
+
+   \subsection RE02_s42 The physical quantities scored in this example are:
+
+   - Total energy deposit \n
+      - unit: Energy,                         collName: totalEDep
+   - Energy deposit by protons \n
+      - unit: Energy,                         collName: protonEDep
+   - Number of steps of protons \n
+      - unit: - ,                     collName: protonNStep   
+   - Cell Flux of charged tracks which pass through the geometry\n
+      - unit: Length/Volume,          collName:  chargedPassCellFlux
+   - Cell Flux of all charged tracks\n        
+      - unit: Length/Volume,                  collName:  chargedCellFlux      
+   - Flux of charged particle at -Z surface of the BOX geometry,
+     where incident angle at the surface is taken into account.\n
+      - unit: Surface^(-1),            collName:  chargedSurfFlux 
+   - Surface current of gamma at -Z surface of the BOX geometry. 
+     The energy of gammas are from    1. keV  to   10. keV.
+     The incident angle is not taken into account.\n
+      - unit: Surface^(-1),            collName:  gammaSurfCurr000
+   - Same as previous one, but different energy bin.
+     The energy of gammas are from   10. keV  to  100. keV.\n
+      - unit: Surface^(-1),           collName:  gammaSurfCurr001
+   - Same as previous one, but different energy bin.
+     The energy of gammas are from  100. keV  to    1. MeV. \n
+      - unit: Surface^(-1),           collName:  gammaSurfCurr002
+   - Same as previous one, except for energy bin.   
+     The energy of gammas are from    1. MeV  to   10. MeV. \n
+      - unit: Surface^(-1),            collName:  gammaSurfCurr003
+ 
+\subsection RE02_s43  Accumulating quantities during a RUN	
+     
+  A PrimitiveScorer creates one hits collection per event.
+  The physical quantity in the hits collection need to be accumulated
+  into another G4THitsMap object during a RUN, in order to obtain
+  integrated flux or dose in a RUN. The accumulation of quantities 
+  are done at RE02Run class.
+ 
+  RE02Run class can automatically generate G4THitsMap objects for a RUN,
+  and accumulate physical quantities of an event into it. The accumulation
+  is done at RE02Run::RecordEvent(G4Event* aEvent).
+  
+  \subsection RE02_s44  Generate a Run object, and print results
+  
+   The RE02Run object is generated at RE02RunAction::GenerateRun().      
+  The accumulated physical quantities are printed at the end of RUN
+  ( RE02RunAction::EndOfEvent() ). This example prints only selected
+  physical quantities.
+
+ 				
+\section RE02_s5 VISUALIZATION
+ 
+  The Visualization Manager is set in the main () (see RE02.cc).
+  The initialization of the drawing is done via a set of /vis/ commands
+  in the macro vis.mac. This macro is automatically read from 
+  the main when running in interactive mode.
+ 
+  The tracks are automatically drawn at the end of event and erased at 
+  the beginning of the next run.
+
+  The visualization (with OpenGL driver) assumes two things:
+     -# the visualization & interfaces categories have been compiled
+            with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
+     -# exampleRE02.cc has been compiled with G4VIS_USE_OPENGLX.   
+
+  (The same with DAWNFILE instead of OPENGLX)
+     
+     
+\section RE02_s6 USER INTERFACES
+  
+  The default command interface, called G4UIterminal, is done via
+  standard G4cin/G4cout.
+  On Linux and Sun-cc on can use a smarter command interface G4UItcsh.
+  It is enough to set the environment variable G4UI_USE_TCSH before
+  compiling exampleRE02.cc
+ 
+       	
+ \section RE02_s7 HOW TO START ?
+ 
+  - Execute RE02 in 'batch' mode from macro files (without visualization)
+\verbatim      
+% exampleRE02   run1.mac
+\endverbatim      
+ 		
+  - Execute RE02 in 'interactive mode' with visualization
+\verbatim      
+% exampleRE02
+....
+Idle> type your commands. For instance:
+Idle> /run/beamOn 10
+....
+Idle> /control/execute run2.mac
+....
+Idle> exit
+\endverbatim      
+     
+  - Macros are for different primary particles.
+    - vis.mac  :  200 MeV proton with visualization
+    - run1.mac :  150 MeV proton
+    - run2.mac :  195 MeV/u Carbon ion
+    - run3.mac :   30 MeV electron
+    - run4.mac :   60 keV gamma
+
+*/
+ 	
+      
+

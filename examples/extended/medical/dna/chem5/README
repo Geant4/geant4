@@ -1,0 +1,165 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Chem5
+                            -------
+
+Jose Ramos-Mendez(a) and Bruce Faddegon
+Department of Radiation Oncology, 
+University of California San Francisco.
+
+(a) CORRESPONDING AUTHOR 
+joserm84 _ gmail _ com
+
+This example is provided by the Geant4-DNA collaboration.
+(http://geant4-dna.org)
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+Any report or published results obtained using this example shall 
+cite the following publication:
+Phys. Med. Biol. 63(10) (2018) 105014-12pp
+
+The example is a variation of chem4, it shows how to activate 
+chemistry code and score the radiochemical yield G using the contructors
+G4EmDNAPhysics_option8 and G4EmDNAChemistry_option1
+
+ 1 - GEOMETRY DEFINITION
+
+    The world volume is a simple box which represents a 'pseudo infinite'
+    homogeneous medium.
+
+    Two parameters define the geometry :
+    - the material of the box -- for Geant4-DNA it has to be water.
+    - the full size of the box.
+
+    The default geometry is constructed in DetectorConstruction class.
+
+ 2 - PHYSICS LIST
+
+    PhysicsList is Geant4 modular physics list using G4EmDNAPhysics_option8 &
+    G4EmDNAChemistry_option1 constructors.
+
+ 3 - ACTION INITALIZATION
+
+    The class ActionInitialization instantiates and registers
+    to Geant4 kernel all user action classes.
+
+    While in sequential mode the action classes are instantiated just once,
+    via invoking the method:
+       ActionInitialization::Build()
+    in multi-threading mode the same method is invoked for each thread worker
+    and so all user action classes are defined thread-local.
+
+    A run action class is instantiated both thread-local
+    and global that's why its instance is created also in the method:
+    ActionInitialization::BuildForMaster()
+    which is invoked only in multi-threading mode.
+
+ 4 - AN EVENT: THE PRIMARY GENERATOR
+
+    The primary kinematic consists of a single particle starting at the center
+    of the box. The type of the particle and its energy are set in the
+    PrimaryGeneratorAction class, and can be changed via the G4 build-in
+    commands of G4ParticleGun class.
+    The chemistry module is triggered in the StackingAction class when all
+    physical tracks have been processed.
+
+ 5 - DETECTOR RESPONSE: Scorers
+ 
+	    5.1 - Species scorer
+
+    Scorers are defined in DetectorConstruction::ConstructSDandField(). There is
+    one G4MultiFunctionalDetector object which computes the energy deposition and
+    the number of species along time in order to extract
+    the radiochemical yields:
+    (Number of species X) / (100 eV of deposited energy).
+
+    Run::RecordEvent(), called at end of event, collects informations
+    event per event from the hits collections, and accumulates statistic for
+    RunAction::EndOfRunAction().
+
+    In multi-threading mode the statistics accumulated per workers is merged
+    to the master in Run::Merge().
+
+    The information about G-value as a function of the time for each 
+    molecular specie is scored in a ASCII format
+    
+    
+        5.2 - Primary killer
+
+    The G-values are computing for a range of deposited energy. 
+    An infinite volume is assumed as geometric scenario. Therefore the energy lost by the 
+    primary particle equals the deposited energy from all secondary particles.
+
+    The primary is killed once it has deposited more energy than a 
+    minimum threshold. 
+    
+    **IMPORTANT**: However, when the primary particle looses more energy 
+    in few interaction steps than the maximum allowed thresold, 
+    the event is disregarded (=aborted). 
+    
+    These two macro commands can be used to control the energy loss by 
+    the primary:
+    
+    /primaryKiller/eLossMin 10 keV 
+    # after 10 keV of energy loss by the primary particle, the primary is killed
+    
+    /primaryKiller/eLossMax 10.1 keV 
+    # if the primary particle losses more than 10.1 keV, the event is aborted
+
+    The G-values are then computed for a deposited energy in the range [10.0 keV;10.1 keV].
+ 
+    Note that if the upper boundary of the energy lost by the primary is 
+    not set, the chemistry may take a lot of time to compute. 
+    This set of macros is embedded in the PrimaryKiller class.
+    The species scorer must check whether the event was aborted before taking it or not into
+    account for the computation of the results. 
+
+ 6 - STACKING ACTION
+
+     StackingAction::NewStage is called when a stack of tracks has been processed
+     (for more details, look at the Geant4 documentation).
+     A verification on whether physical tracks remain to be processed is done.
+     If no tracks remain to be processed, the chemical module is then triggered.
+
+ 7 - VISUALISATION
+
+    The visualization manager is set via the G4VisExecutive class
+    in the main() function in chem5.cc.
+    The initialisation of the drawing is done via a set of /vis/ commands
+    in the macro vis.mac. To activate the visualization mode run:
+     ./chem5 -vis
+
+ 8 - OUTPUT
+
+    Physics initialization and the defined reaction table are printed.
+    G4Scheduler processes the chemical stage time step after time step.
+    Chemical reactions are printed.
+    The molecular reaction as a function of the elapsed time can be displayed
+    setting the macro command /scheduler/verbose 1
+
+9 - RELEVANT MACRO COMMANDS
+    /primaryKiller/eLossMin 10 keV # after 10 keV of energy loss by the primary particle, the primary is killed
+    /primaryKiller/eLossMax 10.1 keV # if the primary particle losses more than 10.1 keV, the event is aborted
+    /scheduler/verbose 1 # set the verbose level of the G4Scheduler class (time steps, reactions ...)
+    /scheduler/endTime 1 microsecond # set the time at which the simulation stops
+    /scheduler/whyDoYouStop # for advanced users: print information at the end of 
+                            #the chemical stage to know why the simulation has stopped
+    
+10 - PLOT
+    The information about all the molecular species is scored in a ASCII 
+    tuple, each value corresponding to the G-value per time. This format is friendly
+    with a wide variety of plotting software. 
+    Experimental data of G-values for solvated electron and hydroxil radical (as a function of the time) 
+    from the literature is available in data subdirectory, the references are provided
+    in the header of each file. Further information is available in Phys. Med. Biol. 63(10) (2018) 105014-12pp.
+
+    A gnuplot script (plot.gp) file is provided to display the output data with the experimental data
+    

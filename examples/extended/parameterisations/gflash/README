@@ -1,0 +1,175 @@
+$README, v 1.0 26.11.2004 Joanna Weng  $
+-------------------------------------------------------------------
+
+
+
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            GFLASH Examples
+                            --------------
+
+These examples demonstrate the use of the GFLASH parameterisation library.
+They use the GFLASH equations (hep-ex/0001020, Grindhammer & Peters)
+to parametrise electromagnetic showers in matter.
+In these examples the calorimeter is a simple cube,
+which consists of 10 x 10 crystals of PbWO4 (CMS like).
+
+Briefly, whenever a e-/e+  enters the calorimeter, it is parametrised if it
+has a minimum energy and the shower is expected to be contained
+in the calorimeter (so called " parameterisation envelope").
+If this is fullfilled the particle is killed, as well as all secondaries,
+and the energy is deposited according to the GFLASH equations.
+
+The examples show how to interface GFLASH to your application.
+The simulation time is measured, so the user can see immediately
+the speed up by using GFLASH.
+
+Geometry and parametrisation is defined in different ways in the set of three equivalent
+(in terms of produced showers) examples: gflash1, gflash2 and gflash3, to demonstrate
+how to use the parametrisation, sensitive detectors and parallel geometry.
+The classes which are the same in all three examples have the names with ExGflash prefix while
+the names of classes specific to each example have the prexix ExGflash[1,2,3].
+
+The gflasha example - allow histogramming of show profiles and fine tuning
+of gflash parametrization for homogeneous medium. This examples has a standalone documentation.
+
+Note: Instead of particle gun the gps class is used here for particle generation.
+
+Briefly
+-------
+
+ Table below presents in which world/geometry (mass or parallel) each of the elements is defined.
+
+
++------------------------------+----------+--------------+--------------+
+|            Example           |  gflash1 |    gflash2   |    gflash3   |
++------------------------------+----------+--------------+--------------+
+|       Block of material      | mass geo |   mass geo   |   mass geo   |
++------------------------------+----------+--------------+--------------+
+|  Crystals (readout geometry) | mass geo |   mass geo   | parallel geo |
++------------------------------+----------+--------------+--------------+
+|      Sensitive detector      | mass geo |   mass geo   | parallel geo |
++------------------------------+----------+--------------+--------------+
+| Envelope for parametrisation | mass geo | parallel geo |   mass geo   |
++------------------------------+----------+--------------+--------------+
+
+
+Example gflash1:
+
+Uses only the mass geometry, with each crystal defined as a volume,
+with parametrisation attached to the envelope in the mass geometry.
+Geometry and sensitive detector are defined in:
+  ExGflash1DetectorConstruction
+  ExGflash1SensitiveDetector
+
+Example gflash2:
+
+Uses mass geometry to create volumes and to create a sensitive detector
+for storing hits, but parametrisation is attached to the envelope
+in the parallel geometry (see also examples/extended/parametrisations/Par01).
+Geometry and sensitive detector are defined in:
+    ExGflash2DetectorConstruction
+    ExGflash2ParallelWorld
+    ExGflash2SensitiveDetector
+
+Example gflash3:
+
+Uses mass geometry to create the main volume (homogeneous material) and use it
+as an envelope for the parametrisation, but the readout geometry (crystals)
+are defined in the parallel geometry, together with the sensitive detector
+to store the hits.
+Geometry and sensitive detector are defined in:
+	ExGflash3DetectorConstruction
+	ExGflash3ParallelWorld
+	ExGflash3SensitiveDetector
+
+Details of implementation:
+-------
+
+Example gflash1:
+
+To use GFLASH the user has to implement the following:
+
+  - ExGflash1DetectorConstruction::ConstructSD() :
+  Here GFLASH has to be initialized and assigend to the envelope,
+  where it should be active (here our calorimeter = fCalo_log )
+
+        // **********************************************
+        // * Initializing shower modell
+        // ***********************************************
+        G4cout << "Creating shower parameterization models" << G4endl;
+        fFastShowerModel = new GFlashShowerModel("fFastShowerModel", fRegion);
+        fParameterisation = new GFlashHomoShowerParameterisation(pbWO4);
+        fFastShowerModel->SetParameterisation(*fParameterisation);
+        fParticleBounds = new GFlashParticleBounds();
+        fFastShowerModel->SetParticleBounds(*fParticleBounds);
+        fHitMaker = new GFlashHitMaker();
+        fFastShowerModel->SetHitMaker(*fHitMaker);
+        G4cout<<"end shower parameterization."<<G4endl;
+
+  - ExGflash1SensitiveDetector:
+  It is mandatory to use G4VGFlashSensitiveDetector as (additional)
+  base class for the sensitive detector.
+  Here it is necessary to implement a seperate
+  interface, where the GFlash spots are processed.
+  (ProcessHits(G4GFlashSpot*aSpot ,G4TouchableHistory* ROhist))
+  The separate interface is used, because the GFLASH spots contains
+  (naturally) less information than the full simulation.
+
+
+Example gflash2:
+
+  - ExGflash2.cc:
+     Parallel world needs to be registered;
+     Fast simulation is activated for parallel world (where envelope is);
+
+  - ExGflash2DetectorConstruction:
+     Only main geometry and SD are created;
+
+  - ExGflash2ParallelWorld:
+     Construction of identical volume for the main box as in the mass geometry,
+     but with dummy material (it is not used anyway);
+     Creation of G4Region associated to G4LogicalVolume;
+     Initialization of GFlash, attaching it to the envelope (G4Region);
+
+  - ExGflash2SensitiveDetector:
+     Uses pointer to ExGflash2ParallelWorld to get the crystals for the readout;
+
+Example gflash3:
+
+   - ExGflash3.cc:
+      Parallel world needs to be registered;
+      Physics of the parallel world needs to be registered so sensitive detector can
+      collect hits;
+      Fast simulation is activated for mass world (where envelope is);
+
+   - ExGflash3DetectorConstruction:
+      Only main volume (box) with material is created;
+      Creation of G4Region associated to G4LogicalVolume of that box;
+      Initialization of GFlash, attaching it to the envelope (G4Region);
+
+   - ExGflash3ParallelWorld:
+      Construction of identical volume for the main box as in the mass geometry,
+      but with dummy material (it is not used anyway);
+      Construction of individual crystals for the readout geometry;
+      Creation of the sensitive detector;
+
+   - ExGflash3SensitiveDetector:
+      Uses pointer to ExGflash3DetectorConstruction to get the crystals for the readout;
+
+Macros
+-------
+vis.mac - macro for use in interactive mode (default, if no arguments are specified)
+test.mac - macro for tests: 50 GeV electrons are shot in the direction of the detector
+           (along z axis), 10 times. As they enter the parametrisation envelope,
+           the GFlash parametrisation is invoked and energy is deposited.
+           The results are printed out:
+            - energy in the most central crystal
+            - energy in 3x3 crystals
+            - energy in 5x5 crystals
+            - number of created deposits
+            - simulation time per event
+

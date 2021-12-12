@@ -1,0 +1,17 @@
+
+                        Geant4 GDML Examples
+                        ====================
+
+This directory contains a set of examples showing the usage of the GDML
+plugin module in Geant4.
+
+   G01        Simple example for importing and exporting simple GDML files.
+   G02        Sample application showing how to import/export different
+              geometry setups, including STEP Tools files and structures
+              integrating them in a real simulation application.
+   G03        Simple example showing how to import extensions to the GDML
+              schema.
+   G04        Simple example showing how to associate detector sensitivity
+              to a logical-volume, making use of the auxiliary-information.
+
+See the README file inside each example for more detail.

@@ -1,0 +1,104 @@
+
+     =====================================================================
+                        Geant4 - Cexmc advanced example
+     =====================================================================
+
+                                    README
+                             -----------------------
+
+Author: A. Radkov (alexey.radkov@gmail.com)
+
+------> Introduction
+
+Cexmc stands for Charge EXchange Monte Carlo. The program was used to simulate
+real experiments in Petersburg Nuclear Physics Institute (PNPI, Russia).
+Detailed User's Manual and explanatory images of the experimental setup can be
+found in directory doc/ of this example.
+
+------> Compilation
+
+Basic modules of Cexmc must compile with Geant4 version 9.4. Cexmc won't compile
+with older versions of Geant4. Cexmc contains several optional modules which can
+be enabled or disabled in the makefile by setting dedicated macros: most of them
+are listed in the beginning of the makefile and well commented. Modules may
+involve additional dependencies. In the following table the dependencies and
+related modules are shown.
+
+Dependency        Requirement  Makefile Macro / Module      Comment
+--------------------------------------------------------------------------------
+boost::serialize  Optional      CEXMC_USE_PERSISTENCY /     used when
+                                Persistency                 (de)serialization of
+                                                            events and run data
+
+boost::split      Optional      CEXMC_USE_PERSISTENCY /     used when parsing
+                                Main                        command line
+                                                            arguments related to
+                                                            persistency module
+
+boost::spirit     Optional      CEXMC_USE_CUSTOM_FILTER /   used in custom
+                                Custom filter               filter engine
+
+cernlib           Optional      CEXMC_USE_GENBOD / Main     user can choose
+                                                            native GENBOD() as
+                                                            phase space
+                                                            generator
+
+CERN ROOT         Optional      CEXMC_USE_ROOT /            used in histograming
+                                Histograming
+
+CERN ROOT / Qt    Optional      CEXMC_USE_ROOTQT /          used for live
+binding                         Histograming                histograms in Qt
+                                                            sessions
+--------------------------------------------------------------------------------
+
+The persistency module is compatible with a pretty old boost::serialize version
+(compilation was tested under Scientific Linux 4.8 with gcc 3.4.6 and boost
+version 1.32). Custom filter requires a newer boost as far as it uses modern
+boost::spirit library which requires boost version 1.37 and higher.
+Presence of CERN ROOT libraries is tested automatically in the makefile, but it
+is possible to disable or enable the histograming framework manually using flag
+CEXMC_USE_HISTOGRAMING in the makefile.
+Compilation of visualization modules and interactive sessions depends on whether
+standard Geant4 macros like G4VIS_USE, G4UI_USE, G4UI_USE_TCSH and G4UI_USE_QT
+have been set.
+If boost is installed in a special path in your system then you may need to
+properly set environment variables BOOST_INCLUDE_PATH and BOOST_LIBRARY_PATH
+which denote directories where boost include files and libraries are located.
+
+------> Run modes
+
+Run modes are set from command-line options. To see available command-line
+options type in terminal 'cexmc -h' or just 'cexmc'. Some run modes can be
+unavailable if certain modules were not compiled.
+
+Here is list of run modes categorized by type of interaction with user:
+
+   1. Batch mode. The simplest mode without any interaction with user.
+      No command line option is required.
+   2. Interactive mode. The program provides an interactive shell.
+      To run in the interactive mode command line option -i must be specified.
+   3. Graphical Qt mode. This mode is specified by command line option -g.
+
+List of run modes categorized by task:
+
+   1. Straight mode (or Monte Carlo mode). The program will read preinit and
+      init macros, then calculate acceptances and (optionally) save data in
+      project files. Project files are saved in a directory defined by
+      environment variable CEXMC_PROJECTS_DIR (or in the current directory if it
+      is not defined), name of the project is specified by option -w. Preinit
+      and init macros are set by options -p and -m respectively. In the straight
+      mode preinit macro must be specified explicitly, as far as desired
+      production model can be instantiated only in preinit phase.
+   2. Replay mode (or Read project mode). In this mode the program will not use
+      common Geant4's event loop. Instead, it will sequentially read event data
+      from an existing project and pass them into
+      CexmcEventAction::EndOfEventAction(). The read project is specified by
+      option -r. This mode is useful when user wants to recalculate data from an
+      existing project with different conditions (for example with different
+      reconstruction parameters) or apply a custom filter. The results of run
+      can be written again into another project.
+   3. Show results mode (or Output mode). The program will output various data
+      from an existing project (specified by option -r). Type(s) of data are
+      specified in option -o. For example, to show results of a run user can
+      specify -orun in command line. To show events, geometry and run results
+      user can specify -oevents,geom,run.

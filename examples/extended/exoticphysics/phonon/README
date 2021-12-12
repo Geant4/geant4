@@ -1,0 +1,99 @@
+
+ =================================================================
+                     Phonon propagation in Geant4
+ =================================================================
+                         Daniel Brandt - SLAC
+                       dbrandt@slac.stanford.edu
+
+This example demonstrates how phonon propagation in cryogenic crystals
+can be simulated in Geant4.
+
+1.INTRODUCTION
+
+Phonon propagation is different from most other Geant4 propagation
+simulations in a number of respects:
+
+-Phonons are massless particles moving slower than the speed of light
+
+-Phonon propagation and momentum vectors are not parallel
+
+-Events isotropic in phonon-momentum space are not isotropic in real
+ space.
+
+This example will simulate the propagation of acoustic phonons through
+a Germanium crystal, providing processes to simulate phonon scattering
+off isotopic impurities, mode mixing between polarization states and
+anharmonic downconversion (phonon splitting). As such it provides all
+the physics required to realistically simulate phonon propagation in
+cryogenically cold semiconductor crystals.
+
+2. GEOMETRY
+
+In this example the geometry is a cylindrical Germanium crystal
+centered at (0,0,0) with Almuninium end caps. Phonons absorbed in the
+Al end caps are counted by the sensitive detector.
+
+3. PRIMARY EVENT
+
+The primary event is a single phonon of energy 7.5 meV at the center of
+the Ge crystal. The polarization type (fast transvere, slow transverse or
+longitudinal) is determined randomly according to the density of states
+in Germanium. The direction of propagation is than determined by by the
+User Stacking Action class XPhononStackingAction.
+
+4. EXECUTION & OUTPUT
+
+The executable must be run from within the source directory of the example
+to ensure that it can find the path for crystal data files.  Alternatively
+the search path for the crystal maps can be set in the setting the
+G4LATTICEDATA environment variable. If this variable does not exist, it
+defaults to ./CrystalMaps.  
+
+Data files for each crystal material are stored in a named subdirectory
+under $G4LATTICEDATA/, along with a config.txt file which specifies the
+numerical constants for the lattice.  This example includes germanium [111]
+in CrystalMaps/Ge/.
+
+Upon execution, the vis.mac visualization macro will automatically be
+executed. For the visualization to work, OpenGL support must be installed.
+The macro will automatically generate a single Primary Event (7.5 meV phonon)
+at the center of the crystal.
+
+The trajectory colour will indicate the polarization state of the phonon:
+Longitudinal:    blue
+Fast Transverse: green
+Slow Transverse: red
+
+A small circle will be drawn wherever a phonon is absorbed into the 
+Aluminium. All events within the Aluminium are written into plain-text
+space-sparated-value (ssv) files.
+
+timing.ssv
+------------
+COLUMN 1: Time phonon was absorbed in ns since start of run
+COLUMN 2: Energy of phonon absorbed
+
+caustic.ssv
+------------
+COLUMN 1: x-position of absobrtion in mm
+COLUMN 2: y-position of absobrtion in mm
+COLUMN 3: z-position of absobrtion in mm
+
+Every time a phonon is simulated, the information is appended to timing.ssv
+and caustic.ssv. If the files do not exist they will be created.
+
+5. TESTING
+
+In order to test the example, it can be run as
+   ./XGeBox run.in > test.out
+
+This will create a single primary event and then cause the example to
+terminate automatically, with all screen output redirected to test.out.
+
+If all went well, test.out should be identical to run.out provided with
+this example. Also, the files caustic.ssv and timing.ssv should have been 
+created and be identical to caustic.out and timing.out respectively.
+
+After the first time the example runs, it will append to caustic.ssv and
+timing.ssv. If the testing should be re-run, then caustic.ssv and timing.ssv
+will have to be deleted.

@@ -1,0 +1,26 @@
+
+///\file "physicslists/.README.txt"
+///\brief Examples physicslists README page
+
+/*! \page Examples_physicslists Category "physicslists"
+
+ Examples in this directory demonstrate usage of Geant4 reference physics lists
+ and physics builders.
+
+\link Examplefactory factory \endlink
+
+Demonstrates the usage of G4PhysListFactory to build  the concrete physics list
+
+\link ExampleextensibleFactory extensibleFactory \endlink
+
+ Demonstrates the usage of extensible g4alt::G4PhysListFactory to build a
+ concrete physics list. It also demonstrates the setting of an alternative
+ "default" physics list; extending existing lists by adding/replacing physics
+ constructors; and extending the factory with user supplied physics lists.
+
+\link ExamplegenericPL genericPL \endlink
+
+ Demonstrates the usage of G4GenericPhysicsList to build  the concrete physics
+ list at the run time.
+
+*/

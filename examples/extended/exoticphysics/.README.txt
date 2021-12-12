@@ -1,0 +1,38 @@
+
+///\file "exoticphysics/.README.txt"
+///\brief Examples  exoticphysics README page
+
+/*! \page Examples_exoticphysics Category "exoticphysics"
+
+ Examples in this directory demonstrate exotic physics applications. 
+ Currently, four examples are provided:
+
+\link Examplechanneling channeling \endlink
+
+This example simulates channeling of 400 GeV/c protons in a bent crystal.
+
+\link Exampledmparticle dmparticle \endlink
+
+This is very preliminary and simplified Geant4 example for light dark matter 
+(LDM) particles. 
+
+\link Examplemonopole monopole \endlink
+
+This example is devoted to the energy deposited by classical magnetic
+monopole.
+
+\link Examplephonon phonon \endlink
+
+This example simulates phonons in sub-Kelvin temperature Germanium crystal.
+
+\link Examplesaxs saxs \endlink
+
+The example saxs implements the typical setup of a Small Angle X-ray
+Scattering (SAXS) experiment.
+
+\link Exampleucn ucn \endlink
+
+This example simulates the passage of ultra-cold neutrons (UCN) in a
+hollow pipe.
+
+*/

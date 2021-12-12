@@ -1,0 +1,23 @@
+
+This program compare the Geant3 and Geant4 dE/dx tables.
+The Geant4 values are read as ffread data cards, as they are printed out
+by TestEm3, according the standard Geant3 binning. 
+One must complete by hand the data cards KINE and MATE; see the file lead.dat 
+as an example.
+The Geant3 values are computed within this program.
+The g4-g3 differences are ploted in the file plmat.paw
+
+ % cd geant3/g4mat
+ % gmakeB           to make an executable  (Batch version) 
+ % gmakeT           to make an executable  (inTeractive version)
+ 
+ To execute:
+  
+ % cd geant3/g4mat
+ % $G4SYSTEM/g4mat.xb (for batch) or g4mat.xt (for interactive)
+ 
+ The program will ask:
+ G3 > gives the filename of the data cards to be read:
+ 
+ lead.dat      (XXX.dat)
+ 

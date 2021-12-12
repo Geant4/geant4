@@ -1,0 +1,21 @@
+
+                        Examples for event parallelism
+                        ------------------------------
+
+This directory includes example applications to demonstrate the usage of
+different techniques for achieving event parallelism with Geant4.
+
+- MPI is a native interface with MPI libraries. The directory contains 
+  a Geant4 UI library and a couple of parallelized examples.
+  Using this interface, users applications can be parllelized with 
+  different MPI compliant libraries, such as LAM/MPI, MPICH2, OpenMPI,
+  and so on.
+
+- Example TBB is derived from original basic/B2 demonstrating how to
+  interface a simple application with the Intel Threading Building Blocks
+  library (TBB), and organise MT event-level parallelism as TBB tasks.
+
+- TopC examples are Geant4 examples adapted to be run together with 
+  the TOP-C communication layer application on either a cluster of systems 
+  or multi-processor machines. They are based on N02 and N04 examples,
+  originally provided in novice examples (see more in example/README)

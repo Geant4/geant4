@@ -1,0 +1,13 @@
+
+                         G3toG4 tool's examples
+			 ------------------------
+
+This directory g3tog4 includes applications to demonstrate the usage of the
+g3tog4 tool for converting Geant 3.21 simple geometries to Geant4 ones.
+Currently, only one example is provided:
+
+clGeometry
+----------
+
+It demonstrates building a detector geometry using the call list
+mechanism.

@@ -1,0 +1,38 @@
+
+This README file provides instructions for reading the radioactive decay 
+schemes in the files zXX.aYYY found in the directory RadioactiveDecay3.2
+(most recent version).  This directory, as well as previous versions, is
+available from the Geant4 download page 
+
+http://geant4.web.cern.ch/geant4/support/download.shtml
+
+under the Data files heading. In order to use the radioactive decay module
+correctly, you must download and unpack the above directory in your local
+area, and set the environment variable
+
+G4RADIOACTIVEDATA
+
+to point to it. 
+
+**************************************************************************
+In each of the files, lines beginning with either a 'W' or a '#' are 
+comments.
+
+Lines beginning with a 'P' are headers, each of which describes a level of
+the nucleus.  The first number is the excitation energy in keV, the second 
+is the half life in seconds. Indented lines under the 'P' lines are decay 
+modes for that excitation.  There are two type of records here, 
+distinguished by the number of columns.
+
+If there are 3 columns only, this is a header which describes all decays of
+that type from this level.  The first column is the decay mode, the second
+column is zero, and the third column in the branching ratio to this mode, 
+as a fraction of unity.  Therefore, the third columns of all the 3-column
+records under a given 'P' line should sum to 1.0.
+
+If there are four columns, this is a record which describes a subset of the 
+decay type, specific to a given lower level in the daughter species.  The 
+first column is the decay type, the second column is the excitation level 
+of the daughter (in keV), and the third column is the branching ratio as a 
+percentage (! note... not a fraction of unity) of the total branching ratio 
+which came from the 3-column record for this decay.

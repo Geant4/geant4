@@ -1,0 +1,17 @@
+
+              Geometry tools
+			 --------------
+
+This directory includes examples for the geometry setup.
+
+Transforms
+----------
+This extended example demonstrates various ways of definition of 
+3D transformations for placing volumes. 
+
+vecGeomNavigation
+-----------------
+
+This example demonstrates integration of the navigation elements of
+[VecGeom](https://gitlab.cern.ch/VecGeom/VecGeom), to investigate the
+performance benefits.

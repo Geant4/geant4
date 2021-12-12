@@ -1,0 +1,191 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Example Par04
+                            -------------
+
+ This example demonstrates how to use the Machine Learning (ML) inference
+ to create energy deposits as a fast simulation model using
+<a href="https://github.com/microsoft/onnxruntime">ONNX runtime</a>
+ and <a href="https://github.com/lwtnn/lwtnn">LWTNN</a> libraries.
+
+ The model used in this example was trained externally (in Python) on data
+ from this examples' full simulation and can be applied to perform fast simulation
+
+ The geometry used in the example is a cylindrical setup of layers: tungsten
+ absorber and silicon as the active material. 3D readout geometry (cylindrical)
+ is defined dynamically,  based on the particle direction at the entrance to the
+ calorimeter. This is set using a fast simulation model that is triggered at
+ detector entrance. Analysis of energy deposits is done in the event action,
+ ntuple with hits is stored.
+
+ ## 1. Detector description
+
+ The detector consists of cylindrical layers of passive and active material,
+ tungsten and silicon, respectively.
+
+ Fast simulation is attached to the region of the detector.
+
+ Input macro can specify which layer is considered an active layer (sensitive
+ detector is attached to it). For fast simulation both layers should be marked
+ as sensitive. It is connected to the wway the deposits are created: position is
+ centre of the layer, which may often fall within the absorber (which is thicker
+ than the active material). In a realistic detector setup, the positions used in
+ fast simulation would be calculated properly, to deposit energy within the active
+ material.
+
+ ## 2. Sensitive detector
+
+ Sensitive detector inherits from both base classes:
+ - G4VSensitiveDetector: for processing of detailed/non-fast simulation hits
+ - G4VFastSimSensitiveDetector: for processing of fast sim (G4FastSim) hits.
+ Hits are placed in the same hit collection, with a different flag to distinguish
+ between those originated in the full simulation, and those from the fast
+ simulation.
+ During visualisation, hits are represented as volumes of different colour:
+ green for full simulation and red for fast simulation.
+
+ ## 3. Primary generation
+
+ Particle gun is used as a primary generator. 10 GeV electron is used by default.
+ By default particles are generated along y axis. Those values
+ can be changed using /gun/ UI commands.
+
+ ## 4. Physics List
+
+ FTFP_BERT modular physics list is used. On top of it, fast simulation physics
+ is registered for selected particles (electrons, positrons).
+
+
+ ## 5. User actions
+
+ - Par04RunAction : run action used for initialization and termination
+                    of the run. Histograms for analysis of shower development
+                    in the detector are created.
+
+ - Par04EventAction : event action used for initialization and termination
+                      of the event. Analysis of shower development is performed
+                      on event-by-event basis.
+
+ ## 6. ML Inference
+
+ - Par04MLFastSimModel : model used for parametrisation of źelectrons, positrons,
+      and gammas. Energy is deposited and
+      distributed according to inferred values from the ML model.
+      This class triggers the inference setup, asks for values,
+      and deposits energies at given positions.
+
+ - Par04InferenceSetup : this class is used to initialize the inference parameters
+       (user application specific) such as the inference library,
+      the path and name of the inference model and the size of
+      the input inference vector(latent dimension and and condition size).
+      This class constructs this vector and triggers the interface
+      corresponding to the specified input inference library.
+      After the inference, the post processing step consists of
+      scaling back inferred values to the original range.
+
+ - Par04InferenceInterface : is a base class that allows to read in the ML model, configure
+       and execute inference.
+
+ - Par04OnnxInference and Par04LWTNNInference : inference library specific classes that inherit
+      from the base class Par04InferenceInterface.
+
+
+ ## 7. Output
+
+ The execution of the program (examplePar04) produces an output with histograms.
+ Ntuples are also stored. They are not merged if the application is run on multiple threads.
+
+ The macro file examplePar04.in is used to run full simulation. It will simulate 100
+ events, for single 10 GeV electron beams.
+ If CMake is able to find inference libraries (lwtnn and/or ONNX Runtime), a configuration
+ macro will be available for that library (examplePar04_lwtnn.in and/or examplePar04_onnx.in).
+ It will use a trained model to run inference and create showers in the detector by directly
+ depositing energy.
+
+ ## 8. How to build and run the example
+
+- LWTNN and ONNX Runtime are available on LCG. In order to use them, one can setup the envirnment:
+  % source /cvmfs/sft.cern.ch/lcg/views/LCG_100/x86_64-centos7-gcc10-opt/setup.sh
+
+- Compile and link to generate the executable (in your CMAKE build directory):
+  % cmake <Par04_SOURCE>
+  % make
+
+- Execute the application (in batch mode):
+  % ./examplePar04 -m examplePar04.in
+  which produces two root file for full simulation.
+
+- Execute the application (in interactive mode):
+  % ./examplePar04
+  which allows to visualize hits.
+
+- If ONNX Runtime is available:
+  % ./examplePar04 -m examplePar04_onnx.in
+
+- If LWTNN is available:
+  % ./examplePar04 -m examplePar04_lwtnn.in
+
+ By default, CMake will attempt to build fast simulation with ONNX Runtime and LWTNN. However, if none
+ of those libraries is found, it will proceed with full simulation only. The search can be switched
+ off manually switching CMake flag INFERENCE_LIB to OFF (-DINFERENCE_LIB=OFF)
+
+ ## 9. Macros
+
+ vis.mac - Allows to run visualization. It will be automatically run in interactive mode, if no
+           argument is passed to the executable (examplePar04)
+
+ examplePar04.in - Runs full simulation. It will run 100 events with single electrons, 10 GeV and
+                   along y axis.
+
+ examplePar04_onnx.in - Available only if ONNX Runtime is found by CMake. Runs fast simulation with
+                        a NN stored in onnx file.
+
+ examplePar04_lwtnn.in - Available only if LWTNN is found by CMake. Runs fast simulation with
+                        a NN stored in json file.
+
+ ## 10. UI commands
+
+ UI commands useful in this example:
+
+- activation/disactivation of the fast simulation model:
+   /param/ActivateModel inferenceModel
+   /param/InActivateModel inferenceModel
+
+- particle gun commands
+   /gun/particle e-
+   /gun/energy 10 GeV
+   /gun/direction 0 1 0
+   /gun/position 0 0 0
+
+ UI commands defined in this example:
+ - detector settings
+    /Par04/detector/setDetectorInnerRadius 80 cm
+    /Par04/detector/setDetectorLength 2 m
+    /Par04/detector/setNbOfLayers 90
+    /Par04/detector/setAbsorber 0 G4_W 1.4 mm false
+    /Par04/detector/setAbsorber 1 G4_Si 0.3 mm true
+
+ - readout mesh
+    /Par04/mesh/setSizeOfRhoCells 2.325 mm
+    /Par04/mesh/setSizeOfZCells 3.4 mm
+    /Par04/mesh/setNbOfRhoCells 18
+    /Par04/mesh/setNbOfPhiCells 50
+    /Par04/mesh/setNbOfZCells 45
+
+ - inference setup
+    /Par04/inference/setSizeLatentVector 10
+    /Par04/inference/setSizeConditionVector 4
+    /Par04/inference/setModelPathName MLModels/Generator.onnx
+    /Par04/inference/setProfileFlag 0
+    /Par04/inference/setOptimizationFlag 0
+    /Par04/inference/setInferenceLibrary ONNX
+    /Par04/inference/setSizeOfRhoCells 2.325 mm
+    /Par04/inference/setSizeOfZCells 3.4 mm
+    /Par04/inference/setNbOfRhoCells 18
+    /Par04/inference/setNbOfPhiCells 50
+    /Par04/inference/setNbOfZCells 45
+

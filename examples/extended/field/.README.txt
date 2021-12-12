@@ -1,0 +1,46 @@
+
+///\file "field/.README.txt"
+///\brief Examples field README page
+
+/*! \page Examples_field Category "field"
+
+ Examples in this directory demonstrate specific simulation setups 
+ in magnetic field.
+ 
+\link Examplefield01 field01 \endlink
+
+Example enabling investigation of tracking in a magnetic field.
+
+\link Examplefield02 field02 \endlink
+
+Test for investigation of tracking in electric field and field dependent 
+electromagnetic processes.
+
+\link Examplefield03 field03 \endlink
+
+Example of tracking in magnetic field where field associated
+to selected logical volumes varies.
+
+\link Examplefield04 field04 \endlink
+
+This example shows how to define/use OVERLAPPING field elements 
+in Geant4. Fields might be either magnetic, electric or both.
+
+\link Examplefield05 field05 \endlink
+
+This example demonstrates so-called "spin-frozen" condition.
+
+\link Examplefield06 field06 \endlink
+
+This example exercises the capability of tracking massive
+particles in a gravity field.
+     
+\link ExampleBlineTracer  BlineTracer \endlink
+
+The BlineTracer module allows to trace and visualise magnetic field 
+lines in a Geant4 application where particle are tracked through the
+magnetic field (in future, these functionalities may be integrated in
+the Geant4 kernel).
+
+*/
+

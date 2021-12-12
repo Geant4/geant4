@@ -1,0 +1,162 @@
+
+///\file "hadronic/Hadr06/.README.txt"
+///\brief Example Hadr06 README page
+
+/*! \page ExampleHadr06 Example Hadr06
+
+   Survey energy deposition and particle's flux from an hadronic cascade.
+   Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.   
+   	
+\section Hadr06_s1 MATERIALS AND GEOMETRY DEFINITION
+ 
+   The geometry is a single sphere (absorber) of an homogenous material.
+    
+   Two parameters define the geometry :
+	- the radius of the sphere	   
+ 	- the material of the sphere
+ 	
+   The default geometry (R=30 cm of water) is built in 
+   DetectorConstruction, but the above parameters can be changed interactively 
+   via commands defined in DetectorMessenger.
+
+   The absorber is surrounded by a World volume (vacuum)
+      
+   A function, and its associated UI command, allows to build a material
+   directly from a single isotope.
+   
+   To be identified by the ThermalScattering module, the elements composing a
+   material must have a specific name (see G4NeutronHPThermalScatteringNames.cc)
+   Examples of such materials are build in DetectorConstruction.
+ 	
+\section Hadr06_s2 PHYSICS LIST
+   
+  "Full" set of physics processes are registered, but via PhysicsConstructor
+  objects rather than complete pre-defined G4 physics lists. This alternative 
+  way gives more freedom to register physics.
+  
+  Physics constructors are either constructors provided in Geant4 (with G4 prefix)
+  or 'local'. They include : HadronElastic, HadronInelastic, IonsInelastic, GammaNuclear,
+  RadioactiveDecay and Electomagnetic.
+  (see geant4/source/physics_lists/constructors)
+
+  HadronElasticPhysicsHP include a model for thermalized neutrons, under the control of a command
+  defined in NeutronHPMesseger.
+
+  GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
+
+  ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
+ 
+   Several hadronic physics options are controlled by environment variables.
+   To trigger them, see Hadr06.cc
+ 	 
+\section Hadr06_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+   The primary kinematic is a single particle randomly shooted at the 
+   centre of the sphere. The type of the particle and its energy are set in 
+   PrimaryGeneratorAction (neutron 14 MeV), and can be changed via the G4 
+   build-in commands of ParticleGun class (see the macros provided with 
+   this example).
+ 	
+\section Hadr06_s4 PHYSICS
+
+   The program computes and plots energy deposited in the interaction volume
+   (absorber) and the flux of particles leaving this volume.
+   Processes invoked and particles generated during hadronic cascade are listed.
+
+
+
+\section Hadr06_s5 HISTOGRAMS
+         
+   The test contains 23 built-in 1D histograms, which are managed by
+   G4AnalysisManager and its Messenger. The histos can be individually 
+   activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, etc..)
+   (see the macros xxxx.mac).
+
+            1     "total energy deposit"
+            2     "Edep (MeV/mm) profile along radius"		  
+            3     "total kinetic energy flow"
+            4     "energy spectrum of gamma at creation"
+            5     "energy spectrum of e+- at creation"
+            6     "energy spectrum of neutrons at creation"
+            7     "energy spectrum of protons at creation"
+            8     "energy spectrum of deuterons at creation"
+            9     "energy spectrum of alphas at creation"
+            10    "energy spectrum of all others ions at creation"
+            11    "energy spectrum of all others baryons at creation"
+            12    "energy spectrum of all others mesons at creation"
+            13    "energy spectrum of all others leptons (neutrinos) at creation"
+            14    "energy spectrum of emerging gamma"
+            15    "energy spectrum of emerging e+-"
+            16    "energy spectrum of emerging neutrons"
+            17    "energy spectrum of emerging protons"
+            18    "energy spectrum of emerging deuterons"
+            19    "energy spectrum of emerging alphas"
+            20    "energy spectrum of all others emerging ions"
+            21    "energy spectrum of all others emerging baryons"
+            22    "energy spectrum of all others emerging mesons"
+            23    "energy spectrum of all others emerging leptons (neutrinos)"   
+
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+\verbatim
+/analysis/h1/set id nbBins  valMin valMax unit 
+\endverbatim   
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+\verbatim
+/analysis/setFileName  name  (default Hadr06)
+\endverbatim   
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh
+       
+   It is also possible to print selected histograms on an ascii file:
+\verbatim
+/analysis/h1/setAscii id
+\endverbatim   
+   All selected histos will be written on a file name.ascii (default Hadr06) 
+ 	 				
+\section Hadr06_s6 VISUALIZATION
+ 
+   The Visualization Manager is set in the main().
+   The initialisation of the drawing is done via the commands
+   /vis/... in the macro vis.mac. To get visualisation:
+\verbatim
+> /control/execute vis.mac
+\endverbatim
+ 	
+   The tracks are drawn at the end of event, and erased at the end of run.
+   gamma green   
+   neutron yellow
+   negative particles (e-, ...) red
+   positive particles (e+, ions, ...) blue
+   	
+\section Hadr06_s7 HOW TO START ?
+ 
+   Execute Hadr06 in 'batch' mode from macro files :
+\verbatim   
+% Hadr06   run1.mac
+\endverbatim
+ 		
+   Execute Hadr06 in 'interactive mode' with visualization :
+\verbatim   
+% Hadr06
+Idle> control/execute vis.mac
+ ....
+ Idle> type your commands
+ ....
+ Idle> exit
+\endverbatim
+	
+ Macros provided in this example:
+  - graphite.mac: neutron,14 MeV, in graphite
+  - run1.mac: neutron,14 MeV, in Li7
+  - singleFission.mac: single fission in U235
+  
+  Macros to be run interactively:
+  - debug.mac: water with thermal scattering
+  - fission.mac: U235
+  - vis.mac: To activate visualization
+*/

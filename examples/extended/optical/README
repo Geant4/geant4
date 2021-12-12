@@ -1,0 +1,34 @@
+
+                         Optical processes
+			 -----------------
+
+This directory includes examples demonstrating the use of optical processes
+in the simulation.
+
+OpNovice
+--------
+Simulation of optical photons generation and transport.
+Defines optical surfaces and exercises optical physics processes
+(Cerenkov, Scintillation, Absorption, Rayleigh, ...). Uses stacking
+mechanism to count the secondary particles generated.
+Via the command line one can select an option to define the detector via a
+gdml file. An example gdml file is provided that corresponds
+to the  detector configuration defined in OpNoviceDetectorConstruction.cc.
+
+OpNovice2
+--------
+Investigate optical properties and parameters. Details of optical
+photon boundary interactions on a surface are recorded. Details 
+of optical photon generation and transport are recorded.
+
+LXe
+----
+Multi-purpose detector setup implementing:
+(1) scintillation inside a bulk scintillator with PMTs
+(2) large wall of small PMTs opposite a Cerenkov slab to show the cone
+(3) plastic scintillator with wave-length-shifting fiber readout.
+
+WLS
+----
+This application simulates the propagation of photons inside a Wave Length
+Shifting (WLS) fiber.

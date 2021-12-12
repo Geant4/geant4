@@ -1,0 +1,120 @@
+
+///\file "electromagnetic/TestEm9/.README.txt"
+///\brief Example TestEm9 README page
+
+/*! \page ExampleTestEm9 Example TestEm9
+
+ - Demonstrate electromagnetic physics in crystal calorimeters.
+ - How to define cut-per-region.
+     
+\section TestEm9_s1 GEOMETRY DEFINITION
+
+ The geometry consists of the vertex detector (VD), the electromagnetic
+ calorimeter (EM), and the muon identifier (MU). Detector layout along
+ the Z axis.
+
+ VD consisted of 3 layers of Si with pads structured along the X axis.
+ Between VD and EM there are 2 active absorbers (scintillators).
+ EM is the matrix 5x5 of heavy crystals. MU consist of 2 active absorbers
+ (scintillators) and the iron plate between.
+
+ 2 regions additional to the World are defined: VertexDetector and
+ MuonDetector. For testing purposes first absorber of MU is included in
+ the region of VD.
+
+ Material of calorimeter and absorber can be choosen: \n
+      Air Water lAr Al Fe BGO PbWO4 Pb. \n
+ Eg: 
+\verbatim
+/testem/det/CalMat PbWO4
+/testem/det/AbsMat Al
+\endverbatim
+
+ The size of the detector can be changed also.\n 
+ Eg: 
+\verbatim
+/testem/det/EcalLength   20  cm
+/testem/det/EcalWidth     5  cm
+/testem/det/update             ---> rebuild the geometry
+\endverbatim
+
+\section TestEm9_s2 PHYSICS LISTS
+
+ Physics Lists are based on modular design. Several modules are instantiated:
+ -# Transportation
+ -# EM physics
+ -# Decays
+ -# StepMax - for step limitation
+
+ The following options for EM physics using builders from physics_lists
+ sub-package are available:
+ - "emstandard_opt0" recommended standard EM physics for LHC
+ - "emstandard_opt1" best CPU performance standard physics for LHC
+ - "emstandard_opt2" similar fast simulation
+ - "emstandard_opt3" best standard EM options - analog to "local" above
+ - "emstandard_opt4" best current advanced EM options standard + lowenergy
+ - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+ - "emstandardSS"  standard EM physics and single scattering model
+ - "emstandardGS"  standard EM physics and Goudsmit-Saunderson multiple scatt.
+ - "emlivermore"  low-energy EM physics using Livermore data
+ - "empenelope"   low-energy EM physics implementing Penelope models
+ - "emlowenergy"  low-energy EM physics implementing experimental
+                  low-energy models
+  
+ A local builder, PhysListEmStandard "local" (similar to opt0) is also
+ available.
+
+
+ Optional components can be added:
+ - "elastic"       elastic scattering of hadrons
+ - "binary"        QBBC configuration of hadron/ion inelastic models
+ - "gamma_nuc"     gamma- and electro-nuclear processes
+ - "stopping"      stopping processes
+
+\section TestEm9_s3 AN EVENT : THE PRIMARY GENERATOR
+
+ The primary kinematic consists of a single particle which hits the
+ cylinder perpendicular to the input face. The type of the particle
+ and its energy are set in the PrimaryGeneratorAction class, and can
+ changed via the G4 build-in commands of G4ParticleGun class.
+
+\section TestEm9_s4 OUTPUT
+
+ The batch regime of simulation can be started 
+\verbatim
+$G4WORKDIR/bin/$G4SYSTEM/TestEm9 TestEm9.in
+\endverbatim
+ where TestEm9.in is the example of macro file for batch job.
+
+ As a result of simulation the number of secondaries produced
+ in different regions are averaged. The average energy depositions
+ in active absorbers and EM as well as RMS of these values are shown.
+ The number of hits in pads of VD is printed out.
+
+\section TestEm9_s5 VISUALISATION
+
+ To use visualisation the environment variable G4_VIS_USE should be 
+ defined. An interactive session starts if no macro file is specified 
+ in the command line:
+\verbatim
+$G4WORKDIR/bin/$G4SYSTEM/TestEm9
+\endverbatim
+
+ To start visualisation one can issur 
+\verbatim
+>/control/execute vis.mac
+>/run/beamOn 1
+\endverbatim
+
+\section TestEm9_s6 ANALYSIS
+
+ Number of histograms are built inside the example using internal
+ analysis sub-package. Histograms are saved in a root file.
+ Histogram booking and saving is done only if any of histogram
+
+\verbatim
+/testem/histo/fileName myname
+/testem/histo/setHisto id nbins xmin xmax unit
+\endverbatim
+      
+*/

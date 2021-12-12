@@ -1,0 +1,106 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            ExUCN
+                            -----
+                       Peter Gumplinger
+                  TRIUMF, Vancouver, Canada
+
+This example exhibits the functionality of UCN physics
+
+
+ 1- GEOMETRY DEFINITION
+
+     The geometry consists of a single hollow pipe (cylinder)
+     placed in a world.
+
+     Default World Size: G4Box - 1m x 1m x 100m
+
+     The pipe wall is made of G4_Ni while the world and, hence,
+     the inside of the pipe is made from G4_Galactic
+
+     The G4UCNMaterialPropertiesTable properties are:
+
+     "REFLECTIVITY" = 1
+     "DIFFUSION" = 0.1
+     "FERMIPOT" = 252.0 neV
+     "SPINFLIP"= 0.
+     "LOSS" = 12.5e-5
+     "LOSSCS" = 0.
+     "ABSCS"= 4.49    // 1/v loss cross-section  at room temp.
+     "SCATCS" = 18.5  // (incoherent) "elastic" scattering cross-section
+
+     The MicroRoughnessParameters are:
+
+     Roughness correlation length w = 30nm
+     Surface roughness b = 1nm
+     # of angles theta_i in the look-up tables: 180
+     # of energie bins in the look-up tables: 1000
+     min. and max. values of theta_i: 0*degree and 90*degree
+     min. and max values of Energy: 1neV and 1000neV
+     # of angles theta_o in the look-up table calculation: 15
+     # of angels phi_o   in the look-up table calculation: 15
+     angular cut: 0.01*degree
+
+     The default step limits in the vacuum is 1mm and maxTime is 100s
+
+     The simulation is in a G4UniformGravityField
+
+ 2- PHYSICS LIST
+
+    The ExUCNPhysicsList defines only G4Neutron, G4Proton, G4Electron,
+    G4AntiNeutrinoE, G4MuonPlus, G4MuonMinus and G4GenericIon
+
+    Through ExUCNExtraPhysics the following processes are instantiated:
+
+    G4StepLimiter
+    G4UserSpecialCuts
+
+    and in ConstructUCN()
+
+    G4UCNLoss
+    G4UCNAbsorption
+    G4UCNMultiScattering
+
+ 3- AN EVENT : THE PRIMARY GENERATOR
+
+     The primary kinematic consists of a single ultra-cold neutron,
+     uniform between 1neV and 100neV, from the origin and uniform
+     into 4pi solid angle.
+      
+     A RUN is a set of events.
+
+
+ 4- VISUALIZATION
+
+     The Visualization Manager is set in the main() for interactive session.
+     The initialisation of the drawing is done via the command
+       /control/execute vis.mac
+
+ 5- HOW TO START ?
+
+   This example handles the program arguments in a new way.
+   It can be run with the following optional arguments:
+   % ExUCN [-m macro ] [-u UIsession] [-t nThreads]
+
+   The -t option is available only in multi-threading mode
+   and it allows the user to override the Geant4 default number of
+   threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
+   environment variable which has the top priority.
+
+        - execute ExUCN in 'batch' mode from macro files e.g.
+                % ExUCN -m ExUCN.in > ExUCN.out &
+
+        - execute ExUCN in 'interactive' mode with visualization e.g.
+                % ExUCN
+                ....
+                Idle> type your commands, for example:
+                Idle> run/beamOn 1
+                ....
+
+ 6- HISTOGRAMS
+
+    - no histograms for now

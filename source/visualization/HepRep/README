@@ -1,0 +1,152 @@
+This G4 Graphics Driver creates a HepRep File suitable for viewing
+by the HepRApp, Wired4 or FRED Event Display clients.
+It requires no external packages.
+
+The HepRep graphics format is further described at
+http://www.slac.stanford.edu/~perl/heprep/
+
+
+Two different drivers are available for either HepRep1 or HepRep2.
+
+
+Driver: HepRepFile
+------------------
+The version of HepRep produced by this driver is HepRep Version 1.
+
+Writes files with file extension .heprep.
+
+First file is written to current directory and is named G4Data0.heprep.
+Subsequent files increment the number, as in G4Data1.heprep, G4Data2.heprep...
+
+To specify a different output file directory (instead of current directory),
+set G4HEPREPFILE_DIR
+
+To specify a different output file name (instead of G4Data),
+set G4HEPREPFILE_NAME
+
+To repeatedly overwrite the same output file (instead of having incremental
+numbers at the end of the file name),
+set G4HEPREPFILE_OVERWRITE
+
+By default, invisible objects are not culled but are left in the heprep file
+with their visibility initially set to false (so that you can subsequently
+choose to make them visible from within the heprep browser).
+To force culling of invisible objects,
+set G44HEPREPFILE_CULL
+
+View the file using the HepRApp HepRep Browser, available from:
+http://www.slac.stanford.edu/~perl/HepRApp
+
+HepRApp can read xml files in zipped format as well as unzipped,
+so you can save space by applying gzip to the xml file.
+This will reduce the file to about five percent of its original size.
+
+Joseph Perl
+15 November 2007
+
+
+Driver: HepRepXML
+-----------------
+The version of HepRep produced by this driver is HepRep Version 2.
+
+This driver can write both Binary HepRep (.bheprep) and XML HepRep 
+(.heprep) files. Binary HepRep files are a one-to-one translation
+of XML HepRep files, but they are considerably shorter and faster
+to parse by a HepRepViewer such as WIRED 4.
+
+You can view the files using the WIRED 4 Event Display, available from:
+
+http://wired4.freehep.org
+
+Both Binary HepRep and XML HepRep can be compressed using the standard
+zlib library if linked into Geant4 using G4LIB_USE_ZLIB. If a standard
+zlib is not available (WIN32-VC for instance) you should also set 
+G4LIB_BUILD_ZLIB to build G4zlib included with Geant4.
+
+HepRep files (Binary and XML) can contain multiple HepRep events/geometries.
+If the file contains more than one HepRep it is not strictly XML anymore.
+Files can be written in .heprep.zip, .heprep.gz or .heprep format and their
+binary versions .bheprep.zip, .bheprep.gz or .bheprep.
+
+The .heprep.zip is the default for file output, the .heprep is the default 
+for stdout and stderr.
+
+(Optional) To set the filename with a particular extension such as: 
+.heprep.zip, .heprep.gz, .heprep, .bheprep.zip, .bheprep.gz or .bheprep
+use for instance:
+
+/vis/scene/create filename.bheprep.zip
+
+
+(Optional) To create separate files for each event, you can set a suffix such as 
+"-0001" to start writing files from filename-0001.bheprep.zip to 
+filename-9999.bheprep.zip (or up), while "-55-sub" will start write files 
+filename-55-sub.bheprep.zip to filename-99-sub.bheprep.zip (or up).
+
+/vis/heprep/setEventNumberSuffix -0001
+(Note: suffix has to contain at least one digit)
+
+
+(Optional) To route the HepRep XML output to stdout (or stderr), 
+by default uncompressed, use:
+
+/vis/scene/create stdout
+
+
+To select the driver, where the file if not create by scene is set to 
+G4HepRepOutput.heprep.zip, use:
+
+/vis/open HepRepXML
+
+
+(Optional) To write a geometry, use:
+
+/vis/viewer/flush
+
+
+(Optional) To signal a change in geometry (to be written with the next event), use:
+
+/vis/viewer/refresh
+
+
+To write 10 events (and geometries), use:
+
+/run/beamOn 10
+
+
+(Optional) To accumulate multiple (5) G4 events into one HepRep event, use:
+/vis/scene/endOfEventAction accumulate
+/run/beamOn 5
+/vis/viewer/update
+
+
+(Optional) To add attributes to each point on a trajectory, use:
+/vis/heprep/addPointAttributes 1
+Be aware that this may increase the size of the output dramatically.
+
+
+(Optional) You may use the commands:
+/vis/viewer/zoom                            to set an initial zoom factor
+/vis/viewer/set/viewpointThetaPhi           to set an initial view point
+/vis/heprep/setCoordinateSystem uvw         to change the coordinate system, where uvw can be "xyz", "zxy", ...
+
+
+(Optional) You may decide to write .zip files with events and geometry separated (but linked).
+This results in a smaller zip file, as the geometry is only written once. Use the command:
+
+/vis/heprep/appendGeometry false
+
+
+(Optional) To close the file, remove the SceneHandler, use:
+
+/vis/sceneHandler/remove scene-handler-0
+
+
+Limitations:
+
+Only one SceneHandler can exist at any time, connected to a single Viewer. 
+Since the HepRep format is a model rather than a view this is not a real
+limitation. In WIRED 4 you can create as many views (SceneHandlers) as you like.
+
+1 June 2005
+Mark.Donszelmann@slac.stanford.edu

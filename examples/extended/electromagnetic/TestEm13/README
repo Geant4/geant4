@@ -1,0 +1,79 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm13
+                            --------
+
+	How to compute cross sections from the transmition coefficient
+	( see below, item Physics).
+	
+ 1- GEOMETRY DEFINITION
+ 
+ 	It is a single box representing a layer of finite thickness of
+	homogeneous material.
+ 	Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+ 	
+ 	The default geometry (1 cm of water) is constructed in 
+	DetectorConstruction, but the above parameters can be changed 
+	interactively via the commands defined in DetectorMessenger.
+ 	
+ 2- PHYSICS LIST
+ 
+ 	The physics list contains the standard electromagnetic processes.
+	In order not to introduce 'artificial' constraints on the step size, the
+	multiple scattering is not instanciated, and all processes are
+	registered as discrete : there is no continuous energy loss.  
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+ 	The primary kinematic consists of a single particle starting at the edge
+	of the box. The type of the particle and its energy are set in 
+	PrimaryGeneratorAction (1 MeV gamma), and can be changed via the G4 
+ 	build-in commands of ParticleGun class (see the macros provided with 
+ 	this example).
+ 	
+ 4- PHYSICS
+ 
+	An event is killed at the first step of the incident paticle.
+	Either the particle has interacted or is transmitted through the layer.
+	The cross section, also called absorption coefficient, is computed from 
+	the rate of unaltered transmitted incident particles.
+	
+	The result is compared with the 'input' data, i.e. with the cross
+	sections stored in the PhysicsTables and used by Geant4.
+ 	
+ 	A set of macros defining various run conditions are provided.
+ 	The processes are actived/inactived in order to survey the processes 
+	individually.
+
+ 	 				
+ 6- VISUALIZATION
+ 
+ 	The Visualization Manager is set in the main().
+ 	The initialisation of the drawing is done via the commands
+ 	/vis/... in the macro vis.mac. To get visualisation:
+ 	> /control/execute vis.mac
+ 	
+ 	The detector has a default view which is a longitudinal view of the 
+ 	box.
+ 	
+ 	The tracks are drawn at the end of event, and erased at the end of run.
+	
+ 7- HOW TO START ?
+ 
+	execute TestEm13 in 'batch' mode from macro files :
+ 		% TestEm13   compt.mac
+ 		
+	execute TestEm13 in 'interactive mode' with visualization :
+ 		% TestEm13
+		Idle> control/execute vis.mac
+ 		....
+ 		Idle> type your commands
+ 		....
+ 		Idle> exit
+ 

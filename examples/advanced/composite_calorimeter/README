@@ -1,0 +1,515 @@
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+
+     =========================================================
+                      Geant4 - Composite calorimeter example
+     =========================================================
+
+                             README
+                      ---------------------
+
+ CompositeCalorimeter is an example of a test-beam simulation used 
+ by the CMS Collaboration to validate Geant4 against real data taken 
+ (in 1996) in a CMS Hadron calorimeter test-beam.
+ The name "Composite" for this example emphasizes that, although the 
+ test-beam had the goal of studying the hadronic calorimeter response, 
+ part of the data was taken with the presence of the electromagnetic 
+ crystal calorimeter in front of the hadronic calorimeter, to better 
+ reproduce the situation as in the real CMS experiment. 
+ The geometry of the simulation has been setup in such a way to allow
+ very easily, at run time (therefore without need of changing any code; 
+ see below for the details) the inclusion or exclusion of the 
+ electromagnetic calorimeter part. 
+ Although some important aspects, for a detailed comparison between 
+ test-beam data and simulation, like beam profile, noise, and digitization, 
+ have been omitted here (to avoid too many technical details),
+ nevertheless, this example is able to reproduce the main features of
+ most of the relevant observables as measured in the real test-beam. 
+ The output of this example consists of a set of histograms 
+ and one ntuple which are stored on a ROOT file (default). 
+ In our opinion, the most original "lesson" which is offered by this
+ advanced example for the Geant4 user is to show how the Geometry and
+ the Sensitive/Hit part of the simulation is treated in a big experiment.
+ Although the details of how this is done vary from experiment to
+ experiment (it is worth, for instance, to compare with the Atlas-based
+ advanced example lAr_calorimeter), the main driving needs and goals 
+ are quite general: to have consistency, but avoiding duplications
+ and couplings as much as possibile, between Simulation, Reconstruction,
+ and Visualization. Notice that the solution offered in this example
+ by CMS could appear "overdone" for the sake of simulating only a 
+ relatively simple test-beam setup; but it should be kept in mind
+ that the same approach is used also for the full CMS detector 
+ simulation, as well as for any subdetector.  
+
+  
+1. Setting up the environment variables
+---------------------------------------
+
+ The user should first setup, as "usual", the Geant4 environmental
+ variables (e.g. the script produced by cmake) 
+ Then the specific setup for this example should be run:
+ 
+     >  source envExample.csh      in the case of C-shell
+ or
+     >  . envExample.sh            in the case of bash-shell
+ 
+ The analysis part is based on the native g4analysis tools. As default 
+ the output is a ROOT file. This can be changed to XML by changing the G4AnalysisManager default file type in CCalRunAction::BeginOfRunAction().
+
+
+2. Sample run
+-------------
+
+ Once the environmental variables are setup, you can get the executable
+    CompositeCalorimeter
+ by configuring with cmake and then running the compiler.
+ Then, you can execute it using the Geant4 macro command input file test.g4mac
+ as follows:    
+ 
+    >  ./CompositeCalorimeter test.g4mac
+ 
+ which simulate a few events, each being a 100 GeV pi- incident on the 
+ electromagnetic crystal calorimeter followed by the hadronic calorimeter,
+ without magnetic field.
+ The output is the ROOT file "ccal.root" .
+ See part "8. Analysis / Histogramming" below for more details on the
+ content of that file.
+ If you run instead: 
+
+    >  ./CompositeCalorimeter
+
+ after having setup the Geant4 visualization variables and the PATH,
+ you can visualize the geometry of the apparatus, and also see some
+ events. Similarly, you can get a very simple graphical user interface
+ that allows to select the particle type, its energy, and the number
+ of events (between a limited number of possibilities).
+ For more details, see part "9. Visualization / GUI".
+ 
+
+3. Detector description
+-----------------------
+ 
+ Let's start with a brief description of the test-beam setup.
+
+ There are two possible configurations: 
+   i)  HCAL only, that is only the hadronic calorimeter is present;
+  ii)  ECAL+HCAL, that is the electromagnetic calorimeter (ECAL)
+                  is placed in front of the hadronic calorimeter.
+ ECAL is made of 23 cm long PbWO4 crystals (corresponding to about
+ 25.8 radiation lengths, and 1.1 interaction lengths); for the 
+ test beam a  7 x 7 = 49  matrix of crystals is used.
+ HCAL is a sampling calorimeter, with plastic scintillator as sensitive
+ part and copper as absorber. 28 scintillator plates were used with
+ absorber of varying thickness in between, and also varying thickness
+ and type of scintillator. More precisely:
+   --- layer 1: 2 cm of Copper
+   --- layer 2 to 7: 4 cm of Copper
+   --- layer 8 to 21: 6 cm of Copper
+   --- layer 22 to 27: 8 cm of Copper
+ For the scintillators: 2 mm passive Plastic; 4 mm active Plastic;
+ 1 mm passive Plastic. 
+ The total length of HCAL consists of 152 cm of Copper plus 189 mm of Plastic.
+ The dimension orthogonal to the beam direction is  64 cm x 64 cm.
+ The ECAL and HCAL considered here are prototypes for the Central and
+ Endcap calorimeters of the CMS detector (which covers the rapidity
+ region |eta| < 3.0 ; CMS has also a Forward calorimeter, which covers
+ the region 3.0 < |eta| < 5.0, but this part was not considered in 
+ this test-beam setup). Notice, however, that there are more layers 
+ (28 instead of 19 in the Barrel or 18 in the Endcap) of HCAL in the 
+ test-beam setup than in the real CMS detector, in order to study 
+ energy containment. Therefore, the ECAL+HCAL in the test-beam amounts 
+ to more than 11 radiation lengths as for the real CMS detector (the
+ 19 layers of the Barrel have each 6 cm of absorber, whereas the 
+ 18 layers of the Endcap have each 6.6 cm of absorber, so that the
+ number of interaction lengths are rougly the same). 
+ Five values of the magnetic field (parallel to the face of the scintillators)
+ have been considered in the test-beam: 0.0 , 0.375 , 0.75 , 1.50 , 3.0 Tesla.
+
+ In order to set the magnetic field, you have to edit the file
+       dataglobal/fmap.tb96
+ and change the first number (which appears in the third line of
+ that file, on the first column; the unit being Tesla): 
+   #. Field map
+   *DO FLDM
+     0.0   9               652.0
+ for example, if you want a magnetic field of 3.0 Tesla the last
+ line must be set as follows (the magnetic field unity is kilo Gauss).
+     30.0   9               652.0
+
+ In order to deactivate either the ECAL or the HCAL, it is enough
+ to comment out the corresponding line in the file g4testbeamhcal96.conf, 
+ using "#" as the comment character. For instance, to have only the HCAL
+ without ECAL:
+ "HcalTB96"                      "tbhcal96"              1
+ #"CrystalMatrixModule"           "tbhcal96xtal"          1  
+
+
+ In this test-beam setup, at the back of ECAL, there is also some 
+ material for support and readout, which has been considered in the 
+ simulation. For the HCAL, only the fibres are close to the test-beam, 
+ and because they have the same composition as the scintillators
+ they are adequately represented in the simulation; the remaining
+ of the readout, including the photomultipliers, are in readout boxes
+ far away from the HCAL, and hence are not present in the simulation.
+
+ Let's summarizes now the geometry description of the simulation.
+ As said in the introduction, this part is the most original and
+ important of this example, but it is quite complex and can be fully
+ appreciated only in the context of the CMS software framework, in 
+ particular in the relation between Simulation, Reconstruction, and
+ Visualization. Therefore we limit ourself to only few considerations,
+ pointing to the internal CMS documentation for more details.
+ 
+ --- In order to share the same geometrical and physical information
+     about CMS between Simulation, Reconstruction, and Visualization,
+     avoiding inconsistencies, duplications, and unnecessary dependecies,
+     all these information is store, once for all, in common databases
+     (typically in XML format), instead of putting them inside C++ classes, 
+     as usually done in simpler detector descriptions (in most of the
+     the Geant4 examples, novice or advanced, the geometry information
+     is kept inside the concrete class which inherits from 
+     G4VUserDetectorConstruction). For simplicity, in this example,
+     these "databases" are nothing more than ASCII files:
+
+        datageom/ : tbhcal96.geom, tbhcal96hcal.geom, tbhcal96xtal.geom
+                    store the information about the experimental Hall, 
+                    the HCAL, and the ECAL, respectively.
+
+        dataconf/ : g4testbeamhcal96.conf, testbeamhcal96.conf
+                    store the information about which configuration
+                    (HCAL only, or ECAL+HACL) is considered, in the
+                    Simulation and Reconstruction, respectively.
+                    
+        dataglobal/ : fmap.tb96, material.cms, rotation.cms
+                    The first one is the magnetic field map (how the 
+                    intensity of the magnetic field, in the direction
+                    orthogonal to the beam direction, varies along
+                    the beam axis). The second one, material.cms, 
+                    keeps the full collection of all materials used in 
+                    the CMS detector (not only in the calorimeters, 
+                    although we are simulating only them in this example!).
+                    The third one, rotation.cms, collects a set of useful
+                    rotation parameters (angles).  
+   
+        datavis/ : tbhcal96.vis, tbhcal96hcal.vis, tbhcal96xtal.vis
+	           visualization information for, respectively, the
+                   experimental Hall, HCAL, and ECAL.
+
+ --- In order to allow an high degree of flexibility, at the geometry
+     level the user can choose which subsystem of the detector setup
+     should be simulated and can activate or deactivate the sensitive
+     parts, subsystem by subsystem. This can be done at run time, 
+     by modifying one of the above database information, without need 
+     of putting the hands on the code, recompiling, etc.
+
+ --- There are two "parallel geometry factories": one described by "core" 
+     classes, which are independent from the Simulation (and therefore
+     can be used, for instance, by the Reconstruction); and one which 
+     is specific of the Simulation. In the latter case (Geant4 side of
+     the geometry model), all the geometry factories are derived from the
+     base class CCalG4Albe. Furthermore, using double inheritance, each
+     of them derives also from the counterpart in the "core" hierarchy.  
+     The design of the CCalG4Able class helps a modular approach and easy
+     interchanging at the level of subdetectors, allowing a straightforward
+     transition from the simulation of the entire CMS detector to that of
+     just a part of it, or to a test-beam geometry, as indeed in this example.
+     Of course this modular, flexible, and general approach does not come
+     for free: the price to pay here is its complexity, which would be 
+     otherwise unjustified if we limited ourself to the pure simulation
+     of a relatively simple test-beam setup.
+
+ --- See "10. Classes Overview" below for a schematic summary of the 
+     various classes involved in the Geometry description of this example.
+
+
+4. Physics processes
+--------------------
+ 
+ The factory physics list is used, therefore the choice of the physics list
+ is steered by the environmental variable PHYSLIST.
+ (Note: if this environmental variable is not set, the default physics list
+  which is used is FTFP_BERT).
+ 
+
+5. Particle Generator
+---------------------
+  
+ The 1996 test-beam has been taken with the following particles:
+    --- 225 GeV muons (for calibration)
+    --- 10 to 300 GeV pions
+    --- 10 to 300 GeV electrons
+ therefore the standard Geant4 Particle Gun has been used as primary
+ generator. Notice that, for the sake of keeping the example not too
+ complicated, the proper simulation of the beam profile and 
+ beam contamination have been neglected.  
+
+
+6. Hits 
+-------
+ 
+ In CMS there are two groups of hits: Tracker-like and Calorimeter-like.
+ Only the latter one appears in this example. 
+ For the same reasons, as seen for the Geometry, of consistency without 
+ duplication of information and unnecessary coupling between Simulation, 
+ Reconstruction, and Visualization, the simulation calorimeter hit class,
+ CCalG4Hit, doubly inherits from the common Geant4 abstract class for
+ all hits, G4VHit, and from the "core" (i.e. simulation independent)
+ CMS calorimeter hit class, CCalHit.
+ A new Hit object is created
+   - for each new particle entering the calorimeter;
+   - for each detector unit (i.e cristal or fiber or scintillator layer);
+   - for each nanosecond of the shower development;
+ The information stored in each CCalHit object is the following:
+   - Entry  : local coordinates of the entrance point of the particle
+              in the unit where the shower starts; 
+   - the TrackID  : Identification number of the incident particle;
+   - the IncidentEnergy  : kinetic energy of that incident particle;    
+   - the UnitID : the identification number of the detector unit
+                  (crystal, or fiber, or scintillator layer); 
+   - the TimeSlice : the time interval, in nanoseconds, in which the 
+                     hit has been created;
+   - the EnergyDeposit : the energy deposit in this hit.    
+ Notice that all hit objects created for a given shower have the same 
+ values for the first three pieces of information.
+
+
+No Noise and Digitization 
+--------------------------
+ 
+ In order to keep the complexity of this example to a reasonable 
+ level, both noise and digitization effects have not been included.
+ 
+
+7. User Actions
+----------------
+ 
+ In this example. there have been used the following User Actions:
+
+ --- G4UserRunAction (the derived, concrete class is CCalRunAction):
+     it is used to invoke the Analysis object at the beginning of
+     the Run, to instantiate it and passing it the Run number, and
+     at the end of the Run, to inform it that the Run is finished
+     and therefore the histograms, ntuples, etc. must be closed.
+
+ --- G4UserEventAction (the derived, concrete class is CCalEndOfEventAction):
+     it is used to examine, at the end of the Event, all collected
+     (calorimeter) hits, extract the various observables which are
+     interesting (to the goal of understanding things like: the effect
+     of magnetic field on scintiallator; choice of the absorber
+     thickness by optimizing resolution versus containment; impact of
+     the absorber depth in the energy caontainment; electromagnetic
+     calorimeter contribution in the electron - pion separation; etc.)
+     and finally call the analysis object to store such selected
+     information on histograms and/or in the ntuple.
+     The name of the class "CCalEndOfEventAction" is motivated by the
+     fact that at the beginning of the Event nothing is done. 
+
+ --- G4UserSteppingAction (the derived, concrete class is CCalSteppingAction):
+     it is used to extract some "unphysical" information (that is not
+     experimentally measurable, although interesting for a better 
+     understanding of the shower development), namely the lateral profile 
+     and the deposit as a function of the time (see "8.Analysis/Histogramming 
+     for more details"), which is available only from simulation, and then, 
+     at the end of Event, the analysis object is invoked to store such
+     information on histograms.      
+     Please notice that the stepping action is not used to create hits.
+
+ --- G4UserStackingAction (the derived, concrete class is CCalStackingAction):
+     it is used to ensure that the same track ID of the particle 
+     originating a shower appears in all hits (calorimeter hit objects 
+     of class CCalHit) of the shower, in any calorimeter part. 
+
+
+8. Analysis / Histogramming
+----------------------------
+
+ The analysis part of CompositeCalorimeter is kept in class CCalAnalysis,
+ and is based on the g4tool interfaces.
+ Both the histograms and the ntuple are saved at the end of the run in the 
+ ROOT file "ccal.root" (default: this can be changed to XML or to other 
+ formats supported by the g4analysis tools). 
+ Please note that in a multiple run session, the last run always overrides 
+ the output file.
+ What the histograms and the variables of the ntuple represent is 
+ explained below:
+ 
+  Histograms  h100 - h127 : energy deposit (in GeV) in the sensitive part
+                          (plastic scintillator layer) of one Hadronic 
+                          calorimeter module (there are 28 modules, numbered
+                          from 0 to 27, and the corresponding histogram has
+                          ID = 100 + number of module).
+  Ntuple variables  hcal0 - hcal27 : provide the same information.
+
+  Histograms  h200 - h248 : energy deposit (in GeV) in one crystal
+                          electromagnetic towers (there are a matrix of
+                          7 x 7 = 49 towers, numbered from 0 to 48, and 
+                          the corresponding histogram has 
+                          ID = 200 + number of tower).
+  Ntuple variables  ecal0 - ecal48 : provide the same information.
+  
+  Histograms  h300 - h339 : total energy deposit (in GeV) in any 
+                          electromagnetic crystal tower or hadronic module 
+                          (either in a sensitive or insensitive layer)
+                          in one of the 40 nanosecond time slices: in other
+                          words, histogram  300+I , where I = 0 - 39,
+                          contains the total deposit energy between
+                          I and I+1 nanoseconds after the "collision".  
+                          (Notice that the time window considered, 
+                           40 nanoseconds, is larger than the LHC 
+                           bunch-crossing of 25 nanoseconds.)
+  
+  Histograms  h400 - h469 : energy profile (in GeV), summed over all layers
+                          sensitive (plastic scintillator) and insensitive
+                          (copper absorber), as a function of the radial
+                          distance (in centimeter) from the beam axis 
+                          ( ID histo = 400 + radial distance in cm ).
+
+  Histogram  h4000 : total energy deposit (in GeV) in the sensitive parts
+                    of either the electromagnetic or hadronic calorimeters. 
+  Ntuple variable  edep provides the same information.
+
+  Other ntuple variables are the following:  
+       ---  elab : energy (in GeV) of the incident particle.
+       ---  xpos, ypos, zpos : position (in mm) from where the projectile
+                               has been shot.
+       ---  edec, edhc : total energy deposit (in GeV) in the sensitive
+                         parts of, respectively, the electromagnetic 
+                         and hadronic calorimeters. Notice that their
+                         sum  edec+edhc  coincides with  edep
+
+  Notice that lateral profile (400-469) and time-slice (300-339) 
+  histograms show purely Monte Carlo quantities, which cannot be 
+  experimentally measured. 
+  Please be careful that the range of the histograms has been chosen
+  in such a way to contain most of the entries, but only few histograms
+  fill a large fraction of that range, whereas the remaining majority
+  fill only the first few bins (corresponding to lower energy), and,
+  therefore, when plotted they look almost empty, but they are not,
+  and the results are sensible. We suggest to plot the ntuple's variables,
+  rather than the histograms, when the same information is available
+  from the ntuple.
+
+
+9. Visualization / GUI
+-----------------------
+  
+ If you setup one of the following Geant4 environmental variables:
+    G4VIS_USE_DAWN
+    G4VIS_USE_VRML
+    G4VIS_USE_OPENGLX
+ which correspond to the use of DAWN, VRML, and OPENGLX, respectively, 
+ as visualization engine of Geant4, and set properly the corresponding 
+  PATH  as well, it is then possible to visualize the detector and also 
+ some events. 
+ To do so, you have to run 
+     >  ./CompositeCalorimeter
+ without input file: you then see the detector; after that,
+ you can select the particle gun and its energy, in the
+ case you want something different from the the default 
+ (which is a 100 GeV pi-), for example:
+     Idle> /gun/particle e-
+     Idle> /gun/energy 200 GeV
+ and then run some events, for example:
+     Idle> /run/beamOn 3
+
+ The tracks that are shown include both charged and neutral particles 
+ of any momentum: if you want instead only charged, or only neutral, 
+ then you have simply to edit  src/CCalEndOfEventAction.cc 
+ at the end of the method  EndOfEventAction  and uncomment the line 
+ where the condition on the charge is made (it should then be 
+ straighforward to eventual add some other conditions, for example 
+ if you want to see only those particles that satisfy certain 
+ kinematic conditions). 
+ 
+ Rather than to specify "by hand" the type of particle gun,
+ its energy, and the number of events, it is possible to have
+ a very simple GUI (graphical user interface) from which to make 
+ such choices, between a limited set of possibilities, via menus.
+ Such GUI is based on Motif XmCommand widget, but it would be 
+ straightforward, eventually, to make the necessary changes 
+ in order to use a different one.
+ The only thing you need to do to get the GUI is to setup 
+ the following Geant4 environmental variables:  
+   G4UI_BUILD_XM_SESSION=1
+   G4UI_USE_XM=1
+ Then, if you run the executable without specifying a macro file
+ (like test.g4mac):
+     >  $G4WORKDIR/bin/$G4SYSTEM/CompositeCalorimeter
+ a window automatically pops out, with the menus where you
+ can make your selection of particle type, energy, and number 
+ of events to be run. 
+
+
+10. Classes Overview
+---------------------
+
+ This is a schematic overview of the classes defined in this example:
+
+  CCalPrimaryGeneratorAction
+  CCalPrimaryGeneratorMessenger
+	User action for primaries generator.	 
+
+  CCalDetectorConstruction
+  CCalAMaterial
+  CCalDataSet
+  CCalDetector
+  CCalEcal
+  CCalEcalOrganization
+  CCalG4Able
+  CCalG4Ecal
+  CCalG4Hall
+  CCalG4Hcal
+  CCalGeometryConfiguration
+  CCalHall
+  CCalHcal
+  CCalHcalOrganization
+  CCalMagneticField
+  CCalMaterial
+  CCalMaterialFactory
+  CCalRotationMatrixFactory
+  CCalVOrganization
+  CCalVisManager
+  CCalVisualisable
+  CCaloOrganization
+  CCalutils
+	Geometry and material definitions for the detector.
+        Notice in particular that:
+          CCalHall, CCalEcal, CCalHcal derive from CCalDetector;
+          CCalG4Hall, CCalG4Ecal, CCalG4Hcal derive from the above 
+             corresponding classes and from CCalG4Able;
+          CCalEcalOrganization, CCalHcalOrganization derive from
+             CCalVOrganization : each sensitive cell has an unique
+             number for detector organization (this is a software
+             ID not an hardware/electronic one).
+ 	
+  CCalHit
+  CCalG4Hit
+  CCalG4HitCollection
+  CCalSDList
+  CCalSensAssign
+  CCalSensitiveConfiguration
+  CCalSensitiveDetectors
+  CCaloSD
+        Hit and Sensitive Detectors. 
+        Notice in particular that:
+          CCalG4Hit derives from G4VHit and CCalHit;
+          CCaloSD derives from G4VSensitiveDetector.          
+
+  CCalActionInitializer
+        User-action initialization.
+	
+  CCalAnalysis
+	Analysis manager class.
+
+  CCalRunAction
+	User run action class.
+
+  CCalEndOfEventAction
+	User event action class.
+
+  CCalStackingAction
+        User Stacking action class.
+
+  CCalSteppingAction
+        User Stepping action class.
+

@@ -1,0 +1,109 @@
+=================================================================
+                     Geant4 - clustering
+=================================================================
+
+
+Authors: Y. Perrot (a), H. Payno (b)
+
+(a) ysperrot@gmail.com
+(b) henri.payno@gmail.com
+
+Laboratoire de Physique Corpusculaire de Clermont-Ferrand, CNRS/IN2P3 - Clermont University, France
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+---> 1. Introduction
+
+The clustering example simulates protons tracks in liquid water using Geant4-DNA processes and models.
+Energy deposit are clustered with a dedicated clustering algorithm to assess strand breaks.
+The default parameters of the clustering algorithm have been tuned to reproduce data published by
+Francis et al. 2011 Comput. Meth. Programs. Biomed. 2011 101(3)
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publication:
+Med. Phys. 37 (2010) 4692-4708
+
+----> 2. Set-up
+
+It is similar to the geometry set-up proposed in Francis et al. 2011 Comput. Meth. Programs. Biomed. 2011 101(3).
+It consists in a World volume containing a Target box made of liquid water of  1µm x 1µm x 0.5 µm.
+Energy deposits in the Target are registered (see SteppingAction.cc) and the clustering algorithm is run at the end of each event
+(see EventAction.cc)
+
+----> 3. How to run the example
+
+To get help, run:
+
+> ./clustering -h
+
+In interactive mode, run:
+
+> ./clustering -gui
+
+In batch mode , run:
+
+> ./clustering [-mac run.in] [-mt numberofThreads]
+
+Two macros are available:
+
+run.in: shoots 1000 protons of 500 keV
+
+runOneEvent.in: shoots one proton of 500 keV
+
+All UI clustering commands in these macros are described below in section 5.
+
+----> 4. Simulation output 
+
+The output results consists in a clusters_output.root file, containing for each event:
+- the number of single strand break
+- the number of complex single strand break
+- the number of double strand break
+- the cluster size distribution
+- the absorbed dose in the Target
+
+----> 5. More information
+
+Specific classes are available in this example:
+
+* ClusteringAlgo: contains the core clustering algorithm
+
+* ClusteringAlgoMessenger: defines all UI commands to tune 
+the clustering algorithm
+
+/clustering/algo/setMinPts: 
+  Minimal number of points to create a cluster
+
+/clustering/algo/setSelectionProb: 
+  Probability to select potential damage according to the geometry
+
+/clustering/algo/setEps: 
+  Maximal distance between points to create a cluster
+
+/clustering/algo/setEmin: 
+  Energy to have a probability to create a strand break = 0
+
+/clustering/algo/setEmax: 
+  Energy to have a probability to create a strand break = 1
+allow
+* ClusterSBPoints: defines a cluster of strand break points
+
+* CommandLineParser: defines a parser for command line control
+as in other Geant4-DNA examples
+
+* RunInitObserver: allows initializations at new run 
+(as in pdb4dna and microdosimetry)
+
+* SBPoint: defines a class for point of energy deposition
+
+----> Acknowledgments :
+
+ Ziad Francis for discussion about clustering algorithm.
+

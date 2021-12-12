@@ -1,0 +1,69 @@
+
+///\file "DICOM2/.README.txt"
+///\brief Example DICOM2 README page
+
+/*! \page ExampleDICOM2 Example DICOM2
+
+ This example demonstrates how to inherit from the DICOM example.
+ For more information of the DICOM problem, see the documentation
+ for the DICOM example
+
+\section DICOM2_s0 Introduction
+
+This example demonstrates how to inherit from the DICOM example.
+For more information on the DICOM example, see the README in
+the DICOM example. In addition to demonstrating inheritance from DICOM,
+this example demonstrates method for memory savings, scoring into a sequential
+container instead of an associative container, accumulating the scoring
+with a statistics class instead of a simple floating point, and generic iteration
+over the variety of scoring container storage variants provided by Geant4
+
+\section DICOM2_s1 Configuration and Building
+
+The DICOM example should be built and installed. By default, the CMake configuration
+for the DICOM example will install to the same directory as ${Geant4_DIR}.
+
+When configurating this example, provide DICOM_DIR=<path-to-cmake-configuration>, e.g.
+
+$ cmake -DGeant4_DIR=/usr/local/lib/Geant4-10.5.0 -DDICOM_DIR=/usr/local/lib/Geant4-10.5.0 <path-to-source>
+
+This example will enable DCMTK and/or DICOM_HEAD based on the configuration set when
+the DICOM example was installed. The files "Data.dat.old" and "Data.dat.new" follow
+the same pattern of being copied to "Data.dat" in the binary directory that is detailed
+out in Section 4 of the DICOM README.
+
+\section DICOM2_s2 Class Overview
+
+- Dicom2Run:
+    - How to save memory with G4VTHitsVector instead of G4THitsMap
+    - How to implement G4VTHitsVector with objects instead of pointers (saving more memory)
+    - How to use G4StatAnalysis within G4VTHitsVector (or G4VTHitsMap) to obtain per-voxel
+    statistics
+        - G4StatAnalysis provides standard deviation, mean, variance, relative error,
+        FOM, r2int, r2eff, coefficient of variant, and efficiency in a class that
+        consumes significantly less memory than G4ConvergenceTester
+    - Implements scoring accumulation over the course of a run in
+    G4VTHitsVector<G4StatAnalysis, std::vector<G4StatAnalysis>> Dicom2RunVector
+        - The first template parameter is the type of the data (i.e. double, G4StatAnalysis, etc.)
+        and the second template parameter is the underlying storage type -- by
+        specifying std::vector<G4StatAnalysis>, we override the default storage
+        format of std::vector<G4StatAnalysis*> which results in memory savings
+- Dicom2RunAction:
+    - Overloads EndOfRunAction(const G4Run*) to print out the same quantities
+    as DICOM but with the G4StatAnalysis class
+    - Demonstrates generic iteration of hits containers
+        - The new iteration scheme over hits containers works
+        regardless of whether the underlying storage type is a map, multimap, unordered_map,
+        unordered_multimap, vector, or deque and regardless of whether the data
+        type stored in the sequential container types (vector and deque) are an object or
+        or a pointer to an object
+- Dicom2PrimaryGeneratorAction:
+    - Minor variation of DicomPrimaryGeneratorAction that randomizes the initial
+    direction of the particle
+- Dicom2ActionInitialization:
+    - In addition Dicom2RunAction and Dicom2PrimaryGeneratorAction, this class
+    instantiates DicomEventAction
+
+*/
+
+	

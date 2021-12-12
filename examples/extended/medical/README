@@ -1,0 +1,55 @@
+
+        Geant4 extended examples - medical
+        -----------------------------------
+
+ Specific examples for medical physics applications are demonstarted 
+ in this directory. 
+
+DICOM
+-----
+
+This example serves first to convert a DICOM file to a simple ASCII 
+file, where the Hounsfield numbers are converted to materials and 
+densities so that it can be used by GEANT4. It serves also to create 
+a GEANT4 geometry based on the DICOM file information using the 
+G4PhantomParameterisation. 
+
+DICOM2
+------
+
+This example demonstrates how to reuse the DICOM example library 
+for another application.
+
+dna
+---
+Set of examples using the Geant4-DNA physics processes and models.
+
+electronScattering   
+electronScattering2   
+--------------------
+
+These example demonstrate electron scattering benchmarks. 
+ElectronScattering2 simulates the experiment with a minimum of user code, whereas the other
+version of this example shows how to do more of the work directly as the user.
+
+fanoCavity
+------------
+
+This example computes the dose deposited in an ionization chamber by a
+monoenergetic photon beam.
+
+fanoCavity2
+------------
+
+This example computes the dose deposited in an ionization chamber by an
+extended (one dimensional) monoenergetic electron source.
+This variante of the Fano cavity test make use of an reciprocity theorem.
+
+GammaTherapy
+------------
+
+This example demonstrates a gamma therapy application.
+
+
+     
+

@@ -1,0 +1,88 @@
+
+///\file "field/field02/.README.txt"
+///\brief Example field02 README page
+
+/*! \page Examplefield02 Example  field02 
+
+ Test for investigation of tracking in electric field 
+ and field dependent electromagnetic processes.
+
+\section field02_s0 FIELD DEFINITION
+ The field is a constant electric field.
+
+ Technical note: in order to use any electric field, it is
+ necessary to create the objects for its equation of motion,
+ the stepper and driver for the integration, and the 
+ chord finder.
+
+ The class that does these is F02ElectricFieldSetup. Its object
+ is created in the ConstructSDandField() function in the F02DetectorConstruction
+ class. The interactive commands are implemented in F02FieldMessenger.
+	
+\section field02_s1 GEOMETRY DEFINITION
+ 
+ The "Absorber" is a solid made of a given material.                
+
+ Three parameters define the absorber :
+ - the material of the absorber,
+ - the thickness of an absorber,
+ - the transverse size of the absorber (the input face is a square). 
+
+ The volume "World" contains the "Absorber". 
+ In this test the parameters of the "World" can be changed , too.
+
+ In addition a transverse uniform electric field can be applied.
+
+ The default geometry is constructed in F02DetectorConstruction class,
+ but all the parameters can be changed via
+ the commands defined in the F02DetectorMessenger class.
+ 	
+\section field02_s2 AN EVENT : THE PRIMARY GENERATOR
+ 
+ The primary kinematic consists of a single particle which hits the
+ absorber perpendicular to the input face. The type of the particle
+ and its energy are set in the F02PrimaryGeneratorAction class, and can
+ be changed via the G4 build-in commands of G4ParticleGun class (see
+ the macros provided with this example).
+
+ It is also possible to change the position of the primary particle vertex
+ or activate its randomization via the commands defined in  the
+ F01PrimaryGeneratorMessenger class.
+
+ A RUN is a set of events.
+ 	
+\section field02_s3 DETECTOR RESPONSE
+
+ 
+ A HIT is a record, event per event , of all the 
+ informations needed to simulate and analyse the detector response.
+
+ In this example a F02CalorHit is defined as a set of 2 informations:
+ - the total energy deposit in the absorber,
+ - the total tracklength of all charged particles in the absorber,  
+
+ Therefore  the absorber is declared
+ 'sensitive detector' (SD), see F02CalorimeterSD, which means they can contribute to the hit.
+ 				
+\section field02_s4 PHYSICS LIST
+ 
+ The particle's type and the physic processes which will be available
+ in this example are set in the FTFP_BERT physics list. This physics list 
+ requires data files for electromagnetic and hadronic processes.
+ See more on installation of the datasets in Geant4 Installation Guide,
+ 	
+\section field02_s5 HOW TO START ?
+ 
+ - Execute field02 in 'batch' mode from macro file e.g.
+\verbatim
+% ./field02 field02.in
+\endverbatim
+		
+ - Execute field02 in 'interactive' mode with visualization e.g.
+\verbatim
+% ./field02
+....
+Idle> /run/beamOn 1
+....
+\endverbatim
+*/

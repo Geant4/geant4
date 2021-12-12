@@ -1,0 +1,127 @@
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+
+     =========================================================
+ 		  Geant4 - Microelectronics example
+     =========================================================
+
+                                README file
+                          ----------------------
+
+                           CORRESPONDING AUTHORS 
+
+M. Raine*, D. Lambert*, C. Inguimbert', Q. Gibaru' 
+* CEA, DAM, DIF, F-91297 Arpajon, France
+' ONERA, 2 avenue Edouard Belin - BP 74025 - 31055 TOULOUSE, France
+email: melanie.raine@cea.fr  damien.lambert@cea.fr
+       christophe.Inguimbert@onera.fr Quentin.Gibaru@onera.fr
+
+---->0. INTRODUCTION.                                                    
+                                                                       
+The microelectronics example simulates the track of a 5 MeV proton in silicon. 
+Geant4 standard EM models are used in the World volume while Geant4-MicroElec models
+are used in a Target volume, declared as a Region.
+
+---->1. GEOMETRY SET-UP.
+ 
+By default, the geometry is a 2 um side cube (World) made of silicon containing 
+a smaller cubic Target volume of silicon (1 um3). 
+The target material can be modified and simulated with G4MicroElecPhysics processes.
+
+---->2. SET-UP 
+                                                                        
+Make sure that the G4EMLOW database version is correct (> or = 7.16)
+
+The variable G4ANALYSIS_USE must be set to 1.
+  
+The code should be compiled with cmake: 
+    $ mkdir microelectronics-build
+    $ cd microelectronics-build
+    $ cmake -DGeant4_DIR=/your_path/geant4-install/ $PATHTOMICROELECEXAMPLE/microelectronics
+    $ make
+
+It works in MT mode (but in this example today MT=1 due to memory consumption of new Microelec models).
+
+---->3. HOW TO RUN THE EXAMPLE                                         
+
+In interactive mode, run:
+
+./microelectronics
+
+The macro microelectronics.mac is executed by default. 
+
+To get visualization, make sure to uncomment the #/control/execute vis.mac
+ line in the macro.
+
+ By default, the new MicroElec models are used. 
+ You can used the Silicon MicroElec models, with the "-onlySi" option:
+ ./microelectronics -onlySi
+or
+./microelectronics microelectronics.mac -onlySi
+
+You can change the type of the target material 
+(G4_Ag G4_Al G4_C G4_Cu G4_Ge G4_KAPTON G4_Ni G4_Si G4_SILICON_DIOXIDE G4_Ti G4_W), 
+if you uncomment one line (/microelectronics/det/setMat) into the .mac file. 
+
+
+
+---->4. PHYSICS
+
+This example shows:
+- how to use the G4MicroElecPhysics and G4MicroElecSiPhysics processes, 
+- how to affect them a name
+- how to combine them with Standard EM Physics.
+
+A simple electron capture process is also provided in order to kill electrons 
+below a chosen energy threshold, set in the Physics list.
+
+Look at the G4MicroElecSiPhysics.cc (previous silicon MicroElec models)
+and G4MicroElecPhysics.cc (new MicroElec models) files.
+
+---->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+
+The output results consists in a microelectronics.root file, containing for each simulation step:
+- the type of particle for the current step
+- the type of process for the current step
+- the track position of the current step (in nanometers)
+- the energy deposit along the current step (in eV)
+- the step length (in nm)
+- the total enery loss along the current step (in eV)
+
+This file can be easily analyzed using for example the provided ROOT macro 
+file plot.C; to do so :
+* be sure to have ROOT installed on your machine
+* be sure to be in the microelectronics directory
+* launch ROOT by typing root
+* under your ROOT session, type in : .X plot.C to execute the macro file
+* alternatively you can type directly under your session : root plot.C
+
+The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
+
+-particles:
+e-       : 1    
+proton   : 2
+ion 	 : 3
+
+-processes:
+e-_G4MicroElecElastic		11
+e-_G4MicroElecInelastic		12
+eCapture			13
+
+p_G4MicroElecInelastic		14
+
+ion_G4MicroElecInelastic	15
+
+hIoni				16
+eIoni				17
+
+G4MicroElecPhysics parameters:
+e-_G4LOPhononScattering         19
+e-_G4MicroElecSurface           20
+alpha_G4Dielectrics             21
+ion_G4Dielectrics               22
+
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact one the corresponding authors.

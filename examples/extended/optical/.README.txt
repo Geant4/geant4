@@ -1,0 +1,35 @@
+
+///\file "optical/.README.txt"
+///\brief Examples optical README page
+
+/*! \page Examples_optical Category "optical"
+
+This directory includes examples demonstrating the use of optical processes
+in the simulation.
+
+\link ExampleOpNovice OpNovice \endlink
+
+Simulation of optical photons generation and transport.
+Defines optical surfaces and exercises optical physics processes
+(Cerenkov, Scintillation, Absorption, Rayleigh, ...). Uses stacking
+mechanism to count the secondary particles generated.
+
+\link ExampleOpNovice2 OpNovice2 \endlink
+
+Investigate optical properties and parameters. Details of optical
+photon boundary interactions on a surface are recorded. Details 
+of optical photon generation and transport are recorded.
+
+\link ExampleLXe LXe \endlink
+
+Multi-purpose detector setup implementing:
+-# scintillation inside a bulk scintillator with PMTs
+-# large wall of small PMTs opposite a Cerenkov slab to show the cone
+-# plastic scintillator with wave-length-shifting fiber readout.
+
+\link Examplewls wls \endlink
+
+This application simulates the propagation of photons inside a Wave Length
+Shifting (WLS) fiber.
+
+*/

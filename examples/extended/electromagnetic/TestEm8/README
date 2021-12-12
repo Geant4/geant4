@@ -1,0 +1,87 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm8  
+                            -------
+
+    Example for investigation of ionisation in thin absorbers and gaseous
+    detectors
+	
+ 1- GEOMETRY DEFINITION
+ 
+ 	The target is a cylinder made of a given material placed inside
+        cylindrical container, which is placed inside the world volume.
+ 	
+ 	Following parameters define the geometry:
+ 	- the material of the target,
+	- the thickness of the target,
+ 	- the radius of the target, 
+ 	- the material of the container,
+	- the thickness of the container,
+ 	- the material of the world.
+ 	
+  The list of materials used in gaseous detectors are built inside
+  the DetectorConstruction class, also NIST materials are available. 
+ 	The default geometry is provided but all parameters can be changed via
+ 	UI commands defined in the DetectorMessenger class, for example,
+
+    /testem/setGasMat      XeCH4C3H8
+    /testem/setWindowMat   G4_MYLAR
+    /testem/setWorldMat    G4_AIR
+    /testem/setGasThick    10 cm
+    /testem/setGasRad      20 cm
+    /testem/setWindowThick 50 um
+ 	
+ 2- AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle which hits the
+  absorber perpendicular to the input face. The type of the particle
+  and its energy can be set via the G4 build-in commands of G4ParticleGun.
+  A RUN is a set of events.
+ 	
+ 3- DETECTOR RESPONSE
+
+  The TargetSD class sending information about each step inside the target
+  to the HistoManager class scoring of energy deposition in the detector.
+  Additionally at each step of a particle inside the target the number of 
+  ionisation clusters is sampled using G4ElectronIonPair helper class. The
+  parameter of transformation of energy into ionisation clusters can be
+  set via UI command:
+
+  /testem/setPairEnergy 19 eV
+
+ 4- PHYSICS 
+ 
+  The particle's type and the physics processes which will be available
+  in this example are set in PhysicsList class, which uses Geant4
+  EM physics constructors provided in the physics_list library.
+
+  The  messenger classes introduce interactive commands. In particular,
+  PAI ionisation model can be added using G4EmConfigurator helper class,
+  which is invoked by one following UI commands:
+
+  /testem/phys/addPhysics pai
+  /testem/phys/addPhysics pai_photon
+  /process/em/AddPAIRegion all GasDetector pai
+  /process/em/AddPAIRegion all GasDetector pai_photon
+
+  Cuts for all setup and/or for sensitive volume may changed via commands: 
+
+  /run/setCut  0.5 mm
+  /run/setCutForRegion GasDetector 1.8 mm
+
+ 5- HOW TO START ?
+ 
+  Execute TestEm8 in 'batch' mode from macro files e.g.
+    % $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8  TestEm8.in N
+  here N means number of threads in multi-threaded mode, by
+  default 2 threads are used
+		
+ - execute TestEm8 in 'interactive' mode with visualization e.g.
+ % $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8
+   ....
+   Idle> type your commands
+   ....

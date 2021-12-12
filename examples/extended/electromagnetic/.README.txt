@@ -1,0 +1,119 @@
+
+///\file "electromagnetic/.README.txt"
+///\brief Examples electromagnetic README page
+
+/*! \page Examples_electromagnetic Category "electromagnetic" 
+
+\section electromagnetic_s1 TestEm by theme
+\verbatim
+  --------------------------------------------------------------------------
+  |			Check basic quantities				   |	
+  |------------------------------------------------------------------------|
+  | Total cross-sections, mean free paths ...	| Em0 Em13 Em14		   |
+  |------------------------------------------------------------------------|
+  | Stopping power, particle range ...      	| Em0 Em1 Em5 Em11 Em12	   |
+  |------------------------------------------------------------------------|
+  | Final state :				|			   |
+  |  energy spectra, angular distributions ...  | Em14			   |
+  |------------------------------------------------------------------------|
+  | Energy loss fluctuations      		| Em18			   |
+  --------------------------------------------------------------------------
+  
+  
+  -------------------------------------------------------------------------
+  |			Multiple Coulomb scattering			  |
+  |-----------------------------------------------------------------------|
+  | as an isolated mechanism			| Em15			  |
+  |-----------------------------------------------------------------------|
+  | as a result of particle transport     	| Em5			  |
+  -------------------------------------------------------------------------
+  
+  
+  -------------------------------------------------------------------------
+  |			More global verifications			  | 
+  |-----------------------------------------------------------------------|
+  | Single layer :				|			  |
+  |  transmission, absoption, reflexion ... 	| Em5			  |
+  |-----------------------------------------------------------------------|
+  | Bragg curve, tallies      			| Em7			  |
+  |-----------------------------------------------------------------------|
+  | Depth dose distribution			| Em11 Em12		  |
+  |-----------------------------------------------------------------------|
+  | Shower shapes, Moliere radius      		| Em2			  |
+  |-----------------------------------------------------------------------|
+  | Sampling calorimeters, energy flow		| Em3			  |
+  |-----------------------------------------------------------------------|
+  | Crystal calorimeters     			| Em9			  |
+  -------------------------------------------------------------------------
+  
+  
+  -------------------------------------------------------------------------
+  |			Other specialized programs			  | 
+  |-----------------------------------------------------------------------|
+  | High energy muon physics 			| Em17			  |
+  |-----------------------------------------------------------------------|
+  | Other rare, high energy processes      	| Em6			  |
+  |-----------------------------------------------------------------------|
+  | Synchrotron radiation			| Em16		  	  |
+  |-----------------------------------------------------------------------|
+  | Transition radiation     			| Em8			  |
+  |-----------------------------------------------------------------------|
+  | Photo-absorption-ionization model     	| Em10			  |
+  -------------------------------------------------------------------------
+\endverbatim
+
+
+  - \link ExampleTestEm0 TestEm0 \endlink - how to print cross-sections and stopping power used in input by 
+             the standard EM package
+	      	  
+  - \link ExampleTestEm1 TestEm1 \endlink - how to count processes, activate/inactivate them and survey 
+             the range of charged particles. How to define a maximum step size
+	  
+  - \link ExampleTestEm2 TestEm2 \endlink - shower development in an homogeneous material : 
+             longitudinal and lateral profiles
+	  
+  - \link ExampleTestEm3 TestEm3 \endlink - shower development in a sampling calorimeter : collect energy 
+             deposited, survey energy flow and print stopping power
+	 
+  - \link ExampleTestEm4 TestEm4 \endlink - 9 MeV point like photon source: plot spectrum of energy 
+             deposited in a single media
+	  
+  - \link ExampleTestEm5 TestEm5 \endlink - how to study transmission, absorption and reflection of particles
+             through a single, thin or thick, layer.
+	     
+  - \link ExampleTestEm6 TestEm6 \endlink - physics list for rare, high energy, electromagnetic processes : 
+             gamma conversion and e+ annihilation into pair of muons
+	   
+  - \link ExampleTestEm7 TestEm7 \endlink - how to produce a Bragg curve in water phantom. 
+             How to compute dose in tallies
+	  
+  - \link ExampleTestEm8 TestEm8 \endlink - test of photo-absorption-ionisation model in thin absorbers, 
+             and transition radiation
+	  	  
+  - \link ExampleTestEm9 TestEm9 \endlink - shower development in a crystal calorimeter; cut-per-region
+	  
+  - \link ExampleTestEm10 TestEm10 \endlink - XTR transition radiation model, investigation of ionisation 
+              in thin absorbers     
+
+  - \link ExampleTestEm11 TestEm11 \endlink - how to plot a depth dose profile in a rectangular box      
+
+  - \link ExampleTestEm12 TestEm12 \endlink - how to plot a depth dose profile in spherical geometry : 
+              point like source 
+	  
+  - \link ExampleTestEm13 TestEm13 \endlink - how to compute cross sections of EM processes from rate of 
+              transmission coefficient
+	  
+  - \link ExampleTestEm14 TestEm14 \endlink - how to compute cross sections of EM processes from direct 
+              evaluation of the mean-free path. How to plot final state
+	  
+  - \link ExampleTestEm15 TestEm15 \endlink - compute and plot final state of Multiple Scattering as an 
+              isolated process
+	  
+  - \link ExampleTestEm16 TestEm16 \endlink - simulation of synchrotron radiation
+	  	 	  	  	  
+  - \link ExampleTestEm17 TestEm17 \endlink - check the cross sections of high energy muon processes
+	  	 	  	  	  
+  - \link ExampleTestEm18 TestEm18 \endlink - energy lost by a charged particle in a single layer,
+              due to ionization and bremsstrahlung
+
+*/

@@ -1,0 +1,101 @@
+
+        Geant4 extended examples - Hadronic processes
+        ----------------------------------------------
+
+ Examples in this directory demonstrate specific hadronic physics simulation 
+ with histogramming.
+
+Hadr00
+------
+
+This example demonstrates a usage of G4PhysListFactory to build 
+Physics List and G4HadronicProcessStore to access cross sections.
+
+Hadr01
+------
+
+This example application is based on the application IION developed for
+simulation of proton or ion beam interaction with a water target. Different 
+aspects of beam target interaction are demonstrating in the example including 
+longitudinal profile of energy deposition, spectra of secondary  particles,
+spectra of particles leaving the target. 
+
+Hadr02
+------
+
+This example application is providing simulation of ion beam interaction with different 
+targets. Hadronic aspects of beam target interaction are demonstrated in the example 
+including longitudinal profile of energy deposition, spectra of secondary  particles,
+isotope production spectra. 
+
+Hadr03
+------
+
+This example demonstrates how to compute total cross section from the direct evaluation of the 
+mean free path ( see below, item Physics), how to identify nuclear reactions, how to plot 
+energy spectrum of secondary particles.	
+
+Hadr04
+------
+
+This example is focused on neutronHP physics, especially neutron transport, 
+including thermal scattering.
+See A.R. Garcia, E. Mendoza, D. Cano-Ott presentation at G4 Hadronic group 
+meeting (04/2013) and note on G4NeutronHP package
+
+Hadr05
+------
+
+Examples of hadronic calorimeters
+
+Hadr06
+------
+
+This example demonstrates survey of energy deposition and particle's flux from 
+a hadronic cascade.
+
+Hadr07
+------
+
+Survey energy deposition and particle's flux from an hadronic cascade.
+Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.
+Show how to plot a depth dose profile in a rectangular box.    
+
+Hadr08
+------
+
+This example shows how to get "hadronic model per region" using generic
+biasing: in particular, it is shown how to use "FTFP+INCLXX" in one region,
+while using the default "FTFP+BERT" in all other regions. 
+Notice that we use the generic biasing machinery, but the actual weights
+of all tracks remain to the usual value (1.0) as in the normal (unbiased)
+case.
+
+Hadr09
+------
+
+This example shows how to use Geant4 as a generator for simulating
+inelastic hadron-nuclear interactions.
+Notice that the Geant4 run-manager is not used.
+
+Hadr10
+------
+
+This example aims to test the treatment of decays in Geant4.
+In particular, we want to test the decays of the tau lepton, charmed and
+bottom hadrons, and the use of pre-assigned decays.
+
+FissionFragment
+---------------
+This example demonstrates the Fission Fragment model as used within the
+neutron_hp model. It will demostrate the capability for fission product
+containmentby the cladding in a water moderated sub-critical assembly. It could
+also be further extended to calculate the effective multiplication factor of
+the subcritical assembly for various loading schemes.
+
+NeutronSource
+-------------
+NeutronSource is an example of neutrons production. It illustrates the cooperative work
+of nuclear reactions and radioactive decay processes.
+It survey energy deposition and particle's flux.
+It uses PhysicsConstructor objects.

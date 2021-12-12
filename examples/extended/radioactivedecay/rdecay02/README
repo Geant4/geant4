@@ -1,0 +1,208 @@
+
+    =========================================================
+    Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+    =========================================================
+
+                              rdecay02
+                              --------
+
+  Rdecay02 is created to show how to use the G4RadioactiveDecay process to 
+  simulate the decays of radioactive isotopes as well as the induced
+  radioactivity resulted from nuclear interactions. 
+
+  In this example a simple geometry consists of a cylindric target placed 
+  in the centre of a tube detector. Various primary event generation and 
+  tallying options are available.
+
+  1. GEOMETRY
+
+    The world is filled with "Air" and there are two components in it:	     
+ 
+    - Target:  A cylinder placed at the origin along the z-axis. The default 
+      size of the cylinder is 0.5 cm radius and 1 cm length, and its default 
+      material is "CsI".
+		  
+    - Detector: A tube centered at the origin along the z-axis, with inner 
+      radius matching the radius of the target. The default thickness of the 
+      tube is 2 cm and it is 5 cm long. The default material is "Germanium".
+
+    The user can change the target/detector size and material, using the 
+    commands in the directory  /rdecay02/det
+
+  2. PHYSICS
+
+    The following physics processes are included by default:
+
+     - Standard electromagnetic
+     - Decay
+     - Radioactive Decay
+         By default radioactive decay is applied through out the geometry.
+	 The user can limit it to just the target by commands :
+	        /process/had/rdm/noVolumes
+	        /process/had/rdm/selectVolume Target
+
+     - Hadronic processes
+
+  3. AN EVENT: THE PRIMARY GENERATOR
+  
+    The primary kinematic is a single particle or ion shooted at the 
+    centre of the target. The type of the particle and its energy are set in 
+    PrimaryGeneratorAction, and can be changed via the G4 build-in commands of
+    ParticleGun class (see the macros provided with this example).
+    Default is Ne24, at rest.
+
+  4. DETECTOR RESPONSE
+
+    The relevant informations are collected in TrackingAction or 
+    SteppingAction. These include:
+
+    - Emission particles in the RadioactiveDecay process: 
+        particle PDGcode,
+        particle kinetic energy,
+	particle creation time,
+        particle weight.
+
+	Note: the residual nuclei is not considered as an emitted particle.
+
+    - Radio-Isotopes. All the radioactive isotopes produced in the simulation: 
+        isotope  PDGcode,
+        isotope  creation time,
+        isotope  weight.
+ 
+    - Energy depositions in the target and detector by prodicts of the 
+      RadioactiveDecay process: 
+        energy depostion (positive value for target and negative for detector), 
+        time,
+        weight.
+  
+
+  5. HISTOGRAMS
+
+   The test contains 7 built-in 1D histograms, which are managed by
+   G4AnalysisManager and its Messenger. The histos can be individually 
+   activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, etc..)
+   (see the macros xxxx.mac).
+ 
+	histogram 0: The Pulse Height Spectrum (PHS) of the target.
+	histogram 1: The PHS of the detector.
+	histogram 2: The combined PHS of the target and detector.
+	histogram 3: The anti-coincidece PHS of the target.
+	histogram 4: The anti-coincidece PHS of the detector.
+	histogram 5: The coincidece PHS between the target and detector.
+	histogram 6: The emitted particle energy spectrum.
+	
+   It is assumed the detector and target pulses both have an integration time 
+   of 1 microsecond, and the gate is 2 microsecond for the coincidence spectrum.
+   The target and detctor have a threshold of 10 keV in the anti-/coincidence 
+   modes.
+
+   Initially, all histograms but histogram 6 are inactive.  They can all be turned on 
+   with the command
+
+      /analysis/h1/setActivationToAll true
+
+   or specific histograms can be turned on with the command
+
+      /analysis/h1/setActivation i true 
+
+   where i is the histogram index (0,... n).  
+   To turn off, set the final argument to false
+
+   
+   HistoManager includes also 4 ntuples whose contents are described in the above paragraphe
+  (detector response) 
+  The ntuples can be activated with the command /analysis/ntuple/setActivation
+           
+   One can control the name of the analysis file with the command:
+   /analysis/setFileName  name  (default rdecay02)
+   
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh
+       
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii (default rdecay02)
+   
+ 6. VISUALIZATION
+ 
+   The Visualization Manager is set in the main().
+   The initialisation of the drawing is done via the commands
+   /vis/... in the macro vis.mac. To get visualisation:
+   > /control/execute vis.mac
+ 	
+   The tracks are drawn at the end of event, and erased at the end of run.
+      
+   gamma green   
+   neutron yellow
+   negative particles (e-, ...) red
+   positive particles (e+, ions, ...) blue
+ 	
+ 7. HOW TO START ?
+ 
+   Execute rdecay02 in 'batch' mode from macro files :
+ 	% rdecay02   run1.mac
+ 		
+   Execute rdecay02 in 'interactive mode' with visualization :
+ 	% rdecay02
+	Idle> control/execute vis.mac
+ 	....
+ 	Idle> type your commands
+ 	....
+ 	Idle> exit
+	
+ 8. FURTHER EXAMPLES
+
+   There are a number of g4mac files in the ./macros subdirectory, to show 
+   the features of the G4RadioactiveDecay process. Most of them will lead to 
+   the creation of an root file in the same name of the macro file.
+
+   u238c.mac: shows the decays of the U238 chain in analogue MC mode.
+
+   th234c-b.mac: shows the decays of Th234 in variance reduction MC mode. 
+      All its secondaies in along the decay chains are generated. The default 
+      source profile and decay biasing schemes are used to determine the decay 
+      times and weights of the secondaries.
+
+   proton.mac: simulation of 1 GeV protons incident on a lead target. 
+      The decays of the radio-siotopes created in the proton-lead interactions 
+      are simulated with RadioactiveDecay in analogue MC mode.   
+
+   proton-beam.mac: same as proton.mac, but the decays of the radio-siotopes 
+      created in the proton-lead interactions are simulated with 
+      RadioactiveDecay in variance reduction MC mode. The isotopes and those 
+      along the decay chains are forced to decay in the time windows specified 
+      by the user in file measures.data, and the weights of the decay products 
+      are determined by the beam profile as defined in the beam.data file and 
+      their decay times. 
+
+   neutron.mac: macrofile to show the incident of low energy neutrons on an 
+      user specified NaI target and the decays of the induced radio-isotopes.
+
+   ne24.mac: this shows the decays of Ne-24 to Na-24 in variance reduction MC 
+      mode. Further decays of Na-24 are not simulated by applying the 
+      nucleuslimits in RadioactiveDecay. Two runs are carried out.
+		  One with the bracjing ratio biasing applied and one without. 
+
+   isotopes.mac: to show the decays of a number of different isotopes in a 
+      single macro file.
+
+   f24.mac: to show the different treatments one can apply to the decays of F24.
+      i)   the complete decay chain from F24 to Mg24, in analogue mode; 
+      ii)  the complete chain, but in variance reduction mode; 
+      iii) restrict to the decay of F24 only in analogue mode; iv) restrict to 
+           the decay of F24 only but in variance reduction mode.
+
+   as74.mac: The decays of As74 which has a rather complicated decay scheme. 
+      i)  in analogue MC mode; 
+      ii) in variance reduction MC mode.
+    
+   UserRadDataPb210Test.mac: show how the user can define its own radioactive 
+      decay datafile
+    
+   UserEvapDataBiTest.mac: show how the user can define its own 
+      photo-evaporation datafile 
+	
+   No252.mac: show how to simulate Radoactive decay for nuclei with Z>100 
+      based on user datafile

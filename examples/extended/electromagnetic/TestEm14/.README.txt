@@ -1,0 +1,132 @@
+
+///\file "electromagnetic/TestEm14/.README.txt"
+///\brief Example TestEm14 README page
+
+/*! \page ExampleTestEm14 Example TestEm14
+
+  - How to compute cross sections from the direct evaluation of the mean
+    free path ( see below, \ref TestEm14_s4).
+  - How to plot final state of a process.   
+  
+\section TestEm14_s1 GEOMETRY DEFINITION
+ 
+  It is a single box representing a 'semi infinite' homogeneous medium.
+  Two parameters define the geometry :
+  - the material of the box,
+  - the (full) size of the box.
+   
+  The default geometry (100 m of water) is constructed in 
+  DetectorConstruction, but the above parameters can be changed 
+  interactively via the commands defined in DetectorMessenger.
+   
+\section TestEm14_s2 PHYSICS LIST
+ 
+  The physics list contains the standard electromagnetic processes.
+  In order not to introduce 'artificial' constraints on the step size, the
+  multiple scattering is not instanciated, and all processes are
+  registered as discrete : there is no continuous energy loss.  
+    
+\section TestEm14_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle starting at the edge
+  of the box. The type of the particle and its energy are set in 
+  PrimaryGeneratorAction (1 MeV gamma), and can be changed via the G4 
+  build-in commands of G4ParticleGun class (see the macros provided with 
+  this example).
+   
+\section TestEm14_s4 PHYSICS
+ 
+  An event is killed at the first interaction of the incident paticle.
+  The absorption length, also called mean free path, is computed as 
+  the mean value of the track length of the incident particle.
+  This is why the medium must be 'infinite' : to be sure that interaction
+  occurs at any events.
+  
+  The result is compared with the 'input' data, i.e. with the cross
+  sections stored in the PhysicsTables and used by Geant4.
+  
+  The energy spectrum and the angular distribution of the scattered
+  particle (if any) and of the created secondaries are plotted (see
+  SteppingAction).
+   
+  A set of macros defining various run conditions are provided.
+  The processes are actived/inactived in order to survey the processes 
+  individually.
+
+\section TestEm14_s5 HISTOGRAMS
+         
+  The test contains 6 built-in 1D histograms, which are managed by the
+  HistoManager class and its messenger, HistoMessenger. The histos can be individually 
+  activated with the command :
+  /analysis/h1/set id nbBins  valMin valMax unit 
+  where unit is the desired unit for the histo (MeV or keV, etc..)
+  (see the macros xxxx.mac).
+ 
+   - 1 :     "scattered primary particle: energy spectrum"
+   - 2 :     "scattered primary particle: costheta distribution"
+   - 3 :     "charged secondaries: energy spectrum"
+   - 4 :     "charged secondaries: costheta distribution"
+   - 5 :     "neutral secondaries: energy spectrum"
+   - 6 :     "neutral secondaries: costheta distribution"      
+      
+   The histograms are managed by the HistoManager class and its messenger, 
+   HistoMessenger 
+   The histos can be individually activated with the command :
+\verbatim
+/analysis/h1/set id nbBins  valMin valMax unit 
+\endverbatim
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+\verbatim
+/analysis/setFileName  name  (default testem14)
+\endverbatim
+   
+   It is possible to choose the format of the histogram file : root (default),
+   hbook, xml, csv, by using namespace in HistoManager.hh
+       
+   It is also possible to print selected histograms on an ascii file:
+\verbatim
+/analysis/h1/setAscii id
+\endverbatim
+   All selected histos will be written on a file name.ascii (default testem14) 
+    
+\subsection TestEm14_sub_s51 Using hbook format
+ 
+ Need a special treatement : the Cern Library must be installed and the
+ environment variable CERNLIB correctly set. Then, *before* compiling,
+ activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in HistoManager.hh
+            
+\section TestEm14_s6- VISUALIZATION
+ 
+   The Visualization Manager is set in the main () (see TestEm14.cc).
+   The initialisation of the drawing is done via the commands
+   /vis/... in the macro vis.mac. To get visualisation:
+\verbatim
+> /control/execute vis.mac
+\endverbatim
+   
+   The detector has a default view which is a longitudinal view of the 
+   box.
+   
+   The tracks are drawn at the end of event, and erased at the end of run.
+  
+\section TestEm14_s7- HOW TO START ?
+ 
+  - Execute TestEm14 in 'batch' mode from macro files :
+\verbatim
+% TestEm14   compt.mac
+\endverbatim
+    
+  - Execute TestEm14 in 'interactive mode' with visualization :
+\verbatim
+% TestEm14
+Idle> control/execute vis.mac
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+  
+*/
+  

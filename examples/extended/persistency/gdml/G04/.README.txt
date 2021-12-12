@@ -1,0 +1,39 @@
+
+///\file "persistency/gdml/G04/.README.txt"
+///\brief Example G04 README page
+
+/*! \page ExampleG04 Example G04
+
+
+\section G04_s1 GDML DETECTOR SENSITIVITY
+                    
+This example demonstrates the usage of the GDML auxiliary information for
+associating a sensitive detector to a volume.
+
+The detector construction consists of a call to GDMLProcessor which parses a
+GDML file and returns the pointer to the world volume. The user can also write
+her/his own GDML file and use it as the primary input format for her/his Geant4
+application.
+
+A simple GDML files is provided:
+- auxiliary.gdml, showing association of a volume with the auxiliary
+  information, related to the sensitive detector.
+
+\section G04_s2 HOW TO BUILD THE EXAMPLE ?
+
+- You need to have built the persistency/gdml module by having
+  set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
+  as well as the -DXERCESC_ROOT_DIR=path_to_xercesc flag pointing to 
+  the path where the XercesC XML parser package is installed in your system.
+
+- Compile and link to generate the executable (in your CMAKE build directory):
+\verbatim
+% make
+\endverbatim
+
+- Execute the application for parsing interactively the GDML file:
+\verbatim
+% gdml_det auxiliary.gdml
+\endverbatim
+
+*/

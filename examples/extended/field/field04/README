@@ -1,0 +1,377 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+
+
+                            field04 Example
+                            ---------------
+
+     This example shows how to define/use OVERLAPPING field elements 
+     in Geant4. Fields might be either magnetic, electric or both.
+
+     Credit goes to Tom Roberts and Muons Inc. since much of the code
+     and ideas were taken at liberty from the (GNU GPL) source of 
+     G4BEAMLINE release 1.12.
+
+     http://g4beamline.muonsinc.com
+
+**************
+*Classes Used*
+**************
+
+ 1 - main()
+
+ See field04.cc.
+ 
+        The example can be run with the following optional arguments:
+
+        % field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]   
+
+        If a macro is provided with the option "-m", the program runs in a batch mode,
+        otherwise the program open the interactive session after executing the
+        default initialization macro init_vis.mac. The option "-s preinit" can be used
+        to start the program without initialization in PreInit phase.
+
+        For example:
+        to assign the F04PhysicsList: 
+        % field04 -p QGSP_BERT
+
+        an initial random number seed with:
+        % field04 field04.in -r 12345
+
+        to start with a macro file and an initial seed:
+        % field04 -m field04.in -r 12345
+
+
+ 2- GEOMETRY DEFINITION
+
+        The geometry consists of two solenoidal magnets: a "CaptureMgnt"
+        followed by a (blue-colored "TransferMgnt". By definition, the
+        axis and center of the "CaptureMgnt" coincide with the "World". The
+        position of the "TransferMgnt" relative to the downstream end of the
+        "CaptureMgnt", as well as its axis angle, both may vary. A cylindrical
+        "Target" is positioned inside the "CaptureMgnt". Its axis can vary
+        from 0 to 180 deg, and hence also the direction of the incoming
+        proton beam wrt the "CaptureMgnt"'s axis. A "Degrader" is located
+        inside the "TransferMgnt", its default position being at the
+        upstream end of the "TransferMgnt". Finally, also a "TestPlane" is
+        located inside the "TransferMgnt", by default at its downstream end.
+
+
+        The "World" consists of a solid cylinder made of a given material.
+          (It is the responsibility of the user to make the world
+           large enough to contain the rest of the geometry!)
+
+        Three parameters define the world :
+        - the material of the world,
+        - the world radius,
+        - the world length.
+
+        Example (default values):
+        /field04/SetWorldMat G4_AIR
+        /field04/SetWorldR  5.0 m
+        /field04/SetWorldZ 50.0 m
+
+
+        The "Target" is a solid cylinder made of a given material.
+
+        Five parameters define the target:
+        - the material of the target,
+        - the target radius,
+        - the target thickness,
+        - the target position inside the "CaptureMgnt",
+        - the target axis angle relative to that of the "CaptureMgnt".
+
+        Example (default values):
+        /field04/SetTgtMat G4_W
+        /field04/SetTgtRad    0.4 cm
+        /field04/SetTgtThick 16.0 cm
+        /field04/SetTgtPos 0.0 cm
+        /field04/SetTgtAng 170
+
+
+        The "Degrader" is a solid cylinder  made of a given material.
+
+        Four parameters define the degrader:
+        - the material of the degrader,
+        - the degrader radius,
+        - the degrader thickness,
+        - the degrader position relative to the "TransferMgnt" center.
+
+        Example (default values):
+        /field04/SetDgrMat G4_Pb
+        /field04/SetDgrRad  30.0 cm
+        /field04/SetDgrThick 0.1 cm
+        #/field04/SetDgrPos -7.4 m
+
+
+        The "CaptureMgnt" is a solenoid (vacuum cylinder). It is either
+        a two-sided or a one-sided magnetic bottle with the B field
+        varying linearly from the center value B1 to the edge value B2.
+        The one-sided F04FocusSolenoid has the open end at +z and focuses
+        on the z < 0 side.
+
+        Four parameters define the "CaptureMgnt":
+        - the magnet radius,
+        - the magnet length,
+        - the weaker magnetic field at the center B1
+        - the stronger magnetic field at the edge B2
+
+        Example (default values):
+        /field04/SetCaptureR 0.6 m 
+        /field04/SetCaptureZ 4.0 m
+        /field/SetCaptureB1 2.5 tesla 
+        /field/SetCaptureB2 5.0 tesla
+
+
+        The "TransferMgnt" is a solenoid (vacuum cylinder) with a 
+        constant B-field. When the "TransferMgnt" follows immediately
+        the "CaptureMgnt", its relative position is at 0 cm.
+
+        Four parameters define the "TransferMgnt":
+        - the magnet radius,
+        - the magnet length,
+        - the magnet field,
+        - the magnet relative position
+          (its upstream face wrt the downstream face of the "CaptureMgnt".)
+
+        Example (default values):
+        /field04/SetTransferR  0.3 m
+        /field04/SetTransferZ 15.0 m
+        /field/SetTransferB 5.0 tesla
+        /field04/SetTransferP 0.0 m
+
+        The default geometry is constructed in F04DetectorConstruction class,
+        but all the parameters can be changed via the commands defined in 
+        the F04DetectorMessenger class.
+
+
+ 3- MATERIAL DEFINITION
+
+        Material definitions are done through the singleton class F04Materials
+        which keeps a pointer to the G4NistManager. It has a method
+        GetMaterial by name (G4String) which in turn invokes the
+        G4NistManager::FindOrBuildMaterial, and/or G4Material::GetMaterial
+        methods. It has also a method CreateMaterials which, for materials
+        absent from the NIST data base, shows how to create them using the
+        G4NistManager::ConstructNewMaterial method.
+
+
+ 4- AN EVENT: THE PRIMARY GENERATOR
+
+        The primary kinematic consists of a single particle which hits the
+        target perpendicular to its upstream face. The type of the particle
+        and its energy are set in the F04PrimaryGeneratorAction class, and can
+        be changed via the G4 build-in commands of the G4ParticleGun class.
+        In addition, there is a fRndmFlag, which once set allows the beam to
+        explore randomly the whole cross section of the target. The default
+        beam consists of 500 MeV protons, starting at the upstream face of
+        the target, directed along dx = dy = 0, dz = 1 wrt the target frame.
+        The default direction should NOT be changed! The arguments of the
+        x/y/zvertex commands are relative to the target center.
+
+        Example:
+        /gun/random on
+        #/gun/xvertex 0 mm
+        #/gun/yvertex 0 mm
+        #/gun/zvertex -100 mm
+
+
+ 5- DETECTOR RESPONSE
+
+        Information is extracted from the program via F04SteppingAction
+        at the TestPlane.
+
+
+ 6- PHYSICS 
+
+        The F04PhysicsList extends a selected Geant4 physics list.
+        The base physics list name is provided by its name in the F04PhysicsList 
+        constructor.
+
+        In addition to processes defined in the base Geant4 physics list, 
+        there is added the F04StepMax process and the decay of pions can be assigned 
+        via dedicated commands in F04PhysicsListMessenger.
+
+        The command to define maximum step:
+        /exp/phys/stepMax value unit
+
+        The decay of pions can be assigned via (pi -> e nu, pi -> mu nu):
+
+        /decay/pienu
+        /decay/pimunu
+
+        The pienu assignment includes a small fraction of radiative decay:
+        e nu gamma (G4PionRadiativeDecayChannel).
+
+        The standard/default muon decay chain is modified to be 98.6%
+        G4MuonDecayChannelWithSpin and 1.4% G4MuonRadiativeDecayChannelWithSpin
+        in ConstructParticle().
+
+        The pion decay process G4PolDecay inherits from G4Decay and implements
+        the virtual method - empty in the base class - DaughterPolarization
+
+        The muon decay process is G4DecayWithSpin
+
+        Furthermore, the following commands are also available, but
+        may only be used AFTER /run/initialize
+
+        /process/inactivate msc
+        /process/activate msc
+
+ 7- Overlapping Fields
+
+        The F04GlobalField (a singleton) is instantiated in 
+        F04DetectorConstruction() and assigned to the global field manager 
+        in UpdateField():
+
+        fFieldManager = GetGlobalFieldManager();
+        fFieldManager->SetDetectorField(this);
+
+        The F04GlobalField has a std::vector<ElementField*> FieldList
+
+        The field from each individual beamline element is given by a
+        F04ElementField object. Any number of overlapping F04ElementField
+        objects can be added to the F04GlobalField. Any element that
+        represents an element with an EM field must add the appropriate
+        F04ElementField to the global F04GlobalField object.
+
+        Of course, the F04GlobalField has the method GetFieldValue implemented.
+
+        Before /run/initialize in the macro file or command, the update
+        field command must have been issued if any of the other following
+        field commands was employed:
+
+        /field/update
+
+        Other options are:
+
+        /field/setStepperType 4
+        /field/setMinStep 10 mm
+        /field/setDeltaChord 3.0 mm
+        /field/setDeltaOneStep 0.01 mm
+        /field/setDeltaIntersection 0.1 mm
+        /field/setEpsMin 2.5e-7 mm
+        /field/setEpsMax 0.05 mm
+        
+        Each field element has a rectilinear bounding box in global
+        coordinate space which is checked before a point is verified to
+        actually be inside the F04ElementField (IsWithin and IsOutside).
+        SetGlobalPoint is called 8 times for the corners of the local
+        bounding box, after a local->global coordinate transform.
+
+        The F04ElementField is the interface class used by F04GlobalField to 
+        compute the field value at a given point[].
+
+        A beamline element, for example the F04SimpleSolenoid, will derive
+        from F04ElementField and implement the computation for the element.
+
+        simpleSolenoid 
+          = new F04SimpleSolenoid(B, l, logicTransferMgnt,TransferMgntCenter);
+
+        Besides the magnetic field and the length of the simple solenoid,
+        the constructor needs the knowledge of the G4LogicalVolume for
+        the beamline element and where its center is located in the
+        'World'.
+
+        The F04ElementField has a G4AffineTransform "fGlobal2local" which
+        allows the quick computation of coordinate transformations. It can
+        only be determined by knowing the element's coordinate origin in
+        the global frame and after all of the geometry has been defined.
+        For this reason, the object is prepared in two stages, through the
+        constructor providing it with the coordinate center and a pointer
+        to the G4LogicalVolume. Later the Construct() method is called to
+        calculate the fGlobal2local and the bounding box. This can be done
+        from the F04RunAction::BeginOfRunAction method, for only then are we
+        certain that the geometry has been completely built:
+
+        FieldList* fields = F04GlobalField::GetObject()->GetFields();
+
+        if (fields) {
+           if (fields->size()>0) {
+              FieldList::iterator i;
+              for (i=fields->begin(); i!=fields->end(); ++i)(*i)->Construct();
+           }
+        }
+
+        The F04ElementField constructor will also add the derived object into
+        F04GlobalField. Finally, its AddFieldValue() will add the field value
+        for this element to field[]. 
+
+
+ 8- User Action Classes
+
+        F04RunActionMessenger:
+
+                     /rndm/save freq - to save rndm status in external files
+                                 0 not saved
+                                >0 saved on: beginOfRun.rndm
+                                 1 saved on:   endOfRun.rndm
+                                 2 saved on: endOfEvent.rndm
+                     /rndm/read random/run0evt8268.rndm
+
+        F04RunAction:  
+                     BeginOfRunAction: Deal with random number storage,
+                     initialization etc. Call the Construct() method of
+                     F04ElementFields in the FieldList of F04GlobalField object.
+                     EndOfRunAction: random number storage/status printing.
+
+        F04EventActionMessenger:
+                     /event/setverbose
+
+        F04EventAction(RunAction* RA):
+                     Customized BeginOfEvent printing
+                     EndofEvent:
+                     saveEngingStatus and showEngineStatus according to flag
+                     in F04RunAction
+
+        F04TrackingAction:
+                     PreUserTrackingAction: Instantiate F04UserTrackInformation
+                     and set the application TrackStatus.
+                     PostUserTrackingAction: Retreive F04UserTrackInformation
+                     and decide to save random number status accordingly.
+
+        F04SteppingActionMessenger:
+
+        F04SteppingAction:
+                     UserSteppingAction: Kill primary if/when outside Target
+                     volume. Diagnostic/histogram filling for particles at a
+                     TestPlane. Find decay position and when particle
+                     FIRST reverses z-momentum component via using a
+                     F04UserTrackInformation object.
+
+        F04StackingAction:
+                     Track only primaries, pi+ or mu+
+
+        F04UserTrackInformation:
+                     Keep an application F04TrackStatus for the track:
+                          undefined, left, right, reverse
+
+        F04SteppingVerbose:
+                    Only print track header and step information for
+                    pi+ and mu+. 
+                    Note: the information for primary protons is not printed.
+
+        F04Trajectory, TrajectoryPoint:
+                    Example of application specific implementations
+
+ 9- HOW TO START ?
+
+        - Execute field04 in 'batch' mode from macro files e.g.
+                % field04 -m field04.in
+
+        - Execute field04 in 'interactive' mode with visualization
+                % field04
+                ....
+                Idle> type your commands
+                ....
+
+        - Execute field04 in 'interactive' mode without initialization
+                % field04 -s preinit
+                ....
+                Idle> type your commands, then
+                Idle> /run/initialize
+                Idle> /control/execute vis.mac
+                ....

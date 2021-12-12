@@ -1,0 +1,24 @@
+
+///\file "persistency/gdml/.README.txt"
+///\brief Examples gdml README page
+
+/*! \page Examples_gdml Category "persistency/gdml"
+
+This directory contains a set of examples showing the usage of the GDML
+plugin module in Geant4.
+
+   - \link ExampleG01  G01 \endlink      Simple example for importing and exporting simple GDML files.
+   
+   - \link ExampleG02  G02 \endlink      Sample application showing how to import/export different
+              geometry setups, including STEP Tools files and structures
+              integrating them in a real simulation application.
+
+   - \link ExampleG03  G03 \endlink      Simple example showing how to import extensions to the GDML
+              schema.
+   
+   - \link ExampleG04  G04 \endlink      Simple example showing how to associate detector sensitivity
+              to a logical-volume, making use of the auxiliary-information.
+
+See the README file inside each example for more detail.
+
+*/

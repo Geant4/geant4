@@ -1,0 +1,113 @@
+
+///\file "hadronic/Hadr00/.README.txt"
+///\brief Example Hadr00 README page
+
+/*! \page ExampleHadr00 Example Hadr00
+
+\author V.Ivanchenko \n
+CERN, Geneva, Switzerland
+
+This example demonstrates a usage of G4PhysListFactory to build 
+Physics List and G4HadronicProcessStore to access cross sections.
+
+\section Hadr00_s1 GEOMETRY
+
+The Target volume is a cylinder placed inside the World volume. Following 
+UI commands are available to modify the geometry:
+
+\verbatim
+/testhadr/TargetMat     G4_Pb
+/testhadr/WorldMat      G4_AIR
+/testhadr/TargetRadius  10 mm
+/testhadr/TargetLength  20 cm
+\endverbatim
+
+If geometry was changed between two runs, then the following command need to
+be executed:
+
+\verbatim
+/testhadr/update
+\endverbatim
+
+By default beam direction coincides with the target axis and is Z axis 
+in the global coordinate system. The beam starts in the middle of the target.
+G4ParticleGun is used as a primary generator. The energy and the type of 
+the beam can be defined via standard UI commands
+
+\verbatim
+/gun/energy   15 GeV
+/gun/particle proton
+\endverbatim
+
+\section Hadr00_s2 PHYSICS
+
+Physics List is defined by its name given in the 3d argument of the of the 
+run command. 
+
+\verbatim
+Hadr00 my.macro QGSP_BERT 
+\endverbatim
+
+If 3d argument is not set then by the PHYSLIST environment variable. 
+By default FTFP_BERT Physics List will be instantiated.
+ 
+\section Hadr00_s3 CROSS SECTION
+
+At the end of any run the set of cross sections is built and can be printed 
+out for a given projectile particle and a target element, which can be 
+defined via UI commands:
+
+\verbatim
+/testhadr/particle   pi+
+/testhadr/targetElm  Pb
+/testhadr/verbose    1
+\endverbatim
+
+The level verbosity above zero provides printout of the cross section table.
+The energy/momentum limits and number of bins can be set via UI commands:
+
+\verbatim
+/testhadr/nBinsE      900
+/testhadr/nBinsP      700
+/testhadr/minEnergy   1 keV
+/testhadr/maxEnergy   1 TeV
+/testhadr/minMomentum 1 MeV
+/testhadr/maxMOmentum 10 TeV
+\endverbatim
+
+\section Hadr00_s4 VISUALIZATION
+
+For interactive mode G4 visualization options and variables should be
+defined, then the example should be recompiled:
+
+\verbatim
+gmake visclean
+gmake
+\endverbatim
+
+The vis.mac file can be used an example of visualization. The following 
+command can be used:
+
+\verbatim
+/testhadr/DrawTracks  charged
+/testhadr/DrawTracks  neutral
+/testhadr/DrawTracks  all
+\endverbatim
+
+\section Hadr00_s5 HISTOGRAMS
+
+All histograms are provided in decimal logarithmic scale (log10(E/MeV)
+and log10(p/GeV)) for one projectile particle and one target element.
+The element is taken from the Geant4 NIST database, natural isotope 
+composition is assumed. 
+
+It is possible to change scale and output file name using UI commands:
+
+\verbatim
+/testhadr/histo/fileName name
+/testhadr/histo/setHisto idx nbins vmin vmax unit
+\endverbatim
+
+Only ROOT histograms are available.
+  
+*/

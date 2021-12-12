@@ -1,0 +1,105 @@
+G3toG4
+------
+
+G3toG4 is the Geant4 facility to convert Geant3 geometries into Geant4.
+This is done in two stages. 
+
+First, the user supplies a Geant3 .rz file containing the initialization
+data structures. An executable, rztog4, reads this file and produces an
+ascii ("call list") file containing instructions on how to build the
+geometry. The source code for this is fortran. 
+
+Second, a call list interpreter (G4BuildGeom.cc) reads these instructions
+and builds the geometry in the user's G4 client code.
+
+Two examples of how to use the call list interpreter are supplied in
+examples/extended/g3tog4:
+ - the first example, cltog4, is a simple example which simply invokes the
+   call list interpreter method G4BuildGeom from G3toG4DetectorConstruction
+   class, builds the geometry and exits. 
+ - the second example, clGeometry, is more complete and is patterned after
+   the novice G4 examples. It also invokes the call list interpreter, but
+   in addition, allows the geometry to be visualized and particles to be
+   tracked. Currently, G3toG4 does not provide a method for scoring hits
+   in G4.
+
+To build these examples, especially the one involving visualization, the
+user must have one or more of the following environment variables set:
+
+setenv G4VIS_BUILD_<driver>_DRIVER
+setenv G4VIS_USE_<driver>
+
+where the G4-supported drivers are listed in source/visualization/README.
+
+To use the freeware Mesa API, you must have the environment variable
+OGLHOME defined to point to the directory containing the Mesa lib/ directory
+specific to your platform.
+
+To compile and build the G3toG4 libraries, simply type
+
+gmake
+
+from the top-level G3toG4 directory. 
+
+To build the converter executable "rztog4", simply type
+
+gmake bin
+
+To make everything, simply type:
+
+gmake global
+
+To remove all G3toG4 libraries, executables and .d files, simply type
+
+gmake clean
+
+ the implementation (April 1999)
+----------------------------------------
+- PGON, PCON are built using the CSG classes G4Polycone and G4Polyhedra.
+- G3 MANY feature has not been tested.
+- GsROTM is fully implemented and supports rotations and mirror reflections
+- GSPOSP implemented via individual logical volumes for each instantiation
+  (G4PVIndexed doesn't exist yet)
+- GSDV* routines for dividing volumes implemented, using
+  G4PVReplicas, G4PVParametrised
+- GSROTM is implemented
+- hits are not implemented. Hit code is do-nothing. (It is
+  coded up, but hit class references are commented out.)
+  The digits+hits code has to be updated before G3toG4's
+  hit code can be activated.
+- GSPART has to be updated.
+- Usage of magnetic field class has to be turned on.
+
+ the implementation (February 2001)
+----------------------------------------
+- Supported shapes: all G3 shapes except for
+  "HYPE", "GTRA", "CTUB"
+- G3 MANY feature is not supported.
+- GSDV* routines for dividing volumes implemented, using
+  G4PVReplicas, for shapes:
+      "BOX", "TUBE", "TUBS", "PARA" - all axes;
+      "CONE", "CONS" - axes 2, 3;
+      "TRD1", "TRD2", "TRAP" - axis 3; 
+      "PGON", "PCON" - axis 2;
+      "PARA" -axis 1; axis 2,3 for a special case
+  Unsupported shapes:    
+      "SPHE", "ELTU", "HYPE", "GTRA", "CTUB"
+            
+ the implementation (November 2001)
+----------------------------------------
+- Support for G3 MANY feature:
+
+  MANY positions are resolved in G3toG4MANY function,
+  which has to be processed before G3toG4BuildTree
+  (it is not called by default).
+  In order to resolve MANY user code has to provide
+  additional info using G4gsbool(G4String volName, G4String manyVolName)
+  function) for all overlapping volumes. Daughters of
+  overlapping volumes are then resolved automatically
+  and should not be specified via Gsbool.
+  
+  Limitation: a volume with a MANY position can have only this
+  one position; if more than one position is needed a new volume
+  has to be defined (gsvolu) for each position.
+
+See History file for modification history.

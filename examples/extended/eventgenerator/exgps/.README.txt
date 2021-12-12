@@ -1,0 +1,101 @@
+
+///\file "eventgenerator/exgps/.README.txt"
+///\brief Example exgps README page
+
+/*! \page Exampleexgps Example exgps 
+
+  exgps is created to demonstrate the usage of G4GeneralParticleSource
+  for generating  primary particle according to user defined distributions.
+  These range from simple monocromatic point source to complicated mutiple
+  sources with various biasing schemes. 
+  
+  http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides
+        /ForApplicationDeveloper/html/ch02s07.html
+   
+   
+  \section exgps_s1 GEOMETRY
+
+  Simple geometry consists of a "Vacuum" world and, in it, two other components:
+    - An alunimium box : 20 x 20 x 20 cm in size, cerntered at the origin.
+    - A SiO2 sphere (radius 5 cm) is placed at the centre of the aluminium box.
+
+  \section exgps_s2  PHYSICS
+
+  Tranportation process only for all particles.
+
+  \section exgps_s3 EVENT
+
+  The event generator is the G4GeneralParticleSource (GPS). The instantiation of
+  G4GeneralParticleSource is same as that for G4ParticleGun. 
+  See the exGPSPrimaryGeneratorAction.cc file for details.  
+  
+  \section exgps_s4 VISUALIZATION
+ 
+  Visualisation of the geometry and the tracks is possible with many of the 
+  G4 visualisation packages.
+  An example of displaying the geometry and tracks using OGL is given in the 
+  macro vis.mac.  
+
+  \section exgps_s5 HISTOGRAMS
+
+  This example implements an histo manager which creates histograms and
+  ntuples using Geant4 analysis tools.
+     
+  The output file contains 6 histograms and one ntuple:
+
+  histo1D 1: energy spectrum.
+  histo1D 2: vertex: radial distribution dN/dv.
+  histo1D 3: angular distribution: cos(theta).
+  histo1D 4: angular distribution: phi.        
+  histo2D 1: vertex position in the X-Y plane.
+  histo2D 2: vertex position in the X-Z plane.
+  histo2D 3: vertex position in the Y-Z plane.
+  histo2D 4: angular distribution: phi-cos(theta).
+  histo2D 5: angular distribution: of phi-theta.
+ 
+  In the ntuple the following data are recorded for each incident particle:  
+
+  Particle ID
+  Incident Position (x,y,z);
+  Incident Angle (theta,phi);
+  Particle weight;
+	
+  The histograms are managed by G4AnalysisManager class and its Messenger. 
+  The histos can be individually activated with the command :
+\verbatim  
+  /analysis/h1/set id nbBins  valMin valMax unit
+\endverbatim   
+  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+  One can control the name of the histograms file with the command:
+\verbatim   
+  /analysis/setFileName  name  (default exgps)
+\endverbatim 
+   
+  It is possible to choose the format of the histogram file : root (default),
+  xml, csv, by using namespace in HistoManager.hh 
+	
+
+  \section exgps_s6 GETTING STARTED
+ 
+  - execute exgps in 'batch' mode from macro files
+\verbatim  
+	% exgps   exgps.in
+\endverbatim
+  		
+  - execute exgps in 'interactive mode' with visualization
+\verbatim  
+	% exgps
+	....
+	Idle> type your commands
+	....
+	Idle> exit
+\endverbatim
+ 
+ \section exgps_s7  FURTHER EXAMPLES of MACRO FILES
+
+ There are a number of mac files in the ./macros subdirectory, to show the 
+ various features of GPS. 
+ Please see macros/README file for further informations.
+
+*/

@@ -1,0 +1,94 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm10 
+                            --------
+
+    Test for investigation of transition radiation. 
+    Default setup for "TestEm10.in" and "TestEm10.large_N.in" is the simplified 
+    setup for ALICE XTR test beam (~2004), defined in DetectorSimpleALICE class.
+
+
+ 1- GEOMETRY DEFINITION
+ 
+    The geometry setup includes "radiator" and "absorber" volumes
+    of a box shape.
+
+    The "radiator" material is defined as a mixture of a gas and foil material
+    and the "absorber" contains a gas material.
+
+    Several geometry setups are defined in the classes 
+    DetectorSetupX, 
+    where SetupX = ALICE06, Bari05, Barr90, Construction, Harris73, Messenger, SimpleALICE, Watase86
+ 	
+ 	The default setup, SimpleALICE, can be changed via UI command:
+    /XTRdetector/setup setup
+       where setup = simpleALICE, alice06, bari05, harris73, watase86, barr90
+ 	
+ 2- PRIMARY GENERATOR
+ 
+ 	The primary kinematic consists of a single particle which hits the
+ 	absorber perpendicular to the input face. The type of the particle
+ 	and its energy are set in the PrimaryGeneratorAction class, and can
+ 	be changed via the G4 build-in commands of G4ParticleGun class (see
+ 	the macros provided with this example).
+ 	
+ 3- DETECTOR RESPONSE
+
+ 	In this example the total energy deposited in the "absorber" volume 
+    is accounted in SensitevDetector class, and a spectrum of XTR gamma
+    particles, all secondary gamma particles and all secondary e- 
+    particleas is accounted in StackingAction class.
+ 	
+ 4- PHYSICS
+    
+ 	The particle's type and the physic processes which will be available
+ 	in this example are set in PhysicsList class.
+    The trasition radiation process is defined in the
+    TransitionRadiationPhysics builder.
+ 	 	
+    The transition radiator models can be changed simply with:
+
+    Idle> /emphyslist/setXTRModel modelName
+
+    See macro files "*.mac" for different setups providede with the example.
+
+ 5 - HISTOGRAMS
+
+    Testem10 produces several histo which are saved as testem10.root by default.
+    Content of these histo:  
+        1: Energy deposit in absorber
+        2: XTR Gamma spectrum
+        3: Secondary Gamma spectrum
+        4: Secondary e- spectrum
+        5: Energy deposit in absorber with the same histogram parameters
+           as in the previous version of this example (Geant4 version <=10.2)
+        
+     The histograms are managed by G4AnalysisManager class and its Messenger. 
+     The histos can be individually activated with the command :
+     /analysis/h1/set id nbBins  valMin valMax unit 
+     where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+     
+     One can control the name of the histograms file with the command:
+     /analysis/setFileName  name  (default testem1)
+     
+     It is possible to choose the format of the histogram file : root (default),
+     hbook, xml, csv, by using namespace in HistoManager.hh 
+       
+     It is also possible to print selected histograms on an ascii file:
+     /analysis/h1/setAscii id
+     All selected histos will be written on a file name.ascii  (default testem1)
+
+ 6- HOW TO START ?
+ 
+ 	- execute TestEm10 in 'batch' mode from macro files e.g.
+ 		% TestEm10   run11.mac
+		
+ 	- execute TestEm10 in 'interactive' mode with visualization e.g.
+ 		% TestEm10
+		....
+		Idle> type your commands
+		....

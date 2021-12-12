@@ -1,0 +1,39 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm0
+                            -------
+
+  This program is not a simulation. It prints the cross sections and stopping
+  power used by the standard electromagnetic package, via G4EmCalculator
+  which extracts these data from the PhysicsTables.
+	
+  The program can be used in batch or interactively.	
+ 
+  - execute TestEm0 in 'batch' mode from macro files :
+	% TestEm0   TestEm0.in
+ 		
+  - Interactively, a typical sequence will be :
+	% TestEm0
+	....
+	Idle> /run/initialize
+	....	
+	Idle> /testem/det/setMat Silicon
+	Idle> /run/setCut 100 um	
+ 	Idle> /gun/particle e-
+        Idle> /gun/energy 10 MeV
+        Idle> /run/beamOn
+	 
+  The last command triggers BuildPhysicsTable() and executes the program.
+  
+   
+                            DirectAccess
+                            ------------
+			    
+  DirectAccess is a small batch program which shows how to compute the same
+  basic data directly from the processes (indeed the models).
+  
+  To run it, change name in the first line on GNUmakefile before to compile.

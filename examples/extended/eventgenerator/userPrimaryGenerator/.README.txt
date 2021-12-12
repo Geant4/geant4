@@ -1,0 +1,47 @@
+
+///\file "eventgenerator/userPrimaryGenerator/.README.txt"
+///\brief Example basic README page
+
+/*! \page ExampleuserPrimaryGenerator Example userPrimaryGenerator
+
+ The example shows how to create a primary event including several vertices and 
+ several primary particles per vertex
+
+  \section userPrimaryGenerator_s1 Geometry construction
+
+ It is a simple box which represents an 'infinite' homogeneous medium.
+  
+  \section userPrimaryGenerator_s2 Physics list
+
+ PhysicsList.cc defines only geantino and transportation process.
+
+  \section userPrimaryGenerator_s3 Primary generator : several vertices and particles per event
+
+ vertex A and particle 1 : a geantino uniformly randomized on a cylinder surface.
+ vertex B and particles 2 and 3 : symetric to vertex A.
+
+  \section userPrimaryGenerator_s4 Visualisation
+
+ Visualization Manager is set in the main().
+ Initialisation of the drawing is done via the commands
+ /vis/.. in the macro vis.mac. This macro is automatically read from the main 
+ in case of interactive running mode.
+
+  \section userPrimaryGenerator_s5 How to start ?
+
+  - execute userPrimaryGenerator in 'batch' mode from macro files
+\verbatim  
+	% userPrimaryGenerator   run1.mac
+\endverbatim
+
+  - execute userPrimaryGenerator in 'interactive mode' with visualization
+\verbatim  
+	% userPrimaryGenerator
+	....
+	Idle>      ---> type your commands. For instance:
+	Idle> /run/beamOn 1
+	....
+	Idle> exit
+\endverbatim
+
+*/

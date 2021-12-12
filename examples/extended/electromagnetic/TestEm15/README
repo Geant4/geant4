@@ -1,0 +1,128 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm15
+                            --------
+
+        How to compute and plot the final state of Multiple Scattering 
+        or Gamma Conversion considered as an isolated processes.
+        The method is exposed below : see item Physics. 
+        
+ 1- GEOMETRY DEFINITION
+ 
+        It is a single box representing a 'semi infinite' homogeneous medium.
+        Two parameters define the geometry :
+        - the material of the box,
+        - the (full) size of the box.
+        
+        The default geometry (100 m of water) is constructed in 
+        DetectorConstruction, but the above parameters can be changed 
+        interactively via the commands defined in DetectorMessenger.
+        
+ 2- PHYSICS LIST
+ 
+        The physics list contains the standard electromagnetic processes.
+        In order not to introduce 'artificial' constraints on the step size, 
+        there is no limitation from the maximum energy lost per step.  
+         
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+        The primary kinematic consists of a single particle starting at the edge
+        of the box. The type of the particle and its energy are set in 
+        PrimaryGeneratorAction (1 MeV electron), and can be changed via the G4 
+        build-in commands of ParticleGun class (see the macros provided with 
+        this example).
+        
+ 4- PHYSICS
+ 
+        All discrete processes are inactivated (see provided macros),
+        so that Multiple Scattering or Gamma Conversion is 'forced' to
+        determine the first step of the primary particle.
+        The step size and the final state are computed  and plotted.
+        Then the event is immediately killed.
+        
+        The result is compared with the 'input' data, i.e. with the cross
+        sections stored in the PhysicsTables and used by Geant4.
+        
+        The stepMax command provides an additional control of the step size of
+        the multiple scattering.
+        
+
+ 5- HISTOGRAMS
+         
+        The test contains 16 built-in 1D histograms, which are managed by 
+        G4AnalysisManager and its Messenger. The histos can be individually 
+        activated with the command :
+        /analysis/h1/set id nbBins  valMin valMax unit 
+        where unit is the desired unit for the histo (MeV or keV, etc..)
+        (see the macros xxxx.mac).
+                
+        1       Multiple Scattering. True step length
+        2       Multiple Scattering. Geom step length
+        3       Multiple Scattering. Ratio geomSl/trueSl
+        4       Multiple Scattering. Lateral displacement: radius
+        5       Multiple Scattering. Lateral displac: psi_space
+        6       Multiple Scattering. Angular distrib: theta_plane
+        7       Multiple Scattering. Phi-position angle
+        8       Multiple Scattering. Phi-direction angle
+        9       Multiple Scattering. Correlation: cos(phiPos-phiDir)
+
+        10      Gamma Conversion. Open Angle * Egamma
+        11      Gamma Conversion. Log10(P recoil)
+        12      Gamma Conversion. Phi P recoil angle
+        13      Gamma Conversion. Phi P plus angle
+        14      Gamma Conversion. 2 * cos(phiplus + phiminus) Asymmetry
+        15      Gamma Conversion. E plus / E gamma
+        16      Gamma Conversion. Phi of Gamma Polarization
+
+      
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /analysis/setFileName  name  (default testem15)
+   
+   It is possible to choose the format of the histogram file : root (default),
+   hbook, xml, csv, by using namespace in HistoManager.hh       
+        
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii (default testem15)
+                                        
+ 6- VISUALIZATION
+ 
+        The Visualization Manager is set in the main().
+        The initialization of the drawing is done via the commands
+        /vis/... in the macro vis.mac. To get visualization:
+        > /control/execute vis.mac
+        
+        The detector has a default view which is a longitudinal view of the 
+        box.
+        
+        The tracks are drawn at the end of event, and erased at the end of run.
+        
+ 7- HOW TO START ?
+ 
+        execute TestEm15 in 'batch' mode from macro files :
+                % TestEm15   compt.mac
+                
+        execute TestEm15 in 'interactive mode' with visualization :
+                % TestEm15
+                Idle> control/execute vis.mac
+                ....
+                Idle> type your commands
+                ....
+                Idle> exit
+ 
+8 - MACROS
+       The examples of macros for Multiple Scattering:
+       electron.mac muon.mac  proton.mac
+
+       The example of Gamma Conversion macro :
+       gamma.mac - gamma to e+ e- 
+       gamma2mumu.mac gamma to mu+ mu- 

@@ -1,0 +1,39 @@
+
+        Geant4 extended examples - exotic physics
+        ----------------------------------------------
+
+ Examples in this directory demonstrate exotic physics applications. 
+ Currently, four examples are provided:
+
+channeling
+----------
+
+This example simulates channeling of 400 GeV/c protons in a bent crystal.
+
+dmparticle
+---------
+This is very preliminary and simplified Geant4 example for light dark matter 
+(LDM) particles. 
+
+monopole
+---------
+
+This example is devoted to the energy deposited by classical magnetic
+monopole.
+
+phonon
+------
+
+This example simulates phonons in sub-Kelvin temperature Germanium crystal.
+
+saxs
+----
+
+The example saxs implements the typical setup of a Small Angle X-ray
+Scattering (SAXS) experiment.
+
+ucn
+---
+
+This example simulates the passage of ultra-cold neutrons (UCN) in a
+hollow pipe.

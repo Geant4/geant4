@@ -1,0 +1,160 @@
+
+///\file "hadronic/Hadr01/.README.txt"
+///\brief Example Hadr01 README page
+
+/*! \page ExampleHadr01 Example Hadr01
+
+\author A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov \n
+CERN, Geneva, Switzerland \n
+Karolinska Institute & Hospital, Stockholm, Sweden \n
+Lebedev Physical Institute, Moscow, Russia
+
+This example application is based on the application IION developed for
+simulation of proton or ion beam interaction with a water target. Different 
+aspects of beam target interaction are demonstrating in the example including 
+longitudinal profile of energy deposition, spectra of secondary  particles,
+spectra of particles leaving the target. The results are presenting in a form
+of average numbers and histograms. 
+
+
+\section Hadr01_s1 GEOMETRY
+
+The Target volume is a cylinder placed inside Check cylindrical volume. The 
+Check volume is placed inside the World volume. The radius and the length of
+the Check volume are 1 mm larger than the radius and the length of the Target.
+The material of the Check volume is the same as the World material.  The World
+volume has the sizes 10 mm larger than that of the Target volume.  Any material
+from the Geant4 database can be defined. The default World  material is
+G4Galactic and the default  Target material is aluminum. The Target is
+subdivided on number of equal slices. Following UI commands are available to
+modify the geometry:
+
+\verbatim
+/testhadr/TargetMat     G4_Pb
+/testhadr/WorldMat      G4_AIR
+/testhadr/TargetRadius  10 mm
+/testhadr/TargetLength  20 cm
+/testhadr/NumberDivZ    200
+\endverbatim
+
+Beam direction coincides with the target axis and is Z axis in the global
+coordinate system. The beam starts 5 mm in front of the target. G4ParticleGun
+is used as a primary generator. The energy and the type of the beam can be
+defined via standard UI commands
+
+\verbatim
+/gun/energy   15 GeV
+/gun/particle proton
+\endverbatim
+
+Default beam position is -(targetHalfLength + 5*mm) and direction along Z axis.
+Beam position and direction can be changed by gun UI commands:
+
+\verbatim
+/gun/position  1 10 3 mm
+/gun/direction 1 0 0
+\endverbatim
+
+however, position command is active only if before it the flag is set
+
+\verbatim
+/testhadr/DefaultBeamPosition false   
+\endverbatim
+ 
+\section Hadr01_s2 SCORING
+
+The scoring is performed with the help of UserStackingAction class and two
+sensitive detector  classes: one associated with a target slice, another with
+the Check volume. Each secondary particle is scored by the StackingAction.  In
+the StackingAction it is also possible to kill all or one type of secondary 
+particles 
+
+\verbatim
+/testhadr/Kill             neutron
+/testhadr/KillAllSecondaries  
+\endverbatim
+
+To control running the following options are available:
+
+\verbatim
+/testhadr/PrintModulo      100
+/testhadr/DebugEvent       977
+\endverbatim
+
+The last command selects an events, for which "/tracking/verbose 2" level
+of printout is established.
+
+
+\section Hadr01_s3 PHYSICS
+
+PhysicsList of the application uses reference Phsyics Lists or its components, 
+which are distributed with Geant4 in /geant4/physics_lists subdirectory.
+
+The reference Physics List name may be defined in the 3d argument of the 
+run command: 
+
+\verbatim
+Hadr01 my.macro QGSP_BERT 
+\endverbatim
+
+If 3d argument is not set then the PHYSLIST environment variable is checked. 
+If both are not defined then reference Phsyics Lists is not instantiated, 
+instead the local Physics List is used which is built from components using 
+UI interface. The choice of the physics is provided by the UI command:
+
+\verbatim
+/testhadr/Physics     QGSP_BIC
+\endverbatim
+
+To see the list of available configurations with UI one can use
+
+\verbatim
+/testhadr/ListPhysics
+\endverbatim
+
+The cuts for electromagnetic physics can be established via
+
+\verbatim
+/testhadr/CutsAll       1 mm
+/testhadr/CutsGamma   0.1 mm
+/testhadr/CutsEl      0.2 mm
+/testhadr/CutsPos     0.3 mm
+/testhadr/CutsProt    0.6 mm
+\endverbatim
+
+Note that testhadr UI commands are not available in the case when PHYSLIST 
+environment variable is defined. 
+
+
+\section Hadr01_s4 VISUALIZATION
+
+For interactive mode G4 visualization options and variables should be
+defined, then the example should be recompiled:
+
+\verbatim
+gmake visclean
+gmake
+\endverbatim
+
+
+\section Hadr01_s5 HISTOGRAMS
+
+There are built in histograms. The 1st one (idx=0, id="1") scores energy
+deposition along the target. Histograms "22", "23", "24", "25" scores
+energy deposition per particle type.
+ 
+All other histograms are provided in decimal logarithmic scale (log10(E/MeV),
+where E is secondary particle energy at production
+
+It is possible to change scale and output file name using UI commands:
+
+\verbatim
+/testhadr/histo/fileName name
+/testhadr/histo/setHisto idx nbins vmin vmax unit
+\endverbatim
+
+Only ROOT histograms are available.
+
+All histograms are normalized to the number of events.
+  
+*/

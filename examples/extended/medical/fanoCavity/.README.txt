@@ -1,0 +1,181 @@
+
+///\file "medical/fanoCavity/.README.txt"
+///\brief Example fanoCavity README page
+
+/*! \page ExamplefanoCavity Example fanoCavity
+
+ This program computes the dose deposited in an ionization chamber by a
+ monoenergetic photon beam.
+ The geometry of the chamber satisfies the conditions of charged particle
+ equilibrium. Hence, under idealized conditions, the ratio of the dose 
+ deposited over the beam energy fluence must be equal to the 
+ mass_energy_transfer coefficient of the wall material.
+ 
+ E.Poon and al, Phys. Med. Biol. 50 (2005) 681 \n
+ I.Kawrakow, Med. Phys. 27-3 (2000) 499 \n
+
+\section ExamplefanoCavity_s1 GEOMETRY
+ 
+ The chamber is modelized as a cylinder with a cavity in it.
+ 
+ 6 parameters define the geometry :
+   - the material of the wall of the chamber
+   - the radius of the chamber and the thickness of the wall
+   - the material of the cavity
+   - the radius and the thickness of the cavity
+
+ Wall and cavity must be made of the same material, but with different
+ density
+ 
+ All above parameters can be redifined via the UI commands built in 
+ DetectorMessenger class
+<pre>
+                    -----------------
+                    |               |
+                    | wall          |
+                    |     -----     |
+                    |     |   |     |
+                    |     | <-+-----+--- cavity
+         ------>    |     |   |     |
+         ------>    |     |   |     |
+   beam     -------------------------------- cylinder axis
+         ------>    |     |   |     |
+         ------>    |     |   |     |
+                    |     |   |     |
+                    |     |   |     |
+                    |     -----     |
+                    |               |
+                    |               |
+                    -----------------
+
+</pre>
+
+\section ExamplefanoCavity_s2 BEAM
+  
+ Monoenergetic incident photon beam is uniformly distribued, perpendicular 
+ to the flat end of the chamber. The beam radius can be controled with an
+ UI command built in PrimaryGeneratorMessenger; the default is full wall 
+ chamber radius.
+ 
+ Beam regeneration : after each Compton interaction, the scattered photon is
+ reset to its initial state, energy and direction. Consequently, interaction
+ sites are uniformly distribued within the wall material.
+ 
+ This modification must be done in the ParticleChange of the final state 
+ of the Compton scattering interaction. Therefore, a specific model
+ (MyKleinNishinaCompton) is assigned to the ComptonScattering process in
+ PhysicsList. MyKleinNishinaCompton inherites from G4KleinNishinaCompton;
+ only the function SampleSecondaries() is overwritten.
+ 
+\section ExamplefanoCavity_s3 PURPOSE OF THE PROGRAM
+ 
+ The program computes the dose deposited in the cavity and the ratio
+ Dose/Beam_energy_fluence. This ratio is compared to the mass_energy_transfer
+ coefficient of the wall material.
+ 
+ The mass_energy_transfer coefficient needs :
+ - the photon total cross section, which is read from the PhysicsTables
+ by G4EmCalculator (see EndOfRunAction).
+ - the average kinetic energy of charged secondaries generated in the
+ wall during the run. 
+ 
+ The program needs high statistic to reach precision on the computed dose.
+ The UI command /testem/event/printModulo allows to survey the convergence of
+ the kineticEnergy and dose calculations.
+ 
+ In addition, to increase the program efficiency, the secondary particles
+ which have no chance to reach the cavity are immediately killed (see
+ StackinAction). This feature can be switched off by an UI command (see
+ StackingMessenger).
+ 
+ The simplest way to study the effect of e- tracking parameters on dose 
+ deposition is to use the command /testem/stepMax.
+ 
+\section ExamplefanoCavity_s4 PHYSICS
+ 
+ The physics lists contains the standard electromagnetic processes, with few 
+ modifications listed here.
+ 
+ - Compton scattering : as explained above, the final state is modified in
+ MyKleinNishinaCompton class.
+ \n\n
+ In order to make the program more efficient, one can increase the Compton
+ cross section via the function SetCSFactor(factor) and its 
+ associated UI command. Default is factor=1000.
+ 
+ - Bremsstrahlung : Fano conditions imply no energy transfer via
+ bremsstrahlung radiation. Therefore this process is not registered in the
+ physics list. However, it is always possible to include it.
+ See PhysListEmStandard class.
+ 
+ - Ionisation : In order to have same stopping power in wall and cavity, one
+ must cancel the density correction term in the dedx formula. This is done in
+ a specific MollerBhabha model (MyMollerBhabhaModel) which inherites from 
+ G4MollerBhabhaModel.
+ \n\n
+ To prevent explicit generation of delta-rays, the default production
+ threshold (i.e. cut) is set to 10 km (CSDA condition).
+ \n\n
+ The finalRange of the step function is set to 10 um, which more on less
+ correspond to a tracking cut in water of about 20 keV. See emOptions.
+ Once again, the above parameters can be controled via UI commands.
+ 
+ - Multiple scattering : is switched in single Coulomb scattering mode near
+ boundaries. This is selected via EM options in PhysicsList, and can be
+ controled with UI commands.
+ 
+ - All PhysicsTables are built with 100 bins per decade.  
+ 
+\section ExamplefanoCavity_s5 HISTOGRAMS
+ 
+  fanoCavity has several predefined 1D histograms : 
+  -  1 : emission point of e+-
+  -  2 : energy spectrum of e+-
+  -  3 : theta distribution of e+-
+  -  4 : emission point of e+- hitting cavity
+  -  5 : energy spectrum of e+- when entering in cavity
+  -  6 : theta distribution of e+- before enter in cavity
+  -  7 : theta distribution of e+- at first step in cavity      
+  -  8 : track segment of e+- in cavity
+  -  9 : step size of e+- in wall
+  - 10 : step size of e+- in cavity
+  - 11 : energy deposit in cavity per track     
+      
+  The histograms are managed by G4AnalysisManager class and its messenger. 
+  The histos can be individually activated with the command :
+\verbatim
+/analysis/h1/set id nbBins  valMin valMax unit 
+\endverbatim
+  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+  
+   One can control the name of the histograms file with the command:
+\verbatim
+/analysis/setFileName  name  (default fanoCavity)
+\endverbatim
+   
+   It is possible to choose the format of the histogram file :
+   root(default), xml, hbook.  See HistoManager.hh
+   
+   It is also possible to print selected histograms on an ascii file:
+\verbatim
+/analysis/h1/setAscii id
+\endverbatim
+   All selected histos will be written on a file name.ascii (default fanocavity)
+ 
+\section ExamplefanoCavity_s6 HOW TO START ?
+ 
+ - Execute fanoCavity in 'batch' mode from macro files
+\verbatim
+% fanoCavity   run01.mac
+\endverbatim
+ 
+ - Execute fanoCavity in 'interactive mode' with visualization
+\verbatim
+% fanoCavity
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+
+*/
