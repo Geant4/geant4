@@ -143,6 +143,8 @@ G4MoleculeShootMessenger::~G4MoleculeShootMessenger()
 }
 
 //------------------------------------------------------------------------------
+extern template
+void TG4MoleculeShoot<G4Track>::Shoot(G4MoleculeGun*);
 
 void G4MoleculeShootMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
