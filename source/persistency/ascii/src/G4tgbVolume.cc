@@ -404,7 +404,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
       {
         phiTotal = twopi;
       }
-      solid = new G4Polycone(sname, solParam[0], phiTotal*deg,  // start,delta-phi
+      solid = new G4Polycone(sname, solParam[0], phiTotal,  // start,delta-phi
                              nplanes,                       // sections
                              &((*z_p)[0]), &((*rmin_p)[0]), &((*rmax_p)[0]));
     }
@@ -423,7 +423,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
         phiTotal = twopi;
       }
       solid =
-        new G4GenericPolycone(sname, solParam[0], phiTotal*deg,  // start,delta-phi
+        new G4GenericPolycone(sname, solParam[0], phiTotal,  // start,delta-phi
                               nplanes,                       // sections
                               &((*R_c)[0]), &((*Z_c)[0]));
     }
