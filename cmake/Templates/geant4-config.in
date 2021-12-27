@@ -131,6 +131,7 @@ libs="-lG4interfaces \
 -lG4intercoms \
 -lG4global \
 -lG4tools \
+-lG4tasking \
 @G4_LINK_CXX_FILESYSTEM@"
 
 #-----------------------------------------------------------------------
