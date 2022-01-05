@@ -282,7 +282,10 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 		    message);
       }
     }
-    
+    else{
+      // reset the zero step counter when a non-zero step was performed
+      fNumberZeroSteps = 0;
+    }
     if( (bFirstStep) && (newStep < currentProposedStepLength) )
     {
       exiting  = true;
