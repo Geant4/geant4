@@ -44,10 +44,14 @@
 #include "G4tgrMaterial.hh"
 #include "G4tgrMaterialSimple.hh"
 #include "G4tgrMaterialMixture.hh"
+#include "G4tgrMaterialPropertiesTable.hh"
+#include "G4tgrBorderSurface.hh"
 
 using G4mstgrisot = std::map<G4String, G4tgrIsotope*>;
 using G4mstgrelem = std::map<G4String, G4tgrElement*>;
 using G4mstgrmate = std::map<G4String, G4tgrMaterial*>;
+using G4mstgrmpt  = std::map<G4String, G4tgrMaterialPropertiesTable*>;
+using G4mstgrbrdr = std::map<G4String, G4tgrBorderSurface*>;
 
 class G4tgrMaterialFactory
 {
@@ -75,6 +79,14 @@ class G4tgrMaterialFactory
       // Build a G4tgrMaterialByWeight or G4tgrMaterialByNoAtoms
       // or G4tgrMaterialByVolume and add it to the Materials list
 
+    G4tgrMaterialPropertiesTable* 
+        AddMaterialPropertiesTable(const std::vector<G4String>& wl);
+      // Build a G4tgrMaterialPropertiesTable and add it to the Materials list
+
+    G4tgrBorderSurface* 
+        AddBorderSurface(const std::vector<G4String>& wl);
+      // Build a G4tgrBorderSurface and add it to the Materials list
+
     G4tgrIsotope* FindIsotope(const G4String& name) const;
       // Look for a G4tgrIsotope and if not found return 0
 
@@ -84,16 +96,32 @@ class G4tgrMaterialFactory
     G4tgrMaterial* FindMaterial(const G4String& name) const;
       // Look for an G4tgrMaterial and if not found return 0
 
+    G4tgrMaterialPropertiesTable* 
+          FindMaterialPropertiesTable(const G4String& name) const;
+      // Look for an G4tgrMaterialPropertiesTable and if not found return 0
+
+    G4tgrBorderSurface* 
+          FindBorderSurface(const G4String& name) const;
+      // Look for an G4tgrBorderSurface and if not found return 0
+
     void DumpIsotopeList() const;
       // Dump detailed list of isotopes
     void DumpElementList() const;
       // Dump detailed list of elements
     void DumpMaterialList() const;
       // Dump detailed list of materials
+    void DumpMaterialPropertiesTableList() const;
+      // Dump detailed list of material property tables
+    void DumpBorderSurfaceList() const;
+      // Dump detailed list of border surfaces
 
     const G4mstgrisot& GetIsotopeList() const { return theG4tgrIsotopes; }
     const G4mstgrelem& GetElementList() const { return theG4tgrElements; }
     const G4mstgrmate& GetMaterialList() const { return theG4tgrMaterials; }
+    const G4mstgrmpt&  GetMaterialPropertyTableList() const 
+          { return theG4tgrMaterialPropertiesTables; }
+    const G4mstgrbrdr&  GetBorderSurfaceList() const 
+          { return theG4tgrBorderSurfaces; }
 
   private:
 
@@ -114,6 +142,10 @@ class G4tgrMaterialFactory
       // List of all G4tgrElements created
     G4mstgrmate theG4tgrMaterials;
       // List of all G4tgrMaterials created
+    G4mstgrmpt  theG4tgrMaterialPropertiesTables;
+      // List of all G4tgrMaterialPropertyTables created
+    G4mstgrbrdr  theG4tgrBorderSurfaces;
+      // List of all G4tgrBorderSurfaces created
 };
 
 #endif

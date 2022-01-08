@@ -40,11 +40,14 @@
 #include "G4tgbIsotope.hh"
 #include "G4tgbElement.hh"
 #include "G4tgbMaterial.hh"
+#include "G4tgbMaterialPropertiesTable.hh"
+#include "G4tgbBorderSurface.hh"
 
 #include "G4tgrIsotope.hh"
 #include "G4tgrElement.hh"
-#include "G4tgrElement.hh"
 #include "G4tgrMaterial.hh"
+#include "G4tgrMaterialPropertiesTable.hh"
+#include "G4tgrBorderSurface.hh"
 
 #include "G4Isotope.hh"
 #include "G4Element.hh"
@@ -53,6 +56,8 @@
 using G4mstgbisot = std::map<G4String, G4tgbIsotope*>;
 using G4mstgbelem = std::map<G4String, G4tgbElement*>;
 using G4mstgbmate = std::map<G4String, G4tgbMaterial*>;
+using G4mstgbprop = std::map<G4String, G4tgbMaterialPropertiesTable*>;
+using G4mstgbbrdr = std::map<G4String, G4tgbBorderSurface*>;
 using G4msg4isot = std::map<G4String, G4Isotope*>;
 using G4msg4elem = std::map<G4String, G4Element*>;
 using G4msg4mate = std::map<G4String, G4Material*>;
@@ -72,6 +77,10 @@ class G4tgbMaterialMgr
       // Copy the G4tgrElements into G4tgbElements
     void CopyMaterials();
       // Copy the G4tgrMaterials into G4tgbMaterials
+    void CopyMaterialPropertiesTable();
+      // Copy the G4tgrMaterialPropertiesTable into G4tgbMaterialPropertiesTable
+    void CopyBorderSurface();
+      // Copy the G4tgrBorderSurface into G4tgbBorderSurface
 
     G4Isotope* FindOrBuildG4Isotope(const G4String& name);
       // Look for a G4Isotope that has to exists
@@ -101,10 +110,19 @@ class G4tgbMaterialMgr
     G4tgbMaterial* FindG4tgbMaterial(const G4String& name,
                                      G4bool bMustExist = false) const;
       // Look for a G4tgbMaterial and if not found return nullptr
+    G4tgbMaterialPropertiesTable* FindG4tgbMaterialPropertiesTable(
+      const G4String& name) const;
+      // Look for a G4tgbMaterialPropertiesTable and if not found return nullptr
+    G4tgbBorderSurface* FindG4tgbBorderSurface(const G4String& name) const;
+      // Look for a G4tgbBorderSurface and if not found return nullptr
 
     const G4msg4isot GetG4IsotopeList() const { return theG4Isotopes; }
     const G4msg4elem GetG4ElementList() const { return theG4Elements; }
     const G4msg4mate GetG4MaterialList() const { return theG4Materials; }
+    const G4mstgbprop GetG4MaterialPropertiesTableList() const { 
+      return theG4tgbMaterialPropertiesTables; }
+    const G4mstgbbrdr GetG4tgbBorderSurfaceList() const { 
+      return theG4tgbBorderSurfaces; }
 
   private:
 
@@ -127,6 +145,10 @@ class G4tgbMaterialMgr
       // Container of all G4Elements created
     G4msg4mate theG4Materials;
       // Container of all G4Materials created
+    G4mstgbprop theG4tgbMaterialPropertiesTables;
+      // Container of all G4MaterialPropertyTables created
+    G4mstgbbrdr theG4tgbBorderSurfaces;
+      // Container of all G4MaterialPropertyTables created
 };
 
 #endif

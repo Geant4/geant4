@@ -57,6 +57,8 @@ G4tgbMaterialMgr* G4tgbMaterialMgr::GetInstance()
     theInstance->CopyIsotopes();
     theInstance->CopyElements();
     theInstance->CopyMaterials();
+    theInstance->CopyMaterialPropertiesTable();
+    theInstance->CopyBorderSurface();
   }
   return theInstance;
 }
@@ -144,6 +146,32 @@ void G4tgbMaterialMgr::CopyMaterials()
       return;
     }
     theG4tgbMaterials[tgb->GetName()] = tgb;
+  }
+}
+
+// --------------------------------------------------------------------
+void G4tgbMaterialMgr::CopyMaterialPropertiesTable()
+{
+  const G4mstgrmpt tgrMPTs =
+    G4tgrMaterialFactory::GetInstance()->GetMaterialPropertyTableList();
+  for(auto cite = tgrMPTs.cbegin(); cite != tgrMPTs.cend(); ++cite)
+  {
+    G4tgrMaterialPropertiesTable* tgr = (*cite).second;
+    G4tgbMaterialPropertiesTable* tgb = new G4tgbMaterialPropertiesTable(tgr);
+    theG4tgbMaterialPropertiesTables[tgb->GetName()]  = tgb;
+  }
+}
+
+// --------------------------------------------------------------------
+void G4tgbMaterialMgr::CopyBorderSurface()
+{
+  const G4mstgrbrdr tgrBrdrs =
+    G4tgrMaterialFactory::GetInstance()->GetBorderSurfaceList();
+  for(auto cite = tgrBrdrs.cbegin(); cite != tgrBrdrs.cend(); ++cite)
+  {
+    G4tgrBorderSurface* tgr = (*cite).second;
+    G4tgbBorderSurface* tgb = new G4tgbBorderSurface(tgr);
+    theG4tgbBorderSurfaces[tgb->GetName()]  = tgb;
   }
 }
 
@@ -380,6 +408,10 @@ G4Material* G4tgbMaterialMgr::FindOrBuildG4Material(const G4String& name,
           tgbmate->GetTgrMate()->GetIonisationMeanExcitationEnergy());
       }
     }
+    // Here Optical properties applys to both G4Material and tgbMaterial.
+    G4tgbMaterialPropertiesTable *tgbmpt = FindG4tgbMaterialPropertiesTable(name);
+    if(tgbmpt)
+      g4mate->SetMaterialPropertiesTable(tgbmpt->BuildG4MaterialPropertiesTable());
 
     // Register it
     if(g4mate != nullptr)
@@ -472,4 +504,47 @@ G4tgbMaterial* G4tgbMaterialMgr::FindG4tgbMaterial(const G4String& name,
   }
 
   return mate;
+}
+
+// --------------------------------------------------------------------
+G4tgbMaterialPropertiesTable* 
+  G4tgbMaterialMgr::FindG4tgbMaterialPropertiesTable(const G4String& name) const
+{
+  G4tgbMaterialPropertiesTable* tgbmpt = nullptr;
+
+  G4mstgbprop::const_iterator cite = theG4tgbMaterialPropertiesTables.find(name);
+  if(cite != theG4tgbMaterialPropertiesTables.cend())
+  {
+    tgbmpt = (*cite).second;
+#ifdef G4VERBOSE
+    if(G4tgrMessenger::GetVerboseLevel() >= 2)
+    {
+      G4cout << " G4tgbMaterialMgr::FindG4tgbMaterialPropertiesTable() " << 
+        "- CopyMaterialPropertyTable: " << name << " = " << tgbmpt << G4endl;
+    }
+#endif
+  }
+
+  return tgbmpt;
+}
+
+// --------------------------------------------------------------------
+G4tgbBorderSurface* G4tgbMaterialMgr::FindG4tgbBorderSurface(const G4String& name) const
+{
+  G4tgbBorderSurface* tgbBrdr = nullptr;
+
+  G4mstgbbrdr::const_iterator cite = theG4tgbBorderSurfaces.find(name);
+  if(cite != theG4tgbBorderSurfaces.cend())
+  {
+    tgbBrdr = (*cite).second;
+#ifdef G4VERBOSE
+    if(G4tgrMessenger::GetVerboseLevel() >= 2)
+    {
+      G4cout << " G4tgbMaterialMgr::FindG4tgbBorderSurface() " << 
+        "- CopyMaterialPropertyTable: " << name << " = " << tgbBrdr << G4endl;
+    }
+#endif
+  }
+
+  return tgbBrdr;
 }

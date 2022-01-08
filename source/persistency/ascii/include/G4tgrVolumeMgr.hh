@@ -42,6 +42,8 @@
 #include "G4tgrElement.hh"
 #include "G4tgrMaterial.hh"
 #include "G4tgrRotationMatrix.hh"
+#include "G4tgrMaterialPropertiesTable.hh"
+#include "G4tgrBorderSurface.hh"
 
 #include <map>
 
@@ -100,6 +102,10 @@ class G4tgrVolumeMgr
     void RegisterMe(G4tgrElement* ele) { theHgElemList.push_back(ele); }
     void RegisterMe(G4tgrMaterial* mat) { theHgMateList.push_back(mat); }
     void RegisterMe(G4tgrRotationMatrix* rm) { theHgRotMList.push_back(rm); }
+    void RegisterMe(G4tgrMaterialPropertiesTable* mpt) {
+     theHgMaterialPropertiesTableList.push_back(mpt); }
+    void RegisterMe(G4tgrBorderSurface* brdr) { 
+      theHgBorderSurfaceList.push_back(brdr); }
 
     // Accessors
 
@@ -112,6 +118,10 @@ class G4tgrVolumeMgr
     std::vector<G4tgrElement*> GetElementList() { return theHgElemList; }
     std::vector<G4tgrMaterial*> GetMaterialList() { return theHgMateList; }
     std::vector<G4tgrRotationMatrix*> GetRotMList() { return theHgRotMList; }
+    std::vector<G4tgrMaterialPropertiesTable*> GetMaterialPropertiesTableList() 
+      { return theHgMaterialPropertiesTableList; }
+    std::vector<G4tgrBorderSurface*> 
+      GetBorderSurfaceList() { return theHgBorderSurfaceList; }
 
   private:
 
@@ -140,6 +150,8 @@ class G4tgrVolumeMgr
     std::vector<G4tgrElement*> theHgElemList;
     std::vector<G4tgrMaterial*> theHgMateList;
     std::vector<G4tgrRotationMatrix*> theHgRotMList;
+    std::vector<G4tgrMaterialPropertiesTable*> theHgMaterialPropertiesTableList;
+    std::vector<G4tgrBorderSurface*> theHgBorderSurfaceList;
 };
 
 #endif

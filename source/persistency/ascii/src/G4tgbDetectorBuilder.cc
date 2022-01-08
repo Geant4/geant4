@@ -89,5 +89,13 @@ G4tgbDetectorBuilder::ConstructDetector(const G4tgrVolume* tgrVoltop)
   }
 #endif
 
+  // add optical surfaces
+  const G4mstgbbrdr tgrbbdrs = 
+    G4tgbMaterialMgr::GetInstance()->GetG4tgbBorderSurfaceList();
+  for(auto cite = tgrbbdrs.cbegin(); cite != tgrbbdrs.cend(); ++cite)
+  {
+    (*cite).second->BuildG4BorderSurface();
+  }
+
   return physvol;
 }

@@ -40,6 +40,9 @@
 
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
+#include "G4LogicalBorderSurface.hh"
+#include "G4MaterialPropertiesTable.hh"
+#include "G4LogicalSkinSurface.hh"
 
 class G4Material;
 class G4Element;
@@ -69,6 +72,8 @@ class G4tgbGeometryDumper
     G4String DumpMaterial(G4Material* mat);
     void DumpElement(G4Element* ele);
     void DumpIsotope(G4Isotope* ele);
+    void DumpLogicalBorderSurface(G4LogicalBorderSurface* surf);
+    void DumpLogicalSkinSurface(G4LogicalSkinSurface* skin);
     G4String DumpSolid(G4VSolid* solid, const G4String& extraName = "");
     void DumpBooleanVolume(const G4String& solidType, G4VSolid* so);
     void DumpMultiUnionVolume(  G4VSolid* so);
@@ -109,6 +114,8 @@ class G4tgbGeometryDumper
     std::map<G4String, G4Material*> theMaterials;
     std::map<G4String, G4Element*> theElements;
     std::map<G4String, G4Isotope*> theIsotopes;
+    std::map<G4String, G4LogicalBorderSurface*> theLogicalBorderSurfaces;
+    std::map<G4String, G4LogicalSkinSurface*> theLogicalSkinSurfaces;
     std::map<G4String, G4VSolid*> theSolids;
     std::map<G4String, G4LogicalVolume*> theLogVols;
     std::map<G4String, G4VPhysicalVolume*> thePhysVols;

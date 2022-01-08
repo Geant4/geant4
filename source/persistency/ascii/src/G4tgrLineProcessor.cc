@@ -45,6 +45,7 @@
 #include "G4tgrMaterialFactory.hh"
 #include "G4tgrRotationMatrixFactory.hh"
 #include "G4tgrMessenger.hh"
+#include "G4NistManager.hh"
 
 // --------------------------------------------------------------------
 G4tgrLineProcessor::G4tgrLineProcessor()
@@ -196,6 +197,35 @@ G4bool G4tgrLineProcessor::ProcessLine(const std::vector<G4String>& wl)
                   FatalException, wl[1]);
     }
     mate->SetPressure(G4tgrUtils::GetDouble(wl[2], atmosphere));
+
+    //------------------------------- optical properties
+  }
+  else if(wl0 == ":PROP")
+  {
+    G4Material* g4mate = G4NistManager::Instance()->FindOrBuildMaterial(wl[1]);
+    G4tgrMaterial* tgrmate;
+    if(g4mate == nullptr)
+    {
+      tgrmate = G4tgrMaterialFactory::GetInstance()->FindMaterial(
+        G4tgrUtils::GetString(wl[1]));
+    }
+
+    if(g4mate == nullptr && tgrmate == nullptr)
+    {
+      G4Exception("G4tgrLineProcessor::ProcessLine()", "Material not found",
+                  FatalException, wl[1]);
+    }
+
+    G4tgrMaterialPropertiesTable* tgrmpt = 
+      G4tgrMaterialFactory::GetInstance()->AddMaterialPropertiesTable(wl);
+    volmgr->RegisterMe(tgrmpt);
+
+    //------------------------------- optical surface
+  }
+  else if(wl0 == ":SURF")
+  {
+    G4tgrBorderSurface *brdr = G4tgrMaterialFactory::GetInstance()->AddBorderSurface(wl);
+    volmgr->RegisterMe(brdr); // add to volume manager
 
     //------------------------------- solid
   }
