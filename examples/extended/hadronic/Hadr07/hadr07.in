@@ -10,14 +10,14 @@
 /testhadr/det/setAbsor 1 Li7  30 cm
 /testhadr/det/setSizeYZ 30 cm
 #
-/run/initialize
+/process/em/verbose 0
+/process/had/verbose 1
 #
-/process/list
+/run/initialize
 #
 /testhadr/gun/setDefault
 /gun/particle neutron
 /gun/energy 14.1 MeV
 #
 /run/printProgress 1000
-#
 /run/beamOn 10000

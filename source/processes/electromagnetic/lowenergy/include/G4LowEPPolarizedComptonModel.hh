@@ -65,7 +65,7 @@
 #define G4LowEPPolarizedComptonModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include <limits>
 #include "G4Electron.hh"
 #include "G4ParticleChangeForGamma.hh"
@@ -79,7 +79,6 @@
 #include "G4Exp.hh"
 #include "G4ForceCondition.hh"
 
-
 class G4ParticleChangeForGamma;
 class G4VAtomDeexcitation;
 class G4ShellData;
@@ -87,67 +86,64 @@ class G4DopplerProfile;
 
 class G4LowEPPolarizedComptonModel : public G4VEmModel
 {
-
 public:
-
-  G4LowEPPolarizedComptonModel(const G4ParticleDefinition* p = 0, 
+  explicit G4LowEPPolarizedComptonModel(const G4ParticleDefinition* p = nullptr, 
 		          const G4String& nam = "LowEPComptonModel");
-  
   virtual ~G4LowEPPolarizedComptonModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*,
-                               G4VEmModel* masterModel);
+  void InitialiseLocal(const G4ParticleDefinition*,
+		       G4VEmModel* masterModel) override;
 
-  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
 
-  virtual G4double ComputeCrossSectionPerAtom( const G4ParticleDefinition*,
-                                               G4double kinEnergy,
-                                               G4double Z,
-                                               G4double A=0,
-                                               G4double cut=0,
-                                               G4double emax=DBL_MAX );
+  G4double ComputeCrossSectionPerAtom( const G4ParticleDefinition*,
+				       G4double kinEnergy,
+				       G4double Z,
+				       G4double A=0,
+				       G4double cut=0,
+				       G4double emax=DBL_MAX ) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4DynamicParticle*,
-                                 G4double tmin,
-                                 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+
+  G4LowEPPolarizedComptonModel & operator=(const  G4LowEPPolarizedComptonModel &right) = delete;
+  G4LowEPPolarizedComptonModel(const  G4LowEPPolarizedComptonModel&) = delete;
 
 private:
-
   void ReadData(size_t Z, const char* path = 0);
 
   G4double ComputeScatteringFunction(G4double x, G4int Z);
-
-  G4LowEPPolarizedComptonModel & operator=(const  G4LowEPPolarizedComptonModel &right);
-  G4LowEPPolarizedComptonModel(const  G4LowEPPolarizedComptonModel&);
-
   G4ThreeVector GetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
   G4ThreeVector GetPerpendicularPolarization(const G4ThreeVector& direction0, const G4ThreeVector& polarization0) const;
-
   G4ThreeVector SetNewPolarization(G4double LowEPPCepsilon, G4double sinT2,
                                    G4double phi, G4double cosTheta);
   G4double SetPhi(G4double, G4double);
 
+  void SystemOfRefChange(G4ThreeVector& direction0, G4ThreeVector& direction1,
+                         G4ThreeVector& polarization0, G4ThreeVector& polarization1);
+
+  void SystemOfRefChangeElect(G4ThreeVector& pdirection, G4ThreeVector& edirection,
+                         G4ThreeVector& ppolarization);
+
   G4ThreeVector SetPerpendicularVector(G4ThreeVector& a); 
-  G4bool isInitialised;
-  G4int verboseLevel;
- 
-  //G4double lowestEnergy;
- 
+  
   G4ParticleChangeForGamma* fParticleChange;
   G4VAtomDeexcitation*      fAtomDeexcitation;
 
   static G4ShellData*       shellData;
   static G4DopplerProfile*  profileData;
 
-  static G4int maxZ;
-  static G4LPhysicsFreeVector* data[100];
-
+  static const G4int maxZ = 99;
+  static G4PhysicsFreeVector* data[100];
   static const G4double ScatFuncFitParam[101][9];
   
+  G4int verboseLevel;
+  G4bool isInitialised;
 };
 
 //****************************************************************************

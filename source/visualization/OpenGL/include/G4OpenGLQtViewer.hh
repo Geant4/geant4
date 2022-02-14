@@ -31,8 +31,6 @@
 //
 // 30/06/2014 : M.Kelsey : Change QPixmap objects to pointers
 
-#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
-
 #ifndef G4OPENGLQTVIEWER_HH
 #define G4OPENGLQTVIEWER_HH
 
@@ -64,6 +62,7 @@ class QKeyEvent;
 class QWheelEvent;
 class QProcess;
 class QTime;
+class QElapsedTimer;
 class QVBoxLayout;
 class QPushButton;
 class QSlider;
@@ -308,7 +307,11 @@ private:
   G4OpenGLQtMovieDialog* fMovieParametersDialog;
   RECORDING_STEP fRecordingStep;
   QProcess *fProcess;
+#if QT_VERSION < 0x050e00
   QTime *fLastEventTime;
+#else
+  QElapsedTimer *fLastEventTime;
+#endif
   int fSpinningDelay;
   int fNbMaxFramesPerSec;
   float fNbMaxAnglePerSec;
@@ -426,7 +429,5 @@ private Q_SLOTS :
   void changeColorAndTransparency(QTreeWidgetItem* item,int val);
   void tableWidgetViewerSetItemChanged(QTableWidgetItem *);
 };
-
-#endif
 
 #endif

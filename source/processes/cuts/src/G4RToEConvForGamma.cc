@@ -23,131 +23,97 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RToEConvForGamma class implementation
 //
-//
-//
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file/  History:
-//    5 Oct. 2002, H.Kuirashige : Structure created based on object model
-// --------------------------------------------------------------
+// Author: H.Kurashige, 05 October 2002 - First implementation
+// --------------------------------------------------------------------
 
 #include "G4RToEConvForGamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4PhysicsLogVector.hh"
-
-#include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 
+// --------------------------------------------------------------------
 G4RToEConvForGamma::G4RToEConvForGamma()  
-  : G4VRangeToEnergyConverter(),
-    Z(-1),  
-    s200keV(0.), s1keV(0.),
-    tmin(0.),    tlow(0.), 
-    smin(0.),    slow(0.),
-    cmin(0.),    clow(0.), chigh(0.)
+  : G4VRangeToEnergyConverter()
 {    
-  theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("gamma");
-  if (theParticle ==0) {
+  theParticle = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
+  if (theParticle == nullptr)
+  {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << " G4RToEConvForGamma::G4RToEConvForGamma() ";
-      G4cout << " Gamma is not defined !!" << G4endl;
+    if (GetVerboseLevel()>0)
+    {
+      G4cout << " G4RToEConvForGamma::G4RToEConvForGamma() - ";
+      G4cout << "Gamma is not defined !!" << G4endl;
     }
 #endif
   } 
-}
-
-G4RToEConvForGamma::~G4RToEConvForGamma()
-{ 
-}
-
-
-// ***********************************************************************
-// ******************* BuildAbsorptionLengthVector ***********************
-// ***********************************************************************
-void G4RToEConvForGamma::BuildAbsorptionLengthVector(
-                            const G4Material* aMaterial,
-                            G4RangeVector* absorptionLengthVector )
-{
-  // fill the absorption length vector for this material
-  // absorption length is defined here as
-  //
-  //    absorption length = 5./ macroscopic absorption cross section
-  //
-  const G4CrossSectionTable* aCrossSectionTable = (G4CrossSectionTable*)(theLossTable);
-  const G4ElementVector* elementVector = aMaterial->GetElementVector();
-  const G4double* atomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-
-  //  fill absorption length vector
-  G4int NumEl = aMaterial->GetNumberOfElements();
-  G4double absorptionLengthMax = 0.0;
-  for (size_t ibin=0; ibin<size_t(TotBin); ibin++) {
-    G4double SIGMA = 0. ;
-    for (size_t iel=0; iel<size_t(NumEl); iel++) {
-      G4int IndEl = (*elementVector)[iel]->GetIndex();
-      SIGMA +=  atomicNumDensityVector[iel]*
-	           (*((*aCrossSectionTable)[IndEl]))[ibin];
-    }
-    //  absorption length=5./SIGMA
-    absorptionLengthVector->PutValue(ibin, 5./SIGMA);
-    if (absorptionLengthMax < 5./SIGMA ) absorptionLengthMax = 5./SIGMA;
+  else
+  {
+    fPDG = theParticle->GetPDGEncoding();
   }
 }
 
+// --------------------------------------------------------------------
+G4RToEConvForGamma::~G4RToEConvForGamma()  
+{}
 
-
-// ***********************************************************************
-// ********************** ComputeCrossSection ****************************
-// ***********************************************************************
-G4double G4RToEConvForGamma::ComputeCrossSection(G4double AtomicNumber,
-						 G4double KineticEnergy) 
+// --------------------------------------------------------------------
+G4double G4RToEConvForGamma::ComputeValue(const G4int Z, 
+                                          const G4double energy) 
 {
-  //  Compute the "absorption" cross section of the photon "absorption"
-  //  cross section means here the sum of the cross sections of the
-  //  pair production, Compton scattering and photoelectric processes
-  const  G4double t1keV = 1.*keV;
-  const  G4double t200keV = 200.*keV;
-  const  G4double t100MeV = 100.*MeV;
+  // Compute the "absorption" cross-section of the photon "absorption".
+  // Cross-section means here the sum of the cross-sections of the
+  // pair production, Compton scattering and photoelectric processes
 
-  //  compute Z dependent quantities in the case of a new AtomicNumber
-  if(std::abs(AtomicNumber-Z)>0.1)  {
-    Z = AtomicNumber;
-    G4double Zsquare = Z*Z;
-    G4double Zlog = std::log(Z);
-    G4double Zlogsquare = Zlog*Zlog;
+  const G4double t1keV = 1.*CLHEP::keV;
+  const G4double t200keV = 200.*CLHEP::keV;
+  const G4double t100MeV = 100.*CLHEP::MeV;
 
-    s200keV = (0.2651-0.1501*Zlog+0.02283*Zlogsquare)*Zsquare;
-    tmin = (0.552+218.5/Z+557.17/Zsquare)*MeV;
-    smin = (0.01239+0.005585*Zlog-0.000923*Zlogsquare)*std::exp(1.5*Zlog);
-    cmin=std::log(s200keV/smin)/(std::log(tmin/t200keV)*std::log(tmin/t200keV));
-    tlow = 0.2*std::exp(-7.355/std::sqrt(Z))*MeV;
-    slow = s200keV*std::exp(0.042*Z*std::log(t200keV/tlow)*std::log(t200keV/tlow));
-    s1keV = 300.*Zsquare;
-    clow =std::log(s1keV/slow)/std::log(tlow/t1keV);
+  G4double Zsquare = Z*Z;
+  G4double Zlog = G4Pow::GetInstance()->logZ(Z);
+  G4double Zlogsquare = Zlog*Zlog;
 
-    chigh=(7.55e-5-0.0542e-5*Z)*Zsquare*Z/std::log(t100MeV/tmin);
-  }
+  G4double tmin = (0.552+218.5/Z+557.17/Zsquare)*CLHEP::MeV;
+  G4double tlow = 0.2*G4Exp(-7.355/std::sqrt(Z))*CLHEP::MeV;
 
-  //  calculate the cross section (using an approximate empirical formula)
+  G4double smin = (0.01239+0.005585*Zlog-0.000923*Zlogsquare)*G4Exp(1.5*Zlog);
+  G4double s200keV = (0.2651-0.1501*Zlog+0.02283*Zlogsquare)*Zsquare;
+
+  G4double cminlog = G4Log(tmin/t200keV); 
+  G4double cmin = G4Log(s200keV/smin)/(cminlog*cminlog);
+
+  G4double slowlog = G4Log(t200keV/tlow);
+  G4double slow = s200keV * G4Exp(0.042*Z*slowlog*slowlog);
+  G4double logtlow = G4Log(tlow/t1keV);
+  G4double clow = G4Log(300.*Zsquare/slow)/logtlow;
+  G4double chigh = (7.55e-5 - 0.0542e-5*Z)*Zsquare*Z/G4Log(t100MeV/tmin);
+
+  // Calculate the cross-section (using an approximate empirical formula)
   G4double xs;
-  if ( KineticEnergy<tlow ) {
-    if(KineticEnergy<t1keV) xs = slow*std::exp(clow*std::log(tlow/t1keV));
-    else                    xs = slow*std::exp(clow*std::log(tlow/KineticEnergy));
-
-  } else if ( KineticEnergy<t200keV ) {
-    xs = s200keV
-         * std::exp(0.042*Z*std::log(t200keV/KineticEnergy)*std::log(t200keV/KineticEnergy));
-
-  } else if( KineticEnergy<tmin ){
-    xs = smin
-         * std::exp(cmin*std::log(tmin/KineticEnergy)*std::log(tmin/KineticEnergy));
-
-  } else {
-    xs = smin + chigh*std::log(KineticEnergy/tmin);
-
+  if ( energy < tlow )
+  {
+    xs = (energy < t1keV) ? slow*G4Exp(clow*logtlow) :
+      slow*G4Exp(clow*G4Log(tlow/energy));
   }
-  return xs * barn;
+  else if ( energy < t200keV )
+  {
+    G4double x = G4Log(t200keV/energy);
+    xs = s200keV * G4Exp(0.042*Z*x*x);
+  }
+  else if( energy<tmin )
+  {
+    const G4double x = G4Log(tmin/energy);
+    xs = smin * G4Exp(cmin*x*x);
+  }
+  else
+  {
+    xs = smin + chigh*G4Log(energy/tmin);
+  }
+  return xs * CLHEP::barn;
 }
 
+// --------------------------------------------------------------------

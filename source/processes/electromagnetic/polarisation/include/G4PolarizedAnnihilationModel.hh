@@ -23,122 +23,112 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
-// GEANT4 Class header file
-//
+// Geant4 Class header file
 //
 // File name:     G4PolarizedAnnihilationModel
 //
 // Author:        Andreas Schaelicke and Pavel Starovoitov
 //
-// Creation date: 01.05.2005
-//
-// Modifications:
-// 18-07-06 use newly calculated cross sections (P. Starovoitov)
-// 21-08-06 update interface to geant4.8.1 (A. Schaelicke)
-// 10-07-07 copied Initialise() method from G4eeToTwoGammaModel to provide a  
-//          ParticleChangeForGamma object (A. Schaelicke)
-//
-//
 // Class Description:
+//   Implementation of polarized gamma Annihilation scattering on free electron
 //
-// Implementation of polarized gamma Annihilation scattering on free electron
-// 
-
 // -------------------------------------------------------------------
-//
 
 #ifndef G4PolarizedAnnihilationModel_h
 #define G4PolarizedAnnihilationModel_h 1
 
+#include "globals.hh"
 #include "G4eeToTwoGammaModel.hh"
+#include "G4ThreeVector.hh"
 #include "G4StokesVector.hh"
 
+class G4DynamicParticle;
+class G4MaterialCutsCouple;
 class G4ParticleChangeForGamma;
-class G4PolarizedAnnihilationCrossSection;
+class G4ParticleDefinition;
+class G4PolarizedAnnihilationXS;
 
 class G4PolarizedAnnihilationModel : public G4eeToTwoGammaModel
 {
+ public:
+  explicit G4PolarizedAnnihilationModel(
+    const G4ParticleDefinition* p = nullptr,
+    const G4String& nam           = "Polarized-Annihilation");
 
-public:
+  virtual ~G4PolarizedAnnihilationModel() override;
 
-  explicit G4PolarizedAnnihilationModel(const G4ParticleDefinition* p = nullptr, 
-			const G4String& nam = "Polarized-Annihilation");
+  virtual void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector&) override;
 
-  virtual ~G4PolarizedAnnihilationModel();
+  virtual G4double ComputeCrossSectionPerElectron(G4double kinEnergy) override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) final;
-
-  virtual G4double 
-  ComputeCrossSectionPerElectron(G4double kinEnergy) final;
-
-  void ComputeAsymmetriesPerElectron(G4double gammaEnergy,
-				     G4double & valueX,
-				     G4double & valueA,
-				     G4double & valueT);
+  void ComputeAsymmetriesPerElectron(G4double gammaEnergy, G4double& valueX,
+                                     G4double& valueA, G4double& valueT);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) final;
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*, G4double tmin,
+                                 G4double maxEnergy) final;
 
-  // polarized routines 
-  inline void SetTargetPolarization(const G4ThreeVector & pTarget);
-  inline void SetBeamPolarization(const G4ThreeVector & pBeam);
-  inline const G4ThreeVector & GetTargetPolarization() const;
-  inline const G4ThreeVector & GetBeamPolarization() const;
-  inline const G4ThreeVector & GetFinalGamma1Polarization() const;
-  inline const G4ThreeVector & GetFinalGamma2Polarization() const;
+  // polarized routines
+  inline void SetTargetPolarization(const G4ThreeVector& pTarget);
+  inline void SetBeamPolarization(const G4ThreeVector& pBeam);
+  inline const G4ThreeVector& GetTargetPolarization() const;
+  inline const G4ThreeVector& GetBeamPolarization() const;
+  inline const G4ThreeVector& GetFinalGamma1Polarization() const;
+  inline const G4ThreeVector& GetFinalGamma2Polarization() const;
 
-private:
+  G4PolarizedAnnihilationModel& operator                            =(
+    const G4PolarizedAnnihilationModel& right) = delete;
+  G4PolarizedAnnihilationModel(const G4PolarizedAnnihilationModel&) = delete;
 
-  // hide assignment operator
-  G4PolarizedAnnihilationModel & 
-  operator=(const  G4PolarizedAnnihilationModel &right) = delete;
-  G4PolarizedAnnihilationModel(const  G4PolarizedAnnihilationModel&) = delete;
+ private:
+  G4PolarizedAnnihilationXS* fCrossSectionCalculator;
+  G4ParticleChangeForGamma* fParticleChange;
 
-  G4PolarizedAnnihilationCrossSection * crossSectionCalculator;
-  // incomming
-  G4StokesVector theBeamPolarization;    // positron
-  G4StokesVector theTargetPolarization;  // electron
+  // incoming
+  G4StokesVector fBeamPolarization;    // positron
+  G4StokesVector fTargetPolarization;  // electron
   // outgoing
-  G4StokesVector finalGamma1Polarization;
-  G4StokesVector finalGamma2Polarization;
+  G4StokesVector fFinalGamma1Polarization;
+  G4StokesVector fFinalGamma2Polarization;
 
-  G4int verboseLevel;
-
-  G4ParticleChangeForGamma* gParticleChange;
+  G4int fVerboseLevel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4PolarizedAnnihilationModel::SetTargetPolarization(const G4ThreeVector & pTarget)
+inline void G4PolarizedAnnihilationModel::SetTargetPolarization(
+  const G4ThreeVector& pTarget)
 {
-  theTargetPolarization = pTarget;
+  fTargetPolarization = G4StokesVector(pTarget);
 }
-inline void G4PolarizedAnnihilationModel::SetBeamPolarization(const G4ThreeVector & pBeam)
+inline void G4PolarizedAnnihilationModel::SetBeamPolarization(
+  const G4ThreeVector& pBeam)
 {
-  theBeamPolarization = pBeam;
+  fBeamPolarization = G4StokesVector(pBeam);
 }
-inline const G4ThreeVector & G4PolarizedAnnihilationModel::GetTargetPolarization() const
+inline const G4ThreeVector&
+G4PolarizedAnnihilationModel::GetTargetPolarization() const
 {
-  return theTargetPolarization;
+  return fTargetPolarization;
 }
-inline const G4ThreeVector & G4PolarizedAnnihilationModel::GetBeamPolarization() const
+inline const G4ThreeVector& G4PolarizedAnnihilationModel::GetBeamPolarization()
+  const
 {
-  return theBeamPolarization;
+  return fBeamPolarization;
 }
-inline const G4ThreeVector &  G4PolarizedAnnihilationModel::GetFinalGamma1Polarization() const
+inline const G4ThreeVector&
+G4PolarizedAnnihilationModel::GetFinalGamma1Polarization() const
 {
-  return finalGamma1Polarization;
+  return fFinalGamma1Polarization;
 }
-inline const G4ThreeVector & G4PolarizedAnnihilationModel::GetFinalGamma2Polarization() const
+inline const G4ThreeVector&
+G4PolarizedAnnihilationModel::GetFinalGamma2Polarization() const
 {
-  return finalGamma2Polarization;
+  return fFinalGamma2Polarization;
 }
 
 #endif

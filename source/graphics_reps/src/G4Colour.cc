@@ -123,8 +123,7 @@ void G4Colour::AddToMap(const G4String& key, const G4Colour& colour)
   }
 
   // Convert to lower case since colour map is case insensitive
-  G4String myKey(key);
-  myKey.toLower();
+  G4String myKey = G4StrUtil::to_lower_copy(key);
 
   std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
   
@@ -164,8 +163,7 @@ G4bool G4Colour::GetColour(const G4String& key, G4Colour& result)
   // Add standard colours to map
   InitialiseColourMap();  // Initialises if not already initialised
 
-  G4String myKey(key);
-  myKey.toLower();
+  G4String myKey = G4StrUtil::to_lower_copy(key);
  
   std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
 
@@ -183,4 +181,17 @@ const std::map<G4String, G4Colour>& G4Colour::GetMap()
   InitialiseColourMap();  // Initialises if not already initialised
  
   return fColourMap;
+}
+
+G4bool G4Colour::operator< (const G4Colour& rhs) const
+{
+  if (red < rhs.red) return true;
+  else if (red == rhs.red) {
+    if (green < rhs.green) return true;
+    else if (green == rhs.green) {
+      if (blue < rhs.blue) return true;
+      else if (blue == rhs.blue) {
+	if (alpha < rhs.alpha) return true;
+      }}}
+  return false;
 }

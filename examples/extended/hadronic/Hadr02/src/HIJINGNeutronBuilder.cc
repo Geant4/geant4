@@ -57,7 +57,7 @@ HIJINGNeutronBuilder::HIJINGNeutronBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HIJINGNeutronBuilder::Build(G4NeutronInelasticProcess * aP)
+void HIJINGNeutronBuilder::Build(G4HadronInelasticProcess * aP)
 {
   fModel->SetMinEnergy(fMin);
   fModel->SetMaxEnergy(fMax);
@@ -74,14 +74,14 @@ HIJINGNeutronBuilder::~HIJINGNeutronBuilder()
 void HIJINGNeutronBuilder::Build(G4HadronElasticProcess * )
 {}
 
-void HIJINGNeutronBuilder::Build(G4HadronFissionProcess* aP)
+void HIJINGNeutronBuilder::Build(G4NeutronFissionProcess* aP)
 {
   fissionModel->SetMinEnergy(0.0);
   fissionModel->SetMaxEnergy(20.0*TeV);
   aP->RegisterMe(fissionModel);
 }
 
-void HIJINGNeutronBuilder::Build(G4HadronCaptureProcess* aP)
+void HIJINGNeutronBuilder::Build(G4NeutronCaptureProcess* aP)
 {
   aP->RegisterMe(captureModel);
 }

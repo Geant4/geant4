@@ -143,8 +143,6 @@ public: //with description
 
   virtual void CrossSectionDescription(std::ostream&) const;
 
-public: // Without Description
-
   virtual G4int GetVerboseLevel() const;
 
   virtual void SetVerboseLevel(G4int value);
@@ -163,11 +161,13 @@ public: // Without Description
 
   inline const G4String& GetName() const;
 
+  inline void SetName(const G4String& nam);
+
 protected:
 
-  inline void SetName(const G4String&);
-
   G4int verboseLevel;
+
+  G4String name;
 
 private:
 
@@ -181,7 +181,6 @@ private:
 
   G4bool isForAllAtomsAndEnergies;
 
-  G4String name;
 };
 
 inline G4double 

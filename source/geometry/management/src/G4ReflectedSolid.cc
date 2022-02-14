@@ -218,7 +218,7 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
   // Separation of transformations. Calculation of the extent is done
   // in a reflection of the global space. In such way, the voxel is
   // reflected, but the solid is transformed just by G4AffineTransform.
-  // It allows to use CalculateExtent() of the solid.
+  // It allows one to use CalculateExtent() of the solid.
 
   // Reflect voxel limits in Z
   //

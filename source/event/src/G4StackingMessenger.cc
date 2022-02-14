@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4StackingMessenger class implementation
 //
-//
+// Author: Makoto Asai, 1996
 // --------------------------------------------------------------------
 
 #include "G4StackingMessenger.hh"
@@ -34,8 +35,8 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4ios.hh"
 
-G4StackingMessenger::G4StackingMessenger(G4StackManager * fCont)
-:fContainer(fCont)
+G4StackingMessenger::G4StackingMessenger(G4StackManager* fCont)
+  : fContainer(fCont)
 {
   stackDir = new G4UIdirectory("/event/stack/");
   stackDir->SetGuidance("Stack control commands.");
@@ -61,7 +62,6 @@ G4StackingMessenger::G4StackingMessenger(G4StackManager * fCont)
   verboseCmd->SetGuidance(" 1 : Minimum statistics");
   verboseCmd->SetGuidance(" 2 : Detailed reports");
   verboseCmd->SetGuidance("Note - this value is overwritten by /event/verbose command.");
-
 }
 
 G4StackingMessenger::~G4StackingMessenger()
@@ -72,15 +72,20 @@ G4StackingMessenger::~G4StackingMessenger()
   delete stackDir;
 }
 
-void G4StackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
+void G4StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
   if( command==statusCmd )
   {
-    G4cout << "========================== Current status of the stack =====" << G4endl;
-    G4cout << " Number of tracks in the stack" << G4endl;
-    G4cout << "    Urgent stack    : " << fContainer->GetNUrgentTrack() << G4endl;
-    G4cout << "    Waiting stack   : " << fContainer->GetNWaitingTrack() << G4endl;
-    G4cout << "    Postponed stack : " << fContainer->GetNPostponedTrack() << G4endl;
+    G4cout << "========================== Current status of the stack ====="
+           << G4endl;
+    G4cout << " Number of tracks in the stack"
+           << G4endl;
+    G4cout << "    Urgent stack    : " << fContainer->GetNUrgentTrack()
+           << G4endl;
+    G4cout << "    Waiting stack   : " << fContainer->GetNWaitingTrack()
+           << G4endl;
+    G4cout << "    Postponed stack : " << fContainer->GetNPostponedTrack()
+           << G4endl;
   }
   else if( command==clearCmd )
   {
@@ -109,4 +114,3 @@ void G4StackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     fContainer->SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));
   }
 }
-

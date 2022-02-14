@@ -79,22 +79,30 @@ private:
     // Body
 private:
     
-    G4int     lastZ;   // The last Z of calculated nucleus
-    G4double  lastSig; // Last value of the Cross Section
-    G4double* lastGDR; // Pointer to the last array of GDR cross sections
-    G4double* lastHEN; // Pointer to the last array of HEn cross sections
-    G4double  lastE;   // Last used in the cross section Energy
-    G4double  lastTH;  // Last value of the Energy Threshold (A-dependent)
-    G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
+    G4int     lastZ = 0;         // The last Z of calculated nucleus
+    G4double  lastSig = 0.0;     // Last value of the Cross Section
+    G4double* lastGDR = nullptr; // Pointer to the last array of GDR cross sections
+    G4double* lastHEN = nullptr; // Pointer to the last array of HEn cross sections
+    G4double  lastE = 0.0;       // Last used in the cross section Energy
+    G4double  lastTH = 0.0;      // Last value of the Energy Threshold (A-dependent)
+    G4double  lastSP = 0.0;      // Last value of the ShadowingPomeron (A-dependent)
     
     // Vector of pointers to the GDRPhotonuclearCrossSection
     std::vector <G4double*> GDR;
 
-    // ejc3 // store deuteron XS
-    G4double* deuteron_GDR;
-    G4double* deuteron_HR;
-    G4double deuteron_TH;
-    G4double deuteron_SP;
+    // store deuteron, triton, He3 XS
+    G4double* deuteron_GDR = nullptr;
+    G4double* deuteron_HR = nullptr;
+    G4double deuteron_TH = 0.0;
+    G4double deuteron_SP = 0.0;
+    G4double* triton_GDR = nullptr;
+    G4double* triton_HR = nullptr;
+    G4double triton_TH = 0.0;
+    G4double triton_SP = 0.0;
+    G4double* he3_GDR = nullptr;
+    G4double* he3_HR = nullptr;
+    G4double he3_TH = 0.0;
+    G4double he3_SP = 0.0;
     
     // Vector of pointers to the HighEnPhotonuclearCrossSect
     std::vector <G4double*> HEN;

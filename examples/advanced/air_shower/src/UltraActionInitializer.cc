@@ -40,20 +40,20 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UltraActionInitializer::UltraActionInitializer() : 
+UltraActionInitializer::UltraActionInitializer() :
   G4VUserActionInitialization()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UltraActionInitializer::~UltraActionInitializer() 
+UltraActionInitializer::~UltraActionInitializer()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void UltraActionInitializer::Build() const 
+void UltraActionInitializer::Build() const
 {
-  
+
   // primary generator
   SetUserAction(new UltraPrimaryGeneratorAction());
 
@@ -65,8 +65,7 @@ void UltraActionInitializer::Build() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void UltraActionInitializer::BuildForMaster() const
-{ 
+{
   //Thread-local RunAction: same class, but code controlled by IsMaster()
   SetUserAction(new UltraRunAction());
 }
-

@@ -1,0 +1,183 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_iros
+#define tools_rroot_iros
+
+#include "object"
+#include "../vmanip"
+#include "../forit"
+#include "../scast"
+
+#include "cids"
+
+namespace tools {
+namespace rroot {
+
+class iros : public virtual iro,protected std::vector<iro*> {  //proteced to avoid using std::vector::clear().
+  typedef std::vector<iro*> parent;
+public:
+  static const std::string& s_store_class() {
+    static const std::string s_v("TObjArray");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::iros");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<iros>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return obj_list_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<iros>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  virtual iro* copy() const {return new iros(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    ifac::args args;
+    bool accept_null = false;
+    return stream(a_buffer,args,accept_null);
+  }
+public:
+  iros(ifac& a_fac)
+  :m_fac(a_fac)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~iros(){
+    _clear();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  iros(const iros& a_from)
+  :iro(a_from)
+  ,parent()
+  ,m_fac(a_from.m_fac)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    tools_vforcit(iro*,a_from,it) {
+      parent::push_back((*it)->copy());
+      m_owns.push_back(true);
+    }
+  }
+  iros& operator=(const iros& a_from){
+    if(&a_from==this) return *this;
+
+    _clear();
+
+    tools_vforcit(iro*,a_from,it) {
+      parent::push_back((*it)->copy());
+      m_owns.push_back(true);
+    }
+
+    return *this;
+  }
+public:
+  parent::const_iterator begin() const {return parent::begin();}
+  parent::iterator begin() {return parent::begin();}
+  parent::const_iterator end() const {return parent::end();}
+  parent::iterator end() {return parent::end();}
+  parent::size_type size() const {return parent::size();}
+public:
+  void cleanup() {_clear();}  //warning : clear is a function of the parent std::vector.
+  void dump(std::ostream& a_out) {
+    a_out << " iros : size " << size() << std::endl;
+    tools_vforcit(iro*,*this,it) {
+      a_out << " class " << (*it)->s_cls() << std::endl;
+    }
+  }
+public:
+  bool stream(buffer& a_buffer,const ifac::args& a_args,bool a_accept_null = false) {
+    _clear();
+
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    //::printf("debug : iros::stream : version %d, byte count %d\n",v,c);
+
+   {uint32 id,bits;
+    if(!Object_stream(a_buffer,id,bits)) return false;}
+    std::string name;
+    if(!a_buffer.read(name)) return false;
+    int nobjects;
+    if(!a_buffer.read(nobjects)) return false;
+    int lowerBound;
+    if(!a_buffer.read(lowerBound)) return false;
+
+    //::printf("debug : iros : name \"%s\", nobject %d, lowerBound %d\n",
+    //  name.c_str(),nobjects,lowerBound);
+
+    for (int i=0;i<nobjects;i++) {
+      //::printf("debug : iros :    n=%d i=%d ...\n",nobjects,i);
+
+      iro* obj;
+      bool created;
+      if(!a_buffer.read_object(m_fac,a_args,obj,created)){
+        a_buffer.out() << "tools::rroot::iros::stream : can't read object." << std::endl;
+        return false;
+      }
+      //::printf("debug : iros :    n=%d i=%d : ok\n",nobjects,i);
+      if(obj) {
+        if(created) {
+          parent::push_back(obj);
+          m_owns.push_back(true);
+	} else { //someone else manage this object.
+          parent::push_back(obj);
+          m_owns.push_back(false);
+	}
+      } else {
+        //a_accept_null for branch::stream m_baskets.
+        if(a_accept_null) {
+          parent::push_back(0);
+          m_owns.push_back(false);
+        }
+      }
+    }
+
+    return a_buffer.check_byte_count(s,c,s_store_class());
+  }
+protected:
+  void _clear() {
+    typedef parent::iterator it_t;
+    typedef std::vector<bool>::iterator itb_t;
+    while(!parent::empty()) {
+      it_t it = parent::begin();
+      itb_t itb = m_owns.begin();
+      iro* entry  = (*it);
+      bool own = (*itb);
+      parent::erase(it);
+      m_owns.erase(itb);
+      if(own) delete entry;
+    }
+  }
+protected:
+  ifac& m_fac;
+  std::vector<bool> m_owns;
+};
+
+/*
+inline bool dummy_TObjArray_pointer_stream(buffer& a_buffer,ifac& a_fac,bool a_owner,bool a_warn) {
+  iros oa(a_fac,a_owner,a_warn);
+  iros oa(a_fac,true,true);
+  ifac::args args;
+  return oa.stream(a_buffer,args);
+}
+*/
+
+}}
+
+#endif

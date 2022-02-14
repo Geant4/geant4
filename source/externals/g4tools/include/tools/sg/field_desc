@@ -1,0 +1,196 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_field_desc
+#define tools_sg_field_desc
+
+#include <string>
+#include <cstddef> //ptrdiff_t
+
+#include <vector>
+
+// fied_desc are used in static and then we do not master their destruction.
+//#ifdef TOOLS_MEM
+//#include "../mem"
+//#include "../S_STRING"
+//#endif
+
+namespace tools {
+namespace sg {
+
+class field_desc {
+  //typedef int offset_t; //could be <0 ?
+//#ifdef TOOLS_MEM
+//  TOOLS_SCLASS(tools::sg::field_desc)
+//#endif
+public:
+  typedef ptrdiff_t offset_t;
+public:
+  field_desc():m_offset(0){ //touchy
+//#ifdef TOOLS_MEM
+//    mem::increment(s_class().c_str());
+//#endif
+  }
+  field_desc(const std::string& a_name,
+             const std::string& a_class,
+             offset_t a_offset,
+             bool a_editable)
+  :m_name(a_name)
+  ,m_class(a_class)
+  ,m_offset(a_offset)
+  ,m_editable(a_editable)
+  {
+//#ifdef TOOLS_MEM
+//    mem::increment(s_class().c_str());
+//#endif
+  }
+  virtual ~field_desc(){
+//#ifdef TOOLS_MEM
+//    mem::decrement(s_class().c_str());
+//#endif
+  }
+public:
+  field_desc(const field_desc& a_from)
+  :m_name(a_from.m_name)
+  ,m_class(a_from.m_class)
+  ,m_offset(a_from.m_offset)
+  ,m_editable(a_from.m_editable)
+  ,m_enums(a_from.m_enums)
+  ,m_opts(a_from.m_opts)
+  {}
+  field_desc& operator=(const field_desc& a_from){
+    m_name = a_from.m_name;
+    m_class = a_from.m_class;
+    m_offset = a_from.m_offset;
+    m_editable = a_from.m_editable;
+    m_enums = a_from.m_enums;
+    m_opts = a_from.m_opts;
+    return *this;
+  }
+public:
+  const std::string& name() const {return m_name;}
+  const std::string& cls() const {return m_class;}
+  offset_t offset() const {return m_offset;}
+
+  void add_enum(const std::string& a_key,int a_value) {m_enums.push_back(enum_t(a_key,a_value));}
+  typedef std::pair<std::string,int> enum_t;
+  const std::vector<enum_t>& enums() const {return m_enums;}
+
+  void add_opt(const std::string& a_value) {m_opts.push_back(a_value);}
+  const std::vector<std::string>& opts() const {return m_opts;}
+
+  bool editable() const {return m_editable;}
+protected:
+  std::string m_name;
+  std::string m_class;
+  offset_t m_offset;
+  bool m_editable;
+  std::vector<enum_t> m_enums;
+  std::vector<std::string> m_opts;
+};
+
+}}
+
+#include <cstdarg>
+
+namespace tools {
+namespace sg {
+
+class field_desc_enums : public field_desc {
+  typedef field_desc parent;
+public:
+  field_desc_enums(const std::string& a_name,const std::string& a_class,offset_t a_offset,bool a_editable,size_t a_num,...)
+  :parent(a_name,a_class,a_offset,a_editable)
+  {
+    va_list args;
+    va_start(args,a_num);
+    for(size_t index=0;index<a_num;index++) {
+      char* _key = va_arg(args,char*);
+      int _value = va_arg(args,int);
+      m_enums.push_back(enum_t(_key,_value));
+    }
+    va_end(args);
+  }
+  virtual ~field_desc_enums() {}
+public:
+  field_desc_enums(const field_desc_enums& a_from):parent(a_from) {}
+  field_desc_enums& operator=(const field_desc_enums& a_from){parent::operator=(a_from);return *this;}
+};
+
+class field_desc_opts : public field_desc {
+  typedef field_desc parent;
+public:
+  field_desc_opts(const std::string& a_name,const std::string& a_class,offset_t a_offset,bool a_editable,size_t a_num,...)
+  :parent(a_name,a_class,a_offset,a_editable)
+  {
+    va_list args;
+    va_start(args,a_num);
+    for(size_t index=0;index<a_num;index++) {
+      char* _value = va_arg(args,char*);
+      m_opts.push_back(_value);
+    }
+    va_end(args);
+  }
+  virtual ~field_desc_opts() {}
+public:
+  field_desc_opts(const field_desc_opts& a_from):parent(a_from) {}
+  field_desc_opts& operator=(const field_desc_opts& a_from){parent::operator=(a_from);return *this;}
+};
+
+}}
+
+#include <ostream>
+#include "../forit"
+
+namespace tools {
+namespace sg {
+
+class desc_fields : public std::vector<field_desc> {
+  typedef std::vector<field_desc> parent;
+public:
+  desc_fields(){}
+  desc_fields(const desc_fields& a_parent,size_t a_num,...){
+    parent::operator=(a_parent);
+    va_list args;
+    va_start(args,a_num);
+    for(size_t index=0;index<a_num;index++) {
+      field_desc* _fd = va_arg(args,field_desc*); //we get ownership.
+      parent::push_back(*_fd);
+      delete _fd;
+    }
+    va_end(args);
+  }
+  virtual ~desc_fields() {}
+public:
+  desc_fields(const desc_fields& a_from):parent(a_from) {}
+  desc_fields& operator=(const desc_fields& a_from){parent::operator=(a_from);return *this;}
+public:
+  void dump(std::ostream& a_out) const {
+    a_out << "num fields " << parent::size() << " :" << std::endl;
+    tools_vforcit(field_desc,*this,it) {
+      const field_desc& _fd = *it;
+      a_out << "name " << _fd.name() << std::endl;
+      a_out << "class " << _fd.cls() << std::endl;
+      a_out << "offset " << _fd.offset() << std::endl;
+      a_out << "editable " << (_fd.editable()?"yes":"no") << std::endl;
+     {const std::vector<field_desc::enum_t>& _enums = _fd.enums();
+      if(_enums.size()) {
+        a_out << "num enums " << _enums.size() << " :" << std::endl;
+        tools_vforcit(field_desc::enum_t,_enums,eit) {
+          a_out << "key " << (*eit).first << ", value " << (*eit).second << std::endl;
+        }
+      }}
+     {const std::vector<std::string>& _opts = _fd.opts();
+      if(_opts.size()) {
+        a_out << "num options " << _opts.size() << " :" << std::endl;
+        tools_vforcit(std::string,_opts,oit) {
+          a_out << " " << (*oit) << std::endl;
+        }
+      }}
+    }
+  }
+};
+
+}}
+
+#endif

@@ -1,8 +1,8 @@
-/tracking/storeTrajectory 1
+/control/verbose 0
+/run/numberOfThreads 4
+/run/verbose 0
+/tracking/verbose 0
 
 /run/initialize
-
-/tracking/verbose 0
-/run/verbose 0
 
 /run/beamOn 10

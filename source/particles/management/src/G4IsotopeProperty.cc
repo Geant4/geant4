@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4IsotopeProperty class implementation
 //
-//
-// 
-// ----------------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-// **********************************************************************
-//      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
+// Author: H.Kurashige, 5 October 1999
+// --------------------------------------------------------------------
 
 #include "G4ios.hh"
 #include <iomanip>
@@ -44,17 +40,10 @@
 // ###                           IsotopeProperty                      ###
 // ######################################################################
 
-G4IsotopeProperty::G4IsotopeProperty():
-                   fAtomicNumber(0),fAtomicMass(0),
-		   fISpin(0),fEnergy(0.0),
-		   fLifeTime(-1.0),
-		   fDecayTable(nullptr),
-		   fMagneticMoment(0.0),
-		   fIsomerLevel(-1),
-                   fFloatLevelBase(G4Ions::G4FloatLevelBase::no_Float)
+G4IsotopeProperty::G4IsotopeProperty()
+  : fFloatLevelBase(G4Ions::G4FloatLevelBase::no_Float)
 {
 }
-
 
 G4IsotopeProperty::~G4IsotopeProperty()
 {
@@ -62,24 +51,24 @@ G4IsotopeProperty::~G4IsotopeProperty()
   fDecayTable = nullptr;
 }
 
-G4IsotopeProperty::G4IsotopeProperty(const  G4IsotopeProperty& right)
-  :fAtomicNumber(right.fAtomicNumber),
-   fAtomicMass(right.fAtomicMass),
-   fISpin(right.fISpin),
-   fEnergy(right.fEnergy),
-   fLifeTime(right.fLifeTime),
-   fDecayTable(nullptr),
-   fMagneticMoment(right.fMagneticMoment),
-   fIsomerLevel(right.fIsomerLevel),
-   fFloatLevelBase(right.fFloatLevelBase)
+G4IsotopeProperty::G4IsotopeProperty(const G4IsotopeProperty& right)
+  : fAtomicNumber(right.fAtomicNumber),
+    fAtomicMass(right.fAtomicMass),
+    fISpin(right.fISpin),
+    fEnergy(right.fEnergy),
+    fLifeTime(right.fLifeTime),
+    fDecayTable(nullptr),
+    fMagneticMoment(right.fMagneticMoment),
+    fIsomerLevel(right.fIsomerLevel),
+    fFloatLevelBase(right.fFloatLevelBase)
 {
   // decay table is not copied because G4DecayTable has no copy constructor
 }
 
-// Assignment operator
 G4IsotopeProperty & G4IsotopeProperty::operator=(G4IsotopeProperty& right)
 {
-  if (this != &right) {
+  if (this != &right)
+  {
     fAtomicNumber    = right.fAtomicNumber;
     fAtomicMass      = right.fAtomicMass;
     fISpin           = right.fISpin;
@@ -94,9 +83,7 @@ G4IsotopeProperty & G4IsotopeProperty::operator=(G4IsotopeProperty& right)
   return *this;
 }
 
- 
-// equal / unequal operator
-G4bool G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
+G4bool G4IsotopeProperty::operator==(const G4IsotopeProperty& right) const
 {
   G4bool value = true;
   value = value && ( fAtomicNumber    == right.fAtomicNumber);
@@ -110,7 +97,7 @@ G4bool G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
   return value;
 }
 
-G4bool G4IsotopeProperty::operator!=(const G4IsotopeProperty &right) const
+G4bool G4IsotopeProperty::operator!=(const G4IsotopeProperty& right) const
 {
   return !(*this == right);
 }
@@ -119,38 +106,39 @@ void G4IsotopeProperty::DumpInfo() const
 {
 #ifdef G4VERBOSE
   G4cout << "AtomicNumber: " << fAtomicNumber << ",  "
-	 << "AtomicMass: " << fAtomicMass << G4endl;
-  if (fISpin %2){
+         << "AtomicMass: " << fAtomicMass << G4endl;
+  if (fISpin %2)
+  {
     G4cout << "Spin: " << fISpin << "/2";
-  } else {
+  }
+  else
+  {
     G4cout << "Spin: " << fISpin /2;
   }
   G4cout << ",   " << "MagneticMoment: " 
-	 << fMagneticMoment/MeV*tesla << "[MeV/T]" <<G4endl;
+         << fMagneticMoment/MeV*tesla << "[MeV/T]" <<G4endl;
   G4cout << "Isomer Level: "
-	 << fIsomerLevel
-	 << ", Excited Energy: " 
-	 << std::setprecision(1) 
-	 << fEnergy/keV;
-  if(fFloatLevelBase!=G4Ions::G4FloatLevelBase::no_Float)
-  { G4cout << " +" << G4Ions::FloatLevelBaseChar(fFloatLevelBase); }
+         << fIsomerLevel
+         << ", Excited Energy: " 
+         << std::setprecision(1) 
+         << fEnergy/keV;
+  if (fFloatLevelBase != G4Ions::G4FloatLevelBase::no_Float)
+  {
+    G4cout << " +" << G4Ions::FloatLevelBaseChar(fFloatLevelBase);
+  }
   G4cout << " [keV]" 
-	 << ",   "
-	 << std::setprecision(6)
-	 << "Life Time: " 
-	 << fLifeTime/ns << "[ns]"
+         << ",   "
+         << std::setprecision(6)
+         << "Life Time: " 
+         << fLifeTime/ns << "[ns]"
          << G4endl;
-  if (fDecayTable != nullptr) {
+  if (fDecayTable != nullptr)
+  {
     fDecayTable->DumpInfo();
-  } else {
+  }
+  else
+  {
     // G4cout << "Decay Table is not defined !" << G4endl;
   }
 #endif
 }
-
-
-
-
-
-
-

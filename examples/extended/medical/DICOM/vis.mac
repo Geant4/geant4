@@ -2,6 +2,8 @@
 #
 # Use this open statement to create an OpenGL view:
 /vis/open OGL 600x600-0+0
+#/vis/ogl/flushAt endOfEvent
+/vis/ogl/flushAt NthPrimitive 1000000
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:

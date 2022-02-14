@@ -87,8 +87,8 @@ class G4INCLXXVInterfaceTally;
  * inclModel -> SetMinEnergy(0.0 * MeV); // Set the energy limits
  * inclModel -> SetMaxEnergy(3.0 * GeV);
  *
- * G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess();
- * G4ProtonInelasticCrossSection* protonInelasticCrossSection =  new G4ProtonInelasticCrossSection();
+ * G4HadronInelasticProcess* protonInelasticProcess = new G4HadronInelasticProcess( "protonInelastic", G4Proton::Definition() );
+ * G4VCrossSectionDataSet* protonInelasticCrossSection = new G4BGGNucleonInelasticXS( G4Proton::Proton() );
  *
  * protonInelasticProcess -> RegisterMe(inclModel);
  * protonInelasticProcess -> AddDataSet(protonInelasticCrossSection);
@@ -153,10 +153,10 @@ private:
   G4double toINCLKineticEnergy(G4HadProjectile const &) const;
 
   /// \brief Convert an INCL particle to a G4DynamicParticle
-  G4DynamicParticle *toG4Particle(G4int A, G4int Z , G4double kinE, G4double px, G4double py, G4double pz) const;
+  G4DynamicParticle *toG4Particle(G4int A, G4int Z, G4int S, G4int PDGCode , G4double kinE, G4double px, G4double py, G4double pz) const;
 
-  /// \brief Convert A and Z to a G4ParticleDefinition
-  G4ParticleDefinition *toG4ParticleDefinition (G4int A, G4int Z) const;
+  /// \brief Convert A, Z and S to a G4ParticleDefinition
+  G4ParticleDefinition *toG4ParticleDefinition (G4int A, G4int Z, G4int S, G4int PDGCode) const;
 
   /// \brief Rescale remnant momentum if necessary
   G4double remnant4MomentumScaling(G4double mass,
@@ -184,6 +184,8 @@ private:
 
   G4VLevelDensityParameter *theINCLXXLevelDensity;
   G4FissionProbability *theINCLXXFissionProbability;
+
+  G4int secID;  // Creator model ID for the secondaries
 };
 
 #endif

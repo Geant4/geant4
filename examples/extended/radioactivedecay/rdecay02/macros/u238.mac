@@ -16,8 +16,8 @@
 /process/list
 #
 # rdm is applied only to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+/process/had/rdm/noVolumes
+/process/had/rdm/selectVolume Target
 #
 # place the isotopes in the middle of the target, at rest. 
 /gun/particle ion
@@ -27,9 +27,9 @@
 /analysis/setFileName u238
 /analysis/h1/set 6 100 0. 15. MeV
 #
-/grdm/applyICM false
-/grdm/applyARM false
-/grdm/hlThreshold 1e-6 s
+/process/had/rdm/applyICM false
+/process/had/rdm/applyARM false
+/process/had/rdm/hlThreshold 1e-6 s
 #
 /tracking/verbose 2
 /run/beamOn 2

@@ -59,12 +59,11 @@ public:
     theNDLDataZ = 0;
     theNDLDataA = 0;
 
-    adjustResult = true;
-    if ( std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
-
     theProjectile = G4Neutron::Neutron();
 
     theResult.Put( 0 );
+
+    secID = -1;
   }
   
   virtual ~G4ParticleHPFinalState()
@@ -119,9 +118,6 @@ public:
 protected:
   
     void adjust_final_state ( G4LorentzVector );
-    G4bool DoNotAdjustFinalState();
-
-protected:
   
     G4bool hasXsec;
     G4bool hasFSData;
@@ -139,8 +135,6 @@ protected:
     G4int theNDLDataA;
     G4int theNDLDataM;
 
-private:
-
-    G4bool adjustResult;
+    G4int secID;  // Creator model ID for the secondaries created by this class or derived ones
 };
 #endif

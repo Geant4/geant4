@@ -1,0 +1,174 @@
+
+                 Geant4 10.6 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                             14 February 2020
+
+List of fixes included in this public patch since the public release 10.6:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Applied patch to allow compilation on Windows using Clang.
+      o Quote VECGEOM_COMPILE_DEFINITIONS to avoid incorrect argument errors.
+      o Fix to prevent errors when a shell is in "set -u" mode.
+        Addressing problem report #2221.
+      o No longer create symlinks on Windows; Windows permissions may prevent
+        creation of symlinks, leading to errors at install time.
+      o Updated to data-set G4EMLOW-7.9.1.
+    + GNUMake:
+      o Fixed and updated legacy setup for DLL builds on Windows.
+
+  o Digits_Hits:
+    -----------
+    + G4ScoringManager, G4VScoreWriter, G4ScoringMessenger: added missing
+      setter/getter functions.
+    + In G4ScoreQuantityMessenger, changed SetDefaultUnit() in trackLength
+      scorer to SetDefaultValue() to support various unit category.
+      Addressing problem report #2216.
+
+  o Geometry:
+    --------
+    + magneticfield:
+      o Turn off verbosity flags by default in G4IntegratorDriver,
+        G4InterpolationDriver and G4MagIntegratorDriver.
+    + navigation:
+      o Avoid looping infinitely in G4RegularNavigation by pushing N times
+        with increasing step size. Addressing problem report #2196.
+    + solids/specific:
+      o Re-established parameterisation mechanism for G4Tet and G4UTet which was
+        removed by mistake. Addressing problem report #2209.
+      o Revision of G4Tet, for speed-up and issues detected in unit tests.
+        Implemented SetVertices(), direct modifier for vertices.
+      o Revision of G4Ellipsoid, fixing issues with previous implementation,
+        and 30%-70% speed-up in all main methods.
+        Also addressing problem report #2206.
+      o Added protection in G4VFacet header for double definition of global
+        symbols from Windows Kits code.
+
+  o Global:
+    ------
+    + Fixed symbol exporting problem in G4coutDestination on Windows; define
+      'masterG4coutDestination' as normal pointer.
+      Addressing problem report #2217.
+    + Added windefs.hh header, including protections for double definition
+      of global symbols from Windows Kits code.
+    + Updated date and version for 10.6.p01.
+
+  o Interfaces:
+    ----------
+    + Fixed obsolete URLs in UIQt splash screen.
+
+  o Particles
+    ---------
+    + Fixed broken if-block in G4DecayTableMessenger.
+      Addressing problem report #2193.
+
+  o Physics Lists
+    -------------
+    + constructors/electromagnetic:
+      o G4EmModelActivator: fixed configuration of the default EM multiple
+        scattering on top of any other physics configuration.
+        Addressing problem report #2106.
+    + constructors/gamma_lepto_nuclear
+      o Fixed reports from Coverity; removed double delete in destructor of
+        G4LENDBertiniGammaElectroNuclearBuilder.
+    + lists:
+      o LBE: updated cross-sections to avoid crashes caused by the removal of
+        default Gheisha cross-sections, and to have consistency between elastic
+        and inelastic cross-sections.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + muons:
+      o G4MuPairProductionModel: added Store/Retrieve data methods.
+        Co-works with new data-set G4EMLOW-7.9.1.
+    + standard:
+      o G4BetheHeitler5DModel: added protection against negative argument of
+        sqrt(), due to precision lost.
+    + utils:
+      o G4EmParameters, G4EmParametersMessenger: added new parameter to enable
+        read of e+e- production table from file.
+        Co-works with new data-set G4EMLOW-7.9.1.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections:
+      o G4HadronInelasticDataSet: fixed wrong GHEISHA x-section.
+        Addressing problem report #2220.
+    + management:
+      o G4HadronicProcess: for charge check assume that all final electrons
+        come from internal conversion.
+    + cascade:
+      o G4CascadeCheckBalance: fixed outstanding problem of the interface with
+        native pre-compound model, happening when in the default de-excitation
+        internal electron conversion gets enabled.
+      o G4CascadeInterface: fixed memory leak by deleting ltcollider in class
+        destructor.
+      o G4CascadeParamMessenger.cc: ensure that Bertini-specific commands get
+        added to "/process/had/cascade/" UI directory, instead of
+        "/process/had".
+    + models/coherent_elastic:
+      o G4ElasticHadrNucleusHE: for pi- and Z>1 reuse data structure computed
+        for pi+ in order to reduce memory and CPU at initialisation; added new
+        private methods to store/retrieve data tables. Co-works with new
+        data-set G4EMLOW-7.9.1. Fixed Coverity report.
+        Switch to parameterized model by cut on kinetic energy and not momentum.
+    + models/lend:
+      o Removed inclusion of amp_math header on Windows as it is not required.
+    + models/parton_string/qgsm:
+      o G4FTFParameters: fixed division by zero (Coverity report) due to wrong
+        protection.
+    + models/radioactive_decay:
+      o In G4Radioactivation::AddDeexcitationSpectrumForBiasMode(), fixed
+        memory leak. Addressing problem report #2164.
+      o G4RadioactiveDecay, G4RadioactiveDecayBase: changed default verbosity 
+        from 0 to 1, and remove G4cerr wherever it occurs and replace it with 
+        G4Exception or G4cout.
+        Increased verbosity thresholds in order to reduce printout size.
+      o G4BetaPlusDecay: changed sign of daughterZ argument in
+        G4BetaDecayCorrections according to problem report #2199.
+      o Fixed Coverity warnings in G4RadioactiveDecay and
+        G4RadioactiveDecayBase. Fixed uninitialized data in G4SFDecay.
+    + processes:
+      o G4HadronElasticProcess: removed forgotten try/catch pattern for
+        target isotope selection.
+    + stopping:
+      o G4MuonicAtomDecay: fixed Coverity warning by addition of G4Exception.
+
+  o Visualization:
+    -------------
+    + OpenInventor:
+      o Added include paths to Inventor to usage requirements on G4OpenInventor.
+        Inventor does not yet support imported targets, and paths added by
+        include_directories are now explicitly removed.
+        Addressing problem report #2215
+
+  o Data sets:
+    ---------
+    + G4EMLOW-7.9.1:
+      o Added a new directory mupair for double differential probability
+        of e+e- pairs produced by muons or hadrons.
+
+  o Examples:
+    --------
+    + basic
+      o Fixed comment for suggested command "/run/numberOfThreads" in macros.
+    + extended/hadronic/Hadr01
+      o HistoManager: fixed FPE happening if check on volume's material
+        is not vacuum.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.6.
+  o  Technical notes distributed for release 10.6 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.6.p01 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

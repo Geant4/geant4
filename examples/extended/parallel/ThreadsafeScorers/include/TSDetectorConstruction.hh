@@ -51,10 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #ifndef tsdetectorconstruction_hh
 #define tsdetectorconstruction_hh 1
-
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
@@ -72,41 +70,45 @@ class G4Material;
 
 class TSDetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-    typedef std::map<G4String, G4Material*> MaterialCollection_t;
-    typedef std::set<G4LogicalVolume*> ScoringVolumes_t;
+ public:
+  typedef std::map<G4String, G4Material*> MaterialCollection_t;
+  typedef std::set<G4LogicalVolume*> ScoringVolumes_t;
 
-public:
-    TSDetectorConstruction();
-    virtual ~TSDetectorConstruction();
+ public:
+  TSDetectorConstruction();
+  virtual ~TSDetectorConstruction();
 
-    static TSDetectorConstruction* Instance();
+  static TSDetectorConstruction* Instance();
 
-public:
-    G4VPhysicalVolume* Construct();
-    inline const G4ThreeVector& GetWorldDimensions() const { return fWorldDim; }
-    inline const ScoringVolumes_t& GetScoringVolumes() const
-    { return fScoringVolumes; }
-    inline const G4String& GetMFDName() const { return fMfdName; }
-    inline G4int GetTotalTargets() const 
-    { return fTargetSections.x() * fTargetSections.y() * fTargetSections.z(); }
+ public:
+  G4VPhysicalVolume* Construct();
+  inline const G4ThreeVector& GetWorldDimensions() const { return fWorldDim; }
+  inline const ScoringVolumes_t& GetScoringVolumes() const
+  {
+    return fScoringVolumes;
+  }
+  inline const G4String& GetMFDName() const { return fMfdName; }
+  inline G4int GetTotalTargets() const
+  {
+    return fTargetSections.x() * fTargetSections.y() * fTargetSections.z();
+  }
 
-protected:
-    virtual MaterialCollection_t ConstructMaterials();
-    virtual G4VPhysicalVolume* ConstructWorld(const MaterialCollection_t&);
-    virtual void ConstructSDandField();
+ protected:
+  virtual MaterialCollection_t ConstructMaterials();
+  virtual G4VPhysicalVolume* ConstructWorld(const MaterialCollection_t&);
+  virtual void ConstructSDandField();
 
-private:
-    static TSDetectorConstruction* fgInstance;
-    G4VPhysicalVolume* fWorldPhys;
-    ScoringVolumes_t fScoringVolumes;
-    G4String fWorldMaterialName;
-    G4String fTargetMaterialName;
-    G4String fCasingMaterialName;
-    G4ThreeVector fWorldDim;
-    G4ThreeVector fTargetDim;
-    G4ThreeVector fTargetSections;
-    G4String fMfdName;
+ private:
+  static TSDetectorConstruction* fgInstance;
+  G4VPhysicalVolume* fWorldPhys;
+  ScoringVolumes_t fScoringVolumes;
+  G4String fWorldMaterialName;
+  G4String fTargetMaterialName;
+  G4String fCasingMaterialName;
+  G4ThreeVector fWorldDim;
+  G4ThreeVector fTargetDim;
+  G4ThreeVector fTargetSections;
+  G4String fMfdName;
 };
 
 #endif

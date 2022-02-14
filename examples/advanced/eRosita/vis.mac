@@ -15,7 +15,7 @@
 /vis/open OGL
 #
 ####/vis/open OGLSXm
-####/vis/open HepRepXML
+####/vis/open HepRepFile
 #
 #/vis/open DAWNFILE
 #

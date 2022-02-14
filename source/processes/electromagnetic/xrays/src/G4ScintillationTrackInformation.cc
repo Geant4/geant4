@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Author : Valentin Libioulle valentin.libioulle@usherbrooke.ca (3IT - GRAMS)
 //
 
@@ -32,33 +30,33 @@
 
 G4Allocator<G4ScintillationTrackInformation>*& aScintillationTIAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4ScintillationTrackInformation>*
-            _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4ScintillationTrackInformation>* _instance =
+    nullptr;
+  return _instance;
 }
 
-const G4String G4ScintillationTrackInformation::BaseType = "G4ScintillationTrackInformation";
+const G4String G4ScintillationTrackInformation::BaseType =
+  "G4ScintillationTrackInformation";
 
-G4ScintillationTrackInformation::G4ScintillationTrackInformation(const G4ScintillationType& aType)
-: G4VUserTrackInformation(BaseType),
-scintillationType(aType)
-{
-}
+G4ScintillationTrackInformation::G4ScintillationTrackInformation(
+  const G4ScintillationType& aType)
+  : G4VUserTrackInformation(BaseType)
+  , scintillationType(aType)
+{}
 
-G4ScintillationTrackInformation::~G4ScintillationTrackInformation()
-{
-}
+G4ScintillationTrackInformation::~G4ScintillationTrackInformation() {}
 
-G4ScintillationTrackInformation::G4ScintillationTrackInformation(const G4ScintillationTrackInformation& right)
-: G4VUserTrackInformation(right),
-scintillationType(right.scintillationType)
-{
-}
+G4ScintillationTrackInformation::G4ScintillationTrackInformation(
+  const G4ScintillationTrackInformation& right)
+  : G4VUserTrackInformation(right)
+  , scintillationType(right.scintillationType)
+{}
 
-G4ScintillationTrackInformation& G4ScintillationTrackInformation::operator=(const G4ScintillationTrackInformation& right)
+G4ScintillationTrackInformation& G4ScintillationTrackInformation::operator=(
+  const G4ScintillationTrackInformation& right)
 {
   G4VUserTrackInformation::operator=(right);
-  this->scintillationType = right.scintillationType;
+  this->scintillationType          = right.scintillationType;
   return *this;
 }
 
@@ -67,13 +65,15 @@ void G4ScintillationTrackInformation::Print() const
   G4cout << "The user track information is a scintillation" << G4endl;
 }
 
-G4bool G4ScintillationTrackInformation::IsScintillationTrackInformation(const G4VUserTrackInformation* const aTI)
+G4bool G4ScintillationTrackInformation::IsScintillationTrackInformation(
+  const G4VUserTrackInformation* const aTI)
 {
   G4bool isSTI = (aTI && aTI->GetType() == BaseType.c_str());
   return isSTI;
 }
 
-G4ScintillationTrackInformation* G4ScintillationTrackInformation::Cast(const G4VUserTrackInformation* const aTI)
+G4ScintillationTrackInformation* G4ScintillationTrackInformation::Cast(
+  const G4VUserTrackInformation* const aTI)
 {
   G4ScintillationTrackInformation* STI = nullptr;
   if(IsScintillationTrackInformation(aTI))

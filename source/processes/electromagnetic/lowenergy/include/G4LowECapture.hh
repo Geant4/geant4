@@ -62,39 +62,33 @@ class G4Region;
 class G4LowECapture : public G4VDiscreteProcess
 {
 public:
-
-  G4LowECapture(G4double ekinlimit = 0.0);
-
+  explicit G4LowECapture(G4double ekinlimit = 0.0);
   virtual ~G4LowECapture();
 
   void SetKinEnergyLimit(G4double);
-
   void AddRegion(const G4String&);
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-  virtual G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
-							G4double,
-							G4ForceCondition*);
+  G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+						G4double,
+						G4ForceCondition*) override;
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  G4LowECapture(const G4LowECapture&) = delete;
+  G4LowECapture& operator = (const G4LowECapture &right) = delete;
 
 protected:
-
-  virtual G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*);
+  G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*) override;
 
 private:
-
-  // hide assignment operator as private
-  G4LowECapture(const G4LowECapture&);
-  G4LowECapture& operator = (const G4LowECapture &right);
-
-  G4double kinEnergyThreshold;
-  G4int    nRegions;
   std::vector<G4String> regionName;
   std::vector<const G4Region*> region;
+  G4double kinEnergyThreshold;
+  G4int    nRegions;
+  G4bool   isIon;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

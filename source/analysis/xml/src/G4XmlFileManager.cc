@@ -27,25 +27,83 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4XmlFileManager.hh"
+#include "G4XmlHnFileManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
 
 #include "tools/waxml/begend"
 
 using namespace G4Analysis;
+using namespace tools;
 
 //_____________________________________________________________________________
 G4XmlFileManager::G4XmlFileManager(const G4AnalysisManagerState& state)
- : G4VFileManager(state),
-   fHnFile(nullptr)
+ : G4VTFileManager<std::ofstream>(state)
 {
+  // Create helpers defined in the base class
+  fH1FileManager = std::make_shared<G4XmlHnFileManager<histo::h1d>>(this);
+  fH2FileManager = std::make_shared<G4XmlHnFileManager<histo::h2d>>(this);
+  fH3FileManager = std::make_shared<G4XmlHnFileManager<histo::h3d>>(this);
+  fP1FileManager = std::make_shared<G4XmlHnFileManager<histo::p1d>>(this);
+  fP2FileManager = std::make_shared<G4XmlHnFileManager<histo::p2d>>(this);
+}
+
+//
+// private methods
+//
+
+//_____________________________________________________________________________
+G4String G4XmlFileManager::GetNtupleFileName(XmlNtupleDescription* ntupleDescription)
+{
+  // get ntuple file name
+  auto ntupleFileName = ntupleDescription->fFileName;
+  if ( ntupleFileName.size() ) {
+    // update filename per object per thread
+    ntupleFileName = GetTnFileName(ntupleFileName, GetFileType());
+  } else {
+    // compose ntuple file name from the default file name
+    ntupleFileName = GetNtupleFileName(ntupleDescription->fNtupleBooking.name());
+  }
+  return ntupleFileName;
+}
+
+//
+// protected methods
+//
+
+//_____________________________________________________________________________
+std::shared_ptr<std::ofstream> G4XmlFileManager::CreateFileImpl(const G4String& fileName)
+{
+  std::shared_ptr<std::ofstream> file = std::make_shared<std::ofstream>(fileName);
+  if ( file->fail() ) {
+    Warn(G4String("Cannot create file ") + fileName, fkClass, "CreateFileImpl");
+    return nullptr;
+  }
+
+  waxml::begin(*file);
+  return file;
 }
 
 //_____________________________________________________________________________
-G4XmlFileManager::~G4XmlFileManager()
-{}
+G4bool G4XmlFileManager::WriteFileImpl(std::shared_ptr<std::ofstream> /*file*/)
+{
+  // Nothing to be done here
+  return true;
+}
 
-// 
+//_____________________________________________________________________________
+G4bool G4XmlFileManager::CloseFileImpl(std::shared_ptr<std::ofstream> file)
+{
+  if ( ! file ) return false;
+
+  // close file
+  waxml::end(*file);
+  file->close();
+
+  return true;
+}
+
+//
 // public methods
 //
 
@@ -54,139 +112,80 @@ G4bool G4XmlFileManager::OpenFile(const G4String& fileName)
 {
   // Keep and locks file name
   fFileName =  fileName;
-  fLockFileName = true;
+  auto name = GetFullFileName(fFileName);
+
+  if ( fFile ) {
+    Warn(G4String("File ") + fileName + " already exists.", fkClass, "OpenFile");
+    fFile.reset();
+  }
+
+  // Create histograms file (on master)
+  if ( fState.GetIsMaster() ) {
+    // Create file (and save in in the file map (on master only)
+    fFile = CreateTFile(name);
+    if ( ! fFile) {
+      Warn(G4String("Failed to create file") + fileName, fkClass, "OpenFile");
+      return false;
+    }
+  }
+
   fIsOpenFile = true;
 
-  return true;
-}  
-  
-//_____________________________________________________________________________
-G4bool G4XmlFileManager::WriteFile() 
-{
-  // Nothing to be done here
   return true;
 }
 
 //_____________________________________________________________________________
-G4bool G4XmlFileManager::CloseFile()
-{
-  // Unlock file name
-  
-  fLockFileName = false;
-  fIsOpenFile = false;
-  return true; 
-} 
-   
-//_____________________________________________________________________________
-G4bool G4XmlFileManager::CreateHnFile()
-{
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("create", "histo file", GetFullFileName());
-#endif
-  
-  // delete a previous file if it exists
-  //if ( fHnFile ) delete fHnFile; 
-  
-  fHnFile = std::make_shared<std::ofstream>(GetFullFileName());
-  if ( fHnFile->fail() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " << GetFullFileName();
-    G4Exception("G4XmlFileManager::CreateHnFile()",
-              "Analysis_W001", JustWarning, description);
-    return false;
-  }
-
-  tools::waxml::begin(*fHnFile);
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()->Message("create", "histo file", GetFullFileName());
-#endif
-
-  return true;
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlFileManager::CloseHnFile()
-{
-  // No file may be open if no master manager is instantiated
-  // and no histograms were booked
-  if ( ! fHnFile.get() ) return true;
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("close", "histo file", GetFullFileName());
-#endif
-
-  // close file
-  tools::waxml::end(*fHnFile);
-  fHnFile->close(); 
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()->Message("close", "histo file", GetFullFileName());
-#endif
-
-
-  return true; 
-} 
-   
-//_____________________________________________________________________________
 G4bool G4XmlFileManager::CreateNtupleFile(
-  G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription)
+  XmlNtupleDescription* ntupleDescription)
 {
-  G4String ntupleName = ntupleDescription->fNtupleBooking.name();
+  // get ntuple file name per object (if defined)
+  auto ntupleFileName = GetNtupleFileName(ntupleDescription);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()
-      ->Message("create", "ntuple file", GetNtupleFileName(ntupleName));
-#endif
+  Message(kVL4, "create", "ntuple file", ntupleFileName);
 
-  auto ntupleFile = new std::ofstream(GetNtupleFileName(ntupleName));
-  if ( ntupleFile->fail() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " 
-                << GetNtupleFileName(ntupleName);
-    G4Exception("G4XmlFileManager::CreateNtupleFile()",
-                "Analysis_W001", JustWarning, description);
-    return false;
+  // update file name if it is already in use
+  while ( GetTFile(ntupleFileName, false) ) {
+    // the file is already in use
+    auto oldName = ntupleDescription->fFileName;
+    auto newName = GetBaseName(oldName) + "_bis." + GetExtension(oldName);
+    ntupleDescription->fFileName = newName;
+
+    Warn(G4String( "Ntuple filename ") + oldName + " is already in use.\n" +
+         "It will be replaced with : " + newName,
+         fkClass, "CreateNtupleFile");
+
+    ntupleFileName = GetNtupleFileName(ntupleDescription);
   }
-  
-  tools::waxml::begin(*ntupleFile);
-  ntupleDescription->fFile = ntupleFile;
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()
-      ->Message("create", "ntuple file", GetNtupleFileName(ntupleName));
-#endif
+  ntupleDescription->fFile = CreateTFile(ntupleFileName);
 
-  return true;
-}  
+  Message(kVL2, "create", "ntuple file", ntupleFileName);
+
+  return (ntupleDescription->fFile != nullptr);
+}
 
 //_____________________________________________________________________________
 G4bool G4XmlFileManager::CloseNtupleFile(
-  G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription)
+  XmlNtupleDescription* ntupleDescription)
 {
-  G4String ntupleName = ntupleDescription->fNtupleBooking.name();
+  // Do nothing if there is no file
+  if ( ! ntupleDescription->fFile ) return true;
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()
-      ->Message("close", "ntuple file", GetNtupleFileName(ntupleName));
-#endif
+  auto result = true;
 
-  // close file
-  tools::waxml::end(*(ntupleDescription->fFile));
-  ntupleDescription->fFile->close(); 
+  auto ntupleFileName = GetNtupleFileName(ntupleDescription);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()
-      ->Message("close", "ntuple file", GetNtupleFileName(ntupleName));
-#endif
+  Message(kVL4, "close", "ntuple file", ntupleFileName);
 
-  return true; 
-} 
-   
+  // Close file
+  result &= CloseTFile(ntupleFileName);
+  // Notify not empty file
+  result &=SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
+
+  // Reset file info in ntuple description
+  ntupleDescription->fFile.reset();
+
+  Message(kVL2, "close", "ntuple file", ntupleFileName);
+
+  return result;
+}

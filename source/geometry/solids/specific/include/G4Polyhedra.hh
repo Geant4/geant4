@@ -115,6 +115,9 @@ class G4Polyhedra : public G4VCSGfaceted
 
   G4VSolid* Clone() const;
 
+  G4double GetCubicVolume();
+  G4double GetSurfaceArea();
+
   G4ThreeVector GetPointOnSurface() const;
 
   std::ostream& StreamInfo( std::ostream& os ) const;
@@ -172,11 +175,7 @@ class G4Polyhedra : public G4VCSGfaceted
 
   // Methods for generation of random points on surface
 
-  G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1,
-                                G4ThreeVector p2, G4ThreeVector p3) const;
-  G4ThreeVector GetPointOnTriangle(G4ThreeVector p0, G4ThreeVector p1,
-                                   G4ThreeVector p2) const;
-  G4ThreeVector GetPointOnSurfaceCorners() const;
+  void SetSurfaceElements() const;
 
  protected:  // without description
 
@@ -190,6 +189,9 @@ class G4Polyhedra : public G4VCSGfaceted
   G4PolyhedraHistorical* original_parameters = nullptr; // original input params
 
   G4EnclosingCylinder* enclosingCylinder = nullptr;
+
+  struct surface_element { G4double area = 0.; G4int i0 = 0, i1 = 0, i2 = 0; };
+  mutable std::vector<surface_element>* fElements = nullptr;
 };
 
 #include "G4Polyhedra.icc"

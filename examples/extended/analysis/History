@@ -8,6 +8,21 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th November 2021 I. Hrivnacova (analysisExample-V10-07-01)
+- Removed AnaEx03 with the AIDA implementation
+
+24th May 2021 B. Morgan (analysisExample-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+13th November 2020 B. Morgan (analysisExample-V10-06-02)
+- Enforce use of Serial RunManager for serial-only examples.
+
+10th November 2020 B. Morgan (analysisExample-V10-06-01)
+- Migration to G4RunManagerFactory.
+
+3rd November 2020 B. Morgan (analysisExample-V10-06-00)
+- Support same CMake version range as core Geant4
+
 10th July 2019 I. Hrivnacova (analysisExample-V10-05-00)
 - Removed B3aScoreWriter, B4dScoreWriter examples
   The score ntuple writer is now provided with Geant4 source
@@ -18,7 +33,7 @@
   in CMake and README's
 
 28th May 2014 I. Hrivnacova (analysisExample-V10-00-00)
-- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 
+- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03,
   removed PhysicList class from shared
 
 21th November 2013 A. Dotti      (analysisExample-V09-06-06)
@@ -32,8 +47,8 @@
 - Removed A01, as it was transformed in basic/B5
 
 22th October 2013 I. Hrivnacova (analysisExample-V09-06-04)
-- N03Con replaced with B1Con 
-- Adding README files on AIDA and OpenScientist form A01 
+- N03Con replaced with B1Con
+- Adding README files on AIDA and OpenScientist form A01
   (which is being migrated to g4tools in B5) in AnaEx03
 
 30th September 2013 I. Hrivnacova (analysisExample-V09-06-03)
@@ -60,8 +75,8 @@
 18th September 2012 Ivana Hrivnacova (analysisExample-V09-05-04)
 - Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
   where needed
-- Replaced tabulators with space characters  
-     
+- Replaced tabulators with space characters
+
 08th June 2012 mma (analysisExample-V09-05-03)
 - apply coding conventions in shared
 

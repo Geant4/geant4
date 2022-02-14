@@ -56,7 +56,8 @@ G4ModelingParameters::G4ModelingParameters ():
   fNoOfSides             (24),
   fpSectionSolid         (0),
   fpCutawaySolid         (0),
-  fpEvent                (0)
+  fpEvent                (0),
+  fSpecialMeshRendering  (false)
 {}
 
 G4ModelingParameters::G4ModelingParameters
@@ -83,7 +84,8 @@ G4ModelingParameters::G4ModelingParameters
   fNoOfSides      (noOfSides),
   fpSectionSolid  (0),
   fpCutawaySolid  (0),
-  fpEvent         (0)
+  fpEvent         (0),
+  fSpecialMeshRendering (false)
 {}
 
 G4ModelingParameters::~G4ModelingParameters ()
@@ -237,6 +239,19 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
     os << vams;
   }
 
+  os << "\n  Special Mesh Rendering: ";
+  if (mp.fSpecialMeshRendering) {
+    os << "on: ";
+    if (mp.fSpecialMeshVolumes.empty()) {
+      os << "all meshes";
+    } else {
+      os << "selected meshes";
+      for (const auto& vol: mp.fSpecialMeshVolumes) {
+	os << "\n    " << vol.GetName() << ':' << vol.GetCopyNo();
+      }
+    }
+  } else os << "off";
+
   return os;
 }
 
@@ -258,7 +273,8 @@ G4bool G4ModelingParameters::operator !=
       (fNoOfSides              != mp.fNoOfSides)              ||
       (fpSectionSolid          != mp.fpSectionSolid)          ||
       (fpCutawaySolid          != mp.fpCutawaySolid)          ||
-      (fpEvent                 != mp.fpEvent)
+      (fpEvent                 != mp.fpEvent)                 ||
+      (fSpecialMeshRendering   != mp.fSpecialMeshRendering)
       )
     return true;
 
@@ -272,6 +288,11 @@ G4bool G4ModelingParameters::operator !=
 
   if (fVisAttributesModifiers != mp.fVisAttributesModifiers)
     return true;
+
+  if (fSpecialMeshRendering) {
+    if (fSpecialMeshVolumes != mp.fSpecialMeshVolumes)
+      return true;;
+  }
 
   return false;
 }

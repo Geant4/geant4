@@ -1,0 +1,568 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_ntuple
+#define tools_wroot_ntuple
+
+// An ntuple class to write at the CERN-ROOT format.
+// It inherits wroot::tree and each column is mapped
+// on a (wroot::branch,wroot::leaf). Each add_row() does a tree::fill().
+
+#include "tree"
+#include "icol"
+
+#include "../vfind"
+#include "../vmanip"
+#include "../ntuple_booking"
+#include "../sout"
+#include "../scast"
+#include "../forit"
+
+// for mpi :
+#include "mpi_create_basket"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace wroot {
+
+class ntuple : public tree {
+public:
+//typedef wroot::icol icol; //for backward compatibility.
+public:
+
+#include "columns.icc"
+
+public:
+  ntuple(idir& a_dir,const std::string& a_name,const std::string& a_title,bool a_row_wise = false)
+  :tree(a_dir,a_name,a_title),m_row_wise(a_row_wise),m_row_wise_branch(0)
+  {
+    if(m_row_wise) m_row_wise_branch = create_branch("row_wise_branch");
+  }
+
+  ntuple(idir& a_dir,const ntuple_booking& a_bkg,bool a_row_wise = false)
+  :tree(a_dir,a_bkg.name(),a_bkg.title()),m_row_wise(a_row_wise),m_row_wise_branch(0)
+  {
+    if(m_row_wise) m_row_wise_branch = create_branch("row_wise_branch");
+
+    const std::vector<column_booking>& cols = a_bkg.columns();
+    tools_vforcit(column_booking,cols,it){
+
+#define TOOLS_WROOT_NTUPLE_CREATE_COL(a__type) \
+      if((*it).cls_id()==_cid(a__type())) {\
+        a__type* user = (a__type*)(*it).user_obj();\
+        if(user) {\
+          if(!create_column_ref<a__type>((*it).name(),*user)) {\
+	    m_out << "tools::wroot::ntuple : create_column_ref(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+            safe_clear<branch>(m_branches);\
+	    return;\
+	  }\
+        } else {\
+          if(!create_column<a__type>((*it).name())) {\
+	    m_out << "tools::wroot::ntuple : create_column(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+            safe_clear<branch>(m_branches);\
+	    return;\
+	  }\
+        }\
+      }
+
+#define TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(a__type) \
+      if((*it).cls_id()==_cid_std_vector<a__type>()) {\
+        std::vector<a__type>* vec = (std::vector<a__type>*)(*it).user_obj();\
+        if(vec) {\
+          if(!create_column_vector_ref<a__type>((*it).name(),*vec)) {\
+            m_out << "tools::wroot::ntuple : create_column_vector_ref(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+            safe_clear<branch>(m_branches);\
+	    return;\
+	  }\
+        } else {\
+          if(!create_column_vector<a__type>((*it).name())) {\
+            m_out << "tools::wroot::ntuple : create_column_vector(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+            safe_clear<branch>(m_branches);\
+	    return;\
+	  }\
+        }\
+      }
+
+      //below types are in sync with rroot/ntuple.
+
+           TOOLS_WROOT_NTUPLE_CREATE_COL(char)
+      else TOOLS_WROOT_NTUPLE_CREATE_COL(short)
+      else TOOLS_WROOT_NTUPLE_CREATE_COL(int)
+      else TOOLS_WROOT_NTUPLE_CREATE_COL(float)
+      else TOOLS_WROOT_NTUPLE_CREATE_COL(double)
+
+      else if((*it).cls_id()==_cid(std::string())) {
+        std::string* user = (std::string*)(*it).user_obj();
+        if(user) {
+          if(!create_column_string_ref((*it).name(),*user)) {
+	    m_out << "tools::wroot::ntuple : create_column_string_ref(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+            safe_clear<branch>(m_branches);
+	    return;
+	  }
+        } else {
+          if(!create_column_string((*it).name())) {
+	    m_out << "tools::wroot::ntuple : create_column_string(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+            safe_clear<branch>(m_branches);
+	    return;
+	  }
+        }
+      }
+
+      else TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(char)
+      else TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(short)
+      else TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(int)
+      else TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(float)
+      else TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(double)
+
+      else if((*it).cls_id()==_cid_std_vector<std::string>()) {\
+        std::vector<std::string>* user = (std::vector<std::string>*)(*it).user_obj();
+        char sep = '\n';
+        if(user) {
+          if(!create_column_vector_string_ref((*it).name(),*user,sep)) {
+	    m_out << "tools::wroot::ntuple : create_column_vector_string_ref(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+            safe_clear<branch>(m_branches);
+	    return;
+	  }
+        } else {
+          if(!create_column_vector_string((*it).name(),std::vector<std::string>(),sep)) {
+	    m_out << "tools::wroot::ntuple : create_column_vector_string(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+            safe_clear<branch>(m_branches);
+	    return;
+	  }
+        }
+      }
+
+      // no leaf_store_class() defined for the other types.
+
+      else {
+        m_out << "tools::wroot::ntuple :"
+              << " for column " << sout((*it).name())
+              << ", type with cid " << (*it).cls_id() << " not yet handled."
+              << std::endl;
+        //throw
+        safe_clear<icol>(m_cols);
+        safe_clear<branch>(m_branches);
+        return;
+      }
+    }
+#undef TOOLS_WROOT_NTUPLE_CREATE_VEC_COL
+#undef TOOLS_WROOT_NTUPLE_CREATE_COL
+
+  }
+
+  virtual ~ntuple() {
+    safe_clear<icol>(m_cols);
+  }
+protected:
+  ntuple(const ntuple& a_from):iobject(a_from),itree(a_from),tree(a_from),m_row_wise(a_from.m_row_wise){}
+  ntuple& operator=(const ntuple&){return *this;}
+public:
+  const std::vector<icol*>& columns() const {return m_cols;}
+  std::vector<icol*>& columns() {return m_cols;}
+
+  template <class T>
+  column_ref<T>* create_column_ref(const std::string& a_name,const T& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = m_row_wise?m_row_wise_branch:create_branch(a_name);
+    if(!_branch) return 0;
+    column_ref<T>* col = new column_ref<T>(*_branch,a_name,a_ref);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = m_row_wise?m_row_wise_branch:create_branch(a_name);
+    if(!_branch) return 0;
+    column<T>* col = new column<T>(*_branch,a_name,a_def);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_string_ref* create_column_string_ref(const std::string& a_name,const std::string& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = m_row_wise?m_row_wise_branch:create_branch(a_name);
+    if(!_branch) return 0;
+    column_string_ref* col = new column_string_ref(*_branch,a_name,a_ref);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_string* create_column_string(const std::string& a_name,const std::string& a_def = std::string()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = m_row_wise?m_row_wise_branch:create_branch(a_name);
+    if(!_branch) return 0;
+    column_string* col = new column_string(*_branch,a_name,a_def);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_vector_string_ref* create_column_vector_string_ref(const std::string& a_name,
+                                                            const std::vector<std::string>& a_ref,char a_sep) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = m_row_wise?m_row_wise_branch:create_branch(a_name);
+    if(!_branch) return 0;
+    column_vector_string_ref* col = new column_vector_string_ref(*_branch,a_name,a_ref,a_sep);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_vector_string* create_column_vector_string(const std::string& a_name,
+                                                    const std::vector<std::string>& a_def,char a_sep) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = m_row_wise?m_row_wise_branch:create_branch(a_name);
+    if(!_branch) return 0;
+    column_vector_string* col = new column_vector_string(*_branch,a_name,a_def,a_sep);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  std_vector_column_ref<T>* create_column_vector_ref(const std::string& a_name,const std::vector<T>& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = m_row_wise?m_row_wise_branch:create_std_vector_be_ref<T>(a_name,a_ref);
+    if(!_branch) return 0;
+    std_vector_column_ref<T>* col = new std_vector_column_ref<T>(*_branch,a_name,a_ref);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  std_vector_column<T>* create_column_vector(const std::string& a_name,const std::vector<T>& a_def = std::vector<T>()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    if(m_row_wise) {
+      branch* _branch = m_row_wise_branch;
+      std_vector_column<T>* col = new std_vector_column<T>(*_branch,a_name,a_def);
+      if(!col) return 0;
+      m_cols.push_back(col);
+      return col;
+    } else {
+      std_vector_be_pointer<T>* _branch = create_std_vector_be_pointer<T>(a_name,0);
+      if(!_branch) return 0;
+      std_vector_column<T>* col = new std_vector_column<T>(*_branch,a_name,a_def);
+      if(!col) return 0;
+      _branch->set_pointer(&(col->variable()));
+      m_cols.push_back(col);
+      return col;
+    }
+  }
+
+  template <class T>
+  column_ref<T>* find_column_ref(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_ref<T> >(*col);
+  }
+
+  template <class T>
+  column<T>* find_column(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column<T> >(*col);
+  }
+
+  column_string_ref* find_column_string_ref(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_string_ref >(*col);
+  }
+
+  column_string* find_column_string(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_string >(*col);
+  }
+
+  template <class T>
+  std_vector_column_ref<T>* find_column_vector_ref(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, std_vector_column_ref<T> >(*col);
+  }
+
+  template <class T>
+  std_vector_column<T>* find_column_vector(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, std_vector_column<T> >(*col);
+  }
+
+  column_vector_string_ref* find_column_vector_string_ref(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_vector_string_ref >(*col);
+  }
+
+  column_vector_string* find_column_vector_string(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_vector_string >(*col);
+  }
+
+  void print_columns(std::ostream& a_out) {
+    a_out << "for ntuple named " << sout(m_name) << ", number of columns " << m_cols.size() << " :" << std::endl;
+    tools_vforit(icol*,m_cols,it) {
+      a_out << " " << (*it)->name() << std::endl;
+    }
+  }
+
+  bool add_row() {
+    if(m_cols.empty()) return false;
+    tools_vforit(icol*,m_cols,it) (*it)->add();
+    uint32 n;
+    bool status = tree::fill(n);
+    tools_vforit(icol*,m_cols,it) (*it)->set_def();
+    return status;
+  }
+
+  void set_basket_size(uint32 a_size) {
+    if(m_row_wise) {
+      if(m_row_wise_branch) m_row_wise_branch->set_basket_size(a_size);
+    } else {
+      tools_vforit(icol*,m_cols,it) (*it)->set_basket_size(a_size);
+    }
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// for parallelization : /////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+  branch* get_row_wise_branch() const {return m_row_wise_branch;}
+  void get_branches(std::vector<branch*>& a_vec) const {
+    a_vec.clear();
+    tools_vforcit(icol*,m_cols,it) a_vec.push_back(&((*it)->get_branch()));
+  }
+
+  bool merge_number_of_entries() {
+    m_entries = 0; //it should be zero!
+    m_tot_bytes = 0;
+    m_zip_bytes = 0;
+    bool status = true;
+    tools_vforit(icol*,m_cols,it) {
+      if(it==m_cols.begin()) {
+        m_entries = (*it)->get_branch().entries();
+      } else if(m_entries!=(*it)->get_branch().entries()) {
+        m_out << "tools::wroot::ntuple::merge_number_of_entries :"
+              << " branches do not have same number of entries."
+              << std::endl;
+        status = false;
+      }
+      m_tot_bytes += (*it)->get_branch().tot_bytes();
+      m_zip_bytes += (*it)->get_branch().zip_bytes();
+    }
+    return status;
+  }
+
+  bool mpi_add_basket(impi& a_impi) {
+    uint32 icol; //not used if row_wise.
+    if(!a_impi.unpack(icol)) {
+      m_out << "tools::wroot::ntuple::mpi_add_basket : unpack(icol) failed."<< std::endl;
+      return false;
+    }
+
+    if(m_row_wise) {
+      if(!m_row_wise_branch) return false;
+
+      basket* basket = mpi_create_basket(m_out,a_impi,
+                                         m_dir.file().byte_swap(),m_dir.seek_directory(),
+                                         m_row_wise_branch->basket_size());
+      if(!basket) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : mpi_create_basket() failed."<< std::endl;
+        return false;
+      }
+
+      uint32 add_bytes,nout;
+      if(!m_row_wise_branch->add_basket(m_dir.file(),*basket,add_bytes,nout)) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : row wise : branch.add_basket() failed."<< std::endl;
+        delete basket;
+        return false;
+      }
+
+      delete basket;
+      m_row_wise_branch->set_tot_bytes(m_row_wise_branch->tot_bytes()+add_bytes);
+      m_row_wise_branch->set_zip_bytes(m_row_wise_branch->zip_bytes()+nout);
+
+    } else {
+      if(icol>=m_cols.size()) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : column index "  << icol << " >= " << m_cols.size() << std::endl;
+        return false;
+      }
+
+      branch& _branch = m_cols[icol]->get_branch();
+
+      basket* basket = mpi_create_basket(m_out,a_impi,
+                                         m_dir.file().byte_swap(),m_dir.seek_directory(),
+                                         _branch.basket_size());
+      if(!basket) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : mpi_create_basket() failed."<< std::endl;
+        return false;
+      }
+
+      uint32 add_bytes,nout;
+      if(!_branch.add_basket(m_dir.file(),*basket,add_bytes,nout)) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : column wise : branch.add_basket() failed."<< std::endl;
+        delete basket;
+        return false;
+      }
+
+      delete basket;
+      _branch.set_tot_bytes(_branch.tot_bytes()+add_bytes);
+      _branch.set_zip_bytes(_branch.zip_bytes()+nout);
+    }
+    return true;
+  }
+
+  bool mpi_add_baskets(impi& a_impi) { //column_wise && row_mode only.
+    uint32 _icol = 0;
+    tools_vforcit(icol*,m_cols,it) {
+      uint32 icol;
+      if(!a_impi.unpack(icol)) {
+        m_out << "tools::wroot::ntuple::mpi_add_baskets : unpack(icol) failed."<< std::endl;
+        return false;
+      }
+      if(icol!=_icol) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : received column index "  << icol << ", whilst " << _icol << " expected." << std::endl;
+        return false;
+      }
+      branch& _branch = m_cols[icol]->get_branch();
+      basket* basket = mpi_create_basket(m_out,a_impi,
+                                         m_dir.file().byte_swap(),m_dir.seek_directory(),
+                                         _branch.basket_size());
+      if(!basket) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : mpi_create_basket() failed."<< std::endl;
+        return false;
+      }
+
+      uint32 add_bytes,nout;
+      if(!_branch.add_basket(m_dir.file(),*basket,add_bytes,nout)) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : column wise : branch.add_basket() failed."<< std::endl;
+        delete basket;
+        return false;
+      }
+
+      delete basket;
+      _branch.set_tot_bytes(_branch.tot_bytes()+add_bytes);
+      _branch.set_zip_bytes(_branch.zip_bytes()+nout);
+
+      _icol++;
+    }
+    return true;
+  }
+
+  bool mpi_end_fill(impi& a_impi) {
+
+#define TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(a__type) \
+          {leaf_ref<a__type>* _mleaf_ = _mleaf?id_cast<base_leaf, leaf_ref<a__type> >(*_mleaf):0;\
+            if(_mleaf_) {\
+              uint32 _len;\
+              if(!a_impi.unpack(_len)) return false;\
+              a__type _mx;\
+              if(!a_impi.unpack(_mx)) return false;\
+              _mleaf_->set_length(mx(_len,_mleaf_->length()));\
+              _mleaf_->set_max(mx(_mx,_mleaf_->get_max()));\
+              set_done = true;\
+            }}
+
+#define TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(a__type) \
+          {leaf_std_vector_ref<a__type>* _mleaf_ = _mleaf?id_cast<base_leaf, leaf_std_vector_ref<a__type> >(*_mleaf):0;\
+            if(_mleaf_) {\
+              uint32 _len;\
+              if(!a_impi.unpack(_len)) return false;\
+              a__type _mx;\
+              if(!a_impi.unpack(_mx)) return false;\
+              _mleaf_->set_length(mx(_len,_mleaf_->length()));\
+              _mleaf_->set_max(mx(_mx,_mleaf_->get_max()));\
+              set_done = true;\
+            }}
+
+#define TOOLS_WROOT_NTUPLE_SET_LEAF_STRING_LENGTH_MAX \
+           {leaf_string_ref* _mleaf_ = _mleaf?id_cast<base_leaf,leaf_string_ref>(*_mleaf):0;\
+            if(_mleaf_) {\
+              uint32 _len;\
+              if(!a_impi.unpack(_len)) return false;\
+              int _mx;\
+              if(!a_impi.unpack(_mx)) return false;\
+              _mleaf_->set_length(mx(_len,_mleaf_->length()));\
+              _mleaf_->set_max(mx(_mx,_mleaf_->get_max()));\
+              set_done = true;\
+            }}
+
+    if(m_row_wise) {
+      if(!m_row_wise_branch) return false;
+
+      tools_vforcit(base_leaf*,m_row_wise_branch->leaves(),mit) {
+        base_leaf* _mleaf = *mit;
+
+        bool set_done = false;
+
+        TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(char)
+        TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(short)
+        TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(int)
+        TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(float)
+        TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(double)
+
+        TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(char)
+        TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(short)
+        TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(int)
+        TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(float)
+        TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(double)
+
+        TOOLS_WROOT_NTUPLE_SET_LEAF_STRING_LENGTH_MAX
+
+        if(!set_done) {
+          m_out << "tools::wroot::ntuple::mpi_end_fill :"
+                << " leaf " << _mleaf->name() << " with cid " << _mleaf->id_cls() << " not treated." << std::endl;
+          return false;
+        }
+      }
+
+    } else { // column wise :
+      tools_vforcit(wroot::icol*,m_cols,it) {
+        base_leaf* _mleaf = (*it)->get_leaf();
+
+        bool set_done = false;
+        TOOLS_WROOT_NTUPLE_SET_LEAF_STRING_LENGTH_MAX
+
+        if(!set_done) {
+          uint32 _len;
+          if(!a_impi.unpack(_len)) return false;
+          int _mx;
+          if(!a_impi.unpack(_mx)) return false;
+        }
+      }
+    }
+
+#undef TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX
+#undef TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX
+#undef TOOLS_WROOT_NTUPLE_SET_LEAF_STRING_LENGTH_MAX
+
+    return true;
+  }
+
+protected:
+  std::vector<icol*> m_cols;
+  bool m_row_wise;
+  branch* m_row_wise_branch; //used if row_wise.
+};
+
+}}
+
+#endif

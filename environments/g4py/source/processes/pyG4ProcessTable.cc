@@ -34,6 +34,7 @@ class G4UImessenger;
 
 using namespace boost::python;
 
+
 // ====================================================================
 // thin wrappers
 // ====================================================================
@@ -109,7 +110,7 @@ void(G4ProcessTable::*f2_SetProcessActivation)
   = &G4ProcessTable::SetProcessActivation;
 
 void(G4ProcessTable::*f3_SetProcessActivation)
-  (const G4String&, G4ParticleDefinition*, G4bool)
+  (const G4String&, const G4ParticleDefinition*, G4bool)
   = &G4ProcessTable::SetProcessActivation;
 
 void(G4ProcessTable::*f4_SetProcessActivation)
@@ -124,7 +125,7 @@ void(G4ProcessTable::*f6_SetProcessActivation)
   = &G4ProcessTable::SetProcessActivation;
 
 void(G4ProcessTable::*f7_SetProcessActivation)
-  (G4ProcessType, G4ParticleDefinition*, G4bool)
+  (G4ProcessType, const G4ParticleDefinition*, G4bool)
   = &G4ProcessTable::SetProcessActivation;
 
 void(G4ProcessTable::*f8_SetProcessActivation)
@@ -142,8 +143,8 @@ using namespace pyG4ProcessTable;
 // ====================================================================
 void export_G4ProcessTable()
 {
-  class_<G4ProcessTable, G4ProcessTable*, boost::noncopyable>
-    ("G4ProcessTable", "process table")
+  class_<G4ProcessTable, boost::noncopyable>
+    ("G4ProcessTable", "process table", no_init)
     // ---
     .def("GetProcessTable",  &G4ProcessTable::GetProcessTable,
          return_value_policy<reference_existing_object>())

@@ -250,8 +250,18 @@ void HistoManager::EndOfRun()
   G4cout.precision(prec);
   fAnalysisManager->Write();
   fAnalysisManager->CloseFile();
+  fAnalysisManager->Clear();
 
-  delete fAnalysisManager;
+  G4bool extra = true;
+  if(fTargetMaterial && extra) {
+    G4double E= 5*GeV;
+    G4double cross = 
+      store->GetInelasticCrossSectionPerVolume(particle,E,fTargetMaterial);
+    if(cross <= 0.0) { cross = 1.e-100; }
+    G4cout << "### " << particle->GetParticleName() << " " << E/GeV
+           << " GeV on " << fTargetMaterial->GetName()
+           << " xs/X0= " << 1.0/(cross*fTargetMaterial->GetRadlen()) << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

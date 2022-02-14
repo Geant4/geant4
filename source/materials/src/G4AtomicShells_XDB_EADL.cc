@@ -41,7 +41,6 @@
 #include "G4AtomicShells_XDB_EADL.hh"
 #include "G4SystemOfUnits.hh"
 
-
 const G4int
 G4AtomicShells_XDB_EADL::fNumberOfShells[121] =
 {
@@ -711,7 +710,6 @@ G4AtomicShells_XDB_EADL::fBindingEnergies[2171] =
     0.0396,    0.0251,    0.0113,    0.0042
 };
 
-
 const G4int
 G4AtomicShells_XDB_EADL::fNumberOfElectrons[2171] =
 {
@@ -1276,7 +1274,7 @@ G4AtomicShells_XDB_EADL::GetNumberOfFreeElectrons(G4int Z, G4double th)
   G4int idxmax = idx +  fNumberOfShells[Z];
   G4int n = 0;
   for (G4int i=idx; i<idxmax; ++i) {
-    if(fBindingEnergies[i] <= th) { n += fNumberOfElectrons[i]; } 
+    if(fBindingEnergies[i]*CLHEP::keV <= th) { n += fNumberOfElectrons[i]; } 
   }
   return n;
 }

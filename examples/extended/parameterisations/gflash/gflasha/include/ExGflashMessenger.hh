@@ -30,15 +30,15 @@
 /// \brief Definition of the ExGflashMessenger class
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c:examples/extended/parameterisations/gflash/gflasha/include/ExGflashMessenger.hh
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExGflashMessenger_h
 #define ExGflashMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class ExGflashDetectorConstruction;
 class G4UIdirectory;
@@ -48,23 +48,23 @@ class G4UIcmdWith3Vector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExGflashMessenger: public G4UImessenger
+class ExGflashMessenger : public G4UImessenger
 {
-public:
-  ExGflashMessenger(ExGflashDetectorConstruction* );
-  virtual ~ExGflashMessenger();
+ public:
+  ExGflashMessenger(ExGflashDetectorConstruction*);
+  ~ExGflashMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
 
-private:
-  ExGflashDetectorConstruction*      fDetector;
+ private:
+  ExGflashDetectorConstruction* fDetector;
 
-  G4UIdirectory*             fExGflashDir;
-  G4UIcmdWithAnInteger*      fVerbose;
-  G4UIdirectory*             fDetDir;  
-  G4UIcmdWithAString*        fMaterCmd;
-  G4UIcmdWith3Vector*        fLBinCmd;
-  G4UIcmdWith3Vector*        fRBinCmd;
+  G4UIdirectory* fExGflashDir;
+  G4UIcmdWithAnInteger* fVerbose;
+  G4UIdirectory* fDetDir;
+  G4UIcmdWithAString* fMaterCmd;
+  G4UIcmdWith3Vector* fLBinCmd;
+  G4UIcmdWith3Vector* fRBinCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

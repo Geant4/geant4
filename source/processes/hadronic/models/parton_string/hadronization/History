@@ -7,23 +7,120 @@
       History file for hadronic/models/parton_string/hadronization directory
       -------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16-Apr-2021 B. Morgan        (had-hadronization-V10-07-01)
+- Migrate build to modular CMake API
+
+13-Apr-2021 A. Ribon         (had-hadronization-V10-07-00)
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
+
+19-Oct-2020 A. Ribon         (had-hadronization-V10-06-08)
+-  G4VLongitudinalStringDecay : fix by Vladimir Uzhinsky in the method
+   ProduceOneHadron to remove an inconsistency in the treatment of
+   low-mass strings with respect to the method
+   G4QGSMFragmentation::FragmentString .
+   (As consequence of this inconsistency, interactions with fewer
+    intra-nuclear collisions were favored, therefore producing
+    fewer secondary hadrons.)
+
+17-Oct-2020 V. Ivanchenko    (had-hadronization-V10-06-07)
+-  G4VLongitudinalStringDecay, G4QGSMFragmentation - added protections
+   for arguments of G4Exp to avoid precision lost in same cases
+
+29-Sep-2020 A. Ribon         (had-hadronization-V10-06-06)
+Changes made by Vladimir Uzhinsky in order to improve the agreement
+of FTF simulations with NA49 experimental data (on Pt-Xf correlations
+for various particles produced in pp interactions at 158 GeV/c):
+-  G4LundStringFragmentation : introduced a new parameter (as a class
+   data member), a kind of "temperature", for sampling the Pt of
+   produced hadrons; this parameter has been tuned for different
+   fragmentation processes.
+   Moreover, the string direction (one of string's properties,
+   whose value can be either +1 for projectile-like strings or
+   -1 for target-like strings) is now treated correctly and used
+   to invert the results of the string fragmentation (in the string
+   rest frame) when the string direction is -1.
+-  G4FragmentingString : erased some inconsistencies.
+-  G4VLongitudinalStringDecay : clean-up.
+
+08-Sep-2020 A. Ribon         (had-hadronization-V10-06-05)
+-  G4VLongitudinalStringDecay : made the logic clearer for Coverity,
+   but without any effect on the results.
+
+28-Jul-2020 A. Ribon         (had-hadronization-V10-06-04)
+-  G4QGSMFragmentation : proper exit in the method FragmentString
+   when the string mass is below the threshold.
+
+24-Jul-2020 A. Ribon         (had-hadronization-V10-06-03)
+-  G4LundStringFragmentation, G4QGSMFragmentation : if the flag for
+   heavy (charmed and bottom) hadrons is enabled, then non-zero
+   probabilities for c-cbar and b-bbar creation from the vacuum are set,
+   allowing charmed and bottom hadrons to be created during the string
+   fragmentation of ordinary (i.e. not heavy) projectile hadron nuclear
+   reactions.
+-  G4VLongitudinalStringDecay : in the method SetMinMasses, set the
+   constituent masses of charm and bottom quarks; introduced also a new
+   pre-processor option for debugging heavy hadrons, switched off by
+   default; improved comments.
+-  G4LundStringFragmentation : extension to charm and bottom quarks of the
+   methods Quark_AntiQuark_lastSplitting and Quark_Diquark_lastSplitting;
+   added protections in the method FragmentString to avoid rare crashes
+   seen with heavy hadrons.
+-  G4HadronBuilder : fixed condition in the method Barion to take into
+   account the extension to charm and bottom quarks; moreover, for both
+   Meson and Barion methods, we have to force by hand that the heavy
+   hadron produced by the string fragmentation is one of the few available
+   in Geant4 (in particular, all heavy hadron resonances are transformed
+   into close heavy hadron ground states). Introduced also a new
+   pre-processor option for debugging heavy hadrons, switched off by default.
+-  G4ExcitedStringDecay : add protection in the FragmentStrings method
+   to avoid rare crashes seen with heavy hadrons.
+
+10-Jun-2020 A. Ribon         (had-hadronization-V10-06-02)
+-  Improved treatment of antibaryon interactions in QGS
+   (made by Vladimir Uzhinsky):
+   1. G4QGSMFragmentation : corrected the treatment of low mass
+      diquark-antidiquark strings. In addition to this, the Mt distribution
+      of produced hadrons has been introduced.
+   2. G4VLongitudinalStringDecay : introduced in the method
+      SetMinimalStringMass a check that the strings are of allowed type:
+      quark-antiquark, diquark-antidiquark, quark-diquark and
+      antiquark-antidiquark. Introduced also for diquark-antidiquark strings
+      a special algorithm (already present for the other types of allowed
+      strings) for treating low-mass strings with masses below known hadrons.
+
+23-Apr-2020 V. Ivanchenko    (had-hadronization-V10-06-01)
+- G4VLongitudinalStringDecay, G4QGSMFragmentation
+  G4LundStringFragmentation - fixed Coverity warnings - if fragmentation
+    at low energy is not possible always return flag "false"; initialise
+    with nullptr and not NULL
+
+24-Feb-2020 V. Ivanchenko    (had-hadronization-V10-06-00)
+- G4VLongitudinalStringDecay, G4ExcitedStringDecay,
+  G4LundStringFragmentation - inherit from G4HadronicInteraction
+    destruction of these models end of run by hadron model store;
+    removed implementations of private operators.
+
 19-Nov-2019 A. Ribon         (had-hadronization-V10-05-04)
 -  G4ExcitedStringDecay : protection in the sampling of resonance masses
    against values below threshold.
 -  G4LundStringFragmentation, G4QGSMFragmentation : in the method SplitEandP,
-   added a check that a string can be converted to an existing hadron 
+   added a check that a string can be converted to an existing hadron
    (else a null momentum is returned).
 
 14-Nov-2019 A. Ribon         (had-hadronization-V10-05-03)
 -  G4VLongitudinalStringDecay : forgotten initialization of c-cbar and b-bbar
-   pair production for kinks or gluons. 
+   pair production for kinks or gluons.
 
 07-Nov-2019 A. Ribon         (had-hadronization-V10-05-02)
 -  Implementation, made by Vladimir Uzhinsky, of the fragmentation functions
@@ -63,8 +160,8 @@ code and to keep track of all tags.
 
 26-Oct-2018 V. Uzhinsky      (had-hadronization-V10-04-05)
 -  G4LundStringFragmentation : tuning of strange - anti-strange probability
-   production as a function of energy to describe NA61/SHINE 31 GeV/c p-C 
-   data on K+ / K- production. Decreased also the Lambda0 production for 
+   production as a function of energy to describe NA61/SHINE 31 GeV/c p-C
+   data on K+ / K- production. Decreased also the Lambda0 production for
    NA61/SHINE 158 GeV/c and 31 GeV/c p-C : for the former good agreement,
    while for the latter the simulation underestimates the data.
 -  G4QGSMFragmentation : new algorithm for last string decay a-la Lund
@@ -87,7 +184,7 @@ code and to keep track of all tags.
 -  Improved versions of LUND and QGS fragmentations.
 
 07-Dec-2017 A. Ribon         (had-hadronization-V10-04-00)
--  Brought back the development version of hadronization 
+-  Brought back the development version of hadronization
    (as it was in had-hadronization-V10-03-07).
 
 27-Oct-2017 A. Ribon         (had-hadronization-V10-03-09)
@@ -125,7 +222,7 @@ code and to keep track of all tags.
 
 13-Jan-2017 V. Uzhinsky      (had-hadronization-V10-03-03)
 -  Re-organized and cleaned G4LUNDStringFragmentatio.
-   The variant is tuned using NA49 exp. data on pp->p/pi/K +X. 
+   The variant is tuned using NA49 exp. data on pp->p/pi/K +X.
 
 14-Dec-2016 A. Ribon         (had-hadronization-V10-03-02)
 -  After the release G4 10.3, with "stable" version, this tag brings back
@@ -180,13 +277,13 @@ code and to keep track of all tags.
 13-June-2016 V. Uzhinsky     (had-hadronization-V10-02-06)
    G4LundStringFragmentation::Sample4Momentum() was improved.
    Average transvers momentum is set to 475 MeV for mesons and baryons,
-   and <Pt> for barion 3/2 production - 800 MeV/c. 
+   and <Pt> for barion 3/2 production - 800 MeV/c.
 
    G4LundStringFragmentation::GetLightConeZ - alund=0.233 GeV^2 for strange
    meson produced by a quark, and alund=0.175 GeV^2 for q->baryon.
 
    di-quark fragmentation function into baryon (1/2) z^1.5, and z^(-0.25)
-   for baryon (3/2). 
+   for baryon (3/2).
    Note: the tag was made accidentally in the wrong directory (src/).
 
  6-June-2016 V. Uzhinsky     (had-hadronization-V10-02-05)
@@ -198,7 +295,7 @@ code and to keep track of all tags.
    and <Pt> for barion 3/2 production - 900 MeV/c.
 
  1-June-2016 V. Uzhinsky     (had-hadronization-V10-02-03)
-   Fine tuning of G4LundStringFragmentation.cc. <Pt> of mesons created at 
+   Fine tuning of G4LundStringFragmentation.cc. <Pt> of mesons created at
    quark fragmentation is decreased. <Pt> of baryons created at quark and
    diquark is increased. Fragmentation functions of qq-> B(1/2) and B(3/2)
    are implemented correctly.
@@ -226,7 +323,7 @@ code and to keep track of all tags.
 
  5-Aug-2015 A. Ribon      (had-hadronization-V10-01-07)
  - G4VLongitudinalStringDecay, G4LundStringFragmentation, G4QGSMFragmentation:
-   replaced std::exp, std::log and std::pow with the faster 
+   replaced std::exp, std::log and std::pow with the faster
    G4Exp, G4Log and G4Pow, respectively.
    This changes the random number sequence.
 
@@ -237,9 +334,9 @@ code and to keep track of all tags.
 
  4-June-2015 V. Uzhinsky  (had-hadronization-V10-01-05)
  - G4QGSMFragmentation::SplitEandP a bug is fixed which led to energy-momentum
-   non-conservation quite rare. 
+   non-conservation quite rare.
    FragmentationMass(NewString,&G4HadronBuilder::BuildHighSpin);
-   was changed into 
+   was changed into
    FragmentationMass(NewString,&G4HadronBuilder::BuildLowSpin);
    See Uzhi 03.06.2014
 
@@ -250,8 +347,8 @@ code and to keep track of all tags.
 
 29-May-2015 V. Uzhinsky   (had-hadronization-V10-01-03)
  - G4LundStringFragmentation - a bug led to FPE is erased. It was in
-           G4LundStringFragmentation::FragmentString -- 
-         if(!IsFragmentable(&aString)) // produce 1 hadron 
+           G4LundStringFragmentation::FragmentString --
+         if(!IsFragmentable(&aString)) // produce 1 hadron
    was applied to qq- anti_qq string with mass 1951 MeV, and there was an attempt
    to produce 2 baryons without of a checking baryon masses. I am afraid
                  that it was presented before.
@@ -270,7 +367,7 @@ code and to keep track of all tags.
 
 28-Nov-2014 V. Uzhinsky   (had-hadronization-V10-00-13)
  - G4LundStringFragmentation - charged baryon number conservation is fixed
-   for K-nucleus interactions 
+   for K-nucleus interactions
 
 6-Nov-2014 V. Uzhinsky    (had-hadronization-V10-00-12)
  - Warning message is erased.
@@ -280,16 +377,16 @@ code and to keep track of all tags.
    instead of top directory - hadronization.
 
 3-Nov-2014 V. Uzhinsky    (had-hadronization-V10-00-10)
-- G4ExcitedStringDecay.cc Restoration of the initial string system is addded 
+- G4ExcitedStringDecay.cc Restoration of the initial string system is addded
   for a correct repeatition of calculations in the case when hadronization is fault.
 
-- G4LundStringFragmentation.cc Fragmentation functions for qq -> B are set as 
+- G4LundStringFragmentation.cc Fragmentation functions for qq -> B are set as
   f(z)~ Const for all baryons.
 
-20-Oct-2014 A.Ribon        (had-hadronization-V10-00-09) 
+20-Oct-2014 A.Ribon        (had-hadronization-V10-00-09)
 - G4VLongitudinalStringDecay.cc : mixing between the vector mesons
   rho0 and omega have been changed from 50% (rho0) - 50% (omega) to
-  100% (rho0) - 0% (omega), in order to reduce the pi0 production. 
+  100% (rho0) - 0% (omega), in order to reduce the pi0 production.
   Expected little effects in thin-target, and significant effects
   in hadronic showers in calorimeters.
 
@@ -300,12 +397,12 @@ code and to keep track of all tags.
   re-written. Ionk algorithm is inserted for sampling light-cone momentum
   fraction, z. Parameters of the fragmentation were tuned. They will be
   improved after a revision of the QGSM string creation algorithm.
-- The algorith of G4QGSMFragmentation::SplitEandP was improved. It is 
+- The algorith of G4QGSMFragmentation::SplitEandP was improved. It is
   faster now.
 
 29-Sep-2014, V.Uzhinsky    (had-hadronization-V10-00-07)
 - Essential improvement of hadronization.
-- Parameters and string fragmentation functions of 
+- Parameters and string fragmentation functions of
   G4LundStringFragmentation.cc were tuned, assuming that the weight of
   uu-diquarks in protons is 1/6.
 - Threatment of string decay direction was improved in G4FragmentingString.cc
@@ -328,7 +425,7 @@ code and to keep track of all tags.
 - Bug is fixed in G4LundStringFragmentation.cc for anti-diquark-diquark strings.
 - Anisotropic decay is only left in G4LundStringFragmentation::Sample4Momentum for
   a sampling of momenta of 2 last produced hadrons for all strings. Before this,
-  quark-diquark strings were decayed isotropically. It is improve a little bit 
+  quark-diquark strings were decayed isotropically. It is improve a little bit
   proton spectra.
 
 25-May-2014, V. Uzhinsky   (had-hadronization-V10-00-03)
@@ -353,7 +450,7 @@ code and to keep track of all tags.
   4-dimensional vector in G4LundStringFragmentation.cc .
 
 29-July-2013, H.Kurashige  (had-hadronization-V09-06-01)
-- Remove inclusion of G4ShortLivedTable.hh (G4VLongitudinalStringDecay.cc) 
+- Remove inclusion of G4ShortLivedTable.hh (G4VLongitudinalStringDecay.cc)
 
 02-May-2013, A.Ribon       (had-hadronization-V09-06-00)
 - For thread safety, replaced CLHEP::RandFlat with G4RandFlat in
@@ -377,12 +474,12 @@ code and to keep track of all tags.
 - fix warnings on shadowed variables, affected G4LundStringFragmentation.cc
 
 25-May-2012, G.Folger       (had-hadronization-V09-05-02)
-- make copy ctor, =, == , and != operators private without implementation, 
+- make copy ctor, =, == , and != operators private without implementation,
    fixing coverity warnings
 
 21 May 2012, Vladimir Uzhinsky (had-hadronization-V09-05-01)
 -  Probabilities of s-sbar quark pairs and qq-qqbar diquark pairs
-   are changed in G4LundStringFragmentation for a description of 
+   are changed in G4LundStringFragmentation for a description of
    the NA49 collaboration data.
 
 12-Apr-2012, G.Folger       (had-hadronization-V09-05-00)
@@ -403,14 +500,14 @@ code and to keep track of all tags.
   to make the code easier to understand and maintain.
 
 02 Nov 2011, Alberto Ribon, svn rev 53955
-- Made public the virtual method G4LundStringFragmentation::FragmentString. 
+- Made public the virtual method G4LundStringFragmentation::FragmentString.
   Clean up also old commented lines in two G4LundStringFragmentation
   methods: StopFragmenting and FragmentString.
 
 1 Nov 2011, Gunter Folger, svn rev 53895
 - G4LundStringFragmentation: simplify GetLightConeZ()
 
-29 Sep 2011, Gunter Folger, svn rev 52604 
+29 Sep 2011, Gunter Folger, svn rev 52604
 - G4LundStringFragmentation: Cleanup indentation
 
 19 Jul 2011, Gunter Folger              (had-hadronization-V09-04-02)
@@ -421,7 +518,7 @@ code and to keep track of all tags.
    One outstanding warning in G4LundStringFragmentation::Splitlast().
 
 3 Nov 2010, Gunter Folger               (had-hadronization-V09-03-02)
-- fix minor coverity warnings in G4HadronBuilder 
+- fix minor coverity warnings in G4HadronBuilder
 
 22-September-2010  V. Uzhinsky          (had-hadronization-V09-03-01)
 --------------------------------------------------------------
@@ -429,7 +526,7 @@ code and to keep track of all tags.
 
 20-September-2010  V. Uzhinsky
 ------------------------------
-- Phase space restrictions are introduced at small mass string 
+- Phase space restrictions are introduced at small mass string
   fragmentation.
 
 5-August-2010  V. Uzhinsky
@@ -437,7 +534,7 @@ code and to keep track of all tags.
 - Small re-organization is done in G4ExcitedStringDecay.hh. Inline
   methods were moved to G4ExcitedStringDecay.cc.
 
-- An action is introduced in FragmentStrings. It acts when 
+- An action is introduced in FragmentStrings. It acts when
   EnergyAndMomentumCorrector can not be done due to large sum masses
   of produced hadrons. This led to energy-momentum violation. Now
   string fragmentation is repeted 100 times in a bad case.
@@ -468,20 +565,20 @@ code and to keep track of all tags.
 - remove temporary workaround - fix is now in QGS
 - change pt sampling in G4LundStringFragmentation to avoid near endless
   loop; this should improve overall performance slightly.
-  Affected G4VLongitudinalStringDecay, where SampleQuarkPt() is 
-  implemented; affected .hh and .cc for new optional argument of max Pt 
+  Affected G4VLongitudinalStringDecay, where SampleQuarkPt() is
+  implemented; affected .hh and .cc for new optional argument of max Pt
   to SampleQuarkPt()
 
 18-May-2009   Gunter Folger             (had-hadronization-V09-02-00)
 ---------------------------------------------------------------------
 - reset formatting changes by MK with tags hadr-prtn-hadr-V09-02-xx
-- temporary workaround for wrong PDG codes created on wrong input from QGS 
+- temporary workaround for wrong PDG codes created on wrong input from QGS
   when used for e.g. antiproton.
-   
+
 2-May 2007    Gunter Folger             (had-hadronization-V08-02-03)
 ---------------------------------------------------------------------
-- G4ExcitedStringDecay.hh: protect againt divide by 0 when KTsum1.e() is 0. 
-    
+- G4ExcitedStringDecay.hh: protect againt divide by 0 when KTsum1.e() is 0.
+
 24-April 2007 Gunter Folger             (had-hadronization-V08-02-02)
 ---------------------------------------------------------------------
 - Seperate FTF and QGS fragmentation dir methods where V.Uzhinsky
@@ -489,9 +586,9 @@ code and to keep track of all tags.
 
 2-March 2007 Gunter Folger              (had-hadronization-V08-02-01)
 ---------------------------------------------------------------------
-- G4ExcitedStringDecay::EnergyAndMomentumCorrector no longer causes Exception 
+- G4ExcitedStringDecay::EnergyAndMomentumCorrector no longer causes Exception
   when no converging. Add more info when failing. Return correct status.
-   
+
 24-Jan 2007 Gunter Folger               (had-hadronization-V08-02-00)
 --------------------------------------------------------------
 - G4ExcitedStringDecay::EnergyAndMomentumCorrector :

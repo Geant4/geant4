@@ -81,9 +81,8 @@ class G4WilsonAbrasionModel : public G4HadronicInteraction
     G4WilsonAbrasionModel(G4ExcitationHandler*);
     ~G4WilsonAbrasionModel();
 
-    G4WilsonAbrasionModel(const G4WilsonAbrasionModel& right);
-                                                                                
-    const G4WilsonAbrasionModel& operator=(G4WilsonAbrasionModel& right);
+    G4WilsonAbrasionModel(const G4WilsonAbrasionModel& right) = delete;
+    const G4WilsonAbrasionModel& operator=(G4WilsonAbrasionModel& right) = delete;
 
     virtual G4HadFinalState* ApplyYourself(const G4HadProjectile&, G4Nucleus&);
     void SetVerboseLevel(G4int);
@@ -115,6 +114,7 @@ class G4WilsonAbrasionModel : public G4HadronicInteraction
     G4double B;
     G4double third;
     G4double fradius;
+    G4int secID;  // Creator model ID for the secondaries created by this model
 };
 
 inline void

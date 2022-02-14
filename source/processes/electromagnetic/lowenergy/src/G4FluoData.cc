@@ -40,38 +40,43 @@
 #include "G4SystemOfUnits.hh"
 #include "G4DataVector.hh"
 #include "G4FluoTransition.hh"
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4FluoData::G4FluoData(const G4String& dir)
 {
-  numberOfVacancies=0; 
   fluoDirectory = dir;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4FluoData::~G4FluoData()
 { 
- std::map<G4int,G4DataVector*,std::less<G4int> >::iterator pos;
-
-  for (pos = idMap.begin(); pos != idMap.end(); ++pos)
+  for (auto& pos : idMap)
     {
-      G4DataVector* dataSet = (*pos).second;
+      G4DataVector* dataSet = pos.second;
       delete dataSet;
     }
-  for (pos = energyMap.begin(); pos != energyMap.end(); ++pos)
+  
+  for (auto& pos : energyMap)
     {
-      G4DataVector* dataSet = (*pos).second;
+      G4DataVector* dataSet = pos.second;
       delete dataSet;
     }
- for (pos = probabilityMap.begin(); pos != probabilityMap.end(); ++pos)
+  
+  for (auto& pos: probabilityMap)
     {
-      G4DataVector* dataSet = (*pos).second;
+      G4DataVector* dataSet = pos.second;
       delete dataSet;
     }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 size_t G4FluoData::NumberOfVacancies() const
 {
   return numberOfVacancies;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4FluoData::VacancyId(G4int vacancyIndex) const
 {
@@ -83,8 +88,7 @@ G4int G4FluoData::VacancyId(G4int vacancyIndex) const
     }
   else
     {
-      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
-      pos = idMap.find(vacancyIndex);
+      auto pos = idMap.find(vacancyIndex);
       if (pos!= idMap.end())
 	{ G4DataVector dataSet = (*(*pos).second);
 	n = (G4int) dataSet[0];
@@ -93,6 +97,8 @@ G4int G4FluoData::VacancyId(G4int vacancyIndex) const
     }
   return n;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 size_t G4FluoData::NumberOfTransitions(G4int vacancyIndex) const
 {
@@ -112,6 +118,9 @@ size_t G4FluoData::NumberOfTransitions(G4int vacancyIndex) const
   }
  return n;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
 {
  G4int n = -1;
@@ -123,9 +132,7 @@ G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
    }
  else
    {
-     std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
-    
-     pos = idMap.find(vacancyIndex);
+     auto pos = idMap.find(vacancyIndex);
      
      G4DataVector dataSet = *((*pos).second);
    
@@ -139,6 +146,8 @@ G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
    }
  return n;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
 {
@@ -149,10 +158,8 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
       G4Exception("G4FluoData::StartShellEnergy()","de0002",FatalErrorInArgument,
 		  "vacancyIndex outside boundaries");}
   else
-    {
-      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
-     
-      pos = energyMap.find(vacancyIndex);
+    {     
+      auto pos = energyMap.find(vacancyIndex);
      
       G4DataVector dataSet = *((*pos).second);
      
@@ -164,6 +171,8 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
     }
   return n;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
 {
@@ -177,9 +186,7 @@ G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
     }
   else
     {
-      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
-     
-      pos = probabilityMap.find(vacancyIndex);
+      auto pos = probabilityMap.find(vacancyIndex);
      
       G4DataVector dataSet = *((*pos).second);
      
@@ -192,6 +199,8 @@ G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
   return n;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4FluoData::LoadData(G4int Z)
 { 
   // Build the complete string identifying the file with the data set
@@ -203,6 +212,7 @@ void G4FluoData::LoadData(G4int Z)
     ost << "/fl-tr-pr-"<<".dat"; 
   }
   G4String name(ost.str());
+ 
   
   char* path = std::getenv("G4LEDATA");
   if (!path)
@@ -213,7 +223,12 @@ void G4FluoData::LoadData(G4int Z)
     }
   
   G4String pathString(path);
+  
   G4String dirFile = pathString + fluoDirectory + name;
+   
+  //G4cout << "G4FluoData:: LoadData() name: " << dirFile << G4endl;
+   
+   
   std::ifstream file(dirFile);
   std::filebuf* lsdp = file.rdbuf();
   
@@ -316,6 +331,7 @@ void G4FluoData::LoadData(G4int Z)
   delete transProbabilities;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4FluoData::PrintData() 
 {
@@ -330,7 +346,7 @@ void G4FluoData::PrintData()
 	{ 
 	  G4int id = StartShellId(k,i);
 	// let's start from 1 because the first (index = 0) element of the vector
-	// is the id of the intial vacancy
+	// is the id of the initial vacancy
 	  G4double e = StartShellEnergy(k,i) /MeV;
 	  G4double p = StartShellProb(k,i); 
 	  G4cout << k <<") Shell id: " << id <<G4endl;

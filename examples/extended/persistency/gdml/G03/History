@@ -20,9 +20,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-Mar  19th, 2015  Gabriele Cosmo G03-V10-01-00
-=======
+November 11th, 2021 Gabriele Cosmo G03-V10-07-00
+- Fixed visualisation settings in input macros.
+
+November 13th, 2020 Ben Morgan G03-V10-06-01
+- Enforce use of Serial RunManager.
+
+November 10th, 2020 Ben Morgan G03-V10-06-00
+- Migration to G4RunManagerFactory.
+
 November 28th, 2019 I. Hrivnacova G03-V10-05-00
 - Fixed Doxygen warning in .README.txt
 

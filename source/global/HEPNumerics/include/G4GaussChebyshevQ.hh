@@ -23,62 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4GaussChebyshevQ
 //
 // Class description:
 //
 // Class for Gauss-Chebyshev quadrature method
 // Roots of ortogonal polynoms and corresponding weights are calculated based on
 // iteration method (by bisection Newton algorithm). Constant values for initial
-// approximations were derived from the book: M. Abramowitz, I. Stegun, Handbook
-// of mathematical functions, DOVER Publications INC, New York 1965 ; chapters 9,
-// 10, and 22 .
-//
-// ------------------------------ CONSTRUCTORS ----------------------------
-//
-// Constructor for Gauss-Chebyshev quadrature method
-//
-// G4GaussChebyshevQuadrature( function pFunction,
-//			       G4int nChebyshev       )
-//
-//
-//
-// ------------------------------- METHODS -----------------------------------
-//
-// Integrates function pointed by fFunction from a to b by Gauss-Chebyshev quadrature
-// method
-//
-// G4double Integral(G4double a, G4double b) const 
+// approximations were derived from the book:
+//   M. Abramowitz, I. Stegun, Handbook of mathematical functions,
+//   DOVER Publications INC, New York 1965 ; chapters 9, 10, and 22.
 
-// ------------------------------- HISTORY --------------------------------
-//
-// 13.05.97 V.Grichine (Vladimir.Grichine@cern.ch)
-
+// Author: V.Grichine, 13.05.1997
+// --------------------------------------------------------------------
 #ifndef G4GAUSSCHEBYSHEVQ_HH
-#define G4GAUSSCHEBYSHEVQ_HH
+#define G4GAUSSCHEBYSHEVQ_HH 1
 
 #include "G4VGaussianQuadrature.hh"
 
 class G4GaussChebyshevQ : public G4VGaussianQuadrature
 {
-public:
-        // Constructor/destructor
+ public:
+  G4GaussChebyshevQ(function pFunction, G4int nChebyshev);
+  // Constructor for Gauss-Chebyshev quadrature method
 
-        G4GaussChebyshevQ( function pFunction,
-			   G4int nChebyshev           ) ;
-			   
-	~G4GaussChebyshevQ() ;		   
-			       
-        // Methods
-			     
-        G4double Integral(G4double a, G4double b) const ;
+  ~G4GaussChebyshevQ();
 
+  G4GaussChebyshevQ(const G4GaussChebyshevQ&) = delete;
+  G4GaussChebyshevQ& operator=(const G4GaussChebyshevQ&) = delete;
 
-private:
-
-	G4GaussChebyshevQ(const G4GaussChebyshevQ&);
-	G4GaussChebyshevQ& operator=(const G4GaussChebyshevQ&);
-
+  G4double Integral(G4double a, G4double b) const;
+  // Integrates function pointed by fFunction from a to b by Gauss-Chebyshev
+  // quadrature method
 };
 
 #endif

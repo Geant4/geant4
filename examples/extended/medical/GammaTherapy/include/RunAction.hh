@@ -48,25 +48,30 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class Run;
+class DetectorConstruction;
+class HistoManager;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 class RunAction : public G4UserRunAction
 {
-public: 
+ public:
+  RunAction(DetectorConstruction*);
+  virtual ~RunAction();
 
-  RunAction();
-  virtual  ~RunAction();
- 
+  virtual G4Run* GenerateRun();
+
   void BeginOfRunAction(const G4Run*);
   // In this method histogramms are booked
 
   void EndOfRunAction(const G4Run*);
   // In this method bookHisto method is called in which histogramms are filled
 
-private:
-
-  RunAction & operator=(const RunAction &right);
-  RunAction(const RunAction&);
-
+ private:
+  DetectorConstruction* fDetector;
+  Run* fRun;
+  HistoManager* fHistoManager;
 };
 
 #endif
-

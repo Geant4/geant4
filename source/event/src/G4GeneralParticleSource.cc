@@ -23,43 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///////////////////////////////////////////////////////////////////////////////
+// G4GeneralParticleSource class implementation
 //
-// MODULE:       G4GeneralParticleSource.cc
-//
-// Version:      2.0
-// Date:         5/02/04
-// Author:       Fan Lei 
-// Organisation: QinetiQ ltd.
-// Customer:     ESA/ESTEC
-//
-// Documentation avaialable at http://reat.space.qinetiq.com/gps
-//   These include:
-//       User Requirement Document (URD)
-//       Software Specification Documents (SSD)
-//       Software User Manual (SUM): on-line version available
-//       Technical Note (TN) on the physics and algorithms
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//
-// Version 2.0, 05/02/2004, Fan Lei, Created.
-//    After changes to version 1.1 as in Geant4 v6.0
-//     - Mutilple particle source definition
-//     - Re-structured commands
-//     - Split the task into smaller classes
-//
-//     - old commonds have been retained for backward compatibility, will be
-//       removed in the future.
-//
-//  25/03/2014, Andrew Green
-//      Various changes to use the new G4GeneralParticleSourceData class, mostly
-//      just transparent wrappers around the thread safe object.
-//
-///////////////////////////////////////////////////////////////////////////////
-//
+// Author: Fan Lei, QinetiQ ltd - 05/02/2004
+// Customer: ESA/ESTEC
+// Version: 2.0
+// --------------------------------------------------------------------
+
 #include "G4Event.hh"
 #include "Randomize.hh"
 #include "G4GeneralParticleSource.hh"
@@ -71,161 +41,186 @@
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
-namespace {
-    G4Mutex messangerInit = G4MUTEX_INITIALIZER;
+namespace
+{
+  G4Mutex messangerInit = G4MUTEX_INITIALIZER;
 }
 
-G4GeneralParticleSource::G4GeneralParticleSource() : normalised(false),
-    theMessenger(0)
+G4GeneralParticleSource::G4GeneralParticleSource()
 {
-    GPSData = G4GeneralParticleSourceData::Instance();
-    //currentSource = GPSData->GetCurrentSource();
-    //currentSourceIdx = G4int(GPSData->GetSourceVectorSize() - 1);
+  GPSData = G4GeneralParticleSourceData::Instance();
+  // currentSource = GPSData->GetCurrentSource();
+  // currentSourceIdx = G4int(GPSData->GetSourceVectorSize() - 1);
 
-    //Messenger is special, only a worker should instantiate it. Singleton pattern
-    theMessenger = G4GeneralParticleSourceMessenger::GetInstance(this);
-    //Some initialization should be done only once
-    G4AutoLock l(&messangerInit);
-    static G4bool onlyOnce = false;
-    if ( !onlyOnce ) {
-        theMessenger->SetParticleGun(GPSData->GetCurrentSource());
-        IntensityNormalization();
-        onlyOnce = true;
-    }
+  // Messenger is special, only a worker should instantiate it.
+  // Singleton pattern
+  //
+  theMessenger = G4GeneralParticleSourceMessenger::GetInstance(this);
+
+  // Some initialization should be done only once
+  //
+  G4AutoLock l(&messangerInit);
+  static G4bool onlyOnce = false;
+  if ( !onlyOnce )
+  {
+    theMessenger->SetParticleGun(GPSData->GetCurrentSource());
+    IntensityNormalization();
+    onlyOnce = true;
+  }
 }
 
 G4GeneralParticleSource::~G4GeneralParticleSource()
 {
-    theMessenger->Destroy();
+  theMessenger->Destroy();
 }
 
 void G4GeneralParticleSource::AddaSource(G4double aV)
 {
-    GPSData->Lock();
-    GPSData->AddASource(aV);
-    theMessenger->SetParticleGun(GPSData->GetCurrentSource());
-    //TODO: But do we really normalize here after each source?
-    IntensityNormalization();
-    GPSData->Unlock();
+  GPSData->Lock();
+
+  GPSData->AddASource(aV);
+  theMessenger->SetParticleGun(GPSData->GetCurrentSource());
+
+  // TODO: But do we really normalize here after each source?
+  IntensityNormalization();
+
+  GPSData->Unlock();
 }
 
 void G4GeneralParticleSource::IntensityNormalization()
 {
-    GPSData->IntensityNormalise();
-    normalised=GPSData->Normalised();
+  GPSData->IntensityNormalise();
+  normalised=GPSData->Normalised();
 }
 
 void G4GeneralParticleSource::ListSource()
 {
-    G4cout << "The number of particle sources is: " << GPSData->GetIntensityVectorSize() << G4endl;
-    G4cout <<" Multiple Vertex sources: "<<GPSData->GetMultipleVertex();
-    G4cout <<" Flat Sampling flag: "<<GPSData->GetFlatSampling()<<G4endl;
-    const G4int currentIdx = GPSData->GetCurrentSourceIdx();
-    for(G4int i=0; i<GPSData->GetIntensityVectorSize(); i++)
-    {
-        G4cout << "\tsource " << i << " with intensity: " << GPSData->GetIntensity(i) << G4endl;
-        const G4SingleParticleSource* thisSrc = GPSData->GetCurrentSource(i);
-        G4cout <<" \t\tNum Particles: "<<thisSrc->GetNumberOfParticles()<<"; Particle type: "<<thisSrc->GetParticleDefinition()->GetParticleName()<<G4endl;
-        G4cout <<" \t\tEnergy: "<<G4BestUnit(thisSrc->GetParticleEnergy(),"Energy")<<G4endl;
-        G4cout <<" \t\tDirection: "<<thisSrc->GetAngDist()->GetDirection()<<"; Position: ";
-        G4cout <<G4BestUnit(thisSrc->GetPosDist()->GetCentreCoords(),"Length")<<G4endl;
-        G4cout <<" \t\tAngular Distribution: "<<thisSrc->GetAngDist()->GetDistType()<<G4endl;
-        G4cout <<" \t\tEnergy Distribution: "<<thisSrc->GetEneDist()->GetEnergyDisType()<<G4endl;
-        G4cout <<" \t\tPosition Distribution Type: "<<thisSrc->GetPosDist()->GetPosDisType();
-        G4cout <<"; Position Shape: "<<thisSrc->GetPosDist()->GetPosDisShape()<<G4endl;
-    }
-    //Set back previous source
-    GPSData->GetCurrentSource(currentIdx);
+  G4cout << "The number of particle sources is: "
+         << GPSData->GetIntensityVectorSize() << G4endl;
+  G4cout << " Multiple Vertex sources: " << GPSData->GetMultipleVertex();
+  G4cout << " Flat Sampling flag: " << GPSData->GetFlatSampling() << G4endl;
+  const G4int currentIdx = GPSData->GetCurrentSourceIdx();
+  for(G4int i=0; i<GPSData->GetIntensityVectorSize(); ++i)
+  {
+    G4cout << "\tsource " << i << " with intensity: "
+           << GPSData->GetIntensity(i) << G4endl;
+    const G4SingleParticleSource* thisSrc = GPSData->GetCurrentSource(i);
+    G4cout << " \t\tNum Particles: "<<thisSrc->GetNumberOfParticles()
+           << "; Particle type: "
+           << thisSrc->GetParticleDefinition()->GetParticleName() << G4endl;
+    G4cout << " \t\tEnergy: "
+           << G4BestUnit(thisSrc->GetParticleEnergy(),"Energy") << G4endl;
+    G4cout << " \t\tDirection: "
+           << thisSrc->GetAngDist()->GetDirection() << "; Position: ";
+    G4cout << G4BestUnit(thisSrc->GetPosDist()->GetCentreCoords(),"Length")
+           << G4endl;
+    G4cout << " \t\tAngular Distribution: "
+           << thisSrc->GetAngDist()->GetDistType() << G4endl;
+    G4cout << " \t\tEnergy Distribution: "
+           << thisSrc->GetEneDist()->GetEnergyDisType() << G4endl;
+    G4cout << " \t\tPosition Distribution Type: "
+           << thisSrc->GetPosDist()->GetPosDisType();
+    G4cout << "; Position Shape: "
+           << thisSrc->GetPosDist()->GetPosDisShape() << G4endl;
+  }
+
+  // Set back previous source
+  GPSData->GetCurrentSource(currentIdx);
 }
 
 void G4GeneralParticleSource::SetCurrentSourceto(G4int aV)
 {
-    G4int id = aV;
-    if ( id < GPSData->GetIntensityVectorSize() )
-    {
-        //currentSourceIdx = aV;
-        //currentSource = GPSData->GetCurrentSource(id);
-        theMessenger->SetParticleGun(GPSData->GetCurrentSource(id));
-    }
-    else
-    {
-    	G4ExceptionDescription msg;
-    	msg<<"Trying to set source to index "<<aV<<" but only "<<GPSData->GetIntensityVectorSize()<<" sources are defined.";
-    	G4Exception("G4GeneralParticleSoruce::SetCurrentSourceto","G4GPS004",FatalException,msg);
-    }
+  G4int id = aV;
+  if ( id < GPSData->GetIntensityVectorSize() )
+  {
+    // currentSourceIdx = aV;
+    // currentSource = GPSData->GetCurrentSource(id);
+    theMessenger->SetParticleGun(GPSData->GetCurrentSource(id));
+  }
+  else
+  {
+    G4ExceptionDescription msg;
+    msg << "Trying to set source to index " << aV << " but only "
+        << GPSData->GetIntensityVectorSize() << " sources are defined.";
+    G4Exception("G4GeneralParticleSoruce::SetCurrentSourceto", "G4GPS004",
+                FatalException, msg);
+  }
 }
 
 void G4GeneralParticleSource::SetCurrentSourceIntensity(G4double aV)
 {
-    GPSData->Lock();
-    GPSData->SetCurrentSourceIntensity(aV);
-    GPSData->Unlock();
-    normalised = GPSData->Normalised();
+  GPSData->Lock();
+  GPSData->SetCurrentSourceIntensity(aV);
+  GPSData->Unlock();
+  normalised = GPSData->Normalised();
 }
 
 void G4GeneralParticleSource::ClearAll()
 {
-    GPSData->ClearSources();
-    normalised=GPSData->Normalised();
+  GPSData->ClearSources();
+  normalised=GPSData->Normalised();
 }
 
 void G4GeneralParticleSource::DeleteaSource(G4int aV)
 {
-    G4int id = aV;
-    if ( id <= GPSData->GetIntensityVectorSize() )
-    {
-        GPSData->DeleteASource(aV);
-        normalised=GPSData->Normalised();
-    }
-    else
-    {
-        G4cout << " source index is invalid " << G4endl;
-        G4cout << "    it shall be <= " << GPSData->GetIntensityVectorSize() << G4endl;
-    }
+  G4int id = aV;
+  if ( id <= GPSData->GetIntensityVectorSize() )
+  {
+    GPSData->DeleteASource(aV);
+    normalised=GPSData->Normalised();
+  }
+  else
+  {
+    G4cout << " source index is invalid " << G4endl;
+    G4cout << "    it shall be <= "
+           << GPSData->GetIntensityVectorSize() << G4endl;
+  }
 }
 
 void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event* evt)
 {
-    if (!GPSData->GetMultipleVertex())
+  if (!GPSData->GetMultipleVertex())
+  {
+    G4SingleParticleSource* currentSource = GPSData->GetCurrentSource();
+    if (GPSData->GetIntensityVectorSize() > 1)
     {
-    	G4SingleParticleSource* currentSource = GPSData->GetCurrentSource();
-        if (GPSData->GetIntensityVectorSize() > 1)
+      // Try to minimize locks
+      if (! normalised )
+      {
+        // According to local variable, normalization is needed
+        // Check with underlying shared resource, another
+        // thread could have already normalized this
+        GPSData->Lock();
+        G4bool norm = GPSData->Normalised();
+        if (!norm)
         {
-            //Try to minimize locks
-            if (! normalised ) {
-                //According to local variable, normalization is needed
-                //Check with underlying shared resource, another
-                //thread could have already normalized this
-                GPSData->Lock();
-                G4bool norm = GPSData->Normalised();
-                if (!norm) {
-                    IntensityNormalization();
-                }
-                //This takes care of the case in which the local variable
-                //is False and the underlying resource is true.
-                normalised = GPSData->Normalised();
-                GPSData->Unlock();
-            }
-            G4double rndm = G4UniformRand();
-            size_t i = 0 ;
-            if (! GPSData->GetFlatSampling() )
-            {
-                while ( rndm > GPSData->GetSourceProbability(i) ) i++;
-                currentSource = GPSData->GetCurrentSource(i);
-            }
-            else
-            {
-                i = size_t (GPSData->GetIntensityVectorSize()*rndm);
-                currentSource = GPSData->GetCurrentSource(i);
-            }
+          IntensityNormalization();
         }
-        currentSource->GeneratePrimaryVertex(evt);
-    } 
-    else
-    {
-        for (G4int i = 0; i <  GPSData->GetIntensityVectorSize(); i++)
-        {
-            GPSData->GetCurrentSource(i)->GeneratePrimaryVertex(evt);
-        }
+        // This takes care of the case in which the local variable
+        // is False and the underlying resource is true.
+        normalised = GPSData->Normalised();
+        GPSData->Unlock();
+      }
+      G4double rndm = G4UniformRand();
+      std::size_t i = 0 ;
+      if (! GPSData->GetFlatSampling() )
+      {
+        while ( rndm > GPSData->GetSourceProbability(i) ) ++i;
+          currentSource = GPSData->GetCurrentSource(i);
+      }
+      else
+      {
+        i = std::size_t (GPSData->GetIntensityVectorSize()*rndm);
+        currentSource = GPSData->GetCurrentSource(i);
+      }
     }
+    currentSource->GeneratePrimaryVertex(evt);
+  } 
+  else
+  {
+    for (G4int i = 0; i <  GPSData->GetIntensityVectorSize(); ++i)
+    {
+      GPSData->GetCurrentSource(i)->GeneratePrimaryVertex(evt);
+    }
+  }
 }

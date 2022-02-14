@@ -37,51 +37,56 @@
 #include <map>
 #include <vector>
 
+class G4AccumulableManager;
 class G4AnalysisManagerState;
 class G4VAccumulable;
+template <class T>
+class G4ThreadLocalSingleton;
 
 class G4AccumulableManager
 {
+  friend class G4ThreadLocalSingleton<G4AccumulableManager>;
+
   public:
     virtual ~G4AccumulableManager();
-     
-    // static methods
+
+    // Static methods
     static G4AccumulableManager* Instance();
-   
+
     // Methods
 
     // Create accumulables
     //
     template <typename T>
-    G4Accumulable<T>* 
-    CreateAccumulable(const G4String& name, T value, 
+    G4Accumulable<T>*
+    CreateAccumulable(const G4String& name, T value,
                       G4MergeMode mergeMode = G4MergeMode::kAddition);
 
-    template <typename T> 
-    G4Accumulable<T>* 
-    CreateAccumulable(T value, 
+    template <typename T>
+    G4Accumulable<T>*
+    CreateAccumulable(T value,
                       G4MergeMode mergeMode = G4MergeMode::kAddition);
 
     // Register existing accumulables
-    // 
+    //
     // templated accumulable
-    template <typename T> 
+    template <typename T>
     G4bool RegisterAccumulable(G4Accumulable<T>& accumulable);
     // user defined accumulable
     G4bool RegisterAccumulable(G4VAccumulable* accumulable);
 
     // Access registered accumulables
-    // 
+    //
     // Via name
     // templated accumulable
-    template <typename T> 
+    template <typename T>
     G4Accumulable<T>*  GetAccumulable(const G4String& name, G4bool warn = true) const;
     // user defined accumulable
     G4VAccumulable*  GetAccumulable(const G4String& name, G4bool warn = true) const;
 
     // Via id (in the order of registering)
     //  templated accumulable
-    template <typename T> 
+    template <typename T>
     G4Accumulable<T>*  GetAccumulable(G4int id, G4bool warn = true) const;
     // user defined accumulable
     G4VAccumulable*  GetAccumulable(G4int id, G4bool warn = true) const;
@@ -98,26 +103,25 @@ class G4AccumulableManager
     void Reset();
 
   private:
-    // hide ctor requiring master/worker specification
-    G4AccumulableManager(G4bool isMaster);
+    // Hide singleton ctor
+    G4AccumulableManager();
 
-    // metods
+    // Methods
     // Generate generic accumulable name: accumulableN, where N is the actual number of accumulables
     G4String GenerateName() const;
-    // Check if a name is already used in a map and print a warning 
+    // Check if a name is already used in a map and print a warning
     G4bool CheckName(const G4String& name, const G4String& where) const;
 
-    template <typename T> 
+    template <typename T>
     G4Accumulable<T>*  GetAccumulable(G4VAccumulable* accumulable, G4bool warn) const;
 
-    // constants
+    // Constants
     const G4String kBaseName = "accumulable";
 
-    // static data members
-    static G4AccumulableManager* fgMasterInstance;
-    static G4ThreadLocal G4AccumulableManager* fgInstance;    
+    // Static data members
+    inline static G4AccumulableManager* fgMasterInstance { nullptr };
 
-    // data members
+    // Data members
     std::vector<G4VAccumulable*>        fVector;
     std::map<G4String, G4VAccumulable*> fMap;
     std::vector<G4VAccumulable*>        fAccumulablesToDelete;

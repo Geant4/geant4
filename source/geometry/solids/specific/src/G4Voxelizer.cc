@@ -116,10 +116,6 @@ void G4Voxelizer::BuildEmpty()
 void G4Voxelizer::BuildVoxelLimits(std::vector<G4VSolid*>& solids,
                                    std::vector<G4Transform3D>& transforms)
 {
-  G4Rotate3D rot;
-  G4Translate3D transl ;
-  G4Scale3D scale;
-
   // "BuildVoxelLimits"'s aim is to store the coordinates of the origin as
   // well as the half lengths related to the bounding box of each node.
   // These quantities are stored in the array "fBoxes" (6 different values per
@@ -157,9 +153,8 @@ void G4Voxelizer::BuildVoxelLimits(std::vector<G4VSolid*>& solids,
         max += toleranceVector;
       }
       TransformLimits(min, max, transform);
-      fBoxes[i].hlen = (max - min) / 2;
-      transform.getDecomposition(scale,rot,transl); 
-      fBoxes[i].pos = transl.getTranslation();
+      fBoxes[i].hlen = (max - min) / 2.;
+      fBoxes[i].pos =  (max + min) / 2.;
     }
     fTotalCandidates = fBoxes.size();
   }

@@ -39,7 +39,7 @@
 #include "RunAction.hh"
 #include "RunInitObserver.hh"
 
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
 
@@ -48,6 +48,7 @@
 RunAction::RunAction() : G4UserRunAction()
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
   analysisManager->SetFirstHistoId(1);
 
   // Creating histograms
@@ -78,8 +79,6 @@ RunAction::~RunAction()
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->CloseFile();
-
-  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

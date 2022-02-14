@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(Hadr06)
 
 #----------------------------------------------------------------------------
@@ -43,10 +43,12 @@ set(Hadr04_SCRIPTS
     debug.mac
     envHadronic.csh
     envHadronic.sh
-	fission.mac 
+    fission.mac 
     graphite.mac 
     hadr06.in
-    run1.mac 
+    plotHisto.C
+    run1.mac
+    singleFission.mac 
     vis.mac
   )
 

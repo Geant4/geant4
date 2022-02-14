@@ -35,8 +35,6 @@
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodes/SoTrap.h"
 
@@ -90,7 +88,11 @@ SoTrap::~SoTrap() {
 // initClass
 void SoTrap::initClass(){
   // This statement is required.
-  SO_NODE_INIT_CLASS(SoTrap,SoShape,"Shape");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(SoTrap,SoShape,"Shape");
+  }
 }
 
 
@@ -407,5 +409,3 @@ void SoTrap::generateAlternateRep() {
 void SoTrap::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

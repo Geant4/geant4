@@ -23,17 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4VDiscreteProcess class implementation
 // 
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-// --------------------------------------------------------------
-//   New Physics scheme           8 Jan. 1997  H.Kurahige
-// ------------------------------------------------------------
+// Authors:
+// - 2 December 1995, G.Cosmo - First implementation, based on object model
+// - 18 December 1996, H.Kurashige - New Physics scheme
+// --------------------------------------------------------------------
 
 #include "G4VDiscreteProcess.hh"
 #include "G4SystemOfUnits.hh"
@@ -43,45 +38,54 @@
 #include "G4MaterialTable.hh"
 #include "G4VParticleChange.hh"
 
+// --------------------------------------------------------------------
 G4VDiscreteProcess::G4VDiscreteProcess()
-                   :G4VProcess("No Name Discrete Process") 
+  : G4VProcess("No Name Discrete Process") 
 {
-  G4Exception("G4VDiscreteProcess::G4VDiscreteProcess()","ProcMan102",
-	      JustWarning,"Default constructor is called");
+  G4Exception("G4VDiscreteProcess::G4VDiscreteProcess()", "ProcMan102",
+	      JustWarning, "Default constructor is called");
 }
 
-G4VDiscreteProcess::G4VDiscreteProcess(const G4String& aName , G4ProcessType aType)
-                  : G4VProcess(aName, aType)
+// --------------------------------------------------------------------
+G4VDiscreteProcess::
+G4VDiscreteProcess(const G4String& aName, G4ProcessType aType)
+  : G4VProcess(aName, aType)
 {
   enableAtRestDoIt = false;
   enableAlongStepDoIt = false;
-
 }
 
+// --------------------------------------------------------------------
 G4VDiscreteProcess::~G4VDiscreteProcess()
 {
 }
 
+// --------------------------------------------------------------------
 G4VDiscreteProcess::G4VDiscreteProcess(G4VDiscreteProcess& right)
-                  : G4VProcess(right)
+  : G4VProcess(right)
 {
 }
 
-G4double G4VDiscreteProcess::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    )
+// --------------------------------------------------------------------
+G4double G4VDiscreteProcess::
+PostStepGetPhysicalInteractionLength( const G4Track& track,
+			              G4double previousStepSize,
+			              G4ForceCondition* condition )
 {
-  if ( (previousStepSize < 0.0) || (theNumberOfInteractionLengthLeft<=0.0)) {
-    // beggining of tracking (or just after DoIt of this process)
+  if ( (previousStepSize < 0.0) || (theNumberOfInteractionLengthLeft<=0.0))
+  {
+    // beginning of tracking (or just after DoIt() of this process)
     ResetNumberOfInteractionLengthLeft();
-  } else if ( previousStepSize > 0.0) {
+  }
+  else if ( previousStepSize > 0.0)
+  {
     // subtract NumberOfInteractionLengthLeft 
     SubtractNumberOfInteractionLengthLeft(previousStepSize);
-  } else {
+  }
+  else
+  {
     // zero step
-    //  DO NOTHING
+    // DO NOTHING
   }
 
   // condition is set to "Not Forced"
@@ -91,14 +95,18 @@ G4double G4VDiscreteProcess::PostStepGetPhysicalInteractionLength(
   currentInteractionLength = GetMeanFreePath(track, previousStepSize, condition);
 
   G4double value;
-  if (currentInteractionLength <DBL_MAX) {
+  if (currentInteractionLength < DBL_MAX)
+  {
     value = theNumberOfInteractionLengthLeft * currentInteractionLength;
-  } else {
+  }
+  else
+  {
     value = DBL_MAX;
   }
 #ifdef G4VERBOSE
-  if (verboseLevel>1){
-    G4cout << "G4VDiscreteProcess::PostStepGetPhysicalInteractionLength ";
+  if (verboseLevel>1)
+  {
+    G4cout << "G4VDiscreteProcess::PostStepGetPhysicalInteractionLength() - ";
     G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
     G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
@@ -108,13 +116,12 @@ G4double G4VDiscreteProcess::PostStepGetPhysicalInteractionLength(
   return value;
 }
 
-G4VParticleChange* G4VDiscreteProcess::PostStepDoIt(
-						    const G4Track& ,
-						    const G4Step& 
-						    )
+// --------------------------------------------------------------------
+G4VParticleChange* G4VDiscreteProcess::PostStepDoIt( const G4Track& ,
+						     const G4Step& )
 { 
-//  clear NumberOfInteractionLengthLeft
-    ClearNumberOfInteractionLengthLeft();
+  // clear NumberOfInteractionLengthLeft
+  ClearNumberOfInteractionLengthLeft();
 
-    return pParticleChange;
+  return pParticleChange;
 }

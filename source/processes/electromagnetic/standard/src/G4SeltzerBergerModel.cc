@@ -59,7 +59,7 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4SBBremTable.hh"
 #include "G4ModifiedTsai.hh"
-//#include "G4DipBustGenerator.hh"
+
 #include "G4EmParameters.hh"
 #include  "G4ProductionCutsTable.hh"
 
@@ -75,7 +75,7 @@
 
 G4Physics2DVector* G4SeltzerBergerModel::gSBDCSData[]     = { nullptr };
 G4SBBremTable*     G4SeltzerBergerModel::gSBSamplingTable =   nullptr;
-G4double           G4SeltzerBergerModel::gYLimitData[]    = { 0.0     };
+G4double           G4SeltzerBergerModel::gYLimitData[]    = { 0.0 };
 G4String           G4SeltzerBergerModel::gDataDirectory   = "";
 
 #ifdef G4MULTITHREADED
@@ -128,11 +128,10 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
     for(size_t j=0; j<numOfCouples; ++j) {
       auto mat = theCoupleTable->GetMaterialCutsCouple(j)->GetMaterial();
       auto elmVec = mat->GetElementVector();
-      size_t numOfElem = mat->GetNumberOfElements();
-      for (size_t ie = 0; ie < numOfElem; ++ie) {
-	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), gMaxZet-1));
+      for (auto & elm : *elmVec) {
+	G4int Z = std::max(1,std::min(elm->GetZasInt(), gMaxZet-1));
 	// load SB-DCS data for this atomic number if it has not been loaded yet
-	InitialiseForElement(nullptr, Z);
+        if (gSBDCSData[Z] == nullptr) ReadData(Z);
       }
     }
     // elem.selectr. only for master: base class init-local will set for workers
@@ -177,9 +176,13 @@ const G4String& G4SeltzerBergerModel::FindDirectoryPath()
 
 void G4SeltzerBergerModel::ReadData(G4int Z) {
   // return if it has been already loaded
-  if (gSBDCSData[Z]) {
-    return;
-  }
+  if (gSBDCSData[Z] != nullptr) return;
+
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&theSBMutex);
+  if (gSBDCSData[Z] != nullptr) return;
+#endif
+
   std::ostringstream ost;
   ost << FindDirectoryPath() << Z;
   std::ifstream fin(ost.str().c_str());
@@ -207,6 +210,9 @@ void G4SeltzerBergerModel::ReadData(G4int Z) {
                 ed,"G4LEDATA version should be G4EMLOW6.23 or later.");
     delete v;
   }
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&theSBMutex);
+#endif
 }
 
 G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
@@ -222,8 +228,8 @@ G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
   // make sure that the Z-related SB-DCS are loaded
   // NOTE: fCurrentIZ should have been set before.
   fCurrentIZ = std::max(std::min(fCurrentIZ, gMaxZet-1), 1);
-  if (!gSBDCSData[fCurrentIZ]) {
-    InitialiseForElement(nullptr, fCurrentIZ);
+  if (nullptr == gSBDCSData[fCurrentIZ]) {
+    ReadData(fCurrentIZ);
   }
   // NOTE: SetupForMaterial should have been called before!
   const G4double pt2   = fPrimaryKinEnergy*(fPrimaryKinEnergy+2.*kMC2);
@@ -336,8 +342,8 @@ G4SeltzerBergerModel::SampleEnergyTransfer(const G4double kinEnergy,
   // majoranta
   const G4double x0 = tmin/kinEnergy;
   G4double vmax;
-  if (!gSBDCSData[fCurrentIZ]) {
-    InitialiseForElement(nullptr, fCurrentIZ);
+  if (nullptr == gSBDCSData[fCurrentIZ]) {
+    ReadData(fCurrentIZ);
   }
   vmax = gSBDCSData[fCurrentIZ]->Value(x0, y, fIndx, fIndy)*1.02;
   //
@@ -398,22 +404,6 @@ G4SeltzerBergerModel::SampleEnergyTransfer(const G4double kinEnergy,
     }
   }
   return gammaEnergy;
-}
-
-void G4SeltzerBergerModel::InitialiseForElement(const G4ParticleDefinition*,
-                                                G4int Z)
-{
-  if (!gSBDCSData[Z]) {
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&theSBMutex);
-    if (!gSBDCSData[Z]) {
-#endif
-      ReadData(Z);
-#ifdef G4MULTITHREADED
-    }
-    G4MUTEXUNLOCK(&theSBMutex);
-#endif
-  } 
 }
 
 void G4SeltzerBergerModel::SetupForMaterial(const G4ParticleDefinition*,

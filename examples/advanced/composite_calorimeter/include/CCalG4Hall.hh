@@ -41,8 +41,9 @@ public:
   
 protected:
   //This methods actually constructs the volume.
-  virtual G4VPhysicalVolume* constructIn(G4VPhysicalVolume*);
-  virtual void constructDaughters();
+  virtual G4VPhysicalVolume* constructIn(G4VPhysicalVolume*) override;
+  virtual void constructDaughters() override;
+  virtual void constructSensitive() override;  
 };
 
 #endif

@@ -23,28 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Exception implementation
 //
-//
-// 
-// ----------------------------------------------------------------------
-// G4Exception
-// ----------------------------------------------------------------------
+// Authors: G.Cosmo, M.Asai - May 1999 - First implementation
+// --------------------------------------------------------------------
 
 #include "G4Exception.hh"
 #include "G4StateManager.hh"
 
-void G4Exception(const char* originOfException,
-                 const char* exceptionCode,
-                             G4ExceptionSeverity severity,
-                 const char* description)
+// --------------------------------------------------------------------
+void G4Exception(const char* originOfException, const char* exceptionCode,
+                 G4ExceptionSeverity severity, const char* description)
 {
-  G4VExceptionHandler* exceptionHandler
-    = G4StateManager::GetStateManager()->GetExceptionHandler();
+  G4VExceptionHandler* exceptionHandler =
+    G4StateManager::GetStateManager()->GetExceptionHandler();
   G4bool toBeAborted = true;
-  if(exceptionHandler)
+  if(exceptionHandler != nullptr)
   {
-    toBeAborted = exceptionHandler
-     ->Notify(originOfException,exceptionCode,severity,description);
+    toBeAborted = exceptionHandler->Notify(originOfException, exceptionCode,
+                                           severity, description);
   }
   else
   {
@@ -59,59 +56,58 @@ void G4Exception(const char* originOfException,
             << description << G4endl;
     switch(severity)
     {
-     case FatalException:
-      G4cerr << es_banner << message.str() << "*** Fatal Exception ***"
-             << ee_banner << G4endl;
-      break;
-     case FatalErrorInArgument:
-      G4cerr << es_banner << message.str() << "*** Fatal Error In Argument ***"
-             << ee_banner << G4endl;
-      break;
-     case RunMustBeAborted:
-      G4cerr << es_banner << message.str() << "*** Run Must Be Aborted ***"
-             << ee_banner << G4endl;
-      break;
-     case EventMustBeAborted:
-      G4cerr << es_banner << message.str() << "*** Event Must Be Aborted ***"
-             << ee_banner << G4endl;
-      break;
-     default:
-      G4cout << ws_banner << message.str()
-             << "*** This is just a warning message. ***"
-             << we_banner << G4endl;
-      toBeAborted = false;
-      break;
+      case FatalException:
+        G4cerr << es_banner << message.str() << "*** Fatal Exception ***"
+               << ee_banner << G4endl;
+        break;
+      case FatalErrorInArgument:
+        G4cerr << es_banner << message.str()
+               << "*** Fatal Error In Argument ***" << ee_banner << G4endl;
+        break;
+      case RunMustBeAborted:
+        G4cerr << es_banner << message.str() << "*** Run Must Be Aborted ***"
+               << ee_banner << G4endl;
+        break;
+      case EventMustBeAborted:
+        G4cerr << es_banner << message.str() << "*** Event Must Be Aborted ***"
+               << ee_banner << G4endl;
+        break;
+      default:
+        G4cout << ws_banner << message.str()
+               << "*** This is just a warning message. ***" << we_banner
+               << G4endl;
+        toBeAborted = false;
+        break;
     }
   }
   if(toBeAborted)
   {
-   if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort))
-   {
-     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-     abort();
-   }
-   else
-   {
-     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
-            << G4endl << "*** No guarantee for further execution ***" << G4endl;
-   }
+    if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort))
+    {
+      G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
+      abort();
+    }
+    else
+    {
+      G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***" << G4endl
+             << "*** No guarantee for further execution ***" << G4endl;
+    }
   }
 }
 
-void G4Exception(const char* originOfException,
-                 const char* exceptionCode,
-                             G4ExceptionSeverity severity,
-                             G4ExceptionDescription & description)
+// --------------------------------------------------------------------
+void G4Exception(const char* originOfException, const char* exceptionCode,
+                 G4ExceptionSeverity severity,
+                 G4ExceptionDescription& description)
 {
   G4String des = description.str();
   G4Exception(originOfException, exceptionCode, severity, des.c_str());
 }
 
-void G4Exception(const char* originOfException,
-                 const char* exceptionCode,
-                             G4ExceptionSeverity severity,
-                             G4ExceptionDescription & description,
-                 const char* comments)
+// --------------------------------------------------------------------
+void G4Exception(const char* originOfException, const char* exceptionCode,
+                 G4ExceptionSeverity severity,
+                 G4ExceptionDescription& description, const char* comments)
 {
   description << comments << G4endl;
   G4Exception(originOfException, exceptionCode, severity, description);

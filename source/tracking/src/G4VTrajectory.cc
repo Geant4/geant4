@@ -23,19 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ---------------------------------------------------------------
-//
-// G4VTrajectory.cc
+// G4VTrajectory class implementation
 //
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Makoto  Asai   (e-mail: asai@kekvax.kek.jp)
+//     Makoto  Asai   (e-mail: asai@slac.stanford.edu)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-// ---------------------------------------------------------------
+// --------------------------------------------------------------------
 
 #include "G4VTrajectory.hh"
 #include "G4VTrajectoryPoint.hh"
@@ -49,8 +44,13 @@
 #include "G4Polymarker.hh"
 #include "G4Colour.hh"
 
-G4VTrajectory::G4VTrajectory() {;}
-G4VTrajectory::~G4VTrajectory() {;}
+G4VTrajectory::G4VTrajectory()
+{
+}
+
+G4VTrajectory::~G4VTrajectory()
+{
+}
 
 G4bool G4VTrajectory::operator == (const G4VTrajectory& right) const
 {
@@ -61,21 +61,23 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 {
   // Makes use of attribute values implemented in the concrete class.
   // Note: the user needs to follow with new-line or end-of-string,
-  // depending on the nature of os.
+  // depending on the nature of os
 
   std::vector<G4AttValue>* attValues = CreateAttValues();
   const std::map<G4String,G4AttDef>* attDefs = GetAttDefs();
 
   // Ensure validity...
-  if (G4AttCheck(attValues,attDefs).Check("G4VTrajectory::ShowTrajectory")) {
+  //
+  if (G4AttCheck(attValues,attDefs).Check("G4VTrajectory::ShowTrajectory"))
+  {
     return;
   }
 
   os << "Trajectory:";
 
-  std::vector<G4AttValue>::iterator iAttVal;
-  for (iAttVal = attValues->begin();
-       iAttVal != attValues->end(); ++iAttVal) {
+  for (auto iAttVal = attValues->cbegin();
+            iAttVal != attValues->cend(); ++iAttVal)
+  {
     std::map<G4String,G4AttDef>::const_iterator iAttDef =
       attDefs->find(iAttVal->GetName());
     os << "\n  " << iAttDef->second.GetDesc()
@@ -85,25 +87,29 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 
   delete attValues;  // AttValues must be deleted after use.
 
-  //Now do trajectory points...
-  for (G4int i = 0; i < GetPointEntries(); i++) {
+  // Now do trajectory points...
 
+  for (G4int i=0; i<GetPointEntries(); ++i)
+  {
     G4VTrajectoryPoint* aTrajectoryPoint = GetPoint(i);
     attValues = aTrajectoryPoint->CreateAttValues();
     attDefs = aTrajectoryPoint->GetAttDefs();
 
     // Ensure validity...
-    if (G4AttCheck(attValues,attDefs).Check("G4VTrajectory::ShowTrajectory")) {
+    //
+    if (G4AttCheck(attValues,attDefs).Check("G4VTrajectory::ShowTrajectory"))
+    {
       return;
     }
 
-    for (iAttVal = attValues->begin();
-	 iAttVal != attValues->end(); ++iAttVal) {
+    for (auto iAttVal = attValues->cbegin();
+              iAttVal != attValues->cend(); ++iAttVal)
+    {
       std::map<G4String,G4AttDef>::const_iterator iAttDef =
-	attDefs->find(iAttVal->GetName());
+        attDefs->find(iAttVal->GetName());
       os << "\n    " << iAttDef->second.GetDesc()
-	 << " (" << iAttVal->GetName()
-	 << "): " << iAttVal->GetValue();
+         << " (" << iAttVal->GetName()
+         << "): " << iAttVal->GetValue();
     }
 
     delete attValues;  // AttValues must be deleted after use.
@@ -115,7 +121,8 @@ void G4VTrajectory::DrawTrajectory() const
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
-  if (0 != pVVisManager) {
+  if (pVVisManager != nullptr)
+  {
     pVVisManager->DispatchToModel(*this);
   }
 }

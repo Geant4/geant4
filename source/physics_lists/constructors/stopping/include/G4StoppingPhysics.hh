@@ -55,12 +55,6 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-
-class G4HadronicAbsorptionBertini;
-class G4HadronicAbsorptionFritiof;
-class G4MuonMinusCapture;
-
-
 class G4StoppingPhysics : public G4VPhysicsConstructor {
 
 public: 
@@ -68,32 +62,27 @@ public:
   G4StoppingPhysics( G4int ver = 1 );
 
   G4StoppingPhysics( const G4String& name,
-		                      G4int ver = 1,
-		                      G4bool UseMuonMinusCapture=true );
+		     G4int ver = 1,
+		     G4bool UseMuonMinusCapture=true );
 
-  virtual ~G4StoppingPhysics();
-
-public: 
+  ~G4StoppingPhysics() override;
 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
-  virtual void ConstructParticle();
+  virtual void ConstructParticle() override;
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  virtual void ConstructProcess() override;
+
+  void SetMuonMinusCapture(G4bool val) 
+  { useMuonMinusCapture = val; };
 
 private:
 
-  //G4MuonMinusCapture* muProcess;
-  //G4HadronicAbsorptionBertini* hBertiniProcess;
-  //G4HadronicAbsorptionFritiof* hFritiofProcess;
-  
   G4int  verbose;
-  static G4ThreadLocal G4bool wasActivated;
   G4bool useMuonMinusCapture;
 };
-
 
 #endif

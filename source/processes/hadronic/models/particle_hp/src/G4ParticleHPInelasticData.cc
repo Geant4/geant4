@@ -41,6 +41,7 @@
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4ParticleHPData.hh"
+#include "G4HadronicParameters.hh"
 #include "G4Pow.hh"
 
 G4ParticleHPInelasticData::G4ParticleHPInelasticData(G4ParticleDefinition* projectile)
@@ -49,7 +50,7 @@ G4ParticleHPInelasticData::G4ParticleHPInelasticData(G4ParticleDefinition* proje
   const char* dataDirVariable;
   G4String particleName;
   if( projectile == G4Neutron::Neutron() ) {
-      dataDirVariable = "G4NEUTRONHPDATA";
+    dataDirVariable = "G4NEUTRONHPDATA";
   }else if( projectile == G4Proton::Proton() ) {
     dataDirVariable = "G4PROTONHPDATA";
     particleName = "Proton";
@@ -75,37 +76,41 @@ G4ParticleHPInelasticData::G4ParticleHPInelasticData(G4ParticleDefinition* proje
   SetName( dataName );
 
   if ( !std::getenv(dataDirVariable) && !std::getenv( "G4PARTICLEHPDATA" ) ){
-     G4String message("Please setenv " + G4String(dataDirVariable) + " to point to the " + projectile->GetParticleName() + " cross-section files.");
-     throw G4HadronicException(__FILE__, __LINE__,message.c_str());
+    G4String message("Please setenv G4PARTICLEHPDATA (recommended) or, at least setenv " +
+                     G4String(dataDirVariable) + " to point to the " + projectile->GetParticleName() + " cross-section files.");
+    throw G4HadronicException(__FILE__, __LINE__,message.c_str());
   }
 
   G4String dirName;
   if ( std::getenv(dataDirVariable) ) {
-     dirName = std::getenv(dataDirVariable);
+    dirName = std::getenv(dataDirVariable);
   } else {
-     G4String baseName = std::getenv( "G4PARTICLEHPDATA" );
-     dirName = baseName + "/" + particleName;
+    G4String baseName = std::getenv( "G4PARTICLEHPDATA" );
+    dirName = baseName + "/" + particleName;
   }
-  G4cout << "@@@ G4ParticleHPInelasticData instantiated for particle " << projectile->GetParticleName() << " data directory variable is " << dataDirVariable << " pointing to " << dirName << G4endl;
+  #ifdef G4VERBOSE
+  if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+    G4cout << "@@@ G4ParticleHPInelasticData instantiated for particle " << projectile->GetParticleName() << " data directory variable is " << dataDirVariable << " pointing to " << dirName << G4endl;
+  }
+  #endif
 
   SetMinKinEnergy( 0*CLHEP::MeV );                                   
   SetMaxKinEnergy( 20*CLHEP::MeV );                                   
 
-   onFlightDB = true;
-   theCrossSections = 0;
-   theProjectile=projectile;
+  theCrossSections = 0;
+  theProjectile=projectile;
 
-   theHPData = NULL;
-   instanceOfWorker = false;
-   if ( G4Threading::IsMasterThread() ) {
-      theHPData = new G4ParticleHPData( theProjectile ); 
-   } else {
-      instanceOfWorker = true;
-   }
-   element_cache = NULL;
-   material_cache = NULL;
-   ke_cache = 0.0; 
-   xs_cache = 0.0; 
+  theHPData = NULL;
+  instanceOfWorker = false;
+  if ( G4Threading::IsMasterThread() ) {
+    theHPData = new G4ParticleHPData( theProjectile ); 
+  } else {
+    instanceOfWorker = true;
+  }
+  element_cache = NULL;
+  material_cache = NULL;
+  ke_cache = 0.0; 
+  xs_cache = 0.0; 
 }
    
 G4ParticleHPInelasticData::~G4ParticleHPInelasticData()
@@ -166,22 +171,12 @@ void G4ParticleHPInelasticData::BuildPhysicsTable( const G4ParticleDefinition& p
   //  if(&projectile!=G4Neutron::Neutron()) 
   //     throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
-//080428
-   if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() ) 
-   {
-      G4cout << "Find a flag of \"G4PHP_NEGLECT_DOPPLER\"." << G4endl;
-      G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of inelastic scattering of neutrons (<20MeV)." << G4endl;
-      onFlightDB = false;
-   }    
-
    if ( G4Threading::IsWorkerThread() ) {
       theCrossSections = G4ParticleHPManager::GetInstance()->GetInelasticCrossSections( &projectile );
       return;
    } else {
       if ( theHPData == NULL ) theHPData = G4ParticleHPData::Instance( const_cast<G4ParticleDefinition*> ( &projectile ) ); 
    }
-
-
 
   size_t numberOfElements = G4Element::GetNumberOfElements();
 //  theCrossSections = new G4PhysicsTable( numberOfElements );
@@ -215,6 +210,8 @@ void G4ParticleHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& pro
   if(&projectile!=theProjectile) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use ParticleHP data for a wrong projectile!!!");  
 
+  #ifdef G4VERBOSE
+  if ( G4HadronicParameters::Instance()->GetVerboseLevel() == 0 ) return;
 //
 // Dump element based cross section
 // range 10e-5 eV to 20 MeV
@@ -258,6 +255,7 @@ void G4ParticleHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& pro
    }
 
   //G4cout << "G4ParticleHPInelasticData::DumpPhysicsTable still to be implemented"<<G4endl;
+  #endif
 }
 
 #include "G4NucleiProperties.hh"
@@ -272,7 +270,7 @@ GetCrossSection(const G4DynamicParticle* projectile, const G4Element*anE, G4doub
   // prepare neutron
   G4double eKinetic = projectile->GetKineticEnergy();
 
-  if ( !onFlightDB )
+   if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() )
   {
      //NEGLECT_DOPPLER
      G4double factor = 1.0;
@@ -283,8 +281,7 @@ GetCrossSection(const G4DynamicParticle* projectile, const G4Element*anE, G4doub
         // Will take care after performance check.  
         // factor = factor * targetV;
      }
-     return ( (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) )* factor; 
-
+     return ( (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) )* factor;
   }   
 
   G4ReactionProduct theNeutron( projectile->GetDefinition() );

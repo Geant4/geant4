@@ -79,8 +79,6 @@ GammaRayTelAnalysis::GammaRayTelAnalysis()
 
 GammaRayTelAnalysis::~GammaRayTelAnalysis() {
   Finish();
-  // Complete clean-up
-  delete G4AnalysisManager::Instance();
 }
 
 
@@ -149,6 +147,7 @@ void GammaRayTelAnalysis::setNtuple(float E, float p, float x,
 void GammaRayTelAnalysis::BeginOfRun() 
 { 
   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->SetDefaultFileType("root");
 
   // Open an output file
 

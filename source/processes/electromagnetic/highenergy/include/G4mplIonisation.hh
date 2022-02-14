@@ -68,18 +68,19 @@ public:
   explicit G4mplIonisation(G4double mCharge = 0.0, 
                            const G4String& name = "mplIoni");
 
-  virtual ~G4mplIonisation();
+  ~G4mplIonisation() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
+  G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-                                    const G4Material*, G4double cut) final;
-
-  // Print out of the class parameters
-  virtual void PrintInfo() override;
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+                            const G4Material*, G4double cut) final;
 
   // print description in html
-  virtual void ProcessDescription(std::ostream&) const override;
+  void ProcessDescription(std::ostream&) const override;
+
+  // hide assignment operator
+  G4mplIonisation & operator=(const G4mplIonisation &right) = delete;
+  G4mplIonisation(const G4mplIonisation&) = delete;
 
 protected:
 
@@ -88,12 +89,8 @@ protected:
 
 private:
 
-  // hide assignment operator
-  G4mplIonisation & operator=(const G4mplIonisation &right) = delete;
-  G4mplIonisation(const G4mplIonisation&) = delete;
-
-  G4double    magneticCharge;
-  G4bool      isInitialised;
+  G4double magneticCharge;
+  G4bool isInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

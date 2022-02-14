@@ -28,64 +28,59 @@
 //    *    BrachyDetectorConstruction.hh     *
 //    *                                      *
 //    ****************************************
-// This class manages the geometry of the simulation experimental set-up
 //
-// S. Guatelli, A. Le
+// S. Guatelli, A. Le, University of Wollongong
 
 #ifndef BrachyDetectorConstruction_H
 #define BrachyDetectorConstruction_H 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 class BrachyDetectorMessenger;
+class BrachyFactory;
 class G4LogicalVolume;
 class G4Material;
 class G4Box;
 class G4Colour;
 class G4VPhysicalVolume;
 class G4VPhysicalVolume;
-class BrachyMaterial;
-class BrachyFactory;
 
 class BrachyDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
 
-  BrachyDetectorConstruction();
+  explicit BrachyDetectorConstruction();
   ~BrachyDetectorConstruction();
 
-  G4VPhysicalVolume*   Construct();  
-  void SwitchBrachytherapicSeed(); //Change radiactive source through GUI
+  G4VPhysicalVolume*   Construct() override;  
+  void SwitchBrachytherapicSeed(); //Change brachy source through GUI
   void SelectBrachytherapicSeed(G4String val);
   void ConstructPhantom(); 
   void PrintDetectorParameters(); 
   void SetPhantomMaterial(G4String); 
 
-
 private:
+  BrachyFactory* fFactory;
+  BrachyDetectorMessenger* fDetectorMessenger;   
   
-  G4int detectorChoice; //Select brachytherapic seed
-  BrachyFactory* factory;
+  G4Box*             fWorld;        //pointer to the solid World 
+  G4LogicalVolume*   fWorldLog;     //pointer to the logical World
+  G4VPhysicalVolume* fWorldPhys;    //pointer to the physical World
 
-  // World ...
-  G4Box*             World;        //pointer to the solid World 
-  G4LogicalVolume*   WorldLog;     //pointer to the logical World
-  G4VPhysicalVolume* WorldPhys;    //pointer to the physical World
-
-  // Phantom ... 
-  G4Box*              Phantom;  //pointer to solid phantom
-  G4LogicalVolume*    PhantomLog; //pointer to logic phantom
-  G4VPhysicalVolume*  PhantomPhys; //pointer to physical phantom
-  G4Material*         phantomAbsorberMaterial;
+  G4Box*              fPhantom;  //pointer to solid phantom
+  G4LogicalVolume*    fPhantomLog; //pointer to logic phantom
+  G4VPhysicalVolume*  fPhantomPhys; //pointer to physical phantom
  
-  G4double phantomSizeX; //Phantom XSize
-  G4double phantomSizeY; //Phantom YSize
-  G4double phantomSizeZ; //Phantom ZSize  
-  G4double worldSizeX ; //World XSize
-  G4double worldSizeY ; //World YSize
-  G4double worldSizeZ ; //World XSize
-  BrachyDetectorMessenger* detectorMessenger; 
-  BrachyMaterial* pMaterial;   
+  G4double fPhantomSizeX; //Phantom X Size
+  G4double fPhantomSizeY; //Phantom Y Size
+  G4double fPhantomSizeZ; //Phantom Z Size  
+  
+  G4double fWorldSizeX; //World X Size
+  G4double fWorldSizeY; //World Y Size
+  G4double fWorldSizeZ; //World X Size
+  
+  G4int fDetectorChoice; //Select brachytherapic seed
 };
-
 #endif

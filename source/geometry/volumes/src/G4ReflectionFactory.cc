@@ -751,11 +751,10 @@ G4ReflectionFactory::GetReflectedVolumesMap() const
 
 //_____________________________________________________________________________
 
-void
-G4ReflectionFactory::Reset()
+void G4ReflectionFactory::Clean()
 {
-  fConstituentLVMap.~map();
-  fReflectedLVMap.~map();
+  fConstituentLVMap.clear();
+  fReflectedLVMap.clear();
 }
 
 //_____________________________________________________________________________

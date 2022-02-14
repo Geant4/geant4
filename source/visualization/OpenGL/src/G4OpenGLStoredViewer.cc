@@ -31,8 +31,6 @@
 //                            an OpenGL view, for inheritance by
 //                            derived (X, Xm...) classes.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
-
 #include "G4OpenGLStoredViewer.hh"
 
 #include "G4PhysicalConstants.hh"
@@ -50,8 +48,7 @@ G4OpenGLViewer (sceneHandler),
 fG4OpenGLStoredSceneHandler (sceneHandler),
 fDepthTestEnable(true)
 {
-  fLastVP = fDefaultVP; // Not sure if this gets executed before or
-  // after G4VViewer::G4VViewer!!  Doesn't matter much.
+  fLastVP = fDefaultVP;  // Update in sub-class after KernelVisitDecision
 }
 
 G4OpenGLStoredViewer::~G4OpenGLStoredViewer () {}
@@ -65,7 +62,6 @@ void G4OpenGLStoredViewer::KernelVisitDecision () {
       CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();
   }
-  fLastVP = fVP;
 }
 
 G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
@@ -80,15 +76,20 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
       (lastVP.GetCBDAlgorithmNumber() !=
        fVP.GetCBDAlgorithmNumber())                               ||
+      // Note: Section and Cutaway can reveal back-facing faces. If
+      // backface culling is implemented, the image can look strange because
+      // the back-facing faces are not there. For the moment, we have disabled
+      // (commented out) backface culling (it seems not to affect performance -
+      // in fact, performance seems to improve), so there is no problem.
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
-      // Section (DCUT) implemented locally.  But still need to visit
-      // kernel if status changes so that back plane culling can be
-      // switched.
-      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      // Cutaways implemented locally.  But still need to visit kernel
-      // if status changes so that back plane culling can be switched.
+      // Section (DCUT) is NOT implemented locally so we need to visit the kernel.
+      // (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
+      // Cutaways are implemented locally so we do not need to visit the kernel.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
+      (lastVP.GetGlobalLineWidthScale() != fVP.GetGlobalLineWidthScale()) ||
+      (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
       (lastVP.GetDefaultVisAttributes()->GetColour() !=
        fVP.GetDefaultVisAttributes()->GetColour())                ||
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
@@ -96,7 +97,9 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
       (lastVP.GetVisAttributesModifiers() !=
-       fVP.GetVisAttributesModifiers())
+       fVP.GetVisAttributesModifiers())                           ||
+      (lastVP.IsSpecialMeshRendering() !=
+       fVP.IsSpecialMeshRendering())
       )
   return true;
   
@@ -129,6 +132,10 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+    return true;
+
+  if (lastVP.IsSpecialMeshRendering() &&
+      (lastVP.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
     return true;
 
   // Time window parameters operate on the existing database so no need
@@ -484,5 +491,3 @@ void G4OpenGLStoredViewer::AddPrimitiveForASingleFrame(const G4Circle& circle)
   fG4OpenGLStoredSceneHandler.G4OpenGLStoredSceneHandler::AddPrimitive(circle);
   fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = memoryForDisplayListsKeep;
 }
-
-#endif

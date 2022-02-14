@@ -47,16 +47,9 @@
   GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
 
   ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
-  In particular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
-  This is enough when spatial distribution of deposited energy do not need
-  to be accurate (see param->SetStepFunction(1., 1*mm)).
 
   Several hadronic physics options are controlled by environment variables.
-  To trigger them, the envHadronic.csh script has been added in this example.
-  One must select the options wished, and do
-\verbatim   
-source envHadronic.csh  (or sh)
-\endverbatim	 
+  To select them, see Activation.cc 
  	 
 \section Activation_s3 AN EVENT : THE PRIMARY GENERATOR
  
@@ -179,5 +172,12 @@ Idle> type your commands
 ....
 Idle> exit
 \endverbatim
-
+	
+ Macros provided in this example:
+  - Bi209.mac: neutron (25 meV) on 10 cm of Bi209
+  - Co60.mac:  neutron (25 meV) on 1 cm of Cobalt.
+    
+ Macros to be run interactively:
+  - debug.mac: neutron (25 meV) on Cobalt
+  - vis.mac: To activate visualization
 */

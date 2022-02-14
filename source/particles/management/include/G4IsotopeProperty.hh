@@ -23,219 +23,207 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4IsotopeProperty
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-// ------------------------------------------------------------
-//      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
-//      Add Magnetic Moment                      14 Mar  07 H.Kurashige
-//      Add isomer level              30 Apr. H.Kurashige
+// G4IsotopeProperty contains properties of an isotope
 
-
-#ifndef G4IsotopeProperty_h
-#define G4IsotopeProperty_h 1
+// Author: H.Kurashige, 5 October 1999
+// --------------------------------------------------------------------
+#ifndef G4IsotopeProperty_hh
+#define G4IsotopeProperty_hh 1
 
 #include "globals.hh"
-class G4DecayTable;
 #include "G4Ions.hh"
+
+class G4DecayTable;
 class G4IsotopeProperty
 {
- // Class Description
- //   G4IsotopeProperty contains properties of an isotope
- //
+  public:
 
- public:
-  G4IsotopeProperty();
+    G4IsotopeProperty();
+    virtual ~G4IsotopeProperty();
+      // Constructor & destructor
 
-  // copy construictor  
-  G4IsotopeProperty(const  G4IsotopeProperty& right);
+    G4IsotopeProperty(const G4IsotopeProperty& right);
+      // Copy constructor  
 
-  // Assignment operator
-  G4IsotopeProperty & operator=(G4IsotopeProperty& right);
+    G4IsotopeProperty& operator=(G4IsotopeProperty& right);
+      // Assignment operator
  
-  // equal / unequal operator
-  G4bool operator==(const G4IsotopeProperty &right) const;
-  G4bool operator!=(const G4IsotopeProperty &right) const;
+    G4bool operator==(const G4IsotopeProperty &right) const;
+    G4bool operator!=(const G4IsotopeProperty &right) const;
+      // Equality operators
 
-  // destructor
-  virtual ~G4IsotopeProperty();
+    inline G4int GetAtomicNumber() const;
+    inline void  SetAtomicNumber(G4int Z);
+      // Set/Get Atomic Number
 
+    inline G4int GetAtomicMass() const;
+    inline void  SetAtomicMass(G4int A);
+      // Set/Get Atomic Mass
 
- public:  // With Description
-  // Set/Get Atomic Number
-  G4int         GetAtomicNumber() const;
-  void          SetAtomicNumber(G4int Z);
+    inline G4int GetiSpin() const;
+    inline void  SetiSpin(G4int J);
+      // Set/Get spin
 
-  // Set/Get Atomic Mass
-  G4int         GetAtomicMass() const;
-  void          SetAtomicMass(G4int A);
+    inline G4double GetMagneticMoment() const;
+    inline void     SetMagneticMoment(G4double M);
+      // Set/Get Magnetic Moment
 
-  // Set/Get spin
-  G4int         GetiSpin() const;
-  void          SetiSpin(G4int J);
+    inline G4double GetEnergy() const;
+    inline void     SetEnergy(G4double  E);
+      // Set/Get Excited Energy
 
-  // Set/Get Magentic Moment
-  G4double      GetMagneticMoment() const;
-  void          SetMagneticMoment(G4double M);
+    inline G4int GetIsomerLevel() const;
+    inline void  SetIsomerLevel(G4int level);
+      // Set/Get isomer level
 
-  // Set/Get Excited Energy
-  G4double      GetEnergy() const;
-  void          SetEnergy(G4double  E);
+    inline G4Ions::G4FloatLevelBase GetFloatLevelBase() const;
+    inline void SetFloatLevelBase(G4Ions::G4FloatLevelBase flb);
+    inline void SetFloatLevelBase(G4int flbIndex);
+      // Set/Get floating level base
 
-  // Set/Get isomer lervel
-  G4int         GetIsomerLevel() const;
-  void          SetIsomerLevel(G4int  level);
+    inline G4double GetLifeTime() const;
+    inline void     SetLifeTime(G4double T);
+      // Set/Get life time
 
-  // Set/Get floating level base
-  G4Ions::G4FloatLevelBase GetFloatLevelBase() const;
-  void                     SetFloatLevelBase(G4Ions::G4FloatLevelBase flb);
-  void                     SetFloatLevelBase(G4int flbIndex);
+    inline G4DecayTable* GetDecayTable() const;
+    inline void SetDecayTable(G4DecayTable* table);
+      // Set/Get decay table
 
-  // Set/Get life time
-  G4double      GetLifeTime() const;
-  void          SetLifeTime(G4double  T);
+    void DumpInfo() const;
+      // Dump out information
 
-  // Set/Get decay table
-  G4DecayTable* GetDecayTable() const;
-  void          SetDecayTable(G4DecayTable*  table);
+  private:
 
-  // Dump out information
-  void          DumpInfo() const;
-
- private:
-  G4int         fAtomicNumber;     // number of proton
-  G4int         fAtomicMass;       // number of nucleon 
-  G4int         fISpin;            // total angular momentum (in unit of 1/2)
-  G4double      fEnergy;           // excited energy
-  G4double      fLifeTime;         // lifeTime 
-  G4DecayTable* fDecayTable;       // decay Table
-  G4double      fMagneticMoment;   // magnetic moment 
-  G4int         fIsomerLevel;      // isomer level 
-  G4Ions::G4FloatLevelBase fFloatLevelBase; // floating level base
+    G4int         fAtomicNumber = 0; // number of proton
+    G4int         fAtomicMass = 0;   // number of nucleon 
+    G4int         fISpin = 0;        // total angular momentum (in unit of 1/2)
+    G4double      fEnergy = 0.0;     // excited energy
+    G4double      fLifeTime = -1.0;  // lifeTime 
+    G4DecayTable* fDecayTable = nullptr;      // decay Table
+    G4double      fMagneticMoment = 0.0;      // magnetic moment 
+    G4int         fIsomerLevel = -1;          // isomer level 
+    G4Ions::G4FloatLevelBase fFloatLevelBase; // floating level base
 };
 
+// ------------------------
+// Inline methods
+// ------------------------
+
 inline 
- G4int G4IsotopeProperty::GetAtomicNumber() const
+G4int G4IsotopeProperty::GetAtomicNumber() const
 {
   return fAtomicNumber;
 }
 
 inline 
- void G4IsotopeProperty::SetAtomicNumber(G4int Z)
+void G4IsotopeProperty::SetAtomicNumber(G4int Z)
 {
-    fAtomicNumber = Z;
+  fAtomicNumber = Z;
 }
 
 inline 
- G4int G4IsotopeProperty::GetAtomicMass() const
+G4int G4IsotopeProperty::GetAtomicMass() const
 {
   return fAtomicMass;
 }
 
 inline 
- void G4IsotopeProperty::SetAtomicMass(G4int A)
+void G4IsotopeProperty::SetAtomicMass(G4int A)
 {
-    fAtomicMass = A;
+  fAtomicMass = A;
 }
 
 inline 
- G4int G4IsotopeProperty::GetiSpin() const
+G4int G4IsotopeProperty::GetiSpin() const
 {
   return fISpin;
 }
 
 inline 
- void G4IsotopeProperty::SetiSpin(G4int J)
+void G4IsotopeProperty::SetiSpin(G4int J)
 {
-    fISpin = J;
+  fISpin = J;
 }
 
 inline
-  G4double  G4IsotopeProperty::GetMagneticMoment() const
+G4double  G4IsotopeProperty::GetMagneticMoment() const
 {
   return fMagneticMoment;
 }
 
 inline
-  void     G4IsotopeProperty::SetMagneticMoment(G4double M)
+void     G4IsotopeProperty::SetMagneticMoment(G4double M)
 {
   fMagneticMoment = M;
 }
 
 inline 
- G4double G4IsotopeProperty::GetEnergy() const
+G4double G4IsotopeProperty::GetEnergy() const
 {
   return fEnergy;
 }
 
 inline 
- void G4IsotopeProperty::SetEnergy(G4double E)
+void G4IsotopeProperty::SetEnergy(G4double E)
 {
-    fEnergy = E;
+  fEnergy = E;
 }
 
 inline  
- G4int  G4IsotopeProperty::GetIsomerLevel() const
+G4int  G4IsotopeProperty::GetIsomerLevel() const
 {
   return fIsomerLevel; 
 }
 inline  
- void   G4IsotopeProperty::SetIsomerLevel(G4int  level)
+void G4IsotopeProperty::SetIsomerLevel(G4int level)
 {
   fIsomerLevel = level;
 }
 
 inline 
- G4double G4IsotopeProperty::GetLifeTime() const
+G4double G4IsotopeProperty::GetLifeTime() const
 {
   return fLifeTime;
 }
 
 inline 
- void G4IsotopeProperty::SetLifeTime(G4double T)
+void G4IsotopeProperty::SetLifeTime(G4double T)
 {
-    fLifeTime = T;
+  fLifeTime = T;
 }
 
 inline 
- G4DecayTable* G4IsotopeProperty::GetDecayTable() const
+G4DecayTable* G4IsotopeProperty::GetDecayTable() const
 {
   return fDecayTable;
 }
 
 inline 
- void G4IsotopeProperty::SetDecayTable(G4DecayTable* table)
+void G4IsotopeProperty::SetDecayTable(G4DecayTable* table)
 {
-    fDecayTable = table;
+  fDecayTable = table;
 }
 
 inline 
- G4Ions::G4FloatLevelBase G4IsotopeProperty::GetFloatLevelBase() const
+G4Ions::G4FloatLevelBase G4IsotopeProperty::GetFloatLevelBase() const
 { 
   return fFloatLevelBase; 
 }
 
 inline 
- void G4IsotopeProperty::SetFloatLevelBase(G4Ions::G4FloatLevelBase flb)
+void G4IsotopeProperty::SetFloatLevelBase(G4Ions::G4FloatLevelBase flb)
 {
   fFloatLevelBase = flb;
 }
 
 inline 
- void G4IsotopeProperty::SetFloatLevelBase(G4int flbIndex)
+void G4IsotopeProperty::SetFloatLevelBase(G4int flbIndex)
 {
   fFloatLevelBase = G4Ions::FloatLevelBase(flbIndex);
 }
 
 #endif
-
-
-
-
-
-
-
-

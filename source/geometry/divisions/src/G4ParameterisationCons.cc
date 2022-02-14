@@ -267,10 +267,10 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << " G4ParameterisationConsPhi - position: " << posi/deg << G4endl
+    G4cout << " G4ParameterisationConsPhi - position: " << posi/CLHEP::deg << G4endl
            << " Origin: " << origin << " copyNo: " << copyNo
-           << " - foffset: " << foffset/deg
-           << " - fwidth: " << fwidth/deg << G4endl
+           << " - foffset: " << foffset/CLHEP::deg
+           << " - fwidth: " << fwidth/CLHEP::deg << G4endl
            << " - Axis: " << faxis << G4endl;
   }
 #endif

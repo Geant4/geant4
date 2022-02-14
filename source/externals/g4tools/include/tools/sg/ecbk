@@ -1,0 +1,118 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_ecbk
+#define tools_sg_ecbk
+
+// A callback class to handle a response to some event
+// (viewer/window size, mouse button press, etc...).
+// It is typically used through the event_dispatcher node.
+
+#include "bcbk"
+#include "event"
+#include "event_action"
+#include "../forit"
+#include "../HEADER"
+
+#include <vector>
+
+namespace tools {
+namespace sg {
+  class node;
+}}
+
+namespace tools {
+namespace sg {
+
+class ecbk : public bcbk {
+  TOOLS_HEADER(ecbk,tools::sg::ecbk,bcbk)
+public:
+  ecbk(unsigned int a_action = 0)
+  :parent()
+  ,m_action(a_action)
+  ,m_no_set_done(false)
+  ,m_event(0)
+  ,m_event_action(0)
+  ,m_node(0)
+  ,m_z(0)
+  ,m_w(0)
+  {}
+  virtual ~ecbk(){delete m_event;}
+public:
+  ecbk(const ecbk& a_from)
+  :parent(a_from)
+  ,m_action(a_from.m_action)
+  ,m_no_set_done(a_from.m_no_set_done)
+  ,m_event(0)
+  ,m_event_action(a_from.m_event_action)
+  ,m_node(a_from.m_node)
+  ,m_z(a_from.m_z)
+  ,m_w(a_from.m_w)
+  {
+    if(a_from.m_event) m_event = a_from.m_event->copy();
+  }
+  ecbk& operator=(const ecbk& a_from){
+    parent::operator=(a_from);
+
+    m_action = a_from.m_action;
+    m_no_set_done = a_from.m_no_set_done;
+
+    delete m_event;
+    m_event = 0;
+    if(a_from.m_event) m_event = a_from.m_event->copy();
+
+    m_event_action = a_from.m_event_action;
+    m_node = a_from.m_node;
+    m_z = a_from.m_z;
+    m_w = a_from.m_w;
+    return *this;
+  }
+public:
+  void set_action(unsigned int a_v){m_action = a_v;}
+  void set_no_set_done(bool a_v) {m_no_set_done = a_v;}
+  // for ArcheryTune :
+  event& event_ref() const {return *m_event;}
+  event_action& event_action_ref() const {return *m_event_action;}
+public:
+  static void exec_event_cbks(const std::vector<bcbk*>& a_cbks,
+                              const event& a_evt,
+                              event_action* a_action,
+                              node* a_node,
+                              float a_z = 0,float a_w = 0) {
+    tools_vforcit(bcbk*,a_cbks,it) {
+      bcbk* _cbk = (*it)->copy();
+
+      if(ecbk* _ecbk = safe_cast<bcbk,ecbk>(*_cbk)){
+        delete _ecbk->m_event;
+        _ecbk->m_event = a_evt.copy();
+
+        _ecbk->m_event_action = a_action;
+        _ecbk->m_node = a_node;
+        _ecbk->m_z = a_z;
+        _ecbk->m_w = a_w;
+
+        _ecbk->action();
+
+        if(a_action->done()) {
+          delete _cbk;
+          break;
+        }
+      }
+
+      delete _cbk;
+    }
+  }
+
+public:
+  unsigned int m_action;
+  bool m_no_set_done; //to tell not doing m_event_action->set_done(true).
+  event* m_event;         //owner
+  event_action* m_event_action; //not owner.
+  node* m_node;           //not owner.
+  float m_z;
+  float m_w;
+};
+
+}}
+
+#endif

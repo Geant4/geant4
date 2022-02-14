@@ -30,18 +30,15 @@
 #include "G4VDigi.hh"
 #include "globals.hh"
 
-G4VDigi::G4VDigi()
-{;}
+G4VDigi::G4VDigi() { ; }
 
-G4VDigi::~G4VDigi()
-{;}
+G4VDigi::~G4VDigi() { ; }
 
-G4bool G4VDigi::operator==(const G4VDigi &right) const
-{ return (this==&right); }
+G4bool G4VDigi::operator==(const G4VDigi& right) const
+{
+  return (this == &right);
+}
 
-void G4VDigi::Draw() 
-{;}
+void G4VDigi::Draw() { ; }
 
-void G4VDigi::Print() 
-{;}
-
+void G4VDigi::Print() { ; }

@@ -55,8 +55,7 @@
 class G4VEMDataSet 
 { 
 public:
-
-  G4VEMDataSet();
+  explicit G4VEMDataSet();
   virtual ~G4VEMDataSet();
   
   virtual G4double FindValue(G4double x, G4int componentId = 0) const = 0;
@@ -86,9 +85,7 @@ public:
 
   virtual G4double RandomSelect(G4int componentId = 0) const = 0;
    
-private:
-  // Hide copy constructor and assignment operator 
-  G4VEMDataSet(const G4VEMDataSet& copy);
-  G4VEMDataSet& operator=(const G4VEMDataSet& right);
+  G4VEMDataSet(const G4VEMDataSet& copy) = delete;
+  G4VEMDataSet& operator=(const G4VEMDataSet& right) = delete;
 };
 #endif /* G4VEMDATASET_HH */

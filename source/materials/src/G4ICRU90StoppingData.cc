@@ -160,16 +160,15 @@ void G4ICRU90StoppingData::FillData()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4LPhysicsFreeVector* G4ICRU90StoppingData::AddData(G4int n, const G4double* e, 
-						    const G4float* dedx)
+G4PhysicsFreeVector* G4ICRU90StoppingData::AddData(G4int n, const G4double* e, 
+						   const G4float* dedx)
 {
   static const G4double fac = CLHEP::MeV*CLHEP::cm2/CLHEP::g;
 
-  G4LPhysicsFreeVector* data = new G4LPhysicsFreeVector(n, e[0], e[n-1]);
+  G4PhysicsFreeVector* data = new G4PhysicsFreeVector(n, e[0], e[n-1], true);
   for(G4int i=0; i<n; ++i) { 
     data->PutValues(i, e[i]*CLHEP::MeV, ((G4double)dedx[i])*fac); 
   }
-  data->SetSpline(true);
   data->FillSecondDerivatives();
   return data;
 }

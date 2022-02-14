@@ -23,45 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrPlaceDivRep
+// G4tgrPlaceDivRep
 //
 // Class description:
 //
 // Class to descripe the position of a G4tgrVolume inside another
 // G4tgrVolume as a replica, i.e. filling the whole parent volume.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrPlaceDivRep_h
-#define G4tgrPlaceDivRep_h
-
-#include "globals.hh"
-#include "geomdefs.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrPlaceDivRep_hh
+#define G4tgrPlaceDivRep_hh 1
 
 #include <vector>
 
+#include "globals.hh"
+#include "geomdefs.hh"
 #include "G4tgrPlace.hh"
 
-enum G4DivType { DivByNdiv, DivByWidth, DivByNdivAndWidth };
+enum G4DivType
+{
+  DivByNdiv,
+  DivByWidth,
+  DivByNdivAndWidth
+};
 
 class G4tgrPlaceDivRep : public G4tgrPlace
 {
-
-  public:  // with description
+  public:
 
     G4tgrPlaceDivRep();
-   ~G4tgrPlaceDivRep();
+    ~G4tgrPlaceDivRep();
 
-    G4tgrPlaceDivRep( const std::vector<G4String>& wl );
+    G4tgrPlaceDivRep(const std::vector<G4String>& wl);
       // Creates an object passing the only data that is fixed
       // (ndiv, width, offset may be have to be recalculated)
 
-    EAxis BuildAxis( const G4String& axisName );
+    EAxis BuildAxis(const G4String& axisName);
 
     // Access functions
 
@@ -72,21 +70,22 @@ class G4tgrPlaceDivRep : public G4tgrPlace
     G4DivType GetDivType() const { return theDivType; }
 
     void SetParentName(const G4String& parentName) { theParentName=parentName; }
-    void SetNDiv( G4int ndiv ) { theNDiv = ndiv; }
-    void SetWidth( G4double width ) { theWidth = width; }
-    void SetAxis( EAxis axis ) { theAxis = axis; }
-    void SetOffset( G4double offset ) { theOffset = offset; }
-    void SetDivType( G4DivType typ ) { theDivType = typ; }
-    
+    void SetNDiv(G4int ndiv) { theNDiv = ndiv; }
+    void SetWidth(G4double width) { theWidth = width; }
+    void SetAxis(EAxis axis) { theAxis = axis; }
+    void SetOffset(G4double offset) { theOffset = offset; }
+    void SetDivType(G4DivType typ) { theDivType = typ; }
+
     friend std::ostream& operator<<(std::ostream& os,
                                     const G4tgrPlaceDivRep& obj);
+
   private:
 
-    G4int theNDiv;
-    G4double theWidth;
-    EAxis theAxis;
-    G4double theOffset;
-    G4DivType theDivType;  
+    G4int theNDiv = 0;
+    G4double theWidth = 0.0;
+    EAxis theAxis = kUndefined;
+    G4double theOffset = 0.0;
+    G4DivType theDivType = DivByNdivAndWidth;
 };
 
 #endif

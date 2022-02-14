@@ -45,60 +45,28 @@
 #ifndef G4VCrossSectionRatio_h
 #define G4VCrossSectionRatio_h 1
 
-#include "globals.hh"
+#include "G4VCrossSectionDataSet.hh"
 
 class G4ParticleDefinition;
 
-class G4VCrossSectionRatio
+class G4VCrossSectionRatio : G4VCrossSectionDataSet
 {
 public: 
 
-  G4VCrossSectionRatio(const G4String& nam = "", G4int verb = 0);
+  G4VCrossSectionRatio(const G4String& nam = "XSRatio", G4int verb = 0);
 
-  virtual ~G4VCrossSectionRatio();
+  ~G4VCrossSectionRatio() override;
 
   virtual
   G4double ComputeRatio(const G4ParticleDefinition*,
 			G4double kinEnergy, 
 			G4int /*Z*/, G4int /*A*/) = 0;
 
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
-
-  virtual
-  void DumpPhysicsTable(const G4ParticleDefinition&);
-
-  virtual 
-  void Description() const;
-
-  inline void SetVerboseLevel(G4int value);
-
-  inline G4int GetVerboseLevel() const;
-
-  inline const G4String& GetName() const;
-
 private:
 
   G4VCrossSectionRatio & operator=(const G4VCrossSectionRatio &right);
   G4VCrossSectionRatio(const G4VCrossSectionRatio&);
 
-  G4int verboseLevel;
-  const G4String name;
 };
-
-inline void G4VCrossSectionRatio::SetVerboseLevel(G4int value)
-{
-  verboseLevel = value;
-}
-
-inline G4int G4VCrossSectionRatio::GetVerboseLevel() const
-{
-  return verboseLevel;
-}
-
-inline const G4String& G4VCrossSectionRatio::GetName() const
-{
-  return name;
-}
 
 #endif

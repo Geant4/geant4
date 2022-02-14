@@ -16,8 +16,8 @@
 /process/list
 #
 # rdm is applied only to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+/process/had/rdm/noVolumes
+/process/had/rdm/selectVolume Target
 
 #
 # place the isotopes in the middle of the target, at rest. 
@@ -25,12 +25,12 @@
 /gun/ion 84 201 0 424. keV
 #
 # complete decay chain in VR mode
-/grdm/analogueMC false
-/grdm/sourceTimeProfile beam.data
-/grdm/decayBiasProfile measures.data
-#/grdm/nucleusLimits 238 238 90 92
-/grdm/hlThreshold 1e-6 s
-/grdm/applyARM false
+/process/had/rdm/analogueMC false
+/process/had/rdm/sourceTimeProfile beam.data
+/process/had/rdm/decayBiasProfile measures.data
+#/process/had/rdm/nucleusLimits 238 238 90 92
+/process/had/rdm/hlThreshold 1e-6 s
+/process/had/rdm/applyARM false
 #
 /analysis/setFileName po201m
 /analysis/h1/set 6 100 0. 15. MeV

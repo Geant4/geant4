@@ -38,96 +38,44 @@
 #include <iomanip>   
 
 #include "G4HadronPhysicsFTFP_BERT_ATL.hh"
-
-#include "G4NeutronBuilder.hh"
-#include "G4BertiniNeutronBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4ProtonBuilder.hh"
-#include "G4BertiniProtonBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4FTFPProtonBuilder.hh"
-#include "G4PiKBuilder.hh"
-#include "G4FTFPPiKBuilder.hh"
-#include "G4BertiniPiKBuilder.hh"
-
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicParameters.hh"
 
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT_ATL);
-G4HadronPhysicsFTFP_BERT_ATL::G4HadronPhysicsFTFP_BERT_ATL(G4int) :
+
+G4HadronPhysicsFTFP_BERT_ATL::G4HadronPhysicsFTFP_BERT_ATL(G4int verb) :
     G4HadronPhysicsFTFP_BERT_ATL("hInelastic FTFP_BERT_ATL",false)
-{}
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+}
 
 G4HadronPhysicsFTFP_BERT_ATL::G4HadronPhysicsFTFP_BERT_ATL(const G4String& name, G4bool quasiElastic)
-    :  G4HadronPhysicsFTFP_BERT(name,quasiElastic)
+    : G4HadronPhysicsFTFP_BERT(name,quasiElastic)
 {
-  //Change configuration parameters of FTFP_BERT
-  minFTFP_pion = 9.0 * GeV;
-  maxBERT_pion = 12.0 * GeV;
-  minFTFP_kaon = 9.0 * GeV;
-  maxBERT_kaon = 12.0 * GeV;
-  minFTFP_proton = 9.0 * GeV;
-  maxBERT_proton = 12.0 * GeV;
-  minFTFP_neutron = 9.0 * GeV;
-  maxBERT_neutron = 12.0 * GeV;
-  QuasiElastic = false;
+  // Change configuration parameters of FTFP_BERT 
+  // for n, p, pions, and kaons
+  G4double emin = 9.0*CLHEP::GeV; 
+  G4double emax = 12.0*CLHEP::GeV; 
+  minFTFP_pion    = emin;
+  maxBERT_pion    = emax;
+  minFTFP_kaon    = emin;
+  maxBERT_kaon    = emax;
+  minFTFP_proton  = emin;
+  maxBERT_proton  = emax;
+  minFTFP_neutron = emin;
+  maxBERT_neutron = emax;
 }
 
-void G4HadronPhysicsFTFP_BERT_ATL::DumpBanner()
-{
-  G4cout << " FTFP_BERT_ATL : threshold between BERT and FTFP"
-         << " is over the interval " << minFTFP_pion/GeV << " to "<< maxBERT_pion/GeV << " GeV." << G4endl;
-}
+G4HadronPhysicsFTFP_BERT_ATL::~G4HadronPhysicsFTFP_BERT_ATL()
+{}
 
-void G4HadronPhysicsFTFP_BERT_ATL::Neutron()
+void G4HadronPhysicsFTFP_BERT_ATL::ConstructProcess()
 {
-  auto neu = new G4NeutronBuilder;
-  AddBuilder(neu);
-  auto ftfpn = new G4FTFPNeutronBuilder(QuasiElastic);
-  AddBuilder(ftfpn);
-  neu->RegisterMe(ftfpn);
-  ftfpn->SetMinEnergy(minFTFP_neutron);
-  auto bertn = new G4BertiniNeutronBuilder;
-  AddBuilder(bertn);
-  neu->RegisterMe(bertn);
-  bertn->SetMinEnergy(0.0);
-  bertn->SetMaxEnergy(maxBERT_neutron);
-  neu->Build();
-}
-
-void G4HadronPhysicsFTFP_BERT_ATL::Proton()
-{
-  auto pro = new G4ProtonBuilder;
-  AddBuilder(pro);
-  auto ftfpp = new G4FTFPProtonBuilder(QuasiElastic);
-  AddBuilder(ftfpp);
-  pro->RegisterMe(ftfpp);
-  ftfpp->SetMinEnergy(minFTFP_proton);
-  auto bertp = new G4BertiniProtonBuilder;
-  AddBuilder(bertp);
-  pro->RegisterMe(bertp);
-  bertp->SetMaxEnergy(maxBERT_proton);
-  pro->Build();
-}
-
-void G4HadronPhysicsFTFP_BERT_ATL::Pion()
-{
-  auto pik = new G4PiKBuilder;
-  AddBuilder(pik);
-  auto ftfppik = new G4FTFPPiKBuilder(QuasiElastic);
-  AddBuilder(ftfppik);
-  ftfppik->SetMinEnergy(minFTFP_pion);
-  pik->RegisterMe(ftfppik);
-  auto bertpik = new G4BertiniPiKBuilder();
-  AddBuilder(bertpik);
-  bertpik->SetMaxEnergy(maxBERT_pion);
-  pik->RegisterMe(bertpik);
-  pik->Build();
-}
-
-void G4HadronPhysicsFTFP_BERT_ATL::Kaon() {
-  //Use combined with pions
+  if(G4Threading::IsMasterThread() &&
+     G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
+      DumpBanner();
+  }
+  CreateModels();
 }

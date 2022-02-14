@@ -116,21 +116,15 @@ IsAtRestRequired(G4ParticleDefinition* partDef)
   if(pdgCode==0)
   {
     G4String partName = partDef->GetParticleName();
-    if(partName=="opticalphoton") return false;
     if(partName=="geantino") return false;
     if(partName=="chargedgeantino") return false;
   }
   else
   {
-    if(pdgCode==22) return false; // gamma
-    if(pdgCode==11) return false; // electron
-    if(pdgCode==2212) return false; // proton
-    if(pdgCode==-12) return false; // anti_nu_e
-    if(pdgCode==12) return false; // nu_e
-    if(pdgCode==-14) return false; // anti_nu_mu
-    if(pdgCode==14) return false; // nu_mu
-    if(pdgCode==-16) return false; // anti_nu_tau
-    if(pdgCode==16) return false; // nu_tau
+    if(pdgCode==11 || pdgCode==2212) return false; // electrons and proton
+    pdgCode = std::abs(pdgCode);
+    if(pdgCode==22) return false; // gamma and optical photons
+    if(pdgCode==12 || pdgCode==14 || pdgCode==16) return false; // all neutronos
   }
   return true;
 }

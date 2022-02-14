@@ -297,9 +297,11 @@ class G4VTwistedFaceted: public G4VSolid
 inline
 G4double G4VTwistedFaceted::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) ;
-  else   fCubicVolume = 2 * fDz
-                      * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2  );
+  if(fCubicVolume == 0.)
+  {
+    fCubicVolume = ((fDx1 + fDx2 + fDx3 + fDx4)*(fDy1 + fDy2) +
+                    (fDx4 + fDx3 - fDx2 - fDx1)*(fDy2 - fDy1)/3)*fDz;
+  }
   return fCubicVolume;
 }
 

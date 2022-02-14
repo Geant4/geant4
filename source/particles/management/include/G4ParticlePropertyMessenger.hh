@@ -23,34 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticlePropertyMessenger
 //
+// Class description:
 //
+// This is a messenger class to exchange information between
+// G4ParticleDefinition and UI.
 //
-//---------------------------------------------------------------
-//
-//  G4ParticlePropertyMessenger.hh
-//
-//  Class Description:
-//    This is a messenger class to interface to exchange information
-//    between ParticleDefinition and UI.
-//
-//  /particle/property/   Paricle Table control commands.
+// /particle/property/   Particle Table control commands.
 //   Commands : 
 //     dump * dump particle properties.
 //     stable * Set stable flag.
 //     lifetime * Set life time.
 //     Verbose * Set Verbose level
-//
-//  History:
-//    13 June 1997, H. Kurashige   : The 1st version created.
-//    13 Nov. 1997, H. Kurashige   : fix bugs
-//    08 Jan. 1998, H. Kurashige   : new UIcommand
-//    08 Apr. 1999, H. Kurashige   : fix some improper codings
-//
-//---------------------------------------------------------------
 
-#ifndef G4ParticlePropertyMessenger_h
-#define G4ParticlePropertyMessenger_h 1
+// Author: H.Kurashige, 13 June 1997 - 1st version created
+// --------------------------------------------------------------------
+#ifndef G4ParticlePropertyMessenger_hh
+#define G4ParticlePropertyMessenger_hh 1
+
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4ParticleTable;
 class G4ParticleDefinition;
@@ -62,39 +55,33 @@ class G4UIcmdWithABool;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAnInteger; 
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class G4ParticlePropertyMessenger: public G4UImessenger
+class G4ParticlePropertyMessenger : public G4UImessenger
 {
   public:
-    G4ParticlePropertyMessenger(G4ParticleTable* pTable = 0);
+
+    G4ParticlePropertyMessenger(G4ParticleTable* pTable = nullptr);
     virtual ~G4ParticlePropertyMessenger();
 
-  public: // With Description
-    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
-    virtual G4String GetCurrentValue(G4UIcommand * command);
+    G4ParticlePropertyMessenger(const G4ParticlePropertyMessenger&) = delete;
+    G4ParticlePropertyMessenger& operator=(const G4ParticlePropertyMessenger&) = delete;
+
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
 
   private:
-    G4ParticlePropertyMessenger(const G4ParticlePropertyMessenger&):G4UImessenger(){};
 
-  private:
-    G4ParticleDefinition* SetCurrentParticle();
-    G4ParticleTable* theParticleTable;
-    G4ParticleDefinition* currentParticle;
+    G4ParticleTable* theParticleTable = nullptr;
 
-    G4UIdirectory *             thisDirectory;
-    G4UIcmdWithoutParameter *   dumpCmd;
-    G4UIcmdWithABool *          stableCmd; 
-    G4UIcmdWithAnInteger *      verboseCmd;
-    G4UIcmdWithADoubleAndUnit * lifetimeCmd; 
+    G4UIdirectory*             thisDirectory = nullptr;
+    G4UIcmdWithoutParameter*   dumpCmd = nullptr;
+    G4UIcmdWithABool*          stableCmd = nullptr; 
+    G4UIcmdWithAnInteger*      verboseCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* lifetimeCmd = nullptr; 
  
-    G4DecayTableMessenger* fDecayTableMessenger;
+    G4DecayTableMessenger* fDecayTableMessenger = nullptr;
 };
 
 #endif
-
-
 
 
 

@@ -31,29 +31,22 @@
 // 
 // If you use this example, please cite the following publication:
 // Rad. Prot. Dos. 133 (2009) 2-11
-
+//
+#include "PrimaryGeneratorAction.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"
-
-#include "PrimaryGeneratorAction.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   fParticleGun  = new G4ParticleGun(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   delete fParticleGun;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {

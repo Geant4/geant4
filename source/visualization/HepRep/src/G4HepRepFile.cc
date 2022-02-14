@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// 
+//
 // Joseph Perl  1 October 2001
 // A graphics system to dump geometry hierarchy to the
 // HepRep graphics format (HepRep version 1).
 
-//HepRep
+// HepRep
 #include "G4HepRepFileXMLWriter.hh"
 
 #include "G4HepRepFile.hh"
@@ -39,48 +39,50 @@
 
 static G4HepRepFileXMLWriter* hepRepXMLWriter;
 
-G4HepRepFile::G4HepRepFile():
-  G4VGraphicsSystem("G4HepRepFile",
-		    "HepRepFile",
-		    "A HepRep (format 1) ascii file driver",
-		    G4VGraphicsSystem::fileWriter) {
-		G4HepRepMessenger::GetInstance();
-        hepRepXMLWriter = new G4HepRepFileXMLWriter();
-}
-
-G4HepRepFile::~G4HepRepFile()
+G4HepRepFile::G4HepRepFile()
+  : G4VGraphicsSystem("G4HepRepFile", "HepRepFile",
+                      "A HepRep (format 1) ascii file driver",
+                      G4VGraphicsSystem::fileWriter)
 {
-        delete hepRepXMLWriter;
+  G4HepRepMessenger::GetInstance();
+  hepRepXMLWriter = new G4HepRepFileXMLWriter();
 }
 
-G4VSceneHandler* G4HepRepFile::CreateSceneHandler(const G4String& name) {
+G4HepRepFile::~G4HepRepFile() { delete hepRepXMLWriter; }
+
+G4VSceneHandler* G4HepRepFile::CreateSceneHandler(const G4String& name)
+{
   G4VSceneHandler* pScene = new G4HepRepFileSceneHandler(*this, name);
   return pScene;
 }
 
 G4VViewer* G4HepRepFile::CreateViewer(G4VSceneHandler& scene,
-			       const G4String& name) {
+                                      const G4String& name)
+{
   G4VViewer* pView =
     new G4HepRepFileViewer((G4HepRepFileSceneHandler&) scene, name);
-  if (pView) {
-    if (pView->GetViewId() < 0) {
-      G4cout <<
-	"G4HepRepFile::CreateViewer: ERROR flagged by negative"
-        " view id in G4HepRepFileViewer creation."
-        "\n Destroying view and returning null pointer."
-	     << G4endl;
+  if(pView)
+  {
+    if(pView->GetViewId() < 0)
+    {
+      G4cout << "G4HepRepFile::CreateViewer: ERROR flagged by negative"
+                " view id in G4HepRepFileViewer creation."
+                "\n Destroying view and returning null pointer."
+             << G4endl;
       delete pView;
       pView = 0;
     }
   }
-  else {
-    G4cout <<
-      "G4HepRepFile::CreateViewer: ERROR: null pointer on new G4HepRepFileViewer."
-	   << G4endl;
+  else
+  {
+    G4cout << "G4HepRepFile::CreateViewer: ERROR: null pointer on new "
+              "G4HepRepFileViewer."
+           << G4endl;
   }
   return pView;
 }
 
-G4HepRepFileXMLWriter* G4HepRepFile::GetHepRepXMLWriter () {
-    return hepRepXMLWriter;
+G4HepRepFileXMLWriter* G4HepRepFile::GetHepRepXMLWriter()
+{
+  return hepRepXMLWriter;
 }

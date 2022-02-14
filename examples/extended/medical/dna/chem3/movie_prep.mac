@@ -7,6 +7,6 @@
 
 #/vis/viewer/zoomTo 1.7
 #/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
-#/vis/ogl/set/endTime 1 ps
+#/vis/viewer/set/timeWindow/endTime 1 ps
 
 /control/execute beam.in

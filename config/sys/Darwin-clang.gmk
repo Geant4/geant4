@@ -1,6 +1,6 @@
 #
 # ------ MacOS-X ------
-#                                 MacOS 10.8/9/10/11, clang-3.6 and higher
+#                                 macOS 11, Apple clang-12 and higher
 #
 # Original author: Gabriele Cosmo - CERN
 #
@@ -16,18 +16,9 @@ ifeq ($(G4SYSTEM),Darwin-clang)
 =======
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
   CPPFLAGS  += -DGL_SILENCE_DEPRECATION
-  G4USE_STD11 := 1
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-  ifdef G4USE_STD14
-    G4USE_STD11 := 1
-    CPPFLAGS  += -std=c++14
-    CXXFLAGS  += -std=c++14
-  endif
-  ifdef G4USE_STD17
-    G4USE_STD11 := 1
-    CPPFLAGS  += -std=c++17
-    CXXFLAGS  += -std=c++17
-  endif
+  CPPFLAGS  += -std=c++17
+  CXXFLAGS  += -std=c++17
+  G4USE_STD17 := 1
   ifdef G4MULTITHREADED
     CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
@@ -74,7 +65,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     X11FLAGS  := -I/usr/X11/include
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/X11/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+    X11LIBS   := -L/usr/X11/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
   endif
   ifndef XMFLAGS
     XMFLAGS   := -I/usr/local/include
@@ -106,7 +97,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     ifneq ($(OGLPATH),)
       OGLLIBS := -F$(OGLPATH)/.. -framework OpenGL -framework AGL 
     else
-      OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
+      OGLLIBS := -L$(OGLHOME)/lib -lGL
     endif
   endif
 
@@ -120,9 +111,13 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       QTMOC      := /usr/bin/moc
     endif
     ifndef QTFLAGS
-      QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
-      QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
+      QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/QtWidgets.framework/Headers
       QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/Qt3DCore.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/Qt3DExtras.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/Qt3DRender.framework/Headers
       QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
     ifndef QTLIBPATH
@@ -137,12 +132,20 @@ ifeq ($(G4SYSTEM),Darwin-clang)
         QTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui
       endif   
     endif
+    ifndef QT3DLIBS
+      ifdef QT_AS_FRAMEWORK
+        QT3DLIBS  := $(QTLIBPATH) -framework QtCore -framework QtGui
+        QT3DLIBS  += -framework QtWidgets -framework Qt3DCore -framework Qt3DExtras -framework Qt3DRender
+      else
+        QT3DLIBS  := -L$(QTLPATH) -lQtCore -lQtGui
+        QT3DLIBS  += -lQtWidgets -lQt3DCore -lQt3DExtras -lQt3DRender
+      endif   
+    endif
     ifndef GLQTLIBS  
       ifdef QT_AS_FRAMEWORK
-        GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
-        GLQTLIBS    += -framework QtOpenGL
+        GLQTLIBS  := $(QTLIBPATH) -framework QtCore -framework QtGui -framework QtOpenGL
       else
-        GLQTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui -lQtOpenGL
+        GLQTLIBS  := -L$(QTLPATH) -lQtCore -lQtGui -lQtOpenGL
       endif   
     endif
   else
@@ -155,12 +158,21 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       QTFLAGS   += -I $(QTLPATH)/QtGui.framework/Headers 
       QTFLAGS   += -I $(QTLPATH)/QtWidgets.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/QtOpenGL.framework/Headers
+      QTFLAGS   += -I $(QTLPATH)/Qt3DCore.framework/Headers
+      QTFLAGS   += -I $(QTLPATH)/Qt3DExtras.framework/Headers
+      QTFLAGS   += -I $(QTLPATH)/Qt3DRender.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/QtPrintSupport.framework/Headers
       QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
     ifndef QTLIBS
        QTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
        QTLIBS    += -framework QtWidgets -framework QtPrintSupport
+    endif   
+    ifndef QT3DLIBS
+       QT3DLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
+       QT3DLIBS    += -framework QtWidgets
+       QT3DLIBS    += -framework Qt3DCore -framework Qt3DExtras -framework Qt3DRender
+       QT3DLIBS    += -framework QtPrintSupport
     endif   
     ifndef GLQTLIBS  
       GLQTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4LogicalBorderSurface inline implementation
+// G4LogicalBorderSurface inline implementation
 //
 // ----------------------------------------------------------------------
 
@@ -45,6 +45,12 @@ inline
 const G4VPhysicalVolume* G4LogicalBorderSurface::GetVolume2() const
 {
   return Volume2;
+}
+
+inline
+std::size_t G4LogicalBorderSurface::GetIndex() const
+{
+  return Index;
 }
 
 inline

@@ -18,6 +18,8 @@
 #ifndef SeedTable_h
 #define SeedTable_h 1
 
+#include "CLHEP/Random/Random.h"
+
 namespace CLHEP {
 
 const long HepRandom::seedTable[215][2] = {

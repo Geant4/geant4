@@ -16,15 +16,15 @@
 /process/list
 #
 # rdm is applied only to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+/process/had/rdm/noVolumes
+/process/had/rdm/selectVolume Target
 #
 # place the isotopes in the middle of the target, at rest.
 /gun/particle ion
 /gun/ion 90 234
 #
 #  VR MC
-/grdm/analogueMC 0
+/process/had/rdm/analogueMC 0
 /analysis/setFileName th234c-b
 /analysis/h1/set 6 100 0. 15. MeV
 #

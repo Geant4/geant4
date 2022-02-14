@@ -79,19 +79,19 @@ public:  // with description
   explicit G4GammaConversion(const G4String& processName ="conv",
 			     G4ProcessType type = fElectromagnetic);
 
-  virtual ~G4GammaConversion();
+  ~G4GammaConversion() override;
 
   // true for Gamma only.
-  virtual G4bool IsApplicable(const G4ParticleDefinition&) final;
+  G4bool IsApplicable(const G4ParticleDefinition&) final;
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-				    const G4Material*) override;
-
-  // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo() override;
+  G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+			    const G4Material*) override;
 
   // print documentation in html format
-  virtual void ProcessDescription(std::ostream&) const override;
+  void ProcessDescription(std::ostream&) const override;
+
+  G4GammaConversion & operator=(const  G4GammaConversion &right) = delete;
+  G4GammaConversion(const  G4GammaConversion&) = delete;
 
 protected:
 
@@ -99,10 +99,7 @@ protected:
 
 private:
      
-  G4GammaConversion & operator=(const  G4GammaConversion &right) = delete;
-  G4GammaConversion(const  G4GammaConversion&) = delete;
-
-  G4bool  isInitialised;
+  G4bool isInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

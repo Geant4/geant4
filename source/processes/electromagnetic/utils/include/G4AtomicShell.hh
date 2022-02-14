@@ -65,11 +65,11 @@ public:
 
   // Returns the id of the shell
   inline G4int ShellId() const;
-
-private:
   
   G4AtomicShell & operator=(const  G4AtomicShell &right) = delete;
   G4AtomicShell(const  G4AtomicShell&) = delete;
+
+private:
 
   G4int identifier;
   G4double bindingEnergy;

@@ -23,48 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MSSteppingAction implementation
 //
-//
-//
-//
-
+// Author: M.Asai, 5 May 2006
+// --------------------------------------------------------------------
 
 #include "G4MSSteppingAction.hh"
-
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
+#include "G4Region.hh"
 #include "G4Step.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Region.hh"
-#include "G4Material.hh"
 
-G4MSSteppingAction::G4MSSteppingAction()
-{
-  Initialize(false,0);
-}
+// --------------------------------------------------------------------
+G4MSSteppingAction::G4MSSteppingAction() {}
 
-G4MSSteppingAction::~G4MSSteppingAction()
-{;}
- 
-void G4MSSteppingAction::Initialize(G4bool rSens,G4Region* reg)
+// --------------------------------------------------------------------
+G4MSSteppingAction::~G4MSSteppingAction() {}
+
+// --------------------------------------------------------------------
+void G4MSSteppingAction::Initialize(G4bool rSens, G4Region* reg)
 {
   regionSensitive = rSens;
-  theRegion = reg;
-  length = 0.;
-  x0 = 0.;
-  lambda = 0.;
+  theRegion       = reg;
+  length          = 0.;
+  x0              = 0.;
+  lambda          = 0.;
 }
-  
+
+// --------------------------------------------------------------------
 void G4MSSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
-  G4Region* region = preStepPoint->GetPhysicalVolume()->GetLogicalVolume()->GetRegion();
+  G4Region* region =
+    preStepPoint->GetPhysicalVolume()->GetLogicalVolume()->GetRegion();
 
-  if(regionSensitive && (region!=theRegion)) return;
+  if(regionSensitive && (region != theRegion))
+    return;
 
-  G4double stlen = aStep->GetStepLength();
+  G4double stlen       = aStep->GetStepLength();
   G4Material* material = preStepPoint->GetMaterial();
   length += stlen;
-  x0 += stlen/(material->GetRadlen());
-  lambda += stlen/(material->GetNuclearInterLength());
+  x0 += stlen / (material->GetRadlen());
+  lambda += stlen / (material->GetNuclearInterLength());
 }
-

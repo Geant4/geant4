@@ -78,10 +78,8 @@ public:
   //
   inline G4Material* FindMaterial (const G4String& name) const;
   G4Material* FindOrBuildMaterial (const G4String& name, 
-				   G4bool isotopes=true,
-				   G4bool warning =true);
+				   G4bool warning = true);
 					    
-
   // Find or build a simple material via atomic number
   //
   inline G4Material* FindSimpleMaterial(G4int Z) const;
@@ -93,7 +91,6 @@ public:
 				    const std::vector<G4String>& elm,
 				    const std::vector<G4int>& nbAtoms,
 				    G4double  dens, 
-				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
 				    G4double  temp     = NTP_Temperature,  
 				    G4double  pressure = CLHEP::STP_Pressure);
@@ -104,7 +101,6 @@ public:
 				    const std::vector<G4String>& elm,
 				    const std::vector<G4double>& weight,
 				    G4double  dens, 
-				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
 				    G4double  temp     = NTP_Temperature,  
 				    G4double  pressure = CLHEP::STP_Pressure); 
@@ -114,15 +110,13 @@ public:
   // 
   G4Material* ConstructNewGasMaterial(const G4String& name, 
 				      const G4String& nameDB,
-				      G4double temp, G4double pres, 
-				      G4bool isotopes = true);
+				      G4double temp, G4double pres);
 
   // Construct an ideal gas G4Material from scratch by atom count
   //
   G4Material* ConstructNewIdealGasMaterial(const G4String& name,
                                            const std::vector<G4String>& elm,
                                            const std::vector<G4int>& nbAtoms,
-                                           G4bool    isotopes = true,
                                            G4double  temp     = NTP_Temperature,
                                            G4double  pressure = CLHEP::STP_Pressure); 
 				      
@@ -155,6 +149,11 @@ public:
   //
   inline G4double GetMeanIonisationEnergy(G4int index) const;
   inline G4double GetNominalDensity(G4int index) const;
+
+  G4bool operator==(const G4NistMaterialBuilder&) const = delete;
+  G4bool operator!=(const G4NistMaterialBuilder&) const = delete;
+  G4NistMaterialBuilder(const G4NistMaterialBuilder&) = delete;
+  const G4NistMaterialBuilder& operator=(const G4NistMaterialBuilder&) = delete;
 
 private:
 
@@ -226,7 +225,7 @@ private:
 };
 
 inline const std::vector<G4String>& 
-       G4NistMaterialBuilder::GetMaterialNames() const
+G4NistMaterialBuilder::GetMaterialNames() const
 {
   return names;
 }
@@ -234,7 +233,7 @@ inline const std::vector<G4String>&
 inline G4double 
 G4NistMaterialBuilder::GetMeanIonisationEnergy(G4int index) const
 {
-  return (index >= 0 && index < nMaterials) ? ionPotentials[index] : 10.0*index; 
+  return (index >= 0 && index < nMaterials) ? ionPotentials[index] : 10.0*index;
 }
 
 inline G4double 
@@ -247,11 +246,10 @@ inline G4Material*
 G4NistMaterialBuilder::FindMaterial(const G4String& name) const
 {
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  size_t nmat = theMaterialTable->size();
   G4Material* ptr = nullptr;
-  for(size_t i=0; i<nmat; ++i) {
-    if(name == ((*theMaterialTable)[i])->GetName()) { 
-      ptr = (*theMaterialTable)[i];
+  for(auto & mat : *theMaterialTable) {
+    if(name == mat->GetName()) { 
+      ptr = mat;
       break;
     } 
   }

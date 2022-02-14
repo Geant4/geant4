@@ -18,8 +18,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+07-11-21 I. Hrivnacova (exhadr00-V10-07-02)
+- Added analysis manager Clear() call instead of
+  deleting in the end of run (removed on July 22)
+
+06-10-21 I. Hrivnacova (exhadr00-V10-07-01)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+22-07-21 I. Hrivnacova (exhadr00-V10-07-00)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+10-11-20 B. Morgan (exhadr00-V10-06-01)
+- Migration to G4RunManagerFactory.
+
+13-02-20  V.Ivanchenko (exhadr00-V10-06-00)
+- HistoManagerMessenger - fixed destructor
+
 27-08-19  V.Ivanchenko (exhadr00-V10-05-01)
 - cleaned-up macro files
 
@@ -35,7 +52,7 @@ track of all tags.
 29-03-18  V.Ivanchenko (exhadr00-V10-04-02)
 - DetectorConstruction - cleanup geometry
 - Hadr00.cc - more cleanup visualisation
-	 
+
 24-03-18  M.Maire (exhadr00-V10-04-01)
 - Hadr00.cc : come back to FTFP_BERT
 
@@ -57,15 +74,15 @@ track of all tags.
 
 27-11-13  I. Hrivnacova (exhadr00-V09-06-06)
 - Removed #ifdef G4MULTITHREADED from RunAction (not needed)
-- Fixed .README 
+- Fixed .README
 
 21-11-13  A. Dotti      (exhadr00-V09-06-05)
 - USe G4RunManager::ReinitializeGeometry() to trigger geometry
-  rebuilds. 
+  rebuilds.
 - Remove ui command /testhadr/Update and corresponding
   DetectorConstruction::Update method
 - Mark UI command to change detector as ToBeBroadcasted(false)
-- Update README file for change in ui command 
+- Update README file for change in ui command
 
 06-11-13  V.Ivanchenko (exhadr00-V09-06-04)
 - Fixed for MT
@@ -74,11 +91,11 @@ track of all tags.
 - Fixed for sequential
 
 05-11-13  V.Ivanchenko (exhadr00-V09-06-02)
-- Appling review recommendations, migration to MT, simplified access 
+- Appling review recommendations, migration to MT, simplified access
     to histograms
 
 05-06-13  I. Hrivnacova (exhadr00-V09-06-01)
-- Applied coding guidelines (data members names and initialization, 
+- Applied coding guidelines (data members names and initialization,
   tabulations, separators)
 
 05-04-13  V.Ivanchenko (exhadr00-V09-06-00)
@@ -115,10 +132,10 @@ track of all tags.
 - Cleanup AIDA interface
 
 06-06-10 J.Perl (exhadr00-V09-03-03)
-- Remove unused variable in EventAction 
+- Remove unused variable in EventAction
 
 03-06-10 J.Perl (exhadr00-V09-03-02)
-- Updated vis usage 
+- Updated vis usage
 
 27-05-10 V.Ivant (exhadr00-V09-03-01)
 - Improved printout
@@ -127,8 +144,8 @@ track of all tags.
 - Introduced G4UIExecutive.
 
 26-06-09 V.Ivant (exhadr00-V09-02-00)
-- added a possibility to define Physics List as a job parameter 
-- added script for the test run of all Physics Lists 
+- added a possibility to define Physics List as a job parameter
+- added script for the test run of all Physics Lists
 
 20-11-08 V.Ivant (exhadr00-V09-01-02)
 - added charge exchange cross section
@@ -138,4 +155,4 @@ track of all tags.
 
 07-07-08 V.Ivant (exhadr00-V09-01-00)
 - first release
-     
+

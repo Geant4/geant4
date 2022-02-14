@@ -98,6 +98,10 @@ public:
   G4double SamplePostStepPlasmonTransfer(G4int coupleIndex, 
 				  G4double scaledTkin) const;
 
+  // hide assignment operator 
+  G4PAIPhotData & operator=(const  G4PAIPhotData &right) = delete;
+  G4PAIPhotData(const  G4PAIPhotData&) = delete;
+
 private:
 
   G4double GetEnergyTransfer(G4int coupleIndex, size_t iPlace, 
@@ -106,10 +110,6 @@ private:
 			     G4double position) const;
   G4double GetEnergyPlasmonTransfer(G4int coupleIndex, size_t iPlace, 
 			     G4double position) const;
-
-  // hide assignment operator 
-  G4PAIPhotData & operator=(const  G4PAIPhotData &right);
-  G4PAIPhotData(const  G4PAIPhotData&);
 
   G4int                fTotBin;
   G4double             fLowestKineticEnergy;
@@ -132,7 +132,6 @@ private:
   std::vector<G4PhysicsLogVector*>  fdNdxCutPlasmonTable;
 
   std::vector<G4PhysicsLogVector*>  fdEdxCutTable;
-
 };
 
 #endif

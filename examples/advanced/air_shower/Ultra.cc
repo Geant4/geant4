@@ -35,13 +35,8 @@
 //   *                  Ultra.cc
 //   *******************************************************
 
-
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4Types.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -64,13 +59,10 @@ int main(int argc,char** argv) {
 //(lets use C++ implementation of Jame's RANLUX generator)
  
   G4Random::setTheEngine(new CLHEP::RanluxEngine);
-  
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2); 
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads);
 
   // UserInitialization classes - mandatory
   runManager->SetUserInitialization(new UltraDetectorConstruction);
@@ -79,9 +71,14 @@ int main(int argc,char** argv) {
   // UserAction classes - optional
   runManager->SetUserInitialization(new UltraActionInitializer());
 
-#ifdef G4VIS_USE
-  // Visualization, if you choose to have it!
-  G4VisManager* visManager = new G4VisExecutive;
+  // Detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
+  // Initialise visualization
+  auto* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
 
@@ -89,7 +86,7 @@ int main(int argc,char** argv) {
   runManager->Initialize();
 
   // Get the Pointer to the UI Manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto* UImanager = G4UImanager::GetUIpointer();
 
   // User interactions
   // Define (G)UI for interactive mode
@@ -121,4 +118,3 @@ int main(int argc,char** argv) {
 
   return 0;
 }
-

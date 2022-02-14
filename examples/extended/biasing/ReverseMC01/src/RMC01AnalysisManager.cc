@@ -345,6 +345,7 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
   //We need to loop over the adjoint tracks that have reached the external
   //surface.
   for (std::size_t j=0;j<nb_adj_track;++j) {
+
     G4int pdg_nb =theAdjointSimManager
          ->GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(j);
     G4double prim_ekin=theAdjointSimManager
@@ -494,6 +495,52 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
      fGamma_current->fill(ekin,weight*normalised_weight);
      gamma_current_rmatrix->fill(prim_ekin,ekin,weight*adj_weight/cm2);
    }
+  }
+
+  //Registering of total energy deposited in Event
+  //-------------------------------
+     G4bool new_mean_computed=false;
+     if (totEdep>0.){
+       if (total_normalised_weight>0.){
+         G4double edep=totEdep* total_normalised_weight;
+
+         //Check if the edep is not wrongly too high
+         //-----------------------------------------
+         G4double new_mean(0.0), new_error(0.0);
+         fAccumulated_edep +=edep;
+         fAccumulated_edep2 +=edep*edep;
+         fNentry += 1.0;
+         ComputeMeanEdepAndError(anEvent,new_mean,new_error);
+         G4double new_relative_error = 1.;
+         if ( new_error >0) new_relative_error = new_error/ new_mean;
+         if (fRelative_error <0.10 && new_relative_error>1.5*fRelative_error) {
+           G4cout<<"Potential wrong adjoint weight!"<<std::endl;
+           G4cout<<"The results of this event will not be registered!"
+                                                         <<std::endl;
+           G4cout<<"previous mean edep [MeV] "<< fMean_edep<<std::endl;
+           G4cout<<"previous relative error "<< fRelative_error<<std::endl;
+           G4cout<<"new rejected mean edep [MeV] "<< new_mean<<std::endl;
+           G4cout<<"new rejected relative error "<< new_relative_error
+                                                           <<std::endl;
+           fAccumulated_edep -=edep;
+           fAccumulated_edep2 -=edep*edep;
+           fNentry -= 1.0;
+           return;
+         }
+         else { //accepted
+           fMean_edep = new_mean;
+           fError_mean_edep = new_error;
+           fRelative_error =new_relative_error;
+           new_mean_computed=true;
+         }
+
+       }
+
+       if (!new_mean_computed){
+         ComputeMeanEdepAndError(anEvent,fMean_edep,fError_mean_edep);
+         fRelative_error = (fMean_edep > 0.0) ? fError_mean_edep/fMean_edep : 0.0;
+       }
+     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -552,30 +599,36 @@ void  RMC01AnalysisManager::WriteHisto(G4H2* anHisto,
 void RMC01AnalysisManager::ComputeMeanEdepAndError(
                         const G4Event* anEvent,G4double& mean,G4double& error)
 {  
-   G4int nb_event=anEvent->GetEventID()+1;
+   G4int nb_event = anEvent->GetEventID()+1;
    G4double factor=1.;
    if (fAdjoint_sim_mode) {
-      nb_event /=fNb_evt_per_adj_evt;
-      factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
+     nb_event /= fNb_evt_per_adj_evt;
+     factor = 1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
    }
    
    // VI: error computation now is based on number of entries and not 
    //     number of events
-   if (fNentry > 1.0) {
-      mean = fAccumulated_edep/fNentry;
-      G4double mean_x2 = fAccumulated_edep2/fNentry;
-      /*
+   // LD: This is wrong! With the use of fNentry the results were no longer
+   //     correctly normalised. The mean and the error should be computed
+   //     with nb_event. The old computation has been reset.
+   // VI: OK, but let computations be double
+   if (nb_event > 0) {
+     G4double norm = 1.0/(G4double)nb_event;
+     mean = fAccumulated_edep*norm;
+     G4double mean_x2 = fAccumulated_edep2*norm;
+     G4double zz = mean_x2 - mean*mean;
+     /* 
       G4cout << "Nevt= " << nb_event <<  " mean= " << mean 
              << "  mean_x2= " <<  mean_x2 << " x2 - x*x= " 
-             << mean_x2-mean*mean << G4endl;
-      */
-      error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(fNentry);
-      mean *=factor;
+             << zz << G4endl;
+     */
+     error = factor*std::sqrt(std::max(zz, 0.)*norm);
+     mean *= factor;
+   } else {
+     mean=0;
+     error=0;
    }
-   else {
-      mean=0;
-      error=0;
-  }
+   //G4cout << "Aend: " << mean << " " << error << G4endl; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -656,6 +709,7 @@ void RMC01AnalysisManager::book()
 
   //Histo manager
    G4AnalysisManager* theHistoManager = G4AnalysisManager::Instance();
+   theHistoManager->SetDefaultFileType("root"); 
    G4String extension = theHistoManager->GetFileType();
    fFileName[1] = fFileName[0] + "." + extension;
    theHistoManager->SetFirstHistoId(1);
@@ -824,7 +878,7 @@ void RMC01AnalysisManager::save(G4double scaling_factor)
     theHistoManager->CloseFile();
     G4cout << "\n----> Histogram Tree is saved in " << fFileName[1] << G4endl;
 
-    delete G4AnalysisManager::Instance();
+    theHistoManager->Clear();
     fFactoryOn = false;
   }
 }

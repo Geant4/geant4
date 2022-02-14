@@ -36,49 +36,50 @@
 #include "G4RadioactivationMessenger.hh"
 #include "G4NuclearLevelData.hh"
 #include <sstream>
+#include "G4HadronicException.hh"
 
 
 G4RadioactivationMessenger::G4RadioactivationMessenger(G4Radioactivation* theRadioactivationContainer1)
  :theRadioactivationContainer(theRadioactivationContainer1)
 {
-  grdmDirectory = new G4UIdirectory("/grdm/");
-  grdmDirectory->SetGuidance("Controls the biased version of radioactive decay");
+  rdmDirectory = new G4UIdirectory("/process/had/rdm/");
+  rdmDirectory->SetGuidance("Controls the biased version of radioactive decay");
 
   // Command to turn on/off variance reduction options
-  analoguemcCmd = new G4UIcmdWithABool ("/grdm/analogueMC",this);
+  analoguemcCmd = new G4UIcmdWithABool("/process/had/rdm/analogueMC",this);
   analoguemcCmd->SetGuidance("false: variance reduction method; true: analogue method");
   analoguemcCmd->SetParameterName("AnalogueMC",true);
   analoguemcCmd->SetDefaultValue(true);
-
+  
   // Command to use branching ratio biasing or not
-  brbiasCmd = new G4UIcmdWithABool ("/grdm/BRbias",this);
+  brbiasCmd = new G4UIcmdWithABool("/process/had/rdm/BRbias",this);
   brbiasCmd->SetGuidance("false: no biasing; true: all branches are treated as equal");
   brbiasCmd->SetParameterName("BRBias",true);
   brbiasCmd->SetDefaultValue(true);
-
+  
   // Command to set the half-life thresold for isomer production
-  hlthCmd = new G4UIcmdWithADoubleAndUnit("/grdm/hlThreshold",this);
+  hlthCmd = new G4UIcmdWithADoubleAndUnit("/process/had/rdm/hlThreshold",this);
   hlthCmd->SetGuidance("Set the h-l threshold for isomer production");
   hlthCmd->SetParameterName("hlThreshold",false);
   hlthCmd->SetUnitCategory("Time");
-
+  
   // Command to define the incident particle source time profile
-  sourcetimeprofileCmd = new G4UIcmdWithAString("/grdm/sourceTimeProfile",this);
+  sourcetimeprofileCmd = new G4UIcmdWithAString("/process/had/rdm/sourceTimeProfile",this);
   sourcetimeprofileCmd->SetGuidance 
     ("Supply the name of the ascii file containing the source particle time profile");
   sourcetimeprofileCmd->SetParameterName("STimeProfile",true);
   sourcetimeprofileCmd->SetDefaultValue("source.data");
-
+  
   // Command to define the incident particle source time profile
-  decaybiasprofileCmd = new G4UIcmdWithAString("/grdm/decayBiasProfile",this);
+  decaybiasprofileCmd = new G4UIcmdWithAString("/process/had/rdm/decayBiasProfile",this);
   decaybiasprofileCmd->SetGuidance 
     ("Supply the name of the ascii file containing the decay bias time profile");
   decaybiasprofileCmd->SetParameterName("DBiasProfile",true);
   decaybiasprofileCmd->SetDefaultValue("bias.data");
-
-  // Command to set nuclei spliting parameter
-  splitnucleiCmd = new G4UIcmdWithAnInteger("/grdm/splitNuclei",this);
-  splitnucleiCmd->SetGuidance("Set number of spliting for the isotopes.");
+  
+  // Command to set nuclei splitting parameter
+  splitnucleiCmd = new G4UIcmdWithAnInteger("/process/had/rdm/splitNuclei",this);
+  splitnucleiCmd->SetGuidance("Set number of splitting for the isotopes.");
   splitnucleiCmd->SetParameterName("NSplit",true);
   splitnucleiCmd->SetDefaultValue(1);
   splitnucleiCmd->SetRange("NSplit>=1");
@@ -87,7 +88,7 @@ G4RadioactivationMessenger::G4RadioactivationMessenger(G4Radioactivation* theRad
 
 G4RadioactivationMessenger::~G4RadioactivationMessenger()
 {
-  delete grdmDirectory;
+  delete rdmDirectory;
   delete analoguemcCmd;
   delete sourcetimeprofileCmd;
   delete decaybiasprofileCmd;
@@ -99,23 +100,18 @@ G4RadioactivationMessenger::~G4RadioactivationMessenger()
 
 void G4RadioactivationMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
-  if (command==analoguemcCmd) {theRadioactivationContainer->
-    SetAnalogueMonteCarlo(analoguemcCmd->GetNewBoolValue(newValues));
-
-  } else if (command==brbiasCmd) {theRadioactivationContainer->
-    SetBRBias(brbiasCmd->GetNewBoolValue(newValues));
-
-  } else if (command==sourcetimeprofileCmd) {theRadioactivationContainer->
-    SetSourceTimeProfile(newValues);
-
-  } else if (command==decaybiasprofileCmd) {theRadioactivationContainer->
-    SetDecayBias(newValues);
-
-  } else if (command==splitnucleiCmd) {theRadioactivationContainer->
-    SetSplitNuclei(splitnucleiCmd->GetNewIntValue(newValues));
-
-  } else if (command==hlthCmd ) {theRadioactivationContainer->
-    SetHLThreshold(hlthCmd->GetNewDoubleValue(newValues));
+  if ( command == analoguemcCmd ) { theRadioactivationContainer->
+    SetAnalogueMonteCarlo( analoguemcCmd->GetNewBoolValue( newValues ) );
+  } else if ( command == brbiasCmd ) { theRadioactivationContainer->
+    SetBRBias( brbiasCmd->GetNewBoolValue( newValues ) );
+  } else if ( command == sourcetimeprofileCmd ) { theRadioactivationContainer->
+    SetSourceTimeProfile( newValues );
+  } else if ( command == decaybiasprofileCmd ) { theRadioactivationContainer->
+    SetDecayBias( newValues );
+  } else if ( command == splitnucleiCmd ) { theRadioactivationContainer->
+    SetSplitNuclei( splitnucleiCmd->GetNewIntValue( newValues ) );
+  } else if ( command == hlthCmd ) { theRadioactivationContainer->
+    SetHLThreshold( hlthCmd->GetNewDoubleValue( newValues ) );
   }
 }
 

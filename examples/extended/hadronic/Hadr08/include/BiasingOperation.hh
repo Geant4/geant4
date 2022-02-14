@@ -36,10 +36,7 @@
 
 #include "G4VBiasingOperation.hh"
 
-class G4ProtonInelasticProcess;
-class G4NeutronInelasticProcess;
-class G4PionPlusInelasticProcess;
-class G4PionMinusInelasticProcess;
+class G4HadronInelasticProcess;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,10 +60,10 @@ class BiasingOperation : public G4VBiasingOperation {
       GenerateBiasingFinalState( const G4Track*, const G4Step* ) { return 0; }
 
   private:
-    G4ProtonInelasticProcess*    fProtonInelasticProcess;
-    G4NeutronInelasticProcess*   fNeutronInelasticProcess;
-    G4PionPlusInelasticProcess*  fPionPlusInelasticProcess;
-    G4PionMinusInelasticProcess* fPionMinusInelasticProcess;
+    G4HadronInelasticProcess* fProtonInelasticProcess;
+    G4HadronInelasticProcess* fNeutronInelasticProcess;
+    G4HadronInelasticProcess* fPionPlusInelasticProcess;
+    G4HadronInelasticProcess* fPionMinusInelasticProcess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

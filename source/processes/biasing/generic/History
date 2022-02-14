@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 4, 2021 A. Ribon
+- G4BOptrForceCollision : migrated to the new version of G4PhysicsModelCatalog
+- proc-biasgen-V10-07-01
+
+April 16th, 2021 B. Morgan
+- Migrate build to modular CMake API
+- proc-biasgen-V10-07-00
 
 November 15th, 2019 M. Verderi
 - Introduce leading particle biasing proc-biasgen-V10-05-00
@@ -29,7 +36,7 @@ November 15th, 2019 M. Verderi
   setting a new cross-section value:
       void     SetBiasedCrossSection(G4double xst, bool updateInteractionLength = false);
   default value makes the change backward compatible.
-  
+
 
 November 24th, 2017 M. Verderi
 - Fix G4BiasingProcessInterface for wrong setting of first/last
@@ -37,7 +44,7 @@ November 24th, 2017 M. Verderi
   a pure along, this broke the initial logic based on the fact
   that, before, physics processes always had a PostStepDoIt method.
 - proc-biasgen-V10-03-00
-  
+
 
 November 15th, 2016, M. Verderi
 - Fix one Coverity warning in G4ParallelGeometriesLimiterProcess.

@@ -37,77 +37,39 @@
 
 #include "tools/rroot/ntuple"
 
-#include <vector>
+#include <string_view>
 
+class G4RootRFileManager;
 struct G4RootRNtupleDescription;
 
 class G4RootRNtupleManager : public G4VRNtupleManager
 {
   friend class G4RootAnalysisReader;
 
-  protected:
+  public:
     explicit G4RootRNtupleManager(const G4AnalysisManagerState& state);
-    virtual ~G4RootRNtupleManager();
+    G4RootRNtupleManager() = delete;
+    virtual ~G4RootRNtupleManager() = default;
 
-    // Methods to manipulate ntuples  
-    G4bool IsEmpty() const;
-    G4bool Reset();
-
-    // Access methods
-    tools::rroot::ntuple* GetNtuple() const;
-    tools::rroot::ntuple* GetNtuple(G4int ntupleId) const;
-
-    // Functions independent from the output type 
-    //
-    // Methods to read ntuple from a file
-    G4int SetNtuple(G4RootRNtupleDescription* rntupleDescription);
-    // Methods for ntuple with id = FirstNtupleId                     
-    virtual G4bool SetNtupleIColumn(const G4String& columnName, 
-                            G4int& value);
-    virtual G4bool SetNtupleFColumn(const G4String& columnName, 
-                            G4float& value);
-    virtual G4bool SetNtupleDColumn(const G4String& columnName, 
-                            G4double& value);
-    virtual G4bool SetNtupleSColumn(const G4String& columnName, 
-                            G4String& value);
-    // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(const G4String& columnName, 
-                            std::vector<G4int>& vector);
-    virtual G4bool SetNtupleFColumn(const G4String& columnName, 
-                            std::vector<G4float>& vector);
-    virtual G4bool SetNtupleDColumn(const G4String& columnName, 
-                            std::vector<G4double>& vector);
-    // Methods for ntuple with id > FirstNtupleId                     
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, 
-                            const G4String& columnName, G4int& value);
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, 
-                            const G4String& columnName, G4float& value);
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, 
-                            const G4String& columnName, G4double& value);
-    virtual G4bool SetNtupleSColumn(G4int ntupleId, 
-                            const G4String& columnName, G4String& value);
-    // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4int>& vector);
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4float>& vector);
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4double>& vector);
-    virtual G4bool GetNtupleRow();
-    virtual G4bool GetNtupleRow(G4int ntupleId) ;
-    
-    // Access methods
-    virtual G4int GetNofNtuples() const;
-  
   private:
-    // methods
-    G4RootRNtupleDescription*  GetNtupleInFunction(G4int id, 
-                                         G4String function,
-                                         G4bool warn = true) const;
+    // Set methods
+    void SetFileManager(std::shared_ptr<G4RootRFileManager> fileManager);
 
-    // data members
-    std::vector<G4RootRNtupleDescription*> fNtupleVector;
-};    
+    // Methods from the base class
+    virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
+                                  const G4String& dirName, G4bool isUserFileName) final;
+    virtual G4bool GetTNtupleRow(G4TRNtupleDescription<tools::rroot::ntuple>* ntupleDescription) final;
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootPNtupleManager" };
+
+    // Data members
+    std::shared_ptr<G4RootRFileManager>  fFileManager { nullptr };
+};
+
+inline void
+G4RootRNtupleManager::SetFileManager(std::shared_ptr<G4RootRFileManager> fileManager)
+{ fFileManager = fileManager; }
 
 // inline functions
 

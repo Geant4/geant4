@@ -54,21 +54,14 @@ class G4EmStandardPhysicsWVI : public G4VPhysicsConstructor
 public:
   G4EmStandardPhysicsWVI(G4int ver = 1);
 
-  virtual ~G4EmStandardPhysicsWVI();
+  ~G4EmStandardPhysicsWVI() override;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-
-private:
-  G4int  verbose;
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
 
 

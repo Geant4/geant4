@@ -32,40 +32,43 @@
 // File name:     G4WLSTimeGeneratorProfileDelta.cc
 //
 // Author:        Pedro Rodrigues, Andreia Trindade
-// 
+//
 // Creation date: 2006-05-07
 //
 // Modifications:
 //
-// Class Description: 
+// Class Description:
 //
-// Class Description: End 
+// Class Description: End
 //
 // -------------------------------------------------------------------
 //
-//    
+//
 
 #include "G4WLSTimeGeneratorProfileDelta.hh"
 #include "Randomize.hh"
-//    
+//
 
-G4WLSTimeGeneratorProfileDelta::G4WLSTimeGeneratorProfileDelta(const G4String& name):G4VWLSTimeGeneratorProfile(name)
-{;}
-
-//    
-
-G4WLSTimeGeneratorProfileDelta::~G4WLSTimeGeneratorProfileDelta() 
-{;}
+G4WLSTimeGeneratorProfileDelta::G4WLSTimeGeneratorProfileDelta(
+  const G4String& name)
+  : G4VWLSTimeGeneratorProfile(name)
+{}
 
 //
 
-G4double G4WLSTimeGeneratorProfileDelta::GenerateTime(const G4double time_constant)
+G4WLSTimeGeneratorProfileDelta::~G4WLSTimeGeneratorProfileDelta() {}
+
+//
+
+G4double G4WLSTimeGeneratorProfileDelta::GenerateTime(
+  const G4double time_constant)
 {
   return time_constant;
 }
 
-G4double G4WLSTimeGeneratorProfileDelta::GenerateTime(const G4MaterialPropertiesTable*){
-
+G4double G4WLSTimeGeneratorProfileDelta::GenerateTime(
+  const G4MaterialPropertiesTable*)
+{
   // This method is not currently in use
-  return 0;
+  return 0.;
 }

@@ -23,57 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VPDigitIO.hh
+// G4VPDigitIO
 //
-// History:
-//   '01.08.10  Youhei Morita  Initial creation (with "fadsclass3")
+// Class Description:
+//
+// Abstract base class for storing and retrieving digit collections.
 
-#ifndef V_P_DIGIT_I_O_HH
-#define V_P_DIGIT_I_O_HH 1
+// Author: Youhei Morita, 10.08.2001
+// --------------------------------------------------------------------
+#ifndef G4VPDIGITIO_HH
+#define G4VPDIGITIO_HH 1
 
 #include "G4DCofThisEvent.hh"
 #include "G4DCIOcatalog.hh"
 #include "G4VPDigitsCollectionIO.hh"
 
-// Class Description:
-//   Abstract base class for storing and retrieving digit collections
-
 class G4VPDigitIO
 {
-    public: // With description
-      G4VPDigitIO();
+  public:
+
+    G4VPDigitIO();
       // Constructor
 
-      virtual ~G4VPDigitIO() {};
+    virtual ~G4VPDigitIO() {}
       // Destructor
 
-    public: // With description
-      G4VPDigitIO* GetVPDigitIO() { return f_G4VPDigitIO; };
-      // Returns the pointer of the digit collection I/O manager.
+    G4VPDigitIO* GetVPDigitIO() { return f_G4VPDigitIO; }
+      // Returns the pointer of the digit collection I/O manager
 
-      virtual G4bool Store(const G4DCofThisEvent*) =0;
+    virtual G4bool Store(const G4DCofThisEvent*) = 0;
       // Pure virtual method for storing digit collections of this event.
       // Each persistency package should implement a concrete method
-      // of storing the digit collection of this event with this signature.
+      // of storing the digit collection of this event with this signature
 
-      virtual G4bool Retrieve(G4DCofThisEvent*&) =0;
+    virtual G4bool Retrieve(G4DCofThisEvent*&) = 0;
       // Pure virtual method for retrieving digit collections of this event.
       // Each persistency package should implement a concrete method
-      // of storing the digit collection of this event with this signature.
+      // of storing the digit collection of this event with this signature
 
-      void SetVerboseLevel(int v);
-      // Set verbose level.
+    void SetVerboseLevel(G4int v);
+      // Sets verbose level
 
-    protected:
-      void SetG4VPDigitIO(G4VPDigitIO* digitMan) { f_G4VPDigitIO = digitMan; };
-      // Registers the digit collection I/O manager.
+  protected:
 
-    protected:
-      G4int m_verbose;
-      static G4ThreadLocal G4VPDigitIO* f_G4VPDigitIO;
-      G4DCIOcatalog*    f_catalog;
+    void SetG4VPDigitIO(G4VPDigitIO* digitMan) { f_G4VPDigitIO = digitMan; }
+      // Registers the digit collection I/O manager
 
-}; // End of class G4VPDigitIO
+  protected:
+ 
+    G4int m_verbose = 0;
+    static G4ThreadLocal G4VPDigitIO* f_G4VPDigitIO;
+    G4DCIOcatalog* f_catalog = nullptr;
+};
 
 #endif
-

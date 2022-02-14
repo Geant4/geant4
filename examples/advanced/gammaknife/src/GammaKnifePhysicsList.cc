@@ -51,6 +51,7 @@
 #include "G4RadioactiveDecayPhysics.hh"
 
 #include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
 
 GammaKnifePhysicsList::GammaKnifePhysicsList(): G4VModularPhysicsList()
 {

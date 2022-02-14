@@ -43,41 +43,38 @@
 
 #include "BrachyPrimaryGeneratorAction.hh"
 #include "Randomize.hh"  
+#include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
 #include "G4RunManager.hh"
-
-#include <CLHEP/Units/SystemOfUnits.h>
-
-#ifdef ANALYSIS_USE
-#include "BrachyAnalysisManager.hh"
-#endif
+#include "G4SystemOfUnits.hh"
 
 BrachyPrimaryGeneratorAction::BrachyPrimaryGeneratorAction()
 {
 // Use the GPS to generate primary particles,
-// Particle type, energy position, direction are specified in the 
-// the macro file primary.mac 
- gun = new G4GeneralParticleSource();
+// Particle type, energy position, direction are specified in 
+// macro files
+ fGun = new G4GeneralParticleSource();
 }
 
 BrachyPrimaryGeneratorAction::~BrachyPrimaryGeneratorAction()
 {
-delete gun;
+delete fGun;
 }
 
 void BrachyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  gun -> GeneratePrimaryVertex(anEvent);
+ fGun -> GeneratePrimaryVertex(anEvent);
 
-#ifdef ANALYSIS_USE
- if (gun -> GetParticleDefinition()-> GetParticleName()== "gamma")
+ if (fGun -> GetParticleDefinition()-> GetParticleName()== "gamma")
  { 
- BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
- G4double energy = gun -> GetParticleEnergy();
- analysis -> FillPrimaryParticleHistogram(energy/CLHEP::keV);
-}
-#endif 
+  auto analysisManager = G4AnalysisManager::Instance();
+  G4double energy = fGun -> GetParticleEnergy();
+  // Fill histogram with the energy spectrum of 
+  // the photons emitted by the radionuclide
+  // when modelling the photons as primary particles (not via radioactive decay)
+   analysisManager -> FillH1(0, energy/keV);
+ }
 }
 
 

@@ -15,9 +15,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
-<<<<<<< HEAD
-=======
+
+06-10-21 I. Hrivnacova          tag pdb4dna-V10-07-00
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  removed Analysis.hh.
+
+19-07-21 I. Hrivnacova          tag pdb4dna-V10-06-02
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+16-11-20 B.Morgan            tag pdb4dna-V10-06-01
+- Revert migration to G4RunManagerFactory due to current incompatibility
+  with Tasking system identified in testing.
+
+10-11-20 B. Morgan           tag pdb4dna-V10-06-00
+- Migration to G4RunManagerFactory.
+
 22-07-18 S. Incerti             tag pdb4dna-V10-04-01
 - removed obsolete RanecuEngine
 
@@ -51,15 +66,15 @@ committal in the CVS repository !
 24.11.2014 M.K                  tag pdb4dna-V10-00-06
 -----------------------------------------------------
 - Retag before release
-     
-06.11.2014 I.Hrivnacova                             
+
+06.11.2014 I.Hrivnacova
 -----------------------------------------------------
 - Fixes in README files
 
 05.11.2014 M.K                  tag pdb4dna-V10-00-05
 -----------------------------------------------------
-- order of parsing changed. The goal: one can both 
-select a macro, mt, gui or choose a visualization 
+- order of parsing changed. The goal: one can both
+select a macro, mt, gui or choose a visualization
 driver
 
 05.11.2014 M.K                  tag pdb4dna-V10-00-04

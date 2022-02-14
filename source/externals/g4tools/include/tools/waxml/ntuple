@@ -1,0 +1,517 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_waxml_ntuple
+#define tools_waxml_ntuple
+
+// A ntuple class to write at the aida tuple format.
+// Each add_row() write a row at the aida tuple format.
+
+#include "../vfind"
+#include "../vmanip"
+#include "../sout"
+#include "../srep"
+#include "../tos"
+#include "../forit"
+
+#include <ostream>
+
+// for sub_ntuple :
+#include "../scast"
+#include <sstream>
+
+#include "../ntuple_booking"
+
+namespace tools {
+namespace waxml {
+
+class ntuple {
+protected:
+
+  class iobj {
+  public:
+    virtual ~iobj(){}
+  public:
+    virtual void* cast(cid) const = 0;
+    virtual cid id_cls() const = 0;
+  public:
+    virtual const std::string& name() const = 0;
+    virtual const std::string& aida_type() const = 0;
+  };
+
+  class leaf : public virtual iobj {
+  public:
+    static cid id_class() {return 100;}
+  public: //iobj
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<leaf>(this,a_class)) {return p;}
+      return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public:
+    virtual const std::string& s_def() const = 0;
+    virtual void s_value(std::string&) const = 0;
+  public:
+    leaf(){}
+    virtual ~leaf(){}
+    leaf(const leaf& a_from):iobj(a_from){}
+    leaf& operator=(const leaf&){return *this;}
+  };
+
+  static const std::string& s_aida_type(int) {
+    static const std::string s_v("int");
+    return s_v;
+  }
+  static const std::string& s_aida_type(float) {
+    static const std::string s_v("float");
+    return s_v;
+  }
+  static const std::string& s_aida_type(double) {
+    static const std::string s_v("double");
+    return s_v;
+  }
+  static const std::string& s_aida_type(const std::string&) {
+    static const std::string s_v("string");
+    return s_v;
+  }
+
+  static const std::string& s_aida_type_ituple() {
+    static const std::string s_v("ITuple");
+    return s_v;
+  }
+
+public:
+  template <class T>
+  class column : public leaf {
+  public:
+    static cid id_class() {return 200+_cid(T());}
+  public: //iobj
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast< column<T> >(this,a_class)) {return p;}
+      return leaf::cast(a_class);
+    }
+    virtual cid id_cls() const {return id_class();}
+  public:
+    virtual const std::string& name() const {return m_name;}
+    virtual const std::string& aida_type() const {return s_aida_type(T());}
+  public: //leaf
+    virtual const std::string& s_def() const {return m_def;}
+    virtual void s_value(std::string& a_s) const {a_s = tos(m_tmp);}
+  public:
+    column(const std::string& a_name,const T& a_def)
+    :m_name(a_name),m_def(tos(a_def)),m_tmp(a_def)
+    {}
+    virtual ~column(){}
+  protected:
+    column(const column& a_from)
+    :leaf(a_from)
+    ,m_name(a_from.m_name)
+    ,m_def(a_from.m_def)
+    ,m_tmp(a_from.m_tmp)
+    {}
+    column& operator=(const column& a_from){
+      m_name = a_from.m_name;
+      m_def = a_from.m_def;
+      m_tmp = a_from.m_tmp;
+      return *this;
+    }
+  public:
+    bool fill(const T& a_value) {m_tmp = a_value;return true;}
+  protected:
+    std::string m_name;
+    std::string m_def;
+    T m_tmp;
+  };
+
+
+  class sub_ntuple : public virtual iobj {
+  public:
+    static cid id_class() {return 300;}
+  public: //iobj
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<sub_ntuple>(this,a_class)) {return p;}
+      return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public:
+    virtual const std::string& name() const {return m_name;}
+    virtual const std::string& aida_type() const {return s_aida_type_ituple();}
+  public:
+    sub_ntuple(const std::string& a_name,const std::string& a_spaces)
+    :m_name(a_name),m_spaces(a_spaces){}
+    virtual ~sub_ntuple(){}
+  protected:
+    sub_ntuple(const sub_ntuple& a_from)
+    :iobj(a_from),m_name(a_from.m_name){}
+    sub_ntuple& operator=(const sub_ntuple&){return *this;}
+  public:
+    template <class T>
+    column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
+      if(find_named<iobj>(m_cols,a_name)) return 0;
+      column<T>* col = new column<T>(a_name,a_def);
+      if(!col) return 0;
+      m_cols.push_back(col);
+      return col;
+    }
+
+    sub_ntuple* create_sub_ntuple(const std::string& a_name){
+      if(find_named<iobj>(m_cols,a_name)) return 0;
+      std::string spaces;
+      for(unsigned int i=0;i<4;i++) spaces += " ";
+      sub_ntuple* col = new sub_ntuple(a_name,m_spaces+spaces);
+      if(!col) return 0;
+      m_cols.push_back(col);
+      return col;
+    }
+
+
+    const std::vector<iobj*>& columns() const {return m_cols;}
+
+    std::string booking(bool a_xml_esc) const {
+      std::string s;
+      get_booking(m_cols,a_xml_esc,s);
+      return s;
+    }
+    void reset() {m_tmp.clear();}
+    const std::string& value() const {return m_tmp;}
+
+    bool add_row() {
+      if(m_cols.empty()) return false;
+      std::ostringstream sout;
+      sout << m_spaces << "<row>" << std::endl;
+      tools_vforcit(iobj*,m_cols,it) {
+        if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))) {
+          sout << m_spaces << "  <entryITuple>" << std::endl;
+          sout << sub->value();
+          sout << m_spaces << "  </entryITuple>" << std::endl;
+          sub->reset();
+        } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
+          std::string _sv;
+          lf->s_value(_sv);
+          sout << m_spaces << "  <entry"
+               << " value=\"" << _sv
+               << "\"/>" << std::endl;
+        }
+      }
+      sout << m_spaces << "</row>" << std::endl;
+
+      m_tmp += sout.str();
+
+      return true;
+    }
+  protected:
+    std::string m_name;
+    std::string m_spaces;
+    std::vector<iobj*> m_cols;
+    std::string m_tmp;
+  };
+
+  template <class T>
+  class std_vector_column : public leaf {
+  public:
+    static cid id_class() {return 200+_cid_std_vector<T>();}
+  public: //iobj
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<std_vector_column>(this,a_class)) {return p;}
+      return leaf::cast(a_class);
+    }
+    virtual cid id_cls() const {return id_class();}
+  public:
+    virtual const std::string& name() const {return m_name;}
+    virtual const std::string& aida_type() const {return s_aida_type(T());}
+  public: //leaf
+    virtual const std::string& s_def() const {return m_def;} //not used.
+    virtual void s_value(std::string& a_s) const {
+      std::ostringstream sout;
+      sout << m_spaces << "<entryITuple>" << std::endl;
+      typedef typename std::vector<T>::const_iterator it_t;
+      for(it_t it=m_user_vec.begin();it!=m_user_vec.end();++it) {
+        sout << m_spaces << "  <row><entry" << " value=\"" << tos(*it) << "\"/></row>" << std::endl;
+      }
+      sout << m_spaces << "</entryITuple>" << std::endl;
+      a_s = sout.str();
+    }
+  public:
+    std_vector_column(const std::string& a_name,std::vector<T>& a_user_vec,const std::string& a_spaces)
+    :m_name(a_name)
+    ,m_user_vec(a_user_vec)
+    ,m_spaces(a_spaces)
+    {}
+    virtual ~std_vector_column(){}
+  protected:
+    std_vector_column(const std_vector_column& a_from)
+    :leaf(a_from)
+    ,m_name(a_from.m_name)
+    ,m_user_vec(a_from.m_user_vec)
+    ,m_spaces(a_from.m_spaces)
+    {}
+    std_vector_column& operator=(const std_vector_column& a_from){
+      m_name = a_from.m_name;
+      m_spaces = a_from.m_spaces;
+      return *this;
+    }
+  protected:
+    std::string m_name;
+    std::string m_def; //not used;
+    std::vector<T>& m_user_vec;
+    std::string m_spaces;
+  };
+
+  static leaf* is_std_vector_column(iobj& a_obj) {
+    //200+20+id(basic type) ?
+    int _id = (int)a_obj.id_cls()-220;
+    if((_id<=0)||(_id>=20)) return 0;
+    return id_cast<iobj,leaf>(a_obj);
+  }
+
+public:
+  ntuple(std::ostream& a_writer,unsigned int a_spaces = 0)
+  :m_writer(a_writer){
+    for(unsigned int i=0;i<a_spaces;i++) m_spaces += " ";
+  }
+  ntuple(std::ostream& a_writer,
+         std::ostream& a_out,
+         const ntuple_booking& a_bkg,
+         unsigned int a_spaces = 0)
+  :m_writer(a_writer){
+    for(unsigned int i=0;i<a_spaces;i++) m_spaces += " ";
+
+    const std::vector<column_booking>& cols = a_bkg.columns();
+    tools_vforcit(column_booking,cols,it){
+
+      if((*it).cls_id()==_cid(int(0))) {
+        create_column<int>((*it).name());
+      } else if((*it).cls_id()==_cid(float(0))) {
+        create_column<float>((*it).name());
+      } else if((*it).cls_id()==_cid(double(0))) {
+        create_column<double>((*it).name());
+      } else if((*it).cls_id()==_cid(std::string())) {
+        create_column<std::string>((*it).name());
+
+      } else if((*it).cls_id()==_cid_std_vector<int>()) {
+        std::vector<int>* vec = (std::vector<int>*)(*it).user_obj();
+        if(vec) {
+          create_column<int>((*it).name(),*vec);
+        } else {
+          a_out << "tools::waxml::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          safe_clear<iobj>(m_cols);
+          return;
+        }
+      } else if((*it).cls_id()==_cid_std_vector<float>()) {
+        std::vector<float>* vec = (std::vector<float>*)(*it).user_obj();
+        if(vec) {
+          create_column<float>((*it).name(),*vec);
+        } else {
+          a_out << "tools::waxml::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          safe_clear<iobj>(m_cols);
+          return;
+        }
+      } else if((*it).cls_id()==_cid_std_vector<double>()) {
+        std::vector<double>* vec = (std::vector<double>*)(*it).user_obj();
+        if(vec) {
+          create_column<double>((*it).name(),*vec);
+        } else {
+          a_out << "tools::waxml::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          safe_clear<iobj>(m_cols);
+          return;
+        }
+
+      } else if((*it).cls_id()==_cid_std_vector<std::string>()) {
+        std::vector<std::string>* vec = (std::vector<std::string>*)(*it).user_obj();
+        if(vec) {
+          create_column<std::string>((*it).name(),*vec);
+        } else {
+          a_out << "tools::waxml::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          safe_clear<iobj>(m_cols);
+          return;
+        }
+
+      } else {
+        a_out << "tools::waxml::ntuple :"
+              << " for column " << sout((*it).name())
+              << ", type with cid " << (*it).cls_id() << " not yet handled."
+              << std::endl;
+        //throw
+        safe_clear<iobj>(m_cols);
+        return;
+      }
+    }
+  }
+  virtual ~ntuple() {
+    safe_clear<iobj>(m_cols);
+  }
+protected:
+  ntuple(const ntuple& a_from)
+  :m_writer(a_from.m_writer)
+  ,m_spaces(a_from.m_spaces)
+  {}
+  ntuple& operator=(const ntuple& a_from){
+    m_spaces = a_from.m_spaces;
+    return *this;
+  }
+public:
+  const std::vector<iobj*>& columns() const {return m_cols;}
+
+  template <class T>
+  column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
+    if(find_named<iobj>(m_cols,a_name)) return 0;
+    column<T>* col = new column<T>(a_name,a_def);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  std_vector_column<T>* create_column(const std::string& a_name,std::vector<T>& a_user_vec) {
+    if(find_named<iobj>(m_cols,a_name)) return 0;
+    std::string spaces;
+    for(unsigned int i=0;i<8;i++) spaces += " ";
+    std_vector_column<T>* col = new std_vector_column<T>(a_name,a_user_vec,m_spaces+spaces);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  column<T>* find_column(const std::string& a_name) {
+    iobj* col = find_named<iobj>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<iobj, column<T> >(*col);
+  }
+
+  sub_ntuple* create_sub_ntuple(const std::string& a_name){
+    if(find_named<iobj>(m_cols,a_name)) return 0;
+    std::string spaces;
+    for(unsigned int i=0;i<10;i++) spaces += " ";
+    sub_ntuple* col = new sub_ntuple(a_name,m_spaces+spaces);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  void write_header(const std::string& a_path,const std::string& a_name,const std::string& a_title){
+
+    // <tuple> :
+    m_writer << m_spaces << "  <tuple"
+             << " path=" << sout(to_xml(a_path))
+             << " name=" << sout(to_xml(a_name))
+             << " title=" << sout(to_xml(a_title))
+             << ">" << std::endl;
+
+    // <columns> :
+    m_writer << m_spaces << "    <columns>" << std::endl;
+
+    tools_vforcit(iobj*,m_cols,it) {
+      if(leaf* vlf = is_std_vector_column(*(*it))) {
+        m_writer << m_spaces << "      <column"
+                 << " name=" << sout(to_xml((*it)->name()))
+                 << " type=" << sout("ITuple")
+                 << " booking=\"{" << vlf->aida_type() << " " << to_xml((*it)->name())
+                 << "}\""
+                 << "/>" << std::endl;
+      } else if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))){
+        m_writer << m_spaces << "      <column"
+                 << " name=" << sout(to_xml((*it)->name()))
+                 << " type=" << sout("ITuple")
+                 << " booking=" << sout(sub->booking(true))
+                 << "/>" << std::endl;
+      } else if(/*leaf* lf =*/ id_cast<iobj,leaf>(*(*it))){
+        m_writer << m_spaces << "      <column"
+                 << " name=" << sout(to_xml((*it)->name()))
+                 << " type=" << sout((*it)->aida_type())
+               //<< " default=" << sout(lf->s_def()) //not understood by jas3
+                 << "/>" << std::endl;
+      }
+    }
+
+    m_writer << m_spaces << "    </columns>" << std::endl;
+
+    // rows :
+    m_writer << m_spaces << "    <rows>" << std::endl;
+  }
+
+  bool add_row() {
+    if(m_cols.empty()) return false;
+    m_writer << m_spaces << "      <row>" << std::endl;
+    tools_vforcit(iobj*,m_cols,it) {
+      if(leaf* vlf = is_std_vector_column(*(*it))) {
+        std::string _sv;
+        vlf->s_value(_sv);
+        m_writer << _sv;
+      } else if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))){
+        m_writer << m_spaces << "        <entryITuple>" << std::endl;
+        m_writer << sub->value();
+        m_writer << m_spaces << "        </entryITuple>" << std::endl;
+        sub->reset();
+      } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
+        std::string _sv;
+        lf->s_value(_sv);
+        m_writer << m_spaces << "        <entry"
+                 << " value=" << sout(_sv)
+                 << "/>" << std::endl;
+      }
+    }
+    m_writer << m_spaces << "      </row>" << std::endl;
+    return true;
+  }
+
+  void write_trailer() {
+    m_writer << m_spaces << "    </rows>" << std::endl;
+    m_writer << m_spaces << "  </tuple>" << std::endl;
+  }
+
+  std::string booking(bool a_xml_esc) const {
+    std::string s;
+    get_booking(m_cols,a_xml_esc,s);
+    return s;
+  }
+
+protected:
+  static void get_booking(const std::vector<iobj*>& a_cols,bool a_xml_esc,
+                          std::string& a_string) {
+    a_string += "{"; //we need the + because of the tuple in tuple.
+
+    tools_vforcit(iobj*,a_cols,it) {
+      if(it!=a_cols.begin()) a_string += ",";
+
+      std::string sname = (*it)->name();
+      if(a_xml_esc) sname = to_xml(sname);
+
+      if(leaf* vlf = is_std_vector_column(*(*it))) {
+        a_string += "ITuple " + (*it)->name() + " = {" + vlf->aida_type() + " " + sname + "}";
+
+      } else if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))){
+        a_string += (*it)->aida_type() + " " + sname + " = ";
+
+        get_booking(sub->columns(),a_xml_esc,a_string);
+      } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
+        a_string += (*it)->aida_type() + " " + sname + " = " + lf->s_def();
+      }
+    }
+    a_string += "}";
+  }
+
+protected:
+  std::ostream& m_writer;
+  //std::string m_path;
+  //std::string m_name;
+  //std::string m_title;
+  std::string m_spaces;
+  std::vector<iobj*> m_cols;
+};
+
+}}
+
+#endif

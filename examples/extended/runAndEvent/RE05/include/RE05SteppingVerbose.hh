@@ -53,7 +53,10 @@ class RE05SteppingVerbose : public G4SteppingVerbose
  public:
    
   RE05SteppingVerbose();
- ~RE05SteppingVerbose();
+  virtual ~RE05SteppingVerbose();
+
+  virtual G4VSteppingVerbose* Clone()
+  { return new RE05SteppingVerbose; }
 
   void StepInfo();
   void TrackingStarted();

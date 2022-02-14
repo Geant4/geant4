@@ -57,20 +57,25 @@
 #include "Randomize.hh"
 #include "G4SPSRandomGenerator.hh"
 #include "doiPETAnalysisMessenger.hh"
-
+#include "G4UnitsTable.hh"
+#include "globals.hh"
 
 doiPETAnalysis* doiPETAnalysis::instance=0;
 
 /////////// Constructor /////////////////////////////////////////////
 doiPETAnalysis::doiPETAnalysis()
 {
+	factoryOn = false; //G4ROOT
+	// Initialization ntuple
+  	for (G4int k=0; k<MaxNtCol; k++) fNtColId[k] = 0;
+
 	fAnalysisMessenger = new doiPETAnalysisMessenger(this);
 
 	//Set energy window
 	lowerThreshold = 400*keV;
 	upperThreshold = 600*keV;
-
-
+	triggerEnergy = 50*eV;
+	
 	//give default initial activity. Activity strength is changed in the .mac file
 	InitialActivity = 1000000*becquerel;
 
@@ -92,8 +97,8 @@ doiPETAnalysis::doiPETAnalysis()
 	scatterIndex = 0;
 
 	//
-	numberOfPixel_tan = 32;
-	numberOfPixel_axial = 32;
+	numberOfPixel_tan = 2*numberOfCrystal_tangential; //32;
+	numberOfPixel_axial = 2*numberOfCrystal_axial; //32;
 
 	//Default value for deadtime.
 	block_DeadTime = 256*ns;
@@ -109,7 +114,7 @@ doiPETAnalysis::doiPETAnalysis()
 	crystalEnergyRef = 511 * keV;//Energy of reference in which the energy resolution of the crystal is computed
 
 	//The quantum efficiency models the probability for the event to be detected by the photo-detector.
-	//The quantum efficiency can be set inputParameter.txt file
+	//The quantum efficiency can be set in the inputParameter.txt file
 	crystalQuantumEfficiency = 1;//100% 
 	//
 
@@ -127,10 +132,18 @@ doiPETAnalysis::doiPETAnalysis()
 	//Initialize type of output. The default output is single events
 	getSinglesData  = false; //default value 
 	getCoincidenceData = false;
+
+	ApplyAngerLogic = true;
+	isDOIlookUpTablePrepared = false;
+
 	numberOfHit = 0;
 
-	//This value is based on the assumption that the shift due to the reflector is half distance from the interaction position to the air gap.
+	//This value is based on the assumption that the shift of the response due to the reflector is half distance from the interaction position to the air gap.
 	shiftCoeff = 0.5;
+
+	//
+	PMTblurring_tan = 0.0;
+	PMTblurring_axial = 0.0;
 }
 ////////// Destructor ///////////////////////////////////////////////
 doiPETAnalysis::~doiPETAnalysis()
@@ -153,9 +166,8 @@ void doiPETAnalysis::Delete()
 
 //If there is energy deposition in the phantom by the photon, the scatter index is 1, otherwise it is 0
 //Use this for checking
-void doiPETAnalysis::GetScatterIndexInPhantom(G4double edepInPhantom){
-	if(edepInPhantom>0)scatterIndex = 1;
-	else scatterIndex = 0;
+void doiPETAnalysis::SetScatterIndexInPhantom(G4int sci){
+	scatterIndex = sci;
 }
 
 //Get the source position if the process is annihilation.
@@ -174,6 +186,7 @@ void doiPETAnalysis::SetEventID(G4int evID){
 }
 
 //
+
 void doiPETAnalysis::GetSizeOfDetector(G4double detSizeDoi, G4double detSizeTan, G4double detSizeAxial){
 	sizeOfDetector_DOI = detSizeDoi;
 	sizeOfDetector_axial = detSizeTan;
@@ -244,6 +257,8 @@ void doiPETAnalysis::ReadOut(G4int blkID, G4int cryID, G4double interTime, G4dou
 	//time of the event when detected (timerTag)
 	timeStamp = totalTime + time_tof;
 
+	//triggerEnergy is the energy deposited in the detector below which the detector is insensitive to any interaction.
+	if(totalEdep<triggerEnergy)return;
 
 	//************************************** Apply dead-time ********************************************//
 	//Apply paralizable dead-time in the block beofore events are rejected by the energy window
@@ -291,15 +306,15 @@ void doiPETAnalysis::ReadOut(G4int blkID, G4int cryID, G4double interTime, G4dou
 		crystalID_axial = crystalID_2D/numberOfCrystal_axial;
 		crystalID_tangential = crystalID_2D%numberOfCrystal_tangential;
 
-		//Calculate local position of the crystal with respect to the detector. Only the lateral distances (tangential (y) and axial (z) are needed.)
-		//G4double posCrystalX = (DOI_ID-((G4double)numberOfCrystal_DOI)/2 + 0.5)*(sizeOfCrystal_DOI + crystalGap_DOI) + interactionPos.x();
-		G4double posCrystalY = (crystalID_tangential-((G4double)numberOfCrystal_tangential)/2 + 0.5)*(sizeOfCrystal_tangential + crystalGap_tangential) + interactionPos.y();
-		G4double posCrystalZ = (crystalID_axial-((G4double)numberOfCrystal_axial)/2 + 0.5)*(sizeOfCrystal_axial + crystalGap_axial) + interactionPos.z();
+		intPosX = interactionPos.x();
+		intPosY = interactionPos.y();
+		intPosZ = interactionPos.z();
 
 
-		//shiftCoeff = 0.5 is used. This value is based on the assumption that the shift due to the reflector is half distance from the interaction position to the air gap. 
-		AngerLogic(DOI_ID, crystalID_tangential, crystalID_axial, posCrystalY, posCrystalZ, totalEdep, shiftCoeff);//
-		
+		if(ApplyAngerLogic){
+			//shiftCoeff = 0.5 is used. This value is based on the assumption that the shift due to the reflector is half distance from the interaction position to the air gap. 
+			AngerLogic(intPosX, intPosY, intPosZ, totalEdep, shiftCoeff, isDOIlookUpTablePrepared);//
+		}
 
 		//Single event output. Coincidence events can then be made using the single events.
 		if(getSinglesData) WriteOutput();
@@ -345,9 +360,11 @@ void doiPETAnalysis::Open(G4String fileName)
 {
 	if(getSinglesData){
 		asciiFileName = fileName + "Singles.data";
+		rootFileName = fileName+"Singles.root";
 	}
 	if(getCoincidenceData){
 		asciiFileName = fileName + "Coincidence.data";
+		rootFileName = fileName+"Coincidence.root";
 	}
 
 	ofs.open(asciiFileName.c_str());
@@ -355,51 +372,14 @@ void doiPETAnalysis::Open(G4String fileName)
 		G4cerr<<"=== \n File opening Error to write the output ===="<<G4endl;
 		exit(0);
 	}
-	//
-#ifdef USEROOT
-	if(getSinglesData){ 
-		rootFileName = fileName+"Singles.root";
-		tSingles = new TTree("tSingles","SinglesTree");
-		tSingles->Branch("eventID",&eventID,"eventID/I");
-		tSingles->Branch("blockID",&blockID,"blockID/I");
-		tSingles->Branch("crystalID_axial",&crystalID_axial,"crystalID_axial/I");
-		tSingles->Branch("crystalID_tangential",&crystalID_axial,"crystalID_tangential/I");
-		tSingles->Branch("DOI_ID",&DOI_ID0,"DOI_ID/I");
-		tSingles->Branch("timeStamp",&timeStamp,"timeStamp/D");
-		tSingles->Branch("totalEdep",&totalEdep,"totalEdep/D");
-	}
 
-	if(getCoincidenceData){
-		rootFileName = fileName+"Coincidence.root";
-		tCoincidence = new TTree("tCoincidence","CoincidenceTree");
-		//First Single
-		tCoincidence->Branch("eventID0",&eventID0,"eventID0/I");
-		tCoincidence->Branch("blockID0",&blockID0,"blockID0/I");
-		tCoincidence->Branch("crystalID_axial0",&crystalID_axial0,"crystalID_axial0/I");
-		tCoincidence->Branch("crystalID_tangential0",&crystalID_axial0,"crystalID_tangential0/I");
-		tCoincidence->Branch("DOI_ID0",&DOI_ID0,"DOI_ID0/I");
-		tCoincidence->Branch("timeStamp0",&timeStamp0,"timeStamp0/D");
-		tCoincidence->Branch("totalEdep0",&totalEdep0,"totalEdep0/D");
-
-		//Second Single
-		tCoincidence->Branch("eventID1",&eventID1,"eventID1/I");
-		tCoincidence->Branch("blockID1",&blockID1,"blockID1/I");
-		tCoincidence->Branch("crystalID_axial1",&crystalID_axial1,"crystalID_axial1/I");
-		tCoincidence->Branch("crystalID_tangential1",&crystalID_axial1,"crystalID_tangential1/I");
-		tCoincidence->Branch("DOI_ID1",&DOI_ID1,"DOI_ID1/I");
-		tCoincidence->Branch("timeStamp1",&timeStamp1,"timeStamp1/D");
-		tCoincidence->Branch("totalEdep1",&totalEdep1,"totalEdep1/D");
-	}
-#endif
-	//
 }
 
 void doiPETAnalysis::WriteOutput(){
 	if(getSinglesData){
-		ofs<<eventID<<" "<<blockID<<" "<<crystalID_axial<<" "<<crystalID_tangential<<" "<<DOI_ID<<" "<<std::setprecision(17)<<timeStamp/s<<" "<<std::setprecision(7)<<totalEdep/keV<<G4endl;
-#ifdef USEROOT
-		tSingles->Fill();
-#endif
+		ofs<<eventID<<" "<<blockID<<" "<<std::setprecision(17)<<timeStamp/s<<" "<<std::setprecision(7)<<totalEdep/keV<<" "<<intPosX<<" "<<intPosY<<" "<<intPosZ<<" "<<spositionX<<" "<<spositionY<<" "<<spositionZ<<G4endl;
+		//ofs<<eventID<<" "<<blockID<<" "<<crystalID_axial<<" "<<crystalID_tangential<<" "<<DOI_ID<<" "<<std::setprecision(17)<<timeStamp/s<<" "<<std::setprecision(7)<<totalEdep/keV<<G4endl;
+
 	}
 	if(getCoincidenceData){
 		//2 singles will qualify to be in coincidence within the energy window.
@@ -428,12 +408,13 @@ void doiPETAnalysis::WriteOutput(){
 		}
 
 		ofs<<eventID0<<" "<<blockID0<<" "<<crystalID_axial0<<" "<<crystalID_tangential0<<" "<<DOI_ID0<<" "<<std::setprecision(17)<<timeStamp0/s<<" "<<std::setprecision(7)<<totalEdep0/keV<<" "
-			<<eventID1<<" "<<blockID1<<" "<<crystalID_axial1<<" "<<crystalID_tangential1<<" "<<DOI_ID1<<" "<<std::setprecision(17)<<timeStamp1/s<<" "<<std::setprecision(7)<<totalEdep1/keV<<G4endl;
+			<<eventID1<<" "<<blockID1<<" "<<crystalID_axial1<<" "<<crystalID_tangential1<<" "<<DOI_ID1<<" "<<std::setprecision(17)<<timeStamp1/s<<" "<<std::setprecision(7)<<totalEdep1/keV<<" "
+			<<spositionX<<" "<<spositionY<<" "<<spositionZ<<G4endl;
 
-#ifdef USEROOT
-		tCoincidence->Fill();
-#endif
 	}
+#ifdef ANALYSIS_USE
+	FillListModeEvent();
+#endif
 
 }
 
@@ -444,33 +425,13 @@ void doiPETAnalysis::Close()
 	//close ascii file
 	ofs.close();
 
-	//
-#ifdef USEROOT
-	TFile f(rootFileName.c_str(),"RECREATE");
-	if(getSinglesData){
-		tSingles->Write();
-		delete tSingles;
-	}
-	if(getCoincidenceData){
-		tCoincidence->Write();
-		delete tCoincidence;
-	}
-
-	f.Close();
-
-
-#endif
-
 }
 
-//Place the photomultiplier tube (PMT) at each corner of the detector. 
-//The positions of the PMT is with respect to the axis of the detector block
-//All the PMTs are placed at the same doi (x) position 
-//(at +sizeOfDetector_DOI/2 which is at the top of the detector). 
+//Place the photomultiplier tube (PMT) at each corner of the detector. The positions of the PMT is with respect to the axis of the detector block
+//All the PMTs are placed at the same doi (x) position (at +sizeOfDetector_DOI/2 which is at the top of the detector). 
 
 //The PMT is placed at each corner of the crystal block and is assumed to be an ideal PMT.
-//The signal (energy deposition) of each PMT depends on  the distance of the respective 
-// PMT from the interaction point
+//The signal (energy deposition) of each PMT depends on  the distance of the respective PMT from the interaction point
 void doiPETAnalysis::PMTPosition(){
 
 	sizeOfDetector_DOI = (numberOfCrystal_DOI * sizeOfCrystal_DOI) + (numberOfCrystal_DOI - 1)*crystalGap_DOI;
@@ -568,8 +529,8 @@ void doiPETAnalysis::BlurringParameters(){
 				else {
 					fixedResolution = false;
 					//Store into a file if needed.
-					//std::string fname = "crystalDependentResolution.txt";
-					//std::ofstream outFname(fname.c_str());
+					std::string fname = "crystalDependentResolution.txt";
+					std::ofstream outFname(fname.c_str());
 
 					G4cout<<" \n Crystal dependent resolution is used. preparing look-up table .... "<<G4endl;
 					energyResolution_cryDependent.resize(numberOfBlocks_total,std::vector<G4double>(numberOfCrystal_tangential*numberOfCrystal_axial*numberOfCrystal_DOI,0));	
@@ -577,11 +538,11 @@ void doiPETAnalysis::BlurringParameters(){
 						for(G4int i_cry = 0; i_cry < numberOfCrystal_tangential*numberOfCrystal_axial*numberOfCrystal_DOI; i_cry++){
 							energyResolution_cryDependent[i_blk][i_cry] = crystalResolutionMin + (crystalResolutionMax - crystalResolutionMin)*G4UniformRand();
 							//store into a file
-							//outFname<<i_blk<<" "<<i_cry<<" "<<energyResolution_cryDependent[i_blk][i_cry]<<G4endl;
+							outFname<<i_blk<<" "<<i_cry<<" "<<energyResolution_cryDependent[i_blk][i_cry]<<G4endl;
 						}
 					}
 					G4cout<<"Done. \n"<<G4endl;
-					//outFname.close();
+					outFname.close();
 				}
 
 			}
@@ -629,12 +590,45 @@ void doiPETAnalysis::BlurringParameters(){
 
 			}
 
-			if( (std::string::size_type)inputLine.find("numberOfPixel_2D_Pixel:")!=std::string::npos){
+			//
+			if( (std::string::size_type)inputLine.find("triggerEnergy:")!=std::string::npos){
 				std::istringstream tmpStream(inputLine);
 				tmpStream >> value[0] >> value[1] >> value[2];
-				numberOfPixel_axial = atof(value[1].c_str());
-				numberOfPixel_tan = atof(value[2].c_str());
-				G4cout<<"Number of pixels for a 2D position histogram of the response: "<<numberOfPixel_tan<<" x "<< numberOfPixel_axial <<G4endl;
+				triggerEnergy = atof(value[1].c_str());
+				if(value[2] != "keV"){
+					G4cerr<<" The unit of Trigger energy threshold is not in keV, Make it in 'keV' "<<G4endl; 
+					exit(0);
+				}
+				triggerEnergy = triggerEnergy*keV;
+				G4cout<<"Trigger energy threshold: "<<triggerEnergy/keV<<" keV."<<G4endl;
+
+			}
+
+			//Option to apply AngerLogic
+			if( (std::string::size_type)inputLine.find("ApplyAngerLogic:")!=std::string::npos){
+				std::istringstream tmpStream(inputLine);
+				tmpStream >> value[0] >> value[1];
+				if(value[1]=="true"){
+					ApplyAngerLogic = true;
+					G4cout<<"Angler Logic calculation is applied. "<<G4endl;
+				}
+				else if(value[1]=="false") {
+					ApplyAngerLogic = false;
+					G4cout<<"Angler Logic calculation is NOT applied. "<<G4endl;
+				}
+				else {
+					ApplyAngerLogic = true;
+					G4cout<<"Angler Logic calculation is applied (by defualt). "<<G4endl;
+				}
+			}
+
+			//PMT position calculation blurring at FWHM
+			if( (std::string::size_type)inputLine.find("PMTblurring:")!=std::string::npos){
+				std::istringstream tmpStream(inputLine);
+				tmpStream >> value[0] >> value[1]>>value[2];
+				PMTblurring_tan = atof(value[1].c_str());
+				PMTblurring_axial = atof(value[2].c_str());
+				G4cout<<"PMTblurring position response blurring at FWHM (tan x axial) "<<PMTblurring_tan<<" x " <<PMTblurring_axial<<" mm2"<<G4endl;
 			}
 
 			//
@@ -657,8 +651,7 @@ void doiPETAnalysis::BlurringParameters(){
 	ifs.close();
 }
 
-//The following function reads the reflector pattern for each layer. 
-//Each layer has different patterns along the tangetial and axial positions.
+//The following function reads the reflector pattern for each layer. Each layer has different patterns along the tangetial and axial positions.
 //For defualt reflector pattern, see https://link.springer.com/article/10.1007/s12194-013-0231-4
 //The patter of the reflectors can be changed in the inputParameter.txt file
 //The pattern is given as 0 and 1. If there is reflector the value is 1 and if there is no reflector, the value is 0.
@@ -698,8 +691,9 @@ void doiPETAnalysis::ReadReflectorPattern(){
 						ireflectorLayer1_Tangential.push_back(tmp_value);
 					}
 				}
+				stringReflectorValue.clear();
 			}
-			stringReflectorValue.clear();
+			
 
 			//Reflector patter for Layer1 in the axial direction
 			if( (std::string::size_type)inputLine.find("reflectorLayer1_Axial:")!=std::string::npos){
@@ -711,8 +705,8 @@ void doiPETAnalysis::ReadReflectorPattern(){
 						ireflectorLayer1_Axial.push_back(tmp_value);
 					}
 				}
+				stringReflectorValue.clear();
 			}
-			stringReflectorValue.clear();
 
 			//Reflector patter for Layer2 in the tangential direction
 			if( (std::string::size_type)inputLine.find("reflectorLayer2_Tangential:")!=std::string::npos){
@@ -724,8 +718,8 @@ void doiPETAnalysis::ReadReflectorPattern(){
 						ireflectorLayer2_Tangential.push_back(tmp_value);
 					}
 				}
+				stringReflectorValue.clear();
 			}
-			stringReflectorValue.clear();
 
 			//Reflector patter for Layer2 in the axial direction
 			if( (std::string::size_type)inputLine.find("reflectorLayer2_Axial:")!=std::string::npos){
@@ -737,8 +731,8 @@ void doiPETAnalysis::ReadReflectorPattern(){
 						ireflectorLayer2_Axial.push_back(tmp_value);
 					}
 				}
+				stringReflectorValue.clear();
 			}
-			stringReflectorValue.clear();
 
 			//Reflector patter for Layer3 in the tangential direction
 			if( (std::string::size_type)inputLine.find("reflectorLayer3_Tangential:")!=std::string::npos){
@@ -750,8 +744,8 @@ void doiPETAnalysis::ReadReflectorPattern(){
 						ireflectorLayer3_Tangential.push_back(tmp_value);
 					}
 				}
+				stringReflectorValue.clear();
 			}
-			stringReflectorValue.clear();
 
 			//Reflector patter for Layer3 in the axial direction
 			if( (std::string::size_type)inputLine.find("reflectorLayer3_Axial:")!=std::string::npos){
@@ -763,8 +757,8 @@ void doiPETAnalysis::ReadReflectorPattern(){
 						ireflectorLayer3_Axial.push_back(tmp_value);
 					}
 				}
+				stringReflectorValue.clear();
 			}
-			stringReflectorValue.clear();
 
 			//Reflector patter for Layer4 in the tangential direction
 			if( (std::string::size_type)inputLine.find("reflectorLayer4_Tangential:")!=std::string::npos){
@@ -776,8 +770,8 @@ void doiPETAnalysis::ReadReflectorPattern(){
 						ireflectorLayer4_Tangential.push_back(tmp_value);
 					}
 				}
+				stringReflectorValue.clear();
 			}
-			stringReflectorValue.clear();
 
 			//Reflector patter for Layer4 in the axial direction
 			if( (std::string::size_type)inputLine.find("reflectorLayer4_Axial:")!=std::string::npos){
@@ -789,34 +783,108 @@ void doiPETAnalysis::ReadReflectorPattern(){
 						ireflectorLayer4_Axial.push_back(tmp_value);
 					}
 				}
+				stringReflectorValue.clear();
 			}
-			stringReflectorValue.clear();
 		}//#
 	}//while(eof)
 
-
-	//prepare Look up table for crystal identification. 
-	G4cout<<"DOI look-up table is being prepared. "<<G4endl;
-	std::string outputFileName = "check_2Dposition.txt";// excuted only once
-	std::ofstream outFile(outputFileName.c_str());
-
-	G4double crystalPositionY;
-	G4double crystalPositionZ;
+	//
+	//for debug
+	G4cout<<"\n========= Reflector Pattern ==========="<<G4endl;
+	G4cout<<"Layer 1"<<G4endl;
+	for(unsigned int i = 0; i<ireflectorLayer1_Tangential.size();i++){
+		G4cout<<ireflectorLayer1_Tangential[i]<<" ";
+	}G4cout<<G4endl;
+	for(unsigned int i = 0; i<ireflectorLayer1_Axial.size();i++){
+		G4cout<<ireflectorLayer1_Axial[i]<<" ";
+	}G4cout<<G4endl;
+	G4cout<<"Layer 2"<<G4endl;
+	for(unsigned int i = 0; i<ireflectorLayer2_Tangential.size();i++){
+		G4cout<<ireflectorLayer2_Tangential[i]<<" ";
+	}G4cout<<G4endl;
+	for(unsigned int i = 0; i<ireflectorLayer2_Axial.size();i++){
+		G4cout<<ireflectorLayer2_Axial[i]<<" ";
+	}G4cout<<G4endl;
+	G4cout<<"Layer 3"<<G4endl;
+	for(unsigned int i = 0; i<ireflectorLayer3_Tangential.size();i++){
+		G4cout<<ireflectorLayer3_Tangential[i]<<" ";
+	}G4cout<<G4endl;
+	for(unsigned int i = 0; i<ireflectorLayer3_Axial.size();i++){
+		G4cout<<ireflectorLayer3_Axial[i]<<" ";
+	}G4cout<<G4endl;
+	G4cout<<"Layer 4"<<G4endl;
+	for(unsigned int i = 0; i<ireflectorLayer4_Tangential.size();i++){
+		G4cout<<ireflectorLayer4_Tangential[i]<<" ";
+	}G4cout<<G4endl;
+	for(unsigned int i = 0; i<ireflectorLayer4_Axial.size();i++){
+		G4cout<<ireflectorLayer4_Axial[i]<<" ";
+	}G4cout<<G4endl;
+	G4cout<<"========= Reflector Pattern Ended ===========\n"<<G4endl;
+	
+	//Read DOI look-up-table. This look-up-table is prepared based on the assumption that the interaction is occured at the center of the crystal.
+	G4int index_doi = 0, doiID;
 	doi_table.resize(numberOfCrystal_tangential*numberOfCrystal_axial*numberOfCrystal_DOI,0);
 
-	for(G4int i_DOI = 0; i_DOI<numberOfCrystal_DOI; i_DOI++){
-		//crystalPositionX=(i_DOI-((float)numberOfCrystal_DOI)/2 + 0.5)*(sizeOfCrystal_DOI + crystalGap_DOI); //Becuase only lateral distances are used
-		for(G4int i_axial=0; i_axial< numberOfCrystal_axial;i_axial++){
-			crystalPositionZ = (i_axial-((float)numberOfCrystal_axial)/2 + 0.5)*(sizeOfCrystal_axial + crystalGap_axial);
-			for(G4int i_tan=0; i_tan<numberOfCrystal_tangential;i_tan++){
-				crystalPositionY=(i_tan-((float)numberOfCrystal_tangential)/2 + 0.5)*(sizeOfCrystal_tangential + crystalGap_tangential);
-				AngerLogic(i_DOI, i_tan, i_axial, crystalPositionY, crystalPositionZ, 1, 0.5);
-				outFile<<i_DOI<<" "<<i_axial<<" "<<i_tan<<" "<<crystalID_in2D_posHist<<" "<<PositionAngerZ<<" "<<PositionAngerY<<G4endl;
-				doi_table[crystalID_in2D_posHist]=i_DOI;
+	std::string LUT_FileName = "look_up_table_DOI.txt";
+	std::ifstream ifs_doiLUT;
+	std::ofstream ofs_doiLUT;
+	ifs_doiLUT.open(LUT_FileName.c_str());
+	if(ifs_doiLUT.is_open()){
+		G4cout<<" DOI Look-up table found and used: File name: "<<LUT_FileName<<G4endl;
+		//Read from file
+		while(ifs_doiLUT>>index_doi>>doiID && index_doi < int(doi_table.size())){
+			doi_table[index_doi] = doiID;
+		}
+		if(index_doi==int(doi_table.size())){
+			G4cout<<"!!!Warning: The DOI table index is greater than the total number of crystals."<<G4endl;
+			PrepareDOILookUpTable(LUT_FileName);
+		}
+		isDOIlookUpTablePrepared = true; //
+	}
+	else
+	{
+		PrepareDOILookUpTable(LUT_FileName);
+	}
+	//Write into a file.
+	ofs_doiLUT.open(LUT_FileName.c_str());
+	if(!ofs_doiLUT.is_open()){
+		G4cerr<<"Unable to open file to write doi_LUT"<<G4endl;
+		exit(0);
+	}
+	for(G4int i=0;i<int(doi_table.size()); i++){
+		ofs_doiLUT<<i<<"\t"<<doi_table[i]<<G4endl;
+	}
+	ifs_doiLUT.close();
+
+
+	ifs.close();
+}
+void doiPETAnalysis::PrepareDOILookUpTable(G4String){
+	isDOIlookUpTablePrepared = false; 
+		G4cout<<"Preparing DOI look-up table... "<<G4endl;
+		std::string outputFileName = "_check_2Dposition.txt";// excuted only once
+		std::ofstream outFile(outputFileName.c_str());
+
+		G4double crystalPositionX;
+		G4double crystalPositionY;
+		G4double crystalPositionZ;
+		//doi_table.resize(numberOfCrystal_tangential*numberOfCrystal_axial*numberOfCrystal_DOI,0);
+
+		for(G4int i_DOI = 0; i_DOI<numberOfCrystal_DOI; i_DOI++){
+			crystalPositionX=(i_DOI-((float)numberOfCrystal_DOI)/2 + 0.5)*(sizeOfCrystal_DOI + crystalGap_DOI); //Becuase only lateral distances are used
+			for(G4int i_axial=0; i_axial< numberOfCrystal_axial;i_axial++){
+				crystalPositionZ = (i_axial-((float)numberOfCrystal_axial)/2 + 0.5)*(sizeOfCrystal_axial + crystalGap_axial);
+				for(G4int i_tan=0; i_tan<numberOfCrystal_tangential;i_tan++){
+					crystalPositionY=(i_tan-((float)numberOfCrystal_tangential)/2 + 0.5)*(sizeOfCrystal_tangential + crystalGap_tangential);
+					AngerLogic(crystalPositionX, crystalPositionY, crystalPositionZ, 1, 0.5, isDOIlookUpTablePrepared);
+					outFile<<PositionAngerZ<<" "<<PositionAngerY<<G4endl;
+					doi_table[crystalID_in2D_posHist]=i_DOI;
+
+				}
 			}
 		}
-	}
-	ifs.close();
+		G4cout<<"done."<<G4endl;
+		isDOIlookUpTablePrepared = true;
 }
 
 
@@ -824,8 +892,22 @@ void doiPETAnalysis::ReadReflectorPattern(){
 //The reflectors shifts the response by some distance so that the response can be projected into 2D position histogram. 
 //From this 2D position histogram, the new crystal ID (in 3D along the tangential (y), axial (z) and DOI (x)) (after Anger Logic method is applied) can be obtained.
 //If the crystal ID after Anger method apllied is out of the give number of crystals (in 3D), then an error message is displayed and the event will be rejected.
-void doiPETAnalysis::AngerLogic(G4int i_doi, G4int i_tan, G4int i_axial, G4double posCrystalY, G4double posCrystalZ, G4double Edep, G4double shiftDis)
-{
+void doiPETAnalysis::AngerLogic(G4double posCrystalX, G4double posCrystalY, G4double posCrystalZ, G4double Edep, G4double shiftDis, G4bool isDOI_LUT)
+{ 
+	G4double crystalPitch_DOI = sizeOfCrystal_DOI + crystalGap_DOI;
+	G4double crystalPitch_tan = sizeOfCrystal_tangential + crystalGap_tangential;
+	G4double crystalPitch_axial = sizeOfCrystal_axial + crystalGap_axial;
+
+	//The crystal ID are calculated based on the center of mass 
+	G4int i_doi = posCrystalX/crystalPitch_DOI + (float)numberOfCrystal_DOI*0.5;
+	G4int i_tan = posCrystalY/crystalPitch_tan + (float)numberOfCrystal_tangential*0.5;
+	G4int i_axial = posCrystalZ/crystalPitch_axial + (float)numberOfCrystal_axial*0.5;
+
+	//position of interaction is shifted  the centre of the crystal. This is to use DOI-look up tables as the real scanner
+	posCrystalX = (i_doi-((float)numberOfCrystal_DOI)/2 + 0.5)*crystalPitch_DOI;
+	posCrystalY = (i_tan-((float)numberOfCrystal_tangential)/2 + 0.5)*crystalPitch_tan;
+	posCrystalZ = (i_axial-((float)numberOfCrystal_axial)/2 + 0.5)*crystalPitch_axial;
+
 	//1z and 2z are at the same z distance; 3z and 4z are at the same z distance
 	//The signal (the energy deposition) is devided into the four PMTs depending on their lateral distances (in the axial and tangential directions) from the interaction position
 
@@ -887,14 +969,6 @@ void doiPETAnalysis::AngerLogic(G4int i_doi, G4int i_tan, G4int i_axial, G4doubl
 	PositionAngerZ = (signalZplus - signalZminus)/(signalZplus + signalZminus)*distz; 
 	PositionAngerY = (signalYplus - signalYminus)/(signalYplus + signalYminus)*disty;
 
-	//Find local position in the interacting cystal to estimate the shift due to reflector
-	//double localPosX = posCrystalX - (i_doi-((G4double)numberOfCrystal_DOI)/2 + 0.5)*(sizeOfCrystal_DOI + crystalGap_DOI);
-	G4double localPosY = posCrystalY - (G4double)(i_tan-((G4double)numberOfCrystal_tangential)/2 + 0.5)*(sizeOfCrystal_tangential + crystalGap_tangential);
-	G4double localPosZ = posCrystalZ - (G4double)(i_axial-((G4double)numberOfCrystal_axial)/2 + 0.5)*(sizeOfCrystal_axial + crystalGap_axial);
-
-
-	G4double crystalPitch_tan = sizeOfCrystal_tangential + crystalGap_tangential;
-	G4double crystalPitch_axial = sizeOfCrystal_axial + crystalGap_axial;
 
 	//For detectors with reflector insertion (light sharing), the response is shifted depending on the reflector patter.
 	//Here, it is assumed that the shift of the response is equal to half of the distance from the interaction position to the airgap in the lateral (transversal direction)
@@ -905,45 +979,50 @@ void doiPETAnalysis::AngerLogic(G4int i_doi, G4int i_tan, G4int i_axial, G4doubl
 	//Response shift for 1st Layer
 	if(i_doi == 0){
 		//If reflector is only in one (left) side of the crystal, then response shifts to the right side (away from the reflector)
-		if(ireflectorLayer1_Tangential[i_tan] == 1 && ireflectorLayer1_Tangential[i_tan + 1] == 0) PositionAngerY += (crystalPitch_tan/2 - localPosY)*shiftDis;
+		if(ireflectorLayer1_Tangential[i_tan] == 1 && ireflectorLayer1_Tangential[i_tan + 1] == 0) PositionAngerY += (crystalPitch_tan/2)*shiftDis;
 
 		//If reflector is only in one (right) side of the crystal, then response shifts to the left side (away from the reflector)
-		if(ireflectorLayer1_Tangential[i_tan] == 0 && ireflectorLayer1_Tangential[i_tan + 1] == 1) PositionAngerY -= (crystalPitch_tan/2 - localPosY)*shiftDis;
+		if(ireflectorLayer1_Tangential[i_tan] == 0 && ireflectorLayer1_Tangential[i_tan + 1] == 1) PositionAngerY -= (crystalPitch_tan/2)*shiftDis;
 
-		if(ireflectorLayer1_Axial[i_axial] == 1 && ireflectorLayer1_Axial [i_axial + 1] == 0) PositionAngerZ += (crystalPitch_axial/2 - localPosZ)*shiftDis;
-		if(ireflectorLayer1_Axial[i_axial] == 0 && ireflectorLayer1_Axial [i_axial + 1] == 1) PositionAngerZ -= (crystalPitch_axial/2 - localPosZ)*shiftDis;
+		if(ireflectorLayer1_Axial[i_axial] == 1 && ireflectorLayer1_Axial [i_axial + 1] == 0) PositionAngerZ += (crystalPitch_axial/2)*shiftDis;
+		if(ireflectorLayer1_Axial[i_axial] == 0 && ireflectorLayer1_Axial [i_axial + 1] == 1) PositionAngerZ -= (crystalPitch_axial/2)*shiftDis;
 	}
 	if(i_doi == 1){ //Response shift for 2nd Layer
-		if(ireflectorLayer2_Tangential[i_tan] == 1 && ireflectorLayer2_Tangential[i_tan + 1] == 0) PositionAngerY += (crystalPitch_tan/2 - localPosY)*shiftDis;
-		if(ireflectorLayer2_Tangential[i_tan] == 0 && ireflectorLayer2_Tangential[i_tan + 1] == 1) PositionAngerY -= (crystalPitch_tan/2 - localPosY)*shiftDis;
+		if(ireflectorLayer2_Tangential[i_tan] == 1 && ireflectorLayer2_Tangential[i_tan + 1] == 0) PositionAngerY += (crystalPitch_tan/2)*shiftDis;
+		if(ireflectorLayer2_Tangential[i_tan] == 0 && ireflectorLayer2_Tangential[i_tan + 1] == 1) PositionAngerY -= (crystalPitch_tan/2)*shiftDis;
 
-		if(ireflectorLayer2_Axial[i_axial] == 1 && ireflectorLayer2_Axial [i_axial + 1] == 0) PositionAngerZ += (crystalPitch_axial/2 - localPosZ)*shiftDis;
-		if(ireflectorLayer2_Axial[i_axial] == 0 && ireflectorLayer2_Axial [i_axial + 1] == 1) PositionAngerZ -= (crystalPitch_axial/2 - localPosZ)*shiftDis;
+		if(ireflectorLayer2_Axial[i_axial] == 1 && ireflectorLayer2_Axial [i_axial + 1] == 0) PositionAngerZ += (crystalPitch_axial/2)*shiftDis;
+		if(ireflectorLayer2_Axial[i_axial] == 0 && ireflectorLayer2_Axial [i_axial + 1] == 1) PositionAngerZ -= (crystalPitch_axial/2)*shiftDis;
 	}
 	if(i_doi == 2){ //Response shift for 3rd Layer
-		if(ireflectorLayer3_Tangential[i_tan] == 1 && ireflectorLayer3_Tangential[i_tan + 1] == 0) PositionAngerY += (crystalPitch_tan/2 - localPosY)*shiftDis;
-		if(ireflectorLayer3_Tangential[i_tan] == 0 && ireflectorLayer3_Tangential[i_tan + 1] == 1) PositionAngerY -= (crystalPitch_tan/2 - localPosY)*shiftDis;
+		if(ireflectorLayer3_Tangential[i_tan] == 1 && ireflectorLayer3_Tangential[i_tan + 1] == 0) PositionAngerY += (crystalPitch_tan/2)*shiftDis;
+		if(ireflectorLayer3_Tangential[i_tan] == 0 && ireflectorLayer3_Tangential[i_tan + 1] == 1) PositionAngerY -= (crystalPitch_tan/2)*shiftDis;
 
-		if(ireflectorLayer3_Axial[i_axial] == 1 && ireflectorLayer3_Axial [i_axial + 1] == 0) PositionAngerZ += (crystalPitch_axial/2 - localPosZ)*shiftDis;
-		if(ireflectorLayer3_Axial[i_axial] == 0 && ireflectorLayer3_Axial [i_axial + 1] == 1) PositionAngerZ -= (crystalPitch_axial/2 - localPosZ)*shiftDis;
+		if(ireflectorLayer3_Axial[i_axial] == 1 && ireflectorLayer3_Axial [i_axial + 1] == 0) PositionAngerZ += (crystalPitch_axial/2)*shiftDis;
+		if(ireflectorLayer3_Axial[i_axial] == 0 && ireflectorLayer3_Axial [i_axial + 1] == 1) PositionAngerZ -= (crystalPitch_axial/2)*shiftDis;
 	}
 	if(i_doi == 3){ //Response shift for 4th Layer
-		if(ireflectorLayer4_Tangential[i_tan] == 1 && ireflectorLayer4_Tangential[i_tan + 1] == 0) PositionAngerY += (crystalPitch_tan/2 - localPosY)*shiftDis;
-		if(ireflectorLayer4_Tangential[i_tan] == 0 && ireflectorLayer4_Tangential[i_tan + 1] == 1) PositionAngerY -= (crystalPitch_tan/2 - localPosY)*shiftDis;
+		if(ireflectorLayer4_Tangential[i_tan] == 1 && ireflectorLayer4_Tangential[i_tan + 1] == 0) PositionAngerY += (crystalPitch_tan/2)*shiftDis;
+		if(ireflectorLayer4_Tangential[i_tan] == 0 && ireflectorLayer4_Tangential[i_tan + 1] == 1) PositionAngerY -= (crystalPitch_tan/2)*shiftDis;
 
-		if(ireflectorLayer4_Axial[i_axial] == 1 && ireflectorLayer4_Axial [i_axial + 1] == 0) PositionAngerZ += (crystalPitch_axial/2 - localPosZ)*shiftDis;
-		if(ireflectorLayer4_Axial[i_axial] == 0 && ireflectorLayer4_Axial [i_axial + 1] == 1) PositionAngerZ -= (crystalPitch_axial/2 - localPosZ)*shiftDis;
+		if(ireflectorLayer4_Axial[i_axial] == 1 && ireflectorLayer4_Axial [i_axial + 1] == 0) PositionAngerZ += (crystalPitch_axial/2)*shiftDis;
+		if(ireflectorLayer4_Axial[i_axial] == 0 && ireflectorLayer4_Axial [i_axial + 1] == 1) PositionAngerZ -= (crystalPitch_axial/2)*shiftDis;
 	}
-
+   
+   //Blur the 2D position (obtained by ANger Logic method) to include uncertainity of the PMT position response.
+	if(isDOI_LUT){
+		PositionAngerZ = G4RandGauss::shoot(PositionAngerZ,PMTblurring_axial/2.35);
+		PositionAngerY = G4RandGauss::shoot(PositionAngerY,PMTblurring_tan/2.35);
+	}
 	//The main purpose of shifting the response is to be able to project the response of all the crytal elements into a 2D position histogram so that we can identify the DOI layer 
 	//by comparing with a look-up-table which is prepared based on the reflector insertion. 
 
 	//The crystal ID in 2D position histogram along the axial (z) direction. It can have values of: 0, 1, .. , 31, in 32x32 pixel position histogram
-	crystalID_in2D_posHist_axial = (G4int)((G4double)PositionAngerZ/(G4double)(crystalPitch_axial*0.5) + (G4double)(numberOfPixel_axial - 1.0)*0.5 + 0.5);//0.5 is added for round off
+	crystalID_in2D_posHist_axial = (G4int)(PositionAngerZ/(crystalPitch_axial*0.5) + (G4double)numberOfPixel_axial*0.5);//Note! crystalPitch_axial*0.5 is the pitch for the 32x32 2D pixel space, and 0.5 is added for round off
 
 	//The crystal ID in 2D position histogram along the tangential (y) direction. It can have values of: 0, 1, .. , 31, in 32x32 pixel position histogram
-	crystalID_in2D_posHist_tan =   (G4int)((G4double)PositionAngerY/(G4double)(crystalPitch_tan*0.5) + (G4double)(numberOfPixel_tan - 1.0)*0.5 + 0.5);//y_ID
-
+	crystalID_in2D_posHist_tan =   (G4int)(PositionAngerY/(crystalPitch_tan*0.5) + (G4double)numberOfPixel_tan * 0.5);
+	
 	//continuous crystal ID in the 2D position histogram. It will be from 0 to 1023 (in the case of 16x16x4 crystal array). 
 	crystalID_in2D_posHist = crystalID_in2D_posHist_axial + crystalID_in2D_posHist_tan * numberOfPixel_tan;//32;
 
@@ -969,8 +1048,146 @@ void doiPETAnalysis::AngerLogic(G4int i_doi, G4int i_tan, G4int i_axial, G4doubl
 	CrystalIDAfterAngerLogic(crystalIDNew_tan,crystalIDNew_axial,crystalIDNew_DOI);	
 }
 
+/////
 void doiPETAnalysis::CrystalIDAfterAngerLogic(G4int i_tan, G4int i_axial, G4int i_doi){
 	crystalID_tangential = i_tan;
 	crystalID_axial = i_axial;
 	DOI_ID = i_doi;
+}
+
+void doiPETAnalysis::book() 
+{ 
+  auto manager = G4AnalysisManager::Instance();
+  
+  //manager->SetVerboseLevel(2);
+ 
+  G4bool fileOpen = manager->OpenFile(rootFileName);
+  if (!fileOpen) {
+    G4cout << "\n---> HistoManager::book(): cannot open " 
+           << rootFileName << G4endl;
+    return;
+  }
+  // Create directories  
+  //manager->SetNtupleDirectoryName("ListModeData");
+
+  manager->SetFirstNtupleId(1);
+
+  if(getSinglesData){
+	manager -> CreateNtuple("Singles", "Singles");
+	fNtColId[0] = manager -> CreateNtupleIColumn("eventID");
+	fNtColId[1] = manager -> CreateNtupleIColumn("blockID");
+	//fNtColId[2] = manager -> CreateNtupleDColumn("crystalID_axial");
+	//fNtColId[3] = manager -> CreateNtupleDColumn("crystalID_tangential");
+	//fNtColId[4] = manager -> CreateNtupleDColumn("DOI_ID");
+	fNtColId[2] = manager -> CreateNtupleDColumn("timeStamp");
+	fNtColId[3] = manager -> CreateNtupleDColumn("totalEdep");
+
+	//Interaction position of the photon with the detector
+	fNtColId[4] = manager -> CreateNtupleDColumn("intPosX");
+	fNtColId[5] = manager -> CreateNtupleDColumn("intPosY");
+	fNtColId[6] = manager -> CreateNtupleDColumn("intPosZ");
+
+	////source position (annihilation position)
+	fNtColId[7] = manager -> CreateNtupleDColumn("spositionX");
+	fNtColId[8] = manager -> CreateNtupleDColumn("spositionY");
+	fNtColId[9] = manager -> CreateNtupleDColumn("spositionZ");
+
+	manager -> FinishNtuple();	  
+  }
+  if(getCoincidenceData){
+	  manager -> CreateNtuple("Coincidence", "Coincidence");
+	fNtColId[0] = manager -> CreateNtupleIColumn("eventID0");
+	fNtColId[1] = manager -> CreateNtupleIColumn("blockID0");
+	fNtColId[2] = manager -> CreateNtupleIColumn("crystalID_axial0");
+	fNtColId[3] = manager -> CreateNtupleIColumn("crystalID_tangential0");
+	fNtColId[4] = manager -> CreateNtupleIColumn("DOI_ID0");
+	fNtColId[5] = manager -> CreateNtupleDColumn("timeStamp0");
+	fNtColId[6] = manager -> CreateNtupleDColumn("totalEdep0");
+
+	fNtColId[7] = manager -> CreateNtupleIColumn("eventID1");
+	fNtColId[8] = manager -> CreateNtupleIColumn("blockID1");
+	fNtColId[9] = manager -> CreateNtupleIColumn("crystalID_axial1");
+	fNtColId[10] = manager -> CreateNtupleIColumn("crystalID_tangential1");
+	fNtColId[11] = manager -> CreateNtupleIColumn("DOI_ID1");
+	fNtColId[12] = manager -> CreateNtupleDColumn("timeStamp1");
+	fNtColId[13] = manager -> CreateNtupleDColumn("totalEdep1");
+
+	//source position
+	fNtColId[14] = manager -> CreateNtupleDColumn("spositionX");
+	fNtColId[15] = manager -> CreateNtupleDColumn("spositionY");
+	fNtColId[16] = manager -> CreateNtupleDColumn("spositionZ");
+
+	manager -> FinishNtuple();
+
+  }
+  
+  
+  factoryOn = true;    
+}
+void doiPETAnalysis::FillListModeEvent()
+{
+
+  auto manager = G4AnalysisManager::Instance();
+  if(getSinglesData){
+	 	manager -> FillNtupleIColumn(1, fNtColId[0], G4int(eventID));
+		manager -> FillNtupleIColumn(1, fNtColId[1], G4int(blockID));
+		//manager -> FillNtupleDColumn(1, fNtColId[2], crystalID_axial);
+		//manager -> FillNtupleDColumn(1, fNtColId[3], crystalID_tangential);
+		//manager -> FillNtupleDColumn(1, fNtColId[4], DOI_ID);
+		manager -> FillNtupleDColumn(1, fNtColId[2], timeStamp/s);// in second
+		manager -> FillNtupleDColumn(1, fNtColId[3], totalEdep/keV); //in keV
+		
+		//Interaction position of the photon in the detector
+		manager -> FillNtupleDColumn(1, fNtColId[4], intPosX); //mm
+		manager -> FillNtupleDColumn(1, fNtColId[5], intPosY); //mm
+		manager -> FillNtupleDColumn(1, fNtColId[6], intPosZ); //mm
+
+		//
+		//Add source position
+		manager -> FillNtupleDColumn(1, fNtColId[7], spositionX);
+		manager -> FillNtupleDColumn(1, fNtColId[8], spositionY);
+		manager -> FillNtupleDColumn(1, fNtColId[9], spositionZ);
+
+		manager -> AddNtupleRow(1);
+  }
+
+  if(getCoincidenceData){
+	  //First Single
+		manager -> FillNtupleIColumn(1, fNtColId[0], eventID0);
+		manager -> FillNtupleIColumn(1, fNtColId[1], blockID0);
+		manager -> FillNtupleIColumn(1, fNtColId[2], crystalID_axial0);
+		manager -> FillNtupleIColumn(1, fNtColId[3], crystalID_tangential0);
+		manager -> FillNtupleIColumn(1, fNtColId[4], DOI_ID0);
+		manager -> FillNtupleDColumn(1, fNtColId[5], timeStamp0/s);
+		manager -> FillNtupleDColumn(1, fNtColId[6], totalEdep0/keV);
+	
+	//Second Single
+		manager -> FillNtupleIColumn(1, fNtColId[7], eventID1);
+		manager -> FillNtupleIColumn(1, fNtColId[8], blockID1);
+		manager -> FillNtupleIColumn(1, fNtColId[9], crystalID_axial1);
+		manager -> FillNtupleIColumn(1, fNtColId[10], crystalID_tangential1);
+		manager -> FillNtupleIColumn(1, fNtColId[11], DOI_ID1);
+		manager -> FillNtupleDColumn(1, fNtColId[12], timeStamp1/s);
+		manager -> FillNtupleDColumn(1, fNtColId[13], totalEdep1/keV);
+	
+	//Add source position
+		manager -> FillNtupleDColumn(1, fNtColId[14], spositionX);
+		manager -> FillNtupleDColumn(1, fNtColId[15], spositionY);
+		manager -> FillNtupleDColumn(1, fNtColId[16], spositionZ);
+
+		manager -> AddNtupleRow(1);
+  }
+    
+}
+void doiPETAnalysis::finish() 
+{   
+ if (factoryOn) 
+   {
+    auto manager = G4AnalysisManager::Instance();    
+    manager -> Write();
+    manager -> CloseFile();  
+      
+   // delete G4AnalysisManager::Instance();
+    factoryOn = false;
+   }
 }

@@ -54,7 +54,6 @@ public:
   void AddDecay();
   void AddStepMax();       
 
-  void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);

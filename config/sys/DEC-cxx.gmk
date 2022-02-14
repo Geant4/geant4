@@ -42,8 +42,8 @@ ifeq ($(G4SYSTEM),DEC-cxx)
 #   OGLFLAGS  := -I/usr/include -I/usr/local/include
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-#   OGLLIBS   := -lMesaGLU -lMesaGL
+    OGLLIBS   := -L$(OGLHOME)/lib -lGL
+#   OGLLIBS   := -lMesaGL
   endif
 
   define build-granular-shared-lib

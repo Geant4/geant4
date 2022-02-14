@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
 
@@ -58,10 +58,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
-{     
-  // Construct the default run manager
+{
+  // Detect interactive mode (if no arguments) and define UI session
   //
-  G4RunManager * runManager = new G4RunManager;
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
+  // Construct a serial run manager
+  //
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // Set mandatory initialization classes
   //
@@ -69,18 +76,18 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(detector);
   //
   runManager->SetUserInitialization(new FTFP_BERT);
- 
+
   // set an HistoManager
   //
   HistoManager*  histo = new HistoManager();
-      
+
   // Set user action classes
   //
-  PrimaryGeneratorAction* gen_action = 
+  PrimaryGeneratorAction* gen_action =
                           new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(gen_action);
   //
-  RunAction* run_action = new RunAction(histo);  
+  RunAction* run_action = new RunAction(histo);
   runManager->SetUserAction(run_action);
   //
   EventAction* event_action = new EventAction(run_action,histo);
@@ -89,7 +96,7 @@ int main(int argc,char** argv)
   SteppingAction* stepping_action =
                     new SteppingAction(detector, event_action);
   runManager->SetUserAction(stepping_action);
-  
+
   // Initialize G4 kernel
   //
   runManager->Initialize();
@@ -97,36 +104,23 @@ int main(int argc,char** argv)
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
-  if (argc!=1)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
-    }
-  else
-    {  // interactive mode : define visualization and UI terminal
-#ifdef G4VIS_USE
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#endif
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
 
-#ifdef G4UI_USE
-      ui->SessionStart();
-      delete ui;
-#endif
+  if ( ! ui ) {
+    // batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
+  else {
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
 
-#ifdef G4VIS_USE
-      delete visManager;
-#endif
-    }
-  
   // Job termination
-  delete histo;                
+  delete visManager;
+  delete histo;
   delete runManager;
 
   return 0;

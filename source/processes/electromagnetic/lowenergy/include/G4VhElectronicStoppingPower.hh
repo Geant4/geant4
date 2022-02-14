@@ -58,11 +58,8 @@ class G4Material;
 
 class G4VhElectronicStoppingPower 
 {
-
 public:
-
-  G4VhElectronicStoppingPower();
-
+  explicit G4VhElectronicStoppingPower();
   virtual ~G4VhElectronicStoppingPower();
 
   virtual G4double StoppingPower(const G4Material* material,
@@ -72,25 +69,23 @@ public:
 
   virtual G4double ElectronicStoppingPower(G4double z,
                                            G4double kineticEnergy) const = 0;
+
+  G4VhElectronicStoppingPower(G4VhElectronicStoppingPower &) = delete;
+  G4VhElectronicStoppingPower & operator =
+  (const G4VhElectronicStoppingPower &right) = delete;
  
 protected:
- 
+
+  /// This method returns He effective charge square parametrised according to
+  /// J.F.Ziegler, J.P. Biersack, U. Littmark
+  /// The Stopping and Range of Ions in Matter,
+  /// Vol.1, Pergamon Press, 1985
   G4double HeEffChargeSquare(const G4double z, 
                              const G4double kineticEnergyHe) const;
-  // This method returns He effective charge square parametrised according to
-  // J.F.Ziegler, J.P. Biersack, U. Littmark
-  // The Stopping and Range of Ions in Matter,
-  // Vol.1, Pergamon Press, 1985
 
   G4double GetHeMassAMU() const {return theHeMassAMU;};
 
 private:
-
-  // hide  assignment operator 
-
-    G4VhElectronicStoppingPower(G4VhElectronicStoppingPower &);
-    G4VhElectronicStoppingPower & operator =
-                    (const G4VhElectronicStoppingPower &right);
 
   const G4double theHeMassAMU;
 };

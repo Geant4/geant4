@@ -46,9 +46,8 @@
 
 class G4PenelopeOscillator 
 {
-
  public:
-  G4PenelopeOscillator();
+  explicit G4PenelopeOscillator();
   G4PenelopeOscillator(const G4PenelopeOscillator&);
   
   ~G4PenelopeOscillator(){;};
@@ -60,45 +59,45 @@ class G4PenelopeOscillator
   G4bool operator<(const G4PenelopeOscillator&) const;
   
   //Setters and getters
-  G4double GetHartreeFactor() {return hartreeFactor;};
-  void SetHartreeFactor(G4double hf) {hartreeFactor = hf;};
+  G4double GetHartreeFactor() {return fHartreeFactor;};
+  void SetHartreeFactor(G4double hf) {fHartreeFactor = hf;};
   //
-  G4double GetIonisationEnergy() {return ionisationEnergy;};
-  void SetIonisationEnergy(G4double ie) {ionisationEnergy = ie;};
+  G4double GetIonisationEnergy() {return fIonisationEnergy;};
+  void SetIonisationEnergy(G4double ie) {fIonisationEnergy = ie;};
   //
-  G4double GetResonanceEnergy() const {return resonanceEnergy;};
-  void SetResonanceEnergy(G4double re) {resonanceEnergy = re;};
+  G4double GetResonanceEnergy() const {return fResonanceEnergy;};
+  void SetResonanceEnergy(G4double re) {fResonanceEnergy = re;};
   //
-  G4double GetOscillatorStrength() {return oscillatorStrength;};
-  void SetOscillatorStrength(G4double ostr) {oscillatorStrength=ostr;};
+  G4double GetOscillatorStrength() {return fOscillatorStrength;};
+  void SetOscillatorStrength(G4double ostr) {fOscillatorStrength=ostr;};
   //
-  G4int GetShellFlag() {return shellFlag;};
-  void SetShellFlag(G4int theflag) {shellFlag=theflag;};
+  G4int GetShellFlag() {return fShellFlag;};
+  void SetShellFlag(G4int theflag) {fShellFlag=theflag;};
   //
-  G4double GetParentZ() {return parentZ;};
-  void SetParentZ(G4double parZ) {parentZ = parZ;};
+  G4double GetParentZ() {return fParentZ;};
+  void SetParentZ(G4double parZ) {fParentZ = parZ;};
   //
-  G4int GetParentShellID() {return parentShellID;};
-  void SetParentShellID(G4int psID) {parentShellID = psID;};
+  G4int GetParentShellID() {return fParentShellID;};
+  void SetParentShellID(G4int psID) {fParentShellID = psID;};
   //
-  G4double GetCutoffRecoilResonantEnergy(){return cutoffRecoilResonantEnergy;};
-  void SetCutoffRecoilResonantEnergy(G4double ene){cutoffRecoilResonantEnergy = ene;};
+  G4double GetCutoffRecoilResonantEnergy(){return fCutoffRecoilResonantEnergy;};
+  void SetCutoffRecoilResonantEnergy(G4double ene){fCutoffRecoilResonantEnergy = ene;};
 
 private:
-  G4double hartreeFactor;
-  G4double ionisationEnergy;
-  G4double resonanceEnergy;
-  G4double oscillatorStrength;
-  G4int shellFlag;
-  G4double parentZ;
-  G4int parentShellID; //necessary for interface to AtomicDeexcitationManager
-  G4double cutoffRecoilResonantEnergy;
+  G4double fHartreeFactor;
+  G4double fIonisationEnergy;
+  G4double fResonanceEnergy;
+  G4double fOscillatorStrength;
+  G4double fParentZ;  
+  G4double fCutoffRecoilResonantEnergy;
+  G4int fParentShellID; //necessary for interface to AtomicDeexcitationManager
+  G4int fShellFlag;
 };
 
 struct G4PenelopeOscillatorResEnergyComparator
 {
 public:
-  int operator()(const G4PenelopeOscillator& left,
+  G4int operator()(const G4PenelopeOscillator& left,
 		 const G4PenelopeOscillator& right) 
   {return ((left.GetResonanceEnergy() < right.GetResonanceEnergy()) ? 1 : 0);};
 };

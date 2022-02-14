@@ -45,12 +45,18 @@
 #include "G4VSplitableHadron.hh"
 #include "G4ExcitedString.hh"
 
+#include "G4ParticleTable.hh"  // Uzhi June 2020
+
 #include "G4Log.hh"
 #include "G4Pow.hh"
 
 //#define debugQuarkExchange
 
-G4QuarkExchange::G4QuarkExchange(){}
+G4QuarkExchange::G4QuarkExchange()
+{
+  StrangeSuppress = (1.0-0.04)/2.0;  // Uzhi June 2020 : suppression of strange quark pair prodution,
+                                     //                  i.e. u:d:s=1:1:0.04 . Need to be tuned!
+}
 
 G4QuarkExchange::~G4QuarkExchange(){}
 
@@ -130,16 +136,28 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 
   G4bool ProjectileDiffraction = true;
 
+  // Also for heavy hadrons, assume 50% probability of projectile diffraction.
   if ( absPDGcode > 1000 )                          { ProjectileDiffraction = G4UniformRand() <= 0.5; }
   if ( (absPDGcode == 211) || (absPDGcode == 111) ) { ProjectileDiffraction = G4UniformRand() <= 0.66; }
   if ( (absPDGcode == 321) || (absPDGcode == 311)  || 
        (   PDGcode == 130) || (   PDGcode == 310) ) { ProjectileDiffraction = G4UniformRand() <= 0.5; }
+  if ( absPDGcode > 400  &&  absPDGcode < 600 )     { ProjectileDiffraction = G4UniformRand() <= 0.5; }
+
+  //G4cout<<"ProjectileDiffr "<<ProjectileDiffraction<<G4endl;
 
   if ( ProjectileDiffraction ) {
     if ( absPDGcode > 1000 )                            //------Projectile is baryon --------
     {
-      ProjectileMinDiffrMass = 1.16;              // GeV
-      AveragePt2 = 0.3;                           // GeV^2
+      if ( absPDGcode > 4000 && absPDGcode < 6000 )  // Projectile is a charm or bottom baryon
+      {
+        ProjectileMinDiffrMass = projectile->GetDefinition()->GetPDGMass()/CLHEP::GeV + 0.25;  // GeV
+        AveragePt2 = 0.3;                                                                      // GeV^2
+      }
+      else
+      {
+        ProjectileMinDiffrMass = 1.16;              // GeV
+        AveragePt2 = 0.3;                           // GeV^2
+      }
     }
     else if( absPDGcode == 211 || absPDGcode ==  111) //------Projectile is Pion -----------
     {
@@ -155,6 +173,11 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
     {
       ProjectileMinDiffrMass = 0.25;             // GeV
       AveragePt2 = 0.36;                         // GeV^2
+    }
+    else if( absPDGcode > 400 && absPDGcode < 600)  // Projectile is a charm or bottom meson
+    {
+      ProjectileMinDiffrMass = projectile->GetDefinition()->GetPDGMass()/CLHEP::GeV + 0.25;  // GeV
+      AveragePt2 = 0.3;                                                                      // GeV^2
     }
     else                                             //------Projectile is undefined, Nucleon assumed
     {
@@ -182,7 +205,7 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 
   AveragePt2 = AveragePt2 * GeV*GeV;
 
-  if ( SqrtS - (ProjectileMinDiffrMass+TargetMinDiffrMass) < 220* MeV ) return false;
+  if ( SqrtS - (ProjectileMinDiffrMass+TargetMinDiffrMass) < 220.0*MeV ) return false;
 
   //----------------------- 
   G4double Pt2, PZcms, PZcms2;
@@ -354,12 +377,32 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
   projectile->SplitUp();
   target->SplitUp();
 
-  G4Parton* PrQuark = projectile->GetNextParton(); 
-  G4Parton* TrQuark = target->GetNextParton(); 
+  G4Parton* PrQuark = nullptr;
+  G4Parton* TrQuark = nullptr;
 
-  G4ParticleDefinition * Tmp = PrQuark->GetDefinition();
-  PrQuark->SetDefinition(TrQuark->GetDefinition());
-  TrQuark->SetDefinition(Tmp);
+  if( projectile->GetDefinition()->GetBaryonNumber() >= 0 ) {  // Uzhi June 2020
+    // Quark exchange ----
+    PrQuark = projectile->GetNextParton(); 
+    TrQuark = target->GetNextParton(); 
+    G4ParticleDefinition * Tmp = PrQuark->GetDefinition();
+    PrQuark->SetDefinition(TrQuark->GetDefinition());
+    TrQuark->SetDefinition(Tmp);
+    return true;
+  }
+
+  // Quark exchage for projectile anti-baryon (annihilation and new Q pair creation ---
+  // This part added by Uzhi June 2020
+  PrQuark = projectile->GetNextAntiParton();
+  TrQuark = target->GetNextParton(); 
+  if( -PrQuark->GetDefinition()->GetPDGEncoding() == TrQuark->GetDefinition()->GetPDGEncoding() ){
+    G4int QuarkCode = 1 + (int)(G4UniformRand()/StrangeSuppress);
+    G4ParticleDefinition* AQpr = G4ParticleTable::GetParticleTable()->FindParticle(-QuarkCode);
+    G4ParticleDefinition*  Qtr = G4ParticleTable::GetParticleTable()->FindParticle( QuarkCode);
+    if( (AQpr != nullptr) && (Qtr != nullptr) ) {
+      PrQuark->SetDefinition(AQpr);
+      TrQuark->SetDefinition( Qtr);
+    }
+  }
 
   return true;
 }

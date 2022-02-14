@@ -75,12 +75,8 @@
 //
 // **********************************************************************
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4Types.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "XrayTelDetectorConstruction.hh"
 #include "XrayTelPhysicsList.hh"
@@ -91,12 +87,10 @@
 int main( int argc, char** argv )
 {
   // Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
-
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads); 
+  
   // set mandatory initialization classes
   runManager->SetUserInitialization(new XrayTelDetectorConstruction ) ;
   runManager->SetUserInitialization(new XrayTelPhysicsList);

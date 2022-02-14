@@ -1,7 +1,6 @@
-
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(B1)
 
 #----------------------------------------------------------------------------
@@ -22,7 +21,6 @@ endif()
 #
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
-
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -69,5 +67,3 @@ add_custom_target(B1 DEPENDS exampleB1)
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS exampleB1 DESTINATION bin)
-
-

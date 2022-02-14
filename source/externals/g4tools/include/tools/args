@@ -1,0 +1,515 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_args
+#define tools_args
+
+#ifdef TOOLS_MEM
+#include "mem"
+#include "S_STRING"
+#endif
+
+#include "sout"
+#include "strip"
+#include "words"
+#include "sto"
+#include "forit"
+#include "mnmx"
+//#include "squote"
+
+#include <ostream>
+
+namespace tools {
+
+class args {
+#ifdef TOOLS_MEM
+public:
+  TOOLS_SCLASS(tools::args)
+#endif
+public:
+  typedef std::pair<std::string,std::string> arg;
+public:
+  args(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  args(int a_argc,char* a_argv[]){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    for(int index=0;index<a_argc;index++) {
+      std::string s(a_argv[index]);
+      std::string::size_type pos = s.find('=');
+      if(pos==std::string::npos) {
+        m_args.push_back(arg(s,""));
+      } else {
+	std::string key = s.substr(0,pos);
+        pos++;
+	std::string value = s.substr(pos,s.size()-pos);
+        m_args.push_back(arg(key,value));
+      }
+    }
+  }
+  args(const std::vector<std::string>& a_args,bool a_strip = false){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    add(a_args,a_strip);
+  }
+  args(const std::vector<arg>& a_args):m_args(a_args){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  args(const std::string& a_args,const std::string& a_sep,bool a_strip){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    std::vector<std::string> _args;
+    words(a_args,a_sep,false,_args);
+    add(_args,a_strip);
+  }
+  virtual ~args(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  args(const args& a_from):m_args(a_from.m_args){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  args& operator=(const args& a_from){
+    m_args = a_from.m_args;
+    return *this;
+  }
+public:
+  const std::vector<arg>& get_args() const {return m_args;}
+  //std::vector<arg>& get_args() {return m_args;}
+
+  bool is_arg(const std::string& a_string) const {
+    tools_vforcit(arg,m_args,it) {
+      if((*it).first==a_string) return true;
+    }
+    return false;
+  }
+  bool is_empty() const {return m_args.size()?false:true;}
+  size_t size() const {return m_args.size();}
+  size_t number() const {return m_args.size();} //back comp.
+  bool find(const std::string& a_key,std::string& a_value,const std::string& a_def = std::string()) const {
+    tools_vforcit(arg,m_args,it) {
+      if((*it).first==a_key) {
+        a_value = (*it).second;
+        return true;
+      }
+    }
+    a_value = a_def;
+    return false;
+  }
+#ifdef TOOLS_DEPRECATED
+  std::vector<std::string> find(const std::string& a_key) const {
+    std::vector<std::string> vals;
+    tools_vforcit(arg,m_args,it) {
+      if((*it).first==a_key) vals.push_back((*it).second);
+    }
+    return vals;
+  }
+#endif
+  void find(const std::string& a_key,std::vector<std::string>& a_vals,bool a_clear=true) const {
+    if(a_clear) a_vals.clear();
+    tools_vforcit(arg,m_args,it) {
+      if((*it).first==a_key) a_vals.push_back((*it).second);
+    }
+  }
+
+  bool find(const std::string& a_string,bool& a_value,const bool& a_def = false) const {
+    std::string s;
+    if(!find(a_string,s)) {a_value = a_def;return false;}
+    return to(s,a_value,a_def);
+  }
+  template <class aT>
+  bool find(const std::string& a_string,aT& a_value,const aT& a_def = aT()) const {
+    std::string _s;
+    if(!find(a_string,_s)) {a_value = a_def;return false;}
+    return to<aT>(_s,a_value,a_def);
+  }
+
+#ifdef TOOLS_DEPRECATED
+  std::vector<std::string> tovector() const {
+    // Return a vector of string <name=value>
+    std::vector<std::string> vec;
+    tools_vforcit(arg,m_args,it) {
+      std::string s;
+      if((*it).second.empty()) {
+        s = (*it).first;
+      } else {
+        s = (*it).first;
+        s += "=";
+        s += (*it).second;
+      }
+      vec.push_back(s);
+    }
+    return vec;
+  }
+#endif
+  void to_vector(std::vector<std::string>& a_vec) const {
+    // Return a vector of string <name=value>
+    a_vec.clear();
+    std::string s;
+    tools_vforcit(arg,m_args,it) {
+      s = (*it).first;
+      if((*it).second.size()) {
+        s += "=";
+        s += (*it).second;
+      }
+      a_vec.push_back(s);
+    }
+  }
+
+  bool add(const std::string& a_key,const std::string& a_value = std::string(),bool a_override = true){
+    if(a_override) {
+      tools_vforit(arg,m_args,it) {
+        if((*it).first==a_key) {
+          (*it).second = a_value;
+          return true;
+        }
+      }
+    }
+    if(a_key.empty()) return false;
+    m_args.push_back(arg(a_key,a_value));
+    return true;
+  }
+
+  bool insert_begin(const std::string& a_key,const std::string& a_value = std::string(),bool a_override = true){
+    if(a_override) {
+      tools_vforit(arg,m_args,it) {
+        if((*it).first==a_key) {
+          (*it).second = a_value;
+          return true;
+        }
+      }
+    }
+    if(a_key.empty()) return false;
+    m_args.insert(m_args.begin(),arg(a_key,a_value));
+    return true;
+  }
+
+  void add(const std::vector<std::string>& a_args,bool a_strip = false) {
+    tools_vforcit(std::string,a_args,it) {
+      const std::string& sarg = *it;
+      std::string::size_type pos = sarg.find('=');
+      if(pos==std::string::npos) {
+        if(a_strip) {
+          std::string left = sarg;
+          strip(left,both,' ');
+          m_args.push_back(arg(left,""));
+        } else {
+          m_args.push_back(arg(sarg,""));
+        }
+      } else {
+        std::string left = sarg.substr(0,pos);
+        std::string right = sarg.substr((pos+1),sarg.size()-(pos+1));
+        if(a_strip) {
+          strip(left,both,' ');
+          strip(right,both,' ');
+        }
+        m_args.push_back(arg(left,right));
+      }
+    }
+  }
+
+  void add_keyvals(const std::vector<std::string>& a_args,bool a_strip = false) {
+    //a_args must contain an even number of strings.
+    size_t sz_half = a_args.size()/2;
+    if((2*sz_half)!=a_args.size()) return;
+    for(std::vector<std::string>::const_iterator it = a_args.begin();it!=a_args.end();it+=2) {
+      if(a_strip) {
+        std::string key = *it;
+        strip(key,both,' ');
+        std::string val = *(it+1);
+        strip(val,both,' ');
+        m_args.push_back(arg(key,val));
+      } else {
+        m_args.push_back(arg(*it,*(it+1)));
+      }
+    }
+  }
+
+  void add(const std::vector<arg>& a_args){
+    tools_vforcit(arg,a_args,it) m_args.push_back(*it);
+  }
+
+  void add(const args& a_from){
+    tools_vforcit(arg,a_from.m_args,it) m_args.push_back(*it);
+  }
+
+
+  int remove(const std::string& a_key){
+    size_t nbeg = m_args.size();
+    for(std::vector<arg>::iterator it = m_args.begin();it!=m_args.end();) {
+      if(a_key==(*it).first) {
+        it = m_args.erase(it);
+      } else {
+        ++it;
+      }
+    }
+    return int(nbeg) - int(m_args.size());
+  }
+
+  void remove_first(){if(m_args.size()) m_args.erase(m_args.begin());}
+  void remove_last(){if(m_args.size()) m_args.erase(m_args.end()-1);}
+
+  bool last(std::string& a_key,std::string& a_value) const {
+    a_key.clear();
+    a_value.clear();
+    if(m_args.empty()) return false;
+    a_key = m_args.back().first;
+    a_value = m_args.back().second;
+    return true;
+  }
+
+  bool prog_name(std::string& a_value) const {
+    if(m_args.empty()) {a_value.clear();return false;}
+    if(m_args[0].second.size()) {a_value.clear();return false;}
+    a_value = m_args[0].first;
+    return true;
+  }
+
+  bool file(std::string& a_file) const {
+    std::string slast;
+    std::string s;
+    if((m_args.size()>1) //first arg is the program name !
+       && last(slast,s)
+       && (slast.find('-')!=0)
+       && (s.empty()) ) {
+      a_file = slast; //Last argument is not an option.
+      return true;
+    } else {
+      a_file.clear();
+      return false;
+    }
+  }
+
+  bool file(std::string& a_file,bool a_remove) {
+    std::string slast;
+    std::string s;
+    if((m_args.size()>1) //first arg is the program name !
+       && last(slast,s)
+       && (slast.find('-')!=0)
+       && (s.empty()) ) {
+      a_file = slast; //Last argument is not an option.
+      if(a_remove) m_args.erase(m_args.end()-1);
+      return true;
+    } else {
+      a_file.clear();
+      return false;
+    }
+  }
+
+  void not_hyphens(std::vector<std::string>& a_not_hyphens,bool a_skip_first = false) const {
+    a_not_hyphens.clear();
+    // Get the serie of trailing args not beginning with '-'
+    // and without a value (not of the form [-]xxx=yyy).
+    // Note that an argument like that in between arguments
+    // is NOT taken into account.
+    if(m_args.empty()) return;
+    std::vector<arg>::const_iterator it = m_args.begin();
+    if(a_skip_first) it++;
+    for(;it!=m_args.end();++it) {
+      if( ((*it).first.find('-')==0) || (*it).second.size() ) {
+        a_not_hyphens.clear();
+      } else {
+        a_not_hyphens.push_back((*it).first);
+      }
+    }
+  }
+
+  void files(std::vector<std::string>& a_files,bool a_skip_first = true) const {  //true and not false as in the upper.
+    return not_hyphens(a_files,a_skip_first);
+  }
+
+  bool first_not_hyphen(std::string& a_first,bool a_skip_first = false) const {
+    std::vector<std::string> _ss;
+    not_hyphens(_ss,a_skip_first);
+    if(_ss.empty()) {a_first.clear();return false;}
+    a_first = _ss[0];
+    return true;
+  }
+
+//bool first_of_files(std::string& a_file,bool a_skip_first) const {return first_of_hyphen(a_file,a_skip_first);}
+
+  bool argcv(int& a_argc,char**& a_argv) const {
+    // If using with :
+    //   int argc;
+    //   char** argv;
+    //   args.argcv(argc,argv);
+    // you can delete with :
+    //   args::delete_argcv(argc,argv);
+    if(m_args.empty()) {a_argc = 0;a_argv = 0;return true;}
+    typedef char* _cstr_t;
+    _cstr_t* av = new _cstr_t[m_args.size()+1];
+    if(!av) {a_argc = 0;a_argv = 0;return false;}
+    a_argv = av;
+    for(std::vector<arg>::const_iterator it = m_args.begin();it!=m_args.end();++it,av++) {
+      std::string::size_type lf = (*it).first.length();
+      std::string::size_type ls = (*it).second.length();
+      std::string::size_type sz = lf;
+      if(ls) sz += 1 + ls;
+      char* p = new char[sz+1];
+      if(!p) {a_argc = 0;a_argv = 0;return false;} //some delete are lacking.
+      *av = p;
+     {char* pf = (char*)(*it).first.c_str();
+      for(std::string::size_type i=0;i<lf;i++,p++,pf++) {*p = *pf;}
+      *p = 0;}
+      if(ls) {*p = '=';p++;}
+     {char* ps = (char*)(*it).second.c_str();
+      for(std::string::size_type i=0;i<ls;i++,p++,ps++) {*p = *ps;}
+      *p = 0;}
+    }
+    *(a_argv+m_args.size()) = 0;
+    a_argc = (int)m_args.size();
+    return true;
+  }
+  static void delete_argcv(int& a_argc,char**& a_argv) {
+    for(int index=0;index<a_argc;index++) delete [] a_argv[index];
+    delete [] a_argv;
+    a_argc = 0;
+    a_argv = 0;
+  }
+
+  bool known_options(const std::vector<std::string>& a_knowns) const {
+    tools_vforcit(arg,m_args,it) {
+      if((*it).first.find('-')==0) { //find '-' at first pos.
+        bool found = false;
+        tools_vforcit(std::string,a_knowns,it2) {
+          if((*it).first==(*it2)) {
+            found = true;
+            break;
+          }
+        }
+        if(!found) return false; //one option not in a_knowns.
+      }
+    }
+    return true; //all options are in a_knowns.
+  }
+
+  bool known_options(const std::string& a_known) const {
+    tools_vforcit(arg,m_args,it) {
+      if((*it).first.find('-')==0) { //find '-' at first pos.
+        if((*it).first!=a_known) return false; //one option not a_known.
+      }
+    }
+    return true; //all options are a_known.
+  }
+
+//void remove_string_delimiters_in_keys() {
+//  tools_vforit(arg,m_args,it) {
+//    if(!rm_quotes((*it).first)) rm_double_quotes((*it).first);
+//  }
+//}
+
+//void remove_string_delimiters_in_values() {
+//  tools_vforit(arg,m_args,it) {
+//    if(!rm_quotes((*it).second)) rm_double_quotes((*it).second);
+//  }
+//}
+
+  void files_at_end(bool a_skip_first = true) {
+    // reorder to have "file" arguments at end.
+    if(m_args.empty()) return;
+    std::vector<arg> _args;
+    if(a_skip_first) _args.push_back(*(m_args.begin()));
+    //first pass :
+   {std::vector<arg>::const_iterator it = m_args.begin();
+    if(a_skip_first) it++;
+    for(;it!=m_args.end();++it) {
+      if( ((*it).first.find('-')==0) || (*it).second.size() ) {
+        _args.push_back(*it);
+      }
+    }}
+    //second pass :
+   {std::vector<arg>::const_iterator it = m_args.begin();
+    if(a_skip_first) it++;
+    for(;it!=m_args.end();++it) {
+      if( ((*it).first.find('-')==0) || (*it).second.size() ) {
+      } else {
+        _args.push_back(*it);
+      }
+    }}
+    m_args = _args;
+  }
+
+  //NOTE : print is a Python keyword.
+  void dump(std::ostream& a_out,const std::string& a_comment = std::string(),const std::string& a_prefix = std::string()) const {
+    if(a_comment.size()) a_out << a_comment << std::endl;
+    tools_vforcit(arg,m_args,it) {
+      a_out << a_prefix << "key = " << sout((*it).first) << ", value = " << sout((*it).second) << std::endl;
+    }
+  }
+
+public: //backcomp (for Panoramix).
+  bool isAnArgument(const std::string& a_key) const {return is_arg(a_key);}
+protected:
+  std::vector<arg> m_args;
+};
+
+inline bool check_args(const std::vector<std::string>& a_args,unsigned int a_number,std::ostream& a_out){
+  if(a_args.size()==a_number) return true;
+  a_out << "bad argument number."
+        << " Given " << (unsigned int)a_args.size()
+        << " whilst " << a_number << " expected."
+        << std::endl;
+  return false;
+}
+
+inline bool check_min(const std::vector<std::string>& a_args,unsigned int a_number,std::string& a_last,std::ostream& a_out){
+  if(a_args.size()>=a_number) {
+    if(a_number==0) {
+      if(a_args.empty()) {
+        a_last.clear();
+      } else {
+        a_last = a_args[0];
+        for(size_t index=1;index<a_args.size();index++) a_last += " " + a_args[index];
+      }
+    } else {
+      a_last = a_args[a_number-1];
+      for(size_t index=a_number;index<a_args.size();index++) a_last += " " + a_args[index];
+    }
+    return true;
+  }
+  a_out << "bad argument number."
+        << " Given " << (unsigned int)a_args.size()
+        << " whilst at least " << a_number << " expected."
+        << std::endl;
+  return false;
+}
+
+inline bool check_min_args(const std::vector<std::string>& aArgs,unsigned int a_number,std::ostream& a_out){
+  if(aArgs.size()>=a_number) return true;
+  a_out << "bad argument number."
+        << " Given " << (unsigned int)aArgs.size()
+        << " whilst at least " << a_number << " expected."
+        << std::endl;
+  return false;
+}
+
+inline bool check_or_args(const std::vector<std::string>& aArgs,unsigned int a_1,unsigned int a_2,std::ostream& a_out){
+  if((aArgs.size()==a_1)||(aArgs.size()==a_2)) return true;
+  a_out << "bad argument number."
+        << " Given " << (unsigned int)aArgs.size()
+        << " whilst " << a_1 << " or " << a_2 << " expected."
+        << std::endl;
+  return false;
+}
+
+inline std::vector<std::string> to(int a_argc,char** a_argv) {
+  std::vector<std::string> v;
+  for(int index=0;index<a_argc;index++) v.push_back(a_argv[index]);
+  return v;
+}
+
+}
+
+#endif

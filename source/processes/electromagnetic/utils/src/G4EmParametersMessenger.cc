@@ -77,165 +77,180 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   flucCmd->SetParameterName("choice",true);
   flucCmd->SetDefaultValue(true);
   flucCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  flucCmd->SetToBeBroadcasted(false);
 
   rangeCmd = new G4UIcmdWithABool("/process/eLoss/CSDARange",this);
   rangeCmd->SetGuidance("Enable/disable CSDA range calculation");
   rangeCmd->SetParameterName("range",true);
   rangeCmd->SetDefaultValue(false);
   rangeCmd->AvailableForStates(G4State_PreInit);
+  rangeCmd->SetToBeBroadcasted(false);
 
   lpmCmd = new G4UIcmdWithABool("/process/eLoss/LPM",this);
   lpmCmd->SetGuidance("Enable/disable LPM effect calculation");
   lpmCmd->SetParameterName("lpm",true);
   lpmCmd->SetDefaultValue(true);
   lpmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  splCmd = new G4UIcmdWithABool("/process/em/spline",this);
-  splCmd->SetGuidance("Enable/disable usage spline for Physics Vectors");
-  splCmd->SetParameterName("spl",true);
-  splCmd->SetDefaultValue(false);
-  splCmd->AvailableForStates(G4State_PreInit);
+  lpmCmd->SetToBeBroadcasted(false);
 
   rsCmd = new G4UIcmdWithABool("/process/eLoss/useCutAsFinalRange",this);
   rsCmd->SetGuidance("Enable/disable use of cut in range as a final range");
   rsCmd->SetParameterName("choice",true);
   rsCmd->SetDefaultValue(false);
   rsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  rsCmd->SetToBeBroadcasted(false);
 
   aplCmd = new G4UIcmdWithABool("/process/em/applyCuts",this);
   aplCmd->SetGuidance("Enable/disable applying cuts for gamma processes");
   aplCmd->SetParameterName("apl",true);
   aplCmd->SetDefaultValue(false);
   aplCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  aplCmd->SetToBeBroadcasted(false);
 
   latCmd = new G4UIcmdWithABool("/process/msc/LateralDisplacement",this);
   latCmd->SetGuidance("Enable/disable sampling of lateral displacement");
   latCmd->SetParameterName("lat",true);
   latCmd->SetDefaultValue(true);
   latCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  latCmd->SetToBeBroadcasted(false);
 
   lat96Cmd = new G4UIcmdWithABool("/process/msc/LateralDisplacementAlg96",this);
   lat96Cmd->SetGuidance("Enable/disable sampling of lateral displacement");
   lat96Cmd->SetParameterName("lat96",true);
   lat96Cmd->SetDefaultValue(false);
   lat96Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  lat96Cmd->SetToBeBroadcasted(false);
 
   mulatCmd = new G4UIcmdWithABool("/process/msc/MuHadLateralDisplacement",this);
   mulatCmd->SetGuidance("Enable/disable sampling of lateral displacement for muons and hadrons");
   mulatCmd->SetParameterName("mulat",true);
   mulatCmd->SetDefaultValue(true);
   mulatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  catCmd = new G4UIcmdWithABool("/process/msc/DisplacementBeyondSafety",this);
-  catCmd->SetGuidance("Enable/disable displacement at geometry boundary");
-  catCmd->SetParameterName("cat",true);
-  catCmd->SetDefaultValue(false);
-  catCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  mulatCmd->SetToBeBroadcasted(false);
 
   delCmd = new G4UIcmdWithABool("/process/eLoss/UseAngularGenerator",this);
   delCmd->SetGuidance("Enable usage of angular generator for ionisation");
   delCmd->SetParameterName("del",true);
   delCmd->SetDefaultValue(false);
   delCmd->AvailableForStates(G4State_PreInit);
-
-  IntegCmd = new G4UIcmdWithABool("/process/eLoss/integral",this);
-  IntegCmd->SetGuidance("Switch true/false the integral option");
-  IntegCmd->SetParameterName("integ",true);
-  IntegCmd->SetDefaultValue(true);
-  IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  delCmd->SetToBeBroadcasted(false);
 
   mottCmd = new G4UIcmdWithABool("/process/msc/UseMottCorrection",this);
   mottCmd->SetGuidance("Enable usage of Mott corrections for e- elastic scattering");
   mottCmd->SetParameterName("mott",true);
   mottCmd->SetDefaultValue(false);
   mottCmd->AvailableForStates(G4State_PreInit);
+  mottCmd->SetToBeBroadcasted(false);
 
   birksCmd = new G4UIcmdWithABool("/process/msc/UseG4EmSaturation",this);
   birksCmd->SetGuidance("Enable usage of built-in Birks saturation");
   birksCmd->SetParameterName("birks",true);
   birksCmd->SetDefaultValue(false);
   birksCmd->AvailableForStates(G4State_PreInit,G4State_Init);
+  birksCmd->SetToBeBroadcasted(false);
 
   sharkCmd = new G4UIcmdWithABool("/process/em/UseGeneralProcess",this);
   sharkCmd->SetGuidance("Enable gamma, e+- general process");
   sharkCmd->SetParameterName("gen",true);
   sharkCmd->SetDefaultValue(false);
   sharkCmd->AvailableForStates(G4State_PreInit);
+  sharkCmd->SetToBeBroadcasted(false);
 
   sampleTCmd = new G4UIcmdWithABool("/process/em/enableSamplingTable",this);
   sampleTCmd->SetGuidance("Enable usage of sampling table for secondary generation");
   sampleTCmd->SetParameterName("sampleT",true);
   sampleTCmd->SetDefaultValue(false);
   sampleTCmd->AvailableForStates(G4State_PreInit);
+  sampleTCmd->SetToBeBroadcasted(false);
 
   icru90Cmd = new G4UIcmdWithABool("/process/eLoss/UseICRU90",this);
   icru90Cmd->SetGuidance("Enable usage of ICRU90 stopping powers");
   icru90Cmd->SetParameterName("icru90",true);
   icru90Cmd->SetDefaultValue(false);
   icru90Cmd->AvailableForStates(G4State_PreInit);
+  icru90Cmd->SetToBeBroadcasted(false);
 
-  minSubSecCmd = new G4UIcmdWithADouble("/process/eLoss/minsubsec",this);
-  minSubSecCmd->SetGuidance("Set the ratio subcut/cut ");
-  minSubSecCmd->SetParameterName("rcmin",true);
-  minSubSecCmd->AvailableForStates(G4State_PreInit);
+  mudatCmd = new G4UIcmdWithABool("/process/em/MuDataFromFile",this);
+  mudatCmd->SetGuidance("Enable usage of muon data from file");
+  mudatCmd->SetParameterName("mudat",true);
+  mudatCmd->SetDefaultValue(false);
+  mudatCmd->AvailableForStates(G4State_PreInit);
+  mudatCmd->SetToBeBroadcasted(false);
 
   minEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
   minEnCmd->SetGuidance("Set the min kinetic energy for EM tables");
   minEnCmd->SetParameterName("emin",true);
   minEnCmd->SetUnitCategory("Energy");
   minEnCmd->AvailableForStates(G4State_PreInit);
+  minEnCmd->SetToBeBroadcasted(false);
 
   maxEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/maxKinEnergy",this);
   maxEnCmd->SetGuidance("Set the max kinetic energy for EM tables");
   maxEnCmd->SetParameterName("emax",true);
   maxEnCmd->SetUnitCategory("Energy");
   maxEnCmd->AvailableForStates(G4State_PreInit);
+  maxEnCmd->SetToBeBroadcasted(false);
 
   cenCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/maxKinEnergyCSDA",this);
   cenCmd->SetGuidance("Set the max kinetic energy for CSDA table");
   cenCmd->SetParameterName("emaxCSDA",true);
   cenCmd->SetUnitCategory("Energy");
   cenCmd->AvailableForStates(G4State_PreInit);
+  cenCmd->SetToBeBroadcasted(false);
 
   max5DCmd = new G4UIcmdWithADoubleAndUnit("/process/em/max5DMuPairEnergy",this);
   max5DCmd->SetGuidance("Set the max kinetic energy for 5D muon pair production");
   max5DCmd->SetParameterName("emax5D",true);
   max5DCmd->SetUnitCategory("Energy");
   max5DCmd->AvailableForStates(G4State_PreInit);
+  max5DCmd->SetToBeBroadcasted(false);
 
   lowEnCmd = new G4UIcmdWithADoubleAndUnit("/process/em/lowestElectronEnergy",this);
   lowEnCmd->SetGuidance("Set the lowest kinetic energy for e+-");
   lowEnCmd->SetParameterName("elow",true);
   lowEnCmd->SetUnitCategory("Energy");
   lowEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  lowEnCmd->SetToBeBroadcasted(false);
 
   lowhEnCmd = new G4UIcmdWithADoubleAndUnit("/process/em/lowestMuHadEnergy",this);
   lowhEnCmd->SetGuidance("Set the lowest kinetic energy for muons and hadrons");
   lowhEnCmd->SetParameterName("elowh",true);
   lowhEnCmd->SetUnitCategory("Energy");
   lowhEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  lowhEnCmd->SetToBeBroadcasted(false);
 
   lowEn3Cmd = new G4UIcmdWithADoubleAndUnit("/process/em/lowestTripletEnergy",this);
   lowEn3Cmd->SetGuidance("Set the lowest kinetic energy for triplet production");
   lowEn3Cmd->SetParameterName("elow3",true);
   lowEn3Cmd->SetUnitCategory("Energy");
   lowEn3Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  lowEn3Cmd->SetToBeBroadcasted(false);
 
   lllCmd = new G4UIcmdWithADouble("/process/eLoss/linLossLimit",this);
   lllCmd->SetGuidance("Set linearLossLimit parameter");
   lllCmd->SetParameterName("linlim",true);
   lllCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  lllCmd->SetToBeBroadcasted(false);
 
   brCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/bremThreshold",this);
-  brCmd->SetGuidance("Set bremsstrahlung energy threshold");
+  brCmd->SetGuidance("Set e+- bremsstrahlung energy threshold");
   brCmd->SetParameterName("emaxBrem",true);
   brCmd->SetUnitCategory("Energy");
-  brCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  brCmd->AvailableForStates(G4State_PreInit);
+  brCmd->SetToBeBroadcasted(false);
+
+  br1Cmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/bremMuHadThreshold",this);
+  br1Cmd->SetGuidance("Set muon/hadron bremsstrahlung energy threshold");
+  br1Cmd->SetParameterName("emaxMuHadBrem",true);
+  br1Cmd->SetUnitCategory("Energy");
+  br1Cmd->AvailableForStates(G4State_PreInit);
+  br1Cmd->SetToBeBroadcasted(false);
 
   labCmd = new G4UIcmdWithADouble("/process/eLoss/LambdaFactor",this);
   labCmd->SetGuidance("Set lambdaFactor parameter for integral option");
   labCmd->SetParameterName("Fl",true);
   labCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  labCmd->SetToBeBroadcasted(false);
 
   mscfCmd = new G4UIcmdWithADouble("/process/msc/FactorForAngleLimit",this);
   mscfCmd->SetGuidance("Set factor for computation of a limit for -t (invariant transfer)");
@@ -243,24 +258,28 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   mscfCmd->SetRange("Fact>0");
   mscfCmd->SetDefaultValue(1.);
   mscfCmd->AvailableForStates(G4State_PreInit);
+  mscfCmd->SetToBeBroadcasted(false);
 
   angCmd = new G4UIcmdWithADoubleAndUnit("/process/msc/ThetaLimit",this);
   angCmd->SetGuidance("Set the limit on the polar angle for msc and single scattering");
   angCmd->SetParameterName("theta",true);
   angCmd->SetUnitCategory("Angle");
-  angCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  angCmd->AvailableForStates(G4State_PreInit);
+  angCmd->SetToBeBroadcasted(false);
 
   msceCmd = new G4UIcmdWithADoubleAndUnit("/process/msc/EnergyLimit",this);
   msceCmd->SetGuidance("Set the upper energy limit for msc");
   msceCmd->SetParameterName("mscE",true);
   msceCmd->SetUnitCategory("Energy");
   msceCmd->AvailableForStates(G4State_PreInit);
+  msceCmd->SetToBeBroadcasted(false);
 
   nielCmd = new G4UIcmdWithADoubleAndUnit("/process/em/MaxEnergyNIEL",this);
   nielCmd->SetGuidance("Set the upper energy limit for NIEL");
   nielCmd->SetParameterName("niel",true);
   nielCmd->SetUnitCategory("Energy");
   nielCmd->AvailableForStates(G4State_PreInit);
+  nielCmd->SetToBeBroadcasted(false);
 
   frCmd = new G4UIcmdWithADouble("/process/msc/RangeFactor",this);
   frCmd->SetGuidance("Set RangeFactor for msc processes of e+-");
@@ -268,6 +287,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   frCmd->SetRange("Fr>0");
   frCmd->SetDefaultValue(0.04);
   frCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  frCmd->SetToBeBroadcasted(false);
 
   fr1Cmd = new G4UIcmdWithADouble("/process/msc/RangeFactorMuHad",this);
   fr1Cmd->SetGuidance("Set RangeFactor for msc processes of muons/hadrons");
@@ -275,91 +295,101 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   fr1Cmd->SetRange("Fr1>0");
   fr1Cmd->SetDefaultValue(0.2);
   fr1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fr1Cmd->SetToBeBroadcasted(false);
 
   fgCmd = new G4UIcmdWithADouble("/process/msc/GeomFactor",this);
   fgCmd->SetGuidance("Set GeomFactor parameter for msc processes");
   fgCmd->SetParameterName("Fg",true);
   fgCmd->SetRange("Fg>0");
-  fgCmd->SetDefaultValue(3.5);
+  fgCmd->SetDefaultValue(2.5);
   fgCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fgCmd->SetToBeBroadcasted(false);
  
   skinCmd = new G4UIcmdWithADouble("/process/msc/Skin",this);
   skinCmd->SetGuidance("Set skin parameter for msc processes");
   skinCmd->SetParameterName("skin",true);
   skinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  skinCmd->SetToBeBroadcasted(false);
 
   screCmd = new G4UIcmdWithADouble("/process/msc/ScreeningFactor",this);
   screCmd->SetGuidance("Set screening factor");
   screCmd->SetParameterName("screen",true);
   screCmd->AvailableForStates(G4State_PreInit);
+  screCmd->SetToBeBroadcasted(false);
 
   safCmd = new G4UIcmdWithADouble("/process/msc/SafetyFactor",this);
   safCmd->SetGuidance("Set safety factor");
   safCmd->SetParameterName("fsafe",true);
-  safCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  safCmd->AvailableForStates(G4State_PreInit);
+  safCmd->SetToBeBroadcasted(false);
 
   llimCmd = new G4UIcmdWithADoubleAndUnit("/process/msc/LambdaLimit",this);
   llimCmd->SetGuidance("Set the upper energy limit for NIEL");
   llimCmd->SetParameterName("ll",true);
   llimCmd->SetUnitCategory("Length");
-  llimCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
-  dedxCmd->SetGuidance("Set number of bins for EM tables");
-  dedxCmd->SetParameterName("binsDEDX",true);
-  dedxCmd->SetDefaultValue(84);
-  dedxCmd->AvailableForStates(G4State_PreInit);
-
-  lamCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsLambda",this);
-  lamCmd->SetGuidance("Set number of bins for EM tables");
-  lamCmd->SetParameterName("binsL",true);
-  lamCmd->SetDefaultValue(84);
-  lamCmd->AvailableForStates(G4State_PreInit);
+  llimCmd->AvailableForStates(G4State_PreInit);
+  llimCmd->SetToBeBroadcasted(false);
 
   amCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsPerDecade",this);
   amCmd->SetGuidance("Set number of bins per decade for EM tables");
   amCmd->SetParameterName("bins",true);
   amCmd->SetDefaultValue(7);
   amCmd->AvailableForStates(G4State_PreInit);
+  amCmd->SetToBeBroadcasted(false);
 
   verCmd = new G4UIcmdWithAnInteger("/process/eLoss/verbose",this);
   verCmd->SetGuidance("Set verbose level for EM physics");
   verCmd->SetParameterName("verb",true);
   verCmd->SetDefaultValue(1);
   verCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  verCmd->SetToBeBroadcasted(false);
 
   ver1Cmd = new G4UIcmdWithAnInteger("/process/em/verbose",this);
   ver1Cmd->SetGuidance("Set verbose level for EM physics");
   ver1Cmd->SetParameterName("verb1",true);
   ver1Cmd->SetDefaultValue(1);
   ver1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  ver1Cmd->SetToBeBroadcasted(false);
 
   ver2Cmd = new G4UIcmdWithAnInteger("/process/em/workerVerbose",this);
   ver2Cmd->SetGuidance("Set worker verbose level for EM physics");
   ver2Cmd->SetParameterName("verb2",true);
-  ver2Cmd->SetDefaultValue(1);
+  ver2Cmd->SetDefaultValue(0);
   ver2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  ver2Cmd->SetToBeBroadcasted(false);
 
   mscCmd = new G4UIcmdWithAString("/process/msc/StepLimit",this);
   mscCmd->SetGuidance("Set msc step limitation type");
   mscCmd->SetParameterName("StepLim",true);
   mscCmd->SetCandidates("Minimal UseSafety UseSafetyPlus UseDistanceToBoundary");
   mscCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  mscCmd->SetToBeBroadcasted(false);
 
   msc1Cmd = new G4UIcmdWithAString("/process/msc/StepLimitMuHad",this);
   msc1Cmd->SetGuidance("Set msc step limitation type for muons/hadrons");
   msc1Cmd->SetParameterName("StepLim1",true);
   msc1Cmd->SetCandidates("Minimal UseSafety UseSafetyPlus UseDistanceToBoundary");
   msc1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  msc1Cmd->SetToBeBroadcasted(false);
 
   dumpCmd = new G4UIcommand("/process/em/printParameters",this);
   dumpCmd->SetGuidance("Print all EM parameters.");
+  dumpCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  dumpCmd->SetToBeBroadcasted(false);
 
   nffCmd = new G4UIcmdWithAString("/process/em/setNuclearFormFactor",this);
-  nffCmd->SetGuidance("Define typy of nuclear form-factor");
+  nffCmd->SetGuidance("Define type of nuclear form-factor");
   nffCmd->SetParameterName("NucFF",true);
   nffCmd->SetCandidates("None Exponential Gaussian Flat");
   nffCmd->AvailableForStates(G4State_PreInit);
+  nffCmd->SetToBeBroadcasted(false);
+
+  ssCmd = new G4UIcmdWithAString("/process/em/setSingleScattering",this);
+  ssCmd->SetGuidance("Define type of e+- single scattering model");
+  ssCmd->SetParameterName("SS",true);
+  ssCmd->SetCandidates("WVI Mott DPWA");
+  ssCmd->AvailableForStates(G4State_PreInit);
+  ssCmd->SetToBeBroadcasted(false);
 
   tripletCmd = new G4UIcmdWithAnInteger("/process/gconv/conversionType",this);
   tripletCmd->SetGuidance("gamma conversion triplet/nuclear generation type:");
@@ -370,6 +400,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   tripletCmd->SetRange("type >= 0 && type <= 2");
   tripletCmd->SetDefaultValue(0);
   tripletCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  tripletCmd->SetToBeBroadcasted(false);
 
   onIsolatedCmd = new G4UIcmdWithABool("/process/gconv/onIsolated",this);
   onIsolatedCmd->SetGuidance("Conversion on isolated charged particles");
@@ -378,6 +409,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   onIsolatedCmd->SetParameterName("flag",false);
   onIsolatedCmd->SetDefaultValue(false);
   onIsolatedCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  onIsolatedCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -393,23 +425,20 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete flucCmd;
   delete rangeCmd;
   delete lpmCmd;
-  delete splCmd;
   delete rsCmd;
   delete aplCmd;
   delete latCmd;
   delete lat96Cmd;
   delete mulatCmd;
-  delete catCmd;
   delete delCmd;
-  delete IntegCmd;
   delete mottCmd;
   delete birksCmd;
   delete sharkCmd;
   delete onIsolatedCmd;
   delete sampleTCmd;
   delete icru90Cmd;
+  delete mudatCmd;
 
-  delete minSubSecCmd;
   delete minEnCmd;
   delete maxEnCmd;
   delete max5DCmd;
@@ -419,6 +448,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete lowEn3Cmd;
   delete lllCmd;
   delete brCmd;
+  delete br1Cmd;
   delete labCmd;
   delete mscfCmd;
   delete angCmd;
@@ -432,8 +462,6 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete llimCmd;
   delete screCmd;
 
-  delete dedxCmd;
-  delete lamCmd;
   delete amCmd;
   delete verCmd;
   delete ver1Cmd;
@@ -443,6 +471,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete mscCmd;
   delete msc1Cmd;
   delete nffCmd;
+  delete ssCmd;
 
   delete dumpCmd;
 }
@@ -461,8 +490,6 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == lpmCmd) {
     theParameters->SetLPM(lpmCmd->GetNewBoolValue(newValue));
     physicsModified = true;
-  } else if (command == splCmd) {
-    theParameters->SetSpline(splCmd->GetNewBoolValue(newValue));
   } else if (command == rsCmd) {
     theParameters->SetUseCutAsFinalRange(rsCmd->GetNewBoolValue(newValue));
     physicsModified = true;
@@ -478,14 +505,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == mulatCmd) {
     theParameters->SetMuHadLateralDisplacement(mulatCmd->GetNewBoolValue(newValue));
     physicsModified = true;
-  } else if (command == catCmd) {
-    theParameters->SetLatDisplacementBeyondSafety(catCmd->GetNewBoolValue(newValue));
-    physicsModified = true;
   } else if (command == delCmd) {
     theParameters->ActivateAngularGeneratorForIonisation(delCmd->GetNewBoolValue(newValue));
-  } else if (command == IntegCmd) {
-    theParameters->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
-    physicsModified = true;
   } else if (command == mottCmd) {
     theParameters->SetUseMottCorrection(mottCmd->GetNewBoolValue(newValue));
   } else if (command == birksCmd) {
@@ -496,9 +517,9 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetGeneralProcessActive(sharkCmd->GetNewBoolValue(newValue));
   } else if (command == sampleTCmd) {
     theParameters->SetEnableSamplingTable(sampleTCmd->GetNewBoolValue(newValue));
+  } else if (command == mudatCmd) {
+    theParameters->SetRetrieveMuDataFromFile(mudatCmd->GetNewBoolValue(newValue));
 
-  } else if (command == minSubSecCmd) {
-    theParameters->SetMinSubRange(minSubSecCmd->GetNewDoubleValue(newValue));
   } else if (command == minEnCmd) {
     theParameters->SetMinEnergy(minEnCmd->GetNewDoubleValue(newValue));
   } else if (command == maxEnCmd) { 
@@ -523,6 +544,9 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == brCmd) { 
     theParameters->SetBremsstrahlungTh(brCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
+  } else if (command == br1Cmd) { 
+    theParameters->SetMuHadBremsstrahlungTh(br1Cmd->GetNewDoubleValue(newValue));
+    physicsModified = true;
   } else if (command == labCmd) {
     theParameters->SetLambdaFactor(labCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
@@ -530,7 +554,6 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetFactorForAngleLimit(mscfCmd->GetNewDoubleValue(newValue));
   } else if (command == angCmd) { 
     theParameters->SetMscThetaLimit(angCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == msceCmd) { 
     theParameters->SetMscEnergyLimit(msceCmd->GetNewDoubleValue(newValue));
   } else if (command == nielCmd) { 
@@ -549,27 +572,18 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == safCmd) { 
     theParameters->SetMscSafetyFactor(safCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == llimCmd) { 
     theParameters->SetMscLambdaLimit(llimCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == screCmd) { 
     theParameters->SetScreeningFactor(screCmd->GetNewDoubleValue(newValue));
-  } else if (command == dedxCmd) { 
-    theParameters->SetNumberOfBins(dedxCmd->GetNewIntValue(newValue));
-  } else if (command == lamCmd) { 
-    theParameters->SetNumberOfBins(lamCmd->GetNewIntValue(newValue));
-  } else if (command == amCmd) { 
-    theParameters->SetNumberOfBinsPerDecade(amCmd->GetNewIntValue(newValue));
   } else if (command == verCmd) {
     theParameters->SetVerbose(verCmd->GetNewIntValue(newValue));
   } else if (command == ver1Cmd) {
     theParameters->SetVerbose(ver1Cmd->GetNewIntValue(newValue));
-    physicsModified = true;
   } else if (command == ver2Cmd) {
     theParameters->SetWorkerVerbose(ver2Cmd->GetNewIntValue(newValue));
-    physicsModified = true;
   } else if (command == dumpCmd) {
+    theParameters->SetIsPrintedFlag(false);
     theParameters->Dump();
   } else if (command == mscCmd || command == msc1Cmd) {
     G4MscStepLimitType msctype = fUseSafety;
@@ -605,9 +619,19 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
       return; 
     }
     theParameters->SetNuclearFormfactorType(x);
+  } else if (command == ssCmd) {
+    G4eSingleScatteringType x = fWVI;
+    if(newValue == "DPWA") { x = fDPWA; }
+    else if(newValue == "Mott") { x = fMott; }
+    else if(newValue != "WVI") { 
+      G4ExceptionDescription ed;
+      ed << " G4eSingleScatteringType type <" << newValue << "> unknown!"; 
+      G4Exception("G4EmParametersMessenger", "em0044", JustWarning, ed);
+      return; 
+    }
+    theParameters->SetSingleScatteringType(x);
   } else if ( command==tripletCmd ) {
     theParameters->SetConversionType(tripletCmd->GetNewIntValue(newValue));
-    physicsModified = true;
   } else if ( command==onIsolatedCmd ) {
     theParameters->SetOnIsolated(onIsolatedCmd->GetNewBoolValue(newValue));
     physicsModified = true;

@@ -923,10 +923,9 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector& globalPoint,
   // Requires further investigation and eventually reimplementation of
   // LevelLocate() to take into account point and direction ...
   //
-  if  ( ( (ourStep<fMinStep) && (sampleSafety<halfkCarTolerance) )
-     && ( repLogical->GetSolid()->Inside(localPoint)==kSurface ) )
+  if( ourStep<fMinStep )
   {
-    ourStep = 100*kCarTolerance;
+    ourStep = 2*kCarTolerance;
   }
 
   if ( motherSafety<ourSafety )

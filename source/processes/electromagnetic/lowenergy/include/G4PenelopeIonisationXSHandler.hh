@@ -58,12 +58,11 @@ class G4PenelopeCrossSection;
 
 class G4PenelopeIonisationXSHandler 
 {
-
 public:  
   //! Constructor. nBins is the number of intervals in the 
   //! energy grid. By default the energy grid goes from 100 eV
   //! to 100 GeV.
-  G4PenelopeIonisationXSHandler(size_t nBins=200);
+  explicit G4PenelopeIonisationXSHandler(size_t nBins=200);
   
   //! Destructor. Clean all tables.
   virtual ~G4PenelopeIonisationXSHandler();
@@ -75,16 +74,16 @@ public:
   const G4PenelopeCrossSection* GetCrossSectionTableForCouple(const G4ParticleDefinition*,
 							      const G4Material*,const G4double cut) const;
   //!Setter for the verbosity level
-  void SetVerboseLevel(G4int vl){verboseLevel = vl;};
+  void SetVerboseLevel(G4int vl){fVerboseLevel = vl;};
 
   //! This can be inkoved only by the master
   void BuildXSTable(const G4Material*,G4double cut,
 		    const G4ParticleDefinition*,G4bool isMaster=true);
 
-private:
-  G4PenelopeIonisationXSHandler & operator=(const G4PenelopeIonisationXSHandler &right);
-  G4PenelopeIonisationXSHandler(const G4PenelopeIonisationXSHandler&);
+  G4PenelopeIonisationXSHandler & operator=(const G4PenelopeIonisationXSHandler &right) = delete;
+  G4PenelopeIonisationXSHandler(const G4PenelopeIonisationXSHandler&) = delete;
 
+private:
   void BuildDeltaTable(const G4Material*);
 
   G4DataVector* ComputeShellCrossSectionsElectron(G4PenelopeOscillator* ,
@@ -96,21 +95,20 @@ private:
 		                                  G4double delta);
 
   //Oscillator manager
-  G4PenelopeOscillatorManager* oscManager;
+  G4PenelopeOscillatorManager* fOscManager;
 
   //G4PenelopeCrossSection takes care of the logs
-  std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*> *XSTableElectron;
-  std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*> *XSTablePositron;
+  std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*> *fXSTableElectron;
+  std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*> *fXSTablePositron;
   
   //delta vs. log(energy)
-  std::map<const G4Material*,G4PhysicsFreeVector*> *theDeltaTable;
+  std::map<const G4Material*,G4PhysicsFreeVector*> *fDeltaTable;
 
   //energy grid
-  G4PhysicsLogVector* energyGrid;
-  size_t nBins;
-
-  G4int verboseLevel;
-
+  G4PhysicsLogVector* fEnergyGrid;
+ 
+  G4int fVerboseLevel;
+  size_t fNBins;
 };
 
 #endif

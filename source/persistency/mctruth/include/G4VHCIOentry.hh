@@ -23,47 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VHCIOentry.hh
+// G4VHCIOentry
 //
-// History:
-//   '01.09.12  Youhei Morita  Initial creation
+// Class Description:
+//
+// Abstract base class for hits collection I/O manager entry.
 
-#ifndef VHCIO_ENTRY_T_HH
-#define VHCIO_ENTRY_T_HH 1
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
+#ifndef G4VHCIOENTRYT_HH
+#define G4VHCIOENTRYT_HH 1
 
 #include "G4Types.hh"
-#include <string>
 #include "G4PersistencyCenter.hh"
-
-// Class Description:
-//   Abstract base class for hits collection I/O manager entry
 
 class G4VHCIOentry
 {
-    public: // With description
-      G4VHCIOentry(std::string n);
+  public:
+
+    G4VHCIOentry(const G4String& n);
       // Constructor
 
-      virtual ~G4VHCIOentry() {}
+    virtual ~G4VHCIOentry() {}
       // Destructor
 
-    public: // With description
-      void SetVerboseLevel(G4int v) { m_verbose = v; }
-      // Set verbose level.
+    void SetVerboseLevel(G4int v) { m_verbose = v; }
+      // Sets verbose level.
 
-      std::string GetName() { return m_name; }
+    const G4String& GetName() { return m_name; }
       // Returns the name of the HC I/O manager entry
 
-      virtual void CreateHCIOmanager(std::string, std::string) {}
-      // virtual method for creating HC I/O manager for the detector
+    virtual void CreateHCIOmanager(const G4String&, const G4String&) {}
+      // Virtual method for creating HC I/O manager for the detector
 
-    protected:
-      G4int m_verbose;
+  protected:
 
-    private:
-      std::string m_name;
+    G4int m_verbose = 0;
 
-}; // End of class G4VHCIOentry
+  private:
+
+    G4String m_name;
+};
 
 #endif
-

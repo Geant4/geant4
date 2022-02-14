@@ -86,6 +86,12 @@ doiPETDetectorConstructionMessenger::doiPETDetectorConstructionMessenger(doiPETD
 	changePhantomLengthCmd->SetRange("length>0");
 	changePhantomLengthCmd->AvailableForStates(G4State_PreInit);
 
+	//Change the number of sleeves to be placed
+	changeNumOfSleevesCmd = new G4UIcmdWithAnInteger("/changePhantom/NumberOfSleeves",this);
+	changeNumOfSleevesCmd->SetParameterName("choice",false);
+	changeNumOfSleevesCmd->AvailableForStates(G4State_PreInit);
+
+
 }
 
 ////////// Destructor //////////////////////////////////////////////
@@ -97,6 +103,7 @@ doiPETDetectorConstructionMessenger::~doiPETDetectorConstructionMessenger()
 	delete changeThePhantomPositionCmd;
 	delete changePhantomRadiusCmd;
 	delete changePhantomLengthCmd;
+	delete changeNumOfSleevesCmd;
 
 
 }
@@ -117,6 +124,10 @@ void doiPETDetectorConstructionMessenger::SetNewValue(G4UIcommand* command,G4Str
 	else if (command == changePhantomLengthCmd)
 	{
 		Detector->SetPhantomLength(changePhantomLengthCmd->GetNewDoubleValue(newValue));
+	}
+	else if (command == changeNumOfSleevesCmd)
+	{
+		Detector->SetNumberOfSleeves(changeNumOfSleevesCmd->GetNewIntValue(newValue));
 	}
 }
 

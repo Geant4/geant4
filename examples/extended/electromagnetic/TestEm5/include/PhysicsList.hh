@@ -49,14 +49,13 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
- ~PhysicsList();
+ ~PhysicsList() override;
 
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
         
   void AddPhysicsList(const G4String& name);
     
-  virtual void ConstructProcess();    
-  void AddDecay();
+  void ConstructProcess() override;    
   void AddStepMax();
     
 private:

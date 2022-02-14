@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4VIS_BUILD_OI_DRIVER
 
 /*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */
@@ -50,7 +49,11 @@ void SoGL2PSAction::initClass(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  SO_ACTION_INIT_CLASS(SoGL2PSAction,SoGLRenderAction);
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_ACTION_INIT_CLASS(SoGL2PSAction,SoGLRenderAction);
+  }
 }
 //////////////////////////////////////////////////////////////////////////////
 SoGL2PSAction::SoGL2PSAction(
@@ -159,5 +162,3 @@ void SoGL2PSAction::beginTraversal(
     SoGLRenderAction::beginTraversal(aNode);
   }
 }
-
-#endif

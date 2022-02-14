@@ -39,12 +39,11 @@
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:G4UImessenger(),fPhysicsList(pPhys)
+  :G4UImessenger(),fPhysicsList(pPhys)
 {
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");
@@ -54,6 +53,7 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fListCmd->SetParameterName("PList",false);
   fListCmd->AvailableForStates(G4State_PreInit);
   fListCmd->SetToBeBroadcasted(false);      
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +69,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
   if( command == fListCmd )
-   { fPhysicsList->AddPhysicsList(newValue);}
+    { fPhysicsList->AddPhysicsList(newValue); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

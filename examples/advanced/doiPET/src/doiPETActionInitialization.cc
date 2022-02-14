@@ -49,8 +49,10 @@
 doiPETActionInitialization::doiPETActionInitialization()
 : G4VUserActionInitialization()
 {}*/
-doiPETActionInitialization::doiPETActionInitialization() : G4VUserActionInitialization()
-{}
+doiPETActionInitialization::doiPETActionInitialization(doiPETAnalysis* analysisMan) : G4VUserActionInitialization()
+{
+	analysis = analysisMan;
+}
 
 doiPETActionInitialization::~doiPETActionInitialization()
 {}
@@ -59,7 +61,11 @@ doiPETActionInitialization::~doiPETActionInitialization()
 //
 void doiPETActionInitialization::BuildForMaster() const
 {
-	doiPETRunAction* runAction = new doiPETRunAction();
+#ifdef ANALYSIS_USE
+	 doiPETRunAction* runAction = new doiPETRunAction(analysis);
+#else
+ 	doiPETRunAction* runAction = new doiPETRunAction();
+#endif
 	SetUserAction(runAction);
 }
 
@@ -69,7 +75,11 @@ void doiPETActionInitialization::Build() const
 	doiPETPrimaryGeneratorAction* primary = new doiPETPrimaryGeneratorAction();
 	SetUserAction(primary);
 
-	doiPETRunAction* runAction = new doiPETRunAction();
+#ifdef ANALYSIS_USE
+	 doiPETRunAction* runAction = new doiPETRunAction(analysis);
+#else
+ 	doiPETRunAction* runAction = new doiPETRunAction();
+#endif
 	SetUserAction(runAction);
 
 	SetUserAction(new doiPETEventAction());  

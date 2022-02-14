@@ -99,7 +99,7 @@ template <int NBINS>
 G4double G4CascadeInterpolator<NBINS>::
 interpolate(const G4double (&yb)[nBins]) const {
   // Treat boundary extrapolations specially, otherwise just truncate
-  G4int i = (lastVal<0) ? 0 : (lastVal>last) ? last-1 : G4int(lastVal);
+  G4int i = (lastVal<0) ? 0 : (lastVal>G4double(last)) ? last-1 : G4int(lastVal);
   G4double frac = lastVal - G4double(i);	// May be <0 or >1 if extrapolating
 
   // Special case:  if exactly on upper bin edge, just return value

@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 ////////////////////////////////////////////////////////////////////////
 // G4SurfaceProperty Implementation
 ////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@
 // Class Description:
 //
 // A base class describing a surface property.
-// Derived classes are G4Opticalsurface, G4Firovsurface, etc.      
+// Derived classes are G4Opticalsurface, G4Firovsurface, etc.
 //
 // File:        G4SurfaceProperty.cc
 // Version:     1.0
@@ -48,32 +48,21 @@
 
 G4SurfacePropertyTable G4SurfaceProperty::theSurfacePropertyTable;
 
-//
-// Constructor and destructor
-//
-G4SurfaceProperty::G4SurfaceProperty( const G4String& name,
-			                    G4SurfaceType type )
-  : theName(name), theType(type)
+G4SurfaceProperty::G4SurfaceProperty(const G4String& name, G4SurfaceType type)
+  : theName(name)
+  , theType(type)
 {
   theSurfacePropertyTable.push_back(this);
 }
 
-//
-// Dummy constructor
-//
 G4SurfaceProperty::G4SurfaceProperty()
-  : theName("Dielectric"), theType(dielectric_metal)
+  : theName("Dielectric")
+  , theType(dielectric_metal)
 {
   theSurfacePropertyTable.push_back(this);
 }
 
-G4SurfaceProperty::~G4SurfaceProperty()
-{
-}
-
-//
-// Methods
-//
+G4SurfaceProperty::~G4SurfaceProperty() {}
 
 const G4SurfacePropertyTable* G4SurfaceProperty::GetSurfacePropertyTable()
 {
@@ -86,18 +75,16 @@ size_t G4SurfaceProperty::GetNumberOfSurfaceProperties()
 }
 
 // Dump info for known surface properties
-//
 void G4SurfaceProperty::DumpTableInfo()
 {
   G4cout << "***** Surface Property Table : Nb of Surface Properties = "
          << GetNumberOfSurfaceProperties() << " *****" << G4endl;
 
-  for (size_t i=0; i<theSurfacePropertyTable.size(); i++)
+  for(size_t i = 0; i < theSurfacePropertyTable.size(); i++)
   {
     G4SurfaceProperty* pSurfaceProperty = theSurfacePropertyTable[i];
     G4cout << pSurfaceProperty->GetName() << " : " << G4endl
-           << "  Surface Property type   = " 
-           << pSurfaceProperty->GetType()
+           << "  Surface Property type   = " << pSurfaceProperty->GetType()
            << G4endl;
   }
   G4cout << G4endl;
@@ -107,10 +94,11 @@ void G4SurfaceProperty::CleanSurfacePropertyTable()
 {
   DumpTableInfo();
   G4SurfacePropertyTable::iterator pos;
-  for(pos=theSurfacePropertyTable.begin();
-      pos!=theSurfacePropertyTable.end(); pos++)
+  for(pos = theSurfacePropertyTable.begin();
+      pos != theSurfacePropertyTable.end(); pos++)
   {
-    if (*pos) delete *pos;
+    if(*pos)
+      delete *pos;
   }
   theSurfacePropertyTable.clear();
   DumpTableInfo();

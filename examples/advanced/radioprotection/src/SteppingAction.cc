@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: Susanna Guatelli, susanna@uow.edu.au,
-// Authors: Jeremy Davis, jad028@uowmail.edu.au
+// Authors: Susanna Guatelli and Francesco Romano
+// susanna@uow.edu.au, francesco.romano@ct.infn.it
 //
 
 #include "G4ios.hh"
@@ -57,6 +57,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   // Retrieve the secondary particles
     fSecondary = steppingManager -> GetfSecondary();
+	
+	
 
 #ifdef ANALYSIS_USE  
    for(size_t lp1=0;lp1<(*fSecondary).size(); lp1++)
@@ -69,10 +71,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
        G4double charge = (*fSecondary)[lp1] -> GetDynamicParticle() -> GetDefinition() -> GetPDGCharge();
        G4int AA = (*fSecondary)[lp1] -> GetDynamicParticle() -> GetDefinition() -> GetBaryonNumber();
           
-     if (volumeName == "SV_phys1") 
+     if (volumeName == "SV_phys1" || volumeName == "sen_bridge" || volumeName == "physSensitiveBridgeVolume") 
 //Testing with larger volume!
 //if (volumeName == "DiaVol_phys")
 	 {
+	//	 G4cout << "Particle in = " << volumeName << G4endl;
 	   if ((secondaryParticleName == "proton") ||
                (secondaryParticleName == "neutron")||
                (secondaryParticleName == "alpha") ||

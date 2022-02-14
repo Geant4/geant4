@@ -30,7 +30,7 @@
 #include "G4SDManager.hh"
 
 G4VSDFilter::G4VSDFilter(G4String name)
-:filterName(name)
+  : filterName(name)
 {
   G4SDManager::GetSDMpointer()->RegisterSDFilter(this);
 }
@@ -39,4 +39,3 @@ G4VSDFilter::~G4VSDFilter()
 {
   G4SDManager::GetSDMpointer()->DeRegisterSDFilter(this);
 }
-

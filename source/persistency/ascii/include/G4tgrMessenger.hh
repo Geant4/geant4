@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrMessenger
+// G4tgrMessenger
 //
 // Class description:
 //
 // Concrete class of G4UImessenger which takes care of commands for
 // the geometry generation from text file.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrMessenger_h
-#define G4tgrMessenger_h 1
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrMessenger_hh
+#define G4tgrMessenger_hh 1
 
 #include "G4UImessenger.hh"
 
@@ -47,20 +42,20 @@ class G4UIcmdWithAnInteger;
 
 class G4tgrMessenger : public G4UImessenger
 {
-  public:  // with description
+  public:
 
     G4tgrMessenger();
-   ~G4tgrMessenger();
+    ~G4tgrMessenger();
 
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    void SetNewValue(G4UIcommand* command, G4String newValues);
+    G4String GetCurrentValue(G4UIcommand* command);
     static G4int GetVerboseLevel();
-    static void SetVerboseLevel( G4int verb );
-  
+    static void SetVerboseLevel(G4int verb);
+
   private:
 
-    G4UIdirectory* tgDirectory;
-    G4UIcmdWithAnInteger* verboseCmd;
+    G4UIdirectory* tgDirectory = nullptr;
+    G4UIcmdWithAnInteger* verboseCmd = nullptr;
     static G4ThreadLocal G4int theVerboseLevel;
 };
 

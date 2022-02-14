@@ -23,47 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIaliasList
 //
+// Class description:
 //
+// This class is exclusively used by G4UImanager for handling the
+// alias list.
 
-#ifndef G4UIaliasList_h
-#define G4UIaliasList_h 1
+// Author: M.Asai, 1 October 2001
+// --------------------------------------------------------------------
+#ifndef G4UIaliasList_hh
+#define G4UIaliasList_hh 1
 
-
-#include "globals.hh"
 #include <vector>
 
-// class description:
-//
-//  This class is exclusively used by G4UImanager for handling the
-// alias list.
-// 
+#include "globals.hh"
 
-class G4UIaliasList 
+class G4UIaliasList
 {
   public:
-      G4UIaliasList();
-      ~G4UIaliasList();
+
+    G4UIaliasList();
+    ~G4UIaliasList();
+
+    void RemoveAlias(const char* aliasName);
+    void ChangeAlias(const char* aliasName, const char* aliasValue);
+    G4String* FindAlias(const char* aliasName);
+    void List();
 
   private:
-      G4bool operator==(const G4UIaliasList &right) const;
-      G4bool operator!=(const G4UIaliasList &right) const;
 
-  public:
-      void RemoveAlias(const char* aliasName);
-      void ChangeAlias(const char* aliasName, const char* aliasValue);
-      G4String* FindAlias(const char* aliasName);
-      void List();
+    G4bool operator==(const G4UIaliasList& right) const;
+    G4bool operator!=(const G4UIaliasList& right) const;
 
-  private:
-      void AddNewAlias(const char* aliasName, const char* aliasValue);
-      G4int FindAliasID(const char* aliasName);
+    void AddNewAlias(const char* aliasName, const char* aliasValue);
+    G4int FindAliasID(const char* aliasName);
 
-  private:
-      std::vector<G4String*> alias;
-      std::vector<G4String*> value;
-
+    std::vector<G4String*> alias;
+    std::vector<G4String*> value;
 };
 
 #endif
-

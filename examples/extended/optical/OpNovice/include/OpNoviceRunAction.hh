@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -34,25 +34,26 @@
 #include "globals.hh"
 #include "G4UserRunAction.hh"
 
+class OpNovicePrimaryGeneratorAction;
+class OpNoviceRun;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Timer;
 class G4Run;
 
 class OpNoviceRunAction : public G4UserRunAction
 {
-  public:
-    OpNoviceRunAction();
-    virtual ~OpNoviceRunAction();
+ public:
+  OpNoviceRunAction(OpNovicePrimaryGeneratorAction* = nullptr);
+  ~OpNoviceRunAction();
 
-  public:
-    virtual void BeginOfRunAction(const G4Run* aRun);
-    virtual void EndOfRunAction(const G4Run* aRun);
+  G4Run* GenerateRun() override;
+  void BeginOfRunAction(const G4Run*) override;
+  void EndOfRunAction(const G4Run*) override;
 
-  private:
-    G4Timer* fTimer;
+ private:
+  OpNoviceRun* fRun;
+  OpNovicePrimaryGeneratorAction* fPrimary;
 };
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif /*OpNoviceRunAction_h*/
+#endif

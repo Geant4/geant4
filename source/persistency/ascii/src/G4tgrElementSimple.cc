@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrElementSimple implementation
 //
-//
-//
-// class G4tgrElementSimple
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrElementSimple.hh"
 
@@ -38,46 +34,42 @@
 #include "G4tgrUtils.hh"
 #include "G4tgrMessenger.hh"
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrElementSimple::G4tgrElementSimple()
-  : theZ(0.), theA(0.)
 {
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrElementSimple::~G4tgrElementSimple()
 {
 }
 
-
-// -------------------------------------------------------------------------
-G4tgrElementSimple::G4tgrElementSimple( const std::vector<G4String>& wl ) 
+// --------------------------------------------------------------------
+G4tgrElementSimple::G4tgrElementSimple(const std::vector<G4String>& wl)
 {
-  //---------- Check for miminum number of words read 
-  G4tgrUtils::CheckWLsize( wl, 5, WLSIZE_EQ,
-                           "G4tgrElementSimple::G4tgrElementSimple");
+  //---------- Check for miminum number of words read
+  G4tgrUtils::CheckWLsize(wl, 5, WLSIZE_EQ,
+                          "G4tgrElementSimple::G4tgrElementSimple");
 
-  theType = "ElementSimple";
-  theName = G4tgrUtils::GetString( wl[1] );
-  theSymbol = G4tgrUtils::GetString( wl[2] );
-  theZ = G4tgrUtils::GetInt( wl[3] );
-  theA = G4tgrUtils::GetDouble( wl[4], g/mole);
+  theType   = "ElementSimple";
+  theName   = G4tgrUtils::GetString(wl[1]);
+  theSymbol = G4tgrUtils::GetString(wl[2]);
+  theZ      = G4tgrUtils::GetInt(wl[3]);
+  theA      = G4tgrUtils::GetDouble(wl[4], g / mole);
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 1)
   {
-     G4cout << " Created " << *this << G4endl;
+    G4cout << " Created " << *this << G4endl;
   }
 #endif
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrElementSimple& obj)
 {
-  os << "G4tgrElementSimple= " << obj.theName
-     << " Z = " << obj.theZ << " A= " << obj.theA << G4endl;
+  os << "G4tgrElementSimple= " << obj.theName << " Z = " << obj.theZ
+     << " A= " << obj.theA << G4endl;
 
   return os;
 }

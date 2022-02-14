@@ -295,12 +295,7 @@ void G4FastStep::Initialize(const G4Track&)
 }
 
 G4FastStep::G4FastStep()
-  : G4VParticleChange(),
-    theEnergyChange    ( 0.0     ),
-    theTimeChange      ( 0.0     ),
-    theProperTimeChange( 0.0     ),
-    fFastTrack         ( nullptr ),
-    theWeightChange    ( 0.0     )
+  : G4VParticleChange()
 {
   if (verboseLevel>2)
   {

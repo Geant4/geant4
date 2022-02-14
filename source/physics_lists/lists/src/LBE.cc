@@ -48,6 +48,7 @@
 // 16-08-10 Remove inclusion of obsolete class of G4ParticleWithCuts 
 // 20-10-10 Migrate LowEnergy process to Livermore models, LP
 // 28-03-13 Replace LEP/HEP with FTFP+BERT (A.R.)
+// 15-01-20 Updated cross sections (A.R.)
 // --------------------------------------------------------------
 
 #include <iomanip>  
@@ -69,18 +70,18 @@
 #include "G4StoppingPhysics.hh"
 
 #include "G4HadronicParameters.hh"
-
+#include "G4ShortLivedConstructor.hh"
 #include "LBE.hh"
 
 // Constructor /////////////////////////////////////////////////////////////
 LBE::LBE(G4int ver)
 {
-
-  G4cout << "You are using the simulation engine: LBE"<<G4endl;
-  G4cout <<G4endl<<G4endl;
+  if(ver > 0) {
+    G4cout << "You are using the simulation engine: LBE"<<G4endl;
+    G4cout <<G4endl;
+  }
   defaultCutValue     = 1.0*CLHEP::micrometer; //
   cutForGamma         = defaultCutValue;
-//  cutForElectron      = 1.0*CLHEP::nanometer;
   cutForElectron      = 1.0*CLHEP::micrometer;
   cutForPositron      = defaultCutValue;
   //not used:
@@ -191,7 +192,8 @@ LBE::~LBE()
  void LBE::ConstructMyShortLiveds()
 {
   // ShortLiveds
-  ;
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();
 }
 
 
@@ -441,8 +443,6 @@ LBE::~LBE()
   G4Scintillation* theScintProcessDef = new G4Scintillation("Scintillation");
   // theScintProcessDef->DumpPhysicsTable();
   theScintProcessDef->SetTrackSecondariesFirst(true);
-  theScintProcessDef->SetScintillationYieldFactor(1.0); //
-  theScintProcessDef->SetScintillationExcitationRatio(0.0); //
   theScintProcessDef->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for alpha:
@@ -450,8 +450,6 @@ LBE::~LBE()
   G4Scintillation* theScintProcessAlpha = new G4Scintillation("Scintillation");
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessAlpha->SetTrackSecondariesFirst(true);
-  theScintProcessAlpha->SetScintillationYieldFactor(1.1);
-  theScintProcessAlpha->SetScintillationExcitationRatio(1.0);
   theScintProcessAlpha->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for heavy nuclei
@@ -459,8 +457,6 @@ LBE::~LBE()
   G4Scintillation* theScintProcessNuc = new G4Scintillation("Scintillation");
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessNuc->SetTrackSecondariesFirst(true);
-  theScintProcessNuc->SetScintillationYieldFactor(0.2);
-  theScintProcessNuc->SetScintillationExcitationRatio(1.0);
   theScintProcessNuc->SetVerboseLevel(OpVerbLevel);
 
   // optical processes
@@ -524,7 +520,7 @@ LBE::~LBE()
 
 // Elastic processes:
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronCaptureProcess.hh"
 #include "G4HadronElastic.hh"
 #include "G4ChipsElasticModel.hh"
 #include "G4ElasticHadrNucleusHE.hh"
@@ -534,22 +530,14 @@ LBE::~LBE()
 #include "G4ChipsProtonElasticXS.hh"
 #include "G4ChipsNeutronElasticXS.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"  
+#include "G4ChipsKaonMinusElasticXS.hh"
+#include "G4ChipsKaonPlusElasticXS.hh"
+#include "G4ChipsKaonZeroElasticXS.hh"
+#include "G4BGGNucleonElasticXS.hh"
 #include "G4CrossSectionElastic.hh"
 
 // Inelastic processes:
-#include "G4PionPlusInelasticProcess.hh"
-#include "G4PionMinusInelasticProcess.hh"
-#include "G4KaonPlusInelasticProcess.hh"
-#include "G4KaonZeroSInelasticProcess.hh"
-#include "G4KaonZeroLInelasticProcess.hh"
-#include "G4KaonMinusInelasticProcess.hh"
-#include "G4ProtonInelasticProcess.hh"
-#include "G4AntiProtonInelasticProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
-#include "G4AntiNeutronInelasticProcess.hh"
-#include "G4DeuteronInelasticProcess.hh"
-#include "G4TritonInelasticProcess.hh"
-#include "G4AlphaInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 
 // FTFP + BERT model
 #include "G4TheoFSGenerator.hh"
@@ -561,8 +549,7 @@ LBE::~LBE()
 #include "G4ExcitedStringDecay.hh"
 #include "G4CascadeInterface.hh"
 #include "G4CrossSectionInelastic.hh"
-#include "G4PiNuclearCrossSection.hh"
-#include "G4CrossSectionPairGG.hh"
+#include "G4BGGPionInelasticXS.hh"
 #include "G4ChipsKaonMinusInelasticXS.hh"
 #include "G4ChipsKaonPlusInelasticXS.hh"
 #include "G4ChipsKaonZeroInelasticXS.hh"
@@ -592,16 +579,16 @@ LBE::~LBE()
  void LBE::ConstructHad() 
 {
   // Elastic scattering
-  const G4double elastic_elimitPi = 1.0*CLHEP::GeV;
-
   G4HadronElastic* elastic_lhep0 = new G4HadronElastic();
-  G4HadronElastic* elastic_lhep1 = new G4HadronElastic();
-  elastic_lhep1->SetMaxEnergy( elastic_elimitPi );
-
   G4ChipsElasticModel* elastic_chip = new G4ChipsElasticModel();
-
   G4ElasticHadrNucleusHE* elastic_he = new G4ElasticHadrNucleusHE(); 
-  elastic_he->SetMinEnergy( elastic_elimitPi );
+
+  const G4double elastic_elimitAntiNuc = 100.0*CLHEP::MeV;
+  G4AntiNuclElastic* elastic_anuc = new G4AntiNuclElastic();
+  elastic_anuc->SetMinEnergy( elastic_elimitAntiNuc );
+  G4CrossSectionElastic* elastic_anucxs = new G4CrossSectionElastic( elastic_anuc->GetComponentCrossSection() );
+  G4HadronElastic* elastic_lhep2 = new G4HadronElastic();
+  elastic_lhep2->SetMaxEnergy( elastic_elimitAntiNuc );
 
   // Inelastic scattering
   const G4double theFTFMin0 =    0.0*CLHEP::GeV;
@@ -647,8 +634,6 @@ LBE::~LBE()
   theIonBC->SetMinEnergy( theIonBCMin );
   theIonBC->SetMaxEnergy( theIonBCMax );
 
-  G4VCrossSectionDataSet * thePiData = new G4CrossSectionPairGG(
-  (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*CLHEP::GeV );
   G4VCrossSectionDataSet * theAntiNucleonData = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
   G4ComponentGGNuclNuclXsc * ggNuclNuclXsec = new G4ComponentGGNuclNuclXsc();
   G4VCrossSectionDataSet * theGGNuclNuclData = new G4CrossSectionInelastic(ggNuclNuclXsec);
@@ -666,12 +651,11 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->AddDataSet( new G4BGGPionElasticXS( particle ) );
-          theElasticProcess->RegisterMe( elastic_lhep1 );
           theElasticProcess->RegisterMe( elastic_he );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-	  G4PionPlusInelasticProcess* theInelasticProcess = new G4PionPlusInelasticProcess("inelastic");
-          theInelasticProcess->AddDataSet( thePiData );
+          G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4PionPlus::Definition() );
+          theInelasticProcess->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
           theInelasticProcess->RegisterMe( theBERTModel0 );
 	  pmanager->AddDiscreteProcess( theInelasticProcess );
@@ -682,12 +666,11 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->AddDataSet( new G4BGGPionElasticXS( particle ) );
-          theElasticProcess->RegisterMe( elastic_lhep1 );
           theElasticProcess->RegisterMe( elastic_he );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-	  G4PionMinusInelasticProcess* theInelasticProcess = new G4PionMinusInelasticProcess("inelastic");
-          theInelasticProcess->AddDataSet( thePiData );
+          G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4PionMinus::Definition() );	  
+          theInelasticProcess->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
           theInelasticProcess->RegisterMe( theBERTModel0 );
 	  pmanager->AddDiscreteProcess( theInelasticProcess );
@@ -698,9 +681,11 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->RegisterMe( elastic_lhep0 );
+          theElasticProcess->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusElasticXS::Default_Name()));
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-          G4KaonPlusInelasticProcess* theInelasticProcess = new G4KaonPlusInelasticProcess("inelastic");
+          G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4KaonPlus::Definition() );
+	  
           theInelasticProcess->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
           theInelasticProcess->RegisterMe( theBERTModel0 );
@@ -712,9 +697,10 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->RegisterMe( elastic_lhep0 );
+          theElasticProcess->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroElasticXS::Default_Name()));
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-          G4KaonZeroSInelasticProcess* theInelasticProcess = new G4KaonZeroSInelasticProcess("inelastic");
+	  G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4KaonZeroShort::Definition() );
           theInelasticProcess->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
           theInelasticProcess->RegisterMe( theBERTModel0 );
@@ -726,9 +712,11 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->RegisterMe( elastic_lhep0 );
+          theElasticProcess->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroElasticXS::Default_Name()));
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-          G4KaonZeroLInelasticProcess* theInelasticProcess = new G4KaonZeroLInelasticProcess("inelastic");
+          //G4KaonZeroLInelasticProcess* theInelasticProcess = new G4KaonZeroLInelasticProcess("inelastic");
+	  G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4KaonZeroLong::Definition() );
           theInelasticProcess->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
           theInelasticProcess->RegisterMe( theBERTModel0 ); 
@@ -740,9 +728,10 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->RegisterMe( elastic_lhep0 );
+          theElasticProcess->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusElasticXS::Default_Name()));
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-          G4KaonMinusInelasticProcess* theInelasticProcess = new G4KaonMinusInelasticProcess("inelastic");
+	  G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4KaonMinus::Definition() );
           theInelasticProcess->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
           theInelasticProcess->RegisterMe( theBERTModel0 );
@@ -754,10 +743,11 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsProtonElasticXS::Default_Name()));
+          theElasticProcess->AddDataSet( new G4BGGNucleonElasticXS( G4Proton::Proton() ) );
           theElasticProcess->RegisterMe( elastic_chip );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-          G4ProtonInelasticProcess* theInelasticProcess =  new G4ProtonInelasticProcess("inelastic");
+	  G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4Proton::Definition() );
           theInelasticProcess->AddDataSet( new G4BGGNucleonInelasticXS( G4Proton::Proton() ) );
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
           theInelasticProcess->RegisterMe( theBERTModel0 );
@@ -767,19 +757,13 @@ LBE::~LBE()
       else if (particleName == "anti_proton") 
 	{
           // Elastic scattering
-          const G4double elastic_elimitAntiNuc = 100.0*CLHEP::MeV;
-          G4AntiNuclElastic* elastic_anuc = new G4AntiNuclElastic();
-          elastic_anuc->SetMinEnergy( elastic_elimitAntiNuc );
-          G4CrossSectionElastic* elastic_anucxs = new G4CrossSectionElastic( elastic_anuc->GetComponentCrossSection() );
-          G4HadronElastic* elastic_lhep2 = new G4HadronElastic();
-          elastic_lhep2->SetMaxEnergy( elastic_elimitAntiNuc );
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->AddDataSet( elastic_anucxs );
           theElasticProcess->RegisterMe( elastic_lhep2 );
           theElasticProcess->RegisterMe( elastic_anuc );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-          G4AntiProtonInelasticProcess* theInelasticProcess = new G4AntiProtonInelasticProcess("inelastic");
+	  G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4AntiProton::Definition() );
           theInelasticProcess->AddDataSet( theAntiNucleonData );
 	  theInelasticProcess->RegisterMe( theFTFModel0 );
 	  pmanager->AddDiscreteProcess( theInelasticProcess );
@@ -799,7 +783,7 @@ LBE::~LBE()
 	theElasticProcess->AddDataSet( new G4ParticleHPElasticData );
 	pmanager->AddDiscreteProcess( theElasticProcess );
 	// inelastic scattering
-	G4NeutronInelasticProcess* theInelasticProcess = new G4NeutronInelasticProcess("inelastic");
+	G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4Neutron::Definition() );
         theInelasticProcess->AddDataSet( new G4BGGNucleonInelasticXS( G4Neutron::Neutron() ) );
 	theInelasticProcess->RegisterMe( theFTFModel1 );
         theInelasticProcess->RegisterMe( theBERTModel1 );
@@ -810,7 +794,7 @@ LBE::~LBE()
 	theInelasticProcess->AddDataSet( new G4ParticleHPInelasticData );
 	pmanager->AddDiscreteProcess(theInelasticProcess);
 	// capture
-	G4HadronCaptureProcess* theCaptureProcess = new G4HadronCaptureProcess;
+	G4NeutronCaptureProcess* theCaptureProcess = new G4NeutronCaptureProcess;
 	G4ParticleHPCapture * theNeutronCaptureHPModel = new G4ParticleHPCapture;
         theNeutronCaptureHPModel->SetMinEnergy( theHPMin );
         theNeutronCaptureHPModel->SetMaxEnergy( theHPMax );
@@ -826,10 +810,12 @@ LBE::~LBE()
 	{
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
-          theElasticProcess->RegisterMe( elastic_lhep0 );
+          theElasticProcess->AddDataSet( elastic_anucxs );
+          theElasticProcess->RegisterMe( elastic_lhep2 );
+          theElasticProcess->RegisterMe( elastic_anuc );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-	  G4AntiNeutronInelasticProcess* theInelasticProcess = new G4AntiNeutronInelasticProcess("inelastic");
+	  G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4AntiNeutron::Definition() );
           theInelasticProcess->AddDataSet( theAntiNucleonData );
 	  theInelasticProcess->RegisterMe( theFTFModel0 );
 	  pmanager->AddDiscreteProcess( theInelasticProcess );
@@ -840,9 +826,10 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->RegisterMe( elastic_lhep0 );
+          theElasticProcess->AddDataSet( theGGNuclNuclData );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-	  G4DeuteronInelasticProcess* theInelasticProcess = new G4DeuteronInelasticProcess("inelastic");
+	  G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4Deuteron::Definition() );	  
           theInelasticProcess->AddDataSet( theGGNuclNuclData );
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
 	  theInelasticProcess->RegisterMe( theIonBC );
@@ -854,9 +841,10 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->RegisterMe( elastic_lhep0 );
+          theElasticProcess->AddDataSet( theGGNuclNuclData );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-	  G4TritonInelasticProcess* theInelasticProcess = new G4TritonInelasticProcess("inelastic");
+	  G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4Triton::Definition() );	  
           theInelasticProcess->AddDataSet( theGGNuclNuclData );
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
 	  theInelasticProcess->RegisterMe( theIonBC );
@@ -868,9 +856,10 @@ LBE::~LBE()
           // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
           theElasticProcess->RegisterMe( elastic_lhep0 );
+          theElasticProcess->AddDataSet( theGGNuclNuclData );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
-	  G4AlphaInelasticProcess* theInelasticProcess = new G4AlphaInelasticProcess("inelastic");
+	  G4HadronInelasticProcess* theInelasticProcess = new G4HadronInelasticProcess( "inelastic", G4Alpha::Definition() );	  
           theInelasticProcess->AddDataSet( theGGNuclNuclData );
 	  theInelasticProcess->RegisterMe( theFTFModel1 );
 	  theInelasticProcess->RegisterMe( theIonBC );
@@ -885,7 +874,7 @@ LBE::~LBE()
 
 // Decays ///////////////////////////////////////////////////////////////////
 #include "G4Decay.hh"
-#include "G4RadioactiveDecayBase.hh"
+#include "G4RadioactiveDecay.hh"
 #include "G4IonTable.hh"
 #include "G4Ions.hh"
 
@@ -919,7 +908,7 @@ LBE::~LBE()
   // Declare radioactive decay to the GenericIon in the IonTable.
   const G4IonTable *theIonTable = 
     G4ParticleTable::GetParticleTable()->GetIonTable();
-  G4RadioactiveDecayBase* theRadioactiveDecay = new G4RadioactiveDecayBase();
+  G4RadioactiveDecay* theRadioactiveDecay = new G4RadioactiveDecay();
  
   //Fix for activation of RadioactiveDecay, based on G4RadioactiveDecayPhysics 
   G4EmParameters* param = G4EmParameters::Instance();

@@ -28,8 +28,6 @@
 // 
 // OpenGLImmediateWin32 graphics system factory.
 
-#ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
-
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLSceneHandler.hh"
@@ -75,5 +73,3 @@ G4VViewer* G4OpenGLImmediateWin32::CreateViewer
   }
   return pView;
 }
-
-#endif

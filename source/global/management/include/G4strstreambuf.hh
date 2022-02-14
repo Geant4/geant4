@@ -23,64 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4strstreambuf
 //
+// Class description:
 //
-// ====================================================================
-//
-//   G4strstreambuf
-//
-// ====================================================================
-#ifndef G4_STR_STREAM_BUF_HH
-#define G4_STR_STREAM_BUF_HH
+// Buffer for cout/cerr streaming
+
+// Authors: H.Yoshida, M.Nagamatu - November 1998
+// Revisions: G.Cosmo, 1998-2013
+// --------------------------------------------------------------------
+#ifndef G4STRSTREAMBUF_HH
+#define G4STRSTREAMBUF_HH 1
 
 #include <streambuf>
 
-#include "globals.hh"
 #include "G4coutDestination.hh"
+#include "globals.hh"
 
 class G4strstreambuf;
 
 #ifdef G4MULTITHREADED
 
-  extern G4GLOB_DLL G4strstreambuf*& _G4coutbuf_p();
-  extern G4GLOB_DLL G4strstreambuf*& _G4cerrbuf_p();
-  #define G4coutbuf (*_G4coutbuf_p())
-  #define G4cerrbuf (*_G4cerrbuf_p())
+extern G4GLOB_DLL G4strstreambuf*& _G4coutbuf_p();
+extern G4GLOB_DLL G4strstreambuf*& _G4cerrbuf_p();
+#  define G4coutbuf (*_G4coutbuf_p())
+#  define G4cerrbuf (*_G4cerrbuf_p())
 
 #else  // Sequential
 
-  extern G4GLOB_DLL G4strstreambuf G4coutbuf;
-  extern G4GLOB_DLL G4strstreambuf G4cerrbuf;
+extern G4GLOB_DLL G4strstreambuf G4coutbuf;
+extern G4GLOB_DLL G4strstreambuf G4cerrbuf;
 
 #endif
 
 class G4strstreambuf : public std::basic_streambuf<char>
 {
-  public:
+ public:
+  G4strstreambuf();
+  ~G4strstreambuf();
 
-    G4strstreambuf();
-    ~G4strstreambuf();
-    
-    virtual G4int overflow(G4int c=EOF);
-    virtual G4int sync();
+  virtual G4int overflow(G4int c = EOF);
+  virtual G4int sync();
 
 #ifdef WIN32
-    virtual G4int underflow();
+  virtual G4int underflow();
 #endif
 
-    void SetDestination(G4coutDestination* dest);
-    inline G4coutDestination* GetDestination() const;
-    inline G4int ReceiveString ();
-  
-  private:
+  void SetDestination(G4coutDestination* dest);
+  inline G4coutDestination* GetDestination() const;
+  inline G4int ReceiveString();
 
-    char* buffer;
-    G4int count, size;
-    G4coutDestination* destination;
+ private:
+  char* buffer = nullptr;
+  G4int count = 0, size = 0;
+  G4coutDestination* destination = nullptr;
 
-    // hidden...
-    G4strstreambuf(const G4strstreambuf&);
-    G4strstreambuf& operator=(const G4strstreambuf&);
+  // hidden...
+  G4strstreambuf(const G4strstreambuf&);
+  G4strstreambuf& operator=(const G4strstreambuf&);
 };
 
 #include "G4strstreambuf.icc"

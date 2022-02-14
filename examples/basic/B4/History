@@ -13,9 +13,54 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-<<<<<<< HEAD
-=======
-	 
+
+06-10-21 I. Hrivnacova (exampleB4-V10-07-06)
+- Migration to new G4AnalysisManager.hh header;
+  removed Analysis.hh,
+  define the output file name with an extension
+
+19-07-21 I. Hrivnacova (exampleB4-V10-07-05)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+13-07-21 I. Hrivnacova (exampleB4-V10-07-04)
+- Introduced namespace instead of a class names prefix
+- Declare overriding functions 'override' (and removed 'virtual' keyword)
+
+31-05-21 I. Hrivnacova (exampleB4-V10-07-03)
+- Use G4SteppingVerboseWithUnits, added option to switch to
+  the Geant4 default stepping verbose (-vDefault)
+- Use nullptr instead of 0
+- Clean trailing whitespaces from all files
+
+28/02/21 J. Allison (exampleB4-V10-07-02)
+- Remove visTutor menu in all gui.mac files.
+
+26/02/21 J. Allison (exampleB4-V10-07-01)
+- Remove macros/visTutor.
+  o A movies tutorial is now in examples/extended/visualization/movies.
+
+18/01/21 J. Allison (exampleB4-V10-07-00)
+- Fix README: Update VISUALIZATION TUTORIAL to follow smart parsing.
+
+06/11/20 I. Hrivnacova (exampleB4-V10-06-04)
+- Updated B4Analysis.hh with commented lines for using new generic analysis manager
+- Added "ignoreThreadsExcept 0" setting in run2.mac  (commented)
+
+02/11/20 B.Morgan (exampleB4-V10-06-03)
+- Support same CMake version range as core Geant4
+
+19/07/20 G. Cosmo (exampleB4-V10-06-02)
+- Removed redundant inclusion of headers in example B4d main().
+
+17/07/20 I. Hrivnacova (exampleB4-V10-06-01)
+- Migrated B4d example to use G4RunManagerFactory.
+
+30/06/20 G. Cosmo (exampleB4-V10-06-00)
+- Migrated examples (except for B4d) to use G4RunManagerFactory, therefore
+  implicitly enabling tasking by default in MT builds.
+
 21/11/19 G. Cosmo (exampleB4-V10-05-04)
 - Use default MixMax random engine.
 
@@ -33,14 +78,14 @@ track of all tags.
 - Corrected name of include file: csv.hh.
 
 07/11/18 I. Hrivnacova (exampleB4-V10-04-03)
-- Fixed CMake: added missing plotNtuple.C 
+- Fixed CMake: added missing plotNtuple.C
 
 30/10/18 I. Hrivnacova (exampleB4-V10-04-02)
-- Removed usage of G4ScoreNtupleWriter; 
+- Removed usage of G4ScoreNtupleWriter;
   will be demonstrated in a new extended analysis example
 
 26/10/18 I. Hrivnacova (exampleB4-V10-04-01)
-- Activated storing scorers hits in B4d in Root file using 
+- Activated storing scorers hits in B4d in Root file using
   new G4ScoreNtupleWriter
 - Updated README
 
@@ -76,10 +121,10 @@ track of all tags.
 
 04/05/15 I. Hrivnacova (exampleB4-V10-01-02)
 - Coding guidelines: removed empty lines
-     
+
 18/02/15 I. Hrivnacova (exampleB4-V10-01-01)
 - Fixed accessing gapHit (problem report #1714)
-	 
+
 02/02/15 I. Hrivnacova (exampleB4-V10-01-00)
 - Fixed documentation
 
@@ -105,9 +150,9 @@ track of all tags.
 11/08/14 mma (exampleB4-V10-00-00)
 - Restaure drawing in README and .README
 
-02 December 2013 Ivana Hrivnacova 
+02 December 2013 Ivana Hrivnacova
 - Fixed gui.mac:
-  corrected wireframe parameter, removed run2.mac from gui 
+  corrected wireframe parameter, removed run2.mac from gui
 
 28/11/13 I. Hrivnacova (exampleB4-V09-06-18)
 - Clean-up macros (fixed obsolete comments)
@@ -116,7 +161,7 @@ track of all tags.
 - Fixed deleting fMagFieldMessenger with use of G4AutoDelete utility
 
 30/10/13 I. Hrivnacova (exampleB4-V09-06-16)
-- Added a protection when /run/printProgress value is set to zero 
+- Added a protection when /run/printProgress value is set to zero
 
 30/10/13 I. Hrivnacova (exampleB4-V09-06-15)
 - Updated README
@@ -131,12 +176,12 @@ track of all tags.
 - Using Gent4 default number of threads when not set via command line
 - Updated README
 
-01/10/13 I. Hrivnacova (exampleB4-V09-06-12) 
+01/10/13 I. Hrivnacova (exampleB4-V09-06-12)
 - Updated for changes in analysis:
   removal of G4AnalysisManager::Create(isMaster)
 
 19/08/13 I. Hrivnacova (exampleB4-V09-06-11)
-- Fixed B4[b]RunAction::EndOfRunAction() again: to get the printed 
+- Fixed B4[b]RunAction::EndOfRunAction() again: to get the printed
   histogram statistics correct
 
 24/07/13 P. Gumplinger (exampleB4-V09-06-10)
@@ -159,20 +204,20 @@ track of all tags.
 
 29/05/13 I. Hrivnacova (exampleB4-V09-06-05)
 - Fixed detector construction classes:
-  Moving creating setMagField command from the constructor in 
+  Moving creating setMagField command from the constructor in
   ConstructSDandField(), as the command has to be created per thread,
-  and declaring fMagField and fMessenger data members as static 
+  and declaring fMagField and fMessenger data members as static
   G4ThreadLocal
 
 24/04/13 M. Asai (exampleB4-V09-06-04)
 - Recover GNUmakefiles.
 
 23/04/13 I. Hrivnacova (exampleB4-V09-06-03)
-- Use G4Random::setTheEngine instead of CLHEP::HepRandom in main 
+- Use G4Random::setTheEngine instead of CLHEP::HepRandom in main
   (needed for MT)
 - In B4b: merged  B4bRunAction and B4RunAction in one class
 - Removed unnecessary includes in run action files
-- Minor fixes of coding guidelines 
+- Minor fixes of coding guidelines
 
 18/04/13 M. Asai (exampleB4-V09-06-02)
 - Migrated to the new G4VUserActionInitialization class.
@@ -185,7 +230,7 @@ track of all tags.
 
 28/02/13 I. Hrivnacova
 - When building materials with NistManager
-  do not set fromIsotopes argument (which was set to false), 
+  do not set fromIsotopes argument (which was set to false),
   as since 9.6 all materials have to be built from isotopes.
   Thanks to V. Ivantchenko for pointing at this.
 
@@ -197,7 +242,7 @@ track of all tags.
 
 18/09/12 I. Hrivnacova
 - Updated code using analysis:
-  - Now only a selected analysis manager is included 
+  - Now only a selected analysis manager is included
   - Making directories in output file is optional
   - Adding a line using G4AnalysisManager::GetType()
 - General changes (see basic/History)
@@ -208,7 +253,7 @@ track of all tags.
   constructors in the constructor body and not in the initialization list
   (to avoid passing 'this' in the initializer list).
 
-14/11/11 I. Hrivnacova 
+14/11/11 I. Hrivnacova
 - The first tagged version of the new B4 example
-  (tagged in basic). 
+  (tagged in basic).
   Started from novice/N03.

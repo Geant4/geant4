@@ -20,6 +20,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24, 2021 B. Morgan (exerrprop-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+Nov 03, 2020 B.Morgan (exerrprop-V10-06-00)
+- Support same CMake version range as core Geant4
+
+Jun 13, 2018  G.Cosmo (exerrprop-V10-04-00)
+- Use implicit destructor in ExErrorMagneticField.
+- Updated README.
+
 Oct 16, 2014  I.Hrivnacova (exerrprop-V10-00-00)
 - Fixed coding guidelines (long lines) in errprop.cc, ExErrorDetectorConstruction.cc
 
@@ -29,11 +39,11 @@ Feb 13, 2013  I.Hrivnacova (exerrprop-V09-06-00)
 Sep 4, 2012  I.Hrivnacova (exerrprop-V09-05-05)
 - Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
   where needed
-- Replaced tabulators with space characters  
+- Replaced tabulators with space characters
 
 Sep 4, 2012  I.Hrivnacova (exerrprop-V09-05-04)
 - Updated CMakeLists.txt:
-  adding copying macros (empty), install target and comment lines 
+  adding copying macros (empty), install target and comment lines
 
 Jul 17, 2012  I.Hrivnacova (exerrprop-V09-05-03)
 - Restored files descriptions and moved class descriptions in .hh

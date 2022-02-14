@@ -304,11 +304,11 @@ namespace G4INCL {
       Bool_t forcedDeltasOutside;
       /** \brief Event involved forced eta/omega decays outside the nucleus */
       Bool_t forcedPionResonancesOutside;
-      /** \brief Event involved forced strange absorbtion inside the nucleus */
+      /** \brief Event involved forced strange absorption inside the nucleus */
       Bool_t absorbedStrangeParticle;
       /** \brief Event involved forced Sigma Zero decays outside the nucleus */
       Bool_t forcedSigmaOutside;
-      /** \brief Event involved forced antiKaon/Sigma absorbtion inside the nucleus */
+      /** \brief Event involved forced antiKaon/Sigma absorption inside the nucleus */
       Bool_t forcedStrangeInside;
       /** \brief Number of forced Lambda emit out of the nucleus */
       Int_t emitLambda;

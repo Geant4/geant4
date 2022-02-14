@@ -104,6 +104,10 @@ class G4VIonDEDXTable {
 	G4int,           // Atomic number of ion
         const G4String&  // Name or chemical formula of material
 					     ) = 0;
+
+   G4VIonDEDXTable(G4VIonDEDXTable&) = delete;
+   const G4VIonDEDXTable & operator=(const G4VIonDEDXTable&) = delete;
+
 };
 
 #endif // G4VIONDEDXTABLE_HH

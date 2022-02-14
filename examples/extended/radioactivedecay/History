@@ -20,6 +20,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24, 2021,  B. Morgan (exRadioactiveDecay-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+November 03, 2020 B. Morgan - exRadioactivedecay-V10-06-00
+- Support same CMake version range as core Geant4
+
+April 14, 2017      M. Maire
+- Add example Activation
+
+July 04, 2016      I. Hrivnacova - exRadioactivedecay-V10-02-00
+- Fixes for Doxygen documentation
+
 February 19, 2012  I. Hrivnacova - exRadioactivedecay-V09-06-00
 - Applied coding guidelines (data members names and initialization)
 
@@ -30,14 +42,14 @@ November 25, 2012  I. Hrivnacova - exRadioactivedecay-V09-05-01
 
 September 25, 2012  I. Hrivnacova - exRadioactivedecay-V09-05-00
 - Updated CMakeLists.txt files:
-  adding visualization, optional external packages (rdecay02 ), copying macros, 
+  adding visualization, optional external packages (rdecay02 ), copying macros,
   install target and comment lines
 - Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
 - Replaced tabulators with space characters
 
 November 4, 2011  L. Desorgher - exradioactive-V09-04-00
 - Create this History file
-- Add macro files and user data files in rdecay02  to illustrate the possibility for a user to define its own 
+- Add macro files and user data files in rdecay02  to illustrate the possibility for a user to define its own
   radioactive decay data and evaporation data. An example No252.g4mac shows also how to treat
   nuclei with Z>100.
-	
+

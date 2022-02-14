@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// -------------------------------------------------------------------
 // Code by Susanna Guatelli
 //
 //
@@ -37,9 +35,9 @@ class BrachySteppingAction: public G4UserSteppingAction
 {
 public:
 
-  BrachySteppingAction();
+  explicit BrachySteppingAction();
   ~BrachySteppingAction();
   
-  void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step*) override;
 };
 #endif

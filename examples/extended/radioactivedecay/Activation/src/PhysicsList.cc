@@ -44,10 +44,14 @@
 #include "G4IonINCLXXPhysics.hh"
 #include "G4StoppingPhysics.hh"
 #include "GammaNuclearPhysics.hh"
+#include "GammaNuclearPhysicsLEND.hh"
 
 #include "ElectromagneticPhysics.hh"
-#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option3.hh"
+
 #include "G4DecayPhysics.hh"
+
+#include "RadioactiveDecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,27 +62,12 @@ PhysicsList::PhysicsList()
   G4int verb = 1;
   SetVerboseLevel(verb);
 
-  //add new units
-  //
-  new G4UnitDefinition( "millielectronVolt", "meV", "Energy", 1.e-3*eV);   
-
-  //add new units for radioActive decays
-  // 
-  const G4double minute = 60*second;
-  const G4double hour   = 60*minute;
-  const G4double day    = 24*hour;
-  const G4double year   = 365*day;
-  new G4UnitDefinition("minute", "min", "Time", minute);
-  new G4UnitDefinition("hour",   "h",   "Time", hour);
-  new G4UnitDefinition("day",    "d",   "Time", day);
-  new G4UnitDefinition("year",   "y",   "Time", year);
-
   // Hadron Elastic scattering
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
   
   // Hadron Inelastic Physics
-  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
 
@@ -94,16 +83,18 @@ PhysicsList::PhysicsList()
       
   // Gamma-Nuclear Physics
   RegisterPhysics( new GammaNuclearPhysics("gamma"));
+  ////RegisterPhysics( new GammaNuclearPhysicsLEND("gamma"));
 
   // EM physics
   RegisterPhysics(new ElectromagneticPhysics());
-  ////RegisterPhysics(new G4EmStandardPhysics(verb));
+  ////RegisterPhysics(new G4EmStandardPhysics_option3(verb));
   
   // Decay
   RegisterPhysics(new G4DecayPhysics());
 
   // Radioactive decay
-  RegisterPhysics(new G4RadioactiveDecayPhysics());
+  RegisterPhysics(new RadioactiveDecayPhysics());
+  ////RegisterPhysics(new G4RadioactiveDecayPhysics());  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

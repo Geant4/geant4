@@ -15,6 +15,215 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25.11.2021 S. Guatelli, emlowen-V10-07-27
+- Added option to activate the ANSTO fluorescence radiation yield (Z < 93)
+
+18.11.2021 L.Pandola, emlowen-V10-07-26
+- Fix memory leak reported by Valgrind in Penelope models
+
+10.11.2021 S. Guatelli, emlowen-V10-07-25    
+- included new PIXE data libraries following ANSTO 
+  reccommendations      
+- included new classes to model the ANSTO ECPSSR cross sections
+  for protons and alpha particles
+
+04.11.2021 D.Lambert, emlowen-V10-07-24          
+- G4MicroElecInelasticModel_new: fix delete pointer pb
+        in initialisation/destructor
+
+02.11.2021 Z.Li, emlowen-V10-07-23
+- G4LivermoreGammaConversionModel: code clean-up
+- G4LivermoreComptonModel: code clean-up
+- G4LivermorePhotoElectricModel: code clean-up
+
+01.11.2021 V.Ivanchenko, emlowen-V10-07-22
+- G4LivermorePolarizedRayleighModel - read data from the 
+    $G4LEDATA/livermore directory; code clean-up
+- G4LivermoreRayleighModel - code clean-up
+- G4MicroElecCrossSectionDataSet_new, G4MicroElecElasticModel_new -
+    fixed headers
+- G4LivermoreGammaConversionModelRC, G4LivermoreComptonModifiedModel
+    removed because are not used in any PhysicsList, example, or test
+
+15.10.2021 Z.li, emlowen-V10-07-21
+- G4LivermoreComptonModel, G4LivermoreGammaConversionModel, 
+  G4LivermorePhotoElectricModel, G4LivermoreRayleighModel, 
+  G4RayleighAngularGenerator: updated to use EPICS2017 data
+
+23.09.2021 A.Ribon, emlowen-V10-07-20
+- G4MicroElecSurface.cc : replaced hardwired process-sub-type 25
+  with (already existing) fSurfaceReflection
+- G4MicroElecElastic, G4MicroElecLOPhononScattering, G4MicroElecInelastic :
+  replaced hardwired process-sub-types 51 and 53 with new enum values
+  fLowEnergyElastic and fLowEnergyIonisation
+
+20.08.2021 V.Ivanchenko, emlowen-V10-07-19
+- G4PenelopeBremsstrahlungAngular, G4PenelopeBremsstrahlungFS,
+  G4PenelopeCrossSection, G4JAEAElasticScatteringModel,
+  G4JAEAPolarizedElasticScatteringModel - use optimal methods
+    of G4PhysicsVector
+
+04.08.2021 A.Ribon, emlowen-V10-07-18
+- G4LivermorePolarizedComptonModel : migrated to the new version of
+  G4PhysicsModelCatalog
+
+09.07.2021 V.Ivanchenko, emlowen-V10-07-17
+- G4AugerData - removed dead code
+- G4VCrossSectionHandler, G4eIonisationParameters - use const 
+    pointers to G4Element
+
+31.05.2021 J.Allison, emlowen-V10-07-16
+- G4LivermorePolarizedComptonModel:
+  o Correct the reference to the Quantum Entanglement paper.
+
+19.05.2021 L.Pandola, emlowen-V10-07-15
+- Migrate the spline treatment for all PhysicsVectors 
+
+16.04.2021 B.Morgan, emlowen-V10-07-14
+- Migrate build to modular CMake API
+
+02.05.2021 J.Allison, emlowen-V10-07-13
+- G4LivermorePolarizedComptonModel:
+  o Add quantum entanglement of e+ annihilation.
+  o If the photons have been "tagged" as "quantum-entangled", for example by
+    G4eplusAnnihilation for annihilation into 2 photons, they are "analysed"
+    here if - and only if - both photons suffer Compton scattering. Theoretical
+    predictions from Pryce and Ward, Nature No 4065 (1947) p.435, and Snyder et
+    al, Physical Review 73 (1948) p.440. Experimental validation in "Photon
+    quantum entanglement in the MeV regime and its application in PET imaging",
+    D. Watts, J. Allison et al., Nature Communications NCOMMS-19-40758F April
+    2021 (to be published) and https://arxiv.org/abs/2012.04939.
+  o Add data member:  G4int fEntanglementModelIndex;
+    Entanglement uses AuxiliaryTrackInformation, so we need to pick up a
+    unique model index. In the constructor:
+      fEntanglementModelIndex
+      = G4PhysicsModelCatalog::Register("G4GammaGammaEntanglement");
+    Then in SampleSecondaries:
+      const auto* auxInfo
+      = fParticleChange->GetCurrentTrack()
+      ->GetAuxiliaryTrackInformation(fEntanglementModelIndex);
+  o The implementation of entanglement is described in extensive comments
+    in G4LivermorePolarizedComptonModel.cc.
+
+28.04.2021 V.Ivanchenko, emlowen-V10-07-12
+-- G4IonParametrisedLossModel - follow updated signature for ion ionisation
+
+26.04.2021 V.Ivanchenko, emlowen-V10-07-11
+- updated  PrintGeneratorInformation() methods signature for
+  few angular generators
+
+18.03.2021 V.Ivanchenko, emlowen-V10-07-10
+- removed obsolete PrintInfo() methods and self defined process SubType
+
+12.03.2021 L.Pandola, emlowen-V10-07-09
+- improve management of array in G4PenelopeGammaConversionModel
+- clean-up of tests/
+
+05.03.2021 L.Pandola, emlowen-V10-07-08
+- replace std::map with static arrays in the G4Penelope models for
+  performance improvements
+- Partial clean-up of the test directory
+
+01.03.2021 L.Pandola, emlowen-V10-07-07
+- fix Coverity defects (G4LivermoreNuclearGammaConversionModel and
+  G4MicroElecInelasticModel_new)
+
+24.02.2021 L.Pandola, emlowen-V10-07-06
+- code cleanup of Penelope models
+
+19.02.2021 L.Pandola  emlowen-V10-07-05
+- code cleanup of headers and classes (cont'd)
+
+16.02.2021 L.Pandola, emlowen-V10-07-04
+- use G4double/G4int/G4bool instead of double/int/bool
+- code cleanup of headers and classes (up to G4L*)
+- Convert G4LPhysicsFreeVector into G4PhysicsFreeVector
+
+09.02.2021 V.Ivanchenko, emlowen-V10-07-03
+- removed obsolete G4LivermorePolarizedPhotoElectricModel and
+  G4LivermorePolarizedPhotoElectricGDModel
+
+08.02.2021 V.Ivanchenko, emlowen-V10-07-02
+- removed obsolete unused classes G4BremsstrahlungCrossSectionHandler,
+  G4BremsstrahlungParameters, G4eBremsstrahlungSpectrum, G4hSRIM2000p,
+  G4PhotoElectricAngularGeneratorSimple, G4MicroElecInelastic_new
+
+29.01.2021 V.Ivanchenko, emlowen-V10-07-01
+- G4MicroElecLOPhononModel - fixed Coverity warning; removed debug
+    printout; rename member of class
+
+06.12.2020 V.Ivanchenko, emlowen-V10-07-00
+- G4MicroElecSurface, G4MicroElecLOPhononModel - fixed trivial
+    Coverity warnings
+
+17.11.2020 V.Ivanchenko, emlowen-V10-06-13
+- G4MicroElecInelasticModel_new, G4MicroElecInelastic_new,
+  G4MicroElecSurface - fixed Coverity warnings (non-initialized
+    class members or dereferences)
+
+26.10.2020 V.Ivanchenko, emlowen-V10-06-12
+- removed obsolete G4MuElec* classes
+- Added new classes developed by ONERA and CEA group and provided
+  by D. Lambert: G4MicroElecElasticModel_new,
+  G4MicroElecInelasticModel_new, G4MicroElecInelastic_new,
+  G4MicroElecLOPhononModel, G4MicroElecLOPhononModel.
+  G4MicroElecSiStructure is moved to material category
+- G4MicroElecSurface - new boundary process for e- The code is
+    updated compared with the original: instead of name comparisons
+    pointers are compared; condition on surface is defined by kCarTolerance;
+    initialisation is done in the new BuildPhysicsTable(..) method
+    instead of Initialise(); no dependence on G4Electron; changed
+    process type and sub-types from optical to electromagnetic.
+15.10.2020 L. Pandola, emlowen-V10-06-11
+- Fix Coverity defects and material list in G4PenelopeRayleighModelMI
+
+12.10.2020 L. Pandola, emlowen-V10-06-10
+- replace std::log with G4Log in Penelope and Livermore models
+- use GetZasInt() in Penelope models, when applicable
+- fix typo in material name in G4PenelopeRayleighModelMI
+
+07.10.2020 L. Pandola, emlowen-V10-06-09
+- finalize G4PenelopeRayleighModelMI model of emlowen-V10-06-08:
+make it compatible with Unit Tests, revise verbosity
+
+24.09.2020 G. Paternò, L. Pandola, emlowen-V10-06-08
+- added G4PenelopeRayleighModelMI model and ancillary class G4MIData
+ (provided by G. Paternò, INFN Ferrara)
+- create tests/CMakeLists.txt for Unit Tests and reshape Unit Test
+ G4PenelopeRayleighTest.cc
+
+04.09.2020 M. Omer, R. Hajima, L. Pandola, emlowen-V10-06-07
+- Added protections in G4JAEAPolarizedElasticScatteringModel.cc
+
+11.06.2020 Z. Li, emlowen-V10-06-06
+- Add InitialiseForElement() in G4LivermoreGammaConversionModel
+  and G4LivermoreGammaConversion5DModel, which was missing before
+
+04.06.2020 L. Pandola, emlowen-V10-06-05
+- Fix Coverity defect
+
+25.05.2020 L. Pandola, emlowen-V10-06-04
+- Change initialization of JAEA models
+
+18.05.2020 M. Omer and R. Hajima, L. Pandola, emlowen-V10-06-03
+- Update G4JAEAElasticScattering and G4JAEAElasticScatteringModel to
+  comply with new data format
+- Add JAEA model for polarized gamma scattering
+- Requires new G4EMLOW database
+
+29.04.2020 G. Folger,     emlowen-V10-06-02
+- Fixes for clang10: Correct formatting in G4ecpssrBaseKxsModel.cc
+    and G4ecpssrBaseLixsModel.cc
+
+21.04.2020 V. Ivanchenko, emlowen-V10-06-01
+- G4LivermoreGammaConversionModel, G4LivermoreGammaConversion5DModel
+  fixed compilation for old compilers
+- G4LivermorePhotoElectricModel - allowed "Water" as a name of water
+  material for low-energy photoeffect
+
+30.03.2020 Z. LI, emlowen-V10-06-00
+- Modify G4LivermoreGammaConversionModel class
+- Add G4LivermoreGammaConversion5DModel class
 
 06.11.2019 V. Ivanchenko, emlowen-V10-05-02
 - make transition getenv -> std::getenv in all sub-library
@@ -30,22 +239,22 @@ committal in the CVS repository !
 - Fix Bugzilla 2089
 
 08.10.2018 L. Pandola, emlowen-V10-04-11
-- Fix the bug of emlowen-V10-04-09 also in G4PenelopeComptonModel and 
+- Fix the bug of emlowen-V10-04-09 also in G4PenelopeComptonModel and
   G4PenelopePhotoElectricModel
 
 17.09.2018 D. Sawkey, emlowen-V10-04-10
 - G4RayleighScattering, change automatic documtenation format to rST
 
 30.08.2018 L. Pandola, emlowen-V10-04-09
-- Fix of a bug in G4PenelopeIonisationModel causing a (rare) energy 
+- Fix of a bug in G4PenelopeIonisationModel causing a (rare) energy
   non-conservation and a warning message on screen
 
 12.08.2018 M. Novak, emlowen-V10-04-08
-- G4LivermoreBremsstrahlungModel - resubmit corresponding standard base class 
-    modifications according to emlowen-V10-04-06  
+- G4LivermoreBremsstrahlungModel - resubmit corresponding standard base class
+    modifications according to emlowen-V10-04-06
 
 11.08.2018 Hisaya Kurashige, emlowen-V10-04-07
-- G4LivermoreBremsstrahlungModel is reverted to emlowen-V10-04-05 
+- G4LivermoreBremsstrahlungModel is reverted to emlowen-V10-04-05
 
 10.08.2018 M Novak, emlowen-V10-04-06
 - G4LivermoreBremsstrahlungModel - no any functional changes. Some base class
@@ -1579,7 +1788,7 @@ M. Omer and R. Hajima
 
 25.06.2009, A. Mantero, tag emlowen-V09-02-40
             Design update, Bug Fixes and models update for
-            atomic shell hadronic CS calulation.
+            atomic shell hadronic CS calculation.
 
 02.06.2009, A.Lechner, tag emlowen-V09-02-39
             Bug fix in class G4IonDEDXScalingICRU73: Compilation

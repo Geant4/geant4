@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Authors: Francesco Longo, franzlongo1969@gmail.com
 //
 // $Id: GammaRayTelPhysicsList.cc 66508 2012-12-19 10:16:45Z gcosmo $
 //
@@ -31,7 +32,22 @@
 
 #include "GammaRayTelPhysicsList.hh"
 
-#include "globals.hh"
+// Physic lists (contained inside the Geant4 distribution)
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh" // to treat the new polarised process 
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+#include "G4EmLivermorePolarizedPhysics.hh" // 
+
+#include "G4DecayPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
+#include "G4HadronElasticPhysicsHP.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+#include "G4Decay.hh"
+#include "G4StepLimiter.hh"
+#include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -52,18 +68,29 @@
 #include "GammaRayTelHadronPhysics.hh"
 #include "GammaRayTelIonPhysics.hh"
 
-#include "G4PhysListFactory.hh"
-#include "G4VPhysicsConstructor.hh"
-#include "G4EmProcessOptions.hh"
+#include "G4IonFluctuations.hh"
+#include "G4IonParametrisedLossModel.hh"
+#include "G4HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 
 
 #include "GammaRayTelPhysicsListMessenger.hh"
 
 GammaRayTelPhysicsList::GammaRayTelPhysicsList():  G4VModularPhysicsList()
 {
-  // default cut value  (1.0mm) 
-  defaultCutValue = 1.0*mm;
-  SetVerboseLevel(1);
+  G4LossTableManager::Instance();
+  defaultCutValue = 100*micrometer;
+  SetVerboseLevel(1); 
+
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(250*eV, 1*GeV);
+  SetDefaultCutValue(defaultCutValue);
+  DumpCutValuesTable();
+
+  helIsRegisted  = false;
+  bicIsRegisted  = false;
+  biciIsRegisted = false;
+  locIonIonInelasticIsRegistered = false;
+  radioactiveDecayIsRegisted = false;
 
   pMessenger = new GammaRayTelPhysicsListMessenger(this);
 
@@ -184,18 +211,72 @@ void GammaRayTelPhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "LowE EM") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new GammaRayTelEMlowePhysics();;
-     G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: EM LowE" << G4endl;
-  } 
-  else {
+    emPhysicsList = new G4EmLivermorePhysics();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+  } else if (name == "LowE_Penelope") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+  } else if (name == "LowE_Polarized") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePolarizedPhysics();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+  } else if (name == "standard_opt4") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option4();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardOption_4" << G4endl;
+
+    /////////////////////////////////////////////////////////////////////////////
+    //   HADRONIC MODELS
+    /////////////////////////////////////////////////////////////////////////////
+  } else if (name == "elastic" && !helIsRegisted) {
+    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronElasticPhysics()" << G4endl;
+    hadronPhys.push_back( new G4HadronElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "DElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronDElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "HPElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronElasticPhysicsHP());
+    helIsRegisted = true;
+
+  } else if (name == "binary" && !bicIsRegisted) {
+    hadronPhys.push_back(new G4HadronPhysicsQGSP_BIC_HP());
+    bicIsRegisted = true;
+    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: HadronPhysicsQGSP_BIC_HP()" << G4endl;
+
+  } else if (name == "binary_ion" && !biciIsRegisted) {
+    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    biciIsRegisted = true;
+    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4IonBinaryCascadePhysics()" << G4endl;
+  } else if (name == "radioactive_decay" && !radioactiveDecayIsRegisted ) {
+    hadronPhys.push_back(new G4RadioactiveDecayPhysics());
+    radioactiveDecayIsRegisted = true;
+    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4RadioactiveDecayPhysics()" << G4endl;
+  } else {
+
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
   }
 
-
-  G4cout << "REGISTRATION DONE " << G4endl;
-
-    RegisterPhysics(emPhysicsList);
-
+void GammaRayTelPhysicsList::SetCutForGamma(G4double cut)
+{
+  SetParticleCuts(cut, G4Gamma::Gamma());
 }
+
+void GammaRayTelPhysicsList::SetCutForElectron(G4double cut)
+{
+  SetParticleCuts(cut, G4Electron::Electron());
+}
+
+void GammaRayTelPhysicsList::SetCutForPositron(G4double cut)
+{
+  SetParticleCuts(cut, G4Positron::Positron());
+}
+

@@ -78,8 +78,6 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
-
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                          const G4MaterialCutsCouple*,
                          const G4DynamicParticle*,
@@ -92,13 +90,16 @@ public:
   inline void SetBicubicInterpolationFlag(G4bool val) 
   { fIsUseBicubicInterpolation = val; };
 
+  // hide assignment operator and cctr
+  G4SeltzerBergerModel & operator=(const G4SeltzerBergerModel &right) = delete;
+  G4SeltzerBergerModel(const G4SeltzerBergerModel&) = delete;
+
 protected:
 
   G4double ComputeDXSectionPerAtom(G4double gammaEnergy) override;
 
 private:
 
-  //
   void ReadData(G4int Z);
 
   const G4String& FindDirectoryPath();
@@ -107,10 +108,6 @@ private:
                                 const G4double logKineticEnergy, 
                                 const G4double cut,
                                 const G4double emax);
-
-  // hide assignment operator and cctr
-  G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right);
-  G4SeltzerBergerModel(const  G4SeltzerBergerModel&);
 
   static constexpr G4int    gMaxZet       = 101;
   static constexpr G4double gExpNumLimit  = -12.;

@@ -1,197 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-<<<<<<< HEAD
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
 
 
-***** Table : Nb of materials = 15 *****
-
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m  
-                       Imean:  85.703 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Nitrogen (N)   Z =  7.0   N =    14   A = 14.010 g/mole
-         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance: 99.632 %
-         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:  0.368 %
-          ElmMassFraction:  70.00 %  ElmAbundance  72.71 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
-
-
- Material: H2liquid    density: 70.800 mg/cm3  RadL:   8.923 m    Nucl.Int.Length:   4.944 m  
-                       Imean:  19.200 eV 
-
-   --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:    Water H_2O   density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
-                       Imean:  78.000 eV 
-
-   --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
-          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
-
-
- Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm 
-                       Imean: 188.000 eV 
-
-   --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.950 g/mole
-         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
-         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:  0.063 %
-         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance: 99.600 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:   Carbon    density:  2.267 g/cm3   RadL:  18.833 cm   Nucl.Int.Length:  35.356 cm 
-                       Imean:  81.000 eV 
-
-   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.010 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
-                       Imean: 166.000 eV 
-
-   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.980 g/mole
-         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm 
-                       Imean: 173.000 eV 
-
-   --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.090 g/mole
-         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
-         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:  4.683 %
-         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:  3.087 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm 
-                       Imean: 350.000 eV 
-
-   --->  Element: Ge (Ge)   Z = 32.0   N =    73   A = 72.610 g/mole
-         --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance: 20.840 %
-         --->  Isotope:  Ge72   Z = 32   N =  72   A =  71.92 g/mole   abundance: 27.540 %
-         --->  Isotope:  Ge73   Z = 32   N =  73   A =  72.92 g/mole   abundance:  7.730 %
-         --->  Isotope:  Ge74   Z = 32   N =  74   A =  73.92 g/mole   abundance: 36.280 %
-         --->  Isotope:  Ge76   Z = 32   N =  76   A =  75.92 g/mole   abundance:  7.610 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:      NaI    density:  3.670 g/cm3   RadL:   2.586 cm   Nucl.Int.Length:  42.878 cm 
-                       Imean: 452.000 eV 
-
-   --->  Element: Sodium (Na)   Z = 11.0   N =    23   A = 22.990 g/mole
-         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.000 %
-          ElmMassFraction:  15.34 %  ElmAbundance  50.00 % 
-
-   --->  Element: Iodine (I)   Z = 53.0   N =   127   A = 126.900 g/mole
-         --->  Isotope:  I127   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.000 %
-          ElmMassFraction:  84.66 %  ElmAbundance  50.00 % 
-
-
- Material:   Iodine    density:  4.930 g/cm3   RadL:   1.720 cm   Nucl.Int.Length:  35.676 cm 
-                       Imean: 491.000 eV 
-
-   --->  Element: Iodine (I)   Z = 53.0   N =   127   A = 126.900 g/mole
-         --->  Isotope:  I127   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.000 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:      BGO    density:  7.100 g/cm3   RadL:   1.123 cm   Nucl.Int.Length:  22.806 cm 
-                       Imean: 473.785 eV 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  15.41 %  ElmAbundance  63.16 % 
-
-   --->  Element: Germanium (Ge)   Z = 32.0   N =    73   A = 72.590 g/mole
-         --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance: 20.840 %
-         --->  Isotope:  Ge72   Z = 32   N =  72   A =  71.92 g/mole   abundance: 27.540 %
-         --->  Isotope:  Ge73   Z = 32   N =  73   A =  72.92 g/mole   abundance:  7.730 %
-         --->  Isotope:  Ge74   Z = 32   N =  74   A =  73.92 g/mole   abundance: 36.280 %
-         --->  Isotope:  Ge76   Z = 32   N =  76   A =  75.92 g/mole   abundance:  7.610 %
-          ElmMassFraction:  17.48 %  ElmAbundance  15.79 % 
-
-   --->  Element: Bismuth (Bi)   Z = 83.0   N =   209   A = 208.980 g/mole
-         --->  Isotope: Bi209   Z = 83   N = 209   A = 208.98 g/mole   abundance: 100.000 %
-          ElmMassFraction:  67.10 %  ElmAbundance  21.05 % 
-
-
- Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
-                       Imean: 286.000 eV 
-
-   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.850 g/mole
-         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
-         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance: 91.754 %
-         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:  2.119 %
-         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:  0.282 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material: Tungsten    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.312 cm 
-                       Imean: 727.000 eV 
-
-   --->  Element: W (W)   Z = 74.0   N =   184   A = 183.850 g/mole
-         --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:  0.120 %
-         --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance: 26.500 %
-         --->  Isotope:  W183   Z = 74   N = 183   A = 182.95 g/mole   abundance: 14.310 %
-         --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance: 30.640 %
-         --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance: 28.430 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm 
-                       Imean: 823.000 eV 
-
-   --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.190 g/mole
-         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
-         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance: 24.100 %
-         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance: 22.100 %
-         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance: 52.400 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:  Uranium    density: 18.950 g/cm3   RadL:   3.166 mm   Nucl.Int.Length:  11.446 cm 
-                       Imean: 890.000 eV 
-
-   --->  Element: U (U)   Z = 92.0   N =   238   A = 238.030 g/mole
-         --->  Isotope:  U234   Z = 92   N = 234   A = 234.04 g/mole   abundance:  0.005 %
-         --->  Isotope:  U235   Z = 92   N = 235   A = 235.04 g/mole   abundance:  0.720 %
-         --->  Isotope:  U238   Z = 92   N = 238   A = 238.05 g/mole   abundance: 99.275 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
-
-=======
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -203,31 +23,33 @@
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
 LPM effect enabled                                 1
-Spline of EM tables enabled                        1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
-Use integral approach for tracking                 1
 Use general process                                0
 Enable linear polarisation for gamma               0
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
 Max kinetic energy for tables                      10 TeV
-Number of bins in tables                           120
 Number of bins per decade of a table               10
 Verbose level                                      0
 Verbose level for worker thread                    0
 Bremsstrahlung energy threshold above which 
-  primary is added to the list of secondary        100 TeV
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
 Step function for e+-                              (0.2, 1 mm)
 Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Fluctuations of dE/dx are enabled                  1
@@ -236,10 +58,10 @@ Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
-Factor of cut reduction for sub-cutoff method      1
 Max kinetic energy for CSDA tables                 1 GeV
 Max kinetic energy for NIEL computation            0 eV 
-Linear loss limit 0.01
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
@@ -248,7 +70,6 @@ Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Msc lateral displacement beyond geometry safety    0
 Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
@@ -261,6 +82,7 @@ Factor used for dynamic computation of angular
 Fixed angular limit between single 
   and multiple scattering                          3.1416 rad
 Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
 Type of nuclear form-factor                        1
 Screening factor                                   1
 =======================================================================
@@ -488,16 +310,16 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 100 keV
+ Energy thresholds :  gamma  2.93516 keV    e-  351.296 keV    e+  341.588 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -523,11 +345,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-<<<<<<< HEAD
-  User=3.92s Real=3.93s Sys=0s
-=======
-  User=2.230000s Real=2.238507s Sys=0.000000s
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  User=1.970000s Real=1.987245s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -575,16 +393,16 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 100 keV
+ Energy thresholds :  gamma  2.93516 keV    e-  351.296 keV    e+  341.588 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
 
@@ -609,54 +427,39 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-<<<<<<< HEAD
-  User=3.51s Real=3.53s Sys=0s
-=======
-  User=2.400000s Real=2.408276s Sys=0.000000s
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  User=2.120000s Real=2.133101s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
-<<<<<<< HEAD
- Process calls frequency --->	Transportation = 538606	eBrem = 280955	eIoni = 180439
+ Process calls frequency --->	Transportation = 538236	eBrem = 281299	eIoni = 180465
 
- Nb of incident particles unaltered after 1 cm  of Water : 538606 over 1000000 incident particles.  Ratio = 53.861 %
- ---> CrossSection per volume:	0.61877 cm^-1 	CrossSection per mass: 61.877 mm2/g 
+ Nb of incident particles unaltered after 1 cm  of Water : 538236 over 1000000 incident particles.  Ratio = 53.824 %
+ ---> CrossSection per volume:	0.61946 cm^-1 	CrossSection per mass: 61.946 mm2/g 
 
  Verification from G4EmCalculator: 
-	eBrem= 37.785 mm2/g 	eIoni= 24.166 mm2/g 	total= 61.951 mm2/g 
-	Expected ratio of transmitted particles= 53.821 %
+	eBrem= 37.79 mm2/g 	eIoni= 24.206 mm2/g 	total= 61.997 mm2/g 
+	Expected ratio of transmitted particles= 53.796 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1521312394, 1674266838
-=======
- Process calls frequency --->	Transportation = 537515	eBrem = 281135	eIoni = 181350
-
- Nb of incident particles unaltered after 1 cm  of Water : 537515 over 1000000 incident particles.  Ratio = 53.751 %
- ---> CrossSection per volume:	0.6208 cm^-1 	CrossSection per mass: 62.08 mm2/g 
-
- Verification from G4EmCalculator: 
-	eBrem= 37.788 mm2/g 	eIoni= 24.337 mm2/g 	total= 62.125 mm2/g 
-	Expected ratio of transmitted particles= 53.727 %
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 685999699, 1687796440
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+ Current couple of seeds = 1312526117, 166129892
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserActionInitialization deleted.
+UserWorkerInitialization deleted.
+UserWorkerThreadInitialization deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 Total navigation history collections cleaned: 6
+G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
@@ -674,3 +477,4 @@ G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

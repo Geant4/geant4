@@ -1,0 +1,46 @@
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - ICRP110Phantoms example
+     =========================================================
+
+                      Category History file
+                      ---------------------
+07.10.2021 - I. Hrivnacova; ICRP110Phantoms-V10-07-07
+             Removed unused ICRP110PhantomAnalysisManager.hh.
+
+03.08.2021 - S. Guatelli; ICRP110Phantoms-V10-07-06
+             Implementation of bone material has been revised.
+             UserScorerWriter has been changed in order to fix system testing
+             problem (division by zero). Conditional operator introduced.
+
+01.08.2021 - V. Ivanchenko; ICRP110Phantoms-V10-07-05
+             Fixed hash code
+
+28.07.2021 - S. Guatelli; ICRP110Phantoms-V10-07-04
+             OrganMasses.dat has been updated. The Dose is now calculated
+             averaged over the entire mass of the organ, and not only in the voxels
+             of the organ where there is edep recorded.
+
+24.07.2021 - S. Guatelli; ICRP110Phantoms-V10-07-03
+             General code cleaning
+             
+12.07.2021 - J. Allison; ICRP110Phantoms-V10-07-02
+             Use /vis/viewer/set/specialMeshRendering
+             Draw the full phantom
+             ColourMap.dat: all materials (except air) are opaque
+
+24.05.2021 - B. Morgan (ICRP110Phantoms-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+29.03.2021 - J. Allison; ICRP110Phantoms-V10-07-00
+             Introduced ICRP110PhantomVisAction
+             See vis.mac for how to activate
+
+15.11.2020 - S. Guatelli; ICRP110Phantoms-V10-06-01
+             Migration to G4RunManagerFactory
+
+27.10.2020 - S. Guatelli; ICRP110Phantoms-V10-06-00
+             New advanced example modelling ICRP110 phantom models
+

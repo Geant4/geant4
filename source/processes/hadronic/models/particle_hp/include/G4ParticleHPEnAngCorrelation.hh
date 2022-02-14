@@ -39,6 +39,7 @@
 #include "G4ParticleHPProduct.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Cache.hh"
+#include "G4ParticleHPManager.hh"
 
 class G4ParticleDefinition;
 
@@ -64,6 +65,9 @@ public:
     fCache.Put( val );
     //theTotalMeanEnergy = -1.;
     fCache.Get().theTotalMeanEnergy = -1.;
+    targetMass = 0.0;
+    frameFlag = 0;
+    nProducts = 0;
   }
 
   G4ParticleHPEnAngCorrelation(G4ParticleDefinition* proj)
@@ -75,6 +79,9 @@ public:
     fCache.Put( val );
     //theTotalMeanEnergy = -1.;
     fCache.Get().theTotalMeanEnergy = -1.;
+    targetMass = 0.0;
+    frameFlag = 0;
+    nProducts = 0;
   }
 
   ~G4ParticleHPEnAngCorrelation()
@@ -84,19 +91,6 @@ public:
   
   inline void Init(std::istream & aDataFile)
   {
-    bAdjustFinalState = true;
-    const char* ctmp = std::getenv("G4PHP_DO_NOT_ADJUST_FINAL_STATE");
-    if( ctmp && G4String(ctmp) == "1" )
-    {
-      bAdjustFinalState = false;
-    }
-
-// T.K. Comment out following line to keep the condition at the
-// validation efforts comparing NeutronHP and PartileHP for neutrons (2015 Sep.)
-//#ifdef PHP_AS_HP
-//    bAdjustFinalState = false;
-//#endif
- 
     inCharge = true;
     aDataFile>>targetMass>>frameFlag>>nProducts;
     theProducts = new G4ParticleHPProduct[nProducts];
@@ -155,7 +149,6 @@ private:
 
   G4ParticleDefinition* theProjectile;
 
-  G4bool bAdjustFinalState;
 };
 
 #endif

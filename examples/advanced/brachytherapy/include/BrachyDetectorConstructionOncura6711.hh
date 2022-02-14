@@ -47,13 +47,12 @@ class G4Tubs;
 class G4Box;
 class G4Sphere;
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4VisAttributes;
 
 class BrachyDetectorConstructionOncura6711
 {
 public:
-  BrachyDetectorConstructionOncura6711();
+  explicit BrachyDetectorConstructionOncura6711();
   ~BrachyDetectorConstructionOncura6711();
 
   void  ConstructOncura6711(G4VPhysicalVolume*);
@@ -63,27 +62,24 @@ public:
   // Destroy the Oncura6711 reference source in the experimental set-up
 
 private:   
-  G4Tubs* OncuraCapsule ;
-  G4LogicalVolume*  OncuraCapsuleLog;    
-  G4VPhysicalVolume* OncuraCapsulePhys;
-  G4Sphere* OncuraCapsuleTip1;
-  G4LogicalVolume* OncuraCapsuleTip1Log;
-  G4VPhysicalVolume* OncuraCapsuleTip1Phys;
-  G4Sphere* OncuraCapsuleTip2;
-  G4LogicalVolume* OncuraCapsuleTip2Log;
-  G4VPhysicalVolume* OncuraCapsuleTip2Phys;
-  G4Tubs* OncuraAirGap;
-  G4LogicalVolume* OncuraAirGapLog;
-  G4VPhysicalVolume* OncuraAirGapPhys;
-  G4Tubs* OncuraSilverCore;
-  G4LogicalVolume* OncuraSilverCoreLog;
-  G4VPhysicalVolume* OncuraSilverCorePhys;
-
-  BrachyMaterial* pMat;    
-
-  G4VisAttributes* OncuraCapsuleShellVisAtt;
-  G4VisAttributes*  OncuraCapsuleTipVisAtt;
-  G4VisAttributes*  OncuraSilverCoreVisAtt;
+  G4Tubs* fOncuraCapsule ;
+  G4LogicalVolume*  fOncuraCapsuleLog;    
+  G4VPhysicalVolume* fOncuraCapsulePhys;
+  G4Sphere* fOncuraCapsuleTip1;
+  G4LogicalVolume* fOncuraCapsuleTip1Log;
+  G4VPhysicalVolume* fOncuraCapsuleTip1Phys;
+  G4Sphere* fOncuraCapsuleTip2;
+  G4LogicalVolume* fOncuraCapsuleTip2Log;
+  G4VPhysicalVolume* fOncuraCapsuleTip2Phys;
+  G4Tubs* fOncuraAirGap;
+  G4LogicalVolume* fOncuraAirGapLog;
+  G4VPhysicalVolume* fOncuraAirGapPhys;
+  G4Tubs* fOncuraSilverCore;
+  G4LogicalVolume* fOncuraSilverCoreLog;
+  G4VPhysicalVolume* fOncuraSilverCorePhys;
+  G4VisAttributes* fOncuraCapsuleShellVisAtt;
+  G4VisAttributes* fOncuraCapsuleTipVisAtt;
+  G4VisAttributes* fOncuraSilverCoreVisAtt;
 };
 #endif
 

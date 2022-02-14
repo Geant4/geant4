@@ -46,21 +46,21 @@
 
 BrachyFactoryI:: BrachyFactoryI()
 {
-  iodiumSource = new BrachyDetectorConstructionI();
+  fIodineSource = new BrachyDetectorConstructionI();
 }
 
 BrachyFactoryI::~BrachyFactoryI()
 {
-  delete iodiumSource;
+  delete fIodineSource;
 }
 
 void BrachyFactoryI::CreateSource(G4VPhysicalVolume* mother)
 {
-  iodiumSource -> ConstructIodium(mother);
+  fIodineSource -> ConstructIodine(mother);
 }
 
 void BrachyFactoryI::CleanSource()
 {
- iodiumSource -> CleanIodium(); 
- iodiumSource = 0;
+ fIodineSource -> CleanIodine(); 
+ fIodineSource = nullptr;
 }

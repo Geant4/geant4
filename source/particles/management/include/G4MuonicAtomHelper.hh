@@ -23,41 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: 
-//  20160701 K.Lynch first implementation
-//  20170612 K L Genser major revision; also copied
-//                      functions from G4MuonMinusBoundDecay & 
-//                      old G4MuMinusCaptureCascade; used constexpr
-// ------------------------------------------------------------
-#ifndef G4MuonicAtomHelper_h
-#define G4MuonicAtomHelper_h 1
+// G4MuonicAtomHelper
+
+// Author: K.Lynch, 01.07.2016 - First implementation
+// Revision:
+// - 12.06.2017, K L Genser
+// --------------------------------------------------------------------
+#ifndef G4MuonicAtomHelper_hh
+#define G4MuonicAtomHelper_hh 1
 
 #include "G4MuonicAtom.hh"
 #include "G4Ions.hh"
 
-class G4MuonicAtomHelper {
-public:
-  static G4MuonicAtom* ConstructMuonicAtom(G4String name, G4int encoding, G4Ions const* baseion);
+class G4MuonicAtomHelper
+{
+  public:
 
-  static G4double GetMuonCaptureRate(G4int Z, G4int A);
+    static G4MuonicAtom* ConstructMuonicAtom(const G4String& name,
+                                             G4int encoding,
+                                             G4Ions const* baseion);
 
-  static G4double GetMuonDecayRate(G4int Z);
+    static G4double GetMuonCaptureRate(G4int Z, G4int A);
 
-  static G4double GetMuonZeff(G4int Z);
+    static G4double GetMuonDecayRate(G4int Z);
 
-  static G4double GetKShellEnergy(G4double A);
+    static G4double GetMuonZeff(G4int Z);
 
-  static G4double GetLinApprox(G4int N, 
-                               const G4double* const X, 
-                               const G4double* const Y, 
-                               G4double Xuser);
+    static G4double GetKShellEnergy(G4double A);
 
+    static G4double GetLinApprox(G4int N, 
+                                 const G4double* const X, 
+                                 const G4double* const Y, 
+                                 G4double Xuser);
 };
 
 #endif

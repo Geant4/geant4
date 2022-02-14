@@ -23,14 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// G4VNotifier
+// G4VNotifier class implementation
 //
 // Implementation for the generic notifier base class
 //
-// Author:
-// 01.09.04 G.Cosmo Initial version
+// Author: G.Cosmo, 01.09.2004 - Initial version
 // --------------------------------------------------------------------
 
 #include "G4VNotifier.hh"
@@ -39,14 +36,10 @@
 // Constructor
 // ***************************************************************************
 //
-G4VNotifier::G4VNotifier()
-{
-}
+G4VNotifier::G4VNotifier() {}
 
 // ***************************************************************************
 // Destructor
 // ***************************************************************************
 //
-G4VNotifier::~G4VNotifier() 
-{
-}
+G4VNotifier::~G4VNotifier() {}

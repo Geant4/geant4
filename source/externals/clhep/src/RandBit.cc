@@ -14,6 +14,7 @@
 // =======================================================================
 
 #include "CLHEP/Random/RandBit.h"
+#include <iostream>
 #include <string>
 
 namespace CLHEP {

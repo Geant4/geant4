@@ -17,50 +17,33 @@ namespace CLHEP {
 
 // x, y, z
 
-inline double & Hep3Vector::operator[] (int i)       { return operator()(i); }
-inline double   Hep3Vector::operator[] (int i) const { return operator()(i); }
+inline double & Hep3Vector::operator[] (int i)       { return data[i]; }
+inline double   Hep3Vector::operator[] (int i) const { return data[i]; }
 
-inline double Hep3Vector::x() const { return dx; }
-inline double Hep3Vector::y() const { return dy; }
-inline double Hep3Vector::z() const { return dz; }
+inline double Hep3Vector::x() const { return (*this)[X]; }
+inline double Hep3Vector::y() const { return (*this)[Y]; }
+inline double Hep3Vector::z() const { return (*this)[Z]; }
 
-inline double Hep3Vector::getX() const { return dx; }
-inline double Hep3Vector::getY() const { return dy; }
-inline double Hep3Vector::getZ() const { return dz; }
+inline double Hep3Vector::getX() const { return (*this)[X]; }
+inline double Hep3Vector::getY() const { return (*this)[Y]; }
+inline double Hep3Vector::getZ() const { return (*this)[Z]; }
 
-inline void Hep3Vector::setX(double x1) { dx = x1; }
-inline void Hep3Vector::setY(double y1) { dy = y1; }
-inline void Hep3Vector::setZ(double z1) { dz = z1; }
+inline void Hep3Vector::setX(double x) { (*this)[X] = x; }
+inline void Hep3Vector::setY(double y) { (*this)[Y] = y; }
+inline void Hep3Vector::setZ(double z) { (*this)[Z] = z; }
 
-inline void Hep3Vector::set(double x1, double y1, double z1) { 
-  dx = x1; 
-  dy = y1; 
-  dz = z1; 
+inline void Hep3Vector::set(double x, double y, double z) {
+  (*this)[X] = x;
+  (*this)[Y] = y;
+  (*this)[Z] = z;
 }
 
 inline double Hep3Vector::operator () (int i) const {
-  switch(i) {
-  case X:
-    return x();
-  case Y:
-    return y();
-  case Z:
-    return z();
-  }
-  return 0.;
+  return data[i];
 }
 
 inline double & Hep3Vector::operator () (int i) {
-  static double dummy;
-  switch(i) {
-  case X:
-    return dx;
-  case Y:
-    return dy;
-  case Z:
-    return dz;
-  }
-  return dummy;
+  return data[i];
 }
 
 // --------------
@@ -111,23 +94,21 @@ inline void Hep3Vector::setRhoPhiZ
 // ------------
 
 inline Hep3Vector::Hep3Vector()
-  : dx(0.), dy(0.), dz(0.) {}
-inline Hep3Vector::Hep3Vector(double x1)
-  : dx(x1), dy(0.), dz(0.) {}
-inline Hep3Vector::Hep3Vector(double x1, double y1)
-  : dx(x1), dy(y1), dz(0.) {}
-inline Hep3Vector::Hep3Vector(double x1, double y1, double z1)
-  : dx(x1), dy(y1), dz(z1) {}
+  : data{0.0, 0.0, 0.0} {}
+inline Hep3Vector::Hep3Vector(double x)
+  : data{ x , 0.0, 0.0} {}
+inline Hep3Vector::Hep3Vector(double x, double y)
+  : data{ x ,  y , 0.0} {}
+inline Hep3Vector::Hep3Vector(double x, double y, double z)
+  : data{ x ,  y ,  z } {}
 
 inline Hep3Vector::Hep3Vector(const Hep3Vector & p)
-: dx(p.dx), dy(p.dy), dz(p.dz) {}
+  : data{p.x(), p.y(), p.z()} {}
 
 inline Hep3Vector::~Hep3Vector() {}
 
 inline Hep3Vector & Hep3Vector::operator = (const Hep3Vector & p) {
-  dx = p.dx;
-  dy = p.dy;
-  dz = p.dz;
+  set(p.x(), p.y(), p.z());
   return *this;
 }
 
@@ -137,15 +118,15 @@ inline Hep3Vector & Hep3Vector::operator = (const Hep3Vector & p) {
 
 // r, theta, phi
 
-inline double Hep3Vector::mag2() const { return dx*dx + dy*dy + dz*dz; }
+inline double Hep3Vector::mag2() const { return x()*x() + y()*y() + z()*z(); }
 inline double Hep3Vector::mag()  const { return std::sqrt(mag2()); }
 inline double Hep3Vector::r()    const { return mag(); }
 
 inline double Hep3Vector::theta() 	const {
-  return dx == 0.0 && dy == 0.0 && dz == 0.0 ? 0.0 : std::atan2(perp(),dz);
+  return x() == 0.0 && y() == 0.0 && z() == 0.0 ? 0.0 : std::atan2(perp(),z());
 }
 inline double Hep3Vector::phi() const {
-  return dx == 0.0 && dy == 0.0 ? 0.0 : std::atan2(dy,dx);
+  return x() == 0.0 && y() == 0.0 ? 0.0 : std::atan2(y(),x());
 }
 
 inline double Hep3Vector::getR()     const { return mag();   }
@@ -155,12 +136,12 @@ inline double Hep3Vector::angle()    const { return theta(); }
 
 inline double Hep3Vector::cosTheta() const {
   double ptot = mag();
-  return ptot == 0.0 ? 1.0 : dz/ptot;
+  return ptot == 0.0 ? 1.0 : z()/ptot;
 }
 
 inline double Hep3Vector::cos2Theta() const {
   double ptot2 = mag2();
-  return ptot2 == 0.0 ? 1.0 : dz*dz/ptot2;
+  return ptot2 == 0.0 ? 1.0 : z()*z()/ptot2;
 }
 
 inline void Hep3Vector::setR(double r1) { setMag(r1); }
@@ -181,7 +162,7 @@ inline void Hep3Vector::setPhi(double ph) {
 
 // perp, eta, 
 
-inline double Hep3Vector::perp2()  const { return dx*dx + dy*dy; }
+inline double Hep3Vector::perp2()  const { return x()*x() + y()*y(); }
 inline double Hep3Vector::perp()   const { return std::sqrt(perp2()); }
 inline double Hep3Vector::rho()    const { return perp();  }
 inline double Hep3Vector::eta()    const { return pseudoRapidity();}
@@ -192,8 +173,8 @@ inline double Hep3Vector::getEta() const { return pseudoRapidity();}
 inline void Hep3Vector::setPerp(double r1) {
   double p = perp();
   if (p != 0.0) {
-    dx *= r1/p;
-    dy *= r1/p;
+    (*this)[X] *= r1/p;
+    (*this)[Y] *= r1/p;
   }
 }
 inline void Hep3Vector::setRho(double rho1) { setPerp (rho1); }
@@ -219,27 +200,27 @@ inline double Hep3Vector::getTolerance () {
 // ----------
 
 inline Hep3Vector& Hep3Vector::operator += (const Hep3Vector & p) {
-  dx += p.x();
-  dy += p.y();
-  dz += p.z();
+  (*this)[X] += p.x();
+  (*this)[Y] += p.y();
+  (*this)[Z] += p.z();
   return *this;
 }
 
 inline Hep3Vector& Hep3Vector::operator -= (const Hep3Vector & p) {
-  dx -= p.x();
-  dy -= p.y();
-  dz -= p.z();
+  (*this)[X] -= p.x();
+  (*this)[Y] -= p.y();
+  (*this)[Z] -= p.z();
   return *this;
 }
 
 inline Hep3Vector Hep3Vector::operator - () const {
-  return Hep3Vector(-dx, -dy, -dz);
+  return Hep3Vector(-x(), -y(), -z());
 }
 
 inline Hep3Vector& Hep3Vector::operator *= (double a) {
-  dx *= a;
-  dy *= a;
-  dz *= a;
+  (*this)[X] *= a;
+  (*this)[Y] *= a;
+  (*this)[Z] *= a;
   return *this;
 }
 
@@ -252,11 +233,11 @@ inline double Hep3Vector::diff2(const Hep3Vector & p) const {
 }
 
 inline double Hep3Vector::dot(const Hep3Vector & p) const {
-  return dx*p.x() + dy*p.y() + dz*p.z();
+  return x()*p.x() + y()*p.y() + z()*p.z();
 }
 
 inline Hep3Vector Hep3Vector::cross(const Hep3Vector & p) const {
-  return Hep3Vector(dy*p.z()-p.y()*dz, dz*p.x()-p.z()*dx, dx*p.y()-p.x()*dy);
+  return Hep3Vector(y()*p.z()-p.y()*z(), z()*p.x()-p.z()*x(), x()*p.y()-p.x()*y());
 }
 
 inline double Hep3Vector::perp2(const Hep3Vector & p)  const {
@@ -270,10 +251,10 @@ inline double Hep3Vector::perp(const Hep3Vector & p) const {
 }
 
 inline Hep3Vector Hep3Vector::perpPart () const {
-  return Hep3Vector (dx, dy, 0);
+  return Hep3Vector (x(), y(), 0);
 }
 inline Hep3Vector Hep3Vector::project () const {
-  return Hep3Vector (0, 0, dz);
+  return Hep3Vector (0, 0, z());
 }
 
 inline Hep3Vector Hep3Vector::perpPart (const Hep3Vector & v2) const {
@@ -303,13 +284,13 @@ inline Hep3Vector Hep3Vector::unit() const {
 }
 
 inline Hep3Vector Hep3Vector::orthogonal() const {
-  double xx = dx < 0.0 ? -dx : dx;
-  double yy = dy < 0.0 ? -dy : dy;
-  double zz = dz < 0.0 ? -dz : dz;
+  double xx = x() < 0.0 ? -x() : x();
+  double yy = y() < 0.0 ? -y() : y();
+  double zz = z() < 0.0 ? -z() : z();
   if (xx < yy) {
-    return xx < zz ? Hep3Vector(0,dz,-dy) : Hep3Vector(dy,-dx,0);
+    return xx < zz ? Hep3Vector(0,z(),-y()) : Hep3Vector(y(),-x(),0);
   }else{
-    return yy < zz ? Hep3Vector(-dz,0,dx) : Hep3Vector(dy,-dx,0);
+    return yy < zz ? Hep3Vector(-z(),0,x()) : Hep3Vector(y(),-x(),0);
   }
 }
 

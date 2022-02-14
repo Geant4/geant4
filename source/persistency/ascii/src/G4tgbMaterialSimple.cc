@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgbMaterialSimple
 //
-//
-//
-// class G4tgbMaterialSimple
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgbMaterialSimple.hh"
 
@@ -38,40 +34,36 @@
 #include "G4tgrMaterialSimple.hh"
 #include "G4tgrMessenger.hh"
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbMaterialSimple::G4tgbMaterialSimple()
-  : theZ(0.), theA(0.)
 {
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbMaterialSimple::~G4tgbMaterialSimple()
 {
 }
 
-
-// -------------------------------------------------------------------------
-G4tgbMaterialSimple::G4tgbMaterialSimple( G4tgrMaterial* hgmate)
+// --------------------------------------------------------------------
+G4tgbMaterialSimple::G4tgbMaterialSimple(G4tgrMaterial* hgmate)
 {
-  theTgrMate = hgmate;
+  theTgrMate                    = hgmate;
   G4tgrMaterialSimple* matesimp = static_cast<G4tgrMaterialSimple*>(hgmate);
-  theZ = matesimp->GetZ();
-  theA = matesimp->GetA();
+  theZ                          = matesimp->GetZ();
+  theA                          = matesimp->GetA();
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4Material* G4tgbMaterialSimple::BuildG4Material()
 {
   //----- construct new G4Material with no components (only itself)
 
-  G4Material* mate = new G4Material( GetName(), GetZ(), GetA(),
-                                     theTgrMate->GetDensity(),
-                                     kStateUndefined, STP_Temperature );
-  
+  G4Material* mate =
+    new G4Material(GetName(), GetZ(), GetA(), theTgrMate->GetDensity(),
+                   kStateUndefined, NTP_Temperature);
+
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
   {
     G4cout << "  Constructing new G4Material simple: " << *mate << G4endl;
   }
@@ -80,13 +72,11 @@ G4Material* G4tgbMaterialSimple::BuildG4Material()
   return mate;
 }
 
-
-// -------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& os, const G4tgbMaterialSimple& mate) 
+// --------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgbMaterialSimple& mate)
 {
   os << "Simple Material: " << mate.GetName() << G4endl
-     << " Z = " << mate.GetZ() 
-     << " A = " << mate.GetA() 
+     << " Z = " << mate.GetZ() << " A = " << mate.GetA()
      << " density = " << mate.GetDensity() << G4endl;
   return os;
 }

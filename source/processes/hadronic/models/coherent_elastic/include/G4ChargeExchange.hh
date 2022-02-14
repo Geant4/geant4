@@ -55,6 +55,10 @@ public:
   explicit G4ChargeExchange();
 
   ~G4ChargeExchange() override;
+  G4ChargeExchange( const G4ChargeExchange &right ) = delete;
+  const G4ChargeExchange & operator=( const G4ChargeExchange &right ) = delete;
+  G4bool operator==( const G4ChargeExchange &right ) const = delete;
+  G4bool operator!=( const G4ChargeExchange &right ) const = delete;
 
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                  G4Nucleus& targetNucleus) override;
@@ -96,6 +100,8 @@ private:
   G4ParticleDefinition* theHe3;
 
   G4double lowestEnergyLimit;
+
+  G4int secID;  // Creator model ID for the secondaries created by this model
 };
 
 inline void G4ChargeExchange::SetLowestEnergyLimit(G4double value)

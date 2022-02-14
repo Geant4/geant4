@@ -1,7 +1,5 @@
 #
 # Macro file for "Hadr03.cc"
-# (can be run in batch, without graphic)
-#
 #
 /control/verbose 2
 /run/verbose 2
@@ -19,5 +17,4 @@
 /gun/energy 140 MeV
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

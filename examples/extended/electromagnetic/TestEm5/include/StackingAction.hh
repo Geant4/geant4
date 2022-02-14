@@ -53,22 +53,13 @@ class StackingAction : public G4UserStackingAction
    
     void SetKillStatus(G4int value) { fKillSecondary = value;};
      
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-    
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*) override;
+
   private:
     EventAction*        fEventAction;    
     
-    G4int               fKillSecondary;
+    G4bool              fKillSecondary = 0;
     StackingMessenger*  fStackMessenger;
-
-    G4int               fPhotoGamma;
-    G4int               fComptGamma;
-    G4int               fPhotoAuger;
-    G4int               fComptAuger;
-    G4int               fPixeGamma;
-    G4int               fPixeAuger;
-    G4bool              fIDdefined;
-        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------
 //      GEANT 4 - examplePar02
 // --------------------------------------------------------------
@@ -40,11 +40,7 @@
 //-------------------------------------------------------------------
 
 #include "G4UImanager.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "Par02DetectorConstruction.hh"
 #include "Par02PhysicsList.hh"
@@ -64,23 +60,13 @@ int main( int argc, char** argv ) {
   //-------------------------------
   // Initialization of Run manager
   //-------------------------------
-  #ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  G4cout<<"|              Constructing MT run manager              |"<<G4endl;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  #else
-  G4RunManager* runManager = new G4RunManager;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  G4cout<<"|        Constructing sequential run manager            |"<<G4endl;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  #endif
 
   // Detector/mass geometry:
   G4VUserDetectorConstruction* detector = new Par02DetectorConstruction();
   runManager->SetUserInitialization( detector );
-  
+
   // PhysicsList (including G4FastSimulationManagerProcess)
   G4VUserPhysicsList* physicsList = new Par02PhysicsList;
   runManager->SetUserInitialization( physicsList );

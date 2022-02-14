@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ----------------------------------------------------------------------
-// Class G4Timer
+// G4Timer
 //
 // Class description:
 //
@@ -70,38 +66,39 @@
 // tms fStartTimes,fEndTimes
 //   Timing structures (see times(2)) for start and end times
 
-// History:
-// 23.08.96 P.Kent Updated to also computed real elapsed time
-// 21.08.95 P.Kent
-// 29.04.97 G.Cosmo Added timings for Windows/NT
-
+// Author: P.Kent, 21.08.95 - First implementation
+// Revision: G.Cosmo, 29.04.97 - Added timings for Windows
+// --------------------------------------------------------------------
 #ifndef G4TIMER_HH
-#define G4TIMER_HH
+#define G4TIMER_HH 1
 
 #ifndef WIN32
-#  include <unistd.h>
 #  include <sys/times.h>
+#  include <unistd.h>
 #else
 #  include <time.h>
-#  define _SC_CLK_TCK    1
+#  define _SC_CLK_TCK 1
 
-   extern "C" {
-          int sysconf(int);
-   };
+extern "C"
+{
+  int sysconf(int);
+};
 
-   // Structure returned by times()
-  
-   struct tms {
-      clock_t tms_utime;           /* user time */
-      clock_t tms_stime;           /* system time */
-      clock_t tms_cutime;          /* user time, children */
-      clock_t tms_cstime;          /* system time, children */
-   };
+// Structure returned by times()
 
-   extern "C" {
-      extern clock_t times(struct tms *);
-   };
-#endif  /* WIN32 */
+struct tms
+{
+  clock_t tms_utime;  /* user time */
+  clock_t tms_stime;  /* system time */
+  clock_t tms_cutime; /* user time, children */
+  clock_t tms_cstime; /* system time, children */
+};
+
+extern "C"
+{
+  extern clock_t times(struct tms*);
+};
+#endif /* WIN32 */
 
 #include "G4Types.hh"
 #include "G4ios.hh"
@@ -110,28 +107,26 @@
 
 class G4Timer
 {
-    typedef std::chrono::high_resolution_clock clock_type;
+  using clock_type = std::chrono::high_resolution_clock;
 
-public:
+ public:
+  G4Timer();
 
-    G4Timer();
+  inline void Start();
+  inline void Stop();
+  inline G4bool IsValid() const;
+  inline const char* GetClockTime() const;
+  G4double GetRealElapsed() const;
+  G4double GetSystemElapsed() const;
+  G4double GetUserElapsed() const;
 
-    inline void Start();
-    inline void Stop();
-    inline G4bool IsValid() const;
-    inline const char* GetClockTime() const;
-    G4double GetRealElapsed() const;
-    G4double GetSystemElapsed() const;
-    G4double GetUserElapsed() const;
-
-private:
-
-    G4bool fValidTimes;
-    std::chrono::time_point<clock_type> fStartRealTime, fEndRealTime;
-    tms fStartTimes,fEndTimes;
+ private:
+  G4bool fValidTimes;
+  std::chrono::time_point<clock_type> fStartRealTime, fEndRealTime;
+  tms fStartTimes, fEndTimes;
 };
 
-std::ostream& operator << (std::ostream& os, const G4Timer& t);
+std::ostream& operator<<(std::ostream& os, const G4Timer& t);
 
 #include "G4Timer.icc"
 

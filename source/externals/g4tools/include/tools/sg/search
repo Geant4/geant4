@@ -1,0 +1,150 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+//
+// Helper functions to search node(s) in a scene graph.
+//
+
+#ifndef tools_sg_search
+#define tools_sg_search
+
+#include "search_action"
+#include "node"
+
+namespace tools {
+namespace sg {
+
+template <class NODE>
+inline NODE* find_first_node_of_class(std::ostream& a_out,node& a_from) {
+  search_action action(a_out);
+  action.reset();
+  action.set_what(search_action::search_node_of_class);
+  action.set_stop_at_first(true);
+  action.set_class(NODE::s_class());
+  a_from.search(action);
+  const std::vector<void*>& _objs = action.objs();
+  if(_objs.empty()) return 0;
+  return (NODE*)_objs[0];
+}
+
+inline node* find_first_node_with_class(std::ostream& a_out,node& a_from,const std::string& a_class) {
+  search_action action(a_out);
+  action.reset();
+  action.set_what(search_action::search_node_of_class);
+  action.set_stop_at_first(true);
+  action.set_class(a_class);
+  a_from.search(action);
+  const std::vector<void*>& _objs = action.objs();
+  if(_objs.empty()) return 0;
+  return (node*)_objs[0];
+}
+
+}}
+
+#include "path"
+
+namespace tools {
+namespace sg {
+
+inline const path_t& find_path(search_action& a_action,node& a_from,node& a_node,bool a_verbose) {
+  a_action.reset();
+  a_action.set_what(search_action::search_path_to_node);
+  a_action.set_node(&a_node);
+  a_from.search(a_action);
+  if(!a_action.done()) {
+    if(a_verbose) {
+      a_action.out() << "tools::sg::find_path :"
+            << " not found node of class " << a_node.s_cls()
+            << " from head node of class " << a_from.s_cls()
+            << std::endl;
+    }
+    a_action.clear_path();
+    return a_action.path();
+  }
+  if(a_verbose) {
+    a_action.out() << "tools::sg::find_path :"
+          << " found node of class " << a_node.s_cls()
+          << " from head node of class " << a_from.s_cls()
+          << std::endl;
+  }
+  const path_t& path = a_action.path();
+  if(path.empty()) {
+    if(a_verbose) {
+      a_action.out() << "tools::sg::find_path :"
+            << " node has no path !"
+            << std::endl;
+    }
+    return path;
+  }
+  if(&a_node!=path[path.size()-1]) {
+    a_action.out() << "tools::sg::find_path :"
+          << " node / path tail mismatch !"
+          << " node " << a_node.s_cls()
+          << " tail " << path[path.size()-1]->s_cls()
+          << std::endl;
+    a_action.clear_path();
+    return a_action.path();
+  }
+  return path;
+}
+
+inline const search_action::paths_t& find_paths(search_action& a_action,node& a_from,const std::string& a_class){
+  a_action.reset();
+  a_action.set_what(search_action::search_path_to_node_of_class);
+  a_action.set_class(a_class);
+  a_from.search(a_action);
+  return a_action.paths();
+}
+
+template <class NODE>
+inline const search_action::paths_t& find_paths(search_action& a_action,node& a_from){
+  a_action.reset();
+  a_action.set_what(search_action::search_path_to_node_of_class);
+  a_action.set_class(NODE::s_class());
+  a_from.search(a_action);
+  return a_action.paths();
+}
+
+template <class NODE>
+inline NODE* find_ancestor(std::ostream& a_out,node& a_from,node& a_node,bool a_verbose) {
+  search_action action(a_out);
+  return rfind<NODE>(find_path(action,a_from,a_node,a_verbose));
+}
+
+template <class CONTAINER>
+inline CONTAINER* find_container(std::ostream& a_out,node& a_from,node& a_node,bool a_verbose) {
+  search_action action(a_out);
+  return container<CONTAINER>(find_path(action,a_from,a_node,a_verbose));
+}
+
+template <class NODE>
+inline NODE* search_node(std::ostream& a_out,node& a_from) {
+  search_action sa(a_out);
+  const paths_t& paths = find_paths<NODE>(sa,a_from);
+  tools_vforcit(path_t,paths,it) {
+    NODE* _node = tail<NODE>(*it);
+    if(_node) return _node;
+  }
+  return 0;
+}
+
+template <class SELECTABLE>
+inline SELECTABLE* search_selectable(std::ostream& a_out,node& a_from) {
+  search_action sa(a_out);
+  const paths_t& paths = find_paths<SELECTABLE>(sa,a_from);
+  tools_vforcit(path_t,paths,it) {
+    SELECTABLE* _node = tail<SELECTABLE>(*it);
+    if(_node && _node->border_visible.value()) return _node;
+  }
+/*
+  tools_vforcit(sg::path_t,paths,it) {
+    SELECTABLE* _node = sg::tail<SELECTABLE>(*it);
+    if(_node) return _node;
+  }
+*/
+  return 0;
+}
+
+}}
+
+#endif

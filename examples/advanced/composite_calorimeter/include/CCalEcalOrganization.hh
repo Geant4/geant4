@@ -39,7 +39,7 @@ public:
   CCalEcalOrganization(){};
   ~CCalEcalOrganization();
          
-  virtual unsigned int GetUnitID(const G4Step* aStep) const ;
+  virtual unsigned int GetUnitID(const G4Step* aStep) const override;
       
 };
 

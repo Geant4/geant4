@@ -27,8 +27,6 @@
 
 // John Allison  17th March 2000
 
-#ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
-
 #ifndef G4RAYTRACERXVIEWER_HH
 #define G4RAYTRACERXVIEWER_HH
 
@@ -40,7 +38,5 @@ public:
   virtual ~G4RayTracerXViewer();
   void Initialise();
 };
-
-#endif
 
 #endif

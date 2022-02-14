@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(dicomReader)
 # for shared library
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -26,7 +26,7 @@ add_definitions(-DG4_DCMTK)
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
                     ${DCMTK_INCLUDE_DIRS})
 

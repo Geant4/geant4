@@ -1,0 +1,168 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_bmf
+#define tools_sg_bmf
+
+// mf for multiple field.
+
+// bmf is intended to have no implementation of :
+//   virtual bool write(io::iwbuf&)
+//   virtual bool read(io::irbuf&)
+
+#include "field"
+
+#include "../vdata"
+
+namespace tools {
+namespace sg {
+
+template <class T>
+class bmf : public field {
+  typedef field parent;
+public:
+  static const std::string& s_class() {
+    //we do not use stype(T()).
+    static const std::string s_v("tools::sg::bmf");
+    return s_v;
+  }
+//static bool is_a(const std::string& a_class) {return rcmp(a_class,s_class());}
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< bmf<T> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  bmf(){}
+  bmf(const T& a_value) {m_values.push_back(a_value);}
+  bmf(const std::vector<T>& a_v) {m_values = a_v;}
+  virtual ~bmf(){m_values.clear();}
+public:
+  bmf(const bmf& a_from):parent(a_from),m_values(a_from.m_values){}
+  bmf& operator=(const bmf& a_from){
+    parent::operator=(a_from);
+    if(a_from.m_values!=m_values) m_touched = true;
+    m_values = a_from.m_values;
+    return *this;
+  }
+public:
+  bmf& operator=(const std::vector<T>& a_from){
+    if(a_from!=m_values) m_touched = true;
+    m_values = a_from;
+    return *this;
+  }
+  bool operator==(const bmf& a_from) const {
+    return m_values==a_from.m_values;
+  }
+  bool operator!=(const bmf& a_from) const {
+    return !operator==(a_from);
+  }
+  const T& operator[](size_t a_index) const {
+    //WARNING : no check is done on a_index.
+    return m_values[a_index];
+  }
+  T& operator[](size_t a_index) {
+    //WARNING : no check is done on a_index.
+    return m_values[a_index];
+  }
+public:
+  size_t size() const {return m_values.size();}
+  bool empty() const {return m_values.empty();}
+  const std::vector<T>& values() const {return m_values;}
+  std::vector<T>& values() {return m_values;}
+  void add(const T& a_value) {
+    m_values.push_back(a_value);
+    m_touched = true;
+  }
+  void add(const std::vector<T>& a_vals) {
+    if(a_vals.empty()) return;
+    typedef typename std::vector<T>::const_iterator const_it_t;
+    for(const_it_t it=a_vals.begin();it!=a_vals.end();++it){
+      m_values.push_back(*it);
+    }
+    m_touched = true;
+  }
+  void add_allocated(size_t& a_pos,const T& a_1,const T& a_2,const T& a_3) { //used in sg::plotter.
+    std::vector<T>& v = m_values;
+    v[a_pos] = a_1;a_pos++;
+    v[a_pos] = a_2;a_pos++;
+    v[a_pos] = a_3;a_pos++;
+    m_touched = true;
+  }
+  typedef typename std::vector<T>::iterator it_t;
+  void insert(const it_t& a_it,const T& a_value) {
+    m_values.insert(a_it,a_value);
+    m_touched = true;
+  }
+  bool set_value(size_t a_index,const T& a_value) {
+    if(a_index>=m_values.size()) return false;
+    if(m_values[a_index]!=a_value) m_touched = true;
+    m_values[a_index] = a_value;
+    return true;
+  }
+  bool get_value(size_t a_index,T& a_value) {
+    if(a_index>=m_values.size()) {a_value=T();return false;}
+    a_value = m_values[a_index];
+    return true;
+  }
+  void clear() {
+    if(m_values.size()) m_touched = true;
+    m_values.clear();
+  }
+
+  void set_values(const std::vector<T>& a_values) {
+    if(a_values!=m_values) m_touched = true;
+    m_values = a_values;
+  }
+  void set_value(const T& a_value) { //used in ArcheryTune.
+    bool to_resize = m_values.size()==1?false:true;
+    bool is_eq = ( (m_values.size()>=1) && (m_values[0]==a_value) ) ? true : false;
+    if(to_resize) m_values.resize(1);
+    if(to_resize || !is_eq) m_touched = true;
+    m_values[0] = a_value;
+  }
+
+public: //for iv2sg
+  //bool setValues(size_t a_index,size_t a_num,const T* a_vs) {
+  //  for(size_t index=0;index<a_num;index++) {
+  //    if(!set1Value(a_index+index,a_vs[index])) return false;
+  //  }
+  //  return true;
+  //}
+
+  bool setValues(size_t a_index,size_t a_num,const T* a_vs) {
+    //  012345678
+    //    234
+    if((a_index+a_num)>=m_values.size()) m_values.resize(a_index+a_num);
+    for(size_t index=0;index<a_num;index++) {
+      if(a_vs[index]!=m_values[a_index+index]) m_touched = true;
+      m_values[a_index+index] = a_vs[index];
+    }
+    return true;
+  }
+
+  bool set1Value(size_t a_index,const T& a_value) {
+    if(a_index>=m_values.size()) m_values.resize(a_index+1);
+    if(m_values[a_index]!=a_value) m_touched = true;
+    m_values[a_index] = a_value;
+    return true;
+  }
+  bool setValue(const T& a_value) {set_value(a_value);return true;}
+
+  bmf& operator=(const T& a_v){
+    if(!setValue(a_v)) {}
+    return *this;
+  }
+  size_t getNum() const {return m_values.size();}
+  T* getValues(size_t a_start) { //for gopaw.
+    if(a_start>=(m_values.size()+1)) return 0;
+    T* data = vec_data(m_values);
+    return data+a_start;
+  }
+protected:
+  std::vector<T> m_values;
+};
+
+}}
+
+#endif

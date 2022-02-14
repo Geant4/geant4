@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Version information
-//
-// 26.09.05 K.Murakami  - Created
+// Geant4 Version information
+
+// Author: K.Murakami, 26.09.2005 - Created
 // --------------------------------------------------------------------
 #ifndef G4VERSION_HH
-#define G4VERSION_HH
+#define G4VERSION_HH 1
 
 // Numbering rule for "G4VERSION_NUMBER":
 // - The number is consecutive (i.e. 711) as an integer.
@@ -40,23 +40,23 @@
 //     |--> patch number
 
 #ifndef G4VERSION_NUMBER
-#define G4VERSION_NUMBER  1060
+  #define G4VERSION_NUMBER 1100
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-10-06 $"
+  #define G4VERSION_TAG "$Name: geant4-11-00 $"
 #endif
 
 // as variables
 
-#include "G4Types.hh"
 #include "G4String.hh"
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-10-06 [MT]$";
+static const G4String G4Version = "$Name: geant4-11-00 [MT]$";
 #else
-static const G4String G4Version = "$Name: geant4-10-06 $";
+static const G4String G4Version = "$Name: geant4-11-00 $";
 #endif
-static const G4String G4Date    = "(6-December-2019)";
+static const G4String G4Date = "(10-December-2021)";
 
 #endif

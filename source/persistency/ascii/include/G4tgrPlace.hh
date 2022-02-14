@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrPlace
+// G4tgrPlace
 //
 // Class description:
 //
 // Abstract base class to describe the position of a G4tgrVolume inside
 // another G4tgrVolume.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrPlace_h
-#define G4tgrPlace_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrPlace_hh
+#define G4tgrPlace_hh 1
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -47,7 +42,7 @@ class G4tgrVolume;
 
 class G4tgrPlace
 {
-  public:  // with description
+  public:
 
     G4tgrPlace();
     virtual ~G4tgrPlace();
@@ -58,24 +53,24 @@ class G4tgrPlace
     G4tgrVolume* GetVolume() const { return theVolume; }
     unsigned int GetCopyNo() const { return theCopyNo; }
     const G4String& GetType() const { return theType; }
-    void SetVolume( G4tgrVolume* vol ) { theVolume = vol; }
-    void SetType( const G4String& typ ){ theType = typ; }
+    void SetVolume(G4tgrVolume* vol) { theVolume = vol; }
+    void SetType(const G4String& typ) { theType = typ; }
 
     virtual G4ThreeVector GetPlacement() const;
 
   protected:
 
-    G4tgrVolume* theVolume;
+    G4tgrVolume* theVolume = nullptr;
       // The detunit to which it belongs
 
-    G4String theParentName;  
+    G4String theParentName = "";
       // The parent (by name, as we will allow that a child
-      // is placed in the file before the parent is created) 
+      // is placed in the file before the parent is created)
 
-    unsigned int theCopyNo;
+    unsigned int theCopyNo = 0;
       // The copy number
 
-    G4String theType;
+    G4String theType = "";
       // The type (simple/replica/param)
 };
 

@@ -29,13 +29,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalDetectorConstruction.hh"
-#include "CCalEndOfEventAction.hh"
-#include "CCalRunAction.hh"
+#include "CCalActionInitializer.hh"
+
+#include "G4AnalysisManager.hh"
 
 #include "CCalPrimaryGeneratorAction.hh"
 #include "G4PhysListFactory.hh"
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #include "G4VisExecutive.hh"
@@ -46,7 +47,7 @@ int main(int argc,char** argv) {
 
   G4VisManager *visManager = nullptr;
 
-  G4RunManager * runManager = new G4RunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
   runManager->SetUserInitialization(new CCalDetectorConstruction);
 
   G4PhysListFactory factory;
@@ -126,21 +127,7 @@ int main(int argc,char** argv) {
     UImanager->ApplyCommand(command+fileName);
   }
 
-<<<<<<< HEAD
-delete runManager;
-
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-
-=======
-  //Close-out analysis:
-  // Save histograms
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
-  man->Write();
-  man->CloseFile();
   // Complete clean-up
-  delete G4AnalysisManager::Instance();
   delete runManager;
   delete visManager;
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

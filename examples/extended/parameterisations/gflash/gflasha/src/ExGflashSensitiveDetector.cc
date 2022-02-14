@@ -28,78 +28,81 @@
 //
 // Created by Joanna Weng 26.11.2004
 #include "ExGflashSensitiveDetector.hh"
+#include "ExGflashDetectorConstruction.hh"
 #include "ExGflashHit.hh"
 #include "G4GFlashSpot.hh"
-#include "ExGflashDetectorConstruction.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
-#include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
 
-//WARNING :  You have to use also  G4VGFlashSensitiveDetector() as base class
+// WARNING :  You have to use also  G4VGFlashSensitiveDetector() as base class
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashSensitiveDetector::ExGflashSensitiveDetector(G4String name,
-                                                     ExGflashDetectorConstruction* /* det */)
-  // : G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), fDetector(det), fHCID(-1)
- : G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), fHCID(-1)
+ExGflashSensitiveDetector::ExGflashSensitiveDetector(
+  G4String name, ExGflashDetectorConstruction* /* det */)
+  : G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), fHCID(-1)
 {
-  G4String caloname="ExGflashCollection";
+  G4String caloname = "ExGflashCollection";
   collectionName.insert(caloname);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashSensitiveDetector::~ExGflashSensitiveDetector() 
-{}
+ExGflashSensitiveDetector::~ExGflashSensitiveDetector() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 {
-  if(fHCID<0){ fHCID = GetCollectionID(0); }
-  fCaloHitsCollection=new 
-  ExGflashHitsCollection(SensitiveDetectorName,collectionName[0]); // first collection
-  HCE->AddHitsCollection( fHCID, fCaloHitsCollection );
+  if ( fHCID < 0 ) {
+    fHCID = GetCollectionID(0);
+  }
+  fCaloHitsCollection = new ExGflashHitsCollection(
+    SensitiveDetectorName, collectionName[0]);  // first collection
+  HCE->AddHitsCollection(fHCID, fCaloHitsCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
-{}
+void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool ExGflashSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* /* ROhist */)
+G4bool ExGflashSensitiveDetector::ProcessHits(
+  G4Step* aStep, G4TouchableHistory* /* ROhist */)
 {
-  G4double e=aStep->GetTotalEnergyDeposit();
-  if(e<=0.)return false;
-  
-  ExGflashHit* caloHit=new ExGflashHit();
+  G4double e = aStep->GetTotalEnergyDeposit();
+  if ( e <= 0. ) return false;
+
+  auto caloHit = new ExGflashHit();
   caloHit->SetEdep(e);
   caloHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
   fCaloHitsCollection->insert(caloHit);
-  
+
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Separate GFLASH interface
-G4bool ExGflashSensitiveDetector::ProcessHits(G4GFlashSpot*aSpot ,G4TouchableHistory* /* ROhist */)
-{  //cout<<"This is ProcessHits GFLASH"<<endl;
-  G4double e=aSpot->GetEnergySpot()->GetEnergy();
-  if(e<=0.)return false;
-  
-  //  G4VPhysicalVolume* pCurrentVolume = aSpot->GetTouchableHandle()->GetVolume();
-  
-  ExGflashHit* caloHit=new ExGflashHit();
+G4bool ExGflashSensitiveDetector::ProcessHits(
+  G4GFlashSpot* aSpot, G4TouchableHistory* /* ROhist */)
+{
+  // cout<<"This is ProcessHits GFLASH"<<endl;
+  G4double e = aSpot->GetEnergySpot()->GetEnergy();
+  if ( e <= 0. ) return false;
+
+  //  G4VPhysicalVolume* pCurrentVolume =
+  //  aSpot->GetTouchableHandle()->GetVolume();
+
+  auto caloHit = new ExGflashHit();
   caloHit->SetEdep(e);
   caloHit->SetPos(aSpot->GetEnergySpot()->GetPosition());
   fCaloHitsCollection->insert(caloHit);
-  //  if (ROhist){;} 
-  
+  //  if (ROhist){;}
+
   return true;
 }
 

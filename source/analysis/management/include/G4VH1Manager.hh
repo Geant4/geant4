@@ -40,13 +40,13 @@ class G4HnManager;
 
 class G4VH1Manager
 {
-  // Disable using the object managers outside 
+  // Disable using the object managers outside
   friend class G4VAnalysisManager;
   friend class G4VAnalysisReader;
 
   public:
-    G4VH1Manager() {}
-    virtual ~G4VH1Manager() {}
+    G4VH1Manager() = default;
+    virtual ~G4VH1Manager() = default;
 
     // deleted copy constructor & assignment operator
     G4VH1Manager(const G4VH1Manager& rhs) = delete;
@@ -75,7 +75,7 @@ class G4VH1Manager
                            const G4String& fcnName = "none") = 0;
 
     virtual G4bool ScaleH1(G4int id, G4double factor) = 0;
-                           
+
     // Methods to fill histograms
     virtual G4bool FillH1(G4int id, G4double value, G4double weight = 1.0) = 0;
 

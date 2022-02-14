@@ -1,0 +1,38 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_icol
+#define tools_wroot_icol
+
+#include "../typedefs"
+#include "../cid"
+
+#include <string>
+
+namespace tools {
+namespace wroot {
+class branch;
+class base_leaf;
+}}
+
+namespace tools {
+namespace wroot {
+
+class icol {
+  public:
+    virtual ~icol(){}
+  public:
+    virtual void* cast(cid) const = 0;
+    virtual cid id_cls() const = 0;
+  public:
+    virtual void add() = 0;
+    virtual void set_def() = 0;
+    virtual const std::string& name() const = 0;
+    virtual void set_basket_size(uint32) = 0;
+    virtual branch& get_branch() const = 0;
+    virtual base_leaf* get_leaf() const = 0;
+};
+
+}}
+
+#endif

@@ -1,0 +1,23 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_seek
+#define tools_rroot_seek
+
+//////////////////////////////////////////////////////////////////////////
+// Definition of a file pointer .                                       //
+//////////////////////////////////////////////////////////////////////////
+
+#include "../typedefs"
+
+namespace tools {
+namespace rroot {
+
+typedef int64 seek;
+typedef int seek32;
+
+inline uint32 big_file_version_tag() {return 1000;}
+
+}}
+
+#endif

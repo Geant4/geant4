@@ -7,6 +7,19 @@
 <<<<<<< HEAD
 =======
 
+06 Oct 21 I. Hrivnacova - tag dnaphysics-V10-07-01
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  removed Analysis.hh.
+
+19 Jul 21 I. Hrivnacova - tag dnaphysics-V10-07-00
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+10 Nov 20 B. Morgan - tag dnaphysics-V10-06-00
+- Migration to G4RunManagerFactory.
+
 12 Jan 19 S. Incerti - tag dnaphysics-V10-05-00
 - Updated README (test)
 
@@ -43,13 +56,13 @@
 16 Aug 2017 - tag dnaphysics-V10-03-11 - SI
 - updated numbering scheme
 
-12 Aug 2017 - tag dnaphysics-V10-03-10 - SI, VI 
+12 Aug 2017 - tag dnaphysics-V10-03-10 - SI, VI
 - updated plot.C with numbering
 
-11 Aug 2017 - tag dnaphysics-V10-03-09 - SI, VI 
+11 Aug 2017 - tag dnaphysics-V10-03-09 - SI, VI
 - retag
 
-10 Aug 2017 - tag dnaphysics-V10-03-08 - SI, VI 
+10 Aug 2017 - tag dnaphysics-V10-03-08 - SI, VI
 - fixed FPE, improved SteppingAction
 
 09 Aug 2017 - tag dnaphysics-V10-03-07 - S. Incerti
@@ -90,7 +103,7 @@
 - dnaphysics.cc: second arg is nb of threads
 
 02 June 2016 - tag dnaphysics-V10-02-01 - V. Ivanchenko
-- DetectorConstructor, DetectorMessenger - ensure that geometry 
+- DetectorConstructor, DetectorMessenger - ensure that geometry
     is created once, material may be changed for next runs
 - /run/initialise moved from the code to macro
 - DNA physics configuration is moved from the code to macro
@@ -154,30 +167,30 @@
 30 July 2013 - tag dnaphysics-V09-06-05 - A.Dotti
 - Bug fix for compilation warning with clang32
 
-10 June 2013 - tag dnaphysics-V09-06-04 - S. Incerti 
+10 June 2013 - tag dnaphysics-V09-06-04 - S. Incerti
 - Withdraw RunAction from ActionInitialization for master
 
-28 May 2013 - tag dnaphysics-V09-06-03 - S. Incerti 
+28 May 2013 - tag dnaphysics-V09-06-03 - S. Incerti
 - changed modified density
 - removed standard process tagging in SteppingAction
 - updated plot.C
 
-22 May 2013 - tag dnaphysics-V09-06-02 - M. Karamitros 
+22 May 2013 - tag dnaphysics-V09-06-02 - M. Karamitros
 - Migrated to MT
 
 13 April 2013 - tag dnaphysics-V09-06-01 - S. Incerti
 - Removed unused electron capture process
-- Changed process naming scheme as in the "microdosimetry" 
-advanced example 
+- Changed process naming scheme as in the "microdosimetry"
+advanced example
 
 15 February 2013 - tag dnaphysics-V09-06-00 - S. Incerti
-- Changed default water definition 
+- Changed default water definition
 
 3 November 2012 - tag dnaphysics-V09-05-07 - S. Incerti
-- Removed shadowing in SteppingAction 
+- Removed shadowing in SteppingAction
 
 26 October 2012 - tag dnaphysics-V09-05-06 - L. Pandola
-- Changed CMakeLists.txt to deal with VIS 
+- Changed CMakeLists.txt to deal with VIS
 
 26 October 2012 - tag dnaphysics-V09-05-05 - S. Incerti
 - Renamed executable.
@@ -185,20 +198,20 @@ advanced example
 11 October 2012 - tag dnaphysics-V09-05-04 - G. Cosmo
 - Explicit inclusion of units and constants headers
 
-09 October 2012- tag dnaphysics-V09-05-03 - S. Incerti  
+09 October 2012- tag dnaphysics-V09-05-03 - S. Incerti
 - cleaned main
 
-09 October 2012- tag dnaphysics-V09-05-02 - S. Incerti  
+09 October 2012- tag dnaphysics-V09-05-02 - S. Incerti
 - added more histogram variables
 
-15 August 2012- tag dnaphysics-V09-05-01 - S. Incerti  
+15 August 2012- tag dnaphysics-V09-05-01 - S. Incerti
 - added messenger for material change
 - switched to new analysis interface from Guy Barrand
 
-11 August 2012- tag dnaphysics-V09-05-00 - S. Incerti  
+11 August 2012- tag dnaphysics-V09-05-00 - S. Incerti
 - updated README and SteppingAction.cc files
 
-05 November 2011- tag dnaphysics-V09-04-08 - S. Incerti  
+05 November 2011- tag dnaphysics-V09-04-08 - S. Incerti
 - removed export=root option in HistoManager.cc
 
 24 August2011 - tag dnaphysics-V09-04-07 - S. Incerti
@@ -212,7 +225,7 @@ advanced example
 
 02 August 2011 - tag dnaphysics-V09-04-04 - S. Incerti
 - increased statistics in dna.mac as suggested by Gunter
-- added total energy deposits in ntuple 
+- added total energy deposits in ntuple
 
 05 April 2011 - tag dnaphysics-V09-04-03 - S. Incerti
 - added comment for use of variable density material

@@ -40,8 +40,8 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4BoldyshevTripletModel::maxZ = 99;
-G4LPhysicsFreeVector* G4BoldyshevTripletModel::data[] = {0};
+const G4int G4BoldyshevTripletModel::maxZ;
+G4PhysicsFreeVector* G4BoldyshevTripletModel::data[] = {nullptr};
 
 G4BoldyshevTripletModel::G4BoldyshevTripletModel(const G4ParticleDefinition*, const G4String& nam)
   :G4VEmModel(nam),smallEnergy(4.*MeV)
@@ -174,7 +174,7 @@ void G4BoldyshevTripletModel::ReadData(size_t Z, const char* path)
     }
   }
   
-  data[Z] = new G4LPhysicsFreeVector();
+  data[Z] = new G4PhysicsFreeVector(0,/*spline=*/true);
   std::ostringstream ost;
   ost << datadir << "/livermore/tripdata/pp-trip-cs-" << Z <<".dat";
   std::ifstream fin(ost.str().c_str());
@@ -200,7 +200,7 @@ void G4BoldyshevTripletModel::ReadData(size_t Z, const char* path)
   } 
 
   // Activation of spline interpolation
-  data[Z]->SetSpline(true);    
+  data[Z]->FillSecondDerivatives();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -219,7 +219,7 @@ G4double G4BoldyshevTripletModel::ComputeCrossSectionPerAtom(
 
   G4double xs = 0.0;  
   G4int intZ = std::max(1, std::min(G4lrint(Z), maxZ));
-  G4LPhysicsFreeVector* pv = data[intZ];
+  G4PhysicsFreeVector* pv = data[intZ];
 
   // if element was not initialised
   // do initialisation safely for MT mode

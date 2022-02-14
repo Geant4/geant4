@@ -44,13 +44,12 @@
 
 
 G4LivermoreIonisationCrossSection::G4LivermoreIonisationCrossSection(
-  const G4String& nam) : G4VhShellCrossSection(nam), crossSectionHandler(0)
+  const G4String& nam) : G4VhShellCrossSection(nam), crossSectionHandler(nullptr)
 {
   fLowEnergyLimit  = 10.0*eV;
   fHighEnergyLimit = 100.0*GeV;
 
   transitionManager = G4AtomicTransitionManager::Instance();
-
   verboseLevel = 0;
   
   Initialise();
@@ -95,7 +94,6 @@ G4LivermoreIonisationCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator
   G4int nmax = std::min(9,transitionManager->NumberOfShells(Z));
   if(Z > 6 && Z < 93 && n < nmax && 
      kinEnergy >= fLowEnergyLimit && kinEnergy <= fHighEnergyLimit) {
-    //G4cout << "Z= " << Z << "  n= " << n << " E(MeV)= " << kinEnergy/MeV << G4endl;
     cross = crossSectionHandler->FindValue(Z, kinEnergy, n);
   }
   return cross;

@@ -16,6 +16,70 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 24, 2021 G.Cosmo geom-csg-V10-07-06
+- Corrected typo in G4UPara::GetXHalfLength().
+  Addressing problem report #2446.
+
+November 01, 2021 E.Tcherniaev geom-csg-V10-07-05
+- Revision of G4UTrap:
+  o List of accessors and modifiers made consistent with G4Trap
+  o Implemented check of parameters similar to G4Trap
+
+August 31, 2021 B.Morgan geom-csg-V10-07-04
+- Remove old Get-er methods that simply forward to the new main Get-er
+  methods
+
+May 18, 2021 J.Apostolakis geom-csg-V10-07-03
+- Added method to enable simpler conversion of G4 solids to VecGeom:
+  o G4Trap: added methods to calculate Phi & Theta
+  o G4Para: added methods to calculate original alpha, theta, phi
+
+May 17, 2021 E.Tcherniaev geom-csg-V10-07-02
+- Bux fix in G4Sphere::GetSurfaceArea()
+- G4Sphere::GetCubicVolume() moved to source
+- Revised G4Sphere::GetPointOnSurface()
+
+March 30, 2021 B.Morgan geom-csg-V10-07-01
+- Migrate sources.cmake to modular build API
+
+February 1, 2021 G.Cosmo geom-csg-V10-07-00
+- G4Trap, G4Para: removed spurious character in printout in StreamInfo().
+  Addressed problem report #2318.
+
+November 12, 2020 E.Tcherniaev geom-csg-V10-06-05
+- G4Sphere::InitializeThetaTrigonometry(): tan() replaced with sin()/cos(),
+  it addresses problem report #2289
+
+October 08, 2020 E.Tcherniaev geom-csg-V10-06-04
+- G4Box: Migration to G4QuickRand in GetPointOnSurface();
+- G4Trd: Added two precalculated values fHx, fHy for fast calculation
+  of lateral areas; Revision of GetPointOnSurface();
+- G4Trap: Added array fAreas[6] with precalculated face areas;
+  Added SetCachedValues() method; Revision of GetPointOnSurface();
+- G4Tubs: Revision of GetPointOnSurface();
+- G4CSGSolid: Explicit implementation of G4RandomRadiusInRing(rmin,rmax)
+  based on G4QuickRand
+
+October 06, 2020 E.Tcherniaev geom-csg-V10-06-03
+- Improved G4CutTubs:
+  o Implemented GetCubicVolume(), GetSurfaceArea();
+  o Reimplemented GetPointOnSurface(), it's now faster and uniform;
+  o Reimplemented IsCrossingCutPlanes(), it now reports a problem
+    only in case if cut planes are crossing inside the lateral surface;
+  o Removed GetMaxMinZ() as obsolete;
+
+April 30, 2020 G.Cosmo geom-csg-V10-06-02
+- Adopt new convention for location of headers in VecGeom for all wrappers.
+
+April 09, 2020 E.Tcherniaev geom-csg-V10-06-01
+- G4Trap.cc: fixed calculation of normal for points on edge in
+  SurfaceNormal(), improved code for Inside().
+- testG4Sphere.cc: removed obsolete code for testing CalculateExtent().
+
+December 10, 2019 B.Morgan geom-csg-V10-06-00
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 August 23, 2019 G.Cosmo geom-csg-V10-05-05
 - Minor c++11 revision and headers cleanup.
 - Use pre-increment wherever possible.
@@ -331,7 +395,7 @@ May 5, 2015  G.Cosmo
 April 28, 2015  T.Nikitina               geom-csg-V10-01-03
 - Fixed calculation of Normal in G4Para for kPX and kMX sides in
   DistanceToOut(p,v) and ApproxSurfaceNormal(p).
-  Addressing problem report #1736. 
+  Addressing problem report #1736.
 
 March 3, 2015  G.Cosmo                   geom-csg-V10-01-02
 - Use accessors x(), y() and z() from UVector3, instead of directly accessing
@@ -364,7 +428,7 @@ March 5, 2014  G.Cosmo                   geom-csg-V10-00-03
 
 February 12, 2014  G.Cosmo               geom-csg-V10-00-02
 - Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
-  in parameterisation. Resolves crash in MT visualization when using USolids. 
+  in parameterisation. Resolves crash in MT visualization when using USolids.
 
 February 12, 2014  G.Cosmo               geom-csg-V10-00-01 (and -00)
 - Added correct cloning mechanism in G4U* wrappers.
@@ -418,16 +482,16 @@ Oct 19, 2012   G.Cosmo                   geom-csg-V09-05-08
 - G4Torus: include printout within G4CSGDEBUG. Some code formatting...
 
 Oct 11, 2012   J.Apostolakis             geom-csg-V09-05-07
-- G4Torus: small additional changes, to reorder a few computation 
+- G4Torus: small additional changes, to reorder a few computation
   for better FP accuracy.
 
 Oct  4, 2012   J.Apostolakis             geom-csg-V09-05-06
-- G4Torus: revised the values of delta, to account for precision loss 
+- G4Torus: revised the values of delta, to account for precision loss
   in calculating radius 'pt'.
   Added printing in case of not finding normal when on surface.
 
 Oct  3, 2012   J.Apostolakis             geom-csg-V09-05-05
-- G4Para::SurfaceNormal(): fixed calculation of sin(alpha) from cosine 
+- G4Para::SurfaceNormal(): fixed calculation of sin(alpha) from cosine
   and tangent.
 
 June 12, 2012 G.Cosmo                    geom-csg-V09-05-04
@@ -571,7 +635,7 @@ Nov 26, 2009  T.Nikitina                 geom-csg-V09-02-07
   SPhi in [0:twopi] or [-twopi:0]. Addresses problem report #1086.
 
 Nov 12, 2009  T.Nikitina                 geom-csg-V09-02-06
-- G4Cons: fix to DistanceToIn(p,v), added a check on the direction in case 
+- G4Cons: fix to DistanceToIn(p,v), added a check on the direction in case
   of point on surface. Fixes a problem of stuck tracks observed in CMS, due
   to wrong reply from the solid for points on the inner radius surface base
   with direction along the imaginary extension of the cone.
@@ -690,13 +754,13 @@ May 18, 2007  G.Cosmo                    geom-csg-V08-03-01
 - Use kAngTolerance and kRadTolerance from G4GeometryTolerance class.
 - Coworks with tag "global-V08-03-03".
 
-May 16, 2007  T.Nikitina                 geom-csg-V08-03-00          
+May 16, 2007  T.Nikitina                 geom-csg-V08-03-00
 - G4Tubs: fixed bug for DistanceToOut(p,v) for phi section.
-  Bug was causing segmentation fault in recursive_test (problem report #784). 
+  Bug was causing segmentation fault in recursive_test (problem report #784).
   For v crossing the center of the tub DistanceToOut was always giving
-  Radial distance and not distance in Phi.  
+  Radial distance and not distance in Phi.
 - G4Cons: fixed bug for DistanceToOut(p,v) for phi section,
-  the same as for G4Tubs. 
+  the same as for G4Tubs.
 - Updated unit tests.
 
 Oct 19, 2006  G.Cosmo                    geom-csg-V08-01-00
@@ -766,7 +830,7 @@ May 11, 2005  V.Grichine                 geom-csg-V07-00-05
 - Updated unit test testSurfaceNormal.cc.
 
 May 09, 2005  V.Grichine                 geom-csg-V07-00-04
-- Updated implementation of SurfaceNormal(p) to get consistence with 
+- Updated implementation of SurfaceNormal(p) to get consistence with
   Inside(p) functions for the treatment of phi/theta surfaces.
   They are treated now in both functions in terms of kAngTolerance.
   The reason is that historically SurfaceNormal(p) was using only
@@ -1148,7 +1212,7 @@ Jan 19,   00   G. Cosmo			  geom-solids-csg-01-00-04
  - Syncronized file versions with HEAD (essentially CVS headers changes).
  - Fixes for missing migration on HEAD related to some files in test/fred
    and test/SBT.
- 
+
 Nov 17,   99   J. Apostolakis             geom-solids-csg-01-00-03
  - Tagged
 
@@ -1158,7 +1222,7 @@ Nov 17,   99   V. Grichine
  - A check in G4Trap Makeplane added.
 
 Nov 10,   99   J. Apostolakis             geom-solids-csg-01-00-02-cand
- - Included  David Williams' modifications to 
+ - Included  David Williams' modifications to
    G4IntersectingCone.cc, G4PolyconeSide.cc and G4VCSGfaceted.cc
    and to  test/SBT/SBT.cc  and  test/SBT/polycone.geant4
 
@@ -1166,21 +1230,21 @@ Nov 10,   99   J. Apostolakis             geom-solids-csg-01-00-01
  - Tagged
 
 May 18,   99   David Williams
- - Replaced 1/DBL_MAX with DBL_MIN (valid correction, seen in tests for STL) 
+ - Replaced 1/DBL_MAX with DBL_MIN (valid correction, seen in tests for STL)
    in G4PolyPhiFace.cc, G4PolyconeSide.cc and G4PolyhedraSide.cc
 
 Apr 29,   99   David Williams
  - G4Polyhedra and G4Polycone (and G4VCSGfaceted) modified:
          1. Implemented correct copy constructors and assignment operators.
-         2. Fix some leaks for tracks that pass exactly through an edge. 
+         2. Fix some leaks for tracks that pass exactly through an edge.
             Some leaks still remain: particularly if a track passes through
 	     a corner and between the curved edges of G4Polycone.
          3. G4Polyhedra argument numSide changed to G4int (from G4double)
 
 Apr 13,   99   Vladimir Grichine and Simone Giani
- - Minor consistency fix to 8 basic CSG solids: 
+ - Minor consistency fix to 8 basic CSG solids:
    Tolerance used in calculation of extent but not in one place,
-   and not another - this tripped up the client code. 
+   and not another - this tripped up the client code.
 
 Feb 16,   99   David Williams
  - Repaired bugs in G4Polycone (G4PolyconeSide.cc) as found in
@@ -1195,7 +1259,7 @@ Feb 12,   99   David Williams
 Feb   9,  99   David C. Williams      (davidw@scipp.ucsc.edu)
  - I've committed new versions of the CSG Polycone and Polyhedra in the
    geant4 repository, including a new utility class called
-   G4ReduciblePolygon. The new versions fix several subtle bugs which my  
+   G4ReduciblePolygon. The new versions fix several subtle bugs which my
    "test3" batch geometry testing code uncovered. In addition, the new class
    G4ReduciblePolygon is used to run strict tests on the validity of input
    parameters.

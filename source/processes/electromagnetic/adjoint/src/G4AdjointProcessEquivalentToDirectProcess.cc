@@ -23,297 +23,249 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
-//        GEANT 4 class implementation file 
-//
-// Class Description
 //
 // This class is for adjoint process equivalent to direct process
-
+//
 // ------------------------------------------------------------
-//   Created by L.Desorgher          25 Sept. 2009  Inspired from G4WrapperProcess
+//   Created by L.Desorgher          25 Sept. 2009
 // ------------------------------------------------------------
 
 #include "G4AdjointProcessEquivalentToDirectProcess.hh"
+
 #include "G4DynamicParticle.hh"
-G4AdjointProcessEquivalentToDirectProcess::G4AdjointProcessEquivalentToDirectProcess(const G4String& aName,
-										     G4VProcess* aProcess,
-										     G4ParticleDefinition* fwd_particle_def)
-:G4VProcess(aName)
-{  
-   theDirectProcess =aProcess;
-   theProcessType = theDirectProcess->GetProcessType();
-   theFwdParticleDef  = fwd_particle_def;
+#include "G4ParticleDefinition.hh"
+#include "G4VProcess.hh"
+
+G4AdjointProcessEquivalentToDirectProcess::
+  G4AdjointProcessEquivalentToDirectProcess(
+    const G4String& aName, G4VProcess* aProcess,
+    G4ParticleDefinition* fwd_particle_def)
+  : G4VProcess(aName)
+{
+  fDirectProcess  = aProcess;
+  theProcessType  = fDirectProcess->GetProcessType();
+  fFwdParticleDef = fwd_particle_def;
 }
 
-
-G4AdjointProcessEquivalentToDirectProcess::~G4AdjointProcessEquivalentToDirectProcess()
+G4AdjointProcessEquivalentToDirectProcess::
+  ~G4AdjointProcessEquivalentToDirectProcess()
 {
-  if (theDirectProcess!=0) delete theDirectProcess;
+  if(fDirectProcess != nullptr)
+    delete fDirectProcess;
 }
 
-void G4AdjointProcessEquivalentToDirectProcess::ResetNumberOfInteractionLengthLeft()
+void G4AdjointProcessEquivalentToDirectProcess::
+  ResetNumberOfInteractionLengthLeft()
 {
-  theDirectProcess->ResetNumberOfInteractionLengthLeft();
+  fDirectProcess->ResetNumberOfInteractionLengthLeft();
 }
 
 G4double G4AdjointProcessEquivalentToDirectProcess::
-AlongStepGetPhysicalInteractionLength( const G4Track& track,
-                                             G4double  previousStepSize,
-                                             G4double  currentMinimumStep,
-                                             G4double& proposedSafety,
-                                             G4GPILSelection* selection     )
-{ 
-  
-
-  //Change the particle definition to the direct one
-  //------------------------------------------------
-  G4DynamicParticle* theDynPart = const_cast<G4DynamicParticle*> (track.GetDynamicParticle());
+  AlongStepGetPhysicalInteractionLength(const G4Track& track,
+                                        G4double previousStepSize,
+                                        G4double currentMinimumStep,
+                                        G4double& proposedSafety,
+                                        G4GPILSelection* selection)
+{
+  // Change the particle definition to the direct one
+  G4DynamicParticle* theDynPart =
+    const_cast<G4DynamicParticle*>(track.GetDynamicParticle());
   G4ParticleDefinition* adjPartDef = theDynPart->GetDefinition();
-  
-  G4DecayProducts* decayProducts = const_cast<G4DecayProducts*>  (theDynPart->GetPreAssignedDecayProducts());
-  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*)(0));
-  theDynPart->SetDefinition(theFwdParticleDef);
-  
-  
-  //Call the direct process
-  //----------------------
-  G4double GPIL =  theDirectProcess->
-         AlongStepGetPhysicalInteractionLength( track,
-                                                previousStepSize,
-                                                currentMinimumStep,
-                                                proposedSafety,
-                                                selection     );
-  
-  
-  //Restore the adjoint particle definition to the direct one
-  //------------------------------------------------
+
+  G4DecayProducts* decayProducts =
+    const_cast<G4DecayProducts*>(theDynPart->GetPreAssignedDecayProducts());
+  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*) (0));
+  theDynPart->SetDefinition(fFwdParticleDef);
+
+  // Call the direct process
+  G4double GPIL = fDirectProcess->AlongStepGetPhysicalInteractionLength(
+    track, previousStepSize, currentMinimumStep, proposedSafety, selection);
+
+  // Restore the adjoint particle definition to the direct one
   theDynPart->SetDefinition(adjPartDef);
   theDynPart->SetPreAssignedDecayProducts(decayProducts);
-  
-  
+
   return GPIL;
-						
 }
 
-G4double G4AdjointProcessEquivalentToDirectProcess::
-AtRestGetPhysicalInteractionLength( const G4Track& track,
-                                          G4ForceCondition* condition )
-{ //Change the particle definition to the direct one
-  //------------------------------------------------
-  G4DynamicParticle* theDynPart = const_cast<G4DynamicParticle*> (track.GetDynamicParticle());
+G4double
+G4AdjointProcessEquivalentToDirectProcess::AtRestGetPhysicalInteractionLength(
+  const G4Track& track, G4ForceCondition* condition)
+{
+  // Change the particle definition to the direct one
+  G4DynamicParticle* theDynPart =
+    const_cast<G4DynamicParticle*>(track.GetDynamicParticle());
   G4ParticleDefinition* adjPartDef = theDynPart->GetDefinition();
-  
-  G4DecayProducts* decayProducts =  const_cast<G4DecayProducts*>  (theDynPart->GetPreAssignedDecayProducts());
-  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*)(0));
-  theDynPart->SetDefinition(theFwdParticleDef);
-  
-  
-  //Call the direct process
-  //----------------------
 
-   
-  G4double GPIL =  theDirectProcess->AtRestGetPhysicalInteractionLength( track, condition );
-  
-  //Restore the adjoint particle definition to the direct one
-  //------------------------------------------------
+  G4DecayProducts* decayProducts =
+    const_cast<G4DecayProducts*>(theDynPart->GetPreAssignedDecayProducts());
+  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*) (0));
+  theDynPart->SetDefinition(fFwdParticleDef);
+
+  // Call the direct process
+  G4double GPIL =
+    fDirectProcess->AtRestGetPhysicalInteractionLength(track, condition);
+
+  // Restore the adjoint particle definition to the direct one
   theDynPart->SetDefinition(adjPartDef);
   theDynPart->SetPreAssignedDecayProducts(decayProducts);
-  
+
   return GPIL;
-						
-  
 }
 
-G4double G4AdjointProcessEquivalentToDirectProcess::
-PostStepGetPhysicalInteractionLength( const G4Track& track,
-                                            G4double   previousStepSize,
-                                            G4ForceCondition* condition )
+G4double
+G4AdjointProcessEquivalentToDirectProcess::PostStepGetPhysicalInteractionLength(
+  const G4Track& track, G4double previousStepSize, G4ForceCondition* condition)
 {
-  //Change the particle definition to the direct one
-  //------------------------------------------------
-  G4DynamicParticle* theDynPart = const_cast<G4DynamicParticle*> (track.GetDynamicParticle());
+  // Change the particle definition to the direct one
+  G4DynamicParticle* theDynPart =
+    const_cast<G4DynamicParticle*>(track.GetDynamicParticle());
   G4ParticleDefinition* adjPartDef = theDynPart->GetDefinition();
-  
-  G4DecayProducts* decayProducts =  const_cast<G4DecayProducts*>  (theDynPart->GetPreAssignedDecayProducts());
- 
-  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*)(0));
-  theDynPart->SetDefinition(theFwdParticleDef);
-  
-  
-  //Call the direct process
-  //----------------------
 
-   
-  G4double GPIL = theDirectProcess->PostStepGetPhysicalInteractionLength( track,
-                                                             previousStepSize,
-                                                             condition );
-   
-  //Restore the adjoint particle definition to the direct one
-  //------------------------------------------------
+  G4DecayProducts* decayProducts =
+    const_cast<G4DecayProducts*>(theDynPart->GetPreAssignedDecayProducts());
+
+  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*) (0));
+  theDynPart->SetDefinition(fFwdParticleDef);
+
+  // Call the direct process
+  G4double GPIL = fDirectProcess->PostStepGetPhysicalInteractionLength(
+    track, previousStepSize, condition);
+
+  // Restore the adjoint particle definition to the direct one
   theDynPart->SetDefinition(adjPartDef);
   theDynPart->SetPreAssignedDecayProducts(decayProducts);
-  
-   return GPIL;
-  
-  				     
-}
-/*
-      
-void G4AdjointProcessEquivalentToDirectProcess::SetProcessManager(const G4ProcessManager* procMan)
-{
-   theDirectProcess->SetProcessManager(procMan); 
+
+  return GPIL;
 }
 
-const G4ProcessManager* G4AdjointProcessEquivalentToDirectProcess::GetProcessManager()
+G4VParticleChange* G4AdjointProcessEquivalentToDirectProcess::PostStepDoIt(
+  const G4Track& track, const G4Step& stepData)
 {
-  return     theDirectProcess->GetProcessManager();
-}
-*/
-G4VParticleChange* G4AdjointProcessEquivalentToDirectProcess::PostStepDoIt( const G4Track& track,
-                                                   const G4Step&  stepData )
-{
-  //Change the particle definition to the direct one
-  //------------------------------------------------
-  G4DynamicParticle* theDynPart = const_cast<G4DynamicParticle*> (track.GetDynamicParticle());
+  // Change the particle definition to the direct one
+  G4DynamicParticle* theDynPart =
+    const_cast<G4DynamicParticle*>(track.GetDynamicParticle());
   G4ParticleDefinition* adjPartDef = theDynPart->GetDefinition();
-  
-  G4DecayProducts* decayProducts =  const_cast<G4DecayProducts*>  (theDynPart->GetPreAssignedDecayProducts());
- 
-  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*)(0));
-  theDynPart->SetDefinition(theFwdParticleDef);
-  
-  
-  //Call the direct process
-  //----------------------
-  
-  G4VParticleChange* partChange = theDirectProcess->PostStepDoIt( track, stepData );
-  
-  
-  //Restore the adjoint particle definition to the direct one
-  //------------------------------------------------
+
+  G4DecayProducts* decayProducts =
+    const_cast<G4DecayProducts*>(theDynPart->GetPreAssignedDecayProducts());
+
+  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*) (0));
+  theDynPart->SetDefinition(fFwdParticleDef);
+
+  // Call the direct process
+  G4VParticleChange* partChange = fDirectProcess->PostStepDoIt(track, stepData);
+
+  // Restore the adjoint particle definition to the direct one
   theDynPart->SetDefinition(adjPartDef);
   theDynPart->SetPreAssignedDecayProducts(decayProducts);
-  
+
   return partChange;
-  
-  
-          
 }
 
-G4VParticleChange* G4AdjointProcessEquivalentToDirectProcess::AlongStepDoIt( const G4Track& track,
-                                                    const G4Step& stepData )
-{ 
-  //Change the particle definition to the direct one
-  //------------------------------------------------
-  G4DynamicParticle* theDynPart = const_cast<G4DynamicParticle*> (track.GetDynamicParticle());
+G4VParticleChange* G4AdjointProcessEquivalentToDirectProcess::AlongStepDoIt(
+  const G4Track& track, const G4Step& stepData)
+{
+  // Change the particle definition to the direct one
+  G4DynamicParticle* theDynPart =
+    const_cast<G4DynamicParticle*>(track.GetDynamicParticle());
   G4ParticleDefinition* adjPartDef = theDynPart->GetDefinition();
-  
-  G4DecayProducts* decayProducts =  const_cast<G4DecayProducts*>  (theDynPart->GetPreAssignedDecayProducts());
- 
-  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*)(0));
-  theDynPart->SetDefinition(theFwdParticleDef);
-  
-  
-  //Call the direct process
-  //----------------------
-  G4VParticleChange* partChange =theDirectProcess->AlongStepDoIt( track, stepData );
-  
-  //Restore the adjoint particle definition to the direct one
-  //------------------------------------------------
+
+  G4DecayProducts* decayProducts =
+    const_cast<G4DecayProducts*>(theDynPart->GetPreAssignedDecayProducts());
+
+  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*) (0));
+  theDynPart->SetDefinition(fFwdParticleDef);
+
+  // Call the direct process
+  G4VParticleChange* partChange =
+    fDirectProcess->AlongStepDoIt(track, stepData);
+
+  // Restore the adjoint particle definition to the direct one
   theDynPart->SetDefinition(adjPartDef);
   theDynPart->SetPreAssignedDecayProducts(decayProducts);
-  
-  return partChange;        
+
+  return partChange;
 }
- 
-G4VParticleChange* G4AdjointProcessEquivalentToDirectProcess::AtRestDoIt( const G4Track& track,
-                                                 const G4Step& stepData )
+
+G4VParticleChange* G4AdjointProcessEquivalentToDirectProcess::AtRestDoIt(
+  const G4Track& track, const G4Step& stepData)
 {
-  //Change the particle definition to the direct one
-  //------------------------------------------------
-  G4DynamicParticle* theDynPart = const_cast<G4DynamicParticle*> (track.GetDynamicParticle());
+  // Change the particle definition to the direct one
+  G4DynamicParticle* theDynPart =
+    const_cast<G4DynamicParticle*>(track.GetDynamicParticle());
   G4ParticleDefinition* adjPartDef = theDynPart->GetDefinition();
-  
-  G4DecayProducts* decayProducts =  const_cast<G4DecayProducts*>  (theDynPart->GetPreAssignedDecayProducts());
- 
-  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*)(0));
-  theDynPart->SetDefinition(theFwdParticleDef);
-  
-  
-  //Call the direct process
-  //----------------------
-  G4VParticleChange* partChange =theDirectProcess->AtRestDoIt( track, stepData );
-  
-  //Restore the adjoint particle definition to the direct one
-  //------------------------------------------------
+
+  G4DecayProducts* decayProducts =
+    const_cast<G4DecayProducts*>(theDynPart->GetPreAssignedDecayProducts());
+
+  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*) (0));
+  theDynPart->SetDefinition(fFwdParticleDef);
+
+  // Call the direct process
+  G4VParticleChange* partChange = fDirectProcess->AtRestDoIt(track, stepData);
+
+  // Restore the adjoint particle definition to the direct one
   theDynPart->SetDefinition(adjPartDef);
   theDynPart->SetPreAssignedDecayProducts(decayProducts);
-  
-   return partChange; 
-  
-       
+
+  return partChange;
 }
 
-G4bool G4AdjointProcessEquivalentToDirectProcess::IsApplicable(const G4ParticleDefinition&)
+G4bool G4AdjointProcessEquivalentToDirectProcess::IsApplicable(
+  const G4ParticleDefinition&)
 {
-  return     theDirectProcess->IsApplicable(*theFwdParticleDef);
+  return fDirectProcess->IsApplicable(*fFwdParticleDef);
 }
 
-void G4AdjointProcessEquivalentToDirectProcess::BuildPhysicsTable(const G4ParticleDefinition& )
+void G4AdjointProcessEquivalentToDirectProcess::BuildPhysicsTable(
+  const G4ParticleDefinition&)
 {
-  return     theDirectProcess->BuildPhysicsTable(*theFwdParticleDef);
+  return fDirectProcess->BuildPhysicsTable(*fFwdParticleDef);
 }
 
-void G4AdjointProcessEquivalentToDirectProcess::PreparePhysicsTable(const G4ParticleDefinition& )
+void G4AdjointProcessEquivalentToDirectProcess::PreparePhysicsTable(
+  const G4ParticleDefinition&)
 {
-  return     theDirectProcess->PreparePhysicsTable(*theFwdParticleDef);
+  return fDirectProcess->PreparePhysicsTable(*fFwdParticleDef);
 }
 
-G4bool G4AdjointProcessEquivalentToDirectProcess::
-StorePhysicsTable(const G4ParticleDefinition* ,
-                  const G4String& directory, 
-                        G4bool          ascii)
+G4bool G4AdjointProcessEquivalentToDirectProcess::StorePhysicsTable(
+  const G4ParticleDefinition*, const G4String& directory, G4bool ascii)
 {
-  return theDirectProcess->StorePhysicsTable(theFwdParticleDef,  directory,  ascii);
-} 
- 
-G4bool G4AdjointProcessEquivalentToDirectProcess::
-RetrievePhysicsTable( const G4ParticleDefinition* ,
-                      const G4String& directory, 
-                            G4bool          ascii)
+  return fDirectProcess->StorePhysicsTable(fFwdParticleDef, directory, ascii);
+}
+
+G4bool G4AdjointProcessEquivalentToDirectProcess::RetrievePhysicsTable(
+  const G4ParticleDefinition*, const G4String& directory, G4bool ascii)
 {
-  return theDirectProcess->RetrievePhysicsTable(theFwdParticleDef,  directory,  ascii);
-}  
+  return fDirectProcess->RetrievePhysicsTable(fFwdParticleDef, directory,
+                                              ascii);
+}
 
 void G4AdjointProcessEquivalentToDirectProcess::StartTracking(G4Track* track)
 {
-  //Change the particle definition to the direct one
-  //------------------------------------------------
-  G4DynamicParticle* theDynPart = const_cast<G4DynamicParticle*> (track->GetDynamicParticle());
+  // Change the particle definition to the direct one
+  G4DynamicParticle* theDynPart =
+    const_cast<G4DynamicParticle*>(track->GetDynamicParticle());
   G4ParticleDefinition* adjPartDef = theDynPart->GetDefinition();
-  
-  G4DecayProducts* decayProducts =  const_cast<G4DecayProducts*> (theDynPart->GetPreAssignedDecayProducts());
-  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*)(0));
-  theDynPart->SetDefinition(theFwdParticleDef);
-  
-  theDirectProcess->StartTracking(track);
-  
-   //Restore the adjoint particle definition to the direct one
-  //------------------------------------------------
+
+  G4DecayProducts* decayProducts =
+    const_cast<G4DecayProducts*>(theDynPart->GetPreAssignedDecayProducts());
+  theDynPart->SetPreAssignedDecayProducts((G4DecayProducts*) (0));
+  theDynPart->SetDefinition(fFwdParticleDef);
+
+  fDirectProcess->StartTracking(track);
+
+  // Restore the adjoint particle definition to the direct one
   theDynPart->SetDefinition(adjPartDef);
   theDynPart->SetPreAssignedDecayProducts(decayProducts);
-  
-  
-  return; 
-  
+
+  return;
 }
 
 void G4AdjointProcessEquivalentToDirectProcess::EndTracking()
 {
-  theDirectProcess->EndTracking(); 
+  fDirectProcess->EndTracking();
 }
-

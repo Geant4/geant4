@@ -346,9 +346,9 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector& p)
       //
       // We are in region 0.
       //
-      q       = q / fDet;
-      t       = t / fDet;
-      fSqrDist = q*(fA*q + fB*t + 2.0*d) + t*(fB*q + fC*t + 2.0*e) + f;
+      G4double dist = fSurfaceNormal.dot(D);
+      fSqrDist = dist*dist;
+      return fSurfaceNormal*dist;
     }
   }
   else

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 1st 2021, B. Morgan (gpara-V10-07-00)
+-------------------------
+- Migrate build to modular CMake API
+
 July 5th 2012 G.Cosmo (gpara-V09-05-00)
 ---------------------
 - Explicitly use inclusion of headers for system of units and physical

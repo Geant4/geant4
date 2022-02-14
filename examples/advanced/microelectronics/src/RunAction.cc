@@ -31,7 +31,7 @@
 #include "TrackingAction.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4RunManager.hh"
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Threading.hh"
 
 void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container);
@@ -153,12 +153,13 @@ void RunAction::EndWorker(const G4Run* run)
   // Write Histo
   //
   WriteHistogram();
-  
+
   ///////////////
   // Complete cleanup
   //
-  delete G4AnalysisManager::Instance();
-  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->Clear();
+
   ///////////////
   // Printouts
   //
@@ -211,6 +212,7 @@ void RunAction::CreateHistogram()
 
 	G4cout << "##### Create analysis manager " << "  " << this << G4endl;
 	G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
 
 	G4cout << "Using " << analysisManager->GetType() << " analysis manager" << G4endl;
 

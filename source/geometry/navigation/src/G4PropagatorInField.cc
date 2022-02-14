@@ -678,6 +678,9 @@ void G4PropagatorInField::ClearPropagatorState()
   fParticleIsLooping = false;
   fNoZeroStep = 0;
 
+  fSetFieldMgr = false;  // Has field-manager been set for the current step?
+  fEpsilonStep= 1.0e-5;  // Relative accuracy of current Step
+  
   End_PointAndTangent= G4FieldTrack( G4ThreeVector(0.,0.,0.),
                                      G4ThreeVector(0.,0.,0.),
                                      0.0,0.0,0.0,0.0,0.0); 
@@ -686,6 +689,8 @@ void G4PropagatorInField::ClearPropagatorState()
 
   fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
   fPreviousSafety= 0.0;
+
+  fNewTrack = true;
 }
 
 // ---------------------------------------------------------------------------

@@ -30,6 +30,6 @@
 
 #include "globals.hh"
 
-G4String G4VisFeaturesOfDAWNFILE ();
+G4String G4VisFeaturesOfDAWNFILE();
 
 #endif

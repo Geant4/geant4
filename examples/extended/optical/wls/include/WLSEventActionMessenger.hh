@@ -34,27 +34,24 @@
 #ifndef WLSEventActionMessenger_h
 #define WLSEventActionMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
 
-class EventAction;
-class G4UIcmdWithAString;
+class WLSEventAction;
+
 class G4UIcmdWithAnInteger;
 
-class WLSEventActionMessenger: public G4UImessenger
+class WLSEventActionMessenger : public G4UImessenger
 {
-  public:
+ public:
+  WLSEventActionMessenger(WLSEventAction*);
+  ~WLSEventActionMessenger();
 
-    WLSEventActionMessenger(WLSEventAction*);
-    virtual ~WLSEventActionMessenger();
+  void SetNewValue(G4UIcommand*, G4String) override;
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
+ private:
+  WLSEventAction* fEventAction;
 
-  private:
-
-    WLSEventAction* fEventAction;
-
-    G4UIcmdWithAnInteger* fSetVerboseCmd;
+  G4UIcmdWithAnInteger* fSetVerboseCmd;
 };
 
 #endif

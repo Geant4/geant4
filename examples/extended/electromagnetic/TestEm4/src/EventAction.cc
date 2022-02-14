@@ -35,8 +35,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
-#include "Analysis.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"

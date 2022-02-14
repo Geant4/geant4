@@ -17,48 +17,80 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
-28-11-16 Gunter Folger
+ 
+07-10-21 I. Hrivnacova (amsEcal-V10-07-03)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+19-07-21 I. Hrivnacova (amsEcal-V10-07-02)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+24-05-21,  B. Morgan (amsEcal-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+16-05-21 mma (amsEcal-V10-07-00)
+- Migration to G4RunManagerFactory and G4SteppingVerboseWithUnits.
+
+02-11-20 Ben Morgan (amsEcal-V10-06-00)
+- Support same CMake version range as core Geant4
+
+10-05-18 Ben Morgan (amsEcal-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+13-04-18 mma (amsEcal-V10-04-01)
+- amsEcal.cc : set visualisation only in interactive mode
+
+23-03-18 mma (amsEcal-V10-04-00)
+- amsEcal.cc : remove G4UI_USE and G4VIS_USE
+
+28-11-16 Gunter Folger   	 (amsEcal-V10-02-01)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
 
-13-10-14 mma (amsEcal-V10-00-07) 
+24-04-16 mma  (amsEcal-V10-02-00)
+- PhysListEmStandard: use G4EmParameters
+
+13-10-14 mma (amsEcal-V10-00-07)
 - CmakeLists.txt : remove AIDA references
-	 
-05-08-14 mma (amsEcal-V10-00-06) 
+
+05-08-14 mma (amsEcal-V10-00-06)
 - DetectorConstruction::ConstructSDandField()
-	 
-31-07-14 mma (amsEcal-V10-00-05) 
+
+31-07-14 mma (amsEcal-V10-00-05)
 - migration to MT
-	 
-24-07-14 mma (amsEcal-V10-00-04) 
+
+24-07-14 mma (amsEcal-V10-00-04)
 - physicsList and messenger
 - DetectorConstruction. fibers, layers, modules : start copy number at 1
 - suppress pixels
 - EventAction::WriteFibers()
-	 
-01-07-14 mma (amsEcal-V10-00-03) 
+
+01-07-14 mma (amsEcal-V10-00-03)
 - DetectorConstruction: correct rotation matrix
 - RunAction: reinitialise resEtot and resEvis in loop
 - histos: replace aida by internal system
-   	 
+
 25-06-14 G.Folger (amsEcal-V10-00-02)
-- Fix compilation warning for uninitialised variables resEtot 
+- Fix compilation warning for uninitialised variables resEtot
    and resEvis.
 
 24-06-14 mma (amsEcal-V10-00-01)
-- Additional protection in RunAction against division by zero 
+- Additional protection in RunAction against division by zero
 (bug report 1522)
 
 16-12-13 L.Pandola (amsEcal-V10-00-00)
-- Add in RunAction a protection against division by zero 
+- Add in RunAction a protection against division by zero
 (bug report 1522)
 
 30-07-13 A.Dotti (amsEcal-V09-06-01)
 - Bug fixing for clang32: warning unused private data field
 
 01-04-13 A.Dotti (amsEcla-V09-06-00)
-- Porting to new G4VUserPhysicsList split-class mechanism 
+- Porting to new G4VUserPhysicsList split-class mechanism
 
 28-11-12 G.Cosmo (amsEcal-V09-05-03)
 - Fixed cases of variable shadowing.
@@ -76,141 +108,141 @@ track of all tags.
 - Fix AIDA file option.
 
 03-06-10 J.Perl (amsEcal-V09-03-01)
-- Updated vis usage 
+- Updated vis usage
 
 22-05-10 mma (amsEcal-V09-03-00)
 - amsEcal.cc : introduction of G4UIExecutive
-     
-07-10-09 mma    
+
+07-10-09 mma
 - DetectorConstruction :
   -reduce Pb density to 98%
   - change fiberDiameter, layerThickness, layerMilled
-     
-18-09-09 mma (amsEcal-V09-02-11)    
+
+18-09-09 mma (amsEcal-V09-02-11)
 - SteppingAction: correct protection of i1Pixel calculation
-      
-07-09-09 mma  
-- BeginOfRun: suppress function clear 
-    
-26-08-09 mma (amsEcal-V09-02-10)  
+
+07-09-09 mma
+- BeginOfRun: suppress function clear
+
+26-08-09 mma (amsEcal-V09-02-10)
 - pixels file created at BeginOfRun and appended at EndOfEvent
-     
-23-07-09 mma (amsEcal-V09-02-09)  
+
+23-07-09 mma (amsEcal-V09-02-09)
 - EventActionMessenger : /ams/event/writePixels G4bool
 - change names for pixels numbering : detectorConstruction, RunAction,
   EventAction, SteppingAction
-     
+
 17-07-09 mma
-- EventAction : create File and write list of pixels fired 
-     
-30-06-09 mma (amsEcal-V09-02-08)  
+- EventAction : create File and write list of pixels fired
+
+30-06-09 mma (amsEcal-V09-02-08)
 - DetectorConstruction : complete PrintParameters()
-       
-26-06-09 mma (amsEcal-V09-02-07) 
+
+26-06-09 mma (amsEcal-V09-02-07)
 - DetectorConstruction :
- module = 10*layerThickness(1.68 mm) + 1*milledLayer(1.40 mm) 
-    
-24-06-09 mma 
+ module = 10*layerThickness(1.68 mm) + 1*milledLayer(1.40 mm)
+
+24-06-09 mma
 - RunAction, EventAction : modify initialisation of std::vector
 - SteppingAction : put protection on index computation
-     
-22-06-09 mma (amsEcal-V09-02-06) 
+
+22-06-09 mma (amsEcal-V09-02-06)
 - DetectorConstruction : layerThickness = 1.82 mm
-       
+
 17-06-09 mma (amsEcal-V09-02-05)
 - rename superLayer -> module
   affected : DetectorConstruction, SteppingAction, README
-     
+
 16-06-09 mma (amsEcal-V09-02-04)
-      
+
 10-06-09 mma
-- move trigger conditions from SteppingAction to EventAction 
-     
+- move trigger conditions from SteppingAction to EventAction
+
 09-06-09 mma
-- problems with extra plates. Suppress them and put back 
-  distanceInterLayers = 1.78 mm 
-      
-08-06-09 mma (amsEcal-V09-02-03) 
+- problems with extra plates. Suppress them and put back
+  distanceInterLayers = 1.78 mm
+
+08-06-09 mma (amsEcal-V09-02-03)
 - back to distanceInterLayers = 1.68 mm (ie nominal)
   Put in superLayer 2 extra plates of absorber, 0.5 mm each
-      
-07-06-09 mma 
-- distanceInterLayers = 1.78 mm (was 1.85 mm) --> - 1.5X0 
-       
-04-06-09 mma 
+
+07-06-09 mma
+- distanceInterLayers = 1.78 mm (was 1.85 mm) --> - 1.5X0
+
+04-06-09 mma
 - add histo 5 for geantino scan
-- distanceInterLayers = 1.85 mm (was 1.68 mm) --> + 3X0  
-     
-29-05-09 mma 
+- distanceInterLayers = 1.85 mm (was 1.68 mm) --> + 3X0
+
+29-05-09 mma
 - do not use GeometryReadOut.
 - Compute pixel numbering directly in SteppingAction.
   Modify DetectorConstruction, RunAction, EventAction
-     
-26-05-09 mma 
+
+26-05-09 mma
 - add GeometryReadOut class for pixels
-     
+
 06-05-09 mma (amsEcal-V09-02-02)
 - scan nb of radL with geantino.
-  modifs in DetectorConstruction, SteppingAction, EventAction, RunAction 
-     
+  modifs in DetectorConstruction, SteppingAction, EventAction, RunAction
+
 26-04-09 mma
 - print calorimeter dimensions
-     
+
 24-04-09 mma (amsEcal-V09-02-01)
 - add TrackingAction class
 - compute forward, backward, lateral leakage
-     
+
 06-04-09 mma (amsEcal-V09-02-00)
 - rndmSeed.mac : macro to generate random seeds
 - run2.mac : add command to handle random seed
-     
+
 01-04-09 mma
 - complete README
-- SteppingAction. Code for trigger: kill event under given conditions 
-     
+- SteppingAction. Code for trigger: kill event under given conditions
+
 28-03-09 mma
 - HistoManager : add Ntuple booking
-     
+
 27-03-09 mma
 - pass informations to EventAction and RunAction
 - modify HistoManager
-     
-26-03-09 mma 
+
+26-03-09 mma
 - modify SteppingAction: read layer and superLayer copyNumber
                          compute Pixel index
-     
-25-03-09 mma 
+
+25-03-09 mma
 - DetectorConstruction: suppress biLayer-> put 10 layers directly in superLayer
 - numbering from 0 to n-1
-     
-24-03-09 mma 
+
+24-03-09 mma
 - DetectorConstruction: compute fiberLength coherently;
-     
-23-03-09 mma 
+
+23-03-09 mma
 - physList emstandard_local : mscStepLimitation UseSafety;
-- spline : 10 bin per decade       
-     
-22-03-09 mma 
-- fiberDiameter = 1.08 mm; distanceInterLayers = 1.68 mm 
+- spline : 10 bin per decade
+
+22-03-09 mma
+- fiberDiameter = 1.08 mm; distanceInterLayers = 1.68 mm
 - fiberLength = 664 mm
-    
-19-03-09 mma 
+
+19-03-09 mma
 - PrimaryGeneratorAction & Messenger : /ams/gun/beam
 - HistoManager
 - EventAction: FillHisto
-     
-18-03-09 mma 
+
+18-03-09 mma
 - EventAction -> RunAction : totalEnergy, leakage
-     
-12-03-09 mma 
+
+12-03-09 mma
 - EventAction -> RunAction
 - rm TrackingAction
-     
-12-03-09 mma 
+
+12-03-09 mma
 - SteppingAction -> EventAction
-     
-10-03-09 mma 
+
+10-03-09 mma
 - DetectorConstruction, PhysicsList, PrimaryGeneratorAction
-     
-08-03-09 mma 
+
+08-03-09 mma
 - created from TestEm3

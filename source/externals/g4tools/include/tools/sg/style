@@ -1,0 +1,472 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_style
+#define tools_sg_style
+
+// fields of style_parser but put as sf on a node.
+
+#include "node"
+
+#include "style_parser"
+#include "sf_string"
+#include "sf_vec3f"
+#include "sf_enum"
+
+namespace tools {
+namespace sg {
+
+class style : public node {
+  TOOLS_NODE(style,tools::sg::style,node)
+public:
+  sf_vec<colorf,float> color;
+  sf_vec<colorf,float> highlight_color;
+  sf_vec<colorf,float> back_color;
+  sf<float> line_width;
+  sf<float> marker_size;
+  sf<float> point_size;
+  sf<float> font_size;
+  sf_enum<sg::font_modeling> font_modeling;
+  sf_enum<winding_type> front_face;
+  sf<lpat> line_pattern;
+  sf_enum<sg::marker_style> marker_style;
+  sf_enum<sg::area_style> area_style;
+  sf_string modeling;
+  sf_string light_model;
+  sf_string tick_modeling;
+  sf_string encoding;
+  sf<bool> smoothing;
+  sf<bool> hinting;
+  sf_string cut;
+  sf_enum<sg::painting_policy> painting;
+  sf_enum<sg::hatching_policy> hatching;
+  sf_enum<sg::projection_type> projection;
+  sf_string font;
+  sf<int> multi_node_limit;
+  sf<int> divisions;
+  sf<unsigned int> rotation_steps;
+  sf<float> spacing;
+  sf<float> angle;
+  sf<float> scale;
+  sf<float> offset;
+  sf<float> strip_width;
+  sf<bool> visible;
+  sf<float> bar_offset;
+  sf<float> bar_width;
+  sf<bool> editable;
+  sf<bool> pickable;
+  sf<bool> automated;
+  sf_string options;
+  sf_string color_mapping;
+  sf<bool> enforced;
+  sf_vec3f translation;
+  sf_string coloring;
+  sf_string title;
+public:
+  virtual const desc_fields& node_desc_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::style)
+    static const desc_fields s_v(parent::node_desc_fields(),43, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(color),  //1
+      TOOLS_ARG_FIELD_DESC(highlight_color),
+      TOOLS_ARG_FIELD_DESC(back_color),
+      TOOLS_ARG_FIELD_DESC(line_width),
+      TOOLS_ARG_FIELD_DESC(marker_size),
+      TOOLS_ARG_FIELD_DESC(point_size),
+      TOOLS_ARG_FIELD_DESC(font_size),
+      TOOLS_ARG_FIELD_DESC(font_modeling),
+      TOOLS_ARG_FIELD_DESC(front_face),
+      TOOLS_ARG_FIELD_DESC(line_pattern),   //10
+
+      TOOLS_ARG_FIELD_DESC(marker_style),
+      TOOLS_ARG_FIELD_DESC(area_style),
+      TOOLS_ARG_FIELD_DESC(modeling),
+      TOOLS_ARG_FIELD_DESC(light_model),
+      TOOLS_ARG_FIELD_DESC(tick_modeling),
+      TOOLS_ARG_FIELD_DESC(encoding),
+      TOOLS_ARG_FIELD_DESC(smoothing),
+      TOOLS_ARG_FIELD_DESC(hinting),
+      TOOLS_ARG_FIELD_DESC(cut),
+      TOOLS_ARG_FIELD_DESC(painting),  //20
+
+      TOOLS_ARG_FIELD_DESC(hatching),
+      TOOLS_ARG_FIELD_DESC(projection),
+      TOOLS_ARG_FIELD_DESC(font),
+      TOOLS_ARG_FIELD_DESC(multi_node_limit),
+      TOOLS_ARG_FIELD_DESC(divisions),
+      TOOLS_ARG_FIELD_DESC(rotation_steps),
+      TOOLS_ARG_FIELD_DESC(spacing),
+      TOOLS_ARG_FIELD_DESC(angle),
+      TOOLS_ARG_FIELD_DESC(scale),
+      TOOLS_ARG_FIELD_DESC(offset),  //30
+
+      TOOLS_ARG_FIELD_DESC(strip_width),
+      TOOLS_ARG_FIELD_DESC(visible),
+      TOOLS_ARG_FIELD_DESC(bar_offset),
+      TOOLS_ARG_FIELD_DESC(bar_width),
+      TOOLS_ARG_FIELD_DESC(editable),
+      TOOLS_ARG_FIELD_DESC(pickable),
+      TOOLS_ARG_FIELD_DESC(automated),
+      TOOLS_ARG_FIELD_DESC(options),
+      TOOLS_ARG_FIELD_DESC(color_mapping),
+      TOOLS_ARG_FIELD_DESC(enforced),   //40
+
+      TOOLS_ARG_FIELD_DESC(translation),
+      TOOLS_ARG_FIELD_DESC(coloring),
+      TOOLS_ARG_FIELD_DESC(title)
+    );
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&color);
+    add_field(&highlight_color);
+    add_field(&back_color);
+    add_field(&line_width);
+    add_field(&marker_size);
+    add_field(&point_size);
+    add_field(&font_size);
+    add_field(&font_modeling);
+    add_field(&front_face);
+    add_field(&line_pattern);
+    add_field(&marker_style);
+    add_field(&area_style);
+    add_field(&modeling);
+    add_field(&light_model);
+    add_field(&tick_modeling);
+    add_field(&encoding);
+    add_field(&smoothing);
+    add_field(&hinting);
+    add_field(&cut);
+    add_field(&painting);
+    add_field(&hatching);
+    add_field(&projection);
+    add_field(&font);
+    add_field(&multi_node_limit);
+    add_field(&divisions);
+    add_field(&rotation_steps);
+    add_field(&spacing);
+    add_field(&angle);
+    add_field(&scale);
+    add_field(&offset);
+    add_field(&strip_width);
+    add_field(&visible);
+    add_field(&bar_offset);
+    add_field(&bar_width);
+    add_field(&editable);
+    add_field(&pickable);
+    add_field(&automated);
+    add_field(&options);
+    add_field(&color_mapping);
+    add_field(&enforced);
+    add_field(&translation);
+    add_field(&coloring);
+    add_field(&title);
+  }
+public:
+  style()
+  :parent()
+  ,color(colorf_black())
+  ,highlight_color(colorf_black())
+  ,back_color(colorf_white())
+  ,line_width(1)
+  ,marker_size(1)
+  ,point_size(1)
+  ,font_size(10)
+  ,font_modeling(font_filled)
+  ,front_face(winding_ccw)
+  ,line_pattern(line_solid)
+  ,marker_style(marker_dot)
+  ,area_style(area_solid)
+  ,modeling(modeling_boxes())
+  ,light_model(light_model_phong())
+  ,tick_modeling(tick_modeling_hippo())
+  ,encoding(encoding_none())
+  ,smoothing(false)
+  ,hinting(false)
+  ,cut()
+  ,painting(painting_uniform)
+  ,hatching(hatching_none)
+  ,projection(projection_none)
+  ,font(font_hershey())
+  ,multi_node_limit(style_parser::no_limit())
+  ,divisions(510) //Same as ROOT/TAttAxis
+  ,rotation_steps(24) //Same as SbPolyhedron default.
+  ,spacing(0.05F)
+  ,angle(fpi()/4.0F)
+  ,scale(1)
+  ,offset(0)
+  ,strip_width(0)
+  ,visible(true)
+  ,bar_offset(0.25F)
+  ,bar_width(0.5F)
+  ,editable(false)
+  ,pickable(false)
+  ,automated(true)
+  ,options()
+  ,color_mapping()
+  ,enforced(false)
+  ,translation(vec3f(0,0,0))
+  ,coloring()
+  ,title()
+  {
+    add_fields();
+  }
+  virtual ~style(){}
+public:
+  style(const style& a_from)
+  :parent(a_from)
+  ,color(a_from.color)
+  ,highlight_color(a_from.highlight_color)
+  ,back_color(a_from.back_color)
+  ,line_width(a_from.line_width)
+  ,marker_size(a_from.marker_size)
+  ,point_size(a_from.point_size)
+  ,font_size(a_from.font_size)
+  ,font_modeling(a_from.font_modeling)
+  ,front_face(a_from.front_face)
+  ,line_pattern(a_from.line_pattern)
+  ,marker_style(a_from.marker_style)
+  ,area_style(a_from.area_style)
+  ,modeling (a_from.modeling )
+  ,light_model(a_from.light_model)
+  ,tick_modeling(a_from.tick_modeling)
+  ,encoding(a_from.encoding)
+  ,smoothing(a_from.smoothing)
+  ,hinting(a_from.hinting)
+  ,cut(a_from.cut)
+  ,painting(a_from.painting)
+  ,hatching(a_from.hatching)
+  ,projection(a_from.projection)
+  ,font(a_from.font)
+  ,multi_node_limit(a_from.multi_node_limit)
+  ,divisions(a_from.divisions)
+  ,rotation_steps(a_from.rotation_steps)
+  ,spacing(a_from.spacing)
+  ,angle(a_from.angle)
+  ,scale(a_from.scale)
+  ,offset(a_from.offset)
+  ,strip_width(a_from.strip_width)
+  ,visible(a_from.visible)
+  ,bar_offset(a_from.bar_offset)
+  ,bar_width(a_from.bar_width)
+  ,editable(a_from.editable)
+  ,pickable(a_from.pickable)
+  ,automated(a_from.automated)
+  ,options(a_from.options)
+  ,color_mapping(a_from.color_mapping)
+  ,enforced(a_from.enforced)
+  ,translation(a_from.translation)
+  ,coloring(a_from.coloring)
+  ,title(a_from.title)
+  {
+    add_fields();
+  }
+  style& operator=(const style& a_from){
+    parent::operator=(a_from);
+
+    color = a_from.color;
+    highlight_color = a_from.highlight_color;
+    back_color = a_from.back_color;
+    line_width = a_from.line_width;
+    marker_size = a_from.marker_size;
+    point_size = a_from.point_size;
+    font_size = a_from.font_size;
+    font_modeling = a_from.font_modeling;
+    front_face = a_from.front_face;
+    line_pattern = a_from.line_pattern;
+    marker_style = a_from.marker_style;
+    area_style = a_from.area_style;
+    modeling  = a_from.modeling ;
+    light_model = a_from.light_model;
+    tick_modeling = a_from.tick_modeling;
+    encoding = a_from.encoding;
+    smoothing = a_from.smoothing;
+    hinting = a_from.hinting;
+    cut = a_from.cut;
+    painting = a_from.painting;
+    hatching = a_from.hatching;
+    projection = a_from.projection;
+    font = a_from.font;
+    multi_node_limit = a_from.multi_node_limit;
+    divisions = a_from.divisions;
+    rotation_steps = a_from.rotation_steps;
+    spacing = a_from.spacing;
+    angle = a_from.angle;
+    scale = a_from.scale;
+    offset = a_from.offset;
+    strip_width = a_from.strip_width;
+    visible = a_from.visible;
+    bar_offset = a_from.bar_offset;
+    bar_width = a_from.bar_width;
+    editable = a_from.editable;
+    pickable = a_from.pickable;
+    automated = a_from.automated;
+    options = a_from.options;
+    color_mapping = a_from.color_mapping;
+    enforced = a_from.enforced;
+    translation = a_from.translation;
+    coloring = a_from.coloring;
+    title = a_from.title;
+
+    return *this;
+  }
+public:
+  void reset() {
+    color = colorf_black();
+    highlight_color = colorf_black();
+    back_color = colorf_white();
+    line_width = 1;
+    marker_size = 1;
+    point_size = 1;
+    font_size = 10;
+    font_modeling = font_filled;
+    front_face = winding_ccw;
+    line_pattern = line_solid;
+    marker_style = marker_dot;
+    area_style = area_solid;
+    modeling = modeling_boxes();
+    light_model = light_model_phong();
+    tick_modeling = tick_modeling_hippo();
+    encoding = encoding_none();
+    smoothing = false;
+    hinting = false;
+    cut = "";
+    painting = painting_uniform;
+    hatching = hatching_none;
+    projection = projection_none;
+    font = font_hershey();
+    multi_node_limit = style_parser::no_limit();
+    divisions = 510;
+    rotation_steps = 24;
+    spacing = 0.05F;
+    angle = fpi()/4.0F;
+    scale = 1;
+    offset = 0;
+    strip_width = 0;
+    visible = true;
+    bar_offset = 0.25F;
+    bar_width = 0.5F;
+    editable = false;
+    pickable = false;
+    automated = true;
+    options = "";
+    color_mapping = "";
+    enforced = false;
+    translation = vec3f(0,0,0);
+    coloring = "";
+    title = "";
+  }
+
+  bool from_string(std::ostream& a_out,const cmaps_t& a_cmaps,const std::string& a_s) {
+    style_parser sp;
+
+    sp.color(color.value());
+    sp.highlight_color(highlight_color.value());
+    sp.back_color(back_color.value());
+    sp.line_width(line_width.value());
+    sp.marker_size(marker_size.value());
+    sp.point_size(point_size.value());
+    sp.font_size(font_size.value());
+    sp.font_modeling(font_modeling.value());
+    sp.front_face(front_face.value());
+    sp.line_pattern(line_pattern.value());
+    sp.marker_style(marker_style.value());
+    sp.area_style(area_style.value());
+    sp.modeling(modeling.value());
+    sp.light_model(light_model.value());
+    sp.tick_modeling(tick_modeling.value());
+    sp.encoding(encoding.value());
+    sp.smoothing(smoothing.value());
+    sp.hinting(hinting.value());
+    sp.cut(cut.value());
+    sp.painting(painting.value());
+    sp.hatching(hatching.value());
+    sp.projection(projection.value());
+    sp.font(font.value());
+    sp.multi_node_limit(multi_node_limit.value());
+    sp.divisions(divisions.value());
+    sp.rotation_steps(rotation_steps.value());
+  //sp.transparency(transparency.value());
+  //sp.back_transparency(back_transparency.value());
+    sp.spacing(spacing.value());
+    sp.angle(angle.value());
+    sp.scale(scale.value());
+    sp.offset(offset.value());
+    sp.strip_width(strip_width.value());
+    sp.visible(visible.value());
+    sp.bar_offset(bar_offset.value());
+    sp.bar_width(bar_width.value());
+    sp.editable(editable.value());
+    sp.pickable(pickable.value());
+    sp.automated(automated.value());
+    sp.options(options.value());
+    sp.color_mapping(color_mapping.value());
+    sp.enforced(enforced.value());
+    sp.translation(translation.value());
+    sp.coloring(coloring.value());
+    sp.title(title.value());
+
+    //if(!sp.parse(a_s,style_parser::def_error_func))
+    //  return false;
+
+    if(!sp.parse(a_out,a_cmaps,a_s)) {
+      a_out << "tools::sg::style::from_string :"
+            << " parse failed."
+            << std::endl;
+      return false;
+    }
+
+    color.value(sp.color());
+    highlight_color.value(sp.highlight_color());
+    back_color.value(sp.back_color());
+    line_width.value(sp.line_width());
+    marker_size.value(sp.marker_size());
+    point_size.value(sp.point_size());
+    font_size.value(sp.font_size());
+    font_modeling.value(sp.font_modeling());
+    front_face = sp.front_face();
+    line_pattern.value(sp.line_pattern());
+    marker_style.value(sp.marker_style());
+    area_style.value(sp.area_style());
+    modeling.value(sp.modeling());
+    light_model.value(sp.light_model());
+    tick_modeling.value(sp.tick_modeling());
+    encoding.value(sp.encoding());
+    smoothing.value(sp.smoothing());
+    hinting.value(sp.hinting());
+    cut.value(sp.cut());
+    painting.value(sp.painting());
+    hatching.value(sp.hatching());
+    projection.value(sp.projection());
+    font.value(sp.font());
+    multi_node_limit.value(sp.multi_node_limit());
+    divisions.value(sp.divisions());
+    rotation_steps.value(sp.rotation_steps());
+  //transparency.value(sp.transparency());
+  //back_transparency.value(sp.back_transparency());
+    spacing.value(sp.spacing());
+    angle.value(sp.angle());
+    scale.value(sp.scale());
+    offset.value(sp.offset());
+    strip_width.value(sp.strip_width());
+    visible.value(sp.visible());
+    bar_offset.value(sp.bar_offset());
+    bar_width.value(sp.bar_width());
+    editable.value(sp.editable());
+    pickable.value(sp.pickable());
+    automated.value(sp.automated());
+    options.value(sp.options());
+    color_mapping.value(sp.color_mapping());
+    enforced.value(sp.enforced());
+    translation.value(sp.translation());
+    coloring.value(sp.coloring());
+    title.value(sp.title());
+
+    return true;
+  }
+
+};
+
+}}
+
+#endif

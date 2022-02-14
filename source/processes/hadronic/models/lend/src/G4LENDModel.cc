@@ -41,11 +41,12 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 double MyRNG(void*) { return  G4Random::getTheEngine()->flat(); }
 
 G4LENDModel::G4LENDModel( G4String name )
-:G4HadronicInteraction( name )
+  :G4HadronicInteraction( name ), secID(-1)
 {
 
    proj = NULL; //will be set in an inherited class
@@ -62,6 +63,7 @@ G4LENDModel::G4LENDModel( G4String name )
 
    lend_manager = G4LENDManager::GetInstance();  
 
+   secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );
 }
 
 G4LENDModel::~G4LENDModel()

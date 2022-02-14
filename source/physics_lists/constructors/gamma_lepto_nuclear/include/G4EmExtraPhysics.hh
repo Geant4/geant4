@@ -48,7 +48,7 @@
 #include "G4EmMessenger.hh"
 
 class G4CascadeInterface;
-class G4PhotoNuclearProcess;
+class G4HadronInelasticProcess;
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -76,9 +76,11 @@ public:
   void GammaToMuMuFactor(G4double val);
   void PositronToMuMuFactor(G4double val);
   void PositronToHadronsFactor(G4double val);
+  void GammaNuclearLEModelLimit(G4double val);
 
   void NeutrinoActivated(G4bool val);
   void NuETotXscActivated(G4bool val);
+  void SetUseGammaNuclearXS(G4bool val);
   void SetNuEleCcBias(G4double bf);
   void SetNuEleNcBias(G4double bf);
   void SetNuNucleusBias(G4double bf);
@@ -89,7 +91,7 @@ private:
   void ConstructGammaElectroNuclear();
 
   void ConstructLENDGammaNuclear(G4CascadeInterface* cascade,
-                                 G4PhotoNuclearProcess* gnuc);
+                                 G4HadronInelasticProcess* gnuc);
 
   G4bool gnActivated;
   G4bool eActivated;
@@ -102,6 +104,7 @@ private:
   G4bool phadActivated;
   G4bool fNuActivated;
   G4bool fNuETotXscActivated;
+  G4bool fUseGammaNuclearXS;
 
   G4double gmumuFactor;
   G4double pmumuFactor;
@@ -109,6 +112,7 @@ private:
   G4double fNuEleCcBias;
   G4double fNuEleNcBias;
   G4double fNuNucleusBias;
+  G4double fGNLowEnergyLimit;
 
   G4String fNuDetectorName;
 

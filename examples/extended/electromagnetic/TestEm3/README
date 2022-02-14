@@ -87,11 +87,7 @@ $Id: README 93737 2015-10-30 11:01:43Z gcosmo $
   - "emlowenergy"  low-energy EM physics implementing experimental
                     low-energy models
       
-  Physics lists and options can be (re)set with UI commands
-  
-  Please, notice that options set through G4EmProcessOPtions are global, eg
-  for all particle types. In G4 builders, it is shown how to set options per
-  particle type.
+  Physics lists and options can be (re)set with UI commands.
     
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -135,8 +131,8 @@ $Id: README 93737 2015-10-30 11:01:43Z gcosmo $
   As a homework try to visualize a gamma conversion alone, 
   or the effect of the multiple scattering.
 
-  Notice that one can control the maximum step size in each absorber, via the
-  StepMax process and the command /testem/stepMax/absorber  
+  Notice that one can control the maximum step size, via the
+  StepMax process and the command /testem/stepMax
   (see StepMax and PhysicsList classes)
  
  6- HOW TO START ?
@@ -151,7 +147,22 @@ $Id: README 93737 2015-10-30 11:01:43Z gcosmo $
     Idle> /control/execute run01.mac
     ....
     Idle> exit
- 
+
+  Macros provided in this example:
+  - atlashec.mac: ATLAS HEC model
+  - dedx.mac: to control dE/dx calculation: 1 layer; minimum ionizing particle
+  - emtutor.mac: for tutorial; interactivity + visualisation
+  - geom.mac: to play with geometry
+  - ionC12.mac: ion C12, 1 layer
+  - lhcb.mac: LHCB ECAL model
+  - linac.mac: Linac/Ecal from Graham Wilson
+  - lockwood.mac: Al-Au-Al 1 layer (G.L.Lockwood et al. SAND79-0414 (1980))
+  - run01.mac: Lead-liquidArgon 50 layers; electron 1 GeV
+  - run02.mac: Tungsten-Silicon 50 layers; electron 1 GeV
+  - storeTables.mac: show how to store and retrieve physics tables
+  - tileCal.mac: ATLAS tileCal
+  - vis.mac: to activate visualization
+
  7- HISTOGRAMS
  
  Testem3 can produce histograms : 

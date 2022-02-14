@@ -29,13 +29,5 @@ for ( Int_t i=0; i<nevent; i++ ) {
 
 // Plot the energy deposition in the phantom in 3D
 TCanvas* c1 = new TCanvas("c1", " ");
-
-TH3F* edepDDistribution3D = new TH3F("h30", "3Dedepxyz", 
-				     300, -150, 150, // binning, xmin, xmax, along x direction
-				     300, -150, 150, // binning, xmin, xmax, along y direction
-				     300, -150, 150);// binning, xmin, xmax, along z direction
-						     
-gStyle->SetPalette(1); 
-
-ntuple.Draw("xx:yy:zz:edep>>h30", "", "colz");
+h20->Draw("");					   
 }

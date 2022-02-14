@@ -85,8 +85,8 @@ class G4Colour {
 
 public: // With description
 
-  G4Colour (G4double r = 1., G4double g = 1., G4double b = 1.,
-            G4double a = 1.);
+  G4Colour (G4double r_ = 1., G4double g_ = 1., G4double b_ = 1.,
+            G4double a_ = 1.);
 
   G4Colour (G4ThreeVector);
   // Converts the components of the 3-vector into red, green, blue.
@@ -138,6 +138,8 @@ public: // With description
 
   static void InitialiseColourMap();
   static const std::map<G4String, G4Colour>& GetMap();
+
+  G4bool operator< (const G4Colour& rhs) const;
 
 private:
   G4double red, green, blue, alpha;

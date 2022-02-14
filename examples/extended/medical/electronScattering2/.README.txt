@@ -35,7 +35,7 @@ publshed as:
 "The accuracy of EGSnrc, Geant4 and PENELOPE Monte Carlo systems for the simulation of electron 
 scatter in external beam radiotherapy,"
 by Bruce A Faddegon, Iwan Kawrakow, Yuri Kubyshin, Joseph Perl, Josep Sempau and Laszlo Urban,
-Phys. Med. Biol. 54 (2009) 6151Ð6163, DOI:10.1088/0031-9155/54/20/008 
+Phys. Med. Biol. 54 (2009) 6151-6163, DOI:10.1088/0031-9155/54/20/008 
 
 This present example, electronScattering2, was the Geant4 code used for this publication.
 

@@ -31,52 +31,34 @@
 // Author: 7 Nov 2017 Tatsumi Koi
 //   created from G4HadronPhysicsShielding
 //
+// 02.10.2020 V.Ivanchenko use inheritence from Shielding and cleanup
+//            utilities; use explicit constructors
 //----------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsShieldingLEND_h
 #define G4HadronPhysicsShieldingLEND_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include <CLHEP/Units/SystemOfUnits.h>
+#include "G4HadronPhysicsShielding.hh"
 
-#include "G4VPhysicsConstructor.hh"
-#include "G4HadronicParameters.hh"
-
-
-class G4HadronPhysicsShieldingLEND : public G4VPhysicsConstructor
+class G4HadronPhysicsShieldingLEND : public G4HadronPhysicsShielding
 {
   public:
-    explicit G4HadronPhysicsShieldingLEND(G4int verbose=1);
-    explicit G4HadronPhysicsShieldingLEND(const G4String& name, G4bool );
-    explicit G4HadronPhysicsShieldingLEND(const G4String& name, G4int verbose=1,
-      G4double minFTFPEnergy=G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade(),
-      G4double maxBertiniEnergy=G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade());
+    explicit G4HadronPhysicsShieldingLEND(G4int verbose);
+    explicit G4HadronPhysicsShieldingLEND(const G4String& name);
+    explicit G4HadronPhysicsShieldingLEND(const G4String& name = "hInelastic ShieldingLEND",
+                                      G4bool qe = false);
+    explicit G4HadronPhysicsShieldingLEND(const G4String& name, G4int verbose);
+    explicit G4HadronPhysicsShieldingLEND(const G4String& name, G4int verbose,
+                                          G4double minFTFPEnergy, 
+                                          G4double maxBertiniEnergy);
+
     virtual ~G4HadronPhysicsShieldingLEND();
 
-  public: 
-    virtual void ConstructParticle() override;
-    virtual void ConstructProcess() override;
-    void UseLEND( G4String ss="" ){ useLEND_=true; evaluation_=ss; };
-    void UnuseLEND(){ useLEND_=false; };
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsShieldingLEND(G4HadronPhysicsShieldingLEND &) = delete;
+    G4HadronPhysicsShieldingLEND & operator =
+    (const G4HadronPhysicsShieldingLEND &right) = delete;
 
-  private:
-    virtual void CreateModels();
-    virtual void Neutron();
-    virtual void Proton();
-    virtual void Pion();
-    virtual void Kaon();
-    virtual void Others();
-    virtual void DumpBanner();
-    //This contains extra configurataion specific to this PL
-    virtual void ExtraConfiguration();
-
-    G4bool useLEND_;
-    G4String evaluation_;
-
-    const G4double minFTFPEnergy_;
-    const G4double maxBertiniEnergy_;
-    const G4double minNonHPNeutronEnergy_;
 };
 
 #endif

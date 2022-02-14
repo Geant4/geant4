@@ -30,8 +30,6 @@
 // OpenGL scene handler - base for immediate mode and stored mode classes to
 //                        inherit from.
 
-#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
-
 #ifndef G4OPENGLSCENEHANDLER_HH
 #define G4OPENGLSCENEHANDLER_HH
 
@@ -54,6 +52,7 @@ public:
   virtual void EndPrimitives ();
   virtual void BeginPrimitives2D (const G4Transform3D& objectTransformation);
   virtual void EndPrimitives2D ();
+  using G4VSceneHandler::AddPrimitive;
   void AddPrimitive (const G4Polyline&);
   void AddPrimitive (const G4Polymarker&);
   void AddPrimitive (const G4Text&);
@@ -61,7 +60,6 @@ public:
   void AddPrimitive (const G4Square&);
   void AddPrimitivesCircle (const std::vector <G4VMarker>&);
   void AddPrimitivesSquare (const std::vector <G4VMarker>&);
-  void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
   
   void PreAddSolid (const G4Transform3D& objectTransformation,
@@ -85,7 +83,8 @@ public:
   void AddCompound (const G4VDigi&);
   void AddCompound (const G4THitsMap<G4double>&);
   void AddCompound (const G4THitsMap<G4StatDouble>&);
-  
+  void AddCompound (const G4Mesh&);
+
   // enum for /vis/ogl/flushAt.
   enum FlushAction {
     endOfEvent,
@@ -124,13 +123,8 @@ public:
   void drawVBOArray(std::vector<double> vertices);
   
   // Buffers used to access vertex and indices elements
-#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
-  Wt::WGLWidget::Buffer fVertexBufferObject;
-  Wt::WGLWidget::Buffer fIndicesBufferObject;
-#else
   GLuint fVertexBufferObject;
   GLuint fIndicesBufferObject;
-#endif // G4VIS_BUILD_OPENGLWT_DRIVER
   
 #endif //G4OPENGL_VERSION_2
   
@@ -186,5 +180,3 @@ protected:
 #include "G4OpenGLSceneHandler.icc"
 
 #endif // G4OPENGLSCENEHANDLER_HH
-
-#endif // G4VIS_BUILD_OPENGL_DRIVER

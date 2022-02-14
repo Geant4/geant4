@@ -23,27 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIcmdWithoutParameter
 //
+// Class description:
 //
-//
+// A concrete class of G4UIcommand. The command defined by this class
+// takes no parameter argument.
+// General information of G4UIcommand is given in G4UIcommand.hh
 
-#ifndef G4UIcmdWithoutParameter_H
-#define G4UIcmdWithoutParameter_H 1
+// Author: M.Asai, 1998
+// --------------------------------------------------------------------
+#ifndef G4UIcmdWithoutParameter_hh
+#define G4UIcmdWithoutParameter_hh 1
 
 #include "G4UIcommand.hh"
 
-// class description:
-//  A concrete class of G4UIcommand. The command defined by this class
-// takes no parameter argument.
-//  General information of G4UIcommand is given in G4UIcommand.hh.
-
 class G4UIcmdWithoutParameter : public G4UIcommand
 {
-  public: // with description
-    G4UIcmdWithoutParameter
-    (const char * theCommandPath,G4UImessenger * theMessenger);
-    //  Constructor. The command string with full path directory
-    // and the pointer to the messenger must be given.
+  public:
+
+    G4UIcmdWithoutParameter(const char* theCommandPath,
+                            G4UImessenger* theMessenger);
+      // Constructor. The command string with full path directory
+      // and the pointer to the messenger must be given
 };
 
 #endif

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -57,8 +56,6 @@
 
 #include <vector>
 #include "globals.hh"
-#include "G4DataVector.hh"
-#include "G4DynamicParticle.hh"
 #include "G4VAtomDeexcitation.hh"
 
 class G4LossTableManager;
@@ -267,9 +264,9 @@ public:
 
   void SetVerbose(G4int val);
 
-  //===========================================================================
-  // Private methods 
-  //===========================================================================
+  // hide copy and assign
+  G4EmCalculator & operator=(const  G4EmCalculator &right) = delete;
+  G4EmCalculator(const  G4EmCalculator&) = delete;
 
 private:
 
@@ -301,55 +298,52 @@ private:
 
   void CheckMaterial(G4int Z);
 
-  // hide copy and assign
-  G4EmCalculator & operator=(const  G4EmCalculator &right) = delete;
-  G4EmCalculator(const  G4EmCalculator&) = delete;
-
-  std::vector<const G4Material*>            localMaterials;
-  std::vector<const G4MaterialCutsCouple*>  localCouples;
-
   G4EmParameters*              theParameters;
   G4LossTableManager*          manager;
   G4NistManager*               nist;
   G4IonTable*                  ionTable;
   G4EmCorrections*             corr; 
-  G4DataVector                 localCuts;
-  G4int                        nLocalMaterials;
-
-  G4int                        verbose;
 
   // cache
-  G4int                        currentCoupleIndex;
-  const G4MaterialCutsCouple*  currentCouple;
-  const G4Material*            currentMaterial;
-  const G4Material*            cutMaterial;
-  const G4ParticleDefinition*  currentParticle;
-  const G4ParticleDefinition*  lambdaParticle;
-  const G4ParticleDefinition*  baseParticle;
-  const G4PhysicsTable*        currentLambda;
+  const G4MaterialCutsCouple*  currentCouple = nullptr;
+  const G4Material*            currentMaterial = nullptr;
+  const G4Material*            cutMaterial = nullptr;
+  const G4ParticleDefinition*  currentParticle = nullptr;
+  const G4ParticleDefinition*  lambdaParticle = nullptr;
+  const G4ParticleDefinition*  baseParticle = nullptr;
+  const G4PhysicsTable*        currentLambda = nullptr;
 
-  G4VEmModel*                  currentModel;
-  G4VEmModel*                  loweModel;
-  G4VEnergyLossProcess*        currentProcess;
-  G4VProcess*                  curProcess;
+  G4VEmModel*                  currentModel = nullptr;
+  G4VEmModel*                  loweModel = nullptr;
+  G4VEnergyLossProcess*        currentProcess = nullptr;
+  G4VProcess*                  curProcess = nullptr;
+  G4DynamicParticle*           dynParticle = nullptr;
 
   const G4ParticleDefinition*  theGenericIon;
   G4ionEffectiveCharge*        ionEffCharge;
-  G4DynamicParticle            dynParticle;
 
-  G4String                     currentName;
-  G4String                     lambdaName;
-  G4double                     currentCut;
-  G4double                     chargeSquare;
-  G4double                     massRatio;
-  G4double                     mass;
+  G4double                     currentCut = DBL_MAX;
+  G4double                     chargeSquare = 1.0;
+  G4double                     massRatio = 1.0;
+  G4double                     mass = 0;
   G4double                     cutenergy[3];
-  G4bool                       isIon;
-  G4bool                       isApplicable;
 
-  G4String                     currentParticleName;
-  G4String                     currentMaterialName;
-  G4String                     currentProcessName;
+  G4int                        currentCoupleIndex = 0;
+  G4int                        nLocalMaterials = 0;
+  G4int                        verbose = 0;
+
+  G4bool                       isIon = false;
+  G4bool                       isApplicable = false;
+
+  std::vector<const G4Material*>            localMaterials;
+  std::vector<const G4MaterialCutsCouple*>  localCouples;
+  std::vector<G4double>                     localCuts;
+
+  G4String                     currentName = "";
+  G4String                     lambdaName = "";
+  G4String                     currentParticleName = "";
+  G4String                     currentMaterialName = "";
+  G4String                     currentProcessName = "";
 };
 
 //....oooOO0OOooo.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

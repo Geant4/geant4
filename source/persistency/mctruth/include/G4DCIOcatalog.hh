@@ -23,13 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4DCIOcatalog.hh
+// G4DCIOcatalog
 //
-// History:
-//   '01.09.12  Youhei Morita  Initial creation
+// Class Description:
+//
+// Catalog for the I/O manager of digits collection for each detector
 
-#ifndef DCIO_CATALOG_HH
-#define DCIO_CATALOG_HH 1
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
+#ifndef G4DCIOCATALOG_HH
+#define G4DCIOCATALOG_HH 1
 
 #include <map>
 #include "G4Types.hh"
@@ -37,63 +40,60 @@
 
 class G4VDCIOentry;
 
-typedef std::map<std::string, G4VDCIOentry*, std::less<std::string> > DCIOmap;
-
-typedef std::map<std::string, G4VPDigitsCollectionIO*, std::less<std::string> > DCIOstore;
-
-// Class Description:
-//   Catalog for the I/O manager of digits collection for each detector.
+using DCIOmap = std::map<G4String, G4VDCIOentry*,
+                         std::less<G4String>>;
+using DCIOstore = std::map<G4String, G4VPDigitsCollectionIO*,
+                           std::less<G4String>>;
 
 class G4DCIOcatalog
 {
-    public: // With description
-      G4DCIOcatalog();
+  public:
+
+    G4DCIOcatalog();
       // Constructor
 
-      virtual ~G4DCIOcatalog() {};
+    virtual ~G4DCIOcatalog() {}
       // Destructor
 
-    public: // With description
-      static G4DCIOcatalog* GetDCIOcatalog();
+    static G4DCIOcatalog* GetDCIOcatalog();
       // Construct G4DCIOcatalog and returns the pointer
 
-      void SetVerboseLevel(int v) { m_verbose = v; };
-      // Set verbose level.
+    void SetVerboseLevel(int v) { m_verbose = v; }
+      // Set verbose level
 
-      void RegisterEntry(G4VDCIOentry* d);
+    void RegisterEntry(G4VDCIOentry* d);
       // Register I/O manager entry
 
-      void RegisterDCIOmanager(G4VPDigitsCollectionIO* d);
+    void RegisterDCIOmanager(G4VPDigitsCollectionIO* d);
       // Register I/O manager
 
-      G4VDCIOentry* GetEntry(std::string name);
+    G4VDCIOentry* GetEntry(const G4String& name);
       // Returns the I/O manager entry
 
-      G4VPDigitsCollectionIO* GetDCIOmanager(std::string name);
+    G4VPDigitsCollectionIO* GetDCIOmanager(const G4String& name);
       // Returns the registered I/O manager entry
 
-      void PrintEntries();
+    void PrintEntries();
       // Prints the list of I/O manager entries
 
-      std::string CurrentDCIOmanager();
+    G4String CurrentDCIOmanager();
       // Returns the list of I/O managers
 
-      void PrintDCIOmanager();
+    void PrintDCIOmanager();
       // Prints the list of I/O managers
 
-      size_t NumberOfDCIOmanager() { return theStore.size(); };
-      // Returns the number of registered I/O managers.
+    std::size_t NumberOfDCIOmanager() { return theStore.size(); }
+      // Returns the number of registered I/O managers
 
-      G4VPDigitsCollectionIO* GetDCIOmanager(int n);
+    G4VPDigitsCollectionIO* GetDCIOmanager(G4int n);
       // Returns the n-th registered I/O manager entry
 
-    private:
-      int m_verbose;
-      static G4ThreadLocal G4DCIOcatalog* f_thePointer;
-      DCIOmap theCatalog;
-      DCIOstore theStore;
+  private:
 
-}; // End of class G4DCIOcatalog
+    G4int m_verbose = 0;
+    static G4ThreadLocal G4DCIOcatalog* f_thePointer;
+    DCIOmap theCatalog;
+    DCIOstore theStore;
+};
 
 #endif
-

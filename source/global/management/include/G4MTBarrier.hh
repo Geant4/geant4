@@ -23,18 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MTBarrier
 //
-// ---------------------------------------------------------------
-// GEANT 4 class header file
-//
-// Class Description:
+// Class description:
 //
 // This class defines a synchronization point between threads: a master
 // and a pool of workers.
 // A barrier is a (shared) instance of this class. Master sets the number
 // of active threads to wait for, then it waits for workers to become ready
-// calling the method WaitForReadyWorkers(). The master thread will block on this
-// call.
+// calling the method WaitForReadyWorkers().
+// The master thread will block on this call.
 // Each of the workers calls ThisWorkerReady() when it is ready to continue.
 // It will block on this call.
 // When all worker threads have called ThisWorkerReady and are waiting the
@@ -61,43 +59,41 @@
 // methods LoopWaitingWorkers and ResetCounterAndBroadcast methods in the
 // master. For examples of usage of this class see G4MTRunManager
 //
-// G4MTBarrier.hh
-//
-//  Created on: Feb 10, 2016
-//      Author: adotti
-//
 // =====================================
 // Barriers mechanism
 // =====================================
-// We want to implement barriers.
 // We define a barrier has a point in which threads synchronize.
 // When workers threads reach a barrier they wait for the master thread a
 // signal that they can continue. The master thread broadcast this signal
 // only when all worker threads have reached this point.
-// Currently only three points require this sync in the life-time of a G4 applicattion:
-// Just before and just after the for-loop controlling the thread event-loop.
-// Between runs.
+// Currently only three points require this sync in the life-time of a G4
+// application: just before and just after the for-loop controlling the
+// thread event-loop and between runs.
 //
 // The basic algorithm of each barrier works like this:
 // In the master:
-//   WaitWorkers()  {
+//   WaitWorkers()
+//   {
 //    while (true)
 //    {
-//     G4AutoLock l(&counterMutex);                          || Mutex is locked (1)
-//     if ( counter == nActiveThreads ) break;
-//     G4CONDITIONWAIT( &conditionOnCounter, &counterMutex); || Mutex is atomically released and wait, upon return locked (2)
+//     G4AutoLock l(&counterMutex);                          || Mutex is locked
+//     (1) if ( counter == nActiveThreads ) break; G4CONDITIONWAIT(
+//     &conditionOnCounter, &counterMutex); || Mutex is atomically released and
+//     wait, upon return locked (2)
 //    }                                                      || unlock mutex
-//    G4AutoLock l(&counterMutex);                           || lock again mutex (3)
-//    G4CONDITIONBROADCAST( &doSomethingCanStart );          || Here mutex is locked (4)
+//    G4AutoLock l(&counterMutex);                           || lock again mutex
+//    (3) G4CONDITIONBROADCAST( &doSomethingCanStart );          || Here mutex
+//    is locked (4)
 //   }                                                       || final unlock (5)
 // In the workers:
-//   WaitSignalFromMaster() {
+//   WaitSignalFromMaster()
+//   {
 //    G4AutoLock l(&counterMutex);                           || (6)
 //    ++counter;
 //    G4CONDITIONBROADCAST(&conditionOnCounter);             || (7)
 //    G4CONDITIONWAIT( &doSomethingCanStart , &counterMutex);|| (8)
 //   }
-// Each barriers requires 2 conditions and one mutex, plus a counter.
+// Each barrier requires 2 conditions and one mutex, plus a counter.
 // Important note: the thread calling broadcast should hold the mutex
 // before calling broadcast to obtain predictible behavior
 // http://pubs.opengroup.org/onlinepubs/7908799/xsh/pthread_cond_broadcast.html
@@ -116,40 +112,48 @@
 //              | End              | 1       | -
 // Similarly for more than one worker threads or if worker starts
 
-#ifndef G4MTBARRIER_HH_
-#define G4MTBARRIER_HH_
+// Author: A.Dotti (SLAC), 10 February 2016
+// --------------------------------------------------------------------
+#ifndef G4MTBARRIER_HH
+#define G4MTBARRIER_HH
 
 #include "G4Threading.hh"
 
 class G4MTBarrier
 {
-public:
-  G4MTBarrier() : G4MTBarrier(1) {}
+ public:
+  G4MTBarrier()
+    : G4MTBarrier(1)
+  {}
   virtual ~G4MTBarrier() {}
   G4MTBarrier(const G4MTBarrier&) = delete;
   G4MTBarrier& operator=(const G4MTBarrier&) = delete;
-  //on explicitly defaulted move at
-  //https://msdn.microsoft.com/en-us/library/dn457344.aspx
-  //G4MTBarrier(G4MTBarrier&&) = default;
-  //G4MTBarrier& operator=(G4MTBarrier&&)  = default;
-  G4MTBarrier( unsigned int numThreads );
+
+  // on explicitly defaulted move at
+  // https://msdn.microsoft.com/en-us/library/dn457344.aspx
+  // G4MTBarrier(G4MTBarrier&&) = default;
+  // G4MTBarrier& operator=(G4MTBarrier&&)  = default;
+
+  G4MTBarrier(unsigned int numThreads);
   void ThisWorkerReady();
   virtual void WaitForReadyWorkers();
-  inline void SetActiveThreads( unsigned int val ) { m_numActiveThreads = val; }
+  inline void SetActiveThreads(unsigned int val) { m_numActiveThreads = val; }
   void ResetCounter();
   unsigned int GetCounter();
   void Wait();
   void ReleaseBarrier();
-  inline void Wait( unsigned int numt ) {
-    SetActiveThreads( numt );
+  inline void Wait(unsigned int numt)
+  {
+    SetActiveThreads(numt);
     Wait();
   }
-private:
-  unsigned int m_numActiveThreads;
-  unsigned int m_counter;
+
+ private:
+  unsigned int m_numActiveThreads = 0;
+  unsigned int m_counter          = 0;
   G4Mutex m_mutex;
   G4Condition m_counterChanged;
   G4Condition m_continue;
 };
 
-#endif /* G4MTBARRIER_HH_ */
+#endif

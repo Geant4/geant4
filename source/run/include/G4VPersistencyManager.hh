@@ -23,11 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VPersistencyManager
 //
+// Class description:
 //
+// This is an abstract base class for persistency management. The user's
+// concrete class derived from this class must act as a singleton. The user
+// must construct the object of his/her concrete persistency manager in
+// the main().
+// The virtual methods of Store() and Retrieve() will be invoked from
+// G4RunManager if the persistency manager exists.
+// Even if the user does not use any ODBMS system, the user can use this
+// class especially for Store() methods. Writing an ASCII file for storing
+// event information can be delegated to this class, for example.
 
-#ifndef G4VPersistencyManager_h
-#define G4VPersistencyManager_h 1
+// Author: Youhei Morita, 2001
+// --------------------------------------------------------------------
+#ifndef G4VPersistencyManager_hh
+#define G4VPersistencyManager_hh 1
 
 #include "globals.hh"
 
@@ -35,50 +48,35 @@ class G4Event;
 class G4Run;
 class G4VPhysicalVolume;
 
-// class description:
-//
-//  This is an abstract base class for persistency management. The user's
-// concrete class derived from this class must be a singleton. The user
-// must construct the object of his/her concrete persistency manager at
-// his/her main().
-//  The virtual methods of Store() and Retreive() will be invoked from
-// G4RunManager if the persistency manager exists.
-//  Even if the user does not use any ODBMS, the user can use this class
-// especially for Store() methods. Writing an ASCII file for storing
-// event information can be delegated to this class, for example.
-//
-
-class G4VPersistencyManager 
+class G4VPersistencyManager
 {
-  public: // with description
-      static G4VPersistencyManager* GetPersistencyManager();
-      //  Static method to return the pointer to the singleton object.
-      // Note that this method does NOT create the singleton object.
+  public:
+
+    static G4VPersistencyManager* GetPersistencyManager();
+      // Static method to return the pointer to the singleton object.
+      // Note that this method does NOT create the singleton itself.
+
+    virtual ~G4VPersistencyManager();
+
+    virtual G4bool Store(const G4Event* anEvent)          = 0;
+    virtual G4bool Store(const G4Run* aRun)               = 0;
+    virtual G4bool Store(const G4VPhysicalVolume* world)  = 0;
+      // Stores G4Event, G4Run, and geometry tree characterised
+      // by the world volume.
+
+    virtual G4bool Retrieve(G4Event*& anEvent)            = 0;
+    virtual G4bool Retrieve(G4Run*& aRun)                 = 0;
+    virtual G4bool Retrieve(G4VPhysicalVolume*& theWorld) = 0;
+      // Restores G4Event, G4Run, and geometry tree characterised
+      // by the world volume.
 
   protected:
-      G4VPersistencyManager();
 
-  public:
-      virtual ~G4VPersistencyManager();
+    G4VPersistencyManager();
 
-  private: 
-      static G4ThreadLocal G4VPersistencyManager * fPersistencyManager;
+  private:
 
-  public: // with description
-      virtual G4bool Store(const G4Event* anEvent)=0;
-      virtual G4bool Store(const G4Run* aRun)=0;
-      virtual G4bool Store(const G4VPhysicalVolume* theWorld)=0;
-      //  Stores G4Event, G4Run, and geometry tree characterized by the world volume.
-
-      virtual G4bool Retrieve(G4Event*& anEvent)=0;
-      virtual G4bool Retrieve(G4Run*& aRun)=0;
-      virtual G4bool Retrieve(G4VPhysicalVolume*& theWorld)=0;
-      //  Restore G4Event, G4Run, and geometry tree characterized by the world volume.
-
+    static G4ThreadLocal G4VPersistencyManager* fPersistencyManager;
 };
 
-
-
-
 #endif
-

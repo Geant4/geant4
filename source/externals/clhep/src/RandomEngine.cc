@@ -17,6 +17,9 @@
 #include "CLHEP/Random/RandomEngine.h"
 #include "CLHEP/Random/EngineFactory.h"
 
+#include <iostream>
+#include <vector>
+
 //------------------------- HepRandomEngine ------------------------------
 
 namespace CLHEP {

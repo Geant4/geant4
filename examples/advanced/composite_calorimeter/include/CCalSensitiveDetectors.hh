@@ -35,11 +35,13 @@
 #include <map>
 #include "G4VSensitiveDetector.hh"
 #include "G4LogicalVolume.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 typedef std::multimap< G4String, G4LogicalVolume*, std::less<G4String> > mmslv;
 
 class CCalSensitiveDetectors
 {
+friend class G4ThreadLocalSingleton< CCalSensitiveDetectors >;
 public:    
   ~CCalSensitiveDetectors(){};
   std::vector<G4LogicalVolume*> getVolumes (const G4String& name,
@@ -49,7 +51,7 @@ public:
   static CCalSensitiveDetectors* getInstance();
 private:
   CCalSensitiveDetectors(){};
-  static CCalSensitiveDetectors* theInstance;
+  static G4ThreadLocal CCalSensitiveDetectors* theInstance;
   // logical volume container: name, G4LogicalVolume*
   mmslv theLVs;
 };

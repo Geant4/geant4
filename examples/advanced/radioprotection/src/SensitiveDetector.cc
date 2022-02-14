@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: Susanna Guatelli, susanna@uow.edu.au,
-// Authors: Jeremy Davis, jad028@uowmail.edu.au
+// Authors: Susanna Guatelli and Francesco Romano
+// susanna@uow.edu.au, francesco.romano@ct.infn.it
 //
 //  code based on the basic example B2
 //
@@ -72,7 +72,7 @@ G4bool SensitiveDetector::ProcessHits(G4Step* aStep,
 
   G4String volumeName = aStep -> GetPreStepPoint() -> GetPhysicalVolume()-> GetName();
 
-  if(volumeName != "SV_phys1") 
+  if(volumeName != "SV_phys1" && volumeName != "sen_bridge" && volumeName != "physSensitiveBridgeVolume" ) 
     return false;  
 
   SensitiveDetectorHit* newHit = new SensitiveDetectorHit();

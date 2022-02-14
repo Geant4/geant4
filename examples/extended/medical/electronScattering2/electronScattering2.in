@@ -1,8 +1,12 @@
-/testem/phys/addPhysics emstandard_opt0
-/run/initialize
-/run/setCut 0.01 mm
 /primFoil/material G4_Al
 /primFoil/thickness 0.02596 cm
+#
+/testem/phys/addPhysics emstandard_opt0
+#
+/run/initialize
+#
+/run/setCut 0.01 mm
+#
 /gps/energy 13.00 MeV
 /gps/particle e-
 /gps/direction 0. 0. 1.
@@ -10,4 +14,6 @@
 /gps/pos/shape Circle
 /gps/pos/sigma_r 0.042 cm
 /gps/pos/centre 0. 0. -60.05 cm
+#
 /run/beamOn 20000
+#

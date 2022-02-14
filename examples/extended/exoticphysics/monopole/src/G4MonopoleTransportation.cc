@@ -428,9 +428,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 G4VParticleChange* G4MonopoleTransportation::AlongStepDoIt( 
                    const G4Track& track, const G4Step&  stepData )
 {
-  const G4ParticleDefinition* fOpticalPhoton =
-           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
-
   ++noCalls;
 
   fParticleChange.Initialize(track) ;
@@ -459,14 +456,7 @@ G4VParticleChange* G4MonopoleTransportation::AlongStepDoIt(
      G4double stepLength      = track.GetStepLength() ;
 
      deltaTime= 0.0;  // in case initialVelocity = 0 
-     const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
-     if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
-     {
-        //  A photon is in the medium of the final point
-        //  during the step, so it has the final velocity.
-        deltaTime = stepLength/finalVelocity ;
-     }
-     else if (finalVelocity > 0.0)
+     if (finalVelocity > 0.0)
      {
         G4double meanInverseVelocity ;
         // deltaTime = stepLength/finalVelocity ;
@@ -478,7 +468,7 @@ G4VParticleChange* G4MonopoleTransportation::AlongStepDoIt(
      {
         deltaTime = stepLength/initialVelocity ;
      }
-     fCandidateEndGlobalTime   = startTime + deltaTime ;
+     fCandidateEndGlobalTime = startTime + deltaTime ;
   }
   else
   {

@@ -23,77 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////////////////////////////////////////////////////////////////////////////////
+//  Class:    G4AdjointInterpolator
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4AdjointInterpolator
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	1st April 2007 creation by L. Desorgher  		
-//
-//-------------------------------------------------------------
-//	Documentation:
-//		Used by  G4AdjointCSManager for interpolation purpose. 
-//
+//  Used by  G4AdjointCSManager for interpolation purpose.
+////////////////////////////////////////////////////////////////////////////////
+
 #ifndef G4AdjointInterpolator_h
 #define G4AdjointInterpolator_h 1
 
-#include"globals.hh"
-#include<vector>
+#include "globals.hh"
 
-////////////////////////////////////////////////////////////////////////////////
-//
+#include <vector>
+
 class G4AdjointInterpolator
 {
-	
-  public:
-	static G4AdjointInterpolator* GetAdjointInterpolator();
-	static G4AdjointInterpolator* GetInstance();
-        
-  public:
- 
-	 ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
- 
-	
-	~G4AdjointInterpolator();
+ public:
+  static G4AdjointInterpolator* GetAdjointInterpolator();
+  static G4AdjointInterpolator* GetInstance();
 
-        ////////////
-        // Methods
-	////////////
-	
-	//Caution everywher it is considere thta x_vec increase monotically
-	
-	G4double LinearInterpolation(G4double& x,G4double& x1,G4double& x2,G4double& y1,G4double& y2); 
-	G4double LogarithmicInterpolation(G4double& x,G4double& x1,G4double& x2,G4double& y1,G4double& y2);
-	G4double ExponentialInterpolation(G4double& x,G4double& x1,G4double& x2,G4double& y1,G4double& y2);
-	G4double Interpolation(G4double& x,G4double& x1,G4double& x2,G4double& y1,G4double &y2,G4String InterPolMethod="Log");
-	
-	
-	size_t FindPosition(G4double& x,std::vector<G4double>& x_vec,size_t ind_min=0, size_t ind_max=0);
-	
-	size_t FindPositionForLogVector(G4double& x,std::vector<G4double>& x_vec);
-	
-	G4double Interpolate(G4double& x,std::vector<G4double>& x_vec,std::vector<G4double>& y_vec,G4String InterPolMethod="Log"); //xvec should monotically increase			
-	
-	G4double InterpolateWithIndexVector(G4double& x,std::vector<G4double>& x_vec,std::vector<G4double>& y_vec,
-					    std::vector<size_t>& index_vec, G4double x0,G4double dx); //xvec should monotically increase			
-	
-	
-	G4double InterpolateForLogVector(G4double& x,std::vector<G4double>& x_vec,std::vector<G4double>& y_vec);
-   
-   private:
-  	static G4ThreadLocal 	G4AdjointInterpolator* theInstance;
-   
-   private:
-  	G4AdjointInterpolator();  
-        
+  ~G4AdjointInterpolator();
+
+  // Caution: everywhere it is considered that x_vec increases monotically
+
+  G4double LinearInterpolation(G4double& x, G4double& x1, G4double& x2,
+                               G4double& y1, G4double& y2);
+
+  G4double LogarithmicInterpolation(G4double& x, G4double& x1, G4double& x2,
+                                    G4double& y1, G4double& y2);
+
+  G4double ExponentialInterpolation(G4double& x, G4double& x1, G4double& x2,
+                                    G4double& y1, G4double& y2);
+
+  G4double Interpolation(G4double& x, G4double& x1, G4double& x2, G4double& y1,
+                         G4double& y2, G4String InterPolMethod = "Log");
+
+  size_t FindPosition(G4double& x, std::vector<G4double>& x_vec,
+                      size_t ind_min = 0, size_t ind_max = 0);
+
+  size_t FindPositionForLogVector(G4double& x, std::vector<G4double>& x_vec);
+
+  // xvec should monotically increase
+  G4double Interpolate(G4double& x, std::vector<G4double>& x_vec,
+                       std::vector<G4double>& y_vec,
+                       G4String InterPolMethod = "Log");
+
+  G4double InterpolateWithIndexVector(
+    G4double& x, std::vector<G4double>& x_vec, std::vector<G4double>& y_vec,
+    std::vector<size_t>& index_vec, G4double x0,
+    G4double dx);  // xvec should monotically increase
+
+  G4double InterpolateForLogVector(G4double& x, std::vector<G4double>& x_vec,
+                                   std::vector<G4double>& y_vec);
+
+  G4AdjointInterpolator(G4AdjointInterpolator&) = delete;
+  G4AdjointInterpolator& operator=(const G4AdjointInterpolator& right) = delete;
+
+ private:
+  G4AdjointInterpolator();
+
+  static G4ThreadLocal G4AdjointInterpolator* fInstance;
 };
 #endif

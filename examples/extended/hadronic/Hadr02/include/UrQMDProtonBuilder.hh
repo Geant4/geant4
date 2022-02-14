@@ -36,9 +36,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4ProtonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
 #include "G4UrQMD1_3Model.hh"
@@ -51,7 +49,7 @@ public:
   virtual ~UrQMDProtonBuilder();
 
   virtual void Build(G4HadronElasticProcess * aP);
-  virtual void Build(G4ProtonInelasticProcess * aP);
+  virtual void Build(G4HadronInelasticProcess * aP);
     
   inline void SetMinEnergy(G4double aM) {fMin = aM;}
   inline void SetMaxEnergy(G4double aM) {fMax = aM;}
@@ -65,4 +63,3 @@ private:
 };
 
 #endif
-

@@ -132,3 +132,19 @@ void G4Para::SetThetaAndPhi(double pTheta, double pPhi)
 
   MakePlanes();
 }
+
+inline G4double G4Para::GetPhi() const       
+{
+   return std::atan2(fTthetaSphi,fTthetaCphi);
+}
+
+inline G4double G4Para::GetTheta() const
+{
+   return std::atan(std::sqrt(fTthetaCphi*fTthetaCphi
+                              +fTthetaSphi*fTthetaSphi));
+}
+
+inline G4double G4Para::GetAlpha() const
+{
+  return std::atan(fTalpha);
+}

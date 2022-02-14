@@ -35,11 +35,7 @@
 #include "G4UImanager.hh"
 #include "G4UserSteppingAction.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -59,11 +55,7 @@
 int main(int argc,char** argv) {
  // Construct the run manager
  //
-#ifdef G4MULTITHREADED
- G4MTRunManager* runManager = new G4MTRunManager;
-#else
- G4RunManager* runManager = new G4RunManager;
-#endif
+ auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
  // Set mandatory initialization classes
  //
@@ -73,7 +65,7 @@ int main(int argc,char** argv) {
  G4VUserPhysicsList* physics = new XPhysicsList();
  physics->SetCuts();
  runManager->SetUserInitialization(physics);
-    
+
  // Set user action classes
  //
  runManager->SetUserInitialization(new XActionInitialization);
@@ -88,10 +80,10 @@ int main(int argc,char** argv) {
  // Initialize G4 kernel (replaces /run/initialize macro command)
  //
  runManager->Initialize();
-  
+
  // Get the pointer to the User Interface manager
  //
- G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+ G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
  if (argc==1)   // Define UI session for interactive mode
  {

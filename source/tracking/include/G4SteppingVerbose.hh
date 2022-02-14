@@ -23,57 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SteppingVerbose
 //
+// Class description:
 //
-//---------------------------------------------------------------
-//
-// G4SteppingVerbose.hh
-//
-// class dscription:
-//   This class manages the vervose outputs in G4SteppingManager. 
-//   
-//
+// This class manages the verbose outputs in G4SteppingManager. 
+
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
-
-class G4SteppingVerbose;
-
-#ifndef G4SteppingVerose_h
-#define G4SteppingVerose_h 1
+//---------------------------------------------------------------------
+#ifndef G4SteppingVerose_hh
+#define G4SteppingVerose_hh 1
 
 #include "G4VSteppingVerbose.hh"
 
-class G4SteppingVerbose : public G4VSteppingVerbose {
-public:   // with description
-// Constructor/Destructor
-  G4SteppingVerbose();
- ~G4SteppingVerbose();
-// methods to be invoked in the SteppingManager
-  void NewStep();
-  void AtRestDoItInvoked();
-  void AlongStepDoItAllDone();
-  void PostStepDoItAllDone();
-  void AlongStepDoItOneByOne();
-  void PostStepDoItOneByOne();
-  void StepInfo();
-  void TrackingStarted();
-  void DPSLStarted();
-  void DPSLUserLimit();
-  void DPSLPostStep();
-  void DPSLAlongStep();
-//  void DPSLAlongStepDoItOneByOne();
-//  void DPSLPostStepDoItOneByOne();
-  void VerboseTrack();
-  void VerboseParticleChange();
-  void ShowStep() const;
-//
+class G4SteppingVerbose : public G4VSteppingVerbose
+{
+  public:
+
+    // Constructor/Destructor
+
+    G4SteppingVerbose();
+    virtual ~G4SteppingVerbose();
+
+    virtual G4VSteppingVerbose* Clone()
+    { return new G4SteppingVerbose; }
+
+    // Methods to be invoked in the SteppingManager
+
+    virtual void NewStep();
+    virtual void AtRestDoItInvoked();
+    virtual void AlongStepDoItAllDone();
+    virtual void PostStepDoItAllDone();
+    virtual void AlongStepDoItOneByOne();
+    virtual void PostStepDoItOneByOne();
+    virtual void StepInfo();
+    virtual void TrackingStarted();
+    virtual void DPSLStarted();
+    virtual void DPSLUserLimit();
+    virtual void DPSLPostStep();
+    virtual void DPSLAlongStep();
+    virtual void VerboseTrack();
+    virtual void VerboseParticleChange();
+    virtual void ShowStep() const;
+
+  private:
+    static G4int useBestUnitPrecision;
+
+  public:
+    static void UseBestUnit(G4int prec = 4);
+    static G4int BestUnitPrecision();
 
 };
 
-
 #endif
-

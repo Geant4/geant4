@@ -88,6 +88,9 @@ class G4GenericPolycone : public G4VCSGfaceted
                          const G4AffineTransform& pTransform,
                          G4double& pmin, G4double& pmax) const;
 
+  G4double GetCubicVolume();
+  G4double GetSurfaceArea();
+
   G4ThreeVector GetPointOnSurface() const;
 
   G4GeometryType GetEntityType() const;
@@ -135,6 +138,8 @@ class G4GenericPolycone : public G4VCSGfaceted
 
   // Methods for random point generation
 
+  void SetSurfaceElements() const;
+
  protected:  // without description
 
   // Here are our parameters
@@ -145,9 +150,10 @@ class G4GenericPolycone : public G4VCSGfaceted
   G4int    numCorner;           // number RZ points
   G4PolyconeSideRZ* corners = nullptr;  // corner r,z points
 
-  // Our quick test
+  G4EnclosingCylinder* enclosingCylinder = nullptr; // Our quick test
 
-  G4EnclosingCylinder* enclosingCylinder = nullptr;
+  struct surface_element { G4double area = 0.; G4int i0 = 0, i1 = 0, i2 = 0; };
+  mutable std::vector<surface_element>* fElements = nullptr;
 };
 
 #include "G4GenericPolycone.icc"

@@ -16,11 +16,81 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 Oct 21: D. Sawkey (xrays-V10-07-08)
+- G4Cerenkov, G4Scintillation - update G4OpticalParameters when process
+  parameters updated directly. Addresses bug 2425.
+
+19 Sep 21: V. Grichine (xrays-V10-07-07)
+- G4GaussXTRadiator and G4VXTRenergyLoss - Gauss-distributed regular radiator
+  and set/get methods for angle distribution range
+
+13 Sep 21: D. Sawkey (xrays-V10-07-06)
+- G4Cerenkov - fix protection against too small steps (bug 1992, again)
+
+20 Aug 21: V. Ivanchenko (xrays-V10-07-05)
+- G4Cerenkov - do not use obsolete methods to access G4PhysicsVector data
+
+4 Aug 21: A. Ribon (xrays-V10-07-04)
+- G4Cerenkov, G4Scintillation, G4SynchrotronRadiation,
+  G4SynchrotronRadiationInMat, G4ForwardXrayTR, G4VXTRenergyLoss :
+  set the creator model ID for the secondaries, using the new version
+  of G4PhysicsModelCatalog.
+
+26 May 21: D. Sawkey (xrays-V10-07-03)
+- G4Scintillation: change IsApplicable to all particles except opticalphoton
+  and short-lived.  Address bug 2372.
+
+16 April 21: B. Morgan (xrays-V10-07-02)
+- Migrate to build to modular CMake API
+
+24 February 21: D. Sawkey (xrays-V10-07-01)
+- G4Scintillation. Remove deprecated optical commands.
+
+11 February 21: D. Sawkey (xrays-V10-07-00)
+- large cleaning (all files)
+ - remove commented out code
+ - add ProcessDescription and DumpInfo
+ - organize order of headers, remove and add as needed
+ - use constexpr for numbers
+ - replace G4PhysicsOrderedFreeVector with G4PhysicsFreeVector
+
+5 October 20: D. Sawkey (xrays-V10-06-08)
+- G4Cerenkov, G4Scintillation: apply clang-format style guidelines
+
+30 September 20: H. Wenzel (xrays-V10-06-07)
+- G4Cerenkov: make GetAverageNumberOfPhotons public
+
+28 September 20: D. Sawkey (xrays-V10-06-06)
+- G4Scintillation, G4Cerenkov: remove BuildThePhysicsTable
+
+24 September 20: D. Sawkey (xrays-V10-06-05)
+- G4Scintillation: allow specifying SCINTILLATIONYIELD only (not
+    requiring SCINTILLATIONYIELD1) when only 1 scintillation channel present.
+    Same for particle specific yields.
+
+20 July 20: D. Sawkey (xrays-V10-06-04)
+- G4Cerenkov, G4Scintillation: use new G4OpticalParameters to control
+    simulation parameters
+
+28 May 20: D. Sawkey (xrays-V10-06-03)
+- G4Cerenkov - set verbosity levels correctly
+
+24 May 20: D. Sawkey (xrays-V10-06-02)
+- G4Scintillation, G4ScintillationTrackInformation - new material property
+  names allowing 3 time constants, either with/without scintillation
+  by particle type
+
+19 May 20: D. Sawkey (xrays-V10-06-01)
+- G4Cerenkov, G4Scintillation - update format and style
+
+14 February 20: V. Ivanchenko (xrays-V10-06-00)
+- G4VXTRenergyLoss - fixed destructor
+
 08 November 19: V. Ivanchenko (xrays-V10-05-02)
 - G4SynchrotronRadiation, G4VTransitionRadiation - fixed deregistration
 
 03 April 19: V. Ivanchenko (xrays-V10-05-01)
-- G4SynchrotronRadiation, G4VTransitionRadiation - added 
+- G4SynchrotronRadiation, G4VTransitionRadiation - added
     Register/DeRegister mechnism
 
 11 March 19: D. Sawkey (xrays-V10-05-00)
@@ -53,7 +123,7 @@ committal in the CVS repository !
   Thanks to Raphael Isemann for reporting this.
 
 11 September 17: S.Y.Jun (xrays-V10-03-00)
-- Change material property keys by the enum (index) type defined in 
+- Change material property keys by the enum (index) type defined in
   G4MaterialPropertiesIndex
 
 20 Jun 16: P. Gumplinger (xrays-V10-02-05)
@@ -90,7 +160,7 @@ committal in the CVS repository !
 - G4ForwardXrayTR - fixed Coverity report (V.Grichine)
 
 27 Oct 14: A.Dotti (xrays-V10-00-06)
-- Address problem #1675, this requires re engineering of 
+- Address problem #1675, this requires re engineering of
   all UI commands related to optical processes and created
   in G4OpticalPhysics.
 - Co-working tags: xrays-V10-00-06, op-V10-00-09, phys-ctor-em-V10-00-17
@@ -106,8 +176,8 @@ committal in the CVS repository !
 - G4VXTRenergyLoss - fixed Coverity reports
 
 01 Aug 14: V.Ivanchenko (xrays-V10-00-02)
-- G4SynchrotronRadiation - H.Burkhardt extend model from e+, e- to be 
-    universal - applicable for all relativistic charged particles 
+- G4SynchrotronRadiation - H.Burkhardt extend model from e+, e- to be
+    universal - applicable for all relativistic charged particles
 
 07 Jan 14: P.Gumplinger (xrays-V10-00-01)
 - make all static 'Set/Add/Remove' methods non-inline in G4Scintillation
@@ -132,12 +202,12 @@ committal in the CVS repository !
 - G4Cerenkov - added BuildPhysicsTable method which is doing initialisation
     as before but at the moment when material list is fully defined;
     it is assumed that the list of materials is not changed for the next runs;
-    internal table has NULL pointer to PhysicsVector if material properties 
+    internal table has NULL pointer to PhysicsVector if material properties
     are not defined for a given material, this pointer is check in when step
-    limitation is computed. 
+    limitation is computed.
 
 28 May 13: P.Gumplinger (xrays-V09-06-03)
-- G4Scintillation.cc: Fixed bug in G4Scintillation 
+- G4Scintillation.cc: Fixed bug in G4Scintillation
   "ScintillationYieldByParticleType" mode to correctly produce photons for
   nonlinear scintillators, accounting for variable particle step size in the
   scintillator (dependent on G4 tracking and production cuts) and attempting
@@ -148,18 +218,18 @@ committal in the CVS repository !
 13 May 13: P. Gumplinger (xrays-V09-06-02)
 - G4Scintillation.cc give the YieldRatio priority in cases when the
   ExcitationRatio is both 0.0 or 1.0; necessary because the defaults in
-  G4Scintillation.cc (1.0) and G4OpticalPhysics.cc (0.0) are inconsistent 
+  G4Scintillation.cc (1.0) and G4OpticalPhysics.cc (0.0) are inconsistent
 
 21  Feb 13: V.Ivanchenko (xrays-V09-06-01)
 - G4VXTRenergyLoss, G4StrawTubeXTRadiator - use const declaration to
     array of G4SandiaTable values
 
 18  Feb 13: V.Ivanchenko (xrays-V09-06-00)
-- G4SynchrotronRadiation, G4ForwardXrayTR - removed G4ThreadLocal 
+- G4SynchrotronRadiation, G4ForwardXrayTR - removed G4ThreadLocal
     declarations
 
 21 Sept 12: P.Gumplinger (xrays-V09-05-06)
-- Remove what has now become an annoying NOTE warning in the constructor of 
+- Remove what has now become an annoying NOTE warning in the constructor of
   G4Cerenkov
 
 10 July 12: G.Cosmo (xrays-V09-05-05)
@@ -177,12 +247,12 @@ committal in the CVS repository !
 - G4Cerenkov.hh, G4Scintillation.hh trying to fix Coverity warnings
 
 08 February 12: V. Grichine (xrays-V09-05-01)
-- G4SynchrotronRadiarion and G4SynchrotronRadiarionInMat was modified to 
-  provide more realistic angualr distribution for secondary SR gammas 
+- G4SynchrotronRadiarion and G4SynchrotronRadiarionInMat was modified to
+  provide more realistic angualr distribution for secondary SR gammas
   accordong to simplified dipole busted approach.
 
 20 December 11: V. Grichine  (xrays-V09-05-00)
-- G4VXTRenergyLoss.cc and regular XTR radiators/models were updated for more 
+- G4VXTRenergyLoss.cc and regular XTR radiators/models were updated for more
   accurate angular distribution of XTR
 
 18 November 11: G.Folger     (xrays-V09-04-10)
@@ -207,8 +277,8 @@ committal in the CVS repository !
   and deallocate it directly inside class constructors/destructor.
 
 30 July 11: V.Ivant (xrays-V09-04-05)
-- G4SynchrotronRadiation, G4SynchrotronRadiationInMat - fixed 
-  length of C-arrays for the interface with EM field (addressed 
+- G4SynchrotronRadiation, G4SynchrotronRadiationInMat - fixed
+  length of C-arrays for the interface with EM field (addressed
   bug report #1236)
 
 12 July 11: V.Ivant (xrays-V09-04-04)
@@ -220,7 +290,7 @@ committal in the CVS repository !
 - G4TransparentRegXTRadiator - fixed new gcc-4.6.0 warnings
 
 16 May 11: V.Ivant (xrays-V09-04-01)
-- G4ForwardXrayTR, G4Scintillation, G4TransparentRegXTRadiator, 
+- G4ForwardXrayTR, G4Scintillation, G4TransparentRegXTRadiator,
   G4VXTRenergyLoss - fixed gcc-4.6.0 warnings
 
 05 May 11: V.Ivanchenko (xrays-V09-04-00)
@@ -244,7 +314,7 @@ committal in the CVS repository !
   of Nuclear Science and Engineeering - MIT)
 
 14 October 10: V. Ivanchenko (xrays-V09-03-02)
-- G4SynchrotronRadiationInMat, G4SynchrotronRadiation, 
+- G4SynchrotronRadiationInMat, G4SynchrotronRadiation,
   G4TransitionRadiation - added process sub-types
 
 16 June 10: G. Cosmo (xrays-V09-03-01)
@@ -254,7 +324,7 @@ committal in the CVS repository !
 - Scintillation rise time included, thanks to Martin Goettlich/DESY
 
 29 July 09: P. Gumplinger (xrays-V09-02-00)
-- Change IsApplicable for G4Cerenkov and G4Scintillation to 
+- Change IsApplicable for G4Cerenkov and G4Scintillation to
   exclude short-lived particles.
 
 14 November 08: P. Gumplinger (xrays-V09-01-06)
@@ -276,7 +346,7 @@ committal in the CVS repository !
   tracking-V09-01-03 or newer is required.
 
 04 July 08: P. Gumplinger (xrays-V09-01-03)
-- In G4Scintillation and G4Cerenkov now 
+- In G4Scintillation and G4Cerenkov now
   SetTouchableHandle(aStep.GetPreStepPoint()->GetTouchableHandle())
   for the secondaries in the DoIt.
 
@@ -295,7 +365,7 @@ committal in the CVS repository !
 01 February 08: V. Grichine
 - G4BirkScintillation class was added. The class implements the scintillation
   process with Birk's law
- 
+
 02 November 07: P. Gumplinger (xrays-V09-00-03)
 - G4Cerenkov constructor add warning printout about the change
   to G4VDiscreteProcess
@@ -308,13 +378,13 @@ committal in the CVS repository !
 - G4VXTRenergyLoss: general cleanup of old comments;
                     removed all static members;
                     use verboseLevel variable to control cout
-- G4XTRTransparentRegRadModel, G4XTRRegularRadModel, 
+- G4XTRTransparentRegRadModel, G4XTRRegularRadModel,
   G4StrawTubeXTRadiator : cleanup, use verboseLevel to control cout
-  
+
 02 July 07: V.Ivant (xrays-V09-00-00)
 - G4VXTRenergyLoss: fixed valgrind complains for wrong memory allocation
   by removing internal initialisation of Sandia table but using Sandia
-  table from material 
+  table from material
 
 19 June 07: V.Ivant (xrays-V08-03-01)
 - G4VXTRenergyLoss: restore version 1.34 after failing to clean it up
@@ -345,19 +415,19 @@ committal in the CVS repository !
 20 Jan 06: V.Ivant (xrays-V08-00-00)
 20 Jan 06: V. Grichine
 - New algorithm for XTR angular distribution based on the transparent regular radiator
-  was developed. The method can help for more precise estimation of XTR angular 
-  distribution needed in tracking applications of XTR detectors (ATLAS). The algorithm is 
-  under futher testing. 
+  was developed. The method can help for more precise estimation of XTR angular
+  distribution needed in tracking applications of XTR detectors (ATLAS). The algorithm is
+  under futher testing.
 
 25 Aug 05: V.Ivant (xrays-V07-01-03)
-- G4XTRTransparentRegRadModel: abs -> std::abs 
+- G4XTRTransparentRegRadModel: abs -> std::abs
 
 15 Aug 05: V.Ivant (xrays-V07-01-02)
 14 Oct 05: V. Grichine
 - new XTR models were added with G4VXTRenergyLoss::fExitFlux=true for
   the description of XTR after radiator. These are: G4XTRRegularRadModel,
-  G4XTRGammaRadModel, G4XTRTransparentRegRadModel. XTR process was 
-  transformed to be discrete.      
+  G4XTRGammaRadModel, G4XTRTransparentRegRadModel. XTR process was
+  transformed to be discrete.
 
 
 17 Aug 05: P.Gumplinger (xrays-V07-01-01)
@@ -372,7 +442,7 @@ committal in the CVS repository !
 - Change IsApplicable for G4Cerenkov to exclude 'chargedgeantino'
 
 06 June 05: V.Ivant (xrays-V07-00-03)
-- V.Grichine fix in G4TransparentRegXTRadiator - low limit of integration 
+- V.Grichine fix in G4TransparentRegXTRadiator - low limit of integration
   over theta, which strongly effect the results for ALICE
 
 27 May 05: V.Ivant (xrays-V07-00-02)
@@ -466,7 +536,7 @@ committal in the CVS repository !
   particle.
 
 09 may 02: P. Gumplinger (xrays-V04-00-02)
-- changed method 'IsApplicable' for G4Scintillation to return .false. when it 
+- changed method 'IsApplicable' for G4Scintillation to return .false. when it
   is called for an optical photon.
 
 28 mar 02: G. Cosmo (xrays-V04-00-01)
@@ -475,10 +545,10 @@ committal in the CVS repository !
 22 mar 02: V. Grichine (xrays-V04-00-00)
 - new classes (G4VXTRenergyLoss,G4GammaXTRadiator and G4RegularXTRadiator) were
   added for the description of X-ray transition radiation as continuous process.
-     
+
 12 nov 01: mma (xrays-V03-02-02)
 - merge of 00a and 01
-  
+
 24 oct 01: mma (xrays-V03-02-01)
 - modified G4ForwardXrayTR.cc for cuts per material.
   Does NOT include mods in "xrays-V03-02-00a".
@@ -489,7 +559,7 @@ committal in the CVS repository !
 
 17 sep 01: mma (xrays-V03-02-00)
 - modifs in almost all classes for the migration of Materials to pure STL,
-  but backward compatible with g4rw   
+  but backward compatible with g4rw
 
 12 Nov 00: pg  (xrays-V02-00-04)
 - G4Cerenkov.cc: add check on CerenkovAngleIntegrals->IsFilledVectorExist()
@@ -501,29 +571,29 @@ committal in the CVS repository !
 04 oct 00: pg  (xrays-V02-00-02)
 - G4Cerenkov.cc: calculate secondary position from aStep.GetDeltaPosition().
 - G4Scintillation.cc: calculate secondary position from aStep.GetDeltaPosition().
-     
+
 11 aug 00: mma  (xrays-V02-00-01)
 
 03 aug 00: gc  (xrays-V02-00-00r)
 - G4Scintillation.cc: changed RandGauss to G4RandGauss for fixing
   events' reproducibility problem.
-     
-24 may 00: mma  (xrays-V01-01-02)  
-     
+
+24 may 00: mma  (xrays-V01-01-02)
+
 27 apr 00 mma  (em-V01-01-01)
-- G4endl (dec/iso)      
-     
+- G4endl (dec/iso)
+
 26 apr 00 mma  (em-V01-01-00)
-- all EnergyLoss classes renamed G4V... 
+- all EnergyLoss classes renamed G4V...
   Most classes in standard and muons affected.
 - G4Muls moved in utils
-- bugs fixe in MuPairProduction  
+- bugs fixe in MuPairProduction
 - cowork with geant4-01-01-ref-02
-     
+
 02 mar 00 mma  (em-V01-00-00)
 - new G4VEnergyLoss class and related structure
 - cowork with geant4-01-00-ref-06
-     
+
 10 nov 99 mma  (em-V00-01-03)
 - migration to STL: remove RWT hash dictionnary
 

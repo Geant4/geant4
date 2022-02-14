@@ -80,9 +80,9 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
   //maximum index array for a and c tables
   betaArray[2] = arrayDim - 1;
 
-  // read Majorant Surface Parameters. This are required in order to generate Gavrila angular photoelectron distribution
+  // read Majorant Surface Parameters. This are required in order to generate 
+  //Gavrila angular photoelectron distribution
   for(G4int level = 0; level < 2; level++){
-
     char nameChar0[100] = "ftab0.dat"; // K-shell Majorant Surface Parameters
     char nameChar1[100] = "ftab1.dat"; // L-shell Majorant Surface Parameters
 
@@ -110,10 +110,10 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
 	return;
       }
 
-    // Read parameters into tables. The parameters are function of incident electron energy and shell level
+    // Read parameters into tables. The parameters are function of incident electron 
+    // energy and shell level
     G4float aRead=0,cRead=0, beta=0;
-    for(G4int i=0 ; i<arrayDim ;i++){
-      //fscanf(infile,"%f\t %e\t %e",&beta,&aRead,&cRead);
+    for(G4int i=0 ; i<arrayDim ;++i){     
       infile >> beta >> aRead >> cRead;
       aMajorantSurfaceParameterTable[i][level] = aRead;
       cMajorantSurfaceParameterTable[i][level] = cRead;
@@ -122,8 +122,12 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4PhotoElectricAngularGeneratorPolarized::~G4PhotoElectricAngularGeneratorPolarized()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ThreeVector&
 G4PhotoElectricAngularGeneratorPolarized::SampleDirection(
@@ -166,6 +170,8 @@ G4PhotoElectricAngularGeneratorPolarized::SampleDirection(
   return fLocalDirection;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void
 G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGeneratePhiAndTheta(
       G4int shellLevel, G4double beta, G4double aBeta, G4double cBeta,
@@ -178,9 +184,6 @@ G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGeneratePhiAndTheta(
   G4double crossSectionMajorantFunctionValue = 0;
   G4double maxBeta = 0;
 
-  //G4cout << "shell= " << shellLevel << " beta= " << beta
-  //	 << " aBeta= " << aBeta << " cBeta= " << cBeta << G4endl;
-
   do {
 
     rand1 = G4UniformRand();
@@ -190,26 +193,20 @@ G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGeneratePhiAndTheta(
     phi=2*pi*rand1;
 
     if(shellLevel == 0){
-
       // Polarized Gavrila Cross-Section for K-shell (1959)
       theta=std::sqrt(((G4Exp(rand2*std::log(1+cBeta*pi*pi)))-1)/cBeta);
       crossSectionMajorantFunctionValue =
 	CrossSectionMajorantFunction(theta, cBeta);
       crossSectionValue = DSigmaKshellGavrila1959(beta, theta, phi);
-
     } else {
-
       //  Polarized Gavrila Cross-Section for other shells (L1-shell) (1961)
       theta = std::sqrt(((G4Exp(rand2*std::log(1+cBeta*pi*pi)))-1)/cBeta);
       crossSectionMajorantFunctionValue =
 	CrossSectionMajorantFunction(theta, cBeta);
       crossSectionValue = DSigmaL1shellGavrila(beta, theta, phi);
-
     }
 
     maxBeta=rand3*aBeta*crossSectionMajorantFunctionValue;
-    //G4cout << " crossSectionValue= " << crossSectionValue
-    //	   << " max= " << maxBeta << G4endl;
     if(crossSectionValue < 0.0) { crossSectionValue = maxBeta; }
 
   } while(maxBeta > crossSectionValue || theta > CLHEP::pi);
@@ -217,6 +214,8 @@ G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGeneratePhiAndTheta(
   *pphi = phi;
   *ptheta = theta;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double
 G4PhotoElectricAngularGeneratorPolarized::CrossSectionMajorantFunction(
@@ -227,6 +226,8 @@ G4PhotoElectricAngularGeneratorPolarized::CrossSectionMajorantFunction(
   crossSectionMajorantFunctionValue = theta/(1+cBeta*theta*theta);
   return crossSectionMajorantFunctionValue;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double
 G4PhotoElectricAngularGeneratorPolarized::DSigmaKshellGavrila1959(
@@ -262,14 +263,13 @@ G4PhotoElectricAngularGeneratorPolarized::DSigmaKshellGavrila1959(
   return dsigma;
 }
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double
 G4PhotoElectricAngularGeneratorPolarized::DSigmaL1shellGavrila(
         G4double beta, G4double theta, G4double phi) const
 {
   //Double differential L1 shell cross-section (Gavrila 1961)
-
   G4double beta2 = beta*beta;
   G4double oneBeta2 = 1-beta2;
   G4double sqrtOneBeta2 = std::sqrt(oneBeta2);
@@ -298,6 +298,8 @@ G4PhotoElectricAngularGeneratorPolarized::DSigmaL1shellGavrila(
 
   return dsigma;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4RotationMatrix
 G4PhotoElectricAngularGeneratorPolarized::PhotoElectronRotationMatrix(
@@ -340,12 +342,13 @@ G4PhotoElectricAngularGeneratorPolarized::PhotoElectronRotationMatrix(
   return R;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void
 G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGetMajorantSurfaceAandCParameters(G4int shellId, G4double beta, G4double *majorantSurfaceParameterA, G4double *majorantSurfaceParameterC) const
 {
   // This member function finds for a given shell and beta value
   // of the outgoing electron the correct Majorant Surface parameters
-
   G4double aBeta,cBeta;
   G4double bMin,bStep;
   G4int indexMax;
@@ -386,6 +389,8 @@ G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGetMajorantSurfaceAandCPa
   *majorantSurfaceParameterC = cBeta;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4ThreeVector G4PhotoElectricAngularGeneratorPolarized::PhotoElectronComputeFinalDirection(const G4RotationMatrix& rotation, G4double theta, G4double phi) const
 {
   //computes the photoelectron momentum unitary vector
@@ -400,6 +405,8 @@ G4ThreeVector G4PhotoElectricAngularGeneratorPolarized::PhotoElectronComputeFina
   return outgoingDirection;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4PhotoElectricAngularGeneratorPolarized::PrintGeneratorInformation() const
 {
   G4cout << "\n" << G4endl;
@@ -409,6 +416,8 @@ void G4PhotoElectricAngularGeneratorPolarized::PrintGeneratorInformation() const
   G4cout << "For higher shells the L1 cross-section is used." << G4endl;
   G4cout << "(see Physics Reference Manual) \n" << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ThreeVector
 G4PhotoElectricAngularGeneratorPolarized::PerpendicularVector(

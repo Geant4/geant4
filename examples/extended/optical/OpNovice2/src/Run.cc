@@ -26,54 +26,69 @@
 /// \file optical/OpNovice2/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include <numeric>
 
 #include "Run.hh"
+
 #include "DetectorConstruction.hh"
+#include "HistoManager.hh"
 
 #include "G4OpBoundaryProcess.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-Run::Run() 
-: G4Run()
-{
-  fParticle = nullptr;
-  fEkin = -1.;
-  
-  fCerenkovEnergy = 0.0;
-  fScintEnergy = 0.0;
-  
-  fCerenkovCount = 0;
-  fScintCount = 0;
-  fRayleighCount = 0;
+#include <numeric>
 
-  fOpAbsorption = 0;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+Run::Run()
+  : G4Run()
+{
+  fParticle     = nullptr;
+  fEkin         = -1.;
+  fPolarized    = false;
+  fPolarization = 0.;
+
+  fCerenkovEnergy       = 0.0;
+  fScintEnergy          = 0.0;
+  fWLSAbsorptionEnergy  = 0.0;
+  fWLSEmissionEnergy    = 0.0;
+  fWLS2AbsorptionEnergy = 0.0;
+  fWLS2EmissionEnergy   = 0.0;
+
+  fCerenkovCount       = 0;
+  fScintCount          = 0;
+  fWLSAbsorptionCount  = 0;
+  fWLSEmissionCount    = 0;
+  fWLS2AbsorptionCount = 0;
+  fWLS2EmissionCount   = 0;
+  fRayleighCount       = 0;
+
+  fOpAbsorption      = 0;
   fOpAbsorptionPrior = 0;
 
   fTotalSurface = 0;
 
   fBoundaryProcs.clear();
   fBoundaryProcs.resize(40);
-  for (G4int i = 0; i < 40; ++i) {
+  for(G4int i = 0; i < 40; ++i)
+  {
     fBoundaryProcs[i] = 0;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-Run::~Run()
-{}
+Run::~Run() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
+void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy,
+                     G4bool polarized, G4double polarization)
 {
-  fParticle = particle;
-  fEkin = energy;
+  fParticle     = particle;
+  fEkin         = energy;
+  fPolarized    = polarized;
+  fPolarization = polarization;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,22 +97,33 @@ void Run::Merge(const G4Run* run)
   const Run* localRun = static_cast<const Run*>(run);
 
   // pass information about primary particle
-  fParticle = localRun->fParticle;
-  fEkin     = localRun->fEkin;
+  fParticle     = localRun->fParticle;
+  fEkin         = localRun->fEkin;
+  fPolarized    = localRun->fPolarized;
+  fPolarization = localRun->fPolarization;
 
   fCerenkovEnergy += localRun->fCerenkovEnergy;
-  fScintEnergy    += localRun->fScintEnergy;
+  fScintEnergy += localRun->fScintEnergy;
+  fWLSAbsorptionEnergy += localRun->fWLSAbsorptionEnergy;
+  fWLSEmissionEnergy += localRun->fWLSEmissionEnergy;
+  fWLS2AbsorptionEnergy += localRun->fWLS2AbsorptionEnergy;
+  fWLS2EmissionEnergy += localRun->fWLS2EmissionEnergy;
 
-  fCerenkovCount  += localRun->fCerenkovCount;
-  fScintCount     += localRun->fScintCount;
-  fRayleighCount  += localRun->fRayleighCount;
-  
-  fTotalSurface   += localRun->fTotalSurface;
-  
-  fOpAbsorption   += localRun->fOpAbsorption;
+  fCerenkovCount += localRun->fCerenkovCount;
+  fScintCount += localRun->fScintCount;
+  fWLSAbsorptionCount += localRun->fWLSAbsorptionCount;
+  fWLSEmissionCount += localRun->fWLSEmissionCount;
+  fWLS2AbsorptionCount += localRun->fWLS2AbsorptionCount;
+  fWLS2EmissionCount += localRun->fWLS2EmissionCount;
+  fRayleighCount += localRun->fRayleighCount;
+
+  fTotalSurface += localRun->fTotalSurface;
+
+  fOpAbsorption += localRun->fOpAbsorption;
   fOpAbsorptionPrior += localRun->fOpAbsorptionPrior;
 
-  for (size_t i = 0; i < fBoundaryProcs.size(); ++i) {
+  for(size_t i = 0; i < fBoundaryProcs.size(); ++i)
+  {
     fBoundaryProcs[i] += localRun->fBoundaryProcs[i];
   }
 
@@ -107,49 +133,177 @@ void Run::Merge(const G4Run* run)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Run::EndOfRun()
 {
-  G4int TotNbofEvents = numberOfEvent;
-  if (TotNbofEvents == 0) return;
+  if(numberOfEvent == 0)
+    return;
+  G4double TotNbofEvents = (G4double) numberOfEvent;
 
-  const DetectorConstruction* det = (const DetectorConstruction*)
-    (G4RunManager::GetRunManager()->GetUserDetectorConstruction()); 
+  G4AnalysisManager* analysisMan = G4AnalysisManager::Instance();
+  G4int id                       = analysisMan->GetH1Id("Cerenkov spectrum");
+  analysisMan->SetH1XAxisTitle(id, "Energy [eV]");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("Scintillation spectrum");
+  analysisMan->SetH1XAxisTitle(id, "Energy [eV]");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("Scintillation time");
+  analysisMan->SetH1XAxisTitle(id, "Creation time [ns]");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("WLS abs");
+  analysisMan->SetH1XAxisTitle(id, "Energy [eV]");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("WLS em");
+  analysisMan->SetH1XAxisTitle(id, "Energy [eV]");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("WLS time");
+  analysisMan->SetH1XAxisTitle(id, "Creation time [ns]");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("WLS2 abs");
+  analysisMan->SetH1XAxisTitle(id, "Energy [eV]");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("WLS2 em");
+  analysisMan->SetH1XAxisTitle(id, "Energy [eV]");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("WLS2 time");
+  analysisMan->SetH1XAxisTitle(id, "Creation time [ns]");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("bdry status");
+  analysisMan->SetH1XAxisTitle(id, "Status code");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("x_backward");
+  analysisMan->SetH1XAxisTitle(id, "Direction cosine");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("y_backward");
+  analysisMan->SetH1XAxisTitle(id, "Direction cosine");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("z_backward");
+  analysisMan->SetH1XAxisTitle(id, "Direction cosine");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("x_forward");
+  analysisMan->SetH1XAxisTitle(id, "Direction cosine");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("y_forward");
+  analysisMan->SetH1XAxisTitle(id, "Direction cosine");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("z_forward");
+  analysisMan->SetH1XAxisTitle(id, "Direction cosine");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("x_fresnel");
+  analysisMan->SetH1XAxisTitle(id, "Direction cosine");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("y_fresnel");
+  analysisMan->SetH1XAxisTitle(id, "Direction cosine");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("z_fresnel");
+  analysisMan->SetH1XAxisTitle(id, "Direction cosine");
+  analysisMan->SetH1YAxisTitle(id, "Number of photons");
+
+  id = analysisMan->GetH1Id("Transmitted");
+  analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
+  analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
+
+  id = analysisMan->GetH1Id("Reflected");
+  analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
+  analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
+
+  const DetectorConstruction* det =
+    (const DetectorConstruction*) (G4RunManager::GetRunManager()
+                                     ->GetUserDetectorConstruction());
 
   std::ios::fmtflags mode = G4cout.flags();
-  G4int prec = G4cout.precision(2);
+  G4int prec              = G4cout.precision(2);
 
   G4cout << "\n    Run Summary\n";
-  G4cout <<   "---------------------------------\n";
-  G4cout << "Primary particle was: " << fParticle->GetParticleName() 
+  G4cout << "---------------------------------\n";
+  G4cout << "Primary particle was: " << fParticle->GetParticleName()
          << " with energy " << G4BestUnit(fEkin, "Energy") << "." << G4endl;
+  G4cout << "Number of events: " << numberOfEvent << G4endl;
 
   G4cout << "Material of world: " << det->GetWorldMaterial()->GetName()
          << G4endl;
-  G4cout << "Material of tank:  " << det->GetTankMaterial()->GetName()
-         << G4endl << G4endl;
+  G4cout << "Material of tank:  " << det->GetTankMaterial()->GetName() << G4endl
+         << G4endl;
 
-  if (fParticle->GetParticleName() != "opticalphoton") {
-    G4cout << "Average energy of Cerenkov photons created per event: " 
-           << (fCerenkovEnergy/eV)/TotNbofEvents << " eV." << G4endl;
-    G4cout << "Average number of Cerenkov photons created per event: " 
-           << fCerenkovCount/TotNbofEvents << G4endl;
-    if (fCerenkovCount > 0) { 
-      G4cout << " Average energy: " << (fCerenkovEnergy/eV)/fCerenkovCount 
-             << " eV." << G4endl;
+  if(fParticle->GetParticleName() != "opticalphoton")
+  {
+    G4cout << "Average energy of Cerenkov photons created per event: "
+           << (fCerenkovEnergy / eV) / TotNbofEvents << " eV." << G4endl;
+    G4cout << "Average number of Cerenkov photons created per event: "
+           << fCerenkovCount / TotNbofEvents << G4endl;
+    if(fCerenkovCount > 0)
+    {
+      G4cout << " Average energy per photon: "
+             << (fCerenkovEnergy / eV) / fCerenkovCount << " eV." << G4endl;
     }
-    G4cout << "Average energy of scintillation photons created per event: " 
-           << (fScintEnergy/eV)/TotNbofEvents << " eV." << G4endl;
-    G4cout << "Average number of scintillation photons created per event: " 
-           << fScintCount/TotNbofEvents << G4endl;
-    if (fScintCount > 0) {
-      G4cout << " Average energy: " << (fScintEnergy/eV)/fScintCount << " eV."
-             << G4endl;
+    G4cout << "Average energy of scintillation photons created per event: "
+           << (fScintEnergy / eV) / TotNbofEvents << " eV." << G4endl;
+    G4cout << "Average number of scintillation photons created per event: "
+           << fScintCount / TotNbofEvents << G4endl;
+    if(fScintCount > 0)
+    {
+      G4cout << " Average energy per photon: "
+             << (fScintEnergy / eV) / fScintCount << " eV." << G4endl;
     }
   }
+
+  G4cout << "Average number of photons absorbed by WLS per event: "
+         << fWLSAbsorptionCount / G4double(TotNbofEvents) << " " << G4endl;
+  if(fWLSAbsorptionCount > 0)
+  {
+    G4cout << " Average energy per photon: "
+           << (fWLSAbsorptionEnergy / eV) / fWLSAbsorptionCount << " eV."
+           << G4endl;
+  }
+  G4cout << "Average number of photons created by WLS per event: "
+         << fWLSEmissionCount / TotNbofEvents << G4endl;
+  if(fWLSEmissionCount > 0)
+  {
+    G4cout << " Average energy per photon: "
+           << (fWLSEmissionEnergy / eV) / fWLSEmissionCount << " eV." << G4endl;
+  }
+  G4cout << "Average energy of WLS photons created per event: "
+         << (fWLSEmissionEnergy / eV) / TotNbofEvents << " eV." << G4endl;
+
+  G4cout << "Average number of photons absorbed by WLS2 per event: "
+         << fWLS2AbsorptionCount / G4double(TotNbofEvents) << " " << G4endl;
+  if(fWLS2AbsorptionCount > 0)
+  {
+    G4cout << " Average energy per photon: "
+           << (fWLS2AbsorptionEnergy / eV) / fWLS2AbsorptionCount << " eV."
+           << G4endl;
+  }
+  G4cout << "Average number of photons created by WLS2 per event: "
+         << fWLS2EmissionCount / TotNbofEvents << G4endl;
+  if(fWLS2EmissionCount > 0)
+  {
+    G4cout << " Average energy per photon: "
+           << (fWLS2EmissionEnergy / eV) / fWLS2EmissionCount << " eV."
+           << G4endl;
+  }
+  G4cout << "Average energy of WLS2 photons created per event: "
+         << (fWLS2EmissionEnergy / eV) / TotNbofEvents << " eV." << G4endl;
+
   G4cout << "Average number of OpRayleigh per event:   "
-         << fRayleighCount/TotNbofEvents << G4endl;
+         << fRayleighCount / TotNbofEvents << G4endl;
   G4cout << "Average number of OpAbsorption per event: "
-         << fOpAbsorption/TotNbofEvents << G4endl;
-  G4cout << 
-    "\nSurface events (on +X surface, maximum one per photon) this run:" 
+         << fOpAbsorption / TotNbofEvents << G4endl;
+  G4cout << "\nSurface events (on +X surface, maximum one per photon) this run:"
          << G4endl;
   G4cout << "# of primary particles:      " << std::setw(8) << TotNbofEvents
          << G4endl;
@@ -157,163 +311,202 @@ void Run::EndOfRun()
          << fOpAbsorptionPrior << G4endl;
   G4cout << "Total # of surface events:   " << std::setw(8) << fTotalSurface
          << G4endl;
-  if (fParticle->GetParticleName() == "opticalphoton") {
+  if(fParticle->GetParticleName() == "opticalphoton")
+  {
     G4cout << "Unaccounted for:             " << std::setw(8)
-         << fTotalSurface + fOpAbsorptionPrior - TotNbofEvents << G4endl;
+           << fTotalSurface + fOpAbsorptionPrior - TotNbofEvents << G4endl;
   }
   G4cout << "\nSurface events by process:" << G4endl;
-  if (fBoundaryProcs[Transmission] > 0) {
+  if(fBoundaryProcs[Transmission] > 0)
+  {
     G4cout << "  Transmission:              " << std::setw(8)
            << fBoundaryProcs[Transmission] << G4endl;
   }
-  if (fBoundaryProcs[FresnelRefraction] > 0) {
+  if(fBoundaryProcs[FresnelRefraction] > 0)
+  {
     G4cout << "  Fresnel refraction:        " << std::setw(8)
            << fBoundaryProcs[FresnelRefraction] << G4endl;
   }
-  if (fBoundaryProcs[FresnelReflection] > 0) {
+  if(fBoundaryProcs[FresnelReflection] > 0)
+  {
     G4cout << "  Fresnel reflection:        " << std::setw(8)
-           << fBoundaryProcs[FresnelReflection] << G4endl; 
+           << fBoundaryProcs[FresnelReflection] << G4endl;
   }
-  if (fBoundaryProcs[TotalInternalReflection] > 0) {
+  if(fBoundaryProcs[TotalInternalReflection] > 0)
+  {
     G4cout << "  Total internal reflection: " << std::setw(8)
            << fBoundaryProcs[TotalInternalReflection] << G4endl;
   }
-  if (fBoundaryProcs[LambertianReflection] > 0) {
+  if(fBoundaryProcs[LambertianReflection] > 0)
+  {
     G4cout << "  Lambertian reflection:     " << std::setw(8)
            << fBoundaryProcs[LambertianReflection] << G4endl;
   }
-  if (fBoundaryProcs[LobeReflection] > 0) {
+  if(fBoundaryProcs[LobeReflection] > 0)
+  {
     G4cout << "  Lobe reflection:           " << std::setw(8)
            << fBoundaryProcs[LobeReflection] << G4endl;
   }
-  if (fBoundaryProcs[SpikeReflection] > 0) {
+  if(fBoundaryProcs[SpikeReflection] > 0)
+  {
     G4cout << "  Spike reflection:          " << std::setw(8)
            << fBoundaryProcs[SpikeReflection] << G4endl;
   }
-  if (fBoundaryProcs[BackScattering] > 0) {
+  if(fBoundaryProcs[BackScattering] > 0)
+  {
     G4cout << "  Backscattering:            " << std::setw(8)
            << fBoundaryProcs[BackScattering] << G4endl;
   }
-  if (fBoundaryProcs[Absorption] > 0) {
+  if(fBoundaryProcs[Absorption] > 0)
+  {
     G4cout << "  Absorption:                " << std::setw(8)
            << fBoundaryProcs[Absorption] << G4endl;
   }
-  if (fBoundaryProcs[Detection] > 0) {
+  if(fBoundaryProcs[Detection] > 0)
+  {
     G4cout << "  Detection:                 " << std::setw(8)
            << fBoundaryProcs[Detection] << G4endl;
   }
-  if (fBoundaryProcs[NotAtBoundary] > 0) {
+  if(fBoundaryProcs[NotAtBoundary] > 0)
+  {
     G4cout << "  Not at boundary:           " << std::setw(8)
            << fBoundaryProcs[NotAtBoundary] << G4endl;
   }
-  if (fBoundaryProcs[SameMaterial] > 0) {
+  if(fBoundaryProcs[SameMaterial] > 0)
+  {
     G4cout << "  Same material:             " << std::setw(8)
            << fBoundaryProcs[SameMaterial] << G4endl;
   }
-  if (fBoundaryProcs[StepTooSmall] > 0) {
+  if(fBoundaryProcs[StepTooSmall] > 0)
+  {
     G4cout << "  Step too small:            " << std::setw(8)
            << fBoundaryProcs[StepTooSmall] << G4endl;
   }
-  if (fBoundaryProcs[NoRINDEX] > 0) {
+  if(fBoundaryProcs[NoRINDEX] > 0)
+  {
     G4cout << "  No RINDEX:                 " << std::setw(8)
            << fBoundaryProcs[NoRINDEX] << G4endl;
   }
   // LBNL polished
-  if (fBoundaryProcs[PolishedLumirrorAirReflection] > 0) {
+  if(fBoundaryProcs[PolishedLumirrorAirReflection] > 0)
+  {
     G4cout << "  Polished Lumirror Air reflection: " << std::setw(8)
            << fBoundaryProcs[PolishedLumirrorAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[PolishedLumirrorGlueReflection] > 0) {
+  if(fBoundaryProcs[PolishedLumirrorGlueReflection] > 0)
+  {
     G4cout << "  Polished Lumirror Glue reflection: " << std::setw(8)
            << fBoundaryProcs[PolishedLumirrorGlueReflection] << G4endl;
   }
-  if (fBoundaryProcs[PolishedAirReflection] > 0) {
+  if(fBoundaryProcs[PolishedAirReflection] > 0)
+  {
     G4cout << "  Polished Air reflection: " << std::setw(8)
            << fBoundaryProcs[PolishedAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[PolishedTeflonAirReflection] > 0) {
+  if(fBoundaryProcs[PolishedTeflonAirReflection] > 0)
+  {
     G4cout << "  Polished Teflon Air reflection: " << std::setw(8)
            << fBoundaryProcs[PolishedTeflonAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[PolishedTiOAirReflection] > 0) {
+  if(fBoundaryProcs[PolishedTiOAirReflection] > 0)
+  {
     G4cout << "  Polished TiO Air reflection: " << std::setw(8)
            << fBoundaryProcs[PolishedTiOAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[PolishedTyvekAirReflection] > 0) {
+  if(fBoundaryProcs[PolishedTyvekAirReflection] > 0)
+  {
     G4cout << "  Polished Tyvek Air reflection: " << std::setw(8)
            << fBoundaryProcs[PolishedTyvekAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[PolishedVM2000AirReflection] > 0) {
+  if(fBoundaryProcs[PolishedVM2000AirReflection] > 0)
+  {
     G4cout << "  Polished VM2000 Air reflection: " << std::setw(8)
            << fBoundaryProcs[PolishedVM2000AirReflection] << G4endl;
   }
-  if (fBoundaryProcs[PolishedVM2000GlueReflection] > 0) {
+  if(fBoundaryProcs[PolishedVM2000GlueReflection] > 0)
+  {
     G4cout << "  Polished VM2000 Glue reflection: " << std::setw(8)
            << fBoundaryProcs[PolishedVM2000GlueReflection] << G4endl;
   }
   // LBNL etched
-  if (fBoundaryProcs[EtchedLumirrorAirReflection] > 0) {
+  if(fBoundaryProcs[EtchedLumirrorAirReflection] > 0)
+  {
     G4cout << "  Etched Lumirror Air reflection: " << std::setw(8)
            << fBoundaryProcs[EtchedLumirrorAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[EtchedLumirrorGlueReflection] > 0) {
+  if(fBoundaryProcs[EtchedLumirrorGlueReflection] > 0)
+  {
     G4cout << "  Etched Lumirror Glue reflection: " << std::setw(8)
            << fBoundaryProcs[EtchedLumirrorGlueReflection] << G4endl;
   }
-  if (fBoundaryProcs[EtchedAirReflection] > 0) {
+  if(fBoundaryProcs[EtchedAirReflection] > 0)
+  {
     G4cout << "  Etched Air reflection: " << std::setw(8)
            << fBoundaryProcs[EtchedAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[EtchedTeflonAirReflection] > 0) {
+  if(fBoundaryProcs[EtchedTeflonAirReflection] > 0)
+  {
     G4cout << "  Etched Teflon Air reflection: " << std::setw(8)
            << fBoundaryProcs[EtchedTeflonAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[EtchedTiOAirReflection] > 0) {
+  if(fBoundaryProcs[EtchedTiOAirReflection] > 0)
+  {
     G4cout << "  Etched TiO Air reflection: " << std::setw(8)
            << fBoundaryProcs[EtchedTiOAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[EtchedTyvekAirReflection] > 0) {
+  if(fBoundaryProcs[EtchedTyvekAirReflection] > 0)
+  {
     G4cout << "  Etched Tyvek Air reflection: " << std::setw(8)
            << fBoundaryProcs[EtchedTyvekAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[EtchedVM2000AirReflection] > 0) {
+  if(fBoundaryProcs[EtchedVM2000AirReflection] > 0)
+  {
     G4cout << "  Etched VM2000 Air reflection: " << std::setw(8)
            << fBoundaryProcs[EtchedVM2000AirReflection] << G4endl;
   }
-  if (fBoundaryProcs[EtchedVM2000GlueReflection] > 0) {
+  if(fBoundaryProcs[EtchedVM2000GlueReflection] > 0)
+  {
     G4cout << "  Etched VM2000 Glue reflection: " << std::setw(8)
            << fBoundaryProcs[EtchedVM2000GlueReflection] << G4endl;
   }
   // LBNL ground
-  if (fBoundaryProcs[GroundLumirrorAirReflection] > 0) {
+  if(fBoundaryProcs[GroundLumirrorAirReflection] > 0)
+  {
     G4cout << "  Ground Lumirror Air reflection: " << std::setw(8)
            << fBoundaryProcs[GroundLumirrorAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[GroundLumirrorGlueReflection] > 0) {
+  if(fBoundaryProcs[GroundLumirrorGlueReflection] > 0)
+  {
     G4cout << "  Ground Lumirror Glue reflection: " << std::setw(8)
            << fBoundaryProcs[GroundLumirrorGlueReflection] << G4endl;
   }
-  if (fBoundaryProcs[GroundAirReflection] > 0) {
+  if(fBoundaryProcs[GroundAirReflection] > 0)
+  {
     G4cout << "  Ground Air reflection: " << std::setw(8)
            << fBoundaryProcs[GroundAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[GroundTeflonAirReflection] > 0) {
+  if(fBoundaryProcs[GroundTeflonAirReflection] > 0)
+  {
     G4cout << "  Ground Teflon Air reflection: " << std::setw(8)
            << fBoundaryProcs[GroundTeflonAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[GroundTiOAirReflection] > 0) {
+  if(fBoundaryProcs[GroundTiOAirReflection] > 0)
+  {
     G4cout << "  Ground TiO Air reflection: " << std::setw(8)
            << fBoundaryProcs[GroundTiOAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[GroundTyvekAirReflection] > 0) {
+  if(fBoundaryProcs[GroundTyvekAirReflection] > 0)
+  {
     G4cout << "  Ground Tyvek Air reflection: " << std::setw(8)
            << fBoundaryProcs[GroundTyvekAirReflection] << G4endl;
   }
-  if (fBoundaryProcs[GroundVM2000AirReflection] > 0) {
+  if(fBoundaryProcs[GroundVM2000AirReflection] > 0)
+  {
     G4cout << "  Ground VM2000 Air reflection: " << std::setw(8)
            << fBoundaryProcs[GroundVM2000AirReflection] << G4endl;
   }
-  if (fBoundaryProcs[GroundVM2000GlueReflection] > 0) {
+  if(fBoundaryProcs[GroundVM2000GlueReflection] > 0)
+  {
     G4cout << "  Ground VM2000 Glue reflection: " << std::setw(8)
            << fBoundaryProcs[GroundVM2000GlueReflection] << G4endl;
   }
@@ -323,8 +516,134 @@ void Run::EndOfRun()
   G4cout << " Unaccounted for:            " << std::setw(8)
          << fTotalSurface - sum << G4endl;
 
-  G4cout <<   "---------------------------------\n";
-
+  G4cout << "---------------------------------\n";
   G4cout.setf(mode, std::ios::floatfield);
   G4cout.precision(prec);
+
+  G4int histo_id_trans = analysisMan->GetH1Id("Transmitted");
+  G4int histo_id_refl  = analysisMan->GetH1Id("Reflected");
+  if(analysisMan->GetH1Activation(histo_id_trans))
+  {
+    if(fPolarized)
+    {
+      G4double rindex1 = det->GetTankMaterial()
+                           ->GetMaterialPropertiesTable()
+                           ->GetProperty(kRINDEX)
+                           ->Value(fEkin);
+      G4double rindex2 = det->GetWorldMaterial()
+                           ->GetMaterialPropertiesTable()
+                           ->GetProperty(kRINDEX)
+                           ->Value(fEkin);
+
+      auto histo_trans = analysisMan->GetH1(histo_id_trans);
+      auto histo_refl  = analysisMan->GetH1(histo_id_refl);
+      std::vector<G4double> trans;
+      std::vector<G4double> refl;
+      std::vector<G4double> tot;
+      for(size_t i = 0; i < histo_trans->axis().bins(); ++i)
+      {
+        trans.push_back(histo_trans->bin_height(i));
+        refl.push_back(histo_refl->bin_height(i));
+        tot.push_back(histo_trans->bin_height(i) + histo_refl->bin_height(i));
+      }
+
+      // find Brewster angle: Rp = 0
+      //  need enough statistics for this method to work
+      G4double min_angle = -1.;
+      G4double min_val   = DBL_MAX;
+      G4double bin_width = 0.;
+      for(size_t i = 0; i < refl.size(); ++i)
+      {
+        if(refl[i] < min_val)
+        {
+          min_val   = refl[i];
+          min_angle = histo_refl->axis().bin_lower_edge(i);
+          bin_width = histo_refl->axis().bin_upper_edge(i) -
+                      histo_refl->axis().bin_lower_edge(i);
+          min_angle += bin_width / 2.;
+        }
+      }
+      G4cout << "Polarization of primary optical photons: "
+             << fPolarization / deg << " deg." << G4endl;
+      if(fPolarization == 0.0)
+      {
+        G4cout << "Reflectance shows a minimum at: " << min_angle << " +/- "
+               << bin_width / 2;
+        G4cout << " deg. Expected Brewster angle: "
+               << (360. / CLHEP::twopi) * std::atan(rindex2 / rindex1)
+               << " deg. " << G4endl;
+      }
+
+      // find angle of total internal reflection:  T -> 0
+      //   last bin for T > 0
+      min_angle = -1.;
+      min_val   = DBL_MAX;
+      for(size_t i = 0; i < histo_trans->axis().bins() - 1; ++i)
+      {
+        if(histo_trans->bin_height(i) > 0. &&
+           histo_trans->bin_height(i + 1) == 0.)
+        {
+          min_angle = histo_trans->axis().bin_lower_edge(i);
+          bin_width = histo_refl->axis().bin_upper_edge(i) -
+                      histo_refl->axis().bin_lower_edge(i);
+          min_angle += bin_width / 2.;
+          break;
+        }
+      }
+      G4cout << "Transmission goes to 0 at: " << min_angle << " +/- "
+             << bin_width / 2. << " deg."
+             << " Expected: "
+             << (360. / CLHEP::twopi) * std::asin(rindex2 / rindex1) << " deg."
+             << G4endl;
+
+      // Normalize the transmission/reflection histos so that max is 1.
+      // Only if x values are the same
+      if((analysisMan->GetH1Nbins(histo_id_trans) ==
+          analysisMan->GetH1Nbins(histo_id_refl)) &&
+         (analysisMan->GetH1Xmin(histo_id_trans) ==
+          analysisMan->GetH1Xmin(histo_id_refl)) &&
+         (analysisMan->GetH1Xmax(histo_id_trans) ==
+          analysisMan->GetH1Xmax(histo_id_refl)))
+      {
+        unsigned int ent;
+        G4double sw;
+        G4double sw2;
+        G4double sx2;
+        G4double sx2w;
+        for(size_t bin = 0; bin < histo_trans->axis().bins(); ++bin)
+        {
+          // "bin+1" below because bin 0 is underflow bin
+          // NB. We are ignoring underflow/overflow bins
+          histo_trans->get_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+          if(tot[bin] > 0)
+          {
+            sw /= tot[bin];
+            // bin error is sqrt(sw2)
+            sw2 /= (tot[bin] * tot[bin]);
+            sx2 /= (tot[bin] * tot[bin]);
+            sx2w /= (tot[bin] * tot[bin]);
+            histo_trans->set_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+          }
+        }
+        for(size_t bin = 0; bin < histo_refl->axis().bins(); ++bin)
+        {
+          histo_refl->get_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+          if(tot[bin] > 0)
+          {
+            sw /= tot[bin];
+            // bin error is sqrt(sw2)
+            sw2 /= (tot[bin] * tot[bin]);
+            sx2 /= (tot[bin] * tot[bin]);
+            sx2w /= (tot[bin] * tot[bin]);
+            histo_refl->set_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+          }
+        }
+      }
+      else
+      {
+        G4cout << "Not going to normalize transmission and reflection "
+               << "histograms because bins are not the same." << G4endl;
+      }
+    }
+  }
 }

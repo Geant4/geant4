@@ -14,9 +14,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-14/10/16 Gunter Folger
-=======
+13/02/2021 V. Ivantchenko (ThreadsafeScorers-V10-07-00)
+- TSPhysicsList - removed obsolete header G4EmProcessOptions; removed
+  method SetCuts(..) to avoid data race - use the one from the base class; 
+  removed singletone pattern from this class - it is not used and not needed. 
+
+12/11/2020 Jonathan Madsen (ThreadsafeScorers-V10-06-03)
+- Replaced TIMEMORY_AUTO_TIMER usage with G4USER_SCOPED_PROFILE usage
+
+23/6/2020 Jonathan Madsen (ThreadsafeScores-V10-06-02)
+- Added example of user code leveraging tasking in TSRunAction.cc
+- This example leverages tasks on the master thread at the end
+  of the run to generate some strings of output via a nested
+  hierarchy of tasks and uses the features of the
+  G4TaskGroup to combine the strings in the order that
+  they were submitted to the task-group (thus producing the
+  same output result as the serial version)
+
+23/6/2020 Gabriele Cosmo (ThreadsafeScorers-V10-06-01)
+- Properly include G4RunManagerFactory.hh in main().
+
+28/5/2020 Jonathan Madsen (ThreadsafeScorers-V10-06-00)
+- Updated to use tasking system
+
 22/11/2019 Jonathan Madsen (ThreadsafeScorers-V10-05-01)
 - Updated CMakeLists.txt to support enabling timemory even without
   support at the Geant4 level

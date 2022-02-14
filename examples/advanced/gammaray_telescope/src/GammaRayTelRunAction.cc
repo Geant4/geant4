@@ -126,17 +126,19 @@ void GammaRayTelRunAction::OpenFile()
   //check that we are in a worker: returns -1 in a master and -2 in sequential
   //one file per thread is produced 
   //Tracks_runR.N.dat, where R=run number, N=thread ID
-  char name[25];
-  if (G4Threading::G4GetThreadId() >= 0)          
-    sprintf(name,"Tracks_run%d.%d.dat",fRunID,
-	    G4Threading::G4GetThreadId());
+    std::stringstream name;
+    if (G4Threading::G4GetThreadId() >= 0)          
+    name << "Tracks_run" << fRunID << "."
+         << G4Threading::G4GetThreadId() << ".dat";
   else
-    sprintf(name,"Tracks_run%d.dat",fRunID);
+    name << "Tracks_run" << fRunID << "."
+         << G4Threading::G4GetThreadId() << ".dat";
+
   if (!outFile)
     {
       outFile = new std::ofstream;
-      outFile->open(name);
-      fileName = G4String(name);
+      outFile->open(name.str());
+      fileName = G4String(name.str());
     }
   G4cout << "Open file: " << fileName << G4endl;
 #endif

@@ -1,0 +1,102 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the log-message one should put at every
+committal in the code repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+21 September 2021 - G. Amadio (ptl-V10-07-08)
+- Fix C++20 warnings from GCC 11.2.0.
+
+6 June 2021 - J. Madsen (ptl-V10-07-07)
+- Fix to TaskRunManager::Terminate() + nullptr to m_thread_pool
+  (causes seg-fault when ui/viz inited but run not inited)
+
+3 June 2021 - B. Morgan (ptl-V10-07-06)
+- Do not expose PTL_... CMake options to clients building Geant4
+- Remove exposure of CMAKE_CXX_... options controlled by master project
+
+24 May 2021 - J. Madsen (ptl-V10-07-05)
+- Updated PTL to v2.0.0 which replaced raw pointers to tasks with
+  shared_ptrs for memory management improvements
+
+18th May 2021 - B.Morgan (ptl-V10-07-04)
+- Use CMAKE_CXX_STANDARD in place of GEANT4_BUILD_CXXSTD
+
+15 May 2021 - J. Madsen (ptl-V10-07-03)
+- Make PTL cmake options available
+    - Useful options include PTL_USE_SANITIZER and PTL_USE_LOCKS
+- Removed PTL custom task allocator classes
+- Fixed warnings about TBB task scheduler init
+- Improved thread safety
+- Fixed some memory issues
+
+5 May 2021 - G.Cosmo (ptl-V10-07-02)
+- Updated minimum CMake version requirements in CMakeList.txt.
+
+22 Feb 2021 - B.Morgan (ptl-V10-07-01)
+- Apply patch from Gunter to fix component installs on Windows
+
+8 Nov 2020 - B.Morgan (ptl-V10-07-00)
+- Force installation of PTL headers to CMAKE_INSTALL_INCLUDEDIR/Geant4, following
+  behaviour for other builtins
+- Don't override CMAKE_INSTALL_CONFIGDIR variable as this should be set in the parent
+  directory.
+
+2 Nov 2020 - B.Morgan (ptl-V10-06-08)
+- BUGFIX #2286: Install PTL DLL/archive into appropriate platform dependent
+  locations.
+
+20 Oct 2020 - B.Morgan (ptl-V10-06-07)
+- Export interface targets used by both static and shared variants of
+  PTL to a dedicated file in the build directory. Required to avoid
+  missing/double definitions of targets when building Geant4/PTL with
+  shared/static at the same time.
+
+5 Oct 2020 - J.Madsen(ptl-V10-06-06)
+- Stability fixes for ensuring that stack variables are copied
+  into task-group functions
+
+23 Sept 2020 - J.Madsen (ptl-V10-06-05)
+- All template parameters using leading underscore followed by
+  capital letter have been replaced --> reserved for standard library
+- TaskGroup and TBBTaskGroup support non-aggregating join function
+- Arguments are copied into tuple for tasks
+
+12 Sept 2020 - J.Madsen (ptl-V10-06-04)
+- Fixed issues with PTL::ThreadPool destruction.
+  - For some ill-advised reason, the original impl detached the threads
+    instead of joining them to ensure they were deleted
+- Created generic execute_on_all_threads member function for thread pool
+  - this handles the complexity of performing this operation w/ TBB
+- cleaned up the inconsistent naming in PTL::ThreadPool
+
+23 June 2020 - J.Madsen (ptl-V10-06-03)
+- Tweaked VTaskGroup to use a vector instead of list
+- Declared the default ctor/dtor/assign-op for
+  JoinFunction class in TaskGroup
+
+22 June 2020 - B.Morgan (ptl-V10-06-02)
+- Force use of -pthread on non-Win32 platforms
+
+18 June 2020 - G.Cosmo (ptl-V10-06-01)
+- Adapted files organisation to Geant4 and fixed porting on Windows DLLs.
+- Changed library name to "G4ptl", to distinguish from external installation.
+- Integrated with GNUmake system.
+
+8 May 2020 - J.Madsen (ptl-V10-06-00)
+- New module for built-in Parallel Tasking Library (PTL), a Lightweight
+  C++11 multithreading tasking system featuring thread-pool, task-groups,
+  and lock-free task queue.
+  Original version 0.0.2.

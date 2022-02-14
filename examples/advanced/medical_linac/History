@@ -18,16 +18,19 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-28.11.2016    G.Folger
-=======
+24.05.2021  B. Morgan (medical_linac-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+02.11.2020    B.Morgan tag medical_linac-V10-06-00
+              Support same CMake version range as core Geant4
+
 12.11.2018    V.Ivanchenko tag medical_linac-V10-04-08
               ML2AcceleratorConstructionMessenger,
               ML2PhantomConstructionMessenger - should not
                  trigger /run/beamOn during detector construction
 
 09.11.2018    V.Ivanchenko tag medical_linac-V10-04-07
-              do not explicitly delete singletons, add extra 
+              do not explicitly delete singletons, add extra
               initialisation
 
 08.11.2018    V.Ivanchenko tag medical_linac-V10-04-06
@@ -49,9 +52,9 @@ and keep track of all category-tags.
 
 07.09.2018    S. Guatelli tag medical_linac-V10-04-00
               Directory MacroAndData included
-              Migration from RO Geometry to Multifunctional Detector  
+              Migration from RO Geometry to Multifunctional Detector
               Phase Space creation deleted. This needs to be implemented again
-              G4VIS_USE and G4UI_USE deleted 
+              G4VIS_USE and G4UI_USE deleted
 
 06.11.2017    L.Pandola tag medical_linac-V10-03-02
               re-tag, fix directory
@@ -69,7 +72,7 @@ and keep track of all category-tags.
 
 25.11.2013    G. Folger, tag medical_linac-V09-06-03
               fix MS VC 18 compilation error in ML2PrimaryGenerationAction.cc
-				  
+
 22.11.2013    G. Folger, tag medical_linac-V09-06-02
               fix MS VC 18 compilation error in ML2ExpVoxels.cc
 
@@ -111,7 +114,7 @@ and keep track of all category-tags.
 11.05.2012    G.Folger,G.A.P.Cirrone, medical_linac-V09-05-03
               - Correction of all warnings for gcc4.6
 	      - add batch.mac to run without graphics output
-	       
+
 04.05.2012    G.A.P.Cirrone,    medical_linac-V09-05-02
               - Correction to remove additional warnings
 
@@ -119,10 +122,10 @@ and keep track of all category-tags.
               - Removed warnings related to the DICOM part
 
 08.12.2011    P. Mato,                 medical_linac-V09-05-00
-	      - Added CMakeLists.txt file 
+	      - Added CMakeLists.txt file
 
 24.11.2011    G.Folger,                 medical_linac-V09-04-03
-	      - Warning removed for gcc41: correct return type of 
+	      - Warning removed for gcc41: correct return type of
 	        ML2PrimaryGenerationAction::getNrecycling to G4int.
 
 22.11.2011    C.Andenna, G.A.P.Cirrone, medical_linac-V09-04-02
@@ -178,10 +181,10 @@ and keep track of all category-tags.
 	     resolve external reference.
 
 03.06.2010   J.Perl tag medical_linac-V09-03-00
-	     Update vis usage		     
+	     Update vis usage
 
 19.11.2009   C. Andenna, B. Caccia, G.A.P.Cirrone tag medical_linac-V09-02-05
-	     History corrected, changed the local environmental variables name		     
+	     History corrected, changed the local environmental variables name
 
 18.11.2009   C. Andenna, B. Caccia, G.A.P.Cirrone tag medical_linac-V09-02-04
 	     updated of the include and src files, written the README_MedLinac2.txt.
@@ -207,7 +210,7 @@ and keep track of all category-tags.
 
 06.07.2007   Michela Piergentili, tag medical_linac-V08-03-02
              bug 880 fixed in Detector Construction
- 
+
 01.07.2007   Michela Piergentili, tag medical_linac-V08-03-01
 	     macro updated
 
@@ -218,7 +221,7 @@ and keep track of all category-tags.
 
 08.12.2005   Michela Piergentili , tag medical_linac-V07-01-05
 	     updated macro for visualization
- 
+
 07.12.2005   Susanna Guatelli, tag medical_linac-V07-01-04
              The example compiles with CLHEP 2.0.2.2
 
@@ -257,7 +260,7 @@ and keep track of all category-tags.
 	     Maintenance of the code.
 
 24.11.2004   Michela Piergentili, tag medical_linac-V07-00-01
-	     Added MedLinacTrackingAction, MedLinacMLCDecorator 
+	     Added MedLinacTrackingAction, MedLinacMLCDecorator
 	     and MedLinacMLCMessenger.
 
 24.11.2004   Michela Piergentili, tag medical_linac-V07-00-00
@@ -270,7 +273,7 @@ and keep track of all category-tags.
 	     added README
 
 14.05.2004   Michela Piergentili, tag medical_linac-V06-01-01
-	     decorator design iteration implemented, bug fixed in 
+	     decorator design iteration implemented, bug fixed in
 	     MedLinacPhantomSD, cut per region introduced for the
 	     first collimator
 

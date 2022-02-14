@@ -53,7 +53,7 @@ G4BertiniProtonBuilder()
 }
 
 void G4BertiniProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

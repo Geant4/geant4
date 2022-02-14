@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(DICOM)
 
 option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
@@ -54,8 +54,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include
                     ${PROJECT_SOURCE_DIR}/dicomReader/include
                     ${Geant4_INCLUDE_DIR}
                     ${DCMTK_INCLUDE_DIRS})
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-                    
+
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -96,17 +95,7 @@ set(DICOM_SCRIPTS
     Data.dat.new Data.dat.old
     Data.dat.new_dens Data.partial.dat
 )
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- 
-# original set of DICOM data
-set(DICOM_SCRIPTS
-    1.dcm 2.dcm 3.dcm 
-    1.g4  2.g4 3.g4 
-    1.g4dcm 2.g4dcm 3.g4dcm
-    ColourMap.dat CT2Density.dat 
-    Data.dat 
-  )
-  
+
 # new DICOM data (in share directory)
 set(DICOM_SHARE
     AltData.dat SixSlice.dat

@@ -1,0 +1,12 @@
+# Macro file for the "Factory" example
+# 
+# To be run preferably in batch, without graphics:
+# % factory -m run.mac
+#
+#
+#/run/numberOfThreads 4
+#
+/run/initialize
+#
+/run/printProgress 100
+/run/beamOn 1000

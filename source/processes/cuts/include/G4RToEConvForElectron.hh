@@ -23,62 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RToEConvForElectron
 //
+// Class description:
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//
-// Class Description
-//  This class is a Range to Energy Converter for electron.
-//
-// ------------------------------------------------------------
-//   First Implementation          5 Oct. 2002  H.Kurahige
-// ------------------------------------------------------------
+// This class is a Range to Energy Converter for electron.
 
-#ifndef G4RToEConvForElectron_h
-#define G4RToEConvForElectron_h 1
+// Author: H.Kurashige, 05 October 2002 - First implementation
+// --------------------------------------------------------------------
+#ifndef G4RToEConvForElectron_hh
+#define G4RToEConvForElectron_hh 1
+
+#include <vector>
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <vector>
-
 #include "G4VRangeToEnergyConverter.hh"
-
 
 class G4RToEConvForElectron : public G4VRangeToEnergyConverter
 {
-  public: 
-  //  constructor
-  G4RToEConvForElectron();
+public: 
 
-  public:
-  //  destructor
+  explicit G4RToEConvForElectron();
+
   virtual ~G4RToEConvForElectron();
 
-  protected:
-    virtual G4double ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy
-                                ) ;
+protected:
 
-  protected:
-    G4double Mass;
-    G4double Z;  
-    G4double taul;
-    G4double ionpot;
-    G4double ionpotlog;
-    G4double bremfactor;
+  G4double ComputeValue(const G4int Z, const G4double kinEnergy) final;
+
 };
 
-
 #endif
-
-
-
-
-
-
-
-
-

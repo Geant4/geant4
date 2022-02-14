@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: Susanna Guatelli, susanna@uow.edu.au,
-// Authors: Jeremy Davis, jad028@uowmail.edu.au
+// Authors: Susanna Guatelli and Francesco Romano
+// susanna@uow.edu.au, francesco.romano@ct.infn.it
 //
 
 #include <stdlib.h>
@@ -125,9 +125,9 @@ void AnalysisManager::finish()
    {
     G4AnalysisManager* manager = G4AnalysisManager::Instance();    
     manager -> Write();
-    manager -> CloseFile();  
-      
-    delete G4AnalysisManager::Instance();
+    manager -> CloseFile();
+
+    manager -> Clear();
     factoryOn = false;
    }
 }

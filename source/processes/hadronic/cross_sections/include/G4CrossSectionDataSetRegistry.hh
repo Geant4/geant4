@@ -82,7 +82,7 @@ public:
   //clean the store
       
   G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name, 
-                                                 G4bool warning=true);
+                                                 G4bool warning=false);
   
   G4VComponentCrossSection* GetComponentCrossSection(const G4String& name);
   

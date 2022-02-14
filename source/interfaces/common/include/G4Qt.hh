@@ -32,8 +32,6 @@
 #ifndef G4QT_HH
 #define G4QT_HH
 
-#if defined(G4INTY_BUILD_QT) || defined(G4INTY_USE_QT)
-
 #include "G4VInteractorManager.hh"
 
 class QWidget;
@@ -67,7 +65,5 @@ private:
   char** args;
   bool externalApp;
 };
-
-#endif //HAS_QT
 
 #endif

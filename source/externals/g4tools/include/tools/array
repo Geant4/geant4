@@ -1,0 +1,625 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_array
+#define tools_array
+
+#ifdef TOOLS_MEM
+#include "mem"
+#endif
+
+#include <vector>
+#include <string>
+
+namespace tools {
+
+// array handles an hyperparallelepiped of cells of class T.
+
+template <class T>
+class array {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::array");
+    return s_v;
+  }
+public:
+  typedef typename std::vector< std::pair<unsigned int,unsigned int> > cut_t;
+  typedef typename std::vector<unsigned int> uints_t;
+  typedef typename std::vector<T>::iterator vec_it_t;
+  typedef typename std::vector<T>::const_iterator cons_vec_it_t;
+public:
+  array() {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  array(const uints_t& a_orders) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    configure(a_orders);
+  }
+  array(unsigned int a_dimension,unsigned int a_order) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    // A hypercube of dimension "a_dimension" and size "a_order".
+    uints_t _orders(a_dimension);
+    for(unsigned int index=0;index<a_dimension;index++)
+      _orders[index] = a_order;
+    configure(_orders);
+  }
+  virtual ~array() {
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  array(const array& a_from)
+  :m_orders(a_from.m_orders)
+  ,m_offsets(a_from.m_offsets)
+  ,m_vector(a_from.m_vector)
+  ,m_is(a_from.m_is){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  array& operator=(const array& a_from) {
+    m_orders = a_from.m_orders;
+    m_offsets = a_from.m_offsets;
+    m_vector = a_from.m_vector;
+    m_is = a_from.m_is;
+    return *this;
+  }
+public: //operators:
+  array& operator*=(const T& a_T) {multiply(a_T);return *this;}
+  bool operator==(const array& a_array) const {
+    return equal(a_array);
+  }
+  bool operator!=(const array& a_array) const {
+    return !operator==(a_array);
+  }
+  array operator*(const T& a_T) const {
+    array a(*this);
+    a.multiply(a_T);
+    return a;
+  }
+  // the below would need exception to do it properly.
+  //array operator+(const array& a_array) const {
+  //  array a(*this);
+  //  if(!a.add(a_array)) {} //throw
+  //  return a;
+  //}
+  //array& operator+=(const array& a_array) {
+  //  if(!add(a_array)) {} //throw
+  //  return *this;
+  //}
+public:
+  void copy(const array& a_from) {
+    m_orders = a_from.m_orders;
+    m_offsets = a_from.m_offsets;
+    m_vector = a_from.m_vector;
+    m_is = a_from.m_is;
+  }
+  void clear() {
+    m_orders.clear();
+    m_offsets.clear();
+    m_vector.clear();
+    m_is.clear();
+  }
+  bool configure(const uints_t& a_orders) {
+    m_orders = a_orders;
+    size_t dim = m_orders.size();
+    if(dim==0) {
+      clear();
+      return false;
+    }
+    unsigned int _size = 1;
+    for(size_t index=0;index<dim;index++) {
+      //if(m_orders[index]<0) {
+      //clear();
+      //return false;
+      //}
+      _size *= m_orders[index];
+    }
+    m_vector.resize(_size);
+    m_vector.assign(_size,zero());
+    m_offsets.resize(dim,0);
+    m_offsets[0] = 1;
+    for(size_t iaxis=1;iaxis<dim;iaxis++)
+      m_offsets[iaxis] = m_offsets[iaxis-1] * m_orders[iaxis-1];
+    m_is.resize(dim);
+    m_is.assign(dim,0);
+    return true;
+  }
+  size_t dimension() const { return m_orders.size();}
+  const uints_t& orders() const { return m_orders;}
+  size_t size() const {return m_vector.size();}
+  bool set_value(const uints_t& a_is,const T& a_value) {
+    unsigned int off = 0;
+    if(!offset(a_is,off)) return false;
+    m_vector[off] = a_value;
+    return true;
+  }
+  bool value(const uints_t& a_is,T& a_value) const {
+    unsigned int off = 0;
+    if(!offset(a_is,off)) {
+      a_value = 0;
+      return false;
+    }
+    a_value = m_vector[off];
+    return true;
+  }
+  T value_no_check(const uints_t& a_is) const { //TOUCHY
+    unsigned int off = 0;
+    if(!offset(a_is,off)) {}
+    return m_vector[off];
+  }
+  void reset() {
+    for(vec_it_t it=m_vector.begin();it!=m_vector.end();++it) *it = 0;
+  }
+  const std::vector<T>& vector() const { return m_vector;}
+  std::vector<T>& vector() { return m_vector;}
+  bool fill(const std::vector<T>& a_values,cut_t* a_cut = 0) {
+    size_t dsize = a_values.size();
+    size_t di = 0;
+    unsigned int index = 0;
+    for(vec_it_t it=m_vector.begin();it!=m_vector.end();++it,index++) {
+      if(!a_cut || (a_cut && accept(index,*a_cut)) ) {
+        if(di>=dsize) return false; //a_values exhausted too early
+        *it = a_values[di];
+        di++;
+      }
+    }
+    return true;
+  }
+  bool fill(unsigned int a_sz,const T* a_data,cut_t* a_cut = 0) {
+    unsigned int di = 0;
+    unsigned int index = 0;
+    for(vec_it_t it=m_vector.begin();it!=m_vector.end();++it,index++) {
+      if(!a_cut || (a_cut && accept(index,*a_cut)) ) {
+        if(di>=a_sz) return false; //a_values exhausted too early
+        *it = a_data[di];
+        di++;
+      }
+    }
+    return true;
+  }
+  // Related to other array :
+  bool equal(const array& a_array) const {
+    if(m_orders!=a_array.m_orders) return false;
+    cons_vec_it_t it = m_vector.begin();
+    cons_vec_it_t ait = a_array.m_vector.begin();
+    for(;it!=m_vector.end();++it,++ait) {
+      if((*it)!=(*ait)) return false;
+    }
+    return true;
+  }
+  bool equal(const array& a_array,T aEpsilon) const {
+    if(m_orders!=a_array.m_orders) return false;
+    cons_vec_it_t it = m_vector.begin();
+    cons_vec_it_t ait = a_array.m_vector.begin();
+    for(;it!=m_vector.end();++it,++ait) {
+      T diff = (*it) - (*ait);
+      if(diff<0) diff *= -1;
+      if(diff>=aEpsilon) return false;
+    }
+    return true;
+  }
+  bool is_proportional(const array& a_array,T& a_factor) const {
+    // If true, then : a_array = a_factor * this.
+    a_factor = zero();
+    if(m_orders!=a_array.m_orders) return false;
+    bool first = true;
+    cons_vec_it_t it = m_vector.begin();
+    cons_vec_it_t ait = a_array.m_vector.begin();
+    for(;it!=m_vector.end();++it,++ait) {
+             if( ((*it)==zero()) && ((*ait)==zero())) {
+        continue;
+      } else if( ((*it)!=zero()) && ((*ait)==zero())) {
+        return false;
+      } else if( ((*it)==zero()) && ((*ait)!=zero())) {
+        return false;
+      } else {
+        if(first) {
+          a_factor = (*ait)/(*it);
+          first = false;
+        } else {
+          if((*ait)!=(*it)*a_factor) return false;
+        }
+      }
+    }
+    return true;
+  }
+  bool add(const array& a_array,cut_t* a_cut = 0) {
+    if(m_orders!=a_array.m_orders) return false;
+    vec_it_t it = m_vector.begin();
+    cons_vec_it_t ait = a_array.m_vector.begin();
+    unsigned int index = 0;
+    for(;it!=m_vector.end();++it,++ait,index++) {
+      if(!a_cut || (a_cut && accept(index,*a_cut)) ) {
+        (*it) += (*ait);
+      }
+    }
+    return true;
+  }
+  bool subtract(const array& a_array) {
+    if(m_orders!=a_array.m_orders) return false;
+    vec_it_t it = m_vector.begin();
+    cons_vec_it_t ait = a_array.m_vector.begin();
+    for(;it!=m_vector.end();++it,++ait) (*it) -= (*ait);
+    return true;
+  }
+  bool multiply(const array& a_array) {
+    if(m_orders!=a_array.m_orders) return false;
+    vec_it_t it = m_vector.begin();
+    cons_vec_it_t ait = a_array.m_vector.begin();
+    for(;it!=m_vector.end();++it,++ait) (*it) *= (*ait);
+    return true;
+  }
+  bool divide(const array& a_array) {
+    if(m_orders!=a_array.m_orders) return false;
+    bool status = true;
+    vec_it_t it = m_vector.begin();
+    cons_vec_it_t ait = a_array.m_vector.begin();
+    for(;it!=m_vector.end();++it,++ait) {
+      if((*ait)==zero())  {
+        (*it) = zero(); //PAW convention.
+        status = false;
+      } else {
+        (*it) /= (*ait);
+      }
+    }
+    return status;
+  }
+  bool contract(const array& a_array,T& a_value) const {
+    a_value = zero();
+    if(m_orders!=a_array.m_orders) return false;
+    cons_vec_it_t it = m_vector.begin();
+    cons_vec_it_t ait = a_array.m_vector.begin();
+    for(;it!=m_vector.end();++it,++ait) a_value += (*it) * (*ait);
+    return true;
+  }
+  //Else:
+  void add(const T& a_T,cut_t* a_cut = 0) {
+    unsigned int index = 0;
+    for(vec_it_t it = m_vector.begin();it!=m_vector.end();++it,index++) {
+      if(!a_cut || (a_cut && accept(index,*a_cut)) ) {
+        (*it) += a_T;
+      }
+    }
+  }
+  void multiply(const T& a_T) {
+    for(vec_it_t it = m_vector.begin();it!=m_vector.end();++it) (*it) *= a_T;
+  }
+  bool divide(const T& a_T) {
+    if(a_T==zero()) return false;
+    for(vec_it_t it = m_vector.begin();it!=m_vector.end();++it) (*it) /= a_T;
+    return true;
+  }
+  bool invert() {
+    bool status = true;
+    T v_one = one();
+    for(vec_it_t it = m_vector.begin();it!=m_vector.end();++it) {
+      if((*it)==zero())  {
+        (*it) = zero(); //PAW convention.
+        status = false;
+      } else {
+        T _value = (*it);
+        (*it) = v_one/_value;
+      }
+    }
+    return status;
+  }
+  bool offset(const uints_t& a_is,unsigned int& a_offset) const {
+    size_t dim = m_orders.size();
+    a_offset = 0;
+    if(a_is.size()!=dim) return false;
+    if(dim==0) return false;
+    for(size_t iaxis=0;iaxis<dim;iaxis++) {
+      unsigned int i = a_is[iaxis];
+      if(i>=m_orders[iaxis]) {
+        a_offset = 0;
+        return false;
+      }
+      a_offset += i * m_offsets[iaxis];
+    }
+    return true;
+  }
+  bool indices(unsigned int a_offset,uints_t& a_is) const {
+    if(a_offset>=m_vector.size()) return false;
+    size_t dim = m_orders.size();
+    unsigned int off = a_offset;
+    for(int iaxis=int(dim)-1;iaxis>=0;iaxis--) {
+      a_is[iaxis] = off/m_offsets[iaxis];
+      off -= a_is[iaxis] * m_offsets[iaxis];
+    }
+    return true;
+  }
+  bool accept(unsigned int a_index,const cut_t& a_cut) const {
+    size_t dim = m_orders.size();
+    if(a_cut.size()!=dim) return false;
+    if(!indices(a_index,const_cast<uints_t&>(m_is))) return false;
+    bool good = true;
+    for(size_t iaxis=0;iaxis<dim;iaxis++) {
+      if(m_is[iaxis]<a_cut[iaxis].first) {good = false;break;}
+      if(m_is[iaxis]>a_cut[iaxis].second) {good = false;break;}
+    }
+    return good;
+  }
+  void set_constant(const T& a_v) {
+    for(vec_it_t it = m_vector.begin();it!=m_vector.end();++it) (*it) = a_v;
+  }
+  void set_zero(){
+    set_constant(zero());
+  }
+public:
+  static T zero() {
+    //return (T)0;
+    //return T(0);
+    return T();
+  }
+  static T one() {
+    //return (T)1;
+    return T(1);
+  }
+  static T minus_one() {
+    //return (T)-1;
+    return T(-1);
+  }
+  static T two() {
+    //return (T)2;
+    return T(2);
+  }
+protected:
+  uints_t m_orders;
+  uints_t m_offsets;
+  std::vector<T> m_vector;
+  uints_t m_is;
+};
+
+}
+
+#include <ostream>
+
+// Helpers array<T> :
+namespace tools {
+
+template <class T>
+inline bool contract(
+ const array<T>& aA
+,unsigned int aIA
+,const array<T>& aB
+,unsigned int aIB
+,array<T>& aR
+){
+  // Contract a tensor (aA) with a vector (aB)
+  // on indice aIA of aA and aIB of aB.
+  // aA.dimension must be > 1.
+  // aB.dimension must be > 1.
+  if(&aR==&aA) return false;
+  if(&aR==&aB) return false;
+
+  if(aA.dimension()==0) return false;
+  if(aB.dimension()==0) return false;
+  if(aIA>=aA.dimension()) return false;
+  if(aIB>=aB.dimension()) return false;
+  if(aA.orders()[aIA]!=aB.orders()[aIB]) return false;
+
+  unsigned int rdima = aA.dimension()-1;
+  unsigned int rdimb = aB.dimension()-1;
+
+  if((rdima+rdimb)==0) {
+    std::vector<unsigned int> rorders(1);
+    rorders[0] = 1;
+    if(!aR.configure(rorders)) return false;
+    const std::vector<T>& vA = aA.vector();
+    const std::vector<T>& vB = aB.vector();
+    T value = array<T>::zero();
+    for(unsigned int index=0;index<vA.size();index++) {
+      value += vA[index]*vB[index];
+    }
+    aR.vector()[0] = value;
+    return true;
+  }
+
+  std::vector<unsigned int> rorders(rdima+rdimb);
+  unsigned int index;
+  for(index=0;index<aIA;index++)
+    rorders[index] = aA.orders()[index];
+  for(index=aIA;index<rdima;index++)
+    rorders[index] = aA.orders()[index+1];
+
+  for(index=0;index<aIB;index++)
+    rorders[rdima+index] = aB.orders()[index];
+  for(index=aIB;index<rdimb;index++)
+    rorders[rdima+index] = aB.orders()[index+1];
+
+  if(!aR.configure(rorders)) return false;
+
+  std::vector<unsigned int> ais(aA.dimension());
+  std::vector<unsigned int> bis(aB.dimension());
+  std::vector<unsigned int> ris(aR.dimension());
+
+  //FIXME : optimize the below.
+  unsigned int order = aA.orders()[aIA];
+  unsigned int rsize = aR.size();
+
+  std::vector<T>& rvec = aR.vector();
+
+  for(unsigned int roffset=0;roffset<rsize;roffset++) {
+    if(!aR.indices(roffset,ris)) return false;
+
+    for(index=0;index<aIA;index++) ais[index] = ris[index];
+    for(index=aIA;index<rdima;index++) ais[index+1] = ris[index];
+
+    for(index=0;index<aIB;index++) bis[index] = ris[rdima+index];
+    for(index=aIB;index<rdimb;index++) bis[index+1] = ris[rdima+index];
+
+    T value = 0;
+    for(index=0;index<order;index++) {
+      ais[aIA] = index;
+      T av;
+      if(!aA.value(ais,av)) return false;
+
+      bis[aIB] = index;
+      T bv;
+      if(!aB.value(bis,bv)) return false;
+
+      value += av * bv;
+    }
+
+    rvec[roffset] = value;
+  }
+
+  return true;
+}
+
+template <class T>
+inline bool swap(
+ const array<T>& aV
+,unsigned int aI1
+,unsigned int aI2
+,array<T>& aR
+){
+  if(&aR==&aV) return false;
+
+  unsigned int dim = aV.dimension();
+  if(aI1>=dim) return false;
+  if(aI2>=dim) return false;
+
+  if(aI1==aI2) {
+    aR.copy(aV);
+    return true;
+  }
+
+  if(!aR.configure(aV.orders())) return false;
+
+  std::vector<unsigned int> vis(aV.dimension());
+  std::vector<unsigned int> ris(aV.dimension());
+
+  const std::vector<T>& vvec = aV.vector();
+
+  unsigned int size = aV.size();
+  for(unsigned int offset=0;offset<size;offset++) {
+    T value = vvec[offset];
+
+    if(!aV.indices(offset,vis)) return false;
+    unsigned int i = vis[aI1];
+    vis[aI1] = vis[aI2];
+    vis[aI2] = i;
+    if(!aR.set_value(vis,value)) return false;
+  }
+
+  return true;
+}
+
+//NOTE : print is a Python keyword.
+template <class T>
+inline void dump(std::ostream& a_out,const tools::array<T>& a_array,const std::string& a_title){
+  if(a_title.size()) a_out << a_title << std::endl;
+  const std::vector<T>& vec = a_array.vector();
+  typedef typename std::vector<T>::const_iterator cons_vec_it_t;
+  for(cons_vec_it_t it = vec.begin();it!=vec.end();++it) {
+    a_out << (*it) << std::endl;
+  }
+}
+
+template <class T>
+inline void diff(std::ostream& a_out,const array<T>& aA,const array<T>& aB,T a_epsilon){
+  if(aA.orders()!=aB.orders()) {
+    a_out << "tools::arrays::diff : not same orders" << std::endl;
+    return;
+  }
+  bool header_done = false;
+  unsigned int dim = aA.dimension();
+  std::vector<unsigned int> is(dim);
+  unsigned int vsize = aA.vector().size();
+  for(unsigned int index=0;index<vsize;index++) {
+    T diff = aA.vector()[index]-aB.vector()[index];
+    if(diff<0) diff *= -1;
+    if(diff>=a_epsilon) {
+      aA.indices(index,is);
+      if(!header_done) {
+        a_out << "tools::arrays::diff :" << std::endl;
+        header_done = true;
+      }
+      for(unsigned int i=0;i<dim;i++) a_out << is[i] << " ";
+      a_out << aA.vector()[index] << " " << aB.vector()[index] << std::endl;
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+/// common array /////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+template <class T>
+class kronecker : public array<T> {
+public:
+  kronecker(unsigned int a_order):array<T>(a_order,a_order){
+    //  epsilon(i1,i2,....in) with n = a_order and i in [0,n[.
+    // Then an Array of a_order * a_order.
+    unsigned int index = 0;
+    typedef typename std::vector<unsigned int> _uints_t;
+    _uints_t is(a_order);
+    std::vector<T>& vec = array<T>::vector();
+    typedef typename std::vector<T>::iterator _vec_it_t;
+    _vec_it_t it = vec.begin();
+    for(;it!=vec.end();++it,index++) {
+      if(!array<T>::indices(index,is)) return; //FIXME throw.
+      bool good = true;
+     {for(unsigned int iaxis=0;iaxis<a_order;iaxis++) {
+        unsigned int ival = is[iaxis];
+        for(unsigned int iaxis2=iaxis+1;iaxis2<a_order;iaxis2++) {
+          if(is[iaxis2]==ival) {
+            good = false;
+            break;
+          }
+        }
+        if(!good) break;
+      }}
+      if(!good) continue;
+      // All indicies are different.
+      unsigned int n = 0;
+      for(unsigned int iaxis=0;iaxis<a_order;) {
+        unsigned int ival = is[iaxis];
+        if(ival!=iaxis) {
+          // Swap and add one permutation :
+          unsigned int old = is[ival];
+          is[ival] = ival;
+          is[iaxis] = old;
+          n +=1;
+        } else {
+          iaxis++;
+        }
+      }
+     {unsigned int n_2 = n/2;
+      if(2*n_2==n) (*it) = array<T>::one();
+      else (*it) = array<T>::minus_one();}
+    }
+  }
+};
+
+template <class T>
+inline array<T> operator+(const array<T>& a1,const array<T>& a2) {
+  array<T> res(a1);
+  if(!res.add(a2)) {}
+  return res;
+}
+template <class T>
+inline array<T> operator-(const array<T>& a1,const array<T>& a2) {
+  array<T> res(a1);
+  if(!res.subtract(a2)) {}
+  return res;
+}
+template <class T>
+inline array<T> operator*(const T& a_fac,const array<T>& a_m) {
+  array<T> res(a_m);
+  res *= a_fac;
+  return res;
+}
+
+}
+
+#endif

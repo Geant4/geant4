@@ -74,8 +74,8 @@ void AddPhysicsList(const G4String& plname) {
 }
 
 void ListPhysicsList() {
-  for (G4int i=0; i< plList.size(); i++) {
-    G4cout << plList[i] << G4endl;
+  for (const auto& p : plList) {
+    G4cout << p << G4endl;
   }
 }
 

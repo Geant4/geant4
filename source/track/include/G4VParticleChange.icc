@@ -23,169 +23,135 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VParticleChange inline methods implementation
 //
-//
-//   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-// Set/Get inline functions
-//
-inline
- G4Track* G4VParticleChange::GetSecondary(G4int anIndex) const
+// Author: Hisaya Kurashige, 23 March 1998
+// --------------------------------------------------------------------
+
+inline G4Track* G4VParticleChange::GetSecondary(G4int anIndex) const
 {
   return (*theListOfSecondaries)[anIndex];
 }
 
-inline 
- G4int G4VParticleChange::GetNumberOfSecondaries() const
+inline G4int G4VParticleChange::GetNumberOfSecondaries() const
 {
   return theNumberOfSecondaries;
 }
 
-inline 
- void G4VParticleChange::ProposeTrackStatus(G4TrackStatus aStatus)
+inline void G4VParticleChange::ProposeTrackStatus(G4TrackStatus aStatus)
 {
   theStatusChange = aStatus;
 }
 
-inline 
- G4TrackStatus G4VParticleChange::GetTrackStatus() const
+inline G4TrackStatus G4VParticleChange::GetTrackStatus() const
 {
   return theStatusChange;
 }
 
-inline 
-G4SteppingControl G4VParticleChange::GetSteppingControl() const
+inline G4SteppingControl G4VParticleChange::GetSteppingControl() const
 {
-  return theSteppingControlFlag;    
+  return theSteppingControlFlag;
 }
 
-inline
-void G4VParticleChange::ProposeSteppingControl(G4SteppingControl StepControlFlag)
+inline void
+G4VParticleChange::ProposeSteppingControl(G4SteppingControl StepControlFlag)
 {
   theSteppingControlFlag = StepControlFlag;
 }
 
-inline     
-G4bool G4VParticleChange::GetFirstStepInVolume() const
+inline G4bool G4VParticleChange::GetFirstStepInVolume() const
 {
-   return theFirstStepInVolume;
+  return theFirstStepInVolume;
 }
 
-inline
-G4bool G4VParticleChange::GetLastStepInVolume() const
+inline G4bool G4VParticleChange::GetLastStepInVolume() const
 {
   return theLastStepInVolume;
 }
-   
-inline 
-void   G4VParticleChange::ProposeFirstStepInVolume(G4bool flag)
+
+inline void G4VParticleChange::ProposeFirstStepInVolume(G4bool flag)
 {
-    theFirstStepInVolume = flag;
+  theFirstStepInVolume = flag;
 }
 
-inline 
-void   G4VParticleChange::ProposeLastStepInVolume(G4bool flag)
+inline void G4VParticleChange::ProposeLastStepInVolume(G4bool flag)
 {
-     theLastStepInVolume = flag;
+  theLastStepInVolume = flag;
 }
 
-//----------------------------------------------------------------
-// Set/Get inline functions
-//
-
-inline 
- G4double G4VParticleChange::GetLocalEnergyDeposit() const
+inline G4double G4VParticleChange::GetLocalEnergyDeposit() const
 {
   return theLocalEnergyDeposit;
 }
 
-inline 
- void G4VParticleChange::ProposeLocalEnergyDeposit(G4double anEnergyPart)
+inline void G4VParticleChange::ProposeLocalEnergyDeposit(G4double anEnergyPart)
 {
   theLocalEnergyDeposit = anEnergyPart;
 }
 
-inline 
- G4double G4VParticleChange::GetNonIonizingEnergyDeposit() const
+inline G4double G4VParticleChange::GetNonIonizingEnergyDeposit() const
 {
   return theNonIonizingEnergyDeposit;
 }
 
-inline 
- void G4VParticleChange::ProposeNonIonizingEnergyDeposit(G4double anEnergyPart)
+inline void
+G4VParticleChange::ProposeNonIonizingEnergyDeposit(G4double anEnergyPart)
 {
   theNonIonizingEnergyDeposit = anEnergyPart;
 }
 
-inline 
- G4double G4VParticleChange::GetTrueStepLength() const
+inline G4double G4VParticleChange::GetTrueStepLength() const
 {
   return theTrueStepLength;
 }
 
-inline 
- void G4VParticleChange::ProposeTrueStepLength(G4double aLength)
+inline void G4VParticleChange::ProposeTrueStepLength(G4double aLength)
 {
   theTrueStepLength = aLength;
 }
 
-
-inline 
- void G4VParticleChange::SetVerboseLevel(G4int vLevel)
-{ 
-  verboseLevel = vLevel; 
-}
-
-inline 
- G4int G4VParticleChange::GetVerboseLevel() const 
-{ 
-  return verboseLevel; 
-}
-
-inline 
- G4double G4VParticleChange::GetParentWeight() const
+inline void G4VParticleChange::SetVerboseLevel(G4int vLevel)
 {
-   return theParentWeight;
+  verboseLevel = vLevel;
 }
 
-inline 
- G4double G4VParticleChange::GetWeight() const
+inline G4int G4VParticleChange::GetVerboseLevel() const
 {
-   return theParentWeight;
+  return verboseLevel;
 }
 
+inline G4double G4VParticleChange::GetParentWeight() const
+{
+  return theParentWeight;
+}
 
-//----------------------------------------------------------------
+inline G4double G4VParticleChange::GetWeight() const
+{
+  return theParentWeight;
+}
+
+// ----------------------------------------------------------------
 // inline functions for Initialization
 //
-
-inline 
- void G4VParticleChange::InitializeLocalEnergyDeposit(const G4Track&)
-{  
-  // clear theLocalEnergyDeposited   
-  theLocalEnergyDeposit = 0.0;
+inline void G4VParticleChange::InitializeLocalEnergyDeposit(const G4Track&)
+{
+  // clear theLocalEnergyDeposited
+  theLocalEnergyDeposit       = 0.0;
   theNonIonizingEnergyDeposit = 0.0;
 }
 
-inline
- void G4VParticleChange::InitializeSteppingControl(const G4Track& )
+inline void G4VParticleChange::InitializeSteppingControl(const G4Track&)
 {
   // SteppingControlFlag
-  theSteppingControlFlag = NormalCondition;     
+  theSteppingControlFlag = NormalCondition;
 }
 
-inline 
- void G4VParticleChange::Clear()
+inline void G4VParticleChange::Clear()
 {
   theNumberOfSecondaries = 0;
-  theFirstStepInVolume = false;
-  theLastStepInVolume = false;
+  theFirstStepInVolume   = false;
+  theLastStepInVolume    = false;
 }
-
-//----------------------------------------------------------------
-// functions for Initialization
-//
 
 inline void G4VParticleChange::InitializeStatusChange(const G4Track& track)
 {
@@ -196,7 +162,7 @@ inline void G4VParticleChange::InitializeStatusChange(const G4Track& track)
 inline void G4VParticleChange::InitializeParentWeight(const G4Track& track)
 {
   // set the parent track's weight
-  theParentWeight = track.GetWeight();
+  theParentWeight        = track.GetWeight();
   isParentWeightProposed = false;
 }
 
@@ -204,8 +170,7 @@ inline void G4VParticleChange::InitializeParentGlobalTime(const G4Track& track)
 {
   // set the parent track's global time at the pre-step point
   theParentGlobalTime = track.GetStep()->GetPreStepPoint()->GetGlobalTime();
-} 
-
+}
 
 inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
 {
@@ -216,57 +181,61 @@ inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
-//----------------------------------------------------------------
-// methods for initialize
-inline
-void G4VParticleChange::InitializeStepInVolumeFlags(const G4Track& track)
+inline void G4VParticleChange::InitializeStepInVolumeFlags(const G4Track& track)
 {
-   const G4Step* aStep = track.GetStep();
-   theFirstStepInVolume = aStep-> IsFirstStepInVolume();
-   theLastStepInVolume  = aStep-> IsLastStepInVolume();
+  const G4Step* aStep  = track.GetStep();
+  theFirstStepInVolume = aStep->IsFirstStepInVolume();
+  theLastStepInVolume  = aStep->IsLastStepInVolume();
 }
 
 inline void G4VParticleChange::InitializeSecondaries(const G4Track&)
 {
   // clear secondaries
-  if (theNumberOfSecondaries>0) {
+  if(theNumberOfSecondaries > 0)
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel>0) {
+    if(verboseLevel > 0)
+    {
       G4cerr << "G4VParticleChange::Initialize() Warning  ";
       G4cerr << "theListOfSecondaries is not empty " << G4endl;
       G4cerr << "All objects in theListOfSecondaries are destroyed!" << G4endl;
     }
 #endif
-    for (G4int index= 0; index<theNumberOfSecondaries; index++){
-      if ( (*theListOfSecondaries)[index] ){ 
-         delete (*theListOfSecondaries)[index] ;
-       }
+    for(G4int index = 0; index < theNumberOfSecondaries; index++)
+    {
+      if((*theListOfSecondaries)[index])
+      {
+        delete(*theListOfSecondaries)[index];
+      }
     }
   }
   theNumberOfSecondaries = 0;
 }
 
-//----------------------------------------------------------------
-// methods for handling secondaries 
+// ----------------------------------------------------------------
+// methods for handling secondaries
 //
-
 inline void G4VParticleChange::SetNumberOfSecondaries(G4int totSecondaries)
 {
   // check if tracks still exist in theListOfSecondaries
-  if (theNumberOfSecondaries>0) {
+  if(theNumberOfSecondaries > 0)
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel>0) {
+    if(verboseLevel > 0)
+    {
       G4cerr << "G4VParticleChange::SetNumberOfSecondaries() Warning  ";
       G4cerr << "theListOfSecondaries is not empty ";
     }
 #endif
-    for (G4int index= 0; index<theNumberOfSecondaries; index++){
-      if ( (*theListOfSecondaries)[index] ){
-	delete (*theListOfSecondaries)[index] ;
+    for(G4int index = 0; index < theNumberOfSecondaries; index++)
+    {
+      if((*theListOfSecondaries)[index])
+      {
+        delete(*theListOfSecondaries)[index];
       }
     }
   }
-  theNumberOfSecondaries = 0;
+  theNumberOfSecondaries        = 0;
   theSizeOftheListOfSecondaries = totSecondaries;
 
   // Initialize ListOfSecondaries
@@ -285,46 +254,38 @@ inline void G4VParticleChange::Initialize(const G4Track& track)
   InitializeStepInVolumeFlags(track);
 }
 
-inline 
- void G4VParticleChange::ClearDebugFlag()
+inline void G4VParticleChange::ClearDebugFlag()
 {
   debugFlag = false;
 }
 
-inline 
- void G4VParticleChange::SetDebugFlag()
+inline void G4VParticleChange::SetDebugFlag()
 {
   debugFlag = true;
 }
 
-inline 
- G4bool G4VParticleChange::GetDebugFlag() const
+inline G4bool G4VParticleChange::GetDebugFlag() const
 {
   return debugFlag;
 }
 
-inline
- void     G4VParticleChange::SetSecondaryWeightByProcess(G4bool flag)
+inline void G4VParticleChange::SetSecondaryWeightByProcess(G4bool flag)
 {
   fSetSecondaryWeightByProcess = flag;
 }
 
-inline
- G4bool   G4VParticleChange::IsSecondaryWeightSetByProcess() const
+inline G4bool G4VParticleChange::IsSecondaryWeightSetByProcess() const
 {
   return fSetSecondaryWeightByProcess;
 }
 
-inline
- void     G4VParticleChange::ProposeWeight(G4double w)
+inline void G4VParticleChange::ProposeWeight(G4double w)
 {
-  theParentWeight = w;
+  theParentWeight        = w;
   isParentWeightProposed = true;
 }
 
-inline
- void     G4VParticleChange::ProposeParentWeight(G4double w)
+inline void G4VParticleChange::ProposeParentWeight(G4double w)
 {
   ProposeWeight(w);
 }
-

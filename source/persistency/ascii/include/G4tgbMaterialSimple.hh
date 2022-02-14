@@ -23,39 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbMaterialSimple
+// G4tgbMaterialSimple
 //
 // Class description:
 //
 // Class to represent a simple material definition.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbMaterialSimple_hh
+#define G4tgbMaterialSimple_hh 1
 
-#ifndef G4tgbMaterialSimple_h
-#define G4tgbMaterialSimple_h
-
-#include "globals.hh"
-
-#include <vector>
-#include <string>
 #include <iostream>
 
+#include "globals.hh"
 #include "G4tgbMaterial.hh"
 
 class G4tgbMaterialSimple : public G4tgbMaterial
 {
+  public:
 
-  public:  // with description
- 
     G4tgbMaterialSimple();
-   ~G4tgbMaterialSimple();
+    ~G4tgbMaterialSimple();
 
-    G4tgbMaterialSimple( G4tgrMaterial* tgr );
+    G4tgbMaterialSimple(G4tgrMaterial* tgr);
       // Fill the data interpreting the list of words read 'wl'
 
     friend std::ostream& operator<<(std::ostream&, const G4tgbMaterialSimple&);
@@ -63,13 +54,13 @@ class G4tgbMaterialSimple : public G4tgbMaterial
     G4Material* BuildG4Material();
       // Return the associated G4Material and if does not exist build it
 
-    G4double GetZ() const {return theZ;}
-    G4double GetA() const {return theA;}
+    G4double GetZ() const { return theZ; }
+    G4double GetA() const { return theA; }
 
   private:
 
-    G4double    theZ;
-    G4double    theA;
+    G4double theZ = 0.0;
+    G4double theA = 0.0;
 };
 
 #endif

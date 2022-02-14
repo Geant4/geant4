@@ -18,9 +18,46 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24, 2021 B. Morgan (g3tog4Tests-V10-07-00)
+---------------------------
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+November 10, 2020 B. Morgan (g3tog4Tests-V10-06-01)
+---------------------------
+- Migrate to G4RunManagerFactory.
+
+November 03, 2020 B. Morgan (g3tog4Tests-V10-06-00)
+---------------------------
+- Support same CMake version range as core Geant4
+
+September 29, 2017 I.Hrivnacova  (g3tog4Tests-V10-03-02,03)
+---------------------------
+- Updated for changes in common classes
+- Updated main (removed G4UI_USE, G4VIS_USE macros, moved initialization
+  in macros)
+
+March 16, 2017 Gunter Folger  (g3tog4Tests-V10-03-01)
+---------------------------
+-  Re-tag, using procedure from Ivana,
+    using  excommon-V10-02-01 as tag for common
+    See https://jira-geant4.kek.jp/browse/DEV-131
+
+March 15, 2017 Gunter Folger  (g3tog4Tests-V10-03-00)
+---------------------------
+-  Fix link error for static build, i.e.
+     CMakeLists.txt: remove extra G3toG4 from  target_link_libraries()
+
+July 20, 2016 I.Hrivnacova   (g3tog4Tests-V10-02-01)
+---------------------------
+-  Coding guidelines in common
+
+July 04, 2016 I.Hrivnacova   (g3tog4Tests-V10-02-00)
+---------------------------
+-  Fixes for Doxygen documentation
+
 June 9th, 2014  I.Hrivnacova (g3tog4Tests-V10-01-00)
 ---------------------------
-- Set a specific prefix to common library and test 
+- Set a specific prefix to common library and test
   to avoid name clashes when building all extended examples at once
 
 November 7th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-05)
@@ -45,7 +82,7 @@ June 12th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-01)
 ---------------------------
 - Moved data directory in clGeometry and added copying data files
   in CMake build directory
-  
+
 June 11th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-00)
 ---------------------------
 - Fixed path to copy_files.sh, clean_files.sh in GNUmakefile
@@ -58,8 +95,8 @@ August 30th, 2013  I.Hrivnacova (g3tog4Tests-V09-06-00)
 
 October 22nd, 2012  I.Hrivnacova (g3tog4Tests-V09-05-04)
 ---------------------------
-- Added the "g3tog4" component to find_package call in 
-  clGeometry/CMakeLists.txt and the check on existence of Geant4_g3tog4_FOUND 
+- Added the "g3tog4" component to find_package call in
+  clGeometry/CMakeLists.txt and the check on existence of Geant4_g3tog4_FOUND
   in g3tog4//CMakeLists.txt
 
 October 14th, 2012 A. Dotti (g3tog4Tests-V09-05-03)
@@ -69,8 +106,8 @@ October 14th, 2012 A. Dotti (g3tog4Tests-V09-05-03)
 September 4th, 2012 I.Hrivnacova (g3tog4Tests-V09-05-02)
 ---------------------------
 - Updated CMakeLists.txt:
-  adding visualization, copying macros, install target and comment lines 
-- Added .README  
+  adding visualization, copying macros, install target and comment lines
+- Added .README
 
 July 2nd, 2012 I.Hrivnacova (g3tog4Tests-V09-05-01)
 ---------------------------
@@ -81,7 +118,7 @@ June 5th, 2012 I.Hrivnacova (g3tog4Tests-V09-05-00)
 - Removed cltog4 example as it was just a duplication of clGeometry.
 - Restructured clGeometry for use of classes from common.
 - Applied coding guidelines, code clean-up.
-- Changed gun particle position & direction in test macros 
+- Changed gun particle position & direction in test macros
   to get particles to go through volumes inside HALL
 
 November 23rd, 2011 G.Cosmo (g3tog4Tests-V09-04-01)

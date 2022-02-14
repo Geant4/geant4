@@ -35,12 +35,8 @@
 //
 // -------------------------------------------------------------------
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4Types.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 #include "G4VisExecutive.hh"
@@ -67,16 +63,10 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   // choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
   G4Random::setTheSeed(dir);
-   
-#ifdef G4MULTITHREADED
-  // Construct the default run manager
-  G4MTRunManager* runManager = new G4MTRunManager();
-  G4cout << "Using the MT Run Manager (G4MULTITHREADED=ON)" << G4endl; 
-#else
-  G4RunManager * runManager = new G4RunManager;
-  G4cout << "Using the sequential Run Manager" << G4endl;
-#endif
 
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads);
 
   // chosing Geometry setup
   G4int geometryNumber = 0; 

@@ -126,6 +126,8 @@ private:
   G4int    vShellNumber;
   size_t   fIndex;
 
+  G4int fSecID;  // Creator model ID for the secondaries created by this model
+
   static G4float GREnergy[MAXGRDATA];
   static G4float GRWidth[MAXGRDATA];
 
@@ -143,6 +145,7 @@ private:
   G4bool   fRDM;
   G4bool   fSampleTime;
   G4bool   fCorrelatedGamma;
+  G4bool   fIsomerFlag;
   G4bool   isInitialised;
 
 #ifdef G4MULTITHREADED

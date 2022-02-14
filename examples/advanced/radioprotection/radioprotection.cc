@@ -24,34 +24,36 @@
 // ********************************************************************
 //
 // radioprotection.cc
-// Authors: Susanna Guatelli and Jeremy Davis
-// susanna@uow.edu.au, jad028@uow.edu.au
+// Authors: Susanna Guatelli and Francesco Romano
+// susanna@uow.edu.au, francesco.romano@ct.infn.it
 
 #include "G4RunManager.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
-#include "G4MTRunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "AnalysisManager.hh"
 #include "ActionInitialization.hh"
 #include "AnalysisManager.hh"
 #include "G4UIExecutive.hh"
 
+#include "DetectorMessenger.hh"
 
 int main(int argc, char** argv)
 {
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager* pRunManager = new G4MTRunManager;
-  pRunManager->SetNumberOfThreads(4); // Is equal to 2 by default
-#else  
-  G4RunManager* pRunManager = new G4RunManager;
-#endif
+  auto* pRunManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  pRunManager->SetNumberOfThreads(nThreads);
 
   AnalysisManager* analysis = new AnalysisManager();
  
-  DetectorConstruction* detector = new DetectorConstruction(analysis);  
+  // Construct geometry
+  
+  G4String defaultDetector = "SiliconBridge";
+  
+  DetectorConstruction* detector = new DetectorConstruction(analysis, defaultDetector);  
     
   pRunManager -> SetUserInitialization(detector);
 
@@ -63,6 +65,10 @@ int main(int argc, char** argv)
 
   ActionInitialization* actions = new ActionInitialization(analysis);
   pRunManager->SetUserInitialization(actions);
+
+   // Geometry messenger
+
+  DetectorMessenger* detMess = new DetectorMessenger(analysis);
 
   G4VisManager* visManager = new G4VisExecutive();
   visManager->Initialize();
@@ -92,6 +98,7 @@ int main(int argc, char** argv)
   delete visManager;
   delete analysis; 
   delete pRunManager;
+  delete detMess;
   
   return 0;
 }

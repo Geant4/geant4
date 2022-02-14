@@ -23,15 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIcommandStatus
 //
+// Description:
 //
+// Enumeration of all states associated to a UI command
 
-#ifndef G4UIcommandStatus_h
-#define G4UIcommandStatus_h 1
+// Author: Makoto Asai (SLAC), 1998
+// --------------------------------------------------------------------
+#ifndef G4UIcommandStatus_hh
+#define G4UIcommandStatus_hh 1
 
 enum G4UIcommandStatus
 {
-  fCommandSucceeded         =   0,
+  fCommandSucceeded         = 0,
   fCommandNotFound          = 100,
   fIllegalApplicationState  = 200,
   fParameterOutOfRange      = 300,

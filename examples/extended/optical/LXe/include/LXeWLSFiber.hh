@@ -31,55 +31,46 @@
 /// \file optical/LXe/include/LXeWLSFiber.hh
 /// \brief Definition of the LXeWLSFiber class
 //
-#ifndef LXeMainVolume_H
-#define LXeMainVolume_H 1
-
-#include "G4PVPlacement.hh"
-#include "G4Box.hh"
-#include "G4Tubs.hh"
-#include "G4Sphere.hh"
-#include "G4Material.hh"
-#include "G4LogicalVolume.hh"
-#include "G4OpticalSurface.hh"
+#ifndef LXeWLSFiber_h
+#define LXeWLSFiber_h 1
 
 #include "LXeDetectorConstruction.hh"
 
+#include "G4PVPlacement.hh"
+
+class G4LogicalVolume;
+
 class LXeWLSFiber : public G4PVPlacement
 {
-  public:
+ public:
+  LXeWLSFiber(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
+              G4LogicalVolume* pMotherLogical, G4bool pMany, G4int pCopyNo,
+              LXeDetectorConstruction* c);
 
-    LXeWLSFiber(G4RotationMatrix *pRot,
-                const G4ThreeVector &tlate,
-                G4LogicalVolume *pMotherLogical,
-                G4bool pMany,
-                G4int pCopyNo,
-                LXeDetectorConstruction* c);
+ private:
+  void CopyValues();
 
-  private:
+  static G4LogicalVolume* fClad2_log;
 
-    void CopyValues();
+  G4double fFiber_rmin;
+  G4double fFiber_rmax;
+  G4double fFiber_z;
+  G4double fFiber_sphi;
+  G4double fFiber_ephi;
 
-    static G4LogicalVolume* fClad2_log;
+  G4double fClad1_rmin;
+  G4double fClad1_rmax;
+  G4double fClad1_z;
+  G4double fClad1_sphi;
+  G4double fClad1_ephi;
 
-    G4double fFiber_rmin;
-    G4double fFiber_rmax;
-    G4double fFiber_z;
-    G4double fFiber_sphi;
-    G4double fFiber_ephi;
+  G4double fClad2_rmin;
+  G4double fClad2_rmax;
+  G4double fClad2_z;
+  G4double fClad2_sphi;
+  G4double fClad2_ephi;
 
-    G4double fClad1_rmin;
-    G4double fClad1_rmax;    
-    G4double fClad1_z;
-    G4double fClad1_sphi;
-    G4double fClad1_ephi; 
-
-    G4double fClad2_rmin;
-    G4double fClad2_rmax;    
-    G4double fClad2_z;
-    G4double fClad2_sphi;
-    G4double fClad2_ephi;
-
-    LXeDetectorConstruction* fConstructor;
+  LXeDetectorConstruction* fConstructor;
 };
 
 #endif

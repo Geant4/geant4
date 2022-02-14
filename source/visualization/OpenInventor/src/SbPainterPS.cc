@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 /*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */
 /* Node:             SbPainterPS                                            */
@@ -1051,5 +1049,3 @@ double ConvertRGB_ToGrey(
 {
   return (0.30 * a_red + 0.59 * a_green + 0.11 * a_blue);
 }
-
-#endif

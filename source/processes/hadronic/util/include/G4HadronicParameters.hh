@@ -32,10 +32,6 @@
 //
 // Description:    Singleton to keep global hadronic parameters.
 //
-//                 For the time being, at least, offers only "getters" but
-//                 not "setters", i.e. a recompilation is needed to change
-//                 the default parameters.
-//
 // Modified:
 //
 //----------------------------------------------------------------------------
@@ -44,6 +40,9 @@
 #define G4HadronicParameters_h 1
 
 #include "globals.hh"
+#include "G4Threading.hh"
+
+class G4HadronicParametersMessenger;
 
 
 class G4HadronicParameters {
@@ -53,7 +52,8 @@ class G4HadronicParameters {
     ~G4HadronicParameters();
 
     G4double GetMaxEnergy() const;
-    // Upper limit for Geant4 hadronic physics, for any application.
+    void SetMaxEnergy( const G4double val );
+    // Getter/Setter for the upper limit for Geant4 hadronic physics, for any application.
     // Any hadronic model, physics list builder and constructor should use this method
     // instead of putting an arbitrary value in the code.
     // Any application which tries to use hadronic physics for an energy higher than this limit
@@ -61,27 +61,103 @@ class G4HadronicParameters {
 
     G4double GetMinEnergyTransitionFTF_Cascade() const;
     G4double GetMaxEnergyTransitionFTF_Cascade() const;
-    // Recommended energy limits, for physics lists, of the transition region
-    // between the Fritiof (FTF) string model and the intranuclear cascade model,
-    // either Bertini (BERT) or Binary (BIC). 
+    void SetMinEnergyTransitionFTF_Cascade( const G4double val );
+    void SetMaxEnergyTransitionFTF_Cascade( const G4double val );
+    // Getter/Setter of the recommended energy limits, for physics lists, of the
+    // transition region between the Fritiof (FTF) string model and the
+    // intranuclear cascade model, either Bertini (BERT) or Binary (BIC). 
 
     G4double GetMinEnergyTransitionQGS_FTF() const;
     G4double GetMaxEnergyTransitionQGS_FTF() const;
-    // Recommended energy limits, for physics lists, of the transition region
-    // between the two strings models - the Quark Gluon String (QGS) model and
-    // the Fritiof (FTF) model.
+    void SetMinEnergyTransitionQGS_FTF( const G4double val );
+    void SetMaxEnergyTransitionQGS_FTF( const G4double val );
+    // Getter/Setter of the recommended energy limits, for physics lists, of the
+    // transition region between the two strings models - the Quark Gluon String (QGS)
+    // model and the Fritiof (FTF) model.
+
+    G4double EnergyThresholdForHeavyHadrons() const;
+    void SetEnergyThresholdForHeavyHadrons( G4double val );
+    // if max kinetic energy is below this limit EM and hadronic physics is not 
+    // instantiated for hyperons, anti-hyperons, anti light ions, b-, c- particles
+
+    G4double XSFactorNucleonInelastic() const;
+    void SetXSFactorNucleonInelastic( G4double val );
+    G4double XSFactorNucleonElastic() const;
+    void SetXSFactorNucleonElastic( G4double val );
+    // cross section factor for protons and neutrons
+
+    G4double XSFactorPionInelastic() const;
+    void SetXSFactorPionInelastic( G4double val );
+    G4double XSFactorPionElastic() const;
+    void SetXSFactorPionElastic( G4double val );
+    // cross section factor for pions
+
+    G4double XSFactorHadronInelastic() const;
+    void SetXSFactorHadronInelastic( G4double val );
+    G4double XSFactorHadronElastic() const;
+    void SetXSFactorHadronElastic( G4double val );
+    // cross section factor for other hadrons and ions
+
+    G4double XSFactorEM() const;
+    void SetXSFactorEM( G4double val );
+    // cross section factor for gamma and leptons
+
+    G4bool EnableBCParticles() const;
+    void SetEnableBCParticles( G4bool val );
+    // Baryons and mesons with c- and b- quarks may be enabled/disabled
+    // This flag is used both by EM and hadronic physics constructors
+
+    G4bool EnableHyperNuclei() const;
+    void SetEnableHyperNuclei( G4bool val );
+    // Light hyper-nuclei may be enabled/disabled
+    // This flag is used both by EM and hadronic physics constructors
+
+    G4bool ApplyFactorXS() const;
+    void SetApplyFactorXS( G4bool val );
+    // Flag enabling cross section factor definition
+
+    G4int GetVerboseLevel() const;
+    void SetVerboseLevel( const G4int val );
+    // Getter/Setter of the general verbosity level for hadronics.
+  
+    G4bool EnableCRCoalescence() const;
+    void SetEnableCRCoalescence( G4bool val );
+    // Boolean switch that allows to apply the Cosmic Ray (CR) coalescence algorithm
+    // to the secondaries produced by a string model. By default it is disabled.
 
   private:
     G4HadronicParameters();
+
+    G4bool IsLocked() const;
+
     static G4HadronicParameters* sInstance;
+    #ifdef G4MULTITHREADED
+    static G4Mutex paramMutex;
+    #endif
+
+    G4HadronicParametersMessenger* fMessenger;
 
     G4double fMaxEnergy;
     G4double fMinEnergyTransitionFTF_Cascade;
     G4double fMaxEnergyTransitionFTF_Cascade;
     G4double fMinEnergyTransitionQGS_FTF;
     G4double fMaxEnergyTransitionQGS_FTF;
+    G4double fEnergyThresholdForHeavyHadrons;
+    G4double fXSFactorNucleonInelastic = 1.0;
+    G4double fXSFactorPionInelastic = 1.0;
+    G4double fXSFactorHadronInelastic = 1.0;
+    G4double fXSFactorNucleonElastic = 1.0;
+    G4double fXSFactorPionElastic = 1.0;
+    G4double fXSFactorHadronElastic = 1.0;
+    G4double fXSFactorEM = 1.0;
+    G4double fXSFactorLimit = 0.2;
+    
+    G4int    fVerboseLevel = 1;
+    G4bool   fEnableBC = false;
+    G4bool   fEnableHyperNuclei = false;
+    G4bool   fApplyFactorXS = false;
+    G4bool   fEnableCRCoalescence = false;
 };
-
 
 inline G4double G4HadronicParameters::GetMaxEnergy() const { 
   return fMaxEnergy;
@@ -97,9 +173,61 @@ inline G4double G4HadronicParameters::GetMaxEnergyTransitionFTF_Cascade() const 
 inline G4double G4HadronicParameters::GetMinEnergyTransitionQGS_FTF() const { 
   return fMinEnergyTransitionQGS_FTF;
 }
+
 inline G4double G4HadronicParameters::GetMaxEnergyTransitionQGS_FTF() const { 
   return fMaxEnergyTransitionQGS_FTF;
 }
 
-#endif
+inline G4double G4HadronicParameters::EnergyThresholdForHeavyHadrons() const {
+  return fEnergyThresholdForHeavyHadrons;
+}
 
+inline G4double G4HadronicParameters::XSFactorNucleonInelastic() const {
+  return fXSFactorNucleonInelastic;
+}
+
+inline G4double G4HadronicParameters::XSFactorNucleonElastic() const {
+  return fXSFactorNucleonElastic;
+}
+
+inline G4double G4HadronicParameters::XSFactorPionInelastic() const {
+  return fXSFactorPionInelastic;
+}
+
+inline G4double G4HadronicParameters::XSFactorPionElastic() const {
+  return fXSFactorPionElastic;
+}
+
+inline G4double G4HadronicParameters::XSFactorHadronInelastic() const {
+  return fXSFactorHadronInelastic;
+}
+
+inline G4double G4HadronicParameters::XSFactorHadronElastic() const {
+  return fXSFactorHadronElastic;
+}
+
+inline G4double G4HadronicParameters::XSFactorEM() const {
+  return fXSFactorEM;
+}
+
+inline G4int G4HadronicParameters::GetVerboseLevel() const { 
+  return fVerboseLevel;
+}
+
+inline G4bool G4HadronicParameters::EnableBCParticles() const {
+  return fEnableBC;
+}
+
+inline G4bool G4HadronicParameters::EnableHyperNuclei() const {
+  return fEnableHyperNuclei;
+}
+
+inline G4bool G4HadronicParameters::ApplyFactorXS() const {
+  return fApplyFactorXS;
+}
+
+inline G4bool G4HadronicParameters::EnableCRCoalescence() const {
+  return fEnableCRCoalescence;
+}
+
+#endif

@@ -1,0 +1,102 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_states
+#define tools_sg_states
+
+#include "state"
+
+//#define TOOLS_SG_STATES_CUR
+
+namespace tools {
+namespace sg {
+
+class states {
+public:
+#ifdef TOOLS_SG_STATES_CUR
+  states(unsigned int a_ww,unsigned int a_wh)
+  :m_states(8)
+  ,m_state(&(m_states[0]))
+  ,m_cur_state(0)
+  {
+    m_state->m_ww = a_ww;
+    m_state->m_wh = a_wh;
+  }
+#else
+  states(unsigned int a_ww,unsigned int a_wh):m_states() {
+    m_state.m_ww = a_ww;
+    m_state.m_wh = a_wh;
+  }
+#endif
+  virtual ~states(){}
+protected:
+#ifdef TOOLS_SG_STATES_CUR
+  states(const states& a_from)
+  :m_states(a_from.m_states)
+  ,m_state(&(m_states[a_from.m_cur_state]))
+  ,m_cur_state(a_from.m_cur_state)
+  ,m_saved_state(a_from.m_saved_state)
+  {}
+  states& operator=(const states& a_from){
+    m_states = a_from.m_states;
+    m_state = &(m_states[a_from.m_cur_state]);
+    m_cur_state = a_from.m_cur_state;
+    m_saved_state = a_from.m_saved_state;
+    return *this;
+  }
+#else
+  states(const states& a_from)
+  :m_states(a_from.m_states)
+  ,m_state(a_from.m_state)
+  ,m_saved_state(a_from.m_saved_state)
+  {}
+  states& operator=(const states& a_from){
+    m_states = a_from.m_states;
+    m_state = a_from.m_state;
+    m_saved_state = a_from.m_saved_state;
+    return *this;
+  }
+#endif
+public:
+#ifdef TOOLS_SG_STATES_CUR
+  const sg::state& state() const {return *m_state;}
+  sg::state& state() {return *m_state;}
+  void pop_state() {
+    m_state = &(m_states[m_cur_state]);
+    m_cur_state--;
+  }
+  void push_state() {
+    if((m_cur_state+1)>=(int)m_states.size()) {
+      m_states.resize(m_states.size()+5);
+    }
+    m_cur_state++;
+    m_states[m_cur_state] = *m_state;
+  }
+#else
+  const sg::state& state() const {return m_state;}
+  sg::state& state() {return m_state;}
+  void pop_state() {
+    //if(!m_states.size()) return; //throw.
+    m_state = m_states.back();
+    m_states.pop_back();
+  }
+  void push_state() {m_states.push_back(m_state);}
+#endif
+
+  void save_state(const sg::state& a_state) {m_saved_state = a_state;}
+  const sg::state& saved_state() const {return m_saved_state;}
+  sg::state& saved_state() {return m_saved_state;}
+protected:
+  std::vector<sg::state> m_states;
+#ifdef TOOLS_SG_STATES_CUR
+  sg::state* m_state;
+  int m_cur_state;
+#else
+  sg::state m_state;
+#endif
+  sg::state m_saved_state;
+};
+
+}}
+
+#endif

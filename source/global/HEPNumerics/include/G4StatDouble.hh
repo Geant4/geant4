@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ----------------------------------------------------------------------
-// Class G4StatDouble
+// G4StatDouble
 //
 // Class description:
 //
@@ -35,83 +31,82 @@
 
 // Original Author: Giovanni Santin (ESA) - October 2005 in GRAS tool
 // Adaptation and comments by: John Apostolakis (CERN) - November 2011
-
-#ifndef G4StatDouble_h
-#define G4StatDouble_h 1
+// --------------------------------------------------------------------
+#ifndef G4StatDouble_hh
+#define G4StatDouble_hh 1
 
 #include "globals.hh"
 
-class G4StatDouble 
+class G4StatDouble
 {
+ public:
+  G4StatDouble();
+  G4StatDouble(G4double);
+  virtual ~G4StatDouble();
 
-  public:
-    G4StatDouble();
-    G4StatDouble(G4double);
-    virtual ~G4StatDouble();
+  G4StatDouble(const G4StatDouble&) = default;
 
-  public:
+  G4StatDouble& operator=(const G4double& rhs)
+  {
+    reset();
+    fill(rhs);
+    return *this;
+  }
+  G4StatDouble& operator=(const G4StatDouble& rhs)
+  {
+    m_sum_wx  = rhs.m_sum_wx;
+    m_sum_wx2 = rhs.m_sum_wx2;
+    m_n       = rhs.m_n;
+    m_sum_w   = rhs.m_sum_w;
+    m_sum_w2  = rhs.m_sum_w2;
+    m_scale   = rhs.m_scale;
+    return *this;
+  }
+  G4StatDouble& operator+=(const G4double& rhs)
+  {
+    fill(rhs);
+    return *this;
+  }
+  G4StatDouble& operator+=(const G4StatDouble& rhs)
+  {
+    add(&rhs);
+    return *this;
+  }
 
-    G4StatDouble(const G4StatDouble&) = default;
+  void reset();
+  void fill(G4double x, G4double weight = 1.);
+  // Add new data point: value "x" with weight
+  void scale(G4double);
+  // Reset scale
 
-    G4StatDouble& operator=(const G4double &rhs) 
-    {
-      reset();
-      fill(rhs);
-      return *this;
-    }
-    G4StatDouble& operator=(const G4StatDouble &rhs) 
-    {
-      m_sum_wx = rhs.m_sum_wx;
-      m_sum_wx2 = rhs.m_sum_wx2;
-      m_n = rhs.m_n;
-      m_sum_w = rhs.m_sum_w;
-      m_sum_w2 = rhs.m_sum_w2;
-      m_scale = rhs.m_scale;
-      return *this;
-    }
-    G4StatDouble& operator+=(const G4double &rhs) 
-    { fill(rhs); return *this; }
-    G4StatDouble& operator+=(const G4StatDouble &rhs) 
-    { add(&rhs); return *this; }
+  G4double mean() const;
+  G4double rms();
+  // The moments
 
-  public:
+  G4double mean(G4double ext_sum_w) const;
+  // Mean scaled to sum of weights
+  G4double rms(G4double ext_sum_w, G4int ext_n);
+  // RMS  scaled to sum of weights
 
-    void reset();
-    void fill(G4double x, G4double weight=1.);
-      // Add new data point: value "x" with weight
-    void scale(G4double);
-      // Reset scale
+  void add(const G4StatDouble*);
+  // merge 2 statistics
 
-    G4double mean() const;
-    G4double rms();
-      // The moments
+  inline G4int n() const { return m_n; }
+  inline G4double sum_w() const { return m_sum_w; }
+  inline G4double sum_w2() const { return m_sum_w2; }
+  inline G4double sum_wx() const { return m_sum_wx; }
+  inline G4double sum_wx2() const { return m_sum_wx2; }
 
-    G4double mean(G4double ext_sum_w) const;
-      // Mean scaled to sum of weights
-    G4double rms(G4double ext_sum_w, G4int ext_n);
-      // RMS  scaled to sum of weights
+ protected:
+  G4double rms(G4double sum_wx, G4double sum_wx2, G4double sum_w, G4int n);
 
-    void add(const G4StatDouble*);
-      // merge 2 statistics
-
-    inline G4int    n()       const { return m_n; }
-    inline G4double sum_w()   const { return m_sum_w; }
-    inline G4double sum_w2()  const { return m_sum_w2; }
-    inline G4double sum_wx()  const { return m_sum_wx; }
-    inline G4double sum_wx2() const { return m_sum_wx2; }
-
-  protected:
-
-    G4double rms(G4double sum_wx, G4double sum_wx2, G4double sum_w, G4int n);
-
-  protected:
-
-    G4double m_sum_wx;
-    G4double m_sum_wx2;
-    G4int    m_n;
-    G4double m_sum_w;
-    G4double m_sum_w2;
-    G4double m_scale;
+ protected:
+  G4double m_sum_wx  = 0.0;
+  G4double m_sum_wx2 = 0.0;
+  G4int m_n          = 0;
+  G4double m_sum_w   = 0.0;
+  G4double m_sum_w2  = 0.0;
+  G4double m_scale   = 0.0;
 };
 
 #endif

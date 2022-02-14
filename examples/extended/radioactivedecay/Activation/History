@@ -12,6 +12,69 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+13-10-21 mma (activation-V10-07-11)
+- HadronElasticPhysicsHP : use G4GenericMessenger instead of NeutronHPMessenger
+- RadioactiveDecayPhysics : do not change ThresholdOfHalfLife
+    
+06-10-21 I. Hrivnacova (activation-V10-07-10)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+16-08-21 mma (activation-V10-07-09)
+- TrackingAction : take weight into account
+
+05-08-21 mma (activation-V10-07-08)
+- ElectromagneticPhysics : update EM parameters
+- RadioactiveDecayPhysics : new constructor, include G4Radioactivation process,
+                            inactivate atomic deexcitation
+          
+27-07-21 mma (activation-V10-07-07)
+- RunAction::CountProcesses() : add a protection if (process == nullptr)
+- RunAction : add a comment for excited states
+    
+19-07-21 I. Hrivnacova (activation-V10-07-06)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+22-06-21 G. Cosmo (activation-V10-07-05)
+- Use new CLHEP units for minute, hour, day, year and millielectronvolt
+  in PhysicsList.
+
+15-04-21 mma (activation-V10-07-04)
+- Activation.cc: RunManagerFactory
+                 G4SteppingVerboseWithUnits
+	         ParticleHP env variables 
+- ActionInitialization.hh and cc: remove SteppingVerbose class
+
+04-03-21 A. Ribon (activation-V10-07-03)
+- GammaNuclearPhysics, GammaNuclearPhysicsLEND : replaced
+  G4PhotoNuclearProcess (that has been deleted) with
+  G4HadronInelasticProcess.
+
+15-01-21 mma (activation-V10-07-02)
+- TrackingAction: count secondary particles with meanLife > 0.
+
+05-01-21 mma (activation-V10-07-01)
+- PhysicsList: add GammaNuclearPhysicsLEND
+     
+30-12-20 mma (activation-V10-07-00)
+- update ElectromagneticPhysics
+
+26-10-20 mma (activation-V10-06-03)
+- README : add macros description
+
+05-08-20 Alberto Ribon  (activation-V10-06-02)
+- envHadronic.(c)sh : removed deprecated HP environmental variables
+  and replaced them with corresponding C++ calls in the main.
+  (These two shell-script files will be removed in G4 11.0.)
+     
+21-06-20 mma (activation-V10-06-01)
+- Run.cc, line 188 : correct a protection on maximum number of histos
+     
+13-05-20 mma (activation-V10-06-00)
+- GammaNuclearPhysics : add G4LowEGammaNuclearModel
 
 07-10-18 mma (activation-V10-04-04)
 - PhysicsList : use G4IonElasticPhysics and G4IonPhysicsXS

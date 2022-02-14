@@ -32,8 +32,6 @@
 
 #include "G4VUserActionInitialization.hh"
 
-class G4VSteppingVerbose;
-
 /// Action initialization class.
 ///
 
@@ -45,8 +43,6 @@ class ActionInitialization : public G4VUserActionInitialization
 
     virtual void BuildForMaster() const;
     virtual void Build() const;
-    
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
 };
 
 #endif

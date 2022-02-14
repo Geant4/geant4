@@ -47,7 +47,6 @@
 #define G4EmStandardPhysics_option2_h 1
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,14 +57,10 @@ public:
 
   explicit G4EmStandardPhysics_option2(G4int ver=1, const G4String& name="");
 
-  virtual ~G4EmStandardPhysics_option2();
+  ~G4EmStandardPhysics_option2() override;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-
-private:
-  G4int  verbose;
-  G4EmParticleList partList;
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

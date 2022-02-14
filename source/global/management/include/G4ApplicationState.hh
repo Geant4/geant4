@@ -23,19 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ApplicationState
 //
-//
-
-#ifndef G4APPLICATIONSTATE_H
-#define G4APPLICATIONSTATE_H 1
-
-// Class Description:
+// Description:
 //
 // Specifies the state of the G4 application
 //
 // States:
 //  G4State_PreInit
-//    At the very begining of the Application. G4StateManager starts
+//    At the very beginning of the Application. G4StateManager starts
 //    with this state. G4Initializer changes this state to Init when
 //    G4Initializer::Initialize() method starts. At the moment of
 //    the state change of PreInit->Init, no material, geometrical,
@@ -51,8 +47,8 @@
 //    BeamOn() method, G4RunManager will reset the application state
 //    to Idle after G4GeometryManager::OpenGeometry() is Done.
 //  G4State_GeomClosed
-//    G4 is in this state between G4GeometryManager::CloseGeometry()
-//    and G4GeometryManager::OpenGeometry(), but no event is in 
+//    Geant4 is in this state between G4GeometryManager::CloseGeometry()
+//    and G4GeometryManager::OpenGeometry(), but no event is in
 //    progress. At the begining of each event (construction of a
 //    G4Event object and primary particle generation), G4RunManager
 //    changes this state to EventProc and resets to GeomClosed state
@@ -60,10 +56,10 @@
 //  G4State_EventProc
 //    Processing an event.
 //  G4State_Quit
-//    G4 is in this state when the destructor of G4RunManager is invoked.
+//    Geant4 is in this state when the destructor of G4RunManager is invoked.
 //  G4State_Abort
-//    G4 is in this state when G4Exception is invoked.
-//    
+//    Geant4 is in this state when G4Exception is invoked.
+//
 //
 //  PreInit
 //    |
@@ -79,10 +75,18 @@
 //    v|
 //  EventProc (at each event)
 //
+// --------------------------------------------------------------------
+#ifndef G4APPLICATIONSTATE_HH
+#define G4APPLICATIONSTATE_HH 1
 
-enum G4ApplicationState 
-  {G4State_PreInit, G4State_Init, G4State_Idle, G4State_GeomClosed,
-   G4State_EventProc, G4State_Quit, G4State_Abort};
-
+enum G4ApplicationState
+{
+  G4State_PreInit,
+  G4State_Init,
+  G4State_Idle,
+  G4State_GeomClosed,
+  G4State_EventProc,
+  G4State_Quit,
+  G4State_Abort
+};
 #endif
-

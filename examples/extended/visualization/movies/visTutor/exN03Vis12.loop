@@ -1,0 +1,4 @@
+# exN03Vis12.loop
+/vis/viewer/set/timeWindow/startTime {startTime} ns {timeRange} ns
+# Export if required
+#/vis/ogl/export

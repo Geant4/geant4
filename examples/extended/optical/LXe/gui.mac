@@ -18,14 +18,12 @@
 # Run menu :
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
-#/gui/addButton run run1 "/control/execute run1.mac"
-#/gui/addButton run run2 "/control/execute run2.mac"
 #
 # Gun menu :
 /gui/addMenu gun Gun
-/gui/addButton gun "50 MeV"  "/gun/energy 50 MeV"
-/gui/addButton gun "1 GeV"   "/gun/energy 1 GeV"
-/gui/addButton gun "10 GeV"  "/gun/energy 10 GeV"
+/gui/addButton gun "511 keV"  "/gun/energy 511 keV"
+/gui/addButton gun "5 MeV"  "/gun/energy 5 MeV"
+/gui/addButton gun "50 MeV"   "/gun/energy 50 MeV"
 /gui/addButton gun "e-"      "/gun/particle e-"
 /gui/addButton gun "pi0"     "/gun/particle pi0"
 /gui/addButton gun "pi+"     "/gun/particle pi+"

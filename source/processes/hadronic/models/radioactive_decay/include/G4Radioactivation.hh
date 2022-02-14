@@ -26,7 +26,7 @@
 #ifndef G4Radioactivation_h
 #define G4Radioactivation_h 1
 
-#include "G4RadioactiveDecayBase.hh"
+#include "G4RadioactiveDecay.hh"
 
 #include <vector>
 #include <map>
@@ -52,7 +52,7 @@ typedef std::vector<G4RadioactiveDecayRatesToDaughter> G4RadioactiveDecayRates;
 typedef std::map<G4String, G4DecayTable*> DecayTableMap;
 
 
-class G4Radioactivation : public G4RadioactiveDecayBase
+class G4Radioactivation : public G4RadioactiveDecay
 {
   public: // with description
 

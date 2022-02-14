@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/Users/witoldp/GEANT4/10.01.ref01/geant4/source/persistency/gdml/schema/gdml.xsd">
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd" >
 
  <define>
   <position name="R" unit="mm" x="0" y="0" z="0" />
@@ -49,30 +49,23 @@
  </structure>
 
   <userinfo>
-    <auxiliary auxtype="region" auxvalue="myregion1">
-      
-      <auxiliary auxtype="RootLogicalVolume" auxvalue="Boxvol1">
-	<auxiliary auxtype="sometype" auxvalue="somevalue"/>
+    <auxiliary auxtype="Region" auxvalue="myregion1">
+      <auxiliary auxtype="volume" auxvalue="Boxvol"/>
+      <auxiliary auxtype="pcut" auxvalue="2" auxunit="mm"/>
+      <auxiliary auxtype="ecut" auxvalue="1" auxunit="mm"/>
+      <auxiliary auxtype="poscut" auxvalue="0.2" auxunit="mm"/>
+      <auxiliary auxtype="gamcut" auxvalue="0.8" auxunit="mm"/>
+      <auxiliary auxtype="ulimits" auxvalue="electron">
+        <auxiliary auxtype="ustepMax" auxvalue="5" auxunit="mm"/>
+        <auxiliary auxtype="utrakMax" auxvalue="5" auxunit="cm"/>
+        <auxiliary auxtype="uekinMin" auxvalue="900" auxunit="keV"/>
       </auxiliary>
-      
-      <auxiliary auxtype="RootLogicalVolume" auxvalue="Boxvol2"/>
-      <auxiliary auxtype="proton_cut_legth" auxvalue="2" auxunit="mm"/>
-      <auxiliary auxtype="proton_cut_energy" auxvalue="900" auxunit="KeV"/>
-      <auxiliary auxtype="electron_cut_length" auxvalue="1" auxunit="mm"/>
-      <auxiliary auxtype="electron_cut_energy" auxvalue="1" auxunit="MeV"/>
-
-      <auxiliary auxtype="cut" auxvalue="electron">
-	<auxiliary auxtype="energy" auxvalue="900" auxunit="keV"/>
-      </auxiliary>
-      
-      <auxiliary auxtype="userlimit_electron" auxvalue="1" auxunit="keV"/>
     </auxiliary>
 
-    <auxiliary auxtype="region" auxvalue="myregion2">
-      <auxiliary auxtype="RootLogicalVolume" auxvalue="vol1"/>
-      <auxiliary auxtype="RootLogicalVolume" auxvalue="vol2"/>
-      <auxiliary auxtype="electron_cut_length" auxvalue="1.5" auxunit="mm"/>
-      <auxiliary auxtype="proton_cut_length" auxvalue="2.5" auxunit="mm"/>
+    <auxiliary auxtype="Region" auxvalue="myregion2">
+      <auxiliary auxtype="RootLogicalVolume" auxvalue="myvol"/>
+      <auxiliary auxtype="pcut" auxvalue="2.2" auxunit="mm"/>
+      <auxiliary auxtype="ecut" auxvalue="1.5" auxunit="mm"/>
     </auxiliary>
  </userinfo>
  

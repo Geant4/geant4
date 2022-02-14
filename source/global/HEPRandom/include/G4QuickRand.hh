@@ -28,16 +28,16 @@
 #ifndef G4QUICKRAND_HH
 #define G4QUICKRAND_HH
 
-#include <cstdint>
 #include "G4Types.hh"
+#include <cstdint>
 
 inline G4double G4QuickRand()
 {
-  static const G4double f = 1. / 4294967296.; // 2^-32
+  static const G4double f = 1. / 4294967296.;  // 2^-32
 
   // Algorithm "xor" from p.4 of G.Marsaglia, "Xorshift RNGs"
   static G4ThreadLocal uint32_t y = 2463534242;
-  uint32_t x = y;
+  uint32_t x                      = y;
   x ^= x << 13;
   x ^= x >> 17;
   x ^= x << 5;
@@ -45,4 +45,4 @@ inline G4double G4QuickRand()
   return x * f;
 }
 
-#endif // G4QUICKRAND_HH
+#endif  // G4QUICKRAND_HH

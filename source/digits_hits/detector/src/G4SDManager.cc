@@ -33,7 +33,6 @@
 #include "G4VSensitiveDetector.hh"
 #include "G4ios.hh"
 
-
 G4ThreadLocal G4SDManager* G4SDManager::fSDManager = nullptr;
 
 G4SDManager* G4SDManager::GetSDMpointer()
@@ -45,15 +44,15 @@ G4SDManager* G4SDManager::GetSDMpointer()
   return fSDManager;
 }
 
-G4SDManager* G4SDManager::GetSDMpointerIfExist()
-{ return fSDManager; }
+G4SDManager* G4SDManager::GetSDMpointerIfExist() { return fSDManager; }
 
-G4SDManager::G4SDManager():verboseLevel(0)
+G4SDManager::G4SDManager()
+  : verboseLevel(0)
 {
   G4String topName = "/";
-  treeTop = new G4SDStructure(topName);
-  theMessenger = new G4SDmessenger(this);
-  HCtable = new G4HCtable;
+  treeTop          = new G4SDStructure(topName);
+  theMessenger     = new G4SDmessenger(this);
+  HCtable          = new G4HCtable;
 }
 
 G4SDManager::~G4SDManager()
@@ -63,45 +62,50 @@ G4SDManager::~G4SDManager()
   delete treeTop;
   DestroyFilters();
   theMessenger = nullptr;
-  HCtable = nullptr;
-  treeTop = nullptr;
-  fSDManager = nullptr;
+  HCtable      = nullptr;
+  treeTop      = nullptr;
+  fSDManager   = nullptr;
 }
 
-void G4SDManager::AddNewDetector(G4VSensitiveDetector*aSD)
+void G4SDManager::AddNewDetector(G4VSensitiveDetector* aSD)
 {
   G4int numberOfCollections = aSD->GetNumberOfCollections();
-  G4String pathName = aSD->GetPathName();
-  if( pathName(0) != '/' ) pathName.prepend("/");
-  if( pathName(pathName.length()-1) != '/' ) pathName += "/";
-  treeTop->AddNewDetector(aSD,pathName);
-  if(numberOfCollections<1) return;
-  for(G4int i=0;i<numberOfCollections;i++)
+  G4String pathName         = aSD->GetPathName();
+  if(pathName[0] != '/')
+    pathName.insert(0, "/");
+  if(pathName.back() != '/')
+    pathName += "/";
+  treeTop->AddNewDetector(aSD, pathName);
+  if(numberOfCollections < 1)
+    return;
+  for(G4int i = 0; i < numberOfCollections; i++)
   {
     G4String SDname = aSD->GetName();
     G4String DCname = aSD->GetCollectionName(i);
-    AddNewCollection(SDname,DCname);
+    AddNewCollection(SDname, DCname);
   }
-  if( verboseLevel > 0 )
+  if(verboseLevel > 0)
   {
     G4cout << "New sensitive detector <" << aSD->GetName()
-         << "> is registered at " << pathName << G4endl;
+           << "> is registered at " << pathName << G4endl;
   }
 }
 
-void G4SDManager::AddNewCollection(G4String SDname,G4String DCname)
+void G4SDManager::AddNewCollection(G4String SDname, G4String DCname)
 {
-  G4int i = HCtable->Registor(SDname,DCname);
-  if(verboseLevel>0)
+  G4int i = HCtable->Registor(SDname, DCname);
+  if(verboseLevel > 0)
   {
-    if(i<0) {
-       if(verboseLevel>1) G4cout << "G4SDManager::AddNewCollection : the collection <"
-        << SDname << "/" << DCname << "> has already been reginstered." << G4endl;
+    if(i < 0)
+    {
+      if(verboseLevel > 1)
+        G4cout << "G4SDManager::AddNewCollection : the collection <" << SDname
+               << "/" << DCname << "> has already been reginstered." << G4endl;
     }
     else
     {
-      G4cout << "G4SDManager::AddNewCollection : the collection <"
-       << SDname << "/" << DCname << "> is registered at " << i << G4endl;
+      G4cout << "G4SDManager::AddNewCollection : the collection <" << SDname
+             << "/" << DCname << "> is registered at " << i << G4endl;
     }
   }
 }
@@ -121,24 +125,31 @@ void G4SDManager::TerminateCurrentEvent(G4HCofThisEvent* HCE)
 void G4SDManager::Activate(G4String dName, G4bool activeFlag)
 {
   G4String pathName = dName;
-  if( pathName(0) != '/' ) pathName.prepend("/");
-  treeTop->Activate(pathName,activeFlag);
+  if(pathName[0] != '/')
+    pathName.insert(0, "/");
+  treeTop->Activate(pathName, activeFlag);
 }
 
-G4VSensitiveDetector* G4SDManager::FindSensitiveDetector(G4String dName, G4bool warning)
+G4VSensitiveDetector* G4SDManager::FindSensitiveDetector(G4String dName,
+                                                         G4bool warning)
 {
   G4String pathName = dName;
-  if( pathName(0) != '/' ) pathName.prepend("/");
+  if(pathName[0] != '/')
+    pathName.insert(0, "/");
   return treeTop->FindSensitiveDetector(pathName, warning);
 }
 
 G4int G4SDManager::GetCollectionID(G4String colName)
 {
   G4int id = HCtable->GetCollectionID(colName);
-  if(id==-1)
-  { G4cout << "<" << colName << "> is not found." << G4endl; }
-  else if(id==-2)
-  { G4cout << "<" << colName << "> is ambiguous." << G4endl; }
+  if(id == -1)
+  {
+    G4cout << "<" << colName << "> is not found." << G4endl;
+  }
+  else if(id == -2)
+  {
+    G4cout << "<" << colName << "> is ambiguous." << G4endl;
+  }
   return id;
 }
 
@@ -170,12 +181,12 @@ void G4SDManager::DeRegisterSDFilter(G4VSDFilter* filter)
 void G4SDManager::DestroyFilters()
 {
   auto f = FilterList.begin();
-  while( f != FilterList.end() )
+  while(f != FilterList.end())
   {
-    if(verboseLevel>0) G4cout << "### deleting " << (*f)->GetName() << " " << (*f) << G4endl;
+    if(verboseLevel > 0)
+      G4cout << "### deleting " << (*f)->GetName() << " " << (*f) << G4endl;
     delete *f;
     f = FilterList.begin();
   }
   FilterList.clear();
 }
-

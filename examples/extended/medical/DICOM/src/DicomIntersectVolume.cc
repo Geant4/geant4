@@ -160,9 +160,9 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
   }
 
   //----- Loop to pantom voxels
-  G4int nx = G4int(thePhantomParam->GetNoVoxelX());
-  G4int ny = G4int(thePhantomParam->GetNoVoxelY());
-  G4int nz = G4int(thePhantomParam->GetNoVoxelZ());
+  G4int nx = G4int(thePhantomParam->GetNoVoxelsX());
+  G4int ny = G4int(thePhantomParam->GetNoVoxelsY());
+  G4int nz = G4int(thePhantomParam->GetNoVoxelsZ());
   G4int nxy = nx*ny;
   fVoxelIsInside = new G4bool[nx*ny*nz];
   G4double voxelHalfWidthX = thePhantomParam->GetVoxelHalfX();

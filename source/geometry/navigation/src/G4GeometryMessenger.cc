@@ -36,6 +36,7 @@
 #include "G4GeometryManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Navigator.hh"
+#include "G4PropagatorInField.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -94,7 +95,7 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
 
   pchkCmd = new G4UIcmdWithABool( "/geometry/navigator/push_notify", this );
   pchkCmd->SetGuidance( "Set navigator verbosity push notifications." );
-  pchkCmd->SetGuidance( "This allows to disable/re-enable verbosity in" );
+  pchkCmd->SetGuidance( "This allows one to disable/re-enable verbosity in" );
   pchkCmd->SetGuidance( "navigation, when tracks may get stuck and require" );
   pchkCmd->SetGuidance( "one artificial push along the direction by the" );
   pchkCmd->SetGuidance( "navigator. Notification is active by default." );
@@ -317,6 +318,8 @@ G4GeometryMessenger::SetCheckMode(G4String input)
   G4bool mode = chkCmd->GetNewBoolValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
   navigator->CheckMode(mode);
+  G4PropagatorInField* pField = tmanager->GetPropagatorInField();
+  if (pField != nullptr)  { pField->CheckMode(mode); }
 }
 
 //

@@ -35,7 +35,7 @@
 //
 //  Author: V.Ivanchenko 20 June 2008
 //
-//  Modified: 
+//  Modified:
 //
 // -------------------------------------------------------------
 //
@@ -47,12 +47,7 @@
 #include "ActionInitialization.hh"
 #include "PrimaryGeneratorAction.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4RunManagerFactory.hh"
 #include "G4GenericPhysicsList.hh"
 #include "G4VModularPhysicsList.hh"
 #include "G4UImanager.hh"
@@ -73,7 +68,7 @@ namespace {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
   // Evaluate arguments
   //
@@ -81,7 +76,7 @@ int main(int argc,char** argv)
     PrintUsage();
     return 1;
   }
-  
+
   G4String macro;
   G4String session;
   G4String physListMacro;
@@ -102,8 +97,8 @@ int main(int argc,char** argv)
       PrintUsage();
       return 1;
     }
-  }  
-  
+  }
+
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = 0;
@@ -115,13 +110,11 @@ int main(int argc,char** argv)
   G4Random::setTheEngine(new CLHEP::RanecuEngine());
 
   // Construct the run manager
-#ifdef G4MULTITHREADED  
-  G4MTRunManager * runManager = new G4MTRunManager(); 
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+#ifdef G4MULTITHREADED
   if ( nofThreads > 0 ) {
     runManager->SetNumberOfThreads(nofThreads);
   }
-#else
-  G4RunManager * runManager = new G4RunManager(); 
 #endif
 
   // Get the pointer to the User Interface manager
@@ -133,7 +126,7 @@ int main(int argc,char** argv)
     // via macro
     physList = new G4GenericPhysicsList();
     UImanager->ApplyCommand("/control/execute "+physListMacro);
-  } 
+  }
   else {
     // from vector of physics cobstructor names
     std::vector<G4String>* myConstructors = new std::vector<G4String>;
@@ -170,16 +163,16 @@ int main(int argc,char** argv)
   }
   else {
     // interactive mode : define UI session
-    UImanager->ApplyCommand("/control/execute init_vis.mac"); 
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
     ui->SessionStart();
     delete ui;
   }
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not be deleted 
+  // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
-  
+
   delete visManager;
   delete runManager;
 }

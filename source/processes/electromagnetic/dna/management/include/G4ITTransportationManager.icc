@@ -98,7 +98,7 @@ G4ITTransportationManager::GetActiveNavigatorsIterator()
 // ----------------------------------------------------------------------------
 // GetNoWorlds()
 //
-// Return the number of registerd worlds.
+// Return the number of registered worlds.
 //
 inline
 size_t G4ITTransportationManager::GetNoWorlds() const

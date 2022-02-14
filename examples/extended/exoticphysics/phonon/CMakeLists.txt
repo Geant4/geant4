@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(dmc)
 
 #----------------------------------------------------------------------------
@@ -43,6 +43,8 @@ tarGet_link_libraries(XGeBox ${Geant4_LIBRARIES})
 #
 set(dmc_SCRIPTS
     run.in run.out vis.mac
+   )
+set(dmc_maps   
     CrystalMaps/Ge/config.txt
     CrystalMaps/Ge/FT.ssv
     CrystalMaps/Ge/FTVec.ssv
@@ -58,6 +60,9 @@ foreach(_script ${dmc_SCRIPTS})
     ${PROJECT_BINARY_DIR}/${_script}
     COPYONLY
     )
+endforeach()
+foreach(_map ${dmc_maps})
+    file(DOWNLOAD ${GEANT4_DATASETS_URL}/examples/extendened/exoticphysics/phonon/${_map} ${_map})
 endforeach()
 
 #----------------------------------------------------------------------------

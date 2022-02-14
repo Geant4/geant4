@@ -23,40 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticleWithCuts
 //
-//
-// 
-// --------------------------------------------------------
-//      GEANT 4 class header file
-//
-//      History: 
-//       first implementation, based on object model of Hisaya Kurashige, 
-//       calculation of Range Table is based on implementeation for Muon 
-//                                           by L.Urban, 10 May 1996
-//       added  RestoreCuts  H.Kurashige 09 Mar. 2001
-//       introduced material dependent range cuts   08 Sep. 2001
-//       restructuring for Cuts per Region  by Hisaya    07 Oct.2002 
-//       change to dummy class              by Hisaya    11 MAr.2003 
-// ----------------------------------------------------------------
-// Class Description
-//  Dummy to be removed in future 
-//
+// Dummy class for G4ParticleDefinition
 
+// Author: H.Kurashige, 9 March 2001
+// --------------------------------------------------------------------
 #ifndef G4ParticleWithCuts_h
 #define G4ParticleWithCuts_h 1
+
 #include "G4ParticleDefinition.hh" 
 
-typedef G4ParticleDefinition G4ParticleWithCuts;
+using G4ParticleWithCuts = G4ParticleDefinition;
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

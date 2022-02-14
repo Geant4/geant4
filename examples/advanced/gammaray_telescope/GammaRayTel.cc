@@ -41,15 +41,11 @@
 //           See README file for details on this example            
 //  20.11.01 G.Santin: new analysis management, and some modification in the 
 //                     construction of some Action's
-// ************************************************************ 
+// ************************************************************
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
-#include "G4UImanager.hh" 
+#include "G4Types.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4UImanager.hh"
 
 #include "G4VisExecutive.hh"
 <<<<<<< HEAD
@@ -77,23 +73,17 @@
 int main(int argc, char** argv)
 {
   // Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2); 
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads);
 
   // Set mandatory user initialization classes
   GammaRayTelDetectorConstruction* detector = 
     new GammaRayTelDetectorConstruction;
   runManager->SetUserInitialization(detector);
-  
-  // POSSIBILITY TO SELECT ANOTHER PHYSICS LIST
-  //  do not use   GammaRayTelPhysicsList, this is old style and crashes at 
-  //    program exit   
-  //runManager->SetUserInitialization(new GammaRayTelPhysicsList);
-  
+
+  runManager->SetUserInitialization(new GammaRayTelPhysicsList);
+
   //  runManager->SetUserInitialization(new QGSP_BIC);
   runManager->SetUserInitialization(new FTFP_BERT);
 
@@ -118,27 +108,21 @@ int main(int argc, char** argv)
   
   // Get the pointer to the UI manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  if (argc!=1)   // batch mode
+  if (argc == 1)   // Define UI session for interactive mode.
+    {
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      G4cout << " UI session starts ..." << G4endl;
+      UImanager -> ApplyCommand("/control/execute prerunGammaRayTel.mac");
+      ui -> SessionStart();
+      delete ui;
+    }
+ else   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
-  else
-    {
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      if (ui->IsGUI())
-	{
-	  /* prerunGammaRayTel.mac is loaded by default */
-	  UImanager->ApplyCommand("/control/execute prerunGammaRayTel.mac");
-	  ui->SessionStart();
-	}
-      delete ui;
-<<<<<<< HEAD
-#endif  
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-    }
+  
   // Job termination
   delete visManager;
   delete analysis;

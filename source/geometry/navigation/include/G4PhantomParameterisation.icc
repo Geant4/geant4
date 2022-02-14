@@ -38,15 +38,15 @@ SetVoxelDimensions( G4double halfx, G4double halfy, G4double halfz )
 
 //--------------------------------------------------------------------
 inline
-void G4PhantomParameterisation::SetNoVoxel( size_t nx, size_t ny, size_t nz )
+void G4PhantomParameterisation::SetNoVoxels( size_t nx, size_t ny, size_t nz )
 {
-  fNoVoxelX = nx; 
-  fNoVoxelY = ny; 
-  fNoVoxelZ = nz; 
-  fNoVoxelXY = nx*ny; 
-  fNoVoxel = nx*ny*nz;
+  fNoVoxelsX = nx; 
+  fNoVoxelsY = ny; 
+  fNoVoxelsZ = nz; 
+  fNoVoxelsXY = nx*ny; 
+  fNoVoxels = nx*ny*nz;
 }
-  
+
 //--------------------------------------------------------------------
 inline
 void G4PhantomParameterisation::SetMaterials( std::vector<G4Material*>& mates )
@@ -84,30 +84,30 @@ G4double G4PhantomParameterisation::GetVoxelHalfZ() const
 
 //--------------------------------------------------------------------
 inline
-size_t G4PhantomParameterisation::GetNoVoxelX() const
+size_t G4PhantomParameterisation::GetNoVoxelsX() const
 {
-  return fNoVoxelX;
+  return fNoVoxelsX;
 }
 
 //--------------------------------------------------------------------
 inline
-size_t G4PhantomParameterisation::GetNoVoxelY() const
+size_t G4PhantomParameterisation::GetNoVoxelsY() const
 {
-  return fNoVoxelY;
+  return fNoVoxelsY;
 }
 
 //--------------------------------------------------------------------
 inline
-size_t G4PhantomParameterisation::GetNoVoxelZ() const
+size_t G4PhantomParameterisation::GetNoVoxelsZ() const
 {
-  return fNoVoxelZ;
+  return fNoVoxelsZ;
 }
 
 //--------------------------------------------------------------------
 inline
-size_t G4PhantomParameterisation::GetNoVoxel() const
+size_t G4PhantomParameterisation::GetNoVoxels() const
 {
-  return fNoVoxel;
+  return fNoVoxels;
 }
 
 //--------------------------------------------------------------------

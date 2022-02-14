@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4WeightCutOffProcess
 //
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4WeightCutOffProcess.cc
-//
-// ----------------------------------------------------------------------
+// Author: Michael Dressel, 2002
+// --------------------------------------------------------------------
 
 #include "G4WeightCutOffProcess.hh"
-//#include "G4VScorer.hh"
 #include "G4GeometryCellStep.hh"
-//#include "G4GCellFinder.hh"
 #include "G4TouchableHandle.hh"
 #include "G4VIStore.hh"
 
@@ -55,7 +49,6 @@ G4WeightCutOffProcess(G4double wsurvival,
                       G4double wlimit,
                       G4double isource,
                       G4VIStore *istore,
-		      //                      const G4VGCellFinder &aGCellFinder,
                       const G4String &aName, G4bool para)
   : G4VProcess(aName), 
     fParticleChange(new G4ParticleChange),
@@ -63,10 +56,7 @@ G4WeightCutOffProcess(G4double wsurvival,
     fWeightLimit(wlimit),
     fSourceImportance(isource), 
     fIStore(istore),
-    //    fGCellFinder(aGCellFinder),
-    fGhostWorldName("NoParallelWorld"), fGhostWorld(0),
-    fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0'),
-    fParaflag(para), fEndTrack('0'), feLimited(kDoNot)
+    fParaflag(para)
 {
   if (!fParticleChange)
   {
@@ -93,7 +83,7 @@ G4WeightCutOffProcess(G4double wsurvival,
 G4WeightCutOffProcess::~G4WeightCutOffProcess()
 {
   delete fParticleChange;
-  //  delete fGhostStep;
+  // delete fGhostStep;
 }
 
 
@@ -139,7 +129,7 @@ void G4WeightCutOffProcess::StartTracking(G4Track* trk)
 // G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
 
   if(fParaflag) {
-    if(fGhostNavigator)
+    if(fGhostNavigator != nullptr)
       { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
     else
       {
@@ -229,7 +219,7 @@ G4WeightCutOffProcess::PostStepDoIt(const G4Track& aTrack,
     //  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(aStep);
     //  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(fGhostStep);
     G4double R = fSourceImportance;
-    if (fIStore)
+    if (fIStore != nullptr)
       {
 	G4double i = fIStore->GetImportance(postCell);
 	if (i>0)
@@ -259,7 +249,7 @@ G4WeightCutOffProcess::PostStepDoIt(const G4Track& aTrack,
     //  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(aStep);
     //  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(fGhostStep);
     G4double R = fSourceImportance;
-    if (fIStore)
+    if (fIStore != nullptr)
       {
 	G4double i = fIStore->GetImportance(postCell);
 	if (i>0)
@@ -376,7 +366,7 @@ AtRestGetPhysicalInteractionLength(const G4Track& ,
 G4VParticleChange*
 G4WeightCutOffProcess::AtRestDoIt(const G4Track&, const G4Step&)
 {
-  return 0;
+  return nullptr;
 }
 
 G4VParticleChange*
@@ -386,8 +376,6 @@ G4WeightCutOffProcess::AlongStepDoIt(const G4Track& track, const G4Step&)
   // Expecting G4Transportation to move the track
   pParticleChange->Initialize(track);
   return pParticleChange; 
-
-  //  return 0;
 }
 
 void G4WeightCutOffProcess::CopyStep(const G4Step & step)

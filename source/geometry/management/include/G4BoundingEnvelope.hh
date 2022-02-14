@@ -68,12 +68,12 @@ class G4BoundingEnvelope
       // should have equal numbers of vertices except first and last
       // polygons which may consist of a single vertex
 
-    G4BoundingEnvelope(const G4ThreeVector& pMin, 
+    G4BoundingEnvelope(const G4ThreeVector& pMin,
                        const G4ThreeVector& pMax,
                        const std::vector<const G4ThreeVectorList*>& polygons);
       // Constructor from AABB and a sequence of polygons
 
-    ~G4BoundingEnvelope();
+    ~G4BoundingEnvelope() = default;
       // Destructor
 
     G4bool BoundingBoxVsVoxelLimits(const EAxis pAxis,

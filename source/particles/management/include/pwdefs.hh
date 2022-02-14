@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Defines for Windows DLLs import/export
-//
 
+// Author: G.Cosmo (CERN)
+// --------------------------------------------------------------------
 #ifndef PWDEFS_HH
 #define PWDEFS_HH
 

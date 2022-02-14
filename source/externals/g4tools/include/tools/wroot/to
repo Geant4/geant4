@@ -1,0 +1,282 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_to
+#define tools_wroot_to
+
+#include "directory"
+#include "streamers"
+#include "bufobj"
+
+namespace tools {
+namespace wroot {
+
+//typedef std::map<std::string,std::string> annotations_t;
+inline bool to(directory& a_dir,const std::map<std::string,std::string>& a_annotations,const std::string& a_histo_name) {
+  //if(a_annotations.empty()) return true;
+  std::string sas;
+  tools_mforcit(std::string,std::string,a_annotations,it) {
+    if(it!=a_annotations.begin()) sas += "\n";
+    sas += (*it).first;
+    sas += "\n";
+    sas += (*it).second;
+  }
+  std::string key_name = "annotations_"+a_histo_name;
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,key_name,"annotations","TNamed");
+  if(!Named_stream(*bo,a_histo_name,sas)) {
+    a_dir.file().out() << "tools::wroot::to : Named_stream failed." << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::h1d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH1D");
+  if(!TH1D_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to : TH1D_stream failed." << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::h1df& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH1F");
+  if(!TH1F_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to : TH1F_stream failed." << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::h2d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH2D");
+  if(!TH2D_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to : TH2D_stream failed." << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::h2df& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH2F");
+  if(!TH2F_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TH2F_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::h3d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),"TH3D");
+  if(!TH3D_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TH3D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::h3df& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH3F");
+  if(!TH3F_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TH3F_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::p1d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),"TProfile");
+  if(!TProfile_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TProfile_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::p2d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),"TProfile2D");
+  if(!TProfile2D_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TProfile2D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool write_histos(directory& a_dir,const std::vector< std::pair<std::string,void*> >& a_hists) {
+  typedef std::pair<std::string,void*> class_pointer;
+
+  tools_vforcit(class_pointer,a_hists,it) {
+    const std::string& scls = (*it).first;
+    void* p = (*it).second;
+    if(scls==histo::h1d::s_class()) {
+      histo::h1d& h = *((histo::h1d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else if(scls==histo::h2d::s_class()) {
+      histo::h2d& h = *((histo::h2d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else if(scls==histo::h3d::s_class()) {
+      histo::h3d& h = *((histo::h3d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else if(scls==histo::p1d::s_class()) {
+      histo::p1d& h = *((histo::p1d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else if(scls==histo::p2d::s_class()) {
+      histo::p2d& h = *((histo::p2d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else {
+      a_dir.file().out() << "tools::wroot::write_histos :"
+                         << " WARNING : class " << scls << " not handled."
+                         << std::endl;
+    }
+
+  }
+  return true;
+}
+
+}}
+
+#include "member_writer"
+#include "../store/osc_streamers"
+
+namespace tools {
+namespace wroot {
+
+inline bool to_osc(directory& a_dir,const histo::h1d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_h1d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Histogram1D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to_osc(directory& a_dir,const histo::h2d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_h2d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Histogram2D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to_osc(directory& a_dir,const histo::h3d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_h3d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Histogram3D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to_osc(directory& a_dir,const histo::p1d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_p1d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Profile1D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to_osc(directory& a_dir,const histo::p2d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_p2d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Profile2D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+}}
+
+#endif

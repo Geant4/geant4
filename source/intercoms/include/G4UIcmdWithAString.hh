@@ -23,45 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIcmdWithAString
 //
+// Class description:
 //
-//
+// A concrete class of G4UIcommand. The command defined by this class
+// takes a string. In case the parameter string contains space(s), it
+// must be enclosed by double-quotations (").
+// General information of G4UIcommand is given in G4UIcommand.hh
 
-#ifndef G4UIcmdWithAString_H
-#define G4UIcmdWithAString_H 1
+// Author: M.Asai, 1998
+// --------------------------------------------------------------------
+#ifndef G4UIcmdWithAString_hh
+#define G4UIcmdWithAString_hh 1
 
 #include "G4UIcommand.hh"
 
-// class description:
-//  A concrete class of G4UIcommand. The command defined by this class
-// takes a string. Incase the parameter string contains space(s), it
-// must be enclosed by double-quotations (").
-//  General information of G4UIcommand is given in G4UIcommand.hh.
-
 class G4UIcmdWithAString : public G4UIcommand
 {
-  public: // with description
-    G4UIcmdWithAString
-    (const char * theCommandPath,G4UImessenger * theMessenger);
-    //  Constructor. The command string with full path directory
-    // and the pointer to the messenger must be given.
-    void SetParameterName(const char * theName,G4bool omittable,
-                          G4bool currentAsDefault=false);
-    //  Set the parameter name.
-    //  If "omittable" is set as true, the user of this command can ommit
-    // the value when he/she applies the command. If "omittable" is false,
-    // the user must supply the parameter string.
-    //  "currentAsDefault" flag is valid only if "omittable" is true. If this
-    // flag is true, the current value is used as the default value when the 
-    // user ommit the parameter. If this flag is false, the value given by the 
-    // next SetDefaultValue() method is used.
-    void SetCandidates(const char * candidateList);
-    //  Defines the candidates of the parameter string. Candidates listed in
-    // the argument must be separated by space(s).
-    void SetDefaultValue(const char * defVal);
-    //  Set the default value of the parameter. This default value is used
-    // when the user of this command ommits the parameter value, and
-    // "ommitable" is true and "curreutAsDefault" is false.
+  public:
+
+    G4UIcmdWithAString(const char* theCommandPath, G4UImessenger* theMessenger);
+      // Constructor. The command string with full path directory
+      // and the pointer to the messenger must be given
+
+    void SetParameterName(const char* theName, G4bool omittable,
+                          G4bool currentAsDefault = false);
+      // If "omittable" is set to true, the user of this command can omit
+      // the value when the command is applied. If "omittable" is false,
+      // the user must supply the parameter string.
+      // "currentAsDefault" flag is valid only if "omittable" is true. If this
+      // flag is true, the current value is used as the default value when the
+      // user omits the parameter. If this flag is false, the value given by the
+      // next SetDefaultValue() method is used
+
+    void SetCandidates(const char* candidateList);
+      // Defines the candidates of the parameter string. Candidates listed in
+      // the argument must be separated by space(s)
+
+    void SetDefaultValue(const char* defVal);
+      // Set the default value of the parameter. This default value is used
+      // when the user of this command omits the parameter value, and
+      // "omittable" is true and "currentAsDefault" is false
 };
 
 #endif

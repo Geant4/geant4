@@ -10,6 +10,30 @@
 <<<<<<< HEAD
 =======
 
+07-11-2021 I. Hrivnacova - microdosimetry-V10-07-04
+- Added analysis manager Clear() call instead of
+  deleting in the end of run (removed on July 19)
+
+06-10-2021 I. Hrivnacova - microdosimetry-V10-07-03
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  removed Analysis.hh.
+
+19-07-21 I. Hrivnacova - microdosimetry-V10-07-02
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+23-03-21 V.Ivanchenko - microdosimetry-V10-07-01
+- updated PhysicsList for 11.0: use updated SetEmModel method
+
+03-03-21 V.Ivanchenko - microdosimetry-V10-07-00
+- updated PhysicsList for 11.0: removed thread unsafe SetCuts method,
+  use SetEmModel(..) for multiple scattering.
+
+10-11-20 B. Morgan - microdosimetry-V10-06-00
+- Migration to G4RunManagerFactory.
+
 03-03-19 S. Incerti - microdosimetry-V10-05-00
 - updated plot.C.
 
@@ -41,7 +65,7 @@
 - Correct the check on the output file command line option
 
 10 Nov 2014 - M. Karamitros - microdosimetry-V10-00-05
-- Following Laurent's development: add a tab in the Qt interface 
+- Following Laurent's development: add a tab in the Qt interface
 displaying the README
 
 10 Nov 2014 - M. Karamitros - microdosimetry-V10-00-04
@@ -54,7 +78,7 @@ displaying the README
 
 06 Nov 2014 - M.Karamitros - microdosimetry-V10-00-02
 - Check analysis manager is actived removed
-- Select gui + vis from command line option 
+- Select gui + vis from command line option
 
 23 Oct 2013 - V.Ivanchenko - microdosimetry-V10-00-01
 - Fixed user actions and enter flexible number of threads
@@ -134,7 +158,7 @@ displaying the README
   "target" region) + Modified related classes (RunAct and main)
 
 18 August 2011 - S. Incerti -  microdosimetry-V09-04-06
-- Added scoring of msc 
+- Added scoring of msc
 
 18 August 2011 - S. Incerti -  microdosimetry-V09-04-05
 - Removed initStep test in SteppingAction
@@ -193,8 +217,8 @@ displaying the README
   (to be used with emlowen-V09-02-50 and above)
 
 13 August 2009 - S. Incerti - microdosimetry-V09-02-03
-- replaced H2O material by NIST G4_WATER 
-  (to be used with emlowen-V09-02-50 and above) 
+- replaced H2O material by NIST G4_WATER
+  (to be used with emlowen-V09-02-50 and above)
 
 10 August 2009 - S. Incerti - microdosimetry-V09-02-02
 - added GenericIon definition to PhysicsList (required by rules of G4VUserPhysicsList)

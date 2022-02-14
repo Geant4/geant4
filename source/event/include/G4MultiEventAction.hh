@@ -23,35 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MultiEventAction
 //
+// Class description:
 //
-//---------------------------------------------------------------
-//
-// G4MultiEventAction.hh
-//
-//   Created on: Jan 17, 2016
-//       Author: adotti
-//
-//
-// class description:
-//     This class extends G4UserEventAction and allows multiple
-//     user-defined tracking actions to be used in the same job.
-//     The class is a vector of user-defined tracking actions.
-//     This class owns and manages the dependent user-actions.
+// This class extends G4UserEventAction and allows multiple user-defined
+// tracking actions to be used in the same job.
+// The class is a vector of user-defined tracking actions.
+// This class owns and manages the dependent user-actions.
 // Usage:
-//     There is no need to explicitly use this class as long as the
-//     user actions are set via G4UserActionInitialization::SetUserAction
-//     that can be called several times. Explicitly this is what is happening:
+//   There is no need to explicitly use this class as long as the
+//   user actions are set via G4UserActionInitialization::SetUserAction()
+//   that can be called several times. Explicitly, this is what is happening:
 //     In user-defined action initialization:
-//      G4MultiEventAction* action = new G4MultiEventAction;
-//      action->push_back( G4UserEventActionUPtr( new MyUserEventAction );
-//      [... add as many as needed ...]
-//      SetUserAction( action );
-// ---------------------------------------------------------------
-//
+//     G4MultiEventAction* action = new G4MultiEventAction;
+//     action->push_back( G4UserEventActionUPtr( new MyUserEventAction );
+//     [... add as many as needed ...]
+//     SetUserAction( action );
 
-#ifndef G4MULTIEVENTACTION_HH_
-#define G4MULTIEVENTACTION_HH_
+// Author: Andrea Dotti, SLAC - 17.01.2016
+// --------------------------------------------------------------------
+#ifndef G4MULTIEVENTACTION_HH
+#define G4MULTIEVENTACTION_HH
 
 #include "G4UserEventAction.hh"
 #include <vector>
@@ -60,14 +53,16 @@
 using G4UserEventActionUPtr=std::unique_ptr<G4UserEventAction>;
 using G4UserEventActionVector=std::vector<G4UserEventActionUPtr>;
 
-class G4MultiEventAction : public G4UserEventAction , public G4UserEventActionVector
+class G4MultiEventAction : public G4UserEventAction
+                         , public G4UserEventActionVector
 {
-public:
-  G4MultiEventAction() = default;
-  virtual ~G4MultiEventAction() override = default;
-  virtual void SetEventManager(G4EventManager* ) override;
-  virtual void BeginOfEventAction(const G4Event* ) override;
-  virtual void EndOfEventAction(const G4Event* ) override;
+  public:
+
+    G4MultiEventAction() = default;
+    virtual ~G4MultiEventAction() override = default;
+    virtual void SetEventManager(G4EventManager* ) override;
+    virtual void BeginOfEventAction(const G4Event* ) override;
+    virtual void EndOfEventAction(const G4Event* ) override;
 };
 
-#endif /* SOURCE_EVENT_INCLUDE_G4MULTIEVENTACTION_HH_ */
+#endif

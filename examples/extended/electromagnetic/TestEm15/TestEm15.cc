@@ -33,14 +33,15 @@
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4SteppingVerbose.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
 #include "SteppingAction.hh"
@@ -56,14 +57,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) {
- 
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
+  //Use SteppingVerbose with Unit
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
   
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
-  // Construct the default run manager
+  //construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes

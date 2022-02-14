@@ -30,27 +30,14 @@
 #include <iostream>
 
 #include "CCalSteppingAction.hh"
+#include "CCalRunAction.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4StepPoint.hh"
 #include "G4ThreeVector.hh"
 
-#include "CCalAnalysis.hh"
-
-<<<<<<< HEAD
-
-
-CCalSteppingAction::CCalSteppingAction(){
-
-  CCalAnalysis* analysis = CCalAnalysis::getInstance();
-  timeHistoMaxBin=analysis->maxbin();
-
-  int i; 
-  for (i=0; i<200; i++) {timeDeposit[i] = 0.;}
-  for (i=0; i<70;  i++) {LateralProfile[i] = 0.;}
-
-=======
 CCalSteppingAction::CCalSteppingAction()
 {
   timeHistoMaxBin = 200;

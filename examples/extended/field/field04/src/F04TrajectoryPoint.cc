@@ -41,6 +41,8 @@
 
 #include "G4UnitsTable.hh"
 
+#include "G4UIcommand.hh"
+
 //#define G4ATTDEBUG
 #ifdef G4ATTDEBUG
 #include "G4AttCheck.hh"
@@ -139,7 +141,7 @@ std::vector<G4AttValue>* F04TrajectoryPoint::CreateAttValues() const
 
   values->push_back(G4AttValue("Momentum",G4BestUnit(fMomentum,"Momentum"),""));
 
-  values->push_back(G4AttValue("StepStatus",fStepStatus,""));
+  values->push_back(G4AttValue("StepStatus",G4UIcommand::ConvertToString(fStepStatus),""));
 
   values->push_back(G4AttValue("VolumeName",fVolumeName,""));
 

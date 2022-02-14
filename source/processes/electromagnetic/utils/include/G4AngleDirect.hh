@@ -58,16 +58,14 @@ public:
 
   G4AngleDirect();
 
-  virtual ~G4AngleDirect();
+  ~G4AngleDirect() override;
 
   // Sample direction in global coordinate system,
   // this means for zero scattering angle this direction is the same
   // as the direction of primary 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-					 G4double, G4int, 
-					 const G4Material*);
-
-private:
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                 G4double, G4int, 
+                                 const G4Material*) override;
 
   // hide assignment operator 
   G4AngleDirect & operator=(const  G4AngleDirect &right);

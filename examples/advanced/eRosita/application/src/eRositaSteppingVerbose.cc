@@ -40,12 +40,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 eRositaSteppingVerbose::eRositaSteppingVerbose()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 eRositaSteppingVerbose::~eRositaSteppingVerbose()
-{}
+{
+}
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

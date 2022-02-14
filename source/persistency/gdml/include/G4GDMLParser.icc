@@ -23,150 +23,153 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GDMLParser inline methods
 //
-//
-//
-// class G4GDMLParser inline methods
-//
-// -------------------------------------------------------------------------
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
 
-inline 
-void G4GDMLParser::Read(const G4String& filename, G4bool validate)
-{   
-  if ( G4Threading::IsMasterThread() )
-  {
-    reader->Read(filename,validate,false,strip);
-    ImportRegions();
-  }
-}
-
-inline 
-void G4GDMLParser::ReadModule(const G4String& filename, G4bool validate)
-{   
-  if ( G4Threading::IsMasterThread() )
-  {
-    reader->Read(filename,validate,true);
-    ImportRegions();
-  }
-}
-
-inline
-void G4GDMLParser::Write(const G4String& filename,
-                         const G4VPhysicalVolume* pvol,
-                               G4bool refs,
-                         const G4String& schemaLocation)
+inline void G4GDMLParser::Read(const G4String& filename, G4bool validate)
 {
-  if ( G4Threading::IsMasterThread() )
+  if(G4Threading::IsMasterThread())
   {
-    const G4int depth = 0;
-    G4LogicalVolume* lvol = 0;
+    reader->Read(filename, validate, false, strip);
+    ImportRegions();
+  }
+}
 
-    if (!pvol)
+// --------------------------------------------------------------------
+inline void G4GDMLParser::ReadModule(const G4String& filename, G4bool validate)
+{
+  if(G4Threading::IsMasterThread())
+  {
+    reader->Read(filename, validate, true);
+    ImportRegions();
+  }
+}
+
+// --------------------------------------------------------------------
+inline void G4GDMLParser::Write(const G4String& filename,
+                                const G4VPhysicalVolume* pvol, G4bool refs,
+                                const G4String& schemaLocation)
+{
+  if(G4Threading::IsMasterThread())
+  {
+    const G4int depth     = 0;
+    G4LogicalVolume* lvol = nullptr;
+
+    if(pvol == nullptr)
     {
-      lvol = G4TransportationManager::GetTransportationManager()->
-             GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
+      lvol = G4TransportationManager::GetTransportationManager()
+               ->GetNavigatorForTracking()
+               ->GetWorldVolume()
+               ->GetLogicalVolume();
     }
     else
     {
       lvol = pvol->GetLogicalVolume();
     }
 
-    if (rexp) { ExportRegions(refs); }
-    writer->Write(filename,lvol,schemaLocation,depth,refs);
+    if(rexp)
+    {
+      ExportRegions(refs);
+    }
+    writer->Write(filename, lvol, schemaLocation, depth, refs);
   }
 }
 
-inline
-void G4GDMLParser::Write(const G4String& filename,
-                         const G4LogicalVolume* lvol,
-                               G4bool refs,
-                         const G4String& schemaLocation)
-{ 
-  if ( G4Threading::IsMasterThread() )
+// --------------------------------------------------------------------
+inline void G4GDMLParser::Write(const G4String& filename,
+                                const G4LogicalVolume* lvol, G4bool refs,
+                                const G4String& schemaLocation)
+{
+  if(G4Threading::IsMasterThread())
   {
     const G4int depth = 0;
 
-    if (!lvol)
+    if(lvol == nullptr)
     {
-      lvol = G4TransportationManager::GetTransportationManager()->
-             GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
+      lvol = G4TransportationManager::GetTransportationManager()
+               ->GetNavigatorForTracking()
+               ->GetWorldVolume()
+               ->GetLogicalVolume();
     }
-    if (rexp) { ExportRegions(refs); }
-    writer->Write(filename,lvol,schemaLocation,depth,refs);
+    if(rexp)
+    {
+      ExportRegions(refs);
+    }
+    writer->Write(filename, lvol, schemaLocation, depth, refs);
   }
 }
 
-inline 
-G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
-                                             G4Material* medium,
-                                             G4Material* solid)
-{   
-  if ( G4Threading::IsMasterThread() )
+// --------------------------------------------------------------------
+inline G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
+                                              G4Material* medium,
+                                              G4Material* solid)
+{
+  if(G4Threading::IsMasterThread())
   {
     G4STRead STreader;
     return STreader.Read(filename, medium, solid);
   }
   else
   {
-    return 0;
+    return nullptr;
   }
 }
 
-//
+// --------------------------------------------------------------------
 // Methods for Reader
-//
+// --------------------------------------------------------------------
 
 inline G4bool G4GDMLParser::IsValid(const G4String& name) const
 {
   return reader->IsValidID(name);
 }
 
-inline 
-G4double G4GDMLParser::GetConstant(const G4String& name) const
+inline G4double G4GDMLParser::GetConstant(const G4String& name) const
 {
   return reader->GetConstant(name);
 }
 
-inline 
-G4double G4GDMLParser::GetVariable(const G4String& name) const
+inline G4double G4GDMLParser::GetVariable(const G4String& name) const
 {
   return reader->GetVariable(name);
 }
 
-inline 
-G4double G4GDMLParser::GetQuantity(const G4String& name) const
+inline G4double G4GDMLParser::GetQuantity(const G4String& name) const
 {
   return reader->GetQuantity(name);
 }
 
-inline 
-G4ThreeVector G4GDMLParser::GetPosition(const G4String& name) const
+inline G4ThreeVector G4GDMLParser::GetPosition(const G4String& name) const
 {
   return reader->GetPosition(name);
 }
 
-inline 
-G4ThreeVector G4GDMLParser::GetRotation(const G4String& name) const
+inline G4ThreeVector G4GDMLParser::GetRotation(const G4String& name) const
 {
   return reader->GetRotation(name);
 }
 
-inline 
-G4ThreeVector G4GDMLParser::GetScale(const G4String& name) const
+inline G4ThreeVector G4GDMLParser::GetScale(const G4String& name) const
 {
   return reader->GetScale(name);
 }
 
-inline 
-G4GDMLMatrix G4GDMLParser::GetMatrix(const G4String& name) const
+inline G4GDMLMatrix G4GDMLParser::GetMatrix(const G4String& name) const
 {
   return reader->GetMatrix(name);
 }
 
-inline 
-G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name) const
+inline G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name) const
 {
   return reader->GetVolume(name);
+}
+
+inline G4VPhysicalVolume*
+G4GDMLParser::GetPhysVolume(const G4String& name) const
+{
+  return reader->GetPhysvol(name);
 }
 
 inline G4VPhysicalVolume*
@@ -175,33 +178,28 @@ G4GDMLParser::GetWorldVolume(const G4String& setupName) const
   return reader->GetWorldVolume(setupName);
 }
 
-inline 
-G4GDMLAuxListType
+inline G4GDMLAuxListType
 G4GDMLParser::GetVolumeAuxiliaryInformation(G4LogicalVolume* logvol) const
 {
   return reader->GetVolumeAuxiliaryInformation(logvol);
 }
 
-inline
-const G4GDMLAuxMapType* G4GDMLParser::GetAuxMap() const
+inline const G4GDMLAuxMapType* G4GDMLParser::GetAuxMap() const
 {
   return reader->GetAuxMap();
 }
 
-inline
-const G4GDMLAuxListType* G4GDMLParser::GetAuxList() const
+inline const G4GDMLAuxListType* G4GDMLParser::GetAuxList() const
 {
   return reader->GetAuxList();
 }
 
-inline
-void G4GDMLParser::AddAuxiliary(G4GDMLAuxStructType myaux)
+inline void G4GDMLParser::AddAuxiliary(G4GDMLAuxStructType myaux)
 {
   return writer->AddAuxiliary(myaux);
 }
 
-inline
-void G4GDMLParser::StripNamePointers() const
+inline void G4GDMLParser::StripNamePointers() const
 {
   reader->StripNames();
 }
@@ -246,31 +244,32 @@ inline void G4GDMLParser::Clear()
   reader->Clear();
 }
 
-//
+// --------------------------------------------------------------------
 // Methods for Writer
-//
+// --------------------------------------------------------------------
 
-inline 
-void G4GDMLParser::AddModule(const G4VPhysicalVolume* const physvol)
+inline void G4GDMLParser::AddModule(const G4VPhysicalVolume* const physvol)
 {
   writer->AddModule(physvol);
 }
 
-inline 
-void G4GDMLParser::AddModule(const G4int depth)
+inline void G4GDMLParser::AddModule(const G4int depth)
 {
   writer->AddModule(depth);
 }
 
-inline 
-void G4GDMLParser::SetAddPointerToName(G4bool set)
+inline void G4GDMLParser::SetAddPointerToName(G4bool set)
 {
   writer->SetAddPointerToName(set);
 }
 
-inline
-void G4GDMLParser::AddVolumeAuxiliary(G4GDMLAuxStructType myaux,
-                                      const G4LogicalVolume* const lvol)
+inline void G4GDMLParser::AddVolumeAuxiliary(G4GDMLAuxStructType myaux,
+                                             const G4LogicalVolume* const lvol)
 {
   writer->AddVolumeAuxiliary(myaux, lvol);
+}
+
+inline void G4GDMLParser::SetOutputFileOverwrite(G4bool flag)
+{
+  writer->SetOutputFileOverwrite(flag);
 }

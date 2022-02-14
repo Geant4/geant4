@@ -1,6 +1,6 @@
 #---Adding all GDML examples subdirectories explicitly 
 
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 add_subdirectory(G01)
 add_subdirectory(G02)

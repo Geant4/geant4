@@ -12,10 +12,82 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-<<<<<<< HEAD
-	 
-14-10-16 G.Folger
-=======
+     
+13-10-21 I. Hrivnacova (exhadr06-V10-07-14)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+11-10-21 mma (exhadr06-V10-07-13)
+- HadronElasticPhysicsHP : use G4GenericMessenger instead of NeutronHPMessenger
+- RadioactiveDecayPhysics : do not change ThresholdOfHalfLife
+     
+category:)
+05-08-21 mma (exhadr06-V10-07-12)
+- ElectromagneticPhysics : update EM parameters
+- RadioactiveDecayPhysics : new constructor, include G4Radioactivation process,
+                            inactivate atomic deexcitation
+     
+27-07-21 mma (exhadr06-V10-07-11)
+- RunAction::CountProcesses() : add a protection if (process == nullptr)
+- TrackingAction, RunAction : add a comment for excited states
+
+19-07-21 I. Hrivnacova (exhadr06-V10-07-10)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+22-06-21 G. Cosmo (exhadr06-V10-07-09)
+- Use new CLHEP units for minute, hour, day, year and millielectronvolt
+  in PhysicsList.
+
+06-04-21 mma (exhadr06-V10-07-08)
+- main : set true few env variables for ParticleHP
+         more on stepping verbose initialsation
+     
+22-03-21 mma (exhadr06-V10-07-07)
+- TrackingAction : add TrackingMessenger with 2 commands
+- minor cosmetic in Run.cc
+     
+15-03-21 mma (exhadr06-V10-07-06)
+- DetectorConstruction::SetRadius() : update fWorldSize
+- Migration to G4RunManagerFactory and G4SteppingVerboseWithUnits
+     
+04-03-21 A. Ribon (exhadr06-V10-07-05)
+- GammaNuclearPhysics, GammaNuclearPhysicsLEND : replaced
+  G4PhotoNuclearProcess (that has been deleted) with
+  G4HadronInelasticProcess.
+
+30-01-21 mma (exhadr06-V10-07-04)
+- PhysicsList: add new units for time
+     
+27-01-21 mma (exhadr06-V10-07-03)
+- TrackingAction, Run: print meanLife
+     
+15-01-21 mma (exhadr06-V10-07-02)
+- TrackingAction: count secondary particles with meanLife > 0.
+     
+05-01-21 mma (exhadr06-V10-07-01)
+- PhysicsList: add GammaNuclearPhysicsLEND
+      
+22-12-20 mma (exhadr06-V10-07-00)
+- update ElectromagneticPhysics
+- suppress command /process/list in several macros
+     
+16-10-20 mma (exhadr06-V10-06-03)
+- add macro singleFission.mac
+- TrackingAction : add commented code for singleFission
+
+05-08-20 A. Ribon (exhadr06-V10-06-02)
+- Hadr06.cc , fission.mac , envHadronic.(c)sh : removed deprecated
+  HP environmental variables and replaced them with corresponding
+  C++ calls in the main, and UI commands in the macros. 
+  (The two shell-script files will be removed in G4 11.0.)
+
+10-06-20 mma (exhadr06-V10-06-01)
+- HistoManager, TrackingAction : plot particle energy at creation
+     
+08-05-20 mma (exhadr06-V10-06-00)
+- GammaNuclearPhysics : add G4LowEGammaNuclearModel
 
 04-10-18 mma (exhadr06-V10-04-04)
 - PhysicsList : use G4IonPhysicsXS

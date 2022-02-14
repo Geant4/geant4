@@ -1,0 +1,98 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// Author: Ivana Hrivnacova, 15/09/2020  (ivana@ipno.in2p3.fr)
+
+#include "G4AnalysisUtilities.hh"
+
+#include "tools/wroot/to"
+#include "tools/wroot/file"
+#include "tools/zlib"
+
+//_____________________________________________________________________________
+template <typename HT>
+G4bool G4RootHnFileManager<HT>::Write(
+  tools::wroot::directory* directory, HT* ht, const G4String& htName)
+{
+  // write histpgram
+  return to(*directory, *ht, htName);
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+G4bool G4RootHnFileManager<HT>::WriteExtra(
+  HT* ht, const G4String& htName, const G4String& fileName)
+{
+  auto result = true;
+
+  // // create a new file
+  auto rfile = new tools::wroot::file(G4cout, fileName);
+  // TO DO
+  // rfile->add_ziper('Z', tools::compress_buffer);
+  // rfile->set_compression(fState.GetCompressionLevel());
+  if ( ! rfile ) return false;
+
+  // no directory supported in this mode
+  auto hdirectory = &(rfile->dir());
+  if ( ! hdirectory ) return false;
+
+  // write histo
+  result &= Write(hdirectory, ht, htName);
+
+  // write file
+  unsigned int n;
+  result &= rfile->write(n);
+
+  // close file
+  rfile->close();
+
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+G4bool G4RootHnFileManager<HT>::Write(
+  HT* ht, const G4String& htName, G4String& fileName)
+{
+  if ( fileName.empty()) {
+    // should not happen
+    G4cerr << "!!! Root file name not defined." << G4endl;
+    G4cerr << "!!! Write " << htName << " failed." << G4endl;
+    return false;
+  }
+
+  auto hdirectory = std::get<1>(*fFileManager->GetTFile(fileName));
+  if ( hdirectory == nullptr ) {
+    G4Analysis::Warn(
+      "Failed to get Root file " + fileName + " histo directory.",
+      fkClass, "Write");
+    return false;
+  }
+
+  auto result = Write(hdirectory, ht, htName);
+  fFileManager->LockDirectoryNames();
+  return result;
+}

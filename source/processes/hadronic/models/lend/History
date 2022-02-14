@@ -7,12 +7,53 @@
             History file for LEND Cross Section and Model
             ---------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+4 August 2021 Alberto Ribon (hadr-lend-V10-07-02)
+-------------------------------------------------
+- G4LENDModel, G4LENDCapture, G4LENDElastic, G4LENDFission, G4LENDInelastic :
+  set creator model ID for secondaries, using the new version of
+  G4PhysicsModelCatalog
+
+16 April 2021 Ben Morgan (hadr-lend-V10-07-01)
+--------------------------------------------------
+- Migrate build to modular CMake API
+
+13 April 2021 Alberto Ribon   (hadr-lend-V10-07-00)
+---------------------------------------------------
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
+  Clean-up of old directories no longer present.
+
+12 November 2020 Ben Morgan   (hadr-lend-V10-06-03)
+---------------------------------------------------
+- Apply typo fixes from Gurkan Myczko (https://github.com/Geant4/geant4/pull/15)
+
+30 April 2020  Ben Morgan     (hadr-lend-V10-06-02)
+---------------------------------------------------
+-  Remove obsolete GRANULAR_DEPENDENCIES entries
+
+30 March 2020  Dennis Wright  (hadr-lend-V10-06-01)
+---------------------------------------------------
+- fix of bug report #2174:
+   Create class G4LENDGammaModel to sample GND gamma-nuclear reactions
+   Create class G4LENDGammaCrossSection to sample GND gamma-nuclear reactions
+   add documentation to MCGIDI_outputChannel.cc
+   rewrite T. Koi's version of G4LENDInelastic.cc to take care of large
+   baryon number violations
+
+06 January 2020 Ben Morgan (hadr-lend-V10-06-00)
+------------------------------------------------
+- Patch from Tech-X:
+  Remove inclusion of amp_math on Windows as it is not required
 
 29 May 2019  Dennis Wright  (hadr-lend-V10-05-01)
 -------------------------------------------------
@@ -22,7 +63,7 @@ code and to keep track of all tags.
 -----------------------------------------------
 - GIDI_settings_group, GIDI_settings_flux_order, GIDI_settings_flux,
   GIDI_settings_processedFlux : added assignment operator in these classes
-  (which had the copy constructor and destructor) to fix a few warnings 
+  (which had the copy constructor and destructor) to fix a few warnings
   seen for the first time in g++ 9.1 .
 
 9 November 2018 Gabriele Cosmo (hadr-lend-V10-04-00)
@@ -42,7 +83,7 @@ code and to keep track of all tags.
 10 October 2017 Tatsumi Koi (hadr-lend-V10-03-10)
 -----------------------------------------------
 -Adding G4LENDCombinedModel and G4LENDCombinedCrossSection
--Adding DumpLENDTargetInfo 
+-Adding DumpLENDTargetInfo
 -Reducing default (VerboseLevel=0) output from models and cross sections
 
 9 October 2017 Tatsumi Koi (hadr-lend-V10-03-09)
@@ -72,7 +113,7 @@ code and to keep track of all tags.
 
 23 May 2017 Tatsumi Koi (hadr-lend-V10-03-03)
 -----------------------------------------------
--Fix bug related to "fallthrough" and add comment 
+-Fix bug related to "fallthrough" and add comment
 
 12 May 2017 Gabriele Cosmo (hadr-lend-V10-03-02)
 -----------------------------------------------
@@ -124,7 +165,7 @@ code and to keep track of all tags.
 
 16 November 2015 Tatsumi Koi (hadr-lend-V10-01-13)
 -----------------------------------------------
--Fix of problem on GNUmake system 
+-Fix of problem on GNUmake system
 
 14 November 2015 Tatsumi Koi (hadr-lend-V10-01-12)
 -----------------------------------------------
@@ -196,7 +237,7 @@ code and to keep track of all tags.
 
 2 June 2014 Tatsumi Koi (hadr-lend-V10-00-05)
 -----------------------------------------------
--Protect divide overflow 
+-Protect divide overflow
        src/tpia_misc.cc
        src/tpia_kinetics.cc
 
@@ -205,13 +246,13 @@ code and to keep track of all tags.
 -----------------------------------------------
 -Fix wrong usage of IonTable
 	src/G4LENDManager.cc
--Relax Fatal Energy CheckLevel 
+-Relax Fatal Energy CheckLevel
 	include/G4LENDFission.hh
 	src/G4LENDFission.cc
 
 28 March 2014 Tatsumi Koi (hadr-lend-V10-00-03)
 -----------------------------------------------
--Bug fix 
+-Bug fix
 LEND used G4ParticleTable::GetParticleTable()->GetIon(,,) which obsolete in v10.00
 	src/G4LENDCapture.cc
 	src/G4LENDModel.cc
@@ -238,7 +279,7 @@ Fix compilation warnings detected by clang compiler on MacOS-10.9.
 
 6 May 2013 Tatsumi Koi (hadr-lend-V09-06-01)
 --------------------------------------------
-Fix for "warning: conversion specifies type 'int' but the argument has type 'size_t'" 
+Fix for "warning: conversion specifies type 'int' but the argument has type 'size_t'"
 	src/xData.cc
 
 2 May 2013 Tatsumi Koi (hadr-lend-V09-06-00)
@@ -273,11 +314,11 @@ constants, in plan to remove implicit inclusion from globals.hh.
 
 7 August 2012 Gabriele Cosmo (hadr-lend-V09-05-02)
 ----------------------------------------------
-Fixed GNUmakefile for use of internal expat library, if explicitely chosen.
+Fixed GNUmakefile for use of internal expat library, if explicitly chosen.
 
 13 June 2012 Tatsumi Koi (hadr-lend-V09-05-01)
 ----------------------------------------------
-Fix shadowing compiler warnings 
+Fix shadowing compiler warnings
 	include/G4LENDCrossSection.hh
 	src/G4LENDModel.cc
 	src/G4LENDFission.cc
@@ -300,7 +341,7 @@ fix problem, after setting changes
 
 25 September 2011 Tatsumi Koi (hadr-lend-V09-04-23)
 ----------------------------------------------
-migrate to integer A and Z 
+migrate to integer A and Z
 	src/G4LENDModel.cc
 	src/G4LENDElastic.cc
 	src/G4LENDInelastic.cc
@@ -320,7 +361,7 @@ migrate to integer A and Z
 ----------------------------------------------
 - Introduce BuildPhysicsTable
         include/G4LENDModel.hh
-- Bug fix 
+- Bug fix
         src/G4LENDCaptureCrossSection.cc
         src/G4LENDElasticCrossSection.cc
         src/G4LENDFissionCrossSection.cc
@@ -358,13 +399,13 @@ This tag keeps OLD interface of VCrossSectionDataSet
 
 2 June 2011 Tatsumi Koi (hadr-lend-V09-04-15)
 ----------------------------------------------
-- Fix bug 
+- Fix bug
 	include/tpia_target.h
 
 2 June 2011 Ben Morgan (hadr-lend-V09-04-14)
 ----------------------------------------------
-- sources.cmake : Added support for expat in the CMake build. The expat 
-  include directories are added to the include path, and the module is linked 
+- sources.cmake : Added support for expat in the CMake build. The expat
+  include directories are added to the include path, and the module is linked
   to the expat libraries.
   The interface variables EXPAT_INCLUDE_DIRS and EXPAT_LIBRARIES are used
   so there is no dependence on whether the internal or system expat is used.
@@ -388,12 +429,12 @@ This tag keeps OLD interface of VCrossSectionDataSet
 
 30 May 2011 Tatsumi Koi (hadr-lend-V09-04-12)
 ------------------------------------------------
-- Set proper name 
+- Set proper name
 	include/G4LENDElastic.hh
-- Change format of output messages 
+- Change format of output messages
 	src/G4LENDCrossSection.cc
 	src/G4LENDModel.cc
-- Introduce verboseLevel and its changing method 
+- Introduce verboseLevel and its changing method
 	include/G4LENDManager.hh
 	src/G4LENDManager.cc
 
@@ -405,7 +446,7 @@ This tag keeps OLD interface of VCrossSectionDataSet
 ------------------------------------------------
 - Rename endlXXX -> lendXXX in private values
 - Move create_used_target_map from constructor to BuildPhysicsTable
-  Cross Sections 
+  Cross Sections
 - Set proper name
 - Set proper modelName
 - Fix link error undefined reference to `tpia_samplingMethods_linear'
@@ -413,8 +454,8 @@ This tag keeps OLD interface of VCrossSectionDataSet
 
 26 May 20111 Gunter Folger (hadr-lend-V09-04-09)
 ------------------------------------------------
-- Fix compiler warning in tpia_mac.cc on slc5/gcc43, 
-	empty body of for() at line 321 
+- Fix compiler warning in tpia_mac.cc on slc5/gcc43,
+	empty body of for() at line 321
 
 26 May 2011 Gabriele Cosmo (hadr-lend-V09-04-08)
 ------------------------------------------------
@@ -429,9 +470,9 @@ This tag keeps OLD interface of VCrossSectionDataSet
 18 May 2011 Gunter Folger (hadr-lend-V09-04-06)
 ------------------------------------------------
 - include expat headers froom externals on Windows
-- xDataMisc.cc: imporve condition to include unistd.h/direct.h 
+- xDataMisc.cc: imporve condition to include unistd.h/direct.h
    to avoid warning on Windows from g++ dependency building.
-    
+
 5 May 2011 Tatsumi Koi (hadr-lend-V09-04-05)
 ------------------------------------------------
 - protect by namescope GIDI
@@ -460,7 +501,7 @@ This tag keeps OLD interface of VCrossSectionDataSet
 
 25 Apr 2011 Tatsumi Koi (hadr-lend-V09-04-01)
 ------------------------------------------------
-- delete unneccesary "namespace std" 
+- delete unneccesary "namespace std"
 	src/G4LENDCapture.cc
 	src/G4LENDCaptureCrossSection.cc
 	src/G4LENDCrossSection.cc
@@ -473,7 +514,7 @@ This tag keeps OLD interface of VCrossSectionDataSet
 	src/G4LENDManager.cc
 	src/G4LENDModel.cc
 	src/G4LENDUesdTarget.cc
-- move "namespace std" to proper position 
+- move "namespace std" to proper position
 	src/GIDI4GEANT.cc
 	src/GIDI4GEANT_map.cc
 	src/GIDI4GEANT_target.cc
@@ -481,7 +522,7 @@ This tag keeps OLD interface of VCrossSectionDataSet
 
 1 Apr 2011 Tatsumi Koi (hadr-lend-V09-04-00)
 ------------------------------------------------
-- delete "namespace std" in headers 
+- delete "namespace std" in headers
 	include/GIDI4GEANT_map.hpp
 	include/GIDI4GEANT.hpp
 	include/GIDI4GEANT_target.hpp
@@ -490,7 +531,7 @@ This tag keeps OLD interface of VCrossSectionDataSet
 25 Nov 2010 Tatsumi Koi (hadr-lend-V09-03-07)
 ------------------------------------------------
 - Modified expected value of G4LENDDATA
-	From LENDDATA/xmcf.n_1.map          
+	From LENDDATA/xmcf.n_1.map
       	To   LENDDATA/
 
 25 Nov 2010 Tatsumi Koi (hadr-lend-V09-03-06)

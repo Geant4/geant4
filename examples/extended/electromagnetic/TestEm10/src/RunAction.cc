@@ -32,8 +32,8 @@
 
 #include "RunAction.hh"
 #include "RunMessenger.hh"
-#include "Analysis.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4ios.hh"
 
@@ -67,6 +67,7 @@ void RunAction::BookHisto()
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
   analysisManager->SetFileName("testem10");
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetFirstHistoId(1);     // start histogram numbering from 1

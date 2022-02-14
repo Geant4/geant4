@@ -1,7 +1,7 @@
 #---Adding examples subdirectories explicitly
 #   and a custom target to for building all basic examples -------------
 
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 add_subdirectory(B2b)
 

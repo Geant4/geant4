@@ -29,7 +29,7 @@
 // logical volume.
 //
 // Author: John Apostolakis (John.Apostolakis@cern.ch), 26-06-1997
-// ----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalVolume.hh"

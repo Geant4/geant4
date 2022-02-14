@@ -29,7 +29,7 @@
 //
 #include "STCyclotronRun.hh"
 #include "STCyclotronSensitiveFoil.hh"
-#include "STCyclotronAnalysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4RunManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"

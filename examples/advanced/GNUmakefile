@@ -1,27 +1,17 @@
-# --------------------------------------------------------------
-# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
-# --------------------------------------------------------------
+name := cloud
+G4TARGET := $(name)
+G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../..
+  G4INSTALL = ../../..
 endif
- 
-include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIRS =  gammaray_telescope underground_physics xray_fluorescence xray_telescope
-SUBDIRS += brachytherapy hadrontherapy iort_therapy medical_linac
-SUBDIRS += purging_magnet radioprotection human_phantom
-SUBDIRS += air_shower microbeam microelectronics nanobeam
-SUBDIRS += composite_calorimeter lAr_calorimeter
-SUBDIRS += amsEcal ChargeExchangeMC eRosita
+.PHONY: all
+all: lib bin
 
-.PHONY : all clean clean_libs
+include $(G4INSTALL)/config/binmake.gmk
 
-all:
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
+visclean:
+	rm -f g4*.prim g4*.eps g4*.wrl
+	rm -f .DAWN_*
 
-clean:
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
-
-clean_libs:
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean_libs); done

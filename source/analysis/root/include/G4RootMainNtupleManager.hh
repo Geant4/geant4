@@ -32,20 +32,27 @@
 #define G4RootMainNtupleManager_h 1
 
 #include "G4BaseAnalysisManager.hh"
+#include "G4NtupleBookingManager.hh"
 #include "G4TNtupleDescription.hh"
 #include "G4RootNtupleManager.hh"
+#include "G4RootFileDef.hh"
 #include "globals.hh"
 
 #include <vector>
+#include <string_view>
 
+class G4RootFileManager;
 class G4RootNtupleManager;
+class G4NtupleBookingManager;
 
 namespace tools {
 namespace wroot {
-class file;
 class ntuple;
 }
 }
+
+// Types alias
+using RootNtupleDescription = G4TNtupleDescription<tools::wroot::ntuple, G4RootFile>;
 
 class G4RootMainNtupleManager : public G4BaseAnalysisManager
 {
@@ -53,59 +60,51 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
   friend class G4RootNtupleManager;
 
   public:
-    explicit G4RootMainNtupleManager(G4RootNtupleManager* ntupleBuilder,
-                                     G4bool rowWise,
-                                     const G4AnalysisManagerState& state);
-    ~G4RootMainNtupleManager();
+    G4RootMainNtupleManager(
+               G4RootNtupleManager* ntupleBuilder,
+               std::shared_ptr<G4NtupleBookingManager> bookingManager,
+               G4bool rowWise, G4int fileNumber,
+               const G4AnalysisManagerState& state);
+    G4RootMainNtupleManager() = delete;
+    virtual ~G4RootMainNtupleManager() = default;
 
   protected:
-    // Types alias
-    using NtupleType = tools::wroot::ntuple;
-    using NtupleDescriptionType = G4TNtupleDescription<NtupleType>;
-
-    // Methods to manipulate ntuples  
-    void   CreateNtuple(const tools::ntuple_booking& ntupleBooking, G4bool warn = true);
-    void   CreateNtuplesFromBooking();
+    // Methods to manipulate ntuples
+    void   CreateNtuple(RootNtupleDescription* ntupleDescription, G4bool warn = true);
     G4bool Merge();
-    G4bool Reset(G4bool deleteNtuple);
+    G4bool Reset();
+    void ClearData();
 
     // Set/get methods
-    void SetNtupleFile(std::shared_ptr<tools::wroot::file> rfile);
-    void SetNtupleDirectory(tools::wroot::directory*  directory);
+    void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
     void SetRowWise(G4bool rowWise);
-    std::shared_ptr<tools::wroot::file> GetNtupleFile() const;
-    tools::wroot::directory*  GetNtupleDirectory() const;
+    std::shared_ptr<G4RootFile> GetNtupleFile(RootNtupleDescription* ntupleDescription) const;
 
     // Access functions
-    const std::vector<NtupleDescriptionType*>& GetNtupleDescriptionVector() 
-      { return fNtupleBuilder->GetNtupleDescriptionVector(); }
-    const std::vector<tools::wroot::ntuple*>& GetNtupleVector() 
+    const std::vector<tools::wroot::ntuple*>& GetNtupleVector()
       { return fNtupleVector; }
     unsigned int GetBasketEntries() const;
 
   private:
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootMainNtupleManager" };
+
     // Data members
-    G4RootNtupleManager*  fNtupleBuilder;
+    G4RootNtupleManager* fNtupleBuilder { nullptr };
+    std::shared_ptr<G4NtupleBookingManager> fBookingManager { nullptr };
+    std::shared_ptr<G4RootFileManager> fFileManager { nullptr };
     G4bool  fRowWise;
-    std::shared_ptr<tools::wroot::file>  fNtupleFile;
-    tools::wroot::directory*  fNtupleDirectory;
-    std::vector<tools::wroot::ntuple*>   fNtupleVector;
+    G4int  fFileNumber;
+    std::vector<tools::wroot::ntuple*>  fNtupleVector;
+    std::vector<RootNtupleDescription*>  fNtupleDescriptionVector;
 };
 
-inline void G4RootMainNtupleManager::SetNtupleFile(std::shared_ptr<tools::wroot::file> rfile) 
-{ fNtupleFile = rfile; }
-
-inline void G4RootMainNtupleManager::SetNtupleDirectory(tools::wroot::directory*  directory)
-{ fNtupleDirectory = directory; }
+inline void  G4RootMainNtupleManager::SetFileManager(
+  std::shared_ptr<G4RootFileManager> fileManager)
+{ fFileManager = fileManager; }
 
 inline void G4RootMainNtupleManager::SetRowWise(G4bool rowWise)
 { fRowWise = rowWise; }
-
-inline std::shared_ptr<tools::wroot::file> G4RootMainNtupleManager::GetNtupleFile() const 
-{ return fNtupleFile; }
-
-inline tools::wroot::directory*  G4RootMainNtupleManager::GetNtupleDirectory() const
-{ return fNtupleDirectory; }
 
 inline unsigned int G4RootMainNtupleManager::GetBasketEntries() const
 { return fNtupleBuilder->GetBasketEntries(); }

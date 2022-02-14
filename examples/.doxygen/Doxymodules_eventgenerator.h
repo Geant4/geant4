@@ -127,6 +127,15 @@
 
 /** @} */
 
+/** @defgroup extended_eventgenerator_pythia_py8decayer py8decayer
+ *  Eventgenerator example pythia_py8decayer has its
+ *  <a href="../html_py8decayer/html/index.html">standalone documentation </a>
+ *  @ingroup extended_eventgenerator
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_eventgenerator_userPrimaryGenerator userPrimaryGenerator
  *  Eventgenerator example userPrimaryGenerator has its 
  *  <a href="../html_userPrimaryGenerator/html/index.html">standalone documentation </a>

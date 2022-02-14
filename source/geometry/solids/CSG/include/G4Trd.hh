@@ -166,7 +166,7 @@ class G4Trd : public G4CSGSolid
   private:
 
     G4double halfCarTolerance;
-    G4double fDx1,fDx2,fDy1,fDy2,fDz;
+    G4double fDx1,fDx2,fDy1,fDy2,fDz,fHx,fHy;
     struct { G4double a,b,c,d; } fPlanes[4];
 };
 

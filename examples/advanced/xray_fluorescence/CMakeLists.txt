@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(xray_fluorescence)
 
 #----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -46,7 +46,7 @@ target_link_libraries(XrayFluo ${Geant4_LIBRARIES}  )
 # relies on these scripts being in the current working directory.
 #
 set(xray_fluorescence_SCRIPTS
-    initInter.mac livermore.mac vis.mac SILIefficiency.dat SILIresponse.dat 
+    initInter.mac livermore.mac vis.mac SILIefficiency.dat SILIresponse.dat
     B_flare.dat C_flare.dat M_flare.dat response.dat
   )
 

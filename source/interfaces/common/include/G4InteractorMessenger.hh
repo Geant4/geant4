@@ -47,6 +47,9 @@ private:
   G4UIcommand* addButton;
   G4UIcommand* addIcon;
   G4UIcommand* sys;
+  G4UIcommand* outputStyle;
+  G4UIcommand* nativeMenu;
+  G4UIcommand* clearMenu;
 };
 
 #endif

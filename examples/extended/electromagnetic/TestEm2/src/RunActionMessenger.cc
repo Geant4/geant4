@@ -44,9 +44,7 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
 :G4UImessenger(),fRun(run),
  fRunDir(0),
  fAccCmd(0),
- fVerbCmd(0), 
- fHistoDir(0),        
- fHFileCmd(0)
+ fVerbCmd(0)
 {
   fRunDir = new G4UIdirectory("/testem/run/");
   fRunDir->SetGuidance("run control");
@@ -61,12 +59,6 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
   fVerbCmd = new G4UIcmdWithAnInteger("/testem/run/verbose",this);
   fVerbCmd->SetGuidance("set verbose level for runAction");
   fVerbCmd->SetParameterName("verbose",false);
-    
-  fHistoDir = new G4UIdirectory("/testem/histo/");
-  fHistoDir->SetGuidance("histograms control");
-  
-  fHFileCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
-  fHFileCmd->SetGuidance("set name for the histograms file");    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,8 +68,6 @@ RunActionMessenger::~RunActionMessenger()
   delete fVerbCmd;
   delete fAccCmd;
   delete fRunDir;
-  delete fHFileCmd;
-  delete fHistoDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,9 +79,6 @@ void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if (command == fVerbCmd )
    { fRun->SetVerbose(fVerbCmd->GetNewIntValue(newValue));}
-      
-  if (command == fHFileCmd)
-   { fRun->SetHistoName(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

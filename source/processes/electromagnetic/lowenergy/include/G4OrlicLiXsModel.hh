@@ -25,7 +25,6 @@
 //
 //
 // Author: Haifa Ben Abdelouahed
-//         
 //
 // History:
 // -----------
@@ -52,31 +51,21 @@
 #include "G4AtomicTransitionManager.hh"
 
 class G4OrlicLiXsModel 
-
 {
 public:
-
-  G4OrlicLiXsModel();
-
+  explicit G4OrlicLiXsModel();
   virtual ~G4OrlicLiXsModel();
 
-
-//according to I.ORLIC, C.H.SOW and S.M.TANG,International Journal of PIXE.Vol.4(1997) 217-230	
-		     
+  //according to I.ORLIC, C.H.SOW and S.M.TANG,International Journal of PIXE.Vol.4(1997) 217-230			     
   G4double CalculateL1CrossSection(G4int zTarget, G4double energyIncident);
-
   G4double CalculateL2CrossSection(G4int zTarget, G4double energyIncident);				    
- 
   G4double CalculateL3CrossSection(G4int zTarget, G4double energyIncident);
 
+  G4OrlicLiXsModel(const G4OrlicLiXsModel&) = delete;
+  G4OrlicLiXsModel & operator = (const G4OrlicLiXsModel &right) = delete;
+
 private:
-
-
-  G4OrlicLiXsModel(const G4OrlicLiXsModel&);
-  G4OrlicLiXsModel & operator = (const G4OrlicLiXsModel &right);
-
   G4AtomicTransitionManager*  transitionManager;
-
 };
 
 #endif

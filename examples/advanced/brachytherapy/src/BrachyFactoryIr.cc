@@ -34,8 +34,9 @@
 //
 // $Id: BrachyFactoryIr.cc 69765 2013-05-14 10:11:22Z gcosmo $
 //
-#include "globals.hh"
-#include "BrachyFactoryIr.hh"
+#include "BrachyDetectorMessenger.hh"
+#include "BrachyDetectorConstructionFlexi.hh"
+#include "BrachyFactoryFlexi.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"
@@ -43,26 +44,25 @@
 #include "G4IonTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh" 
-#include "BrachyDetectorMessenger.hh"
-#include "BrachyDetectorConstructionIr.hh"
+#include "globals.hh"
 
 BrachyFactoryIr:: BrachyFactoryIr()
 {
-  iridiumSource = new  BrachyDetectorConstructionIr(); 
+  fFlexiSource = new  BrachyDetectorConstructionFlexi(); 
 }
 
 BrachyFactoryIr:: ~BrachyFactoryIr()
 {
-  delete iridiumSource;
+  delete fFlexiSource;
 }
  
 void BrachyFactoryIr::CreateSource(G4VPhysicalVolume* mother)
 {
-  iridiumSource -> ConstructIridium(mother);
+  fFlexiSource -> ConstructFlexi(mother);
 }
 
-void BrachyFactoryIr::CleanSource()
+void BrachyFactoryFlexi::CleanSource() 
 {
-  iridiumSource -> CleanIridium();
-  iridiumSource = 0;
+  fFlexiSource -> CleanFlexi();
+  fFlexiSource = nullptr;
 }

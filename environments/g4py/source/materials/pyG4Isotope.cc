@@ -29,8 +29,8 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include "G4Version.hh"
-#include "pyG4indexing.hh"
 #include "G4Isotope.hh"
 
 using namespace boost::python;

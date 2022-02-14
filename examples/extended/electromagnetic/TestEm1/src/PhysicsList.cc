@@ -274,7 +274,7 @@ void PhysicsList::AddDecay()
   particleIterator->reset();
   while( (*particleIterator)() ){
     G4ParticleDefinition* particle = particleIterator->value();
-    if (fDecayProcess->IsApplicable(*particle)) 
+    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) 
       ph->RegisterProcess(fDecayProcess, particle);    
   }
 }
@@ -308,13 +308,11 @@ void PhysicsList::AddStepMax()
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
   while ((*particleIterator)()){
-      G4ParticleDefinition* particle = particleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle))
-        {
-          pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }
+    if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
+      pmanager->AddDiscreteProcess(stepMaxProcess);
   }
 }
 

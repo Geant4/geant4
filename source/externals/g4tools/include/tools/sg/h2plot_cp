@@ -1,0 +1,150 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_h2plot_cp
+#define tools_sg_h2plot_cp
+
+// Inheritance :
+#include "h2plot"
+
+namespace tools {
+namespace sg {
+
+class h1d2plot_cp : public h1d2plot {
+public:
+  TOOLS_SCLASS(tools::sg::h1d2plot_cp)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<h1d2plot_cp>(this,a_class)) {return p;}
+    return h1d2plot::cast(a_class);
+  }
+public:
+  virtual plottable* copy() const {return new h1d2plot_cp(*this);}
+public:
+  h1d2plot_cp(const histo::h1d& a_data)
+  :h1d2plot(m_cp) //give ref of m_cp to h1d2plot.
+  ,m_cp(a_data)   //do a local copy.
+  //WARNING : the upper is ok as long as h1d2plot constructor does nothing
+  //          else than keeping the ref to m_cp. Else it would do
+  //          something on an empty histo (and not on a copy of the
+  //          passed a_data).
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~h1d2plot_cp(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  h1d2plot_cp(const h1d2plot_cp& a_from)
+  :plottable(a_from)
+  ,bins1D(a_from)
+  ,h1d2plot(m_cp)
+  ,m_cp(a_from.m_cp)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  h1d2plot_cp& operator=(const h1d2plot_cp& a_from){
+    h1d2plot::operator=(a_from);
+    m_cp = a_from.m_cp;
+    return *this;
+  }
+public:
+  const histo::h1d& data() const {return m_cp;}
+  histo::h1d& data() {return m_cp;}
+protected:
+  histo::h1d m_cp;
+};
+
+class h2d2plot_cp : public h2d2plot {
+public:
+  TOOLS_SCLASS(tools::sg::h2d2plot_cp)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<h2d2plot_cp>(this,a_class)) {return p;}
+    return h2d2plot::cast(a_class);
+  }
+public:
+  virtual plottable* copy() const {return new h2d2plot_cp(*this);}
+public:
+  h2d2plot_cp(const histo::h2d& a_data)
+  :h2d2plot(m_cp)
+  ,m_cp(a_data)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~h2d2plot_cp(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  h2d2plot_cp(const h2d2plot_cp& a_from)
+  :plottable(a_from),bins2D(a_from),h2d2plot(m_cp)
+  ,m_cp(a_from.m_cp)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  h2d2plot_cp& operator=(const h2d2plot_cp& a_from){
+    h2d2plot::operator=(a_from);
+    m_cp = a_from.m_cp;
+    return *this;
+  }
+protected:
+  histo::h2d m_cp;
+};
+
+class p1d2plot_cp : public p1d2plot {
+public:
+  TOOLS_SCLASS(tools::sg::p1d2plot_cp)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<p1d2plot_cp>(this,a_class)) {return p;}
+    return p1d2plot::cast(a_class);
+  }
+public:
+  virtual plottable* copy() const {return new p1d2plot_cp(*this);}
+public:
+  p1d2plot_cp(const histo::p1d& a_data)
+  :p1d2plot(m_cp)
+  ,m_cp(a_data)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~p1d2plot_cp(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  p1d2plot_cp(const p1d2plot_cp& a_from)
+  :plottable(a_from),bins1D(a_from),p1d2plot(m_cp)
+  ,m_cp(a_from.m_cp)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  p1d2plot_cp& operator=(const p1d2plot_cp& a_from){
+    p1d2plot::operator=(a_from);
+    m_cp = a_from.m_cp;
+    return *this;
+  }
+protected:
+  histo::p1d m_cp;
+};
+
+}}
+
+#endif

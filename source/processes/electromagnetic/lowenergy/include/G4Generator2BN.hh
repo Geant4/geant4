@@ -62,19 +62,16 @@ class G4Generator2BN : public G4VEmAngularDistribution
 {
 
 public:
+  explicit G4Generator2BN(const G4String& name = "");
 
-  G4Generator2BN(const G4String& name = "");
+  virtual ~G4Generator2BN(){;};
 
-  virtual ~G4Generator2BN();
-
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double out_energy,
-                                         G4int Z,
-                                         const G4Material* mat = 0);
-
-  void PrintGeneratorInformation() const;
-
-public:
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double out_energy,
+				 G4int Z,
+				 const G4Material* mat = nullptr) override;
+  
+  void PrintGeneratorInformation() const override;
 
   void SetInterpolationThetaIncrement(G4double increment) {dtheta = increment;};
   G4double GetInterpolationThetaIncrement() {return dtheta;};
@@ -84,27 +81,25 @@ public:
 
   void ConstructMajorantSurface();
 
+  G4Generator2BN & operator=(const  G4Generator2BN &right) = delete;
+  G4Generator2BN(const  G4Generator2BN&) = delete;
+
 protected:
 
   G4double CalculateFkt(G4double k, G4double theta, G4double A, G4double c) const;
   G4double Calculatedsdkdt(G4double kout, G4double theta, G4double Eel) const;
 
 private:
-
-  // hide assignment operator 
-  G4Generator2BN & operator=(const  G4Generator2BN &right);
-  G4Generator2BN(const  G4Generator2BN&);
-
   G4Generator2BS fGenerator2BS; 
-
+  static G4double Atab[320];
+  static G4double ctab[320];
   G4double b;
-  G4int index_min, index_max;
+ 
   G4double kmin, Ekmin;
   G4double dtheta;
   G4double kcut;
-  static G4double Atab[320];
-  static G4double ctab[320];
-
+ 
+  G4int index_min, index_max;
   G4int nwarn;
 
 };

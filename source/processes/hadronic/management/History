@@ -7,12 +7,134 @@
             History file for hadronic/management directory
             ----------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+16 November 2021 V. Ivanchenko (hadr-man-V10-07-10)
+---------------------------------------------------
+- G4HadronicProcessStore : attempt to fix memory leak at exit
+
+23 September 2021 A. Ribon (hadr-man-V10-07-09)
+---------------------------------------------------
+- G4HadronicProcessType : added new enum value (fEMDissociation = 310)
+  for EM dissociation process (as requested by Laurence James Nevay).
+
+04 August 2021 A. Ribon (hadr-man-V10-07-08)
+---------------------------------------------------
+- HadronicProcess : removed unused private member variable (idxIC);
+  updated the call to the G4Track method to set the model creator ID.
+
+04 June 2021 A. Ribon (hadr-man-V10-07-07)
+---------------------------------------------------
+- HadronicProcess : made public (instead of protected) the method
+  GetHadronicInteraction(). This can be useful for users to access at
+  run-time some information available from a hadronic final-state model.
+
+17 May 2021 J. Madsen (hadr-man-V10-07-06)
+---------------------------------------------------
+- Fixed TLS usage of G4HadronicProcessStore
+- Fixed loops in G4HadronicProcessStore::Clean()
+
+16 April 2021 B. Morgan (hadr-man-V10-07-05)
+---------------------------------------------------
+- Migrate build to modular CMake API
+
+13 April 2021 A. Ribon (hadr-man-V10-07-04)
+---------------------------------------------------
+- GNUmakefile, sources.cmake : moved most classes of
+  hadronic/models/management into hadronic/management
+  (with the remaining few ones moved into hadronic/util ;
+   moreover, all the classes of hadronic/model/util have been
+   moved to hadronic/util; note that the directories
+   hadronic/models/management/ and hadronic/models/util/ have
+   now been deleted).
+
+22 March 2021 A. Ribon (hadr-man-V10-07-03)
+---------------------------------------------------
+- G4HadronicEPTestMessenger : removed deprecated commands.
+
+18 March 2021 A. Ribon (hadr-man-V10-07-02)
+---------------------------------------------------
+- G4HadronInelasticProcess : moved to hadronic/mangement/ .
+
+08 March 2021 A. Ribon (hadr-man-V10-07-01)
+---------------------------------------------------
+- G4HadronInelasticProcess : removed old and unused header file
+  corresponding to the Gheisha inelastic cross section (that has been
+  deleted).
+
+04 March 2021 A. Ribon (hadr-man-V10-07-00)
+---------------------------------------------------
+- G4HadronInelasticProcess : added a new method to return the particle
+  definition (useful in practice to distinguish between baryons and
+  antibaryons, or between hadrons and ions).
+
+01 November 2020 V. Ivanchenko (hadr-man-V10-06-10)
+---------------------------------------------------
+- G4HadronicProcessStore : fixed Coverity report on the Print(..) method
+
+14 October 2020 A. Ribon (hadr-man-V10-06-09)
+---------------------------------------------------
+- G4HadronicProcess : removed the warnings when the environmental variables
+  G4Hadronic_*Level are used.
+  This is needed for system testing, in order to activate in some platforms
+  these conservation checks for all examples and tests.
+  Note that for advanced users, the use of UI commands are preferable.
+
+05 August 2020 A. Ribon (hadr-man-V10-06-08)
+---------------------------------------------------
+- G4HadronicEPTestMessenger, G4HadronicProcess : deprecated the three
+  environmental variables G4Hadronic_*Level and the corresponding old
+  UI commands "/heptst/*Level", recommending instead the new UI commands
+  "/process/had/heptst/*Level".
+
+04 August 2020 V. Ivanchenko (hadr-man-V10-06-07)
+---------------------------------------------------
+- G4HadronicProcessStore : use verbosity level from the G4HadronicParameters
+    class, add printout of cross section factor
+- G4HadronicProcess - removed unused flag
+
+20 July 2020 V. Ivanchenko (hadr-man-V10-06-06)
+---------------------------------------------------
+- G4HadronicProcessStore : extended default initialisation printout to
+  anti_lambda
+
+18 May 2020 G. Cosmo (hadr-man-V10-06-05)
+---------------------------------------------------
+- G4HadronicProcessStore: removed unnecessary use of deprecated
+  G4USE_STD11 flag in HtmlFileName(). Also indicated in GitHub PR#13.
+
+16 May 2020 V. Ivanchenko (hadr-man-V10-06-04)
+---------------------------------------------------
+- G4HadronicProcessStore : extended default initialisation printout to
+  sigma-, D-, B-.
+- G4HadronicProcess : removed check for G4HadronicException, where it
+  cannot be; limit printout on kaon0 in final state.
+
+12 May 2020 A. Ribon (hadr-man-V10-06-03)
+---------------------------------------------------
+- G4HadronicProcessStore : in the method Dump, check the internal verbosity
+  level as well as the newly introduced global hadronic verbosity level,
+  returning immediately (without printing anything) if one of these is 0.
+
+1 April 2020 V. Ivanchenko (hadr-man-V10-06-02)
+---------------------------------------------------
+- G4HadronicProcess : fixed Coverity warning to EP check method for
+    the case when primary particle remains in the interaction
+
+16 January 2020 A. Ribon (hadr-man-V10-06-01)
+---------------------------------------------------
+- G4HadLeadBias : replaced 'G4int' with 'size_t' to avoid warnings (seen on
+  Windows).
+
+3 January 2020 V. Ivanchenko (hadr-man-V10-06-00)
+---------------------------------------------------
+- G4HadronicProcess : for charge check assume, that all final electrons
+  come from internal conversion
 
 11 November 2019 A. Ribon (hadr-man-V10-05-07)
 ---------------------------------------------------
@@ -33,15 +155,15 @@ code and to keep track of all tags.
 21 August 2019 V. Ivanchenko (hadr-man-V10-05-04)
 ---------------------------------------------------
 - G4EnergyRangeManager : move operators to be private, removed
-    obsolete method, removed G4HadronicException, instead in case of 
+    obsolete method, removed G4HadronicException, instead in case of
     problem return nullptr
-- G4HadronicProcess : do not use try/catch pattern to choose hadronic 
-    interaction; decrease limit on check of offshell mass from 1.5 MeV 
+- G4HadronicProcess : do not use try/catch pattern to choose hadronic
+    interaction; decrease limit on check of offshell mass from 1.5 MeV
     to 10 keV - fixed problem 2175; removed unused headers
 
 13 July 2019 V. Ivanchenko (hadr-man-V10-05-03)
 ---------------------------------------------------
-- G4EnergyRangeManager : added short  cut - if only one model registered 
+- G4EnergyRangeManager : added short  cut - if only one model registered
     for a process no check is applied; implemented C++11 paterns
 
 11 June 2019 A. Ribon (hadr-man-V10-05-02)
@@ -53,8 +175,8 @@ code and to keep track of all tags.
 03 June 2019 V. Ivanchenko (hadr-man-V10-05-01)
 ---------------------------------------------------
 - G4HadronicProcess - removed try/couch pattern from computation of mean
-    free path, removed final state random rotation  
- 
+    free path, removed final state random rotation
+
 08 May 2019 V. Ivanchenko (hadr-man-V10-05-00)
 ---------------------------------------------------
 - G4HadronicInelasticProcess - removed default GHEISHA cross section
@@ -99,7 +221,7 @@ code and to keep track of all tags.
 
 31 May 2017 V. Ivanchenko (hadr-man-V10-04-03)
 ---------------------------------------------------
-- G4HadronicProcess, G4HadronInelasticProcess - added keyword 
+- G4HadronicProcess, G4HadronInelasticProcess - added keyword
     "override", cleanup cross section scale factor and weights
 - G4HadronicProcessStore - use "nullptr", added flag buildXSTable
     and get/set methods
@@ -119,7 +241,7 @@ code and to keep track of all tags.
 
 09 May 2018  Alberto Ribon (hadr-man-V10-04-00)
 ---------------------------------------------------
-- G4HadronicProcess : fixed warnings in gcc 8 regarding catching 
+- G4HadronicProcess : fixed warnings in gcc 8 regarding catching
     polymorphic type by value, instead of by reference.
 
 12 September 2017  Krzysztof Genser (hadr-man-V10-03-06)
@@ -135,15 +257,15 @@ code and to keep track of all tags.
 - G4HadronicProcessStore::DumpHtml(): add PrintHtml for generic ion
 - G4HadronicProcessStore::PrintHtml(): add loop to print descriptions
    of "extra" processes, including radioactive decay.
-- G4HadronicProcessStore::Clean(): add exception to prevent deletion 
-   of G4RadioactiveDecay - already deleted somwhere else. 
+- G4HadronicProcessStore::Clean(): add exception to prevent deletion
+   of G4RadioactiveDecay - already deleted somwhere else.
 
 11 May 2017 V. Ivanchenko (hadr-man-V10-03-03)
 10 May 2017 V. Ivanchenko (hadr-man-V10-03-00)
 ---------------------------------------------------
 - G4HadronicProcess - correctly check charge and energy balance
-    in the case of e- internal convertion; improved initialisation
-    for constructors 
+    in the case of e- internal conversion; improved initialisation
+    for constructors
 
 01 July 2016 V. Ivanchenko (hadr-man-V10-02-03)
 ---------------------------------------------------
@@ -160,7 +282,7 @@ code and to keep track of all tags.
 - G4HadronicProcess - added flag of "integral" approach to take into
     account cross section change at a step; use nullptr;
     do not create new materials in the method GetElementCrossSection(),
-    istead only try to find existing simple G4Material 
+    istead only try to find existing simple G4Material
 
 18 April 2016 V. Ivanchenko (hadr-man-V10-02-00)
 ---------------------------------------------------
@@ -173,19 +295,19 @@ code and to keep track of all tags.
 
 21 September 2015  Dennis Wright  (hadr-man-V10-01-05)
 ------------------------------------------------------
-- G4HadronicProcess::BiasCrossSectionByFactor : replace 
+- G4HadronicProcess::BiasCrossSectionByFactor : replace
   if( (it != "PhotonInelastic") &&
       (it != "ElectroNuclear") &&
       (it != "PositronNuclear") )
 
     by
- 
+
   if( (it != "photonNuclear") &&
       (it != "electronNuclear") &&
       (it != "positronNuclear") )
 
     to fix fatal exception in bug report 1740.
- 
+
 
 09 September 2015 A. Ribon (hadr-man-V10-01-04)
 ---------------------------------------------------
@@ -213,28 +335,28 @@ code and to keep track of all tags.
 
 19 November 2014 G. Folger(hadr-man-V10-00-17)
 ---------------------------------------------------
-- G4HadronicProcess::CheckResult(): Add check for dynamic mass 
-    to correspond to PDG mass within ~10%. 
-	 
+- G4HadronicProcess::CheckResult(): Add check for dynamic mass
+    to correspond to PDG mass within ~10%.
+
 12 November 2014 V. Ivanchenko (hadr-man-V10-00-16)
 ---------------------------------------------------
 - G4HadronicProcessStore -fixed computation of cross sections for ions
 
 12 November 2014 V. Ivanchenko (hadr-man-V10-00-15)
 ---------------------------------------------------
-- G4HadronicProcess - fixed final track status for some models like 
+- G4HadronicProcess - fixed final track status for some models like
     G4WilsonAbrasionModel
 
 11 November 2014 V. Ivanchenko (hadr-man-V10-00-14)
 ---------------------------------------------------
 - G4HadronicProcess - clear final state before resample interaction
-  due to energy balance violation 
+  due to energy balance violation
 
 7 November 2014 V. Ivanchenko (hadr-man-V10-00-13)
 ------------------------------------------------
 4 November 2014 V. Ivanchenko (hadr-man-V10-00-12)
 ------------------------------------------------
-- G4HadronicProcess - added creator model type to secondary 
+- G4HadronicProcess - added creator model type to secondary
 
 12 September 2014 Tatsumi Koi (hadr-man-V10-00-11)
 ------------------------------------------------
@@ -246,7 +368,7 @@ code and to keep track of all tags.
 
 4 August 2014 V. Ivanchenko (hadr-man-V10-00-10)
 ------------------------------------------------
-- G4HadronicProcessStore, G4HadronicProcess: simplified registration and 
+- G4HadronicProcessStore, G4HadronicProcess: simplified registration and
     de-registration; fixed Coverity report
 
 1 August 2014 Alberto Ribon (hadr-man-V10-00-09)
@@ -264,9 +386,9 @@ code and to keep track of all tags.
 
 1 July 2014 Gunter Folger (hadr-man-V10-00-07)
 ----------------------------------------------
-- G4HadronicProcessStore::PrintHtml(): include ProcessDescription 
+- G4HadronicProcessStore::PrintHtml(): include ProcessDescription
     inline in physics lists description
-	 
+
 22 May 2014 Andrea Dotti (hadr-man-V10-00-06)
 --------------------------------------------
 - Code cleanup
@@ -277,7 +399,7 @@ code and to keep track of all tags.
 
 21 May 2014 Andrea Dotti (hadr-man-V10-00-04)
 --------------------------------------------
-- Retagging: previous tag was ok. 
+- Retagging: previous tag was ok.
 
 21 May 2014 Alberto Ribon (hadr-man-V10-00-03)
 ---------------------------------------------
@@ -287,24 +409,24 @@ code and to keep track of all tags.
 20 May 2014 Andrea Dotti (hadr-man-V10-00-02)
 ---------------------------------------------
 - G4HadronicProcessStore : correct for bug in Clear() for which stopping
-  processes are deleted twice (once because are registered as normal 
+  processes are deleted twice (once because are registered as normal
   processes and once are registered as extra processes).
 
 15 May 2014 Vladimir Ivanchenko (hadr-man-V10-00-01)
 ---------------------------------------------------
-- G4HadronicProcess: added method  GetHadronicInteractionList() allowing 
+- G4HadronicProcess: added method  GetHadronicInteractionList() allowing
     access to the list of registered models, removed obsolete access
     methods to G4EnergyRangeManager
 - G4HadronicProcessStore - become G4ThreadLocalSingletone allowing
     proper destruction of hadronic processes/models/x-sections
 - G4EnergyRangeManager - cleaned up; instead of c-array models pointers
     are stored in stl vector
-- this tag requires remove deletion of Physics vectors from destructors 
+- this tag requires remove deletion of Physics vectors from destructors
     of all hadronic classes
 
 03 February 2014 Gunter Folger (hadr-man-V10-00-00)
 ---------------------------------------------------
-- G4HadronicProcess: in EnergyMomentumCheck... add printout of 3momentum  
+- G4HadronicProcess: in EnergyMomentumCheck... add printout of 3momentum
 
 20 June 2013  Dennis Wright  (hadr-man-V09-06-03)
 -------------------------------------------------
@@ -316,17 +438,17 @@ code and to keep track of all tags.
 - Add dump method
 	include/G4EnergyRangeManager.hh
 	src/G4EnergyRangeManager.cc
-     
+
  7 March 2013 michel maire  (hadr-man-V09-06-01)
-- G4HadronicProcessStore- Dump and Print: cosmetic in Processes summary 
-     
+- G4HadronicProcessStore- Dump and Print: cosmetic in Processes summary
+
 30 January 2013 michel maire  (hadr-man-V09-06-00)
 -------------------------------------------------------
 - G4HadronicProcessStore::GetCrossSectionPerAtom() - add material
-    
+
 14 November 2012 Vladimir Ivantchenko  (hadr-man-V09-05-24)
 -------------------------------------------------------
-- G4HadronicProcess.cc - added full printout about hadronic exception 
+- G4HadronicProcess.cc - added full printout about hadronic exception
     inside G4Exception printout, fixed bug#1377
 
 14 November 2012 Vladimir Ivantchenko  (hadr-man-V09-05-23)
@@ -379,7 +501,7 @@ code and to keep track of all tags.
 
 31 August 2012 Gunter Folger    (hadr-man-V09-05-14)
 ----------------------------------------------------
-- G4HadronicProcess: avoid printing of blank line from 
+- G4HadronicProcess: avoid printing of blank line from
   CheckEnergyMomentumConservation()
 
 02 August 2012 V.Ivanchenko (hadr-man-V09-05-13)
@@ -387,16 +509,16 @@ code and to keep track of all tags.
 - G4HadronicProcess: removed GetTargetDefinition()
   instead added GetTargetIsotope; check cross section in PostStepDoIt
   only for charged particles (for performance reasons)
-     
+
 28 July 2012 michel maire (hadr-man-V09-05-12)
 ----------------------------------------------
-- G4HadronicProcess: add function GetTargetDefinition() 
-       
+- G4HadronicProcess: add function GetTargetDefinition()
+
 24 July 2012 michel maire (hadr-man-V09-05-11)
 ----------------------------------------------
-- G4HadronicProcessStore: add functions GetCrossSectionPerAtom() 
+- G4HadronicProcessStore: add functions GetCrossSectionPerAtom()
   and GetCrossSectionPerVolume()
-     
+
 11 July 2012 Gunter Folger    (hadr-man-V09-05-10)
 --------------------------------------------------
 - G4HadronicProcess.cc: fix problem of flushing stdout/stderr for energy
@@ -404,8 +526,8 @@ code and to keep track of all tags.
 
 2  July 2012 John Apostolakis (hadr-man-V09-05-09)
 -------------------------------------------------
-- G4HadronicProcess.cc: Improved quick check and full check for case of 
-  electro-nuclear. 
+- G4HadronicProcess.cc: Improved quick check and full check for case of
+  electro-nuclear.
   Copes with case that both primary survives and secondaries are created.
 
 8  June 2012 Gabriele Cosmo   (hadr-man-V09-05-08)
@@ -416,18 +538,18 @@ code and to keep track of all tags.
 4  June 2012 Dennis Wright    (hadr-man-V09-05-07)
 -------------------------------------------------
 - G4HadronicProcess.hh: remove methods ResetNumberOfInteractionLengthLeft()
-    and GetTotalNumberOfInteractionLengthTraversed() as these have been 
+    and GetTotalNumberOfInteractionLengthTraversed() as these have been
     moved to G4VProcess.   Must use with tag procman-V09-05-00 or later.
 
 21 May 2012 Gunter Folger    (hadr-man-V09-05-06)
 ---------------------------------------------------
 -  E/p conservation fails only if both absolute and relative fail;
-	effect: at low energies, compare to absolute limit, and at 
+	effect: at low energies, compare to absolute limit, and at
 	  high energies use relative limit; cross-over when limits cross,
 	  or at absolute = Ekinetic * relative
-   Charge, baryon non-conservation will make test fail as before.	  
+   Charge, baryon non-conservation will make test fail as before.
 
- 
+
 10 May 2012 Gunter Folger    (hadr-man-V09-05-05)
 ---------------------------------------------------
 -  Improve format of E/p conservation check printout
@@ -441,9 +563,9 @@ code and to keep track of all tags.
 
 05 May 2012 Vladimir Ivantchenko (hadr-man-V09-05-03)
 ---------------------------------------------------
-- G4HadronicProcess - methods FillResult, CheckResult, 
+- G4HadronicProcess - methods FillResult, CheckResult,
     CheckEnergyMomentumConservation and members theTotalResult,
-    epReportLevel, thePro moved to protected to be used 
+    epReportLevel, thePro moved to protected to be used
     in derived classes; removed unused ModelingState;
     commented out obsolete method FillTotalResult;
     change logic of definition of time for secondary particles
@@ -459,19 +581,19 @@ code and to keep track of all tags.
 
 16 March 2012 Gunter Folger    (hadr-man-V09-05-01)
 ---------------------------------------------------
--  add method for energy non-conservation check; in case of non-conservation, 
+-  add method for energy non-conservation check; in case of non-conservation,
     re-sample the interaction. Limits are set in G4HadronicInteraction, and
     may be overridden for models; LEP and HEP override defaults, as these do not
-    return the nucleus in teh final state. 
-   A test mode aborting events and reporting info on stderr is available, and 
-   triggered by a negative value in G4Hadronic_epReportLevel env. variable. 
+    return the nucleus in teh final state.
+   A test mode aborting events and reporting info on stderr is available, and
+   triggered by a negative value in G4Hadronic_epReportLevel env. variable.
 
 22 January 2012  Dennis Wright (hadr-man-V09-05-00)
 ---------------------------------------------------
 - move isotope production infrastructure from process to model level;
   now done only for LEP models
 - G4HadronicProcess.hh, .cc: remove all isotope production
-  infrastructure 
+  infrastructure
 - G4IsoParticleChange.hh : move to models/management
 
 24 November 2011 Vladimir Ivantchenko (hadr-man-V09-04-23)
@@ -544,25 +666,25 @@ code and to keep track of all tags.
 - G4HadronicProcess: use new interface to cross sections;
                      substitute GetMicroscopicCrossSection by
                      GetElementCrossSection;
-                     added check on zero kinetic energy of primary and 
-                     secondary after interaction (active if 
+                     added check on zero kinetic energy of primary and
+                     secondary after interaction (active if
                      G4HadronicProcess_debug environment variable is set)
 - G4HadronicProcessStore - use  new interface to cross sections
 
  1 August 2011  Dennis Wright (hadr-man-V09-04-09)
 --------------------------------------------------
-- Add method G4HadronicProcessStore::DumpHtml to write out html physics 
+- Add method G4HadronicProcessStore::DumpHtml to write out html physics
      list documentation
 - Add method G4HadronicProcessStore::PrintHtml to print html
      documentation for processes, models and cross sections for each
      particle
-   
+
 25 July 2011 Vladimir Ivanchenko (hadr-man-V09-04-08)
 ----------------------------------------------------
 - G4HadronicProcess: added public method GetTargetNucleus to access
   target isotope; added private method FillResult which provides
-  more simple and transparent handle of primary and secondaries, 
-  in particular, allowing primary be unchanged 
+  more simple and transparent handle of primary and secondaries,
+  in particular, allowing primary be unchanged
 
 20 July 2011 Michael Kelsey
 ---------------------------
@@ -576,14 +698,14 @@ code and to keep track of all tags.
  5 June 2011 Dennis Wright      (hadr-man-V09-04-06)
 ----------------------------------------------------
 - G4HadronicProcessType: add fRadioactiveDecay = 211 to enum
-  
+
 6 April 2011 Gunter Folger      (hadr-man-V09-04-05)
 ----------------------------------------------------
 - enhance printout for case 3 in E/p checking with initial state info.
 
 5 April 2011 Gunter Folger      (hadr-man-V09-04-04)
 ----------------------------------------------------
-- modify E/p checking to allow to use stdout or stderr, depending on 
+- modify E/p checking to allow to use stdout or stderr, depending on
    checklevel>0 or checklevel<0.
 
 
@@ -598,15 +720,15 @@ code and to keep track of all tags.
 	G4Hadronic_epReportLevel : set to checklevel [1,4]
 	G4Hadronic_epCheckRelativeLevel: level of relative conservation
 	G4Hadronic_epCheckAbsoluteLevel: level for absolute conservation
-     
+
 10 February 2011 Dennis Wright  (hadr-man-V09-04-01)
 ----------------------------------------------------
-- add method MultiplyCrossSectionBy() to G4HadronicProcess so that 
+- add method MultiplyCrossSectionBy() to G4HadronicProcess so that
 cross sections can be scaled for testing
 
  7 January 2011  Dennis Wright  (hadr-man-V09-04-00)
 ----------------------------------------------------
-- G4HadronicProcess.cc: make GetCrossSectionDataStore public so it 
+- G4HadronicProcess.cc: make GetCrossSectionDataStore public so it
     can be accessed through the process
 - G4HadronicProcessStore::Print() : extend to include cross section
     info
@@ -615,7 +737,7 @@ cross sections can be scaled for testing
 -----------------------------------------------------
 - G4HadronicProcess.cc : in PostStepDoIt, check cross section value
   before calling ApplyYourself.  If less than or equal to zero, return
-  track unchanged. 
+  track unchanged.
 
 21 November 2010  Dennis Wright  (hadr-man-V09-03-05)
 -----------------------------------------------------
@@ -624,15 +746,15 @@ cross sections can be scaled for testing
 
 17 August 2010  Vladimir Ivanchenko (hadr-man-V09-03-04)
 --------------------------------------------------------
-- G4HadronicProcess - use const GetParticleDefinition method of 
+- G4HadronicProcess - use const GetParticleDefinition method of
                       G4DynamicParticle
-- G4HadronicProcessStore - remove const_cast 
+- G4HadronicProcessStore - remove const_cast
 
 29 July 2010  Vladimir Ivanchenko (hadr-man-V09-03-03)
 ------------------------------------------------
 - G4HadronicProcess - added protection against negative cross section;
                       removed commented old code
-- G4HadronicProcessStore - reduce number of const_cast 
+- G4HadronicProcessStore - reduce number of const_cast
 
 01 June 2010  Gunter Folger (hadr-man-V09-03-02)
 ------------------------------------------------
@@ -640,7 +762,7 @@ cross sections can be scaled for testing
 
 21 April 2010 Dennis Wright (hadr-man-V09-03-01)
 ------------------------------------------------
-- create G4HadronicEPTestMessenger to make energy/momentum test 
+- create G4HadronicEPTestMessenger to make energy/momentum test
   commands available in UI
 - include G4HadronicEPTestMessenger in G4HadronicProcessStore
 
@@ -648,24 +770,24 @@ cross sections can be scaled for testing
 -----------------------------------------------
 - G4HadronicProcess: add methods CheckEnergyMomentumConservation,
   SetEpReportLevel, SetEnergyMomentumCheckLevels,
-  GetEnergyMomentumCheckLevels, which implement energy/momentum 
+  GetEnergyMomentumCheckLevels, which implement energy/momentum
   checking
-- also includes Vladimir Ivantchenko's clean-up of unused code 
+- also includes Vladimir Ivantchenko's clean-up of unused code
 
 2 December 2009 Vladimir Ivanchenko (hadr-man-V09-02-05)
 ---------------------------------------------------------
-- G4HadronicProcessStore - added protection to the Clean method 
+- G4HadronicProcessStore - added protection to the Clean method
 
 25 February 2009 Vladimir Ivanchenko (hadr-man-V09-02-04)
 ---------------------------------------------------------
-- G4HadronicProcessStore - added protection to the Clean method 
+- G4HadronicProcessStore - added protection to the Clean method
 
 22 February 2009 Vladimir Ivanchenko (hadr-man-V09-02-03)
 ---------------------------------------------------------
 
 14 February 2009 Vladimir Ivanchenko (hadr-man-V09-02-02)
 ---------------------------------------------------------
-- G4HadronicProcessStore - added Clean method and cleanup of model 
+- G4HadronicProcessStore - added Clean method and cleanup of model
                            and cross section stores
 
 06 February 2009 Vladimir Ivanchenko (hadr-man-V09-02-01)
@@ -677,7 +799,7 @@ cross sections can be scaled for testing
 
 01 December 2008 Dennis Wright (hadr-man-V09-01-10)
 ---------------------------------------------------
-- G4HadronicProcess - make MeanFreePath() public again.  In future 
+- G4HadronicProcess - make MeanFreePath() public again.  In future
   make it protected again, but make a public method which calls it.
 
 21 November 2008 Dennis Wright (hadr-man-V09-01-09)
@@ -708,7 +830,7 @@ cross sections can be scaled for testing
 
 04 August 2008 Vladimir Ivanchenko (hadr-man-V09-01-06)
 ------------------------------------------------------
-- G4HadronicProcessStore - improve cout 
+- G4HadronicProcessStore - improve cout
 - G4HadronicProcess - cleanup: use method SampleZandA to select an isotope
                                do not use home-made NanCheck
                                do not check environment variables run-time
@@ -716,11 +838,11 @@ cross sections can be scaled for testing
                                implement PostStepDoIt and DumpPhysicsTable
                                methods
 - G4HadronInelasticProcess - use methods of the base class
-                          
+
 04 August 2008 Vladimir Ivanchenko (hadr-man-V09-01-05)
 ------------------------------------------------------
 - G4HadronicProcessStore - use sub-types to access cross sections,
-                           add proceses following only G4VProcess interface   
+                           add proceses following only G4VProcess interface
 
 08 July 2008 Dennis Wright (hadr-man-V09-01-04)
 -----------------------------------------------
@@ -728,7 +850,7 @@ cross sections can be scaled for testing
 
 09 June 2008 Dennis Wright (hadr-man-V09-01-03)
 -----------------------------------------------
-- G4HadronicProcess.cc - turn off error in case of fStopButAlive, but leave 
+- G4HadronicProcess.cc - turn off error in case of fStopButAlive, but leave
   it in place for fStopAndKill, fKillTrackAndSecondaries and fPostponeToNextEvent
 
 05 June 2008 Vladimir Ivanchenko (hadr-man-V09-01-02)
@@ -748,7 +870,7 @@ cross sections can be scaled for testing
 - G4HadronicProcess - cleanup of the header (add comments, move
                       methods for isotope production to the src, make
                       GetMeanFreePath protected, remove duplication
-                      of PostStepDoIt), add default implementation of 
+                      of PostStepDoIt), add default implementation of
                       GetMicroscopicCrossSection, comment out check
                       IfApplicable in MeanFreePath
 
@@ -784,7 +906,7 @@ aT.GetGlobalTime() with the variable time at line #664.
 - G4HadronicProcess.hh
        remove AlwaysKillLeadingHadron method
 - G4HadronicProcess.cc
-       use Alex Howard's fix of weighting error in leading particle killer 
+       use Alex Howard's fix of weighting error in leading particle killer
 
 10 Apr 2007 Dennis Wright (hadr-man-V08-02-02)
 ----------------------------------------------
@@ -798,17 +920,17 @@ aT.GetGlobalTime() with the variable time at line #664.
 
 2 Mar 2007 Dennis Wright (hadr-man-V08-02-01)
 ---------------------------------------------
-- G4HadronicProcess.cc: put in Vladimir Ivantchenko's fix to 
+- G4HadronicProcess.cc: put in Vladimir Ivantchenko's fix to
        stop killing primaries for elastic
- 
+
 26 Dec 2006 Dennis Wright (hadr-man-V08-02-00)
 ----------------------------------------------
 - G4HadronicProcess.hh, .cc:
-       Add handling of user-defined isotopes: re-implement methods 
-         GetMeanFreePath() and ChooseAandZ() to use new methods in 
-         G4CrossSectionDataStore.  
+       Add handling of user-defined isotopes: re-implement methods
+         GetMeanFreePath() and ChooseAandZ() to use new methods in
+         G4CrossSectionDataStore.
        No longer use dispatch pointer to call data store methods.
-       Data members currentZ, currentN and methods GetCurrentZ(), 
+       Data members currentZ, currentN and methods GetCurrentZ(),
          GetCurrentN() removed as no longer needed
 
 20 Oct 2006 Dennis Wright (hadr-man-V08-01-00)
@@ -821,8 +943,8 @@ aT.GetGlobalTime() with the variable time at line #664.
 - G4HadronicProcess::ChooseAandZ() : throw fatal exception if
        Z > 92 is chosen
 
-- G4HadronicProcess::GeneralPostStepDoIt() : for suspended tracks, allow 
-       PostStep action to occur at end of step, but maintain suspended 
+- G4HadronicProcess::GeneralPostStepDoIt() : for suspended tracks, allow
+       PostStep action to occur at end of step, but maintain suspended
        track status.  Remove warning for suspended tracks.
 
 
@@ -839,17 +961,17 @@ aT.GetGlobalTime() with the variable time at line #664.
 16 Dec 2005 Dennis Wright for Mikhail Kossov (hadr-man-V08-00-00)
 -----------------------------------------------------------------
 - G4HadronicProcess.hh:  in method ChooseHadronicInteraction, check
-                         G4HadronicInteractionCounter for error - if 
+                         G4HadronicInteractionCounter for error - if
                          so print out
 
-- G4EnergyRangeManager.hh: make method GetHadronicInteractionCounter public 
-- G4EnergyRangeManager.cc: in method GetHadronicInteraction, case 0, print out 
+- G4EnergyRangeManager.hh: make method GetHadronicInteractionCounter public
+- G4EnergyRangeManager.cc: in method GetHadronicInteraction, case 0, print out
                            diagnostic information for exception when no model
                            is found.
-                         
+
 15 Dec 2005 Dennis Wright
 -------------------------
-- G4HadronicProcess.cc: 
+- G4HadronicProcess.cc:
        fixed bug # 611 - problems caused when hadronic interactions
        reset stopButAlive particle to Alive
        solution: In method FillTotalResult add lines
@@ -862,4 +984,4 @@ aT.GetGlobalTime() with the variable time at line #664.
 18 Nov 2005 Dennis Wright (hadr-man-V07-01-00)
 ----------------------------------------------
 
-- G4HadronicProcess.cc: <sstream> migration 
+- G4HadronicProcess.cc: <sstream> migration

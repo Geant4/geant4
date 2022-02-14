@@ -23,18 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
-#define G4VIS_BUILD_OPENGL_GL2PS
-#endif
-#ifdef G4VIS_BUILD_OI_DRIVER
-#define G4VIS_BUILD_OPENGL_GL2PS
-#endif
-
-#ifdef G4VIS_BUILD_OPENGL_GL2PS
 
 /*
  * GL2PS, an OpenGL to PostScript Printing Library
- * Copyright (C) 1999-2017 C. Geuzaine
+ * Copyright (C) 1999-2020 C. Geuzaine
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of either:
@@ -74,10 +66,12 @@
 #include <sys/types.h>
 #include <stdarg.h>
 #include <time.h>
-#include <cfloat>
+#include <float.h>
+#include <limits.h>
 
-#define GL2PS_HAVE_ZLIB
+#if defined(GL2PS_HAVE_ZLIB)
 #include <zlib.h>
+#endif
 
 #if defined(GL2PS_HAVE_LIBPNG)
 #include <png.h>
@@ -142,9 +136,9 @@ typedef enum {
 
 typedef GLfloat GL2PSplane[4];
 
-typedef struct _GL2PSbsptree2d GL2PSbsptree2d;
+typedef struct GL2PSbsptree2d_ GL2PSbsptree2d;
 
-struct _GL2PSbsptree2d {
+struct GL2PSbsptree2d_ {
   GL2PSplane plane;
   GL2PSbsptree2d *front, *back;
 };
@@ -154,9 +148,9 @@ typedef struct {
   char *array;
 } GL2PSlist;
 
-typedef struct _GL2PSbsptree GL2PSbsptree;
+typedef struct GL2PSbsptree_ GL2PSbsptree;
 
-struct _GL2PSbsptree {
+struct GL2PSbsptree_ {
   GL2PSplane plane;
   GL2PSlist *primitives;
   GL2PSbsptree *front, *back;
@@ -186,9 +180,9 @@ typedef struct {
   GLfloat *pixels;
 } GL2PSimage;
 
-typedef struct _GL2PSimagemap GL2PSimagemap;
+typedef struct GL2PSimagemap_ GL2PSimagemap;
 
-struct _GL2PSimagemap {
+struct GL2PSimagemap_ {
   GL2PSimage *image;
   GL2PSimagemap *next;
 };
@@ -197,7 +191,7 @@ typedef struct {
   GLshort type, numverts;
   GLushort pattern;
   char boundary, offset, culled;
-  GLint factor, linecap, linejoin;
+  GLint factor, linecap, linejoin, sortid;
   GLfloat width, ofactor, ounits;
   GL2PSvertex *verts;
   union {
@@ -262,6 +256,9 @@ typedef struct {
   /* for image map list */
   GL2PSimagemap *imagemap_head;
   GL2PSimagemap *imagemap_tail;
+
+  /* for TEX scaling */
+  GLfloat tex_scaling;
 } GL2PScontext;
 
 typedef struct {
@@ -633,6 +630,15 @@ static void gl2psListSort(GL2PSlist *list,
   qsort(list->array, list->n, list->size, fcmp);
 }
 
+/* Must be a list of GL2PSprimitives. */
+static void gl2psListAssignSortIds(GL2PSlist *list)
+{
+  GLint i;
+  for(i = 0; i < gl2psListNbr(list); i++){
+    (*(GL2PSprimitive**)gl2psListPointer(list, i))->sortid = i;
+  }
+}
+
 static void gl2psListAction(GL2PSlist *list, void (*action)(void *data))
 {
   GLint i;
@@ -736,9 +742,9 @@ static GLboolean gl2psSameColorThreshold(int n, GL2PSrgba rgba[],
   if(n < 2) return GL_TRUE;
 
   for(i = 1; i < n; i++){
-	if(std::fabs(rgba[0][0] - rgba[i][0]) > threshold[0] ||
-		std::fabs(rgba[0][1] - rgba[i][1]) > threshold[1] ||
-		std::fabs(rgba[0][2] - rgba[i][2]) > threshold[2])
+    if(std::fabs(rgba[0][0] - rgba[i][0]) > threshold[0] ||
+       std::fabs(rgba[0][1] - rgba[i][1]) > threshold[1] ||
+       std::fabs(rgba[0][2] - rgba[i][2]) > threshold[2])
       return GL_FALSE;
   }
 
@@ -886,7 +892,8 @@ static void gl2psConvertPixmapToPNG(GL2PSimage *pixmap, GL2PSlist *png)
 
 static GLint gl2psAddText(GLint type, const char *str, const char *fontname,
                           GLshort fontsize, GLint alignment, GLfloat angle,
-                          GL2PSrgba color)
+                          GL2PSrgba color, GLboolean setblpos,
+                          GLfloat blx, GLfloat bly)
 {
   GLfloat pos[4];
   GL2PSprimitive *prim;
@@ -911,11 +918,16 @@ static GLint gl2psAddText(GLint type, const char *str, const char *fontname,
   prim = (GL2PSprimitive*)gl2psMalloc(sizeof(GL2PSprimitive));
   prim->type = (GLshort)type;
   prim->boundary = 0;
-  prim->numverts = 1;
-  prim->verts = (GL2PSvertex*)gl2psMalloc(sizeof(GL2PSvertex));
+  prim->numverts = setblpos ? 2 : 1;
+  prim->verts = (GL2PSvertex*)gl2psMalloc(sizeof(GL2PSvertex) * prim->numverts);
   prim->verts[0].xyz[0] = pos[0];
   prim->verts[0].xyz[1] = pos[1];
   prim->verts[0].xyz[2] = pos[2];
+  if (setblpos) {
+    prim->verts[1].xyz[0] = blx;
+    prim->verts[1].xyz[1] = bly;
+    prim->verts[1].xyz[2] = 0;
+  }
   prim->culled = 0;
   prim->offset = 0;
   prim->ofactor = 0.0;
@@ -1485,7 +1497,8 @@ static int gl2psCompareDepth(const void *a, const void *b)
     return 1;
   }
   else{
-    return 0;
+    /* Ensure that initial ordering is preserved when depths match. */
+    return q->sortid < w->sortid ? -1 : 1;
   }
 }
 
@@ -2310,7 +2323,7 @@ static void gl2psParseFeedbackBuffer(GLint used)
   GLboolean boundary;
   GLint i, sizeoffloat, count, v, vtot, offset = 0, factor = 0, auxindex = 0;
   GLint lcap = 0, ljoin = 0;
-  GLfloat lwidth = 1.0F, psize = 1.0F, ofactor  = 0.0F, ounits = 0.0F;
+  GLfloat lwidth = 1.0F, psize = 1.0F, ofactor = 0.0F, ounits = 0.0F;
   GLfloat *current;
   GL2PSvertex vertices[3];
   GL2PSprimitive *prim;
@@ -2432,12 +2445,12 @@ static void gl2psParseFeedbackBuffer(GLint used)
       case GL2PS_LINE_CAP_TOKEN :
         current += 2;
         used -= 2;
-        lcap = current[1];
+        lcap = (GLint)current[1];
         break;
       case GL2PS_LINE_JOIN_TOKEN :
         current += 2;
         used -= 2;
-        ljoin = current[1];
+        ljoin = (GLint)current[1];
         break;
       case GL2PS_LINE_WIDTH_TOKEN :
         current += 2;
@@ -2790,13 +2803,13 @@ static void gl2psPrintPostScriptHeader(void)
   gl2psPrintf("%%%%Title: %s\n"
               "%%%%Creator: GL2PS %d.%d.%d%s, %s\n"
               "%%%%For: %s\n"
-              "%%%%CreationDate: \n"
+              "%%%%CreationDate: %s"
               "%%%%LanguageLevel: 3\n"
               "%%%%DocumentData: Clean7Bit\n"
               "%%%%Pages: 1\n",
               gl2ps->title, GL2PS_MAJOR_VERSION, GL2PS_MINOR_VERSION,
               GL2PS_PATCH_VERSION, GL2PS_EXTRA_VERSION, GL2PS_COPYRIGHT,
-              gl2ps->producer);
+              gl2ps->producer, ctime(&now));
 
   if(gl2ps->format == GL2PS_PS){
     gl2psPrintf("%%%%Orientation: %s\n"
@@ -3350,6 +3363,7 @@ static void gl2psPrintTeXHeader(void)
   char name[256];
   time_t now;
   int i;
+  GLfloat s;
 
   if(gl2ps->filename && strlen(gl2ps->filename) < 256){
     for(i = (int)strlen(gl2ps->filename) - 1; i >= 0; i--){
@@ -3371,19 +3385,22 @@ static void gl2psPrintTeXHeader(void)
           "%% Title: %s\n"
           "%% Creator: GL2PS %d.%d.%d%s, %s\n"
           "%% For: %s\n"
-          "%% CreationDate: %s\n",
+          "%% CreationDate: %s",
           gl2ps->title, GL2PS_MAJOR_VERSION, GL2PS_MINOR_VERSION,
           GL2PS_PATCH_VERSION, GL2PS_EXTRA_VERSION, GL2PS_COPYRIGHT,
           gl2ps->producer, ctime(&now));
 
+  s = gl2ps->tex_scaling;
+  if(s <= 0.) s = 1.;
   fprintf(gl2ps->stream,
-          "\\setlength{\\unitlength}{1pt}\n"
+          "\\setlength{\\unitlength}{%gpt}\n"
           "\\begin{picture}(0,0)\n"
-          "\\includegraphics{%s}\n"
+          "\\includegraphics[scale=%g]{%s}\n"
           "\\end{picture}%%\n"
           "%s\\begin{picture}(%d,%d)(0,0)\n",
-          name, (gl2ps->options & GL2PS_LANDSCAPE) ? "\\rotatebox{90}{" : "",
-          (int)gl2ps->viewport[2], (int)gl2ps->viewport[3]);
+          s, s, name,
+          (gl2ps->options & GL2PS_LANDSCAPE) ? "\\rotatebox{90}{" : "",
+          (int)(gl2ps->viewport[2]), (int)(gl2ps->viewport[3]));
 }
 
 static void gl2psPrintTeXPrimitive(void *data)
@@ -3394,10 +3411,12 @@ static void gl2psPrintTeXPrimitive(void *data)
 
   switch(prim->type){
   case GL2PS_TEXT :
-    fprintf(gl2ps->stream, "\\fontsize{%d}{0}\n\\selectfont",
-            prim->data.text->fontsize);
+    if(!(gl2ps->options & GL2PS_NO_TEX_FONTSIZE))
+      fprintf(gl2ps->stream, "\\fontsize{%d}{0}\\selectfont",
+              prim->data.text->fontsize);
     fprintf(gl2ps->stream, "\\put(%g,%g)",
-            prim->verts[0].xyz[0], prim->verts[0].xyz[1]);
+            prim->verts[0].xyz[0],
+            prim->verts[0].xyz[1]);
     if(prim->data.text->angle)
       fprintf(gl2ps->stream, "{\\rotatebox{%g}", prim->data.text->angle);
     fprintf(gl2ps->stream, "{\\makebox(0,0)");
@@ -3589,6 +3608,43 @@ static void gl2psPutPDFText(GL2PSstring *text, int cnt, GLfloat x, GLfloat y)
        "(%s) Tj\n"
        "ET\n",
        cnt, text->fontsize, crad, srad, -srad, crad, x, y, text->str);
+  }
+}
+
+/*
+  This is used for producing aligned text in PDF. (x, y) is the anchor for the
+  aligned text, (xbl, ybl) is the bottom left corner. Rotation happens
+  around (x, y).*/
+static void gl2psPutPDFTextBL(GL2PSstring *text, int cnt, GLfloat x, GLfloat y,
+                              GLfloat xbl, GLfloat ybl)
+{
+  if(text->angle == 0.0F){
+    gl2ps->streamlength += gl2psPrintf
+      ("BT\n"
+       "/F%d %d Tf\n"
+       "%f %f Td\n"
+       "(%s) Tj\n"
+       "ET\n",
+       cnt, text->fontsize, xbl, ybl, text->str);
+  }
+  else{
+    GLfloat a, ca, sa;
+    GLfloat pi = 3.141593F;
+    GLfloat i = std::atan2(y - ybl, x - xbl);
+    GLfloat r = std::sqrt((y - ybl) * (y - ybl) + (x - xbl) * (x - xbl));
+
+    a = (GLfloat)(pi * text->angle / 180.0F);
+    sa = (GLfloat)sin(a);
+    ca = (GLfloat)cos(a);
+    gl2ps->streamlength += gl2psPrintf
+      ("BT\n"
+       "/F%d %d Tf\n"
+       "%f %f %f %f %f %f Tm\n"
+       "(%s) Tj\n"
+       "ET\n",
+       cnt, text->fontsize,
+       ca, sa, -sa, ca,
+       xbl + r * (std::cos(i) - std::cos(i + a)), ybl + r * (std::sin(i) - std::sin(i+a)), text->str);
   }
 }
 
@@ -3974,8 +4030,16 @@ static void gl2psPDFgroupListWriteMainStream(void)
       for(j = 0; j <= lastel; ++j){
         prim = *(GL2PSprimitive**)gl2psListPointer(gro->ptrlist, j);
         gl2ps->streamlength += gl2psPrintPDFFillColor(prim->verts[0].rgba);
-        gl2psPutPDFText(prim->data.text, gro->fontno, prim->verts[0].xyz[0],
-                        prim->verts[0].xyz[1]);
+        if (prim->numverts == 2) {
+          gl2psPutPDFTextBL(prim->data.text, gro->fontno, prim->verts[0].xyz[0],
+                            prim->verts[0].xyz[1],
+                            prim->verts[1].xyz[0],
+                            prim->verts[1].xyz[1]);
+        }
+        else {
+          gl2psPutPDFText(prim->data.text, gro->fontno, prim->verts[0].xyz[0],
+                          prim->verts[0].xyz[1]);
+        }
       }
       break;
     case GL2PS_SPECIAL:
@@ -4378,7 +4442,7 @@ static int gl2psPrintPDFShaderStreamDataCoord(GL2PSvertex *vertex,
   int offs = 0;
   unsigned long imap;
   GLfloat diff;
-  double dmax = ~1UL;
+  double dmax = (double) ULONG_MAX;
   char edgeflag = 0;
 
   /* FIXME: temp bux fix for 64 bit archs: */
@@ -4421,7 +4485,7 @@ static int gl2psPrintPDFShaderStreamDataRGB(GL2PSvertex *vertex,
 {
   int offs = 0;
   unsigned long imap;
-  double dmax = ~1UL;
+  double dmax = (double) ULONG_MAX;
 
   /* FIXME: temp bux fix for 64 bit archs: */
   if(sizeof(unsigned long) == 8) dmax = dmax - 2048.;
@@ -4446,7 +4510,7 @@ static int gl2psPrintPDFShaderStreamDataAlpha(GL2PSvertex *vertex,
 {
   int offs = 0;
   unsigned long imap;
-  double dmax = ~1UL;
+  double dmax = (double) ULONG_MAX;
 
   /* FIXME: temp bux fix for 64 bit archs: */
   if(sizeof(unsigned long) == 8) dmax = dmax - 2048.;
@@ -5081,13 +5145,13 @@ static void gl2psPrintSVGHeader(void)
   gl2psPrintf("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
   gl2psPrintf("<svg xmlns=\"http://www.w3.org/2000/svg\"\n");
   gl2psPrintf("     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
-              "     width=\"%dpx\" height=\"%dpx\" viewBox=\"%d %d %d %d\">\n",
+              "     width=\"%dpt\" height=\"%dpt\" viewBox=\"%d %d %d %d\">\n",
               width, height, x, y, width, height);
   gl2psPrintf("<title>%s</title>\n", gl2ps->title);
   gl2psPrintf("<desc>\n");
   gl2psPrintf("Creator: GL2PS %d.%d.%d%s, %s\n"
               "For: %s\n"
-              "CreationDate: %s\n",
+              "CreationDate: %s",
               GL2PS_MAJOR_VERSION, GL2PS_MINOR_VERSION, GL2PS_PATCH_VERSION,
               GL2PS_EXTRA_VERSION, GL2PS_COPYRIGHT, gl2ps->producer, ctime(&now));
   gl2psPrintf("</desc>\n");
@@ -5203,11 +5267,7 @@ static void gl2psEndSVGLine(void)
   }
 }
 
-#if defined(GL2PS_HAVE_LIBPNG)
 static void gl2psPrintSVGPixmap(GLfloat x, GLfloat y, GL2PSimage *pixmap)
-#else
-static void gl2psPrintSVGPixmap(GLfloat, GLfloat, GL2PSimage* )
-#endif
 {
 #if defined(GL2PS_HAVE_LIBPNG)
   GL2PSlist *png;
@@ -5240,6 +5300,7 @@ static void gl2psPrintSVGPixmap(GLfloat, GLfloat, GL2PSimage* )
   gl2psPrintf("\"/>\n");
   gl2psListDelete(png);
 #else
+  (void) x; (void) y; (void) pixmap;  /* not used */
   gl2psMsg(GL2PS_WARNING, "GL2PS must be compiled with PNG support in "
            "order to embed images in SVG streams");
 #endif
@@ -5527,10 +5588,10 @@ static void gl2psPrintPGFHeader(void)
           "%% Title: %s\n"
           "%% Creator: GL2PS %d.%d.%d%s, %s\n"
           "%% For: %s\n"
-          "%% CreationDate: \n",
+          "%% CreationDate: %s",
           gl2ps->title, GL2PS_MAJOR_VERSION, GL2PS_MINOR_VERSION,
           GL2PS_PATCH_VERSION, GL2PS_EXTRA_VERSION, GL2PS_COPYRIGHT,
-          gl2ps->producer);
+          gl2ps->producer, ctime(&now));
 
   fprintf(gl2ps->stream, "\\begin{pgfpicture}\n");
   if(gl2ps->options & GL2PS_DRAW_BACKGROUND){
@@ -5700,12 +5761,12 @@ static void gl2psPrintPGFPrimitive(void *data)
             prim->verts[0].rgba[0], prim->verts[0].rgba[1],
             prim->verts[0].rgba[2], prim->data.text->str);
 
-    fprintf(gl2ps->stream, "}{}{\\pgfusepath{discard}}}");
+    fprintf(gl2ps->stream, "}{}{\\pgfusepath{discard}}");
 
     if(prim->data.text->angle)
        fprintf(gl2ps->stream, "}");
 
-    fprintf(gl2ps->stream, "\n");
+    fprintf(gl2ps->stream, "\n}\n");
     break;
   case GL2PS_SPECIAL :
     /* alignment contains the format for which the special output text
@@ -5871,6 +5932,7 @@ static GLint gl2psPrintPrimitives(void)
     gl2psListReset(gl2ps->primitives);
     break;
   case GL2PS_SIMPLE_SORT :
+    gl2psListAssignSortIds(gl2ps->primitives);
     gl2psListSort(gl2ps->primitives, gl2psCompareDepth);
     if(gl2ps->options & GL2PS_OCCLUSION_CULL){
       gl2psListActionInverse(gl2ps->primitives, gl2psAddInImageTree);
@@ -6126,6 +6188,8 @@ GL2PSDLL_API GLint gl2psBeginPage(const char *title, const char *producer,
     gl2ps->buffersize = 0;
   }
 
+  gl2ps->tex_scaling = 1.;
+
   return GL2PS_SUCCESS;
 }
 
@@ -6179,34 +6243,70 @@ GL2PSDLL_API GLint gl2psEndViewport(void)
   return res;
 }
 
+GL2PSDLL_API GLint gl2psSorting(GLint mode)
+{
+  GLint res;
+
+  if(!gl2ps) return GL2PS_UNINITIALIZED;
+
+  switch(mode){
+  case GL2PS_NO_SORT :
+  case GL2PS_SIMPLE_SORT :
+  case GL2PS_BSP_SORT :
+    gl2ps->sort = mode;
+    res = GL2PS_SUCCESS;
+    break;
+  default :
+    gl2psMsg(GL2PS_ERROR, "Unknown sorting algorithm: %d", mode);
+    gl2psFree(gl2ps);
+    gl2ps = NULL;
+    res = GL2PS_ERROR;
+  }
+
+  return res;
+}
+
 GL2PSDLL_API GLint gl2psTextOptColor(const char *str, const char *fontname,
                                      GLshort fontsize, GLint alignment, GLfloat angle,
                                      GL2PSrgba color)
 {
   return gl2psAddText(GL2PS_TEXT, str, fontname, fontsize, alignment, angle,
-                      color);
+                      color, GL_FALSE, 0, 0);
+}
+
+/**
+ * This version of gl2psTextOptColor is used to go around the
+ * fact that PDF does not support text alignment. The extra parameters
+ * (blx, bly) represent the bottom left corner of the text bounding box.
+ */
+GL2PSDLL_API GLint gl2psTextOptColorBL(const char *str, const char *fontname,
+                                       GLshort fontsize, GLint alignment, GLfloat angle,
+                                       GL2PSrgba color, GLfloat blx, GLfloat bly)
+{
+  return gl2psAddText(GL2PS_TEXT, str, fontname, fontsize, alignment, angle,
+                      color, GL_TRUE, blx, bly);
 }
 
 GL2PSDLL_API GLint gl2psTextOpt(const char *str, const char *fontname,
                                 GLshort fontsize, GLint alignment, GLfloat angle)
 {
-  return gl2psAddText(GL2PS_TEXT, str, fontname, fontsize, alignment, angle, NULL);
+  return gl2psAddText(GL2PS_TEXT, str, fontname, fontsize, alignment, angle, NULL, GL_FALSE, 0, 0);
 }
 
 GL2PSDLL_API GLint gl2psText(const char *str, const char *fontname, GLshort fontsize)
 {
   return gl2psAddText(GL2PS_TEXT, str, fontname, fontsize, GL2PS_TEXT_BL, 0.0F,
-                      NULL);
+                      NULL, GL_FALSE, 0, 0);
 }
 
 GL2PSDLL_API GLint gl2psSpecial(GLint format, const char *str)
 {
-  return gl2psAddText(GL2PS_SPECIAL, str, "", 0, format, 0.0F, NULL);
+  return gl2psAddText(GL2PS_SPECIAL, str, "", 0, format, 0.0F, NULL, GL_FALSE, 0, 0);
 }
 
 GL2PSDLL_API GLint gl2psSpecialColor(GLint format, const char *str, GL2PSrgba rgba)
 {
-  return gl2psAddText(GL2PS_SPECIAL, str, "", 0, format, 0.0F, rgba);
+  return gl2psAddText(GL2PS_SPECIAL, str, "", 0, format, 0.0F, rgba, GL_FALSE, 0, 0);
 }
 
 GL2PSDLL_API GLint gl2psDrawPixels(GLsizei width, GLsizei height,
@@ -6507,6 +6607,10 @@ GL2PSDLL_API const char *gl2psGetFormatDescription(GLint format)
 
 GL2PSDLL_API GLint gl2psGetFileFormat()
 {
+  if(!gl2ps) {
+    return GL2PS_UNINITIALIZED;
+  }
+
   return gl2ps->format;
 }
 
@@ -6528,4 +6632,14 @@ GL2PSDLL_API GLint gl2psForceRasterPos(GL2PSvertex *vert)
 
   return GL2PS_SUCCESS;
 }
-#endif
+
+GL2PSDLL_API GLint gl2psSetTexScaling(GLfloat scaling)
+{
+
+  if(!gl2ps) {
+    return GL2PS_UNINITIALIZED;
+  }
+  gl2ps->tex_scaling = scaling;
+
+  return GL2PS_SUCCESS;
+}

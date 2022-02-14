@@ -52,7 +52,6 @@
 #include "G4BetheBlochNoDeltaModel.hh"
 #include "G4ICRU73NoDeltaModel.hh"
 #include "G4UniversalFluctuation.hh"
-#include "G4BohrFluctuations.hh"
 #include "G4IonFluctuations.hh"
 #include "G4UnitsTable.hh"
 #include "G4Electron.hh"
@@ -61,18 +60,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hhIonisation::G4hhIonisation(const G4String& name)
-  : G4VEnergyLossProcess(name),
-    theParticle(nullptr),
-    //theBaseParticle(nullptr),
-    isInitialised(false)
+  : G4VEnergyLossProcess(name)
 {
-  SetStepFunction(0.1, 0.1*mm);
   SetVerboseLevel(1);
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
-  mass = 0.0;
-  ratio = 0.0;
-  flucModel = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,8 +76,7 @@ G4hhIonisation::~G4hhIonisation()
 
 G4bool G4hhIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 100.0*MeV &&
-	 !p.IsShortLived());
+  return (p.GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,15 +100,14 @@ void G4hhIonisation::InitialiseEnergyLossProcess(
   if(isInitialised) { return; }
 
   theParticle = part;
-  if(bpart) { 
+  if(nullptr != bpart) { 
     G4cout << "G4hhIonisation::InitialiseEnergyLossProcess WARNING: no "
 	   << "base particle should be defined for the process "
 	   << GetProcessName() << G4endl; 
   }
-  SetBaseParticle(0);
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
-  G4double eth = 2*MeV*mass/proton_mass_c2;
+  G4double eth = 2*CLHEP::MeV*mass/proton_mass_c2;
   flucModel = new G4IonFluctuations();
 
   G4EmParameters* param = G4EmParameters::Instance();
@@ -129,17 +119,19 @@ void G4hhIonisation::InitialiseEnergyLossProcess(
   G4int bin = G4lrint(param->NumberOfBinsPerDecade()*std::log10(emax/emin));
   SetDEDXBinning(bin);
 
-  G4VEmModel* em = nullptr; 
-  if(part->GetPDGCharge() > 0.0) { em = new G4BraggNoDeltaModel(); }
-  else { em = new G4ICRU73NoDeltaModel(); }
+  G4VEmModel* em = EmModel(0); 
+  if (nullptr == em) { 
+    if(part->GetPDGCharge() > 0.0) { em = new G4BraggNoDeltaModel(); }
+    else { em = new G4ICRU73NoDeltaModel(); }
+  }
   em->SetLowEnergyLimit(emin);
   em->SetHighEnergyLimit(eth);
   AddEmModel(1, em, flucModel);
 
-  em = new G4BetheBlochNoDeltaModel();
+  em = EmModel(1);
+  if(nullptr == em) { em = new G4BetheBlochNoDeltaModel(); }
   em->SetLowEnergyLimit(eth);
   em->SetHighEnergyLimit(emax);
-  SetEmModel(em);
   AddEmModel(1, em, flucModel);
 
   if(verboseLevel>1) {
@@ -150,17 +142,9 @@ void G4hhIonisation::InitialiseEnergyLossProcess(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hhIonisation::PrintInfo()
-{
-  G4cout << "      Delta-ray will not be produced; "
-	 << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4hhIonisation::ProcessDescription(std::ostream& out) const
 {
-  out << "No description available." << G4endl;
+  out << "G4hhIonisation: no delta rays" << G4endl;
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

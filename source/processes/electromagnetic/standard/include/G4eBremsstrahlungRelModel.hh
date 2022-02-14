@@ -60,48 +60,46 @@ class G4eBremsstrahlungRelModel : public G4VEmModel {
 
 public:
 
-  explicit         G4eBremsstrahlungRelModel(const G4ParticleDefinition* p=0,
-                                             const G4String& nam="eBremLPM");
+  explicit G4eBremsstrahlungRelModel(const G4ParticleDefinition* p=nullptr,
+                                     const G4String& nam="eBremLPM");
 
-  virtual         ~G4eBremsstrahlungRelModel();
+  ~G4eBremsstrahlungRelModel() override;
 
-  virtual void     Initialise(const G4ParticleDefinition*,
-                              const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void     InitialiseLocal(const G4ParticleDefinition*,
-                                   G4VEmModel* masterModel) override;
+  void InitialiseLocal(const G4ParticleDefinition*,
+                       G4VEmModel* masterModel) override;
 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-                                        const G4ParticleDefinition*,
-                                        G4double ekin,
-                                        G4double cutEnergy) override;
+  G4double ComputeDEDXPerVolume(const G4Material*,
+                                const G4ParticleDefinition*,
+                                G4double ekin,
+                                G4double cutEnergy) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-                                              G4double ekin,
-                                              G4double zet,
-                                              G4double,
-                                              G4double cutEnergy,
-                                              G4double maxEnergy = DBL_MAX) override;
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                      G4double ekin,
+                                      G4double zet,
+                                      G4double,
+                                      G4double cutEnergy,
+                                      G4double maxEnergy = DBL_MAX) override;
 
-  virtual void     SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                     const G4MaterialCutsCouple*,
-                                     const G4DynamicParticle*,
-                                     G4double cutEnergy,
-                                     G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+                         const G4MaterialCutsCouple*,
+                         const G4DynamicParticle*,
+                         G4double cutEnergy,
+                         G4double maxEnergy) override;
 
-  virtual void     SetupForMaterial(const G4ParticleDefinition*,
-                                    const G4Material*,
-                                    G4double) override;
+  void SetupForMaterial(const G4ParticleDefinition*,
+                        const G4Material*, G4double) override;
 
-  virtual G4double MinPrimaryEnergy(const G4Material*,
-                                    const G4ParticleDefinition*,
-                                    G4double cutEnergy) override;
+  G4double MinPrimaryEnergy(const G4Material*,
+                            const G4ParticleDefinition*,
+                            G4double cutEnergy) override;
 
 protected:
 
   virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
-  void             SetParticle(const G4ParticleDefinition* p);
+  void SetParticle(const G4ParticleDefinition* p);
 
 private:
 
@@ -112,61 +110,74 @@ private:
   G4double ComputeRelDXSectionPerAtom(G4double gammaEnergy);
 
   // init special data per element i.e. per Z
-  void     InitialiseElementData();
+  void InitialiseElementData();
 
   // methods for initialisation and run-time evaluation of LPM functions:
-  void     InitLPMFunctions();
+  void InitLPMFunctions();
 
-  void     ComputeLPMfunctions(G4double& funcXiS,
-                               G4double& funcGS,
-                               G4double& funcPhiS,
-                               const G4double egamma);
+  void ComputeLPMfunctions(G4double& funcXiS,
+                           G4double& funcGS,
+                           G4double& funcPhiS,
+                           const G4double egamma);
 
-  void     GetLPMFunctions(G4double& lpmGs,
-                           G4double& lpmPhis,
-                           const G4double s);
+  void GetLPMFunctions(G4double& lpmGs,
+                       G4double& lpmPhis,
+                       const G4double ss);
 
-  void     ComputeLPMGsPhis(G4double& funcGS,
-                            G4double& funcPhiS,
-                            const G4double varShat);
-  //
+  void ComputeLPMGsPhis(G4double& funcGS,
+                        G4double& funcPhiS,
+                        const G4double varShat);
+
   // for evaluating screening related functions
-  void     ComputeScreeningFunctions(G4double& phi1,
-                                     G4double& phi1m2,
-                                     G4double& psi1,
-                                     G4double& psi1m2,
-                                     const G4double gam,
-                                     const G4double eps);
+  void ComputeScreeningFunctions(G4double& phi1,
+                                 G4double& phi1m2,
+                                 G4double& psi1,
+                                 G4double& psi1m2,
+                                 const G4double gam,
+                                 const G4double eps);
   // hide assignment operator and cctr
-  G4eBremsstrahlungRelModel& operator=(const G4eBremsstrahlungRelModel& right) = delete;
+  G4eBremsstrahlungRelModel& operator=
+  (const G4eBremsstrahlungRelModel& right) = delete;
   G4eBremsstrahlungRelModel(const  G4eBremsstrahlungRelModel&) = delete;
+
+private:
+
+  G4bool                      fIsUseCompleteScreening = false;
 
 protected:
 
-  G4bool                      fIsElectron;
-  G4bool                      fIsScatOffElectron;
-  G4bool                      fIsLPMActive;
+  G4bool                      fIsElectron = true;
+  G4bool                      fIsScatOffElectron = false;
+  G4bool                      fIsLPMActive = false;
   //
-  G4int                       fCurrentIZ;
+  G4int                       fCurrentIZ = 0;
+  const G4ParticleDefinition* fPrimaryParticle = nullptr;
+  G4ParticleDefinition*       fGammaParticle = nullptr;
+  G4ParticleChangeForLoss*    fParticleChange = nullptr;
   // cash
-  G4double                    fPrimaryParticleMass;
-  G4double                    fPrimaryKinEnergy;
-  G4double                    fPrimaryTotalEnergy;
-  G4double                    fDensityFactor;
-  G4double                    fDensityCorr;
+  G4double                    fPrimaryParticleMass = 0.;
+  G4double                    fPrimaryKinEnergy = 0.;
+  G4double                    fPrimaryTotalEnergy = 0.;
+  G4double                    fDensityFactor = 0.;
+  G4double                    fDensityCorr = 0.;
   G4double                    fLowestKinEnergy;
   // scattering off electrons
-  G4double                    fNucTerm;
-  G4double                    fSumTerm;
-  //
-  static const G4double       gBremFactor;
-  static const G4double       gMigdalConstant;
-  //
-  const G4ParticleDefinition* fPrimaryParticle;
-  G4ParticleDefinition*       fGammaParticle;
-  G4ParticleChangeForLoss*    fParticleChange;
+  G4double                    fNucTerm = 0.;
+  G4double                    fSumTerm = 0.;
 
 private:
+
+  // LPM related members
+  G4double                    fLPMEnergyThreshold;
+  G4double                    fLPMEnergy;
+
+protected:
+
+  static const G4double       gBremFactor;
+  static const G4double       gMigdalConstant;
+
+private:
+
   static const G4int          gMaxZet;
   //
   static const G4double       gLPMconstant;
@@ -207,11 +218,6 @@ private:
   //
   static LPMFuncs                   gLPMFuncs;
   static std::vector<ElementData*>  gElementData;
-  //
-  G4bool                      fIsUseCompleteScreening;
-  // LPM related members
-  G4double                    fLPMEnergyThreshold;
-  G4double                    fLPMEnergy;
 
 };
 

@@ -57,6 +57,7 @@
 #include "G4NucleiProperties.hh"
 #include "G4ParticleHPKallbachMannSyst.hh"
 #include "G4IonTable.hh"
+#include "G4ParticleHPManager.hh"
 #include <set>
  
 G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* projectile )
@@ -66,8 +67,8 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
   fCache.Get()->currentMeanEnergy = -2;
   fCache.Get()->fresh = true;
   adjustResult = true;
-  if ( std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
-
+  if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) adjustResult = false;
+  
   theMinEner = DBL_MAX;
   theMaxEner = -DBL_MAX;
   theProjectile = projectile; 
@@ -81,7 +82,7 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
   void G4ParticleHPContAngularPar::Init(std::istream & aDataFile, G4ParticleDefinition* projectile)
   { 
     adjustResult = true;
-    if ( std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
+    if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) adjustResult = false;
 
     theProjectile = projectile;
 
@@ -105,6 +106,9 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
   G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4double massCode, G4double /*targetMass*/, 
                                     G4int angularRep, G4int /*interpolE*/ )
   {
+    // The following line is needed because it may change between runs by UI command
+    if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) adjustResult = false;
+ 
     if( std::getenv("G4PHPTEST") ) G4cout << "  G4ParticleHPContAngularPar::Sample " << anEnergy << " " << massCode << " " << angularRep << G4endl; //GDEB
     if ( fCache.Get() == 0 ) cacheInit();
     G4ReactionProduct * result = new G4ReactionProduct;

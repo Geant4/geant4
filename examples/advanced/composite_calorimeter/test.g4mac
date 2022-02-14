@@ -9,6 +9,12 @@
 ### Initialise the detector and the physics
 /run/initialize
 
+### Need to copy here these commands from the main, after run-initialization,
+### otherwise they are not seen in multithreaded mode by working threads.
+/CCal/generator/verbose 2
+/gun/position -1380. 0. 0. mm
+/gun/direction 1. 0. 0.
+
 ### Select the incident particle and its energy
 /gun/particle pi-
 #/gun/particle mu-
@@ -17,6 +23,6 @@
 
 #/control/execute vis.mac
 
-### Simulate ten events
+### Simulate a few events
 /run/beamOn 20
 

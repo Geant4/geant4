@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 1st, 2021 B.Morgan (geombias-V10-07-01)
+- Add missing include of G4Threading header for G4Mutex
+
+March 30th, 2021 B.Morgan (geombias-V10-07-00)
+- Migrate sources.cmake to modular build API
+
+December 10th, 2019 B.Morgan (geombias-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 September 19th, 2019 G.Cosmo (geombias-V10-05-00)
 - Implemented minor c++11 revision and code cleanup.
 
@@ -44,8 +54,8 @@ November 25th, 2013 A.Howard (geombias-V09-06-07)
 
 November 22nd, 2013 A.Howard (geombias-V09-06-06)
 - Retagging to be co-working with:
-  	    phys-ctor-limiters-V09-06-013, 
-	    procbiasing-V09-06-10 
+  	    phys-ctor-limiters-V09-06-013,
+	    procbiasing-V09-06-10
 	    B01-V09-06-12
 	    B02-V09-06-10
 	    B03-V09-06-01
@@ -117,8 +127,8 @@ November 9th, 2007 A.Howard geombias-V09-00-01
 
 November 9th, 2007 A.Howard geombias-V09-00-00
      - Modified WeightWindow algorithm according to Thomas Booth's
-       recommendation (MCNP author). In order to not introduce extra variance 
-       in the case of splitting to the survival weight when the weight is 
+       recommendation (MCNP author). In order to not introduce extra variance
+       in the case of splitting to the survival weight when the weight is
        above the upper weight window - modified G4WeightWindowAlgorithm.cc
 
 June 4th, 2007 A.Howard geombias-V08-03-02
@@ -127,14 +137,14 @@ June 4th, 2007 A.Howard geombias-V08-03-02
 
 May 31st, 2007 A.Howard geombias-V08-03-01
      - Removed classes from old biasing scheme.  These are now replaced by
-       either CoupledTransportation (parallel navigation) or in 
+       either CoupledTransportation (parallel navigation) or in
        processe/biasing.  In addition the scoring is implemented with the new
        scoring frame-work (digits_hits) and processes/scoring.
      - The following classes are removed:
        G4IStore, G4ParallelNavigator, G4ParallelStepper, G4ParallelWorld,
-       G4VCellScorer, G4VCellScorerStore, G4VIStore, G4VParallelStepper, 
-       G4VPGeoDriver, G4VScorer, G4ImportanceSplitExaminer, 
-       G4VImportanceSplitExaminer, G4VWeightWindowExaminer, 
+       G4VCellScorer, G4VCellScorerStore, G4VIStore, G4VParallelStepper,
+       G4VPGeoDriver, G4VScorer, G4ImportanceSplitExaminer,
+       G4VImportanceSplitExaminer, G4VWeightWindowExaminer,
        G4WeightWindowExaminer
      - Classes are kept in the HEAD for testing purposes.
 
@@ -155,7 +165,7 @@ Sep, 30th 2003 G.Cosmo geombias-V05-02-02
        in "geometry-V05-02-00".
 
 Aug, 22th 2003 M.Dressel geombias-V05-02-01
-     - got rid off G4ImportanceFinder 
+     - got rid off G4ImportanceFinder
 
 Aug, 19th 2003 M.Dressel geombias-V05-02-00
      - first implementation of weight window technique
@@ -183,18 +193,18 @@ Nov, 20th 2002 G.Cosmo geombias-V04-01-04
        to allow porting on Windows DLLs.
 
 Nov, 4th 2002 M.Dressel geombias-V04-01-03
-     - remove G4std:: where it does not belong to, 
+     - remove G4std:: where it does not belong to,
      - remove G4StringConversion,
      - and added G4Nsplit_Weight.cc
 
 Oct, 28th 2002 M.Dressel geombias-V04-01-02
      - moving interfaces G4VCellScorer and G4VCellScorerStore back
- 
+
 Oct, 22th 2002 M.Dressel internal_7_geombias-V04-01-01
-     - renaming G4VPScorer to G4VScorer and  
-                G4PStep to G4GeometryCellStep 
+     - renaming G4VPScorer to G4VScorer and
+                G4PStep to G4GeometryCellStep
      - moving interfaces G4VCellScorer and G4VCellScorerStore to intercoms
-     - adding comments 
+     - adding comments
 
 Oct. 16th 2002 M.Dressel internal_6_geombias-V04-01-01
      - changes recomanded by codewizard
@@ -204,25 +214,25 @@ Oct. 16th 2002 M.Dressel internal_6_geombias-V04-01-01
 Oct. 15th 2002 M.Dressel
      removing G4Pstring with G4StringConversion
 
-Oct. 14th 2002 M.Dressel 
+Oct. 14th 2002 M.Dressel
      cleanup according to codewizzard
 
 Oct. 10th 2002 M.Dressel geombias-V04-01-01-internal-5
      change in G4(V)ImportanceAlgorithm, G4ImportanceSplitExaminer
-     G4ImportanceFinder: give pre and post importance 
+     G4ImportanceFinder: give pre and post importance
      separatly insted only ipre/ipost.
 
 Sep, 2th 2002 M.Dressel geombias-V04-01-01-internal-4
      moved files concerning messaging a importance geometry to
      /afs/cern.ch/user/d/dressel/G4/IGeoMessangers.
-     Support will be given on demand. 
+     Support will be given on demand.
 
 Sep, 2th 2002 M.Dressel geombias-V04-01-01-internal-3
      code cleanup for code-wizard
 
 Aug,  29th 2002 M.Dressel int-2-geombias-V04-01-01
-     renaming of G4PTouchableKey to G4GeometryCell 
-     changing  G4VIStore and G4IStore 
+     renaming of G4PTouchableKey to G4GeometryCell
+     changing  G4VIStore and G4IStore
      and dependants
 
 Aug,  13th, 2002 M.Dressel
@@ -231,31 +241,31 @@ Aug,  13th, 2002 M.Dressel
 Aug,  13th, 2002 M.Dressel - geombias-V04-01-01
     added G4VCellScorer.hh and G4VCellScorerStore.hh
 
-July, 18th, 2002 M.Dressel 
+July, 18th, 2002 M.Dressel
    change the strategy for importance sampling:
 	- G4VIStore: new function:
 		IsKnown(const G4PTouchableKey &ptk)
 		to tell if a cell (G4PTouchableKey) is known in the
 		store
-	- no biasing is applied between cells that are not known by 
+	- no biasing is applied between cells that are not known by
 	  the G4IStore and it's neighbors.
 	- importance valu 0 is allowed to flag that no biasing should
 	  be done betweeen the cell and it's neighbors.
-    change the G4PArallelNavigator: 
+    change the G4PArallelNavigator:
         - using G4TouchableHanle
         - and LocateGlobalPointAndSetup
 
-	  
-July, 11th, 2002 M.Dressel 
+
+July, 11th, 2002 M.Dressel
   added comments in new classes
 
 July, 11th, 2002 M.Dressel - internal-2-geombias-V04-01-01
-  added clases for contruction of a simple geometry with 
+  added clases for contruction of a simple geometry with
   importance values and messengers.
 
 July, 10th, 2002 M.Dressel - internal-1-geombias-V04-01-01
- change in G4Sigma: the sum over the weights is returned by GetWsum 
- (before it was GetSumOfWeights) and the weighted sum over x is returned  
+ change in G4Sigma: the sum over the weights is returned by GetWsum
+ (before it was GetSumOfWeights) and the weighted sum over x is returned
  by GetWXsum().
 
 
@@ -266,7 +276,7 @@ May, 30th, 2002  M.Dressel
 - change comments in WeightWindowAlgorithm
 
 May, 24th, 2002  M.Dressel - internal-1-geombias-V04-00-02
-- Added classes for weight window biasing. 
+- Added classes for weight window biasing.
 
 
 April 10th, 2002  M.Dressel - geombias-V04-00-03

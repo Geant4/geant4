@@ -89,9 +89,6 @@ G4FragmentingString::G4FragmentingString(const G4ExcitedString &excited)
 	Ptleft.setZ(0.);
 	Ptright=excited.GetRightParton()->Get4Momentum().vect();
 	Ptright.setZ(0.);
-	G4LorentzVector P=excited.Get4Momentum();
-	Pplus =P.e() + P.pz();
-	Pminus=P.e() - P.pz();
 	theStableParton=0;
 	theDecayParton=0;
 
@@ -101,6 +98,9 @@ G4FragmentingString::G4FragmentingString(const G4ExcitedString &excited)
         Pleft  = excited.GetLeftParton()->Get4Momentum();
         Pright = excited.GetRightParton()->Get4Momentum();
         Pstring= Pleft + Pright;
+
+        Pplus  = Pstring.plus();
+        Pminus = Pstring.minus();	
 }
 
 //---------------------------------------------------------------------------------
@@ -110,63 +110,50 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 					 const G4LorentzVector *momentum)
 {
 	decaying=None;
+	// Momentum of produced hadron
         G4LorentzVector Momentum = G4LorentzVector(momentum->vect(),momentum->e());
-             // Momentum of produced hadron
-        //G4cout<<"Had Mom "<<Momentum<<G4endl;
-        //G4cout<<"Str Mom "<<old.Pstring<<G4endl;
-        Pstring = old.Pstring - Momentum;
-        //G4cout<<"New Str Mom "<<Pstring<<" "<<Pstring.mag()<<G4endl;
+             
+        if ( old.decaying == Left )
+        {
+                RightParton= old.RightParton;
+                Ptright    = old.Ptright;
+                Pright     = old.Pright;
 
-        G4double StringMass = Pstring.mag();
+                LeftParton = newdecay;
+                Ptleft     = old.Ptleft - momentum->vect();
+                Ptleft.setZ(0.);
+                Pleft = old.Pleft - Momentum;
 
-        G4LorentzRotation toLAB(Pstring.boostVector());
+                Pstring = Pleft + Pright;
+                Pplus   = Pstring.plus();
+                Pminus  = Pstring.minus();
 
-        Pleft  = toLAB*G4LorentzVector(0.,0., StringMass/2.,StringMass/2.);
-        Pright = toLAB*G4LorentzVector(0.,0.,-StringMass/2.,StringMass/2.);
+                theDecayParton=GetLeftParton();
+                theStableParton=GetRightParton();
+                decaying = Left;
+        } else if ( old.decaying == Right )
+        {
+	        RightParton = newdecay;
+                Ptright     = old.Ptright - momentum->vect();
+                Ptright.setZ(0.);
+                Pright = old.Pright - Momentum;
 
-        Ptleft =Pleft.vect();  Ptleft.setZ(0.);
-        Ptright=Pright.vect(); Ptright.setZ(0.);
+                LeftParton  = old.LeftParton;
+                Ptleft      = old.Ptleft;
+                Pleft  = old.Pleft;
 
-        //G4cout<<"Pleft   "<<Pleft<<G4endl;
-        //G4cout<<"Pright  "<<Pright<<G4endl;
-        //G4cout<<"Pstring "<<Pstring<<G4endl;
-	if ( old.decaying == Left )
-	{
-		RightParton= old.RightParton;
-                // Ptright    = old.Ptright;
-                // Pright = old.Pright;
+                Pstring = Pleft + Pright;
+                Pplus   = Pstring.plus();
+                Pminus  = Pstring.minus();
 
-		LeftParton = newdecay;
-                // Ptleft     = old.Ptleft - momentum->vect();
-                // Ptleft.setZ(0.);
-                // Pleft  = old.Pleft - Momentum;
-                // Pstring=Pleft + Pright;
-
-		theDecayParton=GetLeftParton();
-		theStableParton=GetRightParton();
-		decaying=Left;
-	} else if ( old.decaying == Right )
-	{
-		RightParton = newdecay;
-                // Ptright     = old.Ptright - momentum->vect();
-                // Ptright.setZ(0.);
-                // Pright = old.Pright + Momentum;
-
-		LeftParton  = old.LeftParton;
-                // Ptleft      = old.Ptleft;
-                // Pleft  = old.Pleft;
-                // Pstring=Pleft + Pright;
-
-		theDecayParton=GetRightParton();
-		theStableParton=GetLeftParton();
-		decaying=Right;
-	} else
+                theDecayParton=GetRightParton();
+                theStableParton=GetLeftParton();
+                decaying = Right;
+        } else
 	{
 		throw G4HadronicException(__FILE__, __LINE__, 
                   "G4FragmentingString::G4FragmentingString: no decay Direction defined");
 	}
-	Pplus  = Pstring.plus();   //old.Pplus  - (momentum->e() + momentum->pz());
-	Pminus = Pstring.minus();  //old.Pminus - (momentum->e() - momentum->pz());
 }
 
 
@@ -208,7 +195,6 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 
 G4FragmentingString::~G4FragmentingString()
 {}
-
 
 //---------------------------------------------------------------------------------
 
@@ -300,21 +286,16 @@ G4double G4FragmentingString::LightConeDecay()
 
 G4LorentzVector G4FragmentingString::Get4Momentum() const
 {
-        G4LorentzVector momentum(Ptleft+Ptright,0);
-	momentum.setPz(0.5*(Pplus-Pminus));
-	momentum.setE(0.5*(Pplus+Pminus));
-	return momentum;
+        return Pstring;
 }
 
 G4double G4FragmentingString::Mass2() const
 {
-  // return Pplus*Pminus - (Ptleft+Ptright).mag2();
   return Pstring.mag2();
 }
 
 G4double G4FragmentingString::Mass() const
 {
-  // return std::sqrt(this->Mass2());
   return Pstring.mag();
 }
 
@@ -338,3 +319,24 @@ G4LorentzVector G4FragmentingString::GetPright()
   return Pright;
 }
 
+G4LorentzRotation G4FragmentingString::TransformToAlignedCms()
+{
+     G4LorentzVector momentum = Pstring;
+     G4LorentzRotation toAlignedCms(-1*momentum.boostVector());
+     momentum = toAlignedCms * Pleft;
+
+     toAlignedCms.rotateZ(-1*momentum.phi());
+     toAlignedCms.rotateY(-1*momentum.theta());
+
+     Pleft   *= toAlignedCms;
+     Pright  *= toAlignedCms;
+     Pstring *= toAlignedCms;
+
+     Ptleft  = G4ThreeVector(Pleft.vect());
+     Ptleft.setZ(0.);
+     Ptright = G4ThreeVector(Pright.vect());
+     Pplus  = Pstring.plus();
+     Pminus = Pstring.minus();
+
+     return toAlignedCms;
+}

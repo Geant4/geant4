@@ -62,7 +62,6 @@
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronHElasticPhysics.hh"
-#include "G4ChargeExchangePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4NeutronCrossSectionXS.hh"
 #include "G4StoppingPhysics.hh"
@@ -258,7 +257,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "QGSP_BERT_HP") {
 
     SetBuilderList0(true);
-    fHadronPhys.push_back( new G4HadronPhysicsQGSP_BERT_HP());
+    fHadronPhys.push_back( new G4HadronPhysicsQGSP_BERT_HP(verboseLevel));
+    AddPhysicsList("RadioactiveDecay");
 
   } else if (name == "QGSP_BIC") {
 
@@ -284,7 +284,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "QGSP_BIC_HP") {
 
     SetBuilderList0(true);
-    fHadronPhys.push_back( new G4HadronPhysicsQGSP_BIC_HP());
+    fHadronPhys.push_back( new G4HadronPhysicsQGSP_BIC_HP(verboseLevel));
+    AddPhysicsList("RadioactiveDecay");
+
+  } else if (name == "RadioactiveDecay") {
+
+    fHadronPhys.push_back( new G4RadioactiveDecayPhysics(verboseLevel));
 
   } else {
 
@@ -306,7 +311,9 @@ void PhysicsList::SetBuilderList0(G4bool flagHP)
   }
   fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
   fHadronPhys.push_back( new G4IonPhysics(verboseLevel));
-  fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
+  if(!flagHP) {
+    fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -321,7 +328,9 @@ void PhysicsList::SetBuilderList1(G4bool flagHP)
   }
   fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
   fHadronPhys.push_back( new G4IonPhysics(verboseLevel));
-  fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
+  if(!flagHP) {
+    fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

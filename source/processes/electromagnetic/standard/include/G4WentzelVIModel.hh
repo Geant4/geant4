@@ -69,58 +69,60 @@ public:
 
   explicit G4WentzelVIModel(G4bool comb=true, const G4String& nam = "WentzelVIUni");
 
-  virtual ~G4WentzelVIModel();
+  ~G4WentzelVIModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-                               G4VEmModel* masterModel) override;
+  void InitialiseLocal(const G4ParticleDefinition*, 
+		       G4VEmModel* masterModel) override;
 
-  virtual void StartTracking(G4Track*) override;
+  void StartTracking(G4Track*) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-					      G4double KineticEnergy,
-					      G4double AtomicNumber,
-					      G4double AtomicWeight=0., 
-					      G4double cut = DBL_MAX,
-					      G4double emax= DBL_MAX) override;
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double KineticEnergy,
+				      G4double AtomicNumber,
+				      G4double AtomicWeight=0., 
+				      G4double cut = DBL_MAX,
+				      G4double emax= DBL_MAX) override;
 
-  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, 
-					  G4double safety) override;
+  G4ThreeVector& SampleScattering(const G4ThreeVector&, 
+				  G4double safety) override;
 
-  virtual G4double 
+  G4double 
   ComputeTruePathLengthLimit(const G4Track& track,
 			     G4double& currentMinimalStep) override;
 
-  virtual G4double ComputeGeomPathLength(G4double truePathLength) override;
+  G4double ComputeGeomPathLength(G4double truePathLength) override;
 
-  virtual G4double ComputeTrueStepLength(G4double geomStepLength) override;
+  G4double ComputeTrueStepLength(G4double geomStepLength) override;
 
   // defines low energy limit on energy transfer to atomic electron
-  inline void SetFixedCut(G4double);
+  void SetFixedCut(G4double);
 
   // low energy limit on energy transfer to atomic electron
-  inline G4double GetFixedCut() const;
+  G4double GetFixedCut() const;
 
   // access to cross section class
-  inline void SetWVICrossSection(G4WentzelOKandVIxSection*);
+  void SetWVICrossSection(G4WentzelOKandVIxSection*);
 
-  inline G4WentzelOKandVIxSection* GetWVICrossSection();
+  G4WentzelOKandVIxSection* GetWVICrossSection();
 
-  inline void SetUseSecondMoment(G4bool);
+  void SetUseSecondMoment(G4bool);
 
-  inline G4bool UseSecondMoment() const;
+  G4bool UseSecondMoment() const;
 
-  inline G4PhysicsTable* GetSecondMomentTable();
+  G4PhysicsTable* GetSecondMomentTable();
 
-  inline G4double SecondMoment(const G4ParticleDefinition*,
-			       const G4MaterialCutsCouple*,
-			       G4double kineticEnergy);
+  G4double SecondMoment(const G4ParticleDefinition*,
+			const G4MaterialCutsCouple*,
+			G4double kineticEnergy);
 
   void SetSingleScatteringFactor(G4double);
 
   void DefineMaterial(const G4MaterialCutsCouple*);
+
+  G4WentzelVIModel & operator=(const G4WentzelVIModel &right) = delete;
+  G4WentzelVIModel(const G4WentzelVIModel&) = delete;
 
 protected:
 
@@ -133,64 +135,53 @@ private:
   G4double ComputeSecondMoment(const G4ParticleDefinition*,
 			       G4double kineticEnergy);
 
-  //  hide assignment operator
-  G4WentzelVIModel & operator=(const  G4WentzelVIModel &right) = delete;
-  G4WentzelVIModel(const  G4WentzelVIModel&) = delete;
-
 protected:
 
   G4WentzelOKandVIxSection* wokvi;
+  const G4MaterialCutsCouple* currentCouple = nullptr;
+  const G4Material* currentMaterial = nullptr;
 
+  const G4ParticleDefinition* particle = nullptr;
+  G4ParticleChangeForMSC* fParticleChange = nullptr;
+  const G4DataVector* currentCuts = nullptr;
+  G4PhysicsTable* fSecondMoments = nullptr;
+
+  G4double lowEnergyLimit;
   G4double tlimitminfix;
-  G4double ssFactor;
-  G4double invssFactor;
+  G4double ssFactor = 1.05;
+  G4double invssFactor = 1.0;
 
   // cache kinematics
-  G4double preKinEnergy;
-  G4double tPathLength;
-  G4double zPathLength;
-  G4double lambdaeff;
-  G4double currentRange; 
-  G4double cosTetMaxNuc;
+  G4double preKinEnergy = 0.0;
+  G4double tPathLength = 0.0;
+  G4double zPathLength = 0.0;
+  G4double lambdaeff = 0.0;
+  G4double currentRange = 0.0; 
+  G4double cosTetMaxNuc = 0.0;
 
-  // cache material
-  G4int    currentMaterialIndex;
-  const G4MaterialCutsCouple* currentCouple;
-  const G4Material* currentMaterial;
-
-  const G4ParticleDefinition* particle;
-  G4ParticleChangeForMSC*   fParticleChange;
-  const G4DataVector*       currentCuts;
-
-  G4double invsqrt12;
-  G4double fixedCut;
+  G4double fixedCut = -1.0;
 
   // cache kinematics
-  G4double effKinEnergy;
+  G4double effKinEnergy = 0.0;
 
   // single scattering parameters
-  G4double cosThetaMin;
-  G4double cosThetaMax;
+  G4double cosThetaMin = 1.0;
+  G4double cosThetaMax = -1.0;
+  G4double xtsec = 0.0;
 
-  G4PhysicsTable* fSecondMoments;
-  size_t          idx2;
+  G4int  currentMaterialIndex = 0;
+  size_t idx2 = 0;
 
   // data for single scattering mode
-  G4int minNCollisions;
-  G4int nelments;
-  std::vector<G4double> xsecn;
-  std::vector<G4double> prob;
-
-  G4double xtsec;
-  G4double numlimit;
-
-  // projectile
-  G4double lowEnergyLimit;
+  G4int nelments = 0;
 
   // flags
   G4bool   singleScatteringMode;
   G4bool   isCombined;
   G4bool   useSecondMoment;
+
+  std::vector<G4double> xsecn;
+  std::vector<G4double> prob;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

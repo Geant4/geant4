@@ -38,9 +38,8 @@
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
+#include "G4AnalysisManager.hh"
 #include "globals.hh"
-#include "g4root.hh"
-//#include "g4xml.hh"
 
 class DetectorConstruction;
 class PhysicsList;

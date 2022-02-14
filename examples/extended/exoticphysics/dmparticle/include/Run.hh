@@ -39,8 +39,7 @@
 #include "G4Run.hh"
 #include "G4DataVector.hh"
 #include "G4StatDouble.hh"
-
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

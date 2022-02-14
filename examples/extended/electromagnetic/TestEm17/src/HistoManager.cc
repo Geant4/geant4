@@ -81,6 +81,7 @@ void HistoManager::book()
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
   analysisManager->SetVerboseLevel(0);
   G4String extension = analysisManager->GetFileType();
   fileName[1] = fileName[0] + "." + extension;
@@ -123,7 +124,7 @@ void HistoManager::save()
     saveAscii();                    // Write fAscii file, if any
     G4cout << "\n----> Histograms are saved in " << fileName[1] << G4endl;
       
-    //    delete G4AnalysisManager::Instance();
+    analysisManager->Clear();
     factoryOn = false;
   }         
 }

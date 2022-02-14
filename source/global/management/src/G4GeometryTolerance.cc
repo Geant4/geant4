@@ -23,46 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GeometryTolerance class implementation
 //
-//
-// class G4GeometryTolerance
-//
-// Implementation
-//
-// Author:
-// 30.10.06 - G.Cosmo, first implementation
+// Author: G.Cosmo (CERN), 30 October 2006
 // --------------------------------------------------------------------
 
 #include "G4GeometryTolerance.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4AutoDelete.hh"
+#include "G4SystemOfUnits.hh"
 #include "globals.hh"
-
 
 // ***************************************************************************
 // Static class instance
 // ***************************************************************************
 //
-G4ThreadLocal G4GeometryTolerance* G4GeometryTolerance::fpInstance = 0;
+G4ThreadLocal G4GeometryTolerance* G4GeometryTolerance::fpInstance = nullptr;
 
 // ***************************************************************************
 // Constructor.
 // ***************************************************************************
 //
-G4GeometryTolerance::G4GeometryTolerance() : fInitialised(false)
+G4GeometryTolerance::G4GeometryTolerance()
 {
-  fCarTolerance = 1E-9*mm;
-  fAngTolerance = 1E-9*rad;
-  fRadTolerance = 1E-9*mm;
+  fCarTolerance = 1E-9 * mm;
+  fAngTolerance = 1E-9 * rad;
+  fRadTolerance = 1E-9 * mm;
 }
 
 // ***************************************************************************
 // Empty destructor.
 // ***************************************************************************
 //
-G4GeometryTolerance::~G4GeometryTolerance()
-{
-}
+G4GeometryTolerance::~G4GeometryTolerance() {}
 
 // ***************************************************************************
 // Returns the instance of the singleton.
@@ -71,12 +63,12 @@ G4GeometryTolerance::~G4GeometryTolerance()
 //
 G4GeometryTolerance* G4GeometryTolerance::GetInstance()
 {
-  if (fpInstance == 0)
+  if(fpInstance == nullptr)
   {
-    fpInstance = new  G4GeometryTolerance;
+    fpInstance = new G4GeometryTolerance;
     G4AutoDelete::Register(fpInstance);
   }
-  return fpInstance;    
+  return fpInstance;
 }
 
 // ***************************************************************************
@@ -105,18 +97,17 @@ G4double G4GeometryTolerance::GetRadialTolerance() const
 //
 void G4GeometryTolerance::SetSurfaceTolerance(G4double worldExtent)
 {
-  if (!fInitialised)
+  if(!fInitialised)
   {
-    fCarTolerance = fRadTolerance = worldExtent*1E-11;
-    fInitialised = true;
+    fCarTolerance = fRadTolerance = worldExtent * 1E-11;
+    fInitialised                  = true;
   }
   else
   {
     G4cout << "WARNING - G4GeometryTolerance::SetSurfaceTolerance()" << G4endl
            << "          Tolerance can only be set once. Currently set to: "
-           << fCarTolerance/mm << " mm." << G4endl;
-    G4Exception("G4GeometryTolerance::SetSurfaceTolerance()",
-                "NotApplicable", JustWarning,
-                "The tolerance has been already set!");
+           << fCarTolerance / mm << " mm." << G4endl;
+    G4Exception("G4GeometryTolerance::SetSurfaceTolerance()", "NotApplicable",
+                JustWarning, "The tolerance has been already set!");
   }
 }

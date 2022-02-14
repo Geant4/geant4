@@ -1,13 +1,16 @@
+# macro for rdecay01
+#
 # force Ca47 to decay within a window specified in data file
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 1
 #
 /gun/particle ion
 /gun/ion 20 47
 #
-/grdm/decayBiasProfile timeWindowBiased.data
-/grdm/BRbias 0
+/process/had/rdm/decayBiasProfile timeWindowBiased.data
+/process/had/rdm/BRbias 0
 #
 /analysis/setFileName Ca47bias
 /analysis/h1/set 8  100  0. 30. day   #time of life

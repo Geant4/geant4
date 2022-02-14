@@ -1,0 +1,52 @@
+#
+# Camera and lights commands
+/vis/viewer/set/viewpointVector -0.190344 0.0697565 0.979236
+/vis/viewer/set/upVector 0 1 0
+/vis/viewer/set/projection orthogonal
+/vis/viewer/zoomTo 2.00368
+/vis/viewer/scaleTo 1 1 1
+/vis/viewer/set/targetPoint 0 0 0 fm 
+# Note that if you have not set a target point, the vis system sets
+# a target point based on the scene - plus any panning and dollying -
+# so don't be alarmed by strange coordinates here.
+/vis/viewer/dollyTo 0 fm 
+/vis/viewer/set/lightsMove object
+/vis/viewer/set/lightsVector 1 1 1
+/vis/viewer/set/rotationStyle constrainUpDirection
+/vis/viewer/set/background 0 0 0 1
+/vis/viewer/set/defaultColour 1 1 1 1
+/vis/viewer/set/defaultTextColour 0 0 1 1
+#
+# Drawing style commands
+/vis/viewer/set/style wireframe
+/vis/viewer/set/hiddenEdge false
+/vis/viewer/set/auxiliaryEdge false
+/vis/viewer/set/hiddenMarker false
+/vis/viewer/set/globalLineWidthScale 1
+/vis/viewer/set/globalMarkerScale 1
+/vis/viewer/set/numberOfCloudPoints 10000
+#
+# Scene-modifying commands
+/vis/viewer/set/culling global true
+/vis/viewer/set/culling invisible true
+/vis/viewer/set/culling density false
+/vis/viewer/set/culling coveredDaughters false
+/vis/viewer/colourByDensity 0 g/cm3
+/vis/viewer/set/sectionPlane off
+/vis/viewer/set/cutawayMode union
+/vis/viewer/clearCutawayPlanes
+# No cutaway planes defined.
+/vis/viewer/set/explodeFactor 1 0 0 0 fm 
+/vis/viewer/set/lineSegmentsPerCircle 24
+#
+# Touchable commands
+# None
+/vis/viewer/clearVisAttributesModifiers
+#
+# Time window commands
+/vis/viewer/set/timeWindow/startTime -1e+100 ns 
+/vis/viewer/set/timeWindow/endTime 1e+100 ns 
+/vis/viewer/set/timeWindow/fadeFactor 0
+/vis/viewer/set/timeWindow/displayHeadTime false
+/vis/viewer/set/timeWindow/displayLightFront false
+

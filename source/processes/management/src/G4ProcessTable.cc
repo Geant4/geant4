@@ -23,31 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessTable class implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	4th Aug 1998, H.Kurashige
-// ------------------------------------------------------------
-//  History:
-//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
-//
+// Author: H.Kurashige, 4 August 1998
+// --------------------------------------------------------------------
 
 #include "G4ProcessTableMessenger.hh"
 #include "G4ProcessTable.hh"
+#include "G4ParticleTable.hh"
+#include "G4ios.hh"
 
+// --------------------------------------------------------------------
 // Static class variable: ptr to single instance of class in a thread
 G4ThreadLocal G4ProcessTable* G4ProcessTable::fProcessTable = nullptr;
 
-//  constructor //////////////////////////
+// --------------------------------------------------------------------
+// Default constructor
+//
 G4ProcessTable::G4ProcessTable()
-  :verboseLevel(1)
 {
 #ifdef G4VERBOSE
-  if (verboseLevel>1){
+  if (verboseLevel>1)
+  {
     G4cout << "--  G4ProcessTable constructor  --" << G4endl;
   }
 #endif
@@ -57,27 +54,47 @@ G4ProcessTable::G4ProcessTable()
   fProcTblMessenger = new G4ProcessTableMessenger(this);
 }
 
-// destructor //////////////////////////
+// --------------------------------------------------------------------
+// Destructor
+//
 G4ProcessTable::~G4ProcessTable()
 {
-  if ( tmpTblVector != nullptr) {
+  if ( tmpTblVector != nullptr )
+  {
     tmpTblVector ->clear();
     delete tmpTblVector;
     tmpTblVector = nullptr;
   }
 
-  if ( fProcTblVector != nullptr) {
-    G4ProcTableVector::iterator idx;
-    
-    for (idx=fProcTblVector->begin(); idx!=fProcTblVector->end(); ++idx) {
-      delete (*idx);
+  if ( fProcTblVector != nullptr )
+  {
+    for (auto elem : *fProcTblVector)
+    {
+      delete elem;
     }  
     fProcTblVector ->clear();
     delete fProcTblVector;
     fProcTblVector = nullptr;
   }
 
-  if ( fProcNameVector != nullptr) {
+  // delete all process except transportation
+  for(auto proc : fListProcesses)
+  {
+    if ( proc != nullptr )
+    {
+      G4ProcessType type = proc->GetProcessType();
+      if (type != fTransportation && type != fParallel
+       && type != fParameterisation)
+      {
+        delete proc;
+      } 
+    } 
+  }
+
+  fListProcesses.clear();
+
+  if ( fProcNameVector != nullptr )
+  {
     fProcNameVector ->clear();
     delete fProcNameVector;
     fProcNameVector = nullptr;
@@ -86,319 +103,420 @@ G4ProcessTable::~G4ProcessTable()
   delete fProcTblMessenger;
 }
 
-//////////////////////////
+// --------------------------------------------------------------------
+//
 G4ProcessTable* G4ProcessTable::GetProcessTable()
 {
-  if(!fProcessTable) {
+  if(fProcessTable == nullptr)
+  {
     static G4ThreadLocalSingleton<G4ProcessTable> inst;
     fProcessTable = inst.Instance();
   }
   return fProcessTable;
 }
 
-//////////////////////////
-G4int   G4ProcessTable::Insert(G4VProcess* aProcess, 
-			       G4ProcessManager* aProcMgr)
+// --------------------------------------------------------------------
+//
+G4int G4ProcessTable::Insert(G4VProcess* aProcess, 
+                             G4ProcessManager* aProcMgr)
 {
-  if ( (aProcess == nullptr) || ( aProcMgr == nullptr ) ){
+  if ( (aProcess == nullptr) || ( aProcMgr == nullptr ) || !fProcTblVector )
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel>0){
-      G4cout << "G4ProcessTable::Insert : arguments are 0 pointer "
-	     <<aProcess <<","<<  aProcMgr << G4endl;
+    if (verboseLevel>0)
+    {
+      G4cout << "G4ProcessTable::Insert() - arguments are null pointer "
+             << aProcess << "," << aProcMgr << G4endl;
     }
 #endif
     return -1;
   }
     
 #ifdef G4VERBOSE
-  if (verboseLevel>1){
-    G4cout << "G4ProcessTable::Insert ";
+  if (verboseLevel>1)
+  {
+    G4cout << "G4ProcessTable::Insert() -";
     G4cout << " Process["  << aProcess->GetProcessName() << "]";
-    G4cout << " Particle["  << aProcMgr->GetParticleType()->GetParticleName() << "]";
-    G4cout << G4endl;
+    G4cout << " Particle["  << aProcMgr->GetParticleType()->GetParticleName()
+           << "]" << G4endl;
   }
 #endif
 
-  G4int idxTbl=0;
+  G4int idxTbl = 0;
+  G4int nidx = fProcTblVector->size();
   G4ProcTblElement* anElement = nullptr;
-  G4bool isFoundInTbl = false;
   // loop over all elements
-  for (auto itr=fProcTblVector->begin();
-            itr!=fProcTblVector->end(); ++itr, ++idxTbl) {
-    anElement = (*itr);
+  for (; idxTbl < nidx; ++idxTbl)
+  {
+    anElement = (*fProcTblVector)[idxTbl];
+    if(!anElement) { continue; }
     // check if this process is included
-    if (aProcess == anElement->GetProcess()) {
-      isFoundInTbl = true;
-
+    if (aProcess == anElement->GetProcess())
+    {
       // add the process manager into the element 
-      //  unless  this process manager is included
-      if (!anElement->Contains(aProcMgr)) {
-	anElement->Insert(aProcMgr);
+      // unless  this process manager is included
+      if (!anElement->Contains(aProcMgr))
+      {
+        anElement->Insert(aProcMgr);
 #ifdef G4VERBOSE
-	if (verboseLevel>2){
-	  G4cout << " This Process Manager is registered !! " << G4endl;
-	}
+        if (verboseLevel>2)
+        {
+          G4cout << " This Process Manager is registered !! " << G4endl;
+        }
 #endif
       }
-      break;
+      return idxTbl;
     }
   }
   // add this process into the table by creating a new element
-  if (!isFoundInTbl) {
-    G4ProcTblElement* newElement = new G4ProcTblElement(aProcess);
-    newElement->Insert(aProcMgr);
-    fProcTblVector->push_back(newElement);
-    // add into name vector     
-    G4bool isFound = false;
-    for (auto ip=fProcNameVector->cbegin(); ip!=fProcNameVector->cend(); ++ip) {
-      isFound |= (aProcess->GetProcessName() == (*ip));
-    }
-    if (!isFound) {
-      fProcNameVector->push_back(aProcess->GetProcessName() );
-#ifdef G4VERBOSE
-      if (verboseLevel>2){
-	G4cout << " This Process is registered !! " << G4endl;
-      }
-#endif
-    }
+  if (verboseLevel>2)
+  {
+    G4cout << " New element is created !! " << G4endl;
   }
-  return idxTbl;
+  anElement = new G4ProcTblElement(aProcess);
+  anElement->Insert(aProcMgr);
+  fProcTblVector->push_back(anElement);
+  fProcNameVector->push_back(aProcess->GetProcessName() );
+  return nidx;
 }
 
-//////////////////////////
-G4int  G4ProcessTable::Remove( G4VProcess* aProcess, 
-			       G4ProcessManager* aProcMgr)
+// --------------------------------------------------------------------
+//
+G4int G4ProcessTable::Remove( G4VProcess* aProcess, 
+                              G4ProcessManager* aProcMgr )
 {
-  if ( (aProcess == nullptr) || ( aProcMgr == nullptr ) ){
+  if ( (aProcess == nullptr) || ( aProcMgr == nullptr ) || !fProcTblVector )
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel>0){
-      G4cout << "G4ProcessTable::Remove : arguments are 0 pointer "<< G4endl;
+    if (verboseLevel>0)
+    {
+      G4cout << "G4ProcessTable::Remove() - arguments are null pointer "
+             << G4endl;
     }
 #endif
     return -1;
   }
     
 #ifdef G4VERBOSE
-  if (verboseLevel>1){
-    G4cout << "G4ProcessTable::Remove ";
+  if (verboseLevel>1)
+  {
+    G4cout << "G4ProcessTable::Remove() -";
     G4cout << " Process["  << aProcess->GetProcessName() << "]";
-    G4cout << " Particle[" << aProcMgr->GetParticleType()->GetParticleName() << "]" << G4endl;
+    G4cout << " Particle[" << aProcMgr->GetParticleType()->GetParticleName()
+           << "]" << G4endl;
   }
 #endif
 
-  G4ProcTableVector::iterator itr; 
-  G4int idxTbl=0;
+  G4int idxTbl = 0;
+  G4int nidx = fProcTblVector->size();
   G4ProcTblElement* anElement =nullptr;
-  G4bool isFound = false;
   // loop over all elements
-  for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr, ++idxTbl) {
-    anElement = (*itr);
+  for (; idxTbl < nidx; ++idxTbl)
+  {
+    anElement = (*fProcTblVector)[idxTbl];
+    if(!anElement) { continue; }
 
     // check if this process is included
-    if (aProcess == anElement->GetProcess()) {
-      isFound = anElement->Contains(aProcMgr);
-      // remove the process manager from the element
-      anElement->Remove(aProcMgr);
+    if (aProcess == anElement->GetProcess())
+    {
+      if(anElement->Contains(aProcMgr))
+      {
+        // remove the process manager from the element
+        anElement->Remove(aProcMgr);
 #ifdef G4VERBOSE
-      if (verboseLevel>2){
-	G4cout << " This Process Manager is removed !! " << G4endl;
-      }
+        if (verboseLevel>2)
+        {
+          G4cout << " This Process Manager is removed !! " << G4endl;
+        }
 #endif
-      break;
-    }
-  }
-  // 
-  if (!isFound) {
+        if(anElement->Length() == 0)
+        {
+          delete anElement;
+          (*fProcTblVector)[idxTbl] = nullptr;
 #ifdef G4VERBOSE
-    if (verboseLevel>0){
-      G4cout << " This Process Manager is not registered !! " << G4endl;
-    }
+          if (verboseLevel>1)
+          {
+            G4cout << " This Process is removed !! " << G4endl;
+          }
 #endif
-    return -1;
-  }
-  // remove the element if it has no entry
-  if (anElement->Length() == 0){
-    fProcTblVector->erase(itr);
-    delete anElement;
-    // check other prcesses with same name exist or not
-    G4bool isSameName = false;
-    for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr) {
-      anElement = (*itr);
-      if (anElement->GetProcessName() == aProcess->GetProcessName()) {
-	isSameName = true;
-	break;
+        }
+        return idxTbl;
       }
     }
-    // remove from name vector
-    if (!isSameName ) {
-      for (auto i=fProcNameVector->begin(); i!=fProcNameVector->end(); ++i) {
-	if ( *i == aProcess->GetProcessName() ) {
-	  fProcNameVector->erase(i);
-	  break;
-	}
-      }
-    }
-#ifdef G4VERBOSE
-    if (verboseLevel>1){
-      G4cout << " This Process is removed !! " << G4endl;
-    }
-#endif
   }
-  return idxTbl;
+#ifdef G4VERBOSE
+  if (verboseLevel>1)
+  {
+    G4cout << " This Process Manager is not registered to the process!! " 
+           << G4endl;
+  }
+#endif
+  return -1;
 }
 
-//////////////////////////
+// --------------------------------------------------------------------
+//
+void G4ProcessTable::RegisterProcess(G4VProcess* ptr)
+{
+  for(auto proc : fListProcesses)
+  {
+    if(ptr == proc) { return; } 
+  }
+  fListProcesses.push_back(ptr);
+}
+
+// --------------------------------------------------------------------
+//
+void G4ProcessTable::DeRegisterProcess(G4VProcess* ptr)
+{  
+  G4int nn = fListProcesses.size();
+  for(G4int i=0; i<nn; ++i)
+  {
+    if(ptr == fListProcesses[i])
+    { 
+      fListProcesses[i] = nullptr;
+      return; 
+    }
+  }
+}
+
+// --------------------------------------------------------------------
+//
 G4VProcess* G4ProcessTable::FindProcess(const G4String& processName, 
-			                const G4ProcessManager* processManager)
+                                        const G4String& particleName) const
+{
+  return FindProcess(processName,
+          G4ParticleTable::GetParticleTable()->FindParticle(particleName));
+}
+
+// --------------------------------------------------------------------
+//
+G4VProcess* G4ProcessTable::FindProcess(const G4String& processName, 
+                                        const G4ProcessManager* processManager)
                                         const
 {
-  G4int idxTbl = 0;
-  G4bool isFound = false;
-  G4ProcTblElement* anElement =nullptr;
-  for (auto itr=fProcTblVector->cbegin();
-            itr!=fProcTblVector->cend(); ++itr, ++idxTbl) {
-    anElement = (*itr);
-    // check name
-    if ( anElement->GetProcessName() == processName ) {
-      // check if the processManage is included
-      if ( anElement->Contains(processManager) ) {
-	isFound = true;
-	break;
-      }
+  for (auto anElement : *fProcTblVector)
+  {
+    // check name and if the processManage is included
+    if (anElement && anElement->GetProcessName() == processName
+        && anElement->Contains(processManager))
+    {
+      return anElement->GetProcess();
     }
   }
 #ifdef G4VERBOSE
-  if (!isFound && verboseLevel>1){
-    G4cout << " G4ProcessTable::FindProcess :" ;
+  if (verboseLevel > 1)
+  {
+    G4cout << " G4ProcessTable::FindProcess() -" ;
     G4cout << " The Process[" << processName << "] is not found  ";
-    G4cout << " for " << processManager->GetParticleType()->GetParticleName() << G4endl;
+    G4cout << " for [" << processManager->GetParticleType()->GetParticleName()
+           << "]" << G4endl;
   }
 #endif
-  
-  if (isFound) return anElement->GetProcess();
-  else         return nullptr;
+  return nullptr;
 }
 
-///////////////
-G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find( 
-					 G4ProcTableVector*,
-					 const G4String& processName )
+// --------------------------------------------------------------------
+//
+G4VProcess*
+G4ProcessTable::FindProcess(G4ProcessType processType, 
+                            const G4ParticleDefinition* particle) const
+{
+  // find the first process of given type for this particle
+
+  const G4ProcessManager* processManager = particle->GetProcessManager();
+  for (auto anElement : *fProcTblVector)
+  {
+    if (anElement && anElement->GetProcess()->GetProcessType() == processType
+        && anElement->Contains(processManager))
+    {
+      return anElement->GetProcess();
+    }
+  }
+#ifdef G4VERBOSE
+  if (verboseLevel > 1)
+  {
+    G4cout << " G4ProcessTable::FindProcess() -";
+    G4cout << " The Process Type " << processType << " is not found  ";
+    G4cout << " for [" << particle->GetParticleName() << "]" << G4endl;
+  }
+#endif
+  return nullptr;
+}
+
+// --------------------------------------------------------------------
+//
+G4VProcess*
+G4ProcessTable::FindProcess(G4int procSubType, 
+                            const G4ParticleDefinition* particle) const
+{
+  // find the first process of given type for this particle
+
+  const G4ProcessManager* processManager = particle->GetProcessManager();
+  for (auto anElement : *fProcTblVector)
+  {
+    if ( anElement != nullptr
+      && anElement->GetProcess()->GetProcessSubType() == procSubType
+      && anElement->Contains(processManager) )
+    {
+      return anElement->GetProcess();
+    }
+  }
+#ifdef G4VERBOSE
+  if (verboseLevel > 1)
+  {
+    G4cout << " G4ProcessTable::FindProcess() -";
+    G4cout << " The Process SubType " << procSubType << " is not found  ";
+    G4cout << " for [" << particle->GetParticleName() << "]" << G4endl;
+  }
+#endif
+  return nullptr;
+}
+
+// --------------------------------------------------------------------
+//
+G4ProcessTable::G4ProcTableVector*
+G4ProcessTable::Find(const G4String& processName)
 {
   tmpTblVector->clear();
 
   G4bool isFound = false;
-  G4ProcTblElement* anElement =nullptr;
-  for (auto itr=fProcTblVector->cbegin(); itr!=fProcTblVector->cend(); ++itr) {
+  G4ProcTblElement* anElement = nullptr;
+  for (auto itr=fProcTblVector->cbegin(); itr!=fProcTblVector->cend(); ++itr)
+  {
     anElement = (*itr);
     // check name
-    if ( anElement->GetProcessName() == processName ) {
+    if ( anElement != nullptr && anElement->GetProcessName() == processName )
+    {
       isFound = true;
       tmpTblVector->push_back(anElement);
     }
   }
 
-  if (!isFound && verboseLevel>0){
+  if (!isFound && verboseLevel>0)
+  {
 #ifdef G4VERBOSE
-    G4cout << " G4ProcessTable::Find :" ;
+    G4cout << " G4ProcessTable::Find() -" ;
     G4cout << " The Process[" << processName << "] is not found  " << G4endl;
 #endif
   }
-  
-  return tmpTblVector;
 
-}     
-///////////////
-G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find( 
-					 G4ProcTableVector*,
-					 G4ProcessType   processType )
+  return tmpTblVector;
+}
+
+// --------------------------------------------------------------------
+//
+G4ProcessTable::G4ProcTableVector*
+G4ProcessTable::Find(G4ProcessType processType)
 {
   tmpTblVector->clear();
 
   G4bool isFound = false;
-  G4ProcTblElement* anElement =nullptr;
-  for (auto itr=fProcTblVector->cbegin(); itr!=fProcTblVector->cend(); ++itr) {
+  G4ProcTblElement* anElement = nullptr;
+  for (auto itr=fProcTblVector->cbegin(); itr!=fProcTblVector->cend(); ++itr)
+  {
     anElement = (*itr);
     // check name
-    if ( anElement->GetProcess()->GetProcessType() == processType ) {
+    if ( anElement != nullptr && anElement->GetProcess()->GetProcessType() == processType )
+    {
       isFound = true;
       tmpTblVector->push_back(anElement);
     }
   }
 
-  if (!isFound && verboseLevel>0){
+  if (!isFound && verboseLevel>0)
+  {
 #ifdef G4VERBOSE
-    G4cout << " G4ProcessTable::Find :" ;
-    G4cout << " The ProcessType[" << processType << "] is not found  " << G4endl;
+    G4cout << " G4ProcessTable::Find() -" ;
+    G4cout << " The ProcessType[" << processType << "] is not found  "
+           << G4endl;
 #endif
   }
-  
-  return tmpTblVector;
 
+  return tmpTblVector;
 }     
 
-///////////////
-G4ProcessVector* G4ProcessTable::ExtractProcesses( G4ProcTableVector* procTblVector)
+// --------------------------------------------------------------------
+//
+G4ProcessVector*
+G4ProcessTable::ExtractProcesses(G4ProcTableVector* procTblVector) const
 {
   G4ProcessVector* procList = new G4ProcessVector();
   // loop over all elements
-  for (auto itr=procTblVector->cbegin(); itr!=procTblVector->cend(); ++itr) {
+  for (auto itr=procTblVector->cbegin(); itr!=procTblVector->cend(); ++itr)
+  {
     G4ProcTblElement* anElement = (*itr);
-    procList->insert( anElement->GetProcess() );
+    if ( anElement != nullptr) procList->insert( anElement->GetProcess() );
   }
   return procList;
 }
 
-///////////////
-G4ProcessVector* G4ProcessTable::FindProcesses()
+// --------------------------------------------------------------------
+//
+void G4ProcessTable::SetProcessActivation(const G4String& processName, 
+                                          const G4String& particleName, 
+                                                G4bool fActive )
 {
-  return ExtractProcesses(fProcTblVector);
+  if (particleName == "ALL" )
+  {
+    SetProcessActivation( processName, fActive); 
+  }
+  else
+  {
+    SetProcessActivation(processName, 
+        G4ParticleTable::GetParticleTable()->FindParticle(particleName),
+        fActive );
+  }
 }
 
-///////////////
-G4ProcessVector* G4ProcessTable::FindProcesses( const G4ProcessManager* pManager )
+// --------------------------------------------------------------------
+//
+void G4ProcessTable::SetProcessActivation(G4ProcessType processType,
+                                          const G4String& particleName , 
+                                                G4bool fActive)
 {
-  G4ProcessVector* procList = pManager->GetProcessList();
-  return new G4ProcessVector(*procList);
+  if ((particleName == "ALL" ) || (particleName == "all" ))
+  {
+    SetProcessActivation( processType, fActive ); 
+  }
+  else
+  {
+    SetProcessActivation(processType,         
+        G4ParticleTable::GetParticleTable()->FindParticle(particleName),
+        fActive );
+  }
 }
 
-///////////////
-G4ProcessVector* G4ProcessTable::FindProcesses( const G4String& processName )
-{
-  G4ProcTableVector* pTblVector =  Find(fProcTblVector, processName);
-  return ExtractProcesses(pTblVector);
-}
-
-///////////////
-G4ProcessVector* G4ProcessTable::FindProcesses( G4ProcessType processType)
-{
-  G4ProcTableVector* pTblVector =  Find(fProcTblVector, processType);
-  return ExtractProcesses(pTblVector);
-}
-
-///////////////
+// --------------------------------------------------------------------
+//
 void G4ProcessTable::SetProcessActivation( const G4String& processName, 
-			                   G4bool          fActive  )
+                                           G4bool          fActive  )
 {
 #ifdef G4VERBOSE
-  if (verboseLevel>1){
-    G4cout << " G4ProcessTable::SetProcessActivation:" ;
+  if (verboseLevel>1)
+  {
+    G4cout << " G4ProcessTable::SetProcessActivation() -" ;
     G4cout << " The Process[" << processName << "] "<< G4endl;
   }
 #endif
 
-  G4ProcTableVector* pTblVector =  Find(fProcTblVector, processName);
+  G4ProcTableVector* pTblVector =  Find(processName);
   G4ProcTblElement* anElement;  
    // loop over all elements
-  for (auto itr=pTblVector->cbegin(); itr!=pTblVector->cend(); ++itr) {
+  for (auto itr=pTblVector->cbegin(); itr!=pTblVector->cend(); ++itr)
+  {
     anElement = (*itr);
+    if ( anElement == nullptr ) continue;
     G4VProcess* process = anElement->GetProcess();
-    for (G4int idx = 0 ; idx < anElement->Length(); idx++) {
+    for (G4int idx = 0 ; idx < anElement->Length(); ++idx)
+    {
       G4ProcessManager* manager = anElement->GetProcessManager(idx);
       manager->SetProcessActivation(process, fActive);
 #ifdef G4VERBOSE
-      if (verboseLevel>1){
+      if (verboseLevel>1)
+      {
         G4cout << "  for " << manager->GetParticleType()->GetParticleName();
-	G4cout << "  Index = " << manager->GetProcessIndex(process); 
+        G4cout << "  Index = " << manager->GetProcessIndex(process); 
         G4cout << G4endl;
       }
 #endif
@@ -406,121 +524,145 @@ void G4ProcessTable::SetProcessActivation( const G4String& processName,
   }
 }
 
-///////////////
-void G4ProcessTable::SetProcessActivation( 
-			   const G4String& processName, 
-		           G4ProcessManager* processManager, 
-			   G4bool          fActive  )
+// --------------------------------------------------------------------
+//
+void G4ProcessTable::SetProcessActivation(const G4String& processName, 
+                                          G4ProcessManager* processManager, 
+                                          G4bool fActive  )
 {
 #ifdef G4VERBOSE
-  if (verboseLevel>1){
-    G4cout << " G4ProcessTable::SetProcessActivation:" ;
+  if (verboseLevel>1)
+  {
+    G4cout << " G4ProcessTable::SetProcessActivation() -" ;
     G4cout << " The Process[" << processName << "] "<< G4endl;
   }
 #endif
   
   G4VProcess* process = FindProcess( processName,  processManager);
-  if ( process != nullptr) {
+  if ( process != nullptr)
+  {
     processManager->SetProcessActivation(process, fActive);
 #ifdef G4VERBOSE
-    if (verboseLevel>1){
-      G4cout << "  for " << processManager->GetParticleType()->GetParticleName();
-      G4cout << "  Index = " << processManager->GetProcessIndex(process) << G4endl;
+    if (verboseLevel>1)
+    {
+      G4cout << "  for "
+             << processManager->GetParticleType()->GetParticleName();
+      G4cout << "  Index = "
+             << processManager->GetProcessIndex(process) << G4endl;
     }
 #endif
   } 
 }
 
-
-///////////////
-void G4ProcessTable::SetProcessActivation( G4ProcessType   processType, 
-			                   G4bool          fActive  )
+// --------------------------------------------------------------------
+//
+void G4ProcessTable::SetProcessActivation( G4ProcessType processType, 
+                                           G4bool        fActive  )
 {
 #ifdef G4VERBOSE
-  if (verboseLevel>1){
-    G4cout << " G4ProcessTable::SetProcessActivation:" ;
+  if (verboseLevel>1)
+  {
+    G4cout << " G4ProcessTable::SetProcessActivation() -" ;
     G4cout << " The ProcessType[" << G4int(processType) << "] "<< G4endl;
   }
 #endif
 
-  G4ProcTableVector* pTblVector =  Find(fProcTblVector, processType);
+  G4ProcTableVector* pTblVector = Find(processType);
   G4ProcTblElement* anElement;  
   // loop over all elements
-  for (auto itr=pTblVector->cbegin(); itr!=pTblVector->cend(); ++itr) {
+  for (auto itr=pTblVector->cbegin(); itr!=pTblVector->cend(); ++itr)
+  {
     anElement = (*itr);
+    if ( anElement == nullptr ) continue;
     G4VProcess* process = anElement->GetProcess();
 #ifdef G4VERBOSE
-    if (verboseLevel>1){
+    if (verboseLevel>1)
+    {
       G4cout << " The Process[" << process->GetProcessName()<< "] "<< G4endl;
     }
 #endif
-    for (G4int idx = 0 ; idx < anElement->Length(); ++idx) {
+    for (G4int idx = 0 ; idx < anElement->Length(); ++idx)
+    {
       G4ProcessManager* manager = anElement->GetProcessManager(idx);
       manager->SetProcessActivation(process, fActive);
 #ifdef G4VERBOSE
-      if (verboseLevel>1){
+      if (verboseLevel>1)
+      {
         G4cout << "  for " << manager->GetParticleType()->GetParticleName();
-	G4cout << "  Index = " << manager->GetProcessIndex(process) << G4endl;
+        G4cout << "  Index = " << manager->GetProcessIndex(process) << G4endl;
       }
 #endif
     }
   }
 }
 
-///////////////
-void G4ProcessTable::SetProcessActivation( 
-			   G4ProcessType   processType, 
-		           G4ProcessManager* processManager, 
-			   G4bool          fActive  )
+// --------------------------------------------------------------------
+//
+void G4ProcessTable::SetProcessActivation( G4ProcessType   processType, 
+                                           G4ProcessManager* processManager, 
+                                           G4bool          fActive  )
 {
 #ifdef G4VERBOSE
-  if (verboseLevel>1){
-    G4cout << " G4ProcessTable::SetProcessActivation:" ;
+  if (verboseLevel>1)
+  {
+    G4cout << " G4ProcessTable::SetProcessActivation() -" ;
     G4cout << " The ProcessType[" << G4int(processType) << "] "<< G4endl;
   }
 #endif
   
   G4ProcessVector* procList =  processManager->GetProcessList();
-  for (std::size_t idx = 0; idx < procList->length(); ++idx) {
+  for (std::size_t idx = 0; idx < procList->length(); ++idx)
+  {
     G4VProcess* process = (*procList)(idx);
-    if ( process->GetProcessType() == processType) {
+    if ( process->GetProcessType() == processType)
+    {
       processManager->SetProcessActivation(process, fActive);
 #ifdef G4VERBOSE
-      if (verboseLevel>1){
+      if (verboseLevel>1)
+      {
         G4cout << " The Process[" << process->GetProcessName()<< "] "<< G4endl;
-	G4cout << "  for " << processManager->GetParticleType()->GetParticleName();
-	G4cout << "  Index = " << idx << G4endl;
+        G4cout << "  for "
+               << processManager->GetParticleType()->GetParticleName();
+        G4cout << "  Index = " << idx << G4endl;
       }
 #endif
     }
   }
 }
 
-
-/////////////
+// --------------------------------------------------------------------
+//
 void G4ProcessTable::DumpInfo(G4VProcess* process, 
-			      G4ParticleDefinition* particle)
+                              const G4ParticleDefinition* particle)
 {
   G4int idxTbl=0;
-  G4ProcTblElement* anElement =nullptr;
+  G4ProcTblElement* anElement = nullptr;
   G4bool isFoundInTbl = false;
-  G4ProcessManager* manager =nullptr;
+  G4ProcessManager* manager = nullptr;
   G4int idx;
   // loop over all elements
   for (auto itr=fProcTblVector->cbegin();
-            itr!=fProcTblVector->cend(); ++itr, ++idxTbl) {
+            itr!=fProcTblVector->cend(); ++itr, ++idxTbl)
+  {
     anElement = (*itr);
-    if (process == anElement->GetProcess() ){
-      if (particle != nullptr) {
-	for (idx=0; idx<anElement->Length(); idx++){
-	  manager = anElement->GetProcessManager(idx);
-	  if (particle == manager->GetParticleType()) {
-	    isFoundInTbl = true;
-	    break;
-	  }
-	}
-      } else {
-	isFoundInTbl = true;
+    if ( anElement == nullptr ) continue;
+    if (process == anElement->GetProcess() )
+    {
+      if (particle != nullptr)
+      {
+        for (idx=0; idx<anElement->Length(); ++idx)
+        {
+          manager = anElement->GetProcessManager(idx);
+          if (particle == manager->GetParticleType())
+          {
+            isFoundInTbl = true;
+            break;
+          }
+        }
+      }
+      else
+      {
+        isFoundInTbl = true;
       }
       break;
     }
@@ -531,25 +673,31 @@ void G4ProcessTable::DumpInfo(G4VProcess* process,
   process->SetVerboseLevel(verboseLevel);
   process->DumpInfo();
   process->SetVerboseLevel(tmpVerbose);
-  if (particle == nullptr) {
-    for (idx=0; idx<anElement->Length(); idx++){
+  if (particle == nullptr)
+  {
+    for (idx=0; idx<anElement->Length(); ++idx)
+    {
       manager = anElement->GetProcessManager(idx);
       G4cout << " for " << manager->GetParticleType()->GetParticleName();
       G4cout << G4endl;
 #ifdef G4VERBOSE
-      if (verboseLevel >2){
-	tmpVerbose = manager->GetVerboseLevel();
-	manager->SetVerboseLevel(verboseLevel);
-	manager->DumpInfo();
-	manager->SetVerboseLevel(tmpVerbose);
+      if (verboseLevel >2)
+      {
+        tmpVerbose = manager->GetVerboseLevel();
+        manager->SetVerboseLevel(verboseLevel);
+        manager->DumpInfo();
+        manager->SetVerboseLevel(tmpVerbose);
       }
 #endif
     }
-  } else {
+  }
+  else
+  {
     G4cout << " for " << manager->GetParticleType()->GetParticleName();
     G4cout << G4endl;
 #ifdef G4VERBOSE
-    if (verboseLevel >2){
+    if (verboseLevel >2)
+    {
       tmpVerbose = manager->GetVerboseLevel();
       manager->SetVerboseLevel(verboseLevel);
       manager->DumpInfo();
@@ -558,9 +706,3 @@ void G4ProcessTable::DumpInfo(G4VProcess* process,
 #endif
   }
 }
-
-
-
-
-
-

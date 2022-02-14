@@ -44,73 +44,73 @@ class CellParameterisation : public G4VPVParameterisation
 { 
   public:
   
-    CellParameterisation
+    explicit CellParameterisation
     (G4Material* nucleus1, G4Material* cytoplasm1,
      G4Material* nucleus2, G4Material* cytoplasm2,
      G4Material* nucleus3, G4Material* cytoplasm3
      );
 
-    virtual ~CellParameterisation();
+    ~CellParameterisation() override;
    
-    void ComputeTransformation (const G4int copyNo,G4VPhysicalVolume* physVol) const;
+    void ComputeTransformation (const G4int copyNo,G4VPhysicalVolume* physVol) const override;
     
     void ComputeDimensions(G4Box&, 
 				  const G4int, 
-				  const G4VPhysicalVolume* ) const;
+				  const G4VPhysicalVolume* ) const override;
 
     void ComputeDimensions(G4Tubs &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override {}
 
     void ComputeDimensions(G4Trd &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override {}
 	
     void ComputeDimensions(G4Trap &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override {}
 	
     void ComputeDimensions(G4Cons &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override{}
 
     void ComputeDimensions(G4Sphere &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override{}
 
     void ComputeDimensions(G4Ellipsoid &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override{}
 
     void ComputeDimensions(G4Orb &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override{}
 
     void ComputeDimensions(G4Torus &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override{}
 
     void ComputeDimensions(G4Para &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override{}
 
     void ComputeDimensions(G4Polycone &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override{}
 
     void ComputeDimensions(G4Polyhedra &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override{}
 
     void ComputeDimensions(G4Hype &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const {}
+                                   const G4VPhysicalVolume *) const override{}
 
     G4int GetNoBoxes() {return fPhantomTotalPixels;}
 
     G4Material* ComputeMaterial(const G4int copyNo,
                                       G4VPhysicalVolume* physVol,
-                                const G4VTouchable*);
+                                const G4VTouchable*) override;
 
    // NEW
    
@@ -137,7 +137,8 @@ class CellParameterisation : public G4VPVParameterisation
 //
    
   private:
-
+    static CellParameterisation* gInstance;
+    
     G4Material * fNucleusMaterial1;
     G4Material * fCytoplasmMaterial1;
     G4Material * fNucleusMaterial2;
@@ -152,25 +153,21 @@ class CellParameterisation : public G4VPVParameterisation
     G4VisAttributes * fNucleusAttributes3;
     G4VisAttributes * fCytoplasmAttributes3;
     
-    G4ThreeVector * fMapCell ; // VOXEL COORDINATES
-    G4double * fMaterial      ; // MATERIAL 
-    G4double * fMass          ; // DENSITY REGION
-    G4int * fTissueType    ; // DENSITY REGION
-
-    G4int fPhantomTotalPixels;
-    G4int fNucleusTotalPixels;
-    G4int fCytoplasmTotalPixels;
+    G4ThreeVector * fMapCell;    // VOXEL COORDINATES
     
+    G4double *      fMaterial;   // MATERIAL 
+    G4double *      fMass;       // DENSITY REGION
     G4double fDimCellBoxX;
     G4double fDimCellBoxY;
     G4double fDimCellBoxZ;
     G4double fNucleusMass;
     G4double fCytoplasmMass;
     
-    static CellParameterisation* gInstance;
-      
+    G4int *         fTissueType; // DENSITY REGION
+    G4int fPhantomTotalPixels;
+    G4int fNucleusTotalPixels;
+    G4int fCytoplasmTotalPixels;      
 };
-
 #endif
 
 

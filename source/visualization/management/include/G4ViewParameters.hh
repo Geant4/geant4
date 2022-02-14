@@ -201,6 +201,8 @@ public: // With description
         G4double         GetDisplayLightFrontRed () const;
         G4double         GetDisplayLightFrontGreen () const;
         G4double         GetDisplayLightFrontBlue () const;
+        G4bool           IsSpecialMeshRendering  () const;
+  const std::vector<G4ModelingParameters::PVNameCopyNo>& GetSpecialMeshVolumes() const;
 
   // Here Follow functions to evaluate useful quantities as a
   // function of the radius of the Bounding Extent of the object being
@@ -293,6 +295,8 @@ public: // With description
   void SetDisplayLightFrontRed (G4double);
   void SetDisplayLightFrontGreen (G4double);
   void SetDisplayLightFrontBlue (G4double);
+  void SetSpecialMeshRendering (G4bool);
+  void SetSpecialMeshVolumes   (const std::vector<G4ModelingParameters::PVNameCopyNo>&);
 
   // Command dumping functions.
   // For camera commands we need to provide the standard target point from
@@ -387,6 +391,8 @@ private:
   G4double     fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
                fDisplayLightFrontT;
   G4double     fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
+  G4bool       fSpecialMeshRendering;  // Request special rendering of parameterised volumes
+  std::vector<G4ModelingParameters::PVNameCopyNo> fSpecialMeshVolumes;  // If empty, all meshes.
 
   enum { // Constants for geometry mask in ParseGeometry and related functions.
     fNoValue     = 0,

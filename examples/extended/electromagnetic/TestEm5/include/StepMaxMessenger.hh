@@ -28,31 +28,37 @@
 //
 // $Id: StepMaxMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
+//
+//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef StepMaxMessenger_h
 #define StepMaxMessenger_h 1
 
-#include "G4UImessenger.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
 class StepMax;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepMaxMessenger: public G4UImessenger
+class PrimaryGeneratorMessenger : public G4UImessenger
 {
-  public:
-    StepMaxMessenger(StepMax*);
-   ~StepMaxMessenger();
-    
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    StepMax* fStepMax;
-    G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
+ public:
+  PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
+  virtual ~PrimaryGeneratorMessenger();
+
+  virtual void SetNewValue(G4UIcommand*, G4String);
+
+ private:
+  PrimaryGeneratorAction* fPrimaryAction;
+  G4UIdirectory* fGunDir;
+  G4UIcmdWithADoubleAndUnit* fPolarCmd;
+  G4UIcmdWithABool* fRandomDirectionCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

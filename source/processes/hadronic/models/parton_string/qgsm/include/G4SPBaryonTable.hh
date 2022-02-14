@@ -34,9 +34,9 @@ class G4SPBaryonTable
 public:
 	struct DeleteSPBaryon{void operator()(G4SPBaryon* aS){delete aS;} };
 
-	~G4SPBaryonTable() {std::for_each(theBaryons.begin(), theBaryons.end(), G4SPBaryonTable::DeleteSPBaryon());}
-	void insert(G4SPBaryon * aBaryon) { theBaryons.push_back(aBaryon);}
-	G4double length() {return theBaryons.size();}
+    ~G4SPBaryonTable() {std::for_each(theBaryons.begin(), theBaryons.end(), G4SPBaryonTable::DeleteSPBaryon());}
+    void insert(G4SPBaryon * aBaryon) { theBaryons.push_back(aBaryon);}
+    std::size_t length() {return theBaryons.size();}
 
 	const G4SPBaryon * GetBaryon(G4ParticleDefinition * aDefinition);
 

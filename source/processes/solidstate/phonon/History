@@ -16,6 +16,15 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 April 2021 Ben Morgan (prophonon-V10-07-00)
+-----------------------------------------------------
+- Migrate build to modular CMake API
+
+28 May 2020 Ben Morgan (prophonon-V10-06-00)
+-----------------------------------------------------
+- Name module "G4solidstate_phonon" for use with new CMake system,
+  as old "G4phonon" name clashes with solidstate/channeling"
+
 8 October 2014  Michael Kelsey (prophonon-V10-00-01)
 ----------------------------------------------------
 - G4LatticeManager:  Change to globally shared object (simple "static", not

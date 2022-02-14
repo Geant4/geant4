@@ -48,11 +48,11 @@ G4PhysListFactoryMessenger::G4PhysListFactoryMessenger(G4VModularPhysicsList* pl
 
   theRadDecay = new G4UIcommand("/physics_lists/factory/addRadioactiveDecay",this);
   theRadDecay->SetGuidance("Enable radioactive decay.");
-  theRadDecay->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
+  theRadDecay->AvailableForStates(G4State_PreInit);
 
   theOptical = new G4UIcommand("/physics_lists/factory/addOptical",this);
   theOptical->SetGuidance("Enable optical physics.");
-  theOptical->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
+  theOptical->AvailableForStates(G4State_PreInit);
 }
 
 G4PhysListFactoryMessenger::~G4PhysListFactoryMessenger()
@@ -64,9 +64,10 @@ G4PhysListFactoryMessenger::~G4PhysListFactoryMessenger()
 
 void G4PhysListFactoryMessenger::SetNewValue(G4UIcommand* aComm, G4String)
 {
+  G4int ver = thePhysList->GetVerboseLevel();
   if(aComm == theRadDecay) {
-    thePhysList->RegisterPhysics(new G4RadioactiveDecayPhysics(1));
+    thePhysList->RegisterPhysics(new G4RadioactiveDecayPhysics(ver));
   } else if(aComm == theOptical) {
-    thePhysList->RegisterPhysics(new G4OpticalPhysics(1));
+    thePhysList->RegisterPhysics(new G4OpticalPhysics(ver));
   }
 }

@@ -23,26 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsListOrderingParameter implementation
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is a ordering parameter only used by G4PhysicsListHelper
-// ------------------------------------------- 
-//	History
-//        first version                   29 Apr. 2011 by H.Kurashige 
-// ------------------------------------------------------------
+// Author: H.Kurashige, 29 April 2011
+// --------------------------------------------------------------------
 
 #include "G4PhysicsListOrderingParameter.hh"
 
+// --------------------------------------------------------------------
 G4PhysicsListOrderingParameter::G4PhysicsListOrderingParameter()
-: processTypeName("NONE"),
-  processType(-1),
-  processSubType(-1),
-  isDuplicable(false)
 {
-  for(size_t i=0; i<3; i++) ordering[i] = -1;
+  for(std::size_t i = 0; i < 3; ++i)
+    ordering[i] = -1;
 }
 
+// --------------------------------------------------------------------
 G4PhysicsListOrderingParameter::~G4PhysicsListOrderingParameter()
-{}
+{
+}

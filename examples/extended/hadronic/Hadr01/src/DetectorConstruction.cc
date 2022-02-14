@@ -85,19 +85,9 @@ DetectorConstruction::DetectorConstruction()
    fDetectorMessenger(0)
 {
   fDetectorMessenger = new DetectorMessenger(this);
-
-  fRadius = 10.*cm;
-
-<<<<<<< HEAD
-  fTargetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-  fWorldMaterial = 
-    G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
-
-=======
   G4NistManager* nist = G4NistManager::Instance();
   fTargetMaterial = nist->FindOrBuildMaterial("G4_Al");
   fWorldMaterial  = nist->FindOrBuildMaterial("G4_Galactic");
-
   //
   // define battery material using Bugzilla 2175 data
   //
@@ -133,22 +123,31 @@ DetectorConstruction::~DetectorConstruction()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  // Cleanup old geometry
-
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-
+  HistoManager* histo = HistoManager::GetPointer();
   // Sizes
-  G4double checkR  = fRadius + mm;
-  G4double worldR  = fRadius + cm;
-  G4double targetZ = HistoManager::GetPointer()->Length()*0.5; 
-  G4double checkZ  = targetZ + mm;
-  G4double worldZ  = targetZ + cm;
+  fRadius  = histo->Radius();
+  fCheckR  = fRadius + CLHEP::mm;
+  fWorldR  = fRadius + CLHEP::cm;
+  fTargetZ = histo->Length()*0.5; 
+  fCheckZ  = fTargetZ + CLHEP::mm;
+  fWorldZ  = fTargetZ + CLHEP::cm;
 
-  G4int nSlices    = HistoManager::GetPointer()->NumberOfSlices();
-  G4double sliceZ  = targetZ/G4double(nSlices);
+  fSlices  = histo->NumberOfSlices();
+  fSliceZ  = fTargetZ/G4double(fSlices);
+  if(fPhysWorld) {
+    fSolidW->SetOuterRadius(fWorldR);
+    fSolidW->SetZHalfLength(fWorldZ);
+    fSolidA->SetOuterRadius(fRadius);
+    fSolidA->SetZHalfLength(fSliceZ);
+    fSolidC->SetOuterRadius(fCheckR);
+    fSolidC->SetZHalfLength(fCheckZ);
+  }
+}
+
+G4VPhysicalVolume* DetectorConstruction::Construct()
+{
+  if(nullptr != fPhysWorld) { return fPhysWorld; }
+  ComputeGeomParameters();
 
   //
   // World
@@ -160,9 +159,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   // Check volume
   //
-  G4Tubs* solidC = new G4Tubs("Check",0.,checkR,checkZ,0.,twopi);
-  fLogicCheck = new G4LogicalVolume( solidC,fWorldMaterial,"Check"); 
-  new G4PVPlacement(0,G4ThreeVector(),fLogicCheck,"Check",
+  fSolidC = new G4Tubs("Check",0.,fCheckR,fCheckZ,0.,twopi);
+  fLogicCheck = new G4LogicalVolume(fSolidC, fWorldMaterial, "Check"); 
+  new G4PVPlacement(nullptr,G4ThreeVector(0.,0.,0.),fLogicCheck,"Check",
                     fLogicWorld,false,0);
 
   //
@@ -249,16 +248,6 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
     fWorldMaterial = material;
     if(fLogicWorld) { fLogicWorld->SetMaterial(fWorldMaterial); }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetTargetRadius(G4double val)  
-{
-  if(val > 0.0) {
-    fRadius = val;
-    G4RunManager::GetRunManager()->ReinitializeGeometry();
   }
 }
 

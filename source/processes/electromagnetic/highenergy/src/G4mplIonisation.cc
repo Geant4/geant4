@@ -53,19 +53,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 G4mplIonisation::G4mplIonisation(G4double mCharge, const G4String& name)
   : G4VEnergyLossProcess(name),
-    magneticCharge(mCharge),
-    isInitialised(false)
+    magneticCharge(mCharge)
 {
   // By default classical magnetic charge is used
-  if(magneticCharge == 0.0) { magneticCharge = eplus*0.5/fine_structure_const; }
+  if(magneticCharge == 0.0) { magneticCharge = CLHEP::eplus*0.5/CLHEP::fine_structure_const; }
 
   SetVerboseLevel(0);
   SetProcessSubType(fIonisation);
-  SetStepFunction(0.2, 1*mm);
   SetSecondaryParticle(G4Electron::Electron());
 }
 
@@ -101,8 +97,6 @@ void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
 {
   if(isInitialised) { return; }
 
-  SetBaseParticle(0);
-
   // monopole model is responsible both for energy loss and fluctuations
   G4mplIonisationWithDeltaModel* ion =
     new G4mplIonisationWithDeltaModel(magneticCharge,"PAI");
@@ -127,14 +121,9 @@ void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4mplIonisation::PrintInfo()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4mplIonisation::ProcessDescription(std::ostream& out) const
 {
-  out << "No description available." << G4endl;
+  out << "Magnetic monopole ionisation" << G4endl;
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

@@ -8,7 +8,7 @@ project(${_projname})
 #------------------------------------------------------------------------------
 #Manadatory dependencies
 
-cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 find_package(MPI REQUIRED)
 find_package(Geant4 10.2.0 REQUIRED)
 include(${Geant4_USE_FILE})
@@ -86,6 +86,7 @@ set(_sources
   src/G4VUserMPIrunMerger.cc
   src/G4MPIutils.cc
   analysis/src/G4RootMpiAnalysisManager.cc
+  analysis/src/G4RootMpiNtupleFileManager.cc
   analysis/src/G4RootMpiNtupleManager.cc
   analysis/src/G4RootMpiPNtupleManager.cc
 )
@@ -130,6 +131,7 @@ set(HEADERS
   include/G4VUserMPIrunMerger.hh
   include/G4MPIutils.hh
   analysis/include/G4RootMpiAnalysisManager.hh
+  analysis/include/G4RootMpiNtupleFileManager.hh
   analysis/include/G4RootMpiNtupleManager.hh
   analysis/include/G4RootMpiPNtupleDescription.hh
   analysis/include/G4RootMpiPNtupleManager.hh

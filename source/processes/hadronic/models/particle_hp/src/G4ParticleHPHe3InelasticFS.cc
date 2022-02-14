@@ -32,6 +32,12 @@
 #include "G4ParticleHPHe3InelasticFS.hh"
 #include "G4Nucleus.hh"
 #include "G4He3.hh"
+#include "G4PhysicsModelCatalog.hh"
+
+G4ParticleHPHe3InelasticFS::G4ParticleHPHe3InelasticFS()
+{
+  secID = G4PhysicsModelCatalog::GetModelID( "model_G4ParticleHPHe3InelasticFS_F26" );
+}
 
 void G4ParticleHPHe3InelasticFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition* projectile)
 {

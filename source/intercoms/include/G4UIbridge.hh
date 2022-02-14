@@ -23,57 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIbridge
 //
-// ====================================================================
-//   G4UIbridge.hh
+// Class description:
 //
-//  This is a concrete class of G4UIsession.
-//
-//  This class object is instantiated by G4UImanager at every time 
-//  when "/control/execute macro_file" command is executed.
-//  Also in the case of pure batch mode with a macro file, 
-//  this class can be used as other ordinary G4UIsession 
-//  concrete classes, i.e. SessionStart() is invoked in main().
-// ====================================================================
-#ifndef G4UIbridge_H
-#define G4UIbridge_H 1
+// This class is to be used for MT mode.
+// Register a particular thread-local G4UImanager with a UI command
+// directory name. When a UI command is issued in the master thread
+// that starts with this registered directory name, it is immediately
+// forwarded to the registered G4UImanager. Such forwarded command
+// is not processed in the master thread nor by other worker thread
 
-class G4UImanager;
+// Author: A.Dotti, 2013
+// --------------------------------------------------------------------
+#ifndef G4UIbridge_hh
+#define G4UIbridge_hh 1
+
 #include "globals.hh"
 
-// ====================================================================
-//
-// class definition
-//
-//  G4UIbridge:
-//   To be used for MT mode. 
-//   Register a particular thread-local G4UImanager with a UI command
-//   directory name. When a UI command is issued in the master thread
-//   that starts with this redistered directory name, it is immediately
-//   forwarded to the registered G4UImanager. Such forwarded command 
-//   is not processed in the master thread nor other worker thread.
-//
-// ====================================================================
+class G4UImanager;
 
-class G4UIbridge 
+class G4UIbridge
 {
- public:
-  G4UIbridge(G4UImanager* localUI,G4String dir);
-  ~G4UIbridge();
+  public:
 
-  G4int ApplyCommand(const G4String& aCmd);
+    G4UIbridge(G4UImanager* localUI, G4String dir);
+    ~G4UIbridge();
 
- private:
-  G4UImanager* localUImanager;
-  G4String dirName;
+    G4int ApplyCommand(const G4String& aCmd);
 
- public:
-  inline G4UImanager* LocalUI() const
-  { return localUImanager; }
-  inline G4String DirName() const
-  { return dirName; }
-  inline G4int DirLength() const
-  { return dirName.length(); }
+    inline G4UImanager* LocalUI() const { return localUImanager; }
+    inline const G4String& DirName() const { return dirName; }
+    inline G4int DirLength() const { return dirName.length(); }
+
+  private:
+
+    G4UImanager* localUImanager = nullptr;
+    G4String dirName;
 };
 
 #endif

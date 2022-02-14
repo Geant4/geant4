@@ -44,9 +44,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
 
 #include "G4UrQMD1_3Model.hh"
@@ -59,12 +57,7 @@ public:
   virtual ~UrQMDPiKBuilder();
  
   virtual void Build(G4HadronElasticProcess * aP);
-  virtual void Build(G4PionPlusInelasticProcess * aP);
-  virtual void Build(G4PionMinusInelasticProcess * aP);
-  virtual void Build(G4KaonPlusInelasticProcess * aP);
-  virtual void Build(G4KaonMinusInelasticProcess * aP);
-  virtual void Build(G4KaonZeroLInelasticProcess * aP);
-  virtual void Build(G4KaonZeroSInelasticProcess * aP);
+  virtual void Build(G4HadronInelasticProcess * aP);
     
   inline void SetMinEnergy(G4double aM) {fMin = aM;}
   inline void SetMaxEnergy(G4double aM) {fMax = aM;}

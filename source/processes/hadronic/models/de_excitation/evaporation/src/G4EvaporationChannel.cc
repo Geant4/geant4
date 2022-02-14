@@ -49,16 +49,19 @@
 #include "Randomize.hh"
 #include "G4RandomDirection.hh"
 #include "G4Alpha.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ, 
 					   G4EvaporationProbability* aprob):
   G4VEvaporationChannel(),
   theA(anA),
   theZ(aZ),
+  secID(-1),
   theProbability(aprob),
   theCoulombBarrier(new G4CoulombBarrier(anA, aZ))
 { 
   resA = resZ = 0;
+  secID = G4PhysicsModelCatalog::GetModelID("model_G4EvaporationChannel");
   mass = resMass = 0.0; 
   evapMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
   //G4cout << "G4EvaporationChannel: Z= " << theZ << " A= " << theA 
@@ -167,10 +170,12 @@ G4Fragment* G4EvaporationChannel::EmittedFragment(G4Fragment* theNucleus)
   lv.boost(lv0.boostVector());
 
   G4Fragment* evFragment = new G4Fragment(theA, theZ, lv);
+  if(evFragment != nullptr) { evFragment->SetCreatorModelID(secID); }
   lv0 -= lv;
   theNucleus->SetZandA_asInt(resZ, resA);
   theNucleus->SetMomentum(lv0);
-
+  theNucleus->SetCreatorModelID(secID);
+  
   //G4cout << "Residual: Z= " << resZ << " A= " << resA << " Eex= " 
   //	 << theNucleus->GetExcitationEnergy() << G4endl;
   return evFragment; 

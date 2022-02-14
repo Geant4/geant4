@@ -48,25 +48,37 @@
 class G4ErrorFreeTrajParam
 {
  public:  // with description
-
   G4ErrorFreeTrajParam()
-   : fInvP(0.), fLambda(0.), fPhi(0.), fYPerp(0.), fZPerp(0.){}
-  G4ErrorFreeTrajParam( const G4Point3D& pos, const G4Vector3D& mom );
-    // build parameters from position and momentum
+    : fInvP(0.)
+    , fLambda(0.)
+    , fPhi(0.)
+    , fYPerp(0.)
+    , fZPerp(0.)
+  {}
+  G4ErrorFreeTrajParam(const G4Point3D& pos, const G4Vector3D& mom);
+  // build parameters from position and momentum
 
-  virtual ~G4ErrorFreeTrajParam(){}
+  G4ErrorFreeTrajParam(const G4ErrorFreeTrajParam&) = default;
+  G4ErrorFreeTrajParam(G4ErrorFreeTrajParam&&)      = default;
+  // The copy and move constructors
 
-  void Update( const G4Track* aTrack );
-    // update parameters from G4Track
+  virtual ~G4ErrorFreeTrajParam() {}
 
-  friend
-    std::ostream& operator<<(std::ostream&, const G4ErrorFreeTrajParam& ts);
-  
-  // Set and Get methods 
+  G4ErrorFreeTrajParam& operator=(const G4ErrorFreeTrajParam&) = default;
+  G4ErrorFreeTrajParam& operator=(G4ErrorFreeTrajParam&&) = default;
+  // The copy and move assignment operators
 
-  void SetParameters( const G4Point3D& pos, const G4Vector3D& mom );
+  void Update(const G4Track* aTrack);
+  // update parameters from G4Track
 
-  G4Vector3D GetDirection() const { return fDir;}
+  friend std::ostream& operator<<(std::ostream&,
+                                  const G4ErrorFreeTrajParam& ts);
+
+  // Set and Get methods
+
+  void SetParameters(const G4Point3D& pos, const G4Vector3D& mom);
+
+  G4Vector3D GetDirection() const { return fDir; }
 
   G4double GetInvP() const { return fInvP; }
   G4double GetLambda() const { return fLambda; }
@@ -75,13 +87,12 @@ class G4ErrorFreeTrajParam
   G4double GetZPerp() const { return fZPerp; }
 
  private:
-
-  G4Vector3D fDir; //direction to which YPerp, ZPerp refer
-  G4double fInvP; // inverse of momentum
-  G4double fLambda; // 90 - theta angle of direction
-  G4double fPhi; // phi angle of direction
-  G4double fYPerp; // Y coordinate
-  G4double fZPerp; // Z coordinate
+  G4Vector3D fDir;   // direction to which YPerp, ZPerp refer
+  G4double fInvP;    // inverse of momentum
+  G4double fLambda;  // 90 - theta angle of direction
+  G4double fPhi;     // phi angle of direction
+  G4double fYPerp;   // Y coordinate
+  G4double fZPerp;   // Z coordinate
 };
 
 #endif

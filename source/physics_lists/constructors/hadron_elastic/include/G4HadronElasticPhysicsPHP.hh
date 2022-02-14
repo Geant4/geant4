@@ -52,7 +52,6 @@ public:
   // registered to the process manager of each particle type 
   void ConstructProcess() final;
 
-private:
   G4HadronElasticPhysicsPHP(const G4HadronElasticPhysicsPHP&) = delete;
   G4HadronElasticPhysicsPHP& operator=(const G4HadronElasticPhysicsPHP&) = delete;
 };

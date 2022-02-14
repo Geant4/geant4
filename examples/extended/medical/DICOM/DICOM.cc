@@ -53,11 +53,7 @@
 #include "G4Types.hh"
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "globals.hh"
 #include "G4UImanager.hh"
@@ -120,7 +116,6 @@ int main(int argc,char** argv)
   CLHEP::HepRandom::setTheSeeds(seeds);
 
   // Construct the default run manager
-#ifdef G4MULTITHREADED
   char* nthread_c = std::getenv("DICOM_NTHREADS");
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
@@ -147,49 +142,10 @@ int main(int argc,char** argv)
   if(env_threads > 0) {nthreads=env_threads;}
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-    unsigned nthreads = 4;
-    unsigned env_threads = 0;
-    
-    if(nthread_c) { env_threads = G4UIcommand::ConvertToDouble(nthread_c); }
-    if(env_threads > 0) { nthreads = env_threads; }
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  runManager->SetNumberOfThreads(nthreads);
 
-    G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(nthreads);
-
-    G4cout << "\n\n\tDICOM running in multithreaded mode with " << nthreads 
-          << " threads\n\n" << G4endl;
-
-    
-#else
-    G4RunManager* runManager = new G4RunManager;
-    G4cout << "\n\n\tDICOM running in serial mode\n\n" << G4endl;
-
-#endif
-    
-    DicomDetectorConstruction* theGeometry = 0;
-    DicomHandler* dcmHandler = 0;
-
-    if( !bPartial ){
-        // Treatment of DICOM images before creating the G4runManager
-        dcmHandler = new DicomHandler;
-        dcmHandler->CheckFileFormat();
-
-        // Initialisation of physics, geometry, primary particles ...
-        char* nest = getenv( "DICOM_NESTED_PARAM" );
-        if( nest && G4String(nest) == "1" ) {
-            theGeometry = new DicomNestedParamDetectorConstruction();
-        } else {
-            theGeometry = new DicomRegularDetectorConstruction();
-        }
-    } else {
-        theGeometry = new DicomPartialDetectorConstruction();
-    }    
-    runManager->SetUserInitialization(theGeometry);
-
-    std::vector<G4String>* MyConstr = new std::vector<G4String>;
-    MyConstr->push_back("G4EmStandardPhysics");
-    G4VModularPhysicsList* phys = new G4GenericPhysicsList(MyConstr);
-    runManager->SetUserInitialization(phys);
+  DicomDetectorConstruction* theGeometry = 0;
 
     // Set user action classes
     runManager->SetUserInitialization(new DicomActionInitialization());

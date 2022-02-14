@@ -57,23 +57,19 @@ class G4Material;
 
 class G4hICRU49He : public G4VhElectronicStoppingPower
 {
-
 public:
-
-  G4hICRU49He();
+  explicit G4hICRU49He();
 
   ~G4hICRU49He();
 
-  G4bool HasMaterial(const G4Material* material);
+  G4bool HasMaterial(const G4Material* material) override;
 
   G4double StoppingPower(const G4Material* material,
-                               G4double kineticEnergy) ;
+                               G4double kineticEnergy) override;
 
   G4double ElectronicStoppingPower(G4double z,
-                                   G4double kineticEnergy) const;
+                                   G4double kineticEnergy) const override;
  
-protected:
-
 private:
 
   void SetMoleculaNumber(G4int number) {iMolecula = number;};

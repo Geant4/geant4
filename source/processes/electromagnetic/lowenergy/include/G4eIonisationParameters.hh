@@ -43,8 +43,6 @@
 // Low Energy Electromagnetic Physics
 // Set of parameters for LowEnergyIonisation described spectrum 
 // of delta-electrons retrieved from EEDL database.
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
 // -------------------------------------------------------------------
 
 #ifndef G4IONISATIONPARAMETERS_HH
@@ -60,36 +58,27 @@ class G4VEMDataSet;
 class G4eIonisationParameters {
  
 public:
-
-  G4eIonisationParameters(G4int minZ = 1, G4int maxZ = 99);
+  explicit G4eIonisationParameters();
 
   ~G4eIonisationParameters();
  
   G4double Parameter(G4int Z, G4int shellIndex, 
 		     G4int parameterIndex, G4double e) const;
-
   G4double Excitation(G4int Z, G4double e) const;
-  
   void PrintData() const;
 
+  G4eIonisationParameters(const G4eIonisationParameters&) = delete;
+  G4eIonisationParameters & operator=(const G4eIonisationParameters &right) = delete;
+
 private:
-
-  // Hide copy constructor and assignment operator 
-  G4eIonisationParameters(const G4eIonisationParameters&);
-  G4eIonisationParameters & operator=(const G4eIonisationParameters &right);
-
   void LoadData();
 
-  G4int zMin;
-  G4int zMax;
-
   G4DataVector activeZ;
-
   // Parameters of the energy spectra
   std::map<G4int,G4VEMDataSet*,std::less<G4int> > param;
   std::map<G4int,G4VEMDataSet*,std::less<G4int> > excit;
 
-  size_t length;
+  size_t length = 24;
 };
  
 #endif

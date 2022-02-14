@@ -36,6 +36,7 @@
 #include "G4RandomDirection.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4FermiFragmentsPoolVI* G4FermiBreakUpVI::thePool = nullptr;
 
@@ -44,11 +45,12 @@ G4Mutex G4FermiBreakUpVI::FermiBreakUpVIMutex = G4MUTEX_INITIALIZER;
 #endif
 
 G4FermiBreakUpVI::G4FermiBreakUpVI() 
-  : theDecay(nullptr), rndmEngine(nullptr), maxZ(9), maxA(17)
+  : theDecay(nullptr), rndmEngine(nullptr), maxZ(9), maxA(17), secID(-1)
 {
   frag.reserve(10);
   lvect.reserve(10);
   Z = A = spin = 0;
+  secID = G4PhysicsModelCatalog::GetModelID("model_G4FermiBreakUpVI");
   mass = elim = excitation = 0.0;
   tolerance = CLHEP::MeV;  
   frag1 = frag2 = nullptr;
@@ -142,6 +144,7 @@ void G4FermiBreakUpVI::BreakFragment(G4FragmentVector* theResult,
       G4Fragment* f = new G4Fragment(A, Z, lv0);
       f->SetSpin(0.5*spin);
       f->SetCreationTime(time);
+      f->SetCreatorModelID(secID);
       theResult->push_back(f);
     }
     // limit the loop

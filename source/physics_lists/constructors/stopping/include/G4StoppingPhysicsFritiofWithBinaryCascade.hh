@@ -50,26 +50,27 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-
 class G4StoppingPhysicsFritiofWithBinaryCascade : public G4VPhysicsConstructor {
   public: 
     G4StoppingPhysicsFritiofWithBinaryCascade( G4int ver = 1 );
     G4StoppingPhysicsFritiofWithBinaryCascade( const G4String& name, G4int ver = 1,
-                                               G4bool UseMuonMinusCapture = true );
-    virtual ~G4StoppingPhysicsFritiofWithBinaryCascade();
+                                               G4bool useMuCapture = true );
+    ~G4StoppingPhysicsFritiofWithBinaryCascade() override;
 
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
-    virtual void ConstructParticle();
+    void ConstructParticle() override;
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
+    void ConstructProcess() override;
+
+    void SetMuonMinusCapture(G4bool val) 
+    { useMuonMinusCapture = val; };
 
   private:
     G4int  verbose;
-    static G4ThreadLocal G4bool wasActivated;
     G4bool useMuonMinusCapture;
 };
 

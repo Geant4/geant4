@@ -23,35 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Global Constants and typedefs
 //
-// History:
-// 30.06.95 P.Kent - Created
-// 16.02.96 G.Cosmo - Added inclusion of "templates.hh"
-// 03.03.96 M.Maire - Added inclusion of "G4PhysicalConstants.hh"
-// 08.11.96 G.Cosmo - Added cbrt() definition and G4ApplicationState enum type
-// 29.11.96 G.Cosmo - Added typedef of HepBoolean to G4bool
-// 22.10.97 M.Maire - Moved PhysicalConstants at the end of the file
-// 04.12.97 G.Cosmo,E.Tcherniaev - Migrated to CLHEP
-// 26.08.98 J.Allison,E.Tcherniaev - Introduced min/max/sqr/abs functions
-// 22.09.98 G.Cosmo - Removed min/max/sqr/abs functions and replaced with
-//                    inclusion of CLHEP/config/TemplateFunctions.h for CLHEP-1.3
-// 15.12.99 G.Garcia - Included min, max definitions for NT with ISO standard
-// 15.06.01 G.Cosmo - Removed cbrt() definition
-
+// Author: P.Kent, 30.06.1995 - Created
+// Revisions:
+// - 1996 to present - G.Cosmo
+// --------------------------------------------------------------------
 #ifndef GLOBALS_HH
-#define GLOBALS_HH
+#define GLOBALS_HH 1
 
 #include "G4ios.hh"
 
 #ifndef FALSE
-  #define FALSE 0
+#  define FALSE 0
 #endif
 #ifndef TRUE
-  #define TRUE 1
+#  define TRUE 1
 #endif
 
 #include <algorithm>  // Retrieve definitions of min/max

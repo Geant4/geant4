@@ -48,81 +48,54 @@
 #include "G4VEmModel.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4ProductionCutsTable.hh"
-
-#include "G4MicroElecCrossSectionDataSet.hh"
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4GenericIon.hh"
-#include "G4ParticleDefinition.hh"
-
-#include "G4LogLogInterpolation.hh"
-
-#include "G4MicroElecSiStructure.hh"
 #include "G4VAtomDeexcitation.hh"
-#include "G4NistManager.hh"
+#include "G4MicroElecSiStructure.hh"
+
+class G4ParticleDefinition;
+class G4NistManager;
+class G4MicroElecCrossSectionDataSet;
 
 class G4MicroElecInelasticModel : public G4VEmModel
 {
 
 public:
 
-  G4MicroElecInelasticModel(const G4ParticleDefinition* p = 0, 
+  G4MicroElecInelasticModel(const G4ParticleDefinition* p = nullptr, 
 		           const G4String& nam = "MicroElecInelasticModel");
-
   virtual ~G4MicroElecInelasticModel();
+  
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  G4double CrossSectionPerVolume(  const G4Material* material,
+				   const G4ParticleDefinition* p,
+				   G4double ekin,
+				   G4double emin,
+				   G4double emax) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+  G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, 
+                                    G4double k, G4double energyTransfer, 
+                                    G4int shell);
+  G4double TransferedEnergy(G4ParticleDefinition * aParticleDefinition,
+                            G4double incomingParticleEnergy, G4int shell, G4double random) ;
+  
+  inline void SelectFasterComputation(G4bool input); 
 
-  virtual G4double CrossSectionPerVolume(  const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double ekin,
-					   G4double emin,
-					   G4double emax);
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
-
-  double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
-
+  G4MicroElecInelasticModel & operator=(const  G4MicroElecInelasticModel &right) = delete;
+  G4MicroElecInelasticModel(const  G4MicroElecInelasticModel&) = delete;
+  
 protected:
-
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
-
-  //deexcitation manager to produce fluo photns and e-
-  G4VAtomDeexcitation*      fAtomDeexcitation;
-
-  G4Material* nistSi;
-
-  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
-  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
-
-  G4bool isInitialised;
-  G4int verboseLevel;
-  
-  // Cross section
-
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
-
-  typedef std::map<G4String,G4MicroElecCrossSectionDataSet*,std::less<G4String> > MapData;
-  MapData tableData;
-  
-  // Final state
-  
-  G4MicroElecSiStructure SiStructure;
-
-  G4double RandomizeEjectedElectronEnergy(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
-
-  void RandomizeEjectedElectronDirection(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4double
-                                           outgoingParticleEnergy, G4double & cosTheta, G4double & phi );
-
-  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
+  G4double RandomizeEjectedElectronEnergy(G4ParticleDefinition * aParticleDefinition, 
+					  G4double incomingParticleEnergy, G4int shell) ;
+  G4double RandomizeEjectedElectronEnergyFromCumulatedDcs(G4ParticleDefinition * aParticleDefinition, 
+							  G4double incomingParticleEnergy, G4int shell) ;
+  G4double Interpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
   G4double QuadInterpolator( G4double e11, 
 			     G4double e12, 
 			     G4double e21, 
@@ -135,26 +108,43 @@ private:
 			     G4double t2, 
 			     G4double t, 
 			     G4double e);
+  // Partial cross section
+  G4int RandomSelect(G4double energy,const G4String& particle );
 
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
+  //deexcitation manager to produce fluo photns and e-
+  G4VAtomDeexcitation*      fAtomDeexcitation;
+  G4Material* nistSi;
+  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
+  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
+
+  // Cross section
+  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
+  MapFile tableFile;
+
+  typedef std::map<G4String,G4MicroElecCrossSectionDataSet*,std::less<G4String> > MapData;
+  MapData tableData;
+  
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
   TriDimensionMap eDiffCrossSectionData[7];
+  TriDimensionMap eNrjTransfData[7]; // for cumulated dcs 
   TriDimensionMap pDiffCrossSectionData[7];
-  std::vector<double> eTdummyVec;
-  std::vector<double> pTdummyVec;
+  TriDimensionMap pNrjTransfData[7]; // for cumulated dcs
+  std::vector<G4double> eTdummyVec;
+  std::vector<G4double> pTdummyVec;
 
-  typedef std::map<double, std::vector<double> > VecMap;
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
   VecMap eVecm;
   VecMap pVecm;
+  VecMap eProbaShellMap[7]; // for cumulated dcs
+  VecMap pProbaShellMap[7]; // for cumulated dcs
   
-  // Partial cross section
-  
-  G4int RandomSelect(G4double energy,const G4String& particle );
-   
-  //
-   
-  G4MicroElecInelasticModel & operator=(const  G4MicroElecInelasticModel &right);
-  G4MicroElecInelasticModel(const  G4MicroElecInelasticModel&);
+  // Final state
+  G4MicroElecSiStructure SiStructure;
 
+  G4int verboseLevel;
+  G4bool isInitialised;
+  G4bool fasterCode;   
+  //  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

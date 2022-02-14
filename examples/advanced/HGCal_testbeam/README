@@ -1,0 +1,227 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                        Example HGCal_testbeam
+                        ----------------------
+
+ This example is based on the Geant4 standalone application developed
+ by Thorben Quast for the CMS HGCal studies:
+ https://github.com/ThorbenQuast/HGCal_TB_Geant4.
+
+ The goal of this example is to demonstrate a test beam setup used
+ in HEP experiments, and as a base for the validation studies and
+ comparison with experiment data.
+
+ It presents a test beam setup used in the HGCal studies in October
+ 2018. It can be easily extended to other configurations.
+
+ Details on the High Granularity Calorimeter (HGCal) can be found
+ i.a. in the Technical Design Report:
+ https://cds.cern.ch/record/2293646/files/CMS-TDR-019.pdf
+
+ 1. Detector description
+ -----------------------
+
+ Detector construction in this example assumes that the setup is
+ constructed with different elements placed one behind another along
+ z axis (beam axis).
+ There are 3 configurations user can choose from, and could be set
+ with UI command:
+
+ /HGCalTestbeam/setup/configuration <ID>
+
+ where <ID> by default is equal to 0, which means the HGCal testbeam
+ setup used in October 2018.
+ <ID> 1 builds the same calorimeter setup, but places in front of it
+ several beamline elements.
+ <ID> 2 builds a very simplistic test configuration.
+
+ Whenever a silicon wafer or SiPM is placed in the detector, a sensitive
+ volume is attached to it, and will be used to collect signal.
+
+ Silicon wafer is divided into cells (pixels), and each individual pixel
+ can collect signal.
+
+ In order to change the maximum step size allowed in silicon pixels:
+
+ /HGCalTestbeam/setup/stepSilicon <STEP>
+
+ where <STEP> is value of the max step size in micrometres. By default
+ <STEP> is equal to 30 um.
+
+ 2. Signal
+ ---------
+
+ Energy deposited within silicon pixels and SiPMs is registered in the
+ sensitive detectors. Each deposit is added individually to the vector
+ of hits, in order to allow the digitisation.
+
+ Digitisation is performed at the end of the event. It accumulates the
+ energy deposits within pixels, taking into account the time cut on the
+ arrival of signal (global time of energy deposit). By default no time
+ cut is applied which means all the deposits are counted. It can be set
+ using UI command:
+
+ /HGCalTestbeam/hits/timeCut <TIME>
+
+ where <TIME> is the maximum global time of the energy deposit that
+ would be counted into the signal within the pixel.
+
+ Another hit parameter is TOA (time of arrival) which is calculated
+ as time of the energy deposit which added to the digitised pixel energy
+ exceeds the threshold. By default the threshold is equal to 0, which
+ means that any hit will exceed the value, so TOA of pixel equals to
+ the time of the first energy deposit. It can be set using UI command:
+
+ /HGCalTestbeam/hits/toaThreshold <ENERGY_THRESHOLD>
+
+ where <ENERGY_THRESHOLD> indicates the threshold the sum of energy
+ needs to exceed to be counted as time of arrival.
+
+ Additionally, for silicon pixels, time of the last energy deposit
+ (within the time window) is recorded.
+
+ 3. Output
+ ---------
+
+ Output with event signal is stored in ntuple and saved to a ROOT file.
+ Its name can be set with UI command:
+
+ /HGCalTestbeam/output/file <NAME>
+
+ Created TTree "hits" contains following branches:
+
++---------------------------------+-----------------+------+-------------------------------------------+
+|             Branch              |      Type       | Unit |                Description                |
++---------------------------------+-----------------+------+-------------------------------------------+
+| event                           | int             | -    |                                           |
+| pdgID                           | vector<int>     | -    | PDG code of primary particles             |
+| beamEnergy                      | vector<double>  | GeV  | initial energy of primaries               |
+| beamX_cm                        | vector<double>  | cm   | initial X position of primaries           |
+| beamY_cm                        | vector<double>  | cm   | initial Y position of primaries           |
+| beamZ_cm                        | vector<double>  | cm   | initial Z position of primaries           |
+| siliconHits_ID                  | vector<int>     | -    | ID of hits in Si (=1e3*waferID+cellID)    |
+| siliconHits_x_cm                | vector<double>  | cm   | X position of Si pixel                    |
+| siliconHits_y_cm                | vector<double>  | cm   | Y position of Si pixel                    |
+| siliconHits_z_cm                | vector<double>  | cm   | Z position of Si pixel                    |
+| siliconHits_Edep_keV            | vector<double>  | keV  | energy deposited within Si pixel          |
+| siliconHits_EdepNonIonizing_keV | vector<double>  | keV  | non-ionizing energy deposit (Si)          |
+| siliconHits_TOA_ns              | vector<double>  | ns   | time of arrival for Si pixel              |
+| siliconHits_TOA_last_ns         | vector<double>  | ns   | time of last arrival for Si pixel         |
+| siliconHits_type                | vector<int>     | -    | hit type for Si pixel (=0)                |
+| SiPMHits_ID                     | vector<int>     | -    | ID of hits in SiPM (=1e3*sensorID+cellID) |
+| SiPMHits_x_cm                   | vector<double>  | cm   | X position of SiPM                        |
+| SiPMHits_y_cm                   | vector<double>  | cm   | Y position of SiPM                        |
+| SiPMHits_z_cm                   | vector<double>  | cm   | Z position of SiPM                        |
+| SiPMHits_Edep_keV               | vector<double>  | keV  | energy deposited within SiPM              |
+| SiPMHits_EdepNonIonizing_keV    | vector<double>  | keV  | non-ionizing energy deposit (SiPM)        |
+| SiPMHits_TOA_ns                 | vector<double>  | ns   | time of arrival for SiPM                  |
+| SiPMHits_type                   | vector<int>     | -    | hit type for SiPM (= 1)                   |
+| signalSum_HGCAL_GeV             | double          | GeV  | sum of energy deposited in Si pixels      |
+| COGZ_HGCAL_cm                   | double          | cm   | energy-weighted shower depth in z         |
+| NHits_HGCAL                     | int             | -    | number of Si pixel hits                   |
+| signalSum_AHCAL_GeV             | double          | GeV  | sum of energy deposited in SiPMs          |
+| COGZ_AHCAL_cm                   | double          | cm   | energy-weighted shower depth in z         |
+| NHits_AHCAL                     | int             | -    | number of SiPM hits                       |
++---------------------------------+-----------------+------+-------------------------------------------+
+
+ 4. Primary particle generator
+ -----------------------------
+
+ Particle gun is used as a default primary particle generator.
+ It can be controlled with standard UI commands (/gun/) and with
+ additional ones introduced by the messenger:
+
+ /HGCalTestbeam/generator/momentumSpread <VALUE>
+ to change constant particle energy to Gaussian distribution with
+ sigma expressed in units of the initial energy (e.g. <VALUE>=0.05
+ means sigma of 0.05 * E). By default it equals to 0 and constant
+ energy value is used.
+
+ /HGCalTestbeam/generator/beamSpread <none/Gaussian/flat>
+ to define type of beam position spread. By default none is used.
+
+ /HGCalTestbeam/generator/beamSpreadX <SIZE>
+ to define size of beam spread along x axis. It is sigma of a
+ Gaussian distribution, or half-width of a flat distribution.
+
+ /HGCalTestbeam/generator/beamSpreadY <SIZE>
+ to define size of beam spread along y axis. It is sigma of a
+ Gaussian distribution, or half-width of a flat distribution.
+
+ /HGCalTestbeam/generator/fBeamZ0 <POSITION>
+ to define beam position along z axis. By default edge of the
+ world volume is used.
+
+ Additionally, if installation was done with ROOT package (CMake
+ was able to locate it), an option of input read from the ROOT file
+ is enabled. It can be activated with
+
+ /HGCalTestbeam/generator/fReadInputFile true
+
+ /HGCalTestbeam/generator/fPathInputFile <FILE>
+ sets the path to the input file.
+
+ /HGCalTestbeam/generator/startFromEvent <N>
+ allows to start simulation from Nth event.
+
+ Please note that in current implementation input from file needs to be
+ executed in a non-multithreaded mode (or with 1 thread).
+
+ Input file needs to have following structure:
+ - TDirectory "VirtualDetector"
+   - TNtuple "HGCAL" with branches:
+     +---------+-------+------+-------------------------------+
+     | Branch  | Type  | Unit |          Description          |
+     +---------+-------+------+-------------------------------+
+     | EventID | float | -    | ID of event                   |
+     | PDGid   | float | -    | Particle type (PDG code)      |
+     | x       | float | mm   | Initial X position            |
+     | y       | float | mm   | Initial Y position            |
+     | Px      | float | MeV  | Initial momentum along X axis |
+     | Py      | float | MeV  | Initial momentum along Y axis |
+     | Pz      | float | MeV  | Initial momentum along Z axis |
+     +---------+-------+------+-------------------------------+
+
+ Several particles may belong to the same event, in which case all
+ of them are read from the input file.
+ Z position is set to Z position of the entrance of the HGCal detector.
+
+ 5. How to run the example
+ -------------------------
+
+ Example can be run in interactive mode, with visualisation:
+
+ ./HGCal_testbeam
+
+ It will execute init_vis.mac and vis.mac.
+
+ To run in a batch mode, specify the path to the macro:
+
+ ./HGCal_testbeam run.mac
+
+ which will run 10 single-electron events, with beam energy of 30 GeV.
+ The beam position is smeared with Gaussian with x/y sigma of 1.5 cm.
+ The momentum is smeared with Gaussian with sigma of 5% (2.5 GeV).
+ Z beam position is set to -1 m.
+ Maximum step size in Si pixel is 20 um.
+ The name of the created file is output_eM_smeared_30GeV_10events.root.
+
+ 6. Additional settings
+ ----------------------
+
+ 6.1. Particle input from ROOT file
+ ----------------------------------
+
+ If ROOT is found by CMake, it allows to use ROOT file as the input to
+ the primary generator. See more in the description of "4. Primary
+ particle generator".
+
+  ./HGCal_testbeam readFromFile.mac
+
+  Macro readFromFile.mac can be used but name of the input file should
+  be specified (not provided with the example). This mode is meant to
+  be used in the validation with experimental data with geant-val.

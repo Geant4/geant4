@@ -23,19 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4HyperNucleiProperties
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-//
-// ------------------------------------------------------------
-// Hyper Nuclei properties based on CHIPS model (Mikhail KOSOV)
-// Migrate into particles category by H.Kurashige (Sep. 2007)
-// 
+// G4HyperNucleiProperties is an utility class to provide mass formula
+// of hyper nuclei based on CHIPS model (i.e. it has static member
+// functions only)
 
-#ifndef G4HyperNucleiProperties_h
-#define G4HyperNucleiProperties_h 1
+// Author: Mikhail Kosov
+// Revision: H.Kurashige, Migrated to particles category - September 2007
+// --------------------------------------------------------------------
+#ifndef G4HyperNucleiProperties_hh
+#define G4HyperNucleiProperties_hh 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -43,28 +43,16 @@
 
 class G4HyperNucleiProperties
 {
- // Class Description
- //   G4HyperNucleiProperties is an utility class to provide 
- //   mass formula of hyper nuclei based on CHIPS model
- //   (i.e. it has static member function only)
 
+  public: 
 
-public: 
+    G4HyperNucleiProperties() {}
+   ~G4HyperNucleiProperties() {}
 
-  // Destructor
-  ~G4HyperNucleiProperties() { };
-
-  // Default constructor ()
-  G4HyperNucleiProperties(){};
-
-
-public:  // With Description
-
-  // Calculate Mass Excess of nucleus A, Z, L(number of Lambda)
-  static G4double GetAtomicMass(G4int A, G4int Z, G4int L);
+    static G4double GetAtomicMass(G4int A, G4int Z, G4int L);
+      // Calculate Mass Excess of nucleus A, Z, L(number of Lambda)
   
-  static G4double GetNuclearMass(G4int A, G4int Z, G4int L);
-
+    static G4double GetNuclearMass(G4int A, G4int Z, G4int L);
 };
 
 #endif

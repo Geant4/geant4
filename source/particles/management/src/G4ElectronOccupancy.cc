@@ -23,17 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ElectronOccupancy class implementation
 //
-//
-// 
-// ----------------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-//      History: first implementation, based on object model of
-//      Hisaya Kurashige, 17 Aug 1999
-// ----------------------------------------------------------------
-//     This class has information of occupation of electrons 
-//     in atomic orbits
+// Author: Hisaya Kurashige, 17 Aug 1999
 // ---------------------------------------------------------------
 
 #include "G4ElectronOccupancy.hh"
@@ -41,26 +33,27 @@
 
 G4Allocator<G4ElectronOccupancy>*& aElectronOccupancyAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4ElectronOccupancy>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4ElectronOccupancy>* _instance = nullptr;
+  return _instance;
 }
 
-G4ElectronOccupancy::G4ElectronOccupancy(G4int sizeOrbit )
+G4ElectronOccupancy::G4ElectronOccupancy(G4int sizeOrbit)
   : theSizeOfOrbit(sizeOrbit)
 {
   // check size
-  if  ( (theSizeOfOrbit <1 ) || (theSizeOfOrbit > MaxSizeOfOrbit) ) {
+  if  ( (theSizeOfOrbit < 1 ) || (theSizeOfOrbit > MaxSizeOfOrbit) )
+  {
     theSizeOfOrbit = MaxSizeOfOrbit;
   }
 
   // allocate and clear the array of theOccupancies 
   theOccupancies = new G4int[theSizeOfOrbit];
-  G4int   index =0;
-  for (index = 0; index <  theSizeOfOrbit; index++) {
-    theOccupancies[index] =0;
+  for (G4int index = 0; index < theSizeOfOrbit; ++index)
+  {
+    theOccupancies[index] = 0;
   }
 
-   theTotalOccupancy =0;
+  theTotalOccupancy = 0;
 }
 
 G4ElectronOccupancy::~G4ElectronOccupancy()
@@ -68,8 +61,8 @@ G4ElectronOccupancy::~G4ElectronOccupancy()
    theSizeOfOrbit = -1;
 
    delete [] theOccupancies;
-   theOccupancies =0;
-   theTotalOccupancy =0;
+   theOccupancies = nullptr;
+   theTotalOccupancy = 0;
 }
 
 G4ElectronOccupancy::G4ElectronOccupancy(const G4ElectronOccupancy& right)
@@ -78,24 +71,26 @@ G4ElectronOccupancy::G4ElectronOccupancy(const G4ElectronOccupancy& right)
 
   // allocate and clear the array of theOccupancies 
   theOccupancies = new G4int[theSizeOfOrbit];
-  G4int   index =0;
-  for (index = 0; index <  theSizeOfOrbit; index++) {
+  for (G4int index = 0; index < theSizeOfOrbit; ++index)
+  {
     theOccupancies[index] = right.theOccupancies[index];
   }
 
   theTotalOccupancy = right.theTotalOccupancy;
 }
 
-G4ElectronOccupancy& G4ElectronOccupancy::operator=(const G4ElectronOccupancy& right)
+G4ElectronOccupancy&
+G4ElectronOccupancy::operator=(const G4ElectronOccupancy& right)
 {
-  if ( this != &right) {
+  if ( this != &right)
+  {
     theSizeOfOrbit = right.theSizeOfOrbit;
     
     // allocate and clear the array of theOccupancies 
-    if ( theOccupancies != 0 ) delete [] theOccupancies;
+    if ( theOccupancies != nullptr ) delete [] theOccupancies;
     theOccupancies = new G4int[theSizeOfOrbit];
-    G4int   index =0;
-    for (index = 0; index <  theSizeOfOrbit; index++) {
+    for (G4int index = 0; index < theSizeOfOrbit; ++index)
+    {
       theOccupancies[index] = right.theOccupancies[index];
     }
     
@@ -106,15 +101,20 @@ G4ElectronOccupancy& G4ElectronOccupancy::operator=(const G4ElectronOccupancy& r
 
 G4bool G4ElectronOccupancy::operator==(const G4ElectronOccupancy& right) const
 {
-  G4int index;
   G4bool value = true;
-  for (index = 0; index < MaxSizeOfOrbit; index++) {
-    if ( (index < theSizeOfOrbit ) && ( index < right.theSizeOfOrbit) ) {
+  for (G4int index = 0; index < MaxSizeOfOrbit; ++index)
+  {
+    if ( (index < theSizeOfOrbit ) && ( index < right.theSizeOfOrbit) )
+    {
       value = value && 
          (theOccupancies[index] == right.theOccupancies[index]) ;
-    } else if ((index < theSizeOfOrbit ) && ( index >= right.theSizeOfOrbit)) {
+    }
+    else if ((index < theSizeOfOrbit ) && ( index >= right.theSizeOfOrbit))
+    {
       value = value && (theOccupancies[index] == false);
-    } else if ((index >= theSizeOfOrbit ) && ( index <right.theSizeOfOrbit)) {
+    }
+    else if ((index >= theSizeOfOrbit ) && ( index <right.theSizeOfOrbit))
+    {
       value = value && (right.theOccupancies[index] == false);
     }
   }
@@ -129,25 +129,28 @@ G4bool G4ElectronOccupancy::operator!=(const G4ElectronOccupancy& right) const
 void G4ElectronOccupancy::DumpInfo() const
 {
   G4cout << "  -- Electron Occupancy -- " << G4endl;
-  G4int index;
-  for (index = 0; index < theSizeOfOrbit; index++) {
+  for (G4int index = 0; index < theSizeOfOrbit; ++index)
+  {
     G4cout << "   " << index << "-th orbit       " 
            <<  theOccupancies[index] << G4endl;
   }
 }
 
-G4int  G4ElectronOccupancy::AddElectron(G4int orbit, G4int number)
+G4int G4ElectronOccupancy::AddElectron(G4int orbit, G4int number)
 {
   G4int value =0;
-  if (orbit>=theSizeOfOrbit){
+  if (orbit>=theSizeOfOrbit)
+  {
     std::ostringstream smsg;
     smsg<<  "Orbit (" << orbit 
-	<<") exceeds the maximum("
-	<<theSizeOfOrbit-1<<")  ";
+        <<") exceeds the maximum("
+        <<theSizeOfOrbit-1<<")  ";
     G4String msg = smsg.str();
     G4Exception("G4ElectronOccupancy::AddElectron()","PART131",
-		JustWarning, msg);
-  } else if (orbit >=0) {
+                JustWarning, msg);
+  }
+  else if (orbit >=0)
+  {
     theOccupancies[orbit] += number;
     theTotalOccupancy += number; 
     value = number;   
@@ -158,15 +161,18 @@ G4int  G4ElectronOccupancy::AddElectron(G4int orbit, G4int number)
 G4int  G4ElectronOccupancy::RemoveElectron(G4int orbit, G4int number)
 {
   G4int value =0;
-  if (orbit>=theSizeOfOrbit){
+  if (orbit>=theSizeOfOrbit)
+  {
     std::ostringstream smsg;
     smsg<<  "Orbit (" << orbit 
-	<<") exceeds the maximum("
-	<<theSizeOfOrbit-1 <<") ";
+        <<") exceeds the maximum("
+        <<theSizeOfOrbit-1 <<") ";
     G4String msg = smsg.str();
     G4Exception("G4ElectronOccupancy::RemoveElectron()","PART131",
-		JustWarning, msg);
-  } else if (orbit >=0) {
+                JustWarning, msg);
+  }
+  else if (orbit >=0)
+  {
     if ( theOccupancies[orbit] < number ) number = theOccupancies[orbit];
     theOccupancies[orbit] -= number;
     theTotalOccupancy -= number;    

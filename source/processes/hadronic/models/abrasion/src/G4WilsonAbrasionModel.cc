@@ -113,9 +113,11 @@
 #include "G4Exp.hh"
 #include "G4Pow.hh"
 
+#include "G4PhysicsModelCatalog.hh"
+
 
 G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4bool useAblation1)
- :G4HadronicInteraction("G4WilsonAbrasion")
+  : G4HadronicInteraction("G4WilsonAbrasion"), secID(-1)
 {
   // Send message to stdout to advise that the G4Abrasion model is being used.
   PrintWelcomeMessage();
@@ -171,6 +173,9 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4bool useAblation1)
   fradius = 0.99;
   conserveEnergy = false;
   conserveMomentum = true;
+
+  // Creator model ID for the secondaries created by this model
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );  
 }
 
 void G4WilsonAbrasionModel::ModelDescription(std::ostream& outFile) const
@@ -185,7 +190,8 @@ void G4WilsonAbrasionModel::ModelDescription(std::ostream& outFile) const
           << "projectile energies between 70 MeV/n and 10.1 GeV/n. \n";
 }
 
-G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4ExcitationHandler* aExcitationHandler)
+G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4ExcitationHandler* aExcitationHandler) :
+ G4HadronicInteraction("G4WilsonAbrasion"), secID(-1)  
 {
 // Send message to stdout to advise that the G4Abrasion model is being used.
 
@@ -223,13 +229,16 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4ExcitationHandler* aExcitationHan
 // npK, when mutiplied by the nuclear Fermi momentum, determines the range of
 // momentum over which the secondary nucleon momentum is sampled.
 //
-  r0sq             = 0.0;  //A.R. 14-Aug-2012 Coverity fix. 
+  r0sq             = 0.0;
   npK              = 5.0;
   B                = 10.0 * MeV;
   third            = 1.0 / 3.0;
   fradius          = 0.99;
   conserveEnergy   = false;
   conserveMomentum = true;
+
+  // Creator model ID for the secondaries created by this model
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );  
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -655,9 +664,9 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
       G4DynamicParticle *secondary =
         new G4DynamicParticle((*iter)->GetDefinition(),
         (*iter)->GetTotalEnergy(), (*iter)->GetMomentum());
-      theParticleChange.AddSecondary (secondary);  // Added MHM 20050118
+      theParticleChange.AddSecondary (secondary, secID);
       G4String particleName = (*iter)->GetDefinition()->GetParticleName();
-      delete (*iter); // get rid of leftover particle def!  // Added MHM 20050118
+      delete (*iter); // get rid of leftover particle def!
       if (verboseLevel >= 2 && particleName.find("[",0) < particleName.size())
       {
         G4cout <<"------------------------" <<G4endl;
@@ -668,7 +677,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
                <<G4endl;
       }
     }
-    delete products;  // Added MHM 20050118
+    delete products;
   }
 //
 //
@@ -692,9 +701,9 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
       G4DynamicParticle *secondary =
         new G4DynamicParticle((*iter)->GetDefinition(),
         (*iter)->GetTotalEnergy(), (*iter)->GetMomentum());
-      theParticleChange.AddSecondary (secondary);
+      theParticleChange.AddSecondary (secondary, secID);
       G4String particleName = (*iter)->GetDefinition()->GetParticleName();
-      delete (*iter); // get rid of leftover particle def!  // Added MHM 20050118
+      delete (*iter); // get rid of leftover particle def!
       if (verboseLevel >= 2 && particleName.find("[",0) < particleName.size())
       {
         G4cout <<"--------------------" <<G4endl;
@@ -705,7 +714,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
                <<G4endl;
       }
     }
-    delete products;  // Added MHM 20050118
+    delete products;
   }
 
   if (verboseLevel >= 2)
@@ -806,7 +815,7 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
     G4double nucleonMass = typeNucleon->GetPDGMass();
     G4double E           = std::sqrt(p*p + nucleonMass*nucleonMass)-nucleonMass;
     dynamicNucleon = new G4DynamicParticle(typeNucleon,direction,E);
-    theParticleChange.AddSecondary (dynamicNucleon);
+    theParticleChange.AddSecondary (dynamicNucleon, secID);
     pabr += p*direction;
   }
 //

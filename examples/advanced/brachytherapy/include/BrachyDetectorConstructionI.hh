@@ -30,7 +30,9 @@
 //    *    BrachyDetectorConstructionI.hh     *
 //    *                                      *
 //    ****************************************
-// Model of the Iodium source
+//
+// Author: Susanna Guatelli, susanna@uow.edu.au
+// Model of Bebig Isoseed Iodine source
 //
 #ifndef BrachyDetectorConstructionI_H
 #define BrachyDetectorConstructionI_H 1
@@ -42,35 +44,32 @@ class G4Tubs;
 class G4Sphere;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4VisAttributes;
 
 class BrachyDetectorConstructionI
 {
 public:
-  BrachyDetectorConstructionI();
+  explicit BrachyDetectorConstructionI();
   ~BrachyDetectorConstructionI();
-  void  ConstructIodium(G4VPhysicalVolume*);// Construct iodium source
-  void  CleanIodium();
+  void  ConstructIodine(G4VPhysicalVolume*);// Construct iodine source
+  void  CleanIodine(); // Clean iodine source
 private:
-  G4Tubs* defaultTub;
-  G4Tubs* capsule;
-  G4Sphere* capsuleTip;
-  G4Tubs* iodiumCore;
-  G4LogicalVolume* defaultTubLog;
-  G4LogicalVolume* capsuleLog;
-  G4LogicalVolume* capsuleTipLog;
-  G4LogicalVolume* iodiumCoreLog; 
-  G4VPhysicalVolume* defaultTubPhys; 
-  G4VPhysicalVolume* capsulePhys;
-  G4VPhysicalVolume* capsuleTipPhys1;
-  G4VPhysicalVolume* capsuleTipPhys2;
-  G4VPhysicalVolume* iodiumCorePhys;
-  G4VisAttributes* simpleiodiumVisAtt;
-  G4VisAttributes* simpleCapsuleVisAtt;
-  G4VisAttributes* simpleCapsuleTipVisAtt;
-
-  BrachyMaterial* pMaterial;   
+  G4Tubs* fDefaultTub;
+  G4Tubs* fCapsule;
+  G4Sphere* fCapsuleTip;
+  G4Tubs* fIodineCore;
+  G4LogicalVolume* fDefaultTubLog;
+  G4LogicalVolume* fCapsuleLog;
+  G4LogicalVolume* fCapsuleTipLog;
+  G4LogicalVolume* fIodineCoreLog; 
+  G4VPhysicalVolume* fDefaultTubPhys; 
+  G4VPhysicalVolume* fCapsulePhys;
+  G4VPhysicalVolume* fCapsuleTipPhys1;
+  G4VPhysicalVolume* fCapsuleTipPhys2;
+  G4VPhysicalVolume* fIodineCorePhys;
+  G4VisAttributes* fSimpleIodineVisAtt;
+  G4VisAttributes* fSimpleCapsuleVisAtt;
+  G4VisAttributes* fSimpleCapsuleTipVisAtt;
 };
 #endif
 

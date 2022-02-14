@@ -61,6 +61,8 @@ class G4QuarkExchange
 	const G4QuarkExchange & operator=(const G4QuarkExchange &right);
 	G4bool operator==(const G4QuarkExchange &right) const;
 	G4bool operator!=(const G4QuarkExchange &right) const;
+
+       G4double StrangeSuppress;     // Uzhi June 2020
 };
 
 #endif

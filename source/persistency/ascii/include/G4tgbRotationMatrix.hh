@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbRotationMatrix
+// G4tgbRotationMatrix
 //
 // Class description:
 //
 // Transient class of a rotation matrix; builds a G4RotationMatrix,
 // of each rotation matrix.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbRotationMatrix_h
-#define G4tgbRotationMatrix_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbRotationMatrix_hh
+#define G4tgbRotationMatrix_hh 1
 
 #include "globals.hh"
 
@@ -50,27 +45,26 @@
 
 class G4tgbRotationMatrix
 {
-  public:  // with description
+  public:
 
     G4tgbRotationMatrix();
-   ~G4tgbRotationMatrix();
+    ~G4tgbRotationMatrix();
 
-    G4tgbRotationMatrix( G4tgrRotationMatrix* tgr );
+    G4tgbRotationMatrix(G4tgrRotationMatrix* tgr);
       // Construct the G4tgbRotationMatrix (fill its data members)
       // interpreting the data in the list of words 'wl'
 
-    G4RotationMatrix* BuildG4RotMatrix( );
-    G4RotationMatrix* BuildG4RotMatrixFrom3( std::vector<G4double>& values );
-    G4RotationMatrix* BuildG4RotMatrixFrom6( std::vector<G4double>& values );
-    G4RotationMatrix* BuildG4RotMatrixFrom9( std::vector<G4double>& values );
+    G4RotationMatrix* BuildG4RotMatrix();
+    G4RotationMatrix* BuildG4RotMatrixFrom3(std::vector<G4double>& values);
+    G4RotationMatrix* BuildG4RotMatrixFrom6(std::vector<G4double>& values);
+    G4RotationMatrix* BuildG4RotMatrixFrom9(std::vector<G4double>& values);
       // Build a G4RotationMatrix transforming theValues
 
-    G4String GetName() { return theTgrRM->GetName(); }
+    const G4String& GetName() { return theTgrRM->GetName(); }
 
   private:
 
-    G4tgrRotationMatrix* theTgrRM;
+    G4tgrRotationMatrix* theTgrRM = nullptr;
 };
 
 #endif
- 

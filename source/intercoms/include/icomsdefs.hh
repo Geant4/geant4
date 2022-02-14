@@ -23,28 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Defines for Windows DLLs import/export
-//
 
+// Author: G.Cosmo, CERN
+// --------------------------------------------------------------------
 #ifndef G4ICOMSWDEFS_HH
-#define G4ICOMSWDEFS_HH
+#define G4ICOMSWDEFS_HH 1
 
 #include "G4Types.hh"
 
 #ifdef WIN32
-  //
-  // Unique identifier for intercoms module
-  //
-  #if defined G4ICOMS_ALLOC_EXPORT
-    #define G4ICOMS_DLL G4DLLEXPORT
-  #else
-    #define G4ICOMS_DLL G4DLLIMPORT
-  #endif
+//
+// Unique identifier for intercoms module
+//
+#  if defined G4ICOMS_ALLOC_EXPORT
+#    define G4ICOMS_DLL G4DLLEXPORT
+#  else
+#    define G4ICOMS_DLL G4DLLIMPORT
+#  endif
 #else
-  #define G4ICOMS_DLL
+#  define G4ICOMS_DLL
 #endif
 
 #endif /* G4ICOMSWDEFS_HH */

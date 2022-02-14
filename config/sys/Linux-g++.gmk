@@ -1,36 +1,17 @@
 #
-# ------ GNU/LINUX ------ gcc 4.8 and higher
+# ------ GNU/LINUX ------ gcc 9.3 and higher
 #
 ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++
   CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
-  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
-  CXXFLAGS  += -Wshadow
-  ifdef G4USE_STD11
-    CPPFLAGS  += -std=c++11
-    CXXFLAGS  += -std=c++11
-  endif
-  ifdef G4USE_STD14
-    G4USE_STD11 := 1
-    CPPFLAGS  += -std=c++14
-    CXXFLAGS  += -std=c++14
-  endif
-  ifdef G4USE_STD17
-    G4USE_STD11 := 1
-    CPPFLAGS  += -std=c++17
-    CXXFLAGS  += -std=c++17
-  endif
-#
-# Uncomment the following options to activate Pentium4 chip specific
-# floating-point operations on the SSE unit. It will allow for more stable
-# results (no output differences between debug/optimised runs) and little
-# performance improvement (in the order of 2%).
-# NOTE: binaries built using these options will NOT be portable cross
-#       platforms. Will only run on Pentium4-based architectures !
-#
-# CXXFLAGS  += -march=pentium4 -mfpmath=sse
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe -pthread
+  CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
+  CPPFLAGS  += -std=c++17
+  CXXFLAGS  += -std=c++17
+  G4USE_STD17 := 1
   ifdef G4MULTITHREADED
-    CXXFLAGS += -ftls-model=initial-exec -pthread
+    CXXFLAGS += -ftls-model=initial-exec
   endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2
@@ -54,6 +35,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CCFLAGS   += -O2 -g
   endif
   ifdef G4LIB_BUILD_SHARED
+    CPPFLAGS  += -fPIC
     CXXFLAGS  += -fPIC
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
@@ -73,7 +55,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/lib$(ARCH)  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+    X11LIBS   := -L/usr/lib$(ARCH)  -lXmu -lXt -lXext -lX11 -lSM -lICE
   endif
   ifndef XMFLAGS
     XMFLAGS   := -I/usr/include
@@ -95,7 +77,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L$(OGLHOME)/lib$(ARCH) -lGLU -lGL
+    OGLLIBS   := -L$(OGLHOME)/lib$(ARCH) -lGL
   endif
 
 # ---- QT Setup block -------------------------------------------------------
@@ -118,6 +100,9 @@ ifeq ($(G4SYSTEM),Linux-g++)
       QTFLAGS   += -I $(QTHOME)/include/QtGui
       QTFLAGS   += -I $(QTHOME)/include/QtWidgets
       QTFLAGS   += -I $(QTHOME)/include/QtOpenGL
+      QTFLAGS   += -I $(QTHOME)/include/Qt3DCore
+      QTFLAGS   += -I $(QTHOME)/include/Qt3DExtras
+      QTFLAGS   += -I $(QTHOME)/include/Qt3DRender
       QTFLAGS   += -I $(QTHOME)/include/QtPrintSupport
     endif
   else                          # Qt4
@@ -138,6 +123,9 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifeq ($(QT_VERSION),5)
     ifndef QTLIBS              # Qt5
       QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt5PrintSupport
+    endif
+    ifndef QT3DLIBS
+      QT3DLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt53DCore -lQt53DExtras -lQt53DRender -lQt5PrintSupport
     endif
     ifndef GLQTLIBS
       GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL -lQt5PrintSupport

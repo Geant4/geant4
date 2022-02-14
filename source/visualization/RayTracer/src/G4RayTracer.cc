@@ -29,29 +29,18 @@
 #include "G4RayTracerFeatures.hh"
 #include "G4RayTracerSceneHandler.hh"
 #include "G4RayTracerViewer.hh"
-#ifdef G4MULTITHREADED
-#include "G4TheMTRayTracer.hh"
-#else
-#include "G4TheRayTracer.hh"
-#endif
 
 G4RayTracer::G4RayTracer():
   G4VGraphicsSystem("RayTracer",
 		     "RayTracer",
 		     RAYTRACER_FEATURES,
 		     G4VGraphicsSystem::threeD)
+, theRayTracer(nullptr)
 {
-#ifdef G4MULTITHREADED
-  theRayTracer = new G4TheMTRayTracer;  // Establish default ray tracer.
-#else
-  theRayTracer = new G4TheRayTracer;  // Establish default ray tracer.
-#endif
 }
 
 G4RayTracer::~G4RayTracer()
-{
-  delete theRayTracer;
-}
+{}
 
 G4VSceneHandler* G4RayTracer::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4RayTracerSceneHandler (*this, name);

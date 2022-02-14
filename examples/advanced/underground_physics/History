@@ -11,21 +11,86 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 
                       Category History file
                       ---------------------
+29.11.2021 - I. Hrivnacova    (DMX-V10-07-10)
+             Removed obsolete reference to  AIDA/Anaphe from README_stt
+
+18.10.2021 - B. Morgan (DMX-V10-07-10)
+             Use std::string member functions from G4String in place of synonyms
+
+07.10.2021 - I. Hrivnacova    (DMX-V10-07-09)
+             Migration to new G4AnalysisManager.hh header;
+             define the default output file type (root),
+             removed DMXAnalysisManager.hh.
+
+30.08.2021 - D.H. Wright      (DMX-V10-07-08)
+             Replaced G4RadioactiveDecayBase with G4RadioactiveDecay in
+             DMXPhysicsList.cc.  Part of name migration and removal of
+             deprecated G4RadioactiveDecayBase.
+
+19.07.2021 - I. Hrivnacova    (DMX-V10-07-07)
+             Updated for changes in the analysis category:
+             removed deleting of the analysis manager,
+             as this is now done by the Geant4 kernel.
+
+24.05.2021 - B. Morgan (DMX=V10-07-06)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+29.03.2021 - G. Cosmo         (DMX-V10-07-05)
+             In DMXParticleSource::ConfineSourceToVolume(), use existing
+             facility to find physical volme in store, rather than looping
+             through. Some code cleanup.
+
+18.03.2021 - A. Ribon         (DMX-V10-07-04)
+             DMXPhysicsList : replaced G4HadronCaptureProcess with
+             G4NeutronCaptureProcess.
+
+11.03.2021 - A. Ribon         (DMX-V10-07-03)
+             DMXPhysicsList : replaced stopping processes that
+             have been deleted.
+
+08.03.2021 - A. Ribon         (DMX-V10-07-02)
+             DMXPhysicsList : removed header files of old and unused
+	     pion inelastic cross sections (that have been deleted).
+
+04.03.2021 - A. Ribon         (DMX-V10-07-01)
+             DMXPhysicsList : replaced particle-specific inelastic processes
+	     (that have been deleted) with G4HadronInelasticProcess.
+
+24.02.2021 - D. Sawkey        (DMX-V10-07-00)
+             Replace deprecated optical commands & parameters  with new ones.
+
+17.11.2020 - S. Guatelli      (DMX-V10-06-04)
+             Migration to G4RunManagerFactory
+
+03.11.2020 - D.Sawkey      (DMX-V10-06-03)
+             Build material property tables using std::vectors
+
+02.11.2020 - B.Morgan      (DMX-V10-06-02)
+             Support same CMake version range as core Geant4
+
+14.10.2020 - V. Ribon      (DMX-V10-06-01)
+             neutron.mac, ambe_spectrum.mac : removed unneeded
+	     command "/process/had/rdm/analogueMC 1".
+
+05.08.2020 - V. Ribon      (DMX-V10-06-00)
+             neutron.mac, ambe_spectrum.mac, UserRequirements.txt : migrated
+	     UI commands from "/grdm/..." to "/process/had/rdm/..."
+
 09.11.2019 - V. Ivanchenko (DMX-V10-05-03)
              DMXPhysicsList : clean-up both EM, hadronic and radioactive decay
 
-30.08.2019 - S. Guatelli (DMX-V10-05-02)
+30.08.2019 - S. Guatelli   (DMX-V10-05-02)
              G4VIS_USE deleted
 
 10.05.2019 - V. Ivanchenko (DMX-V10-05-01)
-             DMXPhysicsList : add Glauber-Gribov cross section for all elastic 
-             processes          
+             DMXPhysicsList : add Glauber-Gribov cross section for all elastic
+             processes
 
 31.01.2019 - I.Hrivnacova  (DMX-V10-05-00)
              Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 09.08.2018 - A. Ribon      (DMX-V10-04-01)
-             DMXPhysicsList : replaced the explicit high-energy limit of 
+             DMXPhysicsList : replaced the explicit high-energy limit of
              hadronic physics with the one from G4HadronicParameters .
 
 28.10.2016 - G. Folger
@@ -56,34 +121,34 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 
 23.05.2014 - L. Pandola (DMX-V10-00-04)
 	     Actual MT migration. Use G4MTRunManager
-	     Added G4ShortLivedConstructor in the physics list, to 
+	     Added G4ShortLivedConstructor in the physics list, to
               avoid G4Exception PART10116.
 
 21.05.2014 - L. Pandola (DMX-V10-00-03)
-	     Edit constructor of DMXSteppingAction, make const 
+	     Edit constructor of DMXSteppingAction, make const
              Getters in DMXEventAction.
 	     Instantiate DMXRunAction also in the master
 	     Fix a problem with the names of the ASCII files
 
 20.05.2014 - L. Pandola (DMX-V10-00-02)
-	     Edit the constructor of DMXEventAction 
+	     Edit the constructor of DMXEventAction
 	     Make Getters const in RunAction and PrimaryGenerator
-	     ASCII files are created per-thread. Not open at every 
+	     ASCII files are created per-thread. Not open at every
 	      event, but kept as private class members.
 
 13.05.2014 - L. Pandola (DMX-V10-00-01)
 	     Analysis files closed at the end of execution (not
-             end of event). 
+             end of event).
              Added ConstructSDandField() method in the Detector
              Clean up the detector construction messenger
              Made Hits allocators as ThreadLocal
              Remove CLHEP::Random
 
 08.05.2014 - L. Pandola (DMX-V10-00-00)
-             Added ActionInitialization class 
+             Added ActionInitialization class
 
 07.11.2013 - L. Pandola (DMX-V09-06-08)
-	     Remove dependency from the deprecated LEP and HEP 	
+	     Remove dependency from the deprecated LEP and HEP
 	     models from Geisha
 
 30.07.2013 - A. Dotti (DMX-V09-06-07)
@@ -91,19 +156,19 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
              unused private data members
 
 31.05.2013 - L. Pandola (DMX-V09-06-06)
-	     Migrate analysis from the AIDA-based local singleton 
-	     class to the g4analysis tools (no AIDA dependency 
+	     Migrate analysis from the AIDA-based local singleton
+	     class to the g4analysis tools (no AIDA dependency
 	     any longer). Clean-up of README and CMakeLists.txt.
 	     Some cosmetics in the code.
- 
+
 18.04.2013 - L. Pandola (DMX-V09-06-05)
-	     In DMXMinEkineCuts.cc, migrate calculation of the range 
-             from G4EnergyLossTable (obsolete class) to 
-             G4LossTableManager. This should hopefully fix the problems 
+	     In DMXMinEkineCuts.cc, migrate calculation of the range
+             from G4EnergyLossTable (obsolete class) to
+             G4LossTableManager. This should hopefully fix the problems
 	     observed in DMX-V09-06-04. Other minor cosmetics.
 
 16.04.2013 - L. Pandola (DMX-V09-06-04)
-	   - Trying to understand the origin of the crashes which 
+	   - Trying to understand the origin of the crashes which
 	     caused the rejection of DMX-V09-06-03
 
 21.03.2013 - L. Pandola (DMX-V09-06-03)
@@ -124,8 +189,8 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 	   - Fix the CMakeLists.txt file (AIDA optional dependency)
 
 16.10.2012 - L.Pandola (DMX-V09-05-02)
-	   - Change the logic of the CMakeLists.txt file. The env variable 
-             and the cmake line command can be used (the cmake commands gets 
+	   - Change the logic of the CMakeLists.txt file. The env variable
+             and the cmake line command can be used (the cmake commands gets
              the priority)
 
 12.10.2012 - L.Pandola (DMX-V09-05-01)
@@ -149,23 +214,23 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
              Change /vis/open OGLxxx to /vis/open OGL
 
 16.02.2010 - L. Pandola (DMX-V09-03-00)
-	     Copy of the previous tag, DMX-V09-02-02, which was not submitted for 
+	     Copy of the previous tag, DMX-V09-02-02, which was not submitted for
 	     testing.
 
 26.10.2009 - L. Pandola (DMX-V09-02-02)
-	     Physics list migrated from LowEnergy processes to the new Livermore 
-	     models. Physics results unchanged for gamma/e-. Possible differences 
+	     Physics list migrated from LowEnergy processes to the new Livermore
+	     models. Physics results unchanged for gamma/e-. Possible differences
              with ions/protons, since we don't use anymore G4hLowEnergyIonisation
 
 22.10.2009 - L. Pandola (DMX-V09-02-01)
 	     Correct Analysis manager to solve a problem with the HBOOK output files
-	     (ntuples not filled, histograms not saved). Still at the stage of 
+	     (ntuples not filled, histograms not saved). Still at the stage of
 	     pre-migration.
 
 22.10.2009 - L. Pandola (DMX-V09-02-00)
              Get rid of a warning message and allocation problems with ntuple2
-             Meant to be the reference to verify the migration to new 
-	     Livermore models. 
+             Meant to be the reference to verify the migration to new
+	     Livermore models.
 
 16.06.2008 - G.A.P.Cirrone (DMX-V09-01-01)
              Removed AIDA command from GNUmakefile

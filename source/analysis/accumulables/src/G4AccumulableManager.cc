@@ -27,6 +27,7 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4AccumulableManager.hh"
+#include "G4ThreadLocalSingleton.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
@@ -37,36 +38,17 @@ namespace {
   G4Mutex mergeMutex = G4MUTEX_INITIALIZER;
 }
 
-G4AccumulableManager* G4AccumulableManager::fgMasterInstance = nullptr;
-G4ThreadLocal G4AccumulableManager* G4AccumulableManager::fgInstance = nullptr;
-
 //_____________________________________________________________________________
 G4AccumulableManager* G4AccumulableManager::Instance()
 {
-  if ( fgInstance == nullptr ) {
-    G4bool isMaster = ! G4Threading::IsWorkerThread();
-    fgInstance = new G4AccumulableManager(isMaster);
-  }
-  
-  return fgInstance;
-}    
+  static G4ThreadLocalSingleton<G4AccumulableManager> instance;
+  return instance.Instance();
+}
 
 //_____________________________________________________________________________
-G4AccumulableManager::G4AccumulableManager(G4bool isMaster)
- : fVector(),
-   fMap() 
+G4AccumulableManager::G4AccumulableManager()
 {
-  if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
-    G4ExceptionDescription description;
-    description 
-      << "      " 
-      << "G4AccumulableAnalysisManager already exists." 
-      << "Cannot create another instance.";
-    G4Exception("G4AccumulableAnalysisManager::G4AccumulableAnalysisManager()",
-                "Analysis_F001", FatalException, description);
-  }
-  if ( isMaster ) fgMasterInstance = this;
-  fgInstance = this;
+  if ( ! G4Threading::IsWorkerThread() ) fgMasterInstance = this;
 }
 
 //_____________________________________________________________________________
@@ -97,13 +79,13 @@ G4String G4AccumulableManager::GenerateName() const
 G4bool G4AccumulableManager::CheckName(const G4String& name, const G4String& where) const
 {
   if ( fMap.find(name) == fMap.end() ) return true;
- 
+
   G4ExceptionDescription description;
-  description << "      " << "Name " << name << " is already used." << G4endl;
-  description << "      " << "Paremeter will be not created/registered.";
+  description << "Name " << name << " is already used." << G4endl;
+  description << "Parameter will be not created/registered.";
   G4String method("G4AccumulableManager::");
   method.append(where);
-  G4Exception(method, "Analysis_W002", JustWarning, description);
+  G4Exception(method, "Analysis_W001", JustWarning, description);
   return false;
 }
 
@@ -115,9 +97,9 @@ G4bool G4AccumulableManager::CheckName(const G4String& name, const G4String& whe
 G4bool G4AccumulableManager::RegisterAccumulable(G4VAccumulable* accumulable)
 {
   auto name = accumulable->GetName();
-  
+
   // do not accept name if it is already used
-  if ( ! CheckName(name, "RegisterAccumulable") ) return false; 
+  if ( ! CheckName(name, "RegisterAccumulable") ) return false;
 
   // generate name if empty
   if ( ! name.length() ) {
@@ -131,7 +113,7 @@ G4bool G4AccumulableManager::RegisterAccumulable(G4VAccumulable* accumulable)
 }
 
 //_____________________________________________________________________________
-G4VAccumulable*  
+G4VAccumulable*
 G4AccumulableManager::GetAccumulable(const G4String& name, G4bool warn) const
 {
   // get G4VParammeter from the map
@@ -139,9 +121,9 @@ G4AccumulableManager::GetAccumulable(const G4String& name, G4bool warn) const
   if ( it == fMap.end() ) {
     if ( warn) {
       G4ExceptionDescription description;
-      description << "      " << "accumulable " << name << " does not exist.";
-      G4Exception("G4AccumulableManager::GetAccumulable", 
-                  "Analysis_W011", JustWarning, description);
+      description << "Accumulable " << name << " does not exist.";
+      G4Exception("G4AccumulableManager::GetAccumulable",
+                  "Analysis_W001", JustWarning, description);
     }
     return nullptr;
   }
@@ -150,16 +132,16 @@ G4AccumulableManager::GetAccumulable(const G4String& name, G4bool warn) const
 }
 
 //_____________________________________________________________________________
-G4VAccumulable*  
+G4VAccumulable*
 G4AccumulableManager::GetAccumulable(G4int id, G4bool warn) const
 {
   // get G4VParammeter from the vector
   if ( id < 0 || id >= G4int(fVector.size()) ) {
     if ( warn) {
       G4ExceptionDescription description;
-      description << "      " << "accumulable " << id << " does not exist.";
-      G4Exception("G4AccumulableManager::GetAccumulable", 
-                  "Analysis_W011", JustWarning, description);
+      description << "Accumulable " << id << " does not exist.";
+      G4Exception("G4AccumulableManager::GetAccumulable",
+                  "Analysis_W001", JustWarning, description);
     }
     return nullptr;
   }
@@ -168,7 +150,7 @@ G4AccumulableManager::GetAccumulable(G4int id, G4bool warn) const
 }
 
 //_____________________________________________________________________________
-void G4AccumulableManager::Merge() 
+void G4AccumulableManager::Merge()
 {
   // Do nothing if  there are no accumulables registered
   // or if master thread
@@ -177,18 +159,17 @@ void G4AccumulableManager::Merge()
   // The manager on mastter must exist
   if ( ! fgMasterInstance ) {
     G4ExceptionDescription description;
-    description 
-      << "      " << "No master G4AccumulableManager instance exists." 
-      << G4endl 
-      << "      " << "Accumulables will not be merged.";
+    description
+      << "No master G4AccumulableManager instance exists." << G4endl
+      << "Accumulables will not be merged.";
       G4Exception("G4AccumulableManager::Merge()",
-                "Analysis_W031", JustWarning, description);
+                "Analysis_W001", JustWarning, description);
     return;
   }
 
   // The worker manager just merges its accumulables to the master
   // This operation needs a lock
-  // G4cout << "Go to merge accumulables" << G4endl; 
+  // G4cout << "Go to merge accumulables" << G4endl;
   G4AutoLock lock(&mergeMutex);
 
   // the other manager has the vector with the "same" accumulables
@@ -198,7 +179,7 @@ void G4AccumulableManager::Merge()
     // G4VAccumulable* accumulable = *(it++);
     // masterAccumulable->Merge(*(accumulable));
     itMaster->Merge(*(*(it++)));
-  }  
+  }
   lock.unlock();
 }
 
@@ -206,10 +187,10 @@ void G4AccumulableManager::Merge()
 void G4AccumulableManager::Reset()
 {
 // Reset histograms and profiles
-  
+
   for ( auto it : fVector ) {
     it->Reset();
-  }  
-}  
- 
+  }
+}
+
 

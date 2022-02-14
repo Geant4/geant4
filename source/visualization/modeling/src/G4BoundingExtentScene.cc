@@ -56,14 +56,14 @@ void G4BoundingExtentScene::ProcessVolume(const G4VSolid& solid)
 
 void G4BoundingExtentScene::ResetBoundingExtent ()
 {
-  fExtent = G4VisExtent();
+  fExtent = G4VisExtent::GetNullExtent();
   fpCurrentObjectTransformation = 0;
 }
 
 void G4BoundingExtentScene::AccrueBoundingExtent (const G4VisExtent& newExtent)
 {
 
-  if (fExtent == G4VisExtent()) {  // First time.
+  if (fExtent == G4VisExtent::GetNullExtent()) {  // First time.
 
     fExtent = newExtent;
 

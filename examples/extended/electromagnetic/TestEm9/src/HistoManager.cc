@@ -57,16 +57,17 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4GammaGeneralProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-HistoManager* HistoManager::fManager = 0;
+HistoManager* HistoManager::fManager = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager* HistoManager::GetPointer()
 {
-  if(!fManager) {
+  if(nullptr == fManager) {
     fManager = new HistoManager();
   }
   return fManager;
@@ -75,10 +76,10 @@ HistoManager* HistoManager::GetPointer()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager::HistoManager()
- : fGamma(0),
-   fElectron(0),
-   fPositron(0),
-   fHisto(0)
+ : fGamma(G4Gamma::Gamma()),
+   fElectron(G4Electron::Electron()),
+   fPositron(G4Positron::Positron()),
+   fHisto(new Histo())
 {
   fVerbose = 1;
   fEvt1    = -1;
@@ -92,12 +93,7 @@ HistoManager::HistoManager()
   fBinsED= 100;
   fNHisto = 13;
 
-  fHisto   = new Histo();
-  bookHisto();
-
-  fGamma = G4Gamma::Gamma();
-  fElectron = G4Electron::Electron();
-  fPositron = G4Positron::Positron();
+  BookHisto();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -429,6 +425,12 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
   } else {
     const G4VProcess* proc = aTrack->GetCreatorProcess();
     G4int type = proc->GetProcessSubType();
+   
+    if(type == fGammaGeneralProcess) {
+      type = static_cast<const G4GammaGeneralProcess*>(proc)->GetSubProcessSubType();
+      proc = static_cast<const G4GammaGeneralProcess*>(proc)->GetSelectedProcess();
+    }
+
     if(type == fBremsstrahlung) {
       const G4Element* elm = 
         static_cast<const G4VEnergyLossProcess*>(proc)->GetCurrentElement();

@@ -51,36 +51,16 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4EmBuilder.hh"
 
-// Bosons
-#include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
-#include "G4Gamma.hh"
-#include "G4OpticalPhoton.hh"
-
-// leptons
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
-
-// Hadrons
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
-#include "G4GenericIon.hh"
+#include "G4Decay.hh"
+#include "StepMax.hh"
 
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() 
-: G4VModularPhysicsList(), fMessenger(0), fEmPhysicsList(0)
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
     fMessenger = new PhysicsListMessenger(this);
     
@@ -108,41 +88,8 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-    // pseudo-particles
-    G4Geantino::GeantinoDefinition();
-    G4ChargedGeantino::ChargedGeantinoDefinition();
-    
-    // gamma
-    G4Gamma::GammaDefinition();
-    
-    // optical photon
-    G4OpticalPhoton::OpticalPhotonDefinition();
-    
-    // leptons
-    G4Electron::ElectronDefinition();
-    G4Positron::PositronDefinition();
-    G4MuonPlus::MuonPlusDefinition();
-    G4MuonMinus::MuonMinusDefinition();
-    
-    G4NeutrinoE::NeutrinoEDefinition();
-    G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-    G4NeutrinoMu::NeutrinoMuDefinition();
-    G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-    
-    // mesons
-    G4MesonConstructor mConstructor;
-    mConstructor.ConstructParticle();
-    
-    // barions
-    G4BaryonConstructor bConstructor;
-    bConstructor.ConstructParticle();
-    
-    // ions
-    G4IonConstructor iConstructor;
-    iConstructor.ConstructParticle();
-    
-    // Required by MT even if ion physics not used
-    G4GenericIon::GenericIonDefinition();
+    // minimal set of particles for EM physics
+    G4EmBuilder::ConstructMinimalEmSet();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -156,8 +103,6 @@ void PhysicsList::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Decay.hh"
 
 void PhysicsList::AddDecay()
 {
@@ -185,8 +130,6 @@ void PhysicsList::AddDecay()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
 {

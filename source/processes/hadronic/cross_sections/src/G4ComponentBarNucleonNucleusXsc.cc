@@ -65,7 +65,7 @@ G4ComponentBarNucleonNucleusXsc::G4ComponentBarNucleonNucleusXsc()
 
 G4ComponentBarNucleonNucleusXsc::~G4ComponentBarNucleonNucleusXsc()
 {
-  if(isMaster && thePData && theNData) {
+  if(isMaster && nullptr != thePData) {
     for(G4int i=0; i<NZ; ++i) { 
       delete (*thePData)[i];
       delete (*theNData)[i];
@@ -201,7 +201,7 @@ void G4ComponentBarNucleonNucleusXsc::Description(std::ostream& outFile) const
 void 
 G4ComponentBarNucleonNucleusXsc::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  if(theNData) { return; }
+  if(nullptr != theNData) { return; }
 
 #ifdef G4MULTITHREADED
   G4MUTEXLOCK(&barNNXSMutex);

@@ -52,10 +52,9 @@ class G4FastSmulationManagerProcess;
 class G4FastSimulationHelper
 {
 public:
-  // -- Activate fast simulation for particle with pmanager in the mass geometry:
-  static void ActivateFastSimulation(G4ProcessManager* pmanager);
-  // -- Activate fast simulation for particle with pmanager in the parallel geometry:
-  static void ActivateFastSimulation(G4ProcessManager* pmanager, G4String parallelGeometryName );
+  // Activate fast simulation for particle with pmanager in the mass geometry: (without geometry name) or
+  // activate fast simulation for particle with pmanager in the parallel geometry:
+  static void ActivateFastSimulation(G4ProcessManager* pmanager, G4String parallelGeometryName = "");
   
 };
 

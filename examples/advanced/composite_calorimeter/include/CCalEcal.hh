@@ -73,8 +73,8 @@ public:
 
 
 protected:
-  virtual G4int readFile();
-  virtual void constructDaughters();
+  virtual G4int readFile() override;
+  virtual void constructDaughters() override;
 
 private:
   G4String genMat;                            //General material

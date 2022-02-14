@@ -77,7 +77,6 @@
 class G4Polyline;
 class G4Text;
 class G4Circle;
-class G4Scale;
 class G4Square;
 class G4Polymarker;
 class G4Polyhedron;
@@ -118,9 +117,6 @@ public: // With description
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
-
-  virtual void Draw (const G4Scale&,
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   virtual void Draw (const G4Square&,

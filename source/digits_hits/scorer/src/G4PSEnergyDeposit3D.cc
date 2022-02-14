@@ -35,50 +35,53 @@
 // Created: 2007-08-14  Tsukasa ASO
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSEnergyDeposit3D::G4PSEnergyDeposit3D(G4String name,
-					 G4int ni, G4int nj, G4int nk,
-					 G4int depi, G4int depj, G4int depk)
-    :G4PSEnergyDeposit(name),
-     fDepthi(depi),fDepthj(depj),fDepthk(depk)
+G4PSEnergyDeposit3D::G4PSEnergyDeposit3D(G4String name, G4int ni, G4int nj,
+                                         G4int nk, G4int depi, G4int depj,
+                                         G4int depk)
+  : G4PSEnergyDeposit(name)
+  , fDepthi(depi)
+  , fDepthj(depj)
+  , fDepthk(depk)
 {
-  fNi=ni;
-  fNj=nj;
-  fNk=nk;
+  fNi = ni;
+  fNj = nj;
+  fNk = nk;
 }
 
 G4PSEnergyDeposit3D::G4PSEnergyDeposit3D(G4String name, const G4String& unit,
-					 G4int ni, G4int nj, G4int nk,
-					 G4int depi, G4int depj, G4int depk)
-    :G4PSEnergyDeposit(name),
-     fDepthi(depi),fDepthj(depj),fDepthk(depk)
+                                         G4int ni, G4int nj, G4int nk,
+                                         G4int depi, G4int depj, G4int depk)
+  : G4PSEnergyDeposit(name)
+  , fDepthi(depi)
+  , fDepthj(depj)
+  , fDepthk(depk)
 {
-  fNi=ni;
-  fNj=nj;
-  fNk=nk;
+  fNi = ni;
+  fNj = nj;
+  fNk = nk;
   SetUnit(unit);
 }
 
-G4PSEnergyDeposit3D::~G4PSEnergyDeposit3D()
-{;}
+G4PSEnergyDeposit3D::~G4PSEnergyDeposit3D() { ; }
 
 G4int G4PSEnergyDeposit3D::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
-  G4int i = touchable->GetReplicaNumber(fDepthi);
-  G4int j = touchable->GetReplicaNumber(fDepthj);
-  G4int k = touchable->GetReplicaNumber(fDepthk);
-  
-if(i<0||j<0||k<0)
-{
-  G4ExceptionDescription ED;
-  ED << "GetReplicaNumber is negative" << G4endl
-     << "touchable->GetReplicaNumber(fDepthi) returns i,j,k = "
-     << i << "," << j << "," << k << " for volume "
-     << touchable->GetVolume(fDepthi)->GetName() << ","
-     << touchable->GetVolume(fDepthj)->GetName() << ","
-     << touchable->GetVolume(fDepthk)->GetName() << G4endl;
-  G4Exception("G4PSEnergyDeposit3D::GetIndex","DetPS0006",JustWarning,ED);
-}
+  G4int i                       = touchable->GetReplicaNumber(fDepthi);
+  G4int j                       = touchable->GetReplicaNumber(fDepthj);
+  G4int k                       = touchable->GetReplicaNumber(fDepthk);
 
-  return i*fNj*fNk+j*fNk+k;
+  if(i < 0 || j < 0 || k < 0)
+  {
+    G4ExceptionDescription ED;
+    ED << "GetReplicaNumber is negative" << G4endl
+       << "touchable->GetReplicaNumber(fDepthi) returns i,j,k = " << i << ","
+       << j << "," << k << " for volume "
+       << touchable->GetVolume(fDepthi)->GetName() << ","
+       << touchable->GetVolume(fDepthj)->GetName() << ","
+       << touchable->GetVolume(fDepthk)->GetName() << G4endl;
+    G4Exception("G4PSEnergyDeposit3D::GetIndex", "DetPS0006", JustWarning, ED);
+  }
+
+  return i * fNj * fNk + j * fNk + k;
 }

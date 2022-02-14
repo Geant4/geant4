@@ -23,77 +23,76 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-////
+// G4MTRunManagerKernel
 //
+// Class description:
+//
+// This is a class for mandatory control of the Geant4 kernel.
+// This class implements Worker behavior in a MT application.
+//
+// This class is constructed by G4MTRunManager. If a user uses his/her own
+// class instead of G4MTRunManager, this class must be instantiated by at the
+// very beginning of the application and must be deleted at the very end.
+// Also, the following methods must be invoked in the proper order:
+//       DefineWorldVolume()
+//       InitializePhysics()
+//       RunInitialization()
+//       RunTermination()
+//
+// User must provide his/her own classes derived from the following
+// abstract class and register it to the RunManagerKernel:
+//       G4VUserPhysicsList - Particle types, Processes and Cuts
+//
+// G4MTRunManagerKernel does not have an event loop. Handling of events
+// is managed by G4RunManager.
+//
+// This class re-implements only the methods that require special treatment
+// to implement worker behavior
 
-// class description:
-//
-//     This is a class for mandatory control of GEANT4 kernel.
-//     This class implements Worker behavior in a MT application.
-//
-//     This class is constructed by G4MTRunManager. If a user uses his/her own
-//     class instead of G4MTRunManager, this class must be instantiated by
-//     him/herself at the very beginning of the application and must be deleted
-//     at the very end of the application. Also, following methods must be
-//     invoked in the proper order.
-//       DefineWorldVolume
-//       InitializePhysics
-//       RunInitialization
-//       RunTermination
-//
-//     User must provide his/her own classes derived from the following
-//     abstract class and register it to the RunManagerKernel.
-//        G4VUserPhysicsList - Particle types, Processes and Cuts
-//
-//     G4MTRunManagerKernel does not have any eveny loop. Handling of events
-//     is managed by G4RunManager.
-//
-//     This class re-implements only the method that require special treatment
-//     to implement worker behavior
+// Author: M.Asai - July 2013
+// --------------------------------------------------------------------
+#ifndef G4MTRunManagerKernel_hh
+#define G4MTRunManagerKernel_hh 1
 
-#ifndef G4MTRunManagerKernel_h
-#define G4MTRunManagerKernel_h 1
+#include <vector>
 
+#include "G4MTRunManager.hh"
 #include "G4RunManagerKernel.hh"
 #include "G4Threading.hh"
-#include "G4MTRunManager.hh"
 
 class G4WorkerThread;
 class G4WorkerRunManager;
-#include <vector>
 
-class G4MTRunManagerKernel : public G4RunManagerKernel {
-public:
+class G4MTRunManagerKernel : public G4RunManagerKernel
+{
+  public:
+
     G4MTRunManagerKernel();
     virtual ~G4MTRunManagerKernel();
-protected:
-    void SetupShadowProcess() const;
 
-public: // with descroption
-    // This static method is used to start a worker thread.
-    // Virtual methods to be invoked from this methos are
-    // defined in G4UserWorkerInitialization class.
-    static void* StartThread(void* context);
+    static void StartThread(G4WorkerThread* context);
+      // Used to start a worker thread. Virtual methods to be invoked
+      // from this method are defined in G4UserWorkerInitialization class.
 
-//private:
-//    static void ReinitializeGeometry();
-private:
-    static G4ThreadLocal G4WorkerThread* wThreadContext;
-public:
     static G4WorkerThread* GetWorkerThread();
 
-public: // with descroption
-    // Fill decay tables with particle definition pointers of
-    // decay products. This method has to be invoked by 
-    // MTRunManager before event loop starts on workers.
     void SetUpDecayChannels();
+      // Fill decay tables with particle definition pointers of decay products.
+      // This method has to be invoked by G4MTRunManager before the event loop
+      // starts on workers.
 
-private:
-    static std::vector<G4WorkerRunManager*>* workerRMvector;
-
-public:
-    // This method should be invoked by G4MTRunManager
     void BroadcastAbortRun(G4bool softAbort);
+      // This method should be invoked by G4MTRunManager.
+
+  protected:
+
+    void SetupShadowProcess() const;
+
+  private:
+
+    static G4ThreadLocal G4WorkerThread* wThreadContext;
+
+    static std::vector<G4WorkerRunManager*>* workerRMvector;
 };
 
-#endif //G4MTRunManagerKernel_h
+#endif  // G4MTRunManagerKernel_hh

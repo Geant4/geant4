@@ -17,6 +17,50 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-10-21 I. Hrivnacova (testem1-V10-07-06)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+
+10-09-21 D.H. Wright (testem1-V10-07-05)
+- PhysicsList.cc: replace G4RadioactiveDecayBase with G4RadioactiveDecay
+     
+19-07-21 I. Hrivnacova (testem1-V10-07-04)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+29-04-21 mma (testem1-V10-07-03)
+- Additional migration to new G4SteppingVerbose.
+
+26-02-21 M.Asai (testem1-V10-07-02)
+- Migrating to G4RunManagerFactory and G4SteppingVerboseWithUnits
+  classes.
+
+10-02-21 V.Ivanchenko (testem1-V10-07-01)
+- fixed README
+     
+09-12-20 mma (testem1-V10-07-00)
+- updated PhysListEmStandard.cc
+- DetectorConstruction : do not print materials table
+- StepMax.hh and StepMax.cc : purely cosmetic
+- Added macro stepMax.mac
+- cosmetic in TestEm1.in
+
+  
+03-09-20 I.Hrivnacova, mma (testem1-V10-06-02)
+- Revied macros:
+  Added macro description in README.
+
+05-08-20 A.Ribon (testem1-V10-06-01)
+- radioactive.mac : migrated UI command from "/grdm/nucleusLimits"
+  to "/process/had/rdm/nucleusLimits"
+  (this was done for completeness, although not necessary because
+  the comment is currently commented out).
+
+14-01-20 V.Ivanchenko (testem1-V10-06-00)
+- PhysicsList - use G4RadioactiveDecayBase instead of obsolete
+    G4RadioactiveDecay and minor code cleanup
      
 09-10-19 mma (testem1-V10-05-03)
 - PhysicsList : cleanup initialisation.

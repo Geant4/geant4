@@ -28,6 +28,7 @@
 // G4PSNofStep
 #include "G4PSNofStep.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreHistFiller.hh"
 
 // (Description)
 //   This is a primitive scorer class for scoring number of steps in the
@@ -35,69 +36,90 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of step length
+//              in mm vs. number of steps (not weighted)        (Makoto Asai)
 //
 
 G4PSNofStep::G4PSNofStep(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),boundaryFlag(false)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , EvtMap(0)
+  , boundaryFlag(false)
 {
-    SetUnit("");
+  SetUnit("");
 }
 
-G4PSNofStep::~G4PSNofStep()
-{;}
+G4PSNofStep::~G4PSNofStep() { ; }
 
-G4bool G4PSNofStep::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSNofStep::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  if ( boundaryFlag ) {
-      if ( aStep->GetStepLength() == 0. ) return FALSE;
+  if(boundaryFlag)
+  {
+    if(aStep->GetStepLength() == 0.)
+      return FALSE;
   }
-  G4int  index = GetIndex(aStep);
+  G4int index  = GetIndex(aStep);
   G4double val = 1.0;
-  EvtMap->add(index,val);  
+  EvtMap->add(index, val);
+
+  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+  {
+    auto filler = G4VScoreHistFiller::Instance();
+    if(!filler)
+    {
+      G4Exception(
+        "G4PSNofStep::ProcessHits", "SCORER0123", JustWarning,
+        "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+    }
+    else
+    {
+      filler->FillH1(hitIDMap[index], aStep->GetStepLength(), val);
+    }
+  }
+
   return TRUE;
 }
 
 void G4PSNofStep::Initialize(G4HCofThisEvent* HCE)
 {
-  EvtMap = new G4THitsMap<G4double>(detector->GetName(),GetName());
-  if(HCID < 0) {HCID = GetCollectionID(0);}
-  HCE->AddHitsCollection(HCID, (G4VHitsCollection*)EvtMap);
+  EvtMap = new G4THitsMap<G4double>(detector->GetName(), GetName());
+  if(HCID < 0)
+  {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSNofStep::EndOfEvent(G4HCofThisEvent*)
-{;}
+void G4PSNofStep::EndOfEvent(G4HCofThisEvent*) { ; }
 
-void G4PSNofStep::clear(){
-  EvtMap->clear();
-}
+void G4PSNofStep::clear() { EvtMap->clear(); }
 
-void G4PSNofStep::DrawAll()
-{;}
+void G4PSNofStep::DrawAll() { ; }
 
 void G4PSNofStep::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
     G4cout << "  copy no.: " << itr->first
-	   << "  num of step: " << *(itr->second)
-	   << " [steps] "
-	   << G4endl;
+           << "  num of step: " << *(itr->second) << " [steps] " << G4endl;
   }
 }
 
 void G4PSNofStep::SetUnit(const G4String& unit)
 {
-  if (unit == "" ){
-    unitName = unit;
+  if(unit == "")
+  {
+    unitName  = unit;
     unitValue = 1.0;
-  }else{
-      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
-      G4Exception("G4PSNofStep::SetUnit","DetPS0011",JustWarning,msg);
   }
-
+  else
+  {
+    G4String msg = "Invalid unit [" + unit + "] (Current  unit is [" +
+                   GetUnit() + "] ) for " + GetName();
+    G4Exception("G4PSNofStep::SetUnit", "DetPS0011", JustWarning, msg);
+  }
 }
-
-

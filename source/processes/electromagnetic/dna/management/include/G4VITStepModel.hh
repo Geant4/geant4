@@ -75,7 +75,7 @@ public:
     void PrepareNewTimeStep();
 
     void GetApplicable(G4ITType& type1, G4ITType& type2);
-    void virtual PrintInfo() {;}
+    virtual void PrintInfo() {;}
 
     G4VITTimeStepComputer* GetTimeStepper();
     const G4String& GetName();

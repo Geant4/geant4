@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(air_shower)
 
 #----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
-# Add options 
+# Add options
 #
 <<<<<<< HEAD
 option(ULTRA_MIRROR_USE "Use of mirrors" OFF)
@@ -52,7 +52,7 @@ endif()
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -70,6 +70,7 @@ target_link_libraries(Ultra ${Geant4_LIBRARIES})
 #
 set(air_shower_SCRIPTS
     UltraMacro.mac OpenVis.mac VisDirect.mac Direct.mac Mirror.mac Ground.mac Source.mac
+    do_plots.C
   )
 
 foreach(_script ${air_shower_SCRIPTS})

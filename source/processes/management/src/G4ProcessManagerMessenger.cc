@@ -23,25 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-//---------------------------------------------------------------
-//
-//  G4ProcessManagerMessenger.cc
+// G4ProcessManagerMessenger class implementation
 //
 //  Description:
 //    This is a messenger class to interface to exchange information
 //    between ProcessManagerand UI.
 //
-//  History:
-//    13 June 1997, H. Kurashige   : The 1st version created.
-//    10 Nov. 1997  H. Kurashige   : fixed bugs 
-//    08 jan. 1998  H. Kurashige   : new UIcommnds 
-//    02 June 2006  M. Maire       : add physicsModified in activate/inactivate
-//
-//---------------------------------------------------------------
-
+// Author: H.Kurashige, 13 June 1997
+//---------------------------------------------------------------------
 
 #include "G4UImanager.hh"
 #include "G4UIdirectory.hh"
@@ -55,23 +44,20 @@
 #include "G4ProcessManagerMessenger.hh"
 #include "G4ios.hh"                 // Include from 'system'
 #include <iomanip>                  // Include from 'system'
-
 #include <sstream>
 
+//---------------------------------------------------------------------
 G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
-                        :theParticleTable(pTable),
-			 currentParticle(nullptr),
-			 currentProcess(nullptr),
-			 theManager(nullptr),
-                         theProcessList(nullptr)
+  : theParticleTable(pTable)
 {
-  if ( theParticleTable == nullptr) theParticleTable = G4ParticleTable::GetParticleTable();
+  if ( theParticleTable == nullptr)
+    theParticleTable = G4ParticleTable::GetParticleTable();
 
-  //Commnad   /particle/process
+  // Command   /particle/process
   thisDirectory = new G4UIdirectory("/particle/process/");
   thisDirectory->SetGuidance("Process Manager control commands.");
 
-  //Commnad   /particle/process/dump
+  // Command   /particle/process/dump
   dumpCmd = new G4UIcmdWithAnInteger("/particle/process/dump",this);
   dumpCmd->SetGuidance("dump process manager or process information");
   dumpCmd->SetGuidance("  dump [process index]");
@@ -79,7 +65,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   dumpCmd->SetParameterName("index", true);
   dumpCmd->SetDefaultValue(-1);
 
-  //Commnad   /particle/process/verbose
+  // Command   /particle/process/verbose
   verboseCmd = new G4UIcommand("/particle/process/verbose",this);
   verboseCmd->SetGuidance("Set Verbose Level for Process or Process Manager");
   verboseCmd->SetGuidance("  Verbose [Verbose] [process index]");
@@ -92,7 +78,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   verboseCmd->SetParameter(param);
   verboseCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
-  //Commnad   /particle/process/activate
+  // Command   /particle/process/activate
   activateCmd = new G4UIcmdWithAnInteger("/particle/process/activate",this);
   activateCmd->SetGuidance("Activate process  ");
   activateCmd->SetGuidance(" Activate [process index]");
@@ -101,7 +87,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   activateCmd->SetRange("index >=0");
   activateCmd->AvailableForStates(G4State_Idle);
 
-  //Commnad   /particle/process/inactivate
+  // Command   /particle/process/inactivate
   inactivateCmd = new G4UIcmdWithAnInteger("/particle/process/inactivate",this);
   inactivateCmd->SetGuidance("Inactivate process  ");
   inactivateCmd->SetGuidance(" inactivate [process index]");
@@ -109,9 +95,9 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   inactivateCmd->SetDefaultValue(0);
   inactivateCmd->SetRange("index >=0");
   inactivateCmd->AvailableForStates(G4State_Idle);
-
 }
 
+//---------------------------------------------------------------------
 G4ProcessManagerMessenger::~G4ProcessManagerMessenger()
 {
   delete activateCmd; 
@@ -121,82 +107,107 @@ G4ProcessManagerMessenger::~G4ProcessManagerMessenger()
   delete thisDirectory;
 }
 
-G4ParticleDefinition* G4ProcessManagerMessenger::SetCurrentParticle()
+//---------------------------------------------------------------------
+const G4ParticleDefinition* G4ProcessManagerMessenger::SetCurrentParticle()
 {
-  // set currentParticle pointer
-  // get particle name by asking G4ParticleMessenger
-  G4String particleName = G4UImanager::GetUIpointer()->GetCurrentStringValue("/particle/select");
-
-  currentParticle = theParticleTable->FindParticle(particleName);
-  if (currentParticle == nullptr) {
+  // access to selected particle in the G4ParticleTable
+  currentParticle = theParticleTable->GetSelectedParticle();
+  if (currentParticle == nullptr)
+  {
     theManager = nullptr;
-    G4cout << "G4ProcessManagerMessenger::SetCurrentParticle() ";
-    G4cout << particleName << " not found " << G4endl;
-  } else {
+    G4cout << "G4ProcessManagerMessenger::SetCurrentParticle() - not selected";
+  }
+  else
+  {
     theManager = currentParticle->GetProcessManager();
     theProcessList = theManager->GetProcessList();
   }
   return currentParticle;
 }
 
-void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+//---------------------------------------------------------------------
+void G4ProcessManagerMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   G4ExceptionDescription ed;
-  if (SetCurrentParticle()== nullptr) {
+  if (SetCurrentParticle() == nullptr)
+  {
       ed << "Particle is not selected yet !! Command ignored.";
       command->CommandFailed(ed);
       return;
   }
-  if( command == dumpCmd ){
-    //Commnad   /particle/process/dump
+  if( command == dumpCmd )
+  {
+    // Command   /particle/process/dump
     G4int index = dumpCmd->GetNewIntValue(newValue);
-    if (index <0) {
+    if (index <0)
+    {
        theManager->DumpInfo();
-    } else if ( index < theManager->GetProcessListLength()){
+    }
+    else if ( index < theManager->GetProcessListLength())
+    {
       currentProcess =  (*theProcessList)(index);
-      if (currentProcess == nullptr) {
+      if (currentProcess == nullptr)
+      {
 	ed << " no process at index of " << index
 	   << " in the Process Vector";
         command->CommandFailed(ed);
-      } else {
+      }
+      else
+      {
 	currentProcess->DumpInfo();
       }
-    } else {
+    }
+    else
+    {
       ed << " illegal index !!! ";
       command->CommandFailed(ed);
       currentProcess = nullptr;
     } 
  
-  } else if( command==activateCmd ) {
-    //Commnad   /particle/process/activate
+  }
+  else if( command==activateCmd )
+  {
+    // Command   /particle/process/activate
     theManager->SetProcessActivation(activateCmd->GetNewIntValue(newValue), true);
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
     
-  } else if( command==inactivateCmd ) {
-    //Commnad   /particle/process/inactivate
+  }
+  else if( command==inactivateCmd )
+  {
+    // Command   /particle/process/inactivate
     theManager->SetProcessActivation(inactivateCmd->GetNewIntValue(newValue), false);
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
     
-  } else if( command==verboseCmd ) {
-    //Commnad   /particle/process/Verbose
+  }
+  else if( command==verboseCmd )
+  {
+    // Command   /particle/process/Verbose
     //  inputstream for newValues 
     const char* temp = (const char*)(newValue);
     std::istringstream is((char*)temp);
     G4int Verbose, index;
     is  >>Verbose >>index;
-    if (index <0) {
+    if (index <0)
+    {
       theManager->SetVerboseLevel(Verbose);
       
-    } else if ( index < theManager->GetProcessListLength()){
+    }
+    else if ( index < theManager->GetProcessListLength())
+    {
       currentProcess =  (*theProcessList)(index);
-      if (currentProcess == nullptr) {
+      if (currentProcess == nullptr)
+      {
 	ed << " no process at index of " << index
 	   << " in the Process Vector";
         command->CommandFailed(ed);
-      } else {
+      }
+      else
+      {
 	currentProcess->SetVerboseLevel(Verbose);
       }
-    } else {
+    }
+    else
+    {
       ed << " illegal index !!! ";
       command->CommandFailed(ed);
       currentProcess = nullptr;
@@ -204,20 +215,18 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
   }
 }
 
-
-G4String G4ProcessManagerMessenger::GetCurrentValue(G4UIcommand * command)
+//---------------------------------------------------------------------
+G4String G4ProcessManagerMessenger::GetCurrentValue(G4UIcommand* command)
 {
   if(SetCurrentParticle() == nullptr) return "";
 
-  if( command==verboseCmd ){
-    //Commnad   /particle/process/Verbose
+  if( command==verboseCmd )
+  {
+    // Command   /particle/process/Verbose
     return verboseCmd->ConvertToString(theManager->GetVerboseLevel());
-  } else {
+  }
+  else
+  {
     return "";
   }   
 }
-
-
-
-
-

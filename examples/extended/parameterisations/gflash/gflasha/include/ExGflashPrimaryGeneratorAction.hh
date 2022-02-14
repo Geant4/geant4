@@ -35,16 +35,16 @@
 class G4Event;
 class G4GeneralParticleSource;
 
-class ExGflashPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction 
+class ExGflashPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    ExGflashPrimaryGeneratorAction();
-    ~ExGflashPrimaryGeneratorAction();
+ public:
+  ExGflashPrimaryGeneratorAction();
+  ~ExGflashPrimaryGeneratorAction() override;
 
-    virtual void GeneratePrimaries(G4Event* anEvent);
+  void GeneratePrimaries(G4Event* anEvent) override;
 
-  private:
-    G4GeneralParticleSource* fParticleGun;
+ private:
+  G4GeneralParticleSource* fParticleGun;
 };
 
 #endif

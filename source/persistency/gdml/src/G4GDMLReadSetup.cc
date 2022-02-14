@@ -23,91 +23,105 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GDMLReadSetup implementation
 //
-// class G4GDMLReadSetup Implementation
-//
-// Original author: Zoltan Torzsok, November 2007
-//
+// Author: Zoltan Torzsok, November 2007
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadSetup.hh"
 
-G4GDMLReadSetup::G4GDMLReadSetup() : G4GDMLReadSolids()
+// --------------------------------------------------------------------
+G4GDMLReadSetup::G4GDMLReadSetup()
+  : G4GDMLReadSolids()
 {
 }
 
+// --------------------------------------------------------------------
 G4GDMLReadSetup::~G4GDMLReadSetup()
 {
 }
 
+// --------------------------------------------------------------------
 G4String G4GDMLReadSetup::GetSetup(const G4String& ref)
 {
-   if (setupMap.size() == 1)     // If there is only one setup defined,
-   {                             // no matter how it is named
-     return setupMap.begin()->second;
-   }
+  if(setupMap.size() == 1)  // If there is only one setup defined,
+  {                         // no matter how it is named
+    return setupMap.cbegin()->second;
+  }
 
-   if (setupMap.find(ref) == setupMap.end())
-   {
+  if(setupMap.find(ref) == setupMap.cend())
+  {
 #ifdef G4VERBOSE
-     std::ostringstream message;
-     message << "Referenced setup '" << ref << "' was not found!";
-     G4Exception("G4GDMLReadSetup::getSetup()", "NullSetup",
-                 JustWarning, message, "Returning NULL pointer!");
+    std::ostringstream message;
+    message << "Referenced setup '" << ref << "' was not found!";
+    G4Exception("G4GDMLReadSetup::getSetup()", "NullSetup", JustWarning,
+                message, "Returning NULL pointer!");
 #endif
-     return "";
-   }
+    return "";
+  }
 
-   return setupMap[ref];
+  return setupMap[ref];
 }
 
+// --------------------------------------------------------------------
 void G4GDMLReadSetup::SetupRead(const xercesc::DOMElement* const element)
 {
 #ifdef G4VERBOSE
-   G4cout << "G4GDML: Reading setup..." << G4endl;
+  G4cout << "G4GDML: Reading setup..." << G4endl;
 #endif
-   G4String name;
+  G4String name;
 
-   const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
+  const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();
+  XMLSize_t attributeCount                         = attributes->getLength();
 
-   for (XMLSize_t attribute_index=0;
-        attribute_index<attributeCount; attribute_index++)
-   {
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+  for(XMLSize_t attribute_index = 0; attribute_index < attributeCount;
+      ++attribute_index)
+  {
+    xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
 
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
-        { continue; }
+    if(attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+    {
+      continue;
+    }
 
-      const xercesc::DOMAttr* const attribute
-            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      if (!attribute)
-      {
-        G4Exception("G4GDMLReadSetup::SetupRead()",
-                    "InvalidRead", FatalException, "No attribute found!");
-        return;
-      }
-      const G4String attName  = Transcode(attribute->getName());
-      const G4String attValue = Transcode(attribute->getValue());
+    const xercesc::DOMAttr* const attribute =
+      dynamic_cast<xercesc::DOMAttr*>(attribute_node);
+    if(attribute == nullptr)
+    {
+      G4Exception("G4GDMLReadSetup::SetupRead()", "InvalidRead", FatalException,
+                  "No attribute found!");
+      return;
+    }
+    const G4String attName  = Transcode(attribute->getName());
+    const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name")  { name = attValue; }
-   }
+    if(attName == "name")
+    {
+      name = attValue;
+    }
+  }
 
-   for (xercesc::DOMNode* iter = element->getFirstChild();
-        iter != 0; iter = iter->getNextSibling())
-   {
-      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+  for(xercesc::DOMNode* iter = element->getFirstChild(); iter != nullptr;
+      iter                   = iter->getNextSibling())
+  {
+    if(iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)
+    {
+      continue;
+    }
 
-      const xercesc::DOMElement* const child
-            = dynamic_cast<xercesc::DOMElement*>(iter);
-      if (!child)
-      {
-        G4Exception("G4GDMLReadSetup::SetupRead()",
-                    "InvalidRead", FatalException, "No child found!");
-        return;
-      }
-      const G4String tag = Transcode(child->getTagName());
+    const xercesc::DOMElement* const child =
+      dynamic_cast<xercesc::DOMElement*>(iter);
+    if(child == nullptr)
+    {
+      G4Exception("G4GDMLReadSetup::SetupRead()", "InvalidRead", FatalException,
+                  "No child found!");
+      return;
+    }
+    const G4String tag = Transcode(child->getTagName());
 
-      if (tag == "world") { setupMap[name] = GenerateName(RefRead(child)); }
-   }
+    if(tag == "world")
+    {
+      setupMap[name] = GenerateName(RefRead(child));
+    }
+  }
 }

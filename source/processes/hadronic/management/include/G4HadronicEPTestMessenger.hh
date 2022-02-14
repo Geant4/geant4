@@ -59,10 +59,10 @@ class G4HadronicEPTestMessenger: public G4UImessenger
  private:
    G4HadronicProcessStore* theProcessStore;
   
-   G4UIdirectory* heptstDirectory;
-   G4UIcmdWithAnInteger* reportLvlCmd;
-   G4UIcmdWithADouble* procRelLvlCmd;
-   G4UIcmdWithADoubleAndUnit* procAbsLvlCmd;
+   G4UIdirectory*                 heptstDirectory;
+   G4UIcmdWithAnInteger*          reportLvlCmd;
+   G4UIcmdWithADouble*            procRelLvlCmd;
+   G4UIcmdWithADoubleAndUnit*     procAbsLvlCmd;
 };
 
 #endif

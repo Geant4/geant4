@@ -47,9 +47,8 @@
 //
 class G4PenelopeSamplingData
 {
-
 public:
-  G4PenelopeSamplingData(G4int npoints=150);
+  explicit G4PenelopeSamplingData(G4int npoints=150);
   ~G4PenelopeSamplingData();
 
   void AddPoint(G4double x0,G4double pac0,G4double a0,G4double b0,size_t ITTL0,
@@ -65,25 +64,19 @@ public:
 
   G4double SampleValue(G4double rndm);
 
-private:
-  G4PenelopeSamplingData & operator=(const G4PenelopeSamplingData &right);
-  G4PenelopeSamplingData(const G4PenelopeSamplingData&);
+  G4PenelopeSamplingData & operator=(const G4PenelopeSamplingData &right) = delete;
+  G4PenelopeSamplingData(const G4PenelopeSamplingData&) = delete;
   
-  //G4double xlow;
-  //G4double xhigh;
+private:  
+  G4DataVector* fX; //grid points, in increasing order
+  G4DataVector* fPAC; //value of the cumulative pdf at x_i
+  G4DataVector* fA; // rational inverse cumulative inverse distribution parameters
+  G4DataVector* fB;
   
-  G4DataVector* x; //grid points, in increasing order
-  G4DataVector* pac; //value of the cumulative pdf at x_i
-  G4DataVector* a; // rational inverse cumulative inverse distribution parameters
-  G4DataVector* b;
-  
-  std::vector<size_t> *ITTL; //largest j for which pac(j) < (i-1)/(np-1)
-  std::vector<size_t> *ITTU; //smallest k for which pac(k) > i/(np-1)
+  std::vector<size_t> *fITTL; //largest j for which pac(j) < (i-1)/(np-1)
+  std::vector<size_t> *fITTU; //smallest k for which pac(k) > i/(np-1)
 
-  G4int np; //number of grid points
-
-  
-
+  G4int fNP; //number of grid points
 };
 
 #endif

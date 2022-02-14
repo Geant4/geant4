@@ -29,7 +29,7 @@
 //
 // An interface of an GCellFinder. The G4GeometryCell is obtained
 // in the parallel geometry from G4VParallelStepper and in the
-// mass geometry from G4Step. This interface allows to implement
+// mass geometry from G4Step. This interface allows one to implement
 // the two different ways to get a G4GeometryCell used by a process.
 
 // Author: Michael Dressel (CERN), 2002

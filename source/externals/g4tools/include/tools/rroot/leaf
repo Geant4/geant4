@@ -1,0 +1,488 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_leaf
+#define tools_rroot_leaf
+
+#include "base_leaf"
+#include "../stype"
+#include "../cids"
+
+namespace tools {
+namespace rroot {
+
+inline const std::string& leaf_store_class(char) {
+  static const std::string s_v("TLeafB");
+  return s_v;
+}
+inline const std::string& leaf_store_class(short) {
+  static const std::string s_v("TLeafS");
+  return s_v;
+}
+inline const std::string& leaf_store_class(int) {
+  static const std::string s_v("TLeafI");
+  return s_v;
+}
+inline const std::string& leaf_store_class(float) {
+  static const std::string s_v("TLeafF");
+  return s_v;
+}
+inline const std::string& leaf_store_class(double) {
+  static const std::string s_v("TLeafD");
+  return s_v;
+}
+inline const std::string& leaf_store_class(bool) {
+  static const std::string s_v("TLeafO");
+  return s_v;
+}
+
+inline const std::string& leaf_float_cls() {
+  static const std::string s_v("tools::rroot::leaf<float>");
+  return s_v;
+}
+inline const std::string& leaf_double_cls() {
+  static const std::string s_v("tools::rroot::leaf<double>");
+  return s_v;
+}
+inline const std::string& leaf_int_cls() {
+  static const std::string s_v("tools::rroot::leaf<int>");
+  return s_v;
+}
+inline const std::string& leaf_bool_cls() {
+  static const std::string s_v("tools::rroot::leaf<bool>");
+  return s_v;
+}
+
+template <class T>
+class leaf : public base_leaf {
+public:
+  typedef T value_t;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::leaf<"+stype(T())+">");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< leaf<T> >(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return base_leaf_cid()+_cid(T());}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+public:
+  virtual iro* copy() const {return new leaf<T>(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    short v;
+    unsigned int s,c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+    if(!base_leaf::stream(a_buffer)) return false;
+    if(!a_buffer.read(m_min)) return false;
+    if(!a_buffer.read(m_max)) return false;
+    if(!a_buffer.check_byte_count(s,c,leaf_store_class(T()))) return false;
+    return true;
+  }
+public: //base_leaf
+  virtual bool read_buffer(buffer& a_buffer) {
+    if(m_leaf_count) {
+      leaf<int>* leaf_i = safe_cast<base_leaf, leaf<int> >(*m_leaf_count);
+      if(!leaf_i) {
+        m_out << "tools::rroot::leaf::read_buffer : leaf_count not a leaf<int>." << std::endl;
+        return false;
+      }
+      int len;
+      if(!leaf_i->value(0,len)) {
+        m_out << "tools::rroot::leaf::read_buffer : leaf<int>.value() failed."
+	      << " m_leaf_count " << m_leaf_count
+	      << " leaf_i " << leaf_i
+	      << " Name " << sout(leaf_i->name())
+	      << " Size " << leaf_i->num_elem() << std::endl;
+	return false;
+      }
+
+      if (len > leaf_i->get_max()) { //protection.
+        m_out << "tools::rroot::leaf::read_buffer : warning : " << sout(name())
+              << ", len = " << len << " > max = "
+              << leaf_i->get_max() << std::endl;
+        len = leaf_i->get_max();
+      }
+
+      uint32 ndata = len * m_length;
+
+      //if(!ndata) {
+      //  delete [] m_value;
+      //  m_value = new T[1];
+      //  m_size = 0;
+      //  return true;
+      //}
+
+      if(ndata>m_size) {
+        delete [] m_value;
+        m_value = new T[ndata];
+      }
+
+      m_size = ndata;
+      if(!a_buffer.read_fast_array(m_value,ndata)) {
+        m_out << "tools::rroot::leaf::read_buffer : \"" << name() << "\" :"
+              << " read_fast_array failed."
+              << std::endl;
+        return false;
+      }
+      return true;
+
+    } else {
+      if(m_length) {
+        if(m_length>m_size) {
+          delete [] m_value;
+          m_value = new T[m_length];
+        }
+        m_size = m_length;
+        if(!a_buffer.read_fast_array<T>(m_value,m_length)) {
+          m_out << "tools::rroot::leaf::read_buffer :"
+                << " read_fast_array failed. m_length " << m_length
+                << std::endl;
+          return false;
+        }
+        return true;
+      } else {
+        m_out << "tools::rroot::leaf::read_buffer :"
+              << " read_fast_array failed. m_length is zero."
+              << std::endl;
+        return false;
+      }
+    }
+    return true;
+  }
+  virtual bool print_value(std::ostream& a_out,uint32 a_index) const {
+    if(!m_value) return false;
+    if(a_index>=m_size) return false;
+    a_out << m_value[a_index];
+    return true;
+  }
+//virtual uint32 num_elem() const {return m_length;}
+  virtual uint32 num_elem() const {return m_size;}
+public:
+  leaf(std::ostream& a_out,ifac& a_fac)
+  :base_leaf(a_out,a_fac)
+  ,m_min(T()),m_max(T())
+  ,m_value(0),m_size(0)
+  {}
+  virtual ~leaf(){
+    delete [] m_value;
+  }
+protected:
+  leaf(const leaf& a_from)
+  :iro(a_from)
+  ,base_leaf(a_from)
+  ,m_min(T()),m_max(T())
+  ,m_value(0),m_size(0)
+  {}
+  leaf& operator=(const leaf&){return *this;}
+public:
+  bool value(uint32 a_index,T& a_value) const {
+    if(!m_value) {a_value = T();return false;}
+    if(a_index>=m_size) {a_value = T();return false;}
+    a_value = m_value[a_index];
+    return true;
+  }
+  bool value(std::vector<T>& a_v) const {
+    if(!m_value) {a_v.clear();return false;}
+    a_v.resize(m_size);
+    for(uint32 index=0;index<m_size;index++) a_v[index] = m_value[index];
+    return true;
+  }
+  T get_max() const {return m_max;}
+  //uint32 size() const {return m_size;}
+protected:
+  T m_min;    //Minimum value if leaf range is specified
+  T m_max;    //Maximum value if leaf range is specified
+  T* m_value; //!Pointer to data buffer
+  uint32 m_size; //size of m_value array.
+};
+
+class leaf_string : public base_leaf {
+  static const std::string& s_store_class() {
+    static const std::string s_v("TLeafC");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::leaf_string");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<leaf_string>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return leaf_string_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_string>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+public:
+  virtual iro* copy() const {return new leaf_string(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    short v;
+    unsigned int s,c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+    if(!base_leaf::stream(a_buffer)) return false;
+    if(!a_buffer.read(m_min)) return false;
+    if(!a_buffer.read(m_max)) return false;
+    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    return true;
+  }
+public: //base_leaf
+  virtual bool read_buffer(buffer& a_buffer) {
+    delete [] m_value;
+    m_value = 0;
+
+    unsigned char lenchar;
+    if(!a_buffer.read(lenchar)) {
+      m_out << "tools::rroot::leaf_string::read_buffer :"
+            << " read(uchar) failed."
+            << std::endl;
+      return false;
+    }
+    uint32 len = 0;
+    if(lenchar < 255) {
+      len = lenchar;
+    } else {
+      if(!a_buffer.read(len)) {
+        m_out << "tools::rroot::leaf_string::read_buffer :"
+              << " read(int) failed."
+              << std::endl;
+        return false;
+      }
+    }
+    if(len) {
+      //if(!m_length) {
+      //  m_out << "tools::rroot::leaf_string::read_buffer : m_length is zero." << std::endl;
+      //  return false;
+      //}
+      //if(len >= m_length) len = m_length-1;
+
+      m_value = new char[len+1];
+
+      if(!a_buffer.read_fast_array(m_value,len)) {
+        m_out << "tools::rroot::leaf_string::read_buffer :"
+              << " read_fast_array failed."
+              << std::endl;
+        delete [] m_value;
+        m_value = 0;
+        return false;
+      }
+      m_value[len] = 0;
+    } else {
+      m_value = new char[1];
+      m_value[0] = 0;
+    }
+
+    return true;
+  }
+  virtual bool print_value(std::ostream& a_out,uint32) const {
+    if(m_value) a_out << m_value;
+    return true;
+  }
+  virtual uint32 num_elem() const {return 1;}
+public:
+  leaf_string(std::ostream& a_out,ifac& a_fac)
+  :base_leaf(a_out,a_fac)
+  ,m_min(0),m_max(0),m_value(0){}
+  virtual ~leaf_string(){
+    delete [] m_value;
+  }
+protected:
+  leaf_string(const leaf_string& a_from)
+  :iro(a_from),base_leaf(a_from)
+  ,m_min(0),m_max(0),m_value(0){}
+  leaf_string& operator=(const leaf_string&){return *this;}
+public:
+  const char* value() const {return m_value;}
+protected:
+  int m_min;
+  int m_max;
+  char* m_value;
+};
+
+class leaf_element : public base_leaf {
+  static const std::string& s_store_class() {
+    static const std::string s_v("TLeafElement");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::leaf_element");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<leaf_element>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return leaf_element_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_element>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+public:
+  virtual iro* copy() const {return new leaf_element(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    short v;
+    unsigned int s,c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+    if(!base_leaf::stream(a_buffer)) return false;
+    if(!a_buffer.read(fID)) return false;
+    if(!a_buffer.read(fType)) return false;
+    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    return true;
+  }
+public: //base_leaf
+  virtual bool read_buffer(buffer&) {
+    m_out << "tools::rroot::leaf_element::read_buffer : dummy." << std::endl;
+    return false;
+  }
+  virtual bool print_value(std::ostream&,uint32) const {return true;}
+  virtual uint32 num_elem() const {return 0;}
+public:
+  leaf_element(std::ostream& a_out,ifac& a_fac)
+  :base_leaf(a_out,a_fac),fID(0),fType(0){}
+  virtual ~leaf_element(){}
+protected:
+  leaf_element(const leaf_element& a_from)
+  :iro(a_from),base_leaf(a_from),fID(0),fType(0){}
+  leaf_element& operator=(const leaf_element&){return *this;}
+public:
+  //int id() const {return fID;}
+  int leaf_type() const {return fType;}
+protected:
+  int fID;           //element serial number in fInfo
+  int fType;         //leaf type
+};
+
+}}
+
+#include "iobject"
+
+namespace tools {
+namespace rroot {
+
+class leaf_object : public base_leaf {
+  static const std::string& s_store_class() {
+    static const std::string s_v("TLeafObject");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::leaf_object");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<leaf_object>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return leaf_object_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_object>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+public:
+  virtual iro* copy() const {return new leaf_object(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    short v;
+    unsigned int s,c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+    if(!base_leaf::stream(a_buffer)) return false;
+    if(!a_buffer.read(fVirtual)) return false;
+    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    return true;
+  }
+public: //base_leaf
+  virtual bool read_buffer(buffer& a_buffer) {
+    if(!m_obj) {
+      m_out << "tools::rroot::leaf_object::read_buffer : m_obj is null." << std::endl;
+      return false;
+    }
+    std::string fClassName;
+    if (fVirtual) {
+      unsigned char n;
+      if(!a_buffer.read(n)) {
+        m_out << "tools::rroot::leaf_object::read_buffer :"
+                       << " read(unsigned char) failed."
+                       << std::endl;
+        return false;
+      }
+      char classname[128];
+      if(!a_buffer.read_fast_array(classname,n+1)) {
+        m_out << "tools::rroot::leaf_object::read_buffer :"
+                       << " readFastArray failed."
+                       << std::endl;
+        return false;
+      }
+      fClassName = classname;
+    }
+    if(m_obj->store_class_name()!=fClassName) {
+      m_out << "tools::rroot::leaf_object::read_buffer : WARNING : class mismatch :"
+            << " fClassName " << sout(fClassName)
+	    << ". m_obj.store_class_name() " << sout(m_obj->store_class_name())
+            << std::endl;
+      //return false;
+    }
+    if(!m_obj->stream(a_buffer)) {
+      m_out << "tools::rroot::leaf_object::read_buffer :"
+            << " object stream failed."
+            << " Object store class was " << m_obj->store_class_name() << "."
+            << std::endl;
+      return false;
+    }
+    // in case we had written a null pointer a Zombie object was created
+    // we must delete it
+    //FIXME
+    //if (object->TestBit(kInvalidObject)) {
+    //  if (object->GetUniqueID() == 123456789) {
+    //    delete object;
+    //    object = 0;
+    //  }
+    //}
+    return true;
+  }
+  virtual bool print_value(std::ostream&,uint32) const {
+    m_out << m_obj << std::endl;
+    return true;
+  }
+  virtual uint32 num_elem() const {return 0;}
+public:
+  leaf_object(std::ostream& a_out,ifac& a_fac)
+  :base_leaf(a_out,a_fac),m_obj(0),fVirtual(true){}
+  virtual ~leaf_object(){}
+protected:
+  leaf_object(const leaf_object& a_from)
+  :iro(a_from),base_leaf(a_from),m_obj(0),fVirtual(true){}
+  leaf_object& operator=(const leaf_object&){return *this;}
+public:
+  void set_object(iobject* a_obj) {m_obj = a_obj;} //do not get ownership.
+protected:
+  iobject* m_obj;
+protected:
+  bool fVirtual; // Support for Virtuality
+};
+
+// for SWIG :
+inline leaf<int>*    cast_leaf_int(base_leaf& a_leaf) {return safe_cast<base_leaf, leaf<int> >(a_leaf);}
+inline leaf<float>*  cast_leaf_float(base_leaf& a_leaf) {return safe_cast<base_leaf, leaf<float> >(a_leaf);}
+inline leaf<double>* cast_leaf_double(base_leaf& a_leaf) {return safe_cast<base_leaf, leaf<double> >(a_leaf);}
+
+}}
+
+#endif

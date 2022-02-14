@@ -41,33 +41,16 @@
 
 #include "G4VecpssrLiModel.hh"
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4VecpssrLiModel::G4VecpssrLiModel()
 { 
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4VecpssrLiModel::~G4VecpssrLiModel()
 { 
 
 }
 
  
-/*G4double G4VecpssrLiModel::CalculateL1CrossSection(G4int ,G4double , G4double )
-{ 
-
-}
-
-G4double G4VecpssrLiModel::CalculateL2CrossSection(G4int ,G4double , G4double )
- 
-{
-  
-}
-
-
-G4double G4VecpssrLiModel::CalculateL3CrossSection(G4int ,G4double , G4double )
- 
-{ 
-  
-}
-*/

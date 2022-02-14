@@ -28,6 +28,7 @@
 //
 // $Id: StepMaxMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,27 +36,30 @@
 #define StepMaxMessenger_h 1
 
 #include "globals.hh"
-#include "G4UImessenger.hh"
+#include "G4UserRunAction.hh"
 
 class StepMax;
 class G4UIdirectory;
 class G4UIcommand;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class Run;
+class HistoManager;
+class PrimaryGeneratorAction;
 
 class StepMaxMessenger: public G4UImessenger
 {
-  public:
-    StepMaxMessenger(StepMax*);
-   ~StepMaxMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    StepMax*       fStepMax;
-    
-    G4UIdirectory* fStepMaxDir;    
-    G4UIcommand*   fStepMaxCmd;
+ public:
+  RunAction(PrimaryGeneratorAction* = nullptr);
+  virtual ~RunAction();
+
+  virtual G4Run* GenerateRun();
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
+
+ private:
+  Run* fRun;
+  HistoManager* fHistoManager;
+  PrimaryGeneratorAction* fPrimary;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

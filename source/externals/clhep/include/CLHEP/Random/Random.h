@@ -94,7 +94,7 @@ public:
   // Static member functions using the static generator
   // --------------------------------------------------
 
-  static void setTheSeed(long seed, int lux=3);
+  static void setTheSeed(long seed, int lxr=3);
   // (Re)Initializes the generator with a seed.
 
   static long getTheSeed();

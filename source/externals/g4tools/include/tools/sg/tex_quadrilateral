@@ -1,0 +1,447 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_tex_quadrilateral
+#define tools_sg_tex_quadrilateral
+
+#include "node"
+#include "mf"
+#include "render_action"
+#include "pick_action"
+#include "bbox_action"
+#include "event_action"
+#include "render_manager"
+#include "gstos"
+#include "base_tex"
+
+#include "../pointer"
+#include "../num2s"
+
+namespace tools {
+namespace sg {
+
+class tex_quadrilateral : public node, public gstos, public base_tex {
+  TOOLS_NODE_NO_CAST(tex_quadrilateral,tools::sg::tex_quadrilateral,node)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    {if(void* p = cmp_cast<tex_quadrilateral>(this,a_class)) return p;}
+    {if(void* p = base_tex::cast(a_class)) return p;}
+    return parent::cast(a_class);
+  }
+public:
+  sf<bool> show_border;
+  mf_vec<vec3f,float> corners;
+public:
+  virtual const desc_fields& node_desc_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::tex_quadrilateral)
+    static const desc_fields s_v(parent::node_desc_fields(),6, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(img),
+      TOOLS_ARG_FIELD_DESC(back_color),
+      TOOLS_ARG_FIELD_DESC(expand),
+      TOOLS_ARG_FIELD_DESC(limit),
+      TOOLS_ARG_FIELD_DESC(show_border),
+      TOOLS_ARG_FIELD_DESC(corners)
+    );
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&img);
+    add_field(&back_color);
+    add_field(&expand);
+    add_field(&limit);
+    add_field(&show_border);
+    add_field(&corners);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    //a_action.out() << "tools::tex_quadrilateral::render : " << std::endl;
+
+    //NOTE : we draw border (show_border is true) and background even if
+    //       gen_texture() failed.
+
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    if(m_img.is_empty()) return;
+    if(corners.size()!=4) return;
+
+    unsigned int _id = get_tex_id(a_action.out(),a_action.render_manager(),m_img,nearest.value());
+
+    const state& state = a_action.state();
+
+    //image must be 2^n,2^m in size !
+    // exa : 128x64
+
+    f12 xyzs,nms;
+
+    if(show_border.value()) {
+      _front(xyzs,nms/*,0.01f*/); //have to revisit a_epsil.
+
+      a_action.color4f(1,0,0,1);
+    //a_action.line_width(4);
+      a_action.line_width(1);
+
+      a_action.draw_vertex_array(gl::line_loop(),12,xyzs);
+
+      //pushes back the filled polygons to avoid z-fighting with lines
+      a_action.set_polygon_offset(true);
+
+      a_action.color4f(state.m_color);
+      a_action.line_width(state.m_line_width);
+    }
+
+    //draw a back face pointing toward negative z :
+   {a_action.color4f(back_color.value());
+    f18 tris,_nms;
+    _tris(tris,_nms);
+    a_action.draw_vertex_normal_array(gl::triangles(),18,tris,_nms);
+    a_action.color4f(state.m_color);}
+
+    if(_id) {
+      //a_action.color4f(back_color.value()); //do we want that ?
+      _front(xyzs,nms);
+      float tcs[8];
+      set_tcs(tcs);
+      a_action.draw_vertex_normal_array_texture(gl::triangle_fan(),12,xyzs,nms,_id,tcs);
+      //a_action.color4f(state.m_color);
+    }
+    a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
+  }
+  virtual void pick(pick_action& a_action) {
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    if(m_pick_bbox_check_image) {if(m_img.is_empty()) return;}
+    if(corners.size()!=4) return;
+    f12 xyzs,nms;
+    _front(xyzs,nms);
+    a_action.add__primitive(*this,gl::triangle_fan(),12,xyzs,true);
+  }
+
+  virtual void bbox(bbox_action& a_action) {
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    if(m_pick_bbox_check_image) if(m_img.is_empty()) return;
+    if(corners.size()!=4) return;
+    f12 xyzs,nms;
+    _front(xyzs,nms);
+    a_action.add_points(12,xyzs);
+  }
+public:
+  virtual bool intersect_value(std::ostream&,intersect_type,const line<vec3f>& a_line,std::string& a_s) const {
+    // a_line is in local world coordinate.
+    float x,y;
+    if(!line_2_img_ndc(a_line,x,y)) {a_s.clear();return false;}
+    return img_ndc_value(x,y,a_s);
+  }
+public:
+  tex_quadrilateral()
+  :parent()
+  ,base_tex()
+  ,show_border(false)
+  ,corners()
+  ,m_pick_bbox_check_image(true)
+  {
+    add_fields();
+    corners.add(vec3f(-1,-1,0));
+    corners.add(vec3f( 1,-1,0));
+    corners.add(vec3f( 1, 1,0));
+    corners.add(vec3f(-1, 1,0));
+  }
+  virtual ~tex_quadrilateral(){}
+public:
+  tex_quadrilateral(const tex_quadrilateral& a_from)
+  :parent(a_from)
+  ,gstos(a_from)
+  ,base_tex(a_from)
+  ,show_border(a_from.show_border)
+  ,corners(a_from.corners)
+  ,m_pick_bbox_check_image(a_from.m_pick_bbox_check_image)
+  {
+    add_fields();
+  }
+  tex_quadrilateral& operator=(const tex_quadrilateral& a_from){
+    parent::operator=(a_from);
+    gstos::operator=(a_from);
+    base_tex::operator=(a_from);
+    if(&a_from==this) return *this;
+    show_border = a_from.show_border;
+    corners = a_from.corners;
+    m_pick_bbox_check_image = a_from.m_pick_bbox_check_image;
+    return *this;
+  }
+public:
+
+  //const img_byte& rendered_img() const {return m_img;}
+
+protected:
+  void update_sg(std::ostream& a_out) {
+    plane<vec3f> plane(corners[0],corners[1],corners[3]);
+    m_normal = plane.normal();
+    clean_gstos(); //must reset for all render_manager.
+    base_tex::_update_sg_(a_out);
+  }
+protected:
+  bool img_ndc_value(float a_x,float a_y,std::string& a_s) const {
+    const img_byte& _img = img.value();
+    if(_img.is_empty()) {a_s.clear();return false;}
+
+    int ix = int(float(_img.width())*a_x);
+    int iy = int(float(_img.height())*a_y);
+
+    //rgb of pixel :
+    std::vector<unsigned char> pixel;
+    if((ix<0)||(iy<0)||!_img.pixel(ix,iy,pixel)) {a_s.clear();return false;}
+
+    a_s.clear();
+    for(unsigned int ipix=0;ipix<pixel.size();ipix++) {
+      if(ipix) a_s += " ";
+      if(!numas<float>(float(pixel[ipix])/255.0f,a_s)){}
+    }
+
+    return true;
+  }
+
+  bool point_2_img_ndc(const vec3f& a_point,float& a_x,float& a_y) const {
+    // a_point is assumed to be in the corners[0,1,3] plane.
+
+    if(corners.size()!=4) {a_x = 0;a_y = 0;return false;}
+    // In fact, in the below corners[2] is not used.
+
+    // we assume that :
+    //  corners[0] is the bottom-left of image
+    //  corners[1] is the bottom-right of image
+    //  corners[2] is the top-right of image
+    //  corners[3] is the top-left of image
+    vec3f x_axis = corners[1]-corners[0];
+    float l_01 = x_axis.normalize();
+    if(l_01==0.0f) {a_x = 0;a_y = 0;return false;}
+    vec3f y_axis = corners[3]-corners[0];
+    float l_03 = y_axis.normalize();
+    if(l_03==0.0f) {a_x = 0;a_y = 0;return false;}
+
+    float alpha = x_axis.dot(y_axis);
+    float alpha_sq = alpha*alpha;
+    if(alpha_sq==1.0f) {a_x = 0;a_y = 0;return false;}
+
+    vec3f Op = a_point-corners[0];
+
+    float px = Op.dot(x_axis);
+    float py = Op.dot(y_axis);
+
+    float lambda = (px-alpha*py)/(1.0f-alpha_sq);
+    float mu = (py-alpha*px)/(1-alpha_sq);
+
+    // We must have : Op = lambda*x_axis+mu*y_axis;
+
+    a_x = lambda/l_01;
+    a_y = mu/l_03;
+
+    return true;
+  }
+
+  bool line_2_img_ndc(const line<vec3f>& a_line,float& a_x,float& a_y) const {
+    // a_line is in local world coordinate.
+    if(corners.size()!=4) {a_x = 0;a_y = 0;return false;}
+    // In fact corners[2] is not used, only [0,1,3].
+    plane<vec3f> plane(corners[0],corners[1],corners[3]);
+    vec3f p;
+    if(!plane.intersect(a_line,p)) {a_x = 0;a_y = 0;return false;}
+    return point_2_img_ndc(p,a_x,a_y);
+  }
+
+  bool img_ndc_2_point(float a_x,float a_y,vec3f& a_point) const {
+    if(corners.size()!=4) {a_point.set_value(0,0,0);return false;}
+    // In fact, in the below corners[2] is not used.
+
+    // we assume that :
+    //  corners[0] is the bottom-left of image
+    //  corners[1] is the bottom-right of image
+    //  corners[2] is the top-right of image
+    //  corners[3] is the top-left of image
+    vec3f x_axis = corners[1]-corners[0];
+    float l_01 = x_axis.normalize();
+    if(l_01==0.0f) {a_point.set_value(0,0,0);return false;}
+    vec3f y_axis = corners[3]-corners[0];
+    float l_03 = y_axis.normalize();
+    if(l_03==0.0f) {a_point.set_value(0,0,0);return false;}
+
+    float alpha = x_axis.dot(y_axis);
+    //float alpha_sq = alpha*alpha;
+    //if(alpha_sq==1.0f) {a_point.set_value(0,0,0);return false;}
+
+    float lambda = a_x*l_01;
+    float mu = a_y*l_03;
+
+    // px-alpha*py = lambda*(1.0f-alpha_sq);
+    // py-alpha*px = mu*(1-alpha_sq);
+
+    // px-alpha*(alpha*px+mu*(1-alpha_sq)) = lambda*(1-alpha_sq)
+    // px*(1-alpha_sq)-mu*alpha*(1-alpha_sq)) = lambda*(1-alpha_sq)
+    // px*(1-alpha_sq) = lambda*(1-alpha_sq)+mu*alpha*(1-alpha_sq));
+    // px = lambda+mu*alpha;
+
+    // py = lambda*alpha+mu;
+
+    float px = lambda+mu*alpha;
+    float py = lambda*alpha+mu;
+
+    vec3f Op = px*x_axis+py*y_axis;
+
+    a_point = Op+corners[0];
+
+    return true;
+  }
+
+/*
+  float max_height() const {
+    const std::vector<vec3f>& cs = corners.values();
+    float _mn = cs[0].y();
+    _mn = mn<float>(_mn,cs[1].y());
+    _mn = mn<float>(_mn,cs[2].y());
+    _mn = mn<float>(_mn,cs[3].y());
+    float _mx = cs[0].y();
+    _mx = mx<float>(_mx,cs[1].y());
+    _mx = mx<float>(_mx,cs[2].y());
+    _mx = mx<float>(_mx,cs[3].y());
+    return (_mx-_mn);
+  }
+
+  float max_width() const {
+    const std::vector<vec3f>& cs = corners.values();
+    float _mn = cs[0].x();
+    _mn = mn<float>(_mn,cs[1].x());
+    _mn = mn<float>(_mn,cs[2].x());
+    _mn = mn<float>(_mn,cs[3].x());
+    float _mx = cs[0].x();
+    _mx = mx<float>(_mx,cs[1].x());
+    _mx = mx<float>(_mx,cs[2].x());
+    _mx = mx<float>(_mx,cs[3].x());
+    return (_mx-_mn);
+  }
+*/
+
+  typedef float f12[12];
+  void _front(f12& a_front,f12& a_nms,float a_epsil = 0.0f) {
+    const std::vector<vec3f>& cs = corners.values();
+
+    a_front[0] =  cs[0].x()-a_epsil;
+    a_front[1] =  cs[0].y()-a_epsil;
+    a_front[2] =  cs[0].z();
+
+    a_front[3] =  cs[1].x()+a_epsil;
+    a_front[4] =  cs[1].y()-a_epsil;
+    a_front[5] =  cs[1].z();
+
+    a_front[6] =  cs[2].x()+a_epsil;
+    a_front[7] =  cs[2].y()+a_epsil;
+    a_front[8] =  cs[2].z();
+
+    a_front[ 9] = cs[3].x()-a_epsil;
+    a_front[10] = cs[3].y()+a_epsil;
+    a_front[11] = cs[3].z();
+
+    a_nms[0] = m_normal.x();
+    a_nms[1] = m_normal.y();
+    a_nms[2] = m_normal.z();
+
+    a_nms[3] = m_normal.x();
+    a_nms[4] = m_normal.y();
+    a_nms[5] = m_normal.z();
+
+    a_nms[6] = m_normal.x();
+    a_nms[7] = m_normal.y();
+    a_nms[8] = m_normal.z();
+
+    a_nms[9]  = m_normal.x();
+    a_nms[10] = m_normal.y();
+    a_nms[11] = m_normal.z();
+  }
+
+  void _back(f12& a_back) {
+    const std::vector<vec3f>& cs = corners.values();
+
+    a_back[0] =  cs[1].x();
+    a_back[1] =  cs[1].y();
+    a_back[2] =  cs[1].z();
+
+    a_back[3] =  cs[0].x();
+    a_back[4] =  cs[0].y();
+    a_back[5] =  cs[0].z();
+
+    a_back[6] =  cs[3].x();
+    a_back[7] =  cs[3].y();
+    a_back[8] =  cs[3].z();
+
+    a_back[ 9] = cs[2].x();
+    a_back[10] = cs[2].y();
+    a_back[11] = cs[2].z();
+  }
+
+  typedef float f18[18];
+  void _tris(f18& a_tris,f18& a_nms){
+    f12 back;
+    _back(back);
+
+    a_tris[0] = back[0];
+    a_tris[1] = back[1];
+    a_tris[2] = back[2];
+
+    a_tris[3] = back[3];
+    a_tris[4] = back[4];
+    a_tris[5] = back[5];
+
+    a_tris[6] = back[6];
+    a_tris[7] = back[7];
+    a_tris[8] = back[8];
+    //
+    a_tris[9]  = back[6];
+    a_tris[10] = back[7];
+    a_tris[11] = back[8];
+
+    a_tris[12] = back[9];
+    a_tris[13] = back[10];
+    a_tris[14] = back[11];
+
+    a_tris[15] = back[0];
+    a_tris[16] = back[1];
+    a_tris[17] = back[2];
+
+    ///////////////////// back
+    a_nms[0] = -m_normal.x();
+    a_nms[1] = -m_normal.y();
+    a_nms[2] = -m_normal.z();
+
+    a_nms[3] = -m_normal.x();
+    a_nms[4] = -m_normal.y();
+    a_nms[5] = -m_normal.z();
+
+    a_nms[6] = -m_normal.x();
+    a_nms[7] = -m_normal.y();
+    a_nms[8] = -m_normal.z();
+    //
+    a_nms[9]  = -m_normal.x();
+    a_nms[10] = -m_normal.y();
+    a_nms[11] = -m_normal.z();
+
+    a_nms[12] = -m_normal.x();
+    a_nms[13] = -m_normal.y();
+    a_nms[14] = -m_normal.z();
+
+    a_nms[15] = -m_normal.x();
+    a_nms[16] = -m_normal.y();
+    a_nms[17] = -m_normal.z();
+  }
+protected:
+  vec3f m_normal;
+  bool m_pick_bbox_check_image; //for SDSS_image.
+};
+
+}}
+
+#endif

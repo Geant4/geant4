@@ -6,12 +6,28 @@
 
      Hadronic physics-list/constructors/stopping History
      -----------------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-April-2021 Ben Morgan             (phys-ctor-stopping-V10-07-01)
+- Migrate build to modular CMake API
+
+13-Apr-2021, Alberto Ribon              (phys-ctor-stopping-V10-07-00)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
+30-Apr-2020, Ben Morgan                 (phys-ctor-stopping-V10-06-01)
+-  Remove obsolete GRANULAR_DEPENDENCIES entries
+
+21-Feb-2020, Vladimir Ivanchenko        (phys-ctor-stopping-V10-06-00)
+- cleanup of all constructors: fixed names; make all constructor
+  signatures universal, removed thread local members, added c++11
+  keywords
 
 22-Oct-2019, Alberto Ribon              (phys-ctor-stopping-V10-05-02)
 - REAMDE : updated.
@@ -32,7 +48,7 @@ introduced in the code and keeptrack of all tags.
 
 03-Nov-2016, Alberto Ribon              (phys-ctor-stopping-V10-02-02)
 - Written first draft of the README
-	 
+
 16-October-2016, Michel Maire           (phys-ctor-stopping-V10-02-01)
 - add README
 
@@ -56,5 +72,5 @@ introduced in the code and keeptrack of all tags.
 - Changes needed for MT: now G4VUserPhysicsList is a split class
 
 10-Jan-2013, Gunter Folger              (phys-ctor-stopping-V09-06-00)
-- new directory structure introduced. 
+- new directory structure introduced.
    constructors/stopping classes

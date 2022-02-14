@@ -24,7 +24,7 @@
 //                - Modified use of the various exponents of 2
 //                  to avoid per-instance space overhead and
 //                  correct the rounding procedure              16 Sep 1998
-// J. Marfaffino  - Remove dependence on hepString class        13 May 1999
+// J. Marraffino  - Remove dependence on hepString class        13 May 1999
 // M. Fischler    - In restore, checkFile for file not found    03 Dec 2004
 // M. Fischler    - Methods for distrib. instacne save/restore  12/8/04    
 // M. Fischler    - split get() into tag validation and 
@@ -43,8 +43,11 @@
 #include "CLHEP/Random/engineIDulong.h"
 #include "CLHEP/Utility/atomic_int.h"
 
-#include <string.h>	// for strcmp
-#include <cstdlib>	// for std::abs(int)
+#include <atomic>
+#include <cmath>
+#include <iostream>
+#include <string.h>        // for strcmp
+#include <vector>
 
 namespace CLHEP {
 

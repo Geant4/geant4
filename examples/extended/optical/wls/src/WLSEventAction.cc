@@ -28,21 +28,21 @@
 /// \brief Implementation of the WLSEventAction class
 //
 //
+
 #include "WLSEventAction.hh"
 
+#include "WLSEventActionMessenger.hh"
+#include "WLSPhotonDetHit.hh"
+#include "WLSRun.hh"
 #include "WLSRunAction.hh"
 
-#include "WLSEventActionMessenger.hh"
-
-#include "WLSPhotonDetHit.hh"
-
+#include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "WLSTrajectory.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-
 #include "Randomize.hh"
 
 // Purpose: Accumulates statistics regarding hits
@@ -50,8 +50,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSEventAction::WLSEventAction(WLSRunAction* runaction)
- : fRunAction(runaction), fVerboseLevel(0)
+WLSEventAction::WLSEventAction()
+  : fVerboseLevel(0)
 {
   fMPPCCollID = 0;
 
@@ -60,57 +60,93 @@ WLSEventAction::WLSEventAction(WLSRunAction* runaction)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSEventAction::~WLSEventAction()
-{
-  delete fEventMessenger;
-}
+WLSEventAction::~WLSEventAction() { delete fEventMessenger; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void WLSEventAction::BeginOfEventAction(const G4Event* evt)
+void WLSEventAction::BeginOfEventAction(const G4Event*)
 {
- G4int evtNb = evt->GetEventID();
-
- if(fVerboseLevel>0)
-    G4cout << "<<< Event  " << evtNb << " started." << G4endl;
+  fNTIR        = 0;
+  fNExiting    = 0;
+  fEscapedEnd  = 0;
+  fEscapedMid  = 0;
+  fBounce      = 0;
+  fWLSBounce   = 0;
+  fClad1Bounce = 0;
+  fClad2Bounce = 0;
+  fReflected   = 0;
+  fEscaped     = 0;
+  fMirror      = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Threading.hh"
 
 void WLSEventAction::EndOfEventAction(const G4Event* evt)
 {
-  if (fVerboseLevel>0)
-     G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
- 
-  if (fRunAction->GetRndmFreq() == 2)
-    {
-     std::ostringstream os;
-     os<<"endOfEvent_"<<G4Threading::G4GetThreadId()<<".rndm";
-     G4Random::saveEngineStatus(os.str().c_str());
-    }
-
   // Get Hits from the detector if any
-  G4SDManager * SDman = G4SDManager::GetSDMpointer();
-  G4String colName = "PhotonDetHitCollection";
-  fMPPCCollID = SDman->GetCollectionID(colName);
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  G4String colName   = "PhotonDetHitCollection";
+  fMPPCCollID        = SDman->GetCollectionID(colName);
 
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  WLSPhotonDetHitsCollection* mppcHC = 0;
+  G4HCofThisEvent* HCE               = evt->GetHCofThisEvent();
+  WLSPhotonDetHitsCollection* mppcHC = nullptr;
 
   // Get the hit collections
-  if (HCE)
+  if(HCE)
   {
-     if (fMPPCCollID>=0) mppcHC = 
-                        (WLSPhotonDetHitsCollection*)(HCE->GetHC(fMPPCCollID));
+    if(fMPPCCollID >= 0)
+    {
+      mppcHC = (WLSPhotonDetHitsCollection*) (HCE->GetHC(fMPPCCollID));
+    }
   }
 
   // Get hit information about photons that reached the detector in this event
-  if (mppcHC)
+  G4int n_hit = 0;
+  if(mppcHC)
   {
-//     G4int n_hit = mppcHC->entries();
+    n_hit = mppcHC->entries();
   }
+
+  auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(2, mppcHC->entries());
+  for (size_t i = 0; i < mppcHC->entries(); ++i) {
+    auto pdHit = (*mppcHC)[i];
+    analysisManager->FillH1(0, pdHit->GetEnergy());
+    analysisManager->FillH1(1, pdHit->GetArrivalTime());
+  }
+
+  if(fVerboseLevel > 1)
+  {
+    G4cout << "-------------------------------------" << G4endl
+           << " In this event, number of:" << G4endl
+           << "  TIR:           " << fNTIR << G4endl
+           << "  Exiting:       " << fNExiting << G4endl
+           << "  Escaped Mid:   " << fEscapedMid << G4endl
+           << "  Escaped End:   " << fEscapedEnd << G4endl
+           << "  Bounced:       " << fBounce << G4endl
+           << "  WLS Bounce:    " << fWLSBounce << G4endl
+           << "  Clad1 Bounce:  " << fClad1Bounce << G4endl
+           << "  Clad2 Bounce:  " << fClad2Bounce << G4endl
+           << "  Reflected:     " << fReflected << G4endl
+           << "  Escaped:       " << fEscaped << G4endl
+           << "  Mirror:        " << fMirror << G4endl
+           << "  Detector hit:  " << n_hit << G4endl;
+  }
+
+  WLSRun* run = static_cast<WLSRun*>(
+    G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
+  run->AddTIR(fNTIR);
+  run->AddExiting(fNExiting);
+  run->AddEscapedEnd(fEscapedEnd);
+  run->AddEscapedMid(fEscapedMid);
+  run->AddBounce(fBounce);
+  run->AddClad1Bounce(fClad1Bounce);
+  run->AddClad2Bounce(fClad2Bounce);
+  run->AddReflected(fReflected);
+  run->AddEscaped(fEscaped);
+  run->AddMirror(fMirror);
+  run->AddDetectorHits(n_hit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,7 +158,4 @@ G4int WLSEventAction::GetEventNo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void WLSEventAction::SetEventVerbose(G4int level)
-{
-  fVerboseLevel = level;
-}
+void WLSEventAction::SetEventVerbose(G4int level) { fVerboseLevel = level; }

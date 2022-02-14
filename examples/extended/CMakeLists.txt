@@ -1,6 +1,6 @@
 #---Adding all extended examples subdirectories explicitly 
 
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 add_subdirectory(analysis)
 add_subdirectory(biasing)
@@ -18,6 +18,7 @@ add_subdirectory(optical)
 add_subdirectory(parallel)
 add_subdirectory(parameterisations)
 add_subdirectory(persistency)
+add_subdirectory(physicslists)
 add_subdirectory(polarisation)
 add_subdirectory(radioactivedecay)
 add_subdirectory(runAndEvent)

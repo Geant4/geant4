@@ -62,34 +62,32 @@ public:
 
   explicit G4eeToHadrons(const G4String& name = "ee2hadr");
 
-  virtual ~G4eeToHadrons();
+  ~G4eeToHadrons() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
+  G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
   // Set the factor to artificially increase the crossSection (default 1)
   void SetCrossSecFactor(G4double fac);
 
-protected:
-
-  // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile) const override;
-
-  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
-
   // print description in html
-  virtual void ProcessDescription(std::ostream&) const override;
-
-private:
-
-  std::vector<G4DynamicParticle*>* GenerateSecondaries(const G4DynamicParticle*);
+  void ProcessDescription(std::ostream&) const override;
 
   // hide assignment operator
   G4eeToHadrons & operator=(const G4eeToHadrons &right) = delete;
   G4eeToHadrons(const G4eeToHadrons&) = delete;
 
-  G4eeToHadronsMultiModel*  multimodel;
-  G4double                  csFactor;
-  G4bool                    isInitialised;
+protected:
+
+  // Print out of the class parameters
+  void StreamProcessInfo(std::ostream& outFile) const override;
+
+  void InitialiseProcess(const G4ParticleDefinition*) override;
+
+private:
+
+  G4eeToHadronsMultiModel*  multimodel = nullptr;
+  G4double                  csFactor = 1.0;
+  G4bool                    isInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

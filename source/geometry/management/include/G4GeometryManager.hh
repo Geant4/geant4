@@ -40,9 +40,10 @@
 // 26.07.95, P.Kent - Initial version, including optimisation build
 // --------------------------------------------------------------------
 #ifndef G4GEOMETRYMANAGER_HH
-#define G4GEOMETRYMANAGER_HH
+#define G4GEOMETRYMANAGER_HH 1
 
 #include <vector>
+
 #include "G4Types.hh"
 #include "G4SmartVoxelStat.hh"
 
@@ -50,7 +51,7 @@ class G4VPhysicalVolume;
 
 class G4GeometryManager
 {
-  public: // with description
+  public:
   
     G4bool CloseGeometry(G4bool pOptimise = true, G4bool verbose = false,
                          G4VPhysicalVolume* vol = nullptr);
@@ -77,15 +78,15 @@ class G4GeometryManager
     static G4GeometryManager* GetInstanceIfExist();
       // Return ptr to singleton instance.
 
-  public:  // without description
+  public:
 
    ~G4GeometryManager();
       // Destructor.
 
   protected:
 
-    G4GeometryManager();
-      // Protected constructor
+    G4GeometryManager() = default;
+      // Protected constructor. Set the geometry to be open
 
   private:
 

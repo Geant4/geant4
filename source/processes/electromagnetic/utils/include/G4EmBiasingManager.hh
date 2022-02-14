@@ -131,6 +131,10 @@ public:
     { fDirectionalSplittingRadius = r; }
   G4double GetWeight(G4int i);
 
+  // hide copy constructor and assignment operator
+  G4EmBiasingManager(G4EmBiasingManager &) = delete;
+  G4EmBiasingManager & operator=(const G4EmBiasingManager &right) = delete;
+
 private:
 
   void ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
@@ -160,37 +164,36 @@ private:
   inline G4double ApplyRussianRoulette(std::vector<G4DynamicParticle*>& vd,
 				       G4int index); 
 
-  // hide copy constructor and assignment operator
-  G4EmBiasingManager(G4EmBiasingManager &) = delete;
-  G4EmBiasingManager & operator=(const G4EmBiasingManager &right) = delete;
+  G4VEnergyLossProcess* eIonisation = nullptr;
 
-  G4int                        nForcedRegions;
-  G4int                        nSecBiasedRegions;
-  std::vector<const G4Region*> forcedRegions;
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* theGamma;
+
+  G4double fSafetyMin;
+  G4double currentStepLimit = 0.0;
+  G4double fDirectionalSplittingRadius = 0.0;
+
+  G4int nForcedRegions = 0;
+  G4int nSecBiasedRegions = 0;
+
+  G4bool startTracking = true;
+  G4bool fDirectionalSplitting = false;
+
+  G4ThreeVector fDirectionalSplittingTarget;
+  std::vector<G4double> fDirectionalSplittingWeights;
+
   std::vector<G4double>        lengthForRegion;
-  std::vector<const G4Region*> secBiasedRegions;
   std::vector<G4double>        secBiasedWeight;
   std::vector<G4double>        secBiasedEnegryLimit;
-  std::vector<G4int>           nBremSplitting;
 
+  std::vector<const G4Region*> forcedRegions;
+  std::vector<const G4Region*> secBiasedRegions;
+
+  std::vector<G4int>           nBremSplitting;
   std::vector<G4int>           idxForcedCouple;
   std::vector<G4int>           idxSecBiasedCouple;
 
   std::vector<G4DynamicParticle*> tmpSecondaries;
-
-  G4VEnergyLossProcess*         eIonisation;
-
-  const G4ParticleDefinition*  theElectron;
-  const G4ParticleDefinition*  theGamma;
-
-  G4double fSafetyMin;
-  G4double currentStepLimit;
-  G4bool   startTracking;
-
-  G4bool        fDirectionalSplitting;
-  G4ThreeVector fDirectionalSplittingTarget;
-  G4double      fDirectionalSplittingRadius;
-  std::vector<G4double> fDirectionalSplittingWeights;
 };
 
 inline G4bool 

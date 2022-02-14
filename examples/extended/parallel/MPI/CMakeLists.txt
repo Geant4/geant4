@@ -5,7 +5,7 @@
 # and then examples, see included README files
 project(G4mpi)
 
-cmake_minimum_required(VERSION 2.8.3 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 add_subdirectory(source)
 set(G4mpi_DIR "${PROJECT_BINARY_DIR}/source")

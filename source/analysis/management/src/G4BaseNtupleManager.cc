@@ -30,62 +30,8 @@
 
 //_____________________________________________________________________________
 G4BaseNtupleManager::G4BaseNtupleManager(const G4AnalysisManagerState& state)
-  : G4VNtupleManager(state),
-    fFirstNtupleColumnId(0),
-    fLockFirstNtupleColumnId(false)
+  : G4VNtupleManager(state)
 {}
-
-//_____________________________________________________________________________
-G4BaseNtupleManager::~G4BaseNtupleManager()
-{
-}
-
-//
-// private methods
-//
-
-//_____________________________________________________________________________
-G4int  G4BaseNtupleManager::GetCurrentNtupleId() const
-{
-  return  GetNofNtupleBookings() + fFirstId - 1;
-}
-
-//
-// protected methods
-//
-
-//_____________________________________________________________________________
-G4int G4BaseNtupleManager::CreateNtupleIColumn(const G4String& name, 
-                                               std::vector<int>* vector)
-{
-  return CreateNtupleIColumn(GetCurrentNtupleId(), name, vector);
-}
-
-//_____________________________________________________________________________
-G4int G4BaseNtupleManager::CreateNtupleFColumn(const G4String& name,
-                                               std::vector<float>* vector)
-{
-  return CreateNtupleFColumn(GetCurrentNtupleId(), name, vector);
-}
-
-//_____________________________________________________________________________
-G4int G4BaseNtupleManager::CreateNtupleDColumn(const G4String& name,
-                                               std::vector<double>* vector)
-{
-  return CreateNtupleDColumn(GetCurrentNtupleId(), name, vector);
-}
-
-//_____________________________________________________________________________
-G4int G4BaseNtupleManager::CreateNtupleSColumn(const G4String& name)
-{
-  return CreateNtupleSColumn(GetCurrentNtupleId(), name);
-}
-
-//_____________________________________________________________________________
-void  G4BaseNtupleManager::FinishNtuple()
-{
-  return FinishNtuple(GetCurrentNtupleId());
-}
 
 //_____________________________________________________________________________
 G4bool G4BaseNtupleManager::FillNtupleIColumn(G4int id, G4int value)
@@ -118,18 +64,8 @@ G4bool G4BaseNtupleManager::AddNtupleRow()
 }
 
 //_____________________________________________________________________________
-G4bool G4BaseNtupleManager::SetFirstNtupleColumnId(G4int firstId) 
-{ 
-  if ( fLockFirstNtupleColumnId ) {
-    G4ExceptionDescription description;
-    description 
-      << "Cannot set FirstNtupleColumnId as its value was already used.";
-    G4Exception("G4BaseNtupleManager::SetFirstNtupleColumnId()",
-                "Analysis_W013", JustWarning, description);
-    return false;
-  }              
-
-  fFirstNtupleColumnId = firstId; 
+G4bool G4BaseNtupleManager::SetFirstNtupleColumnId(G4int firstId)
+{
+  fFirstNtupleColumnId = firstId;
   return true;
 }
-

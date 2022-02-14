@@ -54,27 +54,19 @@ class G4Material;
 
 class G4PenelopeBremsstrahlungAngular : public G4VEmAngularDistribution
 { 
-
 public:
-  G4PenelopeBremsstrahlungAngular(); 
+  explicit G4PenelopeBremsstrahlungAngular(); 
   ~G4PenelopeBremsstrahlungAngular();
-
-  
-  //! Old interface, backwards compatibility. Will not work in this case
-  //! it will produce a G4Exception().
-  G4double PolarAngle(const G4double initial_energy,
-		      const G4double final_energy,
-		      const G4int Z);
 
   //! Samples the direction of the outgoing photon (in global coordinates). 
   G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
 				 G4double out_energy,
 				 G4int Z,
-				 const G4Material* mat = 0);
+				 const G4Material* mat = nullptr) override;
   
   //! Set/Get Verbosity level
-  void SetVerbosityLevel(G4int vl){verbosityLevel = vl;};
-  G4int GetVerbosityLevel(){return verbosityLevel;};
+  void SetVerbosityLevel(G4int vl){fVerbosityLevel = vl;};
+  G4int GetVerbosityLevel(){return fVerbosityLevel;};
 
   //! Reserved for Master Model
   //! The Initialize() method forces the cleaning of tables
@@ -83,32 +75,27 @@ public:
   void PrepareTables(const G4Material* material,
 		     G4bool isMaster);
 
-
-private:
-  
+private: 
   void ClearTables();
- 
   G4double CalculateEffectiveZ(const G4Material* material);
-  
-  std::map<const G4Material*,G4double> *theEffectiveZSq;
+  void ReadDataFile();
+ 
+  std::map<const G4Material*,G4double> *fEffectiveZSq;
 
   //Tables containing the Lorentz sampling coefficients 
   //The key is the effective Z of the material
-  std::map<G4double,G4PhysicsTable*> *theLorentzTables1;
-  std::map<G4double,G4PhysicsTable*> *theLorentzTables2;
+  std::map<G4double,G4PhysicsTable*> *fLorentzTables1;
+  std::map<G4double,G4PhysicsTable*> *fLorentzTables2;
+ 
+  static const G4int fNumberofZPoints=6;
+  static const G4int fNumberofEPoints=6;
+  static const G4int fNumberofKPoints=4;
 
-  void ReadDataFile();
-  G4bool dataRead;
-  
-  static const G4int NumberofZPoints=6;
-  static const G4int NumberofEPoints=6;
-  static const G4int NumberofKPoints=4;
+  G4double fQQ1[fNumberofZPoints][fNumberofEPoints][fNumberofKPoints];
+  G4double fQQ2[fNumberofZPoints][fNumberofEPoints][fNumberofKPoints];
 
-  G4double QQ1[NumberofZPoints][NumberofEPoints][NumberofKPoints];
-  G4double QQ2[NumberofZPoints][NumberofEPoints][NumberofKPoints];
-
-  G4int verbosityLevel;
-
+  G4int fVerbosityLevel;
+  G4bool fDataRead;
 };
 
 

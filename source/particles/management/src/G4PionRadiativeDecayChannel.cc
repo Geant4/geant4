@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
+// G4PionRadiativeDecayChannel class implementation
 //      GEANT 4 class header file
 //
-//      History:
-//               01 August 2007 P.Gumplinger
-//               Reference: TRIUMF PIENU Technote:
-//                          M. Blecher - "Inclusion of pi->enug in MC "
-//                              Rate is for gammas > 100keV
-//
-// ------------------------------------------------------------
-//
-//
-//
+// Author: P.Gumplinger, 30 July 2007 
+// Reference: M. Blecher, TRIUMF/PIENU Technote
+//            "Inclusion of pi->enug in the Monte Carlo" 
+// --------------------------------------------------------------------
 
 #include "G4PionRadiativeDecayChannel.hh"
 
@@ -45,7 +39,8 @@
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
 
-namespace {
+namespace
+{
   const G4double beta = 3.6612e-03;
   const G4double cib  = 1.16141e-03;
   const G4double csdp = 3.45055e-02;
@@ -58,7 +53,8 @@ namespace {
   const G4double xu = 1. - (yl - std::sqrt(yl*yl-4.*beta*beta))/2.;
   const G4double yu = 1. + beta*beta;
 
-  inline G4double D2W(const G4double x,const G4double y) {
+  inline G4double D2W(const G4double x,const G4double y)
+  {
     return cib*(1.-y)*(1.+((1.-x)*(1.-x)))/((x*x)*(x+y-1.)) +
         csdp*(1.-x)*((x+y-1.)*(x+y-1.)) +
         csdm*(1.-x)*((1.-y)*(1.-y)) +
@@ -67,56 +63,70 @@ namespace {
   }
 
   const G4double d2wmax = D2W(xl,yl);
-
-
 }
+
+// --------------------------------------------------------------------
 G4PionRadiativeDecayChannel::G4PionRadiativeDecayChannel()
   : G4VDecayChannel()
 {
 }
 
+// --------------------------------------------------------------------
 G4PionRadiativeDecayChannel::
-           G4PionRadiativeDecayChannel(const G4String& theParentName,
-                                       G4double        theBR)
-                            : G4VDecayChannel("Radiative Pion Decay",1)
+G4PionRadiativeDecayChannel(const G4String& theParentName,
+                                  G4double        theBR)
+  : G4VDecayChannel("Radiative Pion Decay", 1)
 {
   // set names for daughter particles
-  if (theParentName == "pi+") {
+  if (theParentName == "pi+")
+  {
     SetBR(theBR);
     SetParent("pi+");
     SetNumberOfDaughters(3);
     SetDaughter(0, "e+");
     SetDaughter(1, "gamma");
     SetDaughter(2, "nu_e");
-  } else if (theParentName == "pi-") {
+  }
+  else if (theParentName == "pi-")
+  {
     SetBR(theBR);
     SetParent("pi-");
     SetNumberOfDaughters(3);
     SetDaughter(0, "e-");
     SetDaughter(1, "gamma");
     SetDaughter(2, "anti_nu_e");
-  } else {
+  }
+  else
+  {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << "G4RadiativePionDecayChannel:: constructor :";
-      G4cout << " parent particle is not charged pion but ";
+    if (GetVerboseLevel()>0)
+    {
+      G4cout << "G4RadiativePionDecayChannel::G4PionRadiativeDecayChannel()"
+             << G4endl;
+      G4cout << "Parent particle is not charged pion: ";
       G4cout << theParentName << G4endl;
     }
 #endif
   }
 }
 
+// --------------------------------------------------------------------
 G4PionRadiativeDecayChannel::~G4PionRadiativeDecayChannel()
 {
 }
-G4PionRadiativeDecayChannel::G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel &right)
-  :G4VDecayChannel(right)
+
+// --------------------------------------------------------------------
+G4PionRadiativeDecayChannel::
+G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel& right)
+  : G4VDecayChannel(right)
 {
 }
 
-G4PionRadiativeDecayChannel & G4PionRadiativeDecayChannel::operator=(const G4PionRadiativeDecayChannel & right)
+G4PionRadiativeDecayChannel&
+G4PionRadiativeDecayChannel::operator=(const G4PionRadiativeDecayChannel& right)
 {
-  if (this != &right) { 
+  if (this != &right)
+  { 
     kinematics_name = right.kinematics_name;
     verboseLevel = right.verboseLevel;
     rbranch = right.rbranch;
@@ -129,24 +139,27 @@ G4PionRadiativeDecayChannel & G4PionRadiativeDecayChannel::operator=(const G4Pio
 
     // recreate array
     numberOfDaughters = right.numberOfDaughters;
-    if ( numberOfDaughters >0 ) {
-      if (daughters_name !=0) ClearDaughtersName();
+    if ( numberOfDaughters >0 )
+    {
+      if (daughters_name != nullptr) ClearDaughtersName();
       daughters_name = new G4String*[numberOfDaughters];
       //copy daughters name
-      for (G4int index=0; index < numberOfDaughters; index++) {
-          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      for (G4int index=0; index<numberOfDaughters; ++index)
+      {
+        daughters_name[index] = new G4String(*right.daughters_name[index]);
       }
     }
   }
   return *this;
 }
 
-G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double) 
+// --------------------------------------------------------------------
+G4DecayProducts* G4PionRadiativeDecayChannel::DecayIt(G4double) 
 {
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) 
-                 G4cout << "G4PionRadiativeDecayChannel::DecayIt ";
+     G4cout << "G4PionRadiativeDecayChannel::DecayIt ";
 #endif
 
   CheckAndFillParent();
@@ -157,31 +170,34 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
 
   G4double EMPI = parentmass;
 
-  //daughters'mass
+  // daughters'mass
   const G4int N_DAUGHTER=3;
   G4double daughtermass[N_DAUGHTER]; 
   G4double sumofdaughtermass = 0.0;
-  for (G4int index=0; index<N_DAUGHTER; index++){
+  for (G4int index=0; index<N_DAUGHTER; ++index)
+  {
     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
 
   G4double EMASS = daughtermass[0];
 
-  //create parent G4DynamicParticle at rest
+  // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = 
-                               new G4DynamicParticle( G4MT_parent, dummy, 0.0);
-  //create G4Decayproducts
+  G4DynamicParticle* parentparticle
+    = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
+  // create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   G4double x, y;
 
-  const size_t MAX_LOOP=1000;
+  const std::size_t MAX_LOOP=1000;
 
-  for (size_t loop_counter1=0; loop_counter1<MAX_LOOP; ++loop_counter1){
-    for (size_t loop_counter2=0; loop_counter2<MAX_LOOP; ++loop_counter2){
+  for (std::size_t loop_counter1=0; loop_counter1<MAX_LOOP; ++loop_counter1)
+  {
+    for (std::size_t loop_counter2=0; loop_counter2<MAX_LOOP; ++loop_counter2)
+    {
       x = xl + G4UniformRand()*(xu-xl);
       y = yl + G4UniformRand()*(yu-yl);
       if (x+y > 1.) break;
@@ -190,21 +206,13 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
     if (d2w > G4UniformRand()*d2wmax) break;
   }
 
-//-----------------------------------------------------------------------
-//
-//      Calculate the angle between positron and photon (cosine)
-//
-  G4double cthetaGE =  (y*(x-2.)+2.*(1.-x+beta*beta)) /
-                       (x*std::sqrt(y*y-4.*beta*beta));
+  // Calculate the angle between positron and photon (cosine)
+  //
+  G4double cthetaGE = (y*(x-2.)+2.*(1.-x+beta*beta)) /
+                      (x*std::sqrt(y*y-4.*beta*beta));
 
-//
-//-----------------------------------------------------------------------
-//
   G4double G = x * EMPI/2.;
   G4double E = y * EMPI/2.;
-//
-//-----------------------------------------------------------------------
-//
 
   if (E < EMASS) E = EMASS;
 
@@ -220,8 +228,8 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   G4double cphiE = std::cos(phiE);
   G4double sphiE = std::sin(phiE);
 
-  //Coordinates of the decay positron
-
+  // Coordinates of the decay positron
+  //
   G4double px = sthetaE*cphiE;
   G4double py = sthetaE*sphiE;
   G4double pz = cthetaE;
@@ -229,7 +237,7 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   G4ThreeVector direction0(px,py,pz);
 
   G4DynamicParticle * daughterparticle0 
-    = new G4DynamicParticle( G4MT_daughters[0], daughtermomentum[0]*direction0);
+    = new G4DynamicParticle(G4MT_daughters[0], daughtermomentum[0]*direction0);
 
   products->PushProducts(daughterparticle0);
 
@@ -241,8 +249,8 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   G4double cphiGE = std::cos(phiGE);
   G4double sphiGE = std::sin(phiGE);
 
-  //Coordinates of the decay gamma with respect to the decay positron
-
+  // Coordinates of the decay gamma with respect to the decay positron
+  //
   px = sthetaGE*cphiGE;
   py = sthetaGE*sphiGE;
   pz = cthetaGE;
@@ -252,19 +260,19 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   direction1.rotateUz(direction0);
 
   G4DynamicParticle * daughterparticle1
-    = new G4DynamicParticle( G4MT_daughters[1], daughtermomentum[1]*direction1);
+    = new G4DynamicParticle(G4MT_daughters[1], daughtermomentum[1]*direction1);
 
   products->PushProducts(daughterparticle1);
 
-// output message
+  // output message
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) {
-    G4cout << "G4PionRadiativeDecayChannel::DecayIt ";
-    G4cout << "  create decay products in rest frame " <<G4endl;
+  if (GetVerboseLevel()>1)
+  {
+    G4cout << "G4PionRadiativeDecayChannel::DecayIt() -";
+    G4cout << " create decay products in rest frame " << G4endl;
     products->DumpInfo();
   }
 #endif
 
   return products;
-
 }

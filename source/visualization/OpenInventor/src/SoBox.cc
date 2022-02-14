@@ -34,8 +34,6 @@
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodes/SoBox.h"
 
@@ -78,7 +76,11 @@ SoBox::~SoBox() {
 // initClass
 void SoBox::initClass(){
   // This statement is required.
-  SO_NODE_INIT_CLASS(SoBox,SoShape,"Shape");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(SoBox,SoShape,"Shape");
+  }
 }
 
 
@@ -276,5 +278,3 @@ void SoBox::generateAlternateRep() {
 void SoBox::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

@@ -45,16 +45,12 @@
 
 #include "G4eMultipleScattering.hh"
 
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
+#include "G4PolarizedAnnihilation.hh"
+#include "G4PolarizedBremsstrahlung.hh"
 #include "G4PolarizedCompton.hh"
 #include "G4PolarizedGammaConversion.hh"
-#include "G4ePolarizedIonisation.hh"
-#include "G4ePolarizedBremsstrahlung.hh"
-#include "G4eplusPolarizedAnnihilation.hh"
-#include "G4PolarizedPhotoElectricEffect.hh"
+#include "G4PolarizedIonisation.hh"
+#include "G4PolarizedPhotoElectric.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -81,20 +77,20 @@ void PhysListEmPolarized::ConstructProcess()
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "gamma") {
-      pmanager->AddDiscreteProcess(new G4PolarizedPhotoElectricEffect);
+      pmanager->AddDiscreteProcess(new G4PolarizedPhotoElectric);
       pmanager->AddDiscreteProcess(new G4PolarizedCompton);
       pmanager->AddDiscreteProcess(new G4PolarizedGammaConversion);      
 
     } else if (particleName == "e-") {
-      pmanager->AddProcess(new G4eMultipleScattering,   -1,1,1);
-      pmanager->AddProcess(new G4ePolarizedIonisation,  -1,2,2);
-      pmanager->AddProcess(new G4ePolarizedBremsstrahlung,      -1,3,3);
+      pmanager->AddProcess(new G4eMultipleScattering,     -1, 1,1);
+      pmanager->AddProcess(new G4PolarizedIonisation,     -1, 2,2);
+      pmanager->AddProcess(new G4PolarizedBremsstrahlung, -1,-3,3);
 
     } else if (particleName == "e+") {
-      pmanager->AddProcess(new G4eMultipleScattering,  -1, 1,1);
-      pmanager->AddProcess(new G4ePolarizedIonisation, -1, 2,2);
-      pmanager->AddProcess(new G4ePolarizedBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eplusPolarizedAnnihilation,   0,-1,4);
+      pmanager->AddProcess(new G4eMultipleScattering,     -1, 1,1);
+      pmanager->AddProcess(new G4PolarizedIonisation,     -1, 2,2);
+      pmanager->AddProcess(new G4PolarizedBremsstrahlung, -1,-3,3);
+      pmanager->AddProcess(new G4PolarizedAnnihilation,    0,-1,4);
     }
   }
 }

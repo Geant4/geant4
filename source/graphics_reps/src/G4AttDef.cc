@@ -35,7 +35,7 @@ using namespace std;
 std::ostream& operator<<
 (std::ostream& os, const std::map<G4String,G4AttDef>* definitions)
 {
-  os << "Deprecated output function.  Use const reference equivalent." << endl;
+  os << "G4AttDef: Deprecated output function.  Use const reference instead." << endl;
   if (definitions) {
     os << *definitions;
   } else {

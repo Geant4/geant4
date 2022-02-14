@@ -98,11 +98,11 @@ using namespace std;
 G4eBremParametrizedModel::G4eBremParametrizedModel(const G4ParticleDefinition* p,
 						   const G4String& nam)
   : G4VEmModel(nam),
-    particle(0),
-    isElectron(true),
+    particle(nullptr),
     fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
-    isInitialised(false)
+    isInitialised(false),
+    isElectron(true)
 {
   theGamma = G4Gamma::Gamma();
 
@@ -118,7 +118,7 @@ G4eBremParametrizedModel::G4eBremParametrizedModel(const G4ParticleDefinition* p
     = densityFactor = densityCorr = fMax = fCoulomb = 0.;
 
   InitialiseConstants();
-  if(p) { SetParticle(p); }
+  if(nullptr != p) { SetParticle(p); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

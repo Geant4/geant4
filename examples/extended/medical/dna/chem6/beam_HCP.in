@@ -1,0 +1,97 @@
+#
+
+/run/numberOfThreads 2
+/process/dna/e-SolvationSubType Meesungnoen2002
+#/process/dna/e-SolvationSubType Ritchie1994
+#/process/dna/e-SolvationSubType Terrisol1990
+
+/run/initialize
+
+/chem/reaction/print
+
+/primaryKiller/setSize 5 5 5 um
+/gun/position  0 0 -2.5 um
+/gun/direction 0 0 1
+/gun/particle proton
+
+# in order to reproduce LET values of NIST data
+# please see the spower example using stationary mode
+
+# select cutoff energy for restricted LET
+#/scorer/LET/cutoff 100 eV
+
+#/scorer/species/addTimeToRecord 1 ps
+#/scorer/species/addTimeToRecord 10 ps
+#/scorer/species/addTimeToRecord 100 ps        
+#/scorer/species/addTimeToRecord 1 ns       
+#/scorer/species/addTimeToRecord 10 ns       
+#/scorer/species/addTimeToRecord 100 ns
+#/scorer/species/addTimeToRecord 1 us
+
+/scorer/species/nOfTimeBins 50
+
+/tracking/verbose 0
+/scheduler/verbose 0
+/scheduler/endTime 1 microsecond
+
+/run/printProgress 10
+
+/gun/energy 500 keV
+/run/beamOn 10
+
+/gun/energy 700 keV
+/run/beamOn 10
+
+/gun/energy 800 keV
+/run/beamOn 10
+
+/gun/energy 1200 keV
+/run/beamOn 10
+
+/gun/energy 1500 keV
+/run/beamOn 10
+
+/gun/energy 2000 keV
+/run/beamOn 10
+
+/gun/energy 2500 keV
+/run/beamOn 10
+
+/gun/energy 3000 keV
+/run/beamOn 10
+
+/gun/energy 4000 keV
+/run/beamOn 10
+
+/gun/energy 5000 keV
+/run/beamOn 10
+
+/gun/energy 7500 keV
+/run/beamOn 10
+
+/gun/energy 10000 keV
+/run/beamOn 10
+
+/gun/energy 12000 keV
+/run/beamOn 10
+
+/gun/energy 15000 keV
+/run/beamOn 10
+
+/gun/particle alpha
+
+/gun/energy 1000 keV
+/run/beamOn 10
+
+/gun/energy 2000 keV
+/run/beamOn 10
+
+/gun/energy 4000 keV
+/run/beamOn 10
+
+/gun/energy 8000 keV
+/run/beamOn 10
+
+/gun/energy 20000 keV
+/run/beamOn 10
+

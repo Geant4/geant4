@@ -33,8 +33,6 @@
 #ifndef G4OPENINVENTORSCENEHANDLER_HH
 #define G4OPENINVENTORSCENEHANDLER_HH
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // Inheritance :
 #include "G4VSceneHandler.hh"
 
@@ -56,18 +54,15 @@ public:
 
   G4OpenInventorSceneHandler (G4OpenInventor& system, const G4String& name = "");
   virtual ~G4OpenInventorSceneHandler ();
+
+  using G4VSceneHandler::AddPrimitive;
   void AddPrimitive (const G4Polyline& line);
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Polyhedron& p);
   void AddPrimitive (const G4Polymarker&);
-  ////////////////////////////////////////////////////////////////
-  // Explicitly invoke base class methods to avoid warnings about
-  // hiding of base class methods.
-  void AddPrimitive (const G4Scale& scale) {
-    G4VSceneHandler::AddPrimitive (scale);
-  }
+
   ///////////////////////////////////////////////////////////////
   // Other inherited functions.
   void 		ClearStore ();
@@ -100,7 +95,5 @@ private:
   Geant4_SoStyleCache* fStyleCache;
   bool fPreviewAndFull;
 };
-
-#endif
 
 #endif

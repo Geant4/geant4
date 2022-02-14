@@ -71,11 +71,15 @@
 
 /** @} */
 
-<<<<<<< HEAD
 /** @defgroup extended_hadronic_Hadr05 Hadr05
- *  The shared hadronic classes have their
+ *  The Hadr05 hadronic classes have their
  *  <a href="../html_Hadr05/html/index.html">standalone documentation </a>
-=======
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_hadronic_Hadr06 Hadr06
  *  The Hadr06 hadronic classes have their
  *  <a href="../html_Hadr06/html/index.html">standalone documentation </a>
@@ -104,9 +108,42 @@
 
 /** @} */
 
-/** @defgroup extended_hadronic_Hadr06 Hadr06
- *  The shared hadronic classes have their
- *  <a href="../html_Hadr05/html/index.html">standalone documentation </a>
+/** @} */
+
+/** @defgroup extended_hadronic_Hadr09 Hadr09
+ *  The Hadr09 hadronic classes have their
+ *  <a href="../html_Hadr09/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_Hadr10 Hadr10
+ *  The Hadr10 hadronic classes have their
+ *  <a href="../html_Hadr10/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_FissionFragment FissionFragment
+ *  Hadronic example FissionFragment
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+  class FFActionInitialization {};
+  class FFDetectorConstruction {};
+  class FFPrimaryGeneratorAction {};
+  class FFRunAction {};
+
+/** @} */
+
+/** @defgroup extended_hadronic_NeutronSource NeutronSource
+ *  The NeutronSource hadronic classes have their
+ *  <a href="../html_NeutronSource/html/index.html">standalone documentation </a>
  *  @ingroup extended_hadronic
  *  @{
  */

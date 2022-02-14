@@ -1,0 +1,247 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_plots_viewer
+#define tools_sg_plots_viewer
+
+// used in geant4 offscreen plotting.
+
+#include "viewer"
+
+#include "ortho"
+#include "plots"
+
+#include "h2plot_cp"
+#include "f2plot"
+#include "xy2plot"
+#include "fit2plot"
+#include "cloud2plot_cp"
+
+#include "zb_action"
+#include "../wps"
+
+#include "gl2ps_action"
+
+namespace tools {
+namespace sg {
+
+class plots_viewer : public viewer {
+  TOOLS_HEADER(plots_viewer,tools::sg::plots_viewer,viewer)
+public:
+  virtual void set_size(unsigned int a_width,unsigned int a_height) {
+    parent::set_size(a_width,a_height);
+    m_plots.adjust_size(a_width,a_height);
+  }
+public:
+  plots_viewer(std::ostream& a_out,const base_freetype& a_ttf,
+               unsigned int a_cols = 1,unsigned int a_rows = 1,
+               unsigned int a_width = 500,unsigned int a_height = 500)
+  :parent(a_out,a_width,a_height)
+  ,m_plots(a_ttf)
+  ,m_wps(a_out)
+  {
+    create_sg();
+    m_plots.cols = a_cols;
+    m_plots.rows = a_rows;
+    m_plots.adjust_size(width(),height());
+  }
+  virtual ~plots_viewer() {
+    //WARNING : nodes may refer m_zb_mgr,m_gl2ps_mgr (to handle gstos/texs), then we have to delete them first.
+    m_sg.clear();
+    m_plots.clear_sg();
+  }
+public:
+  plots_viewer(const plots_viewer& a_from)
+  :parent(a_from)
+  ,m_camera(a_from.m_camera)
+  ,m_plots(a_from.m_plots)
+  ,m_wps(a_from.m_out)
+  {
+    create_sg();
+    m_plots.adjust_size(width(),height());
+  }
+  plots_viewer& operator=(const plots_viewer& a_from){
+    parent::operator=(a_from);
+    m_camera = a_from.m_camera;
+    m_plots = a_from.m_plots;
+    create_sg();
+    m_plots.adjust_size(width(),height());
+    return *this;
+  }
+public:
+#include <tools/plotter_common.icc>
+
+  sg::zb_manager& zb_manager() {return m_zb_mgr;}
+  sg::gl2ps_manager& gl2ps_manager() {return m_gl2ps_mgr;}
+
+public:
+  typedef bool (*png_writer)(std::ostream&,const std::string&,
+                             unsigned char*,unsigned int,unsigned int,unsigned int);
+
+  bool write_inzb_png(png_writer a_writer,const std::string& a_file,unsigned int a_width,unsigned int a_height) {
+    // for example :
+    //   #include <tools/png>
+    //   ...
+    //   viewer.write_inzb_png(tools::png::write,"out.png");
+    //
+    zb_action action(m_zb_mgr,m_out,a_width,a_height);
+    action.zbuffer().clear_color_buffer(0);
+    action.add_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
+    action.zbuffer().clear_depth_buffer();
+    sg().render(action);
+
+    unsigned int bpp = 3;
+    uchar* buffer = new unsigned char[a_width*a_height*bpp];
+    if(!buffer) {
+      m_out << "tools::sg::plots_viewer::write_inzb_png : can't alloc buffer." << std::endl;
+      return false;
+    }
+    unsigned char* pos = buffer;
+    zb_action::VCol r,g,b;
+    for(unsigned int row=0;row<a_height;row++) {
+      for(unsigned int col=0;col<a_width;col++) {
+        zb_action::get_rgb(&action,col,a_height-row-1,r,g,b);
+        *pos = (uchar)(255.0F*r);pos++;
+        *pos = (uchar)(255.0F*g);pos++;
+        *pos = (uchar)(255.0F*b);pos++;
+      }
+    }
+
+    bool status = (*a_writer)(m_out,a_file,buffer,a_width,a_height,bpp);
+    if(!status) {
+      m_out << "tools::sg::plots_viewer::write_inzb_png : can't write " << a_file << "." << std::endl;
+    }
+    delete [] buffer;
+    return status;
+  }
+  bool write_inzb_png(png_writer a_writer,const std::string& a_file) {
+    return write_inzb_png(a_writer,a_file,width(),height());
+  }
+
+  typedef bool (*jpeg_writer)(std::ostream&,const std::string&,
+                              unsigned char*,unsigned int,unsigned int,unsigned int,int);
+
+  bool write_inzb_jpeg(jpeg_writer a_writer,const std::string& a_file,unsigned int a_width,unsigned int a_height,int a_quality = 100) {
+    // for example :
+    //   #include <tools/jpeg>
+    //   ...
+    //   viewer.write_inzb_jpeg(tools::jpeg::write,"out.jpeg");
+    //
+    zb_action action(m_zb_mgr,m_out,a_width,a_height);
+    action.zbuffer().clear_color_buffer(0);
+    action.add_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
+    action.zbuffer().clear_depth_buffer();
+    sg().render(action);
+
+    unsigned int bpp = 3;
+    uchar* buffer = new unsigned char[a_width*a_height*bpp];
+    if(!buffer) {
+      m_out << "tools::sg::plots_viewer::write_inzb_jpeg : can't alloc buffer." << std::endl;
+      return false;
+    }
+    unsigned char* pos = buffer;
+    zb_action::VCol r,g,b;
+    for(unsigned int row=0;row<a_height;row++) {
+      for(unsigned int col=0;col<a_width;col++) {
+        zb_action::get_rgb(&action,col,a_height-row-1,r,g,b);
+        *pos = (uchar)(255.0F*r);pos++;
+        *pos = (uchar)(255.0F*g);pos++;
+        *pos = (uchar)(255.0F*b);pos++;
+      }
+    }
+
+    bool status = (*a_writer)(m_out,a_file,buffer,a_width,a_height,bpp,a_quality);
+    if(!status) {
+      m_out << "tools::sg::plots_viewer::write_inzb_jpeg : can't write " << a_file << "." << std::endl;
+    }
+    delete [] buffer;
+    return status;
+  }
+
+  bool write_inzb_jpeg(jpeg_writer a_writer,const std::string& a_file,int a_quality = 100) {
+    return write_inzb_jpeg(a_writer,a_file,width(),height(),a_quality);
+  }
+
+  bool write_inzb_ps(const std::string& a_file,unsigned int a_width,unsigned int a_height,bool a_anonymous = false) {
+    zb_action action(m_zb_mgr,m_out,a_width,a_height);
+    action.zbuffer().clear_color_buffer(0);
+    action.add_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
+    action.zbuffer().clear_depth_buffer();
+    sg().render(action);
+    wps wps(m_out);
+    if(!wps.open_file(a_file,a_anonymous)) {
+      m_out << "tools::viewplot::write_inzb_ps : can't open " << a_file << "." << std::endl;
+      return false;
+    }
+    wps.PS_BEGIN_PAGE();
+    wps.PS_PAGE_SCALE(float(a_width),float(a_height));
+    wps.PS_IMAGE(a_width,a_height,wps::rgb_4,sg::zb_action::get_rgb,&action);
+    wps.PS_END_PAGE();
+    wps.close_file();
+    return true;
+  }
+
+  bool write_inzb_ps(const std::string& a_file,bool a_anonymous = false) {
+    return write_inzb_ps(a_file,width(),height(),a_anonymous);
+  }
+
+  bool open_inzb_ps_file(const std::string& a_file,bool a_anonymous = false) {
+    if(!m_wps.open_file(a_file,a_anonymous)) {
+      m_out << "tools::plots_viewer::open_inzb_ps_file : can't open " << a_file << "." << std::endl;
+      return false;
+    }
+    return true;
+  }
+  bool write_inzb_ps_page(unsigned int a_width,unsigned int a_height) {
+    sg::zb_action action(m_zb_mgr,m_out,a_width,a_height);
+    action.zbuffer().clear_color_buffer(0);
+    action.add_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
+    action.zbuffer().clear_depth_buffer();
+    sg().render(action);
+    m_wps.PS_BEGIN_PAGE();
+    m_wps.PS_PAGE_SCALE(float(a_width),float(a_height));
+    m_wps.PS_IMAGE(a_width,a_height,wps::rgb_4,sg::zb_action::get_rgb,&action);
+    m_wps.PS_END_PAGE();
+    return true;
+  }
+  bool write_inzb_ps_page() {return write_inzb_ps_page(width(),height());}
+  bool close_inzb_ps_file() {return m_wps.close_file();}
+
+  bool write_gl2ps(const std::string& a_file,int a_gl2ps_format,unsigned int a_width,unsigned int a_height) {
+    gl2ps_action action(m_gl2ps_mgr,m_out,a_width,a_height);
+    action.clear_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
+    if(!action.open(a_file,a_gl2ps_format)) return false;
+    sg().render(action);
+    action.close();
+    return true;
+  }
+  bool write_gl2ps(const std::string& a_file,int a_gl2ps_format) {return write_gl2ps(a_file,a_gl2ps_format,width(),height());}
+
+protected:
+  void create_sg() {
+    m_sg.clear();
+
+    m_camera.height = 1;
+    float z = 10*1;
+    m_camera.znear = 0.1f*z;
+    m_camera.zfar = 10*z; //100*z induces problems with lego rendering.
+    m_camera.position = vec3f(0,0,z);
+    m_camera.orientation = rotf(vec3f(0,0,1),0);
+    m_camera.focal = z;
+    m_sg.add(new noderef(m_camera));
+
+    m_sg.add(new noderef(m_plots));
+  }
+
+protected:
+  sg::zb_manager m_zb_mgr;
+  sg::gl2ps_manager m_gl2ps_mgr;
+  ortho m_camera;
+  sg::plots m_plots;
+  wps m_wps;
+};
+
+}}
+
+#endif
+

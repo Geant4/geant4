@@ -32,12 +32,12 @@
 // File name:     G4WLSTimeGeneratorProfileExponential.hh
 //
 // Author:        Pedro Rodrigues, Andreia Trindade
-// 
+//
 // Creation date: 2006-05-07
 //
-// Modifications:  
+// Modifications:
 //
-// Class Description: 
+// Class Description:
 //
 
 // -------------------------------------------------------------------
@@ -50,9 +50,7 @@
 
 class G4WLSTimeGeneratorProfileExponential : public G4VWLSTimeGeneratorProfile
 {
-
-public:
-
+ public:
   explicit G4WLSTimeGeneratorProfileExponential(const G4String& name);
 
   virtual ~G4WLSTimeGeneratorProfileExponential();
@@ -61,16 +59,14 @@ public:
 
   virtual G4double GenerateTime(const G4MaterialPropertiesTable*) override;
 
-protected:
-
-private:
-
+ protected:
+ private:
   // hide assignment operator
 
-  G4WLSTimeGeneratorProfileExponential & operator=
-                     (const  G4WLSTimeGeneratorProfileExponential &right) = delete;
-  G4WLSTimeGeneratorProfileExponential(const  G4WLSTimeGeneratorProfileExponential&) = delete;
-
+  G4WLSTimeGeneratorProfileExponential& operator=
+    (const G4WLSTimeGeneratorProfileExponential& right) = delete;
+  G4WLSTimeGeneratorProfileExponential(
+    const G4WLSTimeGeneratorProfileExponential&) = delete;
 };
 
 #endif

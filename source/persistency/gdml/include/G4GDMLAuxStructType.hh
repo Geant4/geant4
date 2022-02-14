@@ -23,28 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // struct G4GDMLAuxStructType
 
-// History:
-// - Created.                                  Witold Pokorski, March 2015
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLAUXSTRUCTTYPE_INCLUDED_
-#define _G4GDMLAUXSTRUCTTYPE_INCLUDED_
+// Author: Witold Pokorski, March 2015
+// --------------------------------------------------------------------
+#ifndef G4GDMLAUXSTRUCTTYPE_HH
+#define G4GDMLAUXSTRUCTTYPE_HH 1
 
 #include <vector>
 
 struct G4GDMLAuxStructType
 {
-   G4String type;
-   G4String value;
-   G4String unit;
-   std::vector<G4GDMLAuxStructType>* auxList;
+  G4String type;
+  G4String value;
+  G4String unit;
+  std::vector<G4GDMLAuxStructType>* auxList;
 };
 
-typedef std::vector<G4GDMLAuxStructType> G4GDMLAuxListType;
+using G4GDMLAuxListType = std::vector<G4GDMLAuxStructType>;
 
 #endif

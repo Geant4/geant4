@@ -23,28 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Defines for Windows DLLs import/export
 //
-
-#ifndef RUNDEFS_HH
-#define RUNDEFS_HH
+// Author: G.Cosmo (CERN), 5 April 2013
+// --------------------------------------------------------------------
+#ifndef G4RUNDEFS_HH
+#define G4RUNDEFS_HH 1
 
 #include "G4Types.hh"
 
 #ifdef WIN32
-  //
-  // Unique identifier for global module
-  //
-  #if defined G4RUN_ALLOC_EXPORT
-    #define G4RUN_DLL G4DLLEXPORT
-  #else
-    #define G4RUN_DLL G4DLLIMPORT
-  #endif
+//
+// Unique identifier for global module
+//
+#  if defined G4RUN_ALLOC_EXPORT
+#    define G4RUN_DLL G4DLLEXPORT
+#  else
+#    define G4RUN_DLL G4DLLIMPORT
+#  endif
 #else
-  #define G4RUN_DLL
+#  define G4RUN_DLL
+#endif
+
+#if defined(WIN32) && defined(G4LIB_BUILD_DLL)
+#  if defined G4RUN_ALLOC_EXPORT
+#    define G4MTRUN_DLL __declspec(dllexport)
+#  else
+#    define G4MTRUN_DLL __declspec(dllimport)
+#  endif
+#else
+#  define G4MTRUN_DLL
 #endif
 
 #endif /* G4RUNDEFS_HH */

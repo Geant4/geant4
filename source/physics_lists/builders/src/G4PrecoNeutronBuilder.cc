@@ -41,7 +41,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4NeutronInelasticCrossSection.hh"
+#include "G4NeutronInelasticXS.hh"
 
 G4PrecoNeutronBuilder::
 G4PrecoNeutronBuilder() 
@@ -52,11 +52,10 @@ G4PrecoNeutronBuilder()
 }
 
 void G4PrecoNeutronBuilder::
-Build(G4NeutronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(new G4NeutronInelasticCrossSection);  
+  aP->AddDataSet(new G4NeutronInelasticXS);  
 }
-

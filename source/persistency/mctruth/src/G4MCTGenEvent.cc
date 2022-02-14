@@ -23,59 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//   G4MCTGenEvent.cc
+// G4MCTGenEvent implementation
 //
-// ====================================================================
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
 
 #include "G4MCTGenEvent.hh"
 
-// ====================================================================
-//
-// class description
-//
-// ====================================================================
-
-//////////////////////////
+// --------------------------------------------------------------------
 G4MCTGenEvent::G4MCTGenEvent()
-//////////////////////////
 {
 }
 
-///////////////////////////
+// --------------------------------------------------------------------
 G4MCTGenEvent::~G4MCTGenEvent()
-///////////////////////////
 {
   eventList.clear();
 }
 
-/////////////////////////////////////////////////////////////
-int G4MCTGenEvent::AddGenEvent(const void* genevent)
-/////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
+G4int G4MCTGenEvent::AddGenEvent(const void* genevent)
 {
   eventList.push_back(const_cast<void*>(genevent));
   return eventList.size();
 }
 
-/////////////////////////////////////
-int G4MCTGenEvent::GetNofEvents() const
-/////////////////////////////////////
+// --------------------------------------------------------------------
+G4int G4MCTGenEvent::GetNofEvents() const
 {
   return eventList.size();
 }
 
-//////////////////////////////////////////////////////
-const void* G4MCTGenEvent::GetGenEvent(int i)
-//////////////////////////////////////////////////////
+// --------------------------------------------------------------------
+const void* G4MCTGenEvent::GetGenEvent(G4int i)
 {
-  int size= eventList.size();
-  if(i>=0 && i<size) return eventList[i];
-  else return 0;
+  G4int size = eventList.size();
+  if(i >= 0 && i < size)
+    return eventList[i];
+  else
+    return nullptr;
 }
 
-
-//////////////////////////////
+// --------------------------------------------------------------------
 void G4MCTGenEvent::ClearEvent()
-//////////////////////////////
 {
   eventList.clear();
 }

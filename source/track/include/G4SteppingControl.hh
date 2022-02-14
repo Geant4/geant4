@@ -23,37 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SteppingControl
 //
+// Description:
 //
-//
-//---------------------------------------------------------------
-//
-// G4SteppingControl  
-//
-// Class Description:
-//   This enumaration specifies possible conditions to control
-//   the stepping manager behavier.
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
+// Enumeration specifying possible conditions to control
+// the stepping manager behaviour.
 
-#ifndef G4SteppingControl_h
-#define G4SteppingControl_h 1
+// Authors:
+//   Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//   Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// --------------------------------------------------------------------
+#ifndef G4SteppingControl_hh
+#define G4SteppingControl_hh 1
 
-/////////////////////
-enum G4SteppingControl  
-/////////////////////
+enum G4SteppingControl
 {
   NormalCondition,
-  AvoidHitInvocation,            
-    // Hit will NOT be called 
+  AvoidHitInvocation,
+  // Hit will NOT be called
   Debug
 };
 
 #endif
-
-

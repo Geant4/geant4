@@ -104,20 +104,10 @@ public:
     bool GetComputeTimeStep() const;
 
 public:
-    void CalculateTimeStep(const G4Track*, G4double userMinTimeStep);
-
-    void DoCalculateStep();
-
-    void FindReaction(G4ITReactionSet* pReactionSet,
-                      double currentStepTime,
-                      double previousStepTime,
-                      bool reachedUserStepTimeLimit);
-
     const G4Track* GetTrack() const;
 
 protected:
     void SetTrack(const G4Track*);
-    void ExtractTimeStepperData();
 
     G4double fTSTimeStep;
     G4ITReactionSet* fReactionSet;

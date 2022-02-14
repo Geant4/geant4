@@ -118,6 +118,21 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   if (pbullet) initialStrange += pbullet->getStrangeness();
   if (ptarget) initialStrange += ptarget->getStrangeness();
 
+  G4int nelec = 0;
+  G4double elMass = 0.;
+  std::vector<G4InuclElementaryParticle>& outParts = 
+    output.getOutgoingParticles();
+  for (G4int i = 0; i < output.numberOfOutgoingParticles(); i++) {
+    if (outParts[i].getDefinition() == G4Electron::Electron() ) {
+      elMass += outParts[i].getDefinition()->GetPDGMass();
+      ++nelec;
+    }
+  }
+  if(nelec > 0) {
+    initial += G4LorentzVector(0.,0.,0.,elMass/GeV);
+    initialCharge -= nelec;
+  }
+
   // Final state totals are computed for us
   final = output.getTotalOutputMomentum();
   finalBaryon = output.getTotalBaryonNumber();
@@ -155,13 +170,20 @@ void G4CascadeCheckBalance::collide(const G4Fragment& fragment,
   
   // Remove electron masses when internal conversion occurs
   G4double elMass = 0.;
-  std::vector<G4InuclElementaryParticle> outParts = output.getOutgoingParticles();
+  std::vector<G4InuclElementaryParticle>& outParts = 
+    output.getOutgoingParticles();
+  G4int nelec = 0;
   for (G4int i = 0; i < output.numberOfOutgoingParticles(); i++) {
-    if (outParts[i].getDefinition() == G4Electron::Electron() )
-                       elMass += outParts[i].getDefinition()->GetPDGMass();
+    if (outParts[i].getDefinition() == G4Electron::Electron() ) {
+      elMass += outParts[i].getDefinition()->GetPDGMass();
+      ++nelec;
+    }
+  }
+  if(nelec > 0) {
+    initial += G4LorentzVector(0.,0.,0.,elMass/GeV);
+    initialCharge -= nelec;
   }
 
-  final.setE(final.e() - elMass/GeV);
   finalBaryon = output.getTotalBaryonNumber();
   finalCharge = output.getTotalCharge();
   finalStrange = output.getTotalStrangeness();

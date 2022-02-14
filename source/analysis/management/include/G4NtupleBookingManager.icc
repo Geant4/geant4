@@ -1,0 +1,96 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+#include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
+
+//
+// private functions
+//
+
+//_____________________________________________________________________________
+template <typename T>
+G4int G4NtupleBookingManager::CreateNtupleTColumn(
+  G4int ntupleId, const G4String& name, std::vector<T>* vector)
+{
+  Message(G4Analysis::kVL4, "create", "ntuple T column",
+    " ntupleId " + std::to_string(ntupleId));
+
+  auto g4NtupleBooking
+    = GetNtupleBookingInFunction(ntupleId, "CreateNtupleTColumn");
+  if ( ! g4NtupleBooking )  return G4Analysis::kInvalidId;
+
+  // Save column info in booking
+  auto& ntupleBooking = g4NtupleBooking->fNtupleBooking;
+  auto index = ntupleBooking.columns().size();
+  if ( ! vector )
+    ntupleBooking.template add_column<T>(name);
+  else
+    ntupleBooking.template add_column<T>(name, *vector);
+
+  // Create column if ntuple already exists
+  // CreateTColumnInNtuple<T>(ntupleBooking, name, vector);
+  fLockFirstNtupleColumnId = true;
+
+  Message(G4Analysis::kVL2, "create", "ntuple T column",
+    name + " ntupleId " + std::to_string(ntupleId));
+
+  return G4int(index + fFirstNtupleColumnId);
+}
+
+//_____________________________________________________________________________
+inline G4int G4NtupleBookingManager::GetNofNtupleBookings() const
+{
+  return G4int(fNtupleBookingVector.size());
+}
+
+//_____________________________________________________________________________
+inline G4int  G4NtupleBookingManager::GetCurrentNtupleId() const
+{
+  return  GetNofNtupleBookings() + fFirstId - 1;
+}
+
+//
+// public functions
+//
+
+//_____________________________________________________________________________
+inline const std::vector<G4NtupleBooking*>&
+G4NtupleBookingManager::GetNtupleBookingVector() const
+{
+  return fNtupleBookingVector;
+}
+
+//_____________________________________________________________________________
+inline G4int G4NtupleBookingManager::GetFirstNtupleColumnId() const {
+  return fFirstNtupleColumnId;
+}
+
+//_____________________________________________________________________________
+inline G4String G4NtupleBookingManager::GetFileType() const
+{
+  return fFileType;
+}

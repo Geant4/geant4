@@ -23,17 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4VRestContinuousDiscreteProcess
 // 
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-// --------------------------------------------------------------
-//   New Physics scheme           8 Jan. 1997  H.Kurahige
-// ------------------------------------------------------------
+// Authors:
+// - 2 December 1995, G.Cosmo - First implementation, based on object model
+// - 8 January 1997, H.Kurashige - New Physics scheme
+// --------------------------------------------------------------------
 
 #include "G4VRestContinuousDiscreteProcess.hh"
 #include "G4SystemOfUnits.hh"
@@ -43,36 +38,40 @@
 #include "G4MaterialTable.hh"
 #include "G4VParticleChange.hh"
 
+// --------------------------------------------------------------------
 G4VRestContinuousDiscreteProcess::G4VRestContinuousDiscreteProcess()
-  :G4VProcess("No Name Discrete Process"),
-   valueGPILSelection(CandidateForSelection) 
+  : G4VProcess("No Name Discrete Process")
 {
   G4Exception("G4VRestContinuousDiscreteProcess::G4VRestContinuousDiscreteProcess()",
-	      "ProcMan102",JustWarning,"Default constructor is called");
+              "ProcMan102", JustWarning, "Default constructor is called");
 }
 
-G4VRestContinuousDiscreteProcess::G4VRestContinuousDiscreteProcess(const G4String& aName , G4ProcessType aType)
-  : G4VProcess(aName, aType),
-    valueGPILSelection(CandidateForSelection)
+// --------------------------------------------------------------------
+G4VRestContinuousDiscreteProcess::
+G4VRestContinuousDiscreteProcess(const G4String& aName, G4ProcessType aType)
+  : G4VProcess(aName, aType)
 {
 }
 
+// --------------------------------------------------------------------
 G4VRestContinuousDiscreteProcess::~G4VRestContinuousDiscreteProcess()
 {
 }
 
-G4VRestContinuousDiscreteProcess::G4VRestContinuousDiscreteProcess(G4VRestContinuousDiscreteProcess& right)
+// --------------------------------------------------------------------
+G4VRestContinuousDiscreteProcess::
+G4VRestContinuousDiscreteProcess(G4VRestContinuousDiscreteProcess& right)
   : G4VProcess(right),
     valueGPILSelection(right.valueGPILSelection)
 {
 }
 
-G4double G4VRestContinuousDiscreteProcess::AtRestGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4ForceCondition* condition
-			    )
+// --------------------------------------------------------------------
+G4double G4VRestContinuousDiscreteProcess::
+AtRestGetPhysicalInteractionLength( const G4Track& track,
+                                    G4ForceCondition* condition )
 {
-  // beggining of tracking 
+  // beginning of tracking 
   ResetNumberOfInteractionLengthLeft();
 
   // condition is set to "Not Forced"
@@ -82,116 +81,126 @@ G4double G4VRestContinuousDiscreteProcess::AtRestGetPhysicalInteractionLength(
   currentInteractionLength = GetMeanLifeTime(track, condition);
 
 #ifdef G4VERBOSE
-   if ((currentInteractionLength <0.0) || (verboseLevel>2)){
-    G4cout << "G4VRestContinuousDiscreteProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
+  if ((currentInteractionLength <0.0) || (verboseLevel>2))
+  {
+    G4cout << "G4VRestContinuousDiscreteProcess::AtRestGetPhysicalInteractionLength() - ";
+    G4cout << "[ " << GetProcessName() << "]" << G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() << G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]"
+           << G4endl;
   }
 #endif
 
   return theNumberOfInteractionLengthLeft * currentInteractionLength;
 }
 
-
-G4VParticleChange* G4VRestContinuousDiscreteProcess::AtRestDoIt( 
-			     const G4Track&,
-			     const G4Step& 
-			    )
+// --------------------------------------------------------------------
+G4VParticleChange*
+G4VRestContinuousDiscreteProcess::AtRestDoIt( const G4Track&,
+                                              const G4Step& )
 {
-//  clear NumberOfInteractionLengthLeft
-    ClearNumberOfInteractionLengthLeft();
+  ClearNumberOfInteractionLengthLeft();
 
-    return pParticleChange;
+  return pParticleChange;
 }
 
-G4double G4VRestContinuousDiscreteProcess::AlongStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4double previousStepSize,
-			     G4double currentMinimumStep,
-			     G4double& currentSafety,
-                             G4GPILSelection* selection
-			    )
+// --------------------------------------------------------------------
+G4double G4VRestContinuousDiscreteProcess::
+AlongStepGetPhysicalInteractionLength( const G4Track& track,
+                                       G4double previousStepSize,
+                                       G4double currentMinimumStep,
+                                       G4double& currentSafety,
+                                       G4GPILSelection* selection )
 {
   // GPILSelection is set to defaule value of CandidateForSelection
   valueGPILSelection = CandidateForSelection;
 
   // get Step limit proposed by the process
-  G4double steplength = GetContinuousStepLimit(track,previousStepSize,currentMinimumStep, currentSafety);
+  G4double steplength = GetContinuousStepLimit(track, previousStepSize,
+                                     currentMinimumStep, currentSafety);
 
   // set return value for G4GPILSelection
   *selection = valueGPILSelection;
 
 #ifdef G4VERBOSE
-  if (verboseLevel>1){
-    G4cout << "G4VRestContinuousDiscreteProcess::AlongStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
+  if (verboseLevel>1)
+  {
+    G4cout << "G4VRestContinuousDiscreteProcess::AlongStepGetPhysicalInteractionLength() - ";
+    G4cout << "[ " << GetProcessName() << "]" << G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "IntractionLength= " << steplength/cm <<"[cm] " <<G4endl;
+    G4cout << " in Material  " <<  track.GetMaterial()->GetName() << G4endl;
+    G4cout << "IntractionLength= " << steplength/cm <<"[cm] " << G4endl;
   }
 #endif
-  return  steplength ;
+  return steplength;
 }
 
- G4VParticleChange* G4VRestContinuousDiscreteProcess::AlongStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    )
+// --------------------------------------------------------------------
+G4VParticleChange*
+G4VRestContinuousDiscreteProcess::AlongStepDoIt( const G4Track& ,
+                                                 const G4Step& )
 { 
-    return pParticleChange;
+  return pParticleChange;
 }
 
-G4double G4VRestContinuousDiscreteProcess::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    )
+// --------------------------------------------------------------------
+G4double G4VRestContinuousDiscreteProcess::
+PostStepGetPhysicalInteractionLength( const G4Track& track,
+                                      G4double previousStepSize,
+                                      G4ForceCondition* condition )
 {
-  if ( (previousStepSize < 0.0) || (theNumberOfInteractionLengthLeft<=0.0)) {
-    // beggining of tracking (or just after DoIt of this process)
+  if ( (previousStepSize < 0.0) || (theNumberOfInteractionLengthLeft<=0.0))
+  {
+    // beginning of tracking (or just after DoIt() of this process)
     ResetNumberOfInteractionLengthLeft();
-  } else if ( previousStepSize > 0.0) {
+  }
+  else if ( previousStepSize > 0.0)
+  {
     // subtract NumberOfInteractionLengthLeft 
     SubtractNumberOfInteractionLengthLeft(previousStepSize);
-  } else {
+  }
+  else
+  {
     // zero step
-    //  DO NOTHING
+    // DO NOTHING
   }
 
   // condition is set to "Not Forced"
   *condition = NotForced;
 
   // get mean free path
-  currentInteractionLength = GetMeanFreePath(track, previousStepSize, condition);
+  currentInteractionLength = GetMeanFreePath(track,previousStepSize,condition);
 
 
-   G4double value;
-   if (currentInteractionLength <DBL_MAX) {
-     value = theNumberOfInteractionLengthLeft * currentInteractionLength;
-   } else {
-     value = DBL_MAX;
-   }
+  G4double value;
+  if (currentInteractionLength < DBL_MAX)
+  {
+    value = theNumberOfInteractionLengthLeft * currentInteractionLength;
+  }
+  else
+  {
+    value = DBL_MAX;
+  }
 #ifdef G4VERBOSE
-   if (verboseLevel>1){
-    G4cout << "G4VRestContinuousDiscreteProcess::PostStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
+  if (verboseLevel>1)
+  {
+    G4cout << "G4VRestContinuousDiscreteProcess::PostStepGetPhysicalInteractionLength() - ";
+    G4cout << "[ " << GetProcessName() << "]" << G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "InteractionLength= " << value/cm <<"[cm] " <<G4endl;
+    G4cout << " in Material  " <<  track.GetMaterial()->GetName() << G4endl;
+    G4cout << "InteractionLength= " << value/cm <<"[cm] " << G4endl;
   }
 #endif
   return value;
 }
 
-G4VParticleChange* G4VRestContinuousDiscreteProcess::PostStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    )
+// --------------------------------------------------------------------
+G4VParticleChange*
+G4VRestContinuousDiscreteProcess::PostStepDoIt( const G4Track& ,
+                                                const G4Step& )
 { 
-//  clear NumberOfInteractionLengthLeft
-    ClearNumberOfInteractionLengthLeft();
+  ClearNumberOfInteractionLengthLeft();
 
-    return pParticleChange;
+  return pParticleChange;
 }

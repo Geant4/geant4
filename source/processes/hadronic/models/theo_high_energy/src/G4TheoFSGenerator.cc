@@ -35,13 +35,19 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 #include "G4IonTable.hh"
+#include "G4HadronicParameters.hh"
+#include "G4CRCoalescence.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
     : G4HadronicInteraction(name)
-    , theTransport(0), theHighEnergyGenerator(0)
-    , theQuasielastic(0)
- {
- theParticleChange = new G4HadFinalState;
+    , theTransport(nullptr), theHighEnergyGenerator(nullptr)
+    , theQuasielastic(nullptr)
+    , theCosmicCoalescence(nullptr)
+    , theStringModelID(-1)
+{
+  theParticleChange = new G4HadFinalState;
+  theStringModelID = G4PhysicsModelCatalog::GetModelID( "model_" + name );
 }
 
 G4TheoFSGenerator::~G4TheoFSGenerator()
@@ -52,9 +58,8 @@ G4TheoFSGenerator::~G4TheoFSGenerator()
 void G4TheoFSGenerator::ModelDescription(std::ostream& outFile) const
 {
   outFile << GetModelName() <<" consists of a " << theHighEnergyGenerator->GetModelName()
-		  << " string model and a stage to de-excite the excited nuclear fragment."
-		  << "\n<p>"
-		  << "The string model simulates the interaction of\n"
+	  << " string model and a stage to de-excite the excited nuclear fragment.\n<p>"
+	  << "The string model simulates the interaction of\n"
           << "an incident hadron with a nucleus, forming \n"
           << "excited strings, decays these strings into hadrons,\n"
           << "and leaves an excited nucleus. \n"
@@ -64,19 +69,39 @@ void G4TheoFSGenerator::ModelDescription(std::ostream& outFile) const
   theTransport->PropagateModelDescription(outFile);
 }
 
-
 G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus &theNucleus)
 {
   // init particle change
   theParticleChange->Clear();
   theParticleChange->SetStatusChange(stopAndKill);
-  
+  G4double timePrimary=thePrimary.GetGlobalTime();
+
+  // Temporarily dummy treatment of heavy (charm and bottom) hadron projectiles at low energies.
+  // Cascade models are currently not applicable for heavy hadrons and string models cannot
+  // handle them properly at low energies - let's say safely below ~100 MeV.
+  // In these cases, we return as final state the initial state unchanged.
+  // For most applications, this is a safe simplification, giving that the nearly all
+  // slowly moving charm and bottom hadrons decay before any hadronic interaction can occur.
+  // Note that we prefer not to use G4HadronicParameters::GetMinEnergyTransitionFTF_Cascade()
+  // (typicall ~3 GeV) because FTFP works reasonably well below such a value.
+  const G4double energyThresholdForCharmAndBottomHadrons = 100.0*CLHEP::MeV;
+  if ( thePrimary.GetKineticEnergy() < energyThresholdForCharmAndBottomHadrons  &&
+       ( thePrimary.GetDefinition()->GetQuarkContent( 4 )     != 0  ||    // Has charm       constituent quark
+	 thePrimary.GetDefinition()->GetAntiQuarkContent( 4 ) != 0  ||    // Has anti-charm  constituent anti-quark
+	 thePrimary.GetDefinition()->GetQuarkContent( 5 )     != 0  ||    // Has bottom      constituent quark
+	 thePrimary.GetDefinition()->GetAntiQuarkContent( 5 ) != 0 ) ) {  // Has anti-bottom constituent anti-quark
+    theParticleChange->SetStatusChange( isAlive );
+    theParticleChange->SetEnergyChange( thePrimary.GetKineticEnergy() );
+    theParticleChange->SetMomentumChange( thePrimary.Get4Momentum().vect().unit() );
+    return theParticleChange;
+  }
+      
   // check if models have been registered, and use default, in case this is not true @@
   
   const G4DynamicParticle aPart(thePrimary.GetDefinition(),thePrimary.Get4Momentum().vect());
 
-  if ( theQuasielastic ) {
-  
+  if ( theQuasielastic ) 
+  {
      if ( theQuasielastic->GetFraction(theNucleus, aPart) > G4UniformRand() )
      {
        //G4cout<<"___G4TheoFSGenerator: before Scatter (1) QE=" << theQuasielastic<<G4endl;
@@ -84,42 +109,45 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
        //G4cout << "^^G4TheoFSGenerator: after Scatter (1) " << G4endl;
        if (result)
        {
-	    for(unsigned int  i=0; i<result->size(); i++)
+	    for(auto & ptr : *result)
 	    {
 	      G4DynamicParticle * aNew = 
-		 new G4DynamicParticle(result->operator[](i)->GetDefinition(),
-                        	       result->operator[](i)->Get4Momentum().e(),
-                        	       result->operator[](i)->Get4Momentum().vect());
-	      theParticleChange->AddSecondary(aNew);
-	      delete result->operator[](i);
+		 new G4DynamicParticle(ptr->GetDefinition(),
+                        	       ptr->Get4Momentum().e(),
+                        	       ptr->Get4Momentum().vect());
+	      theParticleChange->AddSecondary(aNew, ptr->GetCreatorModelID());
+	      delete ptr;
 	    }
-	    delete result;
-	   
-       } else 
+	    delete result;	   
+       } 
+       else 
        {
 	    theParticleChange->SetStatusChange(isAlive);
 	    theParticleChange->SetEnergyChange(thePrimary.GetKineticEnergy());
 	    theParticleChange->SetMomentumChange(thePrimary.Get4Momentum().vect().unit());
- 
        }
-	return theParticleChange;
+       return theParticleChange;
      } 
   }
 
- // get result from high energy model
-
+  // get result from high energy model
   G4KineticTrackVector * theInitialResult =
                theHighEnergyGenerator->Scatter(theNucleus, aPart);
 
-//#define DEBUG_initial_result
+  // Assign the creator model ID
+  for ( auto & ptr : *theInitialResult ) {
+    ptr->SetCreatorModelID( theStringModelID );
+  }
+
+  //#define DEBUG_initial_result
   #ifdef DEBUG_initial_result
   	  G4double E_out(0);
   	  G4IonTable * ionTable=G4ParticleTable::GetParticleTable()->GetIonTable();
-  	  std::vector<G4KineticTrack *>::iterator ir_iter;
-  	  for(ir_iter=theInitialResult->begin(); ir_iter!=theInitialResult->end(); ir_iter++)
+  	  for(auto & ptr : *theInitialResult)
   	  {
-  		  //G4cout << "TheoFS secondary, mom " << (*ir_iter)->GetDefinition()->GetParticleName() << " " << (*ir_iter)->Get4Momentum() << G4endl;
-  		  E_out += (*ir_iter)->Get4Momentum().e();
+  	     //G4cout << "TheoFS secondary, mom " << ptr->GetDefinition()->GetParticleName() 
+             //         << " " << ptr->Get4Momentum() << G4endl;
+  	     E_out += ptr->Get4Momentum().e();
   	  }
   	  G4double init_mass= ionTable->GetIonMass(theNucleus.GetZ_asInt(),theNucleus.GetA_asInt());
           G4double init_E=aPart.Get4Momentum().e();
@@ -129,15 +157,15 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 
   	  G4int resZ(0),resA(0);
 	  G4double delta_m(0);
-  	  for(size_t them=0; them<thy.size(); them++)
+  	  for(auto & nuc : thy)
   	  {
-   	     if(thy[them].AreYouHit()) {
+   	     if(nuc.AreYouHit()) {
   	       ++resA;
-  	       if ( thy[them].GetDefinition() == G4Proton::Proton() ) {
-	          ++resZ;
-		  delta_m +=G4Proton::Proton()->GetPDGMass();
+  	       if ( nuc.GetDefinition() == G4Proton::Proton() ) {
+	         ++resZ;
+		 delta_m += CLHEP::proton_mass_c2;
 	       } else {
-	          delta_m +=G4Neutron::Neutron()->GetPDGMass();
+		 delta_m += CLHEP::neutron_mass_c2;
 	       }  
   	     }
 	  }
@@ -152,62 +180,80 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   	  G4cout << "  final E, mass = " << E_out <<", " << final_mass << "  excitation_E " << E_excit << G4endl;
   #endif
 
-  G4ReactionProductVector * theTransportResult = NULL;
+  G4ReactionProductVector * theTransportResult = nullptr;
 
-// Uzhi Nov. 2012
+  // Uzhi Nov. 2012 for nucleus-nucleus collision
   G4V3DNucleus* theProjectileNucleus = theHighEnergyGenerator->GetProjectileNucleus(); 
-if(theProjectileNucleus == 0)                                       // Uzhi Nov. 2012
-{                                                                   // Uzhi Nov. 2012
-
-  G4int hitCount = 0;
-  const std::vector<G4Nucleon>& they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
-  for(size_t them=0; them<they.size(); them++)
+  if(theProjectileNucleus == nullptr)
   {
-    if(they[them].AreYouHit()) hitCount ++;
-  }
-  if(hitCount != theHighEnergyGenerator->GetWoundedNucleus()->GetMassNumber() )
-  {
-    theTransport->SetPrimaryProjectile(thePrimary);	// For Bertini Cascade
-    theTransportResult = 
-               theTransport->Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
-    if ( !theTransportResult ) {
-       G4cout << "G4TheoFSGenerator: null ptr from transport propagate " << G4endl;
-       throw G4HadronicException(__FILE__, __LINE__, "Null ptr from transport propagate");
-    } 
-  }
-  else
-  {
-    theTransportResult = theDecay.Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
-    if ( !theTransportResult ) {
-       G4cout << "G4TheoFSGenerator: null ptr from decay propagate " << G4endl;
-       throw G4HadronicException(__FILE__, __LINE__, "Null ptr from decay propagate");
-    }   
-  }
-
-} else                                                              // Uzhi Nov. 2012
-{                                                                   // Uzhi Nov. 2012
+    G4int hitCount = 0;
+    const std::vector<G4Nucleon>& they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
+    for(auto & nuc : they)
+    {
+      if(nuc.AreYouHit()) ++hitCount;
+    }
+    if(hitCount != theHighEnergyGenerator->GetWoundedNucleus()->GetMassNumber() )
+    {
+      theTransport->SetPrimaryProjectile(thePrimary);	// For Bertini Cascade
+      theTransportResult = 
+        theTransport->Propagate(theInitialResult, 
+                                theHighEnergyGenerator->GetWoundedNucleus());
+      if ( !theTransportResult ) {
+        G4cout << "G4TheoFSGenerator: null ptr from transport propagate " << G4endl;
+        throw G4HadronicException(__FILE__, __LINE__, "Null ptr from transport propagate");
+      }
+    }
+    else
+    {
+      theTransportResult = theDecay.Propagate(theInitialResult, 
+                                 theHighEnergyGenerator->GetWoundedNucleus());
+      if ( theTransportResult == nullptr ) {
+         G4cout << "G4TheoFSGenerator: null ptr from decay propagate " << G4endl;
+         throw G4HadronicException(__FILE__, __LINE__, "Null ptr from decay propagate");
+      }   
+    }
+  } 
+  else 
+  { 
     theTransport->SetPrimaryProjectile(thePrimary);
-    theTransportResult = 
-    theTransport->PropagateNuclNucl(theInitialResult, 
+    theTransportResult = theTransport->PropagateNuclNucl(theInitialResult, 
                             theHighEnergyGenerator->GetWoundedNucleus(),
-                            theHighEnergyGenerator->GetProjectileNucleus());
+                            theProjectileNucleus);
     if ( !theTransportResult ) {
        G4cout << "G4TheoFSGenerator: null ptr from transport propagate " << G4endl;
        throw G4HadronicException(__FILE__, __LINE__, "Null ptr from transport propagate");
     } 
-}                                                                   // Uzhi Nov. 2012
+  }
 
+  // If enabled, apply the Cosmic Rays (CR) coalescence to the list of secondaries produced so far.
+  // This algorithm can form deuterons and antideuterons by coalescence of, respectively,
+  // proton-neutron and antiproton-antineutron pairs close in momentum space.
+  // This can be useful in particular for Cosmic Ray applications.
+  if ( G4HadronicParameters::Instance()->EnableCRCoalescence() ) {
+    if(nullptr == theCosmicCoalescence) {
+      theCosmicCoalescence = (G4CRCoalescence*)
+        G4HadronicInteractionRegistry::Instance()->FindModel("G4CRCoalescence");
+      if(nullptr == theCosmicCoalescence) { 
+	theCosmicCoalescence = new G4CRCoalescence();
+      }
+    }
+    theCosmicCoalescence->SetP0Coalescence( thePrimary, theHighEnergyGenerator->GetModelName() );
+    theCosmicCoalescence->GenerateDeuterons( theTransportResult );
+  }
+    
   // Fill particle change
-  unsigned int i;
-  for(i=0; i<theTransportResult->size(); i++)
+  for(auto & ptr : *theTransportResult)
   {
-    G4DynamicParticle * aNew = 
-       new G4DynamicParticle(theTransportResult->operator[](i)->GetDefinition(),
-                             theTransportResult->operator[](i)->GetTotalEnergy(),
-                             theTransportResult->operator[](i)->GetMomentum());
-    // @@@ - overkill? G4double newTime = theParticleChange->GetGlobalTime(theTransportResult->operator[](i)->GetFormationTime());
+    G4DynamicParticle * aNewDP =
+       new G4DynamicParticle(ptr->GetDefinition(),
+                             ptr->GetTotalEnergy(),
+                             ptr->GetMomentum());
+    G4HadSecondary aNew = G4HadSecondary(aNewDP);
+    G4double time = std::max(ptr->GetFormationTime(), 0.0);
+    aNew.SetTime(timePrimary + time);
+    aNew.SetCreatorModelID(ptr->GetCreatorModelID());
     theParticleChange->AddSecondary(aNew);
-    delete theTransportResult->operator[](i);
+    delete ptr;
   }
   
   // some garbage collection

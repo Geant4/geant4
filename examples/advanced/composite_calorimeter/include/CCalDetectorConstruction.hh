@@ -34,13 +34,19 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
+class CCalG4Hall;
+
+
 class CCalDetectorConstruction : public G4VUserDetectorConstruction {
 public:
   CCalDetectorConstruction();
-  ~CCalDetectorConstruction();
+  virtual ~CCalDetectorConstruction();
 
-public:
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
+
+private:
+  CCalG4Hall* testBeamHCal96;
 };
 
 #endif

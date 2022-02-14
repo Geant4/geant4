@@ -53,6 +53,8 @@
 #include <fstream>
 #include <sstream>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4CompositeEMDataSet::G4CompositeEMDataSet(G4VDataSetAlgorithm* argAlgorithm, 
 					   G4double argUnitEnergies, 
 					   G4double argUnitData, 
@@ -65,20 +67,20 @@ G4CompositeEMDataSet::G4CompositeEMDataSet(G4VDataSetAlgorithm* argAlgorithm,
   minZ(argMinZ),
   maxZ(argMaxZ)
 {
-  if (algorithm == 0) 
+  if (algorithm == nullptr) 
   G4Exception("G4CompositeEMDataSet::G4CompositeEMDataSet",
 	      "em1003",FatalException,"interpolation == 0");
 
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4CompositeEMDataSet::~G4CompositeEMDataSet()
 {
   CleanUpComponents();
   if (algorithm) delete algorithm;
 }
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4CompositeEMDataSet::FindValue(G4double argEnergy, G4int argComponentId) const
 {
@@ -94,6 +96,8 @@ G4double G4CompositeEMDataSet::FindValue(G4double argEnergy, G4int argComponentI
  
   return 0.;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CompositeEMDataSet::PrintData(void) const
 {
@@ -112,6 +116,8 @@ void G4CompositeEMDataSet::PrintData(void) const
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4CompositeEMDataSet::SetEnergiesData(G4DataVector* argEnergies, G4DataVector* argData, G4int argComponentId)
 {
   G4VEMDataSet * component(components[argComponentId]);
@@ -128,6 +134,8 @@ void G4CompositeEMDataSet::SetEnergiesData(G4DataVector* argEnergies, G4DataVect
   G4Exception("G4CompositeEMDataSet::SetEnergiesData",
 	      "em1004",FatalException,message.str().c_str());
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CompositeEMDataSet::SetLogEnergiesData(G4DataVector* argEnergies, 
                                               G4DataVector* argData,
@@ -150,6 +158,7 @@ void G4CompositeEMDataSet::SetLogEnergiesData(G4DataVector* argEnergies,
 	      "em1004",FatalException,message.str().c_str());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4CompositeEMDataSet::LoadData(const G4String& argFileName)
 {
@@ -168,6 +177,7 @@ G4bool G4CompositeEMDataSet::LoadData(const G4String& argFileName)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4CompositeEMDataSet::LoadNonLogData(const G4String& argFileName)
 {
@@ -186,6 +196,7 @@ G4bool G4CompositeEMDataSet::LoadNonLogData(const G4String& argFileName)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4CompositeEMDataSet::SaveData(const G4String& argFileName) const
 {
@@ -209,6 +220,8 @@ G4bool G4CompositeEMDataSet::SaveData(const G4String& argFileName) const
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4CompositeEMDataSet::CleanUpComponents(void)
 {
   while (!components.empty())
@@ -219,6 +232,7 @@ void G4CompositeEMDataSet::CleanUpComponents(void)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4CompositeEMDataSet::RandomSelect(G4int componentId) const
 {

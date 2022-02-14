@@ -64,6 +64,8 @@
 #
 #  smartstack        (G4event library G4StackManager uses G4SmartTrackStack)
 #
+#  php_as_hp         (G4processes library ParticleHP built as HP)
+#
 # Optional Components
 # -------------------
 #  gdml              (GDML support)
@@ -74,14 +76,17 @@
 #  ui_win32          (WIN32 Style Application Command Line Interface)
 #
 #  motif             (Motif-X11/OpenGL Graphical User Interface)
-#  qt                (Qt4/OpenGL Graphical User Interface)
+#  qt                (Qt5/OpenGL Graphical User Interface)
 #
-#  vis_network_dawn  (Client/Server network interface to DAWN visualization)
-#  vis_network_vrml  (Client/Server network interface to VRML visualization)
 #  vis_opengl_x11    (OpenGL visualization with X11 interface)
 #  vis_opengl_win32  (OpenGL visualization with X11 interface)
 #  vis_raytracer_x11 (RayTracer visualization with X11 interface)
 #  vis_openinventor  (OpenInventor visualization)
+#
+#  vis_toolssg_x11_gles     (ToolsSG visualization with X11 windowing and GLES rendering)
+#  vis_toolssg_xt_gles      (ToolsSG visualization with Xt windowing and GLES rendering)
+#  vis_toolssg_qt_gles      (ToolsSG visualization with Qt windowing and GLES rendering)
+#  vis_toolssg_windows_gles (ToolsSG visualization with Windows windowing and GLES rendering)
 #
 # In addition, two 'shorthand' components are defined to help activate all
 # available User Interface and Visualization drivers:
@@ -110,12 +115,6 @@
 # system APIs as required, and you should use these to ensure you compile
 # and link against the same API version.
 #
-# An additional variable is set for CLHEP when Geant4 was built using a
-# system install to indicate whether the single/granular CLHEP library/ies
-# was/were linked against
-#
-#  Geant4_system_clhep_ISGRANULAR (TRUE is Geant4 linked to granular CLHEP)
-#
 # Environment variables for, and directory paths to, physics datasets
 # used by some Geant4 physics processes may be determined from the
 # variables
@@ -138,13 +137,6 @@
 #
 #-----------------------------------------------------------------------
 
-# Support CMake >= 3.8
-cmake_policy(VERSION 3.8)
-if(CMAKE_VERSION VERSION_LESS 3.8)
-  message(FATAL_ERROR "Geant4Config requires CMake 3.8 or newer")
-endif()
-include(CMakeFindDependencyMacro)
-
 #-----------------------------------------------------------------------
 # DEBUG : print out the variables passed via find_package arguments
 #
@@ -162,6 +154,27 @@ if(Geant4_CONFIG_DEBUG)
 endif()
 
 #-----------------------------------------------------------------------
+# Check that consumers use the minimum needed CMake version
+# Geant4 uses cxx_std_EP to define the standard it was built against
+# 3.8 and above support EP=17. 3.12 and above add 20. 3.20 and above add 23.
+# We continue to support the earlier version whilst checking for consumers using 20
+cmake_policy(VERSION 3.8...3.18)
+if(CMAKE_VERSION VERSION_LESS 3.8)
+  message(FATAL_ERROR "Projects consuming Geant4Config require CMake 3.8 or newer")
+endif()
+
+if(("@CMAKE_CXX_STANDARD@" GREATER_EQUAL 23) AND (CMAKE_VERSION VERSION_LESS 3.20))
+  message(FATAL_ERROR "Projects consuming Geant4Config require CMake 3.20 or newer (for C++23 support)")
+endif()
+
+if(("@CMAKE_CXX_STANDARD@" GREATER_EQUAL 20) AND (CMAKE_VERSION VERSION_LESS 3.12))
+  message(FATAL_ERROR "Projects consuming Geant4Config require CMake 3.12 or newer (for C++20 support)")
+endif()
+
+# - Help find dependencies
+include(CMakeFindDependencyMacro)
+
+#-----------------------------------------------------------------------
 # Locate ourselves, since all other config files should have been
 # installed alongside us...
 #
@@ -174,7 +187,7 @@ get_filename_component(_geant4_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 @GEANT4_COMPILER_FLAG_HINTS@
 
 # - Provide variable indicating C++ Standard we were compiled against
-set(Geant4_CXXSTD "c++@GEANT4_BUILD_CXXSTD@")
+set(Geant4_CXX_STANDARD "@CMAKE_CXX_STANDARD@")
 
 #-----------------------------------------------------------------------
 # Set the base compile definitions required to use Geant4 if the variable
@@ -263,25 +276,11 @@ unset(Geant4_DATASET_DESCRIPTIONS)
 include("${CMAKE_CURRENT_LIST_DIR}/Geant4PackageCache.cmake" OPTIONAL)
 
 # Builtin/External packages
-set(Geant4_builtin_clhep_FOUND @GEANT4_USE_BUILTIN_CLHEP@)
-if(NOT Geant4_builtin_clhep_FOUND)
-  set(Geant4_system_clhep_ISGRANULAR @GEANT4_USE_SYSTEM_CLHEP_GRANULAR@)
-<<<<<<< HEAD
+set(Geant4_system_clhep_FOUND @GEANT4_USE_SYSTEM_CLHEP@)
 
-  set(CLHEP_ROOT_DIR "@CLHEP_ROOT_DIR@")
-  set(__GEANT4_OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
-  set(CMAKE_MODULE_PATH "${_geant4_thisdir}/Modules" ${CMAKE_MODULE_PATH})
-  find_package(CLHEP @CLHEP_VERSION@ REQUIRED @__g4_clhep_components@)
-  set(CMAKE_MODULE_PATH ${__GEANT4_OLD_CMAKE_MODULE_PATH})
-  unset(CLHEP_ROOT_DIR)
-  unset(__GEANT4_OLD_CMAKE_MODULE_PATH)
-  #CLHEP doesn't use target properties fully yet, so always include_directories
-=======
-  if(Geant4_system_clhep_ISGRANULAR)
-    find_dependency(CLHEP @CLHEP_VERSION@ EXACT COMPONENTS @__g4_clhep_components@ CONFIG)
-  else()
-    find_dependency(CLHEP @CLHEP_VERSION@ EXACT CONFIG)
-  endif()
+if(Geant4_system_clhep_FOUND)
+  set(Geant4_builtin_clhep_FOUND FALSE)
+  find_dependency(CLHEP @CLHEP_VERSION@ EXACT CONFIG)
   # Explicitly use include_directories.
   # - Geant4 and CLHEP use full imported targets with usage requirements,
   #   but ROOT (used in the examples), ignores usage requirements in dictionary
@@ -303,6 +302,20 @@ endif()
 set(Geant4_builtin_zlib_FOUND @GEANT4_USE_BUILTIN_ZLIB@)
 if(NOT Geant4_builtin_zlib_FOUND)
   find_dependency(ZLIB @ZLIB_VERSION_STRING@)
+endif()
+
+set(Geant4_system_ptl_FOUND @GEANT4_USE_SYSTEM_PTL@)
+if(Geant4_system_ptl_FOUND)
+  set(Geant4_builtin_ptl_FOUND FALSE)
+  find_dependency(PTL @PTL_VERSION_STRING@)
+else()
+  # We know exactly where PTL is
+  set(Geant4_builtin_ptl_FOUND TRUE)
+  if(CMAKE_VERSION VERSION_GREATER 3.8.9999)
+    find_dependency(PTL @PTL_VERSION_STRING@ NO_DEFAULT_PATH PATHS "@PACKAGE_PTL_PREFIX@")
+  else()
+    find_package(PTL @PTL_VERSION_STRING@ REQUIRED NO_DEFAULT_PATH PATHS "@PACKAGE_PTL_PREFIX@")
+  endif()
 endif()
 
 # - Multithreading
@@ -329,13 +342,26 @@ endif()
 # - Smart track stack
 set(Geant4_smartstack_FOUND @GEANT4_USE_SMARTSTACK@)
 
+# - ParticleHP as HP
+set(Geant4_php_as_hp_FOUND @GEANT4_BUILD_PHP_AS_HP@)
+
+# - TBB
+set(Geant4_TBB_FOUND @GEANT4_USE_TBB@)
+if(Geant4_TBB_FOUND)
+  find_dependency(TBB @TBB_VERSION@)
+endif()
+
 # - TiMemory
 set(Geant4_timemory_FOUND @GEANT4_USE_TIMEMORY@)
 if(Geant4_timemory_FOUND)
   set(_geant4_use_timemory_library ON)
   set(timemory_DIR "@timemory_DIR@" CACHE PATH "timemory installation for Geant4")
-  set(timemory_FIND_COMPONENTS_INTERFACE @timemory_FIND_COMPONENTS_INTERFACE@)
-  find_package(timemory @G4timemory_VERSION@ REQUIRED QUIET COMPONENTS @G4timemory_COMPONENTS@)
+  if(NOT TARGET @timemory_FIND_COMPONENTS_INTERFACE@)
+    add_library(@timemory_FIND_COMPONENTS_INTERFACE@ INTERFACE IMPORTED)
+    set(timemory_FIND_COMPONENTS_INTERFACE @timemory_FIND_COMPONENTS_INTERFACE@)
+    find_package(timemory @G4timemory_VERSION@ REQUIRED QUIET
+        COMPONENTS @G4timemory_COMPONENTS@)
+  endif()
   set(timemory_LIBRARIES @timemory_FIND_COMPONENTS_INTERFACE@)
 endif()
 
@@ -400,27 +426,7 @@ endif()
 set(Geant4_ui_win32_FOUND @WIN32@)
 if(Geant4_ui_win32_FOUND)
   if(("ui_win32" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_WIN32
-      -DG4UI_USE_WIN32
-      )
-  endif()
-endif()
-
-# - Visualization : Network DAWN
-set(Geant4_vis_dawn_network_FOUND @GEANT4_USE_NETWORK_DAWN@)
-if(Geant4_vis_dawn_network_FOUND)
-  if(("vis_dawn_network" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_DAWN)
-  endif()
-endif()
-
-# - Visualization : Network VRML
-set(Geant4_vis_vrml_network_FOUND @GEANT4_USE_NETWORK_VRML@)
-if(Geant4_vis_vrml_network_FOUND)
-  if(("vis_vrml_network" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VRML)
+    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_WIN32)
   endif()
 endif()
 
@@ -434,74 +440,42 @@ if(Geant4_vis_raytracer_x11_FOUND)
   include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
 
   if(("vis_raytracer_x11" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_XT
-      -DG4VIS_USE_RAYTRACERX
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_RAYTRACERX)
   endif()
 endif()
 
 # - Qt (UI and Vis!)
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
-set(Geant4_USES_QT5 @Qt5Core_FOUND@)
+set(Geant4_qt3d_FOUND @GEANT4_USE_QT3D@)
 if(Geant4_qt_FOUND)
   # Must always refind Qt5 to recreate imported targets. Because these
   # are in the public interface, always need linking.
-  if(Geant4_USES_QT5)
-<<<<<<< HEAD
-    find_package(Qt5Core REQUIRED PATHS "@Qt5Core_DIR@")
-    find_package(Qt5Gui REQUIRED PATHS "@Qt5Gui_DIR@")
-    find_package(Qt5Widgets REQUIRED PATHS "@Qt5Widgets_DIR@")
-    find_package(Qt5OpenGL REQUIRED PATHS "@Qt5OpenGL_DIR@")
-    find_package(Qt5PrintSupport REQUIRED PATHS "@Qt5PrintSupport_DIR@")
-  endif()
+  find_dependency(Qt5Core REQUIRED)
+  find_dependency(Qt5Gui REQUIRED)
+  find_dependency(Qt5Widgets REQUIRED)
+  find_dependency(Qt5OpenGL REQUIRED)
+  find_dependency(Qt5PrintSupport REQUIRED)
 
-  if(Geant4_FIND_REQUIRED_qt OR Geant4_FIND_REQUIRED_ui_all OR Geant4_FIND_REQUIRED_vis_all)
-    # If we have Qt5, we need to refind the components because they use
-    # imported targets, so linking will not work unless we recreate
-    # them
-
-=======
-    find_dependency(Qt5Core REQUIRED)
-    find_dependency(Qt5Gui REQUIRED)
-    find_dependency(Qt5Widgets REQUIRED)
-    find_dependency(Qt5OpenGL REQUIRED)
-    find_dependency(Qt5PrintSupport REQUIRED)
-  else()
-    find_dependency(Qt4 REQUIRED QtCore QtGui QtOpenGL)
+  if(Geant4_qt3d_FOUND)
+    find_dependency(Qt53DCore @QT3D_MINIMUM_VERSION@ REQUIRED)
+    find_dependency(Qt53DExtras @QT3D_MINIMUM_VERSION@ REQUIRED)
+    find_dependency(Qt53DRender @QT3D_MINIMUM_VERSION@ REQUIRED)
   endif()
 
   # Also require OpenGL
   find_dependency(OpenGL)
 
-  if(("qt" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_QT
-      -DG4UI_USE_QT
-      -DG4VIS_USE_OPENGLQT
-      )
+  # Qt must be activated both directly and for OpenInventor
+  if(("qt" IN_LIST Geant4_FIND_COMPONENTS)
+     OR ("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS)
+     OR ("vis_toolssg_qt_gles" IN_LIST Geant4_FIND_COMPONENTS)
+     OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
+    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT)
     set(_geant4_use_opengl_library ON)
+    # Qt3D is always on if available
+    set(_geant4_use_qt3D_library ${Geant4_qt3d_FOUND})
   endif()
 endif()
-
-# - Wt (UI and Vis!)
-#set(Geant4_wt_FOUND @GEANT4_USE_WT@)
-#if(Geant4_wt_FOUND)
-#  find_dependency(Wt)
-#  find_dependency(OpenGL)
-#  if(("wt" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
-#    list(APPEND
-#      Geant4_DEFINITIONS
-#      -DG4INTY_USE_WT
-#      -DG4UI_USE_WT
-#      -DG4VIS_USE_OPENGLWT
-#      )
-#    set(_geant4_use_opengl_library ON)
-#  endif()
-#endif()
 
 # - Motif (UI and Vis!)
 set(Geant4_motif_FOUND @GEANT4_USE_XM@)
@@ -510,18 +484,18 @@ if(Geant4_motif_FOUND)
   include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
   find_dependency(Motif)
   include("${CMAKE_CURRENT_LIST_DIR}/G4MotifShim.cmake")
-  find_dependency(OpenGL)
   if(APPLE)
     find_dependency(XQuartzGL)
+  else()
+    find_dependency(OpenGL)
   endif()
 
-  if(("motif" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_XT
-      -DG4UI_USE_XM
-      -DG4VIS_USE_OPENGLXM
-      )
+  # Motif can be activated both directly and for OpenInventor
+  if(("motif" IN_LIST Geant4_FIND_COMPONENTS)
+     OR ("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS)
+     OR ("vis_toolssg_xt_gles" IN_LIST Geant4_FIND_COMPONENTS)
+     OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
+    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_XM -DG4VIS_USE_OPENGLXM)
     set(_geant4_use_opengl_library ON)
   endif()
 endif()
@@ -531,17 +505,14 @@ set(Geant4_vis_opengl_x11_FOUND @GEANT4_USE_OPENGL_X11@)
 if(Geant4_vis_opengl_x11_FOUND)
   find_dependency(X11)
   include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
-  find_dependency(OpenGL)
   if(APPLE)
     find_dependency(XQuartzGL)
+  else()
+    find_dependency(OpenGL)
   endif()
 
   if(("vis_opengl_x11" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_XT
-      -DG4VIS_USE_OPENGLX
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGLX)
     set(_geant4_use_opengl_library ON)
   endif()
 endif()
@@ -551,39 +522,113 @@ set(Geant4_vis_opengl_win32_FOUND @GEANT4_USE_OPENGL_WIN32@)
 if(Geant4_vis_opengl_win32_FOUND)
   find_dependency(OpenGL)
   if(("vis_opengl_win32" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_WIN32
-      -DG4VIS_USE_OPENGLWIN32
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGLWIN32)
     set(_geant4_use_opengl_library ON)
   endif()
 endif()
 
 # - OpenInventor
 set(Geant4_vis_openinventor_FOUND @GEANT4_USE_INVENTOR@)
+set(Geant4_vis_openinventor_qt_FOUND @GEANT4_USE_INVENTOR_QT@)
 if(Geant4_vis_openinventor_FOUND)
+  find_dependency(Coin)
+
+  if(Geant4_vis_openinventor_qt_FOUND)
+    # Qt dependency handled by Geant4_vis_qt_FOUND earlier,
+    # always ON if Inventor_QT is
+    find_dependency(SoQt)
+  else()
+    if(WIN32)
+      find_dependency(SoWin)
+    else()
+      # Motif/X11/GL dependency handled by Geant4_motif_FOUND earlier,
+      # always ON if Inventor/Xt is.
+      find_dependency(SoXt)
+    endif()
+  endif()
+
   if(("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    if(UNIX AND NOT WIN32)
-      list(APPEND Geant4_DEFINITIONS
-        -DG4INTY_USE_XT
-        -DG4VIS_USE_OI
-        -DG4VIS_USE_OIX
-        )
-    elseif(WIN32)
-      list(APPEND Geant4_DEFINITIONS
-        -G4INTY_USE_WIN32
-        -DG4VIS_USE_OI
-        -DG4VIS_USE_OIWIN32
-        )
+    if(Geant4_vis_openinventor_qt_FOUND)
+      list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIQT)
+    else()
+      if(WIN32)
+        list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIWIN32)
+      else()
+        list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIX)
+      endif()
     endif()
 
     set(_geant4_use_inventor_library ON)
   endif()
 endif()
 
+# - ToolsSG X11/GLES
+set(Geant4_vis_toolssg_x11_gles_FOUND @GEANT4_USE_TOOLSSG_X11_GLES@)
+if(Geant4_vis_toolssg_x11_gles_FOUND)
+  find_dependency(X11)
+  include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
+  if(APPLE)
+    find_dependency(XQuartzGL)
+  else()
+    find_dependency(OpenGL)
+  endif()
+
+  if(("vis_toolssg_x11_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_X11_GLES)
+    set(_geant4_use_toolssg_library ON)
+  endif()
+endif()
+
+# - ToolsSG Windows/GLES
+set(Geant4_vis_toolssg_windows_gles_FOUND @GEANT4_USE_TOOLSSG_WINDOWS_GLES@)
+if(Geant4_vis_toolssg_windows_gles_FOUND)
+  find_dependency(OpenGL)
+  if(("vis_toolssg_windows_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_WINDOWS_GLES)
+    set(_geant4_use_toolssg_library ON)
+  endif()
+endif()
+
+# - ToolsSG Xt/GLES
+set(Geant4_vis_toolssg_xt_gles_FOUND @GEANT4_USE_TOOLSSG_XT_GLES@)
+if(Geant4_vis_toolssg_xt_gles_FOUND)
+  find_dependency(X11)
+  include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
+  if(APPLE)
+    find_dependency(XQuartzGL)
+  else()
+    find_dependency(OpenGL)
+  endif()
+
+  if(("vis_toolssg_xt_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_XT_GLES)
+    set(_geant4_use_toolssg_library ON)
+  endif()
+endif()
+
+# - ToolsSG Qt/GLES
+set(Geant4_vis_toolssg_qt_gles_FOUND @GEANT4_USE_TOOLSSG_QT_GLES@)
+if(Geant4_vis_toolssg_qt_gles_FOUND)
+  find_dependency(OpenGL)
+  if(("vis_toolssg_qt_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_QT_GLES)
+    set(_geant4_use_toolssg_library ON)
+  endif()
+endif()
+
 # Reset any OpenGL Preference
 set(OpenGL_GL_PREFERENCE "${OpenGL_GL_PREFERENCE_SAVE}")
+
+set(Geant4_vis_Vtk_FOUND @GEANT4_USE_VTK@)
+if(Geant4_vis_Vtk_FOUND)
+  find_dependency(VTK)
+  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VTK)
+  set(_geant4_use_vtk_library ON)
+
+  if(Geant4_qt_FOUND)
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VTK_QT)
+  endif()
+endif()
 
 #-----------------------------------------------------------------------
 # Include the files listing all the imported targets and configuring
@@ -630,23 +675,35 @@ set(_geant4_internal_libraries
   Geant4::G4GMocren${_geant4_lib_use_suffix}
   Geant4::G4visHepRep${_geant4_lib_use_suffix}
   Geant4::G4RayTracer${_geant4_lib_use_suffix}
-  Geant4::G4VRML${_geant4_lib_use_suffix}
-  )
+  Geant4::G4VRML${_geant4_lib_use_suffix})
 
 # - G4OpenGL if it's requested.
 if(_geant4_use_opengl_library)
   list(APPEND _geant4_internal_libraries
     Geant4::G4OpenGL${_geant4_lib_use_suffix}
-    Geant4::G4gl2ps${_geant4_lib_use_suffix}
-    )
+    Geant4::G4gl2ps${_geant4_lib_use_suffix})
   list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGL)
+endif()
+
+# - Qt3D if it's requested.
+if(_geant4_use_qt3D_library)
+  list(APPEND _geant4_internal_libraries Geant4::G4visQt3D${_geant4_lib_use_suffix})
+  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_QT3D)
 endif()
 
 # - G4OpenInventor if it's requested.
 if(_geant4_use_inventor_library)
-  list(APPEND _geant4_internal_libraries
-    Geant4::G4OpenInventor${_geant4_lib_use_suffix}
-    )
+  list(APPEND _geant4_internal_libraries Geant4::G4OpenInventor${_geant4_lib_use_suffix})
+endif()
+
+# - G4ToolsSG if it's requested.
+if(_geant4_use_toolssg_library)
+  list(APPEND _geant4_internal_libraries Geant4::G4ToolsSG${_geant4_lib_use_suffix})
+  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG)
+endif()
+
+if(_geant4_use_vtk_library)
+  list(APPEND _geant4_internal_libraries Geant4::G4visVtk${_geant4_lib_use_suffix})
 endif()
 
 # - G3toG4 if it's requested
@@ -714,6 +771,7 @@ list(APPEND _geant4_internal_libraries
   ${_geant4_physicslists_library}
   Geant4::G4run${_geant4_lib_use_suffix}
   Geant4::G4event${_geant4_lib_use_suffix}
+  Geant4::G4tasking${_geant4_lib_use_suffix}
   Geant4::G4tracking${_geant4_lib_use_suffix}
   Geant4::G4parmodels${_geant4_lib_use_suffix}
   Geant4::G4processes${_geant4_lib_use_suffix}
@@ -725,6 +783,7 @@ list(APPEND _geant4_internal_libraries
   Geant4::G4graphics_reps${_geant4_lib_use_suffix}
   Geant4::G4intercoms${_geant4_lib_use_suffix}
   Geant4::G4global${_geant4_lib_use_suffix}
+  Geant4::G4tools${_geant4_lib_use_suffix}
   )
 
 # - Any externals built by Geant4
@@ -776,7 +835,7 @@ set(Geant4_USE_FILE "${_geant4_thisdir}/UseGeant4.cmake")
 list(REMOVE_AT CMAKE_MODULE_PATH 0)
 
 #-----------------------------------------------------------------------
-# Finally, check FOUNDness of required components.
+# Check FOUNDness of required components.
 foreach(_comp ${Geant4_FIND_COMPONENTS})
   if(NOT Geant4_${_comp}_FOUND)
     if(Geant4_FIND_REQUIRED_${_comp})
@@ -786,5 +845,8 @@ foreach(_comp ${Geant4_FIND_COMPONENTS})
   endif()
 endforeach()
 
-# And we should be done...
-
+#-----------------------------------------------------------------------
+# Reporting via FindPackageHandleStandardArgs "CONFIG_MODE" to give a better message on being found
+include(FindPackageHandleStandardArgs)
+set(${CMAKE_FIND_PACKAGE_NAME}_CONFIG "${CMAKE_CURRENT_LIST_FILE}")
+find_package_handle_standard_args(@PROJECT_NAME@ CONFIG_MODE)

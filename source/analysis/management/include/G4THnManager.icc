@@ -29,163 +29,203 @@
 #include "G4AnalysisManagerState.hh"
 #include "G4HnManager.hh"
 #include "G4AnalysisUtilities.hh"
+#include "G4AutoLock.hh"
 
-#include <iostream>
+using std::to_string;
 
 //_____________________________________________________________________________
-template <typename T>
-G4THnManager<T>::G4THnManager(const G4AnalysisManagerState& state,
+template <typename HT>
+G4THnManager<HT>::G4THnManager(const G4AnalysisManagerState& state,
                               const G4String& hnType)
-  : fState(state),
-    fTVector(),
-    fNameIdMap(),
-    fHnManager(nullptr)
+  : fState(state)
 {
   fHnManager = std::make_shared<G4HnManager>(hnType, state);
 }
 
 //_____________________________________________________________________________
-template <typename T>
-G4THnManager<T>::~G4THnManager()
+template <typename HT>
+G4THnManager<HT>::~G4THnManager()
 {
   for ( auto t : fTVector ) {
     delete t;
-  }    
+  }
 }
 
-// 
+//
 // protected methods
 //
 
 //_____________________________________________________________________________
-template <typename T>
-T*  G4THnManager<T>::GetTInFunction(G4int id, 
-                                    G4String functionName, G4bool warn,
-                                    G4bool onlyIfActive) const
+template <typename HT>
+HT*  G4THnManager<HT>::GetTInFunction(G4int id,
+                                      std::string_view functionName, G4bool warn,
+                                      G4bool onlyIfActive) const
 {
   G4int index = id - fHnManager->GetFirstId();
   if ( index < 0 || index >= G4int(fTVector.size()) ) {
     if ( warn) {
-      G4String inFunction = "G4THnManager::";
-      inFunction += functionName;
-      G4ExceptionDescription description;
-      description << "      " << "histogram " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
+      G4Analysis::Warn("Histogram " + to_string(id) + " does not exist.",
+        fkClass, functionName);
     }
-    return 0;         
+    return nullptr;
   }
-  
-  // Do not return histogram if inactive 
+
+  // Do not return histogram if inactive
   if ( fState.GetIsActivation() && onlyIfActive && ( ! fHnManager->GetActivation(id) ) ) {
-    return 0; 
-  }  
-  
+    return nullptr;
+  }
+
   return fTVector[index];
-} 
+}
 
 //_____________________________________________________________________________
-template <typename T>
-G4int G4THnManager<T>::RegisterT(T* t, const G4String& name)
-{
-  G4int index = fTVector.size();
-  fTVector.push_back(t);
-  
-  fHnManager->SetLockFirstId(true);
-  fNameIdMap[name] = index + fHnManager->GetFirstId();
-  return index + fHnManager->GetFirstId();
-}                                         
-
-//_____________________________________________________________________________
-template <typename T>
-G4int  G4THnManager<T>::GetTId(const G4String& name, G4bool warn) const
+template <typename HT>
+G4int  G4THnManager<HT>::GetTId(const G4String& name, G4bool warn) const
 {
   auto it = fNameIdMap.find(name);
-  if ( it ==  fNameIdMap.end() ) {  
+  if ( it ==  fNameIdMap.end() ) {
     if ( warn) {
-      G4String inFunction = "G4THnManager::GetH1Id";
-      G4ExceptionDescription description;
-      description << "      " << "histogram " << name << " does not exist.";
-      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
+      G4Analysis::Warn("histogram " + name + " does not exist.",
+        fkClass, "GetTId");
     }
-    return G4Analysis::kInvalidId;         
+    return G4Analysis::kInvalidId;
   }
   return it->second;
-}  
+}
 
 //_____________________________________________________________________________
-template <typename T>
-void G4THnManager<T>::AddTVector(const std::vector<T*>& tVector)
+template <typename HT>
+G4bool  G4THnManager<HT>::IsVerbose(G4int verboseLevel) const
 {
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) 
-      fState.GetVerboseL4()->Message("merge", "all " + fHnManager->GetHnType(), "");
-#endif
+  return fState.IsVerbose(verboseLevel);
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+void G4THnManager<HT>::Message(
+  G4int level, const G4String& action, const G4String& objectType,
+  const G4String& objectName, G4bool success) const
+{
+  fState.Message(level, action, objectType, objectName, success);
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+void G4THnManager<HT>::AddTVector(const std::vector<HT*>& tVector)
+{
+  Message(G4Analysis::kVL4, "merge", "all " + fHnManager->GetHnType());
+
   // std::vector<tools::histo::h1d*>::const_iterator itw = h1Vector.begin();
   // std::vector<tools::histo::h1d*>::iterator it;
   // for (it = fH1Vector.begin(); it != fH1Vector.end(); it++ ) {
   //   (*it)->add(*(*itw++));
-  // }  
+  // }
   auto itw = tVector.begin();
   for ( auto t : fTVector ) {
     t->add(*(*itw++));
-  }  
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("merge", "all " + fHnManager->GetHnType(), "");
-#endif
-}  
+  }
 
-//_____________________________________________________________________________
-template <typename T>
-typename std::vector<T*>::iterator G4THnManager<T>::BeginT()
-{ 
-  return fTVector.begin(); 
+  Message(G4Analysis::kVL1, "merge", "all " + fHnManager->GetHnType());
 }
 
 //_____________________________________________________________________________
-template <typename T>
-typename std::vector<T*>::iterator G4THnManager<T>::EndT()
-{ 
-  return fTVector.end(); 
+template <typename HT>
+void  G4THnManager<HT>::Merge(
+  G4Mutex& mergeMutex, G4THnManager<HT>* masterInstance)
+{
+  G4AutoLock lH1(&mergeMutex);
+  masterInstance->AddTVector(fTVector);
+  lH1.unlock();
 }
 
 //_____________________________________________________________________________
-template <typename T>
-typename std::vector<T*>::const_iterator G4THnManager<T>::BeginConstT() const
-{ 
-  return fTVector.begin(); 
+template <typename HT>
+typename std::vector<HT*>::iterator G4THnManager<HT>::BeginT()
+{
+  return fTVector.begin();
 }
 
 //_____________________________________________________________________________
-template <typename T>
-typename std::vector<T*>::const_iterator G4THnManager<T>::EndConstT() const
-{ 
-  return fTVector.end(); 
+template <typename HT>
+typename std::vector<HT*>::iterator G4THnManager<HT>::EndT()
+{
+  return fTVector.end();
 }
 
-// 
+//_____________________________________________________________________________
+template <typename HT>
+typename std::vector<HT*>::const_iterator G4THnManager<HT>::BeginConstT() const
+{
+  return fTVector.begin();
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+typename std::vector<HT*>::const_iterator G4THnManager<HT>::EndConstT() const
+{
+  return fTVector.end();
+}
+
+//
 // public methods
 //
 
 //_____________________________________________________________________________
-template <typename T>
-G4bool G4THnManager<T>::Reset()
+template <typename HT>
+G4int G4THnManager<HT>::RegisterT(HT* t, const G4String& name)
 {
-// Reset histograms and ntuple
+  G4int index = fTVector.size();
+  fTVector.push_back(t);
 
-  G4bool finalResult = true;
-
-  for ( auto t : fTVector ) {
-    G4bool result = t->reset();
-    if ( ! result ) finalResult = false;
-  }  
-  
-  return finalResult;
-}  
+  fHnManager->SetLockFirstId(true);
+  fNameIdMap[name] = index + fHnManager->GetFirstId();
+  return index + fHnManager->GetFirstId();
+}
 
 //_____________________________________________________________________________
-template <typename T>
-G4bool G4THnManager<T>::IsEmpty() const
+template <typename HT>
+G4bool G4THnManager<HT>::Reset()
+{
+// Reset histograms
+
+  auto result = true;
+
+  for ( auto t : fTVector ) {
+    result &= t->reset();
+  }
+
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+void
+G4THnManager<HT>::ClearData()
+{
+  for ( auto t : fTVector ) {
+    delete t;
+  }
+
+  fTVector.clear();
+  fNameIdMap.clear();
+
+  if ( fHnManager != nullptr ) {
+    fHnManager->ClearData();
+  }
+
+  Message(G4Analysis::kVL2, "clear", G4Analysis::GetHnType<HT>());
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+G4bool G4THnManager<HT>::IsEmpty() const
 {
   return ! fTVector.size();
-}  
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+HT* G4THnManager<HT>::GetT(G4int id) const
+{
+  return GetTInFunction(id, "GetT");
+}

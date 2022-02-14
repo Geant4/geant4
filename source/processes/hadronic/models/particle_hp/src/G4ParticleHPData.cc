@@ -30,7 +30,7 @@
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #include "G4ParticleHPData.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 
 G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile )
     : theProjectile(projectile)
@@ -78,13 +78,13 @@ G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile )
 //    G4cout << "Entered G4ParticleHPData::DoPhysicsVector."<<G4endl;
     G4int len = theVector->GetVectorLength();
 //    G4cout <<"zahl der energie-punkte "<< len<<G4endl;
-    if(len==0) return new G4LPhysicsFreeVector(0, 0, 0);
+    if(len==0) return new G4PhysicsFreeVector(0, 0., 0.);
     G4double emin = theVector->GetX(0);
     G4double emax = theVector->GetX(len-1);
 //    G4cout <<"zahl der energie-punkte "<< len<<" "<<emin<<" "<<emax<<G4endl;
     
    //  G4int dummy; G4cin >> dummy;     
-    G4LPhysicsFreeVector * theResult = new G4LPhysicsFreeVector(len, emin, emax);
+    G4PhysicsFreeVector * theResult = new G4PhysicsFreeVector(len, emin, emax);
     for (G4int i=0; i<len; i++)
     {
       theResult->PutValues(i, theVector->GetX(i), theVector->GetY(i));

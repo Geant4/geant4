@@ -67,6 +67,8 @@ namespace pyG4MagneticField {
 struct CB_PyG4MagneticField :
     PyG4MagneticField, wrapper<PyG4MagneticField> {
 
+  using PyG4MagneticField::GetFieldValue;
+
   G4ThreeVector GetFieldValue(const G4ThreeVector& pos,
 			      const G4double time) const {
     return get_override("GetFieldValue")(pos, time);

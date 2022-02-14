@@ -37,9 +37,8 @@
 #include "ProcessesCount.hh"
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4AnalysisManager.hh"
 #include "DetectorConstruction.hh"
-
-#include "g4root.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,8 +66,6 @@ class RunAction : public G4UserRunAction
     G4double fMinE;
     G4double fMaxE;
     G4int    fnBin;
-
-    G4int fNtColId[3];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

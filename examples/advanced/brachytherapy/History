@@ -12,8 +12,43 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
                       Category History file
                       ---------------------
 
-<<<<<<< HEAD
-=======
+07.10.2021 - I. Hrivnacova; brachy-V10-07-04
+             Migration to new G4AnalysisManager.hh header;
+             define the default output file type (root),
+             removed BrachyAnalysisManager.hh
+
+02.09.2021 - D.H. Wright; brachy-V10-07-03
+             Replaced string RadioactiveDecayBase with RadioactiveDecay in
+             BrachySteppingAction::UserSteppingAction
+             (RadioactiveDecayBase soon to disappear)
+
+19.07.2021 - I. Hrivnacova; brachy-V10-07-02
+             Updated for changes in the analysis category:
+             removed deleting of the analysis manager,
+             as this is now done by the Geant4 kernel.
+
+24.05.2021 - B. Morgan; brachy-V10-07-01
+             Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+12.02.2021 - S. Guatelli; brachy-V10-07-00
+             Cleaning of the code. Use C++11 keywords and patterns.
+             Remove BrachyMaterial class. Materials implemented now
+             using NIST Material Manager of Geant4. Remove SetCuts from
+             the local PhysicsList as it is not thread-safe.
+
+12.11.2020 - S. Guatelli; brachy-V10-06-03
+             Migration to G4RunManagerFactory
+
+02.11.2020 - B.Morgan; brachy-V10-06-02
+             Support same CMake version range as core Geant4
+
+13.08.2020 - S. Guatelli; brachy-V10-06-01
+             Analysis done by means of G4Analysis. No more dependence on ROOT.
+             General cleaning of the code. RunAction implemented.
+
+14.07.2020 - A. Zaborowska;brachy-V10-06-00
+             Add missing /run/initialize to VisualisationMacro.mac
+
 20.09.2019 - M. Asai;brachy-V10-05-00
              Add G4VScoringMesh:: scope identifier to BrachyUserScoreWriter.cc
              Co-working with detutils-V10-05-01
@@ -26,11 +61,11 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
 29.11.2018 - G. Folger;brachy-V10-04-06.
              Fix Visualisation.mac to leave verbosity at errors
 	      (warning is a 'magic' word failing a test
-	      
+
 29.11.2018 - G. Folger;brachy-V10-04-05.
              Attempt to use Root optionally in CMakeLists.txt.
-	     
-28.11.2018 - S. Guatelli;brachy-V10-04-04. 
+
+28.11.2018 - S. Guatelli;brachy-V10-04-04.
              Added directory test_macro and included more ROOT analysis files.
 
 25.10.2018 - S. Guatelli;brachy-V10-04-03. CMakeList updated
@@ -40,7 +75,7 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
              Option to switch EM physics list included
 
 04.09.2018 - S. Guatelli and A. Le;brachy-V10-04-01.
-             Included new brachy source (I-125 Oncura 6711 source). 
+             Included new brachy source (I-125 Oncura 6711 source).
              G4_VIS_USE and G4_UI_USE deleted.
 
 10.05.2018 - B. Morgan; brachy-V10-04-00
@@ -70,8 +105,8 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
               Analysis with ROOT introduced
 
 21.10.2013 -  L. Pandola; brachy-V09-06-02
-	      Fix bug in BrachySteppingAction.cc reported by John A. 
-              (replace = with ==). Use G4ParticleDefinition instead 
+	      Fix bug in BrachySteppingAction.cc reported by John A.
+              (replace = with ==). Use G4ParticleDefinition instead
               of string.
 
 19.09.2013 -  S. Guatelli; tag brachy-V09-06-01
@@ -93,12 +128,12 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
 
 16.09.2011 -  S. Guatelli; tag brachy-V09-04-01
 
-14.09.2011 -  S. Guatelli; G4 Analysis module substitutes the analysis 
+14.09.2011 -  S. Guatelli; G4 Analysis module substitutes the analysis
               Done with PI-AIDA. macro.C added.
 
-02.09.2011 -  S. Guatelli; scoring mesh introduced. 
+02.09.2011 -  S. Guatelli; scoring mesh introduced.
               Sensitive detector and ReadOutGeometry components deleted.
-           
+
 29.11.2010 -  G.A.P. Cirrone; tag brachy-V09-03-05
    	      Compilation warnigs removed.
 
@@ -118,7 +153,7 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
               G4UIExecutiveand minor revisions
 
 12.11.2009 -- L. Pandola; tag brachy-V09-02-02
-       	      Fixed AIDA 
+       	      Fixed AIDA
 
 12.11.2009 -- S. Guatelli; brachy-V09-02-01
    	      Update of Physics List
@@ -138,11 +173,11 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
 05th June 2008: G.A.P.Cirrone (cirrone@lns.infn.it). Tag version: brachy-V09-01-00
 - Compilation error corrected in the BrachyAnalysiManager
 - Bad type assignment in BrachyAnalysismanager
-- Activated the generation .root files for output 
+- Activated the generation .root files for output
 
 15th November 2006 Susanna Guatelli (brachy-V08-01-01)
-- Physics list cleaned. The cut is fixed to a value lower than the 
-  1 keV limit. 
+- Physics list cleaned. The cut is fixed to a value lower than the
+  1 keV limit.
 
 14th November 2006  John Allison  (brachy-V08-01-00)
 - Removed /vis/scene/transientsAction none (no longer available).
@@ -157,11 +192,11 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
 - Hit collection deleted. The energy deposit and position are stored directly
   in histograms and ntuples in the BrachyPhantomSD
 - Iteration in the management of the primary particles
-- More comments explain the code 
+- More comments explain the code
 - README updated
 
 22th November 2005 Susanna Guatelli (brachy-V07-01-00)
-- Deleted bug in the RunAction. The results of the simulation 
+- Deleted bug in the RunAction. The results of the simulation
   (energy deposit, position) are stored in a hit collection.
 
 30th May 2005  Susanna Guatelli  (brachy-V07-00-01)
@@ -174,7 +209,7 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
              Simulation seed changed
 
 24.11.2004 - Susanna Guatelli
-             Analysis management improved. 
+             Analysis management improved.
 
 13.5.2004 - Susanna Guatelli
             Migration to AIDA 3.2.1 and PI 1.2.1

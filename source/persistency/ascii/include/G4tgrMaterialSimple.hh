@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrMaterialSimple
+// G4tgrMaterialSimple
 //
 // Class description:
 //
 // Class to represent a simple material, i.e. made of a single element.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrMaterialSimple_h
-#define G4tgrMaterialSimple_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrMaterialSimple_hh
+#define G4tgrMaterialSimple_hh 1
 
 #include "globals.hh"
 
@@ -48,15 +43,16 @@
 
 class G4tgrMaterialSimple : public G4tgrMaterial
 {
-  public:  // with description
- 
+  public:
+
+    G4tgrMaterialSimple();
+    ~G4tgrMaterialSimple();
+
     G4tgrMaterialSimple(const G4String& matType,
                         const std::vector<G4String>& wl);
       // Fill the data interpreting the list of words read 'wl'
 
-    friend std::ostream& operator<<(std::ostream&, const G4tgrMaterialSimple&); 
-
-    G4tgrMaterialSimple& operator= (const G4tgrMaterialSimple&); 
+    friend std::ostream& operator<<(std::ostream&, const G4tgrMaterialSimple&);
 
     G4double GetA() const { return theA; }
     G4double GetZ() const { return theZ; }
@@ -64,16 +60,11 @@ class G4tgrMaterialSimple : public G4tgrMaterial
     const G4String& GetComponent(G4int i) const;
     G4double GetFraction(G4int i);
 
-  public:  // without description
-
-    G4tgrMaterialSimple();
-   ~G4tgrMaterialSimple();
-
   private:
 
-    G4String name;
-    G4double    theA;
-    G4double    theZ;
+    G4String name = "MaterialSimple";
+    G4double theA = 0.0;
+    G4double theZ = 0.0;
 };
 
 #endif

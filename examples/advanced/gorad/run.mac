@@ -1,0 +1,99 @@
+#######################################################
+#
+# Sample macro file of Gorad
+#######################################################
+# Set verbosities
+#######################################################
+/control/saveHistory
+/run/verbose 2
+/control/verbose 2
+/event/verbose 0
+/tracking/verbose 0
+/process/verbose 0
+
+#######################################################
+# Set number of threads
+#######################################################
+/run/numberOfThreads 8
+
+#######################################################
+# Geometry of the simulation
+#######################################################
+/gorad/geometry/selectGDML simpleCone.gdml
+##/gorad/geometry/selectGDML orion.gdml
+
+#######################################################
+# Define geometry importance biasing
+#######################################################
+/gorad/bias/geomImportance 5 
+
+#######################################################
+# Physics of the simulation
+#######################################################
+/gorad/physics/EM Op_0
+/gorad/physics/Hadronic FTFP_BERT
+/gorad/physics/cuts/setParticleCut gamma 1.0 mm
+/gorad/physics/cuts/setParticleCut e- 1.0 mm
+/gorad/physics/cuts/setParticleCut e+ 1.0 mm
+/gorad/physics/cuts/setParticleCut proton 1.0 mm
+
+#######################################################
+# GORAD and Geant4 initialization
+#######################################################
+/gorad/initialize
+
+#######################################################
+# Selection of primary particle source
+#######################################################
+/gorad/source/define proton King.spec LW 
+##/gorad/source/define proton Trap.spec LW 
+##/control/execute gps_point.mac
+##/control/execute gps_focus.mac
+
+#######################################################
+# Define probes and scorers
+#######################################################
+/score/create/probe Probes 5 cm
+/score/probe/material G4_WATER
+/score/probe/locate 0 0 0 cm
+/score/quantity/doseDeposit dose mGy
+/score/quantity/volumeFlux volFlx
+/score/quantity/volumeFlux protonFlux
+/score/filter/particle protonFilter proton
+/score/close
+
+#######################################################
+# Setup visualization for interactive mode
+#######################################################
+/control/doifInteractive /run/beamOn 0
+/control/doifInteractive /control/execute vis.mac
+
+#######################################################
+# Define histograms for batch mode
+#######################################################
+/control/doifBatch /gorad/analysis/verbose 0
+/control/doifBatch /gorad/analysis/file KingSpecBias
+/control/doifBatch /gorad/analysis/1D/primary primPE false
+/control/doifBatch /gorad/analysis/1D/config 100 1.0 2.0e3 MeV log
+/control/doifBatch /gorad/analysis/1D/yaxisLog true
+/control/doifBatch /gorad/analysis/1D/primary Weighted true
+/control/doifBatch /gorad/analysis/1D/config 100 1.0 2.0e3 MeV log
+/control/doifBatch /gorad/analysis/1D/yaxisLog true
+/control/doifBatch /gorad/analysis/1D/spectrum Probes volFlx
+/control/doifBatch /gorad/analysis/1D/config 100 1.0e-2 2.0e3 MeV log
+/control/doifBatch /gorad/analysis/1D/yaxisLog true
+/control/doifBatch /gorad/analysis/1D/spectrum Probes protonFlux
+/control/doifBatch /gorad/analysis/1D/config 100 1.0e-2 2.0e3 MeV log
+/control/doifBatch /gorad/analysis/1D/yaxisLog true
+/control/doifBatch /gorad/analysis/plot -1
+/control/doifBatch /analysis/plot/setLayout 1 2
+
+#######################################################
+# Run for batch mode
+#######################################################
+/control/doifBatch /run/eventModulo 0 1
+/control/doifBatch /run/printProgress 10000
+/control/doifBatch /run/beamOn 1000000
+/control/doifBatch /score/dumpAllQuantitiesToFile Probes Probes.csv
+
+exit

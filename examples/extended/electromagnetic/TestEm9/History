@@ -18,7 +18,50 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
+07-11-21 I. Hrivnacova (testem9-V10-07-03)
+- Added analysis manager Clear() call instead of
+  deleting in the end of run (removed on July 19)
+
+19-07-21 I. Hrivnacova (testem9-V10-07-02)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+10-02-21 V. Ivanchenko (testem9-V10-07-01)
+- removed unused header
+
+18-01-21 V. Ivanchenko (testem9-V10-07-00)
+- Updated for 10.7: replaced local Physics List by clone of the 
+  default EM standard; recover analysis of process calls for the
+  case of gamma general process; improved macro files
+  
+
+13-11-20 B. Morgan (testem9-V10-06-01)
+- Enforce use of Serial RunManager.
+
+10-11-20 B. Morgan (testem9-V10-06-00)
+- Migration to G4RunManagerFactory.
+
+16-05-18 J.Allison (testem9-V10-04-04)
+- RunAction.cc: Removed vis commands.
+
+01-05-18 J.Allison (testem9-V10-04-03)
+- RunAction.cc: Removed G4VIS_USE and G4UI_USE.
+
+08-04-18 mma (testem9-V10-04-02)
+- TestEm9.cc - correct visualisation
+
+04-04-18 V.Ivant (testem9-V10-04-01)
+- TestEm9.cc - use default random engine, do not use visualisation
+    in the batch mode
+
+18-03-18 mma (testem9-V10-04-00)
+- testem9.cc : remove G4UI_USE and G4VIS_USE
+
+01-11-16  I. Hrivnacova (testem9-V10-02-03)
+- Coding guidelines (class member names)
+
+14-10-16 G.Folger (testem9-V10-02-02)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
 
@@ -33,24 +76,24 @@ track of all tags.
   kernel UI commands used instead
 
 28-04-14 V.Ivant (testem9-V10-00-00)
-- added "emlowenergy" option for EM physics 
+- added "emlowenergy" option for EM physics
 
 24-07-13 P.Gumplinger (testem9-V09-06-06)
 - comply with compiler warnings about unused class fields in HistoManager.hh
 
 01-04-13 A.Dotti (testem9-V09-06-03,testem9-V09-06-04,testem9-V09-06-05)
 - New G4VUserPhysicsList interface needed for MT
-     
-20-03-13 mma (testem9-V09-06-02)
-- Applied coding guidelines 
 
-28-02-13 I. Hrivnacova (testem9-V09-06-01) 
+20-03-13 mma (testem9-V09-06-02)
+- Applied coding guidelines
+
+28-02-13 I. Hrivnacova (testem9-V09-06-01)
 - When building materials with NistManager
-  do not set fromIsotopes argument (which was set to false), 
+  do not set fromIsotopes argument (which was set to false),
   as since 9.6 all materials have to be built from isotopes.
   (Thanks to V. Ivantchenko for pointing at this.)
 
-13-02-13 I.Hrivnacova 
+13-02-13 I.Hrivnacova
 - Applied coding guidelines (virtual keyword, data members initialization)
 
 11-12-12 V.Ivant (testem9-V09-06-00)
@@ -84,10 +127,10 @@ track of all tags.
 
 17-04-12 V.Ivant (testem9-V09-05-00)
 - miration to internal analysis tool, cose cleanup
-     
+
 31-10-11 mma (testem9-V09-04-03)
 - PhysListEmStandard : msc95 by default
-     
+
 03-10-11 G.Folger (testem09-V09-04-02)
 - Fix gcc46 compilation warning in DetectorConstruction.cc and HistoManager.cc
 
@@ -95,7 +138,7 @@ track of all tags.
 - PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
 
 06-01-11 V.Ivant (testem9-V09-04-00)
-- add extra run with 20 GeV mu- into TestEm9.in 
+- add extra run with 20 GeV mu- into TestEm9.in
 
 19-11-10 V.Ivant (testem9-V09-03-05)
 - add applyCuts option to the macro files
@@ -103,60 +146,60 @@ track of all tags.
 12-08-10 V.Ivant (testem9-V09-03-04)
 - Histo - use empty option when open file
 - PhysicsList - use default constructor for elastic builder
-     
+
 06-06-10 J.Perl (testem9-V09-03-03)
 - Remove unused variable in EventAction
 
 03-06-10 J.Perl (testem9-V09-03-02)
-- Updated vis usage 
+- Updated vis usage
 
-21-05-10 mma (testem9-V09-03-01)     
+21-05-10 mma (testem9-V09-03-01)
 TestEm9.cc : introduction of G4UIExecutive
 
 29-04-10 V.Ivant (testem9-V09-03-00)
-- added a table of average number of calls of processes versus 
+- added a table of average number of calls of processes versus
   atomic number of an atom on which interaction takes place
 
 20-11-09 V.Ivant (testem9-V09-02-00)
 - use Livermore and Penelope builders from PhysList library
-     
+
 16-11-08 mma (testem9-V09-01-09)
 - Em options: 20bins/decade  LinLossLimit=default=0.01
 
 16-10-08 V.Ivant (testem9-V09-01-08)
-- Removed temporary builders PhysListEmStandardLPM and 
+- Removed temporary builders PhysListEmStandardLPM and
 PhysListEmStandardIG
 
 24-09-08 V.Ivant (testem9-V09-01-07)
 - added control on number of events with Edep < 80%
 - use double for number of steps instead of integer
-     
+
 22-09-08 mma
 - histo.cc : root format by default
 
 22-08-08 V.Ivant (testem9-V09-01-06)
 - added computation of ratios E9/E25
 - PhysList with relativistic LPM model is done on top of PhysList
-  option1 
+  option1
 
 11-08-08 V.Ivant (testem9-V09-01-05)
 - added computation of ratios E1/E9 and E1/E25
-- added PhysLists with relativistic LPM model 
+- added PhysLists with relativistic LPM model
 - updated macro
 
 12-06-08 mma (testem9-V09-01-04)
-- Remove AIDA from GNUmakefile 
-     
+- Remove AIDA from GNUmakefile
+
 07-05-08 mma (testem9-V09-01-03)
 - PhysListEmStandard : add spline option for physics tables
 - README : update Aida informations
-     
+
 08-04-08 mma (testem9-V09-01-02)
-- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering. 
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering.
                        Complete EmOptions
 
 07-04-08 V.Ivant (testem9-V09-01-01)
-- fixed problem of geometry/cut modification between runs 
+- fixed problem of geometry/cut modification between runs
 
 18-03-08 V.Ivant (testem9-V09-01-00)
 - added G4EmStandardPhyiscs_option3
@@ -179,11 +222,11 @@ PhysListEmStandardIG
 - extend reference output - show both mean/RMS values and trancated mean/RMS
 
 25-04-07  V.Ivant (testem9-V08-02-02)
-- fix output of statistic 
+- fix output of statistic
 
 24-04-07  V.Ivant (testem9-V08-02-01)
 - use standard names for "livermore" and "penelope" PhysLists
-- by request compute trancated mean values to reduce statistical fluctuations 
+- by request compute trancated mean values to reduce statistical fluctuations
 
 08-01-07  V.Ivant (testem9-V08-02-00)
 - Uncomment hadron ionisation in Livermore builder
@@ -197,10 +240,10 @@ PhysListEmStandardIG
 - add EM components from physics_lists subpackage
 - use hadronic components from physics_lists subpackage
 
-25-10-06 mma (testem9-V08-01-00) 
+25-10-06 mma (testem9-V08-01-00)
 - GNUmakefile : LOADLIBS
 - remove PhysicsLists 52 and 71
-     
+
 19-05-06 mma (testem9-V08-00-00)
 - update README
 
@@ -211,9 +254,9 @@ PhysListEmStandardIG
 - Fix crash connected with non-static hadrons
 
 01-12-05  V.Ivant (testem9-V07-01-04)
-- add a command /testem/phys/mscStepLimit 
+- add a command /testem/phys/mscStepLimit
 
-17-11-05  G.Cosmo (testem9-V07-01-03) 
+17-11-05  G.Cosmo (testem9-V07-01-03)
 - corrected fixes for migration to <sstream> to fix compilation
   errors on SUN-CC.
 
@@ -233,7 +276,7 @@ PhysListEmStandardIG
 
 13-05-05  V.Ivant (testem9-V07-00-01)
 - Migration to NIST materials
-     
+
 03-05-05  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
 
@@ -271,7 +314,7 @@ PhysListEmStandardIG
 
 07-11-03 V.Ivanchenko (testem9-V05-02-05)
 - Fix misprint in the HistoManager
-- Use of the last msc for PhysList52 
+- Use of the last msc for PhysList52
 
 31-10-03 V.Ivanchenko (testem9-V05-02-04)
 - Update geometry and visualisation

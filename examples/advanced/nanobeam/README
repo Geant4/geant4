@@ -131,9 +131,7 @@ This macro file shows :
 - the beam emittance (THETA vs X) and (PHY vs Y) on target
 - the grid shadow image (option)
 
-The output ntuples can be written as xml or csv files, by uncommenting the 
-appropriate header file in include/Analysis.hh
-and by leaving all others commented. 
+The output ntuples can be written as xml or csv files, by changing the G4AnalysisManager default file type in RunAction::BeginOfRunAction().
 
 ---------------------------------------------------------------------------
 

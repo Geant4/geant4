@@ -47,15 +47,22 @@
 #include "G4BaryonConstructor.hh"
 #include "G4Neutron.hh"
 
+#include "G4BGGPionElasticXS.hh"
+#include "G4BGGNucleonElasticXS.hh"
+#include "G4NeutronElasticXS.hh"
+#include "G4HadronicParameters.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4ChargeExchangePhysics);
 
 G4ChargeExchangePhysics::G4ChargeExchangePhysics(G4int ver)
-  : G4VPhysicsConstructor("chargeExchange"), verbose(ver)
+  : G4VPhysicsConstructor("chargeExchange")
 {
-  if(verbose > 1) G4cout << "### ChargeExchangePhysics" << G4endl;
+  // because it is an addition, the type of this constructor is 0
+  G4HadronicParameters::Instance()->SetVerboseLevel(ver);
+  if(ver > 1) G4cout << "### ChargeExchangePhysics" << G4endl;
 }
 
 G4ChargeExchangePhysics::~G4ChargeExchangePhysics()
@@ -75,7 +82,7 @@ void G4ChargeExchangePhysics::ConstructProcess()
 {
   G4ChargeExchange* model = new G4ChargeExchange();
 
-  if(verbose > 1) {
+  if(G4HadronicParameters::Instance()->GetVerboseLevel() > 1) {
     G4cout << "### ChargeExchangePhysics Construct Processes with the model <" 
 	   << model->GetModelName() << ">" << G4endl;
   }
@@ -85,19 +92,27 @@ void G4ChargeExchangePhysics::ConstructProcess()
   while( (*myParticleIterator)() )
   {
     G4ParticleDefinition* particle = myParticleIterator->value();
-    G4String pname = particle->GetParticleName();
-    if(pname == "neutron"   || 
-       pname == "pi-"       || 
-       pname == "pi+"       || 
-       pname == "proton"
+    if( particle == G4Neutron::Definition()   || 
+        particle == G4PionMinus::Definition() || 
+        particle == G4PionPlus::Definition()  || 
+        particle == G4Proton::Definition()
        ) { 
       
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4ChargeExchangeProcess* p = new G4ChargeExchangeProcess();
       p->RegisterMe(model);
+      
+      if( particle == G4PionMinus::Definition() || particle == G4PionPlus::Definition() ) {
+        p->AddDataSet( new G4BGGPionElasticXS( particle ) );
+      } else if( particle == G4Proton::Definition() ) {
+        p->AddDataSet( new G4BGGNucleonElasticXS( particle ) );
+      } else if( particle == G4Neutron::Definition() ) {
+        p->AddDataSet( new G4NeutronElasticXS );
+      }
+  
       pmanager->AddDiscreteProcess(p);
 
-      if(verbose > 1)
+      if(G4HadronicParameters::Instance()->GetVerboseLevel() > 1)
 	G4cout << "### ChargeExchangePhysics added for " 
 	       << particle->GetParticleName() << G4endl;
     }

@@ -41,6 +41,8 @@
 #include "G4VITStepModel.hh"
 #include "G4UserTimeStepAction.hh"
 #include "G4UnitsTable.hh"
+#include "G4Scheduler.hh"
+#include "G4SystemOfUnits.hh"
 #include <vector>
 
 //#define DEBUG_MEM
@@ -113,33 +115,21 @@ G4double G4ITModelProcessor::CalculateMinTimeStep(G4double currentGlobalTime,
     << G4endl;
 #endif
 
-    for (auto pTrack : *fpTrackContainer->GetMainList())
+    for (auto& pStepModel : fActiveModels)
     {
-        if (pTrack == nullptr)
-        {
-            G4ExceptionDescription exceptionDescription;
-            exceptionDescription << "No track found.";
-            G4Exception("G4Scheduler::CalculateMinStep", "ITScheduler006",
-                        FatalErrorInArgument, exceptionDescription);
-            continue;
+        fTSTimeStep =
+            pStepModel->GetTimeStepper()->CalculateMinTimeStep(
+                currentGlobalTime,
+                definedMinTimeStep);
+
+        fpActiveModelWithMinTimeStep = pStepModel;
+
+        if(fTSTimeStep == -1){
+            fpActiveModelWithMinTimeStep->GetReactionProcess()->Initialize();
+            if(fReactionSet->Empty()) return DBL_MAX;
+            auto fReactionSetInTime = fReactionSet->GetReactionsPerTime();
+            fTSTimeStep = fReactionSetInTime.begin()->get()->GetTime() - currentGlobalTime;
         }
-
-#ifdef DEBUG
-        G4cout << "*_* " << GetIT(track)->GetName()
-        << " ID: " << track->GetTrackID()
-        << " at time : " << track->GetGlobalTime()
-        << G4endl;
-#endif
-
-        G4TrackStatus trackStatus = pTrack->GetTrackStatus();
-        if (trackStatus == fStopAndKill || trackStatus == fStopButAlive)
-        {
-            continue;
-        }
-
-        CalculateTimeStep(pTrack, definedMinTimeStep);
-        // if MT mode at track level, this command should be displaced
-        ExtractTimeStepperData();
     }
 
 #if defined (DEBUG_MEM) && defined (DEBUG_MEM_DETAILED_STEPPING)
@@ -149,60 +139,6 @@ G4double G4ITModelProcessor::CalculateMinTimeStep(G4double currentGlobalTime,
     "After looping on tracks, diff is : " << mem_diff << G4endl;
 #endif
     return fTSTimeStep;
-}
-
-//_________________________________________________________________________
-
-void G4ITModelProcessor::ExtractTimeStepperData()
-{
-    if (fpTrack == nullptr)
-    {
-        CleanProcessor();
-        return;
-    }
-
-    for (auto pStepModel : fActiveModels)
-    {
-        if (pStepModel == nullptr)
-        {
-            continue;
-        }
-
-        auto pTimeStepper = pStepModel->GetTimeStepper();
-        G4double sampledMinTimeStep = pTimeStepper->GetSampledMinTimeStep();
-        G4TrackVectorHandle reactants = pTimeStepper->GetReactants();
-
-        if (sampledMinTimeStep < fTSTimeStep)
-        {
-            fpActiveModelWithMinTimeStep = pStepModel;
-            fTSTimeStep = sampledMinTimeStep;
-            //fReactingTracks.clear();
-
-            fReactionSet->CleanAllReaction();
-            if (reactants)
-            {
-                //  fReactingTracks.insert(make_pair(track, reactants));
-                fReactionSet->AddReactions(fTSTimeStep,
-                                           const_cast<G4Track*>(fpTrack),
-                                           reactants);
-                pTimeStepper->ResetReactants();
-            }
-        }
-        else if (fTSTimeStep == sampledMinTimeStep && bool(reactants))
-        {
-            // fReactingTracks.insert(make_pair(track, reactants));
-            fReactionSet->AddReactions(fTSTimeStep,
-                                       const_cast<G4Track*>(fpTrack),
-                                       reactants);
-            pTimeStepper->ResetReactants();
-        }
-        else if (reactants)
-        {
-            pTimeStepper->ResetReactants();
-        }
-    }
-
-    CleanProcessor();
 }
 
 //______________________________________________________________________________
@@ -232,42 +168,12 @@ void G4ITModelProcessor::InitializeStepper(G4double currentGlobalTime,
 
 }
 
-//______________________________________________________________________________
-void G4ITModelProcessor::CalculateTimeStep(const G4Track* pTrack,
-                                           const G4double userMinTimeStep)
-{
-    CleanProcessor();
-    if (pTrack == nullptr)
-    {
-        G4ExceptionDescription exceptionDescription;
-        exceptionDescription << "No track was passed to the method.";
-        G4Exception("G4ITModelProcessor::CalculateStep",
-                    "ITModelProcessor004",
-                    FatalErrorInArgument,
-                    exceptionDescription);
-    }
-    SetTrack(pTrack);
-    fUserMinTimeStep = userMinTimeStep;
-
-    DoCalculateStep();
-}
-
-//______________________________________________________________________________
-
-void G4ITModelProcessor::DoCalculateStep()
-{
-    for (auto& pStepModel : fActiveModels)
-    {
-        pStepModel->GetTimeStepper()->CalculateStep(*fpTrack, fUserMinTimeStep);
-    }
-}
-
 //_________________________________________________________________________
 
 void G4ITModelProcessor::ComputeTrackReaction(G4ITStepStatus fITStepStatus,
                                               G4double fGlobalTime,
                                               G4double currentTimeStep,
-                                              G4double previousTimeStep,
+                                              G4double /*previousTimeStep*/,
                                               G4bool reachedUserTimeLimit,
                                               G4double fTimeTolerance,
                                               G4UserTimeStepAction* fpUserTimeStepAction,
@@ -277,20 +183,19 @@ fVerbose
 #endif
 )
 {
-//  if (fReactingTracks.empty())
     if (fReactionSet->Empty())
     {
         return;
     }
 
     if (fITStepStatus == eCollisionBetweenTracks)
-        //        if(fInteractionStep == false)
     {
-        // TODO
-        FindReaction(fReactionSet,
-                     currentTimeStep,
-                     previousTimeStep,
-                     reachedUserTimeLimit);
+        G4VITReactionProcess* pReactionProcess = fpActiveModelWithMinTimeStep->GetReactionProcess();
+        fReactionInfo = pReactionProcess->FindReaction(fReactionSet,
+                currentTimeStep,
+                fGlobalTime,
+                reachedUserTimeLimit);
+
         // TODO
         // A ne faire uniquement si le temps choisis est celui calculé par le time stepper
         // Sinon utiliser quelque chose comme : fModelProcessor->FindReaction(&fMainList);
@@ -340,7 +245,7 @@ fVerbose
 #endif
 
                     G4Track* secondary = (*productsVector)[i]; //changes->GetSecondary(i);
-                    fpTrackContainer->_PushTrack(secondary);
+//                    fpTrackContainer->_PushTrack(secondary);
                     GetIT(secondary)->SetParentID(pTrackA->GetTrackID(),
                                                   pTrackB->GetTrackID());
 
@@ -351,7 +256,7 @@ fVerbose
                                                 " current global time."
                                              << " This may cause synchronization problem. If the process you"
                                                 " are using required "
-                                             << "such feature please contact the developpers." << G4endl
+                                             << "such feature please contact the developers." << G4endl
                                              << "The global time in the step manager : "
                                              << G4BestUnit(fGlobalTime, "Time")
                                              << G4endl
@@ -443,81 +348,10 @@ fVerbose
         fReactionInfo.clear();
     }
 
-    fReactionSet->CleanAllReaction();
+//    fReactionSet->CleanAllReaction();
 
     fpTrackContainer->MergeSecondariesWithMainList();
     fpTrackContainer->KillTracks();
-}
-
-//______________________________________________________________________________
-void G4ITModelProcessor::FindReaction(G4ITReactionSet* pReactionSet,
-                                      const double currentStepTime,
-                                      const double /*previousStepTime*/,
-                                      const bool reachedUserStepTimeLimit)
-{
-    if (pReactionSet == nullptr || fActiveModels.empty())
-    {
-        return;
-    }
-
-    G4ITReactionPerTrackMap& reactionPerTrackMap = pReactionSet->GetReactionMap();
-    G4VITReactionProcess* pReactionProcess = fpActiveModelWithMinTimeStep->GetReactionProcess();
-
-    for (auto tracks_i = reactionPerTrackMap.begin();
-         tracks_i != reactionPerTrackMap.end();
-         tracks_i = reactionPerTrackMap.begin())
-    {
-        G4Track* pTrackA = tracks_i->first;
-        if (pTrackA->GetTrackStatus() == fStopAndKill)
-        {
-            continue;
-        }
-
-        G4ITReactionPerTrackPtr reactionPerTrack = tracks_i->second;
-        G4ITReactionList& reactionList = reactionPerTrack->GetReactionList();
-
-        assert(reactionList.begin() != reactionList.end());
-
-        for (auto it = reactionList.begin(); it != reactionList.end(); it = reactionList.begin())
-        {
-            G4ITReactionPtr reaction(*it);
-            G4Track* pTrackB = reaction->GetReactant(pTrackA);
-            if (pTrackB->GetTrackStatus() == fStopAndKill)
-            {
-                continue;
-            }
-
-            if (pTrackB == pTrackA)
-            {
-                G4ExceptionDescription exceptionDescription;
-                exceptionDescription
-                    << "The IT reaction process sent back a reaction between trackA and trackB. ";
-                exceptionDescription << "The problem is trackA == trackB";
-                G4Exception("G4ITModelProcessor::FindReaction",
-                            "ITModelProcessor005",
-                            FatalErrorInArgument,
-                            exceptionDescription);
-            }
-
-            pReactionSet->SelectThisReaction(reaction);
-
-            if (pReactionProcess && pReactionProcess->TestReactibility(*pTrackA,
-                                                                       *pTrackB,
-                                                                       currentStepTime,
-                                                                       reachedUserStepTimeLimit))
-            {
-                auto pReactionChange = pReactionProcess->MakeReaction(*pTrackA, *pTrackB);
-
-                if (pReactionChange)
-                {
-                    fReactionInfo.push_back(std::move(pReactionChange));
-                    break;
-                }
-            }
-        }
-    }
-
-    //assert(G4ITReaction::gAll->empty() == true);
 }
 
 void G4ITModelProcessor::SetTrack(const G4Track* track)

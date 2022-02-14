@@ -23,44 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Win32
 //
+// Class description :
 //
-//  To unify Windows message treatment between 
-// G4/interfaces Windows sessions and G4/visualizations Windows drivers.
-// G.Barrand
+// A singleton to handle GUI sessions and visualization 
+// drivers built over Windows. It allows to have one Windows main 
+// loop for the whole application.
+// Unifies Windows message treatment between G4/interfaces Windows
+// sessions and G4/visualizations Windows drivers.
 
-
+// Original author: G.Barrand, 1998
+// --------------------------------------------------------------------
 #ifndef G4WIN32_HH
 #define G4WIN32_HH
-
-#if defined(G4INTY_BUILD_WIN32) || defined(G4INTY_USE_WIN32)
 
 #include <windows.h>
 #include <windowsx.h>
 
 #include "G4VInteractorManager.hh"
 
-// Class description :
-//
-//  G4Win32 : a singleton to handle GUI sessions and visualization 
-// drivers built over Windows. It permits to have one Windows main 
-// loop for the whole application. 
-//
-// Class description - end :
+class G4Win32 : public G4VInteractorManager
+{
+  public:
 
-class G4Win32 : public G4VInteractorManager {
-public:
-  static G4Win32*  getInstance           ();
-  G4bool           Inited                ();
-  void*            GetEvent              ();
-  void             FlushAndWaitExecution ();
-  static G4bool    DispatchWin32Event    (void*);
-  virtual         ~G4Win32               ();                     
-private:
-  G4Win32();
-  static G4Win32* instance; // Pointer to single instance.
+    static G4Win32*  getInstance           ();
+    G4bool           Inited                ();
+    void*            GetEvent              ();
+    void             FlushAndWaitExecution ();
+    static G4bool    DispatchWin32Event    (void*);
+    virtual         ~G4Win32               ();
+
+  private:
+
+    G4Win32();
+    static G4Win32* instance; // Pointer to single instance.
 };
-
-#endif
 
 #endif

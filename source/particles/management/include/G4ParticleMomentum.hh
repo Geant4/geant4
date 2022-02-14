@@ -23,37 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticleMomentum
 //
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-// ------------------------------------------------------------
-//
-// Class Description
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//  G4ParticleMomentum is "momentum direction" not "momentum vector"
-//  The name is miss-leading so you should not use G4ParticleMomentum
-//  and you are recommended to use G4ThreeVector instead
-//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+// G4ParticleMomentum is a three-vector containing the "momentum direction".
+// The momentum components are in global reference system.
+// The name can be misleading and must not be confused with "momentum vector".
+// For this reason, it is recommended to use G4ThreeVector instead
 
-#ifndef G4ParticleMomentum_h
-#define G4ParticleMomentum_h 1
+// --------------------------------------------------------------------
+#ifndef G4ParticleMomentum_hh
+#define G4ParticleMomentum_hh 1
 
 #include "G4ThreeVector.hh"
 
-typedef G4ThreeVector G4ParticleMomentum;
-//  Is a three vector containing the momentum direction.
-//  The momentum components are in global reference system.
+using G4ParticleMomentum = G4ThreeVector;
 
 #endif
-
-
-
-
 
 

@@ -1,0 +1,152 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// G4OldMagIntDriver inline methods implementation
+//
+// V.Grichine, 07.10.1996 - Created
+// --------------------------------------------------------------------
+
+inline
+G4double G4OldMagIntDriver::
+AdvanceChordLimited(G4FieldTrack& track, G4double stepMax, 
+                    G4double epsStep, G4double chordDistance)
+{
+  return ChordFinderDelegate::AdvanceChordLimitedImpl(track, stepMax,
+                                                      epsStep, chordDistance);
+}
+
+inline
+void G4OldMagIntDriver::OnStartTracking()
+{
+  ChordFinderDelegate::ResetStepEstimate();
+}
+
+inline
+G4double G4OldMagIntDriver::GetHmin() const
+{
+  return fMinimumStep;
+} 
+
+inline
+G4double G4OldMagIntDriver::Hmin() const
+{
+  return fMinimumStep;
+}
+
+inline
+G4double G4OldMagIntDriver::GetSafety() const
+{
+  return safety;
+}
+
+inline
+G4double G4OldMagIntDriver::GetPshrnk() const
+{
+  return pshrnk;
+} 
+
+inline
+G4double G4OldMagIntDriver::GetPgrow() const
+{
+  return pgrow;
+}
+ 
+inline
+G4double G4OldMagIntDriver::GetErrcon() const
+{
+  return errcon;
+}
+
+inline
+void G4OldMagIntDriver::SetHmin(G4double newval)
+{
+  fMinimumStep = newval;
+} 
+
+inline
+G4double G4OldMagIntDriver::ComputeAndSetErrcon()
+{
+  errcon = std::pow(max_stepping_increase/GetSafety(),1.0/GetPgrow());
+  return errcon;
+} 
+
+inline
+void G4OldMagIntDriver::ReSetParameters(G4double new_safety)
+{
+  safety = new_safety;
+  pshrnk = -1.0 / pIntStepper->IntegratorOrder();
+  pgrow  = -1.0 / (1.0 + pIntStepper->IntegratorOrder());
+  ComputeAndSetErrcon();
+}
+
+inline
+void G4OldMagIntDriver::SetSafety(G4double val)
+{ 
+  safety = val;
+  ComputeAndSetErrcon();
+}
+
+inline
+void G4OldMagIntDriver::SetPgrow(G4double  val)
+{ 
+  pgrow = val;
+  ComputeAndSetErrcon(); 
+}
+
+inline
+void G4OldMagIntDriver::SetErrcon(G4double val)
+{ 
+  errcon = val;
+}
+
+inline
+G4int G4OldMagIntDriver::GetMaxNoSteps() const
+{
+  return fMaxNoSteps;
+}
+
+inline
+void G4OldMagIntDriver::SetMaxNoSteps(G4int val)
+{
+  fMaxNoSteps = val;
+}
+
+inline
+G4int G4OldMagIntDriver::GetVerboseLevel() const
+{
+  return fVerboseLevel;
+} 
+
+inline 
+void G4OldMagIntDriver::SetVerboseLevel(G4int newLevel)
+{
+  fVerboseLevel = newLevel;
+}
+
+inline
+G4double G4OldMagIntDriver::GetSmallestFraction() const
+{
+  return fSmallestFraction; 
+}

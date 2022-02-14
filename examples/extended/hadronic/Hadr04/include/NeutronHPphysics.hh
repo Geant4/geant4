@@ -36,7 +36,7 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-class NeutronHPMessenger;
+class G4GenericMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,15 +47,14 @@ class NeutronHPphysics : public G4VPhysicsConstructor
    ~NeutronHPphysics();
 
   public:
-    virtual void ConstructParticle() { };
-    virtual void ConstructProcess();
-    
-  public:
-    void SetThermalPhysics(G4bool flag) {fThermal = flag;};  
+    void ConstructParticle() override { };
+    void ConstructProcess() override;
     
   private:
-    G4bool  fThermal;
-    NeutronHPMessenger* fNeutronMessenger;  
+    void DefineCommands();
+      
+    G4bool              fThermal;
+    G4GenericMessenger* fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

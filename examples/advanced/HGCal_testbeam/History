@@ -1,0 +1,44 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example HGCal_testbeam History file
+                    ---------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+14-November-2021 G. Cosmo (exhgcaltb-V10-07-05)
+- Fixed compilation warning for unused private member in PrimaryGeneratorAction.
+
+07-October-2021 I. Hrivnacova (exhgcaltb-V10-07-04)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+19-July-2021 I. Hrivnacova (exhgcaltb-V10-07-03)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+10-June-21  V. Ivanchenko (exhgcaltb-V10-07-02)
+- SiliconPixelHit, SiPMHit - fixed bug in handling of NIEL energy 
+  deposition
+- CMSHadronPhysicsFTFP_BERT - added class from CMS 
+- CMSEmStandardPhysicsHcal - removed obsolete
+- FTFPCMS_BERT_EMM - use correct combination of physics constructors   
+
+24-May-21  B. Morgan (exhgcaltb-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+21-Mar-21  V. Ivanchenko (exhgcaltb-V10-07-00)
+- removed RanecuEngine
+- updated CMS EM physics to 11.0
+
+02-Nov-20  A. Zaborowska (exhgcaltb-V10-06-00)
+- Create HGCal_testbeam example based on Thorben Quast application

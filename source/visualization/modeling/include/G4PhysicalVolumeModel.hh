@@ -108,6 +108,10 @@ public: // With description
     G4bool GetDrawn() const {return fDrawn;}
     void SetDrawn(G4bool drawn) {fDrawn = drawn;}
     G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
+    G4bool operator!= (const G4PhysicalVolumeNodeID& right) const;
+    G4bool operator== (const G4PhysicalVolumeNodeID& right) const {
+      return !operator!= (right);
+    }
   private:
     G4VPhysicalVolume* fpPV;
     G4int fCopyNo;
@@ -173,6 +177,9 @@ public: // With description
   G4int GetCurrentDepth() const {return fCurrentDepth;}
   // Current depth in geom. hierarchy.
 
+  const G4Transform3D& GetTransformation() const {return fTransform;}
+  // Initial transformation
+
   G4VPhysicalVolume* GetCurrentPV() const {return fpCurrentPV;}
   // Current physical volume.
 
@@ -185,7 +192,7 @@ public: // With description
   G4Material* GetCurrentMaterial() const {return fpCurrentMaterial;}
   // Current material.
 
-  G4Transform3D* GetCurrentTransform() const {return fpCurrentTransform;}
+  const G4Transform3D& GetCurrentTransform() const {return fCurrentTransform;}
   // Current transform.
 
   const std::vector<G4PhysicalVolumeNodeID>& GetBaseFullPVPath() const
@@ -247,6 +254,8 @@ public: // With description
   void CurtailDescent() const {fCurtailDescent = true;}
   // Curtail descent of current branch.
 
+  void CalculateExtent ();
+
 protected:
 
   void VisitGeometryAndGetVisReps (G4VPhysicalVolume*,
@@ -267,8 +276,6 @@ protected:
 			      const G4VisAttributes* pVisAttribs,
 			      G4VGraphicsScene& sceneHandler);
 
-  void CalculateExtent ();
-
   /////////////////////////////////////////////////////////
   // Data members...
 
@@ -278,12 +285,13 @@ protected:
   G4int              fRequestedDepth;
                      // Requested depth of geom. hierarchy search.
   G4bool             fUseFullExtent; // ...if requested.
+  G4Transform3D      fTransform;     // Initial transform
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
   G4int              fCurrentPVCopyNo; // Current copy number.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
-  G4Material*    fpCurrentMaterial;  // Current material.
-  G4Transform3D* fpCurrentTransform; // Current transform.
+  G4Material*        fpCurrentMaterial;  // Current material.
+  G4Transform3D      fCurrentTransform;  // Current transform.
   std::vector<G4PhysicalVolumeNodeID> fBaseFullPVPath; // Base. May be empty.
   std::vector<G4PhysicalVolumeNodeID> fFullPVPath;     // Starts from base.
   std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;    // Omits culled volumes.

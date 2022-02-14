@@ -23,16 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProductionCutsTableMessenger class implementation
 //
-//
-// 
-//---------------------------------------------------------------
-//
-//  G4ProductionCutsTableMessenger.cc
-// ------------------------------------------------------------
-//      History
-//        first version                   02 Mar. 2008 by H.Kurashige 
-//
+// Author: H.Kurashige, 02 March 2008 - First version
+// --------------------------------------------------------------------
 
 #include "G4ProductionCutsTableMessenger.hh"
 #include "G4ProductionCutsTable.hh"
@@ -47,10 +41,12 @@
 
 #include <sstream>
 
-G4ProductionCutsTableMessenger::G4ProductionCutsTableMessenger(   G4ProductionCutsTable* pTable)
-  :theCutsTable(pTable)
+// --------------------------------------------------------------------
+G4ProductionCutsTableMessenger::
+G4ProductionCutsTableMessenger(G4ProductionCutsTable* pTable)
+  : theCutsTable(pTable)
 {
-  // /cuts/   directory
+  // /cuts/ directory
   theDirectory = new G4UIdirectory("/cuts/");
   theDirectory->SetGuidance("Commands for G4VUserPhysicsList.");
 
@@ -92,12 +88,12 @@ G4ProductionCutsTableMessenger::G4ProductionCutsTableMessenger(   G4ProductionCu
   setMaxEnergyCutCmd->SetDefaultUnit("GeV");
   setMaxEnergyCutCmd->AvailableForStates(G4State_PreInit);
  
- // /cuts/dump command
+  // /cuts/dump command
   dumpCmd = new G4UIcmdWithoutParameter("/cuts/dump",this);
-  dumpCmd->SetGuidance("Dump cuplues in ProductuinCutsTable. ");
-
+  dumpCmd->SetGuidance("Dump couples in G4ProductionCutsTable. ");
 }
 
+// --------------------------------------------------------------------
 G4ProductionCutsTableMessenger::~G4ProductionCutsTableMessenger()
 {
   delete dumpCmd;
@@ -108,54 +104,61 @@ G4ProductionCutsTableMessenger::~G4ProductionCutsTableMessenger()
   delete theDirectory;
 }
 
-void G4ProductionCutsTableMessenger::SetNewValue(G4UIcommand * command,
-						 G4String newValue)
+// --------------------------------------------------------------------
+void G4ProductionCutsTableMessenger::SetNewValue(G4UIcommand* command,
+                                                 G4String newValue)
 {
-  if( command==verboseCmd ) {
+  if( command==verboseCmd )
+  {
     theCutsTable->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); 
-
-  } else if( command==dumpCmd ){
+  }
+  else if( command==dumpCmd )
+  {
     theCutsTable-> DumpCouples();
-
-  } else if( command==setLowEdgeCmd ){
+  }
+  else if( command==setLowEdgeCmd )
+  {
     G4double lowEdge = setLowEdgeCmd->GetNewDoubleValue(newValue); 
     G4double highEdge = theCutsTable->GetHighEdgeEnergy();
     theCutsTable->SetEnergyRange(lowEdge, highEdge);
-    
-  } else if( command==setHighEdgeCmd ){
+  }
+  else if( command==setHighEdgeCmd )
+  {
     G4double highEdge = setHighEdgeCmd->GetNewDoubleValue(newValue); 
     G4double lowEdge = theCutsTable->GetLowEdgeEnergy();
     theCutsTable->SetEnergyRange(lowEdge, highEdge);
-    
- } else if( command==setMaxEnergyCutCmd ){
+  }
+  else if( command==setMaxEnergyCutCmd )
+  {
     G4double cut = setHighEdgeCmd->GetNewDoubleValue(newValue); 
     theCutsTable->SetMaxEnergyCut(cut);
-    
   }
 }
 
-G4String G4ProductionCutsTableMessenger::GetCurrentValue(G4UIcommand * command)
+// --------------------------------------------------------------------
+G4String G4ProductionCutsTableMessenger::GetCurrentValue(G4UIcommand* command)
 {
   G4String cv;
   
-  if( command==verboseCmd ){
+  if( command==verboseCmd )
+  {
    cv = verboseCmd->ConvertToString(theCutsTable->GetVerboseLevel());
-
- } else if( command==setLowEdgeCmd ){
+  }
+  else if( command==setLowEdgeCmd )
+  {
     G4double lowEdge = theCutsTable->GetLowEdgeEnergy();
     cv = setLowEdgeCmd->ConvertToString( lowEdge, "keV" );
-
- } else if( command==setHighEdgeCmd ){
+  }
+  else if( command==setHighEdgeCmd )
+  {
     G4double highEdge = theCutsTable->GetHighEdgeEnergy();
     cv = setHighEdgeCmd->ConvertToString( highEdge, "TeV" );
-
- } else if( command==setMaxEnergyCutCmd ){
+  }
+  else if( command==setMaxEnergyCutCmd )
+  {
     G4double cut = theCutsTable->GetMaxEnergyCut();
     cv = setMaxEnergyCutCmd->ConvertToString( cut, "GeV" );
- }
-
+  }
 
   return cv;
-
 }
-

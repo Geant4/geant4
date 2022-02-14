@@ -40,7 +40,7 @@
 // 24.7.96, P.Kent - Separated from G4Navigator
 // --------------------------------------------------------------------
 #ifndef G4BLOCKINGLIST_HH
-#define G4BLOCKINGLIST_HH
+#define G4BLOCKINGLIST_HH 1
 
 #include "G4Types.hh"
 #include <vector>
@@ -52,13 +52,13 @@ const G4int kBlockTagNoMax = 2147483647;   // 2^31-1 maximum tag no may reach
 
 class G4BlockingList
 {
-  public:  // with description
+  public:
 
     G4BlockingList(G4int maxDefault = kBlockingListMaxDefault,
                    G4int stride = kBlockingListStride);
       // Create empty blocking List of default size and `stride' resize count.
 
-    ~G4BlockingList();
+    ~G4BlockingList() = default;
       // Destructor. No operations.
 
     void Reset();

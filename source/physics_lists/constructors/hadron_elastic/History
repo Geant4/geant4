@@ -6,12 +6,68 @@
 
      Hadronic physics-list/constructors/hadron_elastic History
      ---------------------------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-May-2021 Vladimir Ivanchenko (phys-ctor-helastic-V10-07-06)
+- in all constructors use verbosity level from G4HadronicParameters
+
+16-April-2021 Ben Morgan (phys-ctor-helastic-V10-07-05)
+- Migrate build to modular CMake API
+
+13-Apr-2021, Alberto Ribon (phys-ctor-helastic-V10-07-04)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
+08-Mar-2021, Alberto Ribon (phys-ctor-helastic-V10-07-03)
+- G4ChargeExchangePhysics : set explicitly the elastic cross sections
+  according to the hadron type, given that the universal Gheisha
+  elastic cross section has been deleted.
+
+15-Feb-2021, Alberto Ribon (phys-ctor-helastic-V10-07-02)
+- G4HadronHElasticPhysics : fixed problem of fully overlapping energy
+  transition between G4HadronElastic and G4ChipsElasticModel, using
+  now G4ChipsElasticModel only for Hydrogen element above 10 MeV.
+
+11-Dec-2020, Vladimir Ivanchenko (phys-ctor-helastic-V10-07-01)
+- G4HadronDElasticPhysics, G4HadronHElasticPhysics : use inheritance
+    from G4HadronElasticPhysics; use G4HadProcesses, G4PhysListUtil,
+    and G4HadParticles; implement x-section factor
+
+07-Dec-2020, Vladimir Ivanchenko (phys-ctor-helastic-V10-07-00)
+- G4HadronElasticPhysics : fixed type of builder in all hadron
+    elastic constructors (problem #2183)
+  G4IonElasticPhysics, G4ThermalNeutrons - added comments
+
+01-Oct-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-06)
+- G4ThermalNeutrons - use G4PhysListUtils to access neutron elastic
+    process
+
+17-Sep-2020, A. Ribon       (phys-ctor-helastic-V10-06-05)
+- G4HadronHElasticPhysics : added elastic scattering for charm and bottom
+  hadrons (needed for FTFP_BERT_TRV).
+
+24-Aug-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-04)
+- G4HadronElasticPhysics - use G4HadProcesses and G4PhysListUtil
+
+01-Aug-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-03)
+- G4HadronElasticPhysics - added optional cross section factor
+    for systematics studies
+
+20-Jul-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-02)
+- G4HadronElasticPhysics - instantiate anti-hyperons
+
+02-Jul-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-01)
+- G4HadronElasticPhysics - use coherently with inelastic physics
+    builder new utilities: G4HadParticles and G4HadronicBuilder
+
+30-Apr-2020 Ben Morgan      (phys-ctor-helastic-V10-06-00)
+-  Remove obsolete GRANULAR_DEPENDENCIES entries
 
 22-Oct-2019, A. Ribon       (phys-ctor-helastic-V10-05-03)
 - G4HadronElasticPhysics, G4HadronDElasticPhysics : use the Glauber-Gribov
@@ -26,7 +82,7 @@ introduced in the code and keeptrack of all tags.
 
 08-May-2019, V. Ivanchenko  (phys-ctor-helastic-V10-05-01)
 - G4HadronElasticPhysics : use Glauber-Gribov x-section for hyperons
-- G4HadronDElasticPhysics, G4HadronDElasticPhysics : use 
+- G4HadronDElasticPhysics, G4HadronDElasticPhysics : use
     Glauber-Gribov x-section for hyperons, d, t, He3, He4
 - G4HadronElasticPhysicsXS, G4IonElasticPhysics - removed commented lines
 
@@ -38,7 +94,7 @@ introduced in the code and keeptrack of all tags.
 - README : updated this file. No changes to anything else.
 
 22-Nov-2018, V. Ivanchenko  (phys-ctor-helastic-V10-04-04)
-- G4HadronElasticPhysics, G4HadronElasticPhysicsXS - use 
+- G4HadronElasticPhysics, G4HadronElasticPhysicsXS - use
     G4BGGNucleonElasticXS x-section for protons
 
 17-Oct-2018, A. Ribon       (phys-ctor-helastic-V10-04-03)
@@ -46,7 +102,7 @@ introduced in the code and keeptrack of all tags.
   replaced Chips cross sections with Glauber-Gribov ones.
 
 19-Jul-2018, V. Ivanchenko  (phys-ctor-helastic-V10-04-02)
-- G4HadronElasticPhysics - fixed problem introduced in previous tags 
+- G4HadronElasticPhysics - fixed problem introduced in previous tags
     for Hadr06 and Hadr07 extended examples
 
 17-Jul-2018, V. Ivanchenko  (phys-ctor-helastic-V10-04-01)
@@ -76,11 +132,11 @@ introduced in the code and keeptrack of all tags.
   the latest version of G4NuclNuclDiffuseElastic respects reproducibility).
 
 14-Aug-2017, A. Ribon         (phys-ctor-helastic-V10-03-01)
-- G4HadronElasticPhysics, G4HadronHElasticPhysics : changed kaon elastic 
+- G4HadronElasticPhysics, G4HadronHElasticPhysics : changed kaon elastic
   cross sections from, respectively, Gheisha (used in G4HadronElasticPhysics)
   and Chips (used in G4HadronHElasticPhysics), to Grichine's Glauber Gribov
   ones. In this way, the total (elastic + inelastic) kaon cross sections
-  are consistent with the PDG ones. 
+  are consistent with the PDG ones.
   Notes:
   - For the time being, kept the original elastic final-state model
     (i.e. Gheisha in G4HadronElasticPhysics and Chips in
@@ -95,7 +151,7 @@ introduced in the code and keeptrack of all tags.
 
 04-Nov-2016, Alberto Ribon    (phys-ctor-helastic-V10-02-04)
 - Written first draft of the README
-	 
+
 16-October-2016 M.Maire  (phys-ctor-helastic-V10-02-03)
 - add README
 
@@ -143,7 +199,7 @@ introduced in the code and keeptrack of all tags.
 - G4HadronHElasticPhysics V. Grichine removed G4LDsdChannel
 
 15-Oct-2014, V. Ivanchenko          (phys-ctor-helastic-V10-00-06)
-- G4HadronHElasticPhysics V. Grichine activates diffraction 
+- G4HadronHElasticPhysics V. Grichine activates diffraction
     dissociation process
 
 01-Aug-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-05)
@@ -165,38 +221,38 @@ introduced in the code and keeptrack of all tags.
 - G4HadronHElasticPhysics: improved version of elastic, used temporarily
   only in FTFP_BERT_TRV as playground before becoming the default in
   all physics lists.
-    
+
 04-Jun-2014, Gunter Folger          (phys-ctor-helastic-V10-00-01)
-- Fix to previous tag. the previous tag badly screwed up code for 
-   G4HadronInelastic. 
+- Fix to previous tag. the previous tag badly screwed up code for
+   G4HadronInelastic.
 
 02-Jun-2014, Gunter Folger          (phys-ctor-helastic-V10-00-00)
 - G4HadronElasticPhysics: Must not inline Get...() to static member data.
     (fails on Windows)
-    
+
 04-Nov-2013, Tatsumi Koi    		(phys-ctor-helastic-V09-06-06)
 - Create G4IonElasticPhysics Elastic Scattering for GenericIon
 
 22-Aug-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-05)
 - G4HadronDElasticPhysics - DiffuseElastic model active above 10 MeV,
-    LHEP model - below 10.1 MeV 
+    LHEP model - below 10.1 MeV
 - G4HadronHElasticPhysics - cleanup
 
 08-Jun-2013, A. Dotti			(phys-ctor-helastic-V09-06-04)
 - Bug fix for MT: wasActivated flag becomes TLS
-- All private data member are now TLS if in doubt or transformed to 
+- All private data member are now TLS if in doubt or transformed to
     local variables
 
 29-Mar-2013, Andrea Dotti		(phys-ctor-helastic-V09-06-03)
 - Changes needed for MT: now G4VUserPhysicsList is a split class
 
 27-Feb-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-02)
-- G4ChargeExchangePhysics - removed obsolete constructor and member of 
+- G4ChargeExchangePhysics - removed obsolete constructor and member of
     the class to fixed warning from the clang compiler on MacOS
 
 08-Feb-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-01)
 - GNUmakefile fixed - G4LIB_BUILD_EXPAT is added
 
 10-Jan-2013, Gunter Folger              (phys-ctor-helastic-V09-06-00)
-- new directory structure introduced. 
+- new directory structure introduced.
    constructors/hadron_elastic

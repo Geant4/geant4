@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrRotationMatrix
+// G4tgrRotationMatrix implementation
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrRotationMatrix.hh"
 
@@ -39,26 +35,22 @@
 #include "G4tgrUtils.hh"
 #include "G4tgrMessenger.hh"
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrRotationMatrix::G4tgrRotationMatrix()
-  : theName("Rotation-Matrix"), theInputType(rm9)
 {
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrRotationMatrix::~G4tgrRotationMatrix()
 {
 }
 
-
-// -------------------------------------------------------------------------
-G4tgrRotationMatrix::G4tgrRotationMatrix( const std::vector<G4String>& wl )
-  : theInputType(rm9) 
+// --------------------------------------------------------------------
+G4tgrRotationMatrix::G4tgrRotationMatrix(const std::vector<G4String>& wl)
 {
-  theName = G4tgrUtils::GetString( wl[1] );
+  theName = G4tgrUtils::GetString(wl[1]);
 
-  switch( wl.size() )
+  switch(wl.size())
   {
     case 5:
       theInputType = rm3;
@@ -70,31 +62,30 @@ G4tgrRotationMatrix::G4tgrRotationMatrix( const std::vector<G4String>& wl )
       theInputType = rm9;
       break;
     default:
-      G4Exception("G4tgrRotationMatrix::G4tgrRotationMatrix()",
-                  "InvalidMatrix", FatalException,
-                  "Input line must have 5, 8 or 11 words.");
+      G4Exception("G4tgrRotationMatrix::G4tgrRotationMatrix()", "InvalidMatrix",
+                  FatalException, "Input line must have 5, 8 or 11 words.");
       break;
   }
- 
+
   //-------- Fill matrix values
-  size_t siz = wl.size() - 2;
-  for( size_t ii = 0; ii < siz; ii++)
+  std::size_t siz = wl.size() - 2;
+  for(std::size_t ii = 0; ii < siz; ++ii)
   {
-    if( siz == 9 )
+    if(siz == 9)
     {
-      theValues.push_back( G4tgrUtils::GetDouble( wl[ii+2] ) );
+      theValues.push_back(G4tgrUtils::GetDouble(wl[ii + 2]));
     }
     else
     {
-      theValues.push_back( G4tgrUtils::GetDouble( wl[ii+2] , deg ) );
+      theValues.push_back(G4tgrUtils::GetDouble(wl[ii + 2], deg));
     }
   }
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
   {
     G4cout << " G4tgrRotationMatrix::G4tgrRotationMatrix() - Created: "
            << theName << G4endl;
-    for( size_t ii = 0; ii < siz; ii++)
+    for(std::size_t ii = 0; ii < siz; ++ii)
     {
       G4cout << " " << theValues[ii];
     }
@@ -103,14 +94,13 @@ G4tgrRotationMatrix::G4tgrRotationMatrix( const std::vector<G4String>& wl )
 #endif
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrRotationMatrix& obj)
 {
   os << "G4tgrRotationMatrix= " << obj.theName
      << " InputTyep = " << obj.theInputType << " VALUES= ";
 
-  for( size_t ii = 0; ii < obj.theValues.size(); ii++ )
+  for(std::size_t ii = 0; ii < obj.theValues.size(); ++ii)
   {
     os << obj.theValues[ii] << " ";
   }

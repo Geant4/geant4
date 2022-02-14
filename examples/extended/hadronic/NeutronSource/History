@@ -13,6 +13,68 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-10-21 mma (NeutronSource-V10-07-11)
+- HadronElasticPhysicsHP : use G4GenericMessenger instead of NeutronHPMessenger
+- RadioactiveDecayPhysics : do not change ThresholdOfHalfLife     
+
+06-10-21 I. Hrivnacova (NeutronSource-V10-07-10)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+     
+05-08-21 mma (NeutronSource-V10-07-09)
+- ElectromagneticPhysics : update EM parameters
+- RadioactiveDecayPhysics : new constructor, include G4Radioactivation process,
+                            inactivate atomic deexcitation
+			         
+27-07-21 mma (NeutronSource-V10-07-08)
+- RunAction::CountProcesses() : add a protection if (process == nullptr)
+- TrackingAction, RunAction : add a comment for excited states
+     
+19-07-21 I. Hrivnacova (NeutronSource-V10-07-07)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+22-06-21 G. Cosmo (NeutronSource-V10-07-06)
+- Use new CLHEP units for minute, hour, day, year and millielectronvolt
+  in PhysicsList.
+
+14-04-21 mma (NeutronSource-V10-07-05)
+- NeutronSource.cc: RunManagerFactory
+                    G4SteppingVerboseWithUnits
+		    ParticleHP env variables 
+- ActionInitialization.hh and cc: remove SteppingVerbose class
+
+04-03-21 A. Ribon (NeutronSource-V10-07-04)
+- GammaNuclearPhysics, GammaNuclearPhysicsLEND : replaced
+  G4PhotoNuclearProcess (that has been deleted) with
+  G4HadronInelasticProcess.
+
+29-01-21 mma (NeutronSource-V10-07-03)
+- TrackingAction, Run: print meanLife
+- PhysicsList: add new units for time
+     
+15-01-21 mma (NeutronSource-V10-07-02)
+- TrackingAction: count secondary particles with meanLife > 0.
+
+05-01-21 mma (NeutronSource-V10-07-01)
+- PhysicsList: add GammaNuclearPhysicsLEND
+     
+01-01-21 mma (NeutronSource-V10-07-00)
+- update ElectromagneticPhysics
+     
+25-10-20 mma (NeutronSource-V10-06-02)
+- README : add macros descrption
+     
+05-08-20 A. Ribon (NeutronSource-V10-06-01)
+- envHadronic.(c)sh , NeutronSource.cc : removed deprecated HP
+  environmental variables and replaced them with corresponding
+  C++ calls in the main.
+  (These two shell-script files will be removed in G4 11.0.)
+
+13-05-20 mma (NeutronSource-V10-06-00)
+- GammaNuclearPhysics : add G4LowEGammaNuclearModel
+
 07-10-18 mma (NeutronSource-V10-04-07)
 - PhysicsList : use G4IonElasticPhysics and G4IonPhysicsXS
 

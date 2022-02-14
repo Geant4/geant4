@@ -41,11 +41,7 @@
 #include "ExTGPrimaryGeneratorAction.hh"
 #include "ExTGActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 
@@ -63,12 +59,8 @@ int main(int argc,char** argv)
 {
   // Run manager
   //
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(1);
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
 
   // User Initialization classes (mandatory)
   //
@@ -85,17 +77,17 @@ int main(int argc,char** argv)
   //MT  runManager->SetUserAction(new ExTGPrimaryGeneratorAction);
 
   runManager->SetUserInitialization(new ExTGActionInitialization);
-   
+
   // Run action that dumps GEANT4 in-memory geometry to text file
   //MT  runManager->SetUserAction(new ExTGRunAction);
 
   // Initialize G4 kernel
   //
   //  runManager->Initialize();
-      
+
   // Get the pointer to the User Interface manager
   //
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
 
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
@@ -109,12 +101,8 @@ int main(int argc,char** argv)
      UImanager->ApplyCommand(command+fileName);
     }
   else           // interactive mode : define visualization and UI terminal
-    { 
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute run.mac");     
-#endif
+    {
+      UImanager->ApplyCommand("/control/execute run.mac");
       ui->SessionStart();
       delete ui;
 #endif

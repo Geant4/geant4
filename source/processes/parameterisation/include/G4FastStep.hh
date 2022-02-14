@@ -315,6 +315,10 @@ public:
 
   void Initialize(const G4FastTrack&);
 
+  // for Debug 
+  void DumpInfo() const;
+  G4bool CheckIt(const G4Track&);
+
 private:
   //===================================================
   // Private Internal methods (implementation).
@@ -350,28 +354,22 @@ private:
   G4ThreeVector thePolarizationChange;
 
   //  The final kinetic energy of the current particle.
-  G4double theEnergyChange;
+  G4double theEnergyChange = 0.0;
 
   //  The changed (final) position of a given particle.
   G4ThreeVector thePositionChange;
 
   //  The changed (final) global time of a given particle.
-  G4double theTimeChange;
+  G4double theTimeChange = 0.0;
 
   //  The changed (final) proper time of a given particle.
-  G4double theProperTimeChange;
+  G4double theProperTimeChange = 0.0;
 
   // The reference G4FastTrack
-  const G4FastTrack* fFastTrack;
+  const G4FastTrack* fFastTrack = nullptr;
 
   // weight for event biasing mechanism:
-  G4double theWeightChange;
-
-
-public:
-  // for Debug 
-  void DumpInfo() const;
-  G4bool CheckIt(const G4Track&);
+  G4double theWeightChange = 0.0;
 };
 
 //*******************************************************************

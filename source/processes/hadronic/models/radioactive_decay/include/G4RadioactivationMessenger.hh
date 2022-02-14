@@ -61,14 +61,13 @@ class G4RadioactivationMessenger: public G4UImessenger
   private:
     G4Radioactivation* theRadioactivationContainer;
   
-    G4UIdirectory* grdmDirectory;
+    G4UIdirectory* rdmDirectory;            
     G4UIcmdWithABool* analoguemcCmd;
     G4UIcmdWithAString* sourcetimeprofileCmd;
     G4UIcmdWithAString* decaybiasprofileCmd;
     G4UIcmdWithABool* brbiasCmd;
     G4UIcmdWithAnInteger* splitnucleiCmd;
     G4UIcmdWithADoubleAndUnit* hlthCmd;
-
 };
 
 #endif

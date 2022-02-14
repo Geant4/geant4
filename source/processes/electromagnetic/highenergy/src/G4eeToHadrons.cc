@@ -57,15 +57,12 @@
 using namespace std;
 
 G4eeToHadrons::G4eeToHadrons(const G4String& name)
-  : G4VEmProcess(name),
-    multimodel(nullptr),
-    csFactor(1.0), 
-    isInitialised(false)
+  : G4VEmProcess(name)
 {
   //SetVerboseLevel(2);
   SetProcessSubType(fAnnihilationToHadrons);
   SetBuildTableFlag(false);
-  SetIntegral(true);
+  SetCrossSectionType(fEmOnePeak);
   SetSecondaryParticle(G4Gamma::Gamma());
 }
 
@@ -116,7 +113,7 @@ void G4eeToHadrons::SetCrossSecFactor(G4double fac)
 
 void G4eeToHadrons::ProcessDescription(std::ostream& out) const
 {
-  out << "No description available." << G4endl;
+  out << "G4eeToHadrons - positron annihilation on atomic electrons" << G4endl;
   G4VEmProcess::ProcessDescription(out);
 }
 

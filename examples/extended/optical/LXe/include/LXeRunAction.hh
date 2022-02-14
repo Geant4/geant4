@@ -35,23 +35,26 @@
 #include "G4UserRunAction.hh"
 
 #ifndef LXeRunAction_h
-#define LXeRunAction_h 1
+#  define LXeRunAction_h 1
 
-class LXeRecorderBase;
+class LXeRun;
+class LXeHistoManager;
+
+class G4Run;
 
 class LXeRunAction : public G4UserRunAction
 {
-  public:
+ public:
+  LXeRunAction();
+  ~LXeRunAction();
 
-    LXeRunAction(LXeRecorderBase*);
-    virtual ~LXeRunAction();
+  G4Run* GenerateRun() override;
+  void BeginOfRunAction(const G4Run*) override;
+  void EndOfRunAction(const G4Run*) override;
 
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
-
-  private:
-
-    LXeRecorderBase* fRecorder;
+ private:
+  LXeRun* fRun;
+  LXeHistoManager* fHistoManager;
 };
 
 #endif

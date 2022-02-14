@@ -28,9 +28,7 @@
 
 #include <cmath>
 #include <iostream>
-
 #include "G4ecpssrBaseKxsModel.hh"
-
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -48,7 +46,6 @@ G4ecpssrBaseKxsModel::G4ecpssrBaseKxsModel()
     verboseLevel=0;
 
     // Storing C coefficients for high velocity formula
-
     G4String fileC1("pixe/uf/c1");
     tableC1 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
 
@@ -113,11 +110,9 @@ void print (G4double elem)
 
 G4ecpssrBaseKxsModel::~G4ecpssrBaseKxsModel()
 {
-
   delete tableC1;
   delete tableC2;
   delete tableC3;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -126,7 +121,6 @@ G4double G4ecpssrBaseKxsModel::ExpIntFunction(G4int n,G4double x)
 
 {
 // this "ExpIntFunction" function allows fast evaluation of the n order exponential integral function En(x)
-
   G4int i;
   G4int ii;
   G4int nm1;
@@ -193,13 +187,10 @@ return ans;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
 G4double G4ecpssrBaseKxsModel::CalculateCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 
 {
-
   // this K-CrossSection calculation method is done according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)//
-
   G4NistManager* massManager = G4NistManager::Instance();
 
   G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
@@ -239,13 +230,13 @@ G4double G4ecpssrBaseKxsModel::CalculateCrossSection(G4int zTarget,G4double mass
 
     if (verboseLevel>0) G4cout << "  systemMass=" <<  systemMass<< G4endl;
 
-  const G4double zkshell= 0.3;
+  constexpr G4double zkshell= 0.3;
   // *** see Brandt, Phys Rev A23, p 1727
 
   G4double screenedzTarget = zTarget-zkshell; // screenedzTarget is the screened nuclear charge of the target
   // *** see Brandt, Phys Rev A23, p 1727
 
-  const G4double rydbergMeV= 13.6056923e-6;
+  constexpr G4double rydbergMeV= 13.6056923e-6;
 
   G4double tetaK = kBindingEnergy/((screenedzTarget*screenedzTarget)*rydbergMeV);  //tetaK denotes the reduced binding energy of the electron
   // *** see Rice, ADANDT 20, p 504, f 2
@@ -267,7 +258,7 @@ G4double G4ecpssrBaseKxsModel::CalculateCrossSection(G4int zTarget,G4double mass
   // *** see Benka, ADANDT 22, p 220, f2, for protons
   // *** see Basbas, Phys Rev A7, p 1000
 
-    if (verboseLevel>0) G4cout << "  sigma0=" <<  sigma0<< G4endl;
+  if (verboseLevel>0) G4cout << "  sigma0=" <<  sigma0<< G4endl;
 
   const G4double kAnalyticalApproximation= 1.5;
   G4double x = kAnalyticalApproximation/velocity;
@@ -379,9 +370,7 @@ G4double G4ecpssrBaseKxsModel::CalculateCrossSection(G4int zTarget,G4double mass
       if (verboseLevel>0) G4cout << "  universalFunction by Brandt 1981 =" << universalFunction<< G4endl;
 
     }
-
   else
-
   {
 
     if ( etaOverTheta2 > 86.6 && (sigmaPSS*tetaK) > 0.4 && (sigmaPSS*tetaK) < 2.9996 )
@@ -448,9 +437,7 @@ G4double G4ecpssrBaseKxsModel::CalculateCrossSection(G4int zTarget,G4double mass
       universalFunction=universalFunction3;
 
     }
-
     else if ( etaOverTheta2 >= 1.e-3 && etaOverTheta2 <= 86.6 && (sigmaPSS*tetaK) >= 0.4 && (sigmaPSS*tetaK) <= 2.9996 )
-
     {
       // From Benka 1978
 
@@ -575,54 +562,26 @@ G4double G4ecpssrBaseKxsModel::FunctionFK(G4double k, G4double theta)
 
   // END PROTECTION
 
-    std::vector<double>::iterator t2 = std::upper_bound(dummyVec.begin(),dummyVec.end(), k);
-    std::vector<double>::iterator t1 = t2-1;
+  auto t2 = std::upper_bound(dummyVec.begin(),dummyVec.end(), k);
+  auto t1 = t2-1;
 
-    std::vector<double>::iterator e12 = std::upper_bound(aVecMap[(*t1)].begin(),aVecMap[(*t1)].end(), theta);
-    std::vector<double>::iterator e11 = e12-1;
+  auto e12 = std::upper_bound(aVecMap[(*t1)].begin(),aVecMap[(*t1)].end(), theta);
+  auto e11 = e12-1;
 
-    std::vector<double>::iterator e22 = std::upper_bound(aVecMap[(*t2)].begin(),aVecMap[(*t2)].end(), theta);
-    std::vector<double>::iterator e21 = e22-1;
+  auto e22 = std::upper_bound(aVecMap[(*t2)].begin(),aVecMap[(*t2)].end(), theta);
+  auto e21 = e22-1;
 
-    valueT1  =*t1;
-    valueT2  =*t2;
-    valueE21 =*e21;
-    valueE22 =*e22;
-    valueE12 =*e12;
-    valueE11 =*e11;
+  valueT1  =*t1;
+  valueT2  =*t2;
+  valueE21 =*e21;
+  valueE22 =*e22;
+  valueE12 =*e12;
+  valueE11 =*e11;
 
-    xs11 = FKData[valueT1][valueE11];
-    xs12 = FKData[valueT1][valueE12];
-    xs21 = FKData[valueT2][valueE21];
-    xs22 = FKData[valueT2][valueE22];
-
-/*
-    if (verboseLevel>0)
-    {
-      G4cout << "x1= " << valueT1 << G4endl;
-      G4cout << " vector of y for x1" << G4endl;
-        std::for_each (aVecMap[(*t1)].begin(),aVecMap[(*t1)].end(), print);
-      G4cout << G4endl;
-      G4cout << "x2= " << valueT2 << G4endl;
-      G4cout << " vector of y for x2" << G4endl;
-        std::for_each (aVecMap[(*t2)].begin(),aVecMap[(*t2)].end(), print);
-
-      G4cout << G4endl;
-      G4cout
-        << "  "
-        << valueT1 << " "
-        << valueT2 << " "
-        << valueE11 << " "
-        << valueE12 << " "
-        << valueE21<< " "
-        << valueE22 << " "
-        << xs11 << " "
-        << xs12 << " "
-        << xs21 << " "
-        << xs22 << " "
-        << G4endl;
-    }
-*/
+  xs11 = FKData[valueT1][valueE11];
+  xs12 = FKData[valueT1][valueE12];
+  xs21 = FKData[valueT2][valueE21];
+  xs22 = FKData[valueT2][valueE22];
 
   G4double xsProduct = xs11 * xs12 * xs21 * xs22;
 
@@ -679,16 +638,10 @@ G4double G4ecpssrBaseKxsModel::QuadInterpolator(G4double e11, G4double e12,
 						       G4double t1, G4double t2,
 						       G4double t, G4double e)
 {
-// Log-Log
+  // Log-Log
   G4double interpolatedvalue1 = LogLogInterpolate(e11, e12, e, xs11, xs12);
   G4double interpolatedvalue2 = LogLogInterpolate(e21, e22, e, xs21, xs22);
   G4double value = LogLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
 
-/*
-// Lin-Log
-  G4double interpolatedvalue1 = LinLogInterpolate(e11, e12, e, xs11, xs12);
-  G4double interpolatedvalue2 = LinLogInterpolate(e21, e22, e, xs21, xs22);
-  G4double value = LinLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
-*/
   return value;
 }

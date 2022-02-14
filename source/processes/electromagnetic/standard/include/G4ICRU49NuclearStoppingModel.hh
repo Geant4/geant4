@@ -67,21 +67,25 @@ public:
   explicit G4ICRU49NuclearStoppingModel(const G4String& nam = 
 					"ICRU49NucStopping");
 
-  virtual ~G4ICRU49NuclearStoppingModel();
+  ~G4ICRU49NuclearStoppingModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) final;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) final;
 
   // main method to compute dEdx
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-                                        const G4ParticleDefinition*,
-                                        G4double kineticEnergy,
-                                        G4double cutEnergy = DBL_MAX) final;
+  G4double ComputeDEDXPerVolume(const G4Material*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double cutEnergy = DBL_MAX) final;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*, 
-				 G4double, G4double) final;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*, 
+			 G4double, G4double) final;
+
+  //  hide assignment operator
+  G4ICRU49NuclearStoppingModel & operator=
+  (const  G4ICRU49NuclearStoppingModel &right) = delete;
+  G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&) = delete;
 
 private:
 
@@ -90,11 +94,6 @@ private:
   G4double NuclearStoppingPower(G4double kineticEnergy,
 				G4double Z1, G4double Z2,
 				G4double A1, G4double A2);
-
-  //  hide assignment operator
-  G4ICRU49NuclearStoppingModel & operator=
-  (const  G4ICRU49NuclearStoppingModel &right) = delete;
-  G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&) = delete;
 
   G4Pow* g4calc;
   G4double theZieglerFactor;

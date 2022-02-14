@@ -51,12 +51,27 @@ public: // With description
    const G4String& colourString = "auto",
    const G4String& description = "",
    G4bool withAnnotation = true,
-   G4double textSize = 10.
+   G4double textSize = 10.,
+   const G4Transform3D& transform = G4Transform3D()
    );
-   
+
+  // Alternative short constructor
+  G4AxesModel
+  (G4double x0, G4double y0, G4double z0, G4double length,
+   const G4Transform3D& transform = G4Transform3D()
+   );
+
   virtual ~G4AxesModel ();
 
-  virtual void DescribeYourselfTo (G4VGraphicsScene&);
+  void Construct
+  (G4double x0, G4double y0, G4double z0, G4double length,
+   G4double arrowWidth, const G4String& colourString,
+   const G4String& description,
+   G4bool withAnnotation,
+   G4double textSize,
+   const G4Transform3D& transform);
+
+  void DescribeYourselfTo (G4VGraphicsScene&) override;
   // The main task of a model is to describe itself to the graphics scene.
 
 private:
@@ -69,6 +84,7 @@ private:
     *fXAxisModel, *fXLabelModel, *fXAnnotationModel,
     *fYAxisModel, *fYLabelModel, *fYAnnotationModel,
     *fZAxisModel, *fZLabelModel, *fZAnnotationModel;
+  G4Transform3D fTransform;
 };
 
 #endif

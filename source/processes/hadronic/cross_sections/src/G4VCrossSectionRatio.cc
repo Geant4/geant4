@@ -37,23 +37,13 @@
 //
 
 #include "G4VCrossSectionRatio.hh"
-#include "G4ParticleDefinition.hh"
 
 G4VCrossSectionRatio::G4VCrossSectionRatio(const G4String& nam, G4int verb) 
-  : verboseLevel(verb),name(nam) 
-{}
+  : G4VCrossSectionDataSet(nam) 
+{
+  SetVerboseLevel(verb);
+}
 
 G4VCrossSectionRatio::~G4VCrossSectionRatio()
 {}
 
-void 
-G4VCrossSectionRatio::Description() const
-{}
-
-void 
-G4VCrossSectionRatio::BuildPhysicsTable(const G4ParticleDefinition&)
-{}
-
-void 
-G4VCrossSectionRatio::DumpPhysicsTable(const G4ParticleDefinition&)
-{}

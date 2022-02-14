@@ -45,7 +45,6 @@
 
 class PhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,15 +56,14 @@ public:
   PhysicsListMessenger(PhysicsList* );
   virtual ~PhysicsListMessenger();
     
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
+  void SetNewValue(G4UIcommand*, G4String) override;
+
 private:
   
   PhysicsList* fPhysicsList;
     
-  G4UIdirectory*             fPhysDir;        
-  G4UIcmdWithAString*        fListCmd;
-  
+  G4UIdirectory*             fPhysDir;    
+  G4UIcmdWithAString*        fListCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

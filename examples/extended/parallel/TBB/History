@@ -15,8 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+28th May 2020 J. Madsen     (tbbex-V10-06-00)
+- Updated TBB example to use new tasking system which is fully compatible with TBB
+
 25th Oct 2018 J. Madsen     (tbbex-V10-04-01)
 - Updated TBB example to work with migration from POSIX threads to C++11 threads
 

@@ -32,61 +32,125 @@
 #define G4VFileManager_h 1
 
 #include "G4BaseFileManager.hh"
+#include "G4VTHnFileManager.hh"
 #include "globals.hh"
+
+#include <memory>
+#include <string_view>
+
+namespace tools {
+namespace histo {
+class h1d;
+class h2d;
+class h3d;
+class p1d;
+class p2d;
+}
+}
 
 class G4VFileManager : public G4BaseFileManager
 {
   public:
     explicit G4VFileManager(const G4AnalysisManagerState& state);
-    virtual ~G4VFileManager();
-   
-    // Methods to manipulate files
-    virtual G4bool OpenFile(const G4String& fileName) = 0;
-    virtual G4bool WriteFile() = 0;
-    virtual G4bool CloseFile() = 0; 
-    
-    // Methods for handling files and directories names
-    //
-    virtual G4bool SetFileName(const G4String& fileName) final;
-    
-    void LockHistoDirectoryName();
-    void LockNtupleDirectoryName();
+    G4VFileManager() = delete;
+    virtual ~G4VFileManager() = default;
 
-    G4bool SetHistoDirectoryName(const G4String& dirName);
-    G4bool SetNtupleDirectoryName(const G4String& dirName); 
+    // Method to open default file
+    virtual G4bool OpenFile(const G4String& fileName) = 0;
+
+    // Methods applied to file per name
+    virtual G4bool CreateFile(const G4String& fileName) = 0;
+    virtual G4bool WriteFile(const G4String& fileName) = 0;
+    virtual G4bool CloseFile(const G4String& fileName) = 0;
+    virtual G4bool SetIsEmpty(const G4String& fileName, G4bool isEmpty) = 0;
+
+    // Methods applied to all registered files
+    virtual G4bool WriteFiles() = 0;
+    virtual G4bool CloseFiles() = 0;
+    virtual G4bool DeleteEmptyFiles() = 0;
+
+    // Clear all data
+    virtual void Clear() = 0;
+
+    // Methods for handling files and directories names
+    virtual G4bool SetFileName(const G4String& fileName) final;
+    virtual G4bool SetHistoDirectoryName(const G4String& dirName);
+    virtual G4bool SetNtupleDirectoryName(const G4String& dirName);
+
+    void LockDirectoryNames();
+    void UnlockDirectoryNames();
 
     G4bool IsOpenFile() const;
     G4String GetHistoDirectoryName() const;
     G4String GetNtupleDirectoryName() const;
 
+    // Access to helpers
+    template <typename HT>
+    std::shared_ptr<G4VTHnFileManager<HT>> GetHnFileManager() const;
+
   protected:
-    // data members
-    G4bool   fIsOpenFile;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4VFileManager" };
+
+    // Data members
     G4String fHistoDirectoryName;
-    G4String fNtupleDirectoryName; 
-    G4bool   fLockFileName;     
-    G4bool   fLockHistoDirectoryName;     
-    G4bool   fLockNtupleDirectoryName;
+    G4String fNtupleDirectoryName;
+    G4bool   fIsOpenFile { false };
+    G4bool   fLockDirectoryNames { false };
+
+    // FileManagers per object type
+    std::shared_ptr<G4VTHnFileManager<tools::histo::h1d>> fH1FileManager { nullptr };
+    std::shared_ptr<G4VTHnFileManager<tools::histo::h2d>> fH2FileManager { nullptr };
+    std::shared_ptr<G4VTHnFileManager<tools::histo::h3d>> fH3FileManager { nullptr };
+    std::shared_ptr<G4VTHnFileManager<tools::histo::p1d>> fP1FileManager { nullptr };
+    std::shared_ptr<G4VTHnFileManager<tools::histo::p2d>> fP2FileManager { nullptr };
 };
 
 // inline functions
 
+inline void G4VFileManager::LockDirectoryNames()
+{ fLockDirectoryNames = true; }
+
+inline void G4VFileManager::UnlockDirectoryNames()
+{ fLockDirectoryNames = false; }
+
 inline G4bool G4VFileManager::IsOpenFile() const
 { return fIsOpenFile; }
 
-inline void G4VFileManager::LockHistoDirectoryName()
-{ fLockHistoDirectoryName = true; }
+inline G4String G4VFileManager::GetHistoDirectoryName() const
+{ return fHistoDirectoryName; }
 
-inline void G4VFileManager::LockNtupleDirectoryName()
-{ fLockNtupleDirectoryName = true; }
+inline G4String G4VFileManager::GetNtupleDirectoryName() const
+{ return fNtupleDirectoryName; }
 
+template <>
+inline
+std::shared_ptr<G4VTHnFileManager<tools::histo::h1d>>
+G4VFileManager::GetHnFileManager<tools::histo::h1d>() const
+{   return fH1FileManager; }
 
-inline G4String G4VFileManager::GetHistoDirectoryName() const {
-  return fHistoDirectoryName;
-}  
+template <>
+inline
+std::shared_ptr<G4VTHnFileManager<tools::histo::h2d>>
+G4VFileManager::GetHnFileManager<tools::histo::h2d>() const
+{ return fH2FileManager; }
 
-inline G4String G4VFileManager::GetNtupleDirectoryName() const {
-  return fNtupleDirectoryName;
-}  
-  
+template <>
+inline
+std::shared_ptr<G4VTHnFileManager<tools::histo::h3d>>
+G4VFileManager::GetHnFileManager<tools::histo::h3d>() const
+{ return fH3FileManager; }
+
+template <>
+inline
+std::shared_ptr<G4VTHnFileManager<tools::histo::p1d>>
+G4VFileManager::GetHnFileManager<tools::histo::p1d>() const
+{ return fP1FileManager; }
+
+template <>
+inline
+std::shared_ptr<G4VTHnFileManager<tools::histo::p2d>>
+G4VFileManager::GetHnFileManager<tools::histo::p2d>() const
+{ return fP2FileManager; }
+
 #endif

@@ -91,17 +91,6 @@ The primary radiation field is defined by means of the GeneralParticleSource
                                           
 A standard Geant4 example CMakeLists.txt is provided.                   
 
-Setup for analysis:
-By default, the example has no analysis component. 
-
-To compile and use the application with the analysis on, build the example with the following command:
-cmake -DWITH_ANALYSIS_USE=ON -DGeant4_DIR=/path/to/Geant4_installation /path/to/brachytherapy_example                                                     
-          
-The installation of ROOT is required (http://root.cern.ch/drupal/).
-
-macro.C and plot_primary.C are provided to plot the results of the simulation, contained
-in the brachytherapy.root file. 
-
 ------------------------------------------------------------------------
 ----> 3.How to run the example.                                         
 
@@ -154,18 +143,33 @@ The GPS macros are executed in VisualisationMacro.mac by default, FlexiSourceMac
 
 The electromagnetic Livermore Low Energy physics is active as well as the radioactive decay.
 The cut is 0.05 mm.
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+Fluorescence and Auger electron emission are included.
 
 The GPS macros are executed in IridiumSourceMacro.mac, IodiumSourceMacro.mac, LeipzigSourceMacro.mac
 ------------------------------------------------------------------------
-----> 5. Scoring mesh
+----> 6. Scoring mesh
+
+The scoring mesh is used to calculate the energy deposition in the plane containing the source (z=0 plane)
+integrated over the whole run. The scoring mesh is defined in the input macro files.
+The default output format of the scoring is changed in the class BrachyUserScoreWriter.
+The scoring mesh is fixed  with a size of 20.025 cm along x and y. The bin size is 0.25 mm along x, y and z. 
+
+When running in interactive mode there is no scoring mesh.The user has to add it with appropriate UI                                                            
 
 The scoring mesh is used to calculate the energy deposition in the voxels of the phantom,
 integrated over the whole run. The scoring mesh is defined in the input macro file (see IridiumSourceMacro.mac for example).
 The user can change the default output format of the scoring in the class BrachyUserScoreWriter.
                                                                          
 ------------------------------------------------------------------------
-----> 6. Simulation output                                               
+----> 6. Analysis
+
+G4Analysis is used to create and fill histograms in ROOT output files.
+                                                       
+The installation of ROOT is required to plot the results of the simulation contained
+in primary.root and brachytherapy.root(http://root.cern.ch/drupal/).
+
+------------------------------------------------------------------------
+----> 7. Simulation output                                               
 
 The output is:
 
@@ -183,20 +187,11 @@ The output is:
   EnergyDeposition_Oncura.out contains the Edep when the Iodine Oncura 6711 source is selected. 
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-- brachytherapy.root, containing 
-  - an ntuple with the 3D energy deposition in the phantom. The macro macro.C is provided as example 
-    to open brachytherapy.root in ROOT interactive session and to plot the results of the simulation. 
-    The ROOT file will be created if the example is built with the WITH_ANALYSIS_USE=ON option (see section 2).                   
-<<<<<<< HEAD
-  - 1D histogram withe the plot of energy spectrum of gamma emitted by the radioactive decay when the Ir or I decay is modelled
-   (see section 4). plot_primary.C is provided as example to open brachytherapy.root and to plot the energy    spectra                                                                
-
--------------------------------------------------------------------------------
-----> 7.Visualisation                                                     
-=======
-  - 1D histogram withe the plot of energy spectrum of gamma emitted by the radioactive decay when gamma are generated directly as 
-    primary particles or whenthey derive from Radioactive Decay(see section 4). 
-    plot_primary.C is provided as example to open brachytherapy.root and to plot the energy spectra                                                                
+- brachytherapy.root, containing a 2D histogram with the energy deposition in the phantom. The macro macro.C is provided as example 
+  to open brachytherapy.root in ROOT interactive session and to plot the results of the simulation. 
+                
+- primary.root, with 1D histogram of the  energy spectrum of photons emitted by the radionuclide (see section 4). 
+  plot_primary.C is provided as example to open primary.root and to plot the energy spectra                                                                
 
 -------------------------------------------------------------------------------
 ----> 8.Visualisation                                                     

@@ -59,46 +59,39 @@ class G4Physics2DVector;
 
 class G4LivermoreBremsstrahlungModel : public G4eBremsstrahlungRelModel
 {
-
 public:
-
-  G4LivermoreBremsstrahlungModel(const G4ParticleDefinition* p = 0, 
-				 const G4String& nam = "LowEnBrem");
-
+  explicit G4LivermoreBremsstrahlungModel(const G4ParticleDefinition* p = nullptr, 
+					  const G4String& nam = "LowEnBrem");
   virtual ~G4LivermoreBremsstrahlungModel();
+  
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   inline void SetBicubicInterpolationFlag(G4bool);
 
+  G4LivermoreBremsstrahlungModel & operator=(const  G4LivermoreBremsstrahlungModel &right) = delete;
+  G4LivermoreBremsstrahlungModel(const  G4LivermoreBremsstrahlungModel&) = delete;
+
 protected:
-
-  virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
-
-  virtual G4String DirectoryPath() const;
+  G4double ComputeDXSectionPerAtom(G4double gammaEnergy) override;
+  G4String DirectoryPath() const;
 
 private:
-
   void ReadData(G4int Z, const char* path = 0);
-
-  // hide assignment operator
-  G4LivermoreBremsstrahlungModel & operator=(const  G4LivermoreBremsstrahlungModel &right);
-  G4LivermoreBremsstrahlungModel(const  G4LivermoreBremsstrahlungModel&);
 
   static G4Physics2DVector* dataSB[101];
   static G4double ylimit[101];
   static G4double expnumlim;
-  G4int  nwarn;
-  size_t idx;
-  size_t idy;
+
+  G4int  nwarn = 0;
+  size_t idx = 0;
+  size_t idy = 0;
   G4bool useBicubicInterpolation;
 };
 

@@ -66,7 +66,8 @@
 #include"G4ThreeVector.hh"
 #include"G4Event.hh"
 #include"G4Run.hh"
-#include "g4root.hh"
+#include"G4AnalysisManager.hh"
+#include"g4hntools_defs.hh"
 
 class G4Timer;
 class RMC01AnalysisManagerMessenger;

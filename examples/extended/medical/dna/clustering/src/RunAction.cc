@@ -33,13 +33,13 @@
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 
-#include "Analysis.hh"
 #include "RunAction.hh"
 #include "RunInitObserver.hh"
 #include "RunActionMessenger.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,7 +56,6 @@ RunAction::RunAction()
 RunAction::~RunAction()
 {
   delete fpRunMessenger;
-  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,6 +67,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   // Get analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
 
   // Open an output file
   analysisManager->OpenFile(fFileName);

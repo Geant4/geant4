@@ -37,8 +37,6 @@
  * gb 14 November 2004 : inherit G4OpenInventorViewer.
  */
 
-#ifdef G4VIS_BUILD_OIX_DRIVER
-
 // this :
 #include "G4OpenInventorXtViewer.hh"
 
@@ -373,5 +371,3 @@ void G4OpenInventorXtViewer::HelpCbk(
   XtManageChild(This->fHelpForm);
   XmTextSetString(This->fHelpText,(char*)This->Help().c_str());
 }
-
-#endif

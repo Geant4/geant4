@@ -57,39 +57,28 @@
 #include "G4BaryonConstructor.hh"
 #include "G4MuonMinus.hh"
 #include "G4PionMinus.hh"
+#include "G4BuilderType.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4StoppingPhysics);
 
-G4ThreadLocal G4bool G4StoppingPhysics::wasActivated = false;
+G4StoppingPhysics::G4StoppingPhysics( G4int ver ) :  
+  G4StoppingPhysics("stopping", ver)
+{}
 
-G4StoppingPhysics::
-G4StoppingPhysics( G4int ver ) :  
-  G4VPhysicsConstructor( "stopping" ),
-//muProcess( 0 ), hBertiniProcess( 0 ), hFritiofProcess( 0 ),
-  verbose( ver ),
-  useMuonMinusCapture( true ) 
-{
-  if ( verbose > 1 ) G4cout << "### G4StoppingPhysics" << G4endl;
-}
-
-
-G4StoppingPhysics::
-G4StoppingPhysics( const G4String& name, G4int ver, 
-                                    G4bool UseMuonMinusCapture ) :
+G4StoppingPhysics::G4StoppingPhysics(const G4String& name, G4int ver, 
+                                     G4bool useMuCapture) :
   G4VPhysicsConstructor( name ),
-  // muProcess( 0 ), hBertiniProcess( 0 ), hFritiofProcess( 0 ),
   verbose( ver ), 
-  useMuonMinusCapture( UseMuonMinusCapture ) 
+  useMuonMinusCapture( useMuCapture ) 
 {
+  SetPhysicsType(bStopping);
   if ( verbose > 1 ) G4cout << "### G4StoppingPhysics" << G4endl;
 }
-
 
 G4StoppingPhysics::~G4StoppingPhysics() {}
-
 
 void G4StoppingPhysics::ConstructParticle() {
   // G4cout << "G4StoppingPhysics::ConstructParticle" << G4endl;
@@ -103,21 +92,16 @@ void G4StoppingPhysics::ConstructParticle() {
   pBaryonConstructor.ConstructParticle();
 }
 
-
 void G4StoppingPhysics::ConstructProcess() {
   if ( verbose > 1 ) G4cout << "### G4StoppingPhysics::ConstructProcess " 
-		   	    << wasActivated << G4endl;
-  if ( wasActivated ) return;
-  wasActivated = true;
+		   	    << G4endl;
 
-  G4MuonMinusCapture* muProcess;
-  G4HadronicAbsorptionBertini* hBertiniProcess;
-  G4HadronicAbsorptionFritiof* hFritiofProcess;
+  G4MuonMinusCapture* muProcess = nullptr;
+  G4HadronicAbsorptionBertini* hBertiniProcess = nullptr;
+  G4HadronicAbsorptionFritiof* hFritiofProcess = nullptr;
 
   if ( useMuonMinusCapture ) {
     muProcess = new G4MuonMinusCapture();
-  } else {
-    muProcess = 0;
   }   
 
   hBertiniProcess = new G4HadronicAbsorptionBertini();
@@ -137,13 +121,11 @@ void G4StoppingPhysics::ConstructProcess() {
     particle = myParticleIterator->value();
     pmanager = particle->GetProcessManager();
 
-    if ( particle == G4MuonMinus::MuonMinus() ) {
-      if ( useMuonMinusCapture ) {
-	 pmanager->AddRestProcess( muProcess );
-         if ( verbose > 1 ) {
-           G4cout << "### G4StoppingPhysics added G4MuonMinusCapture for " 
-	          << particle->GetParticleName() << G4endl;
-         }
+    if (useMuonMinusCapture && particle == G4MuonMinus::MuonMinus()) {
+      pmanager->AddRestProcess( muProcess );
+      if ( verbose > 1 ) {
+	G4cout << "### G4StoppingPhysics added G4MuonMinusCapture for " 
+	       << particle->GetParticleName() << G4endl;
       }
     }
 

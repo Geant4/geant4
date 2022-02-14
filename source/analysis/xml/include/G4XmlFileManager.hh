@@ -31,49 +31,54 @@
 #ifndef G4XmlFileManager_h
 #define G4XmlFileManager_h 1
 
-#include "G4VFileManager.hh"
+#include "G4VTFileManager.hh"
 #include "G4TNtupleDescription.hh"
+#include "G4TFileManager.hh"
 #include "globals.hh"
 
 #include "tools/waxml/ntuple"
 
 #include <fstream>
 #include <memory>
+#include <string_view>
+
+// Type aliases
+using XmlNtupleDescription = G4TNtupleDescription<tools::waxml::ntuple, std::ofstream>;
 
 class G4AnalysisManagerState;
 
-class G4XmlFileManager : public G4VFileManager
+class G4XmlFileManager : public G4VTFileManager<std::ofstream>
 {
   public:
     explicit G4XmlFileManager(const G4AnalysisManagerState& state);
-    ~G4XmlFileManager();
+    G4XmlFileManager() = delete;
+    virtual ~G4XmlFileManager() = default;
 
-    // Type aliases
-    using NtupleType = tools::waxml::ntuple;
-    using NtupleDescriptionType = G4TNtupleDescription<NtupleType>;
+    using G4BaseFileManager::GetNtupleFileName;
+    using G4VTFileManager<std::ofstream>::WriteFile;
+    using G4VTFileManager<std::ofstream>::CloseFile;
 
     // Methods to manipulate output files
     virtual G4bool OpenFile(const G4String& fileName) final;
-    virtual G4bool WriteFile() final;
-    virtual G4bool CloseFile() final; 
+
+    virtual G4String GetFileType() const final { return "xml"; }
 
     // Specific methods for files per objects
-    G4bool CreateHnFile();
-    G4bool CloseHnFile(); 
-    G4bool CreateNtupleFile(NtupleDescriptionType* ntupleDescription);
-    G4bool CloseNtupleFile(NtupleDescriptionType* ntupleDescription); 
-    
-    // Get methods
-    std::shared_ptr<std::ofstream> GetHnFile() const;
-    
+    G4bool CreateNtupleFile(XmlNtupleDescription* ntupleDescription);
+    G4bool CloseNtupleFile(XmlNtupleDescription* ntupleDescription);
+
+  protected:
+    // Methods derived from templated base class
+    virtual std::shared_ptr<std::ofstream> CreateFileImpl(const G4String& fileName) final;
+    virtual G4bool WriteFileImpl(std::shared_ptr<std::ofstream> file) final;
+    virtual G4bool CloseFileImpl(std::shared_ptr<std::ofstream> file) final;
+
    private:
-    // data members
-    std::shared_ptr<std::ofstream> fHnFile;
+    // Utility method
+    G4String GetNtupleFileName(XmlNtupleDescription* ntupleDescription);
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4XmlFileManager" };
 };
-
-// inline functions
-
-inline std::shared_ptr<std::ofstream> G4XmlFileManager::GetHnFile() const
-{ return fHnFile; }
 
 #endif

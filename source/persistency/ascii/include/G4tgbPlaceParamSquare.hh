@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbPlaceParamSquare
+// G4tgbPlaceParamSquare
 //
 // Class description:
 //
 // Class to represent simple Cartesian parameterisations along a square.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbPlaceParamSquare_H
-#define G4tgbPlaceParamSquare_H 1
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbPlaceParamSquare_hh
+#define G4tgbPlaceParamSquare_hh 1
 
 #include "globals.hh"
 #include "G4tgbPlaceParameterisation.hh"
@@ -46,25 +41,25 @@
 class G4VPhysicalVolume;
 
 class G4tgbPlaceParamSquare : public G4tgbPlaceParameterisation
-{ 
-  public:  // with description
+{
+  public:
 
-    G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* );
-   ~G4tgbPlaceParamSquare();
+    G4tgbPlaceParamSquare(G4tgrPlaceParameterisation*);
+    ~G4tgbPlaceParamSquare();
 
-    void ComputeTransformation(const G4int copyNo,
-                               G4VPhysicalVolume *physVol) const;
+   void ComputeTransformation(const G4int copyNo,
+                              G4VPhysicalVolume* physVol) const;
 
   private:
 
-    G4int theNCopies1;
-    G4int theNCopies2;
+    G4int theNCopies1 = 0;
+    G4int theNCopies2 = 0;
     G4ThreeVector theDirection1;
     G4ThreeVector theDirection2;
-    G4double theStep1;
-    G4double theStep2;
-    G4double theOffset1;
-    G4double theOffset2;
+    G4double theStep1 = 0.0;
+    G4double theStep2 = 0.0;
+    G4double theOffset1 = 0.0;
+    G4double theOffset2 = 0.0;
 };
 
 #endif

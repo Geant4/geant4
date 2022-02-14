@@ -1,0 +1,95 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/Qt3D sub-category
+-----------------------------------------------
+12 November 2021 - Ben Morgan (visQt3D-V10-07-12)
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+8 November 2021 - Ben Morgan (visQt3D-V10-07-11)
+- Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+20 October 2021  Gabriele Cosmo  (visQt3D-V10-07-10)
+- Fixed broken dependency in GNUmakefile...
+
+18 October 2021  John Allison  (visQt3D-V10-07-09)
+- G4Qt3DSceneHandler:
+  - Introduce AddCompound(const G4Mesh&).
+    - This copies G4OpenGLSceneHandler.
+    - Subsequently it may be refined for Qt3D - but works well for now.
+
+01 September 2021  John Allison  (visQt3D-V10-07-08)
+- G4Qt3DSceneHandler.cc:
+  o Raise G4Exception if no available node.
+- G4Qt3DViewer.cc:
+  o Protect against illegal call to show() - it may only be called from
+    the master thread.
+
+22 August 2021  John Allison  (visQt3D-V10-07-07)
+- Fix the problem of drawing from the vis sub-thread.
+
+20 August 2021  John Allison  (visQt3D-V10-07-06)
+- Minor updates - optional debug printing, etc.
+- Revert to black background.
+- Add G4Qt3DViewer::MovingToVisSubThread and MovingToMasterThread.
+
+07 June 2021  John Allison  (visQt3D-V10-07-05)
+- Requires greps-V10-07-07 (new method AddCompound (const G4Mesh&)).
+- Requires modeling-V10-07-09 (new class G4Mesh).
+- Requires visman-V10-07-10 (new default method and new commands).
+- G4Qt3DViewer.hh:
+  o Fix hidden function warning.
+- G4Qt3DViewer.cc:
+  o Force kernel visit if special mesh rendering parameters change.
+
+28-May-2021 Ben Morgan (visQt3D-V10-07-04)
+- Migrate to modular CMake build
+
+27 May 2021  John Allison (visQt3D-V10-07-03)
+- AddPrimitive(const G4Polyhedron&):
+  o Minor improvement to error message in the case of unexpected number
+    of edges.
+
+17-Apr-2021  John Allison  (visQt3D-V10-07-02)
+- Fix compiler warning (unused variable "text")
+
+08-Apr-2021  John Allison  (visQt3D-V10-07-01)
+- Move //#define G4QT3DDEBUG to G4Qt3DUtils.hh.
+  o Improve overall protection of debug output with #ifdef G4QT3DDEBUG.
+- Include some trial code for text output, but comment it out.
+
+29-Dec-2020  John Allison  (visQt3D-V10-07-00)
+- G4Qt3DViewer: Move code from constructor to G4Qt3DViewer::Initialise().
+- G4Qt3DSceneHandler:
+  o Implement auxiliary edge suppression.
+  o Tidy up G4Qt3DSceneHandler::AddPrimitive(const G4Text& - still doesn't work.
+
+29-Oct-2020  Ben Morgan (visQt3D-V10-06-02)
+- Remove inclusion of obsolete CMake module
+
+26-Oct-2020  Gabriele Cosmo  (visQt3D-V10-06-01)
+- Corrected GNUmake setup and fixed compilation warnings.
+
+23-Oct-2020  John Allison  (visQt3D-V10-06-00)
+- First version.
+- Requires cmake-V10-06-34.
+
+27-Sep-2019  John Allison
+- First skeleton. Based on XXXSG driver.

@@ -48,7 +48,7 @@ Build(G4HadronElasticProcess *)
 }
 
 void G4AlphaPHPBuilder::
-Build(G4AlphaInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   G4cout << " G4AlphaPHPBuilder " << G4endl;
   G4ParticleHPInelasticData* theAlphaHPInelasticData=new G4ParticleHPInelasticData(G4Alpha::Alpha());

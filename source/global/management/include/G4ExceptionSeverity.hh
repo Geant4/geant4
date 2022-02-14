@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ExceptionSeverity
 //
-//
-// Class Description:
+// Description:
 //
 // Specifies the severity of G4Exception
 //
@@ -35,11 +35,11 @@
 //
 //  FatalErrorInArgument
 //   Fatal error caused by most likely the mis-use of interfaces
-//   by the user's code. Program should be aborted and core dump 
+//   by the user's code. Program should be aborted and core dump
 //   will be generated.
 //
 //  RunMustBeAborted
-//   Error happens at initialization of a run (ex. at the 
+//   Error happens at initialization of a run (ex. at the
 //   moment of closing geometry), or some unpleasant situation
 //   occurs during the event loop. Current run will be aborted
 //   and the application returns to "Idle" state.
@@ -50,17 +50,18 @@
 //
 //  JustWarning
 //   Just display messages.
-//
 
-#ifndef G4ExceptionSeverity_H
-#define G4ExceptionSeverity_H 1
+// Author: M.Asai, 19 August 2002
+// --------------------------------------------------------------------
+#ifndef G4ExceptionSeverity_hh
+#define G4ExceptionSeverity_hh 1
 
-enum G4ExceptionSeverity 
-  { FatalException,
-    FatalErrorInArgument,
-    RunMustBeAborted,
-    EventMustBeAborted,
-    JustWarning };
-
+enum G4ExceptionSeverity
+{
+  FatalException,
+  FatalErrorInArgument,
+  RunMustBeAborted,
+  EventMustBeAborted,
+  JustWarning
+};
 #endif
-

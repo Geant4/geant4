@@ -35,6 +35,7 @@
 #include "G4UnitsTable.hh"
 
 #include "HadronElasticPhysicsHP.hh"
+#include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
@@ -43,10 +44,16 @@
 #include "G4IonElasticPhysics.hh"
 #include "G4IonPhysicsXS.hh"
 #include "G4IonINCLXXPhysics.hh"
-#include "GammaPhysics.hh"
+#include "G4StoppingPhysics.hh"
+#include "GammaNuclearPhysics.hh"
+#include "GammaNuclearPhysicsLEND.hh"
 
-#include "EmStandardPhysics.hh"
+#include "ElectromagneticPhysics.hh"
+#include "G4EmStandardPhysics_option3.hh"
+
 #include "G4DecayPhysics.hh"
+
+#include "RadioactiveDecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,19 +66,16 @@ PhysicsList::PhysicsList()
   
   //add new units
   //
-  new G4UnitDefinition( "millielectronVolt", "meV", "Energy", 1.e-3*eV);   
   new G4UnitDefinition( "mm2/g",  "mm2/g", "Surface/Mass", mm2/g);
   new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
-  
+
   // Hadron Elastic scattering
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
-  
+  ////RegisterPhysics( new G4HadronElasticPhysicsXS(verb) );
+    
   // Hadron Inelastic Physics
   ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
-<<<<<<< HEAD
-  ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
-=======
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
@@ -86,16 +90,19 @@ PhysicsList::PhysicsList()
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
     
   // Gamma-Nuclear Physics
-  RegisterPhysics( new GammaPhysics("gamma"));
-  
+  RegisterPhysics( new GammaNuclearPhysics("gamma"));
+  ////RegisterPhysics( new GammaNuclearPhysicsLEND("gamma"));
+    
   // EM physics
-  RegisterPhysics(new EmStandardPhysics());
+  RegisterPhysics(new ElectromagneticPhysics());
+  ////RegisterPhysics(new G4EmStandardPhysics_option3());
   
   // Decay
   RegisterPhysics(new G4DecayPhysics());
 
   // Radioactive decay
-  RegisterPhysics(new G4RadioactiveDecayPhysics());      
+  RegisterPhysics(new RadioactiveDecayPhysics());
+  ////RegisterPhysics(new G4RadioactiveDecayPhysics());  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

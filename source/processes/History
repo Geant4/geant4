@@ -16,6 +16,35 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 25, 2021 (processes-V10-07-05)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+October 18, 2021 (processes-V10-07-04)
+- Use std::string member functions from G4String in place of synonyms
+
+August 5, 2021 (processes-V10-07-03)
+- Migration to the new version of G4PhysicsModelCatalog
+
+April 18, 2021 (processes-V10-07-02)
+- Migrate main/orphaned processes categories to modular CMake API
+  - EM/Hadronic/Biasing are to be handled in separate MRs
+
+April 13, 2021 A.Ribon (processes-V10-07-01)
+- CMakeLists.txt, GNUmakefile : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+
+March 16, 2021 A.Ribon (processes-V10-07-00)
+- CMakeLists.txt, GNUmakefile : removed the subdirectory rpg
+  (corresponding to the hadronic model rpg that has been deleted).
+
+November 16, 2020 G.Cosmo (processes-V10-06-01)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+September 23, 2020 B.Morgan (processes-V10-06-00)
+- Remove no longer required include_directories
+
 April 20, 2017 G.Cosmo (processes-V10-03-03)
 - Tag based on geant4-10-03-ref-03, plus the following:
   emutils-V10-03-05,  hadr-cross-V10-03-02, hadr-casc-V10-03-00,
@@ -46,11 +75,11 @@ Apr 27, Mikhail Kosov       (processes-cmk-V09-05-00)
 - hadronic/model/chiral_inv_phase_space moved to hadronic/chips
 
 Sep 7, 2011, Gunter Folger   (processes-cmk-V09-04-01)
-- remove/comment new modules hadronic/{common, incl++/...} from cmake 
+- remove/comment new modules hadronic/{common, incl++/...} from cmake
 
 - Update GNUmakefile and use CMakeLists.txt of processes-V09-04-01 for dna architecture change.
 
-Sep 7, 2011, Gunter Folger   (processes-gmk-V09-04-00 and 
+Sep 7, 2011, Gunter Folger   (processes-gmk-V09-04-00 and
                               processes-cmk-V09-04-00)
 - Update GNUmakefile and use CMakeLists.txt of processes-V09-04-01 for dna architecture change.
 
@@ -92,7 +121,7 @@ May 29, 1999: John Allison
   electromagnetic/GNUmakefile..
 
 Sep 25: H.Kurashige.
-- procman-00-02-05 has tagged 
+- procman-00-02-05 has tagged
     Added deleteion of all processes  in the destructor of G4ProcessTable
 Aug 27: HP Wellisch.
 - collected the fixes in a  new processes-tag; trying Harm's improved code.
@@ -140,7 +169,7 @@ Aug 10: H.Kurashige (decay-00-02-01)
 - Modified G4Decay to adapt the removal of G4VProcess::thePhysicsTable
 
 Aug 10: H.Kurashige (procman-00-02-01)
-- Removed G4VProcess::thePhysicsTable  
+- Removed G4VProcess::thePhysicsTable
 
 Jul 19: HP Wellisch
 (pro-00-01-05)
@@ -155,7 +184,7 @@ Jul 14: HP Wellisch
 Tagging the process tag as basis for the final validation procedure
 of geant4-beta.
 
-Jul 09: G.Cosmo 
+Jul 09: G.Cosmo
 - Fixed bug in electromagnetics/util/GNUmakefile and in
   electromagnetics/xrays/GNUmakefile. G4EXEC_BUILD was erroneously
   set.
@@ -184,18 +213,18 @@ optical: head
 parametrisation: pre-beta01-02
 transportation: pre-beta01-02
 
-Changes to accommodate the material-00-01-01 tag are not 
+Changes to accommodate the material-00-01-01 tag are not
 present for the moment.
 
 Jul 08: H.Kurashige (procman-00-01-01)
-- Removed G4MaterialTable.hh  
+- Removed G4MaterialTable.hh
 
 Jul 07: G.Cosmo
 - Added models/generator and models/neutron_hp to compile sequence
   in models/GNUmakefile.
 
 Jul 01: HPW tagging pro-00-07-01
- 
+
 Jun 30: H.Kurashige procman-00-07-03
  - Added G4IVContinuousDiscreteProcess and G4IVRestDiscreteProcess.hh
    for em-00-07-01   (by Michel)
@@ -208,25 +237,25 @@ Jun 30: Paulo & Marc - param-00-07-01
    "G4FlavoredParallelWorld" with some improvements;
 
  - To starting allowing the vis/draw/Ghosts command
-   implementation, the 
+   implementation, the
 
-   G4VPhysicalVolume* 
+   G4VPhysicalVolume*
    GetWorldForThis (G4ParticleDefinition *)
 
-   from G4GlobalFastSimulationManager becomes 
+   from G4GlobalFastSimulationManager becomes
 
-   G4FlavoredParallelWorld* 
+   G4FlavoredParallelWorld*
    GetFlavoredWorldForThis(G4ParticleDefinition *);
 
- - A few changes in the G4FastSimulationManagerProcess 
+ - A few changes in the G4FastSimulationManagerProcess
    to deal with these changes.
 
 Jun 28:H.Kurashige procman-00-06-03
-- Fixed bugs of InsertAt, SetProcessOrdering methods in G4ProcessManager	
+- Fixed bugs of InsertAt, SetProcessOrdering methods in G4ProcessManager
 - Added copy constructor in G4ProcessManager
 
 Jun 28:H.Kurashige decay-06-01
-- Modified for new unified cut scheme 
+- Modified for new unified cut scheme
 
 Jun 27: L. Felawka
 - added new processes G4MuonMinusCaptureatRest and
@@ -278,7 +307,7 @@ Apr 23, 98 H.P. Wellisch
 processes:
   param param-00-05-01
   emlem head
-  optic head 
+  optic head
   decay decay-05-01
   hadro had-00-06-00
   manag head
@@ -310,7 +339,7 @@ processes:
   manag procman-05-01
   trans trans-05-01
 
-the tag were tested with 
+the tag were tested with
 
 * digits+hits   hits-00-05-01
 * events+tracks alpha05
@@ -328,16 +357,16 @@ the tag were tested with
 
 April 20, 98 MMa
   em-00-05-01 suppression of any 'tracking'cut
-              ready for alpha06     
-     
+              ready for alpha06
+
 April 16, 98 L. Felawka
   Replaced compound stopped particle process class "G4HadronAtRest" by
   individual stopped particle process classes "G4PionMinusAbsorptionAtRest",
   "G4NeutronCaptureAtRest", "G4AntiProtonAnnihilationAtRest" and
   "G4AntiNeutronAnnihilationAtRest"
-     
+
 April 12, 98 H.Kuraashige
-  Implement new scheme of 'Particle Change'. Please see 
+  Implement new scheme of 'Particle Change'. Please see
   particle_change.asc in geant4alpha/documents/particles+matter/.
   Following files have been modified.
    management: all abstract classes of G4V*Process.hh
@@ -369,7 +398,7 @@ April 08, 98 G.Cosmo
            G4KaonMinusAbsorptionAtRest.cc, G4ReactionDynamics.cc
 
 March 24, 98 G.Barrand
-- GNUmakefile, hadronic/GNUmakefile, hadronic/models/GNUmakefile : 
+- GNUmakefile, hadronic/GNUmakefile, hadronic/models/GNUmakefile :
   MAKESHLIB changed in G4MAKESHLIB
 
 March 13 1998, Hans-Peter Wellisch
@@ -377,21 +406,21 @@ March 13 1998, Hans-Peter Wellisch
   had-00-04-02.
 
 March 06 1998, Hans-Peter Wellisch
-- Tagged the processes, including the new tags on em, para, and 
+- Tagged the processes, including the new tags on em, para, and
   had: em-00-04-02, param-00-04-04, had-00-04-01
   as pro-00-04-01.
 
 March 03 1998, Marc Verderi
 - The tag param-00-04-02 introduces the possibility for the
-  parameterisation models to parameterise also particles at 
+  parameterisation models to parameterise also particles at
   rest.
 
 March 02 1998, P.MoradeFreitas
-- The param-00-04-01 processes/parameterisation tag introducing 
+- The param-00-04-01 processes/parameterisation tag introducing
   the Ghost volumes.
 
 March 02 1998, S.Sadilov
-- fix processes/hadronic/util/src/GNUmakefile for compiling 
+- fix processes/hadronic/util/src/GNUmakefile for compiling
   processes/hadronic/util/src/G4NucleiPropertiesTable.cc on WinNT.
 
 Feb 05 1998, G.Cosmo (pro-00-03-03)
@@ -439,8 +468,8 @@ and alpha03 of the other cathegories,
 except for intercoms.
 
 January 28, 98 S. Sadilov
-- For Win/NT port in GNUmakefile used $OUT_LIB introduced in 
-  GNUmakefile.architecture as positional qualifier for creating 
+- For Win/NT port in GNUmakefile used $OUT_LIB introduced in
+  GNUmakefile.architecture as positional qualifier for creating
   composite-library.
 
 January 24, 98  H.Kurashige - (procman-03-01)(decay-03-01)

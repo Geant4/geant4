@@ -57,8 +57,8 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include <base/Global.h>
-#include <base/Vector3D.h>
+#include <VecGeom/base/Global.h>
+#include <VecGeom/base/Vector3D.h>
 
 class G4VPVParameterisation;
 
@@ -366,19 +366,12 @@ DistanceToOut(const G4ThreeVector& pt, const G4ThreeVector& d,
   U3Vector v(d.x(), d.y(), d.z());
 
   G4double dist = UnplacedVolume_t::DistanceToOut(p, v, kInfinity);
-  if(calcNorm) // *norm=n, but only after calcNorm check and if convex volume
+  if(calcNorm)
   {
-    if (UnplacedVolume_t::IsConvex())
-    {
-      U3Vector n, hitpoint = p + dist * v;
-      UnplacedVolume_t::Normal(hitpoint, n);
-      *validNorm = true;
-      norm->set(n.x(), n.y(), n.z());
-    }
-    else
-    {
-      *validNorm = false;
-    }
+    *validNorm = UnplacedVolume_t::IsConvex();
+    U3Vector n, hitpoint = p + dist * v;
+    UnplacedVolume_t::Normal(hitpoint, n);
+    norm->set(n.x(), n.y(), n.z());
   }
 
   // Apply Geant4 distance conventions
@@ -424,6 +417,14 @@ G4ThreeVector G4UAdapter<UnplacedVolume_t>::GetPointOnSurface() const
 namespace
 {
   G4Mutex pMutex = G4MUTEX_INITIALIZER;
+}
+
+// Free function to enable ostream output
+template <class UnplacedVolume_t>
+std::ostream&
+operator<<(std::ostream& os, const G4UAdapter<UnplacedVolume_t>& uAdapted)
+{
+  return uAdapted.StreamInfo(os);
 }
 
 template <class UnplacedVolume_t>

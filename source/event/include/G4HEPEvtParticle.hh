@@ -23,16 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4HEPEvtParticle
 //
-//
-//
-// class desccription:
+// Class desccription:
 //
 // This class is exclusively used by G4HEPEvtInterface.
 // It represents one particle in /HEPEVT/ list.
 
-#ifndef G4HEPEvtParticle_h
-#define G4HEPEvtParticle_h 1
+// Author: Makoto Asai, 1997
+// --------------------------------------------------------------------
+#ifndef G4HEPEvtParticle_hh
+#define G4HEPEvtParticle_hh 1
 
 #include "globals.hh"
 #include "evtdefs.hh"
@@ -42,42 +43,38 @@
 class G4HEPEvtParticle 
 {
   public:
-      inline void *operator new(size_t);
-      inline void operator delete(void *aStackedTrack);
 
-      G4HEPEvtParticle();
-      G4HEPEvtParticle(G4PrimaryParticle* pp,
-                       G4int isthep, G4int jdahep1, G4int jdahep2);
-      ~G4HEPEvtParticle();
+    G4HEPEvtParticle();
+    G4HEPEvtParticle(G4PrimaryParticle* pp,
+                     G4int isthep, G4int jdahep1, G4int jdahep2);
+   ~G4HEPEvtParticle();
 
-      G4HEPEvtParticle & operator=(const G4HEPEvtParticle &right);
-      G4bool operator==(const G4HEPEvtParticle &right) const;
-      G4bool operator!=(const G4HEPEvtParticle &right) const;
+    G4HEPEvtParticle & operator=(const G4HEPEvtParticle& right);
+    G4bool operator==(const G4HEPEvtParticle &right) const;
+    G4bool operator!=(const G4HEPEvtParticle &right) const;
+
+    inline void *operator new(std::size_t);
+    inline void operator delete(void* aStackedTrack);
+
+    inline G4PrimaryParticle* GetTheParticle() { return theParticle; }
+    inline void Done() { ISTHEP *= -1; }
+    inline G4int GetISTHEP() { return ISTHEP; }
+    inline G4int GetJDAHEP1() { return JDAHEP1; }
+    inline G4int GetJDAHEP2() { return JDAHEP2; }
 
   private:
-      G4PrimaryParticle * theParticle;
-      G4int ISTHEP; // Status code of the entry
-                    // Set to be 0 after generating links of
-                    // G4PrimaryParticle object
-      G4int JDAHEP1;
-      G4int JDAHEP2;
 
-  public:
-      inline G4PrimaryParticle * GetTheParticle()
-      { return theParticle; }
-      inline void Done()
-      { ISTHEP *= -1; }
-      inline G4int GetISTHEP()
-      { return ISTHEP; }
-      inline G4int GetJDAHEP1()
-      { return JDAHEP1; }
-      inline G4int GetJDAHEP2()
-      { return JDAHEP2; }
+    G4PrimaryParticle* theParticle = nullptr;
+    G4int ISTHEP = 1; // Status code of the entry
+                      // Set to be 0 after generating links of
+                      // G4PrimaryParticle object
+    G4int JDAHEP1 = 1;
+    G4int JDAHEP2 = 1;
 };
 
 extern G4EVENT_DLL G4Allocator<G4HEPEvtParticle>*& aHEPEvtParticleAllocator();
 
-inline void * G4HEPEvtParticle::operator new(size_t)
+inline void * G4HEPEvtParticle::operator new(std::size_t)
 {
   if (!aHEPEvtParticleAllocator())
     aHEPEvtParticleAllocator() = new G4Allocator<G4HEPEvtParticle>;
@@ -90,4 +87,3 @@ inline void G4HEPEvtParticle::operator delete(void * aHEPEvtParticle)
 }
 
 #endif
-

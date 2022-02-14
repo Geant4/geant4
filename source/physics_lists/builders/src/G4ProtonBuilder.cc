@@ -45,7 +45,6 @@
  
  void G4ProtonBuilder::Build()
  {
-   wasActivated = true;
    std::vector<G4VProtonBuilder *>::iterator i;
    for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
    {
@@ -55,10 +54,9 @@
    theProcMan->AddDiscreteProcess(theProtonInelastic);
  }
 
- G4ProtonBuilder::
- G4ProtonBuilder(): wasActivated(false)  
+ G4ProtonBuilder::G4ProtonBuilder()
  {
-   theProtonInelastic=new G4ProtonInelasticProcess;
+   theProtonInelastic=new G4HadronInelasticProcess( "protonInelastic", G4Proton::Definition() );
  }
 
  void G4ProtonBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {

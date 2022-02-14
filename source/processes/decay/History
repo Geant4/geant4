@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 16 April 2021 B. Morgan (decay-V10-07-00)
+- Migrate build to modular CMake API
+
 - 01 November 2019 Vladimir Ivanchenko (decay-V10-05-01)
 - G4Decay.cc : Extended printout in the case of G4Exception DECAY101
     and DECAY102
@@ -48,30 +51,30 @@ committal in the CVS repository !
 
 - June 10, 16 Gunter Folger     (decay-V10-02-01)
   - G4Decay::DecayIt(): better format and info on IsOK... in exception DECAY003
-  
+
 - June 10, 16 Gunter Folger     (decay-V10-02-00)
   - In G4Decay::DecayIt(): add more information in exception DECAY003
-  
+
 - Sep. 29, 15 Hisaya Kurashige  (decay-V10-01-04)
-- fix problem #1783 of spin treatment for in-filght decay 
+- fix problem #1783 of spin treatment for in-filght decay
   (co-work tags: track-V10-01-10, particles-V10-01-10)
 
 - Aug. 14, 15 Hisaya Kurashige  (decay-V10-01-03)
-- Checking of parent mass enough for decay products is moved to 
-  G4VDecayChannel::IsOKWithParentMass 
+- Checking of parent mass enough for decay products is moved to
+  G4VDecayChannel::IsOKWithParentMass
   (i.e. No check in G4Decay::DecayIt)
 -- co work with particles-V10-01-05
- 
+
 - June 22, 15 A.Ribon       (decay-V10-01-01)
 - Add a safety margin of 1 keV when checking that the parent mass is
   enough for decay products in G4Decay::DecayIt
 
-G4Decay::DecayIt to check 
-  that the parent mass is enough for decay products  
+G4Decay::DecayIt to check
+  that the parent mass is enough for decay products
 
 - June 19, 15 H.Kurashige   (decay-V10-01-00)
-- Fix a problem of G4Decay::DecayIt to check 
-  that the parent mass is enough for decay products  
+- Fix a problem of G4Decay::DecayIt to check
+  that the parent mass is enough for decay products
 
 - Feb. 22, 14 H.Kurashige   (decay-V10-00-02)
 - Fix the bug of assigning DBL_MAX for stable particle life time
@@ -80,10 +83,10 @@ G4Decay::DecayIt to check
 - Feb. 21, 14 J.Apostolakis (decay-V10-00-01) corrected bug # below.
 
 - Jan. 04, 14 H.Kurashige   (decay-V10-00-00)
-- Fix the bug of wrong global time for secondaries 
+- Fix the bug of wrong global time for secondaries
   in case that the primary track stops during along step
   (Bug #1555)
- 
+
 - Jun. 11, 13 M.Asai (decay-V09-06-01)
 - Remove the modification in the previous tag, as it is no longer needed as all ions
   are generated after GenericIon gets the collect process manager.
@@ -101,16 +104,16 @@ G4Decay::DecayIt to check
 - Jul. 6, 11 H.Kurashige (decay-V09-04-01)
 - Modify G4Decay  to propose the final local time rather than the global time
   so that local time can be updated properly
-  (see problem #1224)  
+  (see problem #1224)
 
 - Jun. 4, 11 H.Kurashige (decay-V09-04-00)
-- Add SubType of DECAY_Radioactive (=210) 
+- Add SubType of DECAY_Radioactive (=210)
 
 - Oct. 30, 10 H.Kurashige (decay-V09-03-01)
 - Fix minor bugs reported by Coverity
 
 - Aug. 10, 10 H.Kurashige (decay-V09-03-00)
-- Use const pointer to G4ParticleDefinition because it should not be modified.  
+- Use const pointer to G4ParticleDefinition because it should not be modified.
 
 - Sep. 19, 08 H.Kurashige (decay-V09-01-04)
 - modify process sub type enumeration
@@ -120,10 +123,10 @@ G4Decay::DecayIt to check
   GetFieldValue being called initializes a fieldValue array of size 6
   when the array is only defined of size 3 in the calling program.
   Thanks to Kamil Sedlak (PSI) for pointing this out and suggesting this fix.
- 
+
 - Apr. 16, 08 H.Kurashige  (decay-V09-01-02)
 - fix a bug when shortlived particles has finite  pre-assigned proper time
- 
+
 - Apr. 11, 08 P.Gumplinger (decay-V09-01-01)
 - modify G4DecayWithSpin::DecayIt to allow spin precession also for EM Fields;
   e.g. fields that do "DoesFieldChangeEnergy()" but only if the B-field
@@ -142,10 +145,10 @@ G4Decay::DecayIt to check
 - add forward declaration for G4VExtDecayer in G4DecayWithSpin
 
 - Oct. 06, 07 H.Kurashige (decay-V09-00-00)
-- Add a method of DaughterPolarization in G4Decay 
+- Add a method of DaughterPolarization in G4Decay
 
 - May. 07, 07 H.Kurashige (decay-V08-02-00)
-- Add protection for "TotalEnergy < Mass" 
+- Add protection for "TotalEnergy < Mass"
 
 - Apr. 29, 05 H.Kurashige (decay-V07-00-00)
 - Fixed bug in GPILAtRest.
@@ -163,7 +166,7 @@ G4Decay::DecayIt to check
 - Add G4DecayWithSpin class and allow for dependency to
   /geometry/navigation in GNUmakefile
 - Fixed the problem of determination of particle's decay time
-  for the case the particle stops due to energy loss.  
+  for the case the particle stops due to energy loss.
 
 - Aug. 10, 04 H.Kurashige(decay-V06-02-01)
 - Add G4Decay::GetRemainderLifeTime method
@@ -175,7 +178,7 @@ G4Decay::DecayIt to check
 - Change method name for ParticleChange
 
 - Mar. 12, 04 H.Kurashige(decay-V06-00-00)
-- Fixed bug in PostStepGPIL in case of stopping during AlongStep actions 
+- Fixed bug in PostStepGPIL in case of stopping during AlongStep actions
 
 - Apr. 26, 03 V.Ivanchenko(decay-V05-00-00)
 - add initialisation of TouchableHandle for decay products
@@ -185,16 +188,16 @@ G4Decay::DecayIt to check
 
 - Feb. 9, 02 H.Kurashige(decay-V04-00-00)
 - Modify Lowest/HighestBinEnergy for physics table
-  to calculate beta for slow particle 
+  to calculate beta for slow particle
 
 - Aug. 22, 01 H.Kurashige(decay-V03-02-01)
 - Clean up codes
 
 - Feb. 29, 01 H.Kurashige(decay-V03-00-03)
-- Fix minor bug in G4VExtDecayer 
+- Fix minor bug in G4VExtDecayer
 
 - Feb. 22, 01 H.Kurashige(decay-V03-00-02)
-- Add G4VExtDecayer and modify G4Decay 
+- Add G4VExtDecayer and modify G4Decay
 
 - Jan. 18, 01 H.Kurashige(decay-V03-00-01)
 - Use PreAssignedDecayTime in G4DynamicParticle if necessary
@@ -208,4 +211,4 @@ G4Decay::DecayIt to check
 
 - Mar. 1, 00 H.Kurashige (decay-V01-00-00)
 - Bug fix in G4Decay::IsApplicable()
-  G4Decay should be applicable to "shortlived" particles  
+  G4Decay should be applicable to "shortlived" particles

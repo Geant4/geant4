@@ -1,0 +1,106 @@
+
+     ========================================================
+     GORAD - Geant4 Open-source Radiation Analysis and Design
+     ========================================================
+
+First release : September 2020 with Geant4 version 10.7
+Author : Makoto Asai (SLAC National Accelerator Laboratory)
+
+Introduction
+------------
+
+Gorad (Geant4 Open-sourced Radiation Analysis and Design) is meant to be 
+a turn-key application for radiation analysis and spacecraft design built 
+on top of Geant4. Simulation geometry should be provided in the form of GDML.
+Gorad is controlled by UI commands, and it works both in interactive mode 
+with Qt window and in batch mode with an input macro file. 
+
+The current Gorad requires Geant4 version 10.7 (release of December 2020). 
+It does not work with earlier version of Geant4. Geant4 has to be installed 
+with multithreading mode and GDML interface enabled. Qt is also recommended 
+for the use of Gorad in interactive mode. Geant4 GDML interface requires 
+Xerces-C++ version 3 or higher. Xerces-C++ has to be compiled with the same 
+compiler Geant4 is compiled. Please refer to the Geant4 installation guide 
+for enabling these options. 
+
+Building and running Gorad
+--------------------------
+
+To compile and run Gorad, all the Geant4 environment variables have to be 
+properly set. Use the shell script in the Geant4 installation directory. 
+Compilation of Gorad requires cmake and make same as the compilation of 
+Geant4 itself.
+
+  $ source $G4INSTALL/bin/geant4.(c)sh
+  $ cmake .
+  $ make
+
+To run Gorad in interactive mode,
+
+  $ ./gorad
+
+and then, in the keyboard input field, type
+
+  /control/execute <macroFile>
+
+The user may also use any UI commands shown in the left side menu of the 
+Qt window. 
+
+To run Gorad in batch mode,
+
+  $ ./gorad <macroFIle>
+
+A sample macro file 
+-------------------
+
+Associated macro file "run.mac" can be used for both interactive mode
+and batch mode. It uses a simple cone-shaped geometry (simpleCone.gdml)
+and King Solar Proton Fluence model (https://doi.org/10.2514/3.62088).
+It employs both primary particle generation biasing and geometry
+importance biasing. This sample macro file defines a probe filled by
+water located at the center of the world volume with dose and flux 
+scorers. 
+
+If this sample macro file is used in interactive mode, it also sets up
+visualization (through vis.mac). After executing this sample macro, the 
+user can start an event loop with /run/beamOn command.
+
+If this sample macro file is used in batch mode, it defines 4 histograms.
+After the event loop, These histograms are dumped to corresponding files 
+and also plotted to a Postscript file. Scores of the dose and flux scorers 
+are also dumped into an output file. In batch mode, this macro executes 
+one million events.
+
+Gorad manual and additional GDML file
+-------------------------------------
+
+Details of the sample macro file and available alternative commands are
+described in the full manual downloadable from the following URL. Also,
+additional sample GDML file of partial and simplified Orion Spacecraft 
+is available at the following URL. This is a sample input and it is not 
+mandatory to execute Gorad.
+
+ https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesGorad
+
+Known warning messages while processing a GDML file
+---------------------------------------------------
+
+If the input GDML file uses some material names defined in G4NISTManager,
+these names are unrecognizable by the GDML perser itself and cause
+warning messages. For example
+
+G4GDML: VALIDATION ERROR! ID attribute 'G4_AIR' is referenced but was
+        never declared at line: XX
+
+These messages are harmless and these materials are properly interpreted
+once they are set to G4LogicalVolume.
+
+Acknowledgements
+----------------
+
+Development of Gorad is funded by NASA Johnson Space Center (JSC) under 
+the contract NNJ15HK11B. 
+
+
+
+

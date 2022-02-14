@@ -36,7 +36,6 @@
 #include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,9 +53,7 @@ ActionInitialization::~ActionInitialization()
 void ActionInitialization::BuildForMaster() const
 {
  SetUserAction(new RunAction(fDetector,new PrimaryGeneratorAction(fDetector)));
-
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,13 +66,6 @@ void ActionInitialization::Build() const
   TrackingAction *track = new TrackingAction();
   SetUserAction(track);
   SetUserAction(new SteppingAction(fDetector,track));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
-{
-  return new SteppingVerbose();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

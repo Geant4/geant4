@@ -18,9 +18,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-14-10-16 G.Folger
-=======
+07-11-21 I. Hrivnacova (testem8-V10-07-03)
+- Added analysis manager Clear() call instead of
+  deleting in the end of run (removed on July 19)
+
+18-10-21 V. Ivanchenko (testem8-V10-07-02)
+- Added printout of random numbers
+
+06-10-21 I. Hrivnacova (testem8-V10-07-01)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+19-07-21 I. Hrivnacova (testem8-V10-07-00)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+10-11-20 B. Morgan (testem8-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 13-02-19 V.Ivantchenko (testem8-V10-05-00)
 - DetectorConstruction - added alternative materials in order to test
     all methods to construct new material by G4NistMaterialBuilder
@@ -59,7 +75,20 @@ track of all tags.
 14-10-16 G.Folger (testem8-V10-02-04)
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+    fix required by clang39 on Linux and MAC
+
+02-09-16 V.Ivant (testem8-V10-02-03)
+01-09-16 V.Ivant (testem8-V10-02-02)
+- Run - fixed RMS computation by G4StatDouble
+
+04-07-16 I. Hrivnacova  (testem8-V10-02-01)
+- Fixes for Doxygen documentation
+
+19-02-16 V.Ivant (testem8-V10-02-00)
+- TestParameters, Run, PrimaryGeneratorAction,
+  PrimaryGeneratorMessenger - reorganized printout of beam
+    particle; use energy smearing as an addition of noise,
+    so smeared noise should be added in units of energy
 
 27-10-15 D.Sawkey (testem8-V10-01-06)
 - spellcheck, synch README, .README
@@ -68,9 +97,9 @@ track of all tags.
 - TestEm8.cc - use 1 thread for interactive mode, improve vis.mac
 
 13-08-15 V.Ivant (testem8-V10-01-04)
-- PhysicsList - removed configuration of PAI models via 
+- PhysicsList - removed configuration of PAI models via
     G4EmConfigurator and left only method via UI command; set
-    default verbosity to zero to reduce legth of reference output, 
+    default verbosity to zero to reduce legth of reference output,
     fixed initialisation of StepMax in MT mode
 - DetectorConstruction - allowed to change geometry sizes between runs
 - TestParameters - add parameters needed for ALICE TRD simulation
@@ -84,20 +113,20 @@ track of all tags.
 - RunAction - book histograms in constructor allowing to use /analysis/
     UI commands
 - macro files - added alternative configuration of PAI models via
-    EM UI command;  
+    EM UI command;
 
 24-04-15 V.Ivant (testem8-V10-01-01)
-- PhysicsList - fixed problem #1731 in configuration of models per 
+- PhysicsList - fixed problem #1731 in configuration of models per
                 G4Region in MT mode
-- Run - added protection against numerical exception for run with 
+- Run - added protection against numerical exception for run with
         0 or 1 events
 
 04-02-15 V.Ivant (testem8-V10-01-00)
 - DetectorConstruction - removed local pointer to sensitive detector
-    in order to avoid race condition 
+    in order to avoid race condition
 
 20-11-14 V.Ivant (testem8-V10-00-07)
-- DetectorConstruction, TargetSD - attempt to fix crash at 
+- DetectorConstruction, TargetSD - attempt to fix crash at
     destruction in MT mode
 
 03-11-14 V.Ivant (testem8-V10-00-06)
@@ -115,7 +144,7 @@ track of all tags.
 - applied code guidlines
 
 28-04-14 V.Ivant (testem8-V10-00-02)
-- added "emlowenergy" option for EM physics 
+- added "emlowenergy" option for EM physics
 
 16-01-14 V.Ivant (testem8-V10-00-01)
 - HistoManager - fixed output of rms of mean energy
@@ -124,7 +153,7 @@ track of all tags.
 - HistoManager - more accurate computation of mean energy deposition
 
 21-05-13 V.Ivant (testem8-V09-06-03)
-- PhysicsList - substituted obsolete G4PAIPhotonMOdel by G4PAIPhotModel 
+- PhysicsList - substituted obsolete G4PAIPhotonMOdel by G4PAIPhotModel
 
 08-05-13 V.Ivant (testem8-V09-06-02)
 - PhysicsList - fixed typo in PhysicsList::SetCutForProton
@@ -161,13 +190,13 @@ track of all tags.
 - Histo - added method Activate(); fixed method Save()
 
 11-04-12 V.Ivant (testem8-V09-05-03)
-- Histo - use only ROOT option for analysis, 
+- Histo - use only ROOT option for analysis,
 	  allow to have several runs with histograms per session
 - HistoManager - fixed computation of mean energy deposit,
                  allow to have several runs with histograms per session
 
 10-04-12 V.Ivant (testem8-V09-05-02)
-- migration from AIDA to Geant4 histogram's tool; 
+- migration from AIDA to Geant4 histogram's tool;
   applied code convention for all classes of the example
 
 29-02-12 V.Ivant (testem8-V09-05-01)
@@ -180,7 +209,7 @@ track of all tags.
 - HistoManager - book histograms at begin of run not earlier
 
 19-11-10 V.Ivant (testem8-V09-03-07)
-- V. Grichine Histomanager.cc The preparation of 
+- V. Grichine Histomanager.cc The preparation of
               distribution.out file was added. It has
               NumOfEv and distribution(energy/keV)
 
@@ -190,20 +219,20 @@ track of all tags.
 - PhysicsList - fixed UI commands for step limiter
 
 28-09-10 V.Ivant (testem8-V09-03-05)
-- GNUmakefile - added histclean option 
+- GNUmakefile - added histclean option
 
 08-09-10 V.Ivant (testem8-V09-03-04)
 - The example is completely rewritten: physics, scoring, histograms,
   README
 
 04-06-10 J.Perl (testem8-V09-03-03)
-- Updated vis usage 
+- Updated vis usage
 
 04-06-10 V.Ivant (testem8-V09-03-02)
-- PhysicsList, Em8DetectorConstruction - renamed "VertexDetector" by 
+- PhysicsList, Em8DetectorConstruction - renamed "VertexDetector" by
   "GasDetector"
 - added cut per region into TestEm8.in
-     
+
 21-05-10 mma (testem8-V09-03-01)
 - TestEm8.cc : introduction of G4UIExecutive
 
@@ -221,17 +250,17 @@ track of all tags.
   configure PAI model
 
 12-06-08 mma (testem8-V09-01-00)
-- Remove AIDA from GNUmakefile 
+- Remove AIDA from GNUmakefile
 
 12-11-07 V.Ivant  (testem8-V09-00-05)
-- Fixed logic in SteppingAction 
+- Fixed logic in SteppingAction
 
 02-10-07 V.Ivant  (testem8-V09-00-04)
 - Fixed memory leak in UI interface
 
 26-09-07 V.Ivant  (testem8-V09-00-03)
 - Remove used lines from PAI physics constructors, added "pai_brem"
-  constructor PhysListEmPAI in which AlongStep from bremsstrahlung 
+  constructor PhysListEmPAI in which AlongStep from bremsstrahlung
   is allowed
 
 27-08-07 V.Ivant  (testem8-V09-00-02)
@@ -241,7 +270,7 @@ track of all tags.
  Use components of Physics Lists from physics_list subdirectory
 
 27-08-07 V.Ivant  (testem8-V09-00-00a)
-- Fix PAI physics constructors: enegry loss processes should be 
+- Fix PAI physics constructors: enegry loss processes should be
   active post step
 
 27-07-07 V.Ivant  (testem8-V09-00-00)
@@ -251,8 +280,8 @@ track of all tags.
 15-11-06 V.Ivant  (testem8-V08-01-01)
 - Put on the head version of Em8DetectorConstruction.cc and
   PhysListEmModelPai.cc, which provide non-zero results
-     
-25-10-06 mma (testem8-V08-01-00) 
+
+25-10-06 mma (testem8-V08-01-00)
 - GNUmakefile : LOADLIBS
 - remove PhysicsLists 52
 

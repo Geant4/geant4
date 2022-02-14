@@ -23,47 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrMaterial implementation
 //
-//
-//
-// class G4tgrMaterial
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrMaterial.hh"
 #include "G4PhysicalConstants.hh"
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrMaterial::G4tgrMaterial()
-   : theName("Material"), theDensity(0.), theNoComponents(0),
-     theMateType("Material"), theIonisationMeanExcitationEnergy(-1.),
-     theState(kStateUndefined), theTemperature(STP_Temperature),
-     thePressure(STP_Pressure)
+  : theTemperature(NTP_Temperature)
+  , thePressure(STP_Pressure)
 {
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrMaterial::~G4tgrMaterial()
 {
 }
 
-
-// -------------------------------------------------------------------------
-void G4tgrMaterial::SetState( G4String val )
-{ 
-  if( val == "Undefined" ) {
+// --------------------------------------------------------------------
+void G4tgrMaterial::SetState(const G4String& val)
+{
+  if(val == "Undefined")
+  {
     theState = kStateUndefined;
-  } else if( val == "Solid" ) {
+  }
+  else if(val == "Solid")
+  {
     theState = kStateSolid;
-  } else if( val == "Liquid" ) {
+  }
+  else if(val == "Liquid")
+  {
     theState = kStateLiquid;
-  } else if( val == "Gas" ) {
+  }
+  else if(val == "Gas")
+  {
     theState = kStateGas;
-  } else {
-
+  }
+  else
+  {
     G4Exception("G4tgrMaterial::SetState", "Wrong state", FatalErrorInArgument,
                 "Only possible states are Undefined/Solid/Liquid/Gas!");
   }

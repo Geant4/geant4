@@ -23,32 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbMaterialMixture
+// G4tgbMaterialMixture
 //
 // Class description:
 //
 // Transient class of a material mixture; builds a G4Material mixture.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbMaterialMixture_h
-#define G4tgbMaterialMixture_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbMaterialMixture_hh
+#define G4tgbMaterialMixture_hh 1
 
 #include "globals.hh"
-
-#include <vector>
-#include <string>
-
 #include "G4tgbMaterial.hh"
 
 class G4tgbMaterialMixture : public G4tgbMaterial
 {
-  public:  // with description
+  public:
 
     G4tgbMaterialMixture();
     virtual ~G4tgbMaterialMixture();
@@ -58,9 +49,9 @@ class G4tgbMaterialMixture : public G4tgbMaterial
     virtual const G4String& GetComponent(G4int i) const;
     virtual G4double GetFraction(G4int i) const;
 
-    //Operators
+    // Operators
 
-    G4tgbMaterialMixture& operator=(const G4tgbMaterialMixture&); 
+    G4tgbMaterialMixture& operator=(const G4tgbMaterialMixture&);
 
   protected:
 

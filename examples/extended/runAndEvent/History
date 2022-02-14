@@ -19,9 +19,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-Feb 15, 2013 I. Hrivnacova (exRunAndEvent-V09-06-01)
-=======
+Dec. 06th, 2021, I. Hrivnacova  (exRunAndEvent-V10-07-01)
+- Added RE07 in Doxygen documentation
+
+May 24th, 2021,  B. Morgan (exRunAndEvent-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+Nov. 11, 2020 M. Asai (exRunAndEvent-V10-06-02)
+- RE05 and RE06 : Migration to G4RunManagerFactory.
+
+Nov. 03, 2020 B. Morgan (exRunAndEvent-V10-06-01)
+- Support same CMake version range as core Geant4
+
+Oct. 29, 2020 M. Asai (exRunAndEvent-V10-06-00)
+- RE01, RE02, RE03 and RE04 : Migration to G4RunManagerFactory.
+
 Jan. 31, 2019 I. Hrivnacova  (exRunAndEvent-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
@@ -40,7 +52,7 @@ Dec. 19, 2012 I.Hrivnacova (exRunAndEvent-V09-06-00)
 - Added RE05, RE06 which (moved from /novice/N04 and /novice/N07)
 
 Oct. 15, 2012 M.Asai (exRunAndEvent-V09-05-01)
-- Update of RE01, RE03 by T.Aso (see RE01,RE03/History) to be compliant to 
+- Update of RE01, RE03 by T.Aso (see RE01,RE03/History) to be compliant to
 the example coding rule.
 
 Oct. 08, 2012 I.Hrivnacova (exRunAndEvent-V09-05-00)

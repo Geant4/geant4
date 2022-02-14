@@ -27,18 +27,19 @@
 //
 // Class description:
 //
-//   A G4Ellipsoid is an ellipsoidal solid, optionally cut at a given z.
+//   A G4Ellipsoid is an ellipsoidal solid, optionally cut at a given z
 //
 //   Member Data:
 //
-//      xSemiAxis       semi-axis, x
-//      ySemiAxis       semi-axis, y
-//      zSemiAxis       semi-axis, z
-//      zBottomCut      lower cut plane level, z (solid lies above this plane)
-//      zTopCut         upper cut plane level, z (solid lies below this plane)
+//     xSemiAxis   semi-axis, X
+//     ySemiAxis   semi-axis, Y
+//     zSemiAxis   semi-axis, Z
+//     zBottomCut  lower cut in Z (solid lies above this plane)
+//     zTopCut     upper cut in Z (solid lies below this plane)
 
 // 10.11.1999  G.Horton-Smith (Caltech, USA) - First implementation
 // 10.02.2005  G.Guerrieri (INFN Genova, Italy) - Revision
+// 15.12.2019  E.Tcherniaev - Complete revision
 // --------------------------------------------------------------------
 #ifndef G4ELLIPSOID_HH
 #define G4ELLIPSOID_HH
@@ -61,32 +62,32 @@
 
 class G4Ellipsoid : public G4VSolid
 {
-  public:  // with description
+  public:
 
-    G4Ellipsoid(const G4String& pName,
-                      G4double  pxSemiAxis,
-                      G4double  pySemiAxis,
-                      G4double  pzSemiAxis,
-                      G4double  pzBottomCut = 0,
-                      G4double  pzTopCut = 0);
+    // Constructor 
+    G4Ellipsoid(const G4String& name,
+                      G4double  xSemiAxis,
+                      G4double  ySemiAxis,
+                      G4double  zSemiAxis,
+                      G4double  zBottomCut = 0.,
+                      G4double  zTopCut = 0.);
 
+    // Destructor
     virtual ~G4Ellipsoid();
 
-    // Access functions
-   
+    // Accessors
     inline G4double GetDx() const;
     inline G4double GetDy() const;
     inline G4double GetDz() const;
     inline G4double GetSemiAxisMax (G4int i) const;
     inline G4double GetZBottomCut() const;
     inline G4double GetZTopCut() const;
+
+    // Modifiers
     inline void SetSemiAxis (G4double x, G4double y, G4double z);
     inline void SetZCuts (G4double newzBottomCut, G4double newzTopCut);
-    inline G4double GetCubicVolume(); 
-    inline G4double GetSurfaceArea(); 
 
-    // Solid standard methods
-   
+    // Standard methods
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
@@ -96,6 +97,7 @@ class G4Ellipsoid : public G4VSolid
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                                  G4double& pmin, G4double& pmax) const;
+
     EInside Inside(const G4ThreeVector& p) const;
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
     G4double DistanceToIn(const G4ThreeVector& p,
@@ -114,40 +116,69 @@ class G4Ellipsoid : public G4VSolid
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
+
     G4ThreeVector GetPointOnSurface() const;
 
-    // Visualisation functions
-  
-    G4Polyhedron* GetPolyhedron () const;
+    // Visualisation methods
     void DescribeYourselfTo(G4VGraphicsScene& scene) const;
-    G4VisExtent   GetExtent() const;
+    G4VisExtent GetExtent() const;
     G4Polyhedron* CreatePolyhedron() const;
-       
-  public:  // without description
+    G4Polyhedron* GetPolyhedron () const;
 
+  public:
+
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects
     G4Ellipsoid(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
+    // Copy constructorassignment operator
     G4Ellipsoid(const G4Ellipsoid& rhs);
-    G4Ellipsoid& operator=(const G4Ellipsoid& rhs); 
-      // Copy constructor and assignment operator.
 
-  protected:  // without description
- 
-    mutable G4bool fRebuildPolyhedron = false;
-    mutable G4Polyhedron* fpPolyhedron = nullptr;
+    // Assignment
+    G4Ellipsoid& operator=(const G4Ellipsoid& rhs);
 
   private:
 
-    G4double kRadTolerance;
-    G4double halfCarTolerance, halfRadTolerance;
+    // Check parameters and set cached values
+    void CheckParameters();
 
-    G4double fCubicVolume = 0.0;
-    G4double fSurfaceArea = 0.0;
-    G4double xSemiAxis, ySemiAxis, zSemiAxis,
-             semiAxisMax, zBottomCut, zTopCut;
+    // Return normal to surface closest to p
+    G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
+
+    // Calculate area of lateral surface
+    G4double LateralSurfaceArea() const;
+
+  private:
+
+    // Ellipsoid parameters
+    G4double fDx;         // X semi-axis
+    G4double fDy;         // Y semi-axis
+    G4double fDz;         // Z semi-axis
+    G4double fZBottomCut; // Bottom cut in Z
+    G4double fZTopCut;    // Top cut in Z
+
+    // Precalculated cached values
+    G4double halfTolerance; // Surface tolerance
+    G4double fXmax;         // X extent
+    G4double fYmax;         // Y extent
+    G4double fRsph;         // Radius of bounding sphere
+    G4double fR;            // Radius of sphere after scaling
+    G4double fSx;           // X scale factor
+    G4double fSy;           // Y scale factor
+    G4double fSz;           // Z scale factor
+    G4double fZMidCut;      // Middle position between cuts after scaling
+    G4double fZDimCut;      // Half distance between cut after scaling
+    G4double fQ1; // 1st coefficient in approximation of dist = Q1*(x^2+y^2+z^2) - Q2
+    G4double fQ2; // 2nd coefficient in approximation of dist = Q1*(x^2+y^2+z^2) - Q2
+
+    G4double fCubicVolume = 0.0; // Volume
+    G4double fSurfaceArea = 0.0; // Surface area
+    mutable G4double fLateralArea = 0.0; // Lateral surface area
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 };
 
 #include "G4Ellipsoid.icc"

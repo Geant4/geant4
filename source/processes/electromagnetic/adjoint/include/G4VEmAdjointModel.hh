@@ -23,328 +23,290 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////////////////////////////////////////////////////////////////////////////////
+//  Class:  G4VEMAdjointModel
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4VEMAdjointModel
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	10 September 2009 Move to a virtual class. L. Desorgher
-//		1st April 2007 creation by L. Desorgher  		
-//
-//-------------------------------------------------------------
-//	Documentation:
-//		Base class for Adjoint EM model. It is based on the use of direct G4VEmModel.
-//
-
+//  Base class for Adjoint EM model. It is based on the use of direct
+//  G4VEmModel.
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef G4VEmAdjointModel_h
 #define G4VEmAdjointModel_h 1
 
 #include "globals.hh"
-#include "G4DynamicParticle.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4MaterialCutsCouple.hh"
-#include "G4Material.hh"
-#include "G4Element.hh"
-#include "G4ElementVector.hh"
-#include "Randomize.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VEmModel.hh"
-#include "G4Electron.hh"
-#include "G4Gamma.hh"
-#include "G4ProductionCutsTable.hh"
 
-class G4PhysicsTable;
-class G4Region;
-class G4VParticleChange;
-class G4ParticleChange;
-class G4Track;
 class G4AdjointCSMatrix;
+class G4AdjointCSManager;
+class G4Material;
+class G4MaterialCutsCouple;
+class G4ParticleChange;
+class G4Region;
+class G4Track;
 
 class G4VEmAdjointModel
 {
-
-public: // public methods
-
-  G4VEmAdjointModel(const G4String& nam);
+ public:
+  explicit G4VEmAdjointModel(const G4String& nam);
 
   virtual ~G4VEmAdjointModel();
 
   //------------------------------------------------------------------------
   // Virtual methods to be implemented for the sample secondaries concrete model
   //------------------------------------------------------------------------
-  
-  //virtual void Initialise()=0;
-  
-  virtual void SampleSecondaries(const G4Track& aTrack,
-                                G4bool IsScatProjToProjCase,
-				G4ParticleChange* fParticleChange)=0;
- 
+
+  virtual void SampleSecondaries(const G4Track& aTrack, G4bool isScatProjToProj,
+                                 G4ParticleChange* fParticleChange) = 0;
 
   //------------------------------------------------------------------------
-  // Methods for adjoint processes; may be overwritten if needed;  
+  // Methods for adjoint processes
   //------------------------------------------------------------------------
-  
 
   virtual G4double AdjointCrossSection(const G4MaterialCutsCouple* aCouple,
-				             G4double primEnergy,
-				             G4bool IsScatProjToProjCase);
-  
-  virtual G4double GetAdjointCrossSection(const G4MaterialCutsCouple* aCouple,
-				             G4double primEnergy,
-				             G4bool IsScatProjToProjCase);
-  				
+                                       G4double primEnergy,
+                                       G4bool isScatProjToProj);
+
+  // The implementation of the DiffCrossSection... here are correct for
+  // energy loss process. For the photoelectric and Compton scattering
+  // the method should be redefined
   virtual G4double DiffCrossSectionPerAtomPrimToSecond(
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd, // kinetic energy of the secondary particle 
-				      G4double Z, 
-                                      G4double A = 0.);
- 				      
-  virtual G4double DiffCrossSectionPerAtomPrimToScatPrim( 
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyScatProj, // kinetic energy of the primary particle after the interaction 
-				      G4double Z, 
-                                      G4double A = 0.);
-  
- 
-  
+    G4double kinEnergyProj,  // kin energy of primary before interaction
+    G4double kinEnergyProd,  // kinetic energy of the secondary particle
+    G4double Z, G4double A = 0.);
+
+  virtual G4double DiffCrossSectionPerAtomPrimToScatPrim(
+    G4double kinEnergyProj,      // kin energy of primary before interaction
+    G4double kinEnergyScatProj,  // kin energy of primary after interaction
+    G4double Z, G4double A = 0.);
+
   virtual G4double DiffCrossSectionPerVolumePrimToSecond(
-  				      const G4Material* aMaterial,
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
-				      );
- 				      
+    const G4Material* aMaterial,
+    G4double kinEnergyProj,  // kin energy of primary before interaction
+    G4double kinEnergyProd   // kinetic energy of secondary particle
+  );
+
   virtual G4double DiffCrossSectionPerVolumePrimToScatPrim(
-  				      const G4Material* aMaterial, 
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyScatProj // kinetic energy of the primary particle after the interaction 
-				      );
-  
-  
-  //Energy limits of adjoint secondary
+    const G4Material* aMaterial,
+    G4double kinEnergyProj,     // kin energy of primary before interaction
+    G4double kinEnergyScatProj  // kinetic energy of primary after interaction
+  );
+
+  // Energy limits of adjoint secondary
   //------------------
-  
-  virtual G4double GetSecondAdjEnergyMaxForScatProjToProjCase(G4double PrimAdjEnergy);
-  virtual G4double GetSecondAdjEnergyMinForScatProjToProjCase(G4double PrimAdjEnergy,G4double Tcut=0);
-  virtual G4double GetSecondAdjEnergyMaxForProdToProjCase(G4double PrimAdjEnergy);
-  virtual G4double GetSecondAdjEnergyMinForProdToProjCase(G4double PrimAdjEnergy);
-  
-  
-  
-  //Other Methods
+
+  virtual G4double GetSecondAdjEnergyMaxForScatProjToProj(
+    G4double primAdjEnergy);
+
+  virtual G4double GetSecondAdjEnergyMinForScatProjToProj(
+    G4double primAdjEnergy, G4double tcut = 0.);
+
+  virtual G4double GetSecondAdjEnergyMaxForProdToProj(G4double primAdjEnergy);
+
+  virtual G4double GetSecondAdjEnergyMinForProdToProj(G4double primAdjEnergy);
+
+  // Other Methods
   //---------------
-  
-  void  DefineCurrentMaterial(const G4MaterialCutsCouple* couple);
-  
-  
-  std::vector< std::vector< double>* >  ComputeAdjointCrossSectionVectorPerAtomForSecond(      
-				G4double kinEnergyProd,
-				G4double Z, 
-                                G4double A = 0.,
-				G4int nbin_pro_decade=10
-				);
-  std::vector< std::vector< double>* >  ComputeAdjointCrossSectionVectorPerAtomForScatProj(      
-				G4double kinEnergyProd,
-				G4double Z, 
-                                G4double A = 0.,
-				G4int nbin_pro_decade=10
-				);
-  
-  std::vector< std::vector< double>* >  ComputeAdjointCrossSectionVectorPerVolumeForSecond(      
-				G4Material* aMaterial,
-				G4double kinEnergyProd,
-				G4int nbin_pro_decade=10
-				);
-  std::vector< std::vector< double>* >  ComputeAdjointCrossSectionVectorPerVolumeForScatProj(      
-				G4Material* aMaterial,
-				G4double kinEnergyProd,
-				G4int nbin_pro_decade=10
-				);
-  
 
-  
-  inline void SetCSMatrices(std::vector< G4AdjointCSMatrix* >* Vec1CSMatrix, std::vector< G4AdjointCSMatrix* >* Vec2CSMatrix){
-  				 pOnCSMatrixForProdToProjBackwardScattering = Vec1CSMatrix;
-				 pOnCSMatrixForScatProjToProjBackwardScattering = Vec2CSMatrix;
-				 
-  	
+  void DefineCurrentMaterial(const G4MaterialCutsCouple* couple);
+
+  std::vector<std::vector<double>*>
+  ComputeAdjointCrossSectionVectorPerAtomForSecond(G4double kinEnergyProd,
+                                                   G4double Z, G4double A = 0.,
+                                                   G4int nbin_pro_decade = 10);
+
+  std::vector<std::vector<double>*>
+  ComputeAdjointCrossSectionVectorPerAtomForScatProj(
+    G4double kinEnergyProd, G4double Z, G4double A = 0.,
+    G4int nbin_pro_decade = 10);
+
+  std::vector<std::vector<double>*>
+  ComputeAdjointCrossSectionVectorPerVolumeForSecond(
+    G4Material* aMaterial, G4double kinEnergyProd, G4int nbin_pro_decade = 10);
+
+  std::vector<std::vector<double>*>
+  ComputeAdjointCrossSectionVectorPerVolumeForScatProj(
+    G4Material* aMaterial, G4double kinEnergyProd, G4int nbin_pro_decade = 10);
+
+  inline void SetCSMatrices(std::vector<G4AdjointCSMatrix*>* Vec1CSMatrix,
+                            std::vector<G4AdjointCSMatrix*>* Vec2CSMatrix)
+  {
+    fCSMatrixProdToProjBackScat = Vec1CSMatrix;
+    fCSMatrixProjToProjBackScat = Vec2CSMatrix;
   };
-  
-  inline G4ParticleDefinition* GetAdjointEquivalentOfDirectPrimaryParticleDefinition(){return theAdjEquivOfDirectPrimPartDef;}
-  
-  inline G4ParticleDefinition* GetAdjointEquivalentOfDirectSecondaryParticleDefinition(){return theAdjEquivOfDirectSecondPartDef;}	
-  
-  inline G4double GetHighEnergyLimit(){return HighEnergyLimit;}
-  
-  inline G4double GetLowEnergyLimit(){return LowEnergyLimit;}
-  
-  void SetHighEnergyLimit(G4double aVal);
-  
-  void SetLowEnergyLimit(G4double aVal);
-  
-  inline void DefineDirectEMModel(G4VEmModel* aModel){theDirectEMModel = aModel;}
-  
-  void SetAdjointEquivalentOfDirectPrimaryParticleDefinition(G4ParticleDefinition* aPart);
-  
-  inline void SetAdjointEquivalentOfDirectSecondaryParticleDefinition(G4ParticleDefinition* aPart){
-  	theAdjEquivOfDirectSecondPartDef =aPart;
+
+  inline G4ParticleDefinition*
+  GetAdjointEquivalentOfDirectPrimaryParticleDefinition()
+  {
+    return fAdjEquivDirectPrimPart;
   }
-  
-  inline void SetSecondPartOfSameType(G4bool aBool){second_part_of_same_type =aBool;}
-  
-  inline G4bool GetSecondPartOfSameType(){return second_part_of_same_type;}
-  
-  inline void SetUseMatrix(G4bool aBool) { UseMatrix = aBool;}
-  
-  inline void SetUseMatrixPerElement(G4bool aBool){ UseMatrixPerElement = aBool;}
-  inline void SetUseOnlyOneMatrixForAllElements(G4bool aBool){ UseOnlyOneMatrixForAllElements = aBool;}
-  
-  inline void SetApplyCutInRange(G4bool aBool){ ApplyCutInRange = aBool;} 
-  inline G4bool GetUseMatrix() {return UseMatrix;}
-  inline G4bool GetUseMatrixPerElement(){ return UseMatrixPerElement;} 
-  inline G4bool GetUseOnlyOneMatrixForAllElements(){ return UseOnlyOneMatrixForAllElements;} 
-  inline G4bool GetApplyCutInRange(){ return ApplyCutInRange;} 
-  
-  inline G4String GetName(){ return name;}
-  inline virtual void SetCSBiasingFactor(G4double aVal) {CS_biasing_factor = aVal;} 
 
-  inline void SetCorrectWeightForPostStepInModel(G4bool aBool) {correct_weight_for_post_step_in_model = aBool;}
-  inline void SetAdditionalWeightCorrectionFactorForPostStepOutsideModel(G4double factor) {additional_weight_correction_factor_for_post_step_outside_model = factor;}
+  inline G4ParticleDefinition*
+  GetAdjointEquivalentOfDirectSecondaryParticleDefinition()
+  {
+    return fAdjEquivDirectSecondPart;
+  }
 
-protected: 
+  inline G4double GetHighEnergyLimit() { return fHighEnergyLimit; }
 
-  //Some of them can be overriden by daughter classes
-  
-  
+  inline G4double GetLowEnergyLimit() { return fLowEnergyLimit; }
+
+  void SetHighEnergyLimit(G4double aVal);
+
+  void SetLowEnergyLimit(G4double aVal);
+
+  inline void DefineDirectEMModel(G4VEmModel* aModel) { fDirectModel = aModel; }
+
+  void SetAdjointEquivalentOfDirectPrimaryParticleDefinition(
+    G4ParticleDefinition* aPart);
+
+  inline void SetAdjointEquivalentOfDirectSecondaryParticleDefinition(
+    G4ParticleDefinition* aPart)
+  {
+    fAdjEquivDirectSecondPart = aPart;
+  }
+
+  inline void SetSecondPartOfSameType(G4bool aBool)
+  {
+    fSecondPartSameType = aBool;
+  }
+
+  inline G4bool GetSecondPartOfSameType() { return fSecondPartSameType; }
+
+  inline void SetUseMatrix(G4bool aBool) { fUseMatrix = aBool; }
+
+  inline void SetUseMatrixPerElement(G4bool aBool)
+  {
+    fUseMatrixPerElement = aBool;
+  }
+
+  inline void SetUseOnlyOneMatrixForAllElements(G4bool aBool)
+  {
+    fOneMatrixForAllElements = aBool;
+  }
+
+  inline void SetApplyCutInRange(G4bool aBool) { fApplyCutInRange = aBool; }
+
+  inline G4bool GetUseMatrix() { return fUseMatrix; }
+
+  inline G4bool GetUseMatrixPerElement() { return fUseMatrixPerElement; }
+
+  inline G4bool GetUseOnlyOneMatrixForAllElements()
+  {
+    return fOneMatrixForAllElements;
+  }
+
+  inline G4bool GetApplyCutInRange() { return fApplyCutInRange; }
+
+  inline G4String GetName() { return fName; }
+
+  inline virtual void SetCSBiasingFactor(G4double aVal)
+  {
+    fCsBiasingFactor = aVal;
+  }
+
+  inline void SetCorrectWeightForPostStepInModel(G4bool aBool)
+  {
+    fInModelWeightCorr = aBool;
+  }
+
+  inline void SetAdditionalWeightCorrectionFactorForPostStepOutsideModel(
+    G4double factor)
+  {
+    fOutsideWeightFactor = factor;
+  }
+
+  G4VEmAdjointModel(G4VEmAdjointModel&) = delete;
+  G4VEmAdjointModel& operator=(const G4VEmAdjointModel& right) = delete;
+
+ protected:
   G4double DiffCrossSectionFunction1(G4double kinEnergyProj);
+
   G4double DiffCrossSectionFunction2(G4double kinEnergyProj);
-  G4double DiffCrossSectionPerVolumeFunctionForIntegrationOverEkinProj(G4double EkinProd);
-  
-  
-				
-  //General methods to sample secondary energy 
-  //--------------------------------------
-  G4double SampleAdjSecEnergyFromCSMatrix(size_t MatrixIndex,G4double prim_energy,G4bool IsScatProjToProjCase);
-  G4double SampleAdjSecEnergyFromCSMatrix(G4double prim_energy,G4bool IsScatProjToProjCase);
-  void	   SelectCSMatrix(G4bool IsScatProjToProjCase); 		      
- 
-  virtual G4double SampleAdjSecEnergyFromDiffCrossSectionPerAtom(G4double prim_energy,G4bool IsScatProjToProjCase);
-  
-  
-  
-  //Post  Step weight correction
-  //----------------------------
-  virtual void CorrectPostStepWeight(G4ParticleChange* fParticleChange, 
-  				     G4double old_weight, 
-				     G4double adjointPrimKinEnergy, 
-				     G4double projectileKinEnergy,
-				     G4bool IsScatProjToProjCase);      
-  
- 
-  
- 
- 
-  
-protected: //attributes
-  
-  G4VEmModel* theDirectEMModel;
-  G4VParticleChange*  pParticleChange;
-  
 
+  // General methods to sample secondary energy
+  G4double SampleAdjSecEnergyFromCSMatrix(size_t MatrixIndex,
+                                          G4double prim_energy,
+                                          G4bool isScatProjToProj);
 
- 
-  //Name
-  //-----
-  
-  const G4String  name;
-  
-  //Needed for CS integration at the initialisation phase
-  //-----------------------------------------------------
-  
-  G4int ASelectedNucleus;
-  G4int ZSelectedNucleus;
-  G4Material* SelectedMaterial;
-  G4double kinEnergyProdForIntegration;
-  G4double kinEnergyScatProjForIntegration;
-  G4double kinEnergyProjForIntegration;
+  G4double SampleAdjSecEnergyFromCSMatrix(G4double prim_energy,
+                                          G4bool isScatProjToProj);
 
-  //for the adjoint simulation  we need for each element or material:
-  //an adjoint CS Matrix 
-  //-----------------------------
-  
-  std::vector< G4AdjointCSMatrix* >* pOnCSMatrixForProdToProjBackwardScattering;
-  std::vector< G4AdjointCSMatrix* >* pOnCSMatrixForScatProjToProjBackwardScattering;
-  std::vector<G4double> CS_Vs_ElementForScatProjToProjCase;
-  std::vector<G4double> CS_Vs_ElementForProdToProjCase;
-  
-  G4double lastCS;
-  G4double lastAdjointCSForScatProjToProjCase;
-  G4double lastAdjointCSForProdToProjCase;
-  
-  //particle definition
-  //------------------
-  
-  G4ParticleDefinition*	theAdjEquivOfDirectPrimPartDef;
-  G4ParticleDefinition*	theAdjEquivOfDirectSecondPartDef;
-  G4ParticleDefinition*	theDirectPrimaryPartDef;
-  G4bool second_part_of_same_type;
-  
-  //Prestep energy
-  //-------------
-  G4double preStepEnergy;
-  
-  //Current couple material
-  //----------------------
-  G4Material*  currentMaterial;
-  G4MaterialCutsCouple* currentCouple;
-  size_t   currentMaterialIndex; 
-  size_t   currentCoupleIndex; 
-  G4double currentTcutForDirectPrim;
-  G4double currentTcutForDirectSecond;
-  G4bool ApplyCutInRange;
-  
-  //For ions
-  //---------
-  G4double mass_ratio_product;
-  G4double mass_ratio_projectile;
+  void SelectCSMatrix(G4bool isScatProjToProj);
 
-  //Energy limits
-  //-------------
-  
-  G4double HighEnergyLimit;
-  G4double LowEnergyLimit; 
+  virtual G4double SampleAdjSecEnergyFromDiffCrossSectionPerAtom(
+    G4double prim_energy, G4bool isScatProjToProj);
 
-  //Cross Section biasing factor
-  //---------------------------
-  G4double CS_biasing_factor;
-  
-  //Type of Model with Matrix or not
-  //--------------------------------
-   G4bool UseMatrix;
-   G4bool UseMatrixPerElement; //other possibility is per Material
-   G4bool UseOnlyOneMatrixForAllElements;
-  
-   //Index of Cross section matrices to be used
-   //------------
-   size_t indexOfUsedCrossSectionMatrix;
-   
-   size_t model_index;
-   
-   //This is needed for the forced interaction where part of the weight correction
-   // is given outside the model while the secondary are created in the model
-   //The weight should be fixed before adding the secondary
-   G4bool correct_weight_for_post_step_in_model;
-   G4double additional_weight_correction_factor_for_post_step_outside_model;
+  // Post  Step weight correction
+  virtual void CorrectPostStepWeight(G4ParticleChange* fParticleChange,
+                                     G4double old_weight,
+                                     G4double adjointPrimKinEnergy,
+                                     G4double projectileKinEnergy,
+                                     G4bool isScatProjToProj);
 
+  G4AdjointCSManager* fCSManager;
+  G4VEmModel* fDirectModel = nullptr;
+
+  const G4String fName;
+
+  G4Material* fSelectedMaterial        = nullptr;
+  G4Material* fCurrentMaterial         = nullptr;
+  G4MaterialCutsCouple* fCurrentCouple = nullptr;
+
+  // particle definition
+  G4ParticleDefinition* fAdjEquivDirectPrimPart   = nullptr;
+  G4ParticleDefinition* fAdjEquivDirectSecondPart = nullptr;
+  G4ParticleDefinition* fDirectPrimaryPart        = nullptr;
+
+  // adjoint CS matrix for each element or material
+  std::vector<G4AdjointCSMatrix*>* fCSMatrixProdToProjBackScat = nullptr;
+  std::vector<G4AdjointCSMatrix*>* fCSMatrixProjToProjBackScat = nullptr;
+
+  std::vector<G4double> fElementCSScatProjToProj;
+  std::vector<G4double> fElementCSProdToProj;
+
+  G4double fKinEnergyProdForIntegration     = 0.;
+  G4double fKinEnergyScatProjForIntegration = 0.;
+
+  G4double fLastCS                         = 0.;
+  G4double fLastAdjointCSForScatProjToProj = 0.;
+  G4double fLastAdjointCSForProdToProj     = 0.;
+
+  G4double fPreStepEnergy = 0.;
+
+  G4double fTcutPrim   = 0.;
+  G4double fTcutSecond = 0.;
+
+  // Energy limits
+  G4double fHighEnergyLimit = 0.;
+  G4double fLowEnergyLimit  = 0.;
+
+  // Cross Section biasing factor
+  G4double fCsBiasingFactor = 1.;
+
+  // [1] This is needed for the forced interaction where part of the weight
+  // correction is given outside the model while the secondary are created in
+  // the model. The weight should be fixed before adding the secondary
+  G4double fOutsideWeightFactor = 1.;
+
+  // Needed for CS integration at the initialisation phase
+  G4int fASelectedNucleus = 0;
+  G4int fZSelectedNucleus = 0;
+
+  size_t fCSMatrixUsed = 0;  // Index of crosssection matrices used
+
+  G4bool fSecondPartSameType = false;
+  G4bool fInModelWeightCorr =
+    false;  // correct_weight_for_post_step_in_model, see [1]
+
+  G4bool fApplyCutInRange = true;
+
+  // Type of Model with Matrix or not
+  G4bool fUseMatrix               = false;
+  G4bool fUseMatrixPerElement     = false;  // other possibility is per Material
+  G4bool fOneMatrixForAllElements = false;
 };
 
-
 #endif
-

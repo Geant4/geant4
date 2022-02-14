@@ -16,6 +16,20 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 August 2021 Alberto Ribon channeling-V10-07-01
+-----------------------------------------------------
+- G4Channeling, G4ChannelingOptrChangeCrossSection : migrated to the
+  new version of G4PhysicsModelCatalog
+
+16 April 2021 Ben Morgan channeling-V10-07-00
+-----------------------------------------------------
+- Migrate build to modular CMake API
+
+28 May 2019 B. Morgan channeling-V10-06-00
+-----------------------------------------------------
+- Name module "G4solidstate_channeling" for use with new CMake system,
+  as old "G4phonon" name clashes with solidstate/phonon"
+
 11 March 2019 G. Cosmo channeling-V10-05-00
 -----------------------------------------------------
 - Fixed typos in printouts and comments.
@@ -34,7 +48,7 @@ committal in the SVN repository !
 
 20 April 2017  G. Cosmo
 -----------------------------------------------------
-- Removed inclusion if non-existing G4ChargeState.hh header in G4Channeling.cc. 
+- Removed inclusion if non-existing G4ChargeState.hh header in G4Channeling.cc.
 - Corrected GNUmakefile and sources.cmake scripts.
 
 6 April 2017  E. Bagli

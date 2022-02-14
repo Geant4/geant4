@@ -1,0 +1,415 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_legend
+#define tools_sg_legend
+
+// To handle a colored "rep" (line or marker) with a text at right.
+
+#include "back_area"
+#include "matrix"
+#include "text_hershey"
+#include "base_freetype"
+#include "markers"
+#include "enums"
+
+#include "../colorf"
+//#include "../paw2stix"
+#include "text_valop"
+
+namespace tools {
+namespace sg {
+
+class legend : public back_area {
+  TOOLS_NODE(legend,tools::sg::legend,back_area)
+public:
+  mf_string strings;
+
+  sf_vec<colorf,float> color; //color of the "rep"
+  // text atbs :
+  //sf<float> transparency;
+  sf_string font;
+  sf_enum<sg::font_modeling> font_modeling;
+  sf_string encoding;
+  //sf<float> line_width;          // for text_hershey.
+
+  sf<bool> back_visible;
+  sf<float> wmargin_factor;
+  sf<float> hmargin_factor;
+  sf_enum<hjust> lhjust;
+  sf_enum<hjust> rhjust;
+  //sf<bool> confine;
+
+  sf_enum<sg::marker_style> marker_style;
+  sf<float> marker_size;
+public:
+  virtual const desc_fields& node_desc_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::legend)
+    static const desc_fields s_v(parent::node_desc_fields(),12, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(strings),
+      TOOLS_ARG_FIELD_DESC(color),
+      TOOLS_ARG_FIELD_DESC(font),
+
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(font_modeling,3)
+        TOOLS_ARG_ENUM(font_outline),
+        TOOLS_ARG_ENUM(font_filled),
+        TOOLS_ARG_ENUM(font_pixmap)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
+
+      TOOLS_ARG_FIELD_DESC(encoding),
+      TOOLS_ARG_FIELD_DESC(back_visible),
+      TOOLS_ARG_FIELD_DESC(wmargin_factor),
+      TOOLS_ARG_FIELD_DESC(hmargin_factor),
+      TOOLS_ARG_FIELD_DESC(lhjust),
+      TOOLS_ARG_FIELD_DESC(rhjust),
+      TOOLS_ARG_FIELD_DESC(marker_style),
+      TOOLS_ARG_FIELD_DESC(marker_size)
+    );
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&strings);
+
+    add_field(&color);
+    add_field(&font);
+    add_field(&font_modeling);
+    add_field(&encoding);
+
+    add_field(&back_visible);
+    add_field(&wmargin_factor);
+    add_field(&hmargin_factor);
+    add_field(&lhjust);
+    add_field(&rhjust);
+    add_field(&marker_style);
+    add_field(&marker_size);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(back_visible.value()) m_back_sep.render(a_action);
+    m_sep.render(a_action);
+  }
+  virtual void pick(pick_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(back_visible.value()) {
+      m_back_sep.pick(a_action);
+      if(a_action.done()) return;
+    }
+  }
+  virtual void search(search_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    node::search(a_action);
+    if(a_action.done()) return;
+    if(back_visible.value()) {
+      m_back_sep.search(a_action);
+      if(a_action.done()) return;
+    }
+    m_sep.search(a_action);
+    if(a_action.done()) return;
+  }
+  virtual void bbox(bbox_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(back_visible.value()) m_back_sep.bbox(a_action);
+    m_sep.bbox(a_action);
+  }
+public:
+  legend(const base_freetype& a_ttf)
+  :parent()
+  ,strings()
+
+  ,color(colorf_black())
+  //,transparency(0)
+  ,font(font_hershey())
+  ,font_modeling(font_filled)
+  ,encoding(encoding_PAW())
+  //,line_width(1)
+
+  ,back_visible(true)
+  ,wmargin_factor(0.9f)
+  ,hmargin_factor(0.9f)
+  ,lhjust(left)
+  ,rhjust(right)
+
+  ,marker_style(marker_dot)
+  ,marker_size(10)
+
+  //,confine(false)
+
+  ,m_ttf(a_ttf)
+  {
+    add_fields();
+  }
+  virtual ~legend(){}
+public:
+  legend(const legend& a_from)
+  :parent(a_from)
+  ,strings(a_from.strings)
+
+  ,color(a_from.color)
+  //,transparency(a_from.transparency)
+  ,font(a_from.font)
+  ,font_modeling(a_from.font_modeling)
+  ,encoding(a_from.encoding)
+  //,line_width(a_from.line_width)
+
+  ,back_visible(a_from.back_visible)
+  ,wmargin_factor(a_from.wmargin_factor)
+  ,hmargin_factor(a_from.hmargin_factor)
+  ,lhjust(a_from.lhjust)
+  ,rhjust(a_from.rhjust)
+
+  ,marker_style(a_from.marker_style)
+  ,marker_size(a_from.marker_size)
+
+  //,confine(a_from.confine)
+
+  ,m_ttf(a_from.m_ttf)
+  {
+    add_fields();
+  }
+  legend& operator=(const legend& a_from){
+    parent::operator=(a_from);
+    strings = a_from.strings;
+
+    color = a_from.color;
+    //transparency = a_from.transparency;
+    font = a_from.font;
+    font_modeling = a_from.font_modeling;
+    encoding = a_from.encoding;
+    //line_width = a_from.line_width;
+
+    back_visible = a_from.back_visible;
+    wmargin_factor = a_from.wmargin_factor;
+    hmargin_factor = a_from.hmargin_factor;
+    lhjust = a_from.lhjust;
+    rhjust = a_from.rhjust;
+
+    marker_style = a_from.marker_style;
+    marker_size = a_from.marker_size;
+
+    //confine = a_from.confine;
+
+    return *this;
+  }
+public:
+  void update_sg() {
+    // have this method public in order to use it in plotter.
+    // This is so because legend::height is an output field
+    // needed in plotter to place the box.
+
+    m_back_sep.clear(); //back_area::update_sg done last.
+
+    m_sep.clear();
+
+    if(width.value()<=0) return;
+    //if(confine) {
+    //  if(height.value()<=0) return;
+    //}
+
+   {bool empty = true;
+    std::vector<std::string>::const_iterator it;
+    for(it=strings.values().begin();it!=strings.values().end();++it) {
+      if((*it).size()) {empty = false;break;}
+    }
+    if(empty) return;}
+
+    //sf<float> zfront ?
+    float zz = back_visible.value()?0.01f:0;
+
+  //bool rep_line = false;
+
+    /*
+    float fw = 0;
+    float fh = 0;
+    float lw = 0;
+    float rw = 0;
+    if(rep_line) {
+      fw = width * wmargin_factor;
+      fh = height * hmargin_factor;
+
+      lw = fw*0.5f*0.95f;
+      rw = fw*0.5f;
+    }*/
+    ////////////////////////////////////////////////////////////
+    /// rep at left ////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+
+   {separator* _sep = new separator;
+    m_sep.add(_sep);
+
+    rgba* mat = new rgba();
+    mat->color = color;
+    _sep->add(mat);
+
+/*  if(rep_line) {
+      matrix* ltsf = new matrix;
+      float xx = -fw*0.5F; //left justified.
+      ltsf->set_translate(xx,0,zz);
+      _sep->add(ltsf);
+
+      draw_style* ds = new draw_style;
+      ds->style = draw_lines;
+      _sep->add(ds);
+
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::line_strip();
+      vtxs->add( 0,0,zz);
+      vtxs->add(lw,0,zz);
+      _sep->add(vtxs);
+
+    } else*/ { // rep marker :
+      if(marker_style.value()==marker_dot) {
+        draw_style* ds = new draw_style;
+        ds->style = draw_points;
+        ds->point_size = marker_size;
+        _sep->add(ds);
+        vertices* vtxs = new vertices;
+        vtxs->mode = gl::points();
+        vtxs->add(-width*0.5f+height*0.5f,0,zz);
+        _sep->add(vtxs);
+      } else {
+        markers* vtxs = new markers;
+        vtxs->size = marker_size;
+        vtxs->style = marker_style;
+        vtxs->add(-width*0.5f+height*0.5f,0,zz);
+        _sep->add(vtxs);
+      }
+    }
+
+    }
+
+    ////////////////////////////////////////////////////////////
+    /// right text /////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    base_text* rtext = 0;
+    matrix* rtsf = 0;
+
+   {separator* _sep = new separator;
+    m_sep.add(_sep);
+
+    rgba* mat = new rgba();
+    mat->color = colorf_black();
+    _sep->add(mat);
+
+    if(font==font_hershey()) {
+      draw_style* ds = new draw_style;
+      ds->style.value(draw_lines);
+      _sep->add(ds);
+    }
+
+    rtsf = new matrix;
+    _sep->add(rtsf);
+    if(font==font_hershey()) {
+      text_hershey* text = new text_hershey;
+      text->encoding = encoding;
+      text->strings = strings;
+      _sep->add(text);
+      rtext = text;
+    } else {
+      if(encoding==encoding_PAW()) {
+        text_valop* text = new text_valop(m_ttf);
+        text->font = font;
+        text->font_modeling = font_modeling;
+        text->strings = strings;
+        _sep->add(text);
+        rtext = text;
+      } else {
+        base_freetype* text = base_freetype::create(m_ttf);
+        text->font = font;
+        text->modeling = font_modeling;
+        text->strings = strings;
+        _sep->add(text);
+        rtext = text;
+      }
+    }
+    rtext->hjust = rhjust;}
+
+    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+
+/*  if(rep_line) {
+
+      // adjust width :
+      float th = fh;
+     {float mn_x,mn_y,mn_z;
+      float mx_x,mx_y,mx_z;
+      rtext->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      float bxw = mx_x-mn_x;
+      if(!bxw) {
+        m_sep.clear();
+        parent::update_sg();
+        return;
+      }
+      // adjust box width :
+      // fh -> bxw then to have rw :
+      float max_width = rw;
+      if(bxw>max_width) th = max_width*fh/bxw;}
+
+      rtext->height = th;
+
+     {float mn_x,mn_y,mn_z;
+      float mx_x,mx_y,mx_z;
+      rtext->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      rtext->hjust = right;
+      float xx = fw*0.5f;
+      float yy = -(mn_y+mx_y)*0.5F;
+      rtsf->set_translate(xx,yy,zz);}
+
+    } else*/ { //rep mark :
+
+      // adjust width :
+      float th = height;
+     {float mn_x,mn_y,mn_z;
+      float mx_x,mx_y,mx_z;
+      rtext->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      float bxw = mx_x-mn_x;
+      if(!bxw) {
+        m_sep.clear();
+        parent::update_sg();
+        return;
+      }
+      // adjust box width :
+      // height -> bxw then to have a wanted width :
+      float max_width = (width-height)*wmargin_factor;
+      if(bxw>max_width) th = max_width*height/bxw;
+      if(th<0) {
+        m_sep.clear();
+        parent::update_sg();
+        return;
+      }}
+
+      rtext->height = th;
+     {float mn_x,mn_y,mn_z;
+      float mx_x,mx_y,mx_z;
+      rtext->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      rtext->hjust = left;
+      float yy = -(mn_y+mx_y)*0.5F;
+      rtsf->set_translate(-width*0.5f+height,yy,zz);}
+
+    }
+
+    parent::update_sg();
+
+  }
+protected:
+  separator m_sep;
+  const base_freetype& m_ttf;
+};
+
+}}
+
+#endif

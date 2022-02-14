@@ -1,8 +1,9 @@
 #
 # macro file for TestEm18.cc
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setMat Water
 /testem/det/setSize 1 cm
@@ -11,8 +12,10 @@
 #
 /run/setCut 1 mm
 #
+/process/em/verbose 0
+/process/em/printParameters 
+#
 /run/initialize
-/process/list
 #
 /gun/particle ion
 /gun/ion 6 12

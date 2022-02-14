@@ -17,18 +17,14 @@
 	
  1 - EXECUTION
    
-   A - ENVIRONMENT
-     G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS - REQUIRED
-     The example requires this enviroment variable to be set. An error will be
-     displayed and the example will terminate if this environment variable is
-     not set.
-     
-     G4NEUTRON_HP_USE_WENDT_FISSION_MODEL - OPTIONAL
-     This environment variable enables the Wendt fission model contained
-     within the NeutronHP model for simulating fission events. The default model
-     will be used otherwise. A warning will be displayed if this environment
-     variable is not set.
+   A - Enable the following UI command : 
    
+         /process/had/particle_hp/use_Wendt_fission_model true
+	 
+       to use the alternative Wendt fission model contained within the
+       NeutronHP model for simulating fission events
+       (else, the default fission model will be used).
+							       
    B - COMMAND LINE ARGUMENTS
      The example can be run without any input arguments. However, a few options
      are available:
@@ -46,7 +42,9 @@
    C - INTERACTIVE
      No specialized UI commands are currently provided.
      
-     To run the simulation, use the standard UI command:
+     To run the simulation, use the standard UI command (after eventually
+     the above UI command to use the alternative Wendt fission model):
+     
        /run/beamOn
      
  

@@ -23,37 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIcmdWithABool
 //
-//
-//
+// Author: M.Asai, 1998
+// --------------------------------------------------------------------
 
 #include "G4UIcmdWithABool.hh"
 
-G4UIcmdWithABool::G4UIcmdWithABool
-(const char * theCommandPath,G4UImessenger * theMessenger)
-:G4UIcommand(theCommandPath,theMessenger)
+// --------------------------------------------------------------------
+G4UIcmdWithABool::G4UIcmdWithABool(const char* theCommandPath,
+                                   G4UImessenger* theMessenger)
+  : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter * blParam = new G4UIparameter('b');
+  G4UIparameter* blParam = new G4UIparameter('b');
   SetParameter(blParam);
+  SetCommandType(WithABoolCmd);
 }
 
+// --------------------------------------------------------------------
 G4bool G4UIcmdWithABool::GetNewBoolValue(const char* paramString)
 {
   return ConvertToBool(paramString);
 }
 
-void G4UIcmdWithABool::SetParameterName
-(const char * theName,G4bool omittable,G4bool currentAsDefault)
+// --------------------------------------------------------------------
+void G4UIcmdWithABool::SetParameterName(const char* theName, G4bool omittable,
+                                        G4bool currentAsDefault)
 {
-  G4UIparameter * theParam = GetParameter(0);
+  G4UIparameter* theParam = GetParameter(0);
   theParam->SetParameterName(theName);
   theParam->SetOmittable(omittable);
   theParam->SetCurrentAsDefault(currentAsDefault);
 }
 
+// --------------------------------------------------------------------
 void G4UIcmdWithABool::SetDefaultValue(G4bool defVal)
 {
-  G4UIparameter * theParam = GetParameter(0);
+  G4UIparameter* theParam = GetParameter(0);
   theParam->SetDefaultValue(defVal);
 }
-

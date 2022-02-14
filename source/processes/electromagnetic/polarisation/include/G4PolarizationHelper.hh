@@ -23,18 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// GEANT4 Class header file
-//
+// Geant4 Class header file
 //
 // File name:     G4PolarizationHelper
 //
 // Author:        Andreas Schaelicke
 //
-// Creation date: 12.08.2006
-//
 // Class Description:
-//
 //   Provides some basic polarization transformation routines.
 
 #ifndef G4PolarizationHelper_h
@@ -42,17 +37,17 @@
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
-#include "Randomize.hh"
 
+class G4PolarizationHelper
+{
+ public:
+  static G4ThreeVector GetFrame(const G4ThreeVector&, const G4ThreeVector&);
+  static G4ThreeVector GetParticleFrameX(const G4ThreeVector&);
+  static G4ThreeVector GetParticleFrameY(const G4ThreeVector&);
+  static G4ThreeVector GetRandomFrame(const G4ThreeVector&);
 
-class G4PolarizationHelper {
-public:
-  static G4ThreeVector GetFrame(const G4ThreeVector &, const G4ThreeVector &);
-  static G4ThreeVector GetParticleFrameX(const G4ThreeVector &);
-  static G4ThreeVector GetParticleFrameY(const G4ThreeVector &);
-  static G4ThreeVector GetRandomFrame(const G4ThreeVector &);
-
-  static G4ThreeVector GetSpinInPRF(const G4ThreeVector &uZ,const G4ThreeVector &spin);
+  static G4ThreeVector GetSpinInPRF(const G4ThreeVector& uZ,
+                                    const G4ThreeVector& spin);
 
   static void TestPolarizationTransformations();
   static void TestInteractionFrame();

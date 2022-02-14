@@ -62,7 +62,7 @@
 DicomPartialDetectorConstruction::DicomPartialDetectorConstruction()
  : DicomDetectorConstruction(),
    fPartialPhantomParam(0),
-   fNVoxels(0),
+   fNoVoxels(0),
    fDimX(0),
    fDimY(0),
    fDimZ(0),
@@ -180,15 +180,15 @@ ReadPhantomDataFile(const G4String& fname)
 
   }
 
-  fin >> fNVoxelX >> fNVoxelY >> fNVoxelZ;
+  fin >> fNoVoxelsX >> fNoVoxelsY >> fNoVoxelsZ;
   G4cout << "DicomPartialDetectorConstruction::ReadPhantomData nVoxel X/Y/Z "
-  << fNVoxelX << " " << fNVoxelY << " " << fNVoxelZ << G4endl;
+  << fNoVoxelsX << " " << fNoVoxelsY << " " << fNoVoxelsZ << G4endl;
   fin >> fOffsetX >> fDimX;
-  fDimX = (fDimX - fOffsetX)/fNVoxelX;
+  fDimX = (fDimX - fOffsetX)/fNoVoxelsX;
   fin >> fOffsetY >> fDimY;
-  fDimY = (fDimY - fOffsetY)/fNVoxelY;
+  fDimY = (fDimY - fOffsetY)/fNoVoxelsY;
   fin >> fOffsetZ >> fDimZ;
-  fDimZ = (fDimZ - fOffsetZ)/fNVoxelZ;
+  fDimZ = (fDimZ - fOffsetZ)/fNoVoxelsZ;
   G4cout << "DicomPartialDetectorConstruction::ReadPhantomData voxelDimX "
   << fDimX << " fOffsetX " << fOffsetX << G4endl;
   G4cout << "DicomPartialDetectorConstruction::ReadPhantomData voxelDimY "
@@ -197,14 +197,14 @@ ReadPhantomDataFile(const G4String& fname)
   << fDimZ << " fOffsetZ " << fOffsetZ << G4endl;
 
   //--- Read voxels that are filled
-  fNVoxels = 0;
-  //  G4bool* isFilled = new G4bool[fNVoxelX*fNVoxelY*fNVoxelZ];
-  //  fFilledIDs = new size_t[fNVoxelZ*fNVoxelY+1];
+  fNoVoxels = 0;
+  //  G4bool* isFilled = new G4bool[fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ];
+  //  fFilledIDs = new size_t[fNoVoxelsZ*fNoVoxelsY+1];
   //?  fFilledIDs.insert(0);
   G4int ifxmin1, ifxmax1;
-  for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
+  for( G4int iz = 0; iz < fNoVoxelsZ; iz++ ) {
     std::map< G4int, G4int > ifmin, ifmax;
-    for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
+    for( G4int iy = 0; iy < fNoVoxelsY; iy++ ) {
       fin >> ifxmin1 >> ifxmax1;
       // check coherence ...
 
@@ -212,14 +212,14 @@ ReadPhantomDataFile(const G4String& fname)
       ifmax[iy] = ifxmax1;
       G4int ifxdiff = ifxmax1-ifxmin1+1;
       if( ifxmax1 == -1 && ifxmin1 == -1 ) ifxdiff = 0;
-      fFilledIDs.insert(std::pair<G4int,G4int>(ifxdiff+fNVoxels-1, ifxmin1));
+      fFilledIDs.insert(std::pair<G4int,G4int>(ifxdiff+fNoVoxels-1, ifxmin1));
       G4cout << "DicomPartialDetectorConstruction::ReadPhantomData insert "
-             << " FilledIDs "  << ifxdiff+fNVoxels-1 << " min " << ifxmin1
+             << " FilledIDs "  << ifxdiff+fNoVoxels-1 << " min " << ifxmin1
              << " N= " << fFilledIDs.size() << G4endl;
-      //filledIDs[iz*fNVoxelY+iy+1] = ifxmax1-ifxmin1+1;
-      for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
+      //filledIDs[iz*fNoVoxelsY+iy+1] = ifxmax1-ifxmin1+1;
+      for( G4int ix = 0; ix < fNoVoxelsX; ix++ ) {
         if( ix >= G4int(ifxmin1) && ix <= G4int(ifxmax1) ) {
-          fNVoxels++;
+          fNoVoxels++;
         } else {
         }
       }
@@ -230,15 +230,15 @@ ReadPhantomDataFile(const G4String& fname)
 
   //--- Read material IDs
   G4int mateID1;
-  fMateIDs = new size_t[fNVoxelX*fNVoxelY*fNVoxelZ];
+  fMateIDs = new size_t[fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ];
   G4int copyNo = 0;
-  for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
+  for( G4int iz = 0; iz < fNoVoxelsZ; iz++ ) {
     std::map< G4int, G4int > ifmin = fFilledMins[iz];
     std::map< G4int, G4int > ifmax = fFilledMaxs[iz];
-    for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
+    for( G4int iy = 0; iy < fNoVoxelsY; iy++ ) {
       ifxmin1 = ifmin[iy];
       ifxmax1 = ifmax[iy];
-      for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
+      for( G4int ix = 0; ix < fNoVoxelsX; ix++ ) {
         if( ix >= G4int(ifxmin1) && ix <= G4int(ifxmax1) ) {
           fin >> mateID1;
           if( mateID1 < 0 || mateID1 >= nMaterials ) {
@@ -306,15 +306,15 @@ ReadVoxelDensitiesPartial( std::ifstream& fin )
 
   //---- Read the material densities
   G4int copyNo = 0;
-  for( G4int iz = 0; iz < fNVoxelZ; ++iz )
+  for( G4int iz = 0; iz < fNoVoxelsZ; ++iz )
   {
     std::map< G4int, G4int > ifmin = fFilledMins[iz];
     std::map< G4int, G4int > ifmax = fFilledMaxs[iz];
-    for( G4int iy = 0; iy < fNVoxelY; ++iy )
+    for( G4int iy = 0; iy < fNoVoxelsY; ++iy )
     {
       ifxmin1 = ifmin[iy];
       ifxmax1 = ifmax[iy];
-      for( G4int ix = 0; ix < fNVoxelX; ++ix )
+      for( G4int ix = 0; ix < fNoVoxelsX; ++ix )
       {
         if( ix >= G4int(ifxmin1) && ix <= G4int(ifxmax1) ) {
           fin >> dens1;
@@ -483,7 +483,7 @@ void DicomPartialDetectorConstruction::ConstructPhantom()
 
   fPartialPhantomParam->SetMaterials( fPhantomMaterials );
   fPartialPhantomParam->SetVoxelDimensions( fDimX/2., fDimY/2., fDimZ/2. );
-  fPartialPhantomParam->SetNoVoxel( fNVoxelX, fNVoxelY, fNVoxelZ );
+  fPartialPhantomParam->SetNoVoxels( fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ );
   fPartialPhantomParam->SetMaterialIndices( fMateIDs );
 
   fPartialPhantomParam->SetFilledIDs(fFilledIDs);
@@ -499,12 +499,12 @@ void DicomPartialDetectorConstruction::ConstructPhantom()
   if( OptimAxis == "kUndefined" ) {
     phantom_phys =
       new G4PVParameterised(voxelName,phantom_logic,fContainer_logic,
-                            kUndefined, fNVoxels, fPartialPhantomParam);
+                            kUndefined, fNoVoxels, fPartialPhantomParam);
   } else   if( OptimAxis == "kXAxis" ) {
     //    G4cout << " optim kX " << G4endl;
     phantom_phys =
       new G4PVParameterised(voxelName,phantom_logic,fContainer_logic,
-                            kXAxis, fNVoxels, fPartialPhantomParam);
+                            kXAxis, fNoVoxels, fPartialPhantomParam);
     fPartialPhantomParam->SetSkipEqualMaterials(bSkipEqualMaterials);
   } else {
     G4Exception("GmReadPhantomGeometry::ConstructPhantom",

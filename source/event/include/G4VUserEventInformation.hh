@@ -23,45 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-//---------------------------------------------------------------
-//
 // G4VUserEventInformation
 //
-// Class Description:
+// Class description:
 //
-//  Abstract class which the user can derive his/her own concrete
-// class for toring user's information associating with a G4Event
-// class object.
+// Abstract class the user can derive from for tuning user's
+// information associating with a G4Event class object.
 //
-//  It is user's responsibility to construct a concrete class object 
-// and set the pointer to proper G4Event object.
+// It is user's responsibility to construct a concrete class object 
+// and set the pointer to a proper G4Event object.
 //
-//  To set a pointer of a concrete class object to G4Event in
-// G4UserEventingAction concrete implementation, given the G4Event
+// To set a pointer of a concrete class object to G4Event in
+// G4UserEventAction concrete implementation, given the G4Event
 // object is available only by "pointer to const", SetUserEventInformation()
 // method of G4EventManager is available.
-//  Alternatively, the user may modify GenerateEvent() method of 
+// Alternatively, the user may modify GenerateEvent() method of 
 // his/her own RunManager. 
 //
-//  The concrete class object is deleted by Geant4 kernel when
+// The concrete class object is deleted by the Geant4 kernel when
 // associated G4Event object is deleted.
 
-
-#ifndef G4VUserEventInformation_H
-#define G4VUserEventInformation_H 1
+// Author: Makoto Asai (SLAC)
+// --------------------------------------------------------------------
+#ifndef G4VUserEventInformation_hh
+#define G4VUserEventInformation_hh 1
 
 class G4VUserEventInformation
 {
   public:
+
     G4VUserEventInformation() {;}
     virtual ~G4VUserEventInformation() {;}
 
   public:
+
     virtual void Print() const = 0;
 };
 
 #endif
-

@@ -67,15 +67,13 @@ namespace {
 
 // Singleton accessor
 
-G4CascadeParameters* G4CascadeParameters::fpInstance = 0;
-
 const G4CascadeParameters* G4CascadeParameters::Instance() {
-  if (!fpInstance) {
-    fpInstance = new G4CascadeParameters;
-    G4AutoDelete::Register(fpInstance);
-  }
-
-  return fpInstance;
+  static auto _instance = []() {
+    auto _ptr = new G4CascadeParameters{};
+    G4AutoDelete::Register(_ptr);
+    return _ptr;
+  }();
+  return _instance;
 }
 
 

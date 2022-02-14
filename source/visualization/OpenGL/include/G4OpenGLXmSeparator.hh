@@ -28,8 +28,6 @@
 // 
 //Separator class. Inherits from G4OpenGLXmVWidgetComponent
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMSEPARATOR_HH
 #define G4OPENGLXMSEPARATOR_HH
 
@@ -54,7 +52,5 @@ private:
   Widget line;
   Widget* parent;
 };
-
-#endif
 
 #endif

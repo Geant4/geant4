@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLReadSetup
+// G4GDMLReadSetup
 //
 // Class description:
 //
 // GDML class for geometry setup of solids.
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
+// Author: Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
-
-#ifndef _G4GDMLREADSETUP_INCLUDED_
-#define _G4GDMLREADSETUP_INCLUDED_
+#ifndef G4GDMLREADSETUP_HH
+#define G4GDMLREADSETUP_HH 1
 
 #include <map>
 
@@ -47,20 +42,20 @@
 
 class G4GDMLReadSetup : public G4GDMLReadSolids
 {
- public:
+  public:
 
-   G4String GetSetup(const G4String&);
+    G4String GetSetup(const G4String&);
 
-   virtual void SetupRead(const xercesc::DOMElement* const element);
+    virtual void SetupRead(const xercesc::DOMElement* const element);
 
- protected:
+  protected:
 
-   G4GDMLReadSetup();
-   virtual ~G4GDMLReadSetup();
+    G4GDMLReadSetup();
+    virtual ~G4GDMLReadSetup();
 
- protected:
+  protected:
 
-   std::map<G4String,G4String> setupMap;
+    std::map<G4String, G4String> setupMap;
 };
 
 #endif

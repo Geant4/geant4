@@ -1,76 +1,13 @@
-#------------------------------------------------------------------------------
-# sources.cmake
-# Module : G4phys_ctor_em
-# Package: Geant4.src.G4physicslists.G4physlist_ctors.G4physlist_ctor_em
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitely.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 10/01/2013
-#
-#
-#------------------------------------------------------------------------------
+# - G4phys_ctor_em module build definition
 
-# List external includes needed.
-include_directories(${CLHEP_INCLUDE_DIRS})
-
-# List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/builders/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/factory/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/utils/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/processes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/models/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/types/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/highenergy/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/muons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/standard/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/xrays/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/optical/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
-
-#
 # Define the Geant4 Module.
-#
-include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
-  HEADERS
+geant4_add_module(G4phys_ctor_em
+  PUBLIC_HEADERS
+    G4EmBuilder.hh
     G4EmDNAChemistry.hh
     G4EmDNAChemistry_option1.hh
     G4EmDNAChemistry_option2.hh
+    G4EmDNAChemistry_option3.hh
     G4EmDNAPhysics.hh
     G4EmDNAPhysics_option1.hh
     G4EmDNAPhysics_option2.hh
@@ -85,7 +22,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmDNAPhysics_stationary_option4.hh
     G4EmDNAPhysics_stationary_option6.hh
     G4EmDNAPhysicsActivator.hh
-    G4EmLEPTSPhysics.hh
     G4EmLivermorePhysics.hh
     G4EmLivermorePolarizedPhysics.hh
     G4EmLowEPPhysics.hh
@@ -102,12 +38,12 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmStandardPhysics_option4.hh
     G4GammaGeneralProcess.hh
     G4OpticalPhysics.hh
-    G4OpticalPhysicsMessenger.hh
-    G4OpticalProcessIndex.hh
   SOURCES
+    G4EmBuilder.cc
     G4EmDNAChemistry.cc
     G4EmDNAChemistry_option1.cc
     G4EmDNAChemistry_option2.cc
+    G4EmDNAChemistry_option3.cc
     G4EmDNAPhysics.cc
     G4EmDNAPhysics_option1.cc
     G4EmDNAPhysics_option2.cc
@@ -122,7 +58,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmDNAPhysics_stationary_option4.cc
     G4EmDNAPhysics_stationary_option6.cc
     G4EmDNAPhysicsActivator.cc
-    G4EmLEPTSPhysics.cc
     G4EmLivermorePhysics.cc
     G4EmLivermorePolarizedPhysics.cc
     G4EmLowEPPhysics.cc
@@ -138,60 +73,41 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmStandardPhysics_option3.cc
     G4EmStandardPhysics_option4.cc
     G4GammaGeneralProcess.cc
-    G4OpticalPhysics.cc
-    G4OpticalPhysicsMessenger.cc
-  GRANULAR_DEPENDENCIES
+    G4OpticalPhysics.cc)
+
+geant4_module_link_libraries(G4phys_ctor_em
+  PUBLIC
+    G4decay
+    G4emdna-utils
+    G4emutils
+    G4globman
+    G4materials
+    G4partman
+    G4procman
+    G4run
+    G4transportation
+  PRIVATE
     G4baryons
     G4bosons
     G4cuts
-    G4decay
-    G4emdna-utils
-    G4emdna-processes
+    G4emdna-man
+    G4emdna-models
     G4emdna-molman
     G4emdna-moltypes
-    G4emdna-models
+    G4emdna-processes
     G4emhighenergy
     G4emlowenergy
     G4emstandard
-    G4emutils
     G4geometrymng
-    G4globman
-    G4had_mod_man
     G4hadronic_mgt
-    G4hadronic_proc
-    G4hadronic_xsect
     G4hadronic_util
-    G4intercoms
     G4ions
     G4leptons
-    G4magneticfield
-    G4materials
     G4mesons
     G4muons
-    G4navigation
     G4optical
-    G4partman
     G4phys_builders
     G4phys_ctor_factory
     G4physlist_util
-    G4procman
-    G4run
-    G4shortlived
     G4track
-    G4transportation
-    G4volumes
-    G4xrays
-  GLOBAL_DEPENDENCIES
-    G4geometry
-    G4global
-    G4intercoms
-    G4materials
-    G4particles
-    G4processes
-    G4run
-    G4track
-  LINK_LIBRARIES
-)
-
-# List any source specific properties here
-
+    G4xrays)

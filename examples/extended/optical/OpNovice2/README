@@ -64,7 +64,7 @@
  5- HOW TO START ?
  
  - Execute OpNovice2 in 'batch' mode from macro files
- 	% OpNovice2 surface.mac
+ 	% OpNovice2 electron.mac
 
  - Execute OpNovice2 in 'interactive mode' with visualization
  	% OpNovice2
@@ -79,28 +79,36 @@
      	
  7- HISTOGRAMS
  
- OpNovice2 has several predefined 1D histograms : 
-    1 :  Cerenkov spectrum
-    2 :  scintillation spectrum
-    3 :  boundary process status
-    4 :  X momentum dir of scattered photons with px < 0
-    5 :  Y momentum dir of scattered photons with px < 0
-    6 :  Z momentum dir of scattered photons with px < 0
-    7 :  X momentum dir of scattered photons with px >= 0
-    8 :  Y momentum dir of scattered photons with px >= 0
-    9 :  Z momentum dir of scattered photons with px >= 0
-   10 :  X momentum dir of Fresnel-refracted photons
-   11 :  Y momentum dir of Fresnel-refracted photons
-   12 :  Z momentum dir of Fresnel-refracted photons
-   13 :  creation time of scintillation photons
+ OpNovice2 has several predefined 1D histograms :
+    1 : Cerenkov spectrum
+    2 : scintillation spectrum
+    3 : scintillation time (global time)
+    4 : WLS absorption spectrum
+    5 : WLS emission spectrum
+    6 : WLS emission time
+    7 : WLS2 absorption spectrum
+    8 : WLS2 emission spectrum
+    9 : WLS2 emission time
+   10 : boundary process status
+   11 : X momentum dir of scattered photons with px < 0
+   12 : Y momentum dir of scattered photons with px < 0
+   13 : Z momentum dir of scattered photons with px < 0
+   14 : X momentum dir of scattered photons with px >= 0
+   15 : Y momentum dir of scattered photons with px >= 0
+   16 : Z momentum dir of scattered photons with px >= 0
+   17 : X momentum dir of Fresnel-refracted photons
+   18 : Y momentum dir of Fresnel-refracted photons
+   19 : Z momentum dir of Fresnel-refracted photons
+   20 : fraction of photons transmitted at surface
+   21 : fraction of photons reflected at surface
 
- Histograms 4-12 are recorded for photons scattered from the +X
+ Histograms 11-19 are recorded for photons scattered from the +X
  surface of the cube. Only the first interaction is recorded.  
 
  The histograms are managed by G4Analysis classes. 
  The histos can be individually activated with the command:
- /analysis/h1/set id nbBins  valMin valMax unit 
- where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+ /analysis/h1/set id nbBins  valMin valMax 
+ The unit is hardcoded to be eV for energy and ns for time.
  
  One can control the name of the histograms file with the command:
  /analysis/setFileName  name  (default opnovice2)
@@ -110,4 +118,20 @@
  
  It is also possible to print selected histograms on an ascii file:
  /analysis/h1/setAscii id
- All selected histos will be written on a file name.ascii  (default opnovice2) 
+ All selected histos will be written on a file name.ascii  (default opnovice2)
+
+ 8- MACROS
+
+ Several macros are included.
+ boundary.mac: Set the surface to the various types and configurations of
+               model, type, etc., shoot optical photons, and record statistics
+ electron.mac: Shoot electrons and observe Cerenkov and scintillation radiation
+ fresnel.mac:  Shoot optical photons of fixed polarization and random direction
+               at a surface, and plot reflectance/transmittance vs incident
+               angle.
+ OpNovice2.mac: Shoot an optical photon inside a box.
+ scint_by_particle.mac: Configure scintillation to have particle-specific
+               yields and yield ratios. Shoot different types of particles.
+ vis.mac:      Configure visualization.
+ wls.mac:      Configure two wavelength-shifting processes, and shoot optical
+               photons.

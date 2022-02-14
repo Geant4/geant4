@@ -59,56 +59,16 @@ G4BertiniPiKBuilder()
  }
 
 void G4BertiniPiKBuilder::
-Build(G4PionPlusInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
-   aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+   if ( aP->GetParticleDefinition() == G4PionPlus::Definition() ) { 
+     aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+   } else if ( aP->GetParticleDefinition() == G4PionMinus::Definition() ) { 
+     aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
+   } else {
+     aP->AddDataSet(kaonxs);
+   }
    aP->RegisterMe(theModel);
  }
-
-void G4BertiniPiKBuilder::
-Build(G4PionMinusInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
-   aP->RegisterMe(theModel);
- }
-
-void G4BertiniPiKBuilder::
-Build(G4KaonPlusInelasticProcess * aP)
- {
-   aP->RegisterMe(theModel);
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->AddDataSet(kaonxs);
- }
-
-void G4BertiniPiKBuilder::
-Build(G4KaonMinusInelasticProcess * aP)
- {
-   aP->RegisterMe(theModel);
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->AddDataSet(kaonxs);
- }
-
-void G4BertiniPiKBuilder::
-Build(G4KaonZeroLInelasticProcess * aP)
- {
-   aP->RegisterMe(theModel);
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->AddDataSet(kaonxs);
- }
-
-void G4BertiniPiKBuilder::
-Build(G4KaonZeroSInelasticProcess * aP)
- {
-   aP->RegisterMe(theModel);
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
-   aP->AddDataSet(kaonxs);
- }
-

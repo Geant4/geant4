@@ -14,6 +14,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24th Nov 2021 B. Morgan (fieldex-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+13th Nov 2020 B. Morgan (fieldex-V10-06-01)
+- Enforce use of Serial RunManager for serial-only examples.
+
+3rd Nov 2020 B. Morgan (fieldex-V10-06-00)
+- Support same CMake version range as core Geant4
+
 31st Jan 2019  Ivana Hrivnacova (fieldex-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
@@ -24,7 +33,7 @@ track of all tags.
 - Grouping single ex tags for new API of PhysicsList needed for MT
 
 14th Feb 2013 Ivana Hrivnacova (fieldex-V09-06-00)
-- Applied coding guidelines in field01, 02, 03 
+- Applied coding guidelines in field01, 02, 03
   (data members initialization, separators)
 
 17th Nov 2012 Ivana Hrivnacova (fieldex-V09-05-03)
@@ -35,7 +44,7 @@ track of all tags.
 18th Sep 2012 Ivana Hrivnacova (fieldex-V09-05-02)
 - Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
   where needed
-- Replaced tabulators with space characters  
+- Replaced tabulators with space characters
 
 17th Sep 2012 Peter Gumplinger (fieldex-V09-05-01)
 - remove G4TRACKING_ALLOC_EXPORT, G4DLLEXPORT and G4DLLIMPORT from
@@ -44,7 +53,7 @@ track of all tags.
 4th Sep 2012 Ivana Hrivnacova (fieldex-V09-05-00)
 - Updated CMakeLists.txt:
   adding visualization, copying macros, install target and comment lines
-- Added .README files   
+- Added .README files
 
 23rd Nov 2011 Peter Gumplinger (fieldex-V09-04-01)
 - Add README file to the new field example field06 and correct a small
@@ -56,7 +65,7 @@ track of all tags.
 
 19th Nov 2009 Peter Gumplinger (fieldex-V09-02-00)
 --------------------------------------------------
-- Add new field example field05. This example checks the so-called 
+- Add new field example field05. This example checks the so-called
   "spin-frozen" condition. There is a good article hep-ph/0012087v1.
   This article discusses about how to cancel the muon g-2 precession by
   applying an electric field.
@@ -71,7 +80,7 @@ track of all tags.
 - Add new field example field04 to exhibit the way
   overlapping fields may be handled in Geant4.
   Thanks to Tom Roberts and Muons Inc.
-  G4BEAMLINE release 1.12 
+  G4BEAMLINE release 1.12
   http://g4beamline.muonsinc.com
 
 3rd May 2005  John Allison  (fieldex-V07-00-03)
@@ -86,8 +95,8 @@ Dec 3rd, 2004 Gabriele Cosmo (fieldex-V06-02-00)
 
 Mar 23rd, 2004 John Apostolakis (fieldex-V06-00-00)
 ---------------------------------------------------
-- Group together fixes in: 
-    field01    fieldex01-V06-00-00  and  
+- Group together fixes in:
+    field01    fieldex01-V06-00-00  and
     field03    fieldex03-V06-00-00
   which fix common problem in SetField methods.
 - Created.

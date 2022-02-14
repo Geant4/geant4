@@ -113,6 +113,10 @@ public:
 
   // access to an hadronic interaction by name
   G4HadronicInteraction* GetHadronicModel(const G4String&);
+
+  // access to the chosen generator
+  inline G4HadronicInteraction* GetHadronicInteraction() const
+  { return theInteraction; }
   
   // get inverse cross section per volume
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
@@ -177,10 +181,6 @@ protected:
 
   void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
             
-  // access to the chosen generator
-  inline G4HadronicInteraction* GetHadronicInteraction() const
-  { return theInteraction; }
-    
   // access to the cross section data set
   inline G4double GetLastCrossSection() 
   { return theLastCrossSection; }
@@ -237,10 +237,9 @@ private:
   bool useIntegralXS;
 
   G4int nMatWarn;
+  G4int nKaonWarn;
 
   G4int nICelectrons;
-
-  G4int idxIC;
 
   // Energy-momentum checking
   std::pair<G4double, G4double> epCheckLevels;
@@ -251,7 +250,6 @@ private:
   G4double theInitialNumberOfInteractionLength;   
 
   G4double aScaleFactor;
-  G4bool   xBiasOn;
   G4double theLastCrossSection;
 };
  

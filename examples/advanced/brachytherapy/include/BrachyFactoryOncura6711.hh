@@ -39,23 +39,23 @@
 #include "BrachyFactory.hh"
 #include "G4RunManager.hh"
 
+class BrachyFactory;
+class BrachyDetectorConstructionOncura6711;
 class G4ParticleGun;
 class G4Run;
 class G4Event;
-class BrachyFactory;
-class BrachyDetectorConstructionOncura6711;
 
 // This class manages the creation of iodine source
 // brachytherapy ...
 class BrachyFactoryOncura6711 : public BrachyFactory
 {
 public:
-  BrachyFactoryOncura6711();
+  explicit BrachyFactoryOncura6711();
   ~BrachyFactoryOncura6711();
-  void CreateSource(G4VPhysicalVolume*);
-  void CleanSource();
+  void CreateSource(G4VPhysicalVolume*) override;
+  void CleanSource() override;
 
 private:
-  BrachyDetectorConstructionOncura6711* Oncura6711IodineSource;
+  BrachyDetectorConstructionOncura6711* fOncura6711IodineSource;
 };
 #endif

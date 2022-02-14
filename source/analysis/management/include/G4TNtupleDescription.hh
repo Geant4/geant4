@@ -32,32 +32,33 @@
 #ifndef G4TNtupleDescription_h
 #define G4TNtupleDescription_h 1
 
+#include "G4NtupleBookingManager.hh"
 #include "globals.hh"
 
 #include "tools/ntuple_booking"
 
 #include <fstream>
 
-template <typename TNTUPLE>
+template <typename NT, typename FT>
 struct G4TNtupleDescription
 {
-  G4TNtupleDescription() 
-    :  fFile(nullptr),
-       fNtuple(nullptr),
-       fNtupleBooking(),
-       fActivation(true),
-       fIsNtupleOwner(true) {}
+  G4TNtupleDescription(G4NtupleBooking* g4NtupleBooking)
+    :  fNtupleBooking(g4NtupleBooking->fNtupleBooking),
+       fFileName(g4NtupleBooking->fFileName),
+       fActivation(g4NtupleBooking->fActivation)
+    {}
 
+  G4TNtupleDescription() = delete;
   ~G4TNtupleDescription()
-      {  delete fFile;
-         if ( fIsNtupleOwner ) delete fNtuple;
-      }    
+    { if ( fIsNtupleOwner ) delete fNtuple; }
 
-  std::ofstream* fFile;    
-  TNTUPLE* fNtuple; 
-  tools::ntuple_booking fNtupleBooking; 
+  std::shared_ptr<FT> fFile { nullptr };
+  NT* fNtuple { nullptr };
+  tools::ntuple_booking fNtupleBooking;
+  G4String fFileName;
   G4bool fActivation;
-  G4bool fIsNtupleOwner;
+  G4bool fIsNtupleOwner { true };
+  G4bool fHasFill { false };
 };
 
-#endif  
+#endif

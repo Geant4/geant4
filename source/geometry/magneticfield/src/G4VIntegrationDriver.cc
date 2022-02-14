@@ -38,3 +38,10 @@ void G4VIntegrationDriver::RenewStepperAndAdjust(G4MagIntegratorStepper *)
        "This method exists only for the original G4MagIntegratorDriver class. "
        "Not defined for other classes derived from G4VIntegrationDriver");
 }
+
+
+std::ostream& operator<<( std::ostream& os, const G4VIntegrationDriver& id)
+{
+   id.StreamInfo( os );
+   return os;
+}

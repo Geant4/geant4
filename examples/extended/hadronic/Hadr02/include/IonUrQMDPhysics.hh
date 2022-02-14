@@ -65,12 +65,9 @@ public:
 
 private:
 
-  void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
+  void AddProcess(const G4String&, G4ParticleDefinition*);
 
-  G4VCrossSectionDataSet*   fTripathi;
-  G4VCrossSectionDataSet*   fTripathiLight;
-  G4VCrossSectionDataSet*   fShen;
-  G4VCrossSectionDataSet*   fIonH;
+  G4VCrossSectionDataSet* fIonXS;
   
   G4UrQMD1_3Model * fModel;
 

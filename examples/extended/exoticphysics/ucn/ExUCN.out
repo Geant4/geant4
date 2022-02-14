@@ -1,18 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-<<<<<<< HEAD
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
-=======
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -24,7 +23,7 @@
 
 ***** Table : Nb of materials = 2 *****
 
- Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
+ Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -51,20 +50,20 @@ Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -76,11 +75,17 @@ Registered model factories:
   drawByOriginVolume
   drawByAttribute
 
+Registered models:
+  None
+
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
   attributeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -88,8 +93,30 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+"/vis/list" to see available colours.
+/event/verbose 1
+#/tracking/verbose 1
+/ucnboundary/verbose 1
+#
+/run/beamOn 1
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  1 keV    e+  -1 MeV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Ni
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  1.4556 MeV    e+  -1 MeV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
 
 <<<<<<< HEAD
 =======
@@ -1466,8 +1493,7 @@ Terminate current event processing.
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.030000s Real=0.034800s Sys=0.010000s
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  User=0.030000s Real=0.029615s Sys=0.000000s
 Sum NoMT:                            0
 Sum NoMRT:                           0
 Sum NoMRCondition:                   0
@@ -1483,6 +1509,10 @@ Sum No. E > V SnellTransmit:         0
 Sum No. E > V MR SnellTransmit:      0
 Sum No. E > V DiffuseTransmit:       0
                                      
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+#
 Graphics systems deleted.
 Visualization Manager deleting...
 <<<<<<< HEAD
@@ -1492,8 +1522,8 @@ G4 kernel has come to Quit state.
  Maximum number of tracks in the urgent stack : 576460752303423487
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.013 MB
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.015 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

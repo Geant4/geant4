@@ -92,7 +92,6 @@ G4EmDNAPhysics_stationary_option4::G4EmDNAPhysics_stationary_option4(G4int ver)
   param->SetDefaults();
   param->SetFluo(true);  
   param->SetAuger(true);  
-  param->SetAugerCascade(true);  
   param->SetDeexcitationIgnoreCut(true);
   param->ActivateDNA();
 
@@ -103,17 +102,8 @@ G4EmDNAPhysics_stationary_option4::G4EmDNAPhysics_stationary_option4(G4int ver)
 
 G4EmDNAPhysics_stationary_option4::G4EmDNAPhysics_stationary_option4(G4int ver, 
 const G4String&)
-  : G4VPhysicsConstructor("G4EmDNAPhysics_stationary_option4"), verbose(ver)
-{
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDefaults();
-  param->SetFluo(true);  
-  param->SetAuger(true);  
-  param->SetAugerCascade(true);  
-  param->SetDeexcitationIgnoreCut(true);
-
-  SetPhysicsType(bElectromagnetic);
-}
+  : G4EmDNAPhysics_stationary_option4(ver)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

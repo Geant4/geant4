@@ -186,12 +186,6 @@ public: // With description
   void RegisterEndOfRunUserVisAction
   (const G4String& name, G4VUserVisAction*,
    const G4VisExtent& = G4VisExtent());
-  void SetUserAction
-  (G4VUserVisAction* pVisAction,
-   const G4VisExtent& = G4VisExtent());
-  // SetUserAction is deprecated.  Use RegisterRunDurationUserVisAction
-  // or other of the above.
-  void SetUserActionExtent (const G4VisExtent&);  //Legacy: deprecated.
 
   G4bool RegisterGraphicsSystem (G4VGraphicsSystem*);
   // Register an individual graphics system.  Normally this is done in
@@ -243,9 +237,6 @@ public: // With description
     const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation = G4Transform3D());
-
-  void Draw (const G4Scale&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw (const G4Square&,
@@ -525,7 +516,6 @@ private:
   G4int                 fNoOfEventsDrawnThisRun;
   G4int                 fNKeepRequests;
   G4bool                fEventKeepingSuspended;
-  G4bool                fKeptLastEvent;
   G4bool                fDrawEventOnlyIfToBeKept;
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.
   G4bool                fReviewingKeptEvents;

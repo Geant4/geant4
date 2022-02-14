@@ -24,29 +24,20 @@
 // ********************************************************************
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #ifndef CCalActionInitializer_h
 #define CCalActionInitializer_h 1
 
 #include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class CCalActionInitializer : public G4VUserActionInitialization
-{
+class CCalActionInitializer : public G4VUserActionInitialization {
 public:
-
   CCalActionInitializer();
-  ~CCalActionInitializer(){;};
+  ~CCalActionInitializer() {;};
   
   void Build() const;
   void BuildForMaster() const;
-
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

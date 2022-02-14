@@ -15,6 +15,59 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+- September 28, 2021 J. Hahnfeld (track-V10-07-06)
+- G4ParticleChangeForMSC, G4ParticleChangeForTransport: Disable debugFlag
+
+- September 22, 2021 G. Amadio (track-V10-07-05)
+- G4Step: avoid accessing G4Track data via long pointer chains.
+     
+- September 8, 2021 D. Sawkey (track-V10-07-04)
+- G4Track: get material property using int (enum) rather than string
+
+- August 4, 2021 A. Ribon (track-V10-07-03)
+  G4Track : migrated to the new version of G4PhysicsModelCatalog.
+
+- April 28, 2021 M. Maire (track-V10-07-02)
+  G4VParticleChange::DumpInfo(), G4ParticleChange::DumpInfo():
+    adjust printout format
+
+- April 1, 2021 B. Morgan (track-V10-07-01)
+- Migrate build to modular CMake API
+
+- February 8, 2021 G.Cosmo (track-V10-07-00)
+- Correction to G4Track::operator=() to copy also touchable-handles.
+  This fixes a crash originate when running importance sampling in the
+  G4EventManager when the track got assigned the origin touchable handler
+  from its own touchable handle; the touchable handler was sometimes not set.
+  Based on report by M.Dressel.
+
+- November 12, 2020 J.Madsen (track-V10-06-06)
+- Added G4Profiler support.
+
+- July 24, 2020 G.Cosmo (track-V10-06-05)
+- Fixed case of non-initialised values in G4Step.
+
+- July 16, 2020 G.Cosmo (track-V10-06-04)
+- Minor c++11 review; code formatting and cleanup.
+
+- March 11, 2020 V.Ivanchenko (track-V10-06-03)
+- G4Track - do not use Velocity table, instead use GetBeta() method
+    from G4DynamicParticle; expected minor speed-up
+
+- February 10, 2020 V.Ivanchenko (track-V10-06-02)
+- G4Track - use G4OpticalPhoton pdg code; removed static thread local
+    variables; slightly simplified velocity computation; removed
+    commented code left from previous tag
+
+- January 29, 2020 V.Ivanchenko (track-V10-06-01)
+- G4Track - fixed Coverity reports connected with unnecessary checks
+  for valid pointers to G4Step and G4DynamicParticle
+
+- December 9, 2019 B. Morgan (track-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
 
 - November 15, 2019 G.Cosmo (track-V10-05-01)
 - Fixed implicit type conversions from size_t to G4int in G4Step.
@@ -27,8 +80,8 @@ committal in the CVS repository !
   Addressing problem report #2097.
 
 - Aug. 15, 2018 H.Kurashige(track-V10-04-01)
-- fix possible memory leaks 
-   in assignment operator and copy ctr of G4Step and G4Track 
+- fix possible memory leaks
+   in assignment operator and copy ctr of G4Step and G4Track
 - clean up codes
 
 - May 17, 2018 J.Madsen (track-V10-04-00)
@@ -77,17 +130,17 @@ committal in the CVS repository !
 - January 15, 2015 J.Apostolakis (track-V10-01-01)
 - Fixed FieldTrackUpdator to pass magnetic moment and PDG spin
   Is part of corrections needed for Bugzilla issue 1696.
-     
+
 - December 16, 2014 J.Apostolakis (track-V10-01-00)
 - Improve G4ParticleChangeForTransport, by adding update for FirstStep in volume.
-     
+
 - August 19, 2014 K. Genser (track-V10-00-04)
-- Removed non cost requirement when using G4PhysicsModelCatalog getters and moved 
+- Removed non cost requirement when using G4PhysicsModelCatalog getters and moved
    implementations to icc file (requires global-V10-00-31)
 
 - May  21,  2014 J.Apostolakis (track-V10-00-03)
-- Fix G4FieldTrackUpdator to energy/momentum passed to field integration: 
-   first set rest mass, then update kinetic energy. Problem affects 
+- Fix G4FieldTrackUpdator to energy/momentum passed to field integration:
+   first set rest mass, then update kinetic energy. Problem affects
    propagation in multiple geometries.
 
 - Mar. 07,  2014 H.Kurashige (track-V10-00-02)
@@ -95,7 +148,7 @@ committal in the CVS repository !
  (Bug # 1583)
 
 - Jan. 04, 2014 H.Kurashige (track-V10-00-00)
-- modify message from CheckIt for G4VParticleChange and G4ParticleChangeForDecay  
+- modify message from CheckIt for G4VParticleChange and G4ParticleChangeForDecay
 
 - Nov. 21, 2013 H.Kurashige (track-V09-06-04)
 - Fix Coverity deficts in G4Track constructors
@@ -111,10 +164,10 @@ committal in the CVS repository !
 - Moved constructor and destructor of G4VelocityTable singleton to private.
 
 - April 4, 2013 V.Ivanchenko (track-V09-06-00)
-- G4ParticleChange - fixed bug #1451 - neutron do not change velocity 
+- G4ParticleChange - fixed bug #1451 - neutron do not change velocity
     after elastic scattering; little clean up useful for MT
-- G4ParticleChangeForEloss, G4ParticleChangeForGamma - clean up 
-    computation of velocity (a little performance improvement expected) 
+- G4ParticleChangeForEloss, G4ParticleChangeForGamma - clean up
+    computation of velocity (a little performance improvement expected)
 
 - November 8, 2012 I.Hrivnacova (track-V09-05-20)
 - Fixed G4Track: added initialisation of useGivenVelocity where missing
@@ -132,7 +185,7 @@ committal in the CVS repository !
 - August 9, 2012 V.Ivanchenko (track-V09-05-16)
   (should be accompned by a new EM tag of emutils-V09-05-31)
 - G4ParticleChangeForMSC - allowed modification of position and
-    direction AlongStep 
+    direction AlongStep
 
 - June 26, 2012 G.Cosmo (track-V09-05-13)
 - Additional protection for parameter not used in G4VParticleChange when
@@ -154,24 +207,24 @@ committal in the CVS repository !
 - Fixed trivial cases of variable shadowing.
 
 - May 15, 2012 H.Kurashige (track-V09-05-08)
-- Modify way of handling parent weight in AlongStep 
-  in accumulated way (same manner for other prperties) 
+- Modify way of handling parent weight in AlongStep
+  in accumulated way (same manner for other prperties)
 
 - May 1st, 2012 H.Kurashige (track-V09-05-07)
 - Add global time check for secondaries in G4VParticleChange
 - Modify output messages for CheckIt and CheckSecondary
-- Add G4Exception in G4ParticleChangeForRadDecay:: AddSecondary 
+- Add G4Exception in G4ParticleChangeForRadDecay:: AddSecondary
 
 - April 30, 2012 H.Kurashige (track-V09-05-06)
-- Fixed the bug in G4ParticleChange::AddSecondary. 
+- Fixed the bug in G4ParticleChange::AddSecondary.
   (Problem#1305 The local time of the parent was set before)
 
 - April 29, 2012 H.Kurashige (track-V09-05-05)
 - Fix treatment of weights in ParticleChange
   (Problem#1283)
- 
+
 - February 3rd, 2012 J.Apostolakis  (track-V09-05-04)
-- G4FieldTrackUpdator::Update method must reset the RestMass, 
+- G4FieldTrackUpdator::Update method must reset the RestMass,
    because it is used to Initialise each track by ParallelWorldScoringProcess,
    (as well as update during stepping a track.)
     Requires tag  'field-V09-05-03' of geometry/magneticfield
@@ -181,12 +234,12 @@ committal in the CVS repository !
   Modification of Optical process solves Problem #1275
 
 - January 9th, 2012 H.Kurashige  (track-V09-05-02)
-- Use GetNextMaterial instead of GetMaterial 
+- Use GetNextMaterial instead of GetMaterial
   in G4Track::CalculateVelocityForOpticalPhoton()
    (Problem #1275)
 
 - December 22nd, 2011 H.Kurashige  (track-V09-05-01)
-- Set 'false' to SecondaryWeightByProcess in default 
+- Set 'false' to SecondaryWeightByProcess in default
   (Problem #1273)
 
 - December 9th, 2011 H.Kurashige  (track-V09-05-00)
@@ -206,12 +259,12 @@ committal in the CVS repository !
 
 - September 21st,  2011  H.Kurashige (track-V09-04-10)
 - Re-Activate SetParentWeightByTracK() method because Adjoint Process relays on it
-- ProposeParenetWeight method affects seconday trackes if SecondaryTrackWeightByProcess flag 
+- ProposeParenetWeight method affects seconday trackes if SecondaryTrackWeightByProcess flag
   is set true even wheen SetParentWeightByTracK is set to false
 
 -September 17, 2011, H.Kurashige (track-V09-04-09)
 - Fix problems related to treatments of weight in ParticleChange (see problem #1243)
--- always set the parent track's weight to the value set by ProposeParentWeight() and  ProposeWeight() 
+-- always set the parent track's weight to the value set by ProposeParentWeight() and  ProposeWeight()
    methods for all particle change classes.
 -- remove fSetParentWeightByProcess and all related code.
 -- SetSecondaryWeightByProcess() flag is set to true in default.
@@ -223,7 +276,7 @@ committal in the CVS repository !
 -August 22, 2011, H.Kurashige (track-V09-04-07)
 - G4VelocityTable is modified and it is not derived from G4PhysicsVector
   (in order to avoid from creation of PhysicsVector as static objects)
- 
+
 August 17, 2011, H.Kurashige (track-V09-04-05)
 - Add G4VelocityTable as singleton to avoid creation of G4PhysicsVector in event loop
 - Modify G4Step::InitializeStep to set correct velocity for the optical photon
@@ -235,7 +288,7 @@ July 6, 2011, H.Kurashige (track-V09-04-04)
 - Modify CalculateVelocityForOpticalPhoton() for Coverity report.
 
 May. 20, 2011, B.Morgan (track-V09-04-03)
-- CMakeLists.txt : Added G4TRACK_ALLOC_EXPORT compiler definition via 
+- CMakeLists.txt : Added G4TRACK_ALLOC_EXPORT compiler definition via
   add_definitions so it's applied to all sources in this module.
 
 Apr. 29, 2011, H.Kurashige (track-V09-04-02)
@@ -251,7 +304,7 @@ Apr. 2, 2011, H.Kurashige (track-V09-04-01)
 Mar. 16, 2011, H.Kurashige (track-V09-04-00)
 - Fix problems reported by Coverity
 - Add  GetSecondaryInCurrentStep method in G4Step.
- 
+
 Nov. 10, 2010, H.Kurashige (track-V09-03-11)
 - Remove  GetSecondaryInCurrentStep method in G4Step.
   (revert chages in track-V09-03-07)
@@ -260,7 +313,7 @@ Nov. 08, 2010, M.Asai (track-V09-03-10)
 - Adding touchable history of the origin to G4Track.
 
 Oct. 30, 2010, H.Kurashige (track-V09-03-09)
-- Fix minor bugs reported by Coverity 
+- Fix minor bugs reported by Coverity
 
 Oct. 27, 2010, G.Cosmo (track-V09-03-08)
 - Restored DLL setup as originally. Withdrawn changes in last tag.
@@ -276,9 +329,9 @@ Oct. 18, 2010  Hisaya Kurashige (track-V09-03-06)
 Oct. 6, 2010  Hisaya Kurashige (track-V09-03-05)
 - G4Step::GetSecondary() gives back const G4TrackVector*
   and G4Step::GetfSecondary() gives back non-const pointer
- 
+
 Sep 21, 2010  Hisaya Kurashige (track-V09-03-04)
-- Fill the last bin contents in G4Track::PrepareVelocityTable() 
+- Fill the last bin contents in G4Track::PrepareVelocityTable()
    to fix the bug in calculation of GetVelocity
 
 Aug 12, 2010 Hisaya Kurashige (track-V09-03-03)
@@ -298,13 +351,13 @@ July 21, 2010 Gabriele Cosmo (track-V09-03-02)
 
 July 2, 2010 Hisaya Kurashige (track-V09-03-01)
 - Use PhysicsVector for calculation of GetVelocity
-- Add Exception(Warning) if GetDeltaEnergy/Momentum methods are invoked. These methds are planed to be removed 
+- Add Exception(Warning) if GetDeltaEnergy/Momentum methods are invoked. These methds are planed to be removed
 
 Mar. 9, 2010 Hisaya Kurashige (track-V09-03-00)
-- Change G4String to a pointer of G4String 
-  for prooperty to indicate type of UserTrackInformation 
+- Change G4String to a pointer of G4String
+  for prooperty to indicate type of UserTrackInformation
 - Change G4VUserTrackInformation::Print() to a simple virtual method
-  form pure-virtual 
+  form pure-virtual
 
 Oct. 19, 2009 Hisaya Kurashige (track-V09-02-04)
 -added a string prooperty to indicate type of UserTrackInformation
@@ -321,13 +374,13 @@ Apr.  2, 2009 Hisaya Kurashige (track-V09-02-01)
 - Add protection for the case mass==0 and T==0 in GetVelocity
 
 Apr.  2, 2009 Hisaya Kurashige (track-V09-02-00)
-- Modify GetVelocity to improve performance 
+- Modify GetVelocity to improve performance
 
 Oct. 24, 2008 Hisaya Kurashige (track-V09-01-02)
-- change fpCreatorProcess and fpLCAtVertex in G4Track to  'const' pointer   
-- change fpProcessDefinedStep in G4StepPoint to  'const' pointer   
+- change fpCreatorProcess and fpLCAtVertex in G4Track to  'const' pointer
+- change fpProcessDefinedStep in G4StepPoint to  'const' pointer
 
- 
+
 Feb. 5, 2008 Hisaya Kurashige (track-V09-01-01)
 - reset non-ionizing energy loss in G4Step::ResetTotalEnergyDeposit
   in order to initialize NIEL in each step
@@ -350,7 +403,7 @@ Mar. 26, 07 Hisaya Kurashige (track-V08-02-01)
 
 Mar. 11, 07 Hisaya Kurashige (track-V08-02-00)
 - Added magnetic moment in G4DynamicParticle (co-work with particles-V08-02-00)
-- Fixed treatment of parent's weight in G4ParticleChange 
+- Fixed treatment of parent's weight in G4ParticleChange
 
 Nov.  3, 06 J.Apostolakis (track-V08-01-04)
 - New methods first/lastStepInVolume flag in G4Step, G4VParticleChange  by Hisaya
@@ -361,7 +414,7 @@ Oct. 31, 06 G.Cosmo (track-V08-01-03)
 
 Aug. 29, 06 H.Kurashige (track-V08-01-02)
 - Add methods for setting polarization and modifying weight
-    for G4ParticleChangeFoeGamma and  G4ParticleChangeForLoss 
+    for G4ParticleChangeFoeGamma and  G4ParticleChangeForLoss
           (V.Ivanchenko)
 
 Jul. 17, 06 M.Asai (track-V08-01-01)
@@ -372,7 +425,7 @@ Jun. 09, 06 M.Asai (track-V08-01-00)
 
 Jun. 09, 06 T.Sasaki
 - G4Step now has secondary vector
-- G4TrackVector was moved from tracking category 
+- G4TrackVector was moved from tracking category
 
 Jun. 09, 06 M.Asai
 - Introducing G4FieldTrackUpdator class.
@@ -382,10 +435,10 @@ Jun. 07, 06 V.Ivanchenko (track-V08-00-03)
 -  G4ParticleChangeForLoss - remove momentum change AlongStep
 
 Mar. 29, 06 H.Kurashige (track-V08-00-02)
--  Improve G4Track::GetVelocity for optical photon 
+-  Improve G4Track::GetVelocity for optical photon
 
 Feb. 08, 06 H.Kurashige (track-V08-00-01)
--  add ProposeMomentumDirection AlongStep and ProposeWeight PostStep in 
+-  add ProposeMomentumDirection AlongStep and ProposeWeight PostStep in
     G4ParticleChangeForLoss (V.Ivantchenko)
 
 Dec. 20, 05 .Kurashige (track-V08-00-00)
@@ -393,7 +446,7 @@ Dec. 20, 05 .Kurashige (track-V08-00-00)
 
 Dec. 05, 05 mma (track-V07-01-02)
 - G4ParticleChangeForGamma : apply UpdateStepForPostStep in any case
-  
+
 Nov. 26, 05 H.Kurashige (track-V07-01-01)
 - Fix GetVelocity : use the material pointer in PreStepPoint
 
@@ -406,14 +459,14 @@ May 12, 05 P.Gumplinger (track-V07-00-01)
 Apr. 15, 05 V.Ivantchenko (track-V07-00-00)
 - Add a new class of G4ParticleChangeForGamma
 - Modify 4ParticleChangeForLoss
- 
+
 Dec. 02, 04 H.Kurashige (track-V06-02-04)
-- migration to cmath 
+- migration to cmath
 
 Nov. 25, 04 M.Asai (track-V06-02-03)
 - Fix destructor of G4VUserTrackInformation.
 
-Oct. 19, 04 H.Kurashige (track-V06-02-02) 
+Oct. 19, 04 H.Kurashige (track-V06-02-02)
 - Remove obsolete methods from G4ParticleChange
 
 Sep. 17, 04 P.Gumplinger (track-V06-02-01)
@@ -448,7 +501,7 @@ May. 11, 04 V.Ivanchenko (track-V06-01-01)
   processes changing the energy
 
 May. 08, 04 H.Kurashige (track-V06-01-00)
-- Add new methods of ProposeXXX (and corresponding GetXXX methods) 
+- Add new methods of ProposeXXX (and corresponding GetXXX methods)
   as replacements of old methods of SetXXXChange and GetXXXChange
 
 Jan. 20, 04 V.Ivanchenko (track-V06-00-01)
@@ -462,7 +515,7 @@ Dec. 12, 03 G.Cosmo (track-V06-00-00)
   causing noisy warnings on Intel-icc compiler.
 
 Nov. 26, 03 H.Kurashige (track-V05-02-03)
-- Fixed problem of setting  momentum direction for stoppped particle in G4ParticleChange (Vladimir) 
+- Fixed problem of setting  momentum direction for stoppped particle in G4ParticleChange (Vladimir)
 
 Oct. 4, 03 G.Cosmo (track-V05-02-02)
 - Modified GNUmakefile:
@@ -470,7 +523,7 @@ Oct. 4, 03 G.Cosmo (track-V05-02-02)
 - Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
 
 Jun. 11, 03 H.Kurashige (track-V05-02-01)
-- Add ExceptionSeverity 
+- Add ExceptionSeverity
 - Add G4VParticleChange::CheckSecondary
 - Remove inclusion of G4MaterialCutsCouple
 
@@ -481,7 +534,7 @@ Mar. 20, 03  M.Asai (track-V05-01-02)
 - Fix copy operator of G4Track not to copy the pointer to user information
 
 Mar. 20, 03  H.Kurashige  (track-V05-01-01)
-- Correct comments 
+- Correct comments
 - Fixed unused parameter in G4VParticleChange.cc
 
 Mar. 5, 02  H.Kurashige  (track-V05-00-02)
@@ -500,7 +553,7 @@ Dec. 16, 02  G.Cosmo  (track-V05-00-00)
     to properly handle new G4MaterialCutsCouple.
 
 Dec. 04, 02  T.Sasaki (track-V04-01-03)
-- Initial value for fCharge is given in the constuctor 
+- Initial value for fCharge is given in the constuctor
   of G4StepPoint.
 
 Nov. 20, 02   G.Cosmo (track-V04-01-02)
@@ -512,7 +565,7 @@ Nov. 1, 02    J.Generowicz (track-V04-01-01)
 - Added accessors to auxiliary point vector, in both
   G4Step and G4ParticleChangeForTransport
 
-Oct. 31, 02    T.Sasaki (track-V04-01-00)  
+Oct. 31, 02    T.Sasaki (track-V04-01-00)
 - Added StronglyForced flag to G4ForceCondition
 - set fUndefined for the StepStatus in PostStepPoint after CopyPostToPre
 
@@ -522,14 +575,14 @@ Feb. 09 ,02    H.Kurashige (track-V04-00-02)
 Dec. 24 ,01   H.Kurashige (track-V04-00-01)
 - Remove event biasing mechanism from track category
   ( it is moved to hadronic/models )
-- Add G4Track::CopyTrackInfo 
-- Modified G4ParticleChange::AddSecondary to use touchable handle 
+- Add G4Track::CopyTrackInfo
+- Modified G4ParticleChange::AddSecondary to use touchable handle
 - Fixed a bug of changing parent weight in G4ParticleChange::UpdateStepForAlongStep
 
 Dec. 12, 01  H.Kurashige (track-V04-00-00)
 - Added initialization of fStepLength in constructors.
-- Fixed a bug that fStepLength is not copied in assginment operator 
- 
+- Fixed a bug that fStepLength is not copied in assginment operator
+
 Dec. 10, 01  H.Kurashige (track-V03-02-08)
 - Modified assignment operator so that fCurrentStepNumber is set to 0
 
@@ -550,7 +603,7 @@ Oct. 22, 01  H.Kurashige (track-V03-02-04)
 
 Oct. 20, 01  H.Kurashige (track-V03-02-03)
 - Remove "static inline methods"
-- Disable EventBiasingMechanism 
+- Disable EventBiasingMechanism
 
 Oct. 26, 01  G.Cosmo (track-V03-02-02a)
 - Added implementation to assignment operator in G4ParticleChangeForRadDecay.hh
@@ -564,9 +617,9 @@ Sep. 20, 01  H.Kurashige (track-V03-02-01)
 
 Aug. 16, 01  H.Kurashige (track-V03-02-00)
 - Clean up codes
- 
-Mar. 7, 01  H.Kurashige (track-V03-00-04) 
-- Add protection for the zero-momentum case 
+
+Mar. 7, 01  H.Kurashige (track-V03-00-04)
+- Add protection for the zero-momentum case
   for UpdateStepForAlongStep in ParticleChange  (J.A)
 
 Feb. 17, 01  H.Kurashige (track-V03-00-03)
@@ -582,17 +635,17 @@ Feb. 12, 01 H.Kurashige (track-V03-00-01)
 
 
 Feb. 07, 01 H.Kurashige (track-V03-00-00)
-- Add copy constructor to G4Track 
+- Add copy constructor to G4Track
 
 Oct. 19, 00 H.kurashige (track-V02-00-01)
 - Bug fixes in copy constructor of G4ParticleChange
 
 Oct. 18, 00 H.Kurashige (track-V02-00-00)
-- Add "const" to G4DynamicParticle pointer  of returned value of G4Track::GetDynamicParticle 
+- Add "const" to G4DynamicParticle pointer  of returned value of G4Track::GetDynamicParticle
 
 Jun. 2, 2000 M.Asai  (track-V01-01-02)
 - Add G4VUserTrackInformation class and its pointer data member in G4Track
-- Add "const" to pointer to G4Step in G4Track (Hisaya) 
+- Add "const" to pointer to G4Step in G4Track (Hisaya)
 
 Jun. 1 2000 H.Kurashige (track-V01-01-01a)
 -  Removed "const" from the return value type of G4StepPoint::GetPhysicalVolume()
@@ -606,18 +659,18 @@ May 12 2000 H.Kurashige (track-V01-01-00)
 Feb. 16, 2000 H.Kurashige
 -  Added cashing mechanism of pointer to material in G4StepPoint
 -  Added theMaterialChange in G4ParticleChangeForTransportation
--  GetTouchable methods has been changed to give "const" pointer 
+-  GetTouchable methods has been changed to give "const" pointer
 
 Feb. 13, 2000 H.Kurashige (track-V01-00-01)
 -  Added G4ParticleChangeForRadDecay
 -  Changed G4VParticleChange::AddSecondary to set secondary track weight equal to the primary's one
--  Removed printing pointers of ParticleChange object in CheckIt methods 
+-  Removed printing pointers of ParticleChange object in CheckIt methods
 
 Jan. 18, 2000 H.Kurashige (track-V01-00-00)
--  Fixed bugs in treatment of secondary track weight 
+-  Fixed bugs in treatment of secondary track weight
 
 Nov. 7, 1999 H.Kurashige (track-V00-01-01)
--  Added comments for "Software Reference Manual" 
+-  Added comments for "Software Reference Manual"
 
 Oct. 5, 1999 H,Kurashige (track-V00-01-00)
 -  Added mass/charge change in G4ParticleChange
@@ -628,7 +681,7 @@ Jul. 14 1999 H.Kurashige (track-01-00-07)
 -  Fixed bugs in G4Mars5GeVMechanism::CreatePion()
 
 May 6, 1999 H.Kurashige (track-01-00-06)
--  Modified CheckIt methods of G4VParticleChange and derived classes 
+-  Modified CheckIt methods of G4VParticleChange and derived classes
 
 Apr. 28, 1999 H.Kurashige (track-01-00-05b)
 -  Protect proton mass against glanular libraly for G4Mars5Gev...(Makoto)
@@ -636,7 +689,7 @@ Apr. 28, 1999 H.Kurashige (track-01-00-05b)
 -  Remove "include/G4VProcess.hh" from G4Step.cc (Hisaya)
 
 Apr. 13, 1999 H.Kurashige (track-01-00-04)
-- Code polishing according to the messages by CodeWizard 
+- Code polishing according to the messages by CodeWizard
 - Added new virtual method of G4bool CheckIt(const G4Track&) in G4VParticleChange
 
 Feb. 17, 1999 H.Kurashige (track-01-00-03)
@@ -652,10 +705,10 @@ Feb. 6, 1999 H.Kurashige (track-01-00-01)
 -  Removed using G4ParticleMomentum (Hisaya)
 
 Dec. 15,  1998 H.Kurashige (track-00-04-05)
-- G4ParticleChange::CheckIt is activated in VERBOSE mode (Hisaya) 
+- G4ParticleChange::CheckIt is activated in VERBOSE mode (Hisaya)
 
 Dec. 12, 1998 H.Kurashige (track-00-04-04)
-- Fixed bugs in G4Mars5GeVMechanism (Hisaya) 
+- Fixed bugs in G4Mars5GeVMechanism (Hisaya)
 - Added SwOnAllEB/SwOffAllEB in G4ParticleChange (Hisaya)
 - Added GetEBMechanis and IsEBActive in G4VParticleChange (Hisaya)
 
@@ -668,7 +721,7 @@ Dec. 9, 1998 L.Urban (track-00-04-02)
 Nov. 18, 98 H.Kurashige (track-00-04-01)A
 - Added new member of weight in G4Track and removed G4BiasingTag
 - Added Event Biasing based on MARS
-- Modified argument type in G4Track  
+- Modified argument type in G4Track
   ( this tag requires particles-00-04-01 tag)
 
 Nov. 9, 98  H.Kurashige (track-00-03-05)
@@ -676,7 +729,7 @@ Nov. 9, 98  H.Kurashige (track-00-03-05)
 
 Nov. 8, 98 H.Kurashige (track-00-03-04)
 - Added G4BiasingTag as a member of G4Track
-- Modified G4Step, and G4StepPoint for managing  G4BiasingTag 
+- Modified G4Step, and G4StepPoint for managing  G4BiasingTag
 
 Oct. 17, 98 H.Kurashige (track-00-03-03)
 - Fixed bugs in G4VParticleChange and G4ParticleChange
@@ -690,15 +743,15 @@ Aug. 31, 98 G.Cosmo (track-00-02-01)
 - Added comment to G4StepPoint.hh (J.Apostolakis).
 
 Jul. 20,98 H.Kurashige (track-00-01-05)
-- Modified G4ParticleChangeForDecay 
+- Modified G4ParticleChangeForDecay
 
 Jul. 10, 98 P.Urban (track-00-01-02)
 - Optimised G4ParticleChangeForTransport. Much less data
   is copied -> increased performance.
 
 Jul. 1, 98 H.Kurashige (track-00-07-02)
-- Moved UpdateStepForAlongStep into G4ParticleChangeForTransport.cc file 
-  
+- Moved UpdateStepForAlongStep into G4ParticleChangeForTransport.cc file
+
 Jun. 30, 98 P. Urban (track-00-07-01)
 - Some more tracking optimisation results.
 
@@ -720,7 +773,7 @@ May 12, 98 H.Kurashige
   Add new class of G4ParticleChangeForTransport
 
 Apr. 12, 98 H.Kurashige
-- Implement new scheme of 'Particle Change'. Please see 
+- Implement new scheme of 'Particle Change'. Please see
   particle_change.asc in geant4alpha/documents/particles+matter/.
 - Following files are modified (or added)
     G4ParticleChange.hh, .icc, .cc
@@ -747,9 +800,9 @@ Mar. 18, 1998 K.Amako
 
 Jan.  29, 97 K. Amako
 - Following changes have been done and committed/tagged to cvs.
-  Tag# is track-00-03-01. 
+  Tag# is track-00-03-01.
     - G4Step.cc: Output format has been changed in showStep().
-  
+
 Dec. 19, 97 G. Cosmo - (alpha03)
 
 - Created.

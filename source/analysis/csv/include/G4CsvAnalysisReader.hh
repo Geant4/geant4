@@ -25,7 +25,7 @@
 //
 
 // The main manager for Csv analysis reader.
-// It delegates most of functions to the object specific managers. 
+// It delegates most of functions to the object specific managers.
 
 // Author: Ivana Hrivnacova, 05/09/2014 (ivana@ipno.in2p3.fr)
 
@@ -35,66 +35,51 @@
 #include "G4ToolsAnalysisReader.hh"
 #include "globals.hh"
 
-#include "tools/histo/h1d" 
-#include "tools/histo/h2d" 
-#include "tools/histo/h3d" 
-#include "tools/histo/p1d" 
-#include "tools/histo/p2d" 
 #include "tools/rcsv_ntuple"
 
-class G4H1ToolsManager;
-class G4H2ToolsManager;
-class G4H3ToolsManager;
-class G4P1ToolsManager;
-class G4P2ToolsManager;
+#include <memory>
+#include <string_view>
+
+class G4CsvAnalysisReader;
 class G4CsvRNtupleManager;
 class G4CsvRFileManager;
-  
+template <class T>
+class G4ThreadLocalSingleton;
+
 class G4CsvAnalysisReader : public G4ToolsAnalysisReader
 {
+  friend class G4ThreadLocalSingleton<G4CsvAnalysisReader>;
+
   public:
-    explicit G4CsvAnalysisReader(G4bool isMaster = true);
     virtual ~G4CsvAnalysisReader();
-    
-    // static methods
+
+    // Static methods
     static G4CsvAnalysisReader* Instance();
 
     // Access methods
     tools::rcsv::ntuple* GetNtuple() const;
     tools::rcsv::ntuple* GetNtuple(G4int ntupleId) const;
     using G4VAnalysisReader::GetNtuple;
-    
+
   protected:
-    // virtual methods from base class
-    virtual G4int  ReadH1Impl(const G4String& h1Name, const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadH2Impl(const G4String& h2Name, const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadH3Impl(const G4String& h3Name,  const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadP1Impl(const G4String& p1Name,  const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadP2Impl(const G4String& p2Name,  const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
-                              G4bool isUserFileName) final;
+    // Virtual methods from base class
+    virtual G4bool CloseFilesImpl(G4bool reset) final;
 
   private:
-    // static data members
-    static G4CsvAnalysisReader* fgMasterInstance;
-    static G4ThreadLocal G4CsvAnalysisReader* fgInstance;    
+    G4CsvAnalysisReader();
 
-    // methods
-    G4String GetHnFileName(const G4String& hnType, 
-                           const G4String& hnName,
-                           const G4String& baseFileName,
-                           G4bool isUserFileName) const;
- 
+    // Static data members
+    inline static G4CsvAnalysisReader* fgMasterInstance { nullptr };
+
+    // Methods
     G4bool Reset();
 
-    // data members
-    G4CsvRNtupleManager*  fNtupleManager;
-    G4CsvRFileManager*    fFileManager;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4CsvAnalysisReader" };
+
+    // Data members
+    std::shared_ptr<G4CsvRNtupleManager> fNtupleManager { nullptr };
+    std::shared_ptr<G4CsvRFileManager>   fFileManager { nullptr };
 };
 
 #include "G4CsvAnalysisReader.icc"

@@ -75,7 +75,7 @@ public:
   //constructor: one has to give the number of points in each PhysicsVector 
   //(= dimension of the energy grid) and the number of shells (0 is the 
   //default).
-  G4PenelopeCrossSection(size_t nOfEnergyPoints,size_t nOfShells=0);
+  explicit G4PenelopeCrossSection(size_t nOfEnergyPoints,size_t nOfShells=0);
   //
   ~G4PenelopeCrossSection();
 
@@ -90,7 +90,7 @@ public:
   //! Returns the hard cross section for the given shell (normalized to 1)
   G4double GetNormalizedShellCrossSection(size_t shellID,G4double energy) const;
 
-  size_t GetNumberOfShells() const {return numberOfShells;};
+  size_t GetNumberOfShells() const {return fNumberOfShells;};
 
   //!
   //! Public interface for the master thread
@@ -103,27 +103,25 @@ public:
 			         size_t shellID,G4double energy,G4double xs);
   void NormalizeShellCrossSections();
 
-private:
-  G4PenelopeCrossSection & operator=(const G4PenelopeCrossSection &right);
-  G4PenelopeCrossSection(const G4PenelopeCrossSection&);
-  
-  G4bool isNormalized;
+  G4PenelopeCrossSection & operator=(const G4PenelopeCrossSection &right) = delete;
+  G4PenelopeCrossSection(const G4PenelopeCrossSection&) = delete;
 
-  size_t numberOfEnergyPoints;
-  size_t numberOfShells;
-
+private:  
   //all tables are log. XS vs. log E
 
   //XS0, XS1, XS2 in Penelope nomenclature
-  G4PhysicsTable* softCrossSections;
+  G4PhysicsTable* fSoftCrossSections;
 
   //XH0, XH1, XH2 in Penelope nomenclature
-  G4PhysicsTable* hardCrossSections;
+  G4PhysicsTable* fHardCrossSections;
   
   //XS for individual shells
-  G4PhysicsTable* shellCrossSections;
-  G4PhysicsTable* shellNormalizedCrossSections;
+  G4PhysicsTable* fShellCrossSections;
+  G4PhysicsTable* fShellNormalizedCrossSections;
 
+  size_t fNumberOfEnergyPoints;
+  size_t fNumberOfShells;
+  G4bool fIsNormalized;
 };
 
 #endif

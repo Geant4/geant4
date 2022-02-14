@@ -25,8 +25,6 @@
 //
 //
 //
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "G4OpenInventor.hh"
 
@@ -115,5 +113,3 @@ G4bool G4OpenInventor::IsUISessionCompatible () const
 
   return isCompatible;
 }
-
-#endif

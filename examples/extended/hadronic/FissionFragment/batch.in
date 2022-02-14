@@ -1,2 +1,6 @@
+# To use the alternative Wendt fission model enable the following UI command
+# (else, the default one will be used):
+#/process/had/particle_hp/use_Wendt_fission_model true
+#
 /run/beamOn 50
 exit

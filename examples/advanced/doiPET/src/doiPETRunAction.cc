@@ -57,8 +57,15 @@
 #include <fstream>
 
 //
-doiPETRunAction::doiPETRunAction() : G4UserRunAction()
-{}
+#ifdef ANALYSIS_USE
+doiPETRunAction::doiPETRunAction(doiPETAnalysis* analysis) : G4UserRunAction()
+{
+	analysisMan = analysis;
+}
+#else
+doiPETRunAction::doiPETRunAction()
+{ }
+#endif
 //
 
 
@@ -76,10 +83,14 @@ G4Run* doiPETRunAction::GenerateRun()
 
 void doiPETRunAction::BeginOfRunAction(const G4Run* aRun)
 { 
+	//pass file name without fname extention
 	//inform the runManager to save random number seed
 	G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 	G4cout << "### Begin of Run " << aRun->GetRunID() << " start." << G4endl;
-
+#ifdef ANALYSIS_USE
+  // Create ROOT file, histograms and ntuple
+  analysisMan -> book();
+#endif 
 	if (isMaster) {
 		G4Random::showEngineStatus();
 	}	
@@ -91,6 +102,10 @@ void doiPETRunAction::EndOfRunAction(const G4Run*)
 	G4int nofEvents = fRun->GetNumberOfEvent();
 	if (nofEvents == 0) return;
 	G4cout<<G4endl<<"### End of Run ("<<nofEvents<<" events)"<<G4endl;
+#ifdef ANALYSIS_USE
+// Close the output ROOT file with the results
+   analysisMan -> finish(); 
+#endif
 }
 
 

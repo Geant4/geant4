@@ -64,8 +64,8 @@ public:
 			      const G4Material*);
 
   G4int GetEnergyIndex(G4double energy);
-  G4double GetNuMuTotCsXsc(G4int index, G4double energy);
-  G4double GetANuMuTotCsXsc(G4int index, G4double energy);
+  G4double GetNuMuTotCsXsc(G4int index, G4double energy, G4int Z, G4int A);
+  G4double GetANuMuTotCsXsc(G4int index, G4double energy, G4int Z, G4int A);
 
   G4double GetNuMuTotCsArray(G4int index);
   G4double GetANuMuTotCsArray(G4int index);
@@ -78,6 +78,7 @@ public:
 
   G4double GetTotXsc(){return fTotXsc;};
   G4double GetCcTotRatio(){return fCcTotRatio;};
+  G4double GetQEratio(){return fQEratio;};
 
 protected:
 
@@ -86,13 +87,15 @@ protected:
   G4double fCofS, fCofL;
   G4double fCutEnergy; // minimal recoil electron energy detected
   G4double fBiasingFactor; // biasing xsc up
-  G4double fTotXsc, fCcTotRatio, fCcFactor, fNcFactor;
+  G4double fTotXsc, fCcTotRatio, fCcFactor, fNcFactor, fQEratio;
 
   G4int fIndex;
 
   static const G4double fNuMuEnergy[50];
-  static const G4double fNuMuTotXsc[50];
-  static const G4double fANuMuTotXsc[50];
+  static const G4double fNuMuInXsc[50];
+  static const G4double fNuMuQeXsc[50];
+  static const G4double fANuMuInXsc[50];
+  static const G4double fANuMuQeXsc[50];
 
   G4ParticleDefinition* theMuonMinus;
   G4ParticleDefinition* theMuonPlus;

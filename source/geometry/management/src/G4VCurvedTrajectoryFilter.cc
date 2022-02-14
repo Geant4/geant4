@@ -30,14 +30,6 @@
 
 #include "G4VCurvedTrajectoryFilter.hh"
 
-G4VCurvedTrajectoryFilter::G4VCurvedTrajectoryFilter()
-{
-}
-
-G4VCurvedTrajectoryFilter::~G4VCurvedTrajectoryFilter()
-{
-}
-
 std::vector<G4ThreeVector>* 
 G4VCurvedTrajectoryFilter::GimmeThePointsAndForgetThem()
 {
@@ -55,7 +47,7 @@ G4VCurvedTrajectoryFilter::GimmeThePointsAndForgetThem()
 }
 
 void
-G4VCurvedTrajectoryFilter::CreateNewTrajectorySegment( )
+G4VCurvedTrajectoryFilter::CreateNewTrajectorySegment()
 {
   if (fpFilteredPoints != nullptr)
   {

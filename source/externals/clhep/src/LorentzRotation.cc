@@ -8,14 +8,11 @@
 // Some ZOOM methods involving construction from columns and decomposition 
 // into boost*rotation are split off into LorentzRotationC and LorentzRotationD
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/LorentzRotation.h"
 
-#include <iostream>
+#include <cmath>
 #include <iomanip>
+#include <iostream>
 
 namespace CLHEP  {
 
@@ -85,7 +82,7 @@ double HepLorentzRotation::operator () (int i, int j) const {
     if (j == 2) { return tz(); } 
     if (j == 3) { return tt(); } 
   } 
-  std::cerr << "HepLorentzRotation subscripting: bad indeces "
+  std::cerr << "HepLorentzRotation subscripting: bad indices "
 	    << "(" << i << "," << j << ")\n";
   return 0.0;
 } 

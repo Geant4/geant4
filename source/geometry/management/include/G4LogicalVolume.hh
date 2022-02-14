@@ -98,12 +98,11 @@
 // 18.04.01 G.Cosmo: Migrated to STL vector
 // 12.02.99 S.Giani: Added user defined optimisation quality
 // 09.11.98 M.Verderi, J.Apostolakis: Added BiasWeight member and accessors
-// 10.20.97 P.M.DeFreitas: Added pointer to a FastSimulation
-//          J.Apostolakis: & flag to indicate if it is an Envelope for it
+// 10.20.97 P.M.DeFreitas, J.Apostolakis: Added pointer to a FastSimulation
 // 11.07.95 P.Kent: Initial version
 // ------------------------------------------------------------------------
 #ifndef G4LOGICALVOLUME_HH
-#define G4LOGICALVOLUME_HH
+#define G4LOGICALVOLUME_HH 1
 
 #include <vector>
 
@@ -177,13 +176,11 @@ class G4LVData
 // In addition, it invokes a method similiar to the constructor explicitly
 // to achieve the partial effect for each instance in the array.
 //
-typedef G4GeomSplitter<G4LVData> G4LVManager;
+using G4LVManager = G4GeomSplitter<G4LVData>;
 
 class G4LogicalVolume
 {
-  typedef std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
-
-  public:  // with description
+  public:
     
     G4LogicalVolume(G4VSolid* pSolid,
                     G4Material* pMaterial,
@@ -209,7 +206,7 @@ class G4LogicalVolume
       // Copy-constructor and assignment operator not allowed.
 
     inline const G4String& GetName() const;
-    inline void SetName(const G4String& pName);
+    void SetName(const G4String& pName);
       // Returns and sets the name of the logical volume.
 
     inline size_t GetNoDaughters() const;
@@ -339,7 +336,7 @@ class G4LogicalVolume
     inline G4double GetBiasWeight() const;
       // Sets and gets bias weight.
 
-  public:  // without description
+  public:
 
     G4LogicalVolume(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -392,25 +389,19 @@ class G4LogicalVolume
 
   private:
 
-    // Data members:   
+    using G4PhysicalVolumeList = std::vector<G4VPhysicalVolume *>;
+
+    G4GEOM_DLL static G4LVManager subInstanceManager;
+      // This new field helps to use the class G4LVManager introduced above.
 
     G4PhysicalVolumeList fDaughters;
       // Vector of daughters. Given initial size of 0.
     G4String fName;
       // Name of logical volume.
-    EVolume fDaughtersVolumeType;
-      // Are contents of volume placements, replica, parameterised or external?
-
     G4UserLimits* fUserLimits = nullptr;
       // Pointer (possibly nullptr) to user Step limit object for this node.
     G4SmartVoxelHeader* fVoxel = nullptr;
       // Pointer (possibly nullptr) to optimisation info objects.
-    G4bool fOptimise = true;
-      // Flag to identify if optimisation should be applied or not.
-    G4bool fRootRegion = false;
-      // Flag to identify if the logical volume is a root region.
-    G4bool fLock = false;
-      // Flag to identify if entity is locked for final deletion.
     G4double fSmartless = 2.0;
       // Quality for optimisation, average number of voxels to be spent
       // per content.
@@ -420,11 +411,6 @@ class G4LogicalVolume
       // Pointer to the cuts region (if any)
     G4double fBiasWeight = 1.0;
       // Weight used in the event biasing technique.
-  
-    G4int instanceID;
-      // This new field is used as instance ID.
-    G4GEOM_DLL static G4LVManager subInstanceManager;
-      // This new field helps to use the class G4LVManager introduced above.    
 
     // Shadow of master pointers.
     // Each worker thread can access this field from the master thread
@@ -434,6 +420,17 @@ class G4LogicalVolume
     G4VSensitiveDetector* fSensitiveDetector = nullptr;
     G4FieldManager* fFieldManager = nullptr;
     G4LVData* lvdata = nullptr;  // For use of object persistency
+
+    G4int instanceID;
+      // This new field is used as instance ID.
+    EVolume fDaughtersVolumeType;
+      // Are contents of volume placements, replica, parameterised or external?
+    G4bool fOptimise = true;
+      // Flag to identify if optimisation should be applied or not.
+    G4bool fRootRegion = false;
+      // Flag to identify if the logical volume is a root region.
+    G4bool fLock = false;
+      // Flag to identify if entity is locked for final deletion.
 };
 
 #include "G4LogicalVolume.icc"

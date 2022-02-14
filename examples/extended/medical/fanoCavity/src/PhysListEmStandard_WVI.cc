@@ -134,7 +134,7 @@ void PhysListEmStandard_WVI::ConstructProcess()
 
       G4CoulombScattering* cs = new G4CoulombScattering();
       G4eCoulombScatteringModel* single = new G4eCoulombScatteringModel();
-      cs->SetEmModel(single, 1);
+      cs->SetEmModel(single);
 
       pmanager->AddProcess(eMsc, -1, 1,-1);
       pmanager->AddProcess(eIoni,-1, 2, 1);

@@ -35,8 +35,7 @@
 
 #include "G4UserRunAction.hh"
 #include "G4ThreeVector.hh"
-
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,10 +58,7 @@ public:
   virtual void   EndOfRunAction(const G4Run*);
 
   void SetVerbose(G4int val);
-     
-  // Histogram name 
-  void SetHistoName(G4String& val);
-    
+
   // Acceptance parameters
   void  SetEdepAndRMS(G4ThreeVector);
      
@@ -78,8 +74,6 @@ private:
 
   G4int    fVerbose;
     
-  G4String fHistoName[2];
-
   G4double fEdeptrue;
   G4double fRmstrue;
   G4double fLimittrue;

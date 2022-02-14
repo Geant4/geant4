@@ -46,6 +46,11 @@ meeting (04/2013) and note on G4NeutronHP package
 Hadr05
 ------
 
+Examples of hadronic calorimeters
+
+Hadr06
+------
+
 This example demonstrates the usage of G4GenericPhysicsList to build 
 the concrente physics list at the run time.
 
@@ -65,6 +70,20 @@ Notice that we use the generic biasing machinery, but the actual weights
 of all tracks remain to the usual value (1.0) as in the normal (unbiased)
 case.
 
+Hadr09
+------
+
+This example shows how to use Geant4 as a generator for simulating
+inelastic hadron-nuclear interactions.
+Notice that the Geant4 run-manager is not used.
+
+Hadr10
+------
+
+This example aims to test the treatment of decays in Geant4.
+In particular, we want to test the decays of the tau lepton, charmed and
+bottom hadrons, and the use of pre-assigned decays.
+
 FissionFragment
 ---------------
 This example demonstrates the Fission Fragment model as used within the
@@ -72,3 +91,10 @@ neutron_hp model. It will demostrate the capability for fission product
 containmentby the cladding in a water moderated sub-critical assembly. It could
 also be further extended to calculate the effective multiplication factor of
 the subcritical assembly for various loading schemes.
+
+NeutronSource
+-------------
+NeutronSource is an example of neutrons production. It illustrates the cooperative work
+of nuclear reactions and radioactive decay processes.
+It survey energy deposition and particle's flux.
+It uses PhysicsConstructor objects.

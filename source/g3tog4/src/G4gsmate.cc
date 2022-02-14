@@ -113,7 +113,7 @@ void G4gsmate(G4int imate, G4String name, G4double ain, G4double zin,
 
   G4Material* material=0;
   
-  G4String sname = name.strip(G4String::both);
+  G4String sname = G4StrUtil::strip_copy(name);
   if (sname == "AIR") {
     // handle the built in AIR mixture
     G4double aa[2], zz[2], wmat[2];

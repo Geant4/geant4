@@ -43,19 +43,11 @@
 
 
 G4VecpssrKModel::G4VecpssrKModel()
-{ 
+{;}
 
-}
+// -------------------------------------------------------------------
 
 G4VecpssrKModel::~G4VecpssrKModel()
-{ 
+{;}
 
-}
-
-/* 
-G4double G4VecpssrKModel::CalculateCrossSection(G4int,G4double,G4double)
-{ 
-
-}
-*/
 

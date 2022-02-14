@@ -181,7 +181,6 @@ G4VTwistedFaceted( const G4String& pname,     // Name of instance
                 "GeomSolids0002", FatalErrorInArgument, message);
   }
   CreateSurfaces();
-  fCubicVolume = 2 * fDz * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2 );
 }
 
 

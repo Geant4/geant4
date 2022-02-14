@@ -53,7 +53,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4EmSaturation::nMaterials = 0;
+size_t G4EmSaturation::nMaterials = 0;
 std::vector<G4double> G4EmSaturation::massFactors;
 std::vector<G4double> G4EmSaturation::effCharges;
 std::vector<G4double> G4EmSaturation::g4MatData;
@@ -62,12 +62,12 @@ std::vector<G4String> G4EmSaturation::g4MatNames;
 G4EmSaturation::G4EmSaturation(G4int verb) 
 {
   verbose = verb;
-
   nWarnings = nG4Birks = 0;
 
   electron = nullptr;
   proton   = nullptr;
   nist     = G4NistManager::Instance();
+  InitialiseG4Saturation();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -98,7 +98,7 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
 
     // atomic relaxations for gamma incident
     if(22 ==  p->GetPDGEncoding()) {
-      //G4cout << "%% gamma edep= " << edep/keV << " keV " <<manager << G4endl; 
+      //G4cout << "%% gamma edep= " << edep/keV << " keV " << G4endl; 
       evis /= (1.0 + bfactor*edep/
         G4LossTableManager::Instance()->GetRange(electron,edep,couple));
 
@@ -122,12 +122,13 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
       if(nloss > 0.0) {
         G4int idx = couple->GetMaterial()->GetIndex();
         G4double escaled = nloss*massFactors[idx];
-        /*
+	/*        
         G4cout << "%% p edep= " << nloss/keV << " keV  Escaled= " 
                << escaled << " MeV  in " << couple->GetMaterial()->GetName()
-               << "  " << p->GetParticleName()
-               << G4endl; 
-        */
+               << "  " << p->GetParticleName() 
+               << G4endl;
+	G4cout << proton->GetParticleName() << G4endl;
+	*/
         G4double range = G4LossTableManager::Instance()
           ->GetRange(proton,escaled,couple)/effCharges[idx]; 
         nloss /= (1.0 + bfactor*nloss/range);
@@ -142,13 +143,14 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
 
 void G4EmSaturation::InitialiseG4Saturation()
 {
+  if(nMaterials == G4Material::GetNumberOfMaterials()) { return; }
   nMaterials = G4Material::GetNumberOfMaterials();
   massFactors.resize(nMaterials, 1.0);
   effCharges.resize(nMaterials, 1.0);
 
   if(0 == nG4Birks) {  InitialiseG4materials(); }
 
-  for(G4int i=0; i<nMaterials; ++i) {
+  for(size_t i=0; i<nMaterials; ++i) {
     InitialiseBirksCoefficient((*G4Material::GetMaterialTable())[i]);
   }
   if(verbose > 0) { DumpBirksCoefficients(); }
@@ -180,12 +182,12 @@ G4double G4EmSaturation::FindG4BirksCoefficient(const G4Material* mat)
 void G4EmSaturation::InitialiseBirksCoefficient(const G4Material* mat)
 {
   // electron and proton should exist in any case
-  if(!electron) {
+  if(nullptr == electron) {
     electron = G4ParticleTable::GetParticleTable()->FindParticle("e-");
     proton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
-    if(!electron || !proton) {
+    if(nullptr == electron) {
       G4Exception("G4EmSaturation::InitialiseBirksCoefficient", "em0001",
-		  FatalException, "both electron and proton should exist");
+		  FatalException, "electron should exist");
     }
   }
 
@@ -237,7 +239,7 @@ void G4EmSaturation::DumpBirksCoefficients()
 {
   G4cout << "### Birks coefficients used in run time" << G4endl;
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
-  for(G4int i=0; i<nMaterials; ++i) {
+  for(size_t i=0; i<nMaterials; ++i) {
     const G4Material* mat = (*mtable)[i];
     G4double br = mat->GetIonisation()->GetBirksConstant();
     if(br > 0.0) {

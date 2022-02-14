@@ -23,102 +23,61 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RToEConvForProton class implementation
 //
-//
-//
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file/  History:
-//    5 Oct. 2002, H.Kuirashige : Structure created based on object model
-// --------------------------------------------------------------
+// Author: H.Kurashige, 05 October 2002 - First implementation
+// --------------------------------------------------------------------
 
 #include "G4RToEConvForProton.hh"
 #include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4PhysicsLogVector.hh"
 
-#include "G4ios.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+// --------------------------------------------------------------------
 G4RToEConvForProton::G4RToEConvForProton() 
-  : G4VRangeToEnergyConverter(),
-    Mass(0.0),
-    Z(-1.),  
-    tau0(0.0), taul(0.0), taum(0.0),
-    ionpot(0.0),
-    ca(0.0), cba(0.0), cc(0.0)
+  : G4VRangeToEnergyConverter()
 {    
-  theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("proton");
-  if (theParticle ==0) {
+  theParticle = G4ParticleTable::GetParticleTable()->FindParticle("proton");
+  if (theParticle == nullptr)
+  {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << " G4RToEConvForProton::G4RToEConvForProton() ";
-      G4cout << " proton is not defined !!" << G4endl;
+    if (GetVerboseLevel()>0)
+    {
+      G4cout << "G4RToEConvForProton::G4RToEConvForProton() - ";
+      G4cout << "Proton is not defined !!" << G4endl;
     }
 #endif
-  } else {
-    Mass = theParticle->GetPDGMass();
-  } 
+  }
+  else 
+  {
+    fPDG = theParticle->GetPDGEncoding();
+  }
 }
 
+// --------------------------------------------------------------------
 G4RToEConvForProton::~G4RToEConvForProton()
-{ 
-}
+{}
 
-
-G4double G4RToEConvForProton::Convert(G4double rangeCut, const G4Material* )
+// --------------------------------------------------------------------
+G4double G4RToEConvForProton::Convert(const G4double rangeCut, 
+                                      const G4Material* )
 {
-  // Simple formula
-  //   range = Ekin/(100*keV)*(1*mm);
-  return (rangeCut/(1.0*mm)) * (100.0*keV); 
-}
-
-
-// **********************************************************************
-// ************************* ComputeLoss ********************************
-// **********************************************************************
-G4double G4RToEConvForProton::ComputeLoss(G4double AtomicNumber,
-                                                G4double KineticEnergy) 
-{
-  //  calculate dE/dx
-  const G4double  z2Particle = 1.0;
-
-  if( std::fabs(AtomicNumber-Z)>0.1 ){
-    // recalculate constants
-    Z = AtomicNumber;
-    G4double Z13 = std::exp(std::log(Z)/3.);
-    tau0 = 0.1*Z13*MeV/proton_mass_c2;
-    taum = 0.035*Z13*MeV/proton_mass_c2;
-    taul = 2.*MeV/proton_mass_c2;
-    ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z));
-    cc = (taul+1.)*(taul+1.)*std::log(2.*electron_mass_c2*taul*(taul+2.)/ionpot)/(taul*(taul+2.))-1.;
-    cc = 2.*twopi_mc2_rcl2*Z*cc*std::sqrt(taul);
-    ca = cc/((1.-0.5*std::sqrt(tau0/taum))*tau0);
-    cba = -0.5/std::sqrt(taum);
+#ifdef G4VERBOSE
+  if (GetVerboseLevel()>3)
+  {
+    G4cout << "G4RToEConvForProton::Convert() - ";
+    G4cout << " with Range Cut " << rangeCut/mm << "[mm]" << G4endl;
   }
-
-  G4double tau = KineticEnergy/Mass;
-  G4double dEdx;
-  if ( tau <= tau0 ) {
-    dEdx = ca*(std::sqrt(tau)+cba*tau);
-  } else {
-    if( tau <= taul ) {
-      dEdx = cc/std::sqrt(tau);
-    } else {
-      dEdx = (tau+1.)*(tau+1.)*
-             std::log(2.*electron_mass_c2*tau*(tau+2.)/ionpot)/(tau*(tau+2.))-1.;
-      dEdx = 2.*twopi_mc2_rcl2*Z*dEdx;
-    }
-  }
-  return dEdx*z2Particle ;
+#endif
+  // Simple formula - range = Ekin/(100*keV)*(1*mm);
+  return (rangeCut/(1.0*CLHEP::mm)) * (100.0*CLHEP::keV); 
 }
 
-
-// **********************************************************************
-// ************************* Reset       ********************************
-// **********************************************************************
-void G4RToEConvForProton::Reset()
+// --------------------------------------------------------------------
+G4double G4RToEConvForProton::ComputeValue(const G4int, const G4double)
 {
-  // do nothing because loss tables and range vectors are not used 
-  return;
+  return 0.0;
 }
+
+// --------------------------------------------------------------------

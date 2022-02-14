@@ -23,52 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VUserParallelWorld
 //
+// Class description:
 //
+// This is the abstract base class for a user's parallel world.
+// The user MUST NOT create the world volume, and should either get it
+// from GetWorld() protected method, and set inside the Construct() method.
+// The constructor must take a unique name of the parallel world, which is
+// used for the name of the world physical volume of this parallel world.
 
-#ifndef G4VUserParallelWorld_h
-#define G4VUserParallelWorld_h 1
+// Author: M.Asai (SLAC), 9 June 2006
+// --------------------------------------------------------------------
+#ifndef G4VUserParallelWorld_hh
+#define G4VUserParallelWorld_hh 1
+
+#include "globals.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VSensitiveDetector;
 
-#include "globals.hh"
-
-// class description:
-//
-//  This is the abstract base class of the user's parallel world.
-// The user MUST NOT create the worls volume, but should get it from GetWorld()
-// protected method, and fill inside as the Construct() method.
-// The constructor must take a unique name of the parallel world, which is used
-// for the name of the world physical volume of this parallel world.
-//
-
 class G4VUserParallelWorld
 {
   public:
-    G4VUserParallelWorld(G4String worldName);
+
+    G4VUserParallelWorld(const G4String& worldName);
     virtual ~G4VUserParallelWorld();
 
-  public:
     virtual void Construct() = 0;
     virtual void ConstructSD();
 
+    inline const G4String& GetName() { return fWorldName; }
+
   protected:
-    G4String fWorldName;
-    
-  protected:
+
     G4VPhysicalVolume* GetWorld();
 
-  public:
-    inline G4String GetName() { return fWorldName; }
+    void SetSensitiveDetector(const G4String& logVolName,
+                              G4VSensitiveDetector* aSD, G4bool multi = false);
+    void SetSensitiveDetector(G4LogicalVolume* logVol,
+                              G4VSensitiveDetector* aSD);
 
   protected:
-    void SetSensitiveDetector(const G4String& logVolName,
-                G4VSensitiveDetector* aSD,G4bool multi=false);
-    void SetSensitiveDetector(G4LogicalVolume* logVol,
-                G4VSensitiveDetector* aSD);
+
+    G4String fWorldName = "ParallelWorld";
 };
 
 #endif
-

@@ -43,7 +43,7 @@
 //
 // Class Description:
 //
-// Implementation of gamma convertion to e+e- in the field of a nucleus 
+// Implementation of gamma conversion to e+e- in the field of a nucleus 
 // relativistic approximation
 // 
 
@@ -72,53 +72,56 @@ public:
   explicit G4PairProductionRelModel(const G4ParticleDefinition* p = nullptr, 
                                     const G4String& nam = "BetheHeitlerLPM");
  
-  virtual ~G4PairProductionRelModel();
+  ~G4PairProductionRelModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-                          const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-                               G4VEmModel* masterModel) override;
+  void InitialiseLocal(const G4ParticleDefinition*, 
+		       G4VEmModel* masterModel) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A=0., 
-                                      G4double cut=0.,
-                                      G4double emax=DBL_MAX) override;
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double kinEnergy, 
+				      G4double Z, 
+				      G4double A=0., 
+				      G4double cut=0.,
+				      G4double emax=DBL_MAX) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4DynamicParticle*,
-                                 G4double tmin,
-                                 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
 
-  virtual void SetupForMaterial(const G4ParticleDefinition*,
-                                const G4Material*,G4double) override;
+  void SetupForMaterial(const G4ParticleDefinition*,
+			const G4Material*,G4double) override;
 
   inline void   SetLPMflag(G4bool val) { fIsUseLPMCorrection = val;  }
   inline G4bool LPMflag() const        { return fIsUseLPMCorrection; }
 
+  G4PairProductionRelModel & operator=
+  (const G4PairProductionRelModel &right) = delete;
+  G4PairProductionRelModel(const  G4PairProductionRelModel&) = delete;
+
 protected:
 
   // for evaluating screening related functions
-  inline void ComputePhi12(const G4double delta, G4double &phi1, G4double &phi2);
+  inline void ComputePhi12(const G4double delta, 
+			   G4double &phi1, G4double &phi2);
   inline G4double ScreenFunction1(const G4double delta);
   inline G4double ScreenFunction2(const G4double delta);
-  inline void ScreenFunction12(const G4double delta, G4double &f1, G4double &f2);
+  inline void ScreenFunction12(const G4double delta, 
+			       G4double &f1, G4double &f2);
   // helper methods for cross-section computation under different approximations
   G4double ComputeParametrizedXSectionPerAtom(G4double gammaEnergy, G4double Z);
   G4double ComputeXSectionPerAtom(G4double gammaEnergy, G4double Z);
   G4double ComputeDXSectionPerAtom(G4double eplusEnergy, G4double gammaEnergy, 
                                    G4double Z);
-  G4double ComputeRelDXSectionPerAtom(G4double eplusEnergy, G4double gammaEnergy,
-                                      G4double Z);
-
+  G4double ComputeRelDXSectionPerAtom(G4double eplusEnergy, 
+				      G4double gammaEnergy, G4double Z);
 
 private:
 
-  // for creating some data structure per Z with often used comp. intensive data 
+  // for creating some data structure per Z 
   void InitialiseElementData();
   struct ElementData {
     G4double  fLogZ13;
@@ -148,14 +151,6 @@ private:
     std::vector<G4double>  fLPMFuncG;
     std::vector<G4double>  fLPMFuncPhi;
   };
-
-
-private:
-
-  // hide assignment operator
-  G4PairProductionRelModel & operator=
-  (const G4PairProductionRelModel &right) = delete;
-  G4PairProductionRelModel(const  G4PairProductionRelModel&) = delete;
 
 protected:
   static const G4int                gMaxZet;
@@ -187,9 +182,6 @@ protected:
   G4ParticleDefinition*             fThePositron;
   G4ParticleChangeForGamma*         fParticleChange;
 };
-
-
-
 //
 // Bethe screening functions for the elastic (coherent) scattering:
 // Bethe's phi1, phi2 coherent screening functions were computed numerically 
@@ -207,9 +199,9 @@ protected:
 // Eg is the initial photon energy, E is the total energy transferred to one of 
 // the e-/e+ pair, eps0 = mc^2/Eg and eps = E/Eg.
 
-inline 
-void G4PairProductionRelModel::ComputePhi12(const G4double delta, G4double &phi1, 
-                                            G4double &phi2)
+inline void G4PairProductionRelModel::ComputePhi12(const G4double delta,
+						   G4double &phi1, 
+						   G4double &phi2)
 {
     if (delta > 1.4) {
       phi1 = 21.0190 - 4.145*G4Log(delta + 0.958);
@@ -220,7 +212,6 @@ void G4PairProductionRelModel::ComputePhi12(const G4double delta, G4double &phi1
     }
 }
 
-
 // Compute the value of the screening function 3*PHI1(delta) - PHI2(delta):
 inline G4double G4PairProductionRelModel::ScreenFunction1(const G4double delta)
 {
@@ -228,14 +219,12 @@ inline G4double G4PairProductionRelModel::ScreenFunction1(const G4double delta)
                        : 42.184 - delta*(7.444 - 1.623*delta);
 }
 
-
 // Compute the value of the screening function 1.5*PHI1(delta) +0.5*PHI2(delta):
 inline G4double G4PairProductionRelModel::ScreenFunction2(const G4double delta)
 {
   return (delta > 1.4) ? 42.038 - 8.29*G4Log(delta + 0.958)
                        : 41.326 - delta*(5.848 - 0.902*delta);
 }
-
 
 // Same as ScreenFunction1 and ScreenFunction2 but computes them at once
 inline void G4PairProductionRelModel::ScreenFunction12(const G4double delta, 

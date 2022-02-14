@@ -97,6 +97,8 @@ private:
   // Momentum of emitted fragment
   G4ThreeVector theFinalMomentum;
   G4bool fUseAngularGenerator;
+
+  G4int fModelID;
 };
 
 inline G4double 

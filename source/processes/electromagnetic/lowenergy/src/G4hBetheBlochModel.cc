@@ -61,12 +61,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hBetheBlochModel::G4hBetheBlochModel(const G4String& name)
-  : G4VLowEnergyModel(name), 
-    lowEnergyLimit(1.*MeV),
-    highEnergyLimit(100.*GeV),
+  : G4VLowEnergyModel(name),    
     twoln10(2.*std::log(10.)),
     bg2lim(0.0169), 
-    taulim(8.4146e-3)
+    taulim(8.4146e-3),
+    lowEnergyLimit(1.*MeV),
+    highEnergyLimit(100.*GeV)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -9,8 +9,6 @@
 #
 /run/initialize
 #
-/process/list
-#
 /gun/particle ion
 /gun/ion 10 24
 #

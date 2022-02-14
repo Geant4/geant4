@@ -18,6 +18,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 29, 2020 M. Asai (exampleRE02-V10-06-00)
+- Migration to G4RunManagerFactory.
+
+08 May 2018   J.Allison (exampleRE02-V10-04-01)
+- RE02.cc:
+  o Remove G4_VIS_USE and G4UI_USE.
+  o Move instantiation of G4UIExecutive to start of main.
+- vis.mac: Remove
+  /vis/viewer/set/targetPoint 0 100 0 mm
+  /vis/viewer/zoomTo 10000000
+
+21 March 2018   G.Folger  (no tag)
+- update reference outputs run.out, run3.log, and run4.log
+
+March 14, 2018  M. Asai (exampleRE02-V10-04-00)
+- RE02EventAction.cc and RE02Run.cc are modified to shorten the
+  output.
+
 November 18, 2013  I.Hrivnacova (exampleRE02-V09-06-09)
 - Fixed .README
 

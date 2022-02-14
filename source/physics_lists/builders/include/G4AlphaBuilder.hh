@@ -37,7 +37,7 @@
 
 #include "globals.hh"
 
-#include "G4AlphaInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VAlphaBuilder.hh"
 
 #include <vector>
@@ -53,11 +53,9 @@ class G4AlphaBuilder
     void RegisterMe(G4VAlphaBuilder * aB) {theModelCollections.push_back(aB);}
 
   private:
-    G4AlphaInelasticProcess * theAlphaInelastic;
+    G4HadronInelasticProcess * theAlphaInelastic;
     
     std::vector<G4VAlphaBuilder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

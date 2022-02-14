@@ -46,8 +46,8 @@
 #include "G4Positron.hh"
 #include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4AnalysisManager.hh"
 
-#include "PurgMagAnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

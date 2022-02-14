@@ -1383,31 +1383,36 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
 
 G4double G4GenericTrap::GetSurfaceArea()
 {
+  // Set vertices
+  G4ThreeVector v0(fVertices[0].x(),fVertices[0].y(),-fDz);
+  G4ThreeVector v1(fVertices[1].x(),fVertices[1].y(),-fDz);
+  G4ThreeVector v2(fVertices[2].x(),fVertices[2].y(),-fDz);
+  G4ThreeVector v3(fVertices[3].x(),fVertices[3].y(),-fDz);
+  G4ThreeVector v4(fVertices[4].x(),fVertices[4].y(), fDz);
+  G4ThreeVector v5(fVertices[5].x(),fVertices[5].y(), fDz);
+  G4ThreeVector v6(fVertices[6].x(),fVertices[6].y(), fDz);
+  G4ThreeVector v7(fVertices[7].x(),fVertices[7].y(), fDz);
+
+  // Find Surface Area
   if (fSurfaceArea == 0.0)
   {
     if(fIsTwisted)
     {
-      fSurfaceArea = G4VSolid::GetSurfaceArea();
+      fSurfaceArea = GetFaceSurfaceArea(v0,v1,v2,v3)        // -fDz plane
+                   + GetTwistedFaceSurfaceArea(v1,v0,v4,v5) //  Lat plane
+                   + GetTwistedFaceSurfaceArea(v2,v1,v5,v6) //  Lat plane
+                   + GetTwistedFaceSurfaceArea(v3,v2,v6,v7) //  Lat plane
+                   + GetTwistedFaceSurfaceArea(v0,v3,v7,v4) //  Lat plane
+                   + GetFaceSurfaceArea(v7,v6,v5,v4);       // +fDz plane
     }
-     else
+    else
     {
-      // Set vertices
-      G4ThreeVector vertix0(fVertices[0].x(),fVertices[0].y(),-fDz);
-      G4ThreeVector vertix1(fVertices[1].x(),fVertices[1].y(),-fDz);
-      G4ThreeVector vertix2(fVertices[2].x(),fVertices[2].y(),-fDz);
-      G4ThreeVector vertix3(fVertices[3].x(),fVertices[3].y(),-fDz);
-      G4ThreeVector vertix4(fVertices[4].x(),fVertices[4].y(), fDz);
-      G4ThreeVector vertix5(fVertices[5].x(),fVertices[5].y(), fDz);
-      G4ThreeVector vertix6(fVertices[6].x(),fVertices[6].y(), fDz);
-      G4ThreeVector vertix7(fVertices[7].x(),fVertices[7].y(), fDz);
-
-      // Find Surface Area
-      fSurfaceArea = GetFaceSurfaceArea(vertix0,vertix1,vertix2,vertix3)  // -fDz plane
-                   + GetFaceSurfaceArea(vertix1,vertix0,vertix4,vertix5)  //  Lat plane
-                   + GetFaceSurfaceArea(vertix2,vertix1,vertix5,vertix6)  //  Lat plane 
-                   + GetFaceSurfaceArea(vertix3,vertix2,vertix6,vertix7)  //  Lat plane
-                   + GetFaceSurfaceArea(vertix0,vertix3,vertix7,vertix4)  //  Lat plane
-                   + GetFaceSurfaceArea(vertix7,vertix6,vertix5,vertix4); // +fDz plane 
+      fSurfaceArea = GetFaceSurfaceArea(v0,v1,v2,v3)  // -fDz plane
+                   + GetFaceSurfaceArea(v1,v0,v4,v5)  //  Lat plane
+                   + GetFaceSurfaceArea(v2,v1,v5,v6)  //  Lat plane
+                   + GetFaceSurfaceArea(v3,v2,v6,v7)  //  Lat plane
+                   + GetFaceSurfaceArea(v0,v3,v7,v4)  //  Lat plane
+                   + GetFaceSurfaceArea(v7,v6,v5,v4); // +fDz plane
     }
   }
   return fSurfaceArea;
@@ -1426,22 +1431,22 @@ G4double G4GenericTrap::GetCubicVolume()
     else
     {
       // Set vertices
-      G4ThreeVector vertix0(fVertices[0].x(),fVertices[0].y(),-fDz);
-      G4ThreeVector vertix1(fVertices[1].x(),fVertices[1].y(),-fDz);
-      G4ThreeVector vertix2(fVertices[2].x(),fVertices[2].y(),-fDz);
-      G4ThreeVector vertix3(fVertices[3].x(),fVertices[3].y(),-fDz);
-      G4ThreeVector vertix4(fVertices[4].x(),fVertices[4].y(), fDz);
-      G4ThreeVector vertix5(fVertices[5].x(),fVertices[5].y(), fDz);
-      G4ThreeVector vertix6(fVertices[6].x(),fVertices[6].y(), fDz);
-      G4ThreeVector vertix7(fVertices[7].x(),fVertices[7].y(), fDz);
+      G4ThreeVector v0(fVertices[0].x(),fVertices[0].y(),-fDz);
+      G4ThreeVector v1(fVertices[1].x(),fVertices[1].y(),-fDz);
+      G4ThreeVector v2(fVertices[2].x(),fVertices[2].y(),-fDz);
+      G4ThreeVector v3(fVertices[3].x(),fVertices[3].y(),-fDz);
+      G4ThreeVector v4(fVertices[4].x(),fVertices[4].y(), fDz);
+      G4ThreeVector v5(fVertices[5].x(),fVertices[5].y(), fDz);
+      G4ThreeVector v6(fVertices[6].x(),fVertices[6].y(), fDz);
+      G4ThreeVector v7(fVertices[7].x(),fVertices[7].y(), fDz);
 
       // Find Cubic Volume
-      fCubicVolume = GetFaceCubicVolume(vertix0,vertix1,vertix2,vertix3)  // -fDz plane
-                   + GetFaceCubicVolume(vertix1,vertix0,vertix4,vertix5)  //  Lat plane
-                   + GetFaceCubicVolume(vertix2,vertix1,vertix5,vertix6)  //  Lat plane 
-                   + GetFaceCubicVolume(vertix3,vertix2,vertix6,vertix7)  //  Lat plane
-                   + GetFaceCubicVolume(vertix0,vertix3,vertix7,vertix4)  //  Lat plane
-                   + GetFaceCubicVolume(vertix7,vertix6,vertix5,vertix4); // +fDz plane 
+      fCubicVolume = GetFaceCubicVolume(v0,v1,v2,v3)  // -fDz plane
+                   + GetFaceCubicVolume(v1,v0,v4,v5)  //  Lat plane
+                   + GetFaceCubicVolume(v2,v1,v5,v6)  //  Lat plane
+                   + GetFaceCubicVolume(v3,v2,v6,v7)  //  Lat plane
+                   + GetFaceCubicVolume(v0,v3,v7,v4)  //  Lat plane
+                   + GetFaceCubicVolume(v7,v6,v5,v4); // +fDz plane
     }
   }
   return fCubicVolume;
@@ -1450,12 +1455,44 @@ G4double G4GenericTrap::GetCubicVolume()
 // --------------------------------------------------------------------
 
 G4double G4GenericTrap::GetFaceSurfaceArea(const G4ThreeVector& p0,
-                                           const G4ThreeVector& p1, 
+                                           const G4ThreeVector& p1,
                                            const G4ThreeVector& p2,
                                            const G4ThreeVector& p3) const
 {
   // Returns area of the facet 
-  return (((p2-p0).cross(p3-p1)).mag()) / 2.;
+  return 0.5*((p2-p0).cross(p3-p1)).mag();
+}
+
+// --------------------------------------------------------------------
+
+G4double
+G4GenericTrap::GetTwistedFaceSurfaceArea(const G4ThreeVector& p0,
+                                         const G4ThreeVector& p1,
+                                         const G4ThreeVector& p2,
+                                         const G4ThreeVector& p3) const
+{
+  G4int nstep = 100;
+  G4ThreeVector dels1 = (p1 - p0)/nstep;
+  G4ThreeVector dels2 = (p2 - p3)/nstep;
+  G4double area = 0;
+  for (G4int is = 0; is < nstep; ++is)
+  {
+    G4ThreeVector s0 = p0 + dels1*is;
+    G4ThreeVector s1 = s0 + dels1;
+    G4ThreeVector s3 = p3 + dels2*is;
+    G4ThreeVector s2 = s3 + dels2;
+    G4ThreeVector delt1 = (s3 - s0)/nstep;
+    G4ThreeVector delt2 = (s2 - s1)/nstep;
+    for (G4int it = 0; it < nstep; ++it)
+    {
+      G4ThreeVector t0 = s0 + delt1*it;
+      G4ThreeVector t1 = t0 + delt1;
+      G4ThreeVector t3 = s1 + delt2*it;
+      G4ThreeVector t2 = t3 + delt2;
+      area += 0.5*((t2-t0).cross(t3-t1)).mag();
+    }
+  }
+  return area;
 }
 
 // --------------------------------------------------------------------

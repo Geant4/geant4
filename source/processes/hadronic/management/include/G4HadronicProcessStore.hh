@@ -63,6 +63,7 @@
 
 class G4Element;
 class G4HadronicEPTestMessenger;
+class G4HadronicParameters;
 
 class G4HadronicProcessStore
 {
@@ -199,8 +200,8 @@ public:
   void PrintModelHtml(const G4HadronicInteraction * model) const;
 
   void SetVerbose(G4int val);
-
   G4int GetVerbose();
+  // these methods are obsolete and will be removed
 
   G4HadronicProcess* FindProcess(const G4ParticleDefinition*, 
 				 G4HadronicProcessType subType);
@@ -242,13 +243,14 @@ private:
   std::vector<G4VProcess*> extraProcess;
   std::multimap<PD,G4VProcess*> ep_map;
 
+  G4HadronicParameters* param;
+
   // counters and options
   G4int n_proc;
   G4int n_model;
   G4int n_part;
   G4int n_extra;
 
-  G4int  verbose;
   G4bool buildTableStart;
   G4bool buildXSTable;
 
@@ -261,7 +263,6 @@ private:
 
   G4HadronicEPTestMessenger* theEPTestMessenger;
 };
-
 
 #endif
 

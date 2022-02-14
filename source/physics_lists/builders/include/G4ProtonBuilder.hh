@@ -41,7 +41,7 @@
 
 #include "globals.hh"
 
-#include "G4ProtonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
 #include <vector>
@@ -57,11 +57,10 @@ class G4ProtonBuilder
     void RegisterMe(G4VProtonBuilder * aB) {theModelCollections.push_back(aB);}
 
   private:
-    G4ProtonInelasticProcess * theProtonInelastic;
+    G4HadronInelasticProcess * theProtonInelastic;
     
     std::vector<G4VProtonBuilder *> theModelCollections;
 
-    G4bool wasActivated;
 };
 
 #endif

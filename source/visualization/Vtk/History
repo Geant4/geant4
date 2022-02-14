@@ -1,0 +1,27 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/Vtk sub-category
+-----------------------------------------------
+8 November 2021 - Ben Morgan (visVtk-V10-07-03)
+- Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+15 October 2021 John Allison (visVtk-V10-07-02)
+- Implement G4VtkQt::IsUISessionCompatible.
+
+04 October 2021 Stewart Boogert / Laurie Nevay (visVtk-V10-07-01)
+- Operational VTK viewer (VtkNative and VtkQt)

@@ -69,28 +69,27 @@ public:
 
   explicit G4WentzelVIRelModel();
 
-  virtual ~G4WentzelVIRelModel();
+  ~G4WentzelVIRelModel() override;
 
   
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-					      G4double KineticEnergy,
-					      G4double AtomicNumber,
-					      G4double AtomicWeight=0., 
-					      G4double cut = DBL_MAX,
-					      G4double emax= DBL_MAX) override;
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double KineticEnergy,
+				      G4double AtomicNumber,
+				      G4double AtomicWeight=0., 
+				      G4double cut = DBL_MAX,
+				      G4double emax= DBL_MAX) override;
 
-  virtual void DefineMaterial(const G4MaterialCutsCouple* cup);
-
-private:
-
-  void ComputeEffectiveMass();
+  void DefineMaterial(const G4MaterialCutsCouple* cup);
 
   //  hide assignment operator
   G4WentzelVIRelModel & operator=(const  G4WentzelVIRelModel &right) = delete;
   G4WentzelVIRelModel(const  G4WentzelVIRelModel&) = delete;
+
+private:
+
+  void ComputeEffectiveMass();
 
   static std::vector<G4double> effMass;
   G4NistManager* fNistManager;

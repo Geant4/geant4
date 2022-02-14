@@ -27,27 +27,34 @@
 // Author: Ivana Hrivnacova, 10/09/2014  (ivana@ipno.in2p3.fr)
 
 #include "G4RootRFileManager.hh"
+#include "G4RootHnRFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "tools/rroot/file"
-#include <tools/zlib>
+#include "tools/zlib"
 
-#include <iostream>
-#include <cstdio>
+using namespace G4Analysis;
+using namespace tools;
 
 //_____________________________________________________________________________
 G4RootRFileManager::G4RootRFileManager(const G4AnalysisManagerState& state)
- : G4BaseFileManager(state),
-   fRFiles()
+ : G4VRFileManager(state)
 {
+  // Create helpers defined in the base class
+  fH1RFileManager = std::make_shared<G4RootHnRFileManager<histo::h1d>>(this);
+  fH2RFileManager = std::make_shared<G4RootHnRFileManager<histo::h2d>>(this);
+  fH3RFileManager = std::make_shared<G4RootHnRFileManager<histo::h3d>>(this);
+  fP1RFileManager = std::make_shared<G4RootHnRFileManager<histo::p1d>>(this);
+  fP2RFileManager = std::make_shared<G4RootHnRFileManager<histo::p2d>>(this);
 }
 
 //_____________________________________________________________________________
 G4RootRFileManager::~G4RootRFileManager()
-{  
-  for (G4int i=0; i<G4int(fRFiles.size()); ++i) { 
-    delete fRFiles[i];
-  }    
+{
+  for ( auto& rfile : fRFiles ) {
+    delete rfile.second;
+  }
 }
 
 //
@@ -61,56 +68,44 @@ G4bool G4RootRFileManager::OpenRFile(const G4String& fileName,
   // Get full file name
   G4String name = GetFullFileName(fileName, isPerThread);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("open", "read analysis file", name);
-#endif
+  Message(kVL4, "open", "read analysis file", name);
 
   // create new file
-  tools::rroot::file* newFile = new tools::rroot::file(G4cout, name);
+  auto newFile = new tools::rroot::file(G4cout, name);
   newFile->add_unziper('Z',tools::decompress_buffer);
-  
+
   if ( ! newFile->is_open() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " << name;
-    G4Exception("G4RootRFileManager::OpenFile()",
-                "Analysis_WR001", JustWarning, description);
+    Warn("Cannot open file " + name, fkClass, "OpenRFile");
     delete newFile;
     return false;
   }
 
   // add file in a map and delete the previous file if it exists
-  std::map<G4String, tools::rroot::file*>::iterator it
-    = fRFiles.find(name);
-  if ( it != fRFiles.end() ) { 
+  auto it = fRFiles.find(name);
+  if ( it != fRFiles.end() ) {
     delete it->second;
     it->second = newFile;
   }
   else {
     fRFiles[name] = newFile;
-  }    
+  }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()
-      ->Message("open", "read analysis file", name);
-#endif
+  Message(kVL1, "open", "read analysis file", name);
 
   return true;
-}  
-  
+}
+
 //_____________________________________________________________________________
 tools::rroot::file* G4RootRFileManager::GetRFile(const G4String& fileName,
                                                  G4bool isPerThread) const
-{ 
+{
   // Get full file name
   G4String name = GetFullFileName(fileName, isPerThread);
 
-  std::map<G4String, tools::rroot::file*>::const_iterator it
-    = fRFiles.find(name);
+  auto it = fRFiles.find(name);
   if  ( it != fRFiles.end() )
     return it->second;
   else {
     return nullptr;
-  }     
+  }
 }

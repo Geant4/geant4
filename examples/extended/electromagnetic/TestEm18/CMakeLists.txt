@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(TestEm18)
 
 #----------------------------------------------------------------------------
@@ -40,8 +40,9 @@ target_link_libraries(TestEm18 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(TestEm18_SCRIPTS
-    csda.mac electron.mac pixe.mac proton.mac TestEm18.in TestEm18.out vis.mac
-  )
+    csda.mac edep.mac electron.mac ion.mac muon.mac pixe.mac proton.mac
+    TestEm18.in vis.mac plotHisto.C pixe.C
+   )
 
 foreach(_script ${TestEm18_SCRIPTS})
   configure_file(

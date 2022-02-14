@@ -38,8 +38,12 @@
 // Initialization of static data arrays:
 #include "G4LEppData.hh"
 
+#include "G4PhysicsModelCatalog.hh"
+
+
 G4LEpp::G4LEpp():G4HadronElastic("G4LEpp")
 {
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );  
   SetMinEnergy(0.);
   SetMaxEnergy(5.*GeV);
 }
@@ -234,7 +238,7 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     delete newP;
 
     // Recoil particle
-    theParticleChange.AddSecondary(targetParticle);    
+    theParticleChange.AddSecondary(targetParticle, secID);    
     return &theParticleChange;
 }
 

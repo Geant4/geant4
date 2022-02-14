@@ -50,6 +50,22 @@
 #include "G4ParticleHPDataUsed.hh"
 #include "G4Pow.hh"
 #include "zlib.h"
+#include "G4PhysicsModelCatalog.hh"
+
+
+G4ParticleHPElasticFS::G4ParticleHPElasticFS()
+{
+  secID = G4PhysicsModelCatalog::GetModelID( "model_NeutronHPElastic" );
+  
+  hasXsec = false; 
+  theCoefficients = 0;
+  theProbArray = 0;
+    
+  repFlag = 0;
+  tE_of_repFlag3 = 0.0;
+  targetMass = 0.0;
+  frameFlag = 0;
+}
 
 void G4ParticleHPElasticFS::Init(G4double A, G4double Z, G4int M,
                                  G4String& dirName, G4String&,
@@ -367,7 +383,7 @@ G4ParticleHPElasticFS::ApplyYourself(const G4HadProjectile& theTrack)
   theRecoil->SetDefinition(G4IonTable::GetIonTable()->GetIon(static_cast<G4int>(theBaseZ),
                            static_cast<G4int>(theBaseA), 0) );
   theRecoil->SetMomentum(theTarget.GetMomentum());
-  theResult.Get()->AddSecondary(theRecoil);
+  theResult.Get()->AddSecondary(theRecoil, secID);
 
   // Postpone the tracking of the primary neutron
   theResult.Get()->SetStatusChange(suspend);

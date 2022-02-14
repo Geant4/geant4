@@ -74,7 +74,7 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
   param->SetVoxelDimensions( fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ );
 
   //----- Set number of voxels 
-  param->SetNoVoxel( fNVoxelX, fNVoxelY, fNVoxelZ );
+  param->SetNoVoxels( fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ );
 
   //----- Set list of materials
   param->SetMaterials( fMaterials ); 
@@ -109,7 +109,7 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
   // should be placed in the fContainer logical volume
   G4PVParameterised * phantom_phys = 
     new G4PVParameterised("phantom",voxel_logic,fContainer_logic,
-                          kXAxis, fNVoxelX*fNVoxelY*fNVoxelZ, param);
+                          kXAxis, fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ, param);
   // if axis is set as kUndefined instead of kXAxis, GEANT4 will 
   //  do an smart voxel optimisation 
   // (not needed if G4RegularNavigation is used)

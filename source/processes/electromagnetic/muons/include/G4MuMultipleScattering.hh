@@ -69,24 +69,24 @@ public:    // with description
   G4bool IsApplicable (const G4ParticleDefinition& p) override;
 
   // print description in html
-  virtual void ProcessDescription(std::ostream&) const override;
-
-protected:
-
-  // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile) const override;
-
-  // This function initialise models
-  void InitialiseProcess(const G4ParticleDefinition*) override;
-
-private:        // data members
+  void ProcessDescription(std::ostream&) const override;
 
   //  hide assignment operator
   G4MuMultipleScattering & 
     operator=(const  G4MuMultipleScattering &right) = delete;
   G4MuMultipleScattering(const  G4MuMultipleScattering&) = delete;
 
-  G4bool   isInitialized;
+protected:
+
+  // Print out of the class parameters
+  void StreamProcessInfo(std::ostream& outFile) const override;
+
+  // This function initialise models
+  void InitialiseProcess(const G4ParticleDefinition*) override;
+
+private:
+
+  G4bool isInitialized = false;
 
 };
 

@@ -1,7 +1,8 @@
 #
+# Macro file for "Hadr07.cc"
 #
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testhadr/det/setNbOfAbsor  4
 /testhadr/det/setAbsor 1 G4_PLEXIGLASS 5 mm
@@ -23,5 +24,4 @@
 /analysis/h1/setAscii 4
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

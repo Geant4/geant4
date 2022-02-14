@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Defines for Windows DLLs import/export
-//
 
+// Author: G.Cosmo, CERN
+// --------------------------------------------------------------------
 #ifndef TRKGDEFS_HH
-#define TRKGDEFS_HH
+#define TRKGDEFS_HH 1
 
 #include "G4Types.hh"
 

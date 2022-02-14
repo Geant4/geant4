@@ -214,9 +214,7 @@ private:
   G4bool thePrimaryEscape;
   const G4ParticleDefinition * thePrimaryType;
   G4ThreeVector theMomentumTransfer;
-
-
-
+  static G4int theBIC_ID;
 };
 
 #endif

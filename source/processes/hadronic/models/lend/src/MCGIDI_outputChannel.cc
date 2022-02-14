@@ -196,118 +196,156 @@ double MCGIDI_outputChannel_getFinalQ( statusMessageReporting *smr, MCGIDI_outpu
 /*
 ************************************************************
 */
-int MCGIDI_outputChannel_sampleProductsAtE( statusMessageReporting *smr, MCGIDI_outputChannel *outputChannel, MCGIDI_quantitiesLookupModes &modes,
-        MCGIDI_decaySamplingInfo *decaySamplingInfo, MCGIDI_sampledProductsDatas *productDatas, double *masses_ ) {
+int MCGIDI_outputChannel_sampleProductsAtE(statusMessageReporting* smr,
+                                           MCGIDI_outputChannel* outputChannel,
+                                           MCGIDI_quantitiesLookupModes &modes,
+                                           MCGIDI_decaySamplingInfo* decaySamplingInfo,
+                                           MCGIDI_sampledProductsDatas* productDatas,
+                                           double *masses_ )
+{
+  int i1;
+  int multiplicity(0);
+  int secondTwoBody = 0, isDecayChannel = ( outputChannel->reaction == NULL );
+  double e_in = modes.getProjectileEnergy( );
+  MCGIDI_product *product;
+  double phi, p, masses[3];
+  MCGIDI_distribution *distribution;
+  MCGIDI_sampledProductsData productData[2];
 
-    int i1, multiplicity, secondTwoBody = 0, isDecayChannel = ( outputChannel->reaction == NULL );
-    double e_in = modes.getProjectileEnergy( );
-    MCGIDI_product *product;
-    double phi, p, masses[3];
-    MCGIDI_distribution *distribution;
-    MCGIDI_sampledProductsData productData[2];
+  if (isDecayChannel) {
+    masses[0] = masses_[0];              /* More work may be needed here. */
+    masses[1] = masses_[1];
+  } else {
+    masses[0] = MCGIDI_reaction_getProjectileMass_MeV( smr, outputChannel->reaction );
+    masses[1] = MCGIDI_reaction_getTargetMass_MeV( smr, outputChannel->reaction );
+  }
 
-    if( isDecayChannel ) {
-        masses[0] = masses_[0];              /* More work may be needed here. */
-        masses[1] = masses_[1]; }
-    else {
-        masses[0] = MCGIDI_reaction_getProjectileMass_MeV( smr, outputChannel->reaction );
-        masses[1] = MCGIDI_reaction_getTargetMass_MeV( smr, outputChannel->reaction );
-    }
+  // Loop over all possible final state particles reachable from initial state
+  // List of these particles (products) was read in from GIDI
+  // Note: all particles satifying the sampling criteria are included in the 
+  // final state, regardless of charge, energy or baryon number conservation
+ 
+  for (i1 = 0; i1 < outputChannel->numberOfProducts; i1++) {
+    product = &(outputChannel->products[i1]);
+    if (product->decayChannel.genre != MCGIDI_channelGenre_undefined_e ) {
+      if( MCGIDI_outputChannel_sampleProductsAtE(smr, &(product->decayChannel),
+                                                 modes, decaySamplingInfo,
+                                                 productDatas, masses ) < 0 ) return( -1 );
+    } else {
+      distribution = &(product->distribution);
+      if( distribution->type == MCGIDI_distributionType_none_e ) continue;
 
-    for( i1 = 0; i1 < outputChannel->numberOfProducts; i1++ ) {
-        product = &(outputChannel->products[i1]);
-        if( product->decayChannel.genre != MCGIDI_channelGenre_undefined_e ) {
-            if( MCGIDI_outputChannel_sampleProductsAtE( smr, &(product->decayChannel), modes, decaySamplingInfo, productDatas, masses ) < 0 ) return( -1 ); }
-        else {
-            distribution = &(product->distribution);
-            if( distribution->type == MCGIDI_distributionType_none_e ) continue;
-            if( !secondTwoBody ) {
-                if( ( multiplicity = product->multiplicity ) == 0 ) multiplicity = MCGIDI_product_sampleMultiplicity( smr, product, e_in,
-                    decaySamplingInfo->rng( decaySamplingInfo->rngState ) );
-                while( multiplicity > 0 ) { 
+      if (!secondTwoBody) {
+        // Sample multiplicity of final state particle at kinetic energy of projectile
+        // The multiplicity stored in GIDI is a real number whose fractional part is
+        // compared to a random number to decide what integer value is returned   
+        if ((multiplicity = product->multiplicity) == 0) multiplicity =
+                               MCGIDI_product_sampleMultiplicity(smr, product, e_in,
+                                  decaySamplingInfo->rng( decaySamplingInfo->rngState ) );
+        while (multiplicity > 0) { 
 
-                    multiplicity--;
-                    decaySamplingInfo->pop = product->pop;
-                    decaySamplingInfo->mu = 0;
-                    decaySamplingInfo->Ep = 0;
-                    productData[0].isVelocity = decaySamplingInfo->isVelocity;
-                    productData[0].pop = product->pop;
-                    productData[0].delayedNeutronIndex = product->delayedNeutronIndex;
-                    productData[0].delayedNeutronRate = product->delayedNeutronRate;
-                    productData[0].birthTimeSec = 0;
-                    if( product->delayedNeutronRate > 0 ) {
-                        productData[0].birthTimeSec = -G4Log( decaySamplingInfo->rng( decaySamplingInfo->rngState ) ) / product->delayedNeutronRate;
-                    }
+          multiplicity--;
+          decaySamplingInfo->pop = product->pop;
+          decaySamplingInfo->mu = 0;
+          decaySamplingInfo->Ep = 0;
+          productData[0].isVelocity = decaySamplingInfo->isVelocity;
+          productData[0].pop = product->pop;
+          productData[0].delayedNeutronIndex = product->delayedNeutronIndex;
+          productData[0].delayedNeutronRate = product->delayedNeutronRate;
+          productData[0].birthTimeSec = 0;
+          if (product->delayedNeutronRate > 0) {
+            productData[0].birthTimeSec =
+                 -G4Log( decaySamplingInfo->rng( decaySamplingInfo->rngState ) ) / product->delayedNeutronRate;
+          }
 
-                    switch( outputChannel->genre ) {
-                    case MCGIDI_channelGenre_twoBody_e :
-                        secondTwoBody = 1;
-                        MCGIDI_angular_sampleMu( smr, distribution->angular, modes, decaySamplingInfo );
-                        if( smr_isOk( smr ) ) {
-                            phi = 2. * M_PI * decaySamplingInfo->rng( decaySamplingInfo->rngState );
-                            MCGIDI_kinetics_2BodyReaction( smr, distribution->angular, e_in, decaySamplingInfo->mu, phi, productData );
-                            if( !smr_isOk( smr ) ) return( -1 );
-                            productData[1].pop = product[1].pop;
-                            productData[1].delayedNeutronIndex = product[1].delayedNeutronIndex;
-                            productData[1].delayedNeutronRate = product->delayedNeutronRate;
-                            productData[1].birthTimeSec = 0;
-                            MCGIDI_sampledProducts_addProduct( smr, productDatas, productData );
-                            if( !smr_isOk( smr ) ) return( -1 );
-                            MCGIDI_sampledProducts_addProduct( smr, productDatas, &(productData[1]) );
-                            if( !smr_isOk( smr ) ) return( -1 );
-                        }
-                        break;
-                    case MCGIDI_channelGenre_uncorrelated_e :
-                    case MCGIDI_channelGenre_sumOfRemaining_e :
-                        masses[2] = MCGIDI_product_getMass_MeV( smr, product );
-                        switch( distribution->type ) {
-                        case MCGIDI_distributionType_uncorrelated_e :
-                            MCGIDI_uncorrelated_sampleDistribution( smr, distribution, modes, decaySamplingInfo );
-                            break;
-                        case MCGIDI_distributionType_energyAngular_e :
-                            MCGIDI_energyAngular_sampleDistribution( smr, distribution, modes, decaySamplingInfo );
-                            break;
-                        case MCGIDI_distributionType_KalbachMann_e :
-                            MCGIDI_KalbachMann_sampleEp( smr, distribution->KalbachMann, modes, decaySamplingInfo );
-                            break;
-                        case MCGIDI_distributionType_angularEnergy_e :
-                            MCGIDI_angularEnergy_sampleDistribution( smr, distribution->angularEnergy, modes, decaySamplingInfo );
-                            break;
-                        default :
-                            printf( "Unknown spectral data form product name = %s, channel genre = %d\n", product->pop->name, outputChannel->genre );
-                            break;
-                        }
-                        break;
-                    case MCGIDI_channelGenre_undefined_e :
-                        printf( "Channel is undefined\n" );
-                    case MCGIDI_channelGenre_twoBodyDecay_e :
-                        printf( "Channel is twoBodyDecay\n" );
-                    case MCGIDI_channelGenre_uncorrelatedDecay_e :
-                        printf( "Channel is uncorrelatedDecay\n" );
-                    default :
-                        printf( "Unsupported channel genre = %d\n", outputChannel->genre );
-                    }
-                    if( !smr_isOk( smr ) ) return( -1 );
-                    if( !secondTwoBody ) {
-                        if( decaySamplingInfo->frame == xDataTOM_frame_centerOfMass ) {
-                            if( MCGIDI_kinetics_COM2Lab( smr, modes, decaySamplingInfo, masses ) != 0 ) return( -1 );
-                        }
-                        productData[0].kineticEnergy = decaySamplingInfo->Ep;
-                        p = std::sqrt( decaySamplingInfo->Ep * ( decaySamplingInfo->Ep + 2. * product->pop->mass_MeV ) );
-                        if( productData[0].isVelocity ) p *= MCGIDI_speedOfLight_cm_sec / std::sqrt( p * p + product->pop->mass_MeV * product->pop->mass_MeV );
-                        productData[0].pz_vz = p * decaySamplingInfo->mu;
-                        p = std::sqrt( 1. - decaySamplingInfo->mu * decaySamplingInfo->mu ) * p;
-                        phi = 2. * M_PI * decaySamplingInfo->rng( decaySamplingInfo->rngState );
-                        productData[0].px_vx = p * std::sin( phi );
-                        productData[0].py_vy = p * std::cos( phi );
-                        MCGIDI_sampledProducts_addProduct( smr, productDatas, productData );
-                        if( !smr_isOk( smr ) ) return( -1 );
-                    }
-                } // Loop checking, 11.06.2015, T. Koi
+          switch( outputChannel->genre ) {
+
+          case MCGIDI_channelGenre_twoBody_e :
+            secondTwoBody = 1;
+            MCGIDI_angular_sampleMu( smr, distribution->angular, modes, decaySamplingInfo );
+            if (smr_isOk(smr) ) {
+              phi = 2. * M_PI * decaySamplingInfo->rng( decaySamplingInfo->rngState );
+              MCGIDI_kinetics_2BodyReaction( smr, distribution->angular, e_in, decaySamplingInfo->mu, phi, productData );
+              if (!smr_isOk(smr) ) return( -1 );
+              productData[1].pop = product[1].pop;
+              productData[1].delayedNeutronIndex = product[1].delayedNeutronIndex;
+              productData[1].delayedNeutronRate = product->delayedNeutronRate;
+              productData[1].birthTimeSec = 0;
+              MCGIDI_sampledProducts_addProduct( smr, productDatas, productData );
+              if( !smr_isOk( smr ) ) return( -1 );
+              MCGIDI_sampledProducts_addProduct( smr, productDatas, &(productData[1]) );
+              if( !smr_isOk( smr ) ) return( -1 );
             }
-        }
-    }
-    return( productDatas->numberOfProducts );
+            break;
+
+          case MCGIDI_channelGenre_uncorrelated_e :
+
+          case MCGIDI_channelGenre_sumOfRemaining_e :
+            // Get mass of final state particle, then get its distribution
+            // masses[0] and masses[1] are incident and target masses
+            masses[2] = MCGIDI_product_getMass_MeV( smr, product );
+            switch( distribution->type ) {
+            case MCGIDI_distributionType_uncorrelated_e :
+              MCGIDI_uncorrelated_sampleDistribution( smr, distribution, modes, decaySamplingInfo );
+              break;
+            case MCGIDI_distributionType_energyAngular_e :
+              MCGIDI_energyAngular_sampleDistribution( smr, distribution, modes, decaySamplingInfo );
+              break;
+            case MCGIDI_distributionType_KalbachMann_e :
+              MCGIDI_KalbachMann_sampleEp( smr, distribution->KalbachMann, modes, decaySamplingInfo );
+              break;
+            case MCGIDI_distributionType_angularEnergy_e :
+              MCGIDI_angularEnergy_sampleDistribution( smr, distribution->angularEnergy, modes, decaySamplingInfo );
+              break;
+            default :
+              printf( "Unknown spectral data form product name = %s, channel genre = %d\n", product->pop->name, outputChannel->genre );
+              break;
+            }
+            break;
+
+          case MCGIDI_channelGenre_undefined_e :
+            printf( "Channel is undefined\n" );
+            break;
+
+          case MCGIDI_channelGenre_twoBodyDecay_e :
+            printf( "Channel is twoBodyDecay\n" );
+            break;
+
+          case MCGIDI_channelGenre_uncorrelatedDecay_e :
+            printf( "Channel is uncorrelatedDecay\n" );
+            break;
+
+          default :
+            printf( "Unsupported channel genre = %d\n", outputChannel->genre );
+            break;
+          }
+
+          if (!smr_isOk(smr) ) return( -1 );
+          if (!secondTwoBody) {
+            if (decaySamplingInfo->frame == xDataTOM_frame_centerOfMass) {
+              if (MCGIDI_kinetics_COM2Lab( smr, modes, decaySamplingInfo, masses) != 0 ) return( -1 );
+            }
+
+            // Assign kinematics to final state product
+            productData[0].kineticEnergy = decaySamplingInfo->Ep;
+            p = std::sqrt( decaySamplingInfo->Ep * ( decaySamplingInfo->Ep + 2. * product->pop->mass_MeV ) );
+            if (productData[0].isVelocity) p *= MCGIDI_speedOfLight_cm_sec / std::sqrt( p * p + product->pop->mass_MeV * product->pop->mass_MeV );
+            productData[0].pz_vz = p * decaySamplingInfo->mu;
+            p = std::sqrt( 1. - decaySamplingInfo->mu * decaySamplingInfo->mu ) * p;
+            phi = 2. * M_PI * decaySamplingInfo->rng( decaySamplingInfo->rngState );
+            productData[0].px_vx = p * std::sin( phi );
+            productData[0].py_vy = p * std::cos( phi );
+            MCGIDI_sampledProducts_addProduct( smr, productDatas, productData );
+            if (!smr_isOk(smr) ) return( -1 );
+          }
+        } // while multiplicity
+
+      }  // if !secondTwoBody
+    }  // if decay channel genre
+
+  }  // loop over possible final state products
+  return( productDatas->numberOfProducts );
+
 }
 
 #if defined __cplusplus

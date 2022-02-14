@@ -23,17 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TauLeptonicDecayChannel class implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//      History: first implementation, based on object model of
-//      30 May  1997 H.Kurashige
-//
-//      Fix bug in calcuration of electron energy in DecayIt 28 Feb. 01 H.Kurashige 
-// ------------------------------------------------------------
+// Author: H.Kurashige, 30 May 1997 
+// --------------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicalConstants.hh"
@@ -47,47 +40,59 @@
 
 
 G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel()
-  :G4VDecayChannel()
+  : G4VDecayChannel()
 {
 }
 
-
-G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel(
-						     const G4String& theParentName, 
-						     G4double        theBR,
-						     const G4String& theLeptonName)
-                   :G4VDecayChannel("Tau Leptonic Decay",1)
+// --------------------------------------------------------------------
+G4TauLeptonicDecayChannel::
+G4TauLeptonicDecayChannel(const G4String& theParentName, 
+                                G4double  theBR,
+                          const G4String& theLeptonName)
+  : G4VDecayChannel("Tau Leptonic Decay", 1)
 {
   // set names for daughter particles
-  if (theParentName == "tau+") {
+  if (theParentName == "tau+")
+  {
     SetBR(theBR);
     SetParent("tau+");
     SetNumberOfDaughters(3);
-    if ((theLeptonName=="e-"||theLeptonName=="e+")){
+    if ((theLeptonName=="e-"||theLeptonName=="e+"))
+    {
       SetDaughter(0, "e+");
       SetDaughter(1, "nu_e");
       SetDaughter(2, "anti_nu_tau");
-    } else {
+    }
+    else
+    {
       SetDaughter(0, "mu+");
       SetDaughter(1, "nu_mu");
       SetDaughter(2, "anti_nu_tau");
     } 
-  } else if (theParentName == "tau-") {
+  }
+  else if (theParentName == "tau-")
+  {
     SetBR(theBR);
     SetParent("tau-");
     SetNumberOfDaughters(3);
-    if ((theLeptonName=="e-"||theLeptonName=="e+")){
+    if ((theLeptonName=="e-"||theLeptonName=="e+"))
+    {
       SetDaughter(0, "e-");
       SetDaughter(1, "anti_nu_e");
       SetDaughter(2, "nu_tau");
-    } else {
+    }
+    else
+    {
       SetDaughter(0, "mu-");
       SetDaughter(1, "anti_nu_mu");
       SetDaughter(2, "nu_tau");
     } 
-  } else {
+  }
+  else
+  {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>0)
+    {
       G4cout << "G4TauLeptonicDecayChannel:: constructor :";
       G4cout << " parent particle is not tau but ";
       G4cout << theParentName << G4endl;
@@ -96,18 +101,24 @@ G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel(
   }
 }
 
+// --------------------------------------------------------------------
 G4TauLeptonicDecayChannel::~G4TauLeptonicDecayChannel()
 {
 }
 
-G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel &right):
-  G4VDecayChannel(right)
+// --------------------------------------------------------------------
+G4TauLeptonicDecayChannel::
+G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel& right)
+  : G4VDecayChannel(right)
 {
 }
 
-G4TauLeptonicDecayChannel & G4TauLeptonicDecayChannel::operator=(const G4TauLeptonicDecayChannel & right)
+// --------------------------------------------------------------------
+G4TauLeptonicDecayChannel&
+G4TauLeptonicDecayChannel::operator=(const G4TauLeptonicDecayChannel& right)
 {
-  if (this != &right) { 
+  if (this != &right)
+  { 
     kinematics_name = right.kinematics_name;
     verboseLevel = right.verboseLevel;
     rbranch = right.rbranch;
@@ -120,25 +131,29 @@ G4TauLeptonicDecayChannel & G4TauLeptonicDecayChannel::operator=(const G4TauLept
 
     // recreate array
     numberOfDaughters = right.numberOfDaughters;
-    if ( numberOfDaughters >0 ) {
+    if ( numberOfDaughters >0 )
+    {
       if (daughters_name !=0) ClearDaughtersName();
       daughters_name = new G4String*[numberOfDaughters];
-      //copy daughters name
-      for (G4int index=0; index < numberOfDaughters; index++) {
-          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      // copy daughters name
+      for (G4int index=0; index<numberOfDaughters; ++index)
+      {
+        daughters_name[index] = new G4String(*right.daughters_name[index]);
       }
     }
   }
   return *this;
 }
 
-G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double) 
+// --------------------------------------------------------------------
+G4DecayProducts* G4TauLeptonicDecayChannel::DecayIt(G4double) 
 {
   // this version neglects muon polarization 
   //              assumes the pure V-A coupling
   //              gives incorrect energy spectrum for neutrinos
+
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) G4cout << "G4TauLeptonicDecayChannel::DecayIt ";
+  if (GetVerboseLevel()>1) G4cout << "G4TauLeptonicDecayChannel::DecayIt()";
 #endif
 
   CheckAndFillParent();
@@ -147,29 +162,33 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
   // parent mass
   G4double parentmass = G4MT_parent->GetPDGMass();
 
-  //daughters'mass
+  // daughters'mass
   const G4int N_DAUGHTER=3;
   G4double daughtermass[N_DAUGHTER]; 
-  for (G4int index=0; index<N_DAUGHTER; index++){
+  for (G4int index=0; index<N_DAUGHTER; ++index)
+  {
     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
   }
 
-   //create parent G4DynamicParticle at rest
+  // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
-  //create G4Decayproducts
-  G4DecayProducts *products = new G4DecayProducts(*parentparticle);
+  G4DynamicParticle* parentparticle
+    = new G4DynamicParticle(G4MT_parent, dummy, 0.0);
+  // create G4Decayproducts
+  G4DecayProducts* products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   // calculate daughter momentum
   G4double daughtermomentum[N_DAUGHTER];
 
-  // calcurate lepton momentum
-  G4double pmax = (parentmass*parentmass-daughtermass[0]*daughtermass[0])/2./parentmass;
+  // calculate lepton momentum
+  G4double pmax = (parentmass*parentmass
+                 - daughtermass[0]*daughtermass[0])/2./parentmass;
   G4double p, e;
   G4double r;
-  const size_t MAX_LOOP=10000;
-  for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
+  const std::size_t MAX_LOOP=10000;
+  for (std::size_t loop_counter=0; loop_counter<MAX_LOOP; ++loop_counter)
+  {
     // determine momentum/energy
     r = G4UniformRand();
     p = pmax*G4UniformRand();
@@ -177,24 +196,25 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
     if (r < spectrum(p,e,parentmass,daughtermass[0]) ) break;
   } 
 
-  //create daughter G4DynamicParticle 
+  // create daughter G4DynamicParticle 
   // daughter 0 (lepton)
   daughtermomentum[0] = p;
   G4double costheta, sintheta, phi, sinphi, cosphi; 
   costheta = 2.*G4UniformRand()-1.0;
   sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = twopi*G4UniformRand()*rad;
+  phi = twopi*G4UniformRand()*rad;
   sinphi = std::sin(phi);
   cosphi = std::cos(phi);
   G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4DynamicParticle * daughterparticle 
-         = new G4DynamicParticle( G4MT_daughters[0], direction0*daughtermomentum[0]);
+    = new G4DynamicParticle(G4MT_daughters[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
 
   // daughter 1 ,2 (nutrinos)
   // create neutrinos in the C.M frame of two neutrinos
   G4double energy2 = parentmass-e; 
-  G4double vmass   = std::sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
+  G4double vmass = std::sqrt((energy2-daughtermomentum[0])
+                            *(energy2+daughtermomentum[0]));
   G4double beta = -1.0*daughtermomentum[0]/energy2;
   G4double costhetan = 2.*G4UniformRand()-1.0;
   G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
@@ -204,9 +224,9 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
 
   G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
   G4DynamicParticle * daughterparticle1 
-         = new G4DynamicParticle( G4MT_daughters[1], direction1*(vmass/2.));
+       = new G4DynamicParticle( G4MT_daughters[1], direction1*(vmass/2.));
   G4DynamicParticle * daughterparticle2
-         = new G4DynamicParticle( G4MT_daughters[2], direction1*(-1.0*vmass/2.));
+       = new G4DynamicParticle( G4MT_daughters[2], direction1*(-1.0*vmass/2.));
 
   // boost to the muon rest frame
   G4LorentzVector p4;
@@ -221,30 +241,25 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
   daughtermomentum[1] = daughterparticle1->GetTotalMomentum();
   daughtermomentum[2] = daughterparticle2->GetTotalMomentum();
 
-
- // output message
+  // output message
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) {
+  if (GetVerboseLevel()>1)
+  {
     G4cout << "G4TauLeptonicDecayChannel::DecayIt ";
-    G4cout << "  create decay products in rest frame " <<G4endl;
+    G4cout << "  create decay products in rest frame " << G4endl;
     products->DumpInfo();
   }
 #endif
   return products;
 }
 
-
-
-
+// --------------------------------------------------------------------
 G4double G4TauLeptonicDecayChannel::spectrum(G4double p,
-					     G4double e,
-					     G4double mtau,
-					     G4double ml)
+                                             G4double e,
+                                             G4double mtau,
+                                             G4double ml)
 {
   G4double f1;
   f1 = 3.0*e*(mtau*mtau+ml*ml)-4.0*mtau*e*e-2.0*mtau*ml*ml;
   return p*(f1)/(mtau*mtau*mtau*mtau)/(0.6);
 }
-
-
-

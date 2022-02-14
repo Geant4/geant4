@@ -1,18 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-<<<<<<< HEAD
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
-=======
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -29,6 +28,9 @@
 /testhadr/det/setRadius 30 cm
 /run/reinitializeGeometry
 #
+/process/em/verbose 0
+/process/had/verbose 1
+#
 /run/initialize
 
  The Absorber is 30 cm  of Li7
@@ -40,59 +42,11 @@
          --->  Isotope:   Li7   Z =  3   N =   7   A =   7.02 g/mole   abundance: 100.000 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
-<<<<<<< HEAD
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-=======
-/cvmfs/geant4.cern.ch/share/data/G4NDL4.6
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic/CrossSection/6_nat_Carbon
-
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-### ===  Auger cascade flag: 1
-### ===  Ignore cuts flag:   0
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-#
-/process/list
-     Transportation,         hadElastic,   neutronInelastic,           nCapture
-           nFission,    protonInelastic,       pi+Inelastic,       pi-Inelastic
-     kaon+Inelastic,     kaon-Inelastic,    kaon0LInelastic,    kaon0SInelastic
-    lambdaInelastic,anti-lambdaInelastic,    sigma-Inelastic,anti_sigma-Inelastic
-    sigma+Inelastic,anti_sigma+Inelastic,       xi-Inelastic,  anti_xi-Inelastic
-       xi0Inelastic,  anti_xi0Inelastic,    omega-Inelastic,anti_omega-Inelastic
-anti_protonInelastic,anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic
-<<<<<<< HEAD
-  anti_He3Inelastic,anti_alphaInelastic,         dInelastic,         tInelastic
-       He3Inelastic,     alphaInelastic,       ionInelastic,      photonNuclear
-                msc,              hIoni,            ionIoni,    nuclearStopping
-              eIoni,              eBrem,            annihil,               phot
-              compt,               conv,             muIoni,            muBrems
-         muPairProd,              Decay,   RadioactiveDecay
-=======
-  anti_He3Inelastic,anti_alphaInelastic,         ionElastic,         dInelastic
-         tInelastic,       He3Inelastic,     alphaInelastic,       ionInelastic
-hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest,      photonNuclear
-                msc,              hIoni,            ionIoni,    nuclearStopping
-              eIoni,              eBrem,            annihil,               phot
-              compt,               conv,             muIoni,            muBrems
-         muPairProd,              Decay,RadioactiveDecayBase
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 /gun/particle neutron
 /gun/energy 14.1 MeV
 #
 /run/printProgress 1000
-#
 /run/beamOn 10000
 <<<<<<< HEAD
 
@@ -345,19 +299,17 @@ Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
 Enable correlated gamma emission                  0
 Max 2J for sampling of angular correlations       10
-Atomic de-excitation enabled                      1
-Auger electron emission enabled                   1
-Auger cascade enabled                             1
+Atomic de-excitation enabled                      0
+Auger electron emission enabled                   0
 Check EM cuts disabled for atomic de-excitation   0
 Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        1e+27  ns
 ======================================================================
 NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
 NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
 NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic/CrossSection/6_nat_Carbon
 NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -366,87 +318,101 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
                            Hadronic Processes for GenericIon
 
   Process: ionElastic
-        Model:          NNDiffuseElastic: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
+        Model:          NNDiffuseElastic: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
-  Process: RadioactiveDecayBase
+  Process: Radioactivation
 
 ---------------------------------------------------
                            Hadronic Processes for He3
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100.1 MeV/n
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_He3Inelastic
-        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_alpha
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100.1 MeV/n
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_alphaInelastic
-        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_deuteron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100.1 MeV/n
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
-        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: anti_lambdaInelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 0 eV  ---> 25 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100.1 MeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_neutronInelastic
-        Model:                      FTFP: 0 meV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -454,115 +420,95 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
                            Hadronic Processes for anti_proton
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100.1 MeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_protonInelastic
-        Model:                      FTFP: 0 meV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_triton
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100.1 MeV/n
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_tritonInelastic
-        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for deuteron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 meV ---> 10 GeV
-     Cr_sctns:            PhotoNuclearXS: 0 meV ---> 100 TeV
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 10 GeV
+     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100 TeV
-<<<<<<< HEAD
-     Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
-
-  Process: kaon+Inelastic
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 4 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 5 GeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 2.88022e+295 J  
-     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 meV ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
-=======
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100 TeV
-<<<<<<< HEAD
-     Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
-
-  Process: kaon-Inelastic
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 4 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 5 GeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 2.88022e+295 J  
-     Cr_sctns: ChipsKaonMinusInelasticXS: 0 meV ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
-=======
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
 
 ---------------------------------------------------
                            Hadronic Processes for lambda
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: lambdaInelastic
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for neutron
 
   Process: hadElastic
         Model:             hElasticCHIPS: 19.5 MeV ---> 100 TeV
-        Model:          NeutronHPElastic: 0 meV ---> 20 MeV
-     Cr_sctns:        NeutronHPElasticXS: 0 meV ---> 20 MeV
-     Cr_sctns:        G4NeutronElasticXS: 0 meV ---> 100 TeV
+        Model:          NeutronHPElastic: 0 eV  ---> 20 MeV
+     Cr_sctns:        NeutronHPElasticXS: 0 eV  ---> 20 MeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
 
   Process: neutronInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
@@ -576,94 +522,47 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
 =======
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            Binary Cascade: 19.9 MeV ---> 6 GeV
-        Model:        NeutronHPInelastic: 0 meV ---> 20 MeV
-     Cr_sctns:      NeutronHPInelasticXS: 0 meV ---> 20 MeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+        Model:            Binary Cascade: 0 eV  ---> 6 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
   Process: nCapture
-        Model:          NeutronHPCapture: 0 meV ---> 20 MeV
-        Model:               nRadCapture: 19.9 MeV ---> 100 TeV
-     Cr_sctns:        NeutronHPCaptureXS: 0 meV ---> 20 MeV
-     Cr_sctns:        G4NeutronCaptureXS: 0 meV ---> 100 TeV
-
-  Process: nFission
-        Model:          NeutronHPFission: 0 meV ---> 20 MeV
-        Model:                G4LFission: 19.9 MeV ---> 100 TeV
-     Cr_sctns:        NeutronHPFissionXS: 0 meV ---> 20 MeV
-     Cr_sctns:          GheishaFissionXS: 0 meV ---> 100 TeV
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
 
   Process: hadElastic
-<<<<<<< HEAD
-        Model:              hElasticLHEP: 0 meV ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
-
-  Process: pi+Inelastic
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 4 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 5 GeV
-     Cr_sctns:      G4CrossSectionPairGG: 0 meV ---> 100 TeV
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-     Cr_sctns:      G4CrossSectionPairGG: 0 meV ---> 100 TeV
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-     Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
-=======
-        Model:           hElasticGlauber: 0 meV ---> 100 TeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-<<<<<<< HEAD
-        Model:              hElasticLHEP: 0 meV ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
-
-  Process: pi-Inelastic
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 4 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 5 GeV
-     Cr_sctns:      G4CrossSectionPairGG: 0 meV ---> 100 TeV
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-     Cr_sctns:      G4CrossSectionPairGG: 0 meV ---> 100 TeV
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-     Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
-=======
-        Model:           hElasticGlauber: 0 meV ---> 100 TeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
 
 ---------------------------------------------------
                            Hadronic Processes for proton
 
   Process: hadElastic
-        Model:             hElasticCHIPS: 0 meV ---> 100 TeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: protonInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
@@ -675,21 +574,35 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
 =======
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            Binary Cascade: 0 meV ---> 6 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+        Model:            Binary Cascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
 
 ---------------------------------------------------
                            Hadronic Processes for triton
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ================================================================
 <<<<<<< HEAD
@@ -711,32 +624,31 @@ Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1442.7
+Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
-Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
-Upload data before 1st event for                Z < 9
 =======================================================================
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 meV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Li7
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 0 fm 
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 0 meV
+ Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 
@@ -757,95 +669,48 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-<<<<<<< HEAD
-  User=14.5s Real=14.54s Sys=0s
-=======
-  User=7.860000s Real=7.911688s Sys=0.010000s
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  User=3.560000s Real=3.763922s Sys=0.000000s
 
  The run is 10000 neutron of 14.1 MeV through 30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-<<<<<<< HEAD
-     RadioactiveDecay= 198567        Transportation=  72441               annihil=    193
-                compt= 401362                  conv=    194            dInelastic=      2
-                eIoni= 410987                 hIoni=    450            hadElastic= 182268
-              ionIoni= 198953                   msc=    229              nCapture=     32
-     neutronInelastic=  16423                  phot=  20770 
+                Decay=   8129             NoProcess= 181440       Radioactivation=     66
+                 Rayl=   2204        Transportation=  23574                 compt=  38261
+                eIoni=  42538                 hIoni=  35570            hadElastic= 173332
+              ionIoni= 193399                   msc=      2              nCapture=     31
+     neutronInelastic=  16251                  phot=    844            tInelastic=     14
 
- List of generated particles:
-  Be8[3030.000]:      32  Emean =  7.8633 keV	( 1.0903 keV --> 12.126 keV)
-            He6:     131  Emean =   2.259 MeV	( 19.039 keV --> 4.8891 MeV)
-            Li6:     719  Emean =   1.633 MeV	( 24.828 eV  --> 7.5553 MeV)
-            Li7:  197653  Emean =  325.69 keV	( 1.6125 meV --> 6.217 MeV)
-            Li8:      32  Emean =  56.044 keV	( 181.8 eV  --> 1.7602 MeV)
-          alpha:     386  Emean =  1.2535 MeV	( 56.858 keV --> 4.3372 MeV)
-      anti_nu_e:     163  Emean =  2.7631 MeV	( 148.91 keV --> 11.383 MeV)
-       deuteron:     452  Emean =  4.6921 MeV	( 113.11 keV --> 25.647 MeV)
-             e+:     194  Emean =  1.4829 MeV	( 98.693 keV --> 3.6352 MeV)
-             e-:  410941  Emean =  87.509 keV	( 100.02 eV  --> 11.558 MeV)
-          gamma:   46130  Emean =  1.2137 MeV	( 1.0002 keV --> 5.8831 MeV)
-        neutron:   17201  Emean =  3.3601 MeV	( 1.6234 keV --> 13.628 MeV)
 
- Mean energy deposit per event = 10.451 MeV  rms = 3.4424 MeV
- Mean energy flow per event    = 3.0899 MeV  rms = 3.2074 MeV
+ Mean energy deposit per event = 11.045 MeV  rms = 2.6613 MeV
+ Mean energy leakage per event = 1.079 MeV  rms = 2.9251 MeV
 
- List of particles leaving the absorber :
-      anti_nu_e:     163  Emean =  2.7631 MeV	( 148.91 keV --> 11.383 MeV) 	Eflow/event = 45.039 keV
-             e+:       1  Emean =  160.33 keV	( 160.33 keV --> 160.33 keV) 	Eflow/event = 16.033 eV 
-             e-:     138  Emean =  1.2868 MeV	( 16.234 keV --> 4.4787 MeV) 	Eflow/event = 17.757 keV
-          gamma:   25166  Emean =  793.25 keV	( 6.1286 keV --> 5.8831 MeV) 	Eflow/event = 1.9963 MeV
-        neutron:   10746  Emean =  959.26 keV	( 4.8044 meV --> 14.1 MeV) 	Eflow/event = 1.0308 MeV
+ total energy: Edep + Eleak = 12.124 MeV
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 24678972, 1533041965
-=======
- RadioactiveDecayBase= 198889        Transportation=  72623               annihil=    180
-                compt= 402383                  conv=    181            dInelastic=      2
-                eIoni= 411900                 hIoni=    438            hadElastic= 182537
-              ionIoni= 199215                   msc=    197              nCapture=     31
-     neutronInelastic=  16434                  phot=  20705 
-
- List of generated particles:
-            Be7:       1  Emean =  3.1628 MeV	( 3.1628 MeV --> 3.1628 MeV)
-  Be8[3030.000]:      31  Emean =  6.9133 keV	( 1.1031 keV --> 11.878 keV)
-            He6:     147  Emean =  2.3407 MeV	( 8.811 keV --> 4.8593 MeV)
-            Li6:     727  Emean =  1.6045 MeV	( 96.559 eV  --> 8.9438 MeV)
-            Li7:  197952  Emean =  326.21 keV	( 1.5156 meV --> 6.2078 MeV)
-            Li8:      31  Emean =  830.43 eV 	( 9.7619 eV  --> 13.223 keV)
-          alpha:     357  Emean =  1.2397 MeV	( 51.358 keV --> 7.7977 MeV)
-      anti_nu_e:     178  Emean =  2.8247 MeV	( 423.11 keV --> 10.484 MeV)
-       deuteron:     440  Emean =  4.5067 MeV	( 5.9377 keV --> 23.407 MeV)
-             e+:     181  Emean =  1.4698 MeV	( 70.832 keV --> 3.8761 MeV)
-             e-:  411844  Emean =  87.003 keV	( 59.468 eV  --> 9.7671 MeV)
-          gamma:   46193  Emean =  1.2076 MeV	( 1.0001 keV --> 5.882 MeV)
-        neutron:   17163  Emean =  3.3867 MeV	( 471.27 eV  --> 13.638 MeV)
-           nu_e:       1  Emean =  861.78 keV	( 861.78 keV --> 861.78 keV)
-
- Mean energy deposit per event = 10.445 MeV  rms = 3.4457 MeV
- Mean energy flow per event    = 3.103 MeV  rms = 3.2432 MeV
+ List of particles at creation (with meanLife != 0):
+            Be8:       4  Emean =  1.2592 MeV	( 725.16 keV --> 1.7774 MeV)	mean life = 0.00011803 ps 
+            Li6:      50  Emean =  1.9227 MeV	( 177.57 keV --> 3.8158 MeV)	stable
+            Li7:  181390  Emean =  301.65 keV	( 0.42733 meV --> 6.2252 MeV)	stable
+            Li8:      31  Emean =  3.9215 keV	( 146.5 eV  --> 84.061 keV)	mean life = 1.2117 s  
+          alpha:    8233  Emean =  2.7511 MeV	( 6.8668 keV --> 8.762 MeV)	stable
+      anti_nu_e:      31  Emean =  6.4886 MeV	( 1.8741 MeV --> 11.274 MeV)	stable
+             e-:   38046  Emean =  31.005 keV	( 100.01 eV  --> 11.092 MeV)	stable
+          gamma:    2552  Emean =  497.04 keV	( 458.11 keV --> 2.5877 MeV)	stable
+        neutron:   16329  Emean =  3.5722 MeV	( 2.3421 keV --> 14.095 MeV)	mean life = 14.67 min
+         triton:    8143  Emean =  3.9135 MeV	( 31.173 keV --> 10.253 MeV)	mean life = 12.32 y  
 
  List of particles emerging from the absorber :
-      anti_nu_e:     178  Emean =  2.8247 MeV	( 423.11 keV --> 10.484 MeV) 	Eflow/event = 50.279 keV
-             e+:       1  Emean =  1.3136 MeV	( 1.3136 MeV --> 1.3136 MeV) 	Eflow/event = 131.36 eV 
-             e-:     121  Emean =  1.2316 MeV	( 4.108 keV --> 5.0447 MeV) 	Eflow/event = 14.903 keV
-          gamma:   25307  Emean =  786.93 keV	( 2.0953 keV --> 5.882 MeV) 	Eflow/event = 1.9915 MeV
-        neutron:   10698  Emean =  977.91 keV	( 2.8605 meV --> 14.1 MeV) 	Eflow/event = 1.0462 MeV
-           nu_e:       1  Emean =  861.78 keV	( 861.78 keV --> 861.78 keV) 	Eflow/event = 86.178 eV 
+      anti_nu_e:      31  Emean =  6.4886 MeV	( 1.8741 MeV --> 11.274 MeV) 	Eleak/event = 20.115 keV
+             e-:       1  Emean =  62.014 keV	( 62.014 keV --> 62.014 keV) 	Eleak/event = 6.2014 eV 
+          gamma:    1708  Emean =  169.54 keV	( 12.905 keV --> 2.1516 MeV) 	Eleak/event = 28.958 keV
+        neutron:   10047  Emean =  1.0251 MeV	( 19.206 meV --> 14.1 MeV) 	Eleak/event = 1.0299 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1745136536, 1939040133
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+ Current couple of seeds = 1638378845, 1637781720
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-<<<<<<< HEAD
-Dynamic pools deleted: 11 / Total memory freed: 0.089 MB
-=======
-Dynamic pools deleted: 11 / Total memory freed: 0.069 MB
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+Dynamic pools deleted: 11 / Total memory freed: 0.066 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

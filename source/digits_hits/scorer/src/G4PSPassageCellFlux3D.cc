@@ -41,38 +41,42 @@
 // Created: 2007-08-14  Tsukasa ASO
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSPassageCellFlux3D::G4PSPassageCellFlux3D(G4String name,
-					     G4int ni, G4int nj, G4int nk,
-					     G4int di, G4int dj, G4int dk)
-    :G4PSPassageCellFlux(name),
-     fDepthi(di),fDepthj(dj),fDepthk(dk)
+G4PSPassageCellFlux3D::G4PSPassageCellFlux3D(G4String name, G4int ni, G4int nj,
+                                             G4int nk, G4int di, G4int dj,
+                                             G4int dk)
+  : G4PSPassageCellFlux(name)
+  , fDepthi(di)
+  , fDepthj(dj)
+  , fDepthk(dk)
 {
-  fNi=ni;
-  fNj=nj;
-  fNk=nk;
+  fNi = ni;
+  fNj = nj;
+  fNk = nk;
 }
 
-G4PSPassageCellFlux3D::G4PSPassageCellFlux3D(G4String name,const G4String& unit,
-					     G4int ni, G4int nj, G4int nk,
-					     G4int di, G4int dj, G4int dk)
-    :G4PSPassageCellFlux(name),
-     fDepthi(di),fDepthj(dj),fDepthk(dk)
+G4PSPassageCellFlux3D::G4PSPassageCellFlux3D(G4String name,
+                                             const G4String& unit, G4int ni,
+                                             G4int nj, G4int nk, G4int di,
+                                             G4int dj, G4int dk)
+  : G4PSPassageCellFlux(name)
+  , fDepthi(di)
+  , fDepthj(dj)
+  , fDepthk(dk)
 {
-  fNi=ni;
-  fNj=nj;
-  fNk=nk;
+  fNi = ni;
+  fNj = nj;
+  fNk = nk;
   SetUnit(unit);
 }
 
-G4PSPassageCellFlux3D::~G4PSPassageCellFlux3D()
-{;}
+G4PSPassageCellFlux3D::~G4PSPassageCellFlux3D() { ; }
 
 G4int G4PSPassageCellFlux3D::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
-  G4int i = touchable->GetReplicaNumber(fDepthi);
-  G4int j = touchable->GetReplicaNumber(fDepthj);
-  G4int k = touchable->GetReplicaNumber(fDepthk);
-  
-  return i*fNj*fNk+j*fNk+k;
+  G4int i                       = touchable->GetReplicaNumber(fDepthi);
+  G4int j                       = touchable->GetReplicaNumber(fDepthj);
+  G4int k                       = touchable->GetReplicaNumber(fDepthk);
+
+  return i * fNj * fNk + j * fNk + k;
 }

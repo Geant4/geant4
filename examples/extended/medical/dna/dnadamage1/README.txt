@@ -6,8 +6,10 @@
                           ----------------------
 
 
-This is a new example and it may contain bugs. If you find a bug, please contact IRSN:
- ngoc-hoang.tran@irsn.fr or carmen.villagrasa@irsn.fr
+This is a new example and it may contain bugs.
+It was developed by Hoang Tran.
+If you find a bug, please contact IRSN:
+ yann.perrot@irsn.fr or carmen.villagrasa@irsn.fr
 
 ---->0. INTRODUCTION.                                                    
                                                                        

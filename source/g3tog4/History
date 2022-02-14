@@ -2,6 +2,28 @@
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V10-07-04 15-November-2021 I.Hrivnacova
+- Fixed Coverity: uninitialized variable in G3EleTable.cc
+
+g3tog4-V10-07-03 25-October-2021 B.Morgan
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+g3tog4-V10-07-02 18-October-2021 B.Morgan
+- Use std::string member functions from G4String in place of synonyms
+
+g3tog4-V10-07-01 29-June-2021 G.Cosmo
+- Fixed compilation error in G3EleTable when c++20 is enabled.
+
+g3tog4-V10-07-00 1-April-2021 B.Morgan
+- Migrate build to modular CMake API
+
+g3tog4-V10-06-01 28-May-2020 B.Morgan
+- Remove obsolete G4brep module dependency
+
+g3tog4-V10-06-00 9-December-2019 B.Morgan
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 g3tog4-V10-05-01 31-January-2019 I.Hrivnacova
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
@@ -235,10 +257,10 @@ g3tog4-V01-00-00 02-Mar-2000 G.Cosmo
 - included fixes by Ivana:
   o G3VolTable:
   - added tests VTD.size()>0
-  - corrected G3VolTable::GetVTE() 
+  - corrected G3VolTable::GetVTE()
   - added back G3VolTable::Clear()
   o G3Pos:
-  - added G3Pos::GetOnly() 
+  - added G3Pos::GetOnly()
   o G3Division:
   - corrected G3Division::CreateSolid() for
     the case ( shape == "TUBS") && ( fIAxis == 1 )
@@ -265,12 +287,12 @@ g3tog4-br4_0_1fixes-iv2-99nov11    12-Nov-1999  J. Apostolakis
 
 g3tog4-br4_0_1fixes-iv1-99nov02    12-Nov-1999  J. Apostolakis
 - Tag of fixes from consolidation of changes by Ivana & Pedro,
-  as these fixes were on November 2nd. 
+  as these fixes were on November 2nd.
 
 Summary of changes to be added here (to be obtained from Ivana, Pedro)
 
-g3tog4-4_0_1-fixes-branch  Branch for fixes 
-- Changes introduced and tested by Ivana Hrivnacova and Pedro Arce 
+g3tog4-4_0_1-fixes-branch  Branch for fixes
+- Changes introduced and tested by Ivana Hrivnacova and Pedro Arce
   based on geant4-00-01
 
 g3tog4-V00-01-02 22-Nov-1999 Lockman
@@ -285,10 +307,10 @@ g3tog4-V00-01-00 28-Jul-1999 Lockman
 - Commented out "Deleted..." in destructors.
 
 g3tog4-01-01-00 19-Jul-1999 Lockman
-- G3matTable, G3MedTable, G3RotTable: convert from lists G4RWTPtrOrderedVector 
+- G3matTable, G3MedTable, G3RotTable: convert from lists G4RWTPtrOrderedVector
   to G4RWTPtrHashDictionary to allow for noncontiguous indices
-- G3RotTable::Put,Get->put,get. 
-- G3toG4BuildGeom, G4gsrotm: put,get signature change 
+- G3RotTable::Put,Get->put,get.
+- G3toG4BuildGeom, G4gsrotm: put,get signature change
 
 g3tog4-01-00-06 28-May-1999 Lockman
 - ~G3Mat,MedTable: do not destroy G4Material Objects in list. Do a clear()
@@ -357,7 +379,7 @@ g3tog4-01-00-04 11-May-1999 Lockman
   with header file
 
 g3tog4-01-00-03  6-May-1999 Lockman
-- G3MatTable, G3RotTable, G3MedTable: updated to use G4RWTPtrOrderedVector 
+- G3MatTable, G3RotTable, G3MedTable: updated to use G4RWTPtrOrderedVector
   instead of G4RWTPtrHashDictionary
 
 g3tog4-01-00-02  5-May-1999 Lockman
@@ -379,7 +401,7 @@ g3tog4-01-00-02  5-May-1999 Lockman
 - G4makevol: use G4LogicalVolume(solid, material, name) constructor.
 - test/GNUmakefile: define INCFLAGS
 - test/README: modified and shortened
-- test/src/G3toG4DetectorConstruction.cc: add SimpleConstruct() method 
+- test/src/G3toG4DetectorConstruction.cc: add SimpleConstruct() method
   for testing; set visibility of daughters, mother.
 - test/include/G3toG4DetectorMocnstruction.hh: added private _lv, _pv
 - test/src/G3toG4RunAction.cc: set tracking/verbose 1, run/verbose 1
@@ -406,7 +428,7 @@ g3tog4-00-03-01 21-Sep-1998 BIll Lockman
 
 g3tog4-00-02-02 17-Sep-1998 Bill Lockman
 - implemented G4 capitalization convention for class names. g3tog4->G3toG4.
-- clGeometry.cc: introduced G3toG4VisManager class; 
+- clGeometry.cc: introduced G3toG4VisManager class;
   added RunManager->Initialize
 - added G3toG4SetRotation class to set rotation matrix elements directly,
   including improper rotations (parity transforms). Check for orthonormality
@@ -427,14 +449,14 @@ g3tog4-00-07-00 29-Jun-1998 Bill Lockman
 - added an 'examples' target to build the examples in test/
 - example/*/cltog4.* moved to test/. Removed all files in example from repo.
 - test/GNUmakefile: added G4EXLIB=true flag
-- test/clGeometry.cc, cltog4.cc: replaced #include "*.cc" with "*.hh" 
+- test/clGeometry.cc, cltog4.cc: replaced #include "*.cc" with "*.hh"
 
 g3tog4-00-06-06 26-Jun-1998 Gabriele Cosmo
 - Again changes to GNUmakefiles according to the new structure in
   processes/electromagnetic. (by J.Allison)
 
 g3tog4-00-06-05 23-Jun-1998 Bill Lockman
-- GNUmakefile:  
+- GNUmakefile:
 - uncommented cernlibs function (John, did you comment this ???)
 o build only the global processes library, not the processes sublibraries
 o build the global digits+hits library
@@ -455,7 +477,7 @@ g3tog4-00-06-03 14-Jun-1998 Bill Lockman
 - removed proton from macro files
 - if Z<1, set Z=1, A=2.
 - renamed test/clGeometry.g4macro to test/clGeometry.x
-- added example/cltog4.x. 
+- added example/cltog4.x.
 - example/cltog4.cc always runs in batch, no graphics.
 
 g3tog4-00-06-02 12-Jun-1998 Bill Lockman
@@ -493,7 +515,7 @@ g3tog4-00-05-04 21-Apr-1998 Bill Lockman
 07-Apr-1998 Bill Lockman
 - GNUmakefile: Fbinobjects was misspelled => rztog4.d was not made.
 - src/rztog4.F: check for existence of .rz file before continuing.
-- src/G4makevol.cc: include G4BREPSolidPolyhedra.hh and G4BREPSolidPCone.hh 
+- src/G4makevol.cc: include G4BREPSolidPolyhedra.hh and G4BREPSolidPCone.hh
   instead of .h
 
 HEAD April 2, 98 G.Barrand
@@ -505,10 +527,10 @@ HEAD April 2, 98 G.Barrand
   libC libF) do. In general, for both the top-level Makefile and the example
   makefiles, gmake all will build everything, including the external libraries.
   gmake all from the top-level makefile will additionally build both example
-  executables as well as rztog4. From the example directory, gmake all will 
+  executables as well as rztog4. From the example directory, gmake all will
   build the external libraries, the libG3toG4.a and libG3toG4.a libraries,
   and the example executable executable.
-- G4makevol.cc: added commented-out #include "G4BREPSolidPCone.hh" and 
+- G4makevol.cc: added commented-out #include "G4BREPSolidPCone.hh" and
 #include "G4BREPSolidPolyhedra.hh" (will convert in alpha06 release)
 
 26th March 1998  John Allison
@@ -537,10 +559,10 @@ g3tog4-00-04-02 06-Mar-1998 Bill Lockman
 20-Jan-1998  Bill Lockman
 - GNUmakefile: in 'ext', do only geometry (BREPS) and visualization (global)
 - example/GNUmakefile: remove include GNUmakefile.common, replace with required
-	rules. Do not use default clean rule - it removes the $G4SYSTEM soft 
+	rules. Do not use default clean rule - it removes the $G4SYSTEM soft
 	links
 - test/GNUmakefile: remove include GNUmakefile.common, replace with required
-	rules. Do not use default clean rule - it removes the $G4SYSTEM soft 
+	rules. Do not use default clean rule - it removes the $G4SYSTEM soft
 	links
 - test/clGeometry.g4macro: modified
 - test/include/g3tog4DetectorConstruction.hh: modified a comment
@@ -557,30 +579,30 @@ Also eliminated LOADLIBS += -lGLw.  (GLw is not used, I think.)
 
 g3tog4-00-02-03 12-Dec-1997 Lockman:
 test/GNUmakefile: visualization code and library path cloned from run/example2.
-test/src/clGeometry: added #include "G4VisRegisterGraphicsSystems.icc"; 
+test/src/clGeometry: added #include "G4VisRegisterGraphicsSystems.icc";
 protect all visualization code inside #ifdef VISUALIZE_CLGEOMETRY...#endif
 
 18 Nov 1997 B. Lockman:
-src/G4gsmate.cc: changed | to || 
+src/G4gsmate.cc: changed | to ||
 src/G3gsdetv.cc: currently disable
 test/src/, include: updated g3tog4*.cc and *.hh from run/example1
 g3tog4.F : commented out call to code generator
 Removed G3G4Init.cc, G3Mother.cc, G3Mother.hh
-GNUmakefile: 	if SLAC env. variable is set, use cernlib -v 95a, otherwise 
+GNUmakefile: 	if SLAC env. variable is set, use cernlib -v 95a, otherwise
 		use pro
 example/GNUmakefile: updated pattern rules to build .d.
 test/GNUmakefile: remove pattern rules, replace with include GNUmakefile.common
 include/G3G4Interface.hh: G4BuildGeom now returns G4LogicalVolume*
 include/G3VolTable.hh: added static G4LogicalVolume* mothLV; getLVx(G4String&)
-		now returns G4LogicalVolume* corresponding to a name, using 
+		now returns G4LogicalVolume* corresponding to a name, using
 		G4LogicalVolumeStore class; removed getTopVol method
-src/G3VolTable.cc: removed G3Mother; Mother corresponds to the first volume 
+src/G3VolTable.cc: removed G3Mother; Mother corresponds to the first volume
 		placed by G3toG4 (set by method setMother in in putLV.
 src/G4BuildGeom.cc returns G4LogicalVolume* of first volume placed by G3toG4
 src/G4gsatt.cc,G4gsdetv.cc,G4gsdv*.cc: replaced getLV(name) with getLVx(name)
 src/G4gspos*.cc: use G4PVPlacement constructor which places volume inside
 		Logical mother volume.
-src/G4makevol.cc: check that LV is not already placed; if so, do not place it. 
+src/G4makevol.cc: check that LV is not already placed; if so, do not place it.
 		Removed references to G3MOther; added G3Bound to chek the
 		radial bounds on PCON and PGON volumes
 src/clparse.cc: removed GlobalMotherVolume and SubsystemMotherVolume logic.
@@ -603,7 +625,7 @@ G4makevol.cc: commented out the forward declaration class G4RWTValVector<double>
 17-Jun-1997  T. Wenaus
 - GNUmakefile mod to exclude g4geom.cc from library
 - G3VolTable mod to add putLV(name, lvol) method for case when nothing
-  other than lvol pointer is known about the volume 
+  other than lvol pointer is known about the volume
 - src/clparse.cc mods to use g3tog4 in the context of a Geant4
   application of which g3tog4 is just a component:
   - G4LogicalVolume* GlobalMotherVolume if non-null points to the
@@ -625,33 +647,33 @@ src/clGeometry.cc : made cltog4.cc a short version of clGeometry.cc
 - test/src/clGeometry.cc : add particle and hit generation
 
 05-May-1997  B. Lockman
-- src/clparse.cc: G3G4Init no longer calls G4Setup (G3Setup instantiates a 
-  fixed-shape world volume. This is now handled in G3Mother, based on the 
+- src/clparse.cc: G3G4Init no longer calls G4Setup (G3Setup instantiates a
+  fixed-shape world volume. This is now handled in G3Mother, based on the
   information in the call list file.) G3G4Init now just opens clparse.out.
 
 - src/G4makevol.cc : SingletonMother->Instance(G4LogicalVolume* lvol)
 
 - src/G4BuildGeom returns G3Vol.getPV() (see below)
 
-- G3Mother : Singleton class whose data memebers _instance and _LV are 
+- G3Mother : Singleton class whose data memebers _instance and _LV are
   initialized from a call in G4Makevol
 
 o src/G3Mother::Instance(G4LogicalVolume * LV) stores the pointer to the
   singleton object (_instance) and the pointer to the logical mother volume
-  (_instance->_LV); places mother volume; store pointer to physcal mother 
+  (_instance->_LV); places mother volume; store pointer to physcal mother
   volume in G3VolTable: G3Vol.setMother(motherWorldPhys)
 
-- src/G3VolTable.cc : 
+- src/G3VolTable.cc :
 
 o G4LogicalVolume* G3VolTable::getLV() returns the pointer to the top-level
-  logical mother volume 
+  logical mother volume
 
-o G4VPhysicalVolume* G3VolTable::getPV() returns the pointer to the top-level 
+o G4VPhysicalVolume* G3VolTable::getPV() returns the pointer to the top-level
   physical mother volume
 
 - test/src/clGeometry.cc:
 
-o geometry is now closed in G4BuildGeom when G3ggclas is called 
+o geometry is now closed in G4BuildGeom when G3ggclas is called
 
 03-May-1997  B. Lockman
 - summary : got rid of artifical top level volume, replaced with top level
@@ -691,31 +713,31 @@ o added 'ext' target which depends on g4ext (phony) and 'all'. The former
 o instantiated a geometry before G4VisManager
 
 23-Apr-1997  B. Lockman :
-- GNUmakefile: 
+- GNUmakefile:
 o added 'all' to 'ext' dependencies. gmake ext now builds all the
   needed libraries and makes the rztog4 executable. cltog4 executable is made
   by example/GNUmakefile; clGeometry executable is made by test/GNUmakefile.
 o added lG4run to library list in all three GNUmakefiles
- 
-- src/G4gsvolu: 
+
+- src/G4gsvolu:
 o changed 'delete param' to 'delete [] param'
 
 02-Apr-1997  B. Lockman :
-- phase out GNUmakefile-ext. Replace with 'ext' target in GNUmakefile; also 
+- phase out GNUmakefile-ext. Replace with 'ext' target in GNUmakefile; also
   added a 'geom' target which updates geometry/, including STEP and BREPS,
   and merges all .o files into geometry/$G4SYSTEM/libG4geometry.a. Thus:
     using         prototype/GNUmakefile      g3tog4/GNUmakefile
                   ---------------------------------------------
-  either type:         "gmake"     followed by   "gmake ext"           
+  either type:         "gmake"     followed by   "gmake ext"
       or type:         "gmake vis" followed by   "gmake geom"
                   ---------------------------------------------
   where 'ext' updates particle+matter, global, interfaces, visualization and
   geometry, including BREPS and STEP,
   and 'geom' updates geometry only, including BREPS and STEP
-  
+
 - example/: added cltog4.cc, removed from src/.
 07-Apr-1997  B. Lockman
-- GNUmakefiles: particle+matter/GNUmakefile global target now produeces 
+- GNUmakefiles: particle+matter/GNUmakefile global target now produeces
   libraries in particles, processes, management and materials. Modify library
   path accordingly.
 - src/G4makefile: Updated to construct G4Para.
@@ -728,26 +750,26 @@ o Incorporated proper coordinate-system rotation calculated from Euler angles.
   The c.s. rotation matrix is the transpose of the body rotation matrix.
 
 27-Mar-1997  B. Lockman :
-- moved cltog4.cc from src to example so that it doesnt get put into g3tog4 
-  library. Thus, libG3toG4.a will contain no main routine. This avoids 
+- moved cltog4.cc from src to example so that it doesnt get put into g3tog4
+  library. Thus, libG3toG4.a will contain no main routine. This avoids
   conflicts with mains in other packages (like visualization/test). Added
   GNUmakefile to example to build cltog4 target. Commented cltog4 target in
   g3tog4/GNUmakefile.
 
 20-Mar-1997  B. Lockman :
-- src/G4makevol.cc: 
+- src/G4makevol.cc:
 o G4BREPSolidPCone, Polyhedra require the number of sections = nz -1
 - GNUmakefile :
 o removed -include ../global/GNUmakefile.common
-o added clean_libs, clean (doesnt remove $G4SYSTEM/), clean-all (removes 
+o added clean_libs, clean (doesnt remove $G4SYSTEM/), clean-all (removes
   $G4SYSTEM)
 o put in libG3toG4.a target, depends on ../$(G4SYSTEM)/libG3toG4.a. Rule is to
   run ../GNUmakefile which now just makes the libraries
 o typing 'gmake' will make 'all' target
   typing 'gmake lib' or 'gmake bin' will make the libraries and binaries
 o remove binaries before rebuilding
-- src/GLKludge.cc , include/GLKludge.hh : currently G4BREPSolidPCone and 
-  G4BREPSolidPolyhedra cant handle cases where z[i] = z[i-1], add 10 microns 
+- src/GLKludge.cc , include/GLKludge.hh : currently G4BREPSolidPCone and
+  G4BREPSolidPolyhedra cant handle cases where z[i] = z[i-1], add 10 microns
   to z[i] as a temporary kludge if z[i] <= z[i-1]
 
 19-Mar-1997  B. Lockman :
@@ -756,30 +778,30 @@ o currently builds geometry global target using geometry/GNUmakefile.test
 
 18-Mar-1997  B. Lockman :
 - GNUmakefile-ext:
-o updating of external packages needed by g3tog4 now done in 
+o updating of external packages needed by g3tog4 now done in
   GNUmakefile-ext. Invoke 'global' target in packages supporting this.
   This target removes the libraries in the lower level
   package directories and consolidates them in the top-level package
-  directories, simplifying the library path somewhat in GNUmakefile and 
-  example/GNUmakefile. This also makes the libraries defined here 
+  directories, simplifying the library path somewhat in GNUmakefile and
+  example/GNUmakefile. This also makes the libraries defined here
   compatable with those defined in visualization/test/GNUmakefile.
 o added a clean_libs target to remove all libraries (invoked from the command
   line; 'all' does not depend on it)
- 
+
 Mar 16 '97 TW
 - GNUmakefile:
 o minor typo fix CPPFLAGS -> $(CPPFLAGS)
 o consolidated histories back into this file; please keep this file a
   single comprehensive history of g3tog4 package modifications.
 
-14-Mar-1997 Lockman: 	
+14-Mar-1997 Lockman:
 - GNUmakefile:
 o Added vpath %.a to provide library search path
 o make cltog4 dependent on all the libraries in G4LIBS
 
 11-Mar-1997  B. Lockman :
 - GNUmakefile:
-o added tracking, intercoms to library path ; 
+o added tracking, intercoms to library path ;
   now update BREPS, STEP, CSG targets in GNUmakefile-ext
 
 04-Mar-1997  B. Lockman :
@@ -793,7 +815,7 @@ o updated include path to include BREPS, STEP and graphics_reps.
 o updated library path to include BREPS, STEP libraries
 o Added phony BREPS and STEP targets to insure these packages are
   compiled (really should be done in the top-level GNUmakefile)
-  
+
 15-Jan-1997  B. Lockman :
 - GNUmakefile:
 o rewrote include path after directory restructuring
@@ -806,34 +828,34 @@ o rewrote library path after directory restructuring
 29-Oct-1996  B. Lockman :
 - GNUmakefile:
 o rewrote include path after directory restructuring
-o rewrite library path after directory restructuring  
+o rewrite library path after directory restructuring
 
 02-Oct-1996  B. Lockman :
 - GNUmakefile:
-o in making/updating libG3toG4F.a, run ranlib on this library, not 
+o in making/updating libG3toG4F.a, run ranlib on this library, not
   libG3toG4.a
 
 01-Oct-1996  B. Lockman :
 - GNUmakefile:
-o modified FCFLAGS to replace -I with  -WF,-I to define cpp include 
+o modified FCFLAGS to replace -I with  -WF,-I to define cpp include
   path for xlf compiler
 o added -d option for xlf compiler to write intermediate .f file
 o added -g option to produce debug symbols
-o added $(fsources) (*.f filobals.hhles) to 'all' dependencies 
-o moved 'all' rule to below definition of $(cernlibs) so that 
+o added $(fsources) (*.f filobals.hhles) to 'all' dependencies
+o moved 'all' rule to below definition of $(cernlibs) so that
   $(fsources) is defined
 o defined pattern rule to move .f files to $(G4SYSTEM)
-o moved -include ../global/GNUmakefile.common after explicit rules 
+o moved -include ../global/GNUmakefile.common after explicit rules
   and before pattern rules definition. This file defines the
   variables $(sources) (src/*.cc) and $(dependencies) (corresponding
-  .d files) as well as some pattern rules (which are redefined 
+  .d files) as well as some pattern rules (which are redefined
   locally)
- 
+
 Sep 24 '96 TW
 - completion of handling of all cases of Indexing via individual logical
   volume objects created for each instantiation, with physical volume list
   of the instantiations kept in the G3Vol data structure and used to
-  place daughters in the logical volume of each instantiation. 
+  place daughters in the logical volume of each instantiation.
   (Temporary, pending a proper G4 implementation of Indexed placement.)
 - turn off geometry optimisation (takes forever for big geometries!!)
 

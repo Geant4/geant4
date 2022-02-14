@@ -3,17 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-<<<<<<< HEAD
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
 
-=======
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,20 +23,20 @@ Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -52,12 +49,18 @@ Registered model factories:
   drawByParticleID
   drawByEncounteredVolume
 
+Registered models:
+  None
+
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
   encounteredVolumeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -91,9 +94,96 @@ PhysicsList::RegisterConstructor: <G4EmDNAPhysics>
 
 
 ---------------------------------------------------------
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      10 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               20
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 0.1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         0 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Fluorescence ANSTO data files enabled              0
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+======                 DNA Physics Parameters                  ========
+=======================================================================
+Use fast sampling in DNA models                    0
+Use Stationary option in DNA models                0
+Use DNA with multiple scattering of e-             0
+Use DNA e- solvation model type                    11003
+=======================================================================
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger flag: 1
+### ===  Ignore cuts flag:   1
 
 <<<<<<< HEAD
 phot:   for  gamma    SubType= 12  BuildTable= 0
@@ -127,24 +217,24 @@ e-_G4DNAElastic:   for  e-    SubType= 51  BuildTable= 0
  Total cross sections computed from DNAChampionElasticModel model
 =======
 phot:  for gamma SubType=12 BuildTable=0
-      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
+      LambdaPrime table from 200 keV to 100 TeV in 174 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
  LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
 
 compt:  for gamma SubType=13 BuildTable=1
-      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
-      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
+      Lambda table from 10 eV  to 1 MeV, 20 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 160 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-    LivermoreCompton : Emin=    0 eV  Emax=  100 TeV Fluo
+        KleinNishina : Emin=    0 eV  Emax=  100 TeV Fluo
 
 conv:  for gamma SubType=14 BuildTable=1
-      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
+      Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermoreConversion : Emin=    0 eV  Emax=  100 TeV
+      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 10 eV  to 100 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -194,176 +284,16 @@ e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
 DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 3, latDisp: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-<<<<<<< HEAD
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
-
-eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
-=======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-
-eIoni:  for e+  SubType=2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+eIoni:  for e+  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha : Emin=    0 eV  Emax=  100 TeV
-
-eBrem:  for e+  SubType=3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
-            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-
-annihil:  for e+, integral:1  SubType=5 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-<<<<<<< HEAD
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
-
-proton_G4DNAExcitation:   for  proton    SubType= 52  BuildTable= 0
- Total cross sections computed from DNAMillerGreenExcitationModel and DNABornExcitationModel models
-=======
-            eplus2gg : Emin=    0 eV  Emax=  100 TeV
-
-proton_G4DNAElastic:  for proton SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-proton_G4DNAExcitation:  for proton SubType=52 BuildTable=0
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
-DNABornExcitationModel : Emin=  500 keV Emax=  100 MeV
-
-<<<<<<< HEAD
-proton_G4DNAIonisation:   for  proton    SubType= 53  BuildTable= 0
- Total cross sections computed from DNARuddIonisationModel and DNABornIonisationModel models
-=======
-proton_G4DNAIonisation:  for proton SubType=53 BuildTable=0
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  500 keV  deltaRudd Fluo
-DNABornIonisationModel : Emin=  500 keV Emax=  100 MeV  deltaBorn Fluo
-
-<<<<<<< HEAD
-proton_G4DNAChargeDecrease:   for  proton    SubType= 56  BuildTable= 0
- Total cross sections computed from DNADingfelderChargeDecreaseModel model
-=======
-proton_G4DNAChargeDecrease:  for proton SubType=56 BuildTable=0
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  100 MeV
-
-<<<<<<< HEAD
-GenericIon_G4DNAIonisation:   for  GenericIon    SubType= 53  BuildTable= 0
- Total cross sections computed from DNARuddIonisationExtendedModel
-=======
-GenericIon_G4DNAIonisation:  for GenericIon SubType=53 BuildTable=0
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=    1 TeV  deltaRudd Fluo
-
-<<<<<<< HEAD
-alpha_G4DNAExcitation:   for  alpha    SubType= 52  BuildTable= 0
- Total cross sections computed from DNAMillerGreenExcitationModel
-=======
-alpha_G4DNAElastic:  for alpha SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-alpha_G4DNAExcitation:  for alpha SubType=52 BuildTable=0
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
-
-<<<<<<< HEAD
-alpha_G4DNAIonisation:   for  alpha    SubType= 53  BuildTable= 0
- Total cross sections computed from DNARuddIonisationModel
-=======
-alpha_G4DNAIonisation:  for alpha SubType=53 BuildTable=0
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
-
-<<<<<<< HEAD
-alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
- Total cross sections computed from DNADingfelderChargeDecreaseModel model
-=======
-alpha_G4DNAChargeDecrease:  for alpha SubType=56 BuildTable=0
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  400 MeV
-
-<<<<<<< HEAD
-=======
-alpha+_G4DNAElastic:  for alpha+ SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-alpha+_G4DNAExcitation:  for alpha+ SubType=52 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
-
-alpha+_G4DNAIonisation:  for alpha+ SubType=53 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
-
-alpha+_G4DNAChargeDecrease:  for alpha+ SubType=56 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  400 MeV
-
-alpha+_G4DNAChargeIncrease:  for alpha+ SubType=57 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  400 MeV
-
-helium_G4DNAElastic:  for helium SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-helium_G4DNAExcitation:  for helium SubType=52 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
-
-helium_G4DNAIonisation:  for helium SubType=53 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
-
-helium_G4DNAChargeIncrease:  for helium SubType=57 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  400 MeV
-
-hydrogen_G4DNAElastic:  for hydrogen SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-hydrogen_G4DNAExcitation:  for hydrogen SubType=52 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
-
-hydrogen_G4DNAIonisation:  for hydrogen SubType=53 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  100 MeV  deltaRudd Fluo
-
-hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  100 MeV
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 
@@ -380,7 +310,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 29.002 nm  +- 17.889 nm 
  Projected range               = 3.820 Ang +- 2.748 nm 
  Penetration                   = 4.224 nm  +- 2.525 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -394,7 +326,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 21.951 nm  +- 23.987 nm 
  Projected range               = 4.067 Ang +- 2.479 nm 
  Penetration                   = 3.440 nm  +- 2.612 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -408,7 +342,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 11.147 nm  +- 14.647 nm 
  Projected range               = 5.337 Ang +- 1.882 nm 
  Penetration                   = 2.419 nm  +- 1.932 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -422,7 +358,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 7.016 nm  +- 7.440 nm 
  Projected range               = 3.868 Ang +- 1.448 nm 
  Penetration                   = 1.972 nm  +- 1.518 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -436,7 +374,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 6.373 nm  +- 8.381 nm 
  Projected range               = 5.391 Ang +- 1.496 nm 
  Penetration                   = 1.861 nm  +- 1.630 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -450,7 +390,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 15.038 nm  +- 18.804 nm 
  Projected range               = 5.255 Ang +- 2.146 nm 
  Penetration                   = 2.780 nm  +- 2.277 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -464,7 +406,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 17.395 nm  +- 18.125 nm 
  Projected range               = 5.239 Ang +- 2.353 nm 
  Penetration                   = 3.293 nm  +- 2.397 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -478,7 +422,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 15.580 nm  +- 17.445 nm 
  Projected range               = 5.842 Ang +- 2.199 nm 
  Penetration                   = 3.042 nm  +- 2.142 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -492,7 +438,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 12.725 nm  +- 13.684 nm 
  Projected range               = 6.585 Ang +- 1.986 nm 
  Penetration                   = 2.914 nm  +- 2.017 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -506,7 +454,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 13.662 nm  +- 14.860 nm 
  Projected range               = 8.018 Ang +- 2.132 nm 
  Penetration                   = 3.023 nm  +- 2.007 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -520,7 +470,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 15.223 nm  +- 17.136 nm 
  Projected range               = 7.398 Ang +- 2.380 nm 
  Penetration                   = 3.215 nm  +- 2.278 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -534,7 +486,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 15.509 nm  +- 15.605 nm 
  Projected range               = 9.015 Ang +- 2.487 nm 
  Penetration                   = 3.394 nm  +- 2.132 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -548,7 +502,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 16.108 nm  +- 16.355 nm 
  Projected range               = 9.540 Ang +- 2.513 nm 
  Penetration                   = 3.558 nm  +- 2.205 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -562,7 +518,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 16.193 nm  +- 14.905 nm 
  Projected range               = 1.294 nm  +- 2.449 nm 
  Penetration                   = 3.695 nm  +- 2.120 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -576,7 +534,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 17.086 nm  +- 15.614 nm 
  Projected range               = 1.441 nm  +- 2.641 nm 
  Penetration                   = 3.832 nm  +- 2.185 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -590,7 +550,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 18.346 nm  +- 17.721 nm 
  Projected range               = 1.347 nm  +- 2.760 nm 
  Penetration                   = 3.990 nm  +- 2.241 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -604,7 +566,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 20.729 nm  +- 17.414 nm 
  Projected range               = 2.042 nm  +- 3.359 nm 
  Penetration                   = 4.955 nm  +- 2.598 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -618,7 +582,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 22.820 nm  +- 17.248 nm 
  Projected range               = 2.869 nm  +- 3.882 nm 
  Penetration                   = 5.923 nm  +- 2.897 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -632,7 +598,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 24.655 nm  +- 16.269 nm 
  Projected range               = 3.955 nm  +- 4.253 nm 
  Penetration                   = 6.973 nm  +- 3.187 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -646,7 +614,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 27.959 nm  +- 17.884 nm 
  Projected range               = 4.542 nm  +- 5.080 nm 
  Penetration                   = 8.393 nm  +- 3.677 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -660,7 +630,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 30.216 nm  +- 17.613 nm 
  Projected range               = 6.020 nm  +- 5.880 nm 
  Penetration                   = 10.092 nm  +- 4.375 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -674,7 +646,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 32.679 nm  +- 18.083 nm 
  Projected range               = 6.712 nm  +- 6.739 nm 
  Penetration                   = 11.690 nm  +- 5.089 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -688,7 +662,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 36.117 nm  +- 18.561 nm 
  Projected range               = 8.213 nm  +- 7.413 nm 
  Penetration                   = 13.440 nm  +- 5.834 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -702,7 +678,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 39.325 nm  +- 18.495 nm 
  Projected range               = 9.566 nm  +- 8.304 nm 
  Penetration                   = 15.494 nm  +- 6.215 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -716,7 +694,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 47.208 nm  +- 20.676 nm 
  Projected range               = 12.115 nm  +- 10.540 nm 
  Penetration                   = 19.354 nm  +- 7.964 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -730,7 +710,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 53.861 nm  +- 20.324 nm 
  Projected range               = 15.223 nm  +- 12.696 nm 
  Penetration                   = 23.771 nm  +- 9.860 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -744,7 +726,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 63.082 nm  +- 21.675 nm 
  Projected range               = 19.698 nm  +- 15.607 nm 
  Penetration                   = 29.837 nm  +- 11.756 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -758,7 +742,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 71.176 nm  +- 23.369 nm 
  Projected range               = 23.688 nm  +- 17.909 nm 
  Penetration                   = 35.120 nm  +- 13.668 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -772,7 +758,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 80.835 nm  +- 26.248 nm 
  Projected range               = 27.336 nm  +- 19.412 nm 
  Penetration                   = 40.156 nm  +- 15.309 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -785,8 +773,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 =======
  Track length of primary track = 205.471 nm  +- 53.650 nm 
  Projected range               = 83.424 nm  +- 54.462 nm 
- Penetration                   = 122.232 nm  +- 43.688 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+ Penetration                   = 122.233 nm  +- 43.688 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -800,7 +790,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 379.112 nm  +- 97.994 nm 
  Projected range               = 157.614 nm  +- 106.343 nm 
  Penetration                   = 230.086 nm  +- 81.104 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -814,7 +806,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 595.181 nm  +- 142.317 nm 
  Projected range               = 265.667 nm  +- 164.188 nm 
  Penetration                   = 379.507 nm  +- 121.351 nm 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -868,6 +862,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 862.628 nm  +- 202.525 nm 
  Projected range               = 396.862 nm  +- 238.211 nm 
  Penetration                   = 559.410 nm  +- 183.300 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

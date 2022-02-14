@@ -23,68 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsTableHelper
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-// Class Description
-//  G4PhysicsTableHelper is a static utility class 
-//  for helping proceeses to build their physics table
-//
-// ------------------------------------------------------------
-//   First Implementation          20 Aug. 2004   H.Kurashige
-//
-// ------------------------------------------------------------
+// G4PhysicsTableHelper is a static utility class for helping processes
+// to build their physics table.
 
-#ifndef G4PhysicsTableHelper_h 
-#define G4PhysicsTableHelper_h 1
+// Author: H.Kurashige, 20 August 2004 - First implementation
+// --------------------------------------------------------------------
+#ifndef G4PhysicsTableHelper_hh 
+#define G4PhysicsTableHelper_hh 1
 
 #include "globals.hh"
-#include "G4ios.hh"
-#include <vector>
+#include "G4PhysicsVector.hh"
 #include "G4PhysicsTable.hh"
-#include "G4MaterialCutsCouple.hh"
-#include "G4Region.hh"
 
 class G4PhysicsTableHelper
 { 
-  protected:
-    G4PhysicsTableHelper();
-    ~G4PhysicsTableHelper();
-    G4PhysicsTableHelper(const G4PhysicsTableHelper& right);
-    G4PhysicsTableHelper& operator=(const G4PhysicsTableHelper&);
- 
-  public: // with description
+  public:
+
     static G4PhysicsTable* PreparePhysicsTable(G4PhysicsTable* physTable);
-    // Prepare the given physics table before building the physics table 
-    // resize the given physics table to match with the current
-    // production cut table.   
+      // Prepare the given physics table. Before building the table 
+      // resize the given physics table to match with the current
+      // production cut table
 
     static G4bool RetrievePhysicsTable(G4PhysicsTable* physTable,
-				       const G4String& fileName,
-				       G4bool ascii              );
-    // Retrieve physics table from the given file and 
-    // fill the given physics table with retrievd physics vectors
+                                       const G4String& fileName,
+                                       G4bool ascii, G4bool spline);
+      // Retrieve the physics table from the given file and 
+      // fill the given physics table with retrieved physics vectors
 
     static void SetPhysicsVector(G4PhysicsTable* physTable,
-				 size_t idx,
-				 G4PhysicsVector* vec);
-    // Set a physics vector at given position 
+                                 std::size_t idx,
+                                 G4PhysicsVector* vec);
+      // Set a physics vector at given position 
 
-  public: // with description
-   static void  SetVerboseLevel(G4int value);
-   static G4int GetVerboseLevel();
-   // set/get controle flag for output message
-   //  0: Silent
-   //  1: Warning message
-   //  2: More
+    static void  SetVerboseLevel(G4int value);
+    static G4int GetVerboseLevel();
+      // Set/get control flag for output message
+      //  0: Silent
+      //  1: Warning message
+      //  2: More
 
+    G4PhysicsTableHelper(const G4PhysicsTableHelper&) = delete;
+    G4PhysicsTableHelper& operator=(const G4PhysicsTableHelper&) = delete;
 
- protected:
-   static G4ThreadLocal G4int verboseLevel;
-   // controle flag for output message
+  protected:
+
+    G4PhysicsTableHelper();
+    ~G4PhysicsTableHelper();
+ 
+    static G4int verboseLevel;
+      // Control flag for output message
 };
 
 #endif

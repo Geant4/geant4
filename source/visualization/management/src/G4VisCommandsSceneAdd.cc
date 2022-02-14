@@ -40,10 +40,10 @@
 #include "G4MagneticFieldModel.hh"
 #include "G4PSHitsModel.hh"
 #include "G4TrajectoriesModel.hh"
-#include "G4ScaleModel.hh"
 #include "G4TextModel.hh"
 #include "G4ArrowModel.hh"
 #include "G4AxesModel.hh"
+#include "G4PlotterModel.hh"
 #include "G4PhysicalVolumesSearchScene.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -61,9 +61,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4Tokenizer.hh"
 #include "G4RunManager.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "G4StateManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
@@ -80,6 +78,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4GeneralParticleSourceData.hh"
+#include "G4PlotterManager.hh"
 
 #include <sstream>
 
@@ -247,7 +246,7 @@ G4VisCommandSceneAddArrow2D::Arrow2D::Arrow2D
 }
 
 void G4VisCommandSceneAddArrow2D::Arrow2D::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
+  (G4VGraphicsScene& sceneHandler, const G4ModelingParameters*)
 {
   sceneHandler.BeginPrimitives2D();
   sceneHandler.AddPrimitive(fShaftPolyline);
@@ -435,9 +434,9 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
   is.getline(remainder, NREMAINDER);
   dateString += remainder;
   G4Text::Layout layout = G4Text::right;
-  if (layoutString(0) == 'l') layout = G4Text::left;
-  else if (layoutString(0) == 'c') layout = G4Text::centre;
-  else if (layoutString(0) == 'r') layout = G4Text::right;
+  if (layoutString[0] == 'l') layout = G4Text::left;
+  else if (layoutString[0] == 'c') layout = G4Text::centre;
+  else if (layoutString[0] == 'r') layout = G4Text::right;
 
   Date* date = new Date(fpVisManager, size, x, y, layout, dateString);
   G4VModel* model =
@@ -460,7 +459,7 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
 }
 
 void G4VisCommandSceneAddDate::Date::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
+  (G4VGraphicsScene& sceneHandler, const G4ModelingParameters*)
 {
   G4String time;
   if (fDate == "-") {
@@ -535,27 +534,27 @@ G4VisCommandSceneAddElectricField::G4VisCommandSceneAddElectricField () {
   fpCommand -> SetGuidance
   ("Adds electric field representation to current scene.");
   fpCommand -> SetGuidance
-  ("The first parameter is no. of data points per half scene.  So, possibly, at"
+  ("The first parameter is no. of data points per half extent.  So, possibly, at"
    "\nmaximum, the number of data points sampled is (2*n+1)^3, which can grow"
    "\nlarge--be warned!"
    "\nThe default value is 10, i.e., a 21x21x21 array, i.e., 9,261 sampling points."
-   "\nThat may swamp you scene, but usually, a field is limited to a small part of"
-   "\nthe scene, so it's not a problem. But if it is, here are some of the things"
+   "\nThat may swamp your view, but usually, a field is limited to a small part of"
+   "\nthe extent, so it's not a problem. But if it is, here are some of the things"
    "\nyou can do:"
-   "\n- reduce the number of data points per half scene (first parameter);"
+   "\n- reduce the number of data points per half extent (first parameter);"
    "\n- specify \"lightArrow\" (second parameter);"
    "\n- restrict the region sampled with \"/vis/set/extentForField\";"
    "\n- restrict the drawing to a specific volume with"
    "\n    \"/vis/set/volumeForField\" or \"/vis/touchable/volumeForField\"."
-   "\nNote: you may have to deactivate existing field models with"
+   "\nNote: you might have to deactivate existing field models with"
    "\n  \"/vis/scene/activateModel Field false\" and re-issue"
    "\n  \"/vis/scene/add/...Field\" command again.");
   fpCommand -> SetGuidance
   ("In the arrow representation, the length of the arrow is proportional"
    "\nto the magnitude of the field and the colour is mapped onto the range"
-   "\nas a fraction of the maximum magnitude: 0->0.5->1 is blue->green->red.");
+   "\nas a fraction of the maximum magnitude: 0->0.5->1 is red->green->blue.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("nDataPointsPerHalfScene", 'i', omitable = true);
+  parameter = new G4UIparameter ("nDataPointsPerHalfExtent", 'i', omitable = true);
   parameter -> SetDefaultValue (10);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("representation", 's', omitable = true);
@@ -586,10 +585,10 @@ void G4VisCommandSceneAddElectricField::SetNewValue
     return;
   }
 
-  G4int nDataPointsPerHalfScene;
+  G4int nDataPointsPerHalfExtent;
   G4String representation;
   std::istringstream iss(newValue);
-  iss >> nDataPointsPerHalfScene >> representation;
+  iss >> nDataPointsPerHalfExtent >> representation;
   G4ElectricFieldModel::Representation
   modelRepresentation = G4ElectricFieldModel::fullArrow;
   if (representation == "lightArrow") {
@@ -597,7 +596,7 @@ void G4VisCommandSceneAddElectricField::SetNewValue
   }
   G4VModel* model;
   model = new G4ElectricFieldModel
-  (nDataPointsPerHalfScene,modelRepresentation,
+  (nDataPointsPerHalfExtent,modelRepresentation,
    fCurrentArrow3DLineSegmentsPerCircle,
    fCurrentExtentForField,
    fCurrrentPVFindingsForField);
@@ -609,8 +608,8 @@ void G4VisCommandSceneAddElectricField::SetNewValue
       << "Electric field, if any, will be drawn in scene \""
       << currentSceneName
       << "\"\n  with "
-      << nDataPointsPerHalfScene
-      << " data points per half scene and with representation \""
+      << nDataPointsPerHalfExtent
+      << " data points per half extent and with representation \""
       << representation
       << '\"'
       << G4endl;
@@ -677,9 +676,9 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
   is >> size >> x >> y >> layoutString;
 
   G4Text::Layout layout = G4Text::right;
-  if (layoutString(0) == 'l') layout = G4Text::left;
-  else if (layoutString(0) == 'c') layout = G4Text::centre;
-  else if (layoutString(0) == 'r') layout = G4Text::right;
+  if (layoutString[0] == 'l') layout = G4Text::left;
+  else if (layoutString[0] == 'c') layout = G4Text::centre;
+  else if (layoutString[0] == 'r') layout = G4Text::right;
 
   // For End of Event (only for reviewing kept events one by one)
   EventID* eoeEventID
@@ -715,15 +714,11 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
 }
 
 void G4VisCommandSceneAddEventID::EventID::operator()
-(G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters* mp)
+(G4VGraphicsScene& sceneHandler, const G4ModelingParameters* mp)
 {
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-  if (G4Threading::IsMultithreadedApplication()) {
-    runManager = G4MTRunManager::GetMasterRunManager();
-  }
-#endif
-  if (!runManager) return;
+  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
+  if(!runManager)
+    return;
 
   const G4Run* currentRun = runManager->GetCurrentRun();
   if (!currentRun) return;
@@ -869,7 +864,7 @@ fExtent(xmin,xmax,ymin,ymax,zmin,zmax)
 {}
 
 void G4VisCommandSceneAddExtent::Extent::operator()
-(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*)
+(G4VGraphicsScene&, const G4ModelingParameters*)
 {}
 
 ////////////// /vis/scene/add/frame ///////////////////////////////////////
@@ -932,7 +927,7 @@ void G4VisCommandSceneAddFrame::SetNewValue (G4UIcommand*, G4String newValue)
 }
 
 void G4VisCommandSceneAddFrame::Frame::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
+  (G4VGraphicsScene& sceneHandler, const G4ModelingParameters*)
 {
   G4Polyline frame;
   frame.push_back(G4Point3D( fSize,  fSize, 0.));
@@ -1154,7 +1149,7 @@ G4VisCommandSceneAddLine::Line::Line
 }
 
 void G4VisCommandSceneAddLine::Line::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
+  (G4VGraphicsScene& sceneHandler, const G4ModelingParameters*)
 {
   sceneHandler.BeginPrimitives();
   sceneHandler.AddPrimitive(fPolyline);
@@ -1239,11 +1234,136 @@ G4VisCommandSceneAddLine2D::Line2D::Line2D
 }
 
 void G4VisCommandSceneAddLine2D::Line2D::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
+  (G4VGraphicsScene& sceneHandler, const G4ModelingParameters*)
 {
   sceneHandler.BeginPrimitives2D();
   sceneHandler.AddPrimitive(fPolyline);
   sceneHandler.EndPrimitives2D();
+}
+
+////////////// /vis/scene/add/localAxes ///////////////////////////////////////
+
+G4VisCommandSceneAddLocalAxes::G4VisCommandSceneAddLocalAxes () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/localAxes", this);
+  fpCommand -> SetGuidance
+  ("Adds local axes to physical volume(s).");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("physical-volume-name", 's', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("copy-no", 'i', omitable = true);
+  parameter -> SetGuidance ("If negative, matches any copy no.");
+  parameter -> SetDefaultValue (-1);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddLocalAxes::~G4VisCommandSceneAddLocalAxes () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddLocalAxes::GetCurrentValue (G4UIcommand*) {
+  return "world 0 -1";
+}
+
+void G4VisCommandSceneAddLocalAxes::SetNewValue (G4UIcommand*,
+						 G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn = verbosity >= G4VisManager::warnings;
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4String name;
+  G4int copyNo;
+  std::istringstream is (newValue);
+  is >> name >> copyNo;
+
+  std::vector<G4PhysicalVolumesSearchScene::Findings> findingsVector;
+
+  // Search all worlds...
+  G4TransportationManager* transportationManager =
+  G4TransportationManager::GetTransportationManager ();
+  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
+  transportationManager->GetWorldsIterator();
+  size_t nWorlds = transportationManager->GetNoWorlds();
+  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+    G4ModelingParameters mp;  // Default - no culling.
+    G4PhysicalVolumeModel searchModel
+    (*iterWorld,
+     G4PhysicalVolumeModel::UNLIMITED,
+     G4Transform3D(),
+     &mp,
+     true);  // Use full extent (avoids initial descent of geometry tree)
+    G4PhysicalVolumesSearchScene searchScene
+    (&searchModel, name, copyNo);
+    searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
+    for (const auto& findings: searchScene.GetFindings()) {
+      findingsVector.push_back(findings);
+    }
+  }
+
+  G4int id = 0;  // To distinguish axes models by their global description
+  for (const auto& findings: findingsVector) {
+
+    // Create axes model based on size and transformation of found volume(s).
+    const auto& extent = findings.fpFoundPV->GetLogicalVolume()->GetSolid()->GetExtent();
+    const auto& transform = findings.fFoundObjectTransformation;
+
+    const G4double lengthMax = extent.GetExtentRadius()/2.;
+    const G4double intLog10LengthMax = std::floor(std::log10(lengthMax));
+    G4double length = std::pow(10,intLog10LengthMax);
+    if (5.*length < lengthMax) length *= 5.;
+    else if (2.*length < lengthMax) length *= 2.;
+
+    const auto& axesModel = new G4AxesModel(0.,0.,0.,length,transform);
+    axesModel->SetGlobalTag("LocalAxesModel");
+    std::ostringstream oss; oss
+    << "Local Axes for " << findings.fpFoundPV->GetName()
+    << ':' << findings.fFoundPVCopyNo << ':' << id++;
+    axesModel->SetGlobalDescription(oss.str());
+    // ...so add it to the scene.
+    G4bool successful = pScene->AddRunDurationModel(axesModel,warn);
+    if (successful) {
+      if (verbosity >= G4VisManager::confirmations) {
+	G4cout << "\"" << findings.fpFoundPV->GetName()
+	<< "\", copy no. " << findings.fFoundPVCopyNo
+	<< ",\n  found in searched volume \""
+	<< findings.fpSearchPV->GetName()
+	<< "\" at depth " << findings.fFoundDepth
+	<< ",\n  base path: \"" << findings.fFoundBasePVPath
+	<< "\".\n  Local axes have been added to scene \""
+	<< pScene->GetName() << "\".";
+	if (verbosity >= G4VisManager::parameters) {
+	  G4cout << "  With extent " << extent
+	  << "\n  at " << transform.getRotation()
+	  << "  " << transform.getTranslation();
+	}
+	G4cout << G4endl;
+      }
+    } else {
+      G4VisCommandsSceneAddUnsuccessful(verbosity);
+    }
+  }
+
+  if (findingsVector.empty()) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr << "ERROR: Volume \"" << name << "\"";
+      if (copyNo >= 0) {
+	G4cerr << ", copy no. " << copyNo << ",";
+      }
+      G4cerr << " not found." << G4endl;
+    }
+    G4VisCommandsSceneAddUnsuccessful(verbosity);
+    return;
+  }
+
+  CheckSceneAndNotifyHandlers(pScene);
 }
 
 ////////////// /vis/scene/add/logicalVolume //////////////////////////////////
@@ -1321,20 +1441,9 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   G4bool checkOverlaps = G4UIcommand::ConvertToBool(overlapString);
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
-  int nLV = pLVStore -> size ();
-  int iLV;
-  G4LogicalVolume* pLV = 0;
-  for (iLV = 0; iLV < nLV; iLV++ ) {
-    pLV = (*pLVStore) [iLV];
-    if (pLV -> GetName () == name) break;
-  }
-  if (iLV == nLV) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Logical volume " << name
-	     << " not found in logical volume store." << G4endl;
-    }
-    return;
-  }
+  G4LogicalVolume* pLV = nullptr;
+  pLV = pLVStore->GetVolume(name);
+  if (pLV == nullptr) return;  // Volume not found; warning message thrown
 
   const std::vector<G4Scene::Model>& rdModelList =
     pScene -> GetRunDurationModelList();
@@ -1517,11 +1626,11 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 
   G4double userHeight, red, green, blue, xmid, ymid, zmid;
-  G4String userHeightUnit, direction, auto_manual, positionUnit;
+  G4String userHeightUnit, direction, placement, positionUnit;
   std::istringstream is (newValue);
   is >> userHeight >> userHeightUnit >> direction
      >> red >> green >> blue
-     >> auto_manual
+     >> placement
      >> xmid >> ymid >> zmid >> positionUnit;
 
   G4double height = userHeight;
@@ -1547,13 +1656,13 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     else if (vp.z() > vp.x() && vp.z() > vp.y()) logoDirection = Z;
     else if (vp.z() < vp.x() && vp.z() < vp.y()) logoDirection = minusZ;
   }
-  else if (direction(0) == 'x') logoDirection = X;
-  else if (direction(0) == 'y') logoDirection = Y;
-  else if (direction(0) == 'z') logoDirection = Z;
-  else if (direction(0) == '-') {
-    if (direction(1) == 'x') logoDirection = minusX;
-    else if (direction(1) == 'y') logoDirection = minusY;
-    else if (direction(1) == 'z') logoDirection = minusZ;
+  else if (direction[0] == 'x') logoDirection = X;
+  else if (direction[0] == 'y') logoDirection = Y;
+  else if (direction[0] == 'z') logoDirection = Z;
+  else if (direction[0] == '-') {
+    if (direction[1] == 'x') logoDirection = minusX;
+    else if (direction[1] == 'y') logoDirection = minusY;
+    else if (direction[1] == 'z') logoDirection = minusZ;
   } else {
     if (verbosity >= G4VisManager::errors) {
       G4cerr <<	"ERROR: Unrecogniseed direction: \""
@@ -1562,7 +1671,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  G4bool autoPlacing = false; if (auto_manual == "auto") autoPlacing = true;
+  G4bool autoPlacing = false; if (placement == "auto") autoPlacing = true;
   // Parameters read and interpreted.
 
   // Current scene extent
@@ -1693,19 +1802,16 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisAttributes visAtts(G4Colour(red, green, blue));
   visAtts.SetForceSolid(true);         // Always solid.
 
-  G4Logo* logo = new G4Logo(height,visAtts);
+  G4Logo* logo = new G4Logo(height,visAtts,transform);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddLogo::G4Logo>(logo);
   model->SetType("G4Logo");
   model->SetGlobalTag("G4Logo");
   model->SetGlobalDescription("G4Logo: " + newValue);
-  model->SetTransformation(transform);
-  // Note: it is the responsibility of the model to act upon this, but
-  // the extent is in local coordinates...
   G4double& h = height;
   G4double h2 = h/2.;
   G4VisExtent extent(-h,h,-h2,h2,-h2,h2);
-  model->SetExtent(extent);
+  model->SetExtent(extent.Transform(transform));
   // This extent gets "added" to existing scene extent in
   // AddRunDurationModel below.
   const G4String& currentSceneName = pScene -> GetName ();
@@ -1718,7 +1824,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
       if (verbosity >= G4VisManager::parameters) {
 	G4cout << "\n  with extent " << extent
 	       << "\n  at " << transform.getRotation()
-	       << transform.getTranslation();
+	       << "  " << transform.getTranslation();
       }
       G4cout << G4endl;
     }
@@ -1729,8 +1835,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 }
 
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
-(G4double height, const G4VisAttributes& visAtts):
-  fVisAtts(visAtts)
+(G4double height, const G4VisAttributes& visAtts, const G4Transform3D& transform)
 {
   const G4double& h =  height;
   const G4double h2  = 0.5 * h;   // Half height.
@@ -1775,8 +1880,9 @@ G4VisCommandSceneAddLogo::G4Logo::G4Logo
   G4Box bG("bG",w2,ro2,d2);
   G4UnionSolid logoG("logoG",&tG,&bG,G4Translate3D(ri+w2,-ro2,0.));
   fpG = logoG.CreatePolyhedron();
-  fpG->SetVisAttributes(&fVisAtts);
+  fpG->SetVisAttributes(visAtts);
   fpG->Transform(G4Translate3D(-0.55*h,0.,0.));
+  fpG->Transform(transform);
 
   // 4...
   G4Box b1("b1",h2,h2,d2);
@@ -1799,8 +1905,9 @@ G4VisCommandSceneAddLogo::G4Logo::G4Logo
   fp4 = new G4Polyhedron();
   fp4->createPolyhedron(nNodes,nFaces,xyz,faces);
   */
-  fp4->SetVisAttributes(&fVisAtts);
+  fp4->SetVisAttributes(visAtts);
   fp4->Transform(G4Translate3D(0.55*h,0.,0.));
+  fp4->Transform(transform);
 }
 
 G4VisCommandSceneAddLogo::G4Logo::~G4Logo() {
@@ -1809,8 +1916,8 @@ G4VisCommandSceneAddLogo::G4Logo::~G4Logo() {
 }
 
 void G4VisCommandSceneAddLogo::G4Logo::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D& transform, const G4ModelingParameters*) {
-  sceneHandler.BeginPrimitives(transform);
+  (G4VGraphicsScene& sceneHandler, const G4ModelingParameters*) {
+  sceneHandler.BeginPrimitives();
   sceneHandler.AddPrimitive(*fpG);
   sceneHandler.AddPrimitive(*fp4);
   sceneHandler.EndPrimitives();
@@ -1868,9 +1975,9 @@ void G4VisCommandSceneAddLogo2D::SetNewValue (G4UIcommand*, G4String newValue)
   std::istringstream is(newValue);
   is >> size >> x >> y >> layoutString;
   G4Text::Layout layout = G4Text::right;
-  if (layoutString(0) == 'l') layout = G4Text::left;
-  else if (layoutString(0) == 'c') layout = G4Text::centre;
-  else if (layoutString(0) == 'r') layout = G4Text::right;
+  if (layoutString[0] == 'l') layout = G4Text::left;
+  else if (layoutString[0] == 'c') layout = G4Text::centre;
+  else if (layoutString[0] == 'r') layout = G4Text::right;
 
   Logo2D* logo2D = new Logo2D(fpVisManager, size, x, y, layout);
   G4VModel* model =
@@ -1893,7 +2000,7 @@ void G4VisCommandSceneAddLogo2D::SetNewValue (G4UIcommand*, G4String newValue)
 }
 
 void G4VisCommandSceneAddLogo2D::Logo2D::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
+  (G4VGraphicsScene& sceneHandler, const G4ModelingParameters*)
 {
   G4Text text("Geant4", G4Point3D(fX, fY, 0.));
   text.SetScreenSize(fSize);
@@ -2049,7 +2156,22 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   fpCommand -> SetGuidance
   ("If \"placement\" is \"auto\", scale is placed at bottom left of current view."
    "\n  Otherwise placed at (xmid,ymid,zmid).");
-  fpCommand -> SetGuidance (G4Scale::GetGuidanceString());
+  fpCommand -> SetGuidance
+  ("An annotated line in the specified direction with tick marks at the"
+   "\nend.  If autoPlacing is true it is required to be centred at the"
+   "\nfront, right, bottom corner of the world space, comfortably outside"
+   "\nthe existing bounding box/sphere so that existing objects do not"
+   "\nobscure it.  Otherwise it is required to be drawn with mid-point at"
+   "\n(xmid, ymid, zmid)."
+   "\n"
+   "\nThe auto placing algorithm is (approx):"
+   "\n  x = xmin + (1 + comfort) * (xmax - xmin);"
+   "\n  y = ymin - comfort * (ymax - ymin);"
+   "\n  z = zmin + (1 + comfort) * (zmax - zmin);"
+   "\n  if direction == x then (x - length,y,z) to (x,y,z);"
+   "\n  if direction == y then (x,y,z) to (x,y + length,z);"
+   "\n  if direction == z then (x,y,z - length) to (x,y,z);"
+   );
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("length", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
@@ -2119,11 +2241,11 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 
   G4double userLength, red, green, blue, xmid, ymid, zmid;
-  G4String userLengthUnit, direction, auto_manual, positionUnit;
+  G4String userLengthUnit, direction, placement, positionUnit;
   std::istringstream is (newValue);
   is >> userLength >> userLengthUnit >> direction
      >> red >> green >> blue
-     >> auto_manual
+     >> placement
      >> xmid >> ymid >> zmid >> positionUnit;
 
   G4double length = userLength;
@@ -2142,9 +2264,9 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4double unit = G4UIcommand::ValueOf(positionUnit);
   xmid *= unit; ymid *= unit; zmid *= unit;
 
-  G4Scale::Direction scaleDirection (G4Scale::x);
-  if (direction(0) == 'y') scaleDirection = G4Scale::y;
-  if (direction(0) == 'z') scaleDirection = G4Scale::z;
+  Scale::Direction scaleDirection (Scale::x);
+  if (direction[0] == 'y') scaleDirection = Scale::y;
+  if (direction[0] == 'z') scaleDirection = Scale::z;
 
   G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
   if (!pViewer) {
@@ -2165,22 +2287,22 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   if (direction == "auto") {  // Takes cue from viewer.
     if (std::abs(vp.x()) > std::abs(vp.y()) &&
 	std::abs(vp.x()) > std::abs(vp.z())) {  // x viewpoint
-      if (std::abs(up.y()) > std::abs(up.z())) scaleDirection = G4Scale::z;
-	  else scaleDirection = G4Scale::y;
+      if (std::abs(up.y()) > std::abs(up.z())) scaleDirection = Scale::z;
+	  else scaleDirection = Scale::y;
     }
     else if (std::abs(vp.y()) > std::abs(vp.x()) &&
 	     std::abs(vp.y()) > std::abs(vp.z())) {  // y viewpoint
-      if (std::abs(up.x()) > std::abs(up.z())) scaleDirection = G4Scale::z;
-	  else scaleDirection = G4Scale::x;
+      if (std::abs(up.x()) > std::abs(up.z())) scaleDirection = Scale::z;
+	  else scaleDirection = Scale::x;
     }
     else if (std::abs(vp.z()) > std::abs(vp.x()) &&
 	     std::abs(vp.z()) > std::abs(vp.y())) {  // z viewpoint
-      if (std::abs(up.y()) > std::abs(up.x())) scaleDirection = G4Scale::x;
-	  else scaleDirection = G4Scale::y;
+      if (std::abs(up.y()) > std::abs(up.x())) scaleDirection = Scale::x;
+	  else scaleDirection = Scale::y;
     }
   }
 
-  G4bool autoPlacing = false; if (auto_manual == "auto") autoPlacing = true;
+  G4bool autoPlacing = false; if (placement == "auto") autoPlacing = true;
   // Parameters read and interpreted.
 
   // Useful constants, etc...
@@ -2206,16 +2328,17 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 	     << G4endl;
     }
   }
+
   // Test existing scene for room...
   G4bool room  = true;
   switch (scaleDirection) {
-  case G4Scale::x:
+  case Scale::x:
     if (freeLengthFraction * (xmax - xmin) < length) room = false;
     break;
-  case G4Scale::y:
+  case Scale::y:
     if (freeLengthFraction * (ymax - ymin) < length) room = false;
     break;
-  case G4Scale::z:
+  case Scale::z:
     if (freeLengthFraction * (zmax - zmin) < length) room = false;
     break;
   }
@@ -2239,21 +2362,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  // Let's go ahead a construct a scale and a scale model.  Since the
-  // placing is done here, this G4Scale is *not* auto-placed...
-  G4Scale scale(length, annotation, scaleDirection,
-		false, xmid, ymid, zmid,
-                fCurrentTextSize);
-  G4VisAttributes visAttr(G4Colour(red, green, blue));
-  scale.SetVisAttributes(visAttr);
-  G4VModel* model = new G4ScaleModel(scale);
-  G4String globalDescription = model->GetGlobalDescription();
-  globalDescription += " (" + newValue + ")";
-  model->SetGlobalDescription(globalDescription);
-
   // Now figure out the extent...
-  //
-  // From the G4Scale.hh:
   //
   // This creates a representation of annotated line in the specified
   // direction with tick marks at the end.  If autoPlacing is true it
@@ -2270,8 +2379,6 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   //   if direction == y then (x,y,z) to (x,y + length,z)
   //   if direction == z then (x,y,z - length) to (x,y,z)
   //
-  // End of clip from G4Scale.hh:
-  //
   // Implement this in two parts.  Here, use the scale's extent to
   // "expand" the scene's extent.  Then rendering - in
   // G4VSceneHandler::AddPrimitive(const G4Scale&) - simply has to
@@ -2286,7 +2393,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
     const G4double yComfort = comfort * (ymax - ymin);
     const G4double zComfort = comfort * (zmax - zmin);
     switch (scaleDirection) {
-    case G4Scale::x:
+    case Scale::x:
       if (vp.z() > 0.) {
 	sxmid = xmax + xComfort;
 	symid = ymin - yComfort;
@@ -2297,7 +2404,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 	szmid = zmax + zComfort;
       }
       break;
-    case G4Scale::y:
+    case Scale::y:
       if (vp.x() > 0.) {
 	sxmid = xmin - xComfort;
 	symid = ymax + yComfort;
@@ -2308,7 +2415,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 	szmid = zmin - zComfort;
       }
       break;
-    case G4Scale::z:
+    case Scale::z:
       if (vp.x() > 0.) {
 	sxmid = xmax + xComfort;
 	symid = ymin - yComfort;
@@ -2322,78 +2429,47 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  /* Old code - kept for future reference.
-  G4double sxmid(xmid), symid(ymid), szmid(zmid);
-  if (autoPlacing) {
-    sxmid = xmin + onePlusComfort * (xmax - xmin);
-    symid = ymin - comfort * (ymax - ymin);
-    szmid = zmin + onePlusComfort * (zmax - zmin);
-    switch (scaleDirection) {
-    case G4Scale::x:
-      sxmid -= halfLength;
-      break;
-    case G4Scale::y:
-      symid += halfLength;
-      break;
-    case G4Scale::z:
-      szmid -= halfLength;
-      break;
-    }
-  }
-  */
-
-  /* sxmin, etc., not actually used.  Comment out to prevent compiler
-     warnings but keep in case need in future.  Extract transform and
-     scaleExtent into reduced code below.
-  G4double sxmin(sxmid), sxmax(sxmid);
-  G4double symin(symid), symax(symid);
-  G4double szmin(szmid), szmax(szmid);
   G4Transform3D transform;
-  G4VisExtent scaleExtent;
+  const G4double h = halfLength;
+  const G4double t = h/5.;
+  G4VisExtent scaleExtent(-h,h,-t,t,-t,t);
   switch (scaleDirection) {
-  case G4Scale::x:
-    sxmin = sxmid - halfLength;
-    sxmax = sxmid + halfLength;
-    scaleExtent = G4VisExtent(-halfLength,halfLength,0,0,0,0);
+  case Scale::x:
     break;
-  case G4Scale::y:
-    symin = symid - halfLength;
-    symax = symid + halfLength;
+  case Scale::y:
     transform = G4RotateZ3D(halfpi);
-    scaleExtent = G4VisExtent(0,0,-halfLength,halfLength,0,0);
     break;
-  case G4Scale::z:
-    szmin = szmid - halfLength;
-    szmax = szmid + halfLength;
+  case Scale::z:
     transform = G4RotateY3D(halfpi);
-    scaleExtent = G4VisExtent(0,0,0,0,-halfLength,halfLength);
-    break;
-  }
-  */
-  G4Transform3D transform;
-  G4VisExtent scaleExtent;
-  switch (scaleDirection) {
-  case G4Scale::x:
-    scaleExtent = G4VisExtent(-halfLength,halfLength,0,0,0,0);
-    break;
-  case G4Scale::y:
-    transform = G4RotateZ3D(halfpi);
-    scaleExtent = G4VisExtent(0,0,-halfLength,halfLength,0,0);
-    break;
-  case G4Scale::z:
-    transform = G4RotateY3D(halfpi);
-    scaleExtent = G4VisExtent(0,0,0,0,-halfLength,halfLength);
     break;
   }
   transform = G4Translate3D(sxmid,symid,szmid) * transform;
-  /////////  G4VisExtent scaleExtent(sxmin, sxmax, symin, symax, szmin, szmax);
+  scaleExtent = scaleExtent.Transform(transform);
 
-  model->SetTransformation(transform);
-  // Note: it is the responsibility of the model to act upon this, but
-  // the extent is in local coordinates...
+  G4Colour colour(red, green, blue);
+  if (direction == "auto") {
+    switch (scaleDirection) {
+      case Scale::x:
+	colour = G4Colour::Red();
+	break;
+      case Scale::y:
+	colour = G4Colour::Green();
+	break;
+      case Scale::z:
+	colour = G4Colour::Blue();
+	break;
+    }
+  }
+  G4VisAttributes visAttr(colour);
+
+  Scale* scale = new Scale
+  (visAttr, length, transform,
+   annotation, fCurrentTextSize, colour);
+  G4VModel* model = new G4CallbackModel<Scale>(scale);
+  model->SetType("Scale");
+  model->SetGlobalTag("Scale");
+  model->SetGlobalDescription("Scale: " + newValue);
   model->SetExtent(scaleExtent);
-  // This extent gets "added" to existing scene extent in
-  // AddRunDurationModel below.
 
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
@@ -2404,7 +2480,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
       if (verbosity >= G4VisManager::parameters) {
 	G4cout << "\n  with extent " << scaleExtent
 	       << "\n  at " << transform.getRotation()
-	       << transform.getTranslation();
+	       << "  " << transform.getTranslation();
       }
       G4cout << G4endl;
     }
@@ -2414,6 +2490,68 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   CheckSceneAndNotifyHandlers (pScene);
 }
 
+G4VisCommandSceneAddScale::Scale::Scale
+ (const G4VisAttributes& visAtts,
+  G4double length, const G4Transform3D& transform,
+  const G4String& annotation, G4double annotationSize,
+  const G4Colour& annotationColour):
+fVisAtts(visAtts)
+{
+  // Useful constants...
+  const G4double halfLength(length / 2.);
+  const G4double tickLength(length / 20.);
+
+  // Create (empty) polylines having the same vis attributes...
+  // (OK to pass address since fVisAtts is long lived.)
+  fScaleLine.SetVisAttributes(&fVisAtts);
+  fTick11.SetVisAttributes(&fVisAtts);
+  fTick12.SetVisAttributes(&fVisAtts);
+  fTick21.SetVisAttributes(&fVisAtts);
+  fTick22.SetVisAttributes(&fVisAtts);
+
+  // Add points to the polylines to represent a scale parallel to the
+  // x-axis centred on the origin...
+  G4Point3D r1(G4Point3D(-halfLength, 0., 0.));
+  G4Point3D r2(G4Point3D( halfLength, 0., 0.));
+  fScaleLine.push_back(r1);
+  fScaleLine.push_back(r2);
+  G4Point3D ticky(0., tickLength, 0.);
+  G4Point3D tickz(0., 0., tickLength);
+  fTick11.push_back(r1 + ticky);
+  fTick11.push_back(r1 - ticky);
+  fTick12.push_back(r1 + tickz);
+  fTick12.push_back(r1 - tickz);
+  fTick21.push_back(r2 + ticky);
+  fTick21.push_back(r2 - ticky);
+  fTick22.push_back(r2 + tickz);
+  fTick22.push_back(r2 - tickz);
+  // ...and transform to chosen position and orientation
+  fScaleLine.transform(transform);
+  fTick11.transform(transform);
+  fTick12.transform(transform);
+  fTick21.transform(transform);
+  fTick22.transform(transform);
+  // Similarly for annotation
+  G4Point3D textPosition(0., tickLength, 0.);
+  textPosition.transform(transform);
+  fText = G4Text(annotation,textPosition);
+  fText.SetVisAttributes(annotationColour);
+  fText.SetScreenSize(annotationSize);
+}
+
+void G4VisCommandSceneAddScale::Scale::operator()
+(G4VGraphicsScene& sceneHandler,const G4ModelingParameters*)
+{
+  // Draw...
+  sceneHandler.BeginPrimitives();
+  sceneHandler.AddPrimitive(fScaleLine);
+  sceneHandler.AddPrimitive(fTick11);
+  sceneHandler.AddPrimitive(fTick12);
+  sceneHandler.AddPrimitive(fTick21);
+  sceneHandler.AddPrimitive(fTick22);
+  sceneHandler.AddPrimitive(fText);
+  sceneHandler.EndPrimitives();
+}
 
 ////////////// /vis/scene/add/text //////////////////////////////////
 
@@ -2607,8 +2745,8 @@ G4VisCommandSceneAddText2D::G4Text2D::G4Text2D(const G4Text& text):
 {}
 
 void G4VisCommandSceneAddText2D::G4Text2D::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D& transform, const G4ModelingParameters*) {
-  sceneHandler.BeginPrimitives2D(transform);
+  (G4VGraphicsScene& sceneHandler, const G4ModelingParameters*) {
+  sceneHandler.BeginPrimitives2D();
   sceneHandler.AddPrimitive(fText);
   sceneHandler.EndPrimitives2D();
 }
@@ -3064,6 +3202,24 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   std::vector<G4PhysicalVolumesSearchScene::Findings> findingsVector;
 
+  // When it comes to determining the extent of a physical volume we normally
+  // assume the user wishes to ignore "invisible" volumes. For example, most
+  // users make the world volume invisible. So we ask the physical volume
+  // model to traverse the geometry hierarchy, starting at the named physical
+  // volume, until it finds non-invisible ones, whose extents are accumulated
+  // to determine the overall extent. (Once a non-invisible volume is found,
+  // the search is curtailed - daughters are always contained within the mother
+  // so they have no subsequent influence on the extent of the mother - but the
+  // search continues at the same level until all highest level non-invisible
+  // volumes are found an their extents accumulated.) So the default is
+  G4bool useFullExtent = false;
+  // However, the above procedure can be time consuming in some situations, such
+  // as a nested parameterisation whose ultimate volumes are the first non-
+  // visible ones, which are typical of a medical "phantom". So we assume here
+  // below that if a user specifies a name other than "world" or "worlds" he/she
+  // wished the extent to be determined by the volume, whether it is visible
+  // or not. So we set useFullExtent true at that point below.
+
   if (name == "world") {
 
     findingsVector.push_back
@@ -3090,13 +3246,25 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   } else {  // Search all worlds...
 
+    // Use the model's full extent. This assumes the user wants these
+    // volumes in the findings vector (there could be more than one) to
+    // determine the scene's extent. Otherwise G4PhysicalVolumeModel would
+    // re-calculate each volume's extent based on visibility, etc., which
+    // could be time consuming.
+    useFullExtent = true;
+
     std::vector<G4VPhysicalVolume*>::iterator iterWorld =
       transportationManager->GetWorldsIterator();
     for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
-      G4PhysicalVolumeModel searchModel (*iterWorld);  // Unlimited depth.
       G4ModelingParameters mp;  // Default - no culling.
-      searchModel.SetModelingParameters (&mp);
-      G4PhysicalVolumesSearchScene searchScene (&searchModel, name, copyNo);
+      G4PhysicalVolumeModel searchModel
+      (*iterWorld,
+       G4PhysicalVolumeModel::UNLIMITED,
+       G4Transform3D(),
+       &mp,
+       useFullExtent);
+      G4PhysicalVolumesSearchScene searchScene
+      (&searchModel, name, copyNo, requestedDepthOfDescent);
       searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
       for (const auto& findings: searchScene.GetFindings()) {
         findingsVector.push_back(findings);
@@ -3107,19 +3275,18 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   for (const auto& findings: findingsVector) {
     // Set copy number from search findings for replicas and parameterisations.
     findings.fpFoundPV->SetCopyNo(findings.fFoundPVCopyNo);
-    // Create a physical volume model...
     G4PhysicalVolumeModel* foundPVModel = new G4PhysicalVolumeModel
     (findings.fpFoundPV,
      requestedDepthOfDescent,
      findings.fFoundObjectTransformation,
      0, // No modelling parameters (these are set later by the scene handler).
-     false,  // Do not use full extent - only use non-culled extent.
+     useFullExtent,
      findings.fFoundBasePVPath);
     if (clippingSolid) {
       foundPVModel->SetClippingSolid(clippingSolid);
       foundPVModel->SetClippingMode(clippingMode);
     }
-    if (!foundPVModel->Validate(warn)) return;  // Calculates extent
+    if (!foundPVModel->Validate(warn)) return;
     // ...so add it to the scene.
     G4bool successful = pScene->AddRunDurationModel(foundPVModel,warn);
     if (successful) {
@@ -3159,3 +3326,49 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   CheckSceneAndNotifyHandlers(pScene);
 }
+
+/////////////////////////////////////////////////////////////////////////////
+////////////// /vis/scene/add/plotter ///////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+G4VisCommandSceneAddPlotter::G4VisCommandSceneAddPlotter () {
+  fpCommand = new G4UIcommand("/vis/scene/add/plotter", this);
+  fpCommand -> SetGuidance ("Add a plotter to current scene.");
+  
+  G4UIparameter* parameter;
+  parameter =  new G4UIparameter ("plotter", 's',false);
+  fpCommand->SetParameter(parameter);
+}
+
+G4VisCommandSceneAddPlotter::~G4VisCommandSceneAddPlotter () {delete fpCommand;}
+
+G4String G4VisCommandSceneAddPlotter::GetCurrentValue (G4UIcommand*) {return "";}
+
+void G4VisCommandSceneAddPlotter::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4Plotter& _plotter = G4PlotterManager::GetInstance().GetPlotter(newValue);
+  
+  G4VModel* model = new G4PlotterModel(_plotter);
+
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Arrow has been added to scene \"" << currentSceneName << "\"." << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+
+  CheckSceneAndNotifyHandlers (pScene);
+}
+

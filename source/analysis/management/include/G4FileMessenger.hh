@@ -48,17 +48,18 @@ class G4FileMessenger : public G4UImessenger
 {
   public:
     explicit G4FileMessenger(G4VAnalysisManager* manager);
+    G4FileMessenger() = delete;
     virtual ~G4FileMessenger();
-   
-    // methods
+
+    // Methods
     virtual void SetNewValue(G4UIcommand* command, G4String value) final;
- 
-    G4VAnalysisManager*  fManager; ///< Associated class
-    
+
+    G4VAnalysisManager*  fManager { nullptr }; ///< Associated class
+
     std::unique_ptr<G4UIcmdWithAString>  fSetFileNameCmd;
     std::unique_ptr<G4UIcmdWithAString>  fSetHistoDirNameCmd;
     std::unique_ptr<G4UIcmdWithAString>  fSetNtupleDirNameCmd;
 };
-  
+
 #endif
 

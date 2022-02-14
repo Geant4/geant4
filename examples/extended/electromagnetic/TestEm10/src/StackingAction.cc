@@ -31,8 +31,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StackingAction.hh"
-#include "Analysis.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4Track.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"

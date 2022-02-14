@@ -20,10 +20,6 @@
 #ifndef HEP_TWOVECTOR_H
 #define HEP_TWOVECTOR_H
 
-#ifdef GNUPRAGMA
-#pragma interface
-#endif
-
 #include <iostream>
 
 #include "CLHEP/Vector/ThreeVector.h" 

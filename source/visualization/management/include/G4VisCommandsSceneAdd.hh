@@ -68,7 +68,7 @@ private:
     Arrow2D(G4double x1, G4double y1,
 	    G4double x2, G4double y2,
 	    G4double width, const G4Colour& colour);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters* fpMp);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters* fpMp);
     G4Polyline fShaftPolyline;
     G4Polyline fHeadPolyline;
     G4double fWidth;
@@ -105,7 +105,7 @@ private:
      const G4String& date):
       fpVisManager(vm), fSize(size),
       fX(x), fY(y), fLayout(layout), fDate(date) {}
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
     G4VisManager* fpVisManager;
     G4Timer fTimer;
     G4int fSize;
@@ -143,7 +143,7 @@ private:
             G4double x, G4double y, G4Text::Layout layout):
     fForWhat(w), fpVisManager(vm), fSize(size),
     fX(x), fY(y), fLayout(layout) {}
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
     ForWhat fForWhat;
     G4VisManager* fpVisManager;
     G4int fSize;
@@ -166,7 +166,7 @@ private:
     Extent(G4double xmin, G4double xmax,
            G4double ymin, G4double ymax,
            G4double zmin, G4double zmax);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
     G4VisExtent fExtent;
   };
   G4UIcommand* fpCommand;
@@ -196,7 +196,7 @@ private:
   struct Frame {
     Frame(G4double size, G4double width, const G4Colour& colour):
       fSize(size), fWidth(width), fColour(colour) {}
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
     G4double fSize;
     G4double fWidth;
     G4Colour fColour;
@@ -254,7 +254,7 @@ private:
     Line(G4double x1, G4double y1, G4double z1,
 	 G4double x2, G4double y2, G4double z2,
 	 G4double width, const G4Colour& colour);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
     G4Polyline fPolyline;
     G4double fWidth;
     G4Colour fColour;
@@ -275,11 +275,23 @@ private:
     Line2D(G4double x1, G4double y1,
 	 G4double x2, G4double y2,
 	 G4double width, const G4Colour& colour);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
     G4Polyline fPolyline;
     G4double fWidth;
     G4Colour fColour;
   };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddLocalAxes: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLocalAxes ();
+  virtual ~G4VisCommandSceneAddLocalAxes ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLocalAxes (const G4VisCommandSceneAddLocalAxes&);
+  G4VisCommandSceneAddLocalAxes& operator = (const G4VisCommandSceneAddLocalAxes&);
   G4UIcommand* fpCommand;
 };
 
@@ -308,11 +320,10 @@ private:
   // Direction of outward-facing normal to front face of logo.
   enum Direction {X, minusX, Y, minusY, Z, minusZ};
   struct G4Logo {
-    G4Logo(G4double height, const G4VisAttributes&);
+    G4Logo(G4double height, const G4VisAttributes&, const G4Transform3D&);
     ~G4Logo();
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
   private:
-    G4VisAttributes fVisAtts;
     G4Polyhedron *fpG, *fp4;
   };
   G4UIcommand* fpCommand;
@@ -333,7 +344,7 @@ private:
      G4double x, G4double y, G4Text::Layout layout):
       fpVisManager(vm), fSize(size),
       fX(x), fY(y), fLayout(layout) {}
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
     G4VisManager* fpVisManager;
     G4int fSize;
     G4double fX, fY;
@@ -375,6 +386,35 @@ public:
 private:
   G4VisCommandSceneAddScale (const G4VisCommandSceneAddScale&);
   G4VisCommandSceneAddScale& operator = (const G4VisCommandSceneAddScale&);
+  struct Scale {
+    enum Direction {x, y, z};
+    Scale (const G4VisAttributes& visAttribs,
+	   G4double length, const G4Transform3D&,
+	   const G4String& annotation, G4double annotationSize,
+	   const G4Colour& annotationColour
+	   );
+    // This creates a representation of annotated line in the specified
+    // direction with tick marks at the end.  If autoPlacing is true it
+    // is required to be centred at the front, right, bottom corner of
+    // the world space, comfortably outside the existing bounding
+    // box/sphere so that existing objects do not obscure it.  Otherwise
+    // it is required to be drawn with mid-point at (xmid, ymid, zmid).
+    // Annotation size is size of text labels in pixels.
+    //
+    // The auto placing algorithm might be:
+    //   x = xmin + (1 + comfort) * (xmax - xmin)
+    //   y = ymin - comfort * (ymax - ymin)
+    //   z = zmin + (1 + comfort) * (zmax - zmin)
+    //   if direction == x then (x - length,y,z) to (x,y,z)
+    //   if direction == y then (x,y,z) to (x,y + length,z)
+    //   if direction == z then (x,y,z - length) to (x,y,z)
+    ~Scale();
+    void operator()(G4VGraphicsScene&,const G4ModelingParameters*);
+  private:
+    G4VisAttributes fVisAtts;
+    G4Polyline fScaleLine, fTick11, fTick12, fTick21, fTick22;
+    G4Text fText;
+  };
   G4UIcommand* fpCommand;
 };
 
@@ -401,7 +441,7 @@ private:
   G4VisCommandSceneAddText2D& operator = (const G4VisCommandSceneAddText2D&);
   struct G4Text2D {
     G4Text2D(const G4Text&);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    void operator()(G4VGraphicsScene&, const G4ModelingParameters*);
   private:
     G4Text fText;
   };
@@ -445,6 +485,18 @@ public:
 private:
   G4VisCommandSceneAddVolume (const G4VisCommandSceneAddVolume&);
   G4VisCommandSceneAddVolume& operator = (const G4VisCommandSceneAddVolume&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddPlotter: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddPlotter ();
+  virtual ~G4VisCommandSceneAddPlotter ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddPlotter (const G4VisCommandSceneAddPlotter&);
+  G4VisCommandSceneAddPlotter& operator = (const G4VisCommandSceneAddPlotter&);
   G4UIcommand* fpCommand;
 };
 

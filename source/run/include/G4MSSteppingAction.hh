@@ -23,46 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MSSteppingAction
 //
+// Class description:
 //
-//
+// Stepping action for material scanner.
 
-// class description:
-//
+// Author: M.Asai, 5 May 2006
+// --------------------------------------------------------------------
+#ifndef G4MSSteppingAction_hh
+#define G4MSSteppingAction_hh 1
 
-//////////////////////
-//G4MSSteppingAction
-/////////////////////
-
-
-#ifndef G4MSSteppingAction_h
-#define G4MSSteppingAction_h 1
+#include "globals.hh"
+#include "G4UserSteppingAction.hh"
 
 class G4Region;
-
-#include "G4UserSteppingAction.hh"
-#include "globals.hh"
 
 class G4MSSteppingAction : public G4UserSteppingAction
 {
   public:
+
     G4MSSteppingAction();
     virtual ~G4MSSteppingAction();
 
-    void Initialize(G4bool rSens,G4Region* reg);
+    void Initialize(G4bool rSens, G4Region* reg);
     virtual void UserSteppingAction(const G4Step*);
 
-  private:
-    G4bool regionSensitive;
-    G4Region* theRegion;
-    G4double length;
-    G4double x0;
-    G4double lambda;
-
-  public:
     inline G4double GetTotalStepLength() const { return length; }
     inline G4double GetX0() const { return x0; }
     inline G4double GetLambda0() const { return lambda; }
+
+  private:
+
+    G4bool regionSensitive = false;
+    G4Region* theRegion = nullptr;
+    G4double length = 0.0;
+    G4double x0 = 0.0;
+    G4double lambda = 0.0;
 };
 
 #endif

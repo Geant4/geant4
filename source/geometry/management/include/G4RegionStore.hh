@@ -27,28 +27,27 @@
 //
 // Class description:
 //
-// Container for all regiong, with functionality derived from
-// std::vector<T>. The class is a `singleton', in that only
+// Container for all regions, with functionality derived from
+// std::vector<T>. The class is a 'singleton', in that only
 // one can exist, and access is provided via the static method
 // G4RegionStore::GetInstance().
 //
 // All regions should be registered with G4RegionStore, and removed on their
 // destruction. The underlying container initially has a capacity of 20.
+// A map indexed by volume names is also recorded for fast search;
+// pointers to regions with same name are stored in buckets.
 //
 // If much additional functionality is added, should consider containment
-// instead of inheritance for std::vector<T>
-//
-// Member data:
-//
-// static G4RegionStore*
-//   - Pointer to the single G4RegionStore
+// instead of inheritance for std::vector<T>.
 
 // 18.09.02, G.Cosmo - Initial version
 // --------------------------------------------------------------------
 #ifndef G4REGIONSTORE_HH
-#define G4REGIONSTORE_HH
+#define G4REGIONSTORE_HH 1
 
 #include <vector>
+#include <map>
+
 #include "G4Types.hh"
 #include "G4String.hh"
 #include "G4VStoreNotifier.hh"
@@ -58,7 +57,7 @@ class G4VPhysicalVolume;
 
 class G4RegionStore : public std::vector<G4Region*>
 {
-  public:  // with description
+  public:
 
     static void Register(G4Region* pRegion);
       // Add the region to the collection.
@@ -79,37 +78,54 @@ class G4RegionStore : public std::vector<G4Region*>
       // to FALSE. Used by the run manager to notify that the
       // physics table has been updated.
 
-    void UpdateMaterialList(G4VPhysicalVolume* currentWorld=0);
+    void UpdateMaterialList(G4VPhysicalVolume* currentWorld=nullptr);
       // Forces recomputation of material lists in all regions
       // in the store.
 
     G4Region* GetRegion(const G4String& name, G4bool verbose = true) const;
-      // Returns a region through its name specification.
+      // Returns a region through its name specification. Uses the internal
+      // map for fast search and warns if a region in the collection is not
+      // unique or not found.
+
+    inline G4bool IsMapValid() const  { return mvalid; }
+    inline void SetMapValid(G4bool val)  { mvalid = val; }
+      // Accessor to assess validity of the internal map.
+    inline const std::map<G4String,
+            std::vector<G4Region*> >& GetMap() const { return bmap; }
+      // Return the internal map.
+    void UpdateMap();
+      // Bring contents of internal map up to date and resets validity flag.
 
     G4Region* FindOrCreateRegion(const G4String& name);
       // Returns a region through its name specification, if it exists.
       // If it does not exist it will allocate one delegating ownership
       // to the client.
 
-  public:  // without description
-
     void SetWorldVolume();
       // Set a world volume pointer to a region that belongs to it.
       // Scan over all world volumes.
       // This method should be exclusively used by G4RunManagerKernel.
 
+    virtual ~G4RegionStore();
+      // Destructor: takes care to delete allocated regions.
+
+    G4RegionStore(const G4RegionStore&) = delete;
+    G4RegionStore& operator=(const G4RegionStore&) = delete;
+      // Forbidden copy constructor and assignment operator
+
   protected:
 
     G4RegionStore();
       // Protected singleton constructor.
-    virtual ~G4RegionStore();
-      // Destructor: takes care to delete allocated regions.
 
   private:
 
     static G4RegionStore* fgInstance;
     static G4ThreadLocal G4VStoreNotifier* fgNotifier;
     static G4ThreadLocal G4bool locked;
+
+    std::map<G4String, std::vector<G4Region*> > bmap;
+    G4bool mvalid = false;  // Flag to indicate if map is up to date or not
 };
 
 #endif

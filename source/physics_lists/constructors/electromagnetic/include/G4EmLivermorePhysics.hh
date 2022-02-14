@@ -28,7 +28,6 @@
 #define G4EmLivermorePhysics_h 1
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,16 +36,12 @@ class G4EmLivermorePhysics : public G4VPhysicsConstructor
 {
 public:
 
-  explicit G4EmLivermorePhysics(G4int ver=1, const G4String& name="");
+  explicit G4EmLivermorePhysics(G4int ver=1, const G4String& name = "G4EmLivermore");
 
-  virtual ~G4EmLivermorePhysics();
+  ~G4EmLivermorePhysics() override;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-
-private:
-  G4int  verbose;
-  G4EmParticleList partList;
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

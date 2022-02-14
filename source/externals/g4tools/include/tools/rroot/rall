@@ -1,0 +1,528 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_rall
+#define tools_rroot_rall
+
+#include "streamers"
+#include "fac"
+#include "tree"
+#include "../words" //for annotations.
+
+#define TOOLS_RROOT_NOT_OSC
+
+#ifndef TOOLS_RROOT_NOT_OSC
+#include "osc"
+#endif
+
+#include "THistogram"
+
+namespace tools {
+namespace rroot {
+
+inline TDirectory* find_dir(directory& a_dir,const std::string& a_name) {
+  std::ostream& out = a_dir.file().out();
+  key* k = a_dir.find_key(a_name);
+  if(!k) {
+    //out << "tools::rroot::find_dir :"
+    //    << " " << a_name << " not a key."
+    //    << std::endl;
+    return 0;
+  }
+
+  if(k->object_class()!=TDirectory_cls()) {
+    out << "tools::rroot::find_dir :"
+        << " key " << a_name << " not a TDirectory."
+        << std::endl;
+    return 0;
+  }
+  uint32 sz;
+  char* buf = k->get_object_buffer(a_dir.file(),sz); //we don't have ownership of buf.
+  if(!buf) {
+    out  << "tools::rroot::find_dir :"
+         << " can't get directory data buffer."
+         << std::endl;
+    return 0;
+  }
+  buffer b(out,a_dir.file().byte_swap(),sz,buf,k->key_length(),false);
+  TDirectory* tdir = new TDirectory(a_dir.file());
+  if(!tdir) return 0;
+  if(!tdir->stream(b)) {
+    out << "tools::rroot::find_dir :"
+        << " can't stream TDirectory."
+        << std::endl;
+    return 0;
+  }
+  return tdir;
+}
+
+inline directory* find_path_dir(directory& a_from,const std::string& a_path) {
+  if(a_path.empty()) return 0;
+  std::vector<std::string> ws;
+  words(a_path,"/",false,ws);
+  directory* cur_dir = &a_from;
+  for(unsigned int index=0;index<ws.size();index++) {
+    TDirectory* _dir = find_dir(*cur_dir,ws[index]);
+    if(!_dir) return 0;
+    if(index==(ws.size()-1)) return _dir;
+    if(index) delete cur_dir;
+    cur_dir = _dir;
+  }
+  return 0;
+}
+
+inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    a_out << "tools::rroot::read_key : can't get data buffer of " << a_key.object_name() << "." << std::endl;
+    return false;
+  }
+
+  //a_out << "tools::rroot::read_key :"
+  //      << " get data buffer size " << sz << "."
+  //      << std::endl;
+
+  buffer b(a_out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+
+  if(a_key.object_class()==TNamed_cls()) {
+    std::string name,title;
+    if(!Named_stream(b,name,title)) {
+      a_out << "tools::rroot::read_key : TNamed streaming failed" << std::endl;
+    } else {
+      if(a_dump) {
+        a_out << "Named : name = " << sout(name) << ", title = " << sout(title) << std::endl;
+      }
+    }
+
+  } else if(a_key.object_class()==TH1F_cls()) {
+    histo::h1d* h = TH1F_stream(b);
+    if(!h) {
+      a_out << "tools::rroot::read_key : TH1F streaming failed" << std::endl;
+    } else {
+      if(a_dump) h->hprint(a_out);
+    }
+    delete h;
+
+  } else if(a_key.object_class()==TH1D_cls()) {
+    histo::h1d* h = TH1D_stream(b);
+    if(!h) {
+      a_out << "tools::rroot::read_key :"
+            << " TH1D streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h->hprint(a_out);
+    }
+    delete h;
+
+  } else if(a_key.object_class()==TH2F_cls()) {
+    histo::h2d* h = TH2F_stream(b);
+    if(!h) {
+      a_out << "tools::rroot::read_key :"
+            << " TH2F streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h->hprint(a_out);
+    }
+    delete h;
+
+  } else if(a_key.object_class()==TH2D_cls()) {
+    histo::h2d* h = TH2D_stream(b); //we get ownership of h.
+    if(!h) {
+      a_out << "tools::rroot::read_key :"
+            << " TH2D streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h->hprint(a_out);
+    }
+    delete h;
+
+  } else if(a_key.object_class()==TH3D_cls()) {
+    histo::h3d* h = TH3D_stream(b); //we get ownership of h.
+    if(!h) {
+      a_out << "tools::rroot::read_key :"
+            << " TH3D streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h->hprint(a_out);
+    }
+    delete h;
+
+  } else if(a_key.object_class()==TProfile_cls()) {
+    histo::p1d* p = TProfile_stream(b);
+    if(!p) {
+      a_out << "tools::rroot::read_key :"
+            << " TProfile streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) p->hprint(a_out);
+    }
+    delete p;
+
+  } else if(a_key.object_class()==TProfile2D_cls()) {
+    histo::p2d* p = TProfile2D_stream(b);
+    if(!p) {
+      a_out << "tools::rroot::read_key :"
+            << " TProfile2D streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) p->hprint(a_out);
+    }
+    delete p;
+
+  } else if(a_key.object_class()==TTree_cls()) {
+    b.set_map_objs(true); //for "root_ls -ls" on esb evetest.root files.
+    fac _fac(a_out);
+    tree tree(a_file,_fac);
+    if(!tree.stream(b)) {
+      a_out << "tools::rroot::read_key :"
+            << " TTree streaming failed"
+            << std::endl;
+    } else {
+      //tree->dump(a_out);
+      if(a_dump) {
+        tree.dump(a_out,"","  ");
+
+        uint64 entries = tree.entries();
+
+       /*
+       {for(uint32 j=0;j<10;j++){ //to test memory.
+        for(uint32 i=0;i<entries;i++){
+          uint32 n;
+          if(!tree.find_entry(i,n)) {
+            a_out << " can't find entry " << i
+                  << std::endl;
+          }
+        }
+        }}
+        */
+
+       {for(uint32 i=0;i<5;i++){
+          if(!tree.show(a_out,i)) {
+            a_out << " show failed for entry " << i
+                  << std::endl;
+          }
+        }}
+       {for(uint64 i=mx<int64>(5,entries-5);i<entries;i++){
+          if(!tree.show(a_out,(uint32)i)) {
+            a_out << " show failed for entry " << i
+                  << std::endl;
+          }
+        }}
+
+      }
+    }
+
+#ifndef TOOLS_RROOT_NOT_OSC
+  } else if(a_key.object_class()==osc::s_h1d()) {
+
+    histo::h1d h("",10,0,1);
+    if(!from_osc(b,osc::s_h1d(),h)) {
+      a_out << "tools::rroot::read_key :"
+            << " " << osc::s_h1d() << " streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h.hprint(a_out);
+    }
+
+  } else if(a_key.object_class()==osc::s_h2d()) {
+
+    histo::h2d h("",10,0,1,10,0,1);
+    if(!from_osc(b,osc::s_h2d(),h)) {
+      a_out << "tools::rroot::read_key :"
+            << " " << osc::s_h2d() << " streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h.hprint(a_out);
+    }
+
+  } else if(a_key.object_class()==osc::s_h3d()) {
+
+    histo::h3d h("",10,0,1,10,0,1,10,0,1);
+    if(!from_osc(b,osc::s_h3d(),h)) {
+      a_out << "tools::rroot::read_key :"
+            << " " << osc::s_h3d() << " streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h.hprint(a_out);
+    }
+
+  } else if(a_key.object_class()==osc::s_p1d()) {
+
+    histo::p1d h("",10,0,1);
+    if(!from_osc(b,osc::s_p1d(),h)) {
+      a_out << "tools::rroot::read_key :"
+            << " " << osc::s_p1d() << " streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h.hprint(a_out);
+    }
+
+  } else if(a_key.object_class()==osc::s_p2d()) {
+
+    histo::p2d h("",10,0,1,10,0,1);
+    if(!from_osc(b,osc::s_p2d(),h)) {
+      a_out << "tools::rroot::read_key :"
+            << " " << osc::s_p2d() << " streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h.hprint(a_out);
+    }
+#endif
+
+  } else if(a_key.object_class()==THistogram_cls()) { //produced with osc/AIDA through BatchLab/Rio/THistogram.
+
+    pd_data_t data;
+    annotations_t annotations;
+    if(!read_THistogram(b,data,annotations)) {
+      a_out << "tools::rroot::read_key : read_THistogram() failed." << std::endl;
+    } else {
+      if(histo::h1d* _h1d = THistogram_to_h1d(data)) {
+        if(a_dump) _h1d->hprint(a_out);
+        delete _h1d;
+      } else if(histo::h2d* _h2d = THistogram_to_h2d(data)) {
+        if(a_dump) _h2d->hprint(a_out);
+        delete _h2d;
+      } else if(histo::p1d* _p1d = THistogram_to_p1d(data)) {
+        if(a_dump) _p1d->hprint(a_out);
+        delete _p1d;
+      } else if(histo::p2d* _p2d = THistogram_to_p2d(data)) {
+        if(a_dump) _p2d->hprint(a_out);
+        delete _p2d;
+      } else {
+        a_out << "tools::rroot::read_key : can't convert THistogram dat to h1d,h2d,p1d or p2d." << std::endl;
+      }
+    }
+
+  } else if(a_key.object_class()==TDirectory_cls()) {
+
+    //we should not pass here.
+
+  } else {
+    a_out << "tools::rroot::read_key :"
+          << " dont't know how to read key with object class "
+          << sout(a_key.object_class())
+          << std::endl;
+  }
+  return true;
+}
+
+//typedef std::map<std::string,std::string> annotations_t;
+inline bool key_to_annotations(ifile& a_file,key& a_key,std::map<std::string,std::string>& a_annotations,bool a_warn = true) {
+  a_annotations.clear();
+  std::ostream& out = a_key.out();
+  if(a_key.object_class()!=TNamed_cls()) {
+    if(a_warn) out << "tools::rroot::key_to_annotations : key not a TNamed." << std::endl;
+    return false;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::key_to_annotations : can't get data buffer of " << a_key.object_name() << "." << std::endl;
+    return false;
+  }
+  buffer b(out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+  std::string histo_name;
+  std::string sas;
+  if(!Named_stream(b,histo_name,sas)) return false;
+  std::vector<std::string> ws;
+  words(sas,"\n",true,ws);
+  size_t wordn = ws.size();
+  if(2*(wordn/2)!=wordn) {
+    out << "tools::rroot::key_to_annotations : wordn should be even in " << sout(sas) << "." << std::endl;
+    return false;
+  }
+  std::vector<std::string>::const_iterator it;
+  for(it=ws.begin();it!=ws.end();) {
+    const std::string& key = *it;it++;
+    const std::string& value = *it;it++;
+    a_annotations[key] = value;
+  }
+  return true;
+}
+
+inline histo::h1d* key_to_h1d(ifile& a_file,key& a_key,bool a_warn = true) {
+  std::ostream& out = a_key.out();
+  if( (a_key.object_class()!=TH1D_cls()) && (a_key.object_class()!=TH1F_cls()) ) {
+    if(a_warn) out << "tools::rroot::key_to_h1d : key not a TH1D and not a TH1F." << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::key_to_h1d : can't get data buffer of " << a_key.object_name() << "." << std::endl;
+    return 0;
+  }
+  buffer b(out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+  if(a_key.object_class()==TH1D_cls()) {
+    return TH1D_stream(b);
+  } else {
+    return TH1F_stream(b);
+  }
+}
+
+inline histo::h2d* key_to_h2d(ifile& a_file,key& a_key,bool a_warn = true){
+  std::ostream& out = a_key.out();
+  if( (a_key.object_class()!=TH2D_cls()) && (a_key.object_class()!=TH2F_cls()) ) {
+    if(a_warn) out << "tools::rroot::key_to_h2d : key not a TH2D and not a TH2F." << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::key_to_h2d : can't get data buffer of " << a_key.object_name() << "." << std::endl;
+    return 0;
+  }
+  buffer b(out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+  if(a_key.object_class()==TH2D_cls()) {
+    return TH2D_stream(b);
+  } else {
+    return TH2F_stream(b);
+  }
+}
+
+inline histo::h3d* key_to_h3d(ifile& a_file,key& a_key){
+  std::ostream& out = a_key.out();
+  if(a_key.object_class()!=TH3D_cls()) {
+    out << "tools::rroot::key_to_h3d :"
+        << " key not a TH3D."
+        << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::key_to_h3d :"
+        << " can't get data buffer of " << a_key.object_name() << "."
+        << std::endl;
+    return 0;
+  }
+  buffer b(out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+  return TH3D_stream(b);
+}
+
+inline histo::p1d* key_to_p1d(ifile& a_file,key& a_key){
+  std::ostream& out = a_key.out();
+  if(a_key.object_class()!=TProfile_cls()) {
+    out << "tools::rroot::key_to_p1d :"
+        << " key not a TProfile."
+        << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::key_to_p1d :"
+        << " can't get data buffer of " << a_key.object_name() << "."
+        << std::endl;
+    return 0;
+  }
+  buffer b(out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+  return TProfile_stream(b);
+}
+
+inline histo::p2d* key_to_p2d(ifile& a_file,key& a_key){
+  std::ostream& out = a_key.out();
+  if(a_key.object_class()!=TProfile2D_cls()) {
+    out << "tools::rroot::key_to_p2d :"
+        << " key not a TProfile2D."
+        << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::key_to_p2d :"
+        << " can't get data buffer of " << a_key.object_name() << "."
+        << std::endl;
+    return 0;
+  }
+  buffer b(out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+  return TProfile2D_stream(b);
+}
+
+inline tree* key_to_tree(ifile& a_file,ifac& a_fac,key& a_key,bool a_warn = true) {
+  std::ostream& out = a_key.out();
+  if(a_key.object_class()!=TTree_cls()) {
+    if(a_warn) out << "tools::rroot::key_to_tree : key not a TTree." << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::key_to_tree : can't get data buffer of " << a_key.object_name() << "." << std::endl;
+    return 0;
+  }
+  buffer b(out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+  b.set_map_objs(true); //for ioda/comres/tree.py, tree.lua.
+  tree* _tree = new tree(a_file,a_fac);
+  if(!_tree->stream(b)) {
+    out << "tools::rroot::key_to_tree : TTree streaming failed" << std::endl;
+    delete _tree;
+    return 0;
+  }
+  return _tree;
+}
+
+inline void read(std::ostream& a_out,
+                 ifile& a_file,
+                 const std::vector<key*>& a_keys,
+                 bool a_recursive,
+                 bool a_ls,
+                 bool a_dump,
+                 unsigned int a_spaces) {
+
+ {std::vector<key*>::const_iterator it;
+  for(it=a_keys.begin();it!=a_keys.end();++it) {
+    key& k = *(*it);
+    if(k.object_class()!=TDirectory_cls()) {
+      if(a_ls||a_dump) {
+        {for(unsigned int index=0;index<a_spaces;index++) a_out << " ";}
+        std::string label = k.object_name();
+        a_out << "object : " << sout(label)
+              << ", class : " << k.object_class()
+              << std::endl;
+        //k.dump(a_out);
+      }
+      if(!read_key(a_out,a_file,k,a_dump)) return;
+    }
+  }}
+
+ {std::vector<key*>::const_iterator it;
+  for(it=a_keys.begin();it!=a_keys.end();++it) {
+    key& k = *(*it);
+    if(k.object_class()==TDirectory_cls()) {
+
+      if(a_ls||a_dump) {
+        {for(unsigned int index=0;index<a_spaces;index++) a_out << " ";}
+        std::string label = k.object_name();
+        a_out << "directory : " << label << std::endl;
+      }
+
+      if(!a_recursive) continue;
+
+      uint32 sz;
+      char* buf = k.get_object_buffer(a_file,sz);
+      if(!buf) {
+        a_out  << "read :"
+               << " can't get directory data buffer."
+               << std::endl;
+      } else {
+        buffer b(a_out,a_file.byte_swap(),sz,buf,k.key_length(),false);
+        TDirectory dir(a_file);
+        if(!dir.stream(b)) {
+          a_out << "read :"
+                << " can't stream TDirectory."
+                << std::endl;
+        } else {
+          const std::vector<key*>& keys = dir.keys();
+          read(a_out,a_file,keys,a_recursive,a_ls,a_dump,a_spaces+1);
+        }
+      }
+    }
+  }}
+}
+
+}}
+
+#endif

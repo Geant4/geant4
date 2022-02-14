@@ -46,20 +46,21 @@ public:
 
   virtual ~G4PreCompoundNeutron();
 
-  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const;
+  G4PreCompoundNeutron(const G4PreCompoundNeutron &right) = delete;
+  const G4PreCompoundNeutron& 
+  operator= (const G4PreCompoundNeutron &right) = delete;
+  G4bool operator==(const G4PreCompoundNeutron &right) const = delete;
+  G4bool operator!=(const G4PreCompoundNeutron &right) const = delete;
 
-  virtual G4double GetAlpha() const;
+protected:
 
-  virtual G4double GetBeta() const;
+  G4double GetRj(G4int NumberParticles, G4int NumberCharged) const override;
+
+  G4double GetAlpha() const override;
+
+  G4double GetBeta() const override;
 
 private:
-
-  // operators
-  G4PreCompoundNeutron(const G4PreCompoundNeutron &right);
-  const G4PreCompoundNeutron& 
-  operator= (const G4PreCompoundNeutron &right);
-  G4bool operator==(const G4PreCompoundNeutron &right) const;
-  G4bool operator!=(const G4PreCompoundNeutron &right) const;    
 
   G4NeutronCoulombBarrier theNeutronCoulombBarrier;
 };

@@ -25,74 +25,33 @@
 //
 // G4ProcessVector inline methods implementation
 //
+// Authors: G.Cosmo, H.Kurashige - 1998
 // --------------------------------------------------------------------
 
-inline G4bool G4ProcessVector::operator==(const G4ProcessVector &right) const
+inline G4bool G4ProcessVector::operator==(const G4ProcessVector& right) const
 {
   return (this == (G4ProcessVector *) &right);
 }
 
-inline size_t G4ProcessVector::entries() const
+inline std::size_t G4ProcessVector::entries() const
 {
   return pProcVector->size();
 }
 
-inline size_t G4ProcessVector::size() const
+inline std::size_t G4ProcessVector::size() const
 {
   return pProcVector->size();
 }
 
-inline size_t G4ProcessVector::length() const
+inline std::size_t G4ProcessVector::length() const
 {
   return pProcVector->size();
-}
-
-inline size_t G4ProcessVector::index(G4VProcess* aProcess) const
-{
-  G4ProcVector::iterator it;
-  size_t j=0;
-  for (it=pProcVector->begin();it!=pProcVector->end(); ++j,it++) {
-    if (*(*it)==*aProcess) return j;
-  }
-  return -1;
-}
- 
-inline G4bool G4ProcessVector::contains(G4VProcess* aProcess) const
-{
-  G4ProcVector::iterator it;
-  for (it=pProcVector->begin();it!=pProcVector->end(); it++) {
-    if (*(*it)==*aProcess) return true;
-  }
-  return false;
 }
 
 inline G4bool G4ProcessVector::insert(G4VProcess* aProcess)
 {
   pProcVector->push_back(aProcess);
   return true;
-}
-
-inline G4bool G4ProcessVector::insertAt(G4int i,G4VProcess* aProcess)
-{
-  if ( (i<0) || (i>G4int(pProcVector->size())) ) return false;
-  if (i==G4int(pProcVector->size())) {
-    pProcVector->push_back(aProcess);
-  } else {
-    G4ProcVector::iterator it=pProcVector->begin();
-    int j;
-    for(j=0;j!=i;++j) it++;
-    pProcVector->insert(it, aProcess);
-  }
-  return true;
-}
-
-inline G4VProcess* G4ProcessVector::removeAt(G4int i)
-{
-  G4ProcVector::iterator it=pProcVector->begin();
-  for(size_t j=0;j<pProcVector->size() && G4int(j)<i;++j) it++;
-  G4VProcess* rValue = *it;
-  pProcVector->erase(it);
-  return rValue;
 }
 
 inline G4VProcess* G4ProcessVector::removeLast()
@@ -126,7 +85,3 @@ inline G4VProcess* & G4ProcessVector::operator()(G4int i)
 {
   return (*pProcVector)[i];
 }
-
-
-
-

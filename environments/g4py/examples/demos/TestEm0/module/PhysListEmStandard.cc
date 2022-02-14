@@ -90,13 +90,13 @@ void PhysListEmStandard::ConstructProcess()
       //electron
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-3,3);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
     } else if( particleName == "mu+" || 

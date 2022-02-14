@@ -48,7 +48,7 @@ class G4ParticleDefinition;
 class G4HadronNucleonXsc;
 class G4Pow;
 
-class G4ComponentGGHadronNucleusXsc : public G4VComponentCrossSection
+class G4ComponentGGHadronNucleusXsc final : public G4VComponentCrossSection
 {
 public:
 

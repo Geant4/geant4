@@ -41,11 +41,16 @@
   They include : HadronElastic (including neutronHP), HadronInelastic,
   IonsInelastic, GammaNuclear physics, RadioactiveDecay and electomagnetic.
   (see geant4/source/physics_lists/constructors)
-    
+
+  HadronElasticPhysicsHP include a model for thermalized neutrons, under the control of a command
+  defined in NeutronHPMesseger.
+
+  GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
+
+  ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
+
   Several hadronic physics options are controlled by environment variables.
-  To trigger them, an envHadronic.csh has been added in this example.
-  One must select the options wished, and do
-        source envHadronic.csh  (or sh) 
+  To trigger them, see Hadr06.cc
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -63,7 +68,7 @@
 
  5- HISTOGRAMS
          
-   The test contains 13 built-in 1D histograms, which are managed by
+   The test contains 23 built-in 1D histograms, which are managed by
    G4AnalysisManager and its Messenger. The histos can be individually 
    activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 
@@ -73,17 +78,27 @@
             1     "total energy deposit"
             2     "Edep (MeV/mm) profile along radius"		  
             3     "total kinetic energy flow"
-            4     "gamma flux (dN/dE) at exit"
-            5     "e+- flux (dN/dE) at exit"
-            6     "neutrons flux (dN/dE) at exit"
-            7     "protons flux (dN/dE) at exit"
-            8     "deuterons flux (dN/dE) at exit"
-            9     "alphas flux (dN/dE) at exit"
-            10    "all others ions flux (dN/dE) at exit"
-            11    "all others baryons flux (dN/dE) at exit"
-            12    "all others mesons flux (dN/dE) at exit"
-            13    "all others leptons flux (dN/dE) at exit" 
-      
+            4     "energy spectrum of gamma at creation"
+            5     "energy spectrum of e+- at creation"
+            6     "energy spectrum of neutrons at creation"
+            7     "energy spectrum of protons at creation"
+            8     "energy spectrum of deuterons at creation"
+            9     "energy spectrum of alphas at creation"
+            10    "energy spectrum of all others ions at creation"
+            11    "energy spectrum of all others baryons at creation"
+            12    "energy spectrum of all others mesons at creation"
+            13    "energy spectrum of all others leptons (neutrinos) at creation"
+            14    "energy spectrum of emerging gamma"
+            15    "energy spectrum of emerging e+-"
+            16    "energy spectrum of emerging neutrons"
+            17    "energy spectrum of emerging protons"
+            18    "energy spectrum of emerging deuterons"
+            19    "energy spectrum of emerging alphas"
+            20    "energy spectrum of all others emerging ions"
+            21    "energy spectrum of all others emerging baryons"
+            22    "energy spectrum of all others emerging mesons"
+            23    "energy spectrum of all others emerging leptons (neutrinos)"
+	          
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 
@@ -124,3 +139,14 @@
  	Idle> type your commands
  	....
  	Idle> exit
+	
+ Macros provided in this example:
+  - graphite.mac: neutron,14 MeV, in graphite
+  - run1.mac: neutron,14 MeV, in Li7
+  - singleFission.mac: single fission in U235
+  
+  Macros to be run interactively:
+  - debug.mac: water with thermal scattering
+  - fission.mac: U235
+  - vis.mac: To activate visualization
+   

@@ -58,28 +58,29 @@
 #include "Randomize.hh"
 #include "G4LinInterpolation.hh"
 
-
 G4EMDataSet::G4EMDataSet(G4int Z, 
 			 G4VDataSetAlgorithm* algo, 
 			 G4double xUnit, 
 			 G4double yUnit,
-			 G4bool random): 
-  z(Z),
-  energies(0),
-  data(0),
-  log_energies(0),
-  log_data(0),
+			 G4bool random):  
+  energies(nullptr),
+  data(nullptr),
+  log_energies(nullptr),
+  log_data(nullptr),
   algorithm(algo),
+  pdf(nullptr),
   unitEnergies(xUnit),
-  unitData(yUnit),
-  pdf(0),
+  unitData(yUnit), 
+  z(Z),
   randomSet(random)
 {
-  if (algorithm == 0) {
+  if (algorithm == nullptr) {
     G4Exception("G4EMDataSet::G4EMDataSet",
 		    "em1012",FatalException,"interpolation == 0");
   } else if (randomSet) { BuildPdf(); }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EMDataSet::G4EMDataSet(G4int argZ, 
 			 G4DataVector* dataX, 
@@ -88,15 +89,15 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
 			 G4double xUnit, 
 			 G4double yUnit,
 			 G4bool random):
-  z(argZ),
   energies(dataX),
   data(dataY),
-  log_energies(0),
-  log_data(0),
+  log_energies(nullptr),
+  log_data(nullptr),
   algorithm(algo),
+  pdf(nullptr),
   unitEnergies(xUnit),
-  unitData(yUnit),
-  pdf(0),
+  unitData(yUnit), 
+  z(argZ),
   randomSet(random)
 {
   if (!algorithm || !energies || !data) {
@@ -112,6 +113,8 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4EMDataSet::G4EMDataSet(G4int argZ, 
 			 G4DataVector* dataX, 
 			 G4DataVector* dataY,
@@ -121,15 +124,15 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
 			 G4double xUnit, 
 			 G4double yUnit,
 			 G4bool random):
-  z(argZ),
   energies(dataX),
   data(dataY),
   log_energies(dataLogX),
   log_data(dataLogY),
   algorithm(algo),
+  pdf(nullptr),
   unitEnergies(xUnit),
   unitData(yUnit),
-  pdf(0),
+  z(argZ),
   randomSet(random)
 {
   if (!algorithm || !energies || !data || !log_energies || !log_data) {
@@ -147,6 +150,8 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4EMDataSet::~G4EMDataSet()
 { 
   delete algorithm;
@@ -156,6 +161,8 @@ G4EMDataSet::~G4EMDataSet()
   delete log_energies; 
   delete log_data; 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EMDataSet::FindValue(G4double energy, G4int /* componentId */) const
 {
@@ -167,13 +174,15 @@ G4double G4EMDataSet::FindValue(G4double energy, G4int /* componentId */) const
 
   //Nicolas A. Karakatsanis: Check if the logarithmic data have been loaded to decide
   //                         which Interpolation-Calculation method will be applied
-  if (log_energies != 0) 
+  if (log_energies != nullptr) 
    {
      return algorithm->Calculate(energy, FindLowerBound(energy), *energies, *data, *log_energies, *log_data);
    }
 
   return algorithm->Calculate(energy, FindLowerBound(energy), *energies, *data);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EMDataSet::PrintData(void) const
 {
@@ -186,6 +195,8 @@ void G4EMDataSet::PrintData(void) const
       G4cout << G4endl; 
     }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EMDataSet::SetEnergiesData(G4DataVector* dataX, 
 				  G4DataVector* dataY, 
@@ -210,6 +221,8 @@ void G4EMDataSet::SetEnergiesData(G4DataVector* dataX,
     }
   } 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EMDataSet::SetLogEnergiesData(G4DataVector* dataX,
                                      G4DataVector* dataY,
@@ -245,6 +258,8 @@ void G4EMDataSet::SetLogEnergiesData(G4DataVector* dataX,
   } 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4bool G4EMDataSet::LoadData(const G4String& fileName)
 {
  // The file is organized into four columns:
@@ -276,9 +291,6 @@ G4bool G4EMDataSet::LoadData(const G4String& fileName)
   log_data = new G4DataVector;
 
   G4double a, b;
-  //G4int k = 0;
-  //G4int nColumns = 2;
-
   do
     {
       in >> a >> b;
@@ -302,6 +314,7 @@ G4bool G4EMDataSet::LoadData(const G4String& fileName)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4EMDataSet::LoadNonLogData(const G4String& fileName)
 {
@@ -355,7 +368,7 @@ G4bool G4EMDataSet::LoadNonLogData(const G4String& fileName)
   return true;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4EMDataSet::SaveData(const G4String& name) const
 {
@@ -427,7 +440,7 @@ G4bool G4EMDataSet::SaveData(const G4String& name) const
   return true;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 size_t G4EMDataSet::FindLowerBound(G4double x) const
 {
@@ -445,6 +458,7 @@ size_t G4EMDataSet::FindLowerBound(G4double x) const
   return upperBound;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 size_t G4EMDataSet::FindLowerBound(G4double x, G4DataVector* values) const
 {
@@ -462,6 +476,7 @@ size_t G4EMDataSet::FindLowerBound(G4double x, G4DataVector* values) const
   return upperBound;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4String G4EMDataSet::FullFileName(const G4String& name) const
 {
@@ -477,7 +492,7 @@ G4String G4EMDataSet::FullFileName(const G4String& name) const
   return G4String(fullFileName.str().c_str());
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EMDataSet::BuildPdf() 
 {
@@ -508,6 +523,8 @@ void G4EMDataSet::BuildPdf()
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4EMDataSet::RandomSelect(G4int /* componentId */) const
 {
   G4double value = 0.;
@@ -528,22 +545,21 @@ G4double G4EMDataSet::RandomSelect(G4int /* componentId */) const
   // Interpolate the PDF to calculate the X value: 
   // linear interpolation in the first bin (to avoid problem with 0),
   // interpolation with associated data set algorithm in other bins
-
   G4LinInterpolation linearAlgo;
   if (bin == 0) value = linearAlgo.Calculate(x, bin, *pdf, *energies);
   else value = algorithm->Calculate(x, bin, *pdf, *energies);
 
-  //  G4cout << x << " random bin "<< bin << " - " << value << G4endl;
   return value;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EMDataSet::IntegrationFunction(G4double x)
 {
   // This function is needed by G4Integrator to calculate the integral of the data distribution
-
   G4double y = 0;
 
- // Locate the random value in the X vector based on the PDF
+  // Locate the random value in the X vector based on the PDF
   size_t bin = FindLowerBound(x);
 
   // Interpolate to calculate the X value: 

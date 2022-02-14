@@ -28,6 +28,9 @@
 #include "CLHEP/Units/PhysicalConstants.h"
 #include "CLHEP/Random/DoubConv.h"
 #include <cmath>	// for std::floor()
+#include <iostream>
+#include <string>
+#include <vector>
 
 namespace CLHEP {
 

@@ -23,62 +23,61 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4Pevent.hh
+// G4Pevent
 //
-// History:
-//   '01.11.18  Youhei Morita  Initial creation
+// Class Description:
+//
+// Geant4 event object for store.
+//
+// This class has pointers to MCTruth and G4Event.
+//
+// In the event store operation, this object will be created in the concrete
+// class of G4VPEventIO::Store() method, and will be deleted immediately after
+// creating persistent Geant4 event.
+//
+// In the event retrieve operation, this object will be created in the
+// concrete Persistency::Retrieve() method.  The retrieved G4Pevent
+// has to be deleted by the user method which called the Retrieve().
 
+// Author: Youhei Morita, 18.11.2001
+// --------------------------------------------------------------------
 #ifndef G4PEVENT_HH
 #define G4PEVENT_HH 1
 
 #include "G4Event.hh"
 #include "G4MCTEvent.hh"
 
-// Class Description:
-//   Geant4 event object for store.
-// 
-//   This class has pointers to MCTruth and G4Event.
-// 
-//   In the event store operation, this object will be created in the concrete
-//   class of G4VPEventIO::Store() method, and will be deleted immediately after
-//   creating persistent Geant4 event. 
-// 
-//   In the event retrieve operation, this object will be created in the
-//   concrete Persistency::Retrieve() method.  The retrieved G4Pevent
-//   has to be deleted by the user method which called the Retrieve().
-
 class G4Pevent
 {
-    public: // With description
-      G4Pevent( G4MCTEvent* mctevt, G4Event* g4evt );
+  public:
+
+    G4Pevent(G4MCTEvent* mctevt, G4Event* g4evt);
       // Constructor
 
-      ~G4Pevent();
+    ~G4Pevent();
       // Destructor
 
-    public: // With description
-      int GetEventID() { return m_id; };
-      // returns the event ID.
+    G4int GetEventID() { return m_id; }
+      // Returns the event ID
 
-      G4Event* GetEvent() { return f_g4evt; };
-      // returns the G4Event.
+    G4Event* GetEvent() { return f_g4evt; }
+      // Returns the G4Event
 
-      G4MCTEvent* GetMCTEvent() { return f_mctevt; };
-      // returns the MCTruth event.
+    G4MCTEvent* GetMCTEvent() { return f_mctevt; }
+      // Returns the MCTruth event
 
-      int GetGenEventID() const { return genEventID; };
-      // returns the GenEvent ID.
+    G4int GetGenEventID() const { return genEventID; }
+      // Returns the GenEvent ID
 
-      void SetGenEventID(int id) { genEventID=id; };
-      // set the GenEvent ID.
+    void SetGenEventID(G4int id) { genEventID = id; }
+      // Sets the GenEvent ID
 
-    private:
-      int       genEventID;
-      G4MCTEvent* f_mctevt;
-      G4Event*  f_g4evt;
-      int       m_id;
+  private:
 
-}; // End of class G4Pevent
+    G4MCTEvent* f_mctevt = nullptr;
+    G4Event* f_g4evt = nullptr;
+    G4int genEventID = -1;
+    G4int m_id = -1;
+};
 
 #endif
-

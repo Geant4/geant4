@@ -135,10 +135,10 @@ ifndef G4BIN
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
 
-# Use C++11 standard constructs and compilation options ...
+# Use minimum C++14 standard constructs and compilation options ...
 #
-CPPFLAGS += -DG4USE_STD11
-G4USE_STD11 := 1
+# CPPFLAGS += -DG4USE_STD14
+# G4USE_STD14 := 1
 
 # If G4DEBUG or G4NO_OPTIMISE are not specified,
 # the default compilation is optimised ...
@@ -183,6 +183,29 @@ ifndef CLHEP_INCLUDE_DIR
 endif
 ifndef CLHEP_LIB_DIR
   CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
+endif
+
+# PTL path, etc.
+#
+ifndef PTL_BASE_DIR
+  PTL_BASE_DIR  := $(G4BASE)/externals/ptl
+  G4LIB_BUILD_PTL := 1
+  G4LIB_USE_PTL := 1
+endif
+ifndef G4LIB_USE_PTL
+  ifndef PTL_LIB
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      PTL_LIB := ptl.lib
+    else
+      PTL_LIB := ptl
+    endif
+  endif
+endif
+ifndef PTL_INCLUDE_DIR
+  PTL_INCLUDE_DIR := $(PTL_BASE_DIR)/include
+endif
+ifndef CLHEP_LIB_DIR
+  PTL_LIB_DIR     := $(PTL_BASE_DIR)/lib
 endif
 
 # USolids path, etc.
@@ -262,7 +285,7 @@ endif
 # Variables for implicit rules, etc., as suggested in GNU Make manual...
 #
 CPPFLAGS  += -Iinclude 
-CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
+CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR) -I$(PTL_INCLUDE_DIR)
 
 # Positional qualifiers in action...
 #
@@ -284,6 +307,15 @@ ifndef G4LIB_USE_CLHEP
   else
     LDFLAGS   += -L$(CLHEP_LIB_DIR)
     LOADLIBS  += -l$(CLHEP_LIB)
+  endif
+endif
+ifndef G4LIB_USE_PTL
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    LDFLAGS   += -link $(LIB_PATH)$(PTL_LIB_DIR)
+    LOADLIBS  += $(PTL_LIB)
+  else
+    LDFLAGS   += -L$(PTL_LIB_DIR)
+    LOADLIBS  += -l$(PTL_LIB)
   endif
 endif
 ifdef G4LIB_USE_USOLIDS
@@ -318,8 +350,8 @@ endif
 # OGLFLAGS gives the directory containing include files.
 #   E.g.: OGLFLAGS  := -I$(OGLHOME)/include
 # OGLLIBS gives the libraries.
-#   E.g.: OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-#   Or  : OGLLIBS   := -L$(OGLHOME)/lib -lMesaGLU -lMesaGL
+#   E.g.: OGLLIBS   := -L$(OGLHOME)/lib -lGL
+#   Or  : OGLLIBS   := -L$(OGLHOME)/lib -lMesaGL
 # OGLHOME is often /usr or /usr/local.  In such case, it is not necessary
 # to specify the path in OGLFLAGS, since added already by default by the
 # compiler.  OGLHOME can also point to a special installation.
@@ -327,18 +359,23 @@ endif
 # are set below.  Most system-dependent code assumes OGLHOME is set.
 
 # ------------- OpenInventor -----------------
-# The path to the installation of OpenInventor must be specified
+# The path to the installation of OpenInventor (Coin) must be specified
 # if the package is installed in a location different
 # than default system directories (like... /usr or /usr/local).
 #
 ifndef OIVHOME
-  OIVHOME  := /usr/local/Inventor
+  OIVHOME := /usr/local/Inventor
 endif
 ifndef OIVFLAGS
-  OIVFLAGS  := -I$(OIVHOME)/include 
+  OIVFLAGS := -I$(OIVHOME)/include 
 endif
 ifndef OIVLIBS
-  OIVLIBS   := -L$(OIVHOME)/lib -lInventorXt -lInventor
+  ifdef G4VIS_USE_OIQT
+    OIVLIBS := -L$(OIVHOME)/lib -lSoQt
+  else
+    OIVLIBS := -L$(OIVHOME)/lib -lSoXt
+  endif
+  OIVLIBS += -lCoin
 endif
 
 # ----------------- GDML ---------------------
@@ -358,7 +395,7 @@ ifdef G4LIB_USE_GDML
     ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
       GDMLLIBS := $(LIB_PATH)$(XERCESCROOT)/lib xerces-c.lib
     else
-      GDMLLIBS := -L$(XERCESCROOT)/lib -lxerces-c
+      GDMLLIBS := -L$(XERCESCROOT)/$(shell [ -d $(XERCESCROOT)/lib64 ] && echo "lib64" || echo "lib") -lxerces-c
     endif
   endif
   CPPFLAGS  += $(GDMLFLAGS)
@@ -373,7 +410,7 @@ G4TREP := $(G4TMP)/$(G4TEMPLATE_REPOSITORY)
 
 # Default archive call. Changed for: SUN-CC.
 #
-AR := ar r
+AR := ar rc
 
 # Default echo used with makedepend. Changed for SUN-CC, Linux-g++, WIN32.
 #

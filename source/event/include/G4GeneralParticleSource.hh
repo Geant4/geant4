@@ -23,45 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///////////////////////////////////////////////////////////////////////////////
-//
-// MODULE:       G4GeneralParticleSource.hh
-//
-// Version:      2.0
-// Date:         5/02/04
-// Author:       Fan Lei 
-// Organisation: QinetiQ ltd.
-// Customer:     ESA/ESTEC
-//
-// Documentation avaialable at http://reat.space.qinetiq.com/gps
-//   These include:
-//       User Requirement Document (URD)
-//       Software Specification Documents (SSD)
-//       Software User Manual (SUM): on-line version available
-//       Technical Note (TN) on the physics and algorithms
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-// 26/10/2004, F Lei
-//    Added the Multiple_vertex capability.
-//    Removed "inline" from all Set/Get methods.
-//
-// Version 2.0, 05/02/2004, Fan Lei, Created.
-//    based on version 1.1 in Geant4 v6.0
-//     - Mutilple particle source definition
-//     - Re-structured commands
-//     - Split the task into smaller classes
-//
-//     - old commonds have been retained for backward compatibility, but will 
-//       be removed in the future.
-//
-//  25/03/2014, Andrew Green
-//      Various changes to use the new G4GeneralParticleSourceData class, mostly
-//      just transparent wrappers around the thread safe object.
-//
-///////////////////////////////////////////////////////////////////////////////
+// G4GeneralParticleSource
 //
 // Class Description:
 //
@@ -69,92 +31,133 @@
 // It is designed to allow specification of mutiple particle sources, each with 
 // independent definitions of particle type, position, direction (or angular) 
 // and energy distributions.  
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// MEMBER FUNCTIONS
-// ----------------
-//
-// G4GeneralParticleSource()
-//     Constructor:  Initializes variables and instantiates the 
-//                   Messenger and generator classes
-//
-// ~G4GeneralParticleSourceMessenger()
-//     Destructor:  deletes Messenger and others
-//
-//  G4int GetNumberofSource() 
-//     Return the number of particle gun defined
-//
-//  void ListSource()
-//     List the particle guns defined
-//
-//  void SetCurrentSourceto(G4int) 
-//     set the current gun to the specified one so its definition can be changed
-//
-//  void SetCurrentSourceIntensity(G4double)
-//     change the current particle gun strength
-//  
-//  void SetMultipleVertex(G4bool )  
-//     Set if multiple vertex per event.
 
-//  G4SingleParticleSource* GetCurrentSource()
-//     return the pointer to current particle gun
-// 
-//  G4int GetCurrentSourceIndex() 
-//     return the index of the current particle gun
-//
-//  G4double GetCurrentSourceIntensity() 
-//     return the strength of the current gun
-//
-//  void ClearAll()
-//     remove all defined aprticle gun
-//
-//  void AddaSource (G4double)
-//     add a new particle gun with the specified strength
-//
-//  void DeleteaSource(G4int);
-//     delete the specified particle gun
-//
-//  void SetParticleDefinition ();
-//  G4ParticleDefinition * GetParticleDefinition () 
-//     Get/Set the particle definition of the primary track
-//
-//  void SetParticleCharge(G4double aCharge) 
-//     set the charge state of the primary track
-//
-//  void SetParticlePolarization (G4ThreeVector aVal) 
-//  G4ThreeVector GetParticlePolarization ()
-//     Set/Get the polarization state of the primary track
-//
-//  void SetParticleTime(G4double aTime)  { particle_time = aTime; };
-//  G4double GetParticleTime()  { return particle_time; };
-//     Set/Get the Time.
-//
-//  void SetNumberOfParticles(G4int i) 
-//  G4int GetNumberOfParticles() 
-//     set/get the number of particles to be generated in the primary track
-//
-//  G4ThreeVector GetParticlePosition()  
-//  G4ThreeVector GetParticleMomentumDirection()  
-//  G4double GetParticleEnergy()  
-//     get the position, direction, and energy of the current particle 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-#ifndef G4GeneralParticleSource_H
-#define G4GeneralParticleSource_H 1
+// Author: Fan Lei, QinetiQ ltd
+// Customer: ESA/ESTEC
+// Version: 2.0
+// History:
+// - 05/02/2004, F.Lei - Version 2.0. Created.
+// - 26/10/2004, F.Lei - Added the Multiple_vertex capability.
+// - 25/03/2014, A.Green - Various changes to use the new class
+//               G4GeneralParticleSourceData, mostly just transparent wrappers
+//               around the thread safe object.
+// --------------------------------------------------------------------
+#ifndef G4GeneralParticleSource_hh
+#define G4GeneralParticleSource_hh 1
 
 #include "globals.hh"
 #include <vector>
 
 #include "G4Event.hh"
 #include "G4SingleParticleSource.hh"
-//
 #include "G4GeneralParticleSourceMessenger.hh"
-
 #include "G4GeneralParticleSourceData.hh"
 
 class G4SingleParticleSource;
+
+class G4GeneralParticleSource : public G4VPrimaryGenerator
+{
+  public:
+
+    G4GeneralParticleSource();
+      // Initialize variables and instantiates the messenger and
+      // generator classes
+
+   ~G4GeneralParticleSource();
+      // Delete messenger and others
+
+    void GeneratePrimaryVertex(G4Event*);
+
+    inline G4int GetNumberofSource() { return GPSData->GetSourceVectorSize(); }
+      // Return the number of particle gun defined
+
+    void ListSource();
+      // List the particle guns defined
+
+    void SetCurrentSourceto(G4int) ;
+      // Set the current gun to the specified one so its definition
+      // can be changed
+
+    void SetCurrentSourceIntensity(G4double);
+      // Change the current particle gun strength
+
+    inline G4SingleParticleSource* GetCurrentSource() const
+      { return GPSData->GetCurrentSource(); }
+      // Return the pointer to current particle gun
+    inline G4int GetCurrentSourceIndex() const
+      { return GPSData->GetCurrentSourceIdx(); }
+      // Return the index of the current particle gun
+    inline G4double GetCurrentSourceIntensity() const
+      { return GPSData->GetIntensity(GetCurrentSourceIndex()); }
+      // Return the strength of the current gun
+
+    void ClearAll();
+      // Remove all defined particle gun
+    void AddaSource (G4double);
+      // Add a new particle gun with the specified strength
+    void DeleteaSource(G4int);
+      // Delete the specified particle gun
+
+    inline void SetVerbosity(G4int i) { GPSData->SetVerbosityAllSources(i); }
+      // Set the verbosity level.
+
+    inline void SetMultipleVertex(G4bool av) { GPSData->SetMultipleVertex(av); }
+      // Set if multiple vertex per event.
+
+    inline void SetFlatSampling(G4bool av)
+      { GPSData->SetFlatSampling(av); normalised = false;}
+      // Set if flat_sampling is applied in multiple source case
+
+    inline void SetParticleDefinition (G4ParticleDefinition * aPDef) 
+      { GPSData->GetCurrentSource()->SetParticleDefinition(aPDef); }
+    inline G4ParticleDefinition* GetParticleDefinition () const
+      { return GPSData->GetCurrentSource()->GetParticleDefinition(); }
+      // Set/Get the particle definition of the primary track
+
+    inline void SetParticleCharge(G4double aCharge)
+      { GPSData->GetCurrentSource()->SetParticleCharge(aCharge); }
+      // Set the charge state of the primary track
+
+    inline void SetParticlePolarization (G4ThreeVector aVal)
+      { GPSData->GetCurrentSource()->SetParticlePolarization(aVal); }
+    inline G4ThreeVector GetParticlePolarization () const
+      { return GPSData->GetCurrentSource()->GetParticlePolarization(); }
+      // Set/Get polarization state of the primary track
+
+    inline void SetParticleTime(G4double aTime)
+      { GPSData->GetCurrentSource()->SetParticleTime(aTime); }
+    inline G4double GetParticleTime() const
+      { return GPSData->GetCurrentSource()->GetParticleTime(); }
+      // Set/Get the Time.
+
+    inline void SetNumberOfParticles(G4int i)
+      { GPSData->GetCurrentSource()->SetNumberOfParticles(i); }
+    inline G4int GetNumberOfParticles() const
+      { return GPSData->GetCurrentSource()->GetNumberOfParticles(); }
+      // Set/Get the number of particles to be generated in the primary track
+
+    inline G4ThreeVector GetParticlePosition() const
+      { return GPSData->GetCurrentSource()->GetParticlePosition(); }
+    inline G4ThreeVector GetParticleMomentumDirection() const
+      { return GPSData->GetCurrentSource()->GetParticleMomentumDirection(); }
+    inline G4double GetParticleEnergy() const
+      { return GPSData->GetCurrentSource()->GetParticleEnergy(); }
+      // Get the position, direction, and energy of the current particle 
+
+  private:
+
+    void IntensityNormalization();
+
+  private:
+
+    G4bool normalised = false;
+      // Helper Boolean, used to reduce number of locks
+      // at run time (see GeneratePrimaryVertex)
+
+    G4GeneralParticleSourceMessenger* theMessenger = nullptr;
+      // Note this is a shared resource among MT workers
+    G4GeneralParticleSourceData* GPSData = nullptr;
+      // Note this is a shared resource among MT workers
 
 /** Andrea Dotti Feb 2015
  * GPS messenger design requires some explanation for what distributions
@@ -176,88 +179,7 @@ class G4SingleParticleSource;
  * (for example in G4VUserActionInitialization::BuildForMaster() and set the
  * defaults parameter there).
  */
-class G4GeneralParticleSource : public G4VPrimaryGenerator
-{
-    //
-    public:
 
-        G4GeneralParticleSource();
-        ~G4GeneralParticleSource();
-
-        void GeneratePrimaryVertex(G4Event*);
-
-        G4int GetNumberofSource() { return GPSData->GetSourceVectorSize(); };
-        void ListSource();
-        void SetCurrentSourceto(G4int) ;
-        void SetCurrentSourceIntensity(G4double);
-        G4SingleParticleSource* GetCurrentSource() const
-          {return GPSData->GetCurrentSource();}
-        G4int GetCurrentSourceIndex() const
-          { return GPSData->GetCurrentSourceIdx(); }
-        G4double GetCurrentSourceIntensity() const
-          { return GPSData->GetIntensity(GetCurrentSourceIndex()); }
-        void ClearAll();
-        void AddaSource (G4double);
-        void DeleteaSource(G4int);
-
-        // Set the verbosity level.
-        void SetVerbosity(G4int i) {GPSData->SetVerbosityAllSources(i);} ;
-
-        // Set if multiple vertex per event.
-        void SetMultipleVertex(G4bool av) { GPSData->SetMultipleVertex(av);} ;
-
-        // set if flat_sampling is applied in multiple source case
-
-        void SetFlatSampling(G4bool av) { GPSData->SetFlatSampling(av); normalised = false;} ;
-
-        // Set the particle species
-        void SetParticleDefinition (G4ParticleDefinition * aParticleDefinition) 
-          {GPSData->GetCurrentSource()->SetParticleDefinition(aParticleDefinition); } ;
-
-        G4ParticleDefinition * GetParticleDefinition () const
-          { return GPSData->GetCurrentSource()->GetParticleDefinition();} ;
-
-        void SetParticleCharge(G4double aCharge)
-          { GPSData->GetCurrentSource()->SetParticleCharge(aCharge); } ;
-
-        // Set polarization
-        void SetParticlePolarization (G4ThreeVector aVal)
-          {GPSData->GetCurrentSource()->SetParticlePolarization(aVal);};
-        G4ThreeVector GetParticlePolarization () const
-          {return GPSData->GetCurrentSource()->GetParticlePolarization();};
-
-        // Set Time.
-        void SetParticleTime(G4double aTime)
-          { GPSData->GetCurrentSource()->SetParticleTime(aTime); };
-        G4double GetParticleTime() const
-          { return GPSData->GetCurrentSource()->GetParticleTime(); };
-
-        void SetNumberOfParticles(G4int i)
-          { GPSData->GetCurrentSource()->SetNumberOfParticles(i); };
-        //
-        G4int GetNumberOfParticles() const
-          { return GPSData->GetCurrentSource()->GetNumberOfParticles(); };
-        G4ThreeVector GetParticlePosition() const
-          { return GPSData->GetCurrentSource()->GetParticlePosition();};
-        G4ThreeVector GetParticleMomentumDirection() const
-          { return GPSData->GetCurrentSource()->GetParticleMomentumDirection();};
-        G4double GetParticleEnergy() const
-          {return GPSData->GetCurrentSource()->GetParticleEnergy();};
-
-private:
-
-  void IntensityNormalization();
-
-private:
-  //Helper boolean, used to reduce number of locks
-  //at run time (see GeneratePrimaryVertex)
-  G4bool normalised;
-
-  //Note this is a shared resource among MT workers
-  G4GeneralParticleSourceMessenger* theMessenger;
-  //Note this is a shared resource among MT workers
-  G4GeneralParticleSourceData* GPSData;
-  
 };
 
 #endif

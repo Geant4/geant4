@@ -15,9 +15,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-28-11-13 I. Hrivnacova (exhadr05-V09-06-01)
-- Upadeted for changes in Hadr00 (exhadr00-V09-06-05,06)
-- Fixed README  
+24/05/21,  B. Morgan (exPhysicsLists-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+10/11/20 I. Hrivnacova  (exPhysicslists-V10-06-00)
+- Migration to G4RunManagerFactory
+- Removed trailing whitespaces
+
+03/11/20 B. Morgan
+- Support same CMake version range as core Geant4
+
+24/01/20  A. Zaborowska
+- Fix suggested in macros command /run/numberOfThreads
+
+03/11/17 R. Hatcher
+- Addition of extensibleFactory example
 
 27-11-13  W. Pokorski (exhadr05-V09-06-00)
 - first release

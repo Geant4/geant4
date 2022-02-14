@@ -32,8 +32,6 @@
 // Extended driver based on G4OpenInventorXt.hh
 // Uses G4OpenInventorXtExaminerViewer.
 
-#ifdef G4VIS_BUILD_OIX_DRIVER
-
 // this :
 #include "G4OpenInventorXtExtended.hh"
 
@@ -101,6 +99,3 @@ G4VViewer* G4OpenInventorXtExtended::CreateViewer (G4VSceneHandler& scene, const
   G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
   return new G4OpenInventorXtExtendedViewer (*pScene, name);
 }
-
-
-#endif

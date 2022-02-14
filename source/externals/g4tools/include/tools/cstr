@@ -1,0 +1,352 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_cstr
+#define tools_cstr
+
+#include <cstring> // strcpy
+#include <cstdlib> // malloc,free
+
+#ifdef TOOLS_MEM
+#include "mem"
+//#define TOOLS_CSTR_DEBUG_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+#include <cstdio>
+#endif
+#endif
+
+namespace tools {
+
+// NOTE : have str_ to avoid clashes with various strxxx cpp macro
+//        that may come from C or system headers.
+
+#ifdef TOOLS_MEM
+inline const std::string& s_cstr() {
+  static const std::string s_v("tools::cstr");
+  return s_v;
+}
+#endif
+
+inline char* str_dup(const char* a_cstr
+#ifdef TOOLS_MEM
+                     ,bool a_inc = true
+#endif
+		     ) {
+#ifdef TOOLS_MEM
+  if(a_inc) {
+#ifdef TOOLS_CSTR_DEBUG_MEM
+    ::printf("debug : str_dup \"%s\"\n",a_cstr);
+#endif
+    mem::increment(s_cstr().c_str());
+  }
+#endif
+  return ::strcpy((char*)::malloc(::strlen(a_cstr)+1),a_cstr);
+}
+
+inline char* str_from_buffer(const char* a_buffer,size_t a_len
+#ifdef TOOLS_MEM
+                     ,bool a_inc = true
+#endif
+		     ) {
+#ifdef TOOLS_MEM
+  if(a_inc) {
+#ifdef TOOLS_CSTR_DEBUG_MEM
+    ::printf("debug : str_from_buffer.\n");
+#endif
+    mem::increment(s_cstr().c_str());
+  }
+#endif
+  char* s = (char*)::malloc(a_len+1);
+  if(s==NULL) return NULL;
+  s = ::strncpy(s,a_buffer,a_len);
+  s[a_len] = 0;
+  return s;
+}
+
+inline void str_del(char*& a_cstr) {
+  if(a_cstr==NULL) return;
+#ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_del \"%s\"\n",a_cstr);
+#endif
+  mem::decrement(s_cstr().c_str());
+#endif
+  ::free(a_cstr);
+  a_cstr = NULL;
+}
+
+inline char* str_new(size_t a_l = 0,char a_char = ' ') {
+  char* s = (char*)::malloc((a_l+1)*sizeof(char));
+  if(s==NULL) return NULL;
+#ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_new : len %lu\n",a_l);
+#endif
+  mem::increment(s_cstr().c_str());
+#endif
+  char* pos = s;
+  for(size_t c=0;c<a_l;c++,pos++) *pos = a_char;
+  *(s+a_l) = 0;
+  return s;
+}
+
+inline bool str_cat(char*& a_1,const char a_c) {
+  size_t l1 = ::strlen(a_1);
+  char* s = (char*)::malloc(l1+1+1);
+  if(!s) return false;
+#ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_cat \"%s\", char %d\n",a_1,a_c);
+#endif
+  mem::increment(s_cstr().c_str());
+#endif
+  ::memcpy(s,a_1,l1);
+  ::memcpy(s+l1,&a_c,1);
+  *(s+l1+1) = 0;
+  ::free(a_1);
+#ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_cat : dec\n");
+#endif
+  mem::decrement(s_cstr().c_str());
+#endif
+  a_1 = s;
+  return true;
+}
+
+inline bool str_cat(char*& a_1,const char* a_2) {
+  size_t l1 = ::strlen(a_1);
+  size_t l2 = ::strlen(a_2);
+  char* s = (char*)::malloc(l1+l2+1);
+  if(!s) return false;
+#ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_cat \"%s\" \"%s\"\n",a_1,a_2);
+#endif
+  mem::increment(s_cstr().c_str());
+#endif
+  ::memcpy(s,a_1,l1);
+  ::memcpy(s+l1,a_2,l2);
+  *(s+l1+l2) = 0;
+  ::free(a_1);
+#ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_cat : dec\n");
+#endif
+  mem::decrement(s_cstr().c_str());
+#endif
+  a_1 = s;
+  return true;
+}
+
+inline void str_rev(char* a_s) {
+  size_t l = ::strlen(a_s);
+  size_t hl = l/2;
+  char* beg = a_s;
+  char* end = a_s+l-1;
+  for(size_t i=0;i<hl;i++) {
+    char c = *end;
+    *end = *beg;
+    *beg = c;
+    beg++;end--;
+  }
+}
+
+inline char* str_sub(const char* a_s,
+                     unsigned int a_pos,
+                     unsigned int a_sz = 0) { //0 = take up end.
+  size_t l = ::strlen(a_s);
+  if(a_pos>=l) return 0; //throw std::out_of_range
+  size_t ls;
+  if(a_sz) {
+    ls = (a_sz<(l-a_pos)?a_sz:(l-a_pos)); //min(a_sz,l-a_pos)
+  } else {
+    ls = l-a_pos;
+  }
+  char* s = (char*)::malloc(ls+1);
+  if(!s) return 0;
+#ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_sub \"%s\"\n",a_s);
+#endif
+  mem::increment(s_cstr().c_str());
+#endif
+  //abcdefgh  l=8
+  //0123456789
+  ::memcpy(s,a_s+a_pos,ls);
+  *(s+ls) = 0;
+  return s;
+}
+
+inline char* str_rep(const char* a_s,unsigned int a_pos,unsigned int a_sz,const char* a_new) {
+  //not tested yet.
+  size_t las = ::strlen(a_s);
+  if(a_pos>=las) return 0; //throw std::out_of_range
+  if(a_pos+a_sz>las) return 0;
+  size_t lan = ::strlen(a_new);
+  unsigned int num = a_sz<lan?a_sz:(unsigned int)lan;
+  //abcdefghij : l = 10
+  //0123456789
+  //   p
+  size_t le = las-(a_pos+a_sz);
+  size_t ls = a_pos+num+le;
+  char* s = (char*)::malloc(ls+1);
+  if(!s) return 0;
+#ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_rep \"%s\"\n",a_s);
+#endif
+  mem::increment(s_cstr().c_str());
+#endif
+  ::memcpy(s,a_s,a_pos);
+  ::memcpy(s+a_pos,a_new,num);
+  if(le) ::memcpy(s+a_pos+num,a_s+a_pos+a_sz,le);
+  *(s+ls) = 0;
+  return s;
+}
+
+inline void str_skip(char*& a_cstr,char a_c) {
+  while(true) {
+    if(*a_cstr!=a_c) break;
+    a_cstr++;
+  }
+}
+
+}
+
+#include <clocale>
+
+namespace tools {
+
+inline char* beg_LC_NUMERIC() {
+  char* _sl = ::setlocale(LC_NUMERIC,0);
+  char* old = _sl?str_dup(_sl):0;
+  ::setlocale(LC_NUMERIC,"C");
+  return old;
+}
+inline void end_LC_NUMERIC(char*& a_s) {
+  if(a_s) {
+    ::setlocale(LC_NUMERIC,a_s);
+    str_del(a_s);
+  }
+}
+
+inline bool str_2d(const char* a_s,double& a_v) {
+  char* olcn = beg_LC_NUMERIC();
+
+  char* end;
+  a_v = ::strtod(a_s,&end);
+  if(end==a_s) {
+    a_v = 0;
+    end_LC_NUMERIC(olcn);
+    return false;
+  }
+
+  end_LC_NUMERIC(olcn);
+  return true;
+}
+
+/*
+inline bool str_2d(const char* a_s,double& a_v) {
+  char* _sl = ::setlocale(LC_NUMERIC,0);
+  char* old = _sl?str_dup(_sl):0;
+  ::setlocale(LC_NUMERIC,"C");
+
+  char* end;
+  a_v = ::strtod(a_s,&end);
+  bool status = true;
+  if(end==a_s) {
+    status = false;
+    a_v = 0;
+  }
+
+  if(old) {
+    ::setlocale(LC_NUMERIC,old);
+    str_del(old);
+  }
+
+  return status;
+}
+*/
+
+inline size_t str_lcpy(char *dst, const char *src, size_t siz) {
+  // Copy src to string dst of size siz.  At most siz-1 characters
+  // will be copied.  Always NUL terminates (unless siz == 0).
+  // Returns strlen(src); if retval >= siz, truncation occurred.
+
+  // code taken from CERN-ROOT/core/clib to compile exlib/tests/h2root.cpp.
+  // strlcpy, strlcat are in string.h on BSD based systems.
+
+  // Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>.
+
+  /*register*/ char* d = dst;
+  /*register*/ const char* s = src;
+  /*register*/ size_t n = siz;
+
+  // Copy as many bytes as will fit :
+  if (n != 0 && --n != 0) {
+    do {
+      if ((*d++ = *s++) == 0) break;
+    } while (--n != 0);
+  }
+
+  // Not enough room in dst, add NUL and traverse rest of src :
+  if (n == 0) {
+    if (siz != 0) *d = '\0';  // NUL-terminate dst.
+    while (*s++);
+  }
+
+  return(s - src - 1); // count does not include NUL.
+}
+
+inline size_t str_lcat(char *dst, const char *src, size_t siz) {
+  // Appends src to string dst of size siz (unlike strncat, siz is the
+  // full size of dst, not space left).  At most siz-1 characters
+  // will be copied.  Always NUL terminates (unless siz <= strlen(dst)).
+  // Returns strlen(src) + MIN(siz, strlen(initial dst)).
+  // If retval >= siz, truncation occurred.
+
+  // code taken from CERN-ROOT/core/clib to compile exlib/tests/h2root.cpp.
+  // strlcpy, strlcat are in string.h on BSD based systems.
+
+  // Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>.
+
+  /*register*/ char* d = dst;
+  /*register*/ const char* s = src;
+  /*register*/ size_t n = siz;
+  size_t dlen;
+
+  // Find the end of dst and adjust bytes left but don't go past end :
+  while (n-- != 0 && *d != '\0') d++;
+  dlen = d - dst;
+  n = siz - dlen;
+
+  if (n == 0) return(dlen + strlen(s));
+
+  while (*s != '\0') {
+    if (n != 1) {
+      *d++ = *s;
+      n--;
+    }
+    s++;
+  }
+  *d = '\0';
+
+  return(dlen + (s - src)); // count does not include NUL.
+}
+
+template <class VECTOR>
+inline bool str_2ds(char* a_s,const char* a_sep,VECTOR& a_v) {
+  a_v.clear();
+  const char* tok;
+  double d;
+  for (tok = ::strtok(a_s,a_sep);tok && *tok;tok = ::strtok(NULL,a_sep)) {
+    if(!str_2d(tok,d)) {a_v.clear();return false;}
+    a_v.push_back(d);
+  }
+  return true;
+}
+
+}
+
+#endif

@@ -27,7 +27,7 @@
 /// \brief Main program of the eventgenerator/HepMC/MCTruth example
 //
 //
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #include "FTFP_BERT.hh"
@@ -41,8 +41,8 @@
 
 int main()
 {
-  // Construct the default run manager
-  G4RunManager* runManager = new G4RunManager;
+  // Construct a serial run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction);

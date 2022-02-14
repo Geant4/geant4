@@ -41,7 +41,6 @@
 #ifndef G4PaulKxsModel_hh
 #define G4PaulKxsModel_hh 1
 
-//#include "G4VDataSetAlgorithm.hh"
 #include "globals.hh"
 #include <map>
 
@@ -49,30 +48,20 @@ class G4VDataSetAlgorithm;
 class G4VEMDataSet;
 
 class G4PaulKxsModel 
-
 {
 public:
-
-  G4PaulKxsModel();
-
+  explicit G4PaulKxsModel();
   virtual ~G4PaulKxsModel();
 			     
   G4double CalculateKCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);
-				    
- 
+
+  G4PaulKxsModel(const G4PaulKxsModel&) = delete;
+  G4PaulKxsModel & operator = (const G4PaulKxsModel &right) = delete;
+
 private:
-
-
-  G4PaulKxsModel(const G4PaulKxsModel&);
-  G4PaulKxsModel & operator = (const G4PaulKxsModel &right);
-
   G4VDataSetAlgorithm* interpolation;
-
   std::map< G4int , G4VEMDataSet* > protonDataSetMap;
-
   std::map< G4int , G4VEMDataSet* > alphaDataSetMap;
-  
-
 };
 
 #endif

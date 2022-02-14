@@ -33,24 +33,18 @@
 // Rad. Prot. Dos. 133 (2009) 2-11
 
 #include "G4Event.hh"
+#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
 
 #include "EventAction.hh"
 #include "RunAction.hh"
-#include "Analysis.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::EventAction(RunAction* run)
 :fRun(run)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 EventAction::~EventAction()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EventAction::BeginOfEventAction(const G4Event* evt)
 {  
@@ -59,8 +53,6 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   fRun->SetDoseN(0);
   fRun->SetDoseC(0);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EventAction::EndOfEventAction(const G4Event* )
 {  

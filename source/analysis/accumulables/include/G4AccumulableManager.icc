@@ -25,21 +25,21 @@
 //
 
 //_____________________________________________________________________________
-template <typename T> 
-G4Accumulable<T>*  
+template <typename T>
+G4Accumulable<T>*
 G4AccumulableManager::GetAccumulable(G4VAccumulable* accumulable, G4bool warn) const
 {
   // Do not check type if nullptr
   if ( ! accumulable ) return nullptr;
 
   // check type
-  G4Accumulable<T>* taccumulable = dynamic_cast<G4Accumulable<T>*>(accumulable); 
+  auto taccumulable = dynamic_cast<G4Accumulable<T>*>(accumulable);
   if ( ! taccumulable && warn ) {
     G4ExceptionDescription description;
-    description << "      " << "Accumulable " << accumulable->GetName() 
+    description << "      " << "Accumulable " << accumulable->GetName()
                 << " has different type";
-    G4Exception("G4AccumulableManager::GetAccumulable<T>", 
-                "Analysis_W011", JustWarning, description);
+    G4Exception("G4AccumulableManager::GetAccumulable<T>",
+                "Analysis_W001", JustWarning, description);
     return nullptr;
   }
 
@@ -47,13 +47,13 @@ G4AccumulableManager::GetAccumulable(G4VAccumulable* accumulable, G4bool warn) c
 }
 
 //_____________________________________________________________________________
-template <typename T> 
-G4Accumulable<T>* 
+template <typename T>
+G4Accumulable<T>*
 G4AccumulableManager::CreateAccumulable(
   const G4String& name, T value, G4MergeMode mergeMode)
 {
   // do not accept name if it is already used
-  if ( ! CheckName(name, "CreateAccumulable") ) return 0; 
+  if ( ! CheckName(name, "CreateAccumulable") ) return 0;
 
   // create accumulable
   auto accumulable = new G4Accumulable<T>(name, value, mergeMode);
@@ -66,8 +66,8 @@ G4AccumulableManager::CreateAccumulable(
 }
 
 //_____________________________________________________________________________
-template <typename T> 
-G4Accumulable<T>* 
+template <typename T>
+G4Accumulable<T>*
 G4AccumulableManager::CreateAccumulable(
   T value, G4MergeMode mergeMode)
 {
@@ -75,15 +75,15 @@ G4AccumulableManager::CreateAccumulable(
 }
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4bool  G4AccumulableManager::RegisterAccumulable(G4Accumulable<T>& accumulable)
 {
   return RegisterAccumulable(&accumulable);
 }
 
 //_____________________________________________________________________________
-template <typename T> 
-G4Accumulable<T>*  
+template <typename T>
+G4Accumulable<T>*
 G4AccumulableManager::GetAccumulable(const G4String& name, G4bool warn) const
 {
   // get G4VParammeter from the map
@@ -92,8 +92,8 @@ G4AccumulableManager::GetAccumulable(const G4String& name, G4bool warn) const
 }
 
 //_____________________________________________________________________________
-template <typename T> 
-G4Accumulable<T>*  
+template <typename T>
+G4Accumulable<T>*
 G4AccumulableManager::GetAccumulable(G4int id, G4bool warn) const
 {
   // get G4VParammeter from the map
@@ -120,14 +120,14 @@ inline std::vector<G4VAccumulable*>::iterator G4AccumulableManager::End()
 }
 
 //_____________________________________________________________________________
-inline std::vector<G4VAccumulable*>::const_iterator 
+inline std::vector<G4VAccumulable*>::const_iterator
 G4AccumulableManager::BeginConst() const
 {
   return fVector.begin();
 }
 
 //_____________________________________________________________________________
-inline std::vector<G4VAccumulable*>::const_iterator 
+inline std::vector<G4VAccumulable*>::const_iterator
 G4AccumulableManager::EndConst() const
 {
   return fVector.end();

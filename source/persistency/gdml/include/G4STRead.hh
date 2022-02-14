@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4STRead
+// G4STRead
 //
 // Class description:
 //
@@ -34,12 +31,10 @@
 // (.geom and .tree structures) generated out of STEP files from
 // CAD systems (STWriter STEP Tool and similar...).
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4STREAD_INCLUDED_
-#define _G4STREAD_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4STREAD_HH
+#define G4STREAD_HH 1
 
 #include <vector>
 #include <map>
@@ -53,10 +48,11 @@ class G4LogicalVolume;
 
 class G4STRead
 {
-  public:  // with description
+  public:
 
     G4LogicalVolume* Read(const G4String&, G4Material* mediumMaterial,
-                                           G4Material* solidMaterial);
+                          G4Material* solidMaterial);
+
   private:
 
     void TessellatedRead(const std::string&);
@@ -67,12 +63,13 @@ class G4STRead
 
   private:
 
-    G4Box* world_box;
+    G4Box* world_box = nullptr;
     G4ThreeVector world_extent;
-    G4Material* solid_material;
-    G4LogicalVolume* world_volume;
+    G4Material* solid_material = nullptr;
+    G4LogicalVolume* world_volume = nullptr;
+
     std::vector<G4TessellatedSolid*> tessellatedList;
-    std::map<G4TessellatedSolid*,G4LogicalVolume*> volumeMap;
+    std::map<G4TessellatedSolid*, G4LogicalVolume*> volumeMap;
 };
 
 #endif

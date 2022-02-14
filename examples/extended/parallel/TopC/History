@@ -10,6 +10,9 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 October 2020, G. Cosmo (exTopC-V10-06-00)
+- Fixed README.html. Addressing problem report #2284.
+
 09 July 2013, I. Hrivnacova (exTopC-V10-05-00)
 - Removed G4VIS_USE and G4UI_USE from examples
 - Added info/HowToTest.txt with a short summary of the build

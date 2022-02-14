@@ -255,7 +255,7 @@ void G4MoleculeCounter::AddAMoleculeAtTime(Reactant* molecule,
                        << " global time is "
                        << G4BestUnit(G4Scheduler::Instance()->GetGlobalTime(), "Time")
                        << G4endl;
-                G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime",
+                G4Exception("G4MoleculeCounter::AddAMoleculeAtTime",
                             "TIME_DONT_MATCH",
                             FatalException, errMsg);
             }

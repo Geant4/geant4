@@ -37,71 +37,71 @@
 #include "G4UIcommand.hh"
 #include "G4ThreeVector.hh"
 
-class G4HepRepMessenger : public G4UImessenger {
-    
-    public:
-		static G4HepRepMessenger* GetInstance();  // Singleton constructor.
-        virtual ~G4HepRepMessenger();
+class G4HepRepMessenger : public G4UImessenger
+{
+ public:
+  static G4HepRepMessenger* GetInstance();  // Singleton constructor.
+  virtual ~G4HepRepMessenger();
 
-        virtual G4String GetCurrentValue(G4UIcommand * command);
-        virtual void SetNewValue(G4UIcommand * command, G4String newValue);
-        
-	// Used by HepRepFile
-        virtual G4String getFileDir();
-        virtual G4String getFileName();
-        virtual G4bool getOverwrite();
-        virtual G4bool getCullInvisibles();
-		virtual G4bool renderCylAsPolygons();
-		virtual G4double getScale();
-		virtual G4ThreeVector getCenter();
-	
-	// Used by HepRepXML
-        virtual G4String getEventNumberSuffix();
-        virtual G4bool appendGeometry();
-        virtual G4bool addPointAttributes();
-        virtual G4bool useSolids();
-        virtual G4bool writeInvisibles();
+  virtual G4String GetCurrentValue(G4UIcommand* command);
+  virtual void SetNewValue(G4UIcommand* command, G4String newValue);
 
-    private:            
-		G4HepRepMessenger();  // Private constructor.
-		static G4HepRepMessenger* fpInstance;
-        
-        G4UIdirectory* heprepDirectory;
-        
-		G4String fileDir;
-		G4UIcmdWithAString* setFileDirCommand;
-        
-		G4String fileName;
-		G4UIcmdWithAString* setFileNameCommand;
-        
-		G4bool overwrite;
-		G4UIcmdWithABool* setOverwriteCommand;
-        
-		G4bool cullInvisibles;
-		G4UIcmdWithABool* setCullInvisiblesCommand;
-	
-		G4bool cylAsPolygons;
-		G4UIcmdWithABool* renderCylAsPolygonsCommand;
-	
-		G4double scale;
-		G4UIcmdWithADouble* setScaleCommand;
-	
-		G4ThreeVector center;
-		G4UIcmdWith3VectorAndUnit* setCenterCommand;
-	
-        G4String suffix;
-        G4UIcmdWithAString* setEventNumberSuffixCommand;
-        
-        G4bool geometry;
-        G4UIcmdWithABool* appendGeometryCommand;
+  // Used by HepRepFile
+  virtual G4String getFileDir();
+  virtual G4String getFileName();
+  virtual G4bool getOverwrite();
+  virtual G4bool getCullInvisibles();
+  virtual G4bool renderCylAsPolygons();
+  virtual G4double getScale();
+  virtual G4ThreeVector getCenter();
 
-        G4bool pointAttributes;
-        G4UIcmdWithABool* addPointAttributesCommand;
+  // Used by HepRepXML
+  virtual G4String getEventNumberSuffix();
+  virtual G4bool appendGeometry();
+  virtual G4bool addPointAttributes();
+  virtual G4bool useSolids();
+  virtual G4bool writeInvisibles();
 
-        G4bool solids;
-        G4UIcmdWithABool* useSolidsCommand;
-        
-        G4bool invisibles;
+ private:
+  G4HepRepMessenger();  // Private constructor.
+  static G4HepRepMessenger* fpInstance;
+
+  G4UIdirectory* heprepDirectory;
+
+  G4String fileDir;
+  G4UIcmdWithAString* setFileDirCommand;
+
+  G4String fileName;
+  G4UIcmdWithAString* setFileNameCommand;
+
+  G4bool overwrite;
+  G4UIcmdWithABool* setOverwriteCommand;
+
+  G4bool cullInvisibles;
+  G4UIcmdWithABool* setCullInvisiblesCommand;
+
+  G4bool cylAsPolygons;
+  G4UIcmdWithABool* renderCylAsPolygonsCommand;
+
+  G4double scale;
+  G4UIcmdWithADouble* setScaleCommand;
+
+  G4ThreeVector center;
+  G4UIcmdWith3VectorAndUnit* setCenterCommand;
+
+  G4String suffix;
+  G4UIcmdWithAString* setEventNumberSuffixCommand;
+
+  G4bool geometry;
+  G4UIcmdWithABool* appendGeometryCommand;
+
+  G4bool pointAttributes;
+  G4UIcmdWithABool* addPointAttributesCommand;
+
+  G4bool solids;
+  G4UIcmdWithABool* useSolidsCommand;
+
+  G4bool invisibles;
 };
 
 #endif

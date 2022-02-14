@@ -32,13 +32,13 @@
 #include "G4VStringFragmentation.hh"
 #include "G4ExcitedStringVector.hh"
 #include "G4KineticTrackVector.hh"
-#include "G4LundStringFragmentation.hh"
+
+class G4VLongitudinalStringDecay;
 
 class G4ExcitedStringDecay: public G4VStringFragmentation 
 {
   public:
-      G4ExcitedStringDecay();
-      G4ExcitedStringDecay(G4VLongitudinalStringDecay * aStringDecay);
+      G4ExcitedStringDecay(G4VLongitudinalStringDecay* aStringDecay = nullptr);
       virtual ~G4ExcitedStringDecay();
 
   private:

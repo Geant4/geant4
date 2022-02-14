@@ -22,6 +22,9 @@ track of all tags.
 14-10-16 G.Folger
 =======
      
+10-05-21 mma (testem13-V10-07-00)
+- Migration to G4RunManagerFactory and G4SteppingVerboseWithUnits.
+     
 26-11-19 I. Hrivnacova (testem13-V10-05-01)
 - Fixed Doxygen warnings
 

@@ -19,6 +19,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 12, 2021 G.Cosmo geom-bool-V10-07-03
+- In G4BooleanSolid, use G4RecursiveMutex in place of G4Mutex in GetPolyhedron()
+  to avoid potential deadlocks in recursive Boolean operations.
+  Courtesy of S.Boogert (London Univ.).
+
+May 6, 2021 J.Apostolakis geom-bool-V10-07-02
+- Revised GetCubicVolume of UnionSolid and SubtractionSolid to use cubic volume
+  of constituent volume(s) and the intersection solid.
+  Test cases show the potential for improvement: factors of 40-3000.
+  Cases with small overlap will improve most. Not all cases will improve. 
+  Need to monitor cpu cost in most difficult cases: 
+   - Union now   involves 3 calculations (a, b, a n b) - likely 2x cost. 
+   - Subtraction involves 2 calculations (a, a n b) -  1.5x cost.
+
+March 30, 2021 B.Morgan geom-bool-V10-07-01
+- Migrate sources.cmake to modular build API
+
+January 5, 2021 I.Hrivnacova, E.Tcherniaev  geom-bool-V10-07-00
+- Added protection against using invalid normal
+  in G4ScaledSolid::DistanceToOut(p,v, ...)
+
+December 10, 2019 B.Morgan               geom-bool-V10-06-00
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
  November 26, 2019 G.Cosmo               geom-bool-V10-05-04
  - G4MultiUnion: fixed cases of implicit type conversions from size_t to G4int.
 
@@ -227,8 +252,8 @@ committal in the CVS repository !
   - G4SubtractionSolid: improved SurfaceNormal() method, by caching the
     result of the calls to fPtrSolidA->Inside() and fPtrSolidB->Inside().
     Corrected debug printout to say 'Point p is *out*side' not inside.
-    NOTE: further improvement can be made by creating new method 
-            Inside( point, &resultInsideA, &resultInsideB ); 
+    NOTE: further improvement can be made by creating new method
+            Inside( point, &resultInsideA, &resultInsideB );
           which can be called by a 'bare' Inside( point ) method.
 
  June 12, 2012  G.Cosmo                   geom-bool-V09-05-02
@@ -501,7 +526,7 @@ committal in the CVS repository !
     argument *n. Previous fix was incomplete!
 
  Jan 23  2001  Gabriele Cosmo       geom-solid-bool-V03-00-01
- 
+
   - Fixed wrong labels for G4Exception calls in G4UnionSolid.cc and
     G4SubtractionSolid.cc to identify the correct class.
     Fixes bug report #200.
@@ -588,7 +613,7 @@ committal in the CVS repository !
 
  Nov 24  1999 			    geom-solid-bool-V00-01-05
 
-  - Small fix in src/G4DisplacedSolid.cc to the return type 
+  - Small fix in src/G4DisplacedSolid.cc to the return type
          (const G4AffineTransform --> G4AffineTransform)
     to conform with the specification of the class.
 
@@ -610,14 +635,14 @@ committal in the CVS repository !
   New method: Get Object Rotation/Translation methods in Displaced Solid
 
  Nov  9  1999                       geom-solid-bool-V00-01-02-cand
-  
+
   - Tag with additional methods for Visualisation
 
    G4DisplacedSolid,  G4BooleanSolid
 
       Added methods to access data members:
-          Get Constituent Solid  (int) for Boolean   Solid 
-          Get Constituent Solid        for Displaced Solid 
+          Get Constituent Solid  (int) for Boolean   Solid
+          Get Constituent Solid        for Displaced Solid
           Get Frame Rotation/Translation methods in Displaced Solid
 
 

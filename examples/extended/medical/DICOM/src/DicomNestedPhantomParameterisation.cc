@@ -131,7 +131,7 @@ void DicomNestedPhantomParameterisation::ReadColourData(G4String colourFile)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomNestedPhantomParameterisation::
-SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz )
+SetNoVoxels( unsigned int nx, unsigned int ny, unsigned int nz )
 {
   fnX = nx;
   fnY = ny;

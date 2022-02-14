@@ -43,7 +43,6 @@
 #include "G4VUserDetectorConstruction.hh"
 
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4Sphere;
 class G4Tubs;
 class G4LogicalVolume;
@@ -58,30 +57,26 @@ public:
   void CleanLeipzigApplicator();
 
 private:
+  G4Tubs* fCapsule;
+  G4Sphere* fCapsuleTip;
+  G4Tubs* fIridiumCore;   
+  G4Tubs* fApplicator1;
+  G4Tubs* fApplicator2;
   
-  BrachyMaterial* pMaterial; 
-  
-  G4Tubs* capsule;
-  G4Sphere* capsuleTip;
-  G4Tubs* iridiumCore;   
-  G4Tubs* applicator1;
-  G4Tubs* applicator2;
-  
-  G4LogicalVolume* capsuleLog;
-  G4LogicalVolume* capsuleTipLog;
-  G4LogicalVolume* iridiumCoreLog;
-  G4LogicalVolume* applicator1Log;
-  G4LogicalVolume* applicator2Log;
+  G4LogicalVolume* fCapsuleLog;
+  G4LogicalVolume* fCapsuleTipLog;
+  G4LogicalVolume* fIridiumCoreLog;
+  G4LogicalVolume* fApplicator1Log;
+  G4LogicalVolume* fApplicator2Log;
  
-  G4VPhysicalVolume* capsulePhys;
-  G4VPhysicalVolume* capsuleTipPhys;
-  G4VPhysicalVolume* iridiumCorePhys;
-  G4VPhysicalVolume* applicator1Phys;
-  G4VPhysicalVolume* applicator2Phys;
+  G4VPhysicalVolume* fCapsulePhys;
+  G4VPhysicalVolume* fCapsuleTipPhys;
+  G4VPhysicalVolume* fIridiumCorePhys;
+  G4VPhysicalVolume* fApplicator1Phys;
+  G4VPhysicalVolume* fApplicator2Phys;
 
-  G4VisAttributes* simpleCapsuleVisAtt;
-  G4VisAttributes* simpleCapsuleTipVisAtt;
-  G4VisAttributes* applicatorVisAtt;
+  G4VisAttributes* fSimpleCapsuleVisAtt;
+  G4VisAttributes* fSimpleCapsuleTipVisAtt;
+  G4VisAttributes* fApplicatorVisAtt;
 };
-
 #endif

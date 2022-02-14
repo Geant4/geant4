@@ -49,7 +49,7 @@ class BrachyFactory
 {
 public:
 
-  BrachyFactory();
+  explicit BrachyFactory();
   virtual ~BrachyFactory();
 
   // this function manages the creation of the source in terms of 

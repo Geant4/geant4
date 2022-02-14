@@ -391,7 +391,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
 	    if(!ReadDataItem(infile,fICC[k])) {
 	      //if(infile.fail()) { 
 	      if(fVerbose > 1) { 
-		G4cout << "### Fail to read convertion coeff k= " << k 
+		G4cout << "### Fail to read conversion coeff k= " << k 
 		       << " for transition j= " << j 
 		       << "  Z= " << Z << " A= " << A << G4endl; 
 	      }

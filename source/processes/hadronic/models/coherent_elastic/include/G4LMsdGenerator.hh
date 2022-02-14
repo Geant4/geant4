@@ -90,6 +90,7 @@ class G4LMsdGenerator : public G4HadronicInteraction
   // G4ParticleDefinition* fParticle;
 
   G4int fPDGencoding;
+  G4int secID;  // Creator model ID for the secondaries created by this model
 
   static const G4double fMxBdata[23][2];
   static const G4double  fProbMx[60][2];

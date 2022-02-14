@@ -36,7 +36,7 @@
 
 #include "G4VLongitudinalStringDecay.hh"
 
-//**************************************************************************************************************
+//******************************************************************************
 
 class G4LundStringFragmentation: public G4VLongitudinalStringDecay
 {
@@ -107,9 +107,12 @@ class G4LundStringFragmentation: public G4VLongitudinalStringDecay
                                        G4ParticleDefinition * & RightHadron );
 
     G4int SampleState(void);
+
+    G4double Tmt;  // "Temperature" for sampling Pt of hadrons
+
 };
 
-//**************************************************************************************************************
+//******************************************************************************
 // Class G4LundStringFragmentation 
 
 #endif

@@ -23,61 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgbIsotope
 //
-//
-//
-// class G4tgbIsotope
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgbIsotope.hh"
 #include "G4tgrMessenger.hh"
 
-//----------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbIsotope::G4tgbIsotope()
-  : theTgrIsot(0), theG4Isot(0)
 {
 }
 
-//----------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbIsotope::~G4tgbIsotope()
 {
 }
 
-//----------------------------------------------------------------------
-G4tgbIsotope::G4tgbIsotope( G4tgrIsotope* hg )
+// --------------------------------------------------------------------
+G4tgbIsotope::G4tgbIsotope(G4tgrIsotope* hg)
 {
   theTgrIsot = hg;
-  theG4Isot = 0;
 }
 
-//----------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4Isotope* G4tgbIsotope::BuildG4Isotope()
 {
-  G4Isotope* isot = 0;
+  G4Isotope* isot = nullptr;
 
-  //-------- if G4Isotope not found, construct it 
-  if( theG4Isot == 0 )
-  { 
-    //----- construct new G4Isotope 
+  //-------- if G4Isotope not found, construct it
+  if(theG4Isot == nullptr)
+  {
+    //----- construct new G4Isotope
 
     isot = new G4Isotope(theTgrIsot->GetName(), theTgrIsot->GetZ(),
-                         theTgrIsot->GetN(), theTgrIsot->GetA() );
+                         theTgrIsot->GetN(), theTgrIsot->GetA());
 
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if(G4tgrMessenger::GetVerboseLevel() >= 2)
     {
-      G4cout << "  Constructing new G4Isotope " 
-             << *isot << G4endl;
+      G4cout << "  Constructing new G4Isotope " << *isot << G4endl;
     }
 #endif
     theG4Isot = isot;
   }
   else
   {
-    isot = theG4Isot; 
+    isot = theG4Isot;
   }
 
   return isot;

@@ -33,22 +33,18 @@
 //
 // 15 Jul 2009   N.A.Karakatsanis    New methods added for loading logarithmic data
 //                                   to enhance computing performance of interpolation
-//
 // -------------------------------------------------------------------
 
 // Class description:
 // Low Energy Electromagnetic Physics
 // Data set for an electromagnetic physics process
 // A strategy pattern is used to encapsulate algorithms for data interpolation
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
 // -------------------------------------------------------------------
 
 #ifndef G4EMDATASET_HH
 #define G4EMDATASET_HH 1
 
 #include <CLHEP/Units/SystemOfUnits.h>
-
 #include "globals.hh"
 #include "G4VEMDataSet.hh"
 
@@ -57,29 +53,29 @@ class G4VDataSetAlgorithm;
 class G4EMDataSet : public G4VEMDataSet
 {
 public:
-  G4EMDataSet(G4int argZ, 
-	      G4VDataSetAlgorithm* algo, 
-	      G4double xUnit=CLHEP::MeV, 
-	      G4double yUnit=CLHEP::barn,
-              G4bool random=false);
+  explicit G4EMDataSet(G4int argZ, 
+		       G4VDataSetAlgorithm* algo, 
+		       G4double xUnit=CLHEP::MeV, 
+		       G4double yUnit=CLHEP::barn,
+		       G4bool random=false);
 
-  G4EMDataSet(G4int argZ, 
-	      G4DataVector* xData, 
-	      G4DataVector* data, 
-	      G4VDataSetAlgorithm* algo, 
-	      G4double xUnit=CLHEP::MeV, 
-	      G4double yUnit=CLHEP::barn,
-	      G4bool random=false);
+  explicit G4EMDataSet(G4int argZ, 
+		       G4DataVector* xData, 
+		       G4DataVector* data, 
+		       G4VDataSetAlgorithm* algo, 
+		       G4double xUnit=CLHEP::MeV, 
+		       G4double yUnit=CLHEP::barn,
+		       G4bool random=false);
 
-  G4EMDataSet(G4int argZ, 
-	      G4DataVector* xData, 
-	      G4DataVector* data,
-	      G4DataVector* xLogData, 
-	      G4DataVector* Logdata, 
-	      G4VDataSetAlgorithm* algo, 
-	      G4double xUnit=CLHEP::MeV, 
-	      G4double yUnit=CLHEP::barn,
-	      G4bool random=false);
+  explicit G4EMDataSet(G4int argZ, 
+		       G4DataVector* xData, 
+		       G4DataVector* data,
+		       G4DataVector* xLogData, 
+		       G4DataVector* Logdata, 
+		       G4VDataSetAlgorithm* algo, 
+		       G4double xUnit=CLHEP::MeV, 
+		       G4double yUnit=CLHEP::barn,
+		       G4bool random=false);
 
   virtual ~G4EMDataSet();
  
@@ -120,29 +116,25 @@ private:
   size_t FindLowerBound(G4double x, G4DataVector* values) const;
 
   G4double IntegrationFunction(G4double x);
-
   virtual void BuildPdf();
-  
   G4String FullFileName(const G4String& fileName) const;
 
   // Hide copy constructor and assignment operator 
-  G4EMDataSet();
-  G4EMDataSet(const G4EMDataSet& copy);
-  G4EMDataSet& operator=(const G4EMDataSet& right);
-
-  G4int z;
+  explicit G4EMDataSet();
+  G4EMDataSet(const G4EMDataSet& copy) = delete;
+  G4EMDataSet& operator=(const G4EMDataSet& right) = delete;
 
   G4DataVector* energies;            // Owned pointer
   G4DataVector* data;                // Owned pointer
   G4DataVector* log_energies;        // Owned pointer
   G4DataVector* log_data;            // Owned pointer
-
   G4VDataSetAlgorithm* algorithm;    // Owned pointer 
-  
+  G4DataVector* pdf;
+
   G4double unitEnergies;
   G4double unitData;
 
-  G4DataVector* pdf;
+  G4int z;
   G4bool randomSet;
 };
 #endif /* G4EMDATASET_HH */

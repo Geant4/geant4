@@ -32,7 +32,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4ProductionCutsTable.hh"
 
 class G4LivermoreNuclearGammaConversionModel : public G4VEmModel
@@ -40,64 +40,60 @@ class G4LivermoreNuclearGammaConversionModel : public G4VEmModel
 
 public:
 
-  G4LivermoreNuclearGammaConversionModel(const G4ParticleDefinition* p = 0, 
+  explicit G4LivermoreNuclearGammaConversionModel(const G4ParticleDefinition* p = nullptr, 
 		                  const G4String& nam = "LivermoreNuclearConversion");
 
   virtual ~G4LivermoreNuclearGammaConversionModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-                          const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, 
+                          const G4DataVector&) override;
 
   //MT
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			             G4VEmModel* masterModel);
+  void InitialiseLocal(const G4ParticleDefinition*, 
+			             G4VEmModel* masterModel) override;
 
-  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
   //END MT
 
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
+  G4double ComputeCrossSectionPerAtom(
+				      const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double Z, 
                                       G4double A=0, 
                                       G4double cut=0,
-                                      G4double emax=DBL_MAX);
+                                      G4double emax=DBL_MAX) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				       G4double tmin,
-				       G4double maxEnergy);
+				       G4double maxEnergy) override;
 
-  virtual G4double MinPrimaryEnergy(const G4Material*,
+  G4double MinPrimaryEnergy(const G4Material*,
 				    const G4ParticleDefinition*,
-				    G4double);
+				    G4double) override;
+
+  G4LivermoreNuclearGammaConversionModel & operator=(const  G4LivermoreNuclearGammaConversionModel &right) 
+  = delete;
+  G4LivermoreNuclearGammaConversionModel(const  G4LivermoreNuclearGammaConversionModel&) = delete;
 
 private:
-
   void ReadData(size_t Z, const char* path = 0);
-
   G4double ScreenFunction1(G4double screenVariable);
   G4double ScreenFunction2(G4double screenVariable);
 
-  G4LivermoreNuclearGammaConversionModel & operator=(const  G4LivermoreNuclearGammaConversionModel &right);
-  G4LivermoreNuclearGammaConversionModel(const  G4LivermoreNuclearGammaConversionModel&);
+  G4ParticleChangeForGamma* fParticleChange;
 
-  G4bool isInitialised;
-  G4int verboseLevel;
+  //MT
+  static const G4int maxZ = 100;
+  static G4PhysicsFreeVector* data[maxZ+1]; // 101 because Z range is 1-100
+  //END MT
 
   G4double lowEnergyLimit;  
   G4double smallEnergy;
+  G4int verboseLevel;
+  G4bool isInitialised;
   
-  //MT
-  static G4int maxZ;
-  static G4LPhysicsFreeVector* data[100]; // 100 because Z range is 1-99
-                                          // in LivermoreRayleighModel, 101
-					  //  because Z range is 1-100
-  //END MT
-  
-  G4ParticleChangeForGamma* fParticleChange;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

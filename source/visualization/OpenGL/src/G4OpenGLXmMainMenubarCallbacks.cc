@@ -35,8 +35,6 @@
 // See G4OpenGLXmMainMenubarCallbacks.hh for more information.
 
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewer.hh"
 
 #include "G4Xt.hh"
@@ -578,5 +576,3 @@ void G4OpenGLXmViewer::update_panels_callback (Widget,
     pView->fpdolly_slider->SetMinValue (pView->dolly_low);
   }
 }
-
-#endif

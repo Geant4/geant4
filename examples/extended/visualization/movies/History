@@ -1,0 +1,31 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+        examples/extended/visualization/movies History file
+        ----------------------------------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+14th July 2021  J. Allison  (exam-ext-vis-movies-V10-07-03)
+- Replace /vis/ogl/printEPS with /vis/ogl/export in relevant macros.
+
+22nd May 2021  J. Allison  (exam-ext-vis-movies-V10-07-02)
+- Minor improvements to README files.
+
+28th February 2021  J. Allison  (exam-ext-vis-movies-V10-07-01)
+- gui.mac: Remove obsolete buttons.
+
+15th February 2021  J. Allison  (exam-ext-vis-movies-V10-07-00)
+- This example illustrates how to make a movie with /vis/viewer/save
+  and /vis/viewer/interpolate. It also includes the "visTutor" macros
+  from the old "novice" example, N03, subsequently moved to "basic" B4.
+  See README for further information.

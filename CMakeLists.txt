@@ -16,20 +16,21 @@ endif()
 #-----------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
-
-# - Any policy requirements should go here
+cmake_minimum_required(VERSION 3.16...3.21)
 
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
-   ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_cxx.cmake)
+   ${CMAKE_SOURCE_DIR}/cmake/Modules/G4MakeRules_cxx.cmake)
 
 #-----------------------------------------------------------------------
 # - Project definition and basic configuration
-#
-project(Geant4)
-
-set(${PROJECT_NAME}_VERSION_MAJOR 10)
-set(${PROJECT_NAME}_VERSION_MINOR  6)
+#   Version handled manually as project(... VERSION ...) is not used
+#   in tests/examples which are subprojects. All calls must use
+#   the same form.
+project(Geant4
+  DESCRIPTION "C++ toolkit for simulating the passage of particles through matter"
+  HOMEPAGE_URL "https://geant4.cern.ch")
+set(${PROJECT_NAME}_VERSION_MAJOR 11)
+set(${PROJECT_NAME}_VERSION_MINOR  0)
 set(${PROJECT_NAME}_VERSION_PATCH  0)
 set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}")
 

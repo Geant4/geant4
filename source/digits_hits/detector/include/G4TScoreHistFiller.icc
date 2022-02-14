@@ -1,0 +1,257 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// class description:
+//
+// This class implements filling histogram
+// In order to avoid introducing dependency on the analysis category,
+// the analysis manager type is defined via template.
+//
+// Created : M. Asai (Sept. 2020)
+//
+//
+
+template <typename T>
+G4TScoreHistFiller<T>::G4TScoreHistFiller()
+{
+  ;
+}
+
+template <typename T>
+G4TScoreHistFiller<T>::~G4TScoreHistFiller()
+{
+}
+
+template <typename T>
+void G4TScoreHistFiller<T>::CreateAnalysisManager()
+{
+  // get/create analysis manager
+  fAnalysisManager = T::Instance();
+
+  fAnalysisManager->SetVerboseLevel(fVerboseLevel);
+}
+
+template <typename T>
+G4VScoreHistFiller* G4TScoreHistFiller<T>::CreateInstance() const
+{
+  auto instance = new G4TScoreHistFiller();
+  instance->SetVerboseLevel(fVerboseLevel);
+
+  return instance;
+}
+
+template <typename T>
+void G4TScoreHistFiller<T>::SetVerboseLevel(G4int value)
+{
+  fVerboseLevel = value;
+  if(fAnalysisManager)
+  {
+    fAnalysisManager->SetVerboseLevel(value);
+  }
+}
+
+template <typename T>
+void G4TScoreHistFiller<T>::FillH1(G4int id, G4double value, G4double weight)
+{
+  if(!fAnalysisManager)
+  {
+    CreateAnalysisManager();
+  }
+
+  if(!CheckH1(id))
+  {
+    G4ExceptionDescription description;
+    description << "      "
+                << "Cannot fill histogram id=" << id
+                << ". Histogram is not defined.";
+    G4Exception("G4TScoreHistFiller<T>::FillH1", "Digits_hits_utils_001",
+                JustWarning, description);
+
+    return;
+  }
+
+  fAnalysisManager->FillH1(id, value, weight);
+
+#ifdef G4VERBOSE
+  if(fVerboseLevel > 1)
+  {
+    G4cout << "--- done G4TScoreHistFiller<T>::FillH1 : id = " << id << G4endl;
+  }
+#endif
+}
+
+template <typename T>
+void G4TScoreHistFiller<T>::FillH2(G4int id, G4double xvalue, G4double yvalue,
+                                   G4double weight)
+{
+  if(!fAnalysisManager)
+  {
+    CreateAnalysisManager();
+  }
+
+  if(!CheckH2(id))
+  {
+    G4ExceptionDescription description;
+    description << "      "
+                << "Cannot fill histogram id=" << id
+                << ". Histogram is not defined.";
+    G4Exception("G4TScoreHistFiller<T>::FillH2", "Digits_hits_utils_001",
+                JustWarning, description);
+
+    return;
+  }
+
+  fAnalysisManager->FillH2(id, xvalue, yvalue, weight);
+
+#ifdef G4VERBOSE
+  if(fVerboseLevel > 1)
+  {
+    G4cout << "--- done G4TScoreHistFiller<T>::FillH2 : id = " << id << G4endl;
+  }
+#endif
+}
+
+template <typename T>
+void G4TScoreHistFiller<T>::FillH3(G4int id, G4double xvalue, G4double yvalue,
+                                   G4double zvalue, G4double weight)
+{
+  if(!fAnalysisManager)
+  {
+    CreateAnalysisManager();
+  }
+
+  if(!CheckH3(id))
+  {
+    G4ExceptionDescription description;
+    description << "      "
+                << "Cannot fill histogram id=" << id
+                << ". Histogram is not defined.";
+    G4Exception("G4TScoreHistFiller<T>::FillH3", "Digits_hits_utils_001",
+                JustWarning, description);
+
+    return;
+  }
+
+  fAnalysisManager->FillH3(id, xvalue, yvalue, zvalue, weight);
+
+#ifdef G4VERBOSE
+  if(fVerboseLevel > 1)
+  {
+    G4cout << "--- done G4TScoreHistFiller<T>::FillH3 : id = " << id << G4endl;
+  }
+#endif
+}
+
+template <typename T>
+void G4TScoreHistFiller<T>::FillP1(G4int id, G4double xvalue, G4double yvalue,
+                                   G4double weight)
+{
+  if(!fAnalysisManager)
+  {
+    CreateAnalysisManager();
+  }
+
+  if(!CheckP1(id))
+  {
+    G4ExceptionDescription description;
+    description << "      "
+                << "Cannot fill histogram id=" << id
+                << ". Histogram is not defined.";
+    G4Exception("G4TScoreHistFiller<T>::FillP1", "Digits_hits_utils_001",
+                JustWarning, description);
+
+    return;
+  }
+
+  fAnalysisManager->FillP1(id, xvalue, yvalue, weight);
+
+#ifdef G4VERBOSE
+  if(fVerboseLevel > 1)
+  {
+    G4cout << "--- done G4TScoreHistFiller<T>::FillP1 : id = " << id << G4endl;
+  }
+#endif
+}
+
+template <typename T>
+void G4TScoreHistFiller<T>::FillP2(G4int id, G4double xvalue, G4double yvalue,
+                                   G4double zvalue, G4double weight)
+{
+  if(!fAnalysisManager)
+  {
+    CreateAnalysisManager();
+  }
+
+  if(!CheckP2(id))
+  {
+    G4ExceptionDescription description;
+    description << "      "
+                << "Cannot fill histogram id=" << id
+                << ". Histogram is not defined.";
+    G4Exception("G4TScoreHistFiller<T>::FillP2", "Digits_hits_utils_001",
+                JustWarning, description);
+
+    return;
+  }
+
+  fAnalysisManager->FillP2(id, xvalue, yvalue, zvalue, weight);
+
+#ifdef G4VERBOSE
+  if(fVerboseLevel > 1)
+  {
+    G4cout << "--- done G4TScoreHistFiller<T>::FillP2 : id = " << id << G4endl;
+  }
+#endif
+}
+
+template <typename T>
+G4bool G4TScoreHistFiller<T>::CheckH1(G4int id)
+{
+  return (fAnalysisManager->GetH1(id) != nullptr);
+}
+
+template <typename T>
+G4bool G4TScoreHistFiller<T>::CheckH2(G4int id)
+{
+  return (fAnalysisManager->GetH2(id) != nullptr);
+}
+
+template <typename T>
+G4bool G4TScoreHistFiller<T>::CheckH3(G4int id)
+{
+  return (fAnalysisManager->GetH3(id) != nullptr);
+}
+
+template <typename T>
+G4bool G4TScoreHistFiller<T>::CheckP1(G4int id)
+{
+  return (fAnalysisManager->GetP1(id) != nullptr);
+}
+
+template <typename T>
+G4bool G4TScoreHistFiller<T>::CheckP2(G4int id)
+{
+  return (fAnalysisManager->GetP2(id) != nullptr);
+}

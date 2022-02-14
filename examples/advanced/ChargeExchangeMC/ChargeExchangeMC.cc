@@ -503,13 +503,11 @@ int  main( int  argc, char **  argv )
     CexmcHistoManager::Destroy();
 #endif
 
-    delete visManager;
-
     CexmcMessenger::Destroy();
-    delete runManager;
 
     delete session;
-
+    delete visManager;
+    delete runManager;
 
     return 0;
 }

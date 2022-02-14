@@ -43,6 +43,9 @@
 #include "G4PreCompoundModel.hh"
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4Log.hh"
+#include "G4PhysicsModelCatalog.hh"
+
+G4int G4BinaryLightIonReaction::theBLIR_ID = -1;
 
 //#define debug_G4BinaryLightIonReaction
 //#define debug_BLIR_finalstate
@@ -63,7 +66,7 @@ G4BinaryLightIonReaction::G4BinaryLightIonReaction(G4VPreCompoundModel* ptr)
 	}
 	theModel = new G4BinaryCascade(theProjectileFragmentation);
 	theHandler = theProjectileFragmentation->GetExcitationHandler();
-
+    	theBLIR_ID = G4PhysicsModelCatalog::GetModelID("model_G4BinaryLightIonReaction");
 	debug_G4BinaryLightIonReactionResults=std::getenv("debug_G4BinaryLightIonReactionResults")!=0;
 }
 
@@ -76,7 +79,7 @@ void G4BinaryLightIonReaction::ModelDescription(std::ostream& outFile) const
 			<< "using G4BinaryCasacde to model the interaction of a light\n"
 			<< "nucleus with a nucleus.\n"
 			<< "The lighter of the two nuclei is treated like a set of projectiles\n"
-			<< "which are transported simultanously through the heavier nucleus.\n";
+			<< "which are transported simultaneously through the heavier nucleus.\n";
 }
 
 //--------------------------------------------------------------------------------
@@ -308,7 +311,14 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 				tmp.setVect(-tmp.vect());
 			}
 			tmp *= toLab;
-			aNew->Set4Momentum(tmp);
+			aNewDP->Set4Momentum(tmp);
+			G4HadSecondary aNew = G4HadSecondary(aNewDP);
+            G4double time = 0;                     //(*iter)->GetCreationTime();
+            //if(time < 0.0) { time = 0.0; }
+            aNew.SetTime(timePrimary + time);
+            //aNew.SetCreatorModelID((*iter)->GetCreatorModelID()); //AR-02Aug2021 : For some reasons, it does NOT work!
+            aNew.SetCreatorModelID(theBLIR_ID);
+
 			theResult.AddSecondary(aNew);
 			ptot += tmp;
 			        //G4cout << "BLIC: Secondary " << aNew->GetDefinition()->GetParticleName()

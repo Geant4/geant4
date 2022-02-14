@@ -44,35 +44,33 @@
 
 G4QGSPLundStrFragmProtonBuilder::
 G4QGSPLundStrFragmProtonBuilder(G4bool quasiElastic) 
- {
-   theMin = 100*GeV;
-   theModel = new G4TheoFSGenerator("QGSP");
+{
+  theMin = 100*GeV;
+  theModel = new G4TheoFSGenerator("QGSP");
 
-   theStringModel = new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(theStrFragm = new G4LundStringFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+  G4QGSModel< G4QGSParticipants >* theStringModel = 
+    new G4QGSModel< G4QGSParticipants >;
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
 
-   theCascade = new G4GeneratorPrecompoundInterface;
+  G4GeneratorPrecompoundInterface* theCascade = 
+    new G4GeneratorPrecompoundInterface();
 
-   theModel->SetTransport(theCascade);
-   theModel->SetHighEnergyGenerator(theStringModel);
-   if (quasiElastic)
-   {
-      theQuasiElastic=new G4QuasiElasticChannel;
-      theModel->SetQuasiElasticChannel(theQuasiElastic);
-   } else 
-   {  theQuasiElastic=0;}  
-
- }
+  theModel->SetTransport(theCascade);
+  theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasiElastic)
+    {
+      theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+    } 
+}
 
 void G4QGSPLundStrFragmProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
- {
-   aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-   aP->RegisterMe(theModel);
- }
+Build(G4HadronInelasticProcess * aP)
+{
+  aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
+  aP->RegisterMe(theModel);
+}
 
 void G4QGSPLundStrFragmProtonBuilder::
 Build(G4HadronElasticProcess * )
@@ -80,10 +78,5 @@ Build(G4HadronElasticProcess * )
  }
 
 G4QGSPLundStrFragmProtonBuilder::~G4QGSPLundStrFragmProtonBuilder() 
- {
-   if ( theQuasiElastic ) delete theQuasiElastic;
-   delete theStringDecay;
-   delete theStringModel;
-   delete theStrFragm;
- }
+{}
 

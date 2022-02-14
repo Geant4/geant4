@@ -38,19 +38,10 @@
 // Modifications:
 //
 // 16-07-03 Update GetRange interface (V.Ivanchenko)
-//
-//
-// Class Description:
-//
-// It is the generic process of multiple scattering it includes common
-// part of calculations for all charged particles
-//
 // 26-11-03 bugfix in AlongStepDoIt (L.Urban)
 // 25-05-04 add protection against case when range is less than steplimit (VI)
-// 30-06-04 make destructor virtual (V.Ivanchenko)
 // 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
-// 15-04-05 optimize internal interfaces (V.Ivanchenko)
 // 15-04-05 remove boundary flag (V.Ivanchenko)
 // 07-10-05 error in a protection in GetContinuousStepLimit corrected (L.Urban)
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
@@ -63,6 +54,10 @@
 // 15-07-08 Reorder class members for further multi-thread development (VI)
 // 07-04-09 Moved msc methods from G4VEmModel to G4VMscModel (VI) 
 //
+// Class Description:
+//
+// It is the generic process of multiple scattering it includes common
+// part of calculations for all charged particles
 
 // -------------------------------------------------------------------
 //
@@ -92,21 +87,16 @@ class G4VMultipleScattering : public G4VContinuousDiscreteProcess
 {
 public:
 
-  G4VMultipleScattering(const G4String& name = "msc",
-                        G4ProcessType type = fElectromagnetic);
+  explicit G4VMultipleScattering(const G4String& name = "msc",
+                                 G4ProcessType type = fElectromagnetic);
 
-  virtual ~G4VMultipleScattering();
+  ~G4VMultipleScattering() override;
 
   //------------------------------------------------------------------------
   // Virtual methods to be implemented for the concrete model
   //------------------------------------------------------------------------
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override = 0;
-
-  // obsolete
-  virtual void PrintInfo() {};
-
-  virtual void ProcessDescription(std::ostream& outFile) const override;
+  void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
 
@@ -136,7 +126,7 @@ public:
   // (return true if the Physics Table can be build by using file)
   // (return false if the process has no functionality or in case of failure)
   // File name should is constructed as processName+particleName and the
-  // should be placed under the directory specifed by the argument.
+  // should be placed under the directory specified by the argument.
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                               const G4String& directory,
                               G4bool ascii) override;
@@ -173,6 +163,10 @@ public:
                                G4double currentMinimalStep,
                                G4double& currentSafety);
 
+  // hide assignment operator
+  G4VMultipleScattering(G4VMultipleScattering &) = delete;
+  G4VMultipleScattering & operator=(const G4VMultipleScattering &right) = delete;
+
   //------------------------------------------------------------------------
   // Specific methods to set, access, modify models
   //------------------------------------------------------------------------
@@ -188,13 +182,15 @@ public:
 
   // Assign a model to a process local list, to enable the list in run time 
   // the derived process should execute AddEmModel(..) for all such models
-  void SetEmModel(G4VMscModel*, size_t index = 0);
+  void SetEmModel(G4VMscModel*, G4int idx = 0);
   
   // return a model from the local list
-  G4VMscModel* EmModel(size_t index = 0) const;
+  inline G4VMscModel* EmModel(size_t index = 0) const;
 
-  // Access to run time models by index
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
+  // Access to run time models 
+  inline G4int NumberOfModels() const;
+
+  inline G4VMscModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
 
   //------------------------------------------------------------------------
   // Get/Set parameters for simulation of multiple scattering
@@ -203,17 +199,16 @@ public:
   void SetIonisation(G4VEnergyLossProcess*);
   
   inline G4bool LateralDisplasmentFlag() const;
-  inline void SetLateralDisplasmentFlag(G4bool val);
-
+  
   inline G4double Skin() const;
-  inline void SetSkin(G4double val);
   
   inline G4double RangeFactor() const;
-  inline void SetRangeFactor(G4double val);
   
   inline G4double GeomFactor() const;
  
   inline G4double PolarAngleLimit() const;
+
+  inline G4bool UseBaseMaterial() const;
  
   inline G4MscStepLimitType StepLimitType() const;
   inline void SetStepLimitType(G4MscStepLimitType val);
@@ -238,21 +233,13 @@ protected:
   G4double GetContinuousStepLimit(const G4Track& track,
                                   G4double previousStepSize,
                                   G4double currentMinimalStep,
-                                  G4double& currentSafety) override ;
-
-  // return number of already added models
-  inline G4int NumberOfModels() const;
+                                  G4double& currentSafety) override;
 
 private:
 
-  // hide  assignment operator
-  G4VMultipleScattering(G4VMultipleScattering &) = delete;
-  G4VMultipleScattering & 
-    operator=(const G4VMultipleScattering &right) = delete;
-
   // Print out of generic class parameters
   void StreamInfo(std::ostream& outFile, const G4ParticleDefinition&,
-                  G4bool rst=false) const;
+                  G4bool rst = false) const;
 
   // ======== Parameters of the class fixed at construction =========
 
@@ -262,22 +249,14 @@ private:
 
   // ======== Parameters of the class fixed at initialisation =======
 
-  G4SafetyHelper*             safetyHelper;
-
+  G4SafetyHelper*             safetyHelper = nullptr;
+  const G4ParticleDefinition* firstParticle = nullptr;
+  const G4ParticleDefinition* currParticle = nullptr;
+ 
   std::vector<G4VMscModel*>   mscModels;
-  G4int                       numberOfModels;
 
-  const G4ParticleDefinition* firstParticle;
-  const G4ParticleDefinition* currParticle;
-
-  G4MscStepLimitType          stepLimit;
-
-  G4double                    facrange;
+  G4double                    facrange = 0.04;
   G4double                    lowestKinEnergy;
-
-  G4bool                      latDisplacement;
-  G4bool                      isIon;
-  G4bool                      fDispBeyondSafety;
 
   // ======== Cached values - may be state dependent ================
 
@@ -287,20 +266,26 @@ protected:
 
 private:
 
-  // cache
-  G4VMscModel*                currentModel;
-  G4VEnergyLossProcess*       fIonisation;
+  G4ThreeVector               fNewPosition;
+  G4ThreeVector               fNewDirection;
+
+  G4VMscModel*                currentModel = nullptr;
+  G4VEnergyLossProcess*       fIonisation = nullptr;
 
   G4double                    geomMin;
   G4double                    minDisplacement2;
-  G4double                    physStepLimit;
-  G4double                    tPathLength;
-  G4double                    gPathLength;
+  G4double                    physStepLimit = 0.0;
+  G4double                    tPathLength = 0.0;
+  G4double                    gPathLength = 0.0;
 
-  G4ThreeVector               fNewPosition;
-  G4ThreeVector               fNewDirection;
-  G4bool                      fPositionChanged;
-  G4bool                      isActive;
+  G4MscStepLimitType          stepLimit = fUseSafety;
+  G4int                       numberOfModels = 0;
+
+  G4bool                      latDisplacement = true;
+  G4bool                      isIon = false;
+  G4bool                      fPositionChanged = false;
+  G4bool                      isActive = false;
+  G4bool                      baseMat = false;
 };
 
 // ======== Run time inline methods ================
@@ -322,13 +307,6 @@ inline  G4bool G4VMultipleScattering::LateralDisplasmentFlag() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline  void G4VMultipleScattering::SetLateralDisplasmentFlag(G4bool val)
-{
-  latDisplacement = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline  G4double G4VMultipleScattering::Skin() const
 {
   return theParameters->MscSkin();
@@ -336,26 +314,9 @@ inline  G4double G4VMultipleScattering::Skin() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline  void G4VMultipleScattering::SetSkin(G4double val)
-{
-  theParameters->SetMscSkin(val);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline  G4double G4VMultipleScattering::RangeFactor() const
 {
   return facrange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline  void G4VMultipleScattering::SetRangeFactor(G4double val)
-{
-  if(val > 0.0 && val < 1.0) { 
-    facrange = val;
-    theParameters->SetMscRangeFactor(val);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -376,15 +337,13 @@ inline  G4double G4VMultipleScattering::PolarAngleLimit() const
 
 inline G4MscStepLimitType G4VMultipleScattering::StepLimitType() const
 {
-  return stepLimit;
+  return theParameters->MscStepLimitType();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val) 
 {
-  stepLimit = val;
-  if(val == fMinimal) { SetRangeFactor(0.2); }
   theParameters->SetMscStepLimitType(val);
 }
 
@@ -411,17 +370,31 @@ inline const G4ParticleDefinition* G4VMultipleScattering::FirstParticle() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4int G4VMultipleScattering::NumberOfModels() const
+inline G4VMscModel* G4VMultipleScattering::EmModel(size_t index) const
 {
-  return modelManager->NumberOfModels();
+  return (index < mscModels.size()) ? mscModels[index] : nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* 
+inline G4int G4VMultipleScattering::NumberOfModels() const
+{
+  return numberOfModels;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VMscModel* 
 G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
 {
-  return modelManager->GetModel(idx, ver);
+  return static_cast<G4VMscModel*>(modelManager->GetModel(idx, ver));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4VMultipleScattering::UseBaseMaterial() const
+{
+  return baseMat;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

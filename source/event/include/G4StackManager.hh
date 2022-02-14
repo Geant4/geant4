@@ -23,14 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4StackManager
 //
+// Class description:
 //
-//  Last Modification : 04/Oct/11 P. Mato - making use of G4TrackStack with value semantics
-///
+// This is the manager class of handling stacks of G4Track objects.
+// This class must be a singleton and be constructed by G4EventManager.
+// Almost all methods must be invoked exclusively by G4EventManager.
+// Especially, some Clear() methods MUST NOT be invoked by the user.
+// Event abortion is handled by G4EventManager.
+//
+// G4StackManager has three stacks, the urgent stack, the
+// waiting stack, and the postpone to next event stack. The meanings
+// of each stack is descrived in the Geant4 User's Manual.
 
-
-#ifndef G4StackManager_h
-#define G4StackManager_h 1
+// Author: Makoto Asai, 1996
+//
+// History:
+// - 01/Feb/1996, Makoto Asai - Created
+// - 04/Oct/2011, Pere Mato - Use of G4TrackStack with value semantics
+// --------------------------------------------------------------------
+#ifndef G4StackManager_hh
+#define G4StackManager_hh 1
 
 #include "G4UserStackingAction.hh"
 #include "G4StackedTrack.hh"
@@ -40,43 +54,28 @@
 #include "G4Track.hh"
 #include "G4TrackStatus.hh"
 #include "globals.hh"
-#include "evmandefs.hh"
 
 class G4StackingMessenger;
 class G4VTrajectory;
 
-// class description:
-//
-// This is the manager class of handling stacks of G4Track objects.
-// This class must be a singleton and be constructed by G4EventManager.
-// Almost all methods must be invoked exclusively by G4EventManager.
-// Especially, some Clear() methods MUST NOT be invoked by the user.
-// Event abortion is handled by G4EventManager.
-//
-// This G4StackingManager has three stacks, the urgent stack, the
-// waiting stack, and the postpone to next event stack. The meanings
-// of each stack is descrived in the Geant4 user's manual.
-//
-
 class G4StackManager 
 {
   public:
-      G4StackManager();
-      ~G4StackManager();
 
-  private:
-      const G4StackManager& operator=(const G4StackManager &right);
-      G4bool operator==(const G4StackManager &right) const;
-      G4bool operator!=(const G4StackManager &right) const;
+    G4StackManager();
+   ~G4StackManager();
 
-  public:
-      G4int PushOneTrack(G4Track *newTrack, G4VTrajectory *newTrajectory = 0);
-      G4Track * PopNextTrack(G4VTrajectory**newTrajectory);
-      G4int PrepareNewEvent();
+    const G4StackManager& operator=(const G4StackManager&) = delete;
+    G4bool operator==(const G4StackManager&) const = delete;
+    G4bool operator!=(const G4StackManager&) const = delete;
 
-  public: // with description
-      void ReClassify();
-      //  Send all tracks stored in the Urgent stack one by one to 
+    G4int PushOneTrack(G4Track* newTrack,
+                       G4VTrajectory* newTrajectory = nullptr);
+    G4Track* PopNextTrack(G4VTrajectory** newTrajectory);
+    G4int PrepareNewEvent();
+
+    void ReClassify();
+      // Send all tracks stored in the Urgent stack one by one to 
       // the user's concrete ClassifyNewTrack() method. This method
       // can be invoked from the user's G4UserStackingAction concrete
       // class, especially fron its NewStage() method. Be aware that
@@ -84,56 +83,59 @@ class G4StackManager
       // stack are send to the urgent stack and then the user's NewStage()
       // method is invoked.
 
-      void SetNumberOfAdditionalWaitingStacks(G4int iAdd);
-      //  Set the number of additional (optional) waiting stacks.
+    void SetNumberOfAdditionalWaitingStacks(G4int iAdd);
+      // Set the number of additional (optional) waiting stacks.
       // This method must be invoked at PreInit, Init or Idle states.
       // Once the user set the number of additional waiting stacks,
       // he/she can use the corresponding ENUM in G4ClassificationOfNewTrack.
       // The user should invoke G4RunManager::SetNumberOfAdditionalWaitingStacks
       // method, which invokes this method.
 
-      void TransferStackedTracks(G4ClassificationOfNewTrack origin, G4ClassificationOfNewTrack destination);
-      //  Transfter all stacked tracks from the origin stack to the destination stack.
-      // The destination stack needs not be empty.
+    void TransferStackedTracks(G4ClassificationOfNewTrack origin,
+                               G4ClassificationOfNewTrack destination);
+      // Transfer all stacked tracks from the origin stack to the
+      // destination stack. The destination stack needs not be empty.
       // If the destination is fKill, tracks are deleted.
       // If the origin is fKill, nothing happen.
 
-      void TransferOneStackedTrack(G4ClassificationOfNewTrack origin, G4ClassificationOfNewTrack destination);
-      //  Transfter one stacked track from the origin stack to the destination stack.
+    void TransferOneStackedTrack(G4ClassificationOfNewTrack origin,
+                                 G4ClassificationOfNewTrack destination);
+      // Transfter one stacked track from the origin stack to the destination
+      // stack.
       // The transfered track is the one which came last to the origin stack.
       // The destination stack needs not be empty.
       // If the destination is fKill, the track is deleted.
       // If the origin is fKill, nothing happen.
 
-  private:
-      G4UserStackingAction * userStackingAction;
-      G4int verboseLevel;
-#ifdef G4_USESMARTSTACK
-      G4SmartTrackStack * urgentStack;
-#else
-      G4TrackStack * urgentStack;
-#endif
-      G4TrackStack * waitingStack;
-      G4TrackStack * postponeStack;
-      G4StackingMessenger* theMessenger;
-      std::vector<G4TrackStack*> additionalWaitingStacks;
-      G4int numberOfAdditionalWaitingStacks;
+    void clear();
+    void ClearUrgentStack();
+    void ClearWaitingStack(G4int i=0);
+    void ClearPostponeStack();
+    G4int GetNTotalTrack() const;
+    G4int GetNUrgentTrack() const;
+    G4int GetNWaitingTrack(G4int i=0) const;
+    G4int GetNPostponedTrack() const;
+    void SetVerboseLevel( G4int const value );
+    void SetUserStackingAction(G4UserStackingAction* value);
 
-  public:
-      void clear();
-      void ClearUrgentStack();
-      void ClearWaitingStack(int i=0);
-      void ClearPostponeStack();
-      G4int GetNTotalTrack() const;
-      G4int GetNUrgentTrack() const;
-      G4int GetNWaitingTrack(int i=0) const;
-      G4int GetNPostponedTrack() const;
-      void SetVerboseLevel( G4int const value );
-      void SetUserStackingAction(G4UserStackingAction* value);
-  
   private:
-     G4ClassificationOfNewTrack DefaultClassification(G4Track *aTrack);
+
+    G4ClassificationOfNewTrack DefaultClassification(G4Track* aTrack);
+
+  private:
+
+    G4UserStackingAction* userStackingAction = nullptr;
+    G4int verboseLevel = 0;
+#ifdef G4_USESMARTSTACK
+    G4SmartTrackStack* urgentStack = nullptr;
+#else
+    G4TrackStack* urgentStack = nullptr;
+#endif
+    G4TrackStack* waitingStack = nullptr;
+    G4TrackStack* postponeStack = nullptr;
+    G4StackingMessenger* theMessenger = nullptr;
+    std::vector<G4TrackStack*> additionalWaitingStacks;
+    G4int numberOfAdditionalWaitingStacks = 0;
 };
 
 #endif
-

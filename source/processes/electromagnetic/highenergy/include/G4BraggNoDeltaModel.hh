@@ -58,19 +58,18 @@ public:
   explicit G4BraggNoDeltaModel(const G4ParticleDefinition* p = nullptr,
                       const G4String& nam = "BraggNoD");
 
-  virtual ~G4BraggNoDeltaModel();
+  ~G4BraggNoDeltaModel() override;
 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-					const G4ParticleDefinition*,
-					G4double kineticEnergy,
-					G4double cutEnergy) override;
+  G4double ComputeDEDXPerVolume(const G4Material*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double cutEnergy) override;
 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy,
-					 G4double maxEnergy) override;
-private:
+  G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy) override;
 
   // hide assignment operator
   G4BraggNoDeltaModel & operator=(const  G4BraggNoDeltaModel &right) = delete;

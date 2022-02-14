@@ -57,6 +57,7 @@
 #include "G4ITNavigator.hh"
 #include "G4ITSafetyHelper.hh" // Not used yet
 #include "G4TrackingInformation.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 using namespace std;
 
@@ -92,12 +93,12 @@ using namespace G4MemStat;
 using G4MemStat::MemStat;
 #endif
 
-static double InvErf(double x)
+static G4double InvErf(G4double x)
 {
   return CLHEP::HepStat::inverseErf(x);
 }
 
-static double InvErfc(double x)
+static G4double InvErfc(G4double x)
 {
   return CLHEP::HepStat::inverseErf(1. - x);
 }
@@ -107,7 +108,7 @@ static double InvErfc(double x)
 //  return CLHEP::HepStat::erf(x);
 //}
 
-static double Erfc(double x)
+static G4double Erfc(G4double x)
 {
   return 1 - CLHEP::HepStat::erf(1. - x);
 }
@@ -126,7 +127,7 @@ G4DNABrownianTransportation::G4DNABrownianTransportation(const G4String& aName,
   fpState.reset(new G4ITBrownianState());
 
   //ctor
-  SetProcessSubType(61);
+  SetProcessSubType(fLowEnergyBrownianTransportation);
 
   fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
   fpWaterDensity = 0;
@@ -148,7 +149,7 @@ G4DNABrownianTransportation::G4DNABrownianTransportation(const G4DNABrownianTran
     G4ITTransportation(right)
 {
   //copy ctor
-  SetProcessSubType(61);
+  SetProcessSubType(fLowEnergyBrownianTransportation);
   fUseMaximumTimeBeforeReachingBoundary = right
       .fUseMaximumTimeBeforeReachingBoundary;
   fUseSchedulerMinTimeSteps = right.fUseSchedulerMinTimeSteps;
@@ -202,8 +203,8 @@ void G4DNABrownianTransportation::BuildPhysicsTable(const G4ParticleDefinition& 
 
 void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
                                               const G4Step& step,
-                                              const double timeStep,
-                                              double& spaceStep)
+                                              const G4double timeStep,
+                                              G4double& spaceStep)
 {
   // G4cout << "G4ITBrownianTransportation::ComputeStep" << G4endl;
 
@@ -222,7 +223,7 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
   {
     const G4VITProcess* ITProc = ((const G4VITProcess*) step.GetPostStepPoint()
         ->GetProcessDefinedStep());
-    bool makeException = true;
+    G4bool makeException = true;
 
     if(ITProc && ITProc->ProposesTimeStep()) makeException = false;
 
@@ -251,9 +252,9 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
     G4double diffCoeff = molecule->GetDiffusionCoefficient(track.GetMaterial(),
                                                            track.GetMaterial()->GetTemperature());
 
-    static double sqrt_2 = sqrt(2.);
-    double sqrt_Dt = sqrt(diffCoeff*timeStep);
-    double sqrt_2Dt = sqrt_2*sqrt_Dt;
+    static G4double sqrt_2 = sqrt(2.);
+    G4double sqrt_Dt = sqrt(diffCoeff*timeStep);
+    G4double sqrt_2Dt = sqrt_2*sqrt_Dt;
 
     if(State(fTimeStepReachedLimit)== true)
     {
@@ -316,8 +317,8 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
 //                   << "A random number was selected"
 //                   << RESET_COLOR
 //                   << G4endl;
-            double value = State(fRandomNumber)+(1-State(fRandomNumber))*G4UniformRand();
-            double invErfc = InvErfc(value);
+            G4double value = State(fRandomNumber)+(1-State(fRandomNumber))*G4UniformRand();
+            G4double invErfc = InvErfc(value);
             spaceStep = invErfc*2*sqrt_Dt;
 
             if(State(fTimeStepReachedLimit)== false)
@@ -344,9 +345,9 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
           }
           else if(fUseMaximumTimeBeforeReachingBoundary == false) // CDF is used
           {
-            double min_randomNumber = Erfc(State(fEndPointDistance)/2*sqrt_Dt);
-            double value = min_randomNumber+(1-min_randomNumber)*G4UniformRand();
-            double invErfc = InvErfc(value);
+            G4double min_randomNumber = Erfc(State(fEndPointDistance)/2*sqrt_Dt);
+            G4double value = min_randomNumber+(1-min_randomNumber)*G4UniformRand();
+            G4double invErfc = InvErfc(value);
             spaceStep = invErfc*2*sqrt_Dt;
             if(spaceStep >= State(fEndPointDistance))
             {
@@ -731,7 +732,7 @@ G4double G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength(cons
 
     if (fUseSchedulerMinTimeSteps)
     {
-      double minTimeStepAllowed = G4VScheduler::Instance()->GetLimitingTimeStep();
+      G4double minTimeStepAllowed = G4VScheduler::Instance()->GetLimitingTimeStep();
       //========================================================================
       // TODO
 //      double currentMinTimeStep = G4VScheduler::Instance()->GetTimeStep();
@@ -811,7 +812,9 @@ G4DNABrownianTransportation::AlongStepDoIt(const G4Track& track,
 #endif
 
   if (GetIT(track)->GetTrackingInfo()->IsLeadingStep()
-      && State(fComputeLastPosition))
+      && State(fComputeLastPosition)
+      && State(fGeometryLimitedStep)//Hoang added 26/8/2019
+      )
   {
     //==========================================================================
     // DEBUG
@@ -820,7 +823,7 @@ G4DNABrownianTransportation::AlongStepDoIt(const G4Track& track,
 //                G4VScheduler::Instance()->GetTimeStep()) < DBL_EPSILON);
     //==========================================================================
 
-    double spaceStep = DBL_MAX;
+    G4double spaceStep = DBL_MAX;
 
     if(State(theInteractionTimeLeft) <= fInternalMinTimeStep)
     {
@@ -832,7 +835,7 @@ G4DNABrownianTransportation::AlongStepDoIt(const G4Track& track,
       G4double diffusionCoefficient = GetMolecule(track)->
       GetDiffusionCoefficient();
 
-      double sqrt_2Dt= sqrt(2 * diffusionCoefficient * State(theInteractionTimeLeft));
+      G4double sqrt_2Dt= sqrt(2 * diffusionCoefficient * State(theInteractionTimeLeft));
       G4double x = G4RandGauss::shoot(0, sqrt_2Dt);
       G4double y = G4RandGauss::shoot(0, sqrt_2Dt);
       G4double z = G4RandGauss::shoot(0, sqrt_2Dt);

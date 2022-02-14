@@ -23,135 +23,117 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4Step inline definitions
-//-----------------------------------------------------------------
+// G4Step inline methods implementation
+//
+// Authors:
+//   Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//   Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// Revisions:
+//   Hisaya Kurashige, 1998-2007
+// --------------------------------------------------------------------
 
-// Get/Set functions 
-inline 
- G4StepPoint* G4Step::GetPreStepPoint() const 
- { 
-   return fpPreStepPoint; 
- }
-
-inline 
- void G4Step::SetPreStepPoint(G4StepPoint* value)
- { 
-   delete fpPreStepPoint;
-   fpPreStepPoint = value; 
- }
-
-inline 
- G4StepPoint* G4Step::GetPostStepPoint() const
- { 
-   return fpPostStepPoint; 
- }
-   
-inline 
- void G4Step::SetPostStepPoint(G4StepPoint* value)
- { 
-    delete fpPostStepPoint;
-    fpPostStepPoint = value; 
- }
-
-inline 
- G4double G4Step::GetStepLength() const
- { 
-   return fStepLength; 
- }
-
-inline 
- void G4Step::SetStepLength(G4double value)
- { 
-   fStepLength = value; 
- }
-
-inline 
- G4ThreeVector G4Step::GetDeltaPosition() const
- { 
-   return fpPostStepPoint->GetPosition()
-            - fpPreStepPoint->GetPosition(); 
- }
-
-inline 
- G4double G4Step::GetDeltaTime() const
- { 
-   return fpPostStepPoint->GetLocalTime()
-            - fpPreStepPoint->GetLocalTime(); 
- }
-
-
-inline 
- G4double G4Step::GetTotalEnergyDeposit() const
- { 
-   return fTotalEnergyDeposit; 
- }
-
-inline 
- void G4Step::SetTotalEnergyDeposit(G4double value)
- { 
-   fTotalEnergyDeposit = value;   
- }
-
-inline 
- G4double G4Step::GetNonIonizingEnergyDeposit() const
- { 
-   return fNonIonizingEnergyDeposit; 
- }
-
-inline 
- void G4Step::SetNonIonizingEnergyDeposit(G4double value)
- { 
-   fNonIonizingEnergyDeposit = value;   
- }
-
-inline 
- void G4Step::AddTotalEnergyDeposit(G4double value)
- {
-   fTotalEnergyDeposit += value;   
- }
-
-inline 
- void G4Step::ResetTotalEnergyDeposit()
- { 
-   fTotalEnergyDeposit = 0.; 
-   fNonIonizingEnergyDeposit = 0.;   
- }
-
-inline 
- void G4Step::AddNonIonizingEnergyDeposit(G4double value)
- { 
-   fNonIonizingEnergyDeposit += value;   
- }
-
-inline 
- void G4Step::ResetNonIonizingEnergyDeposit()
- { 
-   fNonIonizingEnergyDeposit = 0.; 
- }
-
-inline 
- void G4Step::SetControlFlag(G4SteppingControl value)
- {
-   fpSteppingControlFlag = value;     
- }
-
-inline 
- G4SteppingControl G4Step::GetControlFlag() const
- {
-   return fpSteppingControlFlag;     
- }
-
-inline 
- void G4Step::CopyPostToPreStepPoint( )
- {
-   // This method is called at the beginning of each step 
-   *(fpPreStepPoint) = *(fpPostStepPoint);
-   fpPostStepPoint->SetStepStatus(fUndefined);
-
-   // store number of secondaries
-   nSecondaryByLastStep = fSecondary->size();
+inline G4StepPoint* G4Step::GetPreStepPoint() const
+{
+  return fpPreStepPoint;
 }
 
+inline void G4Step::SetPreStepPoint(G4StepPoint* value)
+{
+  delete fpPreStepPoint;
+  fpPreStepPoint = value;
+}
+
+inline G4StepPoint* G4Step::GetPostStepPoint() const
+{
+  return fpPostStepPoint;
+}
+
+inline void G4Step::SetPostStepPoint(G4StepPoint* value)
+{
+  delete fpPostStepPoint;
+  fpPostStepPoint = value;
+}
+
+inline G4double G4Step::GetStepLength() const
+{
+  return fStepLength;
+}
+
+inline void G4Step::SetStepLength(G4double value)
+{
+  fStepLength = value;
+}
+
+inline G4ThreeVector G4Step::GetDeltaPosition() const
+{
+  return fpPostStepPoint->GetPosition() - fpPreStepPoint->GetPosition();
+}
+
+inline G4double G4Step::GetDeltaTime() const
+{
+  return fpPostStepPoint->GetLocalTime() - fpPreStepPoint->GetLocalTime();
+}
+
+inline G4double G4Step::GetTotalEnergyDeposit() const
+{
+  return fTotalEnergyDeposit;
+}
+
+inline void G4Step::SetTotalEnergyDeposit(G4double value)
+{
+  fTotalEnergyDeposit = value;
+}
+
+inline G4double G4Step::GetNonIonizingEnergyDeposit() const
+{
+  return fNonIonizingEnergyDeposit;
+}
+
+inline void G4Step::SetNonIonizingEnergyDeposit(G4double value)
+{
+  fNonIonizingEnergyDeposit = value;
+}
+
+inline void G4Step::AddTotalEnergyDeposit(G4double value)
+{
+  fTotalEnergyDeposit += value;
+}
+
+inline void G4Step::ResetTotalEnergyDeposit()
+{
+  fTotalEnergyDeposit       = 0.;
+  fNonIonizingEnergyDeposit = 0.;
+}
+
+inline void G4Step::AddNonIonizingEnergyDeposit(G4double value)
+{
+  fNonIonizingEnergyDeposit += value;
+}
+
+inline void G4Step::ResetNonIonizingEnergyDeposit()
+{
+  fNonIonizingEnergyDeposit = 0.;
+}
+
+inline void G4Step::SetControlFlag(G4SteppingControl value)
+{
+  fpSteppingControlFlag = value;
+}
+
+inline G4SteppingControl G4Step::GetControlFlag() const
+{
+  return fpSteppingControlFlag;
+}
+
+inline void G4Step::CopyPostToPreStepPoint()
+{
+  // This method is called at the beginning of each step
+  *(fpPreStepPoint) = *(fpPostStepPoint);
+  fpPostStepPoint->SetStepStatus(fUndefined);
+
+  // store number of secondaries
+  nSecondaryByLastStep = fSecondary->size();
+}
 
 //-------------------------------------------------------------
 // To implement bi-directional association between G4Step and
@@ -160,152 +142,173 @@ inline
 //-------------------------------------------------------------
 #include "G4Track.hh"
 
-inline 
- G4Track* G4Step::GetTrack() const
- { 
-   return fpTrack; 
- }
-   
-inline 
- void G4Step::SetTrack(G4Track* value)
- { 
-   fpTrack = value; 
- }
-
-
-// Other member functions
-inline 
- void G4Step::InitializeStep( G4Track* aValue )
- {
-   // Initialize G4Step attributes
-   fStepLength = 0.;
-   fTotalEnergyDeposit = 0.;
-   fNonIonizingEnergyDeposit = 0.;
-   fpTrack = aValue;
-   fpTrack->SetStepLength(0.);
-
-   nSecondaryByLastStep = 0;
-   
-   // Initialize G4StepPoint attributes.
-   // To avoid the circular dependency between G4Track, G4Step
-   // and G4StepPoint, G4Step has to manage the copy actions.
-   fpPreStepPoint->SetPosition(fpTrack->GetPosition());
-   fpPreStepPoint->SetGlobalTime(fpTrack->GetGlobalTime());
-   fpPreStepPoint->SetLocalTime(fpTrack->GetLocalTime());
-   fpPreStepPoint->SetProperTime(fpTrack->GetProperTime());
-   fpPreStepPoint->SetMomentumDirection(fpTrack->GetMomentumDirection());
-   fpPreStepPoint->SetKineticEnergy(fpTrack->GetKineticEnergy());
-   fpPreStepPoint->SetTouchableHandle(fpTrack->GetTouchableHandle());
-   fpPreStepPoint->SetMaterial( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterial());
-   fpPreStepPoint->SetMaterialCutsCouple( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterialCutsCouple());
-   fpPreStepPoint->SetSensitiveDetector( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetSensitiveDetector());
-   fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
-   fpPreStepPoint->SetSafety(0.);
-   fpPreStepPoint->SetStepStatus(fUndefined);
-   fpPreStepPoint->SetProcessDefinedStep(0);
-   fpPreStepPoint->SetMass(fpTrack->GetDynamicParticle()->GetMass());    
-   fpPreStepPoint->SetCharge(fpTrack->GetDynamicParticle()->GetCharge()); 
-   fpPreStepPoint->SetWeight(fpTrack->GetWeight());
-
-   // Set Velocity
-   // should be placed after SetMaterial for preStep point	
-    fpPreStepPoint->SetVelocity(fpTrack->CalculateVelocity());
-  
-   (*fpPostStepPoint) = (*fpPreStepPoint);
- }
-
-inline 
- void G4Step::UpdateTrack( )
- { 
-   // To avoid the circular dependency between G4Track, G4Step
-   // and G4StepPoint, G4Step has to manage the update actions.
-   // position, time
-   fpTrack->SetPosition(fpPostStepPoint->GetPosition());
-   fpTrack->SetGlobalTime(fpPostStepPoint->GetGlobalTime());
-   fpTrack->SetLocalTime(fpPostStepPoint->GetLocalTime());
-   fpTrack->SetProperTime(fpPostStepPoint->GetProperTime());
-   //  energy, momentum, polarization
-   fpTrack->SetMomentumDirection(fpPostStepPoint->GetMomentumDirection());
-   fpTrack->SetKineticEnergy(fpPostStepPoint->GetKineticEnergy());
-   fpTrack->SetPolarization(fpPostStepPoint->GetPolarization());
-   //  mass charge
-   G4DynamicParticle* pParticle = (G4DynamicParticle*)(fpTrack->GetDynamicParticle());
-   pParticle->SetMass(fpPostStepPoint->GetMass());
-   pParticle->SetCharge(fpPostStepPoint->GetCharge());
-   //  step length
-   fpTrack->SetStepLength(fStepLength);
-   // NextTouchable is updated 
-   // (G4Track::Touchable points touchable of Pre-StepPoint)
-   fpTrack->SetNextTouchableHandle(fpPostStepPoint->GetTouchableHandle());
-   fpTrack->SetWeight(fpPostStepPoint->GetWeight());
-
-   // set velocity 
-   fpTrack->SetVelocity(fpPostStepPoint->GetVelocity());
+inline G4Track* G4Step::GetTrack() const
+{
+  return fpTrack;
 }
 
-inline size_t G4Step::GetNumberOfSecondariesInCurrentStep() const
+inline void G4Step::SetTrack(G4Track* value)
 {
-  return  fSecondary->size() - nSecondaryByLastStep; 
-}  
-
-inline const G4TrackVector* G4Step::GetSecondary() const  
-{
-   return fSecondary;
+  fpTrack = value;
 }
 
-inline G4TrackVector* G4Step::GetfSecondary()  
+inline void G4Step::InitializeStep(G4Track* aValue)
 {
-   return fSecondary;
+  fpTrack = aValue;
+  fpTrack->SetStepLength(0.);
+
+  // Initialize G4Step attributes
+  fStepLength               = 0.;
+  fTotalEnergyDeposit       = 0.;
+  fNonIonizingEnergyDeposit = 0.;
+
+  nSecondaryByLastStep = 0;
+
+  // Initialize G4StepPoint attributes.
+  // To avoid the circular dependency between G4Track, G4Step
+  // and G4StepPoint, G4Step has to manage the copy actions.
+  //
+  fpPreStepPoint->SetSafety(0.0);
+  fpPreStepPoint->SetProcessDefinedStep(0);
+  fpPreStepPoint->SetStepStatus(fUndefined);
+
+  // G4Track properties
+
+  fpPreStepPoint->SetWeight(fpTrack->GetWeight());
+  fpPreStepPoint->SetPosition(fpTrack->GetPosition());
+  fpPreStepPoint->SetLocalTime(fpTrack->GetLocalTime());
+  fpPreStepPoint->SetGlobalTime(fpTrack->GetGlobalTime());
+
+  // G4Track properties (via G4DynamicParticle)
+
+  auto pParticle = fpTrack->GetDynamicParticle();
+
+  fpPreStepPoint->SetMass(pParticle->GetMass());
+  fpPreStepPoint->SetCharge(pParticle->GetCharge());
+  fpPreStepPoint->SetProperTime(pParticle->GetProperTime());
+  fpPreStepPoint->SetKineticEnergy(pParticle->GetKineticEnergy());
+  fpPreStepPoint->SetMomentumDirection(pParticle->GetMomentumDirection());
+  fpPreStepPoint->SetPolarization(pParticle->GetPolarization());
+
+  // G4Track properties (via G4LogicalVolume)
+
+  auto lvol = fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume();
+
+  fpPreStepPoint->SetTouchableHandle(fpTrack->GetTouchableHandle());
+
+  fpPreStepPoint->SetMaterial(lvol->GetMaterial());
+  fpPreStepPoint->SetMaterialCutsCouple(lvol->GetMaterialCutsCouple());
+  fpPreStepPoint->SetSensitiveDetector(lvol->GetSensitiveDetector());
+
+  // SetVelocity() must be called after SetMaterial() for fpPreStepPoint.
+  fpPreStepPoint->SetVelocity(fpTrack->CalculateVelocity());
+
+  (*fpPostStepPoint) = (*fpPreStepPoint);
 }
 
-inline void G4Step::SetSecondary(G4TrackVector* value)  
+inline void G4Step::UpdateTrack()
 {
-   fSecondary=value;
+  // To avoid the circular dependency between G4Track, G4Step
+  // and G4StepPoint, G4Step has to manage the update actions.
+  // position, time
+  fpTrack->SetPosition(fpPostStepPoint->GetPosition());
+  fpTrack->SetGlobalTime(fpPostStepPoint->GetGlobalTime());
+  fpTrack->SetLocalTime(fpPostStepPoint->GetLocalTime());
+  //  mass, charge, proper time
+  G4DynamicParticle* pParticle =
+    (G4DynamicParticle*) (fpTrack->GetDynamicParticle());
+  pParticle->SetMass(fpPostStepPoint->GetMass());
+  pParticle->SetCharge(fpPostStepPoint->GetCharge());
+  pParticle->SetProperTime(fpPostStepPoint->GetProperTime());
+  //  energy, momentum, polarization
+  pParticle->SetMomentumDirection(fpPostStepPoint->GetMomentumDirection());
+  pParticle->SetKineticEnergy(fpPostStepPoint->GetKineticEnergy());
+  pParticle->SetPolarization(fpPostStepPoint->GetPolarization());
+  //  step length
+  fpTrack->SetStepLength(fStepLength);
+  // NextTouchable is updated
+  // (G4Track::Touchable points touchable of Pre-StepPoint)
+  fpTrack->SetNextTouchableHandle(fpPostStepPoint->GetTouchableHandle());
+  fpTrack->SetWeight(fpPostStepPoint->GetWeight());
+
+  // set velocity
+  fpTrack->SetVelocity(fpPostStepPoint->GetVelocity());
 }
 
-inline 
- G4TrackVector* G4Step::NewSecondaryVector()  
+inline std::size_t G4Step::GetNumberOfSecondariesInCurrentStep() const
 {
-   fSecondary=new G4TrackVector();
-   return fSecondary;
+  return fSecondary->size() - nSecondaryByLastStep;
 }
 
-inline void G4Step::DeleteSecondaryVector()  
+inline const G4TrackVector* G4Step::GetSecondary() const
 {
-   if (fSecondary !=0)
-   {
-     fSecondary->clear();
-     delete fSecondary;
-     fSecondary = 0;
-   }
+  return fSecondary;
+}
+
+inline G4TrackVector* G4Step::GetfSecondary()
+{
+  return fSecondary;
+}
+
+inline void G4Step::SetSecondary(G4TrackVector* value)
+{
+  fSecondary = value;
+}
+
+inline G4TrackVector* G4Step::NewSecondaryVector()
+{
+  fSecondary = new G4TrackVector();
+  return fSecondary;
+}
+
+inline void G4Step::DeleteSecondaryVector()
+{
+  if(fSecondary != nullptr)
+  {
+    fSecondary->clear();
+    delete fSecondary;
+    fSecondary = nullptr;
+  }
 }
 
 inline G4bool G4Step::IsFirstStepInVolume() const
 {
-   return fFirstStepInVolume;
+  return fFirstStepInVolume;
 }
 
 inline G4bool G4Step::IsLastStepInVolume() const
 {
-   return fLastStepInVolume;
+  return fLastStepInVolume;
 }
 
-inline  void G4Step::SetFirstStepFlag()
+inline void G4Step::SetFirstStepFlag()
 {
-   fFirstStepInVolume = true;
-}
-  
-inline  void G4Step::ClearFirstStepFlag()
-{
-   fFirstStepInVolume = false;
+  fFirstStepInVolume = true;
 }
 
-inline  void G4Step::SetLastStepFlag()
+inline void G4Step::ClearFirstStepFlag()
 {
-   fLastStepInVolume = true;
+  fFirstStepInVolume = false;
 }
-  
-inline  void G4Step::ClearLastStepFlag()
+
+inline void G4Step::SetLastStepFlag()
 {
-   fLastStepInVolume = false;
+  fLastStepInVolume = true;
+}
+
+inline void G4Step::ClearLastStepFlag()
+{
+  fLastStepInVolume = false;
+}
+
+inline void
+G4Step::SetPointerToVectorOfAuxiliaryPoints(std::vector<G4ThreeVector>* vec)
+{
+  fpVectorOfAuxiliaryPointsPointer = vec;
+}
+
+inline std::vector<G4ThreeVector>*
+G4Step::GetPointerToVectorOfAuxiliaryPoints() const
+{
+  return fpVectorOfAuxiliaryPointsPointer;
 }

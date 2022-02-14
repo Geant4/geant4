@@ -9,13 +9,10 @@
 // rectifying a rotation matrix which may have drifted due to roundoff.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/Rotation.h"
 
 #include <cmath>
+#include <iostream>
 
 namespace CLHEP  {
 

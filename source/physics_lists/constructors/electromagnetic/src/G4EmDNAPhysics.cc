@@ -29,10 +29,7 @@
 
 #include "G4SystemOfUnits.hh"
 
-#include "G4DNAGenericIonsManager.hh"
-
 // *** Processes and models for Geant4-DNA
-
 #include "G4DNAElectronSolvation.hh"
 #include "G4DNAElastic.hh"
 #include "G4DNAChampionElasticModel.hh"
@@ -47,36 +44,34 @@
 #include "G4DNAChargeIncrease.hh"
 
 // particles
-
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4Alpha.hh"
 #include "G4GenericIon.hh"
+#include "G4DNAGenericIonsManager.hh"
 
-// Warning : the following is needed in order to use EM Physics builders
 // e+
 #include "G4Positron.hh"
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
+
 // gamma
 #include "G4Gamma.hh"
 #include "G4PhotoElectricEffect.hh"
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4ComptonScattering.hh"
-#include "G4LivermoreComptonModel.hh"
+#include "G4KleinNishinaModel.hh"
 #include "G4GammaConversion.hh"
-#include "G4LivermoreGammaConversionModel.hh"
 #include "G4RayleighScattering.hh" 
-#include "G4LivermoreRayleighModel.hh"
+#include "G4BetheHeitler5DModel.hh"
 
+// utilities
 #include "G4EmParameters.hh"
-// end of warning
-
-#include "G4LossTableManager.hh"
-#include "G4UAtomicDeexcitation.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4EmBuilder.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -85,14 +80,21 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmDNAPhysics::G4EmDNAPhysics(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmDNAPhysics"), verbose(ver)
+G4EmDNAPhysics::G4EmDNAPhysics(G4int ver, const G4String& name)
+  : G4VPhysicsConstructor(name)
 {
+  // parameters for DNA and for option3 EM physics
+  SetVerboseLevel(ver);
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
+  param->SetMinEnergy(10*CLHEP::eV);
+  param->SetLowestElectronEnergy(0*CLHEP::eV);
+  param->SetNumberOfBinsPerDecade(20);
+  param->SetStepFunction(0.2, 100*CLHEP::um);
+  param->SetMscStepLimitType(fUseDistanceToBoundary);
+  param->SetLateralDisplacementAlg96(true);
   param->SetFluo(true);  
   param->SetAuger(true);  
-  param->SetAugerCascade(true);  
   param->SetDeexcitationIgnoreCut(true);
   param->ActivateDNA();
 
@@ -108,21 +110,22 @@ G4EmDNAPhysics::~G4EmDNAPhysics()
 
 void G4EmDNAPhysics::ConstructParticle()
 {
-// bosons
+  // bosons
   G4Gamma::Gamma();
 
-// leptons
+  // leptons
   G4Electron::Electron();
   G4Positron::Positron();
   
-// baryons
+  // baryons
   G4Proton::Proton();
 
   G4GenericIon::GenericIonDefinition();
+  G4Alpha::Alpha();
 
-  G4DNAGenericIonsManager * genericIonsManager;
-  genericIonsManager=G4DNAGenericIonsManager::Instance();
-  genericIonsManager->GetIon("alpha++");
+  G4DNAGenericIonsManager* genericIonsManager
+    = G4DNAGenericIonsManager::Instance();
+  //genericIonsManager->GetIon("alpha++");
   genericIonsManager->GetIon("alpha+");
   genericIonsManager->GetIon("helium");
   genericIonsManager->GetIon("hydrogen");
@@ -130,151 +133,131 @@ void G4EmDNAPhysics::ConstructParticle()
   //genericIonsManager->GetIon("nitrogen");
   //genericIonsManager->GetIon("oxygen");
   //genericIonsManager->GetIon("iron");
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmDNAPhysics::ConstructProcess()
 {
-  if(verbose > 1) {
-    G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
+  if(verboseLevel > 1) {
+    G4cout << "### " << GetPhysicsName() 
+	   << " Construct Processes " << G4endl;
   }
-  G4PhysicsListHelper* pPhysicsHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+  ConstructGammaPositronProcesses();
 
-  auto pParticleIterator = GetParticleIterator();
-  pParticleIterator->reset();
-  while( (*pParticleIterator)() )
-  {
-    G4ParticleDefinition* pParticle = pParticleIterator->value();
-    G4String particleName = pParticle->GetParticleName();
+  G4PhysicsListHelper* helper = 
+    G4PhysicsListHelper::GetPhysicsListHelper();
+  G4DNAGenericIonsManager* genericIonsManager
+    = G4DNAGenericIonsManager::Instance();
 
-    if (particleName == "e-") {
+  // e-
+  G4ParticleDefinition* part = G4Electron::Electron();
 
-      G4DNAElectronSolvation* pSolvation = new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
-      auto pSolvationModel = G4DNASolvationModelFactory::GetMacroDefinedModel();
-      pSolvationModel->SetHighEnergyLimit(7.4*eV); // limit of the Champion's model
-      pSolvation->SetEmModel(pSolvationModel);
-      pPhysicsHelper->RegisterProcess(pSolvation, pParticle);
+  // *** Solvation ***
+  G4DNAElectronSolvation* pSolvation = 
+    new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
+  auto pSolvationModel = G4DNASolvationModelFactory::GetMacroDefinedModel();
+  pSolvationModel->SetHighEnergyLimit(7.4*eV); // limit of the Champion's model
+  pSolvation->SetEmModel(pSolvationModel);
+  helper->RegisterProcess(pSolvation, part);
       
-      // *** Elastic scattering (two alternative models available) ***
-      
-      G4DNAElastic* pElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
-      pElasticProcess->SetEmModel(new G4DNAChampionElasticModel());
-      
-      // or alternative model
-      //theDNAElasticProcess->SetEmModel(new G4DNAScreenedRutherfordElasticModel());
-      
-      pPhysicsHelper->RegisterProcess(pElasticProcess, pParticle);
+  // *** Elastic scattering ***
+  G4DNAElastic* pElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
+  pElasticProcess->SetEmModel(new G4DNAChampionElasticModel());   
+  helper->RegisterProcess(pElasticProcess, part);
 
-      // *** Excitation ***
-      pPhysicsHelper->RegisterProcess(new G4DNAExcitation("e-_G4DNAExcitation"), pParticle);
+  // *** Excitation ***
+  helper->RegisterProcess(new G4DNAExcitation("e-_G4DNAExcitation"), part);
 
-      // *** Ionisation ***
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("e-_G4DNAIonisation"), pParticle);
+  // *** Ionisation ***
+  helper->RegisterProcess(new G4DNAIonisation("e-_G4DNAIonisation"), part);
 
-      // *** Vibrational excitation ***
-      pPhysicsHelper->RegisterProcess(new G4DNAVibExcitation("e-_G4DNAVibExcitation"), pParticle);
+  // *** Vibrational excitation ***
+  helper->RegisterProcess(new G4DNAVibExcitation("e-_G4DNAVibExcitation"), part);
       
-      // *** Attachment ***
-      pPhysicsHelper->RegisterProcess(new G4DNAAttachment("e-_G4DNAAttachment"), pParticle); 
+  // *** Attachment ***
+  helper->RegisterProcess(new G4DNAAttachment("e-_G4DNAAttachment"), part); 
+
+  // proton
+  part = G4Proton::Proton();
+
+  helper->RegisterProcess(new G4DNAElastic("proton_G4DNAElastic"), part);
+  helper->RegisterProcess(new G4DNAExcitation("proton_G4DNAExcitation"), part);
+  helper->RegisterProcess(new G4DNAIonisation("proton_G4DNAIonisation"), part);
+  helper->RegisterProcess(new G4DNAChargeDecrease("proton_G4DNAChargeDecrease"), part);
+
+  // hydrogen
+  part = genericIonsManager->GetIon("hydrogen");
+
+  helper->RegisterProcess(new G4DNAElastic("hydrogen_G4DNAElastic"), part);
+  helper->RegisterProcess(new G4DNAExcitation("hydrogen_G4DNAExcitation"), part);
+  helper->RegisterProcess(new G4DNAIonisation("hydrogen_G4DNAIonisation"), part);
+  helper->RegisterProcess(new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"), part);
+
+  // alpha++
+  part = G4Alpha::Alpha();
+
+  helper->RegisterProcess(new G4DNAElastic("alpha_G4DNAElastic"), part);
+  helper->RegisterProcess(new G4DNAExcitation("alpha_G4DNAExcitation"), part);
+  helper->RegisterProcess(new G4DNAIonisation("alpha_G4DNAIonisation"), part);
+  helper->RegisterProcess(new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease"), part);
+
+  // alpha+
+  part = genericIonsManager->GetIon("alpha+");
+
+  helper->RegisterProcess(new G4DNAElastic("alpha+_G4DNAElastic"), part);
+  helper->RegisterProcess(new G4DNAExcitation("alpha+_G4DNAExcitation"), part);
+  helper->RegisterProcess(new G4DNAIonisation("alpha+_G4DNAIonisation"), part);
+  helper->RegisterProcess(new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease"), part);
+  helper->RegisterProcess(new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease"), part);
+
+  // helium
+  part = genericIonsManager->GetIon("helium");
+
+  helper->RegisterProcess(new G4DNAElastic("helium_G4DNAElastic"), part);
+  helper->RegisterProcess(new G4DNAExcitation("helium_G4DNAExcitation"), part);
+  helper->RegisterProcess(new G4DNAIonisation("helium_G4DNAIonisation"), part);
+  helper->RegisterProcess(new G4DNAChargeIncrease("helium_G4DNAChargeIncrease"), part);
     
-    } else if ( particleName == "proton" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAElastic("proton_G4DNAElastic"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAExcitation("proton_G4DNAExcitation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("proton_G4DNAIonisation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAChargeDecrease("proton_G4DNAChargeDecrease"), pParticle);
+  // other ions
+  part = G4GenericIon::GenericIon();
 
-    } else if ( particleName == "hydrogen" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAElastic("hydrogen_G4DNAElastic"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAExcitation("hydrogen_G4DNAExcitation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("hydrogen_G4DNAIonisation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"), pParticle);
+  helper->RegisterProcess(new G4DNAIonisation("GenericIon_G4DNAIonisation"), part);
+}
 
-    } else if ( particleName == "alpha" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAElastic("alpha_G4DNAElastic"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAExcitation("alpha_G4DNAExcitation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("alpha_G4DNAIonisation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease"), pParticle);
+void G4EmDNAPhysics::ConstructGammaPositronProcesses()
+{
+  // this construction is based on G4EmStandardPhysics_option3
+  G4EmBuilder::PrepareEMPhysics();
 
-    } else if ( particleName == "alpha+" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAElastic("alpha+_G4DNAElastic"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAExcitation("alpha+_G4DNAExcitation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("alpha+_G4DNAIonisation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease"), pParticle);
+  G4PhysicsListHelper* helper = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4ParticleDefinition* part = G4Gamma::Gamma();
 
-    } else if ( particleName == "helium" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAElastic("helium_G4DNAElastic"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAExcitation("helium_G4DNAExcitation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("helium_G4DNAIonisation"), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4DNAChargeIncrease("helium_G4DNAChargeIncrease"), pParticle);
-    
-    } else if ( particleName == "GenericIon" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("GenericIon_G4DNAIonisation"), pParticle);
+  // photoelectric effect - Livermore model 
+  G4PhotoElectricEffect* thePEEffect = new G4PhotoElectricEffect();
+  thePEEffect->SetEmModel(new G4LivermorePhotoElectricModel());
+  helper->RegisterProcess(thePEEffect, part);
 
-    /*
-    } else if ( particleName == "carbon" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("carbon_G4DNAIonisation"), particle);
+  // Compton scattering - Klein-Nishina
+  G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+  theComptonScattering->SetEmModel(new G4KleinNishinaModel());
+  helper->RegisterProcess(theComptonScattering, part);
 
-    } else if ( particleName == "nitrogen" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("nitrogen_G4DNAIonisation"), particle);
+  // gamma conversion - 5D model
+  G4GammaConversion* theGammaConversion = new G4GammaConversion();
+  theGammaConversion->SetEmModel(new G4BetheHeitler5DModel());
+  helper->RegisterProcess(theGammaConversion, part);
 
-    } else if ( particleName == "oxygen" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("oxygen_G4DNAIonisation"), particle);
+  // Rayleigh scattering - Livermore model
+  G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+  helper->RegisterProcess(theRayleigh, part);
 
-    } else if ( particleName == "iron" ) {
-      pPhysicsHelper->RegisterProcess(new G4DNAIonisation("iron_G4DNAIonisation"), particle);
-    */ 
+  part = G4Positron::Positron();
 
-    }
-    
-    // Warning : the following particles and processes are needed by EM Physics builders
-    // They are taken from the default Livermore Physics list
-    // These particles are currently not handled by Geant4-DNA
-    
-      // e+
-      
-    else if (particleName == "e+") {
-      
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
-
-      pPhysicsHelper->RegisterProcess(msc, pParticle);
-      pPhysicsHelper->RegisterProcess(eIoni, pParticle);
-      pPhysicsHelper->RegisterProcess(new G4eBremsstrahlung(), pParticle);
-      pPhysicsHelper->RegisterProcess(new G4eplusAnnihilation(), pParticle);
-
-    } else if (particleName == "gamma") {
-    
-      // photoelectric effect - Livermore model only
-      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel());
-      pPhysicsHelper->RegisterProcess(thePhotoElectricEffect, pParticle);
-
-      // Compton scattering - Livermore model only
-      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      theComptonScattering->SetEmModel(new G4LivermoreComptonModel());
-      pPhysicsHelper->RegisterProcess(theComptonScattering, pParticle);
-
-      // gamma conversion - Livermore model below 80 GeV
-      G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel());
-      pPhysicsHelper->RegisterProcess(theGammaConversion, pParticle);
-
-      // default Rayleigh scattering is Livermore
-      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      pPhysicsHelper->RegisterProcess(theRayleigh, pParticle);
-    }    
-    // Warning : end of particles and processes are needed by EM Physics builders 
-  }
-
-  // Deexcitation
-  //
-  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  helper->RegisterProcess(new G4eMultipleScattering(), part);
+  helper->RegisterProcess(new G4eIonisation(), part);
+  helper->RegisterProcess(new G4eBremsstrahlung(), part);
+  helper->RegisterProcess(new G4eplusAnnihilation(), part);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

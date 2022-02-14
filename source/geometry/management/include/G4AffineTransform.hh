@@ -88,7 +88,7 @@ class G4AffineTransform
                              const G4ThreeVector& tlate);
       // Optionally rotate by *rot then translate by tlate - rot may be null
 
-    inline G4AffineTransform(const G4AffineTransform& rhs);
+    inline G4AffineTransform(const G4AffineTransform& rhs) = default;
     inline G4AffineTransform(G4AffineTransform&& rhs) = default;
       // Copy and move constructors
 
@@ -96,7 +96,7 @@ class G4AffineTransform
     inline G4AffineTransform& operator=(G4AffineTransform&& rhs) = default;
       // Assignment & Move operators
 
-    inline ~G4AffineTransform();
+    inline ~G4AffineTransform() = default;
       // Destructor
 
     inline G4AffineTransform operator * (const G4AffineTransform& tf) const;

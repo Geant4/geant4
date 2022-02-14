@@ -1,0 +1,928 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_streamers
+#define tools_rroot_streamers
+
+#include "dummy_fac"
+
+#include "named"
+#include "date"
+#include "directory"
+//#include "graph"
+#include "clss"
+#include "dummy"
+#include "obj_list"
+
+#include "../sout"
+#include "../vmanip"
+
+//#include "../histo/histo_data"
+#include "../histo/profile_data"
+
+#include "../histo/h1d"
+#include "../histo/h2d"
+#include "../histo/h3d"
+#include "../histo/p1d"
+#include "../histo/p2d"
+
+#include <list>
+#include <cmath> //::log10, ::fabs.
+//#include "../rtausmed"
+
+namespace tools {
+namespace rroot {
+
+typedef histo::histo_data<double,unsigned int,unsigned int,double> hd_data;
+typedef histo::profile_data<double,unsigned int,unsigned int,double,double> pd_data;
+
+inline bool AttAxis_stream(buffer& a_buffer){
+    int fNdivisions = 510;       //Number of divisions(10000*n3 + 100*n2 + n1)
+    short fAxisColor = 1;        //color of the line axis
+    short fLabelColor = 1;       //color of labels
+    short fLabelFont = 62;       //font for labels
+    float fLabelOffset = 0.005F; //offset of labels
+    float fLabelSize = 0.04F;    //size of labels
+    float fTickLength = 0.03F;   //length of tick marks
+    float fTitleOffset = 1;      //offset of axis title
+    float fTitleSize = 0.04F;    //size of axis title
+    short fTitleColor = 1;       //color of axis title
+    short fTitleFont = 62;       //font for axis title
+
+    // Version 4 streaming (ROOT/v3-00-6).
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    if(!a_buffer.read(fNdivisions)) return false;
+    if(!a_buffer.read(fAxisColor)) return false;
+    if(!a_buffer.read(fLabelColor)) return false;
+    if(!a_buffer.read(fLabelFont)) return false;
+    if(!a_buffer.read(fLabelOffset)) return false;
+    if(!a_buffer.read(fLabelSize)) return false;
+    if(!a_buffer.read(fTickLength)) return false;
+    if(!a_buffer.read(fTitleOffset)) return false;
+    if(!a_buffer.read(fTitleSize)) return false;
+    if(!a_buffer.read(fTitleColor)) return false;
+    if(!a_buffer.read(fTitleFont)) return false;
+
+    if(!a_buffer.check_byte_count(s, c,"TAttAxis")) return false;
+    return true;
+}
+
+inline bool Axis_stream(buffer& a_buffer,histo::axis<double,unsigned int>& a_fAxis){
+    // Version 6 streaming (ROOT/v3-00-6).
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    std::string name;
+    std::string title;
+    if(!Named_stream(a_buffer,name,title)) return false;
+
+    if(!AttAxis_stream(a_buffer)) return false;
+
+    int number;
+    if(!a_buffer.read(number)) return false;
+    double min;
+    if(!a_buffer.read(min)) return false;
+    double max;
+    if(!a_buffer.read(max)) return false;
+
+    std::vector<double> edges;
+    if(!Array_stream<double>(a_buffer,edges)) return false; //fXbins TArrayD
+
+    size_t edgen = edges.size();
+    if(!edgen) {
+      a_fAxis.configure(number,min,max);
+    } else {
+      std::vector<double> vedges;
+      for(size_t index=0;index<edgen;index++) {
+        vedges.push_back(edges[index]);
+      }
+      a_fAxis.configure(vedges);
+    }
+
+    int First;
+    if(!a_buffer.read(First)) return false;
+    int Last;
+    if(!a_buffer.read(Last)) return false;
+
+    if(v>=8) { //fBits2.
+      unsigned short dummy;
+      if(!a_buffer.read(dummy)) return false;
+    }
+
+    //Bool_t
+    unsigned char TimeDisplay;
+    if(!a_buffer.read(TimeDisplay)) return false;
+
+    //TString
+    std::string TimeFormat;
+    if(!a_buffer.read(TimeFormat)) return false;
+
+    if(v>=7) {
+      //THashList*
+      dummy_fac fac(a_buffer.out());
+      if(!dummy_TXxx_pointer_stream(a_buffer,fac)) return false;
+    }
+
+    if(!a_buffer.check_byte_count(s,c,"TAxis")) return false;
+    return true;
+}
+
+inline bool null_epsil(double a_1,double a_2,double a_prec = -5) {
+  return (::log10(::fabs(a_1-a_2))<a_prec?true:false);
+}
+
+inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
+                       double& a_entries,double& a_Sw,double& a_Sw2,double& a_Sxw,double& a_Sx2w){
+    a_entries = 0;
+    a_Sw = 0;
+    a_Sw2 = 0;
+    a_Sxw = 0;
+    a_Sx2w = 0;
+
+    unsigned int s, c;
+    short vers;
+    if(!a_buffer.read_version(vers,s,c)) return false;
+
+    //::printf("debug : tools::rroot::TH_read_1D : version %d\n",vers);
+
+    // Version 3 streaming (ROOT/v3-00-6).
+
+    std::string name;
+    std::string title;
+    if(!Named_stream(a_buffer,name,title)) return false;
+
+    a_data.m_title = title;
+
+   {short color,style,width;
+    if(!AttLine_stream(a_buffer,color,style,width)) return false;}
+   {short color,style;
+    if(!AttFill_stream(a_buffer,color,style)) return false;}
+    if(!AttMarker_stream(a_buffer)) return false;
+
+    int Ncells;
+    if(!a_buffer.read(Ncells)) return false;
+
+    //fXAxis
+    if(!Axis_stream(a_buffer,a_data.m_axes[0])) return false;
+    a_data.m_axes[0].m_offset = 1;
+
+    if(a_data.m_dimension==3) {
+      if(!Axis_stream(a_buffer,a_data.m_axes[1])) return false; //fYAxis
+      a_data.m_axes[1].m_offset = a_data.m_axes[0].m_offset * (a_data.m_axes[0].bins()+2);
+
+      if(!Axis_stream(a_buffer,a_data.m_axes[2])) return false; //fZAxis
+      a_data.m_axes[2].m_offset = a_data.m_axes[1].m_offset * (a_data.m_axes[1].bins()+2);
+
+    } else if(a_data.m_dimension==2) {
+      if(!Axis_stream(a_buffer,a_data.m_axes[1])) return false; //fYAxis
+      a_data.m_axes[1].m_offset = a_data.m_axes[0].m_offset * (a_data.m_axes[0].bins()+2);
+
+      histo::axis<double,unsigned int> dummy;
+      if(!Axis_stream(a_buffer,dummy)) return false; //fZAxis
+    } else {
+      histo::axis<double,unsigned int> dummy;
+      if(!Axis_stream(a_buffer,dummy)) return false; //fYAxis
+      if(!Axis_stream(a_buffer,dummy)) return false; //fZAxis
+    }
+
+    short barOffset;
+    if(!a_buffer.read(barOffset)) return false;
+
+    short barWidth;
+    if(!a_buffer.read(barWidth)) return false;
+
+    if(!a_buffer.read(a_entries)) return false;
+
+    if(!a_buffer.read(a_Sw)) return false; //fTsumw
+
+    if(!a_buffer.read(a_Sw2)) return false;
+
+    if(!a_buffer.read(a_Sxw)) return false;
+
+    if(!a_buffer.read(a_Sx2w)) return false;
+
+    double max;
+    if(!a_buffer.read(max)) return false;
+
+    double min;
+    if(!a_buffer.read(min)) return false;
+
+    double NormFactor;
+    if(!a_buffer.read(NormFactor)) return false;
+
+   {std::vector<double> v;
+    if(!Array_stream<double>(a_buffer,v)) return false;} //fContour TArrayD
+
+    std::vector<double> sumw2; //fSumw2 TArrayD
+    if(!Array_stream<double>(a_buffer,sumw2)) return false;
+
+   {std::string opt;
+    if(!a_buffer.read(opt)) return false; //TString fOption
+    //look if it is an "annotation trick" :
+    //if(opt.size()&&(opt[0]==0)) {
+    //  fAnnotation = opt.substr(1,opt.size()-1);
+    //}
+    }
+
+   {dummy_fac fac(a_buffer.out());
+    obj_list dummy(fac);
+    if(!dummy.stream(a_buffer)) {
+      a_buffer.out() << "tools::rroot::TH_read_1D :"
+                     << " obj_list stream failed."
+                     << std::endl;
+      return false;
+    }} //Functions
+
+    if(vers>=4) {
+      int BufferSize;
+      if(!a_buffer.read(BufferSize)) return false;
+
+      //Double_t* Buffer; //[fBufferSize]
+      if(!dummy_array_stream<double>(a_buffer,BufferSize)) return false;
+    }
+
+    if(vers>=7) {
+      //EBinErrorOpt  fBinStatErrOpt;
+      int dummy;
+      if(!a_buffer.read(dummy)) return false;
+    }
+
+    // Add two for outflows.
+    if(a_data.m_dimension==1) {
+      a_data.m_bin_number = a_data.m_axes[0].m_number_of_bins + 2;
+    } else if(a_data.m_dimension==2) {
+      a_data.m_bin_number =
+        (a_data.m_axes[0].m_number_of_bins + 2) *
+	(a_data.m_axes[1].m_number_of_bins + 2);
+    } else if(a_data.m_dimension==3) {
+      a_data.m_bin_number =
+        (a_data.m_axes[0].m_number_of_bins + 2) *
+	(a_data.m_axes[1].m_number_of_bins + 2) *
+	(a_data.m_axes[2].m_number_of_bins + 2);
+    }
+
+    unsigned int binn = a_data.m_bin_number;
+    a_data.m_bin_Sw2.resize(binn);
+    if(binn==sumw2.size()) {
+      for(unsigned int index=0;index<binn;index++){
+        a_data.m_bin_Sw2[index] = sumw2[index];
+      }
+    } else {
+      a_data.m_bin_Sw2.assign(binn,0);
+    }
+
+    if(!a_buffer.check_byte_count(s,c,"TH")) return false;
+
+    return true;
+}
+
+
+inline bool TH_read_2D(buffer& a_buffer,hd_data& a_data,
+                       double& a_entries,double& a_Sw,double& a_Sw2,
+                       double& a_Sxw,double& a_Sx2w,double& a_Syw,double& a_Sy2w){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    // Version 3 streaming (ROOT/v3-00-6).
+
+    if(!TH_read_1D(a_buffer,a_data,a_entries,a_Sw,a_Sw2,a_Sxw,a_Sx2w)) return false;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
+
+    double ScaleFactor;
+    if(!a_buffer.read(ScaleFactor)) return false;
+    if(!a_buffer.read(a_Syw)) return false;
+    if(!a_buffer.read(a_Sy2w)) return false;
+
+    double Tsumwxy;
+    if(!a_buffer.read(Tsumwxy)) return false;
+    a_data.m_in_range_plane_Sxyw[0] = Tsumwxy;
+
+    if(!a_buffer.check_byte_count(s,c,"TH2")) return false;
+
+    return true;
+}
+
+inline bool TH_read_3D(buffer& a_buffer,hd_data& a_data,
+                       double& a_entries,double& a_Sw,double& a_Sw2,
+                       double& a_Sxw,double& a_Sx2w,
+                       double& a_Syw,double& a_Sy2w,
+                       double& a_Szw,double& a_Sz2w){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    if(!TH_read_1D(a_buffer,a_data,a_entries,a_Sw,a_Sw2,a_Sxw,a_Sx2w)) return false;
+    if(!Att3D_stream(a_buffer)) return false;
+
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
+
+    if(!a_buffer.read(a_Syw)) return false;
+    if(!a_buffer.read(a_Sy2w)) return false;
+    double Tsumwxy;
+    if(!a_buffer.read(Tsumwxy)) return false;
+
+    if(!a_buffer.read(a_Szw)) return false;
+    if(!a_buffer.read(a_Sz2w)) return false;
+    double Tsumwxz;
+    if(!a_buffer.read(Tsumwxz)) return false;
+    double Tsumwyz;
+    if(!a_buffer.read(Tsumwyz)) return false;
+
+    a_data.m_in_range_plane_Sxyw[0] = Tsumwxy;
+    a_data.m_in_range_plane_Sxyw[1] = Tsumwyz;
+    a_data.m_in_range_plane_Sxyw[2] = Tsumwxz;
+
+    if(!a_buffer.check_byte_count(s,c,"TH3")) return false;
+
+    return true;
+}
+
+inline histo::h1d* TH1F_stream(buffer& a_buffer){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return 0;
+
+    // Version 1 streaming (ROOT/v3-00-6).
+
+    // Now we have to reconstruct a valid Histogram from a_buffer :
+    hd_data data;
+
+    data.m_dimension = 1;
+    //data.m_coords.resize(data.m_dimension,0);
+    //data.m_ints.resize(data.m_dimension,0);
+    data.m_axes.resize(1);
+
+    double fEntries; //in range + outflow.
+    double fSw;      //in range.
+    double fSw2;     //in range.
+    double fSxw;     //in range.
+    double fSx2w;    //in range.
+    if(!TH_read_1D(a_buffer,data,fEntries,fSw,fSw2,fSxw,fSx2w)) return 0;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
+
+    std::vector<float> bins; //fArray TArrayF
+    if(!Array_stream<float>(a_buffer,bins)) return 0;
+    if(!a_buffer.check_byte_count(s,c,"TH1F")) return 0;
+
+    unsigned int binn = data.m_bin_number;
+    data.m_bin_Sw.resize(binn,0);
+   {for(unsigned int index=0;index<binn;index++){
+      data.m_bin_Sw[index] = double(bins[index]);
+    }}
+
+    data.m_bin_entries.resize(binn,0);
+   {std::vector<double> empty;
+    empty.resize(1,0);
+    data.m_bin_Sxw.resize(binn,empty);
+    data.m_bin_Sx2w.resize(binn,empty);}
+    data.m_all_entries = static_cast<unsigned int>(fEntries);
+    data.m_in_range_entries = 0;
+    data.m_in_range_Sw = fSw;
+    data.m_in_range_Sw2 = fSw2;
+    data.m_in_range_Sxw.resize(1,0);
+    data.m_in_range_Sx2w.resize(1,0);
+    data.m_in_range_Sxw[0] = fSxw;
+    data.m_in_range_Sx2w[0] = fSx2w;
+
+    histo::h1d* h = new histo::h1d("",10,0,1);
+    h->copy_from_data(data);
+    return h; //give ownership to caller.
+}
+
+inline histo::h1d* TH1D_stream(buffer& a_buffer){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return 0;
+
+    // Version 1 streaming (ROOT/v3-00-6).
+
+    // Now we have to reconstruct a valid Histogram from a_buffer :
+    hd_data data;
+
+    data.m_dimension = 1;
+    data.m_axes.resize(1);
+
+    double fEntries; //in range + outflow.
+    double fSw;      //in range.
+    double fSw2;     //in range.
+    double fSxw;     //in range.
+    double fSx2w;    //in range.
+    if(!TH_read_1D(a_buffer,data,fEntries,fSw,fSw2,fSxw,fSx2w)) return 0;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
+
+    std::vector<double> bins; //fArray TArrayD
+    if(!Array_stream<double>(a_buffer,bins)) return 0;
+    if(!a_buffer.check_byte_count(s,c,"TH1D")) return 0;
+
+    unsigned int binn = data.m_bin_number;
+    data.m_bin_Sw = bins;
+
+    data.m_bin_entries.resize(binn,0);
+   {std::vector<double> empty;
+    empty.resize(1,0);
+    data.m_bin_Sxw.resize(binn,empty);
+    data.m_bin_Sx2w.resize(binn,empty);}
+
+    data.m_all_entries = static_cast<unsigned int>(fEntries);
+    data.m_in_range_entries = 0;
+    data.m_in_range_Sw = fSw;
+    data.m_in_range_Sw2 = fSw2;
+    data.m_in_range_Sxw.resize(1,0);
+    data.m_in_range_Sx2w.resize(1,0);
+    data.m_in_range_Sxw[0] = fSxw;
+    data.m_in_range_Sx2w[0] = fSx2w;
+
+    histo::h1d* h = new histo::h1d("",10,0,1);
+    h->copy_from_data(data);
+    return h;
+}
+
+inline histo::h2d* TH2F_stream(buffer& a_buffer){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return 0;
+
+    // Version 3 streaming (ROOT/v3-00-6).
+
+    // Now we have to reconstruct a valid Histogram from a_buffer :
+    hd_data data;
+
+    data.m_dimension = 2;
+    //data.m_coords.resize(data.m_dimension,0);
+    //data.m_ints.resize(data.m_dimension,0);
+    data.m_axes.resize(2);
+    data.m_in_range_plane_Sxyw.resize(1,0);
+
+    double fEntries; //in range + outflow.
+    double fSw;      //in range.
+    double fSw2;     //in range.
+    double fSxw;     //in range.
+    double fSx2w;    //in range.
+    double fSyw;     //in range.
+    double fSy2w;    //in range.
+    if(!TH_read_2D(a_buffer,data,fEntries,fSw,fSw2,fSxw,fSx2w,fSyw,fSy2w)) return 0;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
+
+    std::vector<float> bins; //fArray TArrayF
+    if(!Array_stream<float>(a_buffer,bins)) return 0;
+    if(!a_buffer.check_byte_count(s,c,"TH2F")) return 0;
+
+    unsigned int binn = data.m_bin_number;
+    data.m_bin_Sw.resize(binn,0);
+   {for(unsigned int index=0;index<binn;index++){
+      data.m_bin_Sw[index] = double(bins[index]);
+    }}
+
+    data.m_bin_entries.resize(binn,0);
+   {std::vector<double> empty;
+    empty.resize(2,0);
+    data.m_bin_Sxw.resize(binn,empty);
+    data.m_bin_Sx2w.resize(binn,empty);}
+
+    data.m_all_entries = static_cast<unsigned int>(fEntries);
+    data.m_in_range_entries = 0;
+    data.m_in_range_Sw = fSw;
+    data.m_in_range_Sw2 = fSw2;
+    data.m_in_range_Sxw.resize(2,0);
+    data.m_in_range_Sx2w.resize(2,0);
+    data.m_in_range_Sxw[0] = fSxw;
+    data.m_in_range_Sx2w[0] = fSx2w;
+    data.m_in_range_Sxw[1] = fSyw;
+    data.m_in_range_Sx2w[1] = fSy2w;
+
+    histo::h2d* h = new histo::h2d("",10,0,1,10,0,1);
+    h->copy_from_data(data);
+    return h;
+}
+
+inline histo::h2d* TH2D_stream(buffer& a_buffer){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return 0;
+
+    // Version 3 streaming (ROOT/v3-00-6).
+
+    // Now we have to reconstruct a valid Histogram from a_buffer :
+    hd_data data;
+
+    data.m_dimension = 2;
+    //data.m_coords.resize(data.m_dimension,0);
+    //data.m_ints.resize(data.m_dimension,0);
+    data.m_axes.resize(2);
+    data.m_in_range_plane_Sxyw.resize(1,0);
+
+    double fEntries; //in range + outflow.
+    double fSw;      //in range.
+    double fSw2;     //in range.
+    double fSxw;     //in range.
+    double fSx2w;    //in range.
+    double fSyw;     //in range.
+    double fSy2w;    //in range.
+    if(!TH_read_2D(a_buffer,data,fEntries,fSw,fSw2,fSxw,fSx2w,fSyw,fSy2w)) return 0;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
+
+    std::vector<double> bins; //fArray TArrayD
+    if(!Array_stream<double>(a_buffer,bins)) return 0;
+    if(!a_buffer.check_byte_count(s,c,"TH2D")) return 0;
+
+    unsigned int binn = data.m_bin_number;
+    data.m_bin_Sw = bins;
+
+    data.m_bin_entries.resize(binn,0);
+   {std::vector<double> empty;
+    empty.resize(2,0);
+    data.m_bin_Sxw.resize(binn,empty);
+    data.m_bin_Sx2w.resize(binn,empty);}
+
+    data.m_all_entries = static_cast<unsigned int>(fEntries);
+    data.m_in_range_entries = 0;
+    data.m_in_range_Sw = fSw;
+    data.m_in_range_Sw2 = fSw2;
+    data.m_in_range_Sxw.resize(2,0);
+    data.m_in_range_Sx2w.resize(2,0);
+    data.m_in_range_Sxw[0] = fSxw;
+    data.m_in_range_Sx2w[0] = fSx2w;
+    data.m_in_range_Sxw[1] = fSyw;
+    data.m_in_range_Sx2w[1] = fSy2w;
+
+    histo::h2d* h = new histo::h2d("",10,0,1,10,0,1);
+    h->copy_from_data(data);
+    return h;
+}
+
+inline histo::h3d* TH3D_stream(buffer& a_buffer){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return 0;
+
+    // Now we have to reconstruct a valid Histogram from a_buffer :
+    hd_data data;
+
+    data.m_dimension = 3;
+    //data.m_coords.resize(data.m_dimension,0);
+    //data.m_ints.resize(data.m_dimension,0);
+    data.m_axes.resize(3);
+    data.m_in_range_plane_Sxyw.resize(3,0);
+
+    double fEntries; //in range + outflow.
+    double fSw;      //in range.
+    double fSw2;     //in range.
+    double fSxw;     //in range.
+    double fSx2w;    //in range.
+    double fSyw;     //in range.
+    double fSy2w;    //in range.
+    double fSzw;     //in range.
+    double fSz2w;    //in range.
+    if(!TH_read_3D(a_buffer,data,fEntries,fSw,fSw2,fSxw,fSx2w,fSyw,fSy2w,fSzw,fSz2w)) return 0;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
+
+    std::vector<double> bins; //fArray TArrayD
+    if(!Array_stream<double>(a_buffer,bins)) return 0;
+    if(!a_buffer.check_byte_count(s,c,"TH3D")) return 0;
+
+    unsigned int binn = data.m_bin_number;
+    data.m_bin_Sw = bins;
+
+    data.m_bin_entries.resize(binn,0);
+   {std::vector<double> empty;
+    empty.resize(3,0);
+    data.m_bin_Sxw.resize(binn,empty);
+    data.m_bin_Sx2w.resize(binn,empty);}
+
+    data.m_all_entries = static_cast<unsigned int>(fEntries);
+    data.m_in_range_entries = 0;
+    data.m_in_range_Sw = fSw;
+    data.m_in_range_Sw2 = fSw2;
+    data.m_in_range_Sxw.resize(3,0);
+    data.m_in_range_Sx2w.resize(3,0);
+    data.m_in_range_Sxw[0] = fSxw;
+    data.m_in_range_Sx2w[0] = fSx2w;
+    data.m_in_range_Sxw[1] = fSyw;
+    data.m_in_range_Sx2w[1] = fSy2w;
+    data.m_in_range_Sxw[2] = fSzw;
+    data.m_in_range_Sx2w[2] = fSz2w;
+
+    histo::h3d* h = new histo::h3d("",10,0,1,10,0,1,10,0,1);
+    h->copy_from_data(data);
+    return h;
+}
+
+inline histo::p1d* TProfile_stream(buffer& a_buffer){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return 0;
+
+    // Version 3 streaming (ROOT/v3-00-6).
+
+    //WARNING : the mapping histo::p1d / TProfile is not obvious.
+    //p1d::m_bin_Svw  <---> TProfile::fArray
+    //p1d::m_bin_Sv2w <---> TProfile::fSumw2
+    //p1d::m_bin_Sw   <---> TProfile::fBinEntries
+
+    histo::h1d* h = TH1D_stream(a_buffer);
+    if(!h) return 0;
+
+    //NOTE : histo.m_bin_Sw <---> TH1D::TArrayD::fArray
+
+    pd_data data(h->dac());
+    delete h;
+
+    std::vector<double> bins; //fBinEntries TArrayD
+    if(!Array_stream<double>(a_buffer,bins)) return 0;
+    int errorMode;
+    if(!a_buffer.read(errorMode)) return 0;
+    double ymin;
+    if(!a_buffer.read(ymin)) return 0;
+    double ymax;
+    if(!a_buffer.read(ymax)) return 0;
+
+    if(v>=4) {
+      double  sumwy;
+      if(!a_buffer.read(sumwy)) return 0;
+      double   sumwy2;
+      if(!a_buffer.read(sumwy2)) return 0;
+    }
+    if(v>=5) {
+      std::vector<double> bins_sumw2; //fBinSumw2 TArrayD
+      if(!Array_stream<double>(a_buffer,bins_sumw2)) return 0;
+    }
+
+    if(!a_buffer.check_byte_count(s,c,"TProfile")) return 0;
+
+    data.m_is_profile = true;
+    data.m_cut_v = true;
+    data.m_min_v = ymin;
+    data.m_max_v = ymax;
+
+    unsigned int binn = data.m_bin_number;
+    data.m_bin_Svw.resize(binn);
+    data.m_bin_Sv2w.resize(binn);
+
+    for(unsigned int index=0;index<binn;index++){
+      double svw = data.m_bin_Sw[index];
+      double sv2w = data.m_bin_Sw2[index];
+      double sw = bins[index];
+    //data.m_bin_entries[index] = (int)sw; //FIXME : ok for w = 1 only !
+      data.m_bin_Sw[index] = (double)sw;
+      //FIXME : data.m_bin_Sxw
+      //FIXME : data.m_bin_Sx2w
+      data.m_bin_Svw[index] = svw;
+      data.m_bin_Sv2w[index] = sv2w;
+    }
+
+    histo::p1d* p = new histo::p1d("",10,0,1);
+    p->copy_from_data(data);
+    // We have now a valid histo::p1d.
+    return p;
+}
+
+inline histo::p2d* TProfile2D_stream(buffer& a_buffer){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return 0;
+
+    // Version 3 streaming (ROOT/v3-00-6).
+
+    //WARNING : the mapping histo::p1d / TProfile is not obvious.
+    //p1d::m_bin_Svw  <---> TProfile::fArray
+    //p1d::m_bin_Sv2w <---> TProfile::fSumw2
+    //p1d::m_bin_Sw   <---> TProfile::fBinEntries
+
+    histo::h2d* h = TH2D_stream(a_buffer);
+    if(!h) return 0;
+
+    //NOTE : histo.m_bin_Sw <---> TH2D::TArrayD::fArray
+
+    pd_data data(h->dac());
+    delete h;
+
+    std::vector<double> bins; //fBinEntries TArrayD
+    if(!Array_stream<double>(a_buffer,bins)) return 0;
+    int errorMode;
+    if(!a_buffer.read(errorMode)) return 0;
+    double zmin;
+    if(!a_buffer.read(zmin)) return 0;
+    double zmax;
+    if(!a_buffer.read(zmax)) return 0;
+    if(v>=5) {
+      double  sumwz;
+      if(!a_buffer.read(sumwz)) return 0;
+      double   sumwz2;
+      if(!a_buffer.read(sumwz2)) return 0;
+    }
+    if(v>=7) {
+      std::vector<double> bins_sumw2; //fBinSumw2 TArrayD
+      if(!Array_stream<double>(a_buffer,bins_sumw2)) return 0;
+    }
+    if(!a_buffer.check_byte_count(s,c,"TProfile2D")) return 0;
+
+    data.m_is_profile = true;
+    data.m_cut_v = true;
+    data.m_min_v = zmin;
+    data.m_max_v = zmax;
+
+    unsigned int binn = data.m_bin_number;
+    data.m_bin_Svw.resize(binn);
+    data.m_bin_Sv2w.resize(binn);
+
+    for(unsigned int index=0;index<binn;index++){
+      double svw = data.m_bin_Sw[index];
+      double sv2w = data.m_bin_Sw2[index];
+      double sw = bins[index];
+    //data.m_bin_entries[index] = (int)sw; //FIXME : ok for w = 1 only !
+      data.m_bin_Sw[index] = (double)sw;
+      //FIXME : data.m_bin_Sxw
+      //FIXME : data.m_bin_Sx2w
+      data.m_bin_Svw[index] = svw;
+      data.m_bin_Sv2w[index] = sv2w;
+    }
+
+    histo::p2d* p = new histo::p2d("",10,0,1,10,0,1);
+    p->copy_from_data(data);
+    return p;
+}
+
+class TDirectory : public directory {
+//public:
+//  static const std::string& store_class() {return TDirectory_cls();}
+public:
+  TDirectory(ifile& a_file):directory(a_file){}
+  virtual ~TDirectory(){}
+protected:
+  TDirectory(const TDirectory& a_from):directory(a_from){}
+  TDirectory& operator=(const TDirectory&){return *this;}
+public:
+  bool stream(buffer& a_buffer){
+    initialize();
+    short version;
+    if(!a_buffer.read_version(version)) return false;
+    unsigned int _date;
+    if(!a_buffer.read(_date)) return false;
+    //m_date_C.setDate(_date);
+    if(!a_buffer.read(_date)) return false;
+    //m_date_M.setDate(_date);
+    if(!a_buffer.read(m_nbytes_keys)) return false;
+    if(!a_buffer.read(m_nbytes_name)) return false;
+    if((uint32)version>big_file_version_tag()) {
+      if(!a_buffer.read(m_seek_directory)) return false;
+      if(!a_buffer.read(m_seek_parent)) return false;
+      if(!a_buffer.read(m_seek_keys)) return false;
+    } else {
+     {seek32 i;
+      if(!a_buffer.read(i)) return false;
+      m_seek_directory = i;}
+
+     {seek32 i;
+      if(!a_buffer.read(i)) return false;
+      m_seek_parent = i;}
+
+     {seek32 i;
+      if(!a_buffer.read(i)) return false;
+      m_seek_keys = i;}
+    }
+    //short v = version%big_file_version_tag();
+
+    if (m_seek_keys) {
+      uint32 n;
+      if(!read_keys(n)) {
+        a_buffer.out() << "tools::rroot::TDirectory::stream :"
+                       << " cannot read keys."
+                       << std::endl;
+        return false;
+      }
+    }
+
+    return true;
+  }
+protected:
+  void initialize(){
+    // Initialise directory to defaults :
+    // If directory is created via default ctor (when dir is read from file)
+    // don't add it here to the directory since its name is not yet known.
+    // It will be added to the directory in TKey::ReadObj().
+    m_date_C = 0;//m_date_C.set();
+    m_date_M = 0;//m_date_M.set();
+    m_nbytes_keys = 0;
+    m_seek_directory = 0;
+    m_seek_parent = 0;
+    m_seek_keys = 0;
+  }
+};
+
+
+inline void dump(std::ostream& a_out,
+                 ifile& a_file,
+                 const std::vector<key*>& a_keys,
+                 bool a_recursive,
+                 unsigned int a_spaces = 0) {
+
+  // dump non directory objects :
+ {std::vector<key*>::const_iterator it;
+  for(it=a_keys.begin();it!=a_keys.end();++it) {
+    key& k = *(*it);
+    if(k.object_class()==TDirectory_cls()) continue;
+   {for(unsigned int index=0;index<a_spaces;index++) a_out << " ";}
+    k.dump(a_out);
+  }}
+
+  // dump directories :
+ {std::vector<key*>::const_iterator it;
+  for(it=a_keys.begin();it!=a_keys.end();++it) {
+    key& k = *(*it);
+    if(k.object_class()!=TDirectory_cls()) continue;
+
+    std::string label = k.object_name();
+   {for(unsigned int index=0;index<a_spaces;index++) a_out << " ";}
+    a_out << "directory : " << label << std::endl;
+
+    if(!a_recursive) continue;
+
+    uint32 sz;
+    char* buf = k.get_object_buffer(a_file,sz);
+    //we don't have ownership of buf.
+    if(!buf) {
+      a_out  << "tools::rroot::dump :"
+             << " can't get directory data buffer."
+             << std::endl;
+    } else {
+      buffer b(a_out,a_file.byte_swap(),sz,buf,k.key_length(),false);
+      TDirectory tdir(a_file);
+      if(!tdir.stream(b)) {
+        a_out  << "tools::rroot::dump :"
+              << " can't stream TDirectory."
+              << std::endl;
+      } else {
+        const std::vector<key*>& keys = tdir.keys();
+        dump(a_out,a_file,keys,a_recursive,a_spaces+1);
+      }
+    }
+  }}
+}
+
+/*
+inline bool read_sinfos(ifile& a_file){
+  key& k = a_file.sinfos_key();
+  std::ostream& out = k.out();
+  if(k.object_class()!=TList_cls()) {
+    out << "tools::rroot::read_sinfos :"
+        << " key not a TList."
+        << std::endl;
+    return false;
+  }
+  unsigned int sz;
+  char* buf = k.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::read_sinfos :"
+        << " can't get data buffer of " << k.object_name() << "."
+        << std::endl;
+    return false;
+  }
+  buffer b(out,a_file.byte_swap(),sz,buf,k.key_length(),false);
+  dummy_fac fac(out);
+  obj_list infos(fac);
+  if(!infos.stream(b)) return false;
+  tools_vforcit(iro*,infos,it) {
+    streamer_info* info = safe_cast<iro,streamer_info>(*(*it));
+    if(!info) return false;
+    info->out(out);
+  }
+  return true;
+}
+*/
+
+}}
+
+#endif

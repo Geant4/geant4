@@ -85,17 +85,10 @@ using namespace G4InuclParticleNames;
 
 // Singleton is created at first invocation
 
-G4ThreadLocal G4CascadeChannelTables* G4CascadeChannelTables::theInstance = 0;
-
 const G4CascadeChannelTables& G4CascadeChannelTables::instance() {
-  if (!theInstance) {
-    theInstance = new G4CascadeChannelTables;
-    G4AutoDelete::Register(theInstance);
-  }
-
-  return *theInstance;
+  G4ThreadLocalStatic auto _instance = G4CascadeChannelTables{};
+  return _instance;
 }
-
 
 // Constructor and destructor fully populate tables
 
@@ -138,11 +131,8 @@ G4CascadeChannelTables::G4CascadeChannelTables() {
 }
 
 G4CascadeChannelTables::~G4CascadeChannelTables() {
-  TableMap::iterator entry;
-  for (entry = tables.begin(); entry != tables.end(); ++entry) {
-    delete entry->second; entry->second = 0;
-  }
-
+  for(auto& itr : tables)
+    delete itr.second;
   tables.clear();
 }
 

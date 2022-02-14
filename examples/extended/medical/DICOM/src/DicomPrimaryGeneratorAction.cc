@@ -43,7 +43,7 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //
-// + Université Laval, Québec (QC) Canada
+// + UniversitÃ© Laval, QuÃ©bec (QC) Canada
 //*******************************************************
 #include "DicomPrimaryGeneratorAction.hh"
 

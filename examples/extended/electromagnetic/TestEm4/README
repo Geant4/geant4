@@ -52,26 +52,12 @@
  		Idle> type your commands
  		....
  		Idle> exit
- 		
- 	- visualize the histogram (paw)
- 		paw> h/file 1 testem4.hbook
- 		paw> option stat
- 		paw> option logy
- 		paw> h/pl 1 	
-  
 
  7- USING HISTOGRAMS
 
  The format of the histogram file can be : root (default),
- hbook, xml, csv, by selecting g4nnn.hh in RunAction.hh 
- 
- Using hbook format
- ------------------
- 
- Need a special treatement : the Cern Library must be installed and the
- environment variable CERNLIB correctly set. Then, *before* compiling,
- activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in RunAction.hh
-  
+ xml, csv, by selecting g4nnn.hh in RunAction.hh
+
  8- RANDOM NUMBERS HANDLING
  
    CLHEP provides several random number engines. In this example the Ranecu

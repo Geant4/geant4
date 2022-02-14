@@ -65,7 +65,7 @@
 // 13.01.13 G.Cosmo, A.Dotti - Modified for thread-safety for MT
 // ----------------------------------------------------------------------
 #ifndef G4PVREPLICA_HH
-#define G4PVREPLICA_HH
+#define G4PVREPLICA_HH 1
 
 #include "G4VPhysicalVolume.hh"
 #include "G4GeomSplitter.hh"
@@ -81,38 +81,15 @@ public:
 
   void initialize() {}
 
-  G4int fcopyNo;
+  G4int fcopyNo = -1;
 };
 
-// The type G4PVRManager is introduced to encapsulate the methods used by
-// both the master thread and worker threads to allocate memory space for
-// the fields encapsulated by the class G4ReplicaData. When each thread
-// initializes the value for these fields, it refers to them using a macro
-// definition defined below. For every G4PVReplica instance, there is
-// a corresponding G4ReplicaData instance. All G4ReplicaData instances are
-// organized by the class G4PVRManager as an array.
-// The field "int instanceID" is added to the class G4PVReplica.
-// The value of this field in each G4LogicalVolume instance is the subscript
-// of the corresponding G4ReplicaData instance.
-// In order to use the class  G4PVRManager, we add a static member in the
-// class G4LogicalVolume as follows: "static G4PVRManager subInstanceManager".
-// For the master thread, the array for G4ReplicaData instances grows
-// dynamically along with G4PVReplica instances arecreated.
-// For each worker thread, it copies the array of G4ReplicaData instances
-// from the master thread.
-// In addition, it invokes a method similiar to the constructor explicitly
-// to achieve the partial effect for each instance in the array.
-//
-typedef G4GeomSplitter<G4ReplicaData> G4PVRManager;
-
-// This macro changes the references to fields that are now encapsulated
-// in the class G4ReplicaData.
-//
-#define G4MT_copyNo ((subInstanceManager.offset[instanceID]).fcopyNo)
+using G4PVRManager = G4GeomSplitter<G4ReplicaData>;
+// Implementation detail for use of G4ReplicaData objects 
 
 class G4PVReplica : public G4VPhysicalVolume
 {
-  public:  // with description
+  public:
 
     G4PVReplica(const G4String& pName,
                       G4LogicalVolume* pLogical,
@@ -167,7 +144,7 @@ class G4PVReplica : public G4VPhysicalVolume
     G4int GetRegularStructureId() const;
       // Accessors for specialised geometries
 
-  public:  // without description
+    // Methods for handling of MT instances
 
     inline G4int GetInstanceID() const  { return instanceID; }
       // Returns the instance ID.
@@ -183,24 +160,26 @@ class G4PVReplica : public G4VPhysicalVolume
       // This method is similar to the destructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
+  protected:
+
+    G4PVReplica(const G4String& pName,
+                      G4int nReplicas,
+                      EAxis pAxis,
+                      G4LogicalVolume*  pLogical,
+                      G4LogicalVolume*  pMotherLogical);
+      // Constructor for derived type(s): PVParameterised, PVDivision, ...
+      // Does not set mother or register in mother volume -- leaves it to
+      // derived type
+
   private:
 
     void CheckAndSetParameters(const EAxis pAxis, const G4int nReplicas,
                                const G4double width, const G4double offset);
 
     void CheckOnlyDaughter(G4LogicalVolume* pMotherLogical);
-      // Check that this volume is the only daughter of its proposed mother volume
+      // Check that this volume is the only daughter of its proposed mother
+      // volume
    
-  protected:
-    G4PVReplica(const G4String& pName,
-                      G4int nReplicas,
-                      EAxis pAxis,
-                      G4LogicalVolume*  pLogical,
-                      G4LogicalVolume*  pMotherLogical
-       );
-     // Constructor for derived type(s):  PVParameterised
-     //  - does not set mother or register in mother volume -- leaves it to derived type
-
   protected:
 
     EAxis faxis;
@@ -216,5 +195,25 @@ class G4PVReplica : public G4VPhysicalVolume
     G4GEOM_DLL static G4PVRManager subInstanceManager;
       // This new field helps to use the class G4PVRManager introduced above.
 };
+
+// NOTE:
+// The type G4PVRManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4ReplicaData. When each thread
+// initializes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4PVReplica instance, there is
+// a corresponding G4ReplicaData instance. All G4ReplicaData instances are
+// organized by the class G4PVRManager as an array.
+// The field "int instanceID" is added to the class G4PVReplica.
+// The value of this field in each G4LogicalVolume instance is the subscript
+// of the corresponding G4ReplicaData instance.
+// In order to use the class  G4PVRManager, we add a static member in the
+// class G4LogicalVolume as follows: "static G4PVRManager subInstanceManager".
+// For the master thread, the array for G4ReplicaData instances grows
+// dynamically along with G4PVReplica instances arecreated.
+// For each worker thread, it copies the array of G4ReplicaData instances
+// from the master thread.
+// In addition, it invokes a method similiar to the constructor explicitly
+// to achieve the partial effect for each instance in the array.
 
 #endif

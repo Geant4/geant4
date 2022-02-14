@@ -42,9 +42,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
 #include "G4BinaryCascade.hh"   
 
@@ -56,12 +54,7 @@ class G4BinaryPiKBuilder : public G4VPiKBuilder
     virtual ~G4BinaryPiKBuilder() {}
 
     virtual void Build(G4HadronElasticProcess *) final override {}
-    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
-    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
-    virtual void Build(G4KaonPlusInelasticProcess *) final override {}
-    virtual void Build(G4KaonMinusInelasticProcess *) final override {}
-    virtual void Build(G4KaonZeroLInelasticProcess *) final override {}
-    virtual void Build(G4KaonZeroSInelasticProcess *) final override {}
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
     virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}

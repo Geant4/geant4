@@ -82,8 +82,6 @@ http://reat.space.qinetiq.com/gps/
 
 Relevant information from the simulation is processed in the XrayTelAnalysis
 class and saved, through the G4AnalysisManager interface, to Histograms and 
-Tuples. The output file is written in XML format, but one can easily switch to 
-ROOT (or Hbook) by changing the appropriate #include in XrayTelAnalysis.hh
-No external software is required (apart from the hbook case, in which the CERNLIB
-must be installed and a FORTRAN compiler must be present)
+Tuples. The output file is written in Root format, but one can easily switch to Xml (or Csv, Hdf5) by changing the G4AnalysisManager default file type in XrayTelAnalysis::book().
+No external software is required (apart from the Hdf5 case).
 

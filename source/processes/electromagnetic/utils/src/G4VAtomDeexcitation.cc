@@ -46,6 +46,7 @@
 
 #include "G4VAtomDeexcitation.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4EmParameters.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Step.hh"
@@ -58,8 +59,9 @@
 #include "G4ElementVector.hh"
 #include "Randomize.hh"
 #include "G4VParticleChange.hh"
-#include "G4PhysicsModelCatalog.hh"
+#include "G4EmSecondaryParticleType.hh"
 #include "G4Gamma.hh"
+#include "G4Log.hh"
 
 #ifdef G4MULTITHREADED
   G4Mutex G4VAtomDeexcitation::atomDeexcitationMutex = G4MUTEX_INITIALIZER;
@@ -67,32 +69,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4VAtomDeexcitation::pixeIDg = -1;
-G4int G4VAtomDeexcitation::pixeIDe = -1;
-
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname) 
-  : verbose(1), name(modname), isActive(false), flagAuger(false),
-    flagAugerCascade(false), flagPIXE(false), ignoreCuts(false),
-    isActiveLocked(false), isAugerLocked(false),
-    isAugerCascadeLocked(false), isPIXELocked(false)
+  : name(modname)
 {
-  theParameters = G4EmParameters::Instance();
   vdyn.reserve(5);
   theCoupleTable = nullptr;
-  G4String gg = "gammaPIXE";
-  G4String ee = "e-PIXE";
-  if(pixeIDg < 0) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&atomDeexcitationMutex);
-    if(pixeIDg < 0) { 
-#endif
-      pixeIDg = G4PhysicsModelCatalog::Register(gg); 
-      pixeIDe = G4PhysicsModelCatalog::Register(ee); 
-#ifdef G4MULTITHREADED
-    }
-    G4MUTEXUNLOCK(&atomDeexcitationMutex);
-#endif
-  }
   gamma = G4Gamma::Gamma();
 }
 
@@ -105,25 +86,27 @@ G4VAtomDeexcitation::~G4VAtomDeexcitation()
 
 void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 {
+  G4EmParameters* theParameters = G4EmParameters::Instance();
   theParameters->DefineRegParamForDeex(this);
 
   // Define list of couples
   theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  nCouples = theCoupleTable->GetTableSize();
 
   // needed for unit tests
-  G4int nn = std::max(numOfCouples, 1);
-  activeDeexcitationMedia.resize(nn, false);
-  activeAugerMedia.resize(nn, false);
-  activePIXEMedia.resize(nn, false);
-  activeZ.resize(93, false);
+  size_t nn = std::max(nCouples, 1);
+  if(activeDeexcitationMedia.size() != nn) {
+    activeDeexcitationMedia.resize(nn, false);
+    activeAugerMedia.resize(nn, false);
+    activePIXEMedia.resize(nn, false);
+  }
+  if(activeZ.size() != 93) { activeZ.resize(93, false); }
 
   // initialisation of flags and options
   // normally there is no locksed flags
-  if(!isActiveLocked)       { isActive  = theParameters->Fluo(); }
-  if(!isAugerLocked)        { flagAuger = theParameters->Auger(); }
-  if(!isAugerCascadeLocked) { flagAugerCascade = theParameters->AugerCascade(); }
-  if(!isPIXELocked)         { flagPIXE  = theParameters->Pixe(); }
+  if(!isActiveLocked) { isActive  = theParameters->Fluo(); }
+  if(!isAugerLocked)  { flagAuger = theParameters->Auger(); }
+  if(!isPIXELocked)   { flagPIXE  = theParameters->Pixe(); }
   ignoreCuts = theParameters->DeexcitationIgnoreCut();
 
   // Define list of regions
@@ -146,17 +129,17 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   }
 
   // Identify active media
-  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  const G4RegionStore* regionStore = G4RegionStore::GetInstance();
   for(size_t j=0; j<nRegions; ++j) {
     const G4Region* reg = regionStore->GetRegion(activeRegions[j], false);
-    if(reg && 0 < numOfCouples) {
+    if(nullptr != reg && 0 < nCouples) {
       const G4ProductionCuts* rpcuts = reg->GetProductionCuts();
       if(0 < verbose) {
         G4cout << "          " << activeRegions[j]
-	       << "  " << deRegions[j]  << "  " << AugerRegions[j]
-	       << "  " << PIXERegions[j] << G4endl;  
+               << "  " << deRegions[j]  << "  " << AugerRegions[j]
+               << "  " << PIXERegions[j] << G4endl;  
       }
-      for(G4int i=0; i<numOfCouples; ++i) {
+      for(G4int i=0; i<nCouples; ++i) {
         const G4MaterialCutsCouple* couple =
           theCoupleTable->GetMaterialCutsCouple(i);
         if (couple->GetProductionCuts() == rpcuts) {
@@ -181,12 +164,12 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   InitialiseForNewRun();
 
   if(0 < verbose && flagAuger) {
-    G4cout << "### ===  Auger cascade flag: " << flagAugerCascade 
-	   << G4endl;
+    G4cout << "### ===  Auger flag: " << flagAuger 
+           << G4endl;
   }
   if(0 < verbose) {
     G4cout << "### ===  Ignore cuts flag:   " << ignoreCuts
-	   << G4endl;
+           << G4endl;
   }
   if(0 < verbose && flagPIXE) {
     G4cout << "### ===  PIXE model for hadrons: " 
@@ -249,14 +232,14 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   }
 }
 
-void G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,  
-					    const G4AtomicShell* as, 
-					    G4int Z, G4int idx)
+void G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,
+                                            const G4AtomicShell* as, 
+                                            G4int Z, G4int idx)
 {
   G4double gCut = DBL_MAX;
   if(ignoreCuts) {
     gCut = 0.0;
-  } else if (theCoupleTable) {
+  } else if (nullptr != theCoupleTable) {
     gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
   }
   if(gCut < as->BindingEnergy()) {
@@ -264,7 +247,7 @@ void G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,
     if(CheckAugerActiveRegion(idx)) {
       if(ignoreCuts) {
         eCut = 0.0;
-      } else if (theCoupleTable) {
+      } else if (nullptr != theCoupleTable) {
         eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
       }
     }
@@ -286,10 +269,10 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
   // step parameters
   const G4StepPoint* preStep = step.GetPreStepPoint();
-  G4ThreeVector prePos = preStep->GetPosition();
-  G4ThreeVector delta = step.GetPostStepPoint()->GetPosition() - prePos;
-  G4double preTime = preStep->GetGlobalTime();
-  G4double dt = step.GetPostStepPoint()->GetGlobalTime() - preTime;
+  const G4ThreeVector prePos = preStep->GetPosition();
+  const G4ThreeVector delta = step.GetPostStepPoint()->GetPosition() - prePos;
+  const G4double preTime = preStep->GetGlobalTime();
+  const G4double dt = step.GetPostStepPoint()->GetGlobalTime() - preTime;
 
   // particle parameters
   const G4Track* track = step.GetTrack();
@@ -312,7 +295,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = 
     material->GetVecNbOfAtomsPerVolume();
-  G4int nelm = material->GetNumberOfElements();
+  const G4int nelm = material->GetNumberOfElements();
 
   // loop over deexcitations
   for(G4int i=0; i<nelm; ++i) {
@@ -325,7 +308,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
       for(G4int ii=0; ii<nshells; ++ii) {
         G4AtomicShellEnumerator as = G4AtomicShellEnumerator(ii);
         const G4AtomicShell* shell = GetAtomicShell(Z, as);
-        G4double bindingEnergy = shell->BindingEnergy();
+        const G4double bindingEnergy = shell->BindingEnergy();
 
         if(gCut > bindingEnergy) { break; }
 
@@ -340,7 +323,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
             //G4cout << " Shell " << ii << " mfp(mm)= " << mfp/mm << G4endl;
             // sample ionisation points
             do {
-              stot -= mfp*std::log(G4UniformRand());
+              stot -= mfp*G4Log(G4UniformRand());
               if( stot > 1.0 || eLossMax < bindingEnergy) { break; }
               // sample deexcitation
               vdyn.clear();
@@ -360,11 +343,10 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
                     // defined secondary type
                     if(dp->GetDefinition() == gamma) { 
-                      t->SetCreatorModelIndex(pixeIDg);
+                      t->SetCreatorModelID(_GammaPIXE);
                     } else {
-                      t->SetCreatorModelIndex(pixeIDe);
+                      t->SetCreatorModelID(_ePIXE);
                     }
-
                     tracks.push_back(t);
                   } else {
                     delete dp;

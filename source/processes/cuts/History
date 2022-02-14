@@ -16,6 +16,36 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October. 12th, 2021 - V.Ivanchenko (proccuts-V10-07-05)
+- G4PhysicsTableHelper - fixed Coverity warning due to index type,
+    removed G4ThreadLocal variable, substitute old cerr by 
+    G4Exception (old printouts are kept), removed unused headers
+- G4MCCIndexConversionTable - changed inline functions -only one
+    return is left instead of two
+
+September. 1th, 2021 - V.Ivanchenko (proccuts-V10-07-04)
+- G4VRangeToEnergyConverter, G4RToEConvForPositron,
+  G4RToEConvForElectron, G4RToEConvForGamma, G4RToEConvForProton
+    Simplified the design - do not use G4PhysicsTable and 
+    G4PhysicsVector but convert range cut to production threshold 
+    directly; expected memory reduction for big detectors and
+    some speed-up of initialisation
+
+July. 18th, 2021 - V.Ivanchenko (proccuts-V10-07-03)
+- G4VRangeToEnergyConverter - updated interfaces to G4PhysicsVector
+
+July. 11th, 2021 - V.Ivanchenko (proccuts-V10-07-02)
+- G4PhysicsTableHelper - fixed minor Coverity report
+
+May. 26th, 2021 - V.Ivanchenko (proccuts-V10-07-01)
+- G4PhysicsTableHelper - updated interface to Retrieve(..) method
+
+Apr. 16th, 2021 - B. Morgan (proccuts-V10-07-00)
+- Migrate build to modular CMake API
+
+Jun. 5th, 2020  - G.Cosmo (procuts-V10-06-00)
+- Revision for use of c++11 constructs. Code cleanup and formatting.
+
 Nov. 19th, 2019  - G.Cosmo (procuts-V10-05-02)
 - Fixed cases of implicit type conversions from size_t to G4int.
 
@@ -32,7 +62,7 @@ Oct. 4th, 2015  - M.Asai (procuts-V10-01-05)
 - G4VRangeToEnergyConverter: recover Reset() to its destructor.
 
 Aug. 10th, 2015   - H.Kurashige (procuts-V10-01-04)
-- Modify loop_counter for better performance 
+- Modify loop_counter for better performance
 
 Aug. 9th, 2015   - H.Kurashige (procuts-V10-01-03)
 - Remove while loop from G4VRangeToEnergyConverter::ConvertCutToKineticEnergy
@@ -50,14 +80,14 @@ Nov. 21st, 2013  - H.Kurashige (procuts-V09-06-09)
 - Fix Coverity defects in G4VRangeToEnergyConverter destructor
 
 Nov. 21st, 2013  - H.Kurashige (procuts-V09-06-08)
-- Fix Coverity defects in G4VRangeToEnergyConverter CTOR 
+- Fix Coverity defects in G4VRangeToEnergyConverter CTOR
 
 July 21st, 2013  - H.Kurashige (procuts-V09-06-07)
 - Fix the bug in G4ProductionCuts copy constructor
 
 June 21st, 2013  - M.Asai (procuts-V09-06-06)
 - G4ProductionCutstable: print out energy thresholds regardless of
-  G4MaterialCutsCouple::IsReCalcNeeded(). 
+  G4MaterialCutsCouple::IsReCalcNeeded().
 
 June 16th, 2013  - M.Asai (procuts-V09-06-05)
 - G4VRangeToEnergyConverter: stop calling Reset() from its destructor.
@@ -71,7 +101,7 @@ June 5th, 2013   - V.Ivanchenko (procuts-V09-06-04)
 June 4th, 2013   - H.Kurashige (procuts-V09-06-03)
 - Modify G4RToEConvForXXX to remove unnecessary static declaration
   (Some static variables are moved to simple member of the class)
-  
+
 May. 30th, 2013   - G.Cosmo (procuts-V09-06-02)
 - Added protection to initialisation of static data in
   G4VRangeToEnergyConverter constructor.
@@ -102,7 +132,7 @@ Jun. 7th, 2012   - G.Cosmo (procuts-V09-05-02)
   '-Wshadow' compilation option on gcc compiler.
 
 Apr. 27th, 2012  - H.Kurashige (procuts-V09-05-01)
-- Fix a bug in G4ProductionCutsTable::RetrieveCutsInfo 
+- Fix a bug in G4ProductionCutsTable::RetrieveCutsInfo
   (TAINED_SCALAR by Coverity)
 
 Aug. 10th, 2011  -  M.Asai (procuts-V09-04-05)
@@ -126,51 +156,51 @@ Jan. 26th, 2011  -  H.Kurashige (procuts-V09-04-00)
 - Define error codes for G4Exceptions
 
 Oct.  7th, 2010  -  H.Kurashige (procuts-V09-03-01)
-- Fixed a possible memory leak soource 
- 
-Jan. 22th, 2010  -  H.Kurashige (procuts-V09-03-00) 
-- Fixed G4ProductionCutTable to solve problems with zero range for protons 
+- Fixed a possible memory leak soource
 
-Nov. 12th, 2009  -  H.Kurashige (procuts-V09-02-08) 
-- Correfct spelling of /cuts/setMaxCutEnergy command 
+Jan. 22th, 2010  -  H.Kurashige (procuts-V09-03-00)
+- Fixed G4ProductionCutTable to solve problems with zero range for protons
 
-Nov. 11th, 2009  -  H.Kurashige (procuts-V09-02-07) 
-- Add /cuts/setMaxCutEnregy command 
+Nov. 12th, 2009  -  H.Kurashige (procuts-V09-02-08)
+- Correfct spelling of /cuts/setMaxCutEnergy command
 
-Sep. 14th, 2009  -  H.Kurashige (procuts-V09-02-06) 
+Nov. 11th, 2009  -  H.Kurashige (procuts-V09-02-07)
+- Add /cuts/setMaxCutEnregy command
+
+Sep. 14th, 2009  -  H.Kurashige (procuts-V09-02-06)
 - Add  G4ProductionCutTable::ResetConverters()
    to clear loss tables and range vectors
 
-Sep. 12th, 2009  -  H.Kurashige (procuts-V09-02-05) 
+Sep. 12th, 2009  -  H.Kurashige (procuts-V09-02-05)
 - Modify G4VRangeToEnergyConverter::ConvertCutToKineticEnergy
    to improve performance
 
-Sep. 11th, 2009  -  H.Kurashige (procuts-V09-02-04) 
+Sep. 11th, 2009  -  H.Kurashige (procuts-V09-02-04)
 - Modify BuildRangeVector where integration is perfomed in this method
   (i.e. not using RangeXXSimpson methods)
-- G4VRangeToEnergyConverter::BuildRangeVector is for e+/e- 
+- G4VRangeToEnergyConverter::BuildRangeVector is for e+/e-
 - G4VRangeToEnergyConverter::TotBin is changed to constant (i.e. same for all converters)
 - Remove RToEConverter for neutron, anti-protprtton, and anti-neutron
 
-Sep. 10th, 2009  -  H.Kurashige (procuts-V09-02-03) 
+Sep. 10th, 2009  -  H.Kurashige (procuts-V09-02-03)
 - Add G4VRangeToEnergyConverter::MaxEnergyCut
    ( 10 GeV is set in default)
-- Add G4VRangeToEnergyConverter::fRangeVectorStore 
+- Add G4VRangeToEnergyConverter::fRangeVectorStore
    to ensure that RangeVector is created only one for each material
 - Set G4VRangeToEnergyConverter::TotBin to 100
-   ( 200 for previous versions) 
+   ( 200 for previous versions)
 
-Aug. 1st, 2009  -  H.Kurashige (procuts-V09-02-02) 
-- Add cuts for proton 
+Aug. 1st, 2009  -  H.Kurashige (procuts-V09-02-02)
+- Add cuts for proton
   (need co-work with G4VUserPhysicsList update)
 
-July 29, 2009  -  H.Kurashige (procuts-V09-02-01) 
-- Add implemtentaion of G4VRangeToEnergyConverter::GetParticleType 
+July 29, 2009  -  H.Kurashige (procuts-V09-02-01)
+- Add implemtentaion of G4VRangeToEnergyConverter::GetParticleType
 
-May 2nd, 2009  -  H.Kurashige (procuts-V09-02-00) 
+May 2nd, 2009  -  H.Kurashige (procuts-V09-02-00)
 - Use std::fabs instead of std::abs.
 
-March 2nd, 2008  -  H.Kurashige (procuts-V09-01-00) 
+March 2nd, 2008  -  H.Kurashige (procuts-V09-01-00)
 - Add ProductionCutsMessenger
 - Suppress 'too big cut value' messsage for higher verbosity
 
@@ -201,7 +231,7 @@ May 26th, 2006 -  H.Kurashige (procuts-V08-00-01)
 
 January  18th, 2006 - H.Kurashige (procuts-V08-00-00)
 - Fix G4VRangeToEnergyConverter::Convert to recalculate the Energy Loss table
-  if new elements are added 
+  if new elements are added
 
 November 18th, 2005 - M.Asai (procuts-V07-01-01)
 - migration to sstream.
@@ -210,15 +240,15 @@ October 28th, 2005 - M.Asai (procuts-V07-01-00)
 - Working tag for merging "envelope" to G4Region.
 
 December 2nd, 2004 - H.Kurashige (procuts-V06-02-03)
-- migration to cmath 
- 
+- migration to cmath
+
 November 7th, 2004 - H.Kurashige (procuts-V06-02-02)
 - Fixed misspelling in method name for  G4PhysicsTableHelper::RetrievePhysicsTable
-  
+
 October 25th, 2004 - H.Kurashige (procuts-V06-02-01)
-- Add G4MCCIndexConversionTable and modify G4ProductionCutsTable 
+- Add G4MCCIndexConversionTable and modify G4ProductionCutsTable
   in order to  extend functionality of Store/RetrievePhysicsTable
-- Add G4PhysicsTableHelper in order to assist implementation of 
+- Add G4PhysicsTableHelper in order to assist implementation of
   new scheme of Store/RetrievePhysicsTable for processes
 
 
@@ -234,9 +264,9 @@ June 7th, 2004 - G.Cosmo (procuts-V06-01-01)
   porting for DLLs on Windows. Modified G4ProductionCuts[.hh.cc].
 
 March 31st, 2004 - H.Kurashige (procuts-V06-01-00)
-- Modify  G4ProductionCutsTable::RetrieveCutsTable to allow  
-   ordering of materials and couples can be different from 
-   one in file 
+- Modify  G4ProductionCutsTable::RetrieveCutsTable to allow
+   ordering of materials and couples can be different from
+   one in file
 
 November 8th, 2003 - H.Kurashige (procuts-V05-02-03)
 - Fixed bugs in G4VRangeToEnergyConverter (and related class)

@@ -29,8 +29,6 @@
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
 //                       functionality for OpenGL in GEANT4
 
-#if defined (G4VIS_BUILD_OPENGLWIN32_DRIVER) || defined (G4VIS_USE_OPENGLWIN32)
-
 #ifndef G4OPENGLWIN32VIEWER_HH
 #define G4OPENGLWIN32VIEWER_HH
 
@@ -53,14 +51,24 @@ protected:
   void CreateGLWin32Context ();
   virtual void CreateMainWindow ();
   HDC fHDC;
+
+  G4bool fMouseHovered;
+  G4bool fMousePressed;
+  G4int fMousePressedX, fMousePressedY;
+
 private:
   static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);
-  static bool SetWindowPixelFormat(HDC);
-private:
+  static G4bool SetWindowPixelFormat(HDC);
+
+  void TrackMouse(G4int, G4int);
+  void ReleaseMouse();
+  void SetShift(G4int, G4int);
+  void SetRotation(G4int, G4int);
+  void SetZoom(G4int);
+
   HWND fWindow;
   HGLRC fHGLRC;
+  G4bool fInCreateWindow;
 };
-
-#endif
 
 #endif

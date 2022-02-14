@@ -23,89 +23,76 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIcommandTree
 //
+// Class description:
 //
+// This class is exclusively used by G4UImanager for handling the
+// tree structure of the commands. The user MUST NOT construct/use
+// this class object
 
-#ifndef G4UIcommandTree_h
-#define G4UIcommandTree_h 1
+// Author: Makoto Asai (SLAC), 1998
+// --------------------------------------------------------------------
+#ifndef G4UIcommandTree_hh
+#define G4UIcommandTree_hh 1
 
-
-#include "G4UIcommand.hh"
-#include "globals.hh"
 #include <vector>
 
-// class description:
-//
-//  This class is exclusively used by G4UImanager for handling the
-// tree structure of the commands. The user MUST NOT construct/use
-// this class object.
+#include "globals.hh"
+#include "G4UIcommand.hh"
 
-class G4UIcommandTree 
+class G4UIcommandTree
 {
   public:
-      G4UIcommandTree();
-      G4UIcommandTree(const char * thePathName);
-      ~G4UIcommandTree();
-      G4bool operator==(const G4UIcommandTree &right) const;
-      G4bool operator!=(const G4UIcommandTree &right) const;
 
-  public:
-      void AddNewCommand(G4UIcommand * newCommand, G4bool workerThreadOnly=false);
-      void RemoveCommand(G4UIcommand * aCommand, G4bool workerThreadOnly=false);
-      G4UIcommand* FindPath(const char* commandPath) const;
-      G4UIcommandTree* FindCommandTree(const char* commandPath);
-      G4String CompleteCommandPath(const G4String& commandPath);
-      G4String GetFirstMatchedString(const G4String&,const G4String&) const;
-      // Complete most available caracters in common into command path in the command line
-      // given
+    G4UIcommandTree();
+    G4UIcommandTree(const char* thePathName);
 
-      void List() const;
-      void ListCurrent() const;
-      void ListCurrentWithNum() const;
-      void CreateHTML();
+    ~G4UIcommandTree();
+
+    G4bool operator==(const G4UIcommandTree& right) const;
+    G4bool operator!=(const G4UIcommandTree& right) const;
+
+    void AddNewCommand(G4UIcommand* newCommand, G4bool workerThreadOnly = false);
+    void RemoveCommand(G4UIcommand* aCommand, G4bool workerThreadOnly = false);
+    G4UIcommand* FindPath(const char* commandPath) const;
+    G4UIcommandTree* FindCommandTree(const char* commandPath);
+    G4String GetFirstMatchedString(const G4String&, const G4String&) const;
+
+    G4String CompleteCommandPath(const G4String& commandPath);
+      // Complete most available characters in common into command path in the
+      // command line given
+
+    void List() const;
+    void ListCurrent() const;
+    void ListCurrentWithNum() const;
+    void CreateHTML(G4String = "");
+
+    inline const G4UIcommand* GetGuidance() const { return guidance; }
+    inline const G4String& GetPathName() const { return pathName; }
+    inline G4int GetTreeEntry() const { return G4int(tree.size()); }
+    inline G4int GetCommandEntry() const { return G4int(command.size()); }
+    inline G4UIcommandTree* GetTree(G4int i) { return tree[i - 1]; }
+    G4UIcommandTree* GetTree(const char* comNameC);
+    inline G4UIcommand* GetCommand(G4int i) { return command[i - 1]; }
+    inline const G4String GetTitle() const
+    {
+      return (guidance == nullptr) ? G4String("...Title not available...")
+                                   : guidance->GetTitle();
+    }
 
   private:
-      G4String CreateFileName(const char* pName);
-      G4String ModStr(const char* strS);
 
-      std::vector<G4UIcommand*> command;
-      std::vector<G4UIcommandTree*> tree;
-      G4UIcommand *guidance;
-      G4String pathName;
-      G4bool broadcastCommands;
+    G4String CreateFileName(const char* pName);
+    G4String ModStr(const char* strS);
 
-  public:
-      inline const G4UIcommand * GetGuidance() const
-      { return guidance; };
-      inline const G4String GetPathName() const
-      { return pathName; };
-      inline G4int GetTreeEntry() const
-      { return G4int(tree.size()); };
-      inline G4int GetCommandEntry() const
-      { return G4int(command.size()); };
-      inline G4UIcommandTree * GetTree(G4int i)
-      { return tree[i-1]; };
-      inline G4UIcommandTree * GetTree(const char* comNameC)
-      { 
-        G4String comName = comNameC;
-        for( size_t i=0; i < tree.size(); i++)
-        {
-          if( comName == tree[i]->GetPathName() )
-          { return tree[i]; }
-        }
-        return NULL;
-      };
-      inline G4UIcommand * GetCommand(G4int i)
-      { return command[i-1]; };
-      inline const G4String GetTitle() const
-      { 
-	    if(guidance==NULL)
-	    { return G4String("...Title not available..."); }
-    	else
-	    { return guidance->GetTitle(); }
-      };
-
+    std::vector<G4UIcommand*> command;
+    std::vector<G4UIcommandTree*> tree;
+    G4UIcommand* guidance = nullptr;
+    G4String pathName;
+    G4bool broadcastCommands = true;
+    G4bool ifSort = false;
+    G4int createHTMLTreeLevel = 0;
 };
 
 #endif
-

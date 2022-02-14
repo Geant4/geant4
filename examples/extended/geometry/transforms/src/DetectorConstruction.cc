@@ -81,6 +81,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
+  G4ReflectionFactory::Instance()->Clean();
         
   // World
   //  
@@ -344,7 +345,7 @@ void DetectorConstruction::PlaceWithReflections()
 
   G4double og = 3*cm; 
 
-  // Place first two positionz in z = - 3cm
+  // Place first two positionz in z = + 3cm
   //
 
   // 1st position
@@ -355,7 +356,7 @@ void DetectorConstruction::PlaceWithReflections()
   G4ThreeVector uz = G4ThreeVector(std::cos(phi), std::sin(phi), 0);    
   G4ThreeVector position = og*uz;
   G4Transform3D transform1(rotm1,position);
-  G4Transform3D translateZ = HepGeom::Translate3D(0, 0, -3.*cm);
+  G4Transform3D translateZ = HepGeom::Translate3D(0, 0, 3.*cm);
 
   new G4PVPlacement(translateZ * transform1, //rotation,position
                     fTrdVolume,              //logical volume
@@ -381,11 +382,11 @@ void DetectorConstruction::PlaceWithReflections()
                     2);                      //copy number
 
 
-  // Place next two positionz in z = + 3cm with reflection 
+  // Place next two positionz in z = - 3cm with reflection 
   //
 
   // 3rd position
-  translateZ = HepGeom::Translate3D(0, 0, +3.*cm);
+  translateZ = HepGeom::Translate3D(0, 0, -3.*cm);
   G4Transform3D reflect3D = HepGeom::ReflectZ3D();
 
   G4ReflectionFactory::Instance()

@@ -23,52 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrIsotope
+// G4tgrIsotope
 //
 // Class description:
 //
 // Transient class of a chemical element.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrIsotope_h
-#define G4tgrIsotope_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrIsotope_hh
+#define G4tgrIsotope_hh 1
 
 #include <vector>
 
+#include "globals.hh"
+
 class G4tgrIsotope
-{ 
-  public:  // with description
+{
+  public:
 
     G4tgrIsotope();
-   ~G4tgrIsotope();
+    ~G4tgrIsotope();
 
-    G4tgrIsotope( const std::vector<G4String>& wl );
+    G4tgrIsotope(const std::vector<G4String>& wl);
       // Construct the G4tgrIsotope (fill its data members)
-      // interpreting the data in the list of words 'wl' 
-  
+      // interpreting the data in the list of words 'wl'
+
     // Retrieval methods
 
     const G4String& GetName() const { return theName; }
-    G4int    GetZ() const { return theZ; }
-    G4int    GetN() const { return theN; }
+    G4int GetZ() const { return theZ; }
+    G4int GetN() const { return theN; }
     G4double GetA() const { return theA; }
 
     friend std::ostream& operator<<(std::ostream& os, const G4tgrIsotope& obj);
-  
- private:
 
-    G4String theName;              // name of the Isotope
-    G4int    theZ;                 // atomic number
-    G4int    theN;                 // number of nucleons
-    G4double theA;                 // mass
+  private:
+
+    G4String theName = ""; // name of the Isotope
+    G4int theZ = 0;        // atomic number
+    G4int theN = 0;        // number of nucleons
+    G4double theA = 0.0;   // mass
 };
 
 #endif

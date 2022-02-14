@@ -61,40 +61,40 @@
 G4DeexParametersMessenger::G4DeexParametersMessenger(G4DeexPrecoParameters* ptr) 
   : theParameters(ptr)
 {
-  fDirectory = new G4UIdirectory("/process/deex/");
+  fDirectory = new G4UIdirectory("/process/had/deex/");
   fDirectory->SetGuidance("Commands for nuclear de-excitation module.");
 
-  readCmd = new G4UIcmdWithABool("/process/deex/readICdata",this);
+  readCmd = new G4UIcmdWithABool("/process/had/deex/readICdata",this);
   readCmd->SetGuidance("Enable/disable download IC data per atomic shell.");
   readCmd->SetParameterName("readIC",true);
   readCmd->SetDefaultValue(false);
   readCmd->AvailableForStates(G4State_PreInit);
 
-  icCmd = new G4UIcmdWithABool("/process/deex/setIC",this);
+  icCmd = new G4UIcmdWithABool("/process/had/deex/setIC",this);
   icCmd->SetGuidance("Enable/disable simulation of e- internal conversion.");
   icCmd->SetParameterName("IC",true);
   icCmd->SetDefaultValue(true);
   icCmd->AvailableForStates(G4State_PreInit);
 
-  corgCmd = new G4UIcmdWithABool("/process/deex/correlatedGamma",this);
+  corgCmd = new G4UIcmdWithABool("/process/had/deex/correlatedGamma",this);
   corgCmd->SetGuidance("Enable/disable simulation of correlated gamma emission.");
   corgCmd->SetParameterName("corrG",true);
   corgCmd->SetDefaultValue(false);
   corgCmd->AvailableForStates(G4State_PreInit);
 
-  maxjCmd = new G4UIcmdWithAnInteger("/process/deex/maxTwoJ",this);
+  isoCmd = new G4UIcmdWithABool("/process/had/deex/isomerProduction",this);
+  isoCmd->SetGuidance("Enable/disable simulation of long lived isomers.");
+  isoCmd->SetParameterName("corrG",true);
+  isoCmd->SetDefaultValue(false);
+  isoCmd->AvailableForStates(G4State_PreInit);
+
+  maxjCmd = new G4UIcmdWithAnInteger("/process/had/deex/maxTwoJ",this);
   maxjCmd->SetGuidance("Set max value for 2J for simulation of correlated gamma emission.");
   maxjCmd->SetParameterName("max2J",true);
   maxjCmd->SetDefaultValue(10);
   maxjCmd->AvailableForStates(G4State_PreInit);
 
-  upCmd = new G4UIcmdWithAnInteger("/process/deex/uploadZ",this);
-  upCmd->SetGuidance("Set max value for Z to be uploaded before 1st event");
-  upCmd->SetParameterName("uploadZ",true);
-  upCmd->SetDefaultValue(30);
-  upCmd->AvailableForStates(G4State_PreInit);
-
-  verbCmd = new G4UIcmdWithAnInteger("/process/deex/verbose",this);
+  verbCmd = new G4UIcmdWithAnInteger("/process/had/deex/verbose",this);
   verbCmd->SetGuidance("Set verbosity level.");
   verbCmd->SetParameterName("verb",true);
   verbCmd->SetDefaultValue(1);
@@ -110,8 +110,8 @@ G4DeexParametersMessenger::~G4DeexParametersMessenger()
   delete readCmd;
   delete icCmd;
   delete corgCmd;
+  delete isoCmd;
   delete maxjCmd;
-  delete upCmd;
   delete verbCmd;
 }
 
@@ -126,10 +126,10 @@ void G4DeexParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetInternalConversionFlag(icCmd->GetNewBoolValue(newValue));
   } else if (command == corgCmd) {
     theParameters->SetCorrelatedGamma(corgCmd->GetNewBoolValue(newValue));
+  } else if (command == isoCmd) {
+    theParameters->SetIsomerProduction(isoCmd->GetNewBoolValue(newValue));
   } else if (command == maxjCmd) { 
     theParameters->SetTwoJMAX(maxjCmd->GetNewIntValue(newValue));
-  } else if (command == upCmd) { 
-    theParameters->SetUploadZ(maxjCmd->GetNewIntValue(newValue));
   } else if (command == verbCmd) { 
     theParameters->SetVerbose(verbCmd->GetNewIntValue(newValue));
   }

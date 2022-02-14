@@ -48,9 +48,8 @@
                 100 MeV/nucleon; the new process was developed 
                 by M.H. Mendenhall and R.A. Weller from Vanderbuilt 
                 University and published in NIM B 277 (2005) 420.
-                In later Geant4 releases the process will be a part
-                of Geant4 source, currently it is released together
-                with its mathematical tool c2_functions in current 
+                The process is released in this example with its 
+                mathematical tool c2_functions
     
  From geant4/source/physics_lists/builders:	 
  - "emstandard_opt0" recommended standard EM physics for LHC
@@ -78,10 +77,6 @@
      		        
  Physics lists and options can be (re)set with UI commands
     
- Please, notice that options set through G4EmProcessOptions are global, eg
- for all particle types. In G4 builders, it is shown how to set options per
- particle type.		
- 	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
      The primary kinematic consists of a single particle which hits the

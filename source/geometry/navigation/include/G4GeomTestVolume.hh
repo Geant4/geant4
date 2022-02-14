@@ -64,6 +64,10 @@ class G4GeomTestVolume
     void SetErrorsThreshold(G4int max);
       // Get/Set maximum number of errors to report (default set to 1)
 
+    void TestOverlapInTree() const;
+      // Check overlaps in the volume tree without
+      // dublication in identical logical volumes
+
     void TestRecursiveOverlap( G4int sLevel=0, G4int depth=-1 );
       // Activate overlaps check, propagating recursively to the daughters,
       // with possibility of specifying the initial level in the volume tree

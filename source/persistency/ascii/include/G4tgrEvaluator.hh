@@ -23,34 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrEvaluator
+// G4tgrEvaluator
 //
 // Class description:
 //
 // Simple customised evaluator utility class.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrEvaluator_HH
-#define G4tgrEvaluator_HH
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrEvaluator_hh
+#define G4tgrEvaluator_hh 1
 
 #include "G4ThreeVector.hh"
 #include "G4Evaluator.hh"
 
 class G4tgrEvaluator : public G4Evaluator
 {
-  public:  // with description
+  public:
 
     G4tgrEvaluator();
-   ~G4tgrEvaluator();
+    ~G4tgrEvaluator();
       // Constructor & destructor.
 
-    void print_error( G4int status ) const;
+    void print_error(G4int status) const;
       // Overwritten ERROR_SYNTAX_ERROR message
 
   private:

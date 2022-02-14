@@ -1,0 +1,137 @@
+#------------------------------------------------------------------------------#
+#
+#
+cmake_policy(SET CMP0012 NEW)
+
+get_filename_component(PTL_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+include(${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersion.cmake)
+include(CMakeFindDependencyMacro)
+
+set(_PTL_AVAILABLE_COMPONENTS )
+
+if(@BUILD_SHARED_LIBS@)
+    list(APPEND _PTL_AVAILABLE_COMPONENTS shared)
+endif()
+
+if(@BUILD_STATIC_LIBS@)
+    list(APPEND _PTL_AVAILABLE_COMPONENTS static)
+endif()
+
+#------------------------------------------------------------------------------#
+#   package initialization
+#
+@PACKAGE_INIT@
+
+
+#------------------------------------------------------------------------------#
+#   install or build tree
+#
+set(_PTL_BUILD_TREE @BUILD_TREE@)
+if(NOT _PTL_BUILD_TREE)
+    set(_PTL_INSTALL_TREE ON)
+endif()
+
+
+#------------------------------------------------------------------------------#
+#   configure lib and include
+#
+if(_PTL_INSTALL_TREE)
+
+    set_and_check(@PROJECT_NAME@_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+    set_and_check(@PROJECT_NAME@_LIB_DIR "@PACKAGE_LIB_INSTALL_DIR@")
+
+    include(${PTL_CMAKE_DIR}/@PROJECT_NAME@Targets.cmake)
+    check_required_components(@PROJECT_NAME@)
+
+    # get target
+    foreach(_COMPONENT ${_PTL_AVAILABLE_COMPONENTS})
+        # set the library
+        if(NOT @PROJECT_NAME@_LIBRARY)
+            set(@PROJECT_NAME@_LIBRARY ${_${_COMPONENT}_LOCATION} CACHE INTERNAL
+                "@PROJECT_NAME@ library")
+        endif()
+    endforeach()
+
+    if(@Threads_FOUND@)
+        set(CMAKE_THREAD_PREFER_PTHREAD @CMAKE_THREAD_PREFER_PTHREAD@)
+        set(THREADS_PREFER_PTHREAD_FLAG @THREADS_PREFER_PTHREAD_FLAG@)
+        find_package(Threads REQUIRED)
+    endif()
+
+    if(@TBB_FOUND@)
+        set(TBB_ROOT_DIR @TBB_ROOT_DIR@)
+        set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/PTL/Modules ${CMAKE_MODULE_PATH})
+        find_package(TBB @TBB_VERSION@ REQUIRED)
+    endif()
+
+else()
+
+    set(@PROJECT_NAME@_INCLUDE_DIR "@PROJECT_SOURCE_DIR@")
+    set(@PROJECT_NAME@_LIB_DIR "@PROJECT_BINARY_DIR@")
+
+    set(@PROJECT_NAME@_Threads_FOUND @Threads_FOUND@)
+    set(@PROJECT_NAME@_TBB_FOUND @TBB_FOUND@)
+
+    if(NOT Threads_FOUND AND @PROJECT_NAME@_Threads_FOUND)
+        set(CMAKE_THREAD_PREFER_PTHREAD @CMAKE_THREAD_PREFER_PTHREAD@)
+        set(THREADS_PREFER_PTHREAD_FLAG @THREADS_PREFER_PTHREAD_FLAG@)
+        find_package(Threads REQUIRED)
+    endif()
+
+    if(NOT TBB_FOUND AND @PROJECT_NAME@_TBB_FOUND)
+        set(TBB_ROOT_DIR @TBB_ROOT_DIR@)
+        set(CMAKE_MODULE_PATH @PROJECT_SOURCE_DIR@/cmake/Modules ${CMAKE_MODULE_PATH})
+        find_package(TBB @TBB_VERSION@ REQUIRED)
+    endif()
+
+    if(NOT TARGET @LIBNAME@-compile-options)
+      include("@PROJECT_BINARY_DIR@/@PROJECT_NAME@-interface.cmake")
+    endif()
+
+    foreach(_COMPONENT ${_PTL_AVAILABLE_COMPONENTS})
+        if(NOT TARGET @LIBNAME@-${_COMPONENT})
+            include("@PROJECT_BINARY_DIR@/@PROJECT_NAME@-${_COMPONENT}.cmake")
+        endif()
+        # set the library
+        if(NOT @PROJECT_NAME@_LIBRARY)
+            set(@PROJECT_NAME@_LIBRARY @LIBNAME@-${_COMPONENT})
+        endif()
+    endforeach()
+
+    set(PROJECT_DEPENDS ${@PROJECT_NAME@_LIBRARY})
+
+endif()
+
+
+#------------------------------------------------------------------------------#
+# internal PTL include directory
+#
+set(@PROJECT_NAME@_INCLUDE_DIRS ${@PROJECT_NAME@_INCLUDE_DIR})
+
+
+#------------------------------------------------------------------------------#
+#   Linking type
+#
+if(WIN32)
+    add_definitions(-D_PTL_ARCHIVE)
+endif()
+
+
+#------------------------------------------------------------------------------#
+#   link target
+#
+set(@PROJECT_NAME@_LIBRARIES ${@PROJECT_NAME@_LIBRARY})
+
+
+#------------------------------------------------------------------------------#
+#   Definitions
+#
+set(PTL_USE_TBB @PTL_USE_TBB@)
+set(PTL_USE_GPU @PTL_USE_GPU@)
+set(PTL_USE_CUDA @PTL_USE_CUDA@)
+
+if(NOT _PTL_INSTALL_TREE)
+    list(APPEND @PROJECT_NAME@_LIBRARIES "@EXTERNAL_LIBRARIES@")
+endif()
+

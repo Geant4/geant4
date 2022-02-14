@@ -44,6 +44,7 @@
 #include "G4Material.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4TransportationProcessType.hh"
 
 #include "G4SDManager.hh"
 #include "G4VSensitiveDetector.hh"
@@ -62,7 +63,7 @@ G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
  fNavigatorID(-1),fFieldTrack('0'),fGhostSafety(0.),fOnBoundary(false),
  layeredMaterialFlag(false)
 {
-  SetProcessSubType(491);
+  SetProcessSubType(PARALLEL_WORLD_PROCESS);
   if(!fpHyperStep) fpHyperStep = new G4Step();
   iParallelWorld = ++nParallelWorlds;
 
@@ -432,21 +433,15 @@ G4bool G4ParallelWorldProcess::IsAtRestRequired(G4ParticleDefinition* partDef)
   if(pdgCode==0)
   {
     G4String partName = partDef->GetParticleName();
-    if(partName=="opticalphoton") return false;
     if(partName=="geantino") return false;
     if(partName=="chargedgeantino") return false;
   }
   else
   {
-    if(pdgCode==22) return false; // gamma
-    if(pdgCode==11) return false; // electron
-    if(pdgCode==2212) return false; // proton
-    if(pdgCode==-12) return false; // anti_nu_e
-    if(pdgCode==12) return false; // nu_e
-    if(pdgCode==-14) return false; // anti_nu_mu
-    if(pdgCode==14) return false; // nu_mu
-    if(pdgCode==-16) return false; // anti_nu_tau
-    if(pdgCode==16) return false; // nu_tau
+    if(pdgCode==11 || pdgCode==2212) return false; // electrons and proton
+    pdgCode = std::abs(pdgCode);
+    if(pdgCode==22) return false; // gamma and optical photons
+    if(pdgCode==12 || pdgCode==14 || pdgCode==16) return false; // all neutronos
   }
   return true;
 }

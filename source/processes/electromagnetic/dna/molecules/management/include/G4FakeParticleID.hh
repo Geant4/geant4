@@ -56,7 +56,7 @@ private :
     friend G4FakeParticleID operator -(const G4FakeParticleID& left,const int& right);
     int fValue;
 
-    static G4ThreadLocal int fLastValue;
+    inline static G4ThreadLocal int fLastValue = 999666999;
 
 public :
 

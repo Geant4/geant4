@@ -1,0 +1,367 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+
+#include "G4AnalysisUtilities.hh"
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4TFileManager<FT>::G4TFileManager(const G4AnalysisManagerState& state)
+ : fAMState(state)
+{}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4TFileManager<FT>::~G4TFileManager()
+{
+  for ( const auto& mapElement : fFileMap ) {
+    delete mapElement.second;
+  }
+}
+
+//
+// private functions
+//
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+void
+G4TFileManager<FT>::FileNotFoundWarning(const G4String& fileName,
+                      std::string_view functionName) const
+{
+  G4Analysis::Warn("Failed to get file " + fileName, fkClass, functionName);
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4TFileInformation<FT>*
+G4TFileManager<FT>::GetFileInfoInFunction(const G4String& fileName,
+                      std::string_view functionName, G4bool warn ) const
+{
+  // Find the file information in the map
+  auto it = fFileMap.find(fileName);
+  if ( it == fFileMap.end() ) {
+    if (warn) {
+      FileNotFoundWarning(fileName, functionName);
+    }
+    return nullptr;
+  }
+
+  return it->second;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+std::shared_ptr<FT>
+G4TFileManager<FT>::GetFileInFunction(const G4String& fileName,
+                      std::string_view functionName, G4bool warn) const
+{
+  // Find the file information in the map
+  auto fileInfo = GetFileInfoInFunction(fileName, functionName, warn);
+  if (! fileInfo) return nullptr;
+
+  // Check if the file is open
+  if ( ! fileInfo->fFile ) {
+    if (warn) {
+      FileNotFoundWarning(fileName, functionName);
+    }
+    return nullptr;
+  }
+
+  return fileInfo->fFile;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::WriteTFile(std::shared_ptr<FT> file,
+                                      [[maybe_unused]] const G4String& fileName)
+{
+  fAMState.Message(G4Analysis::kVL4, "write", "file", fileName);
+
+  // Write the found file
+  auto result = WriteFileImpl(file);
+
+  fAMState.Message(G4Analysis::kVL1, "write", "file", fileName, result);
+
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::CloseTFile(std::shared_ptr<FT> file,
+                                      [[maybe_unused]] const G4String& fileName)
+{
+  fAMState.Message(G4Analysis::kVL4, "close", "file", fileName);
+
+  // Close the found file
+  auto result = CloseFileImpl(file);
+
+  fAMState.Message(G4Analysis::kVL1, "close", "file", fileName, result);
+
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::DeleteEmptyFile(const G4String& fileName)
+{
+  fAMState.Message(G4Analysis::kVL4, "delete", "empty file", fileName);
+
+  auto result = ! std::remove(fileName);
+
+  fAMState.Message(G4Analysis::kVL1, "delete", "empty file", fileName, result);
+
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+void G4TFileManager<FT>::ClearData()
+{
+  for ( const auto& mapElement : fFileMap ) {
+    delete mapElement.second;
+  }
+  fFileMap.clear();
+
+  fAMState.Message(G4Analysis::kVL2, "clear", "files");
+}
+
+//
+// public functions
+//
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+std::shared_ptr<FT> G4TFileManager<FT>::CreateTFile(const G4String& fileName)
+{
+  // Check if file already exists
+  if ( GetFileInFunction(fileName, "CreateTFile", false) ) {
+    G4Analysis::Warn("File " + fileName + " already exists.",
+      fkClass, "CreateTFile");
+    return nullptr;
+  }
+
+  auto fileInformation = GetFileInfoInFunction(fileName, "CreateTFile", false);
+  if ( ! fileInformation ) {
+    fAMState.Message(G4Analysis::kVL4, "create", "fileInformation", fileName);
+
+    // Create file information and save it in the map
+    fileInformation = new G4TFileInformation<FT>(fileName);
+    fFileMap[fileName] = fileInformation;
+  }
+
+  // Create file and save it in fileInformation
+  fAMState.Message(G4Analysis::kVL4, "create", "file", fileName);
+
+  // Let concrete class create a file
+  auto file = CreateFileImpl(fileName);
+  if ( ! file ) {
+    G4Analysis::Warn("Failed to create file " + fileName, fkClass, "CreateTFile");
+    return nullptr;
+  }
+  // Save file in fileInformation
+  fileInformation->fFile = file;
+  fileInformation->fIsOpen = true;
+  fileInformation->fIsEmpty = true;
+  fileInformation->fIsDeleted = false;
+
+  fAMState.Message(G4Analysis::kVL1, "create", "file", fileName);
+
+  // Return created file
+  return file;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::WriteTFile(const G4String& fileName)
+{
+  // Find the file in the map
+  auto file = GetFileInFunction(fileName, "WriteTFile");
+  // Warning is issued in GetFileInfoFunction
+  if (! file) return false;
+
+  return WriteTFile(file, fileName);
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::CloseTFile(const G4String& fileName)
+{
+  // Find the file information in the map
+  auto fileInfo = GetFileInfoInFunction(fileName, "CloseTFile");
+  // Warning is issued in GetFileInfoFunction
+  if ( ! fileInfo ) return false;
+
+  // Do nothing if file is not open
+  if ( ! fileInfo->fIsOpen ) return false;
+
+  // Get file from the file information
+  auto file = fileInfo->fFile;
+  if ( ! file ) {
+    FileNotFoundWarning(fileName, "CloseTFile");
+    return false;
+  }
+
+  auto result = CloseTFile(file, fileName);
+
+  // Update the file information
+  fileInfo->fFile.reset();
+  fileInfo->fIsOpen = false;
+
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::SetIsEmpty(const G4String& fileName, G4bool isEmpty)
+{
+  // Find the file information in the map
+  auto fileInfo = GetFileInfoInFunction(fileName, "SetIsEmpty");
+
+  // Warning is issued in GetFileFunction
+  if ( ! fileInfo ) return false;
+
+  fAMState.Message(G4Analysis::kVL4, "notify not empty", "file", fileName);
+
+  // Set notification to file information
+  if ( fileInfo->fIsEmpty ) {
+    // do not revert information if file is not empty
+    fileInfo->fIsEmpty = isEmpty;
+
+    if ( ! isEmpty ) {
+      fAMState.Message(G4Analysis::kVL3, "notify not empty", "file", fileName);
+    }
+  }
+
+  return true;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+std::shared_ptr<FT> G4TFileManager<FT>::GetTFile(
+  const G4String& fileName, G4bool warn) const
+{
+  // Find the file information in the map
+  return GetFileInFunction(fileName, "GetTFile", warn);
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::OpenFiles()
+{
+  auto result = true;
+  for ( const auto& mapElement : fFileMap ) {
+     auto fileInformation = mapElement.second;
+     // Do nothing if file was open by user explicitly
+     if ( fileInformation->fFile ) {
+       // G4cout << "... skipping open file for " << fileInformation->fFileName << G4endl;
+       continue;
+     }
+
+     result &= (CreateTFile(fileInformation->fFileName) != nullptr);
+  }
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::WriteFiles()
+{
+  auto result = true;
+  for ( const auto& mapElement : fFileMap ) {
+     auto fileInformation = mapElement.second;
+     if ( ! fileInformation->fIsOpen ) {
+       // G4cout << "skipping write for file " << fileInformation->fFileName << G4endl;
+       continue;
+     }
+     result &= WriteTFile(fileInformation->fFile, fileInformation->fFileName);
+  }
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::CloseFiles()
+{
+  auto result = true;
+  for ( const auto& mapElement : fFileMap ) {
+     auto fileInformation = mapElement.second;
+     if ( ! fileInformation->fIsOpen ) {
+       // G4cout << "skipping close for file " << fileInformation->fFileName << G4endl;
+       continue;
+     }
+     result &= CloseTFile(fileInformation->fFile, fileInformation->fFileName);
+
+     // Update file information
+     fileInformation->fFile.reset();
+     fileInformation->fIsOpen = false;
+  }
+
+  // As the files were set to nullptr, clear should not be needed
+  // fFileMap.clear();
+
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4TFileManager<FT>::DeleteEmptyFiles()
+{
+  auto result = true;
+  for ( const auto& mapElement : fFileMap ) {
+    auto fileInformation = mapElement.second;
+    if ( (! fileInformation->fIsEmpty) || fileInformation->fIsDeleted ) {
+      // G4cout << "skipping delete for file " << fileInformation->fFileName << G4endl;
+      continue;
+    }
+
+    result &= DeleteEmptyFile(fileInformation->fFileName);
+
+    // Update file information
+    fileInformation->fIsDeleted = true;
+  }
+
+  return result;
+}

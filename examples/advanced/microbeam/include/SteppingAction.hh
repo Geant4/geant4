@@ -40,23 +40,19 @@
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class SteppingAction : public G4UserSteppingAction
 {
-public:
-  SteppingAction(RunAction* ,DetectorConstruction*);
-  ~SteppingAction();
+  public:
+    explicit SteppingAction(RunAction* ,const DetectorConstruction*);
+    ~SteppingAction() override;
   
-  void UserSteppingAction(const G4Step*);
+    void UserSteppingAction(const G4Step*)override;
   
-private:
-  RunAction*            fRun;
-  DetectorConstruction* fDetector;
-  CellParameterisation * fMyCellParameterisation;  
-
+  private:
+    RunAction*             fRun;
+    const DetectorConstruction*  fDetector;
+    const CellParameterisation * fMyCellParameterisation;  
 };
-
 #endif
 
 

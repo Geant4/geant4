@@ -38,12 +38,13 @@
 #include "G4DNAElectronSolvatation.hh"
 #include "G4Electron.hh"
 #include "G4DNAWaterExcitationStructure.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 G4DNAElectronSolvatation::G4DNAElectronSolvatation(const G4String& processName,
         G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-    SetProcessSubType(58);
+    SetProcessSubType(fLowEnergyElectronSolvation);
 }
 
 G4DNAElectronSolvatation::~G4DNAElectronSolvatation()

@@ -50,25 +50,21 @@
 //#define pdebug
 //#define sdebug
 
-////////////////////////////////////////////////////////////////////
-// CCalG4Hcal constructor & destructor...
-////////////////////////////////////////////////////////////////////
 
-CCalG4Hcal::CCalG4Hcal(const G4String &name):
-  CCalHcal(name), CCalG4Able(name), sclLog(0), absLog(0) {}
+CCalG4Hcal::CCalG4Hcal( const G4String &name ) :
+  CCalHcal(name), CCalG4Able(name), sclLog(0), absLog(0)
+{}
 
-CCalG4Hcal::~CCalG4Hcal(){
+
+CCalG4Hcal::~CCalG4Hcal() {
   if (sclLog)
     delete[] sclLog;
   if (absLog)
     delete[] absLog;
 }
 
-////////////////////////////////////////////////////////////////////
-// CCalG4Hcal methods...
-////////////////////////////////////////////////////////////////////
 
-G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
+G4VPhysicalVolume* CCalG4Hcal::constructIn( G4VPhysicalVolume* mother ) {
   G4cout << "==>> Constructing CCalG4Hcal..." << G4endl;
 
   //Common logical volumes between methods.
@@ -208,7 +204,7 @@ G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
 }
 
 
-G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer(G4int lay) {
+G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer( G4int lay ) {
 
   //Pointers to the Materials
   CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
@@ -317,16 +313,13 @@ G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer(G4int lay) {
 }
 
 
-G4LogicalVolume* CCalG4Hcal::constructAbsorberLayer(G4int lay) {
-
+G4LogicalVolume* CCalG4Hcal::constructAbsorberLayer( G4int lay ) {
   //Pointers to the Materials
-  CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
-
+  CCalMaterialFactory* matfact = CCalMaterialFactory::getInstance();
   //Now the absorber layer
   G4Material* matter = matfact->findMaterial(getAbsMat());
   G4String    name   = Name() + "Absorber" + lay;
-  G4VSolid*   solid  = new G4Box (name, getDx_2Abs(lay)*mm, getDy_2Abs()*mm,
-                                  getDy_2Abs()*mm);
+  G4VSolid*   solid  = new G4Box (name, getDx_2Abs(lay)*mm, getDy_2Abs()*mm, getDy_2Abs()*mm);
   G4LogicalVolume* log = new G4LogicalVolume(solid, matter, name);
   setVisType(CCalVisualisable::Absorber,log);
 #ifdef debug
@@ -334,13 +327,14 @@ G4LogicalVolume* CCalG4Hcal::constructAbsorberLayer(G4int lay) {
        << getDx_2Abs(lay)*mm << " " << getDy_2Abs()*mm << " " 
        << getDy_2Abs()*mm << G4endl;
 #endif
-
   return log;
 }
 
 
-void CCalG4Hcal::constructSensitive(){
+void CCalG4Hcal::constructDaughters() {}
 
+
+void CCalG4Hcal::constructSensitive() {
   if (allSensitiveLogs.size()>0) {
     CCalSensitiveDetectors* sensDets = CCalSensitiveDetectors::getInstance();
     G4String SDname = Name();
@@ -358,4 +352,3 @@ void CCalG4Hcal::constructSensitive(){
   }
 }
 
-void CCalG4Hcal::constructDaughters() {}

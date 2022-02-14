@@ -3,10 +3,14 @@
 =======
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
-# multiLayers
+# Macro file for TestEm11
 #
+# multiLayers
+# limit the step size from histo 1
+#
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setNbOfAbsor  5
 /testem/det/setAbsor 1 Water  13 cm
@@ -27,5 +31,4 @@
 /analysis/h1/set 1 300 0. 300. mm		#edep profile
 #
 /run/printProgress 100000
-#
 /run/beamOn 1000000

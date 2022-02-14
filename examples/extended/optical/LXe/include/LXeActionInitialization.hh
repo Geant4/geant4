@@ -40,31 +40,17 @@ class B4DetectorConstruction;
 class LXeDetectorConstruction;
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-/// Action initialization class.
-///
-
 class LXeActionInitialization : public G4VUserActionInitialization
 {
-  public:
-<<<<<<< HEAD
-    LXeActionInitialization(LXeRecorderBase*);
-=======
-    LXeActionInitialization(const LXeDetectorConstruction* det);
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-    virtual ~LXeActionInitialization();
+ public:
+  LXeActionInitialization(const LXeDetectorConstruction* det);
+  ~LXeActionInitialization();
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+  void BuildForMaster() const override;
+  void Build() const override;
 
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
-
-  private:
-<<<<<<< HEAD
-    LXeRecorderBase* fRecorder;
-=======
-
-    const LXeDetectorConstruction* fDetector;
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+ private:
+  const LXeDetectorConstruction* fDetector;
 };
 
 #endif

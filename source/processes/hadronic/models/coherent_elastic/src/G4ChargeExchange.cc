@@ -50,9 +50,10 @@
 #include "G4Pow.hh"
 
 #include "G4HadronicParameters.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 
-G4ChargeExchange::G4ChargeExchange() : G4HadronicInteraction("Charge Exchange")
+G4ChargeExchange::G4ChargeExchange() : G4HadronicInteraction("Charge Exchange"), secID(-1)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
@@ -88,6 +89,8 @@ G4ChargeExchange::G4ChargeExchange() : G4HadronicInteraction("Charge Exchange")
   theT        = G4Triton::Triton();
   theA        = G4Alpha::Alpha();
   theHe3      = G4He3::He3();
+
+  secID = G4PhysicsModelCatalog::GetModelID( "model_ChargeExchange" );
 }
 
 G4ChargeExchange::~G4ChargeExchange()
@@ -285,7 +288,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   theParticleChange.SetStatusChange(stopAndKill);
   theParticleChange.SetEnergyChange(0.0);
   G4DynamicParticle * aSec = new G4DynamicParticle(theSecondary, nlv1);
-  theParticleChange.AddSecondary(aSec);
+  theParticleChange.AddSecondary(aSec, secID);
 
   G4double erec = std::max(nlv0.e() - m21, 0.0);
 
@@ -298,7 +301,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
     aSec->SetKineticEnergy(0.0);
   } else if(erec > GetRecoilEnergyThreshold()) {
     aSec = new G4DynamicParticle(theRecoil, nlv0);
-    theParticleChange.AddSecondary(aSec);
+    theParticleChange.AddSecondary(aSec, secID);
   } else {
     theParticleChange.SetLocalEnergyDeposit(erec);
   }

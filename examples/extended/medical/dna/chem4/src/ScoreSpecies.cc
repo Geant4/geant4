@@ -41,7 +41,7 @@
 #include <G4SystemOfUnits.hh>
 #include <globals.hh>
 #include <G4EventManager.hh>
-#include "g4analysis.hh"
+#include <G4AnalysisManager.hh>
 
 /**
  \file ScoreSpecies.cc
@@ -57,9 +57,7 @@
 ScoreSpecies::ScoreSpecies(G4String name, G4int depth)
 : G4VPrimitiveScorer(name,depth),
   fEdep(0),
-  fOutputToRoot(true),
-  fOutputToXml(false),
-  fOutputToCsv(false),
+  fOutputType("root"), // other options: "csv", "hdf5", "xml"
   fHCID(-1),
   fEvtMap(0)
 {
@@ -342,22 +340,9 @@ void ScoreSpecies::OutputAndClear()
   //----------------------------------------------------------------------------
   // Save results
 
-  G4VAnalysisManager* analysisManager(0);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType(fOutputType);
 
-  if(fOutputToCsv)
-  {
-    analysisManager = G4Analysis::ManagerInstance("csv");
-    // this->ASCII(); // useful ?
-  }
-  else  if (fOutputToRoot)
-  {
-    analysisManager = G4Analysis::ManagerInstance("root");
-  }
-  else if(fOutputToXml)
-  {
-    analysisManager = G4Analysis::ManagerInstance("xml");
-
-  }
   if(analysisManager)
   {
     this->WriteWithAnalysisManager(analysisManager);

@@ -19,6 +19,32 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13th November 2020 B. Morgan (exam-ext-vis-UVA-V10-06-01)
+- Migration to G4RunManagerFactory.
+
+3rd November 2020 B. Morgan (exam-ext-vis-UVA-V10-06-00)
+- Support same CMake version range as core Geant4
+
+24th January 2020  Anna Zaborowska  (exam-ext-vis-UVA-V10-06-00)
+- Fix suggested in macros command /run/numberOfThreads
+
+3rd May 2017  John Allison  (exam-ext-vis-UVA-V10-03-04)
+- Copied exampleB1.in to userVisAction.in.
+  All macros now include /run/initialize.
+
+28th April 2017  John Allison  (exam-ext-vis-UVA-V10-03-03)
+- Copied run1.mac and run2.mac from example B1.
+
+26th April 2017  John Allison  (exam-ext-vis-UVA-V10-03-02)
+- Removed init.mac.  It is no longer used.  /run/initialize is in
+  the new run1.mac and run2.mac.
+
+8th January 2017  John Allison  (exam-ext-vis-UVA-V10-03-00)
+- userVisAction.cc:
+  o Changed SetUserAction to RegisterRunDurationUserVisAction.
+  o Updated to current practice.
+- init_vis.mac: Updated to current practice.
+
 27th November 2014  John Allison  (exam-ext-vis-UVA-V10-00-02)
 - README: Mention /vis/scene/add/extent.
 

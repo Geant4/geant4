@@ -44,9 +44,12 @@
 #include "G4EmDNAPhysics_option4.hh"
 #include "G4EmDNAPhysics_option5.hh"
 #include "G4EmDNAPhysics_option6.hh"
+#include "G4EmDNAPhysics_option7.hh"
+#include "G4EmDNAPhysics_option8.hh"
 
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
 
 #include "G4UserSpecialCuts.hh"
 #include "G4StepLimiter.hh"
@@ -71,8 +74,53 @@ PhysicsList::PhysicsList()
   SetDefaultCutValue(1.0*nm);
   SetVerboseLevel(1);
   
-  //RegisterPhysics(new G4EmDNAPhysics());
-  RegisterPhysics(new G4EmDNAPhysics_option2());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PhysicsList::~PhysicsList()
+{
+  delete fMessenger;
+  delete fEmPhysicsList;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::ConstructParticle()
+{
+    G4BosonConstructor  pBosonConstructor;
+    pBosonConstructor.ConstructParticle();
+
+    G4LeptonConstructor pLeptonConstructor;
+    pLeptonConstructor.ConstructParticle();
+
+    G4MesonConstructor pMesonConstructor;
+    pMesonConstructor.ConstructParticle();
+
+    G4BaryonConstructor pBaryonConstructor;
+    pBaryonConstructor.ConstructParticle();
+
+    G4IonConstructor pIonConstructor;
+    pIonConstructor.ConstructParticle();
+
+    G4ShortLivedConstructor pShortLivedConstructor;
+    pShortLivedConstructor.ConstructParticle();
+
+    G4DNAGenericIonsManager* genericIonsManager;
+    genericIonsManager=G4DNAGenericIonsManager::Instance();
+    genericIonsManager->GetIon("alpha++");
+    genericIonsManager->GetIon("alpha+");
+    genericIonsManager->GetIon("helium");
+    genericIonsManager->GetIon("hydrogen");  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::ConstructProcess()
+{
+  // transportation
+  //
+  AddTransportation();
   
 <<<<<<< HEAD
   G4ProductionCutsTable::GetProductionCutsTable()->
@@ -141,6 +189,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option6();
          
+  } else if (name == "dna_opt7") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option7();
+         
+  } else if (name == "dna_opt8") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option8();
+         
   } else if (name == "liv") {
     fEmName = name;
     delete fEmPhysicsList;
@@ -150,6 +208,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
+         
+  } else if (name == "emstandard_opt4") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
          
   } else {
 

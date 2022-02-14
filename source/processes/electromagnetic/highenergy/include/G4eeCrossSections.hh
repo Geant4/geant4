@@ -61,7 +61,7 @@ public:
 
   G4eeCrossSections();
 
-  virtual ~G4eeCrossSections();
+  ~G4eeCrossSections();
 
   G4double CrossSection2pi(G4double);
 
@@ -76,6 +76,10 @@ public:
   G4double CrossSection2Kneutral(G4double);
 
   std::complex<G4double> DpRho(G4double e); 
+
+  // hide assignment operator
+  G4eeCrossSections & operator=(const  G4eeCrossSections &right) = delete;
+  G4eeCrossSections(const  G4eeCrossSections&) = delete;
 
 private:
 
@@ -101,10 +105,6 @@ private:
   std::complex<G4double> DpOm(G4double e);
 
   std::complex<G4double> DpPhi(G4double e);
-
-  // hide assignment operator
-  G4eeCrossSections & operator=(const  G4eeCrossSections &right) = delete;
-  G4eeCrossSections(const  G4eeCrossSections&) = delete;
 
   G4double MsPi, MsPi0, MsEta, MsEtap, MsKs, MsKc, MsRho, MsOm;
   G4double MsF0, MsA0, MsPhi, MsK892, MsK0892;

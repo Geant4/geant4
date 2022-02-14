@@ -88,30 +88,26 @@ public:
 
   explicit G4hIonisation(const G4String& name = "hIoni");
 
-  virtual ~G4hIonisation();
+  ~G4hIonisation() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
+  G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, G4double cut) final;
-
-  // Print out of the class parameters
-  virtual void PrintInfo() final;
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+			    const G4Material*, G4double cut) final;
 
   // print documentation in html format
   virtual void ProcessDescription(std::ostream&) const override;
 
-protected:
-
-  virtual void 
-  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-			      const G4ParticleDefinition*) override;
-
-private:
-
   // hide assignment operator
   G4hIonisation & operator=(const G4hIonisation &right) = delete;
   G4hIonisation(const G4hIonisation&) = delete;
+
+protected:
+
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+				   const G4ParticleDefinition*) override;
+
+private:
 
   G4bool     isInitialised;
 

@@ -23,59 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIbatch
 //
-// ====================================================================
-//   G4UIbatch.hh
+// Class description:
 //
-//  This is a concrete class of G4UIsession.
-//
-//  This class object is instantiated by G4UImanager at every time 
-//  when "/control/execute macro_file" command is executed.
-//  Also in the case of pure batch mode with a macro file, 
-//  this class can be used as other ordinary G4UIsession 
-//  concrete classes, i.e. SessionStart() is invoked in main().
-// ====================================================================
-#ifndef G4UI_BATCH_H
-#define G4UI_BATCH_H 1
+// This is a concrete class of G4UIsession.
+// This class object is instantiated by G4UImanager every time
+// the "/control/execute macro_file" command is executed.
+// Also, in the case of pure batch mode with a macro file,
+// this class can be used as other ordinary G4UIsession
+// concrete classes, i.e. SessionStart() is invoked in main().
 
-#include "G4UIsession.hh"
+// Author: M.Asai, 2000
+// --------------------------------------------------------------------
+#ifndef G4UI_BATCH_HH
+#define G4UI_BATCH_HH 1
+
 #include <fstream>
 
-// ====================================================================
-//
-// class definition
-//
-// ====================================================================
+#include "G4UIsession.hh"
 
-class G4UIbatch : public G4UIsession {
-private:
-  G4UIsession* previousSession;
+class G4UIbatch : public G4UIsession
+{
+  public:
 
-  std::ifstream macroStream;
-  G4bool isOpened;
+    G4UIbatch(const char* fileName, G4UIsession* prevSession = nullptr);
+      // "prevSession" must be null if this class is constructed from main().
 
-  //static G4bool commandFailed;
+    ~G4UIbatch();
 
-  // get command from a batch script file
-  G4String ReadCommand();
-  G4int ExecCommand(const G4String& command);
+    inline G4UIsession* GetPreviousSession() const;
 
-public:
-  G4UIbatch(const char* fileName, G4UIsession* prevSession=0);
-  //  "prevSession" must be 0 if this class is constructed
-  //  from main().
+    virtual G4UIsession* SessionStart();
+    virtual void PauseSessionStart(const G4String& Prompt);
 
-  ~G4UIbatch();
-  
-  G4UIsession* GetPreviousSession() const;
+  private:
 
-  virtual G4UIsession* SessionStart();
-  virtual void PauseSessionStart(const G4String& Prompt);
+    G4String ReadCommand();
+      // Get command from a batch script file
 
+    G4int ExecCommand(const G4String& command);
+
+    G4UIsession* previousSession = nullptr;
+
+    std::ifstream macroStream;
+    G4bool isOpened = false;
 };
 
-// ============================================================================
-// inlines
+// --------------------------------------------------------------------
+// Inline methods
+// --------------------------------------------------------------------
 
 inline G4UIsession* G4UIbatch::GetPreviousSession() const
 {

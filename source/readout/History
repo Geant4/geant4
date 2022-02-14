@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 18, 2021 B. Morgan (readout-V10-07-01)
+- Use std::string member functions from G4String in place of synonyms
+
+April 1, 2021 B. Morgan (readout-V10-07-00)
+- Migrate build to modular CMake API
+
+Dec 9, 2019,  B. Morgan (readout-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 Nov 26, 2019,  G.Cosmo (readout-V10-05-01)
 - Fixed cases of implicit type conversions from size_t to G4int.
 

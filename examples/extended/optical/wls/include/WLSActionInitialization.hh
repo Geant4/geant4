@@ -34,24 +34,17 @@
 
 class WLSDetectorConstruction;
 
-class B4DetectorConstruction;
-
-class G4GeneralParticleSource;
-
-/// Action initialization class.
-///
-
 class WLSActionInitialization : public G4VUserActionInitialization
 {
-  public:
-    WLSActionInitialization(WLSDetectorConstruction*);
-    virtual ~WLSActionInitialization();
+ public:
+  WLSActionInitialization(WLSDetectorConstruction*);
+  ~WLSActionInitialization();
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+  void BuildForMaster() const override;
+  void Build() const override;
 
-  private:
-    WLSDetectorConstruction* fDetector;
+ private:
+  WLSDetectorConstruction* fDetector;
 };
 
 #endif

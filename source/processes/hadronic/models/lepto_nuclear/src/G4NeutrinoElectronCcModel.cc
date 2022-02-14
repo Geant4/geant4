@@ -45,6 +45,7 @@
 #include "G4MuonMinus.hh"
 #include "G4TauMinus.hh"
 #include "G4HadronicParameters.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 using namespace std;
 using namespace CLHEP;
@@ -74,6 +75,8 @@ G4NeutrinoElectronCcModel::G4NeutrinoElectronCcModel(const G4String& name)
 
   fCutEnergy = 0.; // default value
 
+  // Creator model ID
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );  
 }
 
 
@@ -192,8 +195,8 @@ G4HadFinalState* G4NeutrinoElectronCcModel::ApplyYourself(
   {
     aLept = new G4DynamicParticle( theTauMinus, lvt2 );
   }
-  if(aNu)   { theParticleChange.AddSecondary( aNu ); }
-  if(aLept) { theParticleChange.AddSecondary( aLept ); }
+  if(aNu)   { theParticleChange.AddSecondary( aNu, secID ); }
+  if(aLept) { theParticleChange.AddSecondary( aLept, secID ); }
 
   G4int Z = targetNucleus.GetZ_asInt();
         Z *= 1;

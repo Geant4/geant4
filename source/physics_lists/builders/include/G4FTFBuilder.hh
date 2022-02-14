@@ -65,12 +65,7 @@ private:
   G4FTFBuilder(G4FTFBuilder &);
   G4FTFBuilder & operator=(const G4FTFBuilder &right);
 
-  G4FTFModel*            fStringModel;
-  G4ExcitedStringDecay*  fStringDecay;
   G4PreCompoundModel*    fPreCompound;
-
-  G4GeneratorPrecompoundInterface* fPrecoInterface;
-  G4LundStringFragmentation*       fLund;
 };
 
 #endif

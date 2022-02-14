@@ -23,82 +23,78 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////////////////////////////////////////////////////////////////////////////////
+//  Class:    G4AdjointCSMatrix
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Class:		G4AdjointCSMatrix.hh
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
+//  An adjoint CS matrix is used by the model of a reverse process to sample
+//  an adjoint secondary (being equivalent to a forward primary). It represents
+//  the integration over the energy of the adjoint secondary (therefore the
+//  forward primary) of the differential cross section of the equivalent forward
+//  discrete process (Ionisation, Brem, PE effect, Compton,..). Each reverse
+//  model has its own cross section matrix for a given cut, material couple. It
+//  is therefore recomputed after a modification of the cuts by the user.
 //
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	1st April 2007 creation by L. Desorgher  		
-//
-//-------------------------------------------------------------
-//	Documentation:
-//		An adjoint CS matrix is used by the model of a reverse process to sample an adjoint secondary (being equivalent to a forward primary). 
-//		It represents the integration over the energy of the adjoint secondary (therefore the forward primary) of the differential cross section 
-//		of the equiavlent forward  discrete process (Ionisation, Brem, PE effect, Compton,..) . Each reverse model has its own cross section matrix for a given cut, 
-//		material couple. It is therefore recompute after a modification  of the cuts by the user. 
-//		
-//		
-//
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef G4AdjointCSMatrix_h
 #define G4AdjointCSMatrix_h 1
 
-#include"globals.hh"
-#include<vector>
-#include"G4ParticleDefinition.hh"
+#include "globals.hh"
+#include "G4ParticleDefinition.hh"
 
-////////////////////////////////////////////////////////////////////////////////
-//
+#include <vector>
+
 class G4AdjointCSMatrix
 {
-        ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
-public:
-	G4AdjointCSMatrix(G4bool aBool);
-	~G4AdjointCSMatrix();
+ public:
+  G4AdjointCSMatrix(G4bool aBool);
+  ~G4AdjointCSMatrix();
 
-        //////////////
-        // Methods  // 
-	//////////////
-	void Clear();
-	void AddData(G4double aPrimEnergy,G4double aCS, std::vector< double>* aLogSecondEnergyVector,
-	 					        std::vector< double>* aLogProbVector,size_t n_pro_decade=0);	
-	
-	G4bool GetData(unsigned int i, G4double& aPrimEnergy,G4double& aCS,G4double& log0, std::vector< double>*& aLogSecondEnergyVector,
-	 							      std::vector< double>*& aLogProbVector,
-								      std::vector< size_t>*& aLogProbVectorIndex);
-	
-	inline std::vector< double>* GetLogPrimEnergyVector(){return &theLogPrimEnergyVector;}
-	inline std::vector< double>* GetLogCrossSectionvector(){return &theLogCrossSectionVector;}
-	inline G4double GetDlog(){return dlog;} 	
-	inline G4bool IsScatProjToProjCase(){return is_scat_proj_to_proj_case;} 
-	void Write(G4String file_name);
-	void Read(G4String file_name);		
+  void Clear();
 
-private:
-        
-	// we did first try to use G4PhysicsOrderedVector but they are not general enough for our purpose
-	
-	std::vector< double> theLogPrimEnergyVector; 
-        std::vector< double> theLogCrossSectionVector; //Adjoint Cross sections in function of primary energy
-        std::vector< std::vector< double>* > theLogSecondEnergyMatrix;
-	std::vector< std::vector< double>* > theLogProbMatrix; //Each column represents the integrated probability of getting a secondary 
-								      // in function of their energy 
-	std::vector< std::vector< size_t >* > theLogProbMatrixIndex; //index of equidistant LogProb
-	std::vector< double> log0Vector;
-	
-	unsigned int nb_of_PrimEnergy;
-	G4bool is_scat_proj_to_proj_case;
-	G4double dlog;
-	
+  void AddData(G4double aPrimEnergy, G4double aCS,
+               std::vector<double>* aLogSecondEnergyVector,
+               std::vector<double>* aLogProbVector, size_t n_pro_decade = 0);
 
+  G4bool GetData(unsigned int i, G4double& aPrimEnergy, G4double& aCS,
+                 G4double& log0, std::vector<double>*& aLogSecondEnergyVector,
+                 std::vector<double>*& aLogProbVector,
+                 std::vector<size_t>*& aLogProbVectorIndex);
+
+  inline std::vector<double>* GetLogPrimEnergyVector()
+  {
+    return &fLogPrimEnergyVector;
+  }
+
+  inline std::vector<double>* GetLogCrossSectionvector()
+  {
+    return &fLogCrossSectionVector;
+  }
+
+  inline G4bool IsScatProjToProj() { return fScatProjToProj; }
+
+  void Write(G4String file_name);
+
+  void Read(G4String file_name);
+
+ private:
+  std::vector<double> fLogPrimEnergyVector;
+  // Adjoint Cross sections as functions of primary energy
+  std::vector<double> fLogCrossSectionVector;
+
+  std::vector<std::vector<double>*> fLogSecondEnergyMatrix;
+  std::vector<std::vector<double>*> fLogProbMatrix;
+  // Each column represents the integrated probability of
+  // getting a secondary
+
+  // index of equidistant LogProb
+  std::vector<std::vector<size_t>*> fLogProbMatrixIndex;
+  std::vector<double> fLog0Vector;
+
+  size_t fNbPrimEnergy = 0;
+
+  G4bool fScatProjToProj;
 };
 #endif

@@ -28,41 +28,40 @@
 /// \brief Implementation of the WLSTrackingAction class
 //
 //
-#include "globals.hh"
-#include "G4RunManager.hh"
+
+#include "WLSTrackingAction.hh"
 
 #include "WLSTrajectory.hh"
-
 #include "WLSUserTrackInformation.hh"
 
 #include "G4Track.hh"
-#include "G4ParticleTypes.hh"
 #include "G4TrackingManager.hh"
-
-#include "WLSTrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-  //Let this be up to the user via vis.mac
+  // Let this be up to the user via vis.mac
   //  fpTrackingManager->SetStoreTrajectory(true);
 
-  //Use custom trajectory class
+  // Use custom trajectory class
   fpTrackingManager->SetTrajectory(new WLSTrajectory(aTrack));
 
   WLSUserTrackInformation* trackInformation = new WLSUserTrackInformation();
 
-  if (aTrack->GetMomentumDirection().z()>0.0) {
-     trackInformation->AddStatusFlag(right);
-  } else {
-     trackInformation->AddStatusFlag(left);
+  if(aTrack->GetMomentumDirection().z() > 0.0)
+  {
+    trackInformation->AddStatusFlag(right);
+  }
+  else
+  {
+    trackInformation->AddStatusFlag(left);
   }
 
   G4String PVName = aTrack->GetVolume()->GetName();
 
-  if (PVName == "WLSFiber" || PVName == "Clad1" || PVName == "Clad2")
-     trackInformation->AddStatusFlag(InsideOfFiber);
+  if(PVName == "WLSFiber" || PVName == "Clad1" || PVName == "Clad2")
+    trackInformation->AddStatusFlag(InsideOfFiber);
 
   fpTrackingManager->SetUserTrackInformation(trackInformation);
 }

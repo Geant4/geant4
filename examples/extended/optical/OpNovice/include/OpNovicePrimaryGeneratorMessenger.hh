@@ -25,7 +25,6 @@
 //
 //
 //
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +32,8 @@
 #ifndef OpNovicePrimaryGeneratorMessenger_h
 #define OpNovicePrimaryGeneratorMessenger_h 1
 
-#include "G4UImessenger.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
 class OpNovicePrimaryGeneratorAction;
 class G4UIdirectory;
@@ -42,18 +41,18 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OpNovicePrimaryGeneratorMessenger: public G4UImessenger
+class OpNovicePrimaryGeneratorMessenger : public G4UImessenger
 {
-  public:
-    OpNovicePrimaryGeneratorMessenger(OpNovicePrimaryGeneratorAction* );
-    virtual ~OpNovicePrimaryGeneratorMessenger();
- 
-    virtual void SetNewValue(G4UIcommand*, G4String);
- 
-  private:
-    OpNovicePrimaryGeneratorAction* fOpNoviceAction;
-    G4UIdirectory*                  fGunDir;
-    G4UIcmdWithADoubleAndUnit*      fPolarCmd;
+ public:
+  OpNovicePrimaryGeneratorMessenger(OpNovicePrimaryGeneratorAction*);
+  ~OpNovicePrimaryGeneratorMessenger();
+
+  void SetNewValue(G4UIcommand*, G4String) override;
+
+ private:
+  OpNovicePrimaryGeneratorAction* fOpNoviceAction;
+  G4UIdirectory* fGunDir;
+  G4UIcmdWithADoubleAndUnit* fPolarCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -45,22 +45,20 @@ class G4VDataSetAlgorithm;
 class G4VEMDataSet;
 
 class G4ecpssrFormFactorLixsModel : public G4VecpssrLiModel
-
 {
 public:
-
-  G4ecpssrFormFactorLixsModel();
+  explicit G4ecpssrFormFactorLixsModel();
 
   virtual ~G4ecpssrFormFactorLixsModel();
 			     
-  G4double CalculateL1CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);
-  G4double CalculateL2CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);
-  G4double CalculateL3CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);				     
+  G4double CalculateL1CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident) override;
+  G4double CalculateL2CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident) override;
+  G4double CalculateL3CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident) override;
+				     
+  G4ecpssrFormFactorLixsModel(const G4ecpssrFormFactorLixsModel&) = delete;
+  G4ecpssrFormFactorLixsModel & operator = (const G4ecpssrFormFactorLixsModel &right) = delete;
+
 private:
-
-  G4ecpssrFormFactorLixsModel(const G4ecpssrFormFactorLixsModel&);
-  G4ecpssrFormFactorLixsModel & operator = (const G4ecpssrFormFactorLixsModel &right);
-
   G4VDataSetAlgorithm* interpolation;
 
   std::map< G4int , G4VEMDataSet* > protonL1DataSetMap;
@@ -69,7 +67,6 @@ private:
   std::map< G4int , G4VEMDataSet* > alphaL1DataSetMap;
   std::map< G4int , G4VEMDataSet* > alphaL2DataSetMap;
   std::map< G4int , G4VEMDataSet* > alphaL3DataSetMap;
-
 };
 
 #endif

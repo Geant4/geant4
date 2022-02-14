@@ -45,18 +45,18 @@ public:
   CCalG4Ecal(const G4String &name);
   virtual ~CCalG4Ecal();
 
-  void setType(CMType ty)    {type = ty;}
+  void setType(CMType ty) {type = ty;}
   
   //Prefix to all names in the Detector
   static G4String idName;  
 
 protected:
   //This methods actually constructs the volume.
-  virtual G4VPhysicalVolume* constructIn(G4VPhysicalVolume*);
+  virtual G4VPhysicalVolume* constructIn(G4VPhysicalVolume*) override;
 
   //Constructs the sensitive detectors and associates them to the corresponding
   //logical volumes
-  virtual void constructSensitive() ;
+  virtual void constructSensitive() override;
 
 private:
   //Methods to construct the different parts of the detector

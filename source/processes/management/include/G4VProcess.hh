@@ -23,46 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VProcess
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-//
-// Class Description
-//  This class is the virtual class for physics process objects. 
-//   It defines public methods which describe the behavior of 
-//   a physics process.
-//
-// ------------------------------------------------------------
-//   New Physics scheme           18 Dec. 1996  H.Kurahige
-// ------------------------------------------------------------
-//   change DoIt/GetPIL arguments type 20 Mar. 1997 H.Kurashige
-//   modified AlongStepGPIL       17 Dec. 1997 H.Kurashige
-//   modified for new ParticleChange 12 Mar. 1998  H.Kurashige
-//   Add process trype            27 Mar. 1998  H.Kurashige
-//   Remove thePhysicsTable       2 Aug. 1998   H.Kurashige
-//   Add PILfactor and GPIL       3 Nov. 2000   H.Kurashige
-//   Add Store/RetrievePhysicsTable 8  Nov. 2000   H.Kurashige
-//   Modify Store/RetrievePhysicsTable methods 9 Mar. 2001   H.Kurashige
-//   Added PreparePhysicsTable  20 Aug. 2004 H.Kurashige
-//   Added isXXXXDoItIsEnabled   2 Oct. 2007 H.Kurashige
-//   Added ProcessSubType   15 Nov. 2007 H.Kurashige
+// This class is the virtual class for physics process objects. 
+// It defines public methods which describe the behavior of 
+// a physics process.
 
-#ifndef G4VProcess_h 
-#define G4VProcess_h 1
+// Authors:
+// - 2 December 1995, G.Cosmo - First implementation, based on object model
+// - 18 December 1996, H.Kurashige - New Physics scheme
+// --------------------------------------------------------------------
+#ifndef G4VProcess_hh 
+#define G4VProcess_hh 1
+
+#include <cmath>
 
 #include "globals.hh"
-#include <cmath>
 #include "G4ios.hh"
-
-class G4ParticleDefinition;
-class G4DynamicParticle;
-class G4Track;
-class G4Step;
+#include "Randomize.hh"              
 
 #include "G4PhysicsTable.hh"
 #include "G4VParticleChange.hh"
@@ -71,83 +51,80 @@ class G4Step;
 #include "G4ParticleChange.hh"
 #include "G4ProcessType.hh"
 
+class G4ParticleDefinition;
+class G4DynamicParticle;
+class G4Track;
+class G4Step;
+class G4ProcessTable;
+
 class G4VProcess 
 {
-  //  A virtual class for physics process objects. It defines
-  //  public methods which describe the behavior of a
-  //  physics process.
 
-  private:
-  // hide default constructor and assignment operator as private 
-  //  do not hide default constructor for alpha version 
-  //  G4VProcess G4VProcess();  
-      G4VProcess & operator=(const G4VProcess &right);
+  public:
 
-  public: // with description
-  //  constructor requires the process name and type
-      G4VProcess(const G4String& aName =  "NoName",
-		 G4ProcessType   aType = fNotDefined );
+    G4VProcess(const G4String& aName = "NoName",
+               G4ProcessType aType = fNotDefined);
+      // Constructor requires the process name and type
 
-  //  copy constructor copys the name but does not copy the 
-  //  physics table (0 pointer is assigned)
-      G4VProcess(const G4VProcess &right);
+    G4VProcess(const G4VProcess& right);
+      // Copy constructor copies the name but does not copy the 
+      // physics table (null pointer is assigned instead)
 
-  public: 
-  //  destructor 
-      virtual ~G4VProcess();
+    virtual ~G4VProcess();
+      // Destructor 
 
-  // equal opperators
-      G4bool operator==(const G4VProcess &right) const;
-      G4bool operator!=(const G4VProcess &right) const;
+    G4VProcess& operator=(const G4VProcess&) = delete;
 
-  public: // with description
-  ////////////////////////////
-  // DoIt    /////////////////
-  ///////////////////////////
-      virtual G4VParticleChange* PostStepDoIt(
-			     const G4Track& track,
-			     const G4Step&  stepData
-			    ) = 0;
+    G4bool operator==(const G4VProcess& right) const;
+    G4bool operator!=(const G4VProcess& right) const;
+      // Equality operators
 
-      virtual G4VParticleChange* AlongStepDoIt(
-			     const G4Track& track,
-			     const G4Step& stepData
-			    ) = 0;
-      virtual G4VParticleChange* AtRestDoIt(
-			     const G4Track& track,
-			     const G4Step& stepData
-			    ) = 0;
-      //  A virtual base class function that has to be overridden
-      //  by any subclass. The DoIt method actually performs the
-      //  physics process and determines either momentum change
-      //  of the production of secondaries etc.
-      //    arguments
-      //      const G4Track&    track:
+    ////////////////////////////
+    // DoIt    /////////////////
+    ////////////////////////////
+
+    virtual G4VParticleChange* PostStepDoIt(
+                             const G4Track& track,
+                             const G4Step& stepData
+                            ) = 0;
+
+    virtual G4VParticleChange* AlongStepDoIt(
+                             const G4Track& track,
+                             const G4Step& stepData
+                            ) = 0;
+    virtual G4VParticleChange* AtRestDoIt(
+                             const G4Track& track,
+                             const G4Step& stepData
+                            ) = 0;
+      // A virtual base class function that has to be overridden
+      // by any subclass. The DoIt() method actually performs the
+      // physics process and determines either momentum change
+      // of the production of secondaries etc.
+      //    Arguments
+      //      const G4Track& track:
       //        reference to the current G4Track information
-      //      const G4Step&     stepData:
+      //      const G4Step&  stepData:
       //        reference to the current G4Step information
 
-  //////////////////////////
-  // GPIL    //////////////
-  /////////////////////////  
-      virtual G4double AlongStepGetPhysicalInteractionLength(
+    //////////////////////////
+    // GPIL    ///////////////
+    //////////////////////////
+
+    virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4double  previousStepSize,
-			     G4double  currentMinimumStep,
-			     G4double& proposedSafety,
+                             G4double previousStepSize,
+                             G4double currentMinimumStep,
+                             G4double& proposedSafety,
                              G4GPILSelection* selection) = 0;
 
-      virtual G4double AtRestGetPhysicalInteractionLength(
+    virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4ForceCondition* condition
-			    ) = 0;
+                             G4ForceCondition* condition ) = 0;
 
-      virtual G4double PostStepGetPhysicalInteractionLength(
+    virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    ) = 0;
-  
+                             G4double previousStepSize,
+                             G4ForceCondition* condition ) = 0;
       //  Returns the Step-size (actual length) which is allowed 
       //  by "this" process. (for AtRestGetPhysicalInteractionLength,
       //  return value is Step-time) The NumberOfInteractionLengthLeft is
@@ -174,252 +151,247 @@ class G4VProcess
       //        this value is used for transformation of
       //        true path length to geometrical path length
 
-      G4double GetCurrentInteractionLength() const;
+    inline G4double GetCurrentInteractionLength() const;
       // Returns currentInteractionLength
 
-      ////////// PIL factor ////////
-      void SetPILfactor(G4double value);
-      G4double GetPILfactor() const;
+    ////////// PIL factor ////////
+    //
+    inline void SetPILfactor(G4double value);
+    inline G4double GetPILfactor() const;
       // Set/Get factor for PhysicsInteractionLength 
       // which is passed to G4SteppingManager for both AtRest and PostStep
 
-      // These three GPIL methods are used by Stepping Manager.
-      // They invoke virtual GPIL methods listed above.
-      // As for AtRest and PostStep the returned value is multipled by thePILfactor 
-      // 
-      G4double AlongStepGPIL( const G4Track& track,
-                              G4double  previousStepSize,
-                              G4double  currentMinimumStep,
-                              G4double& proposedSafety,
-                              G4GPILSelection* selection     );
+    // These three GPIL methods are used by Stepping Manager.
+    // They invoke virtual GPIL methods listed above.
+    // As for AtRest and PostStep the returned value is multipled by
+    // thePILfactor 
+    // 
+    inline G4double AlongStepGPIL( const G4Track& track,
+                                   G4double previousStepSize,
+                                   G4double currentMinimumStep,
+                                   G4double& proposedSafety,
+                                   G4GPILSelection* selection );
 
-      G4double AtRestGPIL( const G4Track& track,
-                           G4ForceCondition* condition );
+    inline G4double AtRestGPIL( const G4Track& track,
+                                G4ForceCondition* condition );
 
-      G4double PostStepGPIL( const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition );
+    inline G4double PostStepGPIL( const G4Track& track,
+                                  G4double previousStepSize,
+                                  G4ForceCondition* condition );
 
-  ////////////////////// 
-      virtual G4bool IsApplicable(const G4ParticleDefinition&){return true;}
+    virtual G4bool IsApplicable(const G4ParticleDefinition&) { return true; }
       // Returns true if this process object is applicable to
-      // the particle type
-      // Process will not be registered to a particle if IsApplicable is false   
+      // the particle type. Process will not be registered to a
+      // particle if IsApplicable is false   
 
-      virtual void BuildPhysicsTable(const G4ParticleDefinition&){}
+    virtual void BuildPhysicsTable(const G4ParticleDefinition&) {}
       // Messaged by the Particle definition (via the Process manager)
-      // whenever cross section tables have to be rebuilt (i.e. if new
+      // whenever cross-section tables have to be rebuilt (i.e. if new
       // materials have been defined). 
       // It is overloaded by individual processes when they need physics
-      // tables. 
+      // tables
 
-     virtual void PreparePhysicsTable(const G4ParticleDefinition&){}
+    virtual void PreparePhysicsTable(const G4ParticleDefinition&) {}
       // Messaged by the Particle definition (via the Process manager)
-      // whenever cross section tables have to be prepare for rebuilt 
+      // whenever cross-section tables have to be prepared for rebuild
       // (i.e. if new materials have been defined). 
       // It is overloaded by individual processes when they need physics
-      // tables. 
+      // tables
 
-      // Processes which Build physics tables independent of cuts
-      // (for example in their constructors)
-      // should preferably use private 
-      // void BuildThePhysicsTable() and void PreparePhysicsTable().
-      // Not another BuildPhysicsTable, please.
+    // Processes which Build physics tables independent of cuts
+    // (for example in their constructors) should preferably use private 
+    // void BuildThePhysicsTable() and void PreparePhysicsTable().
+    // *Not* another BuildPhysicsTable
 
-
-      virtual G4bool StorePhysicsTable(const G4ParticleDefinition* ,
-				       const G4String&, G4bool){return true;}
+    virtual G4bool StorePhysicsTable(const G4ParticleDefinition* ,
+                                     const G4String&, G4bool) { return true; }
       // Store PhysicsTable in a file.
-      // (return false in case of failure at I/O )
+      // Return false in case of failure at I/O
 
-      virtual G4bool RetrievePhysicsTable( const G4ParticleDefinition* ,
-					   const G4String&, G4bool){return false;}
+    virtual G4bool RetrievePhysicsTable(const G4ParticleDefinition* ,
+                                      const G4String&, G4bool) { return false; }
       // Retrieve Physics from a file.
-      // (return true if the Physics Table can be build by using file)
-      // (return false if the process has no functionality or in case of failure)
-      // File name should be defined by each process
-      // and the file should be placed under the directory specifed by the argument.
-      const G4String& GetPhysicsTableFileName(const G4ParticleDefinition* ,
-					      const G4String& directory,
-					      const G4String& tableName,
-					      G4bool ascii =false);
-      // this method is utility for Store/RetreivePhysicsTable
+      // Return true if the Physics Table can be built by using file.
+      // Return false if the process has no functionality or in case
+      // of failure. File name should be defined by each process and the
+      // file should be placed under the directory specified by the argument
 
-  ////////////////////////////
-      const G4String& GetProcessName() const;
-      //  Returns the name of the process.
+    const G4String& GetPhysicsTableFileName(const G4ParticleDefinition* ,
+                                            const G4String& directory,
+                                            const G4String& tableName,
+                                            G4bool ascii = false);
+      // This method is utility for Store/RetreivePhysicsTable
 
-      G4ProcessType GetProcessType() const;
-      //  Returns the process type.
+    inline const G4String& GetProcessName() const;
+      // Returns the name of the process
 
-      void SetProcessType(G4ProcessType );
-      //  Set the process type.
+    inline G4ProcessType GetProcessType() const;
+      // Returns the process type
 
-      G4int GetProcessSubType() const;
-      //  Returns the process sub type.
+    inline void SetProcessType(G4ProcessType);
+      // Sets the process type
 
-      void SetProcessSubType(G4int );
-      //  Set the process sub type.
+    inline G4int GetProcessSubType() const;
+      // Returns the process sub type
 
-      static const G4String& GetProcessTypeName(G4ProcessType );
-      //  Returns the process type name
+    inline void SetProcessSubType(G4int);
+      // Sets the process sub type
 
-      virtual void StartTracking(G4Track*);
-      virtual void EndTracking();
-      // inform Start/End of tracking for each track to the physics process 
+    static const G4String& GetProcessTypeName(G4ProcessType);
+      // Returns the process type name
 
-  public:
-      virtual void SetProcessManager(const G4ProcessManager*); 
-      // A process manager set its own pointer when the process is registered
-      // the process Manager
-      virtual  const G4ProcessManager* GetProcessManager(); 
+    virtual void StartTracking(G4Track*);
+    virtual void EndTracking();
+      // Inform Start/End of tracking for each track to the physics process 
+
+    virtual void SetProcessManager(const G4ProcessManager*); 
+      // A process manager sets its own pointer when the process
+      // is registered in the process Manager
+    virtual const G4ProcessManager* GetProcessManager(); 
       // Get the process manager which the process belongs to
   
-  protected:
-      const G4ProcessManager* aProcessManager; 
- 
-  protected:
-      G4VParticleChange* pParticleChange;
-      //  The pointer to G4VParticleChange object 
-      //  which is modified and returned by address by the DoIt() method.
-      //  This pointer should be set in each physics process
-      //  after construction of derived class object.  
+    virtual void ResetNumberOfInteractionLengthLeft();
+      // Reset (determine the value of) NumberOfInteractionLengthLeft
 
-      G4ParticleChange aParticleChange;
-      //  This object is kept for compatibility with old scheme
-      //  This will be removed in future
+    inline G4double GetNumberOfInteractionLengthLeft() const;
+      // Get NumberOfInteractionLengthLeft
 
-      G4double          theNumberOfInteractionLengthLeft;
-     // The flight length left for the current tracking particle
-     // in unit of "Interaction length".
+    inline G4double GetTotalNumberOfInteractionLengthTraversed() const;
+      // Get NumberOfInteractionLength after
+      //  ResetNumberOfInteractionLengthLeft() is invoked
 
-      G4double          currentInteractionLength;
-     // The InteractionLength in the current material
-
-      G4double          theInitialNumberOfInteractionLength;
-     // The initial value when ResetNumberOfInteractionLengthLeft is invoked
-
- public: // with description
-      virtual void      ResetNumberOfInteractionLengthLeft();
-     // reset (determine the value of)NumberOfInteractionLengthLeft
-
-      G4double GetNumberOfInteractionLengthLeft() const;
-     // get NumberOfInteractionLengthLeft
-
-      G4double GetTotalNumberOfInteractionLengthTraversed() const;
-     // get NumberOfInteractionLength 
-     //   after  ResetNumberOfInteractionLengthLeft is invoked
-
- protected:  // with description
-     void      SubtractNumberOfInteractionLengthLeft(
-				  G4double previousStepSize
-                                );
-     // subtract NumberOfInteractionLengthLeft by the value corresponding to 
-     // previousStepSize      
- 
-     void      ClearNumberOfInteractionLengthLeft();
-     // clear NumberOfInteractionLengthLeft 
-     // !!! This method should be at the end of PostStepDoIt()
-     // !!! and AtRestDoIt
-
- public: // with description
-    // These methods indicate which DoIt is enabled
-    // These methods are used by G4ProcessManager to check
-    // that ordering parameters are set properly
-    G4bool isAtRestDoItIsEnabled() const;
-    G4bool isAlongStepDoItIsEnabled() const;
-    G4bool isPostStepDoItIsEnabled() const;
+    inline G4bool isAtRestDoItIsEnabled() const;
+    inline G4bool isAlongStepDoItIsEnabled() const;
+    inline G4bool isPostStepDoItIsEnabled() const;
+      // These methods indicate which DoIt is enabled.
+      // They are used by G4ProcessManager to check
+      // that ordering parameters are properly set
   
- protected: 
-      G4String theProcessName;
-      //  The name of the process
+    virtual void  DumpInfo() const;
+      // Dump out process information    
 
-      G4String thePhysicsTableFileName;
+    virtual void ProcessDescription(std::ostream& outfile) const;
+      // Write out to html file for automatic documentation
 
-      G4ProcessType theProcessType;
-      //  The type of the process
+    inline void  SetVerboseLevel(G4int value);
+    inline G4int GetVerboseLevel() const;
+      // set/get control flag for output message
+      //  0: Silent
+      //  1: Warning message
+      //  2: More
 
-      G4int theProcessSubType;
-      //  The sub type of the process
-
-      G4double thePILfactor;
-      // factor for PhysicsInteractionLength 
-      // which is passed to G4SteppingManager
- 
-      G4bool enableAtRestDoIt;
-      G4bool enableAlongStepDoIt;
-      G4bool enablePostStepDoIt;
-      
- public: // with description
-   virtual void  DumpInfo() const;
-   // dump out process information    
-
-   virtual void ProcessDescription(std::ostream& outfile) const;
-   // write out to html file for automatic documentation
-
- public: // with description
-   void  SetVerboseLevel(G4int value);
-   G4int GetVerboseLevel() const;
-   // set/get controle flag for output message
-   //  0: Silent
-   //  1: Warning message
-   //  2: More
-
-
- protected:
-   G4int verboseLevel;
-   // controle flag for output message
-    
-private:
-    G4VProcess* masterProcessShadow;
-    //For multi-threaded: poitner to the instance of this process
-    // for the master thread
-public:
-    virtual void SetMasterProcess( G4VProcess* masterP);
-    // Sets the master thread process instance
-    const G4VProcess* GetMasterProcess() const;
-    // Returns the master thread process instnace
-    // Can be used to initialize worker type processes
-    // instances from master one (e.g. to share a read-only table)
-    // if ( this != GetMasterProcess() ) { /*worker*/ }
-    // else { /* master or sequential */ }
+    virtual void SetMasterProcess(G4VProcess* masterP);
+      // Sets the master thread process instance
+    inline const G4VProcess* GetMasterProcess() const;
+      // Returns the master thread process instance.
+      // Can be used to initialise worker type processes
+      // instances from master one (e.g. to share a read-only table)
+      // if ( this != GetMasterProcess() ) { /*worker*/ }
+      // else { /* master or sequential */ }
 
     virtual void BuildWorkerPhysicsTable(const G4ParticleDefinition& part);
-    // Messaged by the Particle definition (via the Process manager)
-    // in worker threads. See BuildWorkerBhyiscsTable method.
-    // Can be used to share among threads physics tables. Use GetMasterProcess
-    // to get pointer of master process from worker thread.
-    // By default this method makes a forward call to
-    // BuildPhysicsTable
+      // Messaged by the Particle definition (via the Process manager)
+      // in worker threads. See BuildWorkerPhyiscsTable() method.
+      // Can be used to share among threads physics tables.
+      // Use GetMasterProcess() to get pointer of master process from
+      // worker thread.
+      // By default this method makes a forward call to BuildPhysicsTable()
     
     virtual void PrepareWorkerPhysicsTable(const G4ParticleDefinition&);
-    // Messaged by the Particle definition (via the Process manager)
-    // in worker threads. See PreparephysicsTable
-    // Can be used to share among threads physics tables. Use GetMasterProcess
-    // to get pointer of master process from worker thread
-    // By default this method makes a forward call
-    // to PreparePhysicsTable
+      // Messaged by the Particle definition (via the Process manager)
+      // in worker threads. See PreparephysicsTable().
+      // Can be used to share among threads physics tables.
+      // Use GetMasterProcess() to get pointer of master process from
+      // worker thread
+      // By default this method makes a forward call to PreparePhysicsTable()
+
+  protected:
+
+    inline void SubtractNumberOfInteractionLengthLeft(G4double prevStepSize);
+      // Subtract NumberOfInteractionLengthLeft by the value corresponding
+      // to previousStepSize      
+ 
+    inline void ClearNumberOfInteractionLengthLeft();
+      // This method should be at the end of PostStepDoIt() and AtRestDoIt()!
+
+  protected:
+
+    const G4ProcessManager* aProcessManager = nullptr; 
+ 
+    G4VParticleChange* pParticleChange = nullptr;
+      // The pointer to G4VParticleChange object 
+      // which is modified and returned by address by the DoIt() method.
+      // This pointer should be set in each physics process
+      // after construction of derived class object
+
+    G4ParticleChange aParticleChange;
+      // This object is kept for compatibility with old scheme.
+      // May be removed in future
+
+    G4double theNumberOfInteractionLengthLeft = -1.0;
+      // The flight length left for the current tracking particle
+      // in unit of "Interaction length"
+
+    G4double currentInteractionLength = -1.0;
+      // The InteractionLength in the current material
+
+    G4double theInitialNumberOfInteractionLength = -1.0;
+      // The initial value when ResetNumberOfInteractionLengthLeft() is invoked
+
+    G4String theProcessName;
+      // The name of the process
+
+    G4String thePhysicsTableFileName;
+
+    G4ProcessType theProcessType = fNotDefined;
+      // The type of the process
+
+    G4int theProcessSubType = -1;
+      // The sub type of the process
+
+    G4double thePILfactor = 1.0;
+      // Factor for PhysicsInteractionLength
+      // which is passed to G4SteppingManager
+ 
+    G4int verboseLevel = 0;
+      // Controle flag for output message
+
+    G4bool enableAtRestDoIt = true;
+    G4bool enableAlongStepDoIt = true;
+    G4bool enablePostStepDoIt = true;
+
+  private:
+ 
+    G4VProcess();  
+      // Hidden default constructor
+
+  private:
+
+    G4VProcess* masterProcessShadow = nullptr;
+      // For multi-threaded: pointer to the instance of this process
+      // for the master thread
+
+    G4ProcessTable* fProcessTable = nullptr;
 };
 
 // -----------------------------------------
 //  inlined function members implementation
 // -----------------------------------------
-#include "Randomize.hh"              
 
 inline 
- const G4String& G4VProcess::GetProcessName() const
+const G4String& G4VProcess::GetProcessName() const
 {
   return theProcessName;
 }
 
 inline      
- G4ProcessType G4VProcess::GetProcessType() const
+G4ProcessType G4VProcess::GetProcessType() const
 {
   return theProcessType;
 }
 
 inline
- void G4VProcess::SetProcessType(G4ProcessType aType)
+void G4VProcess::SetProcessType(G4ProcessType aType)
 {
   theProcessType = aType;
 }
@@ -431,107 +403,113 @@ inline
 }
 
 inline
- void G4VProcess::SetProcessSubType(G4int value)
+void G4VProcess::SetProcessSubType(G4int value)
 {
- theProcessSubType = value;
+  theProcessSubType = value;
 }
 
-inline  void G4VProcess::SetVerboseLevel(G4int value)
+inline
+void G4VProcess::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
 }
 
-inline  G4int G4VProcess::GetVerboseLevel() const
+inline
+G4int G4VProcess::GetVerboseLevel() const
 {
   return  verboseLevel;
 }
 
-inline void G4VProcess::ClearNumberOfInteractionLengthLeft()
+inline
+void G4VProcess::ClearNumberOfInteractionLengthLeft()
 {
   theInitialNumberOfInteractionLength = -1.0; 
   theNumberOfInteractionLengthLeft =  -1.0;
 }
 
-inline G4double G4VProcess::GetNumberOfInteractionLengthLeft() const
+inline
+G4double G4VProcess::GetNumberOfInteractionLengthLeft() const
 {
   return theNumberOfInteractionLengthLeft;
 }
 
-inline G4double G4VProcess::GetTotalNumberOfInteractionLengthTraversed() const
+inline
+G4double G4VProcess::GetTotalNumberOfInteractionLengthTraversed() const
 {
-  return theInitialNumberOfInteractionLength - theNumberOfInteractionLengthLeft;}
+  return theInitialNumberOfInteractionLength - theNumberOfInteractionLengthLeft;
+}
 
-inline G4double G4VProcess::GetCurrentInteractionLength() const
+inline
+G4double G4VProcess::GetCurrentInteractionLength() const
 {
   return currentInteractionLength;
 }
 
-inline void G4VProcess::SetPILfactor(G4double value)
+inline
+void G4VProcess::SetPILfactor(G4double value)
 {
-  if (value>0.) {
-    thePILfactor = value;
-  }
+  if (value>0.) { thePILfactor = value; }
 }
 
-inline G4double G4VProcess::GetPILfactor() const
+inline
+G4double G4VProcess::GetPILfactor() const
 {
   return thePILfactor;
 }
 
-inline G4double G4VProcess::AlongStepGPIL( const G4Track& track,
-                                     G4double  previousStepSize,
-                                     G4double  currentMinimumStep,
-                                     G4double& proposedSafety,
-                                     G4GPILSelection* selection     )
+inline
+G4double G4VProcess::AlongStepGPIL( const G4Track& track,
+                                    G4double  previousStepSize,
+                                    G4double  currentMinimumStep,
+                                    G4double& proposedSafety,
+                                    G4GPILSelection* selection )
 {
-  G4double value
-   =AlongStepGetPhysicalInteractionLength(track, previousStepSize, currentMinimumStep, proposedSafety, selection);
-  return value;
+  return AlongStepGetPhysicalInteractionLength(track, previousStepSize,
+                             currentMinimumStep, proposedSafety, selection);
 }
 
-inline G4double G4VProcess::AtRestGPIL( const G4Track& track,
+inline
+G4double G4VProcess::AtRestGPIL( const G4Track& track,
                                  G4ForceCondition* condition )
 {
-  G4double value
-   =AtRestGetPhysicalInteractionLength(track, condition);
-  return thePILfactor*value;
+  return thePILfactor * AtRestGetPhysicalInteractionLength(track, condition);
 }
 
-inline G4double G4VProcess::PostStepGPIL( const G4Track& track,
-                                   G4double   previousStepSize,
+inline
+G4double G4VProcess::PostStepGPIL( const G4Track& track,
+                                   G4double previousStepSize,
                                    G4ForceCondition* condition )
 {
-  G4double value
-   =PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
-  return thePILfactor*value;
+  return thePILfactor *
+      PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
 }
       
 inline 
- void G4VProcess::SetProcessManager(const G4ProcessManager* procMan)
+void G4VProcess::SetProcessManager(const G4ProcessManager* procMan)
 {
-   aProcessManager = procMan; 
+  aProcessManager = procMan; 
 }
 
 inline
- const G4ProcessManager* G4VProcess::GetProcessManager()
+const G4ProcessManager* G4VProcess::GetProcessManager()
 {
-  return  aProcessManager; 
+  return aProcessManager; 
 }
 
 inline
- G4bool G4VProcess::isAtRestDoItIsEnabled() const
+G4bool G4VProcess::isAtRestDoItIsEnabled() const
 {
   return enableAtRestDoIt;
 }
 
 inline
- G4bool G4VProcess::isAlongStepDoItIsEnabled() const
+G4bool G4VProcess::isAlongStepDoItIsEnabled() const
 {
   return enableAlongStepDoIt;
 }
 
 inline
- G4bool G4VProcess::isPostStepDoItIsEnabled() const
+G4bool G4VProcess::isPostStepDoItIsEnabled() const
 {
   return enablePostStepDoIt;
 }
@@ -539,34 +517,37 @@ inline
 inline
 const G4VProcess* G4VProcess::GetMasterProcess() const
 {
-    return masterProcessShadow;
+  return masterProcessShadow;
 }
 
 inline
-void G4VProcess::SubtractNumberOfInteractionLengthLeft(
-                                  G4double previousStepSize )
+void G4VProcess::SubtractNumberOfInteractionLengthLeft( G4double prevStepSize )
 {
-  if (currentInteractionLength>0.0) {
-    theNumberOfInteractionLengthLeft -= previousStepSize/currentInteractionLength;
-    if(theNumberOfInteractionLengthLeft<0.) {
+  if (currentInteractionLength>0.0)
+  {
+    theNumberOfInteractionLengthLeft -= prevStepSize/currentInteractionLength;
+    if(theNumberOfInteractionLengthLeft<0.)
+    {
        theNumberOfInteractionLengthLeft=CLHEP::perMillion;
     }
-
-  } else {
+  }
+  else
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel>0) {
+    if (verboseLevel>0)
+    {
       G4cerr << "G4VProcess::SubtractNumberOfInteractionLengthLeft()";
       G4cerr << " [" << theProcessName << "]" <<G4endl;
-      G4cerr << " currentInteractionLength = " << currentInteractionLength << " [mm]";
-      G4cerr << " previousStepSize = " << previousStepSize << " [mm]";
+      G4cerr << " currentInteractionLength = "
+             << currentInteractionLength << " [mm]";
+      G4cerr << " previousStepSize = " << prevStepSize << " [mm]";
       G4cerr << G4endl;
     }
 #endif
     G4String msg = "Negative currentInteractionLength for ";
-    msg +=      theProcessName;
+    msg += theProcessName;
     G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()",
-                "ProcMan201",EventMustBeAborted,
-                msg);
+                "ProcMan201", EventMustBeAborted, msg);
   }
 }
 

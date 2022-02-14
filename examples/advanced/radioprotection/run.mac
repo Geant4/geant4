@@ -1,3 +1,4 @@
+/control/execute geometry.mac
 #control the physics
 /control/execute physics.mac
 #/tracking/verbose 1

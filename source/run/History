@@ -16,6 +16,142 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 25, 2021 B.Morgan (run-V10-07-13)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+October 21, 2021 Jonas Hahnfeld (run-V10-07-12)
+- G4VUserPhysicsList - use custom tracking manager if registered
+
+October 18, 2021 Ben Morgan (run-V10-07-11)
+- Use std::string member functions from G4String in place of synonyms
+
+October 6, 2021 Alberto Ribon (run-V10-07-10)
+- G4PhysicsListHelper : replaced hardwired numerical process types and
+  sub-types with corresponding enum values
+
+September 10, 2021 Gabriele Cosmo (run-V10-07-09)
+- Added new Ranlux++ engine to the list of supported random engines in
+  G4UserWorkerThreadInitialization. Requires CLHEP-2.4.5.1.
+
+August 04, 2021 Alberto Ribon (run-V10-07-08)
+- G4VUserPhysicsList : invoke the new static initialization of
+  G4PhysicsModelCatalog in the method G4VUserPhysicsList::Construct
+
+July 01, 2021 Vladimir Ivanchenko (run-V10-07-07)
+- G4VModularPhysicsList - fixed destruction of the vector of G4VPhysicsConstructor
+    for the case, when physics list is created but physics is not build (CMS report)
+
+May 20, 2021 Vladimir Ivanchenko (run-V10-07-06)
+- G4VPhysicsConstructor - fix initialisation of hadronic parameters
+    avoiding uncontrolled override of the verbosityLevel 
+
+May 17, 2021 Jonathan Madsen (run-V10-07-05)
+- Removed calling physicsList->TerminateWorker() in G4WorkerRunManager
+  as this appears to cause errors at termination
+  
+April 25, 2021 Hoang Tran (run-V10-07-04)
+- Added new G4DNAStaticMoleculeReactionProcess in PhysicsListHelper for DNA processs
+
+April 14, 2021 Ben Morgan (run-V10-07-03)
+- Migrate to modular CMake build
+
+April 13, 2021 Alberto Ribon (run-V10-07-02)
+- GNUmakefile : removed deleted directories (hadronic/models/util/
+  and hadronic/models/management/).
+
+April 09, 2021 Gabriele Cosmo (run-V10-07-01)
+- Optimised access to volumes and regions stores.
+- Minor c++11 review in use of iterators, initialisers, etc...
+- Removed obsolete ResetCuts() method in G4VUserPhysicsList.
+- General code cleanup and formatting.
+
+December 07, 2020 Vladimir Ivanchenko (run-V10-07-00)
+- G4PhysicsListHelper - added forgotten processes (general positron
+    and surface reflection)
+
+November 21, 2020 Gabriele Cosmo (run-V10-06-19)
+- Fixed compilation warnings in G4RunManager.
+
+November 18, 2020 Jonathan Madsen (run-V10-06-18)
+- Added G4Profiler support.
+- Removed TIMEMORY_AUTO_TIMER.
+
+November 17, 2020 G.Cosmo (run-V10-06-17)
+- Protect activation of G4BackTrace within G4BT_DEBUG flag in
+  G4RunManagerKernel.
+
+November 16, 2020 G.Cosmo (run-V10-06-16)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+October 20th, 2020 Jonathan Madsen (run-V10-06-15)
+- Run-managers are friends of G4RunManagerFactory.
+
+October 20th, 2020  Jonathan Madsen (run-V10-06-14)
+- Added activation of G4Backtrace to G4RunManagerKernel.
+
+October 9th, 2020  Makoto Asai (run-V10-06-13)
+- Added protection for Windows on G4RunManager::GetRunManager()->rndmSaveThisEvent().
+
+October 5th, 2020  Makoto Asai (run-V10-06-12)
+- Fix the issue of G4RunManager::GetRunManager()->rndmSaveThisEvent() not working
+  in multithreaded mode. Addresses to Bug Report #2278.
+
+September 29th, 2020 Anna Zaborowska (run-V10-06-11)
+- Bug fix for bug #2276: /random/setSeeds parses arguments to int instead of long
+
+September 27th Vladimir Ivanchenko (run-V10-06-10)
+- G4VModularPhysicsList - fixed typos in printouts
+
+September 21st Jonathan Madsen (run-V10-06-09)
+- Added checks for currentRun before calling routines with currentRun
+- G4MTRunManager:
+    - added banner similar to G4TaskRunManager at CreateAndStartWorkers
+    - moved master scoring-manager, master worlds, fMasterRM from private to protected
+
+June 30th Gabriele Cosmo (run-V10-06-08)
+- Added dummy virtual methods Get/SetNumberOfThreads() in G4RunManager to
+  allow dispatching to inheriting MT/Tasking classes.
+
+June 17th Gunter Folger (run-V10-06-07)
+- Fixes for Windows DLLs. In G4MTRunManager: split inline static functions into
+  declaration and definition: GetMasterThreadId(), GetMasterScoringManager(),
+  GetMasterWorlds(), addWorld(), SetSeedOncePerCommunication(),
+  SetSeedOncePerCommunication(); added  GetMasterTheadId().
+  In G4RunManager: import/export static 'fGeometryHasBeenDestroyed' using
+  G4RUN_DLL, and include for rundefs.hh
+
+June 4th, 2020  J.Madsen
+- Minor class access changes in G4MTRunManager to enable inheritance
+  for G4TaskRunManager
+  June 17th Gunter Folger,   included in the above tag
+
+May 26th, 2020  A.Howard (run-V10-06-06)
+- Added second wavelength shifter process to G4PhysicsListHelper.cc
+
+May 20th, 2020  G.Cosmo (run-V10-06-05)
+- Re-applied clang-format after minor rules adaptations.
+
+May 12th, 2020  A.Ribon (run-V10-06-04)
+- G4VPhysicsConstructor.cc : added in the constructors an harmless call
+  to G4HadronicParameters (setting a default parameter), needed to create
+  the instance of the G4HadronicParameters singleton before run
+  initialization.
+
+May 8th, 2020 J. Madsen (run-V10-06-03)
+- Applied clang-format
+
+April 9th, 2020  M.Asai (run-V10-06-02)
+- G4RunManager.cc, G4WorkerRunManager.cc: Adding layered mass geometry
+  option for the new "probe" scoring mesh.
+
+February 18th, 2020  V.Ivanchenko (run-V10-06-01)
+- G4RunManager - does not call G4ParticleTable for Messenger
+    deletion
+
+December 9th, 2019  B. Morgan (run-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 November 22nd, 2019 J. Madsen (run-V10-05-11)
 - Updated sources.cmake to use ${timemory_LIBRARIES} instead of
   difficult to type ${TiMemory_LIBRARIES}

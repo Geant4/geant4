@@ -33,7 +33,8 @@
 //              to include neutron HP
 //
 // Modified:
-//
+// 18.07.2017: A.Dotti: refactoring code
+// 22.09.2020: V.Ivanchenko change design using G4HadProcess utility
 //----------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsFTFP_BERT_HP_h
@@ -72,41 +73,9 @@ class G4HadronPhysicsFTFP_BERT_HP : public G4VPhysicsConstructor
     G4HadronPhysicsFTFP_BERT_HP(const G4String& name, G4bool quasiElastic=false);
     virtual ~G4HadronPhysicsFTFP_BERT_HP();
 
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-
-  private:
-    void CreateModels();
-    G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
-    
-    struct ThreadPrivate {
-      G4NeutronBuilder * theNeutrons;
-      G4BertiniNeutronBuilder * theBertiniNeutron;
-      G4FTFPNeutronBuilder * theFTFPNeutron;
-      G4NeutronPHPBuilder * theHPNeutron;
- 
-      G4PiKBuilder * thePiK;
-      G4BertiniPiKBuilder * theBertiniPiK;
-      G4FTFPPiKBuilder * theFTFPPiK;
-    
-      G4ProtonBuilder * thePro;
-      G4BertiniProtonBuilder * theBertiniPro;
-      G4FTFPProtonBuilder * theFTFPPro;    
-
-      G4HyperonFTFPBuilder * theHyperon;
-    
-      G4AntiBarionBuilder * theAntiBaryon;
-      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-      G4ComponentGGHadronNucleusXsc * xsKaon;
-      G4VCrossSectionDataSet * xsNeutronCaptureXS;
-    };
-    static G4ThreadLocal ThreadPrivate* tpdata;
-
-    //G4VCrossSectionDataSet * BGGProton;
-    //G4VCrossSectionDataSet * BGGNeutron;
-    G4bool QuasiElastic;
+  protected:
+    //Modify the minimum needed
+    void Neutron() override;
 };
 
 #endif

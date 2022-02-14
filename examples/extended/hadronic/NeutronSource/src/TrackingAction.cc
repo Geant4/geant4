@@ -55,12 +55,16 @@ TrackingAction::TrackingAction(EventAction* event)
 void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {  
   //count secondary particles
-  if (track->GetTrackID() == 1) return;  
-  G4String name   = track->GetDefinition()->GetParticleName();
-  G4double energy = track->GetKineticEnergy();
+  if (track->GetTrackID() == 1) return;
+  
   Run* run = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun());    
-  run->ParticleCount(name,energy);
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+	        
+  G4String name     = track->GetDefinition()->GetParticleName();
+  G4double meanLife = track->GetDefinition()->GetPDGLifeTime();    
+  G4double energy   = track->GetKineticEnergy();
+  //do not count excited states with meanlife = 0.  
+  if (meanLife != 0.) run->ParticleCount(name,energy,meanLife);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

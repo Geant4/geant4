@@ -54,8 +54,11 @@ GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
     Rhoh(0.), Alphah(0.), Tmaxh(0.), Betah(0.), AveLogAlpha(0.), AveLogTmax(0.),
     SigmaLogAlpha(0.), SigmaLogTmax(0.), Rho(0.), Alpha(0.), Tmax(0.), Beta(0.)
 {  
-  if(!aPar) { thePar = new GFlashSamplingShowerTuning; owning = true; }
-  else      { thePar = aPar; owning = false; }
+  if(!aPar) {
+    thePar = new GFlashSamplingShowerTuning;
+  } else {
+    thePar = aPar;
+  }
 
   SetMaterial(aMat1,aMat2 );
   d1=dd1;
@@ -64,23 +67,32 @@ GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
   // Longitudinal Coefficients for a homogenious calo
 
   // shower max
-  ParAveT1    = thePar->ParAveT1();   // ln (ln y -0.812)  
+  ParAveT1    = thePar->ParAveT1();   // ln (ln y -0.812)
   ParAveA1    = thePar->ParAveA1();   // ln a (0.81 + (0.458 + 2.26/Z)ln y)
   ParAveA2    = thePar->ParAveA2();
   ParAveA3    = thePar->ParAveA3();
+  // Variance of shower max sampling
+  ParSigLogT1 = thePar->ParsSigLogT1();  // Sigma T1 (-1.4 + 1.26 ln y)**-1 --> bug : these two lines were missing,
+  ParSigLogT2 = thePar->ParsSigLogT2();  // leaving ParSigLogT1, ParSigLogT2 as 0.0
+  // variance of 'alpha'
+  ParSigLogA1 = thePar->ParSigLogA1();   // Sigma a (-0.58 + 0.86 ln y)**-1 --> bug : these two lines were missing
+  ParSigLogA2 = thePar->ParSigLogA2();   // leaving ParSigLogA1 ParSigLogAé as 0.0
+  // correlation alpha%T
+  ParRho1     = thePar->ParRho1();       // Rho = 0.705 -0.023 ln y  --> bug : these two lines were missing,
+  ParRho2     = thePar->ParRho2();       // leaving ParRho1 and ParRho2 being 0.0
   // Sampling
   ParsAveT1   = thePar->ParsAveT1();  // T_sam = log(exp( log T_hom) + t1*Fs-1 + t2*(1-ehat));
   ParsAveT2   = thePar->ParsAveT2();
   ParsAveA1   = thePar->ParsAveA1();  
-  // Variance of shower max sampling 
-  ParsSigLogT1 = thePar->ParSigLogT1();    // Sigma T1 (-2.5 + 1.25 ln y)**-1 
-  ParsSigLogT2 = thePar->ParSigLogT2();
+  // Variance of shower max sampling
+  ParsSigLogT1 = thePar->ParsSigLogT1();    // Sigma T1 (-2.5 + 1.25 ln y)**-1 --> bug ParSigLogT1() was called instead of ParsSigLogT1(); Same for T2.
+  ParsSigLogT2 = thePar->ParsSigLogT2();
   // variance of 'alpha'
-  ParsSigLogA1 = thePar->ParSigLogA1();    // Sigma a (-0.82 + 0.79 ln y)**-1 
-  ParsSigLogA2 = thePar->ParSigLogA2();  
+  ParsSigLogA1 = thePar->ParsSigLogA1();    // Sigma a (-0.82 + 0.79 ln y)**-1 --> bug ParSigLogA1() was called instead of ParsSigLogA1(); Same for A2
+  ParsSigLogA2 = thePar->ParsSigLogA2();
   // correlation alpha%T
-  ParsRho1     = thePar->ParRho1();   // Rho = 0.784 -0.023 ln y 
-  ParsRho2     = thePar->ParRho2();
+  ParsRho1     = thePar->ParsRho1();   // Rho = 0.784 -0.023 ln y --> bug was using ParRho1() and ParRho2()
+  ParsRho2     = thePar->ParsRho2();
 
   // Radial Coefficients
   // r_C (tau)= z_1 +z_2 tau
@@ -141,7 +153,7 @@ GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
 
 GFlashSamplingShowerParameterisation::~GFlashSamplingShowerParameterisation()
 {
-  if(owning) { delete thePar; }
+   delete thePar;
 }
 
 // ------------------------------------------------------------
@@ -183,14 +195,15 @@ void GFlashSamplingShowerParameterisation::ComputeZAX0EFFetc()
   G4double W2  = (d2*density2) / denominator;
   Zeff   = ( W1*Z1 ) + ( W2*Z2 );    //X0*Es/Ec;
   Aeff   = ( W1*A1 ) + ( W2*A2 );
-  X0eff  = ( 1./ ( ( W1 / X01) +( W2 / X02) ) ); 
-  Rhoeff = ( (d1 *density1 ) + (d2 * density2 ))/G4double (d2  + d1  );
-  Rmeff =  1/  ((((W1*Ec1)/ X01)   +   ((W2* Ec2)/  X02) ) / Es ) ;
-  Eceff =  X0eff *((W1*Ec1)/ X01 + (W2* Ec2)/  X02 );      
-  Fs =  X0eff/G4double ((d1/mm )+(d2/mm) );
-  ehat = (1. / (1+ 0.007*(Z1- Z2)));
+  Rhoeff = ( ( d1*density1 ) + ( d2*density2 ) )  / ( d1 + d2 ); // --> was G4double ( d2  + d1 );
+  X0eff  = (W1 * Rhoeff) / (X01 * density1) + (W2 * Rhoeff) / (X02 * density2 );
+  X0eff  = 1./ X0eff;
+  Rmeff =  1./  (  (  ((W1*Ec1)/X01) +  ((W2*Ec2)/X02)  )  /  Es  ) ;
+  Eceff =  X0eff * (   (W1*Ec1)/X01  +   (W2*Ec2)/X02   );
+  Fs =  X0eff/(d1+d2);// --> was G4double ((d1/mm )+(d2/mm) ); Can't understand if dividing by mm makes sense... looks weird.
+  ehat = (  1. / ( 1 + 0.007*(Z1- Z2) )  );
 
-  G4cout << "W1= "  << W1 << G4endl;
+  G4cout << "W1= " << W1 << G4endl;
   G4cout << "W2= " << W2 << G4endl;
   G4cout << "effective quantities Zeff = "<<Zeff<< G4endl;
   G4cout << "effective quantities Aeff = "<<Aeff<< G4endl;
@@ -232,40 +245,57 @@ GenerateLongitudinalProfile(G4double Energy)
 void
 GFlashSamplingShowerParameterisation::ComputeLongitudinalParameters(G4double y)
 {
-  AveLogTmaxh  = std::log(std::max(ParAveT1 +std::log(y),0.1));  //ok 
-  AveLogAlphah = std::log(std::max(ParAveA1 + (ParAveA2+ParAveA3/Zeff)*std::log(y),.1)); //ok
-  //hom  
-  SigmaLogTmaxh  = std::min(0.5,1.00/( ParSigLogT1 + ParSigLogT2*std::log(y)) );  //ok
-  SigmaLogAlphah = std::min(0.5,1.00/( ParSigLogA1 + ParSigLogA2*std::log(y)));  //ok
-  Rhoh           = ParRho1+ParRho2*std::log(y);//ok
+  AveLogTmaxh    = std::log(  std::max(  ParAveT1 + std::log(y),                           0.1  )  );        // ok
+  AveLogAlphah   = std::log(  std::max(  ParAveA1 + (ParAveA2+ParAveA3/Zeff)*std::log(y),  0.1  )  );        // ok
+  // hom
+  SigmaLogTmaxh  = std::min(  0.5,  1.00/( ParSigLogT1 + ParSigLogT2*std::log(y) )  );                       // ok
+  SigmaLogAlphah = std::min(  0.5,  1.00/( ParSigLogA1 + ParSigLogA2*std::log(y) )  );                       // ok
+  Rhoh           = ParRho1 + ParRho2*std::log(y);                                                             //ok
   // if sampling 
-  AveLogTmax  = std::max(0.1,std::log(std::exp(AveLogTmaxh)
-              + ParsAveT1/Fs + ParsAveT2*(1-ehat)));  //ok
-  AveLogAlpha = std::max(0.1,std::log(std::exp(AveLogAlphah)
-              + (ParsAveA1/Fs)));  //ok
+  AveLogTmax    = std::max(  0.1,  std::log(std::exp(AveLogTmaxh)  + ParsAveT1/Fs + ParsAveT2*(1-ehat))  );  // ok
+  AveLogAlpha   = std::max(  0.1,  std::log(std::exp(AveLogAlphah) + ParsAveA1/Fs)                       );  // ok
   //
-  SigmaLogTmax  = std::min(0.5,1.00/( ParsSigLogT1
-                + ParsSigLogT2*std::log(y)) );  //ok
-  SigmaLogAlpha = std::min(0.5,1.00/( ParsSigLogA1
-                + ParsSigLogA2*std::log(y))); //ok
-  Rho           = ParsRho1+ParsRho2*std::log(y); //ok
+  SigmaLogTmax  = std::min(  0.5,  1.00 / (ParsSigLogT1 + ParsSigLogT2*std::log(y))                      );  // ok
+  SigmaLogAlpha = std::min(  0.5,  1.00 / (ParsSigLogA1 + ParsSigLogA2*std::log(y))                      );  // ok
+  Rho           = ParsRho1 + ParsRho2*std::log(y);                                                           // ok
+
+
+  if (0) {
+    G4cout << " y            = " << y << G4endl;
+    G4cout << " std::log(std::exp(AveLogTmaxh)  + ParsAveT1/Fs + ParsAveT2*(1-ehat)) = "
+	   << " std::log(" << std::exp(AveLogTmaxh) << " + " << ParsAveT1/Fs << " + " << ParsAveT2*(1-ehat) << ") = "
+	   << " std::log(" << std::exp(AveLogTmaxh) << " + " << ParsAveT1 << "/" << Fs << " + " << ParsAveT2 << "*" << (1-ehat) << ") = "
+	   << " std::log(" << std::exp(AveLogTmaxh)  + ParsAveT1/Fs + ParsAveT2*(1-ehat) << ")" << G4endl;
+    G4cout << " AveLogTmaxh    " <<  AveLogTmaxh     << G4endl;
+    G4cout << " AveLogAlphah   " <<  AveLogAlphah    << G4endl;
+    G4cout << " SigmaLogTmaxh  " <<  SigmaLogTmaxh   << G4endl;
+    G4cout << " 1.00/( ParSigLogT1 + ParSigLogT2*std::log(y)  ) = " <<  1.00 << "/" << ( ParSigLogT1 + ParSigLogT2*std::log(y)  ) << " = "
+	   << 1.00 << "/" << "(" << ParSigLogT1 << " + " <<  ParSigLogT2*std::log(y) << " )  = "
+	   << 1.00 << "/" << "(" << ParSigLogT1 << " + " <<  ParSigLogT2 << "*" << std::log(y) << " ) "
+	   << G4endl;
+    G4cout << " SigmaLogAlphah " <<  SigmaLogAlphah  << G4endl;
+    G4cout << " Rhoh           " <<  Rhoh            << G4endl;
+    G4cout << " AveLogTmax     " <<  AveLogTmax      << G4endl;
+    G4cout << " AveLogAlpha    " <<  AveLogAlpha     << G4endl;
+    G4cout << " SigmaLogTmax   " <<  SigmaLogTmax    << G4endl;
+    G4cout << " SigmaLogAlpha  " <<  SigmaLogAlpha   << G4endl;
+    G4cout << " Rho            " <<  Rho             << G4endl;
+  }
 }
 
 // ------------------------------------------------------------
 
 void GFlashSamplingShowerParameterisation::GenerateEnergyProfile(G4double /* y */)
 { 
-  G4double Correlation1 = std::sqrt((1+Rho)/2);
-  G4double Correlation2 = std::sqrt((1-Rho)/2);
-  G4double Correlation1h = std::sqrt((1+Rhoh)/2);
-  G4double Correlation2h = std::sqrt((1-Rhoh)/2);
+  G4double Correlation1  = std::sqrt( (1+Rho )/2 );
+  G4double Correlation2  = std::sqrt( (1-Rho )/2 );
+  G4double Correlation1h = std::sqrt( (1+Rhoh)/2 );
+  G4double Correlation2h = std::sqrt( (1-Rhoh)/2 );
   G4double Random1 = G4RandGauss::shoot();
   G4double Random2 = G4RandGauss::shoot();
 
-  Tmax  = std::max(1.,std::exp( AveLogTmax  + SigmaLogTmax  *
-  (Correlation1*Random1 + Correlation2*Random2) ));
-  Alpha = std::max(1.1,std::exp( AveLogAlpha + SigmaLogAlpha *
-  (Correlation1*Random1 - Correlation2*Random2) ));
+  Tmax  = std::max(  1.,   std::exp( AveLogTmax  + SigmaLogTmax  * (Correlation1*Random1 + Correlation2*Random2) ) );
+  Alpha = std::max(  1.1,  std::exp( AveLogAlpha + SigmaLogAlpha * (Correlation1*Random1 - Correlation2*Random2) ) );
   Beta  = (Alpha-1.00)/Tmax;
   //Parameters for Enenrgy Profile including correaltion and sigmas  
   Tmaxh  = std::exp( AveLogTmaxh  + SigmaLogTmaxh  *

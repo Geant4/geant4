@@ -42,11 +42,11 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+#include "G4AnalysisManager.hh"
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 #include "FCALSteppingAction.hh"
 
-#include "FCALAnalysisManager.hh"
 
 #include "G4ios.hh"
 

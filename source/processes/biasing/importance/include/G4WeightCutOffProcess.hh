@@ -23,19 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4WeightCutOffProcess
+// G4WeightCutOffProcess
 //
 // Class description:
 //
 // Process for biasing particle-change cutoff.
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
+// Author: Michael Dressel, 2002
+// --------------------------------------------------------------------
 #ifndef G4WeightCutOffProcess_hh 
-#define G4WeightCutOffProcess_hh G4WeightCutOffProcess_hh
+#define G4WeightCutOffProcess_hh 1
 
 #include "G4VProcess.hh"
 #include "G4VTrackTerminator.hh"
@@ -63,13 +60,15 @@ public:  // with description
                         G4double wlimit,
                         G4double isource,
                         G4VIStore *istore,
-			//                        const G4VGCellFinder &aGCellFinder,
-                        const G4String &aName = "WeightCutOffProcess", G4bool para = false);
+                        const G4String &aName = "WeightCutOffProcess",
+                        G4bool para = false);
     // create a G4ParticleChange
 
   virtual ~G4WeightCutOffProcess();
     // delete the G4ParticleChange
 
+  G4WeightCutOffProcess(const G4WeightCutOffProcess &) = delete;
+  G4WeightCutOffProcess &operator=(const G4WeightCutOffProcess &) = delete;
 
   //--------------------------------------------------------------
   // Set Parallel World
@@ -118,40 +117,35 @@ private:
 
   void CopyStep(const G4Step & step);
 
-  G4Step * fGhostStep;
-  G4StepPoint * fGhostPreStepPoint;
-  G4StepPoint * fGhostPostStepPoint;
+  G4Step* fGhostStep = nullptr;
+  G4StepPoint* fGhostPreStepPoint = nullptr;
+  G4StepPoint* fGhostPostStepPoint = nullptr;
 
-  G4WeightCutOffProcess(const G4WeightCutOffProcess &);
-  G4WeightCutOffProcess &operator=(const G4WeightCutOffProcess &);
+  G4ParticleChange* fParticleChange = nullptr;
+  G4double fWeightSurvival = 0.;
+  G4double fWeightLimit = 0.;
+  G4double fSourceImportance = 0.;
+  G4VIStore* fIStore = nullptr;
 
-  G4ParticleChange *fParticleChange;
-  G4double fWeightSurvival;
-  G4double fWeightLimit;
-  G4double fSourceImportance;
-  G4VIStore *fIStore;
-  //  const G4VGCellFinder &fGCellFinder;
-
-
-  G4TransportationManager* fTransportationManager;
-  G4PathFinder*        fPathFinder;
+  G4TransportationManager* fTransportationManager = nullptr;
+  G4PathFinder*        fPathFinder = nullptr;
 
   // -------------------------------
   // Navigation in the Ghost World:
   // -------------------------------
-  G4String             fGhostWorldName;
-  G4VPhysicalVolume*   fGhostWorld;
-  G4Navigator*         fGhostNavigator;
-  G4int                fNavigatorID;
+  G4String             fGhostWorldName = "NoParallelWorld";
+  G4VPhysicalVolume*   fGhostWorld = nullptr;
+  G4Navigator*         fGhostNavigator = nullptr;
+  G4int                fNavigatorID = -1;
   G4TouchableHandle    fOldGhostTouchable;
   G4TouchableHandle    fNewGhostTouchable;
-  G4FieldTrack         fFieldTrack;
-  G4double             fGhostSafety;
-  G4bool               fOnBoundary;
+  G4FieldTrack         fFieldTrack = '0';
+  G4double             fGhostSafety = -1;
+  G4bool               fOnBoundary = false;
 
   G4bool               fParaflag;
-  G4FieldTrack         fEndTrack;
-  ELimited             feLimited;
+  G4FieldTrack         fEndTrack = '0';
+  ELimited             feLimited = kDoNot;
 };
 
 #endif

@@ -104,11 +104,6 @@
   - 11 positron phi
   - 12 positron polarization
 
- If AIDA is available, i.e. if G4ANALYSIS_USE is set, these
- histograms are stored in a compressed XML file
- (Pol01.aida). These results can be displayed using a small
- program (plotResults.java) based on JAIDA by simply calling 
-
 \verbatim
 % gmake plots
 \endverbatim
@@ -125,7 +120,7 @@
 % Pol01   pol01.in
 \endverbatim
 
- - Execute Pol01 in 'batch' mode including aida output :
+ - Execute Pol01 in 'batch' mode including analysis output :
 \verbatim
 % Pol01   histos.mac
 \endverbatim

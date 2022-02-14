@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLWrite
+// G4GDMLWrite
 //
 // Class description:
 //
 // GDML writer.
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLWRITE_INCLUDED_
-#define _G4GDMLWRITE_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4GDMLWRITE_HH
+#define G4GDMLWRITE_HH 1
 
 #include <map>
 
@@ -55,56 +50,60 @@ class G4VPhysicalVolume;
 
 class G4GDMLWrite
 {
-  typedef std::map<const G4LogicalVolume*,G4Transform3D> VolumeMapType;
-  typedef std::map<const G4VPhysicalVolume*,G4String> PhysVolumeMapType;
-  typedef std::map<G4int,G4int> DepthMapType;
+  using VolumeMapType = std::map<const G4LogicalVolume*, G4Transform3D>;
+  using PhysVolumeMapType = std::map<const G4VPhysicalVolume*, G4String>;
+  using DepthMapType = std::map<G4int, G4int>;
 
-  public:  // with description
+  public:
 
     G4Transform3D Write(const G4String& filename,
                         const G4LogicalVolume* const topLog,
-                        const G4String& schemaPath,
-                        const G4int depth, G4bool storeReferences=true);
-      //
-      // Main method for writing GDML files.
+                        const G4String& schemaPath, const G4int depth,
+                        G4bool storeReferences = true);
+    //
+    // Main method for writing GDML files.
 
     void AddModule(const G4VPhysicalVolume* const topVol);
     void AddModule(const G4int depth);
-      //
-      // Split geometry structure in modules, by volume subtree or level
+    //
+    // Split geometry structure in modules, by volume subtree or level.
 
     void AddAuxiliary(G4GDMLAuxStructType myaux);
-      //
-      // Import auxiliary structure
+    //
+    // Import auxiliary structure.
+
+    void SetOutputFileOverwrite(G4bool flag);
+    //
+    // Set the flag to allow overwriting of the output GDML file
 
     static void SetAddPointerToName(G4bool);
-      //
-      // Specify if to add or not memory addresses to IDs.
+    //
+    // Specify if to add or not memory addresses to IDs.
 
-    virtual void DefineWrite(xercesc::DOMElement*)=0;
-    virtual void MaterialsWrite(xercesc::DOMElement*)=0;
-    virtual void SolidsWrite(xercesc::DOMElement*)=0;
-    virtual void StructureWrite(xercesc::DOMElement*)=0;
+    virtual void DefineWrite(xercesc::DOMElement*)        = 0;
+    virtual void MaterialsWrite(xercesc::DOMElement*)     = 0;
+    virtual void SolidsWrite(xercesc::DOMElement*)        = 0;
+    virtual void StructureWrite(xercesc::DOMElement*)     = 0;
     virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,
-                                             const G4int)=0;
-    virtual void SurfacesWrite()=0;
+                                             const G4int) = 0;
+    virtual void SurfacesWrite()                          = 0;
     virtual void SetupWrite(xercesc::DOMElement*,
-                            const G4LogicalVolume* const)=0;
-      //
-      // Pure virtual methods implemented in concrete writer plugin's classes
+                            const G4LogicalVolume* const) = 0;
+    //
+    // Pure virtual methods implemented in concrete writer plugin's classes.
 
     virtual void ExtensionWrite(xercesc::DOMElement*);
     virtual void UserinfoWrite(xercesc::DOMElement*);
     virtual void AddExtension(xercesc::DOMElement*,
                               const G4LogicalVolume* const);
-      //
-      // To be implemented in the client code for handling extensions
-      // to the GDML schema, identified with the tag "extension".
-      // The implementation should be placed inside a user-class
-      // inheriting from G4GDMLWriteStructure and being registered
-      // as argument to G4GDMLParser.
+    //
+    // To be implemented in the client code for handling extensions
+    // to the GDML schema, identified with the tag "extension".
+    // The implementation should be placed inside a user-class
+    // inheriting from G4GDMLWriteStructure and being registered
+    // as argument to G4GDMLParser.
 
-    G4String GenerateName(const G4String&,const void* const);
+    G4String GenerateName(const G4String&, const void* const);
 
   protected:
 
@@ -119,7 +118,8 @@ class G4GDMLWrite
     G4String Modularize(const G4VPhysicalVolume* const topvol,
                         const G4int depth);
 
-    void AddAuxInfo(G4GDMLAuxListType* auxInfoList, xercesc::DOMElement* element);
+    void AddAuxInfo(G4GDMLAuxListType* auxInfoList,
+                    xercesc::DOMElement* element);
 
     G4bool FileExists(const G4String&) const;
     PhysVolumeMapType& PvolumeMap();
@@ -129,11 +129,12 @@ class G4GDMLWrite
 
     G4String SchemaLocation;
     static G4bool addPointerToName;
-    xercesc::DOMDocument* doc;
-    xercesc::DOMElement* extElement;
-    xercesc::DOMElement* userinfoElement;
-    XMLCh tempStr[10000];
+    xercesc::DOMDocument* doc = nullptr;
+    xercesc::DOMElement* extElement = nullptr;
+    xercesc::DOMElement* userinfoElement = nullptr;
+
     G4GDMLAuxListType auxList;
+    G4bool overwriteOutputFile = false;
 };
 
 #endif

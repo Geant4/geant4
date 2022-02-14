@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Add shortTable initialization by H.Kurashige (12 Dec. 03)
+// G4NucleiPropertiesTheoreticalTable - part 2
+//
+// Author: Tatsumi Koi, SLAC
+// --------------------------------------------------------------------
 
 #include "G4NucleiPropertiesTheoreticalTable.hh"
-
 
 //+-----------------------------+
 //| Table of Atomic Mass Excess |
@@ -2750,7 +2752,7 @@ const G4int G4NucleiPropertiesTheoreticalTable::indexArray[2][G4NucleiProperties
 //   The index in this table coincide with Z-1
 //   For each Z value shortTable[Z-1] has the index of 
 //   the 1st occurrence in the indexArray[][]
-
+//
 const G4int G4NucleiPropertiesTheoreticalTable::shortTable[G4NucleiPropertiesTheoreticalTable::shortTableSize] =
 {
     0,   19,   41 ,  65,   91,  119,  150,  183,  218,  255, 

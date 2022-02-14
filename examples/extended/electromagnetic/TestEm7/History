@@ -18,9 +18,40 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-14-10-16 G.Folger
-=======
+12-11-21 V.Ivanchenko (testem7-V10-07-08)
+- Improved macro files for ion ionisation
+
+06-10-21 I. Hrivnacova (testem7-V10-07-07)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+22-09-21 G. Amadio (testem7-V10-07-06)
+- Fix TestEm7 to build with C++20 standard.
+
+24-07-21 V.Ivanchenko (testem7-V10-07-05)
+- TestEm7.cc - use G4RunManagerFactory
+- c2_function.hh - fixed compilation warning
+
+19-07-21 I. Hrivnacova (testem7-V10-07-04)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+09-07-21 V.Ivanchenko (testem7-V10-07-03)
+- use const pointer to G4Element
+     
+06-05-21 mma (testem7-V10-07-02)
+- Migration to G4SteppingVerboseWithUnits.
+
+19-03-21 V.Ivanchenko (testem7-V10-07-01)
+- updated PhysListEmPhysicsNR for 11.0, removed RanecuEngine
+
+10-02-21 V.Ivanchenko (testem7-V10-07-00)
+- fixed README
+
+07-04-20 V.Ivantchenko (testem7-V10-06-00)
+- do not call vis.mac automatically in interactive mode
+
 28-11-19 I. Hrivnacova (testem7-V10-05-01)
 - Fixed comments, causing doxygen warnings, in c2_function.hh
 

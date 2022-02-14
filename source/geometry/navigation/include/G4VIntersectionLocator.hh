@@ -126,7 +126,10 @@ class G4VIntersectionLocator
                                    std::ostream& oss,
                                    G4int         verboseLevel );
       // Print Method for any ostream - e.g. cerr -- and for G4Exception
-    
+
+    inline void SetCheckMode( G4bool value ) { fCheckMode = value; }
+    inline G4bool GetCheckMode()             { return fCheckMode; }
+
   protected:  // with description
 
     G4FieldTrack ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,  
@@ -197,9 +200,6 @@ class G4VIntersectionLocator
                                                   G4int     CheckMode );
       // As above, but report information about code location.
       // If CheckMode > 1, report extra information.
-   
-    inline void SetCheckMode( G4bool value ) { fCheckMode = value; }
-    inline G4bool GetCheckMode()             { return fCheckMode; }
 
   protected:  // without description
 
@@ -254,13 +254,13 @@ class G4VIntersectionLocator
     G4int    fVerboseLevel = 0;              // For debugging
     G4bool   fUseNormalCorrection = false;   // Configuration parameter
     G4bool   fCheckMode = false;
+    G4bool   fiUseSafety = false;    // Whether to use safety for 'fast steps'
    
     G4Navigator* fiNavigator;
 
     G4ChordFinder* fiChordFinder = nullptr;  // Overridden at each step
     G4double fiEpsilonStep = -1.0;           // Overridden at each step
     G4double fiDeltaIntersection = -1.0;     // Overridden at each step
-    G4bool   fiUseSafety = false;            // Overridden at each step
       // Parameters set at each physical step by calling method 
       // by G4PropagatorInField
 

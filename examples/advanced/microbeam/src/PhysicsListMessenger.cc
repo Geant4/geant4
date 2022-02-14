@@ -27,18 +27,13 @@
 /// \brief Implementation of the PhysicsListMessenger class
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsListMessenger.hh"
-#include "G4SystemOfUnits.hh"
-
 #include "PhysicsList.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   :G4UImessenger(),fPhysicsList(pPhys),fMaxChargedStep(1*CLHEP::mm)
@@ -93,8 +88,6 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fStepMaxCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete fGammaCutCmd;
@@ -106,30 +99,6 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete fStepMaxCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-<<<<<<< HEAD
-void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{       
-  if( command == fGammaCutCmd )
-   { fPhysicsList->SetCutForGamma(fGammaCutCmd->GetNewDoubleValue(newValue));}
-     
-  if( command == fElectCutCmd )
-   { fPhysicsList->SetCutForElectron(fElectCutCmd->GetNewDoubleValue(newValue));}
-     
-  if( command == fProtoCutCmd )
-   { fPhysicsList->SetCutForPositron(fProtoCutCmd->GetNewDoubleValue(newValue));}
-
-  if( command == fAllCutCmd )
-   {
-     G4double cut = fAllCutCmd->GetNewDoubleValue(newValue);
-     fPhysicsList->SetCutForGamma(cut);
-     fPhysicsList->SetCutForElectron(cut);
-     fPhysicsList->SetCutForPositron(cut);
-   } 
-
-=======
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
@@ -139,4 +108,3 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     { fMaxChargedStep = fStepMaxCmd->GetNewDoubleValue(newValue); }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

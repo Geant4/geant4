@@ -23,30 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 ///////////////////////////////////////////////////////
 // File name:     G4eInverseCompton
 //
 // Author:        Laurent Desorgher
 //
 // Creation date: 20.11.2006
-//
 ///////////////////////////////////////////////////////
-#include "G4eInverseCompton.hh"
-#include "G4VEmAdjointModel.hh"
-#include "G4AdjointComptonModel.hh"
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-G4eInverseCompton::G4eInverseCompton(G4bool whichScatCase,G4String process_name,G4AdjointComptonModel* aComptonAdjointModel):
-				G4VAdjointReverseReaction(process_name,whichScatCase)
-{theAdjointEMModel = aComptonAdjointModel;
- theAdjointEMModel->SetSecondPartOfSameType(false);
- SetIntegralMode(false);
- /*if (IsScatProjToProjCase) SetIntegralMode(false);
- else   SetIntegralMode(true); */
+#include "G4eInverseCompton.hh"
+
+#include "G4AdjointComptonModel.hh"
+#include "G4VEmAdjointModel.hh"
+
+////////////////////////////////////////////////////////////////////////////////
+G4eInverseCompton::G4eInverseCompton(
+  G4bool whichScatCase, G4String process_name,
+  G4AdjointComptonModel* aComptonAdjointModel)
+  : G4VAdjointReverseReaction(process_name, whichScatCase)
+{
+  fAdjointModel = aComptonAdjointModel;
+  fAdjointModel->SetSecondPartOfSameType(false);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-G4eInverseCompton::~G4eInverseCompton(){
+
+////////////////////////////////////////////////////////////////////////////////
+G4eInverseCompton::~G4eInverseCompton() {}
+
+////////////////////////////////////////////////////////////////////////////////
+void G4eInverseCompton::ProcessDescription(std::ostream& out) const
+{
+  out << "Inverse Compton effect.\n";
 }

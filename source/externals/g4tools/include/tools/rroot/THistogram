@@ -1,0 +1,730 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_THistogram
+#define tools_rroot_THistogram
+
+// to read some files produced with BatchLab (opaw/examples/osc/analysis.root).
+
+#include "../histo/profile_data"
+
+#include "named"
+#include "../vmanip"
+
+namespace tools {
+namespace rroot {
+
+//typedef histo::histo_data<double,unsigned int,double> hd_data;
+typedef histo::profile_data<double,unsigned int,unsigned int,double,double> pd_data_t;
+typedef histo::axis<double,unsigned int> axis_t;
+typedef std::map<std::string,std::string> annotations_t;
+
+inline bool Axis_read_v0_v3(buffer& a_buffer,axis_t& a_axis) {
+  int idummy;
+  double ddummy;
+  if(!a_buffer.read(a_axis.m_minimum_value)) return false;
+  if(!a_buffer.read(a_axis.m_maximum_value)) return false;
+  if(!a_buffer.read(a_axis.m_offset)) return false;
+  if(!a_buffer.read(a_axis.m_number_of_bins)) return false;
+  if(!a_buffer.read(idummy)) return false; //fOverFlow
+  if(!a_buffer.read(idummy)) return false; //fUnderFlow
+  if(!a_buffer.read(a_axis.m_bin_width)) return false;
+  if(!a_buffer.read(ddummy)) return false; //fSxw
+  if(!a_buffer.read(ddummy)) return false; //fSx2w
+  a_axis.m_fixed = true;
+  a_axis.m_edges.clear();
+  return true;
+}
+
+inline bool Axis_read_v4_v6(buffer& a_buffer,axis_t& a_axis) {
+  int idummy;
+  double ddummy;
+  if(!a_buffer.read(a_axis.m_offset)) return false;
+  if(!a_buffer.read(idummy)) return false; //fOverFlow
+  if(!a_buffer.read(idummy)) return false; //fUnderFlow
+  if(!a_buffer.read(ddummy)) return false; //fSxw
+  if(!a_buffer.read(ddummy)) return false; //fSx2w
+  if(!a_buffer.read(a_axis.m_number_of_bins)) return false;
+  if(!a_buffer.read(a_axis.m_minimum_value)) return false;
+  if(!a_buffer.read(a_axis.m_maximum_value)) return false;
+  if(!a_buffer.read(a_axis.m_fixed)) return false;
+  if(!a_buffer.read(a_axis.m_bin_width)) return false;
+  int edgen;
+  if(!a_buffer.read(edgen)) return false;
+  for(int count=0;count<edgen;count++) {
+    double value;
+    if(!a_buffer.read(value)) return false;
+    a_axis.m_edges.push_back(value);
+  }
+  return true;
+}
+
+inline bool Axis_read_v7(buffer& a_buffer,axis_t& a_axis) {
+  if(!a_buffer.read(a_axis.m_offset)) return false;
+  if(!a_buffer.read(a_axis.m_number_of_bins)) return false;
+  if(!a_buffer.read(a_axis.m_minimum_value)) return false;
+  if(!a_buffer.read(a_axis.m_maximum_value)) return false;
+  if(!a_buffer.read(a_axis.m_fixed)) return false;
+  if(!a_buffer.read(a_axis.m_bin_width)) return false;
+  int edgen;
+  if(!a_buffer.read(edgen)) return false;
+  for(int count=0;count<edgen;count++) {
+    double value;
+    if(!a_buffer.read(value)) return false;
+    a_axis.m_edges.push_back(value);
+  }
+  return true;
+}
+
+inline unsigned int new_bin_number(const std::vector< axis_t >& aAxes) {
+  unsigned int number = 1;
+  for(unsigned int iaxis=0;iaxis<aAxes.size();iaxis++)
+    number *= (aAxes[iaxis].bins()+2);
+  return number;
+}
+
+template <class T>
+inline void add_outflow(const std::vector< axis_t >& aAxes,std::vector<T>& aVector) {
+  // aAxes[].m_offset contains the offset without outflow.
+  unsigned int dim = aAxes.size();
+  // new size and offsets :
+  std::vector<int> aoff(dim);
+
+  int newn = 1;
+ {for(unsigned iaxis=0;iaxis<dim;iaxis++) newn *= (aAxes[iaxis].bins()+2);}
+
+  aoff[0] = 1;
+ {for(unsigned iaxis=1;iaxis<dim;iaxis++) {
+    aoff[iaxis] = aoff[iaxis-1] * (aAxes[iaxis-1].bins()+2);
+  }}
+  // copy :
+  std::vector<T> tmp = aVector;
+  int oldn = (int)tmp.size();
+  aVector.resize(newn,0);
+  // Copy :
+  std::vector<int> is(dim);
+  int offset;
+  for(int index=0;index<oldn;index++) {
+    // Get new offset of index :
+    offset = index;
+   {for(int iaxis=dim-1;iaxis>=0;iaxis--) {
+      is[iaxis] = offset/aAxes[iaxis].m_offset;
+      offset -= is[iaxis] * aAxes[iaxis].m_offset;
+    }}
+    // new offset :
+    offset = 0;
+   {for(unsigned iaxis=0;iaxis<dim;iaxis++) offset += is[iaxis] * aoff[iaxis];}
+    aVector[offset] = tmp[index];
+  }
+}
+
+inline void add_outflow(std::vector< axis_t >& aAxes) {
+  // Restore new offsets :
+  aAxes[0].m_offset = 1;
+  for(unsigned int iaxis=1;iaxis<aAxes.size();iaxis++)
+    aAxes[iaxis].m_offset = aAxes[iaxis-1].m_offset * (aAxes[iaxis-1].bins()+2);
+}
+
+inline bool read_v0(buffer& a_buffer,pd_data_t& a_data) {
+  int idummy;
+  double ddummy;
+  std::string sdummy;
+  if(!a_buffer.read(sdummy)) return false;
+  if(!a_buffer.read(a_data.m_title)) return false;
+
+ {int dim;
+  if(!a_buffer.read(dim)) return false;
+  a_data.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_buffer.read(nbin)) return false;
+  a_data.m_bin_number = nbin;}
+
+  if(!a_buffer.read(idummy)) return false; //fEntries
+  if(!a_buffer.read(idummy)) return false; //fOutFlow
+  if(!a_buffer.read(ddummy)) return false; //fSw
+
+  std::vector<int> vec;
+  if(!a_buffer.read_array<int>(vec)) return false;
+  convert<int,unsigned int>(vec,a_data.m_bin_entries);
+
+  if(a_data.m_bin_entries.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw)) return false;
+  if(a_data.m_bin_Sw.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw2)) return false;
+  if(a_data.m_bin_Sw2.size()!=a_data.m_bin_number) return false;
+  if(a_data.m_dimension>0) {
+    a_data.m_axes.resize(a_data.m_dimension);
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+      if(!Axis_read_v0_v3(a_buffer,a_data.m_axes[iaxis])) return false;
+    }
+  }
+  axis_t axisOfValues;
+  if(!Axis_read_v0_v3(a_buffer,axisOfValues)) return false;
+ {int dummy;
+  if(!a_buffer.read(dummy)) return false;} //m_mode
+
+  // Add outflow :
+  a_data.m_bin_number = new_bin_number(a_data.m_axes);
+  add_outflow<unsigned int>(a_data.m_axes,a_data.m_bin_entries);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw2);
+  add_outflow(a_data.m_axes);
+
+  // Not here in v0 :
+  std::vector<double> empty;
+  empty.resize(a_data.m_dimension,0);
+  a_data.m_bin_Sxw.resize(a_data.m_bin_number,empty);
+  a_data.m_bin_Sx2w.resize(a_data.m_bin_number,empty);
+  a_data.m_is_profile = false;
+  a_data.m_bin_Svw.clear();
+  a_data.m_bin_Sv2w.clear();
+
+  return true;
+}
+
+inline bool read_v1(buffer& a_buffer,pd_data_t& a_data) {
+  int idummy;
+  double ddummy;
+  if(!a_buffer.read(a_data.m_title)) return false;
+
+ {int dim;
+  if(!a_buffer.read(dim)) return false;
+  a_data.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_buffer.read(nbin)) return false;
+  a_data.m_bin_number = nbin;}
+
+  if(!a_buffer.read(idummy)) return false; //fEntries
+  if(!a_buffer.read(idummy)) return false; //fOutFlow
+  if(!a_buffer.read(ddummy)) return false; //fSw
+
+  std::vector<int> vec;
+  if(!a_buffer.read_array<int>(vec)) return false;
+  convert<int,unsigned int>(vec,a_data.m_bin_entries);
+
+  if(a_data.m_bin_entries.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw)) return false;
+  if(a_data.m_bin_Sw.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw2)) return false;
+  if(a_data.m_bin_Sw2.size()!=a_data.m_bin_number) return false;
+  if(a_data.m_dimension>0) {
+    a_data.m_axes.resize(a_data.m_dimension);
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+      if(!Axis_read_v0_v3(a_buffer,a_data.m_axes[iaxis])) return false;
+    }
+  }
+  axis_t axisOfValues;
+  if(!Axis_read_v0_v3(a_buffer,axisOfValues)) return false;
+ {int dummy;
+  if(!a_buffer.read(dummy)) return false;} //m_mode
+
+  // Add outflow :
+  a_data.m_bin_number = new_bin_number(a_data.m_axes);
+  add_outflow<unsigned int>(a_data.m_axes,a_data.m_bin_entries);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw2);
+  add_outflow(a_data.m_axes);
+
+  // Not here in v1 :
+  std::vector<double> empty;
+  empty.resize(a_data.m_dimension,0);
+  a_data.m_bin_Sxw.resize(a_data.m_bin_number,empty);
+  a_data.m_bin_Sx2w.resize(a_data.m_bin_number,empty);
+  a_data.m_is_profile = false;
+  a_data.m_bin_Svw.clear();
+  a_data.m_bin_Sv2w.clear();
+
+  return true;
+}
+
+inline bool read_v2(buffer& a_buffer,pd_data_t& a_data) {
+  int idummy;
+  double ddummy;
+  std::string sdummy;
+  if(!a_buffer.read(a_data.m_title)) return false;
+  if(!a_buffer.read(sdummy)) return false;
+
+ {int dim;
+  if(!a_buffer.read(dim)) return false;
+  a_data.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_buffer.read(nbin)) return false;
+  a_data.m_bin_number = nbin;}
+
+  if(!a_buffer.read(idummy)) return false; //fEntries
+  if(!a_buffer.read(idummy)) return false; //fOutFlow
+  if(!a_buffer.read(ddummy)) return false; //fSw
+
+  std::vector<int> vec;
+  if(!a_buffer.read_array<int>(vec)) return false;
+  convert<int,unsigned int>(vec,a_data.m_bin_entries);
+
+  if(a_data.m_bin_entries.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw)) return false;
+  if(a_data.m_bin_Sw.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw2)) return false;
+  if(a_data.m_bin_Sw2.size()!=a_data.m_bin_number) return false;
+  if(a_data.m_dimension>0) {
+    a_data.m_axes.resize(a_data.m_dimension);
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+      if(!Axis_read_v0_v3(a_buffer,a_data.m_axes[iaxis])) return false;
+    }
+  }
+  axis_t axisOfValues;
+  if(!Axis_read_v0_v3(a_buffer,axisOfValues)) return false;
+ {int dummy;
+  if(!a_buffer.read(dummy)) return false;} //m_mode
+
+  // Add outflow :
+  a_data.m_bin_number = new_bin_number(a_data.m_axes);
+  add_outflow<unsigned int>(a_data.m_axes,a_data.m_bin_entries);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw2);
+  add_outflow(a_data.m_axes);
+
+  // Not here in v2 :
+  std::vector<double> empty;
+  empty.resize(a_data.m_dimension,0);
+  a_data.m_bin_Sxw.resize(a_data.m_bin_number,empty);
+  a_data.m_bin_Sx2w.resize(a_data.m_bin_number,empty);
+  a_data.m_is_profile = false;
+  a_data.m_bin_Svw.clear();
+  a_data.m_bin_Sv2w.clear();
+
+  return true;
+}
+
+inline bool read_v3(buffer& a_buffer,pd_data_t& a_data) {
+  int idummy;
+  double ddummy;
+
+  int l;
+  if(!a_buffer.read(l)) return false;
+  char* str = new char[l+1];
+  for (int i = 0; i < l; i++) {
+    if(!a_buffer.read(str[i])) { delete [] str;return false;}
+  }
+  str[l] = '\0';
+  a_data.m_title = str;
+  delete [] str;
+
+ {int dim;
+  if(!a_buffer.read(dim)) return false;
+  a_data.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_buffer.read(nbin)) return false;
+  a_data.m_bin_number = nbin;}
+
+  if(!a_buffer.read(idummy)) return false; //fEntries
+  if(!a_buffer.read(idummy)) return false; //fOutFlow
+  if(!a_buffer.read(ddummy)) return false; //fSw
+
+  std::vector<int> vec;
+  if(!a_buffer.read_array<int>(vec)) return false;
+  convert<int,unsigned int>(vec,a_data.m_bin_entries);
+
+  if(a_data.m_bin_entries.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw)) return false;
+  if(a_data.m_bin_Sw.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw2)) return false;
+  if(a_data.m_bin_Sw2.size()!=a_data.m_bin_number) return false;
+  if(a_data.m_dimension>0) {
+    a_data.m_axes.resize(a_data.m_dimension);
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+      if(!Axis_read_v0_v3(a_buffer,a_data.m_axes[iaxis])) return false;
+    }
+  }
+  axis_t axisOfValues;
+  if(!Axis_read_v0_v3(a_buffer,axisOfValues)) return false;
+ {int dummy;
+  if(!a_buffer.read(dummy)) return false;} //m_mode
+
+  // Add outflow :
+  a_data.m_bin_number = new_bin_number(a_data.m_axes);
+  add_outflow<unsigned int>(a_data.m_axes,a_data.m_bin_entries);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw2);
+  add_outflow(a_data.m_axes);
+
+  // Not here in v3 :
+  std::vector<double> empty;
+  empty.resize(a_data.m_dimension,0);
+  a_data.m_bin_Sxw.resize(a_data.m_bin_number,empty);
+  a_data.m_bin_Sx2w.resize(a_data.m_bin_number,empty);
+  a_data.m_is_profile = false;
+  a_data.m_bin_Svw.clear();
+  a_data.m_bin_Sv2w.clear();
+
+  return true;
+}
+
+inline bool read_v4(buffer& a_buffer,pd_data_t& a_data) {
+  int idummy;
+  double ddummy;
+
+  int l;
+  if(!a_buffer.read(l)) return false;
+  char* str = new char[l+1];
+  for (int i = 0; i < l; i++) {
+    if(!a_buffer.read(str[i])) { delete [] str;return false;}
+  }
+  str[l] = '\0';
+  a_data.m_title = str;
+  delete [] str;
+
+ {int dim;
+  if(!a_buffer.read(dim)) return false;
+  a_data.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_buffer.read(nbin)) return false;
+  a_data.m_bin_number = nbin;}
+
+  if(!a_buffer.read(idummy)) return false; //fEntries
+  if(!a_buffer.read(idummy)) return false; //fOutFlow
+  if(!a_buffer.read(ddummy)) return false; //fSw
+
+  std::vector<int> vec;
+  if(!a_buffer.read_array<int>(vec)) return false;
+  convert<int,unsigned int>(vec,a_data.m_bin_entries);
+
+  if(a_data.m_bin_entries.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw)) return false;
+  if(a_data.m_bin_Sw.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw2)) return false;
+  if(a_data.m_bin_Sw2.size()!=a_data.m_bin_number) return false;
+  if(a_data.m_dimension>0) {
+    a_data.m_axes.resize(a_data.m_dimension);
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+      if(!Axis_read_v4_v6(a_buffer,a_data.m_axes[iaxis])) return false;
+    }
+  }
+ {int dummy;
+  if(!a_buffer.read(dummy)) return false;} //m_mode
+
+  // Add outflow :
+  a_data.m_bin_number = new_bin_number(a_data.m_axes);
+  add_outflow<unsigned int>(a_data.m_axes,a_data.m_bin_entries);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw2);
+  add_outflow(a_data.m_axes);
+
+  // Not here in v4 :
+  std::vector<double> empty;
+  empty.resize(a_data.m_dimension,0);
+  a_data.m_bin_Sxw.resize(a_data.m_bin_number,empty);
+  a_data.m_bin_Sx2w.resize(a_data.m_bin_number,empty);
+  a_data.m_is_profile = false;
+  a_data.m_bin_Svw.clear();
+  a_data.m_bin_Sv2w.clear();
+
+  return true;
+}
+
+inline bool read_v5(buffer& a_buffer,pd_data_t& a_data) {
+  int idummy;
+  double ddummy;
+  if(!a_buffer.read(a_data.m_title)) return false;
+
+ {int dim;
+  if(!a_buffer.read(dim)) return false;
+  a_data.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_buffer.read(nbin)) return false;
+  a_data.m_bin_number = nbin;}
+
+  if(!a_buffer.read(idummy)) return false; //fEntries
+  if(!a_buffer.read(idummy)) return false; //fOutFlow
+  if(!a_buffer.read(ddummy)) return false; //fSw
+
+  std::vector<int> vec;
+  if(!a_buffer.read_array<int>(vec)) return false;
+  convert<int,unsigned int>(vec,a_data.m_bin_entries);
+
+  if(a_data.m_bin_entries.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw)) return false;
+  if(a_data.m_bin_Sw.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw2)) return false;
+  if(a_data.m_bin_Sw2.size()!=a_data.m_bin_number) return false;
+  if(a_data.m_dimension>0) {
+    a_data.m_axes.resize(a_data.m_dimension);
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+      if(!Axis_read_v4_v6(a_buffer,a_data.m_axes[iaxis])) return false;
+    }
+  }
+ {int dummy;
+  if(!a_buffer.read(dummy)) return false;} //m_mode
+
+  // Add outflow :
+  a_data.m_bin_number = new_bin_number(a_data.m_axes);
+  add_outflow<unsigned int>(a_data.m_axes,a_data.m_bin_entries);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw2);
+  add_outflow(a_data.m_axes);
+
+  // Not here in v5 :
+  std::vector<double> empty;
+  empty.resize(a_data.m_dimension,0);
+  a_data.m_bin_Sxw.resize(a_data.m_bin_number,empty);
+  a_data.m_bin_Sx2w.resize(a_data.m_bin_number,empty);
+  a_data.m_is_profile = false;
+  a_data.m_bin_Svw.clear();
+  a_data.m_bin_Sv2w.clear();
+
+  return true;
+}
+
+inline bool read_v6(buffer& a_buffer,pd_data_t& a_data) {
+  int idummy;
+  double ddummy;
+  if(!a_buffer.read(a_data.m_title)) return false;
+
+ {int dim;
+  if(!a_buffer.read(dim)) return false;
+  a_data.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_buffer.read(nbin)) return false;
+  a_data.m_bin_number = nbin;}
+
+  if(!a_buffer.read(idummy)) return false; //fEntries
+  if(!a_buffer.read(idummy)) return false; //fOutFlow
+  if(!a_buffer.read(ddummy)) return false; //fSw
+
+  std::vector<int> vec;
+  if(!a_buffer.read_array<int>(vec)) return false;
+  convert<int,unsigned int>(vec,a_data.m_bin_entries);
+
+  if(a_data.m_bin_entries.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw)) return false;
+  if(a_data.m_bin_Sw.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw2)) return false;
+  if(a_data.m_bin_Sw2.size()!=a_data.m_bin_number) return false;
+  if(a_data.m_dimension>0) {
+    a_data.m_axes.resize(a_data.m_dimension);
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+      if(!Axis_read_v4_v6(a_buffer,a_data.m_axes[iaxis])) return false;
+    }
+  }
+ {int dummy;
+  if(!a_buffer.read(dummy)) return false;} //m_mode
+
+  // Profile :
+  if(!a_buffer.read(a_data.m_is_profile)) return false;
+  if(a_data.m_is_profile) {
+    if(!a_buffer.read_array<double>(a_data.m_bin_Svw)) return false;
+    if(a_data.m_bin_Svw.size()!=a_data.m_bin_number) return false;
+    if(!a_buffer.read(a_data.m_cut_v)) return false;
+    if(!a_buffer.read(a_data.m_min_v)) return false;
+    if(!a_buffer.read(a_data.m_max_v)) return false;
+  }
+
+  // Add outflow :
+  a_data.m_bin_number = new_bin_number(a_data.m_axes);
+  add_outflow<unsigned int>(a_data.m_axes,a_data.m_bin_entries);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Sw2);
+  add_outflow<double>(a_data.m_axes,a_data.m_bin_Svw);
+  add_outflow(a_data.m_axes);
+
+  // Not here in v6 :
+  std::vector<double> empty;
+  empty.resize(a_data.m_dimension,0);
+  a_data.m_bin_Sxw.resize(a_data.m_bin_number,empty); //Forget to write in v6 !
+  a_data.m_bin_Sx2w.resize(a_data.m_bin_number,empty);
+  if(a_data.m_is_profile) {
+    a_data.m_bin_Sv2w.resize(a_data.m_bin_number,0);
+  }
+
+  return true;
+}
+
+inline bool read_v7(buffer& a_buffer,pd_data_t& a_data) {
+  if(!a_buffer.read(a_data.m_title)) return false;
+
+ {int dim;
+  if(!a_buffer.read(dim)) return false;
+  a_data.m_dimension = dim;}
+
+ {int nbin;
+  if(!a_buffer.read(nbin)) return false;
+  a_data.m_bin_number = nbin;}
+
+  std::vector<int> vec;
+  if(!a_buffer.read_array<int>(vec)) return false;
+  convert<int,unsigned int>(vec,a_data.m_bin_entries);
+
+  if(a_data.m_bin_entries.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw)) return false;
+  if(a_data.m_bin_Sw.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array<double>(a_data.m_bin_Sw2)) return false;
+  if(a_data.m_bin_Sw2.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array2<double>(a_data.m_bin_Sxw)) return false;
+  if(a_data.m_bin_Sxw.size()!=a_data.m_bin_number) return false;
+  if(!a_buffer.read_array2<double>(a_data.m_bin_Sx2w)) return false;
+  if(a_data.m_bin_Sx2w.size()!=a_data.m_bin_number) return false;
+  if(a_data.m_dimension>0) {
+    a_data.m_axes.resize(a_data.m_dimension);
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+      if(!Axis_read_v7(a_buffer,a_data.m_axes[iaxis])) return false;
+    }
+  }
+ {int dummy;
+  if(!a_buffer.read(dummy)) return false;} //m_mode
+  // Profile :
+  if(!a_buffer.read(a_data.m_is_profile)) return false;
+  if(a_data.m_is_profile) {
+    if(!a_buffer.read_array<double>(a_data.m_bin_Svw)) return false;
+    if(a_data.m_bin_Svw.size()!=a_data.m_bin_number) return false;
+    if(!a_buffer.read_array<double>(a_data.m_bin_Sv2w)) return false;
+    if(a_data.m_bin_Sv2w.size()!=a_data.m_bin_number) return false;
+    if(!a_buffer.read(a_data.m_cut_v)) return false;
+    if(!a_buffer.read(a_data.m_min_v)) return false;
+    if(!a_buffer.read(a_data.m_max_v)) return false;
+  }
+
+  return true;
+}
+
+inline bool read_annotations(buffer& a_buffer,annotations_t& a_annotations) {
+  a_annotations.clear(); //reset() does not remove sticky items.
+  int number;
+  if(!a_buffer.read(number)) return false;
+  for(int index=0;index<number;index++) {
+    std::string key;
+    if(!a_buffer.read(key)) return false;
+    std::string value;
+    if(!a_buffer.read(value)) return false;
+    bool sticky;
+    if(!a_buffer.read(sticky)) return false;
+    //if(!a_annotations.addItem(key,value,sticky)) return false; //FIXME : handle sticky ?
+    a_annotations[key] = value;
+  }
+  return true;
+}
+
+inline bool read_THistogram(buffer& a_buffer,pd_data_t& a_data,annotations_t& a_annotations) {
+
+  short v;
+  if(!a_buffer.read_version(v)) return false;
+
+ {std::string name,title;
+  if(!Named_stream(a_buffer,name,title)) return false;}
+
+  if(v==0) {
+    if(!read_v0(a_buffer,a_data)) return false;
+  } else if(v==1) {
+    if(!read_v1(a_buffer,a_data)) return false;
+  } else if(v==2) {
+    if(!read_v2(a_buffer,a_data)) return false;
+  } else if(v==3) {
+    if(!read_v3(a_buffer,a_data)) return false;
+  } else if(v==4) {
+    if(!read_v4(a_buffer,a_data)) return false;
+  } else if(v==5) {
+    if(!read_v5(a_buffer,a_data)) return false;
+  } else if(v==6) {
+    if(!read_v6(a_buffer,a_data)) return false;
+  } else if(v==7) {
+    if(!read_v7(a_buffer,a_data)) return false;
+  } else if(v==8) {
+    if(!read_annotations(a_buffer,a_annotations)) return false;
+    if(!read_v7(a_buffer,a_data)) return false;
+  } else {
+    return false;
+  }
+
+  //data.m_coords.resize(data.m_dimension,0);
+  //data.m_ints.resize(data.m_dimension,0);
+
+  a_data.update_fast_getters();
+
+  return true;
+}
+
+inline const std::string& THistogram_cls(){
+  static const std::string s_v("THistogram");
+  return s_v;
+}
+
+}}
+
+#include "key"
+
+namespace tools {
+namespace rroot {
+
+inline bool read_key_THistogram(ifile& a_file,key& a_key,pd_data_t& a_data,annotations_t& a_annotations,bool a_warn = true) {
+  std::ostream& out = a_key.out();
+  if(a_key.object_class()!=THistogram_cls()) {
+    if(a_warn) out << "tools::rroot::read_key_THisogram : key not a THistogram." << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::read_key_THisogram : can't get data buffer of " << a_key.object_name() << "." << std::endl;
+    return 0;
+  }
+  buffer b(out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+  return read_THistogram(b,a_data,a_annotations);
+}
+
+}}
+
+#include "../histo/h1d"
+#include "../histo/h2d"
+#include "../histo/p1d"
+#include "../histo/p2d"
+
+namespace tools {
+namespace rroot {
+
+inline histo::h1d* THistogram_to_h1d(const pd_data_t& a_data) {
+  unsigned int dim = a_data.m_dimension;
+  bool is_profile = a_data.m_is_profile;
+  if(dim!=1) return 0;
+  if(is_profile) return 0;
+  histo::h1d* histo = new histo::h1d("",10,0,1);
+  histo->copy_from_data(a_data);
+  return histo;
+}
+
+inline histo::h2d* THistogram_to_h2d(const pd_data_t& a_data) {
+  unsigned int dim = a_data.m_dimension;
+  bool is_profile = a_data.m_is_profile;
+  if(dim!=2) return 0;
+  if(is_profile) return 0;
+  histo::h2d* histo = new histo::h2d("",10,0,1,10,0,1);
+  histo->copy_from_data(a_data);
+  return histo;
+}
+
+inline histo::p1d* THistogram_to_p1d(const pd_data_t& a_data) {
+  unsigned int dim = a_data.m_dimension;
+  bool is_profile = a_data.m_is_profile;
+  if(dim!=1) return 0;
+  if(!is_profile) return 0;
+  histo::p1d* histo = new histo::p1d("",10,0,1);
+  histo->copy_from_data(a_data);
+  return histo;
+}
+
+inline histo::p2d* THistogram_to_p2d(const pd_data_t& a_data) {
+  unsigned int dim = a_data.m_dimension;
+  bool is_profile = a_data.m_is_profile;
+  if(dim!=2) return 0;
+  if(!is_profile) return 0;
+  histo::p2d* histo = new histo::p2d("",10,0,1,10,0,1);
+  histo->copy_from_data(a_data);
+  return histo;
+}
+
+}}
+
+#endif

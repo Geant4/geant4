@@ -47,11 +47,7 @@
 #include "F06DetectorConstruction.hh"
 #include "F06ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
@@ -90,20 +86,16 @@ int main(int argc,char** argv)
 
   G4String macro;
   G4String session;
-#ifdef G4MULTITHREADED
   G4int nThreads = 0;
-#endif
 
   G4long randomSeed = 1234;
   for ( G4int i=1; i<argc; i=i+2 ) {
      if      ( G4String(argv[i]) == "-m" ) macro   = argv[i+1];
      else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
      else if ( G4String(argv[i]) == "-r" ) randomSeed  = atoi(argv[i+1]);
-#ifdef G4MULTITHREADED
      else if ( G4String(argv[i]) == "-t" ) {
                     nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
     }
-#endif
     else {
       PrintUsage();
       return 1;
@@ -116,12 +108,8 @@ int main(int argc,char** argv)
 
   // Construct the default run manager
   //
-#ifdef G4MULTITHREADED 
-  G4MTRunManager * runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   if ( nThreads > 0 ) runManager->SetNumberOfThreads(nThreads);
-#else
-  G4RunManager * runManager = new G4RunManager;
-#endif
 
   // Seed the random number generator manually
   G4Random::setTheSeed(randomSeed);
@@ -158,11 +146,11 @@ int main(int argc,char** argv)
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
- 
-  if ( macro.size() ) {
+
+  if ( !ui ) {
      // batch mode
      G4String command = "/control/execute ";
-     UImanager->ApplyCommand(command+macro); 
+     UImanager->ApplyCommand(command+macro);
   }
   else
 <<<<<<< HEAD
@@ -189,8 +177,7 @@ int main(int argc,char** argv)
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
-  
-#ifdef G4VIS_USE
+
   delete visManager;
 #endif
   delete runManager;

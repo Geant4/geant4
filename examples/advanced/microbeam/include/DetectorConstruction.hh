@@ -35,6 +35,8 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include "CellParameterisation.hh"
+#include "EMField.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
@@ -42,27 +44,24 @@
 #include "G4PVPlacement.hh"
 #include "G4UserLimits.hh"
 #include "G4PVParameterised.hh"
-#include "CellParameterisation.hh"
-
-#include "EMField.hh"
 #include "G4EqMagElectricField.hh"
 #include "G4PropagatorInField.hh"
 #include "G4TransportationManager.hh"
 #include "G4ChordFinder.hh"
 #include "G4ClassicalRK4.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
 
-  DetectorConstruction();
-  ~DetectorConstruction();
+  explicit DetectorConstruction();
+  ~DetectorConstruction() override;
 
-  G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct() override;
   
-  void ConstructSDandField();
+  void DefineMaterials();
+  
+  void ConstructSDandField() override;
      
   void SetMassNucleus(G4double mN){ fMassNucleus = mN;}
   G4double GetMassNucleus(){return fMassNucleus;}          
@@ -88,47 +87,32 @@ public:
   G4Material * GetCytoplasmMaterial2() {return  fCytoplasmMaterial2;};
   G4Material * GetCytoplasmMaterial3() {return  fCytoplasmMaterial3;};
   
-  CellParameterisation * GetCellParameterisation() {return fMyCellParameterisation;};
+  const CellParameterisation * GetCellParameterisation() const 
+        {return fMyCellParameterisation;};
+        
+  G4VPhysicalVolume* ConstructLine();     
   
 private:
-
-  G4double fMassNucleus;
-  G4double fMassCytoplasm;
-
-  G4double fDensityPhantom;
-  G4double fDensityNucleus;
-  G4double fDensityCytoplasm;
-  G4int    fNbOfPixelsInPhantom;
-    
-  G4double      fWorldSizeXY;
-  G4double      fWorldSizeZ;
-  G4double      fCollObjSizeXY;
-  G4double      fCollObjSizeZ;
-
-  G4double 	fCiblePositionX;
-  G4double 	fCiblePositionY;
-  G4double 	fCiblePositionZ;
   
-  G4double 	fLineAngle;
- 
-// Materials
-
-  G4Material*   fDefaultMaterial;
-  G4Material*   fCollimatorMaterial;
-  G4Material*   fBoiteMaterial;
-  G4Material*   fCathodeMaterial;
-  G4Material*   fVerreMaterial;
-  G4Material*   fVerre2Material;
-  G4Material*   fKgmMaterial;
-  G4Material*   fBoite2Material;
-  G4Material*   fBoite3Material;
-  G4Material*   fNucleusMaterial1;
-  G4Material*   fCytoplasmMaterial1;
-  G4Material*   fNucleusMaterial2;
-  G4Material*   fCytoplasmMaterial2;
-  G4Material*   fNucleusMaterial3;
-  G4Material*   fCytoplasmMaterial3;
-
+  CellParameterisation * fMyCellParameterisation;
+  
+  // Materials
+  G4Material* fDefaultMaterial;
+  G4Material* fCollimatorMaterial;
+  G4Material* fBoiteMaterial;
+  G4Material* fCathodeMaterial;
+  G4Material* fVerreMaterial;
+  G4Material* fVerre2Material;
+  G4Material* fKgmMaterial;
+  G4Material* fBoite2Material;
+  G4Material* fBoite3Material;
+  G4Material* fNucleusMaterial1;
+  G4Material* fCytoplasmMaterial1;
+  G4Material* fNucleusMaterial2;
+  G4Material* fCytoplasmMaterial2;
+  G4Material* fNucleusMaterial3;
+  G4Material* fCytoplasmMaterial3;
+  
 // Volumes
 
   G4VPhysicalVolume* fPhysiWorld;
@@ -209,27 +193,25 @@ private:
   G4LogicalVolume*   fLogicPhantom;  
   G4Box*             fSolidPhantom; 
 
-  CellParameterisation * fMyCellParameterisation;
-  
-  //
-  
-  static G4ThreadLocal EMField * fField;
+  G4double fMassNucleus;
+  G4double fMassCytoplasm;
 
-  G4FieldManager * fFieldMgr;
-  G4MagIntegratorStepper * fStepper;
-  G4EqMagElectricField * fEquation;
-  G4MagInt_Driver * fIntgrDriver;
-  G4ChordFinder * fChordFinder ;
-  
-  // FROM NANOBEAM EX. TUNINGS
-  
-  G4PropagatorInField * fPropInField;
+  G4double fDensityPhantom;
+  G4double fDensityNucleus;
+  G4double fDensityCytoplasm;
+    
+  G4double fWorldSizeXY;
+  G4double fWorldSizeZ;
+  G4double fCollObjSizeXY;
+  G4double fCollObjSizeZ;
 
-  //
+  G4double fCiblePositionX;
+  G4double fCiblePositionY;
+  G4double fCiblePositionZ;
   
-  void DefineMaterials();
-  G4VPhysicalVolume* ConstructLine();     
-
+  G4double fLineAngle;
+  
+  G4int    fNbOfPixelsInPhantom;
 };
 
 #endif

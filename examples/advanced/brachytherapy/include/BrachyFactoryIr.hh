@@ -40,23 +40,25 @@
 #include "BrachyFactory.hh"
 #include "G4RunManager.hh"
 
+class BrachyFactory;
+class BrachyDetectorConstructionFlexi;
 class G4ParticleGun;
 class G4Run;
 class G4Event;
-class BrachyFactory;
-class BrachyDetectorConstructionIr;
+
+// This class manages the creation of the Nucletron Flexi Source
 
 // This class manages the creation of iridum source used in endocavitary
 // brachytherapy ...
 class BrachyFactoryIr : public BrachyFactory
 {
 public:
-  BrachyFactoryIr();
-  ~BrachyFactoryIr();
-  void CreateSource(G4VPhysicalVolume*);
-  void CleanSource();
+  explicit BrachyFactoryFlexi();
+  ~BrachyFactoryFlexi();
+  void CreateSource(G4VPhysicalVolume*)override;
+  void CleanSource() override;
 
 private:
-  BrachyDetectorConstructionIr* iridiumSource;
+  BrachyDetectorConstructionFlexi* fFlexiSource; 
 };
 #endif

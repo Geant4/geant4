@@ -85,18 +85,20 @@ void G4LightTargetCollider::collide(G4InuclParticle* bullet,
     G4cout << "     Target: " << target->getDefinition()->GetParticleName() << G4endl;
   }
 
-  // Particle-on-particle collision
-  // No nucleus involved, just a proton in this case
-  if (useEPCollider(bullet,target)) {
-    if (verboseLevel > 2)
-      G4cout << " InuclCollider -> particle on particle collision" << G4endl;
- 
-    theElementaryParticleCollider->collide(bullet, target, globalOutput);
-    return;
-  }
-
   G4double ke = bullet->getKineticEnergy();
-  if (target->getDefinition() == G4Deuteron::Deuteron()) {
+
+  if (target->getDefinition() == G4Proton::Proton() ) {
+    if (ke < 0.1447) {
+      // Below threshold lab energy for pi0 creation 
+      globalOutput.trivialise(bullet, target);
+    } else {
+      // Need inelastic cross section in this class if we want to replace ElementaryParticleCollider 
+      // with SingleNucleonScattering
+      theElementaryParticleCollider->collide(bullet, target, globalOutput);
+      if (globalOutput.numberOfOutgoingParticles() == 0) globalOutput.trivialise(bullet, target);
+    }
+
+  } else if (target->getDefinition() == G4Deuteron::Deuteron() ) {
 
     if (ke < mP + mN - mD) {
       // Should not happen as long as inelastic cross section is zero

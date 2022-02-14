@@ -43,10 +43,11 @@
 #include "G4Exp.hh"
 #include "G4Log.hh"
 #include "G4HadronicParameters.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 
 G4HadronElastic::G4HadronElastic(const G4String& name) 
-  : G4HadronicInteraction(name)
+  : G4HadronicInteraction(name), secID(-1)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
@@ -58,6 +59,8 @@ G4HadronElastic::G4HadronElastic(const G4String& name)
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
+
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + name );
 }
 
 G4HadronElastic::~G4HadronElastic()
@@ -192,7 +195,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 	G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
     }
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, lv.vect().unit(), erec);
-    theParticleChange.AddSecondary(aSec);
+    theParticleChange.AddSecondary(aSec, secID);
   } else {
     theParticleChange.SetLocalEnergyDeposit(erec);
   }
@@ -208,6 +211,7 @@ G4HadronElastic::SampleInvariantT(const G4ParticleDefinition* part,
   const G4double plabLowLimit = 400.0*CLHEP::MeV;
   const G4double GeV2 = GeV*GeV;
   const G4double z07in13 = std::pow(0.7, 0.3333333333);
+  const G4double numLimit = 18.;
 
   G4int pdg = std::abs(part->GetPDGEncoding());
   G4double tmax = pLocalTmax/GeV2;
@@ -255,8 +259,8 @@ G4HadronElastic::SampleInvariantT(const G4ParticleDefinition* part,
       cc = 0.2*g4pow->powZ(A,0.4)/dd;//1:0.4     ---    2: 0.4
     }
   }
-  G4double q1 = 1.0 - G4Exp(-bb*tmax);
-  G4double q2 = 1.0 - G4Exp(-dd*tmax);
+  G4double q1 = 1.0 - G4Exp(-std::min(bb*tmax, numLimit));
+  G4double q2 = 1.0 - G4Exp(-std::min(dd*tmax, numLimit));
   G4double s1 = q1*aa;
   G4double s2 = q2*cc;
   if((s1 + s2)*G4UniformRand() < s2) {

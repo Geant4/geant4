@@ -23,54 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//   G4MCTGenEvent.hh
-//
-// ====================================================================
-#ifndef MCT_GEN_EVENT_H
-#define MCT_GEN_EVENT_H
+// G4MCTGenEvent
 
-#include "G4Types.hh"
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
+#ifndef G4MCTGENEVENT_HH
+#define G4MCTGENEVENT_HH 1
+
 #include <iostream>
 #include <vector>
- 
-// ====================================================================
-//
-// class definition
-//
-// ====================================================================
 
-class G4MCTGenEvent {
-protected:
-  std::vector<void*> eventList;
+#include "G4Types.hh"
 
-public:
-  G4MCTGenEvent();
-  virtual ~G4MCTGenEvent();
- 
-  // copy constructor and assignment operator
-  G4MCTGenEvent(const G4MCTGenEvent& right);
-  const G4MCTGenEvent& operator=(const G4MCTGenEvent& right);
-  
-  // methods...  
-  int AddGenEvent(const void* genevent);
-  int GetNofEvents() const;
-  const void* GetGenEvent(int i);
+class G4MCTGenEvent
+{
+  public:
 
-  void ClearEvent();
+    G4MCTGenEvent();
+    virtual ~G4MCTGenEvent();
+
+    inline G4MCTGenEvent(const G4MCTGenEvent& right);
+    inline G4MCTGenEvent& operator=(const G4MCTGenEvent& right);
+      // copy constructor and assignment operator
+
+    G4int AddGenEvent(const void* genevent);
+    G4int GetNofEvents() const;
+    const void* GetGenEvent(G4int i);
+
+    void ClearEvent();
+
+  protected:
+
+    std::vector<void*> eventList;
 };
 
 // ====================================================================
-// inline functions
+// inline methods
 // ====================================================================
 
 inline G4MCTGenEvent::G4MCTGenEvent(const G4MCTGenEvent& right)
 {
-  *this= right;
+  *this = right;
 }
- 
-inline const G4MCTGenEvent& G4MCTGenEvent::operator=(const G4MCTGenEvent& right)
+
+inline G4MCTGenEvent& G4MCTGenEvent::operator=(const G4MCTGenEvent& right)
 {
-  eventList= right.eventList;  // shallow copy
+  eventList = right.eventList;  // shallow copy
 
   return *this;
 }

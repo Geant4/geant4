@@ -119,7 +119,7 @@ void G4DNABornIonisationModel2::Initialise(const G4ParticleDefinition* particle,
     "for particle "
     << particle->GetParticleName()
     << G4endl;
-    description << "G4DNABornIonisationModel2 was already initiliased "
+    description << "G4DNABornIonisationModel2 was already initialised "
     "for particle:" << fParticleDef->GetParticleName() << G4endl;
     G4Exception("G4DNABornIonisationModel2::Initialise","bornIonInit",
         FatalException,description);
@@ -128,7 +128,7 @@ void G4DNABornIonisationModel2::Initialise(const G4ParticleDefinition* particle,
   fParticleDef = particle;
 
   // Energy limits
-  char *path = getenv("G4LEDATA");
+  char *path = std::getenv("G4LEDATA");
 
   // ***
 

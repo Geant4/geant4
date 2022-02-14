@@ -46,11 +46,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "Randomize.hh"
+#include "G4Types.hh"
 
-#ifdef G4VIS_USE
+#include "G4RunManagerFactory.hh"
+
+#include "G4UImanager.hh"
+#include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 #endif
 
@@ -70,11 +71,17 @@
 
 int main(int argc,char** argv) {
 
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
 
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager();
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),2);
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);
+  G4cout << "===== GammaTherapy is started with "
+         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
 
   // set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();

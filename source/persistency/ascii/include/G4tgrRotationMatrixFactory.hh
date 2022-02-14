@@ -23,47 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrRotationMatrixFactory
+// G4tgrRotationMatrixFactory
 //
 // Class description:
 //
 // Singleton class to manage the building of transient rotation matrix.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrRotationMatrixFactory_h
-#define G4tgrRotationMatrixFactory_h
-
-#include "globals.hh"
-#include "G4tgrRotationMatrix.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrRotationMatrixFactory_hh
+#define G4tgrRotationMatrixFactory_hh 1
 
 #include <vector>
 #include <map>
 
-typedef std::map< G4String, G4tgrRotationMatrix* > G4mstgrrotm;
+#include "globals.hh"
+#include "G4tgrRotationMatrix.hh"
 
-class G4tgrRotationMatrixFactory 
+using G4mstgrrotm = std::map<G4String, G4tgrRotationMatrix*>;
+
+class G4tgrRotationMatrixFactory
 {
-  public:  // with desctiption
+  public:
 
     static G4tgrRotationMatrixFactory* GetInstance();
       // Get the only instance (it it does not exists, create it)
-  
-    G4tgrRotationMatrix* AddRotMatrix( const std::vector<G4String>& wl );
+
+    G4tgrRotationMatrix* AddRotMatrix(const std::vector<G4String>& wl);
       // Build a G4tgrRotationMatrix and add it to theTgrRotMats
 
     G4tgrRotationMatrix* FindRotMatrix(const G4String& rotm);
-     // Look for an G4tgrRotationMatrix and if not found return 0
+      // Look for an G4tgrRotationMatrix and if not found return 0
 
-    const G4mstgrrotm& GetRotMatMap() const
-      { return theTgrRotMats; }
+    const G4mstgrrotm& GetRotMatMap() const { return theTgrRotMats; }
     std::vector<G4tgrRotationMatrix*> GetRotMatList() const
-      { return theTgrRotMatList; }
+    {
+      return theTgrRotMatList;
+    }
 
     void DumpRotmList();
       // Dump list of rotation matrices
@@ -71,12 +67,12 @@ class G4tgrRotationMatrixFactory
   private:
 
     G4tgrRotationMatrixFactory();
-   ~G4tgrRotationMatrixFactory();
+    ~G4tgrRotationMatrixFactory();
 
   private:
 
     static G4ThreadLocal G4tgrRotationMatrixFactory* theInstance;
-   
+
     std::vector<G4tgrRotationMatrix*> theTgrRotMatList;
     G4mstgrrotm theTgrRotMats;
 };

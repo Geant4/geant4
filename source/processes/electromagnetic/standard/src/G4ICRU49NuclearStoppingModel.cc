@@ -93,14 +93,14 @@ void G4ICRU49NuclearStoppingModel::InitialiseArray()
   if(0.0 == Z23[1]) {
 #ifdef G4MULTITHREADED
     G4MUTEXLOCK(&G4ICRU49NuclearStoppingModel::ICRU49NuclearMutex);
-#endif
     if(0.0 == Z23[1]) {
+#endif
       for(G4int i=2; i<100; ++i) { 
         Z23[i] = g4calc->powZ(i, 0.23);
       }
       Z23[1] = 1.0;
-    }
 #ifdef G4MULTITHREADED
+    }
     G4MUTEXUNLOCK(&G4ICRU49NuclearStoppingModel::ICRU49NuclearMutex);
 #endif
   }

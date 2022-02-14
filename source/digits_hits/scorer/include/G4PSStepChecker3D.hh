@@ -34,29 +34,25 @@
 //////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for debug.
-// 
+//
 // Created: 2011-03-24  Tsukasa ASO
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
+class G4PSStepChecker3D : public G4PSStepChecker
+{
+ public:  // with description
+  G4PSStepChecker3D(G4String name, G4int ni = 1, G4int nj = 1, G4int nk = 1,
+                    G4int depi = 2, G4int depj = 1, G4int depk = 0);
 
-class G4PSStepChecker3D : public G4PSStepChecker{
- 
- public: // with description
-      G4PSStepChecker3D(G4String name, 
-		     G4int ni=1,G4int nj=1, G4int nk=1,
-		     G4int depi=2, G4int depj=1, G4int depk=0);
+ public:
+  virtual ~G4PSStepChecker3D();
 
-  public:
-      virtual ~G4PSStepChecker3D();
+ protected:  // with description
+  virtual G4int GetIndex(G4Step*);
 
-  protected: // with description
-      virtual G4int GetIndex(G4Step*);
-
-  private:
-      G4int fDepthi, fDepthj, fDepthk;
+ private:
+  G4int fDepthi, fDepthj, fDepthk;
 };
-
-
 
 #endif

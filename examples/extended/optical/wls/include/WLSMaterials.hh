@@ -35,40 +35,33 @@
 #define WLSMaterials_h 1
 
 #include "globals.hh"
-#include "G4Material.hh"
-#include "G4NistManager.hh"
+
+class G4Material;
+class G4NistManager;
 
 class WLSMaterials
 {
-  public:
+ public:
+  ~WLSMaterials();
 
-    virtual ~WLSMaterials();
- 
-    static WLSMaterials* GetInstance();
+  static WLSMaterials* GetInstance();
+  G4Material* GetMaterial(const G4String);
 
-    G4Material* GetMaterial(const G4String);
- 
-  private:
- 
-    WLSMaterials();
+ private:
+  WLSMaterials();
+  void CreateMaterials();
 
-    void CreateMaterials();
+  static WLSMaterials* fInstance;
 
-  private:
+  G4NistManager* fNistMan;
 
-    static WLSMaterials* fInstance;
-
-    G4NistManager*     fNistMan;
-
-    G4Material*        fAir;
-
-    G4Material*        fPMMA;
-    G4Material*        fPethylene;
-    G4Material*        fFPethylene;
-    G4Material*        fPolystyrene;
-    G4Material*        fSilicone;
-    G4Material*        fCoating;
-
+  G4Material* fAir;
+  G4Material* fPMMA;
+  G4Material* fPethylene;
+  G4Material* fFPethylene;
+  G4Material* fPolystyrene;
+  G4Material* fSilicone;
+  G4Material* fCoating;
 };
 
 #endif /*WLSMaterials_h*/

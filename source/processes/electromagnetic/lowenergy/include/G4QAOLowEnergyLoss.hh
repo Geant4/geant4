@@ -52,53 +52,50 @@
 
 class G4QAOLowEnergyLoss : public G4VLowEnergyModel
 {
-public: 
-  
-  G4QAOLowEnergyLoss(const G4String& name); 
-  
+public:   
+  explicit G4QAOLowEnergyLoss(const G4String& name);   
   ~G4QAOLowEnergyLoss();
     
   G4double HighEnergyLimit(const G4ParticleDefinition* aParticle,
-                           const G4Material* material) const;
+                           const G4Material* material) const override;
   // returns the higher limit for model validity
 
   G4double LowEnergyLimit(const G4ParticleDefinition* aParticle,
-                          const G4Material* material) const;
+                          const G4Material* material) const override;
   // returns the lower limit for model validity
  
-  G4double HighEnergyLimit(const G4ParticleDefinition* aParticle) const;
+  G4double HighEnergyLimit(const G4ParticleDefinition* aParticle) const override;
   // returns the higher limit for model validity
 
-  G4double LowEnergyLimit(const G4ParticleDefinition* aParticle) const;
+  G4double LowEnergyLimit(const G4ParticleDefinition* aParticle) const override;
   // returns the lower limit for model validity
  
   G4bool IsInCharge(const G4DynamicParticle* particle,
-		    const G4Material* material) const;
+		    const G4Material* material) const override;
   // returns true if the model is applicable at that energy for
   // that particle for that material
 
   G4bool IsInCharge(const G4ParticleDefinition* aParticle,
-		    const G4Material* material) const;
+		    const G4Material* material) const override;
   // returns true if the model is applicable at that energy for
   // that particle for that material
   
   G4double TheValue(const G4DynamicParticle* particle,
-		           const G4Material* material);
+		           const G4Material* material) override;
   // returns the energy loss via the quantal harmonic oscillator model 
   
   G4double TheValue(const G4ParticleDefinition* aParticle,
        		          const G4Material* material,
-                                G4double kineticEnergy);
+                                G4double kineticEnergy) override;
   // returns the energy loss via the quantal harmonic oscillator model 
 
-private:
-  
+private:  
   G4double EnergyLoss(const G4Material* material,
                             G4double kineticEnergy,
                             G4double zParticle) const;
   // returns the energy loss via the quantal harmonic oscillator model 
    
-  // get number of shell, energy and oscillator strenghts for material
+  // get number of shell, energy and oscillator strengths for material
   G4int GetNumberOfShell(const G4Material* material) const;
 
   G4double GetShellEnergy(const G4Material* material,G4int nbOfTheShell) const; 
@@ -113,11 +110,8 @@ private:
   // terms in Z^3
   G4double GetL2(G4double normEnergy) const;
   // terms in Z^4
-  
-  // Z of element at now avaliable for the model
-  static const G4int materialAvailable[6];
-  
-  // number, energy and oscillator strenghts
+    
+  // number, energy and oscillator strengths
   // for an harmonic oscillator model of material
   static const G4int nbofShellForMaterial[6];
   static const G4double alShellEnergy[3];
@@ -132,16 +126,17 @@ private:
   static const G4double auShellStrength[6];
   static const G4double ptShellEnergy[6];
   static const G4double ptShellStrength[6];
-  
-  G4int numberOfMaterials;
-
   //  variable for calculation of stopping number of L's term
   static const G4double L0[67][2];
   static const G4double L1[22][2];
   static const G4double L2[14][2];
   static const G4int nbOfElectronPerSubShell[1540];
   static const G4int fNumberOfShells[101];
+
+  // Z of element at now avaliable for the model
+  static const G4int materialAvailable[6];
   
+  G4int numberOfMaterials;
   G4int sizeL0;
   G4int sizeL1;
   G4int sizeL2;

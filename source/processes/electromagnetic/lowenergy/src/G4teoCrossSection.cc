@@ -34,18 +34,23 @@
 //  20 Oct 2011   ALF updated to take into account ECPSSR Form Factor
 //  09 Mar 2012   LP  update methods
 //  09 Mar 2012   ALF  update for M-shells Simulation
-//
+//  10 Nov 2021   S. Guatelli & S. Bakr Added ECPSSR form factor documented 
+//                in Bakr et al, NIM B, vol. 436, pp:285-291, 2018 and
+//                called here ECPSSR_ANSTO
 
 #include "globals.hh"
 #include "G4teoCrossSection.hh"
 #include "G4Proton.hh"
 #include "G4ecpssrBaseKxsModel.hh"
 #include "G4ecpssrBaseLixsModel.hh"
-
 #include "G4ecpssrFormFactorKxsModel.hh"
 #include "G4ecpssrFormFactorLixsModel.hh"
 #include "G4ecpssrFormFactorMixsModel.hh"
+#include "G4ANSTOecpssrKxsModel.hh"
+#include "G4ANSTOecpssrLixsModel.hh"
+#include "G4ANSTOecpssrMixsModel.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4teoCrossSection::G4teoCrossSection(const G4String& nam)
   :G4VhShellCrossSection(nam),totalCS(0.0)
 { 
@@ -61,6 +66,12 @@ G4teoCrossSection::G4teoCrossSection(const G4String& nam)
       ecpssrShellLi = new G4ecpssrFormFactorLixsModel();
       ecpssrShellMi = new G4ecpssrFormFactorMixsModel();
     }
+  else if (nam == "ECPSSR_ANSTO")
+    {
+      ecpssrShellK  = new G4ANSTOecpssrKxsModel();  
+      ecpssrShellLi = new G4ANSTOecpssrLixsModel();
+      ecpssrShellMi = new G4ANSTOecpssrMixsModel();
+    }   
   else 
     { 
       G4cout << "G4teoCrossSection::G4teoCrossSection: ERROR " 
@@ -71,12 +82,16 @@ G4teoCrossSection::G4teoCrossSection(const G4String& nam)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4teoCrossSection::~G4teoCrossSection()
 { 
   delete ecpssrShellK;
   delete ecpssrShellLi;
   delete ecpssrShellMi;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 std::vector<G4double> G4teoCrossSection::GetCrossSection(G4int Z,
 							 G4double incidentEnergy,
@@ -93,18 +108,16 @@ std::vector<G4double> G4teoCrossSection::GetCrossSection(G4int Z,
   crossSections.push_back( ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy) );
 
   if (ecpssrShellMi) {
-
     crossSections.push_back( ecpssrShellMi->CalculateM1CrossSection(Z, mass, incidentEnergy) );
     crossSections.push_back( ecpssrShellMi->CalculateM2CrossSection(Z, mass, incidentEnergy) );
     crossSections.push_back( ecpssrShellMi->CalculateM3CrossSection(Z, mass, incidentEnergy) );
     crossSections.push_back( ecpssrShellMi->CalculateM4CrossSection(Z, mass, incidentEnergy) );
     crossSections.push_back( ecpssrShellMi->CalculateM5CrossSection(Z, mass, incidentEnergy) );
-
   }
-
-
   return crossSections;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4teoCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 					 G4double incidentEnergy,
@@ -115,57 +128,49 @@ G4double G4teoCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
   if(shell > 3 && !ecpssrShellMi) {
     return res; 
   } 
-
   else if(shell > 8) { 
     return res;
   } 
-  
   else if(fKShell  == shell) 
     { 
       res = ecpssrShellK->CalculateCrossSection(Z, mass, incidentEnergy);
     } 
-  
   else if(fL1Shell == shell) 
     { 
       res = ecpssrShellLi->CalculateL1CrossSection(Z, mass, incidentEnergy);
-    } 
-  
+    }   
   else if(fL2Shell == shell) 
     { 
       res = ecpssrShellLi->CalculateL2CrossSection(Z, mass, incidentEnergy);
-    } 
-  
+    }   
   else if(fL3Shell == shell) 
     { 
       res = ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy);
     }
-
   else if(fM1Shell == shell) 
     { 
       res = ecpssrShellMi->CalculateM1CrossSection(Z, mass, incidentEnergy);
     }
-
   else if(fM2Shell == shell) 
     { 
       res = ecpssrShellMi->CalculateM2CrossSection(Z, mass, incidentEnergy);
     }
-
   else if(fM3Shell == shell) 
     { 
       res = ecpssrShellMi->CalculateM3CrossSection(Z, mass, incidentEnergy);
     }
-
   else if(fM4Shell == shell) 
     { 
       res = ecpssrShellMi->CalculateM4CrossSection(Z, mass, incidentEnergy);
     }
-
   else if(fM5Shell == shell) 
     { 
       res = ecpssrShellMi->CalculateM5CrossSection(Z, mass, incidentEnergy);
     }
   return res;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 std::vector<G4double> G4teoCrossSection::Probabilities(G4int Z,
 						       G4double incidentEnergy,
@@ -176,20 +181,18 @@ std::vector<G4double> G4teoCrossSection::Probabilities(G4int Z,
   std::vector<G4double> crossSections = 
     GetCrossSection(Z, incidentEnergy, mass, deltaEnergy);
 
-  for (size_t i=0; i<crossSections.size(); i++ ) {
-    
+  for (size_t i=0; i<crossSections.size(); ++i ) {    
     if (totalCS) {
       crossSections[i] = crossSections[i]/totalCS;
-    }
-    
+    }    
   }
   return crossSections;
 }
 
-void G4teoCrossSection::SetTotalCS(G4double val){
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4teoCrossSection::SetTotalCS(G4double val){
   totalCS = val;
-  //  G4cout << "totalXS set to: " << val / barn << " barns" << G4endl;
 }
 
 

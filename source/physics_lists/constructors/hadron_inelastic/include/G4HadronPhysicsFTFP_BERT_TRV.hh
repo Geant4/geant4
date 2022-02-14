@@ -36,6 +36,7 @@
 // 19.06.2008 G.Folger: change default for QE to NOT use Chips QE
 // 01.11.2012 W.Pokorski & A.Ribon: use new cross sections
 // 18.07.2016 A.Dotti: refactor following new code
+// 20.09.2020 V.Ivanchenko change design using G4HadProcess utility
 //
 //----------------------------------------------------------------------------
 //
@@ -49,14 +50,12 @@ class G4HadronPhysicsFTFP_BERT_TRV : public G4HadronPhysicsFTFP_BERT
   public: 
     G4HadronPhysicsFTFP_BERT_TRV(G4int verbose =1);
     G4HadronPhysicsFTFP_BERT_TRV(const G4String& name, G4bool quasiElastic=false);
-    virtual ~G4HadronPhysicsFTFP_BERT_TRV() {}
+    virtual ~G4HadronPhysicsFTFP_BERT_TRV();
 
-  private:
-    //Modify the minimum needed
-      virtual void Pion() override;
-      virtual void Kaon() override;
-      //virtual void DumpBanner() override;
-      virtual void ExtraConfiguration() override;
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsFTFP_BERT_TRV(G4HadronPhysicsFTFP_BERT_TRV &) = delete;
+    G4HadronPhysicsFTFP_BERT_TRV & operator =
+    (const G4HadronPhysicsFTFP_BERT_TRV &right) = delete;
 };
 
 #endif

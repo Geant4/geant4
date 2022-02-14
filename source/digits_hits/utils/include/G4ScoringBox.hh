@@ -41,24 +41,24 @@ class G4VScoreColorMap;
 
 class G4ScoringBox : public G4VScoringMesh
 {
-public:
+ public:
   G4ScoringBox(G4String wName);
   ~G4ScoringBox();
 
-protected:
+ protected:
   // construct this mesh
-  virtual void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
+  virtual void SetupGeometry(G4VPhysicalVolume* fWorldPhys);
 
-public:
+ public:
   void List() const;
-  void Draw(RunScore * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-  void DrawColumn(RunScore * map, G4VScoreColorMap* colorMap, 
-		  G4int idxProj, G4int idxColumn); 
+  void Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg = 111);
+  void DrawColumn(RunScore* map, G4VScoreColorMap* colorMap, G4int idxProj,
+                  G4int idxColumn);
 
   // set a direction to segment this mesh
-  void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
+  void SetSegmentDirection(G4int dir) { fSegmentDirection = dir; }
 
-private:
+ private:
   // get replicated position from 3D index (x,y,z)
   G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
   // get 3D index (x,y,z) from sequential index
@@ -66,13 +66,8 @@ private:
   // get sequential index from 3D index (x,y,z)
   G4int GetIndex(G4int x, G4int y, G4int z) const;
 
-private:
-  G4int fSegmentDirection; // =1: x, =2: y, =3: z
-  
+ private:
+  G4int fSegmentDirection;  // =1: x, =2: y, =3: z
 };
 
-
-
-
 #endif
-

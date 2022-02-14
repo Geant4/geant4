@@ -60,21 +60,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronBenchmarkDetector::ElectronBenchmarkDetector()
-:G4VUserDetectorConstruction(),
-fMaterialPrimFoil(0),
-fLogPrimFoil(0),
-fSolidPrimFoil(0),
-fScorerRingLog(0),
-fLogWorld(0),
-fMessenger(0),
-fWorldVisAtt(0),
-fWindowVisAtt(0),
-fPrimFoilVisAtt(0),
-fMonVisAtt(0),
-fBagVisAtt(0),
-fHeliumVisAtt(0),
-fRingVisAtt(0),
-fScorerVisAtt(0)
+:G4VUserDetectorConstruction()
 {
     // Exit Window
     fPosWindow0     =   0.000000*cm;
@@ -191,15 +177,12 @@ void ElectronBenchmarkDetector::DefineMaterials(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* ElectronBenchmarkDetector::CreateGeometry(){
-    // Clean old geometry, if any
-    G4GeometryManager::GetInstance()->OpenGeometry();
-    G4PhysicalVolumeStore::GetInstance()->Clean();
-    G4LogicalVolumeStore::GetInstance()->Clean();
-    G4SolidStore::GetInstance()->Clean();
-    
+
+    if(fPhysiWorld) return fPhysiWorld;    
+
     // Instantiate the world
-    G4VPhysicalVolume* physiworld = CreateWorld();
-    fLogWorld = physiworld->GetLogicalVolume();
+    fPhysiWorld = CreateWorld();
+    fLogWorld = fPhysiWorld->GetLogicalVolume();
     
     // Instantiate the geometry
     CreateExitWindow(fLogWorld);
@@ -210,7 +193,7 @@ G4VPhysicalVolume* ElectronBenchmarkDetector::CreateGeometry(){
     // Create the scorers
     CreateScorer(fLogWorld);
     
-    return physiworld;
+    return fPhysiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -382,8 +365,6 @@ void ElectronBenchmarkDetector::CreateScorer(G4LogicalVolume* worldLog){
                          G4Material::GetMaterial("G4_AIR"), "scorerRingLog");
     new G4PVReplica("ScorerRing",fScorerRingLog,scorerLog,kRho,
                     G4int(fRadOverall/fWidthScorerRing),fWidthScorerRing);
-
-    ConstructSDandField();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -432,13 +413,16 @@ void ElectronBenchmarkDetector::ConstructSDandField()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ElectronBenchmarkDetector::SetPrimFoilMaterial(G4String matname){
-    fMaterialPrimFoil = G4Material::GetMaterial(matname);
-    if (fLogPrimFoil) {
-      fLogPrimFoil->SetMaterial(fMaterialPrimFoil);
+void ElectronBenchmarkDetector::SetPrimFoilMaterial(const G4String& matname){
+    G4Material* material = G4NistManager::Instance()->FindOrBuildMaterial(matname);
+
+    if(material && material != fMaterialPrimFoil) {
+      fMaterialPrimFoil = material;
+      if (fLogPrimFoil) {
+        fLogPrimFoil->SetMaterial(fMaterialPrimFoil);
+      }
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     }
-    else CreatePrimaryFoil(fLogWorld);
-    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -446,11 +430,6 @@ void ElectronBenchmarkDetector::SetPrimFoilMaterial(G4String matname){
 void ElectronBenchmarkDetector::SetPrimFoilThickness(G4double thicknessPrimFoil)
 {
     fHalfThicknessPrimFoil = thicknessPrimFoil / 2.;
-    if (fSolidPrimFoil) {
-      fSolidPrimFoil->SetZHalfLength(fHalfThicknessPrimFoil);
-    }
-    else CreatePrimaryFoil(fLogWorld);
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

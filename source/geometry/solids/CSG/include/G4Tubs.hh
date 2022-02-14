@@ -161,14 +161,6 @@ class G4Tubs : public G4CSGSolid
     G4Tubs& operator=(const G4Tubs& rhs);
       // Copy constructor and assignment operator.
 
-    //  Older names for access functions
-
-    inline G4double GetRMin() const;
-    inline G4double GetRMax() const;
-    inline G4double GetDz  () const;
-    inline G4double GetSPhi() const;
-    inline G4double GetDPhi() const;
-
   protected:
 
     inline void Initialize();
@@ -212,10 +204,10 @@ class G4Tubs : public G4CSGSolid
       // Radial and angular tolerances
 
     static constexpr G4double kNormTolerance = 1.0e-6;
-      // 
+      //
       // Tolerance of unity for surface normal
       // (for speedup - use fInvRmax if possible )
-   
+
     G4double fRMin, fRMax, fDz, fSPhi, fDPhi;
       //
       // Radial and angular dimensions
@@ -230,9 +222,9 @@ class G4Tubs : public G4CSGSolid
       // Flag for identification of section or full tube
 
     G4double fInvRmax, fInvRmin;
-      // 
+      //
       // More cached values - inverse of Rmax, Rmin.
-   
+
     G4double halfCarTolerance, halfRadTolerance, halfAngTolerance;
       //
       // Cached half tolerance values

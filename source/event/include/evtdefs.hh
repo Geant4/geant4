@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Defines for Windows DLLs import/export
 //
-
+// Author: G.Cosmo, CERN
+// --------------------------------------------------------------------
 #ifndef EVTDEFS_HH
 #define EVTDEFS_HH
 
@@ -47,4 +45,4 @@
   #define G4EVENT_DLL
 #endif
 
-#endif /* G4EVTDEFS_HH */
+#endif /* EVTDEFS_HH */

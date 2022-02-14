@@ -1,7 +1,5 @@
 #
-# Macro file for the initialization phase of "LXe.cc"
-# when runing in interactive mode
-#
+# Macro file for the initialization phase of "LXe"
 # Sets some default verbose
 #
 /run/verbose 2

@@ -32,19 +32,20 @@
 #ifndef F04OpticalPhysics_h
 #define F04OpticalPhysics_h 1
 
+#include "G4EmDNAPhysics.hh"
 #include "globals.hh"
 
 #include "G4VPhysicsConstructor.hh"
 
-class F04OpticalPhysics : public G4VPhysicsConstructor
+class G4EmDNAPhysics_stationary : public G4EmDNAPhysics
 {
 public:
 
-    F04OpticalPhysics();
-    virtual ~F04OpticalPhysics();
+  G4EmDNAPhysics_stationary(G4int ver=1, const G4String& nam="G4EmDNAPhysics_stationary");
 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+  virtual ~G4EmDNAPhysics_stationary();
+
+  void ConstructProcess() override;
 
 };
 #endif

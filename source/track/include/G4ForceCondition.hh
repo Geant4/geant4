@@ -23,47 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ForceCondition
 //
+// Description:
 //
-//
-//---------------------------------------------------------------
-//
-// G4ForceCondition  
-//
-// Class Description:
-//   This enumaration specifies possible conditions the three
-//   types of DoIt can be assinged by physics processes.
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
+// This enumeration specifies possible conditions the three types of
+// DoIt() can be assinged by physics processes.
 
-#ifndef G4ForceCondition_h
-#define G4ForceCondition_h 1
+// Authors:
+//   Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//   Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// --------------------------------------------------------------------
+#ifndef G4ForceCondition_hh
+#define G4ForceCondition_hh 1
 
-/////////////////////
-enum G4ForceCondition  
-/////////////////////
+enum G4ForceCondition
 {
-  InActivated,       
+  InActivated,
   // This PostStepDoit is inactivated by a user
-  Forced,            
-    // This PostStepDoIt is forced to invoke if particle is not a state of StopAndKill.              
-  NotForced,         
-    // This PostStepDoIt is not forced to invoke.
-  Conditionally,     
-    // This PostStepDoIt is forced to invoke only when corresponding
-    // AlongStepDoIt limits the Step.
-  ExclusivelyForced, 
-    // Only this PostStepDoIt (or AtRestDoIt) is exclusively forced 
-    // to invoke - all other DoIt including AlongStepDoIts are ignored.
+  Forced,
+  // This PostStepDoIt is forced to invoke if particle is not in state of
+  // StopAndKill.
+  NotForced,
+  // This PostStepDoIt is not forced to invoke.
+  Conditionally,
+  // This PostStepDoIt is forced to invoke only when corresponding
+  // AlongStepDoIt limits the Step.
+  ExclusivelyForced,
+  // Only this PostStepDoIt (or AtRestDoIt) is exclusively forced
+  // to invoke - all other DoIt including AlongStepDoIts are ignored.
   StronglyForced
-   // This PostStepDoIt is really forced to invoke, anyway.
+  // This PostStepDoIt is really forced to invoke, anyway.
 };
 
 #endif
-
-

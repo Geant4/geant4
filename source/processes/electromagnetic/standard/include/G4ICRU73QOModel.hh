@@ -77,50 +77,52 @@ public:
 
   ~G4ICRU73QOModel() = default;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-                          const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double ComputeCrossSectionPerElectron(
+  G4double ComputeCrossSectionPerElectron(
                                  const G4ParticleDefinition*,
                                  G4double kineticEnergy,
                                  G4double cutEnergy,
-                                 G4double maxEnergy) final;
+                                 G4double maxEnergy);
                                  
-  virtual G4double ComputeCrossSectionPerAtom(
+  G4double ComputeCrossSectionPerAtom(
                                  const G4ParticleDefinition*,
                                  G4double kineticEnergy,
                                  G4double Z, G4double A,
                                  G4double cutEnergy,
                                  G4double maxEnergy) override;
                                                                   
-  virtual G4double CrossSectionPerVolume(const G4Material*,
+  G4double CrossSectionPerVolume(const G4Material*,
                                  const G4ParticleDefinition*,
                                  G4double kineticEnergy,
                                  G4double cutEnergy,
                                  G4double maxEnergy) override;
                                  
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-                                        const G4ParticleDefinition*,
-                                        G4double kineticEnergy,
-                                        G4double) override;
+  G4double ComputeDEDXPerVolume(const G4Material*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4DynamicParticle*,
-                                 G4double tmin,
-                                 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
 
   // add correction to energy loss and compute non-ionizing energy loss
-  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-                                    const G4DynamicParticle*,
-                                    G4double& eloss,
-                                    G4double& niel,
-                                    G4double length) override;
+  void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+			    const G4DynamicParticle*,
+			    const G4double& length,
+			    G4double& eloss) override;
+
+  // hide assignment operator
+  G4ICRU73QOModel & operator=(const  G4ICRU73QOModel &right) = delete;
+  G4ICRU73QOModel(const  G4ICRU73QOModel&) = delete;
  
 protected:
 
-  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                      G4double kinEnergy) final;
+  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+			      G4double kinEnergy) final;
 
 private:
 
@@ -131,7 +133,7 @@ private:
 
   G4double DEDXPerElement(G4int Z, G4double kineticEnergy);
 
-  // get number of shell, energy and oscillator strenghts for material
+  // get number of shell, energy and oscillator strengths for material
   G4int GetNumberOfShells(G4int Z) const;
 
   G4double GetShellEnergy(G4int Z, G4int nbOfTheShell) const; 
@@ -146,10 +148,6 @@ private:
   G4double GetL2(G4double normEnergy) const;
   // terms in Z^4
   
-  // hide assignment operator
-  G4ICRU73QOModel & operator=(const  G4ICRU73QOModel &right) = delete;
-  G4ICRU73QOModel(const  G4ICRU73QOModel&) = delete;
-
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;   
   G4ParticleChangeForLoss*    fParticleChange;
@@ -169,7 +167,7 @@ private:
   static const G4int NQODATA  = 130;
   static const G4int ZElementAvailable[NQOELEM];
   
-  // number, energy and oscillator strenghts
+  // number, energy and oscillator strengths
   // for an harmonic oscillator model of material
   static const G4int startElemIndex[NQOELEM];
   static const G4int nbofShellsForElement[NQOELEM];

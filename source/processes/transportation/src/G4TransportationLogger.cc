@@ -129,9 +129,10 @@ void G4TransportationLogger::ReportLoopingTrack( const G4Track & track,
       << G4endl     
       << " Number of propagation trials = " << numTrials
       << " ( vs maximum = " << GetThresholdTrials() << " for 'important' particles ) " 
-      << G4endl
-      << "   ( Number of *calls* of Transport/AlongStepDoIt = " << noCalls << " )"
       << G4endl;
+
+  if (noCalls)
+    msg << "   ( Number of *calls* of Transport/AlongStepDoIt = " << noCalls << " )" << G4endl;
 
   const G4int numPrints= 5;
   if( numAdviceExcessSteps++ < numPrints )

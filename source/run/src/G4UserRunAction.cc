@@ -23,40 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UserRunAction implementation
 //
-//
+// Original author: M.Asai, 1998
+// --------------------------------------------------------------------
 
+#include "globals.hh"
 #include "G4UserRunAction.hh"
 #include "G4ParticleTable.hh"
-#include "globals.hh"
 
-
+// --------------------------------------------------------------------
 G4UserRunAction::G4UserRunAction()
-:isMaster(true)
 {
- if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
- {
-   G4String msg;
-   msg =  " You are instantiating G4UserRunAction BEFORE your G4VUserPhysicsList is\n";
-   msg += "instantiated and assigned to G4RunManager.\n";
-   msg += " Such an instantiation is prohibited by Geant4 version 8.0. To fix this problem,\n";
-   msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
-   msg += "set it to G4RunManager before instantiating other user action classes\n";
-   msg += "such as G4UserRunAction.";
-   G4Exception("G4UserRunAction::G4UserRunAction()",
-              "Run0041",FatalException,msg);
- }
+  if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
+  {
+    G4String msg;
+    msg = " You are instantiating G4UserRunAction BEFORE your "
+          "G4VUserPhysicsList is\n";
+    msg += "instantiated and assigned to G4RunManager.\n";
+    msg +=
+      " Such an instantiation is prohibited. To fix this problem,\n";
+    msg +=
+      "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
+    msg +=
+      "set it to G4RunManager before instantiating other user action classes\n";
+    msg += "such as G4UserRunAction.";
+    G4Exception("G4UserRunAction::G4UserRunAction()", "Run0041",
+                FatalException, msg);
+  }
 }
 
+// --------------------------------------------------------------------
 G4UserRunAction::~G4UserRunAction()
-{;}
+{
+}
 
+// --------------------------------------------------------------------
 G4Run* G4UserRunAction::GenerateRun()
-{ return 0; }
+{
+  return nullptr;
+}
 
+// --------------------------------------------------------------------
 void G4UserRunAction::BeginOfRunAction(const G4Run*)
-{;}
+{
+}
 
+// --------------------------------------------------------------------
 void G4UserRunAction::EndOfRunAction(const G4Run*)
-{;}
-
+{
+}

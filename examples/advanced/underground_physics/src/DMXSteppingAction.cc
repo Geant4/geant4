@@ -46,8 +46,8 @@
 #include "DMXSteppingActionMessenger.hh"
 
 #include "DMXEventAction.hh"
-#include "DMXAnalysisManager.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4RunManager.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"

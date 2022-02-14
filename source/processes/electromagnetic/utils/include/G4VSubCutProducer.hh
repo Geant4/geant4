@@ -72,11 +72,11 @@ public:
 
   inline const G4String& GetName() const;
 
-private:
-
   // hide assignment operator 
   G4VSubCutProducer & operator=(const  G4VSubCutProducer &right);
   G4VSubCutProducer(const  G4VSubCutProducer&);
+
+private:
 
   G4String fName;
 };

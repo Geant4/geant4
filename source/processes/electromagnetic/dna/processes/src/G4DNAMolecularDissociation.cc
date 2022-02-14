@@ -43,6 +43,7 @@
 #include "G4ParticleChange.hh"
 #include "G4ITTransportationManager.hh"
 #include "G4ITNavigator.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //______________________________________________________________________________
 
@@ -52,7 +53,7 @@ G4DNAMolecularDissociation(const G4String& processName,
    : G4VITRestDiscreteProcess(processName, type)
 {
     // set Process Sub Type
-    SetProcessSubType(59); // DNA sub-type
+    SetProcessSubType(fLowEnergyMolecularDecay); // DNA sub-type
     enableAlongStepDoIt = false;
     enablePostStepDoIt = true;
     enableAtRestDoIt = true;

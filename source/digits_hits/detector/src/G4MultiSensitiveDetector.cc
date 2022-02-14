@@ -31,107 +31,116 @@
 
 //#define MSDDEBUG
 #ifdef MSDDEBUG
-#define DBG( msg ) G4cout<<msg<<G4endl
+#  define DBG(msg) G4cout << msg << G4endl
 #else
-#define DBG( msg )
+#  define DBG(msg)
 #endif
-#define VDBG( vl , msg ) if ( vl<=verboseLevel ) G4cout<<msg<<G4endl
+#define VDBG(vl, msg)                                                          \
+  if(vl <= verboseLevel)                                                       \
+  G4cout << msg << G4endl
 
 G4MultiSensitiveDetector::G4MultiSensitiveDetector(G4String name)
-	: G4VSensitiveDetector(name)
+  : G4VSensitiveDetector(name)
 {
 #ifdef MSDDEBUG
-	verboseLevel = 3;
+  verboseLevel = 3;
 #endif
-	VDBG(1,"Creating G4MultiSenstiveDetector with name: "<<name);
+  VDBG(1, "Creating G4MultiSenstiveDetector with name: " << name);
 }
 
 G4MultiSensitiveDetector::~G4MultiSensitiveDetector()
 {
-	VDBG(2,GetName()<<" : Destructing G4MultiSensitiveDetector");
-	ClearSDs();
+  VDBG(2, GetName() << " : Destructing G4MultiSensitiveDetector");
+  ClearSDs();
 }
 
-G4MultiSensitiveDetector::G4MultiSensitiveDetector(const G4MultiSensitiveDetector& rhs)
-: G4VSensitiveDetector(rhs) ,
-  fSensitiveDetectors(rhs.fSensitiveDetectors)
+G4MultiSensitiveDetector::G4MultiSensitiveDetector(
+  const G4MultiSensitiveDetector& rhs)
+  : G4VSensitiveDetector(rhs)
+  , fSensitiveDetectors(rhs.fSensitiveDetectors)
 {
-	VDBG(3,GetName()<<" : Copy constructor called.");
+  VDBG(3, GetName() << " : Copy constructor called.");
 }
 
-G4MultiSensitiveDetector&
-G4MultiSensitiveDetector::operator=(const G4MultiSensitiveDetector& rhs)
+G4MultiSensitiveDetector& G4MultiSensitiveDetector::operator=(
+  const G4MultiSensitiveDetector& rhs)
 {
-	if ( this != &rhs ) {
-		//G4VSensitiveDetector::operator=(static_cast<const G4VSensitiveDetector&>(rhs));
-		G4VSensitiveDetector::operator=(static_cast<const G4VSensitiveDetector&>(rhs));
-		fSensitiveDetectors = rhs.fSensitiveDetectors;
-	}
-	return *this;
+  if(this != &rhs)
+  {
+    // G4VSensitiveDetector::operator=(static_cast<const
+    // G4VSensitiveDetector&>(rhs));
+    G4VSensitiveDetector::operator=(
+      static_cast<const G4VSensitiveDetector&>(rhs));
+    fSensitiveDetectors = rhs.fSensitiveDetectors;
+  }
+  return *this;
 }
 
-void
-G4MultiSensitiveDetector::Initialize(G4HCofThisEvent* )
+void G4MultiSensitiveDetector::Initialize(G4HCofThisEvent*)
 {
-    //SDManager is resposnsible for calling this since the granular SDs
+  // SDManager is resposnsible for calling this since the granular SDs
   // are also registered
-	//for ( auto sd : fSensitiveDetectors ) sd->Initialize(hcte);
+  // for ( auto sd : fSensitiveDetectors ) sd->Initialize(hcte);
 }
 
-void
-G4MultiSensitiveDetector::EndOfEvent(G4HCofThisEvent* )
+void G4MultiSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
-  //SDManager is resposnsible for calling this since the granular SDs
-// are also registered
-	//for ( auto sd : fSensitiveDetectors ) sd->EndOfEvent(hcte);
+  // SDManager is resposnsible for calling this since the granular SDs
+  // are also registered
+  // for ( auto sd : fSensitiveDetectors ) sd->EndOfEvent(hcte);
 }
 
-void
-G4MultiSensitiveDetector::clear()
+void G4MultiSensitiveDetector::clear()
 {
-	for ( auto sd : fSensitiveDetectors ) sd->clear();
+  for(auto sd : fSensitiveDetectors)
+    sd->clear();
 }
 
-void
-G4MultiSensitiveDetector::DrawAll()
+void G4MultiSensitiveDetector::DrawAll()
 {
-	for ( auto sd : fSensitiveDetectors ) sd->DrawAll();
+  for(auto sd : fSensitiveDetectors)
+    sd->DrawAll();
 }
 
-void
-G4MultiSensitiveDetector::PrintAll()
+void G4MultiSensitiveDetector::PrintAll()
 {
-	for ( auto sd : fSensitiveDetectors ) sd->PrintAll();
+  for(auto sd : fSensitiveDetectors)
+    sd->PrintAll();
 }
 
-G4bool
-G4MultiSensitiveDetector::ProcessHits(G4Step*aStep,G4TouchableHistory*)
+G4bool G4MultiSensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-	VDBG(2,GetName()<<" : Called processHits: "<<aStep<<" with Edep: "<<aStep->GetTotalEnergyDeposit());
-	G4bool result = true;
-	for (auto sd : fSensitiveDetectors )
-		result &= sd->Hit(aStep);
-	return result;
+  VDBG(2, GetName() << " : Called processHits: " << aStep
+                    << " with Edep: " << aStep->GetTotalEnergyDeposit());
+  G4bool result = true;
+  for(auto sd : fSensitiveDetectors)
+    result &= sd->Hit(aStep);
+  return result;
 }
 
 G4int G4MultiSensitiveDetector::GetCollectionID(G4int)
 {
-	G4ExceptionDescription msg;
-	msg << GetName()<<" : This method cannot be called for an instance of type G4MultiSensitiveDetector."
-		<< " First retrieve a contained G4VSensitiveDetector with. i.e. GetSD and then "
-		<< " call this method.";
-	G4Exception("G4MultiSensitiveDetector::GetCollectionID","Det0011",FatalException,msg);
-	return -1;
+  G4ExceptionDescription msg;
+  msg << GetName()
+      << " : This method cannot be called for an instance of type "
+         "G4MultiSensitiveDetector."
+      << " First retrieve a contained G4VSensitiveDetector with. i.e. GetSD "
+         "and then "
+      << " call this method.";
+  G4Exception("G4MultiSensitiveDetector::GetCollectionID", "Det0011",
+              FatalException, msg);
+  return -1;
 }
 
-//This method requires all contained SD to be clonable
+// This method requires all contained SD to be clonable
 G4VSensitiveDetector* G4MultiSensitiveDetector::Clone() const
 {
-	VDBG(2,GetName()<<"Cloning an instance of G4MultiSensitiveDetector");
-	G4MultiSensitiveDetector* newInst = new G4MultiSensitiveDetector(this->GetName());
-	for ( auto sd : fSensitiveDetectors )
-		newInst->AddSD( sd->Clone() );
-	return newInst;
+  VDBG(2, GetName() << "Cloning an instance of G4MultiSensitiveDetector");
+  G4MultiSensitiveDetector* newInst =
+    new G4MultiSensitiveDetector(this->GetName());
+  for(auto sd : fSensitiveDetectors)
+    newInst->AddSD(sd->Clone());
+  return newInst;
 }
 
 void G4MultiSensitiveDetector::AddSD(G4VSensitiveDetector* sd) 

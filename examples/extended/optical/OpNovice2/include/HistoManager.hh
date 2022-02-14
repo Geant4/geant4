@@ -27,7 +27,7 @@
 /// \brief Definition of the HistoManager class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,25 +35,21 @@
 #define HistoManager_h 1
 
 #include "globals.hh"
-
-#include "g4root.hh"
-//#include "g4xml.hh"
-//#include "g4csv.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
 {
-  public:
-    HistoManager();
-   ~HistoManager();
+ public:
+  HistoManager();
+  ~HistoManager();
 
-  private:
-    void Book();
-    G4String fFileName;
+ private:
+  void Book();
+  G4String fFileName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -1,6 +1,5 @@
 #
 # Macro file for "Hadr03.cc"
-# (can be run in batch, without graphic)
 #
 /control/verbose 2
 /run/verbose 2
@@ -22,10 +21,9 @@
 #
 /analysis/setFileName nCapture
 /analysis/h1/set 2  100  0. 15 MeV	#gamma
-/analysis/h1/set 7  100  0. 70 keV	#nuclei
-/analysis/h1/set 10 100  0. 70 MeV	#Q
-/analysis/h1/set 11 100  0. 15 MeV	#Pbalance
+/analysis/h1/set 8  100  0. 70 keV	#nuclei
+/analysis/h1/set 11 100  0. 70 MeV	#Q
+/analysis/h1/set 12 100  0. 15 MeV	#Pbalance
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

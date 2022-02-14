@@ -62,15 +62,15 @@
 class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
 
  public:
-   G4IonDEDXScalingICRU73(G4int minAtomicNumberIon = 19,
-                          G4int maxAtomicNumberIon = 102);
-   ~G4IonDEDXScalingICRU73();
+  explicit G4IonDEDXScalingICRU73(G4int minAtomicNumberIon = 19,
+				  G4int maxAtomicNumberIon = 102);
+  ~G4IonDEDXScalingICRU73();
 
-   // Function for scaling the kinetic energy (no scaling by default).
-   // Returns scaling factor for a given ion.
-   G4double ScalingFactorEnergy(
+  // Function for scaling the kinetic energy (no scaling by default).
+  // Returns scaling factor for a given ion.
+  G4double ScalingFactorEnergy(
              const G4ParticleDefinition* particle,     // Projectile (ion) 
-             const G4Material* material);              // Target material
+             const G4Material* material) override;              // Target material
                                                          
 
    // Function for scaling the dE/dx value (no scaling by default).
@@ -79,7 +79,7 @@ class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
    G4double ScalingFactorDEDX(
              const G4ParticleDefinition* particle,     // Projectile (ion) 
              const G4Material*,                        // Target material
-             G4double kineticEnergy);                  // Kinetic energy
+             G4double kineticEnergy) override;                  // Kinetic energy
 
 
    // Function for defining a base particle for dE/dx calculation.
@@ -87,7 +87,7 @@ class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
    // particle.
    G4int AtomicNumberBaseIon(
              G4int atomicNumberIon,           // Atomic number of ion 
-             const G4Material*);              // Target material
+             const G4Material*) override;              // Target material
 
  private:
    void UpdateCacheParticle(

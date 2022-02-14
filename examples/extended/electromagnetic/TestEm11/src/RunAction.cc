@@ -44,6 +44,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4EmCalculator.hh"
+#include "G4EmParameters.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
@@ -80,10 +81,12 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {  
-  // save Rndm status
-  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-   if (isMaster)  G4Random::showEngineStatus();
-   
+  // show Rndm status
+   if (isMaster) {
+     G4Random::showEngineStatus();
+     G4EmParameters::Instance()->Dump();
+   }
+       
   // keep run condition
   if ( fPrimary ) { 
     G4ParticleDefinition* particle 

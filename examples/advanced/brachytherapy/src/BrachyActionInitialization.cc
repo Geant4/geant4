@@ -28,35 +28,29 @@
 #include "BrachyActionInitialization.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
 #include "BrachySteppingAction.hh"
+#include "BrachyRunAction.hh"
 #include "G4RunManager.hh"
 
 BrachyActionInitialization::BrachyActionInitialization():
 G4VUserActionInitialization()
-{
-}
-
+{}
 
 BrachyActionInitialization::~BrachyActionInitialization()
-{
-}
+{}
 
 void BrachyActionInitialization::BuildForMaster() const
 {
-	// In MT mode, to be clearer, the RunAction class for the master thread might be
-	// different than the one used for the workers.
-	// This RunAction will be called before and after starting the
-	// workers.
+  SetUserAction(new BrachyRunAction());
 }
-
 
 void BrachyActionInitialization::Build() const
 {   
- // Initialize the primary particles
 BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction();
 SetUserAction(primary); 
 
+SetUserAction(new BrachyRunAction());
+
 BrachySteppingAction* stepping = new BrachySteppingAction();
-SetUserAction(stepping);
-	
+SetUserAction(stepping);	
 }  
 

@@ -37,19 +37,15 @@ Original code from geant4/examples/extended/runAndEvent/RE03,
 // by M. Asai
 */
 //
-// class description:
-//
-//This class represents storing the scored quantity into a file.
-//
 class BrachyUserScoreWriter:public G4VScoreWriter
 {
 public:
-  BrachyUserScoreWriter();
+  explicit BrachyUserScoreWriter();
   virtual ~BrachyUserScoreWriter();
   // store a quantity into a file
   void DumpQuantityToFile(const G4String & psName, 
                           const G4String & fileName, 
-                          const G4String & option);
+                          const G4String & option) override;
 };
 #endif
 

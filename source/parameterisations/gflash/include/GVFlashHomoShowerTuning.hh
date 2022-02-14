@@ -54,6 +54,11 @@
 //  alpha = a1+(a2+a3/Z)ln(y)
 
 // Author: J.P. Wellisch - October 2004
+//
+// Usage: use new statement for new instance of class, do not delete.
+//        The instance of class will be deleted in
+//        GFlashHomoShowerParameterisation Destructor.
+
 //---------------------------------------------------------------
 #ifndef GVFlashHomoShowerTuning_hh
 #define GVFlashHomoShowerTuning_hh
@@ -68,21 +73,21 @@ class GVFlashHomoShowerTuning
   
   public: // with description
 
-    virtual G4double ParAveT1(){ return -0.812;} // t1
-    virtual G4double ParAveA1(){ return 0.81;  } // a1
-    virtual G4double ParAveA2(){ return 0.458; } // a2
-    virtual G4double ParAveA3(){ return 2.26;  } // a3
+    virtual G4double ParAveT1(){ return -0.812; } // t1
+    virtual G4double ParAveA1(){ return  0.81;  } // a1
+    virtual G4double ParAveA2(){ return  0.458; } // a2
+    virtual G4double ParAveA3(){ return  2.26;  } // a3
   
-    virtual G4double ParSigLogT1(){ return -1.4;} // t1
-    virtual G4double ParSigLogT2(){ return 1.26;} // t2
+    virtual G4double ParSigLogT1(){ return -1.4; } // t1
+    virtual G4double ParSigLogT2(){ return  1.26;} // t2
       // std::sqrt(var(ln(T))) = 1/(t+t2*ln(y))
 
-    virtual G4double ParSigLogA1(){ return -0.58;} // a1
-    virtual G4double ParSigLogA2(){ return 0.86; } // a2
+    virtual G4double ParSigLogA1(){ return -0.58; } // a1
+    virtual G4double ParSigLogA2(){ return  0.86; } // a2
       // std::sqrt(var(ln(alpha))) = 1/(a1+a2*ln(y))
   
-    virtual G4double ParRho1(){ return 0.705; } // r1
-    virtual G4double ParRho2(){ return -0.023;} // r2
+    virtual G4double ParRho1(){ return  0.705; } // r1
+    virtual G4double ParRho2(){ return -0.023; } // r2
       // Correlation(ln(T),ln(alpha))=r1+r2*ln(y)
 
     // Radial profiles

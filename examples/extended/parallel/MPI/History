@@ -9,8 +9,28 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+9 Novemeber 2021,  I. Hrivnacova (MPI-V10-07-03)
+- Updated analysis classes for changes in analysis
+  in analysis-V10-07-*
+- More updates in g4mpi for changes in G4String:
+  str(i) -> str[i]; str(i,j) -> str.substr(i,j)
+- exMPI03 - include G4AnalysisManager.hh
+  exMPI04 - include G4Root[Mpi]AnalysisManager.hh
+  - instead of removed g4root.hh
+
+25 October 2021, B.Morgan (MPI-V10-07-02)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+18 October 2021 B.Morgan (MPI-V10-07-01)
+- Use std::string member functions from G4String in place of synonyms
+
+1 October 2021  B. Morgan (MPI-V10-07-00)
+- Use new std::string compliant G4String interfaces
+
+4 November 2020 I. Hrivnacova (MPI-V10-06-00)
+- Updated analysis classes for the design changes in analysis
+  tags analysis-V10-06-05,06
+
 21 October 2019 I. Hrivnacova (MPI-V10-05-02)
 - Fixed exMPI03, exMPI04, G4MPIscorerMerger.cc compilation which was broken
   after changes in scorers

@@ -125,12 +125,12 @@ void G4ITStepProcessor::DoIt(double timeStep)
   it--;
   size_t initialSize = mainList->size();
 
-  //  G4cout << "initialSize = " << initialSize << G4endl;
+//    G4cout << "initialSize = " << initialSize << G4endl;
 
   for(size_t i = 0 ; i < initialSize ; ++i)
   {
 
-    //  G4cout << "i = " << i << G4endl;
+//      G4cout << "i = " << i << G4endl;
 
     G4Track* track = *it;
     if (!track)
@@ -326,7 +326,7 @@ void G4ITStepProcessor::DoStepping()
   if(fpProcessInfo->MAXofPostStepLoops == 0 &&
       fpProcessInfo->MAXofAlongStepLoops == 0
      && fpProcessInfo->MAXofAtRestLoops == 0)
-  {
+  {/*
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "No process was found for particle :"
                          << fpTrack->GetDefinition()->GetParticleName();
@@ -336,7 +336,7 @@ void G4ITStepProcessor::DoStepping()
                 exceptionDescription);
 
     fpTrack->SetTrackStatus(fStopAndKill);
-    fpState->fStepStatus = fUndefined;
+    fpState->fStepStatus = fUndefined;*/
     return;
   }
 

@@ -61,6 +61,9 @@ This directory contains a set of dna examples.
        This example shows how to simulate W-values in liquid water
        using the Geant4-DNA physics processes and models.
 
+   - AuNP
+       Simulation calculates absorbed dose around AuNP
+
   Chemistry
 
    - chem1   Simple activation of the chemistry module.
@@ -70,7 +73,11 @@ This directory contains a set of dna examples.
 =======
    - chem4   Simulation of radiochemical yields with the chemistry module.
    - chem5   Variation of chem4, using the contructors G4EmDNAPhysics_option8 and 
-             G4EmDNAChemistry_option1    
+             G4EmDNAChemistry_option1.
+   - chem6   Scoring of the radiochemical yield G defined as a function of time
+             and LET.
+   - scavenger
+             Activation of the scavenging process in chemistry
 
   Geometry and other
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
@@ -92,8 +99,6 @@ This directory contains a set of dna examples.
    - neuron 
        Irradiation of a realistic neuron cell.
    
-   
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 See the README page inside each example for more detail.
 
 

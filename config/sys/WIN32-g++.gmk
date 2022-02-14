@@ -27,7 +27,6 @@ ifeq ($(G4SYSTEM),WIN32-g++)
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
-  G4USE_STD11 := 1
   G4USE_STD17 := 1
   CPPFLAGS  += -std=c++17
   CXXFLAGS  += -std=c++17
@@ -75,7 +74,7 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+    X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
   endif
   ifndef XMFLAGS
     XMFLAGS   := -I/usr/X11R6/include
@@ -93,7 +92,7 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    OGLLIBS   := -L$(OGLHOME)/lib -lGL
   endif
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \

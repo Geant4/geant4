@@ -32,13 +32,11 @@
 //  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
 //  09 Mar 2012   LP  updated methods
 //
-
-
 #include "globals.hh"
 #include "G4empCrossSection.hh"
 #include "G4Proton.hh"
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4empCrossSection::G4empCrossSection(const G4String& nam)
   :G4VhShellCrossSection(nam),totalCS(0.0)
 { 
@@ -57,14 +55,17 @@ G4empCrossSection::G4empCrossSection(const G4String& nam)
     orlicShellLi = new G4OrlicLiXsModel();
     flag=0;
   }
-
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4empCrossSection::~G4empCrossSection()
 { 
   delete paulShellK;
   delete orlicShellLi;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 std::vector<G4double> G4empCrossSection::GetCrossSection(G4int Z,
 							 G4double incidentEnergy,
@@ -92,7 +93,6 @@ std::vector<G4double> G4empCrossSection::GetCrossSection(G4int Z,
     }
 
   }
-
   else {
     crossSections.push_back( 0. );
     crossSections.push_back( 0. );
@@ -101,6 +101,8 @@ std::vector<G4double> G4empCrossSection::GetCrossSection(G4int Z,
   return crossSections;
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4empCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 					 G4double incidentEnergy,
@@ -133,13 +135,14 @@ G4double G4empCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
   return res;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 std::vector<G4double> G4empCrossSection::Probabilities(G4int Z,
 						       G4double incidentEnergy,
 						       G4double mass,
 						       G4double deltaEnergy,
 						       const G4Material* mat)
-{
-  
+{  
   std::vector<G4double> crossSections = GetCrossSection(Z, incidentEnergy, mass, deltaEnergy,mat);
 
   for (size_t i=0; i<crossSections.size(); i++ ) {
@@ -149,11 +152,10 @@ std::vector<G4double> G4empCrossSection::Probabilities(G4int Z,
     }
     
   }
-
   return crossSections;
-
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4empCrossSection::SetTotalCS(G4double val){
 

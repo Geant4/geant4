@@ -23,49 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VStateDependent class implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      ---------------- G4VStateDependent ----------------
-//             by Gabriele Cosmo, November 1996
-// ------------------------------------------------------------
+// Authors: G.Cosmo, M.Asai - November 1996
+// --------------------------------------------------------------------
 
 #include "G4VStateDependent.hh"
 #include "G4StateManager.hh"
 
-G4VStateDependent::G4VStateDependent(G4bool bottom) 
+G4VStateDependent::G4VStateDependent(G4bool bottom)
 {
-   G4StateManager * stateManager = G4StateManager::GetStateManager();
-   stateManager->RegisterDependent(this,bottom);
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  stateManager->RegisterDependent(this, bottom);
 }
 
 G4VStateDependent::~G4VStateDependent()
 {
-   G4StateManager * stateManager = G4StateManager::GetStateManager();
-   stateManager->DeregisterDependent(this);
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  stateManager->DeregisterDependent(this);
 }
 
-G4VStateDependent::G4VStateDependent(const G4VStateDependent &right)
+G4VStateDependent::G4VStateDependent(const G4VStateDependent& right)
 {
-   *this = right;
+  *this = right;
 }
 
-G4VStateDependent& G4VStateDependent::operator=(const G4VStateDependent &right)
+G4VStateDependent& G4VStateDependent::operator=(const G4VStateDependent& right)
 {
-   if (&right == this)  { return *this; }
-   *this = right;
-   return *this;
+  if(&right == this)
+  {
+    return *this;
+  }
+  *this = right;
+  return *this;
 }
 
-G4bool G4VStateDependent::operator==(const G4VStateDependent &right) const
+G4bool G4VStateDependent::operator==(const G4VStateDependent& right) const
 {
-   return (this == &right);
+  return (this == &right);
 }
 
-G4bool G4VStateDependent::operator!=(const G4VStateDependent &right) const
+G4bool G4VStateDependent::operator!=(const G4VStateDependent& right) const
 {
-   return (this != &right);
+  return (this != &right);
 }

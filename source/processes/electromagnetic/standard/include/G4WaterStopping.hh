@@ -48,7 +48,7 @@
 
 
 #include "globals.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include <vector>
 
 class G4EmCorrections;
@@ -57,7 +57,7 @@ class G4WaterStopping
 {
 public:
 
-  explicit G4WaterStopping(G4EmCorrections* corr = 0, G4bool splineFlag = true);
+  explicit G4WaterStopping(G4EmCorrections* corr = nullptr, G4bool splineFlag = true);
 
   ~G4WaterStopping();
 
@@ -74,11 +74,9 @@ private:
   G4WaterStopping & operator=(const  G4WaterStopping &right) = delete;
   G4WaterStopping(const  G4WaterStopping&) = delete;
 
-  G4bool   spline;
-  static const G4int Z[17];
-  static const G4double A[17];
+  G4bool spline;
   G4double emin;
-  std::vector<G4LPhysicsFreeVector*>  dedx;
+  std::vector<G4PhysicsFreeVector*>  dedx;
 };
 
 #endif

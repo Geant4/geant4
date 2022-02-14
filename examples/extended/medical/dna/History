@@ -14,8 +14,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+17-11-2021 I. Hrivnacova (exdna-V10-07-02)
+- Updated documentation
+- Added missing examples in CMakelists.txt
+
+26-10-2021 H. Tran (exdna-V10-07-01)
+- Added new scavenger example
+
+31-05-2021 D. Sakata (exdna-V10-07-00)
+- Added new AuNP example
+
+06-11-2020 I. Hrivnacova (exdna-V10-06-04)
+- Added new chem6 example in the category README
+
+29-04-2020 W. G. Shin (exdna-V10-06-03)
+- Fixed warning message on chem6 example
+
+26-04-2020 W. G. Shin (exdna-V10-06-02)
+- Extended example guideline for chem6
+
+19-02-2020 W. G. Shin (exdna-V10-06-01)
+- Fixed memory issue
+
+10-02-2020 W. G. Shin (exdna-V10-06-00)
+- New example chem6
+
 28-11-2019 I. Hrivnacova (exdna-V10-05-03)
 - Fixed links and formatting in .README.txt
 - Added missing examples in CMakelists.txt

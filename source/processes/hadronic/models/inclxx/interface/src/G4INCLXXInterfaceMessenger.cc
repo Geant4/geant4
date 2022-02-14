@@ -113,7 +113,7 @@ G4INCLXXInterfaceMessenger::~G4INCLXXInterfaceMessenger() {
 
 void G4INCLXXInterfaceMessenger::SetNewValue(G4UIcommand *command, G4String newValues) {
   if(command==accurateNucleusCmd) {
-    newValues.toLower();
+    G4StrUtil::to_lower(newValues);
     if(newValues=="projectile") {
       theINCLXXInterfaceStore->SetAccurateProjectile(true);
     } else if(newValues=="target") {

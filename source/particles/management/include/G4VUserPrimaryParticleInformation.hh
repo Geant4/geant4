@@ -23,38 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-//---------------------------------------------------------------
-//
 // G4VUserPrimaryParticleInformation
 //
-// Class Description:
+// Class description:
 //
-//  Abstract class which the user can derive his/her own concrete
-// class for toring user's information associating with a G4PrimaryParticle
+// Abstract class from which the user can derive a concrete class
+// for tuning user's information associated with a G4PrimaryParticle
 // class object.
-//
-//  It is user's responsibility to construct a concrete class object 
-// and set the pointer to proper G4PrimaryParticle object.
-//
-//  The concrete class object is deleted by Geant4 kernel when
+// It is user's responsibility to construct a concrete class object 
+// and set the pointer to the proper G4PrimaryParticle object.
+// The concrete class object is deleted by Geant4 kernel when
 // associated G4PrimaryParticle object is deleted.
 
-
-#ifndef G4VUserPrimaryParticleInformation_H
-#define G4VUserPrimaryParticleInformation_H 1
+// Author: M.Asai (SLAC)
+// --------------------------------------------------------------------
+#ifndef G4VUserPrimaryParticleInformation_hh
+#define G4VUserPrimaryParticleInformation_hh 1
 
 class G4VUserPrimaryParticleInformation
 {
   public:
+
     G4VUserPrimaryParticleInformation();
     virtual ~G4VUserPrimaryParticleInformation();
 
-  public:
     virtual void Print() const = 0;
 };
 
 #endif
-

@@ -34,8 +34,6 @@
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 #include <assert.h>
 #include <cmath>
 
@@ -59,7 +57,11 @@ SO_NODE_SOURCE(SoTrd)
 
 // initClass
 void SoTrd::initClass(){
-  SO_NODE_INIT_CLASS(SoTrd,SoShape,"Shape");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(SoTrd,SoShape,"Shape");
+  }
 }
 // Constructor
 SoTrd::SoTrd() {
@@ -341,5 +343,3 @@ void SoTrd::generateAlternateRep() {
 void SoTrd::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

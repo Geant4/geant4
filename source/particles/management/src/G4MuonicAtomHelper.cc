@@ -23,18 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MuonicAtomHelper class implementation
 //
-//
-//
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file
-//
-//	History:
-//      July 2016, K.Lynch - first implementation
-//      June 2017, K.L.Genser - major revision; 
-//                 also copied functions from G4MuonMinusBoundDecay & 
-//                 old G4MuMinusCaptureCascade; used constexpr
-// ---------------------------------------------------------------
+// Author: K.Lynch, 01.07.2016 - First implementation
+// Revision:
+// - 12.06.2017, K L Genser
+// --------------------------------------------------------------------
 
 #include "G4MuonicAtomHelper.hh"
 #include "G4DecayTable.hh"
@@ -44,9 +38,9 @@
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
-G4MuonicAtom*
-G4MuonicAtomHelper::ConstructMuonicAtom(G4String name, G4int encoding, G4Ions const* baseion){
-
+G4MuonicAtom* G4MuonicAtomHelper::
+ConstructMuonicAtom(const G4String& name, G4int encoding, G4Ions const* baseion)
+{
   // what should static charge be?  for G4Ions, it is Z ... should it
   // be Z-1 here (since there will always be a muon attached), or Z?
   const G4double charge = baseion->GetPDGCharge();
@@ -68,21 +62,21 @@ G4MuonicAtomHelper::ConstructMuonicAtom(G4String name, G4int encoding, G4Ions co
 
   G4DecayTable* decayTable = new G4DecayTable();
   auto muatom = new G4MuonicAtom(name, mass, 0.0, charge,
-				 baseion->GetPDGiSpin(),
-				 baseion->GetPDGiParity(),
-				 baseion->GetPDGiConjugation(),
-				 baseion->GetPDGiIsospin(),
-				 baseion->GetPDGiIsospin3(),
-				 baseion->GetPDGiGParity(),
-				 pType,
-				 baseion->GetLeptonNumber(),
-				 baseion->GetBaryonNumber(),
-				 encoding,
-				 stable,
-				 lifetime,
+                                 baseion->GetPDGiSpin(),
+                                 baseion->GetPDGiParity(),
+                                 baseion->GetPDGiConjugation(),
+                                 baseion->GetPDGiIsospin(),
+                                 baseion->GetPDGiIsospin3(),
+                                 baseion->GetPDGiGParity(),
+                                 pType,
+                                 baseion->GetLeptonNumber(),
+                                 baseion->GetBaryonNumber(),
+                                 encoding,
+                                 stable,
+                                 lifetime,
                                  decayTable,
-				 shortlived,
-				 baseion->GetParticleSubType(),
+                                 shortlived,
+                                 baseion->GetParticleSubType(),
                                  baseion);
 
   muatom->SetPDGMagneticMoment(baseion->GetPDGMagneticMoment());
@@ -220,9 +214,11 @@ G4double G4MuonicAtomHelper::GetMuonCaptureRate(G4int Z, G4int A)
 
   G4double lambda = -1.;
 
-  size_t nCapRates = sizeof(capRates)/sizeof(capRates[0]);
-  for (size_t j = 0; j < nCapRates; ++j) {
-    if( capRates[j].Z == Z && capRates[j].A == A ) {
+  std::size_t nCapRates = sizeof(capRates)/sizeof(capRates[0]);
+  for (std::size_t j = 0; j < nCapRates; ++j)
+  {
+    if( capRates[j].Z == Z && capRates[j].A == A )
+    {
       lambda = capRates[j].cRate / microsecond;
       break;
     }
@@ -230,8 +226,8 @@ G4double G4MuonicAtomHelper::GetMuonCaptureRate(G4int Z, G4int A)
     if (capRates[j].Z > Z) {break;}
   }
 
-  if (lambda < 0.) {
-
+  if (lambda < 0.)
+  {
     // ==  Mu capture lifetime (Goulard and Primakoff PRC10(1974)2034.
 
     constexpr G4double b0a = -0.03;
@@ -255,18 +251,13 @@ G4double G4MuonicAtomHelper::GetMuonCaptureRate(G4int Z, G4int A)
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
 G4double G4MuonicAtomHelper::GetMuonZeff(G4int Z)
 {
-
   // ==  Effective charges from
   // "Total Nuclear Capture Rates for Negative Muons"
   // T. Suzuki, D. F. Measday, J.P. Roalsvig Phys.Rev. C35 (1987) 2212
   // and if not present from
   // Ford and Wills Nucl Phys 35(1962)295 or interpolated
-
 
   constexpr size_t maxZ = 100;
   constexpr G4double zeff[maxZ+1] =
@@ -286,9 +277,7 @@ G4double G4MuonicAtomHelper::GetMuonZeff(G4int Z)
   if (Z>G4int(maxZ)) {Z=maxZ;}
 
   return zeff[Z];
-
 }
-
 
 G4double G4MuonicAtomHelper::GetMuonDecayRate(G4int Z)
 {
@@ -329,9 +318,10 @@ G4double G4MuonicAtomHelper::GetMuonDecayRate(G4int Z)
 
   // we'll use the above code once we have more data
   // since we only have one value we just assign it
-  if (Z == 1) {lambda =  decRates[0].dRate/microsecond;}
+  if (Z == 1) { lambda =  decRates[0].dRate/microsecond; }
 
-  if (lambda < 0.) {
+  if (lambda < 0.)
+  {
     constexpr G4double freeMuonDecayRate =  0.45517005 / microsecond;
     lambda = 1.0;
     G4double x = GetMuonZeff(Z)*fine_structure_const;
@@ -340,11 +330,11 @@ G4double G4MuonicAtomHelper::GetMuonDecayRate(G4int Z)
   }
 
   return lambda;
-
 }
 
-// From  V.Ivanchenko's G4MuMinusCaptureCascade
-G4double G4MuonicAtomHelper::GetKShellEnergy(G4double Z) {
+// From G4MuMinusCaptureCascade
+G4double G4MuonicAtomHelper::GetKShellEnergy(G4double Z)
+{
   // Calculate the Energy of K Mesoatom Level for this Element using
   // the Energy of Hydrogen Atom taken into account finite size of the
   // nucleus (V.Ivanchenko)
@@ -367,17 +357,20 @@ G4double G4MuonicAtomHelper::GetKShellEnergy(G4double Z) {
   return KEnergy;
 }
 
-// From  V.Ivanchenko's G4MuMinusCaptureCascade
+// From G4MuMinusCaptureCascade
 G4double G4MuonicAtomHelper::GetLinApprox(G4int N,
                                           const G4double* const X,
                                           const G4double* const Y,
-                                          G4double Xuser) {
+                                          G4double Xuser)
+{
   G4double Yuser;
   if(Xuser <= X[0])        Yuser = Y[0];
   else if(Xuser >= X[N-1]) Yuser = Y[N-1];
-  else {
+  else
+  {
     G4int i;
-    for (i=1; i<N; i++){
+    for (i=1; i<N; ++i)
+    {
       if(Xuser <= X[i]) break;
     }
 

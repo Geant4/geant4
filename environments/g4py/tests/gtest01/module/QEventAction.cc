@@ -52,7 +52,7 @@ QEventAction::~QEventAction()
 
 
 ////////////////////////////////////////////////////////////
-void QEventAction::BeginOfEventAction(const G4Event* aevent)
+void QEventAction::BeginOfEventAction(const G4Event* /*aevent*/)
 ////////////////////////////////////////////////////////////
 {
   G4cout << "QEventAction::BofEA is called." << G4endl;
@@ -60,7 +60,7 @@ void QEventAction::BeginOfEventAction(const G4Event* aevent)
 
 
 //////////////////////////////////////////////////////////
-void QEventAction::EndOfEventAction(const G4Event* aevent)
+void QEventAction::EndOfEventAction(const G4Event* /*aevent*/)
 //////////////////////////////////////////////////////////
 {
   G4cout << "QEventAction::EofEA is called." << G4endl;

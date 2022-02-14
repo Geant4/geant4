@@ -62,6 +62,13 @@
 #include "G4Threading.hh"
 #include <vector>
 
+enum G4eSingleScatteringType
+  {
+    fWVI = 0,
+    fMott,
+    fDPWA
+  };
+
 class G4EmParametersMessenger;
 class G4EmExtraParameters;
 class G4EmLowEParameters;
@@ -82,7 +89,7 @@ public:
 
   // printing
   void StreamInfo(std::ostream& os) const;
-  void Dump() const;
+  void Dump();
   friend std::ostream& operator<< (std::ostream& os, const G4EmParameters&);
 
   // boolean flags
@@ -94,9 +101,6 @@ public:
 
   void SetLPM(G4bool val);
   G4bool LPM() const;
-
-  void SetSpline(G4bool val);
-  G4bool Spline() const;
 
   void SetUseCutAsFinalRange(G4bool val);
   G4bool UseCutAsFinalRange() const;
@@ -110,12 +114,13 @@ public:
   void SetBeardenFluoDir(G4bool val);
   G4bool BeardenFluoDir() const;
 
-  void SetAuger(G4bool val);
-  G4bool Auger() const;
+  void SetANSTOFluoDir(G4bool val);
+  G4bool ANSTOFluoDir() const;
 
-  // obsolete methods
-  void SetAugerCascade(G4bool val);
-  G4bool AugerCascade() const;
+  void SetAuger(G4bool val);
+  void SetAugerCascade(G4bool val) { SetAuger(val); };
+  G4bool Auger() const;
+  G4bool AugerCascade() const { return Auger(); }
 
   void SetPixe(G4bool val);
   G4bool Pixe() const;
@@ -131,9 +136,6 @@ public:
 
   void SetMuHadLateralDisplacement(G4bool val);
   G4bool MuHadLateralDisplacement() const;
-
-  void SetLatDisplacementBeyondSafety(G4bool val);
-  G4bool LatDisplacementBeyondSafety() const;
 
   void ActivateAngularGeneratorForIonisation(G4bool val);
   G4bool UseAngularGeneratorForIonisation() const;
@@ -159,6 +161,8 @@ public:
   void SetDNAElectronMsc(G4bool val);
   G4bool DNAElectronMsc() const;
 
+  // if general interaction is enabled then 
+  // force interaction options should be disabled
   void SetGeneralProcessActive(G4bool val);
   G4bool GeneralProcessActive() const;
 
@@ -168,22 +172,24 @@ public:
   void SetEnablePolarisation(G4bool val);
   G4bool EnablePolarisation() const;
 
-  G4bool GetDirectionalSplitting();
+  G4bool GetDirectionalSplitting() const;
   void SetDirectionalSplitting(G4bool v);
 
-  G4bool QuantumEntanglement();
+  G4bool QuantumEntanglement() const;
   void SetQuantumEntanglement(G4bool v);
 
-  // 5d
-  void  SetOnIsolated(G4bool val);
-  G4bool  OnIsolated() const;
+  G4bool RetrieveMuDataFromFile() const;
+  void SetRetrieveMuDataFromFile(G4bool v);
 
-  void  ActivateDNA();
+  // 5d
+  void SetOnIsolated(G4bool val);
+  G4bool OnIsolated() const;
+
+  void ActivateDNA();
+  void SetIsPrintedFlag(G4bool val);
+  G4bool IsPrintLocked() const;
 
   // double parameters with values
-  void SetMinSubRange(G4double val);
-  G4double MinSubRange() const;
-
   void SetMinEnergy(G4double val);
   G4double MinKinEnergy() const;
 
@@ -207,6 +213,8 @@ public:
 
   void SetBremsstrahlungTh(G4double val);
   G4double BremsstrahlungTh() const;
+  void SetMuHadBremsstrahlungTh(G4double val);
+  G4double MuHadBremsstrahlungTh() const;
 
   void SetLambdaFactor(G4double val);
   G4double LambdaFactor() const;
@@ -248,8 +256,10 @@ public:
   G4double MaxEnergyFor5DMuPair() const;
 
   void SetStepFunction(G4double v1, G4double v2);
-
   void SetStepFunctionMuHad(G4double v1, G4double v2);
+  void SetStepFunctionLightIons(G4double v1, G4double v2);
+  void SetStepFunctionIons(G4double v1, G4double v2);
+  void FillStepFunction(const G4ParticleDefinition*, G4VEnergyLossProcess*) const;
 
   void SetDirectionalSplittingRadius(G4double r);
   G4double GetDirectionalSplittingRadius();
@@ -258,11 +268,10 @@ public:
   G4ThreeVector GetDirectionalSplittingTarget() const;
 
   // integer parameters 
-  void SetNumberOfBins(G4int val);
-  G4int NumberOfBins() const;
-
+  
   void SetNumberOfBinsPerDecade(G4int val);
   G4int NumberOfBinsPerDecade() const;
+  G4int NumberOfBins() const;
 
   void SetVerbose(G4int val);
   G4int Verbose() const;
@@ -275,6 +284,9 @@ public:
 
   void SetMscMuHadStepLimitType(G4MscStepLimitType val);
   G4MscStepLimitType MscMuHadStepLimitType() const;
+
+  void SetSingleScatteringType(G4eSingleScatteringType val); 
+  G4eSingleScatteringType SingleScatteringType() const;
 
   void SetNuclearFormfactorType(G4NuclearFormfactorType val);
   G4NuclearFormfactorType NuclearFormfactorType() const;
@@ -292,6 +304,9 @@ public:
 
   void SetPIXEElectronCrossSectionModel(const G4String&);
   const G4String& PIXEElectronCrossSectionModel();
+
+  void SetLivermoreDataDir(const G4String&);
+  const G4String& LivermoreDataDir();
 
   // parameters per region or per process 
   void AddPAIModel(const G4String& particle,
@@ -312,7 +327,7 @@ public:
   const std::vector<G4String>& RegionsPhysics() const;
   const std::vector<G4String>& TypesPhysics() const;
 
-  void SetSubCutoff(G4bool val, const G4String& region = "");
+  void SetSubCutRegion(const G4String& region = "");
 
   void SetDeexActiveRegion(const G4String& region, G4bool fdeex,
 			   G4bool fauger, G4bool fpixe);
@@ -330,12 +345,13 @@ public:
 				G4double factor,
 				G4double energyLimit);
 
+  // define external saturation class
   void SetEmSaturation(G4EmSaturation*);
+  // create and access saturation class
   G4EmSaturation* GetEmSaturation();
 
   // initialisation methods
-  void DefineRegParamForLoss(G4VEnergyLossProcess*, 
-                             G4bool isElectron) const;
+  void DefineRegParamForLoss(G4VEnergyLossProcess*) const;
   void DefineRegParamForEM(G4VEmProcess*) const;
   void DefineRegParamForDeex(G4VAtomDeexcitation*) const;
 
@@ -363,13 +379,11 @@ private:
   G4bool lossFluctuation;
   G4bool buildCSDARange;
   G4bool flagLPM;
-  G4bool spline;
   G4bool cutAsFinalRange;
   G4bool applyCuts;
   G4bool lateralDisplacement;
   G4bool lateralDisplacementAlg96;
   G4bool muhadLateralDisplacement;
-  G4bool latDisplacementBeyondSafety;
   G4bool useAngGeneratorForIonisation;
   G4bool useMottCorrection;
   G4bool integral;
@@ -378,10 +392,11 @@ private:
   G4bool gener;
   G4bool fSamplingTable;
   G4bool fPolarisation;
+  G4bool fMuDataFromFile;
   G4bool onIsolated; // 5d model conversion on free ions
   G4bool fDNA;
+  G4bool fIsPrinted;
   
-  G4double minSubRange;
   G4double minKinEnergy;
   G4double maxKinEnergy;
   G4double maxKinEnergyCSDA;
@@ -391,6 +406,7 @@ private:
   G4double lowestTripletEnergy;
   G4double linLossLimit;
   G4double bremsTh;
+  G4double bremsMuHadTh;
   G4double lambdaFactor;
   G4double factorForAngleLimit;
   G4double thetaLimit;
@@ -404,7 +420,6 @@ private:
   G4double skin;
   G4double factorScreen;
 
-  G4int nbins;
   G4int nbinsPerDecade;
   G4int verbose;
   G4int workerVerbose;
@@ -413,6 +428,7 @@ private:
   G4MscStepLimitType mscStepLimit;
   G4MscStepLimitType mscStepLimitMuHad;
   G4NuclearFormfactorType nucFormfactor;
+  G4eSingleScatteringType fSStype;
 
 #ifdef G4MULTITHREADED
   static G4Mutex emParametersMutex;

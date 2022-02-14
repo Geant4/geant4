@@ -40,33 +40,27 @@
 // Comments: Main program for the Purgin Magnet example. 
 //
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4Types.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4AnalysisManager.hh"
 #include "PurgMagDetectorConstruction.hh"
 #include "PurgMagPhysicsList.hh"
 #include "PurgMagActionInitializer.hh"
-#include "PurgMagAnalysisManager.hh"
 
 int main(int argc,char** argv) {
 
   //choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-  
-  // Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2); 
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+
+ // Construct the default run manager
+ //
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads);
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new PurgMagDetectorConstruction);

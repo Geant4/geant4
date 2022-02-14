@@ -37,9 +37,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-
-
 #ifndef tsactioninitialization_hh_
 #define tsactioninitialization_hh_
 
@@ -51,21 +48,20 @@
 
 class TSActionInitialization : public G4VUserActionInitialization
 {
-public:
-    // Constructor and Destructors
-    TSActionInitialization();
-    virtual ~TSActionInitialization();
+ public:
+  // Constructor and Destructors
+  TSActionInitialization();
+  virtual ~TSActionInitialization();
 
-    static TSActionInitialization* Instance();
+  static TSActionInitialization* Instance();
 
-public:
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+ public:
+  virtual void BuildForMaster() const;
+  virtual void Build() const;
 
-private:
-    // Private functions
-    static TSActionInitialization* fgInstance;
-
+ private:
+  // Private functions
+  static TSActionInitialization* fgInstance;
 };
 
 #endif

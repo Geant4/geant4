@@ -31,30 +31,22 @@
 // 
 // If you use this example, please cite the following publication:
 // Rad. Prot. Dos. 133 (2009) 2-11
-
-#include "G4SystemOfUnits.hh"
-#include "G4SteppingManager.hh"
-
+//
 #include "SteppingAction.hh"
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
-#include "Analysis.hh"
-
+#include "G4AnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4SteppingManager.hh"
 #include "G4Alpha.hh"
 #include "G4Electron.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det)
+SteppingAction::SteppingAction(RunAction* run,const DetectorConstruction* det)
 :fRun(run),fDetector(det)
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 SteppingAction::~SteppingAction()
 { }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
   

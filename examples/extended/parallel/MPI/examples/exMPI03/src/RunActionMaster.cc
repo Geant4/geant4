@@ -32,7 +32,7 @@
 #include "G4Threading.hh"
 #include "Analysis.hh"
 #include "RunActionMaster.hh"
-#include "g4root.hh" //ROOT Format for output
+#include "G4AnalysisManager.hh"
 #include "RunMerger.hh"
 #include "G4MPIscorerMerger.hh"
 #include "G4MPIhistoMerger.hh"    // New code with use of g4analysis
@@ -59,7 +59,7 @@ void
 RunActionMaster::BeginOfRunAction(const G4Run*)
 {
   Analysis* myana = Analysis::GetAnalysis();
-  myana-> Clear();
+  myana->Clear();
   myana->Book();
 }
 
@@ -178,18 +178,21 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
   //Save g4analysis objects to a file
   //NB: It is important that the save is done *after* MPI-merging of histograms
 
-  //One can save all ranks or just rank0: remember in case of all ranks,
-  //the file of rank0 contains the sum of everything
-  if (true /*rank == 0*/)
-    {
-      char str[64];
-      sprintf(str, "dose-rank%03d", rank);
-      G4String fname(str);
-      if (rank == 0)
-        fname = "dose-merged";
-      Analysis* myana = Analysis::GetAnalysis();
-      myana-> Save(fname);
+  //One can save all ranks or just rank0, chane the if
+  if (true /*rank == 0*/) {
+    std::ostringstream fname;
+    fname<<"dose-rank"<<rank;
+    if (rank == 0) {
+      fname.str("dose-merged");
     }
     Analysis* myana = Analysis::GetAnalysis();
-    myana-> Close();
+    myana-> Save(fname.str());
+  }
+  Analysis* myana = Analysis::GetAnalysis();
+  myana-> Close();
+
+  G4cout << "===================================================" << G4endl;
+  G4cout << "End EndOfRunAction for master thread in rank: " << rank << G4endl;
+  G4cout << "===================================================" << G4endl;
+
 }

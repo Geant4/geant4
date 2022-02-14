@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-# $Id: CMakeLists.txt 86065 2014-11-07 08:51:15Z gcosmo $
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-
 #----------------------------------------------------------------------------
 # Setup the project
 #
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(B4c)
 
 #----------------------------------------------------------------------------

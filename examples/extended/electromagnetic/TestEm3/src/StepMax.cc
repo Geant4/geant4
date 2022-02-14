@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-<<<<<<< HEAD
-/// \file electromagnetic/TestEm3/src/StepMax.cc
+/// \file electromagnetic/TestEm1/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id: StepMax.cc 67268 2013-02-13 11:38:40Z ihrivnac $
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,9 +36,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),fMess(0) 
+ : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX),fMess(nullptr) 
 {
-  for (G4int k=0; k<MaxAbsor; k++) fStepMax[k] = DBL_MAX;
   fMess = new StepMaxMessenger(this);
 }
 
@@ -59,8 +54,35 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetStepMax(G4int k,G4double step) {fStepMax[k] = step;}
+void StepMax::SetMaxStep(G4double step) {fMaxChargedStep = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& track,
+                                                   G4double,
+                                                   G4ForceCondition* condition )
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
 
+  if (track.GetVolume()->GetName() == "World") return DBL_MAX;
+  else return fMaxChargedStep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
+   // do nothing
+   aParticleChange.Initialize(aTrack);
+   return &aParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double StepMax::GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*)
+{
+   return fMaxChargedStep;
+}    
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

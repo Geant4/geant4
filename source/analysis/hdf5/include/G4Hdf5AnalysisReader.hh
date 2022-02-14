@@ -25,7 +25,7 @@
 //
 
 // The main manager for Hdf5 analysis reader.
-// It delegates most of functions to the object specific managers. 
+// It delegates most of functions to the object specific managers.
 
 // Author: Ivana Hrivnacova, 20/07/2017 (ivana@ipno.in2p3.fr)
 
@@ -35,68 +35,49 @@
 #include "G4ToolsAnalysisReader.hh"
 #include "globals.hh"
 
-#include "tools/histo/h1d" 
-#include "tools/histo/h2d" 
-#include "tools/histo/h3d" 
-#include "tools/histo/p1d" 
-#include "tools/histo/p2d" 
 #include "tools/hdf5/ntuple"
 
+#include <memory>
+#include <string_view>
+
+class G4Hdf5AnalysisReader;
 class G4Hdf5RFileManager;
-class G4H1ToolsManager;
-class G4H2ToolsManager;
-class G4H3ToolsManager;
-class G4P1ToolsManager;
-class G4P2ToolsManager;
 class G4Hdf5RNtupleManager;
-  
+template <class T>
+class G4ThreadLocalSingleton;
+
 class G4Hdf5AnalysisReader : public G4ToolsAnalysisReader
 {
+  friend class G4ThreadLocalSingleton<G4Hdf5AnalysisReader>;
+
   public:
-    explicit G4Hdf5AnalysisReader(G4bool isMaster = true);
     virtual ~G4Hdf5AnalysisReader();
-    
-    // static methods
+
+    // Static methods
     static G4Hdf5AnalysisReader* Instance();
-    
+
     // Access methods
     tools::hdf5::ntuple* GetNtuple() const;
     tools::hdf5::ntuple* GetNtuple(G4int ntupleId) const;
     using G4VAnalysisReader::GetNtuple;
-    
-  protected:
-    // virtual methods from base class
-    virtual G4int  ReadH1Impl(const G4String& h1Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4int  ReadH2Impl(const G4String& h2Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4int  ReadH3Impl(const G4String& h3Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4int  ReadP1Impl(const G4String& p1Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4int  ReadP2Impl(const G4String& p2Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
- 
-  private:
-    // static data members
-    static G4Hdf5AnalysisReader* fgMasterInstance;
-    static G4ThreadLocal G4Hdf5AnalysisReader* fgInstance;    
 
-    // methods
-    //    
-    template <typename T> 
-    T* ReadHnImpl(const G4String& htName, const G4String& fileName,
-                     const G4String& dirName);
-    template <typename T> 
-    T* ReadPnImpl(const G4String& ptName, const G4String& fileName,
-                     const G4String& dirName);
+  protected:
+    // Virtual methods from base class
+    virtual G4bool CloseFilesImpl(G4bool reset) final;
+
+  private:
+    G4Hdf5AnalysisReader();
+
+    // Methods
     G4bool Reset();
 
-    // data members
-    G4Hdf5RNtupleManager* fNtupleManager;
-    G4Hdf5RFileManager*   fFileManager;
+    // Static data members
+    inline static G4Hdf5AnalysisReader* fgMasterInstance { nullptr };
+    static constexpr std::string_view fkClass { "G4Hdf5AnalysisReader" };
+
+    // Data members
+    std::shared_ptr<G4Hdf5RNtupleManager> fNtupleManager { nullptr };
+    std::shared_ptr<G4Hdf5RFileManager>   fFileManager { nullptr };
 };
 
 #include "G4Hdf5AnalysisReader.icc"

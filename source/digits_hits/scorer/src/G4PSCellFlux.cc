@@ -34,12 +34,14 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreHistFiller.hh"
+
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
-//   The Cell Flux is defined by  a sum of track length divided 
-//   by the geometry volume, where all of the tracks in the geometry 
-//   are taken into account. 
+//   The Cell Flux is defined by  a sum of track length divided
+//   by the geometry volume, where all of the tracks in the geometry
+//   are taken into account.
 //
 //   If you want to score only tracks passing through the geometry volume,
 //  please use G4PSPassageCellFlux.
@@ -48,109 +50,115 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted option
-// 
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. cell flux * track weight (y)         (Makoto Asai)
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(true)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , EvtMap(0)
+  , weighted(true)
 {
-    DefineUnitAndCategory();
-    SetUnit("percm2");
-    //verboseLevel = 10;
+  DefineUnitAndCategory();
+  SetUnit("percm2");
+  // verboseLevel = 10;
 }
 
 G4PSCellFlux::G4PSCellFlux(G4String name, const G4String& unit, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(true)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , EvtMap(0)
+  , weighted(true)
 {
-    DefineUnitAndCategory();
-    SetUnit(unit);
+  DefineUnitAndCategory();
+  SetUnit(unit);
 }
 
-G4PSCellFlux::~G4PSCellFlux()
-{;}
+G4PSCellFlux::~G4PSCellFlux() { ; }
 
-G4bool G4PSCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSCellFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double stepLength = aStep->GetStepLength();
-  if ( stepLength == 0. ) return FALSE;
+  if(stepLength == 0.)
+    return FALSE;
 
-  G4int idx = ((G4TouchableHistory*)
-	       (aStep->GetPreStepPoint()->GetTouchable()))
-               ->GetReplicaNumber(indexDepth);
+  G4int idx = ((G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable()))
+                ->GetReplicaNumber(indexDepth);
   G4double cubicVolume = ComputeVolume(aStep, idx);
 
   G4double CellFlux = stepLength / cubicVolume;
-  if (weighted) CellFlux *= aStep->GetPreStepPoint()->GetWeight(); 
+  if(weighted)
+    CellFlux *= aStep->GetPreStepPoint()->GetWeight();
   G4int index = GetIndex(aStep);
-  EvtMap->add(index,CellFlux);
+  EvtMap->add(index, CellFlux);
+
+  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+  {
+    auto filler = G4VScoreHistFiller::Instance();
+    if(!filler)
+    {
+      G4Exception(
+        "G4PSCellFlux::ProcessHits", "SCORER0123", JustWarning,
+        "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+    }
+    else
+    {
+      filler->FillH1(hitIDMap[index],
+                     aStep->GetPreStepPoint()->GetKineticEnergy(), CellFlux);
+    }
+  }
 
   return TRUE;
 }
 
 void G4PSCellFlux::Initialize(G4HCofThisEvent* HCE)
 {
-  EvtMap = new G4THitsMap<G4double>(detector->GetName(),
-				    GetName());
-  if ( HCID < 0 ) HCID = GetCollectionID(0);
-  HCE->AddHitsCollection(HCID,EvtMap);
+  EvtMap = new G4THitsMap<G4double>(detector->GetName(), GetName());
+  if(HCID < 0)
+    HCID = GetCollectionID(0);
+  HCE->AddHitsCollection(HCID, EvtMap);
 }
 
-void G4PSCellFlux::EndOfEvent(G4HCofThisEvent*)
-{;}
+void G4PSCellFlux::EndOfEvent(G4HCofThisEvent*) { ; }
 
-void G4PSCellFlux::clear(){
-  EvtMap->clear();
-}
+void G4PSCellFlux::clear() { EvtMap->clear(); }
 
-void G4PSCellFlux::DrawAll()
-{;}
+void G4PSCellFlux::DrawAll() { ; }
 
 void G4PSCellFlux::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
-  G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
+  G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell flux : " << *(itr->second)/GetUnitValue() 
-	   << " [" << GetUnit() << "]"
-	   << G4endl;
+           << "  cell flux : " << *(itr->second) / GetUnitValue() << " ["
+           << GetUnit() << "]" << G4endl;
   }
 }
 
 void G4PSCellFlux::SetUnit(const G4String& unit)
 {
-    CheckAndSetUnit(unit,"Per Unit Surface");
+  CheckAndSetUnit(unit, "Per Unit Surface");
 }
 
-void G4PSCellFlux::DefineUnitAndCategory(){
-   // Per Unit Surface
-   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
-   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
-   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+void G4PSCellFlux::DefineUnitAndCategory()
+{
+  // Per Unit Surface
+  new G4UnitDefinition("percentimeter2", "percm2", "Per Unit Surface",
+                       (1. / cm2));
+  new G4UnitDefinition("permillimeter2", "permm2", "Per Unit Surface",
+                       (1. / mm2));
+  new G4UnitDefinition("permeter2", "perm2", "Per Unit Surface", (1. / m2));
 }
 
-G4double G4PSCellFlux::ComputeVolume(G4Step* aStep, G4int idx){
-
-  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid* solid = 0;
-  if(physParam)
-  { // for parameterized volume
-    if(idx<0)
-    {
-      G4ExceptionDescription ED;
-      ED << "Incorrect replica number --- GetReplicaNumber : " << idx << G4endl;
-      G4Exception("G4PSCellFlux::ComputeVolume","DetPS0001",JustWarning,ED);
-    }
-    solid = physParam->ComputeSolid(idx, physVol);
-    solid->ComputeDimensions(physParam,idx,physVol);
-  }
-  else
-  { // for ordinary volume
-    solid = physVol->GetLogicalVolume()->GetSolid();
-  }
-  
+G4double G4PSCellFlux::ComputeVolume(G4Step* aStep, G4int idx)
+{
+  G4VSolid* solid = ComputeSolid(aStep, idx);
+  assert(solid);
   return solid->GetCubicVolume();
 }

@@ -35,6 +35,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicsModelCatalog.hh"
 #include "G4DeexParametersMessenger.hh"
+#include "G4HadronicParameters.hh"
 
 #ifdef G4MULTITHREADED
 G4Mutex G4DeexPrecoParameters::deexPrecoMutex = G4MUTEX_INITIALIZER;
@@ -67,14 +68,13 @@ void G4DeexPrecoParameters::SetDefaults()
   fPrecoHighEnergy = 30*CLHEP::MeV;
   fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
-  fMaxLifeTime = 1000*CLHEP::second;
+  fMaxLifeTime = 1*CLHEP::nanosecond;
   fMinExPerNucleounForMF = 200*CLHEP::GeV;
   fMinZForPreco = 3;
   fMinAForPreco = 5;
   fPrecoType = 3;
   fDeexType = 3;
   fTwoJMAX = 10;
-  fMaxZ = 9;
   fVerbose = 1;
   fNeverGoBack = false;
   fUseSoftCutoff = false;
@@ -88,9 +88,8 @@ void G4DeexPrecoParameters::SetDefaults()
   fInternalConversion = true;
   fLD = true;
   fFD = false;
+  fIsomerFlag = true;
   fDeexChannelType = fCombined;
-  fInternalConversionID = 
-    G4PhysicsModelCatalog::Register("e-InternalConvertion");
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&G4DeexPrecoParameters::deexPrecoMutex);
 #endif
@@ -192,12 +191,6 @@ void G4DeexPrecoParameters::SetTwoJMAX(G4int n)
   fTwoJMAX = n;
 }
 
-void G4DeexPrecoParameters::SetUploadZ(G4int z)
-{
-  if(IsLocked() || z < 1) { return; }
-  fMaxZ = z;
-}
-
 void G4DeexPrecoParameters::SetVerbose(G4int n)
 {
   if(IsLocked()) { return; }
@@ -282,6 +275,12 @@ void G4DeexPrecoParameters::SetDiscreteExcitationFlag(G4bool val)
   fFD = val;
 }
 
+void G4DeexPrecoParameters::SetIsomerProduction(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fIsomerFlag = val;
+}
+
 void G4DeexPrecoParameters::SetDeexChannelsType(G4DeexChannelType val)
 {
   if(IsLocked()) { return; }
@@ -319,22 +318,26 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
   os << "Use discrete excitation energy of the residual      " << fFD << "\n";
   os << "Time limit for long lived isomeres (ns)             " 
      << fMaxLifeTime/CLHEP::ns << "\n";
+  os << "Isomer production flag                              " << fIsomerFlag << "\n";
   os << "Internal e- conversion flag                         " 
      << fInternalConversion << "\n";
   os << "Store e- internal conversion data                   " << fStoreAllLevels << "\n";
-  os << "Electron internal conversion ID                     " 
-     << fInternalConversionID << "\n";
   os << "Correlated gamma emission flag                      " << fCorrelatedGamma << "\n";
   os << "Max 2J for sampling of angular correlations         " << fTwoJMAX << "\n";
-  os << "Upload data before 1st event for                Z < " << fMaxZ << "\n";
-  os << "=======================================================================" << "\n";
+  os << "=======================================================================" << G4endl;
   os.precision(prec);
   return os;
 }
 
+G4int G4DeexPrecoParameters::GetVerbose() const
+{
+  G4int verb = G4HadronicParameters::Instance()->GetVerboseLevel();
+  return (verb > 0) ? std::max(fVerbose, verb) : verb;
+}
+
 void G4DeexPrecoParameters::Dump() const
 {
-  if (G4Threading::IsMasterThread()) { StreamInfo(G4cout); }
+  if ( G4Threading::IsMasterThread() && GetVerbose() > 0 ) { StreamInfo(G4cout); }
 }
 
 std::ostream& operator<< (std::ostream& os, const G4DeexPrecoParameters& par)

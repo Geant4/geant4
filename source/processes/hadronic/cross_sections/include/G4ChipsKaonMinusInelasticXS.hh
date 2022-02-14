@@ -89,7 +89,7 @@ private:
   std::vector<G4double*>* LEN;  // Vector of pointers to LowEnProtonCrossSection
   std::vector<G4double*>* HEN;  // Vector of pointers to HighEnProtonCrossSection
     //
-    G4int j;                      // A#0f Z/N-records already tested in AMDB
+    G4int j=0;                 // A#0f Z/N-records already tested in AMDB
     std::vector <G4int> colN;  // Vector of N for calculated nuclei (isotops)
     std::vector <G4int>  colZ;  // Vector of Z for calculated nuclei (isotops)
     std::vector <G4double> colP;  // Vector of last momenta for the reaction

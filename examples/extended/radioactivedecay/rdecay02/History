@@ -18,12 +18,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-<<<<<<< HEAD
-	 
-14-10-16 G.Folger
-=======
+     
+06-10-21 I. Hrivnacova (rdecay02-V10-07-04)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
 
-20-06-16  Dennis Wright (rdecay02-V10-05-00)
+27-07-21 mma (rdecay02-V10-07-03)
+- RunAction::CountProcesses() : add a protection if (process == nullptr)
+    
+19-07-21 I. Hrivnacova (rdecay02-V10-07-02)
+--------------------------------------
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+22-06-21 G. Cosmo (rdecay02-V10-07-01)
+--------------------------------------
+- Use new CLHEP units for minute, hour, day, year and millielectronvolt
+  in PhysicsList.
+
+19-04-21 mma (rdecay02-V10-07-00)
+---------------------------------
+- rdecay02.cc: RunManagerFactory
+               G4SteppingVerboseWithUnits
+- ActionInitialization.hh and cc: remove SteppingVerbose class
+      
+05-08-20  Alberto Ribon (rdecay02-V10-06-00)
+--------------------------------------------
+- README, .README.txt, macros/* : migrated UI commands from "/grdm/..."
+  to "/process/had/rdm/..."
+
+20-06-19  Dennis Wright (rdecay02-V10-05-00)
 --------------------------------------------
 - in order to separate biased from unbiased RDM in physics lists, create new 
   class BiasedRDPhysics which uses new G4Radioactivation process with all

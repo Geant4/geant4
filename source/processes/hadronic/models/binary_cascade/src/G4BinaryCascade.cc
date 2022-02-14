@@ -66,6 +66,8 @@
 #include "G4ShortLivedConstructor.hh"
 #include <typeinfo>
 
+#include "G4PhysicsModelCatalog.hh"
+
 //   turn on general debugging info, and consistency checks
 
 //#define debug_G4BinaryCascade 1
@@ -108,6 +110,9 @@
 #else
   #define _DebugEpConservation(val)
 #endif
+
+G4int G4BinaryCascade::theBIC_ID = -1;
+
 //
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
@@ -160,14 +165,8 @@ G4VIntraNuclearTransportModel("Binary Cascade", ptr)
     currentInitialEnergy=initial_nuclear_mass=0.;
     massInNucleus=0.;
     theOuterRadius=0.;
+    theBIC_ID = G4PhysicsModelCatalog::GetModelID("model_G4BinaryCascade");
 }
-
-/*
-G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& )
-: G4VIntraNuclearTransportModel("Binary Cascade")
-{
-}
- */
 
 G4BinaryCascade::~G4BinaryCascade()
 {
@@ -176,9 +175,9 @@ G4BinaryCascade::~G4BinaryCascade()
     ClearAndDestroy(&theCapturedList);
     delete thePropagator;
     delete theCollisionMgr;
-    std::for_each(theImR.begin(), theImR.end(), Delete<G4BCAction>());
+    for(auto & ptr : theImR) { delete ptr; }
+    theImR.clear();
     delete theLateParticle;
-    //delete theExcitationHandler;
     delete theH1Scatterer;
 }
 
@@ -349,6 +348,11 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
                     new G4DynamicParticle((*iter)->GetDefinition(),
                             (*iter)->GetTotalEnergy(),
                             (*iter)->GetMomentum());
+        	G4HadSecondary aNew = G4HadSecondary(aNewDP);
+            G4double time=(*iter)->GetFormationTime();
+            if(time < 0.0) { time = 0.0; }
+            aNew.SetTime(timePrimary + time);
+            aNew.SetCreatorModelID((*iter)->GetCreatorModelID());
             theParticleChange.AddSecondary(aNew);
         }
 
@@ -356,7 +360,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 
 
     } else {  // no interaction, return primary
-        if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction void, return intial state ######### "<< G4endl;
+        if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction void, return initial state ######### "<< G4endl;
         theParticleChange.SetStatusChange(isAlive);
         theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
         theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
@@ -959,6 +963,7 @@ G4ReactionProductVector *  G4BinaryCascade::DeExcite()
          if ( theCapturedList.size() == 1 ) {i=theCapturedList.begin();}                             // Uzhi
          G4ReactionProduct * aNew = new G4ReactionProduct((*i)->GetDefinition());
          aNew->SetTotalEnergy((*i)->GetDefinition()->GetPDGMass());
+         aNew->SetCreatorModelID(theBIC_ID);
          aNew->SetMomentum(G4ThreeVector(0));// see boost for preCompoundProducts below..
          precompoundProducts = new G4ReactionProductVector();
          precompoundProducts->push_back(aNew);
@@ -1052,6 +1057,7 @@ G4ReactionProductVector *  G4BinaryCascade::DecayVoidNucleus()
             G4ReactionProduct * aNew = new G4ReactionProduct((*aNuc)->GetDefinition());
             aNew->SetTotalEnergy((*aMom)->e());
             aNew->SetMomentum((*aMom)->vect());
+            aNew->SetCreatorModelID(theBIC_ID);
             result->push_back(aNew);
 
             delete *aMom;
@@ -1068,6 +1074,7 @@ G4ReactionProductVector *  G4BinaryCascade::DecayVoidNucleus()
                   (*aNuc)->GetDefinition());            // Uzhi
             aNew->SetTotalEnergy((*aMom)->e());                             // Uzhi
             aNew->SetMomentum((*aMom)->vect());                             // Uzhi
+            aNew->SetCreatorModelID(theBIC_ID);
             result->push_back(aNew);                           // Uzhi
             delete *aMom;                                                   // Uzhi
          }                                                                  // Uzhi
@@ -1094,6 +1101,7 @@ G4ReactionProductVector * G4BinaryCascade::ProductsAddFinalState(G4ReactionProdu
         aNew->SetMomentum(kt->Get4Momentum().vect());
         aNew->SetTotalEnergy(kt->Get4Momentum().e());
         aNew->SetNewlyAdded(kt->IsParticipant());
+        aNew->SetCreatorModelID(theBIC_ID);
         products->push_back(aNew);
 
 #ifdef debug_BIC_Propagate_finals
@@ -2547,6 +2555,7 @@ G4Fragment * G4BinaryCascade::FindFragments()
     //GF  fragment->SetNumberOfParticles(excitons-holes);
     fragment->SetNumberOfParticles(excitons);
     fragment->SetNumberOfCharged(zCaptured);
+    fragment->SetCreatorModelID(theBIC_ID);
 
     return fragment;
 }
@@ -2710,6 +2719,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
         G4ReactionProduct * aNew = new G4ReactionProduct(kt->GetDefinition());
         aNew->SetMomentum(kt->Get4Momentum().vect());
         aNew->SetTotalEnergy(kt->Get4Momentum().e());
+        aNew->SetCreatorModelID(theBIC_ID);
         products->push_back(aNew);
 #ifdef debug_H1_BinaryCascade
         if (! kt->GetDefinition()->GetPDGStable() )
@@ -2884,6 +2894,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
+        aNew->SetCreatorModelID(theBIC_ID);
         Esecondaries +=(*iter)->Get4Momentum().e();
         psecondaries +=(*iter)->Get4Momentum();
         aNew->SetNewlyAdded(true);
@@ -2907,6 +2918,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
                 G4ReactionProduct * aNew = new G4ReactionProduct(atrack->GetDefinition());
                 aNew->SetMomentum(atrack->Get4Momentum().vect());
                 aNew->SetTotalEnergy(atrack->Get4Momentum().e());
+                aNew->SetCreatorModelID(atrack->GetCreatorModelID());
                 Esecondaries +=atrack->Get4Momentum().e();
                 psecondaries +=atrack->Get4Momentum();
                 aNew->SetNewlyAdded(true);
@@ -2935,6 +2947,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         (*iter)->Update4Momentum((*iter)->Get4Momentum().vect()+transferCorrection);
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
+        aNew->SetCreatorModelID(theBIC_ID);
         Esecondaries +=(*iter)->Get4Momentum().e();
         psecondaries +=(*iter)->Get4Momentum();
         if ( (*iter)->IsParticipant() ) aNew->SetNewlyAdded(true);
@@ -2948,6 +2961,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         (*iter)->Update4Momentum((*iter)->Get4Momentum().vect()+transferCorrection);
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
+        aNew->SetCreatorModelID(theBIC_ID);
         Esecondaries +=(*iter)->Get4Momentum().e();
         psecondaries +=(*iter)->Get4Momentum();
         aNew->SetNewlyAdded(true);
@@ -3006,6 +3020,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         aNew->SetKineticEnergy(Ekinetic);
         aNew->SetMomentum(aNew->GetTotalMomentum() * ((*iter)->Get4Momentum().vect().unit()));
         aNew->SetNewlyAdded(true);
+        aNew->SetCreatorModelID(theBIC_ID);
         products->push_back(aNew);
         Esecondaries += aNew->GetTotalEnergy();
         psecondaries += G4LorentzVector(aNew->GetMomentum(),aNew->GetTotalEnergy() );
@@ -3056,6 +3071,7 @@ G4ReactionProductVector * G4BinaryCascade::HighEnergyModelFSProducts(G4ReactionP
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
         aNew->SetNewlyAdded(true);
+        aNew->SetCreatorModelID((*iter)->GetCreatorModelID());
         //G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
         products->push_back(aNew);
     }
@@ -3080,6 +3096,7 @@ G4ReactionProductVector * G4BinaryCascade::HighEnergyModelFSProducts(G4ReactionP
         G4ReactionProduct * theNew = new G4ReactionProduct(fragment);
         theNew->SetMomentum(G4ThreeVector(0,0,0));
         theNew->SetTotalEnergy(massInNucleus);
+        theNew->SetCreatorModelID(theBIC_ID);
         //theNew->SetFormationTime(??0.??);
         //G4cout << " Nucleus (" << currentZ << ","<< currentA << "), mass "<< massInNucleus << G4endl;
         products->push_back(theNew);

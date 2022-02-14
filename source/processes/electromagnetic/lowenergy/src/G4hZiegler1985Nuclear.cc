@@ -94,7 +94,6 @@ G4double G4hZiegler1985Nuclear::NuclearStoppingPower(G4double kineticEnergy,
     G4double sig = 4.0 * m1 * m2Local / ((m1 + m2Local)*(m1 + m2Local)*
                   (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
 
-
     ionloss *= G4RandGauss::shoot(1.0,sig) ;
   }
 

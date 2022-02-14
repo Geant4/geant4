@@ -30,35 +30,38 @@
 //
 #include "WLSPhotonDetHit.hh"
 
-G4ThreadLocal G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator=0;
+#include "G4UnitsTable.hh"
+
+G4ThreadLocal G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSPhotonDetHit::WLSPhotonDetHit()
 {
   fArrivalTime = 0.;
+  fEnergy = 0.;
   fPosArrive   = G4ThreeVector(0., 0., 0.);
   fPosExit     = G4ThreeVector(0., 0., 0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPhotonDetHit::WLSPhotonDetHit(G4ThreeVector pExit,
-                                 G4ThreeVector pArrive,
-                                 G4double pTime)
+WLSPhotonDetHit::WLSPhotonDetHit(G4ThreeVector pExit, G4ThreeVector pArrive,
+                                 G4double pTime, G4double pEnergy)
 {
   fPosExit     = pExit;
   fPosArrive   = pArrive;
   fArrivalTime = pTime;
+  fEnergy      = pEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPhotonDetHit::~WLSPhotonDetHit() { }
+WLSPhotonDetHit::~WLSPhotonDetHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPhotonDetHit::WLSPhotonDetHit(const WLSPhotonDetHit &right)
+WLSPhotonDetHit::WLSPhotonDetHit(const WLSPhotonDetHit& right)
   : G4VHit()
 {
   *this = right;
@@ -66,11 +69,12 @@ WLSPhotonDetHit::WLSPhotonDetHit(const WLSPhotonDetHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit &right)
+const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit& right)
 {
   fPosExit     = right.fPosExit;
   fPosArrive   = right.fPosArrive;
   fArrivalTime = right.fArrivalTime;
+  fEnergy      = right.fEnergy;
 
   return *this;
 }
@@ -79,7 +83,22 @@ const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit &right)
 
 G4bool WLSPhotonDetHit::operator==(const WLSPhotonDetHit& right) const
 {
-  return fPosExit     == right.fPosExit    &&
-         fPosArrive   == right.fPosArrive  &&
-         fArrivalTime == right.fArrivalTime;  
+  return fPosExit == right.fPosExit && fPosArrive == right.fPosArrive &&
+         fArrivalTime == right.fArrivalTime && fEnergy == right.fEnergy;
+}
+
+void WLSPhotonDetHit::Print()
+{
+  G4cout
+    << "Arrival time: "
+    << std::setw(7) << G4BestUnit(fArrivalTime, "Time")
+    << "Arrival position: ("
+    << std::setw(7) << G4BestUnit(fPosArrive.x(), "Length") << ", "
+    << std::setw(7) << G4BestUnit(fPosArrive.y(), "Length") << "); "
+    << "Exit position: ("
+    << std::setw(7) << G4BestUnit(fPosExit.x(), "Length") << ", "
+    << std::setw(7) << G4BestUnit(fPosExit.y(), "Length") << "); "
+    << "Energy: "
+    << std::setw(7) << G4BestUnit(fEnergy, "Energy")
+    << G4endl;
 }

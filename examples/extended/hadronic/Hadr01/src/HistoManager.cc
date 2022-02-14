@@ -94,22 +94,15 @@ HistoManager* HistoManager::GetPointer()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager::HistoManager()
-: fPrimaryDef(0),
-  fNeutron(0),
-  fEdepMax(1.0*GeV),
-  fLength (300.*mm),
-  fPrimaryKineticEnergy(0.0),  
-  fVerbose(0),  
-  fNBinsE (100),
-  fNSlices(300),
-  fNHisto (28),
-  fBeamFlag(true),
-  fHistoBooked(false),
-  fHisto(0)
+: fPrimaryDef(nullptr),
+  fRadius(10*CLHEP::cm),
+  fLength(300.*CLHEP::mm),
+  fEdepMax(1.0*CLHEP::GeV)
 {
-  fHisto     = new Histo();
+  fHisto = new Histo();
   fHisto->SetVerbose(fVerbose);
-  fNeutron   = G4Neutron::Neutron();
+  BookHisto();
+  fNeutron = G4Neutron::Neutron();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -174,7 +167,8 @@ void HistoManager::bookHisto()
 
 void HistoManager::BeginOfRun()
 {
-  fAbsZ0       = -0.5*fLength;
+  fR2         = fRadius*fRadius;
+  fAbsZ0      = 0.5*fLength;
   fNevt       = 0;
   fNelec      = 0;
   fNposit     = 0;
@@ -424,7 +418,7 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 
 void HistoManager::AddTargetStep(const G4Step* step)
 {
-  fNstep++;
+  ++fNstep;
   G4double fEdep = step->GetTotalEnergyDeposit();
   if(1 < fVerbose) {
     G4cout << "TargetSD::ProcessHits: beta1= " 
@@ -440,7 +434,7 @@ void HistoManager::AddTargetStep(const G4Step* step)
       (step->GetPreStepPoint()->GetPosition() +
        step->GetPostStepPoint()->GetPosition())*0.5;
 
-    G4double z = pos.z() - fAbsZ0;
+    G4double z = pos.z() + fAbsZ0;
 
     // scoring
     fEdepEvt += fEdep;
@@ -473,19 +467,24 @@ void HistoManager::AddTargetStep(const G4Step* step)
 
 void HistoManager::AddLeakingParticle(const G4Track* track)
 {
-  const G4ParticleDefinition* pd = track->GetDefinition(); 
-  G4double e = std::log10(track->GetKineticEnergy()/MeV);
+  const G4ParticleDefinition* pd = track->GetDefinition();
+  const G4StepPoint* sp = track->GetStep()->GetPreStepPoint(); 
+  G4double e = std::log10(sp->GetKineticEnergy()/CLHEP::MeV);
 
-  G4ThreeVector pos = track->GetPosition();
-  G4ThreeVector dir = track->GetMomentumDirection();
+  const G4ThreeVector& pos = sp->GetPosition();
+  const G4ThreeVector& dir = sp->GetMomentumDirection();
   G4double x = pos.x();
   G4double y = pos.y();
   G4double z = pos.z();
- 
+  G4double vx = dir.x();
+  G4double vy = dir.y();
+  G4double vz = dir.z();
+  
   G4bool isLeaking = false;
 
   // Forward 
-  if(z > -fAbsZ0 && dir.z() > 0.0) {
+  const G4double del = 0.001*CLHEP::mm;
+  if(std::abs(z - fAbsZ0) < del && vz > 0.0) {
     isLeaking = true;
     if(pd == fNeutron) {
       ++fNneu_forw;
@@ -493,7 +492,7 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
     } else isLeaking = true;
 
     // Backward
-  } else if (z < fAbsZ0 && dir.z() < 0.0) {
+  } else if (std::abs(z + fAbsZ0) < del && vz < 0.0) {
     isLeaking = true;
     if(pd == fNeutron) {
       ++fNneu_back;
@@ -501,7 +500,8 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
     } else isLeaking = true;
 
     // Side
-  } else if (std::abs(z) <= -fAbsZ0 && x*dir.x() + y*dir.y() > 0.0) {
+  } else if (std::abs(z) <= fAbsZ0 + del && x*vx + y*vy > 0.0 &&
+             std::abs(x*x + y*y - fR2) < del*fRadius) {
     isLeaking = true;
     if(pd == fNeutron) {
       ++fNneu_leak;

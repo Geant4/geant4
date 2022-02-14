@@ -1,6 +1,6 @@
 #---Adding all g3tog4 examples subdirectories explicitly 
 
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 #----------------------------------------------------------------------------
 # g3tog4 examples require Geant4 build with g3tog4

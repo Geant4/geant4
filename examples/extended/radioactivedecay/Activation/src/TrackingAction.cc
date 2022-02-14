@@ -69,10 +69,11 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4String name     = particle->GetParticleName();
   G4double meanLife = particle->GetPDGLifeTime();
   G4double ekin     = track->GetKineticEnergy();
-  fTimeBirth       = track->GetGlobalTime();
+  fTimeBirth        = track->GetGlobalTime();
 
-  //count secondary particles
-  if (track->GetTrackID() > 1)  run->ParticleCount(name,ekin,meanLife);
+  //count secondary particles (with meanLife > 0)
+  if ((track->GetTrackID() > 1) && (meanLife != 0.))
+    run->ParticleCount(name,ekin,meanLife);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,11 +99,12 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     G4double tmin = analysis->GetH1Xmin(id)*unit;
     G4double tmax = analysis->GetH1Xmax(id)*unit;
     G4double binWidth = analysis->GetH1Width(id)*unit;
-
+    G4double weight = track->GetWeight();
+    
     G4double t1 = std::max(fTimeBirth,tmin);
     G4double t2 = std::min(fTimeEnd  ,tmax);
     for (G4double time = t1; time<t2; time+= binWidth)
-       analysis->FillH1(id,time);
+       analysis->FillH1(id,time,weight);       
   }
 
  // keep only emerging particles
@@ -118,6 +120,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  G4String type   = particle->GetParticleType();      
  G4double charge = particle->GetPDGCharge();
  G4double time   = track->GetGlobalTime();
+ G4double weight = track->GetWeight();
  if (charge > 3.)  {ih1 = 10; ih2 = 20;}
  else if (particle == G4Gamma::Gamma())       {ih1 = 4;  ih2 = 14;}
  else if (particle == G4Electron::Electron()) {ih1 = 5;  ih2 = 15;}
@@ -130,9 +133,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  else if (type == "baryon")                   {ih1 = 11; ih2 = 21;}
  else if (type == "meson")                    {ih1 = 12; ih2 = 22;}
  else if (type == "lepton")                   {ih1 = 13; ih2 = 23;};
- if (ih1 > 0) analysis->FillH1(ih1,ekin);
- if (ih2 > 0) analysis->FillH1(ih2,time);
-
+ if (ih1 > 0) analysis->FillH1(ih1,ekin,weight);
+ if (ih2 > 0) analysis->FillH1(ih2,time,weight);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

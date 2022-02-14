@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TrackStack class implementation
+//
 // Author: Makoto Asai (SLAC)
 // --------------------------------------------------------------------
 
@@ -55,7 +57,7 @@ void G4TrackStack::TransferTo(G4TrackStack* aStack)
   clear();
 }
 
-void G4TrackStack::TransferTo(G4SmartTrackStack * aStack)
+void G4TrackStack::TransferTo(G4SmartTrackStack* aStack)
 {
   while (size())
   {

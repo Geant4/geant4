@@ -37,7 +37,6 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "StackingAction.hh"
-#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,13 +78,5 @@ void ActionInitialization::Build() const
   SetUserAction(new StackingAction(fDetector));
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
-{
-  return new SteppingVerbose();
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

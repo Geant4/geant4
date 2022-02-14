@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24th, 2021,  B. Morgan (exPersistency-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+November 13th, 2020 Ben Morgan (exPersistency-V10-06-02)
+- Enforce use of Serial RunManager for serial-only examples.
+
+November 10th, 2020 Ben Morgan (exPersistency-V10-06-01)
+- Migration to G4RunManagerFactory.
+
+November 03, 2020 B. Morgan (exPersistency-V10-06-00)
+- Support same CMake version range as core Geant4
+
 January 31, 2019  I. Hrivnacova (exPersistency-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
@@ -64,9 +76,9 @@ September 25th, 2012 I. Hrivnacova (exPersistency-V09-05-01)
 
 Sep 24th, 2012  Ivana Hrivnacova (exPersistency-V09-05-00)
 - Updated CMakeLists.txt files:
-  adding visualization, copying macros, install target and comment lines 
+  adding visualization, copying macros, install target and comment lines
 - Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
-- Replaced tabulators with space characters  
+- Replaced tabulators with space characters
 
 Aug 27th, 2008  Gabriele Cosmo (persistencyEx-V09-01-00)
 - Added examples set for GDML plugin module.

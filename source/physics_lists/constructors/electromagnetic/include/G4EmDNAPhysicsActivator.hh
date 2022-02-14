@@ -35,24 +35,28 @@
 
 class G4EmParameters;
 class G4ProcessManager;
-class G4LowECapture;
 
 class G4EmDNAPhysicsActivator : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmDNAPhysicsActivator(G4int ver = 1);
+  explicit G4EmDNAPhysicsActivator(G4int ver = 1);
 
-  virtual ~G4EmDNAPhysicsActivator();
+  ~G4EmDNAPhysicsActivator() override;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
 private:
 
-  void AddElectronModels0(const G4String& region, G4LowECapture* ecap, 
-			  G4bool emsc, G4double elowest, G4double elimel);
- 
+  void AddElectronModels0(const G4String& region, G4bool emsc, G4double elimel);
+  void AddElectronModels2(const G4String& region, G4bool emsc, G4double elimel);
+  void AddElectronModels4(const G4String& region, G4bool emsc, G4double elimel);
+  void AddElectronModels4a(const G4String& region, G4bool emsc, G4double elimel);
+  void AddElectronModels6(const G4String& region, G4bool emsc, G4double elimel);
+  void AddElectronModels6a(const G4String& region, G4bool emsc, G4double elimel);
+  void AddElectronModels7(const G4String& region, G4bool emsc, G4double elimel);
+
   void AddProtonModels0(const G4String& region, G4bool pmsc, 
 			G4double elimel, G4double pminbb, G4double pmax);
 
@@ -74,9 +78,5 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
 
 

@@ -39,7 +39,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #include "TSPhysicsList.hh"
 
 #include "G4RunManager.hh"
@@ -63,7 +62,6 @@
 
 // Process options
 #include "G4LossTableManager.hh"
-#include "G4EmProcessOptions.hh"
 
 // Physics List Helper
 #include "G4PhysicsListHelper.hh"
@@ -74,28 +72,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSPhysicsList* TSPhysicsList::fgInstance = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TSPhysicsList* TSPhysicsList::Instance()
-{
-  return fgInstance;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 TSPhysicsList::TSPhysicsList()
-: fEmPhysics_opt4(new G4EmStandardPhysics_option4),
-  fDecayPhysics(new G4DecayPhysics),
-  fRadDecayPhysics(new G4RadioactiveDecayPhysics),
-  fHadronInelasticPhysics(new G4HadronPhysicsQGSP_BERT_HP),
-  fHadronElasticPhysics(new G4HadronElasticPhysicsHP),
-  fIonElasticPhysics(new G4IonElasticPhysics),
-  fIonBinaryCascadePhysics(new G4IonBinaryCascadePhysics),
-  fDefaultCutValue(1.*CLHEP::mm)
 {
-  fgInstance = this;
+  defaultCutValue = 1. * CLHEP::mm;
 
   fConstructors.push_back(fEmPhysics_opt4);
   fConstructors.push_back(fDecayPhysics);
@@ -114,75 +93,62 @@ TSPhysicsList::~TSPhysicsList()
 {
   for(auto ite : fConstructors)
     delete ite;
-
-  fgInstance = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TSPhysicsList::ConstructParticle()
 {
-    for(auto c : fConstructors)
-    {
-        c->ConstructParticle();
-    }
+  for(auto c : fConstructors)
+  {
+    c->ConstructParticle();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TSPhysicsList::ConstructProcess()
 {
-    // Transportation
-    //
-    AddTransportation();
+  // Transportation
+  //
+  AddTransportation();
 
-    for(auto c : fConstructors)
+  for(auto c : fConstructors)
+  {
+    c->ConstructProcess();
+  }
+
+  std::set<G4String> step_limit_particles;
+  // standard particles
+  step_limit_particles.insert("e-");
+  step_limit_particles.insert("e+");
+  step_limit_particles.insert("alpha");
+  step_limit_particles.insert("He3");
+  step_limit_particles.insert("GenericIon");
+  step_limit_particles.insert("proton");
+  step_limit_particles.insert("neutron");
+  // more ~exotic particles
+  step_limit_particles.insert("pi+");
+  step_limit_particles.insert("pi-");
+  step_limit_particles.insert("mu+");
+  step_limit_particles.insert("mu-");
+
+  auto particleIterator = GetParticleIterator();
+  particleIterator->reset();
+
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
+  while((*particleIterator)())
+  {
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4String pname                 = particle->GetParticleName();
+
+    if(step_limit_particles.find(pname) != step_limit_particles.end() ||
+       particle->GetPDGCharge())
     {
-        c->ConstructProcess();
+      ph->RegisterProcess(new G4StepLimiter, particle);
     }
-
-    std::set<G4String> step_limit_particles;
-    // standard particles
-    step_limit_particles.insert("e-");
-    step_limit_particles.insert("e+");
-    step_limit_particles.insert("alpha");
-    step_limit_particles.insert("He3");
-    step_limit_particles.insert("GenericIon");
-    step_limit_particles.insert("proton");
-    step_limit_particles.insert("neutron");
-    // more ~exotic particles
-    step_limit_particles.insert("pi+");
-    step_limit_particles.insert("pi-");
-    step_limit_particles.insert("mu+");
-    step_limit_particles.insert("mu-");
-
-    auto particleIterator=GetParticleIterator();
-    particleIterator->reset();
-
-    G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
-
-    while( (*particleIterator)() )
-    {
-        G4ParticleDefinition* particle = particleIterator->value();
-        G4String pname = particle->GetParticleName();
-
-        if(step_limit_particles.find(pname) != step_limit_particles.end() ||
-           particle->GetPDGCharge())
-        {
-            ph->RegisterProcess(new G4StepLimiter, particle);
-        }
-    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void TSPhysicsList::SetCuts()
-{
-    SetCutValue(fDefaultCutValue, "e-");
-    SetCutValue(fDefaultCutValue, "e+");
-    SetCutValue(fDefaultCutValue, "gamma");
-    SetCutValue(fDefaultCutValue, "proton");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

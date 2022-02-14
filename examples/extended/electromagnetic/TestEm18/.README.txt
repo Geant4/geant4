@@ -70,7 +70,8 @@
  
  It is possible to choose the format of the histogram file : root (default),
  xml, csv, by using namespace in HistoManager.hh     
- 
+ For convenience, few simple Root macros are provided : plotHisto.C pixe.C
+    
  It is also possible to print selected histograms on an ascii file:
 \verbatim
 /analysis/h1/sweAscii id
@@ -105,5 +106,17 @@ Idle> type your commands
 ....
 Idle> exit
 \endverbatim
+	
+ Macros provided in this example:
+  - csda.mac: test independance of user step max
+  - edep.mac: track secondary particles and plot energy deposited
+  - electron.mac: e- (10 MeV) on 1 cm of water
+  - ion.mac: ion C12 (4 GeV) on 1 cm of water
+  - muon.mac: mu+ (1 TeV) on 1 m of water 
+  - pixe.mac: proton (20 MeV) on 50 um of gold. Plot gamma pixe
+  - proton.mac: proton (1 GeV) on 10 cm of water
+  - plotHisto.C, pixe.C: Root macros
   
+  Macros to be run interactively:
+  - vis.mac: To activate visualization  
 */

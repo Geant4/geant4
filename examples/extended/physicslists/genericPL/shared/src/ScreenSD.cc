@@ -29,12 +29,12 @@
 //
 
 #include "ScreenSD.hh"
-#include "Analysis.hh"
 
 #include "G4VTouchable.hh"
 #include "G4Step.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 
 #include "G4VProcess.hh"
 
@@ -76,16 +76,16 @@ G4bool ScreenSD::ProcessHits(G4Step* step, G4TouchableHistory* /*history*/)
   // Obtain local coordinates:
   const G4VTouchable* touchable = preStepPoint->GetTouchable();
   G4ThreeVector globalPosition = preStepPoint->GetPosition();
-  G4ThreeVector localPosition 
+  G4ThreeVector localPosition
     = touchable->GetHistory()->GetTopTransform().TransformPoint(globalPosition);
   // // Example for obtaining the local direction:
   // G4ThreeVector globalDirection = preStepPoint->GetMomentumDirection();
-  // G4ThreeVector localDirection 
+  // G4ThreeVector localDirection
   //   = touchable->GetHistory()->GetTopTransform().TransformAxis(localDirection);
 
   // Time
   G4double time = preStepPoint->GetGlobalTime();
-  
+
   // Store hit in the ntuple
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->FillNtupleIColumn(0, ID);
@@ -94,7 +94,7 @@ G4bool ScreenSD::ProcessHits(G4Step* step, G4TouchableHistory* /*history*/)
   analysisManager->FillNtupleDColumn(3, localPosition.x()/cm);
   analysisManager->FillNtupleDColumn(4, localPosition.y()/cm);
   analysisManager->FillNtupleDColumn(5, time/ns);
-  analysisManager->AddNtupleRow();  
+  analysisManager->AddNtupleRow();
 
   return true;
 }

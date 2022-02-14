@@ -38,7 +38,7 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include <volumes/UnplacedExtruded.h>
+#include <VecGeom/volumes/UnplacedExtruded.h>
 #include "G4TwoVector.hh"
 
 #include "G4Polyhedron.hh"
@@ -62,16 +62,16 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
 
   public:  // with description
 
-    G4UExtrudedSolid(const G4String& pName,
-                     std::vector<G4TwoVector> polygon,
-                     std::vector<ZSection>    zsections);
+    G4UExtrudedSolid(const G4String&                 pName,
+                     const std::vector<G4TwoVector>& polygon,
+                     const std::vector<ZSection>&    zsections);
     // General constructor
 
-    G4UExtrudedSolid(const G4String& pName,
-                     std::vector<G4TwoVector> polygon,
-                     G4double                 halfZ,
-                     G4TwoVector off1, G4double scale1,
-                     G4TwoVector off2, G4double scale2);
+    G4UExtrudedSolid(const G4String&                 pName,
+                     const std::vector<G4TwoVector>& polygon,
+                     G4double                        halfZ,
+                     const G4TwoVector& off1, G4double scale1,
+                     const G4TwoVector& off2, G4double scale2);
     // Special constructor for solid with 2 z-sections
 
    ~G4UExtrudedSolid();

@@ -32,14 +32,16 @@
 #define G4ToolsAnalysisManager_h 1
 
 #include "G4VAnalysisManager.hh"
+#include "G4ToolsAnalysisMessenger.hh"
 #include "globals.hh"
 
-#include "tools/histo/h1d" 
-#include "tools/histo/h2d" 
-#include "tools/histo/h3d" 
-#include "tools/histo/p1d" 
-#include "tools/histo/p2d" 
-#include "tools/wroot/ntuple"
+#include "tools/histo/h1d"
+#include "tools/histo/h2d"
+#include "tools/histo/h3d"
+#include "tools/histo/p1d"
+#include "tools/histo/p2d"
+
+#include <string_view>
 
 class G4H1ToolsManager;
 class G4H2ToolsManager;
@@ -49,17 +51,18 @@ class G4P2ToolsManager;
 
 namespace tools {
 namespace histo {
-class hmpi;  
-}  
+class hmpi;
 }
- 
+}
+
 class G4ToolsAnalysisManager : public  G4VAnalysisManager
 {
+  friend class G4ToolsAnalysisMessenger;
+
   public:
-    explicit G4ToolsAnalysisManager(const G4String& type, G4bool isMaster = true);
     virtual ~G4ToolsAnalysisManager();
-    
-        // static methods
+
+        // Static methods
     static G4ToolsAnalysisManager* Instance();
     static G4bool IsInstance();
 
@@ -74,62 +77,71 @@ class G4ToolsAnalysisManager : public  G4VAnalysisManager
                               G4bool onlyIfActive = true) const;
     tools::histo::p2d*  GetP2(G4int id, G4bool warn = true,
                               G4bool onlyIfActive = true) const;
-    
+
     // Iterators
     std::vector<tools::histo::h1d*>::iterator BeginH1();
     std::vector<tools::histo::h1d*>::iterator EndH1();
     std::vector<tools::histo::h1d*>::const_iterator BeginConstH1() const;
     std::vector<tools::histo::h1d*>::const_iterator EndConstH1() const;
-    
+
     std::vector<tools::histo::h2d*>::iterator BeginH2();
     std::vector<tools::histo::h2d*>::iterator EndH2();
     std::vector<tools::histo::h2d*>::const_iterator BeginConstH2() const;
     std::vector<tools::histo::h2d*>::const_iterator EndConstH2() const;
-    
+
     std::vector<tools::histo::h3d*>::iterator BeginH3();
     std::vector<tools::histo::h3d*>::iterator EndH3();
     std::vector<tools::histo::h3d*>::const_iterator BeginConstH3() const;
     std::vector<tools::histo::h3d*>::const_iterator EndConstH3() const;
-    
+
     std::vector<tools::histo::p1d*>::iterator BeginP1();
     std::vector<tools::histo::p1d*>::iterator EndP1();
     std::vector<tools::histo::p1d*>::const_iterator BeginConstP1() const;
     std::vector<tools::histo::p1d*>::const_iterator EndConstP1() const;
-    
+
     std::vector<tools::histo::p2d*>::iterator BeginP2();
     std::vector<tools::histo::p2d*>::iterator EndP2();
     std::vector<tools::histo::p2d*>::const_iterator BeginConstP2() const;
     std::vector<tools::histo::p2d*>::const_iterator EndConstP2() const;
-    
-    std::vector<tools::wroot::ntuple*>::iterator BeginNtuple();
-    std::vector<tools::wroot::ntuple*>::iterator EndNtuple();
-    std::vector<tools::wroot::ntuple*>::const_iterator BeginConstNtuple() const;
-    std::vector<tools::wroot::ntuple*>::const_iterator EndConstNtuple() const;
 
   protected:
-    // virtual methods from base class
+    explicit G4ToolsAnalysisManager(const G4String& type);
+
+    // Virtual methods from base class
     virtual G4bool PlotImpl() final;
     virtual G4bool MergeImpl(tools::histo::hmpi* hmpi) final;
-    // methods
-    G4bool Reset();
+    virtual G4bool WriteImpl() override;
+    virtual G4bool ResetImpl() override;
+    virtual void   ClearImpl() override;
 
-     // static data members
-    static G4ThreadLocal G4ToolsAnalysisManager* fgToolsInstance;    
+    // Methods
+    G4bool Merge();
+    G4bool IsEmpty();
 
-    // data members
-    G4H1ToolsManager*  fH1Manager;
-    G4H2ToolsManager*  fH2Manager;
-    G4H3ToolsManager*  fH3Manager;
-    G4P1ToolsManager*  fP1Manager;
-    G4P2ToolsManager*  fP2Manager;
+     // Static data members
+    inline static G4ToolsAnalysisManager* fgMasterToolsInstance { nullptr };
+    inline static G4ThreadLocal G4ToolsAnalysisManager* fgToolsInstance { nullptr };
+    static constexpr std::string_view fkClass { "G4ToolsAnalysisManager" };
+
+    // Data members
+    G4H1ToolsManager*  fH1Manager { nullptr };
+    G4H2ToolsManager*  fH2Manager { nullptr };
+    G4H3ToolsManager*  fH3Manager { nullptr };
+    G4P1ToolsManager*  fP1Manager { nullptr };
+    G4P2ToolsManager*  fP2Manager { nullptr };
 
   private:
-    //  // static data members
-    // static G4ThreadLocal G4ToolsAnalysisManager* fgToolsInstance;    
+    //  // Static data members
+    // Static G4ThreadLocal G4ToolsAnalysisManager* fgToolsInstance;
+    // Methods
+    template <typename HT>
+    G4bool WriteT(const std::vector<HT*>& htVector,
+                  const std::vector<G4HnInformation*>& hnVector);
 
+    // Data members
+    std::unique_ptr<G4ToolsAnalysisMessenger> fMessenger;
  };
 
 #include "G4ToolsAnalysisManager.icc"
 
 #endif
-

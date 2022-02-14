@@ -73,6 +73,11 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theGN->SetGuidance("Switching on gamma nuclear physics.");
   theGN->AvailableForStates(G4State_PreInit);
 
+  // command for gamma nuclear physics.
+  theXS = new G4UIcmdWithABool("/physics_lists/em/UseGammaNuclearXS",this);
+  theXS->SetGuidance("Use XS gamma nuclear cross section.");
+  theXS->AvailableForStates(G4State_PreInit);
+
   // command for lend gamma nuclear physics.
   theGLENDN = new G4UIcmdWithABool("/physics_lists/em/LENDGammaNuclear",this);
   theGLENDN->SetGuidance("Switching on LEND gamma nuclear physics.");
@@ -131,6 +136,12 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theNuNucleusBF->SetGuidance("Neutrino-nucleus bias factor");
   theNuNucleusBF->AvailableForStates(G4State_PreInit);
 
+  theGNlowe = new G4UIcmdWithADoubleAndUnit("/physics_lists/em/GammaNuclearLEModelLimit",this);
+  theGNlowe->SetGuidance("Upper energy limit for low-energy model");
+  theGNlowe->SetParameterName("emin",true);
+  theGNlowe->SetUnitCategory("Energy");
+  theGNlowe->AvailableForStates(G4State_PreInit);
+
   theNuDN = new G4UIcmdWithAString("/physics_lists/em/NuDetectorName",this);  
   theNuDN->SetGuidance("Set neutrino detector name");
   theNuDN->AvailableForStates(G4State_PreInit);
@@ -157,6 +168,8 @@ G4EmMessenger::~G4EmMessenger()
   delete theNuEleNcBF;
   delete theNuNucleusBF;
   delete theNuDN;
+  delete theGNlowe;
+  delete theXS;
 
   delete aDir1;
   delete aDir2;
@@ -174,15 +187,17 @@ void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
   if(aComm==thePMM)      theB->PositronToMuMu(thePMM->GetNewBoolValue(aS));
   if(aComm==thePH)       theB->PositronToHadrons(thePH->GetNewBoolValue(aS));
   if(aComm==theNu)       theB->NeutrinoActivated(theNu->GetNewBoolValue(aS));
-  if(aComm==theNuETX)    theB->NuETotXscActivated(theNu->GetNewBoolValue(aS));
+  if(aComm==theNuETX)    theB->NuETotXscActivated(theNuETX->GetNewBoolValue(aS));
+  if(aComm==theXS)       theB->SetUseGammaNuclearXS(theXS->GetNewBoolValue(aS));
 
   if(aComm==theGMM1)     theB->GammaToMuMuFactor(theGMM1->GetNewDoubleValue(aS));
   if(aComm==thePMM1)     theB->PositronToMuMuFactor(thePMM1->GetNewDoubleValue(aS));
   if(aComm==thePH1)      theB->PositronToHadronsFactor(thePH1->GetNewDoubleValue(aS));
 
-  if(aComm==theNuEleCcBF)       theB->SetNuEleCcBias(theNuEleCcBF->GetNewDoubleValue(aS));
-  if(aComm==theNuEleNcBF)       theB->SetNuEleNcBias(theNuEleCcBF->GetNewDoubleValue(aS));
-  if(aComm==theNuNucleusBF)     theB->SetNuNucleusBias(theNuNucleusBF->GetNewDoubleValue(aS));
+  if(aComm==theNuEleCcBF)    theB->SetNuEleCcBias(theNuEleCcBF->GetNewDoubleValue(aS));
+  if(aComm==theNuEleNcBF)    theB->SetNuEleNcBias(theNuEleNcBF->GetNewDoubleValue(aS));
+  if(aComm==theNuNucleusBF)  theB->SetNuNucleusBias(theNuNucleusBF->GetNewDoubleValue(aS));
+  if(aComm==theGNlowe)       theB->GammaNuclearLEModelLimit(theGNlowe->GetNewDoubleValue(aS));
 
   if(aComm==theNuDN)     theB->SetNuDetectorName(aS);
 }

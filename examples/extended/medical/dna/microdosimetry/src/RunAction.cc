@@ -37,7 +37,7 @@
 #include "TrackingAction.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4RunManager.hh"
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Threading.hh"
 #include "CommandLineParser.hh"
 
@@ -164,11 +164,6 @@ void RunAction::EndWorker(const G4Run* run)
   WriteHistogram();
 
   ///////////////
-  // Complete cleanup
-  //
-  delete G4AnalysisManager::Instance();
-
-  ///////////////
   // Printouts
   //
   std::map<const G4ParticleDefinition*, int>&
@@ -221,8 +216,6 @@ void RunAction::CreateHistogram()
   // Book histograms, ntuple
 
   // Create analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  // in Analysis.hh
 
   CommandLineParser* parser = CommandLineParser::GetParser();
   Command* command(0);
@@ -230,7 +223,7 @@ void RunAction::CreateHistogram()
 
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-//  if(!analysisManager->IsActive()) {return; }
+  analysisManager->SetDefaultFileType("root");
 
   G4cout << "Using " << analysisManager->GetType() <<
       " analysis manager" << G4endl;
@@ -284,6 +277,7 @@ void RunAction::WriteHistogram()
   //
   analysisManager->Write();
   analysisManager->CloseFile();
+  analysisManager->Clear();
 
   if(fDebug)
   {

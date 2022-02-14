@@ -28,8 +28,6 @@
 #ifndef G4UIQt_h
 #define G4UIQt_h 
 
-#if defined(G4UI_BUILD_QT_SESSION) || defined(G4UI_USE_QT)
-
 #include <map>
 
 #include "G4VBasicShell.hh"
@@ -49,6 +47,7 @@ class QListWidget;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QTextEdit;
+class QTextBrowser;
 class QLabel;
 class QResizeEvent;
 class QTabWidget;
@@ -147,6 +146,17 @@ public: // With description
   // Third argument is the Geant4 command executed when the button is fired.
   // Fourth argument is the path to the icon file if "user_icon" selected
   // Ex : AddButton("change background color","../background.xpm"," /vis/viewer/set/background"); 
+  void OutputStyle (const char*,const char*,const char*);
+  // Specify an output style
+  // First argument destination (cout cerr warnings errors all)
+  // Second argument is the style (fixed proportional)
+  // Third argument highlights commands if "highlight" (and if /control/verbose > 0)
+
+  void NativeMenu(bool aVal);
+  // Enable/Disable the native Menu Bar in Qt
+
+  void ClearMenu();
+  // Clear Menu Bar, remove all actions
 
   void DefaultIcons(bool aVal);
   // Enable/Disable the default icon ToolBar in Qt
@@ -275,8 +285,11 @@ private:
   virtual G4bool GetHelpChoice(G4int&);// have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*,QEvent*);
   void ActivateCommand(G4String);
+#if QT_VERSION < 0x050F00
   QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
-
+#else
+  QMultiMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
+#endif
   QWidget* CreateVisParametersTBWidget();
   QWidget* CreateHelpTBWidget();
   G4UIDockWidget* CreateCoutTBWidget();
@@ -326,7 +339,7 @@ private:
   QLineEdit* fHelpLine;
   G4QTabWidget* fViewerTabWidget;
   QString fCoutText;
-  QTextEdit *fStartPage;
+  QTextBrowser *fStartPage;
   QSplitter * fHelpVSplitter;
   QTextEdit* fParameterHelpLabel;
   QTableWidget* fParameterHelpTable;
@@ -359,6 +372,7 @@ private:
   QPixmap* fRunIcon;
   QPixmap* fParamIcon;
   QPixmap* fPickTargetIcon;
+  QPixmap* fExitIcon;
   
 #ifdef G4MULTITHREADED
   QComboBox* fThreadsFilterComboBox;
@@ -373,6 +387,10 @@ private:
   bool fPickSelected;
   bool fZoomInSelected;
   bool fZoomOutSelected;
+  struct G4UIQtStyle {
+    G4bool fixed, highlight;
+  };
+  std::map<G4String,G4UIQtStyle> fOutputStyles;
 
 private Q_SLOTS :
   void ExitSession();
@@ -401,8 +419,6 @@ private Q_SLOTS :
   void ViewerPropertiesIconCallback(int);
   void ChangePerspectiveOrtho(const QString&);
 };
-
-#endif
 
 #endif
 

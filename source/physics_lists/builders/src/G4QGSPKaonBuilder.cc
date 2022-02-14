@@ -45,62 +45,35 @@ G4QGSPKaonBuilder(G4bool quasiElastic)
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("QGSP");
 
-  theStringModel = new G4QGSModel< G4QGSParticipants >;
-  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+  G4QGSModel< G4QGSParticipants >* theStringModel = 
+    new G4QGSModel< G4QGSParticipants >;
+  G4ExcitedStringDecay* theStringDecay = 
+    new G4ExcitedStringDecay(new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4GeneratorPrecompoundInterface;
+  G4GeneratorPrecompoundInterface* theCascade = 
+    new G4GeneratorPrecompoundInterface();
 
+  theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
-  {
-    theQuasiElastic=new G4QuasiElasticChannel;
-    theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
-  theModel->SetTransport(theCascade);
+    {
+      theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+    } 
 }
 
 G4QGSPKaonBuilder::
 ~G4QGSPKaonBuilder() 
 {
-  if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theStringDecay;
-  delete theStringModel;
 }
 
 void G4QGSPKaonBuilder::
 Build(G4HadronElasticProcess * ) {}
 
 void G4QGSPKaonBuilder::
-Build(G4KaonPlusInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
 }
-
-void G4QGSPKaonBuilder::
-Build(G4KaonMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSPKaonBuilder::
-Build(G4KaonZeroLInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSPKaonBuilder::
-Build(G4KaonZeroSInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theModel);
-}
-

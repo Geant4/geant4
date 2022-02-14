@@ -1,0 +1,14 @@
+#
+### Radiation field defined
+### by means of GPS
+
+/gps/verbose 0
+
+### Generates Pencil beam of 200MeV protons by default
+### Proton pencil beam is incident on far left side of the phantom 
+### (x = -27 cm)and centered in y and z 
+
+/gps/particle proton
+/gps/energy 250 MeV
+/gps/pos/centre -27. 0. 0. cm
+/gps/direction 1 0 0 

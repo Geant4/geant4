@@ -40,6 +40,7 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4RayleighScattering.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
@@ -60,6 +61,9 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
+
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,9 +75,11 @@ ElectromagneticPhysics::ElectromagneticPhysics(const G4String& name)
 
     G4EmParameters* param = G4EmParameters::Instance();
     param->SetDefaults();
-    param->SetVerbose(0);
-    param->SetStepFunction(1., 1*mm);        //default= 0.1, 100*um
-    param->SetStepFunctionMuHad(1., 1*mm);
+    param->SetStepFunction(0.2, 100*um);
+    param->SetStepFunctionMuHad(0.1, 10*um);
+    param->SetStepFunctionLightIons(0.1, 10*um);
+    param->SetStepFunctionIons(0.1, 1*um);
+    param->SetDeexcitationIgnoreCut(true);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,7 +102,8 @@ void ElectromagneticPhysics::ConstructProcess()
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-
+    
+      ph->RegisterProcess(new G4RayleighScattering,  particle);      
       ph->RegisterProcess(new G4PhotoElectricEffect, particle);
       ph->RegisterProcess(new G4ComptonScattering,   particle);
       ph->RegisterProcess(new G4GammaConversion,     particle);
@@ -104,13 +111,13 @@ void ElectromagneticPhysics::ConstructProcess()
     } else if (particleName == "e-") {
     
       ph->RegisterProcess(new G4eMultipleScattering(), particle);
-      ph->RegisterProcess(new G4eIonisation(),         particle);
+      ph->RegisterProcess(new G4eIonisation,           particle);
       ph->RegisterProcess(new G4eBremsstrahlung(),     particle);
             
     } else if (particleName == "e+") {
     
       ph->RegisterProcess(new G4eMultipleScattering(), particle);
-      ph->RegisterProcess(new G4eIonisation(),         particle);
+      ph->RegisterProcess(new G4eIonisation,           particle);
       ph->RegisterProcess(new G4eBremsstrahlung(),     particle);
       ph->RegisterProcess(new G4eplusAnnihilation(),   particle);
                   
@@ -118,7 +125,7 @@ void ElectromagneticPhysics::ConstructProcess()
                particleName == "mu-"    ) {
 
       ph->RegisterProcess(new G4MuMultipleScattering(), particle);
-      ph->RegisterProcess(new G4MuIonisation(),         particle);
+      ph->RegisterProcess(new G4MuIonisation,           particle);
       ph->RegisterProcess(new G4MuBremsstrahlung(),     particle);
       ph->RegisterProcess(new G4MuPairProduction(),     particle);
                    
@@ -127,13 +134,13 @@ void ElectromagneticPhysics::ConstructProcess()
                particleName == "pi+"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);      
-      ph->RegisterProcess(new G4hIonisation(),         particle);
+      ph->RegisterProcess(new G4hIonisation,           particle);
      
     } else if( particleName == "alpha" || 
                particleName == "He3"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
-      ph->RegisterProcess(new G4ionIonisation(),       particle);
+      ph->RegisterProcess(new G4ionIonisation,         particle);
       ph->RegisterProcess(new G4NuclearStopping(),     particle);
             
     } else if( particleName == "GenericIon" ) {
@@ -153,6 +160,11 @@ void ElectromagneticPhysics::ConstructProcess()
       ph->RegisterProcess(new G4hIonisation(),         particle);
     }
   }
+ 
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -45,40 +45,38 @@
 #include <functional>
 #include "Randomize.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 // Constructor
-
 G4ShellData::G4ShellData(G4int minZ, G4int maxZ, G4bool isOccupancy)
   : zMin(minZ), zMax(maxZ), occupancyData(isOccupancy)
 {  }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 // Destructor
 G4ShellData::~G4ShellData()
 {
-  std::map<G4int,std::vector<G4double>*,std::less<G4int> >::iterator pos;
-  for (pos = idMap.begin(); pos != idMap.end(); ++pos)
+  for (auto& pos : idMap)
     {
-      std::vector<G4double>* dataSet = (*pos).second;
+      std::vector<G4double>* dataSet = pos.second;
       delete dataSet;
     }
-
-  std::map<G4int,G4DataVector*,std::less<G4int> >::iterator pos2;
-  for (pos2 = bindingMap.begin(); pos2 != bindingMap.end(); ++pos2)
+  for (auto& pos2 : bindingMap) 
     {
-      G4DataVector* dataSet = (*pos2).second;
+      G4DataVector* dataSet = pos2.second;
       delete dataSet;
     }
 
   if (occupancyData)
     {
-      std::map<G4int,std::vector<G4double>*,std::less<G4int> >::iterator pos3;
-      for (pos3 = occupancyPdfMap.begin(); pos3 != occupancyPdfMap.end(); ++pos3)
+      for (auto& pos3 : occupancyPdfMap)
 	{
-	  std::vector<G4double>* dataSet = (*pos3).second;
+	  std::vector<G4double>* dataSet = pos3.second;
 	  delete dataSet;
 	}
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 size_t G4ShellData::NumberOfShells(G4int Z) const
 {
@@ -92,30 +90,30 @@ size_t G4ShellData::NumberOfShells(G4int Z) const
   return n;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const std::vector<G4double>& G4ShellData::ShellIdVector(G4int Z) const
 {
-  std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator pos;
-  if (Z < zMin || Z > zMax) {
-
+  if (Z < zMin || Z > zMax) {    
     G4Exception("G4ShellData::ShellIdVector","de0001",FatalErrorInArgument, "Z outside boundaries");
-
-
-  }  pos = idMap.find(Z);
+  }  
+  auto pos = idMap.find(Z);
   std::vector<G4double>* dataSet = (*pos).second;
   return *dataSet;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const std::vector<G4double>& G4ShellData::ShellVector(G4int Z) const
 {
-  std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator pos;
-  if (Z < zMin || Z > zMax) G4Exception("G4ShellData::ShellVector()","de0001",JustWarning,"Z outside boundaries");
-  pos = occupancyPdfMap.find(Z);
+  if (Z < zMin || Z > zMax) 
+    G4Exception("G4ShellData::ShellVector()","de0001",JustWarning,"Z outside boundaries");
+  auto pos = occupancyPdfMap.find(Z);
   std::vector<G4double>* dataSet = (*pos).second;
   return *dataSet;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4ShellData::ShellId(G4int Z, G4int shellIndex) const
 {
@@ -123,8 +121,7 @@ G4int G4ShellData::ShellId(G4int Z, G4int shellIndex) const
 
   if (Z >= zMin && Z <= zMax)
     {
-      std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator pos;
-      pos = idMap.find(Z);
+      auto pos = idMap.find(Z);
       if (pos!= idMap.end())
 	{
 	  std::vector<G4double> dataSet = *((*pos).second);
@@ -138,15 +135,14 @@ G4int G4ShellData::ShellId(G4int Z, G4int shellIndex) const
   return n;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4ShellData::ShellOccupancyProbability(G4int Z, G4int shellIndex) const
 {
   G4double prob = -1.;
-
   if (Z >= zMin && Z <= zMax)
     {
-      std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator pos;
-      pos = idMap.find(Z);
+      auto pos = idMap.find(Z);
       if (pos!= idMap.end())
 	{
 	  std::vector<G4double> dataSet = *((*pos).second);
@@ -160,7 +156,7 @@ G4double G4ShellData::ShellOccupancyProbability(G4int Z, G4int shellIndex) const
   return prob;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4ShellData::BindingEnergy(G4int Z, G4int shellIndex)  const
 {
@@ -168,8 +164,7 @@ G4double G4ShellData::BindingEnergy(G4int Z, G4int shellIndex)  const
 
   if (Z >= zMin && Z <= zMax)
     {
-      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
-      pos = bindingMap.find(Z);
+      auto pos = bindingMap.find(Z);
       if (pos!= bindingMap.end())
 	{
 	  G4DataVector dataSet = *((*pos).second);
@@ -183,6 +178,8 @@ G4double G4ShellData::BindingEnergy(G4int Z, G4int shellIndex)  const
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4ShellData::PrintData() const
 {
   for (G4int Z = zMin; Z <= zMax; Z++)
@@ -192,13 +189,11 @@ void G4ShellData::PrintData() const
 	     << " ---- "
 	     << G4endl;
       G4int nSh = nShells[Z-1];
-      std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator posId;
-      posId = idMap.find(Z);
+      auto posId = idMap.find(Z);
       std::vector<G4double>* ids = (*posId).second;
-      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator posE;
-      posE = bindingMap.find(Z);
+      auto posE = bindingMap.find(Z);
       G4DataVector* energies = (*posE).second;
-      for (G4int i=0; i<nSh; i++)
+      for (G4int i=0; i<nSh; ++i)
 	{
 	  G4int id = (G4int) (*ids)[i];
 	  G4double e = (*energies)[i] / keV;
@@ -216,8 +211,7 @@ void G4ShellData::PrintData() const
 		 << e << " keV ";
 	    if (occupancyData)
 	      {
-		std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator posOcc;
-		posOcc = occupancyPdfMap.find(Z);
+		auto posOcc = occupancyPdfMap.find(Z);
                 std::vector<G4double> probs = *((*posOcc).second);
                 G4double prob = probs[i];
 		G4cout << "- Probability = " << prob;
@@ -229,15 +223,14 @@ void G4ShellData::PrintData() const
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ShellData::LoadData(const G4String& fileName)
 { 
   // Build the complete string identifying the file with the data set
-  
   std::ostringstream ost;
-  
   ost << fileName << ".dat";
-  
+  // G4cout << fileName << G4endl;
   G4String name(ost.str());
   
   char* path = std::getenv("G4LEDATA");
@@ -298,10 +291,10 @@ void G4ShellData::LoadData(const G4String& fileName)
     // moved out of the do-while since might go to a leak. 
     //    else if (a == -2)
     //      {
-	// End of file; delete the empty vectors created when encountering the last -1 -1 row
-	//	delete energies;
-	//	delete ids;
-	//nComponents = components.size();
+    // End of file; delete the empty vectors created when encountering the last -1 -1 row
+    //	delete energies;
+    //	delete ids;
+    //nComponents = components.size();
     //      }
     else
       {
@@ -330,7 +323,6 @@ void G4ShellData::LoadData(const G4String& fileName)
   if (occupancyData)
     {
       // Build cumulative from raw shell occupancy
-
       for (G4int ZLocal=zMin; ZLocal <= zMax; ZLocal++)
 	{
 	  std::vector<G4double> occupancy = ShellIdVector(ZLocal);
@@ -344,37 +336,22 @@ void G4ShellData::LoadData(const G4String& fileName)
 	      prob->push_back(occupancy[i]*scale + (*prob)[i-1]);
 	    }
 	  occupancyPdfMap[ZLocal] = prob;
-
-	  /*
-	    G4double scale = 1. / G4double(Z);
-	    //      transform((*prob).begin(),(*prob).end(),(*prob).begin(),bind2nd(multiplies<G4double>(),scale));
-
-	    for (size_t i=0; i<occupancy.size(); i++)
-	    {
-	    (*prob)[i] *= scale;
-	    }
-	  */
 	}
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4ShellData::SelectRandomShell(G4int Z) const
 {
-  if (Z < zMin || Z > zMax) {
-
+  if (Z < zMin || Z > zMax) 
     G4Exception("G4ShellData::SelectrandomShell","de0001",FatalErrorInArgument, "Z outside boundaries");
 
-  }
   G4int shellIndex = 0;    
   std::vector<G4double> prob = ShellVector(Z);
   G4double random = G4UniformRand();
 
-  // std::vector<G4double>::const_iterator pos;
-  // pos = lower_bound(prob.begin(),prob.end(),random);
-
   // Binary search the shell with probability less or equal random
-
   G4int nShellsLocal = NumberOfShells(Z);
   G4int upperBound = nShellsLocal;
 

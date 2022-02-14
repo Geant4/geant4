@@ -29,7 +29,7 @@
 #ifndef G4PSTrackCounter_h
 #define G4PSTrackCounter_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 
 #include "G4PSDirectionFlag.hh"
@@ -40,46 +40,43 @@
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy
+//              in MeV (x) vs. weighted number of track (y)    (Makoto Asai)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSTrackCounter : public G4VPrimitiveScorer
+class G4PSTrackCounter : public G4VPrimitivePlotter
 {
- 
- public: // with description
-      G4PSTrackCounter(G4String name, G4int direction, G4int depth=0);
+ public:  // with description
+  G4PSTrackCounter(G4String name, G4int direction, G4int depth = 0);
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
 
-  public:
-      virtual ~G4PSTrackCounter();
+ public:
+  virtual ~G4PSTrackCounter();
 
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
+  inline void Weighted(G4bool flg = true) { weighted = flg; }
+  // Multiply track weight
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
 
-  public:
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      virtual void SetUnit(const G4String& unit);
+  virtual void SetUnit(const G4String& unit);
 
-  private:
-      G4int HCID;
-      G4int fDirection;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool weighted;
+ private:
+  G4int HCID;
+  G4int fDirection;
+  G4THitsMap<G4double>* EvtMap;
+  G4bool weighted;
 
-  public:
-
-
+ public:
 };
-
-
 
 #endif

@@ -8,11 +8,13 @@
                                 README file
                           ----------------------
 
-                           CORRESPONDING AUTHOR 
+                           CORRESPONDING AUTHORS 
 
-M. Raine
-CEA, DAM, DIF, F-91297 Arpajon, France
-* e-mail:melanie.raine@cea.fr
+M. Raine*, D. Lambert*, C. Inguimbert', Q. Gibaru' 
+* CEA, DAM, DIF, F-91297 Arpajon, France
+' ONERA, 2 avenue Edouard Belin - BP 74025 - 31055 TOULOUSE, France
+email: melanie.raine@cea.fr  damien.lambert@cea.fr
+       christophe.Inguimbert@onera.fr Quentin.Gibaru@onera.fr
 
 ---->0. INTRODUCTION.                                                    
                                                                        
@@ -22,45 +24,59 @@ are used in a Target volume, declared as a Region.
 
 ---->1. GEOMETRY SET-UP.
  
-The geometry is a 1 um side cube (World) made of silicon containing a smaller cubic Target volume of silicon.
+By default, the geometry is a 2 um side cube (World) made of silicon containing 
+a smaller cubic Target volume of silicon (1 um3). 
+The target material can be modified and simulated with G4MicroElecPhysics processes.
 
 ---->2. SET-UP 
                                                                         
-Make sure G4LEDATA points to the low energy electromagnetic libraries.
+Make sure that the G4EMLOW database version is correct (> or = 7.16)
 
 The variable G4ANALYSIS_USE must be set to 1.
   
 The code should be compiled with cmake: 
-    $ cd $HOME
     $ mkdir microelectronics-build
-    $ cd $HOME/microelectronics-build
-    $ cmake -DGeant4_DIR=/your_path/geant4-install/lib64/Geant4-9.5.0 $HOME/microelectronics
+    $ cd microelectronics-build
+    $ cmake -DGeant4_DIR=/your_path/geant4-install/ $PATHTOMICROELECEXAMPLE/microelectronics
     $ make
 
-It works in MT mode.
+It works in MT mode (but in this example today MT=1 due to memory consumption of new Microelec models).
 
 ---->3. HOW TO RUN THE EXAMPLE                                         
 
 In interactive mode, run:
 
-./Microelectronics
+./microelectronics
 
 The macro microelectronics.mac is executed by default. 
 
 To get visualization, make sure to uncomment the #/control/execute vis.mac
  line in the macro.
 
+ By default, the new MicroElec models are used. 
+ You can used the Silicon MicroElec models, with the "-onlySi" option:
+ ./microelectronics -onlySi
+or
+./microelectronics microelectronics.mac -onlySi
+
+You can change the type of the target material 
+(G4_Ag G4_Al G4_C G4_Cu G4_Ge G4_KAPTON G4_Ni G4_Si G4_SILICON_DIOXIDE G4_Ti G4_W), 
+if you uncomment one line (/microelectronics/det/setMat) into the .mac file. 
+
+
+
 ---->4. PHYSICS
 
 This example shows:
-- how to use the Geant4-MicroElec processes, 
+- how to use the G4MicroElecPhysics and G4MicroElecSiPhysics processes, 
 - how to affect them a name
 - how to combine them with Standard EM Physics.
 
 A simple electron capture process is also provided in order to kill electrons 
 below a chosen energy threshold, set in the Physics list.
 
-Look at the PhyscisList.cc file.
+Look at the G4MicroElecSiPhysics.cc (previous silicon MicroElec models)
+and G4MicroElecPhysics.cc (new MicroElec models) files.
 
 ---->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
@@ -99,7 +115,13 @@ ion_G4MicroElecInelastic	15
 hIoni				16
 eIoni				17
 
+G4MicroElecPhysics parameters:
+e-_G4LOPhononScattering         19
+e-_G4MicroElecSurface           20
+alpha_G4Dielectrics             21
+ion_G4Dielectrics               22
+
+
 ---------------------------------------------------------------------------
 
-Should you have any enquiry, please do not hesitate to contact: 
-melanie.raine@cea.fr
+Should you have any enquiry, please do not hesitate to contact one the corresponding authors.

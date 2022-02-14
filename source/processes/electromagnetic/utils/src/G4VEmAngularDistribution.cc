@@ -48,12 +48,16 @@
 //    
 
 #include "G4VEmAngularDistribution.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEmAngularDistribution::G4VEmAngularDistribution(const G4String& name) 
-  : fLocalDirection(0.0,0.0,1.0),fName(name)
-{}
+  : fName(name)
+{
+  fLocalDirection.set(0.0,0.0,1.0);
+  fPolarisation = G4EmParameters::Instance()->EnablePolarisation();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -85,3 +89,7 @@ void G4VEmAngularDistribution::SamplePairDirections(const G4DynamicParticle* dp,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEmAngularDistribution::PrintGeneratorInformation() const
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

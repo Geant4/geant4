@@ -141,27 +141,25 @@ public:
 
   G4GoudsmitSaundersonMscModel(const G4String& nam = "GoudsmitSaunderson");
 
-  virtual ~G4GoudsmitSaundersonMscModel();
+  ~G4GoudsmitSaundersonMscModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition* p, G4VEmModel* masterModel);
+  void InitialiseLocal(const G4ParticleDefinition* p, G4VEmModel* masterModel) override;
 
+  G4ThreeVector& SampleScattering(const G4ThreeVector&, G4double safety) override;
 
-  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, G4double safety);
+  G4double ComputeTruePathLengthLimit(const G4Track& track, G4double& currentMinimalStep) override;
 
-  virtual G4double ComputeTruePathLengthLimit(const G4Track& track, G4double& currentMinimalStep);
+  G4double ComputeGeomPathLength(G4double truePathLength) override;
 
-  virtual G4double ComputeGeomPathLength(G4double truePathLength);
-
-  virtual G4double ComputeTrueStepLength(G4double geomStepLength);
+  G4double ComputeTrueStepLength(G4double geomStepLength) override;
 
   // method to compute first transport cross section per Volume (i.e. macroscropic first transport cross section; this 
   // method is used only for testing and not during a normal simulation) 
-  virtual G4double CrossSectionPerVolume(const G4Material*, const G4ParticleDefinition*, G4double kineticEnergy,
-                                         G4double cutEnergy = 0.0, G4double maxEnergy = DBL_MAX);
+  G4double CrossSectionPerVolume(const G4Material*, const G4ParticleDefinition*, G4double kineticEnergy, G4double cutEnergy = 0.0, G4double maxEnergy = DBL_MAX) override;
 
-  void     StartTracking(G4Track*);
+  void     StartTracking(G4Track*) override;
 
   void     SampleMSC();
 
@@ -179,14 +177,15 @@ public:
 
   G4GSPWACorrections*        GetPWACorrection()    { return fPWACorrection; }
 
+  //  hide assignment operator
+  G4GoudsmitSaundersonMscModel & operator=(const  G4GoudsmitSaundersonMscModel &right) = delete;
+  G4GoudsmitSaundersonMscModel(const  G4GoudsmitSaundersonMscModel&) = delete;
+
 private:
   inline void     SetParticle(const G4ParticleDefinition* p);
 
   inline G4double GetLambda(G4double);
 
-  //  hide assignment operator
-  G4GoudsmitSaundersonMscModel & operator=(const  G4GoudsmitSaundersonMscModel &right);
-  G4GoudsmitSaundersonMscModel(const  G4GoudsmitSaundersonMscModel&);
   G4double GetTransportMeanFreePathOnly(const G4ParticleDefinition*,G4double);
 
   inline G4double Randomizetlimit();

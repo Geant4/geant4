@@ -39,31 +39,24 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4UnknownDecay.hh"
-
 class G4UnknownDecayPhysics : public G4VPhysicsConstructor
 {
-  public: 
-    G4UnknownDecayPhysics(G4int ver = 1);
-    G4UnknownDecayPhysics(const G4String& name, G4int ver = 1);
-    virtual ~G4UnknownDecayPhysics();
+public: 
+  G4UnknownDecayPhysics(G4int ver = 1);
+  G4UnknownDecayPhysics(const G4String& name, G4int ver = 1);
+  ~G4UnknownDecayPhysics() override;
 
-  public: 
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-
-  virtual G4UnknownDecay* GetDecayProcess() { return fDecayProcess; }
+  void ConstructProcess() override;
 
 private:
-  static G4ThreadLocal G4UnknownDecay* fDecayProcess;
   G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
 };
 
 #endif

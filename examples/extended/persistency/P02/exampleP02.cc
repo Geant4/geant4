@@ -32,7 +32,7 @@
 =======
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,8 +42,7 @@
 
 #include "FTFP_BERT.hh"
 
-
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #ifdef G4VIS_USE
@@ -57,7 +56,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc, char** argv)
-{  
+{
 
   if(argc==1)
   {
@@ -82,16 +81,15 @@ int main(int argc, char** argv)
   }
 
   // Run manager
-  G4RunManager * runManager = new G4RunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // UserInitialization classes (mandatory)
   runManager->SetUserInitialization(det);
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
-  
-#ifdef G4VIS_USE
-  // Visualization, if you choose to have it!
+
+  // Visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
@@ -101,9 +99,9 @@ int main(int argc, char** argv)
 
   //Initialize G4 kernel
   runManager->Initialize();
-      
-  //get the pointer to the User Interface manager 
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
+
+  //get the pointer to the User Interface manager
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
 
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);

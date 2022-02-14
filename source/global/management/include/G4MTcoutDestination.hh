@@ -23,70 +23,86 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MTcoutDestination
 //
-//
-// 
-// ---------------------------------------------------------------
-// GEANT 4 class header file
-//
-// G4MTcoutDestination.hh
-//
-// ---------------------------------------------------------------
-#ifndef G4MTcoutDestination_H
-#define G4MTcoutDestination_H
+// Handling of cout/cerr in multi-threaded mode
 
-#include "globals.hh"
-#include "G4coutDestination.hh"
+// Authors: M.Asai, A.Dotti (SLAC) - 23 May 2013
+// ---------------------------------------------------------------
+#ifndef G4MTcoutDestination_hh
+#define G4MTcoutDestination_hh
+
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
 
-class G4MTcoutDestination : public G4coutDestination
+#include "G4MulticoutDestination.hh"
+#include "G4StateManager.hh"
+#include "globals.hh"
+
+class G4LockcoutDestination;
+
+class G4MTcoutDestination : public G4MulticoutDestination
 {
-  public:
+ public:
+  explicit G4MTcoutDestination(const G4int& threadId);
+  virtual ~G4MTcoutDestination();
 
-    G4MTcoutDestination(const G4int& threadId,
-       std::ostream& co=std::cout, std::ostream&  ce=std::cerr);
-    virtual ~G4MTcoutDestination();
+  virtual void Reset();
 
-    virtual G4int ReceiveG4cout(const G4String&);
-    virtual G4int ReceiveG4cerr(const G4String&);
+  void SetDefaultOutput(G4bool addMasterDestination = true,
+                        G4bool formatAlsoMaster     = true);
 
-    void SetCoutFileName(const G4String& fileN = "G4cout.txt", G4bool ifAppend = true);
-    void SetCerrFileName(const G4String& fileN = "G4cerr.txt", G4bool ifAppend = true);
-    void EnableBuffering(G4bool flag=true);
-    void SetPrefixString(const G4String& wd = "G4WT");
-    void SetIgnoreCout(G4int tid = 0);
-    void SetIgnoreInit(G4bool val=true) { ignoreInit = val; }
-    G4String GetPrefixString() const { return prefix; }
-    G4String GetFullPrefixString() const {
-        std::stringstream os;
-        os<<prefix<<id;
-        return os.str();
-    }
+  void SetCoutFileName(const G4String& fileN = "G4cout.txt",
+                       G4bool ifAppend       = true);
+  void AddCoutFileName(const G4String& fileN = "G4cout.txt",
+                       G4bool ifAppend       = true);
+  void SetCerrFileName(const G4String& fileN = "G4cerr.txt",
+                       G4bool ifAppend       = true);
+  void AddCerrFileName(const G4String& fileN = "G4cerr.txt",
+                       G4bool ifAppend       = true);
 
-  private:
+  void EnableBuffering(G4bool flag = true);
 
-    void CloseCoutFile();
-    void CloseCerrFile();
-    void DumpBuffer();
-  
-  private:
+  inline void SetPrefixString(const G4String& wd = "G4WT") { prefix = wd; }
 
-    std::ostream& finalcout;
-    std::ostream& finalcerr;
-    const G4int id;
-    G4bool useBuffer;
-    G4bool threadCoutToFile;
-    G4bool threadCerrToFile;
-    G4bool ignoreCout;
-    G4bool ignoreInit;
+  void SetIgnoreCout(G4int tid = 0);
+  inline void SetIgnoreInit(G4bool val = true) { ignoreInit = val; }
 
-    std::ostringstream cout_buffer;
-    std::ostringstream cerr_buffer;
-    std::ofstream coutFile;
-    std::ofstream cerrFile;
-    G4String prefix;
+  inline G4String GetPrefixString() const { return prefix; }
+  inline G4String GetFullPrefixString() const
+  {
+    std::stringstream os;
+    os << prefix << id;
+    return os.str();
+  }
+
+ protected:
+  void AddMasterOutput(G4bool formatAlsoMaster);
+  void HandleFileCout(G4String fileN, G4bool appendFlag,
+                      G4bool suppressDefault);
+  void HandleFileCerr(G4String fileN, G4bool appendFlag,
+                      G4bool suppressDefault);
+
+ private:
+  void DumpBuffer();
+
+ private:
+  // Reference to the default destination
+  G4coutDestination* ref_defaultOut = nullptr;
+
+  // Reference to the master destination
+  G4coutDestination* ref_masterOut = nullptr;
+  G4bool masterDestinationFlag     = true;
+  G4bool masterDestinationFmtFlag  = true;
+
+  const G4int id;
+  G4bool useBuffer  = false;
+  G4bool ignoreCout = false;
+  G4bool ignoreInit = true;
+
+  G4String prefix          = "G4WT";
+  G4StateManager* stateMgr = nullptr;
 };
 
 #endif

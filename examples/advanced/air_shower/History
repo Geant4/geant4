@@ -7,25 +7,59 @@
                            History file
                            ------------
 
-<<<<<<< HEAD
-28.11.2016 - G. Folger
-=======
+11.11.2021 - B. Tome (air_shower-V10-07-04)
+             Start using C++11 guidelines
+
+06.11.2021 - I. Hrivnacova (air_shower-V10-07-03)
+             Added analysis manager Clear() call instead of
+             deleting in the end of run (removed on July 19)
+
+07.10.2021 - I. Hrivnacova (air_shower-V10-07-02)
+             Migration to new G4AnalysisManager.hh header;
+             define the default output file type (root),
+             removed UltraAnalysisManager.hh.
+
+19.07.2021 - I. Hrivnacova (air_shower-V10-07-01)
+             Updated for changes in the analysis category:
+             removed deleting of the analysis manager,
+             as this is now done by the Geant4 kernel.
+
+24.05.2021 - B. Morgan (air_shower-V10-07-00)
+             Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+14.11.2020 - S. Guatelli(air_shower-V10-06-04)
+             Migration to G4RunFactoryManager
+
+05.11.2020 - B.Tome (air_shower-V10-06-03)
+             Output results histograms to ROOT file
+             Add ROOT macro file to plot histograms
+
+03.11.2020 - D.Sawkey (air_shower-V10-06-02)
+             Create material properties using std::vectors
+
+02.11.2020 - B.Morgan (air_shower-V10-06-01)
+             Support same CMake version range as core Geant4
+
+29.05.2020 - D.Sawkey (air_shower-V10-06-00)
+             added an #include to UltraDetectorConstruction, due to optical
+             physics changes.
+
 8 November, 2019 B. Tomé (air_shower-V10-05-01)
-- Minor changes, mainly stetics. 
+- Minor changes, mainly stetics.
 
 31.01.2019 - I.Hrivnacova (air_shower-V10-05-00)
              Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 09.11.2018 - B. Tome (air_shower-V10-04-04)
-             Allow to remove reflecting surface. 
+             Allow to remove reflecting surface.
 
 09.11.2018 - B. Tome (air_shower-V10-04-03)
-             Add UltraMacro.mac to CMakeLists.txt            
+             Add UltraMacro.mac to CMakeLists.txt
 
 09.11.2018 - B. Tome (air_shower-V10-04-02)
 	     Reorganise macros. Add new macros.
-             Reorganise and simplify code in UltraDetectorConstruction. 
-             Geometry can now be changed in the same interactive session. 
+             Reorganise and simplify code in UltraDetectorConstruction.
+             Geometry can now be changed in the same interactive session.
 
 08.11.2018 - B. Tome (air_shower-V10-04-01)
        Drop detector configuration through preprocessor directives. Use detector messenger instead.
@@ -62,27 +96,27 @@
              in UltraDetectorConstruction.
 
 20.02.2015 - A. Dotti   (air_shower-V10-01-00)
-             Set defaults for GPS in master thread             
+             Set defaults for GPS in master thread
 
 04.06.2014 - A. Dotti   (air_shower-V10-00-00)
              New MT-ready GPS: migration
 
-22.10.2013 - L. Pandola (air_shower-V09-06-03) 
-	     UltraRunAction.cc: add include for <ctime>, 
+22.10.2013 - L. Pandola (air_shower-V09-06-03)
+	     UltraRunAction.cc: add include for <ctime>,
              needed for Windows
 
 21.10.2013 - L. Pandola (air_shower-V09-06-02)
 	     Migrated to MT. Works in MT and sequential mode.
-	     Removed RunActionMessenger and edited UltraMacro.mac 
+	     Removed RunActionMessenger and edited UltraMacro.mac
 	     accordingly.
 
 27.08.2013 - G. Cosmo (air_shower-V09-06-01)
              Added G4Ellipsoid among solids enabled for parameterisation.
 
 28.05.2013 - L. Pandola (air_shower-V09-06-00)
-	     Migrate analysis from AIDA (with local singleton 
-	     analysis class) to the g4analysis tools. 
-	     Remove AIDA dependency. CMakeLists.txt and 
+	     Migrate analysis from AIDA (with local singleton
+	     analysis class) to the g4analysis tools.
+	     Remove AIDA dependency. CMakeLists.txt and
 	     README are updated accordingly
 
 28.11.2012 - G. Cosmo (air_shower-V09-05-07)
@@ -102,7 +136,7 @@
              latest change to optical boundary process.
 
 31.01.2012 - G.Folger (air_shower-V09-05-02)
-             fix another compilation warning from gcc4.6: variables set but 
+             fix another compilation warning from gcc4.6: variables set but
 	     not used, in src/UltraEventAction.cc
 
 18.01.2012 - G.Folger (air_shower-V09-05-01)
@@ -126,10 +160,10 @@
 16.11.2009 -- B. Tomé,
               Tag air_shower-V09-02-06
               Changed UltraPhysicsList.cc to use new processes G4eMultipleScattering, G4MuMultipleScattering
-              and G4hMultipleScattering 
+              and G4hMultipleScattering
               Tested example air_shower with Geant4 tag geant4-09-02-ref-10
 
-15.05.2009 -- B. Tomé, 
+15.05.2009 -- B. Tomé,
               Updated README file. Tag air_shower-V09-01-00
               Tested example with Geant4 tag geant4-09-02-ref-04 and iAIDA-1.0.14
 
@@ -143,7 +177,7 @@
               Added check of optical photon energy in UltraPrimaryGeneratorAction;
               Cerenkov process attached to all applicable particles;
               Modified Visualisation.mac and UltraMacro.mac files
-              
+
 26.06.2008 -- G.A.P.Cirrone; Tag air_shower-V09-01-02
               Corrected a parameter in the UltraDetectorConstruction to remove a segmentation
 	      due to a non correct definition of the refraction index of the Quartz.
@@ -152,7 +186,7 @@
               Removed no more necessary AIDA commands from GNUmakefile
 
 11.06.2008 -- G.A.P.Cirrone air_shower-V09-01-00
-              Solved a compilation error in the Analysis Manager 
+              Solved a compilation error in the Analysis Manager
 
 30.09.2007 -- P.Gumplinger - air_shower-V09-00-00
            -- adjust to the G4Cerenkov process now being a G4VDiscreteProcess
@@ -164,7 +198,7 @@
 02.06.2006 -- B. Tome - air_shower-V08-00-01
            -- UltraRunAction.cc : Removed use of visualization UI commands.
            -- Small changes in UltraPrimaryGeneratorAction.cc
-   
+
 17.05.2006 -- B. Tome - air_shower-V08-00-00
            -- Small fix correction
 
@@ -194,8 +228,8 @@
 24.11.2004 -- air_shower-V06-02-01
            -- Migration to the new tree-structured command format for G4GeneralParticleSource:
               - new UI commands implemented
-              - changed access to public methods of G4GeneralParticleSource in 
-                UltraPrimaryGenerationAction; methods of G4SPSxxxDistribution are now used. 
+              - changed access to public methods of G4GeneralParticleSource in
+                UltraPrimaryGenerationAction; methods of G4SPSxxxDistribution are now used.
            -- Migration to <cmath>
 
 20.05.2004 -- Example committed

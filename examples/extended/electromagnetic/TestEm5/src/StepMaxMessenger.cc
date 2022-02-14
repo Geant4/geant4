@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/src/StepMaxMessenger.cc
+/// \file electromagnetic/TestEm1/src/StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class
 //
-// $Id: StepMaxMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
-:G4UImessenger(),fStepMax(stepM),fStepMaxCmd(0)
+:G4UImessenger(),fStepMax(stepM),fStepMaxCmd(nullptr)
 { 
   fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
   fStepMaxCmd->SetGuidance("Set max allowed step length");

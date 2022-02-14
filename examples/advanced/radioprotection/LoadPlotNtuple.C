@@ -1,12 +1,12 @@
 {
 
 //Open File where data has been stored!
-TFile f("radioprotection_NEW.root");
-TDirectory* dir = f.Get("radioprotection_ntuple"); 
+TFile* f = new TFile("radioprotection_NEW.root");
+TDirectory* dir = (TDirectory*)f->Get("radioprotection_ntuple"); 
 
-TNtuple * ntuple1 = (TNtuple*)dir->Get("101");   
-TNtuple * ntuple2 = (TNtuple*)dir->Get("102"); 
-TNtuple * ntuple3 = (TNtuple*)dir->Get("103"); 
+TTree * ntuple1 = (TTree*)dir->Get("101");
+TTree * ntuple2 = (TTree*)dir->Get("102");
+TTree * ntuple3 = (TTree*)dir->Get("103");
 
 int numberOfBinsX = 500;
 int numberOfBinsY = 500;
@@ -20,7 +20,7 @@ int Zmin = 0;
 int Zmax = 1000;
 
 //the type of histogram, how many variable, min and max values plus size of bins
-TH1F* edep1Distribution = new TH1F("h0", "Primary Particle Energy Spectrum; Energy (Mev);Frequency",
+TH1F* edep1DistributionPrimary = new TH1F("h0", "Primary Particle Energy Spectrum; Energy (Mev);Frequency",
 				     numberOfBinsX, Xmin, Xmax);       //Edep // binning, xmin, xmax, along x direction
 
 //the type of histogram, how many variable, min and max values plus size of bins
@@ -40,7 +40,7 @@ TH3F* edep3DDistribution = new TH3F("h3", "3Dedep; Edep (keV) ; A; Z",
 
 
 //Plot Primary Energy of Incident Particle
-ntuple1.Draw("Ek>>h0","","");
+ntuple1->Draw("Ek>>h0","","");
 //Plot Energy Deposition within SV
 //ntuple2.Draw("edep>>h1", "", "");
 //Plot 2D/3D Histogram of energy with particle type using A and Z

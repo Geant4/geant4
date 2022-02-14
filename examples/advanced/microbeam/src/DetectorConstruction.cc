@@ -35,12 +35,8 @@
 #include "DetectorConstruction.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4ThreadLocal EMField* DetectorConstruction::fField = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4MagIntegratorDriver.hh"
+#include "G4AutoDelete.hh"
 
 DetectorConstruction::DetectorConstruction()
   
@@ -71,30 +67,37 @@ DetectorConstruction::DetectorConstruction()
    fPhysiPhantom(nullptr),fLogicPhantom(nullptr),fSolidPhantom(nullptr)
   
 {
-  fWorldSizeXY=fWorldSizeZ=0;
   DefineMaterials();
+  
+  // Initialisation of variables which 
+  // will then be appropriately fixed in methods of this class
+  // to implement the simulation geometry set-up
+  fDensityPhantom = 0.; // in g/cm3
+  fDensityNucleus = 0.; // in g/cm3
+  fDensityCytoplasm = 0.; // in g/cm3
+  fWorldSizeXY=fWorldSizeZ=0.; 
+  fCollObjSizeXY = 0.;
+  fCollObjSizeZ = 0.;
+   
+  // TARGET POSITION
+  fCiblePositionX = 0.;
+  fCiblePositionY = 0.;
+  fCiblePositionZ = 0.;
+
+   // MICROBEAM LINE ANGLE
+  fLineAngle = 0.;
+  
+  fNbOfPixelsInPhantom=0;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 DetectorConstruction::~DetectorConstruction()
-{
-  if(fField) {
-    delete fField;
-    fField = nullptr;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+{}
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
-  
 {
   if(fPhysiWorld) { return fPhysiWorld; }
   return ConstructLine();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::DefineMaterials()
 { 
@@ -284,8 +287,6 @@ void DetectorConstruction::DefineMaterials()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4VPhysicalVolume* DetectorConstruction::ConstructLine()
 {
   // WORLD
@@ -352,9 +353,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   PosZ = PosZ + 1.3 * micrometer * std::sin(fLineAngle);
       
   G4RotationMatrix *rot = new G4RotationMatrix();
-  rot->rotateX(0*deg);
+  //  rot->rotateX(0*deg);
   rot->rotateY(10*deg);
-  rot->rotateZ(0*deg);
+  //  rot->rotateZ(0*deg);
  
   fSolidBoite = new G4Box("Boite", 4*cm, 4*cm, 6958.3*mm/2);
   
@@ -387,7 +388,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   fSolid1Gap = new G4Cons("_CollObj_gap1_", 0.*micrometer, 6*micrometer,
 			 0.*micrometer,2.5*micrometer,
 			 3.5*micrometer, 
-			 0, ((360*CLHEP::pi)/180));
+			 0, twopi);
   
   fLogic1Gap = new G4LogicalVolume(fSolid1Gap, fDefaultMaterial, "_CollObj_gap1_");
   
@@ -400,7 +401,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   fSolid2Gap = new G4Cons("_CollObj_gap2_", 0.*micrometer, 15*micrometer,
 			 0.*micrometer,6*micrometer,
 			 6.5*micrometer, 
-			 0, ((360*CLHEP::pi)/180));
+			 0, twopi);
   
   fLogic2Gap = new G4LogicalVolume(fSolid2Gap, fDefaultMaterial, "_CollObj_gap2_");
   
@@ -413,7 +414,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   fSolid3Gap = new G4Cons("_CollObj_gap3_", 0.*micrometer, 105*micrometer, 
 			 0.*micrometer,15*micrometer,
 			 25*micrometer, 
-			 0, ((360*CLHEP::pi)/180));
+			 0, twopi);
   
   fLogic3Gap = new G4LogicalVolume(fSolid3Gap, fDefaultMaterial, "_CollObj_gap3_");
   
@@ -438,7 +439,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   fSolid4Gap = new G4Cons("_CollDet_gap4_", 0.*micrometer, 8*micrometer,
 			 0.*micrometer,5*micrometer,
 			 7.5*micrometer, 
-			 0, ((360*CLHEP::pi)/180));
+			 0, twopi);
 
   fLogic4Gap = new G4LogicalVolume(fSolid4Gap, fDefaultMaterial, "_CollDet_gap4_");
   
@@ -450,7 +451,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   fSolid5Gap = new G4Cons("_CollDet_gap5_", 0.*micrometer, 105*micrometer,
 			 0.*micrometer,8*micrometer,
 			 27.5*micrometer, 
-			 0, ((360*CLHEP::pi)/180));
+			 0, twopi);
 
   fLogic5Gap = new G4LogicalVolume(fSolid5Gap, fDefaultMaterial, "_CollDet_gap5_");
   
@@ -715,19 +716,23 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   return fPhysiWorld;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void DetectorConstruction::ConstructSDandField()
 {
-  if(!fField) { fField = new EMField(); }
+  EMField* field = new EMField();
+  G4AutoDelete::Register(field);
   
-  fEquation = new G4EqMagElectricField(fField);
-  fStepper = new G4ClassicalRK4 (fEquation,8);
-  fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-  fIntgrDriver = new G4MagInt_Driver(0.000001*mm,fStepper,fStepper->GetNumberOfVariables() );
-  fChordFinder = new G4ChordFinder(fIntgrDriver);
+  G4EqMagElectricField* fEquation = new G4EqMagElectricField(field);
+  G4MagIntegratorStepper* fStepper = new G4ClassicalRK4 (fEquation,8);
+  G4FieldManager* fFieldMgr = 
+    G4TransportationManager::GetTransportationManager()->GetFieldManager();
+
+  // Relaxed
+  G4MagInt_Driver* fIntgrDriver = 
+    new G4MagInt_Driver(1*mm,fStepper,fStepper->GetNumberOfVariables() );
+
+  G4ChordFinder* fChordFinder = new G4ChordFinder(fIntgrDriver);
   fFieldMgr->SetChordFinder(fChordFinder);
-  fFieldMgr->SetDetectorField(fField);
+  fFieldMgr->SetDetectorField(field);
 
   // FOLLOWING PARAMETERS TUNED FROM RAY-TRACING SIMULATIONS OF THE AIFIRA NANOBEAM LINE
   

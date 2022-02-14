@@ -569,11 +569,10 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
     ("Vessel", liqPhase_phys, vessel_phys, OpVesselSurface);
   */
 
-  const G4int NUM = 2;
-  G4double vessel_PP[NUM]   = { 6.5*eV, 7.50*eV };
-  G4double vessel_REFL[NUM] = { 0.2, 0.2 };
+  std::vector<G4double> vessel_PP   = { 6.5*eV, 7.50*eV };
+  std::vector<G4double> vessel_REFL = { 0.2, 0.2 };
   G4MaterialPropertiesTable* vessel_mt = new G4MaterialPropertiesTable();
-  vessel_mt->AddProperty("REFLECTIVITY", vessel_PP, vessel_REFL, NUM);
+  vessel_mt->AddProperty("REFLECTIVITY", vessel_PP, vessel_REFL);
   OpVesselSurface->SetMaterialPropertiesTable(vessel_mt);
 
   // G4LogicalBorderSurface* VesselTopSurface = 
@@ -628,12 +627,11 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   new G4LogicalBorderSurface
     ("Shield", LXe_phys, CuShield_phys, OpCuShieldSurface);
 
-  G4double CuShield_PP[NUM]   = { 7.0*eV, 7.50*eV };
-  G4double CuShield_REFL[NUM] = { 0.3, 0.2 };
+  std::vector<G4double> CuShield_PP   = { 7.0*eV, 7.50*eV };
+  std::vector<G4double> CuShield_REFL = { 0.3, 0.2 };
   G4MaterialPropertiesTable *CuShield_mt = new G4MaterialPropertiesTable();
-  CuShield_mt->AddProperty("REFLECTIVITY", CuShield_PP, CuShield_REFL, NUM);
+  CuShield_mt->AddProperty("REFLECTIVITY", CuShield_PP, CuShield_REFL);
   OpCuShieldSurface->SetMaterialPropertiesTable(CuShield_mt);
-
 
   // rings ***************************************************************
 
@@ -648,10 +646,10 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   ring_log = new G4LogicalVolume(ring_tube, ring_mat, "ring_log");
 
   // optical surface: ring materials table
-  G4double ring_PP[NUM]   = { 6.00*eV, 7.50*eV };
-  G4double ring_REFL[NUM] = { 0.7, 0.65 };
+  std::vector<G4double> ring_PP   = { 6.00*eV, 7.50*eV };
+  std::vector<G4double> ring_REFL = { 0.7, 0.65 };
   G4MaterialPropertiesTable *ring_mt = new G4MaterialPropertiesTable();
-  ring_mt->AddProperty("REFLECTIVITY", ring_PP, ring_REFL, NUM);
+  ring_mt->AddProperty("REFLECTIVITY", ring_PP, ring_REFL);
 
   G4OpticalSurface* OpRingSurface = new G4OpticalSurface
     ("RingSurface", unified, ground, dielectric_metal, sigalpha=10.*deg);
@@ -751,12 +749,11 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   new G4LogicalBorderSurface
     ("Mirror", GXe_phys, mirror_phys, OpMirrorSurface);
 
-  G4double mirror_PP[NUM]   = { 6.00*eV, 7.50*eV };
-  G4double mirror_REFL[NUM] = { 0.83, 0.78 };
+  std::vector<G4double> mirror_PP   = { 6.00*eV, 7.50*eV };
+  std::vector<G4double> mirror_REFL = { 0.83, 0.78 };
   G4MaterialPropertiesTable *mirror_mt = new G4MaterialPropertiesTable();
-  mirror_mt->AddProperty("REFLECTIVITY", mirror_PP, mirror_REFL, NUM);
+  mirror_mt->AddProperty("REFLECTIVITY", mirror_PP, mirror_REFL);
   OpMirrorSurface->SetMaterialPropertiesTable(mirror_mt);
-
 
   // Grids  *************************************************************
 
@@ -820,10 +817,10 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   new G4LogicalBorderSurface
     ("Alpha", LXe_phys, alpha_phys, OpAlphaSurface);
 
-  G4double alpha_PP[NUM]   = { 6.00*eV, 7.50*eV };
-  G4double alpha_REFL[NUM] = { 0.05, 0.05 };
+  std::vector<G4double> alpha_PP   = { 6.00*eV, 7.50*eV };
+  std::vector<G4double> alpha_REFL = { 0.05, 0.05 };
   G4MaterialPropertiesTable *alpha_mt = new G4MaterialPropertiesTable();
-  alpha_mt->AddProperty("REFLECTIVITY", alpha_PP, alpha_REFL, NUM);
+  alpha_mt->AddProperty("REFLECTIVITY", alpha_PP, alpha_REFL);
   OpAlphaSurface->SetMaterialPropertiesTable(alpha_mt);
 
   // americium ***********************************************************
@@ -852,10 +849,10 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   new G4LogicalBorderSurface
     ("Americium", LXe_phys, americium_phys, OpAmericiumSurface);
 
-  G4double americium_PP[NUM]   = { 6.00*eV, 7.50*eV };
-  G4double americium_REFL[NUM] = { 0.7, 0.65 };
+  std::vector<G4double> americium_PP   = { 6.00*eV, 7.50*eV };
+  std::vector<G4double> americium_REFL = { 0.7, 0.65 };
   G4MaterialPropertiesTable *americium_mt = new G4MaterialPropertiesTable();
-  americium_mt->AddProperty("REFLECTIVITY", americium_PP, americium_REFL, NUM);
+  americium_mt->AddProperty("REFLECTIVITY", americium_PP, americium_REFL);
   OpAlphaSurface->SetMaterialPropertiesTable(americium_mt);
 
   G4VisAttributes* americium_vat= new G4VisAttributes(cyan);
@@ -915,26 +912,25 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   new G4LogicalBorderSurface
     ("phcath_surf", pmt_phys, phcath_phys, phcath_opsurf);
 
-  G4double phcath_PP[NUM]   = { 6.00*eV, 7.50*eV };
-  // G4double phcath_REFL[NUM] = { 0.0, 0.0};
+  std::vector<G4double> phcath_PP   = { 6.00*eV, 7.50*eV };
+  // std::vector<G4double> phcath_REFL = { 0.0, 0.0};
   // G4MaterialPropertiesTable* phcath_mt = new G4MaterialPropertiesTable();
-  // phcath_mt->AddProperty("REFLECTIVITY", phcath_PP, phcath_REFL, NUM);
+  // phcath_mt->AddProperty("REFLECTIVITY", phcath_PP, phcath_REFL);
   // phcath_opsurf->SetMaterialPropertiesTable(phcath_mt);
 
 
   //**Photocathode surface properties
-  G4double photocath_EFF[NUM]={1.,1.}; //Enables 'detection' of photons
-  G4double photocath_ReR[NUM]={1.92,1.92};
-  G4double photocath_ImR[NUM]={1.69,1.69};
+  std::vector<G4double> photocath_EFF={1.,1.}; //Enables 'detection' of photons
+  std::vector<G4double> photocath_ReR={1.92,1.92};
+  std::vector<G4double> photocath_ImR={1.69,1.69};
   G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
-  photocath_mt->AddProperty("EFFICIENCY",phcath_PP,photocath_EFF,NUM);
-  photocath_mt->AddProperty("REALRINDEX",phcath_PP,photocath_ReR,NUM);
-  photocath_mt->AddProperty("IMAGINARYRINDEX",phcath_PP,photocath_ImR,NUM);
+  photocath_mt->AddProperty("EFFICIENCY",phcath_PP,photocath_EFF);
+  photocath_mt->AddProperty("REALRINDEX",phcath_PP,photocath_ReR);
+  photocath_mt->AddProperty("IMAGINARYRINDEX",phcath_PP,photocath_ImR);
   G4OpticalSurface* photocath_opsurf=
     new G4OpticalSurface("photocath_opsurf",glisur,polished,
                          dielectric_metal);
   photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
-
 
   G4VisAttributes* phcath_vat= new G4VisAttributes(lblue);
   phcath_vat->SetForceSolid(true);

@@ -46,13 +46,12 @@
 // 12-05-06 Add parameter to SelectRandomAtom (A.Bogdanov) 
 // 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
 // 28-02-08 Reorganized protected methods and members (V.Ivanchenko) 
-
 //
 // Class Description:
 //
 // Implementation of e+e- pair production by muons
+// A.G. Bogdanov et al., IEEE Trans. Nuc. Sci., Vol.53, No.2, 2006
 //
-
 // -------------------------------------------------------------------
 //
 
@@ -76,39 +75,42 @@ public:
   explicit G4MuPairProductionModel(const G4ParticleDefinition* p = nullptr,
                                    const G4String& nam = "muPairProd");
 
-  virtual ~G4MuPairProductionModel();
+  virtual ~G4MuPairProductionModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-                          const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*,
-			       G4VEmModel* masterModel) override;
+  void InitialiseLocal(const G4ParticleDefinition*,
+                       G4VEmModel* masterModel) override;
 			
-  virtual G4double ComputeCrossSectionPerAtom(
-				 const G4ParticleDefinition*,
-				 G4double kineticEnergy,
-				 G4double Z, G4double A,
-				 G4double cutEnergy,
-				 G4double maxEnergy) override;
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double kineticEnergy,
+				      G4double Z, G4double A,
+				      G4double cutEnergy,
+				      G4double maxEnergy) override;
 				 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+  G4double ComputeDEDXPerVolume(const G4Material*,
                                 const G4ParticleDefinition*,
                                 G4double kineticEnergy,
                                 G4double cutEnergy) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
+				const G4MaterialCutsCouple*,
+				const G4DynamicParticle*,
+				G4double tmin,
+				G4double maxEnergy) override;
 
-  virtual G4double MinPrimaryEnergy(const G4Material*,
-                                    const G4ParticleDefinition*,
-                                    G4double) override;
+  G4double MinPrimaryEnergy(const G4Material*,
+                            const G4ParticleDefinition*,
+                            G4double) override;
 
   inline void SetLowestKineticEnergy(G4double e);
 
   inline void SetParticle(const G4ParticleDefinition*);
+
+  // hide assignment operator and copy constructor
+  G4MuPairProductionModel & operator=
+  (const G4MuPairProductionModel &right) = delete;
+  G4MuPairProductionModel(const  G4MuPairProductionModel&) = delete;
 
 protected:
 
@@ -130,47 +132,45 @@ private:
 
   void MakeSamplingTables();
 
-  void DataCorrupted(G4int Z, G4double logTkin);
+  void StoreTables() const;
+
+  G4bool RetrieveTables();
+
+  void DataCorrupted(G4int Z, G4double logTkin) const;
 
   inline G4double FindScaledEnergy(G4int Z, G4double rand, G4double logTkin,
 				   G4double yymin, G4double yymax); 
 
-  // hide assignment operator
-  G4MuPairProductionModel & operator=(const G4MuPairProductionModel &right) = delete;
-  G4MuPairProductionModel(const  G4MuPairProductionModel&) = delete;
-
 protected:
 
-  const G4ParticleDefinition* particle;
-  G4NistManager*              nist;
+  G4ParticleDefinition*       theElectron = nullptr;
+  G4ParticleDefinition*       thePositron = nullptr;
+  G4ParticleChangeForLoss*    fParticleChange = nullptr;
+
+  const G4ParticleDefinition* particle = nullptr;
+  G4NistManager*              nist = nullptr;
 
   G4double factorForCross;
   G4double sqrte;
-  G4double particleMass;
-  G4double z13;
-  G4double z23;
-  G4double lnZ;
-  G4int    currentZ;
-
-  static const G4double xgi[8],wgi[8];
-
-  G4ParticleDefinition*       theElectron;
-  G4ParticleDefinition*       thePositron;
-  G4ParticleChangeForLoss*    fParticleChange;
+  G4double particleMass = 0.0;
+  G4double z13 = 0.0;
+  G4double z23 = 0.0;
+  G4double lnZ = 0.0;
 
   G4double minPairEnergy;
   G4double lowestKinEnergy;
 
-  G4int nzdat;
-
-  // gamma energy bins
-  G4int    nYBinPerDecade;
-  size_t   nbiny;
-  size_t   nbine;
-  G4double ymin;
-  G4double dy;
   G4double emin;
   G4double emax;
+  G4double ymin = -5.0;
+  G4double dy = 0.005;
+
+  G4int    currentZ = 0;
+  G4int    nYBinPerDecade = 4;
+  size_t   nbiny = 1000;
+  size_t   nbine = 0;
+
+  G4bool fTableToFile = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,7 +185,7 @@ inline void G4MuPairProductionModel::SetLowestKineticEnergy(G4double e)
 inline
 void G4MuPairProductionModel::SetParticle(const G4ParticleDefinition* p)
 {
-  if(!particle) {
+  if(nullptr == particle) {
     particle = p;
     particleMass = particle->GetPDGMass();
   }
@@ -216,7 +216,7 @@ G4MuPairProductionModel::FindScaledEnergy(G4int Z, G4double rand,
 {
   G4double res = yymin;
   G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
-  if(!pv) { 
+  if(nullptr == pv) { 
     DataCorrupted(Z, logTkin); 
   } else {
     G4double pmin = pv->Value(yymin, logTkin);

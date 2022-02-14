@@ -27,8 +27,6 @@
 //
 //Base class for all Motif component widgets
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmVWidgetComponent.hh"
 
 G4OpenGLXmVWidgetComponent::G4OpenGLXmVWidgetComponent ()
@@ -36,5 +34,3 @@ G4OpenGLXmVWidgetComponent::G4OpenGLXmVWidgetComponent ()
 
 G4OpenGLXmVWidgetComponent::~G4OpenGLXmVWidgetComponent ()
 {}
-
-#endif

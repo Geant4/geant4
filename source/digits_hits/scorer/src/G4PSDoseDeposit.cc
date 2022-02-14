@@ -31,114 +31,116 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreHistFiller.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring only energy deposit.
-// 
+//
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
-// 
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of dose deposit (x)
+//              vs. weight (y) (Makoto Asai)
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSDoseDeposit::G4PSDoseDeposit(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , EvtMap(0)
 {
-    SetUnit("Gy");
+  SetUnit("Gy");
 }
 
 G4PSDoseDeposit::G4PSDoseDeposit(G4String name, const G4String& unit,
-				 G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
+                                 G4int depth)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , EvtMap(0)
 {
-    SetUnit(unit);
+  SetUnit(unit);
 }
 
-G4PSDoseDeposit::~G4PSDoseDeposit()
-{;}
+G4PSDoseDeposit::~G4PSDoseDeposit() { ; }
 
-G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if ( edep == 0. ) return FALSE;
+  if(edep == 0.)
+    return FALSE;
 
-  G4int idx = ((G4TouchableHistory*)
-	       (aStep->GetPreStepPoint()->GetTouchable()))
-               ->GetReplicaNumber(indexDepth);
+  G4int idx = ((G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable()))
+                ->GetReplicaNumber(indexDepth);
   G4double cubicVolume = ComputeVolume(aStep, idx);
 
+  G4double density = aStep->GetTrack()
+                       ->GetStep()
+                       ->GetPreStepPoint()
+                       ->GetMaterial()
+                       ->GetDensity();
+  G4double dose  = edep / (density * cubicVolume);
+  G4double wei   = aStep->GetPreStepPoint()->GetWeight();
+  G4int index    = GetIndex(aStep);
+  G4double dosew = dose * wei;
+  EvtMap->add(index, dosew);
 
-  G4double density = aStep->GetTrack()->GetStep()->GetPreStepPoint()->GetMaterial()->GetDensity();
-  G4double dose    = edep / ( density * cubicVolume );
-  dose *= aStep->GetPreStepPoint()->GetWeight(); 
-  G4int  index = GetIndex(aStep);
-  EvtMap->add(index,dose);  
+  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+  {
+    auto filler = G4VScoreHistFiller::Instance();
+    if(!filler)
+    {
+      G4Exception(
+        "G4PSDoseDeposit::ProcessHits", "SCORER0123", JustWarning,
+        "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+    }
+    else
+    {
+      filler->FillH1(hitIDMap[index], dose, wei);
+    }
+  }
+
   return TRUE;
 }
 
 void G4PSDoseDeposit::Initialize(G4HCofThisEvent* HCE)
 {
   EvtMap = new G4THitsMap<G4double>(GetMultiFunctionalDetector()->GetName(),
-				    GetName());
-  if(HCID < 0) {HCID = GetCollectionID(0);}
-  HCE->AddHitsCollection(HCID, (G4VHitsCollection*)EvtMap);
+                                    GetName());
+  if(HCID < 0)
+  {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSDoseDeposit::EndOfEvent(G4HCofThisEvent*)
-{;}
+void G4PSDoseDeposit::EndOfEvent(G4HCofThisEvent*) { ; }
 
-void G4PSDoseDeposit::clear()
-{
-  EvtMap->clear();
-}
+void G4PSDoseDeposit::clear() { EvtMap->clear(); }
 
-void G4PSDoseDeposit::DrawAll()
-{;}
+void G4PSDoseDeposit::DrawAll() { ; }
 
 void G4PSDoseDeposit::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
     G4cout << "  copy no.: " << itr->first
-	   << "  dose deposit: " 
-	   << *(itr->second)/GetUnitValue()
-	   << " ["<<GetUnit() <<"]"
-	   << G4endl;
+           << "  dose deposit: " << *(itr->second) / GetUnitValue() << " ["
+           << GetUnit() << "]" << G4endl;
   }
 }
 
 void G4PSDoseDeposit::SetUnit(const G4String& unit)
 {
-	CheckAndSetUnit(unit,"Dose");
+  CheckAndSetUnit(unit, "Dose");
 }
 
-G4double G4PSDoseDeposit::ComputeVolume(G4Step* aStep, G4int idx){
-
-  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid* solid = 0;
-  if(physParam)
-  { // for parameterized volume
-    if(idx<0)
-    {
-      G4ExceptionDescription ED;
-      ED << "Incorrect replica number --- GetReplicaNumber : " << idx << G4endl;
-      G4Exception("G4PSDoseDeposit::ComputeVolume","DetPS0004",JustWarning,ED);
-    }
-    solid = physParam->ComputeSolid(idx, physVol);
-    solid->ComputeDimensions(physParam,idx,physVol);
-  }
-  else
-  { // for ordinary volume
-    solid = physVol->GetLogicalVolume()->GetSolid();
-  }
-  
+G4double G4PSDoseDeposit::ComputeVolume(G4Step* aStep, G4int idx)
+{
+  G4VSolid* solid = ComputeSolid(aStep, idx);
   return solid->GetCubicVolume();
 }
-
-
-

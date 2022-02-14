@@ -34,10 +34,10 @@
 /// \file medical/dna/slowing/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
-#include "Analysis.hh"
 #include "SteppingAction.hh"
 #include "EventAction.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4EventManager.hh"

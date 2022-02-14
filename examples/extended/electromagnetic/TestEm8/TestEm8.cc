@@ -34,11 +34,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-#include "G4MTRunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
-#include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -54,30 +52,23 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) 
-{
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
+
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   // Number of threads can be defined via 3rd argument
   G4int nThreads = 2;
   if (argc==3) {
-    if(G4String(argv[2]) == "NMAX") { 
+    if(G4String(argv[2]) == "NMAX") {
       nThreads = G4Threading::G4GetNumberOfCores();
     } else {
       nThreads = G4UIcommand::ConvertToInt(argv[2]);
-    } 
-  } else if(argc==1) { 
+    }
+  } else if(argc==1) {
     nThreads = 1;
   }
   if (nThreads > 0) { runManager->SetNumberOfThreads(nThreads); }
-  G4cout << "===== TestEm8 is started with " 
-         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new PhysicsList);
@@ -88,33 +79,27 @@ int main(int argc,char** argv)
   
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc!=1)   // batch mode  
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
-    }
-    
-  else           //define visualization and UI terminal for interactive mode
-    { 
-#ifdef G4VIS_USE
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif    
-     
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
-#endif
-     
-#ifdef G4VIS_USE
-      delete visManager;
-#endif     
-    } 
-   
-  // job termination
-  //
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
+
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (ui)  {
+    //interactive mode
+    visManager = new G4VisExecutive();
+    visManager->Initialize();
+    ui->SessionStart();
+    delete ui;
+  } else {
+    //batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
+
+  //job termination
+  delete visManager;
   delete runManager;
 
   return 0;

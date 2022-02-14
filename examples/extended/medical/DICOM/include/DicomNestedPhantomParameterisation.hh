@@ -92,7 +92,7 @@ public:
   //                               unsigned int nz) const;
   unsigned int GetMaterialIndex( unsigned int copyNo) const;
   void SetMaterialIndices( size_t* matInd ) { fMaterialIndices = matInd; }
-  void SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz );
+  void SetNoVoxels( unsigned int nx, unsigned int ny, unsigned int nz );
 
   void ComputeTransformation(const G4int no,
                              G4VPhysicalVolume *currentPV) const;

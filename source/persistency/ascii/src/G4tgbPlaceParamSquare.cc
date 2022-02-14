@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgbPlaceParamSquare implementation
 //
-//
-//
-// class G4tgbPlaceParamSquare
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgbPlaceParamSquare.hh"
 #include "G4RotationMatrix.hh"
@@ -38,53 +34,52 @@
 #include "G4tgrMessenger.hh"
 #include "G4tgrPlaceParameterisation.hh"
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbPlaceParamSquare::~G4tgbPlaceParamSquare()
 {
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbPlaceParamSquare::
-G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* tgrParam )
+G4tgbPlaceParamSquare(G4tgrPlaceParameterisation* tgrParam)
   : G4tgbPlaceParameterisation(tgrParam)
 {
-  //---- Get translation and rotation 
-  if( tgrParam->GetParamType() == "SQUARE" )
+  //---- Get translation and rotation
+  if(tgrParam->GetParamType() == "SQUARE")
   {
-    CheckNExtraData( tgrParam, 12, WLSIZE_EQ, "G4tgbPlaceParamSquare:");
-    theDirection1 = G4ThreeVector( tgrParam->GetExtraData()[6],
-                                   tgrParam->GetExtraData()[7],
-                                   tgrParam->GetExtraData()[8] );
-    theDirection2 = G4ThreeVector( tgrParam->GetExtraData()[9],
-                                   tgrParam->GetExtraData()[10],
-                                   tgrParam->GetExtraData()[11] );
+    CheckNExtraData(tgrParam, 12, WLSIZE_EQ, "G4tgbPlaceParamSquare:");
+    theDirection1 =
+      G4ThreeVector(tgrParam->GetExtraData()[6], tgrParam->GetExtraData()[7],
+                    tgrParam->GetExtraData()[8]);
+    theDirection2 =
+      G4ThreeVector(tgrParam->GetExtraData()[9], tgrParam->GetExtraData()[10],
+                    tgrParam->GetExtraData()[11]);
     theAxis = kZAxis;
   }
   else
   {
-    CheckNExtraData( tgrParam, 6, WLSIZE_EQ, "G4tgbPlaceParamSquare:");
-    if( tgrParam->GetParamType() == "SQUARE_XY" )
+    CheckNExtraData(tgrParam, 6, WLSIZE_EQ, "G4tgbPlaceParamSquare:");
+    if(tgrParam->GetParamType() == "SQUARE_XY")
     {
-      theDirection1 = G4ThreeVector(1.,0.,0.);
-      theDirection2 = G4ThreeVector(0.,1.,0.);
-      theAxis = kZAxis;
+      theDirection1 = G4ThreeVector(1., 0., 0.);
+      theDirection2 = G4ThreeVector(0., 1., 0.);
+      theAxis       = kZAxis;
     }
-    else if( tgrParam->GetParamType() == "SQUARE_YZ" )
+    else if(tgrParam->GetParamType() == "SQUARE_YZ")
     {
-      theDirection1 = G4ThreeVector(0.,1.,0.);
-      theDirection2 = G4ThreeVector(0.,0.,1.);
-      theAxis = kXAxis;
+      theDirection1 = G4ThreeVector(0., 1., 0.);
+      theDirection2 = G4ThreeVector(0., 0., 1.);
+      theAxis       = kXAxis;
     }
-    else if( tgrParam->GetParamType() == "SQUARE_XZ" )
+    else if(tgrParam->GetParamType() == "SQUARE_XZ")
     {
-      theDirection1 = G4ThreeVector(1.,0.,0.);
-      theDirection2 = G4ThreeVector(0.,0.,1.);
-      theAxis = kYAxis;
+      theDirection1 = G4ThreeVector(1., 0., 0.);
+      theDirection2 = G4ThreeVector(0., 0., 1.);
+      theAxis       = kYAxis;
     }
   }
 
-  if( theDirection1.mag() == 0. )
+  if(theDirection1.mag() == 0.)
   {
     G4Exception("G4tgbPlaceParamSquare::G4tgbPlaceParamSquare()",
                 "InvalidSetup", FatalException, "Direction1 is zero !");
@@ -93,7 +88,7 @@ G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* tgrParam )
   {
     theDirection1 /= theDirection1.mag();
   }
-  if( theDirection2.mag() == 0. )
+  if(theDirection2.mag() == 0.)
   {
     G4Exception("G4tgbPlaceParamSquare::G4tgbPlaceParamSquare()",
                 "InvalidSetup", FatalException, "Direction2 is zero !");
@@ -102,67 +97,61 @@ G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* tgrParam )
   {
     theDirection2 /= theDirection2.mag();
   }
-  
+
   theNCopies1 = G4int(tgrParam->GetExtraData()[0]);
   theNCopies2 = G4int(tgrParam->GetExtraData()[1]);
-  theStep1 = tgrParam->GetExtraData()[2];
-  theStep2 = tgrParam->GetExtraData()[3];
-  theOffset1 = tgrParam->GetExtraData()[4];
-  theOffset2 = tgrParam->GetExtraData()[5];
+  theStep1    = tgrParam->GetExtraData()[2];
+  theStep2    = tgrParam->GetExtraData()[3];
+  theOffset1  = tgrParam->GetExtraData()[4];
+  theOffset2  = tgrParam->GetExtraData()[5];
 
-  theNCopies = theNCopies1 * theNCopies2;
-  theTranslation = theOffset1*theDirection1 + theOffset2*theDirection2;
-  
+  theNCopies     = theNCopies1 * theNCopies2;
+  theTranslation = theOffset1 * theDirection1 + theOffset2 * theDirection2;
+
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 ) 
-    G4cout << "G4tgbPlaceParamSquare: no copies "
-           << theNCopies << " = " << theNCopies1
-           << " X " << theNCopies2 << G4endl
-           << " offset1 " << theOffset1 << G4endl
-           << " offset2 " << theOffset1 << G4endl
-           << " step1 " << theStep1 << G4endl
-           << " step2 " << theStep2 << G4endl
-           << " direction1 " << theDirection1 << G4endl
-           << " direction2 " << theDirection2 << G4endl
-           << " translation " << theTranslation << G4endl;
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
+    G4cout << "G4tgbPlaceParamSquare: no copies " << theNCopies << " = "
+           << theNCopies1 << " X " << theNCopies2 << G4endl << " offset1 "
+           << theOffset1 << G4endl << " offset2 " << theOffset1 << G4endl
+           << " step1 " << theStep1 << G4endl << " step2 " << theStep2 << G4endl
+           << " direction1 " << theDirection1 << G4endl << " direction2 "
+           << theDirection2 << G4endl << " translation " << theTranslation
+           << G4endl;
 #endif
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 void G4tgbPlaceParamSquare::
-ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
+ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 3)
   {
-    G4cout << " G4tgbPlaceParamSquare::ComputeTransformation():" 
-	   << physVol->GetName() << G4endl
-	   << "   no copies " << theNCopies << G4endl
-           << "   offset1 " << theOffset1 << G4endl
-           << "   offset2 " << theOffset2 << G4endl
-           << "   step1 " << theStep1 << G4endl
+    G4cout << " G4tgbPlaceParamSquare::ComputeTransformation():"
+           << physVol->GetName() << G4endl << "   no copies " << theNCopies
+           << G4endl << "   offset1 " << theOffset1 << G4endl << "   offset2 "
+           << theOffset2 << G4endl << "   step1 " << theStep1 << G4endl
            << "   step2 " << theStep2 << G4endl;
   }
 #endif
 
-  G4int copyNo1 = copyNo%theNCopies1;
-  G4int copyNo2 = G4int(copyNo/theNCopies1);
-  G4double posi1 = copyNo1*theStep1;
-  G4double posi2 = copyNo2*theStep2;
-  G4ThreeVector origin = posi1*theDirection1+ posi2*theDirection2;
+  G4int copyNo1        = copyNo % theNCopies1;
+  G4int copyNo2        = G4int(copyNo / theNCopies1);
+  G4double posi1       = copyNo1 * theStep1;
+  G4double posi2       = copyNo2 * theStep2;
+  G4ThreeVector origin = posi1 * theDirection1 + posi2 * theDirection2;
   origin += theTranslation;
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 3)
   {
-    G4cout << " G4tgbPlaceParamSquare::ComputeTransformation() - "
-           << copyNo << " = " << copyNo1 << ", X " << copyNo2 << G4endl
+    G4cout << " G4tgbPlaceParamSquare::ComputeTransformation() - " << copyNo
+           << " = " << copyNo1 << ", X " << copyNo2 << G4endl
            << " pos: " << origin << ", axis: " << theAxis << G4endl;
   }
 #endif
   //----- Set traslation and rotation
   physVol->SetTranslation(origin);
-  physVol->SetCopyNo( copyNo );
-  physVol->SetRotation( theRotationMatrix );
+  physVol->SetCopyNo(copyNo);
+  physVol->SetRotation(theRotationMatrix);
 }

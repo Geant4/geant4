@@ -96,6 +96,7 @@ private:
   G4double elow;
 
   G4bool isMaster;
+  G4bool spline;
 
 #ifdef G4MULTITHREADED
   static G4Mutex pionUXSMutex;

@@ -51,7 +51,7 @@
 #include "G4KineticTrack.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicsVector.hh"
-#include "G4PhysicsLnVector.hh"
+#include "G4PhysicsLogVector.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
@@ -101,7 +101,7 @@ G4XnpTotalLowE::G4XnpTotalLowE()
   if (_highLimit > _eMax)
     throw G4HadronicException(__FILE__, __LINE__, "G4XnpTotalLowE::G4XnpTotalLowE - High energy limit not valid");
     
-  _sigma = new G4PhysicsLnVector(_eMin,_eMax,_tableSize);
+  _sigma = new G4PhysicsLogVector(_eMin,_eMax,_tableSize);
   G4int i;
   for (i=0; i<_tableSize; i++)
     {

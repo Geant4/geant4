@@ -43,6 +43,13 @@
 #include "G4NistManager.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
+#include "G4BGGPionElasticXS.hh"
+#include "G4BGGPionInelasticXS.hh"
+#include "G4VCrossSectionDataSet.hh"
+#include "G4CrossSectionInelastic.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
+#include "G4PhysicsModelCatalog.hh"
+
 
 G4QMDReaction::G4QMDReaction()
 : G4HadronicInteraction("QMDModel")
@@ -52,12 +59,21 @@ G4QMDReaction::G4QMDReaction()
 , envelopF ( 1.05 ) // 10% for Peripheral reactions
 , gem ( true )
 , frag ( false )
+, secID( -1 )
 {
+   theXS = new G4CrossSectionInelastic( new G4ComponentGGNuclNuclXsc );
+   pipElNucXS = new G4BGGPionElasticXS(G4PionPlus::PionPlus() );
+   pipElNucXS->BuildPhysicsTable(*(G4PionPlus::PionPlus() ) );
 
-   //090331
-   shenXS = new G4IonsShenCrossSection();
-   //genspaXS = new G4GeneralSpaceNNCrossSection();
-   piNucXS = (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name());
+   pimElNucXS = new G4BGGPionElasticXS(G4PionMinus::PionMinus() );
+   pimElNucXS->BuildPhysicsTable(*(G4PionMinus::PionMinus() ) );
+
+   pipInelNucXS = new G4BGGPionInelasticXS(G4PionPlus::PionPlus() );
+   pipInelNucXS->BuildPhysicsTable(*(G4PionPlus::PionPlus() ) );
+
+   pimInelNucXS = new G4BGGPionInelasticXS(G4PionMinus::PionMinus() );
+   pimInelNucXS->BuildPhysicsTable(*(G4PionMinus::PionMinus() ) );
+
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
 
@@ -78,8 +94,8 @@ G4QMDReaction::G4QMDReaction()
    coulomb_collision_px_targ = 0.0;
    coulomb_collision_pz_targ = 0.0;
 
+   secID = G4PhysicsModelCatalog::GetModelID( "model_QMDModel" );
 }
-
 
 
 G4QMDReaction::~G4QMDReaction()
@@ -89,7 +105,6 @@ G4QMDReaction::~G4QMDReaction()
    delete collision;
    delete meanField;
 }
-
 
 
 G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectile , G4Nucleus & target )
@@ -128,16 +143,23 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    //const G4Element* targ_ele =  nistMan->FindOrBuildElement( targ_Z ); 
    //G4double aTemp = projectile.GetMaterial()->GetTemperature();
 
-     //090331
-  
-   G4VCrossSectionDataSet* theXS = shenXS;
+   // Glauber-Gribov nucleus-nucleus cross section does not have GetIsoCrossSection,
+   // therefore call GetElementCrossSection instead.
+   //G4double xs_0 = theXS->GetIsoCrossSection ( proj_dp , targ_Z , targ_A );
+   G4double xs_0 = theXS->GetElementCrossSection( proj_dp , targ_Z , projectile.GetMaterial() );
 
-   if ( proj_pd->GetParticleType() == "meson" ) theXS = piNucXS;
+   // When the projectile is a pion
+   if (proj_pd == G4PionPlus::PionPlus() ) {
+     xs_0 = pipElNucXS->GetElementCrossSection(proj_dp, targ_Z, projectile.GetMaterial() ) +
+            pipInelNucXS->GetElementCrossSection(proj_dp, targ_Z, projectile.GetMaterial() );      
+   } else if (proj_pd == G4PionMinus::PionMinus() ) {
+     xs_0 = pimElNucXS->GetElementCrossSection(proj_dp, targ_Z, projectile.GetMaterial() ) +
+            pimInelNucXS->GetElementCrossSection(proj_dp, targ_Z, projectile.GetMaterial() );
+   }
 
    //G4double xs_0 = genspaXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
    //G4double xs_0 = theXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
    //110822 
-   G4double xs_0 = theXS->GetIsoCrossSection ( proj_dp , targ_Z , targ_A );
 
      G4double bmax_0 = std::sqrt( xs_0 / pi );
      //std::cout << "bmax_0 in fm (fermi) " <<  bmax_0/fermi << std::endl;
@@ -263,7 +285,9 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       G4LorentzVector targ4pCM = CLHEP::boostOf ( targ4p , boostToReac );
 
 //    Projectile
-      if ( proj != NULL )
+      //G4cout << "proj : " << proj << G4endl;
+      //if ( proj != NULL )
+      if ( proj_A != 1 )
       {
 
 //    projectile is nucleus
@@ -293,6 +317,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 //       projectile is particle
 
          // avoid multiple set in "elastic" loop
+         //G4cout << "system Total Participants : " << system->GetTotalNumberOfParticipant() << ", target : " << targ->GetTotalNumberOfParticipant() << G4endl;
          if ( system->GetTotalNumberOfParticipant() == targ->GetTotalNumberOfParticipant() )
          {
 
@@ -536,6 +561,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
           //theParticleChange.AddSecondary( dp ); 
           if ( !( pd->GetAtomicNumber() == 4 && pd->GetAtomicMass() == 8 ) )
           {
+             //G4cout << "pd out of notBreak loop : " << pd->GetParticleName() << G4endl;
              G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
              theParticleChange.AddSecondary( dp ); 
           }
@@ -596,6 +622,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       {
 
          const G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( (*it)->GetAtomicNumber() , (*it)->GetMassNumber(), (*it)->GetExcitationEnergy()*GeV );
+             //G4cout << "pd in notBreak loop : " << pd->GetParticleName() << G4endl;
          G4LorentzVector p4_CM = nucleus_p4CM;
          G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB ); // Back to LAB  
          G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
@@ -618,7 +645,6 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
    for ( G4int i = 0 ; i < system->GetTotalNumberOfParticipant() ; i++ )
    {
-
       // Secondary particles 
 
       const G4ParticleDefinition* pd = system->GetParticipant( i )->GetDefinition();
@@ -626,6 +652,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB );
       G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
       theParticleChange.AddSecondary( dp ); 
+      //G4cout << "In the last theParticleChange loop : " << pd->GetParticleName() << G4endl;
 
 /*
       G4cout << "G4QMDRESULT "
@@ -647,6 +674,14 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    delete system; 
 
    theParticleChange.SetStatusChange( stopAndKill );
+
+   for (G4int i = 0; i < G4int(theParticleChange.GetNumberOfSecondaries() ); i++)
+   {
+     //G4cout << "Particle : " << theParticleChange.GetSecondary(i)->GetParticle()->GetParticleDefinition()->GetParticleName() << G4endl;
+     //G4cout << "KEnergy : " << theParticleChange.GetSecondary(i)->GetParticle()->GetKineticEnergy() << G4endl;
+     //G4cout << "modelID : " << theParticleChange.GetSecondary(i)->GetCreatorModelID() << G4endl;
+     theParticleChange.GetSecondary(i)->SetCreatorModelID(secID);
+   }
 
    return &theParticleChange;
 
@@ -691,6 +726,7 @@ G4double ptot , G4double etot , G4double bmax , G4ThreeVector boostToCM )
    G4int at = pd_targ->GetAtomicMass();
 
 
+   // Check the ramx0 value
    //G4double rmax0 = 8.0;  // T.K dicide parameter value  // for low energy
    G4double rmax0 = bmax + 4.0;
    G4double rmax = std::sqrt( rmax0*rmax0 + b*b );

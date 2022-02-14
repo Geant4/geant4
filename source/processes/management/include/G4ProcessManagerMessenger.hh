@@ -23,33 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessManagerMessenger
 //
+// Class description:
 //
+// This is a messenger class to exchange information between
+// the Process Manager and UI.
 //
-//---------------------------------------------------------------
-//
-//  G4ProcessManagerMessenger.hh
-//
-// Class Description:
-//    This is a messenger class to interface to exchange information
-//    between ProcessManager and UI.
-//-
-//  /particle/process/   Process Manager control commands.
-//   Commands : 
-//     dump * dump process manager information.
-//     Verbose * Set Verbose Level for Process Manager and/or process
-//     Activate * Activate process  
+// /particle/process/   Process Manager control commands
+// Commands : 
+//     dump * dump process manager information
+//     verbose * Set Verbose Level for Process Manager and/or process
+//     activate * Activate process  
 //     inactivate * Inctivate process  
-//
-//  History:
-//    13 June 1997, H. Kurashige   : The 1st version created.
-//    10 Nov. 1997  H. Kurashige   : fixed bugs 
-//    08 Jan. 1998, H. Kurashige   : new UIcommand
-//
-//---------------------------------------------------------------
 
-#ifndef G4ProcessManagerMessenger_h
-#define G4ProcessManagerMessenger_h 1
+// Author: H.Kurashige, 13 June 1997
+//---------------------------------------------------------------------
+#ifndef G4ProcessManagerMessenger_hh
+#define G4ProcessManagerMessenger_hh 1
+
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4ParticleDefinition;
 class G4ParticleTable;
@@ -62,47 +56,42 @@ class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger; 
 class G4UIcommand;
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class G4ProcessManagerMessenger: public G4UImessenger
+class G4ProcessManagerMessenger : public G4UImessenger
 {
   public:
-    G4ProcessManagerMessenger(G4ParticleTable* pTable = 0);
-    // constructor
+
+    G4ProcessManagerMessenger(G4ParticleTable* pTable = nullptr);
+      // Constructor
 
     virtual ~G4ProcessManagerMessenger();
-    // destructor 
+      // Destructor 
  
-public: // with description
-     virtual void SetNewValue(G4UIcommand * command,G4String newValues);
-    // set new value for command string
+    G4ProcessManagerMessenger(const G4ProcessManagerMessenger&) = delete;
+    G4ProcessManagerMessenger& operator=(const G4ProcessManagerMessenger&) = delete;
+      // Copy contructor and assignment operator not allowed
 
-    virtual G4String GetCurrentValue(G4UIcommand * command);
-    // get current value for command string
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+      // Set new value for command string
+
+    virtual G4String GetCurrentValue(G4UIcommand* command);
+      // Get current value for command string
   
   private:
-    G4ProcessManagerMessenger(const G4ProcessManagerMessenger&)
-      : G4UImessenger() {};
-    // hide copy constructor as private
 
-  private:
-    G4ParticleDefinition* SetCurrentParticle();
-    // set particle currently concerned 
+    const G4ParticleDefinition* SetCurrentParticle();
+      // Set particle currently concerned 
     
-  private:
-    G4ParticleTable* theParticleTable;
-    G4ParticleDefinition* currentParticle;
-    G4VProcess* currentProcess;
-    G4ProcessManager*     theManager;
-    G4ProcessVector*      theProcessList;
+    G4ParticleTable* theParticleTable = nullptr;
+    const G4ParticleDefinition* currentParticle = nullptr;
+    G4VProcess* currentProcess = nullptr;
+    G4ProcessManager* theManager = nullptr;
+    G4ProcessVector* theProcessList = nullptr;
 
-    G4UIdirectory *             thisDirectory;
-    G4UIcmdWithAnInteger *      dumpCmd;
-    G4UIcommand          *      verboseCmd;
-    G4UIcmdWithAnInteger *      activateCmd;
-    G4UIcmdWithAnInteger *      inactivateCmd;
+    G4UIdirectory*        thisDirectory = nullptr;
+    G4UIcmdWithAnInteger* dumpCmd = nullptr;
+    G4UIcommand*          verboseCmd = nullptr;
+    G4UIcmdWithAnInteger* activateCmd = nullptr;
+    G4UIcmdWithAnInteger* inactivateCmd = nullptr;
 };
 
 #endif
-

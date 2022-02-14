@@ -28,8 +28,6 @@
 // 
 //Box container class
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMBOX_HH
 #define G4OPENGLXMBOX_HH
 
@@ -66,7 +64,5 @@ private:
   G4OpenGLXmBox (const G4OpenGLXmBox&);
   G4OpenGLXmBox& operator = (const G4OpenGLXmBox&);
 };
-
-#endif
 
 #endif

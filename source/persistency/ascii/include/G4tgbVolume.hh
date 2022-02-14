@@ -23,35 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbVolume
+// G4tgbVolume
 //
 // Class description:
 //
 // Class to manage the geometry info of any detector unit. The detector units
 // created in this class are essentially transient copies of Geant4 physical
 // volumes. Thus, they are characterized by a name and the parameters of a
-// Geant4 physical volume. 
+// Geant4 physical volume.
 // They have associated several detector positions, that can be instances of
 // G4tgrPlace, G4tgrPlaceDivRep or G4tgrPlaceParameterisation.
 // Each detector positioning is done inside a parent. As there can be several
 // parents, we will write one parent for each detector position, even if that
 // means that parents are repeated.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbVolume_hh
+#define G4tgbVolume_hh 1
 
-#ifndef G4tgbVolume_h
-#define G4tgbVolume_h
-
-#include "globals.hh"
-
-#include <vector>
 #include <map>
 
+#include "globals.hh"
 #include "G4tgrVolume.hh"
 #include "geomdefs.hh"
 
@@ -64,56 +57,55 @@ class G4AssemblyVolume;
 
 class G4tgbVolume
 {
-  public:  // with description
+  public:
 
     G4tgbVolume();
-   ~G4tgbVolume();
-    G4tgbVolume( G4tgrVolume* vol);
+    ~G4tgbVolume();
+    G4tgbVolume(G4tgrVolume* vol);
 
-    void ConstructG4Volumes( const G4tgrPlace* place,
-                             const G4LogicalVolume* parentLV );
+    void ConstructG4Volumes(const G4tgrPlace* place,
+                            const G4LogicalVolume* parentLV);
       // Construct the G4VSolid, G4LogicalVolume and the G4VPhysicalVolume
       // of copy 'copyNo'
 
-    G4VSolid* FindOrConstructG4Solid( const G4tgrSolid* vol);
-      // Construct the G4VSolid from the data of the corresponding G4tgrVolume. 
+    G4VSolid* FindOrConstructG4Solid(const G4tgrSolid* vol);
+      // Construct the G4VSolid from the data of the corresponding G4tgrVolume.
       // Allow to use data from another G4tgrVolume, needed by Boolean solids
       // (that have to construct two solids and then do the Boolean operation)
 
-    G4LogicalVolume* ConstructG4LogVol( const G4VSolid* solid );
+    G4LogicalVolume* ConstructG4LogVol(const G4VSolid* solid);
       // Construct the G4LogicalVolume and then call the construction of
       // volumes that are positioned inside this LV
 
-    G4VPhysicalVolume* ConstructG4PhysVol( const G4tgrPlace* place,
-                                           const G4LogicalVolume* currentLV,
-                                           const G4LogicalVolume* parentLV );
+    G4VPhysicalVolume* ConstructG4PhysVol(const G4tgrPlace* place,
+                                          const G4LogicalVolume* currentLV,
+                                          const G4LogicalVolume* parentLV);
       // Construct the G4VPhysicalVolume placing 'curentLV' with position
       // given by the G4tgrPlace 'copyNo' inside 'parentLV'
 
-    void SetCutsInRange( G4LogicalVolume* logvol,
-                         std::map<G4String,G4double> cuts );
-    void SetCutsInEnergy( G4LogicalVolume* logvol,
-                         std::map<G4String,G4double> cuts );
+    void SetCutsInRange(G4LogicalVolume* logvol,
+                        std::map<G4String, G4double> cuts);
+    void SetCutsInEnergy(G4LogicalVolume* logvol,
+                         std::map<G4String, G4double> cuts);
 
-
-    void CheckNoSolidParams( const G4String& solidType,
-                             const unsigned int NoParamExpected,
-                             const unsigned int NoParam );
+    void CheckNoSolidParams(const G4String& solidType,
+                            const unsigned int NoParamExpected,
+                            const unsigned int NoParam);
       // Before building a solid of type 'solydType', check if the number
       // of paramenters is the expected one
 
-  G4VSolid* BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis );
+    G4VSolid* BuildSolidForDivision(G4VSolid* parentSolid, EAxis axis);
 
     const G4String& GetName() const { return theTgrVolume->GetName(); }
     G4bool GetVisibility() const { return theTgrVolume->GetVisibility(); }
     const G4double* GetColour() const { return theTgrVolume->GetColour(); }
 
   private:
- 
-    G4tgrVolume* theTgrVolume;
+
+    G4tgrVolume* theTgrVolume = nullptr;
       // The G4tgrVolume to which it corresponds
 
-    G4AssemblyVolume* theG4AssemblyVolume;
+    G4AssemblyVolume* theG4AssemblyVolume = nullptr;
 };
 
-#endif 
+#endif

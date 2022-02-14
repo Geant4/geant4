@@ -115,22 +115,9 @@ std::vector<G4eBremsstrahlungRelModel::ElementData*> G4eBremsstrahlungRelModel::
 
 G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition* p,
                                                      const G4String& nam)
-: G4VEmModel(nam), fIsElectron(true), fIsScatOffElectron(false),
-  fIsLPMActive(false), fPrimaryParticle(nullptr), fIsUseCompleteScreening(false)
+: G4VEmModel(nam)
 {
-  fCurrentIZ = 0;
-  //
-  fPrimaryParticleMass = 0.;
-  fPrimaryKinEnergy    = 0.;
-  fPrimaryTotalEnergy  = 0.;
-  fDensityFactor       = 0.;
-  fDensityCorr         = 0.;
-  fNucTerm             = 0.;
-  fSumTerm             = 0.;
-  //
-  fPrimaryParticle     = nullptr;
   fGammaParticle       = G4Gamma::Gamma();
-  fParticleChange      = nullptr;
   //
   fLowestKinEnergy     = 1.0*MeV;
   SetLowEnergyLimit(fLowestKinEnergy);
@@ -141,9 +128,8 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
   SetLPMFlag(true);
   //
   SetAngularDistribution(new G4ModifiedTsai());
-  //SetAngularDistribution(new G4DipBustGenerator());
   //
-  if (p) {
+  if (nullptr != p) {
     SetParticle(p);
   }
 }
@@ -153,7 +139,7 @@ G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
   if (IsMaster()) {
     // clear ElementData container
     for (size_t iz = 0; iz < gElementData.size(); ++iz) {
-      if (gElementData[iz]) {
+      if (nullptr != gElementData[iz]) {
         delete gElementData[iz];
       }
     }
@@ -170,7 +156,7 @@ G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
 void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
                                            const G4DataVector& cuts)
 {
-  if (p) {
+  if (nullptr != p) {
     SetParticle(p);
   }
   fCurrentIZ = 0;
@@ -182,7 +168,9 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
       InitialiseElementSelectors(p, cuts);
     }
   }
-  if (!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  if (nullptr == fParticleChange) { 
+    fParticleChange = GetParticleChangeForLoss(); 
+  }
   if (GetTripletModel()) {
     GetTripletModel()->Initialise(p, cuts);
     fIsScatOffElectron = true;
@@ -244,7 +232,7 @@ G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(const G4Material* material,
                                                 G4double cutEnergy)
 {
   G4double dedx = 0.0;
-  if (!fPrimaryParticle) {
+  if (nullptr == fPrimaryParticle) {
     SetParticle(p);
   }
   if (kineticEnergy < LowEnergyLimit()) {
@@ -331,7 +319,7 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
                                                   G4double maxEnergy)
 {
   G4double crossSection = 0.0;
-  if (!fPrimaryParticle) {
+  if (nullptr == fPrimaryParticle) {
     SetParticle(p);
   }
   if (kineticEnergy < LowEnergyLimit()) {
@@ -426,7 +414,7 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double tmin)
 //        v(k)=ln(k/E_t) -> dk/dv=E_t*e^v=k -> ds/dv= ds/dk*dk/dv=ds/dk*k so it
 //        would cnacell out the 1/k factor => 1/k don't included here
 //  (ii)  the constant factor C and Z don't depend on 'k' => not included here
-//  (iii) the 1/F(k) factor is accounted in the callers: explicitely (cross sec-
+//  (iii) the 1/F(k) factor is accounted in the callers: explicitly (cross sec-
 //        tion computation) or implicitly through further variable transformaton
 //        (in the final state sampling algorithm)
 // COMPLETE SCREENING: see more at the DCS without LPM effect below.
@@ -460,7 +448,7 @@ G4eBremsstrahlungRelModel::ComputeRelDXSectionPerAtom(G4double gammaEnergy)
 // where f_c(Z) is the Coulomb correction factor and phi1(g),phi2(g) and psi1(e),
 // psi2(e) are coherent and incoherent screening functions. In the Thomas-Fermi
 // model of the atom, the screening functions will have a form that do not
-// depend on Z (not explicitely). These numerical screening functions can be
+// depend on Z (not explicitly). These numerical screening functions can be
 // approximated as Tsai Eqs. [3.38-3.41] with the variables g=gamma and
 // e=epsilon given by Tsai Eqs. [3.30 and 3.31] (see more details at the method
 // ComputeScreeningFunctions()). Note, that in case of complete screening i.e.

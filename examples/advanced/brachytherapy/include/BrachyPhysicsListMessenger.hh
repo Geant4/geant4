@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author: Susanna Guatelli susanna@uow.edu.au
+//
 #ifndef BrachyPhysicsListMessenger_h
 #define BrachyPhysicsListMessenger_h 1
 
@@ -36,21 +38,16 @@ class G4UIcmdWithAString;
 class BrachyPhysicsListMessenger: public G4UImessenger
 {
   public:
-  
-    BrachyPhysicsListMessenger(BrachyPhysicsList* );
+    explicit BrachyPhysicsListMessenger(BrachyPhysicsList* );
    ~BrachyPhysicsListMessenger();
 
     virtual    
-    void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
     
   private:
-  
-    BrachyPhysicsList*         fPhysicsList;
-    
+    BrachyPhysicsList*         fPhysicsList;  
     G4UIdirectory*             fPhysDir;
     G4UIcmdWithAString*        fListCmd;
-  
 };
-
 #endif
 

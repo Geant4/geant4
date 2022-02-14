@@ -58,26 +58,21 @@ class G4Material;
 
 class G4hZiegler1985p : public G4VhElectronicStoppingPower
 {
-
 public:
-
-  G4hZiegler1985p();
-
+  explicit G4hZiegler1985p();
   ~G4hZiegler1985p();
 
-  G4bool HasMaterial(const G4Material* material);
+  G4bool HasMaterial(const G4Material* material) override;
 
   G4double StoppingPower(const G4Material* material,
-                               G4double kineticEnergy);
+                               G4double kineticEnergy) override;
 
   G4double ElectronicStoppingPower(G4double z,
-                                   G4double kineticEnergy) const;
+                                   G4double kineticEnergy) const override;
  
-protected:
-
 private:
-  const G4double protonMassAMU;
   static const G4double a[92][8];
+  const G4double protonMassAMU;
 
 };
 

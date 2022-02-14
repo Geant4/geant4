@@ -29,9 +29,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VPionBuilder.hh"
 
 #include "G4INCLXXInterface.hh"   
@@ -59,10 +57,8 @@ class G4INCLXXPionBuilder : public G4VPionBuilder
     G4INCLXXPionBuilder();
     virtual ~G4INCLXXPionBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
 
     void SetMinEnergy(G4double aM) {theMin = aM;}
     void SetMaxEnergy(G4double aM) {theMax = aM;}

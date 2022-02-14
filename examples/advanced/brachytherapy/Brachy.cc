@@ -38,23 +38,12 @@
 //    *******************************
 //
 //
-#ifdef G4MULTITHREADED
-  #include "G4MTRunManager.hh"
-#else
-  #include "G4RunManager.hh"
-#endif
-
+#include "G4Types.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
-#include "BrachyFactoryIr.hh"
 #include "BrachyActionInitialization.hh"
-
-#ifdef ANALYSIS_USE
-#include "BrachyAnalysisManager.hh"
-#endif
-
 #include "G4VisExecutive.hh"
-
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
@@ -74,21 +63,18 @@
 int main(int argc ,char ** argv)
 
 {
-
-#ifdef G4MULTITHREADED
-  G4MTRunManager* pRunManager = new G4MTRunManager;
-  pRunManager->SetNumberOfThreads(4); // Is equal to 2 by default
-#else
- G4RunManager* pRunManager = new G4RunManager;
-#endif
-
-<<<<<<< HEAD
-=======
+ // Construct the default run manager
+ //
+  auto* pRunManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  pRunManager->SetNumberOfThreads(nThreads);
+ 
   G4cout << "***********************" << G4endl;
   G4cout << "*** Seed: " << G4Random::getTheSeed() << " ***" << G4endl;
   G4cout << "***********************" << G4endl;
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- // Access to the Scoring Manager pointer
+ 
+  // Access to the Scoring Manager pointer
+
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
 
 
@@ -102,13 +88,7 @@ int main(int argc ,char ** argv)
   BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction();
   pRunManager -> SetUserInitialization(pDetectorConstruction);
 
-//  Analysis Manager
-#ifdef ANALYSIS_USE
-  BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
-  analysis -> book();
-#endif
-
-  // User action initialization  
+  // User action initialization
 
   BrachyActionInitialization* actions = new BrachyActionInitialization();
   pRunManager->SetUserInitialization(actions);
@@ -155,16 +135,9 @@ int main(int argc ,char ** argv)
     }  
 
   // Job termination
+ // Close the root file
 
   delete visManager;
-
-
-#ifdef ANALYSIS_USE
-// Close the output ROOT file with the results
-   analysis -> save(); 
-  delete analysis;
-#endif
-
   delete pRunManager;
 
   return 0;

@@ -38,7 +38,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4TritonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VTritonBuilder.hh"
 
 #include "G4ParticleHPInelastic.hh"
@@ -50,8 +50,8 @@ public:
   virtual ~G4TritonPHPBuilder();
   
 public: 
-  virtual void Build(G4TritonInelasticProcess * aP);
-  virtual void Build(G4HadronElasticProcess * aP);
+  virtual void Build(G4HadronInelasticProcess * aP) final override;
+  virtual void Build(G4HadronElasticProcess * aP) final override;
   
   void SetMinEnergy(G4double aM) 
   {
@@ -65,8 +65,6 @@ public:
 private:
   G4double theMin;
   G4double theMax;
-  G4ParticleHPInelastic*  theParticlePHPModel;
-  
 };
 
 

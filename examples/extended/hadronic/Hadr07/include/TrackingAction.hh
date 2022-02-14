@@ -36,16 +36,25 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
+class TrackingMessenger;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
     TrackingAction();
-   ~TrackingAction() {};
+   ~TrackingAction() override;
    
-    virtual void  PreUserTrackingAction(const G4Track*);  
-    virtual void PostUserTrackingAction(const G4Track*);
+    void  PreUserTrackingAction(const G4Track*) override;  
+    void PostUserTrackingAction(const G4Track*) override;
+    
+    void SetParticleCount(G4bool flag) { fParticleCount = flag;};
+    
+  private:
+    TrackingMessenger*  fTrackMessenger;
+    
+    G4bool fParticleCount;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

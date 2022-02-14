@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLWriteMaterials
+// G4GDMLWriteMaterials
 //
 // Class description:
 //
 // GDML class for writing materials definitions.
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLWRITEMATERIALS_INCLUDED_
-#define _G4GDMLWRITEMATERIALS_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4GDMLWRITEMATERIALS_HH
+#define G4GDMLWRITEMATERIALS_HH 1
 
 #include "G4Types.hh"
 #include <vector>
@@ -47,42 +42,45 @@
 class G4Isotope;
 class G4Element;
 class G4Material;
-class G4PhysicsOrderedFreeVector;
+class G4PhysicsFreeVector;
+class G4MaterialPropertiesTable;
 
 class G4GDMLWriteMaterials : public G4GDMLWriteDefine
 {
+  public:
 
- public:
+    void AddIsotope(const G4Isotope* const);
+    void AddElement(const G4Element* const);
+    void AddMaterial(const G4Material* const);
 
-   void AddIsotope(const G4Isotope* const);
-   void AddElement(const G4Element* const);
-   void AddMaterial(const G4Material* const);
+    virtual void MaterialsWrite(xercesc::DOMElement*);
 
-   virtual void MaterialsWrite(xercesc::DOMElement*);
+  protected:
 
- protected:
+    G4GDMLWriteMaterials();
+    virtual ~G4GDMLWriteMaterials();
 
-   G4GDMLWriteMaterials();
-   virtual ~G4GDMLWriteMaterials();
+    void AtomWrite(xercesc::DOMElement*, const G4double&);
+    void DWrite(xercesc::DOMElement*, const G4double&);
+    void PWrite(xercesc::DOMElement*, const G4double&);
+    void TWrite(xercesc::DOMElement*, const G4double&);
+    void MEEWrite(xercesc::DOMElement*, const G4double&);
+    void IsotopeWrite(const G4Isotope* const);
+    void ElementWrite(const G4Element* const);
+    void MaterialWrite(const G4Material* const);
+    void PropertyWrite(xercesc::DOMElement*, const G4Material* const);
+    void PropertyVectorWrite(const G4String&,
+                             const G4PhysicsFreeVector* const);
+    void PropertyConstWrite(const G4String&, const G4double,
+                            const G4MaterialPropertiesTable*);
 
-   void AtomWrite(xercesc::DOMElement*,const G4double&);
-   void DWrite(xercesc::DOMElement*,const G4double&);
-   void PWrite(xercesc::DOMElement*,const G4double&);
-   void TWrite(xercesc::DOMElement*,const G4double&);
-   void MEEWrite(xercesc::DOMElement*,const G4double&);
-   void IsotopeWrite(const G4Isotope* const);
-   void ElementWrite(const G4Element* const);
-   void MaterialWrite(const G4Material* const);
-   void PropertyWrite(xercesc::DOMElement*, const G4Material* const);
-   void PropertyVectorWrite(const G4String&,
-                            const G4PhysicsOrderedFreeVector* const);
- protected:
+  protected:
 
-   std::vector<const G4Isotope*> isotopeList;
-   std::vector<const G4Element*> elementList;
-   std::vector<const G4Material*> materialList;
-   std::vector<const G4PhysicsOrderedFreeVector*> propertyList;
-   xercesc::DOMElement* materialsElement;
+    std::vector<const G4Isotope*> isotopeList;
+    std::vector<const G4Element*> elementList;
+    std::vector<const G4Material*> materialList;
+    std::vector<const G4PhysicsFreeVector*> propertyList;
+    xercesc::DOMElement* materialsElement = nullptr;
 };
 
 #endif

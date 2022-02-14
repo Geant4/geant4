@@ -1,0 +1,443 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// G4IntegrationDriver inline implementation
+//
+// Author: Dmitry Sorokin, Google Summer of Code 2017
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+
+#include "G4FieldUtils.hh"
+
+#include "G4DriverReporter.hh"
+
+template <class T>
+G4IntegrationDriver<T>::
+G4IntegrationDriver ( G4double hminimum, T* pStepper,
+                      G4int numComponents, G4int statisticsVerbose )
+    : G4RKIntegrationDriver<T>(pStepper),
+      fMinimumStep(hminimum),
+      fSmallestFraction(1e-12),
+      fVerboseLevel(statisticsVerbose),
+      fNoQuickAvanceCalls(0),
+      fNoAccurateAdvanceCalls(0),
+      fNoAccurateAdvanceBadSteps(0),
+      fNoAccurateAdvanceGoodSteps(0)
+{
+    if (numComponents != Base::GetStepper()->GetNumberOfVariables())
+    {
+        std::ostringstream message;
+        message << "Driver's number of integrated components "
+                << numComponents
+                << " != Stepper's number of components "
+                << pStepper->GetNumberOfVariables();
+        G4Exception("G4IntegrationDriver","GeomField0002",
+                    FatalException, message);
+    }
+}
+
+template <class T>
+G4IntegrationDriver<T>::~G4IntegrationDriver()
+{
+#ifdef G4VERBOSE
+    if (fVerboseLevel > 0)
+    {
+       G4cout << "G4Integration Driver Stats: "
+              << "#QuickAdvance " << fNoQuickAvanceCalls
+              << " - #AccurateAdvance " << fNoAccurateAdvanceCalls << " "
+              << "#good steps " << fNoAccurateAdvanceGoodSteps << " "
+              << "#bad steps " << fNoAccurateAdvanceBadSteps << G4endl;
+    }
+#endif
+}
+
+template <class T>
+G4double G4IntegrationDriver<T>::AdvanceChordLimited(G4FieldTrack& track, 
+                                                     G4double stepMax, 
+                                                     G4double epsStep,
+                                                     G4double chordDistance)
+{
+    return ChordFinderDelegate::AdvanceChordLimitedImpl(track, stepMax, epsStep,
+                                                        chordDistance);
+}
+
+template <class T>
+void G4IntegrationDriver<T>::OnStartTracking()
+{
+    ChordFinderDelegate::ResetStepEstimate();
+}
+
+// Runge-Kutta driver with adaptive stepsize control. Integrate starting
+// values at y_current over hstep x2 with accuracy eps. 
+// On output ystart is replaced by values at the end of the integration 
+// interval. RightHandSide is the right-hand side of ODE system. 
+// The source is similar to odeint routine from NRC p.721-722 .
+//
+template <class T>
+G4bool G4IntegrationDriver<T>::
+AccurateAdvance(G4FieldTrack& track, G4double hstep,
+                G4double eps, G4double hinitial)
+{
+    ++fNoAccurateAdvanceCalls;
+
+    if (hstep == 0.0)
+    {
+        std::ostringstream message;
+        message << "Proposed step is zero; hstep = " << hstep << " !";
+        G4Exception("G4IntegrationDriver::AccurateAdvance()", 
+                    "GeomField1001", JustWarning, message);
+        return true; 
+    }
+
+    if (hstep < 0)
+    {
+        std::ostringstream message;
+        message << "Invalid run condition." << G4endl
+                << "Proposed step is negative; hstep = " << hstep << "."
+                << G4endl
+                << "Requested step cannot be negative! Aborting event.";
+        G4Exception("G4IntegrationDriver::AccurateAdvance()", 
+                    "GeomField0003", EventMustBeAborted, message);
+        return false;
+    }
+
+    G4double hnext, hdid;
+
+    G4double dydx[G4FieldTrack::ncompSVEC];
+    G4bool succeeded = true, lastStepSucceeded;
+
+    G4int noFullIntegr = 0, noSmallIntegr = 0;
+
+    G4double y[G4FieldTrack::ncompSVEC];
+    track.DumpToArray(y);
+
+    const G4double startCurveLength = track.GetCurveLength();
+    const G4double endCurveLength = startCurveLength + hstep;
+    const G4double hThreshold = 
+        std::min(eps * hstep, fSmallestFraction * startCurveLength);
+
+    G4double h = hstep;
+    if (hinitial > CLHEP::perMillion * hstep && hinitial < hstep)
+    {
+        h = hinitial;
+    }
+
+#ifdef G4DEBUG_FIELD
+    if (fVerboseLevel > 3)
+       G4cout << "IDriver::AccurAdv called. " 
+               << " Input: hstep = " << hstep << " hinitial= " << hinitial
+               << " , current: h = " << h << G4endl;
+#endif
+
+    G4double curveLength = startCurveLength;
+
+    for (G4int nstp = 0; nstp < Base::GetMaxNoSteps(); ++nstp)
+    {
+        const G4ThreeVector StartPos =
+            field_utils::makeVector(y, field_utils::Value3D::Position);
+
+#ifdef G4DEBUG_FIELD
+        const int nvar= Base::GetStepper()->GetNumberOfVariables();
+        G4double xStepStart= curveLength; // Initial: track.GetCurveLength();
+        G4double yStepStart[G4FieldTrack::ncompSVEC];
+        for (int i=0; i<nvar; ++i)  { yStepStart[i] = y[i]; }
+        // G4FieldTrack yFldTrkStart( StartPos,
+        //                          field_utils::makeVector(y, field_utils::Value3D::Momentum),
+        // ... );
+        // G4FieldTrack yFldTrkStart('0');        
+        // yFldTrkStart.LoadFromArray(y, Base::GetStepper()->GetNumberOfVariables());
+        // yFldTrkStart.SetCurveLength(curveLength);                                   
+        G4cout << "----- Iteration = " << nstp << G4endl;  // + 1 
+#endif
+        
+        Base::GetStepper()->RightHandSide(y, dydx);
+   
+        if (h > GetMinimumStep())
+        {
+            OneGoodStep(y, dydx, curveLength, h, eps, hdid, hnext);
+            lastStepSucceeded = (hdid == h);
+#ifdef G4DEBUG_FIELD
+            G4cout << "IntegrationDriver -- after OneGoodStep / requesting step = " << h << G4endl;
+            G4DriverReporter::PrintStatus( yStepStart, xStepStart, y, curveLength, h,  nstp+1, nvar); // Only
+#endif
+        }
+        else
+        {
+            G4FieldTrack yFldTrk('0');
+            G4double dchord_step, dyerr, dyerr_len;
+            yFldTrk.LoadFromArray(y, Base::GetStepper()->GetNumberOfVariables());
+            yFldTrk.SetCurveLength(curveLength);
+
+            QuickAdvance(yFldTrk, dydx, h, dchord_step, dyerr_len);
+
+            yFldTrk.DumpToArray(y);
+         
+            if (h == 0.0)
+            {
+                G4Exception("G4IntegrationDriver::AccurateAdvance()",
+                            "GeomField0003", FatalException,
+                            "Integration Step became Zero!"); 
+            }
+            dyerr = dyerr_len / h;
+            hdid = h;
+            curveLength += hdid;
+            hnext = Base::ComputeNewStepSize(dyerr / eps, h);
+            lastStepSucceeded = (dyerr <= eps);
+        }
+
+        if (lastStepSucceeded)  { ++noFullIntegr; }
+        else                    { ++noSmallIntegr; }
+
+        const G4ThreeVector EndPos =
+            field_utils::makeVector(y, field_utils::Value3D::Position);
+
+        CheckStep(EndPos, StartPos, hdid);
+
+        //  Avoid numerous small last steps
+        if (h < hThreshold || curveLength >= endCurveLength)
+        {
+            break; 
+        }
+
+        h = std::max(hnext, GetMinimumStep());
+        if (curveLength + h > endCurveLength)
+        {
+            h = endCurveLength - curveLength;
+        }
+    }
+    // Have we reached the end ?
+    // --> a better test might be x-endCurveLength > an_epsilon
+    succeeded = (curveLength >= endCurveLength);
+      // If it was a "forced" last step
+
+    track.LoadFromArray(y, Base::GetStepper()->GetNumberOfVariables());
+    track.SetCurveLength(curveLength);
+
+    return succeeded;
+}
+
+// Driver for one Runge-Kutta Step with monitoring of local truncation error
+// to ensure accuracy and adjust stepsize. Input are dependent variable
+// array y[0,...,5] and its derivative dydx[0,...,5] at the
+// starting value of the independent variable x . Also input are stepsize
+// to be attempted htry, and the required accuracy eps. On output y and x
+// are replaced by their new values, hdid is the stepsize that was actually
+// accomplished, and hnext is the estimated next stepsize. 
+// This is similar to the function rkqs from the book:
+// Numerical Recipes in C: The Art of Scientific Computing (NRC), Second
+// Edition, by William H. Press, Saul A. Teukolsky, William T.
+// Vetterling, and Brian P. Flannery (Cambridge University Press 1992),
+// 16.2 Adaptive StepSize Control for Runge-Kutta, p. 719
+//
+template <class T>
+void G4IntegrationDriver<T>::OneGoodStep(G4double y[],           // InOut
+                                         const G4double dydx[],
+                                         G4double& curveLength,  // InOut
+                                         G4double htry,
+                                         G4double eps_rel_max,
+                                         G4double& hdid,      // Out
+                                         G4double& hnext)    // Out
+
+{
+    G4double error2 = DBL_MAX;
+
+    G4double yerr[G4FieldTrack::ncompSVEC], ytemp[G4FieldTrack::ncompSVEC];
+
+    G4double h = htry;
+
+    static G4ThreadLocal G4int tot_no_trials = 0; 
+    const G4int max_trials = 100; 
+
+    for (G4int iter = 0; iter < max_trials; ++iter)
+    {
+        tot_no_trials++;
+
+        Base::GetStepper()->Stepper(y, dydx, h, ytemp, yerr); 
+        error2 = field_utils::relativeError2(y, yerr, std::max(h, fMinimumStep),
+                                             eps_rel_max);
+        if (error2 <= 1.0)
+        {
+            break; 
+        }
+
+        h = Base::ShrinkStepSize2(h, error2);
+
+        G4double xnew = curveLength + h;
+        if(xnew == curveLength)
+        {
+            std::ostringstream message;
+            message << "Stepsize underflow in Stepper !" << G4endl
+                    << "- Step's start x=" << curveLength
+                    << " and end x= " << xnew 
+                    << " are equal !! " << G4endl
+                    << "  Due to step-size= " << h 
+                    << ". Note that input step was " << htry;
+            G4Exception("G4IntegrationDriver::OneGoodStep()",
+                        "GeomField1001", JustWarning, message);
+            break;
+        }
+    }
+
+    hnext = Base::GrowStepSize2(h, error2);
+    curveLength += (hdid = h);
+
+    field_utils::copy(y, ytemp, Base::GetStepper()->GetNumberOfVariables());
+}
+
+template <class T>
+G4bool G4IntegrationDriver<T>::QuickAdvance(G4FieldTrack& track,    // INOUT
+                                      const G4double dydx[],  
+                                            G4double hstep,
+                                            G4double& dchord_step,
+                                            G4double& dyerr)
+{
+    ++fNoQuickAvanceCalls;
+
+    G4double yIn[G4FieldTrack::ncompSVEC], 
+             yOut[G4FieldTrack::ncompSVEC],
+             yError[G4FieldTrack::ncompSVEC]; 
+
+    G4FieldTrack startTrack( track );  // For debugging
+  
+    track.DumpToArray(yIn);
+
+    Base::GetStepper()->Stepper(yIn, dydx, hstep, yOut, yError); 
+
+    dchord_step = Base::GetStepper()->DistChord();
+    dyerr = field_utils::absoluteError(yOut, yError, hstep);
+    track.LoadFromArray(yOut, Base::GetStepper()->GetNumberOfVariables());
+    track.SetCurveLength(track.GetCurveLength() + hstep);
+
+#ifdef  G4DEBUG_FIELD  
+    // For debugging
+    static unsigned int numCall= 0;
+    G4cout // << "G4IntegratorDriver::"
+           << "QuickAdvance call # " << ++numCall << G4endl
+           << " Input:  hstep= " << hstep       << G4endl
+           << "         track= " << startTrack  << G4endl
+           << " Output: track= " << track       << G4endl
+           << "         d_chord = " << dchord_step
+           << " dyerr = " << dyerr << G4endl;
+#endif
+
+    return true;
+}
+
+template <class T>
+void G4IntegrationDriver<T>::SetSmallestFraction(G4double newFraction)
+{
+    if (newFraction > 1.e-16 && newFraction < 1e-8)
+    {
+        fSmallestFraction = newFraction;
+    }
+    else
+    {
+        std::ostringstream message;
+        message << "Smallest Fraction not changed. " << G4endl
+                << "  Proposed value was " << newFraction << G4endl
+                << "  Value must be between 1.e-8 and 1.e-16";
+        G4Exception("G4IntegrationDriver::SetSmallestFraction()",
+                    "GeomField1001", JustWarning, message);
+    }
+}
+
+template <class T>
+void G4IntegrationDriver<T>::CheckStep(const G4ThreeVector& posIn,
+                                       const G4ThreeVector& posOut,
+                                             G4double hdid)
+{
+    const G4double endPointDist = (posOut - posIn).mag();
+    if (endPointDist >= hdid * (1. + CLHEP::perMillion))
+    {
+        ++fNoAccurateAdvanceBadSteps;
+#ifdef G4DEBUG_FIELD
+        // Issue a warning only for gross differences -
+        // we understand how small difference occur.
+        if (endPointDist >= hdid * (1. + perThousand))
+        {
+           G4Exception("G4IntegrationDriver::CheckStep()",
+                       "GeomField1002", JustWarning,
+                       "endPointDist >= hdid!");
+        }
+#endif
+    }
+    else
+    {
+       ++fNoAccurateAdvanceGoodSteps;
+    }
+}
+
+template <class T>
+inline G4double G4IntegrationDriver<T>::GetMinimumStep() const
+{
+    return fMinimumStep;
+} 
+
+template <class T>
+void G4IntegrationDriver<T>::SetMinimumStep(G4double minimumStepLength)
+{
+    fMinimumStep = minimumStepLength;
+} 
+
+template <class T>
+G4int G4IntegrationDriver<T>::GetVerboseLevel() const
+{
+    return fVerboseLevel;
+}
+
+template <class T>
+void G4IntegrationDriver<T>::SetVerboseLevel(G4int newLevel)
+{
+    fVerboseLevel = newLevel;
+}
+
+template <class T>
+G4double G4IntegrationDriver<T>::GetSmallestFraction() const
+{
+    return fSmallestFraction;
+}
+
+template <class T>
+void G4IntegrationDriver<T>::IncrementQuickAdvanceCalls()
+{
+    ++fNoQuickAvanceCalls;
+}
+
+template <class T>
+void G4IntegrationDriver<T>::StreamInfo( std::ostream& os ) const
+{
+// Write out the parameters / state of the driver
+  os << "State of G4IntegrationDriver: " << std::endl;
+  os << "--Base state (G4RKIntegrationDriver): " << std::endl;
+  Base::StreamInfo( os );
+  os << "--Own  state (G4IntegrationDriver<>): " << std::endl;  
+  os << "    fMinimumStep =      " << fMinimumStep  << std::endl;
+  os << "    Smallest Fraction = " << fSmallestFraction << std::endl;
+  
+  os << "    verbose level     = " << fVerboseLevel << std::endl;    
+  os << "    Reintegrates      = " << DoesReIntegrate() << std::endl;
+  os << "--Chord Finder Delegate state: " << std::endl;
+  ChordFinderDelegate::StreamDelegateInfo( os );
+}

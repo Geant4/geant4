@@ -23,372 +23,246 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Track class implementation
 //
-//
-//
-//---------------------------------------------------------------
-//
-//  G4Track.cc
-//
-//---------------------------------------------------------------
-//   Add copy constructor            Hisaya Feb. 07 01
-//   Fix GetVelocity                 Hisaya Feb. 17 01
-//   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek//
-//   Fix GetVelocity (bug report #741)   Horton-Smith Apr 14 2005
-//   Remove massless check in  GetVelocity   02 Apr. 09 H.Kurashige
-//   Use G4VelocityTable                     17 AUg. 2011 H.Kurashige
+// Author: Katsuya Amako, KEK - 1996
+// Revisions: Hisaya Kurashige, 1998-2011
+// --------------------------------------------------------------------
 
 #include "G4Track.hh"
 #include "G4PhysicalConstants.hh"
-#include "G4ParticleTable.hh"
-#include "G4VelocityTable.hh"
 #include "G4VAuxiliaryTrackInformation.hh"
-#include "G4PhysicsModelCatalog.hh"
 
 #include <iostream>
 #include <iomanip>
 
+// --------------------------------------------------------------------
 G4Allocator<G4Track>*& aTrackAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4Track>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4Track>* _instance = nullptr;
+  return _instance;
 }
 
-G4VelocityTable*& G4Track::velTable()
-{
-    G4ThreadLocalStatic G4VelocityTable* _instance = nullptr;
-    return _instance;
-}
-
-///////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
                  G4double aValueTime,
                  const G4ThreeVector& aValuePosition)
-///////////////////////////////////////////////////////////
-  : fCurrentStepNumber(0),    fPosition(aValuePosition),
-    fGlobalTime(aValueTime),  fLocalTime(0.),
-    fTrackLength(0.),
-    fParentID(0),             fTrackID(0),
-    fVelocity(c_light),
-    fpDynamicParticle(apValueDynamicParticle),
-    fTrackStatus(fAlive),
-    fBelowThreshold(false),   fGoodForTracking(false),
-    fStepLength(0.0),         fWeight(1.0),
-    fpStep(nullptr),
-    fVtxKineticEnergy(0.0),
-    fpLVAtVertex(nullptr),          fpCreatorProcess(nullptr),
-    fCreatorModelIndex(-1),
-    fpUserInformation(nullptr),
-    prev_mat(nullptr),  groupvel(nullptr),
-    prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false),
-    useGivenVelocity(false),
-    fpAuxiliaryTrackInformationMap(nullptr)
+  : fPosition(aValuePosition)
+  , fGlobalTime(aValueTime)
+  , fVelocity(c_light)
 {
-  static G4ThreadLocal G4bool isFirstTime = true;
-  static G4ThreadLocal G4ParticleDefinition* fOpticalPhoton = nullptr;
-  if ( isFirstTime ) {
-    isFirstTime = false;
-    // set  fOpticalPhoton
-    fOpticalPhoton = G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
-  }
+  fpDynamicParticle = (apValueDynamicParticle)
+                    ? apValueDynamicParticle : new G4DynamicParticle();
   // check if the particle type is Optical Photon
-  is_OpticalPhoton = (fpDynamicParticle->GetDefinition() == fOpticalPhoton);
-
-  if (velTable() == nullptr ) velTable() = G4VelocityTable::GetVelocityTable();
-
-  fVelocity = CalculateVelocity();
-
+  is_OpticalPhoton =
+    (fpDynamicParticle->GetDefinition()->GetPDGEncoding() == -22);
 }
 
-//////////////////
+// --------------------------------------------------------------------
 G4Track::G4Track()
-//////////////////
-  : fCurrentStepNumber(0),    
-    fGlobalTime(0),           fLocalTime(0.),
-    fTrackLength(0.),
-    fParentID(0),             fTrackID(0),
-    fVelocity(c_light),
-    fpDynamicParticle(nullptr),
-    fTrackStatus(fAlive),
-    fBelowThreshold(false),   fGoodForTracking(false),
-    fStepLength(0.0),         fWeight(1.0),
-    fpStep(nullptr),
-    fVtxKineticEnergy(0.0),
-    fpLVAtVertex(nullptr),          fpCreatorProcess(nullptr),
-    fCreatorModelIndex(-1),
-    fpUserInformation(nullptr),
-    prev_mat(nullptr),  groupvel(nullptr),
-    prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false),
-    useGivenVelocity(false),
-    fpAuxiliaryTrackInformationMap(nullptr)
-{
-}
+  : fVelocity(c_light)
+  , fpDynamicParticle(new G4DynamicParticle())
+{}
 
-//////////////////
+// --------------------------------------------------------------------
 G4Track::G4Track(const G4Track& right)
-//////////////////
-  : fCurrentStepNumber(0),    
-    fGlobalTime(0),           fLocalTime(0.),
-    fTrackLength(0.),
-    fParentID(0),             fTrackID(0),
-    fVelocity(c_light),
-    fpDynamicParticle(nullptr),
-    fTrackStatus(fAlive),
-    fBelowThreshold(false),   fGoodForTracking(false),
-    fStepLength(0.0),         fWeight(1.0),
-    fpStep(nullptr),
-    fVtxKineticEnergy(0.0),
-    fpLVAtVertex(nullptr),          fpCreatorProcess(nullptr),
-    fCreatorModelIndex(-1),
-    fpUserInformation(nullptr),
-    prev_mat(nullptr),  groupvel(nullptr),
-    prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false),
-    useGivenVelocity(false),
-    fpAuxiliaryTrackInformationMap(nullptr)
+  : fVelocity(c_light)
 {
   *this = right;
 }
 
-///////////////////
+// --------------------------------------------------------------------
 G4Track::~G4Track()
-///////////////////
 {
-   delete fpDynamicParticle;
-   fpDynamicParticle = nullptr;
-   delete fpUserInformation;
-   fpUserInformation = nullptr;
-   ClearAuxiliaryTrackInformation();
+  delete fpDynamicParticle;
+  delete fpUserInformation;
+  ClearAuxiliaryTrackInformation();
 }
 
-//////////////////
-G4Track & G4Track::operator=(const G4Track &right)
-//////////////////
+// --------------------------------------------------------------------
+G4Track& G4Track::operator=(const G4Track& right)
 {
-  if (this != &right) {
-   fPosition = right.fPosition;
-   fGlobalTime = right.fGlobalTime;
-   fLocalTime = right.fLocalTime;
-   fTrackLength = right.fTrackLength;
-   fWeight = right.fWeight;
-   fStepLength = right.fStepLength;
+  if(this != &right)
+  {
+    fPosition    = right.fPosition;
+    fGlobalTime  = right.fGlobalTime;
+    fLocalTime   = right.fLocalTime;
+    fTrackLength = right.fTrackLength;
+    fWeight      = right.fWeight;
+    fStepLength  = right.fStepLength;
 
-   // Track ID (and Parent ID) is not copied and set to zero for new track
-   fTrackID = 0;
-   fParentID =0;
+    // additional fields required for geometrical splitting
+    fpTouchable = right.fpTouchable;
+    fpNextTouchable = right.fpNextTouchable;
+    fpOriginTouchable = right.fpOriginTouchable;
 
-   // CurrentStepNumber is set to be 0
-   fCurrentStepNumber = 0;
+    // Track ID (and Parent ID) is not copied and set to zero for new track
+    fTrackID  = 0;
+    fParentID = 0;
 
-   // velocity information 
-   fVelocity = right.fVelocity;
+    // CurrentStepNumber is set to be 0
+    fCurrentStepNumber = 0;
 
-   // dynamic particle information
-   if (  fpDynamicParticle != nullptr ) delete fpDynamicParticle;
-   fpDynamicParticle = new G4DynamicParticle(*(right.fpDynamicParticle));
- 
-   // track status and flags for tracking  
-   fTrackStatus = right.fTrackStatus;
-   fBelowThreshold = right.fBelowThreshold;
-   fGoodForTracking = right.fGoodForTracking;
-   
-   // Step information (Step Length, Step Number, pointer to the Step,) 
-   // are not copied
-   fpStep = nullptr;
+    // Creator model ID
+    fCreatorModelID = right.fCreatorModelID;
 
-   // vertex information
-   fVtxPosition = right.fVtxPosition;
-   fpLVAtVertex = right.fpLVAtVertex;
-   fVtxKineticEnergy = right.fVtxKineticEnergy;
-   fVtxMomentumDirection = right.fVtxMomentumDirection;
+    // velocity information
+    fVelocity = right.fVelocity;
 
-   // CreatorProcess and UserInformation are not copied 
-   fpCreatorProcess = nullptr;
-   if ( fpUserInformation != nullptr ) delete fpUserInformation;
-   fpUserInformation = nullptr;
+    // dynamic particle information
+    delete fpDynamicParticle;
+    fpDynamicParticle = new G4DynamicParticle(*(right.fpDynamicParticle));
 
-   prev_mat = right.prev_mat;
-   groupvel = right.groupvel;
-   prev_velocity = right.prev_velocity;
-   prev_momentum = right.prev_momentum;
+    // track status and flags for tracking
+    fTrackStatus     = right.fTrackStatus;
+    fBelowThreshold  = right.fBelowThreshold;
+    fGoodForTracking = right.fGoodForTracking;
 
-   is_OpticalPhoton = right.is_OpticalPhoton;
-   useGivenVelocity = right.useGivenVelocity; 
+    // Step information (Step Length, Step Number, pointer to the Step,)
+    // are not copied
+    fpStep = nullptr;
 
-   ClearAuxiliaryTrackInformation();
+    // vertex information
+    fVtxPosition          = right.fVtxPosition;
+    fpLVAtVertex          = right.fpLVAtVertex;
+    fVtxKineticEnergy     = right.fVtxKineticEnergy;
+    fVtxMomentumDirection = right.fVtxMomentumDirection;
 
+    // CreatorProcess and UserInformation are not copied
+    fpCreatorProcess = nullptr;
+    delete fpUserInformation;
+    fpUserInformation = nullptr;
+
+    prev_mat      = right.prev_mat;
+    groupvel      = right.groupvel;
+    prev_velocity = right.prev_velocity;
+    prev_momentum = right.prev_momentum;
+
+    is_OpticalPhoton = right.is_OpticalPhoton;
+    useGivenVelocity = right.useGivenVelocity;
+
+    ClearAuxiliaryTrackInformation();
   }
   return *this;
 }
 
-///////////////////
+// --------------------------------------------------------------------
 void G4Track::CopyTrackInfo(const G4Track& right)
-//////////////////
 {
   *this = right;
 }
 
-///////////////////
-G4double G4Track::CalculateVelocity() const
-///////////////////
-{
-  if (useGivenVelocity) return fVelocity;    
-
-  G4double velocity = c_light ;
-  
-  G4double mass = fpDynamicParticle->GetMass();
-
-  // special case for photons
-  if ( is_OpticalPhoton ) return CalculateVelocityForOpticalPhoton();
-
-  // particles other than optical photon
-  if (mass<DBL_MIN) {
-    // Zero Mass
-    velocity = c_light;
-  } else {
-    G4double T = (fpDynamicParticle->GetKineticEnergy())/mass;
-    if (T > GetMaxTOfVelocityTable()) {
-      velocity = c_light;
-    } else if (T<DBL_MIN) {
-      velocity =0.;
-    } else if (T<GetMinTOfVelocityTable()) {
-      velocity = c_light*std::sqrt(T*(T+2.))/(T+1.0);
-    } else {	
-      velocity = velTable()->Value(T);
-    }
-    
-  }                                                                             
-  return velocity ;
-}
-
-///////////////////
+// --------------------------------------------------------------------
 G4double G4Track::CalculateVelocityForOpticalPhoton() const
-///////////////////
 {
-    
-  G4double velocity = c_light ;
-  
+  G4double velocity = c_light;
 
-  G4Material* mat = nullptr; 
+  G4Material* mat        = nullptr;
   G4bool update_groupvel = false;
-  if ( fpStep !=0  ){
-    mat= this->GetMaterial();         //   Fix for repeated volumes
-  }else{
-    if (fpTouchable!=0){ 
-      mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
+  if(fpStep != nullptr)
+  {
+    mat = this->GetMaterial();  //   Fix for repeated volumes
+  }
+  else
+  {
+    if(fpTouchable != 0)
+    {
+      mat = fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
     }
   }
   // check if previous step is in the same volume
-    //  and get new GROUPVELOCITY table if necessary 
-  if ((mat != nullptr) && ((mat != prev_mat)||(groupvel==nullptr))) {
+  //  and get new GROUPVELOCITY table if necessary
+  if((mat != nullptr) && ((mat != prev_mat) || (groupvel == nullptr)))
+  {
     groupvel = nullptr;
     if(mat->GetMaterialPropertiesTable() != nullptr)
-      groupvel = mat->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
+      groupvel = mat->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
     update_groupvel = true;
   }
   prev_mat = mat;
-  
-  if  (groupvel != nullptr ) {
+
+  if(groupvel != nullptr)
+  {
     // light velocity = c/(rindex+d(rindex)/d(log(E_phot)))
     // values stored in GROUPVEL material properties vector
-    velocity =  prev_velocity;
-    
+    velocity = prev_velocity;
+
     // check if momentum is same as in the previous step
-    //  and calculate group velocity if necessary 
+    //  and calculate group velocity if necessary
     G4double current_momentum = fpDynamicParticle->GetTotalMomentum();
-    if( update_groupvel || (current_momentum != prev_momentum) ) {
-      velocity =
-	groupvel->Value(current_momentum);
+    if(update_groupvel || (current_momentum != prev_momentum))
+    {
+      velocity      = groupvel->Value(current_momentum);
       prev_velocity = velocity;
       prev_momentum = current_momentum;
     }
-  }   
-  
-  return velocity ;
+  }
+
+  return velocity;
 }
 
-///////////////////
-void G4Track::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin)
-///////////////////
+// --------------------------------------------------------------------
+void G4Track::SetAuxiliaryTrackInformation(G4int id,
+              G4VAuxiliaryTrackInformation* info) const
 {
-  G4VelocityTable::SetVelocityTableProperties(t_max, t_min, nbin);
-  velTable() = G4VelocityTable::GetVelocityTable();
-}
-
-///////////////////
-G4double G4Track::GetMaxTOfVelocityTable()
-///////////////////
-{ return G4VelocityTable::GetMaxTOfVelocityTable(); }
-
-///////////////////
-G4double G4Track::GetMinTOfVelocityTable() 
-///////////////////
-{ return G4VelocityTable::GetMinTOfVelocityTable(); }
-
-///////////////////
-G4int    G4Track::GetNbinOfVelocityTable() 
-///////////////////
-{ return G4VelocityTable::GetNbinOfVelocityTable(); }
-
-///////////////////
-void G4Track::SetAuxiliaryTrackInformation(G4int idx, G4VAuxiliaryTrackInformation* info) const
-///////////////////
-{
-  if(!fpAuxiliaryTrackInformationMap)
-  { fpAuxiliaryTrackInformationMap = new std::map<G4int,G4VAuxiliaryTrackInformation*>; }
-  if(idx<0 || idx>=G4PhysicsModelCatalog::Entries())
+  if(fpAuxiliaryTrackInformationMap == nullptr)
+  {
+    fpAuxiliaryTrackInformationMap =
+      new std::map<G4int, G4VAuxiliaryTrackInformation*>;
+  }
+  if(G4PhysicsModelCatalog::GetModelIndex(id) < 0)
   {
     G4ExceptionDescription ED;
-    ED << "Process/model index <" << idx << "> is invalid.";
-    G4Exception("G4VAuxiliaryTrackInformation::G4VAuxiliaryTrackInformation()","TRACK0982",
-    FatalException, ED);
+    ED << "Process/model ID <" << id << "> is invalid.";
+    G4Exception("G4VAuxiliaryTrackInformation::G4VAuxiliaryTrackInformation()",
+                "TRACK0982", FatalException, ED);
   }
-  (*fpAuxiliaryTrackInformationMap)[idx] = info;
+  (*fpAuxiliaryTrackInformationMap)[id] = info;
 }
 
-///////////////////
-G4VAuxiliaryTrackInformation* G4Track::GetAuxiliaryTrackInformation(G4int idx) const
-///////////////////
+// --------------------------------------------------------------------
+G4VAuxiliaryTrackInformation*
+G4Track::GetAuxiliaryTrackInformation(G4int id) const
 {
-  if(!fpAuxiliaryTrackInformationMap) return nullptr;
-  std::map<G4int,G4VAuxiliaryTrackInformation*>::iterator itr
-   = fpAuxiliaryTrackInformationMap->find(idx);
-  if(itr==fpAuxiliaryTrackInformationMap->end()) return nullptr;
-  else return (*itr).second;
+  if(fpAuxiliaryTrackInformationMap == nullptr)
+    return nullptr;
+  auto itr = fpAuxiliaryTrackInformationMap->find(id);
+  if(itr == fpAuxiliaryTrackInformationMap->cend())
+    return nullptr;
+  else
+    return (*itr).second;
 }
 
-///////////////////
-void G4Track::RemoveAuxiliaryTrackInformation(G4int idx)
-///////////////////
+// --------------------------------------------------------------------
+void G4Track::RemoveAuxiliaryTrackInformation(G4int id)
 {
-  if(   fpAuxiliaryTrackInformationMap != nullptr
-     && idx>=0 && idx<G4PhysicsModelCatalog::Entries()){
-    fpAuxiliaryTrackInformationMap->erase(idx);
+  if(fpAuxiliaryTrackInformationMap != nullptr  &&
+     fpAuxiliaryTrackInformationMap->find(id) != fpAuxiliaryTrackInformationMap->cend())
+  {
+    fpAuxiliaryTrackInformationMap->erase(id);
   }
 }
 
-///////////////////
+// --------------------------------------------------------------------
 void G4Track::RemoveAuxiliaryTrackInformation(G4String& name)
-///////////////////
 {
-  if(fpAuxiliaryTrackInformationMap != nullptr) {
-    G4int idx = G4PhysicsModelCatalog::GetIndex(name);
-    RemoveAuxiliaryTrackInformation(idx);
+  if(fpAuxiliaryTrackInformationMap != nullptr)
+  {
+    G4int id = G4PhysicsModelCatalog::GetModelID(name);
+    RemoveAuxiliaryTrackInformation(id);
   }
 }
 
-///////////////////
+// --------------------------------------------------------------------
 void G4Track::ClearAuxiliaryTrackInformation()
-///////////////////
 {
-  if( fpAuxiliaryTrackInformationMap == nullptr) return;
-  for(std::map<G4int,G4VAuxiliaryTrackInformation*>::iterator itr=fpAuxiliaryTrackInformationMap->begin();
-      itr!=fpAuxiliaryTrackInformationMap->end(); itr++)
-  { delete (*itr).second; }
+  if(fpAuxiliaryTrackInformationMap == nullptr)
+    return;
+  for(auto itr = fpAuxiliaryTrackInformationMap->cbegin();
+           itr != fpAuxiliaryTrackInformationMap->cend(); ++itr)
+  {
+    delete(*itr).second;
+  }
   delete fpAuxiliaryTrackInformationMap;
   fpAuxiliaryTrackInformationMap = nullptr;
 }
-
-

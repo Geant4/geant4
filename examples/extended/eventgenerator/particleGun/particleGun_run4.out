@@ -1,10 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -30,7 +37,7 @@ Set file name: run4
 #
 /run/beamOn 1000000
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
@@ -39,10 +46,13 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
-... open Root analysis file : run4.root - done
+... set ntuple merging row mode : row-wise - done
+... create file : run4.root - done
+... open analysis file : run4.root - done
+... open analysis file : run4.root - done
 --> Event 0 starts.
 --> Event 100000 starts.
 --> Event 200000 starts.
@@ -56,9 +66,9 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.900000s Real=2.909573s Sys=0.000000s
-... write Root file : run4.root - done
-... close Root file : run4.root - done
+  User=2.590000s Real=2.618058s Sys=0.000000s
+... write file : run4.root - done
+... close file : run4.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

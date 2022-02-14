@@ -19,6 +19,19 @@
  in order to have a very fast simulation based on assumed detector
  resolutions.
 
+ Par03
+ -------
+
+ This example demonstrates how to create  multiple energy deposits
+ from the fast simulation model and store it alongside deposits created
+ in full/detailed simulation.
+
+ Par04
+ -------
+ This example demonstrates how to use machine-learning aided fast simulation
+ of electromagnetic showers. It runs inference using an external library:
+ either ONNX Runtime, or LWTNN.
+
  gflash
  -------
 

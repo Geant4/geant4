@@ -34,8 +34,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
+#include "G4SteppingVerbose.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -45,7 +46,6 @@
 #include "RunAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -58,16 +58,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) {
- 
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
-  //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
 
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
+  //Use SteppingVerbose with Unit
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
+
+  //Construct a serial run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
+      
   //set mandatory initialization classes
   //
   DetectorConstruction*   det  = new DetectorConstruction();
@@ -91,33 +93,21 @@ int main(int argc,char** argv) {
   //get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc!=1)   // batch mode  
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-    }
-    
-  else           //define visualization and UI terminal for interactive mode
-    { 
-#ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
-#endif    
-     
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
-#endif
-     
-#ifdef G4VIS_USE
-     delete visManager;
-#endif     
-    }
+  if (ui)  {
+    //interactive mode
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+    ui->SessionStart();
+    delete ui;
+    delete visManager;
+  } else  {
+    //batch mode  
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
 
-  //job termination
-  //
+  //job termination 
   delete runManager;
 
   return 0;

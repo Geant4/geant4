@@ -74,8 +74,6 @@
 #define G4MuIonisation_h 1
 
 #include "G4VEnergyLossProcess.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 #include "globals.hh"
 #include "G4VEmModel.hh"
 
@@ -90,34 +88,33 @@ public:
 
   ~G4MuIonisation() = default;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
+  G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, G4double cut) override;
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+                            const G4Material*, G4double cut) override;
 
-  // Print out of the class parameters
-  virtual void PrintInfo() override;
 
   // print description in html
-  virtual void ProcessDescription(std::ostream&) const override;
-
-protected:
-
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                               const G4ParticleDefinition*) override;
-
-private:
+  void ProcessDescription(std::ostream&) const override;
 
   // hide assignment operator
   G4MuIonisation & operator=(const G4MuIonisation &right) = delete;
   G4MuIonisation(const G4MuIonisation&) = delete;
 
-  G4double    mass;
-  G4double    ratio;
+protected:
 
-  const G4ParticleDefinition* theParticle;
-  const G4ParticleDefinition* theBaseParticle;
-  G4bool                      isInitialised;
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                   const G4ParticleDefinition*) override;
+
+private:
+
+  const G4ParticleDefinition* theParticle = nullptr;
+  const G4ParticleDefinition* theBaseParticle = nullptr;
+
+  G4double mass = 0.0;
+  G4double ratio = 0.0;
+
+  G4bool isInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

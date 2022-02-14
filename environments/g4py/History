@@ -11,8 +11,50 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+2 Nov. 2021 B.Morgan (geant4py-V10-07-05)
+- Apply GitHub PR #31 from andriish
+- Use exact version of python for boost.python module
+
+31 Aug. 2021 B.Morgan (geant4py-V10-07-04)
+- Remove binding to obsolete member functions of G4Sphere and G4Tubs
+  - Either no longer used or cause issues when using Vecgeom
+
+27 August 2021 Ben Morgan (geant4py-V10-07-03)
+- Remove obsolete HepRep(WIRED) driver
+
+26 Aug. 2021 B. Morgan (geant4py-V10-07-02)
+- Remove obsolete VRML1 driver
+
+17 Aug. 2021 J. Hahnfeld (geant4py-V10-07-01)
+- Export binding for G4ElementVector, now that it's different from G4ElementTable
+
+12 Nov. 2021 V. Ivanchenko (geant4py-V10-07-00)
+- TestEm0 - use default Geant4 EM physics, do not use obsolete class
+  G4EmProcessOptions
+
+16 Nov. 2020 B. Morgan (geant4py-V10-06-04)
+- Boost 1.73 modified use of its bind and placeholder functionality, resulting
+  in Boost.Python spamming pragma messages about deprecation of this.
+  See https://github.com/boostorg/python/pull/315. Add BOOST_BIND_GLOBAL_PLACEHOLDERS
+  as a private compile definition to geant4py targets to suppress these.
+
+11 Nov. 2020 B. Morgan (geant4py-V10-06-03)
+- Address Bugzilla 2283
+- Make CMAKE_INSTALL_PYTHONDIR a user-configurable cache variable
+- RPATH issue is addressed by use of CMAKE_SKIP_INSTALL_RPATH variable by client
+
+6 Oct. 2020 B. Morgan (geant4py-V10-06-02)
+- Add binding to G4PhysListFactory (GitHub PR #14, contributed by Daniel Hellfeld)
+- Add simple test case of binding.
+
+25 Aug. 2020 B. Morgan (geant4py-V10-06-01)
+- Remove obsolete boost.python indexing suite. Only required on
+  very old Boost versions <= 1.33
+
+19 Mar. 2020 B. Morgan (geant4py-V10-06-00)
+- Integrate build, test, and install of geant4py with core Geant4
+  CMake buildsystem.
+
 1 Dec. 2019 K. Murakami
 - update for 10.6 release
 - update for Python3 support

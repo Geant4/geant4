@@ -35,7 +35,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4CrossSectionPairGG.hh"
 #include "G4HadronicParameters.hh"
 
 
@@ -45,62 +44,29 @@ G4QGSBinaryKaonBuilder(G4bool quasiElastic)
   theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
   theModel = new G4TheoFSGenerator("QGSB");
 
-  theStringModel = new G4QGSModel< G4QGSParticipants >;
-  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+  G4QGSModel< G4QGSParticipants >* theStringModel = 
+    new G4QGSModel< G4QGSParticipants >;
+  G4ExcitedStringDecay* theStringDecay = 
+    new G4ExcitedStringDecay(new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4BinaryCascade;
-
+  theModel->SetTransport(new G4BinaryCascade());
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
-  theModel->SetTransport(theCascade);
+    {
+      theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+    } 
 }
 
 G4QGSBinaryKaonBuilder::
 ~G4QGSBinaryKaonBuilder() 
 {
-  if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theStringDecay;
-  delete theStringModel;
 }
 
 void G4QGSBinaryKaonBuilder::
-Build(G4HadronElasticProcess * ) {}
-
-void G4QGSBinaryKaonBuilder::
-Build(G4KaonPlusInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   aP->RegisterMe(theModel);
 }
-
-void G4QGSBinaryKaonBuilder::
-Build(G4KaonMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSBinaryKaonBuilder::
-Build(G4KaonZeroLInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSBinaryKaonBuilder::
-Build(G4KaonZeroSInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-

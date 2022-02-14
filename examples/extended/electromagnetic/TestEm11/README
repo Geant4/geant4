@@ -65,10 +65,6 @@ $Id: README 94269 2015-11-10 07:55:24Z gcosmo $
       
  Physics lists and options can be (re)set with UI commands
     
- Please, notice that options set through G4EmProcessOptions are global, eg
- for all particle types. In G4 builders, it is shown how to set options per
- particle type.
- 	 
  3- ACTION INITIALIZATION
 
  A newly introduced class, ActionInitialization, instantiates and registers 
@@ -123,7 +119,21 @@ $Id: README 94269 2015-11-10 07:55:24Z gcosmo $
  	Idle> type your commands
  	....
  	Idle> exit
-	
+
+  Macros provided in this example:
+  - alpha.mac: alpha (400 MeV) on water
+  - ionC12.mac: ion C12 (2.4 GeV) on water
+  - multiLayers.mac: gamma (6 MeV) on multi layers
+  - radioactive.mac: radioactive ion on multi layers
+  - range.mac: compute csda range of primary particle
+  - run01.mac: e- (500 keV) on silicon. Step max from histo 1
+  - run02.mac: e- (500 keV) on silicon. Step max from geometry
+  - sandia.mac: to compare with Sandia data
+  - water.mac: e- (4 MeV) on water. No constraint on tracking step  
+
+  Macros to be run interactively:
+  - vis.mac: To activate visualization
+  	
  7- TRACKING and STEP MAX
  
  TestEm11 computes the distribution of energy deposited along the trajectory of 

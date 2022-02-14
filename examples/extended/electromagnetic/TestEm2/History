@@ -18,9 +18,51 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-14-10-16 G.Folger
-=======
+07-11-21 I. Hrivnacova (testem2-V10-07-08)
+- Added analysis manager Clear() in the end of run
+
+06-10-21 I. Hrivnacova (testem2-V10-07-07)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+25-03-21 M.Asai (testem2-V10-07-06)
+- Additional migration to new G4SteppingVerbose.
+
+21-03-21 V.Ivanchenko (testem2-V10-07-05)
+- removed obsolete PhysList5DEmStandard - 5D model is a part of
+  Opt4 and other physics configurations
+     
+26-02-21 M.Asai (testem2-V10-07-04)
+- Migrating to G4SteppingVerboseWithUnits.
+
+22-02-21 mma (testem2-V10-07-03)
+- SteppingVerbose : modify blank space for Process name (cosmetic)
+     
+14-02-21 mma (testem2-V10-07-02)
+- SteppingVerbose : set precision via data member
+- TestEm2.cc : use RunManagerFactory
+
+10-02-21 V.Ivanchenko (testem2-V10-07-01)
+- fixed README
+     
+11-12-20 mma (testem2-V10-07-00)
+- update PhysListEmStandard.cc
+- DetectorConstruction : do not print materials table
+- StepMax, StepMaxMessenger, PhysicsList, PhysicsListMessenger :
+    revert, to make command /testem/stepMax working in interactive mode
+- Added macro stepMax.mac
+- cosmetic in TestEm2.in
+    
+28-08-20 I. Hrivnacova (testem2-V10-06-00)
+- Macro & commands review:
+  - Added macro descriptions in README
+  - Removed implementation of /testem/histo/setFileName and replaced its usage
+    with /analysis/setFileName
+  - Fixed file name in egs4.mac (do nous use egs4 directory which is not defined
+    in build area)
+  - Extended TestEm2.in with a command (missing in testing):
+    /testem/run/verbose 1
+
 26-11-19 I. Hrivnacova (testem2-V10-05-01)
 - Fixed Doxygen warnings
 

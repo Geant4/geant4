@@ -23,6 +23,68 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+18 November 2021  John Allison  (raytracer-V10-07-06)
+- G4RayTracer.cc: Coverity fix: un-initialised data member.
+
+12 November 2021 - Ben Morgan (raytracer-V10-07-05)
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+25 October 2021  Guy Barrand (raytracer-V10-07-04)
+- G4RayTracerSceneHandler.hh: to quiet g++ about "AddPrimitive(G4Plotter&)", have:
+    using G4VSceneHandler::AddPrimitive;
+
+30 September 2021  John Allison  (raytracer-V10-07-03)
+- Remove instantiation of G4The(MT)RayTracer from G4RayTracer.
+  - G4RayTracer is/should be a "pure factory". Its job is to instantiate
+    a scene handler or viewer on request. G4The(MT)RayTracer should/need
+    only be instantiated when the viewer is instantiated.
+  - It is somewhat complicated by the need(?) for G4TheMTRayTracer to be
+    a singleton - is that really required? Cannot G4RTRun simply get the
+    current ray tracer? Anyway, singleton nature is preserved.
+
+24 September 2021  John Allison  (raytracer-V10-07-02)
+- Make RayTracerX viewers "auto refresh".
+  - This means the ray tracer will start tracing immediately on opening
+    (`/vis/open RayTracerX`) and on any change of view parameters.
+  - In the past it was thought better to refresh manually, to give opportunity
+    of adjusting the view first, but with the introduction of using the
+    view parameters of the previously existing viewer (visman-V10-07-20),
+    it is easy to choose a view with an OpenGL viewer, say, then simply open
+    the ray tracer viewer.
+  - Also, with the advent of multithreading, ray tracing is faster, so
+    adjusting and re-viewing is less tedious.
+  - This only affects RayTracerX - plain RayTracer is not affected.    
+  - You may switch this feature off with `/vis/viewer/set/auto-refresh false`.  
+
+30 June 2021  John Allison  (raytracer-V10-07-01)
+- Requires greps-V10-07-09, modeling-V10-07-11 and visman-V10-07-11.
+- Revise vis models. See visualization/modeling/History for more details.
+- Consequent changes:
+  o AddPrimitive(const G4Scale&) has been removed from all scene handlers.
+
+15th April 2021 Ben Morgan (raytracer-V10-07-00)
+- Migrate to modular CMake build
+
+20th October 2020  Jonathan Madsen (raytracer-V10-06-03)
+- Implemented G4RunManagerFactory::GetMasterRunManager()
+
+10th August 2020  John Allison (raytracer-V10-06-02)
+- G4TheMTRayTracer.cc:
+  o Suppress printing during RayTracer run. Keep current verbosity and
+    printProgress, then
+      G4UImanager::GetUIpointer()->ApplyCommand("/run/verbose 0");
+      G4UImanager::GetUIpointer()->ApplyCommand("/run/printProgress 0");
+    then restore after.
+
+31 May 2020 Ben Morgan (raytracer-V10-06-01)
+- Use add_definitions to set PRIVATE-level compile add_definitions
+  for compatibility between old and new CMake systems
+
+12 December 2019 Ben Morgan (raytracer-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 15th November 2019, Gabriele Cosmo (raytracer-V10-05-01)
 - Fixed cases of implicit type conversions from size_t to G4int.
 
@@ -123,7 +185,7 @@ History file for Ray Tracer category
 - Co-working with greps-V09-06-10.
 
 17th September 2013 Makoto Asai (raytracer-V09-06-03)
-- Introducing G4TheMTRayTracer that is multi-threaded. 
+- Introducing G4TheMTRayTracer that is multi-threaded.
 - Co-working with run-V09-06-100 and greps-V09-06-09.
 
 15th September 2013 Makoto Asai (raytracer-V09-06-02)
@@ -181,7 +243,7 @@ History file for Ray Tracer category
   CMake functionality added to trunk at revision 49996.
 
 20th May 2011  Ben Morgan (raytracer-V09-04-02)
-- CMakeLists.txt : Added G4VIS_ALLOC_EXPORT compiler definition via 
+- CMakeLists.txt : Added G4VIS_ALLOC_EXPORT compiler definition via
   add_definitions so it's applied to all sources in this module. We
   don't add this definition at the visualization category level because
   only raytracer uses it. It can be moved higher later.
@@ -198,7 +260,7 @@ History file for Ray Tracer category
   calls.
 - Fix Coverity warnings.
 
-23, December L. Garnier 
+23, December L. Garnier
 - GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 
 27th October 2010  Gabriele Cosmo (raytracer-V09-03-04)
@@ -235,7 +297,7 @@ History file for Ray Tracer category
   parameters [bugzilla Problem 1072]
 
 18 August 2009 Laurent Garnier
-- G4RayTracerXViewer, G4RTXScanner : Fix a crash introduce by the 
+- G4RayTracerXViewer, G4RTXScanner : Fix a crash introduce by the
   new way of handling window size hints (January 2009)
 
 4th April 2008  John Allison  (raytracer-V09-01-00)
@@ -347,7 +409,7 @@ Change seems to just involve passing pWorld to material list where no argument w
 - Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
 
 25th September 2003  Hisaya Kurashige  (raytracer-V05-02-02)
-- Modify GNUmakefile to use processes/cuts category 
+- Modify GNUmakefile to use processes/cuts category
 
 18th September 2003  John Allison  (raytracer-V05-02-01, greps-V05-02-00)
 - Introduced G4VRTScanner and its default concrete implementation,

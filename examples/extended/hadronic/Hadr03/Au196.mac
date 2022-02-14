@@ -1,0 +1,13 @@
+#
+# Macro file for "Hadr03.cc"
+#
+/testhadr/det/setIsotopeMat Au195 79 195 19.30 g/cm3
+/testhadr/det/setSize 100 m 
+#
+/run/initialize
+#
+/gun/particle neutron
+/gun/energy 1 eV
+#
+/run/printProgress 10000
+/run/beamOn 100000

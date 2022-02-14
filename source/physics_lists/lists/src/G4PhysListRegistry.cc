@@ -81,10 +81,15 @@ G4PhysListRegistry* G4PhysListRegistry::Instance()
   // the GS EM extension originally required double underscores
   // support either one or two as __GS is confusing to users
   // same for __SS
-  theInstance->AddPhysicsExtension("GS","G4EmStandardPhysicsGS");
+  theInstance->AddPhysicsExtension("GS" ,"G4EmStandardPhysicsGS");
   theInstance->AddPhysicsExtension("_GS","G4EmStandardPhysicsGS");
-  theInstance->AddPhysicsExtension("SS","G4EmStandardPhysicsSS");
+  theInstance->AddPhysicsExtension("SS" ,"G4EmStandardPhysicsSS");
   theInstance->AddPhysicsExtension("_SS","G4EmStandardPhysicsSS");
+
+  theInstance->AddPhysicsExtension("EM0","G4EmStandardPhysics");
+  theInstance->AddPhysicsExtension("WVI","G4EmStandardPhysicsWVI");
+  theInstance->AddPhysicsExtension("LE" ,"G4EmLowEPPhysics");
+  theInstance->AddPhysicsExtension("_LE","G4EmLowEPPhysics");
 
   return theInstance;
 }

@@ -51,12 +51,12 @@
 
 #include "G4VLowEnergyModel.hh"
 
-//    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....  
 
 G4VLowEnergyModel::G4VLowEnergyModel(const G4String& ) // argument is name
 {;}
 
-//    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
 G4VLowEnergyModel::~G4VLowEnergyModel() 
 {;}

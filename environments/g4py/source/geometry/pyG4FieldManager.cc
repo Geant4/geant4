@@ -63,6 +63,9 @@ G4ChordFinder*(G4FieldManager::*f1_GetChordFinder)()
 const G4ChordFinder*(G4FieldManager::*f2_GetChordFinder)() const
   = &G4FieldManager::GetChordFinder;
 
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetDetectorField,
+                                       SetDetectorField, 1, 2)
+
 }
 
 using namespace pyG4FieldManager;

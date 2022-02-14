@@ -8,13 +8,12 @@
 // the concepts of rotation.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/ThreeVector.h"
 #include "CLHEP/Vector/AxisAngle.h"
 #include "CLHEP/Vector/EulerAngles.h"
+
+#include <cmath>
+#include <iostream>
 
 namespace CLHEP  {
 
@@ -42,29 +41,27 @@ Hep3Vector & Hep3Vector::rotate (const Hep3Vector & axis,
   double rz;
 
   { double  ocdux = ocd * ux;
-    rx = dx * ( cd + ocdux * ux           ) +
-         dy * (      ocdux * uy - sd * uz ) +
-         dz * (      ocdux * uz + sd * uy ) ;
+    rx = x() * ( cd + ocdux * ux           ) +
+         y() * (      ocdux * uy - sd * uz ) +
+         z() * (      ocdux * uz + sd * uy ) ;
   }
 
   { double  ocduy = ocd * uy;
-    ry = dy * ( cd + ocduy * uy           ) +
-         dz * (      ocduy * uz - sd * ux ) +
-         dx * (      ocduy * ux + sd * uz ) ;
+    ry = y() * ( cd + ocduy * uy           ) +
+         z() * (      ocduy * uz - sd * ux ) +
+         x() * (      ocduy * ux + sd * uz ) ;
   }
 
   { double  ocduz = ocd * uz;
-    rz = dz * ( cd + ocduz * uz           ) +
-         dx * (      ocduz * ux - sd * uy ) +
-         dy * (      ocduz * uy + sd * ux ) ;
+    rz = z() * ( cd + ocduz * uz           ) +
+         x() * (      ocduz * ux - sd * uy ) +
+         y() * (      ocduz * uy + sd * ux ) ;
   }
 
-  dx = rx;
-  dy = ry;
-  dz = rz;
-
+  set(rx, ry, rz);
   return *this;
 } /* rotate */
+
 
 //-****************************
 // rotate by three euler angles
@@ -83,22 +80,19 @@ Hep3Vector & Hep3Vector::rotate (double phi1,
   double sinTheta = std::sin( theta1 ), cosTheta1 = std::cos( theta1 );
   double sinPsi   = std::sin( psi1   ), cosPsi   = std::cos( psi1   );
 
-  rx = 	(cosPsi * cosPhi   - cosTheta1 * sinPsi * sinPhi)   * dx  +
-	(cosPsi * sinPhi   + cosTheta1 * sinPsi * cosPhi)   * dy  +
-  	(sinPsi * sinTheta)				   * dz  ;
+  rx = 	(cosPsi * cosPhi   - cosTheta1 * sinPsi * sinPhi)   * x()  +
+	(cosPsi * sinPhi   + cosTheta1 * sinPsi * cosPhi)   * y()  +
+  	(sinPsi * sinTheta)				   * z()  ;
 
-  ry = 	(- sinPsi * cosPhi - cosTheta1 * cosPsi * sinPhi)   * dx  +
-	(- sinPsi * sinPhi + cosTheta1 * cosPsi * cosPhi)   * dy  +
-  	(cosPsi * sinTheta)				   * dz  ;
+  ry = 	(- sinPsi * cosPhi - cosTheta1 * cosPsi * sinPhi)   * x()  +
+	(- sinPsi * sinPhi + cosTheta1 * cosPsi * cosPhi)   * y()  +
+  	(cosPsi * sinTheta)				   * z()  ;
 
-  rz = 	(sinTheta * sinPhi)				   * dx  +
-  	(- sinTheta * cosPhi)				   * dy  +
-	(cosTheta1)					   * dz  ;
+  rz = 	(sinTheta * sinPhi)				   * x()  +
+  	(- sinTheta * cosPhi)				   * y()  +
+	(cosTheta1)					   * z()  ;
 
-  dx = rx;
-  dy = ry;
-  dz = rz;
-
+  set(rx, ry, rz);
   return *this;
 
 } /* rotate */

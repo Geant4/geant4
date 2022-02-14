@@ -31,8 +31,7 @@
 #include <cmath>
 
 #include "G4CSGSolid.hh"
-#include "Randomize.hh"
-#include "G4RandomTools.hh"
+#include "G4QuickRand.hh"
 #include "G4Polyhedron.hh"
 
 #include "G4AutoLock.hh"
@@ -45,7 +44,7 @@ namespace
 //////////////////////////////////////////////////////////////////////////
 //
 // Constructor
-//  - Base class constructor 
+//  - Base class constructor
 
 G4CSGSolid::G4CSGSolid(const G4String& name) :
   G4VSolid(name)
@@ -67,7 +66,7 @@ G4CSGSolid::G4CSGSolid( __void__& a )
 // Destructor
 //
 
-G4CSGSolid::~G4CSGSolid() 
+G4CSGSolid::~G4CSGSolid()
 {
   delete fpPolyhedron; fpPolyhedron = nullptr;
 }
@@ -87,7 +86,7 @@ G4CSGSolid::G4CSGSolid(const G4CSGSolid& rhs)
 //
 // Assignment operator
 
-G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs) 
+G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
 {
    // Check assignment to self
    //
@@ -105,11 +104,13 @@ G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
    delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
-}  
+}
 
 G4double G4CSGSolid::GetRadiusInRing(G4double rmin, G4double rmax) const
 {
-  return G4RandomRadiusInRing(rmin, rmax);
+  G4double k = G4QuickRand();
+  return (rmin <= 0) ? rmax*std::sqrt(k)
+                     : std::sqrt(k*rmax*rmax + (1. - k)*rmin*rmin);
 }
 
 std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const

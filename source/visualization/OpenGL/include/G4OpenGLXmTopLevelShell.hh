@@ -28,8 +28,6 @@
 // 
 //Top level shell class
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMTOPLEVELSHELL_HH
 #define G4OPENGLXMTOPLEVELSHELL_HH
 
@@ -58,7 +56,5 @@ private:
   Widget top_box;
   Widget frame;
 };
-
-#endif
 
 #endif

@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-07-2021  V.Ivanchenko, tag empii-V10-07-01
+            use const pointer to G4Element
+
+16-04-2021  B.Morgan, tag empii-V10-07-00
+            Migrate build to modular CMake API
+
 07-06-2013  G.Cosmo, tag empii-V09-06-00
             Cleanup from MT changes in G4hRDEnergyLoss.cc.
 
@@ -39,7 +45,7 @@ committal in the CVS repository !
             Work in progress on beb-dm
 
 28.06.2011, MGP, tag empii-V09-04-01
-            Workaround in logarithmic interpolator to deal with 
+            Workaround in logarithmic interpolator to deal with
             zeros in new data library G4PII1.3
 
 20.06.2011, MGP, tag empii-V09-04-00
@@ -49,7 +55,7 @@ committal in the CVS repository !
             Remove annoying printout
 
 25.11.2010, MGP, tag empii-V09-03-04
-            Added protections in RDEnergyLoss for unphysical cases of zero energy 
+            Added protections in RDEnergyLoss for unphysical cases of zero energy
 
 21.11.2010, MGP, tag empii-V09-03-03
             Removed leftover debug printing
@@ -67,8 +73,8 @@ committal in the CVS repository !
 
 19.11.2010, MGP, tag empii-V09-03-00
 	    Initial code content corresponding to:
-            M.G. Pia et al., 
-            PIXE Simulation With Geant4, 
+            M.G. Pia et al.,
+            PIXE Simulation With Geant4,
             IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, Dec. 2009
 
 19.11.2010, MGP, created

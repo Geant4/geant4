@@ -45,11 +45,6 @@
 #include "G4FastTrack.hh"
 #include "G4FastStep.hh"
 
-//---------------------------
-// For possible future needs:
-//---------------------------
-typedef G4Region G4Envelope;
-
 //-------------------------------------------
 //
 //        G4VFastSimulationModel class

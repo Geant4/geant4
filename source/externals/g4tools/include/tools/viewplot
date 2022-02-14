@@ -1,0 +1,93 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_viewplot
+#define tools_viewplot
+
+#include "sg/plots_viewer"
+
+#include "sg/dummy_freetype"
+#include "sg/plotter_style"
+
+#include "wps"
+
+namespace tools {
+
+class viewplot : public sg::plots_viewer {
+  typedef sg::plots_viewer parent;
+public:
+  viewplot(std::ostream& a_out,
+           unsigned int a_cols = 1,unsigned int a_rows = 1,
+           unsigned int a_width = 500,unsigned int a_height = 500)
+  :parent(a_out,m_ttf,a_cols,a_rows,a_width,a_height)
+  ,m_wps(a_out)
+  ,m_ttf()
+  ,m_styles(a_out)
+  {}
+  viewplot(std::ostream& a_out,const sg::base_freetype& a_ttf,
+           unsigned int a_cols = 1,unsigned int a_rows = 1,
+           unsigned int a_width = 500,unsigned int a_height = 500)
+  :parent(a_out,a_ttf,a_cols,a_rows,a_width,a_height)
+  ,m_wps(a_out)
+  ,m_ttf()
+  ,m_styles(a_out)
+  {}
+  virtual ~viewplot() {}
+public:
+  viewplot(const viewplot& a_from)
+  :parent(a_from)
+  ,m_wps(a_from.m_out)
+  ,m_styles(a_from.m_styles)
+  {}
+  viewplot& operator=(const viewplot& a_from){
+    parent::operator=(a_from);
+    m_styles = a_from.m_styles;
+    return *this;
+  }
+public:
+#ifdef tools_viewplot
+  //deprecated, use set_current_plotter_style().
+  void style_from_res(const std::string& a_path,bool a_verbose = false) {
+    style_from_res(a_path,m_plots.current_plotter(),a_verbose);
+  }
+#endif
+  void set_current_plotter_style(const std::string& a_path,bool a_verbose = false) {
+    style_from_res(a_path,m_plots.current_plotter(),a_verbose);
+  }
+
+public:
+  void set_cols_rows(unsigned int a_cols,unsigned int a_rows) {
+    m_plots.cols = a_cols;
+    m_plots.rows = a_rows;
+    m_plots.adjust_size(width(),height());
+  }
+
+//#ifdef tools_viewplot
+  bool write(const std::string& a_file,bool a_anonymous = false) {
+    return parent::write_inzb_ps(a_file,a_anonymous);
+  }
+  bool open_file(const std::string& a_file,bool a_anonymous = false) {return open_inzb_ps_file(a_file,a_anonymous);}
+  bool write_page() {return write_inzb_ps_page();}
+  bool close_file() {return close_inzb_ps_file();}
+//#endif
+
+
+  const xml::styles& styles() const {return m_styles;}
+  xml::styles& styles() {return m_styles;}
+
+protected:
+  void style_from_res(const std::string& a_path,sg::plotter& a_plotter,bool a_verbose) {
+    sg::style_from_res(m_styles,a_path,a_plotter,a_verbose);
+  }
+
+protected:
+  sg::zb_manager m_mgr;
+  wps m_wps;
+  sg::dummy_freetype m_ttf;
+  xml::styles m_styles;
+};
+
+}
+
+#endif
+

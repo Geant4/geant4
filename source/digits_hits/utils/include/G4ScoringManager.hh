@@ -51,116 +51,136 @@ class G4VScoreColorMap;
 typedef std::vector<G4VScoringMesh*> MeshVec;
 typedef std::vector<G4VScoringMesh*>::iterator MeshVecItr;
 typedef std::vector<G4VScoringMesh*>::const_iterator MeshVecConstItr;
-typedef std::map<G4String,G4VScoreColorMap*> ColorMapDict;
-typedef std::map<G4String,G4VScoreColorMap*>::iterator ColorMapDictItr;
-typedef std::map<G4String,G4VScoreColorMap*>::const_iterator ColorMapDictConstItr;
-typedef std::map<G4int,G4VScoringMesh*> MeshMap;
-typedef std::map<G4int,G4VScoringMesh*>::iterator MeshMapItr;
-typedef std::map<G4int,G4VScoringMesh*>::const_iterator MeshMapConstItr;
+typedef std::map<G4String, G4VScoreColorMap*> ColorMapDict;
+typedef std::map<G4String, G4VScoreColorMap*>::iterator ColorMapDictItr;
+typedef std::map<G4String, G4VScoreColorMap*>::const_iterator
+  ColorMapDictConstItr;
+typedef std::map<G4int, G4VScoringMesh*> MeshMap;
+typedef std::map<G4int, G4VScoringMesh*>::iterator MeshMapItr;
+typedef std::map<G4int, G4VScoringMesh*>::const_iterator MeshMapConstItr;
 
-class G4ScoringManager 
+class G4ScoringManager
 {
-  public: // with description
-      static G4ScoringManager* GetScoringManager();
-      // Returns the pointer to the singleton object.
-  public:
-      static G4ScoringManager* GetScoringManagerIfExist();
+ public:  // with description
+  static G4ScoringManager* GetScoringManager();
+  // Returns the pointer to the singleton object.
+ public:
+  static G4ScoringManager* GetScoringManagerIfExist();
 
-  public:
-      static void SetReplicaLevel(G4int);
-      static G4int GetReplicaLevel();
+ public:
+  static void SetReplicaLevel(G4int);
+  static G4int GetReplicaLevel();
 
-  protected:
-      G4ScoringManager();
+ protected:
+  G4ScoringManager();
 
-  public:
-      ~G4ScoringManager();
+ public:
+  ~G4ScoringManager();
 
-  public: // with description
-      void RegisterScoreColorMap(G4VScoreColorMap* colorMap);
-      // Register a color map. Once registered, it is available by /score/draw and /score/drawColumn
-      // commands.
+ public:  // with description
+  void RegisterScoreColorMap(G4VScoreColorMap* colorMap);
+  // Register a color map. Once registered, it is available by /score/draw and
+  // /score/drawColumn commands.
 
-  public:
-      void Accumulate(G4VHitsCollection* map);
-      void Merge(const G4ScoringManager* scMan);
-      G4VScoringMesh* FindMesh(G4VHitsCollection* map);
-      G4VScoringMesh* FindMesh(const G4String&);
-      void List() const;
-      void Dump() const;
-      void DrawMesh(const G4String& meshName, const G4String& psName,
-                    const G4String& colorMapName, G4int axflg=111);
-      void DrawMesh(const G4String& meshName, const G4String& psName,
-                    G4int idxPlane, G4int iColumn, const G4String& colorMapName);
-      void DumpQuantityToFile(const G4String& meshName, const G4String& psName,
-                              const G4String& fileName, const G4String& option = "");
-      void DumpAllQuantitiesToFile(const G4String& meshName,
-                                   const G4String& fileName,
-                                   const G4String& option = "");
-      G4VScoreColorMap* GetScoreColorMap(const G4String& mapName);
-      void ListScoreColorMaps();
+ public:
+  void Accumulate(G4VHitsCollection* map);
+  void Merge(const G4ScoringManager* scMan);
+  G4VScoringMesh* FindMesh(G4VHitsCollection* map);
+  G4VScoringMesh* FindMesh(const G4String&);
+  void List() const;
+  void Dump() const;
+  void DrawMesh(const G4String& meshName, const G4String& psName,
+                const G4String& colorMapName, G4int axflg = 111);
+  void DrawMesh(const G4String& meshName, const G4String& psName,
+                G4int idxPlane, G4int iColumn, const G4String& colorMapName);
+  void DumpQuantityToFile(const G4String& meshName, const G4String& psName,
+                          const G4String& fileName,
+                          const G4String& option = "");
+  void DumpAllQuantitiesToFile(const G4String& meshName,
+                               const G4String& fileName,
+                               const G4String& option = "");
+  G4VScoreColorMap* GetScoreColorMap(const G4String& mapName);
+  void ListScoreColorMaps();
 
-  private: 
-      static G4ThreadLocal G4ScoringManager * fSManager;
-      static G4ThreadLocal G4int replicaLevel;
-      G4int verboseLevel;
-      G4ScoringMessenger* fMessenger;
-      G4ScoreQuantityMessenger* fQuantityMessenger;
+ private:
+  static G4ThreadLocal G4ScoringManager* fSManager;
+  static G4ThreadLocal G4int replicaLevel;
+  G4int verboseLevel;
+  G4ScoringMessenger* fMessenger;
+  G4ScoreQuantityMessenger* fQuantityMessenger;
 
-      MeshVec fMeshVec;
-      G4VScoringMesh* fCurrentMesh;
+  MeshVec fMeshVec;
+  G4VScoringMesh* fCurrentMesh;
 
-      G4VScoreWriter * writer;
-      G4VScoreColorMap * fDefaultLinearColorMap;
-      ColorMapDict * fColorMapDict;
+  G4VScoreWriter* writer;
+  G4VScoreColorMap* fDefaultLinearColorMap;
+  ColorMapDict* fColorMapDict;
 
-      MeshMap fMeshMap;
-  public:
-      inline void SetCurrentMesh(G4VScoringMesh* scm)
-      { fCurrentMesh = scm; }
-      inline G4VScoringMesh* GetCurrentMesh() const
-      { return fCurrentMesh; }
-      inline void CloseCurrentMesh()
-      { fCurrentMesh = 0; }
-      inline void SetVerboseLevel(G4int vl) 
-      {
-        verboseLevel = vl;
-        for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
-         (*itr)->SetVerboseLevel(vl);
-        }
-        if(writer) writer->SetVerboseLevel(vl);
-      }
-      inline G4int GetVerboseLevel() const
-      { return verboseLevel; }
-      inline size_t GetNumberOfMesh() const
-      { return fMeshVec.size(); }
-      inline void RegisterScoringMesh(G4VScoringMesh * scm)
-      {
-        scm->SetVerboseLevel(verboseLevel);
-        fMeshVec.push_back(scm);
-        SetCurrentMesh(scm);
-      }
-      inline G4VScoringMesh* GetMesh(G4int i) const
-      { return fMeshVec[i]; }
-      inline G4String GetWorldName(G4int i) const
-      { return fMeshVec[i]->GetWorldName(); }
+  MeshMap fMeshMap;
 
-  public: // with description
-      inline void SetScoreWriter(G4VScoreWriter * sw)
-      {
-        if(writer) { delete writer; }
-        writer = sw;
-        if(writer) writer->SetVerboseLevel(verboseLevel);
-      }
-      // Replace score writers.
-private:
-    //Disable copy constructor and assignement operator
-    G4ScoringManager(const G4ScoringManager&);
-    G4ScoringManager& operator=(const G4ScoringManager&);
+ public:
+  inline void SetCurrentMesh(G4VScoringMesh* scm) { fCurrentMesh = scm; }
+  inline G4VScoringMesh* GetCurrentMesh() const { return fCurrentMesh; }
+  inline void CloseCurrentMesh() { fCurrentMesh = 0; }
+  inline void SetVerboseLevel(G4int vl)
+  {
+    verboseLevel = vl;
+    for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++)
+    {
+      (*itr)->SetVerboseLevel(vl);
+    }
+    if(writer)
+      writer->SetVerboseLevel(vl);
+  }
+  inline G4int GetVerboseLevel() const { return verboseLevel; }
+  inline size_t GetNumberOfMesh() const { return fMeshVec.size(); }
+  inline void RegisterScoringMesh(G4VScoringMesh* scm)
+  {
+    scm->SetVerboseLevel(verboseLevel);
+    fMeshVec.push_back(scm);
+    SetCurrentMesh(scm);
+  }
+  inline G4VScoringMesh* GetMesh(G4int i) const { return fMeshVec[i]; }
+  inline G4String GetWorldName(G4int i) const
+  {
+    return fMeshVec[i]->GetWorldName();
+  }
+
+ public:  // with description
+  inline void SetScoreWriter(G4VScoreWriter* sw)
+  {
+    if(writer)
+    {
+      delete writer;
+    }
+    writer = sw;
+    if(writer)
+      writer->SetVerboseLevel(verboseLevel);
+  }
+  // Replace score writers.
+
+ public:
+  inline void SetFactor(G4double val = 1.0)
+  {
+    if(writer)
+      writer->SetFactor(val);
+  }
+  inline G4double GetFactor() const
+  {
+    if(writer)
+    {
+      return writer->GetFactor();
+    }
+    else
+    {
+      return -1.0;
+    }
+  }
+
+ private:
+  // Disable copy constructor and assignement operator
+  G4ScoringManager(const G4ScoringManager&);
+  G4ScoringManager& operator=(const G4ScoringManager&);
 };
 
-
-
-
 #endif
-

@@ -56,23 +56,23 @@ class G4BetheBlochIonGasModel : public G4BetheBlochModel
 
 public:
 
-  explicit G4BetheBlochIonGasModel(const G4ParticleDefinition* p = 0,
+  explicit G4BetheBlochIonGasModel(const G4ParticleDefinition* p = nullptr,
 				   const G4String& nam = "BetheBlochGasIon");
 
-  virtual ~G4BetheBlochIonGasModel();
+  ~G4BetheBlochIonGasModel() override;
 
-  virtual G4double ChargeSquareRatio(const G4Track& track) final;
+  G4double ChargeSquareRatio(const G4Track& track) final;
 
-  virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
-				     const G4Material* mat,
-				     G4double kineticEnergy) final;
-
-private:
+  G4double GetParticleCharge(const G4ParticleDefinition* p,
+			     const G4Material* mat,
+			     G4double kineticEnergy) final;
 
   // hide assignment operator
   G4BetheBlochIonGasModel & operator=
   (const  G4BetheBlochIonGasModel &right) = delete;
   G4BetheBlochIonGasModel(const  G4BetheBlochIonGasModel&) = delete;
+
+private:
 
   G4double currentCharge;
 };

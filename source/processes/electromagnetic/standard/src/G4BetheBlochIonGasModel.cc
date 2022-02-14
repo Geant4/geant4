@@ -50,8 +50,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-using namespace std;
-
 G4BetheBlochIonGasModel::G4BetheBlochIonGasModel(const G4ParticleDefinition* p, 
   const G4String& nam) : G4BetheBlochModel(p,nam), currentCharge(0.0)
 {}
@@ -65,7 +63,7 @@ G4BetheBlochIonGasModel::~G4BetheBlochIonGasModel()
 
 G4double G4BetheBlochIonGasModel::ChargeSquareRatio(const G4Track& track)
 {
-  currentCharge = track.GetDynamicParticle()->GetCharge()/eplus;
+  currentCharge = track.GetDynamicParticle()->GetCharge()/CLHEP::eplus;
   G4double q2 = currentCharge*currentCharge;
   SetChargeSquareRatio(q2); 
   return q2;
@@ -76,8 +74,7 @@ G4double G4BetheBlochIonGasModel::ChargeSquareRatio(const G4Track& track)
 G4double G4BetheBlochIonGasModel::GetParticleCharge(const G4ParticleDefinition*,
 						    const G4Material*, G4double)
 {
-  return currentCharge*eplus;
+  return currentCharge*CLHEP::eplus;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

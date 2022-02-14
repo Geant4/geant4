@@ -34,7 +34,7 @@
 // Copy constructor
 G4StatMFMicroManager::G4StatMFMicroManager(const G4StatMFMicroManager & )
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroManager::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroManager::copy_constructor meant to not be accessible");
 }
 
 // Operators
@@ -42,7 +42,7 @@ G4StatMFMicroManager::G4StatMFMicroManager(const G4StatMFMicroManager & )
 G4StatMFMicroManager & G4StatMFMicroManager::
 operator=(const G4StatMFMicroManager & )
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroManager::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroManager::operator= meant to not be accessible");
     return *this;
 }
 

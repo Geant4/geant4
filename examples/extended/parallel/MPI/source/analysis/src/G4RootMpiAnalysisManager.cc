@@ -27,123 +27,45 @@
 // Author: Ivana Hrivnacova, 21/11/2018 (ivana@ipno.in2p3.fr)
 
 #include "G4RootMpiAnalysisManager.hh"
+#include "G4RootMpiNtupleFileManager.hh"
 #include "G4RootMpiNtupleManager.hh"
 #include "G4RootMpiPNtupleManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include <tools/impi>
 
+using namespace G4Analysis;
+
 //_____________________________________________________________________________
-G4RootMpiAnalysisManager::G4RootMpiAnalysisManager(G4bool isMaster)
- : G4RootAnalysisManager(isMaster),
-   fMpiNtupleMergeMode(G4MpiNtupleMergeMode::kNone),
-   fMpiSlaveNtupleManager(nullptr)
-{}
+G4RootMpiAnalysisManager* G4RootMpiAnalysisManager::Instance()
+{
+  return fgInstance;
+}
+
+//_____________________________________________________________________________
+G4RootMpiAnalysisManager::G4RootMpiAnalysisManager(G4bool /*isMaster*/)
+ : G4RootAnalysisManager()
+{
+  fgInstance = this;
+
+  // Reset the ntuple file manager
+  fNtupleFileManager.reset();
+
+  // Ntuple file manager
+  fNtupleFileManager = std::make_shared<G4RootMpiNtupleFileManager>(fState);
+  fNtupleFileManager->SetFileManager(fFileManager);
+  fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
+}
 
 //_____________________________________________________________________________
 G4RootMpiAnalysisManager::~G4RootMpiAnalysisManager()
-{}
+{
+  fgInstance = 0;
+}
 
-// 
-// private methods
 //
-
-//_____________________________________________________________________________
-void G4RootMpiAnalysisManager::CreateMpiNtupleManagers(
-                              tools::impi* impi, G4int mpiRank, G4int mpiSize)
-{
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("create", "mpi ntuple managers", "");
-#endif
-
-  switch ( fMpiNtupleMergeMode )
-  {
-    case G4MpiNtupleMergeMode::kNone:
-      fNtupleManager 
-        = new G4RootNtupleManager(fState, 0, fNtupleRowWise, fNtupleRowMode);
-      fNtupleManager->SetFileManager(fFileManager);
-      SetNtupleManager(fNtupleManager);
-      break;
-
-    case G4MpiNtupleMergeMode::kMain: {
-      fNtupleManager 
-        = new G4RootMpiNtupleManager(fState, fNtupleRowWise, fNtupleRowMode,
-                                     impi, mpiSize);
-      fNtupleManager->SetFileManager(fFileManager);
-      SetNtupleManager(fNtupleManager);
-      break;
-    }
-
-    case G4MpiNtupleMergeMode::kSlave: {
-      auto destinationRank = mpiSize;
-      fMpiSlaveNtupleManager 
-        = new G4RootMpiPNtupleManager(fState, impi, mpiRank, destinationRank);
-      SetNtupleManager(fMpiSlaveNtupleManager);
-      break;
-    }
-  }
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL3() ) 
-    fState.GetVerboseL3()->Message("create", "mpi ntuple managers", "");
-#endif
-}
-
-//_____________________________________________________________________________
-void G4RootMpiAnalysisManager::SetMpiNtupleMergingMode(
-                               G4int mpiRank, G4int mpiSize,
-                               G4int nofNtupleFiles)
-{
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()
-      ->Message("set", "mpi ntuple merging mode", "");
-#endif
-
-  auto canMerge = true;
-
-  // Illegal situations
-  if ( mpiSize < 2 ) {
-    G4ExceptionDescription description;
-    description 
-      << "      " << "Merging ntuples is not applicable on a single rank." 
-      << G4endl 
-      << "      " << "Setting was ignored.";
-      G4Exception("G4RootMpiAnalysisManager::SetMpiNtupleMergingMode()",
-                "Analysis_W013", JustWarning, description);
-    canMerge = false;      
-  }
-
-  G4String mergingMode;
-  if ( ! canMerge ) {
-    fMpiNtupleMergeMode = G4MpiNtupleMergeMode::kNone;
-    mergingMode = "G4MpiNtupleMergeMode::kNone";      
-  }
-  else {
-    // Set the number of reduced ntuple files
-    // (multiple output files are not yet supported)
-    fNofNtupleFiles = nofNtupleFiles;
-  
-    // Forced merging mode
-    // MPI
-    if ( mpiRank >= mpiSize ) {
-      // the extra worker
-      fMpiNtupleMergeMode = G4MpiNtupleMergeMode::kMain;
-      mergingMode = "G4MpiNtupleMergeMode::kMain";
-    } else {
-      // processing worker
-      fMpiNtupleMergeMode = G4MpiNtupleMergeMode::kSlave;
-      mergingMode = "G4MpiNtupleMergeMode::kSlave";
-    }
-  }
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) 
-    fState.GetVerboseL2()
-      ->Message("set", "ntuple merging mode", mergingMode);
-#endif
-}
-
+// public methods
+//
 
 //_____________________________________________________________________________
 void G4RootMpiAnalysisManager::SetMpiNtupleMerging(tools::impi* impi, 
@@ -156,16 +78,8 @@ void G4RootMpiAnalysisManager::SetMpiNtupleMerging(tools::impi* impi,
   //        << mpiSize << ","
   //        << nofNtupleFiles << G4endl;
 
-  // fImpi = impi;
-
-  // Set ntuple merging mode 
-  SetMpiNtupleMergingMode(mpiRank, mpiSize, nofNtupleFiles);
-
-  // Clear existing managers
-  ClearNtupleManagers();  
-
-  // Re-create managers
-  CreateMpiNtupleManagers(impi, mpiRank, mpiSize);
+  std::static_pointer_cast<G4RootMpiNtupleFileManager>(fNtupleFileManager)
+    ->SetMpiNtupleMerging(impi, mpiRank, mpiSize, nofNtupleFiles);
 }
 
 // 
@@ -175,154 +89,72 @@ void G4RootMpiAnalysisManager::SetMpiNtupleMerging(tools::impi* impi,
 //_____________________________________________________________________________
 G4bool G4RootMpiAnalysisManager::OpenFileImpl(const G4String& fileName)
 {
-  // No MPI merging, call base class
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kNone )  {
+  if ( fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kNone )  {
     return G4RootAnalysisManager::OpenFileImpl(fileName);
   }
 
+  // Create ntuple manager(s)
+  // and set it to base class which takes then their ownership
+  if ( ! fVNtupleManager ) {
+    SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
+  }
+
   auto finalResult = true;
-  auto result = fFileManager->SetFileName(fileName);
+
+  // Open file
+  // In difference from base class a file is open also on slave ranks
+  auto result = fFileManager->OpenFile(fileName);
   finalResult = finalResult && result;
 
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kMain )  {
-
-#ifdef G4VERBOSE
-    G4String name = fFileManager->GetFullFileName();
-    if ( fState.GetVerboseL4() ) 
-      fState.GetVerboseL4()->Message("open", "main ntuple file", name);
-#endif
-
-    fFileManager->SetNofNtupleFiles(fNofNtupleFiles);
-    result = fFileManager->OpenFile(fileName);
-    finalResult = finalResult && result;
-
-    fNtupleManager->SetNtupleDirectory(fFileManager->GetNtupleDirectory());
-
-    G4cout << "Main: Go to create ntuples from booking " << G4endl;
-    fNtupleManager->CreateNtuplesFromBooking();
-
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("open", "main ntuple file", name, finalResult);
-#endif  
-  }
-
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kSlave )  {
-
-#ifdef G4VERBOSE
-    G4String name = fFileManager->GetFullFileName();
-    if ( fState.GetVerboseL4() ) 
-      fState.GetVerboseL4()->Message("open", "file", name);
-#endif
-    result = fFileManager->OpenFile(fileName);
-    finalResult = finalResult && result;
-
-    // fNtupleManager->SetNtupleDirectory(fFileManager->GetNtupleDirectory());
-
-    G4cout << "Slave: Go to create ntuples from booking" << G4endl;
-    // No file is open by Slave manager
-    fMpiSlaveNtupleManager->CreateNtuplesFromBooking();
-
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("open", "file", name, finalResult);
-#endif  
-  }
+  // Open ntuple file(s) and create ntuples from bookings
+  result = fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
+  finalResult = finalResult && result;
 
   return finalResult;
 }  
 
+//_____________________________________________________________________________
+G4bool G4RootMpiAnalysisManager::WriteImpl() 
+{
+
+  auto finalResult = true;
+
+  // Call base class method
+  auto result = G4RootAnalysisManager::WriteImpl();
+  finalResult = finalResult && result;
+
+  // Write file also on Slave
+  // (skipped in base class)
+  if ( fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kSlave )  {
+    // write all open files
+    result = fFileManager->WriteFiles();
+    finalResult = finalResult && result;
+  }
+
+  Message(kVL2, "write", "slave files", "", finalResult);
+
+  return finalResult;
+}
 
 //_____________________________________________________________________________
 G4bool G4RootMpiAnalysisManager::CloseFileImpl(G4bool reset)
 {
-  // No MPI merging, call base class
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kNone )  {
-    return G4RootAnalysisManager::CloseFileImpl(reset);
-  }
-
   auto finalResult = true;
 
-  // reset data
-  if ( reset ) {
-    auto result = Reset();
-    if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "Resetting data failed";
-        G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W021", JustWarning, description);
-    } 
+  // Call base class method
+  auto result = G4RootAnalysisManager::CloseFileImpl(reset);
+  finalResult = finalResult && result;
+
+  // Close file also on Slave
+  // (skipped in base class)
+  if ( fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kSlave )  {
+    // close all open files
+    result = fFileManager->CloseFiles();
     finalResult = finalResult && result;
   }
 
-  // close file
-  fFileManager->CloseFile(); 
-
-  // MT not yet supported - no files clean-up
-  return finalResult;
-}
-
-//_____________________________________________________________________________
-G4bool G4RootMpiAnalysisManager::WriteNtuple()
-{
-  // No MPI merging, call base class
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kNone  ) {
-    return G4RootAnalysisManager::WriteNtuple();
-  }
-  
-  auto finalResult = true;
-
-  G4String ntupleType;
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kMain ) ntupleType = "main ntuples";
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kSlave ) ntupleType = "slave ntuples";
-
-#ifdef G4VERBOSE 
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("merge", ntupleType, "");
-#endif
-
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kMain )  {
-    auto result = fNtupleManager->Merge();
-    finalResult = result && finalResult;
-  }  
-  
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kSlave ) {
-    auto result = fMpiSlaveNtupleManager->Merge();
-    finalResult = result && finalResult;
-  }
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()->Message("merge", ntupleType, "");
-#endif
+  Message(kVL2, "close", "slave files", "", finalResult);
 
   return finalResult;
-}
 
-//_____________________________________________________________________________
-G4bool G4RootMpiAnalysisManager::Reset()
-{
-// Reset histograms and ntuple
-
-  // No MPI merging, call base class
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kNone  ) {
-    return G4RootAnalysisManager::Reset();
-  }
-  
-  auto finalResult = true;
-  
-  auto result = G4ToolsAnalysisManager::Reset();
-  finalResult = finalResult && result;
-
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kMain )  {
-    result = fNtupleManager->Reset(false);
-    finalResult = result && finalResult;
-  }  
-
-  if ( fMpiNtupleMergeMode == G4MpiNtupleMergeMode::kSlave )  {
-    result = fMpiSlaveNtupleManager->Reset(false);
-    finalResult = result && finalResult;
-  }  
-  
-  return finalResult;
 }

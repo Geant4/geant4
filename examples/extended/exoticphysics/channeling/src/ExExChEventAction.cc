@@ -39,17 +39,12 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 
 #include "ExExChSensitiveDetectorHit.hh"
 
-#include "ExExChTrackingAction.hh"
-#include "ExExChAnalysis.hh"
-
-ExExChEventAction::ExExChEventAction()
-{
-    fSD_ID = -1;
-    fVerboseLevel = 0;
-}
+EventAction::EventAction():
+fSDHT_ID(-1){}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

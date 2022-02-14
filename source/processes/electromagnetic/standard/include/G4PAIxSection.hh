@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // G4PAIxSection.hh -- header file
 //
@@ -209,12 +206,12 @@ public:
   inline G4double GetIntegralPlasmon(G4int i) const;
   inline G4double GetIntegralResonance(G4int i) const;
 
+  G4PAIxSection & operator=(const G4PAIxSection &right) = delete;
+  G4PAIxSection(const G4PAIxSection&) = delete;
+
 private :
 
   void CallError(G4int i, const G4String& methodName) const;
-
-  G4PAIxSection & operator=(const G4PAIxSection &right) = delete;
-  G4PAIxSection(const G4PAIxSection&) = delete;
 
   // Local class constants
  

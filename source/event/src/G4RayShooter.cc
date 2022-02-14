@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RayShooter class implementation
 //
-//
+// Author: Makoto Asai, 2000
+// --------------------------------------------------------------------
 
 #include "G4RayShooter.hh"
 #include "G4SystemOfUnits.hh"
@@ -34,7 +36,6 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 
-
 G4RayShooter::G4RayShooter()
 {
   SetInitialValues();
@@ -42,12 +43,10 @@ G4RayShooter::G4RayShooter()
 
 void G4RayShooter::SetInitialValues()
 {
-  particle_definition = 0;
   G4ThreeVector zero;
   particle_momentum_direction = (G4ParticleMomentum)zero;
   particle_energy = 1.0*GeV;
   particle_position = zero;
-  particle_time = 0.0;
   particle_polarization = zero;
 }
 
@@ -55,38 +54,37 @@ G4RayShooter::~G4RayShooter()
 {
 }
 
-void G4RayShooter::Shoot(G4Event* evt,G4ThreeVector vtx,G4ThreeVector direc)
+void G4RayShooter::Shoot(G4Event* evt,G4ThreeVector vtx, G4ThreeVector direc)
 {
-  if(!particle_definition)
+  if(particle_definition == nullptr)
   {
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4String particleName;
     particle_definition = particleTable->FindParticle(particleName="geantino");
-    if(!particle_definition)
+    if(particle_definition == nullptr)
     {
       G4String msg;
-      msg =  " G4RayTracer uses geantino to trace the ray, but your physics list does not\n";
+      msg = "G4RayTracer uses geantino to trace the ray, but your physics list does not\n";
       msg += "define G4Geantino. Please add G4Geantino in your physics list.";
-      G4Exception("G4RayShooter::Shoot","RayTracer001",FatalException,msg);
+      G4Exception("G4RayShooter::Shoot()", "RayTracer001", FatalException, msg);
     }
   }
 
-  // create a new vertex
+  // Create a new vertex
+  //
   G4PrimaryVertex* vertex = new G4PrimaryVertex(vtx,particle_time);
 
-  // create new primaries and set them to the vertex
+  // Create new primaries and set them to the vertex
+  //
   G4double mass = particle_definition->GetPDGMass();
-  G4PrimaryParticle* particle =
-    new G4PrimaryParticle(particle_definition);
+  G4PrimaryParticle* particle = new G4PrimaryParticle(particle_definition);
   particle->SetKineticEnergy( particle_energy );
   particle->SetMass( mass );
   particle->SetMomentumDirection( direc );
   particle->SetPolarization(particle_polarization.x(),
-			    particle_polarization.y(),
-			    particle_polarization.z());
+                            particle_polarization.y(),
+                            particle_polarization.z());
   vertex->SetPrimary( particle );
 
   evt->AddPrimaryVertex( vertex );
 }
-
-

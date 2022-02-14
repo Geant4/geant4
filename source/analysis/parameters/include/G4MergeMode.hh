@@ -27,10 +27,8 @@
 
 // Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
 
-#ifndef G4MergeMode_h
-#define G4MergeMode_h 1
-
 #include "globals.hh"
+#include "G4AnalysisManager.hh"
 
 // Enumeration for definition available binning schemes
 

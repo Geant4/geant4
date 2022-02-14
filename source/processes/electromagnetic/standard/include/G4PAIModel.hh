@@ -65,7 +65,7 @@ class G4MaterialCutsCouple;
 class G4ParticleChangeForLoss;
 class G4PAIModelData;
 
-class G4PAIModel : public G4VEmModel, public G4VEmFluctuationModel
+class G4PAIModel final : public G4VEmModel, public G4VEmFluctuationModel
 {
 
 public:
@@ -102,10 +102,12 @@ public:
 
   G4double SampleFluctuations(const G4MaterialCutsCouple*,
 			      const G4DynamicParticle*,
-			      G4double, G4double, G4double) final;
+			      const G4double, const G4double,
+                              const G4double, const G4double) final;
 
   G4double Dispersion(const G4Material*, const G4DynamicParticle*,
-		      G4double, G4double) final;
+		      const G4double, const G4double, 
+                      const G4double) final;
 
   void DefineForRegion(const G4Region* r) final;
 
@@ -122,15 +124,15 @@ protected:
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*, 
                               G4double kinEnergy) final;
 
+  // hide assignment operator 
+  G4PAIModel & operator=(const  G4PAIModel &right) = delete;
+  G4PAIModel(const  G4PAIModel&) = delete;
+
 private:
 
   inline G4int FindCoupleIndex(const G4MaterialCutsCouple*);
 
   inline void SetParticle(const G4ParticleDefinition* p);
-
-  // hide assignment operator 
-  G4PAIModel & operator=(const  G4PAIModel &right) = delete;
-  G4PAIModel(const  G4PAIModel&) = delete;
 
   G4int                       fVerbose; 
 

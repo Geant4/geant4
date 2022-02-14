@@ -66,9 +66,12 @@
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
 
-CCalDetectorConstruction::CCalDetectorConstruction() {}
+
+CCalDetectorConstruction::CCalDetectorConstruction() : testBeamHCal96( nullptr ) {}
+
 
 CCalDetectorConstruction::~CCalDetectorConstruction() {}
+
 
 G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
 
@@ -83,6 +86,30 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
   G4cout << "Retrieving rotation matrices....." << G4endl;
 #endif
   CCalRotationMatrixFactory::getInstance("rotation.cms");
+
+#ifdef debug
+  G4cout << tab << "CCalDetectorConstruction: Starting timer!!!" 
+         << G4endl;
+  G4Timer timer;
+  timer.Start();
+#endif
+
+  //HCAL Test Beam 96
+  testBeamHCal96 = new CCalG4Hall("HcalTB96");
+  testBeamHCal96->constructHierarchy();
+#ifdef debug
+  timer.Stop();
+  G4cout << tab << "CCalDetectorConstruction: Total time to "
+         << "construct the geometry: " << timer << G4endl;
+#endif //debug
+  G4VPhysicalVolume* volume = testBeamHCal96->PhysicalVolume(0);
+  
+  return volume;
+}
+
+
+void CCalDetectorConstruction::ConstructSDandField() {
+  // Create global magnetic field messenger.
 
   //-------------------------------------------------------------------------
   // Magnetic field
@@ -138,41 +165,16 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
     fieldIsInitialized = true;
   }
 
-#ifdef debug
-  G4cout << tab << "CCalDetectorConstruction: Starting timer!!!" 
-         << G4endl;
-  G4Timer timer;
-  timer.Start();
-#endif
-
-  //HCAL Test Beam 96
-  CCalG4Hall*  testBeamHCal96 = new CCalG4Hall("HcalTB96");
-  testBeamHCal96->constructHierarchy();
-#ifdef debug
-  timer.Stop();
-  G4cout << tab << "CCalDetectorConstruction: Total time to "
-         << "construct the geometry: " << timer << G4endl;
-#endif //debug
-  G4VPhysicalVolume* volume = testBeamHCal96->PhysicalVolume(0);
-
-  //Addsenistive detector types 
-  //G4bool result;
-  G4int sensitive;
-  sensitive = CCalSensitiveConfiguration::getInstance()->
-    getSensitiveFlag("HadronCalorimeter");
-  if (sensitive>0) /*result =*/ CCalSensAssign::getInstance()->
-                     addCaloSD("HadronCalorimeter", new CCalHcalOrganization);
-  sensitive = CCalSensitiveConfiguration::getInstance()->
-    getSensitiveFlag("CrystalMatrixModule");
-  if (sensitive>0) /*result =*/ CCalSensAssign::getInstance()->
-                     addCaloSD("CrystalMatrix", new CCalEcalOrganization);
-
-  //Assign the sensitive detectors
-  /*result =*/ CCalSensAssign::getInstance()->assign();
-
-  //Create the stacking manager required by Calorimeter
-  /*result =*/ CCalSensAssign::getInstance()->stackingAction();
-  
-  return volume;
-
+  //Add sensitive detector types
+  testBeamHCal96->sensitiveHandling();  
+  G4int sensitive = CCalSensitiveConfiguration::getInstance()->getSensitiveFlag("HadronCalorimeter");
+  if ( sensitive > 0 ) {
+    CCalSensAssign::getInstance()->addCaloSD("HadronCalorimeter", new CCalHcalOrganization);
+  }
+  sensitive = CCalSensitiveConfiguration::getInstance()->getSensitiveFlag("CrystalMatrixModule");
+  if ( sensitive > 0 ) {
+    CCalSensAssign::getInstance()->addCaloSD("CrystalMatrix", new CCalEcalOrganization);
+  }
+  // Assign the sensitive detectors
+  CCalSensAssign::getInstance()->assign();
 }

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 ///////////////////////////////////////////////////////
 // File name:     G4IonInverseIonisation
 //
@@ -32,18 +31,26 @@
 // Creation date: 25.08.2009
 //
 ///////////////////////////////////////////////////////
-#include "G4IonInverseIonisation.hh"
-#include "G4VEmAdjointModel.hh"
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-G4IonInverseIonisation::G4IonInverseIonisation(G4bool whichScatCase,G4String process_name,G4AdjointIonIonisationModel* aEmAdjointModel):
-				G4VAdjointReverseReaction(process_name,whichScatCase)
-{theAdjointEMModel = aEmAdjointModel;
- theAdjointEMModel->SetSecondPartOfSameType(false);
- SetIntegralMode(true); 
+#include "G4IonInverseIonisation.hh"
+
+#include "G4AdjointIonIonisationModel.hh"
+
+////////////////////////////////////////////////////////////////////////////////
+G4IonInverseIonisation::G4IonInverseIonisation(
+  G4bool whichScatCase, G4String process_name,
+  G4AdjointIonIonisationModel* aEmAdjointModel)
+  : G4VAdjointReverseReaction(process_name, whichScatCase)
+{
+  fAdjointModel = aEmAdjointModel;
+  fAdjointModel->SetSecondPartOfSameType(false);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-G4IonInverseIonisation::~G4IonInverseIonisation(){
+
+////////////////////////////////////////////////////////////////////////////////
+G4IonInverseIonisation::~G4IonInverseIonisation() {}
+
+////////////////////////////////////////////////////////////////////////////////
+void G4IonInverseIonisation::ProcessDescription(std::ostream& out) const
+{
+  out << "Inversion ionisation process for ions.\n";
 }

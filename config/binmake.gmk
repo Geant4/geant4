@@ -41,14 +41,14 @@ ifndef SHAREDLIBS
 endif
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/G4global.$(SHEXT) && echo yes)
-endif  
+endif
 
 ifndef INCFLAGS
  ifeq ($(G4INCLUDE_EXEC),1)
   INCFLAGS := -I$(G4INCLUDE)
  else
   INCFLAGS := \
-              -I$(G4BASE)/analysis/g4tools/include \
+              -I$(G4BASE)/externals/g4tools/include \
               -I$(G4BASE)/analysis/management/include \
               -I$(G4BASE)/analysis/hntools/include \
               -I$(G4BASE)/analysis/csv/include \
@@ -138,7 +138,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
               -I$(G4BASE)/processes/hadronic/models/lend/include \
               -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
-              -I$(G4BASE)/processes/hadronic/models/management/include \
               -I$(G4BASE)/processes/hadronic/models/particle_hp/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
@@ -148,9 +147,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/qmd/include \
               -I$(G4BASE)/processes/hadronic/models/quasi_elastic/include \
               -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
-              -I$(G4BASE)/processes/hadronic/models/rpg/include \
               -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
-              -I$(G4BASE)/processes/hadronic/models/util/include \
               -I$(G4BASE)/processes/hadronic/processes/include \
               -I$(G4BASE)/processes/hadronic/stopping/include \
               -I$(G4BASE)/processes/hadronic/util/include \
@@ -163,6 +160,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/navigation/include \
               -I$(G4BASE)/geometry/magneticfield/include \
               -I$(G4BASE)/geometry/biasing/include \
+              -I$(G4BASE)/tasking/include \
               -I$(G4BASE)/track/include \
               -I$(G4BASE)/tracking/include \
               -I$(G4BASE)/digits_hits/detector/include \
@@ -196,7 +194,7 @@ ifdef G4EXLIB
   LDFLAGS += -L$(G4TMPDIR)
   ifdef SHAREDLIBS
     ifdef G4RUNPATHOPTION
-#     For the example dependent directory, keep the 
+#     For the example dependent directory, keep the
 #     path to the shared lib in the executable.
       LDFLAGS += $(G4RUNPATHOPTION)$(G4TMPDIR)
       LDFLAGS += $(G4RUNPATHOPTION)$(G4LIB)/$(G4SYSTEM)
@@ -224,7 +222,7 @@ ifdef G4EXLIB
     TARGETLIB  := -l$(G4TARGET)
   else
   # Windows
-    TARGETLIB  := lib$(G4TARGET).a   
+    TARGETLIB  := lib$(G4TARGET).a
   endif
 endif
 
@@ -245,6 +243,7 @@ ifdef GLOBALLIBS
              -lG4error_propagation \
              -lG4readout \
              -lG4physicslists \
+             -lG4tasking \
              -lG4run \
              -lG4event \
              -lG4tracking \
@@ -263,13 +262,15 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG4clhep
   endif
 
+  ifdef G4LIB_USE_PTL
+    LDLIBS2 += -lG4ptl
+  endif
+
   ifdef G4LIB_USE_EXPAT
     LDLIBS2 += -lG4expat
   endif
 
-  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    LDLIBS2 += -lG4expat
-  endif
+  LDLIBS += -lG4tools
 
   ifdef G4LIB_USE_ZLIB
     LDLIBS2 += -lG4zlib
@@ -305,7 +306,7 @@ else
 # Warning: do not add to LDLIBS2 with += because this causes it to be
 # expanded too soon.  Hence extra libraries must have a different name...
 # Extra libraries to resolve remaining circular dependencies...
-#  LDLIBS2EXTRA = 
+#  LDLIBS2EXTRA =
   endif
   # Bring all symbols in for libraries which requires this (templated factories).
   #
@@ -350,7 +351,7 @@ ifdef USER_DEFINED_LDLIBS
 else
 # Again, do not use := or +=.  See note on LDLIBS2 above.
   LDLIBS_PREFINAL = $(LDLIBS1) $(LDLIBS2) $(LDLIBS2EXTRA) $(LDLIBS3)
-# Version leaving out EXTRALIBS 
+# Version leaving out EXTRALIBS
   LDLIBS_KERNEL   = $(LDLIBS2) $(LDLIBS2EXTRA) $(LDLIBS3)
 endif
 LDLIBS_PREFINAL += $(LDLIBS4)
@@ -377,12 +378,12 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 else
   # Unix
   LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
-  OUT   := -o 
+  OUT   := -o
   TARGOBJEXT := o
 endif
 
 ifdef transform-RPath
-# Invoke system specific transformation of 
+# Invoke system specific transformation of
 include $(G4INSTALL)/config/sys/$(G4SYSTEM)-runpath.gmk
 endif
 

@@ -39,7 +39,7 @@
 //
 // Class Description:
 //
-// An artificial cross section data set which always replys zero
+// An artificial cross section data set which always replies zero
 //
 // -------------------------------------------------------------------
 //

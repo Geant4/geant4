@@ -29,12 +29,12 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
+// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues
 //
 //    ****************************************************
 //    *      UltraPrimaryGeneratorAction.cc
 //    ****************************************************
-//  
+//
 //    Class used in the definition of the optical photons source
 //    A plane, circular source is used. Depending on the source position, optical
 //    photons may reach the UVscope directly or after reflection. By default direct
@@ -75,7 +75,7 @@ UltraPrimaryGeneratorAction::~UltraPrimaryGeneratorAction()
 void UltraPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
 
-  G4int iEvent = anEvent->GetEventID() ;
+  auto iEvent = anEvent->GetEventID() ;
   if ( iEvent == 0 ){
 
     G4cout << particleGun->GetParticleDefinition()->GetParticleName()           << " " ;
@@ -83,36 +83,34 @@ void UltraPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4cout << particleGun->GetCurrentSource()->GetPosDist()->GetPosDisType()    << G4endl ;
 
 
-// Check if optical photon wavelength is within limits set for material optical properties tables. 
+// Check if optical photon wavelength is within limits set for material optical properties tables.
   }
-  
+
   particleGun->GeneratePrimaryVertex(anEvent);
 
     if (particleGun->GetParticleDefinition()->GetParticleName() == "opticalphoton"){
-     
-     	const UltraDetectorConstruction * detector =  
+
+     	const UltraDetectorConstruction * detector =
      	dynamic_cast<const UltraDetectorConstruction *>((G4RunManager::GetRunManager())->GetUserDetectorConstruction()) ;
 
-	G4double lambda_min = detector->GetLambdaMin() ;
-	G4double lambda_max = detector->GetLambdaMax() ;
+	auto lambda_min = detector->GetLambdaMin() ;
+	auto lambda_max = detector->GetLambdaMax() ;
 
-       	G4double energy = particleGun->GetParticleEnergy() ;
+  auto energy = particleGun->GetParticleEnergy() ;
 
 	if (h_Planck*c_light/energy > lambda_max || h_Planck*c_light/energy < lambda_min){
-	       G4cerr << "Error ! Optical photon energy (" << energy/eV << " eV) out of limits set by material optical properties tables. \n" 
-              << "Please check that photon wavelength is within the following interval: [" 
-              << lambda_min/nm << "," 
-              << lambda_max/nm << "] nm" 
+	       G4cerr << "Error ! Optical photon energy (" << energy/eV << " eV) out of limits set by material optical properties tables. \n"
+              << "Please check that photon wavelength is within the following interval: ["
+              << lambda_min/nm << ","
+              << lambda_max/nm << "] nm"
               << ", i.e., ["
               << h_Planck*c_light/lambda_max/eV << ","
               << h_Planck*c_light/lambda_min/eV << "] eV"
               << G4endl ;
-	
+
 	       G4Exception("UltraPrimaryGeneratorAction::GeneratePrimaries()","AirSh005",
 			   FatalException,"Wavelength outside the valid range") ;
 	}
  }
 
 }
-
-

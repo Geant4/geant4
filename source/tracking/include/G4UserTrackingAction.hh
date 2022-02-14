@@ -23,59 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UserTrackingAction
 //
+// Class description:
 //
-//
-//---------------------------------------------------------------
-//
-// G4UserTrackingAction.hh
-//
-// class description:
-//   This class represents actions taken place by the user at 
-//   the start/end point of processing one track. 
-//
+// This class represents any action taking place by the user at the
+// start/end point of processing one track. 
+
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
+// --------------------------------------------------------------------
+#ifndef G4UserTrackingAction_hh
+#define G4UserTrackingAction_hh 1
 
-class G4UserTrackingAction;
-
-#ifndef G4UserTrackingAction_h
-#define G4UserTrackingAction_h 1
-
-class G4TrackingManager;              // Forward declaration
+class G4TrackingManager;
 class G4Track;
 
-///////////////////////////
 class G4UserTrackingAction 
-///////////////////////////
 {
+  public:
 
-//--------
-public: // with description
-//--------
+    // Constructor & Destructor
 
-// Constructor & Destructor
-   G4UserTrackingAction();
-   virtual ~G4UserTrackingAction();
+    G4UserTrackingAction();
+    virtual ~G4UserTrackingAction();
 
-// Member functions
-   virtual void SetTrackingManagerPointer(G4TrackingManager* pValue);
-   virtual void PreUserTrackingAction(const G4Track*){;}
-   virtual void PostUserTrackingAction(const G4Track*){;}
+    // Member functions
 
-//----------- 
-   protected:
-//----------- 
+    virtual void SetTrackingManagerPointer(G4TrackingManager* pValue);
+    virtual void PreUserTrackingAction(const G4Track*){}
+    virtual void PostUserTrackingAction(const G4Track*){}
 
-// Member data
-   G4TrackingManager* fpTrackingManager;
+  protected:
 
+    G4TrackingManager* fpTrackingManager = nullptr;
 };
 
 #endif
-
-

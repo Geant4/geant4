@@ -63,8 +63,10 @@
 
 QGSP_BIC::QGSP_BIC(G4int ver)
 {
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC"<<G4endl;
-  G4cout <<G4endl;
+  if(ver > 0) {
+    G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC"<<G4endl;
+    G4cout <<G4endl;
+  }
 
   defaultCutValue = 0.7*CLHEP::mm;
   SetVerboseLevel(ver);

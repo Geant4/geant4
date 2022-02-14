@@ -37,7 +37,7 @@
 
 #include "globals.hh"
 
-#include "G4DeuteronInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VDeuteronBuilder.hh"
 
 #include <vector>
@@ -53,11 +53,9 @@ class G4DeuteronBuilder
     void RegisterMe(G4VDeuteronBuilder * aB) {theModelCollections.push_back(aB);}
 
   private:
-    G4DeuteronInelasticProcess * theDeuteronInelastic;
+    G4HadronInelasticProcess * theDeuteronInelastic;
     
     std::vector<G4VDeuteronBuilder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

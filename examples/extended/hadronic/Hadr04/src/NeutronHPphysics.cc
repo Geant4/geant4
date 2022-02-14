@@ -32,7 +32,7 @@
 
 #include "NeutronHPphysics.hh"
 
-#include "NeutronHPMessenger.hh"
+#include "G4GenericMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -46,15 +46,15 @@
 #include "G4ParticleHPElastic.hh"
 #include "G4ParticleHPThermalScattering.hh"
 
-#include "G4NeutronInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4ParticleHPInelasticData.hh"
 #include "G4ParticleHPInelastic.hh"
 
-#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronCaptureProcess.hh"
 #include "G4ParticleHPCaptureData.hh"
 #include "G4ParticleHPCapture.hh"
 
-#include "G4HadronFissionProcess.hh"
+#include "G4NeutronFissionProcess.hh"
 #include "G4ParticleHPFissionData.hh"
 #include "G4ParticleHPFission.hh"
 
@@ -63,16 +63,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 NeutronHPphysics::NeutronHPphysics(const G4String& name)
-:  G4VPhysicsConstructor(name), fThermal(true), fNeutronMessenger(0)
+:  G4VPhysicsConstructor(name), fThermal(true), fMessenger(nullptr)
 {
-  fNeutronMessenger = new NeutronHPMessenger(this);
+  // define commands for this class
+  DefineCommands();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 NeutronHPphysics::~NeutronHPphysics()
 {
-  delete fNeutronMessenger;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,7 +119,8 @@ void NeutronHPphysics::ConstructProcess()
    
   // (re) create process: inelastic
   //
-  G4NeutronInelasticProcess* process2 = new G4NeutronInelasticProcess();
+  G4HadronInelasticProcess* process2 =
+    new G4HadronInelasticProcess( "neutronInelastic", G4Neutron::Definition() );
   pManager->AddDiscreteProcess(process2);   
   //
   // cross section data set
@@ -131,7 +133,7 @@ void NeutronHPphysics::ConstructProcess()
 
   // (re) create process: nCapture   
   //
-  G4HadronCaptureProcess* process3 = new G4HadronCaptureProcess();
+  G4NeutronCaptureProcess* process3 = new G4NeutronCaptureProcess();
   pManager->AddDiscreteProcess(process3);    
   //
   // cross section data set
@@ -144,8 +146,8 @@ void NeutronHPphysics::ConstructProcess()
    
   // (re) create process: nFission   
   //
-  G4HadronFissionProcess* process4 = new G4HadronFissionProcess();
-  pManager->AddDiscreteProcess(process4);    
+  G4NeutronFissionProcess* process4 = new G4NeutronFissionProcess();
+  pManager->AddDiscreteProcess(process4);
   //
   // cross section data set
   G4ParticleHPFissionData* dataSet4 = new G4ParticleHPFissionData();
@@ -157,3 +159,21 @@ void NeutronHPphysics::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void NeutronHPphysics::DefineCommands()
+{
+  // Define /testhadr/phys command directory using generic messenger class
+  fMessenger = new G4GenericMessenger(this,
+                        "/testhadr/phys/",
+                        "physics list commands");
+
+  // thermal scattering command
+  auto& thermalCmd
+    = fMessenger->DeclareProperty("thermalScattering", fThermal);
+
+  thermalCmd.SetGuidance("set thermal scattering model");
+  thermalCmd.SetParameterName("thermal", false);
+  thermalCmd.SetStates(G4State_PreInit);  
+}
+
+//..oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

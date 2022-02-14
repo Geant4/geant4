@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -59,21 +59,16 @@
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-int main(int argc,char** argv) 
+
+int main(int argc,char** argv)
 {
 
   //choose the Random engine
 
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
 
-  G4VSteppingVerbose::SetInstance(new Em10SteppingVerbose);
-    
-  // Construct the default run manager
-
-  G4RunManager * runManager = new G4RunManager;
+  //construct a serial run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // set mandatory initialization classes
 

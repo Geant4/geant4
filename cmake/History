@@ -27,12 +27,420 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-15th November 2016 - Ben Morgan (cmake-V10-01-47)
-=======
+09 November 2021 - Ben Morgan (cmake-V10-07-53)
+- Only configure public release contribution guide if present
+
+30 November 2021 - Ivana Hrivnacova (cmake-V10-07-52)
+- Removed FindAIDA.cmake from Modules
+
+29 November 2021 - Ben Morgan (cmake-V10-07-51)
+- Require VecGeom 1.1.18 or newer
+- Configure/find Vtk alongside other UI/Vis options
+
+26 November 2021 - Ben Morgan (cmake-V10-07-50)
+- Strip .git{ignore,lab,hub} files/dirs from source package
+- Use XZ compression instead of BZIP for source package
+
+22 November 2021 - Ben Morgan (cmake-V10-07-49)
+- Improve/modernize CPack source packaging
+
+12 November 2021 - Ben Morgan (cmake-V10-07-48)
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+8 November 2021 - Ben Morgan (cmake-V10-07-47)
+- Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+  
+2 November 2021 - Gunter Folger (cmake-V10-07-46)
+- switch to new dataset G4EMLOW8.0, given by Vladimir
+
+27 October 2021 - Guy Barrand (cmake-V10-07-45)
+- Modules/G4DeveloperAPI.cmake: ToolsSG => G4ToolsSG in the list of Qt moc-able modules.
+
+25/27/28 October 2021 - Gunter Folger (cmake-V10-07-44)
+- switch to new dataset G4TENDL1.4 provided by Alberto
+
+22 October 2021 - Guy Barrand (cmake-V10-07-43)
+- Modules/G4DeveloperAPI.cmake: have ToolsSG as a Qt moc-able module.
+
+13 October 2021 - Ben Morgan (cmake-V10-07-42)
+- Add XercesC library directory to Linux LD_LIBRARY_PATH for GNUmake.
+  Workaround for incorrect setup on LCG stacks for Nightly builds
+
+12 October 2021 - Ben Morgan (cmake-V10-07-41)
+- Make ToolsSG options mutually exclusive
+
+04 October 2021 - Stewart Boogert / Laurie Nevay (cmake-V10-07-40)
+- Add options and find module for VTK visualisation driver
+
+27 September 2021 - Ben Morgan (cmake-V10-07-39)
+- Change default value of GEANT4_BUILD_MULTITHREADED to ON
+
+22 September 2021 - Guilherme Amadio (cmake-V10-07-38)
+- geant4_add_test:
+  - Ensure that Geant4 being built is picked up to build examples.
+  - Ensure that the same compiler is used to build the tests.
+
+13 September 2021 - Gabriele Cosmo (cmake-V10-04-37)
+- Set CLHEP-2.4.5.1 as the required minimum version.
+
+3 September 2021 - Ben Morgan (cmake-V10-04-36)
+- geant4_add_test creates separate build/run tests when asked to do both
+  - Required to support valgrind/memcheck runs without valgrind-ing
+    the build part of the test.
+
+1 September 2021 - Ben Morgan (cmake-V10-04-35)
+- Remove obsolete geant4_{executable,link_library} options
+
+26 August 2021 - Ben Morgan (cmake-V10-07-34)
+- Remove obsolete network VRML driver option
+- Remove obsolete network FukuiRenderer driver option
+
+23 August 2021 - Guilherme Amadio (cmake-V10-07-33)
+- Rename Geant4::HDF5 to hdf5::hdf5 to be compatible with
+  imported target provided since CMake 3.20.
+
+20 August 2021    - Gunter Folger  (cmake-V10-07-32)
+- Switch to G4ParticleXS 4.0
+
+22 July 2021 - Ivana Hrivnacova (cmake-V10-07-31)
+- Fixed path to g4tools/fonts, now in source/externals
+
+30 June 2021 - Ben Morgan (cmake-V10-07-30)
+- Remove obsolete GEANT4_USE_SYSTEM_CLHEP_GRANULAR option
+
+29 June 2021 - Ben Morgan (cmake-V10-07-29)
+- Disable creation of clang-formatting targets
+
+21 June 2021   - Julia Yarba    (cmake-V10-07-28)
+- Clean cmake/Modules/FindPythia8.cmake
+  (remove trailing whitespaces)
+
+18 June 2021   - Julia Yarba    (cmake-V10-07-27)
+- Add cmake/Modules/FindPythia8.cmake
+- Update cmake/Modules/G4ConfigureCMakeHelpers.cmake
+
+8 June 2021    - Gunter Folger  (cmake-V10-07-26)
+- Switch to G4EMLOW 7.17
+
+03 June 2021 - Ben Morgan (cmake-V10-07-25)
+- Remove explicit setting of PTL_ cmake options.
+- Add GEANT4_USE_PTL_LOCKS option to forward to internal PTL
+  as PTL_USE_LOCKS.
+
+27 May 2021 - Ben Morgan (cmake-V10-07-24)
+- Implement build/test script in Python to check for cycles in the
+  declared source module dependency graph.
+
+25 May 2021 - Jonathan Madsen (cmake-V10-07-23)
+- External PTL requires v2.0.0
+
+25 May 2021 - Ben Morgan (cmake-V10-07-22)
+- Clarify use of Freetype for both analysis and visualization
+  - Remove use of no longer required imported target shim for build
+
+24 May 2021 - Ben Morgan (cmake-V10-07-21)
+- Bump minimum CMake version to 3.12
+
+22 May 2021 - Ben Morgan (cmake-V10-07-20)
+- Qualify geant4_add_feature descriptions with "G4_" to distinguish them from
+  CMake property descriptions.
+
+18 May 2021 - Ben Morgan (cmake-V10-07-19)
+- Require C++17 as minimum standard to compile Geant4
+  - Allow compilation against C++23 with CMake 3.20 and newer
+  - Check for filesystem support in native or extension (GNU/Clang) libraries
+
+15 May 2021 - Jonathan Madsen (cmake-V10-07-18)
+- Set GEANT4_BUILD_BUILTIN_BACKTRACE to ON by default so novice
+  and intermediate users can, by default, get valuable information
+  on segmentation faults. Projects with their own signal handlers
+  can configure with this option off, set G4BACKTRACE="none" in
+  the environment, create their signal handlers after G4RunManager
+  gets created, or add `G4BackTrace::DefaultSignals() = std::set<int>{};`
+  before G4RunManager gets created.
+
+10 May 2021    - John Allison  (cmake-V10-07-17)
+- With vis-V10-07-03, incorporating visman-V10-07-06 and vis_toolsg-V10-07-00.
+  Introduce a new vis driver, TOOLSSG (Guy Barrand).
+  o Four (mutually exclusive) options:
+    . TOOLSSG_X11_GLES
+    . TOOLSSG_WINDOWS_GLES
+    . TOOLSSG_XT_GLES
+    . TOOLSSG_QT_GLES
+
+7 May 2021    - Gunter Folger  (cmake-V10-07-16)
+- Switch to G4EMLOW 7.16
+
+4th May 2021 - Ben Morgan (cmake-V10-07-15)
+- Remove obsolete -stdlib flag for AppleClang
+
+3 May 2021    - Gunter Folger  (cmake-V10-07-14)
+- Switch to G4EMLOW 7.15
+
+28 April 2021 - Ben Morgan (cmake-V10-07-13)
+- Preliminary support for sanitizers
+
+22 March 2021 - Alberto Ribon (cmake-V10-07-12)
+- Modules/G4BuildSettings.cmake : removed deprecated PHP_AS_HP
+  environmental variable.
+
+19th March 2021 - Gunter Folger (cmake-V10-07-11)
+- Update to older G4TENDL 1.3.2, 1.4 has problems.
+
+18 March 2021 - Ben Morgan (cmake-V10-07-10)
+- Check for unparsed arguments in G4DeveloperAPI functions to
+  provide better validation against typos/etc in use
+
+09 March 2021 - John Allison (cmake-V10-07-09)
+- Remove all references to Wt.
+
+23 February 2021 - Ben Morgan (cmake-V10-07-08)
+- Store PUBLIC/PRIVATE/INTERFACE module usage requirements explicitly
+
+18th February 2021 - Ben Morgan (cmake-V10-07-07)
+- Add G4tools target to CMake/GNUmake configuration following its
+  migration from analysis to externals categories.
+
+4th February 2021 -  Igor Semeniouk (cmake-V10-07-06)
+- geant4.bat prototype
+- hint to run geant4-config on windows
+
+30th January 2021 - Gunter Folger (cmake-V10-07-05)
+- Update to patched dataset G4PARTICLEXS 3.1.1 as provided by Vladimir I.
+
+22nd January 2021 - Ben Morgan (cmake-V10-07-04)
+- Update for GitHub PR #17: Provide same fix for MacPorts
+- Address Bugzilla #2303: Fail configuration if Qt is enabled with CMake < 3.9
+
+15th January 2021 - Ben Morgan (cmake-V10-07-03)
+- Apply GitHub PR #17 from Florian Uhlig: Fix installation
+  error with Homebrew X11/GL.
+
+11th January 2021 - Ben Morgan (cmake-V10-07-02)
+- Apply GitHub PR #16 from andriish: Fix configure/build with
+  system PTL 1.0.0.
+
+5th January 2010 - Gunter Folger (cmake-V10-07-01)
+- Update to dataset G4EMLOW 7.14 as provided by Sebastien
+
+8th November 2020 - Ben Morgan (cmake-V10-07-00)
+- Install/Use builtin PTL CMake scripts from PTL subdirectory
+  alongside Geant4Config.cmake
+
+20th November 2020 - Ben Morgan (cmake-V10-06-46)
+- Make GEANT4_USE_SYSTEM_PTL option advanced
+
+12th November 2020 - Jonathan Madsen (cmake-V10-06-45)
+- Updated find package routines for timemory
+
+19th November 2020 - Ben Morgan (cmake-V10-06-44)
+- Require VecGeom 1.1.8 or newer
+
+18th November 2020 - Ben Morgan (cmake-V10-06-43)
+- Add GEANT4_BUILD_BUILTIN_BACKTRACE option to enable automatic
+  use of G4BackTrace signal handling in G4RunManager.
+
+17th November 2020 - Gunter Folger (cmake-V10-06-42)
+- Bump CLHEP minimum required version to 2.4.4.0
+
+4th November 2020 - Ben Morgan (cmake-V10-06-41)
+- Make Qt53D driver optional based on find of required Qt5 modules
+
+2nd/3rd November 2020 - Gunter Folger   (cmake-V10-06-40)
+- Update to dataset RadioactiveDecay5.6 and PhotonEvaporation5.7 as
+    provided by Laurent
+
+30th October 2020 - Gunter Folger   (cmake-V10-06-39)
+- Update datasets as provided by Laurent:
+  - G4ENSDFSTATE2.3
+  - PhotonEvaporation5.6
+  - RadioactiveDecay5.5
+
+29th October 2020 - Ben Morgan (cmake-V10-06-38)
+- Remove obsolete Geant4MacroDefineModule and G4DeveloperAPI_OLD modules
+- Make Geant4MacroLibraryTargets module a no-op pending final removal in
+  2021
+- Remove GEANT4_USE_NEW_CMAKE option to complete migration to new system
+- Use STRINGS cache property for enum options and CMAKE_BUILD_TYPE to
+  give easier interface in (G)UIs
+- Remove pre CMake3 functionality from G4InstallData module
+
+27th October 2020 - Gunter Folger   (cmake-V10-06-37)
+- Add optional TENDL dataset
+
+26th October 2020 - Ben Morgan (cmake-V10-06-36)
+- Explicitly initialize GEANT4_USE_QT3D to OFF to prevent
+  user override.
+
+26th October 2020 - Gunter Folger   (cmake-V10-06-35)
+- Switch to G4PARTICLEXS 3.1
+
+23rd October 2020 - John Allison (cmake-V10-06-34)
+- Introduce changes for Qt3D vis driver.
+
+20th October 2020 - Ben Morgan (cmake-V10-06-33)
+- Update functions to use G4expat{-static} as custom built targets.
+  Fixes GitLab Issue #44.
+
+19th October 2020 - Ben Morgan (cmake-V10-06-32)
+- Support CMake 3.8 through 3.18
+- Allow specification of C++20 for CMake 3.12 and above
+
+12th October 2020 - Daren Sawkey (cmake-V10-06-31)
+- Switch to new data set G4RealSurface 2.2
+
+12th October 2020 - Gunter Folger   (cmake-V10-06-30)
+- Switch to G4PARTICLEXS 3.0
+
+24th September 2020 - Gunter Folger (cmake-V10-06-29)
+- Switch to G4EMLOW 7.13
+
+15 September 2020 - Jonathan Madsen (cmake-V10-06-28)
+- Updated GEANT4_TEST_ENVIRONMENT to set G4RUN_MANAGER_TYPE=TBB when MT and
+  GEANT4_USE_TBB=ON
+
+28 August - Ben Morgan (cmake-V10-06-27)
+- Improve support for Inventor (Coin)
+  - Simplify configuration options, handling co-working ones both
+    at configure time and by client applications.
+  - Separate out dependency finding to keep these in one place.
+  - Improve consistency of using XQuartz vs System OpenGL on
+    macOS.
+  - Remove obsolete FindInventor module
+
+21 July 2020 - Ben Morgan (cmake-V10-06-26)
+- Provide new GEANT4_BUILD_PHP_AS_HP option to enable ParticleHP as
+  HP in G4processes. Replaces PHP_AS_HP environment variable.
+- Add PHP_AS_HP "feature" in Geant4Config.cmake/geant4-config to allow
+  clients to check availability.
+
+17th June 2020 - Jonathan Madsen (cmake-V10-06-25)
+- Moved TBB before PTL
+- Forced PTL_USE_TBB to be set to GEANT4_USE_TBB when not
+  using system PTL
+- Added Geant4::G4ptl ALIAS targets for build tree testing
+- Added support for building G4ptl, GEANT4_USE_TBB option
+- Updated FindTBB.cmake to be more robust
+- Updates to PTL internal/external handling
+- fixed PTL find_dependency
+
+15th June 2020 - Gunter Folger (cmake-V10-06-24)
+- Switch to G4EMLOW 7.12
+
+8th June 2020 - Ben Morgan (cmake-V10-06-23)
+- Default GEANT4_USE_NEW_CMAKE to ON to use new build organization
+  as the primary system.
+- Fix bug in setting of AUTOMOC
+- Handle install of G4clhep{-static} independently of main modules
+  due it being built outside the category system.
+- Retain GEANT4_BUILDTREE_INCLUDE_DIRS in new CMake system to support
+  clients that may not yet support CMake target usage requirements.
+- Protect recursion into tests module on existence of the directory
+
+2nd June 2020 - Guilherme Amadio (cmake-V10-06-22)
+- Avoid warnings from propagating CMAKE_DISABLE_FIND_PACKAGE_ROOT
+  down to tests.
+
+30th May 2020 - Ben Morgan (cmake-V10-06-21)
+- Modules/Geant4DeveloperAPI.cmake: Import new "target" style API for
+  declaring and composing libraries from modules of source code.
+  Provide GEANT4_USE_NEW_CMAKE option, OFF by default, to switch between
+  systems.
+
+28th May 2020 - Gunter Folger (cmake-V10-06-20)
+- Switch to G4EMLOW 7.11
+
+26th May 2020 - Ben Morgan (cmake-V10-06-19)
+- Use "VecGeom::vecgeom" as imported target name for VecGeom library
+  to bring in line with upstream master of VecGeom. Export VecCore_DIR
+  if it is set to package cache file, as new VecGeomConfig needs to refind
+  VecCore.
+
+20 May 2020 - Frederick Jones (cmake-V10-06-18)
+- Modules/G4InterfaceOptions.cmake: added GEANT4_USE_XM to Open
+  Inventor X driver code block to correct Xm and Xt link order.
+
+19th May 2020 - Guilherme Amadio (cmake-V10-06-17)
+- Propagate value of CMAKE_DISABLE_FIND_PACKAGE_ROOT down to tests
+  that optionally support ROOT to allow testing Geant4 with ROOT support
+  disabled. This is necessary when testing Geant4 with a different C++
+  standard than ROOT when it's installed.
+
+29th April 2020 - Ben Morgan (cmake-V10-06-16)
+- Add GEANT4_USE_NEW_CMAKE option in preparation for testing of modular
+  build updates. Added now to suppress Continuous warnings
+
+22 April 2020 - Frederick Jones (cmake-V10-06-15)
+- Modules/G4InterfaceOptions.cmake, Templates/Geant4Config.cmake.in:
+  Added support for Open Inventor Qt Vis driver to be built
+  and used in applications.  The library can be built with the
+  OIQT driver, or with the OIX/OIXE drivers, but not both.
+
+6th April 2020 - Ben Morgan (cmake-V10-06-14)
+- Activate build of geant4py when GEANT4_USE_PYTHON is set
+  Check that MT builds use global-dynamic TLS to allow Python
+  module loading of the Geant4 dynamic libraries.
+
+21st April 2020 - Ben Morgan (cmake-V10-06-13)
+- BUGFIX: Only store variables in Geant4PackageCache if they have
+  a value.
+
+20th April 2020 - Ben Morgan (cmake-V10-06-12)
+- Remove Qt4 support
+
+17th April 2020 - Ben Morgan (cmake-V10-06-11)
+- Add GEANT4_USE_PYTHON option to suppress Continuous warnings
+
+3rd April 2020 - Guilherme Amadio (cmake-V10-06-10)
+- Use full path to datasets if GEANT4_INSTALL_DATADIR is an absolute path
+
+2nd April 2020 - Guilherme Amadio (cmake-V10-06-09)
+- Customize CMAKE_INSTALL_DATADIR in a single location
+
+18th March 2020 - Gunter Folger (cmake-V10-06-08)
+- In Modules/G4CPack.cmake suppress warnings about icc libraries not existing
+  for Intel icc version 19.
+
+16th March 2020 - Gunter Folger (cmake-V10-06-07)
+- Switch to G4EMLOW 7.10
+
+14th February 2020 - Ben Morgan (cmake-V10-06-06)
+- No longer create gnumake symlinks on Windows
+  Windows permissions may prevent creation of symlinks, leading to
+  errors at install time. As gnumake is no longer supported on
+  Windows, protect symlink creation with test on host platform.
+
+4th February 2020 - Ben Morgan (cmake-V10-06-05)
+- BUGFIX 2221
+  Use "${FOO:-}" variable expansion and "-z" test to check for
+  undefined variables in Bourne Shell scripts. Prevents errors when
+  shell is in "set -u" mode. Report and patch supplied by Michael Reilly
+
+27th January 2020 - Gunter Folger (cmake-V10-06-04)
+- Switch to G4EMLOW 7.9.1
+
+15th January 2020 - Ben Morgan (cmake-V10-06-03)
+- Quote VECGEOM_COMPILE_DEFINITIONS to avoid incorrect argument errors
+
+6th January 2020 - Ben Morgan (cmake-V10-06-02)
+- Apply patch from TXCorp to allow compilation on Windows using Clang
+
+12th December 2019 - Ben Morgan (cmake-V10-06-01)
+- Remove requirement on presence of XQuartz GLU library
+- No longer save glu related variables in the package cache
+
+6th December 2019 - Ben Morgan (cmake-V10-06-00)
+- Remove obsolete Geant4Wrapping module in preparation for full G4Py
+  build support
+- Rename remaining internal "Geant4..." modules to "G4" convention
+  Retain Geant4DefineModule and Geant4LibraryTargets until new modularization
+  scheme in place.
+- Format G4ClangFormat
+
 25th November 2019 - Ben Morgan (cmake-V10-05-29)
 - Disable configuration of Wt UI/Vis driver due to it no longer
   compiling with recent Wt versions

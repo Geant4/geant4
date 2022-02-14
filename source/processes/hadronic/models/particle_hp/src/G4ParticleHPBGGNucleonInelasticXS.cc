@@ -44,20 +44,7 @@
 
 #include "G4ParticleHPBGGNucleonInelasticXS.hh"
 #include "G4SystemOfUnits.hh"
-/*
-#include "G4GlauberGribovCrossSection.hh"
-#include "G4NucleonNuclearCrossSection.hh"
-#include "G4HadronNucleonXsc.hh"
-*/
-#include "G4HadronInelasticDataSet.hh"
-/*
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4NistManager.hh"
-#include "G4Material.hh"
-#include "G4Element.hh"
-#include "G4Isotope.hh"
-*/
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -32,7 +32,7 @@
 //    ********************************************
 // 
 // code developed by Susanna Guatelli
-
+//
 #ifndef BrachyPrimaryGeneratorAction_h
 #define BrachyPrimaryGeneratorAction_h 1
 
@@ -43,13 +43,13 @@ class G4GeneralParticleSource;
 class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
  public:
-   BrachyPrimaryGeneratorAction();
+   explicit BrachyPrimaryGeneratorAction();
    ~BrachyPrimaryGeneratorAction();
 
  public:
-  void GeneratePrimaries(G4Event* anEvent);
+  void GeneratePrimaries(G4Event* anEvent) override;
 
  private:
-  G4GeneralParticleSource* gun;
+  G4GeneralParticleSource* fGun;
 };
 #endif

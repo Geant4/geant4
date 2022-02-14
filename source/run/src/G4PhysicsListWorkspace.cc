@@ -23,27 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsListWorkspace implementation
+//
+// Authors: J.Apostolakis, A.Dotti - 4 October 2013
+// --------------------------------------------------------------------
+
 #include "G4PhysicsListWorkspace.hh"
 
 namespace
 {
-    G4PhysicsListWorkspace::pool_type thePool;
+  G4PhysicsListWorkspace::pool_type thePool;
 }
 
-G4PhysicsListWorkspace::pool_type*
-G4PhysicsListWorkspace::GetPool() { return &thePool; }
-
-G4PhysicsListWorkspace::G4PhysicsListWorkspace(G4bool verbose)
-   : fVerbose(verbose)
+// --------------------------------------------------------------------
+G4PhysicsListWorkspace::pool_type* G4PhysicsListWorkspace::GetPool()
 {
- 
+  return &thePool;
+}
+
+// --------------------------------------------------------------------
+G4PhysicsListWorkspace::G4PhysicsListWorkspace(G4bool verbose)
+  : fVerbose(verbose)
+{
   fpVUPLSIM =
     &const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager());
   fpVPCSIM =
     &const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager());
   fpVMPLSIM =
     &const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager());
-    
+
   // Copy information from master into PolyCone/Gon Sides in this thread.
   InitialiseWorkspace();
 
@@ -53,63 +61,65 @@ G4PhysicsListWorkspace::G4PhysicsListWorkspace(G4bool verbose)
   fpVMPLOffset = fpVMPLSIM->GetOffset();
 }
 
+// --------------------------------------------------------------------
 G4PhysicsListWorkspace::~G4PhysicsListWorkspace()
 {
 }
 
-void
-G4PhysicsListWorkspace::UseWorkspace()
+// --------------------------------------------------------------------
+void G4PhysicsListWorkspace::UseWorkspace()
 {
-    if( fVerbose )
-        G4cout << "G4PhysicsListWorkspace::UseWorkspace: "
-               << "Copying particles-definition Split-Class - Start " << G4endl;
+  if(fVerbose)
+    G4cout << "G4PhysicsListWorkspace::UseWorkspace: "
+           << "Copying particles-definition Split-Class - Start " << G4endl;
 
-    // Implementation copied from
-    // G4WorkerThread::BuildGeometryAndPhysicsVector()
-  
-    // Physics List related, split classes mechanism:
-    // instantiate sub-instance for this thread
-    fpVUPLSIM->UseWorkArea(fpVUPLOffset);
-    fpVPCSIM->UseWorkArea(fpVPCOffset);
-    fpVMPLSIM->UseWorkArea(fpVMPLOffset);
+  // Physics List related, split classes mechanism:
+  // instantiate sub-instance for this thread
+  fpVUPLSIM->UseWorkArea(fpVUPLOffset);
+  fpVPCSIM->UseWorkArea(fpVPCOffset);
+  fpVMPLSIM->UseWorkArea(fpVMPLOffset);
 }
 
+// --------------------------------------------------------------------
 void G4PhysicsListWorkspace::ReleaseWorkspace()
 {
-    fpVUPLSIM->UseWorkArea(0);
-    fpVPCSIM->UseWorkArea(0);
-    fpVMPLSIM->UseWorkArea(0);
+  fpVUPLSIM->UseWorkArea(nullptr);
+  fpVPCSIM->UseWorkArea(nullptr);
+  fpVMPLSIM->UseWorkArea(nullptr);
 }
 
+// --------------------------------------------------------------------
 void G4PhysicsListWorkspace::InitialisePhysicsList()
 {
 }
 
-void
-G4PhysicsListWorkspace::InitialiseWorkspace()
+// --------------------------------------------------------------------
+void G4PhysicsListWorkspace::InitialiseWorkspace()
 {
-    if( fVerbose )
-      G4cout << "G4PhysicsListWorkspace::InitialiseWorkspace: "
-             << "Copying particles-definition Split-Class - Start " << G4endl;
-    
-    // PhysicsList related, split classes mechanism:
-    //   Do *NOT* instantiate sub-instance for this thread,
-    //   just copy the contents !!
-    fpVUPLSIM->NewSubInstances();
-    fpVPCSIM->NewSubInstances();
-    fpVMPLSIM->WorkerCopySubInstanceArray();
+  if(fVerbose)
+    G4cout << "G4PhysicsListWorkspace::InitialiseWorkspace: "
+           << "Copying particles-definition Split-Class - Start " << G4endl;
 
-    // Additional initialization if needed - beyond copying memory
-    InitialisePhysicsList();
-  
-    if( fVerbose )
-      G4cout << "G4PhysicsListWorkspace::CreateAndUseWorkspace: "
-             << "Copying particles-definition Split-Class - Done!" << G4endl;
+  // PhysicsList related, split classes mechanism:
+  // Do *NOT* instantiate sub-instance for this thread, just copy the contents!!
+  fpVUPLSIM->NewSubInstances();
+  fpVPCSIM->NewSubInstances();
+  // The following line is fundamental! If we call NewSubInstances it will not
+  // work See: https://jira-geant4.kek.jp/browse/DEV-284
+  fpVMPLSIM->WorkerCopySubInstanceArray();
+
+  // Additional initialisation if needed - beyond copying memory
+  InitialisePhysicsList();
+
+  if(fVerbose)
+    G4cout << "G4PhysicsListWorkspace::CreateAndUseWorkspace: "
+           << "Copying particles-definition Split-Class - Done!" << G4endl;
 }
 
+// --------------------------------------------------------------------
 void G4PhysicsListWorkspace::DestroyWorkspace()
 {
-    fpVUPLSIM->FreeWorker();
-    fpVPCSIM->FreeWorker();
-    fpVMPLSIM->FreeWorker();
+  fpVUPLSIM->FreeWorker();
+  fpVPCSIM->FreeWorker();
+  fpVMPLSIM->FreeWorker();
 }

@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbVolume
+// G4tgbVolumeMgr
 //
 // Class description:
 //
 // Class to manage volumes: G4VSolids, G4LogicalVolumes, G4VPhysicalVolumes.
 // It is a singleton, accesed always through calls to GetInstance().
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbVolumeMgr_h
-#define G4tgbVolumeMgr_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbVolumeMgr_hh
+#define G4tgbVolumeMgr_hh 1
 
 #include "globals.hh"
 
@@ -54,57 +49,56 @@ class G4tgbVolume;
 class G4tgrVolume;
 class G4tgbDetectorBuilder;
 
-typedef std::map< G4String, G4tgbVolume* > G4mssvol;
-typedef std::multimap< G4String, G4VSolid* > G4mmssol;
-typedef std::multimap< G4String, G4LogicalVolume* > G4mmslv;
-typedef std::multimap< G4String, G4VPhysicalVolume* > G4mmspv;
-typedef std::map< G4LogicalVolume*, G4LogicalVolume* > G4mlvlv;
-typedef std::map< G4VPhysicalVolume*, G4VPhysicalVolume* > G4mpvpv;
+using G4mssvol = std::map<G4String, G4tgbVolume*>;
+using G4mmssol = std::multimap<G4String, G4VSolid*>;
+using G4mmslv = std::multimap<G4String, G4LogicalVolume*>;
+using G4mmspv = std::multimap<G4String, G4VPhysicalVolume*>;
+using G4mlvlv = std::map<G4LogicalVolume*, G4LogicalVolume*>;
+using G4mpvpv = std::map<G4VPhysicalVolume*, G4VPhysicalVolume*>;
 
-//----------------------------------------------------------------------------  
-class G4tgbVolumeMgr 
-{ 
-  public:  // with description
+class G4tgbVolumeMgr
+{
+  public:
 
     G4tgbVolumeMgr();
-   ~G4tgbVolumeMgr();
+    ~G4tgbVolumeMgr();
 
-    static G4tgbVolumeMgr* GetInstance();  
-      // Get the only instance 
+    static G4tgbVolumeMgr* GetInstance();
+      // Get the only instance
 
-    void AddTextFile( const G4String& fname );
+    void AddTextFile(const G4String& fname);
     G4VPhysicalVolume* ReadAndConstructDetector();
 
     void CopyVolumes();
       // Build a G4tgbVolume per each G4tgbVolume
 
-    G4tgbVolume* FindVolume( const G4String& volname);
+    G4tgbVolume* FindVolume(const G4String& volname);
       // Find a G4tgbVolume by name
 
-    void RegisterMe( const G4tgbVolume* vol );
+    void RegisterMe(const G4tgbVolume* vol);
       // Register a G4tgbVolume
-    void RegisterMe( const G4VSolid* solid );
+    void RegisterMe(const G4VSolid* solid);
       // Register a G4VSolid
-    void RegisterMe( const G4LogicalVolume* lv );
+    void RegisterMe(const G4LogicalVolume* lv);
       // Register a G4LogicalVolume
-    void RegisterMe( const G4VPhysicalVolume* pv );
+    void RegisterMe(const G4VPhysicalVolume* pv);
       // Register a G4VPhysicalVolume
-    void RegisterChildParentLVs( const G4LogicalVolume* logvol,
-                                 const G4LogicalVolume* parentLV );
+    void RegisterChildParentLVs(const G4LogicalVolume* logvol,
+                                const G4LogicalVolume* parentLV);
       // Register a child and its parent LV
 
-    G4VSolid* FindG4Solid( const G4String& name );
-      // Find if solid already exists, comparing the name and all parameters 
+    G4VSolid* FindG4Solid(const G4String& name);
+      // Find if solid already exists, comparing the name and all parameters
       // (could be checked before creating it, but it would be quite
       // complicated, because it would have to compare the parameters, and
       // they depend on the type of solid)
 
-    G4LogicalVolume* FindG4LogVol( const G4String& theName,
-                                   const G4bool bExists = 0 );
+    G4LogicalVolume* FindG4LogVol(const G4String& theName,
+                                  const G4bool bExists = false);
       // Find a G4LogicalVolume if it already exists
 
-    G4VPhysicalVolume* FindG4PhysVol( const G4String& theName,
-                                   const G4bool bExists = 0 );
+    G4VPhysicalVolume* FindG4PhysVol(const G4String& theName,
+                                     const G4bool bExists = false);
       // Find a G4VPhysicalVolume if it already exists
 
     G4VPhysicalVolume* GetTopPhysVol();
@@ -125,14 +119,18 @@ class G4tgbVolumeMgr
     void DumpG4PhysVolLeaf(const G4VPhysicalVolume* pv, unsigned int leafDepth);
     void DumpG4SolidList();
 
-  public:  // without description
-
-    const std::multimap< G4String, G4VSolid* >& GetSolids() const
-      { return theSolids; }
-    void SetDetectorBuilder( G4tgbDetectorBuilder* db )
-      { theDetectorBuilder = db; }
+    const std::multimap<G4String, G4VSolid*>& GetSolids() const
+    {
+      return theSolids;
+    }
+    void SetDetectorBuilder(G4tgbDetectorBuilder* db)
+    {
+      theDetectorBuilder = db;
+    }
     G4tgbDetectorBuilder* GetDetectorBuilder() const
-      { return theDetectorBuilder; }
+    {
+      return theDetectorBuilder;
+    }
 
   private:
 
@@ -164,7 +162,7 @@ class G4tgbVolumeMgr
       // Physical volume tree for inverse navigation (from children to parents):
       // first is child, then parent
 
-    G4tgbDetectorBuilder* theDetectorBuilder;
+    G4tgbDetectorBuilder* theDetectorBuilder = nullptr;
 };
 
 #endif

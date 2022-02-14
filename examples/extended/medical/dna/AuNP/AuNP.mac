@@ -1,0 +1,44 @@
+#/run/numberOfThreads 4
+#/scheduler/verbose 0
+/tracking/verbose 0
+/run/verbose 0
+#
+/AuNP/det/setNPMat G4_Au
+#/AuNP/det/setNPMat G4_WATER
+#
+/AuNP/det/setAbsRadius 1000 um 
+/AuNP/det/setNReplicaAzm 360
+/AuNP/det/setNPRadius 50 nm
+/AuNP/det/setNReplicaR 1000
+/AuNP/det/setTrackingCut 10 eV
+##
+/AuNP/phys/Physics4NP DNA
+#/AuNP/phys/Physics4NP Livermore
+#/AuNP/phys/Physics4NP Penelope
+#
+#/chem/activate True
+#/chem/activate False
+#
+/run/setCut 0.1 nm
+/cuts/setLowEdge 1 eV #take long time
+#
+/run/initialize
+#
+/process/em/fluo true
+/process/em/pixe true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true 
+/process/em/lowestElectronEnergy 1 eV
+#/process/em/pixeElecXSmodel Penelope #for Penelope
+#
+#/gun/particle gamma
+/gun/particle e-
+#/gun/energy 100 eV
+#/gun/energy 1 keV
+/gun/energy 10 keV
+#/gun/energy 100 keV
+#/gun/energy 1 MeV
+#
+/run/printProgress 10000
+/run/beamOn 10000

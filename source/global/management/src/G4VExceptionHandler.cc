@@ -23,47 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VExceptionHandler class implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      ---------------- G4VExceptionHandler ----------------
-//             by Makoto Asai (August 2002)
-// ------------------------------------------------------------
+// Author: M.Asai, August 2002
+// --------------------------------------------------------------------
 
 #include "G4VExceptionHandler.hh"
 #include "G4StateManager.hh"
 
-G4VExceptionHandler::G4VExceptionHandler() 
+G4VExceptionHandler::G4VExceptionHandler()
 {
-  G4StateManager * stateManager = G4StateManager::GetStateManager();
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
   stateManager->SetExceptionHandler(this);
 }
 
-G4VExceptionHandler::~G4VExceptionHandler()
+G4VExceptionHandler::~G4VExceptionHandler() {}
+
+G4VExceptionHandler::G4VExceptionHandler(const G4VExceptionHandler& right)
 {
+  *this = right;
 }
 
-G4VExceptionHandler::G4VExceptionHandler(const G4VExceptionHandler &right)
+G4VExceptionHandler& G4VExceptionHandler::operator=(
+  const G4VExceptionHandler& right)
 {
-   *this = right;
+  if(&right == this)
+  {
+    return *this;
+  }
+  *this = right;
+  return *this;
 }
 
-G4VExceptionHandler& G4VExceptionHandler::operator=(const G4VExceptionHandler &right)
+G4bool G4VExceptionHandler::operator==(const G4VExceptionHandler& right) const
 {
-   if (&right == this)  { return *this; }
-   *this = right;
-   return *this;
+  return (this == &right);
 }
 
-G4bool G4VExceptionHandler::operator==(const G4VExceptionHandler &right) const
+G4bool G4VExceptionHandler::operator!=(const G4VExceptionHandler& right) const
 {
-   return (this == &right);
-}
-
-G4bool G4VExceptionHandler::operator!=(const G4VExceptionHandler &right) const
-{
-   return (this != &right);
+  return (this != &right);
 }

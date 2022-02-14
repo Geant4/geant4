@@ -48,7 +48,7 @@ public:
   G4HadFinalState();
 
   inline
-  G4int GetNumberOfSecondaries() const           { return theSecs.size(); }
+  std::size_t GetNumberOfSecondaries() const           { return theSecs.size(); }
   void SetEnergyChange(G4double anEnergy);
   inline
   G4double GetEnergyChange() const               { return theEnergy; }

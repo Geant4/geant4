@@ -1,0 +1,10 @@
+
+#test beam
+/gps/pos/type Plane				
+/gps/pos/shape Circle
+/gps/pos/radius 1. mm	
+/gps/pos/centre 0. 0. 0. mm	
+/gps/direction 0 0 1  	
+/gps/particle gamma  
+/gps/ene/type Mono					
+/gps/ene/mono 20. keV 

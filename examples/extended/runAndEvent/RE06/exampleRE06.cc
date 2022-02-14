@@ -36,11 +36,9 @@
 //      GEANT 4 - example RE06 
 // --------------------------------------------------------------
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4Types.hh"
+
+#include "G4RunManagerFactory.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -60,32 +58,25 @@
 #include "RE06RunAction.hh"
 #include "RE06SteppingVerbose.hh"
 #include "RE06ActionInitialization.hh"
-#include "RE06WorkerInitialization.hh"
 
 int main(int argc,char** argv)
 {
  // Construct the stepping verbose class
- RE06SteppingVerbose* verbosity = new RE06SteppingVerbose;
- G4VSteppingVerbose::SetInstance(verbosity);
+ //
+ auto verbosity = new RE06SteppingVerbose;
 
  // Construct the run manager
  //
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
-  runManager->SetUserInitialization(new RE06WorkerInitialization);
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+ auto runManager = G4RunManagerFactory::CreateRunManager();
 
  // Set mandatory initialization classes
  //
  G4String parallelWorldName = "ParallelScoringWorld";
- G4VUserDetectorConstruction* detector = new RE06DetectorConstruction;
+ auto detector = new RE06DetectorConstruction;
  detector->RegisterParallelWorld(new RE06ParallelWorld(parallelWorldName));
  runManager->SetUserInitialization(detector);
  //
- G4VModularPhysicsList* physics = new FTFP_BERT;
+ auto physics = new FTFP_BERT;
  physics->RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
  runManager->SetUserInitialization(physics);
   
@@ -96,7 +87,7 @@ int main(int argc,char** argv)
 #ifdef G4VIS_USE
  // Visualization manager
  //
- G4VisManager* visManager = new G4VisExecutive;
+ auto visManager = new G4VisExecutive;
  visManager->Initialize();
 #endif
     
@@ -106,7 +97,7 @@ int main(int argc,char** argv)
   
  // Get the pointer to the User Interface manager
  //
- G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+ auto UImanager = G4UImanager::GetUIpointer();
 
  if (argc==1)   // Define UI session for interactive mode
  {
@@ -126,13 +117,13 @@ int main(int argc,char** argv)
    UImanager->ApplyCommand(command+fileName);
  }
 
-  // Job termination
-  // Free the store: 
-  // user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not
-  // be deleted in the main() program !
+ // Job termination
+ // Free the store:
+ // user actions, physics_list and detector_description are
+ // owned and deleted by the run manager, so they should not
+ // be deleted in the main() program !
 
-#ifdef G4VIS_USE
+ delete verbosity;
  delete visManager;
 #endif
  delete runManager;

@@ -31,8 +31,8 @@
 
 // Created: P.Arce, September 2004
 // --------------------------------------------------------------------
-#ifndef G4ErrorTanPlaneTarget_hh
-#define G4ErrorTanPlaneTarget_hh
+#ifndef G4ERRORTANPLANETARGET_HH
+#define G4ERRORTANPLANETARGET_HH 1
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -42,17 +42,16 @@
 class G4ErrorTanPlaneTarget : public G4ErrorTarget
 {
 
-  public:  // with description
+  public:
 
     G4ErrorTanPlaneTarget();
-    virtual ~G4ErrorTanPlaneTarget();
+    virtual ~G4ErrorTanPlaneTarget() = default;
 
     virtual G4Plane3D GetTangentPlane( const G4ThreeVector& point ) const = 0;
       // Get tangent plane at point
 
     virtual void Dump( const G4String& msg ) const = 0;
       // Dump surface
-
 };
 
 #endif

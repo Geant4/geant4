@@ -44,6 +44,7 @@
 #include "G4Neutron.hh"
 #include "G4HadronicProcess.hh"
 #include "G4HadronElastic.hh"
+#include "G4HadronicParameters.hh"
 
 #include "G4LENDElastic.hh"
 #include "G4LENDElasticCrossSection.hh"
@@ -56,7 +57,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsLEND);
 G4HadronElasticPhysicsLEND::G4HadronElasticPhysicsLEND(G4int ver, const G4String& eva)
   : G4HadronElasticPhysics(ver, "hElasticWEL_CHIPS_LEND"), evaluation(eva)
 {
-  if(verbose > 1) { 
+  if(ver > 1) { 
     G4cout << "### G4HadronElasticPhysicsLEND: " << GetPhysicsName() 
 	   << G4endl; 
   }
@@ -89,7 +90,7 @@ void G4HadronElasticPhysicsLEND::ConstructProcess()
     hel->AddDataSet( lend_XS );
   }
 
-  if(verbose > 1) {
+  if(G4HadronicParameters::Instance()->GetVerboseLevel() > 1) {
     G4cout << "### HadronElasticPhysicsLEND is constructed" 
 	   << G4endl;
   }

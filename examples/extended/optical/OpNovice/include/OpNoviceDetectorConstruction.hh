@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file OpNovice/include/OpNoviceDetectorConstruction.hh
+/// \brief Definition of the OpNoviceDetectorConstruction class
 //
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef OpNoviceDetectorConstruction_h
@@ -36,27 +36,46 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class OpNoviceDetectorMessenger;
+
 class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
-    OpNoviceDetectorConstruction();
-    virtual ~OpNoviceDetectorConstruction();
+ public:
+  OpNoviceDetectorConstruction();
+  ~OpNoviceDetectorConstruction();
 
-  public:
-    virtual G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct() override;
+  void SetDumpGdml(G4bool);
+  G4bool IsDumpGdml() const;
+  void SetVerbose(G4bool verbose);
+  G4bool IsVerbose() const;
+  void SetDumpGdmlFile(G4String);
+  G4String GetDumpGdmlFile() const;
 
-  private:
-    G4double fExpHall_x;
-    G4double fExpHall_y;
-    G4double fExpHall_z;
+ private:
+  void PrintError(G4String);
 
-    G4double fTank_x;
-    G4double fTank_y;
-    G4double fTank_z;
+  OpNoviceDetectorMessenger* fDetectorMessenger;
+  G4String fDumpGdmlFileName;
 
-    G4double fBubble_x;
-    G4double fBubble_y;
-    G4double fBubble_z;
+  G4double fWorld_x;
+  G4double fWorld_y;
+  G4double fWorld_z;
+
+  G4double fExpHall_x;
+  G4double fExpHall_y;
+  G4double fExpHall_z;
+
+  G4double fTank_x;
+  G4double fTank_y;
+  G4double fTank_z;
+
+  G4double fBubble_x;
+  G4double fBubble_y;
+  G4double fBubble_z;
+  
+  G4bool fVerbose;
+  G4bool fDumpGdml;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

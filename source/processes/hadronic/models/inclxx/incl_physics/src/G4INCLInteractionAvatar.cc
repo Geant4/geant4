@@ -426,11 +426,11 @@ namespace G4INCL {
       (*i)->adjustEnergyFromMomentum();
       (*i)->rpCorrelate();
       (*i)->boost(-boostVector);
-      if(theNucleus)
+      if(theNucleus){
         theNucleus->updatePotentialEnergy(*i);
-      else
+      } else {
         (*i)->setPotentialEnergy(0.);
-
+      }
 //jcd      if(shouldUseLocalEnergy && !(*i)->isPion()) { // This translates AECSVT's loops 1, 3 and 4
         if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
            !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isLambda()) { // This translates AECSVT's loops 1, 3 and 4

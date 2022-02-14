@@ -38,7 +38,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4ProtonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
 #include "G4ParticleHPInelastic.hh"
@@ -49,9 +49,8 @@ public:
   G4ProtonPHPBuilder();
   virtual ~G4ProtonPHPBuilder();
   
-public: 
-  virtual void Build(G4ProtonInelasticProcess * aP);
-  virtual void Build(G4HadronElasticProcess * aP);
+  virtual void Build(G4HadronInelasticProcess * aP) final override;
+  virtual void Build(G4HadronElasticProcess * aP) final override;
   
   void SetMinEnergy(G4double aM) 
   {
@@ -65,8 +64,6 @@ public:
 private:
   G4double theMin;
   G4double theMax;
-  G4ParticleHPInelastic*  theParticlePHPModel;
-  
 };
 
 #endif

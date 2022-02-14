@@ -64,15 +64,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int id = aRun->GetRunID();
   G4cout << "### Run " << id << " start" << G4endl;
-  timer->Stop();
-  G4cout << "RunAction::BeginOfRunAction:  "  << *timer << G4endl;
+  fTimer->Stop();
+  G4cout << "Initialisation time:  "  << *fTimer << G4endl;
 
-  delete timer;
-  timer = new G4Timer();
-  timer->Start();
-  G4NuclearLevelData::GetInstance();
-  timer->Stop();
-  G4cout << "NuclearData:  "  << *timer << G4endl;
+  delete fTimer;
+  fTimer = new G4Timer();
+  fTimer->Start();
 
   (HistoManager::GetPointer())->BeginOfRun();
 
@@ -94,6 +91,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 void RunAction::EndOfRunAction(const G4Run*)
 {
 
+  fTimer->Stop();
+  G4cout << "RunAction::EndOfRunAction:  "  << *fTimer << G4endl;
   G4cout << "RunAction: End of run actions are started" << G4endl;
   (HistoManager::GetPointer())->EndOfRun();
 

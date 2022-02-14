@@ -49,28 +49,20 @@
 
 class G4VecpssrLiModel 
 {
-
 public:
-
-  G4VecpssrLiModel();
-
+  explicit G4VecpssrLiModel();
   virtual ~G4VecpssrLiModel();
-			     
-  virtual G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 
-  virtual G4double CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+  virtual G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, 
+					   G4double energyIncident) = 0;
 
-  virtual G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
-				    
+  virtual G4double CalculateL2CrossSection(G4int zTarget,G4double massIncident, 
+					   G4double energyIncident) = 0;
+  virtual G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, 
+					   G4double energyIncident) = 0;
 
-   
-
-private:
-
-
-  G4VecpssrLiModel(const G4VecpssrLiModel&);
-  G4VecpssrLiModel & operator = (const G4VecpssrLiModel &right);
-
+  G4VecpssrLiModel(const G4VecpssrLiModel&) = delete;
+  G4VecpssrLiModel & operator = (const G4VecpssrLiModel &right) = delete;
 };
 
 #endif

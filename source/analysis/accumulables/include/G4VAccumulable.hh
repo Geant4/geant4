@@ -41,17 +41,19 @@ class G4VAccumulable
 
   public:
     G4VAccumulable(const G4String& name = "");
-    G4VAccumulable(const G4VAccumulable& rhs);
-    virtual ~G4VAccumulable() {}
+    G4VAccumulable(const G4VAccumulable& rhs) = default;
+    G4VAccumulable(G4VAccumulable&& rhs) = default;
+    virtual ~G4VAccumulable() = default;
 
-    // operators
-    G4VAccumulable& operator=(const G4VAccumulable& rhs);
+    // Operators
+    G4VAccumulable& operator=(const G4VAccumulable& rhs) = default;
+    G4VAccumulable& operator=(G4VAccumulable&& rhs) = default;
 
-    // methods
+    // Methods
     virtual void Merge(const G4VAccumulable& other) = 0;
     virtual void Reset() = 0;
 
-    // get methods
+    // Get methods
     G4String  GetName() const;
 
   protected:

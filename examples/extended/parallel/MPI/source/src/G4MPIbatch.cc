@@ -39,8 +39,8 @@ void Tokenize(const G4String& str, std::vector<G4String>& tokens)
 {
   const char* delimiter = " ";
 
-  str_size pos0 = str.find_first_not_of(delimiter);
-  str_size pos = str.find_first_of(delimiter, pos0);
+  auto pos0 = str.find_first_not_of(delimiter);
+  auto pos = str.find_first_of(delimiter, pos0);
 
   while (pos != G4String::npos || pos0 != G4String::npos) {
     if (str[pos0] == '\"') {
@@ -95,19 +95,19 @@ G4String G4MPIbatch::ReadCommand()
     G4String cmdline(linebuf);
 
     // TAB-> ' ' conversion
-    str_size nb = 0;
+    G4String::size_type nb = 0;
     while ((nb= cmdline.find('\t',nb)) != G4String::npos) {
       cmdline.replace(nb, 1, " ");
     }
 
     // strip
-    cmdline = cmdline.strip(G4String::both);
+    G4StrUtil::strip(cmdline);
 
     // skip null line if single line
     if( !qcontinued && cmdline.size() == 0 ) continue;
 
     // '#' is treated as echoing something
-    if( cmdline(0) == '#' ) return cmdline;
+    if( cmdline[0] == '#' ) return cmdline;
 
     // tokenize...
     std::vector<G4String> tokens;
@@ -115,9 +115,9 @@ G4String G4MPIbatch::ReadCommand()
     qcontinued = false;
     for( G4int i = 0; i < G4int(tokens.size()); i++ ) {
       // string after '#" is ignored
-      if( tokens[i](0) == '#' ) break;
+      if( tokens[i][0] == '#' ) break;
       // '\' or '_' is treated as continued line.
-      if( tokens[i] == '\\' || tokens[i] == '_' ) {
+      if( tokens[i] == "\\" || tokens[i] == "_" ) {
         qcontinued = true;
         // check nothing after line continuation character
         if( i != G4int(tokens.size())-1 ) {
@@ -137,7 +137,7 @@ G4String G4MPIbatch::ReadCommand()
   }
 
   // strip again
-  cmdtotal = cmdtotal.strip(G4String::both);
+  G4StrUtil::strip(cmdtotal);
 
   // bypass some commands
   cmdtotal = BypassCommand(cmdtotal);
@@ -170,7 +170,7 @@ G4UIsession* G4MPIbatch::SessionStart()
     }
 
     // just echo something
-    if( scommand(0) == '#' ) {
+    if( scommand[0] == '#' ) {
       if( G4UImanager::GetUIpointer()-> GetVerboseLevel() == 2 ) {
         G4cout << scommand << G4endl;
       }

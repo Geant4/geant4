@@ -71,7 +71,7 @@ G4eeToTwoPiModel::G4eeToTwoPiModel(G4eeCrossSections* cr,
   G4cout << "#####G4eeToTwoPiModel####" << G4endl;  
 
   massPi = G4PionPlus::PionPlus()->GetPDGMass();
-  massRho = 775.5*MeV;
+  massRho = 775.5*CLHEP::MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

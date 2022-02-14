@@ -35,13 +35,11 @@
 
 #include "G4RootAnalysisManager.hh"
 
-enum class G4MpiNtupleMergeMode {
-  kNone,
-  kMain,
-  kSlave
-};
+class G4RootMpiNtupleFileManager;
 
-class G4RootMpiPNtupleManager;
+namespace tools {
+class impi;  
+}  
 
 class G4RootMpiAnalysisManager : public  G4RootAnalysisManager
 {
@@ -49,6 +47,9 @@ class G4RootMpiAnalysisManager : public  G4RootAnalysisManager
     explicit G4RootMpiAnalysisManager(G4bool isMaster = true);
     virtual ~G4RootMpiAnalysisManager();
     
+    // Static methods
+    static G4RootMpiAnalysisManager* Instance();
+
     // MPI
     void SetMpiNtupleMerging(tools::impi* impi, 
                              G4int mpiRank, G4int mpiSize,
@@ -57,18 +58,12 @@ class G4RootMpiAnalysisManager : public  G4RootAnalysisManager
   protected:
     // virtual methods from base class
     virtual G4bool OpenFileImpl(const G4String& fileName) final;
+    virtual G4bool WriteImpl() final; 
     virtual G4bool CloseFileImpl(G4bool reset) final; 
-    virtual G4bool WriteNtuple() final;
-    virtual G4bool Reset() final;
 
   private:
-    // methods
-    void SetMpiNtupleMergingMode(G4int mpiRank, G4int mpiSize, G4int nofNtupleFiles);
-    void CreateMpiNtupleManagers(tools::impi* impi, G4int mpiRank, G4int mpiSize);
-
-    // data members 
-    G4MpiNtupleMergeMode      fMpiNtupleMergeMode;
-    G4RootMpiPNtupleManager*  fMpiSlaveNtupleManager;
+    // Static data members
+    inline static G4RootMpiAnalysisManager* fgInstance { nullptr };
 };
 
 #endif

@@ -33,7 +33,8 @@
 //    *******************************
 //
 //
-
+#include "BrachyDetectorMessenger.hh"
+#include "BrachyDetectorConstructionLeipzig.hh"
 #include "globals.hh"
 #include "BrachyFactoryLeipzig.hh"
 #include "G4ParticleTable.hh"
@@ -43,26 +44,24 @@
 #include "G4IonTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh" 
-#include "BrachyDetectorMessenger.hh"
-#include "BrachyDetectorConstructionLeipzig.hh"
 
 BrachyFactoryLeipzig:: BrachyFactoryLeipzig()
 {
- leipzigSource = new  BrachyDetectorConstructionLeipzig();
+ fLeipzigSource = new  BrachyDetectorConstructionLeipzig();
 }
 
 BrachyFactoryLeipzig:: ~BrachyFactoryLeipzig()
 {
-  delete leipzigSource;
+  delete fLeipzigSource;
 }
 
 void BrachyFactoryLeipzig::CreateSource(G4VPhysicalVolume* mother)
 {
-  leipzigSource -> ConstructLeipzig(mother);
+  fLeipzigSource -> ConstructLeipzig(mother);
 }
 
 void BrachyFactoryLeipzig::CleanSource()
 {
-  leipzigSource -> CleanLeipzigApplicator();
-  leipzigSource = 0; 
+  fLeipzigSource -> CleanLeipzigApplicator();
+  fLeipzigSource = nullptr; 
 }

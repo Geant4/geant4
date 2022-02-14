@@ -84,15 +84,13 @@
 #include "G4LossTableManager.hh"
 #include "StepMax.hh"
 
-#include "G4EmProcessOptions.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(0),
-  fDecayPhysicsList(0),
-  fStepMaxProcess(0),
-  fMessenger(0)
+  fEmPhysicsList(nullptr),
+  fDecayPhysicsList(nullptr),
+  fStepMaxProcess(nullptr),
+  fMessenger(nullptr)
 {
   G4LossTableManager::Instance();
   SetDefaultCutValue(1*mm);
@@ -162,69 +160,69 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (name == "emstandard") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysics();
+    fEmPhysicsList = new G4EmStandardPhysics(verboseLevel);
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
   } else if (name == "emstandard_opt1") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysics_option1();
+    fEmPhysicsList = new G4EmStandardPhysics_option1(verboseLevel);
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
   } else if (name == "emstandard_opt2") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysics_option2();
+    fEmPhysicsList = new G4EmStandardPhysics_option2(verboseLevel);
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
   } else if (name == "emstandard_opt3") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysics_option3();
+    fEmPhysicsList = new G4EmStandardPhysics_option3(verboseLevel);
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
   } else if (name == "emstandard_opt4") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysics_option4();
+    fEmPhysicsList = new G4EmStandardPhysics_option4(verboseLevel);
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "emstandard_local") {
+  } else if (name == "local") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandard();
+    fEmPhysicsList = new PhysListEmStandard(verboseLevel);
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
   } else if (name == "emlivermore") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmLivermorePhysics();
+    fEmPhysicsList = new G4EmLivermorePhysics(verboseLevel);
 
   } else if (name == "empenelope") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmPenelopePhysics();
+    fEmPhysicsList = new G4EmPenelopePhysics(verboseLevel);
 
   } else if (name == "emlowenergy") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmLowEPPhysics();
+    fEmPhysicsList = new G4EmLowEPPhysics(verboseLevel);
 
   } else if (name == "emstandardGS") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysicsGS();
+    fEmPhysicsList = new G4EmStandardPhysicsGS(verboseLevel);
 
   } else if (name == "emstandardSS") {
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysicsSS();
+    fEmPhysicsList = new G4EmStandardPhysicsSS(verboseLevel);
 
   } else if (name == "emstandardWVI") {
     fEmName = name;

@@ -6,12 +6,163 @@
 
     Hadronic physics-list/constructors/hadron_inelastic History
     -----------------------------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-May-2021 Vladimir Ivanchenko (phys-ctor-hinelastic-V10-07-05)
+- Migrate all constructors: printouts are controlled by verbosity level
+  of G4HadronicParameters class; base class verboseLevel member is 
+  not used; G4HadronicParameters singletone in initialized in all class
+  constructors; if the verbosity level is defined in a class constructor
+  it is propagated to G4HadronicParameters (user may change this level
+  using UI command before physics is initialized); check versus 
+  nullptr is used in several places
+
+16-April-2021 Ben Morgan (phys-ctor-hinelastic-V10-07-04)
+- Migrate build to modular CMake API
+
+13-April-2021, Alberto Ribon (phys-ctor-hinelastic-V10-07-03)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
+18-March-2021, Alberto Ribon (phys-ctor-hinelastic-V10-07-02)
+-  G4HadronInelasticQBBC, G4HadronPhysicsFTF_BIC, G4HadronPhysicsFTFP_BERT,
+   G4HadronPhysicsFTFP_BERT_HP, G4HadronPhysicsFTFQGSP_BERT,
+   G4HadronPhysicsINCLXX, G4HadronPhysicsQGS_BIC, G4HadronPhysicsQGSP_BERT,
+   G4HadronPhysicsQGSP_BERT_HP, G4HadronPhysicsQGSP_BIC,
+   G4HadronPhysicsQGSP_BIC_HP, G4HadronPhysicsShielding : removed unused
+   header files, and replaced when needed G4HadronCaptureProcess with
+   G4NeutronCaptureProcess.
+
+10-March-2021, Krzysztof Genser (phys-ctor-hinelastic-V10-07-01)
+- G4HadronPhysicsShielding: corrected parameters of the M variant
+
+05-December-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-07-00)
+- G4HadronPhysicsFTFP_BERT, G4HadronPhysicsQGSP_BERT, G4HadronInelasticQBBC,
+  G4HadronPhysicsQGSP_BIC : fixed type of builder in all hadron
+    inelatic constructors (problem #2296)
+
+26-November-2020, Alberto Ribon (phys-ctor-hinelastic-V10-06-18)
+- Update README.
+
+04-November-2020, Alberto Ribon (phys-ctor-hinelastic-V10-06-17)
+- G4HadronPhysicsFTFP_BERT, G4HadronPhysicsQGSP_BERT, G4HadronInelasticQBBC :
+    enabled charm and bottom hadronic physics (now available in nearly all
+    physics lists, in particular those of interest for HEP; the main
+    exception is QGSP_BIC and its derived physics lists, which are
+    typically used for low-energy applications).
+
+30-October-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-16)
+- G4HadronPhysicsINCLXX - use inheritance from the base
+    class G4HadronPhysicsFTFP_BERT; removed duplicate code;
+    clean-up; list of models and applicability intervals are the same;
+    implemented b-, c- particle physics and cross section factor
+
+19-October-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-15)
+- G4HadronPhysicsFTF_BIC, G4HadronPhysicsQGS_BIC,
+  G4HadronPhysicsFTFQGSP_BERT - use inheritance from the base
+    class G4HadronPhysicsFTFP_BERT; removed duplicate code;
+    clean-up; list of models and applicability intervals are the same;
+    implemented b-, c- particle physics and cross section factor
+  Improved comments and info printouts in other physics classes
+  G4HadronInelasticQBBC - use G4HadronicBuilder, apply the Binary
+    cascade to pions below 1.5 GeV
+
+02-October-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-14)
+- G4HadronPhysicsNuBeam, G4HadronPhysicsShielding,
+  G4HadronPhysicsShieldingLEND - use inheritance from the base
+    class G4HadronPhysicsFTFP_BERT; removed duplicate code;
+    clean-up; list of models and applicability intervals are the same;
+    implemented b-, c- particle physics and cross section factor
+  Improved comments and info printouts in other physics classes
+
+01-October-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-13)
+- G4HadronPhysicsQGSP_BERT, G4HadronPhysicsQGSP_FTFP_BERT,
+  G4HadronPhysicsQGSP_BERT_HP - implement DumpBanner() method
+- G4VHadronPhysics - removed unused method
+
+22-September-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-12)
+-  G4HadronInelasticFTFP_BERT, G4HadronInelasticFTFP_BERT_HP,
+   G4HadronInelasticFTFP_BERT_ATL, G4HadronInelasticFTFP_BERT_TRV - added
+     optinal cross section factor for systematics studies; added b-, c-
+     physics; added more c++11 keywords; removed unused headers
+
+17-September-2020, Alberto Ribon    (phys-ctor-hinelastic-V10-06-11)
+-  G4HadronInelasticQGSP_BERT and G4HadronInelasticQGSP_BIC : replaced
+   G4HadronicBuilder::BuildAntiLightIonsQGSP_FTFP with
+   G4HadronicBuilder::BuildAntiLightIonsFTFP
+   (because currently QGSP cannot be applied to any ion or anti-ion).
+
+02-September-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-10)
+-  G4HadronInelasticQGSP_BERT, G4HadronInelasticQGSP_BIC - allow
+     modification of parameters at PreInit stage
+-  G4HadronInelasticQGSP_FTFP_BERT - enable b- and c- particle physics
+
+25-August-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-09)
+-  G4HadronInelasticQGSP_BERT, G4HadronInelasticQGSP_BERT_HP,
+   G4HadronInelasticQGSP_FTFP_BERT - added optinal cross section factor for
+     systematics studies; added b-, c- physics; added more c++11 keywords
+-  G4VHadronPhysics - removed obsolete methods
+
+21-August-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-08)
+-  G4HadronInelasticQBBC - fixed neutrom and anti-baryon configurations
+-  G4HadronInelasticQGSP_BIC, G4HadronInelasticQGSP_BIC_HP,
+   G4HadronInelasticQGSP_BIC_AllHP - added optinal cross section factor for
+     systematics studies; added b-, c- physics;
+
+01-August-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-07)
+-  G4HadronInelasticQBBC - added optinal cross section factor for
+     systematics studies
+
+19-July-2020, Vladimir Ivanchenko  (phys-ctor-hinelastic-V10-06-06)
+-  G4HadronInelasticQBBC - use correct utility methods
+
+09-July-2020, Vladimir Ivanchenko  (phys-ctor-hinelastic-V10-06-05)
+-  G4HadronInelasticQBBC - use utilites G4HadParticle and G4HadronicBuilder
+-  G4VHadronPhysics - removed obsolete methods and thread_local methods
+
+30-May-2020 Ben Morgan             (phys-ctor-hinelastic-V10-06-04)
+-  Remove obsolete GRANULAR_DEPENDENCIES entries
+
+20-May-2020, Alberto Ribon         (phys-ctor-hinelastic-V10-06-03)
+-  G4HadronPhysicsQGSP_BIC_HP, G4HadronPhysicsQGSP_BIC_AllHP : refactoring
+   of these two constructors, consistently with all others.
+   For G4HadronPhysicsQGSP_BIC_HP, the physics remain unchanged;
+   for G4HadronPhysicsQGSP_BIC_AllHP, the physics remain unchanged
+   except for the transition region between Binary and ProtonHP which
+   is now 190-200 MeV (instead than 199-200), as for light ions.
+
+18-May-2020, Vladimir Ivanchenko   (phys-ctor-hinelastic-V10-06-02)
+-  G4HadronPhysicsFTFP_BERT, G4HadronPhysicsQGSP_BERT,
+   G4HadronPhysicsFTFP_BERT_TRV, G4HadronPhysicsQGSP_FTFP_BERT,
+   G4HadronInelasticQBBC - added b- and c- particle
+
+07-May-2020, Alberto Ribon         (phys-ctor-hinelastic-V10-06-01)
+-  G4HadronPhysicsFTFP_BERT, G4HadronPhysicsFTF_BIC, G4HadronPhysicsINCLXX,
+   G4HadronPhysicsShielding, G4HadronPhysicsShieldingLEND,
+   G4HadronPhysicsQGSP_BERT, G4HadronPhysicsQGS_BIC,
+   G4HadronPhysicsQGSP_BIC, G4HadronPhysicsQGSP_BIC_HP,
+   G4HadronPhysicsQGSP_BIC_AllHP : in all the inelastic physics constructors
+   which were using the builder G4HyperonFTFPBuilder, introduce the new
+   builder G4HyperonBuilder; moreover, the new builder G4HyperonQGSPBuilder
+   is used now in all QGS-based inelastic physics constructor for hyperons
+   (and anti-hyperons) at high energies (while keeping using
+   G4HyperonFTFPBuilder at lower energies).
+
+05-May-2020, Alberto Ribon         (phys-ctor-hinelastic-V10-06-00)
+- G4HadronPhysicsQGSP_BERT, G4HadronPhysicsQGSP_BIC, G4HadronPhysicsQGS_BIC,
+  G4HadronPhysicsINCLXX, G4HadronPhysicsQGSP_BIC_HP,
+  G4HadronPhysicsQGSP_BIC_AllHP : use the new builder class
+  G4QGSPAntiBarionBuilder to handle anti_proton and anti_neutron
+  at high energies with QGSP.
+  (For the light anti-ions - anti_deuteron, anti_triton, anti_He3, and
+   anti_alpha - currently QGSP cannot handle them, therefore FTFP is
+   used.)
 
 29-November-2019, Alberto Ribon    (phys-ctor-hinelastic-V10-05-03)
 - Update of the only README file.
@@ -23,10 +174,10 @@ introduced in the code and keeptrack of all tags.
 - G4HadronInelasticFTFQGSP_BERT, G4HadronInelasticQBBC : use Glauber-Gribov
   inelastic cross sections (instead of Chips ones) for hyperons and
   anti-hyperons.
-- G4HadronPhysicsFTF_BIC, G4HadronPhysicsFTFP_BERT_HP, 
+- G4HadronPhysicsFTF_BIC, G4HadronPhysicsFTFP_BERT_HP,
   G4HadronPhysicsFTFP_BERT_TRV, G4HadronPhysicsFTFQGSP_BERT,
   G4HadronPhysicsQGS_BIC, G4HadronPhysicsQGSP_BERT,
-  G4HadronPhysicsQGSP_BERT_HP, G4HadronPhysicsQGSP_BIC, 
+  G4HadronPhysicsQGSP_BERT_HP, G4HadronPhysicsQGSP_BIC,
   G4HadronPhysicsQGSP_BIC_HP, G4HadronPhysicsQGSP_BIC_AllHP,
   G4HadronInelasticQBBC, G4HadronPhysicsINCLXX : removed special treatment
   of hadronic inelastic cross sections of kaons (now default).
@@ -65,7 +216,7 @@ introduced in the code and keeptrack of all tags.
 - G4HadronInelasticQBBC - removed statics class memebers
 
 06-August-2018, Alberto Ribon      (phys-ctor-hinelastic-V10-04-08)
-- G4HadronPhysicsFTFP_BERT_HP, G4HadronPhysicsINCLXX, 
+- G4HadronPhysicsFTFP_BERT_HP, G4HadronPhysicsINCLXX,
   G4HadronPhysicsShielding, G4HadronPhysicsQGSP_BIC_AllHP,
   G4HadronPhysicsNuBeam, G4HadronPhysicsShieldingLEND,
   G4HadronPhysicsQGSP_BERT_HP, G4HadronPhysicsQGSP_BIC_HP,
@@ -74,7 +225,7 @@ introduced in the code and keeptrack of all tags.
   the one from G4HadronicParameters .
 
 28-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-07)
-- in all hadronic builders implement fix for #2057, remove possible 
+- in all hadronic builders implement fix for #2057, remove possible
   double deletion of objects end of run
 
 25-July-2018, Alberto Ribon        (phys-ctor-hinelastic-V10-04-06)
@@ -84,8 +235,8 @@ introduced in the code and keeptrack of all tags.
 
 21-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-05)
 - G4VHadronPhysics - added extra method
-- G4HadronInelasticQBBC, G4HadronPhysicsFTFP_BERT, 
-  G4HadronPhysicsQGSP_BIC_AllHP, G4HadronPhysicsQGS_BIC - do not fill 
+- G4HadronInelasticQBBC, G4HadronPhysicsFTFP_BERT,
+  G4HadronPhysicsQGSP_BIC_AllHP, G4HadronPhysicsQGS_BIC - do not fill
     internal structure for cross sections
 
 20-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-04)
@@ -109,17 +260,17 @@ introduced in the code and keeptrack of all tags.
 - G4HadronInelasticQBBC - use G4ParticleInelasticXS both for neutrons
     and protons
 
-7-Nov-2017, Tatsumi Koi (phys-ctor-hinelastic-V10-03-06) 
+7-Nov-2017, Tatsumi Koi (phys-ctor-hinelastic-V10-03-06)
 - Adding G4HadronPhysicsShieldingLEND
 
-6-Nov-2017, Tatsumi Koi (phys-ctor-hinelastic-V10-03-05) 
+6-Nov-2017, Tatsumi Koi (phys-ctor-hinelastic-V10-03-05)
 - Fix registration of cross section data set in G4HadronPhysicsShielding
 
-16-Oct-2017, Alberto Ribon (phys-ctor-hinelastic-V10-03-04) 
+16-Oct-2017, Alberto Ribon (phys-ctor-hinelastic-V10-03-04)
 - G4HadronPhysicsFTFQGSP_BERT : fixing trivial compiler warnings
   of the previous tag.
 
-16-Oct-2017, Alberto Ribon (phys-ctor-hinelastic-V10-03-03) 
+16-Oct-2017, Alberto Ribon (phys-ctor-hinelastic-V10-03-03)
 - G4HadronPhysicsFTFQGSP_BERT : new hadron physics similar to
   G4HadronPhysicsFTFP_BERT, but with QGS fragmentation of strings
   (instead of the Lund string fragmentation).
@@ -134,7 +285,7 @@ introduced in the code and keeptrack of all tags.
 - Refactoring of code of FTFP_BERT and register physics builders
 
 09-Feb-2017, Makoto Asai                (phys-ctor-hinelastic-V10-03-00)
-- Print-out of the transition energy region between FTFP and BERT 
+- Print-out of the transition energy region between FTFP and BERT
   in the physics lists FTFP_BERT_HP and G4HadronPhysicsFTFP_BERT_HP
   is made only for the master thread.
 
@@ -153,7 +304,7 @@ introduced in the code and keeptrack of all tags.
 - G4HadronPhysicsFTFP_BERT : changed the transition energy region
   between FTFP and BERT in the physics list FTFP_BERT : now it is
   between [2, 6] GeV.
-	 
+
 18-Nov-2016, Alberto Ribon              (phys-ctor-hinelastic-V10-02-07)
 - G4HadronPhysicsFTFP_BERT : changed the transition energy region
   between FTFP and BERT in the physics list FTFP_BERT : now it is
@@ -170,7 +321,7 @@ introduced in the code and keeptrack of all tags.
   fix required by clang39 on Windows and MAC
 
 30-Aug-2016, V.Ivanchenko               (phys-ctor-hinelastic-V10-02-03)
-- G4HadronPhysicsQBBC : use G4 de-excitation for the Bertini cascade 
+- G4HadronPhysicsQBBC : use G4 de-excitation for the Bertini cascade
 
 26-May-2016, A. Ribon                   (phys-ctor-hinelastic-V10-02-02)
 - G4HadronPhysicsQGSP_BIC_AllHP : treat only proton with ParticleHP in
@@ -205,7 +356,7 @@ introduced in the code and keeptrack of all tags.
 
 12-Jun-2015, V.Ivanchenko               (phys-ctor-hinelastic-V10-01-01)
 - G4HadronInelasticQBBC - reduced upper limit of Bertini from 12 to 4 GeV;
-    use BGG inelastic cross section for pions 
+    use BGG inelastic cross section for pions
 
 30-Mar-2015, A. Ribon                   (phys-ctor-hinelastic-V10-01-00)
 - G4HadronPhysicsFTFP_BERT_TRV: changed the transition region between
@@ -215,7 +366,7 @@ introduced in the code and keeptrack of all tags.
 - Add G4HadronPhysicsQGSP_BIC_AllHP for particle_hp physics list
 
 30-Oct-2014, Andrea Dotti               (phys-ctor-hinelastic-V10-00-07)
-- Fix in destructor of G4VHadronPhysics to check validity of pointer. 
+- Fix in destructor of G4VHadronPhysics to check validity of pointer.
 
 30-Oct-2014, Julia Yarba                (phys-ctor-hinelastic-V10-00-06)
 - In G4HadronPhysicsNuBeam, adjust bertini-ftf overlap from 7-10GeV to 3-3.5GeV
@@ -274,14 +425,14 @@ introduced in the code and keeptrack of all tags.
 - Fixed compilation warnings (unused QuasiElastic).
 
 12-Jun-2013, Gunter Folger              (phys-ctor-hinelastic-V09-06-12)
-- in G4HadronPhysicsINCLXX.cc initialise pointers to optinal parts of 
+- in G4HadronPhysicsINCLXX.cc initialise pointers to optinal parts of
    physics to 0 to protect deletion of uninitialised pointer.
 
 11-Jun-2013, Alberto Ribon		(phys-ctor-hinelastic-V09-06-11)
-- Improved use of kaon cross sections in G4HadronPhysicsShielding. 
+- Improved use of kaon cross sections in G4HadronPhysicsShielding.
 
 09-Jun-2013, Andrea Dotti		(phys-ctor-hinelastic-V09-06-10)
-- Fix for MT, make private data members TLS. 
+- Fix for MT, make private data members TLS.
 
 29-Mar-2013, Andrea Dotti		(phys-ctor-hinelastic-V09-06-09)
 - Changes needed for MT: now G4VUserPhysicsList is a split class
@@ -307,7 +458,7 @@ introduced in the code and keeptrack of all tags.
 
 27-Feb-2013, Vladimir Ivanchenko        (phys-ctor-hinelastic-V09-06-03)
 - G4HadronPhysicsFTFP_BERT, G4HadronPhysicsFTFP_BERT_HP - comment out
-    unused members of the class to fix warning from the clang compiler 
+    unused members of the class to fix warning from the clang compiler
     on MacOS
 
 22-Feb-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-02)
@@ -319,5 +470,5 @@ introduced in the code and keeptrack of all tags.
 - GNUmakefile fixed - G4LIB_BUILD_EXPAT is added
 
 10-Jan-2012, Gunter Folger              (phys-ctor-hinelastic-V09-06-00)
-- new directory structure introduced. 
+- new directory structure introduced.
    constructors/hadron_inelastic classes

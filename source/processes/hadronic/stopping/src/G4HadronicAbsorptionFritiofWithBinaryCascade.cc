@@ -63,9 +63,7 @@ G4HadronicAbsorptionFritiofWithBinaryCascade( G4ParticleDefinition* pdef )
   
   G4TheoFSGenerator* theModel = new G4TheoFSGenerator( "FTFB" );
   G4FTFModel* theStringModel = new G4FTFModel;
-  theLund = new G4LundStringFragmentation;
-  theStringDecay = new G4ExcitedStringDecay( theLund );
-  theStringModel->SetFragmentationModel( theStringDecay );
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
 
   G4BinaryCascade* theCascade = new G4BinaryCascade;
 
@@ -80,12 +78,8 @@ G4HadronicAbsorptionFritiofWithBinaryCascade( G4ParticleDefinition* pdef )
   RegisterMe( theModel );
 }
 
-
 G4HadronicAbsorptionFritiofWithBinaryCascade::~G4HadronicAbsorptionFritiofWithBinaryCascade() {
-  delete theLund;
-  delete theStringDecay;
 }
-
 
 // Applies to constructor-specified particle, or to all known cases
 G4bool G4HadronicAbsorptionFritiofWithBinaryCascade::

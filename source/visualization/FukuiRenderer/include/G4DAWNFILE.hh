@@ -33,23 +33,19 @@
 
 #include "G4VGraphicsSystem.hh"
 
-	//----- prototype
-class G4VSceneHandler   ;
+//----- prototype
+class G4VSceneHandler;
 
-	//----------------------------//
-	//----- class G4DAWNFILE -----// 
-	//----------------------------//
-class G4DAWNFILE: public G4VGraphicsSystem {
-
-public:
-  G4DAWNFILE ();
-  virtual ~G4DAWNFILE ();
-  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
-  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
-
-private:
-
-
+//----------------------------//
+//----- class G4DAWNFILE -----//
+//----------------------------//
+class G4DAWNFILE : public G4VGraphicsSystem
+{
+ public:
+  G4DAWNFILE();
+  virtual ~G4DAWNFILE();
+  G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
+  G4VViewer* CreateViewer(G4VSceneHandler&, const G4String& name = "");
 };
 
 #endif

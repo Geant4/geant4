@@ -28,79 +28,45 @@
 
 #include "G4AnalysisVerbose.hh"
 #include "G4UnitsTable.hh"
-
-#include <iostream>
-
-//_____________________________________________________________________________
-G4AnalysisVerbose::G4AnalysisVerbose(const G4String& type, G4int verboseLevel)
- : fType(type),
-   fToBeDoneText(),
-   fDoneText(),
-   fFailureText()
-{
-   if ( verboseLevel == 1 ) fDoneText = "- done";
-   if ( verboseLevel == 2 ) fDoneText = "- done";
-   if ( verboseLevel == 3 ) fToBeDoneText = "done ";
-   if ( verboseLevel == 4 ) fToBeDoneText = "going to ";
-   fFailureText = "has failed";
-}
+#include "G4ios.hh"
 
 //_____________________________________________________________________________
-G4AnalysisVerbose::~G4AnalysisVerbose()
-{  
-}
+G4AnalysisVerbose::G4AnalysisVerbose()
+{}
 
-// 
+//
 // public method
 //
 
 //_____________________________________________________________________________
-void G4AnalysisVerbose::Message(const G4String& action, 
-                                const G4String& object, 
+void G4AnalysisVerbose::Message(G4int level,
+                                const G4String& action,
+                                const G4String& object,
                                 const G4String& objectName,
                                 G4bool success) const
 {
+  if ( level == 0 ) return;
+
+  if ( level < 0 || level > fkMaxLevel ) {
+     // add exception
+     return;
+  }
+
   G4cout << "... "
-         << fToBeDoneText
+         << fToBeDoneText[level-1]
          << action
          << " "
-         << fType
-         << " "
-         << object 
+         << object;
+  if ( objectName.size() ) {
+    G4cout
          << " : "
-         << objectName 
-         << " ";
+         << objectName;
+  }
 
   if ( success )
-     G4cout << fDoneText;
-  else   
-     G4cout << fFailureText;
-        
-  G4cout << G4endl;
-}  
-  
-//_____________________________________________________________________________
-void G4AnalysisVerbose::Message(const G4String& action, 
-                                const G4String& object, 
-                                G4ExceptionDescription& description,
-                                G4bool success) const
-{
-  G4cout << "... "
-         << fToBeDoneText
-         << action
-         << " "
-         << fType
-         << " "
-         << object 
-         << " : "
-         << description.str() 
-         << " ";
+     G4cout << " " << fDoneText[level-1];
+  else
+     G4cout << " " << fFailureText;
 
-  if ( success )
-     G4cout << fDoneText;
-  else   
-     G4cout << fFailureText;
-        
   G4cout << G4endl;
-}  
-  
+}

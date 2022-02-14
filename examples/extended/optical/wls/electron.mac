@@ -1,0 +1,50 @@
+
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+/event/verbose 0
+
+
+/WLS/setPhotonDetGeometry Circle
+/WLS/setNumOfLayers 2
+/WLS/setSurfaceRoughness 0.999
+/WLS/setXYRatio 0.8
+/WLS/setWLSLength 1. m
+/WLS/setWLSRadius 0.5 mm
+/WLS/setClad1Radius 0.3 mm
+/WLS/setClad2Radius 0.1 mm
+#
+/WLS/setPhotonDetHalfLength 0.6 mm
+/WLS/setGap 0.15 mm
+/WLS/setAlignment 0.1 deg
+/WLS/setMirror true
+
+/WLS/setBarLength 1.1 m
+/WLS/setBarBase 9.5 mm
+/WLS/setHoleRadius 0.9 mm
+/WLS/setCoatingThickness 0.3 mm
+/WLS/setCoatingRadius 1.775 mm
+
+
+/run/initialize
+
+/hits/verbose 2
+/process/optical/verbose 1
+
+/gps/particle e-
+/gps/energy 10 MeV
+
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/radius 0.5 mm
+
+/gps/pos/centre 0.0 0.0 0.0 cm
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+/gps/ang/type iso
+/gps/ang/mintheta   0.0 deg
+/gps/ang/maxtheta  90.0 deg
+
+/run/printProgress 1
+/run/beamOn 10

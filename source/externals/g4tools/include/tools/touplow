@@ -1,0 +1,27 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_touplow
+#define tools_touplow
+
+#include <string>
+
+namespace tools {
+
+inline void tolowercase(std::string& a_string){
+  for(std::string::iterator it=a_string.begin();it!=a_string.end();++it) {
+    char c = *it;
+    *it = ((c) >= 'A' && (c) <= 'Z' ?  c - 'A' + 'a' : c);
+  }
+}
+
+inline void touppercase(std::string& a_string){
+  for(std::string::iterator it=a_string.begin();it!=a_string.end();++it) {
+    char c = *it;
+    *it = ((c) >= 'a' && (c) <= 'z' ?  c - 'a' + 'A' : c);
+  }
+}
+
+}
+
+#endif

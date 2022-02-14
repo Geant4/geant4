@@ -54,33 +54,33 @@ class G4TrajectoryContainer
     G4TrajectoryContainer(const G4TrajectoryContainer&) = delete;
     G4TrajectoryContainer& operator=(const G4TrajectoryContainer&) = delete;
 
-    inline void *operator new(size_t);
+    inline void *operator new(std::size_t);
     inline void operator delete(void* anEvent);
 
     G4bool operator==(const G4TrajectoryContainer& right) const;
     G4bool operator!=(const G4TrajectoryContainer& right) const;
 
-    inline size_t size() const { return vect->size(); }
+    inline std::size_t size() const { return vect->size(); }
     inline void push_back(G4VTrajectory* p) { vect->push_back(p); }
-    inline size_t entries() const { return size(); }
+    inline std::size_t entries() const { return size(); }
     inline G4bool insert(G4VTrajectory* p) { push_back(p); return true; }
     inline void clearAndDestroy()
     {
       for(std::size_t i=0; i<size(); ++i) delete (*vect)[i];
       vect->clear();
     }
-    inline G4VTrajectory* operator[](size_t n) { return (*vect)[n]; }
+    inline G4VTrajectory* operator[](std::size_t n) { return (*vect)[n]; }
     inline TrajectoryVector* GetVector() const { return vect; }
 
   private:
 
-    TrajectoryVector* vect;
+    TrajectoryVector* vect = nullptr;
 };
 
 extern G4EVENT_DLL
 G4Allocator<G4TrajectoryContainer>*& aTrajectoryContainerAllocator();
 
-inline void* G4TrajectoryContainer::operator new(size_t)
+inline void* G4TrajectoryContainer::operator new(std::size_t)
 {
   if (!aTrajectoryContainerAllocator())
     aTrajectoryContainerAllocator() = new G4Allocator<G4TrajectoryContainer>;

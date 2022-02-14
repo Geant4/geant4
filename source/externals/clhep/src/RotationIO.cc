@@ -7,10 +7,6 @@
 // which was introduced when ZOOM PhysicsVectors was merged in.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/Rotation.h"
 
 #include <iomanip>

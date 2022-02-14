@@ -23,48 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4AutoDelete
 //
-// ---------------------------------------------------------------
-// GEANT 4 class header file
+// Description:
 //
-// Class Description:
 //   This function implements a simplified "garbage collection" mechanism
-//   for G4-MT model. Objects are registered when created on the heap and they 
-//   will be deleted at the end of
-//   the program (like they would be if marked as "static").
-// 
+//   for G4-MT model. Objects are registered when created on the heap and they
+//   will be deleted at the end of the program (like they would be if marked
+//   as "static").
+//
 // Limitation:
-//   The registered object, should not
-//   contain any G4ThreadLocal data member. Note that in general,
-//   if object is to be thread-private it is unnecessary to mark
-//   any data-member as G4ThreadLocal.
+//   The registered object, should not contain any G4ThreadLocal data member.
+//   Note that in general, if object is to be thread-private it is unnecessary
+//   to mark any data-member as G4ThreadLocal.
 //
 // Performance issues:
 //   This function uses G4ThreadLocalSingleton that on its own uses
-//   locks and mutexes. Thus its use should be limited to only when 
+//   locks and mutexes. Thus its use should be limited to only when
 //   really necessary.
 //
 // Example:
-//   class G4SharedByThreads {
-//     void calledByThreads() {
-//          G4Something* anObject = new G4Something;
-//          G4AutoDelete::Register( anObject );
+//   class G4SharedByThreads
+//   {
+//     void calledByThreads()
+//     {
+//       G4Something* anObject = new G4Something;
+//       G4AutoDelete::Register( anObject );
 //     }
-//   };
-//
-// History:
-//  28 October 2013: A. Dotti - First implementation
+//   }
 
+// Author: A.Dotti (SLAC), 28 October 2013
+// --------------------------------------------------------------------
 #ifndef G4AUTODELETE_HH
 #define G4AUTODELETE_HH
 
 #include "G4ThreadLocalSingleton.hh"
-namespace G4AutoDelete {
-  template<class T>
-  void Register( T* inst ) {
+
+namespace G4AutoDelete
+{
+  template <class T>
+  void Register(T* inst)
+  {
     static G4ThreadLocalSingleton<T> container;
     container.Register(inst);
   }
-}
+}  // namespace G4AutoDelete
 
-#endif //G4AUTODELETE_HH
+#endif

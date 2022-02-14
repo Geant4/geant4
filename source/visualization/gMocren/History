@@ -18,6 +18,23 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+27 September 2021  Pedro Arce (gMocren-V10-07-02)
+- Use updated interface from geomnav to use G4PhantomParameterisation::GetNoVoxels instead of GetNoVoxel
+
+07 June 2021  John Allison (gMocren-V10-07-01)
+- Fix hidden function warning.
+
+14 April 2021 Ben Morgan (gMocren-V10-07-00)
+- Migrate to modular CMake build
+
+ 5 May 2020      Gunter Folger (gMocren-V10-06-01)
+- Fix for clang10: for for warning on confusing indentation
+   enclose statements in if/else with {}
+   affected: src/G4GMocrenFileViewer.cc
+
+12 December 2019 Ben Morgan (gMocren-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
 
 29 August 2019  John Allison (gMocren-V10-05-01)
 - Part of vis-V10-05-24.
@@ -78,7 +95,7 @@ History file for visualization/gMocren sub-category
   o Mark as "intentional" on next Coverity analysis.
 
 15th June 2013  Akinori Kimura (gMocren-V09-06-05)
-- G4GMocrenIO.cc and G4GMocrenFileSceneHandler.{cc,hh}: Fixed warnings of 
+- G4GMocrenIO.cc and G4GMocrenFileSceneHandler.{cc,hh}: Fixed warnings of
   Coverity.
 
 4th June 2013  Akinori Kimura (gMocren-V09-06-04)
@@ -121,7 +138,7 @@ History file for visualization/gMocren sub-category
 - Migrated to G4VScenehandler::fObjectTransformation.
 
 8th October 2011  Akinori Kimura (gMocren-V09-04-02)
-- Fixed Coverity defects in G4GMocrenFileSceneHandler.cc, G4GMocrenIO.cc, 
+- Fixed Coverity defects in G4GMocrenFileSceneHandler.cc, G4GMocrenIO.cc,
   G4GMocrenFileViewer.cc, and G4GMocrenMessenger.cc.
 
 25th September 2011  John Allison (gMocren-V09-04-01)
@@ -134,7 +151,7 @@ History file for visualization/gMocren sub-category
 - Avoided warnings of the following codes in GCC 4.6.0.
   G4GMocrenTouchable.hh, G4GMocrenFileSceneHandler.cc and G4GMocrenIO.cc.
 
-23, December L. Garnier 
+23, December L. Garnier
 - GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 
 11 November 2010  Akinori Kimura (gMocren-V09-03-05)
@@ -186,7 +203,7 @@ Deleted the following two AddEndOfEventModel(*) in
 G4GMocrenFileSceneHandler::GFBeginModeling().
 These models are entrusted to user commands /vis/scene/add/psHits or hits
 
-   scene->AddEndOfEventModel(new G4PSHitsModel()); 
+   scene->AddEndOfEventModel(new G4PSHitsModel());
    scene->AddEndOfEventModel(new G4HitsModel());
 
 

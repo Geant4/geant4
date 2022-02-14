@@ -1,6 +1,5 @@
 #
-# Macro file for "Hadr14.cc"
-# (can be run in batch, without graphic)
+# Macro file for "Hadr03.cc"
 #
 # proton 10 MeV; all processes
 #
@@ -11,13 +10,12 @@
 #
 /testhadr/det/setMat Molybdenum98
 #
-/run/initialize
+/process/had/verbose 1
 #
-/process/list
+/run/initialize
 #
 /gun/particle proton
 /gun/energy 10 MeV
 #
 /run/printProgress 1000
-#
 /run/beamOn 10000

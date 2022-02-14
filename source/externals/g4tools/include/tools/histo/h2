@@ -1,0 +1,226 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_h2
+#define tools_histo_h2
+
+#include "b2"
+
+namespace tools {
+namespace histo {
+
+template <class TC,class TO,class TN,class TW,class TH>
+class h2 : public b2<TC,TO,TN,TW,TH> {
+  typedef b2<TC,TO,TN,TW,TH> parent;
+public:
+  typedef histo_data<TC,TO,TN,TW> hd_t;
+  typedef typename b2<TC,TO,TN,TW,TH>::bn_t bn_t;
+protected:
+  virtual TH get_bin_height(TO a_offset) const { //TH should be the same as TW
+    return parent::m_bin_Sw[a_offset];
+  }
+public:
+
+  virtual TH bin_error(int aI,int aJ) const {
+    TO offset;
+    if(!parent::_find_offset(aI,aJ,offset)) return 0;
+    return ::sqrt(parent::m_bin_Sw2[offset]);
+  }
+
+public:
+  bool multiply(TW a_factor){return parent::base_multiply(a_factor);}
+  bool scale(TW a_factor) {return multiply(a_factor);}
+
+  void copy_from_data(const hd_t& a_from) {parent::base_from_data(a_from);}
+  hd_t get_histo_data() const {return *this;} //deprecated. Keep it for g4tools.
+
+  bool reset() {
+    parent::base_reset();
+    return true;
+  }
+
+  bool fill(TC aX,TC aY,TW aWeight = 1) {
+    if(parent::m_dimension!=2) return false;
+
+    bn_t ibin,jbin;
+    if(!parent::m_axes[0].coord_to_absolute_index(aX,ibin)) return false;
+    if(!parent::m_axes[1].coord_to_absolute_index(aY,jbin)) return false;
+    TO offset = ibin + jbin * parent::m_axes[1].m_offset;
+
+    parent::m_bin_entries[offset]++;
+    parent::m_bin_Sw[offset] += aWeight;
+    parent::m_bin_Sw2[offset] += aWeight * aWeight;
+
+    TC xw = aX * aWeight;
+    TC x2w = aX * xw;
+    parent::m_bin_Sxw[offset][0] += xw;
+    parent::m_bin_Sx2w[offset][0] += x2w;
+
+    TC yw = aY * aWeight;
+    TC y2w = aY * yw;
+    parent::m_bin_Sxw[offset][1] += yw;
+    parent::m_bin_Sx2w[offset][1] += y2w;
+
+    bool inRange = true;
+    if(ibin==0) inRange = false;
+    else if(ibin==(parent::m_axes[0].m_number_of_bins+1)) inRange = false;
+
+    if(jbin==0) inRange = false;
+    else if(jbin==(parent::m_axes[1].m_number_of_bins+1)) inRange = false;
+
+    parent::m_all_entries++;
+    if(inRange) {
+      parent::m_in_range_plane_Sxyw[0] += aX * aY * aWeight;
+
+      // fast getters :
+      parent::m_in_range_entries++;
+      parent::m_in_range_Sw += aWeight;
+      parent::m_in_range_Sw2 += aWeight*aWeight;
+
+      parent::m_in_range_Sxw[0] += xw;
+      parent::m_in_range_Sx2w[0] += x2w;
+
+      parent::m_in_range_Sxw[1] += yw;
+      parent::m_in_range_Sx2w[1] += y2w;
+    }
+
+    return true;
+  }
+
+  bool set_bin_content(bn_t a_ibin,bn_t a_jbin,
+                       TN a_entries,TW a_Sw,TW a_Sw2,
+                       TC a_Sxw,TC a_Sx2w,TC a_Syw,TC a_Sy2w) {
+    if(parent::m_dimension!=2) return false;
+    if(a_ibin>(parent::m_axes[0].m_number_of_bins+1)) return false;
+    if(a_jbin>(parent::m_axes[1].m_number_of_bins+1)) return false;
+
+    bool inRange = true;
+    if(a_ibin==0) inRange = false;
+    else if(a_ibin==(parent::m_axes[0].m_number_of_bins+1)) inRange = false;
+    if(a_jbin==0) inRange = false;
+    else if(a_jbin==(parent::m_axes[1].m_number_of_bins+1)) inRange = false;
+
+    TO offset = a_ibin + a_jbin * parent::m_axes[1].m_offset;
+
+    parent::m_all_entries -= parent::m_bin_entries[offset];
+    if(inRange) {
+      parent::m_in_range_entries -= parent::m_bin_entries[offset];
+      parent::m_in_range_Sw -= parent::m_bin_Sw[offset];
+      parent::m_in_range_Sw2 -= parent::m_bin_Sw2[offset];
+      parent::m_in_range_Sxw[0] -= parent::m_bin_Sxw[offset][0];
+      parent::m_in_range_Sx2w[0] -= parent::m_bin_Sx2w[offset][0];
+      parent::m_in_range_Sxw[1] -= parent::m_bin_Sxw[offset][1];
+      parent::m_in_range_Sx2w[1] -= parent::m_bin_Sx2w[offset][1];
+    }
+
+    parent::m_bin_entries[offset] = a_entries;
+    parent::m_bin_Sw[offset] = a_Sw;
+    parent::m_bin_Sw2[offset] = a_Sw2;
+
+    parent::m_bin_Sxw[offset][0] = a_Sxw;
+    parent::m_bin_Sx2w[offset][0] = a_Sx2w;
+    parent::m_bin_Sxw[offset][1] = a_Syw;
+    parent::m_bin_Sx2w[offset][1] = a_Sy2w;
+
+    parent::m_all_entries += a_entries;
+    if(inRange) {
+      //parent::m_in_range_plane_Sxyw[0] ??? ill-defined.
+
+      parent::m_in_range_entries += a_entries;
+      parent::m_in_range_Sw += a_Sw;
+      parent::m_in_range_Sw2 += a_Sw2;
+
+      parent::m_in_range_Sxw[0] += a_Sxw;
+      parent::m_in_range_Sx2w[0] += a_Sx2w;
+      parent::m_in_range_Sxw[1] += a_Syw;
+      parent::m_in_range_Sx2w[1] += a_Sy2w;
+    }
+
+    return true;
+  }
+
+  bool get_bin_content(bn_t a_ibin,bn_t a_jbin,
+                       TN& a_entries,TW& a_Sw,TW& a_Sw2,
+                       TC& a_Sxw,TC& a_Sx2w,
+                       TC& a_Syw,TC& a_Sy2w) {
+    if(parent::m_dimension!=2) {
+      a_entries = 0;a_Sw = 0;a_Sw2 = 0;
+      a_Sxw = 0;a_Sx2w = 0;
+      a_Syw = 0;a_Sy2w = 0;
+      return false;
+    }
+    if(a_ibin>(parent::m_axes[0].m_number_of_bins+1)) {
+      a_entries = 0;a_Sw = 0;a_Sw2 = 0;
+      a_Sxw = 0;a_Sx2w = 0;
+      a_Syw = 0;a_Sy2w = 0;
+      return false;
+    }
+    if(a_jbin>(parent::m_axes[1].m_number_of_bins+1)) {
+      a_entries = 0;a_Sw = 0;a_Sw2 = 0;
+      a_Sxw = 0;a_Sx2w = 0;
+      a_Syw = 0;a_Sy2w = 0;
+      return false;
+    }
+
+    TO offset = a_ibin + a_jbin * parent::m_axes[1].m_offset;
+
+    a_entries = parent::m_bin_entries[offset];
+    a_Sw = parent::m_bin_Sw[offset];
+    a_Sw2 = parent::m_bin_Sw2[offset];
+
+    a_Sxw = parent::m_bin_Sxw[offset][0];
+    a_Sx2w = parent::m_bin_Sx2w[offset][0];
+    a_Syw = parent::m_bin_Sxw[offset][1];
+    a_Sy2w = parent::m_bin_Sx2w[offset][1];
+
+    return true;
+  }
+
+  bool add(const h2& a_histo){
+    parent::base_add(a_histo);
+    return true;
+  }
+  bool subtract(const h2& a_histo){
+    parent::base_subtract(a_histo);
+    return true;
+  }
+
+  bool multiply(const h2& a_histo) {
+    return parent::base_multiply(a_histo);
+  }
+
+  bool divide(const h2& a_histo) {
+    return parent::base_divide(a_histo);
+  }
+
+  bool equals_TH(const h2& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
+    if(!parent::equals_TH(a_from,a_prec,a_fabs,true)) return false;
+    return true;
+  }
+
+  void not_a_profile() const {}
+
+public: //CERN-ROOT API
+  bool Fill(TC aX,TC aY,TW aWeight = 1) {return fill(aX,aY,aWeight);}
+
+public:
+  h2(const std::string& a_title,bn_t aXnumber,TC aXmin,TC aXmax,bn_t aYnumber,TC aYmin,TC aYmax)
+  :parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax)
+  {}
+  h2(const std::string& a_title,const std::vector<TC>& a_edges_x,const std::vector<TC>& a_edges_y)
+  :parent(a_title,a_edges_x,a_edges_y)
+  {}
+
+  virtual ~h2(){}
+public:
+  h2(const h2& a_from): parent(a_from){}
+  h2& operator=(const h2& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif
+

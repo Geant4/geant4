@@ -65,6 +65,7 @@ void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 
 void Run::CountProcesses(const G4VProcess* process) 
 {
+  if (process == nullptr) return;
   G4String procName = process->GetProcessName();
   std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
   if ( it == fProcCounter.end()) {
@@ -77,11 +78,11 @@ void Run::CountProcesses(const G4VProcess* process)
                   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::ParticleCount(G4String name, G4double Ekin)
+void Run::ParticleCount(G4String name, G4double Ekin, G4double meanLife)
 {
   std::map<G4String, ParticleData>::iterator it = fParticleDataMap1.find(name);
   if ( it == fParticleDataMap1.end()) {
-    fParticleDataMap1[name] = ParticleData(1, Ekin, Ekin, Ekin);
+    fParticleDataMap1[name] = ParticleData(1, Ekin, Ekin, Ekin, meanLife);
   }
   else {
     ParticleData& data = it->second;
@@ -91,7 +92,8 @@ void Run::ParticleCount(G4String name, G4double Ekin)
     G4double emin = data.fEmin;
     if (Ekin < emin) data.fEmin = Ekin;
     G4double emax = data.fEmax;
-    if (Ekin > emax) data.fEmax = Ekin; 
+    if (Ekin > emax) data.fEmax = Ekin;
+    data.fTmean = meanLife; 
   }   
 }
                  
@@ -116,7 +118,7 @@ void Run::ParticleFlux(G4String name, G4double Ekin)
 {
   std::map<G4String, ParticleData>::iterator it = fParticleDataMap2.find(name);
   if ( it == fParticleDataMap2.end()) {
-    fParticleDataMap2[name] = ParticleData(1, Ekin, Ekin, Ekin);
+    fParticleDataMap2[name] = ParticleData(1, Ekin, Ekin, Ekin, -1*ns);
   }
   else {
     ParticleData& data = it->second;
@@ -126,7 +128,8 @@ void Run::ParticleFlux(G4String name, G4double Ekin)
     G4double emin = data.fEmin;
     if (Ekin < emin) data.fEmin = Ekin;
     G4double emax = data.fEmax;
-    if (Ekin > emax) data.fEmax = Ekin; 
+    if (Ekin > emax) data.fEmax = Ekin;
+    data.fTmean = -1*ns; 
   }   
 }
 
@@ -175,7 +178,8 @@ void Run::Merge(const G4Run* run)
        = ParticleData(localData.fCount, 
                       localData.fEmean, 
                       localData.fEmin, 
-                      localData.fEmax);
+                      localData.fEmax,
+		      localData.fTmean);
     }
     else {
       ParticleData& data = fParticleDataMap1[name];   
@@ -184,7 +188,8 @@ void Run::Merge(const G4Run* run)
       G4double emin = localData.fEmin;
       if (emin < data.fEmin) data.fEmin = emin;
       G4double emax = localData.fEmax;
-      if (emax > data.fEmax) data.fEmax = emax; 
+      if (emax > data.fEmax) data.fEmax = emax;
+      data.fTmean = localData.fTmean; 
     }   
   }
   
@@ -200,7 +205,8 @@ void Run::Merge(const G4Run* run)
        = ParticleData(localData.fCount, 
                       localData.fEmean, 
                       localData.fEmin, 
-                      localData.fEmax);
+                      localData.fEmax,
+		      localData.fTmean);
     }
     else {
       ParticleData& data = fParticleDataMap2[name];   
@@ -209,7 +215,8 @@ void Run::Merge(const G4Run* run)
       G4double emin = localData.fEmin;
       if (emin < data.fEmin) data.fEmin = emin;
       G4double emax = localData.fEmax;
-      if (emax > data.fEmax) data.fEmax = emax; 
+      if (emax > data.fEmax) data.fEmax = emax;
+      data.fTmean = localData.fTmean; 
     }   
   }
 
@@ -251,26 +258,6 @@ void Run::EndOfRun()
   }
   G4cout << G4endl;
   
-  //particles count
-  //
-  G4cout << "\n List of generated particles:" << G4endl;
-     
- std::map<G4String,ParticleData>::iterator itc;               
- for (itc = fParticleDataMap1.begin(); itc != fParticleDataMap1.end(); itc++) { 
-    G4String name = itc->first;
-    ParticleData data = itc->second;
-    G4int count = data.fCount;
-    G4double eMean = data.fEmean/count;
-    G4double eMin = data.fEmin;
-    G4double eMax = data.fEmax;    
-         
-    G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
-           << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
-           << "\t( "  << G4BestUnit(eMin, "Energy")
-           << " --> " << G4BestUnit(eMax, "Energy") 
-           << ")" << G4endl;           
- }
-   
   // compute mean Energy deposited and rms
   //
   G4int TotNbofEvents = numberOfEvent;
@@ -284,19 +271,51 @@ void Run::EndOfRun()
          << G4BestUnit(rmsEdep,      "Energy") 
          << G4endl;
   
-  // compute mean Energy flow and rms
+  // compute mean Energy leakage and rms
   //
   fEnergyFlow /= TotNbofEvents; fEnergyFlow2 /= TotNbofEvents;
   G4double rmsEflow = fEnergyFlow2 - fEnergyFlow*fEnergyFlow;
   if (rmsEflow>0.) rmsEflow = std::sqrt(rmsEflow);
   else             rmsEflow = 0.;
   
-  G4cout << " Mean energy flow per event    = "
+  G4cout << " Mean energy leakage per event = "
          << G4BestUnit(fEnergyFlow,"Energy") << ";  rms = "
          << G4BestUnit(rmsEflow,   "Energy") 
          << G4endl;
+	 
+  //energy balance
+  //	 
+  G4double Etot = fEnergyDeposit + fEnergyFlow;
+  G4cout << "\n total energy: Edep + Eleak = " << G4BestUnit(Etot, "Energy")
+         << G4endl;	 
+	   
+  //particles at creation
+  //
+ if (fParticleDataMap1.size() > 0) {       
+  G4cout << "\n List of particles at creation (with meanLife != 0):"
+         << G4endl;
+  std::map<G4String,ParticleData>::iterator itc;               
+  for (itc = fParticleDataMap1.begin(); itc != fParticleDataMap1.end(); itc++) { 
+    G4String name = itc->first;
+    ParticleData data = itc->second;
+    G4int count = data.fCount;
+    G4double eMean = data.fEmean/count;
+    G4double eMin = data.fEmin;
+    G4double eMax = data.fEmax;
+    G4double meanLife = data.fTmean;    
+         
+    G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
+           << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
+           << "\t( "  << G4BestUnit(eMin, "Energy")
+           << " --> " << G4BestUnit(eMax, "Energy") << ")";
+    if (meanLife >= 0.)
+      G4cout << "\tmean life = " << G4BestUnit(meanLife, "Time")   << G4endl;
+    else G4cout << "\tstable" << G4endl;	              
+  }
+ }
+   
                                 
- //particles flux
+ //emerging particles
  //
  G4cout << "\n List of particles leaving the absorber :" << G4endl;
      
@@ -314,7 +333,7 @@ void Run::EndOfRun()
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
            << "\t( "  << G4BestUnit(eMin, "Energy")
            << " --> " << G4BestUnit(eMax, "Energy") 
-           << ") \tEflow/event = " << G4BestUnit(Eflow, "Energy") << G4endl;
+           << ") \tEleak/event = " << G4BestUnit(Eflow, "Energy") << G4endl;
  }
  
   //normalize histograms

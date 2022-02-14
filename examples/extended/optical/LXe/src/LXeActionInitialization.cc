@@ -29,17 +29,13 @@
 
 #include "LXeActionInitialization.hh"
 
-#include "LXePrimaryGeneratorAction.hh"
 #include "LXeDetectorConstruction.hh"
-
-#include "LXeRunAction.hh"
 #include "LXeEventAction.hh"
-#include "LXeTrackingAction.hh"
-#include "LXeSteppingAction.hh"
+#include "LXePrimaryGeneratorAction.hh"
+#include "LXeRunAction.hh"
 #include "LXeStackingAction.hh"
-#include "LXeSteppingVerbose.hh"
-
-#include "LXeRecorderBase.hh"
+#include "LXeSteppingAction.hh"
+#include "LXeTrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,15 +44,14 @@ LXeActionInitialization::LXeActionInitialization(LXeRecorderBase* recorder)
  : G4VUserActionInitialization(), fRecorder(recorder)
 =======
 LXeActionInitialization::LXeActionInitialization(
-   const LXeDetectorConstruction* det)
-  : G4VUserActionInitialization(), fDetector(det)
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  const LXeDetectorConstruction* det)
+  : G4VUserActionInitialization()
+  , fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeActionInitialization::~LXeActionInitialization()
-{}
+LXeActionInitialization::~LXeActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

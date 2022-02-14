@@ -3,7 +3,9 @@
 # To be run preferably in batch, without graphics:
 # % exampleB5 run2.mac
 #
-#/run/numberOfWorkers 4
+#/run/numberOfThreads 4
+/control/cout/ignoreThreadsExcept 0
+#
 /run/initialize
 #
 #  turn off randomization 
@@ -19,6 +21,7 @@
 /B5/generator/momentum 100. GeV
 /B5/field/value 100. tesla
 /analysis/setFileName B5_proton
+/analysis/ntuple/setFileName 0 B5ntuple_proton
 /run/beamOn 30
 #
 /B5/detector/armAngle 60. deg
@@ -26,6 +29,7 @@
 /B5/generator/momentum 100. GeV
 /B5/field/value 200. tesla
 /analysis/setFileName B5_pi+
+/analysis/ntuple/setFileName 0 B5ntuple_pi+
 /run/beamOn 30
 #
 /gun/particle e+
@@ -33,5 +37,6 @@
 /B5/generator/momentum 100. GeV
 /B5/field/value 100. tesla
 /analysis/setFileName B5_e+
+/analysis/ntuple/setFileName 0 B5ntuple_e+
 /run/beamOn 30
 

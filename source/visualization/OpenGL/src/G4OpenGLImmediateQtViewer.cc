@@ -29,8 +29,6 @@
 // Class G4OpenGLImmediateQtViewer : a class derived from G4OpenGLQtViewer and
 //                                G4OpenGLImmediateViewer.
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
 #include "G4OpenGLImmediateQtViewer.hh"
 #include "G4OpenGLImmediateSceneHandler.hh"
 
@@ -72,7 +70,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 }
 
 G4OpenGLImmediateQtViewer::~G4OpenGLImmediateQtViewer() {
-  makeCurrent();
+  //  makeCurrent();  // Not sure why this - commented out 12-Apr-2021 JA
 }
 
 void G4OpenGLImmediateQtViewer::Initialise() {
@@ -131,8 +129,6 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 
   glUseProgram(fShaderProgram);
 
-  setInitialized();  // Should be removed when fuse Wt and Qt
-
 #endif
 
   // If a double buffer context has been forced upon us, ignore the
@@ -149,6 +145,9 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
   
   // and update it immediatly before wait for SessionStart() (batch mode)
 //  QCoreApplication::sendPostedEvents () ;
+
+  // Set jpg as default export format for Qt viewer
+  setExportImageFormat("jpg");
 }
 
 
@@ -346,4 +345,3 @@ void G4OpenGLImmediateQtViewer::ShowView (
   fHasToRepaint = true;
   activateWindow();
 }
-#endif

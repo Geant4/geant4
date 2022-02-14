@@ -25,121 +25,118 @@
 //
 // G4ProcessTable inline methods implementation
 //
-// Author: H.Kurashige
+// Author: H.Kurashige, 4 August 1998
 // --------------------------------------------------------------------
-#include "G4ParticleTable.hh"
 
-//////////////////////////
+// --------------------------------------------------------------------
+//
 inline 
- void  G4ProcessTable::SetVerboseLevel(G4int value)
+void G4ProcessTable::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
 }
 
-//////////////////////////
+// --------------------------------------------------------------------
+//
 inline 
- G4int G4ProcessTable::GetVerboseLevel() const
+G4int G4ProcessTable::GetVerboseLevel() const
 {
   return verboseLevel;
 }
 
-//////////////////////////
+// --------------------------------------------------------------------
+//
 inline 
- G4int  G4ProcessTable::Length() const
+G4int G4ProcessTable::Length() const
 {
   return G4int(fProcTblVector->size());
 }
 
-//////////////////////////
+// --------------------------------------------------------------------
+//
 inline 
- G4ProcessTable::G4ProcNameVector* G4ProcessTable::GetNameList()
+G4ProcessTable::G4ProcNameVector* G4ProcessTable::GetNameList()
 {
-   return  fProcNameVector;
+  return fProcNameVector;
 }
 
-//////////////////////////
+// --------------------------------------------------------------------
+//
 inline 
- G4ProcessTable::G4ProcTableVector* G4ProcessTable::GetProcTableVector() 
+G4ProcessTable::G4ProcTableVector* G4ProcessTable::GetProcTableVector() 
 { 
   return fProcTblVector; 
 }
 
-//////////////////////////
+// --------------------------------------------------------------------
+//
 inline
- G4VProcess* G4ProcessTable::FindProcess(const G4String& processName, 
-                                   const G4ParticleDefinition* particle) const
+G4VProcess*
+G4ProcessTable::FindProcess(const G4String& processName, 
+                            const G4ParticleDefinition* particle) const
 {
-  if ( particle == 0 )
-    return nullptr; 
-  else
-    return FindProcess(processName, particle->GetProcessManager());
+  return (particle) ? 
+    FindProcess(processName, particle->GetProcessManager()) : nullptr;
 }
 
-//////////////////////////
-inline  
- G4VProcess* G4ProcessTable::FindProcess(const G4String& processName, 
-                                         const G4String& particleName) const
-{
-  return FindProcess(processName,
-          G4ParticleTable::GetParticleTable()->FindParticle(particleName));
-}
-
-
-//////////////////////////
-inline 
- void G4ProcessTable::SetProcessActivation(const G4String& processName,
-                                                 G4ParticleDefinition* particle, 
-                                                 G4bool fActive)
+// --------------------------------------------------------------------
+//
+inline
+void G4ProcessTable::SetProcessActivation(const G4String& processName,
+                                          const G4ParticleDefinition* particle,
+                                                G4bool fActive)
 {        
   if ( particle != nullptr )
   { 
     SetProcessActivation(processName, particle->GetProcessManager(), fActive);
   }
 }
-//////////////////////////
-inline
- void  G4ProcessTable::SetProcessActivation(const G4String& processName, 
-                                            const G4String& particleName, 
-                                                  G4bool fActive )
-{
-  if (particleName == "ALL" )
-  {
-    SetProcessActivation( processName , fActive); 
-  }
-  else
-  {
-    SetProcessActivation(processName, 
-        G4ParticleTable::GetParticleTable()->FindParticle(particleName),
-        fActive );
-  }
-}
 
-//////////////////////////
-inline 
- void G4ProcessTable::SetProcessActivation(G4ProcessType processType,
-                                           G4ParticleDefinition* particle,
-                                           G4bool fActive)
+// --------------------------------------------------------------------
+//
+inline
+void G4ProcessTable::SetProcessActivation(G4ProcessType processType,
+                                          const G4ParticleDefinition* particle,
+                                                G4bool fActive)
 {        
   if ( particle != nullptr )
   { 
-    SetProcessActivation( processType, particle->GetProcessManager(), fActive);
+    SetProcessActivation(processType, particle->GetProcessManager(), fActive);
   }        
 }        
 
-//////////////////////////
+// --------------------------------------------------------------------
+//
 inline
- void  G4ProcessTable::SetProcessActivation(G4ProcessType processType,
-                                            const G4String& particleName , 
-                                                  G4bool fActive)
+G4ProcessVector* G4ProcessTable::FindProcesses()
 {
-  if ((particleName == "ALL" )||(particleName == "all" ))
-  {
-    SetProcessActivation( processType, fActive ); 
-  }
-  else
-  {
-    SetProcessActivation(processType,         
-        G4ParticleTable::GetParticleTable()->FindParticle(particleName),
-        fActive );
-  }
+  return ExtractProcesses(fProcTblVector);
+}
+
+// --------------------------------------------------------------------
+//
+inline
+G4ProcessVector*
+G4ProcessTable::FindProcesses( const G4ProcessManager* pManager )
+{
+  G4ProcessVector* procList = pManager->GetProcessList();
+  return new G4ProcessVector(*procList);
+}
+
+// --------------------------------------------------------------------
+//
+inline
+G4ProcessVector* G4ProcessTable::FindProcesses( const G4String& processName )
+{
+  G4ProcTableVector* pTblVector = Find(processName);
+  return ExtractProcesses(pTblVector);
+}
+
+// --------------------------------------------------------------------
+//
+inline
+G4ProcessVector* G4ProcessTable::FindProcesses( G4ProcessType processType)
+{
+  G4ProcTableVector* pTblVector = Find(processType);
+  return ExtractProcesses(pTblVector);
 }

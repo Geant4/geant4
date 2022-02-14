@@ -34,6 +34,7 @@
 
 #include "Run.hh"
 #include "HistoManager.hh"
+#include "TrackingMessenger.hh"
 
 #include "G4Track.hh"
 #include "G4StepStatus.hh"
@@ -42,8 +43,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction()
-:G4UserTrackingAction()
-{ }
+:G4UserTrackingAction(), fTrackMessenger(nullptr),
+ fParticleCount(true)
+{
+  fTrackMessenger = new TrackingMessenger(this); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+TrackingAction::~TrackingAction()
+{
+  delete fTrackMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,12 +62,17 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {  
   //count secondary particles
   if (track->GetTrackID() == 1) return;
-  G4int iabs = track->GetTouchableHandle()->GetCopyNumber();
-  G4String name   = track->GetDefinition()->GetParticleName();
-  G4double energy = track->GetKineticEnergy();
+  
   Run* run = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun());    
-  if(iabs > 0) run->ParticleCount(iabs,name,energy);
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+	  
+  G4int iabs        = track->GetTouchableHandle()->GetCopyNumber();
+  G4String name     = track->GetDefinition()->GetParticleName();
+  G4double meanLife = track->GetDefinition()->GetPDGLifeTime();  
+  G4double energy   = track->GetKineticEnergy();
+  //do not count excited states with meanlife = 0.   
+  if (fParticleCount && (iabs > 0) && (meanLife != 0.))
+    run->ParticleCount(iabs,name,energy,meanLife);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,9 +102,10 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
 
   // count particles
   const G4ParticleDefinition* particle = track->GetParticleDefinition();
-  G4String name   = particle->GetParticleName();
-  G4double energy = track->GetKineticEnergy();
-  run->ParticleCount(0,name,energy);
+  G4String name     = particle->GetParticleName();
+  G4double meanLife = particle->GetPDGLifeTime();  
+  G4double energy   = track->GetKineticEnergy();
+  run->ParticleCount(0,name,energy,meanLife);
 
  ////G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
 }

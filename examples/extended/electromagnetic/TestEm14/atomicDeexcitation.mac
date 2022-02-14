@@ -1,0 +1,41 @@
+#
+# Macro file for "TestEm14.cc"
+#
+# to plot atomic deexcitation following an hole
+# see equivalent macro in rdecay01
+# see S.Bakr et al. Geant4 collaboration meeting 2020
+#
+/control/verbose 1
+/run/verbose 1
+#
+/testem/det/setMat G4_Te
+/testem/phys/addPhysics standard
+/run/setCut 0.1 um
+#
+/run/initialize
+#
+# create an hole by photoelectric interaction
+#
+/process/inactivate compt
+/process/inactivate conv
+#
+# to (de)activate atomic deexcitation
+# play with the 2 following commands
+#
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true
+#
+/gun/particle gamma
+/gun/energy 80 keV
+#
+### to print few events
+###/tracking/verbose 2
+###/run/beamOn 3
+###/tracking/verbose 0
+#
+/analysis/setFileName atomicDeexc
+/analysis/h1/set 3 50000 0.001 50. keV	#energy  of e-  
+/analysis/h1/set 5 50000 0.001 50. keV	#energy  of gamma  
+#
+/run/printProgress 100000
+/run/beamOn 1000000

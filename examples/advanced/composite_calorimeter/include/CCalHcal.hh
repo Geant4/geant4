@@ -74,8 +74,8 @@ public:
   G4double   getDx_2Scnt(unsigned int i)    const {return dx_2Scintillator[i];}
 
 protected:
-  virtual G4int readFile();
-  virtual void constructDaughters();
+  virtual G4int readFile() override;
+  virtual void constructDaughters() override;
 
 private:
   G4String genMaterial;              //General material

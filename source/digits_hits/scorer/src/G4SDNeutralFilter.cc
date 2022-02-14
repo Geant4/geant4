@@ -36,22 +36,23 @@
 // class description:
 //
 //  This is the class of a filter to be associated with a
-// sensitive detector. 
+// sensitive detector.
 //
 // Created: 2005-11-14  Tsukasa ASO.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 G4SDNeutralFilter::G4SDNeutralFilter(G4String name)
-  :G4VSDFilter(name)
-{;}
+  : G4VSDFilter(name)
+{
+  ;
+}
 
-G4SDNeutralFilter::~G4SDNeutralFilter()
-{;}
+G4SDNeutralFilter::~G4SDNeutralFilter() { ; }
 
 G4bool G4SDNeutralFilter::Accept(const G4Step* aStep) const
 {
-  if (aStep->GetPreStepPoint()->GetCharge()== 0. ) return TRUE;
+  if(aStep->GetPreStepPoint()->GetCharge() == 0.)
+    return TRUE;
   return FALSE;
 }
-

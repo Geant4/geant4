@@ -1,18 +1,4 @@
-#------------------------------------------------------------------------------
-# CMakeLists.txt
-# Module : 
-# Package: Geant4.src.G4visualization.
-#
-# Intermediate level CMakeLists.txt - just process subdirectories
-#
-# Generated on : 24/9/2010
-#
-#
-#------------------------------------------------------------------------------
-
-#
-# GL2PS built for GL and Inventor drivers
-#
+# - gl2ps only needed if OGL drivers enabled
 if(GEANT4_USE_OPENGL OR GEANT4_USE_INVENTOR)
-    add_subdirectory(gl2ps)
+  add_subdirectory(gl2ps)
 endif()

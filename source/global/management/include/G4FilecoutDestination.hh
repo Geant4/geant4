@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4FilecoutDestination
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file 
-//
-// Class Description:
+// Class description:
 //
 // Implements a cout destination to a file.
 
@@ -37,8 +33,8 @@
 //
 // Author: A.Dotti (SLAC), April 2017
 // --------------------------------------------------------------------
-#ifndef G4FILECOUTDESTINATION_HH_
-#define G4FILECOUTDESTINATION_HH_
+#ifndef G4FILECOUTDESTINATION_HH
+#define G4FILECOUTDESTINATION_HH
 
 #include <fstream>
 #include <memory>
@@ -47,27 +43,28 @@
 
 class G4FilecoutDestination : public G4coutDestination
 {
-  public:
+ public:
+  explicit G4FilecoutDestination(
+    const G4String& fname, std::ios_base::openmode mode = std::ios_base::app)
+    : m_name(fname)
+    , m_mode(mode)
+    , m_output(nullptr)
+  {}
+  virtual ~G4FilecoutDestination();
 
-    explicit G4FilecoutDestination(const G4String& fname ,
-             std::ios_base::openmode mode = std::ios_base::app )
-      : m_name(fname), m_mode(mode), m_output(nullptr) {}
-    virtual ~G4FilecoutDestination();
+  void SetFileName(const G4String& fname) { m_name = fname; }
 
-    void SetFileName(const G4String& fname) { m_name = fname; }
+  void Open(std::ios_base::openmode mode = std::ios_base::app);
+  // By default append to existing file
+  void Close();
 
-    void Open(std::ios_base::openmode mode=std::ios_base::app);
-      // By default append to existing file
-    void Close();
+  virtual G4int ReceiveG4cout(const G4String& msg) override;
+  virtual G4int ReceiveG4cerr(const G4String& msg) override;
 
-    virtual G4int ReceiveG4cout(const G4String& msg) override;
-    virtual G4int ReceiveG4cerr(const G4String& msg) override;
-
-  private:
-
-    G4String m_name;
-    std::ios_base::openmode m_mode;
-    std::unique_ptr<std::ofstream> m_output;
+ private:
+  G4String m_name;
+  std::ios_base::openmode m_mode;
+  std::unique_ptr<std::ofstream> m_output;
 };
 
-#endif /* G4FILECOUTDESTINATION_HH_ */
+#endif

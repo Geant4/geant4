@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /*
-Authors:
+Author:
 M. Omer and R. Hajima  on   17 October 2016
 contact:
 omer.mohamed@jaea.go.jp and hajima.ryoichi@qst.go.jp
@@ -44,71 +44,61 @@ https://doi.org/10.11484/jaea-data-code-2018-007
 
 #include "G4VEmModel.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4ProductionCutsTable.hh"
-
-
-
+#include "G4DataVector.hh"
 
 class G4JAEAElasticScatteringModel : public G4VEmModel
 {
-
 public:
-
-  G4JAEAElasticScatteringModel();
-
+  explicit G4JAEAElasticScatteringModel();
   virtual ~G4JAEAElasticScatteringModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*,
-			       G4VEmModel* masterModel);
+  void InitialiseLocal(const G4ParticleDefinition*,
+		       G4VEmModel* masterModel) override;
 
-  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
+  G4double ComputeCrossSectionPerAtom(
+				      const G4ParticleDefinition*,
                                       G4double kinEnergy,
                                       G4double Z,
                                       G4double A=0,
                                       G4double cut=0,
-                                      G4double emax=DBL_MAX);
+                                      G4double emax=DBL_MAX) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+  
+  void SetLowEnergyThreshold(G4double val){lowEnergyLimit = val;};
+  void SetDebugVerbosity(G4int val){verboseLevel = val;};
 
-  inline void SetLowEnergyThreshold(G4double);
-
-    G4double distribution[181];
-    G4double pdf[181];
-    G4double cdf[181];
+  G4JAEAElasticScatteringModel & operator=(const G4JAEAElasticScatteringModel &right) = delete;
+  G4JAEAElasticScatteringModel(const G4JAEAElasticScatteringModel&) = delete;
 
 private:
-
   void ReadData(size_t Z, const char* path = 0);
 
-  G4JAEAElasticScatteringModel & operator=(const G4JAEAElasticScatteringModel &right);
-  G4JAEAElasticScatteringModel(const G4JAEAElasticScatteringModel&);
-
-  G4bool isInitialised;
-  G4int verboseLevel;
+  static const G4int maxZ = 99;
+  static G4PhysicsFreeVector* dataCS[maxZ+1];
+  static G4DataVector* ES_Data[maxZ+1];
+  G4ParticleChangeForGamma* fParticleChange;
+  G4double distribution[181];
+  G4double pdf[181];
+  G4double cdf[181];
 
   G4double lowEnergyLimit;
-
-  static G4int maxZ;
-  static G4LPhysicsFreeVector* dataCS[101];
-
-  G4ParticleChangeForGamma* fParticleChange;
-
+  
+  G4int verboseLevel;
+  G4bool isInitialised;
+  
 };
 
-inline void G4JAEAElasticScatteringModel::SetLowEnergyThreshold(G4double val)
-{
-  lowEnergyLimit = val;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

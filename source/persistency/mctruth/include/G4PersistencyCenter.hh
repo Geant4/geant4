@@ -23,13 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4PersistencyCenter.hh
+// G4PersistencyCenter
 //
-// History:
-//   '01.08.10  Youhei Morita  Initial creation (with "fadsclass3")
+// Class Description:
+//
+// Class to handle loading of the G4PersistencyManager.
 
-#ifndef PERSISTENCY_CENTER_HH
-#define PERSISTENCY_CENTER_HH 1
+// Author: Youhei Morita, 10.08.2001
+// --------------------------------------------------------------------
+#ifndef G4PERSISTENCYCENTER_HH
+#define G4PERSISTENCYCENTER_HH 1
 
 #include "G4Types.hh"
 #include <string>
@@ -39,137 +42,140 @@
 #include "G4DCIOcatalog.hh"
 
 #ifndef WIN32
-  #include "G4FileUtilities.hh"
+#  include "G4FileUtilities.hh"
 #endif
 
-// Forward Declaration to avoid circular dependencies.
+// Forward Declarations
 class G4PersistencyManager;
-
-typedef std::map<std::string, G4PersistencyManager*,std::less<std::string> > PMap;
-typedef std::map<int, std::string, std::less<int> > ObjMap;
-typedef std::map<std::string, std::string, std::less<std::string> > FileMap;
-
-enum StoreMode { kOn, kOff, kRecycle };
-
-typedef std::map<std::string, StoreMode, std::less<std::string> > StoreMap;
-typedef std::map<std::string, G4bool, std::less<std::string> >     BoolMap;
-
-// Forward Declarations:
 class G4PersistencyCenterMessenger;
 
-// Class Description:
-//   Class to handle loading of the G4PersistencyManager.
+using PMap = std::map<G4String, G4PersistencyManager*, std::less<G4String>>;
+using ObjMap = std::map<G4int, G4String, std::less<G4int>>;
+using FileMap = std::map<G4String, G4String, std::less<G4String>>;
+
+enum StoreMode
+{
+  kOn,
+  kOff,
+  kRecycle
+};
+
+using StoreMap = std::map<G4String, StoreMode, std::less<G4String>>;
+using BoolMap = std::map<G4String, G4bool, std::less<G4String>>;
 
 class G4PersistencyCenter
 {
-    public: // With description
+  public:
 
-      static G4PersistencyCenter* GetPersistencyCenter();
-      // returns the pointer of singleton G4PersistencyCenter
+    static G4PersistencyCenter* GetPersistencyCenter();
+      // Returns the pointer of singleton G4PersistencyCenter
 
-      void SelectSystem(std::string systemName);
+    void SelectSystem(const G4String& systemName);
       // Select the persistency package
 
-      const std::string CurrentSystem() { return f_currentSystemName; };
-      // returns the current persistent package name
+    const G4String& CurrentSystem() { return f_currentSystemName; }
+      // Returns the current persistent package name
 
-      void SetHepMCObjyReaderFile(std::string file);
-      // Sets the name of HepMCObjyReader file name.  To be called by generator.
+    void SetHepMCObjyReaderFile(const G4String& file);
+      // Sets the name of HepMCObjyReader file name. To be called by generator
 
-      std::string CurrentHepMCObjyReaderFile();
-      // Sets the name of HepMCObjyReader file name.  To be called by generator.
+    G4String CurrentHepMCObjyReaderFile();
+      // Sets the name of HepMCObjyReader file name. To be called by generator
 
-      void SetStoreMode(std::string objName, StoreMode mode);
-      // Sets the object store mode.  Modes are kOn, kOff or kRecycle.
+    void SetStoreMode(const G4String& objName, StoreMode mode);
+      // Sets the object store mode.  Modes are kOn, kOff or kRecycle
 
-      void SetRetrieveMode(std::string objName, G4bool mode);
-      // Sets the object retrieve mode.  Modes are true or false.
+    void SetRetrieveMode(const G4String& objName, G4bool mode);
+      // Sets the object retrieve mode.  Modes are true or false
 
-      StoreMode CurrentStoreMode(std::string objName);
-      // returns the current object store mode.
+    StoreMode CurrentStoreMode(const G4String& objName);
+      // Returns the current object store mode
 
-      G4bool CurrentRetrieveMode(std::string objName);
-      // returns the current object store mode.
+    G4bool CurrentRetrieveMode(const G4String& objName);
+      // Returns the current object store mode
 
-      G4bool SetWriteFile(std::string objName, std::string writeFileName);
-      // Sets the output filename.
+    G4bool SetWriteFile(const G4String& objName, const G4String& writeFileName);
+      // Sets the output filename
 
-      G4bool SetReadFile(std::string objName, std::string readFileName);
-      // Sets the input filename.
+    G4bool SetReadFile(const G4String& objName, const G4String& readFileName);
+      // Sets the input filename
 
-      std::string CurrentWriteFile(std::string objName);
-      // returns the current output filename.
+    G4String CurrentWriteFile(const G4String& objName);
+      // Returns the current output filename
 
-      std::string CurrentReadFile(std::string objName);
-      // returns the current input filename.
+    G4String CurrentReadFile(const G4String& objName);
+      // Returns the current input filename
 
-      std::string CurrentObject(std::string file);
-      // returns the current object type
+    G4String CurrentObject(const G4String& file);
+      // Returns the current object type
 
-      void AddHCIOmanager(std::string detName, std::string colName);
-      // add a hits colleciton I/O manager to the catalog
+    void AddHCIOmanager(const G4String& detName, const G4String& colName);
+      // Adds a hits colleciton I/O manager to the catalog
 
-      std::string CurrentHCIOmanager();
+    G4String CurrentHCIOmanager();
       // Returns a list of registered hits colleciton I/O managers
 
-      void AddDCIOmanager(std::string detName);
-      // add a digits colleciton I/O manager to the catalog
+    void AddDCIOmanager(const G4String& detName);
+      // Adds a digits colleciton I/O manager to the catalog
 
-      std::string CurrentDCIOmanager();
-      // Returns a list of registered digits colleciton I/O managers
+    G4String CurrentDCIOmanager();
+      // Returns a list of registered digits collection I/O managers
 
-      void PrintAll();
-      // prints the current G4PersistencyCenter settings.
+    void PrintAll();
+      // Prints the current G4PersistencyCenter settings
 
-      G4PersistencyManager* CurrentPersistencyManager() { return f_currentManager; };
-      // returns the pointer of the currnet G4PersistencyManager.
+    G4PersistencyManager* CurrentPersistencyManager()
+    {
+      return f_currentManager;
+    }
+      // Returns the pointer of the current G4PersistencyManager
 
-      void SetPersistencyManager(G4PersistencyManager* pm, std::string name);
-      // returns the pointer of the currnet G4PersistencyManager.
+    void SetPersistencyManager(G4PersistencyManager* pm, const G4String& name);
+      // Returns the pointer of the current G4PersistencyManager
 
-      G4PersistencyManager* GetPersistencyManager(std::string nam);
-      // returns the pointer of the currnet G4PersistencyManager with name.
+    G4PersistencyManager* GetPersistencyManager(const G4String& nam);
+      // Returns the pointer of the current G4PersistencyManager with name
 
-      void RegisterPersistencyManager(G4PersistencyManager* pm);
-      // registers the persistency manager to the runtime catalog.
+    void RegisterPersistencyManager(G4PersistencyManager* pm);
+      // Registers the persistency manager to the runtime catalog
 
-      void DeletePersistencyManager();
-      // deletes the current G4PersistencyManager.
+    void DeletePersistencyManager();
+      // Deletes the current G4PersistencyManager
 
-      void SetVerboseLevel(int v);
-      // Set verbose level.
+    void SetVerboseLevel(G4int v);
+      // Sets verbose level
 
-      int VerboseLevel() { return m_verbose; };
-      // Return verbose level.
+    G4int VerboseLevel() { return m_verbose; }
+      // Returns verbose level
 
-    private:
+  private:
 
-      G4PersistencyCenter();
+    G4PersistencyCenter();
       // Constructor
 
-      ~G4PersistencyCenter();
+    ~G4PersistencyCenter();
       // Destructor
 
-      std::string PadString(std::string name, unsigned int width);
-      // truncate or pad a string up to the width.
+    G4String PadString(const G4String& name, unsigned int width);
+      // Truncates or pad a string up to the width
 
-    private:
-      G4PersistencyCenterMessenger* f_theMessenger;
-      static G4ThreadLocal G4PersistencyCenter* f_thePointer;
-      G4PersistencyManager*         f_currentManager;
-      std::string                 f_currentSystemName;
-      PMap                          f_theCatalog;
-      ObjMap                        f_wrObj;
-      ObjMap                        f_rdObj;
-      FileMap                       f_writeFileName;
-      FileMap                       f_readFileName;
-      StoreMap                      f_writeFileMode;
-      BoolMap                       f_readFileMode;
-      G4int                         m_verbose;
+  private:
+
+    G4PersistencyCenterMessenger* f_theMessenger = nullptr;
+    static G4ThreadLocal G4PersistencyCenter* f_thePointer;
+    G4PersistencyManager* f_currentManager = nullptr;
+    G4String f_currentSystemName;
+    PMap f_theCatalog;
+    ObjMap f_wrObj;
+    ObjMap f_rdObj;
+    FileMap f_writeFileName;
+    FileMap f_readFileName;
+    StoreMap f_writeFileMode;
+    BoolMap f_readFileMode;
+    G4int m_verbose = 0;
 #ifndef WIN32
-      G4FileUtilities               f_ut;
+    G4FileUtilities f_ut;
 #endif
-}; // End of class G4PersistencyCenter
+};
 
 #endif
-

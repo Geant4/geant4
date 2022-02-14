@@ -29,8 +29,8 @@
 =======
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
-// 
-
+//
+#include "eRositaActionInitialization.hh"
 #include "eRositaDetectorConstruction.hh"
 #include "eRositaPhysicsList.hh"
 #include "eRositaPrimaryGeneratorAction.hh"
@@ -38,12 +38,9 @@
 #include "eRositaEventAction.hh"
 #include "eRositaSteppingAction.hh"
 #include "eRositaSteppingVerbose.hh"
-
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
-
 #include "G4VisExecutive.hh"
-
 #include "G4UIExecutive.hh"
 
 
@@ -56,29 +53,17 @@ int main(int argc,char** argv)
   
   // Run manager
   //
-  G4RunManager* runManager = new G4RunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads);
+ 
+  G4cout << "***********************" << G4endl;
+  G4cout << "*** Seed: " << G4Random::getTheSeed() << " ***" << G4endl;
+  G4cout << "***********************" << G4endl;
 
-  // User Initialization classes (mandatory)
-  //
-  eRositaDetectorConstruction* detector = new eRositaDetectorConstruction;
-  runManager->SetUserInitialization(detector);
-  //
-  G4VUserPhysicsList* physics = new eRositaPhysicsList;
-  runManager->SetUserInitialization(physics);
-   
-  // User Action classes
-  //
-  G4VUserPrimaryGeneratorAction* genAction = new eRositaPrimaryGeneratorAction(detector);
-  runManager->SetUserAction(genAction);
-  //
-  G4UserRunAction* runAction = new eRositaRunAction;
-  runManager->SetUserAction(runAction);
-  //
-  G4UserEventAction* eventAction = new eRositaEventAction;
-  runManager->SetUserAction(eventAction);
-  //
-  G4UserSteppingAction* steppingAction = new eRositaSteppingAction;
-  runManager->SetUserAction(steppingAction);
+  runManager->SetUserInitialization(new eRositaDetectorConstruction);
+  runManager->SetUserInitialization(new eRositaPhysicsList);
+  runManager->SetUserInitialization(new eRositaActionInitialization());
 
   // Initialize G4 kernel
   //
@@ -88,16 +73,14 @@ int main(int argc,char** argv)
   //
   G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
-  if (argc!=1)   // batch mode  
-    {
+  if (argc != 1)   // batch mode  
+  {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UImanager->ApplyCommand(command+fileName);
-    }
-    
-  else           // interactive mode : define visualization and UI terminal
-    { 
-
+  }
+  else // interactive mode : define visualization and UI terminal
+  { 
       G4VisManager* visManager = new G4VisExecutive;
       visManager->Initialize();
 
@@ -107,7 +90,6 @@ int main(int argc,char** argv)
       delete ui;
 
       delete visManager;
-
     }
 
   // Free the store: user actions, physics_list and detector_description are
@@ -119,5 +101,3 @@ int main(int argc,char** argv)
 
   return 0;
 }
-
-

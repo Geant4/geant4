@@ -1,0 +1,368 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_leaf
+#define tools_wroot_leaf
+
+#include "base_leaf"
+
+#include "../cids"
+#include "../vdata"
+
+namespace tools {
+namespace wroot {
+
+inline const std::string& leaf_store_class(char) {
+  static const std::string s_v("TLeafB");
+  return s_v;
+}
+inline const std::string& leaf_store_class(short) {
+  static const std::string s_v("TLeafS");
+  return s_v;
+}
+inline const std::string& leaf_store_class(int) {
+  static const std::string s_v("TLeafI");
+  return s_v;
+}
+inline const std::string& leaf_store_class(float) {
+  static const std::string s_v("TLeafF");
+  return s_v;
+}
+inline const std::string& leaf_store_class(double) {
+  static const std::string s_v("TLeafD");
+  return s_v;
+}
+inline const std::string& leaf_string_store_class() {
+  static const std::string s_v("TLeafC");
+  return s_v;
+}
+inline const std::string& leaf_element_store_class() {
+  static const std::string s_v("TLeafElement");
+  return s_v;
+}
+inline const std::string& leaf_object_store_class() {
+  static const std::string s_v("TLeafObject");
+  return s_v;
+}
+
+template <class T>
+class leaf_ref : public base_leaf {
+  typedef base_leaf parent;
+public:
+  static cid id_class() {return base_leaf_cid()+_cid(T())+10000;} //10000 same as in ntuple::column_ref.
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_ref>(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual cid id_cls() const {return id_class();}
+public: //ibo
+  virtual const std::string& store_cls() const {return leaf_store_class(T());}
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(1,c)) return false;
+    if(!parent::stream(a_buffer)) return false;
+    if(!a_buffer.write(m_min)) return false;
+    if(!a_buffer.write(m_max)) return false;
+    if(!a_buffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //base_leaf
+  virtual bool fill_buffer(buffer& a_buffer) const {
+    if(m_is_range) {
+      if(m_ref>=m_max) {
+        leaf_ref& self = const_cast<leaf_ref&>(*this);
+        self.m_max = m_ref;
+      }
+    }
+    return a_buffer.write<T>(m_ref);
+  }
+public:
+  leaf_ref(std::ostream& a_out,const std::string& a_name,const T& a_ref)
+  :parent(a_out,a_name,a_name)
+  ,m_min(T()),m_max(T())
+  ,m_ref(a_ref)
+  {
+    m_length = 1;
+    m_length_type = sizeof(T);
+  }
+  virtual ~leaf_ref(){}
+protected:
+  leaf_ref(const leaf_ref& a_from):ibo(a_from),parent(a_from),m_ref(a_from.m_ref){}
+  leaf_ref& operator=(const leaf_ref&){return *this;}
+public:
+  T get_max() const {return m_max;}
+  void set_max(const T& a_value) {m_max = a_value;}
+public:
+  const T& variable() const {return m_ref;}
+  T& variable() {return const_cast<T&>(m_ref);}
+protected:
+  T m_min;    //Minimum value if leaf range is specified
+  T m_max;    //Maximum value if leaf range is specified
+  const T& m_ref;
+};
+
+template <class T>
+class leaf : public leaf_ref<T> {
+  typedef leaf_ref<T> parent;
+public:
+  static cid id_class() {return base_leaf_cid()+_cid(T());}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf>(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual cid id_cls() const {return id_class();}
+public:
+  leaf(std::ostream& a_out,const std::string& a_name)
+  :parent(a_out,a_name,m_value)
+  ,m_value(T())
+  {}
+  virtual ~leaf(){}
+protected:
+  leaf(const leaf& a_from):ibo(a_from),parent(a_from){}
+  leaf& operator=(const leaf&){return *this;}
+public:
+  void fill(const T& a_value) {m_value = a_value;}
+protected:
+  T m_value;
+};
+
+class leaf_string_ref : public base_leaf {
+  typedef base_leaf parent;
+public:
+  static cid id_class() {return leaf_string_cid()+10000;}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_string_ref>(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual cid id_cls() const {return id_class();}
+public: //ibo
+  virtual const std::string& store_cls() const {return leaf_string_store_class();}
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(1,c)) return false;
+    if(!parent::stream(a_buffer)) return false;
+    if(!a_buffer.write(m_min)) return false;
+    if(!a_buffer.write(m_max)) return false;
+    if(!a_buffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //base_leaf
+  virtual bool fill_buffer(buffer& a_buffer) const {
+    leaf_string_ref& self = const_cast<leaf_string_ref&>(*this);
+    size_t len = ::strlen(m_ref.c_str());
+    if(len >= (size_t)m_max) self.m_max = int(len)+1;
+    if(len >= m_length) self.m_length = uint32(len)+1;
+    if(len < 255) {
+      if(!a_buffer.write<unsigned char>((unsigned char)len)) return false;
+    } else {
+      if(!a_buffer.write<unsigned char>(255)) return false;
+      if(!a_buffer.write<uint32>(uint32(len))) return false;
+    }
+    if(len) if(!a_buffer.write_fast_array(m_ref.c_str(),uint32(len))) return false;
+    return true;
+  }
+public:
+  leaf_string_ref(std::ostream& a_out,const std::string& a_name,const std::string& a_ref)
+  :parent(a_out,a_name,a_name)
+  ,m_min(0),m_max(0)
+  ,m_ref(a_ref)
+  {
+    m_length_type = 1;
+  }
+  virtual ~leaf_string_ref(){}
+protected:
+  leaf_string_ref(const leaf_string_ref& a_from):ibo(a_from),parent(a_from),m_ref(a_from.m_ref){}
+  leaf_string_ref& operator=(const leaf_string_ref&){return *this;}
+public:
+  int get_max() const {return m_max;}
+  void set_max(int a_value) {m_max = a_value;}
+public:
+  const std::string& variable() const {return m_ref;}
+  std::string& variable() {return const_cast<std::string&>(m_ref);}
+protected:
+  int m_min; //Minimum value if leaf range is specified
+  int m_max; //Maximum value if leaf range is specified
+  const std::string& m_ref;
+};
+
+class leaf_string : public leaf_string_ref {
+  typedef leaf_string_ref parent;
+public:
+  static cid id_class() {return leaf_string_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_string>(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual cid id_cls() const {return id_class();}
+public:
+  leaf_string(std::ostream& a_out,const std::string& a_name)
+  :parent(a_out,a_name,m_value)
+  {}
+  virtual ~leaf_string(){}
+protected:
+  leaf_string(const leaf_string& a_from):ibo(a_from),parent(a_from){}
+  leaf_string& operator=(const leaf_string&){return *this;}
+public:
+  void fill(const std::string& a_value) {m_value = a_value;}
+protected:
+  std::string m_value;
+};
+
+// to store vector columns of a row_wise ntuple :
+template <class T>
+class leaf_std_vector_ref : public base_leaf {
+  typedef base_leaf parent;
+public:
+  static cid id_class() {return base_leaf_cid()+_cid(std::vector<T>())+10000;} //10000 same as in ntuple::column_ref.
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_std_vector_ref>(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual cid id_cls() const {return id_class();}
+public: //ibo
+  virtual const std::string& store_cls() const {return leaf_store_class(T());}
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(1,c)) return false;
+    if(!parent::stream(a_buffer)) return false;
+    if(!a_buffer.write(m_min)) return false;
+    if(!a_buffer.write(m_max)) return false;
+    if(!a_buffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //base_leaf
+  virtual bool fill_buffer(buffer& a_buffer) const {
+    if(!a_buffer.write_fast_array(vec_data(m_ref),uint32(m_ref.size()))) return false;
+    return true;
+  }
+public:
+  leaf_std_vector_ref(std::ostream& a_out,const std::string& a_name,
+                      base_leaf& a_leaf_count,const std::vector<T>& a_ref)
+  :parent(a_out,a_name,a_name)
+  ,m_min(T()),m_max(T())
+  ,m_ref(a_ref)
+  {
+    parent::m_leaf_count = &a_leaf_count;
+    a_leaf_count.set_is_range(true);
+    m_length = 1;
+    m_length_type = sizeof(T);
+  }
+  virtual ~leaf_std_vector_ref(){}
+protected:
+  leaf_std_vector_ref(const leaf_std_vector_ref& a_from):ibo(a_from),parent(a_from),m_ref(a_from.m_ref){}
+  leaf_std_vector_ref& operator=(const leaf_std_vector_ref&){return *this;}
+public:
+  T get_max() const {return m_max;}
+  void set_max(const T& a_value) {m_max = a_value;}
+public:
+  const std::vector<T>& variable() const {return m_ref;}
+  std::vector<T>& variable() {return const_cast< std::vector<T>& >(m_ref);}
+protected:
+  T m_min;    //Minimum value if leaf range is specified
+  T m_max;    //Maximum value if leaf range is specified
+  const std::vector<T>& m_ref;
+};
+
+class leaf_element : public base_leaf {
+  typedef base_leaf parent;
+public:
+  static cid id_class() {return leaf_element_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_element>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+  virtual cid id_cls() const {return id_class();}
+public:
+  virtual const std::string& store_cls() const {return leaf_element_store_class();}
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(1,c)) return false;
+    if(!parent::stream(a_buffer)) return false;
+
+    if(!a_buffer.write(fID)) return false;
+    if(!a_buffer.write(fType)) return false;
+
+    if(!a_buffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //base_leaf
+  virtual bool fill_buffer(buffer&) const {
+    m_out << "tools::wroot::leaf_element::fill_buffer : dummy." << std::endl;
+    return false;
+  }
+public:
+  leaf_element(std::ostream& a_out,const std::string& a_name,int a_id,int a_type)
+  :parent(a_out,a_name,a_name)
+  ,fID(a_id)
+  ,fType(a_type)
+  {}
+  virtual ~leaf_element(){}
+protected:
+  leaf_element(const leaf_element& a_from):ibo(a_from),parent(a_from){}
+  leaf_element& operator=(const leaf_element& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+protected:
+  int fID;   //element serial number in fInfo
+  int fType; //leaf type
+};
+
+}}
+
+#include "iobject"
+
+namespace tools {
+namespace wroot {
+
+class leaf_object : public base_leaf {
+  typedef base_leaf parent;
+public:
+  static cid id_class() {return leaf_object_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_object>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
+  }
+  virtual cid id_cls() const {return id_class();}
+public:
+  virtual const std::string& store_cls() const {return leaf_object_store_class();}
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(4,c)) return false;
+    if(!parent::stream(a_buffer)) return false;
+    if(!a_buffer.write(fVirtual)) return false;
+    if(!a_buffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //base_leaf
+  virtual bool fill_buffer(buffer& a_buffer) const {
+    if(fVirtual) {
+      const std::string& _class = m_obj.store_class_name();
+      if(_class.size()>255) return false;
+      unsigned char n = (unsigned char)_class.size();
+      if(!a_buffer.write(n)) return false;
+      if(!a_buffer.write_fast_array(_class.c_str(),n+1)) return false;
+    }
+    return m_obj.stream(a_buffer);
+  }
+public:
+  leaf_object(std::ostream& a_out,const std::string& a_name,const iobject& a_obj)
+  :parent(a_out,a_name,a_obj.store_class_name()) //CERN-ROOT/TLeafObject::Streamer() wants store class name on m_title.
+  ,m_obj(a_obj)
+  ,fVirtual(true)
+  {}
+  virtual ~leaf_object(){}
+protected:
+  leaf_object(const leaf_object& a_from):ibo(a_from),parent(a_from),m_obj(a_from.m_obj),fVirtual(true){}
+  leaf_object& operator=(const leaf_object& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+protected:
+  const iobject& m_obj;
+  bool fVirtual; // Support for Virtuality
+};
+
+}}
+
+#endif

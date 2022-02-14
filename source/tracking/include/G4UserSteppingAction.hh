@@ -23,55 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UserSteppingAction
 //
+// Class description:
 //
-//---------------------------------------------------------------
-//
-//  G4UserSteppingAction.hh
-//
-// class description:
-//    This class represents actions taken place by the user at each
-//    end of stepping. 
-//
+// This class represents any action taken place by the user at each
+// end of stepping.
+
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
-
-#ifndef G4UserSteppingAction_h
-#define G4UserSteppingAction_h 1
+// --------------------------------------------------------------------
+#ifndef G4UserSteppingAction_hh
+#define G4UserSteppingAction_hh 1
 
 class G4Step;
-class G4SteppingManager;               // Forward declaration
+class G4SteppingManager;
 
-///////////////////////////
 class G4UserSteppingAction 
-///////////////////////////
 {
+  public:
 
-//--------
-public: // with description
-//--------
+    // Constructor and destructor
 
-// Constructor and destructors
-   G4UserSteppingAction();
-   virtual ~G4UserSteppingAction();
+    G4UserSteppingAction();
+    virtual ~G4UserSteppingAction();
 
-// Member functions
-   virtual void SetSteppingManagerPointer(G4SteppingManager* pValue);
-   virtual void UserSteppingAction(const G4Step*){;}
+    // Member functions
 
-//-----------
-   protected:
-//-----------
+    virtual void SetSteppingManagerPointer(G4SteppingManager* pValue);
+    virtual void UserSteppingAction(const G4Step*){}
 
-// Member data
-   G4SteppingManager* fpSteppingManager;
+  protected:
 
+    G4SteppingManager* fpSteppingManager = nullptr;
 };
 
 #endif
-
-

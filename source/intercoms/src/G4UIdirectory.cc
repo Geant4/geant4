@@ -23,17 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIdirectory
 //
-//
-//
+// Author: Makoto Asai, 1998
+// --------------------------------------------------------------------
 
 #include "G4UIdirectory.hh"
 
-G4UIdirectory::G4UIdirectory(char * theCommandPath,G4bool commandsToBeBroadcasted)
-:G4UIcommand(theCommandPath,NULL,commandsToBeBroadcasted)
-{;}
+// --------------------------------------------------------------------
+G4UIdirectory::G4UIdirectory(char* theCommandPath,
+                             G4bool commandsToBeBroadcasted)
+  : G4UIcommand(theCommandPath, nullptr, commandsToBeBroadcasted)
+{
+  SetCommandType(CmdDirectory);
+}
 
-G4UIdirectory::G4UIdirectory(const char * theCommandPath,G4bool commandsToBeBroadcasted)
-:G4UIcommand(theCommandPath,NULL,commandsToBeBroadcasted)
-{;}
-
+// --------------------------------------------------------------------
+G4UIdirectory::G4UIdirectory(const char* theCommandPath,
+                             G4bool commandsToBeBroadcasted)
+  : G4UIcommand(theCommandPath, nullptr, commandsToBeBroadcasted)
+{
+  SetCommandType(CmdDirectory);
+}

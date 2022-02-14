@@ -57,13 +57,13 @@ public:
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
 
+  using G4VSceneHandler::AddPrimitive;
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Text&)       {}
   virtual void AddPrimitive (const G4Circle&)     {}
   virtual void AddPrimitive (const G4Square&)     {}
   virtual void AddPrimitive (const G4Polyhedron&) {}
   virtual void AddPrimitive (const G4Polymarker&) {}
-  virtual void AddPrimitive (const G4Scale&)      {}
 
   virtual void BeginModeling();
   virtual void EndModeling();

@@ -25,53 +25,70 @@
 //
 // -------------------------------------------------------------------
 // -------------------------------------------------------------------
-
+//    
+//   history :
+//      21/10/2021 : DLa update in order to manage G4MicroElecSiPhysics (previous model) 
+//                                 and G4MicroElecPhysics (new model)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4MULTITHREADED
-  #include "G4MTRunManager.hh"
-#else
-  #include "G4RunManager.hh"
-#endif
-
+#include "G4Types.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
-
 #include "G4UIExecutive.hh"
-
 #include "G4VisExecutive.hh"
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
+#include "G4GenericPhysicsList.hh"
+#include "G4EmStandardPhysics.hh"
+#include "MicroElecSiPhysics.hh"
+#include "MicroElecPhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int main(int argc,char** argv) 
 {
-  G4UIExecutive* session = NULL;
+  G4UIExecutive* session = nullptr;
   if (argc==1)   // Define UI session for interactive mode.
   {
       session = new G4UIExecutive(argc, argv);
   }
 
-  // Choose the Random engine
-  
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
   // Construct the default run manager
-  
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  // runManager->SetNumberOfThreads(2); // Is equal to 2 by default
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
 
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 1;    // the new MicroElec works better with only one thread
+  runManager->SetNumberOfThreads(nThreads);
+  
   // Set mandatory user initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  
-  runManager->SetUserInitialization(new PhysicsList);
-  
+
+  // Management of the MicroElec only Si 
+  //              and the new MicroElec
+  G4String fileName;
+  fileName = "microelectronics.mac";
+  G4bool microElecSiPhysics;
+  microElecSiPhysics=false;
+  if(argc>1)
+    {
+      if (G4String(argv[1])== "-onlySi") {microElecSiPhysics=true;}
+      else {fileName=argv[1]; }
+      if( argc>2)
+      {
+        if (G4String(argv[2])== "-onlySi"){ microElecSiPhysics=true;}
+        else{ fileName=argv[2];}
+      } 
+    }
+
+  if (microElecSiPhysics)
+  {   G4cout << "Physic list : MicroElecSiPhysics (only Silicium)" << G4endl;
+      runManager->SetUserInitialization(new MicroElecSiPhysics());
+  }
+  else
+  {   G4cout << "Physic list : MicroElecPhysics" << G4endl;
+      runManager->SetUserInitialization(new MicroElecPhysics());
+  }
+
   // User action initialization
   runManager->SetUserInitialization(new ActionInitialization(detector));
   
@@ -93,7 +110,6 @@ int main(int argc,char** argv)
   else           // Batch mode
   { 
     G4String command = "/control/execute ";
-    G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
 

@@ -32,8 +32,6 @@
 #ifndef G4OPENINVENTORXTVIEWER_HH
 #define G4OPENINVENTORXTVIEWER_HH
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // Inheritance :
 #include "G4OpenInventorViewer.hh"
 
@@ -77,7 +75,5 @@ protected:
   Widget fHelpForm;
   Widget fHelpText;
 };
-
-#endif
 
 #endif

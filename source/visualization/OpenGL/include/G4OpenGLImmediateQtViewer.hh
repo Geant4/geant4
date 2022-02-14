@@ -29,8 +29,6 @@
 // Class G4OpenGLImmediateQtViewer : a class derived from
 //   G4OpenGLQtViewer and G4OpenGLImmediateViewer.
 
-#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
-
 #ifndef G4OPENGLIMMEDIATEQTVIEWER_HH
 #define G4OPENGLIMMEDIATEQTVIEWER_HH
 
@@ -73,7 +71,5 @@ private:
   void ComputeView ();
 
 };
-
-#endif
 
 #endif

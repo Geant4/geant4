@@ -31,7 +31,6 @@
 //  20-Jul-2010  T.Aso  Specify unit for scorer
 //  24-Mar-2011  T.Aso  Add StepChecker for debugging.
 
-
 #ifndef G4ScoreQuantityMessenger_h
 #define G4ScoreQuantityMessenger_h 1
 
@@ -52,84 +51,77 @@ typedef std::vector<G4String> G4TokenVec;
 // class description:
 //
 //  This is a concrete class of G4UImessenger which handles the commands for
-// G4ScoringManager. 
+// G4ScoringManager.
 //
 
-class G4ScoreQuantityMessenger: public G4UImessenger
+class G4ScoreQuantityMessenger : public G4UImessenger
 {
+ public:
+  G4ScoreQuantityMessenger(G4ScoringManager* SManager);
 
-  public:
-    G4ScoreQuantityMessenger(G4ScoringManager * SManager);
+  ~G4ScoreQuantityMessenger();
 
-    ~G4ScoreQuantityMessenger();
+  void SetNewValue(G4UIcommand* command, G4String newValues);
 
-    void SetNewValue(G4UIcommand * command,G4String newValues);
+  G4String GetCurrentValue(G4UIcommand*);
 
-    G4String GetCurrentValue(G4UIcommand * );
+ protected:
+  void FillTokenVec(G4String newValues, G4TokenVec& token);
 
-  protected:    
+  void FParticleCommand(G4VScoringMesh* mesh, G4TokenVec& token);
+  void FParticleWithEnergyCommand(G4VScoringMesh* mesh, G4TokenVec& token);
 
-    void FillTokenVec(G4String newValues,G4TokenVec& token);
+  G4bool CheckMeshPS(G4VScoringMesh* mesh, G4String& psname,
+                     G4UIcommand* command);
 
-    void FParticleCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
-    void FParticleWithEnergyCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
+ private:
+  void QuantityCommands();
+  void FilterCommands();
 
-    G4bool CheckMeshPS(G4VScoringMesh* mesh, G4String& psname,
-                       G4UIcommand * command);
-  
-  private:
-    void QuantityCommands();
-    void FilterCommands();
-
-  private:
-    G4ScoringManager*        fSMan;
-    //
-    // Quantity commands
-    G4UIdirectory*             quantityDir;
-    G4UIcmdWithAString*        qTouchCmd;
-    G4UIcmdWithoutParameter*   qGetUnitCmd;
-    G4UIcmdWithAString*        qSetUnitCmd;
-    //
-    G4UIcommand*   qCellChgCmd;
-    G4UIcommand*   qCellFluxCmd;
-    G4UIcommand*   qPassCellFluxCmd;
-    G4UIcommand*   qeDepCmd;
-    G4UIcommand*   qdoseDepCmd;
-    G4UIcommand*   qnOfStepCmd;
-    G4UIcommand*   qnOfSecondaryCmd;
-    //
-    G4UIcommand*          qTrackLengthCmd;
-    G4UIcommand*          qPassCellCurrCmd;
-    G4UIcommand*          qPassTrackLengthCmd;
-    G4UIcommand*          qFlatSurfCurrCmd;
-    G4UIcommand*          qFlatSurfFluxCmd;
-//    G4UIcommand*          qSphereSurfCurrCmd;
-//    G4UIcommand*          qSphereSurfFluxCmd;
-//    G4UIcommand*          qCylSurfCurrCmd;
-//    G4UIcommand*          qCylSurfFluxCmd;
-    G4UIcommand*          qNofCollisionCmd;
-    G4UIcommand*          qPopulationCmd;
-    G4UIcommand*          qTrackCountCmd;
-    G4UIcommand*          qTerminationCmd;
-    G4UIcommand*          qMinKinEAtGeneCmd;
+ private:
+  G4ScoringManager* fSMan;
   //
-    G4UIcommand*          qStepCheckerCmd;
+  // Quantity commands
+  G4UIdirectory* quantityDir;
+  G4UIcmdWithAString* qTouchCmd;
+  G4UIcmdWithoutParameter* qGetUnitCmd;
+  G4UIcmdWithAString* qSetUnitCmd;
+  //
+  G4UIcommand* qCellChgCmd;
+  G4UIcommand* qCellFluxCmd;
+  G4UIcommand* qPassCellFluxCmd;
+  G4UIcommand* qeDepCmd;
+  G4UIcommand* qdoseDepCmd;
+  G4UIcommand* qnOfStepCmd;
+  G4UIcommand* qnOfSecondaryCmd;
+  //
+  G4UIcommand* qTrackLengthCmd;
+  G4UIcommand* qPassCellCurrCmd;
+  G4UIcommand* qPassTrackLengthCmd;
+  G4UIcommand* qFlatSurfCurrCmd;
+  G4UIcommand* qFlatSurfFluxCmd;
+  G4UIcommand* qVolFluxCmd;
+  //    G4UIcommand*          qSphereSurfCurrCmd;
+  //    G4UIcommand*          qSphereSurfFluxCmd;
+  //    G4UIcommand*          qCylSurfCurrCmd;
+  //    G4UIcommand*          qCylSurfFluxCmd;
+  G4UIcommand* qNofCollisionCmd;
+  G4UIcommand* qPopulationCmd;
+  G4UIcommand* qTrackCountCmd;
+  G4UIcommand* qTerminationCmd;
+  G4UIcommand* qMinKinEAtGeneCmd;
+  //
+  G4UIcommand* qStepCheckerCmd;
 
-    //
-    // Filter commands 
-    G4UIdirectory*             filterDir;
-    G4UIcmdWithAString*        fchargedCmd;
-    G4UIcmdWithAString*        fneutralCmd;
-    G4UIcommand*               fkinECmd;
-    G4UIcommand*               fparticleCmd;
-    G4UIcommand*               fparticleKinECmd;
-    //
-
-
+  //
+  // Filter commands
+  G4UIdirectory* filterDir;
+  G4UIcmdWithAString* fchargedCmd;
+  G4UIcmdWithAString* fneutralCmd;
+  G4UIcommand* fkinECmd;
+  G4UIcommand* fparticleCmd;
+  G4UIcommand* fparticleKinECmd;
+  //
 };
 
-
-
-
 #endif
-

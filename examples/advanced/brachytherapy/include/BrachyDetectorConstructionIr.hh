@@ -46,38 +46,48 @@ class G4Tubs;
 class G4Box;
 class G4Sphere;
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4VisAttributes;
 
 class BrachyDetectorConstructionIr 
 {
 public:
-  BrachyDetectorConstructionIr();
-  ~BrachyDetectorConstructionIr();
+   explicit BrachyDetectorConstructionFlexi();
+  ~BrachyDetectorConstructionFlexi();
 
   void  ConstructIridium(G4VPhysicalVolume*);
   // Model the Iridum source
 
-  void  CleanIridium(); 
-  // Destroy the Iridium source in the experimental set-up
+  void  CleanFlexi(); 
+  // Clean the Iridium source in the experimental set-up
 
 private:   
-  G4Tubs* capsule ;
-  G4LogicalVolume*  capsuleLog;    
-  G4VPhysicalVolume* capsulePhys;
-  G4Sphere* capsuleTip;
-  G4LogicalVolume* capsuleTipLog;
-  G4VPhysicalVolume* capsuleTipPhys;
+  G4Tubs* fSteelShell;
+  G4LogicalVolume* fLogicalSteelShell;    
+  G4VPhysicalVolume* fPhysicalSteelShell;
 
-  G4Tubs* iridiumCore;
-  G4LogicalVolume* iridiumCoreLog;
-  G4VPhysicalVolume* iridiumCorePhys;
+  G4Tubs* fAirGap;
+  G4LogicalVolume* fLogicalAirGap;
+  G4VPhysicalVolume* fPhysicalAirGap;
+
+  G4Tubs* fEnd1SteelShell;
+  G4LogicalVolume* fLogicalEnd1SteelShell;
+  G4VPhysicalVolume* fPhysicalEnd1SteelShell;
+
+  G4Cons* fEnd2SteelShell;
+  G4LogicalVolume* fLogicalEnd2SteelShell;
+  G4VPhysicalVolume* fPhysicalEnd2SteelShell;
+
+  G4Tubs* fCable;
+  G4LogicalVolume* fLogicalCable;
+  G4VPhysicalVolume* fPhysicalCable;
     
-  BrachyMaterial* pMat;    
+  G4Tubs* fIridiumCore;
+  G4LogicalVolume* fLogicalIridiumCore;
+  G4VPhysicalVolume* fPhysicalIridiumCore;
 
-  G4VisAttributes* simpleCapsuleVisAtt;
-  G4VisAttributes*  simpleCapsuleTipVisAtt;
-  G4VisAttributes*  simpleIridiumVisAtt;
+  G4VisAttributes* fSteelAttributes;
+  G4VisAttributes* fEndAttributes;
+  G4VisAttributes* fSimpleIridiumVisAtt;
 };
 #endif
 

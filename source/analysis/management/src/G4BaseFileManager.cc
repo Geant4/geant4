@@ -27,135 +27,89 @@
 // Author: Ivana Hrivnacova, 10/09/2014  (ivana@ipno.in2p3.fr)
 
 #include "G4BaseFileManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "G4Threading.hh"
 
 //_____________________________________________________________________________
 G4BaseFileManager::G4BaseFileManager(const G4AnalysisManagerState& state)
-  : fState(state),
-    fFileName("")
-{
-}
+  : fState(state)
+{}
 
-//_____________________________________________________________________________
-G4BaseFileManager::~G4BaseFileManager()
-{
-}
-
-// 
-// private methods
 //
-
-//_____________________________________________________________________________
-G4String G4BaseFileManager::TakeOffExtension(G4String& name) const
-{
-  G4String extension;
-  if ( name.find(".") != std::string::npos ) { 
-    extension = name.substr(name.find("."));
-    name = name.substr(0, name.find("."));
-  }
-  else {
-    extension = ".";
-    extension.append(GetFileType());
-  }
-  return extension;
-}    
-
-// 
 // public methods
 //
 
 //_____________________________________________________________________________
+void G4BaseFileManager::AddFileName(const G4String& fileName)
+{
+  // G4cout << "registering " << fileName << " in manager of " << GetFileType() << G4endl;
+
+  // Do nothing in file name is already present
+  for ( const auto& name : fFileNames ) {
+    if ( name == fileName ) return;
+  }
+
+  fFileNames.push_back(fileName);
+}
+
+//_____________________________________________________________________________
+G4String G4BaseFileManager::GetFileType() const
+{
+  return G4StrUtil::to_lower_copy(fState.GetType());
+}
+
+//_____________________________________________________________________________
 G4String G4BaseFileManager::GetFullFileName(const G4String& baseFileName,
-                                            G4bool isPerThread) const 
-{  
-  G4String name(baseFileName);
-  if ( name == "" ) name = fFileName;
+                                            G4bool isPerThread) const
+{
+  G4String fileName(baseFileName);
+  if ( fileName == "" ) fileName = fFileName;
 
   // Take out file extension
-  G4String extension = TakeOffExtension(name);
-    
+  auto name = G4Analysis::GetBaseName(fileName);
+
   // Add thread Id to a file name if MT processing
   if ( isPerThread && ! fState.GetIsMaster() ) {
     std::ostringstream os;
     os << G4Threading::G4GetThreadId();
     name.append("_t");
     name.append(os.str());
-  }  
+  }
 
-  // Add (back if it was present) file extension
-  name.append(extension);
+  // Add (back if it was present or is defined) file extension
+  auto extension = G4Analysis::GetExtension(fileName, GetFileType());
+  if ( extension.size() ) {
+    name.append(".");
+    name.append(extension);
+  }
 
   return name;
-}  
-
-//_____________________________________________________________________________
-G4String G4BaseFileManager::GetNtupleFileName(const G4String& ntupleName) const 
-{  
-  G4String name(fFileName);
-
-  // Take out file extension
-  auto extension = TakeOffExtension(name);
-    
-  // Add ntupleName
-  name.append("_nt_");
-  name.append(ntupleName);
-
-  // Add thread Id to a file name if MT processing
-  if ( ! fState.GetIsMaster() ) {
-    std::ostringstream os;
-    os << G4Threading::G4GetThreadId();
-    name.append("_t");
-    name.append(os.str());
-  }  
-
-  // Add (back if it was present) file extension
-  name.append(extension);
-  
-  return name;
-}  
+}
 
 //_____________________________________________________________________________
 G4String G4BaseFileManager::GetHnFileName(const G4String& hnType,
                                           const G4String& hnName) const
 {
-  G4String name(fFileName);
+  return G4Analysis::GetHnFileName(fFileName, GetFileType(), hnType, hnName);
+}
 
-  // Take out file extension
-  auto extension = TakeOffExtension(name);
- 
-  // Add _hnType_hnName
-  name.append("_");
-  name.append(hnType);
-  name.append("_");
-  name.append(hnName);
+//_____________________________________________________________________________
+G4String G4BaseFileManager::GetNtupleFileName(const G4String& ntupleName) const
+{
+  return G4Analysis::GetNtupleFileName(fFileName, GetFileType(), ntupleName);
+}
 
-  // Add (back if it was present) file extension
-  name.append(extension);
-
-  return name;
+//_____________________________________________________________________________
+G4String G4BaseFileManager::GetNtupleFileName(G4int ntupleFileNumber) const
+{
+  return G4Analysis::GetNtupleFileName(fFileName, GetFileType(), ntupleFileNumber);
 }
 
 //_____________________________________________________________________________
 G4String G4BaseFileManager::GetPlotFileName() const
 {
-  G4String name(fFileName);
-
-  // Take out file extension
-  auto extension = TakeOffExtension(name);
-
-  // Add .ps extension
-  name.append(".ps");
-
-  return name;
+  return G4Analysis::GetPlotFileName(fFileName);
 }
-
-//_____________________________________________________________________________
-G4String G4BaseFileManager::GetFileType() const 
-{
-  G4String fileType = fState.GetType();
-  fileType.toLower();
-  return fileType;
-}                 
 
 

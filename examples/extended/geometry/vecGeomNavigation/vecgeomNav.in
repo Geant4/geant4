@@ -1,0 +1,27 @@
+# Verbosity
+/control/verbose 1
+/run/verbose     1
+/event/verbose   0
+
+/mydet/setGdmlFile  TestNTST.gdml
+
+# /run/numberOfThreads 1
+/control/cout/prefixString G4-WORKER
+
+#  Detector & Field
+/mydet/setField 2.0 tesla
+
+#  Init
+/run/initialize
+
+#  Primary Generator
+# /gun/primaryPerEvt 1
+/gun/particle e-
+/gun/energy   5 GeV
+
+# Runs
+/tracking/verbose 1
+/run/beamOn 1
+
+/tracking/verbose 0
+/run/beamOn 10

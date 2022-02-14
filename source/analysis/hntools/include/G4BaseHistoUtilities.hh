@@ -42,7 +42,7 @@ using G4ToolsBaseHisto
   = tools::histo::base_histo<double, unsigned int, unsigned int, double, double>;
 
 // Access to data parameters
-//  
+//
 G4int    GetNbins(const G4ToolsBaseHisto& baseHisto, G4int dimension);
 G4double GetMin(const G4ToolsBaseHisto& baseHisto, G4int dimension);
 G4double GetMax(const G4ToolsBaseHisto& baseHisto, G4int dimension);
@@ -58,7 +58,7 @@ G4bool SetAxisTitle(G4ToolsBaseHisto& baseHisto, G4int dimension, const G4String
 
 // Accessors
 G4String GetTitle(const G4ToolsBaseHisto& baseHisto);
-G4String GetAxisTitle(const G4ToolsBaseHisto& baseHisto, G4int dimension, 
+G4String GetAxisTitle(const G4ToolsBaseHisto& baseHisto, G4int dimension,
                       const G4String& hnType);
 
 }

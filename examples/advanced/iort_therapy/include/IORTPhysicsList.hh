@@ -57,7 +57,6 @@ public:
 
   void ConstructParticle();
 
-  void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);

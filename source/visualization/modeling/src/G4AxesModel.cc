@@ -58,18 +58,52 @@ G4AxesModel::G4AxesModel
  G4double arrowWidth, const G4String& colourString,
  const G4String& description,
  G4bool withAnnotation,
- G4double textSize):
-  fXAxisModel(0),
-  fXLabelModel(0),
-  fXAnnotationModel(0),
-  fYAxisModel(0),
-  fYLabelModel(0),
-  fYAnnotationModel(0),
-  fZAxisModel(0),
-  fZLabelModel(0),
-  fZAnnotationModel(0)
+ G4double textSize,
+ const G4Transform3D& transform)
 {
-  fType = "G4AxesModel";
+  Construct
+  (x0,y0,z0,length,arrowWidth,
+   colourString,description,withAnnotation,textSize,
+   transform);
+}
+
+// Alternative short constructor
+G4AxesModel::G4AxesModel
+(G4double x0, G4double y0, G4double z0, G4double length,
+ const G4Transform3D& transform)
+{
+  G4double arrowWidth = 1.;
+  const G4String& colourString = "auto";
+  const G4String& description = "";
+  G4bool withAnnotation = true;
+  G4double textSize = 10.;
+  Construct
+  (x0,y0,z0,length,arrowWidth,
+   colourString,description,withAnnotation,textSize,
+   transform);
+}
+
+void G4AxesModel::Construct
+(G4double x0, G4double y0, G4double z0, G4double length,
+ G4double arrowWidth, const G4String& colourString,
+ const G4String& description,
+ G4bool withAnnotation,
+ G4double textSize,
+ const G4Transform3D& transform)
+{
+  fXAxisModel = nullptr;
+  fXLabelModel = nullptr;
+  fXAnnotationModel = nullptr;
+  fYAxisModel = nullptr;
+  fYLabelModel = nullptr;
+  fYAnnotationModel = nullptr;
+  fZAxisModel = nullptr;
+  fZLabelModel = nullptr;
+  fZAnnotationModel = nullptr;
+
+  fTransform = transform;
+
+  fType = "Axes";
   fGlobalTag = fType;
   fGlobalDescription = fType + ": " + description;
   fExtent = G4VisExtent
@@ -93,12 +127,14 @@ G4AxesModel::G4AxesModel
 
   G4Text* text = 0;
   G4VisAttributes* va = 0;
+  G4int lineSegmentsPerCircle = 6;
 
   G4Colour xColour(colour);
   if (autoColour) xColour = G4Colour::Red();
   fXAxisModel = new G4ArrowModel
     (x0, y0, z0, x0+length, y0, z0, arrowWidth,
-     xColour, "x-axis: " + description);
+     xColour, "x-axis: " + description,
+     lineSegmentsPerCircle, fTransform);
   if (withAnnotation) {
     text = new G4Text("x",G4Point3D(x0+1.05*length, y0, z0));
     text->SetScreenSize(textSize);
@@ -106,7 +142,7 @@ G4AxesModel::G4AxesModel
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(xColour);
     text->SetVisAttributes(va);
-    fXLabelModel = new G4TextModel(*text);
+    fXLabelModel = new G4TextModel(*text,fTransform);
     delete text;
     text = new G4Text(annotation,G4Point3D(x0+0.8*length, y0, z0));
     text->SetScreenSize(textSize);
@@ -114,7 +150,7 @@ G4AxesModel::G4AxesModel
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(xColour);
     text->SetVisAttributes(va);
-    fXAnnotationModel = new G4TextModel(*text);
+    fXAnnotationModel = new G4TextModel(*text,fTransform);
     delete text;
   }
 
@@ -122,7 +158,8 @@ G4AxesModel::G4AxesModel
   if (autoColour) yColour = G4Colour::Green();
   fYAxisModel = new G4ArrowModel
     (x0, y0, z0, x0, y0+length, z0, arrowWidth,
-     yColour, "y-axis: " + description);
+     yColour, "y-axis: " + description,
+     lineSegmentsPerCircle, fTransform);
   if (withAnnotation) {
     text = new G4Text("y",G4Point3D(x0, y0+1.05*length, z0));
     text->SetScreenSize(textSize);
@@ -130,7 +167,7 @@ G4AxesModel::G4AxesModel
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(yColour);
     text->SetVisAttributes(va);
-    fYLabelModel = new G4TextModel(*text);
+    fYLabelModel = new G4TextModel(*text,fTransform);
     delete text;
     text = new G4Text(annotation,G4Point3D(x0, y0+0.8*length, z0));
     text->SetScreenSize(textSize);
@@ -138,7 +175,7 @@ G4AxesModel::G4AxesModel
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(yColour);
     text->SetVisAttributes(va);
-    fYAnnotationModel = new G4TextModel(*text);
+    fYAnnotationModel = new G4TextModel(*text,fTransform);
     delete text;
   }
 
@@ -146,7 +183,8 @@ G4AxesModel::G4AxesModel
   if (autoColour) zColour = G4Colour::Blue();
   fZAxisModel = new G4ArrowModel
     (x0, y0, z0, x0, y0, z0+length, arrowWidth,
-     zColour, "z-axis: " + description);
+     zColour, "z-axis: " + description,
+     lineSegmentsPerCircle, fTransform);
   if (withAnnotation) {
     text = new G4Text("z",G4Point3D(x0, y0, z0+1.05*length));
     text->SetScreenSize(textSize);
@@ -154,7 +192,7 @@ G4AxesModel::G4AxesModel
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(zColour);
     text->SetVisAttributes(va);
-    fZLabelModel = new G4TextModel(*text);
+    fZLabelModel = new G4TextModel(*text,fTransform);
     delete text;
     text = new G4Text(annotation,G4Point3D(x0, y0, z0+0.8*length));
     text->SetScreenSize(textSize);
@@ -162,20 +200,22 @@ G4AxesModel::G4AxesModel
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(zColour);
     text->SetVisAttributes(va);
-    fZAnnotationModel = new G4TextModel(*text);
+    fZAnnotationModel = new G4TextModel(*text,fTransform);
     delete text;
   }
 }
 
 void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
-  if (fXAxisModel)       fXAxisModel->DescribeYourselfTo(sceneHandler);
-  if (fXLabelModel)      fXLabelModel->DescribeYourselfTo(sceneHandler);
+  if (fXAxisModel)       fXAxisModel->      DescribeYourselfTo(sceneHandler);
+  if (fXLabelModel)      fXLabelModel->     DescribeYourselfTo(sceneHandler);
   if (fXAnnotationModel) fXAnnotationModel->DescribeYourselfTo(sceneHandler);
-  if (fYAxisModel)       fYAxisModel->DescribeYourselfTo(sceneHandler);
-  if (fYLabelModel)      fYLabelModel->DescribeYourselfTo(sceneHandler);
+
+  if (fYAxisModel)       fYAxisModel->      DescribeYourselfTo(sceneHandler);
+  if (fYLabelModel)      fYLabelModel->     DescribeYourselfTo(sceneHandler);
   if (fYAnnotationModel) fYAnnotationModel->DescribeYourselfTo(sceneHandler);
-  if (fZAxisModel)       fZAxisModel->DescribeYourselfTo(sceneHandler);
-  if (fZLabelModel)      fZLabelModel->DescribeYourselfTo(sceneHandler);
+
+  if (fZAxisModel)       fZAxisModel->      DescribeYourselfTo(sceneHandler);
+  if (fZLabelModel)      fZLabelModel->     DescribeYourselfTo(sceneHandler);
   if (fZAnnotationModel) fZAnnotationModel->DescribeYourselfTo(sceneHandler);
 }

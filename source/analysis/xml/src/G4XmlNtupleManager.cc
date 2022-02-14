@@ -30,50 +30,24 @@
 #include "G4XmlFileManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
-#include "G4Threading.hh"
 #include "G4UnitsTable.hh"
 
 #include "tools/ntuple_booking"
-
-#include <iostream>
-//#include <cstdio>
 
 using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4XmlNtupleManager::G4XmlNtupleManager(const G4AnalysisManagerState& state)
- : G4TNtupleManager<tools::waxml::ntuple>(state),
-   fFileManager(nullptr)
+ : G4TNtupleManager<tools::waxml::ntuple, std::ofstream>(state)
 {}
 
-//_____________________________________________________________________________
-G4XmlNtupleManager::~G4XmlNtupleManager()
-{}
-
-// 
+//
 // private methods
 //
 
 //_____________________________________________________________________________
-void G4XmlNtupleManager::CreateTNtuple(
-  G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription,
-  const G4String& /*name*/, const G4String& /*title*/)
-{
-  // Create ntuple if the file is open (what means here that
-  // a filename was already set)
-  if ( fFileManager->GetFileName().size() ) {
-    if ( fFileManager->CreateNtupleFile(ntupleDescription) ) {
-      ntupleDescription->fNtuple 
-        = new tools::waxml::ntuple(*(ntupleDescription->fFile));
-           // ntuple object is deleted when closing a file
-      fNtupleVector.push_back(ntupleDescription->fNtuple);       
-    }       
-  }
-}
-
-//_____________________________________________________________________________
 void G4XmlNtupleManager::CreateTNtupleFromBooking(
-  G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription)
+  XmlNtupleDescription* ntupleDescription)
 {
     // create a file for this ntuple
     if ( ! fFileManager->CreateNtupleFile(ntupleDescription) ) return;
@@ -82,12 +56,12 @@ void G4XmlNtupleManager::CreateTNtupleFromBooking(
     ntupleDescription->fNtuple
       = new tools::waxml::ntuple(
               *(ntupleDescription->fFile), G4cerr, ntupleDescription->fNtupleBooking);
-    fNtupleVector.push_back(ntupleDescription->fNtuple);  
+    fNtupleVector.push_back(ntupleDescription->fNtuple);
 }
 
 //_____________________________________________________________________________
 void G4XmlNtupleManager::FinishTNtuple(
-  G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription,
+  XmlNtupleDescription* ntupleDescription,
   G4bool /*fromBooking*/)
 
 {
@@ -99,11 +73,17 @@ void G4XmlNtupleManager::FinishTNtuple(
     CreateTNtupleFromBooking(ntupleDescription);
   }
 
+  // Return if creating ntuple failed
+  if ( ! ntupleDescription->fNtuple ) {
+    Warn("Creating ntuple has failed. ", fkClass, "FinishTNtuple");
+    return;
+  }
+
   // Write header
   G4String path = "/";
   path.append(fFileManager->GetNtupleDirectoryName());
   ntupleDescription->fNtuple
-    ->write_header(path, ntupleDescription->fNtupleBooking.name(), 
-                   ntupleDescription->fNtupleBooking.title());  
-  fFileManager->LockNtupleDirectoryName();
+    ->write_header(path, ntupleDescription->fNtupleBooking.name(),
+                   ntupleDescription->fNtupleBooking.title());
+  fFileManager->LockDirectoryNames();
 }

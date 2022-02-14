@@ -79,8 +79,6 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonQMDPhysics);
 
-G4ThreadLocal G4FTFBuilder* G4IonQMDPhysics::theFTFPBuilder = nullptr;
-
 G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
   :  G4IonQMDPhysics("IonQMD", ver)
 {}
@@ -98,9 +96,7 @@ G4IonQMDPhysics::G4IonQMDPhysics(const G4String& nname, G4int ver)
 }
 
 G4IonQMDPhysics::~G4IonQMDPhysics()
-{
-  delete theFTFPBuilder; theFTFPBuilder = nullptr;
-}
+{}
 
 void G4IonQMDPhysics::ConstructProcess()
 {
@@ -116,8 +112,8 @@ void G4IonQMDPhysics::ConstructProcess()
   emaxQMD = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
   G4HadronicInteraction* theFTFP = nullptr;
   if(emax > emaxQMD) {
-    theFTFPBuilder = new G4FTFBuilder("FTFP",thePreCompound);
-    theFTFP = theFTFPBuilder->GetModel();
+    G4FTFBuilder theFTFPBuilder("FTFP",thePreCompound);
+    theFTFP = theFTFPBuilder.GetModel();
     theFTFP->SetMinEnergy(emaxQMD - overlap);
     theFTFP->SetMaxEnergy(emax);
   }

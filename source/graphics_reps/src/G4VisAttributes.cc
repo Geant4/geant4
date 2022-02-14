@@ -41,7 +41,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
-fForcedNumberOfCloudPoints (10000),
+fForcedNumberOfCloudPoints (0),  // <= 0 means under control of viewer
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -59,7 +59,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
-fForcedNumberOfCloudPoints (10000),
+fForcedNumberOfCloudPoints (0),  // <= 0 means under control of viewer
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -77,7 +77,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
-fForcedNumberOfCloudPoints (10000),
+fForcedNumberOfCloudPoints (0),  // <= 0 means under control of viewer
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -96,7 +96,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
-fForcedNumberOfCloudPoints (10000),
+fForcedNumberOfCloudPoints (0),  // <= 0 means under control of viewer
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -158,11 +158,6 @@ G4VisAttributes& G4VisAttributes::operator= (const G4VisAttributes& rhs)
   return *this;
 }
 
-#ifndef WIN32
-// Deprecated 14 July 2016  JA
-const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
-#endif
-
 const G4VisAttributes& G4VisAttributes::GetInvisible() {
   static const G4VisAttributes invisible = G4VisAttributes(false);
   return invisible;
@@ -200,8 +195,9 @@ void G4VisAttributes::SetForceNumberOfCloudPoints (G4int nPoints) {
   if (nPoints <= 0) {
     G4cout <<
     "G4VisAttributes::SetForceNumberOfCloudPoints: number of cloud points"
-    "set to " << fForcedNumberOfCloudPoints
-    << ". This means the viewer default will be used."
+    " set to " << fForcedNumberOfCloudPoints << '.' <<
+    "\n  This means the viewer default will be used, typically controlled by"
+    "\n  \"/vis/viewer/set/numberOfCloudPoints\""
     << G4endl;
   }
 }
@@ -233,7 +229,7 @@ void G4VisAttributes::SetForceLineSegmentsPerCircle (G4int nSegments) {
     nSegments = nSegmentsMin;
     G4cout <<
       "G4VisAttributes::SetForcedLineSegmentsPerCircle: attempt to set the"
-      "\nnumber of line segements per circle < " << nSegmentsMin
+      "\nnumber of line segments per circle < " << nSegmentsMin
          << "; forced to " << nSegments << G4endl;
   }
   fForcedLineSegmentsPerCircle = nSegments;

@@ -32,7 +32,7 @@
 #include "G4PreCompoundModel.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4HadronicInteractionRegistry.hh"
-#include "G4NeutronInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
 G4INCLXXNeutronBuilder::
@@ -51,7 +51,7 @@ G4INCLXXNeutronBuilder()
 }
 
 void G4INCLXXNeutronBuilder::
-Build(G4NeutronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   if(withPreCompound) {
     thePreCompoundModel->SetMinEnergy(thePreCompoundMin);

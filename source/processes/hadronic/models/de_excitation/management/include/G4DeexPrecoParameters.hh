@@ -29,6 +29,8 @@
 // List of parameters of the pre-compound model
 // and the deexcitation module
 //
+// Verbosity level depends on the local verbosity level and the verbosity
+// level of hadronics defined in G4HadronicParameters
 
 #ifndef G4DeexPrecoParameters_h
 #define G4DeexPrecoParameters_h 1
@@ -64,8 +66,9 @@ public:
   friend std::ostream& operator<< (std::ostream& os, 
 				   const G4DeexPrecoParameters&);
 
-  // inline access methods 
+  G4int GetVerbose() const;
 
+  // inline access methods 
   inline G4double GetLevelDensity() const;
 
   inline G4double GetR0() const;
@@ -88,8 +91,6 @@ public:
 
   inline G4double GetMinExPerNucleounForMF() const;
 
-  inline G4int GetInternalConversionID() const;
-
   inline G4int GetMinZForPreco() const;
 
   inline G4int GetMinAForPreco() const;
@@ -101,8 +102,6 @@ public:
   inline G4int GetTwoJMAX() const;
 
   inline G4int GetUploadZ() const;
-
-  inline G4int GetVerbose() const;
 
   inline G4bool NeverGoBack() const;
 
@@ -127,6 +126,8 @@ public:
   inline G4bool GetDiscreteExcitationFlag() const;
 
   inline G4bool StoreICLevelData() const;
+
+  inline G4bool IsomerProduction() const;
 
   inline G4DeexChannelType GetDeexChannelsType() const;
 
@@ -166,8 +167,6 @@ public:
 
   void SetTwoJMAX(G4int);
 
-  void SetUploadZ(G4int);
-
   void SetVerbose(G4int);
 
   void SetNeverGoBack(G4bool);
@@ -197,20 +196,19 @@ public:
 
   void SetDiscreteExcitationFlag(G4bool);
 
+  void SetIsomerProduction(G4bool);
+
   void SetDeexChannelsType(G4DeexChannelType);
-
-  // obsolete method (has no effect)
-  inline void SetUseFilesNEW(G4bool) {};
-
-private:
-
-  G4bool IsLocked() const;
 
   G4DeexPrecoParameters(const G4DeexPrecoParameters & right) = delete;  
   const G4DeexPrecoParameters& operator=
   (const G4DeexPrecoParameters &right) = delete;
   G4bool operator==(const G4DeexPrecoParameters &right) const = delete;
   G4bool operator!=(const G4DeexPrecoParameters &right) const = delete;
+
+private:
+
+  G4bool IsLocked() const;
 
   G4DeexParametersMessenger* theMessenger;
   G4StateManager* fStateManager;
@@ -248,15 +246,12 @@ private:
   G4int fPrecoType;
   G4int fDeexType;
 
-  // Internal conversion model ID
-  G4int fInternalConversionID;
   G4int fTwoJMAX;
 
   // Preco model
   G4int fMinZForPreco;
   G4int fMinAForPreco;
 
-  G4int fMaxZ;
   G4int fVerbose;
 
   // Preco flags
@@ -274,6 +269,7 @@ private:
   G4bool fInternalConversion;
   G4bool fLD;  // use simple level density model 
   G4bool fFD;  // use transition to discrete level 
+  G4bool fIsomerFlag;  // enable isomere production 
 
   // type of a set of e-exitation channels
   G4DeexChannelType fDeexChannelType;   
@@ -338,11 +334,6 @@ inline G4double G4DeexPrecoParameters::GetMinExPerNucleounForMF() const
   return fMinExPerNucleounForMF;
 }
 
-inline G4int G4DeexPrecoParameters::GetInternalConversionID() const
-{
-  return fInternalConversionID;
-}
-
 inline G4int G4DeexPrecoParameters::GetMinZForPreco() const
 {
   return fMinZForPreco;
@@ -366,16 +357,6 @@ inline G4int G4DeexPrecoParameters::GetDeexModelType() const
 inline G4int G4DeexPrecoParameters::GetTwoJMAX() const
 {
   return fTwoJMAX;
-}
-
-inline G4int G4DeexPrecoParameters::GetUploadZ() const
-{
-  return fMaxZ;
-}
-
-inline G4int G4DeexPrecoParameters::GetVerbose() const
-{
-  return fVerbose;
 }
 
 inline G4bool G4DeexPrecoParameters::NeverGoBack() const
@@ -436,6 +417,11 @@ inline G4bool G4DeexPrecoParameters::GetLevelDensityFlag() const
 inline G4bool G4DeexPrecoParameters::GetDiscreteExcitationFlag() const
 {
   return fFD;
+}
+
+inline G4bool G4DeexPrecoParameters::IsomerProduction() const
+{
+  return fIsomerFlag;
 }
 
 inline G4DeexChannelType G4DeexPrecoParameters::GetDeexChannelsType() const

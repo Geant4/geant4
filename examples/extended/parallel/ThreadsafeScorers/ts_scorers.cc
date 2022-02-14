@@ -44,46 +44,43 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-#ifdef G4MULTITHREADED
-    #include "G4MTRunManager.hh"
-    #include "G4Threading.hh"
-    typedef G4MTRunManager RunManager;
-#else
-    #include "G4RunManager.hh"
-    typedef G4RunManager RunManager;
-#endif
+#include "G4RunManagerFactory.hh"
+
+#include "G4Threading.hh"
 
 #include "Randomize.hh"
 
 // User Defined Classes
+#include "TSActionInitialization.hh"
 #include "TSDetectorConstruction.hh"
 #include "TSPhysicsList.hh"
-#include "TSActionInitialization.hh"
 
+#include "G4TiMemory.hh"
+#include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-<<<<<<< HEAD
-=======
-#include "G4TiMemory.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
 
 // for std::system(const char*)
 #include <cstdlib>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void message(RunManager* runmanager)
+void message(G4RunManager* runmanager)
 {
-#ifdef G4MULTITHREADED
-    runmanager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+  G4MTRunManager* man = dynamic_cast<G4MTRunManager*>(runmanager);
+  if(man)
+  {
+    man->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
     G4cout << "\n\n\t--> Running in multithreaded mode with "
-           << runmanager->GetNumberOfThreads()
-           << " threads\n\n" << G4endl;
-#else
-    // get rid of unused variable warning
-    runmanager->SetVerboseLevel(runmanager->GetVerboseLevel());
+           << man->GetNumberOfThreads() << " threads\n\n"
+           << G4endl;
+  }
+  else
+  {
     G4cout << "\n\n\t--> Running in serial mode\n\n" << G4endl;
-#endif
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,71 +88,110 @@ void message(RunManager* runmanager)
 
 int main(int argc, char** argv)
 {
-    TIMEMORY_INIT(argc, argv);
+  // initialize timemory
+  G4Profiler::Configure(argc, argv);
+
+  G4String macro;
+  if(argc > 1)
+    macro = argv[argc - 1];
+
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if(macro.empty())
+    ui = new G4UIExecutive(argc, argv);
+
+  // Set the random seed
+  CLHEP::HepRandom::setTheSeed(1245214UL);
 
 #if defined(GEANT4_USE_TIMEMORY)
-    // override environment settings
-    tim::settings::json_output() = true;
-    tim::settings::dart_output() = true;
-    tim::settings::dart_type() = "peak_rss";
-    tim::settings::dart_count() = 1;
+  // The following exists for:
+  // - G4ProfileType::Run
+  // - G4ProfileType::Event
+  // - G4ProfileType::Track
+  // - G4ProfileType::Step
+  // - G4ProfileType::User
+  //
+  using TrackProfilerConfig = G4ProfilerConfig<G4ProfileType::Track>;
+  using TrackTool           = typename TrackProfilerConfig::type;
+
+  TrackProfilerConfig::GetQueryFunctor() = [](const G4Track* _track) {
+    // only profile if _track != nullptr and dynamic-profiler != nullptr
+    // and /profiler/track/enable is true
+    //
+    return G4Profiler::GetEnabled(G4ProfileType::Track) && _track &&
+           _track->GetDynamicParticle();
+  };
+
+  TrackProfilerConfig::GetLabelFunctor() = [](const G4Track* _track) {
+    // create a label for the profiling entry. This can be customized
+    // to include and information necessary in the returning string
+    auto pdef = _track->GetDynamicParticle()->GetParticleDefinition();
+    static std::string _prefix = "G4Track/";
+    return _prefix + pdef->GetParticleName();
+  };
+
+  // env option to display track profiles as a hierarchy
+  bool track_tree = tim::get_env<bool>("G4PROFILER_TRACK_TREE", true);
+  // env option to enable timeline entries (every entry is unique, HUGE amount
+  // of data!)
+  bool track_time = tim::get_env<bool>("G4PROFILER_TRACK_TIMELINE", false);
+  // default scope is tree
+  auto _scope = tim::scope::config{};
+  if(track_tree == false)
+    _scope += tim::scope::flat{};
+  if(track_time == true)
+    _scope += tim::scope::timeline{};
+  TrackProfilerConfig::GetToolFunctor() = [=](const std::string& _label) {
+    // Configure the profiling tool for a given label. By default,
+    // G4Track and G4Step tools are "flat profiles" but this can be disabled
+    // to include tree
+    return new TrackTool(_label, _scope);
+  };
 #endif
 
-    // Detect interactive mode (if no arguments) and define UI session
-    //
-    G4UIExecutive* ui = 0;
-    if(argc == 1)
-        ui = new G4UIExecutive(argc, argv);
+  G4RunManager* runmanager =
+    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Tasking);
 
-    // Choose the Random engine
-    //G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  message(runmanager);
 
-    CLHEP::HepRandom::setTheSeed(1245214);
+  runmanager->SetUserInitialization(new TSDetectorConstruction);
 
-    RunManager* runmanager = new RunManager();
+  runmanager->SetUserInitialization(new TSPhysicsList);
 
-    runmanager->SetUserInitialization(new TSDetectorConstruction);
+  runmanager->SetUserInitialization(new TSActionInitialization);
 
-    runmanager->SetUserInitialization(new TSPhysicsList);
+  runmanager->Initialize();
 
-    runmanager->SetUserInitialization(new TSActionInitialization);
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  visManager->Initialize();
 
-    runmanager->Initialize();
+  // Get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
+  // Process macro or start UI session
+  //
+  if(!ui)
+  {
+    // batch mode
+    G4String command = "/control/execute ";
+    UImanager->ApplyCommand(command + macro);
+  }
+  else
+  {
+    ui->SessionStart();
+  }
 
-    // Initialize visualization
-    //
-    G4VisManager* visManager = new G4VisExecutive;
-    // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-    // G4VisManager* visManager = new G4VisExecutive("Quiet");
-    visManager->Initialize();
+  // Job termination
+  // Free the store: user actions, physics_list and detector_description are
+  // owned and deleted by the run manager, so they should not be deleted
+  // in the main() program !
+  delete visManager;
+  delete runmanager;
 
-    // Get the pointer to the User Interface manager
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-    // Process macro or start UI session
-    //
-    if (!ui)
-    {
-        // batch mode
-        G4String command = "/control/execute ";
-        G4String fileName = argv[1];
-        UImanager->ApplyCommand(command+fileName);
-    } else
-    {
-        // interactive mode
-        UImanager->ApplyCommand("/control/execute vis.mac");
-        ui->SessionStart();
-        delete ui;
-    }
-
-    // Job termination
-    // Free the store: user actions, physics_list and detector_description are
-    // owned and deleted by the run manager, so they should not be deleted
-    // in the main() program !
-
-    delete visManager;
-    delete runmanager;
-
-    return 0;
+  return 0;
 }

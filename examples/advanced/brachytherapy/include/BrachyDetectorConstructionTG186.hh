@@ -32,7 +32,8 @@
 //    ****************************************
 //
 // Management of the Iridium source
-//
+// Author: Dean Cutajar, University of Wollongong
+// deanc@uow.edu.au
 
 #ifndef BrachyDetectorConstructionIr_H
 #define BrachyDetectorConstructionIr_H 1
@@ -45,41 +46,37 @@ class G4Tubs;
 class G4Box;
 class G4Sphere;
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4VisAttributes;
 
 class BrachyDetectorConstructionTG186
 {
 public:
-  BrachyDetectorConstructionTG186();
+  explicit BrachyDetectorConstructionTG186();
   ~BrachyDetectorConstructionTG186();
 
   void  ConstructTG186(G4VPhysicalVolume*);
   // Model the TG186 reference source
 
   void  CleanTG186(); 
-  // Destroy the TG186 reference source in the experimental set-up
+  // Clean the TG186 reference source 
 
 private:   
-  G4Tubs* TG186capsule ;
-  G4LogicalVolume*  TG186capsuleLog;    
-  G4VPhysicalVolume* TG186capsulePhys;
-  G4Sphere* TG186capsuleTip;
-  G4LogicalVolume* TG186capsuleTipLog;
-  G4VPhysicalVolume* TG186capsuleTipPhys;
-  G4Tubs* TG186iridiumCore;
-  G4LogicalVolume* TG186iridiumCoreLog;
-  G4VPhysicalVolume* TG186iridiumCorePhys;
-  G4Tubs* TG186cable;
-  G4LogicalVolume* TG186cableLog;
-  G4VPhysicalVolume* TG186cablePhys;
-    
-  BrachyMaterial* pMat;    
-
-  G4VisAttributes* TG186simpleCapsuleVisAtt;
-  G4VisAttributes*  TG186simpleCapsuleTipVisAtt;
-  G4VisAttributes*  TG186simpleIridiumVisAtt;
-  G4VisAttributes*  TG186simpleCableVisAtt;
+  G4Tubs* fTG186capsule ;
+  G4LogicalVolume*  fTG186capsuleLog;    
+  G4VPhysicalVolume* fTG186capsulePhys;
+  G4Sphere* fTG186capsuleTip;
+  G4LogicalVolume* fTG186capsuleTipLog;
+  G4VPhysicalVolume* fTG186capsuleTipPhys;
+  G4Tubs* fTG186iridiumCore;
+  G4LogicalVolume* fTG186iridiumCoreLog;
+  G4VPhysicalVolume* fTG186iridiumCorePhys;
+  G4Tubs* fTG186cable;
+  G4LogicalVolume* fTG186cableLog;
+  G4VPhysicalVolume* fTG186cablePhys;
+  G4VisAttributes* fTG186simpleCapsuleVisAtt;
+  G4VisAttributes* fTG186simpleCapsuleTipVisAtt;
+  G4VisAttributes* fTG186simpleIridiumVisAtt;
+  G4VisAttributes* fTG186simpleCableVisAtt;
 };
 #endif
 

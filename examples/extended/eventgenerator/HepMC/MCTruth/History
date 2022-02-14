@@ -18,8 +18,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+13 November 2020 B. Morgan (mctruthex-V10-06-01)
+- Enforce use of Serial RunManager.
+
+10 November 2020 B. Morgan (mctruthex-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 4 September 2018 I. Hrivnacova (mctruthex-V10-04-00)
 - coding guidelines
 

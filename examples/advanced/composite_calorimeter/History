@@ -12,8 +12,54 @@ $Id: History 93898 2015-11-03 08:39:38Z gcosmo $
                       Example History file
                       ---------------------
 
-<<<<<<< HEAD
-=======
+25.10.2021 - B.Morgan (ccal-V10-07-06)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+18.10.2021 - B. Morgan (ccal-V10-07-05)
+- Use std::string member functions from G4String in place of obsolete synonyms
+
+07.10.2021 - I. Hrivnacova (ccal-V10-07-04)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  removed CCalAnalysis.hh.
+
+19.07.2021 - I. Hrivnacova (ccal-V10-07-03)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+24.05.2021 - B. Morgan (ccal-V10-07-02)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+07.05.2021 - A.Ribon (ccal-V10-07-01)
+-  CCalEcal, CCalHcal, CCalHall, CCalEcalOrganization, CCalHcalOrganization :
+   fixed compilation warning (overriden virtual member function not marked
+   as 'override').
+
+04.05.2021 - A.Ribon (ccal-V10-07-00)
+- Migrated to multi-threaded, using G4RunManagerFactory.
+  These are the main changes:
+  1. Introduced the action initializer.
+  2. Split the definition of the sensitive part of the detector
+     from the detector construction itself.
+     (A new method, sensitiveHandling(), has been introduced in
+      the base class CCalG4Able.)
+  3. Made the following three classes thread-local singletons
+     (instead of global singletons): CCalSDList, CCalSensAssign
+     and CCalSensitiveDetectors.
+     (The class CCalSensitiveConfiguration can still remain as a
+      global singleton.)
+  4. Multi-threaded use of the G4AnalysisManager in the run action
+     (with the merging of histograms and ntuple of of all working
+      threads at the end of the run).
+  The most tricky part of this migration was the treatment of the
+  sensitive detectors (i.e. the steps 2. and 3. above), because
+  it was originally done together with the building of the geometry
+  and via thread-unsafe singletons.
+
+02.11.2020 - B.Morgan (ccal-V10-06-00)
+- Support same CMake version range as core Geant4
+
 18.11.2019 - G.Cosmo (ccal-V10-05-01)
 - Fixed cases of type conversions from size_t to G4int in CCaloSD.
 - Some code cleanup.
@@ -52,7 +98,7 @@ $Id: History 93898 2015-11-03 08:39:38Z gcosmo $
 - Fixed compilation warning on gcc-7.1 in CCalAnalysis constructor.
 
 01.08.2016 - A. Dotti   (ccal-V10-02-02)
-- Fix issues with a char* length 
+- Fix issues with a char* length
 
 02.11.2016 - L. Garnier (ccal-V10-02-01)
 - Remove icons.mac. Automatically include since interfaces-V10-02-07
@@ -118,19 +164,19 @@ $Id: History 93898 2015-11-03 08:39:38Z gcosmo $
 - Updated vis usage.
 
 12.11.2009 - A.Ribon (ccal-V09-02-01)
-- Use QGSP_BIC_EMY as default Physics List to test the 
+- Use QGSP_BIC_EMY as default Physics List to test the
   low-energy electromagnetic.
 
 22.02.2009
  -  G.Folger;     Tag: ccal-V09-02-00
     Fix compilation warnings in CCalRunAction.cc and CCalEndOfEventAction.cc
 
-15.06.2008 
+15.06.2008
  - G.A.P.Cirrone; Tag: ccal-V09-01-00
     Removed no more necessary AIDA commands from GNUmakefile
 
 14.11.2006 - A.Ribon (ccal-V08-01-01)
-- Removed hadronic_lists.gmk after the inclusion of 
+- Removed hadronic_lists.gmk after the inclusion of
   Physics Lists in the Geant4 kernel.
 
 21.07.2006 - A.Ribon (ccal-V08-01-00)
@@ -192,7 +238,7 @@ $Id: History 93898 2015-11-03 08:39:38Z gcosmo $
   using G4TouchableHistory.
 
 31.10.03 - A.Ribon (ccal-V05-02-01)
-- Enables possibility of running the simulation in HCal alone or 
+- Enables possibility of running the simulation in HCal alone or
   HCal+ECal mode with the correct B-field + a few small bug corrections.
   Changed also the default stepper (in magnetic field).
 
@@ -200,7 +246,7 @@ $Id: History 93898 2015-11-03 08:39:38Z gcosmo $
 - Complete migration to model EM physics
 
 12.06.2003 - A.Ribon (ccal-V05-01-02)
-- Updated the LHEP, QGSP, and QGSC Physics Lists. 
+- Updated the LHEP, QGSP, and QGSC Physics Lists.
   Done also some clean up.
 
 23.05.2003 - A.Ribon (ccal-V05-01-01)
@@ -240,4 +286,4 @@ $Id: History 93898 2015-11-03 08:39:38Z gcosmo $
 
 30.09.2002 - M.G.Pia
 - Created directory
-             
+

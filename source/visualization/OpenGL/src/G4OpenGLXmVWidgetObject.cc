@@ -27,8 +27,6 @@
 //
 //Virtual base class for all Motif widgets.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewer.hh"
 #include "G4OpenGLXmVWidgetObject.hh"
 
@@ -55,5 +53,3 @@ void G4OpenGLXmVWidgetObject::ProcesspView ()
   bgnd = pView->bgnd;
   top = pView->toplevel;
 }
-
-#endif

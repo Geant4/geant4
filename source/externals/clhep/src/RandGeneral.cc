@@ -49,6 +49,9 @@
 #include "CLHEP/Random/RandGeneral.h"
 #include "CLHEP/Random/DoubConv.h"
 #include <cassert>
+#include <iostream>
+#include <string>
+#include <vector>
 
 namespace CLHEP {
 

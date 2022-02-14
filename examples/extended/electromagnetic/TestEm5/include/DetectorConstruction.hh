@@ -56,8 +56,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
 
-    DetectorConstruction();
-   ~DetectorConstruction();
+  explicit DetectorConstruction();
+  virtual ~DetectorConstruction();
 
   public:
 
@@ -71,7 +71,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetWorldSizeX   (G4double);
      void SetWorldSizeYZ  (G4double);
 
-     void SetMagField(G4double);
+  G4VPhysicalVolume* Construct() override;
+  void ConstructSDandField() override;
 
      virtual G4VPhysicalVolume* Construct();
      virtual void ConstructSDandField();
@@ -101,12 +102,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4double           fAbsorberThickness;
      G4double           fAbsorberSizeYZ;
 
-     G4double           fXposAbs;
-     G4double           fXstartAbs, fXendAbs;
-
-     G4Material*        fWorldMaterial;
-     G4double           fWorldSizeX;
-     G4double           fWorldSizeYZ;
+  G4Box*             fSolidWorld;
+  G4LogicalVolume*   fLogicWorld;
+  G4VPhysicalVolume* fPhysiWorld;
 
      G4bool             fDefaultWorld;
 

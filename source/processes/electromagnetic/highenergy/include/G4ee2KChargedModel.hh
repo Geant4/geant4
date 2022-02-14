@@ -62,20 +62,20 @@ public:
 
   explicit G4ee2KChargedModel(G4eeCrossSections*,G4double,G4double);
 
-  virtual ~G4ee2KChargedModel();
+  ~G4ee2KChargedModel() override;
 
-  virtual G4double PeakEnergy() const override;
+  G4double PeakEnergy() const override;
 
-  virtual G4double ComputeCrossSection(G4double) const override;
+  G4double ComputeCrossSection(G4double) const override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&) override;
 
-private:
-
   // hide assignment operator
-  G4ee2KChargedModel & operator=(const  G4ee2KChargedModel &right);
-  G4ee2KChargedModel(const  G4ee2KChargedModel&);
+  G4ee2KChargedModel & operator=(const  G4ee2KChargedModel &right) = delete;
+  G4ee2KChargedModel(const  G4ee2KChargedModel&) = delete;
+
+private:
 
   G4double massK;
   G4double massPhi;

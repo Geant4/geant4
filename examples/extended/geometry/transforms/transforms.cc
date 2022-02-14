@@ -33,12 +33,12 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4SteppingVerbose.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -51,14 +51,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 int main(int argc,char** argv) {
- 
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  //use G4SteppingVerboseWithUnits
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
   
-  // Construct the default run manager
+  //construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
@@ -70,40 +75,29 @@ int main(int argc,char** argv) {
   
   //Initialize G4 kernel
   runManager->Initialize();
-    
-  // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc!=1)   // batch mode  
-    { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);  
-    }
-    
-  else           // define visualization and UI terminal for interactive mode 
-    { 
-#ifdef G4VIS_USE
-     G4VisManager* visManager = new G4VisExecutive;
-     visManager->Initialize();
-#endif
-     
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
-      UI->ApplyCommand("/control/execute vis.mac");     
-#endif            
-      ui->SessionStart();
-      delete ui;
-#endif
-     
-#ifdef G4VIS_USE
-     delete visManager;
-#endif     
-    }
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
 
-  // job termination
-  //
+  //get the pointer to the User Interface manager 
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
+   visManager->Initialize();
+   ///UImanager->ApplyCommand("/control/execute vis.mac");
+   ui->SessionStart();
+   delete ui;
+  } else  {
+   //batch mode  
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
+
+  //job termination
+  delete visManager;
   delete runManager;
 
   return 0;

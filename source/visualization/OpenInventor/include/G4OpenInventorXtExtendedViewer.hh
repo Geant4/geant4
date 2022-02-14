@@ -32,8 +32,6 @@
 #ifndef G4OPENINVENTORXTEXTENDEDVIEWER_HH
 #define G4OPENINVENTORXTEXTENDEDVIEWER_HH
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // Inheritance :
 #include "G4OpenInventorViewer.hh"
 
@@ -85,7 +83,5 @@ private:
   Widget fHelpText;
   Widget fPDFButton;
 };
-
-#endif
 
 #endif

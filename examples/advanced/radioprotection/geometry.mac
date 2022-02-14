@@ -1,0 +1,6 @@
+# Uncomment a line to select a specific detector type
+# Leave both commented to use the default one
+
+#/geometrySetup/selectDetector Diamond
+#/geometrySetup/selectDetector MicroDiamond
+#/geometrySetup/selectDetector Silicon

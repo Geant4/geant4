@@ -31,6 +31,36 @@
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
 
+// Geant4-MicroElec MODELS
+
+#include "G4MicroElecElastic.hh"
+#include "G4MicroElecElasticModel.hh"
+
+#include "G4MicroElecInelastic.hh"
+#include "G4MicroElecInelasticModel.hh"
+//
+
+#include "G4LossTableManager.hh"
+#include "G4EmConfigurator.hh"
+#include "G4VEmModel.hh"
+#include "G4DummyModel.hh"
+#include "G4eIonisation.hh"
+#include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
+#include "G4BraggModel.hh"
+#include "G4BraggIonModel.hh"
+#include "G4BetheBlochModel.hh"
+#include "G4UrbanMscModel.hh"
+#include "G4MollerBhabhaModel.hh"
+#include "G4IonFluctuations.hh"
+#include "G4UniversalFluctuation.hh"
+
+#include "G4ElectronCapture.hh"
+
+#include "G4UAtomicDeexcitation.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PhysicsList::PhysicsList():  G4VUserPhysicsList()
@@ -94,38 +124,6 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// Geant4-MicroElec MODELS
-
-#include "G4MicroElecElastic.hh"
-#include "G4MicroElecElasticModel.hh"
-
-#include "G4MicroElecInelastic.hh"
-#include "G4MicroElecInelasticModel.hh"
-//
-
-#include "G4LossTableManager.hh"
-#include "G4EmConfigurator.hh"
-#include "G4VEmModel.hh"
-#include "G4DummyModel.hh"
-#include "G4eIonisation.hh"
-#include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
-#include "G4eMultipleScattering.hh"
-#include "G4hMultipleScattering.hh"
-#include "G4BraggModel.hh"
-#include "G4BraggIonModel.hh"
-#include "G4BetheBlochModel.hh"
-#include "G4UrbanMscModel.hh"
-#include "G4MollerBhabhaModel.hh"
-#include "G4IonFluctuations.hh"
-#include "G4UniversalFluctuation.hh"
-
-#include "G4ElectronCapture.hh"
-
-#include "G4UAtomicDeexcitation.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void PhysicsList::ConstructEM()
 {
 
@@ -155,12 +153,12 @@ void PhysicsList::ConstructEM()
 
       // MicroElec elastic is not active in the world 
       G4MicroElecElastic* theMicroElecElasticProcess = new G4MicroElecElastic("e-_G4MicroElecElastic");
-      theMicroElecElasticProcess->SetEmModel(new G4DummyModel(),1);
+      theMicroElecElasticProcess->SetEmModel(new G4DummyModel());
       pmanager->AddDiscreteProcess(theMicroElecElasticProcess);
 
       // MicroElec ionisation is not active in the world 
       G4MicroElecInelastic* microelecioni = new G4MicroElecInelastic("e-_G4MicroElecInelastic");
-      microelecioni->SetEmModel(new G4DummyModel(),1); 
+      microelecioni->SetEmModel(new G4DummyModel()); 
       pmanager->AddDiscreteProcess(microelecioni);
 
       // THE FOLLOWING PROCESS WILL KILL ALL ELECTRONS BELOW A SELECTED ENERY THRESHOLD
@@ -180,8 +178,8 @@ void PhysicsList::ConstructEM()
 
       // MicroElec ionisation is not active in the world 
       G4MicroElecInelastic* microelecioni = new G4MicroElecInelastic("p_G4MicroElecInelastic");
-      microelecioni->SetEmModel(new G4DummyModel(),1); 
-      microelecioni->SetEmModel(new G4DummyModel(),2); 
+      microelecioni->SetEmModel(new G4DummyModel()); 
+      microelecioni->SetEmModel(new G4DummyModel()); 
       pmanager->AddDiscreteProcess(microelecioni);
 
     } else if (particleName == "GenericIon") { 
@@ -195,8 +193,8 @@ void PhysicsList::ConstructEM()
 
       // MicroElec ionisation is not active in the world 
       G4MicroElecInelastic* microelecioni = new G4MicroElecInelastic("ion_G4MicroElecInelastic");
-      microelecioni->SetEmModel(new G4DummyModel(),1); 
-      microelecioni->SetEmModel(new G4DummyModel(),2);
+      microelecioni->SetEmModel(new G4DummyModel()); 
+      microelecioni->SetEmModel(new G4DummyModel());
       pmanager->AddDiscreteProcess(microelecioni);
     } 
   }

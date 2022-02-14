@@ -55,7 +55,8 @@ class G4NystromRK4 : public G4MagIntegratorStepper
     G4NystromRK4(G4Mag_EqRhs* EquationMotion, 
                  G4double distanceConstField = 0.0); 
       // Can be used only for Magnetic Fields - and for 6 variables (x,p)
-
+    ~G4NystromRK4() {}
+   
     virtual void Stepper(const G4double y[],
                          const G4double dydx[],
                          G4double hstep,

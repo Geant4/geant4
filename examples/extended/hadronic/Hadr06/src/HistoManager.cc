@@ -45,7 +45,6 @@ HistoManager::HistoManager()
 
 HistoManager::~HistoManager()
 {
-  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,30 +55,42 @@ void HistoManager::Book()
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetActivation(true);     //enable inactivation of histograms
   
   // Define histograms start values
-  const G4int kMaxHisto = 14;
+  const G4int kMaxHisto = 24;
   const G4String id[] = {"0","1","2","3","4","5","6","7","8","9",
-                         "10","11","12","13"};
+                         "10","11","12","13","14","15","16","17","18","19",
+			 "20","21","22","23" };
   const G4String title[] = 
-                { "dummy",                                        //0
-                  "total energy deposit",                         //1
-                  "Edep (MeV/mm) along absorber",                 //2
-                  "total kinetic energy flow",                    //3
-                  "gamma flux (dN/dE) at exit",                   //4
-                  "e+- flux (dN/dE) at exit",                     //5
-                  "neutrons flux (dN/dE) at exit",                //6
-                  "protons flux (dN/dE) at exit",                 //7
-                  "deuterons flux (dN/dE) at exit",               //8
-                  "alphas flux (dN/dE) at exit",                  //9
-                  "all others ions flux (dN/dE) at exit",         //10
-                  "all others baryons flux (dN/dE) at exit",      //11
-                  "all others mesons flux (dN/dE) at exit",       //12
-                  "all others leptons flux (dN/dE) at exit"       //13  
-                 };  
+       { "dummy",                                                        //0
+         "total energy deposit",                                         //1
+         "Edep (MeV/mm) along absorber",                                 //2
+         "total kinetic energy flow",                                    //3
+         "energy spectrum of gamma at creation",                         //4
+         "energy spectrum of e+- at creation",                           //5
+         "energy spectrum of neutrons at creation",                      //6
+         "energy spectrum of protons at creation",                       //7
+         "energy spectrum of deuterons at creation",                     //8
+         "energy spectrum of alphas at creation",                        //9
+         "energy spectrum of all others ions at creation",               //10
+         "energy spectrum of all others baryons at creation",            //11
+         "energy spectrum of all others mesons at creation",             //12
+         "energy spectrum of all others leptons (neutrinos) at creation", //13
+         "energy spectrum of emerging gamma",                            //14
+         "energy spectrum of emerging e+-",                              //15
+         "energy spectrum of emerging neutrons",                         //16
+         "energy spectrum of emerging protons",                          //17
+         "energy spectrum of emerging deuterons",                        //18
+         "energy spectrum of emerging alphas",                           //19
+         "energy spectrum of all others emerging ions",                  //20
+         "energy spectrum of all others emerging baryons",               //21
+         "energy spectrum of all others emerging mesons",                //22
+         "energy spectrum of all others emerging leptons (neutrinos)"    //23	 
+       };
 
   // Default values (to be reset via /analysis/h1/set command) 
   G4int nbins = 100;

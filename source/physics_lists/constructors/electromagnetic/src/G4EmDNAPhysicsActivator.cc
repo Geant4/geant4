@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// add elastic scattering processes of proton, hydrogen, helium, alpha+, alpha++
 
 #include "G4EmDNAPhysicsActivator.hh"
 
@@ -89,12 +88,18 @@
 #include "G4DNAEmfietzoglouIonisationModel.hh"
 #include "G4DNAEmfietzoglouExcitationModel.hh"
 
+#include <G4DNACPA100ElasticModel.hh>
+#include "G4DNACPA100IonisationModel.hh"
+#include "G4DNACPA100ExcitationModel.hh"
+
 #include "G4Threading.hh"
+
+#include "G4UAtomicDeexcitation.hh"  // added by MJPietrzak
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmDNAPhysicsActivator::G4EmDNAPhysicsActivator(G4int ver)
-  : G4VPhysicsConstructor("G4EmDNAPhysicsActivator"), verbose(ver)
+    : G4VPhysicsConstructor("G4EmDNAPhysicsActivator"), verbose(ver)
 {
   theParameters = G4EmParameters::Instance();
   theParameters->ActivateDNA();
@@ -114,14 +119,14 @@ G4bool G4EmDNAPhysicsActivator::IsVerbose() const
 
 void G4EmDNAPhysicsActivator::ConstructParticle()
 {
-// bosons
+  // bosons
   G4Gamma::Gamma();
 
-// leptons
+  // leptons
   G4Electron::Electron();
   G4Positron::Positron();
   
-// baryons
+  // baryons
   G4Proton::Proton();
 
   G4GenericIon::GenericIonDefinition();
@@ -188,7 +193,7 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
   G4bool a1msc = HasMsc(a1man);
   //  G4bool imsc  = HasMsc(iman);
 
-  // processes are defined with dummy models for the world 
+  // processes are defined with dummy models for the world
   // elastic scatetring
   G4DNAElastic* theDNAeElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
   theDNAeElasticProcess->SetEmModel(new G4DummyModel());
@@ -330,7 +335,7 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
   h0man->AddDiscreteProcess(theDNAh0ChargeIncreaseProcess);
 
   // limits for DNA model applicability
-  static const G4double elowest= 7.4 * eV;   
+  //  static const G4double elowest= 7.4 * eV;  // seems to be option dependent - MJPietrzak
   static const G4double elimel = 1 * MeV;
   static const G4double pminbb = 2 * MeV;
   static const G4double pmin   = 0.1 * keV;
@@ -338,26 +343,16 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
   static const G4double hemin  = 1 * keV;
   static const G4double ionmin = 0.5 * MeV;
 
-  // low-energy capture
-  G4LowECapture* ecap = nullptr;
-  if(G4DNAChemistryManager::IsActivated() == false)
-  {
-    // Note: G4DNAElectronSolvation could also be used instead of G4LowECapture
-    ecap = new G4LowECapture(elowest);
-    //    ecap->SetVerboseLevel(1);
-    eman->AddDiscreteProcess(ecap);
-  }
-  else
-  {
-    // When chemistry is activated: G4DNAElectronSolvation turns the electron
-    // to a solvated electron, otherwise it kills the electron at the
-    // corresponding high energy limit of the model
-    G4DNAElectronSolvation* pSolvatation =
-      new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
-    pSolvatation->SetEmModel(G4DNASolvationModelFactory::GetMacroDefinedModel());
-    eman->AddDiscreteProcess(pSolvatation);
-  }
-  
+
+  // G4DNAElectronSolvation used instead of G4LowECapture (always for simplicity) - MJPietrzak
+
+  // When chemistry is activated: G4DNAElectronSolvation turns the electron
+  // to a solvated electron, otherwise it kills the electron at the
+  // corresponding high energy limit of the model
+  auto pSolvatation = new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
+  pSolvatation->SetEmModel(G4DNASolvationModelFactory::GetMacroDefinedModel());
+  eman->AddDiscreteProcess(pSolvatation);
+
   G4LowECapture* pcap = new G4LowECapture(pmin);
   pman->AddDiscreteProcess(pcap);
   G4LowECapture* icap = new G4LowECapture(ionmin);
@@ -381,34 +376,52 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
 	     << " are activated for G4Region " << reg << G4endl;
     }
 
-    // type of DNA physics
-    G4int itype = 0;
-
-    if(0 == itype) {
-      AddElectronModels0(reg, ecap, emsc, elowest, elimel);
-      AddProtonModels0(reg, pmsc, elimel, pminbb, pmax);
-      AddHeliumModels0(reg, a1msc, a2msc, elimel, pminbb, pmax);
-      AddGenericIonModels0(reg, pminbb);
-      DeactivateNuclearStopping(pman, elimel);
-      DeactivateNuclearStopping(a1man, elimel);
-      DeactivateNuclearStopping(a2man, elimel);
+    if(typesDNA[i] == "DNA_Opt0") {
+      AddElectronModels0(reg, emsc, elimel);
     }
+    else if(typesDNA[i] == "DNA_Opt2"){
+      AddElectronModels2(reg, emsc, elimel);
+    }
+    else if(typesDNA[i] == "DNA_Opt4"){
+      AddElectronModels4(reg, emsc, elimel);
+    }
+    else if(typesDNA[i] == "DNA_Opt4a"){
+      AddElectronModels4a(reg, emsc, elimel);
+    }
+    else if(typesDNA[i] == "DNA_Opt6"){
+      AddElectronModels6(reg, emsc, elimel);
+    }
+    else if(typesDNA[i] == "DNA_Opt6a"){
+      AddElectronModels6a(reg, emsc, elimel);
+    }
+    else if(typesDNA[i] == "DNA_Opt7") {
+      AddElectronModels7(reg, emsc, elimel);
+    }
+
+    // models for for other particles seems to be option independent so I moved them here - MJPietrzak
+    AddProtonModels0(reg, pmsc, elimel, pminbb, pmax);
+    AddHeliumModels0(reg, a1msc, a2msc, elimel, pminbb, pmax);
+    AddGenericIonModels0(reg, pminbb);
+    DeactivateNuclearStopping(pman, elimel);
+    DeactivateNuclearStopping(a1man, elimel);
+    DeactivateNuclearStopping(a2man, elimel);
   }
-  G4LossTableManager::Instance()->EmConfigurator()->AddModels();
+
+  auto ltman = G4LossTableManager::Instance();
+  ltman->EmConfigurator()->AddModels();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmDNAPhysicsActivator::AddElectronModels0(const G4String& reg,
-                                                 G4LowECapture* ecap,
                                                  G4bool emsc,
-                                                 G4double elowest,
                                                  G4double elimel)
-{ 
+{
   G4EmConfigurator* em_config = 
     G4LossTableManager::Instance()->EmConfigurator();
   G4VEmModel* mod;
 
+  static const G4double elowest = 7.4 * eV;  // seems to be option dependent, so I moved it here - MJPietrzak
   static const G4double elimin = 1 * MeV;
   static const G4double elimvb = 100 * eV;
   static const G4double elimat = 13 * eV;
@@ -429,15 +442,9 @@ void G4EmDNAPhysicsActivator::AddElectronModels0(const G4String& reg,
   }
     
   // cuts and solvation
-  if(ecap) {
-    ecap->AddRegion(reg);
-  } else {
-    // For this condition to work, the chemistry list has to be called
-    // before any standard EM physics list
-    mod = new G4DNAOneStepThermalizationModel();
-    em_config->SetExtraEmModel("e-", "e-_G4DNAElectronSolvation",
-			       mod, reg, 0., elowest);
-  }
+  mod = new G4DNAOneStepThermalizationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElectronSolvation",
+                             mod, reg, 0., elowest);
 
   // elastic     
   mod = new G4DNAChampionElasticModel();
@@ -476,6 +483,450 @@ void G4EmDNAPhysicsActivator::AddElectronModels0(const G4String& reg,
 			     mod, reg, 0.0, elimat);
     
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmDNAPhysicsActivator::AddElectronModels2(const G4String &reg,
+                                                 G4bool emsc,
+                                                 G4double elimel)
+{
+  G4EmConfigurator *em_config =
+      G4LossTableManager::Instance()->EmConfigurator();
+  G4VEmModel *mod;
+
+  static const G4double elowest = 7.4 * eV;  // seems to be option dependent, so I moved it here - MJPietrzak
+  static const G4double elimin = 1 * MeV;
+  static const G4double elimvb = 100 * eV;
+  static const G4double elimat = 13 * eV;
+
+
+  // for e- 100 MeV is a limit between different msc models
+  G4double emax = theParameters->MaxKinEnergy();
+
+  if (emsc) {
+    G4UrbanMscModel *msc = new G4UrbanMscModel();
+    msc->SetActivationLowEnergyLimit(elimel);
+    G4double emaxmsc = std::min(100 * MeV, emax);
+    em_config->SetExtraEmModel("e-", "msc", msc, reg, 0.0, emaxmsc);
+  } else {
+    mod = new G4eCoulombScatteringModel();
+    mod->SetActivationLowEnergyLimit(elimel);
+    em_config->SetExtraEmModel("e-", "CoulombScat", mod, reg, 0.0, emax);
+  }
+
+  // cuts and solvation
+  mod = new G4DNAOneStepThermalizationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElectronSolvation",
+                             mod, reg, 0., elowest);
+
+  // elastic
+  mod = new G4DNAChampionElasticModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElastic",
+                             mod, reg, 0.0, elimel);
+
+
+  // ionisation
+  mod = new G4MollerBhabhaModel();
+  mod->SetActivationLowEnergyLimit(elimin);
+  em_config->SetExtraEmModel("e-", "eIoni",
+                             mod, reg, 0.0, emax,
+                             new G4UniversalFluctuation());
+
+  mod = new G4DNABornIonisationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAIonisation",
+                             mod, reg, elowest, elimin);
+
+  // excitation
+  mod = new G4DNABornExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAExcitation",
+                             mod, reg, 0., elimin);
+
+  // vib excitation
+  mod = new G4DNASancheExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAVibExcitation",
+                             mod, reg, 0.0, elimvb);
+
+  // attachment
+  mod = new G4DNAMeltonAttachmentModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAAttachment",
+                             mod, reg, 0.0, elimat);
+
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmDNAPhysicsActivator::AddElectronModels4(const G4String& reg,
+                                                 G4bool emsc,
+                                                 G4double elimel)
+{
+  G4EmConfigurator *em_config =
+      G4LossTableManager::Instance()->EmConfigurator();
+  G4VEmModel *mod;
+
+  static const G4double elowest = 10 * eV;  // seems to be option dependent, so I moved it here - MJPietrzak
+  static const G4double elimin = 1 * MeV;
+//  static const G4double elimvb = 100 * eV;
+//  static const G4double elimat = 13 * eV;
+
+
+  // for e- 100 MeV is a limit between different msc models
+  G4double emax = theParameters->MaxKinEnergy();
+
+  if (emsc) {
+    G4UrbanMscModel *msc = new G4UrbanMscModel();
+    msc->SetActivationLowEnergyLimit(elimel);
+    G4double emaxmsc = std::min(100 * MeV, emax);
+    em_config->SetExtraEmModel("e-", "msc", msc, reg, 0.0, emaxmsc);
+  } else {
+    mod = new G4eCoulombScatteringModel();
+    mod->SetActivationLowEnergyLimit(elimel);
+    em_config->SetExtraEmModel("e-", "CoulombScat", mod, reg, 0.0, emax);
+  }
+
+  // cuts and solvation
+  mod = new G4DNAOneStepThermalizationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElectronSolvation",
+                             mod, reg, 0., elowest);
+
+  // elastic
+  mod = new G4DNAUeharaScreenedRutherfordElasticModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElastic",
+                             mod, reg, 0.0, elimel);
+
+  // ionisation
+  mod = new G4MollerBhabhaModel();
+  mod->SetActivationLowEnergyLimit(elimin);
+  em_config->SetExtraEmModel("e-", "eIoni",
+                             mod, reg, 0.0, emax,
+                             new G4UniversalFluctuation());
+
+  mod = new G4DNAEmfietzoglouIonisationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAIonisation",
+                             mod, reg, elowest, elimin);
+
+  // excitation
+  mod = new G4DNAEmfietzoglouExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAExcitation",
+                             mod, reg, 0., elimin);
+
+
+// todo - MJPietrzak
+//   I don't understand why vib excit. and attachment models are turned off in option 4 (and 6)
+//   therefore I have created option 4a (and 6a), which has these models turned on
+//
+//  // vib excitation
+//  mod = new G4DNASancheExcitationModel();
+//  em_config->SetExtraEmModel("e-", "e-_G4DNAVibExcitation",
+//			     mod, reg, 0.0, elimvb);
+//
+//  // attachment
+//  mod = new G4DNAMeltonAttachmentModel();
+//  em_config->SetExtraEmModel("e-", "e-_G4DNAAttachment",
+//			     mod, reg, 0.0, elimat);
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmDNAPhysicsActivator::AddElectronModels4a(const G4String& reg,
+                                                  G4bool emsc,
+                                                  G4double elimel)
+{
+  G4EmConfigurator *em_config =
+      G4LossTableManager::Instance()->EmConfigurator();
+  G4VEmModel *mod;
+
+  static const G4double elowest = 10 * eV;  // seems to be option dependent, so I moved it here - MJPietrzak
+  static const G4double elimin = 1 * MeV;
+  static const G4double elimvb = 100 * eV;
+  static const G4double elimat = 13 * eV;
+
+
+  // for e- 100 MeV is a limit between different msc models
+  G4double emax = theParameters->MaxKinEnergy();
+
+  if (emsc) {
+    G4UrbanMscModel *msc = new G4UrbanMscModel();
+    msc->SetActivationLowEnergyLimit(elimel);
+    G4double emaxmsc = std::min(100 * MeV, emax);
+    em_config->SetExtraEmModel("e-", "msc", msc, reg, 0.0, emaxmsc);
+  } else {
+    mod = new G4eCoulombScatteringModel();
+    mod->SetActivationLowEnergyLimit(elimel);
+    em_config->SetExtraEmModel("e-", "CoulombScat", mod, reg, 0.0, emax);
+  }
+
+  // cuts and solvation
+  mod = new G4DNAOneStepThermalizationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElectronSolvation",
+                             mod, reg, 0., elowest);
+
+  // elastic
+  mod = new G4DNAUeharaScreenedRutherfordElasticModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElastic",
+                             mod, reg, 0.0, elimel);
+
+  // ionisation
+  mod = new G4MollerBhabhaModel();
+  mod->SetActivationLowEnergyLimit(elimin);
+  em_config->SetExtraEmModel("e-", "eIoni",
+                             mod, reg, 0.0, emax,
+                             new G4UniversalFluctuation());
+
+  mod = new G4DNAEmfietzoglouIonisationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAIonisation",
+                             mod, reg, elowest, elimin);
+
+  // excitation
+  mod = new G4DNAEmfietzoglouExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAExcitation",
+                             mod, reg, 0., elimin);
+
+
+  // I don't understand why vib excit. and attachment models are turned off in option 4
+  // therefore I have created option 4a, which has these models turned on
+  // and here it is - MJPietrzak
+
+  // vib excitation
+  mod = new G4DNASancheExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAVibExcitation",
+                             mod, reg, 0.0, elimvb);
+
+  // attachment
+  mod = new G4DNAMeltonAttachmentModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAAttachment",
+                             mod, reg, 0.0, elimat);
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmDNAPhysicsActivator::AddElectronModels6(const G4String& reg,
+                                                 G4bool emsc,
+                                                 G4double elimel)
+{
+  G4EmConfigurator *em_config =
+      G4LossTableManager::Instance()->EmConfigurator();
+  G4VEmModel *mod;
+
+  static const G4double elowest = 11 * eV;  // seems to be option dependent, so I moved it here - MJPietrzak
+  static const G4double elimin = 1 * MeV;
+  //  static const G4double elimvb = 100 * eV;
+  //  static const G4double elimat = 13 * eV;
+
+  // for e- 100 MeV is a limit between different msc models
+  G4double emax = theParameters->MaxKinEnergy();
+
+  if (emsc) {
+    G4UrbanMscModel *msc = new G4UrbanMscModel();
+    msc->SetActivationLowEnergyLimit(elimel);
+    G4double emaxmsc = std::min(100 * MeV, emax);
+    em_config->SetExtraEmModel("e-", "msc", msc, reg, 0.0, emaxmsc);
+  } else {
+    mod = new G4eCoulombScatteringModel();
+    mod->SetActivationLowEnergyLimit(elimel);
+    em_config->SetExtraEmModel("e-", "CoulombScat", mod, reg, 0.0, emax);
+  }
+
+  // cuts and solvation
+  mod = new G4DNAOneStepThermalizationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElectronSolvation",
+                             mod, reg, 0., elowest);
+
+  // elastic
+  mod = new G4DNACPA100ElasticModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElastic",
+                             mod, reg, 0.0, elimel);
+
+  // ionisation
+  mod = new G4MollerBhabhaModel();
+  mod->SetActivationLowEnergyLimit(elimin);
+  em_config->SetExtraEmModel("e-", "eIoni",
+                             mod, reg, 0.0, emax,
+                             new G4UniversalFluctuation());
+
+  mod = new G4DNACPA100IonisationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAIonisation",
+                             mod, reg, elowest, elimin);
+
+  // excitation
+  mod = new G4DNACPA100ExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAExcitation",
+                             mod, reg, 0., elimin);
+
+
+// I don't understand why vib excit. and attachment models are turned off in option 6 (and 4)
+// therefore I have created option 6a (and 4a), which has these models turned on
+// and here it is - MJPietrzak
+
+//  // vib excitation
+//  mod = new G4DNASancheExcitationModel();
+//  em_config->SetExtraEmModel("e-", "e-_G4DNAVibExcitation",
+//                             mod, reg, 0.0, elimvb);
+//
+//  // attachment
+//  mod = new G4DNAMeltonAttachmentModel();
+//  em_config->SetExtraEmModel("e-", "e-_G4DNAAttachment",
+//                             mod, reg, 0.0, elimat);
+
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmDNAPhysicsActivator::AddElectronModels6a(const G4String& reg,
+                                                  G4bool emsc,
+                                                  G4double elimel)
+{
+  G4EmConfigurator *em_config =
+      G4LossTableManager::Instance()->EmConfigurator();
+  G4VEmModel *mod;
+
+  static const G4double elowest = 11 * eV;  // seems to be option dependent, so I moved it here - MJPietrzak
+  static const G4double elimin = 1 * MeV;
+  static const G4double elimvb = 100 * eV;
+  static const G4double elimat = 13 * eV;
+
+
+  // for e- 100 MeV is a limit between different msc models
+  G4double emax = theParameters->MaxKinEnergy();
+
+  if (emsc) {
+    G4UrbanMscModel *msc = new G4UrbanMscModel();
+    msc->SetActivationLowEnergyLimit(elimel);
+    G4double emaxmsc = std::min(100 * MeV, emax);
+    em_config->SetExtraEmModel("e-", "msc", msc, reg, 0.0, emaxmsc);
+  } else {
+    mod = new G4eCoulombScatteringModel();
+    mod->SetActivationLowEnergyLimit(elimel);
+    em_config->SetExtraEmModel("e-", "CoulombScat", mod, reg, 0.0, emax);
+  }
+
+  // cuts and solvation
+  mod = new G4DNAOneStepThermalizationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElectronSolvation",
+                             mod, reg, 0., elowest);
+
+  // elastic
+  mod = new G4DNACPA100ElasticModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElastic",
+                             mod, reg, 0.0, elimel);
+
+  // ionisation
+  mod = new G4MollerBhabhaModel();
+  mod->SetActivationLowEnergyLimit(elimin);
+  em_config->SetExtraEmModel("e-", "eIoni",
+                             mod, reg, 0.0, emax,
+                             new G4UniversalFluctuation());
+
+  mod = new G4DNACPA100IonisationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAIonisation",
+                             mod, reg, elowest, elimin);
+
+  // excitation
+  mod = new G4DNACPA100ExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAExcitation",
+                             mod, reg, 0., elimin);
+
+  // I don't understand why vib excit. and attachment models are turned off in option 6 (and 4)
+  // therefore I have created option 6a (and 4a), which has these models turned on
+  // and here it is - MJPietrzak
+
+  // vib excitation
+  mod = new G4DNASancheExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAVibExcitation",
+                             mod, reg, 0.0, elimvb);
+
+  // attachment
+  mod = new G4DNAMeltonAttachmentModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAAttachment",
+                             mod, reg, 0.0, elimat);
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmDNAPhysicsActivator::AddElectronModels7(const G4String &reg,
+                                                 G4bool emsc,
+                                                 G4double elimel)
+{
+  G4EmConfigurator *em_config =
+      G4LossTableManager::Instance()->EmConfigurator();
+  G4VEmModel *mod;
+
+  static const G4double elowest = 10 * eV;  // seems to be option dependent, so I moved it here - MJPietrzak
+  static const G4double elimin = 1 * MeV;
+  static const G4double elimvb = 100 * eV;
+  static const G4double elimat = 13 * eV;
+  static const G4double elim1 = 10 * keV;
+
+  // for e- 100 MeV is a limit between different msc models
+  G4double emax = theParameters->MaxKinEnergy();
+
+  if (emsc) {
+    G4UrbanMscModel *msc = new G4UrbanMscModel();
+    msc->SetActivationLowEnergyLimit(elimel);
+    G4double emaxmsc = std::min(100 * MeV, emax);
+    em_config->SetExtraEmModel("e-", "msc", msc, reg, 0.0, emaxmsc);
+  } else {
+    mod = new G4eCoulombScatteringModel();
+    mod->SetActivationLowEnergyLimit(elimel);
+    em_config->SetExtraEmModel("e-", "CoulombScat", mod, reg, 0.0, emax);
+  }
+
+  // cuts and solvation
+  mod = new G4DNAOneStepThermalizationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElectronSolvation",
+                             mod, reg, 0., elowest);
+
+  // elastic
+  mod = new G4DNAUeharaScreenedRutherfordElasticModel();  // G4DNAChampionElasticModel();  in Opt_0 - the main difference between Opt0 and Opt7
+  em_config->SetExtraEmModel("e-", "e-_G4DNAElastic",
+                             mod, reg, 0.0, elimel);
+
+
+  // ionisation
+  mod = new G4MollerBhabhaModel();
+  mod->SetActivationLowEnergyLimit(elimin);
+  em_config->SetExtraEmModel("e-", "eIoni",
+                             mod, reg, 0.0, emax,
+                             new G4UniversalFluctuation());
+  // todo -  MJPietrzak
+  //   I don't understand why the MollerBhabhaModel is here, as there is no sign of this model in regular DNA lists.
+  //   However, it seems that it is necessary for all the options.
+
+  mod = new G4DNABornIonisationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAIonisation",
+                             mod, reg, elim1, elimin);
+
+  mod = new G4DNAEmfietzoglouIonisationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAIonisation",
+                             mod, reg, elowest, elim1);  // mod, reg, 0.0, elim1);
+
+
+  // excitation
+  mod = new G4DNAEmfietzoglouExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAExcitation",
+                             mod, reg, 8 * eV, elim1);
+
+  mod = new G4DNABornExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAExcitation",
+                             mod, reg, elim1, elimin);
+
+  // vib excitation
+  mod = new G4DNASancheExcitationModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAVibExcitation",
+                             mod, reg, 0.0, elimvb);
+
+  // attachment
+  mod = new G4DNAMeltonAttachmentModel();
+  em_config->SetExtraEmModel("e-", "e-_G4DNAAttachment",
+                             mod, reg, 0.0, elimat);
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+//  OTHER PARTICLES (hadrons) MODELS BELOW
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

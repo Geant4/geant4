@@ -82,11 +82,11 @@ template<>
   class G4TrackState<G4ITMultiNavigator> : public G4TrackState<G4ITNavigator>
   {
   public:
-    ~G4TrackState<G4ITMultiNavigator>()
+    ~G4TrackState()
     {
     }
 
-    G4TrackState<G4ITMultiNavigator>()
+    G4TrackState()
     {
       G4ThreeVector Big3Vector(kInfinity, kInfinity, kInfinity);
       fLastLocatedPosition = Big3Vector;

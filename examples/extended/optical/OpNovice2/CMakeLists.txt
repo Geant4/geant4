@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(OpNovice2)
 
 #----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -41,12 +41,13 @@ target_link_libraries(OpNovice2 ${Geant4_LIBRARIES} )
 #
 set(OpNovice2_SCRIPTS
     OpNovice2.out
-    OpNovice2.in
-    vis.mac
-    unified.mac
-    glisur.mac
+    OpNovice2.mac
+    boundary.mac
     electron.mac
+    fresnel.mac
     scint_by_particle.mac
+    vis.mac
+    wls.mac
   )
 
 foreach(_script ${OpNovice2_SCRIPTS})

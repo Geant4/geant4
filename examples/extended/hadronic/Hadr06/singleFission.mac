@@ -1,0 +1,28 @@
+#
+# Macro file for "Hadr06.cc"
+#  
+/run/verbose 2
+#
+/testhadr/det/setIsotopeMat U235 92 235 19.05 g/cm3
+/testhadr/det/setRadius 10 cm
+#
+/run/initialize
+#
+/process/inactivate nCapture
+/process/had/particle_hp/produce_fission_fragment true
+#
+# To "force" primary fission only, kill secondary neutrons:
+# Also, to limit the printout, do not fill ParticleCount()
+#
+/testhadr/tracking/killNeutrons true
+/testhadr/tracking/countParticles false
+#
+/gun/particle neutron
+/gun/energy 0.025 eV
+#
+/analysis/setFileName singleFission
+/analysis/h1/set  1 100  100. 300. MeV	#Edep
+/analysis/h1/set  3 100    0.  20. MeV	#Eflow
+#
+/run/printProgress 1000
+/run/beamOn 10000

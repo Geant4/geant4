@@ -23,13 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4PersistencyCenterMessenger.hh
+// G4PersistencyCenterMessenger
 //
-// History:
-//   01.07.18  Youhei Morita  Initial creation (with "fadsclass")
+// Class Description:
+//
+// User interface messenger class to interface G4PersistencyCenter.
 
-#ifndef PERSISTENCY_CENTER_MESSENGER_HH
-#define PERSISTENCY_CENTER_MESSENGER_HH 1
+// Author: Youhei Morita, 18.07.2001
+// --------------------------------------------------------------------
+#ifndef G4PERSISTENCYCENTERMESSENGER_HH
+#define G4PERSISTENCYCENTERMESSENGER_HH 1
 
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
@@ -37,49 +40,44 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4PersistencyCenter.hh"
-
-// Class inherited:
 #include "G4UImessenger.hh"
 
-// Class Description:
-//   User interface messenger class to interface G4PersistencyCenter
-
-class G4PersistencyCenterMessenger
- : public G4UImessenger
+class G4PersistencyCenterMessenger : public G4UImessenger
 {
-    public: // With description
-      G4PersistencyCenterMessenger(G4PersistencyCenter* p);
+  public:
+
+    G4PersistencyCenterMessenger(G4PersistencyCenter* p);
       // Constructor
 
-      ~G4PersistencyCenterMessenger();
+    ~G4PersistencyCenterMessenger();
       // Destructor
 
-    public: // With description
-      void SetNewValue(G4UIcommand* command, G4String newValues);
+    void SetNewValue(G4UIcommand* command, G4String newValues);
       // User interface for setting a new value
 
-      G4String GetCurrentValue(G4UIcommand* command);
+    G4String GetCurrentValue(G4UIcommand* command);
       // User interface for getting a value
 
-    private:
-      std::string PopWord(std::string text, int n, std::string delim);
+  private:
+
+    G4String PopWord(const G4String& text, G4int n, const G4String& delim);
       // Parse text and returns the n-th words separated by delim
 
-    private:
-      G4PersistencyCenter*    pc;
-      G4UIdirectory*        directory, *subdir1, *subdir2,
-                            *subdir3, *subdir4, *subdir5;
-      G4UIcmdWithAnInteger* verboseCmd;
-      G4UIcmdWithAString*   select;
-      G4UIcmdWithAString*   regHitIO;
-      std::vector<std::string>         wrObj;
-      std::vector<std::string>         rdObj;
-      std::vector<G4UIcmdWithAString*> storeObj;
-      std::vector<G4UIcmdWithAString*> setWrFile;
-      std::vector<G4UIcmdWithAString*> setRdFile;
-      G4UIcmdWithoutParameter*         printAll;
+  private:
 
-}; // End of class G4PersistencyCenterMessenger
+    G4PersistencyCenter* pc = nullptr;
+    G4UIdirectory *directory  = nullptr,
+                  *subdir1 = nullptr, *subdir2 = nullptr,
+                  *subdir3 = nullptr, *subdir4 = nullptr, *subdir5 = nullptr;
+    G4UIcmdWithAnInteger* verboseCmd = nullptr;
+    G4UIcmdWithAString* select = nullptr;
+    G4UIcmdWithAString* regHitIO = nullptr;
+    std::vector<std::string> wrObj;
+    std::vector<std::string> rdObj;
+    std::vector<G4UIcmdWithAString*> storeObj;
+    std::vector<G4UIcmdWithAString*> setWrFile;
+    std::vector<G4UIcmdWithAString*> setRdFile;
+    G4UIcmdWithoutParameter* printAll = nullptr;
+};
 
 #endif
-

@@ -25,231 +25,186 @@
 //
 // G4Step
 //
-// Class Description:
-//   This class represents the Step of a particle being tracked.
-//   It includes information of 
-//     1) List of Step points which compose the Step,
-//     2) static information of particle which generated the 
-//        Step, 
-//     3) trackID and parent particle ID of the Step,
-//     4) termination condition of the Step,
-
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// Class description:
 //
-// ---------------------------------------------------------------
-//   Modified for the new G4ParticleChange          12 Mar. 1998  H.Kurahige
-//   Correct treatment of touchable in G4Step::UpdateTrack
-//                                                  12 May. 1998 H.Kurashige
-// ---------------------------------------------------------------
-//   Separate implementation of inline functions inti G4Step.icc
-//   Add updating mass/charge                        6 Oct. 1999 H.Kurashige
-//   add nonIonizingEnergyLoss                      26 Mar. 2007 H.Kurashige 
-// ---------------------------------------------------------------
+// This class represents the Step of a particle being tracked.
+// It includes information of:
+//     1) List of Step points which compose the Step,
+//     2) static information of particle which generated the Step,
+//     3) trackID and parent particle ID of the Step,
+//     4) termination condition of the Step.
+
+// Authors:
+//   Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//   Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// Revisions:
+//   Hisaya Kurashige, 1998-2007
+// --------------------------------------------------------------------
 #ifndef G4Step_hh
 #define G4Step_hh 1
 
-#include <stdlib.h>                 // Include from 'system'
-#include <cmath>                    // Include from 'system'
-#include "G4ios.hh"                 // Include from 'system'
-#include <iomanip>                  // Include from 'system'
-#include "globals.hh"               // Include from 'global'
-#include "G4ThreeVector.hh"         // Include from 'global'
-#include "G4VPhysicalVolume.hh"     // Include from 'geometry'
-#include "G4StepPoint.hh"           // Include from 'track'
-#include "G4StepStatus.hh"          // Include from 'track'
-class G4Polyline;                   // Forward declaration.
-class G4Track;                      // Forward declaration.
-#include "G4TrackVector.hh"           // Include from 'tracking'
+#include <stdlib.h>              // Include from 'system'
+#include <cmath>                 // Include from 'system'
+#include "G4ios.hh"              // Include from 'system'
+#include <iomanip>               // Include from 'system'
+#include "globals.hh"            // Include from 'global'
+#include "G4ThreeVector.hh"      // Include from 'global'
+#include "G4VPhysicalVolume.hh"  // Include from 'geometry'
+#include "G4StepPoint.hh"        // Include from 'track'
+#include "G4StepStatus.hh"       // Include from 'track'
+#include "G4TrackVector.hh"      // Include from 'tracking'
+#include "G4Profiler.hh"         // Include from 'global'
 
-////////////
+class G4Polyline;                // Forward declaration.
+class G4Track;                   // Forward declaration.
+
 class G4Step
-////////////
 {
+  public:
+   // the profiler aliases are only used when compiled with GEANT4_USE_TIMEMORY
+   using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Step>;
 
-//--------
-   public:
-
-  // Constructor/Destrcutor
-   G4Step();
+    G4Step();
    ~G4Step();
+      // Constructor/Destructor
 
-  // Copy Counstructor and assignment operator
-   G4Step(const G4Step& );
-   G4Step & operator=(const G4Step &);   
+    G4Step(const G4Step&);
+    G4Step& operator=(const G4Step&);
+      // Copy Constructor and assignment operator
 
-//--------
-   public: // with description
+    G4Track* GetTrack() const;
+    void SetTrack(G4Track* value);
+      // Current track
 
-  // Get/Set functions 
+    G4StepPoint* GetPreStepPoint() const;
+    void SetPreStepPoint(G4StepPoint* value);
+      // Pre-Step points
 
-   // current track
-   G4Track* GetTrack() const;
-   void SetTrack(G4Track* value);
+    G4StepPoint* GetPostStepPoint() const;
+    void SetPostStepPoint(G4StepPoint* value);
+      // Post-Step points
 
-   // step points 
-   G4StepPoint* GetPreStepPoint() const;
-   void SetPreStepPoint(G4StepPoint* value);
+    G4double GetStepLength() const;
+    void SetStepLength(G4double value);
+      // Before the end of the AlongStepDoIt loop, StepLength keeps
+      // the initial value which is determined by the shortest geometrical Step
+      // proposed by a physics process. After finishing the AlongStepDoIt,
+      // it will be set equal to 'StepLength' in G4Step
 
-   G4StepPoint* GetPostStepPoint() const;
-   void SetPostStepPoint(G4StepPoint* value);
+    G4double GetTotalEnergyDeposit() const;
+    void SetTotalEnergyDeposit(G4double value);
+      // Total energy deposit
 
-   // step length
-   G4double GetStepLength() const;
-   void SetStepLength(G4double value);
-    // Before the end of the AlongStepDoIt loop,StepLength keeps
-    // the initial value which is determined by the shortest geometrical Step
-    // proposed by a physics process. After finishing the AlongStepDoIt,
-    // it will be set equal to 'StepLength' in G4Step. 
+    G4double GetNonIonizingEnergyDeposit() const;
+    void SetNonIonizingEnergyDeposit(G4double value);
+      // Total non-ionizing energy deposit
 
-   // total energy deposit 
-   G4double GetTotalEnergyDeposit() const;
-   void SetTotalEnergyDeposit(G4double value);
+    G4SteppingControl GetControlFlag() const;
+    void SetControlFlag(G4SteppingControl StepControlFlag);
+      // Control flag for stepping
 
-   // total non-ionizing energy deposit 
-   G4double GetNonIonizingEnergyDeposit() const;
-   void SetNonIonizingEnergyDeposit(G4double value);
+    void AddTotalEnergyDeposit(G4double value);
+    void ResetTotalEnergyDeposit();
+      // Manipulation of total energy deposit
 
-   // control flag for stepping
-   G4SteppingControl GetControlFlag() const;
-   void SetControlFlag(G4SteppingControl StepControlFlag);
+    void AddNonIonizingEnergyDeposit(G4double value);
+    void ResetNonIonizingEnergyDeposit();
+      // Manipulation of non-ionizing energy deposit
 
-    // manipulation of total energy deposit 
-   void AddTotalEnergyDeposit(G4double value);
-   void ResetTotalEnergyDeposit();
+    G4bool IsFirstStepInVolume() const;
+    G4bool IsLastStepInVolume() const;
 
-   // manipulation of non-ionizing energy deposit 
-   void AddNonIonizingEnergyDeposit(G4double value);
-   void ResetNonIonizingEnergyDeposit();
+    void SetFirstStepFlag();
+    void ClearFirstStepFlag();
+    void SetLastStepFlag();
+    void ClearLastStepFlag();
+      // Get/Set/Clear flag for initial/last step
+      // NOTE: flags are not used
 
+    G4ThreeVector GetDeltaPosition() const;
+    G4double GetDeltaTime() const;
+      // Difference of position, time, momentum and energy
 
-   // Get/Set/Clear flag for initial/last step
-   // NOTE:  following flags are not used 
-   G4bool IsFirstStepInVolume() const;
-   G4bool IsLastStepInVolume() const;
+    G4ThreeVector GetDeltaMomentum() const;
+    G4double GetDeltaEnergy() const;
+      // These methods will be deleted
+      // NOTE: use  GetTotalEnergyDeposit() to obtain energy loss in material
 
-   void SetFirstStepFlag();
-   void ClearFirstStepFlag();
-   void SetLastStepFlag();
-   void ClearLastStepFlag();
+    void InitializeStep(G4Track* aValue);
+      // Initialize contents of G4Step
 
-   // difference of position, time, momentum and energy
-   G4ThreeVector GetDeltaPosition() const;
-   G4double GetDeltaTime() const;
+    void UpdateTrack();
+      // Update track by using G4Step information
 
-  // These methods will be deleted 
-  // NOTE: use  GetTotalEnergyDeposit() to obtain 
-  //       energy loss in the material 
-  // 
-   G4ThreeVector GetDeltaMomentum() const;
-   G4double GetDeltaEnergy() const;
+    void CopyPostToPreStepPoint();
+      // Copy PostStepPoint to PreStepPoint
 
-  // Other member functions
+    G4Polyline* CreatePolyline() const;
+      // For visualization
 
-   void InitializeStep( G4Track* aValue );
-   // initialize contents of G4Step
+    inline void SetPointerToVectorOfAuxiliaryPoints(std::vector<G4ThreeVector>* vec);
+    inline std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const;
+      // Auxiliary points modifiers
 
-   void UpdateTrack( );
-   // update track by using G4Step information
+  // --- Secondary buckets ---
 
-   void CopyPostToPreStepPoint( );
-   // copy PostStepPoint to PreStepPoint 
-  
-   G4Polyline* CreatePolyline () const;
-   // for visualization
+    std::size_t GetNumberOfSecondariesInCurrentStep() const;
+      // Secondaries in the current step
 
-//-----------
-   protected:
-//-----------
+    const std::vector<const G4Track*>* GetSecondaryInCurrentStep() const;
 
-  // Member data
+    const G4TrackVector* GetSecondary() const;
+    G4TrackVector* GetfSecondary();
+    G4TrackVector* NewSecondaryVector();
+      // NOTE: Secondary bucket of the Step contains
+      //       all secondaries during tracking the current track
+      //       (i.e. NOT secondaries produced in the current step)
+      // all these methods give same object (i.e. G4TrackVector  )
+      // but 2nd one will create bucket in addition
 
-   G4double fTotalEnergyDeposit;
-     // Accumulated total energy deposit in the current Step
+    void DeleteSecondaryVector();
+      // Just delete secondary bucket
+      // NOTE: G4Track objects inside the bucket are not deleted
 
-   G4double fNonIonizingEnergyDeposit;
+    void SetSecondary(G4TrackVector* value);
+      // Add secondary tracks to the bucket
+
+  protected:
+
+    G4double fTotalEnergyDeposit = 0.0;
+      // Accumulated total energy deposit in the current Step
+
+    G4double fNonIonizingEnergyDeposit = 0.0;
      // Accumulated non-ionizing energy deposit in the current Step
 
-//---------
-   private:
-//---------
+  private:
 
-  // Member data
+    G4StepPoint* fpPreStepPoint = nullptr;
+    G4StepPoint* fpPostStepPoint = nullptr;
+    G4double fStepLength = 0.0;
+      // Step length which may be updated at each invocation of
+      // AlongStepDoIt and PostStepDoIt
 
-   G4StepPoint* fpPreStepPoint;
-   G4StepPoint* fpPostStepPoint;
-   G4double fStepLength;
-     // Step length which may be updated at each invocation of 
-     // AlongStepDoIt and PostStepDoIt
-   G4Track* fpTrack;
-     //
-   G4SteppingControl fpSteppingControlFlag;     
-    // A flag to control SteppingManager behavior from process
+    G4Track* fpTrack = nullptr;
 
-  // flag for initial/last step
-   G4bool fFirstStepInVolume;
-   G4bool fLastStepInVolume;
+    G4SteppingControl fpSteppingControlFlag = NormalCondition;
+      // A flag to control SteppingManager behavior from process
 
-  // Secondary buckets
+    G4bool fFirstStepInVolume = false;
+    G4bool fLastStepInVolume = false;
+      // Flags for initial/last step
 
-  public:
+    G4TrackVector* fSecondary = nullptr;
+      // Secondary bucket implemented by using  std::vector of G4Track*
 
-  // secondaries in the current step
-   size_t GetNumberOfSecondariesInCurrentStep() const;
+    std::size_t nSecondaryByLastStep = 0;
+      // number of secondaries which have been created by the last step
 
-   const std::vector<const G4Track*>* GetSecondaryInCurrentStep() const; 
+    std::vector<const G4Track*>* secondaryInCurrentStep = nullptr;
 
-   // NOTE: Secondary bucket of the Step contains  
-   //       all secondaries during tracking the current track 
-   //       (i.e. NOT secondaries produced in the current step)
-   // all following methods give same object (i.e. G4TrackVector  )
-   // but 2nd one will create bucket in addition  
-   const G4TrackVector* GetSecondary() const ;
-   G4TrackVector* GetfSecondary();
-   G4TrackVector* NewSecondaryVector();
-
-   // just delete secondary bucket
-   //  NOTE: G4Track objects inside the bucket are not deleted 
-   void DeleteSecondaryVector();
-
-   // Add secondary tracks to the bucket 
-   void SetSecondary( G4TrackVector* value);
-
-  private: 
-
-   // Secondary bucket implemented by using  std::vector of G4Track*   
-   G4TrackVector* fSecondary;
-
-   // number of secondaries which have been created by the last step
-   size_t nSecondaryByLastStep;
-
-   typedef const G4Track* CT;
-   std::vector<CT>* secondaryInCurrentStep;
-
-  // Prototyping implementation of smooth representation of curved
-  // trajectories. (jacek 30/10/2002)
-
-  public:
-    // Auxiliary points are ThreeVectors for now; change to
-    // G4VAuxiliaryPoints or some such (jacek 30/10/2002)
-   void SetPointerToVectorOfAuxiliaryPoints( std::vector<G4ThreeVector>* theNewVectorPointer )
-   {
-     fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
-   }
-   std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const
-   {
-     return fpVectorOfAuxiliaryPointsPointer;
-   }
-
- private:
-   // Explicity including the word "Pointer" in the name as I keep
-   // forgetting the * (jacek 30/10/2002)
-   std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
+    std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer = nullptr;
 };
 
 #include "G4Step.icc"
-
 
 #endif

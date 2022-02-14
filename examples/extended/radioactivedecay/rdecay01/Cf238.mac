@@ -1,6 +1,10 @@
+# macro for rdecay01
+#
 # to read user's data file
 #
-/grdm/setRadioactiveDecayFile 98 238 UserData/UserRadData_z98.a238
+/control/cout/ignoreThreadsExcept 0
+#
+/process/had/rdm/setRadioactiveDecayFile 98 238 ../UserData/UserRadData_z98.a238
 #
 /gun/particle ion
 /gun/ion 98 238 

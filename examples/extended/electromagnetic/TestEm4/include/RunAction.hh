@@ -33,8 +33,7 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "Analysis.hh"
-
+#include "G4AnalysisManager.hh"
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 

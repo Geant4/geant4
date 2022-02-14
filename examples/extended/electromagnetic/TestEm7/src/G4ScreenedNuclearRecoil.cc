@@ -198,10 +198,10 @@ G4ScreenedCoulombCrossSection::SelectRandomUnweightedTarget(
     }
 
         G4int N=0;
-        G4int Z=(G4int)std::floor(element->GetZ()+0.5);
+        G4int Z=element->GetZasInt();
         
         G4int nIsotopes=element->GetNumberOfIsotopes();
-        if(!nIsotopes) {
+        if(0<nIsotopes) {
           if(Z<=92) {
             // we have no detailed material isotopic info available, 
             // so use G4StableIsotopes table up to Z=92
@@ -1023,8 +1023,8 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey,
                 
             for (G4int iEl=0; iEl<nMatElements; iEl++)
               {
-                G4Element* element = (*elementVector)[iEl];
-                G4int Z = (G4int) element->GetZ();
+                const G4Element* element = (*elementVector)[iEl];
+                G4int Z = element->GetZasInt();
                 G4double a2=element->GetA()*(mole/gram);
                         
                 if(sigmaMap.find(Z)!=sigmaMap.end()) continue; 

@@ -80,16 +80,6 @@ void G4BooleanSolid::SetAreaAccuracy(G4double ep)
 }
 
 inline
-G4double G4BooleanSolid::GetCubicVolume()
-{
-  if(fCubicVolume < 0.)
-  {
-    fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon);
-  }
-  return fCubicVolume;
-}
-
-inline
 G4double G4BooleanSolid::GetSurfaceArea()
 {
   if(fSurfaceArea < 0.)

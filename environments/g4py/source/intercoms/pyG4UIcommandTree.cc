@@ -66,7 +66,8 @@ void export_G4UIcommandTree()
     .def("CreateHTML",         &G4UIcommandTree::CreateHTML)
     .def("GetGuidance",        &G4UIcommandTree::GetGuidance,
          return_value_policy<reference_existing_object>())
-    .def("GetPathName",        &G4UIcommandTree::GetPathName)
+    .def("GetPathName",        &G4UIcommandTree::GetPathName,
+         return_value_policy<return_by_value>())
     // ---
     .def("GetTreeEntry",       &G4UIcommandTree::GetTreeEntry)
     .def("GetCommandEntry",    &G4UIcommandTree::GetCommandEntry)

@@ -43,7 +43,6 @@
 //
 // Abstract class for Low Energy Electromagnetic models
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
-
 // -------------------------------------------------------------------
 //
 
@@ -59,11 +58,8 @@ class G4Material;
 
 class G4VLowEnergyModel 
 {
-
 public:
-
-  G4VLowEnergyModel(const G4String& name);
-
+  explicit G4VLowEnergyModel(const G4String& name);
   virtual ~G4VLowEnergyModel();
 
   virtual G4double TheValue(const G4DynamicParticle* particle,
@@ -91,15 +87,8 @@ public:
   virtual G4bool IsInCharge(const G4ParticleDefinition* aParticle,
 			    const G4Material* material) const = 0;
 
-protected:
-
-private:
-
-  // hide assignment operator 
-     G4VLowEnergyModel & operator=(const  G4VLowEnergyModel &right);
-     G4VLowEnergyModel(const  G4VLowEnergyModel&);
-
+  G4VLowEnergyModel & operator=(const  G4VLowEnergyModel &right) = delete;
+  G4VLowEnergyModel(const  G4VLowEnergyModel&) = delete;
 };
-
 #endif
 

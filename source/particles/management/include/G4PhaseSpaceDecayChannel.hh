@@ -23,66 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhaseSpaceDecayChannel
 //
+// Class description:
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//      History: first implementation, based on object model of
-//      27 July 1996 H.Kurashige
-//      30 May 1997 H.Kurashige
-//      24 May 2012 H.Kurashige    Add current_parent_mass;
-// ------------------------------------------------------------
-#ifndef G4PhaseSpaceDecayChannel_h
-#define G4PhaseSpaceDecayChannel_h 1
+// Concrete decay channel for a particle.
+
+// Author: H.Kurashige, 27 July 1996
+// --------------------------------------------------------------------
+#ifndef G4PhaseSpaceDecayChannel_hh
+#define G4PhaseSpaceDecayChannel_hh 1
 
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDecayChannel.hh"
 #include "G4Cache.hh"
 
-class G4PhaseSpaceDecayChannel :public G4VDecayChannel
+class G4PhaseSpaceDecayChannel : public G4VDecayChannel
 {
-  public:  // With Description
-    enum {MAX_N_DAUGHTERS=4}; 
-    //Constructors 
-      G4PhaseSpaceDecayChannel(G4int Verbose = 1);
-      G4PhaseSpaceDecayChannel(const G4String& theParentName,
-			       G4double        theBR,
-			       G4int           theNumberOfDaughters,
-			       const G4String& theDaughterName1,
-			       const G4String& theDaughterName2 = "",
-			       const G4String& theDaughterName3 = "",
-			       const G4String& theDaughterName4 = ""   );
+  public:
 
-   // give daughter masses instead of sampling masses 
-   // according to PDG mass and width. 
-     G4bool SetDaughterMasses( G4double masses[]);
+    enum { MAX_N_DAUGHTERS=5 }; 
+
+    G4PhaseSpaceDecayChannel(G4int Verbose = 1);
+    G4PhaseSpaceDecayChannel(const G4String& theParentName,
+                                   G4double  theBR,
+                                   G4int     theNumberOfDaughters,
+                             const G4String& theDaughterName1,
+                             const G4String& theDaughterName2 = "",
+                             const G4String& theDaughterName3 = "",
+                             const G4String& theDaughterName4 = "",
+                             const G4String& theDaughterName5 = "" );
+      // Constructors 
+
+    virtual ~G4PhaseSpaceDecayChannel();
+      // Destructor
+
+    G4bool SetDaughterMasses( G4double masses[]);
+      // Give daughter masses instead of sampling masses 
+      // according to PDG mass and width
   
-     G4bool SampleDaughterMasses();
+    G4bool SampleDaughterMasses();
 
-  public: 
-   //  Destructor
-     virtual ~G4PhaseSpaceDecayChannel();
+    virtual G4DecayProducts* DecayIt(G4double);   
+    G4bool IsOKWithParentMass(G4double parentMass);
 
-  public:  // With Description
-     virtual G4DecayProducts *DecayIt(G4double);   
-     G4bool  IsOKWithParentMass(G4double parentMass);
-
-  public: 
-     static G4double Pmx(G4double e, G4double p1, G4double p2);
+    static G4double Pmx(G4double e, G4double p1, G4double p2);
  
   private:
-     //A thread-local object
-     G4Cache<G4double> current_parent_mass;
-     G4DecayProducts *OneBodyDecayIt();
-     G4DecayProducts *TwoBodyDecayIt();
-     G4DecayProducts *ThreeBodyDecayIt();
-     G4DecayProducts *ManyBodyDecayIt();
-     G4bool           useGivenDaughterMass;
-     G4double         givenDaughterMasses[MAX_N_DAUGHTERS];
-};  
 
+    G4DecayProducts* OneBodyDecayIt();
+    G4DecayProducts* TwoBodyDecayIt();
+    G4DecayProducts* ThreeBodyDecayIt();
+    G4DecayProducts* ManyBodyDecayIt();
+     
+    G4Cache<G4double> current_parent_mass;  // A thread-local object
+    G4double givenDaughterMasses[MAX_N_DAUGHTERS];
+    G4bool useGivenDaughterMass = false;
+};  
 
 #endif

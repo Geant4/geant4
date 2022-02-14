@@ -58,30 +58,27 @@ public:
   explicit G4eplusTo3GammaOKVIModel(const G4ParticleDefinition* p = nullptr,
                                     const G4String& nam = "eplus3ggOKVI");
 
-  virtual ~G4eplusTo3GammaOKVIModel();
+  ~G4eplusTo3GammaOKVIModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) final;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) final;
 
   G4double ComputeCrossSectionPerElectron(G4double kinEnergy);
-
-
   
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A = 0., 
-                                      G4double cutEnergy = 0.,
-                                      G4double maxEnergy = DBL_MAX) final;
+  G4double ComputeCrossSectionPerAtom(
+                                 const G4ParticleDefinition*,
+                                       G4double kinEnergy, 
+                                       G4double Z, 
+                                       G4double A = 0., 
+                                       G4double cutEnergy = 0.,
+                                       G4double maxEnergy = DBL_MAX) final;
 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy = 0.0,
-					 G4double maxEnergy = DBL_MAX) final;
+  G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy = 0.0,
+				 G4double maxEnergy = DBL_MAX) final;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin = 0.0,
@@ -95,12 +92,12 @@ public:
 
   inline void SetDelta(G4double val) { if(val > 0.0) { fDelta = val; } };
   
-private:
-
   // hide assignment operator
   G4eplusTo3GammaOKVIModel & operator=
   (const  G4eplusTo3GammaOKVIModel &right) = delete;
   G4eplusTo3GammaOKVIModel(const  G4eplusTo3GammaOKVIModel&) = delete;
+
+private:
 
   G4double fDelta;
   const G4ParticleDefinition*  theGamma;

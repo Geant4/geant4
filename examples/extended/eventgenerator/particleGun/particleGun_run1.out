@@ -1,10 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -21,7 +28,7 @@
 /tracking/verbose 1
 /run/beamOn 1
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
@@ -30,7 +37,7 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 
@@ -38,34 +45,34 @@ Index : 0     used in the geometry : Yes
 * G4Track Information:   Particle = geantino,   Track ID = 3,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -1.13 mm  -1.65 mm   1.39 mm      1 GeV     0 eV      0 fm      0 fm      World   initStep
-    1  -9.28 mm     -1 cm   1.39 mm      1 GeV     0 eV   1.17 cm   1.17 cm      World   OutOfWorld
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0  -1.127 mm  -1.652 mm   1.394 mm       1 GeV          0 eV       0 fm       0 fm      World   initStep
+    1  -9.275 mm      -1 cm   1.394 mm       1 GeV          0 eV   1.167 cm   1.167 cm      World   OutOfWorld
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 2,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -1.13 mm  -1.65 mm   1.39 mm      1 keV     0 eV      0 fm      0 fm      World   initStep
-    1   -4.9 mm     -1 cm   1.39 mm      1 keV     0 eV   9.16 mm   9.16 mm      World   OutOfWorld
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0  -1.127 mm  -1.652 mm   1.394 mm       1 keV          0 eV       0 fm       0 fm      World   initStep
+    1  -4.897 mm      -1 cm   1.394 mm       1 keV          0 eV    9.16 mm    9.16 mm      World   OutOfWorld
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.13 mm   1.65 mm   1.39 mm      1 MeV     0 eV      0 fm      0 fm      World   initStep
-    1   6.82 mm      1 cm   1.39 mm      1 MeV     0 eV   1.01 cm   1.01 cm      World   OutOfWorld
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0   1.127 mm   1.652 mm   1.394 mm       1 MeV          0 eV       0 fm       0 fm      World   initStep
+    1   6.823 mm       1 cm   1.394 mm       1 MeV          0 eV   1.011 cm   1.011 cm      World   OutOfWorld
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000454s Sys=0.000000s
+  User=0.000000s Real=0.000354s Sys=0.000000s
 #
 /tracking/verbose 0
 /run/beamOn 5
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
@@ -74,13 +81,13 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000041s Sys=0.000000s
+  User=0.000000s Real=0.000039s Sys=0.000000s
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

@@ -42,64 +42,66 @@
 #include "G4Event.hh"
 #include "EventActionMessenger.hh"
 
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithABool.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction():
-  G4UserEventAction(),
-  fEventMessenger(0), 
-  fUI(0), 
-  fSelectedEvents(),
-  fPrintModulo(100),
-  fSelected(0),
-  fDebugStarted(false)
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
+  PrimaryGeneratorAction* Gun)
+  : G4UImessenger()
+  , fPrimaryAction(Gun)
 {
-  fEventMessenger = new EventActionMessenger(this);
-  fUI = G4UImanager::GetUIpointer();
+  fGunDir = new G4UIdirectory("/opnovice2/gun/");
+  fGunDir->SetGuidance("PrimaryGenerator control");
+
+  fPolarCmd =
+    new G4UIcmdWithADoubleAndUnit("/opnovice2/gun/optPhotonPolar", this);
+  fPolarCmd->SetGuidance("Set linear polarization");
+  fPolarCmd->SetGuidance("  angle w.r.t. (k,n) plane");
+  fPolarCmd->SetParameterName("angle", true);
+  fPolarCmd->SetUnitCategory("Angle");
+  fPolarCmd->SetDefaultValue(-360.0);
+  fPolarCmd->SetDefaultUnit("deg");
+  fPolarCmd->AvailableForStates(G4State_Idle);
+
+  fRandomDirectionCmd =
+    new G4UIcmdWithABool("/opnovice2/gun/randomDirection", this);
+  fRandomDirectionCmd->AvailableForStates(G4State_Idle, G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete fEventMessenger;
+  delete fPolarCmd;
+  delete fGunDir;
+  delete fRandomDirectionCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
+                                            G4String newValue)
 {
-  // New event
-  G4int nEvt = evt->GetEventID();
-
-  if(fSelected>0) {
-    for(G4int i=0; i<fSelected; ++i) {
-      if(nEvt == fSelectedEvents[i]) {
-        fUI->ApplyCommand("/random/saveThisEvent");
-        fUI->ApplyCommand("/tracking/verbose  2");
-        fDebugStarted = true;
-        break;
-      }
+  if(command == fPolarCmd)
+  {
+    G4double angle = fPolarCmd->GetNewDoubleValue(newValue);
+    if(angle == -360.0 * deg)
+    {
+      fPrimaryAction->SetOptPhotonPolar();
+    }
+    else
+    {
+      fPrimaryAction->SetOptPhotonPolar(angle);
     }
   }
-
-  // Initialize user actions
-  if(G4int(nEvt/fPrintModulo)*fPrintModulo == nEvt) {
-    G4cout << "EventAction: Event # "
-           << nEvt << " started" << G4endl;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::EndOfEventAction(const G4Event*)
-{
-  if(fDebugStarted) {
-    fUI->ApplyCommand("/tracking/verbose  0");
-    fDebugStarted = false;
-    G4cout << "EventAction: Event ended" << G4endl;
+  else if(command == fRandomDirectionCmd)
+  {
+    fPrimaryAction->SetRandomDirection(true);
   }
 }
 

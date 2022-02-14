@@ -35,6 +35,9 @@
 
 #include "globals.hh"
 
+#include "G4TNtupleDescription.hh"
+#include "G4RootFileDef.hh"
+
 #include "tools/ntuple_booking"
 #include "tools/impi"
 #include "tools/wroot/impi_ntuple"
@@ -43,34 +46,33 @@ namespace tools {
 namespace wroot {
 class branch;
 class base_pntuple;
+class ntuple;
 }
 }
+
+using RootNtupleDescription = G4TNtupleDescription<tools::wroot::ntuple, G4RootFile>;
 
 struct G4RootMpiPNtupleDescription
 {
-  G4RootMpiPNtupleDescription() 
-    :  fNtuple(nullptr),
+  G4RootMpiPNtupleDescription(G4NtupleBooking* g4NtupleBooking) 
+    :  fDescription(g4NtupleBooking),
+       fNtuple(nullptr),
        fBasePNtuple(nullptr),
        fMainBranches(),
-       fNtupleBooking(),
        fMainNtupleRank(0),
-       fImpi(nullptr),       
-       fActivation(true),
-       fIsNtupleOwner(true) {}
+       fImpi(nullptr) {}
 
   ~G4RootMpiPNtupleDescription()
       {
-         if ( fIsNtupleOwner ) delete fNtuple;
+         if ( fDescription.fIsNtupleOwner ) delete fNtuple;
       }    
 
+  RootNtupleDescription fDescription;
   tools::wroot::impi_ntuple* fNtuple;
   tools::wroot::base_pntuple* fBasePNtuple;
   std::vector<tools::wroot::branch*> fMainBranches; 
-  tools::ntuple_booking fNtupleBooking; 
   G4int  fMainNtupleRank;
   tools::impi* fImpi;
-  G4bool fActivation;
-  G4bool fIsNtupleOwner;
 };
 
 #endif  

@@ -9,10 +9,6 @@
 // the rotation matrix, or I/O.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/Rotation.h"
 
 #include <cmath>

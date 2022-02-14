@@ -55,40 +55,37 @@
 
 class G4IonYangFluctuationModel : public G4VLowEnergyModel
 {
-
 public: 
-
-  G4IonYangFluctuationModel(const G4String& name);
+  explicit G4IonYangFluctuationModel(const G4String& name);
 
   ~G4IonYangFluctuationModel();
 
   G4double TheValue(const G4DynamicParticle* particle,
-	       	          const G4Material* material);
+	       	          const G4Material* material) override;
 
   G4double TheValue(const G4ParticleDefinition* aParticle,
        		          const G4Material* material,
-                                G4double kineticEnergy);
+                                G4double kineticEnergy) override;
 
   G4double HighEnergyLimit(const G4ParticleDefinition* aParticle,
-                           const G4Material* material) const;
+                           const G4Material* material) const override;
 
   G4double LowEnergyLimit(const G4ParticleDefinition* aParticle,
-                          const G4Material* material) const;
+                          const G4Material* material) const override;
  
-  G4double HighEnergyLimit(const G4ParticleDefinition* aParticle) const;
+  G4double HighEnergyLimit(const G4ParticleDefinition* aParticle) 
+    const override ;
 
-  G4double LowEnergyLimit(const G4ParticleDefinition* aParticle) const;
+  G4double LowEnergyLimit(const G4ParticleDefinition* aParticle) 
+    const override;
  
   G4bool IsInCharge(const G4DynamicParticle* particle,
-		    const G4Material* material) const;
+		    const G4Material* material) const override;
 
   G4bool IsInCharge(const G4ParticleDefinition* aParticle,
-		    const G4Material* material) const;
-
-protected:
+		    const G4Material* material) const override;
 
 private:
-
   G4double YangFluctuationModel(const G4Material* material, 
                                       G4double kineticEnergy,
                                       G4double particleMass,

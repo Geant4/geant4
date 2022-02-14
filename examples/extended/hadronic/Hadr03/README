@@ -33,9 +33,7 @@
    loss.  
  
    Several hadronic physics options are controlled by environment variables.
-   To trigger them, an envHadronic.csh has been added in this example.
-   One must select the options wished, and do
-        source envHadronic.csh  (or sh) 
+   To select them, see Hadr03.cc.
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -79,18 +77,19 @@
    where unit is the desired unit for the histo (MeV or keV, etc..)
    (see the macros xxxx.mac).
    
-        1	"kinetic energy of scattered primary particle"
+            1	"kinetic energy of scattered primary particle"
 	    2	"kinetic energy of gamma"
-	    3	"kinetic energy of neutrons"
-	    4	"kinetic energy of protons"
-	    5	"kinetic energy of deuterons"
-	    6	"kinetic energy of alphas"
-	    7	"kinetic energy of nuclei"
-	    8	"kinetic energy of mesons"
-	    9	"kinetic energy of baryons"
-	    10	"Q = Ekin out - Ekin in"
-	    11	"Pbalance = mag(P_out - P_in)"
-	    12	"atomic mass of nuclei"				
+	    3	"kinetic energy of e-"	    
+	    4	"kinetic energy of neutrons"
+	    5	"kinetic energy of protons"
+	    6	"kinetic energy of deuterons"
+	    7	"kinetic energy of alphas"
+	    8	"kinetic energy of nuclei"
+	    9	"kinetic energy of mesons"
+	    10	"kinetic energy of baryons"
+	    11	"Q = Ekin out - Ekin in"
+	    12	"Pbalance = mag(P_out - P_in)"
+	    13	"atomic mass of nuclei"				
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
@@ -129,3 +128,18 @@
  	Idle> type your commands
  	....
  	Idle> exit
+	
+ Macros provided in this example:
+  - Au196.mac: neutron (1 MeV) on Au195
+  - elastic.mac: proton (10 MeV) on Mo100. Elastic collisions alone
+  - fusion.mac: deuteron (400 keV) on tritium 
+  - gamma.mac: gamma (10 MeV) on Au196
+  - inelastic.mac: proton (10 MaV) on Mo98. Inelastic interactions alone
+  - ion.mac: Li7 (140 MeV) on Be9
+  - nCapture.mac: neutron (1 eV) on Boron. Capture process alone
+  - nFission.mac: neutron (1 eV) on U235.  Fission process alone
+  - neutron.mac: neutron (1 MeV) on Boron 
+    
+ Macros to be run interactively:
+  - debug.mac: proton (10 MeV) on Boron
+  - vis.mac: To activate visualization

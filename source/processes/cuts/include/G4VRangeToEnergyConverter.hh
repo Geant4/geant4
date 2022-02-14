@@ -23,161 +23,129 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VRangeToEnergyConverter
 //
+// Class description:
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//
-// Class Description
-//  This class is base class for Range to Energy Converters.
-//  Cut in energy corresponding to given cut value in range
-//  is calculated for a material by using Convert method
-//  
-// ------------------------------------------------------------
-//   First Implementation          5 Oct. 2002  H.Kurahige
-// ------------------------------------------------------------
+// Base class for Range to Energy Converters.
+// Cut in energy corresponding to given cut value in range
+// is calculated for a material by using Convert() method.
 
-#ifndef G4VRangeToEnergyConverter_h
-#define G4VRangeToEnergyConverter_h 1
+// Author: H.Kurashige, 05 October 2002 - First implementation
+// --------------------------------------------------------------------
+#ifndef G4VRangeToEnergyConverter_hh
+#define G4VRangeToEnergyConverter_hh 1
 
-#include "globals.hh"
-#include <cmath>
-#include "G4ios.hh"
 #include <vector>
 
+#include "globals.hh"
 #include "G4ParticleDefinition.hh"
-
-#include "G4PhysicsTable.hh"
-#include "G4Element.hh"
 #include "G4Material.hh"
-class G4PhysicsLogVector;
+#include "G4Threading.hh"
 
 class G4VRangeToEnergyConverter
 {
-  public: // with description
-  //  constructor
-  G4VRangeToEnergyConverter();
+public:
 
-  //  copy constructor
-  G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter &right);
+  explicit G4VRangeToEnergyConverter();
 
-  G4VRangeToEnergyConverter & operator=(const G4VRangeToEnergyConverter &right);
-
-  public:
-  //  destructor
   virtual ~G4VRangeToEnergyConverter();
 
-  // equal opperators
-  G4bool operator==(const G4VRangeToEnergyConverter &right) const;
-  G4bool operator!=(const G4VRangeToEnergyConverter &right) const;
+  // operators are not used
+  G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& r) = delete;
+  G4VRangeToEnergyConverter& operator=
+  (const G4VRangeToEnergyConverter &r) = delete;
+  G4bool operator==(const G4VRangeToEnergyConverter& r) const = delete;
+  G4bool operator!=(const G4VRangeToEnergyConverter& r) const = delete;
 
-  public: // with description 
-  // calculate energy cut from given range cut for the material
-  virtual G4double Convert(G4double rangeCut, const G4Material* material);
+  // Calculate energy cut from given range cut for the material
+  virtual G4double Convert(const G4double rangeCut, const G4Material* material);
 
-  //  set energy range for all particle type
-  static void SetEnergyRange(G4double lowedge, G4double highedge);
+  // Set energy range for all particle type
+  // if highedge > 10 GeV, highedge value is not changed
+  static void SetEnergyRange(const G4double lowedge, const G4double highedge);
 
-  //  get energy range for all particle type
+  // Get energy range for all particle type
   static G4double GetLowEdgeEnergy();
   static G4double GetHighEdgeEnergy();
 
-  //  get/set max cut energy for all particle type
+  // Get/set max cut energy for all particle type
+  // No check on the value
   static G4double GetMaxEnergyCut();
-  static void SetMaxEnergyCut(G4double value);
+  static void SetMaxEnergyCut(const G4double value);
   
-  // return pointer to the particle type which this converter takes care
-  const G4ParticleDefinition* GetParticleType() const;
+  // Return pointer to the particle type which this converter takes care of
+  inline const G4ParticleDefinition* GetParticleType() const;
 
-  // return the Loss Table
-  const  G4PhysicsTable* GetLossTable() const;   
-   //-------------- Loss Table ------------------------------------------
-   // theLossTable is a collection of loss vectors for all elements.
-   // Each loss vector has energy loss values (cross section values
-   // for neutral particles) which are calculated by
-   // ComputeLoss(G4double AtomicNumber,G4double KineticEnergy).
-   // ComputeLoss method is pure virtual and should be provided for each 
-   // particle type
-
-  // reset Loss Table and Range Vectors
-  virtual void Reset();
-    
- protected:
-
-    static G4double               LowestEnergy, HighestEnergy;
-    static G4double               MaxEnergyCut; 
-    G4double                      fMaxEnergyCut;
-   
-    const G4ParticleDefinition*   theParticle;
-    typedef G4PhysicsTable        G4LossTable;
-    G4LossTable*                  theLossTable;
-    G4int                         NumberOfElements;
-  
-    typedef G4PhysicsLogVector    G4LossVector;
-    const G4int                   TotBin;
-
-  protected:// with description  
-    virtual void BuildLossTable();
-
-    virtual G4double ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy
-			       ) =0;
-
-  //-------------- Range Table ------------------------------------------
-  protected:
-    typedef G4PhysicsLogVector G4RangeVector;
-
-    virtual void BuildRangeVector(const G4Material* aMaterial,
-                                   G4RangeVector* rangeVector);
-
-    std::vector< G4RangeVector* > fRangeVectorStore;   
-      
-  protected:
-    G4double ConvertCutToKineticEnergy(
-                                       G4RangeVector* theRangeVector,
-				       G4double       theCutInLength, 
-                                       size_t         materialIndex
-                                      ) const;
-
-  public: // with description  
-      void  SetVerboseLevel(G4int value);
-      G4int GetVerboseLevel() const;
-      // controle flag for output message
+  inline void SetVerboseLevel(G4int value);
+  inline G4int GetVerboseLevel() const;
+      // control flag for output message
       //  0: Silent
       //  1: Warning message
       //  2: More
 
- private:
-   G4int verboseLevel;
+protected:
 
-};
+  virtual G4double ComputeValue(const G4int Z, const G4double kinEnergy) = 0;
 
-inline 
- void G4VRangeToEnergyConverter::SetVerboseLevel(G4int value)
-{
-   verboseLevel = value;
-}
+private:
 
-inline 
- G4int G4VRangeToEnergyConverter::GetVerboseLevel() const
-{
-   return verboseLevel;
-}
+  static void FillEnergyVector(const G4double emin, const G4double emax);
 
+  G4double ConvertForGamma(const G4double rangeCut, const G4Material* material);
 
-inline 
- const G4ParticleDefinition* G4VRangeToEnergyConverter::GetParticleType() const
-{
-   return theParticle;
-}
+  G4double ConvertForElectron(const G4double rangeCut, 
+                              const G4Material* material);
+
+  inline G4double LiniearInterpolation(const G4double e1, const G4double e2, 
+                                       const G4double r1, const G4double r2, 
+                                       const G4double r);
+
+protected:
+
+#ifdef G4MULTITHREADED
+  static G4Mutex theMutex;
 #endif
 
+  static G4double Emin;
+  static G4double Emax; 
+  static std::vector<G4double>* Energy;
+  static G4int NbinPerDecade;
+  static G4int Nbin;
 
+  const G4ParticleDefinition* theParticle = nullptr;
 
+  G4int fPDG = 0;
+  G4int verboseLevel = 1;
+};
 
+// ------------------
+// Inline methods
+// ------------------
 
+inline 
+void G4VRangeToEnergyConverter::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
+}
 
+inline 
+G4int G4VRangeToEnergyConverter::GetVerboseLevel() const
+{
+  return verboseLevel;
+}
 
+inline 
+const G4ParticleDefinition* G4VRangeToEnergyConverter::GetParticleType() const
+{
+  return theParticle;
+}
 
+inline G4double G4VRangeToEnergyConverter::LiniearInterpolation(
+                const G4double e1, const G4double e2, 
+                const G4double r1, const G4double r2, const G4double r)
+{
+  return (r1 == r2) ? e1 : e1 + (e2 - e1)*(r - r1)/(r2 - r1);
+}
+
+#endif

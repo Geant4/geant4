@@ -52,7 +52,7 @@ ElectronBenchmarkDetectorMessenger::ElectronBenchmarkDetectorMessenger(
     fPrimFoilMatCmd = new G4UIcmdWithAString("/primFoil/material",this);
     fPrimFoilMatCmd->SetGuidance("Material of primary foil");
     fPrimFoilMatCmd->SetParameterName("primFoilMat",false);
-    fPrimFoilMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+    fPrimFoilMatCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
     fPrimFoilMatCmd->SetToBeBroadcasted(false);
     
     // Foil Thickness
@@ -60,7 +60,7 @@ ElectronBenchmarkDetectorMessenger::ElectronBenchmarkDetectorMessenger(
     fPrimFoilThickCmd->SetGuidance("Thickness of primary foil");
     fPrimFoilThickCmd->SetParameterName("thickness",false);
     fPrimFoilThickCmd->SetDefaultUnit("cm");
-    fPrimFoilThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+    fPrimFoilThickCmd->AvailableForStates(G4State_PreInit);
     fPrimFoilThickCmd->SetToBeBroadcasted(false);
 }
 
@@ -83,7 +83,7 @@ void ElectronBenchmarkDetectorMessenger::SetNewValue(G4UIcommand* command,
         fDetector->SetPrimFoilThickness(
                                 fPrimFoilThickCmd->GetNewDoubleValue(newValue));
     } else {
-        G4cerr << "***** Command is not found !!! " << newValue << G4endl;
+        G4cout << "***** Command is not found !!! " << newValue << G4endl;
     }
 }
 

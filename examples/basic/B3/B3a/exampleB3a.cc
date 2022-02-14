@@ -31,23 +31,19 @@
 /// \file exampleB3.cc
 /// \brief Main program of the B3 example
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4RunManagerFactory.hh"
+#include "G4SteppingVerbose.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4AnalysisManager.hh"
 #include "G4TScoreNtupleWriter.hh"
 
 #include "Randomize.hh"
 
-#include "B3DetectorConstruction.hh"
-#include "B3PhysicsList.hh"
-#include "B3aActionInitialization.hh"
-#include "B3Analysis.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "ActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,38 +51,31 @@ int main(int argc,char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
-    ui = new G4UIExecutive(argc, argv);
-  }
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv);}
 
   // Optionally: choose a different Random engine...
-  //
-<<<<<<< HEAD
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-     
-=======
   // G4Random::setTheEngine(new CLHEP::MTwistEngine);
 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  //use G4SteppingVerboseWithUnits
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
+
   // Construct the default run manager
   //
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif  
+  auto* runManager =
+    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
   // Set mandatory initialization classes
   //
-  runManager->SetUserInitialization(new B3DetectorConstruction);
+  runManager->SetUserInitialization(new B3::DetectorConstruction);
   //
-  runManager->SetUserInitialization(new B3PhysicsList);
-    
+  runManager->SetUserInitialization(new B3::PhysicsList);
+
   // Set user action initialization
   //
-  runManager->SetUserInitialization(new B3aActionInitialization());  
-  
+  runManager->SetUserInitialization(new B3a::ActionInitialization());
+
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;

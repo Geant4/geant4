@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# GNUmakefile for examples module with AIDA interface
+# GNUmakefile for examples module
 # --------------------------------------------------------------
 
 name := Hadr01

@@ -1,10 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -25,7 +32,7 @@ Set file name: run3
 #
 /run/beamOn 100000
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
@@ -34,16 +41,19 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
-... open Root analysis file : run3.root - done
+... set ntuple merging row mode : row-wise - done
+... create file : run3.root - done
+... open analysis file : run3.root - done
+... open analysis file : run3.root - done
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.200000s Real=0.197333s Sys=0.000000s
-... write Root file : run3.root - done
-... close Root file : run3.root - done
+  User=0.180000s Real=0.183447s Sys=0.010000s
+... write file : run3.root - done
+... close file : run3.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

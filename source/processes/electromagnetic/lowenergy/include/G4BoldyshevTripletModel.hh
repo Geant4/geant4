@@ -32,15 +32,14 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4ProductionCutsTable.hh"
 
 class G4BoldyshevTripletModel : public G4VEmModel
 {
-
 public:
-  
-  G4BoldyshevTripletModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BoldyshevTripletConversion");
+  explicit G4BoldyshevTripletModel(const G4ParticleDefinition* p = nullptr, 
+				   const G4String& nam = "BoldyshevTripletConversion");
   
   virtual ~G4BoldyshevTripletModel();
   
@@ -73,8 +72,7 @@ public:
 				    G4double);
 
 private:
-
-  void ReadData(size_t Z, const char* path = 0);
+  void ReadData(size_t Z, const char* path = nullptr);
 
   G4double ScreenFunction1(G4double screenVariable);
   G4double ScreenFunction2(G4double screenVariable);
@@ -82,20 +80,15 @@ private:
   G4BoldyshevTripletModel & operator=(const  G4BoldyshevTripletModel &right);
   G4BoldyshevTripletModel(const  G4BoldyshevTripletModel&);
 
-  G4bool isInitialised;
-  G4int verboseLevel;
+  static const G4int maxZ = 99;
+  static G4PhysicsFreeVector* data[maxZ+1]; // 100 because Z range is 1-99
+  
+  G4ParticleChangeForGamma* fParticleChange;
 
   G4double lowEnergyLimit;  
   G4double smallEnergy;
   
-  //MT
-  static G4int maxZ;
-  static G4LPhysicsFreeVector* data[100]; // 100 because Z range is 1-99
-                                          // in LivermoreRayleighModel, 101
-					  //  because Z range is 1-100
-  //END MT
-  
-  G4ParticleChangeForGamma* fParticleChange;
+  G4int verboseLevel;
 
   G4double asinh (G4double value);
 

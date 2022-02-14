@@ -6,6 +6,21 @@ carlo.casarino@polooncologicocefalu.it
          ====================================================
              History file of the IORT application
          ====================================================
+24.05.2021 - B. Morgan (iort_therapy-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+12.02.2021 - S.Guatelli tag iort_therapy-V10-07-00
+            Dependence to G4EmProcessOptions removed.
+            SetCuts method removed from local physics list as
+            it is not thread-safe. Cuts per Region set in ConstructProcess.
+            RegionStore is not available when accessed from the constructor
+            of the Physics List.
+
+02.11.2020 - B.Morgan tag iort_therapy-V10-06-02
+             Support same CMake version range as core Geant4
+
+13.08.2020 - S. Guatelli tag iort_therapy-V10-06-01
+             Unnecessary in CMakeLists.tst dependance to ROOT removed.
 
 <<<<<<< HEAD
 28.11.2016 - G.Folger
@@ -26,21 +41,21 @@ carlo.casarino@polooncologicocefalu.it
              unused variable deleted
 
 17.09.2018 - S. Guatelli tag iort_therapy-V10-04-02
-             CMakeList.txt updated 
+             CMakeList.txt updated
 
 17.09.2018 - S. Guatelli tag iort_therapy-V10-04-01
-             delete macro directory. 
+             delete macro directory.
 
 12.09.2018 - S. Guatelli tag iort_therapy-V10-04-00
-             removed RO geometry together with Hit class. Scoring mesh included.  
+             removed RO geometry together with Hit class. Scoring mesh included.
              G4_UI_USE and G4_VIS_USE removed.
-             How to delete the geometry of the disk has been changed (bug eliminated). 
+             How to delete the geometry of the disk has been changed (bug eliminated).
              Analysis class deleted (no analysis directly connected with the IORT example)
              G4Decay and IORTMatrix deleted as they are not needed.
              Protontherapy removed as it is out of the scope.
-             G4SystemOfUnits.hh included 
-             README updated accordingly to changes. 
-     
+             G4SystemOfUnits.hh included
+             README updated accordingly to changes.
+
 28.11.2017 - B.Morgan tag iort_therapy-V10-03-01
              Replace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
 
@@ -94,7 +109,7 @@ carlo.casarino@polooncologicocefalu.it
                 Use std::string::size_type for string length instead of int
                 in IORTMatrix::ion. Fixes compilation warning on gcc-4.7.
 15.12.2011 - P.Mato;      Tag: iort_therapy-V09-05-01
-                Tagged changes made by Gunter (windows line endings, 
+                Tagged changes made by Gunter (windows line endings,
                 invalid header files, etc.)
 24.11.2011 - P.Mato;      Tag: iort_therapy-V09-05-00
 	        Added CMakeLists.txt file

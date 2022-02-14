@@ -85,7 +85,6 @@ class G4ParticleHPFissionData : public G4VCrossSectionDataSet
    
       G4PhysicsTable * theCrossSections;
 
-      G4bool onFlightDB;
       G4bool instanceOfWorker;
 
       G4double ke_cache;

@@ -28,7 +28,6 @@
 #define G4EmPenelopePhysics_h 1
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,14 +38,10 @@ public:
 
   explicit G4EmPenelopePhysics(G4int ver=1, const G4String& name="");
 
-  virtual ~G4EmPenelopePhysics();
+  ~G4EmPenelopePhysics() override;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-
-private:
-  G4int  verbose;
-  G4EmParticleList partList;
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

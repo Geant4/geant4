@@ -23,57 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VPHitsCollectionIO.hh
+// G4VPHitsCollectionIO
 //
-// History:
-//   '01.08.16  Youhei Morita  Initial creation
+// Class Description:
+//
+// Abstract base class for storing and retrieving hit collections
 
-#ifndef V_P_HITS_COLLECTION_I_O_HH
-#define V_P_HITS_COLLECTION_I_O_HH 1
+// Author: Youhei Morita, 16.08.2001
+// --------------------------------------------------------------------
+#ifndef G4VPHITSCOLLECTIONIO_HH
+#define G4VPHITSCOLLECTIONIO_HH 1
 
 #include "G4VHitsCollection.hh"
 
-// Class Description:
-//   Abstract base class for storing and retrieving hit collections
-
 class G4VPHitsCollectionIO
 {
-    public: // With description
-      G4VPHitsCollectionIO( std::string detName, std::string colName );
+  public:
+
+    G4VPHitsCollectionIO(const G4String& detName, const G4String& colName);
       // Constructor
 
-      virtual ~G4VPHitsCollectionIO() {};
+    virtual ~G4VPHitsCollectionIO(){};
       // Destructor
 
-    public: // With description
-      virtual G4bool Store(const G4VHitsCollection*) =0;
+    virtual G4bool Store(const G4VHitsCollection*) = 0;
       // Pure virtual method for storing the hit collection.
       // Each persistency package should implement a concrete method
-      // with this signature.
+      // with this signature
 
-      virtual G4bool Retrieve(G4VHitsCollection*&) =0;
+    virtual G4bool Retrieve(G4VHitsCollection*&) = 0;
       // Pure virtual method for retrieving the hit collection.
       // Each persistency package should implement a concrete method
-      // with this signature.
+      // with this signature
 
-      G4bool operator== (const G4VPHitsCollectionIO& right) const;
-      // virtual operator for comparing hit collections with names.
+    G4bool operator==(const G4VPHitsCollectionIO& right) const;
+      // virtual operator for comparing hit collections with names
 
-      std::string SDname() { return f_detName; };
-      // Returns the sensitive detector name.
+    const G4String& SDname() { return f_detName; }
+      // Returns the sensitive detector name
 
-      std::string CollectionName() { return f_colName; };
-      // Returns the hit collection name.
+    const G4String& CollectionName() { return f_colName; }
+      // Returns the hit collection name
 
-      void SetVerboseLevel(int v) { m_verbose = v; };
+    void SetVerboseLevel(G4int v) { m_verbose = v; }
       // Sets the verbose level
 
-    protected:
-      G4int m_verbose;
-      std::string f_detName;
-      std::string f_colName;
+  protected:
 
-}; // End of class G4VPHitsCollectionIO
+    G4int m_verbose = 0;
+    G4String f_detName;
+    G4String f_colName;
+};
 
 #endif
-

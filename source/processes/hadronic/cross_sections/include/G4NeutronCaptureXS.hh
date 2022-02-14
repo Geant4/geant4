@@ -46,18 +46,16 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
 #include "G4ElementData.hh"
+#include "G4PhysicsVector.hh"
 #include "G4Threading.hh"
 #include <vector>
 #include <iostream>
 
-const G4int MAXZCAPTURE = 93;
-
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
-class G4PhysicsVector;
 
-class G4NeutronCaptureXS : public G4VCrossSectionDataSet
+class G4NeutronCaptureXS final : public G4VCrossSectionDataSet
 {
 public: 
 
@@ -88,6 +86,11 @@ public:
 
   void CrossSectionDescription(std::ostream&) const final;
 
+  G4double IsoCrossSection(G4double ekin, G4double logekin, G4int Z, G4int A);
+
+  G4NeutronCaptureXS & operator=(const G4NeutronCaptureXS &right) = delete;
+  G4NeutronCaptureXS(const G4NeutronCaptureXS&) = delete;
+
 private: 
 
   void Initialise(G4int Z);
@@ -96,14 +99,9 @@ private:
 
   const G4String& FindDirectoryPath();
 
-  const G4PhysicsVector* GetPhysicsVector(G4int Z);
+  inline const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
-
-  G4double IsoCrossSection(G4double ekin, G4double logekin, G4int Z, G4int A);
-
-  G4NeutronCaptureXS & operator=(const G4NeutronCaptureXS &right);
-  G4NeutronCaptureXS(const G4NeutronCaptureXS&);
 
   G4double emax;
   G4double elimit;
@@ -111,16 +109,26 @@ private:
 
   std::vector<G4double> temp;
 
-  G4bool   isMaster;
+  G4bool isMaster = false;
 
+  static const G4int MAXZCAPTURE = 93;
   static G4ElementData* data;
-  static const G4int amin[MAXZCAPTURE];
-  static const G4int amax[MAXZCAPTURE];
   static G4String gDataDirectory;
 
 #ifdef G4MULTITHREADED
   static G4Mutex neutronCaptureXSMutex;
 #endif
 };
+
+inline
+const G4PhysicsVector* G4NeutronCaptureXS::GetPhysicsVector(G4int Z)
+{
+  const G4PhysicsVector* pv = data->GetElementData(Z);
+  if(pv == nullptr) { 
+    InitialiseOnFly(Z);
+    pv = data->GetElementData(Z);
+  }
+  return pv;
+}
 
 #endif

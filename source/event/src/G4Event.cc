@@ -23,51 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Event class implementation
 //
-//
-
-// G4Event
+// Author: M.Asai, SLAC
+// --------------------------------------------------------------------
 
 #include "G4Event.hh"
 #include "G4VVisManager.hh"
-//#include "G4HCofThisEvent.hh"
-//#include "G4DCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
 #include "G4VDigiCollection.hh"
 #include "G4ios.hh"
 
 G4Allocator<G4Event>*& anEventAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4Event>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4Event>* _instance = nullptr;
+  return _instance;
 }
 
 G4Event::G4Event()
-:eventID(0),
- thePrimaryVertex(nullptr),numberOfPrimaryVertex(0),
- HC(nullptr),DC(nullptr),trajectoryContainer(nullptr),
- eventAborted(false),userInfo(nullptr),
- randomNumberStatus(nullptr),validRandomNumberStatus(false),
- randomNumberStatusForProcessing(nullptr),validRandomNumberStatusForProcessing(false),
- keepTheEvent(false),grips(0)
 {
 }
 
 G4Event::G4Event(G4int evID)
-:eventID(evID),
- thePrimaryVertex(nullptr),numberOfPrimaryVertex(0),
- HC(nullptr),DC(nullptr),trajectoryContainer(nullptr),
- eventAborted(false),userInfo(nullptr),
- randomNumberStatus(nullptr),validRandomNumberStatus(false),
- randomNumberStatusForProcessing(nullptr),validRandomNumberStatusForProcessing(false),
- keepTheEvent(false),grips(0)
+  : eventID(evID)
 {
 }
 
 G4Event::~G4Event()
 {
   G4PrimaryVertex* nextVertex = thePrimaryVertex;
-  while(nextVertex)
+  while(nextVertex != nullptr)
   {
     G4PrimaryVertex* thisVertex = nextVertex;
     nextVertex = thisVertex->GetNext();
@@ -77,7 +62,7 @@ G4Event::~G4Event()
   thePrimaryVertex = nullptr;
   delete HC;
   delete DC;
-  if(trajectoryContainer)
+  if(trajectoryContainer != nullptr)
   {
     trajectoryContainer->clearAndDestroy();
     delete trajectoryContainer;
@@ -87,12 +72,12 @@ G4Event::~G4Event()
   delete randomNumberStatusForProcessing;
 }
 
-G4bool G4Event::operator==(const G4Event &right) const
+G4bool G4Event::operator==(const G4Event& right) const
 {
   return ( eventID == right.eventID );
 }
 
-G4bool G4Event::operator!=(const G4Event &right) const
+G4bool G4Event::operator!=(const G4Event& right) const
 {
   return ( eventID != right.eventID );
 }
@@ -105,31 +90,31 @@ void G4Event::Print() const
 void G4Event::Draw() const
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(!pVVisManager) return;
+  if(pVVisManager == nullptr) return;
 
   if(trajectoryContainer)
   {
     G4int n_traj = trajectoryContainer->entries();
-    for(G4int i=0;i<n_traj;i++)
+    for(G4int i=0; i<n_traj; ++i)
     { (*trajectoryContainer)[i]->DrawTrajectory(); }
   }
 
-  if(HC)
+  if(HC != nullptr)
   {
     G4int n_HC = HC->GetCapacity();
-    for(G4int j=0;j<n_HC;j++)
+    for(G4int j=0; j<n_HC; ++j)
     {
-      G4VHitsCollection * VHC = HC->GetHC(j);
-      if(VHC) VHC->DrawAllHits();
+      G4VHitsCollection* VHC = HC->GetHC(j);
+      if(VHC != nullptr) VHC->DrawAllHits();
     }
   }
 
-  if(DC)
+  if(DC != nullptr)
   {
     G4int n_DC = DC->GetCapacity();
-    for(G4int j=0;j<n_DC;j++)
+    for(G4int j=0; j<n_DC; ++j)
     {
-      G4VDigiCollection * VDC = DC->GetDC(j);
+      G4VDigiCollection* VDC = DC->GetDC(j);
       if(VDC) VDC->DrawAllDigi();
     }
   }

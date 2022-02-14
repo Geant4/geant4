@@ -16,8 +16,8 @@
 /process/list
 #
 # rdm is applied only to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+/process/had/rdm/noVolumes
+/process/had/rdm/selectVolume Target
 #
 # place the isotopes in the middle of the target, at rest. 
 /gun/particle ion 
@@ -31,18 +31,18 @@
 /run/beamOn 10000
 #
 # complete chain decays in VR mode
-/grdm/analogueMC 0
+/process/had/rdm/analogueMC 0
 /analysis/setFileName f24c-b
 #/run/beamOn 10000
 #
 # No daughter decays in analogue MC mode
-/grdm/analogueMC 1
-/grdm/nucleusLimits 24 24 9 9
+/process/had/rdm/analogueMC 1
+/process/had/rdm/nucleusLimits 24 24 9 9
 /analysis/setFileName f24
 #/run/beamOn 10000
 
 # No daughter decays in VR MC mode
-/grdm/analogueMC 0
-/grdm/BRbias 0
+/process/had/rdm/analogueMC 0
+/process/had/rdm/BRbias 0
 /analysis/setFileName f24-b
 #/run/beamOn 10000

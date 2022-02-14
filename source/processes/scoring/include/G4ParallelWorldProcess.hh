@@ -125,7 +125,7 @@ public: // with description
   inline G4bool GetLayeredMaterialFlag() const
   { return layeredMaterialFlag; }
 
-private:
+protected:
   void CopyStep(const G4Step & step);
   void SwitchMaterial(G4StepPoint*);
 
@@ -135,7 +135,7 @@ public: // with description
   //--------------------------------------------------------------------
   G4bool IsAtRestRequired(G4ParticleDefinition*);
 
-private:
+protected:
   G4Step * fGhostStep;
   G4StepPoint * fGhostPreStepPoint;
   G4StepPoint * fGhostPostStepPoint;

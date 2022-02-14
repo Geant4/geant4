@@ -72,6 +72,7 @@ HadronPhysicsUrQMD::HadronPhysicsUrQMD(G4int)
   fPro = 0;
   fUrQMDPro = 0;    
   fHyperon = 0;
+  fFTFPHyperon = 0;
   fAntiBaryon = 0;
 }
 
@@ -92,8 +93,10 @@ void HadronPhysicsUrQMD::CreateModels()
   fPiK->RegisterMe(fUrQMDPiK);
   
   //For Hyperons use FTF model
-  fHyperon=new G4HyperonFTFPBuilder;
-    
+  fHyperon=new G4HyperonBuilder;
+  fFTFPHyperon=new G4HyperonFTFPBuilder;
+  fHyperon->RegisterMe( fFTFPHyperon );
+
   fAntiBaryon=new G4AntiBarionBuilder;
   fUrQMDAntiBaryon=new  UrQMDAntiBarionBuilder();
   fAntiBaryon->RegisterMe( fUrQMDAntiBaryon );
@@ -113,6 +116,7 @@ HadronPhysicsUrQMD::~HadronPhysicsUrQMD()
   delete fUrQMDPro;    
     
   delete fHyperon;
+  delete fFTFPHyperon;
   delete fAntiBaryon;
   delete fUrQMDAntiBaryon;
 }

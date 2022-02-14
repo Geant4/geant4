@@ -68,16 +68,13 @@ G4double G4VLEPTSModel::GetMeanFreePath(const G4Material* aMaterial,
 			       const G4ParticleDefinition* ,
 			       G4double kineticEnergy )
 {
-
   G4double MeanFreePath;
-  G4bool isOutRange ;
 
   if( verboseLevel >= 3 ) G4cout << aMaterial->GetIndex() << " G4VLEPTSModel::GetMeanFreePath " << kineticEnergy << " > " << theHighestEnergyLimit << " < " << theLowestEnergyLimit << G4endl;
   if (kineticEnergy > theHighestEnergyLimit || kineticEnergy < theLowestEnergyLimit)
     MeanFreePath = DBL_MAX;
   else
-    MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
-                                       GetValue(kineticEnergy, isOutRange);
+    MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->Value(kineticEnergy);
 
   return MeanFreePath;
 }
@@ -184,8 +181,8 @@ void G4VLEPTSModel::BuildMeanFreePathTable( const G4Material* aMaterial, std::ma
   G4PhysicsLogVector* ptrVector = new G4PhysicsLogVector(theLowestEnergyLimit, theHighestEnergyLimit, theNumbBinTable);
   
   for (G4int ii=0; ii < theNumbBinTable; ii++) {
-    LowEdgeEnergy = ptrVector->GetLowEdgeEnergy(ii);
-    if( verboseLevel >= 2 ) G4cout << GetName() << " " << ii << " LowEdgeEnergy " << LowEdgeEnergy << " > " << theLowestEnergyLimit << " < " << theHighestEnergyLimit << G4endl;
+    LowEdgeEnergy = ptrVector->Energy(ii);
+    if( verboseLevel >= 2 ) G4cout << GetName() << " " << ii << " Energy " << LowEdgeEnergy << " > " << theLowestEnergyLimit << " < " << theHighestEnergyLimit << G4endl;
     //-      fValue = ComputeMFP(LowEdgeEnergy, material, aParticleName);
     fValue = 0.;
     if( LowEdgeEnergy >= theLowestEnergyLimit && 

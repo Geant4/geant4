@@ -126,8 +126,8 @@ public:
   // generation of deexcitation for given atom and shell vacancy
   // and material cut couple, which defines cut values 
   void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
-			 const G4AtomicShell*, 
-			 G4int Z, G4int coupleIndex);
+                         const G4AtomicShell*, 
+                         G4int Z, G4int coupleIndex);
 
   // generation of deexcitation for given atom and shell vacancy
   virtual void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
@@ -157,42 +157,38 @@ public:
                              G4double& eLoss,
                              G4int coupleIndex);
 
-private:
-
   // copy constructor and hide assignment operator
   G4VAtomDeexcitation(G4VAtomDeexcitation &) = delete;
   G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right) = delete;
 
-  G4EmParameters*             theParameters;  
+private:
+
   const G4ParticleDefinition* gamma;
+  const G4ProductionCutsTable* theCoupleTable = nullptr;
 
-  G4ProductionCutsTable* theCoupleTable;
-  G4int    verbose;
-  G4String name;
+  G4int    nCouples = 0;
+  G4int    verbose = 1;
 
-  G4bool   isActive;
-  G4bool   flagAuger;
-  G4bool   flagAugerCascade;
-  G4bool   flagPIXE;
-  G4bool   ignoreCuts;
+  G4bool   isActive = false;
+  G4bool   flagAuger = false;
+  G4bool   flagPIXE = false;
+  G4bool   ignoreCuts = false;
 
-  G4bool   isActiveLocked;
-  G4bool   isAugerLocked;
-  G4bool   isAugerCascadeLocked;
-  G4bool   isPIXELocked;
+  G4bool   isActiveLocked = false;
+  G4bool   isAugerLocked = false;
+  G4bool   isPIXELocked = false;
 
   std::vector<G4bool>   activeZ;
   std::vector<G4bool>   activeDeexcitationMedia;
   std::vector<G4bool>   activeAugerMedia;
   std::vector<G4bool>   activePIXEMedia;
-  std::vector<G4String> activeRegions;
   std::vector<G4bool>   deRegions;
   std::vector<G4bool>   AugerRegions;
   std::vector<G4bool>   PIXERegions;
   std::vector<G4DynamicParticle*> vdyn;
+  std::vector<G4String> activeRegions;
 
-  static G4int pixeIDg;
-  static G4int pixeIDe;
+  G4String name;
 
 #ifdef G4MULTITHREADED
   static G4Mutex atomDeexcitationMutex;
@@ -221,12 +217,12 @@ inline G4bool G4VAtomDeexcitation::IsAugerActive() const
 
 inline void G4VAtomDeexcitation::SetAugerCascade(G4bool val)
 {
-  if(!isAugerCascadeLocked) { flagAugerCascade = val;  isAugerCascadeLocked = true; }
+  SetAuger(val);
 }
 
 inline G4bool G4VAtomDeexcitation::IsAugerCascadeActive() const
 {
-  return flagAugerCascade;
+  return flagAuger;
 }
 
 inline void G4VAtomDeexcitation::SetPIXE(G4bool val)
@@ -261,15 +257,15 @@ inline G4int G4VAtomDeexcitation::GetVerboseLevel() const
 }
 
 inline G4bool 
-G4VAtomDeexcitation::CheckDeexcitationActiveRegion(G4int coupleIndex)
+G4VAtomDeexcitation::CheckDeexcitationActiveRegion(G4int idx)
 {
-  return (activeDeexcitationMedia[coupleIndex]);
+  return (idx < nCouples) ? activeDeexcitationMedia[idx] : false;
 }
 
 inline G4bool 
-G4VAtomDeexcitation::CheckAugerActiveRegion(G4int coupleIndex)
+G4VAtomDeexcitation::CheckAugerActiveRegion(G4int idx)
 {
-  return (activeAugerMedia[coupleIndex]);
+  return (idx < nCouples) ? activeAugerMedia[idx] : false;
 }
 
 #endif

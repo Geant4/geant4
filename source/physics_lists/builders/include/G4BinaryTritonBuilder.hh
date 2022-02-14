@@ -41,9 +41,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4TritonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VTritonBuilder.hh"
 
 #include "G4BinaryCascade.hh"   
@@ -54,9 +52,8 @@ class G4BinaryTritonBuilder : public G4VTritonBuilder
     G4BinaryTritonBuilder();
     virtual ~G4BinaryTritonBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4TritonInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
     void SetMaxEnergy(G4double aM) {theMax = aM;}

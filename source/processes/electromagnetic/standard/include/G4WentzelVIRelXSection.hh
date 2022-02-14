@@ -67,15 +67,12 @@ public:
 
   explicit G4WentzelVIRelXSection();
 
-  virtual ~G4WentzelVIRelXSection();
+  ~G4WentzelVIRelXSection() override;
 
   // return cos(ThetaMax) for msc and cos(thetaMin) for single scattering
   // cut = DBL_MAX means no scattering off electrons 
-  virtual G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
+  G4double SetupKinematic(G4double kinEnergy, const G4Material* mat) override;
 
-private:
-
-  //  hide assignment operator
   G4WentzelVIRelXSection & operator=
   (const G4WentzelVIRelXSection &right) = delete;
   G4WentzelVIRelXSection(const  G4WentzelVIRelXSection&) = delete;

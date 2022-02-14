@@ -31,10 +31,9 @@
 // volume.
 
 // Author: John Apostolakis (John.Apostolakis@cern.ch), 16-06-1997
-//
-// ----------------------------------------------------------------------
-#ifndef G4LogicalSkinSurface_h
-#define G4LogicalSkinSurface_h 1
+// --------------------------------------------------------------------
+#ifndef G4LogicalSkinSurface_hh
+#define G4LogicalSkinSurface_hh 1
 
 #include <vector>
 
@@ -48,7 +47,7 @@ using G4LogicalSkinSurfaceTable = std::vector<G4LogicalSkinSurface*>;
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
 
-  public:  // with description
+  public:
 
     G4LogicalSkinSurface( const G4String& name,
                                 G4LogicalVolume* vol,
@@ -71,7 +70,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
 
     static void CleanSurfaceTable();
     static const G4LogicalSkinSurfaceTable* GetSurfaceTable();
-    static size_t GetNumberOfSkinSurfaces();
+    static std::size_t GetNumberOfSkinSurfaces();
     static void DumpInfo(); // const 
       // To handle with the table of surfaces.
 
@@ -91,5 +90,5 @@ class G4LogicalSkinSurface : public G4LogicalSurface
 
 #include "G4LogicalSkinSurface.icc"
 
-#endif /* G4LogicalSkinSurface_h */
+#endif
 

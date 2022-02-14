@@ -34,6 +34,7 @@
 // 23.11.2005 G.Folger: migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 19.06.2008 G.Folger: change default for QE to NOT use Chips QE
+// 20.09.2020 V.Ivanchenko change design using G4HadProcess utility
 //
 //----------------------------------------------------------------------------
 //
@@ -41,15 +42,8 @@
 #define G4HadronPhysicsFTFP_BERT_h 1
 
 #include "globals.hh"
-#include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-
-#include "G4Cache.hh"
-
-class G4ComponentGGHadronNucleusXsc;
-class G4VCrossSectionDataSet;
-
 
 class G4HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
 {
@@ -58,27 +52,22 @@ class G4HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
     G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool quasiElastic=false);
     virtual ~G4HadronPhysicsFTFP_BERT();
 
-  public: 
-    virtual void ConstructParticle() override;
-    //This will call in order:
-    // DumpBanner (for master)
-    // CreateModels
-    // ExtraConfiguation
-    virtual void ConstructProcess() override;
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
-  //    virtual void TerminateWorker() override;
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsFTFP_BERT(G4HadronPhysicsFTFP_BERT &) = delete;
+    G4HadronPhysicsFTFP_BERT & operator =
+    (const G4HadronPhysicsFTFP_BERT &right) = delete;
+
   protected:
-    G4bool QuasiElastic;
-    //This calls the specific ones for the different particles in order
-    virtual void CreateModels();
+    void CreateModels();
     virtual void Neutron();
     virtual void Proton();
     virtual void Pion();
     virtual void Kaon();
     virtual void Others();
     virtual void DumpBanner();
-    //This contains extra configurataion specific to this PL
-    virtual void ExtraConfiguration();
 
     G4double minFTFP_pion;
     G4double maxBERT_pion;
@@ -88,6 +77,9 @@ class G4HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
     G4double maxBERT_proton;
     G4double minFTFP_neutron;
     G4double maxBERT_neutron;
+    G4double minBERT_proton;
+    G4double minBERT_neutron;
+    G4bool QuasiElastic;
 };
 
 #endif

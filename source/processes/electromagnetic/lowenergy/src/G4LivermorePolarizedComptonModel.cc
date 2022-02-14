@@ -27,7 +27,18 @@
 // Authors: G.Depaola & F.Longo
 //
 // History:
-// --------
+// -------
+//
+// 05 Apr 2021   J Allison added quantum entanglement of e+ annihilation.
+// If the photons have been "tagged" as "quantum-entangled", for example by
+// G4eplusAnnihilation for annihilation into 2 photons, they are "analysed"
+// here if - and only if - both photons suffer Compton scattering. Theoretical
+// predictions from Pryce and Ward, Nature No 4065 (1947) p.435, and Snyder et al,
+// Physical Review 73 (1948) p.440. Experimental validation in "Photon quantum 
+// entanglement in the MeV regime and its application in PET imaging",
+// D. Watts, J. Allison et al., Nature Communications (2021)12:2646
+// https://doi.org/10.1038/s41467-021-22907-5.
+//
 // 02 May 2009   S Incerti as V. Ivanchenko proposed in G4LivermoreComptonModel.cc
 //
 // Cleanup initialisation and generation of secondaries:
@@ -40,6 +51,7 @@
 #include "G4LivermorePolarizedComptonModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AutoLock.hh"
 #include "G4Electron.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LossTableManager.hh"
@@ -50,19 +62,22 @@
 #include "G4DopplerProfile.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4Pow.hh"
 #include "G4LogLogInterpolation.hh"
+#include "G4PhysicsModelCatalog.hh"
+#include "G4EntanglementAuxInfo.hh"
+#include "G4eplusAnnihilationEntanglementClipBoard.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
+namespace { G4Mutex LivermorePolarizedComptonModelMutex = G4MUTEX_INITIALIZER; }
 
-G4int G4LivermorePolarizedComptonModel::maxZ = 99;
-G4LPhysicsFreeVector* G4LivermorePolarizedComptonModel::data[] = {0};
-G4ShellData*       G4LivermorePolarizedComptonModel::shellData = 0;
-G4DopplerProfile*  G4LivermorePolarizedComptonModel::profileData = 0; 
-G4CompositeEMDataSet* G4LivermorePolarizedComptonModel::scatterFunctionData = 0;
 
-//static const G4double ln10 = G4Log(10.);
+G4PhysicsFreeVector* G4LivermorePolarizedComptonModel::data[] = {nullptr};
+G4ShellData*       G4LivermorePolarizedComptonModel::shellData = nullptr;
+G4DopplerProfile*  G4LivermorePolarizedComptonModel::profileData = nullptr; 
+G4CompositeEMDataSet* G4LivermorePolarizedComptonModel::scatterFunctionData = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -83,8 +98,9 @@ G4LivermorePolarizedComptonModel::G4LivermorePolarizedComptonModel(const G4Parti
   //Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
   
-  fParticleChange = 0;
-  fAtomDeexcitation = 0;
+  fParticleChange = nullptr;
+  fAtomDeexcitation = nullptr;
+  fEntanglementModelID = G4PhysicsModelCatalog::GetModelID("model_GammaGammaEntanglement");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -93,15 +109,15 @@ G4LivermorePolarizedComptonModel::~G4LivermorePolarizedComptonModel()
 {  
   if(IsMaster()) {
     delete shellData;
-    shellData = 0;
+    shellData = nullptr;
     delete profileData;
-    profileData = 0;
+    profileData = nullptr;
     delete scatterFunctionData;
-    scatterFunctionData = 0;
+    scatterFunctionData = nullptr;
     for(G4int i=0; i<maxZ; ++i) {
       if(data[i]) { 
 	delete data[i];
-	data[i] = 0;
+	data[i] = nullptr;
       }
     }
   }
@@ -116,11 +132,8 @@ void G4LivermorePolarizedComptonModel::Initialise(const G4ParticleDefinition* pa
     G4cout << "Calling G4LivermorePolarizedComptonModel::Initialise()" << G4endl;
 
   // Initialise element selector 
-
   if(IsMaster()) {
-    
     // Access to elements 
-
     char* path = std::getenv("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable = 
@@ -153,7 +166,6 @@ void G4LivermorePolarizedComptonModel::Initialise(const G4ParticleDefinition* pa
     if(!profileData) { profileData = new G4DopplerProfile(); }
 
     // Scattering Function 
-    
     if(!scatterFunctionData)
       {
 	
@@ -215,11 +227,8 @@ void G4LivermorePolarizedComptonModel::ReadData(size_t Z, const char* path)
 	}
     }
   
-  data[Z] = new G4LPhysicsFreeVector();
-  
-  // Activation of spline interpolation
-  data[Z]->SetSpline(false);
-  
+  data[Z] = new G4PhysicsFreeVector();
+    
   std::ostringstream ost;
   ost << datadir << "/livermore/comp/ce-cs-" << Z <<".dat";
   std::ifstream fin(ost.str().c_str());
@@ -244,9 +253,6 @@ void G4LivermorePolarizedComptonModel::ReadData(size_t Z, const char* path)
   fin.close();
 }
 
-
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedComptonModel::ComputeCrossSectionPerAtom(
@@ -266,7 +272,7 @@ G4double G4LivermorePolarizedComptonModel::ComputeCrossSectionPerAtom(
   G4int intZ = G4lrint(Z);
   if(intZ < 1 || intZ > maxZ) { return cs; } 
   
-  G4LPhysicsFreeVector* pv = data[intZ];
+  G4PhysicsFreeVector* pv = data[intZ];
   
   // if element was not initialised
   // do initialisation safely for MT mode
@@ -313,18 +319,15 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   if (gammaEnergy0 < LowEnergyLimit())     
     return ; 
 
-
   G4ThreeVector gammaPolarization0 = aDynamicGamma->GetPolarization();
 
   // Protection: a polarisation parallel to the
   // direction causes problems;
   // in that case find a random polarization
-
   G4ThreeVector gammaDirection0 = aDynamicGamma->GetMomentumDirection();
 
   // Make sure that the polarization vector is perpendicular to the
   // gamma direction. If not
-
   if(!(gammaPolarization0.isOrthogonal(gammaDirection0, 1e-6))||(gammaPolarization0.mag()==0))
     { // only for testing now
       gammaPolarization0 = GetRandomPolarization(gammaDirection0);
@@ -336,7 +339,6 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
 	  gammaPolarization0 = GetPerpendicularPolarization(gammaDirection0, gammaPolarization0);
 	}
     }
-
   // End of Protection
 
   G4double E0_m = gammaEnergy0 / electron_mass_c2 ;
@@ -348,12 +350,11 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   G4int Z = (G4int)elm->GetZ();
 
   // Sample the energy and the polarization of the scattered photon
-
   G4double epsilon, epsilonSq, onecost, sinThetaSqr, greject ;
 
   G4double epsilon0Local = 1./(1. + 2*E0_m);
   G4double epsilon0Sq = epsilon0Local*epsilon0Local;
-  G4double alpha1   = - std::log(epsilon0Local);
+  G4double alpha1   = - G4Log(epsilon0Local);
   G4double alpha2 = 0.5*(1.- epsilon0Sq);
 
   G4double wlGamma = h_Planck*c_light/gammaEnergy0;
@@ -408,17 +409,14 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   // ****************************************************
   //		Phi determination
   // ****************************************************
-
   G4double phi = SetPhi(epsilon,sinThetaSqr);
 
   //
   // scattered gamma angles. ( Z - axis along the parent gamma)
   //
-
   G4double cosTheta = 1. - onecost;
 
   // Protection
-
   if (cosTheta > 1.)
     {
       G4cout
@@ -440,8 +438,7 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
       cosTheta = -1.;
     }
   // End protection      
-  
-  
+ 
   G4double sinTheta = std::sqrt (sinThetaSqr);
   
   // Protection
@@ -467,12 +464,148 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
     }
   // End protection
   
+  // Check for entanglement and re-sample phi if necessary
+  
+  const auto* auxInfo
+  = fParticleChange->GetCurrentTrack()->GetAuxiliaryTrackInformation(fEntanglementModelID);
+  if (auxInfo) {
+    const auto* entanglementAuxInfo = dynamic_cast<const G4EntanglementAuxInfo*>(auxInfo);
+    if (entanglementAuxInfo) {
+      auto* clipBoard = dynamic_cast<G4eplusAnnihilationEntanglementClipBoard*>
+      (entanglementAuxInfo->GetEntanglementClipBoard());
+      if (clipBoard) {
+        // This is an entangled photon from eplus annihilation at rest.
+        // If this is the first scatter of the first photon, place theta and
+        // phi on the clipboard.
+        // If this is the first scatter of the second photon, use theta and
+        // phi of the first scatter of the first photon, together with the
+        // theta of the second photon, to sample phi.
+        if (clipBoard->IsTrack1Measurement()) {
+          // Check we have the relevant track. Not sure this is strictly
+          // necessary but I want to be sure tracks from, say, more than one
+          // entangled system are properly paired.
+          // Note: the tracking manager pops the tracks in the reverse order. We
+          // will rely on that.  (If not, the logic here would have to be a bit
+          // more complicated to ensure we matched the right tracks.)
+          // So our track 1 is clipboard track B.
+          if (clipBoard->GetTrackB() == fParticleChange->GetCurrentTrack()) {
+            // This is the first scatter of the first photon. Reset flag.
+            //            // Debug
+            //            auto* track1 = fParticleChange->GetCurrentTrack();
+            //            G4cout
+            //            << "This is the first scatter of the first photon. Reset flag."
+            //            << "\nTrack: " << track1->GetTrackID()
+            //            << ", Parent: " << track1->GetParentID()
+            //            << ", Name: " << clipBoard->GetParentParticleDefinition()->GetParticleName()
+            //            << G4endl;
+            //            // End debug
+            clipBoard->ResetTrack1Measurement();
+            // Store cos(theta),phi of first photon.
+            clipBoard->SetComptonCosTheta1(cosTheta);
+            clipBoard->SetComptonPhi1(phi);
+          }
+        } else if (clipBoard->IsTrack2Measurement()) {
+          // Check we have the relevant track.
+          // Remember our track 2 is clipboard track A.
+          if (clipBoard->GetTrackA() == fParticleChange->GetCurrentTrack()) {
+            // This is the first scatter of the second photon. Reset flag.
+            //            // Debug
+            //            auto* track2 = fParticleChange->GetCurrentTrack();
+            //            G4cout
+            //            << "This is the first scatter of the second photon. Reset flag."
+            //            << "\nTrack: " << track2->GetTrackID()
+            //            << ", Parent: " << track2->GetParentID()
+            //            << ", Name: " << clipBoard->GetParentParticleDefinition()->GetParticleName()
+            //            << G4endl;
+            //            // End debug
+            clipBoard->ResetTrack2Measurement();
+            
+            // Get cos(theta),phi of first photon.
+            const G4double& cosTheta1 = clipBoard->GetComptonCosTheta1();
+            const G4double& phi1 = clipBoard->GetComptonPhi1();
+            // For clarity make aliases for the current cos(theta),phi.
+            const G4double& cosTheta2 = cosTheta;
+            G4double& phi2 = phi;
+            //            G4cout << "cosTheta1,phi1: " << cosTheta1 << ',' << phi1 << G4endl;
+            //            G4cout << "cosTheta2,phi2: " << cosTheta2 << ',' << phi2 << G4endl;
+            
+            // Re-sample phi
+            // Draw the difference of azimuthal angles, deltaPhi, from
+            // A + B * cos(2*deltaPhi), or rather C + D * cos(2*deltaPhi), where
+            // C = A / (A + |B|) and D = B / (A + |B|), so that maximum is 1.
+            const G4double sin2Theta1 = 1.-cosTheta1*cosTheta1;
+            const G4double sin2Theta2 = 1.-cosTheta2*cosTheta2;
+            
+            // Pryce and Ward, Nature No 4065 (1947) p.435.
+            auto* g4Pow = G4Pow::GetInstance();
+            const G4double A =
+            ((g4Pow->powN(1.-cosTheta1,3))+2.)*(g4Pow->powN(1.-cosTheta2,3)+2.)/
+            ((g4Pow->powN(2.-cosTheta1,3)*g4Pow->powN(2.-cosTheta2,3)));
+            const G4double B = -(sin2Theta1*sin2Theta2)/
+            ((g4Pow->powN(2.-cosTheta1,2)*g4Pow->powN(2.-cosTheta2,2)));
+
+            //    // Snyder et al, Physical Review 73 (1948) p.440.
+            //    // (This is an alternative formulation but result is identical.)
+            //    const G4double& k0 = gammaEnergy0;
+            //    const G4double k1 = k0/(2.-cosTheta1);
+            //    const G4double k2 = k0/(2.-cosTheta2);
+            //    const G4double gamma1 = k1/k0+k0/k1;
+            //    const G4double gamma2 = k2/k0+k0/k2;
+            //    const G4double A1 = gamma1*gamma2-gamma1*sin2Theta2-gamma2*sin2Theta1;
+            //    const G4double B1 = 2.*sin2Theta1*sin2Theta2;
+            //    // That's A1 + B1*sin2(deltaPhi) = A1 + B1*(0.5*(1.-cos(2.*deltaPhi).
+            //    const G4double A = A1 + 0.5*B1;
+            //    const G4double B = -0.5*B1;
+            
+            const G4double maxValue = A + std::abs(B);
+            const G4double C = A / maxValue;
+            const G4double D = B / maxValue;
+            //    G4cout << "A,B,C,D: " << A << ',' << B  << ',' << C << ',' << D << G4endl;
+            
+            // Sample delta phi
+            G4double deltaPhi;
+            const G4int maxCount = 999999;
+            G4int iCount = 0;
+            for (; iCount < maxCount; ++iCount) {
+              deltaPhi = twopi * G4UniformRand();
+              if (G4UniformRand() < C + D * cos(2.*deltaPhi)) break;
+            }
+            if (iCount >= maxCount ) {
+              G4cout << "G4LivermorePolarizedComptonModel::SampleSecondaries: "
+              << "Re-sampled delta phi not found in " << maxCount
+              << " tries - carrying on anyway." << G4endl;
+            }
+            
+            // Thus, the desired second photon azimuth
+            phi2 = deltaPhi - phi1 + halfpi;
+            // The minus sign is in above statement because, since the two
+            // annihilation photons are in opposite directions, their phi's
+            // are measured in the opposite direction.
+            // halfpi is added for the following reason:
+            // In this function phi is relative to the polarisation - see
+            // SystemOfRefChange below. We know from G4eplusAnnihilation that
+            // the polarisations of the two annihilation photons are perpendicular
+            // to each other, i.e., halfpi different.
+            // Furthermore, only sin(phi) and cos(phi) are used below so no
+            // need to place any range constraints.
+            //            if (phi2 > pi) {
+            //              phi2 -= twopi;
+            //            }
+            //            if (phi2 < -pi) {
+            //              phi2 += twopi;
+            //            }
+          }
+        }
+      }
+    }
+  }
+  
+  // End of entanglement
       
   G4double dirx = sinTheta*std::cos(phi);
   G4double diry = sinTheta*std::sin(phi);
   G4double dirz = cosTheta ;
-  
-
+ 
   // oneCosT , eom
 
   // Doppler broadening -  Method based on:
@@ -481,7 +614,6 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   // NIM A 349, pp. 489-494, 1994
   
   // Maximum number of sampling iterations
-
   static G4int maxDopplerIterations = 1000;
   G4double bindingE = 0.;
   G4double photonEoriginal = epsilon * gammaEnergy0;
@@ -535,8 +667,6 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
 	}
    } while ( iteration <= maxDopplerIterations && 
 	     (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
-  //while (iteration <= maxDopplerIterations && photonE > eMax); ???
-
 
   // End of recalculation of photon energy with Doppler broadening
   // Revert to original if maximum number of iterations threshold has been reached
@@ -551,14 +681,7 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   //
   // update G4VParticleChange for the scattered photon 
   //
-
-
-
-  //  gammaEnergy1 = epsilon*gammaEnergy0;
-
-
   // New polarization
-
   G4ThreeVector gammaPolarization1 = SetNewPolarization(epsilon,
 							sinThetaSqr,
 							phi,
@@ -569,7 +692,6 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   gammaDirection1 = tmpDirection1;
 
   // Change reference frame.
-
   SystemOfRefChange(gammaDirection0,gammaDirection1,
 		    gammaPolarization0,gammaPolarization1);
 
@@ -589,7 +711,6 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   //
   // kinematic of the scattered electron
   //
-
   G4double ElecKineEnergy = gammaEnergy0 - gammaEnergy1 -bindingE;
 
   // SI -protection against negative final energy: no e- is created
@@ -599,19 +720,17 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
     return;
   }
  
-  // SI - Removed range test
-  
   G4double ElecMomentum = std::sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
 
   G4ThreeVector ElecDirection((gammaEnergy0 * gammaDirection0 -
 				   gammaEnergy1 * gammaDirection1) * (1./ElecMomentum));
 
-  G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),ElecDirection.unit(),ElecKineEnergy) ;
+  G4DynamicParticle* dp = 
+    new G4DynamicParticle (G4Electron::Electron(),ElecDirection.unit(),ElecKineEnergy) ;
   fvect->push_back(dp);
 
   // sample deexcitation
-  //
-  
+  //  
   if (verboseLevel > 3) {
     G4cout << "Started atomic de-excitation " << fAtomDeexcitation << G4endl;
   }
@@ -674,9 +793,6 @@ G4double G4LivermorePolarizedComptonModel::SetPhi(G4double energyRate,
       b = energyRate + 1/energyRate;
       
       phiProbability = 1 - (a/b)*(std::cos(phi)*std::cos(phi));
-
-      
- 
     }
   while ( rand2 > phiProbability );
   return phi;
@@ -722,7 +838,6 @@ G4ThreeVector G4LivermorePolarizedComptonModel::GetRandomPolarization(G4ThreeVec
   G4ThreeVector c0 = c.unit();
 
   return c0;
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -730,7 +845,6 @@ G4ThreeVector G4LivermorePolarizedComptonModel::GetRandomPolarization(G4ThreeVec
 G4ThreeVector G4LivermorePolarizedComptonModel::GetPerpendicularPolarization
 (const G4ThreeVector& gammaDirection, const G4ThreeVector& gammaPolarization) const
 {
-
   // 
   // The polarization of a photon is always perpendicular to its momentum direction.
   // Therefore this function removes those vector component of gammaPolarization, which
@@ -761,40 +875,10 @@ G4ThreeVector G4LivermorePolarizedComptonModel::SetNewPolarization(G4double epsi
   //  G4double sinsqrphi = sinPhi*sinPhi;
   G4double normalisation = std::sqrt(1. - cosSqrPhi*sinSqrTh);
  
-
   // Determination of Theta 
-  
-  // ---- MGP ---- Commented out the following 3 lines to avoid compilation 
-  // warnings (unused variables)
-  // G4double thetaProbability;
   G4double theta;
-  // G4double a, b;
-  // G4double cosTheta;
-
-  /*
-
-  depaola method
-  
-  do
-  {
-      rand1 = G4UniformRand();
-      rand2 = G4UniformRand();
-      thetaProbability=0.;
-      theta = twopi*rand1;
-      a = 4*normalisation*normalisation;
-      b = (epsilon + 1/epsilon) - 2;
-      thetaProbability = (b + a*std::cos(theta)*std::cos(theta))/(a+b);
-      cosTheta = std::cos(theta);
-    }
-  while ( rand2 > thetaProbability );
-  
-  G4double cosBeta = cosTheta;
-
-  */
-
 
   // Dan Xu method (IEEE TNS, 52, 1160 (2005))
-
   rand1 = G4UniformRand();
   rand2 = G4UniformRand();
 
@@ -833,7 +917,6 @@ G4ThreeVector G4LivermorePolarizedComptonModel::SetNewPolarization(G4double epsi
   gammaPolarization1.setZ(zTotal);
   
   return gammaPolarization1;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -867,16 +950,11 @@ void G4LivermorePolarizedComptonModel::SystemOfRefChange(G4ThreeVector& directio
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex LivermorePolarizedComptonModelMutex = G4MUTEX_INITIALIZER; }
-
 void 
 G4LivermorePolarizedComptonModel::InitialiseForElement(const G4ParticleDefinition*, 
 					      G4int Z)
 {
   G4AutoLock l(&LivermorePolarizedComptonModelMutex);
-  //  G4cout << "G4LivermoreComptonModel::InitialiseForElement Z= " 
-  //   << Z << G4endl;
   if(!data[Z]) { ReadData(Z); }
   l.unlock();
 }

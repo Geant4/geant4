@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4coutFormatters
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 header file 
-//
-// Class Description:
+// Description:
 //
 // Utilities to handle transformations of cout/cerr streams
 
@@ -38,15 +34,15 @@
 // Author: A.Dotti (SLAC), April 2017
 // --------------------------------------------------------------------
 #ifndef G4COUTFORMATTERS_HH
-#define G4COUTFORMATTERS_HH
+#define G4COUTFORMATTERS_HH 1
 
 #include <algorithm>
-#include <sstream>
-#include <vector>
 #include <ctime>
-#include <iomanip>
 #include <functional>
+#include <iomanip>
+#include <sstream>
 #include <unordered_map>
+#include <vector>
 
 #include "G4String.hh"
 #include "G4ios.hh"
@@ -57,10 +53,11 @@ namespace G4coutFormatters
   // Static definitions of provided formatters
   namespace ID
   {
-    static const G4String SYSLOG = "syslog";
-    static const G4String DEFAULT= "default";
-  }
+    static const G4String SYSLOG  = "syslog";
+    static const G4String DEFAULT = "default";
+  }  // namespace ID
 
+  using SetupStyle_f = std::function<G4int(G4coutDestination*)>;
   // A function that set ups a style for the destination
   // Example for a style that set to all capital the messages
   // to G4cerr:
@@ -71,27 +68,26 @@ namespace G4coutFormatters
   //                            return true; }
   //                    );
   //            };
-  using SetupStyle_f = std::function<G4int(G4coutDestination*)>;
 
-  using String_V=std::vector<G4String>;
+  using String_V = std::vector<G4String>;
 
-  // Return list of formatter names
   String_V Names();
+  // Return list of formatter names
 
+  G4int HandleStyle(G4coutDestination* dest, const G4String& style);
   // Setup style (by name) to destination
-  G4int HandleStyle( G4coutDestination* dest , const G4String& style );
 
-  // Set name of the style for the master thread
-  void SetMasterStyle(const G4String& );
+  void SetMasterStyle(const G4String&);
   G4String GetMasterStyle();
+  // Set/get name of the style for the master thread
 
+  void SetupStyleGlobally(const G4String& news);
   // This function should be called in user application main function
   // to setup the style just after setting up RunManager
-  void SetupStyleGlobally(const G4String& news);
 
+  void RegisterNewStyle(const G4String& name, SetupStyle_f& formatter);
   // To be used by user to register by name a new formatter.
   // So it can be used via one of the previous functions
-  void RegisterNewStyle( const G4String& name , SetupStyle_f& formatter);
-}
+}  // namespace G4coutFormatters
 
-#endif // G4COUTFORMATTERS_HH
+#endif

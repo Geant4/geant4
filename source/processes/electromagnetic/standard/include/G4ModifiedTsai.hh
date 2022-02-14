@@ -66,29 +66,29 @@ public:
 
   explicit G4ModifiedTsai(const G4String& name = "");
 
-  virtual ~G4ModifiedTsai();
+  ~G4ModifiedTsai() override;
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double out_energy, G4int Z,
-                                         const G4Material* mat = nullptr) final;
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double out_energy, G4int Z,
+				 const G4Material* mat = nullptr) final;
 
-  virtual void SamplePairDirections(const G4DynamicParticle* dp,
-				    G4double elecKinEnergy,
-				    G4double posiKinEnergy,
-				    G4ThreeVector& dirElectron,
-				    G4ThreeVector& dirPositron,
-				    G4int Z = 0,
-				    const G4Material* mat = nullptr) final;
+  void SamplePairDirections(const G4DynamicParticle* dp,
+			    G4double elecKinEnergy,
+			    G4double posiKinEnergy,
+			    G4ThreeVector& dirElectron,
+			    G4ThreeVector& dirPositron,
+			    G4int Z = 0,
+			    const G4Material* mat = nullptr) final;
 
-  virtual void PrintGeneratorInformation() const final;
-
-private:
-
-  G4double SampleCosTheta(G4double kinEnergy);
+  void PrintGeneratorInformation() const final;
 
   // hide assignment operator 
   G4ModifiedTsai & operator=(const  G4ModifiedTsai &right) = delete;
   G4ModifiedTsai(const  G4ModifiedTsai&) = delete;
+
+private:
+
+  G4double SampleCosTheta(G4double kinEnergy);
 
 };
 

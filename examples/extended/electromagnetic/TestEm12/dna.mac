@@ -1,4 +1,9 @@
 #
+# Macro file for TestEm12
+#
+# limit the step size from histos 1 and 8
+#
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -21,5 +26,4 @@
 /testem/applyAutomaticStepMax true
 #
 /run/printProgress 1000
-#
 /run/beamOn 5000

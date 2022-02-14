@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-project(analysis)
+cmake_minimum_required(VERSION 3.16...3.21)
+project(GB06project)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, no UI and Vis drivers activated

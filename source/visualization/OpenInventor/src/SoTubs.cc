@@ -34,8 +34,6 @@
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodes/SoTubs.h"
 
@@ -85,7 +83,11 @@ SoTubs::~SoTubs() {
 // initClass
 void SoTubs::initClass(){
   // This statement is required.
-  SO_NODE_INIT_CLASS(SoTubs,SoShape,"Shape");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(SoTubs,SoShape,"Shape");
+  }
 }
 
 // generatePrimitives
@@ -467,5 +469,3 @@ void SoTubs::generateAlternateRep() {
 void SoTubs::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

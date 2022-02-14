@@ -44,30 +44,20 @@
 #include "G4Fancy3DNucleus.hh"
 #include "G4Proton.hh"
 #include "G4NucleiProperties.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4LowEIonFragmentation::G4LowEIonFragmentation(G4ExcitationHandler * const value) 
+  : G4HadronicInteraction("LowEIonPreco")
 {
   theHandler = value;
   theModel = new G4PreCompoundModel(theHandler);
   proton = G4Proton::Proton();
-  hits = 0;
-  totalTries = 1;
-  area = 0.0;
-}
-
-G4LowEIonFragmentation::G4LowEIonFragmentation() 
-{
-  theHandler = new G4ExcitationHandler;
-  theModel = new G4PreCompoundModel(theHandler);
-  proton = G4Proton::Proton();
-  hits = 0;
-  totalTries = 1;
-  area = 0.0;
+  secID = G4PhysicsModelCatalog::GetModelID("model_" + GetModelName());
 }
 
 G4LowEIonFragmentation::~G4LowEIonFragmentation() 
 {
-  delete theModel;
+  theResult.Clear();
 }
 
 G4HadFinalState * G4LowEIonFragmentation::
@@ -85,7 +75,8 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
 
   // Get Projectile A, Z
   G4int aProjectileA = thePrimary.GetDefinition()->GetBaryonNumber();
-  G4int aProjectileZ = G4lrint(thePrimary.GetDefinition()->GetPDGCharge()/eplus);
+  G4int aProjectileZ = 
+    G4lrint(thePrimary.GetDefinition()->GetPDGCharge()/eplus);
 
   // Get Maximum radius of both
   
@@ -116,7 +107,8 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
     }
     // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     while(x*x + y*y > 1);
-    impactParameter = std::sqrt(x*x+y*y)*(targetOuterRadius+projectileOuterRadius);
+    impactParameter = std::sqrt(x*x+y*y)*
+      (targetOuterRadius+projectileOuterRadius);
     ++totalTries;
     area = pi*(targetOuterRadius+projectileOuterRadius)*
               (targetOuterRadius+projectileOuterRadius);
@@ -179,7 +171,6 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
 			    aTargetZ+chargedFromProjectile,
   			    fragment4Momentum);
   // M.A. Cortes fix
-  //anInitialState.SetNumberOfParticles(particlesFromProjectile);
   anInitialState.SetNumberOfExcitedParticle(particlesFromProjectile
 					    + particlesFromTarget,
 					    chargedFromProjectile 
@@ -188,16 +179,17 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
 				  chargedFromProjectile + chargedFromTarget);
   G4double time = thePrimary.GetGlobalTime();
   anInitialState.SetCreationTime(time);
+  anInitialState.SetCreatorModelID(secID);
 
   // Fragment the Fragment using Pre-compound
   G4ReactionProductVector* thePreCompoundResult = 
     theModel->DeExcite(anInitialState);
   
   // De-excite the projectile using ExcitationHandler
-  G4ReactionProductVector * theExcitationResult = 0; 
+  G4ReactionProductVector * theExcitationResult = nullptr;
   if(particlesFromProjectile < aProjectileA)
   {
-    G4LorentzVector residual4Momentum(momentum*(1.0-w), projTotEnergy*(1.0-w));  
+    G4LorentzVector residual4Momentum(momentum*(1.0-w), projTotEnergy*(1.0-w));
  
     G4Fragment initialState2(aProjectileA-particlesFromProjectile,
 			     aProjectileZ-chargedFromProjectile,
@@ -210,32 +202,32 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
     initialState2.SetNumberOfExcitedParticle(pinit,cinit);
     initialState2.SetNumberOfHoles(pinit,cinit);
     initialState2.SetCreationTime(time);
+    initialState2.SetCreatorModelID(secID);
 
     theExcitationResult = theHandler->BreakItUp(initialState2);
   }
 
   // Fill the particle change and clear intermediate vectors
-  G4int nexc = 0;
-  G4int npre = 0;
-  if(theExcitationResult)  { nexc = theExcitationResult->size(); }
-  if(thePreCompoundResult) { npre = thePreCompoundResult->size();}
+  G4int nexc = (nullptr != theExcitationResult) ? 
+    theExcitationResult->size() : 0;
+  G4int npre = (nullptr != thePreCompoundResult) ?
+    thePreCompoundResult->size() : 0;
   
-  if(nexc > 0) {
-    for(G4int k=0; k<nexc; ++k) {
-      G4ReactionProduct* p = (*theExcitationResult)[k];
-      theResult.AddSecondary(new G4DynamicParticle(p->GetDefinition(),
-						   p->GetMomentum()));
-      delete p;
-    }
+  for(G4int k=0; k<nexc; ++k) {
+    G4ReactionProduct* p = (*theExcitationResult)[k];
+    G4HadSecondary secondary(new G4DynamicParticle(p->GetDefinition(), p->GetMomentum()));
+    secondary.SetTime(p->GetTOF());
+    secondary.SetCreatorModelID(secID);
+    theResult.AddSecondary(secondary);
+    delete p;
   }
-  
-  if(npre > 0) {
-    for(G4int k=0; k<npre; ++k) {
-      G4ReactionProduct* p = (*thePreCompoundResult)[k];
-      theResult.AddSecondary(new G4DynamicParticle(p->GetDefinition(),
-						   p->GetMomentum()));
-      delete p;
-    }
+  for(G4int k=0; k<npre; ++k) {
+    G4ReactionProduct* p = (*thePreCompoundResult)[k];
+    G4HadSecondary secondary(new G4DynamicParticle(p->GetDefinition(), p->GetMomentum()));
+    secondary.SetTime(p->GetTOF());
+    secondary.SetCreatorModelID(secID);
+    theResult.AddSecondary(secondary);
+    delete p;
   }
   
   delete thePreCompoundResult;

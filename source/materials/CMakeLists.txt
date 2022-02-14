@@ -1,19 +1,3 @@
-#------------------------------------------------------------------------------
-# CMakeLists.txt
-# Module : G4materials
-# Package: Geant4.src.G4materials
-#
-# CMakeLists.txt for single level library that may be build global or granular
-#
-# Generated on : 24/9/2010
-#
-#
-#------------------------------------------------------------------------------
+# - G4materials category build(s)
 
-include(Geant4MacroLibraryTargets)
-if(GEANT4_BUILD_GRANULAR_LIBS)
-    GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
-else()
-    GEANT4_GLOBAL_LIBRARY_TARGET(COMPONENTS sources.cmake)
-endif()
-
+geant4_global_library_target(NAME G4materials COMPONENTS sources.cmake)

@@ -43,8 +43,8 @@ using namespace CLHEP;
 ////////////////////////////////////////////////////////////////////////
 //
 // Constructor (GEANT3 style parameters)
-//  
-G4UPolycone::G4UPolycone( const G4String& name, 
+//
+G4UPolycone::G4UPolycone( const G4String& name,
                               G4double phiStart,
                               G4double phiTotal,
                               G4int numZPlanes,
@@ -88,14 +88,14 @@ G4UPolycone::G4UPolycone( const G4String& name,
 //
 // Constructor (generic parameters)
 //
-G4UPolycone::G4UPolycone(const G4String& name, 
+G4UPolycone::G4UPolycone(const G4String& name,
                                G4double phiStart,
                                G4double phiTotal,
                                G4int    numRZ,
                          const G4double r[],
                          const G4double z[]   )
   : Base_t(name, phiStart, phiTotal, numRZ, r, z)
-{ 
+{
   fGenericPcon = true;
   SetOriginalParameters();
   wrStart = phiStart; while (wrStart < 0) wrStart += twopi;
@@ -157,7 +157,7 @@ G4UPolycone::G4UPolycone( const G4UPolycone& source )
 G4UPolycone& G4UPolycone::operator=( const G4UPolycone& source )
 {
   if (this == &source) return *this;
-  
+
   Base_t::operator=( source );
   fGenericPcon = source.fGenericPcon;
   fOriginalParameters = source.fOriginalParameters;
@@ -266,7 +266,7 @@ G4bool G4UPolycone::Reset()
     message << "Solid " << GetName() << " built using generic construct."
             << G4endl << "Not applicable to the generic construct !";
     G4Exception("G4UPolycone::Reset()", "GeomSolids1001",
-                JustWarning, message, "Parameters NOT resetted.");
+                JustWarning, message, "Parameters NOT reset.");
     return true;  // error code set
   }
 
@@ -563,14 +563,7 @@ G4bool G4UPolycone::CalculateExtent(const EAxis pAxis,
 //
 G4Polyhedron* G4UPolycone::CreatePolyhedron() const
 {
-  G4PolyhedronPcon*
-  polyhedron = new G4PolyhedronPcon( fOriginalParameters.Start_angle,
-                                     fOriginalParameters.Opening_angle,
-                                     fOriginalParameters.Num_z_planes,
-                                     fOriginalParameters.Z_values,
-                                     fOriginalParameters.Rmin,
-                                     fOriginalParameters.Rmax );
-  return polyhedron;
+  return new G4PolyhedronPcon(wrStart, wrDelta, rzcorners);
 }
 
 #endif  // G4GEOM_USE_USOLIDS

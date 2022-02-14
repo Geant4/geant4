@@ -48,10 +48,12 @@
 
 #include "globals.hh"
 #include <memory>
+#include <vector>
 
 class G4ITReactionTable;
 class G4ITReactionChange;
 class G4Track;
+class G4ITReactionSet;
 struct G4ITType;
 
 /**
@@ -79,6 +81,7 @@ public:
                                     double /*currentStepTime*/,
                                     bool /*reachedUserStepTimeLimit*/) = 0;
 
+    virtual std::vector<std::unique_ptr<G4ITReactionChange>> FindReaction(G4ITReactionSet*, const double, const double, const bool)=0;
     virtual std::unique_ptr<G4ITReactionChange> MakeReaction(const G4Track&, const G4Track&) = 0;
 
     virtual void SetReactionTable(const G4ITReactionTable*);

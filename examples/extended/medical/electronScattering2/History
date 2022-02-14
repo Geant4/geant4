@@ -17,8 +17,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-<<<<<<< HEAD
-=======
+
+12-02-21 V. Ivanchenko (exampleES2-V10-07-00)
+- Fixed README; cosmetic modifications in PhysicsList, removed warning
+
+10-11-20 B. Morgan (exampleES2-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 07-05-19 I. Hrivnacova (exampleES2-V10-05-00)
 - Fixed warning about "Attempting to add multiple times the same
   sensitive detector".
@@ -40,7 +45,7 @@ track of all tags.
 
 19 October 2015 Daren Sawkey       (exampleES2-V10-01-04)
 - Modify primary foil parameters by setting class variables and calling
-  G4RunManager [Physics/Geometry]HasBeenModified. 
+  G4RunManager [Physics/Geometry]HasBeenModified.
 
 21 July 2015 Daren Sawkey          (exampleES2-V10-01-03)
 - add physics list G4EmStandardGS to PhysicsList.cc
@@ -54,9 +59,9 @@ track of all tags.
 
 13 February 2015 Daren Sawkey      (exampleES2-V10-01-00)
 - Add macro commands to use more physics list constructors in Geant4 source
-- Rename local physics lists 
-- Add G4LossTableManager 
-  
+- Rename local physics lists
+- Add G4LossTableManager
+
 06 June 2014   Daren Sawkey        (exampleES2-V10-00-02)
 - extended example coding guidelines:
   - set cuts using G4UserPhysicsListMessenger command
@@ -120,19 +125,19 @@ track of all tags.
 
 4 September 2012, Ivana Hrivnacova (exampleES2-V09-05-05)
  - Added CMakeLists.txt:
- - Added .README  
-   
+ - Added .README
+
 20 April 2012, Joseph Perl
 - Apply coding guideline 2.1
-     
+
 19 April 2012, Joseph Perl
 - Correct area calculation in ElectronRun
 - Apply new examples coding guidelines
 
 09-02-12 V.Ivanchenko (exampleES2-V09-05-04)
 - PhysListEmStandardSS, PhysListEmStandardWVI - more correct order
-    and fixed initialisation        
-     
+    and fixed initialisation
+
 29 October 2011, Joseph Perl (exampleES2-V09-04-03)
 - Updated PhysListEmStandard.cc to match version in electronScattering
 
@@ -153,9 +158,9 @@ track of all tags.
 
 4th June 2010, Joseph Perl (exampleES2-V09-03-00)
 - Updated vis usage.
- 
+
 9th December 2009, Joseph Perl (exampleES2-V09-02-01)
 - Correct density for C, Cu and Au.
- 
+
 3rd December 2009, Joseph Perl (exampleES2-V09-02-00)
 - Introducing this example.

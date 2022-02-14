@@ -1,14 +1,3 @@
-# add teting
-
-add_test(gtest04 python test.py)
-
-if (${PYTHON_VERSION_MAJOR} MATCHES "2")
-  configure_file(test.py test.py)
-elseif (${PYTHON_VERSION_MAJOR} MATCHES "3")
-  configure_file(python3/test.py test.py)
-endif()
-
-set_property(TEST gtest04
-             PROPERTY ENVIRONMENT
-             PYTHONPATH=./module:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
-           )
+configure_file(test.py test.py)
+add_test(NAME geant4py-test04 COMMAND ${PYTHON_EXECUTABLE} test.py)
+set_tests_properties(geant4py-test04 PROPERTIES ENVIRONMENT "PYTHONPATH=${GEANT4_PYTHON_OUTPUT_DIR};${GEANT4_TEST_ENVIRONMENT}")

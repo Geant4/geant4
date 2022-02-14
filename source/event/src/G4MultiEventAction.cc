@@ -23,17 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MultiEventAction class implementation
 //
-//
-//---------------------------------------------------------------
-//
-// G4MultiEventAction.cc
-//
-//   Created on: Jan 17, 2016
-//       Author: adotti
-//
-// ---------------------------------------------------------------
-//
+// Author: Andrea Dotti, SLAC - 17.01.2016
+// --------------------------------------------------------------------
 
 #include "G4MultiEventAction.hh"
 #include <algorithm>
@@ -58,4 +51,3 @@ void G4MultiEventAction::EndOfEventAction(const G4Event* evt)
       [evt](G4UserEventActionUPtr& e) { e->EndOfEventAction(evt); }
   );
 }
-

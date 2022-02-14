@@ -23,59 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4GaussJacobiQ
 //
 // Class description:
 //
 // Roots of ortogonal polynoms and corresponding weights are calculated based on
 // iteration method (by bisection Newton algorithm). Constant values for initial
-// approximations were derived from the book: M. Abramowitz, I. Stegun, Handbook
-// of mathematical functions, DOVER Publications INC, New York 1965 ; chapters 9,
-// 10, and 22 .
-//
-// ---------------------------------------------------------------------------
-//
-// Constructor for Gauss-Jacobi integration method. 
-//
-// G4GaussJacobiQ( function pFunction,
-//                 G4double alpha,
-//                 G4double beta, 
-//		   G4int nJacobi   ) 
-//
-// ----------------------------------------------------------------------------
-//
-// Gauss-Jacobi method for integration of ((1-x)^alpha)*((1+x)^beta)*pFunction(x)
-// from minus unit to plus unit .
-//
-// G4double Integral() const
+// approximations were derived from the book:
+//   M. Abramowitz, I. Stegun, Handbook of mathematical functions,
+//   DOVER Publications INC, New York 1965 ; chapters 9, 10, and 22.
 
-// ------------------------------- HISTORY -------------------------------------
-//
-// 13.05.97 V.Grichine (Vladimir.Grichine@cern.chz0
-
+// Author: V.Grichine, 13.05.1997
+// --------------------------------------------------------------------
 #ifndef G4GAUSSJACOBIQ_HH
-#define G4GAUSSJACOBIQ_HH
+#define G4GAUSSJACOBIQ_HH 1
 
 #include "G4VGaussianQuadrature.hh"
 
 class G4GaussJacobiQ : public G4VGaussianQuadrature
 {
-public:
-        // Constructor
+ public:
+  G4GaussJacobiQ(function pFunction, G4double alpha, G4double beta,
+                 G4int nJacobi);
+  // Constructor for Gauss-Jacobi integration method.
 
-        G4GaussJacobiQ( function pFunction, 
-	                G4double alpha,
-	                G4double beta,
-	                G4int nJacobi         ) ;
-			       
-        // Methods
-			     
-        G4double Integral() const ;
+  G4GaussJacobiQ(const G4GaussJacobiQ&) = delete;
+  G4GaussJacobiQ& operator=(const G4GaussJacobiQ&) = delete;
 
-private:
-
-	G4GaussJacobiQ(const G4GaussJacobiQ&);
-	G4GaussJacobiQ& operator=(const G4GaussJacobiQ&);
+  G4double Integral() const;
+  // Gauss-Jacobi method for integration of
+  // ((1-x)^alpha)*((1+x)^beta)*pFunction(x) from minus unit to plus unit.
 };
 
 #endif

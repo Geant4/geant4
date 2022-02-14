@@ -4,13 +4,12 @@
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 # Macro file for "exampleN03.cc"
-# (can be run in batch, without graphic)
 #
 # Lead-liquidArgon 50 layers; electron 1 GeV
 #
 /control/verbose 2
 /control/cout/ignoreThreadsExcept 0
-/run/verbose 2
+/run/verbose 1
 #
 /testem/phys/addPhysics  emstandard_opt0
 #
@@ -30,7 +29,6 @@
 ###/analysis/h1/set 22 102  0.   102. none	#lateral energy leakage
 #
 /run/printProgress 50
-#
 /run/beamOn 100
 #
 /process/em/setSecBiasing eIoni World 0.3 2 MeV

@@ -31,37 +31,22 @@
 #include "G4AnalysisUtilities.hh"
 #include "globals.hh"
 
+using namespace G4Analysis;
+using std::to_string;
+
 //_____________________________________________________________________________
 G4PlotParameters::G4PlotParameters()
  : fMessenger(nullptr),
-   fDefaultColumns(1),
-   fDefaultRows   (2), 
 #if defined(TOOLS_USE_FREETYPE)
-   //Have vertical A4 :
-   fDefaultWidth(2000), 
-   fDefaultHeight((G4int)(29.7f/21.0f*fDefaultWidth)),
    fDefaultStyle("ROOT_default"),
-   fDefaultScale(0.9f),
-   fMaxColumns(3),
-   fMaxRows   (5),
-   fAvailableStyles("ROOT_default hippodrow inlib_default"), 
+   fAvailableStyles("ROOT_default hippodrow inlib_default"),
 #else
-   fDefaultWidth (700),
-   fDefaultHeight((G4int)(29.7f/21.0f*fDefaultWidth)),
    fDefaultStyle("inlib_default"),
-   fDefaultScale(0.9f),
-   fMaxColumns(2),
-   fMaxRows   (3),
    fAvailableStyles("inlib_default"),
 #endif
-   fColumns(fDefaultColumns), 
-   fRows(fDefaultRows), 
-   fWidth(fDefaultWidth), 
-   fHeight(fDefaultHeight),
-   fScale(fDefaultScale),
    fStyle(fDefaultStyle)
 {
-   fMessenger = G4Analysis::make_unique<G4PlotMessenger>(this);
+   fMessenger = std::make_unique<G4PlotMessenger>(this);
 }
 
 //
@@ -72,17 +57,14 @@ G4PlotParameters::G4PlotParameters()
 void G4PlotParameters::SetLayout(G4int columns, G4int rows)
 {
   if ( columns > rows ||
-       columns < 1 || columns > fMaxColumns || 
-       rows < 1 || rows > fMaxRows ) {
-    G4ExceptionDescription description;
-    description 
-      << "Layout: " << columns << " x " << rows << " was ignored." << G4endl
-      << "Supported layouts: " << G4endl
-      << "  columns <= rows" << G4endl
-      << "  columns = 1 .. " << fMaxColumns << G4endl
-      << "  rows    = 1 .. " << fMaxRows << G4endl;
-    G4Exception("G4PlotParameters::SetLayout",
-                "Analysis_W013", JustWarning, description);
+       columns < 1 || columns > fkMaxColumns ||
+       rows < 1 || rows > fkMaxRows ) {
+    Warn("Layout: " + to_string(columns) + " x " + to_string(rows) +
+         " was ignored.\n"
+         "Supported layouts (columns <= rows): \n" +
+         " columns = 1 .. " + to_string(fkMaxColumns) + "\n" +
+         " rows    = 1 .. " + to_string(fkMaxRows),
+         fkClass, "SetLayout");
     return;
   }
   fColumns = columns;
@@ -90,9 +72,9 @@ void G4PlotParameters::SetLayout(G4int columns, G4int rows)
 }
 
 //_____________________________________________________________________________
-void G4PlotParameters::SetDimensions(G4int width, G4int height) 
-{ 
-  fWidth = width; 
+void G4PlotParameters::SetDimensions(G4int width, G4int height)
+{
+  fWidth = width;
   fHeight = height;
 }
 
@@ -102,20 +84,17 @@ void G4PlotParameters::SetStyle(const G4String& style)
 // Set style and update scale according to the style selected
 
   if ( fAvailableStyles.find(style) == std::string::npos ) {
-    G4ExceptionDescription description;
-    description 
-      << "Style: " << style << " was ignored." << G4endl
-      << "Supported styles: " << fAvailableStyles << G4endl;
-    G4Exception("G4PlotParameters::SetLayout",
-                "Analysis_W013", JustWarning, description);
+    Warn("Style: " + style + " was ignored.\n" +
+         "Supported styles: " + fAvailableStyles,
+         fkClass, "SetStyle");
     return;
   }
 
   fStyle = style;
 
   if ( fStyle == "ROOT_default" ) {
-    fScale = fDefaultScale;
+    fScale = fkDefaultScale;
   } else {
-    fScale = 1.f;		
+    fScale = 1.f;
   }
 }

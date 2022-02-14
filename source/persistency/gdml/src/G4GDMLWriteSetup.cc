@@ -23,39 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GDMLWriteSetup implementation
 //
-//
-// class G4GDMLWriteSetup Implementation
-//
-// Original author: Zoltan Torzsok, November 2007
-//
+// Author: Zoltan Torzsok, November 2007
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteSetup.hh"
 
 #include "G4LogicalVolume.hh"
 
-G4GDMLWriteSetup::G4GDMLWriteSetup() : G4GDMLWriteSolids()
+// --------------------------------------------------------------------
+G4GDMLWriteSetup::G4GDMLWriteSetup()
+  : G4GDMLWriteSolids()
 {
 }
 
+// --------------------------------------------------------------------
 G4GDMLWriteSetup::~G4GDMLWriteSetup()
 {
 }
 
+// --------------------------------------------------------------------
 void G4GDMLWriteSetup::SetupWrite(xercesc::DOMElement* gdmlElement,
                                   const G4LogicalVolume* const logvol)
 {
 #ifdef G4VERBOSE
-   G4cout << "G4GDML: Writing setup..." << G4endl;
+  G4cout << "G4GDML: Writing setup..." << G4endl;
 #endif
-   const G4String worldref = GenerateName(logvol->GetName(),logvol);
+  const G4String worldref = GenerateName(logvol->GetName(), logvol);
 
-   xercesc::DOMElement* setupElement = NewElement("setup");
-   setupElement->setAttributeNode(NewAttribute("version","1.0"));
-   setupElement->setAttributeNode(NewAttribute("name","Default"));
-   xercesc::DOMElement* worldElement = NewElement("world");
-   worldElement->setAttributeNode(NewAttribute("ref",worldref));
-   setupElement->appendChild(worldElement);
-   gdmlElement->appendChild(setupElement);
+  xercesc::DOMElement* setupElement = NewElement("setup");
+  setupElement->setAttributeNode(NewAttribute("version", "1.0"));
+  setupElement->setAttributeNode(NewAttribute("name", "Default"));
+  xercesc::DOMElement* worldElement = NewElement("world");
+  worldElement->setAttributeNode(NewAttribute("ref", worldref));
+  setupElement->appendChild(worldElement);
+  gdmlElement->appendChild(setupElement);
 }

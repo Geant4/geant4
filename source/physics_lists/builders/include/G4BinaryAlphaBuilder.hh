@@ -41,9 +41,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4AlphaInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VAlphaBuilder.hh"
 
 #include "G4BinaryCascade.hh"   
@@ -54,9 +52,8 @@ class G4BinaryAlphaBuilder : public G4VAlphaBuilder
     G4BinaryAlphaBuilder();
     virtual ~G4BinaryAlphaBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4AlphaInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess * ) final override {};
+    virtual void Build(G4HadronInelasticProcess * aP) final override ;
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
     void SetMaxEnergy(G4double aM) {theMax = aM;}

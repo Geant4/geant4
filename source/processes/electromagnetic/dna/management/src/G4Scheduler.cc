@@ -91,7 +91,7 @@ using namespace std;
 G4ThreadLocal G4Scheduler* G4Scheduler::fgScheduler(0);
 
 template<typename T>
-  inline bool IsInf(T value)
+  inline G4bool IsInf(T value)
   {
     return std::numeric_limits<T>::has_infinity
         && value == std::numeric_limits<T>::infinity();
@@ -156,7 +156,7 @@ void G4Scheduler::Create()
   fPreviousTimeStep = DBL_MAX;
 
   fZeroTimeCount = 0;
-  fMaxNZeroTimeStepsAllowed = 10;
+  fMaxNZeroTimeStepsAllowed = 10000;
 
   fStartTime = 0;
   fTimeTolerance = 1 * picosecond;
@@ -191,6 +191,9 @@ void G4Scheduler::Create()
 
   fReactionSet = G4ITReactionSet::Instance();
   fMaxTimeStep = DBL_MAX;
+
+  //hoang add
+    fResetScavenger = true;//true by default
 
   G4ITTypeManager::Instance()->ReserveRessource();
 }
@@ -271,7 +274,7 @@ void G4Scheduler::ClearList()
 }
 
 //_________________________________________________________________________
-void G4Scheduler::RegisterModel(G4VITStepModel* model, double time)
+void G4Scheduler::RegisterModel(G4VITStepModel* model, G4double time)
 {
   fpModelHandler->RegisterModel(model, time);
 }
@@ -404,7 +407,18 @@ void G4Scheduler::Process()
   fRunning = true;
   Reset();
 
-  if (fpUserTimeStepAction) fpUserTimeStepAction->StartProcessing();
+    //hoang 7/12/2020
+
+    if(fResetScavenger) {
+        if (fpUserScavenger != nullptr) {
+            fpUserScavenger->Reset();
+        }
+    }
+
+  if (fpUserTimeStepAction)
+  {
+      fpUserTimeStepAction->StartProcessing();
+  }
 
 #ifdef G4VERBOSE
   G4bool trackFound = false;
@@ -483,9 +497,9 @@ void G4Scheduler::Process()
 
 //_________________________________________________________________________
 
-double G4Scheduler::GetNextWatchedTime() const
+G4double G4Scheduler::GetNextWatchedTime() const
 {
-  std::set<double>::const_iterator up = fWatchedTimes.upper_bound(fGlobalTime);
+  std::set<G4double>::const_iterator up = fWatchedTimes.upper_bound(fGlobalTime);
   if(up == fWatchedTimes.end()) return DBL_MAX;
   return *up;
 }
@@ -519,8 +533,8 @@ void G4Scheduler::SynchronizeTracks()
   fGlobalTime = fTrackContainer.GetNextTime();
   G4double tmpGlobalTime = fGlobalTime;
 
-  double nextWatchedTime = -1;
-  bool carryOn = true;
+  G4double nextWatchedTime = -1;
+  G4bool carryOn = true;
 
   while(fTrackContainer.MergeNextTimeToMainList(tmpGlobalTime) && carryOn)
   {
@@ -545,7 +559,7 @@ void G4Scheduler::SynchronizeTracks()
 
 //_________________________________________________________________________
 
-bool G4Scheduler::CanICarryOn()
+G4bool G4Scheduler::CanICarryOn()
 {
   return fGlobalTime < fEndTime && (fMaxSteps == -1 ? true : fNbSteps < fMaxSteps)
       && fContinue == true;
@@ -739,8 +753,7 @@ void G4Scheduler::Stepping()
   // Call IL even if fTSTimeStep == 0
   // if fILTimeStep == 0 give the priority to DoIt processes
 
-  fILTimeStep =
-    fpStepProcessor->ComputeInteractionLength(fPreviousTimeStep);
+  fILTimeStep = fpStepProcessor->ComputeInteractionLength(fPreviousTimeStep);
   // => at least N loops
   // All process returns the physical step of interaction
   // The transportation process calculates the corresponding
@@ -936,15 +949,15 @@ void G4Scheduler::Stepping()
 }
 //_________________________________________________________________________
 
-double G4Scheduler::GetLimitingTimeStep() const
+G4double G4Scheduler::GetLimitingTimeStep() const
 {
   if (fpUserTimeSteps == 0) return fDefaultMinTimeStep;
   if (fabs(fGlobalTime - fUserUpperTimeLimit) < fTimeTolerance)
     return fDefinedMinTimeStep;
 
-  map<double, double>::const_iterator it_fpUserTimeSteps_i = fpUserTimeSteps
+  map<G4double, G4double>::const_iterator it_fpUserTimeSteps_i = fpUserTimeSteps
       ->upper_bound(fGlobalTime);
-  map<double, double>::const_iterator it_fpUserTimeSteps_low = fpUserTimeSteps
+  map<G4double, G4double>::const_iterator it_fpUserTimeSteps_low = fpUserTimeSteps
       ->lower_bound(fGlobalTime);
 
   // DEBUG
@@ -969,7 +982,7 @@ double G4Scheduler::GetLimitingTimeStep() const
     // and fpUserTimeSteps_low->first = X picosecond
     // but the precision is not good enough
     it_fpUserTimeSteps_i = it_fpUserTimeSteps_low;
-    map<double, double>::const_iterator tmp_it = it_fpUserTimeSteps_low;
+    map<G4double, G4double>::const_iterator tmp_it = it_fpUserTimeSteps_low;
     ++tmp_it;
     if (tmp_it == fpUserTimeSteps->end())
     {
@@ -1016,9 +1029,9 @@ void G4Scheduler::FindUserPreDefinedTimeStep()
                 exceptionDescription);
     return; // makes coverity happy
   }
-  map<double, double>::iterator fpUserTimeSteps_i =
+  map<G4double, G4double>::iterator fpUserTimeSteps_i =
       fpUserTimeSteps->upper_bound(fGlobalTime);
-  map<double, double>::iterator fpUserTimeSteps_low = fpUserTimeSteps
+  map<G4double, G4double>::iterator fpUserTimeSteps_low = fpUserTimeSteps
       ->lower_bound(fGlobalTime);
 
   // DEBUG

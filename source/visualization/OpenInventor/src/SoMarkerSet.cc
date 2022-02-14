@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4VIS_BUILD_OI_DRIVER
 
 /*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */
@@ -630,7 +629,11 @@ void HEPVis_SoMarkerSet::initClass (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  SO_NODE_INIT_CLASS(HEPVis_SoMarkerSet,SoPointSet,"PointSet");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(HEPVis_SoMarkerSet,SoPointSet,"PointSet");
+  }
 }
 //////////////////////////////////////////////////////////////////////////////
 HEPVis_SoMarkerSet::HEPVis_SoMarkerSet (
@@ -787,5 +790,3 @@ GLubyte* getBitmap(
   }
   return bitmap; 
 }
-
-#endif

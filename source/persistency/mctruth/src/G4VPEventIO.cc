@@ -23,17 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VPEventIO.cc
+// G4VPEventIO implementation
 //
-// History:
-//   '01.08.10  Youhei Morita  Initial creation (with "fadsclass3")
+// Author: Youhei Morita, 10.08.2001
+// --------------------------------------------------------------------
 
 #include "G4VPEventIO.hh"
 
-// Implementation of Default Constructor
+// --------------------------------------------------------------------
 G4VPEventIO::G4VPEventIO()
- : m_verbose(0), m_currentEvtID(0)
 {
 }
-
-// End of G4VPEventIO.cc

@@ -41,9 +41,10 @@
 #include "G4EmStandardPhysics.hh"
 #include "PhysListEmPolarized.hh"
 
+#include "G4ProcessManager.hh"
+#include "StepMax.hh"
 #include "G4EmParameters.hh"
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4EmBuilder.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -70,26 +71,13 @@ PhysicsList::~PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Bosons
-#include "G4Gamma.hh"
-
-// leptons
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysicsList::ConstructParticle()
 {
-  G4Gamma::GammaDefinition();
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
+  // minimal set of particles for EM physics
+  G4EmBuilder::ConstructMinimalEmSet();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4EmProcessOptions.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -136,9 +124,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
-#include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
 {

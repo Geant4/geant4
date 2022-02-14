@@ -55,31 +55,32 @@ class G4Material;
 class G4PenelopeAnnihilationModel : public G4VEmModel 
 {
 public:
-  
-  G4PenelopeAnnihilationModel(const G4ParticleDefinition* p=0,
-			 const G4String& processName ="PenAnnih");
-  
+  explicit G4PenelopeAnnihilationModel(const G4ParticleDefinition* p=nullptr,
+				       const G4String& processName ="PenAnnih");
   virtual ~G4PenelopeAnnihilationModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-  virtual void InitialiseLocal(const G4ParticleDefinition*,
-                               G4VEmModel* );
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+  void InitialiseLocal(const G4ParticleDefinition*,
+                               G4VEmModel* ) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-					      G4double kinEnergy,
-					      G4double Z,
-					      G4double A=0,
-					      G4double cut=0,
-					      G4double emax=DBL_MAX);
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double kinEnergy,
+				      G4double Z,
+				      G4double A=0,
+				      G4double cut=0,
+				      G4double emax=DBL_MAX) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
   
-  void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
-  G4int GetVerbosityLevel(){return verboseLevel;};
+  void SetVerbosityLevel(G4int lev){fVerboseLevel = lev;};
+  G4int GetVerbosityLevel(){return fVerboseLevel;};
+  
+  G4PenelopeAnnihilationModel & operator=(const G4PenelopeAnnihilationModel &right) = delete;
+  G4PenelopeAnnihilationModel(const G4PenelopeAnnihilationModel&) = delete;
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
@@ -87,20 +88,16 @@ protected:
 
 private:
   G4double ComputeCrossSectionPerElectron(G4double energy);
-
-  G4PenelopeAnnihilationModel & operator=(const G4PenelopeAnnihilationModel &right);
-  G4PenelopeAnnihilationModel(const G4PenelopeAnnihilationModel&);
-
   void SetParticle(const G4ParticleDefinition*);
-
-  G4int verboseLevel;
-  G4bool isInitialised;
-
-  G4double fIntrinsicLowEnergyLimit;
-  G4double fIntrinsicHighEnergyLimit;
 
   //Stored here so it is not recalculated every time
   static G4double fPielr2;
+ 
+  G4double fIntrinsicLowEnergyLimit;
+  G4double fIntrinsicHighEnergyLimit;
+  
+  G4int fVerboseLevel;
+  G4bool fIsInitialised; 
 };
 
 #endif

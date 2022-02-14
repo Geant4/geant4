@@ -1,0 +1,90 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_vector3
+#define tools_rroot_vector3
+
+#include "../scast"
+#include "object"
+#include "cids"
+
+namespace tools {
+namespace rroot {
+
+class vector3 : public virtual iro {
+  typedef iro parent;
+private:
+  static const std::string& s_store_class() {
+    static const std::string s_v("TVector3");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::vector3");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<vector3>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+  virtual iro* copy() const {return new vector3(*this);}
+public:
+  static cid id_class() {return vector3_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<vector3>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  virtual bool stream(buffer& a_buffer) {
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    //printf("debug : tools::rroot::vector3::stream : version %d\n",v);
+
+   {uint32 id,bits;
+    if(!Object_stream(a_buffer,id,bits)) return false;}
+
+    if(!a_buffer.read(m_x)) return false;
+    if(!a_buffer.read(m_y)) return false;
+    if(!a_buffer.read(m_z)) return false;
+
+    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    return true;
+  }
+
+public:
+  vector3():m_x(0),m_y(0),m_z(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~vector3(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  vector3(const vector3& a_from)
+  :parent(a_from)
+  ,m_x(a_from.m_x),m_y(a_from.m_y),m_z(a_from.m_z)
+  {}
+  vector3& operator=(const vector3& a_from){
+    m_x = a_from.m_x;
+    m_y = a_from.m_y;
+    m_z = a_from.m_z;
+    return *this;
+  }
+public:
+  double x() const {return m_x;}
+  double y() const {return m_y;}
+  double z() const {return m_z;}
+private:
+  double m_x,m_y,m_z;
+};
+
+}}
+
+#endif

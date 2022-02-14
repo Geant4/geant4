@@ -23,35 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4StackingMessenger
 //
+// Class description:
 //
-
-#ifndef G4StackingMessenger_h
-#define G4StackingMessenger_h 1
-
-#include "G4UImessenger.hh"
-class G4StackManager;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger;
-
-// class description:
-//
-//  This is a concrete class of G4UImessenger which handles the commands
+// This is a concrete class of G4UImessenger which handles the commands
 // for G4StackManager. It has the following commands:
 //   /event/stack/
 //   /event/stack/status
 //   /event/stack/clear
 //   /event/stack/verbose
 
-class G4StackingMessenger: public G4UImessenger
+// Author: Makoto Asai, 1996
+// --------------------------------------------------------------------
+#ifndef G4StackingMessenger_hh
+#define G4StackingMessenger_hh 1
+
+#include "G4UImessenger.hh"
+
+class G4StackManager;
+class G4UIdirectory;
+class G4UIcmdWithoutParameter;
+class G4UIcmdWithAnInteger;
+
+class G4StackingMessenger : public G4UImessenger
 {
   public:
+
     G4StackingMessenger(G4StackManager* fCont);
-    ~G4StackingMessenger();
-    void SetNewValue(G4UIcommand * command,G4String newValues);
+   ~G4StackingMessenger();
+    void SetNewValue(G4UIcommand* command, G4String newValues);
+
   private:
-    G4StackManager * fContainer;
+
+    G4StackManager* fContainer = nullptr;
     G4UIdirectory* stackDir;
     G4UIcmdWithoutParameter* statusCmd;
     G4UIcmdWithAnInteger* clearCmd;

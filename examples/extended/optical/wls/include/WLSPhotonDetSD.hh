@@ -43,21 +43,19 @@ class G4HCofThisEvent;
 
 class WLSPhotonDetSD : public G4VSensitiveDetector
 {
-  public:
+ public:
+  WLSPhotonDetSD(G4String);
+  ~WLSPhotonDetSD();
 
-    WLSPhotonDetSD(G4String );
-    virtual ~WLSPhotonDetSD();
+  void Initialize(G4HCofThisEvent*) override;
 
-    virtual void Initialize(G4HCofThisEvent* );
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 
-    virtual G4bool ProcessHits(G4Step* , G4TouchableHistory* );
-    //A version of processHits that keeps aStep constant
-    G4bool ProcessHits_constStep(const G4Step* ,
-                                 G4TouchableHistory* );
+  void EndOfEvent(G4HCofThisEvent*) override;
 
-  private:
-
-    WLSPhotonDetHitsCollection* fPhotonDetHitCollection;
+ private:
+  WLSPhotonDetHitsCollection* fPhotonDetHitCollection;
+  G4int fHCID;
 };
 
 #endif

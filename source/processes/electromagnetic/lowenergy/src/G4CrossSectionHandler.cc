@@ -60,11 +60,17 @@
 
 #include "G4LogLogInterpolation.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4CrossSectionHandler::G4CrossSectionHandler()
 { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4CrossSectionHandler::~G4CrossSectionHandler()
 { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 std::vector<G4VEMDataSet*>*
 G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
@@ -108,7 +114,6 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
         log_energies = new G4DataVector;
         log_data = new G4DataVector;
 
-
         for (size_t bin=0; bin<nOfBins; bin++)
 	  {
 	    G4double e = energyVector[bin];
@@ -122,9 +127,6 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
 	  }
 
         G4VDataSetAlgorithm* algo1 = interpolationAlgo->Clone();
-
-//      G4VEMDataSet* elSet = new G4EMDataSet(i,energies,data,algo1,1.,1.);
-
         G4VEMDataSet* elSet = new G4EMDataSet(i,energies,data,log_energies,log_data,algo1,1.,1.);
 
         setForMat->AddComponent(elSet);

@@ -27,6 +27,7 @@
 // Author: Ivana Hrivnacova, 22/08/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4BinScheme.hh"
+#include "G4AnalysisUtilities.hh"
 
 namespace G4Analysis
 {
@@ -36,23 +37,20 @@ G4BinScheme GetBinScheme(const G4String& binSchemeName)
 {
   G4BinScheme binScheme = G4BinScheme::kLinear;
   if ( binSchemeName != "linear" ) {
-    if  ( binSchemeName == "log" )  
+    if  ( binSchemeName == "log" )
       binScheme = G4BinScheme::kLog;
     else {
       // There is no name associated with G4BinScheme::kUser
-      G4ExceptionDescription description;
-      description 
-        << "    \"" << binSchemeName << "\" binning scheme is not supported." << G4endl
-        << "    " << "Linear binning will be applied.";
-      G4Exception("G4Analysis::GetBinScheme",
-                "Analysis_W013", JustWarning, description);
-    }              
+      Warn("\"" + binSchemeName + "\" binning scheme is not supported.\n"
+           "Linear binning will be applied.",
+           kNamespaceName, "GetBinScheme");
+    }
   }
-  return binScheme;            
+  return binScheme;
 }
 
 //_____________________________________________________________________________
-void ComputeEdges(G4int nbins, G4double xmin, G4double xmax, 
+void ComputeEdges(G4int nbins, G4double xmin, G4double xmax,
                   G4double unit, G4Fcn fcn, G4BinScheme binScheme,
                   std::vector<G4double>& edges)
 {
@@ -69,10 +67,10 @@ void ComputeEdges(G4int nbins, G4double xmin, G4double xmax,
       edges.push_back(binValue);
       binValue += dx;
     }
-  }  
+  }
   else if ( binScheme == G4BinScheme::kLog ) {
-    // do not apply fcn 
-    auto dlog 
+    // do not apply fcn
+    auto dlog
       = (std::log10(xumax) - std::log10(xumin))/ nbins;
     auto dx = std::pow(10, dlog);
     auto binValue = xumin;
@@ -81,21 +79,18 @@ void ComputeEdges(G4int nbins, G4double xmin, G4double xmax,
       binValue *= dx;
     }
   }
-  else if ( binScheme == G4BinScheme::kUser ) {  
+  else if ( binScheme == G4BinScheme::kUser ) {
     // This should never happen, but let's make sure about it
     // by issuing a warning
-    G4ExceptionDescription description;
-    description 
-      << "    User binning scheme setting was ignored." << G4endl
-      << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
-    G4Exception("G4Analysis::ComputeEdges",
-              "Analysis_W013", JustWarning, description);
-  }              
-}                                          
+    Warn("User binning scheme setting was ignored.\n"
+         "Linear binning will be applied with given (nbins, xmin, xmax) values",
+         kNamespaceName, "GetBinScheme");
+  }
+}
 
 //_____________________________________________________________________________
-void ComputeEdges(const std::vector<G4double>& edges, 
-                  G4double unit, G4Fcn fcn, 
+void ComputeEdges(const std::vector<G4double>& edges,
+                  G4double unit, G4Fcn fcn,
                   std::vector<G4double>& newBins)
 {
 // Apply function to defined edges
@@ -104,5 +99,5 @@ void ComputeEdges(const std::vector<G4double>& edges,
     newBins.push_back(fcn(element/unit));
   }
 }
-    
+
 }

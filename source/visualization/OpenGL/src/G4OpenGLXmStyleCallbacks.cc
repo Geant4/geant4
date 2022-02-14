@@ -32,8 +32,6 @@
 //                       elements of the control panel to
 //                       determine how to visualize the view.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewer.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -296,6 +294,3 @@ void G4OpenGLXmViewer::projection_callback (Widget w,
   pView->ClearView ();
   pView->DrawView ();
 }  
-
-#endif
-

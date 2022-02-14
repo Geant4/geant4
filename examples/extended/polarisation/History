@@ -15,11 +15,26 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 29th, 2021 I. Hrivnacova (exPolarisation-V10-07-01)
+- Removed obsolete references to AIDA analysis tools
+
+May 24th, 2021,  B. Morgan (exPolarisation-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+November 10th, 2020 B. Morgan (exPolarisation-V10-06-01)
+- Enforce use of Serial RunManager for serial-only examples.
+
+November 10th, 2020 B. Morgan (exPolarisation-V10-06-00)
+- Migrate to G4RunManagerFactory.
+
+November 3rd, 2020 B. Morgan (exPolarisation-V10-06-00)
+- Support same CMake version range as core Geant4
+
 May 13th, 2015 Ivana Hrivnacova (exPolarisation-V10-01-00)
 - Fixed README file
 
 Apr 1st, 2013 Andrea Dotti (exPolarisation-V09-06-00)
-- New interfaces for G4MT 
+- New interfaces for G4MT
 
 Nov 23rd, 2012 Ivana Hrivnacova (exPolarisation-V09-05-02)
 - Updated documentation:
@@ -34,7 +49,7 @@ Sep 29th, 2012 Ivana Hrivnacova (exPolarisation-V09-05-01)
 
 Sep 24th, 2012  Ivana Hrivnacova (exPolarisation-V09-05-00)
 - Updated CMakeLists.txt files:
-  adding visualization, optional external package (AIDA), copying macros, 
-  install target and comment lines 
+  adding visualization, optional external package (AIDA), copying macros,
+  install target and comment lines
 - Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
-- Replaced tabulators with space characters  
+- Replaced tabulators with space characters

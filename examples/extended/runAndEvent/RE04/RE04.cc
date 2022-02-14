@@ -27,11 +27,9 @@
 /// \brief Main program of the runAndEvent/RE04 example
 //
 //
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4Types.hh"
+
+#include "G4RunManagerFactory.hh"
 #include "G4ScoringManager.hh"
 #include "G4UImanager.hh"
 
@@ -52,15 +50,15 @@
 
 int main(int argc,char** argv)
 {
- // Construct the run manager
- //
-#ifdef G4MULTITHREADED
- G4MTRunManager * runManager = new G4MTRunManager;
- //runManager->SetNumberOfThreads(4);
-#else
- G4RunManager * runManager = new G4RunManager;
-#endif
+ // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+ G4UIExecutive* ui = nullptr;
+ if ( argc == 1 ) {
+   ui = new G4UIExecutive(argc, argv);
+ }
 
+// Construct the run manager
+ auto* runManager = G4RunManagerFactory::CreateRunManager();
+ 
  G4ScoringManager::GetScoringManager();
 
  G4String paraWorldName = "ParallelWorld";

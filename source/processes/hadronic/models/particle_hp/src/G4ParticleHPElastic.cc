@@ -37,115 +37,104 @@
 #include "G4ParticleHPElasticFS.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4Threading.hh"
+#include "G4ParticleHPThermalBoost.hh"
 
-  G4ParticleHPElastic::G4ParticleHPElastic()
-    :G4HadronicInteraction("NeutronHPElastic")
-  ,theElastic(NULL)
-  ,numEle(0)
-  {
-    overrideSuspension = false;
-/*
-    G4ParticleHPElasticFS * theFS = new G4ParticleHPElasticFS;
-    if(!std::getenv("G4NEUTRONHPDATA")) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-    dirName = std::getenv("G4NEUTRONHPDATA");
-    G4String tString = "/Elastic";
-    dirName = dirName + tString;
-//    G4cout <<"G4ParticleHPElastic::G4ParticleHPElastic testit "<<dirName<<G4endl;
-    numEle = G4Element::GetNumberOfElements();
-    //theElastic = new G4ParticleHPChannel[numEle];
-    //for (G4int i=0; i<numEle; i++)
-    //{
-    //  theElastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
-    //  while(!theElastic[i].Register(theFS)) ;
-    //}
-    for ( G4int i = 0 ; i < numEle ; i++ ) 
-    {
-       theElastic.push_back( new G4ParticleHPChannel );
-       (*theElastic[i]).Init((*(G4Element::GetElementTable()))[i], dirName);
-       while(!(*theElastic[i]).Register(theFS)) ;
-    }
-    delete theFS;
-*/
-    SetMinEnergy(0.*eV);
-    SetMaxEnergy(20.*MeV);
-  }
-  
-  G4ParticleHPElastic::~G4ParticleHPElastic()
-  {
-     //delete [] theElastic;
-     if ( theElastic != NULL ) {
-        for ( std::vector<G4ParticleHPChannel*>::iterator 
-              it = theElastic->begin() ; it != theElastic->end() ; it++ ) {
-           delete *it;
-        }
-        theElastic->clear();
-     }
-  }
-  
-  #include "G4ParticleHPThermalBoost.hh"
-  
-  G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
-  {
 
-   //if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
+G4ParticleHPElastic::G4ParticleHPElastic() 
+  : G4HadronicInteraction("NeutronHPElastic"), theElastic(nullptr), numEle(0)
+{
+   overrideSuspension = false;
+   SetMinEnergy(0.*eV);
+   SetMaxEnergy(20.*MeV);
+}
 
-    G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
-    const G4Material * theMaterial = aTrack.GetMaterial();
-    G4int n = theMaterial->GetNumberOfElements();
-    G4int index = theMaterial->GetElement(0)->GetIndex();
-    if(n!=1)
-    {
+  
+G4ParticleHPElastic::~G4ParticleHPElastic()
+{
+   //the vectror is shared among threads, only master deletes
+   if ( ! G4Threading::IsWorkerThread() ) {
+      if ( theElastic != nullptr ) {
+         for ( std::vector<G4ParticleHPChannel*>::iterator
+            it = theElastic->begin() ; it != theElastic->end() ; it++ ) {
+            delete *it;
+         }
+         theElastic->clear();
+      }
+   }
+}
+
+
+G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus)
+{
+   return this->ApplyYourself(aTrack, aNucleus, 0);
+}
+  
+
+//--------------------------------------------------------
+// New method added by L. Thulliez (CEA-Saclay) 2021/05/04
+//--------------------------------------------------------
+G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus, G4bool isFromTSL)
+{
+   G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
+   const G4Material * theMaterial = aTrack.GetMaterial();
+   G4int n = theMaterial->GetNumberOfElements();
+   G4int index = theMaterial->GetElement(0)->GetIndex();
+ 
+   if ( ! isFromTSL ) {
+      if ( n != 1 ) {
+         G4int i;
+         G4double* xSec = new G4double[n];
+         G4double sum=0;
+         const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
+         G4double rWeight;
+         G4ParticleHPThermalBoost aThermalE;
+         for ( i = 0; i < n; i++ ) {
+            index = theMaterial->GetElement(i)->GetIndex();
+            rWeight = NumAtomsPerVolume[i];
+            xSec[i] = ((*theElastic)[index])->GetXsec(aThermalE.GetThermalEnergy(aTrack,
+                                                                                 theMaterial->GetElement(i),
+                                                                                 theMaterial->GetTemperature()));
+            xSec[i] *= rWeight;
+            sum+=xSec[i];
+         }
+         G4double random = G4UniformRand();
+         G4double running = 0;
+         for ( i = 0; i < n; i++ ) {
+           running += xSec[i];
+           index = theMaterial->GetElement(i)->GetIndex();
+           if ( sum == 0 || random <= running/sum ) break;
+         }
+         delete [] xSec;
+      }
+   } else {
       G4int i;
-      G4double* xSec = new G4double[n];
-      G4double sum=0;
-      const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
-      G4double rWeight;    
-      G4ParticleHPThermalBoost aThermalE;
-      for (i=0; i<n; i++)
-      {
-        index = theMaterial->GetElement(i)->GetIndex();
-        rWeight = NumAtomsPerVolume[i];
-        //xSec[i] = theElastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
-        xSec[i] = ((*theElastic)[index])->GetXsec(aThermalE.GetThermalEnergy(aTrack,
-  		                                                     theMaterial->GetElement(i),
-  								     theMaterial->GetTemperature()));
-        xSec[i] *= rWeight;
-        sum+=xSec[i];
+      if ( n != 1 ) {
+         for ( i = 0; i < n; i++ ) {
+            if ( aNucleus.GetZ_asInt() == (G4int)(theMaterial->GetElement(i)->GetZ()) ) {
+               index = theMaterial->GetElement(i)->GetIndex();
+            }
+         }
       }
-      G4double random = G4UniformRand();
-      G4double running = 0;
-      for (i=0; i<n; i++)
-      {
-        running += xSec[i];
-        index = theMaterial->GetElement(i)->GetIndex();
-        //if(random<=running/sum) break;
-        if( sum == 0 || random <= running/sum ) break;
-      }
-      delete [] xSec;
-      // it is element-wise initialised.
-    }
-    //G4HadFinalState* finalState = theElastic[index].ApplyYourself(aTrack);
-    G4HadFinalState* finalState = ((*theElastic)[index])->ApplyYourself(aTrack);
-    if (overrideSuspension) finalState->SetStatusChange(isAlive);
+   }
+ 	
+   G4HadFinalState* finalState = ((*theElastic)[index])->ApplyYourself(aTrack);
+   if (overrideSuspension) finalState->SetStatusChange(isAlive);
+ 
+   // Overwrite target parameters
+   aNucleus.SetParameters(G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
+   const G4Element* target_element = (*G4Element::GetElementTable())[index];
+   const G4Isotope* target_isotope=nullptr;
+   G4int iele = target_element->GetNumberOfIsotopes();
+   for ( G4int j = 0 ; j != iele ; j++ ) { 
+      target_isotope=target_element->GetIsotope( j );
+      if ( target_isotope->GetN() == G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA() ) break; 
+   }
+   aNucleus.SetIsotope( target_isotope );
+   
+   G4ParticleHPManager::GetInstance()->CloseReactionWhiteBoard();
+   return finalState; 
+}
 
-    //Overwrite target parameters
-    aNucleus.SetParameters(G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
-    const G4Element* target_element = (*G4Element::GetElementTable())[index];
-    const G4Isotope* target_isotope=NULL;
-    G4int iele = target_element->GetNumberOfIsotopes();
-    for ( G4int j = 0 ; j != iele ; j++ ) { 
-       target_isotope=target_element->GetIsotope( j );
-       if ( target_isotope->GetN() == G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA() ) break; 
-    }
-    //G4cout << "Target Material of this reaction is " << theMaterial->GetName() << G4endl;
-    //G4cout << "Target Element of this reaction is " << target_element->GetName() << G4endl;
-    //G4cout << "Target Isotope of this reaction is " << target_isotope->GetName() << G4endl;
-    aNucleus.SetIsotope( target_isotope );
-    
-    G4ParticleHPManager::GetInstance()->CloseReactionWhiteBoard();
-    return finalState; 
-  }
 
 const std::pair<G4double, G4double> G4ParticleHPElastic::GetFatalEnergyCheckLevels() const
 {
@@ -153,30 +142,19 @@ const std::pair<G4double, G4double> G4ParticleHPElastic::GetFatalEnergyCheckLeve
    return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
 }
 
-/*
-void G4ParticleHPElastic::addChannelForNewElement()
-{
-   G4ParticleHPElasticFS* theFS = new G4ParticleHPElasticFS;
-   for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) 
-   {
-      G4cout << "G4ParticleHPElastic Prepairing Data for the new element of " << (*(G4Element::GetElementTable()))[i]->GetName() << G4endl;
-      theElastic.push_back( new G4ParticleHPChannel );
-      (*theElastic[i]).Init((*(G4Element::GetElementTable()))[i], dirName);
-      while(!(*theElastic[i]).Register(theFS)) ;
-   }
-   delete theFS;
-   numEle = (G4int)G4Element::GetNumberOfElements();
-}
-*/
 
 G4int G4ParticleHPElastic::GetVerboseLevel() const 
 {
    return G4ParticleHPManager::GetInstance()->GetVerboseLevel();
 }
+
+
 void G4ParticleHPElastic::SetVerboseLevel( G4int newValue ) 
 {
    G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
 }
+
+
 void G4ParticleHPElastic::BuildPhysicsTable(const G4ParticleDefinition&)
 {
 
@@ -186,7 +164,7 @@ void G4ParticleHPElastic::BuildPhysicsTable(const G4ParticleDefinition&)
 
    if ( G4Threading::IsMasterThread() ) {
 
-      if ( theElastic == NULL ) theElastic = new std::vector<G4ParticleHPChannel*>;
+      if ( theElastic == nullptr ) theElastic = new std::vector<G4ParticleHPChannel*>;
 
       if ( numEle == (G4int)G4Element::GetNumberOfElements() ) return;
 
@@ -213,6 +191,8 @@ void G4ParticleHPElastic::BuildPhysicsTable(const G4ParticleDefinition&)
    }
    numEle = G4Element::GetNumberOfElements();
 }
+
+
 void G4ParticleHPElastic::ModelDescription(std::ostream& outFile) const
 {
    outFile << "High Precision model based on Evaluated Nuclear Data Files (ENDF) for inelastic reaction of neutrons below 20MeV\n";

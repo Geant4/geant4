@@ -34,8 +34,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SensitiveDetector.hh"
-#include "Analysis.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4Step.hh"  
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"

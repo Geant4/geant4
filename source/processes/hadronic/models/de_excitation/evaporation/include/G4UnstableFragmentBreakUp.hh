@@ -82,6 +82,8 @@ private:
 
   G4NuclearLevelData* fLevelData;
   G4int fVerbose;
+
+  G4int fSecID;  // Creator model ID for the secondaries created by this model  
 };
 
 #endif

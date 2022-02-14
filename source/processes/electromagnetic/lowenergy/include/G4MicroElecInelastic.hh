@@ -44,35 +44,24 @@
 #define G4MicroElecInelastic_h 1
 
 #include "G4VEmProcess.hh"
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4GenericIon.hh"
 
 // Available models
 #include "G4MicroElecInelasticModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class G4MicroElecInelastic : public G4VEmProcess
-
 {
 public: 
-
-  G4MicroElecInelastic(const G4String& processName ="MicroElecIonisation",
-		     G4ProcessType type = fElectromagnetic);
-
+  explicit G4MicroElecInelastic(const G4String& processName ="MicroElecIonisation",
+				G4ProcessType type = fElectromagnetic);
   virtual ~G4MicroElecInelastic();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
-  
-  virtual void PrintInfo();
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
 
 protected:
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
-
-private:
-     
+private:   
   G4bool       isInitialised;
 };
 

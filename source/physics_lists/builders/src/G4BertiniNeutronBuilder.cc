@@ -53,7 +53,7 @@ G4BertiniNeutronBuilder()
 }
 
 void G4BertiniNeutronBuilder::
-Build(G4NeutronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

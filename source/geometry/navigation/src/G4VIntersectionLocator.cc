@@ -777,26 +777,30 @@ ReportReversedPoints( std::ostringstream& msg,
    G4VIntersectionLocator::printStatus( A_PtVel,  B_PtVel,
                            -1.0, NewSafety,  substep_no, msg, verboseLevel );
    msg << "Error in advancing propagation." << G4endl
-       << "        Point A (start) is " << A_PtVel  << G4endl
-       << "        Point B (end)   is " << B_PtVel << G4endl
-       << "        Curve distance is " << curveDist << G4endl
+       << "   The final curve point is NOT further along"
+       << "  than the original!" << G4endl
+       << "   Going *backwards* from len(A) = " << A_PtVel.GetCurveLength()
+       << "  to len(B) = " << B_PtVel.GetCurveLength() << G4endl
+       << "      Curve distance is " << curveDist / CLHEP::millimeter << " mm "
        << G4endl
-       << "The final curve point is not further along"
-       << " than the original!" << G4endl;
-   msg << " Value of fEpsStep= " << epsStep << G4endl;
+       << "      Point A' (start) is " << A_PtVel  << G4endl
+       << "      Point B' (end)   is " << B_PtVel << G4endl;
+   msg << "      fEpsStep= " << epsStep << G4endl << G4endl;
 
    G4int oldprc = msg.precision(20);
-   msg << " Point A (Curve start) is " << StartPointVel << G4endl
-       << " Point B (Curve   end)   is " << EndPointVel << G4endl
-       << " Point A (Current start) is " << A_PtVel << G4endl
-       << " Point B (Current end)   is " << B_PtVel << G4endl
-       << " Point S (Sub start)     is " << SubStart_PtVel
-       << " Point E (Trial Point)   is " << E_Point << G4endl
-       << " Point F (Intersection)  is " << ApproxIntersecPointV 
+   msg << " In full precision, the position, momentum, E_kin, length, rest mass "
+       << " ... are: " << G4endl;
+   msg << " Point A[0] (Curve   start) is " << StartPointVel << G4endl
+       << " Point S    (Sub     start) is " << SubStart_PtVel
+       << " Point A'   (Current start) is " << A_PtVel << G4endl
+       << " Point E    (Trial Point)   is " << E_Point << G4endl
+       << " Point F    (Intersection)  is " << ApproxIntersecPointV << G4endl
+       << " Point B'   (Current end)   is " << B_PtVel << G4endl
+       << " Point B[0] (Curve   end)   is " << EndPointVel << G4endl
        << G4endl
        << " LocateIntersection parameters are : " << G4endl
        << "      Substep no (total) = "  << substep_no << G4endl
-       << "      Substep (depth= " << depth << substep_no_p;
+       << "      Substep no         = "  << substep_no_p << " at depth= " << depth;
    msg.precision(oldprc);
 }
 
@@ -873,7 +877,7 @@ G4VIntersectionLocator::ReportImmediateHit( const char*          MethodName,
      {
         numStill = 0; 
      }
-     G4cout << " Occured: " << ++occurredOnTop;  
+     G4cout << " Occurred: " << ++occurredOnTop;  
      G4cout <<  " out of total calls= " << numCalls;
      G4cout << G4endl;
      lastStart = StartPosition;

@@ -20,6 +20,28 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct. 05, 2021 M. Asai (exampleRE06-V10-07-01)
+- Changing the order of deleting RE06SteppingVerbose to be prior to
+  the deletion of RunManager. Addressing to the Valgring warning message.
+
+Feb. 10, 2021 M. Asai (exampleRE06-V10-07-00)
+- Migration to new SteppingVerbose.
+
+Nov. 11, 2020 M. Asai (exampleRE06-V10-06-02)
+- Migration to G4RunManagerFactory.
+
+May 11, 2018 J. Allison (exampleRE06-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+May 08, 2018 B. Morgan (exampleRE06-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Nov 19, 2016 A. Dotti (exampleRE06-V10-02-00)
+- Setting SD explicitly to managers
+
 Feb 17, 2015 A. Dotti (exampleRE06-V10-01-00)
 - Adding new macro file for testing on Xeon Phi with 
   limited statistics

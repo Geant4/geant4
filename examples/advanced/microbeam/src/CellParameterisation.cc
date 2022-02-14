@@ -36,11 +36,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4SystemOfUnits.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 // SINGLETON
 CellParameterisation * CellParameterisation::gInstance = 0;
-
 
 CellParameterisation::CellParameterisation
 (G4Material * nucleus1,  G4Material * cytoplasm1,
@@ -59,21 +56,16 @@ CellParameterisation::CellParameterisation
    G4int shiftX, shiftY, shiftZ;
    G4double x,y,z,mat,den,tmp,density;  
    G4double denCyto1, denCyto2, denCyto3, denNucl1, denNucl2, denNucl3;
+
+   ncols = nlines = shiftX = shiftY = shiftZ = 0;
+   x = y = z = mat = den = tmp = density =
+     denCyto1 = denCyto2 = denCyto3 = denNucl1 = denNucl2 = denNucl3 = 0.0;
    
-   density=0;
-   denCyto1=0;
-   denCyto2=0;
-   denCyto3=0;
-   denNucl1=0;
-   denNucl2=0;
-   denNucl3=0;
-   
-   ncols=0; nlines=0;
-    
-   // READ PHANTOM 
-   
+   // READ PHANTOM    
    fNucleusMass = 0;
    fCytoplasmMass = 0;
+
+   fDimCellBoxX = fDimCellBoxY = fDimCellBoxZ = micrometer;
     
    FILE *fMap;
    fMap = fopen("phantom.dat","r");
@@ -91,14 +83,14 @@ CellParameterisation::CellParameterisation
       
       if (nlines == 1)
       { 
-        ncols = fscanf(fMap,"%lf %lf %lf",&fDimCellBoxX,&fDimCellBoxY,&fDimCellBoxZ);
-        
+        ncols = fscanf(fMap,"%lf %lf %lf",&fDimCellBoxX,&fDimCellBoxY,&fDimCellBoxZ);        
 	fDimCellBoxX=fDimCellBoxX*micrometer;
         fDimCellBoxY=fDimCellBoxY*micrometer;
         fDimCellBoxZ=fDimCellBoxZ*micrometer;
       }
 
-      if (nlines == 2) ncols = fscanf(fMap,"%i %i %i",&shiftX,&shiftY,&shiftZ); // VOXEL SHIFT IN Z ASSUMED TO BE NEGATIVE
+      // VOXEL SHIFT IN Z ASSUMED TO BE NEGATIVE
+      if (nlines == 2) ncols = fscanf(fMap,"%i %i %i",&shiftX,&shiftY,&shiftZ);
       
       if (nlines == 3) ncols = fscanf(fMap,"%lf %lf %lf",&denCyto1, &denCyto2, &denCyto3);
       
@@ -108,8 +100,8 @@ CellParameterisation::CellParameterisation
       
       if (ncols  <  0) break;
 
-      G4ThreeVector v(x+shiftX,y+shiftY,z-1500/(fDimCellBoxZ/micrometer)-shiftZ); // VOXEL SHIFT IN ORDER TO CENTER PHANTOM
-      
+      // VOXEL SHIFT IN ORDER TO CENTER PHANTOM
+      G4ThreeVector v(x+shiftX,y+shiftY,z-1500/(fDimCellBoxZ/micrometer)-shiftZ); 
       if (nlines>4) 
       {
 
@@ -205,12 +197,8 @@ CellParameterisation::CellParameterisation
   fCytoplasmAttributes3->SetForceSolid(false);
 
   //
-
   gInstance = this;
- 
  }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 CellParameterisation::~CellParameterisation()
 {
@@ -219,8 +207,6 @@ CellParameterisation::~CellParameterisation()
   delete[] fMass;
   delete[] fTissueType;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void CellParameterisation::ComputeTransformation
 (const G4int copyNo, G4VPhysicalVolume* physVol) const
@@ -234,13 +220,9 @@ void CellParameterisation::ComputeTransformation
     physVol->SetTranslation(origin);   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void CellParameterisation::ComputeDimensions
 (G4Box& /*trackerChamber*/, const G4int /*copyNo*/, const G4VPhysicalVolume*) const
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material*
 CellParameterisation::ComputeMaterial(const G4int copyNo,

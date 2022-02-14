@@ -39,10 +39,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #ifndef tsphysicslist_hh
 #define tsphysicslist_hh 1
-
 
 #include "globals.hh"
 #include "G4VUserPhysicsList.hh"
@@ -57,35 +55,19 @@
 
 class TSPhysicsList : public G4VUserPhysicsList
 {
-public:
-    typedef std::deque<G4VPhysicsConstructor*> PhysicsSet_t;
+ public:
+  typedef std::deque<G4VPhysicsConstructor*> PhysicsSet_t;
 
-public:
-    TSPhysicsList();
-    virtual ~TSPhysicsList();
+ public:
+  TSPhysicsList();
+  virtual ~TSPhysicsList();
 
-    static TSPhysicsList* Instance();
+ public:
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
-public:
-    void ConstructParticle();
-    void ConstructProcess();
-    void SetCuts();
-
-private:
-    static TSPhysicsList* fgInstance;
-
-    G4EmStandardPhysics_option4*    fEmPhysics_opt4;
-    G4DecayPhysics*                 fDecayPhysics;
-    G4RadioactiveDecayPhysics*      fRadDecayPhysics;
-    G4HadronPhysicsQGSP_BERT_HP*    fHadronInelasticPhysics;
-    G4HadronElasticPhysicsHP*       fHadronElasticPhysics;
-    G4IonElasticPhysics*            fIonElasticPhysics;
-    G4IonBinaryCascadePhysics*      fIonBinaryCascadePhysics;
-
-    PhysicsSet_t fConstructors;
-
-    G4double fDefaultCutValue;
-
+ private:
+  PhysicsSet_t fConstructors;
 };
 
 #endif

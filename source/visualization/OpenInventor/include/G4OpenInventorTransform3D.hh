@@ -33,8 +33,6 @@
 #ifndef G4OPENINVENTORTRANSFORM3D_HH
 #define G4OPENINVENTORTRANSFORM3D_HH
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 #include "G4Transform3D.hh"
 
 class SbMatrix;
@@ -46,7 +44,5 @@ public:
 private:
   G4float m[16];
 };
-
-#endif
 
 #endif

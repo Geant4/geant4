@@ -121,6 +121,7 @@ void RunAction::BookHisto()
 {
   // Always creating analysis manager
   fAnalysisManager = G4AnalysisManager::Instance();
+  fAnalysisManager->SetDefaultFileType("root");
   fAnalysisManager->SetActivation(true);
   fAnalysisManager->SetVerboseLevel(1);
 
@@ -169,8 +170,6 @@ void RunAction::SaveHisto(G4int nevents)
     }
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
-    delete fAnalysisManager;
-    fAnalysisManager = 0;
   } 
 }
 

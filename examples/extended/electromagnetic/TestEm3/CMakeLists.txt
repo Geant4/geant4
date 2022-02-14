@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(TestEm3)
 
 #----------------------------------------------------------------------------
@@ -40,7 +40,8 @@ target_link_libraries(TestEm3 ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(TestEm3_SCRIPTS
-    atlashec.mac dedx.mac emtutor.mac ionC12.mac lhcb.mac linac.mac lockwood.mac retrieveTables.mac run01.mac run02.mac storeTables.mac TestEm3.in TestEm3.out tileCal.mac vis.mac
+    atlashec.mac dedx.mac emtutor.mac geom.mac ionC12.mac lhcb.mac linac.mac lockwood.mac
+    run01.mac run02.mac stepMax.mac storeTables.mac TestEm3.in TestEm3.out tileCal.mac vis.mac
   )
 
 foreach(_script ${TestEm3_SCRIPTS})

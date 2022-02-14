@@ -571,11 +571,7 @@ void PassiveProtonBeamLine::ConstructPassiveProtonBeamLine()
     
     
     // The treatment room is invisible in the Visualisation
-<<<<<<< HEAD
-    logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
-=======
-    //logicTreatmentRoom -> SetVisAttributes(G4VisAttributes::Invisible);
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+    //logicTreatmentRoom -> SetVisAttributes(G4VisAttributes::GetInvisible());
     
     // Components of the Passive Proton Beam Line
     HadrontherapyBeamLineSupport();

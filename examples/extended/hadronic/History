@@ -13,8 +13,40 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-<<<<<<< HEAD
-=======
+     
+29-11-21 I. Hrivnacova (exHadronic-V10-07-04)
+- Removed obsolete references to AIDA analysis tools
+
+17-11-21 I. Hrivnacova (exHadronic-V10-07-03)
+- Updated documentation
+
+20-06-21 M. Maire (exHadronic-V10-07-02)
+- new example: Hadr05.
+
+26-05-21 A. Ribon (exHadronic-V10-07-01)
+- Created new test: Hadr10.
+
+24-05-21 B. Morgan (exHadronic-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+13-11-20 B. Morgan (exHadronic-V10-06-03)
+- Enforce use of Serial RunManager for serial-only examples.
+
+10-11-20 B. Morgan (exHadronic-V10-06-02)
+- Migration to G4RunManagerFactory for:
+  - FissionFragment
+  - Hadr00
+  - Hadr01
+  - Hadr02
+  - Hadr08
+  - Remainder use G4SteppingVerbose which requires further checks
+    for compatibility with G4RunManagerFactory.
+
+06-11-20 A. Ribon (exHadronic-V10-06-01)
+- Created new test: Hadr09.
+
+03-11-20 B. Morgan (exHadronic-V10-06-00)
+- Support same CMake version range as core Geant4
 
 25-10-19 A. Ribon (exHadronic-V10-05-01)
 - Created new test: Hadr08.
@@ -32,7 +64,7 @@ track of all tags.
 - Added newly created example NeutronSource
 
 04-07-16 I. Hrivnacova  (exHadronic-V10-02-01)
-- Fixes for Doxygen documentation in Hadr03 - Hadr07 
+- Fixes for Doxygen documentation in Hadr03 - Hadr07
 
 03-04-16 M. Maire (exHadronic-V10-02-00)
 - Added newly created example Hadr07
@@ -69,4 +101,4 @@ track of all tags.
 - Updated CMakeLists.txt files:
   adding visualization, copying macros, install target and comment lines
 - Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
-- Replaced tabulators with space characters  
+- Replaced tabulators with space characters

@@ -3,12 +3,13 @@
 =======
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
+# Macro file for TestEm12
+#
 # limit the step size from histos 1 and 8
 #
-/control/verbose 2
 /control/cout/ignoreThreadsExcept 0
-/run/numberOfThreads 2
-/run/verbose 2
+/control/verbose 2
+/run/verbose 1
 #
 /testem/det/setMat G4_WATER
 /testem/det/setRadius  3 cm
@@ -32,5 +33,4 @@
 ###/analysis/h1/set 8 120  0.   1.2 none	#normalized edep profile
 #
 /run/printProgress 1000
-#
 /run/beamOn 10000

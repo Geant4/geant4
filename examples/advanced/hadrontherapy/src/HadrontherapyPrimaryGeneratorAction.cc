@@ -38,7 +38,8 @@
 #include "Randomize.hh"
 
 /////////////////////////////////////////////////////////////////////////////
-HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction()
+HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction() :
+  fNewSource(false)
 {
 <<<<<<< HEAD
   
@@ -49,9 +50,8 @@ HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction()
 }  
 =======
     PrimaryGeneratorMessenger = new HadrontherapyPrimaryGeneratorMessenger(this);
-    SetDefaultPrimaryParticle();
     particleGun = new G4GeneralParticleSource();
-    
+    calculatedPhaseSpaceFileIN = "NULL";
 }
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
@@ -63,14 +63,7 @@ HadrontherapyPrimaryGeneratorAction::~HadrontherapyPrimaryGeneratorAction()
   
 =======
     delete PrimaryGeneratorMessenger;
-    delete  particleGun;
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
-{ 
- 
+    delete particleGun;
 }
 <<<<<<< HEAD
   /////////////////////////////////////////////////////////////////////////////
@@ -87,57 +80,56 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-
-    if(NewSource==true)
+  if(fNewSource==true)
     {
-        std::ifstream in(calculatedPhaseSpaceFileIN);
-        G4double e, xpos, ypos, zpos,dirx,diry,dirz;
-        G4int PDG;
-        G4ThreeVector pos,dir;
-        
-        if(in.eof())
+      std::ifstream in(calculatedPhaseSpaceFileIN);
+      G4double e, xpos, ypos, zpos,dirx,diry,dirz;
+      G4int PDG;
+      G4ThreeVector pos,dir;
+      
+      if(in.eof())
         {
-            G4Exception("HadrontherapyPrimaryGeneratorAction", "NoParticles", FatalException, "No more particles in the file");
+	  G4Exception("HadrontherapyPrimaryGeneratorAction", "NoParticles", FatalException, "No more particles in the file");
         }
-        
-        while(!in.eof())
+      
+      while(!in.eof())
         {
-            
-            in >> e >> xpos >> ypos >>zpos >>dirx>>diry>>dirz >> PDG;
-            dir= G4ThreeVector(dirx,diry,dirz);
-            particleGun->GetCurrentSource()->GetEneDist()->SetMonoEnergy(e);
-            
-            particleGun->GetCurrentSource()->GetParticlePosition().setX(xpos);
-            particleGun->GetCurrentSource()->GetParticlePosition().setY(ypos);
-            particleGun->GetCurrentSource()->GetParticlePosition().setZ(zpos);
-            particleGun->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(dir);
-            
-            G4ParticleDefinition* particleDef = nullptr;
-            if (PDG > 1000000000)
+	  
+	  in >> e >> xpos >> ypos >>zpos >>dirx>>diry>>dirz >> PDG;
+	  dir= G4ThreeVector(dirx,diry,dirz);
+	  particleGun->GetCurrentSource()->GetEneDist()->SetMonoEnergy(e);
+          
+	  particleGun->GetCurrentSource()->GetParticlePosition().setX(xpos);
+	  particleGun->GetCurrentSource()->GetParticlePosition().setY(ypos);
+	  particleGun->GetCurrentSource()->GetParticlePosition().setZ(zpos);
+	  particleGun->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(dir);
+          
+	  G4ParticleDefinition* particleDef = nullptr;
+	  if (PDG > 1000000000)
             {
-                int a=(PDG-1000000000)-(((PDG-1000000000)/10)*10);
-                if(a>0)
+	      int a=(PDG-1000000000)-(((PDG-1000000000)/10)*10);
+	      if(a>0)
                 {
-                    PDG=PDG-a;
-                    particleDef = G4IonTable::GetIonTable()->GetIon(PDG);
-                    G4String Nome = particleDef->GetParticleName();
+		  PDG=PDG-a;
+		  particleDef = G4IonTable::GetIonTable()->GetIon(PDG);
+		  G4String Nome = particleDef->GetParticleName();
                 }
-                
-                else
+	      
+	      else
                 {
-                    particleDef = G4IonTable::GetIonTable()->GetIon(PDG);
-                    G4String Nome = particleDef->GetParticleName();
+		  particleDef = G4IonTable::GetIonTable()->GetIon(PDG);
+		  G4String Nome = particleDef->GetParticleName();
                 }
             }
-            
-            else
+	  
+	  else
             {
-                particleDef = G4ParticleTable::GetParticleTable()->FindParticle(PDG);
+	      particleDef = G4ParticleTable::GetParticleTable()->FindParticle(PDG);
             }
-            
-            particleGun->GetCurrentSource()->SetParticleDefinition(particleDef);
-            particleGun->GeneratePrimaryVertex(anEvent);
-            
+	  
+	  particleGun->GetCurrentSource()->SetParticleDefinition(particleDef);
+	  particleGun->GeneratePrimaryVertex(anEvent);
+          
         }
         
         in.close();

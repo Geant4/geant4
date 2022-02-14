@@ -47,12 +47,7 @@ class G4ParticleHPElasticFS : public G4ParticleHPFinalState
 {
   public:
   
-  G4ParticleHPElasticFS()
-  {
-    hasXsec = false; 
-    theCoefficients = 0;
-    theProbArray = 0;
-  }
+  G4ParticleHPElasticFS();
   ~G4ParticleHPElasticFS()
   {
     if(theCoefficients!=0) delete theCoefficients;

@@ -58,10 +58,6 @@ $Id: README 93735 2015-10-30 11:00:28Z gcosmo $
                     low-energy models
 
   Physics lists and options can be (re)set with UI commands
-    
-  Please, notice that options set through G4EmProcessOptions are global, eg
-  for all particle types. In G4 builders (geant4/source/physics_lists/builders)
-  it is shown how to set options per particle type. 
  		
   A few commands have been added to PhysicsList, in order to set the production 
   threshold for secondaries for gamma and e-/e+.
@@ -110,7 +106,26 @@ $Id: README 93735 2015-10-30 11:00:28Z gcosmo $
 	Idle> type your commands
 	....
 	Idle> exit
-		
+
+  Macros provided in this example:
+  - brems.mac: Bremsstrahlung only
+  - erange.mac: compute the csda range of primary particle
+  - geantino.mac: geantino as primary particle
+  - ionis.mac: Ionisation only
+  - photoelec.mac: 100 keV photon photoelectric effect
+  - radioactive.mac: use radioactive ion as primary particle
+  - range.mac: compute the csda range of the primary particle
+               with or without fluctuations
+  - runs.mac: electron 100 MeV; all processes
+
+  Macros to be run interactively:
+  - annihil.mac: To visualise 100 MeV e+ annihilation
+  - decayinfly.mac: To visualise decay in fly of N16
+  - gammaconversion.mac: To visualise gamma conversion and e+ annihilation
+  - photon.mac: To visualiza p300 keV photon beam
+  - stepMax.mac: to test command /testem/stepMax
+  - vis.mac: To activate visualization
+
  7 - TRACKING : StepMax
  
   In order to control the accuracy of the deposition, the user can limit
@@ -144,10 +159,3 @@ $Id: README 93735 2015-10-30 11:00:28Z gcosmo $
    It is also possible to print selected histograms on an ascii file:
    /analysis/h1/setAscii id
    All selected histos will be written on a file name.ascii  (default testem1)
-    
- Using hbook format
- ------------------
- 
- Need a special treatement : the Cern Library must be installed and the
- environment variable CERNLIB correctly set. Then, *before* compiling,
- activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in HistoManager.hh

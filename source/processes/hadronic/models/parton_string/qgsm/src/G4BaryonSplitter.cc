@@ -33,42 +33,60 @@
 G4BaryonSplitter::
 G4BaryonSplitter()
 {
-	theBaryons.insert(new G4SPBaryon(G4Proton::Proton()));
-	theBaryons.insert(new G4SPBaryon(G4Neutron::Neutron()));
-	theBaryons.insert(new G4SPBaryon(G4AntiProton::AntiProton()));
-	theBaryons.insert(new G4SPBaryon(G4AntiNeutron::AntiNeutron()));
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(2224))); // D++
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(2214))); // D+
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(2114))); // D0
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(1114))); // D-
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-2224))); // anti D++
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-2214))); // anti D+
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-2114))); // anti D0
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-1114))); // anti D-
-	theBaryons.insert(new G4SPBaryon(G4Lambda::Lambda()));
-	theBaryons.insert(new G4SPBaryon(G4AntiLambda::AntiLambda()));
-	theBaryons.insert(new G4SPBaryon(G4SigmaPlus::SigmaPlus()));
-	theBaryons.insert(new G4SPBaryon(G4SigmaZero::SigmaZero()));
-	theBaryons.insert(new G4SPBaryon(G4SigmaMinus::SigmaMinus()));
-	theBaryons.insert(new G4SPBaryon(G4AntiSigmaPlus::AntiSigmaPlus()));
-	theBaryons.insert(new G4SPBaryon(G4AntiSigmaZero::AntiSigmaZero()));
-	theBaryons.insert(new G4SPBaryon(G4AntiSigmaMinus::AntiSigmaMinus()));
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(3224))); // S+*
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(3214))); // S0*
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(3114))); // S-*
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-3224))); // anti S+*
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-3214))); // anti S0*
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-3114))); // anti S-*
-	theBaryons.insert(new G4SPBaryon(G4XiMinus::XiMinus()));
-	theBaryons.insert(new G4SPBaryon(G4XiZero::XiZero()));
-	theBaryons.insert(new G4SPBaryon(G4AntiXiMinus::AntiXiMinus()));
-	theBaryons.insert(new G4SPBaryon(G4AntiXiZero::AntiXiZero()));
-	theBaryons.insert(new G4SPBaryon(G4OmegaMinus::OmegaMinus()));
-	theBaryons.insert(new G4SPBaryon(G4AntiOmegaMinus::AntiOmegaMinus()));
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(3324))); // X0*
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(3314))); // X-*
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-3324))); // anti X0*
-	theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-3314))); // anti X-*
+  theBaryons.insert(new G4SPBaryon(G4Proton::Proton()));
+  theBaryons.insert(new G4SPBaryon(G4Neutron::Neutron()));
+  theBaryons.insert(new G4SPBaryon(G4AntiProton::AntiProton()));
+  theBaryons.insert(new G4SPBaryon(G4AntiNeutron::AntiNeutron()));
+  theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(2224))); // Delta++
+  theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(2214))); // Delta+
+  theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(2114))); // Delta0
+  theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(1114))); // Delta-
+  theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-2224))); // anti Delta++
+  theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-2214))); // anti Delta+
+  theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-2114))); // anti Delta0
+  theBaryons.insert(new G4SPBaryon(G4ParticleTable::GetParticleTable()->FindParticle(-1114))); // anti Delta-
+  theBaryons.insert(new G4SPBaryon(G4Lambda::Lambda()));
+  theBaryons.insert(new G4SPBaryon(G4AntiLambda::AntiLambda()));
+  theBaryons.insert(new G4SPBaryon(G4SigmaPlus::SigmaPlus()));
+  theBaryons.insert(new G4SPBaryon(G4SigmaZero::SigmaZero()));
+  theBaryons.insert(new G4SPBaryon(G4SigmaMinus::SigmaMinus()));
+  theBaryons.insert(new G4SPBaryon(G4AntiSigmaPlus::AntiSigmaPlus()));
+  theBaryons.insert(new G4SPBaryon(G4AntiSigmaZero::AntiSigmaZero()));
+  theBaryons.insert(new G4SPBaryon(G4AntiSigmaMinus::AntiSigmaMinus()));
+  theBaryons.insert(new G4SPBaryon(G4XiMinus::XiMinus()));
+  theBaryons.insert(new G4SPBaryon(G4XiZero::XiZero()));
+  theBaryons.insert(new G4SPBaryon(G4AntiXiMinus::AntiXiMinus()));
+  theBaryons.insert(new G4SPBaryon(G4AntiXiZero::AntiXiZero()));
+  theBaryons.insert(new G4SPBaryon(G4OmegaMinus::OmegaMinus()));
+  theBaryons.insert(new G4SPBaryon(G4AntiOmegaMinus::AntiOmegaMinus()));
+  theBaryons.insert(new G4SPBaryon(G4LambdacPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiLambdacPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4SigmacPlusPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiSigmacPlusPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4SigmacPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiSigmacPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4SigmacZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiSigmacZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4XicPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiXicPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4XicZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiXicZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4OmegacZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiOmegacZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4Lambdab::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiLambdab::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4SigmabPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiSigmabPlus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4SigmabZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiSigmabZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4SigmabMinus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiSigmabMinus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4XibZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiXibZero::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4XibMinus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiXibMinus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4OmegabMinus::Definition()));
+  theBaryons.insert(new G4SPBaryon(G4AntiOmegabMinus::Definition()));
 }
 
 G4bool G4BaryonSplitter::

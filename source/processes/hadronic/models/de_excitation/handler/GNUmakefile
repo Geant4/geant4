@@ -20,7 +20,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
-	    -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \

@@ -45,8 +45,8 @@ public:
   G4double   getDx_2Hall()                  const {return dx_2Hall;}
 
 protected:
-  virtual G4int readFile();
-  virtual void constructDaughters();
+  virtual G4int readFile() override;
+  virtual void constructDaughters() override;
 
 private:
   G4String genMaterial;            //General material

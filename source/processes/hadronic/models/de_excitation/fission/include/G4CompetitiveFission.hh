@@ -116,7 +116,8 @@ private:
   G4bool myOwnLevelDensity;
 
   G4FissionParameters theParam;
-
+  
+  G4int theSecID;  // Creator model ID for the secondaries created by this model
 };
 
 inline G4double G4CompetitiveFission::GetFissionBarrier(void) const 

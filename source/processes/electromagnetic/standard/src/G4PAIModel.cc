@@ -104,7 +104,7 @@ G4PAIModel::~G4PAIModel()
 void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector& cuts)
 {
-  if(fVerbose > 0) {
+  if(fVerbose > 1) {
     G4cout<<"G4PAIModel::Initialise for "<<p->GetParticleName()<<G4endl;
   }
   SetParticle(p);
@@ -114,7 +114,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 
     delete fModelData;      
     fMaterialCutsCoupleVector.clear(); 
-    if(fVerbose > 0) {
+    if(fVerbose > 1) {
       G4cout << "G4PAIModel instantiates data for  " << p->GetParticleName()
 	     << G4endl;
     }  
@@ -136,10 +136,9 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       numRegions = 1;
     }
 
-    if(fVerbose > 0) {
+    if(fVerbose > 1) {
       G4cout << "G4PAIModel is defined for " << numRegions << " regions "   
-	     << G4endl;
-      G4cout << "           total number of materials " << numOfMat << G4endl;
+	     << "; number of materials " << numOfMat << G4endl;
     } 
     for(size_t iReg = 0; iReg<numRegions; ++iReg) {
       const G4Region* curReg = fPAIRegionVector[iReg];
@@ -156,8 +155,8 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 	       << " jMat= " << jMat << "  " << mat->GetName()
 	       << G4endl;
 	*/
-	if(cutCouple) {
-	  if(fVerbose > 0) {
+	if(nullptr != cutCouple) {
+	  if(fVerbose > 1) {
 	    G4cout << "Region <" << curReg->GetName() << ">  mat <" 
 		   << mat->GetName() << ">  CoupleIndex= " 
 		   << cutCouple->GetIndex()
@@ -168,6 +167,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 	  G4bool isnew = true;
 	  if(0 < n) {
 	    for(size_t i=0; i<n; ++i) {
+	      G4cout << i << G4endl;
 	      if(cutCouple == fMaterialCutsCoupleVector[i]) {
 		isnew = false;
 		break;
@@ -175,7 +175,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 	    }
 	  }
 	  // initialise data banks
-	  //G4cout << "   isNew: " << isnew << "  " << cutCouple << G4endl;
+	  // G4cout << "   isNew: " << isnew << "  " << cutCouple << G4endl;
 	  if(isnew) { 
 	    fMaterialCutsCoupleVector.push_back(cutCouple); 
 	    fModelData->Initialise(cutCouple, this);
@@ -322,10 +322,12 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
 ///////////////////////////////////////////////////////////////////////
 
-G4double G4PAIModel::SampleFluctuations( const G4MaterialCutsCouple* matCC,
-                                         const G4DynamicParticle* aParticle,
-					 G4double tmax, G4double step,
-					 G4double eloss)
+G4double G4PAIModel::SampleFluctuations(const G4MaterialCutsCouple* matCC,
+                                        const G4DynamicParticle* aParticle,
+                                        const G4double tcut,
+					const G4double, 
+                                        const G4double step,
+					const G4double eloss)
 {
   G4int coupleIndex = FindCoupleIndex(matCC);
   if(0 > coupleIndex) { return eloss; }
@@ -342,7 +344,7 @@ G4double G4PAIModel::SampleFluctuations( const G4MaterialCutsCouple* matCC,
   G4double scaledTkin = Tkin*fRatio;
 
   G4double loss = fModelData->SampleAlongStepTransfer(coupleIndex, Tkin,
-						      scaledTkin, tmax,
+						      scaledTkin, tcut,
 						      step*fChargeSquare);
   
   // G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV, on step = "
@@ -359,8 +361,9 @@ G4double G4PAIModel::SampleFluctuations( const G4MaterialCutsCouple* matCC,
 
 G4double G4PAIModel::Dispersion( const G4Material* material, 
                                  const G4DynamicParticle* aParticle,
- 				       G4double tmax, 
-			               G4double step       )
+ 				 const G4double tcut,
+ 				 const G4double tmax,
+			         const G4double step )
 {
   G4double particleMass  = aParticle->GetMass();
   G4double electronDensity = material->GetElectronDensity();
@@ -368,7 +371,7 @@ G4double G4PAIModel::Dispersion( const G4Material* material,
   G4double q = aParticle->GetCharge()/eplus;
   G4double etot = kineticEnergy + particleMass;
   G4double beta2 = kineticEnergy*(kineticEnergy + 2.0*particleMass)/(etot*etot);
-  G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * step
+  G4double siga  = (tmax/beta2 - 0.5*tcut) * twopi_mc2_rcl2 * step
                  * electronDensity * q * q;
 
   return siga;

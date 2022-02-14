@@ -29,38 +29,70 @@
 #include "G4H3ToolsManager.hh"
 #include "G4P1ToolsManager.hh"
 #include "G4P2ToolsManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 //_____________________________________________________________________________
-inline 
-tools::histo::h1d*  G4ToolsAnalysisReader::GetH1(G4int id, G4bool warn) const 
+template <typename HT>
+inline
+G4int G4ToolsAnalysisReader::ReadTImpl(
+        const G4String& htName, const G4String& fileName,
+        const G4String& dirName, G4bool isUserFileName,
+        G4THnManager<HT>* htManager)
+{
+  Message(G4Analysis::kVL4, "read", G4Analysis::GetHnType<HT>(), htName);
+
+  // Read hn
+  auto ht = fVFileManager->GetHnRFileManager<HT>()->Read(
+    htName, fileName, dirName, isUserFileName);
+
+  if ( ! ht ) {
+    G4Analysis::Warn(
+      "Streaming " + htName + " from file " + fileName +
+      " directory " + dirName + " failed.",
+      fkClass, "ReadTImpl");
+    return G4Analysis::kInvalidId;
+  }
+
+  auto id = htManager->RegisterT(static_cast<HT*>(ht), htName);
+
+  Message(G4Analysis::kVL2, "read", G4Analysis::GetHnType<HT>(), htName,
+          id > G4Analysis::kInvalidId);
+
+  return id;
+
+}
+
+//_____________________________________________________________________________
+inline
+tools::histo::h1d*  G4ToolsAnalysisReader::GetH1(G4int id, G4bool warn) const
 {
   return fH1Manager->GetH1(id, warn, false);
 }
 
 //_____________________________________________________________________________
-inline 
-tools::histo::h2d*  G4ToolsAnalysisReader::GetH2(G4int id, G4bool warn) const 
+inline
+tools::histo::h2d*  G4ToolsAnalysisReader::GetH2(G4int id, G4bool warn) const
 {
   return fH2Manager->GetH2(id, warn, false);
 }
 
 //_____________________________________________________________________________
-inline 
-tools::histo::h3d*  G4ToolsAnalysisReader::GetH3(G4int id, G4bool warn) const 
+inline
+tools::histo::h3d*  G4ToolsAnalysisReader::GetH3(G4int id, G4bool warn) const
 {
   return fH3Manager->GetH3(id, warn, false);
 }
 
 //_____________________________________________________________________________
-inline 
-tools::histo::p1d*  G4ToolsAnalysisReader::GetP1(G4int id, G4bool warn) const 
+inline
+tools::histo::p1d*  G4ToolsAnalysisReader::GetP1(G4int id, G4bool warn) const
 {
   return fP1Manager->GetP1(id, warn, false);
 }
 
 //_____________________________________________________________________________
-inline 
-tools::histo::p2d*  G4ToolsAnalysisReader::GetP2(G4int id, G4bool warn) const 
+inline
+tools::histo::p2d*  G4ToolsAnalysisReader::GetP2(G4int id, G4bool warn) const
 {
   return fP2Manager->GetP2(id, warn, false);
 }

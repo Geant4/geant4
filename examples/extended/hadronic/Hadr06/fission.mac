@@ -1,11 +1,16 @@
 #
 # Macro file for "Hadr06.cc"
 #
-# NB. for neutronHP, do not forget to activate 
-#     G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS
+# NB. for neutronHP, do not forget to activate the fission fragment model
+#     via one, and only one, of the following two UI commands:
+# - To use the default fission model:
+#/process/had/particle_hp/produce_fission_fragment true
+#
+# - To use the alternative Wendt fission model:
+#/process/had/particle_hp/use_Wendt_fission_model true
 #
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testhadr/det/setIsotopeMat U235 92 235 19.05 g/cm3
 /testhadr/det/setRadius 5 cm
@@ -13,8 +18,6 @@
 /run/initialize
 #
 /control/execute vis.mac
-#
-/process/list
 #
 /gun/particle neutron
 /gun/energy 2 MeV

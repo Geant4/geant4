@@ -23,34 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// G4MultiTrackingAction class implementation
 //
-// ---------------------------------------------------------------
-// GEANT 4 class header file
-//
-// Class Description:
-//
-// This file includes Windows declarations from <windows.h> protecting
-// those defines that may cause troubles within the Geant4 code.
+// Author: Andrea Dotti, SLAC - 17 January 2016
+// --------------------------------------------------------------------
 
-// ---------------------------------------------------------------
-#ifndef windefs_hh
-#define windefs_hh
+#include "G4MultiTrackingAction.hh"
+#include <algorithm>
 
-#if defined(WIN32)
-    //
-	#define WIN32_LEAN_AND_MEAN
-    #define NOMINMAX      // avoid redefinition of min() and max()
-    #include <windows.h>
-    #undef pascal         // trick to overcome redefinition of 'pascal'
-    #undef scr1
-    #undef scr2
-    #undef rad1
-    #undef rad2
-    #undef small
-    #undef ABSOLUTE
-    #undef RELATIVE
-	#undef GetObject
-#endif // WIN32
+void G4MultiTrackingAction::SetTrackingManagerPointer(G4TrackingManager* pVal)
+{
+  std::for_each( begin(), end(),
+    [pVal](G4UserTrackingActionUPtr& e) { e->SetTrackingManagerPointer(pVal); }
+  );
+}
 
-#endif //windefs_hh
+void G4MultiTrackingAction::PreUserTrackingAction(const G4Track* trk)
+{
+  std::for_each( begin(), end(),
+    [trk](G4UserTrackingActionUPtr& e) { e->PreUserTrackingAction(trk); }
+  );
+}
+
+void G4MultiTrackingAction::PostUserTrackingAction(const G4Track* trk)
+{
+  std::for_each( begin(), end(),
+    [trk](G4UserTrackingActionUPtr& e) { e->PostUserTrackingAction(trk); }
+  );
+}

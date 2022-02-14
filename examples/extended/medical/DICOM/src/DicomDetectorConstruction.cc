@@ -83,9 +83,9 @@ DicomDetectorConstruction::DicomDetectorConstruction()
 
    fZSliceHeaderMerged(0),
 
-   fNVoxelX(0),
-   fNVoxelY(0),
-   fNVoxelZ(0),
+   fNoVoxelsX(0),
+   fNoVoxelsY(0),
+   fNoVoxelsZ(0),
    fVoxelHalfDimX(0),
    fVoxelHalfDimY(0),
    fVoxelHalfDimZ(0),
@@ -430,29 +430,29 @@ void DicomDetectorConstruction::ReadPhantomDataNew()
     thePhantomMaterialsOriginal[nmate] = mate;
   }
 
-  fin >> fNVoxelX >> fNVoxelY >> fNVoxelZ;
-  G4cout << "GmReadPhantomG4Geometry::ReadPhantomData fNVoxel X/Y/Z " 
-         << fNVoxelX << " " 
-         << fNVoxelY << " " << fNVoxelZ << G4endl;
+  fin >> fNoVoxelsX >> fNoVoxelsY >> fNoVoxelsZ;
+  G4cout << "GmReadPhantomG4Geometry::ReadPhantomData fNoVoxels X/Y/Z " 
+         << fNoVoxelsX << " " 
+         << fNoVoxelsY << " " << fNoVoxelsZ << G4endl;
   fin >> fMinX >> fMaxX;
   fin >> fMinY >> fMaxY;
   fin >> fMinZ >> fMaxZ;
-  fVoxelHalfDimX = (fMaxX-fMinX)/fNVoxelX/2.;
-  fVoxelHalfDimY = (fMaxY-fMinY)/fNVoxelY/2.;
-  fVoxelHalfDimZ = (fMaxZ-fMinZ)/fNVoxelZ/2.;
+  fVoxelHalfDimX = (fMaxX-fMinX)/fNoVoxelsX/2.;
+  fVoxelHalfDimY = (fMaxY-fMinY)/fNoVoxelsY/2.;
+  fVoxelHalfDimZ = (fMaxZ-fMinZ)/fNoVoxelsZ/2.;
 #ifdef G4VERBOSE
   G4cout << " Extension in X " << fMinX << " " << fMaxX << G4endl
          << " Extension in Y " << fMinY << " " << fMaxY << G4endl
          << " Extension in Z " << fMinZ << " " << fMaxZ << G4endl;
 #endif
 
-  fMateIDs = new size_t[fNVoxelX*fNVoxelY*fNVoxelZ];
-  for( G4int iz = 0; iz < fNVoxelZ; ++iz ) {
-    for( G4int iy = 0; iy < fNVoxelY; ++iy ) {
-      for( G4int ix = 0; ix < fNVoxelX; ++ix ) {
+  fMateIDs = new size_t[fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ];
+  for( G4int iz = 0; iz < fNoVoxelsZ; ++iz ) {
+    for( G4int iy = 0; iy < fNoVoxelsY; ++iy ) {
+      for( G4int ix = 0; ix < fNoVoxelsX; ++ix ) {
         G4int mateID;
         fin >> mateID; 
-        G4int nnew = ix + (iy)*fNVoxelX + (iz)*fNVoxelX*fNVoxelY;
+        G4int nnew = ix + (iy)*fNoVoxelsX + (iz)*fNoVoxelsX*fNoVoxelsY;
         if( mateID < 0 || mateID >= nMaterials ) {
           G4Exception("GmReadPhantomG4Geometry::ReadPhantomData",
                       "Wrong index in phantom file",
@@ -501,11 +501,11 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
 
   //---- Read the material densities
   G4double dens;
-  for( G4int iz = 0; iz < fNVoxelZ; ++iz ) {
-    for( G4int iy = 0; iy < fNVoxelY; ++iy ) {
-      for( G4int ix = 0; ix < fNVoxelX; ++ix ) {
+  for( G4int iz = 0; iz < fNoVoxelsZ; ++iz ) {
+    for( G4int iy = 0; iy < fNoVoxelsY; ++iy ) {
+      for( G4int ix = 0; ix < fNoVoxelsX; ++ix ) {
         fin >> dens; 
-        G4int copyNo = ix + (iy)*fNVoxelX + (iz)*fNVoxelX*fNVoxelY;
+        G4int copyNo = ix + (iy)*fNoVoxelsX + (iz)*fNoVoxelsX*fNoVoxelsY;
 
         if( densityDiff != -1. ) continue; 
 
@@ -804,27 +804,27 @@ G4Material* DicomDetectorConstruction::BuildMaterialWithChangingDensity(
 void DicomDetectorConstruction::ConstructPhantomContainer()
 {
   //---- Extract number of voxels and voxel dimensions
-  fNVoxelX = fZSliceHeaderMerged->GetNoVoxelX();
-  fNVoxelY = fZSliceHeaderMerged->GetNoVoxelY();
-  fNVoxelZ = fZSliceHeaderMerged->GetNoVoxelZ();
+  fNoVoxelsX = fZSliceHeaderMerged->GetNoVoxelsX();
+  fNoVoxelsY = fZSliceHeaderMerged->GetNoVoxelsY();
+  fNoVoxelsZ = fZSliceHeaderMerged->GetNoVoxelsZ();
   
   fVoxelHalfDimX = fZSliceHeaderMerged->GetVoxelHalfX();
   fVoxelHalfDimY = fZSliceHeaderMerged->GetVoxelHalfY();
   fVoxelHalfDimZ = fZSliceHeaderMerged->GetVoxelHalfZ();
 #ifdef G4VERBOSE
-  G4cout << " fNVoxelX " << fNVoxelX << " fVoxelHalfDimX " << fVoxelHalfDimX 
+  G4cout << " fNoVoxelsX " << fNoVoxelsX << " fVoxelHalfDimX " << fVoxelHalfDimX 
          <<G4endl;
-  G4cout << " fNVoxelY " << fNVoxelY << " fVoxelHalfDimY " << fVoxelHalfDimY 
+  G4cout << " fNoVoxelsY " << fNoVoxelsY << " fVoxelHalfDimY " << fVoxelHalfDimY 
          <<G4endl;
-  G4cout << " fNVoxelZ " << fNVoxelZ << " fVoxelHalfDimZ " << fVoxelHalfDimZ 
+  G4cout << " fNoVoxelsZ " << fNoVoxelsZ << " fVoxelHalfDimZ " << fVoxelHalfDimZ 
          <<G4endl;
-  G4cout << " totalPixels " << fNVoxelX*fNVoxelY*fNVoxelZ <<  G4endl;
+  G4cout << " totalPixels " << fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ <<  G4endl;
 #endif
   
   //----- Define the volume that contains all the voxels
-  fContainer_solid = new G4Box("phantomContainer",fNVoxelX*fVoxelHalfDimX,
-                               fNVoxelY*fVoxelHalfDimY,
-                               fNVoxelZ*fVoxelHalfDimZ);
+  fContainer_solid = new G4Box("phantomContainer",fNoVoxelsX*fVoxelHalfDimX,
+                               fNoVoxelsY*fVoxelHalfDimY,
+                               fNoVoxelsZ*fVoxelHalfDimZ);
   fContainer_logic =
     new G4LogicalVolume( fContainer_solid,
    //the material is not important, it will be fully filled by the voxels
@@ -860,19 +860,19 @@ void DicomDetectorConstruction::ConstructPhantomContainerNew()
 #ifdef G4_DCMTK
   //---- Extract number of voxels and voxel dimensions
 #ifdef G4VERBOSE
-  G4cout << " fNVoxelX " << fNVoxelX << " fVoxelHalfDimX " << fVoxelHalfDimX 
+  G4cout << " fNoVoxelsX " << fNoVoxelsX << " fVoxelHalfDimX " << fVoxelHalfDimX 
          <<G4endl;
-  G4cout << " fNVoxelY " << fNVoxelY << " fVoxelHalfDimY " << fVoxelHalfDimY 
+  G4cout << " fNoVoxelsY " << fNoVoxelsY << " fVoxelHalfDimY " << fVoxelHalfDimY 
          <<G4endl;
-  G4cout << " fNVoxelZ " << fNVoxelZ << " fVoxelHalfDimZ " << fVoxelHalfDimZ 
+  G4cout << " fNoVoxelsZ " << fNoVoxelsZ << " fVoxelHalfDimZ " << fVoxelHalfDimZ 
          <<G4endl;
-  G4cout << " totalPixels " << fNVoxelX*fNVoxelY*fNVoxelZ <<  G4endl;
+  G4cout << " totalPixels " << fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ <<  G4endl;
 #endif
   
   //----- Define the volume that contains all the voxels
-  fContainer_solid = new G4Box("phantomContainer",fNVoxelX*fVoxelHalfDimX,
-                               fNVoxelY*fVoxelHalfDimY,
-                               fNVoxelZ*fVoxelHalfDimZ);
+  fContainer_solid = new G4Box("phantomContainer",fNoVoxelsX*fVoxelHalfDimX,
+                               fNoVoxelsY*fVoxelHalfDimY,
+                               fNoVoxelsZ*fVoxelHalfDimZ);
   fContainer_logic =
     new G4LogicalVolume( fContainer_solid,
    //the material is not important, it will be fully filled by the voxels
@@ -940,7 +940,7 @@ void DicomDetectorConstruction::ConstructSDandField()
   //SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
   //G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit("DoseDeposit");
   G4VPrimitiveScorer* dosedep = 
-    new G4PSDoseDeposit3D("DoseDeposit", fNVoxelX, fNVoxelY, fNVoxelZ);
+    new G4PSDoseDeposit3D("DoseDeposit", fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ);
   MFDet->RegisterPrimitive(dosedep);
   
   for(auto ite = fScorers.cbegin(); ite != fScorers.cend(); ++ite)

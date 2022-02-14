@@ -8,10 +8,6 @@
 // of the LorentzRotation.cc code module.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/LorentzVector.h"
 #include "CLHEP/Vector/LorentzRotation.h"
 

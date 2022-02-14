@@ -19,6 +19,9 @@ include $(G4INSTALL)/config/architecture.gmk
 ifdef G4FPE_DEBUG
   CPPFLAGS += -DG4FPE_DEBUG
 endif
+ifdef G4BT_DEBUG
+  CPPFLAGS += -DG4BT_DEBUG
+endif
 
 CPPFLAGS += -DG4RUN_ALLOC_EXPORT
 CPPFLAGS += \
@@ -33,6 +36,7 @@ CPPFLAGS += \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/scoring/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
+            -I$(G4BASE)/processes/optical/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/geometry/management/include \
@@ -50,9 +54,8 @@ CPPFLAGS += \
             -I$(G4BASE)/intercoms/include \
 	    -I$(G4BASE)/geometry/biasing/include \
             -I$(G4BASE)/graphics_reps/include \
+            -I$(G4BASE)/processes/hadronic/management/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-            -I$(G4BASE)/processes/hadronic/models/management/include \
-            -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/particles/bosons/include \
             -I$(G4BASE)/particles/leptons/include \

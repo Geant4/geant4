@@ -90,14 +90,14 @@ public:
 				  G4double scaledTkin, 
 				  G4double tmin, G4double tmax) const;
 
+  // hide assignment operator 
+  G4PAIModelData & operator=(const  G4PAIModelData &right) = delete;
+  G4PAIModelData(const  G4PAIModelData&) = delete;
+
 private:
 
   G4double GetEnergyTransfer(G4int coupleIndex, size_t iPlace, 
 			     G4double position) const;
-
-  // hide assignment operator 
-  G4PAIModelData & operator=(const  G4PAIModelData &right);
-  G4PAIModelData(const  G4PAIModelData&);
 
   G4int                fTotBin;
   G4double             fLowestKineticEnergy;

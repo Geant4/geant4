@@ -46,12 +46,6 @@
  
 #include "globals.hh"
 #include "Randomize.hh"
-#include "G4Element.hh"
-#include "G4ElementVector.hh"
-#include "G4ElementTable.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsVector.hh"
-#include "G4LPhysicsFreeVector.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4Electron.hh"
@@ -81,5 +75,6 @@ class G4LFission : public G4HadronicInteraction
 
     void init();
     G4double spneut[10];
+    G4int secID;  // Creator model ID for the secondaries created by this model
 };
 #endif

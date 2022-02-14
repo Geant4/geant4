@@ -6,11 +6,11 @@
 #
 #-------------------------------------------------
 
-#/control/verbose 2
-#/run/verbose 2
+/control/verbose 2
+/run/verbose 2
 #/tracking/verbose 2
 
-/gun/energy    100 MeV
+/gun/energy 100 MeV
 /gun/particle proton
 /run/beamOn 1000
 

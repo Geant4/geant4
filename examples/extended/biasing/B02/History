@@ -20,12 +20,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2020 Ben Morgan - B02-V10-06-00
+- Migration to G4RunManagerFactory.
+
+May 8th, 2018 B. Morgan - B02-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Mar 7th, 2017 A. Howard - B02-V10-03-00
+- Removed unnecessary clear sampling from B02
+
+Jul 20th, 2016 I. Hrivnacova
+- Coding guidelines (redundant empty lines)
+- Removed unused B02DetectorConstruction::aIstore and its getter
+
 Nov 22nd, 2013 A.Howard - B02-V09-06-10
 - Removed non-english variable names!
 
 Nov 22nd, 2013 A.Howard - B02-V09-06-09
 - Migrated to new MT compliant interface with modular physicslist
-- co-working with 
+- co-working with
   	     	  geombias-V09-06-05
   	     	  phys-ctor-limiters-V09-06-012
   	     	  procbiasing-V09-06-09
@@ -85,7 +100,7 @@ March 17th, 2005 G.Daquino - B02-V07-00-00
 Jun 18th, 2004  G.Daquino - B02-V06-01-00
 - porting B02 from Anaphe (Lizard) to PI. Actually, PI 1.2.1 still DOES NOT
   allow the plotting in the same way, previously set in Anaphe. Therefore the
-  HBOOk file produced at the end of the example still needs other packages to 
+  HBOOk file produced at the end of the example still needs other packages to
   be displayed. However, future PI releases could contain python modules with
   this property.
   README file has been updated accordingly.

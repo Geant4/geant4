@@ -28,35 +28,35 @@
 /// \brief Implementation of the OpNoviceActionInitialization class
 
 #include "OpNoviceActionInitialization.hh"
+#include "OpNoviceEventAction.hh"
 #include "OpNovicePrimaryGeneratorAction.hh"
 #include "OpNoviceRunAction.hh"
-#include "OpNoviceSteppingAction.hh"
 #include "OpNoviceStackingAction.hh"
+#include "OpNoviceSteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 OpNoviceActionInitialization::OpNoviceActionInitialization()
- : G4VUserActionInitialization()
+  : G4VUserActionInitialization()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-OpNoviceActionInitialization::~OpNoviceActionInitialization()
-{}
+OpNoviceActionInitialization::~OpNoviceActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNoviceActionInitialization::BuildForMaster() const
 {
   SetUserAction(new OpNoviceRunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNoviceActionInitialization::Build() const
 {
-  SetUserAction(new OpNovicePrimaryGeneratorAction());
-  SetUserAction(new OpNoviceRunAction());
-  SetUserAction(new OpNoviceSteppingAction());
+  OpNovicePrimaryGeneratorAction* primary =
+    new OpNovicePrimaryGeneratorAction();
+  SetUserAction(primary);
+  SetUserAction(new OpNoviceRunAction(primary));
+  OpNoviceEventAction* event = new OpNoviceEventAction();
+  SetUserAction(event);
+  SetUserAction(new OpNoviceSteppingAction(event));
   SetUserAction(new OpNoviceStackingAction());
 }

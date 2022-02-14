@@ -75,27 +75,24 @@ public:  // with description
   explicit G4ComptonScattering(const G4String& processName ="compt",
 			       G4ProcessType type = fElectromagnetic);
 
-  virtual ~G4ComptonScattering();
+  ~G4ComptonScattering() override;
 
   // true for Gamma only.  
-  virtual G4bool IsApplicable(const G4ParticleDefinition&) final;
+  G4bool IsApplicable(const G4ParticleDefinition&) final;
   
-  // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo() override;
- 
   // print description in html
-  virtual void ProcessDescription(std::ostream&) const override;
+  void ProcessDescription(std::ostream&) const override;
 
-protected:
-
-  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
-
-private:
-     
   G4ComptonScattering & operator=(const  G4ComptonScattering &right) = delete;
   G4ComptonScattering(const  G4ComptonScattering&) = delete;
 
-  G4bool       isInitialised;
+protected:
+
+  void InitialiseProcess(const G4ParticleDefinition*) override;
+
+private:
+     
+  G4bool isInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

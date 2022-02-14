@@ -16,6 +16,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 23, 2021, Alberto Ribon (procscore-V10-07-01)
+- G4ParallelWorldProcess.cc : replaced hardwired process sub-type "491"
+  with new enum value PARALLEL_WORLD_PROCESS.
+
+April 16, 2021, Ben Morgan (procscore-V10-07-00)
+- Migrate build to modular CMake API
+
+May 13, 2020, M. Asai (procscore-V10-06-01)
+- G4ParallelWorldProcess.hh: make some private methods and data members
+  protected so that this class can be extendable.
+
+February 10, 2020, V. Ivanchenko (procscore-V10-06-00)
+- G4ParallelWorldProcess.cc, G4ParallelWorldScoringProcess.cc
+  - use new PDG code for optical photon "-22"
+
 November 24, 2018, M. Asai (procscore-V10-04-01)
 - G4ParallelWorldProcess.cc
   - Fix the track velocity of optical photon for the first step
@@ -39,8 +54,8 @@ July 13, 2015, A. Dotti (procscore-V10-01-01)
 
 February 12, 2015, J.Apostolakis (procscore-V10-01-00)
 - G4ParallelWorldProcess: verbosity to check Update of fieldtrack
-   (protected with custom flag. )   
-    
+   (protected with custom flag. )
+
 November 20, 2014, M.Asai (procscore-V10-00-01)
 - Coverity fixes.
 
@@ -62,7 +77,7 @@ March 17, 2013, M.Asai (procscore-V09-06-01)
   GeomNav1002.
 
 March 27, 2013, M.Asai (procscore-V09-06-00)
-- G4ParallelWorldProcess now sets G4Navigator::SetPushVerbosity(false) 
+- G4ParallelWorldProcess now sets G4Navigator::SetPushVerbosity(false)
   for the navigator of the parallel world to reduce the warning message
   GeomNav1002.
 
@@ -79,9 +94,9 @@ October 9, 2012, M.Asai (procscore-V09-05-04)
 - Fix a compilation warning.
 
 October 5, 2012, M.Asai (procscore-V09-05-03)
-- Introducing "HyperStep" G4Step object owned by G4ParallelWorldProcess, 
+- Introducing "HyperStep" G4Step object owned by G4ParallelWorldProcess,
   which may possess touchables in pre- and post-step points belonging
-  in different worlds. 
+  in different worlds.
 
 July 10, 2012, G.Cosmo (procscore-V09-05-02)
 - Explicitly use inclusion of headers for system of units and physical
@@ -128,8 +143,8 @@ November 23, 2010 J.Apostolakis (procscore-V09-03-00)
   in a Voxel-based "Regular" volume.
   Requires tag in run, "run-V09-03-08".
 
-November 18, 2010 J.Apostolakis 
-- Added G4EnergySplitter (created by Pedro Arce) 
+November 18, 2010 J.Apostolakis
+- Added G4EnergySplitter (created by Pedro Arce)
 
 September 7th, 2008 M.Asai (procscore-V09-01-01)
 - Correction of incorrect modification in the previous tag.

@@ -21,8 +21,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+envs-V10-07-00/ Sep. 25, 2020 B.Morgan
+- Remove MOMO
+
 envs-V10-05-00/ Dec. 1, 2019 K.Murakami
  - g4py, updated for 10.6 release
  - g4pym boost_python library name can be specified in cmake (BZ-2059)

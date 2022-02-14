@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 include(CMakeDependentOption)
 
 set(name ChargeExchangeMC)
@@ -15,32 +15,18 @@ if(NOT gdml_FOUND)
   return()
 endif()
 
-# if CEXMC_USE_TCSH is 'yes' then tcsh session support will be built
-option(CEXMC_USE_TCSH
-    "Build ${name} with tcsh session support
-    (requires Geant4 tcsh support)" ON)
-if(CEXMC_USE_TCSH)
-    find_package(Geant4 COMPONENTS ui_tcsh)
-    if(NOT Geant4_ui_tcsh_FOUND)
-        message(WARNING
-            "Could not find Geant4 tcsh binding, skip tcsh session support")
-    endif()
-endif()
-
-# if CEXMC_USE_GUI is 'yes' then GUI session support will be built
-option(CEXMC_USE_GUI
-    "Build ${name} with GUI session support
-    (requires Geant4 Qt backend)" ON)
-if(CEXMC_USE_GUI)
-    find_package(Geant4 COMPONENTS qt)
-    if(NOT Geant4_qt_FOUND)
-        message(WARNING
-            "Could not find Geant4 Qt backend, skip GUI session support")
-    endif()
+option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
+if(WITH_GEANT4_UIVIS)
+  find_package(Geant4 REQUIRED ui_all vis_all)
+else()
+  find_package(Geant4 REQUIRED)
 endif()
 
 include(${Geant4_USE_FILE})
 
+# Setup of ROOT ANALYSIS : optional.
+find_package(ROOT QUIET)
+cmake_dependent_option(CEXMC_USE_HISTOGRAMING "Build example with analysis objects" ON "ROOT_FOUND" OFF)
 
 set(EXTRA_LIBRARIES )
 
@@ -48,21 +34,13 @@ set(EXTRA_LIBRARIES )
 # written; requires boost::serialize headers and library
 option(CEXMC_USE_PERSISTENCY
     "Build ${name} with data persistency support
-    (requires Boost Serialization library)" ON)
+    (requires Boost Serialization library)" OFF)
+
 if(CEXMC_USE_PERSISTENCY)
-    find_package(Boost COMPONENTS serialization)
-    if(Boost_SERIALIZATION_FOUND)
-        add_definitions(-DCEXMC_USE_PERSISTENCY)
-        include_directories(${Boost_INCLUDE_DIRS})
-        link_directories(${Boost_LIBRARY_DIRS})
-        list(APPEND EXTRA_LIBRARIES ${Boost_LIBRARIES})
-        message(STATUS
-            "Library ${Boost_LIBRARIES} was added to the linkage list")
-    else()
-        message(WARNING
-            "Could not find Boost Serialization library, "
-            "skip data persistency support")
-    endif()
+   find_package(Boost REQUIRED serialization)
+   add_definitions(-DCEXMC_USE_PERSISTENCY)
+   list(APPEND EXTRA_LIBRARIES Boost::serialization)
+    message(STATUS "Library Boost::serialization was added to the linkage list")
 endif()
 
 # if CEXMC_USE_CUSTOM_FILTER is 'yes' then Custom filter can be used for
@@ -111,77 +89,18 @@ if(CEXMC_DEBUG_TP)
     add_definitions(-DCEXMC_DEBUG_TP)
 endif()
 
-# if CEXMC_USE_HISTOGRAMING is 'yes' then ROOT histograming framework will be
-# compiled. Notice: if ROOT CERN is not installed in your system then the
-# histograming module won't compile anyway
-option(CEXMC_USE_HISTOGRAMING
-    "Build ${name} with histograming support
-    (requires CERN ROOT libraries)" ON)
 if(CEXMC_USE_HISTOGRAMING)
-    find_package(ROOT QUIET)
-    if(ROOT_FOUND)
-        add_definitions(-DCEXMC_USE_ROOT)
-        include_directories(${ROOT_INCLUDE_DIR})
-        list(APPEND EXTRA_LIBRARIES ${ROOT_LIBRARIES})
-        message(STATUS
-            "Libraries ${ROOT_LIBRARIES} were added to the linkage list")
-    else()
-        message(WARNING
-            "Could not find ROOT package, skip histograming support")
-    endif()
-endif()
-
-# if CEXMC_USE_ROOTQT is 'yes' then it will be possible to see ROOT histograms
-# in GUI session mode
-cmake_dependent_option(CEXMC_USE_ROOTQT
-    "Build ${name} with GUI histograming support
-    (requires CERN ROOT Qt binding)" ON
-    "CEXMC_USE_HISTOGRAMING" OFF)
-if(CEXMC_USE_ROOTQT AND ROOT_FOUND)
-    find_library(ROOTQT_LIBRARY GQt
-        PATHS ${ROOT_LIBRARY_DIR} ${ROOT_LIBRARY_DIR}/root
-        NO_DEFAULT_PATH)
-    if(ROOTQT_LIBRARY)
-        add_definitions(-DCEXMC_USE_ROOTQT)
-        list(APPEND EXTRA_LIBRARIES -lGQt)
-        message(STATUS "Library -lGQt was added to the linkage list")
-    else()
-        message(WARNING
-            "Could not find ROOT Qt library, skip GUI histograming support")
-    endif()
-endif()
-
-# if CEXMC_USE_GENBOD is 'yes' then original FORTRAN routine GENBOD() will be
-# used as phase space generator
-option(CEXMC_USE_GENBOD
-    "Link ${name} with original FORTRAN function GENBOD()
-    (by default C++ reimplementation of GENBOD() is used)" OFF)
-if(CEXMC_USE_GENBOD)
-    find_program(CERNLIB_CONFIG_EXE cernlib
-        PATHS $ENV{CERN_ROOT}/bin)
-    if(CERNLIB_CONFIG_EXE)
-        execute_process(
-            COMMAND ${CERNLIB_CONFIG_EXE} geant321 phtools packlib kernlib
-            OUTPUT_VARIABLE CERNLIB_LIBRARIES 
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-        add_definitions(-DCEXMC_USE_GENBOD)
-        list(APPEND EXTRA_LIBRARIES ${CERNLIB_LIBRARIES})
-        message(STATUS
-            "Libraries ${CERNLIB_LIBRARIES} were added to the linkage list")
-    else()
-        message(WARNING
-            "Could not find cernlib, skip original FORTRAN GENBOD() support")
-    endif()
-endif()
-
-# all classes in this project have same member names as their formal constructor
-# parameters, so -Wno-shadow option is mandatory to prevent multiple warnings!
-add_definitions(-Wno-shadow)
+	EXECUTE_PROCESS(COMMAND root-config --cflags OUTPUT_VARIABLE ROOT_CXX_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
+	EXECUTE_PROCESS(COMMAND root-config --libs OUTPUT_VARIABLE ROOT_LD_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+	set(CMAKE_EXE_LINKER_FLAGS ${ROOT_LD_FLAGS})
+endif(CEXMC_USE_HISTOGRAMING)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 
 add_executable(${name} ${name}.cc ${sources})
+
 target_link_libraries(${name} ${Geant4_LIBRARIES} ${EXTRA_LIBRARIES})
 
 install(TARGETS ${name} DESTINATION bin)

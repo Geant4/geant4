@@ -45,21 +45,21 @@ public:
 
 protected:
   //This methods actually constructs the volume.
-  virtual G4VPhysicalVolume* constructIn(G4VPhysicalVolume*);
-  virtual void constructDaughters();
+  virtual G4VPhysicalVolume* constructIn(G4VPhysicalVolume*) override;
+  virtual void constructDaughters() override;
 
   //Construct layer of scintillator or absorber
-  G4LogicalVolume*   constructScintillatorLayer (G4int);
-  G4LogicalVolume*   constructAbsorberLayer (G4int);
+  G4LogicalVolume* constructScintillatorLayer(G4int);
+  G4LogicalVolume* constructAbsorberLayer(G4int);
 
   //Constructs the sensitive detectors and associates them to the corresponding
   //logical volumes
-  virtual void constructSensitive() ;
+  virtual void constructSensitive() override;
 
 private:
   //Private data members
-  ptrG4Log*        sclLog;
-  ptrG4Log*        absLog;
+  ptrG4Log* sclLog;
+  ptrG4Log* absLog;
 
   // Logical volumes for sensitive detectors
   std::vector<ptrG4Log> allSensitiveLogs;

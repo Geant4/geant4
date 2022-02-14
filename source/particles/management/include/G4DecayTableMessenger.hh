@@ -23,32 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-//---------------------------------------------------------------
-//
-//
-//  G4DecayTableMessenger.hh
-//
-// Class Description:
-//    This is a messenger class to interface to exchange information
-//    between Decay Table/Decay Channel and UI.  
 // G4DecayTableMessenger
-//  /particle/property/decay/   Decay Table control commands.
+//
+// Class description:
+//
+// Messenger class to interface and exchange information between the
+// decay table/decay channel and UI.  
+//
+// /particle/property/decay/   Decay Table control commands.
 //   Commands : 
 //     select * Enter index of decay mode.
 //     dump * Dump decay mode information.
 //     br * Set branching ratio. [0< BR <1.0]
-//
-//  History:
-//    13 June 1997, H. Kurashige   : The 1st version created.
-//    13 Nov. 1997, H. Kurashige   : fix bugs
-//    08 Jan. 1998, H. Kurashige   : new UIcommand
-//---------------------------------------------------------------
 
-#ifndef G4DecayTableMessenger_h
-#define G4DecayTableMessenger_h 1
+// Author: H.Kurashige, 13 June 1997
+// --------------------------------------------------------------------
+#ifndef G4DecayTableMessenger_hh
+#define G4DecayTableMessenger_hh 1
+
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4ParticleTable;
 class G4VDecayChannel;
@@ -60,40 +54,34 @@ class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger; 
 class G4UIcmdWithADouble;
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class G4DecayTableMessenger: public G4UImessenger
+class G4DecayTableMessenger : public G4UImessenger
 {
-  public: // With Description
-    G4DecayTableMessenger(G4ParticleTable* pTable = 0);
+  public:
+
+    G4DecayTableMessenger(G4ParticleTable* pTable = nullptr);
     virtual ~G4DecayTableMessenger();
 
-    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
-    virtual G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
+
+    G4DecayTableMessenger(const G4DecayTableMessenger&) = delete;
+    G4DecayTableMessenger& operator= (const G4DecayTableMessenger&) = delete;
 
   private:
-    G4DecayTableMessenger(const G4DecayTableMessenger&):G4UImessenger(){}
-    G4DecayTableMessenger & operator = (const G4DecayTableMessenger &){ return *this;}
 
-  private:
     G4ParticleDefinition* SetCurrentParticle();
-    G4ParticleTable* theParticleTable;
-    G4ParticleDefinition* currentParticle;
-    G4DecayTable*   currentDecayTable;
-    G4int           idxCurrentChannel;
-    G4VDecayChannel* currentChannel;
 
-    G4UIdirectory *             thisDirectory;
-    G4UIcmdWithoutParameter *   dumpCmd;
-    G4UIcmdWithAnInteger *      selectCmd;
-    G4UIcmdWithADouble   *      brCmd; 
+    G4ParticleTable* theParticleTable = nullptr;
+    G4ParticleDefinition* currentParticle = nullptr;
+    G4DecayTable* currentDecayTable = nullptr;
+    G4VDecayChannel* currentChannel = nullptr;
+
+    G4UIdirectory* thisDirectory = nullptr;
+    G4UIcmdWithoutParameter* dumpCmd = nullptr;
+    G4UIcmdWithAnInteger* selectCmd = nullptr;
+    G4UIcmdWithADouble* brCmd = nullptr; 
+
+    G4int idxCurrentChannel = -1;
 };
 
 #endif
-
-
-
-
-
-

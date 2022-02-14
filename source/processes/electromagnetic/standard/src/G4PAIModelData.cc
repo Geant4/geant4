@@ -180,20 +180,11 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
     PAItransferTable->insertAt(i,transferVector);
     PAIdEdxTable->insertAt(i,dEdxVector);
 
-    //transferVector->SetSpline(true);
-    //transferVector->FillSecondDerivatives();
-    //dEdxVector->SetSpline(true);
-    //dEdxVector->FillSecondDerivatives();
-
   } // end of Tkin loop`
   fPAIxscBank.push_back(PAItransferTable);
   fPAIdEdxBank.push_back(PAIdEdxTable);
   //G4cout << "dEdxMeanVector: " << G4endl;
   //G4cout << *dEdxMeanVector << G4endl;
-  /*
-  dEdxMeanVector->SetSpline(true);
-  dEdxMeanVector->FillSecondDerivatives();
-  */
   fdEdxTable.push_back(dEdxMeanVector);
 }
 
@@ -204,7 +195,8 @@ G4double G4PAIModelData::DEDXPerVolume(G4int coupleIndex, G4double scaledTkin,
 {
   // VI: iPlace is the low edge index of the bin
   // iPlace is in interval from 0 to (N-1)
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  size_t iPlace(0);
+  G4double dEdx = fdEdxTable[coupleIndex]->Value(scaledTkin, iPlace);
   size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
   /*
   G4cout << "G4PAIModelData::DEDXPerVolume: coupleIdx= " << coupleIndex
@@ -218,7 +210,6 @@ G4double G4PAIModelData::DEDXPerVolume(G4int coupleIndex, G4double scaledTkin,
   }
 
   // VI: apply interpolation of the vector
-  G4double dEdx = fdEdxTable[coupleIndex]->Value(scaledTkin);
   G4double del  = (*(fPAIdEdxBank[coupleIndex]))(iPlace)->Value(cut);
   //G4cout << "dEdx= " << dEdx << " del= " << del << G4endl;
   if(!one) {

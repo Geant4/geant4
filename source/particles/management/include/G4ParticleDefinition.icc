@@ -23,17 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticleDefinition inline methods implementation
 //
-//
+// Authors: G.Cosmo, 2 December 1995 - Design, based on object model
+//          M.Asai, 29 January 1996 - First implementation
+// --------------------------------------------------------------------
 
 inline 
- G4int G4ParticleDefinition::GetInstanceID() const
+G4int G4ParticleDefinition::GetInstanceID() const
 { 
   return g4particleDefinitionInstanceID; 
 }
 
 inline
- G4bool G4ParticleDefinition::GetPDGStable() const
+G4bool G4ParticleDefinition::GetPDGStable() const
 {
   if(IsGeneralIon())
   { return (GetIonLifeTime()<0.); }
@@ -42,69 +45,64 @@ inline
 }
 
 inline
- G4double G4ParticleDefinition::GetPDGLifeTime() const
-{ return thePDGLifeTime; }
+G4double G4ParticleDefinition::GetPDGLifeTime() const
+{
+  return thePDGLifeTime;
+}
 
 inline 
- G4double G4ParticleDefinition::GetIonLifeTime() const
-{ return thePDGLifeTime; }
+G4double G4ParticleDefinition::GetIonLifeTime() const
+{
+  //-- No longer needed to access to G4IonTable.
+  //-- Method GetIonLifeTime() itself is kept for compatibility
 
-//-- No longer needed to access to G4IonTable.
-//-- Method GetIonLifeTime() itself is kept for compatibility
-//-- but moved to icc file as an inlined method.
-//inline
-// G4double G4ParticleDefinition::GetPDGLifeTime() const
-//{
-//  if(IsGeneralIon())
-//  { return GetIonLifeTime(); }
-//  else
-//  { return thePDGLifeTime; }
-//}
+  return thePDGLifeTime;
+}
 
 inline 
- G4ParticleTable* G4ParticleDefinition::GetParticleTable() const
+G4ParticleTable* G4ParticleDefinition::GetParticleTable() const
 { 
   return theParticleTable; 
 }
 
 inline
- G4DecayTable* G4ParticleDefinition::GetDecayTable() const
+G4DecayTable* G4ParticleDefinition::GetDecayTable() const
 { 
   return theDecayTable; 
 }
 
 inline
- void G4ParticleDefinition::SetDecayTable(G4DecayTable* aDecayTable) 
+void G4ParticleDefinition::SetDecayTable(G4DecayTable* aDecayTable) 
 { 
   theDecayTable = aDecayTable; 
 }
 
 inline 
- void G4ParticleDefinition::SetVerboseLevel(G4int value)
+void G4ParticleDefinition::SetVerboseLevel(G4int value)
 {
-   verboseLevel = value;
+  verboseLevel = value;
 }
 
 inline 
- G4int G4ParticleDefinition::GetVerboseLevel() const
+G4int G4ParticleDefinition::GetVerboseLevel() const
 {
-   return verboseLevel;
+  return verboseLevel;
 }
 
 inline
- G4ProcessManager* G4ParticleDefinition::GetMasterProcessManager() const
+G4ProcessManager* G4ParticleDefinition::GetMasterProcessManager() const
 {
-    return theProcessManagerShadow;
+  return theProcessManagerShadow;
 }
 
 inline
-  void G4ParticleDefinition::SetMasterProcessManager( G4ProcessManager* aNewPM )
+void G4ParticleDefinition::SetMasterProcessManager( G4ProcessManager* aNewPM )
 {
-   theProcessManagerShadow = aNewPM;
+  theProcessManagerShadow = aNewPM;
 }
 
 inline
- G4int G4ParticleDefinition::GetQuarkContent(G4int flavor) const 
+G4int G4ParticleDefinition::GetQuarkContent(G4int flavor) const 
 {
   G4int content = 0; 
   if ((flavor>0) && (flavor<=NumberOfQuarkFlavor))
@@ -120,14 +118,14 @@ inline
       message << "Invalid Quark Flavor: " << flavor;
       G4Exception("G4ParticleDefinition::GetQuarkContent()",
                   "InvalidFlavor", JustWarning, message);
-    }	
-#endif	
+    }
+#endif
   }
   return content;  
 }
 
 inline
- G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const 
+G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const 
 {
   G4int content = 0;
   if ((flavor>0) && (flavor<=NumberOfQuarkFlavor))
@@ -150,13 +148,13 @@ inline
 }
 
 inline 
- void G4ParticleDefinition::SetParticleSubType(const G4String& subtype)
+void G4ParticleDefinition::SetParticleSubType(const G4String& subtype)
 {
   theParticleSubType = subtype;
 }
  
 inline 
- void             G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding)
+void G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding)
 { 
   theAntiPDGEncoding = aEncoding; 
 }
@@ -168,50 +166,81 @@ G4bool G4ParticleDefinition::GetApplyCutsFlag() const
 }
 
 inline
- void G4ParticleDefinition::SetAtomicNumber(G4int i)
+void G4ParticleDefinition::SetAtomicNumber(G4int i)
 {
   theAtomicNumber = i;
 }
 
 inline
- G4int G4ParticleDefinition::GetAtomicNumber() const
+G4int G4ParticleDefinition::GetAtomicNumber() const
 {
   return theAtomicNumber;
 }
 
 inline
- void G4ParticleDefinition::SetAtomicMass(G4int i)
+void G4ParticleDefinition::SetAtomicMass(G4int i)
 {
   theAtomicMass = i;
 }
 
 inline
- G4int G4ParticleDefinition::GetAtomicMass() const
+G4int G4ParticleDefinition::GetAtomicMass() const
 {
   return theAtomicMass;
 }
 
 inline 
-  void  G4ParticleDefinition::SetPDGMagneticMoment(G4double magneticMoment)
+void  G4ParticleDefinition::SetPDGMagneticMoment(G4double magneticMoment)
 {
-   thePDGMagneticMoment = magneticMoment;
+  thePDGMagneticMoment = magneticMoment;
 }
 
 inline      
-  G4bool G4ParticleDefinition::IsGeneralIon() const
+G4bool G4ParticleDefinition::IsGeneralIon() const
 {
   return isGeneralIon;
 }
 
 inline
-  G4bool G4ParticleDefinition::IsMuonicAtom() const
+G4bool G4ParticleDefinition::IsMuonicAtom() const
 {
   return isMuonicAtom;
 }
 
 inline
-  G4int G4ParticleDefinition::GetParticleDefinitionID() const
+G4int G4ParticleDefinition::GetParticleDefinitionID() const
 {
   return g4particleDefinitionInstanceID; 
 }
 
+inline
+G4bool G4ParticleDefinition::IsHypernucleus() const
+{
+  if ( GetNumberOfLambdasInHypernucleus() > 0 ) return true;
+  return false;
+}
+
+inline
+G4int G4ParticleDefinition::GetNumberOfLambdasInHypernucleus() const
+{
+  // PDG code of hypernuclei: 10LZZZAAAI
+  G4int numberOfLambdas = 0;
+  if ( thePDGEncoding > 0 ) numberOfLambdas = (thePDGEncoding/10000000)%100;
+  return numberOfLambdas;
+}
+
+inline
+G4bool G4ParticleDefinition::IsAntiHypernucleus() const
+{
+  if ( GetNumberOfAntiLambdasInAntiHypernucleus() > 0 ) return true;
+  return false;
+}
+
+inline
+G4int G4ParticleDefinition::GetNumberOfAntiLambdasInAntiHypernucleus() const
+{
+  // PDG code of anti-hypernuclei: -10LZZZAAAI
+  G4int numberOfAntiLambdas = 0;
+  if ( thePDGEncoding < 0 ) numberOfAntiLambdas = (std::abs(thePDGEncoding)/10000000)%100;
+  return numberOfAntiLambdas;
+}

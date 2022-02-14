@@ -29,19 +29,15 @@
 //
 // Created by Joanna Weng 26.11.2004
 
-// G4 includes 
+// G4 includes
 #include "G4Types.hh"
 #include "G4ios.hh"
 #include "G4Timer.hh"
 #include "G4UImanager.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
-// my project 
+// my project
 #include "ExGflash3DetectorConstruction.hh"
 #include "ExGflash3ParallelWorld.hh"
 #include "ExGflashActionInitialization.hh"
@@ -56,7 +52,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
-{   
+{
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
   if ( argc == 1 ) {
@@ -66,30 +62,18 @@ int main(int argc,char** argv)
   // timer to see GFlash performance
   G4Timer timer;
   timer.Start();
-  
+
   G4cout<<"+-------------------------------------------------------+"<<G4endl;
   G4cout<<"|                                                       |"<<G4endl;
   G4cout<<"|          This is an example of Shower                 |"<<G4endl;
   G4cout<<"|          Parameterization with GFLASH                 |"<<G4endl;
   G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  
 
-
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(1);
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  G4cout<<"|              Constructing MT run manager              |"<<G4endl;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-#else
-  G4RunManager * runManager = new G4RunManager;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  G4cout<<"|        Constructing sequential run manager            |"<<G4endl;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-#endif
-  
+
   // UserInitialization classes (mandatory)
-  G4cout<<"# GFlash Example: Detector Construction"<<G4endl;    
+  G4cout<<"# GFlash Example: Detector Construction"<<G4endl;
   auto detector = new ExGflash3DetectorConstruction();
   detector->RegisterParallelWorld(new ExGflash3ParallelWorld("parallelWorld"));
   runManager->SetUserInitialization(detector);
@@ -126,22 +110,22 @@ int main(int argc,char** argv)
   UImanager->ApplyCommand("/run/verbose 0");
   runManager->Initialize();
   UImanager->ApplyCommand("/Step/Verbose 0");
-  
+
   if (ui)   // Define UI terminal for interactive mode
-  { 
+  {
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
   }
   else           // Batch mode
-  { 
+  {
     G4String s=*(argv+1);
     UImanager->ApplyCommand("/control/execute "+s);
   }
-  
+
   delete visManager;
   delete runManager;
-  
+
   timer.Stop();
   G4cout << G4endl;
   G4cout << "******************************************";
@@ -154,7 +138,7 @@ int main(int argc,char** argv)
   G4cout << G4endl;
   G4cout << "******************************************";
   G4cout << G4endl;
-  
+
   return 0;
 }
 

@@ -16,6 +16,73 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 September 2021 - G.Cosmo (externals-V10-07-07)
+- Synchronised with CLHEP-2.4.5.1:
+  o New random engine RANLUX++ and related helper classes (J.Hahnfeld).
+    RANLUX++ is an extension of RANLUX and uses the equivalent LCG to
+    offer a much higher luxury level at better performance. It inherits
+    the excellent statistical properties and passes the full BigCrush.
+
+07 July 2021 - G.Cosmo (externals-V10-07-06)
+- CLHEP: Fixed seeding in Ranlux64Engine (J.Hahnfeld).
+
+03 June 2021, B. Morgan (externals-V10-07-05)
+- PTL: Hide PTL_... options from clients building Geant4
+  - Forward relevant Geant4 options to PTL: TBB, sanitizer, locks
+
+11 May 2021, J. Allison  (externals-V10-07-04)
+- g4tools-V10-07-03: Rename g4tools/include/tools/sg/gL_manager to GL_manager.
+
+07 May 2021 - G.Cosmo (externals-V10-07-03)
+- CLHEP: Updated values in SystemOfUnits.h and PhysicalConstants.h:
+  o Added units: minute, hour, day, year and millielectronvolt.
+  o Added constants: Bohr_magneton and nuclear_magneton.
+
+06 May 2021 - G.Cosmo (externals-V10-07-02)
+- CLHEP: Fixed trivial compilation warnings on gcc-11 in Random headers.
+
+18 February 2021 - B.Morgan (externals-V10-07-01)
+- Move g4tools from analysis to externals category
+
+8 December 2020 - B.Morgan (externals-V10-07-00)
+- Force PTL to install its CMake configuration files within the directory
+  where Geant4 installs its own.
+- Force PTL to install its headers under CMAKE_INSTALL_INCLUDEDIR/Geant4
+
+11 November 2020 - G.Cosmo (externals-V10-06-05)
+- Synchronised with CLHEP-2.4.4.0:
+  o Removed obsolete #pragma interface/implementation in Vector classes.
+  o Get rid of switch statement in operator()/operator[] of Hep3Vector
+    Replaced dx/dy/dz with operator[] in Hep3Vector.
+    Replaced private dx/dy/dz with public x()/y()/z() in Hep3Vector
+  o Added missing includes in Vector and Random classes for translation
+    unit encapsulation.
+
+17 July 2020 - G.Cosmo (externals-V10-06-04)
+- CLHEP: Updated values in SystemOfUnits.h and PhysicalConstants.h for:
+  - e_SI, electron charge
+  - h_Planck, Planck constant
+  - Avogadro, Avogadro constant
+  - k_Boltzmann, Boltzmann constant
+  based on May 2019 redefinition of SI units. References:
+  https://en.wikipedia.org/wiki/2019_redefinition_of_the_SI_base_units
+  https://www.britannica.com/science/electron-charge.
+
+14 July 2020 - G. Cosmo (externals-V10-06-03)
+- CLHEP: Use 32-bit internal seeds types coherently in MixMaxRng.
+  Addressing CLHEP JIRA ticket #156.
+
+10 June 2020 - J. Madsen (externals-V10-06-02)
+- Migrated PTL's used of CMAKE_BINARY_DIR to PROJECT_BINARY_DIR
+- Fixed PTLConfig.cmake.in for testing
+- Reduced cmake to 3.8 to match Geant4
+
+4 June 2020 - J. Madsen (externals-V10-06-01)
+- Fixed ptl installation of interface libraries
+
+4 June 2020 - J. Madsen (externals-V10-06-00)
+- Added ptl (Parallel Tasking Library) source code
+
 19 November 2019 - G.Cosmo (externals-V10-05-05)
 - CLHEP: Fixed warnings for cases of implicit type conversions in
   Rand*Ziggurat classes.
@@ -35,7 +102,7 @@ committal in the CVS repository !
   MixMaxRng: throw if seed is zero. Use throw instead of exit() elsewhere.
 
 07 June 2019 - G.Cosmo (externals-V10-05-01)
-- CLHEP: defaulted operator=() also for Plan3D; fixing deprecation warnings 
+- CLHEP: defaulted operator=() also for Plan3D; fixing deprecation warnings
   on gcc-9.1.
   Fixed shadowing compilation warnings in Transform3D as reported on gcc-9.1.
 

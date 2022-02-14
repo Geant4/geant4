@@ -46,11 +46,12 @@
 
 G4ElementData::G4ElementData()
 {
-  name = "";
-  for(G4int i=0; i<maxNumElements; ++i) {
+  for(G4int i=0; i<maxNumElm; ++i) {
     elmData[i] = nullptr;
     elm2Data[i] = nullptr;
     compLength[i] = 0;
+    compData[i] = nullptr;
+    compID[i] = nullptr;
   }
 }
 
@@ -58,76 +59,77 @@ G4ElementData::G4ElementData()
 
 G4ElementData::~G4ElementData()
 {
-  for(G4int i=0; i<maxNumElements; ++i) {
+  for(G4int i=0; i<maxNumElm; ++i) {
     delete elmData[i];
     delete elm2Data[i];
-    size_t n = compLength[i]; 
-    //G4cout << "Z= " << i << " L= " << n << G4endl;
-    for(size_t j=0; j<n; ++j) {
-      //G4cout << "j= " << j << "  " << (compData[i])[j] << G4endl;
-      delete (compData[i])[j];
+    if(nullptr != compID[i]) {
+      for(size_t j=0; j<compID[i]->size(); ++j) {
+	delete (*(compData[i]))[j];
+      }
+      delete compID[i];
+      delete compData[i];
     }
   }
 }
 
 void G4ElementData::InitialiseForElement(G4int Z, G4PhysicsVector* v)
 {
-  if(Z < 1 || Z >= maxNumElements) {
+  if(Z < 1 || Z >= maxNumElm) {
     G4cout << "G4ElementData::InitialiseForElement ERROR for " << name 
 	   << "  Z = " << Z << " is out of range!" << G4endl;
     G4Exception("G4ElementData::InitialiseForElement()", "mat601", 
                  FatalException, "Wrong data handling");
     return;
   } 
-  if(elmData[Z]) { delete elmData[Z]; }
+  if(nullptr != elmData[Z]) { delete elmData[Z]; }
   elmData[Z] = v;
 }
 
 void G4ElementData::InitialiseForElement(G4int Z, G4Physics2DVector* v)
 {
-  if(Z < 1 || Z >= maxNumElements) {
+  if(Z < 1 || Z >= maxNumElm) {
     G4cout << "G4ElementData::InitialiseForElement ERROR for " << name 
 	   << "  Z = " << Z << " is out of range!" << G4endl;
     G4Exception("G4ElementData::InitialiseForElement()", "mat601", 
                  FatalException, "Wrong data handling");
     return;
   } 
-  if(elm2Data[Z]) { delete elm2Data[Z]; }
+  if(nullptr != elm2Data[Z]) { delete elm2Data[Z]; }
   elm2Data[Z] = v;
 }
 
 void G4ElementData::InitialiseForComponent(G4int Z, G4int nComponents)
 {
-  if(Z < 1 || Z >= maxNumElements) {
+  if(Z < 1 || Z >= maxNumElm || nComponents < 0) {
     G4cout << "G4ElementData::InitialiseForComponent ERROR for " << name 
-	   << "  Z = " << Z << " is out of range!" << G4endl;
+	   << "  Z= " << Z << "  Ncomp= " << nComponents
+	   << " is out of range!" << G4endl;
     G4Exception("G4ElementData::InitialiseForComponent()", "mat602", 
                  FatalException, "Wrong data handling");	   
     return;
   }
 
   // reserve a new structure
-  size_t n = compLength[Z];
-  if(0 < n) { 
-    for(size_t i=0; i<n; ++i) { delete (compData[Z])[i]; }
-    (compData[Z]).clear();
-    (compID[Z]).clear();
+  if(nullptr == compID[Z]) {
+    compID[Z] = new std::vector<G4int>();
+    compData[Z] = new std::vector<G4PhysicsVector*>();
   }
-  (compData[Z]).reserve(nComponents);
-  (compID[Z]).reserve(nComponents);
+  compID[Z]->resize(nComponents, -1);
+  compData[Z]->resize(nComponents, nullptr);
+  compLength[Z] = 0;
 }
 
-void 
-G4ElementData::AddComponent(G4int Z, G4int id, G4PhysicsVector* v)
+void G4ElementData::AddComponent(G4int Z, G4int id, G4PhysicsVector* v)
 {
-  if(Z < 1 || Z >= maxNumElements) {
+  if(Z < 1 || Z >= maxNumElm || 
+     (G4int)compID[Z]->size() == compLength[Z]) {
     G4cout << "G4ElementData::AddComponent ERROR for " << name 
 	   << "  Z = " << Z << " is out of range!" << G4endl;
     G4Exception("G4ElementData::AddComponent()", "mat603", 
                  FatalException, "Wrong data handling");	   
     return;
   }
-  (compData[Z]).push_back(v);
-  (compID[Z]).push_back(id);
-  ++compLength[Z];
+  (*(compData[Z]))[compLength[Z]] = v;
+  (*(compID[Z]))[compLength[Z]] = id;
+  compLength[Z] = compLength[Z] + 1;
 }

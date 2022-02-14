@@ -75,65 +75,64 @@ public:
 
   ~G4MuBetheBlochModel() = default;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-                          const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple*) override;
+  G4double MinEnergyCut(const G4ParticleDefinition*,
+			const G4MaterialCutsCouple*) override;
 			
-  virtual G4double ComputeCrossSectionPerElectron(
+  G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
 				 G4double maxEnergy);
 				 
-  virtual G4double ComputeCrossSectionPerAtom(
+  G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
 				 G4double maxEnergy) override;
 				 				 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
+  G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
 				 G4double maxEnergy) override;
 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-                                        const G4ParticleDefinition*,
-                                        G4double kineticEnergy,
-                                        G4double cutEnergy) override;
+  G4double ComputeDEDXPerVolume(const G4Material*,
+                                const G4ParticleDefinition*,
+                                G4double kineticEnergy,
+                                G4double cutEnergy) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
-
-protected:
-
-  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kinEnergy) override;
-
-private:
-
-  inline void SetParticle(const G4ParticleDefinition* p);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				const G4MaterialCutsCouple*,
+				const G4DynamicParticle*,
+				G4double tmin,
+				G4double maxEnergy) override;
 
   // hide assignment operator
   G4MuBetheBlochModel & operator=(const  G4MuBetheBlochModel &right) = delete;
   G4MuBetheBlochModel(const  G4MuBetheBlochModel&) = delete;
 
-  const G4ParticleDefinition* particle;
-  G4ParticleDefinition*       theElectron;
-  G4ParticleChangeForLoss*    fParticleChange;
-  G4EmCorrections*            corr;
+protected:
+
+  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+                              G4double kinEnergy) override;
+
+private:
+
+  inline void SetParticle(const G4ParticleDefinition* p);
+
+  const G4ParticleDefinition* particle = nullptr;
+  G4ParticleDefinition*       theElectron = nullptr;
+  G4ParticleChangeForLoss*    fParticleChange = nullptr;
+  G4EmCorrections*            corr = nullptr;
 
   G4double limitKinEnergy;
   G4double logLimitKinEnergy;
-  G4double mass;
-  G4double massSquare;
-  G4double ratio;
+  G4double mass = 1.0;
+  G4double massSquare = 1.0;
+  G4double ratio = 1.0;
   G4double twoln10;
   G4double alphaprime;
   static G4double xgi[8],wgi[8];
@@ -143,7 +142,7 @@ private:
 
 inline void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
-  if(!particle) {
+  if(nullptr == particle) {
     particle = p;
     mass = particle->GetPDGMass();
     massSquare = mass*mass;

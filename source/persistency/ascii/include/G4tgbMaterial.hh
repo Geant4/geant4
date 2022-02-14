@@ -23,26 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbMaterial
+// G4tgbMaterial
 //
 // Class description:
 //
 // Transient class of a material; builds a G4Material.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbMaterial_h
-#define G4tgbMaterial_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbMaterial_hh
+#define G4tgbMaterial_hh 1
 
 #include "globals.hh"
 
-#include <vector>
-#include <string>
 #include <iostream>
 
 #include "G4tgrMaterial.hh"
@@ -51,56 +44,37 @@
 class G4tgbMaterial
 {
   friend std::ostream& operator<<(std::ostream&, const G4tgbMaterial&);
-  
-  public:  // with description
+
+  public:
 
     G4tgbMaterial();
     virtual ~G4tgbMaterial();
 
-    G4tgbMaterial( G4tgrMaterial* tgr );
+    G4tgbMaterial(G4tgrMaterial* tgr);
 
     virtual G4Material* BuildG4Material() = 0;
 
-    const G4String& GetName() const
-    {
-      return theTgrMate->GetName();
-    }
+    const G4String& GetName() const { return theTgrMate->GetName(); }
 
-    G4double GetDensity() const
-    {
-      return theTgrMate->GetDensity();
-    }
+    G4double GetDensity() const { return theTgrMate->GetDensity(); }
 
     G4int GetNumberOfMaterials() const
     {
       return theTgrMate->GetNumberOfComponents();
     }
 
-    G4double GetA() const
-    {
-      return theTgrMate->GetA();
-    }
+    G4double GetA() const { return theTgrMate->GetA(); }
 
-    G4double GetZ() const
-    {
-      return theTgrMate->GetZ();
-    }
+    G4double GetZ() const { return theTgrMate->GetZ(); }
 
-    const G4String& GetType() const
-    {
-      return theTgrMate->GetType();
-    }  
+    const G4String& GetType() const { return theTgrMate->GetType(); }
 
-
-    G4tgrMaterial* GetTgrMate() const
-    {
-      return theTgrMate;
-    }
+    G4tgrMaterial* GetTgrMate() const { return theTgrMate; }
 
   protected:
 
-    G4tgrMaterial* theTgrMate;
-    G4Material* theG4Mate;
+    G4tgrMaterial* theTgrMate = nullptr;
+    G4Material* theG4Mate = nullptr;
 };
 
 #endif

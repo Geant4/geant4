@@ -1,0 +1,10 @@
+#Macro for the initialization in interactive mode
+
+#Geometry setting
+/control/execute geom.mac
+
+#Initialize kernel
+/run/initialize
+
+#Visualization setting
+/control/execute vis.mac

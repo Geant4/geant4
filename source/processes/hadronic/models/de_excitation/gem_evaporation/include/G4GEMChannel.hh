@@ -79,7 +79,7 @@ private:
   
   // Data Members ************
   // This data member define the channel. 
-  // They are intializated at object creation (constructor) time.
+  // They are initialised at object creation (constructor) time.
     
   // Atomic Number
   G4int A;
@@ -114,6 +114,9 @@ private:
   G4VCoulombBarrier * theCoulombBarrierPtr;
 
   G4NuclearLevelData* fNucData;
+
+  // For creator model ID of the secondaries created by this model
+  G4int secID;
 };
 
 

@@ -28,6 +28,7 @@
 // Author: G.Cosmo, CERN
 // --------------------------------------------------------------------
 
+#include <queue>
 #include <set>
 
 #include "G4GeomTestVolume.hh"
@@ -114,6 +115,55 @@ G4int G4GeomTestVolume::GetErrorsThreshold() const
 void G4GeomTestVolume::SetErrorsThreshold(G4int max)
 {
   maxErr = max;
+}
+
+//
+// Test overlap in tree
+//
+void G4GeomTestVolume::TestOverlapInTree() const
+{
+  std::queue<G4VPhysicalVolume*> volumes;
+  std::set<G4LogicalVolume*> checked;
+
+  volumes.push(target);
+  while (!volumes.empty())
+  {
+    G4VPhysicalVolume* current = volumes.front();
+    volumes.pop();
+
+    // check overlaps for daughters
+    G4LogicalVolume* logical = current->GetLogicalVolume();
+    G4int ndaughters = logical->GetNoDaughters();
+    for (G4int i=0; i<ndaughters; ++i)
+    {
+      G4VPhysicalVolume* daughter = logical->GetDaughter(i);
+      daughter->CheckOverlaps(resolution, tolerance, verbosity, maxErr);
+    }
+
+    // append the queue of volumes
+    G4LogicalVolume* previousLogical = nullptr;
+    for (G4int i=0; i<ndaughters; ++i)
+    {
+      G4VPhysicalVolume* daughter = logical->GetDaughter(i);
+      G4LogicalVolume* daughterLogical = daughter->GetLogicalVolume();
+      if (daughterLogical->GetNoDaughters() == 0) continue;
+      G4bool found = (daughterLogical == previousLogical);
+      if (!found) found = (checked.find(daughterLogical) != checked.cend());
+      if (!found)
+      {
+        checked.emplace(daughterLogical);
+        previousLogical = daughterLogical;
+        volumes.push(daughter);
+      }
+      else
+      {
+        if (verbosity)
+          G4cout << "Checking overlaps in tree of volume " << daughter->GetName()
+                 << " (" << daughterLogical->GetSolid()->GetEntityType() << ")"
+                 << " is omitted, to avoid duplication" << G4endl;
+      }
+    }
+  }
 }
 
 //

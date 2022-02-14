@@ -9,10 +9,6 @@
 // would couple in all the HepRotation methods.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/ThreeVector.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 
@@ -42,15 +38,17 @@ Hep3Vector & Hep3Vector::rotateUz(const Hep3Vector& NewUzVector) {
   double u3 = NewUzVector.z();
   double up = u1*u1 + u2*u2;
 
-  if (up>0) {
-      up = std::sqrt(up);
-      double px = dx,  py = dy,  pz = dz;
-      dx = (u1*u3*px - u2*py)/up + u1*pz;
-      dy = (u2*u3*px + u1*py)/up + u2*pz;
-      dz =    -up*px +             u3*pz;
-    }
-  else if (u3 < 0.) { dx = -dx; dz = -dz; }      // phi=0  teta=pi
-  else {};
+  if (up > 0) {
+    up = std::sqrt(up);
+    double px = (u1 * u3 * x() - u2 * y()) / up + u1 * z();
+    double py = (u2 * u3 * x() + u1 * y()) / up + u2 * z();
+    double pz = -up * x() + u3 * z();
+    set(px, py, pz);
+  } else if (u3 < 0.) {
+    setX(-x());
+    setZ(-z());
+  } // phi=0  teta=pi
+
   return *this;
 }
 
@@ -89,30 +87,30 @@ const Hep3Vector HepZHat(0.0, 0.0, 1.0);
 Hep3Vector & Hep3Vector::rotateX (double phi1) {
   double sinphi = std::sin(phi1);
   double cosphi = std::cos(phi1);
-  double ty;
-  ty = dy * cosphi - dz * sinphi;
-  dz = dz * cosphi + dy * sinphi;
-  dy = ty;
+  double ty = y() * cosphi - z() * sinphi;
+  double tz = z() * cosphi + y() * sinphi;
+  setY(ty);
+  setZ(tz);
   return *this;
 } /* rotateX */
 
 Hep3Vector & Hep3Vector::rotateY (double phi1) {
   double sinphi = std::sin(phi1);
   double cosphi = std::cos(phi1);
-  double tz;
-  tz = dz * cosphi - dx * sinphi;
-  dx = dx * cosphi + dz * sinphi;
-  dz = tz;
+  double tx = x() * cosphi + z() * sinphi;
+  double tz = z() * cosphi - x() * sinphi;
+  setX(tx);
+  setZ(tz);
   return *this;
 } /* rotateY */
 
 Hep3Vector & Hep3Vector::rotateZ (double phi1) {
   double sinphi = std::sin(phi1);
   double cosphi = std::cos(phi1);
-  double tx;
-  tx = dx * cosphi - dy * sinphi;
-  dy = dy * cosphi + dx * sinphi;
-  dx = tx;
+  double tx = x() * cosphi - y() * sinphi;
+  double ty = y() * cosphi + x() * sinphi;
+  setX(tx);
+  setY(ty);
   return *this;
 } /* rotateZ */
 
@@ -182,8 +180,8 @@ double Hep3Vector::cos2Theta(const Hep3Vector & q) const {
 void Hep3Vector::setEta (double eta1) {
   double phi1 = 0;
   double r1;
-  if ( (dx == 0) && (dy == 0) ) {
-    if (dz == 0) {
+  if ( (x() == 0) && (y() == 0) ) {
+    if (z() == 0) {
       std::cerr << "Hep3Vector::setEta() - "
                 << "Attempt to set eta of zero vector -- vector is unchanged"
                 << std::endl;
@@ -192,7 +190,7 @@ void Hep3Vector::setEta (double eta1) {
   std::cerr << "Hep3Vector::setEta() - "
             << "Attempt to set eta of vector along Z axis -- will use phi = 0"
             << std::endl;
-    r1 = std::fabs(dz);
+    r1 = std::fabs(z());
   } else {
     r1 = getR();
     phi1 = getPhi();
@@ -200,10 +198,10 @@ void Hep3Vector::setEta (double eta1) {
   double tanHalfTheta = std::exp ( -eta1 );
   double cosTheta1 =
         (1 - tanHalfTheta*tanHalfTheta) / (1 + tanHalfTheta*tanHalfTheta);
-  dz = r1 * cosTheta1;
   double rho1 = r1*std::sqrt(1 - cosTheta1*cosTheta1);
-  dy = rho1 * std::sin (phi1);
-  dx = rho1 * std::cos (phi1);
+  setZ(r1 * cosTheta1);
+  setY(rho1 * std::sin (phi1));
+  setX(rho1 * std::cos (phi1));
   return;
 }
 
@@ -211,26 +209,26 @@ void Hep3Vector::setCylTheta (double theta1) {
 
   // In cylindrical coords, set theta while keeping rho and phi fixed
 
-  if ( (dx == 0) && (dy == 0) ) {
-    if (dz == 0) {
+  if ( (x() == 0) && (y() == 0) ) {
+    if (z() == 0) {
       std::cerr << "Hep3Vector::setCylTheta() - "
                 << "Attempt to set cylTheta of zero vector -- vector is unchanged"
                 << std::endl;
       return;
     }
     if (theta1 == 0) {
-      dz = std::fabs(dz);
+      setZ(std::fabs(z()));
       return;
     }
     if (theta1 == CLHEP::pi) {
-      dz = -std::fabs(dz);
+      setZ(-std::fabs(z()));
       return;
     }
     std::cerr << "Hep3Vector::setCylTheta() - "
       << "Attempt set cylindrical theta of vector along Z axis "
       << "to a non-trivial value, while keeping rho fixed -- "
       << "will return zero vector" << std::endl;
-    dz = 0;
+    setZ(0.0);
     return;
   }
   if ( (theta1 < 0) || (theta1 > CLHEP::pi) ) {
@@ -246,12 +244,12 @@ void Hep3Vector::setCylTheta (double theta1) {
       << "Attempt to set cylindrical theta to 0 or PI "
       << "while keeping rho fixed -- infinite Z will be computed"
       << std::endl;
-      dz = (theta1==0) ? 1.0E72 : -1.0E72;
+      setZ((theta1==0) ? 1.0E72 : -1.0E72);
     return;
   }
-  dz = rho1 / std::tan (theta1);
-  dy = rho1 * std::sin (phi1);
-  dx = rho1 * std::cos (phi1);
+  setZ(rho1 / std::tan (theta1));
+  setY(rho1 * std::sin (phi1));
+  setX(rho1 * std::cos (phi1));
 
 } /* setCylTheta */
 
@@ -266,47 +264,44 @@ void Hep3Vector::setCylEta (double eta1) {
         //-| ZMthrows to say eta rather than theta.  Besides, we assumedly
         //-| need not check for theta of 0 or PI.
 
-  if ( (dx == 0) && (dy == 0) ) {
-    if (dz == 0) {
+  if ( (x() == 0) && (y() == 0) ) {
+    if (z() == 0) {
       std::cerr << "Hep3Vector::setCylEta() - "
         << "Attempt to set cylEta of zero vector -- vector is unchanged"
         << std::endl;
       return;
     }
     if (theta1 == 0) {
-      dz = std::fabs(dz);
+      setZ(std::fabs(z()));
       return;
     }
     if (theta1 == CLHEP::pi) {
-      dz = -std::fabs(dz);
+      setZ(-std::fabs(z()));
       return;
     }
     std::cerr << "Hep3Vector::setCylEta() - "
       << "Attempt set cylindrical eta of vector along Z axis "
       << "to a non-trivial value, while keeping rho fixed -- "
       << "will return zero vector" << std::endl;
-    dz = 0;
+    setZ(0.0);
     return;
   }
   double phi1 (getPhi());
   double rho1 = getRho();
-  dz = rho1 / std::tan (theta1);
-  dy = rho1 * std::sin (phi1);
-  dx = rho1 * std::cos (phi1);
+  setZ(rho1 / std::tan (theta1));
+  setY(rho1 * std::sin (phi1));
+  setX(rho1 * std::cos (phi1));
 
 } /* setCylEta */
 
 
-Hep3Vector operator/  ( const Hep3Vector & v1, double c ) {
+Hep3Vector operator/ ( const Hep3Vector & v1, double c ) {
 //  if (c == 0) {
 //    std::cerr << "Hep3Vector::operator/ () - "
 //      << "Attempt to divide vector by 0 -- "
 //      << "will produce infinities and/or NANs" << std::endl;
 //  } 
-  double   oneOverC = 1.0/c;
-  return Hep3Vector  (  v1.x() * oneOverC,
-                        v1.y() * oneOverC,
-                        v1.z() * oneOverC );
+  return v1 * (1.0/c);
 } /* v / c */
 
 Hep3Vector & Hep3Vector::operator/= (double c) {
@@ -316,10 +311,7 @@ Hep3Vector & Hep3Vector::operator/= (double c) {
 //      << "division by zero would produce infinite or NAN components"
 //      << std::endl;
 //  }
-  double oneOverC = 1.0/c;
-  dx *= oneOverC;
-  dy *= oneOverC;
-  dz *= oneOverC;
+  *this *= 1.0/c;
   return *this;
 }
 

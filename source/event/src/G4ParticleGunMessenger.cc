@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticleGunMessenger class implementation
 //
-//
+// Author: Makoto Asai, 1997
+// --------------------------------------------------------------------
 
 #include "G4ParticleGunMessenger.hh"
 #include "G4SystemOfUnits.hh"
@@ -42,11 +44,10 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"
+#include "G4IonTable.hh"
 
-G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
-  :fParticleGun(fPtclGun),fShootIon(false),
-   fAtomicNumber(0),fAtomicMass(0),fIonCharge(0),fIonExciteEnergy(0.0),
-   fIonFloatingLevelBase('\0'),fIonEnergyLevel(0)
+G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun* fPtclGun)
+  : fParticleGun(fPtclGun)
 {
   particleTable = G4ParticleTable::GetParticleTable();
 
@@ -69,7 +70,7 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   while( (*itr)() )
   {
     G4ParticleDefinition* pd = itr->value();
-    if( !(pd->IsShortLived()) || pd->GetDecayTable() )
+    if( !(pd->IsShortLived()) || pd->GetDecayTable() != nullptr )
     {
       candidateList += pd->GetParticleName();
       candidateList += " ";
@@ -80,7 +81,7 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
 
   directionCmd = new G4UIcmdWith3Vector("/gun/direction",this);
   directionCmd->SetGuidance("Set momentum direction.");
-  directionCmd->SetGuidance("Direction needs not to be a unit vector.");
+  directionCmd->SetGuidance(" Direction needs not to be a unit vector.");
   directionCmd->SetParameterName("ex","ey","ez",true,true); 
   directionCmd->SetRange("ex != 0 || ey != 0 || ez != 0");
   
@@ -92,15 +93,16 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   //energyCmd->SetUnitCandidates("eV keV MeV GeV TeV");
 
   momCmd = new G4UIcmdWith3VectorAndUnit("/gun/momentum",this);
-  momCmd->SetGuidance("Set momentum. This command is equivalent to two commands /gun/direction and /gun/momentumAmp");
+  momCmd->SetGuidance("Set momentum. This command is equivalent to two commands");
+  momCmd->SetGuidance(" /gun/direction and /gun/momentumAmp");
   momCmd->SetParameterName("px","py","pz",true,true); 
   momCmd->SetRange("px != 0 || py != 0 || pz != 0");
   momCmd->SetDefaultUnit("GeV");
 
   momAmpCmd = new G4UIcmdWithADoubleAndUnit("/gun/momentumAmp",this);
   momAmpCmd->SetGuidance("Set absolute value of momentum.");
-  momAmpCmd->SetGuidance("Direction should be set by /gun/direction command.");
-  momAmpCmd->SetGuidance("This command should be used alternatively with /gun/energy.");
+  momAmpCmd->SetGuidance(" Direction should be set by /gun/direction command.");
+  momAmpCmd->SetGuidance(" This command should be used alternatively with /gun/energy.");
   momAmpCmd->SetParameterName("Momentum",true,true);
   momAmpCmd->SetDefaultUnit("GeV");
 
@@ -108,15 +110,15 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   positionCmd->SetGuidance("Set starting position of the particle.");
   positionCmd->SetParameterName("X","Y","Z",true,true);
   positionCmd->SetDefaultUnit("cm");
-  //positionCmd->SetUnitCategory("Length");
-  //positionCmd->SetUnitCandidates("microm mm cm m km");
+  // positionCmd->SetUnitCategory("Length");
+  // positionCmd->SetUnitCandidates("microm mm cm m km");
 
   timeCmd = new G4UIcmdWithADoubleAndUnit("/gun/time",this);
   timeCmd->SetGuidance("Set initial time of the particle.");
   timeCmd->SetParameterName("t0",true,true);
   timeCmd->SetDefaultUnit("ns");
-  //timeCmd->SetUnitCategory("Time");
-  //timeCmd->SetUnitCandidates("ns ms s");
+  // timeCmd->SetUnitCategory("Time");
+  // timeCmd->SetUnitCandidates("ns ms s");
   
   polCmd = new G4UIcmdWith3Vector("/gun/polarization",this);
   polCmd->SetGuidance("Set polarization.");
@@ -154,10 +156,10 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   ionCmd->SetParameter(param);
 
   ionLvlCmd = new G4UIcommand("/gun/ionL",this);
-  ionLvlCmd->SetGuidance("THIS COMMAND IS DEPRECATED and will be removed in release 10.5.");
-  ionLvlCmd->SetGuidance("Use /gun/ion instead.");
-  ionLvlCmd->SetGuidance("Set properties of ion to be generated.");
-  ionLvlCmd->SetGuidance("[usage] /gun/ionL Z A [Q I]");
+  ionLvlCmd->SetGuidance("THIS COMMAND IS DEPRECATED and will be removed in future releases.");
+  ionLvlCmd->SetGuidance(" Use /gun/ion instead.");
+  ionLvlCmd->SetGuidance(" Set properties of ion to be generated.");
+  ionLvlCmd->SetGuidance(" [usage] /gun/ionL Z A [Q I]");
   ionLvlCmd->SetGuidance("        Z:(int) AtomicNumber");
   ionLvlCmd->SetGuidance("        A:(int) AtomicMass");
   ionLvlCmd->SetGuidance("        Q:(int) Charge of Ion (in unit of e)");
@@ -175,7 +177,8 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   paraml->SetDefaultValue("0");
   ionLvlCmd->SetParameter(paraml);
 
-  // set initial value to G4ParticleGun
+  // Set initial value to G4ParticleGun
+  //
   fParticleGun->SetParticleDefinition( G4Geantino::Geantino() );
   fParticleGun->SetParticleMomentumDirection( G4ThreeVector(1.0,0.0,0.0) );
   fParticleGun->SetParticleEnergy( 1.0*GeV );
@@ -200,20 +203,30 @@ G4ParticleGunMessenger::~G4ParticleGunMessenger()
   delete gunDirectory;
 }
 
-void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
+void G4ParticleGunMessenger::
+SetNewValue(G4UIcommand* command, G4String newValues)
 {
   G4ExceptionDescription ed;
-  if (command==listCmd) {
+  if (command==listCmd)
+  {
     particleTable->DumpTable();
-  } else if (command==particleCmd) {
-    if (newValues =="ion") {
+  }
+  else if (command==particleCmd)
+  {
+    if (newValues =="ion")
+    {
       fShootIon = true;
-    } else {
+    }
+    else
+    {
       fShootIon = false;
       G4ParticleDefinition* pd = particleTable->FindParticle(newValues);
-      if(pd != 0) {
+      if(pd != nullptr)
+      {
         fParticleGun->SetParticleDefinition( pd );
-      } else {
+      }
+      else
+      {
         ed << "Particle [" << newValues << "] is not found.";
         command->CommandFailed(ed);
       }
@@ -237,9 +250,12 @@ void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValue
   { fParticleGun->SetNumberOfParticles(numberCmd->GetNewIntValue(newValues)); }
   else if( command==ionCmd ) 
   {
-    if (fShootIon) {
+    if (fShootIon)
+    {
       IonCommand(newValues);
-    } else {
+    }
+    else
+    {
       ed << "Set /gun/particle to ion before using /gun/ion command";
       command->CommandFailed(ed);
     }
@@ -247,20 +263,24 @@ void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValue
   else if( command==ionLvlCmd ) 
   {
     G4ExceptionDescription depWarn; 
-    depWarn << "\nCommand /gun/ionL is deprecated and will be removed in release 10.5.\n"
+    depWarn << "\nCommand /gun/ionL is deprecated and will be removed in future releases.\n"
             << "Use /gun/ion instead.\n";
-    G4Exception("G4ParticleGunMessenger::SetNewValue","IonLWarn",JustWarning,depWarn);
+    G4Exception("G4ParticleGunMessenger::SetNewValue", "IonLWarn",
+                JustWarning, depWarn);
 
-    if (fShootIon) {
+    if (fShootIon)
+    {
       IonLevelCommand(newValues);
-    } else {
+    }
+    else
+    {
       ed << "Set /gun/particle to ion before using /gun/ion command";
       command->CommandFailed(ed);
     }
   }
 }
 
-G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand * command)
+G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand* command)
 {
   G4String cv;
   
@@ -280,7 +300,10 @@ G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand * command)
   {
     G4double mom = fParticleGun->GetParticleMomentum();
     if(mom == 0.)
-    { G4cerr << " G4ParticleGun:  was defined in terms of kinetic energy." << G4endl; }
+    {
+      G4cerr << " G4ParticleGun:  was defined in terms of kinetic energy."
+             << G4endl;
+    }
     else
     {
       if( command==momCmd )
@@ -299,87 +322,102 @@ G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand * command)
   { cv = numberCmd->ConvertToString(fParticleGun->GetNumberOfParticles()); }
   else if( command==ionCmd )
   { 
-    if (fShootIon) {
+    if (fShootIon)
+    {
       cv = ItoS(fAtomicNumber) + " " + ItoS(fAtomicMass) + " ";
       cv += ItoS(fIonCharge);
-    } else {
+    }
+    else
+    {
       cv = "";
     }  
   }    
   return cv;
 }
 
-#include "G4IonTable.hh"
-
-void G4ParticleGunMessenger::IonLevelCommand(G4String newValues)
+void G4ParticleGunMessenger::IonLevelCommand(const G4String& newValues)
 {
   G4Tokenizer next( newValues );
-  // check argument
+
+  // Check argument
+  //
   fAtomicNumber = StoI(next());
   fAtomicMass = StoI(next());
   G4String sQ = next();
-  if (sQ.isNull() || StoI(sQ)<0) {
+  if (sQ.empty() || StoI(sQ)<0)
+  {
     fIonCharge = fAtomicNumber;
-  } else {
+  }
+  else
+  {
     fIonCharge = StoI(sQ);
   }
   sQ = next();
-  if (sQ.isNull()) {
+  if (sQ.empty())
+  {
     fIonEnergyLevel = 0;
-  } else {
+  }
+  else
+  {
     fIonEnergyLevel = StoI(sQ);
   }
-  G4ParticleDefinition* ion = 0;
-  ion =  G4IonTable::GetIonTable()->GetIon(fAtomicNumber,fAtomicMass,fIonEnergyLevel);
-  if (ion == 0) {
+  G4ParticleDefinition* ion = G4IonTable::GetIonTable()
+      ->GetIon(fAtomicNumber,fAtomicMass,fIonEnergyLevel);
+  if (ion == nullptr)
+  {
     G4ExceptionDescription ed;
     ed << "Ion with Z = " << fAtomicNumber << ", A = " << fAtomicMass
        << ", I = " << fIonEnergyLevel << " is not defined ";
     ionLvlCmd->CommandFailed(ed);
-  } else {
+  }
+  else
+  {
     fParticleGun->SetParticleDefinition(ion);
     fParticleGun->SetParticleCharge(fIonCharge*eplus);
   }
 }
 
-void G4ParticleGunMessenger::IonCommand(G4String newValues)
+void G4ParticleGunMessenger::IonCommand(const G4String& newValues)
 {
   G4Tokenizer next( newValues );
-  // check argument
+
+  // Check argument
+  //
   fAtomicNumber = StoI(next());
   fAtomicMass = StoI(next());
   fIonCharge = fAtomicNumber;
   fIonExciteEnergy = 0.0;
   fIonFloatingLevelBase = '\0';
   G4String sQ = next();
-  if (!(sQ.isNull()))
+  if (!(sQ.empty()))
   {
     if (StoI(sQ)>=0)
     fIonCharge = StoI(sQ);
 
     sQ = next();
-    if (!(sQ.isNull()))
+    if (!(sQ.empty()))
     {
       fIonExciteEnergy = StoD(sQ) * keV;
 
       sQ = next();
-      if (sQ.isNull()||sQ=="noFloat")
+      if (sQ.empty()||sQ=="noFloat")
       { fIonFloatingLevelBase = '\0'; }
       else
-      { fIonFloatingLevelBase = sQ[(size_t)0]; }
+      { fIonFloatingLevelBase = sQ[(std::size_t)0]; }
     }
   }
-  G4ParticleDefinition* ion = 0;
-  ion =  G4IonTable::GetIonTable()->GetIon( fAtomicNumber, fAtomicMass,
-                   fIonExciteEnergy, fIonFloatingLevelBase);
-  if (ion==0) {
+  G4ParticleDefinition* ion = G4IonTable::GetIonTable()
+    ->GetIon(fAtomicNumber,fAtomicMass,fIonExciteEnergy,fIonFloatingLevelBase);
+  if (ion==nullptr)
+  {
     G4ExceptionDescription ed;
     ed << "Ion with Z=" << fAtomicNumber;
     ed << " A=" << fAtomicMass << "is not defined";    
     ionCmd->CommandFailed(ed);
-  } else {
+  }
+  else
+  {
     fParticleGun->SetParticleDefinition(ion);
     fParticleGun->SetParticleCharge(fIonCharge*eplus);
   }
 }
-

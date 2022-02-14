@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 ////////////////////////////////////////////////////////////////////////
 // G4OpticalSurface Definition
 ////////////////////////////////////////////////////////////////////////
@@ -36,17 +36,12 @@
 // Created:     1997-06-26
 // Author:      Peter Gumplinger
 // Updated:     1999-10-29 add method and class descriptors
-//              2017-02-24 Mariele Stockhoff add DAVIS model 
-// mail:        gum@triumf.ca
+//              2017-02-24 Mariele Stockhoff add DAVIS model
 //
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpticalSurface_h
 #define G4OpticalSurface_h 1
-
-/////////////
-// Includes
-/////////////
 
 #include "G4Types.hh"
 #include "G4Physics2DVector.hh"
@@ -60,238 +55,240 @@
 
 enum G4OpticalSurfaceFinish
 {
-   polished,                    // smooth perfectly polished surface
-   polishedfrontpainted,        // smooth top-layer (front) paint
-   polishedbackpainted,         // same is 'polished' but with a back-paint
+  polished,              // smooth perfectly polished surface
+  polishedfrontpainted,  // smooth top-layer (front) paint
+  polishedbackpainted,   // same is 'polished' but with a back-paint
 
-   ground,                      // rough surface
-   groundfrontpainted,          // rough top-layer (front) paint
-   groundbackpainted,           // same as 'ground' but with a back-paint
+  ground,              // rough surface
+  groundfrontpainted,  // rough top-layer (front) paint
+  groundbackpainted,   // same as 'ground' but with a back-paint
 
-   polishedlumirrorair,         // mechanically polished surface, with lumirror
-   polishedlumirrorglue,        // mechanically polished surface, with lumirror & meltmount
-   polishedair,                 // mechanically polished surface
-   polishedteflonair,           // mechanically polished surface, with teflon
-   polishedtioair,              // mechanically polished surface, with tio paint
-   polishedtyvekair,            // mechanically polished surface, with tyvek
-   polishedvm2000air,           // mechanically polished surface, with esr film
-   polishedvm2000glue,          // mechanically polished surface, with esr film & meltmount
+  // for LBNL LUT model
+  polishedlumirrorair,   // mechanically polished surface, with lumirror
+  polishedlumirrorglue,  // mechanically polished surface, with lumirror &
+                         // meltmount
+  polishedair,           // mechanically polished surface
+  polishedteflonair,     // mechanically polished surface, with teflon
+  polishedtioair,        // mechanically polished surface, with tio paint
+  polishedtyvekair,      // mechanically polished surface, with tyvek
+  polishedvm2000air,     // mechanically polished surface, with esr film
+  polishedvm2000glue,    // mechanically polished surface, with esr film &
+                         // meltmount
 
-   etchedlumirrorair,           // chemically etched surface, with lumirror
-   etchedlumirrorglue,          // chemically etched surface, with lumirror & meltmount
-   etchedair,                   // chemically etched surface
-   etchedteflonair,             // chemically etched surface, with teflon
-   etchedtioair,                // chemically etched surface, with tio paint
-   etchedtyvekair,              // chemically etched surface, with tyvek
-   etchedvm2000air,             // chemically etched surface, with esr film
-   etchedvm2000glue,            // chemically etched surface, with esr film & meltmount
+  etchedlumirrorair,   // chemically etched surface, with lumirror
+  etchedlumirrorglue,  // chemically etched surface, with lumirror & meltmount
+  etchedair,           // chemically etched surface
+  etchedteflonair,     // chemically etched surface, with teflon
+  etchedtioair,        // chemically etched surface, with tio paint
+  etchedtyvekair,      // chemically etched surface, with tyvek
+  etchedvm2000air,     // chemically etched surface, with esr film
+  etchedvm2000glue,    // chemically etched surface, with esr film & meltmount
 
-   groundlumirrorair,           // rough-cut surface, with lumirror
-   groundlumirrorglue,          // rough-cut surface, with lumirror & meltmount
-   groundair,                   // rough-cut surface
-   groundteflonair,             // rough-cut surface, with teflon
-   groundtioair,                // rough-cut surface, with tio paint
-   groundtyvekair,              // rough-cut surface, with tyvek
-   groundvm2000air,             // rough-cut surface, with esr film
-   groundvm2000glue,            // rough-cut surface, with esr film & meltmount
-   
-   // for DAVIS model
-   Rough_LUT,                   //rough surface 
-   RoughTeflon_LUT,             //rough surface wrapped in Teflon tape
-   RoughESR_LUT,                //rough surface wrapped with ESR
-   RoughESRGrease_LUT,          //rough surface wrapped with ESR
-                                //and coupled with opical grease
-   Polished_LUT,                //polished surface 
-   PolishedTeflon_LUT,          //polished surface wrapped in Teflon tape
-   PolishedESR_LUT,             //polished surface wrapped with ESR
-   PolishedESRGrease_LUT,       //polished surface wrapped with ESR
-                                //and coupled with opical grease
-   Detector_LUT                 //polished surface with optical grease 
+  groundlumirrorair,   // rough-cut surface, with lumirror
+  groundlumirrorglue,  // rough-cut surface, with lumirror & meltmount
+  groundair,           // rough-cut surface
+  groundteflonair,     // rough-cut surface, with teflon
+  groundtioair,        // rough-cut surface, with tio paint
+  groundtyvekair,      // rough-cut surface, with tyvek
+  groundvm2000air,     // rough-cut surface, with esr film
+  groundvm2000glue,    // rough-cut surface, with esr film & meltmount
+
+  // for DAVIS model
+  Rough_LUT,              // rough surface
+  RoughTeflon_LUT,        // rough surface wrapped in Teflon tape
+  RoughESR_LUT,           // rough surface wrapped with ESR
+  RoughESRGrease_LUT,     // rough surface wrapped with ESR
+                          // and coupled with optical grease
+  Polished_LUT,           // polished surface
+  PolishedTeflon_LUT,     // polished surface wrapped in Teflon tape
+  PolishedESR_LUT,        // polished surface wrapped with ESR
+  PolishedESRGrease_LUT,  // polished surface wrapped with ESR
+                          // and coupled with optical grease
+  Detector_LUT            // polished surface with optical grease
 };
 
 enum G4OpticalSurfaceModel
 {
-   glisur,                      // original GEANT3 model
-   unified,                     // UNIFIED model
-   LUT,                         // Look-Up-Table model
-   DAVIS,                       // DAVIS model
-   dichroic                     // dichroic filter
+  glisur,   // original GEANT3 model
+  unified,  // UNIFIED model
+  LUT,      // Look-Up-Table model (LBNL model)
+  DAVIS,    // DAVIS model
+  dichroic  // dichroic filter
 };
 
 class G4MaterialPropertiesTable;
 
-/////////////////////
-// Class Definition
-/////////////////////
-
 class G4OpticalSurface : public G4SurfaceProperty
 {
+ public:
+  G4OpticalSurface(const G4OpticalSurface& right);
+  G4OpticalSurface& operator=(const G4OpticalSurface& right);
 
-public: // Without description
-  
-        //////////////
-        // Operators
-        //////////////
-  
-	G4OpticalSurface(const G4OpticalSurface &right);
-	G4OpticalSurface & operator=(const G4OpticalSurface &right);
-  
-	G4bool operator==(const G4OpticalSurface &right) const;
-	G4bool operator!=(const G4OpticalSurface &right) const;
+  G4bool operator==(const G4OpticalSurface& right) const;
+  G4bool operator!=(const G4OpticalSurface& right) const;
 
-public: // With description
+  G4OpticalSurface(const G4String& name, G4OpticalSurfaceModel model = glisur,
+                   G4OpticalSurfaceFinish finish = polished,
+                   G4SurfaceType type            = dielectric_dielectric,
+                   G4double value                = 1.0);
+  // Constructor of an optical surface object.
 
-        ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
+  virtual ~G4OpticalSurface();
 
-	G4OpticalSurface(const G4String& name,
-                         G4OpticalSurfaceModel model = glisur,
-                         G4OpticalSurfaceFinish finish = polished,
-                         G4SurfaceType type = dielectric_dielectric,
-                         G4double value = 1.0);
-        // Constructor of an optical surface object.
+  void SetType(const G4SurfaceType& type) override;
 
-public: // Without description
+  inline G4OpticalSurfaceFinish GetFinish() const { return theFinish; }
+  // Returns the optical surface finish.
+  void SetFinish(const G4OpticalSurfaceFinish);
+  // Sets the optical surface finish.
 
-	virtual ~G4OpticalSurface();
+  inline G4OpticalSurfaceModel GetModel() const { return theModel; }
+  // Returns the optical surface model used.
+  inline void SetModel(const G4OpticalSurfaceModel model) { theModel = model; }
+  // Sets the optical surface model to be followed.
 
-	////////////
-	// Methods
-        ////////////
+  inline G4double GetSigmaAlpha() const { return sigma_alpha; }
+  // Returns an unified model surface parameter.
+  inline void SetSigmaAlpha(const G4double s_a) { sigma_alpha = s_a; }
+  // Sets an unified model surface parameter.
 
-	// public methods
+  G4double GetPolish() const { return polish; }
+  // Returns the optical surface polish type.
+  inline void SetPolish(const G4double plsh) { polish = plsh; }
+  // Sets the optical surface polish type.
 
-public: // With description
+  inline G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
+  {
+    return theMaterialPropertiesTable;
+  }
+  // Retrieves the pointer of the G4MaterialPropertiesTable
+  // attached to optical surface.
 
-        void SetType(const G4SurfaceType& type);
+  inline void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
+  {
+    theMaterialPropertiesTable = anMPT;
+  }
+  // Attaches a G4MaterialPropertiesTable to the optical surface.
 
-        inline G4OpticalSurfaceFinish GetFinish() const { return theFinish; }
-        // Returns the optical surface finish.
-        void SetFinish(const G4OpticalSurfaceFinish );
-        // Sets the optical surface finish.
+  void DumpInfo() const;
+  // Prints information about the optical surface.
 
-        inline G4OpticalSurfaceModel GetModel() const { return theModel; }
-        // Returns the optical surface model used.
-        inline void SetModel(const G4OpticalSurfaceModel model)
-                                                      { theModel = model; }
-        // Sets the optical surface model to be followed.
+  void ReadDataFile(void);
+  // call the correct ReadXXXFile
 
-	inline G4double GetSigmaAlpha() const { return sigma_alpha; }
-        // Returns an unified model surface parameter.
-	inline void SetSigmaAlpha(const G4double s_a) { sigma_alpha = s_a; }
-        // Sets an unified model surface parameter.
+  void ReadCompressedFile(G4String, std::istringstream&);
+  // read a zlib-compressed file
 
-	G4double GetPolish() const { return polish; }
-        // Returns the optical surface polish type.
-	inline void SetPolish(const G4double plsh) { polish=plsh; }
-        // Sets the optical surface polish type.
+  void ReadLUTFile(void);
+  // Method to read the Look-Up-Table into array AngularDistribution
 
-	inline G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
-                                       { return theMaterialPropertiesTable; }
-        // Retrieves the pointer of the G4MaterialPropertiesTable 
-        // attached to optical surface.
+  inline G4double GetAngularDistributionValue(G4int, G4int, G4int);
 
-	inline void SetMaterialPropertiesTable(G4MaterialPropertiesTable *anMPT)
-                                       { theMaterialPropertiesTable = anMPT; }
-        // Attaches a G4MaterialPropertiesTable to the optical surface.
+  // for DAVIS model
 
-	void DumpInfo() const;
-        // Prints information about the optical surface.
+  inline G4double GetAngularDistributionValueLUT(G4int);
+  // Returns the AngularDistributionValue
 
-        void ReadLUTFile(void);
-        // Method to read the Look-Up-Table into array AngularDistribution
+  void ReadLUTDAVISFile(void);
+  // Method to read the Davis Look-Up-Table into array AngularDistribution
 
-        inline G4double GetAngularDistributionValue(G4int, G4int, G4int);
-        
-        // for DAVIS model
+  void ReadReflectivityLUTFile(void);
+  // Method to read the Look-Up-Table for reflectivity
 
-        inline G4double GetAngularDistributionValueLUT(G4int);
-        // Returns the AngularDistributionValue
+  inline G4double GetReflectivityLUTValue(G4int);
+  // Returns the reflectivity value from the Davis Look-Up-Table
 
-        void ReadLUTDAVISFile(void);
-        // Method to read the Davis Look-Up-Table into array AngularDistribution
- 
-        void ReadReflectivityLUTFile(void);
-        // Method to read the Look-Up-Table for reflectivity
-        
-        inline G4double GetReflectivityLUTValue(G4int);
-        // Returns the reflectivity value from the Davis Look-Up-Table
-        
-        G4int GetInmax(void) const;
-        // Returns the number of lines in the Davis Look-Up-Table
+  G4int GetInmax(void) const;
+  // Returns the number of lines in the Davis Look-Up-Table
 
-        G4int GetLUTbins(void) const;
-        // Returns the number of probability values per incidentangle
+  G4int GetLUTbins(void) const;
+  // Returns the number of probability values per incidentangle
 
-        G4int GetRefMax(void) const;
-        // Returns the number of reflectivity values per angle
-    
-        G4int GetThetaIndexMax(void) const;
-        G4int GetPhiIndexMax(void) const;
+  G4int GetRefMax(void) const;
+  // Returns the number of reflectivity values per angle
 
-        void ReadDichroicFile(void);
-        // Method to read the dichroic surface data file into Dichroic
+  G4int GetThetaIndexMax(void) const;
+  G4int GetPhiIndexMax(void) const;
 
-        inline G4Physics2DVector* GetDichroicVector();
+  void ReadDichroicFile(void);
+  // Method to read the dichroic surface data file into Dichroic
 
-private:
+  inline G4Physics2DVector* GetDichroicVector();
 
-// ------------------
-// Basic data members ( To define an optical surface)
-// ------------------
+ private:
+  G4OpticalSurfaceModel theModel;    // Surface model
+  G4OpticalSurfaceFinish theFinish;  // Surface finish
 
-        G4OpticalSurfaceModel theModel;		// Surface model
-        G4OpticalSurfaceFinish theFinish;	// Surface finish
+  G4double sigma_alpha;  // The sigma of micro-facet polar angle
+  G4double polish;       // Polish parameter in glisur model
 
-	G4double sigma_alpha;		// The sigma of micro-facet polar angle
-	G4double polish;		// Polish parameter in glisur model
+  G4MaterialPropertiesTable* theMaterialPropertiesTable;
 
-	G4MaterialPropertiesTable* theMaterialPropertiesTable;
+  static const G4int incidentIndexMax = 91;
+  static const G4int thetaIndexMax    = 45;
+  static const G4int phiIndexMax      = 37;
 
-        static const G4int incidentIndexMax = 91;
-        static const G4int thetaIndexMax = 45;
-        static const G4int phiIndexMax = 37;
+  G4float* AngularDistribution;
+  G4Physics2DVector* DichroicVector;
 
-        G4float* AngularDistribution;
-        G4Physics2DVector* DichroicVector;
-
-        // for DAVIS model
-        static const G4int indexmax = 7280001; // 3640001; 
-        static const G4int RefMax = 90; 
-        static const G4int LUTbins =20000;
-        G4float* AngularDistributionLUT;
-        G4float* Reflectivity;
+  // for DAVIS model
+  static const G4int indexmax = 7280001;  // 3640001;
+  static const G4int RefMax   = 90;
+  static const G4int LUTbins  = 20000;
+  G4float* AngularDistributionLUT;
+  G4float* Reflectivity;
 };
 
 ////////////////////
 // Inline methods
 ////////////////////
 
-inline
- G4double G4OpticalSurface::GetAngularDistributionValue(G4int angleIncident,
-                                                        G4int thetaIndex,
-                                                        G4int phiIndex)
+inline G4double G4OpticalSurface::GetAngularDistributionValue(
+  G4int angleIncident, G4int thetaIndex, G4int phiIndex)
 {
-  return AngularDistribution[angleIncident+
-                             thetaIndex*incidentIndexMax+
-                             phiIndex*thetaIndexMax*incidentIndexMax];
+  G4int product = angleIncident * thetaIndex * phiIndex;
+  if(product < 0 || product >= incidentIndexMax * thetaIndexMax * phiIndexMax)
+  {
+    G4ExceptionDescription ed;
+    ed << "Index angleIncident: " << angleIncident
+       << " thetaIndex: " << thetaIndex << " phiIndex: " << phiIndex
+       << " out of range!";
+    G4Exception("G4OpticalSurface::GetAngularDistributionValue", "mat317",
+                FatalException, ed);
+    return 0.;
+  }
+  return (G4double)
+    AngularDistribution[angleIncident + thetaIndex * incidentIndexMax +
+                        phiIndex * thetaIndexMax * incidentIndexMax];
 }
 
-inline
- G4double G4OpticalSurface::GetAngularDistributionValueLUT(G4int i)
+inline G4double G4OpticalSurface::GetAngularDistributionValueLUT(G4int i)
 {
-  return AngularDistributionLUT[i];
+  if(i < 0 || i >= indexmax)
+  {
+    G4ExceptionDescription ed;
+    ed << "Index " << i << " out of range!";
+    G4Exception("G4OpticalSurface::GetAngularDistributionValueLUT", "mat318",
+                FatalException, ed);
+    return 0.;
+  }
+  return (G4double) AngularDistributionLUT[i];
 }
 
-inline
- G4double G4OpticalSurface::GetReflectivityLUTValue(G4int i)
+inline G4double G4OpticalSurface::GetReflectivityLUTValue(G4int i)
 {
-  return Reflectivity[i];
+  if(i < 0 || i >= RefMax)
+  {
+    G4ExceptionDescription ed;
+    ed << "Index " << i << " out of range!";
+    G4Exception("G4OpticalSurface::GetReflectivityLUTValue", "mat319",
+                FatalException, ed);
+    return 0.;
+  }
+  return (G4double) Reflectivity[i];
 }
 
-inline
- G4Physics2DVector* G4OpticalSurface::GetDichroicVector()
+inline G4Physics2DVector* G4OpticalSurface::GetDichroicVector()
 {
   return DichroicVector;
 }

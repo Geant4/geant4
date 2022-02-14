@@ -173,8 +173,8 @@ class G4ReflectionFactory
       // Returns a handle to the internal map of volumes which have
       // been reflected, after that placement or replication is performed.
 
-    void Reset();  
-      // Resets maps of constituent and reflected volumes.
+    void Clean();
+      // Clear maps of constituent and reflected volumes.
       // To be used exclusively when volumes are removed from the stores.
 
     G4ReflectionFactory(const G4ReflectionFactory&) = delete;

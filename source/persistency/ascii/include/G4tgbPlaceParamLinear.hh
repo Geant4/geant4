@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbPlaceParamLinear
+// G4tgbPlaceParamLinear
 //
 // Class description:
 //
 // Class to represent simple Cartesian parameterisations along a line.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbPlaceParamLinear_H
-#define G4tgbPlaceParamLinear_H 1
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbPlaceParamLinear_hh
+#define G4tgbPlaceParamLinear_hh 1
 
 #include "globals.hh"
 
@@ -48,18 +43,19 @@ class G4VPhysicalVolume;
 class G4tgrPlaceParameterisation;
 
 class G4tgbPlaceParamLinear : public G4tgbPlaceParameterisation
-{ 
-  public:  // with description
+{
+  public:
 
-    G4tgbPlaceParamLinear( G4tgrPlaceParameterisation* );
+    G4tgbPlaceParamLinear(G4tgrPlaceParameterisation*);
     ~G4tgbPlaceParamLinear();
     void ComputeTransformation(const G4int copyNo,
-                               G4VPhysicalVolume *physVol) const;
+                               G4VPhysicalVolume* physVol) const;
+
   private:
 
     G4ThreeVector theDirection;
-    G4double theStep;
-    G4double theOffset;
+    G4double theStep = 0.0;
+    G4double theOffset = 0.0;
 };
 
 #endif

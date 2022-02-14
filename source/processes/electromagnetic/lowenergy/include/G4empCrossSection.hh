@@ -38,58 +38,48 @@
 
 // -------------------------------------------------------------------
 
-
 #ifndef G4EMPCROSSSECTION_HH
 #define G4EMPCROSSSECTION_HH 1
 
 #include "globals.hh"
 #include "G4VhShellCrossSection.hh"
-
 #include "G4PaulKxsModel.hh"
-
 #include "G4OrlicLiXsModel.hh"
 
 class G4empCrossSection : public G4VhShellCrossSection 
 {
 public:
-
-  G4empCrossSection(const G4String& nam = "");
-
+  explicit G4empCrossSection(const G4String& nam = "");
   virtual ~G4empCrossSection();
 			     
   std::vector<G4double> GetCrossSection(G4int Z,
 					G4double incidentEnergy,
 					G4double mass,
 					G4double deltaEnergy,
-					const G4Material* mat);
+					const G4Material* mat) override;
 
   G4double CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 			G4double incidentEnergy,
 			G4double mass,
-			const G4Material* mat);
+			const G4Material* mat) override;
 
   std::vector<G4double> Probabilities(G4int Z,
 				      G4double incidentEnergy,
 				      G4double mass,
 				      G4double deltaEnergy,
-				      const G4Material* mat);
+				      const G4Material* mat) override;
   
   
-  void SetTotalCS(G4double);
-  
-  
-  
+  void SetTotalCS(G4double) override;
+  G4empCrossSection(const G4empCrossSection&) = delete;
+  G4empCrossSection & operator = (const G4empCrossSection &right) = delete;
+
 private:
-  
-  G4double totalCS;
-  G4int flag; // Flag to select Li XS set (orlic or other)
-              
   G4PaulKxsModel*  paulShellK;
   G4OrlicLiXsModel* orlicShellLi;  
-						
-  G4empCrossSection(const G4empCrossSection&);
-  G4empCrossSection & operator = (const G4empCrossSection &right);
-  
+
+  G4double totalCS;
+  G4int flag; // Flag to select Li XS set (orlic or other)
 };
 
 #endif

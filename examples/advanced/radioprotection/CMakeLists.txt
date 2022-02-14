@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(radioprotection)
 
 #----------------------------------------------------------------------------
@@ -18,7 +18,7 @@ endif()
 # Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})
-# Setup of ROOT ANALYSIS : optional. 
+# Setup of ROOT ANALYSIS : optional.
 option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
 if(WITH_ANALYSIS_USE)
 add_definitions(-DANALYSIS_USE)
@@ -28,7 +28,7 @@ endif()
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include  
+include_directories(${PROJECT_SOURCE_DIR}/include
                      ${Geant4_INCLUDE_DIR} )
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -45,7 +45,7 @@ target_link_libraries(radioprotection ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(radioprotection_SCRIPTS
-   vis.mac physics.mac primary.mac run.mac  MergeFiles LoadPlotNtuple.C
+   vis.mac physics.mac primary.mac run.mac geometry.mac  MergeFiles LoadPlotNtuple.C ProcessMicro.C
   )
 
 foreach(_script ${radioprotection_SCRIPTS})

@@ -3,8 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -17,20 +23,20 @@ Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -43,12 +49,18 @@ Registered model factories:
   drawByParticleID
   drawByEncounteredVolume
 
+Registered models:
+  None
+
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
   encounteredVolumeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -81,10 +93,95 @@ PhysicsList::AddPhysicsList: <dna_opt2>
 
 
 ---------------------------------------------------------
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Fluorescence ANSTO data files enabled              0
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+======                 DNA Physics Parameters                  ========
+=======================================================================
+Use fast sampling in DNA models                    0
+Use Stationary option in DNA models                0
+Use DNA with multiple scattering of e-             0
+Use DNA e- solvation model type                    11003
+=======================================================================
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld  1  1  0
-### ===  Auger cascade flag: 1
+### ===  Auger flag: 1
 ### ===  Ignore cuts flag:   1
 
 phot:  for gamma SubType=12 BuildTable=0
@@ -101,7 +198,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermoreConversion : Emin=    0 eV  Emax=  100 TeV
+ LivermoreConversion : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -134,118 +231,16 @@ e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
 DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 3, latDisp: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e+  SubType=2
+eIoni:  for e+  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha : Emin=    0 eV  Emax=  100 TeV
-
-eBrem:  for e+  SubType=3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
-            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
-
-annihil:  for e+, integral:1  SubType=5 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg : Emin=    0 eV  Emax=  100 TeV
-
-proton_G4DNAElastic:  for proton SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-proton_G4DNAExcitation:  for proton SubType=52 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
-DNABornExcitationModel : Emin=  500 keV Emax=  100 MeV
-
-proton_G4DNAIonisation:  for proton SubType=53 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  500 keV  deltaRudd Fluo
-DNABornIonisationModel : Emin=  500 keV Emax=  100 MeV  deltaBorn Fluo
-
-proton_G4DNAChargeDecrease:  for proton SubType=56 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  100 MeV
-
-GenericIon_G4DNAIonisation:  for GenericIon SubType=53 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=    1 TeV  deltaRudd Fluo
-
-alpha_G4DNAElastic:  for alpha SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-alpha_G4DNAExcitation:  for alpha SubType=52 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
-
-alpha_G4DNAIonisation:  for alpha SubType=53 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  100 TeV  deltaRudd Fluo
-
-alpha_G4DNAChargeDecrease:  for alpha SubType=56 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  400 MeV
-
-alpha+_G4DNAElastic:  for alpha+ SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-alpha+_G4DNAExcitation:  for alpha+ SubType=52 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
-
-alpha+_G4DNAIonisation:  for alpha+ SubType=53 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  100 TeV  deltaRudd Fluo
-
-alpha+_G4DNAChargeDecrease:  for alpha+ SubType=56 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  400 MeV
-
-alpha+_G4DNAChargeIncrease:  for alpha+ SubType=57 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  400 MeV
-
-helium_G4DNAElastic:  for helium SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-helium_G4DNAExcitation:  for helium SubType=52 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
-
-helium_G4DNAIonisation:  for helium SubType=53 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  100 TeV  deltaRudd Fluo
-
-helium_G4DNAChargeIncrease:  for helium SubType=57 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  400 MeV
-
-hydrogen_G4DNAElastic:  for hydrogen SubType=51 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
-
-hydrogen_G4DNAExcitation:  for hydrogen SubType=52 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
-
-hydrogen_G4DNAIonisation:  for hydrogen SubType=53 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  100 TeV  deltaRudd Fluo
-
-hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  100 MeV
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 
@@ -256,9 +251,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAAttachment = 1	e-_G4DNAElastic = 8998	e-_G4DNAExcitation = 12	e-_G4DNAVibExcitation = 989
 
  MeanFreePath:	2.19 Ang +- 2.16 Ang			massic: 0.00 mg/cm2
- CrossSection:	45756518.22 cm^-1 			massic: 45756518.22 cm2/g
+ CrossSection:	45756510.39 cm^-1 			massic: 45756510.39 cm2/g
 
  mean energy of charged secondaries: 0.00 eV 	mass_energy_transfer coef: 0.00 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -267,9 +265,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 8413	e-_G4DNAExcitation = 87	e-_G4DNAIonisation = 452	e-_G4DNAVibExcitation = 1048
 
  MeanFreePath:	2.95 Ang +- 2.96 Ang			massic: 0.00 mg/cm2
- CrossSection:	33852720.96 cm^-1 			massic: 33852720.96 cm2/g
+ CrossSection:	33852715.17 cm^-1 			massic: 33852715.17 cm2/g
 
- mean energy of charged secondaries: 0.11 eV 	mass_energy_transfer coef: 187674.03 cm2/g
+ mean energy of charged secondaries: 110.88 meV	mass_energy_transfer coef: 187674.00 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -278,9 +279,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 7493	e-_G4DNAExcitation = 153	e-_G4DNAIonisation = 1318	e-_G4DNAVibExcitation = 1036
 
  MeanFreePath:	3.46 Ang +- 3.44 Ang			massic: 0.00 mg/cm2
- CrossSection:	28934283.45 cm^-1 			massic: 28934283.45 cm2/g
+ CrossSection:	28934278.50 cm^-1 			massic: 28934278.50 cm2/g
 
- mean energy of charged secondaries: 0.64 eV 	mass_energy_transfer coef: 617546.41 cm2/g
+ mean energy of charged secondaries: 640.29 meV	mass_energy_transfer coef: 617546.31 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -289,9 +293,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 6520	e-_G4DNAExcitation = 123	e-_G4DNAIonisation = 2110	e-_G4DNAVibExcitation = 1247
 
  MeanFreePath:	3.92 Ang +- 3.92 Ang			massic: 0.00 mg/cm2
- CrossSection:	25529450.98 cm^-1 			massic: 25529450.98 cm2/g
+ CrossSection:	25529446.62 cm^-1 			massic: 25529446.62 cm2/g
 
- mean energy of charged secondaries: 1.54 eV 	mass_energy_transfer coef: 982549.57 cm2/g
+ mean energy of charged secondaries: 1.54 eV 	mass_energy_transfer coef: 982549.40 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -300,9 +307,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 5975	e-_G4DNAExcitation = 126	e-_G4DNAIonisation = 2682	e-_G4DNAVibExcitation = 1217
 
  MeanFreePath:	4.21 Ang +- 4.22 Ang			massic: 0.00 mg/cm2
- CrossSection:	23743723.63 cm^-1 			massic: 23743723.63 cm2/g
+ CrossSection:	23743719.57 cm^-1 			massic: 23743719.57 cm2/g
 
- mean energy of charged secondaries: 2.45 eV 	mass_energy_transfer coef: 1161723.39 cm2/g
+ mean energy of charged secondaries: 2.45 eV 	mass_energy_transfer coef: 1161723.19 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -311,9 +321,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 5385	e-_G4DNAExcitation = 155	e-_G4DNAIonisation = 3231	e-_G4DNAVibExcitation = 1229
 
  MeanFreePath:	4.51 Ang +- 4.47 Ang			massic: 0.00 mg/cm2
- CrossSection:	22182247.06 cm^-1 			massic: 22182247.06 cm2/g
+ CrossSection:	22182243.27 cm^-1 			massic: 22182243.27 cm2/g
 
- mean energy of charged secondaries: 3.31 eV 	mass_energy_transfer coef: 1223217.68 cm2/g
+ mean energy of charged secondaries: 3.31 eV 	mass_energy_transfer coef: 1223217.47 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -322,9 +335,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 4979	e-_G4DNAExcitation = 122	e-_G4DNAIonisation = 3495	e-_G4DNAVibExcitation = 1404
 
  MeanFreePath:	4.67 Ang +- 4.63 Ang			massic: 0.00 mg/cm2
- CrossSection:	21404238.22 cm^-1 			massic: 21404238.22 cm2/g
+ CrossSection:	21404234.56 cm^-1 			massic: 21404234.56 cm2/g
 
- mean energy of charged secondaries: 3.93 eV 	mass_energy_transfer coef: 1202032.70 cm2/g
+ mean energy of charged secondaries: 3.93 eV 	mass_energy_transfer coef: 1202032.50 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -333,9 +349,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 4494	e-_G4DNAExcitation = 115	e-_G4DNAIonisation = 3809	e-_G4DNAVibExcitation = 1582
 
  MeanFreePath:	4.77 Ang +- 4.71 Ang			massic: 0.00 mg/cm2
- CrossSection:	20979406.62 cm^-1 			massic: 20979406.62 cm2/g
+ CrossSection:	20979403.03 cm^-1 			massic: 20979403.03 cm2/g
 
- mean energy of charged secondaries: 4.67 eV 	mass_energy_transfer coef: 1225412.55 cm2/g
+ mean energy of charged secondaries: 4.67 eV 	mass_energy_transfer coef: 1225412.34 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -344,9 +363,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 4440	e-_G4DNAExcitation = 105	e-_G4DNAIonisation = 4026	e-_G4DNAVibExcitation = 1429
 
  MeanFreePath:	4.98 Ang +- 4.98 Ang			massic: 0.00 mg/cm2
- CrossSection:	20065025.76 cm^-1 			massic: 20065025.76 cm2/g
+ CrossSection:	20065022.32 cm^-1 			massic: 20065022.32 cm2/g
 
- mean energy of charged secondaries: 5.21 eV 	mass_energy_transfer coef: 1160670.54 cm2/g
+ mean energy of charged secondaries: 5.21 eV 	mass_energy_transfer coef: 1160670.34 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -355,9 +377,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 4225	e-_G4DNAExcitation = 126	e-_G4DNAIonisation = 4139	e-_G4DNAVibExcitation = 1510
 
  MeanFreePath:	5.20 Ang +- 5.14 Ang			massic: 0.00 mg/cm2
- CrossSection:	19240811.79 cm^-1 			massic: 19240811.79 cm2/g
+ CrossSection:	19240808.50 cm^-1 			massic: 19240808.50 cm2/g
 
- mean energy of charged secondaries: 5.66 eV 	mass_energy_transfer coef: 1088598.88 cm2/g
+ mean energy of charged secondaries: 5.66 eV 	mass_energy_transfer coef: 1088598.69 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -366,9 +391,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 4216	e-_G4DNAExcitation = 128	e-_G4DNAIonisation = 5656
 
  MeanFreePath:	8.48 Ang +- 8.48 Ang			massic: 0.00 mg/cm2
- CrossSection:	11794399.23 cm^-1 			massic: 11794399.23 cm2/g
+ CrossSection:	11794397.22 cm^-1 			massic: 11794397.22 cm2/g
 
- mean energy of charged secondaries: 10.62 eV 	mass_energy_transfer coef: 626275.24 cm2/g
+ mean energy of charged secondaries: 10.62 eV 	mass_energy_transfer coef: 626275.13 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -377,9 +405,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3999	e-_G4DNAExcitation = 128	e-_G4DNAIonisation = 5873
 
  MeanFreePath:	1.08 nm  +- 1.08 nm 			massic: 0.00 mg/cm2
- CrossSection:	9275774.10 cm^-1 			massic: 9275774.10 cm2/g
+ CrossSection:	9275772.51 cm^-1 			massic: 9275772.51 cm2/g
 
- mean energy of charged secondaries: 12.60 eV 	mass_energy_transfer coef: 389559.52 cm2/g
+ mean energy of charged secondaries: 12.60 eV 	mass_energy_transfer coef: 389559.45 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -388,9 +419,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 4016	e-_G4DNAExcitation = 109	e-_G4DNAIonisation = 5875
 
  MeanFreePath:	1.29 nm  +- 1.29 nm 			massic: 0.00 mg/cm2
- CrossSection:	7752712.27 cm^-1 			massic: 7752712.27 cm2/g
+ CrossSection:	7752710.95 cm^-1 			massic: 7752710.95 cm2/g
 
- mean energy of charged secondaries: 13.37 eV 	mass_energy_transfer coef: 259209.32 cm2/g
+ mean energy of charged secondaries: 13.37 eV 	mass_energy_transfer coef: 259209.28 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -399,9 +433,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3958	e-_G4DNAExcitation = 106	e-_G4DNAIonisation = 5936
 
  MeanFreePath:	1.50 nm  +- 1.52 nm 			massic: 0.00 mg/cm2
- CrossSection:	6649475.49 cm^-1 			massic: 6649475.49 cm2/g
+ CrossSection:	6649474.36 cm^-1 			massic: 6649474.36 cm2/g
 
- mean energy of charged secondaries: 14.59 eV 	mass_energy_transfer coef: 194080.54 cm2/g
+ mean energy of charged secondaries: 14.59 eV 	mass_energy_transfer coef: 194080.51 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -410,9 +447,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3953	e-_G4DNAExcitation = 103	e-_G4DNAIonisation = 5944
 
  MeanFreePath:	1.71 nm  +- 1.74 nm 			massic: 0.00 mg/cm2
- CrossSection:	5840394.38 cm^-1 			massic: 5840394.38 cm2/g
+ CrossSection:	5840393.38 cm^-1 			massic: 5840393.38 cm2/g
 
- mean energy of charged secondaries: 15.04 eV 	mass_energy_transfer coef: 146371.91 cm2/g
+ mean energy of charged secondaries: 15.04 eV 	mass_energy_transfer coef: 146371.88 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -421,9 +461,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3996	e-_G4DNAExcitation = 91	e-_G4DNAIonisation = 5913
 
  MeanFreePath:	1.90 nm  +- 1.90 nm 			massic: 0.00 mg/cm2
- CrossSection:	5252511.80 cm^-1 			massic: 5252511.80 cm2/g
+ CrossSection:	5252510.90 cm^-1 			massic: 5252510.90 cm2/g
 
- mean energy of charged secondaries: 15.88 eV 	mass_energy_transfer coef: 119173.09 cm2/g
+ mean energy of charged secondaries: 15.88 eV 	mass_energy_transfer coef: 119173.07 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -432,9 +475,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3974	e-_G4DNAExcitation = 112	e-_G4DNAIonisation = 5914
 
  MeanFreePath:	2.09 nm  +- 2.09 nm 			massic: 0.00 mg/cm2
- CrossSection:	4791411.14 cm^-1 			massic: 4791411.14 cm2/g
+ CrossSection:	4791410.32 cm^-1 			massic: 4791410.32 cm2/g
 
- mean energy of charged secondaries: 16.29 eV 	mass_energy_transfer coef: 97570.43 cm2/g
+ mean energy of charged secondaries: 16.29 eV 	mass_energy_transfer coef: 97570.41 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -443,9 +489,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3848	e-_G4DNAExcitation = 85	e-_G4DNAIonisation = 6067
 
  MeanFreePath:	2.27 nm  +- 2.28 nm 			massic: 0.00 mg/cm2
- CrossSection:	4404031.08 cm^-1 			massic: 4404031.08 cm2/g
+ CrossSection:	4404030.33 cm^-1 			massic: 4404030.33 cm2/g
 
- mean energy of charged secondaries: 16.38 eV 	mass_energy_transfer coef: 80133.05 cm2/g
+ mean energy of charged secondaries: 16.38 eV 	mass_energy_transfer coef: 80133.04 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -454,9 +503,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3853	e-_G4DNAExcitation = 98	e-_G4DNAIonisation = 6049
 
  MeanFreePath:	2.45 nm  +- 2.44 nm 			massic: 0.00 mg/cm2
- CrossSection:	4087224.14 cm^-1 			massic: 4087224.14 cm2/g
+ CrossSection:	4087223.44 cm^-1 			massic: 4087223.44 cm2/g
 
- mean energy of charged secondaries: 17.74 eV 	mass_energy_transfer coef: 72510.38 cm2/g
+ mean energy of charged secondaries: 17.74 eV 	mass_energy_transfer coef: 72510.37 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -465,9 +517,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3833	e-_G4DNAExcitation = 81	e-_G4DNAIonisation = 6086
 
  MeanFreePath:	4.28 nm  +- 4.24 nm 			massic: 0.00 mg/cm2
- CrossSection:	2338485.76 cm^-1 			massic: 2338485.76 cm2/g
+ CrossSection:	2338485.36 cm^-1 			massic: 2338485.36 cm2/g
 
- mean energy of charged secondaries: 20.28 eV 	mass_energy_transfer coef: 23709.54 cm2/g
+ mean energy of charged secondaries: 20.28 eV 	mass_energy_transfer coef: 23709.53 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -476,9 +531,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3837	e-_G4DNAExcitation = 87	e-_G4DNAIonisation = 6076
 
  MeanFreePath:	5.93 nm  +- 5.91 nm 			massic: 0.00 mg/cm2
- CrossSection:	1685255.53 cm^-1 			massic: 1685255.53 cm2/g
+ CrossSection:	1685255.24 cm^-1 			massic: 1685255.24 cm2/g
 
  mean energy of charged secondaries: 22.94 eV 	mass_energy_transfer coef: 12888.63 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -487,9 +545,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3948	e-_G4DNAExcitation = 90	e-_G4DNAIonisation = 5962
 
  MeanFreePath:	7.53 nm  +- 7.47 nm 			massic: 0.00 mg/cm2
- CrossSection:	1327179.03 cm^-1 			massic: 1327179.03 cm2/g
+ CrossSection:	1327178.80 cm^-1 			massic: 1327178.80 cm2/g
 
  mean energy of charged secondaries: 21.95 eV 	mass_energy_transfer coef: 7283.50 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -498,9 +559,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3781	e-_G4DNAExcitation = 89	e-_G4DNAIonisation = 6130
 
  MeanFreePath:	9.06 nm  +- 9.06 nm 			massic: 0.00 mg/cm2
- CrossSection:	1103224.89 cm^-1 			massic: 1103224.89 cm2/g
+ CrossSection:	1103224.70 cm^-1 			massic: 1103224.70 cm2/g
 
  mean energy of charged secondaries: 23.00 eV 	mass_energy_transfer coef: 5075.28 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -509,9 +573,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3735	e-_G4DNAExcitation = 112	e-_G4DNAIonisation = 6153
 
  MeanFreePath:	10.59 nm  +- 10.55 nm 			massic: 0.00 mg/cm2
- CrossSection:	944104.06 cm^-1 			massic: 944104.06 cm2/g
+ CrossSection:	944103.90 cm^-1 			massic: 944103.90 cm2/g
 
  mean energy of charged secondaries: 24.51 eV 	mass_energy_transfer coef: 3856.45 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -520,9 +587,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3669	e-_G4DNAExcitation = 91	e-_G4DNAIonisation = 6240
 
  MeanFreePath:	12.33 nm  +- 12.22 nm 			massic: 0.00 mg/cm2
- CrossSection:	810987.39 cm^-1 			massic: 810987.39 cm2/g
+ CrossSection:	810987.25 cm^-1 			massic: 810987.25 cm2/g
 
  mean energy of charged secondaries: 24.57 eV 	mass_energy_transfer coef: 2846.37 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -531,9 +601,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3600	e-_G4DNAExcitation = 102	e-_G4DNAIonisation = 6298
 
  MeanFreePath:	13.83 nm  +- 13.53 nm 			massic: 0.00 mg/cm2
- CrossSection:	722866.49 cm^-1 			massic: 722866.49 cm2/g
+ CrossSection:	722866.36 cm^-1 			massic: 722866.36 cm2/g
 
  mean energy of charged secondaries: 25.43 eV 	mass_energy_transfer coef: 2297.50 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -542,9 +615,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3550	e-_G4DNAExcitation = 98	e-_G4DNAIonisation = 6352
 
  MeanFreePath:	15.26 nm  +- 15.11 nm 			massic: 0.00 mg/cm2
- CrossSection:	655182.91 cm^-1 			massic: 655182.91 cm2/g
+ CrossSection:	655182.80 cm^-1 			massic: 655182.80 cm2/g
 
  mean energy of charged secondaries: 28.13 eV 	mass_energy_transfer coef: 2047.73 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -553,6 +629,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Process calls frequency --->	e-_G4DNAElastic = 3484	e-_G4DNAExcitation = 84	e-_G4DNAIonisation = 6432
 
  MeanFreePath:	16.99 nm  +- 17.28 nm 			massic: 0.00 mg/cm2
- CrossSection:	588506.89 cm^-1 			massic: 588506.89 cm2/g
+ CrossSection:	588506.79 cm^-1 			massic: 588506.79 cm2/g
 
  mean energy of charged secondaries: 26.29 eV 	mass_energy_transfer coef: 1547.32 cm2/g
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.

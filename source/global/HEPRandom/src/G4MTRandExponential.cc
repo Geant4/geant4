@@ -23,71 +23,89 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4BuffercoutDestination class implementation
 //
-// $Id:$
-//
-#if __clang__
-  #if ((defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
-      !__has_feature(cxx_thread_local)) || !__has_feature(c_atomic)
-    #define CLANG_NOSTDTLS
-  #endif
-#endif
+// Author: A.Dotti (SLAC), 14 April 2017
+// --------------------------------------------------------------------
 
-#if (defined(G4MULTITHREADED) && \
-    (!defined(G4USE_STD11) || (defined(CLANG_NOSTDTLS) || defined(__INTEL_COMPILER))))
+#include <iostream>
 
-#include "G4MTRandExponential.hh"
+#include "G4AutoLock.hh"
+#include "G4BuffercoutDestination.hh"
 
-G4MTRandExponential::~G4MTRandExponential()
+// --------------------------------------------------------------------
+G4BuffercoutDestination::G4BuffercoutDestination(std::size_t max)
+  : m_buffer_out("")
+  , m_buffer_err("")
+  , m_maxSize(max)
+{}
+
+// --------------------------------------------------------------------
+G4BuffercoutDestination::~G4BuffercoutDestination() { Finalize(); }
+
+// --------------------------------------------------------------------
+void G4BuffercoutDestination::Finalize()
 {
-  if ( deleteEngine ) delete localEngine;
+  FlushG4cerr();
+  FlushG4cout();
 }
 
-G4double G4MTRandExponential::operator()()
+// --------------------------------------------------------------------
+G4int G4BuffercoutDestination::ReceiveG4cout(const G4String& msg)
 {
-  return fire( defaultMean );
+  m_currentSize_out += msg.size();
+  m_buffer_out << msg;
+  // If there is a max size and it has been reached, flush
+  if(m_maxSize > 0 && m_currentSize_out >= m_maxSize)
+  {
+    FlushG4cout();
+  }
+  return 0;
 }
 
-G4double G4MTRandExponential::operator()( G4double mean )
+// --------------------------------------------------------------------
+G4int G4BuffercoutDestination::ReceiveG4cerr(const G4String& msg)
 {
-  return fire( mean );
+  m_currentSize_err += msg.size();
+  m_buffer_err << msg;
+  // If there is a max size and it has been reached, flush
+  if(m_maxSize > 0 && m_currentSize_err >= m_maxSize)
+  {
+    FlushG4cerr();
+  }
+  return 0;
 }
 
-G4double G4MTRandExponential::shoot()
+// --------------------------------------------------------------------
+G4int G4BuffercoutDestination::FlushG4cout()
 {
-  return -std::log(G4MTHepRandom::getTheEngine()->flat());
+  std::cout << m_buffer_out.str() << std::flush;
+  ResetCout();
+  return 0;
 }
 
-G4double G4MTRandExponential::shoot(G4double mean)
+// --------------------------------------------------------------------
+void G4BuffercoutDestination::ResetCout()
 {
-  return -std::log(G4MTHepRandom::getTheEngine()->flat())*mean;
+  m_buffer_out.str("");
+  m_buffer_out.clear();
+  m_currentSize_out = 0;
 }
 
-void G4MTRandExponential::shootArray( const G4int size, G4double* vect,
-                                  G4double mean )
+// --------------------------------------------------------------------
+G4int G4BuffercoutDestination::FlushG4cerr()
 {
-   for (G4int i=0; i<size; ++i)
-     vect[i] = shoot(mean);
+  std::cerr << m_buffer_err.str() << std::flush;
+  ResetCerr();
+  return 0;
 }
 
-void G4MTRandExponential::shootArray(CLHEP::HepRandomEngine* anEngine,
-                      const G4int size, G4double* vect, G4double mean )
+// --------------------------------------------------------------------
+void G4BuffercoutDestination::ResetCerr()
 {
-   for (G4int i=0; i<size; ++i)
-     vect[i] = shoot(anEngine, mean);
-}
-
-void G4MTRandExponential::fireArray( const G4int size, G4double* vect)
-{
-   for (G4int i=0; i<size; ++i)
-     vect[i] = fire( defaultMean );
-}
-
-void G4MTRandExponential::fireArray( const G4int size, G4double* vect,
-                                     G4double mean )
-{
-   for (G4int i=0; i<size; ++i)
-     vect[i] = fire( mean );
+  m_buffer_err.str("");
+  m_buffer_err.clear();
+  m_currentSize_err = 0;
 }
 
 #endif

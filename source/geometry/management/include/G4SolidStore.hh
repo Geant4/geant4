@@ -28,37 +28,32 @@
 // Class description:
 //
 // Container for all solids, with functionality derived from
-// std::vector<T>. The class is a `singleton', in that only
+// std::vector<T>. The class is a 'singleton', in that only
 // one can exist, and access is provided via the static method
 // G4SolidStore::GetInstance().
 //
 // All solids should be registered with G4SolidStore, and removed on their
-// destruction. Intended principally for UI browser. The underlying
-// container initially has a capacity of 100.
+// destruction. The underlying container initially has a capacity of 100.
+// A map indexed by solid names is also recorded for fast search;
+// pointers to solids with same name are stored in buckets.
 //
 // If much additional functionality is added, should consider containment
-// instead of inheritance for std::vector<T>
-//
-// Member data:
-//
-// static G4SolidStore*
-//   - Ptr to the single G4SolidStore
+// instead of inheritance for std::vector<T>.
 
-// History:
-// 18.04.01, G.Cosmo - Migrated to STL vector
-// 10.07.95, P.Kent - Initial version
+// 10.07.95, P.Kent, G.Cosmo - Initial version
 // --------------------------------------------------------------------
 #ifndef G4VSOLIDSTORE_HH
-#define G4VSOLIDSTORE_HH
+#define G4VSOLIDSTORE_HH 1
 
 #include <vector>
+#include <map>
 
 #include "G4VSolid.hh"
 #include "G4VStoreNotifier.hh"
 
 class G4SolidStore : public std::vector<G4VSolid*>
 {
-  public:  // with description
+  public:
 
     static void Register(G4VSolid* pSolid);
       // Add the solid to the collection.
@@ -73,10 +68,24 @@ class G4SolidStore : public std::vector<G4VSolid*>
 
     G4VSolid* GetSolid(const G4String& name, G4bool verbose = true) const;
       // Return the pointer of the first solid in the collection having
-      // that name.
+      // that name. Uses the internal map for fast search and warns if
+      // a solid in the collection is not unique or not found.
+
+    inline G4bool IsMapValid() const  { return mvalid; }
+    inline void SetMapValid(G4bool val)  { mvalid = val; }
+      // Accessor to assess validity of the internal map.
+    inline const std::map<G4String,
+            std::vector<G4VSolid*> >& GetMap() const { return bmap; }
+      // Return the internal map.
+    void UpdateMap();
+      // Bring contents of internal map up to date and resets validity flag.
 
     virtual ~G4SolidStore();
       // Destructor: takes care to delete allocated solids.
+
+    G4SolidStore(const G4SolidStore&) = delete;
+    G4SolidStore& operator=(const G4SolidStore&) = delete;
+      // Forbidden copy constructor and assignment operator
 
   protected:
 
@@ -87,6 +96,9 @@ class G4SolidStore : public std::vector<G4VSolid*>
     static G4SolidStore* fgInstance;
     static G4ThreadLocal G4VStoreNotifier* fgNotifier;
     static G4ThreadLocal G4bool locked;
+
+    std::map<G4String, std::vector<G4VSolid*> > bmap;
+    G4bool mvalid = false;  // Flag to indicate if map is up to date or not
 };
 
 #endif

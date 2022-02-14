@@ -53,7 +53,6 @@
 #include "G4BetheBlochModel.hh"
 #include "G4IonFluctuations.hh"
 #include "G4UniversalFluctuation.hh"
-#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
@@ -64,8 +63,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     isInitialised(false)
@@ -74,7 +71,7 @@ G4hIonisation::G4hIonisation(const G4String& name)
   SetSecondaryParticle(G4Electron::Electron());
   mass = 0.0;
   ratio = 0.0;
-  eth = 2*MeV;
+  eth = 2*CLHEP::MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,10 +81,9 @@ G4hIonisation::~G4hIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4hIonisation::IsApplicable(const G4ParticleDefinition& p)
+G4bool G4hIonisation::IsApplicable(const G4ParticleDefinition&)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV &&
-	 !p.IsShortLived());
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,18 +112,21 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     //G4cout << " G4hIonisation::InitialiseEnergyLossProcess " << pname 
     //   << "  " << bpart << G4endl;
 
-    // standard base particles
-    if(part == bpart || pname == "proton" ||
-       pname == "anti_proton" || 
-       pname == "pi+" || pname == "pi-" || 
-       pname == "kaon+" || pname == "kaon-" || pname == "GenericIon"
-       || pname == "He3" || pname == "alpha") 
-      { 
-	theBaseParticle = nullptr;
-      }
-    // select base particle 
-    else if(bpart == nullptr) {
+    // define base particle
+    if(part == bpart) { 
+      theBaseParticle = nullptr;
+    } else if(nullptr != bpart) { 
+      theBaseParticle = bpart;
 
+    } else if(pname == "proton" || pname == "anti_proton" || 
+	      pname == "pi+" || pname == "pi-" || 
+	      pname == "kaon+" || pname == "kaon-" || 
+	      pname == "GenericIon" || pname == "alpha") { 
+      // no base particles
+      theBaseParticle = nullptr;
+
+    } else {
+      // select base particle 
       if(part->GetPDGSpin() == 0.0) {
 	if(q > 0.0) { theBaseParticle = G4KaonPlus::KaonPlus(); }
 	else { theBaseParticle = G4KaonMinus::KaonMinus(); }
@@ -135,10 +134,6 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 	if(q > 0.0) { theBaseParticle = G4Proton::Proton(); } 
 	else { theBaseParticle = G4AntiProton::AntiProton(); }
       }
-
-      // base particle defined by interface
-    } else { 
-      theBaseParticle = bpart;
     }
     SetBaseParticle(theBaseParticle);
 
@@ -157,7 +152,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
       SetDEDXBinning(bin);
     }
 
-    if (!EmModel(0)) { 
+    if (nullptr == EmModel(0)) { 
       if(q > 0.0) { SetEmModel(new G4BraggModel()); }
       else        { SetEmModel(new G4ICRU73QOModel()); }
     }
@@ -165,9 +160,9 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     EmModel(0)->SetHighEnergyLimit(eth);
     AddEmModel(1, EmModel(0), new G4IonFluctuations());
 
-    if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
+    if (nullptr == FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
 
-    if (!EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
+    if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
     EmModel(1)->SetLowEnergyLimit(eth);
     EmModel(1)->SetHighEnergyLimit(emax);
     AddEmModel(1, EmModel(1), FluctModel());  
@@ -175,11 +170,6 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     isInitialised = true;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4hIonisation::PrintInfo()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

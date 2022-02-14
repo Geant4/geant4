@@ -83,15 +83,6 @@ public: // With description
   ~G4VisAttributes ();
   G4VisAttributes& operator= (const G4VisAttributes&);
 
-#ifndef WIN32
-  // Deprecated 14 July 2016  JA
-  // Use GetInvisible() instead.  E.g.:
-  //   logical_volume->SetVisAttributes(G4VisAttributes::GetInvisible());
-  // or use one of the above constructors or SetVisibility and
-  //   logical_volume->SetVisAttributes(my_vis_attributes);
-  static const G4VisAttributes Invisible;
-#endif
-
   static const G4VisAttributes& GetInvisible();
 
   G4bool operator != (const G4VisAttributes& a) const;
@@ -111,6 +102,7 @@ public: // With description
   void SetForceSolid          (G4bool = true);
   void SetForceCloud          (G4bool = true);
   void SetForceNumberOfCloudPoints (G4int nPoints);
+  // nPoints <= 0 means under control of viewer
   void SetForceAuxEdgeVisible (G4bool = true);
   void SetForceLineSegmentsPerCircle (G4int nSegments);
   // Allows choice of circle approximation.  A circle of 360 degrees

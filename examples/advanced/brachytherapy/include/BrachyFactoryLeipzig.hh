@@ -38,26 +38,26 @@
 #ifndef BrachyFactoryLeipzig_h
 #define BrachyFactoryLeipzig_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "BrachyFactory.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4RunManager.hh"
 
+class BrachyDetectorConstructionLeipzig;
 class G4ParticleGun;
 class G4Run;
 class G4Event;
 class BrachyFactory;
-class BrachyDetectorConstructionLeipzig;
 
 class BrachyFactoryLeipzig : public BrachyFactory
 {
 public:
-  BrachyFactoryLeipzig();
+  explicit BrachyFactoryLeipzig();
  ~BrachyFactoryLeipzig();
 
-  void CreateSource(G4VPhysicalVolume*);
-  void CleanSource();
+  void CreateSource(G4VPhysicalVolume*)override;
+  void CleanSource()override;
 
 private:
-  BrachyDetectorConstructionLeipzig* leipzigSource;
+  BrachyDetectorConstructionLeipzig* fLeipzigSource;
 };
 #endif

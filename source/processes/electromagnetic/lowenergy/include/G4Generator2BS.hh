@@ -70,30 +70,28 @@ public:
 
   virtual ~G4Generator2BS();
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double out_energy,
-                                         G4int Z,
-                                         const G4Material* mat = nullptr);
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double out_energy,
+				 G4int Z,
+				 const G4Material* mat = nullptr) override;
 
-  void PrintGeneratorInformation() const;
+  void PrintGeneratorInformation() const override;
 
-protected:
-
-  inline G4double RejectionFunction(G4double value) const;
-
-private:
-
-  // hide assignment operator 
   G4Generator2BS & operator=(const  G4Generator2BS &right)= delete;
   G4Generator2BS(const  G4Generator2BS&) = delete;
 
+protected:
+  inline G4double RejectionFunction(G4double value) const;
+
+private:
+  G4Pow* g4pow;
+  
   G4double fz;
   G4double ratio;
   G4double ratio1;
   G4double ratio2;
   G4double delta;
 
-  G4Pow* g4pow;
   G4int  nwarn;
 
 };

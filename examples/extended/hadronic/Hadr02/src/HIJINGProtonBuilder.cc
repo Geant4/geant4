@@ -59,7 +59,7 @@ void HIJINGProtonBuilder::Build(G4HadronElasticProcess * )
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HIJINGProtonBuilder::Build(G4ProtonInelasticProcess * aP)
+void HIJINGProtonBuilder::Build(G4HadronInelasticProcess * aP)
 {
   fModel->SetMinEnergy(fMin);
   fModel->SetMaxEnergy(fMax);

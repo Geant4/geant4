@@ -116,43 +116,43 @@ G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle)
     if (PDGcode < 0) WParity = +1;
 
     // Copied from G4HadronNucleonXsc::HyperonNucleonXscNS(...)
-    if ( PDGcode == 3122 || PDGcode == 3222 ||
-         PDGcode == 3112 || PDGcode == 3212 ||
-         PDGcode ==-3122 || PDGcode ==-3222 ||
-         PDGcode ==-3112 || PDGcode ==-3212   ) {
+    if ( PDGcode == 3122 || PDGcode == 3222 ||     // Lambda      or  Sigma+          or
+         PDGcode == 3112 || PDGcode == 3212 ||     // Sigma-      or  Sigma0          or 
+         PDGcode ==-3122 || PDGcode ==-3222 ||     // anti_Lambda or  anti_Sigma+     or
+         PDGcode ==-3112 || PDGcode ==-3212   ) {  // anti_Sigma- or  anti_Sigma0
       coeff = lBarCof1S;
     }
-    if ( PDGcode == 3312 || PDGcode == 3322 ||
-         PDGcode ==-3312 || PDGcode ==-3322   ) {
+    if ( PDGcode == 3312 || PDGcode == 3322 ||     // Xi-         or  Xi0             or
+         PDGcode ==-3312 || PDGcode ==-3322   ) {  // anti_Xi-    or  anti_Xi0
       coeff = lBarCof2S;
     }
-    if ( PDGcode == 3334 || PDGcode ==-3334 ) {
+    if ( PDGcode == 3334 || PDGcode ==-3334 ) {    // Omega-      or  anti_Omega-
       coeff = lBarCof3S;
     }
-    if ( PDGcode == 4122 || PDGcode ==-4122 ||
-	 PDGcode == 4222 || PDGcode ==-4222 ||
-	 PDGcode == 4212 || PDGcode ==-4212 ||
-	 PDGcode == 4112 || PDGcode ==-4112   ) {
+    if ( PDGcode == 4122 || PDGcode ==-4122 ||     // Lambda_c+   or  anti_Lambda_c+  or 
+	 PDGcode == 4222 || PDGcode ==-4222 ||     // Sigma_c++   or  anti_Sigma_c++  or
+	 PDGcode == 4212 || PDGcode ==-4212 ||     // Sigma_c+    or  anti_Sigma_c+   or
+	 PDGcode == 4112 || PDGcode ==-4112   ) {  // Sigma_c0    or  anti_Sigma_c0
       coeff = lBarCof1C;
     }
-    if ( PDGcode == 4432 || PDGcode ==-4432 ) {
+    if ( PDGcode == 4332 || PDGcode ==-4332 ) {    // Omega_c0    or  anti_Omega_c0 
       coeff = lBarCof2SC;
     }
-    if ( PDGcode == 4232 || PDGcode == 4132 || 
-         PDGcode ==-4232 || PDGcode ==-4132   ) {
+    if ( PDGcode == 4232 || PDGcode == 4132 ||     // Xi_c+       or  Xi_c0           or
+         PDGcode ==-4232 || PDGcode ==-4132   ) {  // anti_Xi_c+  or  anti_Xi_c0
       coeff = lBarCofSC;
     }
-    if ( PDGcode == 5122 || PDGcode ==-5122 ||
-	 PDGcode == 5222 || PDGcode ==-5222 ||
-	 PDGcode == 5112 || PDGcode ==-5112 ||
-	 PDGcode == 5212 || PDGcode ==-5212   ) {
+    if ( PDGcode == 5122 || PDGcode ==-5122 ||     // Lambda_b0   or  anti_Lambda_b0  or
+	 PDGcode == 5222 || PDGcode ==-5222 ||     // Sigma_b+    or  anti_Sigma_b+   or
+	 PDGcode == 5112 || PDGcode ==-5112 ||     // Sigma_b-    or  anti_Sigma_b-   or
+	 PDGcode == 5212 || PDGcode ==-5212   ) {  // Sigma_b0    or  anti_Sigma_b0
       coeff = lBarCof1B;
     }
-    if ( PDGcode == 5332 || PDGcode ==-5332 ) {
+    if ( PDGcode == 5332 || PDGcode ==-5332 ) {    // Omega_b-    or  anti_Omega_b-
       coeff = lBarCof2SB;
     }
-    if ( PDGcode == 5132 || PDGcode == 5232 || 
-         PDGcode ==-5132 || PDGcode ==-5232   ) {
+    if ( PDGcode == 5132 || PDGcode == 5232 ||     // Xi_b-       or  Xi_b0           or
+         PDGcode ==-5132 || PDGcode ==-5232   ) {  // anti_Xi_b-  or  anti_Xi_b0
       coeff = lBarCofSB;
     } 
     // End of Copied from G4HadronNucleonXsc::HyperonNucleonXscNS(...)
@@ -189,33 +189,33 @@ G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle)
     if (PDGcode < 0) WParity = +1;
 
     // Copied from G4HadronNucleonXsc::SCBMesonNucleonXscNS(...)
-    if ( PDGcode == 511 || PDGcode ==-511 ||
-         PDGcode == 521 || PDGcode ==-521   ) { 
+    if ( PDGcode == 511 || PDGcode ==-511 ||     // B0     or  anti_B0  or
+         PDGcode == 521 || PDGcode ==-521   ) {  // B+     or  B-
       coeff = llMesCof1B;
     }
-    if ( PDGcode == 421 || PDGcode ==-421 ||
-         PDGcode == 411 || PDGcode ==-411   ) {
+    if ( PDGcode == 421 || PDGcode ==-421 ||     // D0     or  anti_D0  or
+         PDGcode == 411 || PDGcode ==-411   ) {  // D+     or  D-
       coeff = llMesCof1C;
     }
-    if ( PDGcode == 531 || PDGcode ==-531 ) {
+    if ( PDGcode == 531 || PDGcode ==-531 ) {    // Bs0    or  anti_Bs0  or
       coeff = llMesCofSB;
     }
-    if ( PDGcode == 541 || PDGcode ==-541 ) {
+    if ( PDGcode == 541 || PDGcode ==-541 ) {    // Bc+    or  Bc-
       coeff = llMesCofCB;
     }
-    if ( PDGcode == 431 || PDGcode ==-431 ) {
+    if ( PDGcode == 431 || PDGcode ==-431 ) {    // D_s+   or  D_s-
       coeff = llMesCofSC;
     }
-    if ( PDGcode == 441 || PDGcode == 443 ) {
+    if ( PDGcode == 441 || PDGcode == 443 ) {    // Eta_c  or  J/psi
       coeff = llMesCof2C;
     }
-    if ( PDGcode == 553 ) {
+    if ( PDGcode == 553 ) {                      // Upsilon
       coeff = llMesCof2B;
     }
-    if ( PDGcode == 221 ) {
+    if ( PDGcode == 221 ) {                      // Eta
       coeff = llMesCofEta;
     }
-    if ( PDGcode == 331 ) {
+    if ( PDGcode == 331 ) {                      // Eta'
       coeff = llMesCofEtaP;
     }
     // End of Copied from G4HadronNucleonXsc::SCBMesonNucleonXscNS(...)

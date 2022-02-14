@@ -52,11 +52,13 @@ public: // With description
 
   G4Visible ();
   G4Visible (const G4Visible&);
+  G4Visible (G4Visible&&);
   G4Visible (const G4VisAttributes*);
 
   virtual ~G4Visible ();
 
   G4Visible& operator= (const G4Visible&);
+  G4Visible& operator= (G4Visible&&);
 
   G4bool operator != (const G4Visible& right) const;
 

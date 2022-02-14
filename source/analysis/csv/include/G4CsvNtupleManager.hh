@@ -37,60 +37,63 @@
 #include "tools/wcsv_ntuple"
 
 #include <memory>
+#include <string_view>
+
+// Types alias
+using CsvNtupleDescription = G4TNtupleDescription<tools::wcsv::ntuple, std::ofstream>;
 
 class G4CsvFileManager;
 
-class G4CsvNtupleManager : public G4TNtupleManager<tools::wcsv::ntuple> 
+class G4CsvNtupleManager : public G4TNtupleManager<tools::wcsv::ntuple,
+                                                   std::ofstream>
 {
   friend class G4CsvAnalysisManager;
+  friend class G4CsvNtupleFileManager;
 
   public:
     explicit G4CsvNtupleManager(const G4AnalysisManagerState& state);
-    ~G4CsvNtupleManager();
+    G4CsvNtupleManager() = delete;
+    virtual ~G4CsvNtupleManager() = default;
 
   private:
-    // Types alias
-    using NtupleType = tools::wcsv::ntuple;
-    using NtupleDescriptionType = G4TNtupleDescription<NtupleType>;
-
     // Functions specific to the output type
 
     // Set methods
     void SetFileManager(std::shared_ptr<G4CsvFileManager> fileManager);
 
     // Access to ntuple vector (needed for Write())
-    const std::vector<NtupleDescriptionType*>& GetNtupleDescriptionVector() const;
+    const std::vector<CsvNtupleDescription*>& GetNtupleDescriptionVector() const;
 
     void SetIsCommentedHeader(G4bool isCommentedHeader);
     void SetIsHippoHeader(G4bool isHippoHeader);
-    
+
     // Methods from the templated base class
     //
-    virtual void CreateTNtuple(
-                    NtupleDescriptionType*  ntupleDescription,
-                    const G4String& name, const G4String& title) final;
     virtual void CreateTNtupleFromBooking(
-                    NtupleDescriptionType*  ntupleDescription) final;
+                    CsvNtupleDescription*  ntupleDescription) final;
 
     virtual void FinishTNtuple(
-                    NtupleDescriptionType*  ntupleDescription,
+                    CsvNtupleDescription*  ntupleDescription,
                     G4bool fromBooking) final;
-    
-    G4bool WriteHeader(NtupleType* ntuple) const;
+
+    G4bool WriteHeader(tools::wcsv::ntuple* ntuple) const;
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4CsvNtupleManager" };
 
     // data members
-    std::shared_ptr<G4CsvFileManager>  fFileManager;
-    G4bool  fIsCommentedHeader;
-    G4bool  fIsHippoHeader;
+    std::shared_ptr<G4CsvFileManager>  fFileManager { nullptr };
+    G4bool  fIsCommentedHeader { true };
+    G4bool  fIsHippoHeader { false };
 };
 
 // inline functions
 
-inline void 
+inline void
 G4CsvNtupleManager::SetFileManager(std::shared_ptr<G4CsvFileManager> fileManager)
 { fFileManager = fileManager; }
 
-inline const std::vector<G4TNtupleDescription<tools::wcsv::ntuple>*>& 
+inline const std::vector<G4TNtupleDescription<tools::wcsv::ntuple, std::ofstream>*>&
 G4CsvNtupleManager::GetNtupleDescriptionVector() const
 { return fNtupleDescriptionVector; }
 
@@ -101,4 +104,3 @@ inline void G4CsvNtupleManager::SetIsHippoHeader(G4bool isHippoHeader)
 { fIsHippoHeader = isHippoHeader; }
 
 #endif
-

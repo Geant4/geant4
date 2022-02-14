@@ -1,28 +1,118 @@
-#------------------------------------------------------------------------------
-# CMakeLists.txt
-# Module : G4expat
-# Package: Geant4.src.G4externals.G4expat
+# - Build for Geant4-vendored version of Expat
 #
-# CMakeLists.txt for single level library that may be build global or granular
-#
-# Created on: 02/06/2011
-#
-# $Date$
-# $Revision$
-# $Author$
-#
-#------------------------------------------------------------------------------
+# It largely reproduces Expat's core CMake script for checks/defines
+# but replaces the library build with Geant4 specifics for naming
+# an installing.
 
-include(Geant4MacroLibraryTargets)
-if(GEANT4_BUILD_GRANULAR_LIBS)
-    GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
-else()
-    GEANT4_GLOBAL_LIBRARY_TARGET(COMPONENTS sources.cmake)
+#----------------------------------------------------------------------------
+# - Expat core build
+set(XML_CONTEXT_BYTES 1024)
+set(XML_DTD 1)
+set(XML_NS 1)
+
+include(CheckIncludeFile)
+include(CheckIncludeFiles)
+include(CheckFunctionExists)
+include(CheckSymbolExists)
+include(TestBigEndian)
+
+check_include_file("dlfcn.h" HAVE_DLFCN_H)
+check_include_file("fcntl.h" HAVE_FCNTL_H)
+check_include_file("inttypes.h" HAVE_INTTYPES_H)
+check_include_file("memory.h" HAVE_MEMORY_H)
+check_include_file("stdint.h" HAVE_STDINT_H)
+check_include_file("stdlib.h" HAVE_STDLIB_H)
+check_include_file("strings.h" HAVE_STRINGS_H)
+check_include_file("string.h" HAVE_STRING_H)
+check_include_file("sys/stat.h" HAVE_SYS_STAT_H)
+check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
+check_include_file("unistd.h" HAVE_UNISTD_H)
+
+check_function_exists("getpagesize" HAVE_GETPAGESIZE)
+check_function_exists("bcopy" HAVE_BCOPY)
+check_symbol_exists("memmove" "string.h" HAVE_MEMMOVE)
+check_function_exists("mmap" HAVE_MMAP)
+
+#/* Define to 1 if you have the ANSI C header files. */
+check_include_files("stdlib.h;stdarg.h;string.h;float.h" STDC_HEADERS)
+
+test_big_endian(WORDS_BIGENDIAN)
+#/* 1234 = LIL_ENDIAN, 4321 = BIGENDIAN */
+if(WORDS_BIGENDIAN)
+  set(BYTEORDER 4321)
+else(WORDS_BIGENDIAN)
+  set(BYTEORDER 1234)
+endif(WORDS_BIGENDIAN)
+
+if(HAVE_SYS_TYPES_H)
+  check_symbol_exists("off_t" "sys/types.h" OFF_T)
+  check_symbol_exists("size_t" "sys/types.h" SIZE_T)
+else(HAVE_SYS_TYPES_H)
+  set(OFF_T "long")
+  set(SIZE_T "unsigned")
+endif(HAVE_SYS_TYPES_H)
+
+configure_file(expat_config.h.cmake expat_config.h)
+add_definitions(-DHAVE_EXPAT_CONFIG_H)
+
+if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS -wd4996)
 endif()
 
-# - Ensure clients of the static expat library use the XML_STATIC
-# preprocessor def
+#----------------------------------------------------------------------------
+# - Geant4 Integration
+# Use geant4_add_library to create G4expat and static variant if needed
+set(G4expat_HEADERS
+  include/expat_external.h
+  include/expat.h
+  ${CMAKE_CURRENT_BINARY_DIR}/expat_config.h)
+
+set(G4expat_SOURCES
+  ${CMAKE_CURRENT_BINARY_DIR}/expat_config.h
+  src/amigaconfig.h
+  src/ascii.h
+  src/asciitab.h
+  src/iasciitab.h
+  src/internal.h
+  src/latin1tab.h
+  src/macconfig.h
+  src/nametab.h
+  src/utf8tab.h
+  src/winconfig.h
+  src/xmlparse.cc
+  src/xmlrole.cc
+  src/xmlrole.h
+  src/xmltok.cc
+  src/xmltok.h
+  src/xmltok_impl.cc
+  src/xmltok_impl.h
+  src/xmltok_ns.cc)
+
+
+# - Create target(s) and set usage requirements
+geant4_library_target(NAME G4expat SOURCES ${G4expat_SOURCES} ${G4expat_HEADERS})
+foreach(__g4expat_target G4expat G4expat-static)
+  if(TARGET ${__g4expat_target})
+    target_include_directories(${__g4expat_target}
+      PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+      PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+    )
+  endif()
+endforeach()
+
 if(TARGET G4expat-static)
   target_compile_definitions(G4expat-static PUBLIC XML_STATIC)
 endif()
 
+# - Ensure the header directory gets added to the list of ones to export
+set_property(GLOBAL APPEND PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+# Install headers alongside Geant4
+install(FILES ${G4expat_HEADERS}
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+  COMPONENT Development)

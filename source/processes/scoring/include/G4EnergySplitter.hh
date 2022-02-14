@@ -49,7 +49,7 @@ public: // with description
   G4EnergySplitter();
   virtual ~G4EnergySplitter();
   
-  G4int SplitEnergyInVolumes(const G4Step* aStep );    // Calculates the energy spliting, and dumps it into theEnergies. Returns number of steps
+  G4int SplitEnergyInVolumes(const G4Step* aStep );    // Calculates the energy splitting, and dumps it into theEnergies. Returns number of steps
 
   void GetLastVoxelID( G4int& voxelID);
   void GetFirstVoxelID( G4int& voxelID);

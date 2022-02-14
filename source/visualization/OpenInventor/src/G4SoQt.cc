@@ -26,9 +26,6 @@
 //
 // F.W. Jones 05012018
 
-#if defined(G4VIS_BUILD_OIQT_DRIVER)
-//#if defined(G4INTY_BUILD_QT) || defined(G4INTY_USE_QT)
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -39,33 +36,29 @@
 //#include "G4UImanager.hh"
 
 #include <Inventor/Qt/SoQt.h>
+#include <QMainWindow>
 
 #include <qwidget.h>
 #include <qapplication.h>
 
+#ifndef G4GMAKE
+#include "moc_G4SoQt.cpp"
+#endif
 
-G4SoQt* G4SoQt::instance    = NULL;
+G4SoQt* G4SoQt::instance = NULL;
 
-static G4bool QtInited  = FALSE;
+static G4bool QtInited = FALSE;
+
 
 /***************************************************************************/
-G4SoQt* G4SoQt::getInstance() 
+G4SoQt* G4SoQt::getInstance()
 {
   if (instance==NULL) {
      instance = new G4SoQt();
   }
   return instance;
-  //  return G4SoQt::getInstance(0, NULL, (char*)"Geant4");
 }
 
-/***************************************************************************/
-//G4SoQt* G4SoQt::getInstance(int a_argn, char** a_args, char* a_class)
-//{
-//  if (instance==NULL) {
-//    instance = new G4SoQt();
-//  }
-//  return instance;
-//}
 
 /***************************************************************************/
 G4SoQt::G4SoQt()
@@ -78,20 +71,36 @@ G4SoQt::G4SoQt()
   // to the (one and only one) QApplication object:
   //      new QApplication (*p_argn, args);
   //      if(!qApp) {
-        
+
+  // FWJ detects existence of Qt UI or other running qApp
+  if (qApp) externalApp = true;
+
   QWidget* mainWin = SoQt::init("Geant4");
+
+  // FWJ Cf Xt:
+  QtInited = TRUE;
+
+  // FWJ DEBUG
+  //  G4cout << "G4SoQt: mainWin=" << mainWin << G4endl;
+  //  G4cout << "G4SoQt: toplevelwidget=" << SoQt::getTopLevelWidget() << G4endl;
+
+// FWJ CAN'T GET MENUBAR THIS WAY OR BY CAST
+  //  QWidget* toplevel = SoQt::getTopLevelWidget();
+  //  QMenuBar* menubar = QMainWindow::menuBar();
+  //  G4cout << "G4OpenInventorQtExaminerViewer menubar=" << menubar << G4endl;
+
 
   // FWJ will this work?
   SetMainInteractor(mainWin);
   //  SetMainInteractor(qApp);
   //  AddDispatcher     ((G4DispatchFunction)XtDispatchEvent);
-  
+
 // FWJ no locale for now (see G4Qt.cc)
 
 }
 
 /***************************************************************************/
-G4SoQt::~G4SoQt() 
+G4SoQt::~G4SoQt()
 {
   if(this==instance) {
     instance = NULL;
@@ -104,7 +113,7 @@ G4bool G4SoQt::Inited()
 }
 
 /***************************************************************************/
-void* G4SoQt::GetEvent() 
+void* G4SoQt::GetEvent()
 {
   return 0;
 }
@@ -121,18 +130,37 @@ void G4SoQt::FlushAndWaitExecution()
    // FWJ no, should be done in secondaryLoop()!
    //   SoQt::mainLoop();
 }
+
+
 /***************************************************************************/
 void G4SoQt::SecondaryLoop()
 {
-   G4cout << "G4SoQt: SECONDARY LOOP CALLED !!!!!!" << G4endl;
+   if (externalApp) return;
+
+   // FWJ DEBUG
+   //      G4cout <<
+   //     "ENTERING OIQT VIEWER SECONDARY LOOP" << G4endl;
+   //   else
+
+   G4cout <<
+      "ENTERING OIQT VIEWER SECONDARY LOOP... PRESS E KEY TO EXIT" << G4endl;
+
    SoQt::mainLoop();
 }
 
 
 /***************************************************************************/
+void G4SoQt::ExitSecondaryLoop()
+{
+   // FWJ DEBUG
+   //   G4cout << "G4SoQt: EXIT SECONDARY LOOP externalApp=" <<
+   //      externalApp << G4endl;
+
+   if (externalApp) return;   
+   SoQt::exitMainLoop();
+}
+/***************************************************************************/
 bool G4SoQt::IsExternalApp()
 {
   return externalApp;
 }
-
-#endif

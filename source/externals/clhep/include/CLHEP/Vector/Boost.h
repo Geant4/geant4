@@ -19,10 +19,6 @@
 #ifndef HEP_BOOST_H
 #define HEP_BOOST_H
 
-#ifdef GNUPRAGMA
-#pragma interface
-#endif
-
 #include "CLHEP/Vector/RotationInterfaces.h"
 #include "CLHEP/Vector/BoostX.h"
 #include "CLHEP/Vector/BoostY.h"

@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Em10TrackingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
-//
-/// \file electromagnetic/TestEm10/src/Em10TrackingAction.cc
-/// \brief Implementation of the Em10TrackingAction class
-//
- #include "Em10TrackingAction.hh"
+#include "G4LENDorBERTModel.hh"
+#include "G4LENDCombinedModel.hh"
+#include "G4CascadeInterface.hh"
+#include "G4DynamicParticle.hh"
+#include "G4PhysicsModelCatalog.hh"
 
- #include "G4TrackingManager.hh"
- #include "G4Track.hh"
- #include "G4RunManager.hh"
+G4LENDorBERTModel::G4LENDorBERTModel( G4ParticleDefinition* pd )
+  :G4LENDModel( "LENDorBERTModel" ), secID( -1 ) {
+   proj = pd;
+   lend = new G4LENDCombinedModel( proj ); 
+   bert = new G4CascadeInterface;
+   secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );
+}
 
  #include "G4UImanager.hh"
  #include "G4SystemOfUnits.hh"
@@ -41,23 +44,32 @@
  : G4UserTrackingAction()
  { }
 
- void Em10TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
- {
+   G4int iZ = aTarg.GetZ_asInt();
+   G4int iA = aTarg.GetA_asInt();
+   G4int iM = 0;
+   if ( aTarg.GetIsotope() != nullptr ) iM = aTarg.GetIsotope()->Getm();
 
-  if( aTrack->GetParentID() == 1 && aTrack->GetKineticEnergy() > 100.*GeV ){
-    G4cout << "[Em10TrackingAction::DEBUG]" << G4endl;
-    G4cout << " Track ID:          " << aTrack->GetTrackID() << G4endl;
-    G4cout << " particle:          " << aTrack->GetDynamicParticle()->GetDefinition()->GetParticleName() << G4endl;
-    G4cout << " Parent ID:         " << aTrack->GetParentID() << G4endl;
-    G4cout << " created by:        " << aTrack->GetCreatorProcess()->GetProcessName() << G4endl;
-    G4cout << " kin. energy (TeV): " << aTrack->GetKineticEnergy() / TeV << G4endl;
-    G4cout << " volume:            " << aTrack->GetVolume()->GetName() << G4endl;
-    G4cout << " global time:       " << aTrack->GetGlobalTime() << G4endl;
+   G4DynamicParticle* dp = new G4DynamicParticle( aTrack.GetDefinition() , G4ThreeVector(0.,0.,1.) , aTrack.GetKineticEnergy() );
+   G4bool lendIsOK = lend->HasData( dp , iZ , iA , iM , aTarg.GetIsotope() , nullptr , aTrack.GetMaterial() );
+   delete dp;
 
-    G4cout << " Killing event..." << G4endl;
-    if( aTrack->GetTrackID() != 1 )
-      const_cast<G4Track*>(aTrack)->SetTrackStatus( fKillTrackAndSecondaries );
-  }
+   G4HadronicInteraction* model = nullptr;
+   if ( lendIsOK ) { 
+      //G4cout << "LEND is selected" << G4endl;
+      model = lend;
+   } else { 
+      //G4cout << "BERT is selected" << G4endl;
+      model = bert;
+   }
 
-  return;
- }
+   G4HadFinalState* result = model->ApplyYourself(aTrack,aTarg);
+   
+   // Assign the creator model ID to the secondaries
+   if ( result != nullptr ) {
+     for ( size_t i = 0; i < result->GetNumberOfSecondaries(); ++i ) {
+       result->GetSecondary( i )->SetCreatorModelID( secID );
+     }
+   }
+
+   return result;
+}

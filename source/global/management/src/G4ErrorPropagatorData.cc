@@ -23,48 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ErrorPropagatorData class implementation
 //
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class implementation file 
+// Author: P.Arce, 2004
 // --------------------------------------------------------------------
 
 #include "G4ErrorPropagatorData.hh"
 
-//-------------------------------------------------------------------
+//---------------------------------------------------------------------
 
-G4ThreadLocal G4ErrorPropagatorData* G4ErrorPropagatorData::fpInstance = 0;
+G4ThreadLocal G4ErrorPropagatorData* G4ErrorPropagatorData::fpInstance =
+  nullptr;
 G4ThreadLocal G4int G4ErrorPropagatorData::theVerbosity = 0;
 
-//-------------------------------------------------------------------
-
+//---------------------------------------------------------------------
 G4ErrorPropagatorData::G4ErrorPropagatorData()
-  : theMode(G4ErrorMode_PropTest), theState(G4ErrorState_PreInit),
-    theStage(G4ErrorStage_Inflation), theTarget(0)
-{
-}
+  : theMode(G4ErrorMode_PropTest)
+  , theState(G4ErrorState_PreInit)
+  , theStage(G4ErrorStage_Inflation)
+{}
 
+// --------------------------------------------------------------------
 G4ErrorPropagatorData::~G4ErrorPropagatorData()
 {
-  delete fpInstance; fpInstance = 0;
+  delete fpInstance;
+  fpInstance = nullptr;
 }
 
+// --------------------------------------------------------------------
 G4ErrorPropagatorData* G4ErrorPropagatorData::GetErrorPropagatorData()
 {
-  if (fpInstance == 0)
+  if(fpInstance == nullptr)
   {
     fpInstance = new G4ErrorPropagatorData;
   }
   return fpInstance;
 }
 
-G4int G4ErrorPropagatorData::verbose() 
-{
-  return theVerbosity;
-}
+// --------------------------------------------------------------------
+G4int G4ErrorPropagatorData::verbose() { return theVerbosity; }
 
-void G4ErrorPropagatorData::SetVerbose( G4int ver )
-{
-  theVerbosity = ver;
-}
+// --------------------------------------------------------------------
+void G4ErrorPropagatorData::SetVerbose(G4int ver) { theVerbosity = ver; }

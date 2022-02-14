@@ -62,6 +62,7 @@
 
 #include "G4CollisionOutput.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4CascadParticle.hh"
 #include "G4CascadeParameters.hh"
 #include "G4Electron.hh"
@@ -254,15 +255,8 @@ G4int G4CollisionOutput::getTotalCharge() const {
   G4int charge = 0;
   G4int i(0);
 
-  if (G4CascadeParameters::usePreCompound() ) {
-    // Possible to have internal conversion electron 
-    for (i = 0; i < numberOfOutgoingParticles(); i++)
-      if (outgoingParticles[i].getDefinition() != G4Electron::Electron() )
-        charge += G4int(outgoingParticles[i].getCharge());
-  } else {
-    for (i = 0; i < numberOfOutgoingParticles(); i++)
-      charge += G4int(outgoingParticles[i].getCharge());
-  }
+  for (i = 0; i < numberOfOutgoingParticles(); i++)
+    charge += G4int(outgoingParticles[i].getCharge());
 
   for (i = 0; i < numberOfOutgoingNuclei(); i++)
     charge += G4int(outgoingNuclei[i].getCharge());
@@ -426,6 +420,12 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
     G4cout << " target momentum = " << momt.e()<<", "<< momt.x()<<", "<< momt.y()<<", "<< momt.z()<<G4endl;
     G4cout << " Fstate momentum = " << out_mom.e()<<", "<< out_mom.x()<<", "<< out_mom.y()<<", "<< out_mom.z()<<G4endl;
   }
+  // correction for internal conversion
+  G4LorentzVector el4mom(0.,0.,0.,electron_mass_c2/GeV);
+  for(G4int i=0; i < numberOfOutgoingParticles(); ++i) {
+    if (outgoingParticles[i].getDefinition() == G4Electron::Electron())
+      momt += el4mom;
+  }
 
   ini_mom += momt;
 
@@ -539,9 +539,9 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   }
 
   // Momentum (hard) tuning required for energy conservation
-  if (verboseLevel > 2)
+  if (verboseLevel > 2) {
     G4cout << " trying hard (particle-pair) tuning" << G4endl;
-
+  }
   /*****
   // Hard tuning of quasielastic particle against nucleus
   if (npart == 1) {

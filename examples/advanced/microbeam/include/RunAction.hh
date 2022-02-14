@@ -31,16 +31,13 @@
 // 
 // If you use this example, please cite the following publication:
 // Rad. Prot. Dos. 133 (2009) 2-11
-
+//
 #ifndef RunAction_h
 #define RunAction_h 1
 
+#include "DetectorConstruction.hh"
 #include "G4UserRunAction.hh"
 //#include "G4ThreeVector.hh"
-
-#include "DetectorConstruction.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
 
@@ -48,11 +45,11 @@ class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*);
-  ~RunAction();
+  explicit RunAction(const DetectorConstruction*);
+  ~RunAction() override;
 
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
+  void BeginOfRunAction(const G4Run*) override;
+  void EndOfRunAction(const G4Run*) override;
     
   void  SetRndmFreq(G4int   val)  {fSaveRndm = val;}
   G4int GetRndmFreq()             {return fSaveRndm;}
@@ -87,19 +84,17 @@ private:
   DetectorConstruction* fDetector;    
   CellParameterisation * fMyCellParameterisation;  
 
-  G4int fSaveRndm;
-  G4int fNumEvent;
-  G4int fNbOfPixels;
-  G4int fNbOfHitsGas;
-
+  G4ThreeVector * fMapVoxels;
+  
   G4double fDoseN;
   G4double fDoseC;
   G4double fMassCytoplasm;
   G4double fMassNucleus;
   G4double * fDose3DDose;
 
-  G4ThreeVector * fMapVoxels;
-
+  G4int fSaveRndm;
+  G4int fNumEvent;
+  G4int fNbOfPixels;
+  G4int fNbOfHitsGas;
 };
-
 #endif

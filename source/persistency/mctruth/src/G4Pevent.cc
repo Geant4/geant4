@@ -23,20 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4Pevent.cc
+// G4Pevent implementation
 //
-// History:
-//   '01.11.18  Youhei Morita  Initial creation
+// Author: Youhei Morita, 18.11.2001
+// --------------------------------------------------------------------
 
 #include "G4Pevent.hh"
 
-G4Pevent::G4Pevent( G4MCTEvent* mctevt, G4Event* g4evt )
- : genEventID(-1), f_mctevt(mctevt), f_g4evt(g4evt)
+// --------------------------------------------------------------------
+G4Pevent::G4Pevent(G4MCTEvent* mctevt, G4Event* g4evt)
+  : f_mctevt(mctevt)
+  , f_g4evt(g4evt)
 {
   m_id = g4evt->GetEventID();
-  if (mctevt) genEventID= mctevt->GetEventNumber();
+  if(mctevt != nullptr)
+    genEventID = mctevt->GetEventNumber();
 }
 
+// --------------------------------------------------------------------
 G4Pevent::~G4Pevent()
 {
   delete f_g4evt;

@@ -95,6 +95,27 @@ Idle> /run/beamOn 1
 Idle> exit
 \endverbatim
 	
+ Macros provided in this example:
+  - Co60.mac:  Co60
+  - Gd158.mac: Gd158 excited state
+  - No158.mac: read user data file
+  - Po212.mac: Po212 excited state
+  - Ra228.mac: Ra228 excited state
+  - alpha.mac: Po212 alpha decay
+  - atomicDeexcitation.mac: plot Auger cascade
+  - fullChain.mac: U238
+  - neutron.mac: Li10 neutron emission
+  - proton.mac:  Co53 proton  emission
+  - singleDecay.mac: Ne10
+  - timeWindow.mac: print activity within a given time window
+  - timeWindowBiased.mac: force decay within a given time window  
+    
+ Macros to be run interactively:
+  - Cf238.mac: read user data file
+  - debug.mac: Pb210
+  - electronicCapture.mac: Fe55 electronic capture
+  - vis.mac: To activate visualization
+  	
 \section rdecay01_s9 Histograms
  
   rdecay01 produces several 1D histograms which are saved as

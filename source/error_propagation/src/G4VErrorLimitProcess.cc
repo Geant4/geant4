@@ -25,7 +25,7 @@
 //
 //
 // ------------------------------------------------------------
-//      GEANT 4 class implementation file 
+//      GEANT 4 class implementation file
 // ------------------------------------------------------------
 //
 
@@ -34,30 +34,25 @@
 
 //------------------------------------------------------------------------
 G4VErrorLimitProcess::G4VErrorLimitProcess(const G4String& processName)
-  : G4VDiscreteProcess (processName) 
+  : G4VDiscreteProcess(processName)
 {
-  theStepLimit = kInfinity;
+  theStepLimit  = kInfinity;
   theStepLength = kInfinity;
 }
 
+//------------------------------------------------------------------------
+G4VErrorLimitProcess::~G4VErrorLimitProcess() {}
 
 //------------------------------------------------------------------------
-G4VErrorLimitProcess::~G4VErrorLimitProcess()
-{
-}
-
-
-//------------------------------------------------------------------------
-G4double G4VErrorLimitProcess::
-GetMeanFreePath(const class G4Track &, G4double, enum G4ForceCondition *)
+G4double G4VErrorLimitProcess::GetMeanFreePath(const class G4Track&, G4double,
+                                               enum G4ForceCondition*)
 {
   return theStepLength;
 }
 
-
 //------------------------------------------------------------------------
-G4VParticleChange* G4VErrorLimitProcess::
-PostStepDoIt(const G4Track& aTrack, const G4Step& )
+G4VParticleChange* G4VErrorLimitProcess::PostStepDoIt(const G4Track& aTrack,
+                                                      const G4Step&)
 {
   theParticleChange.Initialize(aTrack);
   return &theParticleChange;

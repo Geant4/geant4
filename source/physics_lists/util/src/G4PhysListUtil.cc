@@ -32,6 +32,7 @@
 // Author: 2007 Gunter Folger
 //
 // Modified:
+// 07.10.2020 V.Ivanchenko added InitialiseParameters method
 //
 //----------------------------------------------------------------------------
 //
@@ -40,6 +41,18 @@
 
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
+#include "G4NistManager.hh"
+#include "G4EmParameters.hh"
+#include "G4HadronicParameters.hh"
+#include "G4NuclearLevelData.hh"
+
+void G4PhysListUtil::InitialiseParameters()
+{
+  G4NistManager::Instance();
+  G4EmParameters::Instance()->SetDefaults();
+  G4HadronicParameters::Instance();
+  G4NuclearLevelData::GetInstance();
+}
 
 G4HadronicProcess* 
 G4PhysListUtil::FindInelasticProcess(const G4ParticleDefinition* p)
@@ -49,8 +62,27 @@ G4PhysListUtil::FindInelasticProcess(const G4ParticleDefinition* p)
      G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
      size_t n = pvec->size();
      for(size_t i=0; i<n; ++i) {
-       if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
-	 had = static_cast<G4HadronicProcess*>((*pvec)[i]);
+       auto proc = (*pvec)[i];
+       if(proc != nullptr && fHadronInelastic == proc->GetProcessSubType()) {
+	 had = static_cast<G4HadronicProcess*>(proc);
+	 break;
+       }
+     }
+  }
+  return had;
+}
+
+G4HadronicProcess* 
+G4PhysListUtil::FindElasticProcess(const G4ParticleDefinition* p)
+{
+  G4HadronicProcess* had = nullptr;
+  if(p) {
+     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
+     size_t n = pvec->size();
+     for(size_t i=0; i<n; ++i) {
+       auto proc = (*pvec)[i];
+       if(proc != nullptr && fHadronElastic == proc->GetProcessSubType()) {
+	 had = static_cast<G4HadronicProcess*>(proc);
 	 break;
        }
      }
@@ -66,8 +98,9 @@ G4PhysListUtil::FindCaptureProcess(const G4ParticleDefinition* p)
      G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
      size_t n = pvec->size();
      for(size_t i=0; i<n; ++i) {
-       if(fCapture == ((*pvec)[i])->GetProcessSubType()) {
-	 had = static_cast<G4HadronicProcess*>((*pvec)[i]);
+       auto proc = (*pvec)[i];
+       if(proc != nullptr && fCapture == proc->GetProcessSubType()) {
+	 had = static_cast<G4HadronicProcess*>(proc);
 	 break;
        }
      }
@@ -83,8 +116,9 @@ G4PhysListUtil::FindFissionProcess(const G4ParticleDefinition* p)
      G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
      size_t n = pvec->size();
      for(size_t i=0; i<n; ++i) {
-       if(fFission == ((*pvec)[i])->GetProcessSubType()) {
-	 had = static_cast<G4HadronicProcess*>((*pvec)[i]);
+       auto proc = (*pvec)[i];
+       if(proc != nullptr && fFission == proc->GetProcessSubType()) {
+	 had = static_cast<G4HadronicProcess*>(proc);
 	 break;
        }
      }

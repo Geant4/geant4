@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: Susanna Guatelli, susanna@uow.edu.au,
-// Authors: Jeremy Davis, jad028@uowmail.edu.au
+// Authors: Susanna Guatelli and Francesco Romano
+// susanna@uow.edu.au, francesco.romano@ct.infn.it
 //
 // Code based on the hadrontherapy advanced example
 
@@ -50,7 +50,6 @@
 
 #include "G4IonFluctuations.hh"
 #include "G4IonParametrisedLossModel.hh"
-#include "G4EmProcessOptions.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
@@ -63,6 +62,18 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 
+  G4double lowLimit = 250. * eV;
+  G4double highLimit = 100. * GeV;
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit, highLimit);
+
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+"); 
+  
+  DumpCutValuesTable();
+  
   helIsRegisted  = false;
   bicIsRegisted  = false;
   biciIsRegisted = false;
@@ -132,6 +143,7 @@ void PhysicsList::ConstructProcess()
   for(size_t i=0; i<hadronPhys.size(); i++) {
     hadronPhys[i]->ConstructProcess();
   }
+
 
   // step limitation (as a full process)
   //
@@ -221,27 +233,6 @@ void PhysicsList::AddStepMax()
         pmanager -> AddProcess(new G4StepLimiter(),  -1,-1,3);
   }
 
-}
-
-void PhysicsList::SetCuts()
-{
-
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
-
-  G4double lowLimit = 250. * eV;
-  G4double highLimit = 100. * GeV;
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit, highLimit);
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-
-  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 void PhysicsList::SetCutForGamma(G4double cut)

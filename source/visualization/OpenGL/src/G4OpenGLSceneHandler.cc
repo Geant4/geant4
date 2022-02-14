@@ -25,41 +25,41 @@
 //
 //
 //
-// 
+//
 // Andrew Walkden  27th March 1996
 // OpenGL stored scene - creates OpenGL display lists.
 // OpenGL immediate scene - draws immediately to buffer
 //                           (saving space on server).
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
 
-#include "G4OpenGLSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
-#include "G4OpenGLTransform3D.hh"
-#include "G4Point3D.hh"
-#include "G4Normal3D.hh"
-#include "G4Transform3D.hh"
-#include "G4Polyline.hh"
-#include "G4Polymarker.hh"
-#include "G4Text.hh"
-#include "G4Circle.hh"
-#include "G4Square.hh"
-#include "G4VMarker.hh"
-#include "G4Polyhedron.hh"
-#include "G4VisAttributes.hh"
-#include "G4PhysicalVolumeModel.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VSolid.hh"
-#include "G4Scene.hh"
-#include "G4VisExtent.hh"
-#include "G4AttHolder.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4RunManager.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#endif
-#include "G4Run.hh"
+#  include "G4OpenGLSceneHandler.hh"
+#  include "G4OpenGLViewer.hh"
+#  include "G4OpenGLTransform3D.hh"
+#  include "G4Point3D.hh"
+#  include "G4Normal3D.hh"
+#  include "G4Transform3D.hh"
+#  include "G4Polyline.hh"
+#  include "G4Polymarker.hh"
+#  include "G4Text.hh"
+#  include "G4Circle.hh"
+#  include "G4Square.hh"
+#  include "G4VMarker.hh"
+#  include "G4Polyhedron.hh"
+#  include "G4VisAttributes.hh"
+#  include "G4PhysicalVolumeModel.hh"
+#  include "G4VPhysicalVolume.hh"
+#  include "G4LogicalVolume.hh"
+#  include "G4VSolid.hh"
+#  include "G4Scene.hh"
+#  include "G4VisExtent.hh"
+#  include "G4AttHolder.hh"
+#  include "G4PhysicalConstants.hh"
+#  include "G4RunManager.hh"
+#  include "G4Run.hh"
+#  include "G4RunManagerFactory.hh"
+#  include "G4Mesh.hh"
+#  include "G4PseudoScene.hh"
+#  include "G4VisManager.hh"
 
 const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
@@ -146,12 +146,7 @@ void G4OpenGLSceneHandler::ScaledFlush()
         fFlushAction = NthPrimitive;
       }
     }
-    G4RunManager* runMan = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-    if (G4Threading::IsMultithreadedApplication()) {
-      runMan = G4MTRunManager::GetMasterRunManager();
-    }
-#endif
+    G4RunManager* runMan = G4RunManagerFactory::GetMasterRunManager();
     if (!runMan) {
       // No run manager - shouldn't happen
       glFlush();
@@ -199,8 +194,8 @@ void G4OpenGLSceneHandler::ScaledFlush()
         break;
       case eachPrimitive:
         // This is equivalent to numeric with fEntitiesFlushInterval == 1.
-        fEntitiesFlushInterval = 1;  // fallthrough
-        // Fall through to NthPrimitive.
+        fEntitiesFlushInterval = 1;
+	[[fallthrough]];  // Fall through to NthPrimitive.
       case NthPrimitive:
       { // Encapsulate in scope {} brackets to satisfy Windows.
         static G4int primitivesWaitingToBeFlushed = 0;
@@ -253,8 +248,8 @@ void G4OpenGLSceneHandler::ScaledFlush()
         break;
       case eachPrimitive:
         // This is equivalent to NthPrimitive with fEntitiesFlushInterval == 1.
-        fEntitiesFlushInterval = 1;  // fallthrough
-        // Fall through to NthPrimitive.
+        fEntitiesFlushInterval = 1;
+	[[fallthrough]];  // Fall through to NthPrimitive.
       case NthPrimitive:
       { // Encapsulate in scope {} brackets to satisfy Windows.
         static G4int primitivesWaitingToBeFlushed = 0;
@@ -436,15 +431,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         //filled = false;
         break;
       case G4VMarker::hashed:
-        if (!hashedWarned) {  // fallthrough
+        if (!hashedWarned) {
           G4cout << "Hashed fill style in G4OpenGLSceneHandler."
           << "\n  Not implemented.  Using G4VMarker::filled."
           << G4endl;
           hashedWarned = true;
-        }  // fallthrough
+        }
         // Maybe use
         //glPolygonStipple (fStippleMaskHashed);
-        // Drop through to filled...
+	[[fallthrough]];   // Drop through to filled...
       case G4VMarker::filled:
         glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
         //filled = true;
@@ -460,8 +455,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     switch (polymarker.GetMarkerType()) {
     default:
     case G4Polymarker::dots:
-        size = 1.;  // fallthrough
-      // Drop through to circles
+        size = 1.;
+	[[fallthrough]];  // Fall through to circles
     case G4Polymarker::circles:
       nSides = GetNoOfSides(fpVisAttribs);
       startPhi = 0.;
@@ -572,11 +567,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
   G4OpenGLSceneHandler::AddPrimitive(oneSquare);
 }
 
-void G4OpenGLSceneHandler::AddPrimitive (const G4Scale& scale)
-{
-  G4VSceneHandler::AddPrimitive(scale);
-}
-
 //Method for handling G4Polyhedron objects for drawing solids.
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
@@ -643,20 +633,20 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       // Transparent...
       glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
       glEnable(GL_COLOR_MATERIAL);
-      glDisable (GL_CULL_FACE);
+      //glDisable (GL_CULL_FACE);
       glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
     } else {
       // Opaque...
       if (clipping) {
         glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
-	glDisable (GL_CULL_FACE);
+	//glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
       } else {
         glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
-	glEnable (GL_CULL_FACE);
-	glCullFace (GL_BACK);
+	//glEnable (GL_CULL_FACE);
+	//glCullFace (GL_BACK);
 	glPolygonMode (GL_FRONT, GL_LINE);
       }
     }
@@ -671,7 +661,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 #ifndef G4OPENGL_VERSION_2
       glEnable(GL_COLOR_MATERIAL);
 #endif
-      glDisable (GL_CULL_FACE);
+      //glDisable (GL_CULL_FACE);
       glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
     } else {
       // Opaque...
@@ -679,15 +669,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       if (clipping) {
         glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
-	glDisable (GL_CULL_FACE);
+	//glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
       } else {
         glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 #ifndef G4OPENGL_VERSION_2
         glEnable(GL_COLOR_MATERIAL);
 #endif
-        glEnable (GL_CULL_FACE);
-	glCullFace (GL_BACK);
+        //glEnable (GL_CULL_FACE);
+	//glCullFace (GL_BACK);
 	glPolygonMode (GL_FRONT, GL_FILL);
       }
     }
@@ -699,7 +689,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   default:
     glEnable (GL_DEPTH_TEST);
     glDepthFunc (GL_LEQUAL);    //??? was GL_ALWAYS
-    glDisable (GL_CULL_FACE);
+    //glDisable (GL_CULL_FACE);
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
     break;
   }
@@ -830,17 +820,17 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       if (isTransparent) {
 	// Transparent...
 	glDepthMask (GL_FALSE);  // Make depth buffer read-only.
-	glDisable (GL_CULL_FACE);
+	//glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
       } else {
 	// Opaque...
 	glDepthMask (GL_TRUE);  // Make depth buffer writable (default).
 	if (clipping) {
-	  glDisable (GL_CULL_FACE);
+	  //glDisable (GL_CULL_FACE);
 	  glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
 	} else {
-	  glEnable (GL_CULL_FACE);
-	  glCullFace (GL_BACK);
+	  //glEnable (GL_CULL_FACE);
+	  //glCullFace (GL_BACK);
 	  glPolygonMode (GL_FRONT, GL_FILL);
 	}
       }
@@ -910,16 +900,16 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glDepthFunc (GL_LEQUAL);  // to make sure line gets drawn.  
       if (isTransparent) {
 	// Transparent...
-	glDisable (GL_CULL_FACE);
+	//glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
       } else {
 	// Opaque...
 	if (clipping) {
-	  glDisable (GL_CULL_FACE);
+	  //glDisable (GL_CULL_FACE);
 	  glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 	} else {
-	  glEnable (GL_CULL_FACE);
-	  glCullFace (GL_BACK);
+	  //glEnable (GL_CULL_FACE);
+	  //glCullFace (GL_BACK);
 	  glPolygonMode (GL_FRONT, GL_LINE);
 	}
       }
@@ -1033,6 +1023,118 @@ void G4OpenGLSceneHandler::AddCompound(const G4THitsMap<G4StatDouble>& hits) {
   G4VSceneHandler::AddCompound(hits);  // For now.
 }
 
+void G4OpenGLSceneHandler::AddCompound(const G4Mesh& mesh)
+{
+  // Special mesh rendering for OpenGL drivers
+  // Limited to rectangular 3-deep meshes
+  if (mesh.GetMeshType() != G4Mesh::rectangle ||
+      mesh.GetMeshDepth() != 3) {
+    G4VSceneHandler::AddCompound(mesh);
+  }
+
+  auto container = mesh.GetContainerVolume();
+
+  static G4bool firstPrint = true;
+  G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
+  G4bool print = firstPrint && verbosity >= G4VisManager::confirmations;
+
+  if (print) {
+    G4cout
+    << "Special case drawing of G4VNestedParameterisation in G4OpenGLSceneHandler"
+    << '\n' << mesh
+    << G4endl;
+  }
+
+  // Instantiate a temporary G4PhysicalVolumeModel
+  G4ModelingParameters tmpMP;
+  tmpMP.SetCulling(true);  // This avoids drawing transparent...
+  tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+  const G4bool useFullExtent = true;  // To avoid calculating the extent
+  G4PhysicalVolumeModel tmpPVModel
+  (container,
+   G4PhysicalVolumeModel::UNLIMITED,
+   G4Transform3D(),
+   &tmpMP,
+   useFullExtent);
+
+  // Instantiate a pseudo scene so that we can make a "private" descent
+  // into the nested parameterisation and fill a multimap...
+  std::multimap<const G4Colour,G4ThreeVector> positionByColour;
+  G4double halfX = 0., halfY = 0., halfZ = 0.;
+  struct PseudoScene: public G4PseudoScene {
+    PseudoScene
+    (G4PhysicalVolumeModel* pvModel // input...the following are outputs
+     , std::multimap<const G4Colour,G4ThreeVector>& positionByColour
+     , G4double& halfX, G4double& halfY, G4double& halfZ)
+    : fpPVModel(pvModel)
+    , fPositionByColour(positionByColour)
+    , fHalfX(halfX), fHalfY(halfY), fHalfZ(halfZ)
+    {}
+    using G4PseudoScene::AddSolid;  // except for...
+    void AddSolid(const G4Box& box) {
+      const G4Colour& colour = fpPVModel->GetCurrentLV()->GetVisAttributes()->GetColour();
+      const G4ThreeVector& position = fpCurrentObjectTransformation->getTranslation();
+      fPositionByColour.insert(std::make_pair(colour,position));
+      fHalfX = box.GetXHalfLength();
+      fHalfY = box.GetYHalfLength();
+      fHalfZ = box.GetZHalfLength();
+    }
+    G4PhysicalVolumeModel* fpPVModel;
+    std::multimap<const G4Colour,G4ThreeVector>& fPositionByColour;
+    G4double &fHalfX, &fHalfY, &fHalfZ;
+  }
+  pseudoScene(&tmpPVModel,positionByColour,halfX,halfY,halfZ);
+
+  // Make private descent into the nested parameterisation
+  tmpPVModel.DescribeYourselfTo(pseudoScene);
+
+  // Make list of found colours
+  std::set<G4Colour> setOfColours;
+  for (const auto& entry: positionByColour) {
+    setOfColours.insert(entry.first);
+  }
+
+  if (print) {
+    for (const auto& colour: setOfColours) {
+      G4cout << "setOfColours: " << colour << G4endl;
+    }
+  }
+
+  // Draw as dots
+  BeginPrimitives (mesh.GetTransform());
+  G4int nDotsTotal = 0;
+  for (const auto& colour: setOfColours) {
+    G4int nDots = 0;
+    G4Polymarker dots;
+    dots.SetVisAttributes(G4Colour(colour));
+    dots.SetMarkerType(G4Polymarker::dots);
+    dots.SetSize(G4VMarker::screen,1.);
+    dots.SetInfo(container->GetName());
+    const auto range = positionByColour.equal_range(colour);
+    for (auto posByCol = range.first; posByCol != range.second; ++posByCol) {
+      const G4double x = posByCol->second.getX() + (2.*G4UniformRand()-1.)*halfX;
+      const G4double y = posByCol->second.getY() + (2.*G4UniformRand()-1.)*halfY;
+      const G4double z = posByCol->second.getZ() + (2.*G4UniformRand()-1.)*halfZ;
+      dots.push_back(G4ThreeVector(x,y,z));
+      ++nDots;
+    }
+    AddPrimitive(dots);
+    if (print) {
+      G4cout
+      << "Number of dots for colour " << colour
+      << ": " << nDots << G4endl;
+    }
+    nDotsTotal += nDots;
+  }
+  if (print) {
+    G4cout << "Total number of dots: " << nDotsTotal << G4endl;
+  }
+  EndPrimitives ();
+
+  firstPrint = false;
+
+  return;
+}
 
 #ifdef G4OPENGL_VERSION_2
 
@@ -1131,13 +1233,8 @@ void G4OpenGLSceneHandler::OptimizeVBOForCons(G4int aNoFaces){
 
 void G4OpenGLSceneHandler::glBeginVBO(GLenum type)  {
   fDrawArrayType = type;
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
   glGenBuffers(1,&fVertexBufferObject);
   glGenBuffers(1,&fIndicesBufferObject);
-#else
-  fVertexBufferObject = glCreateBuffer(); //glGenBuffer(1,fVertexBufferObject_2)
-  fIndicesBufferObject = glCreateBuffer(); //glGenBuffer(1,fIndicesBufferObject_2)
-#endif
 
   // clear data and indices for OpenGL
   fOglVertex.clear();
@@ -1215,26 +1312,18 @@ void G4OpenGLSceneHandler::glEndVBO()  {
     glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
     
     // Load fOglVertex into VBO
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
     int sizeV = fOglVertex.size();
     // FIXME : perhaps a problem withBufferData in OpenGL other than WebGL ?
 //    void glBufferData(	GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage);
     glBufferData(GL_ARRAY_BUFFER, sizeof(double)*sizeV, &fOglVertex[0], GL_STATIC_DRAW);
-#else
-    glBufferDatafv(GL_ARRAY_BUFFER, fOglVertex.begin(), fOglVertex.end(), GL_STATIC_DRAW);
-#endif
-    
+
     // Bind IBO
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fIndicesBufferObject);
     
     // Load fOglVertex into VBO
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
     int sizeI = fOglIndices.size();
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(int)*sizeI, &fOglIndices[0], GL_STATIC_DRAW);
-#else
-    glBufferDataiv(GL_ELEMENT_ARRAY_BUFFER, fOglIndices.begin(), fOglIndices.end(), GL_STATIC_DRAW, GL_UNSIGNED_BYTE);
-#endif
-    
+
     //----------------------------
     // Draw VBO
     //----------------------------
@@ -1268,33 +1357,20 @@ void G4OpenGLSceneHandler::glEndVBO()  {
     }
 
     // delete the buffer
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
     glDeleteBuffers(1,&fVertexBufferObject);
-#else
-    glDeleteBuffer(fVertexBufferObject);
-#endif
   }
 }
           
 void G4OpenGLSceneHandler::drawVBOArray(std::vector<double> vertices)  {
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
   glGenBuffers(1,&fVertexBufferObject);
   glGenBuffers(1,&fIndicesBufferObject);
-#else
-  fVertexBufferObject = glCreateBuffer(); //glGenBuffer(1,fVertexBufferObject_2)
-  fIndicesBufferObject = glCreateBuffer(); //glGenBuffer(1,fIndicesBufferObject_2)
-#endif
 
   // Bind this buffer
   glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
   // Load oglData into VBO
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
   int s = vertices.size();
   glBufferData(GL_ARRAY_BUFFER, sizeof(double)*s, &vertices[0], GL_STATIC_DRAW);
-#else
-  glBufferDatafv(GL_ARRAY_BUFFER, vertices.begin(), vertices.end(), GL_STATIC_DRAW);
-#endif
-  
+
   //----------------------------
   // Draw VBO
   //----------------------------
@@ -1313,7 +1389,6 @@ void G4OpenGLSceneHandler::drawVBOArray(std::vector<double> vertices)  {
  
  glLoadMatrixd, glRotated and any other function that have to do with the double type. Most GPUs don't support GL_DOUBLE (double) so the driver will convert the data to GL_FLOAT (float) and send to the GPU. If you put GL_DOUBLE data in a VBO, the performance might even be much worst than immediate mode (immediate mode means glBegin, glVertex, glEnd). GL doesn't offer any better way to know what the GPU prefers.
  */
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
     glVertexAttribPointer(pGLViewer->fVertexPositionAttribute,
                           3,     // size: Every vertex has an X, Y anc Z component
                           GL_DOUBLE, // type: They are double
@@ -1323,36 +1398,15 @@ void G4OpenGLSceneHandler::drawVBOArray(std::vector<double> vertices)  {
                           //         vx, vy, vz, nx, ny, nz and every element is a
                           //         Float32, hence 4 bytes large
                           0);    // offset: The byte position of the first vertex in the buffer
-#else
-    glVertexAttribPointer(pGLViewer->fVertexPositionAttribute,
-                          3,     // size: Every vertex has an X, Y anc Z component
-                          GL_FLOAT, // type: They are floats
-                          GL_FALSE, // normalized: Please, do NOT normalize the vertices
-                          2*3*4,    // stride: The first byte of the next vertex is located this
-                          //         amount of bytes further. The format of the VBO is
-                          //         vx, vy, vz, nx, ny, nz and every element is a
-                          //         Float32, hence 4 bytes large
-                          0);    // offset: The byte position of the first vertex in the buffer
-#endif
   }
   
   glDrawArrays(fDrawArrayType, // GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES, GL_TRIANGLE_FAN, GL_TRIANGLE_STRIP, and GL_TRIANGLES
                0, vertices.size()/6);
   if (pGLViewer) {
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
     glDisableClientState( GL_VERTEX_ARRAY );
-#else
-    glDisableVertexAttribArray(pGLViewer->fVertexPositionAttribute);
-#endif
   }
   
   // delete the buffer
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
   glDeleteBuffers(1,&fVertexBufferObject);
-#else
-  glDeleteBuffer(fVertexBufferObject);
-#endif
 }
-#endif
-
 #endif

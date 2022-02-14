@@ -71,7 +71,6 @@
 #include "G4ProcessManager.hh"
 #include "G4IonFluctuations.hh"
 #include "G4IonParametrisedLossModel.hh"
-#include "G4EmProcessOptions.hh"
 #include "G4ParallelWorldPhysics.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4AutoDelete.hh"
@@ -325,19 +324,17 @@ void HadrontherapyPhysicsList::SetCuts()
     // '/run/setCutForRegion <G4Region name> <cut value>'
     // must be defined here
     //
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-    // At moment, only 'DetectorLog' is defined as G4Region
-    //
-    G4String regName[] = {"DetectorLog"};
-    G4double fuc = 1.;
-    for(G4int i=0;i<1;i++)
-    {
-        G4Region* reg = G4RegionStore::GetInstance()->GetRegion(regName[i]);
-        G4ProductionCuts* cuts = new G4ProductionCuts;
-        cuts->SetProductionCut(defaultCutValue*fuc);
-        reg->SetProductionCuts(cuts);
-        fuc *= 10.;
+    HadrontherapyStepMax* stepMaxProcess  = new HadrontherapyStepMax();
+    
+    auto particleIterator = GetParticleIterator();
+    particleIterator->reset();
+    while ((*particleIterator)()){
+        G4ParticleDefinition* particle = particleIterator->value();
+        G4ProcessManager* pmanager = particle->GetProcessManager();
+        
+        if (stepMaxProcess->IsApplicable(*particle) && pmanager)
+        {
+            pmanager ->AddDiscreteProcess(stepMaxProcess);
+        }
     }
 }

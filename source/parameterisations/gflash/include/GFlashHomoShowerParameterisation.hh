@@ -91,7 +91,6 @@ class GFlashHomoShowerParameterisation : public GVFlashShowerParameterisation
 
     // parametrization parameters
     GVFlashHomoShowerTuning * thePar;
-    G4bool owning;
 
     // Cashed parameters:  
     // Longitudinal Coefficients for a homogeneous calo

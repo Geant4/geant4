@@ -13,7 +13,9 @@ GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
 GLOBLIBS += libG4intercoms.lib libG4global.lib
-GLOBLIBS += libG4expat.lib
+ifdef G4LIB_BUILD_EXPAT
+  GLOBLIBS += libG4expat.lib
+endif
 
 include $(G4INSTALL)/config/architecture.gmk
 

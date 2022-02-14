@@ -55,11 +55,9 @@ class G4PionBuilder : public G4PhysicsBuilderInterface
     virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
-    G4PionPlusInelasticProcess*  thePionPlusInelastic;
-    G4PionMinusInelasticProcess* thePionMinusInelastic;
+    G4HadronInelasticProcess* thePionPlusInelastic;
+    G4HadronInelasticProcess* thePionMinusInelastic;
     std::vector<G4VPionBuilder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

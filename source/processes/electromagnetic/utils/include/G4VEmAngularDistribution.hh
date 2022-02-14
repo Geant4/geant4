@@ -50,7 +50,6 @@
 #define G4VEmAngularDistribution_h 1
 
 #include "globals.hh"
-#include "Randomize.hh"
 #include "G4ThreeVector.hh"
 #include "G4DynamicParticle.hh"
 
@@ -90,18 +89,21 @@ public:
 				    G4int Z = 0,
 				    const G4Material* mat = nullptr);
 
+  virtual void PrintGeneratorInformation() const;
+
   inline const G4String& GetName() const;
-
-protected:
-
-  G4ThreeVector fLocalDirection;
-
-private:
 
   // hide assignment operator
   G4VEmAngularDistribution & 
     operator=(const  G4VEmAngularDistribution &right) = delete;
   G4VEmAngularDistribution(const  G4VEmAngularDistribution&) = delete;
+
+protected:
+
+  G4ThreeVector fLocalDirection;
+  G4bool fPolarisation;
+
+private:
 
   G4String fName;
 };

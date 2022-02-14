@@ -64,6 +64,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 typedef G4THitsCollection<ExN04TrackerHit> ExN04TrackerHitsCollection;
 
+
 extern G4Allocator<ExN04TrackerHit> ExN04TrackerHitAllocator;
 
 inline void* ExN04TrackerHit::operator new(size_t)

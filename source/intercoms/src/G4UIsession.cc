@@ -23,37 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIsession
 //
-//
-// 
-// ---------------------------------------------------------------------
+// Author: Makoto Asai, 1998
+// --------------------------------------------------------------------
 
 #include "G4UIsession.hh"
 
 G4int G4UIsession::inSession = 0;
-G4UIsession::G4UIsession() : ifBatch(0) , lastRC(0)
+
+// --------------------------------------------------------------------
+G4UIsession::G4UIsession()
 {
- inSession++;
+  ++inSession;
 }
 
-G4UIsession::G4UIsession(G4int iBatch) : ifBatch(iBatch) , lastRC(0)
-{;}
+// --------------------------------------------------------------------
+G4UIsession::G4UIsession(G4int iBatch)
+  : ifBatch(iBatch)
+{
+}
 
-G4UIsession::~G4UIsession() 
-{ if(!ifBatch) { inSession--; } }
+// --------------------------------------------------------------------
+G4UIsession::~G4UIsession()
+{
+  if(!ifBatch)
+  {
+    --inSession;
+  }
+}
 
-G4UIsession * G4UIsession::SessionStart() { return nullptr; }
+// --------------------------------------------------------------------
+G4UIsession* G4UIsession::SessionStart()
+{
+  return nullptr;
+}
 
-void G4UIsession::PauseSessionStart(const G4String&) {;}
+// --------------------------------------------------------------------
+void G4UIsession::PauseSessionStart(const G4String&)
+{
+}
 
+// --------------------------------------------------------------------
+G4int G4UIsession::InSession()
+{
+  return inSession;
+}
+
+// --------------------------------------------------------------------
 G4int G4UIsession::ReceiveG4cout(const G4String& coutString)
 {
-  std::cout <<  coutString << std::flush;
+  std::cout << coutString << std::flush;
   return 0;
 }
 
+// --------------------------------------------------------------------
 G4int G4UIsession::ReceiveG4cerr(const G4String& cerrString)
 {
-  std::cerr <<  cerrString << std::flush;
+  std::cerr << cerrString << std::flush;
   return 0;
-}                                                                       
+}

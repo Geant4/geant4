@@ -31,67 +31,53 @@
 #define G4LivermorePolarizedGammaConversionModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 
-//#include "G4Electron.hh"
-//#include "G4Positron.hh"
 class G4ParticleChangeForGamma;
-
-
 
 class G4LivermorePolarizedGammaConversionModel : public G4VEmModel
 {
-
 public:
 
-  G4LivermorePolarizedGammaConversionModel(const G4ParticleDefinition* p = 0, 
+  explicit G4LivermorePolarizedGammaConversionModel(const G4ParticleDefinition* p = nullptr, 
 					     const G4String& nam = "LivermorePolarizedGammaConversion");
-  
   virtual ~G4LivermorePolarizedGammaConversionModel();
   
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel);
+  void InitialiseLocal(const G4ParticleDefinition*, 
+		       G4VEmModel* masterModel) override;
   
-  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(
-					      const G4ParticleDefinition*,
-					      G4double kinEnergy, 
-					      G4double Z, 
-					      G4double A=0, 
-					      G4double cut=0,
-					      G4double emax=DBL_MAX);
+  G4double ComputeCrossSectionPerAtom(
+				      const G4ParticleDefinition*,
+				      G4double kinEnergy, 
+				      G4double Z, 
+				      G4double A=0, 
+				      G4double cut=0,
+				      G4double emax=DBL_MAX) override;
   
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+  
+  G4double MinPrimaryEnergy(const G4Material*,
+			    const G4ParticleDefinition*,
+			    G4double) override;  
 
-  virtual G4double MinPrimaryEnergy(const G4Material*,
-				    const G4ParticleDefinition*,
-				    G4double); 
-  
+  G4LivermorePolarizedGammaConversionModel & operator=(const  G4LivermorePolarizedGammaConversionModel &right) = delete;
+  G4LivermorePolarizedGammaConversionModel(const  G4LivermorePolarizedGammaConversionModel&) = delete;
+
 private:
-  
-  G4ParticleChangeForGamma* fParticleChange;
-
-  G4double lowEnergyLimit;  
-  
-  //  G4double highEnergyLimit; 
-  G4bool isInitialised;
-  G4int verboseLevel;
-
-
   void ReadData(size_t Z, const char* path = 0);
   
   G4double ScreenFunction1(G4double screenVariable);
   G4double ScreenFunction2(G4double screenVariable);
   
   // specific methods for polarization 
-  
   G4ThreeVector GetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
   G4ThreeVector GetPerpendicularPolarization(const G4ThreeVector& direction0, const G4ThreeVector& polarization0) const;
   G4ThreeVector SetPerpendicularVector(G4ThreeVector& a); // temporary
@@ -99,8 +85,6 @@ private:
 			 G4ThreeVector& polarization0);
 
   // Gamma Conversion methods 
-
-
   G4double SetPhi(G4double);
   G4double SetPsi(G4double, G4double); //
 
@@ -119,23 +103,21 @@ private:
   G4double Finvlor(G4double*, G4double,G4double);
 
   G4double Ftan(G4double*, G4double);
-
-  //G4double Gtan(G4double*, G4double);
-
   G4double Fdtan(G4double*, G4double);
   G4double Finttan(G4double*, G4double);
   G4double Finvtan(G4double*, G4double, G4double);
 
+
+  G4ParticleChangeForGamma* fParticleChange;
+
+  static const G4int maxZ = 99;
+  static G4PhysicsFreeVector* data[100]; // 100 because Z range is 1-99
+
+  G4double lowEnergyLimit;  
   G4double smallEnergy;
   G4double Psi, Phi;
-
-  
-  G4LivermorePolarizedGammaConversionModel & operator=(const  G4LivermorePolarizedGammaConversionModel &right);
-  G4LivermorePolarizedGammaConversionModel(const  G4LivermorePolarizedGammaConversionModel&);
-
-  static G4int maxZ;
-  static G4LPhysicsFreeVector* data[100]; // 100 because Z range is 1-99
-
+  G4int verboseLevel;
+  G4bool isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

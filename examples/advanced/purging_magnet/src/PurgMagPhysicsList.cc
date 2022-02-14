@@ -32,16 +32,8 @@
 //    *                              *
 //    ********************************
 //
-//
-<<<<<<< HEAD
-// $Id: PurgMagPhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "PurgMagPhysicsList.hh"
-
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -51,8 +43,9 @@
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"              
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "G4DecayPhysics.hh"
 
 PurgMagPhysicsList::PurgMagPhysicsList():  G4VUserPhysicsList()
 {
@@ -61,129 +54,35 @@ PurgMagPhysicsList::PurgMagPhysicsList():  G4VUserPhysicsList()
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
   cutForProton    = defaultCutValue;
-  
+
+  fEmPhysicsList = new G4EmStandardPhysics_option4();
+  fDecPhysicsList = new G4DecayPhysics();
   SetVerboseLevel(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 PurgMagPhysicsList::~PurgMagPhysicsList()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+{
+ delete fDecPhysicsList;
+ delete fEmPhysicsList;
+}
 
 void PurgMagPhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
-
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructBarions();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PurgMagPhysicsList::ConstructBosons()
-{ 
-
-  // gamma
-  G4Gamma::GammaDefinition();
-
-  // optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
-}
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PurgMagPhysicsList::ConstructLeptons()
-{
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PurgMagPhysicsList::ConstructBarions()
-{
-  //  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ fDecPhysicsList -> ConstructParticle();
+} 
 
 void PurgMagPhysicsList::ConstructProcess()
 {
   AddTransportation();
-  ConstructEM();
-  ConstructGeneral();
+  fEmPhysicsList -> ConstructProcess();
+  
+// Deexcitation
+// Both Fluorescence and Auger e- emission activated
+//G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+//G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+//de -> SetFluo(true);
+//de -> SetAuger(true);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4eMultipleScattering.hh"            
-#include "G4hMultipleScattering.hh"            
-// Bosons
-#include "G4PhotoElectricEffect.hh"                  
-#include "G4ComptonScattering.hh"              
-#include "G4GammaConversion.hh"                
-// Leptons
-#include "G4eIonisation.hh"                   
-#include "G4eBremsstrahlung.hh"                
-#include "G4eplusAnnihilation.hh"             
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PurgMagPhysicsList::ConstructEM()
-{
-  auto particleIterator=GetParticleIterator();
-  particleIterator->reset();
-  while( (*particleIterator)() )
-    {
-      G4ParticleDefinition* particle = particleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
-      
-      
-      if (particleName == "gamma") {
-	//gamma
-	pmanager->AddDiscreteProcess(new G4GammaConversion);
-	pmanager->AddDiscreteProcess(new G4ComptonScattering);
-	pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-	
-      } else if (particleName == "e-") {
-	//electron
-	pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);      
-	pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-	pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);      
-	
-      } else if (particleName == "e+") {
-	//positron      
-	pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);      
-	pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-	pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);      
-	pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);      
-	
-      } else if (particleName == "proton") {
-	//proton
-	pmanager->AddProcess(new G4hMultipleScattering,  -1,1,1);
-	
-      } else if (particleName == "anti_proton") {
-	//antiproton
-	pmanager->AddProcess(new G4hMultipleScattering,  -1,1,1);
-      } 
-    }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PurgMagPhysicsList::ConstructGeneral()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PurgMagPhysicsList::SetCuts()
 {
@@ -203,12 +102,10 @@ void PurgMagPhysicsList::SetCuts()
   SetCutValue(cutForProton, "proton");
   SetCutValue(cutForProton, "anti_proton");
   
-    //  SetCutValueForOthers(defaultCutValue);
+  //  SetCutValueForOthers(defaultCutValue);
   
   if (verboseLevel>0) DumpCutValuesTable();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PurgMagPhysicsList::SetGammaLowLimit(G4double lowcut)
 {
@@ -221,8 +118,6 @@ void PurgMagPhysicsList::SetGammaLowLimit(G4double lowcut)
   SetGELowLimit(lowcut);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void PurgMagPhysicsList::SetElectronLowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
@@ -234,8 +129,6 @@ void PurgMagPhysicsList::SetElectronLowLimit(G4double lowcut)
   // G4Electron::SetEnergyRange(lowcut,1e5);
   SetGELowLimit(lowcut);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PurgMagPhysicsList::SetPositronLowLimit(G4double lowcut)
 {
@@ -252,7 +145,6 @@ void PurgMagPhysicsList::SetPositronLowLimit(G4double lowcut)
   // G4Positron::SetEnergyRange(lowcut,1e5);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PurgMagPhysicsList::SetProtonLowLimit(G4double lowcut)
 {
@@ -270,8 +162,6 @@ void PurgMagPhysicsList::SetProtonLowLimit(G4double lowcut)
   // G4AntiProton::SetEnergyRange(lowcut,1e5);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void PurgMagPhysicsList::SetGEPLowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
@@ -286,9 +176,7 @@ void PurgMagPhysicsList::SetGEPLowLimit(G4double lowcut)
 
   G4cerr << " SetGEPLowLimit : Uncertain whether setting Positron low limit " << G4endl;
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void PurgMagPhysicsList::SetGELowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
@@ -300,35 +188,23 @@ void PurgMagPhysicsList::SetGELowLimit(G4double lowcut)
 }
 void PurgMagPhysicsList::SetGammaCut(G4double val)
 {
-  ResetCuts();
   cutForGamma = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void PurgMagPhysicsList::SetElectronCut(G4double val)
 {
-  //  ResetCuts();
   cutForElectron = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void PurgMagPhysicsList::SetPositronCut(G4double val)
 {
-  //  ResetCuts();
   cutForPositron = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void PurgMagPhysicsList::SetProtonCut(G4double val)
 {
-  //ResetCuts();
   cutForProton = val;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

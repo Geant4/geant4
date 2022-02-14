@@ -51,32 +51,27 @@ G4QGSBinaryNeutronBuilder(G4bool quasiElastic)
   theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
   theModel = new G4TheoFSGenerator("QGSB");
 
-  theStringModel = new G4QGSModel< G4QGSParticipants >;
-  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+  G4QGSModel< G4QGSParticipants >* theStringModel = 
+    new G4QGSModel< G4QGSParticipants >;
+  G4ExcitedStringDecay* theStringDecay = 
+    new G4ExcitedStringDecay(new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4BinaryCascade;
-
-  theModel->SetTransport(theCascade);
+  theModel->SetTransport(new G4BinaryCascade());
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
+    {
+      theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+    } 
 }
 
 G4QGSBinaryNeutronBuilder::
 ~G4QGSBinaryNeutronBuilder() 
 {
-  delete theStringDecay;
-  delete theStringModel;
-  if ( theQuasiElastic ) delete theQuasiElastic;
 }
 
 void G4QGSBinaryNeutronBuilder::
-Build(G4NeutronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );

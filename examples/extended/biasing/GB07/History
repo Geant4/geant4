@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2020 Ben Morgan - biasingGB07-V10-06-01
+- Migration to G4RunManagerFactory.
+
+Nov 6, 2020  I. Hrivnacova - biasingGB07-V10-06-00
+- Fixed doxygen documentation
+
 Nov 15, 2019 M. Verderi - biasingGB07-V10-05-00
 - Creation
 

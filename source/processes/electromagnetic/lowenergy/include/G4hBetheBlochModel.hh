@@ -61,7 +61,7 @@ class G4hBetheBlochModel : public G4VLowEnergyModel
 
 public:
 
-  G4hBetheBlochModel(const G4String& name) ;
+  explicit G4hBetheBlochModel(const G4String& name) ;
 
   ~G4hBetheBlochModel() ;
 
@@ -96,15 +96,14 @@ private:
                                    G4double kineticEnergy,
                                    G4double particleMass) const;
 
-  // Low energy limit of the model
-  G4double lowEnergyLimit;
-  G4double highEnergyLimit;
-
-  // constants needed for the energy loss calculation
-  
+  // constants needed for the energy loss calculation  
   const G4double twoln10;
   const G4double bg2lim;
   const G4double taulim;    // energy to start to switch off shell corrections
+
+  // Low energy limit of the model
+  G4double lowEnergyLimit;
+  G4double highEnergyLimit;
 
 };
 

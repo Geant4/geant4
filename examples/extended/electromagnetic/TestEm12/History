@@ -17,8 +17,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-<<<<<<< HEAD
-=======
+     
+06-10-21 I. Hrivnacova (testem12-V10-07-04)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+19-07-21 I. Hrivnacova (testem12-V10-07-03)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+10-05-21 mma (testem12-V10-07-02)
+- Migration to G4RunManagerFactory and G4SteppingVerboseWithUnits.
+
+10-02-21 V.Ivanchenko (testem12-V10-07-01)
+- fixed README
+     
+18-12-20 mma (testem12-V10-07-00)
+- updated PhysListEmStandard.cc
+     
+27-10-20 mma (testem12-V10-06-00)
+- add macros description in Readme
 
 09-09-18 SI (testem12-V10-04-04)
 - updated dna.mac

@@ -13,25 +13,23 @@
 /testem/det/setMat Aluminium 
 /testem/det/setSize 10 m
 #
+/process/em/verbose 0
 /testem/phys/addPhysics  emstandard_opt0
 ###/testem/phys/addPhysics  local
-<<<<<<< HEAD
-=======
-/process/em/printParameters 
 #
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 /run/setCut 1 mm
 #
 /run/initialize
+/process/em/printParameters
+# 
 ##/globalField/setValue 0 0 5 tesla
 #
 /testem/gun/setDefault 
 /gun/particle e-
 /gun/energy 100 MeV
 #
-/run/verbose 1
 /run/printProgress 200
-#
 /run/beamOn 2000
 #
 /gun/particle proton

@@ -38,81 +38,60 @@
 #include "tools/raxml"
 
 #include <vector>
+#include <string_view>
 
+class G4XmlRFileManager;
 struct G4XmlRNtupleDescription;
 
 class G4XmlRNtupleManager : public G4VRNtupleManager
 {
   friend class G4XmlAnalysisReader;
 
+  public:
+    explicit G4XmlRNtupleManager(const G4AnalysisManagerState& state);
+    G4XmlRNtupleManager() = delete;
+    virtual ~G4XmlRNtupleManager() = default;
+
   protected:
-    G4XmlRNtupleManager(const G4AnalysisManagerState& state);
-    virtual ~G4XmlRNtupleManager();
+    // Set methods
+    void SetFileManager(std::shared_ptr<G4XmlRFileManager> fileManager);
 
-    // Methods to manipulate ntuples  
-    G4bool IsEmpty() const;
-    G4bool Reset();
+    // Methods from base classes
+    using G4BaseRNtupleManager::SetNtupleIColumn;
+    using G4BaseRNtupleManager::SetNtupleFColumn;
+    using G4BaseRNtupleManager::SetNtupleDColumn;
+    using G4TRNtupleManager<tools::aida::ntuple>::SetNtupleIColumn;
+    using G4TRNtupleManager<tools::aida::ntuple>::SetNtupleFColumn;
+    using G4TRNtupleManager<tools::aida::ntuple>::SetNtupleDColumn;
+    using G4TRNtupleManager<tools::aida::ntuple>::SetNtupleSColumn;
 
-    // Access methods
-    tools::aida::ntuple* GetNtuple() const;
-    tools::aida::ntuple* GetNtuple(G4int ntupleId) const;
+    // Override base class functions for vector columns
+    // in order to fill the maps
 
-    // Functions independent from the output type 
-    //
-    // Methods to read ntuple from a file
-    G4int SetNtuple(G4XmlRNtupleDescription* rntupleDescription);
-    // Methods for ntuple with id = FirstNtupleId                     
-    virtual G4bool SetNtupleIColumn(const G4String& columnName, 
-                            G4int& value);
-    virtual G4bool SetNtupleFColumn(const G4String& columnName, 
-                            G4float& value);
-    virtual G4bool SetNtupleDColumn(const G4String& columnName, 
-                            G4double& value);
-    virtual G4bool SetNtupleSColumn(const G4String& columnName, 
-                            G4String& value);
-    // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(const G4String& columnName, 
-                            std::vector<G4int>& vector);
-    virtual G4bool SetNtupleFColumn(const G4String& columnName, 
-                            std::vector<G4float>& vector);
-    virtual G4bool SetNtupleDColumn(const G4String& columnName, 
-                            std::vector<G4double>& vector);
-    // Methods for ntuple with id > FirstNtupleId                     
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, 
-                            const G4String& columnName, G4int& value);
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, 
-                            const G4String& columnName, G4float& value);
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, 
-                            const G4String& columnName, G4double& value);
-    virtual G4bool SetNtupleSColumn(G4int ntupleId, 
-                            const G4String& columnName, G4String& value);
-    // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4int>& vector);
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4float>& vector);
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4double>& vector);
-    virtual G4bool GetNtupleRow();
-    virtual G4bool GetNtupleRow(G4int ntupleId) ;
-    
-    // Access methods
-    virtual G4int GetNofNtuples() const;
-  
+    virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName,
+                            std::vector<G4int>& vector) final;
+    virtual G4bool SetNtupleFColumn(G4int ntupleId, const G4String& columnName,
+                            std::vector<G4float>& vector) final;
+    virtual G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName,
+                            std::vector<G4double>& vector) final;
+    virtual G4bool SetNtupleSColumn(G4int ntupleId, const G4String& columnName,
+                            std::vector<std::string>& vector) final;
+
   private:
-    // methods
-    G4XmlRNtupleDescription*  GetNtupleInFunction(G4int id, 
-                                         G4String function,
-                                         G4bool warn = true) const;
+    // Methods from the base class
+    virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
+                              const G4String& dirName, G4bool isUserFileName) final;
+    virtual G4bool GetTNtupleRow(G4TRNtupleDescription<tools::aida::ntuple>* ntupleDescription) final;
 
-    // data members
-    std::vector<G4XmlRNtupleDescription*> fNtupleVector;
-};    
+    // Static data members
+    static constexpr std::string_view fkClass { "G4XmlRNtupleManager" };
 
-// inline functions
+    // Data members
+    std::shared_ptr<G4XmlRFileManager>  fFileManager { nullptr };
+};
 
-inline G4int G4XmlRNtupleManager::GetNofNtuples() const
-{ return fNtupleVector.size(); }
+inline void
+G4XmlRNtupleManager::SetFileManager(std::shared_ptr<G4XmlRFileManager> fileManager)
+{ fFileManager = fileManager; }
 
 #endif
-

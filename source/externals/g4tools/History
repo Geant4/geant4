@@ -1,0 +1,64 @@
+# g4tools Category History
+# - It is NOT a substitute for good git commit messages!
+# - All entries must be in reverse time order (most recent data on top)!
+
+9 November 2021  I. Hrivnacova (g4tools-V10-07-11)
+- Restored files for MPI
+
+25 October 2021, G. Barrand (g4tools-V10-07-10)
+- tools/tokenize: to help parsing some Geant4 commands "new value".
+  It permits to get arguments within double quotes to handle, for example, file path that
+  may contains spaces or a color given as "r g b".
+- tools/sg/event_dispatcher,bcbk,ecbk,cbks: classes to have a mechanism in G4/G4ToolsSGSceneHandler
+  so that tools::sg::plots be properly resized when doing a mouse G4Viewer resize.
+- tools/sg/plotter_some_styles: have the plotting setup of ROOT_default, hippodraw, style done in C++
+  to avoid the usage of expat for these defaults styles.
+- tools/sg/light_off: a node to switch off light in a sub scene graph.
+- tools/Qt/sg_viewer: in dstor, reset the "interactors" to null in the glarea.
+
+21 October 2021  G. Barrand (g4tools-V10-07-09)
+- tools/hdf5/ntuple: add code to write/read a column of vectors of strings.
+- tools/waxml/ntuple: add code to write a column of vectors of strings.
+
+19 October 2021  I. Hrivnacova (g4tools-V10-07-08)
+- Added rroot/rall and rroot/THistogram needed for
+  tools::rroot::find_dir (used in Root analysis reader)
+
+13 October 2021  Guy Barrand  (g4tools-V10-07-07)
+- sg/base_freetype, text_freetype: modifs to be able to handle embedded fonts.
+- font/lato_regular_ttf: embedded lato_regular.ttf font.
+- font/roboto_bold_ttf: embedded roboto_bold.ttf font.
+- sg/text_hershey_marker, text_freetype_marker: modifs to avoid 'squashing' of text.
+- sg/render_action, GL_viewer, atb_vertices: handle transparency by using a two pass rendering method.
+- sg/gl2ps_actions/2format: avoid a warning if returning false.
+- have 5.6.0 in tools/version.
+
+08th October 2021, G. Barrand (g4tools-V10-07-06)
+- remove the files not used by other Geant4 categories (up so far analysis and visualization).
+- remove the test directory. It will be maintained in github/gbarrand/g4tools.
+- remove the not used src/csz_inflate.cc file but have a dummy.cc for Geant4/cmake.
+- CMakeLists.txt: refer to src/dummy.cc (instead of src/csz_inflate.cc) when declaring the g4tools module.
+- have 5.5.0 in tools/version.
+
+25th May 2021, B. Morgan (g4tools-V10-07-05)
+- Move fonts from analysis category to tools to assist cross-category use
+
+18th May 2021, G. Barrand (g4tools-V10-07-04)
+- tools/zb/polygon: in scan() : initialize ET,AET,SLLBlock, before calling
+  CreateETandAET, to quiet g++-11 -Wmaybe-uninitialized warnings.
+
+5th May 2021, J. Allison (g4tools-V10-07-03)
+- Rename g4tools/include/tools/sg/gL_manager to GL_manager.
+
+16th April 2021, I. Hrivnacova (g4tools-V10-07-02)
+- Updated to g4tools 5.4.0 (Guy Barrand):
+  “Windowing” code update needed for the new “ToolsSG” vis drivers.
+  See History_tools for the complete list of modifications.
+
+04th March 2021, I. Hrivnacova (g4tools-V10-07-01)
+- Updated to g4tools 5.3.1 (Guy Barrand):
+  "Windowing" code needed for G4/vis/tools_sg
+  See History_tools for the complete list of modifications.
+
+18th February 2021, B. Morgan (g4tools-V10-07-00)
+- Move g4tools from g4analysis to externals category

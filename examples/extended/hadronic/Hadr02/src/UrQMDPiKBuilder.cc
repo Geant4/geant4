@@ -66,52 +66,7 @@ void UrQMDPiKBuilder::Build(G4HadronElasticProcess * )
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void UrQMDPiKBuilder::Build(G4PionPlusInelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->RegisterMe(fModel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDPiKBuilder::Build(G4PionMinusInelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->RegisterMe(fModel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDPiKBuilder::Build(G4KaonPlusInelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->RegisterMe(fModel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDPiKBuilder::Build(G4KaonMinusInelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->RegisterMe(fModel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDPiKBuilder::Build(G4KaonZeroLInelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->RegisterMe(fModel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDPiKBuilder::Build(G4KaonZeroSInelasticProcess * aP)
+void UrQMDPiKBuilder::Build(G4HadronInelasticProcess * aP)
 {
   fModel->SetMinEnergy(fMin);
   fModel->SetMaxEnergy(fMax);

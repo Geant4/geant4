@@ -42,9 +42,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4ProtonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
@@ -62,8 +60,8 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
     virtual ~G4QGSPProtonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess *)  final override {}
-    virtual void Build(G4ProtonInelasticProcess * aP)  final override ;
+    virtual void Build(G4HadronElasticProcess *)  override {}
+    virtual void Build(G4HadronInelasticProcess * aP) override;
     
     virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
 
@@ -71,13 +69,7 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
   private:
 
     G4TheoFSGenerator * theModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4QGSParticipants > * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
-    G4QGSMFragmentation * theQGSM;
     G4double theMin;
-
 };
 
 #endif

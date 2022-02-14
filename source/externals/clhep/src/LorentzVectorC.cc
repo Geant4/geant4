@@ -11,13 +11,10 @@
 // pp.phi() - w.getV().phi() with pp.deltaRPhi(w.getV()) which behaves 
 // correctly across the 2pi boundary.
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/LorentzVector.h"
 
 #include <cmath>
+#include <iostream>
 
 namespace CLHEP  {
 

@@ -38,10 +38,12 @@
 G4PhysicalVolumesSearchScene::G4PhysicalVolumesSearchScene
 (G4PhysicalVolumeModel* pSearchVolumesModel,      // usually a world
  const G4String&        requiredPhysicalVolumeName,
- G4int                  requiredCopyNo)
+ G4int                  requiredCopyNo,
+ G4int                  requiredContinuation)
 : fpSearchVolumesModel  (pSearchVolumesModel)
 , fMatcher              (requiredPhysicalVolumeName)
 , fRequiredCopyNo       (requiredCopyNo)
+, fRequiredContinuation (requiredContinuation)
 {}
 
 void G4PhysicalVolumesSearchScene::ProcessVolume (const G4VSolid&)
@@ -56,16 +58,26 @@ void G4PhysicalVolumesSearchScene::ProcessVolume (const G4VSolid&)
   if (fMatcher.Match(name)) {
     if ((fRequiredCopyNo < 0 ||  // I.e., ignore negative request
          fRequiredCopyNo == copyNo)) {
-      auto path = fpSearchVolumesModel->GetFullPVPath();
-      path.pop_back();  // Base node is one up from found node
+      auto basePath = fpSearchVolumesModel->GetFullPVPath();
+      basePath.pop_back();  // Base node is one up from found node
+      // Mark base path nodes as not drawn
+      for (auto& node: basePath) node.SetDrawn(false);
       fFindings.push_back
       (Findings
        (fpSearchVolumesModel->GetTopPhysicalVolume(),
         pCurrentPV,
         copyNo,
         fpSearchVolumesModel->GetCurrentDepth(),
-        path,
+        basePath,
         *fpCurrentObjectTransformation));
+      // If user has asked for limited descent
+      if (fRequiredContinuation >= 0) {
+	static G4int firstFoundDepth = fpSearchVolumesModel->GetCurrentDepth();
+	G4int foundDepth = fpSearchVolumesModel->GetCurrentDepth();
+	if (foundDepth >= firstFoundDepth + fRequiredContinuation) {
+	  fpSearchVolumesModel->CurtailDescent();
+	}
+      }
     }
   }
 }
@@ -89,7 +101,7 @@ G4PhysicalVolumesSearchScene::Matcher::Matcher(const G4String& requiredMatch)
       fRequiredMatch = requiredMatch;
     }
   }
-  if (fRequiredMatch.isNull()) {
+  if (fRequiredMatch.empty()) {
     G4Exception
     ("G4PhysicalVolumesSearchScene::Matcher::Matcher",
      "modeling0013", JustWarning, "Required match is null");

@@ -1,0 +1,67 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_branch_object
+#define tools_rroot_branch_object
+
+#include "branch"
+
+namespace tools {
+namespace rroot {
+
+class branch_object : public branch {
+  typedef branch parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::branch_object");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<branch_object>(this,a_class)) return p;
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return branch_object_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<branch_object>(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+public:
+  virtual bool stream(buffer& a_buffer) {
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+    if(!parent::stream(a_buffer)) return false;
+    if(!a_buffer.read(fClassName)) return false;
+    if(!a_buffer.check_byte_count(s,c,"TBranchObject")) return false;
+    return true;
+  }
+public: //branch
+public:
+  branch_object(std::ostream& a_out,ifac& a_fac)
+  :parent(a_out,a_fac)
+  //,m_obj(0)
+  ,fClassName()
+  {}
+
+  virtual ~branch_object(){
+    //delete m_obj;
+  }
+protected:
+  branch_object(const branch_object& a_from)
+  :iro(a_from),parent(a_from){}
+  branch_object& operator=(const branch_object&){return *this;}
+public:
+  const std::string& class_name() const {return fClassName;}
+//  iro* object() {return m_obj;}
+protected:
+//  iro* m_obj;
+protected:
+  std::string fClassName; //Class name of referenced object
+};
+
+}}
+
+#endif

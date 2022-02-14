@@ -23,64 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Class G4ErrorPropagatorData inline implementation
 //
+// Author: P.Arce, 2004
 // --------------------------------------------------------------------
 
-inline
-G4ErrorMode G4ErrorPropagatorData::GetMode() const
-{
-  return theMode;
-}
+inline G4ErrorMode G4ErrorPropagatorData::GetMode() const { return theMode; }
 
-inline
-void G4ErrorPropagatorData::SetMode( G4ErrorMode mode )
-{
-  theMode = mode;
-}
+inline void G4ErrorPropagatorData::SetMode(G4ErrorMode mode) { theMode = mode; }
 
-
-inline 
-void G4ErrorPropagatorData::SetState( G4ErrorState sta )
+inline void G4ErrorPropagatorData::SetState(G4ErrorState sta)
 {
   theState = sta;
 }
 
-inline 
-G4ErrorState G4ErrorPropagatorData::GetState() const
-{
-  return theState;
-}
+inline G4ErrorState G4ErrorPropagatorData::GetState() const { return theState; }
 
-inline 
-void G4ErrorPropagatorData::SetStage( G4ErrorStage sta )
+inline void G4ErrorPropagatorData::SetStage(G4ErrorStage sta)
 {
   theStage = sta;
 }
 
-inline 
-G4ErrorStage G4ErrorPropagatorData::GetStage() const
-{
-  return theStage;
-}
+inline G4ErrorStage G4ErrorPropagatorData::GetStage() const { return theStage; }
 
-inline 
-const G4ErrorTarget* G4ErrorPropagatorData::GetTarget( G4bool mustExist ) const
+inline const G4ErrorTarget* G4ErrorPropagatorData::GetTarget(
+  G4bool mustExist) const
 {
-  if( theTarget == 0 && mustExist )
+  if(theTarget == nullptr && mustExist)
   {
-    G4Exception("G4ErrorPropagatorData::GetTarget()",
-                "InvalidSetup", FatalException,
-                "G4ErrorPropagator defined but without final target!"); 
+    G4Exception("G4ErrorPropagatorData::GetTarget()", "InvalidSetup",
+                FatalException,
+                "G4ErrorPropagator defined but without final target!");
   }
   return theTarget;
 }
 
-inline 
-void G4ErrorPropagatorData::SetTarget( const G4ErrorTarget* target )
+inline void G4ErrorPropagatorData::SetTarget(const G4ErrorTarget* target)
 {
   theTarget = const_cast<G4ErrorTarget*>(target);
 }

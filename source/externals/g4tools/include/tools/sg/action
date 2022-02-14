@@ -1,0 +1,69 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_action
+#define tools_sg_action
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include "../S_STRING"
+#include "../scast"
+
+#include <ostream>
+
+namespace tools {
+namespace sg {
+
+class action {
+public:
+  TOOLS_SCLASS(tools::sg::action)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<action>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const = 0;
+public:
+  action(std::ostream& a_out)
+  :m_out(a_out)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~action(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  action(const action& a_from)
+  :m_out(a_from.m_out)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  action& operator=(const action&){return *this;}
+public:
+  std::ostream& out() const {return m_out;}
+  //void reset() {
+  //}
+protected:
+  std::ostream& m_out;
+};
+
+#include "../HEADER"
+
+#define TOOLS_ACTION(a__class,a__sclass,a__parent)\
+  TOOLS_HEADER(a__class,a__sclass,a__parent)\
+  virtual tools::sg::action* copy() const {return new a__class(*this);}
+
+#define TOOLS_ACTION_NO_COPY(a__class,a__sclass,a__parent)\
+  TOOLS_HEADER(a__class,a__sclass,a__parent)
+
+}}
+
+#endif

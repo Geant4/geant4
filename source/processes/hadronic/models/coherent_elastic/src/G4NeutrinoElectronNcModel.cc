@@ -37,6 +37,7 @@
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4HadronicParameters.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 using namespace std;
 using namespace CLHEP;
@@ -44,6 +45,8 @@ using namespace CLHEP;
 G4NeutrinoElectronNcModel::G4NeutrinoElectronNcModel(const G4String& name) 
   : G4HadronElastic(name)
 {
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + name );
+
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   SetLowestEnergyLimit(1.e-6*eV);  
@@ -54,7 +57,6 @@ G4NeutrinoElectronNcModel::G4NeutrinoElectronNcModel(const G4String& name)
   fSin2tW = 0.23129; // 0.2312;
 
   fCutEnergy = 0.; // default value
-
 }
 
 
@@ -137,7 +139,7 @@ G4HadFinalState* G4NeutrinoElectronNcModel::ApplyYourself(
     eP *= ePlab;
     G4LorentzVector lvt2( eP, eTkin + electron_mass_c2 );
     G4DynamicParticle * aSec = new G4DynamicParticle( theElectron, lvt2 );
-    theParticleChange.AddSecondary( aSec );
+    theParticleChange.AddSecondary( aSec, secID );
 
     G4LorentzVector lvp1 = aParticle->Get4Momentum();
     G4LorentzVector lvt1(0.,0.,0.,electron_mass_c2);

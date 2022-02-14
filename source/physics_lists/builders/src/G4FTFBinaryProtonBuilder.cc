@@ -53,28 +53,23 @@ G4FTFBinaryProtonBuilder(G4bool quasiElastic)
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFB");
 
-  theStringModel = new G4FTFModel;
-  theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
-  theStringModel->SetFragmentationModel(theStringDecay);
+  G4FTFModel* theStringModel = new G4FTFModel;
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
 
-  theCascade = new G4BinaryCascade;
+  G4BinaryCascade* theCascade = new G4BinaryCascade;
   theModel->SetTransport(theCascade);
 
   theModel->SetHighEnergyGenerator(theStringModel);
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
 
-  if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
-
+  if (quasiElastic) {
+     theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+  } 
 }
 
 void G4FTFBinaryProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
@@ -85,9 +80,5 @@ Build(G4ProtonInelasticProcess * aP)
 G4FTFBinaryProtonBuilder::
 ~G4FTFBinaryProtonBuilder() 
 {
-  delete theStringDecay;
-  delete theStringModel;
-  //delete theModel;
-  if ( theQuasiElastic ) delete theQuasiElastic;
 }
 

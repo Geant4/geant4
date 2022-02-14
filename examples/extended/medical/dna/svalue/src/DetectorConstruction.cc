@@ -62,29 +62,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
- : G4VUserDetectorConstruction(),
-   fNuclMaterial(0),
-   fCytoMaterial(0),
-   fWorldMaterial(0),
-   fNucl(0),
-   fCyto(0),
-   fWorld(0),
-   fDetectorMessenger(0)
-      
+ : G4VUserDetectorConstruction()
 {
   //default tracking cut  
-  fTrackingCut = 7.4*eV;
+  fTrackingCut = 7.4*CLHEP::eV;
   
   // default parameter values
-  fWorldRadius = 10*m;
-  fCytoThickness = 20*nm;
-  fNuclRadius = 10*nm;
+  fWorldRadius = 10*CLHEP::m;
+  fCytoThickness = 20*CLHEP::nm;
+  fNuclRadius = 10*CLHEP::nm;
   
   DefineMaterials();
-  SetWorldMaterial("G4_WATER");
-  //SetWorldMaterial("G4_Galactic");
-  SetCytoMaterial("G4_WATER");
-  SetNuclMaterial("G4_WATER");
 
   // create commands for interactive definition of the detector  
   fDetectorMessenger = new DetectorMessenger(this);
@@ -93,13 +81,8 @@ DetectorConstruction::DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete fDetectorMessenger;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VPhysicalVolume* DetectorConstruction::Construct()
-{
-  return ConstructVolumes();
+{ 
+  delete fDetectorMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -108,22 +91,15 @@ void DetectorConstruction::DefineMaterials()
 { 
   G4NistManager* man = G4NistManager::Instance();
   
-  man->FindOrBuildMaterial("G4_WATER");
-<<<<<<< HEAD
-  
-=======
-  man->FindOrBuildMaterial("G4_Galactic");
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  fWorldMaterial = man->FindOrBuildMaterial("G4_WATER");
+  fCytoMaterial = fNuclMaterial = man->FindOrBuildMaterial("G4_WATER");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
+G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
+  if(fWorld) return fWorld;
                    
   // Spherical world
   //
@@ -238,7 +214,6 @@ void DetectorConstruction::PrintParameters() const
 void DetectorConstruction::SetTrackingCut(G4double value)
 {
   fTrackingCut = value;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -246,7 +221,6 @@ void DetectorConstruction::SetTrackingCut(G4double value)
 void DetectorConstruction::SetNuclRadius(G4double value)
 {
   fNuclRadius = value;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -254,47 +228,51 @@ void DetectorConstruction::SetNuclRadius(G4double value)
 void DetectorConstruction::SetCytoThickness(G4double value)
 {
   fCytoThickness = value;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
+void DetectorConstruction::SetWorldMaterial(const G4String& materialChoice)
 {
   // search the material by its name   
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial) fWorldMaterial = pttoMaterial;
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
+  if (pttoMaterial && pttoMaterial != fWorldMaterial) {
+    fWorldMaterial = pttoMaterial;
+    if(fLogicalWorld) fLogicalWorld->SetMaterial(pttoMaterial);
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetCytoMaterial(G4String materialChoice)
+void DetectorConstruction::SetCytoMaterial(const G4String& materialChoice)
 {
   // search the material by its name   
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-<<<<<<< HEAD
-  if (pttoMaterial) fAbsorMaterial = pttoMaterial;
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
-}
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-=======
-  if (pttoMaterial) fCytoMaterial = pttoMaterial;
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
+  if (pttoMaterial && pttoMaterial != fCytoMaterial) {
+    fCytoMaterial = pttoMaterial;
+    if(fLogicalCyto) fLogicalCyto->SetMaterial(pttoMaterial);
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetNuclMaterial(G4String materialChoice)
+void DetectorConstruction::SetNuclMaterial(const G4String& materialChoice)
 {
   // search the material by its name   
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial) fNuclMaterial = pttoMaterial;
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
+  if (pttoMaterial && pttoMaterial != fNuclMaterial) {
+    fNuclMaterial = pttoMaterial;
+    if(fLogicalNucl) fLogicalNucl->SetMaterial(pttoMaterial);
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

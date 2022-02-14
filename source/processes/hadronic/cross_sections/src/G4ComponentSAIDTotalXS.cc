@@ -38,7 +38,7 @@
 
 #include "G4ComponentSAIDTotalXS.hh"
 #include "G4PhysicsVector.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 
 const G4String G4ComponentSAIDTotalXS::fnames[13] = {
   "","pp","np","pip","pim",
@@ -229,12 +229,12 @@ void G4ComponentSAIDTotalXS::Initialise(G4SAIDCrossSectionType tp)
       return;
     }
     if(idx <= 4) {
-      elastdata[idx] = new G4LPhysicsFreeVector();
-      inelastdata[idx] = new G4LPhysicsFreeVector();
+      elastdata[idx] = new G4PhysicsFreeVector(true);
+      inelastdata[idx] = new G4PhysicsFreeVector(true);
       ReadData(idx,elastdata[idx],path,"_el.dat");
       ReadData(idx,inelastdata[idx],path,"_in.dat");
     } else {
-      inelastdata[idx] = new G4LPhysicsFreeVector();
+      inelastdata[idx] = new G4PhysicsFreeVector();
       ReadData(idx,inelastdata[idx],path,".dat");
     }
 #ifdef G4MULTITHREADED
@@ -265,7 +265,7 @@ void G4ComponentSAIDTotalXS::ReadData(G4int index,
     // retrieve data from DB
     v->Retrieve(filein, true);
     v->ScaleVector(CLHEP::MeV,CLHEP::millibarn);
-    v->SetSpline(true);
+    v->FillSecondDerivatives();
   } 
 }
 

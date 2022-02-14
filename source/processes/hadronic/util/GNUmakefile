@@ -15,6 +15,8 @@ CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/global/HEPNumerics/include \
+            -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include \

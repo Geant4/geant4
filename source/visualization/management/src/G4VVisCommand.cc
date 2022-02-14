@@ -36,8 +36,6 @@
 #include <sstream>
 #include <cctype>
 
-G4int G4VVisCommand::fErrorCode = 0;
-
 G4int           G4VVisCommand::fCurrentArrow3DLineSegmentsPerCircle = 6;
 G4Colour        G4VVisCommand::fCurrentColour = G4Colour::White();
 G4Colour        G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
@@ -50,12 +48,29 @@ G4double        G4VVisCommand::fCurrentLineWidth = 1.;  // pixels
 G4PhysicalVolumeModel::TouchableProperties          G4VVisCommand::fCurrentTouchableProperties;
 G4VisExtent                                         G4VVisCommand::fCurrentExtentForField;
 std::vector<G4PhysicalVolumesSearchScene::Findings> G4VVisCommand::fCurrrentPVFindingsForField;
+G4bool G4VVisCommand::fThereWasAViewer = false;
+G4ViewParameters G4VVisCommand::fVPExistingViewer;
 
 G4VVisCommand::G4VVisCommand () {}
 
 G4VVisCommand::~G4VVisCommand () {}
 
-G4VisManager* G4VVisCommand::fpVisManager = 0;
+G4VisManager* G4VVisCommand::fpVisManager = nullptr;
+
+G4VisManager* G4VVisCommand::GetVisManager ()
+{
+  return fpVisManager;
+}
+
+void G4VVisCommand::SetVisManager (G4VisManager* pVisManager)
+{
+  fpVisManager = pVisManager;
+}
+
+const G4Colour& G4VVisCommand::GetCurrentTextColour()
+{
+  return fCurrentTextColour;
+}
 
 G4String G4VVisCommand::ConvertToString
 (G4double x, G4double y, const char * unitName)
@@ -219,6 +234,23 @@ void G4VVisCommand::CheckSceneAndNotifyHandlers(G4Scene* pScene)
 
 }
 
+G4bool G4VVisCommand::CheckView ()
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+  "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+       << G4endl;
+    }
+    return false;
+  }
+  
+  return true;
+}
+
 void G4VVisCommand::G4VisCommandsSceneAddUnsuccessful
 (G4VisManager::Verbosity verbosity) {
   // Some frequently used error printing...
@@ -269,15 +301,12 @@ void G4VVisCommand::InterpolateViews
     currentViewer->SetViewParameters(*vp);
     currentViewer->RefreshView();
     if (exportString == "export" &&
-        currentViewer->GetName().contains("OpenGL")) {
+        G4StrUtil::contains(currentViewer->GetName(), "OpenGL")) {
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/ogl/export");
     }
-    // File-writing viewers need to close the file
     currentViewer->ShowView();
-#ifdef G4VIS_USE_STD11
     if (waitTimePerPointmilliseconds > 0)
       std::this_thread::sleep_for(std::chrono::milliseconds(waitTimePerPointmilliseconds));
-#endif
   } while (safetyCount++ < safety);  // Loop checking, 16.02.2016, J.Allison
 }
 
@@ -340,4 +369,30 @@ void G4VVisCommand::DrawExtent(const G4VisExtent& extent)
       fpVisManager->Draw(box,visAtts,G4Translate3D(centre));
     }
   }
+}
+
+void G4VVisCommand::CopyMostViewParameters
+(G4ViewParameters& target, const G4ViewParameters& from)
+{
+  // Copy view parameters except for autoRefresh and background...
+  auto targetAutoRefresh = target.IsAutoRefresh();
+  auto targetBackground  = target.GetBackgroundColour();
+  target = from;
+  target.SetAutoRefresh(targetAutoRefresh);
+  target.SetBackgroundColour(targetBackground);
+}
+
+void G4VVisCommand::CopyCameraParameters
+(G4ViewParameters& target, const G4ViewParameters& from)
+{
+  // Copy view parameters pertaining only to camera
+  target.SetViewpointDirection  (from.GetViewpointDirection());
+  target.SetLightpointDirection (from.GetLightpointDirection());
+  target.SetLightsMoveWithCamera(from.GetLightsMoveWithCamera());
+  target.SetUpVector            (from.GetUpVector());
+  target.SetFieldHalfAngle      (from.GetFieldHalfAngle());
+  target.SetZoomFactor          (from.GetZoomFactor());
+  target.SetScaleFactor         (from.GetScaleFactor());
+  target.SetCurrentTargetPoint  (from.GetCurrentTargetPoint());
+  target.SetDolly               (from.GetDolly());
 }

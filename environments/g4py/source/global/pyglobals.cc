@@ -33,7 +33,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4indexing.hh"
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include "G4Version.hh"
 #include "G4strstreambuf.hh"
 #include "G4UImanager.hh"
@@ -44,15 +44,15 @@
 
 using namespace boost::python;
 
-extern G4strstreambuf G4coutbuf;
-extern G4strstreambuf G4cerrbuf;
+//extern G4strstreambuf G4coutbuf;
+//extern G4strstreambuf G4cerrbuf;
 
 namespace pyglobals {
 
 // G4cout/cerr are set to Python stdout
 void SetG4PyCoutDestination()
 {
-  G4UImanager* UImgr= G4UImanager::GetUIpointer();
+  G4UImanager::GetUIpointer();
   G4PyCoutDestination* pycout= new G4PyCoutDestination();
   G4coutbuf.SetDestination(pycout);
   G4cerrbuf.SetDestination(pycout);

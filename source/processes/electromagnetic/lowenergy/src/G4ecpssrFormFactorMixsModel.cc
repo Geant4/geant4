@@ -36,16 +36,13 @@
 
 #include <fstream>
 #include <iomanip>
-
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
-
 #include "G4EMDataSet.hh"
 #include "G4LinInterpolation.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
-
 #include "G4ecpssrFormFactorMixsModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,8 +75,7 @@ G4ecpssrFormFactorMixsModel::G4ecpssrFormFactorMixsModel()
   protonMiXsVector.push_back(protonM4DataSetMap);
   protonMiXsVector.push_back(protonM5DataSetMap);
 
-
-  for (G4int i=62; i<93; i++) 
+  for (G4int i=29; i<93; i++) 
   {
       alphaM1DataSetMap[i] = new G4EMDataSet(i,interpolation);
       alphaM1DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m1-");
@@ -103,9 +99,6 @@ G4ecpssrFormFactorMixsModel::G4ecpssrFormFactorMixsModel()
   alphaMiXsVector.push_back(alphaM3DataSetMap);
   alphaMiXsVector.push_back(alphaM4DataSetMap);
   alphaMiXsVector.push_back(alphaM5DataSetMap);
-
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -166,153 +159,35 @@ G4double G4ecpssrFormFactorMixsModel::CalculateMiCrossSection(G4int zTarget,G4do
 
 G4double G4ecpssrFormFactorMixsModel::CalculateM1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
-
   // mShellId
   return  CalculateMiCrossSection (zTarget, massIncident, energyIncident, 1); 
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ecpssrFormFactorMixsModel::CalculateM2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
-
   // mShellId
   return  CalculateMiCrossSection (zTarget, massIncident, energyIncident, 2); 
-
-  /*
-
-  G4Proton* aProton = G4Proton::Proton();
-  G4Alpha* aAlpha = G4Alpha::Alpha();  
-  G4double sigma = 0;
-
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 61) {
-
-    if (massIncident == aProton->GetPDGMass())
-      {      
-	sigma = protonM2DataSetMap[zTarget]->FindValue(energyIncident/MeV);  
-        if (sigma !=0 && energyIncident > protonM2DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
-      }
-    else if (massIncident == aAlpha->GetPDGMass())
-      {
-        sigma = alphaM2DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
-        if (sigma !=0 && energyIncident > alphaM2DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
-      }
-    else
-      { 
-	sigma = 0.;
-      }
-  }
-  
-  // sigma is in internal units: it has been converted from 
-  // the input file in barns bt the EmDataset
-  return sigma;
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ecpssrFormFactorMixsModel::CalculateM3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
-
   return  CalculateMiCrossSection (zTarget, massIncident, energyIncident, 3); 
-  /*
-
-
-  G4Proton* aProton = G4Proton::Proton();
-  G4Alpha* aAlpha = G4Alpha::Alpha();  
-  G4double sigma = 0;
-
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 61) {
-
-    if (massIncident == aProton->GetPDGMass())
-      {      
-	sigma = protonM3DataSetMap[zTarget]->FindValue(energyIncident/MeV);  
-        if (sigma !=0 && energyIncident > protonM3DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
-      }
-    else if (massIncident == aAlpha->GetPDGMass())
-      {
-        sigma = alphaM3DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
-        if (sigma !=0 && energyIncident > alphaM3DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
-      }
-    else
-      { 
-	sigma = 0.;
-      }
-  }
-  
-  // sigma is in internal units: it has been converted from 
-  // the input file in barns bt the EmDataset
-  return sigma;
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ecpssrFormFactorMixsModel::CalculateM4CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
-
   return  CalculateMiCrossSection (zTarget, massIncident, energyIncident, 4); 
-  /*
-  G4Proton* aProton = G4Proton::Proton();
-  G4Alpha* aAlpha = G4Alpha::Alpha();  
-  G4double sigma = 0;
-
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 61) {
-
-    if (massIncident == aProton->GetPDGMass())
-      {      
-	sigma = protonM3DataSetMap[zTarget]->FindValue(energyIncident/MeV);  
-        if (sigma !=0 && energyIncident > protonM3DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
-      }
-    else if (massIncident == aAlpha->GetPDGMass())
-      {
-        sigma = alphaM3DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
-        if (sigma !=0 && energyIncident > alphaM3DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
-      }
-    else
-      { 
-	sigma = 0.;
-      }
-  }
-  
-  // sigma is in internal units: it has been converted from 
-  // the input file in barns bt the EmDataset
-  return sigma;
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ecpssrFormFactorMixsModel::CalculateM5CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
-
   return  CalculateMiCrossSection (zTarget, massIncident, energyIncident, 5); 
-  /*
-  G4Proton* aProton = G4Proton::Proton();
-  G4Alpha* aAlpha = G4Alpha::Alpha();  
-  G4double sigma = 0;
-
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 61) {
-
-    if (massIncident == aProton->GetPDGMass())
-      {      
-	sigma = protonM3DataSetMap[zTarget]->FindValue(energyIncident/MeV);  
-        if (sigma !=0 && energyIncident > protonM3DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
-      }
-    else if (massIncident == aAlpha->GetPDGMass())
-      {
-        sigma = alphaM3DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
-        if (sigma !=0 && energyIncident > alphaM3DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
-      }
-    else
-      { 
-	sigma = 0.;
-      }
-  }
-  
-  // sigma is in internal units: it has been converted from 
-  // the input file in barns bt the EmDataset
-  return sigma;
-  */
 }

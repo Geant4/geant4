@@ -123,7 +123,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
   	 << " 1-cos(TetMax)= " << 1. - cosThetaMax << G4endl;
   G4cout << "cut[0]= " << (*pCuts)[0] << G4endl;
   */
-  if(!fParticleChange) {
+  if(nullptr == fParticleChange) {
     fParticleChange = GetParticleChangeForGamma();
   }
   if(IsMaster() && mass < GeV && part->GetParticleName() != "GenericIon") {

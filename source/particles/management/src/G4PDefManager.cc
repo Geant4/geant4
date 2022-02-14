@@ -23,22 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PDefManager class implementation
 //
-//
-//
-// ------------------------------------------------------------
-//
-//  GEANT4 class header file
-//
-// ---------------- G4PDefManager ----------------
-//
-// Utility template class for splitting RW data for thread-safety from
-// classes: G4ParticleDefinition, G4VDecayChannel.
-//
-// ------------------------------------------------------------
-// History:
-// 01.25.2009 Xin Dong: First implementation from automatic MT conversion.
-// ------------------------------------------------------------
+// Author: Xin Dong, 25.01.2009 - First implementation
+//                                from automatic MT conversion.
+// --------------------------------------------------------------------
 
 #include <stdlib.h>
 
@@ -49,19 +38,20 @@
 
 void G4PDefData::initialize()
 {
-  theProcessManager = 0;
+  theProcessManager = nullptr;
+  theTrackingManager = nullptr;
 }
 
 G4int& G4PDefManager::slavetotalspace()
 {
-    G4ThreadLocalStatic G4int _instance = 0;
-    return _instance;
+  G4ThreadLocalStatic G4int _instance = 0;
+  return _instance;
 }
 
 G4PDefData*& G4PDefManager::offset()
 {
-    G4ThreadLocalStatic G4PDefData* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4PDefData* _instance = nullptr;
+  return _instance;
 }
 
 G4PDefManager::G4PDefManager() : totalobj(0)
@@ -75,7 +65,7 @@ G4int G4PDefManager::CreateSubInstance()
   // thread, ions are created dynamically.
 {
   G4AutoLock l(&mutex);
-  totalobj++;
+  ++totalobj;
   if (totalobj > slavetotalspace())
   {
     l.unlock();
@@ -94,15 +84,15 @@ void G4PDefManager::NewSubInstances()
   if (slavetotalspace()  >= totalobj)  { return; }
   G4int originaltotalspace = slavetotalspace();
   slavetotalspace() = totalobj + 512;
-  offset() = (G4PDefData *) realloc(offset(), slavetotalspace() * sizeof(G4PDefData));
-
-  if (offset() == 0)
+  offset() = (G4PDefData *) realloc(offset(),
+                                    slavetotalspace() * sizeof(G4PDefData));
+  if (offset() == nullptr)
   {
     G4Exception("G4PDefManager::NewSubInstances()",
                 "OutOfMemory", FatalException, "Cannot malloc space!");
   }
 
-  for (G4int i = originaltotalspace; i < slavetotalspace(); i++)
+  for (G4int i = originaltotalspace; i < slavetotalspace(); ++i)
   {
     offset()[i].initialize();
   }
@@ -111,9 +101,9 @@ void G4PDefManager::NewSubInstances()
 void G4PDefManager::FreeSlave()
   // Invoked by all threads to free the subinstance array.
 {
-  if (!offset())  { return; }
+  if (offset() == nullptr)  { return; }
   free(offset());
-  offset() = 0;
+  offset() = nullptr;
 }
 
 G4PDefData* G4PDefManager::GetOffset()
@@ -124,20 +114,20 @@ G4PDefData* G4PDefManager::GetOffset()
 void G4PDefManager::UseWorkArea( G4PDefData* newOffset )
   // Use recycled work area, which was created previously.
 {
-  if( offset() && offset()!=newOffset )
+  if( (offset() != nullptr) && (offset() != newOffset) )
   {
     G4Exception("G4PDefManager::UseWorkspace()",
                 "InvalidCondition", FatalException,
                 "Thread already has workspace - cannot use another.");
   }
-  offset()= newOffset;
+  offset() = newOffset;
 }
 
 G4PDefData* G4PDefManager::FreeWorkArea()
   // Detach this thread from this Location
   // The object which calls this method is responsible for it.
 {
-  G4PDefData* offsetRet= offset();
-  offset()= 0;
+  G4PDefData* offsetRet = offset();
+  offset() = nullptr;
   return offsetRet;
 }

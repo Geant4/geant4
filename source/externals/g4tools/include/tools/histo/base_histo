@@ -1,0 +1,668 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_base_histo
+#define tools_histo_base_histo
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include "histo_data"
+
+#include <cmath>
+#include <map> //for annotations
+#include <ostream>
+
+namespace tools {
+namespace histo {
+
+//TC is for a coordinate.
+//TO is for an offset used to identify a bin.
+//TN is for a number of entries.
+//TW is for a weight.
+//TH is for a height.
+
+template <class TC,class TO,class TN,class TW,class TH>
+class base_histo : protected histo_data<TC,TO,TN,TW> {
+  typedef histo_data<TC,TO,TN,TW> parent;
+private:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::base_histo");
+    return s_v;
+  }
+public:
+  typedef histo_data<TC,TO,TN,TW> hd_t;
+  typedef axis<TC,TO> axis_t;
+  typedef typename axis_t::bn_t bn_t;
+  typedef unsigned int dim_t;
+  typedef TC coordinate_t;
+  typedef TO offset_t;
+  typedef TN num_entries_t;
+  typedef TW weight_t;
+  typedef TH height_t;
+protected:
+  virtual TH get_bin_height(TO) const = 0;  //histo/profile
+protected:
+  void base_from_data(const hd_t& a_from) {parent::operator=(a_from);}
+#ifdef tools_histo_base_histo //for backward compatibility with tools
+  hd_t base_get_data() const {
+    hd_t hd;
+    hd = *this;
+    return hd;
+  }
+#endif
+public:
+  const hd_t& dac() const {return *this;} //data accessor.
+protected:
+  base_histo():parent() {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+protected:
+  virtual ~base_histo() {
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  base_histo(const base_histo& a_from):parent(a_from) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  base_histo& operator=(const base_histo& a_from) {
+    if(&a_from==this) return *this;
+    parent::operator=(a_from);
+    return *this;
+  }
+
+public:
+  bool equals(const base_histo& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
+    return parent::equals(a_from,a_prec,a_fabs);
+  }
+
+  const std::string& title() const {return parent::m_title;}
+  bool set_title(const std::string& a_title){parent::m_title = a_title;return true;}
+  dim_t dimension() const {return parent::m_dimension;}
+  dim_t number_of_planes() const {return dim_planes(parent::m_dimension);}
+
+  TN entries() const {
+    return parent::m_in_range_entries; //not set if reading a TH from a CERN-ROOT file.
+  }
+  TN all_entries() const {
+    return parent::m_all_entries; //works also is reading histo from a CERN-ROOT file.
+  }
+
+  TN extra_entries() const {
+    return parent::m_all_entries-parent::m_in_range_entries; //works also is reading histo from a CERN-ROOT file.
+  }
+  TW equivalent_bin_entries() const {
+    TW sw = 0;
+    TW sw2 = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        sw += parent::m_bin_Sw[ibin];
+        sw2 += parent::m_bin_Sw2[ibin];
+      }
+    }
+    if(sw2==0) return 0;
+    return (sw * sw)/sw2;
+  }
+  TH sum_bin_heights() const {
+    TH sh = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        sh += get_bin_height(ibin);
+      }
+    }
+    return sh;
+  }
+  TH sum_all_bin_heights() const {
+    TH sh = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      sh += get_bin_height(ibin);
+    }
+    return sh;
+  }
+
+  TH sum_extra_bin_heights() const {
+    TH sh = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(histo::is_out(parent::m_axes,ibin)) {
+        sh += get_bin_height(ibin);
+      }
+    }
+    return sh;
+  }
+
+  TH min_bin_height() const {
+    TH value = 0;
+    bool first = true;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        TH vbin = get_bin_height(ibin);
+        if(first) {
+          first = false;
+          value = vbin;
+        } else {
+          if(vbin<=value) value = vbin;
+        }
+      }
+    }
+    return value;
+  }
+
+  TH max_bin_height() const {
+    TH value = 0;
+    bool first = true;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        TH vbin = get_bin_height(ibin);
+        if(first) {
+          first = false;
+          value = vbin;
+        } else {
+          if(vbin>=value) value = vbin;
+        }
+      }
+    }
+    return value;
+  }
+
+  bool min_bin_height_with_entries(TH& a_value) const {
+    TH value = 0;
+    bool first = true;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin) && (parent::m_bin_entries[ibin]>0) ) {
+        TH vbin = get_bin_height(ibin);
+        if(first) {
+          first = false;
+          value = vbin;
+        } else {
+          if(vbin<=value) value = vbin;
+        }
+      }
+    }
+    a_value = value;
+    return first?false:true; //return true if at least one bin with entries processed.
+  }
+
+  bool max_bin_height_with_entries(TH& a_value) const {
+    TH value = 0;
+    bool first = true;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin) && (parent::m_bin_entries[ibin]>0) ) {
+        TH vbin = get_bin_height(ibin);
+        if(first) {
+          first = false;
+          value = vbin;
+        } else {
+          if(vbin>=value) value = vbin;
+        }
+      }
+    }
+    a_value = value;
+    return first?false:true; //return true if at least one bin with entries processed.
+  }
+
+  bool has_entries_per_bin() const { //to detect histos coming from TH streaming out of a root file.
+    // it assumes that update_fast_getters() had been applied.
+    if(parent::m_in_range_entries) return true;
+    // may be a from-root histo :
+    if(parent::m_in_range_Sw) return false;
+    // no in range entries and weight :
+    return true; //for exa not filled = ok.
+  }
+
+public: //histo_data
+  bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=parent::m_dimension) return false;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        a_value += parent::m_bin_Sxw[ibin][a_axis];
+      }
+    }
+    return true;
+  }
+
+  bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=parent::m_dimension) return false;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        a_value += parent::m_bin_Sx2w[ibin][a_axis];
+      }
+    }
+    return true;
+  }
+
+  TW get_in_range_Sw() const {return parent::m_in_range_Sw;}   //for CERN-ROOT file writing.
+  TW get_in_range_Sw2() const {return parent::m_in_range_Sw2;} //for CERN-ROOT file writing.
+
+  void get_Sw_Sw2(TW& a_sw,TW& a_sw2) const {
+    a_sw = 0;
+    a_sw2 = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        a_sw += parent::m_bin_Sw[ibin];
+        a_sw2 += parent::m_bin_Sw2[ibin];
+      }
+    }
+  }
+  void get_all_Sw_Sw2(TW& a_sw,TW& a_sw2) const {
+    a_sw = 0;
+    a_sw2 = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      a_sw += parent::m_bin_Sw[ibin];
+      a_sw2 += parent::m_bin_Sw2[ibin];
+    }
+  }
+
+/*
+  TW get_all_Sw() const {
+    TW sw = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) sw += m_bin_Sw[ibin];
+    return sw;
+  }
+  TN get_all_entries() const {
+    TN number = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      number += m_bin_entries[ibin];
+    }
+    return number;
+  }
+
+  // for inlib/wroot/streamers :
+  TN get_entries() const {
+    TN number = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
+        number += m_bin_entries[ibin];
+      }
+    }
+    return number;
+  }
+*/
+protected:
+  enum {AxisX=0,AxisY=1,AxisZ=2};
+
+  bool configure(dim_t a_dim,
+                 const std::vector<bn_t>& aNumbers,
+                 const std::vector<TC>& aMins,
+                 const std::vector<TC>& aMaxs) {
+    // Clear :
+    parent::m_bin_entries.clear();
+    parent::m_bin_Sw.clear();
+    parent::m_bin_Sw2.clear();
+    parent::m_bin_Sxw.clear();
+    parent::m_bin_Sx2w.clear();
+    parent::m_in_range_Sxw.clear();
+    parent::m_in_range_Sx2w.clear();
+    parent::m_axes.clear();
+    parent::m_in_range_plane_Sxyw.clear();
+    parent::m_annotations.clear();
+
+    parent::m_bin_number = 0;
+    parent::m_dimension = 0;
+    parent::m_all_entries = 0;
+    parent::m_in_range_entries = 0;
+    parent::m_in_range_Sw = 0;
+    parent::m_in_range_Sw2 = 0;
+    parent::m_in_range_Sxw.resize(a_dim,0);
+    parent::m_in_range_Sx2w.resize(a_dim,0);
+
+    // Some checks :
+    if(!a_dim) return false;
+    parent::m_axes.resize(a_dim);
+    // Setup axes :
+    for(dim_t iaxis=0;iaxis<a_dim;iaxis++) {
+      if(!parent::m_axes[iaxis].configure(aNumbers[iaxis],aMins[iaxis],aMaxs[iaxis])) {
+        // do not do :
+        //   m_axes.clear()
+        // so that :
+        //   b1::axis(),b2::axis_[x,y]()
+        // do not crash in case of a bad booking.
+        //m_axes.clear();
+        return false;
+      }
+    }
+
+    parent::m_dimension = a_dim;
+
+    base_allocate(); //set m_bin_number.
+
+    return true;
+  }
+
+  bool configure(dim_t a_dim,const std::vector< std::vector<TC> >& a_edges) {
+    // Clear :
+    parent::m_bin_entries.clear();
+    parent::m_bin_Sw.clear();
+    parent::m_bin_Sw2.clear();
+    parent::m_bin_Sxw.clear();
+    parent::m_bin_Sx2w.clear();
+    parent::m_in_range_Sxw.clear();
+    parent::m_in_range_Sx2w.clear();
+    parent::m_axes.clear();
+    parent::m_in_range_plane_Sxyw.clear();
+    parent::m_annotations.clear();
+
+    parent::m_bin_number = 0;
+    parent::m_dimension = 0;
+    parent::m_all_entries = 0;
+    parent::m_in_range_entries = 0;
+    parent::m_in_range_Sw = 0;
+    parent::m_in_range_Sw2 = 0;
+    parent::m_in_range_Sxw.resize(a_dim,0);
+    parent::m_in_range_Sx2w.resize(a_dim,0);
+
+    // Some checks :
+    if(!a_dim) return false;
+    parent::m_axes.resize(a_dim);
+    // Setup axes :
+    for(dim_t iaxis=0;iaxis<a_dim;iaxis++) {
+      if(!parent::m_axes[iaxis].configure(a_edges[iaxis])) {
+        //m_axes.clear();
+        return false;
+      }
+    }
+
+    parent::m_dimension = a_dim;
+
+    base_allocate(); //set m_bin_number.
+
+    return true;
+  }
+
+  void base_reset() {
+    // Reset content (different of clear that deallocate all internal things).
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      parent::m_bin_entries[ibin] = 0;
+      parent::m_bin_Sw[ibin] = 0;
+      parent::m_bin_Sw2[ibin] = 0;
+      for(dim_t iaxis=0;iaxis<parent::m_dimension;iaxis++) {
+        parent::m_bin_Sxw[ibin][iaxis] = 0;
+        parent::m_bin_Sx2w[ibin][iaxis] = 0;
+      }
+    }
+    parent::m_in_range_plane_Sxyw.assign(dim_planes(parent::m_dimension),0);
+    //profile not done here.
+    parent::reset_fast_getters();
+  }
+
+protected:
+  void base_allocate() {
+    dim_t iaxis;
+    // Add two bins for the [under,out]flow data.
+    TO n_bin = 1;
+    for(iaxis=0;iaxis<parent::m_dimension;iaxis++) {
+      n_bin *= (parent::m_axes[iaxis].bins() + 2);
+    }
+
+    parent::m_bin_entries.resize(n_bin,0);
+    parent::m_bin_Sw.resize(n_bin,0);
+    parent::m_bin_Sw2.resize(n_bin,0);
+
+    std::vector<TC> empty;
+    empty.resize(parent::m_dimension,0);
+    parent::m_bin_Sxw.resize(n_bin,empty);
+    parent::m_bin_Sx2w.resize(n_bin,empty);
+
+    parent::m_bin_number = n_bin; // All bins : [in-range, underflow, outflow] bins.
+
+    parent::m_axes[0].m_offset = 1;
+    for(iaxis=1;iaxis<parent::m_dimension;iaxis++) {
+      parent::m_axes[iaxis].m_offset = parent::m_axes[iaxis-1].m_offset * (parent::m_axes[iaxis-1].bins()+2);
+    }
+
+    parent::m_in_range_plane_Sxyw.resize(dim_planes(parent::m_dimension),0);
+  }
+
+public:
+  // to access data from methods :
+  const std::vector<TN>& bins_entries() const {return parent::m_bin_entries;}
+  const std::vector<TW>& bins_sum_w() const {return parent::m_bin_Sw;}
+  const std::vector<TW>& bins_sum_w2() const {return parent::m_bin_Sw2;}
+  const std::vector< std::vector<TC> >& bins_sum_xw() const {return parent::m_bin_Sxw;}
+  const std::vector< std::vector<TC> >& bins_sum_x2w() const {return parent::m_bin_Sx2w;}
+  const std::vector<TC>& in_range_planes_xyw() const {return parent::m_in_range_plane_Sxyw;}
+
+public:
+  const axis_t& get_axis(int a_index) const {return parent::m_axes[a_index];}
+  offset_t get_bins() const {return parent::m_bin_number;}
+  const std::string& get_title() const {return parent::m_title;}
+  dim_t get_dimension() const {return parent::m_dimension;}
+  bool is_valid() const {return (parent::m_dimension?true:false);}
+
+public: //annotations :
+  typedef std::map<std::string,std::string> annotations_t;
+  const annotations_t& annotations() const {return parent::m_annotations;}
+  annotations_t annotations() {return parent::m_annotations;}
+
+  void add_annotation(const std::string& a_key,const std::string& a_value) {
+    parent::m_annotations[a_key] = a_value; //override if a_key already exists.
+  }
+  bool annotation(const std::string& a_key,std::string& a_value) const {
+    annotations_t::const_iterator it = parent::m_annotations.find(a_key);
+    if(it==parent::m_annotations.end()) {a_value.clear();return false;}
+    a_value = (*it).second;
+    return true;
+  }
+
+  void set_annotations(const annotations_t& a_annotations) {parent::m_annotations = a_annotations;}
+
+  void hprint_annotations(std::ostream& a_out) {
+    a_out << " * ANNOTATIONS :" << std::endl;
+    annotations_t::const_iterator it;
+    for(it=parent::m_annotations.begin();it!=parent::m_annotations.end();++it) {
+    //out << " * (" << index << ") "
+      a_out << " *  " << (*it).first << " = " << (*it).second << std::endl;
+    }
+  }
+
+protected:
+  bool is_compatible(const base_histo& a_histo){
+    if(parent::m_dimension!=a_histo.m_dimension) return false;
+    for(dim_t iaxis=0;iaxis<parent::m_dimension;iaxis++) {
+      if(!parent::m_axes[iaxis].is_compatible(a_histo.m_axes[iaxis])) return false;
+    }
+    return true;
+  }
+
+  void base_add(const base_histo& a_histo){
+    // The only histogram operation that makes sense.
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      parent::m_bin_entries[ibin] += a_histo.m_bin_entries[ibin];
+      parent::m_bin_Sw[ibin] += a_histo.m_bin_Sw[ibin];
+      parent::m_bin_Sw2[ibin] += a_histo.m_bin_Sw2[ibin];
+      for(dim_t iaxis=0;iaxis<parent::m_dimension;iaxis++) {
+        parent::m_bin_Sxw[ibin][iaxis] += a_histo.m_bin_Sxw[ibin][iaxis];
+        parent::m_bin_Sx2w[ibin][iaxis] += a_histo.m_bin_Sx2w[ibin][iaxis];
+      }
+    }
+   {size_t nplane = parent::m_in_range_plane_Sxyw.size();
+    for(size_t iplane=0;iplane<nplane;iplane++)
+      parent::m_in_range_plane_Sxyw[iplane] += a_histo.m_in_range_plane_Sxyw[iplane];}
+    parent::update_fast_getters();
+  }
+
+  void base_subtract(const base_histo& a_histo) {
+    //ill-defined operation. We keep that because of the "ill-defined past".
+    // We build a new histo with one entry in each bin.
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      parent::m_bin_entries[ibin] = 1;
+
+      parent::m_bin_Sw[ibin] -= a_histo.m_bin_Sw[ibin];
+      // Yes, it is a += in the below.
+      parent::m_bin_Sw2[ibin] += a_histo.m_bin_Sw2[ibin];
+      for(dim_t iaxis=0;iaxis<parent::m_dimension;iaxis++) {
+        parent::m_bin_Sxw[ibin][iaxis] -= a_histo.m_bin_Sxw[ibin][iaxis];
+        parent::m_bin_Sx2w[ibin][iaxis] -= a_histo.m_bin_Sx2w[ibin][iaxis];
+      }
+    }
+
+ //{for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] ??? a_histo.m_in_range_plane_Sxyw[iplane];}
+
+    parent::update_fast_getters();
+  }
+
+  bool base_multiply(const base_histo& a_histo) {
+    //ill-defined operation. We keep that because of the "ill-defined past".
+
+    // We build a new histo with one entry in each bin of weight :
+    //   this.w * a_histo.w
+    // The current histo is overriden with this new histo.
+    // The m_bin_Sw2 computation is consistent with FreeHEP and CERN-ROOT.
+
+    if(!is_compatible(a_histo)) return false;
+
+    std::vector<int> is(parent::m_dimension);
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      TW swa = parent::m_bin_Sw[ibin];
+      TW sw2a = parent::m_bin_Sw2[ibin];
+      TW swb = a_histo.m_bin_Sw[ibin];
+      TW sw2b = a_histo.m_bin_Sw2[ibin];
+      TW sw = swa * swb;
+      parent::m_bin_entries[ibin] = 1;
+      parent::m_bin_Sw[ibin] = sw;
+      parent::m_bin_Sw2[ibin] = sw2a * swb * swb + sw2b * swa * swa;
+      histo::get_indices(parent::m_axes,ibin,is);
+      for(dim_t iaxis=0;iaxis<parent::m_dimension;iaxis++) {
+        TC x = parent::m_axes[iaxis].bin_center(is[iaxis]);
+        parent::m_bin_Sxw[ibin][iaxis] = x * sw;
+        parent::m_bin_Sx2w[ibin][iaxis] = x * x * sw;
+      }
+    }
+
+ //{for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] ??? a_histo.m_in_range_plane_Sxyw[iplane];}
+
+    parent::update_fast_getters();
+    return true;
+  }
+
+  bool base_divide(const base_histo& a_histo) {
+    //ill-defined operation. We keep that because of the "ill-defined past".
+
+    // We build a new histo with one entry in each bin of weight :
+    //   this.w / a_histo.w
+    // The current histo is overriden with this new histo.
+    // The m_bin_Sw2 computation is consistent with FreeHEP and ROOT.
+
+    if(!is_compatible(a_histo)) return false;
+
+    std::vector<int> is(parent::m_dimension);
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      histo::get_indices(parent::m_axes,ibin,is);
+      TW swa = parent::m_bin_Sw[ibin];
+      TW swb = a_histo.m_bin_Sw[ibin];
+      TW sw2a = parent::m_bin_Sw2[ibin];
+      TW sw2b = a_histo.m_bin_Sw2[ibin];
+      if(swb!=0) {
+        parent::m_bin_entries[ibin] = 1;
+        TW sw = swa / swb;
+        parent::m_bin_Sw[ibin] = sw;
+        TW swb2 = swb * swb;
+        parent::m_bin_Sw2[ibin] = sw2a / swb2 + sw2b * swa * swa /(swb2*swb2);
+        for(dim_t iaxis=0;iaxis<parent::m_dimension;iaxis++) {
+          TC x = parent::m_axes[iaxis].bin_center(is[iaxis]);
+          parent::m_bin_Sxw[ibin][iaxis] = x * sw;
+          parent::m_bin_Sx2w[ibin][iaxis] = x * x * sw;
+        }
+      } else {
+        parent::m_bin_entries[ibin] = 0;
+        parent::m_bin_Sw[ibin] = 0;
+        parent::m_bin_Sw2[ibin] = 0;
+        for(dim_t iaxis=0;iaxis<parent::m_dimension;iaxis++) {
+          parent::m_bin_Sxw[ibin][iaxis] = 0;
+          parent::m_bin_Sx2w[ibin][iaxis] = 0;
+        }
+      }
+    }
+
+ //{for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] ??? a_histo.m_in_range_plane_Sxyw[iplane];}
+
+    parent::update_fast_getters();
+    return true;
+  }
+
+  bool base_multiply(TW a_factor) {
+    if(a_factor<0) return false;
+    TW factor2 = a_factor * a_factor;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      parent::m_bin_Sw[ibin] *= a_factor;
+      parent::m_bin_Sw2[ibin] *= factor2;
+      for(dim_t iaxis=0;iaxis<parent::m_dimension;iaxis++) {
+        parent::m_bin_Sxw[ibin][iaxis] *= a_factor;
+        parent::m_bin_Sx2w[ibin][iaxis] *= a_factor;
+      }
+    }
+   {size_t nplane = parent::m_in_range_plane_Sxyw.size();
+    for(size_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] *= a_factor;}
+    parent::update_fast_getters();
+    return true;
+  }
+
+  bool get_ith_axis_mean(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=parent::m_dimension) return false;
+    TW sw = 0;
+    TC sxw = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        sw += parent::m_bin_Sw[ibin];
+        sxw += parent::m_bin_Sxw[ibin][a_axis];
+      }
+    }
+    if(sw==0) return false;
+    a_value = sxw/sw;
+    return true;
+  }
+
+  bool get_ith_axis_rms(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=parent::m_dimension) return false;
+    TW sw = 0;
+    TC sxw = 0;
+    TC sx2w = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        sw += parent::m_bin_Sw[ibin];
+        sxw += parent::m_bin_Sxw[ibin][a_axis];
+        sx2w += parent::m_bin_Sx2w[ibin][a_axis];
+      }
+    }
+    if(sw==0) return false;
+    TC mean = sxw/sw;
+    a_value = ::sqrt(::fabs((sx2w / sw) - mean * mean));
+    return true;
+  }
+
+  TN get_bin_entries(const std::vector<int>& aIs) const {
+    if(parent::m_bin_number==0) return 0;
+    TO offset;
+    if(!histo::get_offset(parent::m_axes,aIs,offset)) return 0;
+    return parent::m_bin_entries[offset];
+  }
+};
+
+// predefined annotation keys :
+inline const std::string& key_axis_x_title() {
+  static const std::string s_v("axis_x.title");
+  return s_v;
+}
+inline const std::string& key_axis_y_title() {
+  static const std::string s_v("axis_y.title");
+  return s_v;
+}
+inline const std::string& key_axis_z_title() {
+  static const std::string s_v("axis_z.title");
+  return s_v;
+}
+
+}}
+
+#endif

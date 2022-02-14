@@ -35,12 +35,7 @@
 
 #include "G4Types.hh"
 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4ScoringManager.hh"
 
@@ -65,12 +60,8 @@ int main(int argc,char** argv)
 {
  // Construct the run manager
  //
-#ifdef G4MULTITHREADED
- G4MTRunManager * runManager = new G4MTRunManager;
+ auto* runManager = G4RunManagerFactory::CreateRunManager();
  runManager->SetNumberOfThreads(4);
-#else
- G4RunManager * runManager = new G4RunManager;
-#endif
 
  // Activate UI-command base scorer
  G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();

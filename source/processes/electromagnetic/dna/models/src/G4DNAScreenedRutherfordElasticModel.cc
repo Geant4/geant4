@@ -591,7 +591,7 @@ ScreenedRutherfordRandomizeCosTheta(G4double k,
   }
 
   // ***** Alternative method using cumulative probability
-  if (fasterCode)
+  else
   {
   
    //
@@ -651,7 +651,7 @@ ScreenedRutherfordRandomizeCosTheta(G4double k,
    */
   }
 
-  return 0.;
+  //return 0.;
 }
 
 

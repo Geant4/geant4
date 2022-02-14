@@ -16,12 +16,13 @@
 /testem/phys/addPhysics  elastic		#hadronic physics
 #
 /testem/det/CalMat      CsI
+#
+/run/initialize
+#
 /run/setCut    5.   mm
 /run/setCutForRegion VertexDetector 0.01 mm
 /run/setCutForRegion MuonDetector 100 mm
 /testem/stepMax         100  mm
-#
-/run/initialize
 #
 /testem/histo/fileName  csi
 #

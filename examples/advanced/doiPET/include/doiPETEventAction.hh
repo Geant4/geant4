@@ -51,15 +51,15 @@
 class doiPETEventAction : public G4UserEventAction
 {
 public:
-	doiPETEventAction();
-	virtual ~doiPETEventAction();
+  doiPETEventAction();
+  virtual ~doiPETEventAction();
 
-	virtual void  BeginOfEventAction(const G4Event*);
-	virtual void  EndOfEventAction(const G4Event*);
+  virtual void  BeginOfEventAction(const G4Event*);
+  virtual void  EndOfEventAction(const G4Event*);
 
 private:
-	// G4int eventID;
-	G4int printModulo;
+  //G4int eventID;
+  G4int printModulo;
 };
 
 #endif

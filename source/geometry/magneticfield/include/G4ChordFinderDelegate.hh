@@ -74,6 +74,9 @@ class G4ChordFinderDelegate
     G4double GetLastStepEstimateUnc(); 
     void SetLastStepEstimateUnc(G4double stepEst);
 
+    void  StreamDelegateInfo( std::ostream& os ) const;
+     // Write out the parameters / state of the driver
+   
   private:
 
     Driver& GetDriver();

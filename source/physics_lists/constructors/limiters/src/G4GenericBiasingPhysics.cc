@@ -375,3 +375,112 @@ void G4GenericBiasingPhysics::ConstructProcess()
     }
 }
 
+
+
+void G4GenericBiasingPhysics::AssociateParallelGeometries()
+{
+  
+  // -- parallel geometries for individual particles:
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
+  
+  while( (*particleIterator)() )
+    {
+      G4ParticleDefinition*     particle = particleIterator->value();
+      G4String              particleName = particle->GetParticleName();
+      G4ProcessManager*         pmanager = particle->GetProcessManager();
+
+      G4bool requested = false;
+      for ( G4String requestedParticles : fParticlesWithParallelGeometries )
+	{
+	  if ( requestedParticles == particleName )
+	    {
+	      requested = true;
+	      break;
+	    }
+	}
+      if ( requested )
+	{
+	  // -- insert biasing process for handling parallel geometries:
+	  G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
+
+	  // -- attach the requested worlds to this process:
+	  std::vector< G4String >& parallelWorlds = fParallelGeometriesForParticle[ particleName ];
+	  for ( G4String world : parallelWorlds ) limiter->AddParallelWorld( world );
+	}
+      
+    }
+
+  
+  // -- parallel geometries for particles in PDG ranges:
+  G4int i = 0; // -- index for PDG range
+  for ( G4int PDGlow : fPDGlowParallelGeometries )
+    {
+      G4int PDGhigh     = fPDGhighParallelGeometries[i];
+      auto & geometries = fPDGrangeParallelGeometries[i];
+      
+      particleIterator->reset();
+
+      while( (*particleIterator)() )
+	{
+	  G4ParticleDefinition*    particle = particleIterator->value();
+	  G4int                 particlePDG = particle->GetPDGEncoding();
+	  G4ProcessManager*        pmanager = particle->GetProcessManager();
+
+	  if ( ( particlePDG >= PDGlow ) && ( particlePDG <= PDGhigh ) )
+	    {
+	      // -- §§ exclude particles from individual list ?
+	      // -- insert biasing process for handling parallel geometries:
+	      G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
+
+	      // -- attached the requested worlds to this process:
+	      for ( auto geometry : geometries ) limiter->AddParallelWorld( geometry );
+	    }
+	}
+      // -- increment index for next PDG range:
+      i++;
+    }
+
+
+  // -- parallel geometries for all neutral / charged particles:
+  particleIterator->reset();
+  G4bool islAllNeutral = false;
+  for(auto isln : fAllNeutralParallelGeometriesISL)
+  { islAllNeutral |= isln; }
+  G4bool islAllCharged = false;
+  for(auto islc : fAllChargedParallelGeometriesISL)
+  { islAllCharged |= islc; }
+
+  while((*particleIterator)())
+  {
+    G4ParticleDefinition*    particle = particleIterator->value();
+    G4ProcessManager*        pmanager = particle->GetProcessManager();
+    if(particle->GetPDGCharge() == 0.)
+    {
+      // Neutral particle
+      if(particle->IsShortLived() && !islAllNeutral) continue;
+      G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
+      G4int j = 0;
+      for(G4String wNameN : fParallelGeometriesForCharged)
+      {
+        if(!(particle->IsShortLived()) || fAllNeutralParallelGeometriesISL[j])
+        { limiter->AddParallelWorld(wNameN); }
+        j++;
+      }
+    }
+    else
+    {
+      // charged
+      if(particle->IsShortLived() && !islAllCharged) continue;
+      G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
+      G4int j = 0;
+      for(G4String wNameC : fParallelGeometriesForCharged)
+      {
+        if(!(particle->IsShortLived()) || fAllChargedParallelGeometriesISL[j])
+        { limiter->AddParallelWorld(wNameC); }
+        j++;
+      }
+    }
+  }
+  
+}

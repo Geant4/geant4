@@ -96,6 +96,11 @@ class G4Para : public G4CSGSolid
     inline G4double GetXHalfLength()  const;
     inline G4double GetTanAlpha()     const;
 
+    inline G4double GetAlpha()  const;
+    inline G4double GetTheta()  const;    
+    inline G4double GetPhi()    const;
+    // Obtain (re)computed values of original parameters
+   
     // Modifiers
 
     inline void SetXHalfLength(G4double val);
@@ -104,7 +109,7 @@ class G4Para : public G4CSGSolid
     inline void SetAlpha(G4double alpha);
     inline void SetTanAlpha(G4double val);
     inline void SetThetaAndPhi(double pTheta, double pPhi);
-
+   
     void SetAllParameters(G4double pDx, G4double pDy, G4double pDz,
                           G4double pAlpha, G4double pTheta, G4double pPhi);
 
@@ -174,6 +179,7 @@ class G4Para : public G4CSGSolid
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
 
+   
   private:
 
     G4double halfCarTolerance;

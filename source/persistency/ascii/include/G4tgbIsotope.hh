@@ -23,52 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbIsotope
+// G4tgbIsotope
 //
 // Class description:
 //
 // Transient class of an isotope; builds a G4Isotope.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbIsotope_h
-#define G4tgbIsotope_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbIsotope_hh
+#define G4tgbIsotope_hh 1
 
 #include "globals.hh"
-
-#include <vector>
-#include <string>
 
 #include "G4tgrIsotope.hh"
 #include "G4Isotope.hh"
 
-//-------------------------------------------------------------------------- 
-
 class G4tgbIsotope
 {
+  public:
 
- public:   // with description 
+    G4tgbIsotope();
+    ~G4tgbIsotope();
 
-   G4tgbIsotope();
-  ~G4tgbIsotope();
+    G4tgbIsotope(G4tgrIsotope* hg);
+      // Construct the G4tgbIsotope from the corresponding HgIsotope
 
-   G4tgbIsotope( G4tgrIsotope* hg );
-     // Construct the G4tgbIsotope from the corresponding HgIsotope
+    G4Isotope* BuildG4Isotope();
+      // Build a G4Isotope out of this HIsotope
 
-   G4Isotope* BuildG4Isotope();
-     // Build a G4Isotope out of this HIsotope
+    const G4String& GetName() const { return theTgrIsot->GetName(); }
 
-   const G4String& GetName() const  { return theTgrIsot->GetName(); }
+  private:
 
- private:
-
-   G4tgrIsotope* theTgrIsot;
-   G4Isotope* theG4Isot;
+    G4tgrIsotope* theTgrIsot = nullptr;
+    G4Isotope* theG4Isot = nullptr;
 };
 
 #endif

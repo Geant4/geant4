@@ -61,29 +61,33 @@
 class G4hMultipleScattering : public G4VMultipleScattering
 
 {
-public:    // with description
+public: 
 
   explicit G4hMultipleScattering(const G4String& processName="msc");
 
-  virtual ~G4hMultipleScattering();
+  ~G4hMultipleScattering() override;
 
   // returns true for charged particles, false otherwise
-  virtual G4bool IsApplicable (const G4ParticleDefinition& p) final;
+  G4bool IsApplicable (const G4ParticleDefinition& p) final;
 
   // print documentation in html format
-  virtual void ProcessDescription(std::ostream&) const override;
+  void ProcessDescription(std::ostream&) const override;
+
+  G4hMultipleScattering & operator=
+  (const G4hMultipleScattering &right) = delete;
+  G4hMultipleScattering(const G4hMultipleScattering&) = delete;
 
 protected:
 
   // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile) const override;
+  void StreamProcessInfo(std::ostream& outFile) const override;
 
   // This function initialise models
-  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
-private:        // data members
+private:
 
-  G4bool   isInitialized;
+  G4bool isInitialized;
 
 };
 

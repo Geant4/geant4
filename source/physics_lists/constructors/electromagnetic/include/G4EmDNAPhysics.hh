@@ -37,15 +37,16 @@ class G4EmDNAPhysics : public G4VPhysicsConstructor
 {
 public:
 
-  explicit G4EmDNAPhysics(G4int ver=1, const G4String& name="");
+  G4EmDNAPhysics(G4int ver=1, const G4String& name="G4EmDNAPhysics");
 
   virtual ~G4EmDNAPhysics();
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
-private:
-  G4int  verbose;
+protected:
+
+  virtual void ConstructGammaPositronProcesses();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,10 +27,10 @@
 //
 // file STCyclotronSensitiveTarget.cc
 //
-#include "STCyclotronAnalysis.hh"
 #include "STCyclotronRun.hh"
 #include "STCyclotronSensitiveTarget.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4RunManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4UnitsTable.hh"
@@ -45,7 +45,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4DecayTable.hh"
 #include "G4VDecayChannel.hh"
-#include "G4RadioactiveDecay.hh"
 #include "G4TrackVector.hh"
 #include "G4VProcess.hh"
 #include "G4Tubs.hh"

@@ -142,7 +142,7 @@ SetNewValue(G4UIcommand * command,G4String newValues)
 
 G4String GFlashShowerModelMessenger::GetCurrentValue(G4UIcommand * command)
 {
-  G4String returnValue('\0');
+  G4String returnValue(1,'\0');
   std::ostringstream os;
   
   if( command == FlagCmd ) { 

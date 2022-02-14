@@ -45,13 +45,18 @@ void export_G4UIparameter()
     .def(init<const char*, char, G4bool>())
     // ---
     .def("List",                   &G4UIparameter::List)
-    .def("GetDefaultValue",        &G4UIparameter::GetDefaultValue)
+    .def("GetDefaultValue",        &G4UIparameter::GetDefaultValue,
+         return_value_policy<return_by_value>())
     .def("GetParameterType",       &G4UIparameter::GetParameterType)
-    .def("GetParameterRange",      &G4UIparameter::GetParameterRange)
-    .def("GetParameterName",       &G4UIparameter::GetParameterName)
-    .def("GetParameterCandidates", &G4UIparameter::GetParameterCandidates)
+    .def("GetParameterRange",      &G4UIparameter::GetParameterRange,
+         return_value_policy<return_by_value>())
+    .def("GetParameterName",       &G4UIparameter::GetParameterName,
+         return_value_policy<return_by_value>())
+    .def("GetParameterCandidates", &G4UIparameter::GetParameterCandidates,
+         return_value_policy<return_by_value>())
     .def("IsOmittable",            &G4UIparameter::IsOmittable)
     .def("GetCurrentAsDefault",    &G4UIparameter::GetCurrentAsDefault)
-    .def("GetParameterGuidance",   &G4UIparameter::GetParameterGuidance)
+    .def("GetParameterGuidance",   &G4UIparameter::GetParameterGuidance,
+         return_value_policy<return_by_value>())
     ;
 }

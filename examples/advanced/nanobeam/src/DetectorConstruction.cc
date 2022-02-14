@@ -148,7 +148,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4double x_grid=5.0*mm;    
   G4double y_grid=5.0*mm;
-  G4double grid_Zpos=(250+200)*mm;      // 250+10 mm for object size of 50µm diam
+  G4double grid_Zpos=(250+200)*mm;      // 250+10 mm for object size of 50Âµm diam
 
   //G4double thickness_grid=10*micrometer;
   G4double thickness_grid=100*micrometer;

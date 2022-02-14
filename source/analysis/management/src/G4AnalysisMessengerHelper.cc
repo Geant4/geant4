@@ -39,11 +39,11 @@
 #include "G4UIparameter.hh"
 #include "G4Tokenizer.hh"
 
-#include <iostream>
 #include <vector>
 #include <algorithm>
 
 using namespace G4Analysis;
+using std::to_string;
 
 namespace {
 
@@ -54,7 +54,7 @@ G4String ObjectType(const G4String& hnType)
   if (first == "h") {
     return "Histogram";
   } else if (first == "p") {
-    return "Profile";    
+    return "Profile";
   } else {
     // other possibilitied not handled
     return "";
@@ -69,18 +69,14 @@ void Replace(std::string& str, const std::string& from, const std::string& to) {
   while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
     str.replace(start_pos, from.length(), to);
     start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-  }  
-} 
+  }
+}
 
-}                
+}
 
 //_____________________________________________________________________________
 G4AnalysisMessengerHelper::G4AnalysisMessengerHelper(const G4String& hnType)
   : fHnType(hnType)
-{}
-
-//_____________________________________________________________________________
-G4AnalysisMessengerHelper::~G4AnalysisMessengerHelper()
 {}
 
 //
@@ -93,30 +89,27 @@ G4String G4AnalysisMessengerHelper::Update(const G4String& str, const G4String& 
   G4String newStr(str);
 
   // Hn, Pn
-  G4String upperHnType(str);
-  upperHnType.toUpper();
+  G4String upperHnType = G4StrUtil::to_upper_copy(str);
   Replace(newStr, "UHNTYPE_", upperHnType);
 
   // hn, pn
   Replace(newStr, "HNTYPE_", fHnType);
-  
+
   // n = 1,2,3
   G4String second = fHnType.substr(1,1);
   Replace(newStr, "NDIM_", second);
-  
+
   // histogram, profile
-  G4String lowerObjectType(ObjectType(fHnType));
-  lowerObjectType.toLower();
+  G4String lowerObjectType = G4StrUtil::to_lower_copy(ObjectType(fHnType));
   Replace(newStr, "LOBJECT", lowerObjectType);
-  
+
   // Histogram, Profile
   Replace(newStr, "OBJECT", ObjectType(fHnType));
-  
+
   // X, Y, Z
-  G4String upperAxis(axis);
-  upperAxis.toUpper();
+  G4String upperAxis = G4StrUtil::to_upper_copy(axis);
   Replace(newStr, "UAXIS", upperAxis);
-  
+
   // x, y, z
   Replace(newStr, "AXIS", axis);
 
@@ -129,7 +122,7 @@ G4String G4AnalysisMessengerHelper::Update(const G4String& str, const G4String& 
 //
 
 //_____________________________________________________________________________
-std::unique_ptr<G4UIdirectory> 
+std::unique_ptr<G4UIdirectory>
 G4AnalysisMessengerHelper::CreateHnDirectory() const
 {
   std::unique_ptr<G4UIdirectory> directory(new G4UIdirectory(Update("/analysis/HNTYPE_/")));
@@ -138,7 +131,24 @@ G4AnalysisMessengerHelper::CreateHnDirectory() const
 }
 
 //_____________________________________________________________________________
-std::unique_ptr<G4UIcommand> 
+std::unique_ptr<G4UIcommand>
+G4AnalysisMessengerHelper::CreateGetCommand(G4UImessenger* messenger) const
+{
+  auto parId = new G4UIparameter("id", 'i', false);
+  parId->SetGuidance(Update("OBJECT id"));
+  parId->SetParameterRange("id>=0");
+
+  std::unique_ptr<G4UIcommand> command(
+    new G4UIcommand(Update("/analysis/HNTYPE_/get"), messenger));
+  command->SetGuidance(Update("Get the address of the NDIM_D LOBJECT of given id"));
+  command->SetParameter(parId);
+  command->AvailableForStates(G4State_Idle, G4State_GeomClosed, G4State_EventProc);
+
+  return command;
+}
+
+//_____________________________________________________________________________
+std::unique_ptr<G4UIcommand>
 G4AnalysisMessengerHelper::CreateSetTitleCommand(G4UImessenger* messenger) const
 {
   auto parId = new G4UIparameter("id", 'i', false);
@@ -157,27 +167,27 @@ G4AnalysisMessengerHelper::CreateSetTitleCommand(G4UImessenger* messenger) const
   command->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   return command;
-}  
+}
 
 
 //_____________________________________________________________________________
-std::unique_ptr<G4UIcommand> 
+std::unique_ptr<G4UIcommand>
 G4AnalysisMessengerHelper::CreateSetBinsCommand(const G4String& axis,
                                                 G4UImessenger* messenger) const
 {
   auto parId = new G4UIparameter("id", 'i', false);
   parId->SetGuidance(Update( "OBJECT id"));
   parId->SetParameterRange("id>=0");
-  
+
   auto parNbins = new G4UIparameter("nbins", 'i', false);
   parNbins->SetGuidance("Number of bins");
-  
+
   auto parValMin = new G4UIparameter("valMin", 'd', false);
   parValMin->SetGuidance("Minimum value, expressed in unit");
-  
+
   auto parValMax = new G4UIparameter("valMax", 'd', false);
   parValMax->SetGuidance("Maximum value, expressed in unit");
-  
+
   auto parValUnit = new G4UIparameter("valUnit", 's', true);
   parValUnit->SetGuidance("The unit applied to filled values and valMin, valMax");
   parValUnit->SetDefaultValue("none");
@@ -193,12 +203,13 @@ G4AnalysisMessengerHelper::CreateSetBinsCommand(const G4String& axis,
   auto parValBinScheme = new G4UIparameter("valBinScheme", 's', true);
   parValBinScheme->SetParameterCandidates("linear log");
   G4String binSchemeGuidance = "The binning scheme (linear, log).\n";
-  binSchemeGuidance 
+  binSchemeGuidance
     += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
   binSchemeGuidance += "but none value should be used instead.";
   parValBinScheme->SetGuidance(binSchemeGuidance);
   parValBinScheme->SetDefaultValue("linear");
- 
+
+  auto commandName = Update("/analysis/HNTYPE_/setUAXIS", axis);
   std::unique_ptr<G4UIcommand> command(
     new G4UIcommand(Update("/analysis/HNTYPE_/setUAXIS", axis), messenger));
   command->SetGuidance(Update("Set parameters for the NDIM_D LOBJECT of given id:"));
@@ -214,10 +225,10 @@ G4AnalysisMessengerHelper::CreateSetBinsCommand(const G4String& axis,
   command->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   return command;
-}  
+}
 
 //_____________________________________________________________________________
- std::unique_ptr<G4UIcommand>  
+ std::unique_ptr<G4UIcommand>
  G4AnalysisMessengerHelper::CreateSetValuesCommand(const G4String& axis,
                                                    G4UImessenger* messenger) const
 {
@@ -227,10 +238,10 @@ G4AnalysisMessengerHelper::CreateSetBinsCommand(const G4String& axis,
 
   auto parValMin = new G4UIparameter("valMin", 'd', false);
   parValMin->SetGuidance(Update("Minimum AXIS-value expressed in unit", axis));
-  
+
   auto parValMax = new G4UIparameter("valMax", 'd', false);
   parValMax->SetGuidance(Update("Maximum AXIS-value expressed in unit", axis));
-  
+
   auto parValUnit = new G4UIparameter("valUnit", 's', true);
   parValUnit->SetGuidance("The unit applied to filled values and valMin, valMax");
   parValUnit->SetDefaultValue("none");
@@ -251,10 +262,10 @@ G4AnalysisMessengerHelper::CreateSetBinsCommand(const G4String& axis,
   command->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   return command;
-}  
+}
 
 //_____________________________________________________________________________
-std::unique_ptr<G4UIcommand> 
+std::unique_ptr<G4UIcommand>
 G4AnalysisMessengerHelper::CreateSetAxisCommand(const G4String& axis,
                                                 G4UImessenger* messenger) const
 {
@@ -265,7 +276,7 @@ G4AnalysisMessengerHelper::CreateSetAxisCommand(const G4String& axis,
   auto parAxis = new G4UIparameter("axis", 's', false);
   parAxis->SetGuidance(Update("Histogram AXIS-axis title", axis));
 
-  std::unique_ptr<G4UIcommand> command( 
+  std::unique_ptr<G4UIcommand> command(
     new G4UIcommand(Update("/analysis/HNTYPE_/setUAXISaxis", axis), messenger));
   command->SetGuidance(Update("Set AXIS-axis title for the NDIM_D LOBJECT of given id", axis));
   command->SetParameter(parId);
@@ -276,7 +287,7 @@ G4AnalysisMessengerHelper::CreateSetAxisCommand(const G4String& axis,
 }
 
 //_____________________________________________________________________________
-std::unique_ptr<G4UIcommand> 
+std::unique_ptr<G4UIcommand>
 G4AnalysisMessengerHelper::CreateSetAxisLogCommand(const G4String& axis,
                                                    G4UImessenger* messenger) const
 {
@@ -287,7 +298,7 @@ G4AnalysisMessengerHelper::CreateSetAxisLogCommand(const G4String& axis,
   auto parAxisLog = new G4UIparameter("axis", 'b', false);
   parAxisLog->SetGuidance(Update("Histogram AXIS-axis log scale", axis));
 
-  std::unique_ptr<G4UIcommand> command( 
+  std::unique_ptr<G4UIcommand> command(
     new G4UIcommand(Update("/analysis/HNTYPE_/setUAXISaxisLog", axis), messenger));
   command->SetGuidance(
     Update("Activate AXIS-axis log scale for plotting of the NDIM_D LOBJECT of given id", axis));
@@ -299,54 +310,45 @@ G4AnalysisMessengerHelper::CreateSetAxisLogCommand(const G4String& axis,
 }
 
 //_____________________________________________________________________________
-void G4AnalysisMessengerHelper::GetBinData(BinData& data, 
-                                           std::vector<G4String>& parameters, 
+void G4AnalysisMessengerHelper::GetBinData(BinData& data,
+                                           std::vector<G4String>& parameters,
                                            G4int& counter) const
 {
-  data.fNbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
-  data.fVmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
-  data.fVmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
+  data.fNbins = G4UIcommand::ConvertToInt(parameters[counter++]);
+  data.fVmin = G4UIcommand::ConvertToDouble(parameters[counter++]);
+  data.fVmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ;
   data.fSunit = parameters[counter++];
   data.fSfcn = parameters[counter++];
   data.fSbinScheme = parameters[counter++];
 }
 
 //_____________________________________________________________________________
-void G4AnalysisMessengerHelper::GetValueData(ValueData& data, 
-                                             std::vector<G4String>& parameters, 
+void G4AnalysisMessengerHelper::GetValueData(ValueData& data,
+                                             std::vector<G4String>& parameters,
                                              G4int& counter) const
 {
-  data.fVmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
-  data.fVmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
+  data.fVmin = G4UIcommand::ConvertToDouble(parameters[counter++]);
+  data.fVmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ;
   data.fSunit = parameters[counter++];
   data.fSfcn = parameters[counter++];
 }
 
 //_____________________________________________________________________________
-void G4AnalysisMessengerHelper::WarnAboutParameters(G4UIcommand* command, 
+void G4AnalysisMessengerHelper::WarnAboutParameters(G4UIcommand* command,
                                                     G4int nofParameters) const
 {
-  G4ExceptionDescription description;
-  description 
-    << "Got wrong number of \"" << command->GetCommandName() 
-    << "\" parameters: " << nofParameters
-    << " instead of " << command->GetParameterEntries() 
-    << " expected" << G4endl;
-  G4String methodName(Update("G4UHNTYPE_Messenger::SetNewValue"));  
-  G4Exception(methodName,
-              "Analysis_W013", JustWarning, description);
+  Warn(
+    "Got wrong number of \"" + command->GetCommandName() +
+    "\" parameters: " + to_string(nofParameters) +
+    " instead of " + to_string(command->GetParameterEntries()) + " expected",
+    fkClass, "WarnAboutParameters");
 }
 
 //_____________________________________________________________________________
 void G4AnalysisMessengerHelper::WarnAboutSetCommands() const
 {
-  G4ExceptionDescription description;
-  description 
-    << "Command setX, setY, setZ must be called sucessively in this order. " << G4endl
-    << "Command was ignored." << G4endl;
-  G4String methodName(Update("G4UHNTYPE_Messenger::SetNewValue"));  
-  G4Exception(methodName,
-              "Analysis_W013", JustWarning, description);
+  Warn(
+    "Command setX, setY, setZ must be called successively in this order.\n"
+    "Command was ignored.",
+    fkClass, "WarnAboutSetCommands");
 }
-
-

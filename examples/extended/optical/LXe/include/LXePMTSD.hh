@@ -31,54 +31,53 @@
 #ifndef LXePMTSD_h
 #define LXePMTSD_h 1
 
-#include "G4DataVector.hh"
-#include "G4VSensitiveDetector.hh"
 #include "LXePMTHit.hh"
+
+#include "G4VSensitiveDetector.hh"
 
 #include <vector>
 
-class G4Step;
+class G4DataVector;
 class G4HCofThisEvent;
+class G4Step;
 
 class LXePMTSD : public G4VSensitiveDetector
 {
+ public:
+  LXePMTSD(G4String name);
+  ~LXePMTSD();
 
-  public:
+  void Initialize(G4HCofThisEvent*) override;
+  G4bool ProcessHits(G4Step* aStep, G4TouchableHistory*) override;
 
-    LXePMTSD(G4String name);
-    virtual ~LXePMTSD();
- 
-    virtual void Initialize(G4HCofThisEvent* );
-    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* );
- 
-    //A version of processHits that keeps aStep constant
-    G4bool ProcessHits_constStep(const G4Step* ,
-                                 G4TouchableHistory* );
-    virtual void EndOfEvent(G4HCofThisEvent* );
-    virtual void clear();
-    void DrawAll();
-    void PrintAll();
- 
-    //Initialize the arrays to store pmt possitions
-    inline void InitPMTs(){
-      if(fPMTPositionsX)delete fPMTPositionsX;
-      if(fPMTPositionsY)delete fPMTPositionsY;
-      if(fPMTPositionsZ)delete fPMTPositionsZ;
-      fPMTPositionsX = new G4DataVector();
-      fPMTPositionsY = new G4DataVector();
-      fPMTPositionsZ = new G4DataVector();
-    }
+  // A version of processHits active on boundary
+  G4bool ProcessHits_boundary(const G4Step*, G4TouchableHistory*);
 
-    //Store a pmt position
-    void SetPmtPositions(const std::vector<G4ThreeVector>& positions);
+  // Initialize the arrays to store pmt possitions
+  inline void InitPMTs()
+  {
+    if(fPMTPositionsX)
+      delete fPMTPositionsX;
+    if(fPMTPositionsY)
+      delete fPMTPositionsY;
+    if(fPMTPositionsZ)
+      delete fPMTPositionsZ;
+    fPMTPositionsX = new G4DataVector();
+    fPMTPositionsY = new G4DataVector();
+    fPMTPositionsZ = new G4DataVector();
+  }
 
-  private:
+  // Store a pmt position
+  void SetPmtPositions(const std::vector<G4ThreeVector>& positions);
 
-    LXePMTHitsCollection* fPMTHitCollection;
+ private:
+  LXePMTHitsCollection* fPMTHitCollection;
 
-    G4DataVector* fPMTPositionsX;
-    G4DataVector* fPMTPositionsY;
-    G4DataVector* fPMTPositionsZ;
+  G4DataVector* fPMTPositionsX;
+  G4DataVector* fPMTPositionsY;
+  G4DataVector* fPMTPositionsZ;
+
+  G4int fHitCID;
 };
 
 #endif

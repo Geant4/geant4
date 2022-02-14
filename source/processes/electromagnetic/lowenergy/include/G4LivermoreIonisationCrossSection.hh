@@ -56,8 +56,7 @@ class G4LivermoreIonisationCrossSection : public G4VhShellCrossSection
 
 public:
   
-  G4LivermoreIonisationCrossSection(const G4String& nam = "LivermorePIXE");
-  
+  explicit G4LivermoreIonisationCrossSection(const G4String& nam = "LivermorePIXE");
   virtual ~G4LivermoreIonisationCrossSection();
 
   void Initialise();
@@ -65,38 +64,32 @@ public:
   G4double CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 			G4double incidentEnergy,
 			G4double mass = 0.0,
-			const G4Material* mat = 0);
+			const G4Material* mat = 0) override;
 
   std::vector<G4double> GetCrossSection(G4int Z,
 					G4double incidentEnergy,
 					G4double mass = 0.0,
 					G4double deltaEnergy = 0.0,
-					const G4Material* mat = 0);
+					const G4Material* mat = 0) override;
 
   std::vector<G4double> Probabilities(G4int Z,
 				      G4double incidentEnergy,
 				      G4double mass = 0.0,
 				      G4double deltaEnergy = 0,
-				      const G4Material* mat = 0);
+				      const G4Material* mat = 0) override;
     
-    
+  G4LivermoreIonisationCrossSection & operator=(const G4LivermoreIonisationCrossSection &right) = delete;
+  G4LivermoreIonisationCrossSection(const G4LivermoreIonisationCrossSection&) = delete;
+
 private:
- 
-  G4LivermoreIonisationCrossSection & operator=(const G4LivermoreIonisationCrossSection &right);
-  G4LivermoreIonisationCrossSection(const G4LivermoreIonisationCrossSection&);
+  G4VCrossSectionHandler* crossSectionHandler;
+  const G4AtomicTransitionManager* transitionManager;
 
   //Intrinsic energy limits of the model: cannot be extended by the parent process
   G4double fLowEnergyLimit;
   G4double fHighEnergyLimit;
  
-  //G4bool isInitialised;
-
   G4int verboseLevel;
- 
-  G4VCrossSectionHandler* crossSectionHandler;
-
-  const G4AtomicTransitionManager* transitionManager;
-
 };
 
 #endif

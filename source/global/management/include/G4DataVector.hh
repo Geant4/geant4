@@ -23,74 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4DataVector
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-//
-// Class Description:
-//
-//   Utility class providing similar behaviour of vector<G4double>.
-//   It includes additional methods for compatibility with Rogue Wave
-//   collection.
-//
+// Utility class providing similar behaviour of std::vector<G4double>.
+// It includes additional methods for compatibility with Rogue Wave
+// collection.
 
-#ifndef G4DataVector_h
-#define G4DataVector_h 1
+// Author: H.Kurashige, 18 September 2001
+// --------------------------------------------------------------------
+#ifndef G4DataVector_hh
+#define G4DataVector_hh 1
 
-#include "globals.hh"
-#include <vector>
-#include "G4ios.hh"
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <vector>
 
-class G4DataVector : public std::vector<G4double> 
+#include "G4ios.hh"
+#include "globals.hh"
+
+class G4DataVector : public std::vector<G4double>
 {
-
- public: // with description
-
+ public:
   G4DataVector();
-   // Default constructor.
+  // Default constructor.
 
   G4DataVector(const G4DataVector&) = default;
-  G4DataVector(G4DataVector&&) = default;
-   // Default copy&move constructors.
+  G4DataVector(G4DataVector&&)      = default;
+  // Default copy&move constructors.
 
-  explicit G4DataVector(size_t cap);
-   // Constructor given a 'capacity' defining the initial number of elements.
+  explicit G4DataVector(std::size_t cap);
+  // Constructor given a 'capacity' defining the initial number of elements.
 
-  G4DataVector(size_t cap, G4double value);
-   // Constructor given a 'capacity' defining the initial number of elements
-   // and initialising them to 'value'.
+  G4DataVector(std::size_t cap, G4double value);
+  // Constructor given a 'capacity' defining the initial number of elements
+  // and initialising them to 'value'.
 
   virtual ~G4DataVector();
-   // Empty destructor
+  // Empty destructor
 
-  G4DataVector& operator=(const G4DataVector &) = default;
-  G4DataVector& operator=(G4DataVector &&) = default;
-   // Default copy&move assignment operators.
+  G4DataVector& operator=(const G4DataVector&) = default;
+  G4DataVector& operator=(G4DataVector&&) = default;
+  // Default copy&move assignment operators.
 
-  inline void insertAt(size_t, const G4double&);
-    // Insert an element at given position
+  inline void insertAt(std::size_t, const G4double&);
+  // Insert an element at given position
 
-  inline size_t index(const G4double&);
-    // Returns back index of the element same as given value
+  inline std::size_t index(const G4double&);
+  // Returns back index of the element same as given value
 
   inline G4bool contains(const G4double&) const;
-    // Returns 'true' if it contains the element same as given value 
+  // Returns 'true' if it contains the element same as given value
 
   inline G4bool remove(const G4double&);
-    // Removes the first element same as given value  
+  // Removes the first element same as given value
 
-  inline size_t removeAll(const G4double&);
-    // Remove all elements same as given value  
+  inline std::size_t removeAll(const G4double&);
+  // Remove all elements same as given value
 
-  enum {T_G4DataVector = 100};
+  enum
+  {
+    T_G4DataVector = 100
+  };
 
-  G4bool Store(std::ofstream& fOut, G4bool ascii=false);
-  G4bool Retrieve(std::ifstream& fIn, G4bool ascii=false);
+  G4bool Store(std::ofstream& fOut, G4bool ascii = false);
+  G4bool Retrieve(std::ifstream& fIn, G4bool ascii = false);
   // To store/retrieve persistent data to/from file streams.
 
   friend std::ostream& operator<<(std::ostream&, const G4DataVector&);

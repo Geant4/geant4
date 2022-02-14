@@ -28,8 +28,6 @@
 #ifndef G4OPENINVENTORVIEWER_HH
 #define G4OPENINVENTORVIEWER_HH
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // Inheritance :
 #include "G4VViewer.hh"
 
@@ -59,6 +57,7 @@ public:
   G4OpenInventorViewer(G4OpenInventorSceneHandler& scene,
 		       const G4String& name = "");
   virtual ~G4OpenInventorViewer();
+
 protected:
   virtual void ViewerRender() = 0;
   virtual SoCamera* GetCamera() = 0;
@@ -77,11 +76,11 @@ protected:
   void SetReducedWireFrame(bool);
   void UpdateScene();
   G4String Help(const G4String& topic = "controls");
+
 private:
-  //static void SelectionCB(void*,SoPath*);
-  //static void DeselectionCB(void*,SoPath*);
   static void GroupCameraSensorCB(void*,SoSensor*);
-  static void CameraSensorCB(void*,SoSensor*);
+  // FWJ no longer needed:
+  //  static void CameraSensorCB(void*,SoSensor*);
   static void pointAt(SoCamera*,const SbVec3f & targetpoint, const SbVec3f & upvector);
   static void lookAt(SoCamera*,const SbVec3f & dir, const SbVec3f & up);
   static void lookedAt(SoCamera*,SbVec3f & dir, SbVec3f & up);
@@ -98,9 +97,8 @@ protected:
   Geant4_SoImageWriter* fSoImageWriter;
   Geant4_SoGL2PSAction* fGL2PSAction;
   SoNodeSensor* fGroupCameraSensor;
-  SoNodeSensor* fCameraSensor;
+  // FWJ no longer needed:
+  //  SoNodeSensor* fCameraSensor;
 };
-
-#endif
 
 #endif

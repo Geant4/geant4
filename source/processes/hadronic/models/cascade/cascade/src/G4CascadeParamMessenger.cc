@@ -31,6 +31,7 @@
 // 20130703  M. Kelsey -- Add flag for USE_PHASESPACE
 // 20141030  M. Kelsey -- Add flag to enable direct pi-N absorption
 // 20141211  M. Kelsey -- Change PIN_ABSORPTION flag to double, for energy cut
+// 20200110  M. Kelsey -- Reset cmdDir to 0 before .../cascade/ directory.
 
 #include "G4CascadeParamMessenger.hh"
 #include "G4CascadeParameters.hh"
@@ -50,7 +51,7 @@
 G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
   : G4UImessenger(), theParams(params), cmdDir(0), localCmdDir(false) {
   // NOTE: Put under same top-level tree as EM
-  CreateDirectory("/process/had/","Hadronic processes");
+  CreateDirectory("/process/had/","Hadronic processes"); cmdDir=0;
   CreateDirectory("/process/had/cascade/","Bertini-esque cascade parameters");
 
   verboseCmd = CreateCommand<G4UIcmdWithAnInteger>("verbose",
@@ -137,8 +138,8 @@ void G4CascadeParamMessenger::CreateDirectory(const char* path,
 
   // Directory path must be absolute, prepend "/" if ncessary
   G4String fullPath = path;
-  if (fullPath(0) != '/') fullPath.prepend("/");
-  if (fullPath(fullPath.length()-1) != '/') fullPath.append("/");
+  if (fullPath[0] != '/') fullPath.insert(0, "/");
+  if (fullPath.back() != '/') fullPath.append("/");
 
   // See if input path has already been registered
   G4UIcommand* foundPath = UIman->GetTree()->FindPath(fullPath);

@@ -29,16 +29,16 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
+// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues
 //
 //    ****************************************************
 //    *      UltraFresnelLens.cc
 //    ****************************************************
 //
-//    Class for definition of the Ultra Fresnel Lens. 
+//    Class for definition of the Ultra Fresnel Lens.
 //    An  UltraFresnelLens object is created in the UltraDetectorConstruction class.
 //    This class makes use of the UltraFresnelLensParameterisation class.
-//    The lens profile is define through the GetSagita method.   
+//    The lens profile is define through the GetSagita method.
 //
 #include <cmath>
 #include "UltraFresnelLens.hh"
@@ -56,7 +56,7 @@
 #include "G4ThreeVector.hh"
 #include "G4VisAttributes.hh"
 
-UltraFresnelLens::UltraFresnelLens( G4double Diameter, G4int nGrooves, G4Material* Material, G4VPhysicalVolume * MotherPV, G4ThreeVector Pos)
+UltraFresnelLens::UltraFresnelLens(G4double Diameter, G4int nGrooves, G4Material* Material, G4VPhysicalVolume * MotherPV, G4ThreeVector Pos)
 {
 
  LensMaterial    = Material ;
@@ -71,9 +71,9 @@ UltraFresnelLens::UltraFresnelLens( G4double Diameter, G4int nGrooves, G4Materia
    }
 
 
-G4double  Rmin1 = (NumberOfGrooves-1)*(GrooveWidth) ;
-G4double  Rmax1 = (NumberOfGrooves-0)*(GrooveWidth) ;
-LensThickness   = GetSagita(Rmax1)-GetSagita(Rmin1) ; // Height of the highest groove 
+auto  Rmin1 = (NumberOfGrooves-1)*(GrooveWidth) ;
+auto  Rmax1 = (NumberOfGrooves-0)*(GrooveWidth) ;
+LensThickness   = GetSagita(Rmax1)-GetSagita(Rmin1) ; // Height of the highest groove
 
 BuildLens(MotherPV) ;
 
@@ -87,47 +87,46 @@ UltraFresnelLens::~UltraFresnelLens(  )
 
 void UltraFresnelLens::BuildLens(G4VPhysicalVolume *MotherPV){
 
-G4double StartPhi = 0.0 ;
-G4double DeltaPhi = twopi ;
+auto StartPhi = 0.0 ;
+auto DeltaPhi = twopi ;
 
-G4double  LensMotherDz = LensThickness ;
+auto  LensMotherDz = LensThickness ;
 
 
-G4Tubs *LensMotherCylinder 
+auto LensMotherCylinder
     = new G4Tubs("LensMotherCylinder",0.0*mm,LensDiameter/2.0,LensMotherDz/2.0,StartPhi,DeltaPhi);
 
-G4Material *LensMotherMaterial = MotherPV->GetLogicalVolume()->GetMaterial() ;
-G4LogicalVolume *LensMotherLV 
+auto LensMotherMaterial = MotherPV->GetLogicalVolume()->GetMaterial() ;
+auto LensMotherLV
     = new G4LogicalVolume(LensMotherCylinder,LensMotherMaterial,"LensMotherLV",0,0,0);
-G4VPhysicalVolume *LensMotherPV 
+auto LensMotherPV
     = new G4PVPlacement(0,LensPosition,"LensMotherPV",LensMotherLV,MotherPV,false,0);
 
 LensMotherLV->SetVisAttributes (G4VisAttributes::Invisible);
 
 
-G4Cons *solidGroove 
+auto solidGroove
   = new G4Cons("Groove",40.0*mm,50.0*mm,40.0*mm,40.001*mm,1.0*mm,StartPhi,DeltaPhi);
 
-G4LogicalVolume *logicalGroove 
+auto logicalGroove
     = new G4LogicalVolume(solidGroove,LensMaterial,"Groove_log",0,0,0);
 
-G4VPVParameterisation *FresnelLensParam = new UltraFresnelLensParameterisation(this);
+auto FresnelLensParam = new UltraFresnelLensParameterisation(this);
 
-LensPhysicalVolume = 
+LensPhysicalVolume =
  new G4PVParameterised("LensPV",logicalGroove,LensMotherPV,kZAxis,NumberOfGrooves,FresnelLensParam) ;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double UltraFresnelLens::GetSagita(G4double radius) 
+G4double UltraFresnelLens::GetSagita(G4double radius)
 {
-
-  G4double Conic = -1.0;
-  G4double Curvature = 0.00437636761488/mm ;
-  G4double Aspher[8] = {      4.206739256e-05/(mm),
-                                9.6440152e-10/(mm3),
-                               -1.4884317e-15/(mm2*mm3),
+  auto Conic = -1.0;
+  auto Curvature = 0.00437636761488/mm ;
+  G4double Aspher[8] = {4.206739256e-05/(mm),
+                        9.6440152e-10/(mm3),
+                       -1.4884317e-15/(mm2*mm3),
 			                  0.0/(mm*mm3*mm3),
 			                  0.0/(mm3*mm3*mm3),
 			                  0.0/(mm2*mm3*mm3*mm3),
@@ -135,26 +134,22 @@ G4double UltraFresnelLens::GetSagita(G4double radius)
 			                  0.0/(mm*3*mm3*mm3*mm3*mm3)
                             };
 
-  G4double TotAspher = 0.0*mm ;
+  auto TotAspher = 0.0*mm ;
 
   for(G4int k=1;k<9;k++){
     TotAspher += Aspher[k-1]*std::pow(radius,2*k) ;
   }
 
-  G4double ArgSqrt = 1.0-(1.0+Conic)*std::pow(Curvature,2)*std::pow(radius,2) ; 
+  auto ArgSqrt = 1.0-(1.0+Conic)*std::pow(Curvature,2)*std::pow(radius,2) ;
 
   if (ArgSqrt < 0.0){
     G4Exception("UltraFresnelLens::GetSagita()","AirSh002",
 		FatalException,
 		"UltraFresnelLensParameterisation::Sagita: Square Root of <0 !");
   }
-  G4double Sagita_value = Curvature*std::pow(radius,2)/(1.0+std::sqrt(ArgSqrt)) + TotAspher;
+  auto Sagita_value = Curvature*std::pow(radius,2)/(1.0+std::sqrt(ArgSqrt)) + TotAspher;
 
   return Sagita_value ;
 
-                             
+
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

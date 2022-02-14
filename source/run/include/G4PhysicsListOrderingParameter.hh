@@ -23,51 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsListOrderingParameter
+// 
+// Class description:
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is a ordering parameter only used by G4PhysicsListHelper
-// ------------------------------------------- 
-//	History
-//        first version                   29 Apr. 2011 by H.Kurashige 
-// ------------------------------------------------------------
+// This class defins a parameter ordering used by G4PhysicsListHelper.
 
-#ifndef G4PhysicsListOrderingParameter_h
-#define G4PhysicsListOrderingParameter_h 1
-#include "globals.hh"
+// Author: H.Kurashige, 29 April 2011
+// --------------------------------------------------------------------
+#ifndef G4PhysicsListOrderingParameter_hh
+#define G4PhysicsListOrderingParameter_hh 1
+
 #include "G4ios.hh"
+#include "globals.hh"
 
-class G4PhysicsListHelper; 
+class G4PhysicsListHelper;
 class G4PhysicsListOrderingParameter
 {
-  friend class G4PhysicsListHelper;  
-  
-public:
-  // Hide constructor and destructor 
-  G4PhysicsListOrderingParameter();
-  virtual ~G4PhysicsListOrderingParameter();
+  friend class G4PhysicsListHelper;
 
-  G4String  GetTypeName() const {return processTypeName;}
-  G4int     GetType() const { return processType;}
-  G4int     GetSubType() const { return processSubType;}
-  G4int     GetOrdering(int idx) const;
-  G4bool    GetDuplicable() const {return isDuplicable;}
-  
-private:
-  G4String  processTypeName;
-  G4int     processType;
-  G4int     processSubType;
-  G4int     ordering[3];
-  G4bool    isDuplicable;
+  public:
+
+    G4PhysicsListOrderingParameter();
+    virtual ~G4PhysicsListOrderingParameter();
+
+    inline const G4String& GetTypeName() const { return processTypeName; }
+    inline G4int GetType() const { return processType; }
+    inline G4int GetSubType() const { return processSubType; }
+    inline G4int GetOrdering(G4int idx) const
+    {
+      return ((idx < -1) || (idx > 2)) ? -1 : ordering[idx];
+    }
+    inline G4bool GetDuplicable() const { return isDuplicable; }
+
+  private:
+
+    G4String processTypeName = "NONE";
+    G4int processType = -1;
+    G4int processSubType = -1;
+    G4int ordering[3];
+    G4bool isDuplicable = false;
 };
 
-inline
- G4int     G4PhysicsListOrderingParameter::GetOrdering(int idx) const
-{
-  if ((idx<-1)||(idx>2)) return -1;
-  else return ordering[idx]; 
-}
-
 #endif
-

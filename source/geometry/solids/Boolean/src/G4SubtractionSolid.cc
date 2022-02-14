@@ -41,6 +41,8 @@
 #include "G4Polyhedron.hh"
 #include "HepPolyhedronProcessor.h"
 
+#include "G4IntersectionSolid.hh"
+
 #include <sstream>
 
 ///////////////////////////////////////////////////////////////////
@@ -570,4 +572,36 @@ G4SubtractionSolid::CreatePolyhedron () const
   G4Polyhedron* result = new G4Polyhedron(*top);
   if (processor.execute(*result)) { return result; }
   else { return nullptr; }
+}
+
+////////////////////////////////////////////////////
+//
+// GetCubicVolume
+//
+
+G4double G4SubtractionSolid::GetCubicVolume()
+{
+   if( fCubicVolume != -1.0 ) {
+      return fCubicVolume;
+   }
+
+   G4double cubVolumeA = fPtrSolidA->GetCubicVolume();
+
+   G4ThreeVector bminA, bmaxA, bminB, bmaxB;
+   fPtrSolidA->BoundingLimits(bminA, bmaxA);
+   fPtrSolidB->BoundingLimits(bminB, bmaxB);
+   G4double intersection = 0.;
+   G4bool   canIntersect = 
+        bminA.x() < bmaxB.x() && bminA.y() < bmaxB.y() && bminA.z() < bmaxB.z() &&
+        bminB.x() < bmaxA.x() && bminB.y() < bmaxA.y() && bminB.z() < bmaxA.z();
+   if ( canIntersect )
+   {
+      G4IntersectionSolid intersectVol( "Temporary-Intersection-for-Union",
+                                        fPtrSolidA, fPtrSolidB );
+      intersection = intersectVol.GetCubicVolume();
+   }
+
+   fCubicVolume = cubVolumeA - intersection;
+
+   return fCubicVolume;
 }

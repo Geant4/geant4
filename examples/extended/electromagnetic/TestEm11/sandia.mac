@@ -3,14 +3,17 @@
 =======
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
+# Macro file for TestEm11
+#
 # limit the step size from histo 8
 #
 # G.J.Lockwood et al.
-#     Sandia report SAND79-0414.UC-34a, February 1987
+# Sandia report SAND79-0414.UC-34a, February 1987
 # O.Kadri et al. NIM B 258 (2007) 381
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setNbOfAbsor  1
 ###/testem/det/setAbsor 1 G4_Al  1 cm
@@ -28,10 +31,9 @@
 /gun/particle e-
 /gun/energy 1000 keV
 #
-/analysis/setFileName sandia/Ta_1000keV_opt3
+/analysis/setFileName Ta_1000keV_opt3
 ###/analysis/h1/set 8 100 0.  1.0 none	#normalized Edep profile
 /analysis/h1/set 8 100 0.  0.5 none	#for Ta
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

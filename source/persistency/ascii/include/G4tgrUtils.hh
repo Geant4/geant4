@@ -23,82 +23,83 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrUtils
+// G4tgrUtils
 //
 // Class description:
 //
 // Utility class for managing of strings.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrUtils_h
-#define G4tgrUtils_h 
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrUtils_hh
+#define G4tgrUtils_hh 1
 
 #include <iostream>
 #include <vector>
 
+#include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
 #include "G4tgrEvaluator.hh"
 
-enum WLSIZEtype {WLSIZE_EQ,WLSIZE_NE,WLSIZE_LE,WLSIZE_LT,WLSIZE_GE,WLSIZE_GT};
+enum WLSIZEtype
+{
+  WLSIZE_EQ,
+  WLSIZE_NE,
+  WLSIZE_LE,
+  WLSIZE_LT,
+  WLSIZE_GE,
+  WLSIZE_GT
+};
 
 class G4tgrUtils
 {
-  public:  // with description
+  public:
 
     G4tgrUtils();
-   ~G4tgrUtils();
-  
+    ~G4tgrUtils();
+
     static G4bool IsSeparator(char);
-    static G4bool IsNumber( const G4String& str);
-    static G4bool IsInteger( const G4double val,
-                             const G4double precision = 1.e-6 );
-    static G4bool IsFunction( const G4String& word ); 
+    static G4bool IsNumber(const G4String& str);
+    static G4bool IsInteger(const G4double val,
+                            const G4double precision = 1.e-6);
+    static G4bool IsFunction(const G4String& word);
       // Checks that every character in a G4String is a number
       // (also '.' or exponencial notation: 'E')
-    static G4bool WordIsUnit( const G4String& word );
+    static G4bool WordIsUnit(const G4String& word);
 
-    static void Dump3v( const G4ThreeVector& vec, const char* msg);
+    static void Dump3v(const G4ThreeVector& vec, const char* msg);
       // Dumps a three-vector with a message
-    static void Dumprm( const G4RotationMatrix& rm, const char* msg);
+    static void Dumprm(const G4RotationMatrix& rm, const char* msg);
       // Dumps a rotation matrix with a message
-    static void DumpVS( const std::vector<G4String>& wl , const char* msg);
+    static void DumpVS(const std::vector<G4String>& wl, const char* msg);
       // Dumps a vector of G4Strings with a message to cout
-    static void DumpVS( const std::vector<G4String>& wl , const char* msg,
-                              std::ostream& outs) ;
+    static void DumpVS(const std::vector<G4String>& wl, const char* msg,
+                       std::ostream& outs);
       // Dumps a vector of G4Strings with a message to outs
-    static void CheckWLsize( const std::vector<G4String>& wl,
-                                   unsigned int nWCheck, WLSIZEtype st,
-                             const G4String& methodName );
-    static G4bool CheckListSize( unsigned int nWreal,
-                                 unsigned int nWcheck, WLSIZEtype st,
-                                              G4String& outstr );
+    static void CheckWLsize(const std::vector<G4String>& wl,
+                            unsigned int nWCheck,
+                            WLSIZEtype st, const G4String& methodName);
+    static G4bool CheckListSize(unsigned int nWreal, unsigned int nWcheck,
+                                WLSIZEtype st, G4String& outstr);
 
-    static G4String SubColon( const G4String& str );
+    static G4String SubColon(const G4String& str);
       // Return the str without leading ':'
 
-    static G4String GetString( const G4String& str );
+    static G4String GetString(const G4String& str);
       // Return the str without leading and trailing '"' and ' '
 
-    static G4double GetDouble( const G4String& str, G4double unitval = 1. );
+    static G4double GetDouble(const G4String& str, G4double unitval = 1.);
       // Convert a G4String to a double, checking that it is really a number
-    static G4int GetInt( const G4String& str );
+    static G4int GetInt(const G4String& str);
       // Convert a G4String to an integer, checking that it is really an int
-    static G4bool GetBool( const G4String& str );
+    static G4bool GetBool(const G4String& str);
       // Convert a bool to an integer, checking that it is really a bool
 
-    static G4RotationMatrix GetRotationFromDirection( G4ThreeVector dir );
+    static G4RotationMatrix GetRotationFromDirection(G4ThreeVector dir);
 
-    static G4bool AreWordsEquivalent( const G4String& word1,
-                                      const G4String& word2 );
+    static G4bool AreWordsEquivalent(const G4String& word1,
+                                     const G4String& word2);
       // Looks if word1 and word2 are equivalent, considering that
       // word1 may have '*', meaning 'any character'
 
@@ -107,4 +108,4 @@ class G4tgrUtils
     static G4ThreadLocal G4tgrEvaluator* theEvaluator;
 };
 
-#endif 
+#endif

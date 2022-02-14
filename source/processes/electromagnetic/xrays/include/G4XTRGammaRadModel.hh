@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
 ///////////////////////////////////////////////////////////////////////////
-// 
-// Rough model describing a gamma function distributed radiator of X-ray 
-// transition radiation. XTR is considered to flux after radiator!  
-// Thicknesses of plates and gas gaps are distributed according to gamma 
+//
+// Rough model describing a gamma function distributed radiator of X-ray
+// transition radiation. XTR is considered to flux after radiator!
+// Thicknesses of plates and gas gaps are distributed according to gamma
 // distribution. x are thicknesses of plates or gas gaps:
 //
 // p(x) = (alpha/<x>)^alpha * x^(alpha-1) * std::exp(-alpha*x/<x>) / G(alpha)
@@ -41,36 +39,33 @@
 // formation zone ~ mean thickness << absorption length
 // for each material and in the range 1-100 keV. This allows us to simplify
 // interference effects in radiator stack (GetStackFactor method).
-// 
-// 
+//
 // History:
 //
-// 03.10.05 V. Grichine, first version 
+// 03.10.05 V. Grichine, first version
 //
 
 #ifndef G4XTRGammaRadModel_h
 #define G4XTRGammaRadModel_h 1
 
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
 #include "G4VXTRenergyLoss.hh"
 
 class G4XTRGammaRadModel : public G4VXTRenergyLoss
 {
-public:
+ public:
+  explicit G4XTRGammaRadModel(G4LogicalVolume* anEnvelope, G4double, G4double,
+                              G4Material*, G4Material*, G4double, G4double,
+                              G4int,
+                              const G4String& processName = "XTRgammaRadiator");
+  ~G4XTRGammaRadModel();
 
-  G4XTRGammaRadModel (G4LogicalVolume *anEnvelope,
-		      G4double,G4double,
-		      G4Material*,G4Material*,
-		      G4double,G4double,G4int,
-		      const G4String & processName = "XTRgammaRadiator"   );
-  virtual ~G4XTRGammaRadModel ();
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
 
-  // Pure virtual function from base class
-
-  G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);
-
-private:
-
-  //  G4double fAlphaPlate, fAlphaGas ;
+  G4double GetStackFactor(G4double energy, G4double gamma,
+                          G4double varAngle) override;
 };
 
 #endif

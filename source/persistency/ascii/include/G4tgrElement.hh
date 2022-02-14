@@ -23,34 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrElement
+// G4tgrElement
 //
 // Class description:
 //
 // Transient class of a chemical element.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrElement_h
-#define G4tgrElement_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrElement_hh
+#define G4tgrElement_hh 1
 
 #include "globals.hh"
 
 class G4tgrElement
 {
-  public:  // with description
+  public:
 
     G4tgrElement();
     virtual ~G4tgrElement();
 
-    const G4String& GetName() const   { return theName;   }
+    const G4String& GetName() const { return theName; }
     const G4String& GetSymbol() const { return theSymbol; }
-    const G4String& GetType() const   { return theType;   }
+    const G4String& GetType() const { return theType; }
 
   protected:
 

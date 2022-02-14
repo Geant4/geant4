@@ -1,0 +1,22 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_impi_ntuple
+#define tools_wroot_impi_ntuple
+
+#include "../impi"
+
+namespace tools {
+namespace wroot {
+
+class impi_ntuple {
+public:
+  virtual bool add_row(impi&,int,int) = 0;
+  virtual bool end_fill(impi&,int,int) = 0;
+public:
+  virtual ~impi_ntuple() {}
+};
+
+}}
+
+#endif

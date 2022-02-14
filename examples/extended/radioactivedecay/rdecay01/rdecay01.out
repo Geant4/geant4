@@ -1,65 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-<<<<<<< HEAD
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
 
-Visualization Manager instantiating with verbosity "warnings (3)"...
-Visualization Manager initialising...
-Registering graphics systems...
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
 
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateQt (OGLIQt, OGLI)
-OpenGLStoredQt (OGLSQt, OGL, OGLS)
-OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
-OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
-OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
 
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
-
-You have successfully registered the following user vis actions.
-Run Duration User Vis Actions: none
-End of Event User Vis Actions: none
-End of Run User Vis Actions: none
-
-Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-=======
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -92,22 +44,23 @@ Enable correlated gamma emission                  0
 Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      0
 Auger electron emission enabled                   0
-Auger cascade enabled                             0
 Check EM cuts disabled for atomic de-excitation   0
 Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        1e+27  ns
 ======================================================================
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 --> Event 0 starts.
@@ -116,9 +69,9 @@ Index : 0     used in the geometry : Yes
 * G4Track Information:   Particle = Co60,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
-    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   Radioactivation
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0       0 fm       0 fm       0 fm       0 eV           0 eV       0 fm       0 fm      World   initStep
+    1       0 fm       0 fm       0 fm       0 eV           0 eV       0 fm       0 fm      World   Radioactivation
 
     :----- List of secondaries ----------------
    Ni60[2505.753]:  energy = 1.818 eV   time = 9.982 y  
@@ -131,34 +84,30 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0      0 fm      0 fm      0 fm    129 keV     0 eV      0 fm      0 fm      World   initStep
-    1   -217 um  -35.7 um      1 mm    129 keV     0 eV   1.02 mm   1.02 mm      World   OutOfWorld
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0       0 fm       0 fm       0 fm   128.9 keV          0 eV       0 fm       0 fm      World   initStep
+    1  -2.171 mm  -356.7 um       1 cm   128.9 keV          0 eV   1.024 cm   1.024 cm      World   OutOfWorld
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_e,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0      0 fm      0 fm      0 fm    188 keV     0 eV      0 fm      0 fm      World   initStep
-    1   -227 um     -1 mm   53.9 um    188 keV     0 eV   1.03 mm   1.03 mm      World   OutOfWorld
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0       0 fm       0 fm       0 fm   188.1 keV          0 eV       0 fm       0 fm      World   initStep
+    1  -2.269 mm      -1 cm   538.6 um   188.1 keV          0 eV   1.027 cm   1.027 cm      World   OutOfWorld
 
 *********************************************************************************************************
 * G4Track Information:   Particle = Ni60[2505.753],   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0      0 fm      0 fm      0 fm   1.82 eV      0 eV      0 fm      0 fm      World   initStep
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0       0 fm       0 fm       0 fm   1.818 eV           0 eV       0 fm       0 fm      World   initStep
     End of event. Decay chain: Co60 ---> Ni60[2505.753]
 
  Run terminated.
 Run Summary
   Number of events processed : 1
-<<<<<<< HEAD
-  User=0s Real=0s Sys=0s
-=======
-  User=0.000000s Real=0.014870s Sys=0.000000s
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  User=0.000000s Real=0.001990s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -172,11 +121,7 @@ Run Summary
 
    Ekin Total (Q single decay): mean =  317.1 keV	( 317.1 keV --> 317.1 keV)
 
-<<<<<<< HEAD
-   Momentum balance (excluding gamma desexcitation): mean = 0.5648 eV 	( 0.5648 eV  --> 0.5648 eV )
-=======
-   Momentum balance (excluding gamma desexcitation): mean = 0.5595 eV 	( 0.5595 eV  --> 0.5595 eV )
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+   Momentum balance (excluding gamma desexcitation): mean =  559.6 meV	( 559.6 meV --> 559.6 meV)
 
    Total time of life (full chain): mean =  9.982 y    half-life =  6.919 y     ( 9.982 y   --> 9.982 y  )
 
@@ -190,16 +135,16 @@ Run Summary
 #
 /run/beamOn 100000
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
 --> Event 0 starts.
@@ -235,11 +180,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-<<<<<<< HEAD
-  User=1.72s Real=1.72s Sys=0s
-=======
-  User=0.720000s Real=0.750654s Sys=0.000000s
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  User=0.720000s Real=0.743373s Sys=0.010000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -258,15 +199,14 @@ Run Summary
    Momentum balance (excluding gamma desexcitation): mean = 0.3661 eV 	( 6.902e-06 eV  --> 15.57 eV )
 =======
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
-   Ni60[1332.514]:     118  Emean =  17.74 eV 	( 0.3673 eV  --> 32.55 eV )	mean life = 1.06 ps 
-   Ni60[2505.753]:   99882  Emean =  1.469 eV 	( 0.0008367 eV  --> 3.757 eV )	mean life = 4.761 ps 
+   Ni60[1332.514]:     118  Emean =  17.74 eV 	( 367.3 meV --> 32.55 eV )	mean life = 1.06 ps 
+   Ni60[2505.753]:   99882  Emean =  1.469 eV 	( 0.8367 meV --> 3.757 eV )	mean life = 4.761 ps 
         anti_nu_e:  100000  Emean =    223 keV	( 3.89 keV --> 1.482 MeV)	stable
                e-:  100000  Emean =  95.49 keV	( 2.058 eV  --> 1.358 MeV)	stable
 
    Ekin Total (Q single decay): mean =  318.4 keV	( 317.1 keV --> 1.49 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean = 0.3281 eV 	( 1.339e-06 eV  --> 15.58 eV )
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+   Momentum balance (excluding gamma desexcitation): mean =  328.1 meV	( 0.0004246 meV --> 15.58 eV )
 
    Total time of life (full chain): mean =  7.607 y    half-life =  5.273 y     ( 15.92 min --> 94.63 y  )
 
@@ -279,16 +219,16 @@ Run Summary
 #
 /run/beamOn 100000
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 2 starts.
 --> Event 0 starts.
@@ -324,11 +264,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-<<<<<<< HEAD
-  User=3.92s Real=3.93s Sys=0s
-=======
-  User=1.690000s Real=1.744772s Sys=0.010000s
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  User=1.690000s Real=1.744463s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -351,16 +287,16 @@ Run Summary
 =======
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
              Ni60:  100000  Emean =  15.91 eV 	( 15.91 eV  --> 41.74 eV )	stable
-   Ni60[1332.514]:   99999  Emean =  12.34 eV 	( 0.3471 eV  --> 32.26 eV )	mean life = 1.06 ps 
+   Ni60[1332.514]:   99999  Emean =  12.34 eV 	( 347.1 meV --> 32.26 eV )	mean life = 1.06 ps 
    Ni60[2158.632]:       6  Emean =  1.079 eV 	( 1.079 eV  --> 1.079 eV )	mean life = 0.8512 ps 
-   Ni60[2505.753]:   99878  Emean =  1.476 eV 	( 0.0005675 eV  --> 3.762 eV )	mean life = 4.761 ps 
+   Ni60[2505.753]:   99878  Emean =  1.476 eV 	( 0.5675 meV --> 3.762 eV )	mean life = 4.761 ps 
         anti_nu_e:  100000  Emean =  222.1 keV	( 3.749 keV --> 1.49 MeV)	stable
                e-:  100028  Emean =  96.66 keV	( 3.218 eV  --> 1.458 MeV)	stable
             gamma:  199855  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)	stable
 
    Ekin Total (Q single decay): mean =  941.3 keV	( 317.1 keV --> 2.159 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean =  965.8 keV	( 3.956e-07 eV  --> 2.981 MeV)
+   Momentum balance (excluding gamma desexcitation): mean =  965.8 keV	( 0.008172 meV --> 2.981 MeV)
 
    Total time of life (full chain): mean =  7.582 y    half-life =  5.256 y     ( 11.42 min --> 84.33 y  )
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

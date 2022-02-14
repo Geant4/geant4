@@ -28,8 +28,6 @@
 // John Allison  16th July 2015
 // Base class for OpenGLImmediate/StoredXm graphics system factories.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXm.hh"
 
 #include "G4UImanager.hh"
@@ -70,5 +68,3 @@ G4bool G4OpenGLXm::IsUISessionCompatible () const
 
   return isCompatible;
 }
-
-#endif

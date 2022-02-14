@@ -15,13 +15,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+12 November 2021 Ben Morgan (visexternalsgl2ps-V10-07-01)
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+15 July 2021 Laurent Garnier (visexternalsgl2ps-V10-07-00)
+- Migrate gl2ps to 1.4.2
+
+23 September 2020 Ben Morgan (visexternalsgl2ps-V10-06-03)
+- Remove remianing include_directories
+
+28 August 2020 Ben Morgan (visexternalsgl2ps-V10-06-02)
+- Link to XQuartz GL when we are on macOS and building X11 drivers
+
+29 April 2020   Gunter Folger (visexternalgl2ps-V10-06-01)
+- (trivial) fix for clang10. Affects src/gl2ps.cc
+
+12th December 2019 Ben Morgan (visexternalgl2ps-V10-06-00)
+- Remove no longer required dependence on OpenGLU
 
 23rd October 2019 Ben Morgan (visexternalgl2ps-V10-05-03)
 - Only link to imported targets for OpenGL
 - Explicitly link to G4globman/G4global to use/propagate usage requirements.
 
 17 September 2019 Laurent Garnier (visexternalgl2ps-V10-05-02)
-- gl2ps.cc: fix Continous warnings 
+- gl2ps.cc: fix Continous warnings
 
 17 September 2019 Laurent Garnier (visexternalgl2ps-V10-05-01)
 - gl2ps.cc gl2ps.h: Update library to 1.4.0 applying Geant4 patches
@@ -53,7 +71,7 @@ committal in the CVS repository !
 30th October 2014 Laurent Garnier  (visexternal-V10-00-03)
 - Tagged
 
-1st October 2014 Laurent Garnier 
+1st October 2014 Laurent Garnier
 - Geant4_gl2ps : Minor change for OpenGL2
 
 2nd July 2014 Laurent Garnier (visexternal-V10-00-02)
@@ -84,8 +102,8 @@ committal in the CVS repository !
 22nd May 2013  Laurent Garnier
 - sources.cmake: Add missing include for "global/management"
 - G4OpenGL2PSAction.cc :
-  o Fix another memory leak for aFileName, perhaps the same as 
-    bugzilla #1469 ? It happens on big scenes when extendBufferSize was called. 
+  o Fix another memory leak for aFileName, perhaps the same as
+    bugzilla #1469 ? It happens on big scenes when extendBufferSize was called.
   o replace the use of INT_MAX by std::numeric_limits<GLint>::max()
 
 21st May 2013  Laurent Garnier
@@ -133,7 +151,7 @@ committal in the CVS repository !
 27th December 2010  John Allison  (visexternal-V09-04-00)
 - Tagged.
 
-23, December L. Garnier 
+23, December L. Garnier
 - GNUmakefile : Remove Qt stuff from Makefile
 
 13th November 2010, John Allison  (visexternal-V09-03-03)
@@ -163,7 +181,7 @@ committal in the CVS repository !
  - Added dependency on zlib if G4LIB_BUILD_ZLIB is set and corrected
    inclusion of zlib.h in gl2ps.cc
 
-2 Nov 2009, Laurent Garnier 
+2 Nov 2009, Laurent Garnier
  - Add debug flag in GNUMakefile
 
 29 April 2009, Laurent Garnier (visexternal-V09-02-04)
@@ -189,6 +207,6 @@ committal in the CVS repository !
 16 February 2009, Laurent Garnier
  - Creation of this library in order to have a gl2ps for all viewers.
  - Copying gl2ps.cc and gl2ps.h files form OpenInventor/src
- - Add a new file G4OpenGL2PSAction.cc to be on the top of gl2ps 
+ - Add a new file G4OpenGL2PSAction.cc to be on the top of gl2ps
    external package. This file will be heritate/used by viewers
    in order to have gl2ps render.

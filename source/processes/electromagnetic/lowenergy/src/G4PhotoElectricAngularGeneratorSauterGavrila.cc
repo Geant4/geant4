@@ -51,12 +51,17 @@
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
+// -------------------------------------------------------------------
 G4PhotoElectricAngularGeneratorSauterGavrila::G4PhotoElectricAngularGeneratorSauterGavrila():
   G4VEmAngularDistribution("AngularGenSauterGavrilaLowE")
 {}
 
+// -------------------------------------------------------------------
+
 G4PhotoElectricAngularGeneratorSauterGavrila::~G4PhotoElectricAngularGeneratorSauterGavrila() 
 {}
+
+// -------------------------------------------------------------------
 
 G4ThreeVector& 
 G4PhotoElectricAngularGeneratorSauterGavrila::SampleDirection(
@@ -67,7 +72,6 @@ G4PhotoElectricAngularGeneratorSauterGavrila::SampleDirection(
   // Compute Theta distribution of the emitted electron, with respect to the
   // incident Gamma.
   // The Sauter-Gavrila distribution for the K-shell is used. 
-
   G4double costeta = 1.;
   G4double Phi     = twopi * G4UniformRand();
   G4double cosphi = std::cos(Phi);
@@ -100,6 +104,8 @@ G4PhotoElectricAngularGeneratorSauterGavrila::SampleDirection(
   fLocalDirection.rotateUz(dp->GetMomentumDirection());
   return fLocalDirection;
 }
+
+// -------------------------------------------------------------------
 
 void G4PhotoElectricAngularGeneratorSauterGavrila::PrintGeneratorInformation() const
 {

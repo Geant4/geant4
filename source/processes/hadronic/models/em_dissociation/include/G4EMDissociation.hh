@@ -79,11 +79,11 @@ class G4EMDissociation : public G4HadronicInteraction
 {
   public:
     G4EMDissociation();
-    G4EMDissociation(const G4EMDissociation& emd);
     G4EMDissociation (G4ExcitationHandler *);
     ~G4EMDissociation ();
     
-    const G4EMDissociation& operator=(G4EMDissociation &right);
+    G4EMDissociation(const G4EMDissociation& emd) = delete;
+    const G4EMDissociation& operator=(G4EMDissociation &right) = delete;
 
     virtual G4HadFinalState* ApplyYourself(const G4HadProjectile&, G4Nucleus&);
 
@@ -95,5 +95,7 @@ class G4EMDissociation : public G4HadronicInteraction
     G4bool handlerDefinedInternally;
     G4EMDissociationCrossSection* dissociationCrossSection;
     G4EMDissociationSpectrum* thePhotonSpectrum;
+    G4int secID_projectileDissociation;  // Creator model ID for the secondaries created by projectile dissociation
+    G4int secID_targetDissociation;      // Creator model ID for the secondaries created by target     dissociation
 };
 #endif

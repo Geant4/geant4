@@ -23,16 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//   G4MCTGenParticle.hh
-//
-// ====================================================================
-#ifndef MCT_GEN_PARTICLE_H
-#define MCT_GEN_PARTICLE_H
+// G4MCTGenParticle
 
-#include "G4Types.hh"
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
+#ifndef G4MCTGENPARTICLE_HH
+#define G4MCTGENPARTICLE_HH 1
+
 #include <algorithm>
 
-typedef std::pair<void*, void*> G4MCTGenParticle; // <event, particle>
+using G4MCTGenParticle = std::pair<void*, void*>;  // <event, particle>
 
 #endif
-

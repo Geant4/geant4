@@ -74,6 +74,7 @@ void Run::SetPrimary (G4ParticleDefinition* particle, G4double energy)
 
 void Run::CountProcesses(const G4VProcess* process) 
 {
+  if (process == nullptr) return;
   G4String procName = process->GetProcessName();
   std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
   if ( it == fProcCounter.end()) {
@@ -86,11 +87,11 @@ void Run::CountProcesses(const G4VProcess* process)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::ParticleCount(G4int k, G4String name, G4double Ekin)
+void Run::ParticleCount(G4int k, G4String name, G4double Ekin, G4double meanLife)
 {
  std::map<G4String, ParticleData>::iterator it = fParticleDataMap[k].find(name);
   if ( it == fParticleDataMap[k].end()) {
-    (fParticleDataMap[k])[name] = ParticleData(1, Ekin, Ekin, Ekin);
+    (fParticleDataMap[k])[name] = ParticleData(1, Ekin, Ekin, Ekin, meanLife);
   }
   else {
     ParticleData& data = it->second;
@@ -100,7 +101,8 @@ void Run::ParticleCount(G4int k, G4String name, G4double Ekin)
     G4double emin = data.fEmin;
     if (Ekin < emin) data.fEmin = Ekin;
     G4double emax = data.fEmax;
-    if (Ekin > emax) data.fEmax = Ekin; 
+    if (Ekin > emax) data.fEmax = Ekin;
+    data.fTmean = meanLife; 
   }   
 }
 
@@ -192,7 +194,8 @@ void Run::Merge(const G4Run* run)
          = ParticleData(localData.fCount, 
                         localData.fEmean, 
                         localData.fEmin, 
-                        localData.fEmax);
+                        localData.fEmax,
+			localData.fTmean);
       }
       else {
         ParticleData& data = (fParticleDataMap[k])[name];   
@@ -201,7 +204,8 @@ void Run::Merge(const G4Run* run)
         G4double emin = localData.fEmin;
         if (emin < data.fEmin) data.fEmin = emin;
         G4double emax = localData.fEmax;
-        if (emax > data.fEmax) data.fEmax = emax; 
+        if (emax > data.fEmax) data.fEmax = emax;
+	data.fTmean = localData.fTmean; 
       }
     }
   }
@@ -280,7 +284,8 @@ void Run::EndOfRun()
   //particles count in absorbers
   //
   for (G4int k=1; k<= nbOfAbsor; k++) {
-  G4cout << "\n List of generated particles in absorber " << k << ":" << G4endl;
+  G4cout << "\n List of created particles (with meanLife != 0) in absorber " 
+         << k << ":" << G4endl;
 
     std::map<G4String,ParticleData>::iterator itc;               
     for (itc  = fParticleDataMap[k].begin();
@@ -290,13 +295,16 @@ void Run::EndOfRun()
        G4int count = data.fCount;
        G4double eMean = data.fEmean/count;
        G4double eMin = data.fEmin;
-       G4double eMax = data.fEmax;    
+       G4double eMax = data.fEmax;
+       G4double meanLife = data.fTmean;    
 
        G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
               << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
               << "\t( "  << G4BestUnit(eMin, "Energy")
-              << " --> " << G4BestUnit(eMax, "Energy") 
-              << ")" << G4endl;           
+              << " --> " << G4BestUnit(eMax, "Energy") << ")";
+       if (meanLife >= 0.)
+         G4cout << "\tmean life = " << G4BestUnit(meanLife, "Time") << G4endl;
+       else G4cout << "\tstable" << G4endl;	            
     }
   }
   //particles emerging from absorbers
@@ -312,6 +320,7 @@ void Run::EndOfRun()
     G4double eMean = data.fEmean/count;
     G4double eMin = data.fEmin;
     G4double eMax = data.fEmax;
+    ///G4double meanLife = data.fTmean;    
 
     G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")

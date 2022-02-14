@@ -163,7 +163,7 @@ void DetectorConstruction::DefineMaterials()
  ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
  ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
      
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  ////G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -218,8 +218,9 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 
   if (pttoMaterial) {
     fMaterial = pttoMaterial;
-    if (fBox) G4RunManager::GetRunManager()
-                             ->DefineWorldVolume(ConstructVolumes());
+    if(fBox) { fBox->GetLogicalVolume()->SetMaterial(fMaterial); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    G4cout << "\n " << fMaterial << G4endl;
   } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;  

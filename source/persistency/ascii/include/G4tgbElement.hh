@@ -23,60 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbElement
+// G4tgbElement
 //
 // Class description:
 //
 // Transient class of a chemical element; builds a G4Element.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbElement_h
-#define G4tgbElement_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbElement_hh
+#define G4tgbElement_hh 1
 
 #include <vector>
 #include <string>
 
+#include "globals.hh"
 #include "G4tgrElement.hh"
 #include "G4Element.hh"
 
-//--------------------------------------------------------------------------
-
 class G4tgbElement
-{ 
+{
+  public:
 
- public:  // with description
+    G4tgbElement() {}
+    ~G4tgbElement() {}
 
-   G4tgbElement(){}
-  ~G4tgbElement(){}
+    G4tgbElement(G4tgrElement* hg);
+      // Construct the G4tgbElement from the corresponding HgElement
 
-   G4tgbElement( G4tgrElement* hg );
-     // Construct the G4tgbElement from the corresponding HgElement
-  
-   G4Element* BuildG4ElementSimple();
-   G4Element* BuildG4ElementFromIsotopes();
-     // Build a G4Element out of this HElement
+    G4Element* BuildG4ElementSimple();
+    G4Element* BuildG4ElementFromIsotopes();
+      // Build a G4Element out of this HElement
 
-  const G4String& GetName() const
-  {
-    return theTgrElem->GetName();
-  }
-  const G4String& GetType() const
-  {
-    return theTgrElem->GetType();
-  }
+    const G4String& GetName() const { return theTgrElem->GetName(); }
+    const G4String& GetType() const { return theTgrElem->GetType(); }
 
- private:
+  private:
 
-  G4tgrElement* theTgrElem;
-  G4Element* theG4Elem;
+    G4tgrElement* theTgrElem = nullptr;
+    G4Element* theG4Elem = nullptr;
 };
 
 #endif

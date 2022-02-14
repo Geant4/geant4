@@ -76,8 +76,8 @@
 #include "G4PhysListFactoryMessenger.hh"
 #include "G4UImessenger.hh"
 
-G4PhysListFactory::G4PhysListFactory() 
-  : defName("FTFP_BERT"),verbose(1),theMessenger(nullptr)
+G4PhysListFactory::G4PhysListFactory(G4int ver) 
+  : defName("FTFP_BERT"),verbose(ver),theMessenger(nullptr)
 {
   nlists_hadr = 23;
   G4String ss[23] = {
@@ -178,15 +178,13 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   else if(had_name == "ShieldingM")     {p = new Shielding(verbose,"HP","M");}
   else if(had_name == "NuBeam")         {p = new NuBeam(verbose);}
   else {
-    G4cout << "### G4PhysListFactory WARNING: "
-	   << "PhysicsList " << had_name << " is not known"
-	   << G4endl;
+    p = new FTFP_BERT(verbose);
+    G4ExceptionDescription ed;
+    ed << "PhysicsList " << had_name << " is not known;"
+       << " the default FTFP_BERT is created";
+    G4Exception("G4PhysListFactory: ","pl0003",JustWarning,ed,"");
   }
-  if(p) {
-    G4cout << "<<< Reference Physics List " << had_name
-	   << em_name << " is built" << G4endl;
-    G4int ver = p->GetVerboseLevel();
-    p->SetVerboseLevel(0);
+  if(nullptr != p) {
     if(0 < em_opt && had_name != "LBE") {
       if(1 == em_opt) { 
 	p->ReplacePhysics(new G4EmStandardPhysics_option1(verbose)); 
@@ -212,14 +210,13 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
 	p->ReplacePhysics(new G4EmLowEPPhysics(verbose)); 
       }
     }
-    p->SetVerboseLevel(ver);
     theMessenger = new G4PhysListFactoryMessenger(p);
   }
-  G4cout << G4endl;
+  if(0 < verbose) G4cout << G4endl;
   return p;
 }
   
-G4bool G4PhysListFactory::IsReferencePhysList(const G4String& name)
+G4bool G4PhysListFactory::IsReferencePhysList(const G4String& name) const
 {
   G4bool res = false;
   size_t n = name.size();

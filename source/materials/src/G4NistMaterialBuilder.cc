@@ -74,6 +74,8 @@
 #include "G4Element.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ApplicationState.hh"
+#include "G4StateManager.hh"
 #include <iomanip>
 
 #ifdef G4MULTITHREADED
@@ -100,21 +102,21 @@ G4NistMaterialBuilder::~G4NistMaterialBuilder()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
-                                                       G4bool, G4bool warning)
+                                                       G4bool warning)
 {
   if(verbose > 1) {
     G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " 
 	   << matname << G4endl;
   }
-  G4Material* mat = FindMaterial(matname);
-  if(mat != nullptr) { return mat; }
   G4String name = matname;
-  if(name == "G4_NYLON-6/6" || name == "G4_NYLON-6/10") {
-    if("G4_NYLON-6/6" == matname)  { name = "G4_NYLON-6-6"; }
-    else { name = "G4_NYLON-6-10";}
-    mat = FindMaterial(name);
-  }
-  return (mat == nullptr) ? BuildNistMaterial(name, warning) : mat; 
+  if("G4_NYLON-6/6" == matname)  { name = "G4_NYLON-6-6"; }
+  else if(name == "G4_NYLON-6/10") { name = "G4_NYLON-6-10"; }
+
+  G4Material* mat = FindMaterial(name);
+  if(mat != nullptr) { return mat; }
+
+  mat = BuildNistMaterial(name, warning);
+  return mat; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -149,7 +151,7 @@ G4Material* G4NistMaterialBuilder::BuildNistMaterial(const G4String& name,
   if( (verbose == 1 && warning) || verbose > 1) {
     G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial WARNING:"
 	   << " material <" << name
-	   << "> is not found out" << G4endl;
+	   << "> is not found." << G4endl;
   }
   return mat;
 }
@@ -208,11 +210,11 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
       G4Element* el = elmBuilder->FindOrBuildElement(Z);
       if(!el) {
 	G4cout << "G4NistMaterialBuilder::BuildMaterial:"
-	       << "  ERROR: elements Z= " << Z << " is not found "
+	       << "  ERROR: elements Z= " << Z << " is not found"
 	       << " for material " << names[i]
 	       << G4endl;
 	G4Exception("G4NistMaterialBuilder::BuildMaterial()", "mat103",
-	             FatalException, "Fail to construct material");
+	             FatalException, "Failed to construct material");
 	return 0;
       }
       if(atomCount[i]) {
@@ -247,8 +249,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
-				      G4double dens, 
-				      G4bool,
+				      G4double dens,
 				      G4State state,     
 				      G4double temp,  
 				      G4double pres)
@@ -258,7 +259,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   if(mat) { 
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: the material <" << name
-	   << "> is already exist" << G4endl;
+	   << "> already exists." << G4endl;
     G4cout << "      New material will NOT be built!"
 	   << G4endl;
     return mat; 
@@ -298,8 +299,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4double>& w,
-				      G4double dens, 
-				      G4bool,
+				      G4double dens,
 				      G4State state,     
 				      G4double temp,  
 				      G4double pres)
@@ -309,7 +309,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   if(mat) { 
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: the material <" << name
-	   << "> is already exist" << G4endl;
+	   << "> already exists." << G4endl;
     G4cout << "      New material will NOT be built!"
 	   << G4endl;
     return mat; 
@@ -348,15 +348,14 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
 				      const G4String& name,
 				      const G4String& nameDB,
 				      G4double temp, 
-				      G4double pres, 
-				      G4bool)
+				      G4double pres)
 {
   // Material name is in DB
   G4Material* mat = FindOrBuildMaterial(name);
   if(mat) { 
     G4cout << "G4NistMaterialBuilder::ConstructNewGasMaterial:"
            << "  WARNING: the material <" << name
-	   << "> is already exist" << G4endl;
+	   << "> already exists." << G4endl;
     G4cout << "      New material will NOT be built!"
 	   << G4endl;
     return mat; 
@@ -366,14 +365,14 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
   if(!bmat) {
     G4cout << "G4NistMaterialBuilder::ConstructNewGasMaterial:"
 	   << "  WARNING: the Name <" << nameDB 
-	   << "> is NOT in the DB: no new gas will be constructed"
+	   << "> is NOT in the database: no new gas will be constructed."
 	   << G4endl;
     return 0;
   }
   if(bmat->GetState() != kStateGas) {
     G4cout << "G4NistMaterialBuilder::ConstructNewGasMaterial:"
 	   << "  WARNING:  <" << nameDB 
-	   << "> is NOT a gas -  no new gas will be constructed"
+	   << "> is NOT a gas -  no new gas will be constructed."
 	   << G4endl;
     return 0;
   }
@@ -395,7 +394,6 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
-                                      G4bool,
                                       G4double temp,
                                       G4double pres)
 {
@@ -406,7 +404,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
   if(mat) {
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: the material <" << name
-           << "> is already exist" << G4endl;
+           << "> already exists." << G4endl;
     G4cout << "      New material will NOT be built!"
            << G4endl;
     return mat;
@@ -467,10 +465,10 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 
   if (nCurrent != 0) {
     G4cout << "G4NistMaterialBuilder::AddMaterial WARNING: previous "
-	   << "mixture " << nMaterials << " " << names[nMaterials] 
+	   << "mixture " << nMaterials << " " << names[nMaterials]
 	   << " is not yet complete!"
 	   << G4endl;
-    G4cout << "         New material " << nameMat << " will not be added" 
+    G4cout << "         New material " << nameMat << " will not be added."
 	   << G4endl;
     return;
   }
@@ -501,7 +499,7 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   ++nMaterials;
 
   if(verbose > 1) {
-    G4cout << "New material " << nameMat << " is prepeared; "
+    G4cout << "New material " << nameMat << " is prepared; "
            << " nMaterials= " << nMaterials
            << " nComponents= " << nComponents
            << " nCurrent= " << nCurrent
@@ -536,7 +534,7 @@ void G4NistMaterialBuilder::ListMaterials(const G4String& mnam) const
 
   } else {
     G4cout << "### G4NistMaterialBuilder::ListMaterials: Warning " 
-	   << mnam << " list is not known" << G4endl;
+	   << mnam << " list is not known." << G4endl;
   }
 }
 
@@ -648,7 +646,7 @@ G4NistMaterialBuilder::AddGas(const G4String& nameMat, G4double t, G4double p)
     }
   }
   G4cout << "WARNING: G4NistMaterialBuilder::AddGas problem: there is no "
-	 << nameMat << " in the list of materials;"
+	 << nameMat << " in the list of materials."
 	 << G4endl;
 }
 

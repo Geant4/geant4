@@ -37,77 +37,38 @@
 
 #include "tools/rcsv_ntuple"
 
-#include <vector>
+#include <string_view>
 
-struct G4CsvRNtupleDescription;
+class G4CsvRFileManager;
 
-class G4CsvRNtupleManager : public G4VRNtupleManager
+class G4CsvRNtupleManager : public G4TRNtupleManager<tools::rcsv::ntuple>
 {
   friend class G4CsvAnalysisReader;
 
-  protected:
+  public:
     explicit G4CsvRNtupleManager(const G4AnalysisManagerState& state);
-    virtual ~G4CsvRNtupleManager();
+    G4CsvRNtupleManager() = delete;
+    virtual ~G4CsvRNtupleManager() = default;
 
-    // Methods to manipulate ntuples  
-    G4bool IsEmpty() const;
-    G4bool Reset();
-
-    // Access methods
-    tools::rcsv::ntuple* GetNtuple() const;
-    tools::rcsv::ntuple* GetNtuple(G4int ntupleId) const;
-
-    // Functions independent from the output type 
-    //
-    // Methods to read ntuple from a file
-    G4int SetNtuple(G4CsvRNtupleDescription* rntupleDescription);
-    // Methods for ntuple with id = FirstNtupleId                     
-    virtual G4bool SetNtupleIColumn(const G4String& columnName, 
-                            G4int& value);
-    virtual G4bool SetNtupleFColumn(const G4String& columnName, 
-                            G4float& value);
-    virtual G4bool SetNtupleDColumn(const G4String& columnName, 
-                            G4double& value);
-    virtual G4bool SetNtupleSColumn(const G4String& columnName, 
-                            G4String& value);
-    // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(const G4String& columnName, 
-                            std::vector<G4int>& vector);
-    virtual G4bool SetNtupleFColumn(const G4String& columnName, 
-                            std::vector<G4float>& vector);
-    virtual G4bool SetNtupleDColumn(const G4String& columnName, 
-                            std::vector<G4double>& vector);
-    // Methods for ntuple with id > FirstNtupleId                     
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, 
-                            const G4String& columnName, G4int& value);
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, 
-                            const G4String& columnName, G4float& value);
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, 
-                            const G4String& columnName, G4double& value);
-    virtual G4bool SetNtupleSColumn(G4int ntupleId, 
-                            const G4String& columnName, G4String& value);
-    // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4int>& vector);
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4float>& vector);
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4double>& vector);
-    virtual G4bool GetNtupleRow();
-    virtual G4bool GetNtupleRow(G4int ntupleId) ;
-    
-    // Access methods
-    virtual G4int GetNofNtuples() const;
-  
   private:
-    // methods
-    G4CsvRNtupleDescription*  GetNtupleInFunction(G4int id, 
-                                         G4String function,
-                                         G4bool warn = true) const;
+    // Set methods
+    void SetFileManager(std::shared_ptr<G4CsvRFileManager> fileManager);
 
-    // data members
-    std::vector<G4CsvRNtupleDescription*> fNtupleVector;
-};    
+    // Methods from the base class
+    virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
+                                  const G4String& dirName, G4bool isUserFileName) final;
+    virtual G4bool GetTNtupleRow(G4TRNtupleDescription<tools::rcsv::ntuple>* ntupleDescription) final;
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4CsvRNtupleManager" };
+
+    // Data members
+    std::shared_ptr<G4CsvRFileManager>  fFileManager { nullptr };
+};
+
+inline void
+G4CsvRNtupleManager::SetFileManager(std::shared_ptr<G4CsvRFileManager> fileManager)
+{ fFileManager = fileManager; }
 
 // inline functions
 

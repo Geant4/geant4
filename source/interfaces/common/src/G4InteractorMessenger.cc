@@ -103,7 +103,7 @@ G4InteractorMessenger::G4InteractorMessenger (
   parameter = new G4UIparameter("Icon",'s',false);
   parameter->SetDefaultValue("");
   parameter->SetParameterCandidates
-  ("open save move rotate pick zoom_in zoom_out wireframe solid hidden_line_removal hidden_line_and_surface_removal perspective ortho user_icon");
+  ("open save move rotate pick zoom_in zoom_out wireframe solid hidden_line_removal hidden_line_and_surface_removal perspective ortho exit user_icon");
   addIcon->SetParameter (parameter);
 
   parameter = new G4UIparameter("Command",'s',true);
@@ -121,12 +121,45 @@ G4InteractorMessenger::G4InteractorMessenger (
   parameter->SetDefaultValue("");
   sys->SetParameter (parameter);
 
+  // /gui/outputStyle :
+  outputStyle = new G4UIcommand("/gui/outputStyle",this);
+  outputStyle->SetGuidance("Set output style.");
+  outputStyle->SetGuidance("Highlights commands if requested and if /control/verbose > 0.");
+  parameter = new G4UIparameter("destination",'s',true);  // Omitable
+  parameter->SetParameterCandidates("cout cerr warnings errors all");
+  parameter->SetDefaultValue("all");
+  outputStyle->SetParameter (parameter);
+  parameter = new G4UIparameter("type",'s',true);  // Omitable
+  parameter->SetParameterCandidates("fixed proportional");
+  parameter->SetDefaultValue("fixed");
+  outputStyle->SetParameter (parameter);
+  parameter = new G4UIparameter("highlight",'s',true);  // Omitable
+  parameter->SetParameterCandidates("highlight no-highlight");
+  parameter->SetDefaultValue("highlight");
+  outputStyle->SetParameter (parameter);
+
+  // /gui/nativeMenuBar :
+  nativeMenu = new G4UIcommand("/gui/nativeMenuBar",this);
+  nativeMenu->SetGuidance("Allow native menu bar in Geant4 Qt driver.");
+  nativeMenu->SetGuidance("By default, enable.");
+
+  parameter = new G4UIparameter("bool",'b',true);
+  parameter->SetDefaultValue("true");
+  nativeMenu->SetParameter (parameter);
+  // /gui/clearMenu
+  clearMenu = new G4UIcommand("/gui/clearMenu",this);
+  clearMenu->SetGuidance("Clear menu bar, remove all user defined menu entries.");
 }
 
 G4InteractorMessenger::~G4InteractorMessenger()
 {
-  delete addButton;
+  delete clearMenu;
+  delete nativeMenu;
+  delete outputStyle;
+  delete sys;
+  delete defaultIcons;
   delete addIcon;
+  delete addButton;
   delete addMenu;
   delete interactorDirectory;
 }
@@ -146,7 +179,14 @@ void G4InteractorMessenger::SetNewValue (
     } else if(command==addIcon) {
       session->AddIcon((const char*)params[0],(const char*)params[1],(const char*)params[2],(const char*)params[3]);
     } else if(command==sys) {
-      system((const char*)params[0]);
+      int rc = system((const char*)params[0]);
+      if ( rc < 0 ){ } 
+    } else if(command==outputStyle) {
+      session->OutputStyle((const char*)params[0],(const char*)params[1],(const char*)params[2]);
+    } else if(command==nativeMenu) {
+      session->NativeMenu(command->ConvertToBool(newValue));
+    } else if(command==clearMenu) {
+      session->ClearMenu();
     }
   }
   delete [] params;
@@ -166,8 +206,8 @@ G4bool GetValues (
       return false;
     }
     G4String token = tok;
-    if( token(0)=='"' ) {
-      while( token(token.length()-1) != '"' ) {
+    if( token[0]=='"' ) {
+      while( token.back() != '"' ) {
 	tok = strtok(NULL," ");
 	if( (tok==NULL) || (*tok=='\0')) {
 	  STRDEL(value);
@@ -176,9 +216,9 @@ G4bool GetValues (
 	token += " ";
 	token += tok;
       }
-      token = (G4String)token.strip(G4String::both,'"');
+      G4StrUtil::strip(token, '"');
     }
-    if( token.isNull() ) {
+    if( token.empty() ) {
       STRDEL(value);
       return false;
     } else { 

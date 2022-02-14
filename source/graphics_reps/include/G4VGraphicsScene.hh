@@ -61,7 +61,6 @@ class G4VHit;
 class G4VDigi;
 template <typename T> class G4THitsMap;
 class G4Polyline;
-class G4Scale;
 class G4Text;
 class G4Circle;
 class G4Square;
@@ -69,6 +68,8 @@ class G4Polymarker;
 class G4Polyhedron;
 class G4VisExtent;
 class G4StatDouble;
+class G4Mesh;
+class G4Plotter;
 
 class G4VGraphicsScene {
 
@@ -130,6 +131,7 @@ public: // With description
   virtual void AddCompound (const G4VDigi&)                  = 0;
   virtual void AddCompound (const G4THitsMap<G4double>&)     = 0;
   virtual void AddCompound (const G4THitsMap<G4StatDouble>&) = 0;
+  virtual void AddCompound (const G4Mesh&)                   = 0;
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding graphics primitives to the scene handler.  A
@@ -153,13 +155,13 @@ public: // With description
   // z-coordinate is ignored.
 
   virtual void AddPrimitive (const G4Polyline&)   = 0;
-  virtual void AddPrimitive (const G4Scale&)      = 0;
   virtual void AddPrimitive (const G4Text&)       = 0;
   virtual void AddPrimitive (const G4Circle&)     = 0;
   virtual void AddPrimitive (const G4Square&)     = 0;
   virtual void AddPrimitive (const G4Polymarker&) = 0;
   virtual void AddPrimitive (const G4Polyhedron&) = 0;
-
+  virtual void AddPrimitive (const G4Plotter&)    = 0;
+  
   virtual const G4VisExtent& GetExtent() const;
   // The concrete class should overload this or a null extent will be returned.
   // See G4VScenHandler for example.

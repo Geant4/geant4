@@ -18,10 +18,30 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+19-11-21 I. Hrivnacova (AnaEx01-V10-07-03)
+- Always close analysis files in EndOfRunAction
+
+03-11-21 I. Hrivnacova (AnaEx01-V10-07-02)
+- Define analysis manager configuration and create
+  histograms only once. (This is needed since AnaEx01-V10-07-00,
+  as the analysis manager is not re-created for each run.)
+
+06-10-21 I. Hrivnacova (AnaEx01-V10-07-01)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  use auto for histograms get via GetH1()
+
+19-07-21 I. Hrivnacova (AnaEx01-V10-07-00)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+10-11-20 B. Morgan, I. Hrivnacova (AnaEx01-V10-06-00)
+- Migration to G4RunManagerFactory.
+- Call SetNtupleMerging only in MT to suppress warning in Seq mode.
+
 15-10-18 G. Cosmo (AnaEx01-V10-04-02)
-- Added missing include of G4SteateManager.hh in DetectorConstruction source.
+- Added missing include of G4StateManager.hh in DetectorConstruction source.
 
 04-07-18 I. Hrivnacova (AnaEx01-V10-04-01)
 - Fixed compilation error introduced in previous tag
@@ -29,7 +49,7 @@ track of all tags.
 03-07-18 I. Hrivnacova (AnaEx01-V10-04-00)
 - Macro & commands review:
   - Removed obsolete /N03 top command directory
-  - Added protection against warnings issued from ReinitializeGeometry() if 
+  - Added protection against warnings issued from ReinitializeGeometry() if
     called in PreInit phase
   - Added test for all commands defined in this example in AnaEx01.in
   - Updated README files
@@ -55,7 +75,7 @@ track of all tags.
 - Updated hbook for developments in analysis category
 
 01-09-15 I. Hrivnacova (AnaEx01-V10-01-08)
-- New attempt to fix compilation on Windows 
+- New attempt to fix compilation on Windows
 
 30-08-15 I. Hrivnacova (AnaEx01-V10-01-07)
 - Corrected previous update which caused compilation error
@@ -68,8 +88,8 @@ track of all tags.
 
 27-08-15 I. Hrivnacova (AnaEx01-V10-01-04)
 - Introduced meaningful histograms and ntuple names instead of numbers
-  in all AnaEx0N examples and use histogram ids starting from 0  
-- Simplified HistoManager class and fixed function names to follow 
+  in all AnaEx0N examples and use histogram ids starting from 0
+- Simplified HistoManager class and fixed function names to follow
   coding guidelines
 - In hbook:
   - Fixed Set*AxisTitle methods
@@ -88,16 +108,16 @@ track of all tags.
 
 24-08-15 I. Hrivnacova (AnaEx01-V10-01-02)
 - Fix in hbook:
-  Do not delete h1, h2 and p1 in Reset(); 
+  Do not delete h1, h2 and p1 in Reset();
   this avoids error message at CloseFile():
- ***** ERROR in HDELET : Unknown histogram : ID=       1 
-... close Hbook file : AnaEx01.hbook - done  
+ ***** ERROR in HDELET : Unknown histogram : ID=       1
+... close Hbook file : AnaEx01.hbook - done
 
 17-08-15 I. Hrivnacova (AnaEx01-V10-01-01)
 - Updated hbook for developments in analysis category:
-  new G4VAnalysisManager functions: 
+  new G4VAnalysisManager functions:
      virtual G4bool PlotImpl();
-     virtual G4bool MergeImpl(tools::histo::hmpi* hmpi);   
+     virtual G4bool MergeImpl(tools::histo::hmpi* hmpi);
 
 09-06-15 I. Hrivnacova (AnaEx01-V10-01-00)
 - Updated hbook for developments in analysis category:
@@ -111,28 +131,28 @@ track of all tags.
 05-11-14 I. Hrivnacova (AnaEx01-V10-00-04)
 - Including shared directory directly in the example
   to avoid out-of-project sources
-  - based on analysisShared-V10-00-00 
+  - based on analysisShared-V10-00-00
 - Adding utility scripts for GNUmake build (much simpler replacement
   for scripts from common) \
-  - based on analysisScripts-V10-00-00 
-- Moved implementation of G4AnalysisManager for hbook from 
-  extended/common/analysis in hbook sub-directory  
+  - based on analysisScripts-V10-00-00
+- Moved implementation of G4AnalysisManager for hbook from
+  extended/common/analysis in hbook sub-directory
 
 13-08-14 mma (AnaEx01-V10-00-03)
 - update Readme and .Readme again
 
 12-08-14 mma (AnaEx01-V10-00-02)
-- restaure calorimeter drawing in Readme and .Readme 
+- restaure calorimeter drawing in Readme and .Readme
 
 17-06-14 I. Hrivnacova (AnaEx01-V10-00-01)
 - Fixed problems reported by Davide Mancusi:
-  - Moving tools/hbook/*.f files in examples/extended/common/analysis/src 
-    to avoid their retrieval from Geant4 source/includes which causes problem 
-    when building examples against Geant4 build directory. 
-  - Added -lkernlib in list of libraries (required with Debian cernlib 
+  - Moving tools/hbook/*.f files in examples/extended/common/analysis/src
+    to avoid their retrieval from Geant4 source/includes which causes problem
+    when building examples against Geant4 build directory.
+  - Added -lkernlib in list of libraries (required with Debian cernlib
     distribution 20061220)
-- In CMake build: replaced explicit use of gfortran with 
-  enable_language(Fortran) and using fortran_sources variable in analogous 
+- In CMake build: replaced explicit use of gfortran with
+  enable_language(Fortran) and using fortran_sources variable in analogous
   way as sources
 
 11-06-14 I. Hrivnacova (AnaEx01-V10-00-00)
@@ -143,10 +163,10 @@ track of all tags.
 - Fixed path to hbook *.f files in GNUmakefile.tools_hbook
 
 28-05-14 I. Hrivnacova
-- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 
+- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03,
   removed PhysicList class from shared
   (tag in examples/analysis)
-    
+
 16-09-13 I. Hrivnacova (AnaEx01-V09-06-02)
 - Updated SharedFilesList.txt for addedActionInitialization class
   (missing in analysisExample-V09-06-02 in top directory)
@@ -154,44 +174,44 @@ track of all tags.
 11-07-13 I. Hrivnacova (AnaEx01-V09-06-01)
 - Updated CMakeLists.txt and SharedFilesList.txt for added classes
   in Hbook analysis code
-     
-02-04-13 I. Hrivnacova (AnaEx01-V09-06-00)
-- Create two ntuples instead of one in order to demonstrate 
-  how to do this with all tools.
-    
-31-08-12 I. Hrivnacova (AnaEx01-V09-05-05)      
-- Updated CMakeLists.tx:
-  adding visualization, copying macros, install target and comment lines 
-- Adding .README  
 
-06-04-12 mma (AnaEx01-V09-05-04)      
+02-04-13 I. Hrivnacova (AnaEx01-V09-06-00)
+- Create two ntuples instead of one in order to demonstrate
+  how to do this with all tools.
+
+31-08-12 I. Hrivnacova (AnaEx01-V09-05-05)
+- Updated CMakeLists.tx:
+  adding visualization, copying macros, install target and comment lines
+- Adding .README
+
+06-04-12 mma (AnaEx01-V09-05-04)
 - AnaEx01.cc : change order of UI and Vis
-     
-22-02-12 mma (AnaEx01-V09-05-03)      
+
+22-02-12 mma (AnaEx01-V09-05-03)
 - HistoManager : suppress SetFirstNtupleId()
 - file G4HbookAnalysisManager renamed ExG4HbookAnalysisManager
-     
-15-02-12 mma (AnaEx01-V09-05-02)   
+
+15-02-12 mma (AnaEx01-V09-05-02)
 - HistoManager : new handle namespace and fileName[2]
 - HistoManager : add protections for histo file management
-      
-22-01-12 mma (AnaEx01-V09-05-01)        
+
+22-01-12 mma (AnaEx01-V09-05-01)
 - HistoManager.hh and .cc : add hbook option.
   New files :  GNUmakefile.tools_hbook and ExG4HbookAnalysisManager.hh .cc
-     
-21-01-12 mma (AnaEx01-V09-05-00)        
+
+21-01-12 mma (AnaEx01-V09-05-00)
 - HistoManager.hh and .cc : migrate to new g4tools histogramming system
   Do not need aida anymore, nor G4ANALYSIS_USE
 - HistoManager : histId and histPt
 - HistoManager : coding conventions
 - Update Readme accordingly
-     
-07-06-11 mma (AnaEx01-V09-04-01)     
+
+07-06-11 mma (AnaEx01-V09-04-01)
 PhysicsList migrated to new scheme G4PhysListHelper
-     
+
 03 February 2011 mma (AnaEx01-V09-04-00)
 - delete subdirectory analysis
-     
+
 08 November 2010 Michel Maire (AnaEx01-V09-03-00)
 - revised version of example :
   class HistoManager to replace AnaEx01AnalysisManager
@@ -205,7 +225,7 @@ PhysicsList migrated to new scheme G4PhysListHelper
   In fact the analysis directory should not be distributed anymore.
 - have a run.mac in the main example directory.
 - AnaEx01AnalysisManager : arrange to have histo and tuple name
-  as interger in case of hbook file format. 
+  as interger in case of hbook file format.
 
 5 March 2009 Guy Barrand
 - GNUmakefile : remove the G4ANALYSIS_USE logic found in this file, since

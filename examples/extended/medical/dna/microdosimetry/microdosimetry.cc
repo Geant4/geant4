@@ -34,11 +34,7 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4MULTITHREADED
-  #include "G4MTRunManager.hh"
-#else
-  #include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
@@ -71,8 +67,7 @@ int main(int argc,char** argv)
   //
   Command* commandLine(0);
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager= new G4MTRunManager;
+  auto* runManager= G4RunManagerFactory::CreateRunManager();
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
     int nThreads = 2;
@@ -84,15 +79,13 @@ int main(int argc,char** argv)
     {
      nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
     }
+
+    runManager->SetNumberOfThreads(nThreads);
+
     G4cout << "===== Microdosimetry is started with "
        << runManager->GetNumberOfThreads()
        << " threads =====" << G4endl;
- 
-    runManager->SetNumberOfThreads(nThreads);
   }
-#else
-  G4RunManager* runManager = new G4RunManager();
-#endif
 
   // Set mandatory user initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
@@ -230,12 +223,10 @@ void Parse(int& argc, char** argv)
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
 
-#ifdef G4MULTITHREADED
   parser->AddCommand("-mt",
                      Command::WithOption,
                      "Launch in MT mode (events computed in parallel)", 
                      "2");
-#endif
 
   parser->AddCommand("-vis",
                      Command::WithOption,

@@ -23,59 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrRotationMatrixFactory implementation
 //
-//
-//
-// class G4tgrRotationMatrixFactory
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrRotationMatrixFactory.hh"
 #include "G4tgrMessenger.hh"
 #include "G4tgrUtils.hh"
 
+G4ThreadLocal G4tgrRotationMatrixFactory*
+  G4tgrRotationMatrixFactory::theInstance = nullptr;
 
-G4ThreadLocal G4tgrRotationMatrixFactory * G4tgrRotationMatrixFactory::theInstance = 0;
-
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrRotationMatrixFactory* G4tgrRotationMatrixFactory::GetInstance()
 {
-  if( !theInstance )
+  if(theInstance == nullptr)
   {
     theInstance = new G4tgrRotationMatrixFactory;
   }
   return theInstance;
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrRotationMatrixFactory::G4tgrRotationMatrixFactory()
 {
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrRotationMatrixFactory::~G4tgrRotationMatrixFactory()
 {
-  G4mstgrrotm::iterator cite;
-  for( cite = theTgrRotMats.begin(); cite != theTgrRotMats.end(); cite++)
+  for(auto cite = theTgrRotMats.cbegin(); cite != theTgrRotMats.cend(); ++cite)
   {
-    delete (*cite).second;
+    delete(*cite).second;
   }
   theTgrRotMats.clear();
   delete theInstance;
 }
 
-
-// -------------------------------------------------------------------------
-G4tgrRotationMatrix*
-G4tgrRotationMatrixFactory::AddRotMatrix( const std::vector<G4String>& wl )
+// --------------------------------------------------------------------
+G4tgrRotationMatrix* G4tgrRotationMatrixFactory::AddRotMatrix(
+  const std::vector<G4String>& wl)
 {
-  //---------- Check for miminum number of words read 
-  if( wl.size() != 5 && wl.size() != 8 && wl.size() != 11 )
+  //---------- Check for miminum number of words read
+  if(wl.size() != 5 && wl.size() != 8 && wl.size() != 11)
   {
     G4tgrUtils::DumpVS(wl, "G4tgrRotationMatrixFactory::AddRotMatrix()");
     G4Exception("G4tgrRotationMatrixFactory::AddRotMatrix()", "InvalidMatrix",
@@ -83,50 +74,47 @@ G4tgrRotationMatrixFactory::AddRotMatrix( const std::vector<G4String>& wl )
   }
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
   {
-    G4cout << " G4tgrRotationMatrixFactory::AddRotMatrix() - Adding: "
-           << wl[1] << G4endl;
+    G4cout << " G4tgrRotationMatrixFactory::AddRotMatrix() - Adding: " << wl[1]
+           << G4endl;
   }
 #endif
   //---------- Look if rotation matrix exists
-  if( FindRotMatrix( G4tgrUtils::GetString(wl[1]) ) != 0 )
+  if(FindRotMatrix(G4tgrUtils::GetString(wl[1])) != 0)
   {
     G4String ErrMessage = "Rotation matrix repeated... " + wl[1];
-    G4Exception("G4tgrRotationMatrixFactory::AddRotMatrix()",
-                "InvalidInput", FatalException, ErrMessage);
-  } 
- 
-  G4tgrRotationMatrix* rotm = new G4tgrRotationMatrix( wl );
-  theTgrRotMats[ rotm->GetName() ] =  rotm;
-  theTgrRotMatList.push_back( rotm );
- 
+    G4Exception("G4tgrRotationMatrixFactory::AddRotMatrix()", "InvalidInput",
+                FatalException, ErrMessage);
+  }
+
+  G4tgrRotationMatrix* rotm      = new G4tgrRotationMatrix(wl);
+  theTgrRotMats[rotm->GetName()] = rotm;
+  theTgrRotMatList.push_back(rotm);
+
   return rotm;
 }
 
-
-// -------------------------------------------------------------------------
-G4tgrRotationMatrix*
-G4tgrRotationMatrixFactory::FindRotMatrix(const G4String& name)
+// --------------------------------------------------------------------
+G4tgrRotationMatrix* G4tgrRotationMatrixFactory::FindRotMatrix(
+  const G4String& name)
 {
-  G4tgrRotationMatrix* rotm = 0;
+  G4tgrRotationMatrix* rotm = nullptr;
 
-  G4mstgrrotm::const_iterator cite = theTgrRotMats.find( name );
-  if( cite != theTgrRotMats.end() )
-  { 
+  G4mstgrrotm::const_iterator cite = theTgrRotMats.find(name);
+  if(cite != theTgrRotMats.cend())
+  {
     rotm = (*cite).second;
-  } 
+  }
 
   return rotm;
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 void G4tgrRotationMatrixFactory::DumpRotmList()
 {
   G4cout << " @@@@@@@@@@@@@@@@ DUMPING G4tgrRotationMatrix's List " << G4endl;
-  G4mstgrrotm::const_iterator cite;
-  for(cite = theTgrRotMats.begin(); cite != theTgrRotMats.end(); cite++)
+  for(auto cite = theTgrRotMats.cbegin(); cite != theTgrRotMats.cend(); ++cite)
   {
     G4cout << " ROTM: " << (*cite).second->GetName() << G4endl;
   }

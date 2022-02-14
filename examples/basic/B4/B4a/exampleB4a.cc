@@ -31,30 +31,25 @@
 /// \file exampleB4a.cc
 /// \brief Main program of the B4a example
 
-#include "B4DetectorConstruction.hh"
-#include "B4aActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
-#include "G4UImanager.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4SteppingVerbose.hh"
 #include "G4UIcommand.hh"
-#include "FTFP_BERT.hh"
-
-#include "Randomize.hh"
-
-#include "G4VisExecutive.hh"
+#include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+#include "G4VisExecutive.hh"
+#include "FTFP_BERT.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " exampleB4a [-m macro ] [-u UIsession] [-t nThreads]" << G4endl;
+    G4cerr << " exampleB4a [-m macro ] [-u UIsession] [-t nThreads] [-vDefault]"
+           << G4endl;
     G4cerr << "   note: -t option is available only for multi-threaded mode."
            << G4endl;
   }
@@ -70,9 +65,10 @@ int main(int argc,char** argv)
     PrintUsage();
     return 1;
   }
-  
+
   G4String macro;
   G4String session;
+  G4bool verboseBestUnits = true;
 #ifdef G4MULTITHREADED
   G4int nThreads = 0;
 #endif
@@ -84,12 +80,16 @@ int main(int argc,char** argv)
       nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
     }
 #endif
+    else if ( G4String(argv[i]) == "-vDefault" ) {
+      verboseBestUnits = false;
+      --i;  // this option is not followed with a parameter
+    }
     else {
       PrintUsage();
       return 1;
     }
-  }  
-  
+  }
+
   // Detect interactive mode (if no macro provided) and define UI session
   //
   G4UIExecutive* ui = 0;
@@ -98,32 +98,35 @@ int main(int argc,char** argv)
   }
 
   // Optionally: choose a different Random engine...
-  //
   // G4Random::setTheEngine(new CLHEP::MTwistEngine);
-  
+
+  // Use G4SteppingVerboseWithUnits
+  if ( verboseBestUnits ) {
+    G4int precision = 4;
+    G4SteppingVerbose::UseBestUnit(precision);
+  }
+
   // Construct the default run manager
   //
+  auto* runManager =
+    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 #ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-  if ( nThreads > 0 ) { 
+  if ( nThreads > 0 ) {
     runManager->SetNumberOfThreads(nThreads);
-  }  
-#else
-  G4RunManager * runManager = new G4RunManager;
+  }
 #endif
 
   // Set mandatory initialization classes
   //
-  B4DetectorConstruction* detConstruction = new B4DetectorConstruction();
+  auto detConstruction = new B4::DetectorConstruction();
   runManager->SetUserInitialization(detConstruction);
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
-    
-  B4aActionInitialization* actionInitialization
-     = new B4aActionInitialization(detConstruction);
+
+  auto actionInitialization = new B4a::ActionInitialization(detConstruction);
   runManager->SetUserInitialization(actionInitialization);
-  
+
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
@@ -141,7 +144,7 @@ int main(int argc,char** argv)
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command+macro);
   }
-  else  {  
+  else  {
     // interactive mode : define UI session
     UImanager->ApplyCommand("/control/execute init_vis.mac");
     if (ui->IsGUI()) {
@@ -153,7 +156,7 @@ int main(int argc,char** argv)
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not be deleted 
+  // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
 
   delete visManager;

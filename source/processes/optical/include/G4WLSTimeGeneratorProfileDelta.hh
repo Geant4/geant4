@@ -32,10 +32,10 @@
 // File name:     G4WLSTimeGeneratorProfileDelta.hh
 //
 // Author:        Pedro Rodrigues, Andreia Trindade
-// 
+//
 // Creation date: 2006-05-07
 //
-// Modifications: 
+// Modifications:
 //
 // Class Description: Discrete Class of WLSTimeGeneratorProfile
 //
@@ -49,9 +49,7 @@
 
 class G4WLSTimeGeneratorProfileDelta : public G4VWLSTimeGeneratorProfile
 {
-
-public:
-
+ public:
   explicit G4WLSTimeGeneratorProfileDelta(const G4String& name);
 
   virtual ~G4WLSTimeGeneratorProfileDelta();
@@ -60,16 +58,14 @@ public:
 
   virtual G4double GenerateTime(const G4MaterialPropertiesTable*) override;
 
-protected:
-
-private:
-
+ protected:
+ private:
   // hide assignment operator
 
-  G4WLSTimeGeneratorProfileDelta & operator=
-                          (const  G4WLSTimeGeneratorProfileDelta &right) = delete;
-  G4WLSTimeGeneratorProfileDelta(const  G4WLSTimeGeneratorProfileDelta&) = delete;
-
+  G4WLSTimeGeneratorProfileDelta& operator=
+    (const G4WLSTimeGeneratorProfileDelta& right) = delete;
+  G4WLSTimeGeneratorProfileDelta(const G4WLSTimeGeneratorProfileDelta&) =
+    delete;
 };
 
 #endif

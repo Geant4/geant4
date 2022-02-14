@@ -7,8 +7,19 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
-<<<<<<< HEAD
-=======
+25.10.2021 - B. Morgan (ChargeExchangeMC-V10-07-01)
+             Use G4StrUtil functions replacing deprecated G4String member functions
+
+24.05.2021 - B. Morgan (ChargeExchangeMC-V10-07-00)
+           Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+02.11.2020 - B.Morgan, Tag ChargeExchangeMC-V10-06-01
+             Support same CMake version range as core Geant4
+
+08.04.2020 - S. Guatelli, Tag ChargeExchangeMC-V10-06-00
+             Error removed from the main. CMakeList.txt updated.
+             Dependence to Qt Libraries when using ROOT demoved as obsolete.
+
 02.09.2019 - S. Guatelli, Tag ChargeExchangeMC-V10-05-02
              G4VIS_USE and G4UI_USE deleted
 
@@ -29,18 +40,18 @@ cirrone@lns.infn.it
              Replace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
 
 31.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-06
-             Clean up preinit.mac, to avoid a cerr when 
+             Clean up preinit.mac, to avoid a cerr when
               ROOT is not available
 
 26.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-05
-             Edit CMakeLists.txt such to copy mac/gmdl in the 
+             Edit CMakeLists.txt such to copy mac/gmdl in the
               build directory
 
 25.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-04
              Fix residual shadowing on gcc 4.9
 
 23.10.2017 - A. Radkov, Tag ChargeExchangeMC-V10-03-03
-             Fix shadowed variabiles (and removed flag from 
+             Fix shadowed variabiles (and removed flag from
               CMakeLists.txt)
 
 12.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-02
@@ -59,16 +70,16 @@ cirrone@lns.infn.it
 
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 09.12.2014 - A. Radkov, Tag ChargeExchangeMC-V10-01-00
-             CERN ROOT histograming binding. Bug fix for online histogram 
-             redrawing and easy online histogram showing from a dedicated 
+             CERN ROOT histograming binding. Bug fix for online histogram
+             redrawing and easy online histogram showing from a dedicated
              menu bar (in graphical mode).
 
 06.10.2014 - L.Pandola, Tag: ChargeExchangeMC-V10-00-01
              Edited CMakeLists.txt file to allow for the integration
-             in the CDash testing 
+             in the CDash testing
 
-12.12.2013 - A. Radkov & L. Pandola, Tag: ChargeExchangeMC-V10-00-00 
-             Fix a few compiler warnings (shadowed variables, system of 
+12.12.2013 - A. Radkov & L. Pandola, Tag: ChargeExchangeMC-V10-00-00
+             Fix a few compiler warnings (shadowed variables, system of
              units). FTFP_BERT replaces deprecated QGSP_BERT
 
 22.11.2012 - L.Garnier Tag: ChargeExchangeMC-V09-05-05
@@ -85,7 +96,7 @@ cirrone@lns.infn.it
 
 17.10.2012, L.Pandola & A.Radkov, Tag: ChargeExchangeMC-V09-05-01
             - Fix to compile the code against Geant4 9.6
-            - Edit GNUmakefile such that the default version does not 
+            - Edit GNUmakefile such that the default version does not
               depend on boost
 
 11.10.2012, G.Cosmo,  Tag: ChargeExchangeMC-V09-05-00

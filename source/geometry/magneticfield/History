@@ -15,6 +15,127 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 30, 2021 B.Morgan                           - field-V10-07-00
+-----------------------
+- Migrate sources.cmake to modular build API
+
+November 26, 2020 J.Apostolakis                   - field-V10-06-09
+-------------------------------
+- Fix to enable G4TDormandPrince45 to be used with G4InterpolationDriver.
+
+  This fix was needed because G4Interpolation driver creates additional
+  copies of the stepper class.  Due to this it must obtain the equation
+  with the type of the templated stepper.
+
+  For a stepper to be used with 'G4InterpolationDriver', it must
+  implement the method
+     Equation_type  GetSpecificEquation()
+  Templated steppers must ensure that the return type 'Equation_type'
+  is the specific equation type of the template.
+
+  This method was added to G4DormandPrince745 and G4TDormandPrince745.
+
+October 12, 2020 J.Apostolakis                    - field-V10-06-08
+------------------------------
+- Fixes & refinements - mostly in templated classes, tests.
+  Compilation fixes, e.g. missing include <cassert>.
+  Refinements, e.g. int -> unsigned int in templates
+
+October 9, 2020 J.Apostolakis                     - field-V10-06-07
+-----------------------------
+- Configure G4ChordFinder to use templated G4TDormandPrince45 as the
+  default stepper for magnetic fields (when one is not chosen
+  explicitly by the application.)
+
+October 9, 2020 J.Apostolakis & J. Xie           - field-V10-06-06
+--------------------------------------
+- Adapted classes that avoid virtual calls for field, equation, stepper
+  created by Josh Xie (Google Summer of Code 2014), supervised by
+  S. Wenzel & J.A.
+
+  The revised design and implementations include:
+   * equation of motion templated on the field type;
+   * steppers templated on the type of equation and the number of integration
+     variables.
+  In addition the key methods are marked as 'inline' to enable compilers, where
+  they judge possible, to embed them and avoid any function calls.
+
+  These classes can be combined also with the templated drivers
+  (G4IntegrationStepper, G4FSALIntegrationStepper and/or G4InterpolationDriver
+  to avoid virtual calls in all the levels up to the chord finder's call to
+  the integration driver. ]
+
+  The types of stepper currently available are
+  i) the originally developed intermediate order stepper:
+
+   - Name (templated) -  original  --   Order/    - Comments
+                                           / Embdedded
+   ==============================================================================
+   G4TClassicalRK4:     G4ClassicalRK4   4th / no   robust, old default
+   G4TCashKarpRKF45:    G4CashKarpRKF45  5th / yes  first embedded RK in G4
+
+  ii) the original low order steppers (for specialised uses)
+   G4TSimpleHeum:       G4SimpleHeum     3rd / no  lower order alternative
+   G4TSimpleRunge:      G4SimpleRunge    2nd / no  very low order
+   G4TExplicitEuler:    G4ExplicitEuler  1st / no  lowest order - for checks only
+
+  and
+  iii) some newly adapted stepper(s) /  ( J.A. Oct 2020 )
+   G4TDormandPrince45  G4DormandPrince745 5th/ yes  default / preferred
+   ==============================================================================
+
+  Note: Additional lower-order steppers are not yet available.
+        'Vector' steppers (using blaze) are not supported.
+
+  Experimental versions of fields with inline methods:
+     G4TUniformMagField,  G4TQuadrupoleMagField
+  are included to show how the field evaluation GetFieldValue can also be inlined.
+
+  Note 2:
+  Steppers which are not embedded obtain their error estimates by
+  breaking the step into two halves, then comparing with the whole step.
+  As a result many more field / derivative evaluations are needed than
+  embedded steppers of the same order, but the reliability of their error
+  estimation has different properties; so it may be more robust in some cases. )
+
+June 15, 2020 G.Cosmo                            - field-V10-06-05
+---------------------
+- Implemented move constructor and operator for G4FieldTrack.
+
+March 24, 2020 J.Apostolakis                     - field-V10-06-04
+----------------------------
+- New class G4DriverReporter to print progress of drivers.
+   Used for debugging differences between Old & fixed MagIntDriver
+- Revisions in testing CMake config file and stepper/driver test
+   for magnetic field.
+
+March 13, 2020 J.Apostolakis                     - field-V10-06-03
+----------------------------
+- G4VIntegrationDriver & dependent driver classes:
+    Added new virtual StreamInfo() method,
+       & used it to implement operator << for G4VIntegrationDriver
+    Made (virtual) DoesReIntegrate() const.
+- G4MagInt_Driver: Fixed max iterations & clarified that its
+     ComputeNewStepSize does NOT (yet) respect maximum reduction factor (0.1).
+  ( Done to enable comparisons with new G4IntegrationDriver<> implementation.)
+- G4OldMagIntDriver maintains all old behaviour of G4MagInt_Driver.
+
+
+January 22, 2020 G.Cosmo                         - field-V10-06-02
+------------------------
+- Fixed compilation errors and configuration for field07 unit test.
+
+January 13, 2020 G.Cosmo                         - field-V10-06-01
+------------------------
+- Turn off verbosity flags by default in G4IntegratorDriver,
+  G4InterpolationDriver and G4MagIntegratorDriver.
+
+December 10, 2019 B.Morgan                       - field-V10-06-00
+--------------------------
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 November 14, 2019 J.Apostolakis                  - field-V10-05-17
 -------------------------------
 - Added method / attribute to G4VIntegrationDriver DoesReIntegrate()
@@ -44,7 +165,7 @@ September 12, 2019 G. Cosmo                      - field-V10-05-12
 
 July 8, 2019 D. Sorokin                          - field-V10-05-11
 -----------------------------------------
-- G4BFieldIntegrationDriver: an attempt to solve looping particle issue. 
+- G4BFieldIntegrationDriver: an attempt to solve looping particle issue.
 
 July 3, 2019 D. Sorokin                          - field-V10-05-10
 -----------------------------------------
@@ -60,7 +181,7 @@ June 20, 2019 D. Sorokin                          - field-V10-05-08
 
 June 12, 2019 D. Sorokin & J. Apostolakis         - field-V10-05-07
 -----------------------------------------
-- Revert to use G4IntegrationDriver as default in G4ChordFinder 
+- Revert to use G4IntegrationDriver as default in G4ChordFinder
     ( c-tor for magnetic field. ).
   Change to use concrete type of Stepper as template parameter
 
@@ -116,8 +237,8 @@ September 13, 2018 D.Sorokin                   - field-V10-04-13, -14
   (all calls now use non-virtual RightHandSide() method instead).
 - Reversed declaration of final for the class G4UniformMagField.
   Returned to previous status: only GetFieldValue method is final.
-  ( This avoid need to change examples/tests and potentially migrate 
-    users' code. ) 
+  ( This avoid need to change examples/tests and potentially migrate
+    users' code. )
 
 September 12, 2018 D.Sorokin                   - field-V10-04-11, -12
 ----------------------------
@@ -125,7 +246,7 @@ September 12, 2018 D.Sorokin                   - field-V10-04-11, -12
   magnetic fields.  In QuickAdvance it uses helix stepper when the
   estimated 'helix' rotation angle is larger than pi/3.
 - G4NystromRK4 uses G4CachedMagneticField for caching values.
-  NOTE: It now the user's responsibility to create G4CachedMagneticField. 
+  NOTE: It now the user's responsibility to create G4CachedMagneticField.
   ( The alternative is to create G4CachedMagneticField inside G4NystromRK4.
     But this would have several disadvantages:
     * It would change the field in the user's equation of motion;
@@ -145,7 +266,7 @@ July 10, 2018 D. Sorokin              - field-V10-04-08, -09, -10
   operations (J.A.)
 - Fix for unitialised pIntStepper pointer in G4FSALIntegrationDriver
   constructor.  Revision of data member variable names.  ( J.A. )
-  
+
 June 15, 2018 G.Cosmo                   - field-V10-04-07
 ---------------------
 - Fixed minor Coverity defects in G4BurlischStoer and G4ModifiedMidPoint.
@@ -168,21 +289,21 @@ Apr 30, 2018 J. Apostolakis             - field-V10-04-04
 
   Added new virtual method in G4VIntegrationDriver :
       void RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper)
-  which used to exist in G4MagInt_Driver. 
+  which used to exist in G4MagInt_Driver.
   ( Its absence caused a problem in some existing user code since 10.4. )
 
   This method must be defined in those derived driver classes which accept
   a Runge Kutta stepper ( i.e. some or any type of G4MagIntegratorStepper )
 
 - G4IntegrationDriver, G4FSALIntegrationDriver
-  Defined default implementation (which throws a Fatal G4Exception), and 
+  Defined default implementation (which throws a Fatal G4Exception), and
   implementations in the templated classes G4IntegrationDriver and
   G4FSALIntegrationDriver which check the type (via dynamic cast) and
   change the stepper if it is appropriate.
 
 Feb 13, 2018 J. Apostolakis             - field-V10-04-03
 ---------------------------
-- Change in G4FieldManager::CreateChordFinder to cope 
+- Change in G4FieldManager::CreateChordFinder to cope
   better with case that field argument is null.
 
 Feb 13, 2018 D. Sorokin                 - field-V10-04-01
@@ -196,15 +317,15 @@ Feb 13, 2018 D. Sorokin                 - field-V10-04-01
 Jan 31, 2018 J. Apostolakis
 ---------------------------
 - G4MagneticField no longer inherits from G4ElectroMagneticField
-  This was incorrect, and allowed a user to provide a full EM 
+  This was incorrect, and allowed a user to provide a full EM
   field, but obtain the force only from the B-field when using
   the equation created in the G4ChordFinder constructor.
    => potential interface change.
 
-  Result: It is no longer possible to use the equation of motion for a 
+  Result: It is no longer possible to use the equation of motion for a
      pure magnetic field for the case of a mixed electromagnetic field.
      This change is desired, and is a *protection* as that inadvertent
-     use led to incorrect results. 
+     use led to incorrect results.
   Instead the full chain of classes for equation of full EM field,
      steppers and driver must be used for the case of the 'full' EM field.
 
@@ -216,7 +337,7 @@ Feb 9, 2017 G.Cosmo                     - field-V10-04-00
 
 Nov 17, 2017 J. Apostolakis             - field-V10-03-30
 ---------------------------
-- G4ChordFinder: Reinstated old driver G4MagInt_Drv, for use 
+- G4ChordFinder: Reinstated old driver G4MagInt_Drv, for use
     with G4DormandPrince745 (5th order) in G4ChordFinder's
     2nd constructor (with magnetic field.)
   ( Reverses change made in field-V10-03-27 )
@@ -226,9 +347,9 @@ Nov 16, 2017 J. Apostolakis             - field-V10-03-29
 - Suppressed statistics printing in G4ChordFinder and new drivers
    ( G4IntegrationDriver and G4FSALIntegrationDriver )
    protecting them by verbosity flags.
-    
+
 - Minor fix to initialise scalar data member in new steppers
-  G4RK547FEq1, G4RK547FEq2 and G4RK547FEq3. 
+  G4RK547FEq1, G4RK547FEq2 and G4RK547FEq3.
   Fixes coverity issues 97886, 97888 and 97889.
 
 
@@ -238,7 +359,7 @@ Nov 14, 2017 J. Apostolakis             - field-V10-03-28
 - Fix in G4FSALDormandPrince745 for unitialised variables.
   Initialise ak8[], ak9[] in constructor. This avoids repeated
   memory allocation, without deletion - i.e. a memory leak.
-- Initialise fLastStepLength and/or fAuxStepper data members in 
+- Initialise fLastStepLength and/or fAuxStepper data members in
   in constructors of G4DormandPrince745 and G4FSALDormandPrince745.
   Coverity issues: 67394 (G4FSALDormandPrince745)
                    67391     (G4DormandPrince745)
@@ -247,11 +368,11 @@ Nov 14, 2017 J. Apostolakis             - field-V10-03-27 (fixed)
 ---------------------------             - field-V10-03-26
 - G4ChordFinder: changes in default stepper & driver in 2nd constructor.
   in which only a magnetic field is provided (used widely) :
-  
+
   * Reinstated G4DormandPrince745 (5th order) as default in G4ChordFinder.
    (corrected -23, which missed to initialise driver.)
 
-  * New templated driver G4IntegrationDriver is chosen for the 
+  * New templated driver G4IntegrationDriver is chosen for the
     the simple constuctors of G4ChordFinder and G4FieldManager
     which only require a (pure) magnetic field. ( Details below.)
 
@@ -261,23 +382,23 @@ Nov 14, 2017 J. Apostolakis             - field-V10-03-27 (fixed)
     This aims to reuse some derivatives, thus reducing computations
     of derivatives and thus field evaluations. )
 
-  * The templated 'driver' classes, available and now chosen in 
+  * The templated 'driver' classes, available and now chosen in
     G4ChordFinder's 2nd constructor, are used per type of stepper
     class:
      - G4IntegrationDriver      for non-FSAL     steppers
      - G4FSALIntegrationDriver  for FSAL-capable steppers
     These make non-virtual calls to the stepper, as they know its type.
 
-- First fix in G4FSALDormandPrince745 for memory leak, missing 
+- First fix in G4FSALDormandPrince745 for memory leak, missing
   delete[] fInitialDyDx in destructor. Coverity issue: 96383.
 
 ----------------------------------------------------------------------
 Multiple tags (below) were to better test stepper/driver combinations:
 Date   Tagger         Tag name        Stepper                Driver
 ======================================================================
-Nov 3, D. Sorokin     field-V10-03-25 G4FSALBogackiShampine45 FSAL 
+Nov 3, D. Sorokin     field-V10-03-25 G4FSALBogackiShampine45 FSAL
 Nov 3, J. Apostolakis field-V10-03-24 G4FSALDormandPrince745  FSAL  ok
-Nov 2, J. Apostolakis field-V10-03-23 G4DormandPrince745      new    
+Nov 2, J. Apostolakis field-V10-03-23 G4DormandPrince745      new
 Nov 2, J. Apostolakis field-V10-03-22 G4RK547FEq1             FSAL  ok
 ----------------------------------------------------------------------
 Glossary of drivers:
@@ -287,7 +408,7 @@ Glossary of drivers:
 
 Nov  2, 2017 D. Sorokin                 - field-V10-03-21
 ---------------------------------------
-- Added new steppers G4RK547FEq{1,2,3} which implement 7 stage embedded 
+- Added new steppers G4RK547FEq{1,2,3} which implement 7 stage embedded
   Runge-Kutta 4,5 pairs with:
      - FSAL property (return derivative at endpoint for use in next step),
      - stable equilibrium states ( improved handling of difficulties in
@@ -300,7 +421,7 @@ Nov  2, 2017 D. Sorokin                 - field-V10-03-21
 - Reinstated G4DormandPrince745  ( known widely as DOPRI5 ) as
   the default RK method in G4ChordFinder for pure magnetic fields.
     ( Withdrew G4BogackiShampine45. )  J. Apostolakis
-  
+
 Nov  1, 2017 J. Apostolakis             - field-V10-03-20
 ---------------------------
 - Made G4BogackiShampine45 the default RK method in G4ChordFinder
@@ -325,8 +446,8 @@ Existing class G4MagInt_Drv remains, deriving from base class.
 
 Oct 13, 2017 D. Sorokin                 - field-V10-03-17
 ---------------------------------------
-- add G4FieldUtils.hh, G4FieldUtils.icc, G4FieldUtils.cc: 
-  utilities to extract data from arrays in conventions of the 
+- add G4FieldUtils.hh, G4FieldUtils.icc, G4FieldUtils.cc:
+  utilities to extract data from arrays in conventions of the
   magneticfield integration.
 
 Oct 13, 2017 G. Cosmo                   - field-V10-03-16
@@ -398,7 +519,7 @@ Jul 03, 2017 J.Apostolakis             - field-V10-03-08
   fAuxStepper data members in constructor.
   Coverity issues: 67393, 67394, 67391, 67390, 67363
 
-Jul 03, 2017 J.Apostolakis             - field-V10-03-05, -06, -07 
+Jul 03, 2017 J.Apostolakis             - field-V10-03-05, -06, -07
 --------------------------
 - fix for memory leak in Stepper() in two steppers:
      G4FSALBogackiShampline45 ( Coverity issue 67389 )
@@ -409,13 +530,13 @@ Jul 03, 2017 J.Apostolakis             - field-V10-03-05, -06, -07
 May 17, 2017 J.Apostolakis             - field-V10-03-03, -04 (resubmit)
 --------------------------
 - G4FieldManager::SetDetectorField
-  Fixed default of 'fail mode' parameter in 
+  Fixed default of 'fail mode' parameter in
      to 0 (silent) - not 1 which was used for debugging.
   In case of existing G4ChordFinder, use 'max' (1, failMode) not min.
 
 
 May 11, 2017 J.Apostolakis             - field-V10-03-02
--------------------------- 
+--------------------------
 - Reintroduced changes of field-V10-01-05, 06 and 07  to address
   issue recalled by ATLAS.
 - New fixes/refinements (since field-V10-01-07)
@@ -426,24 +547,24 @@ May 11, 2017 J.Apostolakis             - field-V10-03-02
   o G4FieldManager.cc : Revised behaviour of SetDetector - it now
     passes the Field to the Equation, as is the natural user expectation
     The previous behaviour is possible, using extra argument 'failMode' flag.
-            Values: 0           = silent ; 
-                    1 (default) = warning; 
+            Values: 0           = silent ;
+                    1 (default) = warning;
                     2 or other  = fatal exception.
 
-    This change is to ensure that user expectation is met: 
-    if the field is changed for an existing, working stepper it must 
+    This change is to ensure that user expectation is met:
+    if the field is changed for an existing, working stepper it must
     be propagated to the equation of motion.
     Note: this causes potential conflict between the type of the equation
           and the field, which will need to be solved in the future.
     Old behaviour (just set our own pointer) is still available in new method:
-    ProposeDetectorField(G4Field *detectorField) 
-    Note: Error reporting behaviour of SetDetector is 'soft'. It does not 
+    ProposeDetectorField(G4Field *detectorField)
+    Note: Error reporting behaviour of SetDetector is 'soft'. It does not
           complain by default if ChordFinder is not (yet) set.
           ( The default values of failMode = 0 i.e. quiet. )
     If a chord-finder exists, it will still warn for other errors.
     To obtain have noisy extra checks call SetDetectorField with failMode > 0
     or by using the new method for an existing field:
-    ChangeDetectorField(G4Field *detectorField)    
+    ChangeDetectorField(G4Field *detectorField)
   OLD: Co-works and requires new tag in geometry/navigation: geomnav-V10-01-24.
 
 Mar  22, 2017 G.Cosmo                   - field-V10-03-01
@@ -457,24 +578,24 @@ Mar  17, 2017 G.Cosmo                   - field-V10-03-00
 
 Oct   7, 2016 J.Apostolakis             - field-V10-02-24, 25
 ---------------------------
-- Checked loops for termination for infinite loops and annotated 
+- Checked loops for termination for infinite loops and annotated
    them with "Loop checking" comment
 
 Oct   7, 2016 D.Sorokin                 - field-V10-02-23
 -----------------------  Commit: J. Apostolakis
-- Protection for multiple inclusion of G4ClassicalRK4 
+- Protection for multiple inclusion of G4ClassicalRK4
    (thanks to Dmitrii Sorokin, GSoC 2016 student. )
 
 Aug  16, 2016 J.Apostolakis             - field-V10-02-22
 ---------------------------
-- Added initialization of fAuxStepper in constructor of 
+- Added initialization of fAuxStepper in constructor of
   G4DoLoMcPriRK34, G4DormandPrince745 & G4DormandPrinceRK56.
 
 June 11, 2016 J.Apostolakis             - field-V10-02-21
 ---------------------------
 - Restored G4ClassicalRK4 as default stepper for B-field,
   (due to performance issues reported in benchmarking.)
-    
+
 June 10, 2016 G.Cosmo                   - field-V10-02-20
 ---------------------
 - Fixed code indentation in G4HelixMixedStepper;
@@ -484,8 +605,8 @@ June 1, 2016 J.Apostolakis              - field-V10-02-19, 18, 17
 --------------------------
 - Fix in multiple steppers for the size of two C-arrays which hold
   intermediate values;  they must be at least 8 and at least
-  'fNumberOfStateVariables' long.  
-  Changed: G4CashKarp, 
+  'fNumberOfStateVariables' long.
+  Changed: G4CashKarp,
            G4BogackiShampine 23 & 34
            G4DormandPrince 745, RK56 & RK78
 	   G4DoLoMcPriRK34
@@ -501,7 +622,7 @@ June 1, 2016 J.Apostolakis              - field-V10-02-15 (also -14)
 --------------------------
 - Made G4ClassicalRK4 the default stepper again in G4ChordFinder
 - Fixes in test code (RkTestRun) for new names of classes.
-     
+
 May 31, 2016 J.Apostolakis              - field-V10-02-13 (also -12)
 --------------------------
 - New class G4NewChordFinder, that uses old G4MagIntegratorDriver or
@@ -520,11 +641,11 @@ May 31, 2016 J.Apostolakis              - field-V10-02-13 (also -12)
 ( Note: FSAL steppers remain 'behind' the improved non-FSAL versions.)
 
 - Made DormandPrince745 (DP45) the default stepper (in G4ChordFinder).
-    
+
 May 26, 2016 J.Apostolakis & Som. Banerjee   - field-V10-02-11
 ------------------------------------------
 - First version of FSAL classes (as additional classes)
-    FSAL Integrator Driver  : New *concrete*, stand-alone driver 
+    FSAL Integrator Driver  : New *concrete*, stand-alone driver
     FSAL Integrator Stepper : New base class (separate from G4MagIntegratorStepper)
     FBogackiShampine45:  FSAL-version of BogackiShampine45 stepper
     FDormandPrince745:   FSAL-version of FDormandPrince745 stepper
@@ -547,7 +668,7 @@ Context:
 May 26, 2016 J.Apostolakis                   - field-V10-02-10
 --------------------------
 Preparation for addition of FSAL steppers (& driver)
-- G4MagIntegratorStepper: Added counter for calls to equation RHS, 
+- G4MagIntegratorStepper: Added counter for calls to equation RHS,
     with Get/Reset methods.
 - Cosmetic fixes in sources.cmake (tabs to spaces)
 
@@ -573,11 +694,11 @@ May 24, 2016 J.Apostolakis             - field-V10-02-06, 07
 --------------------------
 - Added TsitourasRK45 stepper.
 - Made Cash-Karp the default stepper (in G4ChordFinder).
-    
+
 May 23, 2016 J.Apostolakis             - field-V10-02-05
 --------------------------
 - Made DormandPrince745 (DP45) the default stepper (in G4ChordFinder).
-    
+
 May 20, 2016 J.Apostolakis             - field-V10-02-04
 -------------------------
 - Added steppers created by Somnath Banerjee as part of GSoC 2015,
@@ -594,11 +715,11 @@ May 20, 2016 J.Apostolakis             - field-V10-02-04
       “An efficient Runge-Kutta (4,5) pair,”
       Comput. Math. with Appl., vol. 32, no. 6, pp. 15–28, Sep. 1996.
   - BS23 is four stage RK method from the paper of P. Bogacki and L. F. Shampine,
-      “A 3(2) pair of Runge - Kutta formulas,” 
+      “A 3(2) pair of Runge - Kutta formulas,”
       Appl. Math. Lett., vol 2, no 4, p.321 (1989).
-  - DP45 are from Table 2 of  J. R. Dormand and P. J. Prince's 
+  - DP45 are from Table 2 of  J. R. Dormand and P. J. Prince's
       “A family of embedded Runge-Kutta formulae,”
-      Journal of comput. and applied Math., vol. 6, no. 1, pp. 19–26, 1980.    
+      Journal of comput. and applied Math., vol. 6, no. 1, pp. 19–26, 1980.
 
 May 4, 2016 G.Cosmo                   - field-V10-02-03
 -------------------
@@ -620,7 +741,7 @@ Feb 25, 2016 P.Gumplinger             - field-V10-02-01
 
 Dec 11, 2015 A.Dotti		      - field-V10-02-00
 --------------------------
-Fixing typo in tests/CMakeList.txt file: subdirecotry() 
+Fixing typo in tests/CMakeList.txt file: subdirecotry()
 instead of add_subdirectory()
 
 Nov  2, 2015 J.Apostolakis             - field-V10-01-15 (fixed)
@@ -629,12 +750,12 @@ Oct 22, 2015 J.Apostolakis             - field-V10-01-14
 - Reverted changes in G4FieldManager from  tags field-V10-01-05 to -07
    inadvertently reintroduced in tag field-V10-01-13
     (fixed in tag -15: committed new copy from tag -04 'on top')
-    
+
 - Added explanation comment in G4MagHelicalSteper.
-    
+
 Oct 13, 2015 J.Apostolakis             - field-V10-01-13
 --------------------------
-- G4ChordFinder::FindNextChord: Added check against number of iterations, 
+- G4ChordFinder::FindNextChord: Added check against number of iterations,
   to identify potential issue of lack of convergence.
 - test: fixed testProElectricMagField.cc
 
@@ -667,30 +788,30 @@ Jun 10, 2015 J.Apostolakis             - field-V10-01-07
    longer complains by default if ChordFinder is not (yet) set.
     ( The default values of failMode = 0 i.e. quiet. )
    If a chord-finder exists, it will still warn for other errors.
-   
+
    It is still possible to have louder/extra checks done calling
      SetDetectorField with failMode > 0
    or by using a new method, which expects an existing field:
-     ChangeDetectorField(G4Field *detectorField)    
+     ChangeDetectorField(G4Field *detectorField)
 
 Jun  8, 2015 J.Apostolakis             - field-V10-01-05, (-06 fixed)
 --------------------------
 - G4FieldManager.cc : Revised behaviour of SetDetector - it now
    passes the Field to the Equation, as is the natural user expectation
-   The previous behaviour is possible, using extra argument 'failMode' 
-      flag. Values: 0           = silent ; 
-                    1 (default) = warning; 
+   The previous behaviour is possible, using extra argument 'failMode'
+      flag. Values: 0           = silent ;
+                    1 (default) = warning;
                     2 or other  = fatal exception.
    Or can use alternative (new) suggestion method ProposeDetectorField();
 
-   This change is to ensure that user expectation is met: 
-      if the field is changed for an existing, working stepper it must 
+   This change is to ensure that user expectation is met:
+      if the field is changed for an existing, working stepper it must
       be propagated to the equation of motion.
    Note: this causes potential conflict between the type of the equation
          and the field, which will need to be solved in the future.
 
    Old behaviour (just set our own pointer) is still available in new method:
-     ProposeDetectorField(G4Field *detectorField) 
+     ProposeDetectorField(G4Field *detectorField)
 
    Co-works and requires new tag in geometry/navigation: geomnav-V10-01-24.
 
@@ -702,10 +823,10 @@ Jan 28, 2015 J.Apostolakis             - field-V10-01-01 (-02,03 fixed)
 --------------------------                               ( History    )
 - Revert unintended inclusion of changes in G4MagIntegratorDriver
 
-Jan 15, 2015 J.Apostolakis             - field-V10-01-00 
+Jan 15, 2015 J.Apostolakis             - field-V10-01-00
 --------------------------
 - Small refinements in G4FieldTrack - access rest mass, avoid div by 0
-    Avoid division by zero for Unit direction in FieldTrack 
+    Avoid division by zero for Unit direction in FieldTrack
     Added method to get Rest Mass.
   Needed for fixes related to Problem report 1696.
   Thanks to Nathan S. Froemming <nfroemm@uw.edu> who reported the issue
@@ -728,7 +849,7 @@ May 21, 2014 J.Apostolakis             - field-V10-00-03
     avoid confusion;
   * Revised constructors to add pdg-spin as last argument (with default -1).
 - G4ChargeState:
-  - Addressed Coverity issue #56281 'Arguments in wrong order'  
+  - Addressed Coverity issue #56281 'Arguments in wrong order'
     G4ChargeState::SetChargeMoments() when used in
     G4FieldTrack::SetChargeMoments() from addition of spin to arguments,
     without revising name of method to reflect it;
@@ -738,7 +859,7 @@ May 21, 2014 J.Apostolakis             - field-V10-00-03
     to SetChargeSpinMoments();
   - Added new methods including SetChargesAndMoments(), SetChargeMdm(),
     SetChargeDipoleMoments() (no spin), and also SetChargeSpin(),
-    SetChargeMdmSpin() (which includes spin) to provide most/all potential 
+    SetChargeMdmSpin() (which includes spin) to provide most/all potential
     combinations.
 - G4MagIntegratorDriver::OneGoodStep():
   * Trial changes to address Valgrind issue, about value used before being set.
@@ -763,7 +884,7 @@ Nov 18, 2013 P.Gumplinger                 - field-V09-06-13/12
 -------------------------
 - fix Coverity warning in G4RepleteEofM
 
-Nov 17, 2013 J.Apostolakis                
+Nov 17, 2013 J.Apostolakis
 --------------------------
 - Fixed and improved HelixMixed Stepper:
     Corrected the default stepper for small steps to be ClassicalRK4.
@@ -796,7 +917,7 @@ May 10th, 2013 P.Gumplinger - field-V09-06-06
 - prevent divided by zero and shortcut spin tracking for spin == 0
   particles: G4Mag_SpinEqRhs.cc, G4EqEMFieldWithSpin.cc and
   G4EqEMFieldWithEDM.cc
-                                            field-V09-06-05 - same 
+                                            field-V09-06-05 - same
 May 8th,  2013 P.Gumplinger/J.Apostolakis - field-V09-06-04
 -----------------------------------------
 - Introduced new class G4ChargeState to hold charge, spin, magnetic moment
@@ -842,12 +963,12 @@ May 14th, 2012 G.Cosmo - field-V09-05-04
 
 February 3rd,  2012 J.Apostolakis - field-V09-05-03
 ---------------------------------
-- G4FieldTrack: 
-    Added new (inline) method to set the Rest Mass. Needed in order to 
+- G4FieldTrack:
+    Added new (inline) method to set the Rest Mass. Needed in order to
        reset this - and keep reuse the same G4FieldTrack in a client
        (across tracks.)
     Made SetCurvePnt() method private.
-    Simplified implementation of constructors.  Gain of 1 square root and 
+    Simplified implementation of constructors.  Gain of 1 square root and
        1 division per call.
 
 February  3rd,  2012 G.Cosmo - field-V09-05-02
@@ -878,7 +999,7 @@ November  4th,  2011 J.Apostolakis - field-V09-04-05
   Added new data member to identify gravity field;
   Added new method IsGravityActive() to access this data member;
   Created new source file: moving constructors to it.
-- Changed G4UniformGravityField and G4ElectroMagneticField 
+- Changed G4UniformGravityField and G4ElectroMagneticField
   to accomodate this refinement.
 
 November 2nd,  2011 P.Gumplinger - field-V09-04-04
@@ -887,7 +1008,7 @@ November 2nd,  2011 P.Gumplinger - field-V09-04-04
 
 October 28th,  2011 P.Gumplinger - field-V09-04-03
 --------------------------------
-- Added (uniform) gravity field capability. 
+- Added (uniform) gravity field capability.
   New classes G4EqGravityField, G4UniformGravityField.
 
   *Required* for co-working tag in Transportation
@@ -897,7 +1018,7 @@ October 12th,  2011 P.Gumplinger - field-V09-04-02
 - replaced: omegac = 0.105658387*GeV/mass * 2.837374841e-3*(rad/cm/kilogauss)
   with:     omegac = (eplus/particleMass)*c_light
   in G4EqEMFieldWithEDM.cc, G4Mag_SpinEqRhs.cc, G4EqEMFieldWithSpin.cc
-  changed calculation: 
+  changed calculation:
      std::sqrt(kineticEnergy*kineticEnergy + 2.0*restMass_c2*kineticEnergy);
   to:
      std::sqrt(kineticEnergy*(kineticEnergy+2.0*restMass_c2))
@@ -985,14 +1106,14 @@ Nov 5th,  2009 J.Apostolakis - field-V09-02-05
 - G4Nystrom:  New Set/Get method for cache distance.
               Changed private data members in G4NystromRK4.
 - G4MagIntegratorDriver:  alternative call to ComputeRightHandSide is not used (in comment)
-              As a result G4NystromRK4 operates without reusing 
+              As a result G4NystromRK4 operates without reusing
 
 Nov 5th,  2009 J.Apostolakis - field-V09-02-04
 ----------------------------
-- G4CachedMagneticField: New Simple class to cache value of Magnetic Field. 
+- G4CachedMagneticField: New Simple class to cache value of Magnetic Field.
      Speeds up code when calculation of field value is complex.
 - G4NystromRK4 :         New Stepper with Nystrom for magnetic field
-     with analytic estimation of integration error.  
+     with analytic estimation of integration error.
      Greatly reduces number of field value per step.
 - Revised testPropagateMagField to use Cached Quadrupole field,
      and to cover G4NystromRK4 and G4ConstRK4.
@@ -1033,7 +1154,7 @@ November, 7th, 2008   P.Gumplinger - field-V09-01-04
 
 October, 28th, 2008   T.Nikitina - field-V09-01-03
 --------------------------------
-- Added 'ApproxCurveV' to method G4ChordFinder::ApproxCurvePointS() in 
+- Added 'ApproxCurveV' to method G4ChordFinder::ApproxCurvePointS() in
   order to better calculate the curve length.
 - Some code cleanup.
 
@@ -1088,7 +1209,7 @@ August 21st, 2007    T.Nikitina - field-V09-00-01
 - In G4HelixMixedStepper added possibility to call different steppers for
   small steps and add some statistics how offen different steppers are called.
 - G4RKG3_Stepper: improved internal algorithm to use pre-computed values;
-  the stepper now gives comparable CPU performance as ClassicalRK4. 
+  the stepper now gives comparable CPU performance as ClassicalRK4.
 - Updated unit tests.
 
 August 17th, 2007    G.Cosmo - field-V09-00-00
@@ -1098,8 +1219,8 @@ August 17th, 2007    G.Cosmo - field-V09-00-00
 
 June 8th, 2007    T.Nikitina - field-V08-03-03
 ----------------------------
-- Relaxed FatalException to Warning in G4MagIntegratorDriver::AccurateAdvance() 
-  for case of step zero and return previous value. This fixes problem 
+- Relaxed FatalException to Warning in G4MagIntegratorDriver::AccurateAdvance()
+  for case of step zero and return previous value. This fixes problem
   observed by ATLAS in release 8.3 when requiring very accurate propagation
   -- ie using very small values for acceptable integration error.
 
@@ -1126,9 +1247,9 @@ May 11th, 2007    G.Cosmo - field-V08-03-00
 
 May 10th, 2007    J.Apostolakis - field-V08-02-01
 -------------------------------
-- G4MagIntegratorDriver: 
+- G4MagIntegratorDriver:
     * added protections against zero initial or internal step h=0, (exceptions)
-    * revised (re)calculation of h, and quit loop if h/length < smallest-fraction (~ 10^-12) 
+    * revised (re)calculation of h, and quit loop if h/length < smallest-fraction (~ 10^-12)
 
 April 26th, 2007  T.Nikitina - field-V08-02-00
 ----------------------------
@@ -1141,7 +1262,7 @@ November 14th, 2006  J.Apostolakis - field-V08-01-02
 - G4MagIntegratorDriver
   * Made first argument of GetDerivatives a reference - avoid copy
 - G4MagIntegratorStepper
-  * Include the SetEquationOfMotion() method in G4MagIntegratorStepper 
+  * Include the SetEquationOfMotion() method in G4MagIntegratorStepper
     (for Geant4e, as in field-V08-01-00)
   * Update of disclaimers.
 
@@ -1159,14 +1280,14 @@ June 21st, 2006  J.Apostolakis - field-V08-01-00
 
 June 22nd, 2006  J.Apostolakis - field-V08-00-07
 -----------------------------
-- G4ExactHelixStepper: reintroduced corrected class 
+- G4ExactHelixStepper: reintroduced corrected class
     --> testPropagateMagField now tests it also (added)
-- G4MagHelicalStepper: made Stepper virtual (for now) 
+- G4MagHelicalStepper: made Stepper virtual (for now)
              to enable G4ExactHelixStepper to override it
 
 June 21st, 2006  J.Apostolakis - field-V08-00-06
 -----------------------------
-- G4ExactHelixStepper: taking out class 
+- G4ExactHelixStepper: taking out class
    (provisional tag in case of difficulties with class, revisions)
 
 --- The field-V08-00-0x , x > 6, tags do not include the change below
@@ -1187,30 +1308,30 @@ May 18th, 2006  J.Apostolakis - field-V08-00-03
 May 16th, 2006  J.Apostolakis - field-V08-00-02
 -----------------------------
 - G4ExactHelixStepper
-   Taken out alpha version - it was included in error 
+   Taken out alpha version - it was included in error
 
 May 11th, 2006  J.Apostolakis - field-V08-00-01
 -----------------------------
 - G4FieldTrack
    Significant, provisional change:
-     * Added charge and moments to FieldTrack 
+     * Added charge and moments to FieldTrack
          (SetMethods,  and pointer to embedded class G4ChargeState)
    Technical revisions:
      * New constructor, with charge and without velocity
      * New almost-default constructor (taking a character)
-   Also: 
+   Also:
      * New constructor to take const reference to Spin
      * New implementation method UpdateFourMomentum
-     * Streaming operator takes const reference, 
+     * Streaming operator takes const reference,
          and outputs momentum magnitude & direction magn.
 
 - G4ExactHelixStepper
-   Included in error 
+   Included in error
 
 Apr 6th, 2006  J.Apostolakis - field-V08-00-00
 ----------------------------
 - In G4FieldManager
- Added missing  const GetChordFinder() method -- Problem report #847 
+ Added missing  const GetChordFinder() method -- Problem report #847
  Corrected description (at top of include file hh):
   - It is possible to set the field manager of a logical volume (since long)
 
@@ -1254,21 +1375,21 @@ Feb 9th, 2004  G.Cosmo - field-V06-00-00
 
 Nov 13th, 2003  J.Apostolakis - field-V05-02-08
 -----------------------------
-- G4ChordFinder:  
+- G4ChordFinder:
   o extended the arguments of AdvanceChordLimited  and  FindNextChord
     adding the current safety sphere (origin, radius), for use in optimising.
   o fixed set functions which had side effect (on first fraction.)
 - Added new class G4ChordFinderSaf (using above)
-  o which uses safety to create longer chords, so enabling 
+  o which uses safety to create longer chords, so enabling
       propagation in fewer steps --> performance optimisation
-- G4FieldManager: 
+- G4FieldManager:
     Changed default accuracy parameters to much better values:
         Epsilon Min Default  to 5.0e-5  from 5.0e-7  (too small)
         Epsilon Max Default  to 0.001   from 0.05    (far too big)
 
 Nov  7th, 2003  J.Apostolakis - field-V05-02-07
 -----------------------------
-- G4ChordFinder 
+- G4ChordFinder
   o Made this a base class
     * to enable specialised implementations
     * virtual methods: FindNextChord, PrintStatistics)
@@ -1276,7 +1397,7 @@ Nov  7th, 2003  J.Apostolakis - field-V05-02-07
 
   o New default value of                                      Accuracy!!
       Delta Chord        to  0.25 mm    (from 3.00 mm)     <-----
-                                                                 
+
 - G4FieldManager
   o Changed default values of
       Delta One Step     to  0.010 mm   (from 0.25 mm)     <-----
@@ -1301,13 +1422,13 @@ Nov 7th, 2003  J.Apostolakis - field-V05-02-05
   o Added simple statistics (with access methods)
 - test/NTST
   o Added new test, taken from D. Williams' exampleNTST
-     modified and maintained by J. Apostolakis 
+     modified and maintained by J. Apostolakis
 
 Nov 5th, 2003  J.Apostolakis - field-V05-02-04
 ----------------------------
 - G4FieldManager
   o Added Get/Set Min/Max imumEpsilonStep
-  o Added fEpsilonMin fEpsilonMax & default to member variables. 
+  o Added fEpsilonMin fEpsilonMax & default to member variables.
    >> Now these can be tailored for different parts of a detector or setup
 
 - G4Field G4ElectroMagneticField G4MagneticField
@@ -1318,7 +1439,7 @@ Nov 5th, 2003  J.Apostolakis - field-V05-02-04
 - G4MagErrorStepper and derived classes
     (G4ClassicalRK4 G4SimpleRunge G4ExplicitEuler G4ImplicitEuler G4SimpleHeum)
   o the constructors take G4EquationOfMotion in place of a G4Mag_EqRhs
-    as it these applicable to all types of equations 
+    as it these applicable to all types of equations
      (not just ones for Magnetic field)
 
 - G4EqMagElectricField
@@ -1380,7 +1501,7 @@ Jun 21st, 2003  J.Apostolakis - field-V05-01-03
   * Added extra argument to Accurate Advance:
     hinitial: suggested initial step size
 - Note:
-  * Purpose:  performance boost with small/limited changes, 
+  * Purpose:  performance boost with small/limited changes,
     including minor revisions of interfaces.
 
 Jun 20th, 2003  J.Apostolakis - field-V05-01-02
@@ -1398,7 +1519,7 @@ Jun 20th, 2003  J.Apostolakis - field-V05-01-01
 - Migrated unit tests to <std>.
 
 Jun 19th, 2003  J.Apostolakis - field-V05-01-00
------------------------------ 
+-----------------------------
 - G4ChordFinder:
   o Corrected simple constructor to initialise several member variables
     including LastStepEstimate_Unconstrained.
@@ -1452,8 +1573,8 @@ Further fixes for unitialised variables:
 * G4Mag_SpinEqRhs
   -  Initialise the values of dydx that we do not update.
 
-Note: Undoing these changes and the ones below would enable the user to see 
-        if undefined values are used in variables that he/she expects to 
+Note: Undoing these changes and the ones below would enable the user to see
+        if undefined values are used in variables that he/she expects to
         have integrated.
       BUT the fix assists us to find truly undefined values elsewhere
         -- if they exist -- using valgrind.
@@ -1470,12 +1591,12 @@ Changed:
   - Only the Integration variables will be integrated
 
 * G4ClassicalRK4 and G4MagErrorStepper
-  - Copy the initial time to intermediate and output C-vectors, 
+  - Copy the initial time to intermediate and output C-vectors,
      in order to provide a zero-eth estimate value.
   Note1: Should clean-up this fix, making it similar to Driver (above)
-  Note2: Should *not* be used for time varying field unless created 
+  Note2: Should *not* be used for time varying field unless created
            with at least 8 integration variables
----------------------------------  
+---------------------------------
 G4ChordFinder.cc
   - Correction from zero dChord
       which is does not update the Unconstrained step estimate (state)
@@ -1493,8 +1614,8 @@ Oct  29th, 2002   J. Apostolakis - test-V04-01-02
 Oct  29th, 2002   J. Apostolakis - test-V04-01-02
 --------------------------------
 - (Only changed and tagged test subdirectory)
-  Changed tests to use the new method SetChargeMomentumMass of 
-  PropagatorInField in order to be ready for its full use in 
+  Changed tests to use the new method SetChargeMomentumMass of
+  PropagatorInField in order to be ready for its full use in
   G4PropagatorInField.
   (A key problem at end-July was this non-preparedness of the unit tests.)
 
@@ -1521,7 +1642,7 @@ Jun  25th, 2002   J. Apostolakis - field-V04-00-05
   Added protection against error of 0.0 in ComputeNewStepSize.
 
 - G4EquationOfMotion
-  Made RightHandSide an inline method 
+  Made RightHandSide an inline method
   In GetFieldValue signature of Point is double[4], instead of double[3]
   Defined G4maximum_number_of_field_components as enum
 
@@ -1544,8 +1665,8 @@ May  31st, 2002   J. Apostolakis - field-V04-00-03
 May   7th, 2002   J. Apostolakis
 --------------------------------
 - G4MagIntegratorDriver  -  ( on trunk )
-  * Fix to update the field track for steps smaller than the chord finder's 
-minstep. 
+  * Fix to update the field track for steps smaller than the chord finder's
+minstep.
 
 
 April 19th, 2002  J. Apostolakis   (not included in tag field-V04-00-02)
@@ -1557,30 +1678,30 @@ April 19th, 2002  J. Apostolakis   (not included in tag field-V04-00-02)
 May   7th, 2002   J. Apostolakis - field-V04-00-02
 --------------------------------
  Tag including only two changes below:
-  - Putting aside the other fixes/changes (as the one above) to 
-G4MagIntegratorDriver, tagging only the fix to update the field track 
+  - Putting aside the other fixes/changes (as the one above) to
+G4MagIntegratorDriver, tagging only the fix to update the field track
 for steps smaller than the chord finder's minstep.
 
 May   7th, 2002   J. Apostolakis
 --------------------------------
 - G4MagIntegratorDriver  -  **  branch ** on 1.20 **
-  * Fix to update the field track for steps smaller than the chord finder's 
-minstep. 
+  * Fix to update the field track for steps smaller than the chord finder's
+minstep.
 
 May   7th, 2002   J. Apostolakis
 --------------------------------
 - G4MagIntegratorStepper
-  * Changed RightHandSide from a virtual method to an inline (non-virtual) 
+  * Changed RightHandSide from a virtual method to an inline (non-virtual)
       method -- it is not and should not be changed by derived classes.
 
 Mar 28th, 2002  J. Apostolakis - field-V04-00-01
 -----------------------
-- Fixed LinearStep in G4MagHelicalStepper (expected unit direction), 
+- Fixed LinearStep in G4MagHelicalStepper (expected unit direction),
     that had not been updated for new integration variable (momentum).
-    --> found in testing helical steppers in BaBar setup, 
+    --> found in testing helical steppers in BaBar setup,
          in region of negligible field.
 
-- Changed maximum number of steps in driver, 
+- Changed maximum number of steps in driver,
     halving from 500/order to 250/order.
 
 Mar 28th, 2002  J. Apostolakis
@@ -1591,13 +1712,13 @@ Mar 28th, 2002  J. Apostolakis
 - Updated outputs of testPropagateMagField for new version of source,
     that has 3rd test case.
 
-- Added new runs and outputs for testProElectroMagField, with 
+- Added new runs and outputs for testProElectroMagField, with
     several steppers, and modified test script test.sh accordingly.
 
 
 Feb  2nd, 2002   V. Grichine
 ------------------------
-Update of test/field02 to utilise new features 
+Update of test/field02 to utilise new features
   - for Electric Field, to signal that a field modifies the energy;
   - updating of time by integration, for time dependent fields.
 
@@ -1657,7 +1778,7 @@ Motivated by the use case of an Electric Field,
  - and to enable fields that vary with the global time)
 we (John Ap. and V. Grichine) changed the following:
 
-- Modified G4Field to allow the time in the GetFieldValue method 
+- Modified G4Field to allow the time in the GetFieldValue method
      - as 4th component of the "position" array.
 
 - Modified EquationOfMotion to provide the time to the GetFieldValue method
@@ -1665,14 +1786,14 @@ we (John Ap. and V. Grichine) changed the following:
       * as the 4th component of a position / time  4-array
       * in place of only position as a 3-arry
 
-- Added the global time as variable to be integrated over in the 
+- Added the global time as variable to be integrated over in the
    case of an Electric Field
 
 Support for these modifications is required in G4Transportation.
 
 (Better support will require either
  - a modification in G4FieldTrack to indicate whether the time has been
-    integrated or not.  
+    integrated or not.
  - or additionally making the time calculation a property of G4FieldTrack,
     bring in code to do it in from G4Transportation.)
 
@@ -1720,7 +1841,7 @@ May 23rd, 2001  J. Apostolakis - field-V03-01-01
 - Fixed G4FieldManager constructors to give default values to delta
   parameters.
 
-- Updated testPropagateSpin (it now compiles), 
+- Updated testPropagateSpin (it now compiles),
    and some outputs of testPropagateMagField (1 to 5)
 
 
@@ -1744,14 +1865,14 @@ Mar 23rd, 2001  J. Apostolakis - field-V03-00-04
 
 - Tidied G4FieldTrack
    * deleted obsolete methods Set/Get MomentumModulus() and its data member.
-   * in constructor to set the value of the spin to (0.0, 0.0, 0.0) 
+   * in constructor to set the value of the spin to (0.0, 0.0, 0.0)
           if pSpin is null.  (It was undefined.)
 
 Mar 23rd, 2001  J. Apostolakis - field-V03-00-03
 ------------------------------
-- Fixed (hacked) CashKarp to work using Auxiliary Stepper.   
+- Fixed (hacked) CashKarp to work using Auxiliary Stepper.
 
-- Modified G4MagIntegratorStepper 
+- Modified G4MagIntegratorStepper
      to use pointer to G4EquationOfMotion
             instead of G4Mag_EqRhs
 
@@ -1760,7 +1881,7 @@ Mar 23rd, 2001  J. Apostolakis - field-V03-00-03
 Mar 23rd, 2001  J. Apostolakis - field-V03-00-02
 ------------------------------
 - Fixed G4MagHelicalStepper::AdvanceHelix for momentum, allowing
-    the possibility of (correct) use of all Helical Steppers. 
+    the possibility of (correct) use of all Helical Steppers.
 
 - test/testProElectroMagField.cc updated for momentum.
     (Not yet updated: Spin tests)
@@ -1769,14 +1890,14 @@ Mar 23rd, 2001  J. Apostolakis - field-V03-00-02
 Mar 19th, 2001  J. Apostolakis - field-V03-00-01
 ------------------------------
 - Tagging the modification of several classes to integrate in momentum*c_light
-    instead of velocity.  
+    instead of velocity.
   Reason for change:  Velocity integration can result in superluminar
     velocities,  due to arithmetic inaccuracies.
-  Classes modified: 
+  Classes modified:
     G4FieldTrack,   (Changed components 3,4,5 of SixVector to Momentum,
     G4Mag_EqRhs, G4Mag_UsualEqRhs, G4EqMagElectricField
 
-Feb 20th, 2001  J. Apostolakis 
+Feb 20th, 2001  J. Apostolakis
 
 - Modified several classes to integrate in momentum instead of velocity.
 
@@ -1784,11 +1905,11 @@ Feb 20th, 2001  J. Apostolakis
      Changed components 3,4,5 of SixVector to Momentum,
      Modified constructor
      Added energy calculation to "LoadFromArray" method
-     GetEnergy method is now implemented. 
+     GetEnergy method is now implemented.
      Deleted obsolete (old) method names for Curve and Position. New have "Get"
 
  G4ChordFinder
-     Renamed old-method names of Field Track to new ones. 
+     Renamed old-method names of Field Track to new ones.
 
 Jan 29th, 2001  G. Cosmo - field-V03-00-00
 -------------------------
@@ -1858,7 +1979,7 @@ May 10th, 2000  G. Cosmo
 
 May    9th, 2000   J. Apostolakis - field-V01-01-01
 
-- G4MagErrorStepper: 
+- G4MagErrorStepper:
     Modified DistChord to check whether the chord endpoint are the same point.
 
 - G4RKG3_Stepper:
@@ -1907,9 +2028,9 @@ July      6th, 1999   J. Apostolakis - field-01-00-07
 
 These fixes and those in field-01-00-06 and field-01-00-06a all come
 from the need to cope with the imprecision of the integration, and its
-interaction with paths that are rather straight. 
+interaction with paths that are rather straight.
 
-G4MagIntegrationDriver: 
+G4MagIntegrationDriver:
  i) AccurateAdvance now that the chord distance is smaller than the curve len-
 gth (times 1+epsilon).
 
@@ -1940,13 +2061,13 @@ the two input curve points is truly greater than their linear distance.
 ( in G4ChordFinder::ApproxCurvePointV )
 
 The condition that prints out a warning message has been altered to
-take into account the case of a very small final interval. 
+take into account the case of a very small final interval.
 ( in G4MagInt_Driver::AccurateAdvance )
 
 June     ??th, 1999   J. Apostolakis - field-01-00-05
 
-The condition that prints out a warning message was changed to delete 
-an incorrect comparison. 
+The condition that prints out a warning message was changed to delete
+an incorrect comparison.
 ( in G4MagInt_Driver::AccurateAdvance )
 
 April    19th, 1999   J. Apostolakis - field-01-00-04
@@ -1960,7 +2081,7 @@ in destructors of 2 steppers (G4CashKarpRKF45, G4SimpleHeum)
 
 February 17th, 1999   J. Apostolakis -  field-01-00-02
 
- Moved G4PropagatorInField files to geometry/volumes. 
+ Moved G4PropagatorInField files to geometry/volumes.
  Updated GNUmakefile not to depend on geometry/volumes anymore.
    -> the known circular dependency is removed
 
@@ -1969,10 +2090,10 @@ February 12th, 1999   J. Apostolakis -  field-spin1-works1     (act Feb17)
 
   A tag that contains the first version that worked with spin (in Peter G.'s
 directory).   G4PropagateInSpin is still in this version.  A small change
-in a branch of the header file was needed. 
+in a branch of the header file was needed.
 
 
-February 10th, 1999   J. Apostolakis 
+February 10th, 1999   J. Apostolakis
 
 All the following changes are needed for energy integration also:
 
@@ -1983,14 +2104,14 @@ Because of the need for the stepper to know about it in its Abstract interface
                                to base class G4MagIntegratorStepper
 
 As a consequense the classes that derived from G4MagIntegratorStepper directly
-were changed: G4CashKarpRKF45, G4MagHelicalStepper, 
+were changed: G4CashKarpRKF45, G4MagHelicalStepper,
 
 
 February  9th, 1999    J. Apostolakis
 
 Equation of Motion:
 G4MagEqRhs.hh  Made SetChargeMomentumMass virtual, so that G4Mag_SpinEqRhs
-                 can initialise its constants too. 
+                 can initialise its constants too.
 
 
 February  9th, 1999   P. Gumplinger
@@ -2000,8 +2121,8 @@ Added Equation of Motion for Spin in Magnetic Field.
 
 February 17th, 1999   J. Apostolakis  -  field-01-00-01
   --->  date is correct, made sure that tag does not include above fixes!
-  
- Moved G4PropagatorInField files to geometry/volumes. 
+
+ Moved G4PropagatorInField files to geometry/volumes.
  Updated GNUmakefile not to depend on geometry/volumes anymore.
    -> the known circular dependency is removed
 
@@ -2019,7 +2140,7 @@ Nov   19th, 1998   J. Apostolakis  -  field-00-04-01head ===> R+D version only
 
 Nov   19th, 1998   J. Apostolakis  -  field-00-03-03b
 
- Subtle fix to interface of G4UniformMagField::GetFieldValue  
+ Subtle fix to interface of G4UniformMagField::GetFieldValue
          ( that tripped Visual C++ )
 
  G4PropagatorInField:  added printing method for verboseness.
@@ -2047,9 +2168,9 @@ Nov   19th, 1998   J. Apostolakis  -  field-00-03-02
    Minor corrections  (???)
 
 Nov   19th, 1998   J. Apostolakis  -  field-00-03-02
- 
+
    Major development to allow Electric Field
-   
+
 
 
 June  17th, 1998   J. Apostolakis  -  magfield-06-03
@@ -2060,7 +2181,7 @@ June  17th, 1998   J. Apostolakis  -  magfield-06-03
            test/testPropagateInField.cc
 ----------------------------------------------------------------------
 
- 1)  Added an assertion after each call to LocateGlobalPointAndSetup. 
+ 1)  Added an assertion after each call to LocateGlobalPointAndSetup.
      It checks that the located volume is equal to the current volume.
      If this check fails, the Propagator does not know how to continue.
 
@@ -2084,24 +2205,24 @@ May    7th, 1998    J. Apostolakis  -  magfield-06-02-helix01
 May    7th, 1998    W. Wander     (recorded/commited by  J. Apostolakis)
 
 - New "helical" RK steppers that move in helical segments, not linear.
-    * Several changes to add steppers 
+    * Several changes to add steppers
 
  Modified Files:
-        G4MagErrorStepper.hh 
-        G4MagErrorStepper.cc 
+        G4MagErrorStepper.hh
+        G4MagErrorStepper.cc
            added Helical stepping methods to this general ABC.
-        
+
         G4MagIntegratorStepper.hh
            made RightHandSide virtual   (this will be reversed very soon)
 
         testPropagateMagField.cc
            Test of Helical stepping functionality added.
-           
+
  Added Files for new Helical RK steppers, deriving from G4MagErrorStepper:
         G4HelixExplicitEuler.cc  ( and .hh )
         G4HelixHeum.cc
         G4HelixImplicitEuler.cc
-        G4HelixSimpleRunge.cc  
+        G4HelixSimpleRunge.cc
 
  Added File for implementation:
         G4MagErrorStepper.icc
@@ -2109,7 +2230,7 @@ May    7th, 1998    W. Wander     (recorded/commited by  J. Apostolakis)
 
 May    7th, 1998    J. Apostolakis   -  magfield-06-01
 
-- added small changes to 
+- added small changes to
     * G4ChordFinder:           methods to get/set IntegratorDriver
     * G4MagIntegratorDriver:   made OneGoodStep method public
 - created the file.

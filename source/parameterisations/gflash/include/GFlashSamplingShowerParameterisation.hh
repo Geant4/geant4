@@ -53,6 +53,9 @@ class GFlashSamplingShowerParameterisation
 
     GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
                                          G4double d1, G4double d2,
+    /// \param aMat1 passive material, \param dd1 - passive layer thickness
+    /// \param aMat2 active material,  \param dd2 - acive layer thickness
+
     GFlashSamplingShowerTuning * aPar = 0);
     ~GFlashSamplingShowerParameterisation();
 
@@ -101,7 +104,6 @@ class GFlashSamplingShowerParameterisation
     // parametrization parameters
     //
     GFlashSamplingShowerTuning * thePar;
-    G4bool owning;
 
     // Cashed parameters:  
     // Longitudinal Coefficients for a homogenious calo

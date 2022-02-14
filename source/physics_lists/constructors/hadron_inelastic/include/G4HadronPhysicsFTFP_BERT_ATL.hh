@@ -36,6 +36,7 @@
 //
 // Modified:
 // 18.07.2017 A.Dotti: refactor for allowing new code
+// 22.09.2020: V.Ivanchenko change design using G4HadProcess utility
 //---------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsFTFP_BERT_ATL_h
@@ -48,15 +49,14 @@ class G4HadronPhysicsFTFP_BERT_ATL : public G4HadronPhysicsFTFP_BERT
   public: 
     G4HadronPhysicsFTFP_BERT_ATL(G4int verbose =1);
     G4HadronPhysicsFTFP_BERT_ATL(const G4String& name, G4bool quasiElastic=false);
-    virtual ~G4HadronPhysicsFTFP_BERT_ATL() {}
+    virtual ~G4HadronPhysicsFTFP_BERT_ATL();
 
-  private:
-    //Modify the minimum needed
-    virtual void Neutron() override;
-    virtual void Proton() override;
-    virtual void Pion() override;
-    virtual void Kaon() override;
-    virtual void DumpBanner() override;
+    void ConstructProcess() override;
+
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsFTFP_BERT_ATL(G4HadronPhysicsFTFP_BERT_ATL &) = delete;
+    G4HadronPhysicsFTFP_BERT_ATL & operator =
+    (const G4HadronPhysicsFTFP_BERT_ATL &right) = delete;
 };
 
 #endif

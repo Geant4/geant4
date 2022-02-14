@@ -37,6 +37,29 @@
 #include "G4Track.hh"
 #include "HadrontherapyAnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "HadrontherapyMatrix.hh"
+
+
+#include "G4SteppingManager.hh"
+#include "G4TrackVector.hh"
+#include "HadrontherapySteppingAction.hh"
+#include "G4ios.hh"
+#include "G4SteppingManager.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
+#include "G4TrackStatus.hh"
+#include "G4TrackVector.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
+#include "G4UserEventAction.hh"
+#include "G4TransportationManager.hh"
+#include "G4VSensitiveDetector.hh"
+#include "HadrontherapyRunAction.hh"
+#include "G4SystemOfUnits.hh"
+#include "HadrontherapyRBE.hh"
+#include <G4AccumulableManager.hh>
+
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorSD::HadrontherapyDetectorSD(G4String name):
@@ -76,15 +99,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
 
     // Get kinetic energy
     G4Track * theTrack = aStep  ->  GetTrack();
-<<<<<<< HEAD
-    G4double kineticEnergy =  theTrack -> GetKineticEnergy();  
-
-    G4ParticleDefinition *particleDef = theTrack -> GetDefinition();
-    //Get particle name  
-    G4String particleName =  particleDef -> GetParticleName();  
-
-=======
-    
+    G4double kineticEnergy = theTrack->GetKineticEnergy();
     G4ParticleDefinition *particleDef = theTrack -> GetDefinition();
     //Get particle name
     G4String particleName =  particleDef -> GetParticleName();
@@ -123,10 +138,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
     G4VPhysicalVolume* volumePre = touchPreStep->GetVolume();
     G4String namePre = volumePre->GetName();
     
-    
-    
-    
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+
     
 
 #ifdef G4ANALYSIS_USE_ROOT
@@ -339,7 +351,24 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
         }
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     }
-#endif
+
+    auto rbe = HadrontherapyRBE::GetInstance();
+    if (rbe->IsCalculationEnabled())
+    {
+        if (!fRBEAccumulable)
+        {
+            fRBEAccumulable = dynamic_cast<HadrontherapyRBEAccumulable*>(G4AccumulableManager::Instance()->GetAccumulable("RBE"));
+            if (!fRBEAccumulable)
+            {
+                G4Exception("HadrontherapyDetectorSD::ProcessHits", "NoAccumulable", FatalException, "Accumulable RBE not found.");
+            }
+        }
+	if (A>0) //protect against gammas, e- , etc
+	  {
+	    fRBEAccumulable->Accumulate(kineticEnergy / A, energyDeposit, DX, Z, i, j, k);
+	  }
+    }
+
 
     return true;
 }

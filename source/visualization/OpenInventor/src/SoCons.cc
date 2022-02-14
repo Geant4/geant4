@@ -34,8 +34,6 @@
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodes/SoCons.h"
 
@@ -85,7 +83,11 @@ SoCons::~SoCons() {
 // initClass
 void SoCons::initClass(){
   // This statement is required.
-  SO_NODE_INIT_CLASS(SoCons,SoShape,"Shape");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(SoCons,SoShape,"Shape");
+  }
 }
 
 
@@ -440,5 +442,3 @@ void SoCons::generateAlternateRep() {
 void SoCons::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

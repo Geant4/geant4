@@ -34,31 +34,30 @@
 #ifndef WLSPrimaryGeneratorMessenger_h
 #define WLSPrimaryGeneratorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
-
-class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
 
 class WLSPrimaryGeneratorAction;
 
+class G4UIdirectory;
+class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
+
 class WLSPrimaryGeneratorMessenger : public G4UImessenger
 {
-  public:
+ public:
+  WLSPrimaryGeneratorMessenger(WLSPrimaryGeneratorAction*);
+  ~WLSPrimaryGeneratorMessenger();
 
-    WLSPrimaryGeneratorMessenger(WLSPrimaryGeneratorAction*);
-    virtual ~WLSPrimaryGeneratorMessenger();
- 
-    virtual void SetNewValue(G4UIcommand*, G4String);
- 
-  private:
+  void SetNewValue(G4UIcommand*, G4String) override;
 
-    WLSPrimaryGeneratorAction*   fAction;
+ private:
+  WLSPrimaryGeneratorAction* fAction;
 
-    G4UIdirectory*               fGunDir;
+  G4UIdirectory* fGunDir;
 
-    G4UIcmdWithADoubleAndUnit*   fSetPolarizationCmd;
-    G4UIcmdWithADoubleAndUnit*   fSetDecayTimeConstantCmd;
+  G4UIcmdWithADoubleAndUnit* fSetPolarizationCmd;
+  G4UIcmdWithADoubleAndUnit* fSetDecayTimeConstantCmd;
+  // G4UIcmdWithABool*            fSetUseSampledEnergyCmd;
 };
 
 #endif

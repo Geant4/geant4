@@ -48,24 +48,20 @@ class G4UIcmdWithAnInteger;
 //   /hts/verbose
 //
 
-class G4SDmessenger: public G4UImessenger
+class G4SDmessenger : public G4UImessenger
 {
-  public:
-    G4SDmessenger(G4SDManager * SDManager);
-    ~G4SDmessenger();
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-  
-  private:
-    G4SDManager * fSDMan;
-    G4UIdirectory* hitsDir;
-    G4UIcmdWithoutParameter* listCmd;
-    G4UIcmdWithAString* activeCmd;
-    G4UIcmdWithAString* inactiveCmd;
-    G4UIcmdWithAnInteger* verboseCmd;
+ public:
+  G4SDmessenger(G4SDManager* SDManager);
+  ~G4SDmessenger();
+  void SetNewValue(G4UIcommand* command, G4String newValues);
+
+ private:
+  G4SDManager* fSDMan;
+  G4UIdirectory* hitsDir;
+  G4UIcmdWithoutParameter* listCmd;
+  G4UIcmdWithAString* activeCmd;
+  G4UIcmdWithAString* inactiveCmd;
+  G4UIcmdWithAnInteger* verboseCmd;
 };
 
-
-
-
 #endif
-

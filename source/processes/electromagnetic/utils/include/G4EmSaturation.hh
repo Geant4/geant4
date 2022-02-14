@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 #ifndef G4EmSaturation_h
 #define G4EmSaturation_h 1
 
@@ -94,16 +93,16 @@ public:
   // dump G4 list
   void DumpG4BirksCoefficients();
 
-  // this method should not be overwitten
+  // this method should not be overwritten
   inline G4double VisibleEnergyDepositionAtAStep(const G4Step*) const; 
 
   inline void SetVerbose(G4int);
 
-private:
-
   // hide assignment operator
   G4EmSaturation & operator=(const G4EmSaturation &right) = delete;
   G4EmSaturation(const G4EmSaturation&) = delete;
+
+private:
 
   void InitialiseBirksCoefficient(const G4Material*);
 
@@ -117,7 +116,7 @@ private:
   G4int    nG4Birks;
   G4int    nWarnings;
 
-  static G4int nMaterials;
+  static size_t nMaterials;
 
   // list of materials used in run time
   static std::vector<G4double> massFactors;

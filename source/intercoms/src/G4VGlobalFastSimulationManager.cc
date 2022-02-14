@@ -23,26 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VGlobalFastSimulationManager
 //
-//
-// 
-// Abstract interface for GEANT4 Global Fast Simulation Manager.
-// P. Mora de Freitas & M. Verderi 14/April/1999.
+// Authors: P. Mora de Freitas & M. Verderi, 14 April 1999
+// --------------------------------------------------------------------
 
 #include "G4VGlobalFastSimulationManager.hh"
 
-G4ThreadLocal G4VGlobalFastSimulationManager* 
-G4VGlobalFastSimulationManager::fpConcreteInstance = 0;
+G4ThreadLocal G4VGlobalFastSimulationManager*
+  G4VGlobalFastSimulationManager::fpConcreteInstance = nullptr;
 
-G4VGlobalFastSimulationManager* 
-G4VGlobalFastSimulationManager::GetConcreteInstance ()
+// --------------------------------------------------------------------
+G4VGlobalFastSimulationManager*
+G4VGlobalFastSimulationManager::GetConcreteInstance()
 {
   return fpConcreteInstance;
 }
 
-void
-G4VGlobalFastSimulationManager::
-SetConcreteInstance (G4VGlobalFastSimulationManager* m)
+// --------------------------------------------------------------------
+void G4VGlobalFastSimulationManager::SetConcreteInstance(
+  G4VGlobalFastSimulationManager* m)
 {
   fpConcreteInstance = m;
 }

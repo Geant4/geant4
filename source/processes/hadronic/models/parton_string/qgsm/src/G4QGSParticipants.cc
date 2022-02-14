@@ -46,13 +46,27 @@
 // Promoting model parameters from local variables class properties
 G4ThreadLocal G4int G4QGSParticipants_NPart = 0;
 
-G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(),
-		ModelMode(SOFT),
-		nCutMax(7),ThresholdParameter(0.000*GeV),
-		QGSMThreshold(3*GeV),theNucleonRadius(1.5*fermi),alpha(-0.5),beta(2.5)
+G4QGSParticipants::G4QGSParticipants()
+  : theDiffExcitaton(), ModelMode(SOFT), nCutMax(7),
+    ThresholdParameter(0.0*GeV), QGSMThreshold(3.0*GeV),
+    theNucleonRadius(1.5*fermi), theCurrentVelocity(G4ThreeVector()),
+    theProjectileSplitable(nullptr), Regge(nullptr),
+    InteractionMode(ALL), alpha(-0.5), beta(2.5), sigmaPt(0.0),
+    NumberOfInvolvedNucleonsOfTarget(0), NumberOfInvolvedNucleonsOfProjectile(0),
+    ProjectileResidual4Momentum(G4LorentzVector()), ProjectileResidualMassNumber(0),
+    ProjectileResidualCharge(0), ProjectileResidualExcitationEnergy(0.0),
+    TargetResidual4Momentum(G4LorentzVector()), TargetResidualMassNumber(0),
+    TargetResidualCharge(0), TargetResidualExcitationEnergy(0.0),
+    CofNuclearDestruction(0.0), R2ofNuclearDestruction(0.0),
+    ExcitationEnergyPerWoundedNucleon(0.0), DofNuclearDestruction(0.0),
+    Pt2ofNuclearDestruction(0.0), MaxPt2ofNuclearDestruction(0.0)
 {
+  for (size_t i=0; i < 250; ++i) {
+    TheInvolvedNucleonsOfTarget[i] = nullptr;
+    TheInvolvedNucleonsOfProjectile[i] = nullptr;
+  }
   // Parameters setting
-  SetCofNuclearDestruction(1.);
+  SetCofNuclearDestruction( 1.0 );
   SetR2ofNuclearDestruction( 1.5*fermi*fermi );
   SetDofNuclearDestruction( 0.3 );
   SetPt2ofNuclearDestruction( 0.075*GeV*GeV );
@@ -63,10 +77,36 @@ G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(),
 }
 
 G4QGSParticipants::G4QGSParticipants(const G4QGSParticipants &right)
-: G4VParticipants(),ModelMode(right.ModelMode), nCutMax(right.nCutMax),
-  ThresholdParameter(right.ThresholdParameter), QGSMThreshold(right.QGSMThreshold),
-  theNucleonRadius(right.theNucleonRadius)
-{}
+  : G4VParticipants(), ModelMode(right.ModelMode), nCutMax(right.nCutMax),
+    ThresholdParameter(right.ThresholdParameter),
+    QGSMThreshold(right.QGSMThreshold),
+    theNucleonRadius(right.theNucleonRadius),
+    theCurrentVelocity(right.theCurrentVelocity),
+    theProjectileSplitable(right.theProjectileSplitable),
+    Regge(right.Regge), InteractionMode(right.InteractionMode),
+    alpha(right.alpha), beta(right.beta), sigmaPt(right.sigmaPt),
+    NumberOfInvolvedNucleonsOfTarget(right.NumberOfInvolvedNucleonsOfTarget),
+    NumberOfInvolvedNucleonsOfProjectile(right.NumberOfInvolvedNucleonsOfProjectile),
+    ProjectileResidual4Momentum(right.ProjectileResidual4Momentum),
+    ProjectileResidualMassNumber(right.ProjectileResidualMassNumber),
+    ProjectileResidualCharge(right.ProjectileResidualCharge),
+    ProjectileResidualExcitationEnergy(right.ProjectileResidualExcitationEnergy),
+    TargetResidual4Momentum(right.TargetResidual4Momentum),
+    TargetResidualMassNumber(right.TargetResidualMassNumber),
+    TargetResidualCharge(right.TargetResidualCharge),
+    TargetResidualExcitationEnergy(right.TargetResidualExcitationEnergy),
+    CofNuclearDestruction(right.CofNuclearDestruction),
+    R2ofNuclearDestruction(right.R2ofNuclearDestruction),
+    ExcitationEnergyPerWoundedNucleon(right.ExcitationEnergyPerWoundedNucleon),
+    DofNuclearDestruction(right.DofNuclearDestruction),
+    Pt2ofNuclearDestruction(right.Pt2ofNuclearDestruction),
+    MaxPt2ofNuclearDestruction(right.MaxPt2ofNuclearDestruction)
+{
+  for (size_t i=0; i < 250; ++i) {
+    TheInvolvedNucleonsOfTarget[i] = right.TheInvolvedNucleonsOfTarget[i];
+    TheInvolvedNucleonsOfProjectile[i] = right.TheInvolvedNucleonsOfProjectile[i];
+  }
+}
 
 G4QGSParticipants::~G4QGSParticipants() {}
 
@@ -980,13 +1020,14 @@ G4bool G4QGSParticipants::PutOnMassShell() {
 G4ThreeVector G4QGSParticipants::GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const {
   //  @@ this method is used in FTFModel as well. Should go somewhere common!
 
-  G4double Pt2( 0.0 );
-  if ( AveragePt2 <= 0.0 ) {
-    Pt2 = 0.0;
-  } else {
-    Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) );
+  G4double Pt2( 0.0 ), Pt(0.0);
+  if ( AveragePt2 > 0.0 ) {
+    G4double x = maxPtSquare/AveragePt2;
+    Pt2 = (x < 200) ?
+      -AveragePt2 * G4Log( 1.0 + G4UniformRand() * ( G4Exp( -x ) -1.0 ) )
+      : -AveragePt2 * G4Log( 1.0 - G4UniformRand() );
+    Pt = std::sqrt( Pt2 );
   }
-  G4double Pt = std::sqrt( Pt2 );
   G4double phi = G4UniformRand() * twopi;
 
   return G4ThreeVector( Pt*std::cos(phi), Pt*std::sin(phi), 0.0 );    

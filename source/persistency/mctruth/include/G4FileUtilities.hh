@@ -23,15 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4FileUtilities.hh
+// G4FileUtilities
 //
-// History:
-//   01.08.24  Youhei Morita  Initial creation
+// Class Description:
+//
+// File utilities to access files with POSIX interface
 
-#ifndef FILE_UTILITIES_HH
-#define FILE_UTILITIES_HH 1
+// Author: Youhei Morita, 24.08.2001
+// --------------------------------------------------------------------
+#ifndef G4FILE_UTILITIES_HH
+#define G4FILE_UTILITIES_HH 1
 
 #include "G4Types.hh"
+#include "G4String.hh"
 
 #include <sys/types.h>
 #include <fcntl.h>
@@ -42,39 +46,34 @@
 #include <string>
 #include <iostream>
 
-
-// Class Description:
-//   File utilities to access files with POSIX interface.
-
 class G4FileUtilities
 {
-    public: // With description
-      G4FileUtilities();
+  public:
+
+    G4FileUtilities();
       // Constructor
 
-      ~G4FileUtilities();
+    ~G4FileUtilities();
       // Destructor
 
-    public: // With description
-      G4bool FileExists(const std::string file);
-      // checks if the "file" exists.  returns true if it does.
+    G4bool FileExists(const G4String& file);
+      // checks if the "file" exists.  returns true if it does
 
-      std::string StrErrNo() const { return ::strerror(errno); };
-      // returns the error message of the last system call as string.
+    std::string StrErrNo() const { return ::strerror(errno); }
+      // returns the error message of the last system call as string
 
-      G4int Shell(std::string str) { return ::system(str.c_str()); };
-      // execute the shell command.  returns zero if success.
+    G4int Shell(const G4String& str) { return ::system(str.c_str()); }
+      // executes the shell command.  returns zero if success
 
-      G4int CopyFile(const std::string srcFile, const std::string dstFile);
-      // copies the "srcFile" to "dstFile".  returns zero if success.
+    G4int CopyFile(const G4String& srcFile, const G4String& dstFile);
+      // copies the "srcFile" to "dstFile".  returns zero if success
 
-      G4int DeleteFile(const std::string file, const std::string option);
-      // deletes the "file" with the "option".  returns zero if success.
+    G4int DeleteFile(const G4String& file, const G4String& option);
+      // deletes the "file" with the "option".  returns zero if success
 
-      std::string GetEnv(const std::string env) { return ::getenv(env.c_str()); };
-      // retuns the value of environment variable as string.
+    std::string GetEnv(const G4String& env) { return ::getenv(env.c_str()); }
+      // retuns the value of environment variable as string
 
-}; // End of class G4FileUtilities
+};
 
 #endif
-

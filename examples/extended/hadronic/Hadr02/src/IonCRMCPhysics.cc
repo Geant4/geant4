@@ -34,8 +34,9 @@
 // Author:    2018 Alberto Ribon
 //
 // Modified:
+// -  18-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
-// ------------------------------------------------------------
+//---------------------------------------------------------------------------
 // 
 #ifdef G4_USE_CRMC
 
@@ -60,7 +61,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4BuilderType.hh"
 #include "G4HadronicInteractionRegistry.hh"
-#include "G4CRMCModel.hh"
+#include "HadronicInelasticModelCRMC.hh"
 #include "G4HadronicParameters.hh"
 
 using namespace std;
@@ -70,32 +71,21 @@ using namespace std;
 //
 G4_DECLARE_PHYSCONSTR_FACTORY( IonCRMCPhysics );
 
-G4ThreadLocal G4bool                    IonCRMCPhysics::wasActivated = false;
-G4ThreadLocal G4BinaryLightIonReaction* IonCRMCPhysics::theIonBC = 0;
-G4ThreadLocal G4HadronicInteraction*    IonCRMCPhysics::theFTFP = 0;
-G4ThreadLocal G4VCrossSectionDataSet*   IonCRMCPhysics::theNuclNuclData = 0; 
-G4ThreadLocal G4VComponentCrossSection* IonCRMCPhysics::theGGNuclNuclXS = 0;
-G4ThreadLocal G4FTFBuilder*             IonCRMCPhysics::theBuilder = 0;
-G4ThreadLocal G4CRMCModel*              IonCRMCPhysics::theCRMC = 0;
+const std::array< std::string, 13 > IonCRMCPhysics::fModelNames = {
+  "EPOS-LHC", "EPOS-1.99", "QGSJET-01", "", "", "",
+  "SIBYLL-2.3", "QGSJETII-04", "", "", "", "QGSJETII-03", "DPMJET-3.06" };          
+          
 
-
-IonCRMCPhysics::IonCRMCPhysics( G4int ver ) : G4VPhysicsConstructor( "ionInelasticCRMC"),
-                                              verbose( ver ) {
+IonCRMCPhysics::IonCRMCPhysics( G4int ver ) : G4VPhysicsConstructor( "ionInelasticCRMC" ) {
+  fModel = 0;  //***LOOKHERE*** CRMC model: 0:EPOS-LHC, 1:EPOS-1.99, 2:QGSJET:01, 6:SIBYLL-2.3,
+               //                           7:QGSJETII-04, 11:QGSJETII-03, 12:DPMJET-3.06
+  fVerbose = ver;
+  if ( fVerbose > 1 ) G4cout << "### IonCRMCPhysics" << G4endl;
   SetPhysicsType( bIons );
-  if ( verbose > 1 ) G4cout << "### G4IonPhysics" << G4endl;
 }
 
 
-IonCRMCPhysics::~IonCRMCPhysics() {
-  // Explictly setting pointers to zero is actually needed.
-  // These are static variables, in case we restart threads we need to re-create objects
-  delete theCRMC;         theCRMC = 0;
-  delete theBuilder;      theBuilder = 0;
-  delete theGGNuclNuclXS; theGGNuclNuclXS = 0;
-  delete theNuclNuclData; theNuclNuclData = 0;
-  delete theIonBC;        theIonBC = 0;
-  delete theFTFP;         theFTFP = 0;
-}
+IonCRMCPhysics::~IonCRMCPhysics() {}
 
 
 void IonCRMCPhysics::ConstructParticle() {
@@ -106,51 +96,48 @@ void IonCRMCPhysics::ConstructParticle() {
 
 
 void IonCRMCPhysics::ConstructProcess() {
-  if ( wasActivated ) return;
-  wasActivated = true;
+  fModel = 0;                          //***LOOKHERE*** 0:EPOS-LHC, 1:EPOS-1.99, 2:QGSJET:01, 6:SIBYLL-2.3,
+                                       //               7:QGSJETII-04, 11:QGSJETII-03, 12:DPMJET-3.06
+  const G4double minCRMC = 100.0*GeV;  //***LOOKHERE*** CRMC model is applied only above this projectile lab energy per nucleon
+  const G4double maxFTFP = 110.0*GeV;  //***LOOKHERE*** FTFP model is applied only below this projectile lab energy per nucleon
   G4HadronicInteraction* p = G4HadronicInteractionRegistry::Instance()->FindModel( "PRECO" );
   G4PreCompoundModel* thePreCompound = static_cast< G4PreCompoundModel* >( p );
   if ( ! thePreCompound ) thePreCompound = new G4PreCompoundModel;
-  // Transition energies per nucleon
-  const G4double minCRMC = 100.0*GeV;
-  const G4double maxFTFP = 110.0*GeV;
-  const G4double minFTFP =   2.0*GeV;
-  const G4double maxBIC =    4.0*GeV;
-  const G4double minBIC =    0.0*GeV;
   // Binary Cascade
-  theIonBC = new G4BinaryLightIonReaction( thePreCompound );
-  theIonBC->SetMinEnergy( minBIC );
-  theIonBC->SetMaxEnergy( maxBIC );
+  G4HadronicInteraction* theIonBC = new G4BinaryLightIonReaction( thePreCompound );
+  theIonBC->SetMinEnergy( 0.0 );
+  theIonBC->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade() );
   // FTFP
-  theBuilder = new G4FTFBuilder( "FTFP", thePreCompound );
-  theFTFP = theBuilder->GetModel();
-  theFTFP->SetMinEnergy( minFTFP );
+  G4FTFBuilder theBuilder( "FTFP", thePreCompound );
+  G4HadronicInteraction* theFTFP = theBuilder.GetModel();
+  theFTFP->SetMinEnergy( G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade() );
   theFTFP->SetMaxEnergy( maxFTFP );
   // CRMC
-  theCRMC = new G4CRMCModel;
+  G4HadronicInteraction* theCRMC = new HadronicInelasticModelCRMC( fModel, fModelNames[fModel] );
   theCRMC->SetMinEnergy( minCRMC );
   theCRMC->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   // Cross section
-  theNuclNuclData = new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc );
+  G4CrossSectionInelastic* theXS = new G4CrossSectionInelastic( new G4ComponentGGNuclNuclXsc );
   // Processes
-  AddProcess( "dInelastic",     G4Deuteron::Deuteron(),     false );
-  AddProcess( "tInelastic",     G4Triton::Triton(),         false );
-  AddProcess( "He3Inelastic",   G4He3::He3(),               true );
-  AddProcess( "alphaInelastic", G4Alpha::Alpha(),           true );
-  AddProcess( "ionInelastic",   G4GenericIon::GenericIon(), true );
-  if ( verbose > 1 ) G4cout << "G4IonPhysics::ConstructProcess done! " << G4endl;
+  AddProcess( "dInelastic",     G4Deuteron::Deuteron(),     theIonBC, theFTFP, theCRMC , theXS );
+  AddProcess( "tInelastic",     G4Triton::Triton(),         theIonBC, theFTFP, theCRMC , theXS );
+  AddProcess( "He3Inelastic",   G4He3::He3(),               theIonBC, theFTFP, theCRMC , theXS );
+  AddProcess( "alphaInelastic", G4Alpha::Alpha(),           theIonBC, theFTFP, theCRMC , theXS );
+  AddProcess( "ionInelastic",   G4GenericIon::GenericIon(), theIonBC, theFTFP, theCRMC , theXS );
+  if ( fVerbose > 1 ) G4cout << "IonCRMCPhysics::ConstructProcess done! " << G4endl;
 }
 
 
-void IonCRMCPhysics::AddProcess( const G4String& name, G4ParticleDefinition* part, G4bool ) {
+void IonCRMCPhysics::AddProcess( const G4String& name, G4ParticleDefinition* part,
+				 G4HadronicInteraction* theIonBC, G4HadronicInteraction* theFTFP,
+				 G4HadronicInteraction* theCRMC, G4VCrossSectionDataSet* xs ) {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess( name, part );
   G4ProcessManager* pManager = part->GetProcessManager();
   pManager->AddDiscreteProcess( hadi );
-  hadi->AddDataSet( theNuclNuclData );    
-  hadi->RegisterMe( theIonBC );
-  hadi->RegisterMe( theFTFP );
-  hadi->RegisterMe( theCRMC );
+  if ( xs )      hadi->AddDataSet( xs );
+  if ( theIonBC) hadi->RegisterMe( theIonBC );
+  if ( theFTFP ) hadi->RegisterMe( theFTFP );
+  if ( theCRMC ) hadi->RegisterMe( theCRMC );
 }
 
 #endif //G4_USE_CRMC
-

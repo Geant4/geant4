@@ -1,0 +1,102 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_text_hershey_marker
+#define tools_sg_text_hershey_marker
+
+#include "text_hershey"
+
+namespace tools {
+namespace sg {
+
+class text_hershey_marker : public text_hershey {
+  TOOLS_NODE(text_hershey_marker,tools::sg::text_hershey_marker,text_hershey)
+public:
+  virtual bool draw_in_frame_buffer() const {return true;}
+
+  virtual void render(render_action& a_action) {
+    //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+    a_action.set_lighting(false);
+    a_action.set_depth_test(false);
+
+    float x,y,z;
+    a_action.projected_origin(x,y,z);
+
+    const state& state = a_action.state();
+
+    float sy = 2.0f*float(height.value())/float(state.m_wh); //in [-1,1]
+
+    float old_height = height.value();
+    height.value_no_cmp(sy);
+
+    std::vector<float> segs;
+    get_segments(segs); //must be after changing the height.
+
+    a_action.load_matrices_to_identity();
+    
+   {tools::mat4f _mtx;
+    _mtx.set_translate(x,y,0);
+    if(state.m_ww) _mtx.mul_scale(float(state.m_wh)/float(state.m_ww),1,1);
+    a_action.load_proj_matrix(_mtx);}
+    
+    a_action.draw_vertex_array_xy(gl::lines(),segs);
+
+    a_action.load_matrices_from_state();
+
+    height.value_no_cmp(old_height);
+
+    a_action.set_depth_test(state.m_GL_DEPTH_TEST);
+    a_action.set_lighting(a_action.state().m_GL_LIGHTING);
+
+  }
+
+  virtual void pick(pick_action& a_action) {
+    float x,y,z;
+    a_action.projected_origin(x,y,z);
+
+    const state& state = a_action.state();
+
+    float sy = 2.0f*float(height.value())/float(state.m_wh); //in [-1,1]
+
+    float old_height = height.value();
+    height.value_no_cmp(sy);
+
+    std::vector<float> segs;
+    get_segments(segs);
+
+    a_action.set_matrices_to_identity();
+    
+   {tools::mat4f& _mtx = a_action.model_matrix();
+    _mtx.set_translate(x,y,0);
+    if(state.m_ww) _mtx.mul_scale(float(state.m_wh)/float(state.m_ww),1,1);}
+
+    a_action.add__lines_xy(*this,segs);
+
+    a_action.set_matrices_from_state();
+
+    height.value_no_cmp(old_height);
+  }
+
+  virtual void bbox(bbox_action& a_action) {
+    a_action.add_one_point(0,0,0);
+  }
+public:
+  text_hershey_marker()
+  :parent()
+  {
+    height = 10; //in pixels
+  }
+  virtual ~text_hershey_marker(){}
+public:
+  text_hershey_marker(const text_hershey_marker& a_from)
+  :parent(a_from)
+  {}
+  text_hershey_marker& operator=(const text_hershey_marker& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif

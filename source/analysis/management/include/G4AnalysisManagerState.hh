@@ -31,9 +31,10 @@
 #ifndef G4AnalysisManagerState_h
 #define G4AnalysisManagerState_h 1
 
+#include "G4AnalysisVerbose.hh"
 #include "globals.hh"
-#include "G4AnalysisVerbose.hh" 
-#include "G4Threading.hh"
+
+#include <string_view>
 
 class G4AnalysisManagerState
 {
@@ -42,46 +43,45 @@ class G4AnalysisManagerState
   friend class G4VAnalysisReader;
   friend class G4ParameterManager;
 
-  public: 
+  public:
     G4AnalysisManagerState(const G4String& type, G4bool isMaster);
+    // disabled constructors, operators
+    G4AnalysisManagerState() = delete;
+    G4AnalysisManagerState(const G4AnalysisManagerState&) = delete;
+    G4AnalysisManagerState& operator=(const G4AnalysisManagerState&) = delete;
+
+    // Methods
+    void Message([[maybe_unused]] G4int level,
+                 [[maybe_unused]] const G4String& action,
+                 [[maybe_unused]] const G4String& objectType,
+                 [[maybe_unused]] const G4String& objectName = "",
+                 [[maybe_unused]] G4bool success = true) const;
 
     // get methods
     G4String GetType() const;
     G4bool   GetIsMaster() const;
     G4bool   GetIsActivation() const;
     G4int    GetVerboseLevel() const;
-    const G4AnalysisVerbose* GetVerboseL1() const;
-    const G4AnalysisVerbose* GetVerboseL2() const;
-    const G4AnalysisVerbose* GetVerboseL3() const;
-    const G4AnalysisVerbose* GetVerboseL4() const;
+    G4bool   IsVerbose(G4int verboseLevel) const;
     G4int    GetCompressionLevel() const;
 
   private:
-    // disabled constructors, operators  
-    G4AnalysisManagerState(); 
-    G4AnalysisManagerState(const G4AnalysisManagerState&); 
-    G4AnalysisManagerState& operator=(const G4AnalysisManagerState&); 
-
     // set methods
     // (hidden from all clients except for G4VAnalysisManager friend)
     void SetIsActivation(G4bool isActivation);
     void SetVerboseLevel(G4int verboseLevel);
     void SetCompressionLevel(G4int level);
 
-    // data members
+    // Static data members
+    static constexpr std::string_view fkClass { "G4AnalysisManagerState" };
+
+    // Data members
     G4String fType;
     G4bool   fIsMaster;
-    G4bool   fIsActivation;
-    G4int    fVerboseLevel;
-    G4int    fCompressionLevel;
-    G4AnalysisVerbose  fVerboseL1;
-    G4AnalysisVerbose  fVerboseL2;
-    G4AnalysisVerbose  fVerboseL3;
-    G4AnalysisVerbose  fVerboseL4;
-    G4AnalysisVerbose* fpVerboseL1;
-    G4AnalysisVerbose* fpVerboseL2;
-    G4AnalysisVerbose* fpVerboseL3;
-    G4AnalysisVerbose* fpVerboseL4;
+    G4bool   fIsActivation { false };
+    G4int    fVerboseLevel { 0 };
+    G4int    fCompressionLevel { 1 };
+    G4AnalysisVerbose fVerbose;
 };
 
 // inline functions
@@ -104,20 +104,10 @@ inline G4bool  G4AnalysisManagerState::GetIsActivation() const
 inline G4int   G4AnalysisManagerState::GetVerboseLevel() const
 { return fVerboseLevel; }
 
-inline const G4AnalysisVerbose* G4AnalysisManagerState::GetVerboseL1() const
-{ return fpVerboseL1; }
-
-inline const G4AnalysisVerbose* G4AnalysisManagerState::GetVerboseL2() const
-{ return fpVerboseL2; }
-
-inline const G4AnalysisVerbose* G4AnalysisManagerState::GetVerboseL3() const
-{ return fpVerboseL3; }
-
-inline const G4AnalysisVerbose* G4AnalysisManagerState::GetVerboseL4() const
-{ return fpVerboseL4; }
+inline G4bool  G4AnalysisManagerState::IsVerbose(G4int verboseLevel) const
+{ return fVerboseLevel == verboseLevel; }
 
 inline G4int  G4AnalysisManagerState::GetCompressionLevel() const
 { return fCompressionLevel; }
 
-#endif  
-
+#endif

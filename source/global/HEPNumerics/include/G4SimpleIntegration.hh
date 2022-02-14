@@ -23,97 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4SimpleIntegration
 //
 // Class description:
 //
 // Class for realisation of simple numerical methodes for integration of
 // functions with signature: double f(double). The methods based mainly on
-// algorithms given in the book :
+// algorithms given in the book:
 //   An introduction to NUMERICAL METHODS IN C++,
 //   B.H. Flowers, Claredon Press, Oxford, 1995.
-//
-// --------------------------- Member data ----------------------------
-//
-//   fFunction       - pointer to the function to be integrated
-//   fTolerance      - accuracy of integration in Adaptive Gauss method
-//   fMaxDepth = 100 - constant maximum iteration depth for
-//                     Adaptive Gauss method
-//
-// --------------------------- Methods --------------------------------
-//
-//   Trapezoidal, MidPoint, Gauss and Simpson(double a,double b,int n)
-//   - integrate function pointed by fFunction from a to b by n iterations,
-//     i.e. with Step (b-a)/n according to the correspondent method.
-//
-//   AdaptGausIntegration(double a, double b)
-//   - integrate function from a to be with accuracy <= fTolerance 
 
-// ----------------------------- History ------------------------------ 
-//
-//  26.03.97   V.Grichine ( Vladimir.Grichine@cern.ch )
-
+// Author: V.Grichine, 26.03.1997
+// --------------------------------------------------------------------
 #ifndef G4SIMPLEINTEGRATION_HH
-#define G4SIMPLEINTEGRATION_HH
+#define G4SIMPLEINTEGRATION_HH 1
 
 #include "G4Types.hh"
 
-typedef G4double (*function)(G4double) ;
+typedef G4double (*function)(G4double);
 
 class G4SimpleIntegration
 {
-  public:
+ public:
+  explicit G4SimpleIntegration(function pFunction);
 
-       explicit G4SimpleIntegration( function pFunction ) ;
-       
-       G4SimpleIntegration( function pFunction,
-                            G4double pTolerance ) ;
-       
-      ~G4SimpleIntegration() ;
-       
-       // Simple integration methods
-       
-       G4double Trapezoidal(G4double xInitial,
-                            G4double xFinal,
-                            G4int iterationNumber ) ;
+  G4SimpleIntegration(function pFunction, G4double pTolerance);
 
-       G4double    MidPoint(G4double xInitial,
-                            G4double xFinal,
-                            G4int iterationNumber ) ;
+  ~G4SimpleIntegration();
 
-       G4double       Gauss(G4double xInitial,
-                            G4double xFinal,
-                            G4int iterationNumber ) ;
+  G4SimpleIntegration(const G4SimpleIntegration&) = delete;
+  G4SimpleIntegration& operator=(const G4SimpleIntegration&) = delete;
+  // Private copy constructor and assignment operator.
 
-       G4double     Simpson(G4double xInitial,
-                            G4double xFinal,
-                            G4int iterationNumber ) ;
+  // Simple integration methods:
+  // Trapezoidal, MidPoint, Gauss and Simpson(double a,double b,int n)
+  // - integrate function pointed by fFunction from a to b by n iterations,
+  //   i.e. with Step (b-a)/n according to the correspondent method.
 
-       // Adaptive Gauss integration with accuracy ~ fTolerance
+  G4double Trapezoidal(G4double xInitial, G4double xFinal,
+                       G4int iterationNumber);
 
-       G4double       AdaptGaussIntegration( G4double xInitial,
-                                             G4double xFinal   ) ;
-       
-  protected:
+  G4double MidPoint(G4double xInitial, G4double xFinal, G4int iterationNumber);
 
-       G4double       Gauss( G4double xInitial,
-                             G4double xFinal   ) ;
+  G4double Gauss(G4double xInitial, G4double xFinal, G4int iterationNumber);
 
-       void      AdaptGauss( G4double xInitial,
-                             G4double xFinal,
-                             G4double& sum,
-                             G4int& depth      ) ;
-  private:
+  G4double Simpson(G4double xInitial, G4double xFinal, G4int iterationNumber);
 
-       G4SimpleIntegration(const G4SimpleIntegration&);
-       G4SimpleIntegration& operator=(const G4SimpleIntegration&);
-         // Private copy constructor and assignment operator.
+  // Adaptive Gauss integration with accuracy ~ fTolerance
 
-  private:
+  G4double AdaptGaussIntegration(G4double xInitial, G4double xFinal);
+  // Integrate function from a to be with accuracy <= fTolerance
 
-        function fFunction ;
-        G4double fTolerance ;
-        const G4int fMaxDepth ;
+ protected:
+  G4double Gauss(G4double xInitial, G4double xFinal);
+
+  void AdaptGauss(G4double xInitial, G4double xFinal, G4double& sum,
+                  G4int& depth);
+
+ private:
+  function fFunction;              // pointer to the function to be integrated
+  G4double fTolerance   = 0.0001;  // accuracy of integration
+  const G4int fMaxDepth = 100;     // constant maximum iteration depth
 };
 
 #endif

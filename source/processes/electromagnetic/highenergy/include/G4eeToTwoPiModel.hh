@@ -62,20 +62,20 @@ public:
 
   explicit G4eeToTwoPiModel(G4eeCrossSections*,G4double,G4double);
 
-  virtual ~G4eeToTwoPiModel();
+  ~G4eeToTwoPiModel() override;
 
-  virtual G4double PeakEnergy() const override;
+  G4double PeakEnergy() const override;
 
-  virtual G4double ComputeCrossSection(G4double) const override;
+  G4double ComputeCrossSection(G4double) const override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&) override;
-
-private:
 
   // hide assignment operator
   G4eeToTwoPiModel & operator=(const  G4eeToTwoPiModel &right) = delete;
   G4eeToTwoPiModel(const  G4eeToTwoPiModel&) = delete;
+
+private:
 
   G4double massPi;
   G4double massRho;

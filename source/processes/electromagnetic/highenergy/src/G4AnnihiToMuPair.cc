@@ -48,9 +48,12 @@
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
+#include "G4TauPlus.hh"
+#include "G4TauMinus.hh"
 #include "G4Material.hh"
 #include "G4Step.hh"
 #include "G4LossTableManager.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,23 +63,34 @@ G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type)
 {
   //e+ Energy threshold
-  const G4double Mu_massc2 = G4MuonPlus::MuonPlus()->GetPDGMass();
-  LowestEnergyLimit = 2.*Mu_massc2*Mu_massc2/electron_mass_c2 - electron_mass_c2;
+  if(processName == "AnnihiToTauPair") {
+    SetProcessSubType(fAnnihilationToTauTau);
+    part1 = G4TauPlus::TauPlus();
+    part2 = G4TauMinus::TauMinus();
+    fInfo = "e+e->tau+tau-";
+  } else {
+    SetProcessSubType(fAnnihilationToMuMu);
+    part1 = G4MuonPlus::MuonPlus();
+    part2 = G4MuonMinus::MuonMinus();
+  }
+  fMass = part1->GetPDGMass();
+  fLowEnergyLimit = 
+    2.*fMass*fMass/CLHEP::electron_mass_c2 - CLHEP::electron_mass_c2;
  
-  //modele ok up to 1000 TeV due to neglected Z-interference
-  HighestEnergyLimit = 1000.*TeV;
+  //model is ok up to 1000 TeV due to neglected Z-interference
+  fHighEnergyLimit = 1000.*TeV;
  
-  CurrentSigma = 0.0;
-  CrossSecFactor = 1.;
-  SetProcessSubType(6);
-  G4LossTableManager::Instance()->Register(this);
+  fCurrentSigma = 0.0;
+  fCrossSecFactor = 1.;
+  fManager = G4LossTableManager::Instance();
+  fManager->Register(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4AnnihiToMuPair::~G4AnnihiToMuPair() // (empty) destructor
 { 
-  G4LossTableManager::Instance()->DeRegister(this);
+  fManager->DeRegister(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,10 +103,7 @@ G4bool G4AnnihiToMuPair::IsApplicable(const G4ParticleDefinition& particle)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4AnnihiToMuPair::BuildPhysicsTable(const G4ParticleDefinition&)
-// Build cross section and mean free path tables
-//here no tables, just calling PrintInfoDefinition
 {
-  CurrentSigma = 0.0;
   PrintInfoDefinition();
 }
 
@@ -101,71 +112,72 @@ void G4AnnihiToMuPair::BuildPhysicsTable(const G4ParticleDefinition&)
 void G4AnnihiToMuPair::SetCrossSecFactor(G4double fac)
 // Set the factor to artificially increase the cross section
 { 
-  CrossSecFactor = fac;
-  G4cout << "The cross section for AnnihiToMuPair is artificially "
-         << "increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
+  fCrossSecFactor = fac;
+  //G4cout << "The cross section for AnnihiToMuPair is artificially "
+  //       << "increased by the CrossSecFactor=" << fCrossSecFactor << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4AnnihiToMuPair::ComputeCrossSectionPerAtom(G4double Epos, G4double Z)
+G4double G4AnnihiToMuPair::ComputeCrossSectionPerElectron(const G4double e)
 // Calculates the microscopic cross section in GEANT4 internal units.
 // It gives a good description from threshold to 1000 GeV
 {
-  static const G4double Mmuon = G4MuonPlus::MuonPlus()->GetPDGMass();
-  static const G4double Rmuon = CLHEP::elm_coupling/Mmuon; //classical particle radius
-  static const G4double Sig0  = CLHEP::pi*Rmuon*Rmuon/3.;  //constant in crossSection
-  static const G4double pia = CLHEP::pi * CLHEP::fine_structure_const; // pi * alphaQED
+  G4double rmuon = CLHEP::elm_coupling/fMass; //classical particle radius
+  G4double sig0 = CLHEP::pi*rmuon*rmuon/3.;   //constant in crossSection
+  const G4double pial = CLHEP::pi*CLHEP::fine_structure_const; // pi * alphaQED
 
-  G4double CrossSection = 0.;
-  if (Epos < LowestEnergyLimit) return CrossSection;
+  if (e <= fLowEnergyLimit) return 0.0;
    
-  G4double xi = LowestEnergyLimit/Epos;
-  G4double piaxi = pia * sqrt(xi);
-  G4double SigmaEl = Sig0 * xi * (1.+xi/2.) * piaxi;
-  if( Epos>LowestEnergyLimit+1.e-5 ) SigmaEl /= (1.-std::exp( -piaxi/std::sqrt(1-xi) ));
-  CrossSection = SigmaEl*Z; // SigmaEl per electron * number of electrons per atom
-  return CrossSection;
+  const G4double xi = fLowEnergyLimit/e;
+  const G4double piaxi = pial * std::sqrt(xi);
+  G4double sigma = sig0 * xi * (1. + xi*0.5);
+  //G4cout << "### xi= " << xi << " piaxi=" << piaxi << G4endl;
+
+  // argument of the exponent below 0.1 or above 10
+  // Sigma per electron * number of electrons per atom
+  if(xi <= 1.0 - 100*piaxi*piaxi) {
+    sigma *= std::sqrt(1.0 - xi);
+  } else if( xi >= 1.0 - 0.01*piaxi*piaxi) {
+    sigma *= piaxi;
+  } else {
+    sigma *= piaxi/(1. - G4Exp( -piaxi/std::sqrt(1-xi) ));
+  }
+  //G4cout << "### sigma= " << sigma << G4endl;
+  return sigma;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4AnnihiToMuPair::CrossSectionPerVolume(G4double PositronEnergy, 
+G4double G4AnnihiToMuPair::ComputeCrossSectionPerAtom(const G4double energy,
+                                                      const G4double Z)
+{
+  return ComputeCrossSectionPerElectron(energy)*Z;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4AnnihiToMuPair::CrossSectionPerVolume(G4double energy, 
 						 const G4Material* aMaterial)
 {
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
-  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
-
-  G4double SIGMA = 0.0;
-
-  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; ++i )
-  {
-    G4double AtomicZ = (*theElementVector)[i]->GetZ();
-    SIGMA += NbOfAtomsPerVolume[i] *
-      ComputeCrossSectionPerAtom(PositronEnergy,AtomicZ);
-  }
-  return SIGMA;
+  return ComputeCrossSectionPerElectron(energy)*aMaterial->GetTotNbOfElectPerVolume();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4AnnihiToMuPair::GetMeanFreePath(const G4Track& aTrack,
                                            G4double, G4ForceCondition*)
-
 // returns the positron mean free path in GEANT4 internal units
-
 {
   const G4DynamicParticle* aDynamicPositron = aTrack.GetDynamicParticle();
-  G4double PositronEnergy = aDynamicPositron->GetKineticEnergy()
-                                              +electron_mass_c2;
-  G4Material* aMaterial = aTrack.GetMaterial();
-  CurrentSigma = CrossSectionPerVolume(PositronEnergy, aMaterial);
+  G4double energy = aDynamicPositron->GetTotalEnergy();
+  const G4Material* aMaterial = aTrack.GetMaterial();
+
+  // cross section before step
+  fCurrentSigma = CrossSectionPerVolume(energy, aMaterial);
 
   // increase the CrossSection by CrossSecFactor (default 1)
-  G4double mfp = DBL_MAX;
-  if(CurrentSigma > DBL_MIN) mfp = 1.0/(CurrentSigma*CrossSecFactor);
-
-  return mfp;
+  return (fCurrentSigma > 0.0) ? 1.0/(fCurrentSigma*fCrossSecFactor) : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -176,84 +188,77 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
 // generation of e+e- -> mu+mu-
 //
 {
-
   aParticleChange.Initialize(aTrack);
-  static const G4double Mele=electron_mass_c2;
-  static const G4double Mmuon=G4MuonPlus::MuonPlus()->GetPDGMass();
 
   // current Positron energy and direction, return if energy too low
   const G4DynamicParticle *aDynamicPositron = aTrack.GetDynamicParticle();
-  G4double Epos = aDynamicPositron->GetKineticEnergy() + Mele; 
+  const G4double Mele = CLHEP::electron_mass_c2;
+  G4double Epos = aDynamicPositron->GetTotalEnergy();
+  G4double xs = CrossSectionPerVolume(Epos, aTrack.GetMaterial());
 
   // test of cross section
-  if(CurrentSigma*G4UniformRand() > 
-     CrossSectionPerVolume(Epos, aTrack.GetMaterial())) 
+  if(xs > 0.0 && fCurrentSigma*G4UniformRand() > xs) 
     {
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
 
-  if (Epos < LowestEnergyLimit) {
-     return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
-  }
+  const G4ThreeVector PosiDirection = aDynamicPositron->GetMomentumDirection();
+  G4double xi = fLowEnergyLimit/Epos; // xi is always less than 1,
+                                      // goes to 0 at high Epos
 
-  G4ParticleMomentum PositronDirection = 
-                                       aDynamicPositron->GetMomentumDirection();
-  G4double xi = LowestEnergyLimit/Epos; // xi is always less than 1,
-                                        // goes to 0 at high Epos
-
-  // generate cost
+  // generate cost; probability function 1+cost**2 at high Epos
   //
   G4double cost;
   do { cost = 2.*G4UniformRand()-1.; }
   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while (2.*G4UniformRand() > 1.+xi+cost*cost*(1.-xi) ); 
-                                                       //1+cost**2 at high Epos
   G4double sint = sqrt(1.-cost*cost);
 
   // generate phi
   //
-  G4double phi=2.*pi*G4UniformRand();
+  G4double phi = 2.*CLHEP::pi*G4UniformRand();
 
-  G4double Ecm   = sqrt(0.5*Mele*(Epos+Mele));
-  G4double Pcm   = sqrt(Ecm*Ecm-Mmuon*Mmuon);
-  G4double beta  = sqrt((Epos-Mele)/(Epos+Mele));
-  G4double gamma = Ecm/Mele;                    // =sqrt((Epos+Mele)/(2.*Mele));
+  G4double Ecm   = std::sqrt(0.5*Mele*(Epos+Mele));
+  G4double Pcm   = std::sqrt(Ecm*Ecm - fMass*fMass);
+  G4double beta  = std::sqrt((Epos-Mele)/(Epos+Mele));
+  G4double gamma = Ecm/Mele;
   G4double Pt    = Pcm*sint;
   
   // energy and momentum of the muons in the Lab
   //
-  G4double EmuPlus   = gamma*(     Ecm+cost*beta*Pcm);
-  G4double EmuMinus  = gamma*(     Ecm-cost*beta*Pcm);
-  G4double PmuPlusZ  = gamma*(beta*Ecm+cost*     Pcm);
-  G4double PmuMinusZ = gamma*(beta*Ecm-cost*     Pcm);
-  G4double PmuPlusX  = Pt*cos(phi);
-  G4double PmuPlusY  = Pt*sin(phi);
-  G4double PmuMinusX =-Pt*cos(phi);
-  G4double PmuMinusY =-Pt*sin(phi);
+  G4double EmuPlus   = gamma*(Ecm + cost*beta*Pcm);
+  G4double EmuMinus  = gamma*(Ecm - cost*beta*Pcm);
+  G4double PmuPlusZ  = gamma*(beta*Ecm + cost*Pcm);
+  G4double PmuMinusZ = gamma*(beta*Ecm - cost*Pcm);
+  G4double PmuPlusX  = Pt*std::cos(phi);
+  G4double PmuPlusY  = Pt*std::sin(phi);
+  G4double PmuMinusX =-PmuPlusX;
+  G4double PmuMinusY =-PmuPlusY;
   // absolute momenta
-  G4double PmuPlus  = sqrt(Pt*Pt+PmuPlusZ *PmuPlusZ );
-  G4double PmuMinus = sqrt(Pt*Pt+PmuMinusZ*PmuMinusZ);
+  G4double PmuPlus  = std::sqrt(Pt*Pt+PmuPlusZ *PmuPlusZ );
+  G4double PmuMinus = std::sqrt(Pt*Pt+PmuMinusZ*PmuMinusZ);
 
   // mu+ mu- directions for Positron in z-direction
   //
   G4ThreeVector
-    MuPlusDirection ( PmuPlusX/PmuPlus, PmuPlusY/PmuPlus,  PmuPlusZ/PmuPlus  );
+    MuPlusDirection(PmuPlusX/PmuPlus, PmuPlusY/PmuPlus, PmuPlusZ/PmuPlus);
   G4ThreeVector
     MuMinusDirection(PmuMinusX/PmuMinus,PmuMinusY/PmuMinus,PmuMinusZ/PmuMinus);
 
   // rotate to actual Positron direction
   //
-  MuPlusDirection.rotateUz(PositronDirection);
-  MuMinusDirection.rotateUz(PositronDirection);
+  MuPlusDirection.rotateUz(PosiDirection);
+  MuMinusDirection.rotateUz(PosiDirection);
 
   aParticleChange.SetNumberOfSecondaries(2);
+
   // create G4DynamicParticle object for the particle1
-  G4DynamicParticle* aParticle1= new G4DynamicParticle(
-                         G4MuonPlus::MuonPlus(),MuPlusDirection,EmuPlus-Mmuon);
+  G4DynamicParticle* aParticle1 = 
+    new G4DynamicParticle(part1, MuPlusDirection, EmuPlus-fMass);
   aParticleChange.AddSecondary(aParticle1);
   // create G4DynamicParticle object for the particle2
-  G4DynamicParticle* aParticle2= new G4DynamicParticle(
-                     G4MuonMinus::MuonMinus(),MuMinusDirection,EmuMinus-Mmuon);
+  G4DynamicParticle* aParticle2 =
+    new G4DynamicParticle(part2, MuMinusDirection, EmuMinus-fMass);
   aParticleChange.AddSecondary(aParticle2);
 
   // Kill the incident positron 
@@ -268,12 +273,12 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
 
 void G4AnnihiToMuPair::PrintInfoDefinition()
 {
-  G4String comments ="e+e->mu+mu- annihilation, atomic e- at rest, SubType=.";
+  G4String comments = fInfo + " annihilation, atomic e- at rest, SubType=";
   G4cout << G4endl << GetProcessName() << ":  " << comments 
 	 << GetProcessSubType() << G4endl;
-  G4cout << "        threshold at " << LowestEnergyLimit/GeV << " GeV"
+  G4cout << "        threshold at " << fLowEnergyLimit/CLHEP::GeV << " GeV"
          << " good description up to "
-         << HighestEnergyLimit/TeV << " TeV for all Z." << G4endl;
+         << fHighEnergyLimit/CLHEP::TeV << " TeV for all Z." << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

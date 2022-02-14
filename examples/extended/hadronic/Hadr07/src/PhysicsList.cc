@@ -44,12 +44,17 @@
 #include "G4IonINCLXXPhysics.hh"
 #include "G4StoppingPhysics.hh"
 #include "GammaNuclearPhysics.hh"
+#include "GammaNuclearPhysicsLEND.hh"
 
 #include "ElectromagneticPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option3.hh"
+
 #include "G4DecayPhysics.hh"
+
+#include "RadioactiveDecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
+
 #include "StepMaxBuilder.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,16 +67,15 @@ PhysicsList::PhysicsList()
   
   //add new units
   //
-  new G4UnitDefinition( "millielectronVolt", "meV", "Energy", 1.e-3*eV);   
   new G4UnitDefinition( "mm2/g",  "mm2/g", "Surface/Mass", mm2/g);
   new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
-    
+      
   // Hadron Elastic scattering
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
   
   // Hadron Inelastic Physics
-  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
 
@@ -87,6 +91,7 @@ PhysicsList::PhysicsList()
       
   // Gamma-Nuclear Physics
   RegisterPhysics( new GammaNuclearPhysics("gamma"));
+  ////RegisterPhysics( new GammaNuclearPhysicsLEND("gamma"));
   
   // EM physics
   RegisterPhysics(new ElectromagneticPhysics());
@@ -97,8 +102,9 @@ PhysicsList::PhysicsList()
   RegisterPhysics(new G4DecayPhysics());
 
   // Radioactive decay
-  RegisterPhysics(new G4RadioactiveDecayPhysics());
-
+  RegisterPhysics(new RadioactiveDecayPhysics());
+  ////RegisterPhysics(new G4RadioactiveDecayPhysics());
+  
   // Step Max
   RegisterPhysics(new StepMaxBuilder());
 }

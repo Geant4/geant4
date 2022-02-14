@@ -51,11 +51,6 @@
 // 28-02-08 Use precomputed Z^1/3 and Log(A) (V.Ivanchenko)
 // 31-05-13 Use element selectors instead of local data structure (V.Ivanchenko)
 //
-
-//
-// Class Description:
-//
-//
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,9 +67,11 @@
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ModifiedMephi.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,38 +83,40 @@ const G4double G4MuBremsstrahlungModel::xgi[] =
 const G4double G4MuBremsstrahlungModel::wgi[] = 
   {0.08566,0.18038,0.23396,0.23396,0.18038,0.08566};
 G4double G4MuBremsstrahlungModel::fDN[] = {0.0};
+#ifdef G4MULTITHREADED
+  G4Mutex G4MuBremsstrahlungModel::theMuBremMutex = G4MUTEX_INITIALIZER;
+#endif
 
 G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
-    particle(nullptr),
     sqrte(sqrt(G4Exp(1.))),
-    bh(202.4),
-    bh1(446.),
-    btf(183.),
-    btf1(1429.),
-    fParticleChange(nullptr),
-    lowestKinEnergy(1.0*GeV),
-    minThreshold(0.9*keV)
+    lowestKinEnergy(1.0*CLHEP::GeV),
+    minThreshold(0.9*CLHEP::keV)
 {
   theGamma = G4Gamma::Gamma();
-  nist = G4NistManager::Instance();
-
-  lowestKinEnergy = 1.*GeV;  
-
-  mass = rmass = cc = coeff = 1.0;
+  nist = G4NistManager::Instance();  
 
   if(0.0 == fDN[1]) {
-    for(G4int i=1; i<93; ++i) {
-      G4double dn = 1.54*nist->GetA27(i);
-      fDN[i] = dn;
-      if(1 < i) {
-        fDN[i] /= std::pow(dn, 1./G4double(i));
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&theMuBremMutex);
+    if(0.0 == fDN[1]) {
+#endif
+      for(G4int i=1; i<93; ++i) {
+        G4double dn = 1.54*nist->GetA27(i);
+        fDN[i] = dn;
+        if(1 < i) {
+          fDN[i] /= std::pow(dn, 1./G4double(i));
+        }
       }
+#ifdef G4MULTITHREADED
     }
+    G4MUTEXUNLOCK(&theMuBremMutex);
+#endif
   }
+  SetAngularDistribution(new G4ModifiedMephi());
 
-  if(p) { SetParticle(p); }
+  if(nullptr != p) { SetParticle(p); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -142,10 +141,11 @@ G4double G4MuBremsstrahlungModel::MinPrimaryEnergy(const G4Material*,
 void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
                                          const G4DataVector& cuts)
 {
-  if(p) { SetParticle(p); }
+  SetParticle(p);
 
-  // define pointer to G4ParticleChange
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  if(nullptr == fParticleChange) { 
+    fParticleChange = GetParticleChangeForLoss(); 
+  }
 
   if(IsMaster() && p == particle && lowestKinEnergy < HighEnergyLimit()) { 
     InitialiseElementSelectors(p, cuts); 
@@ -182,7 +182,7 @@ G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
     material->GetAtomicNumDensityVector();
 
   //  loop for elements in the material
-  for (size_t i=0; i<material->GetNumberOfElements(); i++) {
+  for (size_t i=0; i<material->GetNumberOfElements(); ++i) {
 
     G4double loss = 
       ComputMuBremLoss((*theElementVector)[i]->GetZ(), kineticEnergy, cut);
@@ -257,9 +257,9 @@ G4double G4MuBremsstrahlungModel::ComputeMicroscopicCrossSection(
 
   G4double aa = aaa;
 
-  for(G4int l=0; l<kkk; l++)
+  for(G4int l=0; l<kkk; ++l)
   {
-    for(G4int i=0; i<6; i++)
+    for(G4int i=0; i<6; ++i)
     {
       G4double ep = G4Exp(aa + xgi[i]*hhh)*totalEnergy;
       cross += ep*wgi[i]*ComputeDMicroscopicCrossSection(tkin, Z, ep);
@@ -376,21 +376,18 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
   const G4Element* anElement = SelectRandomAtom(couple,particle,kineticEnergy);
   G4double Z = anElement->GetZ();
 
-  G4double totalEnergy   = kineticEnergy + mass;
-  G4double totalMomentum = sqrt(kineticEnergy*(kineticEnergy + 2.0*mass));
-
   G4double func1 = tmin*
     ComputeDMicroscopicCrossSection(kineticEnergy,Z,tmin);
 
   G4double lnepksi, epksi;
   G4double func2;
 
-  G4double xmin = G4Log(tmin/MeV);
+  G4double xmin = G4Log(tmin/CLHEP::MeV);
   G4double xmax = G4Log(kineticEnergy/tmin);
 
   do {
     lnepksi = xmin + G4UniformRand()*xmax;
-    epksi   = MeV*G4Exp(lnepksi);
+    epksi   = CLHEP::MeV*G4Exp(lnepksi);
     func2   = epksi*ComputeDMicroscopicCrossSection(kineticEnergy,Z,epksi);
 
     // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
@@ -400,32 +397,34 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
 
   // ===== sample angle =====
 
-  G4double gam  = totalEnergy/mass;
-  G4double rmax = gam*std::min(1.0, totalEnergy/gEnergy - 1.0);
-  G4double rmax2= rmax*rmax;
-  G4double x = G4UniformRand()*rmax2/(1.0 + rmax2);
+  //
+  // angles of the emitted gamma using general interface
 
-  G4double theta = sqrt(x/(1.0 - x))/gam;
-  G4double sint  = sin(theta);
-  G4double phi   = twopi * G4UniformRand() ;
-  G4double dirx  = sint*cos(phi), diry = sint*sin(phi), dirz = cos(theta) ;
-
-  G4ThreeVector gDirection(dirx, diry, dirz);
-  gDirection.rotateUz(partDirection);
-
-  partDirection *= totalMomentum;
-  partDirection -= gEnergy*gDirection;
-  partDirection = partDirection.unit();
-
-  // primary change
-  kineticEnergy -= gEnergy;
-  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
-  fParticleChange->SetProposedMomentumDirection(partDirection);
-
-  // save secondary
-  G4DynamicParticle* aGamma = 
-    new G4DynamicParticle(theGamma,gDirection,gEnergy);
-  vdp->push_back(aGamma);
+  G4ThreeVector gamDir = 
+    GetAngularDistribution()->SampleDirection(dp, gEnergy, Z, 
+                                              couple->GetMaterial());
+  // create G4DynamicParticle object for the Gamma
+  G4DynamicParticle* gamma = new G4DynamicParticle(theGamma, gamDir, gEnergy);
+  vdp->push_back(gamma);
+  // compute post-interaction kinematics of primary e-/e+ based on
+  // energy-momentum conservation
+  const G4double totMomentum = 
+    std::sqrt(kineticEnergy*(kineticEnergy + 2.0*mass));
+  G4ThreeVector dir =
+    (totMomentum*dp->GetMomentumDirection()-gEnergy*gamDir).unit();
+  const G4double finalE = kineticEnergy - gEnergy;
+  // if secondary gamma energy is higher than threshold(very high by default)
+  // then stop tracking the primary particle and create new secondary e-/e+
+  // instead of the primary one
+  if (gEnergy > SecondaryThreshold()) {
+    fParticleChange->ProposeTrackStatus(fStopAndKill);
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    G4DynamicParticle* newdp = new G4DynamicParticle(particle, dir, finalE);
+    vdp->push_back(newdp);
+  } else { // continue tracking the primary e-/e+ otherwise
+    fParticleChange->SetProposedMomentumDirection(dir);
+    fParticleChange->SetProposedKineticEnergy(finalE);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

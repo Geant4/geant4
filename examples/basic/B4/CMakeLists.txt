@@ -1,8 +1,6 @@
-
-#---Adding example N3 subdirectories explicitly 
+#---Adding example N3 subdirectories explicitly
 #   and a custom target to for building all example N3 options ----------
-
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 add_subdirectory(B4a)
 add_subdirectory(B4b)

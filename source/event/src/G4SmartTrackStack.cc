@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Author: S.Kamperis - 04/Oct/12
+// G4SmartTrackStack class implementation
+//
+// Author: S.Kamperis - 4 October 2012
 // --------------------------------------------------------------------
 
 #include "G4SmartTrackStack.hh"

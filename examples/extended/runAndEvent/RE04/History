@@ -13,6 +13,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct. 29, 2020 M. Asai (exampleRE04-V10-06-00)
+- Migration to G4RunManagerFactory.
+
+May 10, 2018 J. Allison  (exampleRE04-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac: Tidied.
+  o No need to create empty scene - /vis/drawVolume creates a new one.
+  o No need to /tracking/storeTrajectories - /vis/scene/add/trajectories does.
+
+May 10, 2018 B. Morgan (exampleRE04-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Mar 29, 2016 J. Allison (exampleRE04-V10-02-00)
+- vis.mac: Added "/vis/drawVolume worlds".
+
 Nov 26, 2013 M. Asai (exampleRE04-V09-06-06)
 - Remove old local physics list and use FTFP_BERT and physics
   constructor for G4ParallelWOrldProcess.

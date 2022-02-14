@@ -32,7 +32,6 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,12 +64,5 @@ void ActionInitialization::Build() const
 
   SetUserAction(new SteppingAction());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
-{
-  return new SteppingVerbose();
-}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

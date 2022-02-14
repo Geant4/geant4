@@ -77,7 +77,6 @@ private:
 
   // Caching
   mutable G4bool fFirst;
-  mutable G4bool fWarnedMissingAttribute;
   mutable G4VAttValueFilter* filter;
 
 };
@@ -87,7 +86,6 @@ G4AttributeFilterT<T>::G4AttributeFilterT(const G4String& name)
   :G4SmartFilter<T>(name)
   ,fAttName("")
   ,fFirst(true)
-  ,fWarnedMissingAttribute(false)
   ,filter(0)
 {}
 
@@ -101,17 +99,12 @@ template <typename T>
 G4bool
 G4AttributeFilterT<T>::Evaluate(const T& object) const
 {
-  // Return false if attribute name has not been set. Just print one warning.
-  if (fAttName.isNull()) {
-
-    if (!fWarnedMissingAttribute) {
-      G4Exception("G4AttributeFilterT::Evaluate", "modeling0101", JustWarning, "Null attribute name");
-      fWarnedMissingAttribute = true;
-    }
-    
-    return false;
-  }
+  // Return true (i.e., do not filter out) if attribute name has not yet been set.
+  if (fAttName.empty()) return true;
   
+  // ...or required attribute value has not yet been set
+  if (fConfigVect.size() == 0) return true;
+
   if (fFirst) {
 
     fFirst = false;
@@ -124,11 +117,11 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
       static G4bool warnedUnableToExtract = false;
       if (!warnedUnableToExtract) {
 	G4ExceptionDescription ed;
-	ed <<"Unable to extract attribute definition named "<<fAttName;
+	ed <<"Unable to extract attribute definition named "<<fAttName<<' ';
 	G4Exception
 	  ("G4AttributeFilterT::Evaluate", "modeling0102", JustWarning, ed, "Invalid attribute definition");
-	G4cout << "Available attributes:\n"
-	       << object.GetAttDefs();
+	G4cerr << "Available attributes:\n"
+	       << *object.GetAttDefs();
 	warnedUnableToExtract = true;
       }
       return false;
@@ -155,11 +148,11 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
     static G4bool warnedUnableToExtract = false;
     if (!warnedUnableToExtract) {
       G4ExceptionDescription ed;
-      ed <<"Unable to extract attribute value named "<<fAttName;
+      ed <<"Unable to extract attribute value named "<<fAttName<<' ';
       G4Exception
 	("G4AttributeFilterT::Evaluate", "modeling0103", JustWarning, ed, "InvalidAttributeValue");
-      G4cout << "Available attributes:\n"
-	     << object.GetAttDefs();
+      G4cerr << "Available attributes:\n"
+	     << *object.GetAttDefs();
       warnedUnableToExtract = true;
     }
     return false;

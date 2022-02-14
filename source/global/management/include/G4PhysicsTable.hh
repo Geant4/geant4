@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
+// G4PhysicsTable
 //
 // Class description:
 //
@@ -39,108 +35,90 @@
 // The constructor given the 'capacity' of the table, pre-allocates
 // memory for the specified value by invoking the STL's reserve()
 // function, in order to avoid reallocation during insertions.
-// G4PhysicsTable has a vector of boolean which are used 
-// as 'recalc-needed' flags when processes calculate physics tables. 
-// ------------------------------------------------------------
-//
-// History:
-// -------
-// - First implementation, based on object model of
-//   2nd December 1995. G.Cosmo
-// - 1st March 1996, modified. K.Amako
-// - 24th February 2001, migration to STL vectors. H.Kurashige
-// - 9th March 2001, added Store/RetrievePhysicsTable. H.Kurashige
-// - 20th August 2004, added FlagArray and related methods   H.Kurashige
-//-------------------------------------
+// G4PhysicsTable has a vector of Boolean which are used
+// as 'recalc-needed' flags when processes calculate physics tables.
 
-#ifndef G4PhysicsTable_h
-#define G4PhysicsTable_h 1
+// Author: G.Cosmo, 2 December 1995
+//         First implementation based on object model
+// Revisions:
+// - 1st March 1996, K.Amako: modified
+// - 24th February 2001, H.Kurashige: migration to STL vectors
+// --------------------------------------------------------------------
+#ifndef G4PhysicsTable_hh
+#define G4PhysicsTable_hh 1
 
-#include <vector>
-#include "globals.hh"
+#include "G4PhysicsVector.hh"
 #include "G4ios.hh"
+#include "globals.hh"
+#include <vector>
 
-class G4PhysicsVector;
-
-class G4PhysicsTable : public std::vector<G4PhysicsVector*> 
+class G4PhysicsTable : public std::vector<G4PhysicsVector*>
 {
+  using G4PhysCollection = std::vector<G4PhysicsVector*>;
+  using G4FlagCollection = std::vector<G4bool>;
 
-  typedef std::vector<G4PhysicsVector*> G4PhysCollection;
-  typedef std::vector<G4bool> G4FlagCollection;
- 
- public: // with description
-
+ public:
   G4PhysicsTable();
-    // Default constructor.
+  // Default constructor
 
   explicit G4PhysicsTable(size_t cap);
-    // Constructor with capacity. Reserves memory for the
-    // specified capacity.
+  // Constructor with capacity. Reserves memory for the specified capacity
 
   virtual ~G4PhysicsTable();
-    // Destructor.
-    // Does not invoke deletion of contained pointed collections.
-
-  G4PhysicsVector*& operator()(size_t);
-  G4PhysicsVector* const& operator()(size_t) const;
-    // Access operators.
-
-  void clearAndDestroy();
-    // Removes all items and deletes them at the same time.
-
-  void   push_back( G4PhysicsVector* );
-  void   insert (G4PhysicsVector*);
-    // Pushes new element to collection.
-
-  void   insertAt (size_t, G4PhysicsVector*); 
-    // insert element at the specified position in the collection.
-  
-  void   resize(size_t, G4PhysicsVector* vec = (G4PhysicsVector*)(0));
-  // resize collection
- 
-  size_t entries() const;
-  size_t length() const;
-    // Return collection's size.
-
-  G4bool isEmpty() const;
-    // Flags if collection is empty or not.
-
-  G4bool ExistPhysicsTable(const G4String& fileName) const;
-    // Check if the specified file exists or not
-
-  G4bool StorePhysicsTable(const G4String& filename, G4bool ascii=false);
-    // Stores PhysicsTable in a file (returns false in case of failure).
-  
-  G4bool RetrievePhysicsTable(const G4String& filename, G4bool ascii=false);
-    // Retrieves Physics from a file (returns false in case of failure).
-
-  void ResetFlagArray();
-    // Reset the array of flags and all flags are set "true" 
-    // This flag is supposed to be used as "recalc-needed" flag
-    //   associated with each physics vector  
-
-  G4bool GetFlag(size_t i) const;
-  void   ClearFlag(size_t i);
-    // Get/Clear the flag for the 'i-th' physics vector    
-   
-  friend std::ostream& operator<<(std::ostream& out, G4PhysicsTable& table);
-
- protected:
-
-  G4PhysicsVector* CreatePhysicsVector(G4int type);  
-  G4FlagCollection vecFlag; 
-
- private:
+  // Destructor. Does not invoke deletion of contained pointed collections
 
   G4PhysicsTable(const G4PhysicsTable&) = delete;
   G4PhysicsTable& operator=(const G4PhysicsTable&) = delete;
-    // Private copy constructor and assignment operator.
 
+  G4PhysicsVector*& operator()(std::size_t);
+  G4PhysicsVector* const& operator()(std::size_t) const;
+  // Access operators
+
+  void clearAndDestroy();
+  // Removes all items and deletes them at the same time
+
+  void push_back(G4PhysicsVector*);
+  void insert(G4PhysicsVector*);
+  // Pushes new element to collection
+
+  void insertAt(std::size_t, G4PhysicsVector*);
+  // Insert element at the specified position in the collection
+
+  void resize(std::size_t, G4PhysicsVector* vec = (G4PhysicsVector*) (0));
+  // Resize collection
+
+  std::size_t entries() const;
+  std::size_t length() const;
+  // Return collection's size
+
+  G4bool isEmpty() const;
+  // Flags if collection is empty or not
+
+  G4bool ExistPhysicsTable(const G4String& fileName) const;
+  // Check if the specified file exists or not
+
+  G4bool StorePhysicsTable(const G4String& filename, G4bool ascii = false);
+  // Stores PhysicsTable in a file (returns false in case of failure)
+
+  G4bool RetrievePhysicsTable(const G4String& filename, G4bool ascii = false, G4bool spline = false);
+  // Retrieves Physics from a file (returns false in case of failure)
+
+  void ResetFlagArray();
+  // Reset the array of flags and all flags are set "true".
+  // This flag is supposed to be used as "recalc-needed" flag
+  // associated with each physics vector
+
+  G4bool GetFlag(std::size_t i) const;
+  void ClearFlag(std::size_t i);
+  // Get/Clear the flag for the 'i-th' physics vector
+
+  friend std::ostream& operator<<(std::ostream& out, G4PhysicsTable& table);
+
+ protected:
+  G4PhysicsVector* CreatePhysicsVector(G4int type, G4bool spline);
+  G4FlagCollection vecFlag;
 };
 
-typedef G4PhysicsTable::iterator G4PhysicsTableIterator;
-
-#include "G4PhysicsVector.hh"
 #include "G4PhysicsTable.icc"
 
 #endif

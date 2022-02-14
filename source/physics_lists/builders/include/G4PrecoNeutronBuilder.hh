@@ -42,14 +42,13 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
+#include "G4NeutronFissionProcess.hh"
+#include "G4NeutronCaptureProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 
 #include "G4PreCompoundModel.hh" 
 #include "G4ExcitationHandler.hh"  
-#include "G4NeutronInelasticCrossSection.hh"
 
 class G4PrecoNeutronBuilder : public G4VNeutronBuilder
 {
@@ -58,9 +57,9 @@ class G4PrecoNeutronBuilder : public G4VNeutronBuilder
     virtual ~G4PrecoNeutronBuilder() {}
 
     virtual void Build(G4HadronElasticProcess *) final override {}
-    virtual void Build(G4HadronFissionProcess *) final override {}
-    virtual void Build(G4HadronCaptureProcess *) final override {}
-    virtual void Build(G4NeutronInelasticProcess * aP) final override;
+    virtual void Build(G4NeutronFissionProcess *) final override {}
+    virtual void Build(G4NeutronCaptureProcess *) final override {}
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
 

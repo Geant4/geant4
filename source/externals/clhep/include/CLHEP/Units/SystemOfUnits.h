@@ -40,6 +40,9 @@
 // 29.04.08   use PDG 2006 value of e_SI
 // 03.11.08   use PDG 2008 value of e_SI
 // 19.08.15   added liter and its sub units (mma)
+// 12.01.16   added symbols for microsecond (us) and picosecond (ps) (mma)
+// 17.07.20   use PDG 2019 value of e_SI
+// 06.05.21   added minute, hour, day, year and millielectronvolt (mma)
 
 #ifndef HEP_SYSTEM_OF_UNITS_H
 #define HEP_SYSTEM_OF_UNITS_H
@@ -132,11 +135,16 @@ namespace CLHEP {
   //
   // Time [T]
   //
-  static const double nanosecond  = 1.;
-  static const double second      = 1.e+9 *nanosecond;
-  static const double millisecond = 1.e-3 *second;
-  static const double microsecond = 1.e-6 *second;
-  static const double  picosecond = 1.e-12*second;
+  static constexpr double nanosecond  = 1.;
+  static constexpr double second      = 1.e+9 *nanosecond;
+  static constexpr double millisecond = 1.e-3 *second;
+  static constexpr double microsecond = 1.e-6 *second;
+  static constexpr double picosecond  = 1.e-12*second;
+
+  static constexpr double minute = 60*second;
+  static constexpr double hour   = 60*minute;
+  static constexpr double day    = 24*hour;
+  static constexpr double year   = 365*day;  
 
   static const double hertz = 1./second;
   static const double kilohertz = 1.e+3*hertz;
@@ -150,19 +158,20 @@ namespace CLHEP {
   //
   // Electric charge [Q]
   //
-  static const double eplus = 1. ;// positron charge
-  static const double e_SI  = 1.602176487e-19;// positron charge in coulomb
-  static const double coulomb = eplus/e_SI;// coulomb = 6.24150 e+18 * eplus
+  static constexpr double eplus = 1. ;// positron charge
+  static constexpr double e_SI  = 1.602176634e-19;// positron charge in coulomb
+  static constexpr double coulomb = eplus/e_SI;// coulomb = 6.24150 e+18 * eplus
 
   //
   // Energy [E]
   //
-  static const double megaelectronvolt = 1. ;
-  static const double     electronvolt = 1.e-6*megaelectronvolt;
-  static const double kiloelectronvolt = 1.e-3*megaelectronvolt;
-  static const double gigaelectronvolt = 1.e+3*megaelectronvolt;
-  static const double teraelectronvolt = 1.e+6*megaelectronvolt;
-  static const double petaelectronvolt = 1.e+9*megaelectronvolt;
+  static constexpr double megaelectronvolt = 1. ;
+  static constexpr double     electronvolt = 1.e-6*megaelectronvolt;
+  static constexpr double kiloelectronvolt = 1.e-3*megaelectronvolt;
+  static constexpr double gigaelectronvolt = 1.e+3*megaelectronvolt;
+  static constexpr double teraelectronvolt = 1.e+6*megaelectronvolt;
+  static constexpr double petaelectronvolt = 1.e+9*megaelectronvolt;
+  static constexpr double millielectronvolt = 1.e-9*megaelectronvolt;  
 
   static const double joule = electronvolt/e_SI;// joule = 6.24150 e+12 * MeV
 

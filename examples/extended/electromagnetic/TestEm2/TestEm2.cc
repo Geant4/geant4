@@ -35,16 +35,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-#include "G4MTRunManager.hh"
+#include "G4Types.hh"
+
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
-#include "G4UIcommand.hh"
+#include "G4SteppingVerbose.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
-#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -58,20 +58,23 @@
 
 int main(int argc,char** argv) {
 
-  //choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
-#ifdef G4MULTITHREADED  
-  G4MTRunManager * runManager = new G4MTRunManager();
-  G4int nThreads = G4Threading::G4GetNumberOfCores();
-  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
-  runManager->SetNumberOfThreads(nThreads);
-#else
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-  G4RunManager * runManager = new G4RunManager(); 
-#endif
-
-  // set mandatory initialization classes
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
+  
+  //Use SteppingVerbose with Unit
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
+  
+  //Creating run manager
+  auto runManager = G4RunManagerFactory::CreateRunManager();
+    
+  if (argc==3) { 
+     G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+     runManager->SetNumberOfThreads(nThreads);
+  }
+  
+  //set mandatory initialization classes
   DetectorConstruction* detector = new DetectorConstruction();
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());

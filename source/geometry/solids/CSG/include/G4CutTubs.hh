@@ -99,8 +99,8 @@ class G4CutTubs : public G4CSGSolid
 
     // Methods for solid
 
-    inline G4double GetCubicVolume();
-    inline G4double GetSurfaceArea();
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
@@ -146,14 +146,6 @@ class G4CutTubs : public G4CSGSolid
     G4CutTubs& operator=(const G4CutTubs& rhs);
       // Copy constructor and assignment operator.
 
-    //  Older names for access functions
-
-    inline G4double GetRMin() const;
-    inline G4double GetRMax() const;
-    inline G4double GetDz  () const;
-    inline G4double GetSPhi() const;
-    inline G4double GetDPhi() const;
-
   protected:
 
     inline void Initialize();
@@ -182,17 +174,14 @@ class G4CutTubs : public G4CSGSolid
     G4double GetCutZ(const G4ThreeVector& p) const;
       // Get Z value of the point on Cutted Plane
 
-    void GetMaxMinZ(G4double& zmin,G4double& zmax)const;
-      // Get Max and Min values of Z on Cutted Plane,
-      // Used for Calculate BoundingLimits()
-
   private:
 
     G4double kRadTolerance, kAngTolerance;
       //
       // Radial and angular tolerances
 
-    G4double fRMin, fRMax, fDz, fSPhi, fDPhi;
+     G4double fRMin, fRMax, fDz, fSPhi, fDPhi;
+     mutable G4double fZMin, fZMax;
       //
       // Radial and angular dimensions
 

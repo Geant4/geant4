@@ -38,7 +38,7 @@
 // 24.07.95, P.Kent: First non-stub version
 // --------------------------------------------------------------------
 #ifndef G4VPHYSICALVOLUME_HH
-#define G4VPHYSICALVOLUME_HH
+#define G4VPHYSICALVOLUME_HH 1
 
 #include "G4Types.hh"
 #include "G4String.hh"
@@ -60,7 +60,7 @@ class G4PVData
 
   public:
 
-    G4PVData() {}
+    G4PVData() = default;
 
     void initialize()
     {
@@ -72,12 +72,12 @@ class G4PVData
     G4double tx = 0., ty = 0., tz = 0.;
 };
 
-typedef G4GeomSplitter<G4PVData> G4PVManager;
+using G4PVManager = G4GeomSplitter<G4PVData>;
 // Implementation detail for use of G4PVData objects 
 
 class G4VPhysicalVolume
 {
-  public:  // with description
+  public:
 
     G4VPhysicalVolume(G4RotationMatrix* pRot,
                 const G4ThreeVector& tlate,
@@ -151,7 +151,7 @@ class G4VPhysicalVolume
 
     inline const G4String& GetName() const;
       // Return the volume's name.
-    inline void SetName(const G4String& pName);
+    void SetName(const G4String& pName);
       // Set the volume's name.
 
     virtual G4int GetMultiplicity() const;
@@ -198,7 +198,7 @@ class G4VPhysicalVolume
       // Concrete implementation is done and required only for placed and
       // parameterised volumes. Returns true if the volume is overlapping.
 
-  public:  // without description
+  public:
 
     G4VPhysicalVolume(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -266,7 +266,6 @@ class G4VPhysicalVolume
 // it copies the array of G4PVData instances from the master thread.           
 // In addition, it invokes a method similiar to the constructor explicitly
 // to achieve the partial effect for each instance in the array.
-//
 
 #include "G4VPhysicalVolume.icc"
 

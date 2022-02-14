@@ -66,7 +66,7 @@ Build(G4HadronElasticProcess * aP)
 }
 
 void G4NeutronPHPBuilder::
-Build(G4HadronFissionProcess * aP)
+Build(G4NeutronFissionProcess * aP)
 {
   if(theHPFission == 0) theHPFission = new G4ParticleHPFission;
   theHPFission->SetMinEnergy(theMin);
@@ -77,7 +77,7 @@ Build(G4HadronFissionProcess * aP)
 }
 
 void G4NeutronPHPBuilder::
-Build(G4HadronCaptureProcess * aP)
+Build(G4NeutronCaptureProcess * aP)
 {
   if(theHPCapture==0) theHPCapture = new G4ParticleHPCapture;
   theHPCapture->SetMinEnergy(theMin);
@@ -88,7 +88,7 @@ Build(G4HadronCaptureProcess * aP)
 }
 
 void G4NeutronPHPBuilder::
-Build(G4NeutronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   if(theHPInelastic==0) theHPInelastic = new G4ParticleHPInelastic(G4Neutron::Neutron(),"NeutronHPInelastic");
   theHPInelastic->SetMinEnergy(theIMin);

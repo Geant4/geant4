@@ -39,11 +39,7 @@
 #include "FTFP_BERT.hh"
 #include "FTFP_INCLXX.hh"
 #include "G4UImanager.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "ActionInitialization.hh"
 #include "G4UIExecutive.hh"
 #include "G4GenericBiasingPhysics.hh"
@@ -57,18 +53,8 @@ int main( int argc, char** argv ) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  #ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  G4cout<<"|              Constructing MT run manager              |"<<G4endl;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  #else
-  G4RunManager * runManager = new G4RunManager;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  G4cout<<"|        Constructing sequential run manager            |"<<G4endl;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  #endif
 
   G4VUserDetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization( detector );

@@ -67,6 +67,19 @@ G4VoxelNavigation::~G4VoxelNavigation()
   delete fLogger;
 }
 
+// --------------------------------------------------------------------------
+// Input:
+//    exiting:         : last step exited
+//    blockedPhysical  : phys volume last exited (if exiting)
+//    blockedReplicaNo : copy/replica number of exited 
+// Output:
+//    entering         : if true, found candidate volume to enter 
+//    blockedPhysical  : candidate phys volume to enter - if entering
+//    blockedReplicaNo : copy/replica number            - if entering
+//    exiting:         : will exit current (mother) volume
+// In/Out
+// --------------------------------------------------------------------------
+
 // ********************************************************************
 // ComputeStep
 // ********************************************************************
@@ -76,7 +89,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                                 const G4ThreeVector& localDirection,
                                 const G4double currentProposedStepLength,
                                       G4double& newSafety,
-                                      G4NavigationHistory& history,
+                          /* const */ G4NavigationHistory& history,
                                       G4bool& validExitNormal,
                                       G4ThreeVector& exitNormal,
                                       G4bool& exiting,
@@ -148,34 +161,6 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                                             true,
                                            &motherValidExitNormal,
                                            &motherExitNormal);
-
-    fLogger->PostComputeStepLog(motherSolid, localPoint, localDirection,
-                                motherStep, motherSafety);
-
-    if( (motherStep >= kInfinity) || (motherStep < 0.0) )
-    {
-      // Error - indication of being outside solid !!
-      //
-      fLogger->ReportOutsideMother(localPoint, localDirection, motherPhysical);
-    
-      ourStep = 0.0;
-    
-      exiting = true;
-      entering = false;
-    
-      // validExitNormal= motherValidExitNormal;
-      // exitNormal= motherExitNormal;
-      // Makes sense and is useful only if the point is very close ...
-      //  Alternatives: i) validExitNormal= false;
-      //               ii) Check safety from outside and choose !!
-      validExitNormal = false;
-    
-      *pBlockedPhysical = nullptr; // or motherPhysical ?
-      blockedReplicaNo = 0;  // or motherReplicaNumber ?
-    
-      newSafety = 0.0;
-      return ourStep;
-    }
   }
 #endif
 
@@ -297,24 +282,19 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
         //
         if ( motherSafety<=ourStep )
         {
-          if( !fCheck )
-          {
-            motherStep = motherSolid->DistanceToOut(localPoint, localDirection,
+          // In case of check mode this is a duplicate call -- acceptable
+          motherStep = motherSolid->DistanceToOut(localPoint, localDirection,
                               true, &motherValidExitNormal, &motherExitNormal);
-          }
-          // Not correct - unless mother limits step (see below)
-          // validExitNormal= motherValidExitNormal;
-          // exitNormal= motherExitNormal;
 #ifdef G4VERBOSE
-          else // check_mode
+          if ( fCheck )
           {
             fLogger->PostComputeStepLog(motherSolid, localPoint, localDirection,
                                         motherStep, motherSafety);
             if( motherValidExitNormal )
             {
               fLogger->CheckAndReportBadNormal(motherExitNormal,
-                                              localPoint, localDirection, 
-                                              motherStep, motherSolid,
+                                               localPoint, localDirection, 
+                                               motherStep, motherSolid,
                                         "From motherSolid::DistanceToOut" );
             }
           }

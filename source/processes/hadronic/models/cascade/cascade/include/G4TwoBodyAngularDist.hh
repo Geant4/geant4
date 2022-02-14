@@ -27,7 +27,7 @@
 // Date:    21 February 2013
 //
 // Description: Singleton class to evaluate two-body angular distribution
-//		functions based on intial/final state codes.
+//		functions based on initial/final state codes.
 //
 // 20130307  M. Kelsey -- Add verbosity interface for contained objects
 // 20130422  M. Kelsey -- Add three-body distributions, for temporary use

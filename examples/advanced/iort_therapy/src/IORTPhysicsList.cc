@@ -54,7 +54,6 @@
 #include "G4EmLivermorePhysics.hh"  
 #include "G4EmPenelopePhysics.hh"   
 #include "G4EmExtraPhysics.hh"   
-#include "G4EmProcessOptions.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ProcessManager.hh"
@@ -72,6 +71,14 @@ IORTPhysicsList::IORTPhysicsList() : G4VModularPhysicsList()
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+");
+
+  DumpCutValuesTable();
+  
   stepMaxProcess  = 0;
 
   pMessenger = new IORTPhysicsListMessenger(this);
@@ -105,6 +112,8 @@ void IORTPhysicsList::ConstructProcess()
   emPhysicsList->ConstructProcess();
   em_config.AddModels();
 
+  // Set cuts for detector
+  SetDetectorCut(defaultCutValue); 
   // step limitation (as a full process)
   //
   AddStepMax();
@@ -172,25 +181,6 @@ void IORTPhysicsList::AddStepMax()
 	pmanager ->AddDiscreteProcess(stepMaxProcess);
       }
   }
-}
-
-void IORTPhysicsList::SetCuts()
-{
-
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-
-  // Set cuts for detector
-  SetDetectorCut(defaultCutValue); 
-  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 void IORTPhysicsList::SetCutForGamma(G4double cut)

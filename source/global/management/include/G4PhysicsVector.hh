@@ -23,233 +23,201 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsVector
 //
+// Class description:
 //
-// 
-//---------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//  G4PhysicsVector.hh
-//
-//  Class description:
-//
-//    A physics vector which has values of energy-loss, cross-section, 
-//    and other physics values of a particle in matter in a given 
-//    range of the energy, momentum, etc.
-//    This class serves as the base class for a vector having various 
-//    energy scale, for example like 'log', 'linear', 'free', etc.
+// A physics vector which has values of energy-loss, cross-section,
+// and other physics values of a particle in matter in a given
+// range of energy, momentum, etc.
+// This class serves as the base class for a vector having various
+// energy scale, for example like 'log', 'linear', 'free', etc.
 
-//  History:
-//    02 Dec. 1995, G.Cosmo : Structure created based on object model
-//    03 Mar. 1996, K.Amako : Implemented the 1st version
-//    27 Apr. 1996, K.Amako : Cache mechanism added
-//    01 Jul. 1996, K.Amako : Now GetValue not virtual
-//    21 Sep. 1996, K.Amako : Added [] and () operators
-//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
-//    09 Mar. 2001, H.Kurashige : Added G4PhysicsVectorType & Store/Retrieve()
-//    02 Apr. 2008, A.Bagulya : Added SplineInterpolation() and SetSpline()
-//    11 May  2009, V.Ivanchenko : Added ComputeSecondDerivatives
-//    19 Jun. 2009, V.Ivanchenko : Removed hidden bin 
-//    22 Dec. 2009  H.Kurashige  : Use pointers to G4PVDataVector
-//    04 May. 2010  H.Kurashige  : Use G4PhysicsVectorCache
-//    28 May  2010  H.Kurashige  : Stop using  pointers to G4PVDataVector
-//    16 Aug. 2011  H.Kurashige  : Add dBin, baseBin and verboseLevel
-//    02 Oct. 2013  V.Ivanchenko : FindBinLocation method become inlined;
-//                                 instead of G4Pow G4Log is used
-//    15 Mar. 2019  M.Novak : added Value method with the known log-energy value
-//                            that can avoid the log call in case of log-vectors
-//    16 July 2019  M.Novak : special LogVectorValue method for log-vectors
-//---------------------------------------------------------------
+// Authors:
+// - 02 Dec. 1995, G.Cosmo: Structure created based on object model
+// - 03 Mar. 1996, K.Amako: Implemented the 1st version
+// Revisions:
+// - 11 Nov. 2000, H.Kurashige: Use STL vector for dataVector and binVector
+// --------------------------------------------------------------------
+#ifndef G4PhysicsVector_hh
+#define G4PhysicsVector_hh 1
 
-#ifndef G4PhysicsVector_h
-#define G4PhysicsVector_h 1
-
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <vector>
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4PhysicsVectorType.hh"
 #include "G4Log.hh"
+#include "G4PhysicsVectorType.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
-typedef std::vector<G4double> G4PVDataVector;
-
-class G4PhysicsVector 
+class G4PhysicsVector
 {
-  public:// with description
+public:
+  // Default constructor - vector will be filled via Retrieve() method
+  // Free vector may be filled via InsertValue(..) method
+  explicit G4PhysicsVector(G4bool spline = false);
 
-    explicit G4PhysicsVector(G4bool spline = false);
-         // default constructor - vector will be filled via Retrieve() method 
+  // Copy constructor and assignment operator
+  G4PhysicsVector(const G4PhysicsVector&) = default;
+  G4PhysicsVector& operator=(const G4PhysicsVector&) = default;
 
-    G4PhysicsVector(const G4PhysicsVector&);
-    G4PhysicsVector& operator=(const G4PhysicsVector&);
-         // Copy constructor and assignment operator.
+  // not used operators
+  G4PhysicsVector(const G4PhysicsVector&&) = delete;
+  G4PhysicsVector& operator=(const G4PhysicsVector&&) = delete;
+  G4bool operator==(const G4PhysicsVector& right) const = delete;
+  G4bool operator!=(const G4PhysicsVector& right) const = delete;
 
-    virtual ~G4PhysicsVector();
+  virtual ~G4PhysicsVector() = default;
 
-    G4double Value(G4double theEnergy, size_t& lastidx) const; 
-         // Get the cross-section/energy-loss value corresponding to the
-         // given energy. An appropriate interpolation is used to calculate
-         // the value. Consumer code got changed index and may reuse it
-         // for the next call to save CPU for bin location. 
+  // Get the cross-section/energy-loss value corresponding to the
+  // given energy. An appropriate interpolation is used to calculate
+  // the value. Consumer code gets changed index and may reuse it
+  // for the next call to save CPU for bin location.
+  inline G4double Value(const G4double energy, std::size_t& lastidx) const;
 
-    inline G4double LogVectorValue(const G4double theEnergy,
-                                   const G4double theLogEnergy) const;
-         // Same as the Value method above but specialised for log-vector type.
-         // Note, unlike the general Value method above, this method will work
-         // properly only in case of G4PhysicsLogVector-s.
+  // Get the cross-section/energy-loss value corresponding to the
+  // given energy. An appropriate interpolation is used to calculate
+  // the value. This method should be used if bin location cannot be 
+  // kept in the user code.
+  inline G4double Value(const G4double energy) const;
 
-    inline G4double Value(G4double theEnergy) const; 
-         // Get the cross-section/energy-loss value corresponding to the
-         // given energy. An appropriate interpolation is used to calculate
-         // the value. This method is kept for backward compatibility reason,
-         // it should be used instead of the previous method if bin location 
-         // cannot be kept thread safe
+  // Obsolete method to get value, 'isOutRange' is not used anymore.
+  // This method is kept for the compatibility reason
+  inline G4double GetValue(const G4double energy, G4bool& isOutRange) const;
 
-    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange) const;
-         // Obsolete method to get value, isOutRange is not used anymore. 
-         // This method is kept for the compatibility reason.
+  // Same as the Value() method above but specialised for log-vector type.
+  // Note, unlike the general Value() method above, this method will work
+  // properly only for G4PhysicsLogVector.
+  inline G4double LogVectorValue(const G4double energy,
+                                 const G4double theLogEnergy) const;
 
-    G4bool operator==(const G4PhysicsVector &right) const ;
-    G4bool operator!=(const G4PhysicsVector &right) const ;
+  // Returns the value for the specified index of the dataVector
+  // The boundary check will not be done
+  inline G4double operator[](const std::size_t index) const;
+  inline G4double operator()(const std::size_t index) const;
 
-    inline G4double operator[](const size_t index) const ;
-         // Returns the value for the specified index of the dataVector
-         // The boundary check will not be done. 
+  // Put data into the vector at 'index' position.
+  // Take note that the 'index' starts from '0'.
+  // It is assumed that energies are already filled.
+  inline void PutValue(const std::size_t index, const G4double value);
 
-    inline G4double operator()(const size_t index) const ;
-         // Returns the value for the specified index of the dataVector
-         // The boundary check will not be done. 
+  // Returns the value in the energy specified by 'index'
+  // of the energy vector. The boundary check will not be done.
+  // Use this when compute cross-section, dEdx, or other value
+  // before filling the vector by PutValue().
+  inline G4double Energy(const std::size_t index) const;
+  inline G4double GetLowEdgeEnergy(const std::size_t index) const;
 
-    inline void PutValue(size_t index, G4double theValue);
-         // Put 'theValue' into the dataVector specified by 'index'.
-         // Take note that the 'index' starts from '0'.
-         // To fill the vector, you have beforehand to construct a vector
-         // by the constructor with Emin, Emax, Nbin. 'theValue' should
-         // be the crosssection/energyloss value corresponding to the  
-         // energy of the index. 
+  // Returns the energy of the first and the last point of the vector.
+  inline G4double GetMinEnergy() const;
+  inline G4double GetMaxEnergy() const;
 
-    virtual void ScaleVector(G4double factorE, G4double factorV);
-         // Scale all values of the vector and second derivatives
-         // by factorV, energies by vectorE. This method may be applied 
-         // for example after Retrieve a vector from an external file to 
-         // convert values into Geant4 units
+  // Returns the data of the first and the last point of the vector.
+  // If the vector is empty returns zeros.
+  inline G4double GetMinValue() const;
+  inline G4double GetMaxValue() const;
 
-    inline G4double Energy(size_t index) const;
-         // Returns the value in the energy specified by 'index'
-         // of the energy vector. The boundary check will not be done. 
-         // Use this function when compute cross section or dEdx 
-         // before filling the vector by PutValue(..).
+  // Get the total length of the vector
+  inline std::size_t GetVectorLength() const;
 
-    inline G4double GetMaxEnergy() const;
-         // Returns the energy of the last point of the vector
+  // Computes the lower index the energy bin in case of log-vector i.e.
+  // in case of vectors with equal bin widths on log-scale
+  // Note, that no check on the boundary is performed
+  inline std::size_t ComputeLogVectorBin(const G4double logenergy) const;
 
-    G4double GetLowEdgeEnergy(size_t binNumber) const;
-         // Obsolete method
-         // Get the energy value at the low edge of the specified bin.
-         // Take note that the 'binNumber' starts from '0'.
-         // The boundary check will not be done.
+  // Get physics vector type.
+  inline G4PhysicsVectorType GetType() const;
 
-    inline size_t GetVectorLength() const;
-         // Get the total length of the vector. 
+  // True if using spline interpolation.
+  inline G4bool GetSpline() const;
 
-    inline size_t FindBin(G4double energy, size_t idx) const;
-         // find low edge index of a bin for given energy
-         // min value 0, max value VectorLength-1
-         // idx is suggested bin number from user code
+  // Define verbosity level.
+  inline void SetVerboseLevel(G4int value);
 
-    inline size_t ComputeLogVectorBin(const G4double logenergy) const;
-         // Computes the lower index the energy bin in case of log-vector i.e.
-         // in case of vectors with equal bin widths on log-scale.
+  // Find energy using linear interpolation for vector
+  // filled by cumulative probability function.
+  // Assuming that vector is already filled.
+  inline G4double FindLinearEnergy(const G4double rand) const;
 
-    void FillSecondDerivatives();
-         // Initialise second derivatives for spline keeping 
-         // 3d derivative continues - default algorithm
-         // Warning: this method should be called when the vector 
-         // is already filled
+  // Find low edge index of a bin for given energy.
+  // Min value 0, max value idxmax.
+  std::size_t FindBin(const G4double energy, std::size_t idx) const;
 
-    void ComputeSecDerivatives();
-         // Initialise second derivatives for spline using algorithm 
-         // which garantee only 1st derivative continues 
-         // Warning: this method should be called when the vector 
-         // is already filled
+  // Scale all values of the vector by factorV, energies by vectorE.
+  // AFter this method FillSecondDerivatives(...) should be called. 
+  // This method may be applied for example after retrieving a vector 
+  // from an external file to convert values into Geant4 units.
+  void ScaleVector(const G4double factorE, const G4double factorV);
 
-    void ComputeSecondDerivatives(G4double firstPointDerivative, 
-                                  G4double endPointDerivative);
-         // Initialise second derivatives for spline using 
-         // user defined 1st derivatives at edge points
-         // Warning: this method should be called when the vector 
-         // is already filled
+  // This method should be called when the vector is fully filled 
+  // There are 3 types of second derivative computations:
+  //    fSplineSimple -     2d derivative continues
+  //    fSplineBase -       3d derivative continues (the default)
+  //    fSplineFixedEdges - 3d derivatives continues, 1st and last 
+  //                        derivatives are fixed  
+  void FillSecondDerivatives(const G4SplineType = G4SplineType::Base,
+                             const G4double dir1 = 0.0,
+                             const G4double dir2 = 0.0);
 
-    G4double FindLinearEnergy(G4double rand) const;
-         // Find energy using linear interpolation for vector
-         // filled by cumulative probability function 
-         // value of rand should be between 0 and 1
+  // This method can be applied if both energy and data values 
+  // grow monotonically, for example, if in this vector a 
+  // cumulative probability density function is stored. 
+  G4double GetEnergy(const G4double value) const;
 
-    inline G4bool IsFilledVectorExist() const;
-         // Is non-empty physics vector already exist?
+  // To store/retrieve persistent data to/from file streams.
+  G4bool Store(std::ofstream& fOut, G4bool ascii = false) const;
+  G4bool Retrieve(std::ifstream& fIn, G4bool ascii = false);
 
-    inline G4PhysicsVectorType GetType() const;
-         // Get physics vector type
-  
-    inline void SetSpline(G4bool);
-         // Activate/deactivate Spline interpolation.
+  // Print vector
+  friend std::ostream& operator<<(std::ostream&, const G4PhysicsVector&);
+  void DumpValues(G4double unitE = 1.0, G4double unitV = 1.0) const;
 
-    G4bool Store(std::ofstream& fOut, G4bool ascii=false) const;
-    virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii=false);
-         // To store/retrieve persistent data to/from file streams.
+protected:
 
-    friend std::ostream& operator<<(std::ostream&, const G4PhysicsVector&);
-    void DumpValues(G4double unitE=1.0, G4double unitV=1.0) const;
-         // print vector
+  // The default implements a free vector initialisation.
+  virtual void Initialise();
 
-    inline void SetVerboseLevel(G4int value);
+  void PrintPutValueError(std::size_t index, G4double value, 
+                          const G4String& text);
 
-    inline G4double Interpolation(size_t idx, G4double energy) const;
+private:
 
-  protected:
+  void ComputeSecDerivative0();
+  void ComputeSecDerivative1();
+  void ComputeSecDerivative2(const G4double firstPointDerivative,
+                             const G4double endPointDerivative);
+  // Internal methods for computing of spline coeffitients
 
-    void DeleteData();
-    void CopyData(const G4PhysicsVector& vec);
-         // Internal methods for allowing copy of objects
+  // Linear or spline interpolation.
+  inline G4double Interpolation(const std::size_t idx,
+                                const G4double energy) const;
 
-    void PrintPutValueError(size_t index);
+  // Assuming (edgeMin <= energy <= edgeMax).
+  inline std::size_t GetBin(const G4double energy) const;
 
-  protected:
+protected:
 
-    G4PhysicsVectorType type;   // The type of PhysicsVector (enumerator)
+  G4double edgeMin = 0.0;  // Energy of first point
+  G4double edgeMax = 0.0;  // Energy of the last point
 
-    G4double edgeMin;           // Energy of first point
-    G4double edgeMax;           // Energy of the last point
+  G4double invdBin = 0.0;  // 1/Bin width for linear and log vectors
+  G4double logemin = 0.0;  // used only for log vector
 
-    size_t numberOfNodes;
+  G4int verboseLevel = 0;
+  G4int idxmax = 0;
+  std::size_t numberOfNodes = 0;
 
-    G4PVDataVector  dataVector;    // Vector to keep the crossection/energyloss
-    G4PVDataVector  binVector;     // Vector to keep energy
-    G4PVDataVector  secDerivative; // Vector to keep second derivatives 
+  G4PhysicsVectorType type = T_G4PhysicsFreeVector;
+  // The type of PhysicsVector (enumerator)
 
-  private:
+  std::vector<G4double> binVector;      // energy
+  std::vector<G4double> dataVector;     // crossection/energyloss
+  std::vector<G4double> secDerivative;  // second derivatives
 
-    G4bool SplinePossible();
+private:
 
-    inline G4double LinearInterpolation(size_t idx, G4double energy) const;
-         // Linear interpolation function
-    inline G4double SplineInterpolation(size_t idx, G4double energy) const;
-         // Spline interpolation function
-
-    inline size_t FindBinLocation(G4double theEnergy) const;
-         // find low edge index of a bin for given energy
-         // min value 0, max value VectorLength-1
-
-    G4bool     useSpline;
-
-  protected:
-
-    G4double invdBin;       // 1/Bin width - useful only for fixed binning
-    G4double baseBin;       // Set this in constructor for performance
-
-    G4int verboseLevel;
+  G4bool useSpline = false;
 };
 
 #include "G4PhysicsVector.icc"

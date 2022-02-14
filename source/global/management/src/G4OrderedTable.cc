@@ -23,51 +23,74 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4OrderedTable class implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class implementation
-//
-//      G4OrderedTable
-//
-// ------------------------------------------------------------
+// Author: M.Maire (LAPP), September 1996
+// Revisions: H.Kurashige (Kobe Univ.), January-September 2001
+// --------------------------------------------------------------------
 
-#include "G4DataVector.hh"
 #include "G4OrderedTable.hh"
-#include <iostream>
+#include "G4DataVector.hh"
+
 #include <fstream>
 #include <iomanip>
+#include <iostream>
 
+// --------------------------------------------------------------------
 G4OrderedTable::G4OrderedTable()
   : std::vector<G4DataVector*>()
-{
-}
+{}
 
-G4OrderedTable::G4OrderedTable(size_t cap)
-  : std::vector<G4DataVector*>(cap, (G4DataVector*)(0) )
-{
-}
+// --------------------------------------------------------------------
+G4OrderedTable::G4OrderedTable(std::size_t cap)
+  : std::vector<G4DataVector*>(cap, (G4DataVector*) (0))
+{}
 
-G4OrderedTable::~G4OrderedTable()
-{
-}
+// --------------------------------------------------------------------
+G4OrderedTable::~G4OrderedTable() {}
 
-G4bool G4OrderedTable::Store(const G4String& fileName,
-                             G4bool          ascii)
+// --------------------------------------------------------------------
+void G4OrderedTable::clearAndDestroy()
 {
-  std::ofstream fOut;  
-  
-  // open output file //
-  if (!ascii)
-    { fOut.open(fileName, std::ios::out|std::ios::binary); }
-  else
-    { fOut.open(fileName, std::ios::out); }
-
-  // check if the file has been opened successfully 
-  if (!fOut)
+  G4DataVector* a = nullptr;
+  while(size() > 0)
   {
-#ifdef G4VERBOSE  
+    a = back();
+    pop_back();
+    for(auto i = cbegin(); i != cend(); ++i)
+    {
+      if(*i == a)
+      {
+        erase(i);
+        --i;
+      }
+    }
+    if(a != nullptr)
+    {
+      delete a;
+    }
+  }
+}
+
+// --------------------------------------------------------------------
+G4bool G4OrderedTable::Store(const G4String& fileName, G4bool ascii)
+{
+  std::ofstream fOut;
+
+  // open output file //
+  if(!ascii)
+  {
+    fOut.open(fileName, std::ios::out | std::ios::binary);
+  }
+  else
+  {
+    fOut.open(fileName, std::ios::out);
+  }
+
+  // check if the file has been opened successfully
+  if(!fOut)
+  {
+#ifdef G4VERBOSE
     G4cerr << "G4OrderedTable::::Store():";
     G4cerr << " Cannot open file: " << fileName << G4endl;
 #endif
@@ -75,51 +98,51 @@ G4bool G4OrderedTable::Store(const G4String& fileName,
     return false;
   }
 
- // Number of elements
-  G4int tableSize = G4int(size()); 
-  if (!ascii)
+  G4int tableSize = G4int(size());  // Number of elements
+  if(!ascii)
   {
-    fOut.write( (char*)(&tableSize), sizeof tableSize); 
+    fOut.write((char*) (&tableSize), sizeof tableSize);
   }
   else
   {
     fOut << tableSize << G4endl;
   }
 
-  // Data Vector
-  G4int vType = G4DataVector::T_G4DataVector;
-  for (G4OrderedTableIterator itr=begin(); itr!=end(); ++itr)
+  G4int vType = G4DataVector::T_G4DataVector;  // Data Vector
+  for(auto itr = cbegin(); itr != cend(); ++itr)
   {
-    if (!ascii)
+    if(!ascii)
     {
-      fOut.write( (char*)(&vType), sizeof vType); 
+      fOut.write((char*) (&vType), sizeof vType);
     }
     else
     {
       fOut << vType << G4endl;
     }
-    (*itr)->Store(fOut,ascii);
+    (*itr)->Store(fOut, ascii);
   }
   fOut.close();
   return true;
 }
 
-
-
-G4bool G4OrderedTable::Retrieve(const G4String& fileName,
-                                G4bool          ascii)
+// --------------------------------------------------------------------
+G4bool G4OrderedTable::Retrieve(const G4String& fileName, G4bool ascii)
 {
-  std::ifstream fIn;  
+  std::ifstream fIn;
   // open input file //
-  if (!ascii)
-    { fIn.open(fileName,std::ios::in|std::ios::binary); }
-  else
-    { fIn.open(fileName,std::ios::in); }
-
-  // check if the file has been opened successfully 
-  if (!fIn)
+  if(!ascii)
   {
-#ifdef G4VERBOSE  
+    fIn.open(fileName, std::ios::in | std::ios::binary);
+  }
+  else
+  {
+    fIn.open(fileName, std::ios::in);
+  }
+
+  // check if the file has been opened successfully
+  if(!fIn)
+  {
+#ifdef G4VERBOSE
     G4cerr << "G4OrderedTable::Retrieve():";
     G4cerr << " Cannot open file: " << fileName << G4endl;
 #endif
@@ -127,62 +150,62 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
     return false;
   }
 
-  // clear 
+  // clear
   clearAndDestroy();
-  
+
   // Number of elements
-  G4int tableSize=0; 
-  if (!ascii)
+  G4int tableSize = 0;
+  if(!ascii)
   {
-    fIn.read((char*)(&tableSize), sizeof tableSize); 
+    fIn.read((char*) (&tableSize), sizeof tableSize);
   }
   else
   {
     fIn >> tableSize;
   }
-  if (tableSize<=0)
+  if(tableSize <= 0)
   {
-#ifdef G4VERBOSE  
+#ifdef G4VERBOSE
     G4cerr << "G4OrderedTable::Retrieve():";
     G4cerr << " Invalid table size: " << tableSize << G4endl;
 #endif
     return false;
   }
-  reserve(tableSize); 
+  reserve(tableSize);
 
   // Physics Vector
-  for (G4int idx=0; idx<tableSize; ++idx)
+  for(G4int idx = 0; idx < tableSize; ++idx)
   {
-    G4int vType=0;
-    if (!ascii)
+    G4int vType = 0;
+    if(!ascii)
     {
-      fIn.read( (char*)(&vType), sizeof vType); 
+      fIn.read((char*) (&vType), sizeof vType);
     }
     else
     {
-      fIn >>  vType;
+      fIn >> vType;
     }
-    if (vType != G4DataVector::T_G4DataVector)
+    if(vType != G4DataVector::T_G4DataVector)
     {
-#ifdef G4VERBOSE  
+#ifdef G4VERBOSE
       G4cerr << "G4OrderedTable::Retrieve():";
       G4cerr << " Illegal Data Vector type: " << vType << " in  ";
       G4cerr << fileName << G4endl;
-#endif          
+#endif
       fIn.close();
       return false;
     }
 
     G4DataVector* pVec = new G4DataVector;
 
-    if (! (pVec->Retrieve(fIn,ascii)) )
+    if(!(pVec->Retrieve(fIn, ascii)))
     {
-#ifdef G4VERBOSE  
+#ifdef G4VERBOSE
       G4cerr << "G4OrderedTable::Retrieve(): ";
       G4cerr << " Error in retreiving " << idx
              << "-th Physics Vector from file: ";
       G4cerr << fileName << G4endl;
-#endif          
+#endif
       fIn.close();
       delete pVec;
       return false;
@@ -190,23 +213,23 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
 
     // add a PhysicsVector to this OrderedTable
     push_back(pVec);
-  } 
+  }
   fIn.close();
   return true;
 }
 
-std::ostream& operator<<(std::ostream& out, 
-                         G4OrderedTable& right)
+// --------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& out, G4OrderedTable& right)
 {
   // Printout Data Vector
-  size_t i=0;
-  for (G4OrderedTableIterator itr=right.begin(); itr!=right.end(); ++itr)
+  std::size_t i = 0;
+  for(auto itr = right.cbegin(); itr != right.cend(); ++itr)
   {
     out << std::setw(8) << i << "-th Vector   ";
     out << ": Type    " << G4DataVector::T_G4DataVector << G4endl;
     out << *(*itr);
-    i +=1;
+    i += 1;
   }
   out << G4endl;
-  return out; 
+  return out;
 }

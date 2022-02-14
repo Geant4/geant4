@@ -33,8 +33,11 @@
 
 #include "CLHEP/Random/RandGauss.h"
 #include "CLHEP/Random/DoubConv.h"
-#include <string.h>	// for strcmp
 #include <cmath>	// for std::log()
+#include <iostream>
+#include <string.h>	// for strcmp
+#include <string>
+#include <vector>
 
 namespace CLHEP {
 

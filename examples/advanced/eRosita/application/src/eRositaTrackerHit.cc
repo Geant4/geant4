@@ -31,32 +31,31 @@
 //
 
 #include "eRositaTrackerHit.hh"
+
 #include "G4UnitsTable.hh"
 #include "G4VVisManager.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4ios.hh"
+
 #include "AnalysisManager.hh"
 
-G4Allocator<eRositaTrackerHit> eRositaTrackerHitAllocator;
+G4ThreadLocal G4Allocator<eRositaTrackerHit>* eRositaTrackerHitAllocator=0;
 
+eRositaTrackerHit::eRositaTrackerHit()
+{}
 
-eRositaTrackerHit::eRositaTrackerHit() {}
+eRositaTrackerHit::~eRositaTrackerHit()
+{}
 
-
-eRositaTrackerHit::~eRositaTrackerHit() {}
-
-
-eRositaTrackerHit::eRositaTrackerHit(const eRositaTrackerHit& right)
-  : G4VHit()
+eRositaTrackerHit::eRositaTrackerHit(const eRositaTrackerHit& right) : G4VHit()
 {
   trackID   = right.trackID;
   chamberNb = right.chamberNb;
   edep      = right.edep;
   pos       = right.pos;
 }
-
 
 const eRositaTrackerHit& eRositaTrackerHit::operator=(const eRositaTrackerHit& right)
 {
@@ -67,12 +66,10 @@ const eRositaTrackerHit& eRositaTrackerHit::operator=(const eRositaTrackerHit& r
   return *this;
 }
 
-
 G4bool eRositaTrackerHit::operator==(const eRositaTrackerHit& right) const
 {
   return (this==&right) ? true : false;
 }
-
 
 void eRositaTrackerHit::Draw()
 {
@@ -82,21 +79,19 @@ void eRositaTrackerHit::Draw()
     G4Circle circle(pos);
     circle.SetScreenSize(2.);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
   }
 }
 
-
 void eRositaTrackerHit::Print()
 {
   G4cout << "  trackID: " << trackID
-         << "  energy deposit: " << G4BestUnit(edep,"Energy")
-	 << "  position: " << G4BestUnit(pos,"Length") << G4endl;
+         << "  energy deposit: " << G4BestUnit(edep, "Energy")
+	 << "  position: " << G4BestUnit(pos, "Length") << G4endl;
 }
-
 
 void eRositaTrackerHit::PrintToFile()
 {
@@ -107,6 +102,4 @@ void eRositaTrackerHit::PrintToFile()
   //    << " " << pos.z() 
   //   << std::endl; 
   AnalysisManager::Instance()->Score(edep);
-
 }
-

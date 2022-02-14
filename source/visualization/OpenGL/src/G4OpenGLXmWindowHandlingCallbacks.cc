@@ -31,8 +31,6 @@
 //                                     (Motif) widgets to use.
 //                                     in handling (Xm) windows
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewer.hh"
 
 void G4OpenGLXmViewer::resize_callback (Widget w, 
@@ -71,7 +69,7 @@ void G4OpenGLXmViewer::print_callback (Widget,
 				    XtPointer) 
 {
   G4OpenGLXViewer* pView = (G4OpenGLXmViewer*) clientData;
-  pView->printEPS();
+  pView->exportImage();
 }
 
 void G4OpenGLXmViewer::set_print_colour_callback (Widget w,
@@ -99,5 +97,3 @@ void G4OpenGLXmViewer::set_print_style_callback (Widget w,
   G4cout << "`Produce vectored PostScript ?' set to : " << pView->fPrintColour;
   
 }
-
-#endif

@@ -55,7 +55,6 @@
 #ifndef G4VEmFluctuationModel_h
 #define G4VEmFluctuationModel_h 1
 
-
 #include "globals.hh"
 #include <CLHEP/Random/RandomEngine.h>
 
@@ -80,14 +79,16 @@ public:
 
   virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
 				      const G4DynamicParticle*,
-				      G4double tmax,
-				      G4double length,
-				      G4double meanLoss) = 0;
+				      const G4double tcut,
+				      const G4double tmax,
+				      const G4double length,
+				      const G4double meanLoss) = 0;
 
   virtual G4double Dispersion(const G4Material*,
                               const G4DynamicParticle*,
-			      G4double tmax,
-			      G4double length) = 0;
+			      const G4double tcut,
+			      const G4double tmax,
+			      const G4double length) = 0;
 
   //------------------------------------------------------------------------
   // Methods with standard implementation; may be overwritten if needed 
@@ -103,12 +104,12 @@ public:
 
   inline const G4String& GetName() const;
 
-private:
-
   // hide assignment operator
   G4VEmFluctuationModel & 
     operator=(const  G4VEmFluctuationModel &right) = delete;
   G4VEmFluctuationModel(const  G4VEmFluctuationModel&) = delete;
+
+private:
 
   const G4String      name;
   G4LossTableManager* fManager;

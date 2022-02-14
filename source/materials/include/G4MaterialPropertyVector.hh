@@ -40,8 +40,7 @@
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
 // Updated:     2011-10-13 by Peter Gumplinger
-//              remove the class: simply typedef to G4PhysicsOrderedFreeVector
-// mail:        gum@triumf.ca
+//              remove the class: simply typedef to G4PhysicsFreeVector
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -52,12 +51,12 @@
 // Includes
 /////////////
 
-#include "G4PhysicsOrderedFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 
 /////////////////////
 // Class Definition
 /////////////////////
 
-typedef G4PhysicsOrderedFreeVector G4MaterialPropertyVector;
+typedef G4PhysicsFreeVector G4MaterialPropertyVector;
 
 #endif /* G4MaterialPropertyVector_h */

@@ -37,7 +37,8 @@
 // 28 Nov 2001 Elena Guardincerri     Created
 //
 // -------------------------------------------------------------------
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
+#include "G4RootAnalysisReader.hh"
 
 #include "G4VProcess.hh"
 #include "XrayFluoAnalysisManager.hh"
@@ -49,6 +50,7 @@
 #include "G4Proton.hh"
 #include "G4SystemOfUnits.hh"
 
+using G4AnalysisReader = G4RootAnalysisReader;
 
 XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 
@@ -92,8 +94,6 @@ XrayFluoAnalysisManager::~XrayFluoAnalysisManager()
 
   delete instance;
   instance = 0;
-  
-  delete G4AnalysisManager::Instance();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -113,6 +113,7 @@ void XrayFluoAnalysisManager::book()
   G4AutoLock l(&dataManipulationMutex);
   // Get analysis manager
   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->SetDefaultFileType("root");
   // Open an output file
   man->OpenFile(outputFileName);
   man->SetVerboseLevel(1);
@@ -302,7 +303,11 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 	  G4int sampleMat=0;
 	  if(aStep->GetTrack()){
 	    sampleMaterial = aStep->GetTrack()->GetMaterial()->GetName();
-	    if (sampleMaterial == ("Dolorite" || "Anorthosite" || "Mars1" || "IceBasalt" || "HPGe")) sampleMat=1;
+	    if (sampleMaterial == "Dolorite"
+          || sampleMaterial == "Anorthosite"
+          || sampleMaterial == "Mars1"
+          || sampleMaterial == "IceBasalt"
+          || sampleMaterial == "HPGe") sampleMat=1;
 	  }
 	
 	  G4int part = -1 ;

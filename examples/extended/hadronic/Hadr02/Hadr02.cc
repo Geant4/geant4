@@ -38,12 +38,12 @@
 //
 //  Author: V.Ivanchenko 20 June 2008
 //
-//  Modified: 
+//  Modified:
 //
 // -------------------------------------------------------------
 //
 //
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 #include "DetectorConstruction.hh"
@@ -79,8 +79,8 @@ int main(int argc,char** argv) {
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
-  //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager();
+  //Construct a serial run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
@@ -97,12 +97,12 @@ int main(int argc,char** argv) {
     char* path = std::getenv("PHYSLIST");
     if (path) { physName = G4String(path); }
   }
-  if ( physName == "UrQMD" ) { 
-    phys = new UrQMD; 
+  if ( physName == "UrQMD" ) {
+    phys = new UrQMD;
   } else if ( physName == "CRMC_FTFP_BERT" ) {
     phys = new CRMC_FTFP_BERT;
-  } else { 
-    phys = factory.GetReferencePhysList( physName ); 
+  } else {
+    phys = factory.GetReferencePhysList( physName );
   }
 
   // Physics List is defined via environment variable PHYSLIST
@@ -123,34 +123,21 @@ int main(int argc,char** argv) {
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-#ifdef G4VIS_USE
-   G4VisManager* visManager = 0;
-#endif
 
-  if (argc==1)   // Define UI terminal for interactive mode
-    {
-#ifdef G4VIS_USE
-      //visualization manager
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
-#endif
-    }
-  else           // Batch mode
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UImanager->ApplyCommand(command+fileName);
-    }
+  if (ui)  {
+   //interactive mode
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+   //batch mode
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
 
   //job termination
-#ifdef G4VIS_USE
-   delete visManager;
-#endif
+  delete visManager;
   delete runManager;
 
   return 0;

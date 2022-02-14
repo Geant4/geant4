@@ -30,18 +30,12 @@
 #include "G4VHit.hh"
 #include "globals.hh"
 
-G4VHit::G4VHit()
-{;}
+G4VHit::G4VHit() { ; }
 
-G4VHit::~G4VHit()
-{;}
+G4VHit::~G4VHit() { ; }
 
-G4bool G4VHit::operator==(const G4VHit &) const
-{ return false; }
+G4bool G4VHit::operator==(const G4VHit&) const { return false; }
 
-void G4VHit::Draw()
-{;}
+void G4VHit::Draw() { ; }
 
-void G4VHit::Print()
-{;}
-
+void G4VHit::Print() { ; }

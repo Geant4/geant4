@@ -32,6 +32,7 @@
 #include "PhysicsListMessenger.hh"
  
 #include "PhysListEmStandard.hh"
+#include "G4EmStandardPhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -55,7 +56,7 @@ PhysicsList::PhysicsList()
 
   // EM physics
   emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  emPhysicsList = new G4EmStandardPhysics(1);
 
 }
 
@@ -164,8 +165,6 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmProcessOptions.hh"
-
 void PhysicsList::ConstructProcess()
 {
   // Transportation
@@ -174,15 +173,7 @@ void PhysicsList::ConstructProcess()
 
   // Electromagnetic physics list
   //
-  emPhysicsList->ConstructProcess();
-  
-  // Em options
-  //
-  G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);
-  emOptions.SetMaxEnergyForCSDARange(100*TeV);
-  emOptions.SetDEDXBinningForCSDARange(120);
-  emOptions.SetVerbose(0);  
+  emPhysicsList->ConstructProcess();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -195,11 +186,17 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "local") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
+
+  } else if (name == "standard") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics(verboseLevel);
         
   } else {
 

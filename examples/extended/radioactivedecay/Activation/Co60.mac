@@ -1,0 +1,31 @@
+#
+# Macro file for "Activation.cc"
+#
+/control/verbose 2
+/run/verbose 1
+#
+/testhadr/det/setMat G4_Co
+/testhadr/det/setThickness 1 cm
+/testhadr/det/setSizeYZ 1 cm
+#
+/process/em/verbose 0
+/process/had/verbose 0
+#
+/run/initialize
+#
+/process/em/printParameters
+#
+/gun/particle neutron
+/gun/energy 25 meV
+/testhadr/gun/beamSize 8 mm
+/testhadr/gun/beamTime 10 year
+#
+/analysis/setFileName Co60
+/analysis/h1/set 4  100  0  8  MeV    #gamma
+/analysis/h1/set 14 100  0 20  year   #gamma
+/analysis/h1/set 24 100  0 20  year   #(Co60)
+/analysis/h1/set 27 100  0 20  year   #(Ni60 ?)
+/analysis/h1/set 28 100  0 20  year   #(Co59 ?)
+#
+/run/printProgress 10000
+/run/beamOn 100000

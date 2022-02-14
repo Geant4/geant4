@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 //---------------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -45,13 +44,13 @@
 #include "G4WaterStopping.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4EmCorrections.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4int G4WaterStopping::Z[17] = {
+const G4int Z[17] = {
   3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26};
-const G4double G4WaterStopping::A[17] = {
+const G4double A[17] = {
   7, 9, 11, 12, 14, 16, 19, 20, 23, 24, 27, 28, 31, 32, 35, 40, 56};
 
 G4WaterStopping::G4WaterStopping(G4EmCorrections* corr, G4bool splineFlag)
@@ -91,13 +90,13 @@ void G4WaterStopping::AddData(const G4double* energy,
 			      const G4double* stoppower, 
 			      G4double factor)
 {
-  G4LPhysicsFreeVector* pv = 
-    new G4LPhysicsFreeVector(53,energy[0]*MeV,energy[52]*MeV);
+  G4PhysicsFreeVector* pv = 
+    new G4PhysicsFreeVector(53,energy[0]*CLHEP::MeV,energy[52]*CLHEP::MeV,spline);
   dedx.push_back(pv);
   for(G4int i=0; i<53; ++i) {
-    pv->PutValues(i,energy[i]*MeV,stoppower[i]*factor);
+    pv->PutValues(i,energy[i]*CLHEP::MeV,stoppower[i]*factor);
   }
-  pv->SetSpline(spline);
+  if(spline) { pv->FillSecondDerivatives(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,8 +105,8 @@ void G4WaterStopping::Initialise(G4EmCorrections* corr)
 {
   //..Reduced energies
   static const G4double E[53] = {0.025,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.15,0.2,0.25,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,15,20,25,30,40,50,60,70,80,90,100,150,200,250,300,400,500,600,700,800,900,1000};
-  emin   = E[0]*MeV;
-  static const G4double factor = 1000.*MeV/cm;
+  emin = E[0]*CLHEP::MeV;
+  static const G4double factor = 1000.*CLHEP::MeV/CLHEP::cm;
 
   static const G4double G4_WATER_Li[53]={2.3193,2.5198,2.8539,3.1164,3.3203,3.4756,3.5914,3.6755,3.7347,3.8125,3.7349,3.6134,3.4818,3.2258,2.9949,2.7909,2.611,2.4517,2.3103,2.1841,1.7151,1.4139,1.2053,1.0525,0.84417,0.70862,0.61317,0.54214,0.48708,0.44305,0.40697,0.29312,0.23208,0.19364,0.16706,0.13252,0.11092,0.09608,0.08522,0.076915,0.07035,0.065026,0.048615,0.040137,0.034964,0.03149,0.027148,0.024579,0.022911,0.021761,0.020937,0.020327,0.019862};
   AddData(E,G4_WATER_Li,factor);
@@ -145,7 +144,7 @@ void G4WaterStopping::Initialise(G4EmCorrections* corr)
   static const G4double G4_WATER_Fe [53]={6.5394, 7.3060, 8.7367, 10.0690, 11.3310, 12.5470, 13.7280, 14.8780, 15.9980, 21.1160, 25.4850, 29.1260, 32.0640, 36.1770, 38.6920, 40.2760, 41.2950, 41.9530, 42.3710, 42.6210, 42.5910, 41.6900, 40.5190, 39.2690, 36.8000, 34.5040, 32.4190, 30.5410, 28.8480, 27.3170, 25.9310, 20.6170, 17.0680, 14.5540, 12.6930, 10.1410, 8.4892, 7.3402, 6.4976, 5.8545, 5.3479, 4.9387, 3.6892, 3.0503, 2.6620, 2.4014, 2.0756, 1.8825, 1.7569, 1.6702, 1.6079, 1.5619, 1.5267};
   AddData(E,G4_WATER_Fe,factor);
 
-  if(corr) {
+  if(nullptr != corr) {
     for(G4int i=0; i<17; ++i) {
       corr->AddStoppingData(Z[i], A[i], "G4_WATER", dedx[i]);
     }

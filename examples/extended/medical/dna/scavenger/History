@@ -1,0 +1,21 @@
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example scavenger History file
+                    ------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+08-11-2021: H. Tran  scavenger-V10-07-01
+- delete limit time step
+
+26 October 2021 - F. Chappuis, L. Desorgher, H. Tran - scavenger-V10-07-00
+- initial tag

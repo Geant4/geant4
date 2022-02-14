@@ -68,7 +68,7 @@ namespace G4INCL {
       theA = A;
       setINCLMass();
       if(createParticleSampler)
-        theParticleSampler = new ParticleSampler(A,Z);
+        theParticleSampler = new ParticleSampler(A,Z,S);
     }
 
     /**
@@ -104,7 +104,7 @@ namespace G4INCL {
         particles.push_back(new Particle(**p));
       }
       if(rhs.theParticleSampler)
-        theParticleSampler = new ParticleSampler(rhs.theA,rhs.theZ);
+        theParticleSampler = new ParticleSampler(rhs.theA,rhs.theZ,rhs.theS);
       else
         theParticleSampler = NULL;
     }

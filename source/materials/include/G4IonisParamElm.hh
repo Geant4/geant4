@@ -85,13 +85,14 @@ public:  // with description
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-private:
-
     // operators
     G4IonisParamElm& operator=(const G4IonisParamElm&) = delete;
     G4bool operator==(const G4IonisParamElm&) const = delete;
     G4bool operator!=(const G4IonisParamElm&) const = delete;
     G4IonisParamElm(G4IonisParamElm&) = delete;
+
+private:
+
     //
     //  data members
     //

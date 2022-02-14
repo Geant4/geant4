@@ -1,0 +1,360 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_tex_rect
+#define tools_sg_tex_rect
+
+// node to render an RGB tools::img_byte with ::glTexImage2D.
+
+//#define TOOLS_SG_TEX_RECT_DEBUG
+
+#include "node"
+#include "render_action"
+#include "pick_action"
+#include "bbox_action"
+#include "event_action"
+#include "render_manager"
+#include "gstos"
+#include "base_tex"
+
+#include "../pointer"
+#include "../num2s"
+
+namespace tools {
+namespace sg {
+
+class tex_rect : public node, public gstos, public base_tex {
+  TOOLS_NODE_NO_CAST(tex_rect,tools::sg::tex_rect,node)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    {if(void* p = cmp_cast<tex_rect>(this,a_class)) return p;}
+    {if(void* p = base_tex::cast(a_class)) return p;}
+    return parent::cast(a_class);
+  }
+public:
+  sf<bool> show_border;
+  sf<float> height;
+public:
+  virtual const desc_fields& node_desc_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::tex_rect)
+    static const desc_fields s_v(parent::node_desc_fields(),6, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(img),
+      TOOLS_ARG_FIELD_DESC(back_color),
+      TOOLS_ARG_FIELD_DESC(expand),
+      TOOLS_ARG_FIELD_DESC(limit),
+      TOOLS_ARG_FIELD_DESC(show_border),
+      TOOLS_ARG_FIELD_DESC(height)
+    );
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&img);
+    add_field(&back_color);
+    add_field(&expand);
+    add_field(&limit);
+    add_field(&show_border);
+    add_field(&height);
+  }
+public:
+  virtual void render(render_action& a_action) {
+#ifdef TOOLS_SG_TEX_RECT_DEBUG
+    a_action.out() << "tools::tex_rect::render : begin : 001 : " << std::endl;
+#endif
+
+    //NOTE : we draw border (show_border is true) and background even if
+    //       gen_texture() failed.
+
+    if(touched()) {
+#ifdef TOOLS_SG_TEX_RECT_DEBUG
+      a_action.out() << "tools::tex_rect::render : touched." << std::endl;
+#endif
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    if(m_img.is_empty()) {
+#ifdef TOOLS_SG_TEX_RECT_DEBUG
+      a_action.out() << "tools::tex_rect::render : m_img is empty." << std::endl;
+#endif
+      return;
+    }
+
+#ifdef TOOLS_SG_TEX_RECT_DEBUG
+    a_action.out() << "tools::tex_rect::render : have a m_img. get_tex_id ..." << std::endl;
+#endif
+
+    unsigned int _id = get_tex_id(a_action.out(),a_action.render_manager(),m_img,nearest.value());
+
+#ifdef TOOLS_SG_TEX_RECT_DEBUG
+    a_action.out() << "tools::tex_rect::render : get_tex_id : " << _id << "." << std::endl;
+#endif
+
+    const state& state = a_action.state();
+
+    //image must be 2^n,2^m in size !
+    // exa : 128x64
+
+    f12 xyzs;
+
+    if(show_border.value()) {
+#ifdef TOOLS_SG_TEX_RECT_DEBUG
+      a_action.out() << "tools::tex_rect::render : show_border." << std::endl;
+#endif
+      f12 nms;
+      _front(xyzs,nms,0.01f);
+
+      a_action.color4f(1,0,0,1);
+      a_action.line_width(4);
+
+      a_action.draw_vertex_array(gl::line_loop(),12,xyzs);
+
+      //pushes back the filled polygons to avoid z-fighting with lines
+      a_action.set_polygon_offset(true);
+
+      a_action.color4f(state.m_color);
+      a_action.line_width(state.m_line_width);
+    }
+
+#ifdef TOOLS_SG_TEX_RECT_DEBUG
+    a_action.out() << "tools::tex_rect::render : draw back face." << std::endl;
+#endif
+
+    //draw a back face pointing toward negative z :
+   {a_action.color4f(back_color.value());
+    f18 tris,nms;
+    _tris(tris,nms);
+    a_action.draw_vertex_normal_array(gl::triangles(),18,tris,nms);
+    a_action.color4f(state.m_color);}
+
+    if(_id) {
+#ifdef TOOLS_SG_TEX_RECT_DEBUG
+      a_action.out() << "tools::tex_rect::render : draw_vertex_normal_array_texture." << std::endl;
+#endif
+      f12 nms;
+      _front(xyzs,nms);
+      float tcs[8];
+      set_tcs(tcs);
+      a_action.draw_vertex_normal_array_texture(gl::triangle_fan(),12,xyzs,nms,_id,tcs);
+    }
+    a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
+  }
+  virtual void pick(pick_action& a_action) {
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    if(m_img.is_empty()) return;
+    f12 xyzs,nms;
+    _front(xyzs,nms);
+    a_action.add__primitive(*this,gl::triangle_fan(),12,xyzs,true);
+  }
+
+  virtual void bbox(bbox_action& a_action) {
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    if(m_img.is_empty()) return;
+    f12 xyzs,nms;
+    _front(xyzs,nms);
+    a_action.add_points(12,xyzs);
+  }
+public:
+  virtual bool intersect_value(std::ostream&,intersect_type,const line<vec3f>& a_line,std::string& a_s) const {
+    // a_line is in local world coordinate.
+
+    const img_byte& _img = img.value();
+    if(_img.is_empty()) {a_s.clear();return false;}
+
+    float aspect = float(_img.width())/float(_img.height());
+    float h2 = height.value()*0.5f;
+    float w2 = aspect*h2;
+
+    plane<vec3f> plane(vec3f(w2,h2,0),vec3f(-w2,h2,0),vec3f(-w2,-h2,0));
+    vec3f p;
+    if(!plane.intersect(a_line,p)) {a_s.clear();return false;}
+
+    float imw = (float)_img.width();
+    float imh = (float)_img.height();
+
+    //image coordinates :
+    int ix = int((imw*p.x()/w2+imw)*0.5f);
+    int iy = int((imh*p.y()/h2+imh)*0.5f);
+
+    //rgb of pixel :
+    std::vector<unsigned char> pixel;
+    if((ix<0)||(iy<0)||!_img.pixel(ix,iy,pixel)) {a_s.clear();return false;}
+
+    a_s.clear();
+    for(unsigned int ipix=0;ipix<pixel.size();ipix++) {
+      if(ipix) a_s += " ";
+      if(!numas<float>(float(pixel[ipix])/255.0f,a_s)){}
+    }
+
+    return true;
+  }
+public:
+  tex_rect()
+  :parent()
+  ,base_tex()
+  ,show_border(false)
+  ,height(1)
+  {
+    add_fields();
+  }
+  virtual ~tex_rect(){}
+public:
+  tex_rect(const tex_rect& a_from)
+  :parent(a_from)
+  ,gstos(a_from)
+  ,base_tex(a_from)
+  ,show_border(a_from.show_border)
+  ,height(a_from.height)
+  {
+    add_fields();
+  }
+  tex_rect& operator=(const tex_rect& a_from){
+    parent::operator=(a_from);
+    gstos::operator=(a_from);
+    base_tex::operator=(a_from);
+    if(&a_from==this) return *this;
+    show_border = a_from.show_border;
+    height = a_from.height;
+    return *this;
+  }
+public:
+
+  //const img_byte& rendered_img() const {return m_img;}
+
+  void rendered_size(std::ostream& a_out,unsigned int& a_w,unsigned int& a_h) {
+    update_sg(a_out);
+    reset_touched();
+    a_w = m_img.width();
+    a_h = m_img.height();
+  }
+
+protected:
+  //virtual //NOTE : virtual for diaporama node. (but warning with clang -g4flags).
+  void update_sg(std::ostream& a_out) {
+    clean_gstos(); //must reset for all render_manager.
+    if(height.value()<=0) {
+      m_img.make_empty();
+      return;
+    }
+    base_tex::_update_sg_(a_out);
+  }
+protected:
+
+  typedef float f12[12];
+  void _front(f12& front,f12& nms,float a_epsil = 0.0f) { //[12]
+    float aspect = float(img.value().width())/float(img.value().height());
+    float h2 = height*0.5f;
+    float w2 = aspect*h2;
+
+    h2 += a_epsil;
+    w2 += a_epsil;
+
+    front[0] = -w2;
+    front[1] = -h2;
+    front[2] =  0;
+
+    front[3] =  w2;
+    front[4] = -h2;
+    front[5] =  0;
+
+    front[6] =  w2;
+    front[7] =  h2;
+    front[8] =  0;
+
+    front[ 9] = -w2;
+    front[10] =  h2;
+    front[11] =  0;
+
+    nms[0] = 0;
+    nms[1] = 0;
+    nms[2] = 1;
+
+    nms[3] = 0;
+    nms[4] = 0;
+    nms[5] = 1;
+
+    nms[6] = 0;
+    nms[7] = 0;
+    nms[8] = 1;
+
+    nms[9] = 0;
+    nms[10] = 0;
+    nms[11] = 1;
+  }
+
+  void _back(f12& back) { //[12]
+    float aspect = float(img.value().width())/float(img.value().height());
+    float h2 = height*0.5f;
+    float w2 = aspect*h2;
+    float d2 = 0;
+
+    back[0] =  w2;back[ 1] = -h2;back[ 2] = d2;
+    back[3] = -w2;back[ 4] = -h2;back[ 5] = d2;
+    back[6] = -w2;back[ 7] =  h2;back[ 8] = d2;
+    back[9] =  w2;back[10] =  h2;back[11] = d2;
+  }
+
+  typedef float f18[18];
+  void _tris(f18& tris,f18& nms){
+    f12 back;
+    _back(back);
+
+    tris[0] = back[0];
+    tris[1] = back[1];
+    tris[2] = back[2];
+
+    tris[3] = back[3];
+    tris[4] = back[4];
+    tris[5] = back[5];
+
+    tris[6] = back[6];
+    tris[7] = back[7];
+    tris[8] = back[8];
+    //
+    tris[9]  = back[6];
+    tris[10] = back[7];
+    tris[11] = back[8];
+
+    tris[12] = back[9];
+    tris[13] = back[10];
+    tris[14] = back[11];
+
+    tris[15] = back[0];
+    tris[16] = back[1];
+    tris[17] = back[2];
+
+    ///////////////////// back
+    nms[0] = 0;
+    nms[1] = 0;
+    nms[2] = -1;
+
+    nms[3] = 0;
+    nms[4] = 0;
+    nms[5] = -1;
+
+    nms[6] = 0;
+    nms[7] = 0;
+    nms[8] = -1;
+    //
+    nms[9]  = 0;
+    nms[10] = 0;
+    nms[11] = -1;
+
+    nms[12] = 0;
+    nms[13] = 0;
+    nms[14] = -1;
+
+    nms[15] = 0;
+    nms[16] = 0;
+    nms[17] = -1;
+  }
+};
+
+}}
+
+#endif

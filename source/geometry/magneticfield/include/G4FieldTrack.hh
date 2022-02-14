@@ -79,6 +79,10 @@ class G4FieldTrack
      inline G4FieldTrack& operator= ( const G4FieldTrack& rStVec );
        // Copy constructor & Assignment operator
 
+     inline G4FieldTrack(G4FieldTrack&& from);
+     inline G4FieldTrack& operator=(G4FieldTrack&& from);
+       // Move constructor & operator
+
      inline void UpdateState( const G4ThreeVector& pPosition, 
                                     G4double       LaboratoryTimeOfFlight,
                               const G4ThreeVector& pMomentumDirection,

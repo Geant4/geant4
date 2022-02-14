@@ -75,7 +75,7 @@ public:
   // If both parents are not killed therefore
   // we can used the particle change
   // you will have to give the pointers
-  // of your particleChange while intializing
+  // of your particleChange while initializing
   // but it might tell you that energy is not
   // conserved for instance
   G4VParticleChange* GetParticleChange(const G4Track*);

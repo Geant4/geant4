@@ -53,16 +53,12 @@ class G4EmStandardPhysicsGS : public G4VPhysicsConstructor
 public:
   G4EmStandardPhysicsGS(G4int ver = 0);
 
-  // obsolete
-  G4EmStandardPhysicsGS(G4int ver, const G4String& name);
+  explicit G4EmStandardPhysicsGS(G4int ver=1, const G4String& name="");
 
-  virtual ~G4EmStandardPhysicsGS();
+  ~G4EmStandardPhysicsGS() override;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-
-private:
-  G4int  verbose;
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,171 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rntuple
+#define tools_rntuple
+
+// interfaces to read ntuple.
+
+#include "scast"
+#include "cids"
+#include "touplow"
+#include "forit"
+#include "mnmx"
+
+#include <string>
+#include <vector>
+
+namespace tools {
+namespace read {
+
+class icol {
+public:
+  virtual ~icol(){}
+public:
+  virtual void* cast(cid) const = 0;
+  virtual cid id_cls() const = 0;
+public:
+  virtual const std::string& name() const = 0;
+public:
+  virtual void stop() {}
+  virtual bool fetch_entry() const {return false;} //for binded column API.
+};
+
+template <class T>
+class icolumn : public virtual icol {
+public:
+  typedef T entry_t;
+public:
+  static cid id_class() {
+    static const T s_v = T(); //do that for T = std::string.
+    return _cid(s_v);
+  }
+public: //icol
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<icolumn>(this,a_class)) return p;
+    return 0;
+  }
+  virtual cid id_cls() const {return id_class();}
+public:
+  virtual ~icolumn(){}
+public:
+  virtual bool get_entry(T&) const = 0;
+};
+
+class intuple {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::read::intuple");
+    return s_v;
+  }
+public:
+  virtual ~intuple(){}
+public:
+  virtual void start() = 0;
+  virtual bool next() = 0;
+  virtual icol* find_icol(const std::string&) = 0;
+  virtual const std::vector<icol*>& columns() const = 0;
+  virtual const std::string& title() const = 0;
+  virtual bool number_of_entries(uint64&) const = 0;
+public:
+  virtual void stop() {}
+public:
+  size_t number_of_columns() const {return columns().size();}
+
+  void column_names(std::vector<std::string>& a_names) const {
+    a_names.clear();
+    const std::vector<icol*>& _cols = columns();
+    tools_vforcit(icol*,_cols,it) a_names.push_back((*it)->name());
+  }
+
+  icol* find_icol_case_insensitive(const std::string& a_name) { //for gopaw and exlib::evaluator.
+    std::string low_a_name = a_name;
+    tolowercase(low_a_name);
+    std::string low_name;
+    const std::vector<icol*>& _cols = columns();
+    tools_vforcit(icol*,_cols,it) {
+      low_name = (*it)->name();
+      tolowercase(low_name);
+      if(low_name==low_a_name) return *it;
+    }
+    return 0;
+  }
+
+  template <class T>
+  icolumn<T>* find_column(const std::string& a_name){
+    icol* col = find_icol(a_name);
+    if(!col) return 0;
+    return id_cast<icol, icolumn<T> >(*col);
+  }
+
+  template <class T>
+  bool find_column(const std::string& a_name,icolumn<T>*& a_col,bool a_case_sensitive = true) { //for gopaw and exlib::evaluator.
+    icol* col = a_case_sensitive ? find_icol(a_name) : find_icol_case_insensitive(a_name);
+    if(!col) {a_col = 0;return false;}
+    a_col = id_cast<icol, icolumn<T> >(*col);
+    return a_col?true:false;
+  }
+
+  template <class T>
+  bool column_is_of_type(const std::string& a_name,bool& a_is,bool a_case_sensitive = true) {
+    icol* col = a_case_sensitive ? find_icol(a_name) : find_icol_case_insensitive(a_name);
+    if(!col) {a_is = false;return false;}
+    a_is = id_cast<icol, icolumn<T> >(*col)?true:false;
+    return true;
+  }
+
+  template <class T>
+  bool column_min(unsigned int a_col,T& a_value) {
+    a_value = T();
+    const std::vector<icol*>& cols = columns();
+    if(cols.empty()) return false;
+    if(a_col>=cols.size()) return false;
+    icol* _base_col = cols[a_col];
+    icolumn<T>* _col = id_cast<icol, icolumn<T> >(*_base_col);
+    if(!_col) return false;
+    uint64 _rows;
+    if(!number_of_entries(_rows)) return false;
+    start();
+    T v;
+   {for(uint64 row=0;row<_rows;row++) {
+      if(!next()) {a_value = T();return false;}
+      if(!_col->get_entry(v)) {}
+      if(!row) {
+        a_value = v;
+      } else {
+        a_value = mn<T>(a_value,v);
+      }
+    }}
+    return true;
+  }
+
+  template <class T>
+  bool column_max(unsigned int a_col,T& a_value) {
+    a_value = T();
+    const std::vector<icol*>& cols = columns();
+    if(cols.empty()) return false;
+    if(a_col>=cols.size()) return false;
+    icol* _base_col = cols[a_col];
+    icolumn<T>* _col = id_cast<icol, icolumn<T> >(*_base_col);
+    if(!_col) return false;
+    uint64 _rows;
+    if(!number_of_entries(_rows)) return false;
+    start();
+    T v;
+   {for(uint64 row=0;row<_rows;row++) {
+      if(!next()) {a_value = T();return false;}
+      if(!_col->get_entry(v)) {}
+      if(!row) {
+        a_value = v;
+      } else {
+        a_value = mx<T>(a_value,v);
+      }
+    }}
+    return true;
+  }
+
+};
+
+}}
+
+#endif

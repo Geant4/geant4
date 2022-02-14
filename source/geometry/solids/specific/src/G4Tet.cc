@@ -30,6 +30,7 @@
 // Implementation for G4Tet class
 //
 // 03.09.2004 - Marcus Mendenhall, created
+// 08.01.2020 - Evgueni Tcherniaev, complete revision, speed up
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
@@ -42,15 +43,11 @@
 
 #include "G4VPVParameterisation.hh"
 
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
-
-#include "G4ThreeVector.hh"
-
-#include <cmath>
 
 #include "G4AutoLock.hh"
 
@@ -64,158 +61,83 @@ using namespace CLHEP;
 ////////////////////////////////////////////////////////////////////////
 //
 // Constructor - create a tetrahedron
-// This class is implemented separately from general polyhedra,
-// because the simplex geometry can be computed very quickly,
-// which may become important in situations imported from mesh generators,
-// in which a very large number of G4Tets are created.
 // A Tet has all of its geometrical information precomputed
 //
 G4Tet::G4Tet(const G4String& pName,
-                   G4ThreeVector anchor,
-                   G4ThreeVector p2,
-                   G4ThreeVector p3,
-                   G4ThreeVector p4, G4bool* degeneracyFlag)
+             const G4ThreeVector& p0,
+             const G4ThreeVector& p1,
+             const G4ThreeVector& p2,
+             const G4ThreeVector& p3, G4bool* degeneracyFlag)
   : G4VSolid(pName)
 {
-  // fV<x><y> is vector from vertex <y> to vertex <x>
-  //
-  G4ThreeVector fV21=p2-anchor;
-  G4ThreeVector fV31=p3-anchor;
-  G4ThreeVector fV41=p4-anchor;
-
-  // make sure this is a correctly oriented set of points for the tetrahedron
-  //
-  G4double signed_vol=fV21.cross(fV31).dot(fV41);
-  if(signed_vol<0.0)
+  // Check for degeneracy
+  G4bool degenerate = CheckDegeneracy(p0, p1, p2, p3);
+  if (degeneracyFlag)
   {
-    G4ThreeVector temp(p4);
-    p4=p3;
-    p3=temp;
-    temp=fV41;
-    fV41=fV31;
-    fV31=temp; 
+    *degeneracyFlag = degenerate;
   }
-  fCubicVolume = std::fabs(signed_vol) / 6.;
-
-  G4ThreeVector fV24=p2-p4;
-  G4ThreeVector fV43=p4-p3;
-  G4ThreeVector fV32=p3-p2;
-
-  fXMin=std::min(std::min(std::min(anchor.x(), p2.x()),p3.x()),p4.x());
-  fXMax=std::max(std::max(std::max(anchor.x(), p2.x()),p3.x()),p4.x());
-  fYMin=std::min(std::min(std::min(anchor.y(), p2.y()),p3.y()),p4.y());
-  fYMax=std::max(std::max(std::max(anchor.y(), p2.y()),p3.y()),p4.y());
-  fZMin=std::min(std::min(std::min(anchor.z(), p2.z()),p3.z()),p4.z());
-  fZMax=std::max(std::max(std::max(anchor.z(), p2.z()),p3.z()),p4.z());
-
-  fDx=(fXMax-fXMin)*0.5; fDy=(fYMax-fYMin)*0.5; fDz=(fZMax-fZMin)*0.5;
-
-  fMiddle=G4ThreeVector(fXMax+fXMin, fYMax+fYMin, fZMax+fZMin)*0.5;
-  fMaxSize=std::max(std::max(std::max((anchor-fMiddle).mag(),
-                                      (p2-fMiddle).mag()),
-                             (p3-fMiddle).mag()),
-                    (p4-fMiddle).mag());
-
-  G4bool degenerate=std::fabs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
-
-  if(degeneracyFlag) *degeneracyFlag=degenerate;
   else if (degenerate)
   {
-    G4Exception("G4Tet::G4Tet()", "GeomSolids0002", FatalException,
-                "Degenerate tetrahedron not allowed.");
+    std::ostringstream message;
+    message << "Degenerate tetrahedron: " << GetName() << " !\n"
+            << "  anchor: " << p0 << "\n"
+            << "  p1    : " << p1 << "\n"
+            << "  p2    : " << p2 << "\n"
+            << "  p3    : " << p3 << "\n"
+            << "  volume: "
+            << std::abs((p1 - p0).cross(p2 - p0).dot(p3 - p0))/6.;
+    G4Exception("G4Tet::G4Tet()", "GeomSolids0002", FatalException, message);
   }
 
-  fTol=1e-9*(std::fabs(fXMin)+std::fabs(fXMax)+std::fabs(fYMin)
-            +std::fabs(fYMax)+std::fabs(fZMin)+std::fabs(fZMax));
-  // fTol=kCarTolerance;
+  // Define surface thickness
+  halfTolerance = 0.5 * kCarTolerance;
 
-  fAnchor=anchor;
-  fP2=p2;
-  fP3=p3;
-  fP4=p4;
-
-  G4ThreeVector fCenter123=(anchor+p2+p3)*(1.0/3.0); // face center
-  G4ThreeVector fCenter134=(anchor+p4+p3)*(1.0/3.0);
-  G4ThreeVector fCenter142=(anchor+p4+p2)*(1.0/3.0);
-  G4ThreeVector fCenter234=(p2+p3+p4)*(1.0/3.0);
-
-  // compute area of each triangular face by cross product
-  // and sum for total surface area
-
-  G4ThreeVector normal123=fV31.cross(fV21);
-  G4ThreeVector normal134=fV41.cross(fV31);
-  G4ThreeVector normal142=fV21.cross(fV41);
-  G4ThreeVector normal234=fV32.cross(fV43);
-
-  fSurfaceArea=(
-      normal123.mag()+
-      normal134.mag()+
-      normal142.mag()+
-      normal234.mag()
-  )/2.0;
-
-  fNormal123=normal123.unit();
-  fNormal134=normal134.unit();
-  fNormal142=normal142.unit();
-  fNormal234=normal234.unit();
-
-  fCdotN123=fCenter123.dot(fNormal123);
-  fCdotN134=fCenter134.dot(fNormal134);
-  fCdotN142=fCenter142.dot(fNormal142);
-  fCdotN234=fCenter234.dot(fNormal234);
+  // Set data members
+  Initialize(p0, p1, p2, p3);
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4Tet::G4Tet( __void__& a )
-  : G4VSolid(a),
-    fAnchor(0,0,0), fP2(0,0,0), fP3(0,0,0), fP4(0,0,0), fMiddle(0,0,0),
-    fNormal123(0,0,0), fNormal142(0,0,0), fNormal134(0,0,0),
-    fNormal234(0,0,0),
-    fCdotN123(0.), fCdotN142(0.), fCdotN134(0.), fCdotN234(0.),
-    fXMin(0.), fXMax(0.), fYMin(0.), fYMax(0.), fZMin(0.), fZMax(0.),
-    fDx(0.), fDy(0.), fDz(0.), fTol(0.), fMaxSize(0.)
+  : G4VSolid(a)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
 // Destructor
 //
 G4Tet::~G4Tet()
 {
-  delete fpPolyhedron;  fpPolyhedron = nullptr;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 //
 G4Tet::G4Tet(const G4Tet& rhs)
-  : G4VSolid(rhs),
-    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fAnchor(rhs.fAnchor),
-    fP2(rhs.fP2), fP3(rhs.fP3), fP4(rhs.fP4), fMiddle(rhs.fMiddle),
-    fNormal123(rhs.fNormal123), fNormal142(rhs.fNormal142),
-    fNormal134(rhs.fNormal134), fNormal234(rhs.fNormal234),
-    warningFlag(rhs.warningFlag), fCdotN123(rhs.fCdotN123),
-    fCdotN142(rhs.fCdotN142), fCdotN134(rhs.fCdotN134),
-    fCdotN234(rhs.fCdotN234), fXMin(rhs.fXMin), fXMax(rhs.fXMax),
-    fYMin(rhs.fYMin), fYMax(rhs.fYMax), fZMin(rhs.fZMin), fZMax(rhs.fZMax),
-    fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz), fTol(rhs.fTol),
-    fMaxSize(rhs.fMaxSize)
+  : G4VSolid(rhs)
 {
+   halfTolerance = rhs.halfTolerance;
+   fCubicVolume = rhs.fCubicVolume;
+   fSurfaceArea = rhs.fSurfaceArea;
+   for (G4int i = 0; i < 4; ++i) { fVertex[i] = rhs.fVertex[i]; }
+   for (G4int i = 0; i < 4; ++i) { fNormal[i] = rhs.fNormal[i]; }
+   for (G4int i = 0; i < 4; ++i) { fDist[i] = rhs.fDist[i]; }
+   for (G4int i = 0; i < 4; ++i) { fArea[i] = rhs.fArea[i]; }
+   fBmin = rhs.fBmin;
+   fBmax = rhs.fBmax;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
 // Assignment operator
 //
-G4Tet& G4Tet::operator = (const G4Tet& rhs) 
+G4Tet& G4Tet::operator = (const G4Tet& rhs)
 {
    // Check assignment to self
    //
@@ -227,39 +149,163 @@ G4Tet& G4Tet::operator = (const G4Tet& rhs)
 
    // Copy data
    //
-   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   fAnchor = rhs.fAnchor;
-   fP2 = rhs.fP2; fP3 = rhs.fP3; fP4 = rhs.fP4; fMiddle = rhs.fMiddle;
-   fNormal123 = rhs.fNormal123; fNormal142 = rhs.fNormal142;
-   fNormal134 = rhs.fNormal134; fNormal234 = rhs.fNormal234;
-   warningFlag = rhs.warningFlag; fCdotN123 = rhs.fCdotN123;
-   fCdotN142 = rhs.fCdotN142; fCdotN134 = rhs.fCdotN134;
-   fCdotN234 = rhs.fCdotN234; fXMin = rhs.fXMin; fXMax = rhs.fXMax;
-   fYMin = rhs.fYMin; fYMax = rhs.fYMax; fZMin = rhs.fZMin; fZMax = rhs.fZMax;
-   fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz; fTol = rhs.fTol;
-   fMaxSize = rhs.fMaxSize;
+   halfTolerance = rhs.halfTolerance;
+   fCubicVolume = rhs.fCubicVolume;
+   fSurfaceArea = rhs.fSurfaceArea;
+   for (G4int i = 0; i < 4; ++i) { fVertex[i] = rhs.fVertex[i]; }
+   for (G4int i = 0; i < 4; ++i) { fNormal[i] = rhs.fNormal[i]; }
+   for (G4int i = 0; i < 4; ++i) { fDist[i] = rhs.fDist[i]; }
+   for (G4int i = 0; i < 4; ++i) { fArea[i] = rhs.fArea[i]; }
+   fBmin = rhs.fBmin;
+   fBmax = rhs.fBmax;
    fRebuildPolyhedron = false;
    delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
-// CheckDegeneracy
+// Return true if tetrahedron is degenerate
+// Tetrahedron is concidered as degenerate in case if its minimal
+// height is less than degeneracy tolerance
 //
-G4bool G4Tet::CheckDegeneracy( G4ThreeVector anchor,
-                               G4ThreeVector p2,
-                               G4ThreeVector p3,
-                               G4ThreeVector p4 )
+G4bool G4Tet::CheckDegeneracy(const G4ThreeVector& p0,
+                              const G4ThreeVector& p1,
+                              const G4ThreeVector& p2,
+                              const G4ThreeVector& p3) const
 {
-  G4bool result;
-  G4Tet* object=new G4Tet("temp",anchor,p2,p3,p4,&result);
-  delete object;
-  return result;
+  G4double hmin = 4. * kCarTolerance; // degeneracy tolerance
+
+  // Calculate volume
+  G4double vol = std::abs((p1 - p0).cross(p2 - p0).dot(p3 - p0));
+
+  // Calculate face areas squared
+  G4double ss[4];
+  ss[0] = ((p1 - p0).cross(p2 - p0)).mag2();
+  ss[1] = ((p2 - p0).cross(p3 - p0)).mag2();
+  ss[2] = ((p3 - p0).cross(p1 - p0)).mag2();
+  ss[3] = ((p2 - p1).cross(p3 - p1)).mag2();
+
+  // Find face with max area
+  G4int k = 0;
+  for (G4int i = 1; i < 4; ++i) { if (ss[i] > ss[k]) k = i; }
+
+  // Check: vol^2 / s^2 <= hmin^2
+  return (vol*vol <= ss[k]*hmin*hmin);
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//
+// Set data members
+//
+void G4Tet::Initialize(const G4ThreeVector& p0,
+                       const G4ThreeVector& p1,
+                       const G4ThreeVector& p2,
+                       const G4ThreeVector& p3)
+{
+  // Set vertices
+  fVertex[0] = p0;
+  fVertex[1] = p1;
+  fVertex[2] = p2;
+  fVertex[3] = p3;
+
+  G4ThreeVector norm[4];
+  norm[0] = (p2 - p0).cross(p1 - p0);
+  norm[1] = (p3 - p0).cross(p2 - p0);
+  norm[2] = (p1 - p0).cross(p3 - p0);
+  norm[3] = (p2 - p1).cross(p3 - p1);
+  G4double volume = norm[0].dot(p3 - p0);
+  if (volume > 0.)
+  {
+    for (G4int i = 0; i < 4; ++i) { norm[i] = -norm[i]; }
+  }
+
+  // Set normals to face planes
+  for (G4int i = 0; i < 4; ++i) { fNormal[i] = norm[i].unit(); }
+
+  // Set distances to planes
+  for (G4int i = 0; i < 3; ++i) { fDist[i] = fNormal[i].dot(p0); }
+  fDist[3] = fNormal[3].dot(p1);
+
+  // Set face areas
+  for (G4int i = 0; i < 4; ++i) { fArea[i] = 0.5*norm[i].mag(); }
+
+  // Set bounding box
+  for (G4int i = 0; i < 3; ++i)
+  {
+    fBmin[i] = std::min(std::min(std::min(p0[i], p1[i]), p2[i]), p3[i]);
+    fBmax[i] = std::max(std::max(std::max(p0[i], p1[i]), p2[i]), p3[i]);
+  }
+
+  // Set volume and surface area
+  fCubicVolume = std::abs(volume)/6.;
+  fSurfaceArea = fArea[0] + fArea[1] + fArea[2] + fArea[3];
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Set vertices
+//
+void G4Tet::SetVertices(const G4ThreeVector& p0,
+                        const G4ThreeVector& p1,
+                        const G4ThreeVector& p2,
+                        const G4ThreeVector& p3, G4bool* degeneracyFlag)
+{
+  // Check for degeneracy
+  G4bool degenerate = CheckDegeneracy(p0, p1, p2, p3);
+  if (degeneracyFlag)
+  {
+    *degeneracyFlag = degenerate;
+  }
+  else if (degenerate)
+  {
+    std::ostringstream message;
+    message << "Degenerate tetrahedron is not permitted: " << GetName() << " !\n"
+            << "  anchor: " << p0 << "\n"
+            << "  p1    : " << p1 << "\n"
+            << "  p2    : " << p2 << "\n"
+            << "  p3    : " << p3 << "\n"
+            << "  volume: "
+            << std::abs((p1 - p0).cross(p2 - p0).dot(p3 - p0))/6.;
+    G4Exception("G4Tet::SetVertices()", "GeomSolids0002",
+                FatalException, message);
+  }
+
+  // Set data members
+  Initialize(p0, p1, p2, p3);
+
+  // Set flag to rebuild polyhedron
+  fRebuildPolyhedron = true;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Return four vertices
+//
+void G4Tet::GetVertices(G4ThreeVector& p0,
+                        G4ThreeVector& p1,
+                        G4ThreeVector& p2,
+                        G4ThreeVector& p3) const
+{
+  p0 = fVertex[0];
+  p1 = fVertex[1];
+  p2 = fVertex[2];
+  p3 = fVertex[3];
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Return std::vector of vertices
+//
+std::vector<G4ThreeVector> G4Tet::GetVertices() const
+{
+  std::vector<G4ThreeVector> vertices(4);
+  for (G4int i = 0; i < 4; ++i) { vertices[i] = fVertex[i]; }
+  return vertices;
+}
+
+////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
@@ -268,35 +314,56 @@ void G4Tet::ComputeDimensions(G4VPVParameterisation* ,
                               const G4int ,
                               const G4VPhysicalVolume* )
 {
-  G4Exception("G4Tet::ComputeDimensions()",
-              "GeomSolids0001", FatalException,
-              "G4Tet does not support Parameterisation.");
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
-// Get bounding box
+// Set bounding box
+//
+void G4Tet::SetBoundingLimits(const G4ThreeVector& pMin,
+                              const G4ThreeVector& pMax)
+{
+  G4int iout[4] = { 0, 0, 0, 0 };
+  for (G4int i = 0; i < 4; ++i)
+  {
+    iout[i] = (fVertex[i].x() < pMin.x() ||
+               fVertex[i].y() < pMin.y() ||
+               fVertex[i].z() < pMin.z() ||
+               fVertex[i].x() > pMax.x() ||
+               fVertex[i].y() > pMax.y() ||
+               fVertex[i].z() > pMax.z());
+  }
+  if (iout[0] + iout[1] + iout[2] + iout[3] != 0)
+  {
+    std::ostringstream message;
+    message << "Attempt to set bounding box that does not encapsulate solid: "
+            << GetName() << " !\n"
+            << "  Specified bounding box limits:\n"
+            << "    pmin: " << pMin << "\n"
+            << "    pmax: " << pMax << "\n"
+            << "  Tetrahedron vertices:\n"
+            << "    anchor " << fVertex[0] << ((iout[0]) ? " is outside\n" : "\n")
+            << "    p1 "     << fVertex[1] << ((iout[1]) ? " is outside\n" : "\n")
+            << "    p2 "     << fVertex[2] << ((iout[2]) ? " is outside\n" : "\n")
+            << "    p3 "     << fVertex[3] << ((iout[3]) ? " is outside"   : "");
+    G4Exception("G4Tet::SetBoundingLimits()", "GeomSolids0002",
+                FatalException, message);
+  }
+  fBmin = pMin;
+  fBmax = pMax;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Return bounding box
 //
 void G4Tet::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
-  pMin.set(fXMin,fYMin,fZMin);
-  pMax.set(fXMax,fYMax,fZMax);
-
-  // Check correctness of the bounding box
-  //
-  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
-  {
-    std::ostringstream message;
-    message << "Bad bounding box (min >= max) for solid: "
-            << GetName() << " !"
-            << "\npMin = " << pMin
-            << "\npMax = " << pMax;
-    G4Exception("G4Tet::BoundingLimits()", "GeomMgt0001", JustWarning, message);
-    DumpInfo();
-  }
+  pMin = fBmin;
+  pMax = fBmax;
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
 //
@@ -346,279 +413,172 @@ G4bool G4Tet::CalculateExtent(const EAxis pAxis,
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
-// Return whether point inside/outside/on surface, using tolerance
+// Return whether point inside/outside/on surface
 //
 EInside G4Tet::Inside(const G4ThreeVector& p) const
 {
-  G4double r123, r134, r142, r234;
+  G4double dd[4];
+  for (G4int i = 0; i < 4; ++i) { dd[i] = fNormal[i].dot(p) - fDist[i]; }
 
-  // this is written to allow if-statement truncation so the outside test
-  // (where most of the world is) can fail very quickly and efficiently
-
-  if ( (r123=p.dot(fNormal123)-fCdotN123) > fTol ||
-       (r134=p.dot(fNormal134)-fCdotN134) > fTol ||
-       (r142=p.dot(fNormal142)-fCdotN142) > fTol ||
-       (r234=p.dot(fNormal234)-fCdotN234) > fTol )
-  {
-    return kOutside; // at least one is out!
-  }
-  else if( (r123 < -fTol)&&(r134 < -fTol)&&(r142 < -fTol)&&(r234 < -fTol) )
-  {
-    return kInside; // all are definitively inside
-  }
-  else
-  {
-    return kSurface; // too close to tell
-  }
+  G4double dist = std::max(std::max(std::max(dd[0], dd[1]), dd[2]), dd[3]);
+  return (dist <= -halfTolerance) ?
+    kInside : ((dist <= halfTolerance) ? kSurface : kOutside);
 }
 
-///////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
-// Calculate side nearest to p, and return normal
-// If two sides are equidistant, normal of first side (x/y/z) 
-// encountered returned.
-// This assumes that we are looking from the inside!
+// Return unit normal to surface at p
 //
 G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
 {
-  G4double r123=std::fabs(p.dot(fNormal123)-fCdotN123);
-  G4double r134=std::fabs(p.dot(fNormal134)-fCdotN134);
-  G4double r142=std::fabs(p.dot(fNormal142)-fCdotN142);
-  G4double r234=std::fabs(p.dot(fNormal234)-fCdotN234);
+  G4double k[4];
+  for (G4int i = 0; i < 4; ++i)
+  {
+    k[i] = std::abs(fNormal[i].dot(p) - fDist[i]) <= halfTolerance;
+  }
+  G4double nsurf = k[0] + k[1] + k[2] + k[3];
+  G4ThreeVector norm =
+    k[0]*fNormal[0] + k[1]*fNormal[1] + k[2]*fNormal[2] + k[3]*fNormal[3];
 
-  const G4double delta = 0.5*kCarTolerance;
-  G4ThreeVector sumnorm(0., 0., 0.);
-  G4int noSurfaces=0; 
-
-  if (r123 <= delta)         
+  if (nsurf == 1.) return norm;
+  else if (nsurf > 1.) return norm.unit(); // edge or vertex
   {
-     ++noSurfaces; 
-     sumnorm= fNormal123; 
-  }
-
-  if (r134 <= delta)    
-  {
-     ++noSurfaces; 
-     sumnorm += fNormal134; 
-  }
- 
-  if (r142 <= delta)    
-  {
-     ++noSurfaces; 
-     sumnorm += fNormal142;
-  }
-  if (r234 <= delta)    
-  {
-     ++noSurfaces; 
-     sumnorm += fNormal234;
-  }
-  
-  if( noSurfaces > 0 )
-  { 
-     if( noSurfaces == 1 )
-     { 
-       return sumnorm; 
-     }
-     else
-     {
-       return sumnorm.unit();
-     }
-  }
-  else // Approximative Surface Normal
-  {
-
-    if( (r123<=r134) && (r123<=r142) && (r123<=r234) ) { return fNormal123; }
-    else if ( (r134<=r142) && (r134<=r234) )           { return fNormal134; }
-    else if (r142 <= r234)                             { return fNormal142; }
-    return fNormal234;
+#ifdef G4SPECSDEBUG
+    std::ostringstream message;
+    G4int oldprc = message.precision(16);
+    message << "Point p is not on surface (!?) of solid: "
+            << GetName() << "\n";
+    message << "Position:\n";
+    message << "   p.x() = " << p.x()/mm << " mm\n";
+    message << "   p.y() = " << p.y()/mm << " mm\n";
+    message << "   p.z() = " << p.z()/mm << " mm";
+    G4cout.precision(oldprc);
+    G4Exception("G4Tet::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, message );
+    DumpInfo();
+#endif
+    return ApproxSurfaceNormal(p);
   }
 }
-///////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////
 //
-// Calculate distance to box from an outside point
-// - return kInfinity if no intersection.
-// All this is very unrolled, for speed.
+// Find surface nearest to point and return corresponding normal
+// This method normally should not be called
+//
+G4ThreeVector G4Tet::ApproxSurfaceNormal(const G4ThreeVector& p) const
+{
+  G4double dist = -DBL_MAX;
+  G4int iside = 0;
+  for (G4int i = 0; i < 4; ++i)
+  {
+    G4double d = fNormal[i].dot(p) - fDist[i];
+    if (d > dist) { dist = d; iside = i; }
+  }
+  return fNormal[iside];
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Calculate distance to surface from outside,
+// return kInfinity if no intersection
 //
 G4double G4Tet::DistanceToIn(const G4ThreeVector& p,
                              const G4ThreeVector& v) const
 {
-    G4ThreeVector vu(v.unit()), hp;
-    G4double vdotn, t, tmin=kInfinity;
-
-    G4double extraDistance=10.0*fTol; // a little ways into the solid
-
-    vdotn=-vu.dot(fNormal123);
-    if(vdotn > 1e-12)
-    { // this is a candidate face, since it is pointing at us
-      t=(p.dot(fNormal123)-fCdotN123)/vdotn; // #  distance to intersection
-      if( (t>=-fTol) && (t<tmin) )
-      { // if not true, we're going away from this face or it's not close
-        hp=p+vu*(t+extraDistance); // a little beyond point of intersection
-        if ( ( hp.dot(fNormal134)-fCdotN134 < 0.0 ) &&
-             ( hp.dot(fNormal142)-fCdotN142 < 0.0 ) &&
-             ( hp.dot(fNormal234)-fCdotN234 < 0.0 ) )
-        {
-          tmin=t;
-        }
-      }
+  G4double tin = -DBL_MAX, tout = DBL_MAX;
+  for (G4int i = 0; i < 4; ++i)
+  {
+    G4double cosa = fNormal[i].dot(v);
+    G4double dist = fNormal[i].dot(p) - fDist[i];
+    if (dist >= -halfTolerance)
+    {
+      if (cosa >= 0.) { return kInfinity; }
+      tin = std::max(tin, -dist/cosa);
     }
-
-    vdotn=-vu.dot(fNormal134);
-    if(vdotn > 1e-12)
-    { // # this is a candidate face, since it is pointing at us
-      t=(p.dot(fNormal134)-fCdotN134)/vdotn; // #  distance to intersection
-      if( (t>=-fTol) && (t<tmin) )
-      { // if not true, we're going away from this face
-        hp=p+vu*(t+extraDistance); // a little beyond point of intersection
-        if ( ( hp.dot(fNormal123)-fCdotN123 < 0.0 ) && 
-             ( hp.dot(fNormal142)-fCdotN142 < 0.0 ) &&
-             ( hp.dot(fNormal234)-fCdotN234 < 0.0 ) )
-        {
-          tmin=t;
-        }
-      }
+    else if (cosa > 0.)
+    {
+      tout = std::min(tout, -dist/cosa);
     }
+  }
 
-    vdotn=-vu.dot(fNormal142);
-    if(vdotn > 1e-12)
-    { // # this is a candidate face, since it is pointing at us
-      t=(p.dot(fNormal142)-fCdotN142)/vdotn; // #  distance to intersection
-      if( (t>=-fTol) && (t<tmin) )
-      { // if not true, we're going away from this face
-        hp=p+vu*(t+extraDistance); // a little beyond point of intersection
-        if ( ( hp.dot(fNormal123)-fCdotN123 < 0.0 ) &&
-             ( hp.dot(fNormal134)-fCdotN134 < 0.0 ) &&
-             ( hp.dot(fNormal234)-fCdotN234 < 0.0 ) )
-        {
-          tmin=t;
-        }
-      }
-    }
-
-    vdotn=-vu.dot(fNormal234);
-    if(vdotn > 1e-12)
-    { // # this is a candidate face, since it is pointing at us
-      t=(p.dot(fNormal234)-fCdotN234)/vdotn; // #  distance to intersection
-      if( (t>=-fTol) && (t<tmin) )
-      { // if not true, we're going away from this face
-        hp=p+vu*(t+extraDistance); // a little beyond point of intersection
-        if ( ( hp.dot(fNormal123)-fCdotN123 < 0.0 ) &&
-             ( hp.dot(fNormal134)-fCdotN134 < 0.0 ) &&
-             ( hp.dot(fNormal142)-fCdotN142 < 0.0 ) )
-        {
-          tmin=t;
-        }
-      }
-    }
-
-  return std::max(0.0,tmin);
+  return (tout - tin <= halfTolerance) ?
+    kInfinity : ((tin < halfTolerance) ? 0. : tin);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// 
-// Approximate distance to tet.
-// returns distance to sphere centered on bounding box
-// - If inside return 0
+////////////////////////////////////////////////////////////////////////
+//
+// Estimate safety distance to surface from outside
 //
 G4double G4Tet::DistanceToIn(const G4ThreeVector& p) const
 {
-  G4double dd=(p-fMiddle).mag() - fMaxSize - fTol;
-  return std::max(0.0, dd);
+  G4double dd[4];
+  for (G4int i = 0; i < 4; ++i) { dd[i] = fNormal[i].dot(p) - fDist[i]; }
+
+  G4double dist = std::max(std::max(std::max(dd[0], dd[1]), dd[2]), dd[3]);
+  return (dist > 0.) ? dist : 0.;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
-// Calcluate distance to surface of box from inside
-// by calculating distances to box's x/y/z planes.
-// Smallest distance is exact distance to exiting.
+// Calcluate distance to surface from inside
 //
-G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
-                               const G4bool calcNorm,
-                                     G4bool* validNorm, G4ThreeVector* n) const
+G4double G4Tet::DistanceToOut(const G4ThreeVector& p,
+                              const G4ThreeVector& v,
+                              const G4bool calcNorm,
+                                    G4bool* validNorm,
+                                    G4ThreeVector* n) const
 {
-    G4ThreeVector vu(v.unit());
-    G4double t1=kInfinity,t2=kInfinity,t3=kInfinity,t4=kInfinity, vdotn, tt;
+  // Calculate distances and cosines
+  G4double cosa[4], dist[4];
+  G4int ind[4] = {0}, nside = 0;
+  for (G4int i = 0; i < 4; ++i)
+  {
+    G4double tmp = fNormal[i].dot(v);
+    cosa[i] = tmp;
+    ind[nside] = (tmp > 0) * i;
+    nside += (tmp > 0);
+    dist[i] = fNormal[i].dot(p) - fDist[i];
+  }
 
-    vdotn=vu.dot(fNormal123);
-    if(vdotn > 1e-12)  // #we're heading towards this face, so it is a candidate
-    {
-      t1=(fCdotN123-p.dot(fNormal123))/vdotn; // #  distance to intersection
-    }
+  // Find intersection (in most of cases nside == 1)
+  G4double tout = DBL_MAX;
+  G4int iside = 0;
+  for (G4int i = 0; i < nside; ++i)
+  {
+    G4int k = ind[i];
+    // Check: leaving the surface
+    if (dist[k] >= -halfTolerance) { tout = 0.; iside = k; break; }
+    // Compute distance to intersection
+    G4double tmp = -dist[k]/cosa[k];
+    if (tmp < tout) { tout = tmp; iside = k; }
+  }
 
-    vdotn=vu.dot(fNormal134);
-    if(vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
-    {
-      t2=(fCdotN134-p.dot(fNormal134))/vdotn; // #  distance to intersection
-    }
-
-    vdotn=vu.dot(fNormal142);
-    if(vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
-    {
-      t3=(fCdotN142-p.dot(fNormal142))/vdotn; // #  distance to intersection
-    }
-
-    vdotn=vu.dot(fNormal234);
-    if(vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
-    {
-      t4=(fCdotN234-p.dot(fNormal234))/vdotn; // #  distance to intersection
-    }
-
-    tt=std::min(std::min(std::min(t1,t2),t3),t4);
-
-    if (warningFlag && (tt == kInfinity || tt < -fTol))
-    {
-      DumpInfo();
-      std::ostringstream message;
-      message << "No good intersection found or already outside!?" << G4endl
-              << "p = " << p / mm << "mm" << G4endl
-              << "v = " << v  << G4endl
-              << "t1, t2, t3, t4 (mm) "
-              << t1/mm << ", " << t2/mm << ", " << t3/mm << ", " << t4/mm;
-      G4Exception("G4Tet::DistanceToOut(p,v,...)", "GeomSolids1002",
-                  JustWarning, message);
-      if(validNorm)
-      {
-        *validNorm=false; // flag normal as meaningless
-      }
-    }
-    else if(calcNorm && n != nullptr)
-    {
-      G4ThreeVector normal;
-      if(tt==t1)        { normal=fNormal123; }
-      else if (tt==t2)  { normal=fNormal134; }
-      else if (tt==t3)  { normal=fNormal142; }
-      else if (tt==t4)  { normal=fNormal234; }
-      *n=normal;
-      if(validNorm) { *validNorm=true; }
-    }
-
-    return std::max(tt,0.0); // avoid tt<0.0 by a tiny bit
-                             // if we are right on a face
+  // Set normal, if required, and return distance to out
+  if (calcNorm)
+  {
+    *validNorm = true;
+    *n = fNormal[iside];
+  }
+  return tout;
 }
 
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
-// Calculate exact shortest distance to any boundary from inside
-// - If outside return zero
+// Calculate safety distance to surface from inside
 //
 G4double G4Tet::DistanceToOut(const G4ThreeVector& p) const
 {
-  G4double t1,t2,t3,t4;
-  t1=fCdotN123-p.dot(fNormal123); //  distance to plane, positive if inside
-  t2=fCdotN134-p.dot(fNormal134); //  distance to plane
-  t3=fCdotN142-p.dot(fNormal142); //  distance to plane
-  t4=fCdotN234-p.dot(fNormal234); //  distance to plane
+  G4double dd[4];
+  for (G4int i = 0; i < 4; ++i) { dd[i] = fDist[i] - fNormal[i].dot(p); }
 
-  // if any one of these is negative, we are outside,
-  // so return zero in that case
-
-  G4double tmin=std::min(std::min(std::min(t1,t2),t3),t4);
-  return (tmin < fTol)? 0:tmin;
+  G4double dist = std::min(std::min(std::min(dd[0], dd[1]), dd[2]), dd[3]);
+  return (dist > 0.) ? dist : 0.;
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
 // GetEntityType
 //
@@ -627,7 +587,7 @@ G4GeometryType G4Tet::GetEntityType() const
   return G4String("G4Tet");
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
 // Make a clone of the object
 //
@@ -636,7 +596,7 @@ G4VSolid* G4Tet::Clone() const
   return new G4Tet(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
 // Stream object contents to an output stream
 //
@@ -644,86 +604,47 @@ std::ostream& G4Tet::StreamInfo(std::ostream& os) const
 {
   G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
-  << "    *** Dump for solid - " << GetName() << " ***\n"
-  << "    ===================================================\n"
-  << " Solid type: G4Tet\n"
-  << " Parameters: \n"
-  << "    anchor: " << fAnchor/mm << " mm \n"
-  << "    p2: " << fP2/mm << " mm \n"
-  << "    p3: " << fP3/mm << " mm \n"
-  << "    p4: " << fP4/mm << " mm \n"
-  << "    normal123: " << fNormal123 << " \n"
-  << "    normal134: " << fNormal134 << " \n"
-  << "    normal142: " << fNormal142 << " \n"
-  << "    normal234: " << fNormal234 << " \n"
-  << "-----------------------------------------------------------\n";
+     << "    *** Dump for solid - " << GetName() << " ***\n"
+     << "    ===================================================\n"
+     << " Solid type: " << GetEntityType() << "\n"
+     << " Parameters: \n"
+     << "    anchor: " << fVertex[0]/mm << " mm\n"
+     << "    p1    : " << fVertex[1]/mm << " mm\n"
+     << "    p2    : " << fVertex[2]/mm << " mm\n"
+     << "    p3    : " << fVertex[3]/mm << " mm\n"
+     << "-----------------------------------------------------------\n";
   os.precision(oldprc);
-
   return os;
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
-// GetPointOnFace
-//
-// Auxiliary method for get point on surface
-//
-G4ThreeVector G4Tet::GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2,
-                                    G4ThreeVector p3, G4double& area) const
-{
-  G4double lambda1,lambda2;
-  G4ThreeVector v, w;
-
-  v = p3 - p1;
-  w = p1 - p2;
-
-  lambda1 = G4RandFlat::shoot(0.,1.);
-  lambda2 = G4RandFlat::shoot(0.,lambda1);
-
-  area = 0.5*(v.cross(w)).mag();
-
-  return (p2 + lambda1*w + lambda2*v);
-}
-
-////////////////////////////////////////////////////////////////////////////
-//
-// GetPointOnSurface
+// Return random point on the surface
 //
 G4ThreeVector G4Tet::GetPointOnSurface() const
 {
-  G4double chose,aOne,aTwo,aThree,aFour;
-  G4ThreeVector p1, p2, p3, p4;
-  
-  p1 = GetPointOnFace(fAnchor,fP2,fP3,aOne);
-  p2 = GetPointOnFace(fAnchor,fP4,fP3,aTwo);
-  p3 = GetPointOnFace(fAnchor,fP4,fP2,aThree);
-  p4 = GetPointOnFace(fP4,fP3,fP2,aFour);
-  
-  chose = G4RandFlat::shoot(0.,aOne+aTwo+aThree+aFour);
-  if( (chose>=0.) && (chose <aOne) ) {return p1;}
-  else if( (chose>=aOne) && (chose < aOne+aTwo) ) {return p2;}
-  else if( (chose>=aOne+aTwo) && (chose<aOne+aTwo+aThree) ) {return p3;}
-  return p4;
+  constexpr G4int iface[4][3] = { {0,1,2}, {0,2,3}, {0,3,1}, {1,2,3} };
+
+  // Select face
+  G4double select = fSurfaceArea*G4QuickRand();
+  G4int i = 0;
+  for ( ; i < 4; ++i) { if ((select -= fArea[i]) <= 0.) break; }
+
+  // Set selected triangle
+  G4ThreeVector p0 = fVertex[iface[i][0]];
+  G4ThreeVector e1 = fVertex[iface[i][1]] - p0;
+  G4ThreeVector e2 = fVertex[iface[i][2]] - p0;
+
+  // Return random point
+  G4double r1 = G4QuickRand();
+  G4double r2 = G4QuickRand();
+  return (r1 + r2 > 1.) ?
+    p0 + e1*(1. - r1) + e2*(1. - r2) : p0 + e1*r1 + e2*r2;
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
-// GetVertices
-//
-std::vector<G4ThreeVector> G4Tet::GetVertices() const 
-{
-  std::vector<G4ThreeVector> vertices(4);
-  vertices[0] = fAnchor;
-  vertices[1] = fP2;
-  vertices[2] = fP3;
-  vertices[3] = fP4;
-
-  return vertices;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// GetCubicVolume
+// Return volume of the tetrahedron
 //
 G4double G4Tet::GetCubicVolume()
 {
@@ -732,47 +653,60 @@ G4double G4Tet::GetCubicVolume()
 
 ////////////////////////////////////////////////////////////////////////
 //
-// GetSurfaceArea
+// Return surface area of the tetrahedron
 //
 G4double G4Tet::GetSurfaceArea()
 {
   return fSurfaceArea;
 }
 
-// Methods for visualisation
-
 ////////////////////////////////////////////////////////////////////////
 //
-// DescribeYourselfTo
+// Methods for visualisation
 //
-void G4Tet::DescribeYourselfTo (G4VGraphicsScene& scene) const 
+void G4Tet::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddSolid (*this);
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
-// GetExtent
+// Return VisExtent
 //
-G4VisExtent G4Tet::GetExtent() const 
+G4VisExtent G4Tet::GetExtent() const
 {
-  return G4VisExtent (fXMin, fXMax, fYMin, fYMax, fZMin, fZMax);
+  return G4VisExtent(fBmin.x(), fBmax.x(),
+                     fBmin.y(), fBmax.y(),
+                     fBmin.z(), fBmax.z());
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // CreatePolyhedron
 //
-G4Polyhedron* G4Tet::CreatePolyhedron() const 
+G4Polyhedron* G4Tet::CreatePolyhedron() const
 {
-  G4Polyhedron* ph = new G4Polyhedron;
-  G4double xyz[4][3];
-  const G4int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
-  xyz[0][0]=fAnchor.x(); xyz[0][1]=fAnchor.y(); xyz[0][2]=fAnchor.z();
-  xyz[1][0]=fP2.x(); xyz[1][1]=fP2.y(); xyz[1][2]=fP2.z();
-  xyz[2][0]=fP3.x(); xyz[2][1]=fP3.y(); xyz[2][2]=fP3.z();
-  xyz[3][0]=fP4.x(); xyz[3][1]=fP4.y(); xyz[3][2]=fP4.z();
+  // Check orientation of vertices
+  G4ThreeVector v1 = fVertex[1] - fVertex[0];
+  G4ThreeVector v2 = fVertex[2] - fVertex[0];
+  G4ThreeVector v3 = fVertex[3] - fVertex[0];
+  G4bool invert = v1.cross(v2).dot(v3) < 0.;
+  G4int k2 = (invert) ? 3 : 2;
+  G4int k3 = (invert) ? 2 : 3;
 
+  // Set coordinates of vertices
+  G4double xyz[4][3];
+  for (G4int i = 0; i < 3; ++i)
+  {
+    xyz[0][i] = fVertex[0][i];
+    xyz[1][i] = fVertex[1][i];
+    xyz[2][i] = fVertex[k2][i];
+    xyz[3][i] = fVertex[k3][i];
+  }
+
+  // Create polyhedron
+  G4int faces[4][4] = { {1,3,2,0}, {1,4,3,0}, {1,2,4,0}, {2,3,4,0} };
+  G4Polyhedron* ph = new G4Polyhedron;
   ph->createPolyhedron(4,4,xyz,faces);
 
   return ph;
@@ -788,13 +722,13 @@ G4Polyhedron* G4Tet::GetPolyhedron() const
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
-    {
-      G4AutoLock l(&polyhedronMutex);
-      delete fpPolyhedron;
-      fpPolyhedron = CreatePolyhedron();
-      fRebuildPolyhedron = false;
-      l.unlock();
-    }
+  {
+    G4AutoLock l(&polyhedronMutex);
+    delete fpPolyhedron;
+    fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
+  }
   return fpPolyhedron;
 }
 

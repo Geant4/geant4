@@ -64,38 +64,34 @@ public:
 
   explicit G4hhIonisation(const G4String& name = "hhIoni");
 
-  virtual ~G4hhIonisation();
+  ~G4hhIonisation() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
+  G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, G4double cut) override;
-
-  // Print out of the class parameters
-  virtual void PrintInfo() override;
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+			    const G4Material*, G4double cut) override;
 
   // print description in html
-  virtual void ProcessDescription(std::ostream&) const override;
-
-protected:
-
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*) override;
-
-private:
+  void ProcessDescription(std::ostream&) const override;
 
   // hide assignment operator
   G4hhIonisation & operator=(const G4hhIonisation &right) = delete;
   G4hhIonisation(const G4hhIonisation&) = delete;
 
-  G4double   mass;
-  G4double   ratio;
+protected:
 
-  const G4ParticleDefinition* theParticle;
-  //const G4ParticleDefinition* theBaseParticle;
-  G4VEmFluctuationModel*      flucModel;
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                   const G4ParticleDefinition*) override;
 
-  G4bool                      isInitialised;
+private:
+
+  const G4ParticleDefinition* theParticle = nullptr;
+  G4VEmFluctuationModel* flucModel = nullptr;
+
+  G4double mass = 0.0;
+  G4double ratio = 0.0;
+
+  G4bool isInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

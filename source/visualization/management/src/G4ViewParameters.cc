@@ -100,7 +100,8 @@ G4ViewParameters::G4ViewParameters ():
   fDisplayLightFrontT(0.),
   fDisplayLightFrontRed(0.),
   fDisplayLightFrontGreen(1.),
-  fDisplayLightFrontBlue(0.)
+  fDisplayLightFrontBlue(0.),
+  fSpecialMeshRendering(false)
 {
   // Pick up default no of sides from G4Polyhedron.
   // Note that this parameter is variously called:
@@ -450,6 +451,18 @@ G4String G4ViewParameters::DrawingStyleCommands() const
 
   oss << "\n/vis/viewer/set/numberOfCloudPoints "
   << fNumberOfCloudPoints;
+
+  oss << "\n/vis/viewer/set/specialMeshRendering ";
+  if (fSpecialMeshRendering) {
+    oss << "true";
+  } else {
+    oss << "false";
+  }
+
+  oss << "\n/vis/viewer/set/specialMeshVolumes";
+  for (const auto& volume : fSpecialMeshVolumes) {
+    oss << ' ' << volume.GetName() << ' ' << volume.GetCopyNo();
+  }
 
   oss << std::endl;
   
@@ -1050,6 +1063,19 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
     << ' ' << v.fDisplayLightFrontGreen << ' ' << v.fDisplayLightFrontBlue;
   }
 
+  os << "\n  Special Mesh Rendering: ";
+  if (v.fSpecialMeshRendering) {
+    os << "on: ";
+    if (v.fSpecialMeshVolumes.empty()) {
+      os << "all meshes";
+    } else {
+      os << "selected meshes";
+      for (const auto& vol: v.fSpecialMeshVolumes) {
+	os << "\n    " << vol.GetName() << ':' << vol.GetCopyNo();
+      }
+    }
+  } else os << "off";
+
   return os;
 }
 
@@ -1094,7 +1120,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour)     ||
       (fPicking              != v.fPicking)              ||
-      (fRotationStyle        != v.fRotationStyle)
+      (fRotationStyle        != v.fRotationStyle)        ||
+      (fSpecialMeshRendering != v.fSpecialMeshRendering)
       )
     return true;
 
@@ -1152,6 +1179,11 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
         fDisplayLightFrontBlue  != v.fDisplayLightFrontBlue) {
       return true;
     }
+  }
+
+  if (fSpecialMeshRendering) {
+    if (fSpecialMeshVolumes != v.fSpecialMeshVolumes)
+      return true;;
   }
 
   return false;

@@ -64,36 +64,39 @@ public:
   explicit G4eBremParametrizedModel(const G4ParticleDefinition* p = nullptr, 
 				    const G4String& nam = "eBremParam");
 
-  virtual ~G4eBremParametrizedModel();
+  ~G4eBremParametrizedModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel) override;
+  void InitialiseLocal(const G4ParticleDefinition*, 
+		       G4VEmModel* masterModel) override;
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*, 
-				const G4MaterialCutsCouple*) override;
+  G4double MinEnergyCut(const G4ParticleDefinition*, 
+			const G4MaterialCutsCouple*) override;
 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-					const G4ParticleDefinition*,
-					G4double kineticEnergy,
-					G4double cutEnergy) override;
+  G4double ComputeDEDXPerVolume(const G4Material*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double cutEnergy) override;
 					
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-					      G4double tkin, 
-					      G4double Z,   G4double,
-					      G4double cutEnergy,
-					      G4double maxEnergy = DBL_MAX) override;
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double tkin, 
+				      G4double Z, G4double,
+				      G4double cutEnergy,
+				      G4double maxEnergy = DBL_MAX) override;
   
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double cutEnergy,
-				 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double cutEnergy,
+			 G4double maxEnergy) override;
 
-  virtual void SetupForMaterial(const G4ParticleDefinition*,
-                                const G4Material*,G4double) override;
+  void SetupForMaterial(const G4ParticleDefinition*,
+                        const G4Material*,G4double) override;
 
+  // hide assignment operator
+  G4eBremParametrizedModel & operator=(const  G4eBremParametrizedModel &right) = delete;
+  G4eBremParametrizedModel(const  G4eBremParametrizedModel&) = delete;
 
 private:
 
@@ -115,12 +118,7 @@ private:
 
   G4double ScreenFunction2(G4double ScreenVariable);
 
-  // * fast inline functions *
   inline void SetCurrentElement(const G4double);
-
-  // hide assignment operator
-  G4eBremParametrizedModel & operator=(const  G4eBremParametrizedModel &right) = delete;
-  G4eBremParametrizedModel(const  G4eBremParametrizedModel&) = delete;
 
 protected:
 
@@ -145,23 +143,24 @@ protected:
   G4double facFel, facFinel;
   G4double fMax,fCoulomb;
 
-  G4bool   isElectron;
-
 private:
 
-  // consts
   G4double lowKinEnergy;
   G4double fMigdalConstant;
   G4double bremFactor;
 
-  G4bool   isInitialised;
+  G4bool isInitialised;
+
+protected:
+
+  G4bool isElectron;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4eBremParametrizedModel::SetCurrentElement(const G4double Z)
 {
-  //std::cout<<"SetCurrentElement Z="<<Z<<std::endl;
   if(Z != currentZ) {
     currentZ = Z;
 
@@ -175,7 +174,6 @@ inline void G4eBremParametrizedModel::SetCurrentElement(const G4double Z)
 
     fCoulomb = GetCurrentElement()->GetfCoulomb();
     fMax = Fel-fCoulomb + Finel/currentZ  +  (1.+1./currentZ)/12.;
-
   }
 }
 

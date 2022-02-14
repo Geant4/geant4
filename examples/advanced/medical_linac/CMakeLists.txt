@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(medical_linac)
 
 #----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -40,7 +40,7 @@ target_link_libraries(ml2 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(medical_linac_SCRIPTS
-    ml2.mac  
+    ml2.mac
     batch.mac
     acc1.mac
     macroAndData/macro_files/accelerator/acc1.mac
@@ -48,14 +48,14 @@ set(medical_linac_SCRIPTS
     macroAndData/macro_files/accelerator/acc2_6MeV_10x10.mac
     macroAndData/macro_files/accelerator/acc2_15MeV_3x3.mac
     macroAndData/macro_files/accelerator/accSaturn.mac
-    macroAndData/macro_files/main/batch.mac 
-    macroAndData/macro_files/main/ml2.mac 
+    macroAndData/macro_files/main/batch.mac
+    macroAndData/macro_files/main/ml2.mac
     macroAndData/macro_files/main/vis.mac
     macroAndData/experimental/VoxelsTest_In.txt
     macroAndData/experimental/EXP_Saturn_Cal_Data.txt
     macroAndData/results/PhSp/PhSp_Acc1.txt
     macroAndData/results/ROG/ROG_Out.txt
-    macroAndData/results/experimental/VoxelsTest_Out.m   
+    macroAndData/results/experimental/VoxelsTest_Out.m
   )
 
 foreach(_script ${medical_linac_SCRIPTS})

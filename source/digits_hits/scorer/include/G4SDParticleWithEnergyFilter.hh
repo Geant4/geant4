@@ -40,38 +40,38 @@ class G4ParticleDefinition;
 // class description:
 //
 //  This is the class of a filter to be associated with a
-// sensitive detector. 
+// sensitive detector.
 //  This class filters steps by partilce definition and kinetic energy.
 //
 // Created: 2005-11-14  Tsukasa ASO.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4SDParticleWithEnergyFilter : public G4VSDFilter 
+class G4SDParticleWithEnergyFilter : public G4VSDFilter
 {
-  public: // with description
-      G4SDParticleWithEnergyFilter(G4String name,
-				   G4double elow=0.0, G4double ehigh=DBL_MAX);
-      virtual ~G4SDParticleWithEnergyFilter();
+ public:  // with description
+  G4SDParticleWithEnergyFilter(G4String name, G4double elow = 0.0,
+                               G4double ehigh = DBL_MAX);
+  virtual ~G4SDParticleWithEnergyFilter();
 
-  public: // with description
-      virtual G4bool Accept(const G4Step*) const;
+ public:  // with description
+  virtual G4bool Accept(const G4Step*) const;
 
-      void add(const G4String& particleName);
-      // add the particle into accepatable particle list.
-      //
-      void SetKineticEnergy(G4double elow, G4double ehigh);
-      // Set acceptable kinetic energy range.
-      //
-      void show();
+  void add(const G4String& particleName);
+  // add the particle into accepatable particle list.
+  //
+  void SetKineticEnergy(G4double elow, G4double ehigh);
+  // Set acceptable kinetic energy range.
+  //
+  void show();
 
-  private:
-     G4SDParticleFilter* fParticleFilter;
-     G4SDKineticEnergyFilter* fKineticFilter;
-  public:
-    G4SDParticleWithEnergyFilter(const G4SDParticleWithEnergyFilter&);
-    G4SDParticleWithEnergyFilter& operator=(const G4SDParticleWithEnergyFilter&);
+ private:
+  G4SDParticleFilter* fParticleFilter;
+  G4SDKineticEnergyFilter* fKineticFilter;
+
+ public:
+  G4SDParticleWithEnergyFilter(const G4SDParticleWithEnergyFilter&);
+  G4SDParticleWithEnergyFilter& operator=(const G4SDParticleWithEnergyFilter&);
 };
 
 #endif
-

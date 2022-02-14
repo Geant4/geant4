@@ -1,0 +1,17 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_version
+#define tools_version
+
+#define TOOLS_MAJOR_VERSION 5
+#define TOOLS_MINOR_VERSION 6
+#define TOOLS_PATCH_VERSION 0
+#define TOOLS_VERSION "5.6.0"
+#define TOOLS_VERSION_VRP "v5r6p0"
+
+namespace tools {
+inline unsigned int version() {return 50600;}
+}
+
+#endif

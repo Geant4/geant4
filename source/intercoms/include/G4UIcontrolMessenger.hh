@@ -23,26 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIcontrolMessenger
 //
+// Class description:
 //
-
-#ifndef G4UIcontrolMessenger_h
-#define G4UIcontrolMessenger_h 1
-
-#include "G4UImessenger.hh"
-
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithoutParameter;
-class G4UIcommand;
-
-// class description:
-//  This class is a concrete class of G4UImessenger which defines
+// This class is a concrete class of G4UImessenger which defines
 // commands affecting to the G4UImanager. Commands defined by
-// this messenger are
-//   /control/ 
+// this messenger are:
+//   /control/
 //   /control/macroPath
 //   /control/execute
 //   /control/loop
@@ -75,49 +63,64 @@ class G4UIcommand;
 //   /control/doifBatch
 //   /control/doifInteractive
 
-class G4UIcontrolMessenger : public G4UImessenger 
+// Author: Makoto Asai, SLAC - 2001
+// --------------------------------------------------------------------
+#ifndef G4UIcontrolMessenger_hh
+#define G4UIcontrolMessenger_hh 1
+
+#include "G4UImessenger.hh"
+
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithABool;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithoutParameter;
+class G4UIcommand;
+
+class G4UIcontrolMessenger : public G4UImessenger
 {
   public:
-      G4UIcontrolMessenger();
-      ~G4UIcontrolMessenger();
-      void SetNewValue(G4UIcommand * command,G4String newValue);
-      G4String GetCurrentValue(G4UIcommand * command);
+
+    G4UIcontrolMessenger();
+    ~G4UIcontrolMessenger();
+    void SetNewValue(G4UIcommand* command, G4String newValue);
+    G4String GetCurrentValue(G4UIcommand* command);
 
   private:
-      G4UIdirectory * controlDirectory;
-      G4UIcmdWithAString * macroPathCommand;
-      G4UIcmdWithAString * ExecuteCommand;
-      G4UIcmdWithAnInteger * suppressAbortionCommand;
-      G4UIcmdWithAnInteger * verboseCommand;
-      G4UIcmdWithABool * doublePrecCommand;
-      G4UIcmdWithAString * historyCommand;
-      G4UIcmdWithoutParameter * stopStoreHistoryCommand;
-      G4UIcommand * aliasCommand;
-      G4UIcmdWithAString * unaliasCommand;
-      G4UIcmdWithoutParameter * listAliasCommand;
-      G4UIcmdWithAString * getEnvCmd;
-      G4UIcommand * getValCmd;
-      G4UIcmdWithAString * echoCmd;
-      G4UIcmdWithAString * shellCommand;
-      G4UIcommand * loopCommand;
-      G4UIcommand * foreachCommand;
-      G4UIcmdWithAString * ManualCommand;
-      G4UIcmdWithAString * HTMLCommand;
-      G4UIcmdWithAnInteger * maxStoredHistCommand;
-      G4UIcommand * ifCommand;
-      G4UIcommand * doifCommand;
-      G4UIcommand * addCommand;
-      G4UIcommand * subtractCommand;
-      G4UIcommand * multiplyCommand;
-      G4UIcommand * divideCommand;
-      G4UIcommand * remainderCommand;
-      G4UIcommand * strifCommand;
-      G4UIcommand * strdoifCommand;
-      G4UIcmdWithAString * ifBatchCommand;
-      G4UIcmdWithAString * ifInteractiveCommand;
-      G4UIcmdWithAString * doifBatchCommand;
-      G4UIcmdWithAString * doifInteractiveCommand;
+
+    G4UIdirectory* controlDirectory = nullptr;
+    G4UIcmdWithAString* macroPathCommand = nullptr;
+    G4UIcmdWithAString* ExecuteCommand = nullptr;
+    G4UIcmdWithAnInteger* suppressAbortionCommand = nullptr;
+    G4UIcmdWithAnInteger* verboseCommand = nullptr;
+    G4UIcmdWithABool* doublePrecCommand = nullptr;
+    G4UIcmdWithAString* historyCommand = nullptr;
+    G4UIcmdWithoutParameter* stopStoreHistoryCommand = nullptr;
+    G4UIcommand* aliasCommand = nullptr;
+    G4UIcmdWithAString* unaliasCommand = nullptr;
+    G4UIcmdWithoutParameter* listAliasCommand = nullptr;
+    G4UIcmdWithAString* getEnvCmd = nullptr;
+    G4UIcommand* getValCmd = nullptr;
+    G4UIcmdWithAString* echoCmd = nullptr;
+    G4UIcmdWithAString* shellCommand = nullptr;
+    G4UIcommand* loopCommand = nullptr;
+    G4UIcommand* foreachCommand = nullptr;
+    G4UIcmdWithAString* ManualCommand = nullptr;
+    G4UIcmdWithAString* HTMLCommand = nullptr;
+    G4UIcmdWithAnInteger* maxStoredHistCommand = nullptr;
+    G4UIcommand* ifCommand = nullptr;
+    G4UIcommand* doifCommand = nullptr;
+    G4UIcommand* addCommand = nullptr;
+    G4UIcommand* subtractCommand = nullptr;
+    G4UIcommand* multiplyCommand = nullptr;
+    G4UIcommand* divideCommand = nullptr;
+    G4UIcommand* remainderCommand = nullptr;
+    G4UIcommand* strifCommand = nullptr;
+    G4UIcommand* strdoifCommand = nullptr;
+    G4UIcmdWithAString* ifBatchCommand = nullptr;
+    G4UIcmdWithAString* ifInteractiveCommand = nullptr;
+    G4UIcmdWithAString* doifBatchCommand = nullptr;
+    G4UIcmdWithAString* doifInteractiveCommand = nullptr;
 };
 
 #endif
-

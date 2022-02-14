@@ -27,6 +27,7 @@
 // Author: Ivana Hrivnacova, 22/08/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4Fcn.hh"
+#include "G4AnalysisUtilities.hh"
 
 namespace G4Analysis
 {
@@ -40,15 +41,13 @@ G4Fcn GetFunction(const G4String& fcnName)
     else if ( fcnName == "log10") fcn = std::log10;
     else if ( fcnName == "exp" )  fcn = std::exp;
     else {
-      G4ExceptionDescription description;
-      description 
-        << "    \"" << fcnName << "\" function is not supported." << G4endl
-        << "    " << "No function will be applied to histogram values.";
-      G4Exception("G4Analysis::GetFunction",
-                "Analysis_W013", JustWarning, description);
-    }              
+      Warn(
+        "\"" + fcnName + "\" function is not supported.\n" +
+        "No function will be applied to histogram values.",
+        kNamespaceName, "GetFunction");
+    }
   }
-  return fcn;            
+  return fcn;
 }
-    
+
 }

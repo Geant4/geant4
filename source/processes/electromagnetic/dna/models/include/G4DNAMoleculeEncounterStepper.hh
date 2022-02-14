@@ -47,6 +47,8 @@
 
 #include "G4VITTimeStepComputer.hh"
 #include "G4KDTreeResult.hh"
+#include "G4ITTrackHolder.hh"
+#include "G4ITReaction.hh"
 
 class G4VDNAReactionModel;
 class G4DNAMolecularReactionTable;
@@ -75,6 +77,7 @@ public:
 
     virtual void Prepare();
     virtual G4double CalculateStep(const G4Track&, const G4double&);
+    virtual G4double CalculateMinTimeStep(G4double, G4double);
 
     void SetReactionModel(G4VDNAReactionModel*);
     G4VDNAReactionModel* GetReactionModel();
@@ -94,9 +97,10 @@ private:
                                G4KDTreeResultHandle&);
 
     G4bool fHasAlreadyReachedNullTime;
-
     const G4DNAMolecularReactionTable*& fMolecularReactionTable;
     G4VDNAReactionModel* fReactionModel;
+    G4ITTrackHolder* fpTrackContainer;
+    G4ITReactionSet* fReactionSet;
     G4int fVerbose;
 
     class Utils

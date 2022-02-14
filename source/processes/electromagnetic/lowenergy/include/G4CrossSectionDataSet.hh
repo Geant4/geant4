@@ -40,8 +40,6 @@
 // Low Energy Electromagnetic Physics
 // Data set for an electromagnetic physics process
 // A strategy pattern is used to encapsulate algorithms for data interpolation
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
 // -------------------------------------------------------------------
 
 #ifndef  G4CrossSectionDataSet_HH
@@ -55,9 +53,9 @@ class G4CrossSectionDataSet : public G4VEMDataSet
 { 
 
 public:
-  G4CrossSectionDataSet(G4VDataSetAlgorithm* algo, 
-			   G4double xUnit=CLHEP::MeV, 
-			   G4double dataUnit=CLHEP::barn);
+  explicit G4CrossSectionDataSet(G4VDataSetAlgorithm* algo, 
+				 G4double xUnit=CLHEP::MeV, 
+				 G4double dataUnit=CLHEP::barn);
 
   virtual ~G4CrossSectionDataSet();
 
@@ -101,26 +99,14 @@ public:
  
   virtual G4double RandomSelect(G4int /*componentId */) const { return -1.; };
 
-
-  //   void CleanUpComponents();
-   
 private:
 
   G4String FullFileName(const G4String & argFileName) const;
 
   // Hide copy constructor and assignment operator 
-  G4CrossSectionDataSet();
-  G4CrossSectionDataSet(const G4CrossSectionDataSet & copy);
-  G4CrossSectionDataSet& operator=(const G4CrossSectionDataSet & right);
-
-  std::vector<G4VEMDataSet*> components;          // Owned pointers
-
-  G4int z;
-
-  G4VDataSetAlgorithm* algorithm;           // Owned pointer 
-  
-  G4double unitEnergies;
-  G4double unitData; 
+  explicit G4CrossSectionDataSet();
+  G4CrossSectionDataSet(const G4CrossSectionDataSet & copy) = delete;
+  G4CrossSectionDataSet& operator=(const G4CrossSectionDataSet & right) = delete;
 
   G4double GetUnitEnergies() const { return unitEnergies; }
   G4double GetUnitData() const { return unitData; }
@@ -128,6 +114,13 @@ private:
    
   void CleanUpComponents(void);
 
+  std::vector<G4VEMDataSet*> components;          // Owned pointers
 
+  G4VDataSetAlgorithm* algorithm;           // Owned pointer 
+  
+  G4double unitEnergies;
+  G4double unitData; 
+
+  G4int z = 0;
 };
 #endif /* G4CrossSectionDataSet_HH */

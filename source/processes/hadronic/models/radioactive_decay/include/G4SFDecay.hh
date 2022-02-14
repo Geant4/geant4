@@ -54,13 +54,10 @@ class G4SFDecay : public G4NuclearDecay
 
     virtual void DumpNuclearInfo();
 
-    void SetARM(G4bool onoff) {applyARM = onoff;}
- 
   private:
     const G4double transitionQ;
     G4int parentZ;
     G4int parentA;
-    G4bool applyARM;
 };
 
 #endif

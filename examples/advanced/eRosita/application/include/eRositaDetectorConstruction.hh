@@ -64,6 +64,8 @@ public:
   //  G4double GetTargetFullLength()  {return fTargetLength;};
   //  G4double GetWorldFullLength()   {return fWorldLength;}; 
   
+  virtual void ConstructSDandField();
+  
   void setTargetMaterial (G4String);
   void setTrackerMaterial(G4String);
   void setWorldMaterial(G4String);
@@ -85,12 +87,11 @@ private:
   G4VPhysicalVolume* physiTracker;  // pointer to the physical Tracker
   G4VisAttributes*   visTracker;    // pointer to visualization attributes
   
-  G4Material*         TargetMater;  // pointer to the target  material
+ G4Material*         TargetMater;  // pointer to the target  material
   G4Material*         TrackerMater; // pointer to the tracker material
   G4Material*         WorldMater;   // pointer to the tracker material
-
-  G4Material*         vacuum;
  
+ G4Material*         vacuum;
        
   G4double hWorldLength;            // half length of the world volume
   G4double hTargetLength;           // half length of target

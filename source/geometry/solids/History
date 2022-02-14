@@ -15,6 +15,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+March 30, 2021 B.Morgan                 - geomsolids-V10-07-00
+- Migrate sources.cmake to modular build API
+
+December 10, 2019 B.Morgan              - geomsolids-V10-06-00
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
 
 June 3, 2019 J.Apostolakis              - geomsolids-V10-05-00
 - Change CMakeLists.txt in test directories to allow optional use
@@ -108,7 +114,7 @@ September, 30th, 2003   G.Cosmo            -  geomsolids-V05-02-00
 - Archived solids/STEP and solids/STEPinterface modules.
   Modified GNUmakefiles to cope with this.
   Include tags: breps-V05-02-00, geom-bool-V05-02-00, geom-csg-V05-02-00,
-                geom-specific-V05-02-01, 
+                geom-specific-V05-02-01,
 
 May   28th, 2003   G. Cosmo                -  geomsolids-V05-01-00
 - Modified GNUmakefile to make compilation of STEP and STEPinterface
@@ -123,14 +129,14 @@ Oct   28th, 2002   G. Cosmo                -  geomsolids-V04-01-00
 - Coworks with tag geommng-V04-01-03 of geometry/management, and based
   on reference tag "geant4-04-01-ref-03". Includes streaming mechanism
   for solids.
-  
+
 Apr   20th, 2001   G. Cosmo                -  geomsolids-V03-01-00
 - Collects tags breps-V03-01-00, geom-solids-csg-V03-01-01,
   stepinterface-V03-01-00, geom-solids-specific-V03-01-00,
   geom-solid-bool-V03-00-03 and the latest fixes to STEP.
 - Added X11RayTracer tool (E.Medernach) for unit testing and latest
   updates to SBT and Fred test suites.
-  
+
 Nov   13th, 2000   G. Cosmo                -  geomsolids-V02-00-01
 
 - Collects tags breps-V02-00-02, geom-solids-csg-V02-00-09,
@@ -216,7 +222,7 @@ Nov   17th, 1998   J. Apostolakis            -  solids-00-03-03
 
   --> newest PCone at the time
 
-    given to CMS (Matthias) for preliminary testing. 
+    given to CMS (Matthias) for preliminary testing.
     mentioned to Steffano Magni
 
 Nov   17th, 1998   J. Apostolakis            -  solids-00-03-02

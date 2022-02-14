@@ -34,37 +34,38 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 G4PenelopeSamplingData::G4PenelopeSamplingData(G4int nPoints) : 
-  np(nPoints)
+  fNP(nPoints)
 {
   //create vectors
-  x = new G4DataVector();
-  pac = new G4DataVector();
-  a = new G4DataVector();
-  b = new G4DataVector();
-  ITTL = new std::vector<size_t>;
-  ITTU = new std::vector<size_t>;
+  fX = new G4DataVector();
+  fPAC = new G4DataVector();
+  fA = new G4DataVector();
+  fB = new G4DataVector();
+  fITTL = new std::vector<size_t>;
+  fITTU = new std::vector<size_t>;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 G4PenelopeSamplingData::~G4PenelopeSamplingData()
 {
-  if (x) delete x;
-  if (pac) delete pac;
-  if (a) delete a;
-  if (b) delete b;
-  if (ITTL) delete ITTL;
-  if (ITTU) delete ITTU;
+  if (fX) delete fX;
+  if (fPAC) delete fPAC;
+  if (fA) delete fA;
+  if (fB) delete fB;
+  if (fITTL) delete fITTL;
+  if (fITTU) delete fITTU;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......oooOO0OOooo...
+
 size_t G4PenelopeSamplingData::GetNumberOfStoredPoints()
 {
-  size_t points = x->size();
+  size_t points = fX->size();
 
   //check everything is all right
-  if (pac->size() != points || a->size() != points || 
-      b->size() != points || ITTL->size() != points ||
-      ITTU->size() != points)
+  if (fPAC->size() != points || fA->size() != points || 
+      fB->size() != points || fITTL->size() != points ||
+      fITTU->size() != points)
     {
       G4ExceptionDescription ed;
       ed << "Data vectors look to have different dimensions !" << G4endl;
@@ -77,40 +78,40 @@ size_t G4PenelopeSamplingData::GetNumberOfStoredPoints()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 void G4PenelopeSamplingData::Clear()
 {
-  if (x) delete x;
-  if (pac) delete pac;
-  if (a) delete a;
-  if (b) delete b;
-  if (ITTL) delete ITTL;
-  if (ITTU) delete ITTU;
+  if (fX) delete fX;
+  if (fPAC) delete fPAC;
+  if (fA) delete fA;
+  if (fB) delete fB;
+  if (fITTL) delete fITTL;
+  if (fITTU) delete fITTU;
   //create vectors
-  x = new G4DataVector();
-  pac = new G4DataVector();
-  a = new G4DataVector();
-  b = new G4DataVector();
-  ITTL = new std::vector<size_t>;
-  ITTU = new std::vector<size_t>;
+  fX = new G4DataVector();
+  fPAC = new G4DataVector();
+  fA = new G4DataVector();
+  fB = new G4DataVector();
+  fITTL = new std::vector<size_t>;
+  fITTU = new std::vector<size_t>;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 void G4PenelopeSamplingData::AddPoint(G4double x0,G4double pac0,G4double a0,G4double b0,
 					size_t ITTL0,size_t ITTU0)
 {
-  x->push_back(x0);
-  pac->push_back(pac0);
-  a->push_back(a0);
-  b->push_back(b0);
-  ITTL->push_back(ITTL0);
-  ITTU->push_back(ITTU0);
+  fX->push_back(x0);
+  fPAC->push_back(pac0);
+  fA->push_back(a0);
+  fB->push_back(b0);
+  fITTL->push_back(ITTL0);
+  fITTU->push_back(ITTU0);
 
   //check how many points we do have now
   size_t nOfPoints = GetNumberOfStoredPoints();
 
-  if (nOfPoints > ((size_t)np))
+  if (nOfPoints > ((size_t)fNP))
     {
       G4cout << "G4PenelopeSamplingData::AddPoint() " << G4endl;
       G4cout << "WARNING: Up to now there are " << nOfPoints << " points in the table" << G4endl;
-      G4cout << "while the anticipated (declared) number is " << np << G4endl;
+      G4cout << "while the anticipated (declared) number is " << fNP << G4endl;
     }
     return;
 }
@@ -124,8 +125,8 @@ void G4PenelopeSamplingData::DumpTable()
   G4cout << "*************************************************************************" << G4endl;
   for (size_t i=0;i<GetNumberOfStoredPoints();i++)
     {
-      G4cout << i << " " << (*x)[i] << " " << (*pac)[i] << " " << (*a)[i] << " " << 
-	(*b)[i] << " " << (*ITTL)[i] << " " << (*ITTU)[i] << G4endl;
+      G4cout << i << " " << (*fX)[i] << " " << (*fPAC)[i] << " " << (*fA)[i] << " " << 
+	(*fB)[i] << " " << (*fITTL)[i] << " " << (*fITTU)[i] << G4endl;
     }
   G4cout << "*************************************************************************" << G4endl;
 }
@@ -133,8 +134,8 @@ void G4PenelopeSamplingData::DumpTable()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 G4double G4PenelopeSamplingData::GetX(size_t index)
 {
-  if (index < x->size())
-    return (*x)[index];
+  if (index < fX->size())
+    return (*fX)[index];
   else
     return 0;
 }
@@ -142,8 +143,8 @@ G4double G4PenelopeSamplingData::GetX(size_t index)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 G4double G4PenelopeSamplingData::GetPAC(size_t index)
 {
-  if (index < pac->size())
-    return (*pac)[index];
+  if (index < fPAC->size())
+    return (*fPAC)[index];
   else
     return 0;
 }
@@ -151,8 +152,8 @@ G4double G4PenelopeSamplingData::GetPAC(size_t index)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 G4double G4PenelopeSamplingData::GetA(size_t index)
 {
-  if (index < a->size())
-    return (*a)[index];
+  if (index < fA->size())
+    return (*fA)[index];
   else
     return 0;
 }
@@ -160,8 +161,8 @@ G4double G4PenelopeSamplingData::GetA(size_t index)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 G4double G4PenelopeSamplingData::GetB(size_t index)
 {
-  if (index < b->size())
-    return (*b)[index];
+  if (index < fB->size())
+    return (*fB)[index];
   else
     return 0;
 }
@@ -174,13 +175,13 @@ G4double G4PenelopeSamplingData::SampleValue(G4double maxRand)
   size_t points = GetNumberOfStoredPoints();
  
   size_t itn = (size_t) (maxRand*(points-1)); 
-  size_t i = (*ITTL)[itn];
-  size_t j = (*ITTU)[itn];
+  size_t i = (*fITTL)[itn];
+  size_t j = (*fITTU)[itn];
 
   while ((j-i) > 1)
     {
       size_t k = (i+j)/2;
-      if (maxRand > (*pac)[k])
+      if (maxRand > (*fPAC)[k])
 	i = k;
       else
 	j = k;
@@ -189,16 +190,16 @@ G4double G4PenelopeSamplingData::SampleValue(G4double maxRand)
   //Sampling from the rational inverse cumulative distribution
   G4double result = 0;
 
-  G4double rr = maxRand - (*pac)[i];
+  G4double rr = maxRand - (*fPAC)[i];
   if (rr > 1e-16)
     {
-      G4double d = (*pac)[i+1]-(*pac)[i];
-      result = (*x)[i]+
-	((1.0+(*a)[i]+(*b)[i])*d*rr/
-	 (d*d+((*a)[i]*d+(*b)[i]*rr)*rr))*((*x)[i+1]-(*x)[i]);      
+      G4double d = (*fPAC)[i+1]-(*fPAC)[i];
+      result = (*fX)[i]+
+	((1.0+(*fA)[i]+(*fB)[i])*d*rr/
+	 (d*d+((*fA)[i]*d+(*fB)[i]*rr)*rr))*((*fX)[i+1]-(*fX)[i]);      
     }
   else
-    result = (*x)[i]; 
+    result = (*fX)[i]; 
   
   return result;
 }

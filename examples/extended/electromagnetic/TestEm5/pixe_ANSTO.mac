@@ -1,0 +1,61 @@
+# macro file for TestEm5.cc    
+# Macro showing how to activate
+# the ANSTO PIXE data libraries,
+# which can be used up to 5 MeV/amu
+#    		    
+/control/cout/ignoreThreadsExcept 0
+/control/verbose 2
+/run/verbose 1
+#
+/testem/det/setAbsMat Gold
+/testem/det/setAbsThick 50 um
+/testem/det/setAbsYZ    50 um
+#
+/testem/phys/addPhysics emstandard_opt4
+###/testem/phys/addPhysics emlivermore
+#
+/run/setCut 2 um
+/run/setCutForAGivenParticle gamma 0.5 um
+#
+# to (de)activate pixe or atomic deexcitation
+/process/em/pixe true
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true
+#
+# to activate the ANSTO cross sections
+/process/em/pixeXSmodel ECPSSR_ANSTO
+#
+# to activate the ANSTO fluorescence
+# radiation yields
+/process/em/fluoANSTO true
+#
+/process/em/verbose 0
+/process/em/printParameters 
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle proton 
+/gun/energy 3 MeV
+#
+# to be run interactively  
+###/control/execute vis.mac
+###/tracking/verbose 2
+###/run/beamOn 1
+# 
+/analysis/setFileName pixe
+/analysis/h1/set  3 1000 0 100 keV  #all gamma: energy at vertex
+/analysis/h1/set 51 1000 0 100 keV  #deexcitation
+/analysis/h1/set 55 1000 0 100 keV  #pixe
+#
+/analysis/h1/set  2  500 0  50 keV  #all e-: energy at vertex
+/analysis/h1/set 50  200 0  20 keV  #deexcitation
+/analysis/h1/set 54  200 0  20 keV  #pixe
+#
+/analysis/h1/set  4  500 0.01  50 keV log10  #all e-: energy at vertex
+/analysis/h1/set 52  200 0.01  20 keV log10  #deexcitation
+/analysis/h1/set 56  200 0.01  20 keV log10  #pixe
+#
+/tracking/verbose 0
+/run/printProgress 10000 
+/run/beamOn 100000

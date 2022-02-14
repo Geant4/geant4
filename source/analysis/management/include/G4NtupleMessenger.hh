@@ -36,30 +36,41 @@
 #include "globals.hh"
 
 #include <memory>
+#include <string_view>
 
 class G4VAnalysisManager;
 class G4UIcommand;
 class G4UIcmdWithABool;
+class G4UIcmdWithAString;
 
 class G4NtupleMessenger : public G4UImessenger
 {
   public:
     explicit G4NtupleMessenger(G4VAnalysisManager* manager);
+    G4NtupleMessenger() = delete;
     virtual ~G4NtupleMessenger();
-   
-    // methods
+
+    // Methods
     virtual void SetNewValue(G4UIcommand* command, G4String value) final;
-    
+
   private:
+    // Methods
     void SetActivationCmd();
     void SetActivationToAllCmd();
- 
-    G4VAnalysisManager*  fManager; ///< Associated class
-    
-    std::unique_ptr<G4UIdirectory>     fNtupleDir;   
-    std::unique_ptr<G4UIcommand>       fSetActivationCmd;   
-    std::unique_ptr<G4UIcmdWithABool>  fSetActivationAllCmd;   
-};
-  
-#endif
+    void SetFileNameCmd();
+    void SetFileNameToAllCmd();
 
+    // Static data members
+    static constexpr std::string_view fkClass { "G4NtupleMessenger" };
+
+    // Data members
+    G4VAnalysisManager*  fManager { nullptr }; ///< Associated class
+
+    std::unique_ptr<G4UIdirectory>      fNtupleDir;
+    std::unique_ptr<G4UIcommand>        fSetActivationCmd;
+    std::unique_ptr<G4UIcmdWithABool>   fSetActivationAllCmd;
+    std::unique_ptr<G4UIcommand>        fSetFileNameCmd;
+    std::unique_ptr<G4UIcmdWithAString> fSetFileNameAllCmd;
+};
+
+#endif

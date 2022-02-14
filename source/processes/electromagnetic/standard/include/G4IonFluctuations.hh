@@ -50,12 +50,11 @@
 #ifndef G4IonFluctuations_h
 #define G4IonFluctuations_h 1
 
-
 #include "G4VEmFluctuationModel.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4UniversalFluctuation.hh"
 
 class G4Pow;
+class G4UniversalFluctuation;
 
 class G4IonFluctuations : public G4VEmFluctuationModel
 {
@@ -64,56 +63,57 @@ public:
 
   explicit G4IonFluctuations(const G4String& nam = "IonFluc");
 
-  virtual ~G4IonFluctuations();
+  ~G4IonFluctuations() override;
 
   // Sample fluctuations
-  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
-                                      const G4DynamicParticle*,
-                                      G4double tmax,
-                                      G4double length,
-                                      G4double meanLoss) override;
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
+			      const G4DynamicParticle*,
+			      const G4double tcut,
+			      const G4double tmax,
+			      const G4double length,
+			      const G4double meanLoss) override;
 
   // Compute dispertion 
-  virtual G4double Dispersion(const G4Material*,
-                              const G4DynamicParticle*,
-                              G4double tmax,
-                              G4double length) override;
+  G4double Dispersion(const G4Material*,
+		      const G4DynamicParticle*,
+                      const G4double tcut,
+		      const G4double tmax,
+		      const G4double length) override;
 
   // Initialisation prerun
-  virtual void InitialiseMe(const G4ParticleDefinition*) override;
+  void InitialiseMe(const G4ParticleDefinition*) override;
 
   // Initialisation prestep
-  virtual void SetParticleAndCharge(const G4ParticleDefinition*, 
-                                    G4double q2) override;
+  void SetParticleAndCharge(const G4ParticleDefinition*, 
+			    G4double q2) override;
+
+  // hide assignment operator
+  G4IonFluctuations & operator=(const  G4IonFluctuations &right) = delete;
+  G4IonFluctuations(const  G4IonFluctuations&) = delete;
 
 private:
 
   G4double Factor(const G4Material*, G4double Zeff);
   G4double RelativisticFactor(const G4Material*, G4double Zeff);
 
-  // hide assignment operator
-  G4IonFluctuations & operator=(const  G4IonFluctuations &right) = delete;
-  G4IonFluctuations(const  G4IonFluctuations&) = delete;
-
-  G4UniversalFluctuation      uniFluct;
-  const G4ParticleDefinition* particle;
-
-  G4Pow*   g4calc; 
+  const G4ParticleDefinition* particle = nullptr;
+  G4UniversalFluctuation* uniFluct;
+  G4Pow* g4calc; 
 
   G4double particleMass;
-  G4double charge;
-  G4double chargeSquare;
-  G4double effChargeSquare;
+  G4double charge = 1.0;
+  G4double chargeSquare = 1.0;
+  G4double effChargeSquare = 1.0;
 
   // data members to speed up the fluctuation calculation
   G4double parameter;
   G4double theBohrBeta2;
-  G4double minFraction;
-  G4double xmin;
+  G4double minFraction = 0.2;
+  G4double xmin = 0.2;
   G4double minLoss;
   // cash
-  G4double kineticEnergy;
-  G4double beta2;
+  G4double kineticEnergy = 0.0;
+  G4double beta2 = 0.0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

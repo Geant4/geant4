@@ -65,7 +65,7 @@ struct CompareMaterial
   bool operator()(const G4Material* mat1, const G4Material* mat2) const;
 };
 
-typedef std::map<const G4Material*, double, CompareMaterial> ComponentMap;
+typedef std::map<const G4Material*, G4double, CompareMaterial> ComponentMap;
 
 /**
  * \class G4DNAMolecularMaterial
@@ -96,7 +96,6 @@ class G4DNAMolecularMaterial: public G4VStateDependent
 {
 public:
   static G4DNAMolecularMaterial* Instance();
-  static void DeleteInstance();
   void Initialize();
   void Clear();
 
@@ -105,7 +104,7 @@ public:
   //----------------------------------------------------------------------------
 
   /**
-   * \fn const std::vector<double>* \
+   * \fn const std::vector<G4double>* \
    *     GetDensityTableFor(const G4Material* searchedMaterial) const
    * \brief Retrieve a table of volumetric mass densities (mass per unit volume)
    * in the G4 unit system for chosen material.
@@ -120,10 +119,10 @@ public:
    * indexed on the (parent) material index.
    *
    */
-  const std::vector<double>* GetDensityTableFor(const G4Material*) const;
+  const std::vector<G4double>* GetDensityTableFor(const G4Material*) const;
   
   /**
-   * \fn const std::vector<double>* \
+   * \fn const std::vector<G4double>* \
    *     GetNumMolPerVolTableFor(const G4Material* searchedMaterial) const
    * \brief Retrieve a table of molecular densities (number of molecules per
    * unit volume) in the G4 unit system for chosen material.
@@ -137,7 +136,7 @@ public:
    * Pointer to a table of molecular densities for the \p searchedMaterial 
    * indexed on the (parent) material index.
    */
-  const std::vector<double>* GetNumMolPerVolTableFor(const G4Material*) const;
+  const std::vector<G4double>* GetNumMolPerVolTableFor(const G4Material*) const;
   
   inline const std::vector<ComponentMap>* GetMassFractionTable() const{
     return fpCompFractionTable;
@@ -233,9 +232,9 @@ protected:
                                G4double fraction);
   void SearchMolecularMaterial(G4Material* parentMaterial,
                                G4Material* material,
-                               double currentFraction);
+                               G4double currentFraction);
 
-  void AddMaterial(const G4Material*, double fraction);
+  void AddMaterial(const G4Material*, G4double fraction);
 
   void PrintNotAMolecularMaterial(const char* methodName,
                                   const G4Material* lookForMaterial) const;
@@ -245,9 +244,9 @@ protected:
   std::vector<ComponentMap>* fpCompDensityTable;
   std::vector<ComponentMap>* fpCompNumMolPerVolTable;
 
-  mutable std::map<const G4Material*, std::vector<double>*, CompareMaterial>
+  mutable std::map<const G4Material*, std::vector<G4double>*, CompareMaterial>
             fAskedDensityTable;
-  mutable std::map<const G4Material*, std::vector<double>*, CompareMaterial>
+  mutable std::map<const G4Material*, std::vector<G4double>*, CompareMaterial>
             fAskedNumPerVolTable;
   mutable std::map<const G4Material*, bool, CompareMaterial> fWarningPrinted;
   

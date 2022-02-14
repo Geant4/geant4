@@ -25,9 +25,9 @@
 //
 //
 //
-// 
+//
 // ------------------------------------------------------------
-//      GEANT 4 class header file 
+//      GEANT 4 class header file
 // ------------------------------------------------------------
 // Class description:
 //
@@ -52,41 +52,38 @@
 
 class G4UniformRandPool
 {
-  public:
+ public:
+  G4UniformRandPool();
+  G4UniformRandPool(/*PoolSize_t&*/ G4int ps);
+  ~G4UniformRandPool();
 
-    G4UniformRandPool();
-    G4UniformRandPool( /*PoolSize_t&*/ G4int ps );
-   ~G4UniformRandPool();
+  void Resize(/*PoolSize_t*/ G4int newSize);
+  void GetMany(G4double* rnds, G4int howMany);
+  inline G4double GetOne();
+  inline /*PoolSize_t*/ G4int GetPoolSize() const;
 
-    void Resize( /*PoolSize_t*/ G4int newSize );
-    void GetMany( G4double* rnds , G4int howMany );
-    inline G4double GetOne();
-    inline /*PoolSize_t*/ G4int GetPoolSize() const;
+  // These two static methods are used to
+  // simulate the calls of CLHEP::HepRandom
+  //
+  static G4double flat();
+  static void flatArray(G4int howmany, G4double* rnds);
 
-    // These two static methods are used to
-    // simulate the calls of CLHEP::HepRandom
-    //
-    static G4double flat();
-    static void flatArray( G4int howmany, G4double* rnds );
+ private:
+  void Fill(G4int howmany);
 
-  private:
-
-    inline void Fill( G4int howmany );
-
-  private:
-
-    /*PoolSize_t*/ G4int size;
-    G4double* buffer;
-    G4int currentIdx;
+ private:
+  /*PoolSize_t*/ G4int size;
+  G4double* buffer;
+  G4int currentIdx;
 };
 
 inline G4double G4UniformRandPool::GetOne()
 {
   // No more available numbers, re-fill
   //
-  if ( currentIdx >= /*(unsigned int)*/size )
+  if(currentIdx >= /*(unsigned int)*/ size)
   {
-    Fill(/*(unsigned int)*/size);
+    Fill(/*(unsigned int)*/ size);
   }
 
   return buffer[currentIdx++];

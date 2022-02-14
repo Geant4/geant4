@@ -23,81 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/include/EventAction.hh
+/// \file EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 70747 2013-06-05 11:56:02Z ihrivnac $
 //
-/////////////////////////////////////////////////////////////////////////
-//
-// EventAction
-//
-// Created: 21.06.2008 V.Ivanchenko
-//
-// Modified:
-//
-////////////////////////////////////////////////////////////////////////
-// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef EventAction_h
 #define EventAction_h 1
- 
+
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-#include <vector>
+#include "DetectorConstruction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class G4Event;
-class EventActionMessenger;
-class G4UImanager;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
-public: // Without description
+  public:  
+    EventAction(DetectorConstruction*);
+   ~EventAction() override;
 
-  EventAction();
-  virtual ~EventAction();
-
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
-
-  inline void SetPrintModulo(G4int val);
-  inline void AddEventToDebug(G4int val);
-
-private:
-
-  EventAction & operator=(const EventAction &right);
-  EventAction(const EventAction&);
-
-  EventActionMessenger* fEventMessenger;
-  G4UImanager*          fUI;
-  std::vector<G4int>    fSelectedEvents;
-
-  G4int        fPrintModulo;
-  G4int        fSelected;
-
-  G4bool       fDebugStarted;
-
+    void BeginOfEventAction(const G4Event*) override;
+    void   EndOfEventAction(const G4Event*) override;
+    
+    void SumEnergy(G4int k, G4double de, G4double dl)
+        {fEnergyDeposit[k] += de; fTrackLengthCh[k] += dl;};          
+        
+  private:  
+    DetectorConstruction* fDetector;
+    
+    G4double  fEnergyDeposit[kMaxAbsor];
+    G4double  fTrackLengthCh[kMaxAbsor];
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void EventAction::SetPrintModulo(G4int val)   
-{ 
-  fPrintModulo = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
-inline void EventAction::AddEventToDebug(G4int val)  
-{ 
-  fSelectedEvents.push_back(val);
-  ++fSelected;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-
+    

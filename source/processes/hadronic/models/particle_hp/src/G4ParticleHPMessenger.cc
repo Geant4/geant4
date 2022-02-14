@@ -25,10 +25,11 @@
 //
 #include "G4ParticleHPMessenger.hh"
 #include "G4ParticleHPManager.hh"
-
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4ParticleHPMessenger::G4ParticleHPMessenger( G4ParticleHPManager* man )
 :manager(man)
@@ -68,6 +69,18 @@ G4ParticleHPMessenger::G4ParticleHPMessenger( G4ParticleHPManager* man )
    ProduceFissionFragementCmd->SetCandidates("true false");
    ProduceFissionFragementCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+   WendtFissionModelCmd = new G4UIcmdWithAString("/process/had/particle_hp/use_Wendt_fission_model",this);
+   WendtFissionModelCmd->SetGuidance("Enable use of Wendt fission model.");
+   WendtFissionModelCmd->SetParameterName("choice",false);
+   WendtFissionModelCmd->SetCandidates("true false");
+   WendtFissionModelCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+      
+   NRESP71Cmd = new G4UIcmdWithAString("/process/had/particle_hp/use_NRESP71_model",this);
+   NRESP71Cmd->SetGuidance("Enable to use NRESP71 model for n on C reaction");
+   NRESP71Cmd->SetParameterName("choice",false);
+   NRESP71Cmd->SetCandidates("true false");
+   NRESP71Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
    VerboseCmd = new G4UIcmdWithAnInteger("/process/had/particle_hp/verbose",this);
    VerboseCmd->SetGuidance("Set Verbose level of ParticleHP package");
    VerboseCmd->SetParameterName("verbose_level",true);
@@ -84,31 +97,167 @@ G4ParticleHPMessenger::~G4ParticleHPMessenger()
    delete NeglectDopplerCmd;
    delete DoNotAdjustFSCmd;
    delete ProduceFissionFragementCmd;
+   delete WendtFissionModelCmd;
+   delete NRESP71Cmd;
    delete VerboseCmd;
 }
 
 void G4ParticleHPMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-   G4bool bValue=false;
-   if ( newValue == "true" ) bValue=true;
+   G4bool bValue = false;
+   if ( newValue == "true" ) bValue = true;
 
-   if ( command == PhotoEvaCmd ) { 
-      manager->SetUseOnlyPhotoEvaporation( bValue ); 
+   if ( command == PhotoEvaCmd ) {
+     if ( manager->GetUseOnlyPhotoEvaporation() != bValue ) {
+       manager->SetUseOnlyPhotoEvaporation( bValue );
+       #ifdef G4VERBOSE
+       if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+         G4cout << G4endl
+	        << "=== G4ParticleHPMessenger CHANGED PARAMETER UseOnlyPhotoEvaporation TO "
+	        << bValue << " ===" << G4endl;
+       }
+       if ( bValue ) {
+         G4cout << "    -> Forced the use of the Photon Evaporation model (instead of the neutron capture final state data)"
+	        << G4endl;
+       } else {
+         G4cout << "    -> Go back to use the default neutron capture final state data !" << G4endl;
+       }
+       #endif
+     }
    }
-   if ( command == SkipMissingCmd) { 
-      manager->SetSkipMissingIsotopes( bValue ); 
+   
+   if ( command == SkipMissingCmd) {
+     if ( manager->GetSkipMissingIsotopes() != bValue ) {
+       manager->SetSkipMissingIsotopes( bValue );
+       #ifdef G4VERBOSE
+       if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+         G4cout << G4endl
+	        << "=== G4ParticleHPMessenger CHANGED PARAMETER SkipMissingIsotopes TO "
+	        << bValue << " ===" << G4endl;
+       }
+       if ( bValue ) {
+         G4cout << "    -> Use only exact isotope data files, instead of allowing nearby isotope files to be used: \n"
+	        << "       if the exact file is not available, the cross section will be set to zero !"
+	        << G4endl;
+       } else {
+         G4cout << "    -> Go back to the default, i.e. use nearby isotope files when the exact isotope data files are not found !"
+		<< G4endl;
+       }
+       #endif
+     }
    }
-   if ( command == NeglectDopplerCmd ) { 
-      manager->SetNeglectDoppler( bValue ); 
+   
+   if ( command == NeglectDopplerCmd ) {
+     if ( manager->GetNeglectDoppler() != bValue ) {
+       manager->SetNeglectDoppler( bValue );
+       #ifdef G4VERBOSE
+       if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+         G4cout << G4endl
+	        << "=== G4ParticleHPMessenger CHANGED PARAMETER NeglectDoppler TO "
+	        << bValue << " ===" << G4endl;
+       }
+       if ( bValue ) {
+         G4cout << "    -> Switched off the Doppler broadening due to the thermal motion of the target nucleus: \n"
+	        << "       on-the-fly Doppler broadening will be neglected in the cross section calculations of \n"
+	        << "       capture, elastic, fission and inelastic reactions/scatterings of neutrons below 20 MeV.\n" 
+                << "       This option provides a significant CPU performance advantage !"
+	        << G4endl;
+       } else {
+         G4cout << "    -> Go back to the default, i.e. switch on the Doppler broadening on-the-fly !" << G4endl;
+       }
+       #endif
+     }
    }
-   if ( command == DoNotAdjustFSCmd ) { 
-      manager->SetDoNotAdjustFinalState( bValue ); 
+   
+   if ( command == DoNotAdjustFSCmd ) {
+     if ( manager->GetDoNotAdjustFinalState() != bValue ) {
+       manager->SetDoNotAdjustFinalState( bValue );
+       #ifdef G4VERBOSE
+       if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+         G4cout << G4endl
+	        << "=== G4ParticleHPMessenger CHANGED PARAMETER DoNotAdjustFinalState TO "
+	        << bValue << " ===" << G4endl;
+       }
+       if ( bValue ) {
+         G4cout << "    -> Disabled the adjustment of the final state for getting better conservation !"
+	        << G4endl;
+       } else {
+         G4cout << "    -> Go back to the default, i.e. adjust the final state to get better conservation !"
+		<< G4endl;
+       }
+       #endif
+     }
    }
+   
    if ( command == ProduceFissionFragementCmd ) { 
-      manager->SetProduceFissionFragments( bValue ); 
+     if ( manager->GetProduceFissionFragments() != bValue ) {
+      manager->SetProduceFissionFragments( bValue );
+       #ifdef G4VERBOSE
+       if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+         G4cout << G4endl
+	        << "=== G4ParticleHPMessenger CHANGED PARAMETER ProduceFissionFragments TO "
+	        << bValue << " ===" << G4endl;
+       }
+       if ( bValue ) {
+         G4cout << "    -> Enabled the generation of fission fragments !"
+	        << G4endl;
+       } else {
+         G4cout << "    -> Go back to the default, i.e. do not generate fission fragments !" << G4endl;
+       }
+       #endif
+     }
    }
+   
+   if ( command == WendtFissionModelCmd ) { 
+     if ( manager->GetUseWendtFissionModel() != bValue ) {
+       manager->SetUseWendtFissionModel( bValue );
+       // Make sure both fission fragment models are not active at same time
+       if ( bValue ) manager->SetProduceFissionFragments( false );
+       #ifdef G4VERBOSE
+       if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+         G4cout << G4endl
+	        << "=== G4ParticleHPMessenger CHANGED PARAMETER UseWendtFissionModel TO "
+	        << bValue << " ===" << G4endl;
+       }
+       if ( bValue ) {
+         G4cout << "    -> Enabled the use of Wendt fission model !" << G4endl;
+       } else {
+         G4cout << "    -> Go back to the default, i.e. do not use the Wendt fission model !" << G4endl;
+       }
+       #endif
+     }
+   }
+   
+   if ( command == NRESP71Cmd ) { 
+     if ( manager->GetUseNRESP71Model() != bValue ) {
+       manager->SetUseNRESP71Model( bValue );
+       #ifdef G4VERBOSE
+       if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+         G4cout << G4endl
+	        << "=== G4ParticleHPMessenger CHANGED PARAMETER UseNRESP71Model TO "
+	        << bValue << " ===" << G4endl;
+       }
+       if ( bValue ) {
+         G4cout << "    -> Enabled the use of NRESP71 model for n on C reaction !" << G4endl;
+       } else {
+         G4cout << "    -> Go back to the default, i.e. do not use the NRESP71 model !" << G4endl;
+       }
+       #endif
+     }
+   }
+   
    if ( command == VerboseCmd ) {
-      manager->SetVerboseLevel( VerboseCmd->ConvertToInt( newValue ) ); 
+     G4int verboseLevel = VerboseCmd->ConvertToInt( newValue );
+     if ( manager->GetVerboseLevel() != verboseLevel  ) {
+       manager->SetVerboseLevel( verboseLevel );
+       #ifdef G4VERBOSE
+       if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+         G4cout << G4endl
+	        << "=== G4ParticleHPMessenger CHANGED PARAMETER VerboseLevel TO "
+	        << verboseLevel << " ===" << G4endl;
+       }
+       #endif
+     }      
    }
 }
 

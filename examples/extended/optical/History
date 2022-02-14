@@ -14,8 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+24 May 2021:  B. Morgan (exOptical-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+03 November 2020:  B. Morgan (exOptical-V10-06-00)
+- Support same CMake version range as core Geant4
+
 31 January 2019:   I. Hrivnacova (exOptical-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
@@ -46,4 +50,4 @@ track of all tags.
   adding visualization, copying macros, install target and comment lines
 - Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
   where needed
-- Replaced tabulators with space characters  
+- Replaced tabulators with space characters

@@ -23,113 +23,84 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-
-#include <complex>
 
 #include "G4XTRGammaRadModel.hh"
-#include "Randomize.hh"
-
-#include "G4Gamma.hh"
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////
-//
 // Constructor, destructor
-
 G4XTRGammaRadModel::G4XTRGammaRadModel(G4LogicalVolume* anEnvelope,
-                                     G4double alphaPlate,
-                                     G4double alphaGas,
-                                     G4Material* foilMat,G4Material* gasMat,
-                                     G4double a, G4double b, G4int n,
-                                     const G4String& processName) :
-  G4VXTRenergyLoss(anEnvelope,foilMat,gasMat,a,b,n,processName)
+                                       G4double alphaPlate, G4double alphaGas,
+                                       G4Material* foilMat, G4Material* gasMat,
+                                       G4double a, G4double b, G4int n,
+                                       const G4String& processName)
+  : G4VXTRenergyLoss(anEnvelope, foilMat, gasMat, a, b, n, processName)
 {
-  G4cout<<"Gammma distributed X-ray TR radiator model is called"<<G4endl ;
+  G4cout << "Gamma distributed X-ray TR radiator model is called" << G4endl;
 
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator
-
-  fAlphaPlate = alphaPlate ;
-  fAlphaGas   = alphaGas   ;
-  G4cout<<"fAlphaPlate = "<<fAlphaPlate<<" ; fAlphaGas = "<<fAlphaGas<<G4endl ;
+  fAlphaPlate = alphaPlate;
+  fAlphaGas   = alphaGas;
+  G4cout << "fAlphaPlate = " << fAlphaPlate << " ; fAlphaGas = " << fAlphaGas
+         << G4endl;
   fExitFlux = true;
-  //  BuildTable() ;
 }
 
 ///////////////////////////////////////////////////////////////////////////
+G4XTRGammaRadModel::~G4XTRGammaRadModel() {}
 
-G4XTRGammaRadModel::~G4XTRGammaRadModel()
+void G4XTRGammaRadModel::ProcessDescription(std::ostream& out) const
 {
-  ;
+  out << "Rough model describing X-ray transition radiation. Thicknesses of "
+         "plates\n"
+         "and gas gaps are distributed according to gamma distributions.\n";
 }
 
-
-
 ///////////////////////////////////////////////////////////////////////////
-//
 // Rough approximation for radiator interference factor for the case of
-// fully GamDistr radiator. The plate and gas gap thicknesses are distributed 
-// according to exponent. The mean values of the plate and gas gap thicknesses 
-// are supposed to be about XTR formation zones but much less than 
+// fully GamDistr radiator. The plate and gas gap thicknesses are distributed
+// according to exponent. The mean values of the plate and gas gap thicknesses
+// are supposed to be about XTR formation zones but much less than
 // mean absorption length of XTR photons in coresponding material.
-
-G4double 
-G4XTRGammaRadModel::GetStackFactor( G4double energy, 
-                                         G4double gamma, G4double varAngle )
+G4double G4XTRGammaRadModel::GetStackFactor(G4double energy, G4double gamma,
+                                            G4double varAngle)
 {
-  G4double result, Qa, Qb, Q, Za, Zb, Ma, Mb ;
-  
-  Za = GetPlateFormationZone(energy,gamma,varAngle) ;
-  Zb = GetGasFormationZone(energy,gamma,varAngle) ;
+  G4double result, Qa, Qb, Q, Za, Zb, Ma, Mb;
 
-  Ma = GetPlateLinearPhotoAbs(energy) ;
-  Mb = GetGasLinearPhotoAbs(energy) ;
+  Za = GetPlateFormationZone(energy, gamma, varAngle);
+  Zb = GetGasFormationZone(energy, gamma, varAngle);
 
-  Qa = ( 1.0 + fPlateThick*Ma/fAlphaPlate ) ;
-  Qa = std::pow(Qa,-fAlphaPlate) ;
-  Qb = ( 1.0 + fGasThick*Mb/fAlphaGas ) ;
-  Qb = std::pow(Qb,-fAlphaGas) ;
-  Q  = Qa*Qb ;
+  Ma = GetPlateLinearPhotoAbs(energy);
+  Mb = GetGasLinearPhotoAbs(energy);
 
-  G4complex Ca(1.0+0.5*fPlateThick*Ma/fAlphaPlate,fPlateThick/Za/fAlphaPlate) ; 
-  G4complex Cb(1.0+0.5*fGasThick*Mb/fAlphaGas,fGasThick/Zb/fAlphaGas) ; 
+  Qa = (1.0 + fPlateThick * Ma / fAlphaPlate);
+  Qa = std::pow(Qa, -fAlphaPlate);
+  Qb = (1.0 + fGasThick * Mb / fAlphaGas);
+  Qb = std::pow(Qb, -fAlphaGas);
+  Q  = Qa * Qb;
 
-  G4complex Ha = std::pow(Ca,-fAlphaPlate) ;  
-  G4complex Hb = std::pow(Cb,-fAlphaGas) ;
-  G4complex H  = Ha*Hb ;
+  G4complex Ca(1.0 + 0.5 * fPlateThick * Ma / fAlphaPlate,
+               fPlateThick / Za / fAlphaPlate);
+  G4complex Cb(1.0 + 0.5 * fGasThick * Mb / fAlphaGas,
+               fGasThick / Zb / fAlphaGas);
 
-  G4complex F1 = ( 0.5*(1+Qa)*(1.0+H) - Ha - Qa*Hb )/(1.0-H) ;
+  G4complex Ha = std::pow(Ca, -fAlphaPlate);
+  G4complex Hb = std::pow(Cb, -fAlphaGas);
+  G4complex H  = Ha * Hb;
 
-  G4complex F2 = (1.0-Ha)*(Qa-Ha)*Hb/(1.0-H)/(Q-H) ;
+  G4complex F1 = (0.5 * (1 + Qa) * (1.0 + H) - Ha - Qa * Hb) / (1.0 - H);
 
-  F2          *= std::pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
+  G4complex F2 = (1.0 - Ha) * (Qa - Ha) * Hb / (1.0 - H) / (Q - H);
 
-  result      = ( 1 - std::pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
+  F2 *= std::pow(Q, G4double(fPlateNumber)) - std::pow(H, fPlateNumber);
 
-  G4complex stack  = result*F1;
-            stack += F2;
-            stack *= 2.0*OneInterfaceXTRdEdx(energy,gamma,varAngle);
+  result = (1. - std::pow(Q, G4double(fPlateNumber))) / (1. - Q);
 
-	    result = std::real(stack);
+  G4complex stack = result * F1;
+  stack += F2;
+  stack *= 2.0 * OneInterfaceXTRdEdx(energy, gamma, varAngle);
 
-	    // result     *= 2.0*std::real(F1);
-	    // result     += 2.0*std::real(F2);
+  result = std::real(stack);
 
-  return      result ;
+  return result;
 }
-
-
-//
-//
-////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-

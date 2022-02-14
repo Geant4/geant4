@@ -1,0 +1,73 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// Author: Ivana Hrivnacova, 26/08/2021 (ivana@ipno.in2p3.fr)
+
+#include "G4AnalysisUtilities.hh"
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+tools::raxml_out* G4XmlRFileManager::GetHandler(
+  const G4String& fileName, const G4String& objectName,
+  std::string_view inFunction)
+{
+// Get buffer for reading object specified by objectName and objectType
+// for a file specified by fileName;
+// open the file if it was not yet open
+
+  // Histograms and profiles are not saved per thread
+  // and ntuple file name is already updated
+  auto rfile = GetRFile(fileName);
+  if ( ! rfile ) {
+    if ( ! OpenRFile(fileName) ) return nullptr;
+    rfile = GetRFile(fileName);
+  }
+
+  tools::raxml_out* handler = nullptr;
+  if ( rfile ) {
+    std::vector<tools::raxml_out>& objects = rfile->objects();
+    std::vector<tools::raxml_out>::iterator it;
+    for (it = objects.begin(); it!=objects.end(); ++it) {
+      tools::raxml_out& object = *it;
+      if ( (object.cls().compare(HT::s_class()) == 0) &&
+           (object.name().compare(objectName) == 0) ) {
+        handler = &object;
+        handler->disown();
+        break;
+      }
+    }
+  }
+
+  if ( ! handler ) {
+    G4Analysis::Warn(
+      "Cannot get " + objectName + " in file " + fileName,
+      fkClass, inFunction);
+    return nullptr;
+  }
+
+  return handler;
+}

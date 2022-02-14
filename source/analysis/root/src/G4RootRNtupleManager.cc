@@ -27,8 +27,17 @@
 // Author: Ivana Hrivnacova, 09/04/2014 (ivana@ipno.in2p3.fr)
 
 #include "G4RootRNtupleManager.hh"
-#include "G4RootRNtupleDescription.hh"
+#include "G4RootRFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
+
+#include "tools/rroot/file"
+#include "tools/rroot/rall"
+#include "tools/rroot/streamers"
+#include "tools/rroot/fac"
+#include "tools/rroot/tree"
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4RootRNtupleManager::G4RootRNtupleManager(const G4AnalysisManagerState& state)
@@ -37,267 +46,98 @@ G4RootRNtupleManager::G4RootRNtupleManager(const G4AnalysisManagerState& state)
 {
 }
 
-//_____________________________________________________________________________
-G4RootRNtupleManager::~G4RootRNtupleManager()
-{  
-  std::vector<G4RootRNtupleDescription*>::iterator it;  
-  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
-    delete (*it);
-  }   
-}
-
-// 
+//
 // private methods
 //
 
 //_____________________________________________________________________________
-G4RootRNtupleDescription* G4RootRNtupleManager::GetNtupleInFunction(G4int id, 
-                                      G4String functionName, G4bool warn) const
-{                                      
-  G4int index = id - fFirstId;
-  if ( index < 0 || index >= G4int(fNtupleVector.size()) ) {
-    if ( warn) {
-      G4String inFunction = "G4RootRNtupleManager::";
-      inFunction += functionName;
-      G4ExceptionDescription description;
-      description << "      " << "ntuple " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_WR011", JustWarning, description);
-    }
-    return nullptr;         
+G4int G4RootRNtupleManager::ReadNtupleImpl(const G4String& ntupleName,
+                                           const G4String& fileName,
+                                           const G4String& dirName,
+                                           G4bool isUserFileName)
+{
+  Message(kVL4, "read", "ntuple", ntupleName);
+
+  // Ntuples are saved per thread
+  // but do not apply the thread suffix if fileName is provided explicitly
+  auto isPerThread = true;
+  if ( isUserFileName ) isPerThread = false;
+
+  // Get or open a file
+  auto rfile = fFileManager->GetRFile(fileName, isPerThread);
+  if ( ! rfile ) {
+    if ( ! fFileManager->OpenRFile(fileName, isPerThread) ) return kInvalidId;
+    rfile = fFileManager->GetRFile(fileName, isPerThread);
   }
-  
-  return fNtupleVector[index];
-}
-  
-// 
-// protected methods
-//
 
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::IsEmpty() const
-{
-  return ! fNtupleVector.size();
-}  
- 
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::Reset()
-{
-// Reset ntuples
+  // Get key
+  tools::rroot::key* key = nullptr;
+  tools::rroot::TDirectory* newDir = nullptr;
+  if ( ! dirName.empty() ) {
+    newDir = tools::rroot::find_dir(rfile->dir(), dirName);
+    if ( newDir ) {
+      key = newDir->find_key(ntupleName);
+    }
+    else {
+      G4Analysis::Warn(
+        "Directory " + dirName + " not found in file " + fileName + ".",
+        fkClass, "ReadNtupleImpl");
+      return kInvalidId;
+    }
+  }
+  else {
+    key = rfile->dir().find_key(ntupleName);
+  }
 
-  std::vector<G4RootRNtupleDescription*>::iterator it;  
-  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
-    // ntuple is deleted automatically when file is closed
-    // delete (*it)->fNtuple;
-    (*it)->fNtuple=0; 
-  }  
-  
-  return true;
-}  
+  if ( ! key ) {
+    Warn("Key " + ntupleName + " for Ntuple not found in file " + fileName +
+      ", directory " + dirName, fkClass, "ReadNtupleImpl");
+    delete newDir;
+    return kInvalidId;
+  }
 
-//_____________________________________________________________________________
-tools::rroot::ntuple* G4RootRNtupleManager::GetNtuple() const
-{
-  return GetNtuple(fFirstId);
-}  
+  unsigned int size;
+  char* charBuffer = key->get_object_buffer(*rfile, size);
+  if ( ! charBuffer ) {
+    Warn("Cannot get data buffer for Ntuple " + ntupleName +
+         " in file " + fileName, fkClass, "ReadNtupleImpl");
+    delete newDir;
+    return kInvalidId;
+  }
 
-//_____________________________________________________________________________
-tools::rroot::ntuple* G4RootRNtupleManager::GetNtuple(G4int ntupleId) const
-{
-  G4RootRNtupleDescription* rntupleDescription
-    = GetNtupleInFunction(ntupleId, "GetRNtuple");
+  auto verbose = false;
+  auto buffer
+    = new tools::rroot::buffer(G4cout, rfile->byte_swap(), size, charBuffer,
+                               key->key_length(), verbose);
+  buffer->set_map_objs(true);
 
-  if ( ! rntupleDescription ) return nullptr; 
-    
-  return rntupleDescription->fNtuple;  
-}  
+  auto fac = new tools::rroot::fac(G4cout);
 
-//_____________________________________________________________________________
-G4int G4RootRNtupleManager::SetNtuple(G4RootRNtupleDescription* rntupleDescription)
-{
-  G4int id = fNtupleVector.size() + fFirstId;
+  auto tree = new tools::rroot::tree(*rfile, *fac);
+  if ( ! tree->stream(*buffer) ) {
+    Warn("TTree streaming failed for Ntuple " + ntupleName +
+         " in file " + fileName,
+         fkClass, "ReadNtupleImpl");
 
-  fNtupleVector.push_back(rntupleDescription);
-  
+    delete buffer;
+    delete tree;
+    delete newDir;
+    return kInvalidId;
+  }
+
+  auto rntuple  = new tools::rroot::ntuple(*tree); //use the flat ntuple API.
+  auto rntupleDescription = new G4TRNtupleDescription<tools::rroot::ntuple>(rntuple);
+
+  auto id = SetNtuple(rntupleDescription);
+
+  Message(kVL2, "read", "ntuple", ntupleName, id > kInvalidId);
+
   return id;
-}  
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleIColumn(const G4String& columnName, 
-                                             G4int& value)
-{
-  return SetNtupleIColumn(fFirstId, columnName, value);
 }
 
 //_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleFColumn(const G4String& columnName, 
-                                             G4float& value)
-{                                             
-  return SetNtupleFColumn(fFirstId, columnName, value);
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleDColumn(const G4String& columnName, 
-                                             G4double& value)
-{                                             
-  return SetNtupleDColumn(fFirstId, columnName, value);
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleSColumn(const G4String& columnName, 
-                                             G4String& value)
-{                                             
-  return SetNtupleSColumn(fFirstId, columnName, value);
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleIColumn(const G4String& columnName, 
-                                             std::vector<G4int>& vector)
-{
-  return SetNtupleIColumn(fFirstId, columnName, vector);
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleFColumn(const G4String& columnName, 
-                                             std::vector<G4float>& vector)
-{                                             
-  return SetNtupleFColumn(fFirstId, columnName, vector);
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleDColumn(const G4String& columnName, 
-                                             std::vector<G4double>& vector)
-{                                             
-  return SetNtupleDColumn(fFirstId, columnName, vector);
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleIColumn(G4int ntupleId, 
-                                             const G4String& columnName, 
-                                             G4int& value)
-{
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL4()->Message("set", "ntuple I column", description);
-  }  
-#endif
-
-  G4RootRNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "SetNtupleIColumn");
-  if ( ! ntupleDescription )  return false;   
-  
-  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
-  ntupleBinding->add_column(columnName, value);
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) { 
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple I colum", description, true);
-  }  
-#endif
-
-  return true;
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleFColumn(G4int ntupleId, 
-                                             const G4String& columnName, 
-                                             G4float& value)
-{                                             
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL4()->Message("set", "ntuple F column", description);
-  }  
-#endif
-
-  G4RootRNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "SetNtupleFColumn");
-  if ( ! ntupleDescription )  return false;   
-  
-  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
-  ntupleBinding->add_column(columnName, value);
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple F colum", description, true);
-  }  
-#endif
-
-  return true;
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleDColumn(G4int ntupleId, 
-                                             const G4String& columnName, 
-                                             G4double& value)
-{                                             
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL4()->Message("set", "ntuple D column", description);
-  }  
-#endif
-
-  G4RootRNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "SetNtupleDColumn");
-  if ( ! ntupleDescription )  return false;   
-  
-  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
-  ntupleBinding->add_column(columnName, value);
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple D colum", description, true);
-  }  
-#endif
-
-  return true;
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleSColumn(G4int ntupleId, 
-                                             const G4String& columnName, 
-                                             G4String& value)
-{                                             
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL4()->Message("set", "ntuple S column", description);
-  }  
-#endif
-
-  G4RootRNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "SetNtupleSColumn");
-  if ( ! ntupleDescription )  return false;   
-  
-  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
-  ntupleBinding->add_column(columnName, value);
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple S colum", description, true);
-  }  
-#endif
-
-  return true;
-}
-
-//_____________________________________________________________________________
-G4bool G4RootRNtupleManager::SetNtupleIColumn(G4int ntupleId, 
-                                             const G4String& columnName, 
-                                             std::vector<G4int>& vector)
+G4bool G4RootRNtupleManager::GetTNtupleRow(
+  G4TRNtupleDescription<tools::rroot::ntuple>* ntupleDescription)
 {
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
@@ -422,12 +262,7 @@ G4bool G4RootRNtupleManager::GetNtupleRow(G4int ntupleId)
     }  
 #endif
     if ( ! ntuple->initialize(G4cout, *ntupleBinding) ) {
-      G4ExceptionDescription description;
-      description 
-        << "      " 
-        << "Ntuple initialization failed !!"; 
-      G4Exception("G4RootRNtuple::GetNtupleRow()",
-                  "Analysis_WR021", JustWarning, description);
+      Warn("Ntuple initialization failed !!", fkClass, "GetTNtupleRow");
       return false;
     }
     ntupleDescription->fIsInitialized = true;
@@ -437,15 +272,10 @@ G4bool G4RootRNtupleManager::GetNtupleRow(G4int ntupleId)
   G4bool next = ntuple->next();
   if ( next ) {
     if ( ! ntuple->get_row() ) {
-      G4ExceptionDescription description;
-      description 
-        << "      " 
-        << "Ntuple get_row() failed !!"; 
-      G4Exception("G4RootRNtuple::GetNtupleRow()",
-                  "Analysis_WR021", JustWarning, description);
+      Warn("Ntuple get_row() failed !!", fkClass, "GetTNtupleRow");
       return false;
     }
-  }  
+  }
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) {
@@ -456,4 +286,4 @@ G4bool G4RootRNtupleManager::GetNtupleRow(G4int ntupleId)
 #endif
 
   return next;
-}   
+}

@@ -1,0 +1,84 @@
+#---------------------------------------#
+#-------------Select Phantom------------#
+#---------------------------------------#
+# Choose phantom sex (male or female)
+/phantom/setPhantomSex female
+/phantom/setScoreWriterSex female
+
+# Choose phantom section (head, trunk or full)
+/phantom/setPhantomSection head
+/phantom/setScoreWriterSection head
+
+#---------------------------------------#
+#------------Initialization-------------#
+#---------------------------------------#
+/run/initialize
+
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+#---------------------------------------#
+#-------------Visualisation-------------#
+#---------------------------------------#
+# Visualize Phantom with OPENGL
+#  /control/execute openGLVis.mac
+#
+#---------------------------------------#
+#---------Radiation Environment---------#
+#---------------------------------------#
+# Call upon definition of primary beam
+/control/execute primary.mac
+#
+#---------------------------------------#
+#------Create Phantom Scoring Mesh------#
+#---------------------------------------#
+
+/score/create/boxMesh PhantomMesh
+
+#################################################################################
+#                                                                               #
+# The phantom voxels have dimensions (x,y,z) = (1.775, 1.775, 4.84)mm           #
+# and there are 299 voxels along x, 137 along y and 348 along z in              #
+# the full phantom. Mesh dimensions, however, are to be specified as            #
+# half-lengths.                                                                 #
+#                                                                               #
+# If the user is not building all 348 z-slices of the phantom, has to change    #
+# the boxSize in z and the nBins in z to match the geometry of                  #
+# the phantom in which they have simulated. Below, the mesh is defined for      #
+# a female partial head phantom with 45 single slices in z.                     #
+#                                                                               #
+################################################################################# 
+
+/score/mesh/boxSize 265.3625 121.5875 108.9 mm
+/score/mesh/nBin 299 137 45
+/score/mesh/translate/xyz 0. 0. 0. mm 
+
+# Choose the quantity to score via mesh
+/score/quantity/energyDeposit energyDeposit
+
+# Close Scorer
+/score/close
+/score/list
+#
+#---------------------------------------#
+#----------Run Beam-On Command----------#
+#---------------------------------------#
+# Chooose number of events
+/run/beamOn 100
+#
+#---------------------------------------#
+#-------Visualising Scoring Mesh--------#
+#---------------------------------------#
+# You can also enter the below commands in the GUI
+# when running the simulation in interactive mode
+#
+#/score/drawProjection PhantomMesh energyDeposit
+#/score/drawProjection PhantomMesh doseDeposit
+
+#---------------------------------------#
+#----Dump Scoring Mesh Data to File-----#
+#---------------------------------------#
+/score/dumpQuantityToFile PhantomMesh energyDeposit PhantomMesh_Edep.txt
+

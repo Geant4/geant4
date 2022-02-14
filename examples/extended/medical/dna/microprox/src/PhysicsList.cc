@@ -46,6 +46,8 @@
 #include "G4EmDNAPhysics_option4.hh"
 #include "G4EmDNAPhysics_option5.hh"
 #include "G4EmDNAPhysics_option6.hh"
+#include "G4EmDNAPhysics_option7.hh"
+#include "G4EmDNAPhysics_option8.hh"
 
 #include "G4UserSpecialCuts.hh"
 
@@ -70,8 +72,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
   SetVerboseLevel(1);
 
   // EM physics
-  fEmPhysicsList = new G4EmDNAPhysics_option2();
-  
+  fEmPhysicsList = new G4EmDNAPhysics_option2();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,9 +114,6 @@ void PhysicsList::ConstructParticle()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
-#include "G4EmProcessOptions.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -177,6 +175,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option6();
+
+  } else if (name == "dna_opt7") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option7();
+
+  } else if (name == "dna_opt8") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option8();
          
   } else {
 

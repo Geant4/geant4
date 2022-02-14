@@ -1,0 +1,796 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_branch_element
+#define tools_rroot_branch_element
+
+#include "branch"
+#include "stl_vector"
+
+#include "info"
+#include "obj_list"
+
+//#define TOOLS_RROOT_BRANCH_ELEMENT_DUMP
+
+namespace tools {
+namespace rroot {
+
+class branch_element : public branch {
+  typedef branch parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::branch_element");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<branch_element>(this,a_class)) return p;
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return branch_element_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<branch_element>(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+public:
+  virtual bool stream(buffer& a_buffer) {
+    _clear();
+
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    //::printf("debug : inlib::branch_element::stream : version %d, count %d\n",v,c);
+
+    if(!parent::stream(a_buffer)) {
+      m_out << "tools::rroot::branch_element::stream : parent::stream() failed." << std::endl;
+      return false;
+    }
+
+    if(v<=7) {
+      if(!a_buffer.read(fClassName)) return false;
+      if(!a_buffer.read(fClassVersion)) return false;
+      if(!a_buffer.read(fID)) return false;
+      if(!a_buffer.read(fType)) return false;
+      if(!a_buffer.read(fStreamerType)) return false;
+    } else { //v>=8
+      if(!a_buffer.read(fClassName)) return false;
+      //::printf("debug : inlib::branch_element::stream : fClassName \"%s\"\n",fClassName.c_str());
+      std::string fParentName;
+      if(!a_buffer.read(fParentName)) return false;
+      //::printf("debug : inlib::branch_element::stream : fParentName \"%s\"\n",fParentName.c_str());
+      std::string fCloneName;
+      if(!a_buffer.read(fCloneName)) return false;
+      //::printf("debug : inlib::branch_element::stream : fCloneName \"%s\"\n",fCloneName.c_str());
+      int dummy_int;
+      if(!a_buffer.read(dummy_int)) return false; //fCheckSum
+      //::printf("debug : inlib::branch_element::stream : fCheckSum %d\n",dummy_int);
+
+      if(v>=10) {
+        short dummy_short;
+        if(!a_buffer.read(dummy_short)) return false; //fClassVersion
+        //::printf("debug : inlib::branch_element::stream : fClassVersion %d\n",dummy_short);
+      } else {
+        if(!a_buffer.read(dummy_int)) return false; //fClassVersion
+      }
+
+      if(!a_buffer.read(fID)) return false;
+      //::printf("debug : inlib::branch_element::stream : fID %d\n",fID);
+      if(!a_buffer.read(fType)) return false;
+      //::printf("debug : inlib::branch_element::stream : fType %d\n",fType);
+      if(!a_buffer.read(fStreamerType)) return false;
+      //::printf("debug : inlib::branch_element::stream : fStreamerType %d\n",fStreamerType);
+
+      if(!a_buffer.read(dummy_int)) return false; //fMaximum
+      //::printf("debug : inlib::branch_element::stream : fMaximum %d\n",dummy_int);
+
+      //TBranchElement* fBranchCount;
+      ifac::args args;
+      if(!pointer_stream(a_buffer,m_fac,args,fBranchCount,fBranchCount_created)) {
+        m_out << "tools::rroot::branch_element::stream : "
+              << "can't read fBranchCount."
+              << std::endl;
+        return false;
+      }
+
+      //TBranchElement* fBranchCount2;
+      if(!pointer_stream(a_buffer,m_fac,args,fBranchCount2,fBranchCount2_created)) {
+        m_out << "tools::rroot::branch_element::stream : "
+              << "can't read fBranchCount2."
+              << std::endl;
+        _clear();
+        return false;
+      }
+
+    }
+
+    if(!a_buffer.check_byte_count(s,c,"TBranchElement")) {_clear();return false;}
+    return true;
+  }
+public: //branch
+
+  virtual bool read_leaves(ifile& a_file,buffer& a_buffer){
+
+    // For k<type> value, see the below commented enum EReadWrite from ROOT-6.12.06 code.
+    static int kInt      = 3;
+    static int kDouble   = 8;
+    static int kDouble32 = 9;
+    static int kUInt     = 13;
+    static int kBits     = 15;  // In v4-00-01 version 8, it is Long64_t.
+    static int kObject   = 61;
+    static int kObjectP  = 64;
+
+    if(fType==3) { // TClonesArray master branch (has only the number of elements).
+      //from v4-00-01
+      int n;
+      if(!a_buffer.read(n)) return false;
+      /* ROOT-6.12.06 code :
+      if ((n < 0) || (n > fMaximum)) {
+         if (IsMissingCollection()) {
+            n = 0;
+            b.SetBufferOffset(b.Length() - sizeof(n));
+         } else {
+            Error("ReadLeaves", "Incorrect size read for the container in %s\nThe size read is %d when the maximum is %d\nThe size is reset to 0 for this entry (%lld)", GetName(), n, fMaximum, GetReadEntry());
+            n = 0;
+         }
+      }*/
+      //::printf("debug : uuuu : ndata %d\n",n);
+      fNdata = n;
+
+      //TClonesArray *clones = (TClonesArray*)fObject;
+      //if (!clones) return;
+      //if (clones->IsZombie()) return;
+      //clones->Clear();
+      //clones->ExpandCreateFast(fNdata);
+
+      //m_out << "debug : tools::rroot::branch_element::read_leaves :"
+      //      << " name " << m_name << " ref_cls " << fClassName
+      //      << " : type " << fType << ", fNdata " << n
+      //      << std::endl;
+      return true;
+
+    } else if(fType==31) { // TClonesArray sub-branch (contains the elements).
+      if(fStreamerType==kObject) { //to read EsbRoot fgd_dig.root.
+        int ndata = fBranchCount->get_ndata();
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
+        ::printf("debug : %s : fClassName %s : fID %d : kObject : ndata %d\n",m_name.c_str(),fClassName.c_str(),fID,ndata);
+#endif
+        streamer_info* _info = a_file.find_streamer_info(fClassName);
+        if(!_info) {
+          m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                << " read(kObject) : streamer_infos for ref_cls " << fClassName << " not found."
+                << std::endl;
+          return false;
+        }
+        streamer_element* _element = _info->find_streamer_element(fID);
+        if(!_element) {
+          m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                << " read(kObject) : for ref_cls " << fClassName << ", fID " << fID << " streamer element not found."
+                << std::endl;
+          return false;
+        }
+        //::printf("debug : element type name %s\n",_element->type_name().c_str());
+
+        obj_list* _list = 0;
+        if(!m_obj) {
+          _list = new obj_list(m_fac);
+          m_obj = _list;
+        } else {
+          _list = id_cast<iro,obj_list>(*m_obj);
+          if(!_list) {
+            m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                  << " read(kObject) : m_obj is not an obj_list."
+                  << std::endl;
+            return false;
+          }
+        }
+
+        _list->safe_clear();
+
+        for(int index=0;index<ndata;index++) {
+          ifac::args args;
+          iro* _obj = m_fac.create(_element->type_name(),args);
+          if(!_obj) {_list->safe_clear();return false;}
+          if(!_obj->stream(a_buffer)){
+            m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                  << " kObject : obj stream of class " << sout(_element->type_name())
+                  << " failed at index " << index << " (" << ndata << ")." << std::endl;
+            _list->safe_clear();
+            return false;
+          }
+          _list->add_object(_obj); //give ownership.
+        }
+
+        return true;
+      }
+      if(fStreamerType==kObjectP) return true;
+      //from v4-00-01
+      if(fStreamerType==kDouble32) {
+        int ndata = fBranchCount->get_ndata();
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
+        ::printf("debug : %s : fID %d : double32 : ndata %d\n",m_name.c_str(),fID,ndata);
+#endif
+        stl_vector<double>* vec = 0;
+        if(!m_obj) {
+          vec = new stl_vector<double>;
+          m_obj = vec;
+        } else {
+          vec = id_cast<iro, stl_vector<double> >(*m_obj);
+          if(!vec) {
+            m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                  << " read(kDouble32) : m_obj is not a stl_vector<double>."
+                  << std::endl;
+            return false;
+          }
+        }
+
+        vec->resize(ndata);
+        float afloat;
+        for(int ii=0;ii<ndata;ii++) {
+          if(!a_buffer.read(afloat)) {
+            m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                  << " read(float) failed."
+                  << std::endl;
+            vec->clear();
+            return false;
+          }
+          //::printf("debug : zzzz %g\n",afloat);
+          (*vec)[ii] = afloat;
+        }
+
+        return true;
+
+      } else if(fStreamerType==kDouble) {
+        int ndata = fBranchCount->get_ndata();
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
+        ::printf("debug : %s : fID %d : double : ndata %d\n",m_name.c_str(),fID,ndata);
+#endif
+        stl_vector<double>* vec = 0;
+        if(!m_obj) {
+          vec = new stl_vector<double>;
+          m_obj = vec;
+        } else {
+          vec = id_cast<iro, stl_vector<double> >(*m_obj);
+          if(!vec) {
+            m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                  << " read(kDouble) : m_obj is not a stl_vector<double>."
+                  << std::endl;
+            return false;
+          }
+        }
+
+        vec->resize(ndata);
+        double* _value = vec_data(*vec);
+        if(!a_buffer.read_fast_array(_value,ndata)) {
+          m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                << " read_fast_array(double) failed."
+                << std::endl;
+          vec->clear();
+          return false;
+        }
+
+        return true;
+
+      } else if(fStreamerType==kInt) {
+        int ndata = fBranchCount->get_ndata();
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
+        ::printf("debug : %s : fID %d : int : ndata %d\n",m_name.c_str(),fID,ndata);
+#endif
+        stl_vector<int>* vec = 0;
+        if(!m_obj) {
+          vec = new stl_vector<int>;
+	  m_obj = vec;
+        } else {
+          vec = id_cast<iro, stl_vector<int> >(*m_obj);
+          if(!vec) {
+            m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                  << " read(kInt) : m_obj is not a stl_vector<int>."
+                  << std::endl;
+            return false;
+          }
+        }
+
+        vec->resize(ndata);
+        int* _value = vec_data(*vec);
+        if(!a_buffer.read_fast_array(_value,ndata)) {
+          m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                << " read_fast_array(int) failed."
+                << std::endl;
+          vec->clear();
+          return false;
+        }
+
+        return true;
+
+      } else if((fStreamerType==kUInt)||(fStreamerType==kBits)) {
+        int ndata = fBranchCount->get_ndata();
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
+        if(fStreamerType==kUInt) ::printf("debug : %s : fID %d : uint : ndata %d\n",m_name.c_str(),fID,ndata);
+        else                     ::printf("debug : %s : fID %d : bits : ndata %d\n",m_name.c_str(),fID,ndata);
+#endif
+        stl_vector<uint32>* vec = 0;
+        if(!m_obj) {
+          vec = new stl_vector<uint32>;
+	  m_obj = vec;
+        } else {
+          vec = id_cast<iro, stl_vector<uint32> >(*m_obj);
+          if(!vec) {
+            m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                  << " read(kUInt) : m_obj is not a stl_vector<uint32>."
+                  << std::endl;
+            return false;
+          }
+        }
+
+        vec->resize(ndata);
+        uint32* _value = vec_data(*vec);
+        if(!a_buffer.read_fast_array(_value,ndata)) {
+          m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
+                << " read_fast_array(uint) failed."
+                << std::endl;
+          vec->clear();
+          return false;
+        }
+
+        return true;
+
+      } else {
+        m_out << "tools::rroot::branch_element::read_leaves :"
+              << " name " << m_name << " ref_cls " << fClassName
+              << " : for type " << fType << ", stream_type " << fStreamerType << " not treated."
+              << std::endl;
+        return false;
+      }
+	/*
+        //m_obj = clones_array<float>(m_fac,true,false);  //true = owner of objects.
+        uint32 ndata = 1;
+        float* _value = new float[ndata];
+        if(!a_buffer.read_fast_array(_value,ndata)) {
+          m_out << "tools::rroot::branch_element::read_leaves : \"" << name() << "\" :"
+                << " read_fast_array failed."
+                << std::endl;
+          return false;
+        }
+	*/
+  //} else if(fType<=2) { //in v5-18-00d
+    } else if(fType==0) { // to read wroot.root of examples/cpp/wroot.cpp.
+//     if(fID>=0) {
+//       // branch in split mode
+//       m_out << "tools::rroot::branch_element::read_leaves :"
+//             << " name " << m_name << " ref_cls " << fClassName << " :"
+//             << " type 0 with ID " << fID << "."
+//             << std::endl;
+//       return true;
+//
+
+       if((fID==-1)||
+          (fID==1)     // for pmx to read LHCb files :
+         ){
+         //from v4-00-01
+         //if (fBranchCount) fNdata = (Int_t)fBranchCount->GetValue(0,0);
+         //else fNdata = 1;
+	 if(fBranchCount) {
+           fNdata = fBranchCount->get_ndata();
+           //::printf("debug : branch_element::read_leaves : (fType==0,fID==-1) : fNdata %d\n",fNdata);
+	 } else {
+	   fNdata = 1;
+	 }
+
+         // read object :
+	 bool created = false;
+         if(!m_obj) {
+           ifac::args args;
+           m_obj = m_fac.create(fClassName,args);
+           if(!m_obj) return false;
+	   created = true;
+         }
+
+         if(!m_obj->stream(a_buffer)){
+           m_out << "tools::rroot::branch_element::read_leaves :"
+                 << " name " << sout(m_name) << ", ref_cls " << sout(fClassName) << " :"
+                 << " obj stream failed."
+                 << std::endl;
+	   if(created) {delete m_obj;m_obj = 0;}
+           return false;
+         }
+
+         return true;
+
+       } else {
+         m_out << "tools::rroot::branch_element::read_leaves :"
+               << " name " << m_name << " ref_cls " << fClassName << " :"
+               << " type 0 with ID " << fID << " not treated."
+               << std::endl;
+         return false;
+       }
+
+    }
+
+    m_out << "tools::rroot::branch_element::read_leaves :"
+          << " name " << m_name << " ref_cls " << fClassName
+          << " : type " << fType << " not treated, stream_type is " << fStreamerType << "."
+          << std::endl;
+    return false;
+
+/*
+    ///////////////////////////////////////////////////////
+    /// STL container /////////////////////////////////////
+    ///////////////////////////////////////////////////////
+    if(fType==4) {
+      // STL container master branch (has only the number of elements).
+      //from v4-00-01
+      int n;
+      if(!a_buffer.read(n)) return false;
+      //fNdata = n;
+
+      m_out << "tools::rroot::branch_element::read_leaves :"
+            << " name " << m_name << " ref_cls " << fClassName
+            << " : type " << fType << " not treated."
+            << std::endl;
+      return false;
+
+    } else if(fType==41) {
+      // STL container sub-branch (contains the elements).
+      m_out << "tools::rroot::branch_element::read_leaves :"
+            << " name " << m_name << " ref_cls " << fClassName
+            << " : type " << fType << " not treated."
+            << std::endl;
+      return false;
+
+    ///////////////////////////////////////////////////////
+    /// TClonesArray container ////////////////////////////
+    ///////////////////////////////////////////////////////
+    } else if(fType==3) {
+      // TClonesArray master branch (has only the number of elements).
+      //from v4-00-01
+      int n;
+      if(!a_buffer.read(n)) return false;
+
+      //fNdata = n;
+      //TClonesArray *clones = (TClonesArray*)fObject;
+      //if (!clones) return;
+      //if (clones->IsZombie()) return;
+      //clones->Clear();
+      //clones->ExpandCreateFast(fNdata);
+
+      m_out << "tools::rroot::branch_element::read_leaves :"
+            << " name " << m_name << " ref_cls " << fClassName
+            << " : type " << fType << " not treated."
+            << std::endl;
+      return false;
+
+    } else if(fType==31) {
+      // TClonesArray sub-branch (contains the elements).
+      m_out << "tools::rroot::branch_element::read_leaves :"
+            << " name " << m_name << " ref_cls " << fClassName
+            << " : type " << fType << " not treated."
+            << std::endl;
+      return false;
+
+    ///////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////
+    } else if(fType<=2) {
+      // branch in split mode
+
+      //from v4-00-01
+      //if (fBranchCount) fNdata = (Int_t)fBranchCount->GetValue(0,0);
+      //else fNdata = 1;
+      //if (!fInfo) return;
+      //fInfo->ReadBuffer(b,fObject,fID);
+      //if (fStreamerType == 6) fNdata = (Int_t)GetValue(0,0);
+
+      //from 3.0.06
+      //if (fID >= 0) {
+      //  fInfo->ReadBuffer(b,fAddress,fID);
+      //} else if (fID == -1) {   // top level branch in non split mode
+      //  char **ppointer = (char**)fAddress;
+      //  fInfo->ReadBuffer(b,*ppointer,fID);
+      //}
+
+      //m_out << "tools::rroot::branch_element::read_leaves :"
+      //      << " name " << m_name << " ref_cls " << fClassName << " :"
+      //      << " type " << fType << " with ID " << fID << "."
+      //      << " and then ?"
+      //      << std::endl;
+
+      // read object ?
+      bool created = false;
+      if(!m_obj) {
+        ifac::args args;
+        m_obj = m_fac.create(fClassName,args);
+        if(!m_obj) return false;
+        created = true;
+      }
+
+      if(!m_obj->stream(a_buffer)){
+        m_out << "tools::rroot::branch_element::read_leaves :"
+              << " name " << m_name << " ref_cls " << fClassName << " :"
+              << " obj stream failed."
+              << std::endl;
+        if(created) {delete m_obj;m_obj = 0;}
+        return false;
+      }
+
+      //m_out << "tools::rroot::branch_element::read_leaves :"
+      //      << " name " << m_name << " ref_cls " << fClassName << " :"
+      //      << " obj streamed."
+      //      << std::endl;
+
+      return true;
+
+//  } else if(fType==0) {
+//     if(fID>=0) {
+//       // branch in split mode
+//       m_out << "tools::rroot::branch_element::read_leaves :"
+//             << " name " << m_name << " ref_cls " << fClassName << " :"
+//             << " type 0 with ID " << fID << "."
+//             << std::endl;
+//       return true;
+//
+//     } else if(fID==-1) {
+//       // top level branch in non split mode
+//       m_out << "tools::rroot::branch_element::read_leaves :"
+//             << " name " << m_name << " ref_cls " << fClassName << " :"
+//             << " type 0 with ID " << fID
+//             << " : fill object."
+//             << std::endl;
+
+//       if(!m_obj) {
+//         m_out << "tools::rroot::branch_element::read_leaves :"
+//               << " name " << m_name << " ref_cls " << fClassName << " :"
+//               << " m_obj is null."
+//               << std::endl;
+//         return false;
+//       }
+//       if(!m_obj->stream(a_buffer)){
+//         m_out << "tools::rroot::branch_element::read_leaves :"
+//               << " name " << m_name << " ref_cls " << fClassName << " :"
+//               << " obj stream failed."
+//               << std::endl;
+//         return false;
+//       }
+//       return true;
+
+//     } else {
+//       m_out << "tools::rroot::branch_element::read_leaves :"
+//             << " name " << m_name << " ref_cls " << fClassName << " :"
+//             << " type 0 with ID " << fID << " not treated."
+//             << std::endl;
+//       return false;
+//     }
+
+//  //LHCb files :
+//  } else if(fType==1) {
+//    // parent branch is a base class branch.
+//    // Ok, and then ?
+//    m_out << "tools::rroot::branch_element::read_leaves :"
+//          << " name " << m_name << " ref_cls " << fClassName << " :"
+//          << " type " << fType << " with ID " << fID << "."
+//          << std::endl;
+//    return true;
+
+    } else {
+      m_out << "tools::rroot::branch_element::read_leaves :"
+            << " name " << m_name << " ref_cls " << fClassName << " :"
+            << " type " << fType << " with ID " << fID << "."
+            << " unknown case."
+            << std::endl;
+      return false;
+    }
+*/
+  }
+
+  virtual bool find_entry(ifile& a_file,uint64 a_entry,uint32& a_nbytes){
+    //The below line will call the upper read_leaves.
+    if(!parent::find_entry(a_file,a_entry,a_nbytes)) return false;
+
+    if(m_branches.size()) {
+      //if(!m_obj) {
+      //  m_obj = m_fac.create(fClassName);
+      //  if(!m_obj) return false;
+      //}
+
+      tools_vforcit(branch*,m_branches,it) {
+        uint32 n;
+        if(!(*it)->find_entry(a_file,a_entry,n)) return false;
+        a_nbytes += n;
+      }
+    }
+
+    return true;
+  }
+
+  virtual bool show(std::ostream& a_out,ifile& a_file,uint64 a_entry){
+    uint32 n;
+    if(!find_entry(a_file,a_entry,n)) return false;
+
+   {std::string s;
+    uint32 len = uint32(name().size())+128;
+    sprintf(s,len," %-15s = ",name().c_str());
+    a_out << s;}
+
+    a_out << m_obj << std::endl;
+
+    return true;
+    //return parent::show(a_out,a_file,a_entry);
+  }
+public:
+  branch_element(std::ostream& a_out,ifac& a_fac)
+  :parent(a_out,a_fac)
+  ,m_obj(0)
+  ,fClassVersion(0)
+  ,fID(0)
+  ,fType(0)
+  ,fStreamerType(-1)
+  ,fBranchCount(0)   //not owner
+  ,fBranchCount_created(false)
+  ,fBranchCount2(0)  //not owner
+  ,fBranchCount2_created(false)
+  ,fNdata(1)
+  {}
+
+  virtual ~branch_element() {
+    _clear();
+    if(m_obj) delete m_obj;
+  }
+protected:
+  branch_element(const branch_element& a_from):iro(a_from),parent(a_from){}
+  branch_element& operator=(const branch_element&){return *this;}
+public:
+  const std::string& class_name() const {return fClassName;}
+  int type() const {return fType;}
+  int streamer_type() const {return fStreamerType;}
+  int id() const {return fID;}
+  iro* object() {return m_obj;}
+  int get_ndata() const {return fNdata;}
+
+  template <class T>
+  stl_vector<T>* object_to_stl_vector() const {
+    if(!m_obj) {
+      m_out << "tools::rroot::branch_element::object_to_stl_vector : there is no object." << std::endl;
+      return 0;
+    }
+    stl_vector<T>* od = id_cast<iro, stl_vector<T> >(*m_obj);
+    if(!od) {
+      m_out << "tools::rroot::branch_element::object_to_stl_vector :"
+            << " object of class " << sout(m_obj->s_cls()) << " not a tools::rroot::stl_vector<T>."
+	    << std::endl;
+      return 0;
+    }
+    return od; //WARNING : we are not owner.
+  }
+
+  obj_list* object_to_obj_list() const {
+    if(!m_obj) {
+      m_out << "tools::rroot::branch_element::object_to_obj_list : there is no object." << std::endl;
+      return 0;
+    }
+    obj_list* od = id_cast<iro,obj_list>(*m_obj);
+    if(!od) {
+      m_out << "tools::rroot::branch_element::object_to_obj_list :"
+            << " object of class " << sout(m_obj->s_cls()) << " not a tools::rroot::obj_list."
+	    << std::endl;
+      return 0;
+    }
+    return od; //WARNING : we are not owner.
+  }
+
+  template <class T>
+  stl_vector<T>* find_entry_vec(ifile& a_file,uint64 a_event) {
+    unsigned int n;
+    if(!find_entry(a_file,a_event,n)) {
+      m_out << "tools::rroot::branch_element::find_entry_vec : find_entry() failed." << std::endl;
+      return 0;
+    }
+    if(!m_obj) {
+      m_out << "tools::rroot::branch_element::find_entry_vec : no object found." << std::endl;
+      return 0;
+    }
+    stl_vector<T>* od = id_cast<iro, stl_vector<T> >(*m_obj);
+    if(!od) {
+      m_out << "tools::rroot::branch_element::find_entry_vec :"
+            << " object not a tools::rroot::stl_vector<T>."
+	    << std::endl;
+      return 0;
+    }
+    return od; //WARNING : we are not owner.
+  }
+
+protected:
+  void _clear() {
+    if(fBranchCount_created) {delete fBranchCount;fBranchCount = 0;fBranchCount_created = false;}
+    if(fBranchCount2_created) {delete fBranchCount2;fBranchCount2 = 0;fBranchCount2_created = false;}
+  }
+protected:
+  iro* m_obj;
+protected:
+  std::string fClassName; //Class name of referenced object
+  int fClassVersion;  //Version number of class
+  int fID;            //element serial number in fInfo
+  int fType;          //branch type
+  int fStreamerType;  //branch streamer type
+  branch_element* fBranchCount;  // pointer to primary branchcount branch
+  bool fBranchCount_created;
+  branch_element* fBranchCount2; // pointer to secondary branchcount branch
+  bool fBranchCount2_created;
+  int fNdata;         // Number of data in this branch
+};
+
+}}
+
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
+#undef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
+#endif
+
+#endif
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+/* In v4-00-01 version 8 :
+          case  1:  {b.ReadFastArray((Char_t*)  fAddress, n); break;}
+          case  2:  {b.ReadFastArray((Short_t*) fAddress, n); break;}
+          case  3:  {b.ReadFastArray((Int_t*)   fAddress, n); break;}
+          case  4:  {b.ReadFastArray((Long_t*)  fAddress, n); break;}
+          case  5:  {b.ReadFastArray((Float_t*) fAddress, n); break;}
+          case  6:  {b.ReadFastArray((Int_t*)   fAddress, n); break;}
+          case  8:  {b.ReadFastArray((Double_t*)fAddress, n); break;}
+          case 11:  {b.ReadFastArray((UChar_t*) fAddress, n); break;}
+          case 12:  {b.ReadFastArray((UShort_t*)fAddress, n); break;}
+          case 13:  {b.ReadFastArray((UInt_t*)  fAddress, n); break;}
+          case 14:  {b.ReadFastArray((ULong_t*) fAddress, n); break;}
+          case 15:  {b.ReadFastArray((Long64_t*)fAddress, n); break;}
+          case 16:  {b.ReadFastArray((ULong64_t*)fAddress, n); break;}
+		  case  9:  {Double_t *xx = (Double_t*)fAddress;
+			            Float_t afloat;
+						for (Int_t ii=0;ii<n;ii++) {
+				            b>> afloat; xx[ii] = Double_t(afloat);
+						} break;}
+*/
+/* 6.12.06 version 10 : fStreamerType : from meta/inc/TVirtualStreamerInfo.h :
+
+   enum EReadWrite {
+      kBase        =  0,  kOffsetL = 20,  kOffsetP = 40,  kCounter =  6,  kCharStar = 7,
+      kChar        =  1,  kShort   =  2,  kInt     =  3,  kLong    =  4,  kFloat    = 5,
+      kDouble      =  8,  kDouble32=  9,
+      kUChar       = 11,  kUShort  = 12,  kUInt    = 13,  kULong   = 14,  kBits     = 15,
+      kLong64      = 16,  kULong64 = 17,  kBool    = 18,  kFloat16 = 19,
+      kObject      = 61,  kAny     = 62,  kObjectp = 63,  kObjectP = 64,  kTString  = 65,
+      kTObject     = 66,  kTNamed  = 67,  kAnyp    = 68,  kAnyP    = 69,  kAnyPnoVT = 70,
+      kSTLp        = 71,
+      kSkip        = 100, kSkipL = 120, kSkipP   = 140,
+      kConv        = 200, kConvL = 220, kConvP   = 240,
+      kSTL         = ROOT::kSTLany, // 300
+      kSTLstring   = ROOT::kSTLstring, // 365
+      kStreamer    = 500, kStreamLoop = 501,
+      kCache       = 600,  // Cache the value in memory than is not part of the object but is accessible via a SchemaRule
+      kArtificial  = 1000,
+      kCacheNew    = 1001,
+      kCacheDelete = 1002,
+      kNeedObjectForVirtualBaseClass = 99997,
+      kMissing     = 99999
+   };
+
+// Some comments about EReadWrite
+// kBase    : base class element
+// kOffsetL : fixed size array
+// kOffsetP : pointer to object
+// kCounter : counter for array size
+// kCharStar: pointer to array of char
+// kBits    : TObject::fBits in case of a referenced object
+// kObject  : Class  derived from TObject
+// kObjectp : Class* derived from TObject and with    comment field //->Class
+// kObjectP : Class* derived from TObject and with NO comment field //->Class
+// kAny     : Class  not derived from TObject
+// kAnyp    : Class* not derived from TObject with    comment field //->Class
+// kAnyP    : Class* not derived from TObject with NO comment field //->Class
+// kAnyPnoVT: Class* not derived from TObject with NO comment field //->Class and Class has NO virtual table
+// kSTLp    : Pointer to STL container.
+// kTString : TString, special case
+// kTObject : TObject, special case
+// kTNamed  : TNamed , special case
+
+*/

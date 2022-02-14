@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-<<<<<<< HEAD
-/// \file electromagnetic/TestEm3/include/StepMax.hh
+/// \file electromagnetic/TestEm1/include/StepMax.hh
 /// \brief Definition of the StepMax class
 //
-// $Id: StepMax.hh 66241 2012-12-13 18:34:42Z gunter $
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,39 +38,36 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Step.hh"
 
-#include "DetectorConstruction.hh"
-
 class StepMaxMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StepMax : public G4VDiscreteProcess
 {
-public:
+  public:
 
-  StepMax(const G4String& processName = "UserStepMax");
- ~StepMax();
+   StepMax(const G4String& processName = "UserMaxStep");
+   ~StepMax();
 
-  G4bool   IsApplicable(const G4ParticleDefinition&);
+   G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-  void     SetStepMax(G4int, G4double);
+   void SetMaxStep(G4double);
 
-  G4double GetStepMax(G4int k) { return fStepMax[k];};
+   G4double GetMaxStep() {return fMaxChargedStep;};
 
-  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-                                               G4double previousStepSize,
-                                               G4ForceCondition* condition);
+   G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                      G4double previousStepSize,
+                                      G4ForceCondition* condition) override;
 
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
-  G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*)
-     {return DBL_MAX;};    
+   G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*) override;
 
-private:
+  private:
 
-  G4double fStepMax[MaxAbsor];
+     G4double fMaxChargedStep;
      
-  StepMaxMessenger* fMess;
+     StepMaxMessenger* fMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

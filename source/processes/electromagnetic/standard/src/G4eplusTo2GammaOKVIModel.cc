@@ -99,12 +99,9 @@ void G4eplusTo2GammaOKVIModel::Initialise(const G4ParticleDefinition* p,
       G4double emin = 10*eV;
       G4double emax = 100*TeV;
       G4int nbins = 20*G4lrint(std::log10(emax/emin));
-      fCrossSection   = new G4PhysicsLogVector(emin, emax, nbins);
-      fCrossSection3G = new G4PhysicsLogVector(emin, emax, nbins);
-      f3GProbability  = new G4PhysicsLogVector(emin, emax, nbins);
-      fCrossSection->SetSpline(true);
-      fCrossSection3G->SetSpline(true);
-      f3GProbability->SetSpline(true);
+      fCrossSection   = new G4PhysicsLogVector(emin, emax, nbins, true);
+      fCrossSection3G = new G4PhysicsLogVector(emin, emax, nbins, true);
+      f3GProbability  = new G4PhysicsLogVector(emin, emax, nbins, true);
       for(G4int i=0; i<= nbins; ++i) {
         G4double e = fCrossSection->Energy(i);
         G4double cs2 = ComputeCrossSectionPerElectron(e);
@@ -114,6 +111,9 @@ void G4eplusTo2GammaOKVIModel::Initialise(const G4ParticleDefinition* p,
 	fCrossSection3G->PutValue(i, cs3);
 	f3GProbability->PutValue(i, cs3/cs2);
       }
+      fCrossSection->FillSecondDerivatives();
+      fCrossSection3G->FillSecondDerivatives();
+      f3GProbability->FillSecondDerivatives();
     }
   }
   // here particle change is set for the triplet model

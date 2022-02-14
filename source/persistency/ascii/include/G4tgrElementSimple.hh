@@ -23,49 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrElementSimple
+// G4tgrElementSimple
 //
 // Class description:
 //
 // Transient class of a chemical element.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrElementSimple_h
-#define G4tgrElementSimple_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrElementSimple_hh
+#define G4tgrElementSimple_hh 1
 
 #include <vector>
 
+#include "globals.hh"
 #include "G4tgrElement.hh"
 
 class G4tgrElementSimple : public G4tgrElement
-{ 
-  public:  // with description
+{
+  public:
 
     G4tgrElementSimple();
-   ~G4tgrElementSimple();
+    ~G4tgrElementSimple();
 
-    G4tgrElementSimple( const std::vector<G4String>& wl );
+    G4tgrElementSimple(const std::vector<G4String>& wl);
       // Construct the G4tgrElementSimple (fill its data members)
-      // interpreting the data in the list of words 'wl' 
+      // interpreting the data in the list of words 'wl'
 
     G4double GetZ() const { return theZ; }
     G4double GetA() const { return theA; }
 
     friend std::ostream& operator<<(std::ostream& os,
                                     const G4tgrElementSimple& obj);
+
   private:
 
-    G4double theZ;
-    G4double theA;
+    G4double theZ = 0.0;
+    G4double theA = 0.0;
 };
 
 #endif
-

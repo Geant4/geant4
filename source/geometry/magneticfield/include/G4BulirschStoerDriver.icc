@@ -29,6 +29,8 @@
 // Supervision: John Apostolakis, CERN
 // --------------------------------------------------------------------
 
+#include <cassert>
+
 #include "G4LineSection.hh"
 #include "G4FieldUtils.hh"
 
@@ -424,4 +426,11 @@ G4MagIntegratorStepper*
 G4IntegrationDriver<G4BulirschStoer>::GetStepper()
 {
     return nullptr;
+}
+
+void
+G4IntegrationDriver<G4BulirschStoer>::StreamInfo( std::ostream& os ) const
+{
+  os << "State of G4IntegrationDriver<G4BulirschStoer>: " << std::endl;
+  os << "   Method is implemented, but gives no information. " << std::endl;
 }

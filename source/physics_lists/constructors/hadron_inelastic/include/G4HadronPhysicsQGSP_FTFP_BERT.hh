@@ -33,6 +33,7 @@
 // Replace the use of LEP for proton, neutron, pions
 //
 // Modified:
+// 02.10.2020 V.Ivanchenko: added c-,b- particles and cross section biasing
 //----------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsQGSP_FTFP_BERT_h
@@ -40,21 +41,20 @@
 
 
 #include "globals.hh"
-#include "G4ios.hh"
-
 #include "G4HadronPhysicsQGSP_BERT.hh"
-
 
 class G4HadronPhysicsQGSP_FTFP_BERT : public G4HadronPhysicsQGSP_BERT 
 {
   public: 
     G4HadronPhysicsQGSP_FTFP_BERT(G4int verbose =1);
     G4HadronPhysicsQGSP_FTFP_BERT(const G4String& name, G4bool quasiElastic=true);
-  protected:
-    //virtual void DumpBanner() override;    
-    G4bool QuasiElastic;
-};
+    virtual ~G4HadronPhysicsQGSP_FTFP_BERT();
 
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsQGSP_FTFP_BERT(G4HadronPhysicsQGSP_FTFP_BERT &) = delete;
+    G4HadronPhysicsQGSP_FTFP_BERT & operator =
+    (const G4HadronPhysicsQGSP_FTFP_BERT &right) = delete;
+};
 
 #endif
 

@@ -1,18 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-<<<<<<< HEAD
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
-=======
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,7 +25,6 @@
 G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 <<< Geant4 Physics List simulation engine: FTFP_BERT
 
-<<< Reference Physics List FTFP_BERT is built
 
 Opening output file  ...  done
 Visualization Manager instantiating with verbosity "warnings (3)"...
@@ -34,20 +32,20 @@ Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -59,11 +57,17 @@ Registered model factories:
   drawByOriginVolume
   drawByAttribute
 
+Registered models:
+  None
+
 Registered filter factories:
   chargeFilter
   particleFilter
   originVolumeFilter
   attributeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -101,13 +105,80 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 =======
 
- FTFP_BERT : new threshold between BERT and FTFP is over the interval 
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
  for pions :   3 to 6 GeV
  for kaons :   3 to 6 GeV
  for proton :  3 to 6 GeV
  for neutron : 3 to 6 GeV
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           1
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
@@ -133,7 +204,6 @@ Rayl:  for gamma SubType=11 BuildTable=1
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 msc:  for e-  SubType= 10
-      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 <<<<<<< HEAD
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
@@ -161,16 +231,18 @@ CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
   eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 =======
             UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e-  SubType=2
+eIoni:  for e-  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha : Emin=    0 eV  Emax=  100 TeV
 
-eBrem:  for e-  SubType=3
+eBrem:  for e-  XStype:4  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
@@ -178,15 +250,14 @@ eBrem:  for e-  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-CoulombScat:  for e-, integral:1  SubType=1 BuildTable=1
-      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 1
+CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 <<<<<<< HEAD
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
@@ -208,16 +279,18 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 =======
             UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e+  SubType=2
+eIoni:  for e+  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha : Emin=    0 eV  Emax=  100 TeV
 
-eBrem:  for e+  SubType=3
+eBrem:  for e+  XStype:4  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
@@ -226,7 +299,7 @@ eBrem:  for e+  SubType=3
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-annihil:  for e+, integral:1  SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 <<<<<<< HEAD
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
@@ -271,18 +344,18 @@ CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
 =======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+, integral:1  SubType=1 BuildTable=1
-      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 1
+CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
 msc:  for proton  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for proton  SubType=2
+hIoni:  for proton  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
@@ -290,28 +363,27 @@ hIoni:  for proton  SubType=2
                Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
-hBrems:  for proton  SubType=3
+hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-hPairProd:  for proton  SubType=4
+hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
+CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 msc:  for GenericIon  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 <<<<<<< HEAD
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
@@ -326,8 +398,9 @@ ionIoni:   for  GenericIon    SubType= 2
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 =======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-ionIoni:  for GenericIon  SubType=2
+ionIoni:  for GenericIon  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
@@ -338,112 +411,11 @@ ionIoni:  for GenericIon  SubType=2
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 msc:  for alpha  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-<<<<<<< HEAD
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-ionIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
-
-msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-hBrems:   for  anti_proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  anti_proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-hBrems:   for  kaon+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  kaon+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-=======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-
-ionIoni:  for alpha  SubType=2
+ionIoni:  for alpha  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
@@ -452,11 +424,11 @@ ionIoni:  for alpha  SubType=2
           BetheBloch : Emin=7.9452 MeV Emax=  100 TeV
 
 msc:  for anti_proton  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for anti_proton  SubType=2
+hIoni:  for anti_proton  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
@@ -464,31 +436,31 @@ hIoni:  for anti_proton  SubType=2
             ICRU73QO : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
-hBrems:  for anti_proton  SubType=3
+hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-hPairProd:  for anti_proton  SubType=4
+hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton, integral:1  SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
+CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for kaon+  SubType=2
+hIoni:  for kaon+  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
@@ -496,31 +468,31 @@ hIoni:  for kaon+  SubType=2
                Bragg : Emin=    0 eV  Emax=1.05231 MeV
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
 
-hBrems:  for kaon+  SubType=3
+hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-hPairProd:  for kaon+  SubType=4
+hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+, integral:1  SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
+CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for kaon-  SubType=2
+hIoni:  for kaon-  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
@@ -528,21 +500,20 @@ hIoni:  for kaon-  SubType=2
             ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
 
-hBrems:  for kaon-  SubType=3
+hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-hPairProd:  for kaon-  SubType=4
+hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -553,7 +524,6 @@ CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 msc:  for mu+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0, polarAngLim(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 <<<<<<< HEAD
         WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -587,8 +557,9 @@ CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 =======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-muIoni:  for mu+  SubType=2
+muIoni:  for mu+  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
@@ -597,28 +568,27 @@ muIoni:  for mu+  SubType=2
           BetheBloch : Emin=  200 keV Emax=    1 GeV
         MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
 
-muBrems:  for mu+  SubType=3
+muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=  100 TeV
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-muPairProd:  for mu+  SubType=4
+muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=  100 TeV
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+, integral:1  SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
+CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 msc:  for mu-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0, polarAngLim(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 <<<<<<< HEAD
         WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -646,8 +616,9 @@ muPairProd:   for  mu-    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 =======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-muIoni:  for mu-  SubType=2
+muIoni:  for mu-  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
@@ -656,21 +627,20 @@ muIoni:  for mu-  SubType=2
           BetheBloch : Emin=  200 keV Emax=    1 GeV
         MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
 
-muBrems:  for mu-  SubType=3
+muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=  100 TeV
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-muPairProd:  for mu-  SubType=4
+muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=  100 TeV
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
       Used Lambda table of mu+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -738,11 +708,11 @@ hPairProd:   for  pi-    SubType= 4
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for pi+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for pi+  SubType=2
+hIoni:  for pi+  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
@@ -750,31 +720,31 @@ hIoni:  for pi+  SubType=2
                Bragg : Emin=    0 eV  Emax=297.505 keV
           BetheBloch : Emin=297.505 keV Emax=  100 TeV
 
-hBrems:  for pi+  SubType=3
+hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-hPairProd:  for pi+  SubType=4
+hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+, integral:1  SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
+CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for pi-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for pi-  SubType=2
+hIoni:  for pi-  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
@@ -782,21 +752,20 @@ hIoni:  for pi-  SubType=2
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV
           BetheBloch : Emin=297.505 keV Emax=  100 TeV
 
-hBrems:  for pi-  SubType=3
+hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-hPairProd:  for pi-  SubType=4
+hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
       Used Lambda table of pi+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -836,36 +805,58 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: nKiller
 
 ---------------------------------------------------
+                           Hadronic Processes for B-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: B-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for D-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: D-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for He3
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -873,11 +864,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -887,11 +878,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -901,11 +892,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: anti_lambdaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
 
@@ -915,11 +919,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -929,11 +933,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -943,11 +947,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -956,17 +960,17 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: electronNuclear
+  Process: positronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
@@ -981,9 +985,10 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
-     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon+
@@ -1039,8 +1044,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: lambdaInelastic
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -1135,20 +1140,33 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for triton
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ================================================================
-<<<<<<< HEAD
-=======
+### G4LevelReader: broken transition 0 from level 24 to 24 for isotope Z= 89 A= 219 - use ground level
 =======================================================================
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
@@ -1165,13 +1183,12 @@ Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1e+12
+Time limit for long lived isomeres (ns)             1
+Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
-Electron internal conversion ID                     2
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
-Upload data before 1st event for                Z < 9
 =======================================================================
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
@@ -1188,100 +1205,100 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Polystyrene
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.10846 keV    e-  280.946 keV    e+  272.577 keV proton 70 keV
+ Energy thresholds :  gamma  2.10408 keV    e-  280.078 keV    e+  273.283 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : MWPCArCO2
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  94.5861 keV    e-  1.00386 MeV    e+  951.321 keV proton 70 keV
+ Energy thresholds :  gamma  94.659 keV    e-  1.00699 MeV    e+  946.934 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.87535 keV    e-  460.395 keV    e+  442.201 keV proton 70 keV
+ Energy thresholds :  gamma  5.84821 keV    e-  461.317 keV    e+  445.215 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  17.2183 keV    e-  951.321 keV    e+  901.528 keV proton 70 keV
+ Energy thresholds :  gamma  17.242 keV    e-  954.247 keV    e+  906.136 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 6     used in the geometry : Yes
  Material : ShieldingConcrete
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.31198 keV    e-  451.206 keV    e+  436.298 keV proton 70 keV
+ Energy thresholds :  gamma  5.2945 keV    e-  453.149 keV    e+  437.815 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 7     used in the geometry : Yes
  Material : LiquidArgon
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.20596 keV    e-  274.415 keV    e+  267.137 keV proton 70 keV
+ Energy thresholds :  gamma  5.21174 keV    e-  274.485 keV    e+  266.675 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 8     used in the geometry : Yes
  Material : Copper
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  20.6438 keV    e-  1.03121 MeV    e+  977.24 keV proton 70 keV
+ Energy thresholds :  gamma  20.5443 keV    e-  1.03402 MeV    e+  979.822 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 9     used in the geometry : Yes
  Material : FCAL1CuArKap
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  14.4581 keV    e-  679.834 keV    e+  652.968 keV proton 70 keV
+ Energy thresholds :  gamma  14.5048 keV    e-  681.756 keV    e+  651.425 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 10     used in the geometry : Yes
  Material : FCAL2WFeNi
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  96.1886 keV    e-  1.60683 MeV    e+  1.5024 MeV proton 70 keV
+ Energy thresholds :  gamma  96.3233 keV    e-  1.60788 MeV    e+  1.5016 MeV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 11     used in the geometry : Yes
  Material : FCAL2CuArKap
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  14.4581 keV    e-  679.834 keV    e+  652.968 keV proton 70 keV
+ Energy thresholds :  gamma  14.5048 keV    e-  681.756 keV    e+  651.425 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 12     used in the geometry : Yes
  Material : Tungsten
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  97.4901 keV    e-  1.63955 MeV    e+  1.54333 MeV proton 70 keV
+ Energy thresholds :  gamma  97.7141 keV    e-  1.64906 MeV    e+  1.53897 MeV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -1291,19 +1308,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total CPU time elapsed for geometry optimisation: 0.61 seconds
 =======
     Total memory consumed for geometry optimisation:   395 kByte
-    Total CPU time elapsed for geometry optimisation: 0.3 seconds
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+    Total CPU time elapsed for geometry optimisation: 0.26 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-<<<<<<< HEAD
-      85.25         0.52         0.00          148k EmModuleLogical
-      14.75         0.09         0.01          236k HadModuleLogical
-=======
-      53.33         0.16         0.00          152k EmModuleLogical
-      46.67         0.14         0.00          238k HadModuleLogical
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+      53.85         0.14         0.00          152k EmModuleLogical
+      46.15         0.12         0.00          238k HadModuleLogical
        0.00         0.00         0.00            4k Mother
        0.00         0.00         0.00            0k CryostatLogical
        0.00         0.00         0.00            0k LArgLogical
@@ -1314,15 +1325,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-<<<<<<< HEAD
-      60.56        235k      1361     2360       3772         0.09    HadModuleLogical
-      38.11        148k      1077     1143       2440         0.52    EmModuleLogical
-       0.94          3k         8       42        146         0.00    Mother
-       0.11          0k         1        6          8         0.00    SolidWLogical
-       0.11          0k         1        6          8         0.00    CuPlateLogical
-=======
-      60.17        238k      1385     2370       3792         0.14    HadModuleLogical
-      38.50        152k      1129     1152       2426         0.16    EmModuleLogical
+      60.17        238k      1385     2370       3792         0.12    HadModuleLogical
+      38.50        152k      1129     1152       2426         0.14    EmModuleLogical
        0.93          3k         8       42        146         0.00    Mother
        0.12          0k         1        7          8         0.00    SolidWLogical
        0.12          0k         1        7          8         0.00    CuPlateLogical
@@ -1341,282 +1345,147 @@ Read 2001 events from file data-tracks/tracks-20GeV.dat
 ---> Begin of event: 1
  ****  Primary : 1
  Vertex : (5.55552,7.16569,32740)
-<<<<<<< HEAD
 Number of F1 Tiles with Positive energy : 46
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-3.7309 1.62166 1.62899 
+1.56451 1.75052 1.6982 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-1.71665
-=======
-Number of F1 Tiles with Positive energy : 47
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.8978 2.64624 2.7378 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-16.6712
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+4.11888
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 1
-N Scondaries 182
-EmEdep is=19802.8 MeV 
-HadEdep is=7.95843 MeV
-Edep in FCAL1 FCAl2 : 19802.8 7.95843
+N Tracks out of world 6
+N Secondaries 218
+EmEdep is=19834.1 MeV 
+HadEdep is=0.962245 MeV
+Edep in FCAL1 FCAl2 : 19834.1 0.962245
  ****  Primary : 2
  Vertex : (-3.76032,10.9751,32740)
-Number of F1 Tiles with Positive energy : 53
+Number of F1 Tiles with Positive energy : 49
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.83597 1.94264 1.50459 
+1.86973 6.20464 3.44795 
  Visible Energy in Hole Counter  (MeV) 
-0 80.6978
+0 44.1638
  Visible Energy in Upstream Dead Materials 
-646.17
-=======
-N Tracks out of world 4
-N Secondaries 145
-EmEdep is=19840.9 MeV 
-HadEdep is=0.674385 MeV
-Edep in FCAL1 FCAl2 : 19840.9 0.674385
- ****  Primary : 2
- Vertex : (-3.76032,10.9751,32740)
-Number of F1 Tiles with Positive energy : 39
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.50478 1.99402 1.6083 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-3.28582
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+234.509
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 32
-N Scondaries 144
-EmEdep is=18406.2 MeV 
-HadEdep is=0.0965517 MeV
-Edep in FCAL1 FCAl2 : 18406.2 0.0965517
+N Tracks out of world 20
+N Secondaries 275
+EmEdep is=18685.6 MeV 
+HadEdep is=6.49503 MeV
+Edep in FCAL1 FCAl2 : 18685.6 6.49503
  ****  Primary : 3
  Vertex : (13.1951,2.677,32740)
-Number of F1 Tiles with Positive energy : 45
+Number of F1 Tiles with Positive energy : 50
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.65028 1.58665 1.70866 
+1.68094 1.71906 1.59777 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-7.62426
-=======
-N Tracks out of world 2
-N Secondaries 176
-EmEdep is=19830.1 MeV 
-HadEdep is=2.08051 MeV
-Edep in FCAL1 FCAl2 : 19830.1 2.08051
- ****  Primary : 3
- Vertex : (13.1951,2.677,32740)
-Number of F1 Tiles with Positive energy : 47
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.20838 1.57378 1.75032 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-6.45203
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+21.4079
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
 N Tracks out of world 5
-N Scondaries 330
-EmEdep is=19823.3 MeV 
-HadEdep is=8.7006 MeV
-Edep in FCAL1 FCAl2 : 19823.3 8.7006
-=======
-N Tracks out of world 1
-N Secondaries 149
-EmEdep is=19758.1 MeV 
-HadEdep is=5.48336 MeV
-Edep in FCAL1 FCAl2 : 19758.1 5.48336
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+N Secondaries 239
+EmEdep is=19545.9 MeV 
+HadEdep is=3.1433 MeV
+Edep in FCAL1 FCAl2 : 19545.9 3.1433
  ****  Primary : 4
  Vertex : (-8.66148,-8.80731,32740)
-Number of F1 Tiles with Positive energy : 37
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-<<<<<<< HEAD
-1.98612 1.61066 1.95438 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-2.72241
-=======
-1.65583 1.78189 2.44243 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-8.14885
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 2
-N Scondaries 164
-EmEdep is=19788.3 MeV 
-HadEdep is=21.101 MeV
-Edep in FCAL1 FCAl2 : 19788.3 21.101
- ****  Primary : 5
- Vertex : (4.75859,7.01622,32740)
-Number of F1 Tiles with Positive energy : 52
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.79156 1.44055 3.3899 
-=======
-N Tracks out of world 4
-N Secondaries 139
-EmEdep is=19771.8 MeV 
-HadEdep is=2.07167 MeV
-Edep in FCAL1 FCAl2 : 19771.8 2.07167
- ****  Primary : 5
- Vertex : (4.75859,7.01622,32740)
-Number of F1 Tiles with Positive energy : 41
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.61962 1.73066 3.52892 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- Visible Energy in Hole Counter  (MeV) 
-0 23.48
- Visible Energy in Upstream Dead Materials 
-<<<<<<< HEAD
-1.94541
-=======
-634.435
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 4
-N Scondaries 214
-EmEdep is=19858.8 MeV 
-HadEdep is=2.11177 MeV
-Edep in FCAL1 FCAl2 : 19858.8 2.11177
- ****  Primary : 6
- Vertex : (1.94335,14.9228,32740)
-Number of F1 Tiles with Positive energy : 53
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.5182 1.73246 2.62832 
- Visible Energy in Hole Counter  (MeV) 
-0 150.775
- Visible Energy in Upstream Dead Materials 
-1848.01
-=======
-N Tracks out of world 29
-N Secondaries 163
-EmEdep is=18968.5 MeV 
-HadEdep is=11.7774 MeV
-Edep in FCAL1 FCAl2 : 18968.5 11.7774
- ****  Primary : 6
- Vertex : (1.94335,14.9228,32740)
-Number of F1 Tiles with Positive energy : 57
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.65089 1.80649 1.56591 
- Visible Energy in Hole Counter  (MeV) 
-0 102.7
- Visible Energy in Upstream Dead Materials 
-1413.55
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 74
-N Scondaries 218
-EmEdep is=16584.8 MeV 
-HadEdep is=1.04174 MeV
-Edep in FCAL1 FCAl2 : 16584.8 1.04174
- ****  Primary : 7
- Vertex : (-10.9878,-6.7949,32740)
-Number of F1 Tiles with Positive energy : 48
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.5954 1.80396 2.45713 
- Visible Energy in Hole Counter  (MeV) 
-0 23.0574
- Visible Energy in Upstream Dead Materials 
-426.915
-=======
-N Tracks out of world 39
-N Secondaries 219
-EmEdep is=17303.6 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 17303.6 0
- ****  Primary : 7
- Vertex : (-10.9878,-6.7949,32740)
-Number of F1 Tiles with Positive energy : 58
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.95042 1.88591 1.86929 
- Visible Energy in Hole Counter  (MeV) 
-0 116.884
- Visible Energy in Upstream Dead Materials 
-5521.46
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 42
-N Scondaries 249
-EmEdep is=18778.3 MeV 
-HadEdep is=0.00316602 MeV
-Edep in FCAL1 FCAl2 : 18778.3 0.00316602
- ****  Primary : 8
- Vertex : (10.9757,-1.49585,32740)
 Number of F1 Tiles with Positive energy : 39
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.4879 1.72986 2.18968 
+1.61437 1.56073 1.78634 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-3.67903
-=======
-N Tracks out of world 186
-N Secondaries 111
-EmEdep is=12107.2 MeV 
-HadEdep is=1.12084 MeV
-Edep in FCAL1 FCAl2 : 12107.2 1.12084
- ****  Primary : 8
- Vertex : (10.9757,-1.49585,32740)
-Number of F1 Tiles with Positive energy : 40
+4.12931
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 6
+N Secondaries 201
+EmEdep is=19734 MeV 
+HadEdep is=1.09292 MeV
+Edep in FCAL1 FCAl2 : 19734 1.09292
+ ****  Primary : 5
+ Vertex : (4.75859,7.01622,32740)
+Number of F1 Tiles with Positive energy : 42
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-2.12399 1.82514 1.7729 
+1.59961 1.97463 2.02568 
+ Visible Energy in Hole Counter  (MeV) 
+0 0.102209
+ Visible Energy in Upstream Dead Materials 
+4.99682
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 2
+N Secondaries 185
+EmEdep is=19771.7 MeV 
+HadEdep is=1.80674 MeV
+Edep in FCAL1 FCAl2 : 19771.7 1.80674
+ ****  Primary : 6
+ Vertex : (1.94335,14.9228,32740)
+Number of F1 Tiles with Positive energy : 43
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.90073 1.59699 1.66575 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-6.61148
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+20.263
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 8
+N Secondaries 172
+EmEdep is=19671.7 MeV 
+HadEdep is=0.226567 MeV
+Edep in FCAL1 FCAl2 : 19671.7 0.226567
+ ****  Primary : 7
+ Vertex : (-10.9878,-6.7949,32740)
+Number of F1 Tiles with Positive energy : 39
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.99358 1.52363 1.73135 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+30.0124
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 16
+N Secondaries 120
+EmEdep is=19528.9 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 19528.9 0
+ ****  Primary : 8
+ Vertex : (10.9757,-1.49585,32740)
+Number of F1 Tiles with Positive energy : 47
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+2.59427 1.68612 1.80234 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+10.3706
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
@@ -1629,392 +1498,217 @@ HadEdep is=2.20838 MeV
 Edep in FCAL1 FCAl2 : 19656.3 2.20838
 =======
 N Tracks out of world 1
-N Secondaries 112
-EmEdep is=19820.1 MeV 
-HadEdep is=0.478148 MeV
-Edep in FCAL1 FCAl2 : 19820.1 0.478148
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+N Secondaries 114
+EmEdep is=19886.2 MeV 
+HadEdep is=0.0992936 MeV
+Edep in FCAL1 FCAl2 : 19886.2 0.0992936
  ****  Primary : 9
  Vertex : (-27.7734,3.36444,32740)
-Number of F1 Tiles with Positive energy : 62
+Number of F1 Tiles with Positive energy : 41
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-<<<<<<< HEAD
-1.64188 2.89549 1.90654 
+1.60024 1.48466 1.93992 
  Visible Energy in Hole Counter  (MeV) 
-0 163.758
+0 31.2655
  Visible Energy in Upstream Dead Materials 
-7371.61
-=======
-1.89045 1.51087 1.67915 
- Visible Energy in Hole Counter  (MeV) 
-0 128.842
- Visible Energy in Upstream Dead Materials 
-1838.83
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+1052.45
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 198
-N Scondaries 171
-EmEdep is=10242.9 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 10242.9 0
-=======
-N Tracks out of world 81
-N Secondaries 167
-EmEdep is=16190.6 MeV 
-HadEdep is=6.00833 MeV
-Edep in FCAL1 FCAl2 : 16190.6 6.00833
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+N Tracks out of world 22
+N Secondaries 103
+EmEdep is=18556.9 MeV 
+HadEdep is=7.33271 MeV
+Edep in FCAL1 FCAl2 : 18556.9 7.33271
  ****  Primary : 10
  Vertex : (-22.5474,4.1006,32740)
-Number of F1 Tiles with Positive energy : 44
+Number of F1 Tiles with Positive energy : 40
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-<<<<<<< HEAD
-1.89709 1.65003 2.30346 
+1.55792 1.57948 1.62951 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-32.5834
-=======
-1.86211 1.7742 3.47816 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-11.0079
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+12.9482
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 4
-N Scondaries 121
-EmEdep is=19703.1 MeV 
-HadEdep is=1.32114 MeV
-Edep in FCAL1 FCAl2 : 19703.1 1.32114
-=======
-N Tracks out of world 3
-N Secondaries 110
-EmEdep is=19712.4 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19712.4 0
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+N Tracks out of world 1
+N Secondaries 169
+EmEdep is=19824.5 MeV 
+HadEdep is=10.2607 MeV
+Edep in FCAL1 FCAl2 : 19824.5 10.2607
 
 ---> Begin of event: 11
  ****  Primary : 11
  Vertex : (-6.31939,21.5056,32740)
-<<<<<<< HEAD
-Number of F1 Tiles with Positive energy : 40
+Number of F1 Tiles with Positive energy : 43
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.666 1.55629 1.79119 
+1.82825 2.42874 2.13601 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-23.3839
-=======
-Number of F1 Tiles with Positive energy : 73
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.33972 1.69918 2.06784 
- Visible Energy in Hole Counter  (MeV) 
-0 186.642
- Visible Energy in Upstream Dead Materials 
-5657.8
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+13.4448
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 3
-N Scondaries 186
-EmEdep is=19731.6 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19731.6 0
+N Tracks out of world 2
+N Secondaries 233
+EmEdep is=19902.1 MeV 
+HadEdep is=0.766665 MeV
+Edep in FCAL1 FCAl2 : 19902.1 0.766665
  ****  Primary : 12
  Vertex : (17.1015,6.30557,32740)
-Number of F1 Tiles with Positive energy : 41
+Number of F1 Tiles with Positive energy : 46
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.84034 1.67498 3.08873 
+1.68025 1.87567 2.66991 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-1.60415
-=======
-N Tracks out of world 196
-N Secondaries 93
-EmEdep is=12213.7 MeV 
-HadEdep is=0.0940535 MeV
-Edep in FCAL1 FCAl2 : 12213.7 0.0940535
- ****  Primary : 12
- Vertex : (17.1015,6.30557,32740)
+3.56202
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 1
+N Secondaries 250
+EmEdep is=19851.9 MeV 
+HadEdep is=0.664813 MeV
+Edep in FCAL1 FCAl2 : 19851.9 0.664813
+ ****  Primary : 13
+ Vertex : (-24.9484,11.8659,32740)
+Number of F1 Tiles with Positive energy : 16
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.78724 1.9479 1.5402 
+ Visible Energy in Hole Counter  (MeV) 
+0 37.6612
+ Visible Energy in Upstream Dead Materials 
+18639
+ Visible Energy in Tail Catcher Scintillator
+1.94941 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 128
+N Secondaries 226
+EmEdep is=435.216 MeV 
+HadEdep is=0.0770643 MeV
+Edep in FCAL1 FCAl2 : 435.216 0.0770643
+ ****  Primary : 14
+ Vertex : (-0.133696,18.3151,32740)
 Number of F1 Tiles with Positive energy : 42
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-3.63472 1.77987 1.69077 
+2.43716 2.3251 2.2699 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-88.3137
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+11.2232
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
 N Tracks out of world 4
-N Scondaries 178
-EmEdep is=19868.2 MeV 
-HadEdep is=14.2385 MeV
-Edep in FCAL1 FCAl2 : 19868.2 14.2385
- ****  Primary : 13
- Vertex : (-24.9484,11.8659,32740)
-Number of F1 Tiles with Positive energy : 15
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.61876 3.27385 1.63957 
- Visible Energy in Hole Counter  (MeV) 
-0 93.3071
- Visible Energy in Upstream Dead Materials 
-18931.4
-=======
-N Tracks out of world 8
-N Secondaries 281
-EmEdep is=19492.7 MeV 
+N Secondaries 214
+EmEdep is=19824.2 MeV 
 HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19492.7 0
- ****  Primary : 13
- Vertex : (-24.9484,11.8659,32740)
-Number of F1 Tiles with Positive energy : 20
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.62744 1.48946 2.23249 
- Visible Energy in Hole Counter  (MeV) 
-0 46.9606
- Visible Energy in Upstream Dead Materials 
-18727.9
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 164
-N Scondaries 242
-EmEdep is=368.57 MeV 
-HadEdep is=0.241863 MeV
-Edep in FCAL1 FCAl2 : 368.57 0.241863
-=======
-N Tracks out of world 115
-N Secondaries 157
-EmEdep is=471.499 MeV 
-HadEdep is=1.94839 MeV
-Edep in FCAL1 FCAl2 : 471.499 1.94839
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- ****  Primary : 14
- Vertex : (-0.133696,18.3151,32740)
-Number of F1 Tiles with Positive energy : 45
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-<<<<<<< HEAD
-1.81634 1.51612 1.66413 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-4.73758
-=======
-2.273 2.17229 2.09826 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-12.4859
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 9
-N Scondaries 193
-EmEdep is=19742.3 MeV 
-HadEdep is=22.4828 MeV
-Edep in FCAL1 FCAl2 : 19742.3 22.4828
+Edep in FCAL1 FCAl2 : 19824.2 0
  ****  Primary : 15
  Vertex : (17.3196,17.6617,32740)
 Number of F1 Tiles with Positive energy : 37
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.73859 1.422 2.10102 
+1.73842 1.72772 3.18855 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-0.774097
-=======
-N Tracks out of world 1
-N Secondaries 192
-EmEdep is=19615.4 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19615.4 0
- ****  Primary : 15
- Vertex : (17.3196,17.6617,32740)
-Number of F1 Tiles with Positive energy : 50
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.60187 1.93296 1.68054 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-4.01263
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+4.86872
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 1
-N Scondaries 171
-EmEdep is=19883.3 MeV 
-HadEdep is=6.94053 MeV
-Edep in FCAL1 FCAl2 : 19883.3 6.94053
+N Tracks out of world 10
+N Secondaries 146
+EmEdep is=19774.1 MeV 
+HadEdep is=1.57888 MeV
+Edep in FCAL1 FCAl2 : 19774.1 1.57888
  ****  Primary : 16
  Vertex : (-20.8489,10.8988,32740)
-Number of F1 Tiles with Positive energy : 61
+Number of F1 Tiles with Positive energy : 74
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.74821 2.05236 3.58812 
+1.69408 2.17327 1.85811 
  Visible Energy in Hole Counter  (MeV) 
-0 72.2236
+0 46.2077
  Visible Energy in Upstream Dead Materials 
-2830.86
-=======
-N Tracks out of world 4
-N Secondaries 137
-EmEdep is=19755 MeV 
-HadEdep is=7.32705 MeV
-Edep in FCAL1 FCAl2 : 19755 7.32705
- ****  Primary : 16
- Vertex : (-20.8489,10.8988,32740)
-Number of F1 Tiles with Positive energy : 62
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.79066 1.44464 2.12125 
- Visible Energy in Hole Counter  (MeV) 
-0 81.0699
- Visible Energy in Upstream Dead Materials 
-4940.42
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+4094.18
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
 N Tracks out of world 105
-N Scondaries 268
-EmEdep is=15438.9 MeV 
-HadEdep is=0.963312 MeV
-Edep in FCAL1 FCAl2 : 15438.9 0.963312
+N Secondaries 213
+EmEdep is=13721.4 MeV 
+HadEdep is=3.00138 MeV
+Edep in FCAL1 FCAl2 : 13721.4 3.00138
  ****  Primary : 17
  Vertex : (-9.96316,-9.33478,32740)
-Number of F1 Tiles with Positive energy : 54
+Number of F1 Tiles with Positive energy : 45
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.52648 1.7616 1.91359 
+1.71092 1.71 2.55059 
  Visible Energy in Hole Counter  (MeV) 
-0 23.6622
+0 4.21123
  Visible Energy in Upstream Dead Materials 
-220.498
-=======
-N Tracks out of world 142
-N Secondaries 246
-EmEdep is=12794.5 MeV 
-HadEdep is=1.19275 MeV
-Edep in FCAL1 FCAl2 : 12794.5 1.19275
- ****  Primary : 17
- Vertex : (-9.96316,-9.33478,32740)
-Number of F1 Tiles with Positive energy : 59
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.84436 1.94537 1.6795 
- Visible Energy in Hole Counter  (MeV) 
-0 55.1167
- Visible Energy in Upstream Dead Materials 
-3325.24
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+14.2372
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 16
-N Scondaries 98
-EmEdep is=19166.8 MeV 
-HadEdep is=2.77211 MeV
-Edep in FCAL1 FCAl2 : 19166.8 2.77211
- ****  Primary : 18
- Vertex : (-9.96316,-9.33478,32740)
-Number of F1 Tiles with Positive energy : 42
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.59246 1.77004 2.7832 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-13.2751
-=======
-N Tracks out of world 86
-N Secondaries 141
-EmEdep is=14088.6 MeV 
+N Tracks out of world 5
+N Secondaries 186
+EmEdep is=19743.7 MeV 
 HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 14088.6 0
+Edep in FCAL1 FCAl2 : 19743.7 0
  ****  Primary : 18
  Vertex : (-9.96316,-9.33478,32740)
-Number of F1 Tiles with Positive energy : 46
+Number of F1 Tiles with Positive energy : 72
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.83629 1.66164 2.09831 
+2.27676 1.61995 1.68555 
  Visible Energy in Hole Counter  (MeV) 
-0 0
+0 119.273
  Visible Energy in Upstream Dead Materials 
-2.36648
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+4796.33
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-<<<<<<< HEAD
-N Tracks out of world 13
-N Scondaries 201
-EmEdep is=19472.3 MeV 
-HadEdep is=0.262399 MeV
-Edep in FCAL1 FCAl2 : 19472.3 0.262399
+N Tracks out of world 180
+N Secondaries 175
+EmEdep is=13052.1 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 13052.1 0
  Run terminated.
 Run Summary
   Number of events processed : 18
-  User=9.72s Real=9.81s Sys=0s
-=======
-N Tracks out of world 2
-N Secondaries 176
-EmEdep is=19924.3 MeV 
-HadEdep is=4.87868 MeV
-Edep in FCAL1 FCAl2 : 19924.3 4.87868
- Run terminated.
-Run Summary
-  Number of events processed : 18
-  User=9.560000s Real=9.619343s Sys=0.010000s
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  User=7.190000s Real=7.283024s Sys=0.000000s
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserActionInitialization deleted.
+UserWorkerInitialization deleted.
+UserWorkerThreadInitialization deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
@@ -2029,33 +1723,28 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.101 MB
 =======
 TransportationManager deleted.
-Total navigation history collections cleaned: 42
+Total navigation history collections cleaned: 46
+G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0606 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0663 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+Pool ID '16G4SmartVoxelNode', size : 0.112 MB
+Pool ID '17G4SmartVoxelProxy', size : 0.0942 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
-<<<<<<< HEAD
-Pool ID '7G4Track', size : 0.202 MB
-Pool ID '18G4TouchableHistory', size : 0.0327 MB
-Pool ID '15G4CountedObjectIvE', size : 0.00481 MB
-Pool ID '10G4Fragment', size : 0.000961 MB
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.69 MB
-=======
-Pool ID '17G4DynamicParticle', size : 0.0875 MB
-Pool ID '7G4Track', size : 0.174 MB
-Pool ID '18G4TouchableHistory', size : 0.00481 MB
+Pool ID '17G4DynamicParticle', size : 0.0904 MB
+Pool ID '7G4Track', size : 0.181 MB
+Pool ID '18G4TouchableHistory', size : 0.00577 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '10G4Fragment', size : 0.000961 MB
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.33 MB
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+Pool ID '10G4Fragment', size : 0.00192 MB
+Pool ID '17G4ReactionProduct', size : 0.00192 MB
+Number of memory pools allocated: 14 of which, static: 0
+Dynamic pools deleted: 14 / Total memory freed: 0.56 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

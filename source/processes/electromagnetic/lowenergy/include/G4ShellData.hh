@@ -51,48 +51,36 @@ class G4DataVector;
 class G4ShellData 
 { 
 public:
-
-  G4ShellData(G4int minZ = 1, G4int maxZ = 100, G4bool isOccupancy = false);
-
+  explicit G4ShellData(G4int minZ = 1, G4int maxZ = 100, G4bool isOccupancy = false);
   ~G4ShellData();
  
   size_t NumberOfShells(G4int Z) const;
-
   G4int ShellId(G4int Z, G4int shellIndex) const;
-
   G4double ShellOccupancyProbability(G4int Z, G4int shellIndex) const;
-
   const std::vector<G4double>& ShellIdVector(G4int Z) const;
-
   G4double BindingEnergy(G4int Z, G4int shellIndex) const;
-
   void SetOccupancyData() { occupancyData = true; }
-
   void LoadData(const G4String& fileName);
-
   void PrintData() const;
 
   // Randomly select a shell based on shell occupancy
   G4int SelectRandomShell(G4int Z) const;
 
-private:
-
   // Hide copy constructor and assignment operator 
-  G4ShellData& operator=(const G4ShellData& right);
-  G4ShellData(const G4ShellData&);
+  G4ShellData& operator=(const G4ShellData& right) = delete;
+  G4ShellData(const G4ShellData&) = delete;
 
+private: 
   const std::vector<G4double>& ShellVector(G4int Z) const;
-
-  G4int zMin;
-  G4int zMax; 
-
-  G4bool occupancyData;
 
   std::map<G4int,std::vector<G4double>*,std::less<G4int> > idMap;
   std::map<G4int,G4DataVector*,std::less<G4int> > bindingMap;
   std::vector<G4int> nShells;
   std::map<G4int,std::vector<G4double>*,std::less<G4int> > occupancyPdfMap;
 
+  G4int zMin;
+  G4int zMax; 
+  G4bool occupancyData;
 };
  
 #endif

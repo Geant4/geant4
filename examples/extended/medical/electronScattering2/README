@@ -36,7 +36,7 @@ published as:
 "The accuracy of EGSnrc, Geant4 and PENELOPE Monte Carlo systems for the simulation of electron 
 scatter in external beam radiotherapy,"
 by Bruce A Faddegon, Iwan Kawrakow, Yuri Kubyshin, Joseph Perl, Josep Sempau and Laszlo Urban,
-Phys. Med. Biol. 54 (2009) 6151Ð6163, DOI:10.1088/0031-9155/54/20/008 
+Phys. Med. Biol. 54 (2009) 6151-6163, DOI:10.1088/0031-9155/54/20/008 
 
 This present example, electronScattering2, was the Geant4 code used for this publication.
 
@@ -74,11 +74,7 @@ This present example, electronScattering2, was the Geant4 code used for this pub
    - "emlowenergy"  low-energy EM physics implementing experimental
                     low-energy models
    
- Physics lists and options can be (re)set with UI commands
-    
- Note that options set through G4EmProcessOptions are global, eg for all particle types.
- In G4 builders, it is shown how to set options per particle type.
-
+ Physics lists and options can be (re)set with UI commands.
        	
  3- PRIMARY GENERATOR
  

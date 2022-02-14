@@ -46,23 +46,25 @@ public:
 
   virtual ~G4PreCompoundTriton();
 
-  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const;
+  G4PreCompoundTriton(const G4PreCompoundTriton &right) = delete;
+  const G4PreCompoundTriton& 
+  operator= (const G4PreCompoundTriton &right) = delete;
+  G4bool operator==(const G4PreCompoundTriton &right) const = delete;
+  G4bool operator!=(const G4PreCompoundTriton &right) const = delete;
 
-  virtual G4double FactorialFactor(G4int N, G4int P) const;
+protected:
 
-  virtual G4double CoalescenceFactor(G4int A) const;
+  G4double GetRj(G4int NumberParticles, G4int NumberCharged) const override;
 
-  virtual G4double GetAlpha() const;
+  G4double FactorialFactor(G4int N, G4int P) const override;
+
+  G4double CoalescenceFactor(G4int A) const override;
+
+  G4double GetAlpha() const override;
 
 private:
 
   // operators
-  G4PreCompoundTriton(const G4PreCompoundTriton &right);
-  const G4PreCompoundTriton& 
-  operator= (const G4PreCompoundTriton &right);
-  G4bool operator==(const G4PreCompoundTriton &right) const;
-  G4bool operator!=(const G4PreCompoundTriton &right) const;    
-
   G4TritonCoulombBarrier theTritonCoulombBarrier;
 };
 

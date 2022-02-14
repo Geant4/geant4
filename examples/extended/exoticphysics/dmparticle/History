@@ -14,6 +14,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-11-21 I. Hrivnacova (dmparticle-V10-07-02)
+- Added analysis manager Clear() call instead of
+  deleting in the end of run (removed on July 19)
+
+06-10-21 I. Hrivnacova (dmparticle-V10-07-01)
+- Migration to new G4AnalysisManager.hh header;
+  define the output file name with an extension.
+
+19-07-21 I. Hrivnacova (dmparticle-V10-07-00)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+10-11-20 B. Morgan (dmparticle-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 17-05-18 J.Allison (dmparticle-V10-04-01)
 - RunAction.cc: Remove vis commands.
 
@@ -29,7 +45,7 @@ track of all tags.
 - fixed LDMP production model
 
 06-06-17 I.Hrivnacova (dmparticle-V10-03-02)
-- fixed Doxygen documentation 
+- fixed Doxygen documentation
 
 06-06-17 V.Ivanchenko (dmparticle-V10-03-01)
 - general cleanup of the code and documentation

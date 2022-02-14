@@ -23,93 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RToEConvForGamma
 //
+// Class description:
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//
-// Class Description
-//  This class is a Range to Energy Converter for gamma.
-//
-// ------------------------------------------------------------
-//   First Implementation          5 Oct. 2002  H.Kurahige
-// ------------------------------------------------------------
+// This class is a Range to Energy Converter for gamma.
 
-#ifndef G4RToEConvForGamma_h
-#define G4RToEConvForGamma_h 1
+// Author: H.Kurashige, 05 October 2002 - First implementation
+// --------------------------------------------------------------------
+#ifndef G4RToEConvForGamma_hh
+#define G4RToEConvForGamma_hh 1
 
 #include "globals.hh"
-#include "G4ios.hh"
-#include <vector>
-
 #include "G4VRangeToEnergyConverter.hh"
-
 
 class G4RToEConvForGamma : public G4VRangeToEnergyConverter
 {
-  public: // with description
-  //  constructor
-  G4RToEConvForGamma();
+public:
 
-  public:
-  //  destructor
+  explicit G4RToEConvForGamma();
+
   virtual ~G4RToEConvForGamma();
 
-  public: // with description 
-  // calculate energy cut from given range cut for the material
-  // virtual G4double convert(G4double rangeCut, const G4Material* material); 
+protected:
 
-  protected:
-    virtual G4double ComputeLoss( G4double AtomicNumber,
-                                  G4double KineticEnergy
-				  ) ;
-  
-  //-------------- Range Table ------------------------------------------
-    virtual void BuildRangeVector( const G4Material* aMaterial,
-				   G4RangeVector* rangeVector);
-
-    typedef G4LossTable G4CrossSectionTable;
-    void BuildAbsorptionLengthVector( const G4Material* aMaterial,
-				      G4RangeVector* rangeVector);
- 
-    G4double ComputeCrossSection( G4double AtomicNumber,
-				  G4double KineticEnergy
-				  );
-
-    G4double Z;  
-    G4double s200keV, s1keV;
-    G4double tmin, tlow; 
-    G4double smin, slow;
-    G4double cmin, clow, chigh;
+  G4double ComputeValue(const G4int Z, const G4double kinEnergy) final;
 
 };
 
-inline 
- G4double G4RToEConvForGamma::ComputeLoss(G4double AtomicNumber,
-					  G4double KineticEnergy) 
-{
-  return ComputeCrossSection(AtomicNumber,KineticEnergy);
-}
-
-inline 
- void G4RToEConvForGamma::BuildRangeVector(
-                                const G4Material* aMaterial,
-                                G4RangeVector* rangeVector)
-{
-  BuildAbsorptionLengthVector(aMaterial, rangeVector);
-}
-
-
-
 #endif
-
-
-
-
-
-
-
-
-

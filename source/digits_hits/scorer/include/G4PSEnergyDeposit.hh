@@ -29,40 +29,42 @@
 #ifndef G4PSEnergyDeposit_h
 #define G4PSEnergyDeposit_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Description:
 //   This is a primitive scorer class for scoring energy deposit.
-// 
+//
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura
 // 2010-07-22   Introduce Unit specification.
-// 
+//
+// 2020-09-03   Use G4VPrimitivePlotter and fill 1-D histo of energy deposit (x)
+//              vs. track weight (y)                   (Makoto Asai)
+//
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSEnergyDeposit : public G4VPrimitiveScorer
+class G4PSEnergyDeposit : public G4VPrimitivePlotter
 {
- 
- public: // with description
-      G4PSEnergyDeposit(G4String name, G4int depth=0); // default unit
-      G4PSEnergyDeposit(G4String name, const G4String& unit, G4int depth=0);
-      virtual ~G4PSEnergyDeposit();
+ public:                                              // with description
+  G4PSEnergyDeposit(G4String name, G4int depth = 0);  // default unit
+  G4PSEnergyDeposit(G4String name, const G4String& unit, G4int depth = 0);
+  virtual ~G4PSEnergyDeposit();
 
- protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
 
- public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      virtual void SetUnit(const G4String& unit);
+  virtual void SetUnit(const G4String& unit);
 
-  private:
-      G4int HCID;
-      G4THitsMap<G4double>* EvtMap;
+ private:
+  G4int HCID;
+  G4THitsMap<G4double>* EvtMap;
 };
 #endif

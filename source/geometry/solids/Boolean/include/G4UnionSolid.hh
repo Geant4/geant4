@@ -110,6 +110,8 @@ class G4UnionSolid : public G4BooleanSolid
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
 
+    virtual G4double GetCubicVolume() final;
+
   private:
 
     G4ThreeVector fPMin, fPMax; // bounding box extended by half-tolerance

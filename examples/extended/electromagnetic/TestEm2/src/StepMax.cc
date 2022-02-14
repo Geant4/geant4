@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-<<<<<<< HEAD
-/// \file electromagnetic/TestEm2/src/StepMax.cc
+/// \file electromagnetic/TestEm1/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id: StepMax.cc 74994 2013-10-25 10:47:45Z gcosmo $
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,14 +35,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-<<<<<<< HEAD
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX),fMess(0)
-=======
-StepMax::StepMax(PhysicsListMessenger* mess)
-  : G4VEmProcess("UserMaxStep", fGeneral),fMessenger(mess),
-    fMaxChargedStep(DBL_MAX),fInitialised(false)
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+ : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX),fMess(nullptr) 
 {
   fMess = new StepMaxMessenger(this);
 }
@@ -64,48 +54,13 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetMaxStep(G4double step) 
-{
-<<<<<<< HEAD
-  fMaxChargedStep = step;
-=======
-  if(fInitialised) {
-    fInitialised = false;
-  }
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-}
+void StepMax::SetMaxStep(G4double step) {fMaxChargedStep = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-<<<<<<< HEAD
 G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track&,
                                                    G4double,
                                                    G4ForceCondition* condition )
-=======
-void StepMax::BuildPhysicsTable(const G4ParticleDefinition&)
-{
-  if(!fInitialised) {
-    fMaxChargedStep = fMessenger->GetMaxChargedStep();
-    fInitialised = true;
-    if(fMaxChargedStep < DBL_MAX) {
-      G4cout << GetProcessName() << ":  SubType= " << GetProcessSubType()
-             << "  Step limit(mm)= " << fMaxChargedStep << G4endl;
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void StepMax::InitialiseProcess(const G4ParticleDefinition*)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double 
-StepMax::PostStepGetPhysicalInteractionLength(const G4Track&,
-                                              G4double,
-                                              G4ForceCondition* condition)
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
@@ -124,4 +79,9 @@ G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double StepMax::GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*)
+{
+   return fMaxChargedStep;
+}    
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

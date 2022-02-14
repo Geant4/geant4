@@ -36,14 +36,10 @@ using namespace boost::python;
 // module definition
 // ====================================================================
 
-#ifdef ENABLE_GDML
 void export_G4GDMLParser();
-#endif
 
 BOOST_PYTHON_MODULE(G4gdml)
 {
-#ifdef ENABLE_GDML
   export_G4GDMLParser();
-#endif
 }
 

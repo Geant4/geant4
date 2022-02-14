@@ -28,7 +28,7 @@
 #define G4HumanPhantomAnalysisManager_HH
 
 #include "globals.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 /*
 Author: Susanna Guatelli, University of Wollongong, Australia

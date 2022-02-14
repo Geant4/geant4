@@ -83,6 +83,7 @@
 #include <fstream>
 #include <sstream>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VCrossSectionHandler::G4VCrossSectionHandler()
 {
@@ -92,6 +93,7 @@ G4VCrossSectionHandler::G4VCrossSectionHandler()
   ActiveElements();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VCrossSectionHandler::G4VCrossSectionHandler(G4VDataSetAlgorithm* algorithm,
 					       G4double minE,
@@ -101,30 +103,28 @@ G4VCrossSectionHandler::G4VCrossSectionHandler(G4VDataSetAlgorithm* algorithm,
 					       G4double unitData,
 					       G4int minZ, 
 					       G4int maxZ)
-  : interpolation(algorithm), eMin(minE), eMax(maxE), nBins(bins),
-    unit1(unitE), unit2(unitData), zMin(minZ), zMax(maxZ)
+  : interpolation(algorithm), eMin(minE), eMax(maxE), 
+    unit1(unitE), unit2(unitData), zMin(minZ), zMax(maxZ), 
+    nBins(bins)
 {
-  crossSections = 0;
+  crossSections = nullptr;
   ActiveElements();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VCrossSectionHandler::~G4VCrossSectionHandler()
 {
   delete interpolation;
-  interpolation = 0;
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos;
+  interpolation = nullptr;
 
-  for (pos = dataMap.begin(); pos != dataMap.end(); ++pos)
+  for (auto pos : dataMap)
     {
-      // The following is a workaround for STL ObjectSpace implementation, 
-      // which does not support the standard and does not accept 
-      // the syntax pos->second
-      // G4VEMDataSet* dataSet = pos->second;
-      G4VEMDataSet* dataSet = (*pos).second;
+      G4VEMDataSet* dataSet = pos.second;
       delete dataSet;
     }
 
-  if (crossSections != 0)
+  if (crossSections != nullptr)
     {
       size_t n = crossSections->size();
       for (size_t i=0; i<n; i++)
@@ -132,9 +132,11 @@ G4VCrossSectionHandler::~G4VCrossSectionHandler()
 	  delete (*crossSections)[i];
 	}
       delete crossSections;
-      crossSections = 0;
+      crossSections = nullptr;
     }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VCrossSectionHandler::Initialise(G4VDataSetAlgorithm* algorithm,
 					G4double minE, G4double maxE, 
@@ -142,7 +144,7 @@ void G4VCrossSectionHandler::Initialise(G4VDataSetAlgorithm* algorithm,
 					G4double unitE, G4double unitData,
 					G4int minZ, G4int maxZ)
 {
-  if (algorithm != 0) 
+  if (algorithm != nullptr) 
     {
       delete interpolation;
       interpolation = algorithm;
@@ -162,19 +164,14 @@ void G4VCrossSectionHandler::Initialise(G4VDataSetAlgorithm* algorithm,
   zMax = maxZ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VCrossSectionHandler::PrintData() const
 {
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
-
-  for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
+  for (auto pos : dataMap) 
     {
-      // The following is a workaround for STL ObjectSpace implementation, 
-      // which does not support the standard and does not accept 
-      // the syntax pos->first or pos->second
-      // G4int z = pos->first;
-      // G4VEMDataSet* dataSet = pos->second;
-      G4int z = (*pos).first;
-      G4VEMDataSet* dataSet = (*pos).second;     
+      G4int z = pos.first;
+      G4VEMDataSet* dataSet = pos.second;     
       G4cout << "---- Data set for Z = "
 	     << z
 	     << G4endl;
@@ -183,15 +180,16 @@ void G4VCrossSectionHandler::PrintData() const
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VCrossSectionHandler::LoadData(const G4String& fileName)
 {
   size_t nZ = activeZ.size();
   for (size_t i=0; i<nZ; i++)
     {
-      G4int Z = (G4int) activeZ[i];
+      G4int Z = G4int(activeZ[i]);
 
-      // Build the complete string identifying the file with the data set
-      
+      // Build the complete string identifying the file with the data set      
       char* path = std::getenv("G4LEDATA");
       if (!path)
 	{ 
@@ -251,24 +249,22 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
       
       file.close();
       G4VDataSetAlgorithm* algo = interpolation->Clone();
-
-      G4VEMDataSet* dataSet = new G4EMDataSet(Z,orig_reg_energies,orig_reg_data,log_reg_energies,log_reg_data,algo);
-
+      G4VEMDataSet* dataSet = new G4EMDataSet(Z,orig_reg_energies,orig_reg_data,
+					      log_reg_energies,log_reg_data,algo);
       dataMap[Z] = dataSet;
-
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
 {
   size_t nZ = activeZ.size();
   for (size_t i=0; i<nZ; i++)
     {
-      G4int Z = (G4int) activeZ[i];
+      G4int Z = G4int(activeZ[i]);
 
-      // Build the complete string identifying the file with the data set
-      
+      // Build the complete string identifying the file with the data set      
       char* path = std::getenv("G4LEDATA");
       if (!path)
 	{ 
@@ -324,69 +320,56 @@ void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
       G4VDataSetAlgorithm* algo = interpolation->Clone();
 
       G4VEMDataSet* dataSet = new G4EMDataSet(Z,orig_reg_energies,orig_reg_data,algo);
-
       dataMap[Z] = dataSet;
-
     }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
 {
   size_t nZ = activeZ.size();
   for (size_t i=0; i<nZ; i++)
     {
-      G4int Z = (G4int) activeZ[i];
+      G4int Z = G4int(activeZ[i]);
       
       G4VDataSetAlgorithm* algo = interpolation->Clone();
       G4VEMDataSet* dataSet = new G4ShellEMDataSet(Z, algo);
-
-      dataSet->LoadData(fileName);
-      
+      dataSet->LoadData(fileName);      
       dataMap[Z] = dataSet;
     }
 }
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VCrossSectionHandler::Clear()
 {
   // Reset the map of data sets: remove the data sets from the map 
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos;
-
   if(! dataMap.empty())
     {
-        for (pos = dataMap.begin(); pos != dataMap.end(); ++pos)
+      for (auto pos : dataMap)
 	{
-	  // The following is a workaround for STL ObjectSpace implementation, 
-	  // which does not support the standard and does not accept
-	  // the syntax pos->first or pos->second
-	  // G4VEMDataSet* dataSet = pos->second;
-	  G4VEMDataSet* dataSet = (*pos).second;
+	  G4VEMDataSet* dataSet = pos.second;
 	  delete dataSet;
-	  dataSet = 0;
-	  G4int i = (*pos).first;
-	  dataMap[i] = 0;
+	  dataSet = nullptr;
+	  G4int i = pos.first;
+	  dataMap[i] = nullptr;
 	}
 	dataMap.clear();
     }
-
   activeZ.clear();
   ActiveElements();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy) const
 {
   G4double value = 0.;
-  
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
-  pos = dataMap.find(Z);
+ 
+  auto pos = dataMap.find(Z);
   if (pos!= dataMap.end())
     {
-      // The following is a workaround for STL ObjectSpace implementation, 
-      // which does not support the standard and does not accept 
-      // the syntax pos->first or pos->second
-      // G4VEMDataSet* dataSet = pos->second;
       G4VEMDataSet* dataSet = (*pos).second;
       value = dataSet->FindValue(energy);
     }
@@ -398,25 +381,20 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy) const
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy, 
                                            G4int shellIndex) const
 {
   G4double value = 0.;
-
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
-  pos = dataMap.find(Z);
+  auto pos = dataMap.find(Z);
   if (pos!= dataMap.end())
     {
-      // The following is a workaround for STL ObjectSpace implementation, 
-      // which does not support the standard and does not accept 
-      // the syntax pos->first or pos->second
-      // G4VEMDataSet* dataSet = pos->second;
       G4VEMDataSet* dataSet = (*pos).second;
       if (shellIndex >= 0) 
 	{
 	  G4int nComponents = dataSet->NumberOfComponents();
 	  if(shellIndex < nComponents)    
-	    // - MGP - Why doesn't it use G4VEMDataSet::FindValue directly?
 	    value = dataSet->GetComponent(shellIndex)->FindValue(energy);
 	  else 
 	    {
@@ -437,12 +415,12 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy,
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4VCrossSectionHandler::ValueForMaterial(const G4Material* material,
 						  G4double energy) const
 {
   G4double value = 0.;
-
   const G4ElementVector* elementVector = material->GetElementVector();
   const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
   G4int nElements = material->GetNumberOfElements();
@@ -458,12 +436,12 @@ G4double G4VCrossSectionHandler::ValueForMaterial(const G4Material* material,
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4DataVector* energyCuts)
 {
   // Builds a CompositeDataSet containing the mean free path for each material
   // in the material table
-
   G4DataVector energyVector;
   G4double dBin = std::log10(eMax/eMin) / nBins;
 
@@ -475,26 +453,25 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
   // Factory method to build cross sections in derived classes,
   // related to the type of physics process
 
-  if (crossSections != 0)
+  if (crossSections != nullptr)
     {  // Reset the list of cross sections
-      std::vector<G4VEMDataSet*>::iterator mat;
       if (! crossSections->empty())
 	{
-	  for (mat = crossSections->begin(); mat!= crossSections->end(); ++mat)
+	  for (auto mat=crossSections->begin(); mat != crossSections->end(); ++mat)
 	    {
 	      G4VEMDataSet* set = *mat;
 	      delete set;
-	      set = 0;
+	      set = nullptr;
 	    }
 	  crossSections->clear();
 	  delete crossSections;
-	  crossSections = 0;
+	  crossSections = nullptr;
 	}
     }
 
   crossSections = BuildCrossSectionsForMaterials(energyVector,energyCuts);
 
-  if (crossSections == 0)
+  if (crossSections == nullptr)
     {
       G4Exception("G4VCrossSectionHandler::BuildMeanFreePathForMaterials",
 		    "em1010",FatalException,"crossSections = 0");
@@ -503,18 +480,15 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 
   G4VDataSetAlgorithm* algo = CreateInterpolation();
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo);
-  //G4cout << "G4VCrossSectionHandler  new dataset " << materialSet << G4endl; 
 
   G4DataVector* energies;
   G4DataVector* data;
   G4DataVector* log_energies;
   G4DataVector* log_data;
-
   
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
-
 
   for (size_t mLocal=0; mLocal<numOfCouples; mLocal++)
     {
@@ -546,24 +520,19 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 	    }
 	}
       G4VDataSetAlgorithm* algoLocal = CreateInterpolation();
-
-      //G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.);
-
       G4VEMDataSet* dataSet = new G4EMDataSet(mLocal,energies,data,log_energies,log_data,algoLocal,1.,1.);
-
       materialSet->AddComponent(dataSet);
     }
-
   return materialSet;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4VCrossSectionHandler::SelectRandomAtom(const G4MaterialCutsCouple* couple,
                                                      G4double e) const
 {
   // Select randomly an element within the material, according to the weight
   // determined by the cross sections in the data set
-
   const G4Material* material = couple->GetMaterial();
   G4int nElements = material->GetNumberOfElements();
 
@@ -575,7 +544,6 @@ G4int G4VCrossSectionHandler::SelectRandomAtom(const G4MaterialCutsCouple* coupl
     }
 
   // Composite material
-
   const G4ElementVector* elementVector = material->GetElementVector();
   size_t materialIndex = couple->GetIndex();
 
@@ -591,7 +559,6 @@ G4int G4VCrossSectionHandler::SelectRandomAtom(const G4MaterialCutsCouple* coupl
     }
 
   G4double random = G4UniformRand() * materialCrossSection0;
-
   for (G4int k=0 ; k < nElements ; k++ )
     {
       if (random <= cross[k]) return (G4int) (*elementVector)[k]->GetZ();
@@ -600,12 +567,13 @@ G4int G4VCrossSectionHandler::SelectRandomAtom(const G4MaterialCutsCouple* coupl
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 const G4Element* G4VCrossSectionHandler::SelectRandomElement(const G4MaterialCutsCouple* couple,
 							     G4double e) const
 {
   // Select randomly an element within the material, according to the weight determined
   // by the cross sections in the data set
-
   const G4Material* material = couple->GetMaterial();
   G4Element* nullElement = 0;
   G4int nElements = material->GetNumberOfElements();
@@ -614,8 +582,7 @@ const G4Element* G4VCrossSectionHandler::SelectRandomElement(const G4MaterialCut
   // Special case: the material consists of one element
   if (nElements == 1)
     {
-      G4Element* element = (*elementVector)[0];
-      return element;
+      return (*elementVector)[0];
     }
   else
     {
@@ -646,27 +613,22 @@ const G4Element* G4VCrossSectionHandler::SelectRandomElement(const G4MaterialCut
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4int G4VCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
 {
   // Select randomly a shell, according to the weight determined by the cross sections
   // in the data set
-
   // Note for later improvement: it would be useful to add a cache mechanism for already
   // used shells to improve performance
-
   G4int shell = 0;
 
   G4double totCrossSection = FindValue(Z,e);
   G4double random = G4UniformRand() * totCrossSection;
   G4double partialSum = 0.;
 
-  G4VEMDataSet* dataSet = 0;
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
-  pos = dataMap.find(Z);
-  // The following is a workaround for STL ObjectSpace implementation,
-  // which does not support the standard and does not accept
-  // the syntax pos->first or pos->second
-  // if (pos != dataMap.end()) dataSet = pos->second;
+  G4VEMDataSet* dataSet = nullptr;
+  auto pos = dataMap.find(Z);
   if (pos != dataMap.end()) 
     dataSet = (*pos).second;
   else
@@ -680,7 +642,7 @@ G4int G4VCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   for (size_t i=0; i<nShells; i++)
     {
       const G4VEMDataSet* shellDataSet = dataSet->GetComponent(i);
-      if (shellDataSet != 0)
+      if (shellDataSet != nullptr)
 	{
 	  G4double value = shellDataSet->FindValue(e);
 	  partialSum += value;
@@ -691,10 +653,12 @@ G4int G4VCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   return shell;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VCrossSectionHandler::ActiveElements()
 {
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  if (materialTable == 0)
+  if (materialTable == nullptr)
       G4Exception("G4VCrossSectionHandler::ActiveElements",
 		    "em1001",FatalException,"no MaterialTable found");
 
@@ -708,8 +672,7 @@ void G4VCrossSectionHandler::ActiveElements()
 
       for (G4int iEl=0; iEl<nElements; iEl++)
 	{
-	  G4Element* element = (*elementVector)[iEl];
-	  G4double Z = element->GetZ();
+	  G4double Z = (*elementVector)[iEl]->GetZ();
 	  if (!(activeZ.contains(Z)) && Z >= zMin && Z <= zMax)
 	    {
 	      activeZ.push_back(Z);
@@ -718,18 +681,21 @@ void G4VCrossSectionHandler::ActiveElements()
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VDataSetAlgorithm* G4VCrossSectionHandler::CreateInterpolation()
 {
   G4VDataSetAlgorithm* algorithm = new G4LogLogInterpolation;
   return algorithm;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4int G4VCrossSectionHandler::NumberOfComponents(G4int Z) const
 {
   G4int n = 0;
 
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
-  pos = dataMap.find(Z);
+  auto pos = dataMap.find(Z);
   if (pos!= dataMap.end())
     {
       G4VEMDataSet* dataSet = (*pos).second;

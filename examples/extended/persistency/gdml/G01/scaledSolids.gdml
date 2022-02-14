@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <define/>
+
+  <materials>
+    <material Z="13" name="Basic" state="solid">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="166"/>
+      <D unit="g/cm3" value="2.7"/>
+      <atom unit="g/mole" value="26.9815"/>
+    </material>
+  </materials>
+
+  <solids>
+    <box lunit="mm" name="boxS" x="400" y="1200" z="1000"/>
+    <scaledSolid name="boxScaled">
+      <solidref ref="boxS"/>
+      <scale name="boxScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <cone aunit="deg" deltaphi="360" lunit="mm" name="consS" rmax1="400" rmax2="600" rmin1="100" rmin2="200" startphi="0" z="1000"/>
+    <scaledSolid name="consScaled">
+      <solidref ref="consS"/>
+      <scale name="consScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <eltube dx="200" dy="300" dz="500" lunit="mm" name="eltuS"/>
+    <scaledSolid name="eltuScaled">
+      <solidref ref="eltuS"/>
+      <scale name="eltuScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <para alpha="30" aunit="deg" lunit="mm" name="paraS" phi="30" theta="30" x="800" y="1200" z="1000"/>
+    <scaledSolid name="paraScaled">
+      <solidref ref="paraS"/>
+      <scale name="paraScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <polycone aunit="deg" deltaphi="360" lunit="mm" name="pconeS" startphi="0">
+      <zplane rmax="500" rmin="100" z="-500"/>
+      <zplane rmax="300" rmin="200" z="100"/>
+      <zplane rmax="600" rmin="300" z="400"/>
+    </polycone>
+    <scaledSolid name="pconeScaled">
+      <solidref ref="pconeS"/>
+      <scale name="pconeScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <polyhedra aunit="deg" deltaphi="360" lunit="mm" name="phedraS" numsides="4" startphi="0">
+      <zplane rmax="400" rmin="100" z="-500"/>
+      <zplane rmax="300" rmin="200" z="100"/>
+      <zplane rmax="500" rmin="300" z="400"/>
+    </polyhedra>
+    <scaledSolid name="phedraScaled">
+      <solidref ref="phedraS"/>
+      <scale name="phedraScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <sphere aunit="deg" deltaphi="360" deltatheta="180" lunit="mm" name="sphereS" rmax="600" rmin="200" startphi="0" starttheta="0"/>
+    <scaledSolid name="sphereScaled">
+      <solidref ref="sphereS"/>
+      <scale name="sphereScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <torus aunit="deg" deltaphi="360" lunit="mm" name="torusS" rmax="300" rmin="200" rtor="400" startphi="0"/>
+    <scaledSolid name="torusScaled">
+      <solidref ref="torusS"/>
+      <scale name="torusScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <trap alpha1="0" alpha2="0" aunit="deg" lunit="mm" name="trapS" phi="35" theta="25" x1="200" x2="300" x3="200" x4="300" y1="400" y2="400" z="600"/>
+    <scaledSolid name="trapScaled">
+      <solidref ref="trapS"/>
+      <scale name="trapScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <trd lunit="mm" name="trdS" x1="400" x2="600" y1="800" y2="1000" z="1000"/>
+    <scaledSolid name="trdScaled">
+      <solidref ref="trdS"/>
+      <scale name="trdScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="tubsS" rmax="400" rmin="200" startphi="0" z="1000"/>
+    <scaledSolid name="tubsScaled">
+      <solidref ref="tubsS"/>
+      <scale name="tubsScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <cutTube aunit="deg" deltaphi="280" highX="0" highY="0.102899151085505" highZ="0.994691793826551" lowX="0" lowY="0.639201496881821" lowZ="-0.76903930093594" lunit="mm" name="ctubsS" rmax="300" rmin="200" startphi="-30" z="1209.8"/>
+    <scaledSolid name="ctubsScaled">
+      <solidref ref="ctubsS"/>
+      <scale name="ctubsScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <xtru lunit="mm" name="Xtru1S">
+      <twoDimVertex x="-300" y="-300"/>
+      <twoDimVertex x="-300" y="300"/>
+      <twoDimVertex x="300" y="300"/>
+      <twoDimVertex x="300" y="-300"/>
+      <twoDimVertex x="150" y="-300"/>
+      <twoDimVertex x="150" y="150"/>
+      <twoDimVertex x="-150" y="150"/>
+      <twoDimVertex x="-150" y="-300"/>
+      <section scalingFactor="1.5" xOffset="-200" yOffset="100" zOrder="0" zPosition="-400"/>
+      <section scalingFactor="0.5" xOffset="0" yOffset="0" zOrder="1" zPosition="100"/>
+      <section scalingFactor="0.7" xOffset="0" yOffset="0" zOrder="2" zPosition="150"/>
+      <section scalingFactor="0.9" xOffset="200" yOffset="200" zOrder="3" zPosition="400"/>
+    </xtru>
+    <scaledSolid name="Xtru1Scaled">
+      <solidref ref="Xtru1S"/>
+      <scale name="Xtru1Scaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <xtru lunit="mm" name="XtruS1">
+      <twoDimVertex x="-300" y="-300"/>
+      <twoDimVertex x="-300" y="300"/>
+      <twoDimVertex x="300" y="300"/>
+      <twoDimVertex x="300" y="-300"/>
+      <twoDimVertex x="150" y="-300"/>
+      <twoDimVertex x="150" y="150"/>
+      <twoDimVertex x="-150" y="150"/>
+      <twoDimVertex x="-150" y="-300"/>
+      <section scalingFactor="1.5" xOffset="-200" yOffset="100" zOrder="0" zPosition="-400"/>
+      <section scalingFactor="0.5" xOffset="0" yOffset="0" zOrder="1" zPosition="100"/>
+    </xtru>
+    <xtru lunit="mm" name="XtruS2">
+      <twoDimVertex x="-300" y="-300"/>
+      <twoDimVertex x="-300" y="300"/>
+      <twoDimVertex x="300" y="300"/>
+      <twoDimVertex x="300" y="-300"/>
+      <twoDimVertex x="150" y="-300"/>
+      <twoDimVertex x="150" y="150"/>
+      <twoDimVertex x="-150" y="150"/>
+      <twoDimVertex x="-150" y="-300"/>
+      <section scalingFactor="0.7" xOffset="0" yOffset="0" zOrder="0" zPosition="100"/>
+      <section scalingFactor="0.9" xOffset="200" yOffset="200" zOrder="1" zPosition="400"/>
+    </xtru>
+    <union name="xtru2S">
+      <first ref="XtruS1"/>
+      <second ref="XtruS2"/>
+    </union>
+    <hype aunit="deg" inst="30" lunit="mm" name="hypeS" outst="40" rmax="300" rmin="200" z="1000"/>
+    <scaledSolid name="hypeScaled">
+      <solidref ref="hypeS"/>
+      <scale name="hypeScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <paraboloid dz="500" lunit="mm" name="paraboloidS" rhi="450" rlo="200"/>
+    <scaledSolid name="paraboloidScaled">
+      <solidref ref="paraboloidS"/>
+      <scale name="paraboloidScaled_scl" x="0.8" y="0.5" z="0.25"/>
+    </scaledSolid>
+    <box lunit="mm" name="worldS" x="12400" y="6000" z="6000"/>
+  </solids>
+
+  <structure>
+    <volume name="box">
+      <materialref ref="Basic"/>
+      <solidref ref="boxScaled"/>
+    </volume>
+    <volume name="cons">
+      <materialref ref="Basic"/>
+      <solidref ref="consScaled"/>
+    </volume>
+    <volume name="eltu">
+      <materialref ref="Basic"/>
+      <solidref ref="eltuScaled"/>
+    </volume>
+    <volume name="para">
+      <materialref ref="Basic"/>
+      <solidref ref="paraScaled"/>
+    </volume>
+    <volume name="pcone">
+      <materialref ref="Basic"/>
+      <solidref ref="pconeScaled"/>
+    </volume>
+    <volume name="phedra">
+      <materialref ref="Basic"/>
+      <solidref ref="phedraScaled"/>
+    </volume>
+    <volume name="sphere">
+      <materialref ref="Basic"/>
+      <solidref ref="sphereScaled"/>
+    </volume>
+    <volume name="torus">
+      <materialref ref="Basic"/>
+      <solidref ref="torusScaled"/>
+    </volume>
+    <volume name="trap">
+      <materialref ref="Basic"/>
+      <solidref ref="trapScaled"/>
+    </volume>
+    <volume name="trd">
+      <materialref ref="Basic"/>
+      <solidref ref="trdScaled"/>
+    </volume>
+    <volume name="tubs">
+      <materialref ref="Basic"/>
+      <solidref ref="tubsScaled"/>
+    </volume>
+    <volume name="ctubs">
+      <materialref ref="Basic"/>
+      <solidref ref="ctubsScaled"/>
+    </volume>
+    <volume name="xtru1">
+      <materialref ref="Basic"/>
+      <solidref ref="Xtru1Scaled"/>
+    </volume>
+    <volume name="xtru2">
+      <materialref ref="Basic"/>
+      <solidref ref="xtru2S"/>
+    </volume>
+    <volume name="hype">
+      <materialref ref="Basic"/>
+      <solidref ref="hypeScaled"/>
+    </volume>
+    <volume name="paraboloid">
+      <materialref ref="Basic"/>
+      <solidref ref="paraboloidScaled"/>
+    </volume>
+    <volume name="world">
+      <materialref ref="Basic"/>
+      <solidref ref="worldS"/>
+      <physvol name="boxV">
+        <volumeref ref="box"/>
+        <position name="boxV_pos" unit="mm" x="-5000" y="-1500" z="1000"/>
+      </physvol>
+      <physvol name="consV">
+        <volumeref ref="cons"/>
+        <position name="consV_pos" unit="mm" x="-5000" y="1500" z="1000"/>
+      </physvol>
+      <physvol name="eltuV">
+        <volumeref ref="eltu"/>
+        <position name="eltuV_pos" unit="mm" x="-3500" y="-1500" z="1000"/>
+      </physvol>
+      <physvol name="paraV">
+        <volumeref ref="para"/>
+        <position name="paraV_pos" unit="mm" x="-3500" y="1500" z="1000"/>
+      </physvol>
+      <physvol name="pconeV">
+        <volumeref ref="pcone"/>
+        <position name="pconeV_pos" unit="mm" x="-2000" y="-1500" z="1000"/>
+      </physvol>
+      <physvol name="phedraV">
+        <volumeref ref="phedra"/>
+        <position name="phedraV_pos" unit="mm" x="-2000" y="1500" z="1000"/>
+      </physvol>
+      <physvol name="sphereV">
+        <volumeref ref="sphere"/>
+        <position name="sphereV_pos" unit="mm" x="-500" y="-1500" z="1000"/>
+      </physvol>
+      <physvol name="torusV">
+        <volumeref ref="torus"/>
+        <position name="torusV_pos" unit="mm" x="-500" y="1500" z="1000"/>
+      </physvol>
+      <physvol name="trapV">
+        <volumeref ref="trap"/>
+        <position name="trapV_pos" unit="mm" x="1000" y="-1500" z="1000"/>
+      </physvol>
+      <physvol name="trdV">
+        <volumeref ref="trd"/>
+        <position name="trdV_pos" unit="mm" x="1000" y="1500" z="1000"/>
+      </physvol>
+      <physvol name="tubsV">
+        <volumeref ref="tubs"/>
+        <position name="tubsV_pos" unit="mm" x="2500" y="-1500" z="1000"/>
+      </physvol>
+      <physvol name="ctubsV">
+        <volumeref ref="ctubs"/>
+        <position name="ctubsV_pos" unit="mm" x="2500" y="1500" z="1000"/>
+      </physvol>
+      <physvol name="xtru1V">
+        <volumeref ref="xtru1"/>
+        <position name="xtru1V_pos" unit="mm" x="4000" y="-1500" z="1000"/>
+      </physvol>
+      <physvol name="xtru2V">
+        <volumeref ref="xtru2"/>
+        <position name="xtru2V_pos" unit="mm" x="4000" y="1500" z="1000"/>
+      </physvol>
+      <physvol name="hypeV">
+        <volumeref ref="hype"/>
+        <position name="hypeV_pos" unit="mm" x="5500" y="-1500" z="1000"/>
+      </physvol>
+      <physvol name="paraboloidV">
+        <volumeref ref="paraboloid"/>
+        <position name="paraboloidV_pos" unit="mm" x="5500" y="1500" z="1000"/>
+      </physvol>
+    </volume>
+  </structure>
+
+  <setup name="Default" version="1.0">
+    <world ref="world"/>
+  </setup>
+
+</gdml>

@@ -87,8 +87,7 @@ G4UItcsh::G4UItcsh(const G4String& prompt, G4int maxhist)
     if(histfile.eof()) break;
 
     histfile.getline(linebuf, BUFSIZE);
-    G4String aline= linebuf;
-    aline.strip(G4String::both);
+    G4String aline= G4StrUtil::strip_copy(linebuf);
     if(aline.size() !=  0) StoreHistory(linebuf);
   }
   histfile.close();
@@ -162,13 +161,13 @@ void G4UItcsh::MakePrompt(const char* msg)
         break;
       } 
     } else {
-      promptString.append(G4String(promptSetting[i]));
+      promptString += promptSetting[i];
     }
   }
 
   // append last chaacter
   if(i == promptSetting.length()-1) 
-    promptString.append(G4String(promptSetting[i]));
+    promptString += promptSetting[i];
 }
 
 
@@ -210,7 +209,7 @@ void G4UItcsh::InsertCharacter(char cc)
   if(IsCursorLast()) {  // add
     commandLine+= cc;
   } else { // insert
-    commandLine.insert(cursorPosition-1, G4String(cc));
+    commandLine.insert(cursorPosition-1, G4String(1,cc));
   }
   cursorPosition++;
 }
@@ -400,14 +399,13 @@ void G4UItcsh::ListMatchedCommand()
   G4cout << G4endl;
   
   // input string
-  G4String input= G4String(commandLine).strip(G4String::leading);
+  G4String input = G4StrUtil::lstrip_copy(commandLine);
   // target token is last token
-  G4int jhead= input.last(' ');
-  if(jhead != G4int(G4String::npos)) {
-    input.remove(0, jhead);
-    input= input.strip(G4String::leading);
+  auto jhead= input.rfind(' ');
+  if(jhead != G4String::npos) {
+    input.erase(0, jhead);
+    G4StrUtil::lstrip(input);
   }
-  //G4cout << "@@@@ input=" << input << G4endl;
 
   // command tree of "user specified directory"
   G4String vpath = currentCommandDir;
@@ -423,8 +421,8 @@ void G4UItcsh::ListMatchedCommand()
       }
     }
     // get abs. path
-    if(indx != -1) vpath= GetAbsCommandDirPath(input(0,indx+1));  
-    if(!(indx==0  && len==1)) vcmd= input(indx+1,len-indx-1);  // care for "/"
+    if(indx != -1) vpath= GetAbsCommandDirPath(input.substr(0,indx+1));  
+    if(!(indx==0  && len==1)) vcmd= input.substr(indx+1,len-indx-1);  // care for "/"
   }
 
   // list matched dirs/commands
@@ -439,18 +437,19 @@ void G4UItcsh::CompleteCommand()
 ////////////////////////////////
 {
   // inputting string
-  G4String input= G4String(commandLine).strip(G4String::leading);
+  G4String input = G4StrUtil::lstrip_copy(commandLine);
+
   // target token is last token
-  G4int jhead= input.last(' ');
-  if(jhead != G4int(G4String::npos)) {
-    input.remove(0, jhead);
-    input= input.strip(G4String::leading);
+  auto jhead= input.rfind(' ');
+  if(jhead != G4String::npos) {
+    input.erase(0, jhead);
+    G4StrUtil::lstrip(input);
   }
 
   // tail string
   size_t thead = input.find_last_of('/');
   G4String strtail = input;
-  if (thead != G4String::npos) strtail = input(thead+1, input.size()-thead-1);
+  if (thead != G4String::npos) strtail = input.substr(thead+1, input.size()-thead-1);
 
   // command tree of "user specified directory"  
   G4String vpath= currentCommandDir;
@@ -460,14 +459,14 @@ void G4UItcsh::CompleteCommand()
   if(!input.empty()) {
     G4int indx= -1;
     for(G4int i=len-1; i>=0; i--) {
-      if(input(i)=='/') {
+      if(input[i]=='/') {
         indx= i;
         break;
       }   
     }
     // get abs. path
-    if(indx != -1) vpath= GetAbsCommandDirPath(input(0,indx+1));
-    if(!(indx==0  && len==1)) vcmd= input(indx+1,len-indx-1);  // care for "/"
+    if(indx != -1) vpath= GetAbsCommandDirPath(input.substr(0,indx+1));
+    if(!(indx==0  && len==1)) vcmd= input.substr(indx+1,len-indx-1);  // care for "/"
   }
 
   G4UIcommandTree* atree= GetCommandTree(vpath);  // get command tree
@@ -485,7 +484,7 @@ void G4UItcsh::CompleteCommand()
   for(G4int idir=1; idir<=Ndir; idir++) {
     G4String fpdir= atree-> GetTree(idir)-> GetPathName();
     // matching test
-    if( fpdir.index(inputpath, 0) == 0) {
+    if( fpdir.find(inputpath, 0) == 0) {
       if(nMatch==0) {
         stream= GetCommandPathTail(fpdir);
       } else {
@@ -501,7 +500,7 @@ void G4UItcsh::CompleteCommand()
     G4String fpcmd= atree-> GetPathName() +
                     atree-> GetCommand(icmd) -> GetCommandName();
     // matching test
-    if( fpcmd.index(inputpath, 0) ==0) {
+    if( fpcmd.find(inputpath, 0) ==0) {
       if(nMatch==0) {
         stream= GetCommandPathTail(fpcmd) + " ";
       } else {
@@ -515,24 +514,24 @@ void G4UItcsh::CompleteCommand()
   // display...
   input= commandLine;
   // target token is last token
-  jhead= input.last(' ');
-  if(jhead == G4int(G4String::npos)) jhead=0;
+  jhead= input.rfind(' ');
+  if(jhead == G4String::npos) jhead=0;
   else jhead++;
 
   G4int jt = jhead;
 
   G4String dspstr; 
   G4int i;
-  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); 
-  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(' '); 
-  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); 
+  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= AsciiBS; 
+  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= ' '; 
+  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= AsciiBS; 
 
   dspstr+= (vpath + stream);
   if (nMatch == 0) dspstr+= strtail;
   G4cout << dspstr << std::flush;
 
   // command line string
-  input.remove(jt);
+  input.erase(jt);
   input+= (vpath + stream);
   if (nMatch==0) input+= strtail;
 
@@ -658,7 +657,7 @@ G4String G4UItcsh::GetCommandLineString(const char* msg)
   // multi-line
   while( (newCommand.length() > 0) &&
 	 ( newCommand[newCommand.length()-1] == '_') ) {
-    newCommand.remove(newCommand.length()-1);
+    newCommand.erase(newCommand.length()-1);
     G4cout << G4endl;
     promptString= "? ";
     G4cout << promptString << std::flush;

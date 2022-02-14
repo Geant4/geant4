@@ -46,31 +46,31 @@
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4HadronicParameters.hh"
 
-
 G4QGSPProtonBuilder::
 G4QGSPProtonBuilder(G4bool quasiElastic) 
  {
    theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
    theModel = new G4TheoFSGenerator("QGSP");
 
-   theStringModel = new G4QGSModel< G4QGSParticipants >;
-   theStringDecay = new G4ExcitedStringDecay(theQGSM = new G4QGSMFragmentation);
+   G4QGSModel< G4QGSParticipants >* theStringModel = 
+     new G4QGSModel< G4QGSParticipants >;
+   G4ExcitedStringDecay* theStringDecay = 
+     new G4ExcitedStringDecay(new G4QGSMFragmentation);
    theStringModel->SetFragmentationModel(theStringDecay);
 
-   theCascade = new G4GeneratorPrecompoundInterface();
+   G4GeneratorPrecompoundInterface* theCascade = 
+     new G4GeneratorPrecompoundInterface();
 
    theModel->SetTransport(theCascade);
    theModel->SetHighEnergyGenerator(theStringModel);
    if (quasiElastic)
    {
-      theQuasiElastic=new G4QuasiElasticChannel;
-      theModel->SetQuasiElasticChannel(theQuasiElastic);
-   } else 
-   {  theQuasiElastic=0;}  
+     theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+   } 
  }
 
 void G4QGSPProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
  {
    aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
    theModel->SetMinEnergy(theMin);
@@ -80,9 +80,5 @@ Build(G4ProtonInelasticProcess * aP)
 
 G4QGSPProtonBuilder::~G4QGSPProtonBuilder() 
  {
-   if ( theQuasiElastic ) delete theQuasiElastic;
-   delete theStringDecay;
-   delete theStringModel;
-   delete theQGSM;
  }
 

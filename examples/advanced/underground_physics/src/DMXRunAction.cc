@@ -48,10 +48,9 @@
 
 #include "G4Run.hh"
 #include "G4ios.hh"
+#include "G4AnalysisManager.hh"
 
 #include <fstream>
-
-#include "DMXAnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -98,6 +97,7 @@ void DMXRunAction::Book()
 {  
   // Get/create analysis manager
   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->SetDefaultFileType("root");
   
   // Open an output file
   man->OpenFile(savehistFile);

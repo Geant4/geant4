@@ -53,9 +53,11 @@ G4ArrowModel::G4ArrowModel
  G4double x2, G4double y2, G4double z2,
  G4double width, const G4Colour& colour,
  const G4String& description,
- G4int lineSegmentsPerCircle)
+ G4int lineSegmentsPerCircle,
+ const G4Transform3D& transform)
 : fpShaftPolyhedron(nullptr)
 , fpHeadPolyhedron(nullptr)
+, fTransform(transform)
 {
   fType = "G4ArrowModel";
   fGlobalTag = fType;
@@ -125,8 +127,10 @@ G4ArrowModel::G4ArrowModel
 
 void G4ArrowModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
-  sceneHandler.BeginPrimitives();
-  if (fpShaftPolyhedron) sceneHandler.AddPrimitive(*fpShaftPolyhedron);
-  if (fpHeadPolyhedron) sceneHandler.AddPrimitive(*fpHeadPolyhedron);
-  sceneHandler.EndPrimitives();
+  if (fpShaftPolyhedron && fpHeadPolyhedron) {
+    sceneHandler.BeginPrimitives(fTransform);
+    sceneHandler.AddPrimitive(*fpShaftPolyhedron);
+    sceneHandler.AddPrimitive(*fpHeadPolyhedron);
+    sceneHandler.EndPrimitives();
+  }
 }

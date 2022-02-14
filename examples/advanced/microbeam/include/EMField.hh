@@ -46,11 +46,10 @@ class EMField
 {  
   public:
 
-    EMField();
+    explicit EMField();
   
     void  GetFieldValue( const  double Point[4], double *Bfield ) const;
 		       
     G4bool DoesFieldChangeEnergy() const {return true;}
 };
-
 #endif

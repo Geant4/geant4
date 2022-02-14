@@ -35,7 +35,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/physics_lists/util/include \
 	    -I$(G4BASE)/processes/hadronic/cross_sections/include \
 	    -I$(G4BASE)/processes/hadronic/management/include \
-	    -I$(G4BASE)/processes/hadronic/models/management/include \
 	    -I$(G4BASE)/processes/hadronic/processes/include \
 	    -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/management/include \

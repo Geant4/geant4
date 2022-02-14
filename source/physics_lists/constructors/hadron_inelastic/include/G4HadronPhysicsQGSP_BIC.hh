@@ -36,6 +36,7 @@
 // 25.04.2007 G.Folger: Add quasielastic as option, use quasielastic by default
 // 31.10.2012 A.Ribon: Use G4MiscBuilder
 // 19.03.2013 A.Ribon: Replace LEP with FTFP and BERT
+// 02.10.2020 V.Ivanchenko: added c-,b- particles and cross section biasing
 //
 //----------------------------------------------------------------------------
 //
@@ -45,12 +46,6 @@
 #include "globals.hh"
 
 #include "G4VPhysicsConstructor.hh"
-
-
-#include "G4Cache.hh"
-
-class G4ComponentGGHadronNucleusXsc;
-class G4VCrossSectionDataSet;
 
 class G4HadronPhysicsQGSP_BIC : public G4VPhysicsConstructor
 {
@@ -62,16 +57,18 @@ class G4HadronPhysicsQGSP_BIC : public G4VPhysicsConstructor
     void ConstructParticle() override;
     void ConstructProcess() override;
 
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsQGSP_BIC(G4HadronPhysicsQGSP_BIC &) = delete;
+    G4HadronPhysicsQGSP_BIC & operator =
+    (const G4HadronPhysicsQGSP_BIC &right) = delete;
+
   protected:
     void CreateModels();
     virtual void Neutron();
     virtual void Proton();
     virtual void Pion();
-    virtual void Kaon() { /*Done in Pion*/}
     virtual void Others();
     virtual void DumpBanner() {}
-    //This contains extra configurataion specific to this PL
-    virtual void ExtraConfiguration();
     
     G4double minQGSP_neutron;
     G4double minQGSP_proton;
@@ -83,6 +80,8 @@ class G4HadronPhysicsQGSP_BIC : public G4VPhysicsConstructor
     G4double minFTFP_neutron;
     G4double minFTFP_pik;
     G4double maxBIC_proton;
+    G4double minBIC_neutron;
+    G4double minBIC_proton;
     G4double maxBIC_neutron;
     G4double maxBERT_pik;
 

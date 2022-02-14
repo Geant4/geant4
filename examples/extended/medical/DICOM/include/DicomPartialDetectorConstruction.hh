@@ -95,7 +95,7 @@ private:
   std::multimap<G4int,G4int> fFilledIDs;
   std::map< G4int, std::map< G4int, G4int > > fFilledMins;
   std::map< G4int, std::map< G4int, G4int > > fFilledMaxs;
-  G4int fNVoxels;
+  G4int fNoVoxels;
   G4double fDimX, fDimY, fDimZ;
   G4double fOffsetX, fOffsetY, fOffsetZ;
   std::vector<G4Material*> fPhantomMaterials;

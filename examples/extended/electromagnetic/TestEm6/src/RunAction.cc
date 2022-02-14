@@ -58,7 +58,6 @@ RunAction::RunAction(DetectorConstruction* det)
   fMinE = 40*GeV;
   fMaxE = 10000*GeV;
   fnBin = 10000;
-  fNtColId[0] = fNtColId[1] = fNtColId[2] = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,7 +80,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   fProcCounter = new ProcessesCount;
 
   fAnalysis = G4AnalysisManager::Instance();
-  
+  fAnalysis->SetDefaultFileType("root");
+
   // Open an output file
   //
   std::stringstream tmp;
@@ -89,8 +89,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4String fileName = tmp.str();
   fAnalysis->OpenFile(fileName);    
   fAnalysis->SetVerboseLevel(2);
-  G4String extension = fAnalysis->GetFileType();
-  fileName = fileName + "." + extension;
+  fAnalysis->SetActivation(true);
     
   // Creating histograms 1,2,3,4,5,6
   // 
@@ -156,22 +155,20 @@ void RunAction::CountProcesses(G4String procName)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  // show Rndm status : not needed
-  //
-  //CLHEP::HepRandom::showEngineStatus();
-
+  G4cout << "### RunAction::EndOfRunAction" << G4endl;
   //total number of process calls
   //
   G4double countTot = 0.;
   G4cout << "\n Number of process calls --->";
-  for (size_t i=0; i< fProcCounter->size();i++) {
-        G4String procName = (*fProcCounter)[i]->GetName();
-        if (procName != "Transportation") {
-          G4int count    = (*fProcCounter)[i]->GetCounter(); 
-          G4cout << "\t" << procName << " : " << count;
-          countTot += count;
-        }
+  for (size_t i=0; i< fProcCounter->size(); ++i) {
+    G4String procName = (*fProcCounter)[i]->GetName();
+    if (procName != "Transportation") {
+      G4int count    = (*fProcCounter)[i]->GetCounter(); 
+      G4cout << "\t" << procName << " : " << count;
+      countTot += count;
+    }
   }
+  G4cout << G4endl;
   
   //instance EmCalculator
   //
@@ -192,107 +189,91 @@ void RunAction::EndOfRunAction(const G4Run*)
   G4String BremName         = "eBrem";
   G4String IoniName         = "eIoni";
   
-
   //get AnnihiToMuPair
   //
   G4AnnihiToMuPair* annihiToMu = 
     reinterpret_cast<G4AnnihiToMuPair*>(emCal.FindProcess(positron,
                                                           annihiToMuName));
 
-  G4double de, x, energy;
-  G4double crs_annihil, crs_annihiToMu, crs_annihiToHadr;
-  G4double crsVol_annihil, crsVol_annihiToMu, crsVol_annihiToHadr,
-    crsVol_Brem, crsVol_Ioni;
-  G4double crs_annihil_theory, crs_annihiToMu_theory, RR;
-  G4double X1, X2;
-
-  G4double atomicZ, atomicA;
-
-  G4double Mu;  //for muon mass
-  G4double Me;  //for electron mass
-  G4double Re;  //for classical electron radius
-  G4double Ru;  //for classical muon radius
-  G4double Eth; //for energy threshould to annihiToMu
-
   //parameters for ComputeCrossSection
   //
-  G4double minBin = std::log10(fMinE/GeV);
-  G4double maxBin = std::log10(fMaxE/GeV);
-  de      = (maxBin - minBin)/G4double(fnBin);
-  x       = minBin - de*0.5;
-  atomicZ = 1.;
-  atomicA = 2.;  
+  G4double atomicZ = 1.;
+  G4double atomicA = 2.;  
 
   //set parameters for theory
   //
   const G4ParticleDefinition* muon = G4MuonMinus::MuonMinus();
-  Mu   = muon->GetPDGMass();
-  Me   = electron_mass_c2;
-  Re   = classic_electr_radius;
-  Ru   = Re*Me/Mu;
-  Eth  = 2*Mu*Mu/Me-Me;
+  G4double Mu = muon->GetPDGMass();
+  G4double Me = electron_mass_c2;
+  G4double Re = classic_electr_radius;
+  G4double Ru = Re*Me/Mu;
+  G4double Eth = 2*Mu*Mu/Me-Me;
+  G4PhysicsLogVector v(fMinE, fMaxE, fnBin, false);
   
   //Compute CrossSections and Fill histgrams
   //
-  for(int i=0;i<fnBin;i++){
-    x += de;
-    energy=std::pow(10,x)*GeV;
+  for(G4int i=0; i<=fnBin; ++i) {
+    G4double energy = v.Energy(i);
+    G4double x = std::log10(energy/GeV);
 
     //CrossSectionPerAtom
     //
-    crs_annihiToMu = annihiToMu->ComputeCrossSectionPerAtom(energy,atomicZ);
+    G4double crs_annihiToMu = 
+      annihiToMu->ComputeCrossSectionPerAtom(energy,atomicZ);
+    //G4cout << "crs_annihiToMu(mkb)=" << crs_annihiToMu/microbarn << G4endl;
     fAnalysis->FillH1(7,x,crs_annihiToMu/microbarn);
   
-    crs_annihil = 
+    G4double crs_annihil = 
       emCal.ComputeCrossSectionPerAtom(energy,positron,annihilName,
                                        atomicZ,atomicA);
     fAnalysis->FillH1(8,x,crs_annihil/microbarn);
 
-    crs_annihiToHadr = 
+    G4double crs_annihiToHadr = 
       emCal.ComputeCrossSectionPerAtom(energy,positron,annihiToHadrName,
                                        atomicZ,atomicA);
     fAnalysis->FillH1(9,x,crs_annihiToHadr/microbarn);
 
     //CrossSectionPerVolume
     //
-    crsVol_Brem = 
+    G4double crsVol_Brem = 
       emCal.ComputeCrossSectionPerVolume(energy,positron,BremName,fMat,100*keV);
     fAnalysis->FillH1(12,x,crsVol_Brem*mm);
 
-    crsVol_Ioni = 
+    G4double crsVol_Ioni = 
       emCal.ComputeCrossSectionPerVolume(energy,positron,IoniName,fMat,100*keV);
     fAnalysis->FillH1(13,x,crsVol_Ioni*mm);
                 
-    crsVol_annihiToMu = annihiToMu->CrossSectionPerVolume(energy,fMat);
+    G4double crsVol_annihiToMu = annihiToMu->CrossSectionPerVolume(energy,fMat);
     fAnalysis->FillH1(14,x,crsVol_annihiToMu*mm);
   
-    crsVol_annihil = 
+    G4double crsVol_annihil = 
       emCal.ComputeCrossSectionPerVolume(energy,positron,annihilName,fMat);
     fAnalysis->FillH1(15,x,crsVol_annihil*mm);
 
-    crsVol_annihiToHadr = 
+    G4double crsVol_annihiToHadr = 
       emCal.ComputeCrossSectionPerVolume(energy,positron,annihiToHadrName,fMat);
     fAnalysis->FillH1(16,x,crsVol_annihiToHadr*mm);
 
     //R ratio
     //
-    RR = 0.0;
-    if(crsVol_annihiToMu != 0) RR = crsVol_annihiToHadr/crsVol_annihiToMu;
+    G4double RR = 0.0;
+    if(crsVol_annihiToMu > 0.) RR = crsVol_annihiToHadr/crsVol_annihiToMu;
     fAnalysis->FillH1(17,x,RR);
 
     //Theoretical calculation
     //
-    X1 = energy/Me;
+    G4double X1 = energy/Me;
     if(X1>1 && i%1000==0){
-      crs_annihil_theory = atomicZ*pi*Re*Re*
+      G4double crs_annihil_theory = atomicZ*pi*Re*Re*
         ( (X1*X1+4*X1+1)*G4Log(X1+std::sqrt(X1*X1-1))/(X1*X1-1)
          -(X1+3)/std::sqrt(X1*X1-1) )/(X1+1);
       fAnalysis->FillH1(10,x,crs_annihil_theory/microbarn);
     }
 
-    X2 = Eth/energy;
-    if(X2<1 && i%1000==0){
-      crs_annihiToMu_theory = atomicZ*pi*Ru*Ru/3*X2*(1+X2/2)*std::sqrt(1-X2);
+    G4double X2 = Eth/energy;
+    if(X2<1. && i%1000==0){
+      G4double crs_annihiToMu_theory = 
+	atomicZ*pi*Ru*Ru/3*X2*(1+X2/2)*std::sqrt(1-X2);
       fAnalysis->FillH1(11,x,crs_annihiToMu_theory/microbarn);
     }
 
@@ -303,8 +284,8 @@ void RunAction::EndOfRunAction(const G4Run*)
  
   fAnalysis->Write();
   fAnalysis->CloseFile();
+  fAnalysis->Clear();
 
-  delete fAnalysis;
   G4cout << G4endl;
 }
 

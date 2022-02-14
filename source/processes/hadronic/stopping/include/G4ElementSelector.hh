@@ -65,7 +65,7 @@ public:
   
   virtual ~G4ElementSelector();
 
-  virtual G4Element* SelectZandA(const G4Track& track, G4Nucleus*);
+  virtual const G4Element* SelectZandA(const G4Track& track, G4Nucleus*);
 
 private:
 

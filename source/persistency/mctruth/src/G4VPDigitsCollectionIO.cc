@@ -23,25 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VPDigitsCollectionIO.cc
+// G4VPDigitsCollectionIO implementation
 //
-// History:
-//   '01.08.16  Youhei Morita  Initial creation
+// Author: Youhei Morita, 16.08.2001
+// --------------------------------------------------------------------
 
 #include "G4VPDigitsCollectionIO.hh"
 
-// Implementation of Constructor #1
-G4VPDigitsCollectionIO::G4VPDigitsCollectionIO( std::string detName,
-                                                std::string colName )
- : m_verbose(0), f_detName(detName), f_colName(colName)
-{}
-
-// Implementation of operator== 
-G4bool G4VPDigitsCollectionIO::operator== (const G4VPDigitsCollectionIO& right) const
+// --------------------------------------------------------------------
+G4VPDigitsCollectionIO::G4VPDigitsCollectionIO(const G4String& detName,
+                                               const G4String& colName)
+  : f_detName(detName)
+  , f_colName(colName)
 {
-  return ( (f_detName == right.f_detName) &&
-           (f_colName == right.f_colName) );
 }
 
-// End of G4VPDigitsCollectionIO.cc
-
+// --------------------------------------------------------------------
+G4bool G4VPDigitsCollectionIO::operator==(
+  const G4VPDigitsCollectionIO& right) const
+{
+  return ((f_detName == right.f_detName) && (f_colName == right.f_colName));
+}

@@ -25,6 +25,7 @@
 
 #include "CLHEP/Vector/ThreeVector.h"
 
+#include <cmath>
 #include <iostream>
 
 namespace CLHEP  {

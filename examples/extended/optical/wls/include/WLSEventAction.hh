@@ -34,35 +34,53 @@
 #ifndef WLSEventAction_h
 #define WLSEventAction_h 1
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4UserEventAction.hh"
 
-class WLSRunAction;
 class WLSEventActionMessenger;
 
 class WLSEventAction : public G4UserEventAction
 {
-  public:
+ public:
+  WLSEventAction();
+  ~WLSEventAction();
 
-    WLSEventAction(WLSRunAction*);
-    virtual ~WLSEventAction();
+  void BeginOfEventAction(const G4Event*) override;
+  void EndOfEventAction(const G4Event*) override;
 
-  public:
+  G4int GetEventNo();
+  void SetEventVerbose(G4int);
 
-    virtual void   BeginOfEventAction(const G4Event*);
-    virtual void     EndOfEventAction(const G4Event*);
+  void AddTIR() { fNTIR += 1; };
+  void AddExiting() { fNExiting += 1; };
+  void AddEscapedEnd() { fEscapedEnd += 1; };
+  void AddEscapedMid() { fEscapedMid += 1; };
+  void AddBounce() { fBounce += 1; };
+  void AddWLSBounce() { fWLSBounce += 1; };
+  void AddClad1Bounce() { fClad1Bounce += 1; };
+  void AddClad2Bounce() { fClad2Bounce += 1; };
+  void AddReflected() { fReflected += 1; };
+  void AddEscaped() { fEscaped += 1; };
+  void AddMirror() { fMirror += 1; };
 
-    G4int GetEventNo();
-    void SetEventVerbose(G4int);
+ private:
+  WLSEventActionMessenger* fEventMessenger;
 
-  private:
+  G4int fVerboseLevel;
 
-    WLSRunAction* fRunAction;
-    WLSEventActionMessenger* fEventMessenger;
+  G4int fMPPCCollID;
 
-    G4int fVerboseLevel;
- 
-    G4int fMPPCCollID;
+  G4int fNTIR;
+  G4int fNExiting;
+  G4int fEscapedEnd;
+  G4int fEscapedMid;
+  G4int fBounce;
+  G4int fWLSBounce;
+  G4int fClad1Bounce;
+  G4int fClad2Bounce;
+  G4int fReflected;
+  G4int fEscaped;
+  G4int fMirror;
 };
 
 #endif

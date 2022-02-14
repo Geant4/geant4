@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-# $Id: CMakeLists.txt 86065 2014-11-07 08:51:15Z gcosmo $
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-
 #----------------------------------------------------------------------------
 # Setup the project
 #
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(B4d)
 
 #----------------------------------------------------------------------------
@@ -43,7 +38,7 @@ target_link_libraries(exampleB4d ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
-# build B4c. This is so that we can run the executable directly because it
+# build B4d. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
 set(EXAMPLEB4D_SCRIPTS

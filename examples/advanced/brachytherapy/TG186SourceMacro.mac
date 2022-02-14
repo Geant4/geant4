@@ -28,7 +28,7 @@
 /gps/pos/centre 0. 0. 0. mm
 /gps/ang/type iso
 ################################################
-/run/beamOn  100
+/run/beamOn  10000
 #
 # Dump scores to a file
 #

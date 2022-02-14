@@ -35,79 +35,77 @@
 #include "G4CellScoreComposer.hh"
 #include "G4Step.hh"
 
-G4CellScoreComposer::G4CellScoreComposer():
-  fSCScoreValues()
+G4CellScoreComposer::G4CellScoreComposer()
+  : fSCScoreValues()
 {}
 
-G4CellScoreComposer::~G4CellScoreComposer()
-{}
+G4CellScoreComposer::~G4CellScoreComposer() {}
 
-void G4CellScoreComposer::EstimatorCalculation(const G4Step &aStep){
-
-  G4StepPoint *p = aStep.GetPreStepPoint();
-  if (!p) {
-    G4Exception("G4CellScoreComposer::EstimatorCalculation","Det0191",FatalException," no pointer to pre PreStepPoint!");
+void G4CellScoreComposer::EstimatorCalculation(const G4Step& aStep)
+{
+  G4StepPoint* p = aStep.GetPreStepPoint();
+  if(!p)
+  {
+    G4Exception("G4CellScoreComposer::EstimatorCalculation", "Det0191",
+                FatalException, " no pointer to pre PreStepPoint!");
   }
-  G4double sl = aStep.GetStepLength();
-  G4double slw = sl * p->GetWeight();
+  G4double sl   = aStep.GetStepLength();
+  G4double slw  = sl * p->GetWeight();
   G4double slwe = slw * p->GetKineticEnergy();
-  
+
   G4double v = p->GetVelocity();
-  if (!(v>0.)) {
+  if(!(v > 0.))
+  {
     v = 10e-9;
   }
 
   fSCScoreValues.fSumSL += sl;
   fSCScoreValues.fSumSLW += slw;
   fSCScoreValues.fSumSLW_v += slw / v;
-  fSCScoreValues.fSumSLWE +=  slwe;
+  fSCScoreValues.fSumSLWE += slwe;
   fSCScoreValues.fSumSLWE_v += slwe / v;
- 
 }
-void G4CellScoreComposer::TrackEnters(){
-  fSCScoreValues.fSumTracksEntering++;
-}
-void G4CellScoreComposer::NewTrackPopedUp(){
-  fSCScoreValues.fSumPopulation++;
-}
+void G4CellScoreComposer::TrackEnters() { fSCScoreValues.fSumTracksEntering++; }
+void G4CellScoreComposer::NewTrackPopedUp() { fSCScoreValues.fSumPopulation++; }
 
-void G4CellScoreComposer::SetCollisionWeight(G4double weight){
+void G4CellScoreComposer::SetCollisionWeight(G4double weight)
+{
   fSCScoreValues.fSumCollisions++;
-  fSCScoreValues.fSumCollisionsWeight+=weight;
+  fSCScoreValues.fSumCollisionsWeight += weight;
 }
 
+const G4CellScoreValues& G4CellScoreComposer::GetStandardCellScoreValues() const
+{
+  if(fSCScoreValues.fSumSLW > 0.)
+  {
+    // divide by SumSLW or SumSLW_v ?
+    fSCScoreValues.fNumberWeightedEnergy =
+      fSCScoreValues.fSumSLWE_v / fSCScoreValues.fSumSLW_v;
 
-const G4CellScoreValues &G4CellScoreComposer::
-GetStandardCellScoreValues() const {
-  if (fSCScoreValues.fSumSLW > 0.) {
-    //divide by SumSLW or SumSLW_v ?
-    fSCScoreValues.fNumberWeightedEnergy = 
-      fSCScoreValues.fSumSLWE_v / fSCScoreValues.fSumSLW_v; 
-
-    fSCScoreValues.fFluxWeightedEnergy = 
+    fSCScoreValues.fFluxWeightedEnergy =
       fSCScoreValues.fSumSLWE / fSCScoreValues.fSumSLW;
 
-    fSCScoreValues.fAverageTrackWeight = 
+    fSCScoreValues.fAverageTrackWeight =
       fSCScoreValues.fSumSLW / fSCScoreValues.fSumSL;
   }
   return fSCScoreValues;
 }
 
-void G4CellScoreComposer::SetImportnace(G4double importance){
+void G4CellScoreComposer::SetImportnace(G4double importance)
+{
   fSCScoreValues.fImportance = importance;
 }
 
-std::ostream& operator<<(std::ostream &out, 
-                           const G4CellScoreComposer &ps) {
-  G4CellScoreValues scores =  ps.GetStandardCellScoreValues();
+std::ostream& operator<<(std::ostream& out, const G4CellScoreComposer& ps)
+{
+  G4CellScoreValues scores = ps.GetStandardCellScoreValues();
   out << "Tracks entering: " << scores.fSumTracksEntering << G4endl;
   out << "Population:      " << scores.fSumPopulation << G4endl;
   out << "Collisions:      " << scores.fSumCollisions << G4endl;
   out << "Collisions*Wgt:  " << scores.fSumCollisionsWeight << G4endl;
   out << "NumWGTedEnergy:  " << scores.fNumberWeightedEnergy << G4endl;
   out << "FluxWGTedEnergy: " << scores.fFluxWeightedEnergy << G4endl;
-  out << "Aver.TrackWGT*I: " << scores.fAverageTrackWeight*
-    scores.fImportance << G4endl;
+  out << "Aver.TrackWGT*I: " << scores.fAverageTrackWeight * scores.fImportance
+      << G4endl;
   return out;
 }
-

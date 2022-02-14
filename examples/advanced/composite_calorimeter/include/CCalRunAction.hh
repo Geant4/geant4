@@ -38,8 +38,8 @@ class G4Run;
 class CCalRunAction: public G4UserRunAction
 {
 public:
-  CCalRunAction(){};
-  virtual ~CCalRunAction(){};
+  CCalRunAction();
+  virtual ~CCalRunAction();
       
   virtual void BeginOfRunAction(const G4Run* aRun);    
   virtual void EndOfRunAction(const G4Run* aRun);    

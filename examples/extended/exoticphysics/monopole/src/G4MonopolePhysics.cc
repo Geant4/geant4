@@ -94,7 +94,11 @@ G4MonopolePhysics::~G4MonopolePhysics()
 
 void G4MonopolePhysics::ConstructParticle()
 {
-  fMpl = G4Monopole::MonopoleDefinition(fMonopoleMass, fMagCharge, fElCharge);
+  if(!fMpl) { 
+    fMpl = G4Monopole::MonopoleDefinition(fMonopoleMass, fMagCharge, fElCharge);
+  } else {
+    G4Monopole::Monopole();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

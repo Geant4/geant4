@@ -70,6 +70,8 @@
 
 #include "G4VMultiFragmentation.hh"
 #include "G4VFermiBreakUp.hh"
+#include "G4Element.hh"
+#include "G4ElementTable.hh"
 
 #include "G4VEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
@@ -79,6 +81,7 @@
 #include "G4FermiBreakUpVI.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4Pow.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4ExcitationHandler::G4ExcitationHandler()
   : icID(0),maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),
@@ -111,7 +114,6 @@ G4ExcitationHandler::G4ExcitationHandler()
 
 G4ExcitationHandler::~G4ExcitationHandler()
 {
-  //G4cout << "### Delete handler " << this << G4endl;
   delete theMultiFragmentation;
   delete theFermiModel;
   if(isEvapLocal) { delete theEvaporation; } 
@@ -119,17 +121,26 @@ G4ExcitationHandler::~G4ExcitationHandler()
 
 void G4ExcitationHandler::SetParameters()
 {
-  if(fVerbose > 1) {
-    G4cout << "G4ExcitationHandler::SetParameters() started " << this << G4endl;
-  }
-  auto param = G4NuclearLevelData::GetInstance()->GetParameters();
+  G4NuclearLevelData* ndata = G4NuclearLevelData::GetInstance();
+  auto param = ndata->GetParameters();
   isActive = true;
-  if(fDummy == param->GetDeexChannelsType()) { isActive = false; }
+  // check if de-excitation is needed
+  if(fDummy == param->GetDeexChannelsType()) { 
+    isActive = false; 
+  } else {
+    // upload data for elements used in geometry
+    G4int Zmax = 20;
+    const G4ElementTable* table = G4Element::GetElementTable();
+    for(auto & elm : *table) { Zmax = std::max(Zmax, elm->GetZasInt()); }
+    ndata->UploadNuclearLevelData(Zmax+1);
+  }
   minEForMultiFrag = param->GetMinExPerNucleounForMF();
   minExcitation = param->GetMinExcitation();
   maxExcitation = param->GetPrecoHighEnergy();
-  icID = param->GetInternalConversionID();
-  fVerbose = param->GetVerbose();
+  icID = G4PhysicsModelCatalog::GetModelID("model_e-InternalConversion");
+
+  // allowing local debug printout 
+  fVerbose = std::max(fVerbose, param->GetVerbose());
   if(isActive) {
     if(!thePhotonEvaporation)  { SetPhotonEvaporation(new G4PhotonEvaporation()); }
     if(!theEvaporation) { 
@@ -139,6 +150,9 @@ void G4ExcitationHandler::SetParameters()
     if(!theMultiFragmentation) { SetMultiFragmentation(new G4StatMF()); }
   }
   theFermiModel->SetVerbose(fVerbose);
+  if(fVerbose > 1) {
+    G4cout << "G4ExcitationHandler::SetParameters() done " << this << G4endl;
+  }
 }
 
 void G4ExcitationHandler::Initialise()
@@ -155,7 +169,8 @@ void G4ExcitationHandler::Initialise()
     theFermiModel->Initialise();
     theEvaporation->InitialiseChannels();
   }
-  if(fVerbose > 0) { param->Dump(); }
+  // dump level is controlled by parameter class
+  param->Dump();
 }
 
 void G4ExcitationHandler::SetEvaporation(G4VEvaporation* ptr, G4bool flag)
@@ -487,7 +502,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
       theNew->SetMomentum(frag->GetMomentum().vect());
       theNew->SetTotalEnergy(etot);
       theNew->SetFormationTime(frag->GetCreationTime());
-      if(theKindOfFragment == theElectron) { theNew->SetCreatorModel(icID); }
+      if(theKindOfFragment == theElectron) {
+	theNew->SetCreatorModelID(icID);
+      } else {
+	theNew->SetCreatorModelID(frag->GetCreatorModelID());
+      }
       theReactionProductVector->push_back(theNew);
 
       // fragment not found out ground state is created
@@ -507,6 +526,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	theNew->SetMomentum(mom);
 	theNew->SetTotalEnergy(etot);
 	theNew->SetFormationTime(frag->GetCreationTime());
+	theNew->SetCreatorModelID(frag->GetCreatorModelID());
 	theReactionProductVector->push_back(theNew);
 	if(fVerbose > 3) {
 	  G4cout << "          ground state, energy corrected E(MeV)= " 

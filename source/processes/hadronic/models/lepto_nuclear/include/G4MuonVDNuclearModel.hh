@@ -73,10 +73,12 @@ class G4MuonVDNuclearModel : public G4HadronicInteraction
 
     G4KokoulinMuonNuclearXS* muNucXS;
 
-    G4TheoFSGenerator* ftfp;
-    G4LundStringFragmentation* theFragmentation;
-    G4ExcitedStringDecay* theStringDecay;
-    G4CascadeInterface* bert;
+  G4TheoFSGenerator* ftfp;
+  G4LundStringFragmentation* theFragmentation;
+  G4ExcitedStringDecay* theStringDecay;
+  G4CascadeInterface* bert;
+
+  G4int secID;  // Creator model ID for the secondaries created by this model
 };
  
 #endif

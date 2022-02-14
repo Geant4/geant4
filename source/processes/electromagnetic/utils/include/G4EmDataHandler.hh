@@ -57,6 +57,7 @@
 
 class G4ParticleDefinition;
 class G4VEmProcess;
+class G4VEnergyLossProcess;
 
 class G4EmDataHandler
 {
@@ -80,7 +81,7 @@ public:
   G4bool RetrievePhysicsTable(size_t idx,
 			      const G4ParticleDefinition* part,
 			      const G4String& fname,
-			      G4bool ascii);
+			      G4bool ascii, G4bool spline);
 
   void SetMasterProcess(const G4VEmProcess*);
 

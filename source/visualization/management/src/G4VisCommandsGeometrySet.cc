@@ -59,6 +59,17 @@ void G4VVisCommandGeometrySet::Set
     }
     return;
   }
+  // Recalculate extent of any physical volume model in run duration lists
+  for (const auto& scene : fpVisManager->GetSceneList()) {
+    const auto& runDurationModelList = scene->GetRunDurationModelList();
+    for (const auto& sceneModel : runDurationModelList) {
+      auto model = sceneModel.fpModel;
+      auto pvModel = dynamic_cast<G4PhysicalVolumeModel*>(model);
+      if (pvModel) pvModel->CalculateExtent();
+    }
+    // And re-calculate the scene's extent
+    scene->CalculateExtent();
+  }
   if (fpVisManager->GetCurrentViewer()) {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
   }
@@ -282,6 +293,61 @@ void G4VisCommandGeometrySetForceAuxEdgeVisible::SetNewValue
   Set(name, setForceAuxEdgeVisible, requestedDepth);
 }
 
+////////////// /vis/geometry/set/forceCloud /////////////////////////
+
+G4VisCommandGeometrySetForceCloud::G4VisCommandGeometrySetForceCloud()
+{
+  G4bool omitable;
+  fpCommand = new G4UIcommand("/vis/geometry/set/forceCloud", this);
+  fpCommand->SetGuidance
+  ("Forces logical volume(s) always to be drawn as a cloud of points,"
+   "\nregardless of the view parameters.");
+  fpCommand->SetGuidance("\"all\" sets all logical volumes.");
+  fpCommand->SetGuidance
+    ("Optionally propagates down hierarchy to given depth.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("logical-volume-name", 's', omitable = true);
+  parameter->SetDefaultValue("all");
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("depth", 'd', omitable = true);
+  parameter->SetDefaultValue(0);
+  parameter->SetGuidance
+    ("Depth of propagation (-1 means unlimited depth).");
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("forceCloud", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("nPoints", 'd', omitable = true);
+  parameter->SetGuidance
+    ("<= 0 means under control of viewer.");
+  parameter->SetDefaultValue(0);
+  fpCommand->SetParameter(parameter);
+}
+
+G4VisCommandGeometrySetForceCloud::~G4VisCommandGeometrySetForceCloud()
+{
+  delete fpCommand;
+}
+
+G4String
+G4VisCommandGeometrySetForceCloud::GetCurrentValue(G4UIcommand*)
+{
+  return "";
+}
+
+void G4VisCommandGeometrySetForceCloud::SetNewValue
+(G4UIcommand*, G4String newValue)
+{
+  G4String name, forceCloudString;
+  G4int requestedDepth, nPoints;
+  std::istringstream iss(newValue);
+  iss >> name >> requestedDepth >> forceCloudString >> nPoints;
+  G4bool forceCloud = G4UIcommand::ConvertToBool(forceCloudString);;
+
+  G4VisCommandGeometrySetForceCloudFunction setForceCloud(forceCloud,nPoints);
+  Set(name, setForceCloud, requestedDepth);
+}
+
 ////////////// /vis/geometry/set/forceLineSegmentsPerCircle /////////////////////////
 
 G4VisCommandGeometrySetForceLineSegmentsPerCircle::G4VisCommandGeometrySetForceLineSegmentsPerCircle()
@@ -331,7 +397,8 @@ void G4VisCommandGeometrySetForceLineSegmentsPerCircle::SetNewValue
   std::istringstream iss(newValue);
   iss >> name >> requestedDepth >> lineSegmentsPerCircle;
 
-  G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction setForceLineSegmentsPerCircle(lineSegmentsPerCircle);
+  G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction
+  setForceLineSegmentsPerCircle(lineSegmentsPerCircle);
   Set(name, setForceLineSegmentsPerCircle, requestedDepth);
 }
 

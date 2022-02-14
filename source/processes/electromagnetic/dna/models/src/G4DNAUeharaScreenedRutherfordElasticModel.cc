@@ -516,7 +516,7 @@ BrennerZaiderRandomizeCosTheta(G4double k)
    */
   }
  
-  return 0.;
+  //return 0.;
 
 }
 
@@ -647,5 +647,5 @@ ScreenedRutherfordRandomizeCosTheta(G4double k,
      */
   }
  
-  return 0.;
+  //return 0.;
 }

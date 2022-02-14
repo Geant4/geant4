@@ -86,7 +86,7 @@ namespace G4INCL {
       const std::map<G4int,InterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache->find(nuclideID);
       if(mapEntry == rpCorrelationTableCache->end()) {
 
-        INCL_DEBUG("Creating r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A=" << A << ", Z=" << Z << std::endl);
+        INCL_DEBUG("Creating r-p correlation function for " << ((t==Proton) ? "protons" : ((t==Neutron) ? "neutrons" : "lambdas")) << " in A=" << A << ", Z=" << Z << std::endl);
 
         IFunction1D *rpCorrelationFunction;
         if(A > 19) {

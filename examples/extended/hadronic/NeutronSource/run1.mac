@@ -1,5 +1,5 @@
 #
-# Macro file for "AmBe.cc"
+# Macro file for "NeutronSource.cc"
 #
 /control/verbose 2
 /run/verbose 1
@@ -12,8 +12,6 @@
 #
 /run/initialize
 #
-/process/list
-#
 /gun/particle ion
 /gun/ion 95 241
 /gun/energy 0. eV
@@ -23,5 +21,4 @@
 /analysis/h1/set 6  60  0. 12.  MeV #neutrons
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

@@ -60,20 +60,13 @@ class G4QGSBinaryKaonBuilder : public G4VKaonBuilder
     virtual ~G4QGSBinaryKaonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4KaonPlusInelasticProcess * aP);
-    virtual void Build(G4KaonMinusInelasticProcess * aP);
-    virtual void Build(G4KaonZeroLInelasticProcess * aP);
-    virtual void Build(G4KaonZeroSInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {};
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
-    G4BinaryCascade * theCascade;
-    G4QGSModel< G4QGSParticipants > * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
     G4double theMin;
 
 };

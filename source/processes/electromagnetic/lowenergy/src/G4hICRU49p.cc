@@ -61,9 +61,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hICRU49p::G4hICRU49p():G4VhElectronicStoppingPower(), 
-  iMolecula(0),
-  protonMassAMU(1.007276)
+G4hICRU49p::G4hICRU49p():
+  G4VhElectronicStoppingPower(), 
+  protonMassAMU(1.007276),
+  iMolecula(0)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -16,6 +16,162 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 November 2021 - Koichi Murakami (interfaces-V10-07-23)
+- Add verbose setting in G4UIExecutive [BZ-2402]
+
+8 November 2021 - Ben Morgan (interfaces-V10-07-22)
+- Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+02 November 2021 - Laurent Garnier (interfaces-V10-07-21)
+- Fix HTML links in Qt UI Start page
+
+28 October 2021 - John Allison (interfaces-V10-07-20)
+- G4UIQt.cc: Replace '<' by "&lt" in session output.
+
+25 October 2021 - Ben Morgan (interfaces-V10-07-19)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+19 October 2021 - Ben Morgan (interfaces-V10-07-18)
+- Don't discard return value of G4String::strip.
+
+18 October 2021 - B. Morgan (interfaces-V10-07-17)
+- Use std::string member functions from G4String in place of synonyms
+
+04 October 2021 - Stewart Boogert / Laurie Nevay (interfaces-V10-07-16)
+- Add context for VtkQt visualisation driver
+
+1 October 2021 Ben Morgan (interfaces-V10-07-15)
+- Use proper enum interface for G4String::strip
+
+25 September 2021  Ben Morgan (interfaces-V10-07-14)
+- Remove no longer support GAG/Gain UI
+
+21 September 2021  Guilherme Amadio (interfaces-V10-07-13)
+- Fix C++20 warnings from GCC 11.2.0.
+
+12 Jujy 2021  Igor Semeniouk (interfaces-V10-07-12)
+- G4UIQt.hh: add fExitIcon pointer
+- G4UIQt.cc: "exit" icon and extension selection
+- G4InteractorMessenger.cc - allow use exit icon by user
+
+23 June 2021  Igor Semeniouk (interfaces-V10-07-11)
+- G4UIQt.cc: Fix "Viewer Properties" window opened on Startup
+  o "viewer" window must be constructed with setVisiable(false)
+
+22 April 2021 Ben Morgan (interfaces-V10-07-10)
+- G4UIQt.cc: Deal properly with creation and deletion of Viewer Properties
+
+19 April 2021 Ben Morgan (interfaces-V10-07-09)
+- Remove obsolete Wt code from source and use in G4UIexecutive
+
+1 April 2021 Ben Morgan (interfaces-V10-07-08)
+- Migrate build to modular CMake API
+
+18 March 2021  John Allison  (interfaces-V10-07-07)
+- G4UIQt::ReceiveG4cout/G4cerr:
+  o Trap empty string with empty() instead of using unary operator!
+    (The latter may work for std::string but G4String has a conversion
+    operator to char*, so ! is always false.)
+  o Fixes bug report #2347.
+
+11 March 2021  Gabriele Cosmo (interfaces-V10-07-06)
+- Extended G4UIWin32 driver with new features, based on contribution
+  by O.Pena-Rodrigues in GitHub PR#23.
+- Removed spurious moc data previously pushed by mistake.
+
+5 March 2021  Gabriele Cosmo (interfaces-V10-07-05)
+- Modified G4UIExecutive::SelectSessionByFile() to ensure that in Windows
+  the Win32 OpenGL driver is selected as the second choice by default.
+  Based on GitHub PR#20, contributed by Ovidio Pena Rodriguez.
+
+26 February 2021  Igor Semeniouk (interfaces-V10-07-04)
+- G4UIQt, G4InteractorMessenger, G4VInteractiveSession: introducing menu
+  bar style:
+  o /gui/nativeMenuBar [true|false]
+    Allow native menu bar when relevant ( MacOS, Ubuntu Unity), default true
+    Native menu enabled by defailt in G4UIQt
+  o /gui/clearMenu
+    Clear menu bar, remove all user defined menu entries.
+
+26 January 2021  John Allison (interfaces-V10-07-03)
+- G4UIQt.cc: Get colour and background from OS.
+  o Instead of fixed background <span style='background:#EEEEEE...
+    use <span style='background:" + pal.highlight().color().name()...
+  o This picks up colour from the OS and even allows for change of
+    OS display style, e.g., dark mode on MacOS.
+
+20 January 2021  John Allison (interfaces-V10-07-02)
+- G4UIQt.cc: Fix bug in command-line-echo highlighting whereby there
+  could be a crash in some circumstances.
+  o Use <span> instead of <div> in HTML wrappers.
+
+16 January 2021  John Allison (interfaces-V10-07-01)
+- Requires intercoms-V10-07-00.
+- Introduce choice of output styles:
+  o /gui/outputStyle
+    <cout|cerr|warnings|errors|all>
+    <fixed|proportional>
+    <highlight|no-highlight>
+  o Highlighting applies to the echoed command line if echoing is
+    requested with /control/verbose > 0.
+
+29 December 2020  John Allison (interfaces-V10-07-00)
+- G4UIQt.cc: Use 12pt Courier for G4UIQt output window.
+
+29 November 2020  Gabriele Cosmo (interfaces-V10-06-11)
+- G4UIQt.cc: protected MT code within G4MULTITHREADED in workaround
+  introduced previously.
+
+09 November 2020  John Allison (interfaces-V10-06-10)
+- G4UIQt.cc:
+  o Re "workaround" (interfaces-V10-06-08), it seems workers write
+    to std::cout/cerr anyway (is that a bug?) so limit this workaround
+    to the master thread.
+
+16 November 2020  Gabriele Cosmo (interfaces-V10-06-09)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+09 November 2020  John Allison (interfaces-V10-06-08)
+- G4UIQt.cc:
+  o As a workaround to the problem of loss of output in the case of
+    a crash or G4Exception:
+    - Send G4cout/cerr also to std::cout/cerr so that output is not lost.
+
+21 September 2020  John Allison (interfaces-V10-06-07)
+- G4Qt.cc: Add the following to fix a problem with Windows - see
+  https://geant4-forum.web.cern.ch/t/blue-screen-when-running-b1-example-using-qt/3144
+#ifdef WIN32
+      qApp->setAttribute( Qt::AA_UseDesktopOpenGL );
+#endif
+
+28 August 2020 Ben Morgan (interfaces-V10-06-06)
+- GEANT4_USE_INVENTOR for SoXt activates use of Xm, so we do not
+  need to check for use of inventor in setting up Xt, only GEANT4_USE_XM.
+
+19 June 2020  John Allison  (interfaces-V10-06-05)
+- Fix Qt 5.15 deprecation warnings.
+
+31 May 2020 Ben Morgan (interfaces-V10-06-04)
+- Use add_definitions to set PRIVATE-level compile definitions
+  for compatibility between old/new CMake system
+- Use CMake AUTOMOC to automatically generate and compile Moc
+  sources
+
+16 Apr 2020 Ben Morgan (interfaces-V10-06-03)
+- Remove Qt4 support
+
+ 6 Apr 2020 Igor Semeniouk (interfaces-V10-06-02)
+-- G4UIQt.cc:
+ o replace setcolor with rich text html tags.
+
+16 Jan 2020 Gabriele Cosmo (interfaces-V10-06-01)
+- Fixed obsolete URLs in UIQt splash screen.
+
+11 Dec 2019 Ben Morgan (interfaces-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 30 Nov 2019 Igor Semeniouk (interfaces-V10-05-07)
 -- G4UIQt.cc:
  o fix ui command not stored in callback for icon defined via /gui/addIcon command.

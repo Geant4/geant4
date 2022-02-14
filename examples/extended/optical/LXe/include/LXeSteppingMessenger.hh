@@ -32,24 +32,22 @@
 #define LXeSteppingMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
 
 class LXeSteppingAction;
+
 class G4UIcmdWithABool;
 
-class LXeSteppingMessenger: public G4UImessenger
+class LXeSteppingMessenger : public G4UImessenger
 {
-  public:
-    LXeSteppingMessenger(LXeSteppingAction*);
-    virtual ~LXeSteppingMessenger();
- 
-    virtual void SetNewValue(G4UIcommand*, G4String);
+ public:
+  LXeSteppingMessenger(LXeSteppingAction*);
+  ~LXeSteppingMessenger();
 
-  private:
+  void SetNewValue(G4UIcommand*, G4String) override;
 
-    LXeSteppingAction*        fStepping;
-    G4UIcmdWithABool*  fOneStepPrimariesCmd;
- 
+ private:
+  LXeSteppingAction* fStepping;
+  G4UIcmdWithABool* fOneStepPrimariesCmd;
 };
 
 #endif

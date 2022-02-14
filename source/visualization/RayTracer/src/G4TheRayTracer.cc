@@ -54,6 +54,9 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4VVisManager.hh"
 
+G4VFigureFileMaker * G4TheRayTracer::theFigMaker = 0;
+G4VRTScanner * G4TheRayTracer::theScanner = 0;
+
 G4TheRayTracer::G4TheRayTracer(G4VFigureFileMaker* figMaker,
 			       G4VRTScanner* scanner)
 {

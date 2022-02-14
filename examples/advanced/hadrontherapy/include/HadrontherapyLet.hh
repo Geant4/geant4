@@ -36,7 +36,6 @@
 #include <vector>
 #include <string>
 
-
 #include "HadrontherapyMatrix.hh"
 struct ionLet
 {

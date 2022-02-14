@@ -6,7 +6,7 @@
 # Geant4 libraries and tests,
 #
 # In addition to the core compiler/linker flags (configured in the
-# Geant4MakeRules_<LANG>.cmake files) for Geant4, the build may require
+# G4MakeRules_<LANG>.cmake files) for Geant4, the build may require
 # further configuration. This module performs this task whicj includes:
 #
 #  1) Extra build modes for developers
@@ -117,6 +117,7 @@ mark_as_advanced(CMAKE_CXX_FLAGS_MAINTAINER)
 #
 if(NOT CMAKE_CONFIGURATION_TYPES)
   # Single mode build tools like Make, Ninja,
+  set(__g4buildmodes "" Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo MinSizeRel Maintainer)
   if(NOT CMAKE_BUILD_TYPE)
     # Default to a Release build if nothing else...
     set(CMAKE_BUILD_TYPE Release
@@ -130,6 +131,7 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
       FORCE
       )
   endif()
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${__g4buildmodes})
 else()
   # Multimode tools like VS, Xcode
   list(APPEND CMAKE_CONFIGURATION_TYPES Debug_FPE)
@@ -154,74 +156,126 @@ endif() #NOT WIN32
 #
 
 #.rst
-# - ``GEANT4_BUILD_CXXSTD`` (Allowed values: 11, 14, 17, c++11, c++14, c++17)
+# - ``CMAKE_CXX_STANDARD`` (Allowed values: 17, 20, 23)
+# - ``GEANT4_BUILD_CXXSTD`` (DEPRECATED)
 #
 #   - Choose C++ Standard to build against from supported list.
-#   - Note that only C++17 is supported on Windows with MSVC
-#
-set(__g4_default_cxxstd 11 14 17 c++11 c++14 c++17)
-if(MSVC)
-  set(__g4_default_cxxstd 17 c++17)
+#   - C++23 awareness is only available from CMake 3.20 onwards
+set(__g4_default_cxxstd 17 20)
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.20)
+  list(APPEND __g4_default_cxxstd 23)
 endif()
 
-enum_option(GEANT4_BUILD_CXXSTD
+if(GEANT4_BUILD_CXXSTD)
+  message(WARNING
+    "The GEANT4_BUILD_CXXSTD argument is deprecated.\n"
+    "Please use CMAKE_CXX_STANDARD to set the required C++ Standard. "
+    "The value supplied will be used to set CMAKE_CXX_STANDARD, but this behaviour will "
+    "be removed in future releases.")
+  set(CMAKE_CXX_STANDARD ${GEANT4_BUILD_CXXSTD})
+endif()
+
+enum_option(CMAKE_CXX_STANDARD
   DOC "C++ Standard to compile against"
   VALUES ${__g4_default_cxxstd}
   CASE_INSENSITIVE
   )
 
-string(REGEX REPLACE "^c\\+\\+" "" GEANT4_BUILD_CXXSTD "${GEANT4_BUILD_CXXSTD}")
-mark_as_advanced(GEANT4_BUILD_CXXSTD)
-geant4_add_feature(GEANT4_BUILD_CXXSTD "Compiling against C++ Standard '${GEANT4_BUILD_CXXSTD}'")
+mark_as_advanced(CMAKE_CXX_STANDARD)
+geant4_add_feature(CMAKE_CXX_STANDARD "Compiling against C++ Standard '${CMAKE_CXX_STANDARD}'")
 
-
-# Require at least C++11 with no extensions and the following features
+# Setup required CXX variables: must not use vendor extensions, must require standard
+# Set convenience variable for compile features to use
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(GEANT4_TARGET_COMPILE_FEATURES
-  cxx_alias_templates
-  cxx_auto_type
-  cxx_delegating_constructors
-  cxx_enum_forward_declarations
-  cxx_explicit_conversions
-  cxx_final
-  cxx_lambdas
-  cxx_nullptr
-  cxx_override
-  cxx_range_for
-  cxx_strong_enums
-  cxx_uniform_initialization
-  # Features that MSVC 18.0 cannot support but in list of Geant4 coding
-  # guidelines - to be required once support for that compiler is dropped.
-  # Version 10.2 is coded without these being required.
-  #cxx_deleted_functions
-  #cxx_generalized_initializers
-  #cxx_constexpr
-  #cxx_inheriting_constructors
-  )
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(GEANT4_TARGET_COMPILE_FEATURES cxx_std_${CMAKE_CXX_STANDARD})
 
-# If a standard higher than 11 has been selected, check that compiler has
-# at least one feature from that standard and append these to the required
-# feature list
-if(GEANT4_BUILD_CXXSTD GREATER 11)
-  if(CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES)
-    list(APPEND GEANT4_TARGET_COMPILE_FEATURES ${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES})
-  else()
-    message(FATAL_ERROR "Geant4 requested to be compiled against C++ standard '${GEANT4_BUILD_CXXSTD}'\nbut detected compiler '${CMAKE_CXX_COMPILER_ID}', version '${CMAKE_CXX_COMPILER_VERSION}'\ndoes not support, or CMake (${CMAKE_VERSION}) is not aware of, any features of that standard.")
-  endif()
+# Emit early fatal error if we don't have a record of the requested standard
+# in CMake's known features. CMake *will* check this for us as well, but doing
+# the check here only emits one error. We can also give a better hint on the
+# cause/resolution
+if(NOT ("${CMAKE_CXX_COMPILE_FEATURES}" MATCHES "cxx_std_${CMAKE_CXX_STANDARD}"))
+  message(FATAL_ERROR
+    "Geant4 requested compilation using C++ standard '${CMAKE_CXX_STANDARD}' with compiler\n"
+    "'${CMAKE_CXX_COMPILER_ID}', version '${CMAKE_CXX_COMPILER_VERSION}'\n"
+    "but CMake ${CMAKE_VERSION} is not aware of any support for that standard by this compiler. You may need a newer CMake and/or compiler.\n")
 endif()
 
-# - Check for Standard Library Implementation Features
-# Smart pointers are a library implementation feature
-# Hashed containers are a library implementation feature
-# Random numbers are a library implementation feature?
-# An example of where a workaround is needed
-# Rest of concurrency a library implementation feature
+# - Check for Language/Standard Library Implementation Features
+#
+# - A very dumb wrapper round try_compile to give simple reporting
+function(check_cxx_feature _flag _bindir _src)
+  try_compile(${_flag} ${_bindir} ${_src} ${ARGN})
+  # Can be simplified after 3.17 with CHECK_PASS/FAIL
+  set(__preamble "Checking C++ feature ${_flag} -")
+  if(${_flag})
+    message(STATUS "${__preamble} Success")
+  else()
+    message(STATUS "${__preamble} Failed")
+  endif()
+endfunction()
+
+# - Filesystem may be experimental/filesystem, and in stdc++fs (GCC/libstdc++), c++fs (Clang/libc++)
+#   G4global will provide this as a PUBLIC dependency, if required
+#   - native stdlib (nothing needed)
+#   - GNU: stdc++fs
+#   - Clang: c++fs
+check_cxx_feature(CXXSTDLIB_FILESYSTEM_NATIVE
+  ${PROJECT_BINARY_DIR}/cxx_filesystem/native
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/check_cxx_filesystem.cc)
+
+if(NOT CXXSTDLIB_FILESYSTEM_NATIVE)
+  # GNU libstdc++fs
+  check_cxx_feature(CXXSTDLIB_FILESYSTEM_STDCXXFS
+    ${PROJECT_BINARY_DIR}/cxx_filesystem/stdc++fs
+    ${PROJECT_SOURCE_DIR}/cmake/Modules/check_cxx_filesystem.cc
+    LINK_LIBRARIES stdc++fs)
+  # LLVM libc++fs
+  check_cxx_feature(CXXSTDLIB_FILESYSTEM_CXXFS
+    ${PROJECT_BINARY_DIR}/cxx_filesystem/c++fs
+    ${PROJECT_SOURCE_DIR}/cmake/Modules/check_cxx_filesystem.cc
+    LINK_LIBRARIES c++fs)
+endif()
+# Derive name of library to link to
+# Default is native...
+if(CXXSTDLIB_FILESYSTEM_NATIVE)
+  set(GEANT4_CXX_FILESYSTEM_LIBRARY )
+elseif(CXXSTDLIB_FILESYSTEM_STDCXXFS)
+  set(GEANT4_CXX_FILESYSTEM_LIBRARY "stdc++fs")
+elseif(CXXSTDLIB_FILESYSTEM_CXXFS)
+  set(GEANT4_CXX_FILESYSTEM_LIBRARY "c++fs")
+else()
+  message(FATAL_ERROR "No support for C++ filesystem found for compiler '${CMAKE_CXX_COMPILER_ID}', '${CMAKE_CXX_COMPILER_VERSION}'")
+endif()
 
 # Hold any appropriate compile flag(s) in variable for later export to
-# config files. Needed to support clients using late CMake 2.8 where compile features
-# are not available.
-set(GEANT4_CXXSTD_FLAGS "${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_STANDARD_COMPILE_OPTION}")
+# non-cmake config files
+set(GEANT4_CXXSTD_FLAGS "${CMAKE_CXX${CMAKE_CXX_STANDARD}_STANDARD_COMPILE_OPTION}")
 
+#.rst:
+# - ``GEANT4_BUILD_SANITIZER`` (Allowed values: none address thread undefined)
+#
+#   - Build libraries with instrumentation of the given sanitizer
+#   - Only for GNU/Clang at the moment
+#   - VS 2019 16.9 supports asan: https://devblogs.microsoft.com/cppblog/address-sanitizer-for-msvc-now-generally-available/)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|.*Clang")
+  enum_option(GEANT4_BUILD_SANITIZER
+    DOC "Build libraries with sanitizer instrumentation"
+    VALUES none address thread undefined
+    CASE_INSENSITIVE)
+
+  mark_as_advanced(GEANT4_BUILD_SANITIZER)
+
+  if(NOT (GEANT4_BUILD_SANITIZER STREQUAL "none"))
+    # Add flags - longer term, make compile/link options
+    # frame pointer flag to get more meaningful stack traces
+    # May need others for better/reliable output
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=${GEANT4_BUILD_SANITIZER}")
+
+    geant4_add_feature(GEANT4_BUILD_SANITIZER "Compiling/linking with sanitizer '${GEANT4_BUILD_SANITIZER}'")
+  endif()
+endif()
 #-----------------------------------------------------------------------
 # Multithreading
 #-----------------------------------------------------------------------
@@ -231,7 +285,7 @@ set(GEANT4_CXXSTD_FLAGS "${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_STANDARD_COMPILE_OPTI
 #   If set to ``ON``, compile Geant4 with support for multithreading.
 #   On Win32, this option requires use of static libraries only
 #
-option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" OFF)
+option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" ON)
 geant4_add_feature(GEANT4_BUILD_MULTITHREADED "Build multithread enabled libraries")
 
 #.rst:
@@ -273,10 +327,21 @@ if(GEANT4_BUILD_MULTITHREADED)
     set(GEANT4_MULTITHREADED_CXX_FLAGS "${GEANT4_MULTITHREADED_CXX_FLAGS} ${${GEANT4_BUILD_TLS_MODEL}_TLSMODEL_FLAGS}")
   endif()
 
-  # Set Defs/Compiler Flags
-  # TODO: Migrate def to header
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GEANT4_MULTITHREADED_CXX_FLAGS}")
 endif()
+
+#-----------------------------------------------------------------------
+# Physics
+#-----------------------------------------------------------------------
+#.rst:
+# - ``GEANT4_BUILD_PHP_AS_HP`` (Default: OFF)
+#
+#   - Build ParticleHP as HP.
+#
+set(_default_build_php_as_hp OFF)
+option(GEANT4_BUILD_PHP_AS_HP "Build ParticleHP as HP" ${_default_build_php_as_hp})
+mark_as_advanced(GEANT4_BUILD_PHP_AS_HP)
+geant4_add_feature(GEANT4_BUILD_PHP_AS_HP "Building ParticleHP as HP")
 
 #-----------------------------------------------------------------------
 # Miscellaneous
@@ -304,6 +369,20 @@ option(GEANT4_BUILD_VERBOSE_CODE
   "Enable verbose output from Geant4 code. Switch off for better performance at the cost of fewer informational messages or warnings"
   ON)
 mark_as_advanced(GEANT4_BUILD_VERBOSE_CODE)
+
+#.rst:
+# - ``GEANT4_BUILD_BUILTIN_BACKTRACE`` (Unix only, Default: OFF)
+#
+#   - Setting to ``ON`` will build in automatic signal handling for ``G4RunManager``
+#     through ``G4Backtrace``. Applications requiring/implenting their own signal
+#     handling should not enable this option.
+#
+if(UNIX)
+  option(GEANT4_BUILD_BUILTIN_BACKTRACE
+    "Enable automatic G4Backtrace signal handling in G4RunManager. Switch off for applications implementing their own signal handling"
+    ON)
+  mark_as_advanced(GEANT4_BUILD_BUILTIN_BACKTRACE)
+endif()
 
 #.rst:
 # - ``GEANT4_BUILD_MSVC_MP`` (Windows only, Default: OFF)
@@ -424,5 +503,3 @@ foreach(_conftype ${CMAKE_CONFIGURATION_TYPES})
     "${BASE_OUTPUT_DIRECTORY}/${_conftype}/${CMAKE_INSTALL_LIBDIR}"
     )
 endforeach()
-
-

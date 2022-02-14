@@ -28,68 +28,80 @@
 /// \brief Implementation of the WLSRunAction class
 //
 //
+
 #include "WLSRunAction.hh"
-#include "WLSRunActionMessenger.hh"
-
-#include "G4Run.hh"
-#include "G4RunManager.hh"
-
-#include "Randomize.hh"
 
 #include "WLSDetectorConstruction.hh"
+#include "WLSRun.hh"
 #include "WLSSteppingAction.hh"
 
-#include <ctime>
+#include "G4AnalysisManager.hh"
+#include "G4Run.hh"
+#include "G4RunManager.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSRunAction::WLSRunAction()
-  : fSaveRndm(0), fAutoSeed(false)
+  : fRun(nullptr)
 {
-  fRunMessenger = new WLSRunActionMessenger(this);
+  auto analysisManager = G4AnalysisManager::Instance();
+
+  analysisManager->SetDefaultFileType("root");
+  analysisManager->SetVerboseLevel(1);
+  G4cout << "Using " << analysisManager->GetType() << G4endl;
+
+  analysisManager->CreateH1("Energy", "Energy of optical photon", 100,
+                            2.*CLHEP::eV, 3.2*CLHEP::eV);
+  analysisManager->CreateH1("Time", "Arrival time", 100, 0., 100.*CLHEP::ns);
+  analysisManager->CreateH1("Number of photons", "Number of photons", 100, 0., 100.);
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSRunAction::~WLSRunAction()
+WLSRunAction::~WLSRunAction() {}
+
+G4Run* WLSRunAction::GenerateRun()
 {
-  delete fRunMessenger;
+  fRun = new WLSRun();
+  return fRun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void WLSRunAction::BeginOfRunAction(const G4Run* aRun)
+void WLSRunAction::BeginOfRunAction(const G4Run*)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  G4AnalysisManager::Instance()->OpenFile("wls");
+}
 
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  if (fAutoSeed) {
-     // automatic (time-based) random seeds for each run
-     G4cout << "*******************" << G4endl;
-     G4cout << "*** AUTOSEED ON ***" << G4endl;
-     G4cout << "*******************" << G4endl;
-     long seeds[2];
-     time_t systime = time(NULL);
-     seeds[0] = (long) systime;
-     seeds[1] = (long) (systime*G4UniformRand());
-     G4Random::setTheSeeds(seeds);
-     G4Random::showEngineStatus();
-  } else {
-     G4Random::showEngineStatus();
+void WLSRunAction::EndOfRunAction(const G4Run*)
+{
+  auto analysisManager = G4AnalysisManager::Instance();
+  if (analysisManager->GetH1(0)) {
+    G4cout << G4endl << " ----> print histograms statistics ";
+    if(isMaster)
+		{
+      G4cout << "for the entire run " << G4endl << G4endl;
+    }
+    else {
+      G4cout << "for the local thread " << G4endl << G4endl;
+    }
+
+    G4cout << " Mean number of photons detected/event: "
+       << analysisManager->GetH1(2)->mean()
+       << " rms = "
+       << analysisManager->GetH1(2)->rms() << G4endl;
+
   }
 
-  if (fSaveRndm > 0) G4Random::saveEngineStatus("BeginOfRun.rndm");
+  analysisManager->Write();
+  analysisManager->CloseFile();
 
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void WLSRunAction::EndOfRunAction(const G4Run* )
-{
-  if (fSaveRndm == 1)
-  {
-     G4Random::showEngineStatus();
-     G4Random::saveEngineStatus("endOfRun.rndm");
-  }
+  if(isMaster)
+    fRun->EndOfRun();
 }

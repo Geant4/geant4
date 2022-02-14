@@ -33,7 +33,7 @@
 //
 #include "G4ParticleHPJENDLHEData.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4ElementTable.hh"
 #include "G4ParticleHPData.hh"
 #include "G4Pow.hh"
@@ -318,7 +318,7 @@ G4PhysicsVector* G4ParticleHPJENDLHEData::readAFile ( std::fstream* file )
       v_xs.push_back( xs*barn );
    }
 
-   G4LPhysicsFreeVector* aPhysVec = new G4LPhysicsFreeVector( static_cast< size_t >( len ) , v_e.front() , v_e.back() );
+   G4PhysicsFreeVector* aPhysVec = new G4PhysicsFreeVector( static_cast< size_t >( len ) , v_e.front() , v_e.back() );
 
    for ( G4int i = 0 ; i < len ; i++ )
    {

@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ----------------------------------------------------------------------
-//
-// G4TwoVector class, typedef to CLHEP Hep2Vector
-//
-// ----------------------------------------------------------------------
+// G4TwoVector, a typedef to CLHEP Hep2Vector
 
+// Author: G.Cosmo (CERN), 1997
+// --------------------------------------------------------------------
 #ifndef G4TWOVECTOR_HH
-#define G4TWOVECTOR_HH
+#define G4TWOVECTOR_HH 1
 
 #include "globals.hh"
 #include <CLHEP/Vector/TwoVector.h>
 
-typedef CLHEP::Hep2Vector G4TwoVector;
+using G4TwoVector = CLHEP::Hep2Vector;
 
 #endif

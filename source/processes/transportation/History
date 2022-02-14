@@ -16,13 +16,44 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 23rd 2021, Alberto Ribon transport-V10-07-03
+----------------------------
+- Added PARALLEL_WORLD_PROCESS to G4TransportationProcessType
+  (to avoid hardwired value "491" in the constructor of class
+   G4ParallelWorldProcess).
+
+Apr 16th 2021, Ben Morgan transport-V10-07-02
+-------------------------
+- Migrate build to modular CMake API
+
+Feb 24th 2021, G. Cosmo transport-V10-07-01
+-----------------------
+- Enable setting of smooth curved trajectories to particle-change in
+  G4CoupledTransportation::AlongStepDoIt(), which was commented out by
+  mistake. Based on discussion in Geant4 Forum thread #4271.
+
+Dec 16th 2020, G. Amadio transport-V10-07-00
+------------------------
+- Limit reporting of number of calls to G4Transportation::AlongStepDoIt()
+  to when either G4VERBOSE or G4DEBUG_TRANSPORT is defined, which allows to
+  avoid using a thread local variable for a slight performance gain.
+
+Oct 26th 2020, G. Amadio & J.Apostolakis transport-V10-06-00
+----------------------------------------
+- A substantial reorganisation of G4Transportation::AlongStepGPIL
+  to use values already in cache, reduce the number of branches, and
+  use extra local variables for track properties to avoid indirections.
+  The method is one of the heaviest in many types of simulation workloads.
+  Profiling identified a persistent reduction in misses of instruction-TLB
+  loads after these changes.
+
 Nov  1st 2019, J.Apostolakis transport-V10-05-02
 ----------------------------
 - Optimisation in G4Transportation and G4CoupledTransportation:
-   Avoid calling user field manager's ConfigureForTrack method,
-   except if particle is charged, or forces from magnetic moment
-   or gravity are enabled.
-   
+  Avoid calling user field manager's ConfigureForTrack method,
+  except if particle is charged, or forces from magnetic moment
+  or gravity are enabled.
+
   * Introduces new common 'flag' in G4(Coupled)Transportation
       to enable gravity fields.
     The following static method must be called if the application uses
@@ -80,9 +111,9 @@ Nov 8th  2018, J.Apostolakis transport-V10-04-11, 10
 Nov 8th  2018, J.Apostolakis transport-V10-04-09
 ----------------------------
 - G4Transportation & G4CoupledTransportation:
-  Summary: 
+  Summary:
      Restored old default energy thresholds for loopers - but only stable particles killed.
-  Full information: 
+  Full information:
   * Added method SetHighLooperThresholds() to restore old default
     parameters for killing looping particles:
      - warning energy to 100 MeV ( particles below this killed silently )
@@ -97,7 +128,7 @@ Nov 7th  2018, J.Apostolakis transport-V10-04-08, 07
 - G4Transportation & G4CoupledTransportation:
   * Adjusted killing of looping particles, to apply only to stable particles.
   * Unstable particles will be propagated indefinitely.
-  * Added Printing the maximum energy and sum of energies of particles 'saved' 
+  * Added Printing the maximum energy and sum of energies of particles 'saved'
     in G4(Coupled)Transportation destructor.
 
 July 9th  2018, G.Cosmo transport-V10-04-06
@@ -117,7 +148,7 @@ June 14th  2018, J.Apostolakis transport-V10-04-03
 ------------------------------
 - New class G4TransportationLogger to consolidate reports from the
   Transportation processes. First step: it now issues the warning Exception
-  for looping tracks. Added information on material density, step length.    
+  for looping tracks. Added information on material density, step length.
 - G4Transportation and G4CoupledTransportation: changed default threshold from
   0 to 1 keV for warning when abandoning looping tracks.
   Tracks with less energy do not get reported.
@@ -137,7 +168,7 @@ June  8th  2018, G.Cosmo transport-V10-04-01
 June  7th 2018, J.Apostolakis transport-V10-04-00
 -----------------------------
 - G4Transportation & G4CoupledTransportation: changed default values of two
-  thresholds related to the killing of looping particles: 
+  thresholds related to the killing of looping particles:
      'Important' Energy: particles with MORE energy are killed ONLY after
                          multiple steps (fThresholdTrials) marked as 'looping'.
      'Warning'   Energy: particles with LESS energy are killed SILENTLY
@@ -146,7 +177,7 @@ June  7th 2018, J.Apostolakis transport-V10-04-00
   New values:  Warning_Energy= 0. Important_Energy= 1.0 * MeV
   NOTES:
    1) This can happen if a track's propagation in field requires a large
-      number of integration steps.  ( Default number is 1000, and it is 
+      number of integration steps.  ( Default number is 1000, and it is
       accessed by G4PropagatorInField's  Get/Set MaxLoopCount() methods.)
    2) Usually the material is vacuum or very low density material.
       And particles have either low momentum or momentum with a very small
@@ -183,20 +214,20 @@ August 28th 2017, G.Cosmo        transport-V10-03-01
 August 25th 2017, J.Apostolakis transport-V10-03-00
 --------------------------------
 - G4CoupledTransportation & G4Transportation: obtain equation of motion
-    using dedicated method of ProgatorInField. 
+    using dedicated method of ProgatorInField.
     Smaller code, and future proof.
 
 February 12th 2015, J.Apostolakis transport-V10-01-03
 --------------------------------
 - G4CoupledTransportation:: Made SignifyStepInAnyVolume 'flag' static.
     Stoped using IsLastStepInVolume for step limitation.
-    
+
 January 20th 2015, J.Apostolakis transport-V10-01-02
 --------------------------------
 - G4CoupledTransportation: Added ability to identify first step in a volume in either
     the mass geometry or in any geometry.  Also added flag for last step in a volume
     in the mass geometry.
-    Extends fix of tag transport-V10-01-00. 
+    Extends fix of tag transport-V10-01-00.
 
   Since it is not clear whether user wants/needs to identify the first/last in
     any geometry or just in the mass geometry, allowing this to be a choice:
@@ -204,7 +235,7 @@ January 20th 2015, J.Apostolakis transport-V10-01-02
   or any geometry (currently the default - what was the case for last step before).
   Also depends in geomnav-V10-01-02 and track-V10-01-00.
   Addresses Bugzilla issue #1032.
-     
+
 January 10th 2014, M.Kelsey transport-V10-01-01
 ---------------------------
 - G4Transportation.cc, G4CoupledTransportation: In
@@ -214,17 +245,17 @@ January 10th 2014, M.Kelsey transport-V10-01-01
   from "PDG" mass.
 
 December 17th 2014, J.Apostolakis transport-V10-01-00
---------------------------------- 
+---------------------------------
 - G4Transportation: Added ability to identify last step in volume for the case of
-   propagation in field.       
+   propagation in field.
    Requires use of tags in navigation (geomnav-V10-01-02) and track (track-V10-01-00) .
    Addresses Bugzilla issue #1032.
-    
+
 November 21st 2014, J.Apostolakis transport-V10-00-06
 --------------------------------- (corrected version of transport-V10-00-04)
 - Added initialization of G4CoupledTransportation data members (fixes Coverity issue 15280)
   Renamed data member, to make its name canonical.
-     
+
 October 15th 2014, M.Asai transport-V10-00-05
 -------------------------
 - G4CoupledTransportation is reverted to transport-V10-00-03.
@@ -238,15 +269,15 @@ May   27st 2014, V.Ivanchenko transport-V10-00-03
 
 May   21st 2014, J.Apostolakis transport-V10-00-02
 ------------------------------
-- Revised  AlongStepDoIt methods of G4Transportation and 
+- Revised  AlongStepDoIt methods of G4Transportation and
    G4CoupledTransportation:
-   * Adapted to revised signature for G4FieldTrack constructors, 
+   * Adapted to revised signature for G4FieldTrack constructors,
      which now take PDG spin.
    * Changed to use different constructor for G4FieldTrack (no Velocity)
    * Adapted to revised signature of G4ChargeState constructor (PDG spin is
      now 3rd argument and mandatory. )
 
-NOTE: Requires tag field-V10-00-03 of geometry/magneticfield 
+NOTE: Requires tag field-V10-00-03 of geometry/magneticfield
 
 
 March 14th 2014, J.Apostolakis transport-V10-00-01
@@ -262,7 +293,7 @@ March 14th 2014, J.Apostolakis transport-V10-00-01
 
 October 18th 2013, J.Apostolakis transport-V09-06-07
 --------------------------------
-- Initialize missing data members in G4CoupledTransportation constructor 
+- Initialize missing data members in G4CoupledTransportation constructor
   Addresses issue identified by Coverity.
 
 May 13th, 2013, G.Cosmo          transport-V09-06-06
@@ -299,7 +330,7 @@ Feb. 26th, 2013, G.Cosmo transport-V09-06-01
 
 Feb. 6th, 2013, G.Cosmo transport-V09-06-00
 -----------------------
-- G4Transportation.cc, G4CoupledTransportation.cc: 
+- G4Transportation.cc, G4CoupledTransportation.cc:
     Corrected condition for warning message in AlongStepDoIt().
     Code cleanup on MT changes.
 
@@ -310,8 +341,8 @@ Jan. 15th, 2013, A.Dotti
 
 Jul. 12th, 2011, J.Apostolakis transport-V09-05-02
 ------------------------------
-- G4Transportation.cc: 
-    Corrected issues with initilisation of data members reported by Coverity.
+- G4Transportation.cc:
+    Corrected issues with initialisation of data members reported by Coverity.
     Renamed data member endpointdistance to fEndPointDistance (to conform).
 
 Jul. 5th, 2012 Gabriele Cosmo transport-V09-05-01
@@ -327,8 +358,8 @@ Jun. 7th, 2012 Gabriele Cosmo transport-V09-05-00
 Nov. 4th, 2011, J.Apostolakis transport-V09-04-13
 -----------------------------
 - Turned off tracking for magnetic moment - by default.
-  It can be enabled in 
-    G4Transportation, G4CoupledTransportation 
+  It can be enabled in
+    G4Transportation, G4CoupledTransportation
   by using the new method EnableUseMagneticMoment().
   Should ensure particles with a moment are not affected
   unless user needs this.
@@ -337,7 +368,7 @@ Nov. 4th, 2011, J.Apostolakis transport-V09-04-12
 -----------------------------
 * Reduce overhead of the addition of Gravity
 - G4Transportation: Revised condition for gravity field (version 1).
-  G4CoupledTransportation: Revised the field-detection condition, 
+  G4CoupledTransportation: Revised the field-detection condition,
    with improved logic to cope with ConfigureForTrack (for any field) (v2).
   Deleted dependence on G4UniformGravityField in both.
   Tag coworks with field-V09-04-05
@@ -363,11 +394,11 @@ Aug. 8th, 2011, H.Kurashige  transport-V09-04-08
 ---------------------------
 - Modify calculation of deltaTime for optical photon in Transportation (and CoupledTransportation)
   Use the updated velocity obtained from G4Track::CalculateVelocityForOpticalPhoton
-  instead of the initial velocity of the step.  
+  instead of the initial velocity of the step.
   (see problem #1239)
-  [ This is because the velocity at the initial point can refer to 
-  a previous volume.  If the PreStepPoint was on a surface, we 
-  the previous step was in another volume, which shared this 
+  [ This is because the velocity at the initial point can refer to
+  a previous volume.  If the PreStepPoint was on a surface, we
+  the previous step was in another volume, which shared this
   PreStepPoint --> and its velocity would be wrong. ]
 
 July 6th, 2011, H.Kurashige  transport-V09-04-07
@@ -375,11 +406,11 @@ July 6th, 2011, H.Kurashige  transport-V09-04-07
 - Modify G4Transportation (and CoupledTtansportation)
   to propose the final local time rather than the global time
   so that local time can be updated properly.
-  (see problem #1224)  
+  (see problem #1224)
   [ This adapts to the recent change in Tracking, which made
-  the change of LocalTime trigger the change of Global Time 
-  (instead of vice-versa). ] 
- 
+  the change of LocalTime trigger the change of Global Time
+  (instead of vice-versa). ]
+
 June 10th, 2011, J.Apostolakis  transport-V09-04-06
 ------------------------------
 - Fix for invalid safety passed to SafetyHelper.
@@ -390,7 +421,7 @@ June 10th, 2011, J.Apostolakis  transport-V09-04-05
   Use only initial velocity to update time. An estimate of velocity
   at endpoint is not yet available. (finalVelocity still= initial)
     ==> It will be updated later in the tracking sequence, when
-        energy loss is applied, and it will be available to 
+        energy loss is applied, and it will be available to
 	Transportation only in the PostStepDoIt()
 
 May 26th, 2011, H.Kurashige  transport-V09-04-04
@@ -409,8 +440,8 @@ January 21th, 2011, V.Ivanchenko  transport-V09-04-02
 
 January 21th, 2011, V.Ivanchenko  transport-V09-04-01
 --------------------------------
-- G4UserSpecialCuts: fixed bug in energy tracking cut; changed order 
-  of checks: 1st energy tracking cut, 2nd track length, 3d time cut, 
+- G4UserSpecialCuts: fixed bug in energy tracking cut; changed order
+  of checks: 1st energy tracking cut, 2nd track length, 3d time cut,
   4th range for charged particles with non-zero mass; removed unnecessary
   string comparisons.
 
@@ -476,7 +507,7 @@ November 9th, 2007, J.Apostolakis  transport-V09-00-06
 - G4Transportation:
   o Update the SafetyHelper using the safety calculated by Navigator.
 
-November 27th, 2007, J.Apostolakis  transport-V09-00-05a 
+November 27th, 2007, J.Apostolakis  transport-V09-00-05a
 ----------------------------------
 - G4CoupledTransportation
   o Added updating of particle-looping flag (was commented out.)
@@ -489,33 +520,33 @@ November 8th, 2007, J.Apostolakis  transport-V09-00-05
     * When it is true, the optimisation is 'on' steps shorter than the
       safety will not call G4Navigator - so long as the particle goes straight
       ie it is not charged or there is no field.
-    * Retained the default value as 'off' - as since changed in 
+    * Retained the default value as 'off' - as since changed in
       transport-V09-00-02 following Alex's suggestion.
 
 November 8th, 2007, J.Apostolakis  transport-V09-00-04
 ---------------------------------
 - G4Transportation (AlongStepGPIL):
-  o Moved the call to ConfigureForTrack before the check whether 
-    fieldMgr has 0 field ptr, in order to enable it to be called 
+  o Moved the call to ConfigureForTrack before the check whether
+    fieldMgr has 0 field ptr, in order to enable it to be called
     even if the field manager points to a zero field.
     Needed to enable a user to switch a global field on (off was possible),
-    as a track goes between volume (or regions) of a setup.   
-    [ Response to request of Atlas/ZM. ] 
+    as a track goes between volume (or regions) of a setup.
+    [ Response to request of Atlas/ZM. ]
     Note: this ordering already existed in G4CoupledTransportation.
 
 October 12th, 2007, J.Apostolakis  transport-V09-00-03
 ---------------------------------
 - G4CoupledTransportation:
-  o Improves condition for flag that regulates Relocating when only 
-    any geometry (including a parallel geometry) limits the step.  
+  o Improves condition for flag that regulates Relocating when only
+    any geometry (including a parallel geometry) limits the step.
     New PathFinder method required.
 - Requires and co-works with tag geomnav-V09-00-03
 
 October 4th, 2007, J.Apostolakis  transport-V09-00-02
 --------------------------------
 - G4CoupledTransportation:
-  o First fix for problem in condition for Relocating when only a parallel 
-    geometry limited the step.  
+  o First fix for problem in condition for Relocating when only a parallel
+    geometry limited the step.
   o Change of condition for recalculation safety (from Alex Howard) used,
     as currently it improves stability.
 
@@ -526,11 +557,11 @@ September 25th, 2007, J.Apostolakis  transport-V09-00-01
   step  (ie when a track does less than the safety).
     * Relevant only if there is no field, or the particle is neutral
     * Temporary measure (in current form) to improve comparison
-        old / new Transportation  (single/old vs coupled with pathfinder). 
+        old / new Transportation  (single/old vs coupled with pathfinder).
 
 July 12th, 2007, J.Apostolakis  transport-V09-00-00
 ------------------------------
-- Retagged to enable testing of new developments 
+- Retagged to enable testing of new developments
   (which were not included in release 9.0)
 
 June  6th, 2007, G.Cosmo        transport-V08-03-14
@@ -599,7 +630,7 @@ May 25th, 2007, J.Apostolakis  transport-V08-03-03
 - G4Transportation
   o Fix for case of zero proposed step: missed to set end position. (A.Howard)
 - G4Transportation8
-  o Fixed StartTracking() to reset number of looping steps and 
+  o Fixed StartTracking() to reset number of looping steps and
     to clear propagator state (safety issue in case of overlaps).
 
 May 18th, 2007, J.Apostolakis  transport-V08-03-02
@@ -610,13 +641,13 @@ May 18th, 2007, J.Apostolakis  transport-V08-03-02
 - G4Transportation8:
   o Small cleanup, and hints for saving Safety to helper.
 
-May 13th, 2007, A.Howard       transport-V08-03-01 
+May 13th, 2007, A.Howard       transport-V08-03-01
 ------------------------
 - G4VTrackTerminator:
   o Use call to G4GeometryTolerance instead of kCarTolerance.
   o Requires tag "global-V08-03-00" and related tag set.
 
-May 9th, 2007, J.Apostolakis  transport-V08-03-00 
+May 9th, 2007, J.Apostolakis  transport-V08-03-00
 ----------------------------
 - G4Transportation (hh,icc,cc)
   o Renamed G4CoupledTransportation to G4Transportation
@@ -636,10 +667,10 @@ May 8th, 2007, G.Cosmo  transport-V08-02-03
 
 May 2nd, 2007, J.Apostolakis  transport-V08-02-02
 ----------------------------
-- G4CoupledTransportation: 
+- G4CoupledTransportation:
   o Make treatment of mass and full safety coherent (to-dos remain in
     G4PathFinder).
-  o Added storing of full safety in state; retrieve it after compute step 
+  o Added storing of full safety in state; retrieve it after compute step
     from PathFinder; calculate them same way at start of step.
   o Put back in the code for treating looping particles.
 
@@ -650,10 +681,10 @@ February 15th, 2007, J.Apostolakis  transport-V08-02-01
 February 15th, 2007, J.Apostolakis  transport-V08-02-00
 ----------------------------------
 - G4Transportation: call PropagatorInField to clear state for new track
-   --> addresses reliabilitiy problem seen by Atlas.  This fix is related 
-       to overlaps, clearing the safety value (which is multivalued due 
-       to the overlaps, and thus can become invalid for a new track in 
-       an overlap region.) 
+   --> addresses reliabilitiy problem seen by Atlas.  This fix is related
+       to overlaps, clearing the safety value (which is multivalued due
+       to the overlaps, and thus can become invalid for a new track in
+       an overlap region.)
 
 November 22nd, 2006, J.Apostolakis  transport-V08-01-04
 ---------------------------------
@@ -671,7 +702,7 @@ November 22nd, 2006, J.Apostolakis  transport-V08-01-03
 November 13th, 2006, J.Apostolakis  transport-V08-01-01
 ---------------------------------
 - Updated G4CoupledTransportation to use new signature of
-  G4PathFinder::ComputeStep that added  new argument 
+  G4PathFinder::ComputeStep that added  new argument
   at the end: currentVolume.
 
 June 2nd, 2006, J.Apostolakis  transport-V08-00-02
@@ -771,8 +802,8 @@ Aug. 27th, M.Dressel transport-V05-02-03
 
 Aug. 19th, M.Dressel transport-V05-02-02
 --------------------
-- rename G4ImportancePostStepDoIt to 
-  G4SplittingAndRussianRouletePostStepDoIt since it is also used in 
+- rename G4ImportancePostStepDoIt to
+  G4SplittingAndRussianRouletePostStepDoIt since it is also used in
   weight window biasing
 
 Aug. 19th, M.Dressel transport-V05-02-01
@@ -798,8 +829,8 @@ Jun, 25th, J.Apostolakis
 Jun, 21st, J.Apostolakis  transport-V05-01-06
 ------------------------
 G4Transportation:
-- Added warning when energy changes from propagation in magnetic field 
-  (or other field that conserves energy) due to the inaccuracy of 
+- Added warning when energy changes from propagation in magnetic field
+  (or other field that conserves energy) due to the inaccuracy of
   numerical integration of the equations of motion.
 
 Jun, 21st, J.Apostolakis  transport-V05-01-05
@@ -827,7 +858,7 @@ Jun, 13th, M.Dressel       transport-V05-01-03
 
 Jun, 12th, M.Dressel       transport-V05-01-02
 --------------------
-- Fixed "'this' : used in base member initializer list" in 
+- Fixed "'this' : used in base member initializer list" in
   src\G4MassImportanceProcess.cc, src\G4ParallelImportanceProcess.cc
 
 Jun, 4th, G.Cosmo          transport-V05-01-01
@@ -841,9 +872,9 @@ May, 13th, J.Apostolakis   transport-V05-01-00
   missing functionality for two use cases:
   o a local field when no global field exists  (it was not seen)
   o overriding an existing global field by a 'zero' field
-    by creating a local field manager that has a null G4Field pointer 
+    by creating a local field manager that has a null G4Field pointer
     (a use case which did not exist.)
-  Further work to verify these use cases work is required.  
+  Further work to verify these use cases work is required.
 
 Apr, 7th, V.Ivanchenko     transport-V05-00-04
 -----------------
@@ -870,7 +901,7 @@ Nov, 20th, J. Apostolakis  transport-V04-01-05
 -------------------------
 - Tagged.
    Tag requires:   geomvol-V04-01-06 and tracking-V04-01-10
-      and is dependent also on greps-V04-01-01 and track-V04-01-01. 
+      and is dependent also on greps-V04-01-01 and track-V04-01-01.
 
 Nov, 8th, J.Generowicz
 - Copy auxiliary smooth trajectory point from PIF to ParticleChange
@@ -904,8 +935,8 @@ Oct  10th, 2002 M.Dressel transport-V04-01-01-internal-5
 - changing sampler concept: instead of separat samplers for
   all combinations of importance sampling, scoring, wieght roulette
   for parallel and mass geometry there are two Samplers now
-  for the mass and parallel geometry: G4MassGeometrySampler 
-  and G4ParallelGeometrySampler. 
+  for the mass and parallel geometry: G4MassGeometrySampler
+  and G4ParallelGeometrySampler.
 - Introduction of Configurators to setup the processes.
 
 Sep  18th, 2002 M.Dressel transport-V04-01-01-internal-4
@@ -919,35 +950,35 @@ Sep  2th, 2002 M.dressel  transport-V04-01-01-internal-3
 Aug  29th, 2002 M.Dressel int-1-V04-01-01
 -----------------------------------------
 - adopted to changes in int-2-geombias-V04-01-01:
-     renaming of G4PTouchableKey to G4GeometryCell 
-     changing  G4VIStore and G4IStore 
+     renaming of G4PTouchableKey to G4GeometryCell
+     changing  G4VIStore and G4IStore
      and dependants
 
 Aug  13th, 2002 M.Dressel transport-V04-01-01
 ----------------------------------------------
 - added G4CellStoreScorer,  G4VTrackTerminator and changed the sampler
   classes in order to use the G4VTrackTerminator (if necessary) to
-  kill a track. 
+  kill a track.
 - coworks with geombias-V04-01-01
 
-July 18th, 2002 M.Dressel 
+July 18th, 2002 M.Dressel
 -------------------------
 - bug fix in G4TrackLogger
 
 July 11th, 2002 M.Dressel internal-2-transport-V04-01-01
 --------------------------------------------------------
-- moved the standard scoring classes to run because 
+- moved the standard scoring classes to run because
   they need G4EventManager.
 
 July 10th, 2002 M.Dressel internal-1-transport-V04-01-01
 --------------------------------------------------------
 - add classes for standard scoreing. Remove G4ScorePrinter and G4Scorer.
   G4StandardScorer and G4StandardScoreTable may be used as replacement.
-  The source file G4StandardScorer.cc may be found in 
+  The source file G4StandardScorer.cc may be found in
   extended/examples/B09/src because it needs to acces the
   G4EventManager.
 
-Jun   13, 2002 M.Dressel transport-V04-00-09 
+Jun   13, 2002 M.Dressel transport-V04-00-09
 ---------------------------------------------
 - add classes for creating and printing tallies.
 
@@ -962,21 +993,21 @@ May   31, 2002  M.Dressel transport-V04-00-07
 
 May   31, 2002  M.Dressel transport-V04-00-06
 --------------------------------------------------------
-- renaming of the Manager classes to Sampler classes 
+- renaming of the Manager classes to Sampler classes
 - substitution of G4ParallelManager inside the Sampler classes
 
-May   30, 2002  M.Dressel 
+May   30, 2002  M.Dressel
 --------------------------------------------------------
 - chamged G4VImportanceScoreConstructor to G4VSampler
 
-May   30, 2002  M.Dressel 
+May   30, 2002  M.Dressel
 --------------------------------------------------------
-- all the ImportanceScoreManagers derive form 
-  G4VImportanceScoreConstructor 
+- all the ImportanceScoreManagers derive form
+  G4VImportanceScoreConstructor
 
 May   30, 2002  M.Dressel internal-3-transport-V04-00-05
 --------------------------------------------------------
-- changes in Importance Manager constructors, G4ImportanceAlgorithm as 
+- changes in Importance Manager constructors, G4ImportanceAlgorithm as
   pointer
 
 May   29, 2002  M.Dressel internal-2-transport-V04-00-05
@@ -991,10 +1022,10 @@ May   24, 2002  M.Dressel internal-1-transport-V04-00-05
 - Add classes for wieght window biasing.
 
 
-May   02, 2002  M.Dressel 
+May   02, 2002  M.Dressel
 -------------------------
-- Change in G4ProcessPlacer: set process vector via process manager not 
-  directly. 
+- Change in G4ProcessPlacer: set process vector via process manager not
+  directly.
 - Change in G4ParallelTranport: use StartTracking to signal inital step.
   This should help to locate "suspended" tracks.
 
@@ -1040,16 +1071,16 @@ Dec   8, 2001 J.Apostolakis - transport-V03-02-07
 - Activated the killing of 'looping' particles -- to be used also to
   abandon (kill) particles that are stuck (eg at boundaries).
   [ Fix for problems of stuck particles reported by CMS (P.Arce),
-    and Atlas (A.Del'Acqua, A.Rimoldi) ] 
+    and Atlas (A.Del'Acqua, A.Rimoldi) ]
 
 Nov  28, 2001 J.Apostolakis - transport-V03-02-06
 ---------------------------
-- Fix for the new updating of the time for fields -- correcting previous 
-  tag.  By keeping account whether the field changes the energy (and 
+- Fix for the new updating of the time for fields -- correcting previous
+  tag.  By keeping account whether the field changes the energy (and
   therefore the velocity) in the field manager.
 
   Requires and co-works with
-   - "field-V03-02-07" 
+   - "field-V03-02-07"
    - "geomvol-V03-02-02"
   in order to compile (let alone have any effect.)
 
@@ -1097,16 +1128,16 @@ Jul  19, 2001   G. Cosmo  transport-V03-02-00
 
 Apr  11, 2001   J. Apostolakis   transport-V03-01-02
 ------------------------------
-- Corrected the last update of G4Transportation.cc, which overwrote the 
+- Corrected the last update of G4Transportation.cc, which overwrote the
   value of the spin in the cases where a particle was not charged (eg photon)
-  or a charged particle was not in a field. 
+  or a charged particle was not in a field.
 
 Apr  11, 2001   P. Gumplinger   transport-V03-01-01
 -----------------------------
 - Updated G4Transportation.cc to make spin tracking work correctly:
   o Replaced the line originally commented out:
       // fTransportEndPolarization= aFieldTrack.GetSpin() ; // Not yet possible
-    with: 
+    with:
       fTransportEndSpin = aFieldTrack.GetSpin();
   o Added to the AlongStepDoIt() the following call:
       fParticleChange.SetPolarizationChange(fTransportEndSpin);
@@ -1114,12 +1145,12 @@ Apr  11, 2001   P. Gumplinger   transport-V03-01-01
 Mar  19, 2001   J. Apostolakis  transport-V03-00-01
 ------------------------------
 - G4Transportation modified to use new FieldTrack, and get Kinetic
-  Energy from it. 
+  Energy from it.
   This new FieldTrack together with changes in associated Equation of Motion
   classes implement the momentum vector as independent variable in place of
-  the velocity. 
-  So this tag requires 
-  - new geometry/magneticfield tag "field-V03-00-01",  and 
+  the velocity.
+  So this tag requires
+  - new geometry/magneticfield tag "field-V03-00-01",  and
   - new geometry/volumes  tag "geomvol-V03-00-03" for new
     G4PropagatorInField ().
 
@@ -1128,8 +1159,8 @@ Feb  27, 2001   J. Apostolakis  (transport-V03-00-00)
 - G4Transportation.cc:
   *   Modified calculation of energy at the end of field step
        to make it more accurate at low velocities,
-       (while remaining correct at high gammas). 
-  This improves the energy determination. 
+       (while remaining correct at high gammas).
+  This improves the energy determination.
   Together with electromagnetic/standard tag  "stand-V03-00-03"
   this addresses the main problem in propagating in an electric field
   (Problem report # 108 )
@@ -1172,7 +1203,7 @@ Dec   4, 1998   J. Apostolakis  (transport-00-04-01)
 - The Velocity Vector for Transport in a magnetic field is now set correctly.
   (previously the scalar velocity was automatically promoted to a 3-vector)
 
-Nov  25, 1998  J. Apostolakis   
+Nov  25, 1998  J. Apostolakis
 -----------------------------
 - Added the direction to  LocateGlobalPointAndUpdateTouchable.
 
@@ -1189,7 +1220,7 @@ Nov  19, 1998   J. Apostolakis  (transport-00-03-04)
 
 Nov  11, 1998   J. Apostolakis  (transport-00-03-03)
 ------------------------------
-- Changes to accomodate new interface of Field: 
+- Changes to accomodate new interface of Field:
   G4PropagatorInField and G4FieldTrack.
 
 Oct  30, 1998  J. Apostolakis   (transport-00-03-02)
@@ -1202,7 +1233,7 @@ Sep  16, 1998  J. Apostolakis   (transport-00-03-01)
 - Checks whether the particle is out of the world volume,
   if so it has exited and must be killed.
 
-Aug  28, 1998  J. Apostolakis 
+Aug  28, 1998  J. Apostolakis
 -----------------------------
 - The PostStepGetPhysicalInteractionLength has fixed (to return kInf)
   The boolean flags for touchables are now initialised. & Other small fixes ?
@@ -1211,10 +1242,10 @@ Aug  28, 1998  J. Apostolakis
 June 08, 1998   J. Apostolakis  (trans-06-04)
 ------------------------------
 - Corrected Safety computation for the case of the field (adding endpoint
-  distance instead of curve length.) 
+  distance instead of curve length.)
 - Added PostStepDoIt method that tries to relocate the particle using
   G4ParticleChangeForTransport
-- Transportation is no longer a G4ContinuousProcess. 
+- Transportation is no longer a G4ContinuousProcess.
 
 June 08, 1998   J. Apostolakis  (trans-06-03)
 ------------------------------
@@ -1243,9 +1274,9 @@ April 17, 1998  M. Maire      [recorded by John Apostolakis]
 
 April 15, 1998  H. Kurasige   [recorded by John Apostolakis]
 ---------------------------
-- The transportation does the absolute minimum required to conform to 
-  the new scheme for ParticleChange: G4VParticleChange is used in signature. 
-  [ But default G4ParticleChange is still used ]. 
+- The transportation does the absolute minimum required to conform to
+  the new scheme for ParticleChange: G4VParticleChange is used in signature.
+  [ But default G4ParticleChange is still used ].
 
 April 14, 1998  John Apostolakis
 --------------------------------

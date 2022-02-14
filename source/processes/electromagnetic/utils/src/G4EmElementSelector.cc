@@ -65,9 +65,8 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
   theElementVector = material->GetElementVector();
   if(nElmMinusOne > 0) {
     xSections.reserve(n);
-    G4PhysicsLogVector* v0 = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins);
+    G4PhysicsLogVector* v0 = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins,false);
     xSections.push_back(v0);
-    v0->SetSpline(false);
     for(G4int i=1; i<n; ++i) {
       G4PhysicsLogVector* v = new G4PhysicsLogVector(*v0);
       xSections.push_back(v);
@@ -118,7 +117,6 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
       xSections[i]->PutValue(j, cross);
     }
   }
-
   // xSections start from null, so use probabilities from the next bin
   if(0.0 == (*xSections[nElmMinusOne])[0]) {
     for (G4int i=0; i<=nElmMinusOne; ++i) {
@@ -142,8 +140,51 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
       }
     }
   }
-  //G4cout << "======== G4EmElementSelector for the " << model->GetName() 
-  //    << G4endl;
+  /*
+  G4cout << "======== G4EmElementSelector for the " << model->GetName() 
+         << G4endl;
+  for (G4int i=0; i<=nElmMinusOne; ++i) {
+    G4cout << "#### i=" << i << G4endl;
+    G4cout << (*xSections[i]) << G4endl;
+  }
+  */
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+const G4Element* 
+G4EmElementSelector::SelectRandomAtom(const G4double e, 
+                                      const G4double loge) const
+{
+  const G4Element* element = (*theElementVector)[nElmMinusOne];
+  if (nElmMinusOne > 0) {
+    // 1. Determine energy index (only once)
+    // handle cases below/above the enrgy grid (by ekin, idx that gives a=0/1)
+    // ekin = x[0]   if e<=x[0]   and idx will be   0 ^ a=0 => so y=y0
+    // ekin = x[N-1] if e>=x[N-1] and idx will be N-2 ^ a=1 => so y=y_{N-1}
+    G4double ekin = e;
+    std::size_t idx = 0;
+    if(e <= (xSections[0])->Energy(0)) {
+      ekin = (xSections[0])->Energy(0);
+    } else if(e < (xSections[0])->GetMaxEnergy()) {
+      idx = (xSections[0])->ComputeLogVectorBin(loge);
+    } else {
+      ekin = (xSections[0])->GetMaxEnergy();
+      idx = (xSections[0])->GetVectorLength() - 2;
+    }
+    // 2. Do the linear interp.(corner cases are already excluded)
+    const G4double x1 = (xSections[0])->Energy(idx);
+    const G4double  a = (ekin - x1)/((xSections[0])->Energy(idx+1) - x1);
+    const G4double urnd = G4UniformRand();
+    for (G4int i = 0; i < nElmMinusOne; ++i) {
+      const G4double  y1 = (*xSections[i])[idx];
+      if (urnd <= y1 + a*((*xSections[i])[idx+1] - y1)) {
+        element = (*theElementVector)[i];
+        break;
+      }
+    }
+  }
+  return element;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

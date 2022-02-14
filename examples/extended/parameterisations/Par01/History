@@ -18,7 +18,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
+10-11-2020 B. Morgan (expar01-V10-06-00)
+- Migration to G4RunManagerFactory.
+
+17-05-2018 J.Allison (expar01-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+28-11-2017 I. Hrivnacova (expar01-V10-03-00)
+- Fixed Doxygen warnings, formatting
+
+03-11-2016 M. Verderi (expar01-V10-02-03)
+- Use new G4FastSimulationPhysics physics constructor to configure
+  the physics list for fast simulation
+- Suppress Par01PhysicsList.
+
+02-11-2016 I. Hrivnacova (expar01-V10-02-02)
+- Added file descriptions for Doxygen documentation
+
+27-10-2016 M. Verderi (expar01-V10-02-01)
+- apply coding guidelines
+
+14-10-16 G.Folger (expar01-V10-02-00)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
 
@@ -189,7 +211,7 @@ June 17, 2000  John Allison  (exampleN05-V01-01-00)
 11 December 1998 M. Verderi
 - fix made in ExN05CalorimeterSD to allow several instanciations of this class.
   The problem was a static variable (HCID) used in EndOfEventAction which made
-  confusion to get the hits collection. HCID is now put as private (non static!) 
+  confusion to get the hits collection. HCID is now put as private (non static!)
   member of the class.
 - the example.in/.out are updated accordingly
 
@@ -224,8 +246,8 @@ June 17, 2000  John Allison  (exampleN05-V01-01-00)
 - Modified ExN05PhysicsList to register above processes.
 - Modified ExN05DetectorConstruction to attach Userlimits to crystal.
 - Added ExN05DetectorMessenger to switch on/off UserLimits.
-- Modified exampleN05.in 
- 
+- Modified exampleN05.in
+
 
 9th August 1998  John Allison
 - Changed G4UIterminal to G4UIGAG.
@@ -274,7 +296,7 @@ a private navigator, rather than the one for tracking.
 May 07, 98 M. Verderi
 
 - First commit (many improvements needed):
-	- main() coded in exampleN05.cc 
+	- main() coded in exampleN05.cc
 	- include:
 		MyCalorimeterHit.hh
 		MyCalorimeterHitsCollection.hh
@@ -283,7 +305,7 @@ May 07, 98 M. Verderi
 		MyEMCShower.hh
 		MyEnergySpot.hh
 		MyEventAction.hh
-		MyEventActionMessenger.hh 
+		MyEventActionMessenger.hh
 		MyPhysicsList.hh
 		MyPiModel.hh
 		MyPrimaryGeneratorAction.hh

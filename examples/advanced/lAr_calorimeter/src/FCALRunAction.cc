@@ -35,8 +35,7 @@
 #include "G4Run.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-
-#include "FCALAnalysisManager.hh"
+#include "G4AnalysisManager.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -45,6 +44,7 @@ FCALRunAction::FCALRunAction()
 {
     // Get/create analysis manager
     G4AnalysisManager* man = G4AnalysisManager::Instance();
+    man->SetDefaultFileType("root");
     
     // Open an output file
     G4cout << "Opening output file " << man->GetFileName() << " ... ";
@@ -65,7 +65,6 @@ FCALRunAction::FCALRunAction()
 
 FCALRunAction::~FCALRunAction()
 {
- delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -98,8 +97,6 @@ void FCALRunAction::EndOfRunAction(const G4Run* )
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->Write();
   man->CloseFile();
-  // Complete clean-up
-  delete G4AnalysisManager::Instance();
 }
 
 

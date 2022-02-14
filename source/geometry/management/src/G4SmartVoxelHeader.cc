@@ -63,7 +63,6 @@ G4SmartVoxelHeader::G4SmartVoxelHeader(G4LogicalVolume* pVolume,
     fparamAxis(kUndefined)
 {
   size_t nDaughters = pVolume->GetNoDaughters();
-  G4VoxelLimits limits;   // Create `unlimited' limits object
 
   // Determine whether daughter is replicated
   //
@@ -955,7 +954,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 
   // Create G4VoxelNodes. Will Add proxies before setting fslices
   //
-  G4NodeVector* nodeList = new G4NodeVector();
+  auto* nodeList = new G4NodeVector();
   if (nodeList == nullptr)
   {
     G4Exception("G4SmartVoxelHeader::BuildNodes()", "GeomMgt0003",
@@ -1017,7 +1016,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   // Create proxy List : caller has deletion responsibility
   // (but we must delete nodeList *itself* - not the contents)
   //
-  G4ProxyVector* proxyList = new G4ProxyVector();
+  auto* proxyList = new G4ProxyVector();
   if (proxyList == nullptr)
   {
     G4Exception("G4SmartVoxelHeader::BuildNodes()", "GeomMgt0003",
@@ -1034,7 +1033,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     // Get rid of possible excess capacity in the internal node vector
     //
     ((*nodeList)[nNode])->Shrink();
-    G4SmartVoxelProxy* pProxyNode = new G4SmartVoxelProxy((*nodeList)[nNode]);
+    auto* pProxyNode = new G4SmartVoxelProxy((*nodeList)[nNode]);
     if (pProxyNode == nullptr)
     {
       G4Exception("G4SmartVoxelHeader::BuildNodes()", "GeomMgt0003",
@@ -1214,7 +1213,7 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
 
         // Delete node proxies at start of collected sets of nodes/headers
         //
-        lastProxy=0;
+        lastProxy=nullptr;
         for (replaceNo=minNo; replaceNo<=maxNo; ++replaceNo)
         {
           if (lastProxy != fslices[replaceNo])
@@ -1341,7 +1340,7 @@ std::ostream& operator << (std::ostream& os, const G4SmartVoxelHeader& h)
 
   if (haveHeaders)
   {
-    collectHead=0;
+    collectHead=nullptr;
     for (j=0; j<h.fslices.size(); ++j)
     {
       if (h.fslices[j]->IsHeader())

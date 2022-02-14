@@ -979,7 +979,7 @@ G4double G4DNACPA100IonisationModel::RandomTransferedEnergy
 
          G4double interpolatedvalue2 = Interpolate(valuePROB21, valuePROB22, random, nrjTransf21, nrjTransf22);
 
-         // zero is explicitely set
+         // zero is explicitly set
 
          G4double value = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
 

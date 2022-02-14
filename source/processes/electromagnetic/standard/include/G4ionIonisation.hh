@@ -80,9 +80,9 @@ public:
 
   explicit G4ionIonisation(const G4String& name = "ionIoni");
 
-  virtual ~G4ionIonisation();
+  ~G4ionIonisation() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
+  G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
   void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
 		       G4PhysicsVector* dVector);
@@ -90,27 +90,26 @@ public:
   void ActivateStoppingData(G4bool);
 
   // print documentation in html format
-  virtual void ProcessDescription(std::ostream&) const override;
-
-protected:
-
-  // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile) const override;
-
-  virtual void 
-  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-			      const G4ParticleDefinition*) override;
-
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, G4double cut) final;
-
-  inline G4double BetheBlochEnergyThreshold();
-
-private:
+  void ProcessDescription(std::ostream&) const override;
 
   // hide assignment operator
   G4ionIonisation & operator=(const G4ionIonisation &right) = delete;
   G4ionIonisation(const G4ionIonisation&) = delete;
+
+protected:
+
+  // Print out of the class parameters
+  void StreamProcessInfo(std::ostream& outFile) const override;
+
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+				   const G4ParticleDefinition*) override;
+
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+			    const G4Material*, G4double cut) final;
+
+  inline G4double BetheBlochEnergyThreshold();
+
+private:
 
   G4EmCorrections*            corr;
 

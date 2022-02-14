@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /*
-Authors:
+Author:
 M. Omer and R. Hajima  on   17 October 2016
 contact:
 omer.mohamed@jaea.go.jp and hajima.ryoichi@qst.go.jp
@@ -47,35 +47,20 @@ https://doi.org/10.11484/jaea-data-code-2018-007
 
 class G4JAEAElasticScattering : public G4VEmProcess
 {
-
 public:
-//Constructor
-  G4JAEAElasticScattering(const G4String& processName ="JAEA_ES",
-		      G4ProcessType type = fElectromagnetic);
-//Destructor
-  virtual ~G4JAEAElasticScattering();
-
+  //Constructor
+  explicit G4JAEAElasticScattering(const G4String& processName ="JAEA_ES",
+				   G4ProcessType type = fElectromagnetic);
+  //Destructor
+  ~G4JAEAElasticScattering() override;
+  
   //true for gamma only
-    G4bool IsApplicable(const G4ParticleDefinition&);
-
-
-// Adding an enumerator to those included in G4EmProcessSubType to define sub-type of EM processes
-// The last enumerator has a value of 24 so, G4JAEAElasticScattering should be 25 unless change in
-// order to be made by Geant4 team. Temporarily, the enum is assigned as 11 of G4RayleighScattering.
-
-
-enum G4EmProcessSubType
-{fG4JAEAElasticScattering=11};
-
-  // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo();
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
 
 protected:
-
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
-
   G4bool isInitialised;
 
 };

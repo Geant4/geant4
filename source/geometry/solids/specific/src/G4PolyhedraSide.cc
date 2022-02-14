@@ -616,12 +616,10 @@ EInside G4PolyhedraSide::Inside( const G4ThreeVector& p,
   //
   // Use distance along normal to decide return value
   //
-  if ( (std::fabs(norm) < tolerance) && (*bestDistance < 2.0*tolerance) )
+  if ( (std::fabs(norm) > tolerance) || (*bestDistance > 2.0*tolerance) )
+    return (norm < 0) ? kInside : kOutside;
+  else
     return kSurface;
-  else if (norm < 0)
-    return kInside;
-  else  
-    return kOutside;
 }
 
 // Normal

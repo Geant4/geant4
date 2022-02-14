@@ -31,8 +31,6 @@
 //                               an OpenGL view, for inheritance by
 //                               derived (X, Xm...) classes.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
-
 #include "G4OpenGLImmediateViewer.hh"
 #include "G4OpenGLImmediateSceneHandler.hh"
 
@@ -65,5 +63,3 @@ void G4OpenGLImmediateViewer::ProcessView ()
     if (cutawayUnion) glDisable (GL_CLIP_PLANE2);
   }
 }
-
-#endif

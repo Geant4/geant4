@@ -29,8 +29,6 @@
 // Andrew Walkden  10th February 1997
 // G4OpenGLImmediateSceneHandler - no Display lists.
 
-#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
-
 #ifndef G4OPENGLIMMEDIATESCENEHANDLER_HH
 #define G4OPENGLIMMEDIATESCENEHANDLER_HH
 
@@ -51,12 +49,12 @@ public:
   void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();
+  using G4VSceneHandler::AddPrimitive;
   void AddPrimitive (const G4Polyline&);
   void AddPrimitive (const G4Polymarker&);
   void AddPrimitive (const G4Text& text);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
-  void AddPrimitive (const G4Scale& scale);
   void AddPrimitive (const G4Polyhedron&);
 
 protected:
@@ -71,7 +69,5 @@ protected:
   private:
   bool AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline);
 };
-
-#endif
 
 #endif

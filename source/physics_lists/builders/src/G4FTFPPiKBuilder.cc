@@ -54,19 +54,16 @@ G4FTFPPiKBuilder(G4bool quasiElastic)
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFP");
 
-  theStringModel = new G4FTFModel;
-  theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
-  theStringModel->SetFragmentationModel(theStringDecay);
+  G4FTFModel* theStringModel = new G4FTFModel();
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
 
-  theCascade = new G4GeneratorPrecompoundInterface();
+  G4GeneratorPrecompoundInterface* theCascade = 
+    new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
-  if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
+  if (quasiElastic) {
+     theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+  } 
 
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
@@ -75,59 +72,17 @@ G4FTFPPiKBuilder(G4bool quasiElastic)
 
 G4FTFPPiKBuilder::~G4FTFPPiKBuilder() 
 {
-  delete theStringDecay;
-  delete theStringModel;
-  if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theLund;
 }
 
 void G4FTFPPiKBuilder::
-Build(G4PionPlusInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+  if ( aP->GetParticleDefinition() == G4PionPlus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+  } else if ( aP->GetParticleDefinition() == G4PionMinus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
+  }
   aP->RegisterMe(theModel);
 }
-
-void G4FTFPPiKBuilder::
-Build(G4PionMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFPPiKBuilder::
-Build(G4KaonPlusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFPPiKBuilder::
-Build(G4KaonMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFPPiKBuilder::
-Build(G4KaonZeroLInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFPPiKBuilder::
-Build(G4KaonZeroSInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theModel);
-}
-

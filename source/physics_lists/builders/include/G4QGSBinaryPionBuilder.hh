@@ -60,20 +60,14 @@ class G4QGSBinaryPionBuilder : public G4VPionBuilder
     virtual ~G4QGSBinaryPionBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
-    G4BinaryCascade * theCascade;
-    G4QGSModel< G4QGSParticipants > * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
     G4double theMin;
-
 };
 
 #endif

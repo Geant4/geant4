@@ -40,17 +40,18 @@ public:
     virtual ~G4DNAElectronHoleRecombination();
     void Create();
 
-    void StartTracking(G4Track*);
+    void StartTracking(G4Track*) override;
 
-    virtual G4bool IsApplicable(const G4ParticleDefinition&);
+    G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-    virtual void BuildPhysicsTable(const G4ParticleDefinition&){}
+    void BuildPhysicsTable(const G4ParticleDefinition&) override
+    {}
 
     ////////////////////////////
     // DoIt    /////////////////
     ///////////////////////////
-    virtual G4VParticleChange* AtRestDoIt(const G4Track& /*track*/,
-                                          const G4Step& /*stepData*/);
+    G4VParticleChange* AtRestDoIt(const G4Track& /*track*/,
+                                          const G4Step& /*stepData*/) override;
     //  A virtual base class function that has to be overridden
     //  by any subclass. The DoIt method actually performs the
     //  physics process and determines either momentum change
@@ -61,21 +62,21 @@ public:
     //      const G4Step&     stepData:
     //        reference to the current G4Step information
 
-    virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
 
     //////////////////////////
     // GPIL    //////////////
     /////////////////////////
 
-    virtual G4double GetMeanFreePath(const G4Track& aTrack,
+    G4double GetMeanFreePath(const G4Track& aTrack,
                                     G4double previousStepSize,
-                                    G4ForceCondition* condition);
+                                    G4ForceCondition* condition)override;
     //  Calculates from the macroscopic cross section a mean
     //  free path, the value is returned in units of distance.
 
-    virtual G4double GetMeanLifeTime(const G4Track& aTrack,
-                                    G4ForceCondition* condition);
+    G4double GetMeanLifeTime(const G4Track& aTrack,
+                                    G4ForceCondition* condition) override;
     //  Calculates the mean life-time (i.e. for decays) of the
     //  particle at rest due to the occurrence of the given process,
     //  or converts the probability of interaction (i.e. for
@@ -98,10 +99,9 @@ private:
 
     G4bool FindReactant(const G4Track& track);
     void MakeReaction(const G4Track& track);
-    void BuildDissociationChannels();
 
     const std::vector<double>* fpMoleculeDensity;
     G4ParticleChange fParticleChange;
     G4bool fIsInitialized;
-    std::map<int, std::pair<double, double> > fOnsagerRadiusPerMaterial;
+    std::map<int, std::pair<double, G4double> > fOnsagerRadiusPerMaterial;
 };

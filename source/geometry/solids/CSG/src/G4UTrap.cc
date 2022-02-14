@@ -49,13 +49,48 @@ G4UTrap::G4UTrap( const G4String& pName,
   : G4USolid(pName, new UTrap(pName, pdz, pTheta, pPhi,
                               pdy1, pdx1, pdx2, pAlp1, pdy2, pdx3, pdx4, pAlp2))
 {
+  G4ThreeVector pt[8];
+  CheckParameters();
+  GetVertices(pt);
+  CheckPlanarity(pt);
 }
 
 G4UTrap::G4UTrap( const G4String& pName,
                   const G4ThreeVector pt[8] )
   : G4USolid(pName, new UTrap(pName))
 {
+  // Start with check of centering - the center of gravity trap line
+  // should cross the origin of frame
+  if (!(   pt[0].z() < 0
+        && pt[0].z() == pt[1].z()
+        && pt[0].z() == pt[2].z()
+        && pt[0].z() == pt[3].z()
+
+        && pt[4].z() > 0
+        && pt[4].z() == pt[5].z()
+        && pt[4].z() == pt[6].z()
+        && pt[4].z() == pt[7].z()
+
+        && std::abs( pt[0].z() + pt[4].z() ) < kCarTolerance
+
+        && pt[0].y() == pt[1].y()
+        && pt[2].y() == pt[3].y()
+        && pt[4].y() == pt[5].y()
+        && pt[6].y() == pt[7].y()
+
+        && std::abs(pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y()) < kCarTolerance
+        && std::abs(pt[0].x()+pt[1].x()+pt[4].x()+pt[5].x() +
+                    pt[2].x()+pt[3].x()+pt[6].x()+pt[7].x()) < kCarTolerance ))
+  {
+    std::ostringstream message;
+    message << "Invalid vertice coordinates for Solid: " << GetName();
+    G4Exception("G4UTrap::G4UTrap()", "GeomSolids0002",
+                FatalException, message);
+  }
+
   SetPlanes(pt);
+  CheckParameters();
+  CheckPlanarity(pt);
 }
 
 G4UTrap::G4UTrap( const G4String& pName,
@@ -64,6 +99,7 @@ G4UTrap::G4UTrap( const G4String& pName,
                         G4double pX, G4double pLTX )
   : G4USolid(pName, new UTrap(pName, pZ, pY, pX, pLTX))
 {
+  CheckParameters();
 }
 
 G4UTrap::G4UTrap( const G4String& pName,
@@ -72,6 +108,7 @@ G4UTrap::G4UTrap( const G4String& pName,
                         G4double pdz )
   : G4USolid(pName, new UTrap(pName, pdx1, pdx2, pdy1, pdy2, pdz))
 {
+  CheckParameters();
 }
 
 G4UTrap::G4UTrap(const G4String& pName,
@@ -79,6 +116,7 @@ G4UTrap::G4UTrap(const G4String& pName,
                        G4double pAlpha, G4double pTheta, G4double pPhi )
   : G4USolid(pName, new UTrap(pName, pdx, pdy, pdz, pAlpha, pTheta, pPhi))
 {
+  CheckParameters();
 }
 
 G4UTrap::G4UTrap( const G4String& pName )
@@ -132,8 +170,8 @@ G4UTrap& G4UTrap::operator = (const G4UTrap& rhs)
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Accessors & modifiers
-
+// Accessors
+//
 G4double G4UTrap::GetZHalfLength() const
 {
   return GetShape()->GetZHalfLength();
@@ -154,6 +192,10 @@ G4double G4UTrap::GetTanAlpha1() const
 {
   return GetShape()->GetTanAlpha1();
 }
+G4double G4UTrap::GetTanAlpha1() const
+{
+  return Base_t::GetTanAlpha1();
+}
 G4double G4UTrap::GetYHalfLength2() const
 {
   return GetShape()->GetYHalfLength2();
@@ -164,11 +206,27 @@ G4double G4UTrap::GetXHalfLength3() const
 }
 G4double G4UTrap::GetXHalfLength4() const
 {
-  return GetShape()->GetXHalfLength4();
+  return GetDx4();
 }
 G4double G4UTrap::GetTanAlpha2() const
 {
-  return GetShape()->GetTanAlpha2();
+  return Base_t::GetTanAlpha2();
+}
+G4double G4UTrap::GetPhi() const       
+{
+  return Base_t::GetPhi();
+}
+G4double G4UTrap::GetTheta() const
+{
+  return Base_t::GetTheta();
+}
+G4double G4UTrap::GetAlpha1() const
+{
+  return Base_t::GetAlpha1();
+}
+G4double G4UTrap::GetAlpha2() const
+{
+  return Base_t::GetAlpha2();
 }
 TrapSidePlane G4UTrap::GetSidePlane(G4int n) const
 {
@@ -182,6 +240,10 @@ G4ThreeVector G4UTrap::GetSymAxis() const
   return G4ThreeVector(axis.x(), axis.y(), axis.z());
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Modifier
+//
 void G4UTrap::SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
                                G4double pDy1, G4double pDx1, G4double pDx2,
                                G4double pAlp1,
@@ -192,8 +254,17 @@ void G4UTrap::SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
                                pDy1, pDx1, pDx2, pAlp1,
                                pDy2, pDx3, pDx4, pAlp2);
   fRebuildPolyhedron = true;
+
+  G4ThreeVector pt[8];
+  CheckParameters();
+  GetVertices(pt);
+  CheckPlanarity(pt);
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
+// Set parameters using eight vertices
+//
 void G4UTrap::SetPlanes(const G4ThreeVector pt[8])
 {
   UVector3 upt[8];
@@ -203,6 +274,98 @@ void G4UTrap::SetPlanes(const G4ThreeVector pt[8])
   }
   GetShape()->SetPlanes(upt);
   fRebuildPolyhedron = true;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Check dimensions
+//
+void G4UTrap::CheckParameters() const
+{
+  G4double fDz  = GetZHalfLength();
+  G4double fDy1 = GetYHalfLength1();
+  G4double fDx1 = GetXHalfLength1();
+  G4double fDx2 = GetXHalfLength2();
+  G4double fDy2 = GetYHalfLength2();
+  G4double fDx3 = GetXHalfLength3();
+  G4double fDx4 = GetXHalfLength4();
+
+  if (fDz<=0 ||
+      fDy1<=0 || fDx1<=0 || fDx2<=0 ||
+      fDy2<=0 || fDx3<=0 || fDx4<=0)
+  {
+    std::ostringstream message;
+    message << "Invalid Length Parameters for Solid: " << GetName()
+            << "\n  X - " <<fDx1<<", "<<fDx2<<", "<<fDx3<<", "<<fDx4
+            << "\n  Y - " <<fDy1<<", "<<fDy2
+            << "\n  Z - " <<fDz;
+    G4Exception("G4UTrap::CheckParameters()", "GeomSolids0002",
+                FatalException, message);
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Compute coordinates of vertices
+//
+void G4UTrap::GetVertices(G4ThreeVector pt[8]) const
+{
+  G4double fDz      = GetZHalfLength();
+  G4double fDy1     = GetYHalfLength1();
+  G4double fDx1     = GetXHalfLength1();
+  G4double fDx2     = GetXHalfLength2();
+  G4double fDy2     = GetYHalfLength2();
+  G4double fDx3     = GetXHalfLength3();
+  G4double fDx4     = GetXHalfLength4();
+  G4double phi      = GetPhi();
+  G4double theta    = GetTheta();
+  G4double fTalpha1 = GetTanAlpha1();
+  G4double fTalpha2 = GetTanAlpha2();
+
+  G4double DzTthetaCphi = fDz*std::tan(theta)*std::cos(phi);
+  G4double DzTthetaSphi = fDz*std::tan(theta)*std::sin(phi);
+  G4double Dy1Talpha1   = fDy1*fTalpha1;
+  G4double Dy2Talpha2   = fDy2*fTalpha2;
+
+  pt[0].set(-DzTthetaCphi-Dy1Talpha1-fDx1,-DzTthetaSphi-fDy1,-fDz);
+  pt[1].set(-DzTthetaCphi-Dy1Talpha1+fDx1,-DzTthetaSphi-fDy1,-fDz);
+  pt[2].set(-DzTthetaCphi+Dy1Talpha1-fDx2,-DzTthetaSphi+fDy1,-fDz);
+  pt[3].set(-DzTthetaCphi+Dy1Talpha1+fDx2,-DzTthetaSphi+fDy1,-fDz);
+  pt[4].set( DzTthetaCphi-Dy2Talpha2-fDx3, DzTthetaSphi-fDy2, fDz);
+  pt[5].set( DzTthetaCphi-Dy2Talpha2+fDx3, DzTthetaSphi-fDy2, fDz);
+  pt[6].set( DzTthetaCphi+Dy2Talpha2-fDx4, DzTthetaSphi+fDy2, fDz);
+  pt[7].set( DzTthetaCphi+Dy2Talpha2+fDx4, DzTthetaSphi+fDy2, fDz);
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Check planarity of lateral planes
+//
+void G4UTrap::CheckPlanarity(const G4ThreeVector pt[8]) const
+{
+  constexpr G4int iface[4][4] = { {0,4,5,1}, {2,3,7,6}, {0,2,6,4}, {1,5,7,3} };
+  const static G4String side[4] = { "~-Y", "~+Y", "~-X", "~+X" };
+
+  for (G4int i=0; i<4; ++i)
+  {
+    TrapSidePlane plane = GetSidePlane(i);
+    G4double dmax = 0;
+    for (G4int k=0; k<4; ++k)
+    {
+      const G4ThreeVector p = pt[iface[i][k]];
+      G4double dist = plane.a*p.x() + plane.b*p.y() + plane.c*p.z() + plane.d;
+      if (std::abs(dist) > std::abs(dmax)) dmax = dist;
+    }
+    if (std::abs(dmax) > 1000 * kCarTolerance)
+    {
+      std::ostringstream message;
+      message << "Side face " << side[i] << " is not planar for solid: "
+              << GetName() << "\nDiscrepancy: " << dmax/mm << " mm\n";
+      StreamInfo(message);
+      G4Exception("G4UTrap::CheckPlanarity()", "GeomSolids0002",
+                  FatalException, message);
+    }
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -232,18 +395,11 @@ G4VSolid* G4UTrap::Clone() const
 //
 G4Polyhedron* G4UTrap::CreatePolyhedron() const
 {
-  G4double fTthetaSphi = GetShape()->GetThetaSphi();
-  G4double fTthetaCphi = GetShape()->GetThetaCphi();
-  G4double phi = std::atan2(fTthetaSphi, fTthetaCphi);
-  G4double alpha1 = std::atan(GetTanAlpha1());
-  G4double alpha2 = std::atan(GetTanAlpha2());
-  G4double theta = std::atan(std::sqrt(fTthetaCphi*fTthetaCphi+fTthetaSphi*fTthetaSphi));
-
-  return new G4PolyhedronTrap(GetZHalfLength(), theta, phi,
+  return new G4PolyhedronTrap(GetZHalfLength(), GetTheta(), GetPhi(),
                               GetYHalfLength1(),
-                              GetXHalfLength1(), GetXHalfLength2(), alpha1,
+                              GetXHalfLength1(), GetXHalfLength2(), GetAlpha1(),
                               GetYHalfLength2(),
-                              GetXHalfLength3(), GetXHalfLength4(), alpha2);
+                              GetXHalfLength3(), GetXHalfLength4(), GetAlpha2());
 }
 
 #endif  // G4GEOM_USE_USOLIDS

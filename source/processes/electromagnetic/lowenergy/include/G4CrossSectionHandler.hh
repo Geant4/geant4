@@ -56,23 +56,19 @@ class G4Element;
 class G4CrossSectionHandler : public G4VCrossSectionHandler {
  
 public:
-
-  G4CrossSectionHandler();
+  explicit G4CrossSectionHandler();
 
   ~G4CrossSectionHandler();
-	
-   
+	 
 protected: 
    
-  virtual std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
-								       const G4DataVector* energyCuts = 0);
+  std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
+							     const G4DataVector* energyCuts = 0) override;
  
 private:
- 
   // Hide copy constructor and assignment operator
-  G4CrossSectionHandler(const G4CrossSectionHandler&);
-  G4CrossSectionHandler & operator=(const G4CrossSectionHandler &right);
-
+  G4CrossSectionHandler(const G4CrossSectionHandler&) = delete;
+  G4CrossSectionHandler & operator=(const G4CrossSectionHandler &right) = delete;
 };
  
 #endif

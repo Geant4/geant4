@@ -41,8 +41,7 @@
 =======
 //                                  ACTUAL CONTRIBUTORS
 //                                  ====================
-//          G.A.P. Cirrone(a), Z. Mei(i), L. Pandola(a), G. Petringa(a), F. Romano (a,g)
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+//                  G.A.P. Cirrone(a), L. Pandola(a), G. Petringa(a)
 //
 //                      ==========>    MAIN AUTHORS <==========
 //
@@ -52,22 +51,8 @@
 //
 //                      R. Calcagno(a), G.Danielsen (b), F.Di Rosa(a),
 //                      S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
-<<<<<<< HEAD
-//                      A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(e), G.Russo(a),
-//                      M.Russo(a), A.Varisano(a)
-//
-//
-//              (a) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//              (b) Helsinki Institute of Physics, Helsinki, Finland
-//              (c) University of Wallongong, Australia
-//              (d) CERN, (CH)
-//              (e) INFN Section of Genova, genova, Italy
-//              (f) Physics and Astronomy Department, Universituy of Catania, Catania, Italy
-//
-//          *Corresponding author, email to pablo.cirrone@lns.infn.it
-=======
-//                      A.Lechner(d), S.E.Mazzaglia(a), M.G.Pia(e),
-//                      G.Russo(a,h), M.Russo(a), A. Tramontana (a),
+//                      A.Lechner(d), S.E.Mazzaglia(a), Z. Mei(h), M.G.Pia(e),
+//                      F.Romano(a), G.Russo(a,g), M.Russo(a), A. Tramontana (a),
 //                      A.Varisano(a)
 //
 //              (a) Laboratori Nazionali del Sud of INFN, Catania, Italy
@@ -76,9 +61,8 @@
 //              (d) CERN, Geneve, Switzwerland
 //              (e) INFN Section of Genova, Genova, Italy
 //              (f) Physics and Astronomy Department, Univ. of Catania, Catania, Italy
-//              (g) National Physics Laboratory, Teddington, UK
-//              (h) CNR-IBFM, Italy
-//              (i) Institute of Applied Electromagnetic Engineering(IAEE) 
+//              (g) CNR-IBFM, Italy
+//              (h) Institute of Applied Electromagnetic Engineering(IAEE)
 //                  Huazhong University of Science and Technology(HUST), Wuhan, China
 //
 //
@@ -114,14 +98,7 @@
 #include "G4ParallelWorldPhysics.hh"
 #include <time.h>
 #include "G4Timer.hh"
-
-//************************MT*********************
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4RunManagerFactory.hh"
 #include "HadrontherapyActionInitialization.hh"
 
 <<<<<<< HEAD
@@ -151,28 +128,17 @@ int main(int argc ,char ** argv)
     
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     // Set the Random engine
-    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
-   
-  // Only if an initial random seed is needed
-    G4int seed =1414159599;// time(0);
-  CLHEP::HepRandom::setTheSeed(seed);    
-  // G4cout << "******************************************************************"<< seed << G4endl;
+    // The following guarantees random generation also for different runs
+    // in multithread
+    CLHEP::RanluxEngine defaultEngine( 1234567, 4 );
+    G4Random::setTheEngine( &defaultEngine );
+    G4int seed = (G4int) time( NULL );
+    G4Random::setTheSeed( seed );
+ 
+ auto* runManager = G4RunManagerFactory::CreateRunManager();
+ G4int nThreads = 4;
+ runManager->SetNumberOfThreads(nThreads); 
 
-    //************************MT*********************
-#ifdef G4MULTITHREADED
-    
-    G4MTRunManager* runManager = new G4MTRunManager;
-    //runManager->SetNumberOfThreads(2); // Is equal to 2 by default, it can be setted also with the macro command: /run/numberOfThread 2
-#else
-    G4RunManager* runManager = new G4RunManager;
-#endif
-    
-<<<<<<< HEAD
-    //************************MT*********************
-    //   G4RunManager* runManager = new G4RunManager;
-    
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     // Geometry controller is responsible for instantiating the
     // geometries. All geometry specific m tasks are now in class
     // HadrontherapyGeometryController.

@@ -41,18 +41,10 @@ set(GEANT4_FALSEPOSITIVE_SOURCES
   # - Xaw is deprecated...
   G4UIXaw.hh
   G4UIXaw.cc
-  # - OpenGL Wt not yet supported....
-  G4OpenGLImmediateWt.hh
-  G4OpenGLImmediateWtViewer.hh
-  G4OpenGLWtViewer.hh
-  G4OpenGLImmediateWt.cc
-  G4OpenGLImmediateWtViewer.cc
-  G4OpenGLWtViewer.cc
   # - VRML has icc files in the src/ directory. These are only used
   #   internally but validate_sources assumes icc files will be in
   #   include/
   #   They are covered in sources.cmake though!
-  G4VRML1SceneHandlerFunc.icc
   G4VRML2SceneHandlerFunc.icc
   # - Documentation of processes/hadronic/models/cascade/cascade
   # lists some sources in in comments. These do not correspond to

@@ -23,53 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4DalitzDecayChannel
 //
+// Class description:
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//      History: first implementation, based on object model of
-//      30 May 1997 H.Kurashige
-// ------------------------------------------------------------
-#ifndef G4DalitzDecayChannel_h
-#define G4DalitzDecayChannel_h 1
+// Class describing the kinematics in Dalitz decay:
+// parent -> lepton + anti_lepton
+
+// Author: H.Kurashige, 30 May 1997 
+// --------------------------------------------------------------------
+#ifndef G4DalitzDecayChannel_hh
+#define G4DalitzDecayChannel_hh 1
 
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDecayChannel.hh"
 
-class G4DalitzDecayChannel :public G4VDecayChannel
+class G4DalitzDecayChannel : public G4VDecayChannel
 {
- // Class Description
- //   This class describes kinematics in Dalitz decay
- //       parent -> lepton + anti_lepton   
- //
 
- public: // With Description
-    //Constructors 
-      G4DalitzDecayChannel(const G4String& theParentName,
-			   G4double        theBR,
-			   const G4String& theLeptonName,
-			   const G4String& theAntiLeptonName);
-    //  Destructor
-      virtual ~G4DalitzDecayChannel();
+  public:
+
+    G4DalitzDecayChannel(const G4String& theParentName,
+                               G4double  theBR,
+                         const G4String& theLeptonName,
+                         const G4String& theAntiLeptonName);
+
+    virtual ~G4DalitzDecayChannel();
+
+    virtual G4DecayProducts* DecayIt(G4double);     
 
   protected:
-    // Copy constructor and assignment operator
-      G4DalitzDecayChannel(const G4DalitzDecayChannel &);
-      G4DalitzDecayChannel & operator=(const G4DalitzDecayChannel &);
+
+    G4DalitzDecayChannel(const G4DalitzDecayChannel&);
+    G4DalitzDecayChannel& operator=(const G4DalitzDecayChannel&);
+      // Copy constructor and assignment operator
 
   private:
-      G4DalitzDecayChannel();
 
-  public: // With Description
-     virtual G4DecayProducts *DecayIt(G4double);     
+    G4DalitzDecayChannel();
 
-  private:
-     enum{idGamma=0, idLepton=1, idAntiLepton=2}; 
-
-};  
-
+    enum{idGamma=0, idLepton=1, idAntiLepton=2};
+};
 
 #endif

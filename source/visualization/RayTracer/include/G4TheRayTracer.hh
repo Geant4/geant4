@@ -122,9 +122,9 @@ class G4TheRayTracer
 
   protected:
     G4RayShooter * theRayShooter;
-    G4VFigureFileMaker * theFigMaker;
+    static G4VFigureFileMaker * theFigMaker;
     G4RTMessenger * theMessenger;
-    G4VRTScanner * theScanner;
+    static G4VRTScanner * theScanner;
 
     G4EventManager * theEventManager;
 

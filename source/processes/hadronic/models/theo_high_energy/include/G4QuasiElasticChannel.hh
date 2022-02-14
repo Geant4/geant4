@@ -39,6 +39,7 @@
 #ifndef G4QuasiElasticChannel_h
 #define G4QuasiElasticChannel_h
 
+#include "G4HadronicInteraction.hh"
 #include "globals.hh"
 
 class G4KineticTrackVector;
@@ -47,28 +48,27 @@ class G4QuasiElRatios;
 class G4DynamicParticle;
 class G4V3DNucleus;
 
-
-class G4QuasiElasticChannel
+class G4QuasiElasticChannel : public G4HadronicInteraction
 {
   public:
-	G4QuasiElasticChannel();
-	~G4QuasiElasticChannel();
-	
+	explicit G4QuasiElasticChannel();
+	~G4QuasiElasticChannel() override;
+
 	G4double GetFraction(G4Nucleus &theNucleus,
 			     const G4DynamicParticle& thePrimary);
 
 	G4KineticTrackVector* Scatter(G4Nucleus &theNucleus,
 				      const G4DynamicParticle& thePrimary);
 					
-  private:
-        G4QuasiElasticChannel(const G4QuasiElasticChannel &);
-	const G4QuasiElasticChannel & operator=(const G4QuasiElasticChannel &);
-	G4bool operator==(const G4QuasiElasticChannel &) const;
-	G4bool operator!=(const G4QuasiElasticChannel &) const;
+        G4QuasiElasticChannel(const G4QuasiElasticChannel &) = delete;
+	const G4QuasiElasticChannel & operator=(const G4QuasiElasticChannel &) = delete;
+	G4bool operator==(const G4QuasiElasticChannel &) const = delete;
+	G4bool operator!=(const G4QuasiElasticChannel &) const = delete;
 
-   private:
+  private:
    	G4QuasiElRatios* theQuasiElastic;
 	G4V3DNucleus* the3DNucleus;
+        G4int secID;  // Creator model ID for the secondaries created by this model
 };
 
 #endif

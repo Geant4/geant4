@@ -29,8 +29,8 @@
 // --------------------------------------------------------------------
 
 #include <cmath>
-#include "globals.hh"
 
+#include "globals.hh"
 #include "G4BoundingEnvelope.hh"
 #include "G4GeometryTolerance.hh"
 
@@ -103,14 +103,6 @@ G4BoundingEnvelope( const G4ThreeVector& pMin,
   // 
   CheckBoundingBox();
   CheckBoundingPolygons();
-}
-
-///////////////////////////////////////////////////////////////////////
-//
-// Destructor
-//
-G4BoundingEnvelope::~G4BoundingEnvelope()
-{
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -428,7 +420,7 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
 
   // Allocate memory for transformed polygons
   //
-  G4int nbases = (fPolygons == 0) ? 2 : fPolygons->size();
+  G4int nbases = (fPolygons == nullptr) ? 2 : fPolygons->size();
   std::vector<G4Polygon3D*> bases(nbases);
   if (fPolygons == nullptr)
   {
@@ -539,7 +531,7 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
 
   // Free memory
   //
-  for (G4int i=0; i<nbases; ++i) { delete bases[i]; bases[i] = 0; }
+  for (G4int i=0; i<nbases; ++i) { delete bases[i]; bases[i] = nullptr; }
 
   // Final adjustment of the extent
   // 
@@ -609,27 +601,27 @@ G4BoundingEnvelope::TransformVertices(const G4Transform3D& pTransform3D,
     baseB[3].set(fMin.x(),fMax.y(),fMax.z());
   }
   std::vector<const G4ThreeVectorList*>::const_iterator ia, iaend;
-  std::vector<G4Polygon3D*>::iterator ib = pBases.begin();
-  ia    = (fPolygons == 0) ? aabb.begin() : fPolygons->begin();
-  iaend = (fPolygons == 0) ? aabb.end()   : fPolygons->end();
+  auto ib = pBases.begin();
+  ia    = (fPolygons == nullptr) ? aabb.cbegin() : fPolygons->cbegin();
+  iaend = (fPolygons == nullptr) ? aabb.cend()   : fPolygons->cend();
 
   if (pTransform3D.xx()==1 && pTransform3D.yy()==1 && pTransform3D.zz()==1)
   {
     G4ThreeVector offset = pTransform3D.getTranslation();
     for ( ; ia != iaend; ++ia, ++ib)
     { 
-      G4ThreeVectorList::const_iterator ka = (*ia)->begin();
-      G4Polygon3D::iterator             kb = (*ib)->begin();
-      for ( ; ka != (*ia)->end(); ++ka, ++kb) { (*kb) = (*ka) + offset; }
+      auto ka = (*ia)->cbegin();
+      auto kb = (*ib)->begin();
+      for ( ; ka != (*ia)->cend(); ++ka, ++kb) { (*kb) = (*ka) + offset; }
     }
   }
   else
   {
     for ( ; ia != iaend; ++ia, ++ib)
     { 
-      G4ThreeVectorList::const_iterator ka = (*ia)->begin();
-      G4Polygon3D::iterator             kb = (*ib)->begin();
-      for ( ; ka != (*ia)->end(); ++ka, ++kb)
+      auto ka = (*ia)->cbegin();
+      auto kb = (*ib)->begin();
+      for ( ; ka != (*ia)->cend(); ++ka, ++kb)
       {
         (*kb) = pTransform3D*G4Point3D(*ka);
       }

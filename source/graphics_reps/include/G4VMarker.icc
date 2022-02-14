@@ -27,6 +27,9 @@
 //
 // 
 
+inline G4bool G4VMarker::operator==(const G4VMarker& mk) const
+{ return !(*this != mk); }
+
 inline G4Point3D G4VMarker::GetPosition () const {
   return fPosition;
 }

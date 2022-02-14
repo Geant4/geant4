@@ -58,12 +58,7 @@ public:
   virtual ~UrQMDAntiBarionBuilder();
 
   virtual void Build(G4HadronElasticProcess * aP);
-  virtual void Build(G4AntiProtonInelasticProcess * aP);
-  virtual void Build(G4AntiNeutronInelasticProcess * aP);
-  virtual void Build(G4AntiDeuteronInelasticProcess * aP);
-  virtual void Build(G4AntiTritonInelasticProcess * aP);
-  virtual void Build(G4AntiHe3InelasticProcess * aP);
-  virtual void Build(G4AntiAlphaInelasticProcess * aP);
+  virtual void Build(G4HadronInelasticProcess * aP);
     
   inline void SetMinEnergy(G4double val) {fMin = val;}
   inline void SetMaxEnergy(G4double val) {fMax = val;}
@@ -78,4 +73,3 @@ private:
 
 };
 #endif
-

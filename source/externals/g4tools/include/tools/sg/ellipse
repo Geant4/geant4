@@ -1,0 +1,220 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_ellipse
+#define tools_sg_ellipse
+
+// same logic as ROOT/TEllipse.
+
+#include "node"
+#include "sf"
+#include "render_action"
+#include "pick_action"
+#include "bbox_action"
+
+#include "../mathf"
+#include "../curve"
+
+namespace tools {
+namespace sg {
+
+class ellipse : public node,public curve {
+  TOOLS_NODE_NO_CAST(ellipse,tools::sg::ellipse,node)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<ellipse>(this,a_class)) return p;
+    if(void* p = cmp_cast<curve>(this,a_class)) return p;
+    return node::cast(a_class);
+  }
+public:
+  sf<float> rx;
+  sf<float> ry;
+  sf<float> phi_min;  //radians
+  sf<float> phi_max;  //radians
+  sf<unsigned int> steps;
+public:
+  virtual const desc_fields& node_desc_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::ellipse)
+    static const desc_fields s_v(parent::node_desc_fields(),5, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(rx),
+      TOOLS_ARG_FIELD_DESC(ry),
+      TOOLS_ARG_FIELD_DESC(phi_min),
+      TOOLS_ARG_FIELD_DESC(phi_max),
+      TOOLS_ARG_FIELD_DESC(steps)
+    );
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&rx);
+    add_field(&ry);
+    add_field(&phi_min);
+    add_field(&phi_max);
+    add_field(&steps);
+  }
+public: //curve
+  virtual bool pos_tan_nor(float /*a_s*/,
+                           vec3f& a_pos,
+                           vec3f& a_tan,
+                           vec3f& a_nor) const {
+
+    //float r = radius.value();
+    //float cs = fcos(a_s);
+    //float sn = fsin(a_s);
+
+    float x,y,z;
+
+   {//x = r*cs;y = r*sn;z = 0;
+    x = 0;y = 0;z = 0;
+    m_model.mul_3f(x,y,z);
+    a_pos.set_value(x,y,z);}
+
+   {//x = -sn;y = cs;z = 0;
+    x = 0;y = 1;z = 0;
+    m_model.mul_dir_3(x,y,z);
+    a_tan.set_value(x,y,z);}
+
+   {x = 0;y = 0;z = 1;
+    m_model.mul_dir_3(x,y,z);
+    a_nor.set_value(x,y,z);}
+
+    return true;
+  }
+public:
+  virtual void copy(curve*& a_new) const {a_new = new ellipse(*this);}
+public:
+  virtual void render(render_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+    const state& state = a_action.state();
+    a_action.set_lighting(false);
+    a_action.add_line_strip(m_xyzs);
+    a_action.set_lighting(state.m_GL_LIGHTING);
+  }
+
+  virtual void pick(pick_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(a_action.stop_at_first()){
+      a_action.add_line_strip(m_xyzs);
+      if(a_action.done()) a_action.set_node(this);
+    } else {
+      a_action.set_done(false);
+      a_action.zs().clear();
+      a_action.ws().clear();
+      a_action.add_line_strip(m_xyzs);
+      if(a_action.done()) {
+        a_action.add_pick(*this,a_action.zs(),a_action.ws(),a_action.state());
+        a_action.set_done(false);
+      }
+    }
+  }
+  virtual void bbox(bbox_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    a_action.add_line_strip(m_xyzs);
+  }
+public:
+  ellipse()
+  :parent()
+  ,curve()
+  ,rx(1)
+  ,ry(1)
+  ,phi_min(0)
+  ,phi_max(tools::ftwo_pi())
+  ,steps(40)
+  {
+    add_fields();
+  }
+  virtual ~ellipse(){}
+public:
+  ellipse(const ellipse& a_from)
+  :parent(a_from)
+  ,curve(a_from)
+  ,rx(a_from.rx)
+  ,ry(a_from.ry)
+  ,phi_min(a_from.phi_min)
+  ,phi_max(a_from.phi_max)
+  ,steps(a_from.steps)
+  {
+    add_fields();
+  }
+  ellipse& operator=(const ellipse& a_from){
+    parent::operator=(a_from);
+    curve::operator=(a_from);
+    rx = a_from.rx;
+    ry = a_from.ry;
+    phi_min = a_from.phi_min;
+    phi_max = a_from.phi_max;
+    steps = a_from.steps;
+    return *this;
+  }
+protected:
+  void update_sg() {
+    m_xyzs.clear();
+    if(!steps.value()) return;
+
+    unsigned int num = steps.value();
+
+   //set number of points approximatively proportional to the ellipse circumference
+   //float circ = kPI*(r1+r2)*(phi2-phi1)/360;
+   //Int_t n = (Int_t)(np*circ/((gPad->GetX2()-gPad->GetX1())+(gPad->GetY2()-gPad->GetY1())));
+   //if (n < 8) n= 8;
+   //if (n > np) n = np;
+
+    m_xyzs.resize((num+1)*3);
+
+    float phimin = phi_min.value();
+    float phimax = phi_max.value();
+    float r1 = rx.value();
+    float r2 = ry.value();
+
+    float phi1 = mn<float>(phimin,phimax);
+    float phi2 = mx<float>(phimin,phimax);
+
+    float angle,dx,dy;
+    float dphi = (phi2-phi1)/float(num);
+    size_t pos = 0;
+    for(unsigned int i=0;i<=num;i++) {
+      angle = phi1 + float(i)*dphi;
+      dx    = r1*fcos(angle);
+      dy    = r2*fsin(angle);
+      m_xyzs[pos]  = dx;pos++;
+      m_xyzs[pos]  = dy;pos++;
+      m_xyzs[pos]  = 0;pos++;
+    }
+    /*
+    TString opt = option;
+    opt.ToLower();
+    if (phi2-phi1 >= 360 ) {
+      if (GetFillStyle()) gPad->PaintFillArea(n,x,y);
+      if (GetLineStyle()) gPad->PaintPolyLine(n+1,x,y);
+    } else {
+      x[n+1] = gPad->XtoPad(x1);
+      y[n+1] = gPad->YtoPad(y1);
+      x[n+2] = x[0];
+      y[n+2] = y[0];
+      if (GetFillStyle()) gPad->PaintFillArea(n+2,x,y);
+      if (GetLineStyle()) {
+         if (TestBit(kNoEdges) || opt.Contains("only")) gPad->PaintPolyLine(n+1,x,y);
+         else                                           gPad->PaintPolyLine(n+3,x,y);
+      }
+    }
+    */
+
+  }
+
+protected:
+  std::vector<float> m_xyzs;
+};
+
+}}
+
+#endif

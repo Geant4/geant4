@@ -41,43 +41,36 @@ class G4VHit;
 // class.
 //  Geant4 kernel will use this class methods.
 
-class G4VHitsCollection 
+class G4VHitsCollection
 {
-  public:
-      G4VHitsCollection();
-      G4VHitsCollection(G4String detName,G4String colNam);
-      virtual ~G4VHitsCollection();
-      G4bool operator==(const G4VHitsCollection &right) const;
+ public:
+  G4VHitsCollection();
+  G4VHitsCollection(G4String detName, G4String colNam);
+  virtual ~G4VHitsCollection();
+  G4bool operator==(const G4VHitsCollection& right) const;
 
-      virtual void DrawAllHits();
-      virtual void PrintAllHits();
+  virtual void DrawAllHits();
+  virtual void PrintAllHits();
 
-  protected:
+ protected:
+  // Collection name
+  G4String collectionName;
+  G4String SDname;
+  // Collection ID
+  G4int colID;
 
-      // Collection name
-      G4String collectionName;
-      G4String SDname;
-      // Collection ID
-      G4int colID;
+ public:
+  inline const G4String& GetName() const { return collectionName; }
+  inline const G4String& GetSDname() const { return SDname; }
+  inline void SetColID(G4int i) { colID = i; }
+  inline G4int GetColID() const { return colID; }
 
-  public:
-      inline const G4String& GetName() const
-      { return collectionName; }
-      inline const G4String& GetSDname() const
-      { return SDname; }
-      inline void SetColID(G4int i)
-      { colID = i; }
-      inline G4int GetColID() const
-      { return colID; }
-
-  public:
-      // GetHit and GetSize are given a default implementation here so
-      // that the template G4THitsCollection can be used, but they
-      // are re-implemented G4THitsCollection.
-      virtual G4VHit* GetHit(size_t) const { return nullptr; } 
-      virtual size_t GetSize() const { return 0; };
-
+ public:
+  // GetHit and GetSize are given a default implementation here so
+  // that the template G4THitsCollection can be used, but they
+  // are re-implemented G4THitsCollection.
+  virtual G4VHit* GetHit(size_t) const { return nullptr; }
+  virtual size_t GetSize() const { return 0; };
 };
 
 #endif
-

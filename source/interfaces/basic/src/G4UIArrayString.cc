@@ -38,13 +38,12 @@ G4UIArrayString::G4UIArrayString(const G4String& stream)
   nElement=0;
   nColumn=5;  // temporal assignment
 
-  G4String tmpstr= stream;  // G4String::strip() CONST !!
-  G4String astream= tmpstr.strip(G4String::both);
+  G4String astream = G4StrUtil::strip_copy(stream);
 
   // tokenize...
   G4int indx=0;
   while(1) {
-    G4int jc= astream.index(" ", indx);
+    G4int jc= astream.find(" ", indx);
     nElement++;
     if(jc == G4int(G4String::npos)) break;
     jc++; // fix a tiny mistake...
@@ -61,15 +60,15 @@ G4UIArrayString::G4UIArrayString(const G4String& stream)
   // push...
   indx=0;
   for(G4int i=0; i<nElement; i++){
-    G4int jc= astream.index(" ", indx);
+    G4int jc= astream.find(" ", indx);
     if(jc != G4int(G4String::npos))
-      stringArray[i]= astream(indx, jc-indx);
+      stringArray[i]= astream.substr(indx, jc-indx);
     else {  // last token
       jc= astream.length()+1;
-      stringArray[i]= astream(indx, jc-indx);
+      stringArray[i]= astream.substr(indx, jc-indx);
     }
     for(G4int j=1; jc+j< G4int(astream.length()); j++ ) { // skip continuing spaces
-      if(astream(jc+j)==' ') jc++;
+      if(astream[jc+j]==' ') jc++;
       else break;
     }
     indx= jc+1;
@@ -173,11 +172,9 @@ void G4UIArrayString::Show(G4int ncol)
 
       // care for color code
       G4String colorWord;
-      //if(word.index(strESC,0) != G4String::npos) {
-      //if(strESC == word[0]) {
       const char tgt = word[(size_t)0];
       if(strESC == tgt) {
-        colorWord= word(0,5);
+        colorWord= word.substr(0,5);
         word.erase(0,5);
       }
       if(!colorWord.empty()) G4cout << colorWord << std::flush;

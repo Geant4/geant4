@@ -82,7 +82,6 @@ G4eeToPGammaModel::G4eeToPGammaModel(G4eeCrossSections* cr,
     particle = G4Eta::Eta();
   }
   massP = particle->GetPDGMass();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

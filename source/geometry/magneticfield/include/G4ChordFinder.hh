@@ -59,7 +59,7 @@ class G4ChordFinder
                      G4double         stepMinimum = 1.0e-2, // * mm 
                      G4MagIntegratorStepper* pItsStepper = nullptr,
                      // G4bool           useHigherEfficiencyStepper = true,
-                     G4bool           useFSALstepper = false  );
+                     G4int            stepperDriverChoice = 2  );
         // A constructor that creates defaults for all "children" classes.
         //
         // The type of equation of motion is fixed.
@@ -114,6 +114,9 @@ class G4ChordFinder
         // Set verbosity and return old value
 
       void OnComputeStep();
+
+      friend std::ostream&
+             operator<<( std::ostream& os, const G4ChordFinder& cf);
 
    protected:   // .........................................................
 

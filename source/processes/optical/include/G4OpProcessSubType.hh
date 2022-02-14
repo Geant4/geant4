@@ -40,13 +40,14 @@
 #ifndef G4OpProcessSubType_h
 #define G4OpProcessSubType_h 1
 
-enum G4OpProcessSubType 
-{ 
+enum G4OpProcessSubType
+{
   fOpAbsorption = 31,
-  fOpBoundary = 32,
-  fOpRayleigh = 33,
-  fOpWLS = 34,
-  fOpMieHG = 35
+  fOpBoundary   = 32,
+  fOpRayleigh   = 33,
+  fOpWLS        = 34,
+  fOpMieHG      = 35,
+  fOpWLS2       = 36,
 };
 
 #endif

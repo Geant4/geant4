@@ -54,16 +54,16 @@ class G4IonINCLXXPhysics : public G4VPhysicsConstructor
 public:
   G4IonINCLXXPhysics(G4int ver = 0);
   G4IonINCLXXPhysics(const G4String& name, G4int ver = 0);
-  virtual ~G4IonINCLXXPhysics();
+  ~G4IonINCLXXPhysics() override;
 
   // This method will be invoked in the Construct() method.
   // each particle type will be instantiated
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
 private:
 
@@ -72,13 +72,6 @@ private:
 		  G4HadronicInteraction*,
 		  G4HadronicInteraction*,
 		  G4VCrossSectionDataSet*);
-
-  static G4ThreadLocal G4INCLXXInterface* theINCLXXDeuteron;
-  static G4ThreadLocal G4INCLXXInterface* theINCLXXTriton;
-  static G4ThreadLocal G4INCLXXInterface* theINCLXXHe3;
-  static G4ThreadLocal G4INCLXXInterface* theINCLXXAlpha;
-  static G4ThreadLocal G4INCLXXInterface* theINCLXXIons;
-  static G4ThreadLocal G4FTFBuilder* theFTFPBuilder;
 
   G4double emaxINCLXX;
   G4double deltaE;

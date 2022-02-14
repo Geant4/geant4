@@ -78,23 +78,14 @@ using namespace std;
 G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
                                          const G4String& nam)
   : G4VEmModel(nam),
-  particle(nullptr),
-  limitKinEnergy(100.*keV),
-  logLimitKinEnergy(G4Log(limitKinEnergy)),
-  twoln10(2.0*G4Log(10.0)),
-  //bg2lim(0.0169),
-  //taulim(8.4146e-3),
-  alphaprime(fine_structure_const/twopi)
+    limitKinEnergy(100.*CLHEP::keV),
+    logLimitKinEnergy(G4Log(limitKinEnergy)),
+    twoln10(2.0*G4Log(10.0)),
+    alphaprime(CLHEP::fine_structure_const/CLHEP::twopi)
 {
   theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();
-  fParticleChange = nullptr;
-
-  // initial initialisation of memeber should be overwritten
-  // by SetParticle
-  mass = massSquare = ratio = 1.0;
-
-  if(p) { SetParticle(p); }
+  if(nullptr != p) { SetParticle(p); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,8 +112,10 @@ G4double G4MuBetheBlochModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
-  if(p) { SetParticle(p); }
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  SetParticle(p);
+  if(nullptr == fParticleChange) { 
+    fParticleChange = GetParticleChangeForLoss();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,7 +128,7 @@ G4double G4MuBetheBlochModel::ComputeCrossSectionPerElectron(
 {
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = min(tmax,maxKinEnergy);
+  G4double maxEnergy = std::min(tmax,maxKinEnergy);
   if(cutEnergy < maxEnergy) {
 
     G4double totEnergy = kineticEnergy + mass;
@@ -153,7 +146,7 @@ G4double G4MuBetheBlochModel::ComputeCrossSectionPerElectron(
       G4double logstep = logtmax - logtmin;
       G4double dcross  = 0.0;
 
-      for (G4int ll=0; ll<8; ll++)
+      for (G4int ll=0; ll<8; ++ll)
       {
         G4double ep = G4Exp(logtmin + xgi[ll]*logstep);
         G4double a1 = G4Log(1.0 + 2.0*ep/electron_mass_c2);
@@ -165,9 +158,7 @@ G4double G4MuBetheBlochModel::ComputeCrossSectionPerElectron(
     }
 
     cross *= twopi_mc2_rcl2/beta2;
-
   }
-
   //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax
   //         << " cross= " << cross << G4endl;
   
@@ -212,7 +203,7 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
-  G4double cutEnergy = min(cut,tmax);
+  G4double cutEnergy = std::min(cut,tmax);
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau+2.0);
   G4double beta2 = bg2/(gam*gam);
@@ -235,10 +226,7 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   // shell correction
   dedx -= 2.0*corr->ShellCorrection(p,material,kineticEnergy);
-
-  // now compute the total ionization loss
-
-  if (dedx < 0.0) dedx = 0.0 ;
+  dedx = std::max(dedx, 0.0);
 
   // radiative corrections of R. Kokoulin
   if (cutEnergy > limitKinEnergy) {
@@ -258,7 +246,7 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
     dedx += dloss*logstep*alphaprime;
   }
 
-  dedx *= twopi_mc2_rcl2*eDensity/beta2;
+  dedx *= CLHEP::twopi_mc2_rcl2*eDensity/beta2;
 
   //High order corrections
   dedx += corr->HighOrderCorrections(p,material,kineticEnergy,cutEnergy);
@@ -297,7 +285,6 @@ void G4MuBetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     deltaKinEnergy = minKinEnergy*maxKinEnergy
                     /(minKinEnergy*(1.0 - q) + maxKinEnergy*q);
 
-
     f = 1.0 - beta2*deltaKinEnergy/tmax 
             + 0.5*deltaKinEnergy*deltaKinEnergy/etot2;
 
@@ -323,9 +310,9 @@ void G4MuBetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
                                    (deltaMomentum * totalMomentum);
 
-  G4double sint = sqrt(1.0 - cost*cost);
+  G4double sint = std::sqrt(1.0 - cost*cost);
 
-  G4double phi = twopi * G4UniformRand() ;
+  G4double phi = CLHEP::twopi * G4UniformRand() ;
 
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
   G4ThreeVector direction = dp->GetMomentumDirection();

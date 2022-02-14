@@ -28,8 +28,6 @@
 #ifndef G4UIXm_h
 #define G4UIXm_h 
 
-#if defined(G4UI_BUILD_XM_SESSION) || defined(G4UI_USE_XM)
-
 #include <map>
 
 #include <X11/Intrinsic.h>
@@ -97,8 +95,6 @@ private:
   G4int fHelpChoice;
   static void ButtonCallback(Widget,XtPointer,XtPointer);
 };
-
-#endif
 
 #endif
 

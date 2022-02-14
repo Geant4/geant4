@@ -46,8 +46,12 @@
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
+#include "G4HadronPhysicsQGSP_BIC.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronPhysicsINCLXX.hh"
+#include "G4HadronPhysicsShielding.hh"
+
 #include "G4IonElasticPhysics.hh"
 <<<<<<< HEAD
 #include "G4IonPhysics.hh"
@@ -57,7 +61,11 @@
 #include "G4IonPhysicsPHP.hh"
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #include "G4IonINCLXXPhysics.hh"
-#include "GammaPhysics.hh"
+
+#include "GammaNuclearPhysics.hh"
+#include "GammaNuclearPhysicsLEND.hh"
+
+#include "G4RadioactiveDecayPhysics.hh"
 
 // particles
 
@@ -97,10 +105,12 @@ PhysicsList::PhysicsList()
   ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
   RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC(verb));  
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
-  
+  ////RegisterPhysics( new G4HadronPhysicsShielding(verb));
+    
   // Ion Elastic scattering
   //
   RegisterPhysics( new G4IonElasticPhysics(verb));  
@@ -122,8 +132,10 @@ PhysicsList::PhysicsList()
   RegisterPhysics( new GammaPhysics("gamma"));
 =======
   RegisterPhysics( new GammaNuclearPhysics("gamma"));
-
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  ////RegisterPhysics( new GammaNuclearPhysicsLEND("gamma")); 
+  
+  // Radioactive decay
+  RegisterPhysics(new G4RadioactiveDecayPhysics());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

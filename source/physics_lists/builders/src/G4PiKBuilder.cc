@@ -42,22 +42,19 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4PiKBuilder::
-G4PiKBuilder(): wasActivated(false) 
+G4PiKBuilder::G4PiKBuilder()
 {  
-  thePionPlusInelastic=new G4PionPlusInelasticProcess;
-  thePionMinusInelastic=new G4PionMinusInelasticProcess;
-  theKaonPlusInelastic=new G4KaonPlusInelasticProcess;
-  theKaonMinusInelastic=new G4KaonMinusInelasticProcess;
-  theKaonZeroLInelastic=new G4KaonZeroLInelasticProcess;
-  theKaonZeroSInelastic=new G4KaonZeroSInelasticProcess;
+  thePionPlusInelastic=new  G4HadronInelasticProcess( "pi+Inelastic",    G4PionPlus::Definition() );
+  thePionMinusInelastic=new G4HadronInelasticProcess( "pi-Inelastic",    G4PionMinus::Definition() );
+  theKaonPlusInelastic=new  G4HadronInelasticProcess( "kaon+Inelastic",  G4KaonPlus::Definition() );
+  theKaonMinusInelastic=new G4HadronInelasticProcess( "kaon-Inelastic",  G4KaonMinus::Definition() );
+  theKaonZeroLInelastic=new G4HadronInelasticProcess( "kaon0LInelastic", G4KaonZeroLong::Definition() );
+  theKaonZeroSInelastic=new G4HadronInelasticProcess( "kaon0SInelastic", G4KaonZeroShort::Definition() );
 }
 
 void G4PiKBuilder::
 Build()
 {
-  wasActivated = true;
-
   std::vector<G4VPiKBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {

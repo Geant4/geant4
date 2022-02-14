@@ -122,12 +122,6 @@
 
 #include <cassert>
 
-// // Q : Use enum G4EmProcessSubType hire ?
-// enum G45DConversionMode
-//   {
-//     kEPair, kMuPair
-//   };
-
 const G4int kEPair = 0;
 const G4int kMuPair = 1;
 
@@ -136,11 +130,13 @@ const G4int kMuPair = 1;
 
 G4BetheHeitler5DModel::G4BetheHeitler5DModel(const G4ParticleDefinition* pd,
                                              const G4String& nam)
-  : G4PairProductionRelModel(pd, nam),fVerbose(1),fConversionType(0),
-    iraw(false),
+  : G4PairProductionRelModel(pd, nam),
     fLepton1(G4Electron::Definition()),fLepton2(G4Positron::Definition()),
+    fTheMuPlus(G4MuonPlus::Definition()),fTheMuMinus(G4MuonMinus::Definition()),
+    fVerbose(1),
+    fConversionType(0),
     fConvMode(kEPair),
-    fTheMuPlus(G4MuonPlus::Definition()),fTheMuMinus(G4MuonMinus::Definition())
+    iraw(false)
 {
   theIonTable = G4IonTable::GetIonTable();
   //Q: Do we need this on Model
@@ -167,7 +163,7 @@ void G4BetheHeitler5DModel::Initialise(const G4ParticleDefinition* part,
   // > 3 print rejection warning from transformation (fix bug from gammaray .. )
   // > 4 print photon direction & polarisation
   fVerbose = theManager->Verbose();
-  fConversionType  = theManager->GetConversionType();
+  fConversionType = theManager->GetConversionType();
   //////////////////////////////////////////////////////////////
   // iraw :
   //      true  : isolated electron or nucleus.
@@ -481,12 +477,12 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     const G4double LeptonEnergy2 = PairInvMass*0.5;
 
     // New way of calucaltion thePRecoil to avoid underflow
-    const G4double ap1 = 2.0*GammaEnergy*RecoilMass -
-      PairInvMass*PairInvMass + 2.0*PairInvMass*RecoilMass;
-    const G4double bp1 = 2.0*GammaEnergy*RecoilMass -
-      PairInvMass*PairInvMass - 2.0*PairInvMass*RecoilMass;
+    G4double abp = std::max((2.0*GammaEnergy*RecoilMass -
+			     PairInvMass*PairInvMass + 2.0*PairInvMass*RecoilMass)*
+                            (2.0*GammaEnergy*RecoilMass -
+			     PairInvMass*PairInvMass - 2.0*PairInvMass*RecoilMass),0.0);
 
-    const G4double thePRecoil = std::sqrt(ap1 * bp1) * isqrts2;
+    G4double thePRecoil = std::sqrt(abp) * isqrts2;
 
     // back to the center-of-mass frame
     Recoil.set( thePRecoil*sinTheta*cosPhi,

@@ -18,8 +18,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+November 13th, 2020 Ben Morgan (exampleP01-V10-06-03)
+- Enforce use of Serial RunManager.
+
+November 10th, 2020 Ben Morgan (exampleP01-V10-06-02)
+- Migration to G4RunManagerFactory.
+
+April 3rd, 2020 Gunter Folger  (exampleP01-V10-06-01)
+- Since root6.20 Rootmacros is included by default, reduce check to include
+   old modules/RootNewMacros.cmake file.
+
+March 31st, 2020 Gunter Folger (exampleP01-V10-06-00)
+- Adapt to root 6.20: modules/RootNewMacros.cmake becomes RootMacros.cmake
+  Choice is made by checking existance of file.
+
 November 28th, 2019 I. Hrivnacova (exampleP01-V10-05-01)
 - Fixed Doxygen warning in .README.txt
 
@@ -40,7 +52,7 @@ November 28th, 2017 B. Morgan (exampleP01-V10-03-00)
 - Update generated source name
 
 July 20th, 2016 I. Hrivnacova (exampleP01-V10-02-00)
-- Coding guidelines 
+- Coding guidelines
   (redundant empty lines, class member functions names)
 
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
@@ -83,9 +95,9 @@ October 11th, 2012 A. Dotti (exampleP01-V09-05-07)
 
 September 25th, 2012 I. Hrivnacova
 - Taking into account renaming the dictionary also in macros, code
-  and GNUmake build 
+  and GNUmake build
 - Fixes in GNUmakefile (was failing when building with internal
-  CLHEP and xerces-c)  
+  CLHEP and xerces-c)
 
 September 25th, 2012 I. Hrivnacova (exampleP01-V09-05-06)
 - renamed Classes.hh to ExP01Classes.hh
@@ -100,11 +112,11 @@ April 10th, 2012 W.Pokorski (exampleP01-V09-05-03)
 - removing debug printout, small fix in the iterator type
 
 March 29th, 2012 W.Pokorski (exampleP01-V09-05-01)
-- fixes in GNUMakefile, CMakeLists.txt, removing G4Exception from the code and 
+- fixes in GNUMakefile, CMakeLists.txt, removing G4Exception from the code and
 adding root macro to read the hits.
- 
+
 December 1th, 2010  W.Pokorski, I.Hrivnacova (exampleP01-V09-03-02)
-- Updated setup to use latest version of Root. 
+- Updated setup to use latest version of Root.
 
 November 7th, 2010  J.Allison (exampleP01-V09-03-01)
 - Introduced G4UIExecutive.

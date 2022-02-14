@@ -23,78 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////////////////////////////////////////////////////////////////////////////////
+//  Class:    G4AdjointhMultipleScattering
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Class:		G4AdjointhMultipleScattering
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
-//
-// GEANT4 Class header file
-//
-// File name:     G4AdjointhMultipleScattering
-//
-// Author:        Desorgher Laurent
-//
-// Creation date: 03.06.2009 cloned from G4hMultipleScattering by U.Laszlo with slight modification for adjoint_ion. 
-//
-//
-//------------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	03.06.2009  Creation by L. Desorgher. Cloned from G4hMultipleScattering by U.Laszlo with slight modifications.	  		
-//		09.11.2009  Remove 	AlongStepGetPhysicalInteractionLength, to call the one of the base class.
-//-------------------------------------------------------------
-//	Documentation:
-//		The class simulates the multiple scattering for adjoint proton of charged particle. In this approximate implementation the reverse multiple scattering 
-//		is the same than the foward one. This should be changed in the future to have the MultipleScaterring computed for the energy  at the end of the step 
-//		and not before the step. 
-//
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//  The class simulates the multiple scattering for adjoint proton of charged
+//  particle. In this approximate implementation the reverse multiple scattering
+//  is the same as the forward one. This should be changed in the future to
+//  have the MultipleScattering computed for the energy  at the end of the step
+//  and not before the step.
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef G4AdjointhMultipleScattering_h
 #define G4AdjointhMultipleScattering_h 1
 
 #include "G4VMultipleScattering.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class G4VMscModel;
 
 class G4AdjointhMultipleScattering : public G4VMultipleScattering
-
 {
-public:    // with description
+ public:
+  explicit G4AdjointhMultipleScattering(const G4String& processName = "msc");
 
-  G4AdjointhMultipleScattering(const G4String& processName="msc");
-
-  virtual ~G4AdjointhMultipleScattering();
+  ~G4AdjointhMultipleScattering() override;
 
   // returns true for charged particles, false otherwise
-  G4bool IsApplicable (const G4ParticleDefinition& p);
+  G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
-  // PrG4int few lines of informations about the process: validity range,
-  void PrintInfo();
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
+  void StreamProcessInfo(std::ostream& out) const override;
 
-protected:
+  G4AdjointhMultipleScattering(G4AdjointhMultipleScattering&) = delete;
+  G4AdjointhMultipleScattering& operator=(
+    const G4AdjointhMultipleScattering& right) = delete;
 
-  // This function initialise models
-  void InitialiseProcess(const G4ParticleDefinition*);
+ protected:
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
-private:        // data members
-
-  G4bool   isInitialized;
+ private:
+  G4bool fIsInitialized = false;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-

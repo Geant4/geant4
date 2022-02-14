@@ -1,0 +1,52 @@
+#Macro for the visualization
+
+#Create an empty scene
+/vis/scene/create
+
+#Create a scene handler for a specific graphics system
+/vis/open OGL
+
+#Draw the scene
+/vis/viewer/reset
+/vis/viewer/set/viewpointThetaPhi 135. 45. deg
+/vis/viewer/zoom 0.5
+
+#Specify style (surface, wireframe, auxiliary edges,...)
+/vis/viewer/set/style wireframe
+/vis/viewer/set/lineSegmentsPerCircle 100
+
+#Geometry
+#/vis/geometry/set/lineWidth all 1 3
+#/vis/geometry/set/colour PhantomLogic 1 0 0 0
+
+#Decoration
+#Axes
+/vis/set/lineWidth 3
+/vis/scene/add/axes 0 0 0 0.10 m	#Simple axes: x=red, y=green, z=blue.
+#Name
+#/vis/set/textColour red
+#/vis/set/textLayout right
+#/vis/scene/add/text2D 0.9 -.9 24 ! ! saxs
+#Frame
+#/vis/set/colour red
+#/vis/set/lineWidth 2
+#/vis/scene/add/frame	#Simple frame around the view
+#/vis/set/colour        #Revert to default colour (white)
+#/vis/set/lineWidth     #Revert to default line width (1.)
+
+#Commands for the drawing the tracks
+/vis/scene/add/eventID          		#Drawn at end of event
+/tracking/storeTrajectory 0				#(if too many tracks cause core dumped => storeTrajectory 0)
+/vis/scene/endOfEventAction accumulate
+/vis/scene/add/trajectories smooth rich
+#/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+
+#Draw hits at end of event:
+/vis/scene/add/hits
+
+#Geometry test (it can cause a "core dumped")
+/geometry/navigator/reset
+/geometry/test/run 

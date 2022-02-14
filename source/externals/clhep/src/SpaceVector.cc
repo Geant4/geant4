@@ -14,10 +14,6 @@
 // SpaceVectorP.cc	Intrinsic properties and methods involving second vector
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/ThreeVector.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 
@@ -46,10 +42,10 @@ void Hep3Vector::setSpherical (
 //      << "Spherical coordinates set with theta not in [0, PI]" << std::endl;
 //	// No special return needed if warning is ignored.
 //  }
-  dz = r1 * std::cos(theta1);
   double rho1 ( r1*std::sin(theta1));
-  dy = rho1 * std::sin (phi1);
-  dx = rho1 * std::cos (phi1);
+  setZ(r1 * std::cos(theta1));
+  setY(rho1 * std::sin (phi1));
+  setX(rho1 * std::cos (phi1));
   return;
 } /* setSpherical (r, theta1, phi1) */
 
@@ -62,9 +58,9 @@ void Hep3Vector::setCylindrical (
 //      << "Cylindrical coordinates supplied with negative Rho" << std::endl;
 //    // No special return needed if warning is ignored.
 //  }
-  dz = z1;
-  dy = rho1 * std::sin (phi1);
-  dx = rho1 * std::cos (phi1);
+  setZ(z1);
+  setY(rho1 * std::sin (phi1));
+  setX(rho1 * std::cos (phi1));
   return;
 } /* setCylindrical (r, phi, z) */
 
@@ -76,7 +72,7 @@ void Hep3Vector::setRhoPhiTheta (
     std::cerr << "Hep3Vector::setRhoPhiTheta() - "
       << "Attempt set vector components rho, phi, theta with zero rho -- "
       << "zero vector is returned, ignoring theta and phi" << std::endl;
-    dx = 0; dy = 0; dz = 0;
+    set(0.0, 0.0, 0.0);
     return;
   }
 //  if ( (theta1 == 0) || (theta1 == CLHEP::pi) ) {
@@ -89,9 +85,9 @@ void Hep3Vector::setRhoPhiTheta (
 //      << "Rho, phi, theta set with theta not in [0, PI]" << std::endl;
 //	// No special return needed if warning is ignored.
 //  }
-  dz = rho1 / std::tan (theta1);
-  dy = rho1 * std::sin (phi1);
-  dx = rho1 * std::cos (phi1);
+  setZ(rho1 / std::tan (theta1));
+  setY(rho1 * std::sin (phi1));
+  setX(rho1 * std::cos (phi1));
   return;
 } /* setCyl (rho, phi, theta) */
 
@@ -103,13 +99,13 @@ void Hep3Vector::setRhoPhiEta (
     std::cerr << "Hep3Vector::setRhoPhiEta() - "
       << "Attempt set vector components rho, phi, eta with zero rho -- "
       << "zero vector is returned, ignoring eta and phi" << std::endl;
-    dx = 0; dy = 0; dz = 0;
+    set(0.0, 0.0, 0.0);
     return;
   }
   double theta1 (2 * std::atan ( std::exp (-eta1) ));
-  dz = rho1 / std::tan (theta1);
-  dy = rho1 * std::sin (phi1);
-  dx = rho1 * std::cos (phi1);
+  setZ(rho1 / std::tan (theta1));
+  setY(rho1 * std::sin (phi1));
+  setX(rho1 * std::cos (phi1));
   return;
 } /* setCyl (rho, phi, eta) */
 
@@ -120,17 +116,17 @@ void Hep3Vector::setRhoPhiEta (
 //************
 
 int Hep3Vector::compare (const Hep3Vector & v) const {
-  if       ( dz > v.dz ) {
+  if       ( z() > v.z() ) {
     return 1;
-  } else if ( dz < v.dz ) {
+  } else if ( z() < v.z() ) {
     return -1;
-  } else if ( dy > v.dy ) {
+  } else if ( y() > v.y() ) {
     return 1;
-  } else if ( dy < v.dy ) {
+  } else if ( y() < v.y() ) {
     return -1;
-  } else if ( dx > v.dx ) {
+  } else if ( x() > v.x() ) {
     return 1;
-  } else if ( dx < v.dx ) {
+  } else if ( x() < v.x() ) {
     return -1;
   } else {
     return 0;
@@ -205,9 +201,9 @@ bool Hep3Vector::isParallel (const Hep3Vector & v,
   // At this point we know v1v2 can be squared.
 
   Hep3Vector v1Xv2 ( cross(v) );
-  if (  (std::fabs (v1Xv2.dx) > TOOBIG) ||
-        (std::fabs (v1Xv2.dy) > TOOBIG) ||
-        (std::fabs (v1Xv2.dz) > TOOBIG) ) {
+  if (  (std::fabs (v1Xv2.x()) > TOOBIG) ||
+        (std::fabs (v1Xv2.y()) > TOOBIG) ||
+        (std::fabs (v1Xv2.z()) > TOOBIG) ) {
     return false;
   }
                     
@@ -256,9 +252,9 @@ bool Hep3Vector::isOrthogonal (const Hep3Vector & v,
   // At this point we know v1v2 can be squared.
 
   Hep3Vector eps_v1Xv2 ( cross(epsilon*v) );
-  if (  (std::fabs (eps_v1Xv2.dx) > TOOBIG) ||
-        (std::fabs (eps_v1Xv2.dy) > TOOBIG) ||
-        (std::fabs (eps_v1Xv2.dz) > TOOBIG) ) {
+  if (  (std::fabs (eps_v1Xv2.x()) > TOOBIG) ||
+        (std::fabs (eps_v1Xv2.y()) > TOOBIG) ||
+        (std::fabs (eps_v1Xv2.z()) > TOOBIG) ) {
     return true;
   }
 

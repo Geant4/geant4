@@ -52,61 +52,39 @@ class G4MicroElecElasticModel : public G4VEmModel
 {
 
 public:
-
-  G4MicroElecElasticModel(const G4ParticleDefinition* p = 0, 
+  G4MicroElecElasticModel(const G4ParticleDefinition* p = nullptr, 
 		          const G4String& nam = "MicroElecElasticModel");
-
   virtual ~G4MicroElecElasticModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double ekin,
-					   G4double emin,
-					   G4double emax);
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  G4double CrossSectionPerVolume(const G4Material* material,
+				 const G4ParticleDefinition* p,
+				 G4double ekin,
+				 G4double emin,
+				 G4double emax) override;
+  
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   inline void SetKillBelowThreshold (G4double threshold);		 
   G4double GetKillBelowThreshold () { return killBelowEnergy; }	
 
-protected:
+  G4MicroElecElasticModel & operator=(const  G4MicroElecElasticModel &right) = delete;
+  G4MicroElecElasticModel(const  G4MicroElecElasticModel&) = delete;
 
+protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
-
-  G4Material* nistSi;
-  G4double killBelowEnergy;  
-  G4double lowEnergyLimit;  
-  G4double lowEnergyLimitOfModel;  
-  G4double highEnergyLimit; 
-  G4bool isInitialised;
-  G4int verboseLevel;
-  
-  // Cross section
-  
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
-
-  typedef std::map<G4String,G4MicroElecCrossSectionDataSet*,std::less<G4String> > MapData;
-  MapData tableData;
-  
   // Final state
-
   G4double Theta(G4ParticleDefinition * aParticleDefinition, G4double k, G4double integrDiff);
-
   G4double LinLinInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-
-  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
-  G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
+  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);   
+  G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);   
   G4double QuadInterpolator(G4double e11, 
  		            G4double e12, 
 			    G4double e21, 
@@ -119,22 +97,29 @@ private:
 			    G4double t2, 
 			    G4double t, 
 			    G4double e);
-
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
-
-  TriDimensionMap eDiffCrossSectionData;
-  std::vector<double> eTdummyVec;
-
-  typedef std::map<double, std::vector<double> > VecMap;
-  VecMap eVecm;
-   
   G4double RandomizeCosTheta(G4double k);
-   
-  //
-   
-  G4MicroElecElasticModel & operator=(const  G4MicroElecElasticModel &right);
-  G4MicroElecElasticModel(const  G4MicroElecElasticModel&);
 
+  // Cross section 
+  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
+  MapFile tableFile;
+
+  typedef std::map<G4String,G4MicroElecCrossSectionDataSet*,std::less<G4String> > MapData;
+  MapData tableData;
+  
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
+  TriDimensionMap eDiffCrossSectionData;
+  std::vector<G4double> eTdummyVec;
+
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
+  VecMap eVecm;
+
+  G4Material* nistSi;
+  G4double killBelowEnergy;  
+  G4double lowEnergyLimit;  
+  G4double lowEnergyLimitOfModel;  
+  G4double highEnergyLimit; 
+  G4int verboseLevel;
+  G4bool isInitialised;    
 };
 
 inline void G4MicroElecElasticModel::SetKillBelowThreshold (G4double threshold) 

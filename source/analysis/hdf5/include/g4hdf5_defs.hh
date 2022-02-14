@@ -30,25 +30,10 @@
 #define g4hdf5_defs_h
 
 #include "tools/hdf5/ntuple"
-#include "G4Hdf5AnalysisManager.hh"
-#include "G4Hdf5AnalysisReader.hh"
 #include "g4hntools_defs.hh"
 
-namespace G4Hdf5
-{
-  // Ntuple types
-  using G4Ntuple = tools::hdf5::ntuple; 
-  using G4NtupleIterator = std::vector<tools::hdf5::ntuple*>::iterator;
-  using G4NtupleConstIterator = std::vector<tools::hdf5::ntuple*>::const_iterator;
-
-  // RNtuple types
-  using G4RNtuple = tools::hdf5::ntuple; 
-
-  // Managers
-  using G4AnalysisManager = G4Hdf5AnalysisManager; 
-  using G4AnalysisReader = G4Hdf5AnalysisReader; 
-}  
+// Hdf5 output specific types
+using G4Hdf5Ntuple = tools::hdf5::ntuple;
+using G4Hdf5RNtuple = tools::hdf5::ntuple;
 
 #endif
-
-  

@@ -2,34 +2,64 @@
 # CMakeLists.txt
 # Module : G4externals
 # Package: Geant4.src.G4externals
-#
-# Intermediate level CMakeLists.txt - just process subdirectories
-#
-# Created on : 02/06/2011
-#
-# $Date$
-# $Revision$
-# $Author$
-#
 #------------------------------------------------------------------------------
 
-#----------------------------------------------------------------------------
-# We only need internal CLHEP if it was requested
-#
+# - Recurse into subdirectories as needed
 if(NOT GEANT4_USE_SYSTEM_CLHEP)
-    add_subdirectory(clhep)
+  add_subdirectory(clhep)
 endif()
 
-#----------------------------------------------------------------------------
-# We only need internal expat if it was requested
-#
 if(NOT GEANT4_USE_SYSTEM_EXPAT)
-    add_subdirectory(expat)
+  add_subdirectory(expat)
+endif()
+
+if(NOT GEANT4_USE_SYSTEM_ZLIB)
+  add_subdirectory(zlib)
+endif()
+
+# - G4tools always built
+add_subdirectory(g4tools)
+
+# PTL requires additional pre and post inclusion steps as it's a true subproject
+if(NOT GEANT4_USE_SYSTEM_PTL)
+  set(CMAKE_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}/PTL)
+  set(PTL_USE_TBB ${GEANT4_USE_TBB})
+
+  if(NOT (GEANT4_BUILD_SANITIZER STREQUAL "none"))
+    set(PTL_USE_SANITIZER ON)
+    set(PTL_SANITIZER_TYPE ${GEANT4_BUILD_SANITIZER})
+  endif()
+
+  set(PTL_USE_LOCKS ${GEANT4_USE_PTL_LOCKS})
+
+  add_subdirectory(ptl)
+  # Needs to be in defined category list for static/shared to be linked correctly.
+  set_property(GLOBAL APPEND PROPERTY GEANT4_DEFINED_CATEGORIES G4ptl)
 endif()
 
 #----------------------------------------------------------------------------
-# Geant4 internal ZLIB build optional
+# Alias the tasking libraries to Geant4 target naming convention
 #
-if(NOT GEANT4_USE_SYSTEM_ZLIB)
-    add_subdirectory(zlib)
+if(TARGET ptl-shared)
+  add_library(G4ptl INTERFACE)
+  target_link_libraries(G4ptl INTERFACE PTL::ptl-shared)
+  install(TARGETS G4ptl
+    EXPORT Geant4LibraryDepends
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Runtime
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+  add_library(Geant4::G4ptl ALIAS G4ptl)
+endif()
+
+if(TARGET ptl-static)
+  add_library(G4ptl-static INTERFACE)
+  target_link_libraries(G4ptl-static INTERFACE PTL::ptl-static)
+  install(TARGETS G4ptl-static
+    EXPORT Geant4LibraryDepends
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Runtime
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+  add_library(Geant4::G4ptl-static ALIAS G4ptl-static)
 endif()

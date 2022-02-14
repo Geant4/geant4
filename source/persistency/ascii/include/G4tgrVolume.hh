@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrVolume
+// G4tgrVolume
 //
 // Class description:
 //
@@ -39,17 +36,15 @@
 // parents, one parent for each volume placement will be written, even if that
 // means that parents are repeated...
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrVolume_h
-#define G4tgrVolume_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrVolume_hh
+#define G4tgrVolume_hh 1
 
 #include <vector>
 #include <map>
+
+#include "globals.hh"
 
 class G4tgrSolid;
 class G4tgrPlace;
@@ -58,66 +53,66 @@ class G4tgrPlaceParameterisation;
 
 class G4tgrVolume
 {
-  public:  // with description
+  public:
 
     G4tgrVolume();
-    G4tgrVolume( const std::vector<G4String>& wl );
-    G4tgrVolume( const G4tgrVolume& vol );
+    G4tgrVolume(const std::vector<G4String>& wl);
+    G4tgrVolume(const G4tgrVolume& vol);
     virtual ~G4tgrVolume();
 
-    virtual G4tgrPlace* AddPlace( const std::vector<G4String>& wl );
+    virtual G4tgrPlace* AddPlace(const std::vector<G4String>& wl);
       // Add a position with the data read from a ':place' tag
 
-    G4tgrPlaceDivRep* AddPlaceReplica( const std::vector<G4String>& wl );
+    G4tgrPlaceDivRep* AddPlaceReplica(const std::vector<G4String>& wl);
       // Add a replicated position
 
     G4tgrPlaceParameterisation* AddPlaceParam(const std::vector<G4String>& wl);
       // Add a parameterised position
 
-    void AddVisibility( const std::vector<G4String>& wl );
+    void AddVisibility(const std::vector<G4String>& wl);
       // Add visibility flag
 
-    void AddRGBColour( const std::vector<G4String>& wl );
+    void AddRGBColour(const std::vector<G4String>& wl);
       // Add colour
 
-    void AddCheckOverlaps( const std::vector<G4String>& wl );
+    void AddCheckOverlaps(const std::vector<G4String>& wl);
       // Add check overlaps flag
 
     // Accessors
 
-    const G4String& GetName() const {return theName;}
-    void SetName(const G4String& name) {theName = name;}
-    const G4String& GetType() const {return theType;}
-    G4tgrSolid* GetSolid() const {return theSolid;}
-    const G4String& GetMaterialName() const {return theMaterialName;}
+    const G4String& GetName() const { return theName; }
+    void SetName(const G4String& name) { theName = name; }
+    const G4String& GetType() const { return theType; }
+    G4tgrSolid* GetSolid() const { return theSolid; }
+    const G4String& GetMaterialName() const { return theMaterialName; }
 
     const std::vector<G4tgrPlace*> GetPlacements() const {return thePlacements;}
-    G4bool GetVisibility() const {return theVisibility;}
-    G4double* GetColour() const {return theRGBColour;}
-    G4double* GetRGBColour() const {return theRGBColour;}
+    G4bool GetVisibility() const { return theVisibility; }
+    G4double* GetColour() const { return theRGBColour; }
+    G4double* GetRGBColour() const { return theRGBColour; }
 
-    G4bool GetCheckOverlaps() const {return theCheckOverlaps;}
+    G4bool GetCheckOverlaps() const { return theCheckOverlaps; }
 
-    virtual G4tgrVolume* GetVolume( G4int ii ) const;
+    virtual G4tgrVolume* GetVolume(G4int ii) const;
 
     friend std::ostream& operator<<(std::ostream& os, const G4tgrVolume& obj);
 
-  protected:   
+  protected:
 
-    G4String theName;   
+    G4String theName = "";
       // Name of the volume
-    G4String theType;   
-      // Type of the volume    
-    G4String theMaterialName;   
+    G4String theType = "";
+      // Type of the volume
+    G4String theMaterialName = "";
       // Material of which the corresponding PV will be made of
-    G4tgrSolid* theSolid;
-      // Solid 
+    G4tgrSolid* theSolid = nullptr;
+      // Solid
     std::vector<G4tgrPlace*> thePlacements;
-      // Vector of placements 
+      // Vector of placements
 
-    G4bool theVisibility;
-    G4double* theRGBColour;
-    G4bool theCheckOverlaps;
+    G4bool theVisibility = false;
+    G4double* theRGBColour = nullptr;
+    G4bool theCheckOverlaps = false;
 };
 
 #endif

@@ -19,7 +19,33 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
+06-10-21 I. Hrivnacova (expol01-V10-07-03)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+19-07-21 I. Hrivnacova (expol01-V10-07-02)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+16-02-21 D. Sawkey (expol01-V10-07-01)
+- used renamed polarized processes
+
+12-02-21 V. Ivanchenko (expol01-V10-07-00)
+- Updated for 11.0 - clean-up Physics List
+
+13-11-20 B. Morgan (expol01-V10-06-01)
+- Enforce use of Serial RunManager.
+
+10-11-20 B.Morgan (expol01-V10-06-00)
+- Migrate to G4RunManagerFactory.
+
+17-05-18 J.Allison (expol01-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+14-10-16 G.Folger (expol01-V10-02-03)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
 
@@ -27,8 +53,8 @@ track of all tags.
 - RunAction - fixed compillation at gcc 4.1
 
 11-11-14 V.Ivanchenko (expol01-V10-00-01)
-- Several updates for the unification of the example: use standard 
-  physics builder from physics_list sub-package; removed local 
+- Several updates for the unification of the example: use standard
+  physics builder from physics_list sub-package; removed local
   SetCuts() method; removed AIDA histograms
 
 16-10-14 I.Hrivnacova (expol01-V10-00-00)
@@ -50,10 +76,10 @@ track of all tags.
 - Introduced G4UIExecutive.
 
 06-06-10 J.Perl (expol01-V09-03-01)
-- Remove unused variable in EventAction 
+- Remove unused variable in EventAction
 
 04-06-10 J.Perl (expol01-V09-03-00)
-- Updated vis usage 
+- Updated vis usage
 
 20-11-09 V.Ivanchenko (expol01-V09-02-00)
 - Update msc processes according to 9.3 scheme
@@ -79,7 +105,7 @@ track of all tags.
 
 02-10-06 V.Ivanchenko (expol01-V08-01-00)
 - first tag
-          
+
 11-08-06 Andreas Schaelicke
 - created from TestEm15
 

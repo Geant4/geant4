@@ -29,7 +29,7 @@
 #ifndef G4PSFlatSurfaceFlux_h
 #define G4PSFlatSurfaceFlux_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 #include "G4Box.hh"
 #include "G4PSDirectionFlag.hh"
@@ -38,7 +38,7 @@
 //   This is a primitive scorer class for scoring Surface Flux.
 //  Current version assumes only for G4Box shape, and the surface
 //  is defined at the -Z plane of the box.
-//   The surface flux is given in the unit of area. 
+//   The surface flux is given in the unit of area.
 //    e.g.  sum of 1/cos(T)/mm2,  where T is a incident angle of the
 //                                track on the surface.
 //
@@ -50,51 +50,52 @@
 //   2  OUT                    |<-  |        fFlux_Out
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
-// 
+//
 // 18-Nov-2005  T.Aso,  To use always positive value for anglefactor.
 //                      Bug fix. Area definition.
 // 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted and divideByArea options
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. cell flux * track weight             (Makoto Asai)
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSFlatSurfaceFlux : public G4VPrimitiveScorer
+class G4PSFlatSurfaceFlux : public G4VPrimitivePlotter
 {
-  public: // with description
-      G4PSFlatSurfaceFlux(G4String name,G4int direction, G4int depth=0);
-      G4PSFlatSurfaceFlux(G4String name,G4int direction, 
-			  const G4String& unit, G4int depth=0);
-      virtual ~G4PSFlatSurfaceFlux();
+ public:  // with description
+  G4PSFlatSurfaceFlux(G4String name, G4int direction, G4int depth = 0);
+  G4PSFlatSurfaceFlux(G4String name, G4int direction, const G4String& unit,
+                      G4int depth = 0);
+  virtual ~G4PSFlatSurfaceFlux();
 
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
+  inline void Weighted(G4bool flg = true) { weighted = flg; }
+  // Multiply track weight
 
-      inline void DivideByArea(G4bool flg=true) { divideByArea = flg; }
-      // Divided by Area.
+  inline void DivideByArea(G4bool flg = true) { divideByArea = flg; }
+  // Divided by Area.
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      G4int IsSelectedSurface(G4Step*,G4Box*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+  G4int IsSelectedSurface(G4Step*, G4Box*);
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      virtual void SetUnit(const G4String& unit);
+  virtual void SetUnit(const G4String& unit);
 
-  protected:
-      virtual void DefineUnitAndCategory();
+ protected:
+  virtual void DefineUnitAndCategory();
 
-  private:
-      G4int  HCID;
-      G4int  fDirection;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool weighted;
-      G4bool divideByArea;
+ private:
+  G4int HCID;
+  G4int fDirection;
+  G4THitsMap<G4double>* EvtMap;
+  G4bool weighted;
+  G4bool divideByArea;
 };
 
 #endif
-

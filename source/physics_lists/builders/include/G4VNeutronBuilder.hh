@@ -43,9 +43,9 @@
 #include "G4PhysicsBuilderInterface.hh"
 
 class G4HadronElasticProcess;
-class G4HadronFissionProcess;
-class G4HadronCaptureProcess;
-class G4NeutronInelasticProcess;
+class G4NeutronFissionProcess;
+class G4NeutronCaptureProcess;
+class G4HadronInelasticProcess;
 
 class G4VNeutronBuilder : public G4PhysicsBuilderInterface
 {
@@ -53,9 +53,9 @@ public:
   G4VNeutronBuilder() = default;
   virtual ~G4VNeutronBuilder() {} 
   virtual void Build(G4HadronElasticProcess * aP) = 0;
-  virtual void Build(G4HadronFissionProcess * aP) = 0;
-  virtual void Build(G4HadronCaptureProcess * aP) = 0;
-  virtual void Build(G4NeutronInelasticProcess * aP) = 0;
+  virtual void Build(G4NeutronFissionProcess * aP) = 0;
+  virtual void Build(G4NeutronCaptureProcess * aP) = 0;
+  virtual void Build(G4HadronInelasticProcess * aP) = 0;
   using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 
 };

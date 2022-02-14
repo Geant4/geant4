@@ -23,43 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbMaterialMixtureByNoAtoms
+// G4tgbMaterialMixtureByNoAtoms
 //
 // Class description:
 //
 // Class to represent a material whose components are given by number of atoms.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbMaterialMixtureByNoAtoms_h
-#define G4tgbMaterialMixtureByNoAtoms_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbMaterialMixtureByNoAtoms_hh
+#define G4tgbMaterialMixtureByNoAtoms_hh 1
 
 #include "globals.hh"
-
-#include <vector>
-#include <string>
-
 #include "G4tgbMaterialMixture.hh"
 
 class G4tgbMaterialMixtureByNoAtoms : public G4tgbMaterialMixture
 {
+  public:
 
-  public:  // with description
-
-    G4tgbMaterialMixtureByNoAtoms( G4tgrMaterial* tgr );
+    G4tgbMaterialMixtureByNoAtoms(G4tgrMaterial* tgr);
     G4tgbMaterialMixtureByNoAtoms();
-   ~G4tgbMaterialMixtureByNoAtoms();
+    ~G4tgbMaterialMixtureByNoAtoms();
 
     G4Material* BuildG4Material();
       // Return the associated G4Material and if does not exist build it
 
     void TransformToFractionsByWeight();
-
 };
 
 #endif

@@ -65,6 +65,7 @@ private:
   G4PreCompoundModel* fPreco;
   G4LorentzVector lab4mom;
 
+  G4int secID;  // Creator model ID for the secondaries created by this model
 };
 
 #endif

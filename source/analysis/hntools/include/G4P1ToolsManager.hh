@@ -26,7 +26,7 @@
 
 // Manager class for tools::histo::P1d.
 // It implements functions specific to the P1 type
-// (defined in g4tools). 
+// (defined in g4tools).
 //
 // Author: Ivana Hrivnacova, 24/07/2014  (ivana@ipno.in2p3.fr)
 
@@ -42,10 +42,11 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <string_view>
 
 namespace tools {
-namespace histo { 
-class p1d; 
+namespace histo {
+class p1d;
 }
 }
 
@@ -54,28 +55,29 @@ class G4P1ToolsManager : public G4VP1Manager,
 {
   public:
     explicit G4P1ToolsManager(const G4AnalysisManagerState& state);
-    virtual ~G4P1ToolsManager();
+    G4P1ToolsManager() = delete;
+    virtual ~G4P1ToolsManager() = default;
 
     // Method to add profiles read from a file
     G4int AddP1(const G4String& name, tools::histo::p1d* p1d);
     // Method for merge (MT)
     void  AddP1Vector(const std::vector<tools::histo::p1d*>& p1Vector);
-    
+
     // Access methods
     //
     tools::histo::p1d*  GetP1(G4int id, G4bool warn = true,
                               G4bool onlyIfActive = true) const;
-                              
+
     // Iterators
     std::vector<tools::histo::p1d*>::iterator BeginP1();
     std::vector<tools::histo::p1d*>::iterator EndP1();
     std::vector<tools::histo::p1d*>::const_iterator BeginConstP1() const;
     std::vector<tools::histo::p1d*>::const_iterator EndConstP1() const;
-                              
+
     // Access to profile vector (needed for Write())
     const std::vector<tools::histo::p1d*>& GetP1Vector() const;
-    const std::vector<G4HnInformation*>&   GetHnVector() const;  
-    
+    const std::vector<G4HnInformation*>&   GetHnVector() const;
+
   protected:
     // Virtual functions from base class
     //
@@ -85,39 +87,39 @@ class G4P1ToolsManager : public G4VP1Manager,
     virtual G4int CreateP1(const G4String& name, const G4String& title,
                            G4int nbins, G4double xmin, G4double xmax,
                            G4double ymin = 0, G4double ymax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& xbinScheme = "linear") final;
     virtual G4int CreateP1(const G4String& name, const G4String& title,
                            const std::vector<G4double>& edges,
                            G4double ymin = 0, G4double ymax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none") final;
-                           
+
     virtual G4bool SetP1(G4int id,
                            G4int nbins, G4double xmin, G4double xmax,
                            G4double ymin = 0, G4double ymax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& xbinScheme = "linear") final;
     virtual G4bool SetP1(G4int id,
                            const std::vector<G4double>& edges,
                            G4double ymin = 0, G4double ymax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none") final;
     virtual G4bool ScaleP1(G4int id, G4double factor) final;
-    
+
     // Method to fill profiles
     //
-    virtual G4bool FillP1(G4int id, G4double xvalue, G4double yvalue, 
+    virtual G4bool FillP1(G4int id, G4double xvalue, G4double yvalue,
                           G4double weight = 1.0) final;
 
     // Access methods
@@ -146,24 +148,24 @@ class G4P1ToolsManager : public G4VP1Manager,
     virtual G4String GetP1YAxisTitle(G4int id) const final;
 
     // Write data on ASCII file
-    //virtual G4bool WriteOnAscii(std::ofstream& output) final;
+    virtual G4bool WriteOnAscii(std::ofstream& output) final;
 
     // Access to Hn manager
     virtual std::shared_ptr<G4HnManager> GetHnManager() final;
 
   private:
-    // methods
+    // Methods
     //
-    void AddP1Information(const G4String& name,  
-                          const G4String& xunitName, 
-                          const G4String& yunitName, 
+    void AddP1Information(const G4String& name,
+                          const G4String& xunitName,
+                          const G4String& yunitName,
                           const G4String& xfcnName,
                           const G4String& yfcnName,
                           G4BinScheme xbinScheme) const;
 
-    // data members
-    //static constexpr G4int kDimension = 1;  // not yet supported on vc12
-    static const G4int kDimension;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4P1ToolsManager" };
+    static constexpr G4int fkDimension = 2;
 };
 
 // inline methods
@@ -174,11 +176,11 @@ inline  std::vector<tools::histo::p1d*>::iterator G4P1ToolsManager::BeginP1()
 inline  std::vector<tools::histo::p1d*>::iterator G4P1ToolsManager::EndP1()
 { return EndT(); }
 
-inline  std::vector<tools::histo::p1d*>::const_iterator 
+inline  std::vector<tools::histo::p1d*>::const_iterator
 G4P1ToolsManager::BeginConstP1() const
 { return BeginConstT(); }
 
-inline  std::vector<tools::histo::p1d*>::const_iterator 
+inline  std::vector<tools::histo::p1d*>::const_iterator
 G4P1ToolsManager::EndConstP1() const
 { return EndConstT(); }
 

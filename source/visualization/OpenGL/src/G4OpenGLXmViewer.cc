@@ -30,8 +30,6 @@
 // G4OpenGLXmViewer : Class derived from G4OpenGLXViewer, to provide
 //                  (Motif) widget OpenGL functionality for GEANT4.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "globals.hh"
 
 #include "G4OpenGLXmViewer.hh"
@@ -58,8 +56,11 @@
 
 void G4OpenGLXmViewer::ShowView () {
 
-  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+//  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propagated before progressing.
+// JA: Commented out July 2021 - slows rendering down in some cases and I
+// don't see any adverse effects.
+
   glFlush ();
 
   G4Xt::getInstance () -> SecondaryLoop ();
@@ -861,5 +862,3 @@ G4OpenGLXmViewer::~G4OpenGLXmViewer ()
 ******************************/
 
 }
-
-#endif

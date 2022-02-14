@@ -15,19 +15,18 @@
 /testem/det/setAbsYZ    50 um
 #
 /testem/phys/addPhysics  emstandard_opt3
+/process/em/verbose 1
+/process/em/workerVerbose 0
 #
 /run/setCut 7 um
 #
 /run/initialize
-#/process/em/verbose 1
-/process/em/workerVerbose 0
 #
 /testem/gun/setDefault
 /gun/particle pi+ 
 /gun/energy 5 GeV
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000
 #
 /testem/det/setAbsMat Gold

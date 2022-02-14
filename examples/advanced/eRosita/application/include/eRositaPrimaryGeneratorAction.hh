@@ -47,10 +47,10 @@ class G4Event;
 class eRositaPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-  eRositaPrimaryGeneratorAction(eRositaDetectorConstruction*);    
-  ~eRositaPrimaryGeneratorAction();
+  eRositaPrimaryGeneratorAction();  
+  
+  virtual ~eRositaPrimaryGeneratorAction();
 
-public:
   void GeneratePrimaries(G4Event*);
 
 private:
@@ -70,5 +70,3 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

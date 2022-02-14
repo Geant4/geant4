@@ -414,8 +414,8 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   if (detail >= 7) {
     G4Polyhedron* polyhedron = solid.GetPolyhedron();
     fRestOfLine << "\nLocal polyhedron coordinates:\n" << *polyhedron;
-    G4Transform3D* transform = pPVModel->GetCurrentTransform();
-    polyhedron->Transform(*transform);
+    const G4Transform3D& transform = pPVModel->GetCurrentTransform();
+    polyhedron->Transform(transform);
     fRestOfLine << "\nGlobal polyhedron coordinates:\n" << *polyhedron;
   }
 

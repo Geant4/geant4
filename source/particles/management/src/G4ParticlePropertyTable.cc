@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticlePropertyTable class implementation
 //
-// class G4ParticlePropertyTable
-//
-// Implementation
-//
-// History:
-// first implementation by H Kurashige 9 June 2003
-// Add   magnetic moment    by H Kurashige   Mar 2007
+// Author: H.Kurashige, 9 June 2003 - First implementation
+// --------------------------------------------------------------------
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -39,9 +35,11 @@
 #include "G4ParticlePropertyTable.hh"
 
 // Static class variable: ptr to single instance of class
-G4ThreadLocal G4ParticlePropertyTable* G4ParticlePropertyTable::fgParticlePropertyTable = nullptr;
+//
+G4ThreadLocal G4ParticlePropertyTable*
+              G4ParticlePropertyTable::fgParticlePropertyTable = nullptr;
 
-////////////////////
+// --------------------------------------------------------------------
 G4ParticlePropertyTable* G4ParticlePropertyTable::GetParticlePropertyTable()
 {
   if (fgParticlePropertyTable == nullptr)
@@ -51,62 +49,35 @@ G4ParticlePropertyTable* G4ParticlePropertyTable::GetParticlePropertyTable()
   return fgParticlePropertyTable;
 }
 
-/////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 G4ParticlePropertyTable::~G4ParticlePropertyTable()
 {
-  for (size_t idx=0; idx<arrayDataObject.size(); idx++){
+  for (std::size_t idx=0; idx<arrayDataObject.size(); ++idx)
+  {
     delete arrayDataObject[idx];
   }
   arrayDataObject.clear();
 }
 
-/////////////////////////////////////////////////////////////
-G4ParticlePropertyTable::G4ParticlePropertyTable():
-  verboseLevel(1)
+// --------------------------------------------------------------------
+G4ParticlePropertyTable::G4ParticlePropertyTable()
 {
   fParticleTable = G4ParticleTable::GetParticleTable();   
-}
-
-////////////////////////
-G4ParticlePropertyTable::G4ParticlePropertyTable(const G4ParticlePropertyTable &right)
-{
-  fParticleTable = G4ParticleTable::GetParticleTable();   
-  *this = right;
-}
-      
-////////////////////////
-G4ParticlePropertyTable & G4ParticlePropertyTable::operator=(const G4ParticlePropertyTable &right)
-{
-  if (this != &right) {
-    fParticleTable = right.fParticleTable;
-    verboseLevel   = right.verboseLevel; 
-  }
-  return *this;
 }
   
-////////////////////////
-G4bool G4ParticlePropertyTable::operator==(const G4ParticlePropertyTable &) const
-{
-  return true;
-}
-
-////////////////////////
-G4bool G4ParticlePropertyTable::operator!=(const G4ParticlePropertyTable &) const
-{
-  return false;
-}
-
-/////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 void G4ParticlePropertyTable::Clear()
 {
-  for (size_t idx=0; idx<arrayDataObject.size(); idx++){
+  for (std::size_t idx=0; idx<arrayDataObject.size(); ++idx)
+  {
     delete arrayDataObject[idx];
   }
   arrayDataObject.clear();
 }
 
-/////////////////////////////////////////////////////////////////////
-G4ParticlePropertyData* G4ParticlePropertyTable::GetParticleProperty(const G4String& aParticleName)
+// --------------------------------------------------------------------
+G4ParticlePropertyData*
+G4ParticlePropertyTable::GetParticleProperty(const G4String& aParticleName)
 {
   G4ParticleDefinition* aParticle = fParticleTable->FindParticle(aParticleName);
   if (aParticle == nullptr ) return nullptr;
@@ -114,11 +85,13 @@ G4ParticlePropertyData* G4ParticlePropertyTable::GetParticleProperty(const G4Str
   return GetParticleProperty(aParticle);
 }
 
-//////////////////////////////////////
-G4ParticlePropertyData*  G4ParticlePropertyTable::GetParticleProperty(const G4ParticleDefinition* aParticle)
+// --------------------------------------------------------------------
+G4ParticlePropertyData* G4ParticlePropertyTable::
+GetParticleProperty(const G4ParticleDefinition* aParticle)
 {
   if (aParticle == nullptr ) return nullptr;
-  G4ParticlePropertyData* pData = new G4ParticlePropertyData(aParticle->GetParticleName());
+  G4ParticlePropertyData* pData
+    = new G4ParticlePropertyData(aParticle->GetParticleName());
   pData->thePDGMass        = aParticle->GetPDGMass();
   pData->thePDGWidth       = aParticle->GetPDGWidth();
   pData->thePDGCharge      = aParticle->GetPDGCharge();
@@ -134,7 +107,9 @@ G4ParticlePropertyData*  G4ParticlePropertyTable::GetParticleProperty(const G4Pa
   pData->thePDGEncoding    = aParticle->GetPDGEncoding();
   pData->theAntiPDGEncoding  = aParticle->GetAntiPDGEncoding();
   pData->thePDGLifeTime    = aParticle->GetPDGLifeTime(); 
-  for (size_t flv=0; flv<G4ParticlePropertyData::NumberOfQuarkFlavor; ++flv) {
+  for (std::size_t flv=0;
+       flv<G4ParticlePropertyData::NumberOfQuarkFlavor; ++flv)
+  {
     pData->theQuarkContent[flv]     = aParticle->theQuarkContent[flv];
     pData->theAntiQuarkContent[flv] = aParticle->theAntiQuarkContent[flv];
   }
@@ -144,13 +119,16 @@ G4ParticlePropertyData*  G4ParticlePropertyTable::GetParticleProperty(const G4Pa
   return pData;
 }
 
-////////////////////////// 
-G4bool G4ParticlePropertyTable::SetParticleProperty(const G4ParticlePropertyData& pData)
+// --------------------------------------------------------------------
+G4bool G4ParticlePropertyTable::
+SetParticleProperty(const G4ParticlePropertyData& pData)
 {
   G4StateManager* pStateMan = G4StateManager::GetStateManager();
-  if (pStateMan->GetCurrentState() != G4State_PreInit){
+  if (pStateMan->GetCurrentState() != G4State_PreInit)
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel>0){
+    if (verboseLevel>0)
+    {
       G4cout << "G4ParticlePropertyTable::GetParticleProperty() ";
       G4cout << " for " << pData.theParticleName << G4endl;
       G4cout << " Particle properties can be modified only in Pre_Init state";
@@ -160,10 +138,13 @@ G4bool G4ParticlePropertyTable::SetParticleProperty(const G4ParticlePropertyData
     return false;
   } 
 
-  G4ParticleDefinition* aParticle = fParticleTable->FindParticle(pData.theParticleName);
-  if (aParticle == nullptr ) {
+  G4ParticleDefinition* aParticle
+    = fParticleTable->FindParticle(pData.theParticleName);
+  if (aParticle == nullptr )
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel>1){
+    if (verboseLevel>1)
+    {
       G4cout << "G4ParticlePropertyTable::GetParticleProperty() ";
       G4cout << " for " << pData.theParticleName << G4endl;
       G4cout << " Particle does not exist" << G4endl;
@@ -220,11 +201,15 @@ G4bool G4ParticlePropertyTable::SetParticleProperty(const G4ParticlePropertyData
   if (pData.fPDGLifeTimeModified) {
     aParticle->thePDGLifeTime = pData.thePDGLifeTime; 
   }
-  for (size_t flv=0; flv<G4ParticlePropertyData::NumberOfQuarkFlavor; ++flv) {
-    if (pData.fQuarkContentModified){
+  for (std::size_t flv=0;
+       flv<G4ParticlePropertyData::NumberOfQuarkFlavor; ++flv)
+  {
+    if (pData.fQuarkContentModified)
+    {
       aParticle->theQuarkContent[flv] = pData.theQuarkContent[flv];
     }
-    if (pData.fAntiQuarkContentModified){
+    if (pData.fAntiQuarkContentModified)
+    {
       aParticle->theAntiQuarkContent[flv] = pData.theAntiQuarkContent[flv];
     }
   }

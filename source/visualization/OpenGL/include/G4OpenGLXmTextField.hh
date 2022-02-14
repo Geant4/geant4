@@ -28,8 +28,6 @@
 // 
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMTEXTFIELD_HH
 #define G4OPENGLXMTEXTFIELD_HH
 
@@ -67,7 +65,5 @@ private:
   Widget text_field;
   Widget* parent;
 };
-
-#endif
 
 #endif

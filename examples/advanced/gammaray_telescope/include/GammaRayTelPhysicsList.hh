@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Authors: Susanna Guatelli, susanna@uow.edu.au,
+//
+
 #ifndef GammaRayTelPhysicsList_h
 #define GammaRayTelPhysicsList_h 1
 
@@ -36,16 +39,26 @@ class GammaRayTelPhysicsList: public G4VModularPhysicsList
 public:
   GammaRayTelPhysicsList();
   virtual ~GammaRayTelPhysicsList();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
-  void SetRegionCut(G4double);
+
+  void ConstructParticle();
+
+  void SetCutForGamma(G4double);
+  void SetCutForElectron(G4double);
+  void SetCutForPositron(G4double);
+
   void AddPhysicsList(const G4String& name);
   // void ConstructProcess();
 
   
 private:
+
+  G4EmConfigurator em_config;
+
+  G4bool helIsRegisted;
+  G4bool bicIsRegisted;
+  G4bool biciIsRegisted;
+  G4bool locIonIonInelasticIsRegistered;
+  G4bool radioactiveDecayIsRegisted;
 
   G4String                             emName;
   G4VPhysicsConstructor*               emPhysicsList;

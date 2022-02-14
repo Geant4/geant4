@@ -39,35 +39,45 @@ class G4VPrimitiveScorer;
 
 class G4ScoringCylinder : public G4VScoringMesh
 {
-  public:
-      G4ScoringCylinder(G4String wName);
-      ~G4ScoringCylinder();
+ public:
+  G4ScoringCylinder(G4String wName);
+  ~G4ScoringCylinder();
 
-  protected:
-      virtual void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
+ protected:
+  virtual void SetupGeometry(G4VPhysicalVolume* fWorldPhys);
 
-  public:
-      virtual void List() const;
-      virtual void Draw(RunScore * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-      virtual void DrawColumn(RunScore * map, G4VScoreColorMap* colorMap, 
-			  G4int idxProj, G4int idxColumn); 
+ public:
+  virtual void List() const;
+  virtual void Draw(RunScore* map, G4VScoreColorMap* colorMap,
+                    G4int axflg = 111);
+  virtual void DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
+                          G4int idxProj, G4int idxColumn);
 
-  void SetRMax(G4double rMax) {fSize[0] = rMax;}
-  void SetZSize(G4double zSize) {fSize[1] = zSize;} // half height
+  void SetRMin(G4double rMin) { fSize[0] = rMin; }
+  void SetRMax(G4double rMax) { fSize[1] = rMax; }
+  void SetZSize(G4double zSize) { fSize[2] = zSize; }  // half height
 
-  void RegisterPrimitives(std::vector<G4VPrimitiveScorer *> & vps);
+  void RegisterPrimitives(std::vector<G4VPrimitiveScorer*>& vps);
 
   // get 3D index (z,phi,r) from sequential index
   void GetRZPhi(G4int index, G4int q[3]) const;
 
-//Xin Dong 09302011 for Scorers
-public:
-  //private:
-  //enum IDX {IR, IZ, IPHI};
-  enum IDX {IZ, IPHI, IR};
+  // Xin Dong 09302011 for Scorers
+ public:
+  // private:
+  // enum IDX {IR, IZ, IPHI};
+  enum IDX
+  {
+    IZ,
+    IPHI,
+    IR
+  };
 
+ private:
+  void DumpVolumes();
+  void DumpSolids(G4int);
+  void DumpLogVols(G4int);
+  void DumpPhysVols(G4int);
 };
 
-
 #endif
-

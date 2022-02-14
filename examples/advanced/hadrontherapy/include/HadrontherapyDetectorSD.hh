@@ -35,6 +35,7 @@
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
+class HadrontherapyRBEAccumulable;
 class HadrontherapyDetectorSD : public G4VSensitiveDetector
 {
 public:
@@ -52,6 +53,7 @@ public:
 private:
     HadrontherapyDetectorHitsCollection *HitsCollection;
     G4String sensitiveDetectorName;
+    HadrontherapyRBEAccumulable* fRBEAccumulable{ nullptr };
 };
 #endif
 

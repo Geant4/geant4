@@ -48,29 +48,28 @@
 #include "G4BaryonConstructor.hh"
 #include "G4MuonMinus.hh"
 #include "G4PionMinus.hh"
+#include "G4BuilderType.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY( G4StoppingPhysicsFritiofWithBinaryCascade );
 
-G4ThreadLocal G4bool G4StoppingPhysicsFritiofWithBinaryCascade::wasActivated = false;
-
-
 G4StoppingPhysicsFritiofWithBinaryCascade::
 G4StoppingPhysicsFritiofWithBinaryCascade( G4int ver ) : 
-  G4VPhysicsConstructor( "stopping" ), verbose( ver ), useMuonMinusCapture( true ) {
-  if ( verbose > 1 ) G4cout << "### G4StoppingPhysicsFritiofWithBinaryCascade" << G4endl;
-}
-
+  G4StoppingPhysicsFritiofWithBinaryCascade("stopping", ver)
+{}
 
 G4StoppingPhysicsFritiofWithBinaryCascade::
 G4StoppingPhysicsFritiofWithBinaryCascade( const G4String& name, G4int ver, 
                                            G4bool UseMuonMinusCapture ) :
-  G4VPhysicsConstructor( name ), verbose( ver ), useMuonMinusCapture( UseMuonMinusCapture ) {
-  if ( verbose > 1 ) G4cout << "### G4StoppingPhysicsFritiofWithBinaryCascade" << G4endl;
+  G4VPhysicsConstructor( name ), verbose( ver ), 
+  useMuonMinusCapture( UseMuonMinusCapture ) 
+{
+  SetPhysicsType(bStopping);
+  if(verbose > 1) G4cout << "### G4StoppingPhysicsFritiofWithBinaryCascade" 
+                         << G4endl;
 }
-
 
 G4StoppingPhysicsFritiofWithBinaryCascade::~G4StoppingPhysicsFritiofWithBinaryCascade() {}
 
@@ -87,14 +86,10 @@ void G4StoppingPhysicsFritiofWithBinaryCascade::ConstructParticle() {
   pBaryonConstructor.ConstructParticle();
 }
 
-
 void G4StoppingPhysicsFritiofWithBinaryCascade::ConstructProcess() {
-  if ( verbose > 1 ) G4cout << "### G4StoppingPhysicsFritiofWithBinaryCascade::ConstructProcess " 
-		   	    << wasActivated << G4endl;
-  if ( wasActivated ) return;
-  wasActivated = true;
+  if ( verbose > 1 ) G4cout << "### G4StoppingPhysicsFritiofWithBinaryCascade::ConstructProcess " << G4endl;
 
-  G4MuonMinusCapture* muProcess = 0;
+  G4MuonMinusCapture* muProcess = nullptr;
   if ( useMuonMinusCapture ) {
     muProcess = new G4MuonMinusCapture();
   }
@@ -118,12 +113,11 @@ void G4StoppingPhysicsFritiofWithBinaryCascade::ConstructProcess() {
     particle = myParticleIterator->value();
     pmanager = particle->GetProcessManager();
 
-    if ( particle == G4MuonMinus::MuonMinus() ) {
-      if ( useMuonMinusCapture ) {
-        pmanager->AddRestProcess( muProcess );
-        if ( verbose > 1 ) {
-          G4cout << "### G4MuonMinusCapture added for " << particle->GetParticleName() << G4endl;
-        }
+    if (useMuonMinusCapture && particle == G4MuonMinus::MuonMinus() ) {
+      pmanager->AddRestProcess( muProcess );
+      if ( verbose > 1 ) {
+	G4cout << "### G4MuonMinusCapture added for " 
+               << particle->GetParticleName() << G4endl;
       }
     }
 
@@ -132,7 +126,8 @@ void G4StoppingPhysicsFritiofWithBinaryCascade::ConstructProcess() {
          ( ! particle->IsShortLived() ) ) {
 
       // Use Fritiof/BinaryCascade for: anti-proton and anti-neutron
-      if ( particle == G4AntiProton::Definition()  ||  particle == G4AntiNeutron::Definition() ) {
+      if ( particle == G4AntiProton::Definition()  ||  
+           particle == G4AntiNeutron::Definition() ) {
         if ( hFritiofWithBinaryCascadeProcess->IsApplicable( *particle ) ) {
           pmanager->AddRestProcess( hFritiofWithBinaryCascadeProcess );
           if ( verbose > 1 ) {
@@ -141,7 +136,8 @@ void G4StoppingPhysicsFritiofWithBinaryCascade::ConstructProcess() {
           }
         }
 
-      // Use Fritiof/Precompound for: anti-lambda, anti-sigma0, anti-sigma+, anti-xi0 and anti-nuclei
+      // Use Fritiof/Precompound for: 
+      // anti-lambda, anti-sigma0, anti-sigma+, anti-xi0 and anti-nuclei
       } else if ( particle == G4AntiLambda::Definition()     ||
                   particle == G4AntiSigmaZero::Definition()  ||
                   particle == G4AntiSigmaPlus::Definition()  ||
@@ -177,6 +173,5 @@ void G4StoppingPhysicsFritiofWithBinaryCascade::ConstructProcess() {
         }
       }
     }
-
   } // end of while loop
 }

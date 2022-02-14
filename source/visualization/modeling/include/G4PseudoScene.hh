@@ -80,22 +80,24 @@ public:
   void AddCompound (const G4VDigi&)       {}
   void AddCompound (const G4THitsMap<G4double>&)     {}
   void AddCompound (const G4THitsMap<G4StatDouble>&) {}
+  void AddCompound (const G4Mesh&)        {}
   // Primitives
   void BeginPrimitives   (const G4Transform3D&) {}
   void EndPrimitives     ()                     {}
   void BeginPrimitives2D (const G4Transform3D&) {}
   void EndPrimitives2D   ()                     {}
   void AddPrimitive (const G4Polyline&)   {}
-  void AddPrimitive (const G4Scale&)      {}
   void AddPrimitive (const G4Text&)       {}
   void AddPrimitive (const G4Circle&)     {}
   void AddPrimitive (const G4Square&)     {}
   void AddPrimitive (const G4Polymarker&) {}
   void AddPrimitive (const G4Polyhedron&) {}
 
+  void AddPrimitive (const G4Plotter&)    {}
+
 protected:
 
-  virtual void ProcessVolume (const G4VSolid&) = 0;
+  virtual void ProcessVolume (const G4VSolid&);
   const G4Transform3D* fpCurrentObjectTransformation;
 };
 

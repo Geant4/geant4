@@ -18,9 +18,12 @@
     using Table = map<int,array<map<int,double>, 2>>;
     using ResultTable = map<int,array<vector<int>, 2>>;
 
-    system ("rm -rf output.root");
-    system ("hadd output.root output_*.root");
-    
+    ifstream fs("output_t0.root");
+    if ( fs.good() ) {
+      system ("rm -rf output.root");
+      system ("hadd output.root output_*.root");
+    }
+
     double xphy;
     double yphy;
     double zphy;
@@ -219,7 +222,7 @@
               "in 5 nm radius from left side of the cube"
             <<" exposing chromatin fiber. Energy: 5 keV;\n"
             <<"Source type, 1;\n"
-            <<"Incident particles, 200;\n"
+            <<"Incident particles, 2212;\n"
             <<"Mean particle energy, 5 keV;\n"
             <<"Energy distribution, M, 0;\n"
             <<"Particle fraction, 1.0;\n"
@@ -230,12 +233,12 @@
             <<"Volumes, 0,20,20,20,-20,-20,-20,2,15,15,20,-15,-15,20;\n"
             <<"Chromosome sizes, ;\n"
             <<"DNA Density, ;"
-            <<"Cell Cycle Phase, G1/G2;\n"
+            <<"Cell Cycle Phase, G0/G1;\n"
             <<"DNA Structure, 4, 1;\n"
             <<"In vitro / in vivo, 0;\n"
             <<"Proliferation status, 1;\n"
             <<"Microenvironment, 27, 0.0;\n"
-            <<"Damage definition, 1, 1, 10, -1, 0, 17.5;\n"
+            <<"Damage definition, 1, 1, 10, -1, 17.5;\n"
             <<"Time, 2.5ns;\n"
             <<"Damage and primary count, 638, 200;\n"
             <<"Data entries, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0;\n"

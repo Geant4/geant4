@@ -33,30 +33,32 @@ class G4LogicalVolume;
 
 class G4ScoringRealWorld : public G4VScoringMesh
 {
-public:
+ public:
   G4ScoringRealWorld(G4String lvName);
   ~G4ScoringRealWorld();
 
-protected:
+ protected:
   // construct this mesh
-  virtual void SetupGeometry(G4VPhysicalVolume* );
+  virtual void SetupGeometry(G4VPhysicalVolume*);
 
-protected:
+ protected:
   G4String logVolName;
 
-public:
+ public:
   virtual void List() const;
 
-public:
-    //++++++++++ visualization method not yet implemented
-    virtual void Draw(RunScore * /*map*/, G4VScoreColorMap* /*colorMap*/, G4int /*axflg=111*/)
-    {;}
-    virtual void DrawColumn(RunScore * /*map*/, G4VScoreColorMap* /*colorMap*/,
+ public:
+  //++++++++++ visualization method not yet implemented
+  virtual void Draw(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
+                    G4int /*axflg=111*/)
+  {
+    ;
+  }
+  virtual void DrawColumn(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
                           G4int /*idxProj*/, G4int /*idxColumn*/)
-    {;}
+  {
+    ;
+  }
 };
-
-
-
 
 #endif

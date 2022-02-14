@@ -33,24 +33,54 @@
 //
 //
 #include "LXeRunAction.hh"
-#include "LXeRecorderBase.hh"
+
+#include "LXeHistoManager.hh"
+#include "LXeRun.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeRunAction::LXeRunAction(LXeRecorderBase* r) : fRecorder(r) {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXeRunAction::~LXeRunAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void LXeRunAction::BeginOfRunAction(const G4Run* aRun){
-  if(fRecorder)fRecorder->RecordBeginOfRun(aRun);
+LXeRunAction::LXeRunAction()
+  : fRun(nullptr)
+  , fHistoManager(nullptr)
+{
+  // Book predefined histograms
+  fHistoManager = new LXeHistoManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeRunAction::EndOfRunAction(const G4Run* aRun){
-  if(fRecorder)fRecorder->RecordEndOfRun(aRun);
+LXeRunAction::~LXeRunAction() { delete fHistoManager; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4Run* LXeRunAction::GenerateRun()
+{
+  fRun = new LXeRun();
+  return fRun;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeRunAction::BeginOfRunAction(const G4Run*)
+{
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if(analysisManager->IsActive())
+  {
+    analysisManager->OpenFile();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeRunAction::EndOfRunAction(const G4Run*)
+{
+  if(isMaster)
+    fRun->EndOfRun();
+
+  // save histograms
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if(analysisManager->IsActive())
+  {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }
 }

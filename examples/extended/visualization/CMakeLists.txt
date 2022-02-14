@@ -1,7 +1,8 @@
 #---Adding all visualization examples subdirectories explicitly 
 
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 add_subdirectory(perspective)
 add_subdirectory(standalone)
 add_subdirectory(userVisAction)
+add_subdirectory(movies)

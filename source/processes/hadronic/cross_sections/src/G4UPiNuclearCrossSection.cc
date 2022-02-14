@@ -37,7 +37,7 @@
 
 #include "G4UPiNuclearCrossSection.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4PionMinus.hh"
 #include "G4PionPlus.hh"
 #include "G4PhysicsTable.hh"
@@ -62,6 +62,8 @@ G4UPiNuclearCrossSection::G4UPiNuclearCrossSection()
  : G4VCrossSectionDataSet("G4UPiNuclearCrossSection")
 {
   isMaster = false;
+  spline   = false;
+
   piPlus  = G4PionPlus::PionPlus();
   piMinus = G4PionMinus::PionMinus();
 
@@ -134,13 +136,15 @@ void G4UPiNuclearCrossSection::AddDataSet(const G4String& p,
 					  const G4double* e, 
 					  G4int n)
 {
-  G4LPhysicsFreeVector* pvin = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
-  pvin->SetSpline(true);
-  G4LPhysicsFreeVector* pvel = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
-  pvel->SetSpline(true);
+  G4PhysicsFreeVector* pvin = new G4PhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV,spline);
+  G4PhysicsFreeVector* pvel = new G4PhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV,spline);
   for(G4int i=0; i<n; ++i) { 
     pvin->PutValues(i,e[i]*GeV,in[i]*millibarn); 
     pvel->PutValues(i,e[i]*GeV,std::max(0.0,(tot[i]-in[i])*millibarn)); 
+  }
+  if(spline) {
+    pvin->FillSecondDerivatives();
+    pvel->FillSecondDerivatives();
   }
   if(p == "pi+") {
     piPlusInelastic->push_back(pvin);

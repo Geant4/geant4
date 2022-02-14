@@ -1,0 +1,391 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// G4Profiler
+//
+// Template definition file
+//
+// Author: Jonathan Madsen, LBNL - November 2020
+// --------------------------------------------------------------------
+
+#if !defined(G4PROFILER_ICC_)
+#  define G4PROFILER_ICC_ 1
+
+#  include <functional>
+#  include <type_traits>
+#  include <tuple>
+#  include <initializer_list>
+#  include <string>
+#  include <sstream>
+
+// for index_sequence implementation
+#  include "PTL/Globals.hh"
+
+#  if defined(GEANT4_USE_TIMEMORY)
+#    include <timemory/utility/utility.hpp>
+#  endif
+
+#  if !defined(GEANT4_FOLD_EXPRESSION)
+#    define GEANT4_FOLD_EXPRESSION(...)                                        \
+      ::G4Impl::consume_parameters(                                            \
+        ::std::initializer_list<int>{ (__VA_ARGS__, 0)... })
+#  endif
+
+#  if !defined(G4PROFILER_ARG_SET)
+#    define G4PROFILER_ARG_SET(...) G4TypeList<__VA_ARGS__>
+#  endif
+
+//----------------------------------------------------------------------------//
+// lightweight (w.r.t. compile-time) alternative to std::tuple that doesn't
+// store anything and cannot be instantiated because it has no definition. This
+// guards against meta-programming mistakes where:
+//    std::function<void(const G4Step*)>
+// ends up as
+//    std::function<void(G4TypeList<const G4Step*>)>
+template <typename... Types>
+struct G4TypeList;
+
+// this is used in G4Impl::Functors to add a common set of arguments to all of
+// the functors
+template <typename... Types>
+struct G4CommonTypeList;
+
+//--------------------------------------------------------------------------------------//
+//
+template <typename... Types>
+struct G4TypeListSize;
+
+template <typename... Types>
+struct G4TypeListSize<G4TypeList<Types...>>
+{
+  static constexpr size_t value = sizeof...(Types);
+};
+
+template <typename... Types>
+struct G4TypeListSize<std::tuple<Types...>>
+{
+  static constexpr size_t value = std::tuple_size<std::tuple<Types...>>::value;
+};
+
+namespace G4Impl
+{
+  template <typename Tp>
+  std::string demangle()
+  {
+#  if defined(GEANT4_USE_TIMEMORY)
+    return tim::demangle<Tp>();
+#  else
+    return typeid(Tp).name();
+#  endif
+  }
+
+  template <typename... Tp>
+  void consume_parameters(Tp&&...)
+  {}
+  //------------------------------------------------------------------------//
+  // don't provide a definition that works without G4TypeList
+  template <typename RetT, typename... Tail>
+  struct Functors;
+  //------------------------------------------------------------------------//
+  template <typename RetT, typename... Tail>
+  struct Functors<RetT, G4TypeList<Tail...>>
+  {
+    using type = std::function<RetT(Tail...)>;
+  };
+  //------------------------------------------------------------------------//
+  template <typename RetT, typename... CommonT, typename... Tail>
+  struct Functors<RetT, G4CommonTypeList<CommonT...>, G4TypeList<Tail...>>
+  {
+    using type = std::function<RetT(CommonT..., Tail...)>;
+  };
+  //------------------------------------------------------------------------//
+  template <typename RetT, typename... Types, typename... Tail>
+  struct Functors<RetT, G4TypeList<G4TypeList<Types...>, Tail...>>
+  {
+    using type = std::tuple<std::function<RetT(Types...)>,
+                            typename Functors<RetT, Tail>::type...>;
+  };
+  //------------------------------------------------------------------------//
+  template <typename RetT, typename... CommonT, typename... Types,
+            typename... Tail>
+  struct Functors<RetT, G4CommonTypeList<CommonT...>,
+                  G4TypeList<G4TypeList<Types...>, Tail...>>
+  {
+    using type = std::tuple<
+      std::function<RetT(CommonT..., Types...)>,
+      typename Functors<RetT, G4CommonTypeList<CommonT...>, Tail>::type...>;
+  };
+  //------------------------------------------------------------------------//
+  template <typename RetT, typename... Tail>
+  using Functors_t = typename Functors<RetT, Tail...>::type;
+
+}  // namespace G4Impl
+
+//
+//  this allows the generic invocation or assignment of a functor
+//
+template <typename Type, typename FuncT, typename RetT = void>
+struct FuncHandler
+{
+  using this_type = FuncHandler<Type, FuncT, RetT>;
+
+  // until Geant4 updates to C++14 as a minimum
+  template <typename Tp>
+  using decay_t = typename std::decay<Tp>::type;
+  template <bool Bv, typename Tp = void>
+  using enable_if_t = typename std::enable_if<Bv, Tp>::type;
+  template <size_t... Idx>
+  using index_sequence = PTL::mpl::index_sequence<Idx...>;
+  template <size_t NumT>
+  using make_index_sequence = PTL::mpl::make_index_sequence<NumT>;
+
+  static constexpr size_t size = std::tuple_size<FuncT>::value;
+
+  FuncHandler(FuncT& _functors)
+    : m_functors(_functors)
+  {}
+
+  // overloading the assignment operator will let users
+  // be able to use one method for the G4ProfilerConfig
+  // despite the potential variants. Thus this is valid:
+  //
+  // GetLabelFunctor() = [](int i) { return std::to_string(i); }
+  // GetLabelFunctor() = [](float v) { return std::to_string(v); }
+  //
+  // but will only compile for types that are explicitly
+  // supported --> the assign function iterates through the
+  // specific variants at compile-time
+  template <typename Func>
+  void operator=(Func&& f)
+  {
+    assign(m_functors, std::forward<Func>(f), 0, make_index_sequence<size>{});
+  }
+
+ private:
+  FuncT& m_functors;
+
+  template <typename Tp>
+  static enable_if_t<std::is_same<decay_t<Tp>, bool>::value, Tp>
+  get_default_return_value()
+  {
+    return false;
+  }
+
+  template <typename Tp>
+  static enable_if_t<std::is_same<decay_t<Tp>, std::string>::value, Tp>
+  get_default_return_value()
+  {
+    // this may return an ugly mangled name but will at least but useful
+    // and can be demangled with c++filt
+    return std::string("label-functor-not-set-for-") + G4Impl::demangle<Tp>();
+  }
+
+  template <typename Tp>
+  static enable_if_t<std::is_pointer<decay_t<Tp>>::value, Tp>
+  get_default_return_value()
+  {
+    return nullptr;
+  }
+
+ private:
+  using return_t = decay_t<RetT>;
+
+  //
+  //  NOTE: All references to "iterations" in the comments
+  //  below refer to compile-time iterations, which are
+  //  implemented through recusion below. Iterations stop
+  //  when a valid statement has been found and thus necessitates
+  //  four versions of the same function: two of these functions
+  //  handle the end of the recursion 'sizeof...(Tail) == 0'
+  //  and the first of these functions (1.a) is used if a valid
+  //  statement is found and the second (1.b, if reached) introduces
+  //  a compilation error. The third and fourth start the iteration
+  //  when 'sizeof...(Tail) > 0'. If a valid statement is found
+  //  in the third function (2.a), recursion stops. If not, the
+  //  iteration is continued to the next index via the fourth
+  //  function (2.b).
+  //
+
+  // INVOKE 1.a
+  //
+  // this is the end of the iteration through the potential
+  // functor variants and the trailing '->' tests whether the
+  // functor can be called with the given arguments. The
+  // 'int' as the second parameter ensures (through overload
+  // resolution rules) that this gets tested before the
+  // function after this (1.b).
+  // If the size of 'FuncT' is equal to 1, then this is also
+  // the start of the iteration through the potential functor
+  // variants.
+  template <typename Tp, size_t Idx, size_t... Tail, typename... Args,
+            enable_if_t<sizeof...(Tail) == 0, int> = 0>
+  static auto invoke(Tp& _obj, int, index_sequence<Idx, Tail...>,
+                     Args&&... _args)
+    -> decltype(std::get<Idx>(_obj)(std::forward<Args>(_args)...), return_t{})
+  {
+    // if the functor has been set, then execute it
+    if(std::get<Idx>(_obj))
+      return std::get<Idx>(_obj)(std::forward<Args>(_args)...);
+    else
+    {
+      std::stringstream ss;
+      ss << "Error! Functor "
+         << G4Impl::demangle<decltype(std::get<Idx>(_obj))>()
+         << " was not set for " << G4Impl::demangle<Type>();
+      throw std::runtime_error(ss.str());
+    }
+    // the default for booleans should return false
+    return get_default_return_value<return_t>();
+  }
+
+  // INVOKE 1.b
+  //
+  // this is the end of the iteration through the potential
+  // functor variants and if this function is reached during
+  // compile-time, this means that the given arguments are
+  // not supported by any of the functors and will fail to
+  // compile. The 'long' as the second parameter ensures that
+  // it has lower precedence than the one above
+  template <typename Tp, size_t Idx, size_t... Tail, typename... Args,
+            enable_if_t<sizeof...(Tail) == 0, int> = 0>
+  static auto invoke(Tp&, long, index_sequence<Idx, Tail...>, Args&&...)
+    -> return_t
+  {
+    // this will cause a failure at compile-time.
+    // this ensures that this static assert is dependent
+    // on this function getting instantiated, simply putting
+    // 'false' here would result in compile-time failure
+    // even if no code ever instantiated this function
+    static_assert(!std::is_same<Tp, Tp>::value, "Error! No valid functor!");
+    throw std::runtime_error(
+      "Error! No valid functor! This should have caused a compilation error!");
+    return return_t{};
+  }
+
+  // INVOKE 2.a
+  //
+  // If the size of 'FuncT' is greater than one, this is the
+  // start of the iteration through the potential functor variants.
+  // This version will be used if the X in '-> decltype(X, Y)'
+  // is valid. If it is not valid, then overload resolution
+  // rules will dictate that the compiler will move on to the
+  // 'invoke' member function 2.b
+  template <typename Tp, size_t Idx, size_t... Tail, typename... Args,
+            enable_if_t<(sizeof...(Tail) > 0), int> = 0>
+  static auto invoke(Tp& _obj, int, index_sequence<Idx, Tail...>,
+                     Args&&... _args)
+    -> decltype(std::get<Idx>(_obj)(std::forward<Args>(_args)...), return_t{})
+  {
+    return std::get<Idx>(_obj)(std::forward<Args>(_args)...);
+  }
+
+  // INVOKE 2.b
+  //
+  // If the above test was not valid, we discard the current index
+  // ('Idx') and proceed to the next index. If there is only
+  // one index remaining, then this will call proceed to the
+  // first invoke member function (1.a). If there are multiple
+  // indexes remaining, then this will proceed to the previous
+  // invoke member function (2.a) and this will continue until
+  // a valid match is found or will fail to compile.
+  template <typename Tp, size_t Idx, size_t... Tail, typename... Args,
+            enable_if_t<(sizeof...(Tail) > 0), int> = 0>
+  static auto invoke(Tp& _obj, long, index_sequence<Idx, Tail...>,
+                     Args&&... _args)
+    -> decltype(invoke(_obj, 0, index_sequence<Tail...>{},
+                       std::forward<Args>(_args)...))
+  {
+    return invoke(_obj, 0, index_sequence<Tail...>{},
+                  std::forward<Args>(_args)...);
+  }
+
+ private:
+  // this uses the same principles as the invoke member function.
+  // See the comments there.
+  template <typename LhsT, typename RhsT, size_t Idx, size_t... Tail,
+            enable_if_t<sizeof...(Tail) == 0, int> = 0>
+  static auto assign(LhsT& _lhs, RhsT&& _rhs, int, index_sequence<Idx, Tail...>)
+    -> decltype((std::get<Idx>(_lhs) = std::forward<RhsT>(_rhs)), void())
+  {
+    std::get<Idx>(_lhs) = std::forward<RhsT>(_rhs);
+  }
+
+  // this uses the same principles as the invoke member function.
+  // See the comments there.
+  template <typename LhsT, typename RhsT, size_t Idx, size_t... Tail,
+            enable_if_t<sizeof...(Tail) == 0, int> = 0>
+  static void assign(LhsT&, RhsT&&, long, index_sequence<Idx, Tail...>)
+  {
+    // this will cause a failure at compile-time.
+    // this ensures that this static assert is dependent
+    // on this function getting instantiated, simply putting
+    // 'false' here would result in compile-time failure
+    // even if no code ever instantiated this function
+    static_assert(!std::is_same<LhsT, LhsT>::value,
+                  "Error! No valid functor assignment!");
+    throw std::runtime_error(
+      "Error! No valid functor! This should have caused a compilation error!");
+  }
+
+  // this uses the same principles as the invoke member function.
+  // See the comments there.
+  template <typename LhsT, typename RhsT, size_t Idx, size_t... Tail,
+            enable_if_t<(sizeof...(Tail) > 0), int> = 0>
+  static auto assign(LhsT& _lhs, RhsT&& _rhs, int, index_sequence<Idx, Tail...>)
+    -> decltype((std::get<Idx>(_lhs) = std::forward<RhsT>(_rhs)), void())
+  {
+    std::get<Idx>(_lhs) = std::forward<RhsT>(_rhs);
+  }
+
+  // this uses the same principles as the invoke member function.
+  // See the comments there.
+  template <typename LhsT, typename RhsT, size_t Idx, size_t... Tail,
+            enable_if_t<(sizeof...(Tail) > 0), int> = 0>
+  static void assign(LhsT& _lhs, RhsT&& _rhs, long,
+                     index_sequence<Idx, Tail...>)
+  {
+    assign(_lhs, std::forward<RhsT>(_rhs), 0, index_sequence<Tail...>{});
+  }
+
+ public:
+  // overloading the call operator makes it generic to call
+  // the functors but will only compile for types that are
+  // explicitly supported --> the invoke function iterates
+  // through the specific variants at compile-time to
+  // ensure using SFINAE
+  template <typename... Args>
+  auto operator()(Args&&... _args)
+    -> decltype(std::declval<this_type>().invoke(std::declval<FuncT&>(), 0,
+                                                 make_index_sequence<size>{},
+                                                 std::forward<Args>(_args)...))
+  {
+    return invoke(m_functors, 0, make_index_sequence<size>{},
+                  std::forward<Args>(_args)...);
+  }
+};
+
+//----------------------------------------------------------------------------//
+
+#endif

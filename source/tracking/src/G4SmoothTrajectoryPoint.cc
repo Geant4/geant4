@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SmoothTrajectoryPoint class implementation
 //
-//
-//
-// ---------------------------------------------------------------
-//
-// G4SmoothTrajectoryPoint.cc
-//
-// ---------------------------------------------------------------
+// Contact:
+//   Questions and comments to this code should be sent to
+//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//     Makoto  Asai   (e-mail: asai@slac.stanford.edu)
+//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// --------------------------------------------------------------------
 
 #include "G4SmoothTrajectoryPoint.hh"
 
@@ -46,39 +46,38 @@
 
 G4Allocator<G4SmoothTrajectoryPoint>*& aSmoothTrajectoryPointAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4SmoothTrajectoryPoint>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4SmoothTrajectoryPoint>* _instance = nullptr;
+  return _instance;
 }
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint()
-: fAuxiliaryPointVector(0)
 {
   fPosition = G4ThreeVector(0.,0.,0.);
 }
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos)
-: fAuxiliaryPointVector(0)
 {
   fPosition = pos;
 }
 
-G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos,
-						 std::vector<G4ThreeVector>* auxiliaryPoints)
-: fPosition(pos),
-  fAuxiliaryPointVector(auxiliaryPoints)
-{}
+G4SmoothTrajectoryPoint::
+G4SmoothTrajectoryPoint(G4ThreeVector pos,
+                        std::vector<G4ThreeVector>* auxiliaryPoints)
+  : fPosition(pos), fAuxiliaryPointVector(auxiliaryPoints)
+{
+}
 
-G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right)
-: G4VTrajectoryPoint(),
-  fPosition(right.fPosition),fAuxiliaryPointVector(right.fAuxiliaryPointVector)
+G4SmoothTrajectoryPoint::
+G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint& right)
+  : G4VTrajectoryPoint(),
+    fPosition(right.fPosition),
+    fAuxiliaryPointVector(right.fAuxiliaryPointVector)
 {
 }
 
 G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint()
 {
-  if(fAuxiliaryPointVector) {
-    delete fAuxiliaryPointVector;
-  }
+  delete fAuxiliaryPointVector;
 }
 
 
@@ -88,13 +87,14 @@ G4SmoothTrajectoryPoint::GetAttDefs() const
   G4bool isNew;
   std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4SmoothTrajectoryPoint",isNew);
-  if (isNew) {
+  if (isNew)
+  {
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Step Position",
-			     "Physics","G4BestUnit","G4ThreeVector");
+                             "Physics","G4BestUnit","G4ThreeVector");
     G4String Aux("Aux");
     (*store)[Aux] = G4AttDef(Aux, "Auxiliary Point Position",
-			     "Physics","G4BestUnit","G4ThreeVector");
+                             "Physics","G4BestUnit","G4ThreeVector");
   }
   return store;
 }
@@ -103,15 +103,16 @@ std::vector<G4AttValue>* G4SmoothTrajectoryPoint::CreateAttValues() const
 {
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
-  if (fAuxiliaryPointVector) {
-    std::vector<G4ThreeVector>::iterator iAux;
-    for (iAux = fAuxiliaryPointVector->begin();
-	 iAux != fAuxiliaryPointVector->end(); ++iAux) {
+  if (fAuxiliaryPointVector != nullptr)
+  {
+    for (auto iAux = fAuxiliaryPointVector->cbegin();
+              iAux != fAuxiliaryPointVector->cend(); ++iAux)
+    {
       values->push_back(G4AttValue("Aux",G4BestUnit(*iAux,"Length"),""));
     }
   }
 
-  values->push_back(G4AttValue("Pos",G4BestUnit(fPosition,"Length"),""));
+  values->push_back(G4AttValue("Pos", G4BestUnit(fPosition,"Length"),""));
 
 #ifdef G4ATTDEBUG
   G4cout << G4AttCheck(values,GetAttDefs());

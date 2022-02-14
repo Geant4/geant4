@@ -23,49 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VUserTrackInformation class implementation
 //
-//
-// 
-// --------------------------------------------------------------
+// Author: Makoto Asai, 2 June 2000
+// --------------------------------------------------------------------
 
 #include "G4VUserTrackInformation.hh"
 
+// --------------------------------------------------------------------
 G4VUserTrackInformation::G4VUserTrackInformation()
-  : pType(0)
-{;}
+{}
 
+// --------------------------------------------------------------------
 G4VUserTrackInformation::G4VUserTrackInformation(const G4String& infoType)
-{ 
-  pType = new G4String(infoType) ;
+{
+  pType = new G4String(infoType);
 }
 
+// --------------------------------------------------------------------
 G4VUserTrackInformation::~G4VUserTrackInformation()
 {
-  if (pType!=0) delete pType;
+  if(pType != nullptr)
+    delete pType;
 }
 
-G4VUserTrackInformation::G4VUserTrackInformation(const  G4VUserTrackInformation& right) 
-  :pType(0)
+// --------------------------------------------------------------------
+G4VUserTrackInformation::
+G4VUserTrackInformation(const G4VUserTrackInformation& right)
 {
-  if (right.pType!=0)  pType = new G4String(*(right.pType));
+  if(right.pType != nullptr)
+    pType = new G4String(*(right.pType));
 }
 
-
-G4VUserTrackInformation& G4VUserTrackInformation::operator=(const G4VUserTrackInformation& right)
+// --------------------------------------------------------------------
+G4VUserTrackInformation&
+G4VUserTrackInformation::operator=(const G4VUserTrackInformation& right)
 {
-  if (this != &right) {
-    if (pType !=0) delete pType;
-    if (right.pType) pType = new G4String(*(right.pType));
-    else pType=0;
+  if(this != &right)
+  {
+    if(pType != nullptr)
+      delete pType;
+    if(right.pType)
+      pType = new G4String(*(right.pType));
+    else
+      pType = nullptr;
   }
   return *this;
 }
-  
 
+// --------------------------------------------------------------------
 const G4String& G4VUserTrackInformation::GetType() const
 {
-  static const G4String NOTYPE="NONE";
-  if(pType!=0) return *pType;
-  else return NOTYPE;
+  static const G4String NOTYPE = "NONE";
+  if(pType != nullptr)
+    return *pType;
+  else
+    return NOTYPE;
 }
-

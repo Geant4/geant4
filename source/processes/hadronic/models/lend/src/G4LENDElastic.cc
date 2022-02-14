@@ -141,8 +141,7 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
 //     theRecoil->SetDefinition( ionTable->GetIon( iZ , iA ) ); 
        theRecoil->SetDefinition( G4IonTable::GetIonTable()->GetIon( iZ, iA , iM ));
      theRecoil->SetMomentum( theTarget.GetMomentum() );
-
-     theResult->AddSecondary( theRecoil );
+     theResult->AddSecondary( theRecoil, secID );
 
    return theResult; 
 

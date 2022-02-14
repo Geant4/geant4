@@ -70,7 +70,7 @@ class G4BooleanSolid : public G4VSolid
       // return the corresponding solid (for no=0 and 1).
       // If the solid is not a "Boolean", return 0.
 
-    inline G4double GetCubicVolume();
+    virtual G4double GetCubicVolume();
     inline G4double GetSurfaceArea();
 
     virtual G4GeometryType  GetEntityType() const;
@@ -82,12 +82,12 @@ class G4BooleanSolid : public G4VSolid
     inline G4double GetCubVolEpsilon() const;
     inline void SetCubVolStatistics(G4int st);
     inline void SetCubVolEpsilon(G4double ep);
-
+   
     inline G4int GetAreaStatistics() const;
     inline G4double GetAreaAccuracy() const;
     inline void SetAreaStatistics(G4int st);
     inline void SetAreaAccuracy(G4double ep);
-
+   
     G4ThreeVector GetPointOnSurface() const;
 
   public:  // without description
@@ -116,12 +116,14 @@ class G4BooleanSolid : public G4VSolid
     G4VSolid* fPtrSolidA = nullptr;
     G4VSolid* fPtrSolidB = nullptr;
 
+    G4double fCubicVolume = -1.0;
+      // Stored value of fCubicVolume 
+
   private:
 
     G4int    fStatistics = 1000000;
     G4double fCubVolEpsilon = 0.001;
     G4double fAreaAccuracy = -1;
-    G4double fCubicVolume = -1.0;
     G4double fSurfaceArea = -1.0;
 
     mutable G4bool fRebuildPolyhedron = false;

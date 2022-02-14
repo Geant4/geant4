@@ -18,7 +18,7 @@
 /run/setCut 0.7 mm
 #
 # histogram file
-/testem/histo/setFileName egs4/93ref0
+/analysis/setFileName egs4_93ref0
 #
 /run/initialize
 #

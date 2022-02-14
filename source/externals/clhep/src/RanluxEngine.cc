@@ -41,8 +41,12 @@
 #include "CLHEP/Random/engineIDulong.h"
 #include "CLHEP/Utility/atomic_int.h"
 
-#include <string.h>	// for strcmp
+#include <atomic>
 #include <cstdlib>	// for std::abs(int)
+#include <iostream>
+#include <string.h>	// for strcmp
+#include <string>
+#include <vector>
 
 namespace CLHEP {
 

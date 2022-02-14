@@ -83,7 +83,7 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
 
          theSec->SetMomentum( G4ThreeVector( (*products)[j].px*MeV , (*products)[j].py*MeV , (*products)[j].pz*MeV ) );
          //G4cout << theSec->GetDefinition()->GetParticleName() << G4endl;
-         theResult->AddSecondary( theSec );
+         theResult->AddSecondary( theSec, secID );
          //Set time for delayed neutrons
          //Current implementation is a little tricky, 
          if ( (*products)[j].birthTimeSec != 0 ) {

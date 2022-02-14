@@ -62,7 +62,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
 				  const G4bool& /*visible*/) const
 {
   // Return if attribute name has not been set. Just print one warning
-  if (fAttName.isNull()) {
+  if (fAttName.empty()) {
 
     if (!fWarnedMissingAttribute) {
       G4ExceptionDescription ed;

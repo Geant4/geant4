@@ -34,8 +34,6 @@
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
@@ -66,7 +64,11 @@ SO_KIT_SOURCE(SoDetectorTreeKit)
  
 // initClass
 void SoDetectorTreeKit::initClass(){
-  SO_KIT_INIT_CLASS(SoDetectorTreeKit,SoBaseKit,"BaseKit");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_KIT_INIT_CLASS(SoDetectorTreeKit,SoBaseKit,"BaseKit");
+  }
 }
 
 // Constructor
@@ -237,5 +239,3 @@ void SoDetectorTreeKit::doAction(
   SO_ALTERNATEREP_DO_ACTION(aAction)
   SoBaseKit::doAction(aAction);
 }
-
-#endif

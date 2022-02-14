@@ -11,8 +11,8 @@ $Id: README 92318 2015-08-27 14:49:47Z gcosmo $
                             AnaEx01
                             -------
                             
- Examples AnaEx01, AnaEx02 and AnaEx03 show the usage of histogram and tuple 
- manipulations using G4Analysis, ROOT and AIDA compliant systems on the same
+ Examples AnaEx01 and AnaEx02 show the usage of histogram and tuple
+ manipulations using G4Analysis and ROOT compliant systems on the same
  scenario. All analysis manipulations (histo booking, filling, saving histos 
  in a file, etc...) are located in one class : HistoManager, implementation of 
  which is different in each example. All the other classes are same in all 

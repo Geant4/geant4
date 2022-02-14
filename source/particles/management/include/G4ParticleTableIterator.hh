@@ -23,67 +23,81 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	28 Oct 1999, H.Kurashige
-// ------------------------------------------------------------
+// G4ParticleTableIterator
 
-#ifndef G4ParticleTableIterator_h
-#define G4ParticleTableIterator_h 1
+// Authors: G.Cosmo, 2 December 1995 - Design, based on object model
+//          H.Kurashige, 28 October 1999 - First implementation
+// --------------------------------------------------------------------
+#ifndef G4ParticleTableIterator_hh
+#define G4ParticleTableIterator_hh 1
 
 #include <map>
 #include "G4ParticleDefinition.hh"
 
 template < class K, class V > class G4ParticleTableIterator
 {
- public:
-  typedef  std::map<K, V, std::less<K> > Map;
-  G4ParticleTableIterator( Map &adict):
-    it(adict.begin()),
-    mydict(&adict),
-    defined(false),
-    skipIons(true)
-     {}
+  public:
 
-  G4bool operator++ ()
+    using Map = std::map<K, V, std::less<K> >;
+
+    G4ParticleTableIterator( Map &adict )
+      : it(adict.begin()), mydict(&adict)
+    {
+    }
+
+    G4bool operator++()
     {
       if(!defined) return false;
-      it++;
+      ++it;
       return it!=mydict->end() ? true : false;
     }
       
-  G4bool operator()()
+    G4bool operator()()
     {
-      if(!defined) {
+      if(!defined)
+      {
         defined=true;
         it=mydict->begin();
-      } else {
-        it++;
+      }
+      else
+      {
+        ++it;
       }
       if(it==mydict->end()) return false;
-      if(skipIons){
-        while((static_cast<G4ParticleDefinition*>((*it).second))->IsGeneralIon()){ // Loop checking, 09.08.2015, K.Kurashige
-          it++;
+      if(skipIons)
+      {
+        while((static_cast<G4ParticleDefinition*>
+              ((*it).second))->IsGeneralIon())
+        {                           // Loop checking, 09.08.2015, K.Kurashige
+          ++it;
           if(it==mydict->end()) return false;
         }
       }
       return true;
     }
 
-  void reset (G4bool ifSkipIon = true) {defined=false; skipIons = ifSkipIon; }
-  K* key() const { return &((*it).first); }
-  V  value() const { return (*it).second; }
+    void reset (G4bool ifSkipIon = true)
+    {
+      defined=false;
+      skipIons = ifSkipIon;
+    }
 
- private:
-  typename Map::iterator it;  
-  Map * mydict;
-  G4bool defined;
-  G4bool skipIons;
+    K* key() const
+    {
+      return &((*it).first);
+    }
+
+    V value() const
+    {
+      return (*it).second;
+    }
+
+  private:
+
+    typename Map::iterator it;  
+    Map* mydict = nullptr;
+    G4bool defined = false;
+    G4bool skipIons = true;
 };
 
 #endif

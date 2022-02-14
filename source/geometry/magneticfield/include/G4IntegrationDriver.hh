@@ -53,7 +53,7 @@ class G4IntegrationDriver : public G4RKIntegrationDriver<T>,
     G4IntegrationDriver( G4double hminimum,
                          T*       stepper,
                          G4int    numberOfComponents = 6,
-                         G4int    statisticsVerbosity = 1 );
+                         G4int    statisticsVerbosity = 0 );
 
     virtual ~G4IntegrationDriver() override;
 
@@ -67,12 +67,12 @@ class G4IntegrationDriver : public G4RKIntegrationDriver<T>,
 
     virtual void OnStartTracking() override;
     virtual void OnComputeStep() override {}
-    virtual G4bool DoesReIntegrate() override { return true; } 
+    virtual G4bool DoesReIntegrate() const override { return true; }
 
     virtual G4bool AccurateAdvance(G4FieldTrack& track,
                                    G4double hstep,
                                    G4double eps, // Requested y_err/hstep
-                                   G4double hinitial = 0) override;
+                                   G4double hinitial = 0 ) override;
       // Integrates ODE from current s (s=s0) to s=s0+h with accuracy eps.
       // On output track is replaced by value at end of interval.
       // The concept is similar to the odeint routine from NRC p.721-722.
@@ -87,6 +87,9 @@ class G4IntegrationDriver : public G4RKIntegrationDriver<T>,
     virtual void SetVerboseLevel(G4int newLevel) override;
     virtual G4int GetVerboseLevel() const override;
 
+    virtual void  StreamInfo( std::ostream& os ) const override;
+     // Write out the parameters / state of the driver
+   
     // Accessors
     //
     G4double GetMinimumStep() const;

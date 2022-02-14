@@ -43,8 +43,8 @@ namespace CLHEP {
   * @ingroup random
   */
 
-typedef unsigned long int myID_t;
-typedef unsigned long long int myuint_t;
+using myID_t = std::uint32_t;
+using myuint_t = unsigned long long int;
 
 class MixMaxRng: public HepRandomEngine {
 
@@ -144,6 +144,7 @@ private:
 #if defined __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#pragma GCC diagnostic ignored "-Wuninitialized"
 #endif
   inline double convert1double(myuint_t u)
   {

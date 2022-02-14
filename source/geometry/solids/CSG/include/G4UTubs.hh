@@ -38,7 +38,7 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include <volumes/UnplacedTube.h>
+#include <VecGeom/volumes/UnplacedTube.h>
 
 #include "G4Polyhedron.hh"
 
@@ -80,7 +80,7 @@ class G4UTubs : public G4UAdapter<vecgeom::GenericUnplacedTube>
     void SetZHalfLength   (G4double newDz);
     void SetStartPhiAngle (G4double newSPhi, G4bool trig=true);
     void SetDeltaPhiAngle (G4double newDPhi);
-    
+
     inline G4GeometryType GetEntityType() const;
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
@@ -100,9 +100,9 @@ class G4UTubs : public G4UAdapter<vecgeom::GenericUnplacedTube>
       // persistifiable objects.
 
     G4UTubs(const G4UTubs& rhs);
-    G4UTubs& operator=(const G4UTubs& rhs); 
+    G4UTubs& operator=(const G4UTubs& rhs);
       // Copy constructor and assignment operator.
- 
+
 };
 
 // --------------------------------------------------------------------

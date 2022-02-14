@@ -2,15 +2,12 @@
 # Visualization of detector geometry and events  
 ###################################################
 
-# create empty scene
-/vis/scene/create
-
 # writing Geometry in GDML file
 /mydet/writeFile wtest.gdml
 /run/initialize
 
 # Create a scene handler for a specific graphics system
-/vis/open OGL
+/vis/open OGL 600x600-0+0
 
 # draw scene
 /vis/viewer/zoom 1.5

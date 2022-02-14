@@ -32,7 +32,6 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,8 +55,7 @@ void ActionInitialization::BuildForMaster() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::Build() const
-{
-  
+{  
   PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(fDetector);
   SetUserAction(prim);
 
@@ -65,14 +63,6 @@ void ActionInitialization::Build() const
   SetUserAction(run); 
 
   SetUserAction(new SteppingAction());
-
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
-{
-  return new SteppingVerbose();
-}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

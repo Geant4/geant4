@@ -23,68 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -----------------------------------------------------------------------------
-//
-// GEANT4 Class header file
 //
 // File name:     G4eAdjointMultipleScattering
 //
 // Author:        Vladimir Ivanchenko
 //
-// Creation date: 10 March 2001
-// 
-// Modifications:
-//
+// The class simulates the multiple scattering for e+ and e-
 //
 //------------------------------------------------------------------------------
-//
-
-// class description
-//
-//  The class simulates the multiple scattering for e+ and e-
-//
-// class description - end
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4eAdjointMultipleScattering_h
 #define G4eAdjointMultipleScattering_h 1
 
 #include "G4VMultipleScattering.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class G4eAdjointMultipleScattering : public G4VMultipleScattering
 
 {
-public:    // with description
-
+ public:
   explicit G4eAdjointMultipleScattering(const G4String& processName = "msc");
 
-  virtual ~G4eAdjointMultipleScattering();
+  ~G4eAdjointMultipleScattering() override;
 
-  // This is called in the beginning of tracking for a new track
   void StartTracking(G4Track*) override;
 
   // returns true for charged particles, false otherwise
-  G4bool IsApplicable (const G4ParticleDefinition& p) final;
+  G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
-  // Print few lines of informations about the process: validity range,
-  void PrintInfo() override;
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
+  void StreamProcessInfo(std::ostream& outFile) const override;
 
-protected:
+  G4eAdjointMultipleScattering(G4eAdjointMultipleScattering&) = delete;
+  G4eAdjointMultipleScattering& operator                      =(
+    const G4eAdjointMultipleScattering& right) = delete;
 
-  // This function initialise models
+ protected:
   void InitialiseProcess(const G4ParticleDefinition*) override;
 
-private:        // data members
-
-  G4bool   isInitialized;
-
+ private:
+  G4bool fIsInitialized = false;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

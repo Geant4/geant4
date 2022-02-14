@@ -34,7 +34,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
+#include "G4Types.hh"
+
+#include "G4RunManagerFactory.hh"
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 #include "globals.hh"
@@ -61,28 +64,19 @@
 
 namespace {
   void PrintUsage() {
-    G4cerr 
+    G4cerr
       << " Usage: " << G4endl
-      << " exampleB4a [-m macro ] [-s setupMonopole] [-t nThreads]" << G4endl
+      << " monopole [-m macro ] [-s setupMonopole] [-t nThreads]" << G4endl
       << "   Note: " << G4endl
       << "    -s should be followed by a composed string, eg. \'1 0 100 GeV\'" << G4endl
-      << "    -t option is available only for multi-threaded mode." << G4endl
+      << "    -t option is for multi-threaded mode." << G4endl
       << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-<<<<<<< HEAD
-  //choose the Random engine
-  //CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  //CLHEP::HepRandom::setTheEngine(new CLHEP::Ranlux64Engine);
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanluxEngine);
-
-  //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
-=======
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
   // Evaluate arguments
   //
@@ -93,44 +87,35 @@ int main(int argc,char** argv)
 
   G4String macro;
   G4String setupMonopole;
-#ifdef G4MULTITHREADED
-  G4int nThreads = 0;
-#endif
+  G4int nThreads = 1;
   for ( G4int i=1; i<argc; i=i+2 ) {
     if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
     else if ( G4String(argv[i]) == "-s" ) setupMonopole = argv[i+1];
-#ifdef G4MULTITHREADED
     else if ( G4String(argv[i]) == "-t" ) {
       nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
     }
-#endif
     else {
       PrintUsage();
       return 1;
     }
-  }  
-  
-  // Instantiate G4UIExecutive if interactive mode
+  }
+
+  // Construct the default run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  if ( nThreads > 0 ) {
+    runManager->SetNumberOfThreads(nThreads);
+  }
+  G4cout << "===== Example is started with "
+         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
+
+  // Instantiate G4UIExecutive if interactive
   G4UIExecutive* ui = nullptr;
-  if ( ! macro.size() ) {
+  if ( macro.empty() ) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::MixMaxRng);
-
-  // Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  if ( nThreads > 0 ) { 
-    runManager->SetNumberOfThreads(nThreads);
-  }  
-  G4cout << "===== Monopole is started with "
-         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
-#else
-  G4RunManager* runManager = new G4RunManager();
-#endif
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   //create physicsList
   // Physics List is defined via environment variable PHYSLIST
@@ -145,8 +130,6 @@ int main(int argc,char** argv)
   // monopole physics is added
   G4MonopolePhysics * theMonopole = new G4MonopolePhysics();
 
-  //get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   // Setup monopole
   if ( setupMonopole.size() )  {
     UImanager->ApplyCommand("/control/verbose 1");
@@ -155,26 +138,11 @@ int main(int argc,char** argv)
 
   // regsiter monopole physics
   phys->RegisterPhysics(theMonopole);
-    
+
+  runManager->SetUserInitialization(phys);
+
   // visualization manager
-<<<<<<< HEAD
-#ifdef G4VIS_USE
-  G4VisManager* visManager = 0;
-#endif
-        
-  //get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-  // Setup monopole
-  G4String s = ""; 
-  if(argc > 2) { s = argv[2]; }
-  UImanager->ApplyCommand("/control/verbose 1");
-  UImanager->ApplyCommand("/monopole/setup "+s);
-
-  // mandator user classes
-=======
-  G4VisManager* visManager = new G4VisExecutive();
-  visManager->Initialize();
+  G4VisManager* visManager = nullptr;
 
   // set detector construction
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
@@ -221,8 +189,10 @@ int main(int argc,char** argv)
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command+macro);
   }
-  else  {  
+  else  {
     // interactive mode : define UI session
+    visManager = new G4VisExecutive();
+    visManager->Initialize();
     UImanager->ApplyCommand("/control/execute init_vis.mac");
     ui->SessionStart();
     delete ui;

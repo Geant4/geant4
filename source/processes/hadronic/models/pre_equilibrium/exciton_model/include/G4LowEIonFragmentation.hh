@@ -50,14 +50,12 @@ class G4LowEIonFragmentation : public G4HadronicInteraction
 {
 public:
   
-  G4LowEIonFragmentation(G4ExcitationHandler * const value);
-
-  G4LowEIonFragmentation();
+  G4LowEIonFragmentation(G4ExcitationHandler * const value = nullptr);
 
   virtual ~G4LowEIonFragmentation();
 
-  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, 
-					  G4Nucleus & theNucleus);
+  G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, 
+				  G4Nucleus & theNucleus) override;
 
   inline G4double GetCrossSection() 
   {
@@ -67,26 +65,24 @@ public:
     return area*hits/(static_cast<G4double>(totalTries)*CLHEP::millibarn);
   }
 
+  G4LowEIonFragmentation(const G4LowEIonFragmentation &) = delete;
+  const G4LowEIonFragmentation& operator=
+  (const G4LowEIonFragmentation &right) = delete;
+  G4bool operator==(const G4LowEIonFragmentation &right) const = delete;
+  G4bool operator!=(const G4LowEIonFragmentation &right) const = delete;
+
 private:  
-
-  G4LowEIonFragmentation(const G4LowEIonFragmentation &);  
-  const G4LowEIonFragmentation& operator=(const G4LowEIonFragmentation &right);
-  G4bool operator==(const G4LowEIonFragmentation &right) const;
-  G4bool operator!=(const G4LowEIonFragmentation &right) const;
-
-  // Members
   
   G4HadFinalState theResult;
   const G4ParticleDefinition* proton;
    
-  G4PreCompoundModel * theModel;
-  G4ExcitationHandler * theHandler;
+  G4PreCompoundModel * theModel = nullptr;
+  G4ExcitationHandler * theHandler = nullptr;
   
-private:
-
-  G4int hits;
-  G4int totalTries;
-  G4double area;
+  G4int hits = 0;
+  G4int totalTries = 1;
+  G4int secID = -1;  // ID for the secondaries created by this model
+  G4double area = 0.0;
 
 };
 

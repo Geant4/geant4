@@ -36,23 +36,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PenelopeOscillator::G4PenelopeOscillator() :
- hartreeFactor(0), ionisationEnergy(0*eV), resonanceEnergy(0*eV),
- oscillatorStrength(0), shellFlag(-1), parentZ(0),
- parentShellID(-1),cutoffRecoilResonantEnergy(0*eV)
+ fHartreeFactor(0.), fIonisationEnergy(0.*eV), fResonanceEnergy(0.*eV),
+ fOscillatorStrength(0.), fParentZ(0.), fCutoffRecoilResonantEnergy(0*eV),
+ fParentShellID(-1), fShellFlag(-1)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PenelopeOscillator::G4PenelopeOscillator(const G4PenelopeOscillator& right)
 {
-  hartreeFactor = right.hartreeFactor;
-  ionisationEnergy = right.ionisationEnergy;
-  resonanceEnergy = right.resonanceEnergy;
-  oscillatorStrength = right.oscillatorStrength;
-  shellFlag = right.shellFlag;
-  parentZ = right.parentZ;
-  parentShellID = right.parentShellID;
-  cutoffRecoilResonantEnergy = right.cutoffRecoilResonantEnergy;
+  fHartreeFactor = right.fHartreeFactor;
+  fIonisationEnergy = right.fIonisationEnergy;
+  fResonanceEnergy = right.fResonanceEnergy;
+  fOscillatorStrength = right.fOscillatorStrength;
+  fShellFlag = right.fShellFlag;
+  fParentZ = right.fParentZ;
+  fParentShellID = right.fParentShellID;
+  fCutoffRecoilResonantEnergy = right.fCutoffRecoilResonantEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -62,14 +62,14 @@ G4PenelopeOscillator& G4PenelopeOscillator::operator=(const G4PenelopeOscillator
   if (this == &right)  
     return *this; 
 
-  hartreeFactor = right.hartreeFactor;
-  ionisationEnergy = right.ionisationEnergy;
-  resonanceEnergy = right.resonanceEnergy;
-  oscillatorStrength = right.oscillatorStrength;
-  shellFlag = right.shellFlag;
-  parentZ = right.parentZ;
-  parentShellID = right.parentShellID; 
-  cutoffRecoilResonantEnergy = right.cutoffRecoilResonantEnergy;
+  fHartreeFactor = right.fHartreeFactor;
+  fIonisationEnergy = right.fIonisationEnergy;
+  fResonanceEnergy = right.fResonanceEnergy;
+  fOscillatorStrength = right.fOscillatorStrength;
+  fShellFlag = right.fShellFlag;
+  fParentZ = right.fParentZ;
+  fParentShellID = right.fParentShellID; 
+  fCutoffRecoilResonantEnergy = right.fCutoffRecoilResonantEnergy;
   return *this;
 }
 
@@ -79,7 +79,7 @@ G4bool G4PenelopeOscillator::operator==(const G4PenelopeOscillator& right) const
 {
   //Oscillator are ordered according to the ionisation energy. They are considered to be
   //equal if the ionisation energy is the same
-  return (ionisationEnergy == right.ionisationEnergy) ? true : false;
+  return (fIonisationEnergy == right.fIonisationEnergy) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -87,7 +87,7 @@ G4bool G4PenelopeOscillator::operator==(const G4PenelopeOscillator& right) const
 G4bool G4PenelopeOscillator::operator>(const G4PenelopeOscillator& right) const
 {
   //Oscillator are ordered according to the ionisation energy. 
-  return (ionisationEnergy > right.ionisationEnergy) ? true : false;
+  return (fIonisationEnergy > right.fIonisationEnergy) ? true : false;
 }
 
 
@@ -96,7 +96,7 @@ G4bool G4PenelopeOscillator::operator>(const G4PenelopeOscillator& right) const
 G4bool G4PenelopeOscillator::operator<(const G4PenelopeOscillator& right) const
 {
   //Oscillator are ordered according to the ionisation energy. 
-  return (ionisationEnergy < right.ionisationEnergy) ? true : false;
+  return (fIonisationEnergy < right.fIonisationEnergy) ? true : false;
 }
 
 

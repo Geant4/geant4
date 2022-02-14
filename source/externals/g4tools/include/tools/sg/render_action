@@ -1,0 +1,321 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_render_action
+#define tools_sg_render_action
+
+#include "matrix_action"
+
+#include "../glprims"
+#include "../vdata"
+#include "../colorf"
+
+namespace tools {
+namespace sg {
+  class render_manager;
+}}
+
+
+namespace tools {
+namespace sg {
+
+typedef size_t bufpos;
+
+class render_action : public matrix_action {
+  TOOLS_ACTION_NO_COPY(render_action,tools::sg::render_action,matrix_action)
+public:
+  typedef unsigned int gstoid;
+public:
+  virtual void load_proj_matrix(const mat4f&) = 0;
+  virtual void load_model_matrix(const mat4f&) = 0;
+public:
+  virtual void draw_vertex_array(gl::mode_t,size_t,const float*) = 0;
+  virtual void draw_vertex_array_xy(gl::mode_t,size_t,const float*) = 0;
+  virtual void draw_vertex_color_array(gl::mode_t,size_t,const float*,const float*) = 0;
+  virtual void draw_vertex_normal_array(gl::mode_t,size_t,const float*,const float*) = 0;
+  virtual void draw_vertex_color_normal_array(gl::mode_t,size_t,const float*,const float*,const float*) = 0;
+
+  /////////////////////////////////////////////////////////////////
+  /// texture /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  virtual void draw_vertex_array_texture(gl::mode_t,size_t,const float*,gstoid,const float*) = 0;
+  virtual void draw_vertex_normal_array_texture(gl::mode_t,size_t,const float*,const float*,gstoid,const float*) = 0;
+
+  /////////////////////////////////////////////////////////////////
+  /// VBO /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  virtual void begin_gsto(gstoid) = 0;
+  virtual void draw_gsto_v(gl::mode_t,size_t,bufpos) = 0;
+  virtual void draw_gsto_vc(gl::mode_t,size_t,bufpos,bufpos) = 0;
+  virtual void draw_gsto_vn(gl::mode_t,size_t,bufpos,bufpos) = 0;
+  virtual void draw_gsto_vcn(gl::mode_t,size_t,bufpos,bufpos,bufpos) = 0;
+  virtual void end_gsto() = 0;
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+
+  virtual void clear_color(float,float,float,float) = 0;
+  virtual void color4f(float,float,float,float) = 0;
+  virtual void line_width(float) = 0;
+  virtual void point_size(float) = 0;
+  virtual void set_polygon_offset(bool) = 0;
+  virtual void set_winding(winding_type) = 0;
+  virtual void set_shade_model(shade_type) = 0;
+  virtual void set_cull_face(bool) = 0;
+  virtual void set_point_smooth(bool) = 0;
+  virtual void set_line_smooth(bool) = 0;
+  virtual void normal(float,float,float) = 0;
+  virtual void set_depth_test(bool) = 0;
+  virtual unsigned int max_lights() = 0;
+  virtual void enable_light(unsigned int,
+                            float,float,float, //directrion
+                            float,float,float,float) = 0; //RGBA
+  virtual void set_lighting(bool) = 0;
+  virtual void set_blend(bool) = 0;
+  virtual void restore_state(unsigned int) = 0;
+
+  virtual sg::render_manager& render_manager() = 0; //sg:: is needed.
+public:
+  render_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
+  :parent(a_out,a_ww,a_wh)
+  ,m_do_transparency(false)
+  ,m_have_to_do_transparency(false)
+  {}
+  virtual ~render_action(){}
+public:
+  render_action(const render_action& a_from)
+  :parent(a_from)
+  ,m_do_transparency(a_from.m_do_transparency)
+  ,m_have_to_do_transparency(a_from.m_have_to_do_transparency)
+  {}
+  render_action& operator=(const render_action& a_from){
+    parent::operator=(a_from);
+    m_do_transparency = a_from.m_do_transparency;
+    m_have_to_do_transparency = a_from.m_have_to_do_transparency;
+    return *this;
+  }
+public:
+  void set_do_transparency(bool a_value) {m_do_transparency = a_value;}
+  bool do_transparency() const {return m_do_transparency;}
+  void set_have_to_do_transparency(bool a_value) {m_have_to_do_transparency = a_value;}
+  bool have_to_do_transparency() const {return m_have_to_do_transparency;}
+
+  bool have_to_render() {
+    bool transparent = state().m_color.a()!=1?true:false;
+    if(transparent) {
+      if(m_do_transparency) return true;
+      m_have_to_do_transparency = true;
+      return false;
+    }
+    if(m_do_transparency) return false;
+    return true;
+  }
+
+  void load_matrices_to_identity() {
+    load_proj_matrix(m_identity);
+    load_model_matrix(m_identity);
+  }
+  void load_matrices_from_state() {
+    const sg::state& _state = state();
+    load_proj_matrix(_state.m_proj);
+    load_model_matrix(_state.m_model);
+  }
+
+  void clear_color(const colorf& a_color){
+    clear_color(a_color[0],a_color[1],a_color[2],a_color[3]);
+  }
+  void color4f(const colorf& a_color){
+    color4f(a_color[0],a_color[1],a_color[2],a_color[3]);
+  }
+
+  void enable_light(unsigned int a_light,
+                    const vec3f& a_dir,
+                    const colorf& a_col) {
+    enable_light(a_light,
+                 a_dir[0],a_dir[1],a_dir[2],
+                 a_col[0],a_col[1],a_col[2],1);
+  }
+
+  void draw_vertex_array(gl::mode_t a_mode,const std::vector<float>& a_xyzs){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    draw_vertex_array(a_mode,a_xyzs.size(),_xyzs);
+  }
+
+  void draw_vertex_array_xy(gl::mode_t a_mode,const std::vector<float>& a_xys){
+    const float* _xys = vec_data<float>(a_xys);
+    draw_vertex_array_xy(a_mode,a_xys.size(),_xys);
+  }
+
+  void draw_vertex_color_array(gl::mode_t a_mode,
+                               const std::vector<float>& a_xyzs,
+                               const std::vector<float>& a_rgbas){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _rgbas = vec_data<float>(a_rgbas);
+    draw_vertex_color_array(a_mode,a_xyzs.size(),_xyzs,_rgbas);
+  }
+
+  void draw_vertex_normal_array(gl::mode_t a_mode,
+                                const std::vector<float>& a_xyzs,
+                                const std::vector<float>& a_nms){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _nms = vec_data<float>(a_nms);
+    draw_vertex_normal_array(a_mode,a_xyzs.size(),_xyzs,_nms);
+  }
+
+  void draw_vertex_color_normal_array(gl::mode_t a_mode,
+                                      const std::vector<float>& a_xyzs,
+                                      const std::vector<float>& a_rgbas,
+                                      const std::vector<float>& a_nms){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _rgbas = vec_data<float>(a_rgbas);
+    const float* _nms = vec_data<float>(a_nms);
+    draw_vertex_color_normal_array(a_mode,a_xyzs.size(),_xyzs,_rgbas,_nms);
+  }
+
+  void normal(const vec3f& a_vec) {normal(a_vec[0],a_vec[1],a_vec[2]);}
+
+public:
+  // for sphere::visit template.
+  bool add_triangles_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
+    draw_vertex_normal_array(gl::triangles(),a_floatn,a_xyzs,a_nms);
+    return true;
+  }
+  bool add_triangle_fan_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
+    draw_vertex_normal_array(gl::triangle_fan(),a_floatn,a_xyzs,a_nms);
+    return true;
+  }
+  bool add_triangle_fan_normal_rgba(size_t a_floatn,const float* a_xyzs,float* a_nms,const float* a_rgbas) {
+    draw_vertex_color_normal_array(gl::triangle_fan(),a_floatn,a_xyzs,a_rgbas,a_nms);
+    return true;
+  }
+  bool add_triangle_strip_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
+    draw_vertex_normal_array(gl::triangle_strip(),a_floatn,a_xyzs,a_nms);
+    return true;
+  }
+  bool add_triangle_strip_normal_rgba(size_t a_floatn,const float* a_xyzs,const float* a_nms,const float* a_rgbas) {
+    draw_vertex_color_normal_array(gl::triangle_strip(),a_floatn,a_xyzs,a_rgbas,a_nms);
+    return true;
+  }
+  bool add_lines(size_t a_floatn,const float* a_xyzs) {
+    draw_vertex_array(gl::lines(),a_floatn,a_xyzs);
+    return true;
+  }
+  bool add_line_loop(size_t a_floatn,const float* a_xyzs) {
+    draw_vertex_array(gl::line_loop(),a_floatn,a_xyzs);
+    return true;
+  }
+  bool add_line_strip(size_t a_floatn,const float* a_xyzs) {
+    draw_vertex_array(gl::line_strip(),a_floatn,a_xyzs);
+    return true;
+  }
+  bool add_points(size_t a_floatn,const float* a_xyzs) {
+    draw_vertex_array(gl::points(),a_floatn,a_xyzs);
+    return true;
+  }
+
+/*
+  bool add_triangles_texture(size_t a_floatn,const float* a_xyzs,gstoid a_tex,const float* a_texs){
+    draw_vertex_array_texture(gl::triangles(),a_floatn,a_xyzs,a_tex,a_texs);
+    return true;
+  }
+  bool add_triangle_fan_texture(size_t a_floatn,const float* a_xyzs,gstoid a_tex,const float* a_texs){
+    draw_vertex_array_texture(gl::triangle_fan(),a_floatn,a_xyzs,a_tex,a_texs);
+    return true;
+  }
+  bool add_triangle_strip_texture(size_t a_floatn,const float* a_xyzs,gstoid a_tex,const float* a_texs){
+    draw_vertex_array_texture(gl::triangle_strip(),a_floatn,a_xyzs,a_tex,a_texs);
+    return true;
+  }
+*/
+  bool add_triangle_fan_texture_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms,gstoid a_tex,const float* a_texs){
+    draw_vertex_normal_array_texture(gl::triangle_fan(),a_floatn,a_xyzs,a_nms,a_tex,a_texs);
+    return true;
+  }
+  bool add_triangle_strip_texture_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms,gstoid a_tex,const float* a_texs){
+    draw_vertex_normal_array_texture(gl::triangle_strip(),a_floatn,a_xyzs,a_nms,a_tex,a_texs);
+    return true;
+  }
+
+  bool add_line_loop(const std::vector<float>& a_xyzs){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    draw_vertex_array(gl::line_loop(),a_xyzs.size(),_xyzs);
+    return true;
+  }
+
+  bool add_line_strip(const std::vector<float>& a_xyzs){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    draw_vertex_array(gl::line_strip(),a_xyzs.size(),_xyzs);
+    return true;
+  }
+
+/*
+  /////////////////////////////////////////////////////////
+  /// for sg::markers and gstos : /////////////////////////
+  /////////////////////////////////////////////////////////
+  bool add_lines(const std::vector<float>& a_xyzs){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    draw_vertex_array(gl::lines(),a_xyzs.size(),_xyzs);
+    return true;
+  }
+  bool add_triangles_normal(const std::vector<float>& a_xyzs,const std::vector<float>& a_nms){
+    if(a_xyzs.size()!=a_nms.size()) return false;
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _nms = vec_data<float>(a_nms);
+    draw_vertex_normal_array(gl::triangles(),a_xyzs.size(),_xyzs,_nms);
+    return true;
+  }
+  bool project_point(const mat4f& a_model_matrix,const mat4f& a_projection_matrix,
+                     float& a_x,float& a_y,float& a_z,float& a_w) {
+    //return project_point(a_x,a_y,a_z,a_w);
+    a_w = 1;
+    a_model_matrix.mul_4f(a_x,a_y,a_z,a_w);
+    a_projection_matrix.mul_4f(a_x,a_y,a_z,a_w);
+    if(a_w==0.0F) return false;
+    a_x /= a_w;
+    a_y /= a_w;
+    a_z /= a_w;
+    return true;
+  }
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+*/
+
+  bool add_triangle_strip_as_triangles(size_t a_floatn,const float* a_xyzs,const float* a_nms) { //used in sg::sphere, icosahedron_sphere.
+    // It appears that if glShadeModel is GL_FLAT, triangle strip does not look the same in "gsto mode" where it is rendered as triangles.
+    // We use this function for immediate rendering, in case we want the same rendering as "gsto mode".
+
+    size_t num = a_floatn/3;
+    if(num<3) return false;
+    size_t nxyzs = (num-2)*3*3;
+
+    std::vector<float> m_xyzs(nxyzs);
+    std::vector<float> m_nms(nxyzs);
+
+   {float* pxyzs = vec_data<float>(m_xyzs);
+    float* pnms = vec_data<float>(m_nms);
+    gl::triangle_strip_to_triangles_nms(num,a_xyzs,a_nms,pxyzs,pnms);}
+
+    return add_triangles_normal(nxyzs,vec_data<float>(m_xyzs),vec_data<float>(m_nms));
+  }
+
+  void dump_vertex_array_xy(std::ostream& a_out,gl::mode_t /*a_mode*/,size_t a_floatn,const float* a_xys) {
+    size_t num = a_floatn/2;
+    if(!num) return;
+    a_out << "dump_vertex_array_xy : begin : " << num << std::endl;
+    for(size_t index=0;index<num;index++) {
+      a_out << "xy : " << index
+            << " " << a_xys[2*index]
+            << " " << a_xys[2*index+1]
+            << std::endl;
+    }
+    a_out << "dump_vertex_array_xy : end." << std::endl;
+  }
+protected:
+  bool m_do_transparency;
+  bool m_have_to_do_transparency;
+};
+
+}}
+
+#endif

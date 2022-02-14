@@ -50,7 +50,7 @@ class G4NeutrinoElectronCcModel : public G4HadronicInteraction
 {
 public:
 
-  G4NeutrinoElectronCcModel(const G4String& name = "nu-e-elastic");
+  G4NeutrinoElectronCcModel(const G4String& name = "nu-e-inelastic");
 
   virtual ~G4NeutrinoElectronCcModel();
 
@@ -86,6 +86,7 @@ private:
   G4double fSin2tW;    // sin^2theta_Weinberg
   G4double fCutEnergy; // minimal recoil electron energy detected
 
+  G4int secID;  // Creator model ID for the secondaries created by this model  
 };
 
 

@@ -9,7 +9,7 @@
                      s. Larsson, May 2004
 
 -----------------------------------------------------------------
-Acknowledgments to GEANT4 people, in particular to J. Apostolakis,
+Acknowledgments to the GEANT4 Collaboration, in particular to J. Apostolakis,
 J Generowicz, G. Folger, Vladimir Ivanchenko,  M.G.Pia and 
 S. Guatelli. 
 -----------------------------------------------------------------
@@ -24,27 +24,23 @@ environment. It simulates a strong purging magnet in a treatment head.
 The geometry is very simplified. The major idea of this example is to 
 implement an external magnetic field grid and test if the deviation of 
 electrons are as expected in this particular field. The data (position, 
-energy and momentum) are collected in a measurement volume.The data is 
-stored in a CSV file (or, optionally in a ROOT, or a XML file, by 
-commenting/uncommenting the appropriate #includes in PurgMagAnalysisManager.hh)
+energy and momentum) are collected in a measurement volume. The data is
+stored in a CSV file (or, optionally in a ROOT, or a XML file, by changing
+the G4AnalysisManager default file type in PurgMagRunAction::Book().
 
- 
+<<<<<<< HEAD
   
+=======
+>>>>>>> Migration to G4RunManagerFactory done.
 1. Setting up the environment variables
 ---------------------------------------
--example enviroment with the compiler 3.2.3
- -a standard Geant4 example GNUmakefile is provided                     
-
-setup with:                                                             
-compiler = gcc-3.2.3
-G4SYSTEM = linux-g++                                                    
 
 The following environment variables need to be set:                     
 
 G4LEDATA: points to low energy data base 
 
-The required data-file for the field map can be downloaded from:
-   http://cern.ch/geant4/source/source/PurgMag3D.TABLE.gz
+The required data-file for the detailed field map can be downloaded from:
+   http://cern.ch/geant4-data/datasets/PurgMag3D.TABLE.gz
 
 
 2. How to run the example
@@ -53,7 +49,6 @@ The required data-file for the field map can be downloaded from:
 - Run the "PurgMag" executable.
 - File PurgMag.TABLE needs to be available in the current directory in order to run correctly.
 - For visualisation use vis.mac. 
-  Default visualization is with OpenGL
 - Interactive or batch modes possible.
   Default: Interactive mode.
 
@@ -72,9 +67,9 @@ idle> exit
 3)Ntuple with position, energy and momentum for positrons
   (not needed in this example, will be used in further development)
 
-A default vizualisation macro (vis.mac) is pre-loaded before interactive runs.
-Executing it
-    osmachine.3% $G4WORKDIR/bin/Linux-g++/PurgMag 
+A default visualisation macro (vis.mac) is pre-loaded before interactive runs.
+Executing it from the build directory:
+    $ ./PurgMag 
 runs vis.mac before giving you an interactive prompt.
 
 	

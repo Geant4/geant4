@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and J. Davis, CMRP, UOW
+// Authors: Susanna Guatelli and Francesco Romano
+// susanna@uow.edu.au, francesco.romano@ct.infn.it
 // 
-//
 
 #ifndef RunAction_h
 #define RunAction_h 1

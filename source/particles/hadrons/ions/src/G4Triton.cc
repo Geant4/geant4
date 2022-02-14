@@ -32,7 +32,7 @@
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
-//  New impelemenataion as an utility class  M.Asai, 26 July 2004
+//  Implementation as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
 #include "G4Triton.hh"
@@ -44,7 +44,7 @@
 // ###                           TRITON                               ###
 // ######################################################################
 
-G4Triton* G4Triton::theInstance = 0;
+G4Triton* G4Triton::theInstance = nullptr;
 
 G4Triton* G4Triton::Definition()
 {
@@ -65,13 +65,12 @@ G4Triton* G4Triton::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   //             excitation 
-    G4double  year = 31.536000e06 * second;
     anInstance = new G4Ions(
                  name,    2.808921*GeV,       0.0*MeV,  +1.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
             "nucleus",               0,            +3, 1000010030,
-                 true,      12.32*year,          NULL,
+                 true,      12.32*year,       nullptr,
 		false,        "static",   -1000010030, 
 		 0.0,                0
               );
@@ -95,5 +94,3 @@ G4Triton*  G4Triton::Triton()
 {
   return Definition();
 }
-
-

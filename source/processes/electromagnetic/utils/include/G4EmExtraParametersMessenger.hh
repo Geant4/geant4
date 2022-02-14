@@ -66,9 +66,13 @@ class G4EmExtraParametersMessenger: public G4UImessenger
 public:   // with description
   
   explicit G4EmExtraParametersMessenger(G4EmExtraParameters*);
-  virtual ~G4EmExtraParametersMessenger();
+  ~G4EmExtraParametersMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String) override;
+  void SetNewValue(G4UIcommand*, G4String) override;
+
+  G4EmExtraParametersMessenger & operator=
+  (const G4EmExtraParametersMessenger &right) = delete;
+  G4EmExtraParametersMessenger(const G4EmExtraParametersMessenger&) = delete;
 
 private:
 
@@ -82,12 +86,14 @@ private:
   G4UIcommand*               paiCmd;
   G4UIcommand*               mscoCmd;
 
-  G4UIcommand*               SubSecCmd;
+  G4UIcmdWithAString*        SubSecCmd;
   G4UIcommand*               bfCmd;
   G4UIcommand*               fiCmd;
   G4UIcommand*               bsCmd;
   G4UIcommand*               StepFuncCmd;
   G4UIcommand*               StepFuncCmd1;
+  G4UIcommand*               StepFuncCmd2;
+  G4UIcommand*               StepFuncCmd3;
 
   G4UIcmdWith3VectorAndUnit* dirSplitTargetCmd;
 };

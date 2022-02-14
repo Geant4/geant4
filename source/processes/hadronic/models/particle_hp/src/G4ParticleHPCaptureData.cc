@@ -45,6 +45,7 @@
 #include "G4ParticleHPData.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4Threading.hh"
+#include "G4HadronicParameters.hh"
 #include "G4Pow.hh"
 
 G4ParticleHPCaptureData::G4ParticleHPCaptureData()
@@ -54,7 +55,6 @@ G4ParticleHPCaptureData::G4ParticleHPCaptureData()
    SetMaxKinEnergy( 20*MeV );                                   
 
    theCrossSections = 0;
-   onFlightDB = true;
 
    instanceOfWorker = false;
    if ( G4Threading::IsWorkerThread() ) {
@@ -116,14 +116,6 @@ void G4ParticleHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
-//080428
-   if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() )
-   {
-      G4cout << "Find a flag of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
-      G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of capture reaction of neutrons (<20MeV)." << G4endl;
-      onFlightDB = false;
-   }
-
    if ( G4Threading::IsWorkerThread() ) {
       theCrossSections = G4ParticleHPManager::GetInstance()->GetCaptureCrossSections();
       return;
@@ -143,11 +135,13 @@ void G4ParticleHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
   for( size_t i=0; i<numberOfElements; ++i )
   {
+     #ifdef G4VERBOSE
      if(std::getenv("CaptureDataIndexDebug"))
      {
        G4int index_debug = ((*theElementTable)[i])->GetIndex();
-       G4cout << "IndexDebug "<< i <<" "<<index_debug<<G4endl;
+       if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) G4cout << "IndexDebug "<< i <<" "<<index_debug<<G4endl;
      }
+     #endif
      G4PhysicsVector* physVec = G4ParticleHPData::
       Instance(G4Neutron::Neutron())->MakePhysicsVector((*theElementTable)[i], this);
      theCrossSections->push_back(physVec);
@@ -159,8 +153,11 @@ void G4ParticleHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 void G4ParticleHPCaptureData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 {
   if(&aP!=G4Neutron::Neutron()) 
-     throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
+     throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");
 
+  #ifdef G4VERBOSE
+  if ( G4HadronicParameters::Instance()->GetVerboseLevel() == 0 ) return;
+  
 //
 // Dump element based cross section
 // range 10e-5 eV to 20 MeV
@@ -202,8 +199,8 @@ void G4ParticleHPCaptureData::DumpPhysicsTable(const G4ParticleDefinition& aP)
       G4cout << G4endl;
    }
 
-
-//  G4cout << "G4ParticleHPCaptureData::DumpPhysicsTable still to be implemented"<<G4endl;
+   //G4cout << "G4ParticleHPCaptureData::DumpPhysicsTable still to be implemented"<<G4endl;
+   #endif
 }
 
 #include "G4NucleiProperties.hh"
@@ -218,7 +215,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
 
-  if ( !onFlightDB )
+  if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() )
   {
      //NEGLECT_DOPPLER
      G4double factor = 1.0;

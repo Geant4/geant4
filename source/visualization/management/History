@@ -25,6 +25,352 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+11 November 2021  John Allison (visman-V10-07-28)
+- G4VisManager.cc:
+  - Bug exposed by G03.
+  - Protect null pointers in GeometryHasChanged when called before any
+    scenes, scene handlers or viewers had been created.
+
+07 November 2021  John Allison (visman-V10-07-27)
+- G4VSceneHandler:
+  - Introduce GetColour (const G4Visible&).
+    - This makes no assumptions about the validity of data member fpVisAttribs.
+    - If the G4Visible has no vis attributes, i.e., the pointer is null,
+      the colour is obtained from the default view parameters of the
+      current viewer.
+    - It is safer than GetColour () (no arguments), which might be deprecated
+      in future.
+  - Add explanatory comment regarding view destruction in RemoveViewerFromList.
+- G4Scene.cc:
+  - Remove misleading comments.
+- G4VisCommansCompound.cc:
+  - /vis/drawTree: Invoke /vis/viewer/reset to ensure culling is off, so that
+    all volumes are printed.
+
+05 November 2021  Guy Barrand (visman-V10-07-26)
+- suppress G4VisPlotMessenger.hh. The relationship G4/analysis
+  versus G4/visualization is going to be done by using G4/commands.
+- sources.cmake: remove G4VisPlotMessenger.hh.
+- G4VisCommandsPlotter, G4VisManager.cc: have now the commands:
+    /vis/plotter/add/h1
+    /vis/plotter/add/h2
+  managed here (and no more in G4VisPlotMessenger).    
+
+03 November 2021  Guy Barrand (visman-V10-07-25)
+- G4PlotterManager: have:
+    /vis/plotter/style/select
+    /vis/plotter/style/add
+    /vis/plotter/style/remove
+  commands to be able to create styles from G4 commands.
+  To handle properly these commands, a local list of
+  styles is managed (do not use the tools::xml::styles
+  for this).
+- G4PlotterManager: remove the:
+    /vis/plotter/style/load
+  command and the logic to define a style through an
+  XML file. It then removes a dependancy toward expat.
+- sources.cmake: since expat is no more used, remove:
+    ${EXPAT_LIBRARIES}
+
+02 November 2021  Gabriele Cosmo  (visman-V10-07-24)
+- G4VVisCommand: move static functions to be not inline, to support Windows DLL
+  builds. Added GetVisManager() accessor.
+- G4VisPlotMessenger: use GetVisManager() accessor instead of static pointer
+  in inline method AddRegionHistogram().
+
+30 October 2021  John Allison  (visman-V10-07-23)
+- G4VisExecutive.icc:
+  - Introduce additional nicknames:
+    - "TSG" for the selected ToolsSG driver.
+    - "VTK_NATIVE" for the G4Vtk driver.
+    - "Vtk" and "VTK" for the selected Vtk driver.
+    - So now the names (and nicknames) are, for example:
+      - TOOLSSG_QT_GLES (TSG_QT_GLES, TSG)
+      - VtkNative (VTKN, VTK_NATIVE)
+      - VtkQt (VTKQt, Vtk, VTK)
+- G4VisManager.cc:
+  - Invoke G4UIdirectory::Sort() for /vis/.
+    - Command names now appear in alphabetical order.
+    - Sort() was recently introduced in intercoms-V10-07-14.
+    - By default, sorting is propagated to subdirectories, but this may
+      be intercepted by Sort(false) on the subdirectory.
+  - Protect against nullptr in SetCurrentViewer().
+  - Fix a bug which prevented the number of events to be kept being set
+    to zero. 
+- G4VSceneHandler.hh:
+  - Remove redundant forward declarations.
+  - Tidy AddPrimitive section.
+- G4VSceneHandler.cc:
+  - Reset current viewer to nullptr after RemoveViewerFromList.
+  - Improve warning messages in the default AddPrimitive (const G4Plotter&).
+
+25 October 2021 Guy Barrand (visman-V10-07-22)
+- sources.cmake: declare to cmake:
+    G4VisCommandsPlotter.hh,.cc
+    G4PlotterManager.hh,.cc
+    G4VisPlotMessenger.hh
+  Have G4tools in the module dependencies (mainly to have -I toward g4tools/include/tools).
+  Because G4PlotterManager.cc uses expat to load an XML style file, have also:
+    ${EXPAT_LIBRARIES}
+- include/G4VisPlotMessenger.hh: a template pure header messenger for the commands:
+    /vis/plotter/add/h1
+    /vis/plotter/add/h2
+  This file is intended to be used in user code and does the connection of the
+  G4/vis/plotting with G4/analysis that manages the histograms. (Done in this way,
+  it avoids a strong relationship between the vis and analysis categories).
+- include/G4VSceneHandler.hh,.cc: default implementation of AddPrimitive(G4Plotter).
+- G4VisManager.cc: declare the /vis/scene/add/plotter along the /vis/plotter commands.
+- G4VisCommandsSceneAdd.hh,.cc: /vis/scene/add/plotter command.
+- G4VisCommandsPlotter.hh,.cc: new files: have commands:
+    /vis/plotter/create
+    /vis/plotter/setLayout
+    /vis/plotter/addStyle
+    /vis/plotter/addRegionStyle
+    /vis/plotter/addRegionParameter
+    /vis/plotter/clear
+    /vis/plotter/clearRegion
+    /vis/plotter/list
+- G4PlotterManager.hh,.cc: new files: a singleton to handle named G4Plotter instances
+  and the commands:
+    /vis/plotter/style/load
+    /vis/plotter/style/list
+    /vis/plotter/style/print
+
+10 October 2021 John Allison (visman-V10-07-21)
+- G4VisCommandsCompound.cc, G4VisCommandOpen, G4VisCommandSceneHandlerCreate:
+  - Improve reporting of unrecognised graphics system.
+- G4VisCommandsTouchable.cc: Migrate to modeling-V10-07-14:
+  - G4PhysicalVolumeModel: Hold current transform as object, not as a pointer.
+
+02 September 2021 John Allison (visman-V10-07-20)
+- G4VVisCommand, G4VisCommandsSceneHandler and G4VisCommandsViewer:
+  o Preserve view parameters of any existing viewer and use them in
+    the creation of a new viewer.
+  o So if the user requests a new viewer of the same or a new graphics
+    system, the upcoming view will inherit the view parameters of
+    the previously existing viewer.
+  o The idea is that it makes the response a command /vis/viewer/open
+    (or /vis/viewer/create) more natural. (Hitherto, it might have
+    opened a virgin viewer without any reference to what the user had
+    previously specified.)
+  o The first /vis/open in not affected.
+
+27 August 2021 Ben Morgan (visman-V10-07-19)
+- Remove obsolete HepRep(WIRED) driver
+
+26 August 2021 Ben Morgan (visman-V10-07-18)
+- G4VisExecutive:
+  o Remove obsolete VRML1 and network VRML2 drivers
+  o Remove obsolete network FukuiRenderer driver
+
+31 July 2021  John Allison  (visman-V10-07-17)
+- G4Scene: Remove misleading warning message.
+  o AddRunDurationModel: Allow multiple models fo the same name, but
+    different parameters, to be added without warning.
+
+18 July 2021  John Allison  (visman-V10-07-16)
+- G4VSceneHandler.cc:
+  o Use C++17 [[fallthrough]] instead of // fallthrough in switch statement.
+
+15 July 2021  John Allison  (visman-V10-07-15)
+- G4VisCommands.cc:
+  o Replace /vis/ogl/printEPS with /vis/ogl/export in guidance.
+
+12 July 2021  John Allison  (visman-V10-07-14)
+- G4VisCommandsScene:
+  o Implement /vis/scene/removeModel.
+
+09 July 2021  John Allison  (visman-V10-07-13)
+- G4ViewParameters.cc:
+  o Add Special Mesh Rendering parameters to /vis/viewer/save.
+
+06 July 2021  John Allison  (visman-V10-07-12)
+- G4VSceneHandler.cc:
+  o Add code for drawing the extents of models in a scene.
+    . For debug only; commented out.
+- G4VViewer.cc:
+  o Trap request to set touchable of a physical volume no longer in the
+    physical volume store and issue message.
+- G4ViewParameters:
+  o Fix Coverity warning.
+- G4VVisCommandGeometrySet.cc:
+  o Recalculate extent of any physical volume model in run duration lists
+    after any /vis/geometry command (the scene's extent might have been
+    changed by the command).
+
+30 June 2021  John Allison  (visman-V10-07-11)
+- Requires greps-V10-07-09 and modeling-V10-07-11.
+- Revise vis models. See visualization/modeling/History for more details.
+- Consequent changes:
+  o AddPrimitive(const G4Scale&) has been removed from all scene handlers.
+  o Draw(const G4Scale&) has been removed from G4VisManager.
+  o /vis/scene/add/scale reimplemented with G4CallBackModel.
+  o All commands using G4CallBackModel follow interface change.
+
+07 June 2021  John Allison  (visman-V10-07-10)
+- G4VSceneHandler:
+  o Implement a default AddCompound (const G4Mesh&).
+    . Just draws the "container" volume and prints a G4Exception
+      with guidance.
+- G4ViewParameters:
+  o Add new data members and accessors and operator<< and operator!=
+    G4bool fSpecialMeshRendering;  // Request special rendering
+    std::vector<G4ModelingParameters::PVNameCopyNo> fSpecialMeshVolumes;
+- G4VisCommandsViewerSet:
+  o Implement new commands:
+    /vis/viewer/set/specialMeshRendering
+    /vis/viewer/set/specialMeshVolumes
+- G4VisCommandsSet: Minor improvement to guidance.
+
+28 May 2021 Ben Morgan (visman-V10-07-09)
+- Migrate to modular CMake build
+
+22 May 2021  John Allison  (visman-V10-07-08)
+- Exploit C++17 to parse saved files in /vis/viewer/interpolate.
+  o Unifies Unix and Windows code.
+  o Avoids the use of Unix-specific system call to popen.
+  o Uses <filesystem>.
+
+11 May 2021  John Allison  (visman-V10-07-07)
+- Introduce /vis/scene/add/localAxes and /vis/touchable/localAxes.
+
+05 May 2021  Guy Barrand  (visman-V10-07-06)
+- G4VisExecutive.icc
+  o Four new (mutually exclusive) vis drivers (in vis_toolsg-V10-07-00):
+    . TOOLSSG_X11_GLES
+    . TOOLSSG_WINDOWS_GLES
+    . TOOLSSG_XT_GLES
+    . TOOLSSG_QT_GLE
+
+31 March 2021  Gabriele Cosmo  (visman-V10-07-05)
+- Use existing facility to find logical volume in store, rather than looping
+  through in G4VisCommandSceneAddLogicalVolume::SetNewValue().
+
+28 March 2021  John Allison  (visman-V10-07-04)
+- G4VisCommandsSceneAdd.cc:
+  o /vis/scene/add/volume (and /vis/drawVolume, which calls it):
+    . Exploit G4PhysicalVolumesSearchScene to streamline geometry tree searches.
+    . Avoid calculating extent of a temporary physical volume when not
+      necessary.
+- G4VisCommandsSet.cc, G4VisCommandsTouchable.cc and G4VisCommandsViewer.cc:
+  o Add comment of explanation where using G4PhysicalVolumesSearchScene.
+- The above does introduce a change of behaviour for the case that a user
+  names the volume(s) requested, e.g., "/vis/drawVolume Shape1". The user will
+  not normally see any difference - but it does avoid extravagant computation
+  in some circumstances. The issue is this (I copy and paste a snippet from the
+  code for /vis/scene/add/volume):
+  // When it comes to determining the extent of a physical volume we normally
+  // assume the user wishes to ignore "invisible" volumes. For example, most
+  // users make the world volume invisible. So we ask the physical volume
+  // model to traverse the geometry hierarchy, starting at the named physical
+  // volume, until it finds non-invisible ones, whose extents are accumulated
+  // to determine the overall extent. (Once a non-invisible volume is found,
+  // the search is curtailed - daughters are always contained within the mother
+  // so they have no subsequent influence on the extent of the mother - but the
+  // search continues at the same level until all highest level non-invisible
+  // volumes are found an their extents accumulated.) So the default is
+  G4bool useFullExtent = false;
+  // However, the above procedure can be time consuming in some situations, such
+  // as a nested parameterisation whose ultimate volumes are the first non-
+  // visible ones, which are typical of a medical "phantom". So we assume here
+  // below that if a user specifies a name other than "world" or "worlds" he/she
+  // wished the extent to be determined by the volume, whether it is visible
+  // or not. So we set useFullExtent true at that point below.
+
+09 March 2021  John Allison  (visman-V10-07-03)
+- G4VisExecutive.icc: Remove Wt.
+
+02 February 2021  John Allison  (visman-V10-07-02)
+- Interrupt macro (vis.mac) if graphics system invalid/unavailable.
+  o Issues "Batch is interrupted" and avoids long litany of further errors.
+
+30 December 2020  John Allison  (visman-V10-07-01)
+- Remove deprecated G4VisManager::SetUserAction.
+  o Use RegisterRunDurationUserVisAction or similar instead. These functions
+    represent quite an advanced use of G4 visualisation and are rarely used.
+    They have been deprecated and a warning printed since 2016.
+    examples/extended/visualization were updated long ago.
+
+29 December 2020  John Allison  (visman-V10-07-00)
+- G4VisCommandsSet.cc: /vis/set/extentForField:
+  o Parameters are no longer omitable.
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/electricField and magneticField:
+  o Improve guidance to take note of change to G4VFieldModel - see
+    modeling-V10-07-00 - namely that the number of data points is now
+    calculated on the basis of the extent, which can be set as above.
+    (If not set, the extent is null, and in G4VFieldModel, is taken to be
+    the extent of the current scene.)
+
+16 November 2020 Gabriele Cosmo (visman-V10-06-12)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+21 October 2020  Jonathan Madsen (visman-V10-06-11)
+- Implemented G4RunManagerFactory::GetMasterRunManager()
+
+21 October 2020  John Allison  (visman-V10-06-10)
+- G4VisManager: Improve logic of automatic event keeping.
+  o In MT mode, now keeps one (random) event when end-of-event action is "refresh".
+  o In MT mode, keeps events (up to a user-adjustable maximum number).
+  o These may be in addition to events kept by a user in his/her user actions.
+  o Improved messaging.
+
+15 October 2020  John Allison  (visman-V10-06-09)
+- Part of vis-V10-06-08.
+- G4VVisCommand.hh/cc, G4VisCommandsCompound.cc, G4VisCommandsSceneHandler.cc:
+  o Use command->CommandFailed() - remove internal fErrorCode.
+
+10 August 2020 John Allison  (visman-V10-06-08)
+- G4VVisCommand.cc, G4VisCommandsViewer.cc, G4VisManager.cc:
+  o Remove obsolete G4VIS_USE_STD11 and references to obsolete G4VIS_USE.
+    (G4VIS_USE was removed in Geant4 10.6.)
+
+04 August 2020 John Allison  (visman-V10-06-07)
+- G4VisCommandsScene.cc:
+  o Remove superfluous/unnecessary SetView in G4VisCommandSceneNotifyHandlers.
+- G4VisManager.cc:
+  o Protect algorithm in NotifyHandlers with IsValidView.
+
+18 June 2020 John Allison  (visman-V10-06-06)
+* G4VisCommandsSceneAdd.cc:
+  /vis/scene/add/*Field: Correct guidance (red->green->blue).
+
+19 May 2020 John Allison  (visman-V10-06-05)
+* G4VVisCommand: Add CheckView for future utility.
+* G4VisCommandsScene.cc: /vis/scene/showExtents: Improve output layout.
+
+22 April 2020 Frederick Jones (visman-V10-06-04)
+* G4VisExecutive.icc: Support for OIQT Vis driver, via "OIQT"
+  or "OI" keywords, provided the G4OpenInventor library has
+  been built with the OIQT driver included.
+
+07 April 2020 John Allison  (visman-V10-06-03)
+* G4Scene.cc:
+  * Bug fix: Models with no extent do not contribute to scene's extent.
+* G4VisCommandsSceneHandler.cc: /vis/sceneHandler/create:
+  * Trap infinite loop when looking for a fallback graphics system.
+
+04 March 2020. John Allison  (visman-V10-06-02)
+- G4VisCommandsListManager.hh:
+  o Bug fix: Notify handlers after /vis/filtering/*/mode command.
+    . Causes rebuild of graphics database.
+- G4VisManager.cc: Improve printing of available systems and models.
+
+13 February 2020. John Allison  (visman-V10-06-01)
+- G4VisCommandsGeometrySet: /vis/geometry/set/forceCloud:
+  o New command (not previously available due to oversight.
+  o Set the default value of number of cloud points to 0 (<= 0 means
+    under control of the viewer, i.e., the value in the view parameters
+    - see G4VSceneHandler::RequestPrimitives.
+- G4VisCommandsTouchableSet:
+  o Clarify the meaning of the default value of number of cloud points.
+  o Correct guidance for /vis/touchable/set/numberOfCloudPoints.
+  o Tidy.
+- G4VisManager.cc: Instantiate /vis/geometry/set/forceCloud.
+
+12 December 2019 Ben Morgan (visman-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 29 October 2019  Gabriele Cosmo (visman-V10-05-14)
 - G4VisCommandsViewer.cc:
   o Replaced use of std::experimental::filesystem with std::filesystem
@@ -381,7 +727,7 @@ History file for visualization management sub-category
 - G4VViewer::G4Spline: Remove.
 - /vis/viewer/set/timeWindow/displayLightFront: change defaults.
 - /vis/viewer/colourByDensity: change defaults.
- 
+
 24 July 2018  John Allison  (visman-V10-04-13)
 - G4VisCommandsViewer.cc:
   o /vis/viewer/interpolate: Fix gcc8 warnings.
@@ -544,7 +890,7 @@ History file for visualization management sub-category
 - G4VisManager:
   o Moved SetUserAction out of line and added warning message:
     "Deprecated.  Use RegisterRunDurationUserVisAction."
- 
+
 9th December 2016  John Allison (visman-V10-03-00)
 - Coworks with modeling-V10-03-00.
 - G4VVisCommand:
@@ -679,7 +1025,7 @@ std::ostream& operator <<
 - G4ViewParameters.cc:
   o G4ViewParameters::CatmullRomCubicSplineInterpolation:
     Improved interpolation of vis attributes modifiers.
-    
+
 14th August 2016  John Allison (visman-V10-02-19)
 -  Ooops.  Now as stated.
 
@@ -757,7 +1103,7 @@ G4VisCommandViewerClone::SetNewValue
   available on Windows because it uses popen, a way of getting
   output from a system command. _popen (with an underscore) is
   said to be available in Windows but this has not been tried.
- 
+
 1st June 2016  John Allison  (visman-V10-02-11)
 - Introduced /vis/viewer/interpolate.  See History from development
   branch visman-V10-02-02-branch as follows:
@@ -809,7 +1155,7 @@ G4VisCommandViewerClone::SetNewValue
 26th January 2016  John Allison
 - Merged visman-V10-02-03: G4VisManager::G4VisSubThread:
   GetNavigatorForTracking -> SetWorldVolume
-  This is required for OriginVolume drawing and filtering. 
+  This is required for OriginVolume drawing and filtering.
 24th January 2016  John Allison  (visman-V10-02-02-branch-04)
 - Refinements.
 23rd January 2016  John Allison  (visman-V10-02-02-branch-01)
@@ -875,7 +1221,7 @@ G4VisCommandViewerClone::SetNewValue
 26th January 2016  John Allison  (visman-V10-02-03)
 - G4VisManager::G4VisSubThread:
   GetNavigatorForTracking -> SetWorldVolume
-  This is required for OriginVolume drawing and filtering. 
+  This is required for OriginVolume drawing and filtering.
 
 14th January 2016  John Allison  (visman-V10-02-02)
 - Improved /vis/viewer/save.
@@ -894,14 +1240,14 @@ G4VisCommandViewerClone::SetNewValue
 - G4VViewer:
   o Add ComputeFlyThrough method (beta)
   o Add an G4Spline class for testing
-    
+
 1st November 2015  John Allison  (visman-V10-01-20)
 - Introduced (again!) <chrono> for queue handling in MT mode.
   o Except for Xeon Phi, which is protected by #ifndef __MIC__
 
 15th October 2015  John Allison  (visman-V10-01-19)
 - G4VisManager.cc:
-  o Corrected end-of-run printing for the case of 
+  o Corrected end-of-run printing for the case of
   "/vis/multithreading/actionOnEventQueueFull discard".
 - G4VisCommandsViewer.cc:
   o Improved guidance and confirmation printing for /vis/viewer/save.
@@ -1201,7 +1547,7 @@ G4VisCommandViewerClone::SetNewValue
 1st October 2014  Laurent Garnier
 -G4VSceneHandler.cc:
   o AddPrimitive (const G4Scale& scale) : Remove unnecessary initialization
--G4VisManager : 
+-G4VisManager :
   o Change G4cerr instead of G4cout on some error messages
   o Add a warning in SetCurrentViewer() when no scene handler present
 
@@ -1240,12 +1586,12 @@ G4VisCommandViewerClone::SetNewValue
 
 9th July 2014  Laurent Garnier (visman-V10-00-13)
 - Change some G4cout in G4err in case of error messages in
-  G4VSceneHandler, G4ViewParameters, G4VisCommand, G4VisCommandGeometry, G4VisCommandGeometrySet, 
+  G4VSceneHandler, G4ViewParameters, G4VisCommand, G4VisCommandGeometry, G4VisCommandGeometrySet,
   G4VisCommandsTouchable, G4VisCommandsTouchableSet, G4VisCommandViewerDefault, G4VisCommandsViewerSet
 
 8th July 2014  Laurent Garnier (visman-V10-00-12)
-- G4VisCommandViewer : 
-  o Revert change to /vis/viewer/update in order not to failed with a Cerr in all examples. 
+- G4VisCommandViewer :
+  o Revert change to /vis/viewer/update in order not to failed with a Cerr in all examples.
   o Set verbosity on "/vis/viewer/update" to G4cout instead of G4cerr and change the message
 
 7th July 2014  Laurent Garnier (visman-V10-00-11)
@@ -1328,9 +1674,9 @@ G4VisCommandViewerClone::SetNewValue
 
 21st November 2013  Makoto Asai (visman-V09-06-26)
 - Move invokation with G4TransportationManager in G4VisCommandsSceneAdd.cc
-  to G4TrakingMessenger. G4TransportationManager is thread-local. 
+  to G4TrakingMessenger. G4TransportationManager is thread-local.
   G4VisCommandsSceneAdd.cc cannot access to G4TransportationManager.
-   
+
 15th November 2013  John Allison
 - Some changes as suggested by PVS.
 - Fixes for Coverity.
@@ -1739,7 +2085,7 @@ G4VisCommandViewerClone::SetNewValue
       twice!!  This was an attempt to fix a curious problem whereby
       trajectories were not refreshed.  Probably the go only to the
       back buffer, because a second refresh seems to do the trick.
-  o /vis/scene/list: Improved. 
+  o /vis/scene/list: Improved.
 - G4VisCommandsSceneAdd.cc: /vis/scene/add/userAction:
   o Small improvement to guidance and code readability.
 
@@ -1877,7 +2223,7 @@ G4VisCommandViewerClone::SetNewValue
 
 3rd January 2012  John Allison (visman-V09-05-01)
 - G4VisCommandsScene.cc: /vis/scene/notifyHandlers:
-  o Downgraded "scene has changed" from WARNING to NOTE. 
+  o Downgraded "scene has changed" from WARNING to NOTE.
 
 2nd January 2012  John Allison
 - G4VisManager::EndOfEvent: Removed unwarranted DrawView.  It was
@@ -2109,7 +2455,7 @@ G4VisCommandViewerClone::SetNewValue
 
 9th March 2010 Laurent Garnier
  - G4OpenGLViewer : Fix clipping when resizing non square size windows
-  
+
 8th March 2010 Laurent Garnier
 -G4VisManager.cc : Add protection against null pointer
 
@@ -2203,9 +2549,9 @@ G4VisCommandViewerClone::SetNewValue
   argument, such as "800x400" or "800x400-0+0".)
 
 2nd December, Laurent Garnier
- - G4ViewParameters.hh G4ViewParameters.icc G4VisManager.hh G4VisManager.icc 
+ - G4ViewParameters.hh G4ViewParameters.icc G4VisManager.hh G4VisManager.icc
    G4ViewParameters.cc G4VisManager.cc G4VViewer.cc G4VisCommandsViewer.cc,
-   do a lot of change to be able to pass XString like 400x600-0+0 to viewers 
+   do a lot of change to be able to pass XString like 400x600-0+0 to viewers
    and set position and location. It will work for Qt, X, Win32 for the moment.
 
 27th July 2008  John Allison (visman-V09-01-05)
@@ -2222,7 +2568,7 @@ G4VisCommandViewerClone::SetNewValue
  - Fixed gcc-4.3.0 compiler warnings.
 
 5th February 2008, Laurent Garnier
- - Implemented a function in order to IncrementPan with X,Y,Z values 
+ - Implemented a function in order to IncrementPan with X,Y,Z values
 
 29th January 2008  John Allison  (visman-V09-01-01)
  - G4VisExecutive.icc: Re-instated G4DAWNFILE (somehow got lost!!)
@@ -2528,7 +2874,7 @@ G4VisCommandViewerClone::SetNewValue
 4th May 2006  John Allison  (visman-V08-00-15)
 - Improved protection for null models and parameters.
 
-2nd May 2006 Jane Tinslay 
+2nd May 2006 Jane Tinslay
 - Add G4TrajectoryGenericDrawerFactory to G4VisExecutive
 - Add FilterTrajectory method to G4VisManager
 
@@ -2665,7 +3011,7 @@ G4VisCommandViewerClone::SetNewValue
   user has not instantiated a scene handler, e.g., in batch mode.
 
 29th November 2005  Jane Tinslay
-- Make G4VisManager::RegisterModelFactories() non-pure for 
+- Make G4VisManager::RegisterModelFactories() non-pure for
   backwards compatibility.
 - Add information message to G4VisManager::DispatchToModel when default trajectory
   model is used.

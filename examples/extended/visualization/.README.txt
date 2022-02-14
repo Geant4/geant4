@@ -20,5 +20,9 @@ System as a "stand-alone" graphics library and viewer.
 
 This example illustrates how to create a "vis action".
  
+\link Examplemovies movies \endlink
+
+This example illustrates how to create movies.
+ 
 */
 

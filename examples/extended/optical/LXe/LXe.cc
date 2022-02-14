@@ -33,57 +33,50 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
-#include "G4UImanager.hh"
-#include "G4String.hh"
-
-#include "LXePhysicsList.hh"
-#include "LXeDetectorConstruction.hh"
 #include "LXeActionInitialization.hh"
+#include "LXeDetectorConstruction.hh"
 
-#include "LXeRecorderBase.hh"
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
+#include "FTFP_BERT.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4OpticalParameters.hh"
+#include "G4OpticalPhysics.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4String.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
-#endif
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc, char** argv)
 {
-<<<<<<< HEAD
-=======
-  //detect interactive mode (if no arguments) and define UI session
+  // detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
-  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
+  if(argc == 1)
+  {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-#else
-  G4RunManager * runManager = new G4RunManager;
-#endif
-<<<<<<< HEAD
+  auto runManager = G4RunManagerFactory::CreateRunManager();
 
-  runManager->SetUserInitialization(new LXeDetectorConstruction());
-  runManager->SetUserInitialization(new LXePhysicsList());
-=======
   LXeDetectorConstruction* det = new LXeDetectorConstruction();
   runManager->SetUserInitialization(det);
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-  LXeRecorderBase* recorder = NULL; //No recording is done in this example
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
 
-  runManager->SetUserInitialization(new LXeActionInitialization(recorder));
+  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  auto opticalParams               = G4OpticalParameters::Instance();
+
+  opticalParams->SetWLSTimeProfile("delta");
+
+  opticalParams->SetScintTrackSecondariesFirst(true);
+
+  opticalParams->SetCerenkovMaxPhotonsPerStep(100);
+  opticalParams->SetCerenkovMaxBetaChange(10.0);
+  opticalParams->SetCerenkovTrackSecondariesFirst(true);
 
 <<<<<<< HEAD
 #ifdef G4VIS_USE
@@ -93,48 +86,33 @@ int main(int argc, char** argv)
 
   runManager->SetUserInitialization(new LXeActionInitialization(det));
 
-  //initialize visualization
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  // initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 #endif
 
-  // runManager->Initialize();
- 
-  // get the pointer to the UI manager and set verbosities
+  // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-<<<<<<< HEAD
-  if(argc==1){
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
+  if(ui)
+  {
+    // interactive mode
     UImanager->ApplyCommand("/control/execute vis.mac");
-#endif
-    if (ui->IsGUI())
-       UImanager->ApplyCommand("/control/execute gui.mac");
-    ui->SessionStart();
-    delete ui;
-#endif
-  }
-  else{
-=======
-  if (ui) {
-    //interactive mode
-    UImanager->ApplyCommand("/control/execute vis.mac");
-    if (ui->IsGUI()) {
+    if(ui->IsGUI())
+    {
       UImanager->ApplyCommand("/control/execute gui.mac");
     }
     ui->SessionStart();
     delete ui;
-  } else {
-    //batch mode  
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-    G4String command = "/control/execute ";
-    G4String filename = argv[1];
-    UImanager->ApplyCommand(command+filename);
+  }
+  else
+  {
+    // batch mode
+    G4String command  = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
   }
 
 //  if(recorder)delete recorder;

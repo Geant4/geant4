@@ -31,8 +31,6 @@
 //                                 an OpenGL viewer, for inheritance by
 //                                 derived (X, Xm...) classes.
 
-#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
-
 #ifndef G4OPENGLIMMEDIATEVIEWER_HH
 #define G4OPENGLIMMEDIATEVIEWER_HH
 
@@ -48,7 +46,5 @@ public:
   G4OpenGLImmediateViewer (G4OpenGLImmediateSceneHandler& scene);
   void ProcessView ();
 };
-
-#endif
 
 #endif

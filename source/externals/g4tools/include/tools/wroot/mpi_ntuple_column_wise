@@ -1,0 +1,224 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_mpi_ntuple_column_wise
+#define tools_wroot_mpi_ntuple_column_wise
+
+// MPI pntuple. It uses the inlib/impi interface.
+
+#include "base_pntuple_column_wise"
+#include "mpi_basket_add"
+#include "impi_ntuple"
+
+#include "../S_STRING"
+#include "../forit"
+
+namespace tools {
+namespace wroot {
+
+class mpi_ntuple_column_wise : public base_pntuple_column_wise, public virtual impi_ntuple {
+  typedef base_pntuple_column_wise parent;
+protected:
+  class basket_add : public mpi_basket_add {
+    typedef mpi_basket_add parent;
+  public:
+    virtual bool add_basket(basket* a_basket) {  // we get ownership of a_basket.
+      if(m_row_mode) {
+        m_parallel_branch.m_parallel_baskets.push_back(a_basket);
+        if(ready_to_flush_baskets(m_cols)) {return flush_baskets(m_mpi,m_dest,m_tag,m_id,m_cols);}
+        return true;
+      }
+      bool status = mpi_send_basket(m_mpi,m_dest,m_tag,m_id,m_icol,*a_basket);
+      delete a_basket;
+      return status;
+    }
+  public:
+    basket_add(impi& a_mpi,int a_dest,int a_tag,uint32 a_id,uint32 a_icol,
+	       branch& a_parallel_branch,
+               std::vector<icol*>& a_cols,
+               bool a_row_mode)
+    :parent(a_mpi,a_dest,a_tag,a_id,a_icol)
+    ,m_parallel_branch(a_parallel_branch)
+    ,m_cols(a_cols)
+    ,m_row_mode(a_row_mode)
+    {}
+  protected:
+    basket_add(const basket_add& a_from)
+    :branch::iadd_basket(a_from)
+    ,parent(a_from)
+    ,m_parallel_branch(a_from.m_parallel_branch)
+    ,m_cols(a_from.m_cols)
+    ,m_row_mode(a_from.m_row_mode)
+    {}
+    basket_add& operator=(const basket_add& a_from){
+      parent::operator=(a_from);
+      m_row_mode = a_from.m_row_mode;
+      return *this;
+    }
+  protected:
+    branch& m_parallel_branch;
+    std::vector<icol*>& m_cols;
+    bool m_row_mode;
+  };
+
+public:
+  virtual bool add_row(impi& a_mpi,int a_dest,int a_tag) {
+    if(m_cols.empty()) return false;
+
+    tools_vforit(icol*,m_cols,it) (*it)->add();
+
+    uint32 _icol = 0;
+    tools_vforit(icol*,m_cols,it) {
+      basket_add _badd(a_mpi,a_dest,a_tag,m_id,_icol,(*it)->get_branch(),m_cols,m_row_mode);_icol++;
+      if(!(*it)->get_branch().pfill(_badd,m_nev)) return false;
+    }
+
+    tools_vforit(icol*,m_cols,it) (*it)->set_def();
+    return true;
+  }
+
+  virtual bool end_fill(impi& a_mpi,int a_dest,int a_tag) {
+    uint32 _icol = 0;
+    tools_vforit(icol*,m_cols,it) {
+      basket_add _badd(a_mpi,a_dest,a_tag,m_id,_icol,(*it)->get_branch(),m_cols,m_row_mode);_icol++;
+      if(!(*it)->get_branch().end_pfill(_badd)) return false;
+    }
+
+    if(m_row_mode) {
+      size_t number;
+      bool status = flush_remaining_baskets(number,a_mpi,a_dest,a_tag,m_id,m_cols);
+      if(number) {
+        m_out << "tools::wroot::mpi_ntuple_column_wise::end_fill : it remained " << number << " baskets not written on file." << std::endl;
+	status = false;
+      }
+      if(!status) return false;
+    }
+
+    a_mpi.pack_reset();
+    if(!a_mpi.pack(mpi_protocol_end_fill())) return false;
+    if(!a_mpi.pack(m_id)) return false;
+    if(!end_leaves(a_mpi)) return false;
+    if(!a_mpi.send_buffer(a_dest,a_tag)) return false;
+
+    return true;
+  }
+
+public:
+  mpi_ntuple_column_wise(uint32 a_id,std::ostream& a_out,
+                          bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                          const std::string& a_name,const std::string& a_title,
+                          bool a_row_mode,uint32 a_nev,
+                          bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,a_verbose)
+  ,m_id(a_id)
+  ,m_row_mode(a_row_mode)
+  ,m_nev(a_nev)
+  {
+    if(m_row_mode) {
+      if(!m_nev) m_nev = 4000;  //4000*sizeof(double) = 32000 = default basket size.
+    } else {
+      m_nev = 0;
+    }
+  }
+
+  mpi_ntuple_column_wise(uint32 a_id,std::ostream& a_out,
+                         bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                         const std::vector<uint32>& a_basket_sizes,const ntuple_booking& a_bkg,
+                         bool a_row_mode,uint32 a_nev,
+                         bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_basket_sizes,a_bkg,a_verbose)
+  ,m_id(a_id)
+  ,m_row_mode(a_row_mode)
+  ,m_nev(a_nev)
+  {
+    if(m_row_mode) {
+      if(!m_nev) m_nev = 4000;  //4000*sizeof(double) = 32000 = default basket size.
+    } else {
+      m_nev = 0;
+    }
+  }
+  virtual ~mpi_ntuple_column_wise() {}
+protected:
+  mpi_ntuple_column_wise(const mpi_ntuple_column_wise& a_from)
+  :impi_ntuple(a_from)
+  ,parent(a_from)
+  ,m_row_mode(a_from.m_row_mode)
+  ,m_nev(a_from.m_nev)
+  {}
+  mpi_ntuple_column_wise& operator=(const mpi_ntuple_column_wise& a_from){parent::operator=(a_from);return *this;}
+protected:
+  static bool ready_to_flush_baskets(std::vector<icol*>& a_cols) {
+    //return true if all parallel branches have at least one basket in their m_parallel_baskets.
+    if(a_cols.empty()) return false;
+    tools_vforit(icol*,a_cols,it) {
+      branch& _branch = (*it)->get_branch();
+      if(_branch.m_parallel_baskets.empty()) return false;
+    }
+    return true;
+  }
+  static bool flush_baskets(impi& a_mpi,int a_dest,int a_tag,uint32 a_id,std::vector<icol*>& a_cols) {
+    a_mpi.pack_reset();
+    if(!a_mpi.pack(mpi_protocol_baskets())) return false;
+    if(!a_mpi.pack(a_id)) return false;
+
+    bool status = true;
+    uint32 _icol = 0;
+    tools_vforit(icol*,a_cols,it) {
+      branch& _branch = (*it)->get_branch();
+      basket* _front_basket = _branch.m_parallel_baskets.front();
+      if(status) {
+        if(!mpi_pack_basket(a_mpi,_icol,*_front_basket)) status = false;
+      }
+      _branch.m_parallel_baskets.erase(_branch.m_parallel_baskets.begin());
+      delete _front_basket;
+      _icol++;
+    }
+    if(!status) return false;
+
+    return a_mpi.send_buffer(a_dest,a_tag);
+  }
+
+  static bool flush_remaining_baskets(size_t& a_number,impi& a_mpi,int a_dest,int a_tag,uint32 a_id,std::vector<icol*>& a_cols) {
+    a_number = 0;
+    while(ready_to_flush_baskets(a_cols)) {
+      if(!flush_baskets(a_mpi,a_dest,a_tag,a_id,a_cols)) return false;
+    }
+    // look for pending baskets.
+   {tools_vforit(icol*,a_cols,it) {
+      branch& _branch = (*it)->get_branch();
+      a_number += _branch.m_parallel_baskets.size();
+    }}
+   {tools_vforit(icol*,a_cols,it) {
+      branch& _branch = (*it)->get_branch();
+      safe_clear(_branch.m_parallel_baskets);
+    }}
+    return true;
+  }
+protected:
+  bool end_leaves(impi& a_mpi) const {
+#include "MPI_SET_MAX.icc"
+    tools_vforcit(icol*,m_cols,pit) {
+      base_leaf* _pleaf = (*pit)->get_leaf();
+
+      bool set_done = false;
+
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_STRING_SET_LENGTH_MAX
+
+      if(!set_done) {
+        if(!a_mpi.pack((uint32)0)) return false;
+        if(!a_mpi.pack((int)0)) return false;
+      }
+    }
+#undef TOOLS_WROOT_MPI_NTUPLE_SET_MAX
+#undef TOOLS_WROOT_MPI_NTUPLE_STRING_SET_MAX
+    return true;
+  }
+protected:
+  uint32 m_id;
+  bool m_row_mode;
+  uint32 m_nev;
+};
+
+}}
+
+#endif

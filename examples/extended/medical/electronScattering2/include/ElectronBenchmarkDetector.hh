@@ -50,12 +50,12 @@ class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
 public:
     
     ElectronBenchmarkDetector();
-    virtual ~ElectronBenchmarkDetector();
+    ~ElectronBenchmarkDetector() override;
     
-    virtual G4VPhysicalVolume* Construct();
+    G4VPhysicalVolume* Construct() override;
     
     // Sensitive Detector
-    void ConstructSDandField();
+    void ConstructSDandField() override;
     
     // Material Definition
     void DefineMaterials();
@@ -70,19 +70,19 @@ public:
     G4VPhysicalVolume* CreateGeometry();
     
     // Command Interface
-    void SetPrimFoilMaterial(G4String matname);
+    void SetPrimFoilMaterial(const G4String& matname);
     void SetPrimFoilThickness(G4double thicknessPrimFoil);
     
 private:
-    // Exit Window
+    // Exit Window.
     G4double fPosWindow0;
     G4double fPosWindow1;
     
     // Primary Foil
-    G4Material* fMaterialPrimFoil;
+    G4Material* fMaterialPrimFoil = nullptr;
     G4double fHalfThicknessPrimFoil;
     G4double fPosPrimFoil;
-    G4LogicalVolume* fLogPrimFoil;
+    G4LogicalVolume* fLogPrimFoil = nullptr;
     G4Tubs* fSolidPrimFoil; 
 
     // Monitor Chambers
@@ -100,7 +100,7 @@ private:
     G4double fPosScorer;
     G4double fThicknessScorer;
     G4double fWidthScorerRing;
-    G4LogicalVolume* fScorerRingLog;
+    G4LogicalVolume* fScorerRingLog = nullptr;
     
     // Radii
     G4double fRadOverall;
@@ -111,7 +111,8 @@ private:
     G4double fRadDelta;
     
     // World volume
-    G4LogicalVolume* fLogWorld;
+    G4LogicalVolume* fLogWorld = nullptr;
+    G4VPhysicalVolume* fPhysiWorld = nullptr;
     
     // SensitiveDetector
     // G4Cache mechanism is necessary for multi-threaded operation
@@ -119,17 +120,17 @@ private:
     const G4Cache<G4MultiFunctionalDetector*> fSensitiveDetectorCache;
     
     // Messenger
-    ElectronBenchmarkDetectorMessenger* fMessenger;
+    ElectronBenchmarkDetectorMessenger* fMessenger = nullptr;
     
     // Visualization Attributes
-    G4VisAttributes* fWorldVisAtt;
-    G4VisAttributes* fWindowVisAtt;
-    G4VisAttributes* fPrimFoilVisAtt;
-    G4VisAttributes* fMonVisAtt;
-    G4VisAttributes* fBagVisAtt;
-    G4VisAttributes* fHeliumVisAtt;
-    G4VisAttributes* fRingVisAtt;
-    G4VisAttributes* fScorerVisAtt;
+    G4VisAttributes* fWorldVisAtt = nullptr;
+    G4VisAttributes* fWindowVisAtt = nullptr;
+    G4VisAttributes* fPrimFoilVisAtt = nullptr;
+    G4VisAttributes* fMonVisAtt = nullptr;
+    G4VisAttributes* fBagVisAtt = nullptr;
+    G4VisAttributes* fHeliumVisAtt = nullptr;
+    G4VisAttributes* fRingVisAtt = nullptr;
+    G4VisAttributes* fScorerVisAtt = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

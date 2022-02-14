@@ -19,10 +19,42 @@ track of all tags.
  
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-Oct 14, 2016 G.Folger
-- remove direct use of aParticleIterator, use GetParticleTableIterator().
-=======
+Oct 25, 2021 B. Morgan (WLS-V10-07-04)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+Oct 6, 2021 I. Hrivnacova (WLS-V10-07-03)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  removed WLSAnalysis.hh
+
+Sept 7, 2021 D. Sawkey (WLS-V10-07-02)
+- add visualisation attributes
+- fix bug preventing cladding being built
+- fix counting detector hits
+- add histograms
+- use G4OpBoundaryProcess::invokeSD rather than ProcessHits_boundary call
+  in SteppingAction
+- remove StringToRotation
+- remove Sr90.mac; add electron.mac
+
+May 21, 2021 D. Sawkey (WLS-V10-07-01)
+- WLSMaterials: use correct material property names
+
+May 19, 2021 V. Ivanchenko (WLS-V10-07-00)
+- WLSPrimaryGeneratorAction - use G4PhysicsFreeVector instead of
+  G4PhysicsOrderedFreeVector
+
+November 5, 2020 D. Sawkey (WLS-V10-06-02)
+- Large cleaning including clang-format style guidelines.
+- Add counters to record run and event statistics.
+- update macros
+
+November 3, 2020 D. Sawkey (WLS-V10-06-01)
+- Add remaining material properties using new interface with sd::vectors
+
+August 4, 2020 D. Sawkey (WLS-V10-06-00)
+- Add material properties using new interface with std::vectors
+
 October 29, 2019 D. Sawkey (WLS-V10-05-01)
 - Use G4OpticalPhysics
 - Use G4SteppingVerbose

@@ -1,0 +1,53 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_tokenize
+#define tools_tokenize
+
+#include <string>
+#include <vector>
+
+namespace tools {
+
+inline bool double_quotes_get_token(const std::string& a_cmd,std::string::size_type a_begIdx,
+                                    std::string::size_type& a_endIdx,std::string& a_token) {
+  while ( a_cmd[a_begIdx] == ' ') ++a_begIdx; // Loop checking, 23.06.2015, I. Hrivnacova
+  if ( a_cmd[a_begIdx] == '"' ) {
+    a_endIdx = a_cmd.find('"', a_begIdx+1);
+    if ( a_endIdx == std::string::npos ) a_endIdx = a_cmd.length();
+    a_token = a_cmd.substr(a_begIdx+1, (a_endIdx-1)-a_begIdx);
+    ++a_endIdx;
+  }
+  else {
+    a_endIdx = a_cmd.find(' ', a_begIdx);
+    if ( a_endIdx == std::string::npos ) a_endIdx = a_cmd.length();
+    a_token = a_cmd.substr(a_begIdx, a_endIdx-a_begIdx);
+  }
+  return ( a_token.length() > 0 );
+}
+
+//  From a string, double_quotes_tokenize permits to get arguments
+// by taking into account strings enclosed by double quotes and potentially
+// containing spaces (for example to specify a file path containing spaces).
+//  Example:
+//    if a_cmd is the string: aa bbb "ccc ddd" ee "fff gg"
+//  Returned a_args string list will be:
+//    "aa", "bb", "ccc ddd", "ee", "fff gg"
+//  Algorithm from Geant4/G4AnalysisUtilities.cc/Tokenize() done by Ivana Hrivnacova.
+
+inline void double_quotes_tokenize(const std::string& a_cmd, std::vector<std::string>& a_args) {
+  std::string::size_type begIdx = 0;
+  std::string::size_type endIdx = 0;
+  std::string token;
+  do {
+    if ( double_quotes_get_token(a_cmd, begIdx, endIdx, token) ) {
+      a_args.push_back(token);
+    }
+    begIdx = endIdx + 1;
+  }
+  while ( endIdx < a_cmd.length() ); // Loop checking, 23.06.2015, I. Hrivnacova
+}
+
+}
+
+#endif

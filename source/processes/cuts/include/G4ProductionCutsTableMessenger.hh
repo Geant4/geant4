@@ -23,34 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProductionCutsTableMessenger
 //
+// Class description:
 //
+// This is a messenger class to interface to information exchange
+// between G4ProductionCutsTable and UI.
 // 
-//---------------------------------------------------------------
-//
-//  G4ProcductionCutsTableMessenger.hh
-//
-//  Class Description:
-//    This is a messenger class to interface to exchange information
-//    between ProductionCutsTable and UI.
-// --
-//  the List of Directory and Commands
-// -       
-//  /run/particle/   Paricle control commands.
-//   Commands : 
-//    SetCuts *  Set default cut value
+// List of Directory and Commands:
+//      
+//  /run/particle/   Particle control commands
+//  Commands : 
+//    SetCuts  * Set default cut value
 //    dumpList * Dump List of particles in G4VUserPhysicsList.
-//    verbose * Set the Verbose level of G4VUserPhysicsList.
-// ------------------------------------------------------------
-//	History
-//        first version                02 Mar. 2008 by H.Kurashige 
-// ------------------------------------------------------------
+//    verbose  * Set the Verbose level of G4VUserPhysicsList
 
-#ifndef G4ProcductionCutsTableMessenger_h
-#define G4ProcductionCutsTableMessenger_h 1
+// Author: H.Kurashige, 02 March 2008 - First version
+// --------------------------------------------------------------------
+#ifndef G4ProcductionCutsTableMessenger_hh
+#define G4ProcductionCutsTableMessenger_hh 1
+
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4ProductionCutsTable;
-
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
@@ -58,36 +54,35 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString; 
 class G4UIcommand;
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class G4ProductionCutsTableMessenger: public G4UImessenger
+class G4ProductionCutsTableMessenger : public G4UImessenger
 {
-  private:
-  // hide default constructor
-    G4ProductionCutsTableMessenger(){}
-
   public:
+
     G4ProductionCutsTableMessenger(G4ProductionCutsTable* pTable);
     virtual ~G4ProductionCutsTableMessenger();
+
+    G4ProductionCutsTableMessenger(const G4ProductionCutsTableMessenger&) = delete;
+    G4ProductionCutsTableMessenger& operator=(const G4ProductionCutsTableMessenger&) = delete;
+      // Copy contructor and assignment operator not allowed
     
-public: // with description
-    virtual  void SetNewValue(G4UIcommand * command,G4String newValues);
-    virtual  G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand* command);
 
   protected:
-    G4ProductionCutsTable* theCutsTable;
+
+    G4ProductionCutsTable* theCutsTable = nullptr;
     
-  private: //commands
-    G4UIdirectory *             theDirectory;
-    G4UIcmdWithAnInteger *      verboseCmd;
-    G4UIcmdWithADoubleAndUnit * setLowEdgeCmd; 
-    G4UIcmdWithADoubleAndUnit * setHighEdgeCmd; 
-    G4UIcmdWithADoubleAndUnit * setMaxEnergyCutCmd; 
-    G4UIcmdWithoutParameter *   dumpCmd;
- 
+  private:
+
+    G4ProductionCutsTableMessenger() {}
+      // Hidden default constructor
+
+    G4UIdirectory*             theDirectory = nullptr;
+    G4UIcmdWithAnInteger*      verboseCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* setLowEdgeCmd = nullptr; 
+    G4UIcmdWithADoubleAndUnit* setHighEdgeCmd = nullptr; 
+    G4UIcmdWithADoubleAndUnit* setMaxEnergyCutCmd = nullptr; 
+    G4UIcmdWithoutParameter*   dumpCmd = nullptr;
 }; 
 
 #endif
-
-

@@ -1,0 +1,26 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                 VecGeomNavigation  History file
+                 -------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+09/07/2021 G.Cosmo (VecGeomNavigation-V10-07-02)
+- Switched to use "master" for G4VecGeomNav package (instead of hardcoded
+  hashed tag "1a002fbf2bccd81827b6100f86e2ad82433a75e9", used for 11.0-beta),
+  to constantly test development version.
+
+25/06/2021 B.Morgan (VecGeomNavigation-V10-07-01)
+- Fix build of builtin G4VecGeomNav
+
+24/06/2021 J.Apostolakis (VecGeomNavigation-V10-07-00)
+- First version of example interfacing VecGeom navigation with Geant4.

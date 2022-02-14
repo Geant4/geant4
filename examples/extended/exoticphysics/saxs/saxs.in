@@ -1,0 +1,51 @@
+#Medical material (MedMat) definition
+/det/setComp0 0.80							#Comp0->Fat
+/det/setComp1 0.20							#Comp1->Water
+/det/setComp2 0.00							#Comp2->Collagen (BM)
+/det/setComp3 0.00							#Comp3->Mineral (HA)
+
+#Custom Material (CustomMat) definition
+/det/setCustomMatDensity 1.72 				#[g/mol]
+/det/setCustomMatHmassfract 0.0504
+/det/setCustomMatNmassfract 0.3500
+/det/setCustomMatOmassfract 0.5996
+/det/SetCustomMatFF myFF.dat				#NH4NO3
+
+/det/setPhantomMaterial 2					#see the list below	
+/det/setPhantomDiameter 10. mm
+/det/setPhantomHeight 10. mm
+/det/setPhantomZ 500. mm                    #default is 0
+
+/det/setDetectorSize 400. mm
+/det/setDetectorThickness 20. mm
+/det/setDetectorSampleDistance 400. mm
+
+/phys/SelectPhysicsList empenelopeMI			#To activate MI effect, set "penelopeMI"				
+
+/run/setCut .1 mm	
+
+/run/verbose 1
+
+/run/initialize
+
+/run/setfilenamesave output					#output filename (without extention)
+
+#source
+/gps/pos/type Plane				
+/gps/pos/shape Circle
+/gps/pos/radius 1. mm	
+/gps/pos/centre 0. 0. 0. mm	
+/gps/direction 0 0 1  	
+/gps/particle gamma  
+/gps/ene/type Mono					
+/gps/ene/mono 20. keV 
+
+/run/printProgress 100000
+/run/beamOn 1000000		
+
+#materials for the Phantom:
+#1->Water, 2->MedMat, 3->PMMA, 4->Adipose, 5->Glandular, 6->Breast5050, 7->carcinoma, 
+#8->kidney, 9->liver, 10->Fat, 11->BoneMatrix, 12->Mineral, 13->Bone, 14->fatLowX, 
+#15->bonematrixLowX, 16->dryBoneLowX, 17->Lexan, 18->Kapton, 19->Nylon, 
+#20->Polyethylene, 21->Polystyrene, 22->Formaline, 23->Acetone, 24->Hperoxide
+#25->CIRS3070, 26->CIRS5050, 27->CIRS7030, 28->RMI454, 29->Air, 30->CustomMat

@@ -33,6 +33,7 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4PhysicalVolumeStore.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
@@ -50,6 +51,7 @@
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 #include "G4Vector3D.hh"
+#include "G4Mesh.hh"
 
 #include <sstream>
 #include <iomanip>
@@ -61,21 +63,22 @@ namespace {
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*            pVPV
  , G4int                       requestedDepth
- , const G4Transform3D&        modelTransformation
+ , const G4Transform3D&        modelTransform
  , const G4ModelingParameters* pMP
  , G4bool                      useFullExtent
  , const std::vector<G4PhysicalVolumeNodeID>& baseFullPVPath)
-: G4VModel           (modelTransformation,pMP)
+: G4VModel           (pMP)
 , fpTopPV            (pVPV)
 , fTopPVCopyNo       (pVPV? pVPV->GetCopyNo(): 0)
 , fRequestedDepth    (requestedDepth)
 , fUseFullExtent     (useFullExtent)
+, fTransform         (modelTransform)
 , fCurrentDepth      (0)
 , fpCurrentPV        (fpTopPV)
 , fCurrentPVCopyNo   (fpTopPV? fpTopPV->GetCopyNo(): 0)
 , fpCurrentLV        (fpTopPV? fpTopPV->GetLogicalVolume(): 0)
 , fpCurrentMaterial  (fpCurrentLV? fpCurrentLV->GetMaterial(): 0)
-, fpCurrentTransform (const_cast<G4Transform3D*>(&modelTransformation))
+, fCurrentTransform  (modelTransform)
 , fBaseFullPVPath    (baseFullPVPath)
 , fAbort             (false)
 , fCurtailDescent    (false)
@@ -170,6 +173,7 @@ void G4PhysicalVolumeModel::CalculateExtent ()
   if (radius < 0.) {  // Nothing in the scene - revert to top extent
     fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
   }
+  fExtent.Transform(fTransform);
 }
 
 void G4PhysicalVolumeModel::DescribeYourselfTo
@@ -215,7 +219,7 @@ G4String G4PhysicalVolumeModel::GetCurrentTag () const
   if (fpCurrentPV) {
     std::ostringstream o;
     o << fpCurrentPV -> GetCopyNo ();
-    return fpCurrentPV -> GetName () + "." + o.str();
+    return fpCurrentPV -> GetName () + ":" + o.str();
   }
   else {
     return "WARNING: NO CURRENT VOLUME - global tag is " + fGlobalTag;
@@ -242,7 +246,6 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
   // Find corresponding logical volume and (later) solid, storing in
   // local variables to preserve re-entrancy.
   G4LogicalVolume* pLV  = pVPV -> GetLogicalVolume ();
-
   G4VSolid* pSol = nullptr;
   G4Material* pMaterial = nullptr;
 
@@ -390,6 +393,14 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   fpCurrentLV = pLV;
   fpCurrentMaterial = pMaterial;
 
+  // Create a nodeID for use below - note the "drawn" flag is true
+  G4int copyNo = fpCurrentPV->GetCopyNo();
+  auto nodeID = G4PhysicalVolumeNodeID
+  (fpCurrentPV,copyNo,fCurrentDepth,fCurrentTransform);
+
+  // Update full path of physical volumes...
+  fFullPVPath.push_back(nodeID);
+
   const G4RotationMatrix objectRotation = pVPV -> GetObjectRotationValue ();
   const G4ThreeVector&  translation     = pVPV -> GetTranslation ();
   G4Transform3D theLT (G4Transform3D (objectRotation, translation));
@@ -403,13 +414,17 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // not be accumulated.
   G4Transform3D theNewAT (theAT);
   if (fCurrentDepth != 0) theNewAT = theAT * theLT;
-  fpCurrentTransform = &theNewAT;
+  fCurrentTransform = theNewAT;
 
   const G4VisAttributes* pVisAttribs = pLV->GetVisAttributes();
   //  If the volume does not have any vis attributes, create it.
   G4VisAttributes* tempVisAtts = nullptr;
   if (!pVisAttribs) {
-    tempVisAtts = new G4VisAttributes; // Default value.
+    if (fpMP->GetDefaultVisAttributes()) {
+      tempVisAtts = new G4VisAttributes(*fpMP->GetDefaultVisAttributes());
+    } else {
+      tempVisAtts = new G4VisAttributes;
+    }
     // The user may request /vis/viewer/set/colourByDensity.
     if (fpMP->GetCBDAlgorithmNumber() == 1) {
       // Algorithm 1: 3 parameters: Simple rainbow mapping.
@@ -446,15 +461,6 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // From here, can assume pVisAttribs is a valid pointer.  This is necessary
   // because PreAddSolid needs a vis attributes object.
 
-  // Make decision to draw...
-  G4bool thisToBeDrawn = true;
-  
-  // Update full path of physical volumes...
-  G4int copyNo = fpCurrentPV->GetCopyNo();
-  fFullPVPath.push_back
-  (G4PhysicalVolumeNodeID
-   (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform));
-  
   // Check if vis attributes are to be modified by a /vis/touchable/set/ command.
   const auto& vams = fpMP->GetVisAttributesModifiers();
   if (vams.size()) {
@@ -547,11 +553,54 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     }
   }
 
+  // Check for special mesh rendering
+  if (fpMP->IsSpecialMeshRendering()) {
+    if (fpMP->GetSpecialMeshVolumes().empty()) {
+      // No volumes specified - all are potentially possible
+      goto create_mesh;
+    } else {
+      for (const auto& pvNameCopyNo: fpMP->GetSpecialMeshVolumes()) {
+	if (pVPV->GetName() == pvNameCopyNo.GetName()) {
+	  // We have a name match
+	  if (pvNameCopyNo.GetCopyNo() < 0) {
+	    // Any copy number is OK
+	    goto create_mesh;
+	  } else {
+	    if (pVPV->GetCopyNo() == pvNameCopyNo.GetCopyNo()) {
+	      // We have a name and copy number match
+	      goto create_mesh;
+	    }
+	  }
+	}
+      }
+      // We have fallen out of this loop without finding a match
+      goto continue_processing;
+    }
+  create_mesh:
+    // Create - or at least attempt to create - a mesh. If it cannot be created
+    // out of this pVPV the type will be "invalid".
+    G4Mesh mesh(pVPV,theNewAT);
+    if (mesh.GetMeshType() != G4Mesh::invalid) {
+      fFullPVPath.push_back(nodeID);
+      fDrawnPVPath.push_back(nodeID);
+      sceneHandler.AddCompound(mesh);
+      fFullPVPath.pop_back();
+      fDrawnPVPath.pop_back();
+      delete tempVisAtts;  // Needs cleaning up (Coverity warning!!)
+      return;
+    }  // else continue processing
+  }
+continue_processing:
+
+  // Make decision to draw...
+  G4bool thisToBeDrawn = true;
+
   // There are various reasons why this volume
   // might not be drawn...
   G4bool culling = fpMP->IsCulling();
   G4bool cullingInvisible = fpMP->IsCullingInvisible();
-  G4bool markedVisible = pVisAttribs->IsVisible();
+  G4bool markedVisible
+  = pVisAttribs->IsVisible() && pVisAttribs->GetColour().GetAlpha() > 0;
   G4bool cullingLowDensity = fpMP->IsDensityCulling();
   G4double density = pMaterial? pMaterial->GetDensity(): 0;
   G4double densityCut = fpMP -> GetVisibleDensity ();
@@ -572,15 +621,13 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // 6) The user has asked for all further traversing to be aborted...
   if (fAbort) thisToBeDrawn = false;
 
-  // Record thisToBeDrawn in path...
-  fFullPVPath.back().SetDrawn(thisToBeDrawn);
+  // Set "drawn" flag (it was true by default) - thisToBeDrawn may be false
+  nodeID.SetDrawn(thisToBeDrawn);
 
   if (thisToBeDrawn) {
 
     // Update path of drawn physical volumes...
-    fDrawnPVPath.push_back
-      (G4PhysicalVolumeNodeID
-       (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform,thisToBeDrawn));
+    fDrawnPVPath.push_back(nodeID);
 
     if (fpMP->IsExplode() && fDrawnPVPath.size() == 1) {
       // For top-level drawn volumes, explode along radius...
@@ -669,6 +716,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     }
   }
 
+  // Clean up
   delete tempVisAtts;
 
   // Reset for normal descending of next volume at this level...
@@ -748,7 +796,7 @@ void G4PhysicalVolumeModel::DescribeSolid
 	  ("cutaway_solid", pSol, pCutawaySolid, theAT.inverse());
       }
 
-      const G4Polyhedron* pResultantPolyhedron = pResultantSolid->GetPolyhedron();
+      G4Polyhedron* pResultantPolyhedron = pResultantSolid->GetPolyhedron();
       if (!pResultantPolyhedron) {
         if (fpMP->IsWarning())
           G4cout <<
@@ -774,6 +822,7 @@ void G4PhysicalVolumeModel::DescribeSolid
       if (pResultantPolyhedron) {
         // Finally, draw polyhedron...
         sceneHandler.BeginPrimitives(theAT);
+	pResultantPolyhedron->SetVisAttributes(pVisAttribs);
         sceneHandler.AddPrimitive(*pResultantPolyhedron);
         sceneHandler.EndPrimitives();
       }
@@ -785,57 +834,74 @@ void G4PhysicalVolumeModel::DescribeSolid
 
 G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
 {
-  G4TransportationManager* transportationManager =
-    G4TransportationManager::GetTransportationManager ();
+// Not easy to see how to validate this sort of model. Previously there was
+// a check that a volume of the same name (fTopPVName) existed somewhere in
+// the geometry tree but under some circumstances this consumed lots of CPU
+// time. Instead, let us simply check that the volume (fpTopPV) exists in the
+// physical volume store.
 
-  size_t nWorlds = transportationManager->GetNoWorlds();
-
-  G4bool found = false;
-
-  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
-    transportationManager->GetWorldsIterator();
-  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
-    G4VPhysicalVolume* world = (*iterWorld);
-    if (!world) break; // This can happen if geometry has been cleared/destroyed.
-    // The idea now is to seek a PV with the same name and copy no
-    // in the hope it's the same one!!
-    G4PhysicalVolumeModel searchModel (world);
-    G4int verbosity = 0;  // Suppress messages from G4PhysicalVolumeSearchScene.
-    G4PhysicalVolumeSearchScene searchScene
-      (&searchModel, fTopPVName, fTopPVCopyNo, verbosity);
-    G4ModelingParameters mp;  // Default modeling parameters for this search.
-    mp.SetDefaultVisAttributes(fpMP? fpMP->GetDefaultVisAttributes(): 0);
-    searchModel.SetModelingParameters (&mp);
-    searchModel.DescribeYourselfTo (searchScene);
-    G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
-    if (foundVolume) {
-      if (foundVolume != fpTopPV && warn) {
-	G4cout <<
-	  "G4PhysicalVolumeModel::Validate(): A volume of the same name and"
-	  "\n  copy number (\""
-	       << fTopPVName << "\", copy " << fTopPVCopyNo
-	       << ") still exists and is being used."
-	  "\n  But it is not the same volume you originally specified"
-	  "\n  in /vis/scene/add/."
-	       << G4endl;
-      }
-      fpTopPV = foundVolume;
-      CalculateExtent ();
-      found = true;
-    }
-  }
-  if (found) return true;
-  else {
+  const auto& pvStore = G4PhysicalVolumeStore::GetInstance();
+  auto iterator = find(pvStore->begin(),pvStore->end(),fpTopPV);
+  if (iterator == pvStore->end()) {
     if (warn) {
-      G4cout <<
-	"G4PhysicalVolumeModel::Validate(): No volume of name and"
-	"\n  copy number (\""
-	     << fTopPVName << "\", copy " << fTopPVCopyNo
-	     << ") exists."
-	     << G4endl;
+      G4ExceptionDescription ed;
+      ed << "Attempt to validate a volume that is no longer in the physical volume store.";
+      G4Exception("G4PhysicalVolumeModel::Validate", "modeling0015", JustWarning, ed);
     }
     return false;
+  } else {
+    return true;
   }
+
+  // Previous algorithm
+//  G4TransportationManager* transportationManager =
+//    G4TransportationManager::GetTransportationManager ();
+//  size_t nWorlds = transportationManager->GetNoWorlds();
+//  G4bool found = false;
+//  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
+//    transportationManager->GetWorldsIterator();
+//  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+//    G4VPhysicalVolume* world = (*iterWorld);
+//    if (!world) break; // This can happen if geometry has been cleared/destroyed.
+//    // The idea now is to seek a PV with the same name and copy no
+//    // in the hope it's the same one!!
+//    G4PhysicalVolumeModel searchModel (world);
+//    G4int verbosity = 0;  // Suppress messages from G4PhysicalVolumeSearchScene.
+//    G4PhysicalVolumeSearchScene searchScene
+//      (&searchModel, fTopPVName, fTopPVCopyNo, verbosity);
+//    G4ModelingParameters mp;  // Default modeling parameters for this search.
+//    mp.SetDefaultVisAttributes(fpMP? fpMP->GetDefaultVisAttributes(): 0);
+//    searchModel.SetModelingParameters (&mp);
+//    searchModel.DescribeYourselfTo (searchScene);
+//    G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
+//    if (foundVolume) {
+//      if (foundVolume != fpTopPV && warn) {
+//	G4cout <<
+//	  "G4PhysicalVolumeModel::Validate(): A volume of the same name and"
+//	  "\n  copy number (\""
+//	       << fTopPVName << "\", copy " << fTopPVCopyNo
+//	       << ") still exists and is being used."
+//	  "\n  But it is not the same volume you originally specified"
+//	  "\n  in /vis/scene/add/."
+//	       << G4endl;
+//      }
+//      fpTopPV = foundVolume;
+//      CalculateExtent ();
+//      found = true;
+//    }
+//  }
+//  if (found) return true;
+//  else {
+//    if (warn) {
+//      G4cout <<
+//	"G4PhysicalVolumeModel::Validate(): No volume of name and"
+//	"\n  copy number (\""
+//	     << fTopPVName << "\", copy " << fTopPVCopyNo
+//	     << ") exists."
+//	     << G4endl;
+//    }
+//    return false;
+//  }
 }
 
 const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
@@ -942,7 +1008,7 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
   const G4ThreeVector& localTranslation = fpCurrentPV->GetTranslation();
   oss.str(""); oss << '\n' << G4Transform3D(localRotation,localTranslation);
   values->push_back(G4AttValue("LocalTrans", oss.str(),""));
-  oss.str(""); oss << '\n' << *fpCurrentTransform;
+  oss.str(""); oss << '\n' << fCurrentTransform;
   values->push_back(G4AttValue("GlobalTrans", oss.str(),""));
   G4String matName = fpCurrentMaterial? fpCurrentMaterial->GetName(): G4String("No material");
   values->push_back(G4AttValue("Material", matName,""));
@@ -973,6 +1039,17 @@ G4bool G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::operator<
   return false;
 }
 
+G4bool G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::operator!=
+  (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& right) const
+{
+  if (fpPV            != right.fpPV ||
+      fCopyNo         != right.fCopyNo ||
+      fNonCulledDepth != right.fNonCulledDepth ||
+      fTransform      != right.fTransform ||
+      fDrawn          != right.fDrawn) return true;
+  return false;
+}
+
 std::ostream& operator<<
   (std::ostream& os, const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& node)
 {
@@ -987,7 +1064,7 @@ std::ostream& operator<<
 //    if (!node.GetDrawn()) os << "not ";
 //    os << "drawn)";
   } else {
-    os << " (Null node)";
+    os << " (Null PV node)";
   }
   return os;
 }

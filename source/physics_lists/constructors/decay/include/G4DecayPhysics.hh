@@ -47,27 +47,22 @@
 
 class G4DecayPhysics : public G4VPhysicsConstructor
 {
-  public: 
-    G4DecayPhysics(G4int ver = 1);
-    G4DecayPhysics(const G4String& name, G4int ver = 1);
-    virtual ~G4DecayPhysics();
+public: 
+  G4DecayPhysics(G4int ver = 1);
+  G4DecayPhysics(const G4String& name, G4int ver = 1);
+  ~G4DecayPhysics() override;
 
-  public: 
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-
-  virtual G4Decay* GetDecayProcess() { return fDecayProcess; }
+  void ConstructProcess() override;
 
 private:
-  static G4ThreadLocal G4Decay* fDecayProcess;
   G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
 };
 
 #endif

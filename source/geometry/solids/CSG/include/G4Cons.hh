@@ -169,16 +169,6 @@ class G4Cons : public G4CSGSolid
     G4Cons& operator=(const G4Cons& rhs);
       // Copy constructor and assignment operator.
 
-    //  Old access functions
-
-    inline G4double    GetRmin1() const;
-    inline G4double    GetRmax1() const;
-    inline G4double    GetRmin2() const;
-    inline G4double    GetRmax2() const;
-    inline G4double    GetDz()    const;
-    inline G4double    GetSPhi() const;
-    inline G4double    GetDPhi() const;
-
   private:
 
     inline void Initialize();

@@ -30,8 +30,6 @@
 // Class G4OpenGLStoredXmViewer : a class derived from G4OpenGLXmViewer 
 //                                and G4OpenGLStoredViewer.
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OpenGLSTOREDXMVIEWER_HH
 #define G4OpenGLSTOREDXMVIEWER_HH
 
@@ -51,7 +49,5 @@ public:
   void FinishView ();
 
 };
-
-#endif
 
 #endif

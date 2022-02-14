@@ -29,9 +29,9 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
+#include "G4NeutronFissionProcess.hh"
+#include "G4NeutronCaptureProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 
 #include "G4LENDElasticCrossSection.hh"
@@ -46,14 +46,13 @@
 class G4NeutronLENDBuilder : public G4VNeutronBuilder
 {
   public: 
-    G4NeutronLENDBuilder(G4String eva="");
-    virtual ~G4NeutronLENDBuilder();
+    G4NeutronLENDBuilder(const G4String& eva="");
+    virtual ~G4NeutronLENDBuilder() {}
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4HadronFissionProcess * aP);
-    virtual void Build(G4HadronCaptureProcess * aP);
-    virtual void Build(G4NeutronInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess * aP) final override;
+    virtual void Build(G4NeutronFissionProcess * aP) final override;
+    virtual void Build(G4NeutronCaptureProcess * aP) final override;
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
 
     void SetMinEnergy(G4double aM) 
     {

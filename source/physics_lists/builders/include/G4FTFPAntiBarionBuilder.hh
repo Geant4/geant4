@@ -41,8 +41,6 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-// #include "G4HadronFissionProcess.hh"
-// #include "G4HadronCaptureProcess.hh"
 #include "G4VAntiBarionBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
@@ -62,12 +60,7 @@ class G4FTFPAntiBarionBuilder : public G4VAntiBarionBuilder
     virtual ~G4FTFPAntiBarionBuilder();
 
     virtual void Build(G4HadronElasticProcess *) final override {}
-    virtual void Build(G4AntiProtonInelasticProcess * aP) final override;
-    virtual void Build(G4AntiNeutronInelasticProcess * aP) final override;
-    virtual void Build(G4AntiDeuteronInelasticProcess * aP) final override;
-    virtual void Build(G4AntiTritonInelasticProcess * aP) final override;
-    virtual void Build(G4AntiHe3InelasticProcess * aP) final override;
-    virtual void Build(G4AntiAlphaInelasticProcess * aP) final override;
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     virtual void SetMinEnergy(G4double val) final override {theMin = val;}
     virtual void SetMaxEnergy(G4double val) final override {theMax = val;}
@@ -76,14 +69,7 @@ class G4FTFPAntiBarionBuilder : public G4VAntiBarionBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4FTFModel * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
-    G4LundStringFragmentation * theLund;
-
     G4VCrossSectionDataSet* theAntiNucleonData;
-    G4VComponentCrossSection * theAntiNucleonXS;
     G4double theMin;
     G4double theMax;
 

@@ -377,7 +377,7 @@ void G4FTFParameters::InitForInteraction( const G4ParticleDefinition* particle,
     // Gaussian parametrization of elastic scattering amplitude assumed
     SetAvaragePt2ofElasticScattering( 1.0/( Xtotal*Xtotal/16.0/pi/Xelastic/0.3894 )*GeV*GeV );
   } else {
-    SetSlope(0.0);
+    SetSlope(1.0);
     SetAvaragePt2ofElasticScattering( 0.0);
   }
   SetGamma0( GetSlope()*Xtotal/10.0/2.0/pi );
@@ -883,7 +883,8 @@ class G4FTFSettingDefaultHDP
     //
     // baryons
     //
-    /* JVY, Oct. 31, 2017: Per Alberto R. & Vladimir U., keep this group of parameters FIXED
+    /* JVY, Oct. 31, 2017: Per Alberto R. & Vladimir U., keep this group of parameters FIXED */
+    /* JVY, June 11, 2020: try to open up... */
     // Process=0 --> Qexchg w/o excitation
     //
     HDP.SetDefault( "FTF_BARYON_PROC0_A1",  13.71 );
@@ -893,6 +894,7 @@ class G4FTFSettingDefaultHDP
     HDP.SetDefault( "FTF_BARYON_PROC0_A3",   0.0  );
     HDP.SetDefault( "FTF_BARYON_PROC0_ATOP", 1.0  ); 
     HDP.SetDefault( "FTF_BARYON_PROC0_YMIN", 0.93 ); 
+    /* */
     //
     // Process=1 --> Qexchg w/excitation
     //
@@ -903,7 +905,7 @@ class G4FTFSettingDefaultHDP
     HDP.SetDefault( "FTF_BARYON_PROC1_A3",   0.   );
     HDP.SetDefault( "FTF_BARYON_PROC1_ATOP", 0.   );
     HDP.SetDefault( "FTF_BARYON_PROC1_YMIN", 1.4  );
-    */
+    /* */
     //
     // NOTE: Process #2 & 3 are projectile & target diffraction
     //       they have more complex definition of A1 & A2 
@@ -917,7 +919,8 @@ class G4FTFSettingDefaultHDP
     HDP.SetDefault( "FTF_BARYON_DIFF_DISSO_PROJ", false );
     HDP.SetDefault( "FTF_BARYON_DIFF_DISSO_TGT",  false ); // as in hadr-string-diff-V10-03-07
     //
-    /* JVY, Oct. 31, 2017: Per Alberto R. & Vladimir U., keep this group of parameters FIXED
+    /* JVY, Oct. 31, 2017: Per Alberto R. & Vladimir U., keep this group of parameters FIXED */
+    /* JVY, June 11, 2020: try to open up... */
     // Process=4 --> Qexchg w/additional multiplier in excitation 
     //
     HDP.SetDefault( "FTF_BARYON_PROC4_A1",  0.6 ); 
@@ -927,7 +930,7 @@ class G4FTFSettingDefaultHDP
     HDP.SetDefault( "FTF_BARYON_PROC4_A3",  0.  );
     HDP.SetDefault( "FTF_BARYON_PROC4_ATOP",0.  );
     HDP.SetDefault( "FTF_BARYON_PROC4_YMIN",1.4 );
-    */
+    /* */
     //
     // Parameters of participating hadron (baryon) excitation
     //
@@ -951,7 +954,7 @@ class G4FTFSettingDefaultHDP
     // JVY, Aug.8, 2018 --> Feb.14, 2019 --> June 25, 2019: 
     // Parameters of participating hadron (pions) excitation
     //
-    /* JVY, June 25, 2019: For now, keep this group of parameters FIXED
+    /* JVY, June 25, 2019: For now, keep this group of parameters FIXED */
     // Process=0 --> Qexchg w/o excitation
     //
     HDP.SetDefault( "FTF_PION_PROC0_A1", 150.0  );
@@ -971,10 +974,17 @@ class G4FTFSettingDefaultHDP
     HDP.SetDefault( "FTF_PION_PROC1_A3",   0.   );
     HDP.SetDefault( "FTF_PION_PROC1_ATOP", 0.   );
     HDP.SetDefault( "FTF_PION_PROC1_YMIN", 0.0  );
+    /*
     //
     // NOTE: Process #2 & 3 are projectile & target diffraction
     //
     // Process=2 --> Projectile diffraction
+    //
+    // Q: Would it even make sense to make these configurable ?
+    //    The following is hadrcoded:
+    //    Projectile Baryon Number > 10 (AbsProjectileBaryonNumber > 10)
+    //    ... which is "strange" because projectile is a pion !!!... so it's always OFF    
+    //    (see also lines 1007-1016)
     //
     HDP.SetDefault( "FTF_PION_PROC2_A1",    2.27 );
     HDP.SetDefault( "FTF_PION_PROC2_B1",    0.5  );
@@ -983,6 +993,7 @@ class G4FTFSettingDefaultHDP
     HDP.SetDefault( "FTF_PION_PROC2_A3",    0.   );
     HDP.SetDefault( "FTF_PION_PROC2_ATOP",  0.   );
     HDP.SetDefault( "FTF_PION_PROC2_YMIN",  3.0  );
+    */
     //
     // Process=3 --> Target diffraction
     //
@@ -993,7 +1004,6 @@ class G4FTFSettingDefaultHDP
     HDP.SetDefault( "FTF_PION_PROC3_A3",    0.08);
     HDP.SetDefault( "FTF_PION_PROC3_ATOP",  0.  );
     HDP.SetDefault( "FTF_PION_PROC3_YMIN",  2.2 );
-    */
     //
     // projectile and/or target diffraction (dissociation) may be switched ON/OFF 
     //
@@ -1006,7 +1016,8 @@ class G4FTFSettingDefaultHDP
     HDP.SetDefault( "FTF_PION_DIFF_DISSO_PROJ", false );
     HDP.SetDefault( "FTF_PION_DIFF_DISSO_TGT",  false ); 
     //
-    /* JVY, June 25, 2019: For now keep this group of parameters FIXED
+    /* JVY, June 25, 2019: For now keep this group of parameters FIXED */
+    /* JVY, June 11, 2020: try to open up... */
     // Process=4 --> Qexchg w/additional multiplier in excitation 
     //
     HDP.SetDefault( "FTF_PION_PROC4_A1",  1.0 ); 
@@ -1016,7 +1027,7 @@ class G4FTFSettingDefaultHDP
     HDP.SetDefault( "FTF_PION_PROC4_A3",  0.  );
     HDP.SetDefault( "FTF_PION_PROC4_ATOP",0.  );
     HDP.SetDefault( "FTF_PION_PROC4_YMIN",2.4 );
-    */
+    /* */
     //    
     // NOTE; As of geant4-10-05, all these settings beloe are correct 
     //       (and are the same as they were in 10.4.ref06) 
@@ -1102,20 +1113,8 @@ G4FTFSettingDefaultHDP FTFDefaultsHDP;
 
 G4FTFParamCollection::G4FTFParamCollection()
 {
+  // zero out everything
 
-  Reset(); // zero out everything
-   
-  //
-  // keep the 2 parameters below fixed for now (i.e. do not take them from HDP)
-  //
-  fNuclearProjDestructP2 = 4.0;
-  fNuclearProjDestructP3 = 2.1;
-  
-}
-
-
-void G4FTFParamCollection::Reset()
-{
   // parameters of excitation
 
   // Proc=0 --> Qexchg w/o excitation
@@ -1136,11 +1135,26 @@ void G4FTFParamCollection::Reset()
   fProc1Atop = 0.;
   fProc1Ymin = 0.;
 
-  // Proc=2 & Proc=3 for ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 )
-  // Do NOT do anything as it's set once and for all !!!
-
   fProjDiffDissociation = false;
   fTgtDiffDissociation = false;
+
+  // Proc=2 --> Projectile diffraction
+  fProc2A1 = 0.; 
+  fProc2B1 = 0.; 
+  fProc2A2 = 0.; 
+  fProc2B2 = 0.; 
+  fProc2A3 = 0.; 
+  fProc2Atop = 0.; 
+  fProc2Ymin = 0.;
+  
+  // Proc=3 --> Target diffraction
+  fProc3A1 = 0.; 
+  fProc3B1 = 0.; 
+  fProc3A2 = 0.; 
+  fProc3B2 = 0.; 
+  fProc3A3 = 0.; 
+  fProc3Atop = 0.; 
+  fProc3Ymin = 0.; 
 
   // Proc=4 --> Qexchg w/additional multiplier in excitation  
   fProc4A1 = 0.;
@@ -1167,7 +1181,9 @@ void G4FTFParamCollection::Reset()
 
   // COMMONs
   fNuclearProjDestructP1 = 0.;
+  fNuclearProjDestructP1_NBRNDEP = false;
   fNuclearTgtDestructP1 = 0.;
+  fNuclearTgtDestructP1_ADEP = false;
   fNuclearProjDestructP2 = 0.;
   fNuclearProjDestructP3 = 0.;
   fNuclearTgtDestructP2 = 0.;
@@ -1182,8 +1198,13 @@ void G4FTFParamCollection::Reset()
   fExciEnergyPerWoundedNucleon = 0.;
   fDofNuclearDestruct = 0.;
   fMaxPt2ofNuclearDestruct = 0.;
-
-  return;
+   
+  //
+  // keep the 2 parameters below fixed for now (i.e. do not take them from HDP)
+  //
+  fNuclearProjDestructP2 = 4.0;
+  fNuclearProjDestructP3 = 2.1;
+  
 }
 
 //============================================================================
@@ -1198,7 +1219,7 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   //
   // Proc=0 --> Qexchg w/o excitation
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  /* As of Oct. 31, 2017 keep these fixed */
   HDP.DeveloperGet( "FTF_BARYON_PROC0_A1",   fProc0A1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC0_B1",   fProc0B1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC0_A2",   fProc0A2 ); 
@@ -1206,8 +1227,9 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   HDP.DeveloperGet( "FTF_BARYON_PROC0_A3",   fProc0A3 );
   HDP.DeveloperGet( "FTF_BARYON_PROC0_ATOP", fProc0Atop ); 
   HDP.DeveloperGet( "FTF_BARYON_PROC0_YMIN", fProc0Ymin );
-  */ 
+  /* */ 
   //
+  /* JVY, June 11, 2020: make configurable
   fProc0A1 =  13.71; 
   fProc0B1 =   1.75;
   fProc0A2 = -30.69; // (or -214.5 as in Doc ?)
@@ -1215,10 +1237,11 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   fProc0A3 =   0.;
   fProc0Atop = 1.;   // ( or 0.5 as in Doc ?)
   fProc0Ymin = 0.93; // (or 1.1 as in Doc ?)
+  */
   //
   // Proc=1 --> Qexchg w/excitation
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  /* As of Oct. 31, 2017 keep these fixed */
   HDP.DeveloperGet( "FTF_BARYON_PROC1_A1",   fProc1A1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC1_B1",   fProc1B1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC1_A2",   fProc1A2 ); 
@@ -1226,8 +1249,9 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   HDP.DeveloperGet( "FTF_BARYON_PROC1_A3",   fProc1A3 );
   HDP.DeveloperGet( "FTF_BARYON_PROC1_ATOP", fProc1Atop ); 
   HDP.DeveloperGet( "FTF_BARYON_PROC1_YMIN", fProc1Ymin ); 
-  */
+  /* */
   //
+  /* JVY, June 11, 2020: make configurable
   fProc1A1 =  25.;
   fProc1B1 =   1.;
   fProc1A2 = -50.34;
@@ -1235,6 +1259,7 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   fProc1A3 =   0.;
   fProc1Atop = 0.;
   fProc1Ymin = 1.4;
+  */
   //
   // Proc=2 & Proc=3 for the case ( AbsProjectileBaryonNumber > 10 ||  NumberOfTargetNucleons > 10 )
   // (diffraction dissociation)
@@ -1247,7 +1272,8 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   //
   // Proc=4 --> Qexchg "w/additional multiplier" in excitation 
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  /* As of Oct. 31, 2017 keep these fixed */
+  /*  */
   HDP.DeveloperGet( "FTF_BARYON_PROC4_A1",   fProc4A1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC4_B1",   fProc4B1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC4_A2",   fProc4A2 ); 
@@ -1255,8 +1281,9 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   HDP.DeveloperGet( "FTF_BARYON_PROC4_A3",   fProc4A3 );
   HDP.DeveloperGet( "FTF_BARYON_PROC4_ATOP", fProc4Atop ); 
   HDP.DeveloperGet( "FTF_BARYON_PROC4_YMIN", fProc4Ymin );
-  */ 
-  // 
+  /* */ 
+  //
+  /* JVY, June 11, 2020: make configurable
   fProc4A1 =   0.6; // (or 1. as in Doc ?)
   fProc4B1 =   0.;
   fProc4A2 =  -1.2; // (or -2.01 as in Doc ?)
@@ -1264,6 +1291,7 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   fProc4A3 =   0.;
   fProc4Atop = 0.;
   fProc4Ymin = 1.4;
+  */
   //
   //
   HDP.DeveloperGet( "FTF_BARYON_DELTA_PROB_QEXCHG", fDeltaProbAtQuarkExchange );
@@ -1356,7 +1384,7 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   //
   // Proc=0 --> Qexchg w/o excitation
   //
-  /* As of June 25, 2019 keep these fixed
+  /* As of June 25, 2019 keep these fixed */
   HDP.DeveloperGet( "FTF_PION_PROC0_A1",   fProc0A1 );
   HDP.DeveloperGet( "FTF_PION_PROC0_B1",   fProc0B1 );
   HDP.DeveloperGet( "FTF_PION_PROC0_A2",   fProc0A2 ); 
@@ -1364,8 +1392,9 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   HDP.DeveloperGet( "FTF_PION_PROC0_A3",   fProc0A3 );
   HDP.DeveloperGet( "FTF_PION_PROC0_ATOP", fProc0Atop ); 
   HDP.DeveloperGet( "FTF_PION_PROC0_YMIN", fProc0Ymin );
-  */ 
+  /* */ 
   //
+  /* JVY, June 11, 2020: make configurable
   fProc0A1 = 150.0; 
   fProc0B1 =   1.8;
   fProc0A2 =-247.3; 
@@ -1373,10 +1402,11 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   fProc0A3 =   0.;
   fProc0Atop = 1.;   // ( or 0.5 as in Doc ?)
   fProc0Ymin = 2.3; // (or 1.1 as in Doc ?)
+  */
   //
   // Proc=1 --> Qexchg w/excitation
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  /* As of Oct. 31, 2017 keep these fixed */
   HDP.DeveloperGet( "FTF_PION_PROC1_A1",   fProc1A1 );
   HDP.DeveloperGet( "FTF_PION_PROC1_B1",   fProc1B1 );
   HDP.DeveloperGet( "FTF_PION_PROC1_A2",   fProc1A2 ); 
@@ -1384,8 +1414,9 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   HDP.DeveloperGet( "FTF_PION_PROC1_A3",   fProc1A3 );
   HDP.DeveloperGet( "FTF_PION_PROC1_ATOP", fProc1Atop ); 
   HDP.DeveloperGet( "FTF_PION_PROC1_YMIN", fProc1Ymin ); 
-  */
-  //
+  /* */
+  // 
+  /* JVY, June 11, 2020: make configurable
   fProc1A1 =   5.77;
   fProc1B1 =   0.6;
   fProc1A2 =  -5.77;
@@ -1393,10 +1424,17 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   fProc1A3 =   0.;
   fProc1Atop = 0.;
   fProc1Ymin = 0.0;
+  */
   //
   // Proc=2 --> Projectile diffraction
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  // Q: Would it even make sense to make these configurable ?
+  //    The following is hadrcoded:
+  //    Projectile Baryon Number > 10 (AbsProjectileBaryonNumber > 10)
+  //    ... which is "strange" because projectile is a pion !!!... so it's always OFF    
+  //    (see also lines 1007-1016)
+  //
+  /* As of Oct. 31, 2017 keep these fixed 
   HDP.DeveloperGet( "FTF_PION_PROC2_A1",   fProc2A1 );
   HDP.DeveloperGet( "FTF_PION_PROC2_B1",   fProc2B1 );
   HDP.DeveloperGet( "FTF_PION_PROC2_A2",   fProc2A2 ); 
@@ -1405,7 +1443,7 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   HDP.DeveloperGet( "FTF_PION_PROC2_ATOP", fProc2Atop ); 
   HDP.DeveloperGet( "FTF_PION_PROC2_YMIN", fProc2Ymin ); 
   */
-  //
+  // keep fixed so far; see note above
   fProc2A1 =   2.27;
   fProc2B1 =   0.5;
   fProc2A2 =-98052.0;
@@ -1416,7 +1454,7 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   //
   // Proc=3 --> Target diffraction
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  /* As of Oct. 31, 2017 keep these fixed */
   HDP.DeveloperGet( "FTF_PION_PROC3_A1",   fProc3A1 );
   HDP.DeveloperGet( "FTF_PION_PROC3_B1",   fProc3B1 );
   HDP.DeveloperGet( "FTF_PION_PROC3_A2",   fProc3A2 ); 
@@ -1424,8 +1462,9 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   HDP.DeveloperGet( "FTF_PION_PROC3_A3",   fProc3A3 );
   HDP.DeveloperGet( "FTF_PION_PROC3_ATOP", fProc3Atop ); 
   HDP.DeveloperGet( "FTF_PION_PROC3_YMIN", fProc3Ymin ); 
-  */
+  /* */
   //
+  /* JVY, June 11, 2020: make configurable
   fProc3A1 =   7.0;
   fProc3B1 =   0.9;
   fProc3A2 = -85.28;
@@ -1433,6 +1472,7 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   fProc3A3 =   0.08;
   fProc3Atop = 0.;
   fProc3Ymin = 2.2;
+  */
   //
   // for Proc2 & Proc3, pprojectile or target diffraction can be turned ON/OFF
   // if num.baryons >10 (which is strange for projectile which is pion !!!)
@@ -1442,7 +1482,7 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   //
   // Proc=4 --> Qexchg "w/additional multiplier" in excitation 
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  /* As of Oct. 31, 2017 keep these fixed */
   HDP.DeveloperGet( "FTF_PION_PROC4_A1",   fProc4A1 );
   HDP.DeveloperGet( "FTF_PION_PROC4_B1",   fProc4B1 );
   HDP.DeveloperGet( "FTF_PION_PROC4_A2",   fProc4A2 ); 
@@ -1450,8 +1490,9 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   HDP.DeveloperGet( "FTF_PION_PROC4_A3",   fProc4A3 );
   HDP.DeveloperGet( "FTF_PION_PROC4_ATOP", fProc4Atop ); 
   HDP.DeveloperGet( "FTF_PION_PROC4_YMIN", fProc4Ymin );
-  */ 
+  /* */ 
   // 
+  /* JVY, June 11, 2020: make configurable
   fProc4A1 =   1.0; 
   fProc4B1 =   0.;
   fProc4A2 = -11.02; 
@@ -1459,6 +1500,7 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj()
   fProc4A3 =   0.;
   fProc4Atop = 0.;
   fProc4Ymin = 2.4;
+  */
   //
   //
   HDP.DeveloperGet( "FTF_PION_DELTA_PROB_QEXCHG", fDeltaProbAtQuarkExchange );

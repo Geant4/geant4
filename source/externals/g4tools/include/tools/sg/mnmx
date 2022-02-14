@@ -1,0 +1,106 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_mnmx
+#define tools_sg_mnmx
+
+#include "node"
+#include "bbox_action"
+
+namespace tools {
+
+inline bool mnmx(std::ostream& a_out,sg::node& a_node,vec3f& a_mn,vec3f& a_mx){
+  sg::bbox_action action(a_out);
+  a_node.bbox(action);
+  if(!action.end() || action.box().is_empty()) {
+    a_out << "tools::mnmx :"
+          << " bbox problem."
+          << std::endl;
+    a_mn.set_value(0,0,0);
+    a_mx.set_value(0,0,0);
+    return false;
+  }
+  a_mn = action.box().mn();
+  a_mx = action.box().mx();
+  return true;
+}
+
+}
+
+#include "matrix"
+
+namespace tools {
+
+inline bool center_adjust(std::ostream& a_out,
+                          sg::node& a_node,sg::matrix& a_tsf,
+                          unsigned int a_ww,unsigned int a_wh,
+                          float a_height,
+                          float& a_dx,float& a_dy,float& a_dz,
+                          bool a_verbose = true) {
+  //NOTE : we assume an ortho camera.
+  if(!a_ww||!a_wh) {
+    if(a_verbose) {
+      a_out << "tools::center_adjust :"
+            << " null viewer width or height."
+            << std::endl;
+    }
+    a_dx = 0;a_dy = 0;a_dz = 0;
+    return false;
+  }
+  sg::bbox_action _action(a_out);
+  a_node.bbox(_action);
+  if(!_action.box().get_size(a_dx,a_dy,a_dz)) {
+    if(a_verbose) {
+      a_out << "tools::center_adjust :"
+            << " empty box."
+            << std::endl;
+    }
+    a_dx = 0;a_dy = 0;a_dz = 0;
+    return false;
+  }
+  if(!a_dx||!a_dy) {
+    if(a_verbose) {
+      a_out << "tools::center_adjust :"
+            << " dx or dy null."
+            << std::endl;
+    }
+    a_dx = 0;a_dy = 0;a_dz = 0;
+    return false;
+  }
+  vec3f c;
+  if(!_action.box().center(c)) {
+    if(a_verbose) {
+      a_out << "tools::center_adjust :"
+            << " can't get box center."
+            << std::endl;
+    }
+    a_dx = 0;a_dy = 0;a_dz = 0;
+    return false;
+  }
+  float vp_aspect = float(a_ww)/float(a_wh);
+  float scene_aspect = float(a_dx)/float(a_dy);
+  //::printf("debug : set_tsf : %d %d : %g %g %g : %g %g\n",
+  //    a_ww,a_wh,a_dx,a_dy,a_dz,vp_aspect,scene_aspect);
+  float scale;
+  if(vp_aspect>=scene_aspect) {
+    scale = a_height/a_dy;
+  } else {
+    scale = (vp_aspect*a_height)/a_dx;
+  }
+  a_tsf.set_scale(scale,scale,scale);
+  a_tsf.mul_translate(-c.x(),-c.y(),0);
+  return true;
+}
+
+inline bool center_adjust(std::ostream& a_out,
+                          sg::node& a_node,sg::matrix& a_tsf,
+                          unsigned int a_ww,unsigned int a_wh,
+                          float a_height,bool a_verbose = true) {
+  float dx,dy,dz;
+  return center_adjust(a_out,a_node,a_tsf,a_ww,a_wh,a_height,
+                       dx,dy,dz,a_verbose);
+}
+
+}
+
+#endif

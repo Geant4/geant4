@@ -1,14 +1,19 @@
 #
 # macro file for TestEm18.cc
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setMat Water
 ###/testem/det/setMat Water_vapor
 /testem/det/setSize 1 cm
 #
+# prevent any delta rays production
 /run/setCut 100 km
+#
+/process/em/verbose 0
+/process/em/printParameters 
 #
 /run/initialize
 #

@@ -93,7 +93,11 @@ void RunAction::fillPerEvent(G4double EAbs, G4double EGap,
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4int NbOfEvents = aRun->GetNumberOfEvent();
-  if (NbOfEvents == 0) return;
+  if (NbOfEvents == 0) {
+    // close open files
+    fHistoManager->Save();
+    return;
+  }
   
   //compute statistics: mean and rms
   //

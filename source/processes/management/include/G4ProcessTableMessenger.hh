@@ -23,83 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessTableMessenger
 //
+// Class description:
 //
+// Messenger class to exchange information between ProcessTable and UI.
 //
-//---------------------------------------------------------------
-//
-//  G4ProcessTableMessenger.hh
-//
-//  Class Description:
-//    This is a messenger class to interface to exchange information
-//    between ProcessTable and UI.
-//-
 //  /process/   Process Table control commands.
 //   Commands : 
-//     list *       :Dump process name registered.
-//     verbose *    :Set Verbose Level for Process Table
-//     activate *   :Activate process  
-//     inactivate * :Inctivate process  
-//     dump *       :Dump process information
-//
-//  History:
-//    15 Aug. 1998, H. Kurashige  
-//
-//---------------------------------------------------------------
+//     list *       : Dump process name registered.
+//     verbose *    : Set Verbose Level for Process Table
+//     activate *   : Activate process  
+//     inactivate * : Inctivate process  
+//     dump *       : Dump process information
 
-#ifndef G4ProcessTableMessenger_h
-#define G4ProcessTableMessenger_h 1
-
-class G4ProcessTable;
-
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger; 
-class G4UIcmdWithAString;
+// Author: H.Kurashige, 15 August 1998
+// --------------------------------------------------------------------
+#ifndef G4ProcessTableMessenger_hh
+#define G4ProcessTableMessenger_hh 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 #include "G4ProcessType.hh"
 
-class G4ProcessTableMessenger: public G4UImessenger
+class G4ProcessTable;
+class G4UIdirectory;
+class G4UIcmdWithoutParameter;
+class G4UIcmdWithAnInteger; 
+class G4UIcmdWithAString;
+
+class G4ProcessTableMessenger : public G4UImessenger
 {
   public:
+
     G4ProcessTableMessenger(G4ProcessTable* pTable);
     virtual ~G4ProcessTableMessenger();
 
-  public: // with description
+    G4ProcessTableMessenger(const G4ProcessTableMessenger&) = delete;
+    G4ProcessTableMessenger& operator=(const G4ProcessTableMessenger&) = delete;
+
     virtual void SetNewValue(G4UIcommand * command,G4String newValues);
     virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
+
+    G4ProcessTableMessenger(){}
+
     G4String GetProcessTypeName(G4ProcessType aType) const;  
     G4int    GetProcessType(const G4String& aTypeName) const;
-    static G4ThreadLocal   G4int NumberOfProcessType;
+    static G4ThreadLocal G4int NumberOfProcessType;
     void     SetNumberOfProcessType();
 
   private:
-    G4ProcessTableMessenger(const G4ProcessTableMessenger&)
-      : G4UImessenger() {};
-    G4ProcessTableMessenger(){};
 
-  private:
-    G4ProcessTable*  theProcessTable;
+    G4ProcessTable* theProcessTable = nullptr;
 
-    G4UIdirectory *             thisDirectory;
-    G4UIcmdWithAnInteger *      verboseCmd;
-    G4UIcmdWithAString *        listCmd;
-    G4UIcommand *               dumpCmd;
-    G4UIcommand *               activateCmd;
-    G4UIcommand *               inactivateCmd;
-    G4UIcommand *               procVerboseCmd;
+    G4UIdirectory*        thisDirectory = nullptr;
+    G4UIcmdWithAnInteger* verboseCmd = nullptr;
+    G4UIcmdWithAString*   listCmd = nullptr;
+    G4UIcommand*          dumpCmd = nullptr;
+    G4UIcommand*          activateCmd = nullptr;
+    G4UIcommand*          inactivateCmd = nullptr;
+    G4UIcommand*          procVerboseCmd = nullptr;
 
-    G4String                    currentProcessTypeName;
-    G4String                    currentProcessName;
-    G4String                    currentParticleName; 
+    G4String currentProcessTypeName = "all";
+    G4String currentProcessName = "all";
+    G4String currentParticleName = "all"; 
 };
 
 #endif
-
-
-
-

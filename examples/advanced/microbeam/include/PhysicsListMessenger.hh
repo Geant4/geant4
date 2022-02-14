@@ -27,9 +27,6 @@
 /// \brief Definition of the PhysicsListMessenger class
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
 
@@ -41,22 +38,14 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class PhysicsListMessenger: public G4UImessenger
 {
 public:
   
-<<<<<<< HEAD
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-=======
-  PhysicsListMessenger(PhysicsList* );
+  explicit PhysicsListMessenger(PhysicsList* );
  ~PhysicsListMessenger();
     
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
 
   inline G4double GetMaxChargedStep() const { return fMaxChargedStep; }
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
@@ -81,8 +70,5 @@ private:
   G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
   G4double                   fMaxChargedStep;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 

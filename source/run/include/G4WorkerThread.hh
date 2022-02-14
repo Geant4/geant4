@@ -23,42 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4WorkerThread
 //
+// Class description:
 //
-//
+// This is a class to encapsulate thread-specific data.
+// Used by G4MTRunManager and G4WorkerRunManager classes.
 
-// class description:
-//
-// This is a class to encapsulate thread-specific data
-// Used by G4MTRunManager and G4WorkerRunManager classes
-
+// Authors: X.Dong, A.Dotti, 2013
+// --------------------------------------------------------------------
 #ifndef G4WorkerThread_hh
-#define G4WorkerThread_hh
-#include "G4Types.hh"
+#define G4WorkerThread_hh 1
+
 #include "G4String.hh"
+#include "G4Types.hh"
 
 #include "G4Threading.hh"
 
-class G4WorkerThread {
-public:
-    void SetThreadId( G4int threadId );
+class G4WorkerThread
+{
+  public:
+
+    void SetThreadId(G4int threadId);
     G4int GetThreadId() const;
-        
-    void SetNumberThreads( G4int numnberThreads );
-    G4int GetNumberThreads() const; 
-        
-    //Build geometry for workers
+
+    void SetNumberThreads(G4int numnberThreads);
+    G4int GetNumberThreads() const;
+
     static void BuildGeometryAndPhysicsVector();
+      // Build geometry for workers
     static void DestroyGeometryAndPhysicsVector();
     static void UpdateGeometryAndPhysicsVectorFromMaster();
 
-    //Setting Pin Affinity
     void SetPinAffinity(G4int aff) const;
+      // Setting Pin Affinity
 
-private:
-    G4int threadId;
-    G4int numThreads;
-    
+  private:
+
+    G4int threadId = 0;
+    G4int numThreads = 0;
 };
-#endif //G4WorkerThread_hh
 
+#endif

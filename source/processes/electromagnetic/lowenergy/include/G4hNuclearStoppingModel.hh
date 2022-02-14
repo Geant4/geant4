@@ -59,40 +59,39 @@ class G4DynamicParticle;
 
 class G4hNuclearStoppingModel : public G4VLowEnergyModel
 {
-
 public:
 
-  G4hNuclearStoppingModel(const G4String& name);
+  explicit G4hNuclearStoppingModel(const G4String& name);
 
   ~G4hNuclearStoppingModel() ;
 
   G4double TheValue(const G4DynamicParticle* particle,
-	            const G4Material* material);
+	            const G4Material* material) override;
 
   G4double TheValue(const G4ParticleDefinition* aParticle,
 	            const G4Material* material,
-                          G4double kineticEnergy);
+                          G4double kineticEnergy) override;
 
   G4double HighEnergyLimit(const G4ParticleDefinition* ,
-                           const G4Material* ) const
+                           const G4Material* ) const override
   {return highEnergyLimit;};
  
   G4double LowEnergyLimit(const G4ParticleDefinition* ,
-                          const G4Material* ) const
+                          const G4Material* ) const override
   {return lowEnergyLimit;};
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* ) const
+  G4double HighEnergyLimit(const G4ParticleDefinition* ) const override
   {return highEnergyLimit;};
  
-  G4double LowEnergyLimit(const G4ParticleDefinition* ) const
+  G4double LowEnergyLimit(const G4ParticleDefinition* ) const override
   {return lowEnergyLimit;};
  
   G4bool IsInCharge(const G4DynamicParticle* ,
-		    const G4Material* ) const
+		    const G4Material* ) const override
   {return true;};
 
   G4bool IsInCharge(const G4ParticleDefinition* ,
-		    const G4Material* ) const
+		    const G4Material* ) const override
   {return true;};
 
   void SetNuclearStoppingFluctuationsOn() 
@@ -101,15 +100,10 @@ public:
   void SetNuclearStoppingFluctuationsOff() 
   {nStopingPowerTable->SetNuclearStoppingFluctuationsOff();}; 
 
-
-protected:
+  G4hNuclearStoppingModel(G4hNuclearStoppingModel &) = delete;
+  G4hNuclearStoppingModel & operator=(const G4hNuclearStoppingModel &right) = delete;
 
 private:
-
-  // hide  assignment operator 
-  G4hNuclearStoppingModel(G4hNuclearStoppingModel &);
-  G4hNuclearStoppingModel & operator=(const G4hNuclearStoppingModel &right);
-
   void InitializeMe();
 
   G4double StoppingPower(const G4Material* material,
@@ -119,14 +113,14 @@ private:
 
   // Pointer to the parametrisation class
   G4VhNuclearStoppingPower* nStopingPowerTable;
+  G4String modelName;
 
   G4double factorPDG2AMU;    // Factor to convert PDG mass unit
                              // into AMU
 
   G4double theZieglerFactor; // Factor to convert the Stopping Power 
                              // unit [ev/(10^15 atoms/cm^2]
-                             // into the Geant4 dE/dx unit
-  G4String modelName;
+                             // into the Geant4 dE/dx unit  
   G4double lowEnergyLimit;
   G4double highEnergyLimit;
 };

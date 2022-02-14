@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(P01)
 
 #----------------------------------------------------------------------------
@@ -31,6 +31,13 @@ if(ROOT_FOUND)
   if(NOT VERSION6MATCH) 
     message(FATAL_ERROR "P01 requires ROOT 6")
   endif()
+endif()
+
+# Include ROOT's CMake functions for dictionary generation
+#  since root6.20, the file is renamed and included by default, so include
+#  only when we find the *old* name
+if(EXISTS "${ROOT_DIR}/modules/RootNewMacros.cmake")
+   include("${ROOT_DIR}/modules/RootNewMacros.cmake")
 endif()
 
 #----------------------------------------------------------------------------

@@ -23,12 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VUserPrimaryVertexInformation class implementation
 //
-//
-//
-//---------------------------------------------------------------
+// Author: M.Asai (SLAC)
+// --------------------------------------------------------------------
 
 #include "G4VUserPrimaryVertexInformation.hh"
-G4VUserPrimaryVertexInformation::G4VUserPrimaryVertexInformation() {;}
-G4VUserPrimaryVertexInformation::~G4VUserPrimaryVertexInformation() {;}
 
+G4VUserPrimaryVertexInformation::G4VUserPrimaryVertexInformation()
+{
+}
+
+G4VUserPrimaryVertexInformation::~G4VUserPrimaryVertexInformation()
+{
+}

@@ -180,10 +180,10 @@ void PerspectiveVisAction::ExtendedDraw
 
   // Draw extended edges as requested...
   G4bool any = false, A = false, X = false, Y = false, Z = false;
-  if (fOptionString.contains("a")) {A = true; any = true;}
-  if (fOptionString.contains("x")) {X = true; any = true;}
-  if (fOptionString.contains("y")) {Y = true; any = true;}
-  if (fOptionString.contains("z")) {Z = true; any = true;}
+  if (G4StrUtil::contains(fOptionString, "a")) {A = true; any = true;}
+  if (G4StrUtil::contains(fOptionString, "x")) {X = true; any = true;}
+  if (G4StrUtil::contains(fOptionString, "y")) {Y = true; any = true;}
+  if (G4StrUtil::contains(fOptionString, "z")) {Z = true; any = true;}
   if (any)
     {
       G4Polyhedron* polyhedron = solid.GetPolyhedron();

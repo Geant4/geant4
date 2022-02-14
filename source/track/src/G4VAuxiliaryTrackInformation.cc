@@ -23,19 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VAuxiliaryTrackInformation class implementation
 //
-//
-// 
-// --------------------------------------------------------------
+// Author: Makoto Asai, 3 June 2005
+// --------------------------------------------------------------------
 
 #include "G4VAuxiliaryTrackInformation.hh"
 
-G4VAuxiliaryTrackInformation::G4VAuxiliaryTrackInformation()
-{;}
+G4VAuxiliaryTrackInformation::G4VAuxiliaryTrackInformation() { ; }
 
-G4VAuxiliaryTrackInformation::~G4VAuxiliaryTrackInformation()
-{;}
+G4VAuxiliaryTrackInformation::~G4VAuxiliaryTrackInformation() { ; }
 
 void G4VAuxiliaryTrackInformation::Print() const
-{ G4cout<<"G4VAuxiliaryTrackInformation base class -- no concrete information available"<<G4endl; }
-
+{
+  G4cout << "G4VAuxiliaryTrackInformation base class -- no concrete "
+            "information available"
+         << G4endl;
+}

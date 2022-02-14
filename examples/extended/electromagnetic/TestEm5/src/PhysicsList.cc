@@ -38,7 +38,6 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmStandardSSM.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -222,18 +221,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
-        
+
   } else if (name == "emstandardSS") {
 
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS();
-
-  } else if (name == "standardSSM") {
-
-    fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardSSM();
 
   } else if (name == "emstandardWVI") {
 

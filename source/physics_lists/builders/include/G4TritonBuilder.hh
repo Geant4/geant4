@@ -37,7 +37,7 @@
 
 #include "globals.hh"
 
-#include "G4TritonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VTritonBuilder.hh"
 
 #include <vector>
@@ -48,16 +48,15 @@ class G4TritonBuilder
     G4TritonBuilder();
     virtual ~G4TritonBuilder();
 
-  public: 
-    void Build();
-    void RegisterMe(G4VTritonBuilder * aB) {theModelCollections.push_back(aB);}
+    virtual void Build() final;
+    virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final;
+
+    using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 
   private:
-    G4TritonInelasticProcess * theTritonInelastic;
+    G4HadronInelasticProcess * theTritonInelastic;
     
     std::vector<G4VTritonBuilder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

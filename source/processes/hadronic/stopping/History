@@ -7,12 +7,66 @@
             History file for hadronic/stopping directory
             ----------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+04 August 2021 A. Ribon (hadr-stopping-V10-07-07)
+ --------------------------------------------------------------------
+- G4MuonicAtomDecay, G4HadronStoppingProcess : migrated to the new
+  version of G4PhysicsModelCatalog
+
+09 July 2021 V.Ivanchenko (hadr-stopping-V10-07-06)
+ --------------------------------------------------------------------
+- G4ElementSelector, G4HadronStoppingProcess - use const pointer
+    to G4Element
+
+16 April 2021 B. Morgan (hadr-stopping-V10-07-05)
+ --------------------------------------------------------------------
+- Migrate build to modular CMake API
+
+13 April 2021 A. Ribon (hadr-stopping-V10-07-04)
+ --------------------------------------------------------------------
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management), and clean up.
+
+11 March 2021 A. Ribon (hadr-stopping-V10-07-03)
+ --------------------------------------------------------------------
+- Removed obsolete classes: G4AntiNeutronAnnihilationAtRest,
+    G4AntiSigmaPlusAbsorptionFritiof, G4SigmaMinusAbsorptionBertini,
+    G4AntiProtonAbsorptionFritiof, G4KaonMinusAbsorptionBertini,
+    G4PiMinusAbsorptionBertini
+
+02 March 2021 V.Ivanchenko (hadr-stopping-V10-07-02)
+ --------------------------------------------------------------------
+- G4MuonicAtomDecay - fixed a new Coverity warning
+
+29 January 2021 V.Ivanchenko (hadr-stopping-V10-07-01)
+ --------------------------------------------------------------------
+- G4MuonicAtomDecay - fixed remaining Coverity warning, removed
+    commented code
+
+05 December 2020 V.Ivanchenko (hadr-stopping-V10-07-00)
+ --------------------------------------------------------------------
+- G4MuonicAtomDecay - fixed Coverity warning, removed commented code
+
+01 April 2020 V.Ivanchenko (hadr-stopping-V10-06-02)
+ --------------------------------------------------------------------
+- G4MuonicAtomDecay - fixed Coverity warning
+
+24 February 2020 V.Ivanchenko (hadr-stopping-V10-06-01)
+ --------------------------------------------------------------------
+- G4HadronicAbsorptionFritiof, G4HadronicAbsorptionFritiofWithBinaryCascade
+  simplified instantiation of the FTF model, do not destruct its components
+
+27 January 2020 V.Ivanchenko (hadr-stopping-V10-06-00)
+ --------------------------------------------------------------------
+- G4MuonicAtomDecay - fixed Coverity warning by addition of G4Exception
 
 06 November 2019 V.Ivanchenko (hadr-stopping-V10-05-02)
  --------------------------------------------------------------------
@@ -22,7 +76,7 @@ code and to keep track of all tags.
  --------------------------------------------------------------------
 - G4HadronicAbsorptionFritofWithBinaryCascade : created a new class for
   handling anti-proton and anti-neutron annihilation at rest using
-  Fritiof coupled with Binary cascade (instead of directly with 
+  Fritiof coupled with Binary cascade (instead of directly with
   Precompound, as in the class G4HadronicAbsorptionFritiof).
 
 22 May 2019 A. Ribon          (hadr-stopping-V10-05-00)
@@ -70,7 +124,7 @@ code and to keep track of all tags.
 
 16 November 2016 V. Ivantchenko  (hadr-stopping-V10-02-02)
 --------------------------------------------------------------------
-- G4EmCaptureCascade - added C++11 keywords, an attempt to remove 
+- G4EmCaptureCascade - added C++11 keywords, an attempt to remove
     bound check warning
 
 11 October 2016 K.L. Genser  (hadr-stopping-V10-02-01)
@@ -96,14 +150,14 @@ code and to keep track of all tags.
 
 26 January 2015 V. Ivantchenko  (hadr-stopping-V10-01-01)
 --------------------------------------------------------------------
-- G4HadronStoppingProcess, G4MuMinusCapturePrecompound,  
+- G4HadronStoppingProcess, G4MuMinusCapturePrecompound,
   G4MuonMinusBoundDecay - cleanup comments
 
 08 December 2014 V. Ivantchenko  (hadr-stopping-V10-01-00)
 --------------------------------------------------------------------
-- G4HadronStoppingProcess, G4MuonMinusBoundDecay: fixed time of muon 
-    nuclear capture secondaries (fix #1695); define index in the model 
-    cathalog inside PreparePhysicsTable() to avoid bad interference 
+- G4HadronStoppingProcess, G4MuonMinusBoundDecay: fixed time of muon
+    nuclear capture secondaries (fix #1695); define index in the model
+    cathalog inside PreparePhysicsTable() to avoid bad interference
     with EM physics
 
 30 August 2014 V. Ivantchenko  (hadr-stopping-V10-00-08)
@@ -118,13 +172,13 @@ code and to keep track of all tags.
 
 04 August 2014 V. Ivantchenko  (hadr-stopping-V10-00-06)
 --------------------------------------------------------------------
-- G4HadronStoppingProcess : do not use deRegister flag 
+- G4HadronStoppingProcess : do not use deRegister flag
     (fixing Coverity report)
 
 01 August 2014 A. Ribon    (hadr-stopping-V10-00-05)
 --------------------------------------------------------------------
 - G4HadronStoppingProcess : replaced the old method of G4EnergyRangeManager
-  (still there but deprecated) with the new one (which uses 
+  (still there but deprecated) with the new one (which uses
   G4HadronicInteraction::IsApplicable).
 
 27 May 2014 V. Ivantchenko (hadr-stopping-V10-00-04)
@@ -134,10 +188,10 @@ code and to keep track of all tags.
 
 22 May 2014 A. Dotti       (hadr-stopping-V10-00-03)
 -------------------------------------------------------------------
-- G4HadronStoppingProcess : in destructor do not de-register if 
+- G4HadronStoppingProcess : in destructor do not de-register if
   flag G4bool G4HadronicProcess::deRegister==true, this is needed
   for new thread-local-singleton G4HadronicProcessStore to correct
-  for memory corruption observed in valgrind. Requires  
+  for memory corruption observed in valgrind. Requires
   hadr-man-V10-00-05
 
 14 May 2014 V. Ivantchenko (hadr-stopping-V10-00-02)
@@ -147,7 +201,7 @@ code and to keep track of all tags.
     in deuterium and in He4; reduced number of trials to find neutrino
     4-momentum from 1000 to 100; added protection 1 keV for negative
     excitation energy, substitute FatalException by JustWarning.
-    All this addressing the recent ATLAS report 
+    All this addressing the recent ATLAS report
 
 10 March 2014 V. Ivantchenko (hadr-stopping-V10-00-01)
 --------------------------------------------------------------------
@@ -155,7 +209,7 @@ code and to keep track of all tags.
 
 31 January 2014 V. Ivantchenko (hadr-stopping-V10-00-00)
 --------------------------------------------------------------------
-- G4MuMinusCapturePrecompound - fix infonite loop (bug #1536) by 
+- G4MuMinusCapturePrecompound - fix infonite loop (bug #1536) by
     reimplementing old algorithm of mu- capture which not include
     direct muon reaction but only considering deexcitation of
     residual fragment
@@ -177,14 +231,14 @@ code and to keep track of all tags.
 
 04 June  2013 A. Ribon       (hadr-stopping-V09-06-08)
 --------------------------------------------------------------------
-- G4MuonMinusCaptureAtRest  
+- G4MuonMinusCaptureAtRest
   fix inside .cc file to access ions via IonTable class and
   GetIon method
 
 01 May   2013 K. Genser      (hadr-stopping-V09-06-07)
 --------------------------------------------------------------------
-- G4MuonMinusBoundDecay 
-  improved muon capture rate data/lookup and improved 
+- G4MuonMinusBoundDecay
+  improved muon capture rate data/lookup and improved
   calculation of bound muon decay rate
 
 24 April 2013 K. Genser      (hadr-stopping-V09-06-06)
@@ -211,7 +265,7 @@ code and to keep track of all tags.
 28 January 2013 Julia Yarba (hadr-stopping-V09-06-02)
 ---------------------------------------------------------
 - Remove G4ThreadLocal from G4StopElementSelector, G4MuMinusCaptureCascade,
-  G4MuonMinusBoundDecay, and replace with static const as those arrays are 
+  G4MuonMinusBoundDecay, and replace with static const as those arrays are
   NOT mutable; this is part of adapting for MT processing
 
 13 December 2012 Michael Kelsey (hadr-stopping-V09-06-01)
@@ -227,16 +281,16 @@ code and to keep track of all tags.
 --------------------------------------------------------
 - sources.cmake: Remove all deprecated classes for start of 10.0 development:
 
-G4AntiNeutronAnnihilationAtRest.hh,cc	G4PiMinusStopLi.hh,cc		 
-G4AntiProtonAnnihilationAtRest.hh,cc	G4PiMinusStopMaterial.hh,cc	 
-G4DistributionGenerator.hh,cc		G4PiMinusStopN.hh,cc		 
-G4KaonMinusAbsorption.hh,cc		G4PiMinusStopO.hh,cc		 
-G4KaonMinusAbsorptionAtRest.hh,cc	G4PiMinusStopPb.hh,cc		 
-G4NeutronCaptureAtRest.hh,cc		G4PiMinusStopTa.hh,cc		 
+G4AntiNeutronAnnihilationAtRest.hh,cc	G4PiMinusStopLi.hh,cc
+G4AntiProtonAnnihilationAtRest.hh,cc	G4PiMinusStopMaterial.hh,cc
+G4DistributionGenerator.hh,cc		G4PiMinusStopN.hh,cc
+G4KaonMinusAbsorption.hh,cc		G4PiMinusStopO.hh,cc
+G4KaonMinusAbsorptionAtRest.hh,cc	G4PiMinusStopPb.hh,cc
+G4NeutronCaptureAtRest.hh,cc		G4PiMinusStopTa.hh,cc
 G4PiMinusAbsorptionAtRest.hh,cc		G4PionMinusAbsorptionAtRest.hh,cc
-G4PiMinusStopAbsorption.hh,cc		G4StopDeexcitation.hh,cc	 
-G4PiMinusStopAl.hh,cc			G4StopDeexcitationAlgorithm.hh	 
-G4PiMinusStopC.hh,cc			G4StopDummyDeexcitation.hh,cc	 
+G4PiMinusStopAbsorption.hh,cc		G4StopDeexcitation.hh,cc
+G4PiMinusStopAl.hh,cc			G4StopDeexcitationAlgorithm.hh
+G4PiMinusStopC.hh,cc			G4StopDummyDeexcitation.hh,cc
 G4PiMinusStopCo.hh,cc			G4StopTheoDeexcitation.hh,cc
 G4PiMinusStopCu.hh,cc
 
@@ -248,7 +302,7 @@ G4PiMinusStopCu.hh,cc
 --------------------------------------------------------------------
 - G4HadronicAbsorptionFritiof, G4MuMinusCapturePrecompound,
   G4MuMinusBoundDecay, G4EmCaptureCascade: fixed memory leak;
-    reuse G4PreCompoundModel instead from the store of creation of 
+    reuse G4PreCompoundModel instead from the store of creation of
     a new one
 
 17 October 2012 Michael Kelsey  (hadr-stopping-V09-05-29)
@@ -262,7 +316,7 @@ Added nuclear capture at rest of anti-nuclei with FTFP in
 G4HadronicAbsorptionFritiof (A.R.). Moreover (K.G.):
 - G4HadronStoppingProcess: Reverted to one argument c'tor
 - G4MuonMinusCapture:      Reverted to using one argument c'tor
-                           Reverted to the implied fHadronAtRest 
+                           Reverted to the implied fHadronAtRest
                            HadronicProcessType
 
 10 October 2012 Krzysztof Genser (hadr-stopping-V09-05-27)
@@ -308,18 +362,18 @@ The following classes will be deprecated in the 9.6 release, and removed for
 are now handled by Bertini and Fritiof models, and muon capture by the more
 complex process with atomic cascade effects.
 
-  G4AntiNeutronAnnihilationAtRest.cc	G4PiMinusStopCu.cc		  
-  G4AntiProtonAnnihilationAtRest.cc	G4PiMinusStopLi.cc		  
-  G4DistributionGenerator.cc		G4PiMinusStopMaterial.cc	  
-  G4KaonMinusAbsorption.cc		G4PiMinusStopN.cc		  
+  G4AntiNeutronAnnihilationAtRest.cc	G4PiMinusStopCu.cc
+  G4AntiProtonAnnihilationAtRest.cc	G4PiMinusStopLi.cc
+  G4DistributionGenerator.cc		G4PiMinusStopMaterial.cc
+  G4KaonMinusAbsorption.cc		G4PiMinusStopN.cc
   G4KaonMinusAbsorptionAtRest.cc	G4PiMinusStopO.cc
-  G4MuonMinusCaptureAtRest.cc		G4PiMinusStopPb.cc		  
-  G4NeutronCaptureAtRest.cc		G4PiMinusStopTa.cc		  
-  G4PiMinusAbsorptionAtRest.cc		G4PionMinusAbsorptionAtRest.cc	  
-  G4PiMinusStopAbsorption.cc		G4StopDeexcitation.cc		  
-  G4PiMinusStopAl.cc			G4StopDeexcitationAlgorithm.hh	  
-  G4PiMinusStopC.cc			G4StopDummyDeexcitation.cc	  
-  G4PiMinusStopCo.cc			G4StopTheoDeexcitation.cc         
+  G4MuonMinusCaptureAtRest.cc		G4PiMinusStopPb.cc
+  G4NeutronCaptureAtRest.cc		G4PiMinusStopTa.cc
+  G4PiMinusAbsorptionAtRest.cc		G4PionMinusAbsorptionAtRest.cc
+  G4PiMinusStopAbsorption.cc		G4StopDeexcitation.cc
+  G4PiMinusStopAl.cc			G4StopDeexcitationAlgorithm.hh
+  G4PiMinusStopC.cc			G4StopDummyDeexcitation.cc
+  G4PiMinusStopCo.cc			G4StopTheoDeexcitation.cc
 
 19 September 2012 Gabriele Cosmo (hadr-stopping-V09-05-22)
 ----------------------------------------------------------
@@ -340,7 +394,7 @@ Requires co-working base tag hadr-man-V09-05-16
 
 17 August 2012 Witek Pokorski (hadr-stopping-V09-05-19)
 -------------------------------------------------------
-- removed obsolete CHIPS includes 
+- removed obsolete CHIPS includes
 
 14 August 2012 Alberto Ribon (hadr-stopping-V09-05-18)
 ------------------------------------------------------
@@ -367,7 +421,7 @@ Requires co-working base tag hadr-man-V09-05-16
 - Fixed Coverity complains in G4KaonMinusAbsorptionAtRest.cc and
   G4PiMinusStopMaterial.cc
 
-- G4MuonMinusBoundDecay - added data for muon capture rate in He4 
+- G4MuonMinusBoundDecay - added data for muon capture rate in He4
     from recent experimental data
 
 19 June 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-13)
@@ -379,7 +433,7 @@ Requires co-working base tag hadr-man-V09-05-16
 ------------------------------------------------------
 - G4HadronStoppingProcess.hh: remove member "G4HadFinalState result: because
   it shadows "result" in .cc file
-- replace shadowed variables m, mm, dir and index in .cc files 
+- replace shadowed variables m, mm, dir and index in .cc files
 
 24 May 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-11)
 ------------------------------------------------------------
@@ -395,7 +449,7 @@ Requires co-working base tag hadr-man-V09-05-16
 ------------------------------------------------------------
 23 May 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-08)
 ------------------------------------------------------------
-- G4EmCaptureCascade - fixed initilisation of mesoatomic K-shelll energies
+- G4EmCaptureCascade - fixed initialisation of mesoatomic K-shelll energies
 
 22 May 2012 Michael Kelsey (hadr-stopping-V09-05-07)
 ----------------------------------------------------
@@ -426,12 +480,12 @@ Requires co-working base tag hadr-man-V09-05-16
   G4EmCaptureCascade, G4MuMinusCapturePrecompound, G4HadronStoppingProcess,
   G4MuonMinusCapture which provides general stopping process and
   example of its implementation for mu- implementing the same model
-  as in G4MuonMinusCaptureAtRest in granular design fully based on 
-  the hadronic framework  
+  as in G4MuonMinusCaptureAtRest in granular design fully based on
+  the hadronic framework
 
 2 May 2012 G.Folger                   ( ..trunk.. )
 ------------------------------------------------------------
-- revert changes by Mikhail ( revs. r58293, r28255 ) 
+- revert changes by Mikhail ( revs. r58293, r28255 )
 
 28 Apr 2012 Mikhail Kosov (hadr-stopping-V09-05-04)
 ------------------------------------------------------------
@@ -445,8 +499,8 @@ Requires co-working base tag hadr-man-V09-05-16
 
 16 February 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-02)
 ------------------------------------------------------------
--  G4PiMinusAbsorptionBertini - return back usage of native pre-compound 
-     de-excitation for the Bertini cascade 
+-  G4PiMinusAbsorptionBertini - return back usage of native pre-compound
+     de-excitation for the Bertini cascade
 
 20 January 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-01)
 ------------------------------------------------------------
@@ -457,7 +511,7 @@ Requires co-working base tag hadr-man-V09-05-16
 -  G4FTFCaptureAtRest - changed initialisation of de-excitation;
      removed double deletion of objects; added registration
      in G4HadronicProcessStore; added sub-type definition
--  G4PiMinusAbsorptionBertini - temporary do not use native pre-compound 
+-  G4PiMinusAbsorptionBertini - temporary do not use native pre-compound
      but Bertini pre-compound due to double deletion of objects;
      after fix of Bertini this should be return back
 
@@ -492,7 +546,7 @@ Requires co-working base tag hadr-man-V09-05-16
 
 27 September 2011  Dennis Wright  (hadr-stopping-V09-04-02)
 -----------------------------------------------------------
-- Migrate to integer Z and A.  File affected: 
+- Migrate to integer Z and A.  File affected:
     G4KaonMinusAbsorptionAtRest.cc
 
 17 September 2011  Dennis Wright  (hadr-stopping-V09-04-01)
@@ -511,17 +565,17 @@ Requires co-working base tag hadr-man-V09-05-16
 
 11-Nov-2010 Dennis Wright  (hadr-stopping-V09-03-01)
 ----------------------------------------------------------
-- G4MuonMinusCaptureAtRest::DoMuCapture : fix unused branch  
+- G4MuonMinusCaptureAtRest::DoMuCapture : fix unused branch
     pd = G4Deuteron::Deuteron() in mass calculation
 - G4PiMinusStopMaterial: theR was used but uninitialized.  Now init'ed
-    to 0.5 in ctor 
+    to 0.5 in ctor
 - G4PiMinusAbsorptionAtRest: remove null test for vector pointer
-    in dtor 
+    in dtor
 - G4StopDummyDeexcitation: initialize pointer _products in ctor
 - G4KaonMinusAbsorptionAtRest::SigmaLambdaConversion : add dummy
     particles to default of switch/case to avoid possible NULL
     pointers
- 
+
 20-Sep-2010 Gunter Folger  (hadr-stopping-V09-03-00)
 ----------------------------------------------------------
 - G4MuonMinusCaptureAtRest use integer A&Z for G4Fancy3DNucleus
@@ -537,7 +591,7 @@ Requires co-working base tag hadr-man-V09-05-16
 
 04-Aug-2009 Vladimir Ivantchenko (hadr-stopping-V09-02-02)
 ----------------------------------------------------------
-- removed unused include of G4NucleiPropertiesTable.hh 
+- removed unused include of G4NucleiPropertiesTable.hh
 
 02-Feb-2009 Vladimir Ivantchenko (hadr-stopping-V09-02-01)
 ----------------------------------------------------------
@@ -545,12 +599,12 @@ Requires co-working base tag hadr-man-V09-05-16
 
 23-Jan-2009 Vladimir Ivantchenko (hadr-stopping-V09-02-00)
 ----------------------------------------------------------
-G4MuonMinusCaptureAtRest - added deregistration  
+G4MuonMinusCaptureAtRest - added deregistration
 
 22-Oct-2008 Dennis Wright (hadr-stopping-V09-01-05)
 ---------------------------------------------------
-- replace G4NucleiPropertiesTable::GetBindingEnergy() with 
-  G4NucleiProperties::GetBindingEnergy() in 
+- replace G4NucleiPropertiesTable::GetBindingEnergy() with
+  G4NucleiProperties::GetBindingEnergy() in
   G4KaonMinusAbsorptionAtRest.cc and G4PiMinusStopAbsorption.cc
 - replace G4NucleiPropertiesTable::GetAtomicMass with
   G4NucleiProperties::GetNuclearMass in G4StopTheoDeexcitation.cc
@@ -561,14 +615,14 @@ G4MuonMinusCaptureAtRest - added deregistration
 
 01-Sep-2008 Vladimir Ivantchenko (hadr-stopping-V09-01-03)
 ----------------------------------------------------------
-G4MuonMinusCaptureAtRest - added registration in the 
+G4MuonMinusCaptureAtRest - added registration in the
        G4HadronicprocessStore and PrintInfo by adding
        PreparePhysicsTable and BuildPhysicsTable methods
 GNUmakefile - add includes
 
 08-Jul-2008 Dennis Wright (hadr-stopping-V09-01-02)
 ---------------------------------------------------
-- set process sub-type to 15 for 
+- set process sub-type to 15 for
   G4AntiNeutronAnnihilationAtRest, G4AntiProtonAnnihilationAtRest,
   G4KaonMinusAbsorption, G4KaonMinusAbsorptionAtRest,
   G4MuonMinusCaptureAtRest, G4NeutronCaptureAtRest,
@@ -580,12 +634,12 @@ GNUmakefile - add includes
 
 28-Mar-2008 Dennis Wright (hadr-stopping-V09-01-00)
 ---------------------------------------------------
-G4NeutronCaptureAtRest::AtomAs - add () around && within || to 
+G4NeutronCaptureAtRest::AtomAs - add () around && within || to
   fix gcc-4.3 compiler warning
 
 19-Nov-2007 Vladimir Ivantchenko (hadr-stopping-V09-00-05)
 ----------------------------------------------------------
-G4MuonMinusCaptureAtRest - move back 
+G4MuonMinusCaptureAtRest - move back
 
 15-Nov-2007 Vladimir Ivantchenko (hadr-stopping-V09-00-04)
 ----------------------------------------------------------
@@ -604,7 +658,7 @@ G4StopElementSelector - fixed typo in Primakoff formula for capture
 05-Jul-2007 Dennis Wright (hadr-stopping-V09-00-01)
 ---------------------------------------------------
 - removed old-style copyright from all headers
-- fixed Software Reference Manual tags 
+- fixed Software Reference Manual tags
 
 05-Jul-2007 Gabriele Cosmo (hadr-stopping-V09-00-00)
 ----------------------------------------------------
@@ -628,7 +682,7 @@ G4StopElementSelector - fixed typo in Primakoff formula for capture
 ----------------------------------------------------
 -  correct inconsistent use of targetA; for effective targetA transforming
    to integer using G4int and G4lrint gives values different by 1.
-   
+
 16-Nov-2006 Vladimir Ivantchenko (hadr-stopping-V08-01-00)
 ----------------------------------------------------------
 -  G4MuonMinusCaptureAtRest - fix bounding energies, rewrite DoMuonCapture

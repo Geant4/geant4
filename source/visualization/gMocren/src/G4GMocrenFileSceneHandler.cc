@@ -1194,9 +1194,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
         ;
       }
       
-      kNestedVolumeDimension[0] = phantomPara->GetNoVoxelX();
-      kNestedVolumeDimension[1] = phantomPara->GetNoVoxelY();
-      kNestedVolumeDimension[2] = phantomPara->GetNoVoxelZ();
+      kNestedVolumeDimension[0] = phantomPara->GetNoVoxelsX();
+      kNestedVolumeDimension[1] = phantomPara->GetNoVoxelsY();
+      kNestedVolumeDimension[2] = phantomPara->GetNoVoxelsZ();
       kNestedVolumeDirAxis[0] = 0;
       kNestedVolumeDirAxis[1] = 1;
       kNestedVolumeDirAxis[2] = 2;

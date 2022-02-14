@@ -25,17 +25,13 @@
 //
 //
 /// \file exampleB5.cc
-/// \brief Main program of the analysis/B5 example
+/// \brief Main program of the basic B5 example
 
-#include "B5DetectorConstruction.hh"
-#include "B5ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4RunManagerFactory.hh"
+#include "G4SteppingVerbose.hh"
 #include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
 #include "G4StepLimiterPhysics.hh"
@@ -55,29 +51,27 @@ int main(int argc,char** argv)
 #ifdef G4UI_USE
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
-    ui = new G4UIExecutive(argc, argv);
-  }
-#endif
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv); }
+
+  // Use G4SteppingVerboseWithUnits
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
 
   // Construct the default run manager
   //
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+  auto* runManager =
+    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
   // Mandatory user initialization classes
-  runManager->SetUserInitialization(new B5DetectorConstruction);
+  runManager->SetUserInitialization(new B5::DetectorConstruction);
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   physicsList->RegisterPhysics(new G4StepLimiterPhysics());
   runManager->SetUserInitialization(physicsList);
 
   // User action initialization
-  runManager->SetUserInitialization(new B5ActionInitialization());
+  runManager->SetUserInitialization(new B5::ActionInitialization());
 
 #ifdef G4VIS_USE
   // Visualization manager construction
@@ -105,7 +99,7 @@ int main(int argc,char** argv)
 #endif
     if (ui->IsGUI()) {
          UImanager->ApplyCommand("/control/execute gui.mac");
-    }     
+    }
     // start interactive session
     ui->SessionStart();
     delete ui;
@@ -114,7 +108,7 @@ int main(int argc,char** argv)
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not be deleted 
+  // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
 
 #ifdef G4VIS_USE

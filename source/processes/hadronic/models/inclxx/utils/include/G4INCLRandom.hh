@@ -177,8 +177,11 @@ namespace G4INCL {
         }
 
         result_type operator()() const {
-//          return shootInteger(max());
-          return G4RandFlat::shootInt(INT_MAX);
+          #ifdef INCLXX_IN_GEANT4_MODE
+             return G4RandFlat::shootInt(INT_MAX);
+          #else
+             return shootInteger(max());
+          #endif
         }
 
     };

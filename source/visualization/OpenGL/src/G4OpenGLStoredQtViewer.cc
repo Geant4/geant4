@@ -29,8 +29,6 @@
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
 //                                G4OpenGLStoredViewer.
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
 #include "G4OpenGLStoredQtViewer.hh"
 
 #include "G4OpenGLStoredSceneHandler.hh"
@@ -51,6 +49,8 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   G4OpenGLStoredViewer (sceneHandler),             // FIXME : gerer le pb du parent !
   QGLWidget()
 {
+  if (fViewId < 0) return;  // In case error in base class instantiation.
+
   fQGLWidgetInitialiseCompleted = false;
 
     // Indicates that the widget has no background, i.e. when the widget receives paint events, the background is not automatically repainted. Note: Unlike WA_OpaquePaintEvent, newly exposed areas are never filled with the background (e.g., after showing a window for the first time the user can see "through" it until the application processes the paint events). This flag is set or cleared by the widget's author.
@@ -60,12 +60,10 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   fHasToRepaint = false;
   fPaintEventLock = false;
   fUpdateGLLock = false;
-
-  if (fViewId < 0) return;  // In case error in base class instantiation.
 }
 
 G4OpenGLStoredQtViewer::~G4OpenGLStoredQtViewer() {
-  makeCurrent();
+  //  makeCurrent();  // Not sure why this - commented out 12-Apr-2021 JA
   // this is connect to the Dialog for deleting it properly
   // when close event.
   //   ((QDialog*)window())->reject();
@@ -103,6 +101,8 @@ void G4OpenGLStoredQtViewer::initializeGL () {
    // Set the component visible
   //   setVisible(true) ;
 
+  // Set jpg as default export format for Qt viewer
+  setExportImageFormat("jpg");
 }
 
 G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
@@ -121,21 +121,27 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
       (lastVP.GetCBDAlgorithmNumber() !=
        fVP.GetCBDAlgorithmNumber())                               ||
+      // Note: Section and Cutaway can reveal back-facing faces. If
+      // backface culling is implemented, the image can look strange because
+      // the back-facing faces are not there. For the moment, we have disabled
+      // (commented out) backface culling (it seems not to affect performance -
+      // in fact, performance seems to improve), so there is no problem.
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
-      // Section (DCUT) implemented locally.  But still need to visit
-      // kernel if status changes so that back plane culling can be
-      // switched.
-      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      // Cutaways implemented locally.  But still need to visit kernel
-      // if status changes so that back plane culling can be switched.
+      // Section (DCUT) is NOT implemented locally so we need to visit the kernel.
+      // (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
+      // Cutaways are implemented locally so we do not need to visit the kernel.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
+      (lastVP.GetGlobalLineWidthScale() != fVP.GetGlobalLineWidthScale()) ||
+      (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
       (lastVP.GetDefaultVisAttributes()->GetColour() !=
        fVP.GetDefaultVisAttributes()->GetColour())                ||
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
-      (lastVP.IsPicking ()          != fVP.IsPicking ()))
+      (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
+      (lastVP.IsSpecialMeshRendering() != fVP.IsSpecialMeshRendering()))
     return true;
 
   // Don't check VisAttributesModifiers if this comparison has been
@@ -181,6 +187,10 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
     return true;
 
+  if (lastVP.IsSpecialMeshRendering() &&
+      (lastVP.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
+    return true;
+
   return false;
 }
 
@@ -212,6 +222,7 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   if (!fNeedKernelVisit) {
     KernelVisitDecision ();
   }
+  fLastVP = fVP;
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
    
@@ -442,5 +453,3 @@ G4Colour& c,
 size_t poIndex) {
   c = getColorForPoIndex(poIndex);
 }
-
-#endif

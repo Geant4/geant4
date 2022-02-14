@@ -81,51 +81,50 @@ class G4BetheBlochModel;
 class G4ParticleChangeForLoss;
 class G4VIonDEDXTable;
 class G4VIonDEDXScalingAlgorithm;
-class G4LPhysicsFreeVector;
+class G4PhysicsFreeVector;
 class G4MaterialCutsCouple;
 
 typedef std::list<G4IonDEDXHandler*> LossTableList;
 typedef std::pair<const G4ParticleDefinition*, 
                   const G4MaterialCutsCouple*> IonMatCouple;
 
-
 class G4IonParametrisedLossModel : public G4VEmModel {
 
  public:
-   G4IonParametrisedLossModel(const G4ParticleDefinition* particle = 0,
-                              const G4String& name = "ParamICRU73");
+   explicit G4IonParametrisedLossModel(const G4ParticleDefinition* particle = nullptr,
+				       const G4String& name = "ParamICRU73");
 
    virtual ~G4IonParametrisedLossModel();
 
-   virtual void Initialise(
-                           const G4ParticleDefinition*, // Projectile
-                           const G4DataVector&); // Cut energies
+  void Initialise(
+		  const G4ParticleDefinition*, // Projectile
+		  const G4DataVector&) override; // Cut energies
 
-   virtual G4double MinEnergyCut(
-                                 const G4ParticleDefinition*,  // Projectile
-		        	 const G4MaterialCutsCouple*);
-
-   virtual G4double ComputeCrossSectionPerAtom(
-                                 const G4ParticleDefinition*, // Projectile
-				 G4double,  // Kinetic energy of projectile
-				 G4double,  // Atomic number
-                                 G4double,  // Mass number
-				 G4double,  // Energy cut for secondary prod.
-				 G4double); // Maximum energy of secondaries
-				 				 
-   virtual G4double CrossSectionPerVolume(
+  G4double MinEnergyCut(
+			const G4ParticleDefinition*,  // Projectile
+			const G4MaterialCutsCouple*) override;
+  
+  G4double ComputeCrossSectionPerAtom(
+				      const G4ParticleDefinition*, // Projectile
+				      G4double,  // Kinetic energy of projectile
+				      G4double,  // Atomic number
+				      G4double,  // Mass number
+				      G4double,  // Energy cut for secondary prod.
+				      G4double) override; // Maximum energy of secondaries
+  
+  G4double CrossSectionPerVolume(
                                  const G4Material*,  // Target material
 				 const G4ParticleDefinition*, // Projectile
 				 G4double,  // Kinetic energy
 				 G4double,  // Energy cut for secondary prod.
-				 G4double); // Maximum energy of secondaries
+				 G4double) override; // Maximum energy of secondaries
 				 
-   virtual G4double ComputeDEDXPerVolume(
-                                 const G4Material*, // Target material
-				 const G4ParticleDefinition*, // Projectile
-				 G4double,  // Kinetic energy of projectile
-				 G4double); // Energy cut for secondary prod.
-
+  G4double ComputeDEDXPerVolume(
+				const G4Material*, // Target material
+				const G4ParticleDefinition*, // Projectile
+				G4double,  // Kinetic energy of projectile
+				G4double) override; // Energy cut for secondary prod.
+  
    // Function, which computes the continuous energy loss (due to electronic
    // stopping) for a given pre-step energy and step length by using
    // range vs energy (and energy vs range) tables  
@@ -143,28 +142,27 @@ class G4IonParametrisedLossModel : public G4VEmModel {
 				 G4double); // Energy cut for secondary prod.
 
 
-   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double,  // Energy cut for secondary prod.
-                                 G4double); // Maximum energy of secondaries
+   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			  const G4MaterialCutsCouple*,
+			  const G4DynamicParticle*,
+			  G4double,  // Energy cut for secondary prod.
+			  G4double) override; // Maximum energy of secondaries
 
-   virtual G4double GetChargeSquareRatio(
+   G4double GetChargeSquareRatio(
                                  const G4ParticleDefinition*, // Projectile
 		 	 	 const G4Material*,  // Target Material
-				 G4double); // Kinetic energy of projectile
+				 G4double) override; // Kinetic energy of projectile
 
-   virtual G4double GetParticleCharge(
-                                 const G4ParticleDefinition*, // Projectile
-				 const G4Material*,  // Target Material
-				 G4double); // Kinetic energy of projectile 
+   G4double GetParticleCharge(
+			      const G4ParticleDefinition*, // Projectile
+			      const G4Material*,  // Target Material
+			      G4double) override; // Kinetic energy of projectile 
 
-   virtual void CorrectionsAlongStep(
-                                 const G4MaterialCutsCouple*,// Mat.-Cut couple
-				 const G4DynamicParticle*,  // Dyn. particle
-				 G4double&, // Energy loss in current step
-				 G4double&, 
-				 G4double); // Length of current step
+   void CorrectionsAlongStep(
+                             const G4MaterialCutsCouple*,// Mat.-Cut couple
+			     const G4DynamicParticle*,   // Dyn. particle
+                             const G4double&,            // Length of current step
+			     G4double&) override;        // Energy loss in current step
 
    // Function which allows to add additional stopping power tables
    // in combination with a scaling algorithm, which may depend on dynamic
@@ -173,7 +171,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    // which applies the scaling of energy and dE/dx values)
    G4bool AddDEDXTable(const G4String& name,
                      G4VIonDEDXTable* table, 
-                     G4VIonDEDXScalingAlgorithm* algorithm = 0); 
+                     G4VIonDEDXScalingAlgorithm* algorithm = nullptr); 
 
    G4bool RemoveDEDXTable(const G4String& name); 
 
@@ -211,10 +209,8 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    inline void SetEnergyLossLimit(G4double ionEnergyLossLimit); 
 
  protected:
-
-   virtual 
    G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-			       G4double);   // Kinetic energy of projectile
+			       G4double) override;   // Kinetic energy of projectile
 
  private:
    // Function which updates parameters concerning the dE/dx calculation
@@ -266,10 +262,10 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    // # 
    // ######################################################################
 
-   typedef std::map<IonMatCouple, G4LPhysicsFreeVector*> RangeEnergyTable; 
+   typedef std::map<IonMatCouple, G4PhysicsFreeVector*> RangeEnergyTable; 
    RangeEnergyTable r;
 
-   typedef std::map<IonMatCouple, G4LPhysicsFreeVector*> EnergyRangeTable; 
+   typedef std::map<IonMatCouple, G4PhysicsFreeVector*> EnergyRangeTable; 
    EnergyRangeTable E;
 
    // ######################################################################

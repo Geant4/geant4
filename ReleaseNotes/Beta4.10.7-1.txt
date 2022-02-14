@@ -1,0 +1,885 @@
+
+                  Geant4 10.7-beta-01 Release Notes
+                  ---------------------------------
+
+                                                            26 June 2020
+
+                 Migration Notes & Main New Features
+                 -----------------------------------
+
+  o Introducing new optional (experimental) tasking system, based on PTL
+    (Parallel Tasking Library), dedicated run manager (G4TaskRunManager) and
+    factory (G4RunManagerFactory), enabling use of tasks for the event loop.
+    The tasking system is fully compatible with Intel TBB, which can be
+    selected if GEANT4_USE_TBB=ON is specified when configuring CMake. The
+    default behavior is to submit the tasks to an internal thread-pool and
+    task-queue. A comprehensive description of the system and options available
+    can be found in the README document located within the new source/tasking
+    module.
+  o Revision of G4PhysicsVector classes to use similar algorithm for bin
+    selection and adding checks on vectors length.
+  o G4PhysicsLinearVector, G4PhysicsLogVector: more accurate checks in class
+    constructors.
+  o New class G4DriverReporter to print progress of field drivers.
+  o Enabled "check-mode" for G4PropagatorInField and G4VIntersectionLocator.
+    Enable use of whiteboard for logging/debugging in G4MultiLevelLocator, if
+    "check-mode" in navigation is being activated through UI command.
+  o Added layered mass geometry option for the new "probe" scoring mesh.
+  o Introducing G4VPrimitivePlotter allowing the user to extend a primitive
+    scorer and directly fill a 1D histogram.
+  o Enabled handling of automatic min/max axes values in case of log scale
+    in analysis tools.
+  o Fixed reading and writing of const properties of materials in GDML.
+  o Cleanup destruction of physics processes at the end of job.
+    Reviewed ownership/deletion of physics models at the end of the run.
+  o Introducing thermal model of positronium decay to two gammas.
+    In this model, the positronium acquires a mean kinetic energy on formation,
+    which contributes to a small non-collinearity of the gammas, detectable and
+    significant in PET.
+  o Added new EM model for polarized gamma elastic scattering.
+  o Implemented three time constants for G4Scintillation, and allow multiple
+    time constants to work with scintillation by particle type.
+  o Added second wavelength shifting process within the same material.
+  o New physics-list builder classes to allow alternative builders for
+    anti_proton, anti_neutron, hyperons and anti-hyperons nuclear interactions
+    at high energies with QGSP.
+  o Extended EM physics-list constructors to allow extra available DNA options.
+  o New General Particle Source energy distribution option that generates flat
+    energy distribution with track weights representing energy spectrum.
+  o Added handling of lepto-nuclear interactions for anti_nu_e, nu_e and
+    anti_mu_nu.
+  o Define PDG code as "-22" for G4OpticalPhoton.
+  o Added implementation of IRT in G4DNA module.
+  o Added new UI messenger for hadronic physics, currently used for controlling
+    verbosity level: the UI command "/process/had/verbose 0" allows to switch
+    off the print-out at initialization of hadronic processes, models and
+    cross sections (similar to the existing command "/process/em/verbose 0"
+    to switch off the print-out of electromagnetic physics information).
+  o Fixed non-conservation warnings coming from G4HadronicProcess due to
+    sub-threshold reactions in Bertini cascade.
+  o G4CrossSectionElastic, G4CrossSectionInelastic: fix of the max energy of
+    applicability of the (elastic and inelastic) cross-sections of ions and
+    anti-ions nuclear interactions.
+  o Improved treatment of antibaryon interactions in QGS.
+  o Added support for OpenInventor Qt visualisation driver to be built and
+    used in applications. The OpenInventor module can be built with either
+    the OIQT driver, or with the OIX/OIXE drivers, but not with both.
+    Enabled use of OIQT viewer with Qt UI.
+  o New advanced example showing how to efficiently simulate particle transport
+    through aerosols containing billions of randomly-positioned droplets, using
+    an ordinary workstation.
+  o Added support for modular builds in CMake.
+  o Extended CMake build system to support G4Py activation through
+    GEANT4_USE_PYTHON flag.
+  o Build option with VecGeom requires VecGeom-1.1.7.
+  o New data sets G4EMLOW-7.12.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o Tested platforms:
+    + Linux, gcc-4.9.3.
+      Tested on 64 bit architectures (Intel or AMD) with CERN CentOS
+      Linux 7 (CC7) (based on CentOS Linux 7).
+      Versions of Geant4 have also been compiled successfully on other
+      Linux distributions, Ubuntu, Debian, Suse or other RedHat systems.
+    + MacOSX 10.15, Apple LLVM/clang-11.0.3
+    + Windows/10 with Visual C++ 14.23 (Visual Studio 2019)
+
+  o More verified configurations:
+    + Linux, gcc-5.4.0/7.3.0/8.3.0/9.2.0/10.1.0, clang-7.0/8.0/10.0.
+    + Linux, Intel-icc 19.0.
+    + MacOSX 10.14 with Apple LLVM/clang-10.0.
+
+  o External dependencies
+    + CLHEP-2.4.1.3, suggested for external installation of the CLHEP library.
+    + VecGeom-1.1.7, for optional use of the VecGeom geometry primitives.
+
+  o New data sets:
+    + G4EMLOW-7.12.
+
+ Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/user_documentation
+ for further information about using Geant4.
+
+ ----------------------------------------------------------------------------
+
+List of features and fixes included in this Beta release since 10.6.p02:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Added support for building PTL external module and introduced
+        GEANT4_USE_TBB option, enabling use of TBB as possible alternative
+        to builtin PTL tasking.
+      o Added support for OpenInventor Qt visualisation driver to be built and
+        used in applications. The OpenInventor module can be built with either
+        the OIQT driver, or with the OIX/OIXE drivers, but not with both.
+        Added GEANT4_USE_XM to OpenInventor X11 driver code block to correct
+        Xm and Xt link order.
+      o Removed requirement on presence of GLU library.
+        No longer save GLU related variables in the package cache.
+      o Change shimmed imported target name to VecGeom::vecgeom to match
+        upstream usage and reliably use target when available from VecGeom.
+        Export VecCore_DIR to package cache when set so that Geant4 behaviour
+        is consistent. Co-works with VecGeom-1.1.7.
+      o Added GEANT4_USE_NEW_CMAKE option in preparation for testing of modular
+        build updates, ON by default, to switch between systems. Importing new
+        "target" style API for declaring and composing libraries from modules
+        of source code. Retain GEANT4_BUILDTREE_INCLUDE_DIRS in new CMake
+        system to support clients that may not yet support CMake target usage
+        requirements.
+      o Propagate value of CMAKE_DISABLE_FIND_PACKAGE_ROOT down to tests
+        that optionally support Root to allow testing Geant4 with Root support
+        disabled. This is necessary when testing Geant4 with a different C++
+        standard than Root when it's installed. Avoid warnings from propagating
+        the flag down to tests.
+      o Applied patch to allow compilation on Windows using Clang.
+      o Use "${FOO:-}" variable expansion and "-z" test to check for
+        undefined variables in Bourne Shell scripts. Prevents errors when
+        shell is in "set -u" mode. Addressing problem report #2221.
+      o Handle install of G4clhep{-static} independently of main modules
+        due it being built outside the category system.
+      o Renamed remaining internal "Geant4..." modules to "G4" convention.
+        Retain Geant4DefineModule and Geant4LibraryTargets until new
+        modularization scheme is in place.
+      o Updated version of data sets: G4EMLOW-7.12.
+        Updated tag-IDs for 10.7-beta.
+    + GNUMake:
+      o Added setup for building and configuring new externals/ptl
+        and tasking modules. External installation of PTL can be enabled
+        by defining the installation through the environment variable
+        PTL_BASE_DIR.
+      o Added -pthread to all builds in Linux targets.
+      o Corrected setup for use of OpenInventor (Coin).
+      o Added missing settings in G4UI_BUILD.gmk script for OIQt and use of UI.
+      o Removed deprecated G4USE_STD11 flag settings.
+      o Removed dependency on GLU for all configurations, as no longer
+        necessary.
+
+  o Analysis:
+    --------
+    + Updated to g4tools 5.1.0:
+      o Corrections to handle automatic min/max axes values in case of log
+        scale. See History_tools in analysis module for all details.
+    + Fix to add a null-pointer check to ntupleDescription->fNtuple in
+      G4RootPNtupleManager::Merge().
+    + Fixed compilation warnings on clang-10 for g4tools.
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+    + Update granular dependencies in preparation for modularization
+    + Remove uneeded links to externals in factory.
+
+  o Digits & Hits:
+    -------------
+    + Introducing G4VPrimitivePlotter allowing the user to extend a primitive
+      scorer and directly fill 1D histogram.
+    + Added two ComputeSolid() method to G4VPrimitiveScorer, to consolidate
+      code.
+    + Fixed cases of comparison between int and size_t in templated classes
+      and some cleanup.
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Error Propagation:
+    -----------------
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Event:
+    -----
+    + Introducing a new General Particle Source energy distribution option,
+      that generates flat energy distribution with track weights that
+      represent energy spectrum provided by /gps/hist/point commands.
+      This option can enhance, for example, higher energy tracks that are
+      rare but contribute to the scores.
+    + Corrected logic in G4VPrimaryGenerator::CheckVertexInsideWorld() method.
+    + G4GeneralParticleSourceMessenger: command structure clean-up.
+    + Some code cleanup, formatting and C++11 revision.
+    + Removed obsolete and unused headers.
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+    + Fixed Coverity defect in G4GeneralParticleSourceMessenger.
+
+  o Externals:
+    ---------
+    + ptl:
+      o New module for PTL (Parallel Tasking Library), implementing a
+        lightweight C++11 multi-threading tasking system featuring thread-pool,
+        task-groups, and lock-free task queue.
+    + zlib:
+      o Added needed include directories to CMake script when using new
+        CMake system.
+
+  o G3toG4:
+    ------
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Geometry:
+    --------
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+    + magneticfield:
+      o New class G4DriverReporter to print progress of drivers.
+      o G4VIntegrationDriver and dependent driver classes: added new virtual
+        method StreamInfo(), used to implement operator<<() for
+        G4VIntegrationDriver.
+      o G4MagInt_Driver: fixed max iterations & clarified that its method
+        ComputeNewStepSize() does not (yet) respect maximum reduction factor
+        (0.1); this is to enable comparisons with new G4IntegrationDriver<>
+        implementation.
+      o G4OldMagIntDriver maintains all old behaviour of G4MagInt_Driver.
+      o In G4MultiLevelLocator, added ability to record in a 'whiteboard',
+        the start/end steps of integration intervals, to allow identify issues
+        like negative or zero steps occurrences. Includes new classes
+        G4LocatorChangeLogger and G4LocatorChangeRecord.
+      o G4PropagationInField: improved ClearPropagatorState() method.
+      o Implemented move constructor and operator for G4FieldTrack.
+    + management:
+      o Added deleted declarations for copy constructor and assignment operators
+        on store singletons. Based on GitHub PR#12 report.
+      o Reduced size of G4LogicalVolume objects by reordering class members.
+      o Adopt new convention for location of headers in VecGeom for wrappers.
+      o Fix to CMake script to support new CMake system.
+    + navigation:
+      o Enabled "check-mode" for G4PropagatorInField and G4VIntersectionLocator.
+        Enable use of whiteboard for logging/debugging in G4MultiLevelLocator,
+        if "check-mode" in navigation is being activated through UI command.
+      o Reordered data members in G4Navigator, to reduce object size.
+    + solids/CSG:
+      o G4Trap: fixed calculation of normal for points on edge in
+        SurfaceNormal(). Improved code for Inside().
+      o Adopt new convention for location of headers in VecGeom for all
+        wrappers.
+    + solids/specific:
+      o Added GetTwistedFaceSurfaceArea() in G4GenericTrap and fixed
+        calculation of surface area in unit tests.
+      o Adopt new convention for location of headers in VecGeom for all
+        wrappers.
+
+  o Global:
+    ------
+    + G4Physics2DVector: extended number of characters in the table dump from 5
+      to 8; use similar algorithm for bin selection as in 1D vector;
+      if any dimension is less than 2 throw a G4Exception.
+    + G4PhysicsVector: use same code for interpolation for all types of
+      PhysicsVector; removed obsolete unused methods; maximally use const
+      variables; preserve precision of printout.
+    + G4PhysicsLinearVector: added checks on vector length: if it is less
+      than 2 throw a G4Exception.
+    + G4PhysicsLogVector: added checks on vector length: if it is less
+      than 3 throw a G4Exception.
+    + G4PhysicsLinearVector, G4PhysicsLogVector: more accurate checks in class
+      constructors. Fixed Coverity warnings.
+    + C++11 revision in 'management' and 'HEPNumerics' modules; general
+      code cleanup/formatting.
+    + Removed use of deprecated G4USE_STD11 flag.
+    + Fix to CMake script to support new CMake system.
+    + Changed date for release 10.7-beta.
+
+  o Graphics Representations:
+    ------------------------
+    + HepPolyhedron, G4Polyhedron: added HepPolyhedronTet.
+    + G4VisAttributes: clarify that if number of cloud points (for cloud style
+      drawing) is <= 0, this is to be interpreted as under control of the
+      viewer, i.e., to be decided by the viewer. Otherwise this number is to be
+      drawn. Zero is the default value, which may be changed by invoking the
+      method SetForceNumberOfCloudPoints(); also possible to force cloud
+      drawing with SetForceCloud().
+    + Improved deprecation message for G4AttDefs::operator<<().
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Intercoms
+    ---------
+    + Removed unnecessary use of deprecated G4USE_STD11 flag in G4AnyMethod.
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Interfaces
+    ----------
+    + G4UIQt: replaced use of setTextColor() with adoption of rich text html
+      tags (improving visibility in MacOS Dark Mode).
+    + Fixed deprecation warnings being triggered when using Qt-5.15.
+    + Use CMake AUTOMOC to automatically generate and compile Moc sources
+      and fixed CMake script to support new CMake system.
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Materials
+    ---------
+    + G4MaterialPropertiesTable: added ConstPropertyExists() method.
+    + G4MaterialPropertiesTable, G4MaterialPropertiesIndex: added new
+      properties for scintillation allowing 3 time constants and a second
+      wavelength shifter in the same material.
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Parameterisations:
+    -----------------
+    + GFlash:
+      o Substituting Gamma calculation with corresponding STL functions, as
+        suggested in GitHub PR#3. Makes LnGamma calculation 1.4 times faster,
+        and Gamma 1.9 times faster.
+      o GFlashSamplingShowerParameterisation: added X0eff calculation.
+      o Delete local tuning data in GFlashXXXShowerParameterisation class
+        destructors.
+
+  o Particles:
+    ---------
+    + G4ParticleTable: create/destruct only one instance of G4IonTable and
+      associated messenger; define assignment operator and copy constructor
+      as deleted; added cache with pointer to selected particle and get/set
+      methods.
+    + G4DynamicParticle: added GetBeta() method.
+    + G4OpticalPhoton: define PDG code as "-22".
+    + G4NuclideTable: added destruction of messenger
+    + Added move operators to G4DynamicParticle.
+      Code revision for c++11 and cleanup in 'management' module.
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+    + Fixed Coverity warning.
+
+  o Persistency:
+    -----------
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+    + ASCII:
+      o Fixed Coverity defects warnings.
+    + GDML:
+      o Fixed reading and writing of const properties of materials.
+        Matrices of size 1x1 are now used both for writing out and reading in
+        of const material. This fixes the inconsistency (using constants by the
+        writer) found in the code. Const material properties with the same name
+        (in different materials) are now written out with the properties table
+        address appended.
+
+  o Physics Lists:
+    -------------
+    + Fixes to CMake scripts to support new CMake system.
+    + Builders:
+      o Revised all classes to remove unnecessary members, not destruct models
+        and cross-sections and use updated instantiation of string models.
+        This should help to achieve full deletion of hadronic physics objects
+        at the end of run.
+      o G4QGSPAntiBarionBuilder: created new class to handle anti_proton and
+        anti_neutron at high energies with QGSP. For the light anti-ions
+        (anti_deuteron, anti_triton, anti_He3, and anti_alpha), currently QGSP
+        cannot handle them, therefore FTFP is used.
+      o G4VHyperonBuilder, G4HyperonBuilder, G4HyperonQGSPBuilder: new classes
+        to allow alternative builders for hyperons (and anti-hyperons).
+        The class G4HyperonQGSPBuilder uses QGSP model to handle hyperons (and
+        anti-hyperons) at high energies.
+      o G4HyperonFTFPBuilder: now it derives from G4VHyperonBuilder (physics
+        behind remains unchanged, i.e. it is still based on BERT and FTFP
+        models).
+      o G4HadronicBuilder: new utility class to build kaons, hyperons, and b-,
+        c- particles.
+      o Added second wavelength shifter optical process to the
+        OrderingParameterTable.
+    + Constructors:
+      o decay:
+        - G4RadioactiveDecayPhysics: enabled flag for isomer production,
+          required after fix to problem report #2226.
+          Updated initialisation to be coherent with recent updates in
+          initialisation of atomic de-excitation.
+        - G4DecayPhysics, G4RadioactiveDecayPhysics, G4SpinDecayPhysics,
+          G4UnknownDecayPhysics: general cleanup. Removed thread local pointers,
+          avoid deleting objects; use C++11 keywords; use standard signatures
+          for constructors; define builder type for the main constructor
+          G4DecayPhysics (bDecay, for others bUnknown).
+      o electromagnetic:
+        - G4OpticalPhysics, G4OpticalPhysicsMessenger: added settings for
+          G4Scintillation to use 3 time constants. Added second wavelength
+          shifter optical process to constructors.
+        - G4EmBuilder: new utility class to allow reducing code duplication for
+          standard and low-energy EM physics constructors. Includes flag for
+          allowing choice of multiple-scattering model.
+        - G4EmStandardPhysics_option1: switch to use new G4EmBuilder utility;
+          fixed StepFunction definition.
+        - G4EmStandardPhysics_option3: switch to use new G4EmBuilder utility;
+          use ICRU90 stopping power data for water and air.
+        - Removed duplicate code by using G4EmBuilder in several constructors,
+          fixed definition of StepFunction, use the same flag as hadronic
+          physics to enable EM interaction of b- and c- mesons and baryons.
+        - G4EmModelActivator: use same options for physics per region as used
+          in EM constructors recently updated.
+        - G4LivermorePolarizedPhysics: use inheritance from G4LivermorePhysics.
+        - G4EmDNAModelActivator: extended to extra available DNA options
+          (DNA_Opt2, DNA_Opt4, DNA_Opt4a, DNA_Opt6, DNA_Opt6a, DNA_Opt7).
+        - Optimisation in initialisation of G4EmDNAChemistry_option3.
+        - Use C++11 features in several constructors.
+      o gamma_lepto_nuclear:
+        - G4EmExtraPhysics, G4EmMessenger: added low-energy limit, set method,
+          and UI command defining low-energy gamma-nuclear model, which is
+          using de-excitation module and providing isomer production and
+          gamma transitions.
+        - G4EmExtraPhysics: extension to anti_nu_mu, nu_e and anti_nu_e
+          processes-models.
+      o hadron_inelastic:
+        - Use the new builder class G4QGSPAntiBarionBuilder to handle
+          anti_proton and anti_neutron at high energies with QGSP.
+          For the light anti-ions - anti_deuteron, anti_triton, anti_He3 and
+          anti_alpha - currently QGSP cannot handle them, therefore FTFP is used.
+        - In all the inelastic physics constructors which are using the builder
+          G4HyperonFTFPBuilder, introduced the new builder G4HyperonBuilder;
+          moreover, the new builder G4HyperonQGSPBuilder is used now in all
+          QGS-based inelastic physics constructor for hyperons (and
+          anti-hyperons) at high energies, while keeping using
+          G4HyperonFTFPBuilder at lower energies.
+        - G4HadronPhysicsFTFP_BERT, G4HadronPhysicsQGSP_BERT,
+          G4HadronInelasticQBBC: added b- and c- particles.
+        - G4HadronPhysicsQGSP_BIC_HP, G4HadronPhysicsQGSP_BIC_AllHP: refactoring
+          consistently with all others. For G4HadronPhysicsQGSP_BIC_HP, the
+          physics remains unchanged; for G4HadronPhysicsQGSP_BIC_AllHP, the
+          physics remains unchanged except for the transition region between
+          Binary and ProtonHP which is now 190-200 MeV (instead than 199-200),
+          as for light ions.
+      o ions:
+        - Cleanup of constructors: fixed names; made all constructor signatures
+          universal, removed thread local members, added c++11 keywords.
+      o stopping:
+        - Cleanup of constructors: fixed names; made all constructor signatures
+          universal, removed thread local members, added c++11 keywords.
+    + utils:
+      o G4HadParticles: new utility providing several lists of PDG codes for
+        kaons, hyperons, b- and c- particles in order to be used for
+        construction of hadronic physics. Updated list of heavy EM particles.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + DNA:
+      o Added classes for IRT; added features in management classes for IRT
+        (G4ITReaction, G4ITModelProcessor ...).
+      o Added features in G4DNAMolecularReactionTable for GFDE.
+      o Added molecules (Oxygen, O2, O3, HO2) from: Plante et al.(2017).
+      o G4MoleculeDefinition: copy constructor and assignment operator are not
+        allowed (as for G4ParticleDefinition). Now deleted.
+      o Revised displacement of OH radicals of B1A1 dissociation based on
+        momentum conservation in G4DNAWaterDissociationDisplacer.
+      o Fix to CMake script to support new CMake system.
+    + Low Energy:
+      o Added new model for polarized gamma elastic scattering, provided by
+        the JAEA group. Updated existing process (G4JAEAElasticScattering) and
+        model (G4JAEAElasticScatteringModel) in order to comply with the new
+        data format. Changed initialisation of JAEA models.
+      o G4LivermorePhotoElectricModel: allow "Water" as a name of water
+        material for low-energy photo-effect.
+      o Added G4LivermoreGammaConversion5DModel class. Reading EPICS2017 data.
+      o Change in G4LivermoreGammaConversion to now derive from
+        G4PairProductionRelModel. Added missing method InitialiseForElement().
+      o Fixed compilation warnings on clang-10.
+    + Standard:
+      o G4eplusAnnihilation: fixed problem seen in the rare case, when initial
+        energy is null; introducing thermal model of positronium decay to two gammas.
+        In this model, the positronium acquires a mean kinetic energy on
+        formation, which contributes to a small non-collinearity of the
+        gammas, detectable and significant in PET. To activate this model:
+          material->GetIonisation()->SetMeanEnergyPerIonPair(meanKE).
+        A mean kinetic energy of 5 eV produces a projected acollinearity
+        of about 0.5 degrees FWHM, as reported in:
+        K.Shibuya et al., IFMBE Proceedings Vol. 14/3 1667 (2007).
+      o G4UniversalFluctuation: changed 'nmaxCont' from 16 to 8 for speedup.
+        Set value for 'a0' to 42 after optimisations. Minor C++ improvements.
+      o G4UrbanMscModel: tuned 'tlimitmin' computation for e- (for e+ kept
+        unchanged) and changed parameterisation of 'stepmin'; added two private
+        inline methods to reduce code duplication.
+        Removed cache and introduced data struct precomputed at initialisation,
+        added e- range cut to the data structure.
+      o G4BetheHeitler5DModel: change "final" keyword by "override" for virtual
+        methods.
+      o G4LindhardSorensenData: fixed few numbers in the data table.
+      o G4eeToTwoGammaModel: code cleanup; added static flag, which identifies
+        if electron motion is taken into account for sampling of acollinearity, 
+        when annihilation happens at rest; ensuring that by default no extra
+        computation is performed; also removed extra printout at initialisation
+        and extra data structure.
+      o Fixed compilation warnings on clang-10.
+   + Utils:
+      o G4EmParameters, G4EmLowEParameters, G4EmLowEParametersMessenger: added
+        a new parameter - name of the sub-directory with data for Livermore
+        models with variants: "livermore" (default), "epics_2017".
+        Comes with G4EMLOW-7.10 data set and higher.
+      o G4EmParameters, G4EmParametersMessenger, G4VMultipleScattering:
+        removed displacement-beyond-safety option, as may lead to crashes in
+        some circomstances, and wrong results in others.
+      o G4EmParameters, G4EmParametersMessenger, G4EmExtraParametersMessenger,
+        G4VEnergyLossProcess: added two extra sets of StepFunction parameters
+        for light ions and generic ions. Added extra UI commands. Modified
+        interfaces accordingly. Removed old comments.
+      o G4EmLowEParametersMessenger: extended number of DNA PhysicsList options.
+      o G4VEmProcess: removed old unused methods; DefinedMaterial() method is
+        now protected (needed for AtRest processes).
+      o G4LossTableManager: made ResetParameters() method public.
+      o G4VAtomicDeexcitation: optimized arrays initialisation.
+      o G4EmCalculator: fixed printout.
+    + Xrays:
+      o Implemented three time constants for G4Scintillation, and allow
+        multiple time constants to work with scintillation by particle type.
+        The existing material property names have FAST and SLOW in them, like
+        FASTTIMECONSTANT. This doesn't generalize well. Also YIELDRATIO as a
+        single value doesn't generalize to three time constants. Proposal is
+        to create new names SCINTILLATIONTIMECONSTANT1/2/3 and the same for
+        other parameters. The existing names are kept for backwards
+        compatibility, with the idea to remove them in the next major release.
+        There is a flag in G4Scintillation, with messenger command in the
+        OpticalPhysics list, to use the new method:
+          /process/optical/scintillation/setEnhancedTimeConstants true.
+        Results are unchanged if using same values.
+        Set verbosity levels correctly.
+      o G4VXTRenergyLoss: fixed destructor.
+      o Code formatting.
+
+  o Generic Processes:
+    -----------------
+    + Biasing:
+      o G4ImportanceProcess: added process type as fParallel.
+    + Cuts:
+      o Revision for use of c++11 constructs. Code cleanup and formatting.
+    + Management:
+      o G4ProcessManagerMessenger: use cache pointer of selected particle
+        in the G4ParticleTable class.
+      o G4ProcessTable: enabled deletion of all processes except
+        G4Transportation at the end of run.
+      o Fixed Coverity warning for uninitialised data in G4VProcess.
+      o C++11 revision and code cleanup/formatting.
+    + Optical:
+      o Added second wavelength shifting process, G4OpWLS2, within the same
+        material.
+      o Use new ConstPropertyExists(int) method rather than passing strings.
+      o G4OpRayleigh: avoid double deletion of property vectors.
+      o Code cleanup and improved readability.
+    + Parameterisation:
+      o G4FastSimulationHelper: merged ActivateFastSimulation() calls for mass
+        and parallel geometry cases.
+      o G4FastSimulationManager, G4VFastSimulationModel: removed redefinition
+        of G4Envelope type.
+      o Added sanity check for root logical volumes in regions for
+        G4GlobalFastSimulationManager. UI command /param/showSetup works also
+        if no parallel world is present.
+    + Scoring:
+      o G4ParallelWorldProcess, G4ParallelWorldScoringProcess: use new PDG
+        code for optical photon, "-22".
+      o G4ParallelWorldProcess: make some private methods and data members
+        protected so that this class can be extendable.
+
+  o Hadronic Processes:
+    ------------------
+    + Fixes to CMake scripts to support new CMake system.
+    + cross_sections
+      o G4ElNeutrinoNucleusTotXsc: new class for (nu_e,anti_nu_e)-nucleus
+        cross-sections.
+      o G4PhotoNuclearCrossSection: corrected threshold for
+        gamma + p -> pi0 + p, extended for use on 3H and 3He targets.
+      o G4HadronNucleonXsc: general clean-up of the code; use PDG number
+        instead of particle pointer; removed instantiation of most of hadrons,
+        optimisation in selection of parameterisation parameters.
+      o G4CrossSectionElastic, G4CrossSectionInelastic: fix for ions and
+        anti-ions, where the max energy of applicability of the (elastic and
+        inelastic) cross-sections must scale with the absolute baryonic number;
+        however, the cross-sections objects are often shared between the
+        different types of ions (d, t, He3, alpha, and genericIon), therefore
+        we scale by a large value (256, safely larger than the number of
+        nucleons of the heaviest nuclides).
+      o Fixed compilation warnings on clang-10.
+    + management
+      o G4HadronicProcess: fixed Coverity defect warning to EP check method for
+        the case when primary particle remains in the interaction.
+      o G4HadronicProcessStore: in the method Dump(), check the internal
+        verbosity level as well as the newly introduced global hadronic
+        verbosity level, returning immediately (without printing anything) if
+        one of these is 0. Extended default initialisation printout to sigma-,
+        D-, B-. Removed check for G4HadronicException, where it cannot be;
+        limit printout on kaon0 in final state.
+      o Removed use of deprecated G4USE_STD11 flag.
+      o G4HadLeadBias: replaced 'G4int' with 'size_t' to fix warnings
+        on Windows.
+    + models/binary_cascade
+      o G4BinaryCascade: fixed memory leak at exit.
+    + models/cascade
+      o Fixed non-conservation warnings coming from G4HadronicProcess due to
+        sub-threshold reactions in Bertini. Sub-threshold reactions are now
+        treated as having a "non-interaction" final state, that is, the initial
+        particles are simply copied to the final state.
+      o Fixed compilation warnings on clang-10.
+    + models/de_excitation
+      o G4PhotonEvaporation, G4DeexPrecoParameters, G4DeexParametersMessenger:
+        added extra flag 'IsomerProduction'; if enabled. photon evaporation
+        samples the time of gamma transition; added C++ interface and UI command
+        allowing to set this flag; radioactive decay constructor should enable
+        this parameter. Addressing problem report #2226.
+      o G4DeexPrecoParameters: in method Dump(), check the global verbosity
+        level of hadronics (if zero, do not print anything).
+      o Fixed compilation warnings on clang-10.
+    + models/inclxx
+      o G4INCLXXInterfaceStore: in method EmitBigWarning(), check the global
+        verbosity level of hadronics (if zero, do not print anything).
+      o Fixed compilation warnings on clang-10.
+    + models/lepto_nuclear
+      o G4NuMuNucleusCcModel, G4NeutrinoNucleusModel, new access methods
+        and minor fixes in in nu-mu nucleus model.
+      o Added classes G4ANuElNucleusCcModel and G4ANuElNucleusNcModel, 
+        for anti_nu_e. Initialization from G4PARTICLEXS (neutrino/anti_nu_e).
+      o Added classes G4NuElNucleusCcModel and G4NuElNucleusNcModel,
+        for nu_e. Initialization from G4PARTICLEXS (neutrino/nu_e).
+      o Added classes G4ANuMuNucleusCcModel and G4ANuMuNucleusNcModel,
+        for anti_mu_nu. Initialization from G4PARTICLEXS (neutrino/anti_nu_mu).
+      o G4NuMuNucleusCcModel, G4NuMuNucleusNcModel, G4NeutrinoNucleusModel:
+        rearrangement of initialisation methods and arrays.
+        Fixes in CoherentPion() method, cleanup of Cc and Nc.
+      o G4NeutrinoNucleusModel: added K+, K- in final state.
+      o Fixed Coverity warnings for defects.
+    + models/management
+      o G4HadronicInteractionRegistry: delete HP and PHP at the end of run.
+      o G4HadronicInteraction: provide default implementation for all virtual
+        methods.
+      o G4VHighEnergyGenerator, G4VIntraNuclearTransportModel,
+        G4VPreCompoundModel: cleaned up: removed old commented lines,
+        code format, C++11 keywords.
+    + models/particle_hp
+      o Allow printout only if the global hadronic verbosity level is not zero.
+      o G4ParticleHPHash, G4ParticleHPCaptureFS: fixes for implicit conversion
+        between 'size_t' and 'G4int', to avoid warnings on Windows.
+    + models/parton_string
+      o Improved treatment of antibaryon interactions in QGS.
+        In G4QGSMFragmentation, corrected the treatment of low-mass diquark-
+        antidiquark strings. In addition to this, introduced the Mt
+        distribution of produced hadrons.
+        In G4VLongitudinalStringDecay, introduced in SetMinimalStringMass()
+        a check that the strings are of allowed type: quark-antiquark, diquark-
+        antidiquark, quark-diquark and antiquark-antidiquark. Introduced also
+        for diquark-antidiquark strings a special algorithm (already present
+        for the other types of allowed strings) for treating low-mass strings
+        with masses below known hadrons.
+      o In G4QGSParticipants, the average transverse momentum of partons in a
+        hadron is set to zero (according to the study of transverse momentum
+        distributions of hadrons produced in hadronic interactions, in
+        particular the study of Xf - Pt correlations presented by the NA49
+        Collaboration). In G4QuarkExchange, the reggeon exchanges are now
+        treated as annihilation and creation of quark-antiquark pairs (to
+        reflect in inelastic processes the non-vacuum reggeon exchanges present
+        in antiparticle-particle elastic scattering amplitudes).
+      o G4VLongitudinalStringDecay, G4LundStringFragmentation,
+        G4ExcitedStringDecay: inherit from G4HadronicInteraction; destruction
+        of these models at the end of run is now done by the hadron model
+        store; removed implementations of private operators.
+      o G4VStringFragmentation: use inheritance from G4HadronicInteraction;
+        removed implementations of private operators.
+      o G4SPBaryonTable: changed return type of the method 'length()' from
+        'double' to 'size_t', to fix warnings on Windows.
+      o G4FTFModel, G4FTFParticipants: clean-up: removed unused methods,
+        delete operators, use of C++11 keywords.
+      o G4VParticipants, G4VPartonStringModel, G4VStringFragmentation,
+        G4StringModel: clean-up; removed unused methods, delete operators,
+        use of C++11 keywords.
+      o G4QGSModel: clean-up; removed unused methods, delete operators, use of
+        C++11 keywords, moved inline implementation to source.
+    + models/qmd
+      o G4QMDReaction: added code in ApplyYourself() to get cross-section when
+        projectile is pion. Replaced data member G4PiNuclearCrossSection with
+        G4BGGPionElasticXS and G4BGGPionInelasticXS.
+        In G4QMDGroundStateNucleus constructor, move check for p or n
+        projectile earlier in code so baryon number can be conserved.
+        Addressing problem report #2236.
+    + models/quasi_elastic
+      o G4QuasiElRatios: fixed memory leak at exit.
+    + models/radioactive_decay
+      o G4RadioactiveDecayBase, G4RadioactiveDecay: in BuildPhysicsTable(),
+        check the global hadronic verbosity level before printing out
+        information.
+    + models/rpg
+      o Fixed Coverity warnings for unused variables.
+    + models/theo_high_energy
+      o G4QuasiElasticChannel: use inheritance from G4HadronicInteraction.
+        In G4TheoFSGenerator do not destruct G4QuasiElasticChannel.
+      o G4QuasiElasticChannel, G4TheoFSGenerator: clean-up; use of C++11
+        keywords and loops, removed unused methods, formatting. 
+    + models/util
+      o Fixed compilation warnings on clang-10.
+    + processes
+      o G4MuNeutrinoNucleusProcess, G4ElNeutrinoNucleusProcess: extended to
+        anti_nu_mu, nu_e and anti_nu_e.
+    + stopping
+      o G4HadronicAbsorptionFritiof,
+        G4HadronicAbsorptionFritiofWithWithBinaryCascade: simplified
+	instantiation of the FTF model, do not destruct its components.
+      o G4MuonicAtomDecay: fixed Coverity defect warning.
+    + util
+      o G4HadronicParameters: added modifiers for Cascade-FTF transition.
+        Creates the new messenger.
+      o G4HadronicParametersMessenger: created new messenger class for
+        G4HadronicParameters. For the time being it has only the global
+        verbosity level for hadronics.
+      o G4HadFinalState: fixed warning on Windows for implicit conversions
+        from 'size_t' to 'G4int'.
+
+  o Readout
+    -------
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Run
+    ---
+    + G4RunManager, G4WorkerRunManager: added layered mass geometry option
+      for the new "probe" scoring mesh.
+    + G4RunManager: do not call G4ParticleTable for Messenger deletion.
+    + Modified G4MTRunManager to enable inheritance for new G4TaskRunManager.
+    + G4MTRunManager, G4RunManager: fixes for windows, to avoid inline static
+      methods and use export flag G4RUN_DLL for static data.
+    + Added second wavelength shifter process to G4PhysicsListHelper.
+    + G4VPhysicsConstructor: added harmless call to G4HadronicParameters in
+      constructors, setting a default parameter; needed to create the instance
+      of the G4HadronicParameters singleton before run initialization.
+    + General code formatting.
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Tasking
+    -------
+    + New module implementing a new Geant4 run manager, G4TaskRunManager,
+      enabling use of the PTL tasking system for the event loop. The tasking
+      system is fully compatible with Intel TBB, which can be selected if
+      GEANT4_USE_TBB=ON is specified when configuring CMake. The default
+      behavior, however, is to submit the tasks to an internal thread-pool
+      and task-queue.
+      A comprehensive description of the system and options provided can be
+      found in the README document located within this module.
+
+  o Track & Tracking
+    ----------------
+    + G4Track: use new G4OpticalPhoton PDG code; removed static thread local 
+      variables; slightly simplified velocity computation; fixed Coverity
+      warnings connected with unnecessary checks for valid pointers to G4Step
+      and G4DynamicParticle; removed commented code.
+      Avoid using velocity table, use GetBeta() method from G4DynamicParticle
+      instead; expected minor speedup.
+    + Minor c++11 revision; code cleanup and formatting in tracking module.
+    + Fixed minor Coverity defect for uninitialised data in G4SteppingManager.
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories.
+
+  o Visualization:
+    -------------
+    + Cleanup CMake build, removing obsolete granular library options and
+      explicit include_directories. Fixed compilation warnings on clang-10.
+    + Use CMake AUTOMOC to automatically generate and compile Moc sources
+      and fixed CMake script to support new CMake system.
+    + management:
+      o Fixed case where models with no extent do not contribute to scene's
+        extent.
+      o Trap infinite loop when looking for a fallback graphics system when
+        issuing "/vis/sceneHandler/create".
+      o G4VisExecutive: added support for OIQT driver, via "OIQT" or "OI"
+        keywords, provided the G4OpenInventor library has been built with
+        the OIQT driver included.
+      o Added new command "/vis/geometry/set/forceCloud".
+      o G4VVisCommand: added CheckView for future utility.
+      o G4VisCommandsScene: improved output layout for "/vis/scene/showExtents".
+      o Bug fix: rebuild graphics databases after "/vis/filtering/*/mode".
+      o Improved printing of available systems and models.
+    + modeling:
+      o Suppress warnings while filter not fully established.
+      o Minor code tidy.
+    + OpenGL:
+      o Improved guidance and tidy "/vis/ogl/" commands.
+      o Removed no longer required dependence on GLU.
+      o Removed support for Qt4.
+      o Fixed bug in "/vis/ogl/export" when dot '.' is included in name.
+    + OpenInventor:
+      o Enable configuration for OIQT driver, as orthogonal to OIX and OIXE.
+      o Corrections to OIQT viewer and changes for use with Qt UI.
+
+  o Data Sets:
+    ---------
+    + G4EMLOW-7.12:
+      o Added new cross-section files for protons (HT).
+      o Added EPICS2017 data for gamma conversion (ZL).
+      o Added new JAEA elastic polarized gamma scattering data files
+        in compressed format.
+      o Added a new numerical DCS set for e-/e+ elastic scattering
+        obtained by numerical Dirac Partial Wave Analysis (DPWA).
+        More information can be found in the 'dpwa/Readme.txt' file.
+
+  o Examples:
+    --------
+    + Updated reference outputs, macros, READMEs and scripts.
+    + advanced/air_shower
+      o Added missing include statement in UltraDetectorConstruction.
+    + advanced/fastAerosol
+      o New example showing use of FastAerosol geometry classes, allowing to
+        efficiently and accurately simulate particle transport through aerosols
+        containing billions of randomly-positioned droplets, using an ordinary
+        workstation. See: MacFadden, N., Knaian, A., "Efficient Modeling of
+        Particle Transport through Aerosols in Geant4", manuscript in
+        preparation, 2020.
+    + advanced/gammaray_telescope
+      o GammaRayTelHadronPhysics, GammaRayTelIonPhysics: fixed
+        compilation problems due to incorrect FTFP instantiation.
+    + advanced/hadrontherapy
+      o Deleted many obsolete macro files.
+      o Code cleaup; removed Root script folder and other cosmetics.
+    + basic/B5
+      o Migrated main() to use new G4RunManagerFactory.
+        The new G4TaskRunManager is exercised by default in MT builds.
+    + extended/electromagnetic/TestEm1
+      o PhysicsList: use G4RadioactiveDecayBase instead of deprecated
+        G4RadioactiveDecay. Minor code cleanup.
+    + extended/electromagnetic/TestEm4
+    + extended/electromagnetic/TestEm7
+      o Do not call vis.mac automatically in interactive mode.
+    + extended/electromagnetic/TestEm11
+      o PhysicsList: use G4RadioactiveDecayBase instead of deprecated
+        G4RadioactiveDecay. Minor code cleanup.
+    + extended/hadronic/Hadr00
+      o HistoManagerMessenger: fixed destructor.
+    + extended/hadronic/Hadr02
+      o HadronPhysicsCRMC_FTFP_BERT , HadronPhysicsHIJING , HadronPhysicsUrQMD:
+        introduced the new class G4HyperonBuilder which is now needed when
+        using G4HyperonFTFPBuilder.
+    + extended/hadronic/Hadr03
+      o PhysicsList: added G4HadronPhysicsQGSP_BIC, Shielding, RadioactiveDecay.
+      o GammaNuclearPhysics: added G4LowEGammaNuclearModel.
+      o Added GammaNuclearPhysicsLEND.
+      o HistoManager, SteppingAction: added plot of e-.
+      o Modified gamma.mac script; added Au196.mac.
+    + extended/hadronic/Hadr06
+      o HistoManager, TrackingAction: plot particle energy at creation.
+      o GammaNuclearPhysics: added G4LowEGammaNuclearModel.
+    + extended/hadronic/Hadr07
+    + extended/hadronic/NeutronSource
+      o GammaNuclearPhysics: added G4LowEGammaNuclearModel.
+    + extended/medical/dna/chem6
+      o New example providing scoring of the radiochemical yield G defined as
+        (Number of species X) / (100 eV of deposited energy), as a function of
+        time and LET. The details are described in the following paper:
+        J. Appl. Phys. 125 (2019) 104301.
+    + extended/optical/OpNovice2
+      o Use new scintillation time constant parameter.
+      o Added code to generate statistics for wavelength shifting.
+      o Added wls.mac to test WLS and new process WLS2.
+      o Removed string comparisons and redundant calls in SteppingAction.
+      o Removed redundant G4AnalysisManager::Instance() calls.
+    + extended/parallel/TBB
+      o Updated to use new tasking system which is fully compatible with TBB.
+    + extended/parallel/ThreadsafeScorers
+      o Updated to use new tasking system; forcing use of G4TaskRunManager.
+      o Added example of user code leveraging tasking in TSRunAction; it
+        leverages tasks on the master thread at the end of the run to generate
+        some strings of output via a nested hierarchy of tasks and uses the
+        features of the G4TaskGroup to combine the strings in the order that
+        they were submitted to the task-group (thus producing the same output
+        result as the serial version).
+    + extended/persistency/gdml/G01
+      o Use [] brackets in loop.gdml sample to show how to index names
+        and dimensions in loops.
+    + extended/persistency/P01
+      o Fixed CMake script for search or Root macros.
+    + extended/radioactivedecay/Activation
+      o GammaNuclearPhysics: added G4LowEGammaNuclearModel.
+      o In Run, corrected a protection on maximum number of histograms.
+
+ ----------------------------------------------------------------------------
+ 

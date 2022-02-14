@@ -44,7 +44,7 @@
 #include "G4CrossSectionFactory.hh"
 #include "G4CrossSectionFactoryRegistry.hh"
 
-// Neeed for running with 'static' libraries to pull the references of the 
+// Needed for running with 'static' libraries to pull the references of the 
 // declared factories
 G4_REFERENCE_XS_FACTORY(G4ChipsKaonMinusInelasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsKaonMinusElasticXS);
@@ -64,19 +64,13 @@ G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusInelasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusElasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonInelasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonElasticXS);
-G4_REFERENCE_XS_FACTORY(G4NucleonNuclearCrossSection);
 G4_REFERENCE_XS_FACTORY(G4ElectroNuclearCrossSection);
-G4_REFERENCE_XS_FACTORY(G4PhotoNuclearCrossSection);
-G4_REFERENCE_XS_FACTORY(G4PiNuclearCrossSection);
-G4_REFERENCE_XS_FACTORY(G4NeutronInelasticXS);
-G4_REFERENCE_XS_FACTORY(G4NeutronElasticXS);
-G4_REFERENCE_XS_FACTORY(G4NeutronCaptureXS);
 
 G4ThreadLocal G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::instance = nullptr;
 
 G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::Instance()
 {
-  if(!instance) {
+  if(nullptr == instance) {
     static G4ThreadLocalSingleton<G4CrossSectionDataSetRegistry> inst;
     instance = inst.Instance();
   }
@@ -117,23 +111,23 @@ void G4CrossSectionDataSetRegistry::Clean()
 
 void G4CrossSectionDataSetRegistry::Register(G4VCrossSectionDataSet* p)
 {
-  if(!p) { return; }
+  if(nullptr == p) { return; }
   for (auto xsec : xSections) {
     if(xsec == p) { return; }
   }
   //G4cout << "Register x-section #" << xSections.size() 
-  //<< "  " << p->GetName() << G4endl;
+  //	 << "  " << p->GetName() << "  " << p << G4endl;
   xSections.push_back(p);
 }
 
 void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
 {
-  if(!p) { return; }
+  if(nullptr == p) { return; }
   size_t n = xSections.size(); 
   for (size_t i=0; i<n; ++i) {
     if(xSections[i] == p) {
-      //std::cout << "DeRegister x-section #" << i << std::endl;
-      //std:: cout << "        " << p->GetName() << std::endl;
+      //std::cout << "DeRegister x-section #" << i 
+      //        << "  " << p->GetName() << "  " << p << std::endl;
       xSections[i] = nullptr;
       return;
     }

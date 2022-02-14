@@ -32,8 +32,6 @@
 //                       elements of the control panel to
 //                       rotate the view.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewer.hh"
 
 #include "G4PhysicalConstants.hh"
@@ -322,4 +320,3 @@ void G4OpenGLXmViewer::reset_callback (Widget w,
   pView->zoom_high = 10.0;
   
 }
-#endif

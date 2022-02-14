@@ -16,6 +16,86 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 October, 2021  M. Asai (intercoms-V10-07-14)
+- G4UIcommandTree, G4UIdirectory, G4GenericMessenger
+ - Improve output HTML file layout (L.Garnier)
+ - Add option to sort command/directory names in alphabetic order (J.Allison)
+
+25 October, 2021 B.Morgan (intercoms-V10-07-13)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+18 October, 2021 B.Morgan (intercoms-V10-07-12)
+- Use std::string member functions from G4String in place of synonyms
+
+1 October, 2021  B. Morgan (intercoms-V10-07-11)
+- Use new std::string compliant G4String interfaces
+
+30 August, 2021  J. Allison (intercoms-V10-07-10)
+- G4UIparameter::CandidateCheck :
+   When candidate not found, print list of candidates.
+  
+11 July, 2021  M. Asai (intercoms-V10-07-08, -09)
+- G4GenericMessenger :
+   Adding G4ThreeVector type without unit to DeclareProperty().
+   Removing unnecessary duplications of G4UIdirectory objects.
+.
+06 July, 2021  M. Asai (intercoms-V10-07-07)
+- G4UImanager : adding access methods to individual UI command.
+  G4UIcommand : adding command-type identiifier.
+
+30 June, 2021  M. Asai (intercoms-V10-07-06)
+- G4UIcontrolMessenger : protect some control commands not to be
+  broadcasted to worker threads.
+
+06 May, 2021  G. Cosmo (intercoms-V10-07-05)
+- Fixed shadowing compilation warning in G4UImanager reported with gcc-11.
+
+12 April, 2021  G. Cosmo (intercoms-V10-07-04)
+- Fixed leak in G4ProfilerMessenger.
+
+12 March 2021 Ben Morgan (intercoms-V10-07-03)
+- Modernize CMake build
+
+10 February 2020  John Allison (intercoms-V10-07-02)
+- G4UImanager:
+  o Set LastCommandOutputTreated=false only for master thread.
+    Avoids inadvertent "highlighting" in G4UIQt on worker threads.
+
+16 January 2020  John Allison (intercoms-V10-07-01)
+- G4UImanager:
+  o Introduce flag and access functions for LastCommandOutputTreated.
+  o This flag is set to false at the point in ApplyCommand where, if
+    verbosity>0, the command is sent G4cout.
+  o The treating UI must reset to true when the line has been treated.
+  o Of course, the UI may simply ignore it.
+
+12 November, 2020  J. Madsen (intercoms-V10-06-06)
+- Added G4ProfilerMessenger.
+- See examples/extended/parallel/ThreadsafeScorers/run.mac for example usage
+
+30 September, 2020  M. Asai (intercoms-V10-06-05)
+- Adding a new parameter type 'L' for long int type.
+- Adding parameter range check for long int.
+- Introduing G4UIcmdWithALongInt command type.
+
+29 September, 2020  A. Zaborowska (intercoms-V10-06-04)
+- Add StoL method for parsing string to long int.
+
+25 August, 2020  G. Cosmo (intercoms-V10-06-03)
+- Revision for c++11 constructs, code cleanup and formatting.
+- Fixed Coverity defect for uninitialised data in G4UImanager.
+
+18 May, 2020  G. Cosmo (intercoms-V10-06-02)
+- Removed unnecessary use of deprecated G4USE_STD11 flag in G4AnyMethod.
+  Also indicated in GitHub PR#13.
+
+19 February, 2020  M. Asai (intercoms-V10-06-01)
+- Accept null string as an alias value. Addessing to bug report #2208.
+
+9 December, 2019  B. Morgan (intercoms-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 26 November, 2019  G. Cosmo (intercoms-V10-05-09)
 - Fixed more cases of implicit type conversions from size_t to G4int.
 
@@ -60,7 +140,7 @@ committal in the CVS repository !
   Bug report #2068.
 
 26 June, 2018 K. Murakami (intercoms-V10-04-03)
-- G4G4InteractorMessenger.cc ::fix compilation warning for -Wunused-result
+- G4InteractorMessenger.cc: fixed compilation warning for -Wunused-result
 
 17 May, 2018 J. Madsen (intercoms-V10-04-02)
 - updated "thread-local-static-var" model to
@@ -68,7 +148,7 @@ committal in the CVS repository !
   which fixes Windows DLL + MT
 
 20 December, 2017 Makoto Asai (intercoms-V10-04-01)
-- G4UIcommand, G4UImanager: additional implementation for adding 
+- G4UIcommand, G4UImanager: additional implementation for adding
   a mechanism of carrying back error message from the messenger
   if a command is rejected due to the target class or the messenger.
 
@@ -85,12 +165,12 @@ committal in the CVS repository !
 
 27 July, 2017 Ivana Hrivnacova (intercoms-V10-03-02)
 - Explicitly remove constness by means of remove_const.
-  Fixing problem report #1803 (with the patch provided here).  
+  Fixing problem report #1803 (with the patch provided here).
 
 30 May, 2017 Ivana Hrivnacova (intercoms-V10-03-01)
 - Fixed G4GenericMessenger::Command::SetUnit:
   Do not ignore setting and issue a warning when running sequantial application
-  built against Geant4 libraries compiled with MT enabled 
+  built against Geant4 libraries compiled with MT enabled
 
 8 February, 2017 Makoto Asai (intercoms-V10-03-00)
 - Introducing /control/useDoublePrecision command to use 17 digits
@@ -104,7 +184,7 @@ committal in the CVS repository !
 - G4UIcontrolMessenger : improve /control/getVal command.
 
 5 August, 2016 Makoto Asai (intercoms-V10-02-01, -02 and -03)
-- G4UIcontrolMessenger : added new commands ifBatch, 
+- G4UIcontrolMessenger : added new commands ifBatch,
   ifInteractive, doifBatch and doifInteractive.
 
 25 July, 2016 Makoto Asai (intercoms-V10-02-00)
@@ -119,7 +199,7 @@ committal in the CVS repository !
   track down "using namespace std" issues in various processes packages
 
 22 May, 2015 Robert Hatcher (intercoms-V10-01-01)
-- Deal with implementation of remove_reference in G4AnyMethod for cases 
+- Deal with implementation of remove_reference in G4AnyMethod for cases
   where one is compiling with the C++11 standard or clang and a
   "using namespace std" causes a clash
 
@@ -127,7 +207,7 @@ committal in the CVS repository !
 - Using new IsMasterThread() function as suggested by J.Allison
 
 05 November, 2014  Robert Hatcher  (intercoms-V10-00-15)
-- Rename a few inline method parameter names from 's' to 's0' 
+- Rename a few inline method parameter names from 's' to 's0'
   to avoid a clash with CLHEP global 's'
 
 23 October, 2014 A. Dotti (intercoms-V10-00-14)
@@ -150,7 +230,7 @@ to be registered to the G4UImanager of the master thread.
 - G4UImanager.hh : Change threadId from private to public
 
 12 August, 2014 L. Garnier (intercoms-V10-00-08)
-- G4UImanager.hh : add "G4MTcoutDestination* GetThreadCout()" 
+- G4UImanager.hh : add "G4MTcoutDestination* GetThreadCout()"
   to get the cout destination of this thread
 
 4 May, 2014 M. Asai (intercoms-V10-00-07)
@@ -170,7 +250,7 @@ to be registered to the G4UImanager of the master thread.
   Addressing old problem report #1527.
 
 9 April, 2014 L. Garnier (intercoms-V10-00-03)
-- Fix DEV-140 : "/control/macroPath" now also apply to macros 
+- Fix DEV-140 : "/control/macroPath" now also apply to macros
   called inside a loop.
 
 16 March, 2014 M. Asai (intercoms-V10-00-02)
@@ -202,7 +282,7 @@ to be registered to the G4UImanager of the master thread.
 
 20 November, 2013 M. Asai (intercoms-V09-06-13)
 - Fix G4UIcmdWith3VectorAndUnit and G4UIcmdWithADoubleAndUnit.
-  Since version 9.3, they do not check and reject incorrect unit 
+  Since version 9.3, they do not check and reject incorrect unit
   but instead misinterpret and accept with wrong value.
 
 5 November, 2013 M. Asai (intercoms-V09-06-12)
@@ -213,8 +293,8 @@ to be registered to the G4UImanager of the master thread.
   avoid Windows linking problems.
 
 29 October, 2013 P. Mato (intercoms-V09-06-10)
-- Fixed problem with G4GenericMessenger reported by Ivana that SetUnit 
-  and SetRange were not working together. Fixed variable shadowing in 
+- Fixed problem with G4GenericMessenger reported by Ivana that SetUnit
+  and SetRange were not working together. Fixed variable shadowing in
   G4AnyType.hh.
 
 25 September, 2013 M. Asai (intercoms-V09-06-09)
@@ -241,7 +321,7 @@ to be registered to the G4UImanager of the master thread.
 - Introducing /control/cout/ command category for handling thread-local cout/cerr.
 
 14 March, 2013 A. Dotti (intercoms-V09-06-04)
-- Changing signature for GetCommandStack() 
+- Changing signature for GetCommandStack()
 
 12 March, 2013 M. Asai (intercoms-V09-06-03)
 - Adding flags for commands to be boradcasted to thread-local UI mamaners.
@@ -274,13 +354,14 @@ February 08, 2013 J.Jacquemier (intercoms-V09-06-00)
  - Fixed on executing a macro file containing Windows return codes.
 
 2 October, 2012 P. Mato (intercoms-V09-05-03)
- - Added some protection when getting the value of a command which is a method 
+ - Added some protection when getting the value of a command which is a method
 
 1 October, 2012 P. Mato (intercoms-V09-05-02)
  - Fixed windows warning
 
 27 September, 2012 P. Mato (intercoms-V09-05-01)
- - Added initial version of the G4GenericMessenger class. The use can be seen in the testGenericMessenger.cc unit test.
+ - Added initial version of the G4GenericMessenger class.
+   The use can be seen in the testGenericMessenger.cc unit test.
  - Added G4AnyType and G4AnyMethod class to support G4Generic Messenger.
 
 23 May, 2012 G.Cosmo (intercoms-V09-05-00)
@@ -308,7 +389,7 @@ February 08, 2013 J.Jacquemier (intercoms-V09-06-00)
  - Range check of UI commands care for units.
    * G4UIcommahd::DoIt() method is changed to virtual.
    * G4UIcmdWithADoubleAndUnit/G4UIcmdWith3VectorAndUnit: add DoIt() method.
- 
+
 19 May 2010 L. Garnier (intercoms-V09-03-01)
  - G4UIManager : Add field to get GUI Window session
 
@@ -328,7 +409,7 @@ February 08, 2013 J.Jacquemier (intercoms-V09-06-00)
 7th May 2009, Laurent Garnier
  - G4UIcommandTree : Add a new function to complete a command path with
    maximum characters guess.
- - G4UIcommandTree : FindCommandTree will now return current tree when 
+ - G4UIcommandTree : FindCommandTree will now return current tree when
    command path is "/"
 
 21 November, 2008 K.Murakami (intercoms-V09-01-01)
@@ -351,7 +432,7 @@ July 16, 2007 K.Murakami (intercoms-V09-00-00)
   * bug fixed for the treatment of the last line
   * add support for continued line by \, _
   * string after '#' is treated as comment
-  * white spaces at the head of a line are allowed. 
+  * white spaces at the head of a line are allowed.
 
 June 6, 2007, M.Asai
 - Introducing /control/getEnv and /control/echo commands.
@@ -405,7 +486,7 @@ May 16, 2004, M.Asai (intercoms-V06-01-01)
 May 16, 2004, M.Asai (intercoms-V06-01-00)
 - Introducing static methods in G4UIcommand class for conversion between
   a string and a value. Some implementation of derived classes are modified
-  accordingly. 
+  accordingly.
 
 Jun 07, 2003, G.Cosmo (intercoms-V05-01-02)
 - G4UItokenNum.hh: corrected implementation of operator=().
@@ -497,7 +578,7 @@ Oct 5, 2001, M.Asai (intercoms-V03-02-10)
 
 Oct 4, 2001, M.Asai (intercoms-V03-02-09)
 - Correction for string parameter starting with a space.
-- Recurrent variables 
+- Recurrent variables
 
 Oct 1, 2001, M.Asai (intercoms-V03-02-08)
 - Introducing a functionality of "shell variables".

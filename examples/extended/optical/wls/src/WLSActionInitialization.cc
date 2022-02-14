@@ -28,28 +28,25 @@
 /// \brief Implementation of the WLSActionInitialization class
 
 #include "WLSActionInitialization.hh"
+
 #include "WLSDetectorConstruction.hh"
-
-#include "WLSPrimaryGeneratorAction.hh"
-
-#include "WLSRunAction.hh"
 #include "WLSEventAction.hh"
-#include "WLSTrackingAction.hh"
-#include "WLSSteppingAction.hh"
+#include "WLSPrimaryGeneratorAction.hh"
+#include "WLSRunAction.hh"
 #include "WLSStackingAction.hh"
+#include "WLSSteppingAction.hh"
+#include "WLSTrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSActionInitialization::WLSActionInitialization(WLSDetectorConstruction* det)
- : G4VUserActionInitialization(), fDetector(det)
-{
-}
+  : G4VUserActionInitialization()
+  , fDetector(det)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSActionInitialization::~WLSActionInitialization()
-{
-}
+WLSActionInitialization::~WLSActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,16 +60,14 @@ void WLSActionInitialization::BuildForMaster() const
 void WLSActionInitialization::Build() const
 {
   SetUserAction(new WLSPrimaryGeneratorAction(fDetector));
+  SetUserAction(new WLSRunAction());
 
-  WLSRunAction* runAction = new WLSRunAction();
-  WLSEventAction* eventAction = new WLSEventAction(runAction);
-
-  SetUserAction(runAction);
+  WLSEventAction* eventAction = new WLSEventAction();
   SetUserAction(eventAction);
+  
   SetUserAction(new WLSTrackingAction());
-  SetUserAction(new WLSSteppingAction(fDetector));
+  SetUserAction(new WLSSteppingAction(fDetector, eventAction));
   SetUserAction(new WLSStackingAction());
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

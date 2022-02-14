@@ -52,15 +52,13 @@
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
 
+// -------------------------------------------------------------------
 
 G4PaulKxsModel::G4PaulKxsModel()
-{ 
-
-  
+{   
   interpolation = new G4LogLogInterpolation();
 
-
-    for (G4int i=4; i<93; i++) {
+  for (G4int i=4; i<93; i++) {
       protonDataSetMap[i] = new G4EMDataSet(i,interpolation);
       protonDataSetMap[i]->LoadData("pixe/kpcsPaul/kcs-");
     }
@@ -68,37 +66,28 @@ G4PaulKxsModel::G4PaulKxsModel()
       alphaDataSetMap[i] = new G4EMDataSet(i,interpolation);
       alphaDataSetMap[i]->LoadData("pixe/kacsPaul/kacs-");
     }
-
-
-
-
 }
 
 G4PaulKxsModel::~G4PaulKxsModel()
 { 
-
   protonDataSetMap.clear();
   alphaDataSetMap.clear();
   delete interpolation;
-
 }
 
-G4double G4PaulKxsModel::CalculateKCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
+// -------------------------------------------------------------------
+G4double G4PaulKxsModel::CalculateKCrossSection(G4int zTarget,
+						G4double massIncident, G4double energyIncident)
 {
   
   G4Proton* aProtone = G4Proton::Proton();
   G4Alpha* aAlpha = G4Alpha::Alpha();
-  
   G4double sigma = 0;
 
   if (massIncident == aProtone->GetPDGMass() && zTarget < 93 && zTarget > 3)
     {
-
-      //      G4EMDataSet* currentDataset =  protonDataSetMap[zTarget];
-      //      currentDataset->GetEnergies
-
-  if (energyIncident > protonDataSetMap[zTarget]->GetEnergies(0).back() ||
-      energyIncident < protonDataSetMap[zTarget]->GetEnergies(0).front() )
+      if (energyIncident > protonDataSetMap[zTarget]->GetEnergies(0).back() ||
+	  energyIncident < protonDataSetMap[zTarget]->GetEnergies(0).front() )
 	{sigma = 0;}
       else {     
 	sigma = protonDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
@@ -117,13 +106,9 @@ G4double G4PaulKxsModel::CalculateKCrossSection(G4int zTarget,G4double massIncid
 	}
       else
 	{ 
-	  
-// G4Exception("G4PaulKxsModel::CalculateKCrossSection()","de0004",JustWarning, "Energy deposited locally");
 	  sigma = 0.;
-
 	}
     }
-  
   
   // sigma is in internal units (mm^2)
   return sigma;

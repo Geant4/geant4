@@ -88,6 +88,7 @@ public:
     inline virtual void Prepare() ;
 
     virtual G4double CalculateStep(const G4Track&, const G4double&) = 0;
+    virtual G4double CalculateMinTimeStep(G4double, G4double) = 0;
 
     inline G4TrackVectorHandle GetReactants();
     inline virtual void ResetReactants()
@@ -99,6 +100,7 @@ public:
     
     inline void SetReactionTable(const G4ITReactionTable*);
     inline const G4ITReactionTable* GetReactionTable();
+
 
 protected :
     static G4ThreadLocal G4double fCurrentGlobalTime ;

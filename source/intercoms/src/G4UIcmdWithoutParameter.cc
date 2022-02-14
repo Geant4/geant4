@@ -23,14 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIcmdWithoutParameter
 //
-//
-//
+// Author: M.Asai, 1998
+// --------------------------------------------------------------------
 
 #include "G4UIcmdWithoutParameter.hh"
 
-G4UIcmdWithoutParameter::G4UIcmdWithoutParameter
-(const char * theCommandPath,G4UImessenger * theMessenger)
-:G4UIcommand(theCommandPath,theMessenger)
-{;}
-
+// --------------------------------------------------------------------
+G4UIcmdWithoutParameter::G4UIcmdWithoutParameter(const char* theCommandPath,
+                                                 G4UImessenger* theMessenger)
+  : G4UIcommand(theCommandPath, theMessenger)
+{
+  SetCommandType(WithoutParameterCmd);
+}

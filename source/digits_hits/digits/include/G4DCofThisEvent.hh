@@ -46,70 +46,68 @@
 // GetDC() and GetNumberOfCollections() for accessing to the stored digi
 // collection(s).
 
-class G4DCofThisEvent 
+class G4DCofThisEvent
 {
-  public:
-      G4DCofThisEvent();
-      G4DCofThisEvent(G4int cap);
-      ~G4DCofThisEvent();
-      inline void *operator new(size_t);
-      inline void operator delete(void* anDCoTE);
+ public:
+  G4DCofThisEvent();
+  G4DCofThisEvent(G4int cap);
+  ~G4DCofThisEvent();
+  inline void* operator new(size_t);
+  inline void operator delete(void* anDCoTE);
 
-      void AddDigiCollection(G4int DCID,G4VDigiCollection * aDC);
+  void AddDigiCollection(G4int DCID, G4VDigiCollection* aDC);
 
-      G4DCofThisEvent(const G4DCofThisEvent&);
-      G4DCofThisEvent& operator=(const G4DCofThisEvent&);
-  private:
-      std::vector<G4VDigiCollection*> * DC;
+  G4DCofThisEvent(const G4DCofThisEvent&);
+  G4DCofThisEvent& operator=(const G4DCofThisEvent&);
 
-  public: // with description
-      inline G4VDigiCollection* GetDC(G4int i) const
-      { return (*DC)[i]; }
-      //  Returns a pointer to a digi collection. Null will be returned
-      // if the particular collection is not stored at the current event.
-      // The integer argument is ID number which is assigned by G4DigiManager
-      // and the number can be obtained by G4DigiManager::GetDigiCollectionID()
-      // method.
-      inline G4int GetNumberOfCollections() const
-      {
-        G4int n = 0;
-        for(auto dc : *DC) if(dc) n++;
-        return n;
-      }
-      //  Returns the number of digi collections which are stored in this class
-      // object.
-  public:
-      inline size_t GetCapacity() const
-      {
-        return DC->size();
-      }
+ private:
+  std::vector<G4VDigiCollection*>* DC;
+
+ public:  // with description
+  inline G4VDigiCollection* GetDC(G4int i) const { return (*DC)[i]; }
+  //  Returns a pointer to a digi collection. Null will be returned
+  // if the particular collection is not stored at the current event.
+  // The integer argument is ID number which is assigned by G4DigiManager
+  // and the number can be obtained by G4DigiManager::GetDigiCollectionID()
+  // method.
+  inline G4int GetNumberOfCollections() const
+  {
+    G4int n = 0;
+    for(auto dc : *DC)
+      if(dc)
+        n++;
+    return n;
+  }
+  //  Returns the number of digi collections which are stored in this class
+  // object.
+ public:
+  inline size_t GetCapacity() const { return DC->size(); }
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4DCofThisEvent>*& anDCoTHAllocator_G4MT_TLS_();
+extern G4DLLEXPORT G4Allocator<G4DCofThisEvent>*& anDCoTHAllocator_G4MT_TLS_();
 #else
-  extern G4DLLIMPORT G4Allocator<G4DCofThisEvent>*& anDCoTHAllocator_G4MT_TLS_();
+extern G4DLLIMPORT G4Allocator<G4DCofThisEvent>*& anDCoTHAllocator_G4MT_TLS_();
 #endif
 
 inline void* G4DCofThisEvent::operator new(size_t)
 {
-    if (!anDCoTHAllocator_G4MT_TLS_())
-        anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
-    G4Allocator<G4DCofThisEvent>& anDCoTHAllocator =
-            *anDCoTHAllocator_G4MT_TLS_();
-    void* anDCoTH;
-    anDCoTH = (void*)anDCoTHAllocator.MallocSingle();
-    return anDCoTH;
+  if(!anDCoTHAllocator_G4MT_TLS_())
+    anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
+  G4Allocator<G4DCofThisEvent>& anDCoTHAllocator =
+    *anDCoTHAllocator_G4MT_TLS_();
+  void* anDCoTH;
+  anDCoTH = (void*) anDCoTHAllocator.MallocSingle();
+  return anDCoTH;
 }
 
 inline void G4DCofThisEvent::operator delete(void* anDCoTH)
 {
-    if (!anDCoTHAllocator_G4MT_TLS_())
-        anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
-    G4Allocator<G4DCofThisEvent>& anDCoTHAllocator =
-            *anDCoTHAllocator_G4MT_TLS_();
-    anDCoTHAllocator.FreeSingle((G4DCofThisEvent*)anDCoTH);
+  if(!anDCoTHAllocator_G4MT_TLS_())
+    anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
+  G4Allocator<G4DCofThisEvent>& anDCoTHAllocator =
+    *anDCoTHAllocator_G4MT_TLS_();
+  anDCoTHAllocator.FreeSingle((G4DCofThisEvent*) anDCoTH);
 }
 
 #endif
-

@@ -56,22 +56,15 @@
 
 class G4LowEWentzelVIModel : public G4WentzelVIModel
 {
-
 public:
-
-  G4LowEWentzelVIModel();
-
+  explicit G4LowEWentzelVIModel();
   virtual ~G4LowEWentzelVIModel();
 
-  virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
-					      G4double& currentMinimalStep);
+  G4double ComputeTruePathLengthLimit(const G4Track& track,
+				      G4double& currentMinimalStep) override;
 
-private:
-
-  //  hide assignment operator
-  G4LowEWentzelVIModel & operator=(const  G4LowEWentzelVIModel &right);
-  G4LowEWentzelVIModel(const  G4LowEWentzelVIModel&);
-
+  G4LowEWentzelVIModel & operator=(const  G4LowEWentzelVIModel &right) = delete;
+  G4LowEWentzelVIModel(const  G4LowEWentzelVIModel&) = delete;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

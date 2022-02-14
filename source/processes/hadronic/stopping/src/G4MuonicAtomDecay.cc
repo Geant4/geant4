@@ -84,7 +84,6 @@ G4MuonicAtomDecay::G4MuonicAtomDecay(G4HadronicInteraction* hiptr,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuonicAtomDecay::~G4MuonicAtomDecay()
-//{delete theTotalResult;}
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -176,7 +175,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
   G4ForceCondition* condition = nullptr; // it is unused in the following call anyway
   G4double meanlife = GetMeanLifeTime(aTrack, condition);
 
-  G4HadFinalState* result    = nullptr;  // result before converting to G4VParticleChange*
+  G4HadFinalState* result = nullptr;  // result before converting to G4VParticleChange*
   // G4int nSecondaries = 0;
   // save track time and start from zero time
   //  G4double time0 = aTrack.GetGlobalTime(); FillResult does it
@@ -220,7 +219,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
     G4VDecayChannel* decaychannel = nullptr;
     G4double massParent = aParticle->GetMass();
     decaychannel = decaytable->SelectADecayChannel(massParent);
-    if ( decaychannel ==0) {
+    if (decaychannel == nullptr) {
       // decay channel not found
       G4ExceptionDescription ed;
       ed << "Can not determine decay channel for "
@@ -245,6 +244,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
         ed << G4endl;
       }
       G4Exception("G4MuonicAtomDecay::DecayIt", "DECAY003", FatalException,ed);
+      return &theTotalResult;
     } else {
       // execute DecayIt()
 #ifdef G4VERBOSE
@@ -256,12 +256,17 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
       }
 #endif
       products = decaychannel->DecayIt(aParticle->GetMass());
+      if(products == nullptr) {
+	G4ExceptionDescription ed;
+	ed << "No products are generated for "
+           << aParticleDef->GetParticleName();
+	G4Exception("G4MuonicAtomDecay::DecayIt","DECAY003",FatalException,ed);
+        return &theTotalResult;
+      }
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>1) {
 	decaychannel->SetVerboseLevel(temp);
       }
-#endif
-#ifdef G4VERBOSE
       if (GetVerboseLevel()>2) {
 	if (! products->IsChecked() ) products->DumpInfo();
       }
@@ -300,11 +305,11 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
       // PostStep case
       products->Boost( ParentEnergy, ParentDirection);
     }
-    //  G4ParticleChangeForDecay fParticleChangeForDecay; // is it equivalent to G4ParticleChange* theTotalResult;
 
     //add products in theTotalResult
     G4int numberOfSecondaries = products->entries();
     theTotalResult.SetNumberOfSecondaries(numberOfSecondaries);
+   
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
       G4cout << "G4MuonicAtomDecay::DecayIt  : Decay vertex :";
@@ -410,7 +415,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
                     FatalException, ed);
       }
       // Loop checking, 06-Aug-2015, Vladimir Ivanchenko
-    } while(!result);
+    } while(result == nullptr);
 
     // add delay time of capture (inter + intra)
     G4int nsec = result->GetNumberOfSecondaries();
@@ -428,14 +433,9 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
 
     FillResult(result,aTrack);
 
-    // delete result;// causes bad free check fixme; move to the class members?
-
     ClearNumberOfInteractionLengthLeft();
     return &theTotalResult;
-
   }
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -520,7 +520,7 @@ void G4MuonicAtomDecay::FillResult(G4HadFinalState * aR, const G4Track & aT)
 
       G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
                                    time, aT.GetPosition());
-      track->SetCreatorModelIndex(aR->GetSecondary(i)->GetCreatorModelType());
+      track->SetCreatorModelID(aR->GetSecondary(i)->GetCreatorModelID());
       G4double newWeight = weight*aR->GetSecondary(i)->GetWeight();
 	// G4cout << "#### ParticleDebug "
 	// <<GetProcessName()<<" "

@@ -98,7 +98,6 @@ G4EmDNAPhysics_option7::G4EmDNAPhysics_option7(G4int ver, const G4String&) :
   param->SetDefaults();
   param->SetFluo(true);  
   param->SetAuger(true);  
-  param->SetAugerCascade(true);  
   param->SetDeexcitationIgnoreCut(true);
   param->ActivateDNA();
 

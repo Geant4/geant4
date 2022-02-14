@@ -1,0 +1,20 @@
+#
+# macro file for TestEm2.cc
+#
+/control/verbose 2
+/run/verbose 1
+#
+/process/em/verbose 0
+#    
+/run/initialize
+#l
+/gun/particle chargedgeantino 
+#
+/tracking/verbose 1
+#
+/testem/stepMax 1 cm
+/run/beamOn 1
+#
+/testem/stepMax 3 cm
+/run/beamOn 1
+

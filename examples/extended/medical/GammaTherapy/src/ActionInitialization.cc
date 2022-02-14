@@ -27,7 +27,7 @@
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
-//fanoCavity
+// fanoCavity
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -38,21 +38,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::ActionInitialization(DetectorConstruction* det)
-  : G4VUserActionInitialization(),fDetector(det)
-{ 
-}
+  : G4VUserActionInitialization()
+  , fDetector(det)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{ }
+ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
-  RunAction* runAct = new RunAction(fDetector, 
-                                     new PrimaryGeneratorAction(fDetector)); 
+  RunAction* runAct = new RunAction(fDetector);
   SetUserAction(runAct);
 }
 
@@ -63,12 +61,11 @@ void ActionInitialization::Build() const
   PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(fDetector);
   SetUserAction(prim);
 
-  RunAction* runAct = new RunAction(fDetector, prim);
+  RunAction* runAct = new RunAction(fDetector);
   SetUserAction(runAct);
 
-  TrackingAction *track = new TrackingAction();
+  TrackingAction* track = new TrackingAction();
   SetUserAction(track);
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

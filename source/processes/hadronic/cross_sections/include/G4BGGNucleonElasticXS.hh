@@ -60,7 +60,7 @@ class G4Material;
 class G4Element;
 class G4Isotope;
 
-class G4BGGNucleonElasticXS : public G4VCrossSectionDataSet
+class G4BGGNucleonElasticXS final : public G4VCrossSectionDataSet
 {
 public:
 

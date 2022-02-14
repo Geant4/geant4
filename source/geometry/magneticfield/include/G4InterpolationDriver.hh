@@ -51,7 +51,7 @@ class G4InterpolationDriver : public G4RKIntegrationDriver<T>
     G4InterpolationDriver(G4double hminimum,
                           T* stepper,
                           G4int numberOfComponents = 6,
-                          G4int statisticsVerbosity = 1);
+                          G4int statisticsVerbosity = 0);
 
     virtual ~G4InterpolationDriver() override;
 
@@ -65,7 +65,7 @@ class G4InterpolationDriver : public G4RKIntegrationDriver<T>
 
     virtual void OnStartTracking() override;
     virtual void OnComputeStep() override;
-    virtual G4bool DoesReIntegrate() override { return false; }
+    virtual G4bool DoesReIntegrate() const override { return false; }
      // Interpolation driver does not recalculate when AccurateAdvance is called
      //  -- reintegration would require other calls
    
@@ -80,6 +80,8 @@ class G4InterpolationDriver : public G4RKIntegrationDriver<T>
     virtual void SetVerboseLevel(G4int level) override;
     virtual G4int GetVerboseLevel() const override;
 
+    virtual void  StreamInfo( std::ostream& os ) const override;
+   
   private:
 
     struct InterpStepper

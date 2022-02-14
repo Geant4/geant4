@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-<<<<<<< HEAD
-/// \file electromagnetic/TestEm2/include/StepMax.hh
+/// \file electromagnetic/TestEm1/include/StepMax.hh
 /// \brief Definition of the StepMax class
 //
-// $Id: StepMax.hh 74994 2013-10-25 10:47:45Z gcosmo $
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,36 +44,30 @@ class StepMaxMessenger;
 
 class StepMax : public G4VDiscreteProcess
 {
-public:
+  public:
 
-  StepMax(const G4String& processName = "UserMaxStep");
-  virtual ~StepMax();
+    StepMax(const G4String& processName = "UserMaxStep");
+   ~StepMax();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+    G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-  void SetMaxStep(G4double);
+    void SetMaxStep(G4double);
 
-  G4double GetMaxStep() {return fMaxChargedStep;};
+    G4double GetMaxStep() {return fMaxChargedStep;};
 
-  virtual G4double 
-  PostStepGetPhysicalInteractionLength(const G4Track& track,
+    G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
                                        G4double previousStepSize,
-                                       G4ForceCondition* condition);
+                                       G4ForceCondition* condition) override;
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
-  virtual G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*)
-  {return DBL_MAX;};    
+   G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*) override;
 
-private:
+  private:
 
-  G4double fMaxChargedStep;
-<<<<<<< HEAD
+     G4double fMaxChargedStep;
      
-  StepMaxMessenger* fMess;
-=======
-  G4bool fInitialised;
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+     StepMaxMessenger* fMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

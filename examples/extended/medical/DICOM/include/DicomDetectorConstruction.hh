@@ -148,7 +148,7 @@ class DicomDetectorConstruction : public G4VUserDetectorConstruction
     DicomPhantomZSliceHeader* fZSliceHeaderMerged;
     // z slice header resulted from merging all z slice headers
 
-    G4int fNVoxelX, fNVoxelY, fNVoxelZ;
+    G4int fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ;
     G4double fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ;
 <<<<<<< HEAD
 =======
@@ -171,7 +171,7 @@ class DicomDetectorConstruction : public G4VUserDetectorConstruction
 
 inline G4int DicomDetectorConstruction::GetTotalVoxels() const
 {
-    return fNVoxelX * fNVoxelY * fNVoxelZ;
+    return fNoVoxelsX * fNoVoxelsY * fNoVoxelsZ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

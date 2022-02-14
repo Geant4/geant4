@@ -1,0 +1,20 @@
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - fastAerosol example
+     =========================================================
+
+                      Category History file
+                      ---------------------
+24.05.2021 - B. Morgan (fastAerosol-V10-07-00)
+             Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+14.11.2020 - S. Guatelli fastAerosol-V10-06-02
+             Migration to G4RunManagerFactory
+
+02.11.2020 - B.Morgan fastAerosol-V10-06-01
+             Support same CMake version range as core Geant4
+
+20.04.2020 - S. Guatelli; New Advanced Example: fastAerosol-V10-06-00.
+

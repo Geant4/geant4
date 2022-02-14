@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ----------------------------------------------------------------------
-// Class G4SliceTimer
+// G4SliceTimer
 //
 // Class description:
 //
@@ -37,99 +33,80 @@
 // Note: Uses <sys/times.h> & <unistd.h> - POSIX.1 defined
 //       If used, this header must be included in the source (.cc) file
 //       and it must be the first header file to be included!
-//
-// Member functions:
-//
-// G4SliceTimer()
-//   Construct a timer object
-// Start()
-//   Start timing
-// Stop()
-//   Stop timing
-// Clear()
-//   Clear accumulated times
-// G4bool IsValid()
-//   Return true if have a valid time (ie start() and stop() called)
-// G4double GetRealElapsed()
-//   Return the elapsed real time between last calling start() and stop()
-// G4double GetSystemElapsed()
-//   Return the elapsed system time between last calling start() and stop()
-// G4double GetUserElapsed()
-//   Return the elapsed user time between last calling start() and stop()
-//
-// Operators:
-//
-// std::ostream& operator << (std::ostream& os, const G4SliceTimer& t);
-//   Print the elapsed real,system and usertimes on os. Prints **s for times
-//   if !IsValid
-//
-// Member data:
-//
-// G4bool fValidTimes
-//   True after start and stop have both been called more than once and
-//   an equal number of times
-// clock_t fStartRealTime,fEndRealTime
-//   Real times (arbitrary time 0)
-// tms fStartTimes,fEndTimes
-//   Timing structures (see times(2)) for start and end times
 
-// History:
-// 23.10.06 - M.Asai - Derived from G4Timer implementation
-// ----------------------------------------------------------------------
+// Author: M.Asai, 23.10.06 - Derived from G4Timer implementation
+// --------------------------------------------------------------------
 #ifndef G4SLICE_TIMER_HH
-#define G4SLICE_TIMER_HH
+#define G4SLICE_TIMER_HH 1
 
 #ifndef WIN32
-#  include <unistd.h>
 #  include <sys/times.h>
+#  include <unistd.h>
 #else
 #  include <time.h>
-#  define _SC_CLK_TCK    1
+#  define _SC_CLK_TCK 1
 
-   extern "C" {
-          int sysconf(int);
-   };
+extern "C"
+{
+  int sysconf(int);
+};
 
-   // Structure returned by times()
-  
-   struct tms {
-      clock_t tms_utime;           /* user time */
-      clock_t tms_stime;           /* system time */
-      clock_t tms_cutime;          /* user time, children */
-      clock_t tms_cstime;          /* system time, children */
-   };
+// Structure returned by times()
+//
+struct tms
+{
+  clock_t tms_utime;  /* user time */
+  clock_t tms_stime;  /* system time */
+  clock_t tms_cutime; /* user time, children */
+  clock_t tms_cstime; /* system time, children */
+};
 
-   extern "C" {
-      extern clock_t times(struct tms *);
-   };
-#endif  /* WIN32 */
+extern "C"
+{
+  extern clock_t times(struct tms*);
+};
+#endif /* WIN32 */
 
 #include "G4Types.hh"
 #include "G4ios.hh"
 
 class G4SliceTimer
 {
-  public:
+ public:
+  G4SliceTimer();
+  // Construct a timer object
 
-    G4SliceTimer();
+  inline void Start();
+  // Start timing
+  inline void Stop();
+  // Stop timing
+  inline void Clear();
+  // Clear accumulated times
+  inline G4bool IsValid() const;
+  // Return true if have a valid time (ie start() and stop() called)
+  G4double GetRealElapsed() const;
+  // Return the elapsed real time between last calling start() and stop()
+  G4double GetSystemElapsed() const;
+  // Return the elapsed system time between last calling start() and stop()
+  G4double GetUserElapsed() const;
+  // Return the elapsed user time between last calling start() and stop()
 
-    inline void Start();
-    inline void Stop();
-    inline void Clear();
-    inline G4bool IsValid() const;
-    G4double GetRealElapsed() const;
-    G4double GetSystemElapsed() const;
-    G4double GetUserElapsed() const;
+ private:
+  clock_t fStartRealTime, fEndRealTime;
+  // Real times (arbitrary time 0)
+  tms fStartTimes, fEndTimes;
+  // Timing structures (see times(2)) for start and end times
 
-  private:
+  G4double fRealElapsed = 0.0, fSystemElapsed = 0.0, fUserElapsed = 0.0;
 
-    G4bool fValidTimes;
-    clock_t fStartRealTime,fEndRealTime;
-    tms fStartTimes,fEndTimes;
-    G4double fRealElapsed,fSystemElapsed,fUserElapsed;
+  G4bool fValidTimes = true;
+  // True after start and stop have both been called more than once and
+  // an equal number of times
 };
 
-std::ostream& operator << (std::ostream& os, const G4SliceTimer& t);
+std::ostream& operator<<(std::ostream& os, const G4SliceTimer& t);
+// Print the elapsed real,system and usertimes on os. Prints **s for times
+// if !IsValid
 
 #include "G4SliceTimer.icc"
 

@@ -26,9 +26,7 @@
 
 #include "ExExChTrackingAction.hh"
 
-#include "G4TrackingManager.hh"
-#include "G4Track.hh"
-#include "G4TrackVector.hh"
+#include "UserActionInitialization.hh"
 
 #include "ExExChParticleUserInfo.hh"
 

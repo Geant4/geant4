@@ -59,21 +59,17 @@
 class G4RayleighAngularGenerator : public G4VEmAngularDistribution
 {
 public:
-
-  G4RayleighAngularGenerator();
-
+  explicit G4RayleighAngularGenerator();
   virtual ~G4RayleighAngularGenerator();
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-					 G4double out_energy,
-					 G4int Z,
-					 const G4Material* mat = 0);
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double out_energy,
+				 G4int Z,
+				 const G4Material* mat = nullptr) override;
+  G4RayleighAngularGenerator & operator=(const  G4RayleighAngularGenerator &right) = delete;
+  G4RayleighAngularGenerator(const  G4RayleighAngularGenerator&) = delete;
+
 private:
-
-  // hide assignment operator 
-  G4RayleighAngularGenerator & operator=(const  G4RayleighAngularGenerator &right);
-  G4RayleighAngularGenerator(const  G4RayleighAngularGenerator&);
-
   // static data
   static const G4double PP0[101];
   static const G4double PP1[101];

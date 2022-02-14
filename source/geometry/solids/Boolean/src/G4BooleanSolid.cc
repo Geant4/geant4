@@ -42,7 +42,7 @@
 
 namespace
 {
-  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+  G4RecursiveMutex polyhedronMutex = G4MUTEX_INITIALIZER;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -114,8 +114,8 @@ G4BooleanSolid::~G4BooleanSolid()
 
 G4BooleanSolid::G4BooleanSolid(const G4BooleanSolid& rhs)
   : G4VSolid (rhs), fPtrSolidA(rhs.fPtrSolidA), fPtrSolidB(rhs.fPtrSolidB),
-    fStatistics(rhs.fStatistics), fCubVolEpsilon(rhs.fCubVolEpsilon),
-    fAreaAccuracy(rhs.fAreaAccuracy), fCubicVolume(rhs.fCubicVolume),
+    fCubicVolume(rhs.fCubicVolume), fStatistics(rhs.fStatistics),
+    fCubVolEpsilon(rhs.fCubVolEpsilon), fAreaAccuracy(rhs.fAreaAccuracy), 
     fSurfaceArea(rhs.fSurfaceArea), fRebuildPolyhedron(false),
     fpPolyhedron(nullptr), createdDisplacedSolid(rhs.createdDisplacedSolid)
 {
@@ -346,7 +346,7 @@ G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
-      G4AutoLock l(&polyhedronMutex);
+      G4RecursiveAutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
       fRebuildPolyhedron = false;
@@ -408,4 +408,18 @@ G4BooleanSolid::StackPolyhedron(HepPolyhedronProcessor& processor,
   }
 
   return top;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Estimate Cubic Volume (capacity) and store it for reuse.
+
+G4double G4BooleanSolid::GetCubicVolume()
+{
+  if(fCubicVolume < 0.)
+  {
+    fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon);
+  }
+  return fCubicVolume;
 }

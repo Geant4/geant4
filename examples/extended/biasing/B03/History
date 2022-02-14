@@ -16,9 +16,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-October 14th, 2016 G.Folger
-=======
+March 18th, 2021 Alberto Ribon - B03-V10-07-02
+- B03PhysicsList : replaced G4HadronCaptureProcess with
+  G4NeutronCaptureProcess, and G4HadronFissionProcess with
+  G4NeutronFissionProcess.
+
+March 8th, 2021 Alberto Ribon - B03-V10-07-01
+- B03PhysicsList : replaced old ion cross sections (that have been deleted)
+  with better ones.
+
+March 4th, 2021 Alberto Ribon - B03-V10-07-00
+- B03PhysicsList : use G4HadronInelasticProcess for inelastic processes
+  (the particle-specific inelastic processes have been deleted).
+
+November 10th, 2020 Ben Morgan - B03-V10-06-00
+- Migration to G4RunManagerFactory.
+
 May 29th, 2019 V. Ivanchenko  - B03-V10-05-01
 - B03PhysicsList : use G4NeutronInelasticXS cross section
 
@@ -39,7 +52,7 @@ Feb 15th, 2018 A. Howard - B03-V10-04-00
   in MT mode. Now everything is handled with B03PhysicsList.cc
 
 Mar 8th, 2017 A. Howard - B03-V10-03-01
-- B03PhysicsList - removed obsolete unnececssary instantiation of 
+- B03PhysicsList - removed obsolete unnececssary instantiation of
   de-excitation sub-models
 
 Mar 7th, 2017 A. Howard - B03-V10-03-00

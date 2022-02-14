@@ -45,7 +45,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
-#include "G4NistElementBuilder.hh"
 #include "G4PhysicsVector.hh"
 #include "G4Physics2DVector.hh"
 #include <vector>
@@ -75,6 +74,13 @@ public:
   // set name of the dataset
   void SetName(const G4String& nam);
 
+  //--------------------------------------------------------------
+  //
+  // run time methods - no check on validity of input index 
+  // it is a responsibility of the consume code to check the input
+  //
+  //--------------------------------------------------------------
+
   // get vector for the element 
   inline G4PhysicsVector* GetElementData(G4int Z);
 
@@ -86,10 +92,10 @@ public:
 
   // get component ID which may be number of nucleons, 
   // or shell number, or any other integer
-  inline G4int GetComponentID(G4int Z, size_t idx);
+  inline G4int GetComponentID(G4int Z, G4int idx);
 
   // get vector per shell or per isotope
-  inline G4PhysicsVector* GetComponentDataByIndex(G4int Z, size_t idx);
+  inline G4PhysicsVector* GetComponentDataByIndex(G4int Z, G4int idx);
 
   // get vector per shell or per isotope
   inline G4PhysicsVector* GetComponentDataByID(G4int Z, G4int id);
@@ -100,20 +106,23 @@ public:
 
   // return cross section per element 
   // if not available return zero
-  inline G4double GetValueForComponent(G4int Z, size_t idx, G4double kinEnergy);
-
-private:
+  inline G4double GetValueForComponent(G4int Z, G4int idx, 
+                                       G4double kinEnergy);
 
   // Assignment operator and copy constructor
   G4ElementData & operator=(const G4ElementData &right) = delete;
   G4ElementData(const G4ElementData&) = delete;
 
-  G4PhysicsVector* elmData[maxNumElements]; 
-  G4Physics2DVector* elm2Data[maxNumElements];
-  std::vector<G4PhysicsVector*> compData[maxNumElements];
-  std::vector<G4int> compID[maxNumElements];
-  size_t compLength[maxNumElements];
-  G4String name;
+private:
+
+  static const G4int maxNumElm = 99;
+  G4PhysicsVector* elmData[maxNumElm]; 
+  G4Physics2DVector* elm2Data[maxNumElm];
+  std::vector<G4PhysicsVector*>* compData[maxNumElm];
+  std::vector<G4int>* compID[maxNumElm];
+  G4int compLength[maxNumElm];
+  
+  G4String name = "";
 };
 
 inline void G4ElementData::SetName(const G4String& nam)
@@ -136,27 +145,27 @@ G4Physics2DVector* G4ElementData::GetElement2DData(G4int Z)
 inline 
 size_t G4ElementData::GetNumberOfComponents(G4int Z)
 {
-  return compLength[Z];
+  return compID[Z]->size();
 }
 
-inline G4int G4ElementData::GetComponentID(G4int Z, size_t idx)
+inline G4int G4ElementData::GetComponentID(G4int Z, G4int idx)
 {
-  return (compID[Z])[idx];
+  return (*(compID[Z]))[idx];
 }
 
-inline 
-G4PhysicsVector* G4ElementData::GetComponentDataByIndex(G4int Z, size_t idx)
+inline G4PhysicsVector* 
+G4ElementData::GetComponentDataByIndex(G4int Z, G4int idx)
 {
-  return (compData[Z])[idx];
+  return (*(compData[Z]))[idx];
 }
 
 inline 
 G4PhysicsVector* G4ElementData::GetComponentDataByID(G4int Z, G4int id)
 {
-  G4PhysicsVector* v = 0;
-  for(size_t i=0; i<compLength[Z]; ++i) {
-    if(id == (compID[Z])[i]) {
-      v = (compData[Z])[i];
+  G4PhysicsVector* v = nullptr;
+  for(G4int i=0; i<compLength[Z]; ++i) {
+    if(id == (*(compID[Z]))[i]) {
+      v = (*(compData[Z]))[i];
       break;
     }
   }
@@ -170,9 +179,9 @@ G4double G4ElementData::GetValueForElement(G4int Z, G4double kinEnergy)
 }
 
 inline G4double 
-G4ElementData::GetValueForComponent(G4int Z, size_t idx, G4double kinEnergy)
+G4ElementData::GetValueForComponent(G4int Z, G4int idx, G4double kinEnergy)
 {
-  return ((compData[Z])[idx])->Value(kinEnergy);
+  return (*(compData[Z]))[idx]->Value(kinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

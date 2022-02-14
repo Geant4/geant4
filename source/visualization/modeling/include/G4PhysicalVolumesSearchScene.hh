@@ -49,7 +49,9 @@ public:
   G4PhysicalVolumesSearchScene
   (G4PhysicalVolumeModel* pSearchVolumeModel,    // usually a world
    const G4String&        requiredPhysicalVolumeName,
-   G4int                  requiredCopyNo = -1);  // -1 means any copy no
+   G4int                  requiredCopyNo = -1, // -1 means any copy no
+   // Don't continue beyond requiredContinuation once found
+   G4int requiredContinuation = G4PhysicalVolumeModel::UNLIMITED);
 
   virtual ~G4PhysicalVolumesSearchScene () {}
 
@@ -108,6 +110,7 @@ private:
   const G4PhysicalVolumeModel* fpSearchVolumesModel;
   Matcher                      fMatcher;
   G4int                        fRequiredCopyNo;
+  G4int                        fRequiredContinuation;
   std::vector<Findings>        fFindings;
 };
 

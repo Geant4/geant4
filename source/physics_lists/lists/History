@@ -13,11 +13,61 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-October-2021 B.Morgan (phys-lists-V10-07-10)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+25-August-2021 Dennis Wright (phys-lists-V10-07-09)
+- LBE.cc: replace G4RadioactiveDecayBase with G4RadioactiveDecay
+  see top level History file
+ 
+28-April-2021 R. Hatcher (phys-lists-V10-07-08)
+- corresponding changes to G4PhysListFactoryAlt ctor to maintain drop-in
+  compatibility with older factory.
+
+24-April-2021 V.Ivanchenko  (phys-lists-V10-07-07)
+- in all Physics List protect banners by verbosity level
+- G4PhysListFactory add verbosity level to constructor and 
+  propagate to constructed Physics List
+
+16-April-2021 Ben Morgan (phys-lists-V10-07-06)
+- Migrate build to modular CMake API
+
+13-April-2021  Alberto Ribon (phys-lists-V10-07-05)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
+18-March-2021  Alberto Ribon (phys-lists-V10-07-04)
+ - LBE.cc : renamed G4HadronCaptureProcess as G4NeutronCaptureProcess.
+
+04-March-2021  Alberto Ribon (phys-lists-V10-07-03)
+ - LBE.cc : replaced particle-specific hadronic inelastic processes
+   (that have been deleted) with G4HadronInelasticProcess.
+
+24-February-2021 Daren Sawkey (phys-lists-V10-07-02)
+ - LBE.cc. Remove deprecated optical commands.
+
+17-February-2021  Robert Hatcher (phys-lists-V10-07-01)
+ - Update list of EM extension shorthands known to extensible factory to
+   match old factory
+
+24-November-2020  Alberto Ribon (phys-lists-V10-06-02)
+ - LBE : added G4ShortLivedConstructor (to avoid crashes, e.g. when rho0
+   is produced by the decay of eta_prime).
+
+30-April-2020 Ben Morgan       (phys-lists-V10-06-01)
+ - Remove obsolete GRANULAR_DEPENDENCIES entries
+
+15-January-2020  Alberto Ribon (phys-lists-V10-06-00)
+ - LBE : updated cross sections to avoid crashes caused by the removal of
+   default Gheisha cross sections, and to have consistency between elastic
+   and inelastic cross sections.
+
 22-October-2019  Alberto Ribon (phys-lists-V10-05-04)
  - FTFP_BERT_HP, QGSP_BERT_HP, INCLXXPhysicsListHelper : added (consistently)
    RadioactiveDecay to all physics lists which use NeutronHP (the rationale
    is that precision is more valuable than speed for these physics lists;
-   note that, among the reference physics lists with NeutronHP, only 
+   note that, among the reference physics lists with NeutronHP, only
    FTFP_BERT_HP, QGSP_BERT_HP, FTFP_INCLXX_HP and QGSP_INCLXX_HP did not have
    RadioactiveDecay activated by default).
 
@@ -31,21 +81,21 @@ introduced in the code and keeptrack of all tags.
 31-July-2019  Gunter Folger (phys-lists-V10-05-02)
  - Code clean-up
    - remove template mechanism
-      - except for G4GenericPhysicsList, G4PhysListStamper, 
+      - except for G4GenericPhysicsList, G4PhysListStamper,
         and INCLXXPhysicsListHelper
    - delete copy ctor and assigmnet operator
-   - for empty dtor, use =default	
+   - for empty dtor, use =default
    - move include/x.icc to src/x.cc for lists without template
    - remove SetCuts() implementation where not specialised
    - remove version number from lists
    - remove G4DataQuestionaire
-   
+
 
 25-June-2019  Dennis Wright (phys-lists-V10-05-01)
 - replace G4RadioactiveDecay with G4RadioactiveDecayBase in LBE.icc
 
 18-March-2019 V.Ivanchenko  (phys-lists-V10-05-00)
-- Shielding, QGSP_BIC_HP, QGSP_BIC_AllHP - cut for proton is set 
+- Shielding, QGSP_BIC_HP, QGSP_BIC_AllHP - cut for proton is set
     to zero (problem #2150) and code clean-up
 
 21-November-2018 A. Ribon  (phys-lists-V10-04-07)

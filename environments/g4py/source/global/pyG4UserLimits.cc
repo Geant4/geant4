@@ -30,6 +30,8 @@
 // ====================================================================
 #include <boost/python.hpp>
 #include "G4UserLimits.hh"
+
+// Needed to avoid "incomplete type" error on G4Track
 #include "G4Track.hh"
 
 using namespace boost::python;

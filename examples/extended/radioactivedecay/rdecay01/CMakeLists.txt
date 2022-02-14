@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(rdecay01)
 
 #----------------------------------------------------------------------------
@@ -45,8 +45,7 @@ set(rdecay01_SCRIPTS
 =======
     alpha.mac Cf238.mac Co60.mac debug.mac Gd158.mac electronicCapture.mac fullChain.mac neutron.mac
     proton.mac No252.mac Po212.mac Ra228.mac rdecay01.in singleDecay.mac timeWindow.mac
-    timeWindowBiased.mac timeWindowBiased.data vis.mac
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+    timeWindowBiased.mac timeWindowBiased.data atomicDeexcitation.mac vis.mac
   )
 
 foreach(_script ${rdecay01_SCRIPTS})

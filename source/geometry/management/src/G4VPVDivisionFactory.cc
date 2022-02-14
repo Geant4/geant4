@@ -40,19 +40,3 @@ G4VPVDivisionFactory* G4VPVDivisionFactory::Instance()
   // ---
   return fgInstance;
 }  
-
-
-//_____________________________________________________________________________
-
-G4VPVDivisionFactory::G4VPVDivisionFactory()
-{
-  // Protected singleton constructor.
-  // ---
-  // fgInstance = this;
-}
-
-//_____________________________________________________________________________
-
-G4VPVDivisionFactory::~G4VPVDivisionFactory()
-{
-}

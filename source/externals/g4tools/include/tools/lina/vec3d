@@ -1,0 +1,130 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vec3d
+#define tools_vec3d
+
+#include "vec3"
+#include "../S_STRING"
+#include <cmath>
+
+namespace tools {
+
+class vec3d : public vec3<double> {
+  typedef vec3<double> parent;
+public:
+  TOOLS_SCLASS(tools::vec3d) //for stype()
+public:
+  vec3d():parent(){}
+  vec3d(const double a_vec[3]):parent(a_vec){}
+  vec3d(double a0,double a1,double a2):parent(a0,a1,a2){}
+  virtual ~vec3d() {}
+public:
+  vec3d(const vec3d& a_from):parent(a_from){}
+  vec3d& operator=(const vec3d& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+
+  vec3d(const parent& a_from):parent(a_from){}
+
+public: //operators
+  vec3d operator*(double a_v) const {
+    return vec3d(m_data[0]*a_v,
+                 m_data[1]*a_v,
+                 m_data[2]*a_v);
+  }
+  vec3d operator+(const vec3d& a_v) const {
+    return vec3d(m_data[0]+a_v.m_data[0],
+                 m_data[1]+a_v.m_data[1],
+                 m_data[2]+a_v.m_data[2]);
+  }
+  vec3d operator-(const vec3d& a_v) const {
+    return vec3d(m_data[0]-a_v.m_data[0],
+                 m_data[1]-a_v.m_data[1],
+                 m_data[2]-a_v.m_data[2]);
+  }
+  vec3d& operator+=(const vec3d& a_v) {
+    m_data[0] += a_v.m_data[0];
+    m_data[1] += a_v.m_data[1];
+    m_data[2] += a_v.m_data[2];
+    return *this;
+  }
+  vec3d& operator-=(const vec3d& a_v) {
+    m_data[0] -= a_v.m_data[0];
+    m_data[1] -= a_v.m_data[1];
+    m_data[2] -= a_v.m_data[2];
+    return *this;
+  }
+  vec3d& operator*=(double a_v) {
+    m_data[0] *= a_v;
+    m_data[1] *= a_v;
+    m_data[2] *= a_v;
+    return *this;
+  }
+  vec3d operator-() const {
+    return vec3d(-m_data[0],-m_data[1],-m_data[2]);
+  }
+public:
+  double length() const {return parent::length(::sqrt);}
+  double normalize() {return parent::normalize(::sqrt);}
+public: //for g4dum/G4ThreeVector :
+  double mag2() const {return m_data[0]*m_data[0]+m_data[1]*m_data[1]+m_data[2]*m_data[2];}
+  void set(double a_0,double a_1,double a_2) {
+    m_data[0] = a_0;
+    m_data[1] = a_1;
+    m_data[2] = a_2;
+  }
+  void rotateUz(const vec3d& a_new_uz_vector) { //from CLHEP/ThreeVector.cc.
+    // a_new_uz_vector must be normalized !
+    double& dx = m_data[0];
+    double& dy = m_data[1];
+    double& dz = m_data[2];
+    double u1 = a_new_uz_vector.x();
+    double u2 = a_new_uz_vector.y();
+    double u3 = a_new_uz_vector.z();
+    double up = u1*u1 + u2*u2;
+    if (up>0) {
+      up = std::sqrt(up);
+      double px = dx,  py = dy,  pz = dz;
+      dx = (u1*u3*px - u2*py)/up + u1*pz;
+      dy = (u2*u3*px + u1*py)/up + u2*pz;
+      dz =    -up*px +             u3*pz;
+    } else if (u3 < 0.) { // phi=0  teta=pi
+      dx = -dx; dz = -dz;
+    } else {
+    }
+    //return *this;
+  }
+
+
+private:static void check_instantiation() {vec3d v(0,0,0);v.set_value(1,1,1);}
+};
+
+inline vec3d operator*(double a_f,const vec3d& a_v) {
+  vec3d res(a_v);
+  res *= a_f;
+  return res;
+}
+
+}
+
+
+#include <vector>
+
+namespace tools {
+
+#ifndef SWIG
+//for sf, mf :
+inline bool set_from_vec(vec3d& a_v,const std::vector<double>& a_sv) {
+  if(a_sv.size()!=3) return false;
+  a_v[0] = a_sv[0];
+  a_v[1] = a_sv[1];
+  a_v[2] = a_sv[2];
+  return true;
+}
+#endif
+
+}
+
+#endif

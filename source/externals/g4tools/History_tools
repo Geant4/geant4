@@ -1,0 +1,1183 @@
+5.6.0:
+- tools/tokenize: to help parsing some Geant4 commands "new value".
+- tools/sg/event_dispatcher,bcbk,ecbk,cbks: classes to have a mechanism in G4/G4ToolsSGSceneHandler
+  so that tools::sg::plots be properly resized when doing a mouse G4Viewer resize.
+- tools/sg/plotter_some_styles: have the plotting setup of ROOT_default, hippodraw, style done in C++
+  to avoid the usage of expat for these defaults styles.
+- tools/sg/light_off: a node to switch off light in a sub scene graph.
+- tools/Qt/sg_viewer: in dstor, reset the "interactor" to null in the glarea.
+- tools/waxml/ntuple: add code to write a column of vectors of strings.
+- tools/hdf5/ntuple: add code to write/read a column of vectors of strings.
+- add back: tools/rroot/rall, THistogram.
+- sg//base_freetype, text_freetype: modifs to be able to handle embedded fonts.
+- font/lato_regular_ttf: embedded lato_regular.ttf font.
+- font/roboto_bold_ttf: embedded roboto_bold.ttf font.
+- sg/text_hershey_marker, text_freetype_marker: modifs to avoid 'squashing' of text.
+- sg/render_action, GL_viewer, atb_vertices: handle transparency by using a two pass rendering method.
+- sg/gl2ps_actions/2format: avoid a warning if returning false.
+- have 5.6.0 in tools/version.
+
+5.5.0:
+ - in geant4 repository remove the files not used by other Geant4 categories.
+ - in geant4 repository remove the test directory.
+ - in geant4 repository remove the not used src/csz_inflate.cc file but have a dummy.cc for Geant4/cmake.
+ - tools/zb/polygon: in scan() : initialize ET,AET,SLLBlock, before calling
+   CreateETandAET, to quiet g++-11 -Wmaybe-uninitialized warnings.
+
+5.4.0 : more windowing material for the G4/vis/ToolsSG drivers.
+ - tools/[Qt,Xt,Windows] : interactor interface logic.
+ - tools/sg/device_interactor, keys : to handle key/mouse/wheel events.
+ - tools/sg/event : key_up_event, key_down_event, wheel_rotate_event.
+ - tools/lina/eqT : remove since duplicated with tools/eqT.
+ - tools/sg/text_freetype_marker : handle font_pixmap modeling.
+ - tools/OpenGL : BUSH_USE_AGL => TOOLS_USE_AGL. To be able to enforce the usage of Apple/OpenGL on macOS.
+ - tools/Cocoa/session.hm, sg_viewer.hm. For Geant4/G4ToolsSGCocoaGLES driver.
+ - tools/Qt/session, sg_viewer. For Geant4/G4ToolsSGQtGLES driver.
+ - tools/Xt/session, sg_viewer. For Geant4/G4ToolsSGXtGLES driver.
+ - tools/Xt/OpenGLArea : have a C++ version of the C OpenGLArea widget.
+ - tools/Xt/OpenGLArea.h, OpenGLAreaP.h, OpenGLArea.c : remove.
+ - tools/Windows/sg_viewer : have a win_render() method.
+ - tools/app, sys/dir : to be able to build macOS .app for examples doing UI and vis with Cocoa
+   and AGL or Metal.
+ - tools/get_env : have "get env" things in a dedicated file.
+ - tools/log_file, sys/process : to help debuggin macOS .app applications.
+ - test/build : have 'cppflags="${cppflags} -I../include"' for g4tools within G4 source/externals.
+ - test/cpp/rxrayfluo.cpp, build : rm this program (since it needs a xrayfluo.root file not delivered with g4tools).
+ - test/cpp/test/fonts_microsoft : rm directory.
+
+5.3.1 :
+ - tools/png : use png_get_image_[width,height] methods. Then it works with recent png libs.
+ - toos/sg/GL_plots_viewer : pass the ttf factory in constructor.
+
+5.3.0 : have test/cpp/polyhedron_X11.cpp, test/cpp/polyhedron_Windows.cpp, test/cpp/polyhedron_metal.mm.
+ - tools/sg : text_hershey_marker, text_freetype_marker : to handle G4/vis/tools_sg/G4Text.
+
+ - tools/sg/gl_manager => tools/sg/GL_manager in the github repository.
+ - tools/lina : mat3, mat3d, mat3f, mat4d, rotd, vec4d.
+ - tools/hep : pbp.icc, polyhedron, polyhedron.icc, sf_polyhedron.
+ - tools/sg : color, polyhedron, tessellate.
+ - tools/carray.
+
+ - tools/X11 : sg_viewer.
+ - test/cpp : build : modifs to build polyhedron_X11 program.
+ - test/cpp : use_X11, use_GLX, use_jpeg, use_png, find_inc, find_lib.
+ - test/cpp : polyhedron_X11.cpp, polyhedron_common.icc
+
+ - tools/Cocoa, tools/metal.
+ - test/cpp : build : modifs to build polyhedron_metal program.
+ - test/cpp : use_metal
+ - test/cpp : polyhedron_metal.mm
+
+ - tools/Windows : sg_viewer, session, window, glarea.
+ - test/cpp : build : modifs to build polyhedron_Windows program.
+ - test/cpp : use_WGL, use_Windows
+ - test/cpp : polyhedron_Windows.cpp
+
+5.2.3 :
+ - tools/wroot/infos, branch, rroot/branch : Lenght => Length in comments.
+ - tools/hatcher.icc : pow, sqrt, tan => std::pow, std::sqrt, std::tan.
+ - tools/wps : retreive => retrieve.
+ - tools/wcsv_ntuple, value.icc, test/cpp/wcsv_ntuple.cpp : unknow => unkown.
+
+5.2.2 :
+ - tools/histo/h2,h3 : get_bin_content : bugfix : have '&' in "get" arguments.
+   Thanks to Dmitri Konstantinov and Grigory Latyshev for the report.
+
+5.2.1 :
+ - fonts : have lato_regular.ttf file and license_font_lato.txt, readme_font_lato.txt texts taken from :
+     https://www.latofonts.com/lato-free-fonts
+
+
+5.2.0 :
+ //////////////////////////////////////////////////
+ /// use google fonts : ///////////////////////////
+ //////////////////////////////////////////////////
+ - tools/test/cpp : viewplot.cpp and test/virewplot_ttf.cpp : use wrap_viewplot_fonts_google_style.
+ - tools/xml : viewplot.style replaced with viewplot_fonts_google.style,
+   wrap_viewplot_style replaced by wrap_viewplot_fonts_google_style in order to use
+   roboto_bold.ttf instead of arialbd.ttf and lato_regular.ttf instead of helvetica.ttf.
+ - tools/sg/strings : font_roboto_bold() and lato_regular() functions.
+ - tools/test/cpp : add license_font_[roboto,lato].txt files.
+ - tools/test/cpp : add roboto_bold.ttf, lato_regular.ttf.
+ - tools/test/cpp : rm arialbd.ttf, helvetica.ttf.
+
+ //////////////////////////////////////////////////
+ /// hdf5 : ///////////////////////////////////////
+ //////////////////////////////////////////////////
+ - tools/hdf5/tools : replace the usage of free() by tools_H5free_memory(). (And then avoid a crash if using recent hdf5 lib).
+ - tools/hdf5/hdf5_h : #define tools_H5free_memory according hdf5 version.
+
+ //////////////////////////////////////////////////
+ /// ROOT file format : ///////////////////////////
+ //////////////////////////////////////////////////
+ - tools/rroot/iros, obj_list : inherit std::vector only protected to avoid using std::vector::clear()
+   (instead of [iros,obj_list].cleanup()).
+
+ //////////////////////////////////////////////////
+ /// around graphics : ////////////////////////////
+ //////////////////////////////////////////////////
+ - tools/sg/plotter : handle "min/max log logic" for the functions.
+ - tools/sg/text, infos_box : add font_lato_regular_ttf, font_roboto_bold_ttf in font fields options.
+ - tools/sg/state, GL_action, normal : handle m_normal field.
+ - tools/sg/head_light : in render(), mtx.mul_3f(dx,dy,dz) => mtx.mul_dir_3f(dx,dy,dz)
+ - tools/sg/holder : handle m_own.
+ - tools/sg/primitive_visitor, render_action, bbox_action, pick_action, gl2ps_action, zb_action, gstos_add, glprims :
+   handle normal for point, line, triangle.
+ - tools/sg/action, visible_action win_action write_action, read_action search_action, gl2ps_action,
+   matrix_action, render_action, get_matrix_action, event_action, bbox_action, pick_action : have a safe cast logic.
+
+ //////////////////////////////////////////////////
+ /// various : ////////////////////////////////////
+ //////////////////////////////////////////////////
+ - src/csz_inflate.cc : init some variable to quiet Coverity.
+ - * : cosmetic : rm trailing spaces.
+
+5.1.0:
+ - tools/sg/plotter, data_axis, plottables, h2plot : corrections to handle automatic min/max in case of log scale.
+ - tools/histo/base_histo : [min,max]_bin_height_with_entries(). Used by the plotter.
+ - tools/wcsv_histo : h_header(), p_header() functions.
+ - tools/gl2ps : cast ~1UL to double.
+ - tools/test/cpp/waxml.cpp, wcsv_histo.cpp,wcsv_ntuple.cpp,wcsv_ntuple_booking.cpp :
+   have output file name of the form : out_<app>_<etc>.[aida,csv]
+ - tools/test/*.ps : new version to take into account modifs done in the plotter.
+ - various modifications coming from other usage of inlib/exlib.
+
+5.0.5:
+ - tools/gl2ps : gl2psPDFgroupListWriteXObjectResources : add a break at end of case GL2PS_PIXMAP.
+
+5.0.4:
+ - tools/sg/vertices : fix a shadow warning in the add(vector<float>&) method.
+
+5.0.3:
+ - tools/gl2ps : tools_gl2psPrintPostScriptPixmap : quiet coverity.
+ - tools/rroot/vector3 : quiet coverity about uninited variables.
+ - tools/zb/buffer : get_pixel() : quiet coverity : set a_pixel=0 in case args out of range.
+ - tools/sg/text : quiet coverity : a bxw => bxh.
+ - tools/sg/axis, sg/plotter : set_encoding(), set_encoding_none().
+ - tools/sg/render_gsots : init fields in cp cstor and operator=.
+ - tools/sg/plotter : add fields : title_box_[width,height,x_margin,y_margin].
+
+5.0.2:
+ - tools/sg/tools : add_string_opt : handle axis label of format "10^%d?" in case of freetype font.
+
+5.0.1 :
+ - gl2ps_def.h, gl2ps_begin.icc, Xt/OpenGLArea.c : /*/////*/ => /*-----*/.
+ - lina/vec3, vec3f : cos_angle.
+
+5.0.0 : ROOT format : restore a "per event/row view" for the ntuple column-wise in MT and MPI.
+        batch plotting : fixes to avoid labels overlap when having a grid of plotters.
+        MPI : fix a memory leak.
+        scene graph : have material for interactive plotting.
+        include modifications coming from other usage of inlib/exlib, for example, in rroot, to be able to read TClonesArray.
+
+ //////////////////////////////////////////////////
+ /// ROOT file format : ///////////////////////////
+ /// restore event view in MT/MPI column_wise : ///
+ //////////////////////////////////////////////////
+ - wroot/base_pntuple, base_pntuple_column_wise, branch, ntuple,
+   mpi_basket_add, mpi_ntuple_column_wise, mpi_ntuple_row_wise, mpi_send_basket, mpi_protocol,
+   mt_ntuple_column_wise, mt_ntuple_row_wise, mt_basket_add,  :
+     modification to handle the staging of baskets in MT and MPI
+     (stored in in branch::std::vector<basket*> m_parallel_baskets;)
+
+ //////////////////////////////////////////////////
+ /// ROOT file format : ///////////////////////////
+ //////////////////////////////////////////////////
+ - wroot/ntuple : mpi_add_basket : have "delete basket" in case some "branch.add_basket" failed.
+ - wroot/directory : keys() getter.
+ - wroot/file, infos : StreamerInfo => streamer_info.
+ - wroot/info : StreamerInfo => streamer_info. Then have consistent casing relative to the rest for this class.
+ - wroot/element : streamer_info => streamer__info : in order to reuse the name for our reimplementation
+   of "TStreamerInfo" (then streamer_info for us) class.
+
+ - rroot/buffer : m_map_objs(true) : have obj in map the default when reading.
+ - rroot/info, cids, streamers : as for wroot, StreamerInfo => streamer_info to have consistent casing.
+ - rroot/info : in stream() : handle "obj_created" after pointer_stream().
+ - rroot/THistogram, rall : to handle old OpenScientist/AIDA files.
+ - rroot/tree_manip : find_tree : handle a_map_objs argument, to be able to control if read objects are handled in the buffer map or not.
+ - rroot/ifac, fac, iros, obj_list, hash_list, obj_array, streamers, branch, tree : a factory does not handle the ownership of object. (Having
+   that introduced a lot of confusion about the ownership of read objects when implementing the "clone array" logic). Now iros, list, obj_array
+   handle (or not) the ownership of what they read (according to what buffer.read_object returns).
+ - rroot/buffer : pointer_stream() : return (in "a_created" argument) if object had been created (by a factory) or not (existing in buffer map)).
+ - rroot/buffer : dummy_TXxx_pointer_stream : if object created, delete it.
+ - rroot/ntuple : read::intuple => read::icol(a_from) in copy constructors of columns.
+ - rroot/ntuple : title(), number_of_entries() : implementation of the virtual intuple methods.
+ - rrrot/branch : begin of reading clone arrays.
+ - rroot/tree : be able to read "version>=20" trees.
+ - rroot/vector3, cids, fac : to read TVector3.
+ - rroot/list => obj_list.
+ - rroot/file : dump_streamer_infos(), find_streamer_info(), read_streamer_infos_data() : to read TClonesArray of TVector3 in a generic way.
+ - rroot/branch_element : to read TClonesArray of TVector3 in a generic way.
+
+ //////////////////////////////////////////////////
+ /// around graphics : ////////////////////////////
+ //////////////////////////////////////////////////
+ - new files :
+   o tools/sg/GL_action, GL_viewer, base_tex, blend, cloud2plot, cloud2plot_cp, cursor_shape, ellipse, f2plot
+     fit2plot, gl, gstos_add, h2plot_cp, GL_plots_viewer, plotter_style, render_gstos, render_manager, tex_quadrilateral
+     tex_rect, xy2plot, zb_action, zb_manager.
+   o tools/curve, glbuf, OpenGL, plotter_common.icc.
+   o tools/hdf5/group_exits.
+   o tools/Qt/plots_glarea.
+   o tools/Xt/OpenGLarea[.h,P.h,c], tools.
+   o tools/X11/base_session,session,dispatcher.
+   o for plotter printing : image, image_reader, paper_format, xpm, jpeg, png.
+ - sg/axis : two new fields to avoid label overlapping :
+     labels_no_overlap_automated (true by default)
+     labels_gap : amount of gap to set betwen labels when removing overlaps.
+ - sg/viewer : use cursor_shape include (instead of local enum).
+ - sg/viewer : get_clear_color().
+ - sg/vertices, atb_vertices : have the gstos mode (to store primitives in GPU) on vertices.
+ - sg/field, field_desc, snode, vertices, torche, text_hershey, text_freetype, text, ortho, normal, style, plots, matrix, plotter, rgba, markers,
+   line_set, line_style, legend, infos_box, holder, atb_vertices, axis, back_area, _switch, base_camera, base_text, draw_style :
+   use a thread safe way to declare fields in node_desc_fields().
+ - sg/text, text_freetype, style, text_valop, text_style, style_parser, infos_box : handle modeling font_pixmap.
+ - sg/state, render_action, GL_manager : handle GL_BLEND.
+ - sg/* : gl_manager => render_manager. manager_zb => zb_manager. render_zb => zb_action.
+ - sg/sf_mat4f : set_rotate.
+ - sg/strings : more global strings for sg_serv mode.
+ - sg/plots : handle layout logic in set_plotter_layout() method.
+ - sg/plotter, plottables : handle primitive_ellipse plottable.
+ - sg/group : clear() : use safe_reverse_clear().
+ - sg/primitive_visitor : add_texture().
+ - sg/event : be able to cast by id (more faster than string).
+ - sg/cube : inherit render_gsto to handle gsto.
+ - sg/draw_style : enum e_style => draw_type.
+ - sg/glprims : add utilities line_strip_to_lines(), line_loop_to_lines(), triangle_fan_to_triangles[_2to3]() methods.
+ - columns : following a Coverity report (99671), handle "tree*" instead of "tree" in the std::vector m_sub field of class tree.
+ - sg/line_style : from/to string : width, pattern on sp.width, pattern.
+ - sg/style_parser : handle width, pattern.
+ - sg/axis, plotter : touched, reset_touched by taking into account styles.
+ - sg/node : touched, reset_touched virtual. For axis and plotter.
+ - sg/gl2ps_action : a gl2ps render action using the below pure header gl2ps.
+ - gl2ps, gl2ps_def.h, gl2ps_begin.icc, gl2ps_end.icc : pure header gl2ps.
+
+ //////////////////////////////////////////////////
+ /// around histos, nutples : /////////////////////
+ //////////////////////////////////////////////////
+ - tools/aida_ntuple, xml/aidas : cols() => columns(). columns() => number_of_columns().
+ - tools/aida_ntuple : column_min(), column_max().
+ - tools/ntuple_binding : add_column_vec().
+ - tools/ntuple_booking : add_column_vec(), add_column(T& user variable).
+ - tools/rcsv_ntuple : add title(). number_of_entries() methods.
+ - tools/rntuple : intuple : virtual tile(), number_of_entries() methods.
+ - tools/rntuple : add methods number_of_columns, column_names, find_icol_case_insensitive, find_column, column_is_of_type, column_min,max.
+ - tools/histo/base_histo : add get_Sw_Sw2, get_all_Sw_Sw2 methods.
+ - tools/histo/p1 : add set_bin_content, get_bin_content methods. (It permits a "full access" to all infos of a bin).
+
+ //////////////////////////////////////////////////
+ /// hdf5 : ///////////////////////////////////////
+ //////////////////////////////////////////////////
+ - tools/hdf5 :
+   T_tools, ntuple, pages : handle "vlen" variable length array.
+   store : in write mode, add "type" "object" attribute. Increment write version number (1 =>2).
+
+ //////////////////////////////////////////////////
+ /// various : ////////////////////////////////////
+ //////////////////////////////////////////////////
+ - tools/zlib : have the TOOLS_USE_OUREX_ZLIB logic.
+ - tools/xml/styles : handle "copy" keyword.
+ - tools/args : insert_begin() to insert an arg at head of list.
+ - tools/args : file() to get the last argument as a file name.
+ - tools/test : have const ref (instead of const only).
+ - tools/vmanip : use size_t.
+ - tools/strip : handle "all chars are the same" case.
+ - tools/value : m_id => m_itag.
+ - tools/mathd : dcos, dsin, dpow, ldfabs (not on ANDROID).
+ - tools/mapmanip : add_unique().
+ - tools/glutess/* : GLU_[FALSE,TRUE] => TOOLS_GLU_[FALSE,TRUE] to avdoid clash with glu.h.
+ - tools/cmathT : remove.
+ - tools/colorf : handle cpp TOOLS_MEM_ATEXIT if wanting to have a correct counting of statics with TOOLS_MEM at exit.
+ - tools/colorfs : in cpp TOOLS_COLORFS_STAT remove not used r,g,b arguments.
+ - tools/colors : add (some of) CERN-ROOT colors.
+ - tools/cstr : add str_lcpy().
+ - tools/eqT : add vector_are_equal().
+ - tools/file : add is_kumac().
+ - tools/file_format : handle .kumac extension.
+ - tools/system : iOS : do not compile ::system().
+ - tools/system : execute() => std_system(). repenv() => rep_env().
+
+ //////////////////////////////////////////////////
+ /// test programs (test/cpp) : ///////////////////
+ //////////////////////////////////////////////////
+ - utest*.ps, wrap*_ps : new versions to take into account modifications to avoid automatically overlap of labels
+   in each plotter when having a grid of plotters.
+ - read_root.iccc, mpi_ntuple.cpp, mt_ntuple.cpp, mt_ntuple_ref.cpp, mt_ntuple_seq.cpp :
+   arguments -row_mode, -basket_entries and flag row_wise => read_check_row_wise : to be able to handle various writting
+   mode of ntuple (column-wise, column-wise-row-mode, row-wise).
+ - wcsv_histo.cpp : -no_header argument.
+ - build, vc++, find_link_exe, use_* : use the vc++ shell script to build with VisualC++.
+   It permits to build on CYGWIN but also on WSL (Microsoft/ubuntu) by using VisualC++.
+ - rroot.cpp, wroot.cpp, utest.cpp, rxrayfluo.cpp : handle TOOLS_MEM to be able, if built with "-mem", to have a decount, at end,
+   of created/deleted objects. (If all is ok, the decount should be "0", and nothing be printed).
+ - raxml.cpp : cols() => columns().
+ - hdf5_histos.cpp : test handling of a directory.
+ - threads : have exit_set() to handle with mutex.lock the query of "a_args.m_exit".
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ 4.2.3 :
+ - test/cpp/use_freetype : -DDTOOLS_USE_OUREX_FREETYPE => -DTOOLS_USE_OUREX_FREETYPE.
+ - test/cpp/test/build : be able to have -our_freetype to not use system freetype.
+   Used at LAL for utest unitary tests using freetype in order to compare with
+   reference .ps files produced on macOS with ourex/freetype.
+ - test/cpp/test/use_freetype : handle build_use_our_freetype variable.
+
+ 4.2.3 :
+ - tools/sg/text_freetype : g++-8.1.0 : use the functions introduced below in glutess.
+ - tools/tess_contour : g++-8.1.0 : use the functions introduced below in glutess.
+ - tools/glutess/glutess : g++-8.1.0 : introduce five gluTessCallback_<enum>() functions to be able to avoid warnings :
+     warning :cast between incompatible function types
+ - test/cpp/test/lego_offscreen_zb.cpp : message about freetype in case of failure.
+
+ 4.2.2 : g++-8.1.0 : fix warnings.
+ - forit : (a__it) => a__it.
+ - xml/tree : two const std::string& atb => const std::string& _atb to avoid shadow warnings.
+
+ 4.2.1 : fix Coverity notifications.
+ - wroot/MT_SET_MAX.icc : protect usage of null object in "return false" messages.
+ - wroot/ntuple : tree : create_branch : add a null pointer check.
+ - wroot/tree : create_column_vector : displace col null pointer up one line.
+ - wroot/base_leaf : (protected) cp cstor : add some missing fields initialisation.
+ - rroot/base_leaf : (protected) cp cstor : add some missing fields initialisation.
+
+ 4.2.0 : correction to pass integration in Geant4 (for the 10.4) :
+ - aida_ntuple : id_class() method.
+ - ntuple_binding : add_column_cid() method.
+ - wroot/branch : fill(), add_basket() : have a check "m_write_basket>=m_max_baskets".
+ - wroot/mt_ntuple_column_wise : in add_row() and end_fill() : check m_cols.size() versus m_main_branches.size().
+
+ 4.1.0 : wroot : have material/corrections in order to do ntuple booking without the "ref" logic for all column types.
+ - test/cpp/mt_ntuple.cpp : now an example with the "variable on column" logic for all column types.
+ - test/cpp/mt_ntuple_ref.cpp : example with the "user variable ref" logic for all column types.
+
+ 4.0.0 : changes in wroot, rroot in order to handle row wise ntuple in case of multi-thread or MPI.
+ - wroot : branch::end_pfill : do not add empty basket.
+ - wroot : ObjArray => obj_array, List => obj_list.
+ - wroot : Windows : get_me() to avoid usage of *this in constructor.
+ - wroot : icol : get_branch() return ref and not a pointer.
+ - wroot : leaf_ref, leaf_string_ref, leaf_std_vector_ref : _ref logic to have same logic than for other drivers.
+ - wroot : leaf : rm m_title field : mimick ROOT logic.
+ - wroot : base_leaf : handle m_leaf_count object.
+ - wroot : columns.icc : to put column code in common between ntuple and base_pntuple.
+ - wroot : new file to support row wise ntuple for MT and MPI : SET_MAX.icc, base_pntuple_column_wise, base_pntuple_row_wise
+           basket_add, impi_ntuple, imt_ntuple,
+	   mpi_basket_add, mpi_create_basket, mpi_ntuple_column_wise, mpi_ntuple_row_wise, mpi_protocol.
+ - wroot : pntuple => mt_ntuple_column_wise, mpi_pntuple => mpi_ntuple_column_wise.
+
+ - rroot : ntuple : handle row_wise.
+ - rroot : base_leaf : handle m_is_range field, handle m_own_leaf_count.
+ - rroot : leaf : handle leaf_count logic : it permits to store std::vector of basic type on a leaf<T>.
+ - rroot : named splitted in iros, object, list, obj_array, named.
+ - rroot : buffer : read_object() : handle a trailing bool& a_created argument. It helps to know if
+           the created object is managed or not.
+ - rroot : Windows : get_me() to avoid usage of *this in constructor.
+ - rroot : ObjArray => obj_array, List => obj_list.
+
+ - ntuple_binding : handle class id in column_binding.
+ - ntuple_booking : has_similar_layout() : to compare with another ntuple_booking object. Used in MT to be sure MT booking object
+   as the same "layout" than the one coming from the main.
+
+ - wcsv_ntuple : in _ref columns, pass user variable as const.
+
+ - hdf5 : header : to write/read a "header" with general infos as the name of the writing library and the "data schema version.".
+
+ - test/cpp : pwroot.cpp => mt_ntuple.cpp, wroot_pntuple.cpp => mt_ntuple_seq.cpp.
+ - test/cpp : read_root.icc : used in mt_ntuple.cpp, mpi_ntuple.cpp to check consistency.
+
+ - test/cpp : cern_root_read_rg_rbw.cpp : to check that the ntuple in .root files produced by mt_ntuple.cpp
+   and mpi_ntuple.cpp are readable by CERN-ROOT.
+
+ 3.7.0 : quiet some Coverity notifications. In default code, remove some "a_inc" logic in some classes.
+   It comes from a revisit to the way we can decount static object deletion (by using an atexit logic in apps).
+ - tools/mem : have most methods protected. In the static list(), have the s_list on the heap.
+   It permits to have an atexit logic in apps that permits to count the deletion of static objects.
+ - tools/cstr, putenv : #ifdef TOOLS_MEM the "a_inc" argument in str_dup. In put_env(), do not use this
+   argument in default code.
+ - tools/colorf, colors : #ifdef TOOLS_MEM the a_inc argument in constructor. In colors, have a coworking
+   cpp TOOLS_MEM_ATEXIT logic so that this argument is not used in default code.
+ - tools/lina/mat, mat4, vec3, vec4, vec4f : #ifdef TOOLS_MEM the a_inc argument in constructor.
+   In sg/base_camera, have a coworking cpp TOOLS_MEM_ATEXIT logic so that this argument is not used in
+   default code of id_orientation().
+ - test/cpp/viewplot.cpp : #ifdef TOOLS_MEM : example of an atexit final object counting.
+ - tools/glutess/normal : static_ComputeNormal : remove Coverity warnings about not initialized minVert,
+   maxVert variables.
+
+ 3.6.0 :
+ - mesh : Coverity 96394 : in __gl_meshDelete : return to the original code which is in fact ok! Coverity
+   had been adused by (too much) clever C code.
+ - sweep : Coverity 96379 : have "#ifndef NDEBUG" around fixedEdges++.
+ - test/cpp/build : have : cppflags -DNDEBUG.
+ - test/cpp/build : rm test/hdf5_threads.cpp for utest.
+ - test/cpp/build : have use_dl for utest if using hdf5.
+
+ 3.5.0 : Coverity fixes and test/cpp/hdf5_threads.cpp program.
+ - hatcher.icc : 96393. Rm dead code.
+ - bsf : 96392 : bsf() : initialize m_value.
+ - hatcher.icc : 96393 : have a : delete [] listPoints;
+ - plotter : 96389 : comment out some not used variables.
+ - legend : 96388 : comment out some "rep_line" dead code.
+ - plots : 96387, 96386 : fix an unneeded "if".
+ - data_axis : 96385 : avoid a not needed test.
+ - valop : 96380 : correct func_1() return logic.
+ - sweep : 96379 : have assert(++fixedEdges==1) in two steps.
+ - mesh : 96394 : in __gl_meshDelete : fix a eDel->Lface bad access.
+ - test/cpp/hdf5_threads.cpp : to test HDF5 and threads. It needs a HDF5 lib built with "configure --enable-threadsafe".
+
+ 3.3.0 : hdf5 : arrange to compile without -DH5_USE_16_API (then use 1.18 API if using hdf5/1.18.x).
+ - tools/hdf5 : hdf5_h : tools_H5<xxx> : in order to compile hdf5 related code with 1.18 API.
+ - tools/hdf5 : * : use tools_H5<xxx>.
+ - tools/h2file : use not_a_profile() in write/read_histo(). It permits to enforce that profiles must be used with
+   write/read_profile() functions.
+ - tools/ntuple : constructor for writing : supress the "bool write" argument. "bool compress, uint basket_size" args
+   permit to sign a constructor for writing.
+ - tools/ntuple : constructor for reading : suppress the "bool a_write,bool compress, uint basket_size" arguments that
+   are not needed when reading.
+ - tools/ntuple : constructor for reading : have a constructor with a tools::ntuple_binding argument.
+ - tools/ntuple : have column_ref, std_vector_column_ref, column_ref classes. It permits to handle properly the binding
+   of a user variable at write, but also at read.
+ - test/cpp/use_hdf5 : comment out usage of -DH5_USE_16_API.
+ - test/cpp/hdf5_ntuple.cpp : revisit ntuple constructors for writing and reading as described upper.
+ - test/cpp/hdf5_ntuple.cpp : have an example of reading by using tools::ntuple_binding.
+ - tools/wcsv_histo : tools::wcsv::hto : use not_a_profile(). Now this template will not compile if passing a profile. (For
+   a profile someone has to use the tools::wcsv::pto template).
+ - tools/histo/h1,h2,h3 : dummy not_a_profile() method to write templated function dedicated to histo but not intended
+   for profile.
+ - tools/utest : handle -no_<name> argument.
+ - tools/lina/geom3 : some unsigned int => size_t.
+ - tools/system : rmenv() => rm_env().
+
+ 3.2.0 : test/cpp/utest.cpp to do unitary tests.
+ - test/cpp/utest : have test/viewplot_ttf.cpp test. It permits to test plotting with freetype.
+ - test/cpp/utest : have test/lego_offscreen.cpp test. It permits to test 3D plotting with freetype.
+ - WARNING : freetype related tests may not pass according the version of freetype. They do not pass with a :
+     * 2.7.0 on my Mac
+     * 2.5.5 on another Mac (macpro4).
+   whilst it is ok with a :
+     * 2.8.0 on my Mac
+     * 2.5.2 on ubuntu
+     * the 2.1.9 of softinex/ourex/freetype on Windows-10/64, ubuntu, macOS.
+
+ - to build and execute freetype related tests :
+     UNIX> ./build -expat -freetype utest.cpp
+     UNIX> ./tools_test_utest
+    (UNIX> ./tools_test_utest -verbose)
+   To build and execute hdf5 related tests :
+     UNIX> ./build -hdf5 utest.cpp
+     UNIX> ./tools_test_utest
+   To have the list of compiled tests :
+     UNIX> ./tools_test_utest -list
+
+ 3.1.0 :
+ - test/cpp/cern_root_hdf5_ntuple.cpp : program to read the ntuple.hdf5 file produced with hdf5_ntuple.cpp and to
+   plot a column projection by using CERN-ROOT/TH and TCanvas.
+ - test/cpp/use_cern_root, setup_cern_root.sh, setup_cern_root.csh : to access CERN-ROOT to compile, link and run
+   the cern_root_hdf5_ntuple.cpp program.
+ - test/cpp/use_zip, use_thread : to put in common acces to zlib, thread for the various programs that use them.
+ - test/sys/process, dir : for unitary test program.
+ - test/cpp/utest.cpp, test/*.cpp : unitary test program.
+
+ 3.0.0 : hdf5 write/read. contour plotting. w/r-root : handle branch_objet.
+         Various modifs coming from inlib/exlib dev done for other applications :
+ - tools/hdf : material to write/read histos and ntuple at the HDF5 file format.
+ - test/cpp/hdf5_histos.cpp : example to write/read histos with HDF5.
+ - test/cpp/hdf5_ntuple.cpp : example to write/read an ntuple with HDF5.
+
+ - tools/ccontour, clist_contour, hatcher, hatcher.icc, tess_contour, valop : for plotting contours.
+ - tools/sg/plotter : code to have contour plotting.
+ - tools/spline : to have nice function plotting.
+
+ - tools/rroot/branch_object, iobject, cids, fac, leaf : handle branch_object.
+ - tools/rroot/tree_manip : find_leaf, find_branch_element, read_leaf, read_leaf_object, read_std_vec.
+ - tools/rroot/branch, branch_element, file, tree : number of entries : uint32 => uint64.
+ - tools/rroot/ntuple : column_string::fetch_entry : test if m_leaf.value() is null.
+ - tools/rroot/streamers/TH3D_stream : m_axes.resize(3), instead of 2.
+
+ - tools/wroot/branch_object, cids : handle branch_object.
+ - tools/wroot/basket : in stream(), handle "displacement".
+ - tools/wroot/branch : reset() method.
+ - tools/wroot/branch, buffer : in fill() : buf.reset_objs_map().
+ - tools/wroot/ntuple : column_ref : to handle user variable binding at write.
+ - tools/wroot/tree : cstor : managed argument.
+ - tools/wroot/tree : have a reset method.
+
+ - tools/rcsv_ntuple : handle int64, uint64, bool columns.
+ - tools/wcsv_ntuple : column_ref to be able to bind a user variable on simple type columns.
+ - test/cpp/rcsv.cpp => rcsv_ntuple.cpp
+ - test/cpp/wcsv.cpp => wcsv_ntuple.cpp
+ - test/cpp/wcsv_booking.cpp => wcsv_ntuple_booking.cpp
+ - test/cpp/wcsv_booking_bind.cpp : to show user variable binding on simple type columns.
+
+ - tools/ntuple_booking, ntuple_binding : can pass now a user variable for simple types.
+
+ - tools/histo/axis, histo_data, base_histo, p1, p2,  : equals method to be able to compare easily histos.
+ - tools/histo/c1d,c2d,c3d : inline code in the classes.
+ - tools/histo/h1,h2,h3 : get_bin_content method.
+ - tools/histo/h1d,h2d,h3d,p1d,p2d,h2df,h3df : have a default constructor building a valid histo : needed when reading from file.
+
+ - tools/vmanip, sg/group, rroot/directory, named, waxml/ntuple : clear => safe_clear.
+ - tools/sg/vertices, text_hershey, style_parser, style_colormap, primitive_visitor, render_action,
+   manager_zb, normal, matrix, nodekit, line_set, head_light, pick_action, gl_manager, cube, h2plot,
+   draw_style, node : rm some not needed "tools::".
+ - tools/sg/set_plotter_camera : have a func to pass float x,y,z camera position.
+ - tools/sg/text_style : options field.
+ - tools/sg/strings : font_ROOT_<>() golabl strings.
+ - tools/sg/plottable, plottables : bins1D, bins2D, func1D, func2D, points2D, points3D now in plottables.
+ - tools/sg/viewer : fields m_produce_out_jpg, m_produce_out_png, m_produce_out_file.
+ - tools/sg/legend, markers mnmx text_valop valop2sg : handle markers and text with upper/lower script in legend box.
+ - tools/sg/atb_vertices : draw_edges field. Have code to draw edges for triangles.
+ - tools/sg/bmf, mf : setup a multiple value field from one value or a std::vector of values.
+ - tools/sg/plots : handle new fields left_margin, right_margin, top_margin, bottom_margin, horizontal_spacing, vertical_spacing.
+ - tools/sg/axis : handle case of label at center of bin.
+
+ - tools/system : [is,get,put]env => [is,get,put]_env : to avoid clash with system functions.
+
+ 2.4.0 :
+ - test/cpp/mpi_ntuple.cpp : modifs to use an ntuple id.
+ - tools/mpi/pntuple : handle a ntuple id.
+
+ 2.3.0 :
+ - test/cpp/mpi_ntuple.cpp : use a maximum tools::impi interface which does not bring mpi.h.
+ - tools/mpi/pntuple : have the code using only the tools::impi interface.
+ - tools/mpi/wrmpi : pack_reset(), send_buffer() virtual methods implementations.
+ - tools/impi : pack_reset(), send_buffer() virtual methods.
+
+ 2.2.0 :
+ - sg/vertices : supress m_xyzs_pos field to correct a Coverity issue.
+ - sg/atb_vertices : m_[xyzs,rgbas,nms]_pos protected. To correct Coverity issues.
+ - rroot/ntuple : initialize() : if(!_branch) => if(!_be) : seen by coverity.
+ - wroot/to : add code to write annotations.
+ - rroot/rall :
+ - add touplow.
+
+ 2.1.0 : for parallel ntuple : handle properly the user std::vector for column of vector.
+ - ntuple_booking : add the set_user_obj() method and non-const columns() getter.
+ - rroot/branch_element : implement a show() method to show the m_obj address.
+ - rroot/branch : make virtual the show() method.
+ - test/cpp : pwroot.cpp, wroot_pntuple.cpp, mpi_ntuple.cpp : example of a vector column.
+
+ 2.0.0 :
+ wroot : parallel ntuple : on a same booked nutple, pass baskets from threads or mpi ranks to a "main ntuple" tied to a file.
+ rroot : modifs to be in sync with the logic of wroot.
+ remove hbook, fortran and cernlib related things.
+
+ - tools/wroot,rroot : base_leaf, branch, key, basket, fac : remove ifile& relationship in constructors.
+ - tools/wroot,rroot : base_leaf, branch, basket : remove relationship to "manager" (exa remove m_branch in base_leaf).
+ - realloc, wps, tos, smatch, xml/tree, args, array, rcsv_histo, rcsv_ntuple, b2s, cmemT, glprims, hplot,
+   xml/loader : use size_t instead of unsigned int.
+ - viewplot, wps : a_anonymous arg to write ps file without date. It permits to compare files.
+ - snpf : _MSC_VER < 1900 : handle "_TWO_DIGIT_EXPONENT".
+ - rtausmeui : mem count.
+ - randT, randd, randf : pass templated math_func in arg to shoot (a_sqrt, a_log).
+ - path : suffix, nosuffix : avoid return of a std::string.
+ - mathd, mathf : rad2deg, deg2rad : use a static to do the computation once.
+ - cmathT : rm _conj functions.
+ - forit : vfor : reverse.
+ - impi, mpi/wrmpi : pack, unpack(int64).
+ - histo/base_histo, c1d, c2d, c3d, dps : unsigned int -> size_t.
+ - xml/loader : handle a_take_ctrl.
+
+
+ - io/iwbuf, sg/bmf, mf, line_set, group, axis, style_parser, cube, colormap, plots, atb_vertices,
+   text_freetype, text_hershey, pick_action, plotter : unsigned int -> size_t.
+ - sg/gl_manager, manage_zb, render_zb, primitive_visitor, render_action : unsigned int -> size_t.
+ - sg/primitive_visitor : *pos++ -> *pos;pos++.
+
+ - colorf : remove static color functions. They are put in colorfs.
+ - sg/vertices : is_visible().
+ - sg/field, field_desc : editable field.
+ - sg/legend, text, rgba, torche, infos_box, colormap, axis, text_style, back_area, style, style_colormap, line_style.
+
+ - test/cpp/viewplot.cpp : colorf::<color>() -> colorf_<color>().
+ - test/cpp/wroot.cpp : -megas option.
+ - test/cpp/mpi.cpp -> mpi_histos.cpp.
+ - test/cpp/rroot.cpp, rxrayfluo.cpp :
+     tools::rroot::key_to_<obj>(rfile,*key);       : add the rfile at first argument.
+     char* buf = key->get_object_buffer(rfile,sz); : add the rfile at first argument.
+     tools::rroot::fac fac(std::cout);             : replace rfile arg by std::cout.
+
+ - histo : cosmetic aEdges => a_edges.
+ - rroot : cosmetic rm not needed tools::rroot:: prefix.
+ - lina/qrot (rotf) : pass a_sqrt, a_fabs, a_sin, a_cos,... in arg.
+ - args : use mem::inc,dec.
+ - file, file_format, fileis, fsize : handle py, lua, jive. Isolate size() in a standalone file.
+ - raxml, xml/aidas : separate the xml parsing logic (in a xml/aidas file) from the expat reader.
+   (Have something similar than the xml style reading).
+ - sg : gl_manager, manager_zb : begin_render() : have two more args to pass the area size to render.
+ - sg : axis : pick() : use nodekit_pick(). It permits to pick and move an axis (in interactive apps).
+
+ 1.27.4 :
+ - tools/value : Windows-64 : rm warnings when writing a void* in a string..
+
+ 1.27.3 :
+ - tools/typedefs, pointer, value.icc : Windows-64 : rm warnings when writing a void* in a string.
+ - tools/wroot/ntuple : delete columns in destructor.
+
+ 1.27.2 :
+ - tools/glutess/render : static_RenderTriangle : (void)size; at end to fix a warning.
+
+ 1.27.1 :
+ - hls, sg/style_colormap : correct some g++-6 (pedantic) warnings.
+
+ 1.27.0 : WARNING : change in the ROOT format for TTrees :
+ - tools/wroot/basket constructor : enforce m_version += 1000. This has to be considered as a change in the ROOT/IO
+   format (related to trees) compared to the one of CERN-ROOT/4.x that we followed up so fare. This change follows
+   what is in CERN-ROOT/5.x/TBasket. It permits to produce files compatible with what CERN-ROOT/hadd program expects,
+   and which does not work properly for CERN-ROOT/4.x/TBasket versioning logic. Here we must point out that this
+   CERN-ROOT/hadd tool breaks some "golden rule" claiming that CERN-ROOT will "forever" handle old file format
+   properly.
+
+ 1.26.2 :
+ - test/cpp/viewplot.cpp : more tests to check the sg::plotter nodes reset when producing more pages and files with
+   the same viewer.
+ - test/cpp/viewplot.cpp : regions_style() : have a a_plotter_scale argument to have space between plotters.
+ - test/cpp/viewplot.cpp : HD_style() : set also line_width on title, axis texts to handle properly hershey font
+   if using on large (batch) window.
+ - test/cpp/viewplot.cpp : use tools/xml/wrap_viewplot_style include-embeded style file.
+ - test/cpp/viewplot.cpp : use set_current_plotter_style() instead of style_from_res().
+
+ - tools/xml/viewplot.style, wrap_viewplot_style : a style file (and include-embeded version) for viewplot.cpp.
+ - tools/viewplot : deprecate style_from_res() and replace it with the more explicit set_current_plotter_style().
+ - tools/sg/plots : init_sg() "public" and doing more initializations.
+ - tools/sg/plots : plotter_scale field, to let space between sg::plotter nodes in a grid of plots.
+ - tools/sg/back_area, plotter : border_line_width field, to customize border line width of plotter::infos_box.
+ - tools/sg/style_color : use "parent" typedef.
+
+ 1.26.1 :
+ - test/cpp/viewplot.cpp : regions_style() function to adjust per plotter parameters (as margins)
+   in case of multiple regions.
+ - tools/viewplot : set_from_res() : add a verbose arg.
+
+ 1.26.0 : prepare freetype2 + modifs and fixes coming from dev in inlib/exlib.
+ - zfunc,wroot/file, ifile, rroot/file, ifile, key : zfunc -> press_func,
+   zip_func -> compress_func, unzip_func -> decompress_func.
+ - vdata : handle (__GNUC__ == 4 && __GNUC_MINOR__ <= 0).
+ - zlib : return Z_DATA_ERROR -> return false.
+ - aida_ntuple, sg/action, xml/loader, styles : std::ostream& out() now const.
+ - lina/box3, box3f : for Windows : avoid the max() in std::numeric_limits<T_t>::max().
+ - rtausmed, rtausmef : use typedef parent.
+ graphics :
+ - test/cpp/use_freetype : supress TOOLS_USE_NATIVE_FREETYPE usage.
+ - test/cpp/viewplot.cpp : have view.style "embedded" (encapsulated in the style_viewplot #include).
+ - sg/text_freetype : #ifndef TOOLS_USE_OUREX_FREETYPE -> #ifndef TOOLS_USE_OUREX_FREETYPE.
+ - sg/bmf : optimize setValues().
+ - sg/* : TOOLS_FIELD_DESC_NODE_CLASS logic.
+ - img : check_gl_limit().
+
+ 1.25.0 : material for using freetype rendering in plotting.
+ - test/cpp/viewplot.style, arialbd.ttf, helvetica.ttf : material to render "a la CERN-ROOT".
+ - tools/sg/text_freetype : the sg/node handling freetype.
+ - tools/fmanip, nostream, sep, system : used by sg/text_freetype.
+ - tools/glutess : a pure header version of the tessel code found in mesa/glu. Used by sg/text_freetype.
+
+ 1.24.2 :
+ - tools/wcsv_ntuple, tools/wroot/ntuple : have class icol public.
+ - test/cpp/build, use_expat : put expat things common to raxml,viewplot.cpp in use_expat.
+ - tools/mpi/wrmpi :
+     #ifdef TOOLS_USE_MPI_PACK_NOT_CONST
+        char* buffer() {return m_buffer;}
+     #else
+        const char* buffer() const {return m_buffer;}
+     #endif
+ - doc/g4tools_user_api.xml : file ready to go in g4 docbook documentation.
+ - test/cpp/histo.cpp : example code to get all infos of a bin.
+ - tools/sg/render_zb, tools/zb/buffer : handle line width to have thick lines in case of
+   rendering in a high resolution viewport (needed if rendering text with freetype).
+ - test/cpp/viewplot.cpp, use_freetype : prepare the ground for freetype (but not yet ready).
+
+ 1.24.1 :
+ - test/cpp/build_f77 : src_dir/close.f -> ./close.f (Ivana request).
+ - src/close.f -> tests/cpp/close.f.
+ - test/cpp/histo.cpp : have profile_[x,y] example code.
+ - tools/histo/slice, sliced : add profile_[x,y] functions.
+ - tools/histo/slice : improve readability, have :
+     template <class H2,class H1>
+   instead of :
+     template <class TC,class TO,class TN,class TW,class TH>
+
+ 1.24.0 :
+ - wrmpi : have :
+     #ifdef TOOLS_USE_MPI_PACK_NOT_CONST
+   to be able to handle old MPI_[Pack,UnPack] signature without const in the first argument.
+   Not tested since we have not an old MPI at hand!
+ - tools/axis : modification to quiet Coverity.
+ - rroot/key : ifdef TOOLS_USE_CSZ : csz decompression code (coming from old CERN-ROOT) is used in inlib
+   to read very old root file, but this functionality is not needed within g4tools. Then we "ifdef" the related
+   code with TOOLS_USE_CSZ to avoid the csz dependancy by default.
+ Modifications to be in sync with inlib developments but not (yet) fully used in g4tools :
+ - tools/sg/visible_action,base_camera,group,matrix,node,noderef,render_action,separator : handle visible action.
+ - lina/box3, box3f : have the template base box3 class.
+ - fileis, file_format : handle wrl extension.
+ - img : various optimizations in image concatenation.
+
+ 1.23.1 :
+ - tools/mpi directory with an implementation of the toos/impi_world and tools/histo/hmpi interfaces.
+ - test/cpp/dummy_mpi.h, hmpi, mpi_world, wrmpi moved under tools/mpi.
+ - tools/histo/hmpi : comm_rank(), comm_size() methods to quiet Ivana :-).
+ - tools/hplot, sg/cube, sg/primitive_visitor, sg/text_hershey : minor corrections to quiet Coverity.
+
+ 1.23.0 :
+ - tools/impi_world : interface to the mpi toolkit and global functions (MPI_Init, MPI_Comm_rank, etc...).
+ - test/cpp/mpi_world : implementation of the upper.
+ - test/cpp/mpi.cpp : example of usage of mpi_world and the interface.
+ - tools/histp/hmpi : rank() getter.
+ - tools/smatch, vpair, xml/styles, xml_style, test/cpp/viewplot.cpp : prepare the ground for plot style files.
+ - tools/lina/geom3, line, plane, mat, MATCOM, vec3, vec2f : modifs coming from inlib/exlib developments that
+   should have, in principle, no impact on the rest of g4tools.
+
+ 1.22.1 :
+ - viewplot : open_file(), write_pate(), close_file() methods. To write multiple pages in a file.
+   See test/cpp/viewplot.cpp for an example.
+ - viewplot : plot(p1d). See test/cpp/viewplot.cpp for an example.
+
+ 1.22.0 : revisit structure for plotting related code.
+ - Have tools/[sg,lina,io,zb] directories to contain this code (instead of tools/plot/...).
+   Extra lite files related to plotting and put under tools :
+     HEADER, axis, cmemT, colorf, cstr, glprims, hershey, hls, hplot, img
+     mathf, out_error, viewplot, wps.
+ - tools/gzip_buffer renamed tools/zlib. Method gzip_buffer renamed compress_buffer and
+   gunzip_buffer renamed decompress_buffer. In fact we had nothing of gzip in the
+   previous gzip_buffer file ! (I had learn since that in fact gzip is zlib deflate/inflate
+   plus a special header added when writing/reading in for a .gz file. As this header is not used
+   for the root format compression, then it is better to rename things).
+
+ 1.21.0 : tools/plot. Revisit #include paths to avoid too much -I when compiling.
+
+ 1.20.0 : tools/plot, test/cpp/viewplot.cpp. Add "batch plotting" facility.
+
+ 1.19.2 :
+ - wcs_ntuple : constructor with ntuple_booking, rm typedef uint and use uint32.
+ - rcs_ntuple : rm typedef uint which is error-prone and use uint32.
+
+ 1.19.1 :
+ - wcs_ntuple : handle vector column if using the ntuple_booking way.
+
+ csv handle vector columns. Windows #ifdef WIN32 -> #ifdef _MSC_VER (more clean).
+ 1.19.0 : csv handle vector columns. Windows #ifdef WIN32 -> #ifdef _MSC_VER (more clean).
+ - wcsv_ntuple, rcsv_ntuple, test/cpp/wcsv,rcsv : handle vector columns.
+ - test/cpp/waxml.cpp, wroot.cpp : use num2s.
+ - waxml/histos : handle a global ostringstream to convert numbers; huge optimization.
+ - waxml/ntuple : s_value(string&), instead of returning a string; faster code.
+ - typedefs, vdata, snpf, wroot/date, file, rroot/file : WIN32 -> _MSC_VER.
+ - histo/base_histo : restore the extra_entries() method.
+ - histo/base_cloud, base_histo, dps, xml/element, tree : remove std::string title() method which is inefficient
+   and error prone. Stay only with the "const" one.
+ - histo/h1,h2,h3 : get_histo_data() : use *this instead of parent::base_get_data().
+ - words : have an extra bool a_clear arguments to have the possibility to append words to the output vector.
+ - args : add() : revisit strip logic. Remove some functions (that was only used in OpenScientist).
+ - wroot/file : synchronize() : __MINGW32__ case.
+ - wroot/ifile, rroot/ifile : add const to the out() method.
+ - wroot/wbuf : char_p2s -> charp_out.
+ - wroot/buffer : remove sout()
+ - wroot/directory : long2s -> long_out. Remove sout().
+ - wroot/element, rroot/info : fullName(string&) instead returning a string.
+ - sout : use an object.
+ - raxml : const for cls,path,name() string getters.
+ - pointer : handle the case of machines on which a pointer does not match a long.
+ - cids : ids for vector of basic types.
+ - file : revisit the is_hippo() logic.
+ - hbook/ntuple : to<> -> numas.
+ - b2s, num2s, snum : revisit string to number conversion to have faster code.
+
+ 1.18.2 : revisit mpi code related code :
+ - test/cpp/wrmpi, hmpi : concrete implementation of abstract tools/impi, histo/hmpi.
+ - test/cpp/dummy_mpi.h : in case of not having an mpi implementation.
+ - tools/histo/hmpi to abstract the send/receive of a bunch of histos.
+ - tools/histo/hd2mpi : to pack/unpack histo_data, profile_data by using impi..
+ - tools/impi abstract class to abstrac MPI pack/unpacking.
+ - remote tools/mpi directory.
+
+ 1.18.1 :
+ - test/cpp/use_mpi : have -DTOOLS_USE_NATIVE_MPI in case we have a MPI around.
+ - tools/mpi/hd2mpi : have :
+     #ifdef TOOLS_USE_NATIVE_MPI
+     #include <mpi.h>
+     #else
+     #include "dummy/mpi.h"
+     #endif
+   to use dummy/mpi.h in case there is MPI implementation around.
+ - tools/mpi/dummy/mpi.h : a dummy mpi.h to compile (and link test/cpp/mpi.cpp) in case there is no MPI around.
+ - tools/mpi/hs2mpi : std::cout -> a_out.
+ - test/cpp/mpi.cc : test the return of MPI_Init().
+ - test/cpp/rroot.cpp : delete dir when finished with it.
+
+ 1.18.0 : have code to send/recv histos through MPI. Have histo_data inheritance protected in base_histo. Fix some root streamers.
+ - wcsv_histo, rcsv_histo : handle #plane_Sxyw for h2,h3.
+ - wcsv_histo : revisit due to the fact that hist_data is no more publicly inherited by histos.
+
+ - test/cpp/rcsv.C renamed read_wcsv_csv.C.
+ - test/cpp/wcsv.cpp : produce now a wcsv.csv file (instead of out.csv).
+ - test/cpp/rroot.C renamed read_wroot_root.C.
+ - test/cpp/wroot.cpp : out.root -> wroot.root : to help knowing from which program a .root comes from.
+
+ - rroot/streamers : h2, h3 : read fTsumxy,xz,yz and put on m_in_range_plane_Sxyw.
+ - wroot/streamers : p1, p2 : revisit to save m_bin_Svw at the right place.
+ - wroot/streamers : h2, h3 : save fTsumxy,xz,yz.
+ - wroot/streamers : revisit due to the fact that hist_data is no more publicly inherited by histos.
+ - wroot/to : write_histos() : to write a vector of histos at once in a directory.
+ - wroot/element, infos : classes streamer_[short,uint,int,float,double,stat_t,bool] : for a better handling of the offsets.
+
+ - histo/base_histo : public -> protected for hist_data inheritance.
+ - histo/slice : set m_in_range_plane_Sxyw to zero.
+ - histo/h1,h2,h3,p1,p2 : in fill() handle m_in_range_plane_Sxyw.
+ - histo/histo_data, base_histo, b1, b2, b3 : handle m_in_range_plane_Sxyw to save "fTsumxy,xz,xy" for H2, H3 at the root format.
+
+ - tools/histo/histos : to clear a std::vector of histos.
+ - test/cpp/mpi.cpp, build, use_mpi : to test histo send/recv through mpi.
+ - tools/mpi directory.
+
+ - other modifs due to cosmetic or to modifs in inlib/exlib but not used in tools.
+
+ 1.17.1 : revisit the usage of std::vector::resize(), have assign() if needed (for exa in histo::reset()) :
+  - tools/array, tools/histo/[base_histo,histo_data,p1,p2,profile_data], tools/rroot/streamers : revisit reset().
+
+ 1.17.0 :
+ - tools/wroot/infos : fixes in the streamer infos in order to read .root files with CERN-ROOT/6.02.03 :
+   In TTree fScaleFactor -> fScalefactor.
+   Replace the streamer_basic_type(OBJECT_ANY) to streamer_object_any(...).
+ - rm CVS directories (no more needed since g4tools handled in git).
+
+ 1.16.3 :
+ - tools/rroot/ntuple : add also "id casting" in tools::rroot::ntuple::column<T> and column_element<T>.
+ - tools/rcsv_ntuple : Windows : rcsv.cpp crashed. It came from a lack of "id casting" in the
+   tools::rcsv::ntuple::column<T> class. (This induced bad pointers in _read_line()).
+ - wroot/leaf : add iro(a_from) in the copy constructors.
+ - tools/rcsv_ntuple/s_cid() : be compleete (compare to types handled in _read_line()).
+
+ 1.16.2 :
+ - test/cpp/rcsv.cpp : modifs for example code to init and read by using ntuple_binding.
+ - tools/rcsv_ntuple, cids : modifs to init and read by using ntuple_binding.
+ - test/cpp/wcsv.cpp : produce a commented header.
+ - tools/wcsv_ntuple : write a "commented header" with columns descriptor.
+
+ 1.16.1 :
+ - tools/rroot/ntuple/column_string : implement the find_entry() method. It permits to read std::string
+   column by using the ntuple_binding way.
+ - test/cpp/rroot.cpp : example of ntuple_binding(std::string) usage.
+ - tools/histo/h[1,2,3] : set_bin_content() method.
+ - tools/wcsv_ntuple : set the title if creating from a booking.
+
+ 1.16.0 : write/read ntuple with std::string columns. Some important modifs in wroot/streamers to
+   stream properly TH[1,2,3]F histos.
+ - tools/cpp/raxml.cpp, rcsv.cpp, rroot.C, rroot.cpp : examples to read an ntuple std::column.
+ - tools/cpp/waxml.cpp, wcsv.cpp, wroot.cpp : examples to write an ntuple std::string column.
+ - rcsv_ntuple : is_hippo() method : to detect if a file is at the hippodraw format.
+ - rroot/clss, rall, streamers : modifs to read TH3D histos.
+ - wroot/ntuple : class column_string + modifs to write an ntuple string column.
+ - wroot/branch : create_leaf_string() : to create an std::string column.
+ - wroot/leaf : leaf_string : to write an ntuple string column.
+ - wroot/streamers : modifs to stream properly TH[1,2,3]F histos.
+ - wcsv_ntuple : modifs to write std::string columns.
+ - waxml/ntuple : modifs to write std::string columns.
+
+ 1.15.2 :
+ - test/cpp/[w,r]csv_histo.cpp : -verbose : change output to easily compare writing and reading mean,rms axes.
+ - tools/rcsv_histo : correct m_bin_Sxw,Sx2w reading for [2,3] dimensions.
+
+ 1.15.1 :
+ - test/cpp/wcsv_histo.cpp : write an histo with variable edge bins.
+ - test/cpp/wcsv_histo.cpp : h1d : add a title with two words (to test the csv reading).
+ - test/cpp/wcsv_histo.cpp : h1d : add an annotation with an empty value (to test the csv reading).
+ - tools/rcsv_histo : if verbose, dump annotations.
+ - tools/rcsv_histo : #title : read the "rest of line".
+ - tools/rcsv_histo : add reading of axis with variable edge bins.
+
+ 1.15.0 :
+ - tools/rcsv_histo, test/cpp/rcsv_histo.cpp : to read histo at csv format.
+ - tools/wcsv_histo : for non-profile, correct the labels to remove Svw,Sv2w.
+ - tools/rcsv_ntuple : cosmetic.
+ - tools/xml/loader : if(!XML_Parse()) -> if(XML_Parse()==XML_STATUS_ERROR) : seen by Coverity.
+ - tools/xml/element : correction for Coverity.
+ - tools/aida_ntuple, columns, raxml : correction for Coverity.
+ - tools/histo/histo_data, dps, profile_data : correction for Coverity.
+ - src/csz_inflate.c : correction for Coverity.
+
+ 1.14.1 :
+ - rroot/streamers : static_cast<unsigned int> fEntries to data.m_all_entries.
+
+ 1.14.0 :
+ Changes to extend the "fast getters" logic to 1D histo and profile in order
+ that .root streaming of them be strictly compatible wiht the TProfile ones :
+ - test/cpp/wroot.cpp : have a 2D profile example. Add more verbose comments.
+ - test/cpp/rroot.cpp : have hard coded reading example (in particular of profiles) in case
+   the file is the pawdemo.root one or the out.root one produced by wroot.
+ - rroot/streamers : revisit to use at the end the m_in_range_xxx fields in mean,rms().
+ - rroot/cids, clss, streamers, rall : read TProfile2D.
+ - rroot/named : in ObjArray, List : add a lacking "delete obj" in case the read object is of bad type.
+ - wroot/infos, streamers : TProfile : pass from version 3 to version 4. TProfile2D from version 4 to 5.
+ - raxml : update_fast_getters() done on the hdata.
+ - store/osc_streamers : update_fast_getters() done on the hdata.
+ - histo/slice : update_fast_getters() done on the hdata.
+ - histo/h1, h2, h3, p1,p2 : fille() : update the m_in_range_xxx fields.
+ - histo/b1,b2,b3 : rm update_fast_getters() methods. mean,rms() use now the m_in_range fields.
+ - histo/base_histo : all_entries() uses now the m_all_entries fast getter.
+ - histo/histo_data : reset_fast_getters(), update_fast_getters().
+ - histo/histo_data : new fields : m_all_entries, m_in_range_entries, m_in_range_Sw, m_in_range_Sw2.
+ Changes in rroot to read streamers infos :
+ - rroot/file : read_streamer_infos().
+ - rroot/info : new file.
+ Others :
+ - cmathT : have "const type&" in args.
+ - forit : tools_typename_vforcit() cpp macro, but it is not yet used in this release.
+
+ 1.13.0 :
+ - test/cpp/wcsv_histo.cpp : example of changing the comment and separator characters.
+ - test/cpp/raxml.cpp : example of ntuple reading by using a ntuple_binding.
+ - tools/aida_ntuple : set_binding() logic.
+ - tools/wcsv_histo : be able to change the comment character for the header.
+ - tools/wcsv_histo : cpp tools_wcsv_ntuple -> tools_wcsv_histo.
+ - tools/rroot/rall : key_to_h1d() : to ease histogram reading knowing the name of the key.
+ - tools/rroot/rall : find_TDirectory() : to ease searching of a directory in a directory.
+ - tools/rroot/directory : file() method.
+ - tools/rroot/member_reader : cpp tools_rroot_member_writer -> tools_rroot_member_reader.
+ - tools/wroot/date : WIN32 : rm include windows.h and then stay with the not thread safe localtime() on Windows.
+ - mgr/build : do not bring wroot/date from inlib.
+
+ 1.12.0 :
+ - tools/histo/h[1,2,3],p[1,2] : s_cls() method to write class name in a csv histo file.
+ - tools/wcsv_histo, test/cpp/wcsv_histo.cpp.
+ - tools/wroot/streamers : do not use get_histo_data() since now h[1,2,3] inherits histo_data.
+ - src/setpawc.f, setntuc.f in test/cpp.
+
+ 1.11.0 :
+ - modifs to build rcsv.cpp example :
+     mgr/2g4tools.upgrade
+     mgr/build
+ - new file to build rcsv.cpp example :
+     test/cpp/out.aida
+     test/cpp/rcsv.cpp
+     test/cpp/tools_test_rcsv
+     tools/chars
+     tools/rcsv_ntuple
+     tools/s2time
+
+ - modifs to build raxml.cpp example :
+     test/cpp/build
+ - new files to read aida xml file (it needs expat) :
+     test/cpp/raxml.cpp
+     tools/aida_ntuple
+     tools/array
+     tools/columns
+     tools/file
+     tools/file_format
+     tools/file_reader
+     tools/handle
+     tools/histo/dps
+     tools/raxml
+     tools/value
+     tools/value.icc
+     tools/xml/element,loader,tree
+
+ - g4tools/hbook/CHBOOK : remove not used code.
+ - g4tools/src/hdummy.c : moved in test/cpp.
+ - g4tools/src/hids.f,hisid.f, hntvar2.f : remove.
+ - test/cpp/rroot.cpp, rxrayfluo.cpp, wroot.cpp, wroot_ntu_1000_cols.cpp, chbook.cpp, whbook.cpp : include cstdlib.
+ - test/cpp/use_f77, use_cernlib, build_f77 : Mavericks with gfortron-48 from MacPorts : rm -m32, use f77libs to
+   say where libgfortran.dylib is.
+ - tools/wroot/infos : streamer infos for TH3[F,D], TProfile2D.
+ - tools/wroot/named : Att3D_stream().
+ - tools/wroot/streamers, to : TH3[F,D], TProfile2D streamers;
+ - tools/wroot/date : use localtime_r() (instead of localtime()) which is thread safe.
+ - tools/rroot/streamers, tools/store/osc_streamers : have new axis offset template argument.
+ - toools/histo/[h,p]1,2,3d : remove __CINT__ code.
+ - tools/histo/p1, p2 : configure methods.
+ - tools/hsito/b1,b2,b3,h1,h2,h3,p1,p2 : _find_offset() logic to avoid duplicating code to find the offset from coords.
+ - tools/histo/* : handle a new template argument for the bin offset type. Needed for sparce histos that
+   will have a uint64 offset type. New base_histo inherits histo_data.
+ - tools/histo/base_histo : inherits histo_data.
+ - tools/histo/axes : to commonalize some code with sparse histos.
+ - tools/histo/axis, tools/waxml/histos, test/cpp/histo.cpp : have enum
+     axis_UNDERFLOW_BIN,axis_OVERFLOW_BIN under namspace tools::histo to avoid
+   to use template for that.
+ - tools/histo/h1df, h2df, h3df : histos with float bins.
+ - src/csz_inflate.cc : comment out register keyword.
+ - src/csz_inflate.cc : in csz__Inflate_dynamic() have some "free structure at return time" detected by Coverity.
+ - rroot/basket : in stream() comment out an if dead code block to quiet Coverity.
+ - wroot/to,bufobj,directory : cosmetic edition.
+
+ 1.10.0 :
+ - tests/cpp/*.cpp : use new random API.
+ - tools/cmathT,randT,rtausme[ui,f,d],randd,randf,random,rroot/streamers : to quit Coverity, revisit random
+   generators to avoid usage of stdlib.h/rand() indirectly used in rroot/streamers.
+ - tools/rroot/base_leaf,basket,branch,leaf,streamers : modifications to quiet Coverity.
+ - tools/mathd : rename math to mathd to follow naming convention [f,d] used in other places.
+ - test/cpp/build : inflate.c -> csz_inflate.cc.
+ - src/inflate.c -> src/csz_inflate.cc.
+
+ 1.9.4 :
+ - test/cpp/rxrayfluo.cpp : add a ntuple_binding usage.
+ - tools/ntuple_binding, rroot/ntuple : logic to attach user variables to ntuple columns when reading.
+   Available today only for the root format.
+ - tools/rroot/named, tree : use of the tools_vforcit cpp macro to simplify edition of loops with iterators.
+ - histo/c1d : correct a mistyping in "#define tools_histo_c1d" that was _cld !
+
+ 1.9.3 :
+ - test/cpp/waxml.cpp : have an histo title with <,>,&,",' to test XML escaping when writing
+   at the AIDA XML format.
+ - tools/waxml/begend, histos, ntuple : use to_xml() to escape the XML special characters in strings.
+ - tools/waxml/begend : change output dtd version from 3.0 to 3.2.1.
+ - tools/ntuple_booking : to quiet coverity, in operator=() add :
+     if(&a_from==this) return *this;
+
+ 1.9.1 :
+ - test/cpp/rxrayfluo.cpp : to test the reading of a xrayfluo.root file.
+
+ 1.9.0 :
+ - tools/rroot, test/cpp/rroot.cpp : code to read a file at CERN-ROOT format.
+
+ 1.8.0 :
+ - tools/[wroot,waxml]/ntuple : handle the creation of std::vector columns through
+   the new ntuple_booking class.
+ - tools/[wroot,waxml,hbook]/ntuple, wcsv_ntuple : handle the new ntuple_booking.
+ - tools/ntuple_boooking : revisit the logic. Have a column_booking class.
+   Handle a opaque pointer for the std::vector column case. Have fields protected
+   and have getter, setter methods.
+ - tools/wroot/ntuple : rm the unused m_def field in the std_vector_column class.
+
+ 1.7.2 :
+ - test/cpp/wroot.cpp, rroot.C : have an example of std_vector columns.
+ - tools/wroot/branch_element, leaf_element, ntuple::std_vector_column : handle column
+   of std::vectors.
+ - mgr/build_app : have :
+     cppflags="${cppflags} -I../g4tools/include"
+
+ 1.7.1 :
+ - tools/wroot/buffer : expand2() method to have same logic as CERN-ROOT/TBuffer.
+   It boosts the writing of ntuple with large number of columns.
+ - tools/forit : use tools_[v,s,l,m]for[c]it cpp macros to shorten iterator/loop code.
+
+ 1.7.0 :
+ - test/cpp/list_free_segs.C : to list free segments in a out.root file.
+ - wroot/file : set_END() : update first back free segment m_first field
+   when writing something. This permits to have good free segs infos in file.
+ - wroot/file/make_free_seg : use free_seg/add_free() function.
+ - wroot/free_seg : add_free function.
+ - histo/c[1,2,3] : operator= : protect against same object.
+ - wroot/named/ObjArray : operator= : protect against same object.
+ - wroot/ntuple/column : operator= : protect against same object.
+ - sto/to() : have a default value.
+ - pointer/p2s : void* -> const void*.
+ - args/find() : have a default value.
+
+ 1.6.0 :
+ - test/cpp/wroot.cpp : add an empty tree to check the below modification.
+ - wroot/basket/stream : remove the if(!m_data.length()) test that
+   refrains to write an empty tree.
+ - wroot/store : put in this directory the code that permits to stream
+   histos with all their internal infos.
+ - args, path, hbook/hdummy.c : changes coming from the inlib/exlib
+   context but not used within g4tools.
+
+ 1.5.0 :
+ - build_f77 : modifications to build from CYGWIN with DF98 fortran.
+ - wroot : osc_streamers, iobj_const_visitor, to, buffer, member_writer :
+   modifications in order to be able to stream histos as in
+   OpenScientist/BatchLab and then with all the internal infos.
+   We remember that the ROOT/TH streaming does not handle the number
+   of entries per bin (but only the weight per bin) and not the annotations.
+ - tools/gzip_buffer, test/cpp/wroot.cpp : show how to use compression
+   with zlib.
+ - histo/base_histo : in a for, change an unsigned to "unsigned int".
+ - histo/c[1,2,3]d : tools::mn,mx<> changed to mn,mx<>.
+ - wroot/wbuf : have a public : set_byte_swap() method (then
+   the wbuf byte swapping can be changed out of the constructor).
+ - safe_cast, hbook/wntuple  : rename the global cast() functions
+   to safe_cast(). It permits to trace them more easily.
+ - strip : have a "return bool" returning true if some stripping had been done.
+ - test/cpp/use_cc, use_cpp, build : [cc,cpp]_linker : variables to
+   explicitely link with cc or cpp.
+ - test/cpp/use_cernlib : Windows : try to handle a build from cygwin.
+ - vmanip, mem, platform, mem : slight changes coming from the inlib/exlib
+   context but not used within g4tools.
+ - license file : correct some typos (` to ').
+
+ 1.4.3 :
+ - histo/b3,h3d : have a print() method. (Few things in it for the moment...)
+ - histo/sliced : for h3 : projection_[xy,yz,xz] methods.
+ - test/cpp/histo.cpp : example of a h3d with some projections.
+
+ 1.4.2 :
+ - histo/h3::fill : bug correction : line 69 [3] -> [2].
+ - test/cpp/use_cpp : g++ : have the -shadow option.
+ - histo/c[1,2,3]d : set_histogram(), s_class() : methods needed when
+   creating back objects when reading an AIDA xml file.
+   (In fact not used today since reading files is not used in G4).
+ - modifs in typedefs, cids, tos, vmanip : the same, coming from modifs
+   in inlib related to the reading of files.
+
+ 1.4.1 : 21 Aug 2012 : G.Barrand :
+ - wroot/file, free_seg : handle (and save) "free segments".
+   It permits to open the file correctly when opening back
+   from CERN-ROOT with "UPDATE" mode.
+
+ 1.4.0 : 20 Aug 2012 : G.Barrand :
+ - Handle "axis title for plotting" through annotations.
+   See examples/cpp/[wroot,waxml].cpp for examples.
+ - Arrange so that "axis title for plotting" be saved in .root file
+   so that ROOT plotting handle these titles.
+ - Save annotations for the AIDA file format.
+ - NOTE : it does not seem to have an HBOOK API to save
+   per histogram "axis title for plotting" in a HBOOK file.
+
+ 1.3.2 : 17 Aug 2012 : G.Barrand :
+ - base_histo : have annotations.
+
+ 1.3.1 : 24 Jul 2012 : G.Barrand :
+ - hbook/h1,h2,p1 : have a configure() method to rebook.
+ - hbook/h1,h2,p1,base_histo : have title(),reset(),all_entries()
+   on base_histo.
+
+ 1.3.0 : 20 Jul 2012 : G.Barrand :
+ - add file/class ntuple_booking to capture a ntuple booking parameters.
+ - hbook/wntuple, waxml/ntuple, wcsv_ntuple : add a constructor receiving
+   a ntuple_booking object.
+ - tests/cpp/[waxml,whbook,wroot,wcsv_booking].cpp : have an example of usage
+   of the creation of an ntuple by using a ntuple_booking object.
+
+ 1.2.1 : 19 Jul 2012 : G.Barrand :
+ - histo/b1,b2,b3 : have public configure methods to rebook an existing
+   histogram.
+ - histo/b3 constructor : variable ns changed to nbins to remove a
+   "-shadow pinaillage" warning.
+ - change "private" to "protected" in various classes to let things
+   opened via inheritance.
+ - test/cpp/build : g++ : -shadow.
+ - test/cpp/build : CYGWIN : changes to build also with VisualStudio 2009.
+
+ 1.2.0 : 28 May 2012 : G.Barrand :
+ - waxml/ntuple : do not write the default option in the column element.
+   It permits to have XML files with ntuple readable by jas3.
+   The 1.4 release of ioda can also read these files.
+ - sto : remove the "tellg() logic". There is a difference of comportement
+   of tellg() in the g++ 4.6.x versions. We use now fail() to detect
+   if a stream conversion toward numbers is ok or not.
+ - tools/hbook/base_histo : have an hbook_id() method to get the... HBOOK ID!
+ - tools/hbook/h1,h2,base_histo : displace scale() on base_histo.
+ - tools/hbook/h1,h2,base_histo : add(),subtract(),multiply(),divide() methods.
+   (To please Michel).
+ - Slight corrections to remove messages from the -Wshadow "pinaillage" option.
+   (Hell, if a compiler misunderstands the name of a local variable with the
+   name of a method...)
+ - Slight corrections to compile with clang++.
+ - modify test/cpp/build to build the C++ programs from CYGWIN by using
+   the Visual Studio compiler.
+
+ 1.1.0 : 8 Feb 2012 : G.Barrand :
+ - split the fill_infos() function in wroot/infos.
+   It was too long and induces warning with icc and g++.
+
+ 1.0.6 : 8 Feb 2012 : G.Barrand :
+ - build from code of inexlib-1.3.
+ - histo : some "this->" changed to "parent::".
+   "this->" is needed only when invoking virtual methods.
+ - have snpf to avoid too much #ifdef WIN32 for [v]snprintf.
+ - have "typedef cid" in a standalone cid file.
+ - remove some remaining inline keyword within class.
+ - test/cpp/use_clang : to build with clang. Tested with
+   clang-3.0 on MacOSX. To use clang :
+     cd test/cpp
+     ./build -clang
+ - add this history file.
+
+

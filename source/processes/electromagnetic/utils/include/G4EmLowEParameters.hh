@@ -72,6 +72,9 @@ public:
   void SetBeardenFluoDir(G4bool val);
   G4bool BeardenFluoDir() const;
 
+  void SetANSTOFluoDir(G4bool val);
+  G4bool ANSTOFluoDir() const;
+
   void SetAuger(G4bool val);
   G4bool Auger() const;
 
@@ -101,6 +104,9 @@ public:
   void SetPIXEElectronCrossSectionModel(const G4String&);
   const G4String& PIXEElectronCrossSectionModel();
 
+  void SetLivermoreDataDir(const G4String&);
+  const G4String& LivermoreDataDir();
+
   // parameters per region or per process 
   void AddMicroElec(const G4String& region);
   const std::vector<G4String>& RegionsMicroElec() const;
@@ -129,6 +135,7 @@ private:
 
   G4bool fluo;
   G4bool beardenFluoDir;
+  G4bool fANSTOFluoDir;
   G4bool auger;
   G4bool pixe;
   G4bool deexIgnoreCut;
@@ -141,6 +148,7 @@ private:
 
   G4String namePIXE;
   G4String nameElectronPIXE;
+  G4String livDataDir;
 
   std::vector<G4String>  m_regnamesME;
 

@@ -40,22 +40,16 @@ class G4HCofThisEvent;
 
 class LXeScintSD : public G4VSensitiveDetector
 {
-  public:
+ public:
+  LXeScintSD(G4String name);
+  ~LXeScintSD();
 
-    LXeScintSD(G4String name);
-    virtual ~LXeScintSD();
+  void Initialize(G4HCofThisEvent*) override;
+  G4bool ProcessHits(G4Step* aStep, G4TouchableHistory*) override;
 
-    virtual void Initialize(G4HCofThisEvent* );
-    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* );
-    virtual void EndOfEvent(G4HCofThisEvent* );
-    virtual void clear();
-    virtual void DrawAll();
-    virtual void PrintAll();
- 
-  private:
-
-    LXeScintHitsCollection* fScintCollection;
- 
+ private:
+  LXeScintHitsCollection* fScintCollection;
+  G4int fHitsCID;
 };
 
 #endif

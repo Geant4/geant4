@@ -84,6 +84,8 @@ public:
 
   void InitialiseParameters(const G4ParticleDefinition*);
 
+  void DumpParameters(std::ostream& out) const;
+
   // empty method
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 			 const G4MaterialCutsCouple*,
@@ -146,6 +148,7 @@ public:
   inline G4double GetDEDX(const G4ParticleDefinition* part,
                           G4double kineticEnergy,
                           const G4MaterialCutsCouple* couple);
+
   inline G4double GetDEDX(const G4ParticleDefinition* part,
                           G4double kineticEnergy,
                           const G4MaterialCutsCouple* couple,
@@ -154,6 +157,7 @@ public:
   inline G4double GetRange(const G4ParticleDefinition* part,
                            G4double kineticEnergy,
                            const G4MaterialCutsCouple* couple);
+
   inline G4double GetRange(const G4ParticleDefinition* part,
                            G4double kineticEnergy,
                            const G4MaterialCutsCouple* couple,
@@ -167,41 +171,42 @@ public:
   inline 
   G4double GetTransportMeanFreePath(const G4ParticleDefinition* part,
                                     G4double kinEnergy);
+
   inline
   G4double GetTransportMeanFreePath(const G4ParticleDefinition* part,
                                     G4double kinEnergy,
                                     G4double logKinEnergy);
 
-private:
-
   //  hide assignment operator
   G4VMscModel & operator=(const  G4VMscModel &right) = delete;
   G4VMscModel(const  G4VMscModel&) = delete;
 
-  G4SafetyHelper* safetyHelper;
-  G4VEnergyLossProcess* ionisation;
-  const G4ParticleDefinition* currentPart;
+private:
 
-  G4double dedx;
-  G4double localtkin;
-  G4double localrange;
+  G4SafetyHelper* safetyHelper = nullptr;
+  G4VEnergyLossProcess* ionisation = nullptr;
+  const G4ParticleDefinition* currentPart = nullptr;
+
+  G4double dedx = 0.0;
+  G4double localtkin = 0.0;
+  G4double localrange = DBL_MAX;
 
 protected:
 
-  G4double facrange;
-  G4double facgeom;
-  G4double facsafety;
-  G4double skin;
-  G4double dtrl;
+  G4double facrange = 0.04;
+  G4double facgeom = 2.5;
+  G4double facsafety = 0.6;
+  G4double skin = 1.0;
+  G4double dtrl = 0.05;
   G4double lambdalimit;
   G4double geomMin;
   G4double geomMax;
 
+  G4bool   samplez = false;
+  G4bool   latDisplasment = true;
+
   G4ThreeVector      fDisplacement;
   G4MscStepLimitType steppingAlgorithm;
-
-  G4bool   samplez;
-  G4bool   latDisplasment;
 
 };
 
@@ -299,7 +304,7 @@ G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
                      const G4MaterialCutsCouple* couple)
 {
   G4double x;
-  if (ionisation) {
+  if (nullptr != ionisation) {
     x = ionisation->GetDEDX(kinEnergy, couple);
   } else {
     const G4double q = part->GetPDGCharge()*inveplus;
@@ -308,12 +313,14 @@ G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
   return x;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double 
 G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
                      const G4MaterialCutsCouple* couple, G4double logKinEnergy)
 {
   G4double x;
-  if (ionisation) {
+  if (nullptr != ionisation) {
     x = ionisation->GetDEDX(kinEnergy, couple, logKinEnergy);
   } else {
     const G4double q = part->GetPDGCharge()*inveplus;
@@ -325,15 +332,15 @@ G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double 
-G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy,
+G4VMscModel::GetRange(const G4ParticleDefinition* part, G4double kinEnergy,
                       const G4MaterialCutsCouple* couple)
 {
   //G4cout << "G4VMscModel::GetRange E(MeV)= " << kinEnergy << "  " 
   //  << ionisation << "  " << part->GetParticleName()
   //  << G4endl;
-  localtkin  = kinEnergy;
-  if (ionisation) {
-    localrange = ionisation->GetRangeForLoss(kinEnergy, couple); 
+  localtkin = kinEnergy;
+  if (nullptr != ionisation) {
+    localrange = ionisation->GetRange(kinEnergy, couple); 
   } else {
     const G4double q = part->GetPDGCharge()*inveplus;
     localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity()); 
@@ -342,6 +349,8 @@ G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy,
   return localrange;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double 
 G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy, 
                       const G4MaterialCutsCouple* couple, G4double logKinEnergy)
@@ -349,9 +358,9 @@ G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy,
   //G4cout << "G4VMscModel::GetRange E(MeV)= " << kinEnergy << "  " 
   //  << ionisation << "  " << part->GetParticleName()
   //	<< G4endl;
-  localtkin  = kinEnergy;
-  if (ionisation) { 
-    localrange = ionisation->GetRangeForLoss(kinEnergy, couple, logKinEnergy);
+  localtkin = kinEnergy;
+  if (nullptr != ionisation) { 
+    localrange = ionisation->GetRange(kinEnergy, couple, logKinEnergy);
   } else { 
     const G4double q = part->GetPDGCharge()*inveplus;
     localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity());
@@ -370,7 +379,7 @@ G4VMscModel::GetEnergy(const G4ParticleDefinition* part,
   //G4cout << "G4VMscModel::GetEnergy R(mm)= " << range << "  " << ionisation
   //	 << "  Rlocal(mm)= " << localrange << "  Elocal(MeV)= " << localtkin
   //	 << G4endl;
-  if(ionisation) { e = ionisation->GetKineticEnergy(range, couple); }
+  if(nullptr != ionisation) { e = ionisation->GetKineticEnergy(range, couple); }
   else { 
     e = localtkin;
     if(localrange > range) {
@@ -404,12 +413,10 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
                                       G4double ekin)
 {
   G4double x;
-  if (xSectionTable) {
-    const G4int idx = CurrentCouple()->GetIndex();
-    x =  (*xSectionTable)[idx]->Value(ekin, idxTable)/(ekin*ekin);
+  if (nullptr != xSectionTable) {
+    x = pFactor*(*xSectionTable)[basedCoupleIndex]->Value(ekin)/(ekin*ekin);
   } else { 
-    x = CrossSectionPerVolume(CurrentCouple()->GetMaterial(), part, ekin, 
-                              0.0, DBL_MAX); 
+    x = pFactor*CrossSectionPerVolume(pBaseMaterial, part, ekin, 0.0, DBL_MAX); 
   }
   return (x > 0.0) ? 1.0/x : DBL_MAX;
 }
@@ -419,12 +426,10 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
                                       G4double ekin, G4double logekin)
 {
   G4double x;
-  if (xSectionTable) {
-    const G4int idx = CurrentCouple()->GetIndex();
-    x =  (*xSectionTable)[idx]->LogVectorValue(ekin, logekin)/(ekin*ekin);
+  if (nullptr != xSectionTable) {
+    x = pFactor*(*xSectionTable)[basedCoupleIndex]->LogVectorValue(ekin, logekin)/(ekin*ekin);
   } else { 
-    x = CrossSectionPerVolume(CurrentCouple()->GetMaterial(), part, ekin, 
-                              0.0, DBL_MAX); 
+    x = pFactor*CrossSectionPerVolume(pBaseMaterial, part, ekin, 0.0, DBL_MAX);
   }
   return (x > 0.0) ? 1.0/x : DBL_MAX;
 }
@@ -432,4 +437,3 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

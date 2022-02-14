@@ -53,7 +53,7 @@ G4BinaryTritonBuilder()
 }
 
 void G4BinaryTritonBuilder::
-Build(G4TritonInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

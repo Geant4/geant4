@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(wls)
 
 #----------------------------------------------------------------------------
@@ -40,14 +40,9 @@ target_link_libraries(wls ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(wls_SCRIPTS
-    wls.out
-    wls.in
-    init.in
     gui.mac
-    icons.mac
-    run.png
-    Sr90.mac
     vis.mac
+    electron.mac
    )
 
 foreach(_script ${wls_SCRIPTS})

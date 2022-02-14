@@ -31,33 +31,43 @@
 #ifndef G4RootRFileManager_h
 #define G4RootRFileManager_h 1
 
-#include "G4BaseFileManager.hh"
+#include "G4VRFileManager.hh"
 #include "globals.hh"
 
 #include <map>
+#include <string_view>
 
 namespace tools {
-namespace rroot { 
-class file; 
+namespace rroot {
+class file;
 //class directory;
 }
-}  
+}
 
-class G4RootRFileManager : public G4BaseFileManager
+class G4RootRFileManager : public G4VRFileManager
 {
   public:
     explicit G4RootRFileManager(const G4AnalysisManagerState& state);
+    G4RootRFileManager() = delete;
     virtual ~G4RootRFileManager();
+
+    virtual G4String GetFileType() const final { return "Root"; }
+
+    // Methods from base class
+    virtual void CloseFiles() final {}
 
     // Methods to manipulate input files
     virtual G4bool OpenRFile(const G4String& fileName,
                              G4bool isPerThread);
-    
+
     // Get methods
-    tools::rroot::file* GetRFile(const G4String& fileName, 
+    tools::rroot::file* GetRFile(const G4String& fileName,
                                  G4bool isPerThread) const;
 
   private:
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootRFileManager" };
+
     // data members
     std::map<G4String, tools::rroot::file*> fRFiles;
 };

@@ -23,32 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrMaterialMixture
+// G4tgrMaterialMixture
 //
 // Class description:
 //
 // Class to represent a material mixture.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrMaterialMixture_h
-#define G4tgrMaterialMixture_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrMaterialMixture_hh
+#define G4tgrMaterialMixture_hh 1
 
 #include <iostream>
 #include <vector>
 
+#include "globals.hh"
 #include "G4tgrMaterial.hh"
 
 class G4tgrMaterialMixture : public G4tgrMaterial
 {
-  public:  // with description
+  public:
+
+    G4tgrMaterialMixture();
+    ~G4tgrMaterialMixture();
 
     G4tgrMaterialMixture(const G4String& matType,
                          const std::vector<G4String>& wl);
@@ -60,24 +57,17 @@ class G4tgrMaterialMixture : public G4tgrMaterial
 
     G4double GetA() const { return 0.; }
     G4double GetZ() const { return 0.; }
-    const G4String& GetComponent(G4int i) const { return theComponents[i]; } 
-    G4double GetFraction(G4int i) { return theFractions[i]; } 
-
-    G4tgrMaterialMixture operator= (const G4tgrMaterialMixture&); 
-
-  public:  // without description
-
-    G4tgrMaterialMixture();
-   ~G4tgrMaterialMixture();
+    const G4String& GetComponent(G4int i) const { return theComponents[i]; }
+    G4double GetFraction(G4int i) { return theFractions[i]; }
 
   protected:
 
-    void TransformToFractionsByWeight(){};
+    void TransformToFractionsByWeight() {}
 
   protected:
 
-    std::vector<G4String>  theComponents;
-    std::vector<G4double>  theFractions;
+    std::vector<G4String> theComponents;
+    std::vector<G4double> theFractions;
 };
 
 #endif

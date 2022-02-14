@@ -36,30 +36,30 @@ class G4HCofThisEvent;
 
 // class description:
 //
-// This class implements the interface for storing hits collections of G4THitsMap<G4double>
-// type vith Geant4 analysis tools.
+// This class implements the interface for storing hits collections of
+// G4THitsMap<G4double> type vith Geant4 analysis tools.
 
 class G4VScoreNtupleWriter
 {
-  public: 
-    virtual ~G4VScoreNtupleWriter();
+ public:
+  virtual ~G4VScoreNtupleWriter();
 
-    // static methods
-    static G4VScoreNtupleWriter* Instance();
+  // static methods
+  static G4VScoreNtupleWriter* Instance();
 
-    // methods
-    virtual G4bool Book(G4HCofThisEvent* hce) = 0;
-    virtual void   OpenFile() = 0;
-    virtual void   Fill(G4HCofThisEvent* hce, G4int eventNumber) = 0;
-    virtual void   Write() = 0;
+  // methods
+  virtual G4bool Book(G4HCofThisEvent* hce)                  = 0;
+  virtual void OpenFile()                                    = 0;
+  virtual void Fill(G4HCofThisEvent* hce, G4int eventNumber) = 0;
+  virtual void Write()                                       = 0;
 
-  protected:
-    G4VScoreNtupleWriter();
-    virtual G4VScoreNtupleWriter* CreateInstance() const = 0;
+ protected:
+  G4VScoreNtupleWriter();
+  virtual G4VScoreNtupleWriter* CreateInstance() const = 0;
 
-    // static data members
-    static G4VScoreNtupleWriter* fgMasterInstance;    
-    static G4ThreadLocal G4VScoreNtupleWriter* fgInstance;    
+  // static data members
+  static G4VScoreNtupleWriter* fgMasterInstance;
+  static G4ThreadLocal G4VScoreNtupleWriter* fgInstance;
 };
 
 #endif

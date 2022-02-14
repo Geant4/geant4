@@ -23,75 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsLinearVector class implementation
 //
-//
-// 
-//--------------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-//  G4PhysicsLinearVector.cc
-//
-//  15 Feb 1996 - K.Amako : 1st version
-//  19 Jun 2009 - V.Ivanchenko : removed hidden bin 
-//  02 Oct 2013 - V.Ivanchenko : removed FindBinLocation
-//
-//--------------------------------------------------------------------
+// Authors:
+// - 02 Dec. 1995, G.Cosmo: Structure created based on object model
+// - 03 Mar. 1996, K.Amako: Implemented the 1st version
+// Revisions:
+// - 11 Nov. 2000, H.Kurashige: Use STL vector for dataVector and binVector
+// --------------------------------------------------------------------
 
 #include "G4PhysicsLinearVector.hh"
 
-G4PhysicsLinearVector::G4PhysicsLinearVector()
-  : G4PhysicsVector()
+// --------------------------------------------------------------------
+G4PhysicsLinearVector::G4PhysicsLinearVector(G4bool spline)
+  : G4PhysicsVector(spline)
 {
   type = T_G4PhysicsLinearVector;
 }
 
-G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin, 
-                                             G4double theEmax, size_t theNbin)
-  : G4PhysicsVector()
+// --------------------------------------------------------------------
+G4PhysicsLinearVector::G4PhysicsLinearVector(G4double Emin, G4double Emax,
+                                             std::size_t Nbin, G4bool spline)
+  : G4PhysicsVector(spline)
 {
-  type = T_G4PhysicsLinearVector;
-
-  invdBin = 1./((theEmax-theEmin)/(G4double)theNbin);
-  baseBin = theEmin*invdBin;
-
-  numberOfNodes = theNbin + 1;
-  dataVector.reserve(numberOfNodes);
-  binVector.reserve(numberOfNodes);      
-
-  binVector.push_back(theEmin);
-  dataVector.push_back(0.0);
-
-  for (size_t i=1; i<numberOfNodes-1; ++i)
-    {
-      binVector.push_back( theEmin + i/invdBin );
-      dataVector.push_back(0.0);
-    }
-  binVector.push_back(theEmax);
-  dataVector.push_back(0.0);
-
-  edgeMin = binVector[0];
-  edgeMax = binVector[numberOfNodes-1];
-
-}  
-
-G4PhysicsLinearVector::~G4PhysicsLinearVector()
-{}
-
-G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
-{
-  G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
-  if (success)
+  numberOfNodes = Nbin + 1;
+  if(Nbin < 1 || Emin >= Emax)
   {
-    invdBin = 1./(binVector[1]-edgeMin);
-    baseBin = edgeMin*invdBin;
+    G4ExceptionDescription ed;
+    ed << "G4PhysicsLinearVector with wrong parameters: theNbin= " << Nbin
+       << " Emin= " << Emin << " Emax= " << Emax;
+    G4Exception("G4PhysicsLinearVector::G4PhysicsLinearVector()", "glob03",
+                FatalException, ed, "theNbins should be > 0 and Emax > Emin");
   }
-  return success;
+  if(numberOfNodes < 2)
+  {
+    numberOfNodes = 2;
+  }
+  type = T_G4PhysicsLinearVector;
+
+  binVector.resize(numberOfNodes);
+  dataVector.resize(numberOfNodes, 0.0);
+  binVector[0] = Emin;
+  binVector[numberOfNodes - 1] = Emax;
+  Initialise();
+
+  for(G4int i = 1; i <= idxmax; ++i)
+  {
+    binVector[i] = edgeMin + i / invdBin;
+  }
 }
 
-void G4PhysicsLinearVector::ScaleVector(G4double factorE, G4double factorV)
+// --------------------------------------------------------------------
+void G4PhysicsLinearVector::Initialise()
 {
-  G4PhysicsVector::ScaleVector(factorE, factorV);
-  invdBin = 1./(binVector[1]-edgeMin);
-  baseBin = edgeMin*invdBin;
+  idxmax  = numberOfNodes - 2;
+  edgeMin = binVector[0];
+  edgeMax = binVector[numberOfNodes - 1];
+  invdBin = (idxmax + 1) / (edgeMax - edgeMin);
 }
 
+// --------------------------------------------------------------------

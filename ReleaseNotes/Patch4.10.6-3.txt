@@ -1,0 +1,114 @@
+
+                 Geant4 10.6 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                          6 November 2020
+
+List of fixes included in this public patch since the public release 10.6.p02:
+
+  o Analysis:
+    --------
+    + Fixed definition of UI commands in G4AnalysisMessenger (for 2D and
+      3D histograms).
+    + Updated to g4tools 5.0.6:
+      o Changed usage of Google style fonts.
+      o Fixed compilation warnings on clang-10.
+
+  o Event:
+    -----
+    + Fixed misleading error message in G4SPSPosDistribution.
+      Addressing problem report #2275.
+
+  o Global:
+    ------
+    + Re-instate static pointer for 'masterG4coutDestination' in
+      G4coutDestination with proper symbol exporting on Windows
+      (necessary for MT builds). Restores trapping of G4cout from
+      workers in Qt GUI.
+    + Updated date and version for 10.6.p03.
+
+  o Intercoms:
+    ---------
+    + Added StoL() method in G4UImessenger for parsing string to long int.
+      Addressing problem report #2276.
+
+  o Interfaces:
+    ----------
+    + Added fix in G4Qt to properly set GL on Windows (see Forum topic #3144).
+
+  o Persistency - gdml:
+    ------------------
+    + Fixed treatment of loops. Addressing problem report #2273.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections:
+      o G4CrossSectionElastic, G4CrossSectionInelastic: fix for ions and
+        anti-ions, where the max energy of applicability of the (elastic and
+        inelastic) cross-sections must scale with the absolute baryonic number;
+        however, the cross-sections objects are often shared between the
+        different types of ions (d, t, He3, alpha, and genericIon), therefore
+        we scale by a large value (256, safely larger than the number of
+        nucleons of the heaviest nuclides).
+    + models/de_excitation:
+      o G4NuclearLevelData: more safe initialisation of data in MT mode, use
+        mutex locks only within each method, whithout calls to other methods.
+      o G4ExcitationHandler: call to G4NuclearLevelData to initialise data for
+        levels for all elements possibly involved in the geometry.
+      o G4FermiFragmentsPoolVI: use old interface to nuclear levels.
+    + models/particle_hp:
+      o G4ParticleHPInelastic, G4ParticleHPInelasticData: improved error
+        message in the case that both G4PARTICLEHPDATA and the related
+        particle-specific environmental variable (e.g. G4PROTONHPDATA) are
+        not defined. The recommendation is to define only G4PARTICLEHPDATA.
+    + models/parton_string/diffraction:
+      o G4FTFModel: quasi-elastic is not applied any longer when the target
+        nucleus has one nucleon and the projectile hadron is not an ion. This
+        avoids to double count elastic scattering (as reported by NA61/SHINE
+        in 158 GeV/c proton interactions on liquid hydrogen).
+        Addressing problem report #2274.
+    + models/parton_string/hadronization:
+      o G4VLongitudinalStringDecay: fix in ProduceOneHadron() method, to remove
+        an inconsistency in the treatment of low-mass strings with respect to
+        the method G4QGSMFragmentation::FragmentString(). As consequence of
+        this inconsistency, interactions with fewer intra-nuclear collisions
+        were favored, therefore producing fewer secondary hadrons.
+      o G4QGSMFragmentation : proper exit in the method FragmentString()
+        when the string mass is below the threshold.
+    + models/parton_string/qgsm:
+      o G4BaryonSplitter: removed inexisting in Geant4 excited hyperon states
+        (Sigma* and Xi*).
+
+  o Run:
+    ---
+    + Fix for rndmSaveThisEvent() not properly working in multi-threaded mode.
+      Addressing problem report #2278.
+    + Allow setting of seeds with 'long' values for '/random/setSeeds'
+      UI command. Addresses problem report #2276.
+
+  o Visualization:
+    -------------
+    + Fixed compilation warnings on clang-10 in gMocren and gl2ps.
+
+  o Examples:
+    --------
+    + advanced/brachytherapy
+      o Added missing call to "/run/initialize" in VisualisationMacro.mac.
+    + advanced/purging_magnet
+    + advanced/STCyclotron
+      o Fixed README.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.6 or 10.6.p01/p02.
+  o  Technical notes distributed for release 10.6 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.6.p03 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

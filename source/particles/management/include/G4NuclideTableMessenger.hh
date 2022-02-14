@@ -23,52 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//---------------------------------------------------------------
+// G4NuclideTableMessenger
 //
-//  G4NuclideTableMessenger.hh
+// Class Description:
 //
-//  Class Description:
-//    This is a messenger class to interface to exchange information
-//    between ParticleDefinition and UI.
+// This is a messenger class to exchange information between
+// G4ParticleDefinition and UI.
 //
-//  /particle/manage/nuclide   Nuclide Table control commands.
+//   /particle/manage/nuclide   Nuclide Table control commands
 //   Commands : 
 //     lifetime * Set threshold of half-life.
-//
-//  History:
-//    11 November 2015, T. Koi   : The 1st version created.
-//
-//---------------------------------------------------------------
 
-#ifndef G4NuclideTableMessenger_h
-#define G4NuclideTableMessenger_h 1
-
-class G4NuclideTable;
-
-class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
+// Author: T.Koi, SLAC - 11 November 2015
+// --------------------------------------------------------------------
+#ifndef G4NuclideTableMessenger_hh
+#define G4NuclideTableMessenger_hh 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4NuclideTableMessenger: public G4UImessenger
+class G4NuclideTable;
+class G4UIdirectory;
+class G4UIcmdWithADoubleAndUnit;
+
+class G4NuclideTableMessenger : public G4UImessenger
 {
   public:
-    G4NuclideTableMessenger(G4NuclideTable* nuclideTable = 0);
+
+    G4NuclideTableMessenger(G4NuclideTable* nuclideTable = nullptr);
     virtual ~G4NuclideTableMessenger();
 
-  public: // With Description
-    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+    G4NuclideTableMessenger(const G4NuclideTableMessenger&) = delete;
+    G4NuclideTableMessenger& operator=(const G4NuclideTableMessenger&) = delete;
+
+    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
 
   private:
-    G4NuclideTableMessenger(const G4NuclideTableMessenger&):G4UImessenger(){};
 
-  private:
-    G4NuclideTable* theNuclideTable;
+    G4NuclideTable* theNuclideTable = nullptr;
 
-    G4UIdirectory *             thisDirectory;
-    G4UIcmdWithADoubleAndUnit * lifetimeCmd; 
-    G4UIcmdWithADoubleAndUnit * lToleranceCmd; 
+    G4UIdirectory* thisDirectory = nullptr;
+    G4UIcmdWithADoubleAndUnit* lifetimeCmd = nullptr; 
+    G4UIcmdWithADoubleAndUnit* lToleranceCmd = nullptr; 
 };
 
 #endif

@@ -313,8 +313,9 @@ G4NavigationLogger::CheckDaughterEntryPoint(const G4VSolid* sampleSolid,
   G4ThreeVector  localReEntryPoint = localPoint+distToReEntry*localDirection;
 
   // Clear error  -- Daughter entry point is bad
+  constexpr G4double eps= 1.0e-10;
   G4bool DaughterEntryIsOutside = SuspiciousDaughterDist
-         && ( (sampleStep < distToReEntry) || (insideMother == kOutside ) );
+     && ( (sampleStep * (1.0+eps) < distToReEntry) || (insideMother == kOutside ) );
   G4bool EntryIsMotherExit = std::fabs(sampleStep-motherStep) < kCarTolerance;
 
   // Check for more subtle error - is exit point of daughter correct ?

@@ -58,20 +58,14 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4IonPhysicsXS);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4IonPhysicsXS::G4IonPhysicsXS(G4int ver)
-  : G4IonPhysicsXS("ionPhysicsXS")
-{
-  verbose = ver;
-}
+  : G4IonPhysicsXS("ionPhysicsXS", ver)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4IonPhysicsXS::G4IonPhysicsXS(const G4String& nname)
-  : G4IonPhysics(nname)
-{
-  G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
-  param->SetDeexChannelsType(fCombined);
-  if(verbose > 1) { G4cout << "### IonPhysics: " << nname << G4endl; }
-}
+G4IonPhysicsXS::G4IonPhysicsXS(const G4String& nname, G4int ver)
+  : G4IonPhysics(nname, ver)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

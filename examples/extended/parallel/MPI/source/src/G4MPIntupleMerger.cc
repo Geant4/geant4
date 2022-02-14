@@ -47,6 +47,7 @@ G4MPIntupleMerger::G4MPIntupleMerger(G4int nofReducedNtupleFiles,
   G4bool isMaster = true;
   auto analysisManager
     = new G4RootMpiAnalysisManager(isMaster);
+  analysisManager->SetVerboseLevel(1);
   // G4cout << "Start configure ntuple MPI merging" << G4endl;
 
   // Get communicator

@@ -75,6 +75,7 @@ private:
 	G4UIcmdWith3VectorAndUnit *changeThePhantomPositionCmd; 
 	G4UIcmdWithADoubleAndUnit* changePhantomRadiusCmd;
 	G4UIcmdWithADoubleAndUnit* changePhantomLengthCmd;
+	G4UIcmdWithAnInteger* changeNumOfSleevesCmd;
 };
 
 #endif

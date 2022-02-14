@@ -61,6 +61,9 @@ public:
 
   explicit G4EmModelActivator(const G4String& emphys="");
 
+  G4EmModelActivator & operator=(const G4EmModelActivator &right) = delete;
+  G4EmModelActivator(const G4EmModelActivator&) = delete;
+
 private:
 
   void ActivatePAI();
@@ -73,14 +76,11 @@ private:
 
   void AddStandardScattering(const G4ParticleDefinition*, G4EmConfigurator*,
                              G4VMscModel*, const G4String&, 
-                             G4double, G4double);
+                             G4double, G4double, const G4String&);
 
   G4bool HasMsc(G4ProcessManager*) const;
 
-  G4VMscModel* GetGSModel();
-
-  G4EmModelActivator & operator=(const G4EmModelActivator &right) = delete;
-  G4EmModelActivator(const G4EmModelActivator&) = delete;
+  void SetMscParameters(const G4ParticleDefinition*, G4VMscModel*, const G4String& phys);
 
   G4EmParameters* theParameters;
   G4String baseName;

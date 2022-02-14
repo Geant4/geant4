@@ -37,11 +37,11 @@
 #include "G4Nucleus.hh"
 #include "G4ProcessManager.hh"
 #include "G4CrossSectionDataStore.hh"
-#include "G4HadronElasticDataSet.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4HadronicException.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4VCrossSectionRatio.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4HadronElasticProcess::G4HadronElasticProcess(const G4String& pName)
   : G4HadronicProcess(pName, fHadronElastic), 
@@ -82,21 +82,8 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   G4Nucleus* targNucleus = GetTargetNucleusPointer();
 
   // Select element
-  const G4Element* elm = nullptr;
-  try
-    {
-      elm = GetCrossSectionDataStore()->SampleZandA(dynParticle, material, 
-						    *targNucleus);
-    }
-  catch(G4HadronicException & aR)
-    {
-      G4ExceptionDescription ed;
-      aR.Report(ed);
-      DumpState(track,"SampleZandA",ed); 
-      ed << " PostStepDoIt failed on element selection" << G4endl;
-      G4Exception("G4HadronElasticProcess::PostStepDoIt", "had003", 
-		  FatalException, ed);
-    }
+  const G4Element* elm = 
+    GetCrossSectionDataStore()->SampleZandA(dynParticle, material, *targNucleus);
 
   // Initialize the hadronic projectile from the track
   G4HadProjectile theProj(track);
@@ -135,6 +122,8 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
       result->SetTrafoToLab(theProj.GetTrafoToLab());
       ClearNumberOfInteractionLengthLeft();
 
+      // The following method of the base class takes care also of setting
+      // the creator model ID for the secondaries that are created
       FillResult(result, track);
 
       if (epReportLevel != 0) {
@@ -248,6 +237,8 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 			       track.GetPosition());
       t->SetWeight(weight);
       t->SetTouchableHandle(track.GetTouchableHandle());
+      G4int secID = G4PhysicsModelCatalog::GetModelID( "model_" + hadi->GetModelName() );
+      if ( secID > 0 ) t->SetCreatorModelID(secID);
       theTotalResult->AddSecondary(t);
 
     } else {

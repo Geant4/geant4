@@ -46,25 +46,17 @@
 #include "G4ExcitationHandler.hh"
 
 G4FTFBuilder::G4FTFBuilder(const G4String& aName, G4PreCompoundModel* p) 
-  : G4VHadronModelBuilder(aName), 
-    fStringModel(0), fStringDecay(0),
-    fPreCompound(p),fPrecoInterface(0),fLund(0)
+  : G4VHadronModelBuilder(aName), fPreCompound(p)
 {}
 
 G4FTFBuilder::~G4FTFBuilder() 
-{
-  delete fStringDecay;
-  delete fStringModel;
-  delete fLund;
-}                                     
+{}                                     
 
 G4HadronicInteraction* G4FTFBuilder::BuildModel()
 {
   G4TheoFSGenerator* theFTFModel = new G4TheoFSGenerator(GetName());
-  fStringModel  = new G4FTFModel();
-  fLund = new G4LundStringFragmentation();
-  fStringDecay  = new G4ExcitedStringDecay(fLund);
-  fStringModel->SetFragmentationModel(fStringDecay);
+  G4FTFModel* fStringModel  = new G4FTFModel();
+  fStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
   theFTFModel->SetHighEnergyGenerator(fStringModel);
 
   if(!fPreCompound) {
@@ -76,7 +68,8 @@ G4HadronicInteraction* G4FTFBuilder::BuildModel()
     theFTFModel->SetTransport(bic);
 
   } else {
-    fPrecoInterface = new G4GeneratorPrecompoundInterface(fPreCompound);
+    G4GeneratorPrecompoundInterface* fPrecoInterface = 
+      new G4GeneratorPrecompoundInterface(fPreCompound);
     theFTFModel->SetTransport(fPrecoInterface);
   }
 

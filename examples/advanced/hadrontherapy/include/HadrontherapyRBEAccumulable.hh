@@ -88,11 +88,16 @@ private:
 
     // How many voxels do we have?
     // ...along each axis
-    size_t fVoxelsAlongX;
-    size_t fVoxelsAlongY;
-    size_t fVoxelsAlongZ;
+     G4int fVoxelsAlongX;
+    G4int fVoxelsAlongY;
+    G4int fVoxelsAlongZ;
+
     // ...and in total
     size_t fVoxels;
+
+  
+
+
 };
 
 #endif // HADRONTHERAPYRBEACCUMULABLE_HH

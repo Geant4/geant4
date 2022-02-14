@@ -23,19 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RayShooter
 //
+// Class description:
 //
-
-// class description:
-//
-//  the object of this class shoots a ray (actually geantino) primary particle
+// The object of this class shoots a ray (actually geantino) primary particle
 // associated with a G4Event object. This slass must be used exclusively by
 // G4RayTracer.
-//
 
-#ifndef G4RayShooter_h
-#define G4RayShooter_h 1
-
+// Author: Makoto Asai, 2000
+// --------------------------------------------------------------------
+#ifndef G4RayShooter_hh
+#define G4RayShooter_hh 1
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -47,33 +46,26 @@ class G4Event;
 
 class G4RayShooter
 {
-  public: 
-     G4RayShooter();
   public:
-     virtual ~G4RayShooter();
 
-  public: // with description
-     void Shoot(G4Event* evt,G4ThreeVector vtx,G4ThreeVector direc);
-     // This method generates a primary vertex and a primary particle at the
-     // given vertex point and with the given direction. This method is invoked
-     // by G4RayTracer and G4MaterialScanner.
+    G4RayShooter();
+    virtual ~G4RayShooter();
 
-  private:  
-     void SetInitialValues();
+    void Shoot(G4Event* evt, G4ThreeVector vtx, G4ThreeVector direc);
+      // Generates a primary vertex and a primary particle at the given
+      // vertex point and with the given direction. This method is invoked
+      // by G4RayTracer and G4MaterialScanner.
 
-     G4ParticleDefinition* particle_definition;
-     G4ParticleMomentum    particle_momentum_direction;
-     G4double	           particle_energy;
-     G4ThreeVector         particle_position;
-     G4double              particle_time;
-     G4ThreeVector         particle_polarization;
+  private:
+ 
+    void SetInitialValues();
+
+    G4ParticleDefinition* particle_definition = nullptr;
+    G4ParticleMomentum    particle_momentum_direction;
+    G4double              particle_energy = 0.0;
+    G4ThreeVector         particle_position;
+    G4double              particle_time = 0.0;
+    G4ThreeVector         particle_polarization;
 };
 
 #endif
-
-
-
-
-
-
-

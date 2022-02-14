@@ -1,0 +1,152 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_base_freetype
+#define tools_sg_base_freetype
+
+#include "base_text"
+#include "gstos"
+#include "sf_string"
+#include <map>
+
+// abstract class to handle freetype text.
+
+namespace tools {
+namespace sg {
+
+class base_freetype : public base_text, public gstos {
+  TOOLS_HEADER(base_freetype,tools::sg::base_freetype,base_text)
+public:
+  sf_string font;
+  sf_enum<winding_type> front_face; //default is ccw.
+  sf_enum<font_modeling> modeling;
+  typedef unsigned int unichar;
+  typedef std::vector<unichar> uniline;
+  mf_std_vec<unichar> unitext;
+  //mf_string font_dirs; //do we want that ? It is costly. We should have a sg::font node.
+public:
+  virtual const desc_fields& node_desc_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::base_freetype)
+    static const desc_fields s_v(parent::node_desc_fields(),4, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(font),
+      TOOLS_ARG_FIELD_DESC(front_face),
+
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(modeling,3)
+        TOOLS_ARG_ENUM(font_outline),
+        TOOLS_ARG_ENUM(font_filled),
+        TOOLS_ARG_ENUM(font_pixmap)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
+
+      TOOLS_ARG_FIELD_DESC(unitext)
+      //TOOLS_ADD_FIELD_DESC(font_dirs)
+    );
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&font);
+    add_field(&front_face);
+    add_field(&modeling);
+    add_field(&unitext);
+    //add_field(&font_dirs);
+  }
+public:
+  base_freetype()
+  :parent()
+  ,gstos()
+
+  ,font("")
+  ,front_face(winding_ccw)
+  ,modeling(font_filled)
+  ,unitext()
+  //,font_dirs()
+  {
+    add_fields();
+  }
+  virtual ~base_freetype(){}
+public:
+  base_freetype(const base_freetype& a_from)
+  :parent(a_from)
+  ,gstos(a_from)
+
+  ,font(a_from.font)
+  ,front_face(a_from.front_face)
+  ,modeling(a_from.modeling)
+  ,unitext(a_from.unitext)
+  //,font_dirs(a_from.font_dirs)
+  ,m_fonts(a_from.m_fonts)
+  ,m_finders(a_from.m_finders)
+  {
+    add_fields();
+  }
+
+  base_freetype& operator=(const base_freetype& a_from){
+    parent::operator=(a_from);
+    gstos::operator=(a_from);
+    font = a_from.font;
+    front_face = a_from.front_face;
+    modeling = a_from.modeling;
+    unitext = a_from.unitext;
+    //font_dirs = a_from.font_dirs;
+    m_fonts = a_from.m_fonts;
+    m_finders = a_from.m_finders;
+    return *this;
+  }
+
+public:
+  static base_freetype* create(const base_freetype& a_ttf) {
+    return safe_cast<node,base_freetype>(*(a_ttf.copy()));
+  }
+public:
+  void dump_unitext(std::ostream& a_out) {
+    //unitext.values().size()
+    a_out << "unitext size : " << unitext.values().size() << std::endl;
+    std::vector<uniline>::const_iterator vit;
+    for(vit=unitext.values().begin();vit!=unitext.values().end();++vit) {
+      const uniline& line = *vit;
+      a_out << "beg line :" << std::endl;
+      //a_out << line << std::endl;
+      std::vector<unichar>::const_iterator it;
+      for(it=line.begin();it!=line.end();++it) {
+        a_out << ((unsigned int)*it) << std::endl;
+      }
+      a_out << "end line." << std::endl;
+    }
+  }
+public:  
+  typedef const unsigned char*(*font_getter)(unsigned int&);
+  void add_embedded_font(const std::string& a_name,font_getter a_getter) {
+    unsigned int size;
+    const unsigned char* buffer = a_getter(size);
+    m_fonts[a_name] = embedded_font(size,buffer); //warning: we do not take ownership of buffer.
+  }
+  typedef std::pair<unsigned int,const unsigned char*> embedded_font;
+  void add_embedded_font(const std::string& a_name,unsigned int a_size,const unsigned char* a_buffer) {
+    //warning: we do not take ownership of a_buffer.
+    m_fonts[a_name] = embedded_font(a_size,a_buffer);
+  }
+  bool find_embedded_font(const std::string& a_name,unsigned int& a_size,const unsigned char*& a_buffer) {
+    std::map<std::string,embedded_font>::const_iterator it = m_fonts.find(a_name);
+    if(it==m_fonts.end()) {a_size = 0;a_buffer = 0;return false;}
+    a_size = (*it).second.first;
+    a_buffer = (*it).second.second;
+    return true;
+  }
+public:  
+  typedef bool(*font_finder)(const std::string&,std::string&);
+  void add_font_finder(font_finder a_finder) {m_finders.push_back(a_finder);}
+  bool find_font_with_finders(const std::string& a_name,std::string& a_font) {
+    tools_vforcit(font_finder,m_finders,it) {
+      if((*it)(a_name,a_font)) return true;
+    }
+    a_font.clear();
+    return false;
+  }
+protected:
+  std::map<std::string,embedded_font> m_fonts;
+  std::vector<font_finder> m_finders;
+};
+
+}}
+
+#endif

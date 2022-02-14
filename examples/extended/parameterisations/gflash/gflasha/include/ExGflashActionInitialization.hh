@@ -38,16 +38,15 @@ class ExGflashDetectorConstruction;
 
 class ExGflashActionInitialization : public G4VUserActionInitialization
 {
-  public:
-    ExGflashActionInitialization(ExGflashDetectorConstruction* det);
-    virtual ~ExGflashActionInitialization();
+ public:
+  ExGflashActionInitialization(ExGflashDetectorConstruction* det);
+  ~ExGflashActionInitialization() override;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
-  private:
+  void BuildForMaster() const override;
+  void Build() const override;
 
+ private:
   ExGflashDetectorConstruction* fDetector;
-
 };
 
 #endif

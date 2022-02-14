@@ -54,23 +54,10 @@
 #include <iterator>
 #include <vector>
 #include <algorithm> 
+#include "G4AnalysisManager.hh"
 
-#ifdef USEROOT
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#include "TRandom3.h"
-#include "TFile.h"
-#include "TNtuple.h"
-#include "g4root.hh"
-#include "TROOT.h"
-#include "TFile.h"
-#include "TH1.h"
-#include "TH2.h"
-#include "TTree.h"
-#include "TLeaf.h"
-#include "TSystem.h"
-#pragma GCC diagnostic pop
-#endif
+// Define the total number of columns in the ntuple
+const G4int MaxNtCol = 17;
 
 class doiPETAnalysisMessenger;
 
@@ -96,17 +83,19 @@ public:
 
 	void GetParentParticleName(G4String);
 	void GetSizeOfDetector (G4double, G4double, G4double);
-	void GetScatterIndexInPhantom(G4double);
+	void SetScatterIndexInPhantom(G4int);
 
 	void SetSourcePosition(G4ThreeVector);//
 	void SetEventID(G4int);
 
 	void BlurringParameters();
 	void GetTimeOfAnnihilation(G4double);
+	
 
 	void PMTPosition();
-	void AngerLogic(G4int, G4int, G4int, G4double, G4double, G4double, G4double);
+	void AngerLogic(G4double, G4double, G4double, G4double, G4double, G4bool);
 	void ReadReflectorPattern();
+	void PrepareDOILookUpTable(G4String);
 
 	void SetActivity(G4double);
 	void SetIsotopeHalfLife(G4double);
@@ -117,14 +106,28 @@ public:
 	G4double QuantumEffifciency(G4double, G4int, G4int);
 	void ReadOut(G4int, G4int, G4double, G4double, G4ThreeVector, G4double);
 
+	//G4ROOT
+	void book(); // booking the ROOT file
+
+	
+	void FillListModeEvent(); //Single or Coinsidence 
+	void finish();
+	// Close the ROOT file with all the results stored in nutples 
+
+
 private:
 	static doiPETAnalysis* instance;
 	doiPETAnalysisMessenger* fAnalysisMessenger;
 	//std::multimap< G4int, InteractionInformation* > mapBlockInteraction;
 	std::set<G4int> setBlockInteraction;
 
-	G4double upperThreshold, lowerThreshold;	
+	G4double upperThreshold, lowerThreshold;
+	G4double triggerEnergy;
 
+	//G4ROOT
+	G4bool factoryOn; 
+ 	G4int  fNtColId[MaxNtCol];
+  //
 
 
 	//G4ThreeVector sourcePosition;
@@ -166,7 +169,7 @@ private:
 	G4double shiftCoeff;
 
 	G4double PositionAngerZ, PositionAngerY;
-
+	
 	//reflector pattern
 	std::vector<G4int> ireflectorLayer1_Tangential;
 	std::vector<G4int> ireflectorLayer1_Axial;
@@ -190,6 +193,11 @@ private:
 
 	//interaction position with respect to the crystal axis
 	G4ThreeVector interactionPos;
+
+	//interaction position
+	G4double intPosX;
+	G4double intPosY;
+	G4double intPosZ;
 
 
 	G4double interactionTime;
@@ -216,10 +224,16 @@ private:
 	G4int DOI_ID0,					DOI_ID1;
 	G4double timeStamp0,			timeStamp1;
 	G4double totalEdep0,			totalEdep1;
-
+	G4double sposX, sposY, sposZ;
 	//choice for the user
 	G4bool getSinglesData;
 	G4bool getCoincidenceData;
+	
+	//
+	G4bool ApplyAngerLogic;
+
+	G4double PMTblurring_tan;
+	G4double PMTblurring_axial;
 
 	G4String outputData;
 	G4int numberOfHit;
@@ -248,6 +262,7 @@ private:
 
 	//G4bool variableResolution;
 	G4bool fixedResolution;
+	G4bool isDOIlookUpTablePrepared;
 
 	G4double energyResolution_fixed;
 	std::vector<std::vector<G4double>> energyResolution_cryDependent;
@@ -282,14 +297,16 @@ private:
 	G4String asciiFileName;
 	G4String rootFileName;
 
-#ifdef USEROOT
-	TTree* tSingles;
-	TTree* tCoincidence;
-	//TH1F*hb;
-#endif
+// #ifdef USEROOT
+//     TFile* file;
+// 	TTree* tSingles;
+// 	TTree* tCoincidence;
+// 	//TH1F*hb;
+// #endif
 
 	//input file to read reflector pattern
 	std::ifstream ifs;
 };
 
 #endif
+

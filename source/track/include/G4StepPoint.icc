@@ -23,221 +23,270 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4StepPoint inline methods implementation
 //
-//
-//
-inline 
- const G4ThreeVector& G4StepPoint::GetPosition() const
- { return fPosition; }
+// Author: Hisaya Kurashige, 16 February 2000
+// --------------------------------------------------------------------
 
-inline 
- void G4StepPoint::SetPosition(const G4ThreeVector& aValue)
- { fPosition = aValue; }
+inline const G4ThreeVector& G4StepPoint::GetPosition() const
+{
+  return fPosition;
+}
 
-inline 
- void G4StepPoint::AddPosition(const G4ThreeVector& aValue)
- { fPosition += aValue; } // Position where the track locates
-    
-inline 
- G4double G4StepPoint::GetLocalTime() const
- { return fLocalTime; }
+inline void G4StepPoint::SetPosition(const G4ThreeVector& aValue)
+{
+  fPosition = aValue;
+}
 
-inline 
- void G4StepPoint::SetLocalTime(const G4double aValue)
- { fLocalTime = aValue; }
+inline void G4StepPoint::AddPosition(const G4ThreeVector& aValue)
+{
+  fPosition += aValue;  // Position where the track locates
+}
 
-inline 
- void G4StepPoint::AddLocalTime(const G4double aValue)
- { fLocalTime += aValue; } // Time since the track is created.
-     
-inline 
- G4double G4StepPoint::GetGlobalTime() const
- { return fGlobalTime; }
+inline G4double G4StepPoint::GetLocalTime() const
+{
+  return fLocalTime;
+}
 
-inline 
- void G4StepPoint::SetGlobalTime(const G4double aValue)
- { fGlobalTime = aValue; }
+inline void G4StepPoint::SetLocalTime(const G4double aValue)
+{
+  fLocalTime = aValue;
+}
 
-inline 
- void G4StepPoint::AddGlobalTime(const G4double aValue)
- { fGlobalTime += aValue; }
-      // Time since the event in which the track belongs is created.
-     
-inline 
- G4double G4StepPoint::GetProperTime() const
- { return fProperTime; }
+inline void G4StepPoint::AddLocalTime(const G4double aValue)
+{
+  fLocalTime += aValue;  // Time since the track is created
+}
 
-inline 
- void G4StepPoint::SetProperTime(const G4double aValue)
- { fProperTime = aValue; }
+inline G4double G4StepPoint::GetGlobalTime() const
+{
+  return fGlobalTime;
+}
 
-inline 
- void G4StepPoint::AddProperTime(const G4double aValue)
- { fProperTime += aValue; } // Proper time of the particle.
-     
-inline 
- const G4ThreeVector& G4StepPoint::GetMomentumDirection() const
- { return fMomentumDirection; }
+inline void G4StepPoint::SetGlobalTime(const G4double aValue)
+{
+  fGlobalTime = aValue;
+}
 
-inline 
- void G4StepPoint::SetMomentumDirection(const G4ThreeVector& aValue)
- { fMomentumDirection = aValue; }
+inline void G4StepPoint::AddGlobalTime(const G4double aValue)
+{
+  fGlobalTime += aValue;  // Time since the event in which the
+}                         // track belongs is created
 
-inline
- void G4StepPoint::AddMomentumDirection(const G4ThreeVector& aValue)
- { fMomentumDirection += aValue;} // Direction of momentum  (should be an unit vector)
-    
-inline 
- G4ThreeVector G4StepPoint::GetMomentum() const
- { 
-     G4double tMomentum = std::sqrt(fKineticEnergy*fKineticEnergy +
-                               2*fKineticEnergy*fMass);
-     return G4ThreeVector(fMomentumDirection.x()*tMomentum,
-			  fMomentumDirection.y()*tMomentum,
-			  fMomentumDirection.z()*tMomentum);
- }
-     // Total momentum of the track
+inline G4double G4StepPoint::GetProperTime() const
+{
+  return fProperTime;
+}
 
-inline 
- G4double G4StepPoint::GetTotalEnergy() const
- { return fKineticEnergy + fMass; } // Total energy of the track
+inline void G4StepPoint::SetProperTime(const G4double aValue)
+{
+  fProperTime = aValue;
+}
 
-inline
- G4double G4StepPoint::GetKineticEnergy() const
- { return fKineticEnergy; }
+inline void G4StepPoint::AddProperTime(const G4double aValue)
+{
+  fProperTime += aValue;  // Proper time of the particle
+}
 
-inline
- void G4StepPoint::SetKineticEnergy(const G4double aValue)
- { fKineticEnergy = aValue; }
+inline const G4ThreeVector& G4StepPoint::GetMomentumDirection() const
+{
+  return fMomentumDirection;
+}
 
-inline
- void G4StepPoint::AddKineticEnergy(const G4double aValue)
- { fKineticEnergy += aValue; }// Kinetic Energy of the track
+inline void G4StepPoint::SetMomentumDirection(const G4ThreeVector& aValue)
+{
+  fMomentumDirection = aValue;
+}
 
-inline
- G4double G4StepPoint::GetVelocity() const
- { return fVelocity; }
+inline void G4StepPoint::AddMomentumDirection(const G4ThreeVector& aValue)
+{
+  fMomentumDirection += aValue;  // Direction of momentum (unit vector)
+}
 
-inline
- void G4StepPoint::SetVelocity(G4double v)
- {  fVelocity = v; }
-  
-inline
- G4double G4StepPoint::GetBeta() const
- {  return fVelocity/CLHEP::c_light; }
-    // Velocity of the track in unit of c(light velocity)
+inline G4ThreeVector G4StepPoint::GetMomentum() const
+{
+  G4double tMomentum =           // Total momentum of the track
+    std::sqrt(fKineticEnergy * fKineticEnergy + 2 * fKineticEnergy * fMass);
+  return G4ThreeVector(fMomentumDirection.x() * tMomentum,
+                       fMomentumDirection.y() * tMomentum,
+                       fMomentumDirection.z() * tMomentum);
+}
 
-inline
- G4double G4StepPoint::GetGamma() const
- { return (fMass==0.) ? DBL_MAX : (fKineticEnergy+fMass)/fMass; }
-     // Gamma factor (1/sqrt[1-beta*beta]) of the track    
+inline G4double G4StepPoint::GetTotalEnergy() const
+{
+  return fKineticEnergy + fMass;  // Total energy of the track
+}
 
-inline
- G4VPhysicalVolume* G4StepPoint::GetPhysicalVolume() const
- { return fpTouchable->GetVolume(); }
+inline G4double G4StepPoint::GetKineticEnergy() const
+{
+  return fKineticEnergy;
+}
 
-inline
- const G4VTouchable* G4StepPoint::GetTouchable() const
- { return fpTouchable(); }
+inline void G4StepPoint::SetKineticEnergy(const G4double aValue)
+{
+  fKineticEnergy = aValue;
+}
 
-inline
- const G4TouchableHandle& G4StepPoint::GetTouchableHandle() const 
- { return fpTouchable; }
+inline void G4StepPoint::AddKineticEnergy(const G4double aValue)
+{
+  fKineticEnergy += aValue;  // Kinetic Energy of the track
+}
 
-inline
- void G4StepPoint::SetTouchableHandle(const G4TouchableHandle& apValue) 
- { fpTouchable = apValue; }
+inline G4double G4StepPoint::GetVelocity() const
+{
+  return fVelocity;
+}
 
-inline
- G4double G4StepPoint::GetSafety() const
- { return fSafety; }
+inline void G4StepPoint::SetVelocity(G4double v)
+{
+  fVelocity = v;
+}
 
-inline
- void G4StepPoint::SetSafety(const G4double aValue)
- { fSafety = aValue; }
+inline G4double G4StepPoint::GetBeta() const
+{
+  return fVelocity / CLHEP::c_light;  // Velocity of the track
+}                                     //  in unit of c (light velocity)
 
-inline
- const G4ThreeVector& G4StepPoint::GetPolarization() const
- { return fPolarization; }
+inline G4double G4StepPoint::GetGamma() const
+{
+  return (fMass == 0.) ? DBL_MAX : (fKineticEnergy + fMass) / fMass;
+    // Gamma factor (1/sqrt[1-beta*beta]) of the track
+}
 
-inline
- void G4StepPoint::SetPolarization(const G4ThreeVector& aValue)
- { fPolarization = aValue; }
+inline G4VPhysicalVolume* G4StepPoint::GetPhysicalVolume() const
+{
+  return fpTouchable->GetVolume();
+}
 
-inline
- void G4StepPoint::AddPolarization(const G4ThreeVector& aValue)
- { fPolarization += aValue; }
+inline const G4VTouchable* G4StepPoint::GetTouchable() const
+{
+  return fpTouchable();
+}
 
-inline
- G4StepStatus G4StepPoint::GetStepStatus() const
- { return fStepStatus; }
+inline const G4TouchableHandle& G4StepPoint::GetTouchableHandle() const
+{
+  return fpTouchable;
+}
 
-inline
- void G4StepPoint::SetStepStatus(const G4StepStatus aValue)
- { fStepStatus = aValue; }
+inline void G4StepPoint::SetTouchableHandle(const G4TouchableHandle& apValue)
+{
+  fpTouchable = apValue;
+}
 
-inline
- const G4VProcess* G4StepPoint::GetProcessDefinedStep() const
- { return fpProcessDefinedStep; }
-     // If the pointer is 0, this means the Step is defined
-     // by the user defined limit in the current volume.
+inline G4double G4StepPoint::GetSafety() const
+{
+  return fSafety;
+}
 
-inline
- void G4StepPoint::SetProcessDefinedStep(const G4VProcess* aValue)
- { fpProcessDefinedStep = aValue; }
+inline void G4StepPoint::SetSafety(const G4double aValue)
+{
+  fSafety = aValue;
+}
 
-inline
- G4double G4StepPoint::GetMass() const
- { return fMass; }
+inline const G4ThreeVector& G4StepPoint::GetPolarization() const
+{
+  return fPolarization;
+}
 
-inline
- void G4StepPoint::SetMass(G4double value)
- { fMass = value; }
+inline void G4StepPoint::SetPolarization(const G4ThreeVector& aValue)
+{
+  fPolarization = aValue;
+}
 
-inline
- G4double G4StepPoint::GetCharge() const
- { return fCharge; }
+inline void G4StepPoint::AddPolarization(const G4ThreeVector& aValue)
+{
+  fPolarization += aValue;
+}
 
-inline
- void G4StepPoint::SetCharge(G4double value)
- { fCharge = value; }
+inline G4StepStatus G4StepPoint::GetStepStatus() const
+{
+  return fStepStatus;
+}
 
-inline
- G4double G4StepPoint::GetMagneticMoment() const
- { return fMagneticMoment; }
+inline void G4StepPoint::SetStepStatus(const G4StepStatus aValue)
+{
+  fStepStatus = aValue;
+}
 
-inline
- void G4StepPoint::SetMagneticMoment(G4double value)
- { fMagneticMoment = value; }
+inline const G4VProcess* G4StepPoint::GetProcessDefinedStep() const
+{
+  // If the pointer is 0, this means the Step is defined
+  // by the user defined limit in the current volume.
+  return fpProcessDefinedStep;
+}
 
-inline
- G4Material* G4StepPoint::GetMaterial() const
- { return fpMaterial; }
+inline void G4StepPoint::SetProcessDefinedStep(const G4VProcess* aValue)
+{
+  fpProcessDefinedStep = aValue;
+}
 
-inline
- void G4StepPoint::SetMaterial(G4Material* material)
- {fpMaterial = material; }
+inline G4double G4StepPoint::GetMass() const
+{
+  return fMass;
+}
 
-inline 
- const G4MaterialCutsCouple* G4StepPoint::GetMaterialCutsCouple() const
- { return fpMaterialCutsCouple; }
+inline void G4StepPoint::SetMass(G4double value)
+{
+  fMass = value;
+}
 
-inline 
- void G4StepPoint::SetMaterialCutsCouple(const G4MaterialCutsCouple* materialCutsCouple)
- { fpMaterialCutsCouple = materialCutsCouple; }
+inline G4double G4StepPoint::GetCharge() const
+{
+  return fCharge;
+}
 
-inline
- G4VSensitiveDetector* G4StepPoint::GetSensitiveDetector() const
- { return fpSensitiveDetector; }
+inline void G4StepPoint::SetCharge(G4double value)
+{
+  fCharge = value;
+}
 
-inline
- void G4StepPoint::SetSensitiveDetector(G4VSensitiveDetector* aValue)
- { fpSensitiveDetector = aValue; }
+inline G4double G4StepPoint::GetMagneticMoment() const
+{
+  return fMagneticMoment;
+}
 
-inline
- void G4StepPoint::SetWeight(G4double aValue)
- { fWeight = aValue; }
+inline void G4StepPoint::SetMagneticMoment(G4double value)
+{
+  fMagneticMoment = value;
+}
 
-inline
- G4double G4StepPoint::GetWeight() const
- { return fWeight; }
+inline G4Material* G4StepPoint::GetMaterial() const
+{
+  return fpMaterial;
+}
+
+inline void G4StepPoint::SetMaterial(G4Material* material)
+{
+  fpMaterial = material;
+}
+
+inline const G4MaterialCutsCouple* G4StepPoint::GetMaterialCutsCouple() const
+{
+  return fpMaterialCutsCouple;
+}
+
+inline void G4StepPoint::SetMaterialCutsCouple(
+  const G4MaterialCutsCouple* materialCutsCouple)
+{
+  fpMaterialCutsCouple = materialCutsCouple;
+}
+
+inline G4VSensitiveDetector* G4StepPoint::GetSensitiveDetector() const
+{
+  return fpSensitiveDetector;
+}
+
+inline void G4StepPoint::SetSensitiveDetector(G4VSensitiveDetector* aValue)
+{
+  fpSensitiveDetector = aValue;
+}
+
+inline void G4StepPoint::SetWeight(G4double aValue)
+{
+  fWeight = aValue;
+}
+
+inline G4double G4StepPoint::GetWeight() const
+{
+  return fWeight;
+}

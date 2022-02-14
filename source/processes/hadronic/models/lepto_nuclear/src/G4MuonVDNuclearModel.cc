@@ -51,6 +51,24 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4KokoulinMuonNuclearXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
+#include "G4ElementData.hh" 
+#include "G4Physics2DVector.hh" 
+#include "G4Pow.hh" 
+#include "G4PhysicsModelCatalog.hh"
+
+const G4int G4MuonVDNuclearModel::zdat[] = {1, 4, 13, 29, 92};
+const G4double G4MuonVDNuclearModel::adat[] = {1.01,9.01,26.98,63.55,238.03};
+const G4double G4MuonVDNuclearModel::tdat[] = {
+  1.e3,2.e3,3.e3,4.e3,5.e3,6.e3,7.e3,8.e3,9.e3, 
+  1.e4,2.e4,3.e4,4.e4,5.e4,6.e4,7.e4,8.e4,9.e4, 
+  1.e5,2.e5,3.e5,4.e5,5.e5,6.e5,7.e5,8.e5,9.e5, 
+  1.e6,2.e6,3.e6,4.e6,5.e6,6.e6,7.e6,8.e6,9.e6, 
+  1.e7,2.e7,3.e7,4.e7,5.e7,6.e7,7.e7,8.e7,9.e7, 
+  1.e8,2.e8,3.e8,4.e8,5.e8,6.e8,7.e8,8.e8,9.e8, 
+  1.e9,2.e9,3.e9,4.e9,5.e9,6.e9,7.e9,8.e9,9.e9, 
+  1.e10,2.e10,3.e10,4.e10,5.e10,6.e10,7.e10,8.e10,9.e10,1.e11}; 
+
+G4ElementData* G4MuonVDNuclearModel::fElementData = nullptr;             
 
 G4MuonVDNuclearModel::G4MuonVDNuclearModel()
  : G4HadronicInteraction("G4MuonVDNuclearModel")
@@ -94,6 +112,9 @@ G4MuonVDNuclearModel::G4MuonVDNuclearModel()
 
   // Build Bertini cascade
   bert = new G4CascadeInterface();
+
+  // Creator model ID
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );
 }
 
 
@@ -296,6 +317,11 @@ G4MuonVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
 
   delete incident;
 
+  // Assign the creator model ID to the secondaries
+  for ( size_t i = 0; i < hfs->GetNumberOfSecondaries(); ++i ) {
+    hfs->GetSecondary( i )->SetCreatorModelID( secID );
+  }
+  
   // Copy secondaries from sub-model to model
   theParticleChange.AddSecondaries(hfs);
 } 

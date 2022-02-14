@@ -96,3 +96,24 @@ TrapSidePlane G4Trap::GetSidePlane( G4int n ) const
 {
   return fPlanes[n] ;
 }
+
+inline G4double G4Trap::GetPhi() const       
+{
+   return std::atan2(fTthetaSphi,fTthetaCphi);
+}
+
+inline G4double G4Trap::GetTheta() const
+{
+   return std::atan(std::sqrt(fTthetaCphi*fTthetaCphi
+                              +fTthetaSphi*fTthetaSphi));
+}
+
+inline G4double G4Trap::GetAlpha1() const
+{
+  return std::atan(fTalpha1);
+}
+
+inline G4double G4Trap::GetAlpha2() const
+{
+  return std::atan(fTalpha2);
+}

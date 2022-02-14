@@ -188,7 +188,7 @@ G4double G4UPara::GetYHalfLength() const
 }
 G4double G4UPara::GetXHalfLength() const
 {
-  return GetZ();
+  return GetX();
 }
 G4ThreeVector G4UPara::GetSymAxis() const
 {
@@ -197,6 +197,22 @@ G4ThreeVector G4UPara::GetSymAxis() const
 G4double G4UPara::GetTanAlpha() const
 {
   return fTalpha;
+}
+
+G4double G4UPara::GetPhi() const       
+{
+   return std::atan2(fTthetaSphi,fTthetaCphi);
+}
+
+G4double G4UPara::GetTheta() const
+{
+   return std::atan(std::sqrt(fTthetaCphi*fTthetaCphi
+                              +fTthetaSphi*fTthetaSphi));
+}
+
+G4double G4UPara::GetAlpha() const
+{
+  return std::atan(fTalpha);
 }
 
 void G4UPara::SetXHalfLength(G4double val)

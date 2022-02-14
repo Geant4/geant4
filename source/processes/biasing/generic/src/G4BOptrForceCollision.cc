@@ -45,7 +45,7 @@
 // -- §§ consider calling other constructor, thanks to C++11
 G4BOptrForceCollision::G4BOptrForceCollision(G4String particleName, G4String name)
   : G4VBiasingOperator(name),
-    fForceCollisionModelID(-1),
+    fForceCollisionModelID(G4PhysicsModelCatalog::GetModelID("model_GenBiasForceCollision")),
     fCurrentTrack(nullptr),
     fCurrentTrackData(nullptr),
     fInitialTrackWeight(-1.0),
@@ -69,7 +69,7 @@ G4BOptrForceCollision::G4BOptrForceCollision(G4String particleName, G4String nam
 
 G4BOptrForceCollision::G4BOptrForceCollision(const G4ParticleDefinition* particle, G4String name)
   : G4VBiasingOperator(name),
-    fForceCollisionModelID(-1),
+    fForceCollisionModelID(G4PhysicsModelCatalog::GetModelID("model_GenBiasForceCollision")),
     fCurrentTrack(nullptr),
     fCurrentTrackData(nullptr),
     fInitialTrackWeight(-1.0),
@@ -93,9 +93,6 @@ G4BOptrForceCollision::~G4BOptrForceCollision()
 
 void G4BOptrForceCollision::Configure()
 {
-  // -- Create ID for force collision:
-  fForceCollisionModelID = G4PhysicsModelCatalog::Register("GenBiasForceCollision");
-
   // -- build free flight operations:
   ConfigureForWorker();
 }
@@ -106,9 +103,6 @@ void G4BOptrForceCollision::ConfigureForWorker()
   // -- start by remembering processes under biasing, and create needed biasing operations:
   if ( fSetup )
     {
-      // -- get back ID created in master thread in case of MT (or reget just created ID in sequential mode):
-      fForceCollisionModelID = G4PhysicsModelCatalog::Register("GenBiasForceCollision");
-
       const G4ProcessManager* processManager = fParticleToBias->GetProcessManager();
       const G4BiasingProcessSharedData* interfaceProcessSharedData = G4BiasingProcessInterface::GetSharedData( processManager );
       if ( interfaceProcessSharedData ) // -- sharedData tested, as is can happen a user attaches an operator

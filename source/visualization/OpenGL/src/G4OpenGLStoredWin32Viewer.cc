@@ -29,8 +29,6 @@
 // Class G4OpenGLStoredWin32Viewer : a class derived from G4OpenGLWin32Viewer and
 //                             G4OpenGLStoredViewer.
 
-#ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
-
 #include "G4OpenGLStoredWin32Viewer.hh"
 
 #include "G4OpenGLStoredSceneHandler.hh"
@@ -75,6 +73,7 @@ void G4OpenGLStoredWin32Viewer::DrawView () {
   // /vis/viewer/rebuild, but if not, make decision and set flag only
   // if necessary...
   if (!fNeedKernelVisit) KernelVisitDecision ();
+  fLastVP = fVP;
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
 
@@ -133,5 +132,3 @@ void G4OpenGLStoredWin32Viewer::FinishView (
     ::DispatchMessage (&event);
   }
 }
-
-#endif

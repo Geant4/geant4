@@ -25,7 +25,7 @@ using namespace GIDI;
 
 static const char Okay_message[] = "all is okay";
 static const char mallocError_message[] = "could not allocate memory";
-static const char insufficientMemory_message[] = "user's memory is too small to hanlde data";
+static const char insufficientMemory_message[] = "user's memory is too small to handle data";
 static const char badIndex_message[] = "bad index";
 static const char XNotAscending_message[] = "x values are not ascending";
 static const char badIndexForX_message[] = "index not correct for x value";

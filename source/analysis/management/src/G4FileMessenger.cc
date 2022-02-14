@@ -38,30 +38,26 @@ using namespace G4Analysis;
 //_____________________________________________________________________________
 G4FileMessenger::G4FileMessenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
-    fManager(manager),
-    fSetFileNameCmd(nullptr),
-    fSetHistoDirNameCmd(nullptr),
-    fSetNtupleDirNameCmd(nullptr)
-{  
-  fSetFileNameCmd = G4Analysis::make_unique<G4UIcmdWithAString>("/analysis/setFileName",this);
+    fManager(manager)
+{
+  fSetFileNameCmd = std::make_unique<G4UIcmdWithAString>("/analysis/setFileName",this);
   fSetFileNameCmd->SetGuidance("Set name for the histograms & ntuple file");
   fSetFileNameCmd->SetParameterName("Filename", false);
   fSetFileNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  
-  fSetHistoDirNameCmd = G4Analysis::make_unique<G4UIcmdWithAString>("/analysis/setHistoDirName",this);
+
+  fSetHistoDirNameCmd = std::make_unique<G4UIcmdWithAString>("/analysis/setHistoDirName",this);
   fSetHistoDirNameCmd->SetGuidance("Set name for the histograms directory");
   fSetHistoDirNameCmd->SetParameterName("HistoDirName", false);
   fSetHistoDirNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  
-  fSetNtupleDirNameCmd = G4Analysis::make_unique<G4UIcmdWithAString>("/analysis/setNtupleDirName",this);
+
+  fSetNtupleDirNameCmd = std::make_unique<G4UIcmdWithAString>("/analysis/setNtupleDirName",this);
   fSetNtupleDirNameCmd->SetGuidance("Set name for the ntuple directory");
   fSetNtupleDirNameCmd->SetParameterName("NtupleDirName", false);
   fSetNtupleDirNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //_____________________________________________________________________________
-G4FileMessenger::~G4FileMessenger()
-{}
+G4FileMessenger::~G4FileMessenger() = default;
 
 //
 // public functions
@@ -72,11 +68,11 @@ void G4FileMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
   if ( command == fSetFileNameCmd.get() ) {
     G4cout << "Set file name: " << newValues << G4endl;
     fManager->SetFileName(newValues);
-  }  
+  }
   else if ( command == fSetHistoDirNameCmd.get() ) {
     fManager->SetHistoDirectoryName(newValues);
-  }  
+  }
   else if ( command == fSetNtupleDirNameCmd.get() ) {
     fManager->SetNtupleDirectoryName(newValues);
-  }  
-}  
+  }
+}

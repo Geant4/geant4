@@ -16,6 +16,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2020 Ben Morgan - GB01-V10-06-00
+- Migration to G4RunManagerFactory.
+
+May 8th, 2018 J. Allison - GB01-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive nearer to start of main.
+
+May 8th, 2018 B. Morgan - GB01-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Nov 02, 2016 I. Hrivnacova
+- Added files description (for Doxygen)
+
+Jul 20, 2016 I. Hrivnacova
+- Coding guidelines
+  (redundant empty lines, class data member names, separators)
+
 Nov 14, 2014, M. Verderi
 - Fix in GB01BOptrChangeCrossSection, which was not properly using the
   new cross-section value in case of an UpdateForStep(...). A trick

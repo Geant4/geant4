@@ -1,6 +1,6 @@
 #---Adding all analysis examples subdirectories explicitly 
 
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 find_package(Geant4)
 include(${Geant4_USE_FILE})
@@ -18,14 +18,4 @@ if(ROOT_FOUND)
   add_subdirectory(AnaEx02)
 else()
   message(STATUS "G4 Examples: ROOT package not found. AnaEx02 disabled.") 
-endif()   
-
-#----------------------------------------------------------------------------
-# AnaEx03 example requires AIDA
-#
-find_package(AIDA QUIET)
-if(AIDA_FOUND)
-  add_subdirectory(AnaEx03)
-else()
-  message(STATUS "G4 Examples: AIDA package not found. AnaEx03 disabled.") 
 endif()   

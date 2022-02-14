@@ -6,6 +6,12 @@
 
                       Category History file
 
+10.11.2020 - Ben Morgan (DICOM2-V10-06-01)
+             Migration to G4RunManagerFactory.
+
+20.10.2020 - B. Morgan (DICOM2-V10-06-00)
+             Fix compiler warning on Windows
+
 26.11.2019 - I. Hrivnacova (DICOM2-V10-05-04)
              Fixed Doxygen warnings
 

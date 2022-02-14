@@ -1113,10 +1113,10 @@ public:
     }
 
 protected:
-    c2_scaled_function_p<float_type>() : func() {} // hide default constructor, since its use is almost always an error.
-        /// \brief the scaling factor for the function
-        const c2_const_ptr<float_type> func;
-        float_type yscale;
+  c2_scaled_function_p(float_type scale) : func(), yscale(scale) {}
+  /// \brief the scaling factor for the function
+  const c2_const_ptr<float_type> func;
+  float_type yscale;
 };
 
 /// \brief A container into which any other c2_function can be dropped.

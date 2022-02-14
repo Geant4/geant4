@@ -23,60 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsLinearVector
 //
+// Class description:
 //
-// 
-//--------------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//  G4PhysicsLinearVector.hh
-//
-//  Class description:
-//
-//    A physics vector which has values of energy-loss, cross-section, 
-//    and other physics values of a particle in matter in a given 
-//    range of the energy, momentum, etc. The scale of energy/momentum
-//    bins is in linear.
+// A physics vector which has values of energy-loss, cross-section,
+// and other physics values of a particle in matter in a given
+// range of energy, momentum, etc. The scale of energy/momentum
+// bins is linear.
 
-//  History:
-//    02 Dec. 1995, G.Cosmo : Structure created based on object model
-//    03 Mar. 1996, K.Amako : Implemented the 1st version
-//    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
-//                            user introduced
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
-//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
-//    16 Aug. 2011  H.Kurashige : Move dBin, baseBin to the base class
-//    02 Oct. 2013  V.Ivanchenko : Remove FindBinLocation method
-//
-//--------------------------------------------------------------------
+// Authors:
+// - 02 Dec. 1995, G.Cosmo: Structure created based on object model
+// - 03 Mar. 1996, K.Amako: Implemented the 1st version
+// Revisions:
+// - 11 Nov. 2000, H.Kurashige: Use STL vector for dataVector and binVector
+// --------------------------------------------------------------------
+#ifndef G4PhysicsLinearVector_hh
+#define G4PhysicsLinearVector_hh 1
 
-#ifndef G4PhysicsLinearVector_h
-#define G4PhysicsLinearVector_h 1
-
-#include "globals.hh"
 #include "G4PhysicsVector.hh"
+#include "globals.hh"
 
-class G4PhysicsLinearVector : public G4PhysicsVector  
+class G4PhysicsLinearVector : public G4PhysicsVector
 {
-public:// with description
+public:
+  // The vector will be filled from external file using Retrieve() method
+  explicit G4PhysicsLinearVector(G4bool spline = false);
 
-  G4PhysicsLinearVector();
-       // the vector will be filled from external file using Retrieve method
+  // Energies will be computed and filled at construction, values will be 
+  // filled with zeros. Required Nbin > 0 and Emax > Emin.
+  // Use PutValue(..) to fill the data vector
+  explicit G4PhysicsLinearVector(G4double Emin, G4double Emax, std::size_t Nbin,
+                                 G4bool spline = false);
 
-  G4PhysicsLinearVector(G4double theEmin, G4double theEmax, size_t theNbin);
-       // Energy vector will be computed and filled at construction, 
-       // number of elements 'theNbin+1'. Use PutValue() to fill the data vector
+  virtual ~G4PhysicsLinearVector() = default;
 
-  virtual ~G4PhysicsLinearVector();
+protected:
 
-  virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii) final;
-       // To retrieve persistent data from a file stream.
-
-  virtual void ScaleVector(G4double factorE, G4double factorV) final;
-       // Scale all values of the vector and second derivatives
-       // by factorV, energies - by vectorE. 
-
+  void Initialise() final;
 };
-
 
 #endif

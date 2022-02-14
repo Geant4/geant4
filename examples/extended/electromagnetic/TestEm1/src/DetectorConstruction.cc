@@ -186,7 +186,7 @@ void DetectorConstruction::DefineMaterials()
  LSO->AddElement(Si, 1);
  LSO->AddElement(O , 5);
    
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -233,6 +233,7 @@ void DetectorConstruction::PrintParameters()
 {
   G4cout << "\n The Box is " << G4BestUnit(fBoxSize,"Length")
          << " of " << fMaterial->GetName() << G4endl;
+  G4cout << fMaterial << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

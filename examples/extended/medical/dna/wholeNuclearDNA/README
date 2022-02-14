@@ -24,7 +24,7 @@ shall cite the following Geant4-DNA collaboration publications:
 The wholenucleardna example offers the basic tools to simulate the track structure of different charge particles within a
 simplified geometrical model of the DNA molecule contained in a cell nucleus. 
 In this example, the DetectorConstruction file contains the placement of the 6 Gbp (base-pairs) of a human cell respecting five compaction levels in the structure of the DNA molecule: double helix, nucleosome, chromatin fiber, simple chromatin fiber loop and complex chromatin fiber loops.
-These complex chromatin fiber loops are then used to fill the chromosome territories using a constant density (~30-31 kbp/µm3.
+These complex chromatin fiber loops are then used to fill the chromosome territories using a constant density (~30-31 kbp/Âµm3.
 Even though this geometry defines different volumes for the DNA base, the back-bone region or the histone proteins, the material filling all these volumes in the simulation is liquid water ("G4_WATER")
 
 In order to simulate all the energy transfer points of the track at nanometric level, the Geant4-DNA physics processes and models are used. 
@@ -36,7 +36,7 @@ http://geant4-dna.org
 As indicated in the introduction, the whole DNA molecule contained in a human cell with 5 different compaction levels is described in this geometry. In order to place the complex chromatin loops in each of the 43 chromosome territories, the files called "chromo-number.dat" are needed. 
 These 43 chromosome territories are then placed in an ellipsoid that has the typical dimensions of a human fibroblast cell nucleus.
 All the volumes in the geometry are made of liquid water (G4_WATER material) despite of what they geometrically represent.
-Particles are shot from a random (x,y)position covering the main central part of the cell nucleus and at z=2.99 µm from the center of the nucleus. This value allows the primary particle to be either inside the cell nucleus, either not far from the entrance surface so its energy loss before the cell nucleus entrance is negligible. 
+Particles are shot from a random (x,y)position covering the main central part of the cell nucleus and at z=2.99 Âµm from the center of the nucleus. This value allows the primary particle to be either inside the cell nucleus, either not far from the entrance surface so its energy loss before the cell nucleus entrance is negligible. 
 
 WARNING: By default, the bases are not built. To build the whole geometry, set the flag fBuildBases in DetectorConstruction to true.
 

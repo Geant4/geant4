@@ -32,41 +32,43 @@
 // File name:     G4WLSTimeGeneratorProfileExponential.cc
 //
 // Author:        Pedro Rodrigues, Andreia Trindade
-// 
+//
 // Creation date: 2006-05-07
 //
 // Modifications:
 //
-// Class Description: 
+// Class Description:
 //
-// Class Description: End 
+// Class Description: End
 //
 // -------------------------------------------------------------------
 //
-//    
+//
 
 #include "G4WLSTimeGeneratorProfileExponential.hh"
 #include "Randomize.hh"
-//    
+//
 
-G4WLSTimeGeneratorProfileExponential::G4WLSTimeGeneratorProfileExponential(const G4String& name):G4VWLSTimeGeneratorProfile(name)
-{;}
-
-//    
-
-G4WLSTimeGeneratorProfileExponential::~G4WLSTimeGeneratorProfileExponential() 
-{;}
+G4WLSTimeGeneratorProfileExponential::G4WLSTimeGeneratorProfileExponential(
+  const G4String& name)
+  : G4VWLSTimeGeneratorProfile(name)
+{}
 
 //
 
-G4double G4WLSTimeGeneratorProfileExponential::GenerateTime(const G4double time_constant)
+G4WLSTimeGeneratorProfileExponential::~G4WLSTimeGeneratorProfileExponential() {}
+
+//
+
+G4double G4WLSTimeGeneratorProfileExponential::GenerateTime(
+  const G4double time_constant)
 {
-  G4double time = 0;
-  time = -std::log(G4UniformRand())*time_constant;
-  return time;
+  return -std::log(G4UniformRand()) * time_constant;
 }
 
-G4double G4WLSTimeGeneratorProfileExponential::GenerateTime(const G4MaterialPropertiesTable*){
+G4double G4WLSTimeGeneratorProfileExponential::GenerateTime(
+  const G4MaterialPropertiesTable*)
+{
   // This method is not currently in use
-  return 0;
+  return 0.;
 }

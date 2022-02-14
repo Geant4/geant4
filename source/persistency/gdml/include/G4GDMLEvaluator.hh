@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLEvaluator
+// G4GDMLEvaluator
 //
 // Class description:
 //
-// GDML class for evaluation of expressions.
+// GDML class for evaluation of expressions
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLEVALUATOR_INCLUDED_
-#define _G4GDMLEVALUATOR_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4GDMLEVALUATOR_HH
+#define G4GDMLEVALUATOR_HH 1
 
 #include <vector>
 
@@ -45,29 +40,28 @@
 
 class G4GDMLEvaluator
 {
+  public:
 
- public:
+    G4GDMLEvaluator();
 
-   G4GDMLEvaluator();
+    void Clear();
+    void DefineConstant(const G4String&, G4double);
+    void DefineVariable(const G4String&, G4double);
+    void DefineMatrix(const G4String&, G4int, std::vector<G4double>);
+    void SetVariable(const G4String&, G4double);
+    G4bool IsVariable(const G4String&) const;
+    G4String SolveBrackets(const G4String&);
+    G4double Evaluate(const G4String&);
+    G4int EvaluateInteger(const G4String&);
+    G4double GetConstant(const G4String&);
+    G4double GetVariable(const G4String&);
+    G4String ConvertToString(G4int ival);
+    G4String ConvertToString(G4double dval);
 
-   void Clear();
-   void DefineConstant(const G4String&, G4double);
-   void DefineVariable(const G4String&, G4double);
-   void DefineMatrix(const G4String&, G4int, std::vector<G4double>);
-   void SetVariable(const G4String&, G4double);
-   G4bool IsVariable(const G4String&) const;
-   G4String SolveBrackets(const G4String&);
-   G4double Evaluate(const G4String&);
-   G4int EvaluateInteger(const G4String&);
-   G4double GetConstant(const G4String&);
-   G4double GetVariable(const G4String&);
-   G4String ConvertToString(G4int ival);
-   G4String ConvertToString(G4double dval);
+  private:
 
- private:
-
-   G4Evaluator eval;
-   std::vector<G4String> variableList;
+    G4Evaluator eval;
+    std::vector<G4String> variableList;
 };
 
 #endif

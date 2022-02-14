@@ -1,0 +1,26 @@
+#
+# Macro file for "TestEm3.cc" 
+#
+# to play with geometry
+# 1 layer; magnetic field
+#
+/control/verbose 2
+#
+/testem/det/setNbOfLayers 1
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 Aluminium 10 cm
+/testem/det/setSizeYZ 10 cm
+#
+/run/setCut 2 cm
+#
+/run/initialize
+#
+/globalField/setValue 0 0 10 tesla
+#
+/testem/gun/setDefault
+/testem/gun/rndm 0.1
+/gun/particle proton
+/gun/energy 300 MeV
+#
+/run/printProgress 0
+/run/beamOn 10

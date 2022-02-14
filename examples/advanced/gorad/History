@@ -1,0 +1,63 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 10th, 2021 B. Morgan (gorad-V10-07-05)
+- Protect inclusion of G4UIQt.hh
+
+October 25th, 2021 B.Morgan (gorad-V10-07-04)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+October 6th, 2021 I. Hrivnacova (gorad-V10-07-03)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (csv),
+  removed Analysis.hh.
+
+July 19th, 2021 Ivana Hrivnacova (gorad-V10-07-02)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+May 24th, 2021 B. Morgan (gorad-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+March 29th, 2021  Gabriele Cosmo (gorad-V10-07-00)
+- Fixed shadowing compilation warnings in GRInitialization.
+
+November 16th, 2020  Makoto Asai (gorad-V10-06-06)
+- GRGeomBiasMessenger.cc : Fix compilation warning.
+
+November 13th, 2020  Makoto Asai (gorad-V10-06-05)
+- Migration to G4RunManagerFactory.
+
+November 2nd, 2020  Ben Morgan (gorad-V10-06-04)
+- Support same CMake version range as core Geant4
+
+October 29th, 2020  Makoto Asai (gorad-V10-06-03)
+- Adding protection to disordered UI commands.
+
+October 26th, 2020  Makoto Asai (gorad-V10-06-02)
+- Updating and fixing some typos in printouts.
+
+September 23rd, 2020  Makoto Asai  (gorad-V10-06-01)
+- Update README.
+- Code cleanup.
+
+September 8th, 2020  Makoto Asai  (gorad-V10-06-00)
+- First introduction of Gorad.
+
+

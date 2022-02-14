@@ -1,0 +1,244 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_base_tex
+#define tools_sg_base_tex
+
+#include "../platform"
+#include "../img"
+#include "../lina/line"
+#include "../lina/vec3f"
+
+#include "sf_vec"
+#include "sf_img"
+#include "../colorfs"
+
+namespace tools {
+namespace sg {
+
+class base_tex {
+public:
+  TOOLS_SCLASS(tools::sg::base_tex)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<base_tex>(this,a_class)) return p;
+    return 0;
+  }
+public:
+  sf_img<byte> img;
+  sf_vec<colorf,float> back_color;
+  sf<bool> expand;
+  sf<unsigned int> limit;
+  sf<bool> nearest; //for glTexParameteri. See exlib/sg/GL_manager. default=true for astro images.
+public:
+  enum intersect_type {
+    intersect_down,
+    intersect_move,
+    intersect_up
+  };
+  virtual bool intersect_value(std::ostream&,intersect_type a_type,const line<vec3f>& a_line,std::string& a_s) const = 0;
+public:
+  base_tex()
+  :img(img_byte())
+  ,back_color(colorf_white())
+  ,expand(false)
+  ,limit(device::tex_mem_limit()) //OpenGL-ES glTex limitation.
+  ,nearest(true)
+  ,m_img()
+  {}
+  virtual ~base_tex(){}
+public:
+  base_tex(const base_tex& a_from)
+  :img(a_from.img)
+  ,back_color(a_from.back_color)
+  ,expand(a_from.expand)
+  ,limit(a_from.limit)
+  ,nearest(a_from.nearest)
+  ,m_img()
+  {}
+  base_tex& operator=(const base_tex& a_from){
+    img = a_from.img;
+    back_color = a_from.back_color;
+    expand = a_from.expand;
+    limit = a_from.limit;
+    nearest = a_from.nearest;
+    m_img.make_empty();
+    return *this;
+  }
+protected:
+  void _update_sg_(std::ostream& a_out) {
+    //clean_texs(); //must reset for all render_manager.
+
+    const img_byte& _img = img.value();
+
+   //::printf("debug : base_tex::_update_sg : size = %d, w = %d, h = %d, bpp %d\n",
+   //    _img.size(),_img.width(),_img.height(),_img.bpp());
+
+
+    if(_img.is_empty()) {
+      m_img.make_empty();
+      return;
+    }
+
+    unsigned int bpp = _img.bpp();
+    if((bpp!=1)&&(bpp!=3)&&(bpp!=4)) {
+      a_out << "tools::sg::tex_rect::update_sg :"
+            << " bpp " << bpp << " not handled."
+            << std::endl;
+      m_img.make_empty();
+      return;
+    }
+
+    //a_out << "debug : tools::sg::tex_rect::update_sg :"
+    //      << " this " << inlib::p2s(this)
+    //      << std::endl;
+
+    // image must be power of two in width and height.
+
+    const colorf& bc = back_color.value();
+    //::printf("debug : back_color %g %g %g %g\n",bc.r(),bc.g(),bc.b(),bc.a());
+
+    byte pixel[4];
+    pixel[0] = bc.ruchar();
+    pixel[1] = bc.guchar();
+    pixel[2] = bc.buchar();
+    pixel[3] = bc.auchar();
+
+    //dump(a_out,"debug : 0000 :",_img);
+
+    if((back_color.value().a()!=1)&&(bpp!=4)) {
+      //transparent background.
+
+      //NOTE : the node must be rendered after the "behind nodes" so that
+      //       transparency be taken into account for the "behind nodes".
+
+      img_byte img4;
+      if(!_img.rgb2rgba(img4,255)){
+        a_out << "tools::sg::tex_rect::update_sg :"
+              << " rgb2rgba failed."
+              << std::endl;
+        m_img.make_empty();
+        return;
+      }
+
+      if(!img4.to_texture(expand.value(),pixel,m_img)){
+        a_out << "tools::sg::tex_rect::update_sg :"
+              << " problem with inlib::tex_rect::to_texture."
+              << std::endl;
+        m_img.make_empty();
+        return;
+      }
+
+    } else {
+      if(!_img.to_texture(expand.value(),pixel,m_img)){
+        a_out << "tools::sg::tex_rect::update_sg :"
+              << " problem with inlib::tex_rect::to_texture."
+              << std::endl;
+        m_img.make_empty();
+        return;
+      }
+    }
+
+  //a_out << "debug : limit : 000 : " << limit.value() << std::endl;
+    if(limit.value()) {
+      unsigned int tw = m_img.width();
+      unsigned int th = m_img.height();
+      if((tw*th*m_img.bpp())>limit.value()) {
+        //a_out << "debug : trunc " << (tw*th) << std::endl;
+        unsigned int fac = 2;
+        while(true) {
+          unsigned int pw = tw/fac;
+          unsigned int ph = th/fac;
+          if((pw*ph)<limit.value()) {
+            unsigned int sx = (tw-pw)/2;
+            unsigned int sy = (th-ph)/2;
+
+            img_byte part;
+            if(!m_img.get_part(sx,sy,pw,ph,part)) {
+              m_img.make_empty();
+              return;
+            }
+          //a_out << "debug : base_tex : img.get_part due to limit (" << limit.value() << ")." << std::endl;
+            m_img = part;
+            break;
+          }
+          fac *= 2;
+        }
+      }
+    }
+    //dump_not_null(a_out,"debug : base_tex::_update_sg_ :",m_img);
+
+  }
+
+  static void dump(std::ostream& a_out,const std::string& a_cmt,const img_byte& a_img) {
+    if(a_cmt.size()) a_out << a_cmt << std::endl;
+    a_out << " width " << a_img.width()
+          << " height " << a_img.height()
+          << " bpp " << a_img.bpp()
+          << std::endl;
+  }
+
+  static void dump_not_null(std::ostream& a_out,const std::string& a_cmt,const img_byte& a_img) {
+    if(a_cmt.size()) a_out << a_cmt << std::endl;
+    unsigned int w = a_img.width();
+    unsigned int h = a_img.height();
+    unsigned int n = a_img.bpp();
+    a_out << "img_byte : width " << w << " height " << h << " bpp " << n << std::endl;
+    byte* pos = (byte*)a_img.buffer();
+    if(n==3) {
+      byte r,g,b;
+      for(unsigned int j=0;j<h;j++) {
+        for(unsigned int i=0;i<w;i++) {
+          r = *pos;pos++;
+          g = *pos;pos++;
+          b = *pos;pos++;
+          if(r||g||b)
+            a_out << " " << i << " " << j
+                  << " : " << (unsigned int)r << " " << (unsigned int)g << " " << (unsigned int)b
+                  << std::endl;
+        }
+      }
+    }
+  }
+
+  void set_tcs(float a_tcs[8]) {
+    const img_byte& _img = img.value();
+
+    a_tcs[0] = 0;a_tcs[1] = 0;
+    a_tcs[2] = 1;a_tcs[3] = 0;
+    a_tcs[4] = 1;a_tcs[5] = 1;
+    a_tcs[6] = 0;a_tcs[7] = 1;
+
+    float ax = 1;
+    float bx = 0;
+    float ay = 1;
+    float by = 0;
+   {unsigned int iw = _img.width();
+    unsigned int ih = _img.height();
+    unsigned int rw = m_img.width();
+    unsigned int rh = m_img.height();
+    if(rw>iw) {
+      float part = float(iw)/float(rw);
+      ax = part;
+      bx = 0.5f*(1-part);
+    }
+    if(rh>ih) {
+      float part = float(ih)/float(rh);
+      ay = part;
+      by = 0.5f*(1-part);
+    }}
+
+   {unsigned int num = 12/3;
+    for(unsigned int index=0;index<num;index++) {
+      a_tcs[2*index]   = ax*a_tcs[2*index]  +bx;
+      a_tcs[2*index+1] = ay*a_tcs[2*index+1]+by;
+    }}
+
+  }
+protected:
+  img_byte m_img;
+};
+
+}}
+
+#endif

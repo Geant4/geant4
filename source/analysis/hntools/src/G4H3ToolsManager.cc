@@ -36,18 +36,12 @@
 #include <fstream>
 
 using namespace G4Analysis;
-
-// static definitions
-const G4int G4H3ToolsManager::kDimension = 3;
+using std::to_string;
 
 //_____________________________________________________________________________
 G4H3ToolsManager::G4H3ToolsManager(const G4AnalysisManagerState& state)
  : G4VH3Manager(),
    G4THnManager<tools::histo::h3d>(state, "H3")
-{}
-
-//_____________________________________________________________________________
-G4H3ToolsManager::~G4H3ToolsManager()
 {}
 
 //
@@ -58,9 +52,9 @@ namespace {
 
 //_____________________________________________________________________________
 void UpdateH3Information(G4HnInformation* hnInformation,
-                          const G4String& xunitName, 
-                          const G4String& yunitName, 
-                          const G4String& zunitName, 
+                          const G4String& xunitName,
+                          const G4String& yunitName,
+                          const G4String& zunitName,
                           const G4String& xfcnName,
                           const G4String& yfcnName,
                           const G4String& zfcnName,
@@ -71,28 +65,28 @@ void UpdateH3Information(G4HnInformation* hnInformation,
   hnInformation->SetDimension(kX, xunitName, xfcnName, xbinScheme);
   hnInformation->SetDimension(kY, yunitName, yfcnName, ybinScheme);
   hnInformation->SetDimension(kZ, zunitName, zfcnName, zbinScheme);
-}  
-                           
+}
+
 //_____________________________________________________________________________
 void AddH3Annotation(tools::histo::h3d* h3d,
-                     const G4String& xunitName, 
-                     const G4String& yunitName, 
-                     const G4String& zunitName, 
+                     const G4String& xunitName,
+                     const G4String& yunitName,
+                     const G4String& zunitName,
                      const G4String& xfcnName,
                      const G4String& yfcnName,
                      const G4String& zfcnName)
-{                          
+{
   G4String xaxisTitle;
   G4String yaxisTitle;
   G4String zaxisTitle;
-  UpdateTitle(xaxisTitle, xunitName, xfcnName);        
-  UpdateTitle(yaxisTitle, yunitName, yfcnName);        
-  UpdateTitle(zaxisTitle, zunitName, zfcnName);        
+  UpdateTitle(xaxisTitle, xunitName, xfcnName);
+  UpdateTitle(yaxisTitle, yunitName, yfcnName);
+  UpdateTitle(zaxisTitle, zunitName, zfcnName);
   h3d->add_annotation(tools::histo::key_axis_x_title(), xaxisTitle);
   h3d->add_annotation(tools::histo::key_axis_y_title(), yaxisTitle);
   h3d->add_annotation(tools::histo::key_axis_z_title(), zaxisTitle);
-}               
-                          
+}
+
 //_____________________________________________________________________________
 tools::histo::h3d* CreateToolsH3(
                          const G4String& title,
@@ -102,12 +96,13 @@ tools::histo::h3d* CreateToolsH3(
                          const G4String& xunitName,
                          const G4String& yunitName,
                          const G4String& zunitName,
-                         const G4String& xfcnName, 
+                         const G4String& xfcnName,
                          const G4String& zfcnName,
                          const G4String& yfcnName,
                          const G4String& xbinSchemeName,
                          const G4String& ybinSchemeName,
-                         const G4String& zbinSchemeName)
+                         const G4String& zbinSchemeName,
+                         std::string_view className)
 {
   auto xunit = GetUnitValue(xunitName);
   auto yunit = GetUnitValue(yunitName);
@@ -118,23 +113,20 @@ tools::histo::h3d* CreateToolsH3(
   auto xbinScheme = GetBinScheme(xbinSchemeName);
   auto ybinScheme = GetBinScheme(ybinSchemeName);
   auto zbinScheme = GetBinScheme(zbinSchemeName);
-  
+
   if ( xbinScheme != G4BinScheme::kLog && ybinScheme !=  G4BinScheme::kLog && zbinScheme != G4BinScheme::kLog) {
     if ( xbinScheme == G4BinScheme::kUser || ybinScheme == G4BinScheme::kUser || zbinScheme == G4BinScheme::kUser) {
       // This should never happen, but let's make sure about it
       // by issuing a warning
-      G4ExceptionDescription description;
-      description 
-        << "    User binning scheme setting was ignored." << G4endl
-        << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
-      G4Exception("G4H3ToolsManager::CreateH3",
-                "Analysis_W013", JustWarning, description);
-    }              
-    return new tools::histo::h3d(title, 
-                                 nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+      Warn("User binning scheme setting was ignored.\n"
+           "Linear binning will be applied with given (nbins, xmin, xmax) values.",
+           className, "CreateToolsH3");
+    }
+    return new tools::histo::h3d(title,
+                                 nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit),
                                  nybins, yfcn(ymin/yunit), yfcn(ymax/yunit),
                                  nzbins, zfcn(zmin/zunit), zfcn(zmax/zunit));
-               // h3 objects are deleted in destructor and reset when 
+               // h3 objects are deleted in destructor and reset when
                // closing a file.
   }
   else {
@@ -145,9 +137,9 @@ tools::histo::h3d* CreateToolsH3(
     ComputeEdges(nybins, ymin, ymax, yunit, yfcn, ybinScheme, yedges);
     std::vector<G4double> zedges;
     ComputeEdges(nzbins, zmin, zmax, zunit, zfcn, zbinScheme, zedges);
-    return new tools::histo::h3d(title, xedges, yedges, zedges); 
+    return new tools::histo::h3d(title, xedges, yedges, zedges);
   }
-}     
+}
 
 //_____________________________________________________________________________
 tools::histo::h3d* CreateToolsH3(
@@ -161,7 +153,7 @@ tools::histo::h3d* CreateToolsH3(
                          const G4String& xfcnName,
                          const G4String& yfcnName,
                          const G4String& zfcnName)
-{                          
+{
   auto xunit = GetUnitValue(xunitName);
   auto yunit = GetUnitValue(yunitName);
   auto zunit = GetUnitValue(zunitName);
@@ -169,18 +161,18 @@ tools::histo::h3d* CreateToolsH3(
   auto yfcn = GetFunction(yfcnName);
   auto zfcn = GetFunction(zfcnName);
 
-  // Apply function 
+  // Apply function
   std::vector<G4double> xnewEdges;
   ComputeEdges(xedges, xunit, xfcn, xnewEdges);
   std::vector<G4double> ynewEdges;
   ComputeEdges(yedges, yunit, yfcn, ynewEdges);
   std::vector<G4double> znewEdges;
   ComputeEdges(zedges, zunit, zfcn, znewEdges);
-  
-  return new tools::histo::h3d(title, xnewEdges, ynewEdges, znewEdges); 
-             // h3 objects are deleted in destructor and reset when 
+
+  return new tools::histo::h3d(title, xnewEdges, ynewEdges, znewEdges);
+             // h3 objects are deleted in destructor and reset when
              // closing a file.
-}  
+}
 
 //_____________________________________________________________________________
 void  ConfigureToolsH3(tools::histo::h3d* h3d,
@@ -190,12 +182,13 @@ void  ConfigureToolsH3(tools::histo::h3d* h3d,
                        const G4String& xunitName,
                        const G4String& yunitName,
                        const G4String& zunitName,
-                       const G4String& xfcnName, 
+                       const G4String& xfcnName,
                        const G4String& yfcnName,
                        const G4String& zfcnName,
                        const G4String& xbinSchemeName,
                        const G4String& ybinSchemeName,
-                       const G4String& zbinSchemeName)
+                       const G4String& zbinSchemeName,
+                       std::string_view className)
 {
   auto xunit = GetUnitValue(xunitName);
   auto yunit = GetUnitValue(yunitName);
@@ -206,19 +199,16 @@ void  ConfigureToolsH3(tools::histo::h3d* h3d,
   auto xbinScheme = GetBinScheme(xbinSchemeName);
   auto ybinScheme = GetBinScheme(ybinSchemeName);
   auto zbinScheme = GetBinScheme(zbinSchemeName);
-  
+
   if ( xbinScheme != G4BinScheme::kLog && ybinScheme !=  G4BinScheme::kLog && zbinScheme !=  G4BinScheme::kLog) {
     if ( xbinScheme == G4BinScheme::kUser || ybinScheme == G4BinScheme::kUser || zbinScheme == G4BinScheme::kUser) {
       // This should never happen, but let's make sure about it
       // by issuing a warning
-      G4ExceptionDescription description;
-      description 
-        << "    User binning scheme setting was ignored." << G4endl
-        << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
-      G4Exception("G4H3ToolsManager::CreateH3",
-                "Analysis_W013", JustWarning, description);
-    }              
-    h3d->configure(nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+      Warn("User binning scheme setting was ignored.\n"
+           "Linear binning will be applied with given (nbins, xmin, xmax) values.",
+           className, "ConfigureToolsH3");
+    }
+    h3d->configure(nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit),
                    nybins, yfcn(ymin/yunit), yfcn(ymax/yunit),
                    nzbins, zfcn(zmin/zunit), zfcn(zmax/zunit));
   }
@@ -232,7 +222,7 @@ void  ConfigureToolsH3(tools::histo::h3d* h3d,
     ComputeEdges(nzbins, zmin, zmax, zunit, zfcn, zbinScheme, zedges);
     h3d->configure(xedges, yedges, zedges);
   }
-}     
+}
 
 //_____________________________________________________________________________
 void  ConfigureToolsH3(tools::histo::h3d* h3d,
@@ -272,10 +262,10 @@ void  ConfigureToolsH3(tools::histo::h3d* h3d,
 //
 
 //_____________________________________________________________________________
-void G4H3ToolsManager::AddH3Information(const G4String& name,  
-                          const G4String& xunitName, 
-                          const G4String& yunitName, 
-                          const G4String& zunitName, 
+void G4H3ToolsManager::AddH3Information(const G4String& name,
+                          const G4String& xunitName,
+                          const G4String& yunitName,
+                          const G4String& zunitName,
                           const G4String& xfcnName,
                           const G4String& yfcnName,
                           const G4String& zfcnName,
@@ -283,13 +273,13 @@ void G4H3ToolsManager::AddH3Information(const G4String& name,
                           G4BinScheme ybinScheme,
                           G4BinScheme zbinScheme) const
 {
-  auto hnInformation = fHnManager->AddHnInformation(name, 3);
+  auto hnInformation = fHnManager->AddHnInformation(name, fkDimension);
   hnInformation->AddDimension(xunitName, xfcnName, xbinScheme);
   hnInformation->AddDimension(yunitName, yfcnName, ybinScheme);
   hnInformation->AddDimension(zunitName, zfcnName, zbinScheme);
-}  
+}
 
-// 
+//
 // protected methods
 //
 
@@ -298,48 +288,43 @@ G4int G4H3ToolsManager::CreateH3(const G4String& name,  const G4String& title,
                           G4int nxbins, G4double xmin, G4double xmax,
                           G4int nybins, G4double ymin, G4double ymax,
                           G4int nzbins, G4double zmin, G4double zmax,
-                          const G4String& xunitName, const G4String& yunitName, 
+                          const G4String& xunitName, const G4String& yunitName,
                           const G4String& zunitName,
                           const G4String& xfcnName, const G4String& yfcnName,
-                          const G4String& zfcnName, 
-                          const G4String& xbinSchemeName, 
+                          const G4String& zfcnName,
+                          const G4String& xbinSchemeName,
                           const G4String& ybinSchemeName,
                           const G4String& zbinSchemeName)
-                               
+
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("create", "H3", name);
-#endif
+  Message(kVL4, "create", "H3", name);
+
   tools::histo::h3d* h3d
-    = CreateToolsH3(title, 
+    = CreateToolsH3(title,
                     nxbins, xmin, xmax, nybins, ymin, ymax, nzbins, zmin, zmax,
-                    xunitName, yunitName, zunitName, 
-                    xfcnName, yfcnName, zfcnName, 
-                    xbinSchemeName, ybinSchemeName, zbinSchemeName);
-    
+                    xunitName, yunitName, zunitName,
+                    xfcnName, yfcnName, zfcnName,
+                    xbinSchemeName, ybinSchemeName, zbinSchemeName, fkClass);
+
   // Add annotation
   AddH3Annotation(h3d, xunitName, yunitName, zunitName,
-                  xfcnName, yfcnName, zfcnName);        
-    
+                  xfcnName, yfcnName, zfcnName);
+
   // Save H3 information
   auto xbinScheme = GetBinScheme(xbinSchemeName);
   auto ybinScheme = GetBinScheme(ybinSchemeName);
   auto zbinScheme = GetBinScheme(zbinSchemeName);
   AddH3Information(
-    name, xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName, 
+    name, xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName,
     xbinScheme, ybinScheme, zbinScheme);
-    
-  // Register histogram 
-  G4int id = RegisterT(h3d, name); 
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) 
-    fState.GetVerboseL2()->Message("create", "H3", name);
-#endif
+  // Register histogram
+  G4int id = RegisterT(h3d, name);
+
+  Message(kVL2, "create", "H3", name);
 
   return id;
-}                                         
+}
 
 //_____________________________________________________________________________
 G4int G4H3ToolsManager::CreateH3(const G4String& name,  const G4String& title,
@@ -350,68 +335,61 @@ G4int G4H3ToolsManager::CreateH3(const G4String& name,  const G4String& title,
                           const G4String& zunitName,
                           const G4String& xfcnName, const G4String& yfcnName,
                           const G4String& zfcnName)
-                               
+
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("create", "H3", name);
-#endif
+  Message(kVL4, "create", "H3", name);
+
   tools::histo::h3d* h3d
-    = CreateToolsH3(title, xedges, yedges, zedges, 
-        xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName); 
-    
+    = CreateToolsH3(title, xedges, yedges, zedges,
+        xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName);
+
   // Add annotation
-  AddH3Annotation(h3d, xunitName, yunitName, zunitName, 
-                  xfcnName, yfcnName, zfcnName);        
-    
+  AddH3Annotation(h3d, xunitName, yunitName, zunitName,
+                  xfcnName, yfcnName, zfcnName);
+
   // Save H3 information
   AddH3Information(
-    name, xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName, 
+    name, xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName,
     G4BinScheme::kUser, G4BinScheme::kUser, G4BinScheme::kUser);
-    
-  // Register histogram 
-  G4int id = RegisterT(h3d, name); 
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) 
-    fState.GetVerboseL2()->Message("create", "H3", name);
-#endif
+  // Register histogram
+  G4int id = RegisterT(h3d, name);
+
+  Message(kVL2, "create", "H3", name);
 
   return id;
-}                                         
+}
 
 //_____________________________________________________________________________
 G4bool G4H3ToolsManager::SetH3(G4int id,
-                            G4int nxbins, G4double xmin, G4double xmax, 
+                            G4int nxbins, G4double xmin, G4double xmax,
                             G4int nybins, G4double ymin, G4double ymax,
                             G4int nzbins, G4double zmin, G4double zmax,
                             const G4String& xunitName, const G4String& yunitName,
                             const G4String& zunitName,
                             const G4String& xfcnName, const G4String& yfcnName,
                             const G4String& zfcnName,
-                            const G4String& xbinSchemeName, 
+                            const G4String& xbinSchemeName,
                             const G4String& ybinSchemeName,
                             const G4String& zbinSchemeName)
-{                                
+{
   auto h3d = GetTInFunction(id, "SetH3", false, false);
   if ( ! h3d ) return false;
 
   auto info = fHnManager->GetHnInformation(id, "SetH3");
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("configure", "H3", info->GetName());
-#endif
+
+  Message(kVL4, "configure", "H3", info->GetName());
 
   // Configure tools h3
   ConfigureToolsH3(
     h3d, nxbins, xmin, xmax, nybins, ymin, ymax, nzbins, zmin, zmax,
-    xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName, 
-    xbinSchemeName, ybinSchemeName, zbinSchemeName);
+    xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName,
+    xbinSchemeName, ybinSchemeName, zbinSchemeName, fkClass);
 
   // Add annotation
-  AddH3Annotation(h3d, xunitName, yunitName, zunitName, 
-                  xfcnName, yfcnName, zfcnName);        
-    
+  AddH3Annotation(h3d, xunitName, yunitName, zunitName,
+                  xfcnName, yfcnName, zfcnName);
+
   // Update information
   auto xbinScheme = GetBinScheme(xbinSchemeName);
   auto ybinScheme = GetBinScheme(ybinSchemeName);
@@ -421,11 +399,11 @@ G4bool G4H3ToolsManager::SetH3(G4int id,
     xbinScheme, ybinScheme, zbinScheme);
 
   // Set activation
-  fHnManager->SetActivation(id, true); 
-  
+  fHnManager->SetActivation(id, true);
+
   return true;
 }
-                                  
+
 //_____________________________________________________________________________
 G4bool G4H3ToolsManager::SetH3(G4int id,
                             const std::vector<G4double>& xedges,
@@ -435,35 +413,33 @@ G4bool G4H3ToolsManager::SetH3(G4int id,
                             const G4String& zunitName,
                             const G4String& xfcnName, const G4String& yfcnName,
                             const G4String& zfcnName)
-{                                
+{
   auto h3d = GetTInFunction(id, "SetH3", false, false);
   if ( ! h3d ) return false;
 
   auto info = fHnManager->GetHnInformation(id, "SetH3");
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("configure", "H3", info->GetName());
-#endif
+
+  Message(kVL4, "configure", "H3", info->GetName());
 
   // Configure tools h3
-  ConfigureToolsH3(h3d, xedges, yedges, zedges, 
+  ConfigureToolsH3(h3d, xedges, yedges, zedges,
     xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName);
 
   // Add annotation
-  AddH3Annotation(h3d, xunitName, yunitName, zunitName, 
-                  xfcnName, yfcnName, zfcnName);        
-    
+  AddH3Annotation(h3d, xunitName, yunitName, zunitName,
+                  xfcnName, yfcnName, zfcnName);
+
   // Update information
   UpdateH3Information(
     info, xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName,
     G4BinScheme::kUser, G4BinScheme::kUser, G4BinScheme::kUser);
 
   // Set activation
-  fHnManager->SetActivation(id, true); 
-  
+  fHnManager->SetActivation(id, true);
+
   return true;
 }
-                                  
+
 //_____________________________________________________________________________
 G4bool G4H3ToolsManager::ScaleH3(G4int id, G4double factor)
 {
@@ -471,10 +447,10 @@ G4bool G4H3ToolsManager::ScaleH3(G4int id, G4double factor)
   if ( ! h3d ) return false;
 
   return h3d->scale(factor);
-}  
-                           
+}
+
 //_____________________________________________________________________________
-G4bool G4H3ToolsManager::FillH3(G4int id, 
+G4bool G4H3ToolsManager::FillH3(G4int id,
                              G4double xvalue, G4double yvalue, G4double zvalue,
                              G4double weight)
 {
@@ -482,33 +458,32 @@ G4bool G4H3ToolsManager::FillH3(G4int id,
   if ( ! h3d ) return false;
 
   if ( fState.GetIsActivation() && ( ! fHnManager->GetActivation(id) ) ) {
-    return false; 
-  }  
+    return false;
+  }
 
-  G4HnDimensionInformation* xInfo 
+  G4HnDimensionInformation* xInfo
     = fHnManager->GetHnDimensionInformation(id, kX, "FillH3");
-  G4HnDimensionInformation* yInfo 
+  G4HnDimensionInformation* yInfo
     = fHnManager->GetHnDimensionInformation(id, kY, "FillH3");
-  G4HnDimensionInformation* zInfo 
+  G4HnDimensionInformation* zInfo
     = fHnManager->GetHnDimensionInformation(id, kZ, "FillH3");
 
-  h3d->fill(xInfo->fFcn(xvalue/xInfo->fUnit), 
-            yInfo->fFcn(yvalue/yInfo->fUnit), 
+  h3d->fill(xInfo->fFcn(xvalue/xInfo->fUnit),
+            yInfo->fFcn(yvalue/yInfo->fUnit),
             zInfo->fFcn(zvalue/zInfo->fUnit), weight);
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " id " << id 
-                << " xvalue " << xvalue 
-                << " xfcn(xvalue/xunit) " <<  xInfo->fFcn(xvalue/xInfo->fUnit) 
-                << " yvalue " << yvalue
-                << " yfcn(yvalue/yunit) " <<  yInfo->fFcn(yvalue/yInfo->fUnit)
-                << " zvalue " << zvalue
-                << " zfcn(zvalue/zunit) " <<  zInfo->fFcn(zvalue/zInfo->fUnit)
-                << " weight " << weight;
-    fState.GetVerboseL4()->Message("fill", "H3", description);
-  }  
-#endif
+
+  if ( IsVerbose(kVL4) ) {
+    Message(kVL4, "fill", "H3",
+      " id " + to_string(id) +
+      " xvalue " + to_string(xvalue) +
+      " xfcn(xvalue/xunit) " +  to_string(xInfo->fFcn(xvalue/xInfo->fUnit)) +
+      " yvalue " + to_string(yvalue) +
+      " yfcn(yvalue/yunit) " +  to_string(yInfo->fFcn(yvalue/yInfo->fUnit)) +
+      " zvalue " + to_string(zvalue) +
+      " zfcn(zvalue/zunit) " +  to_string(zInfo->fFcn(zvalue/zInfo->fUnit)) +
+      " weight " + to_string(weight));
+  }
+
   return true;
 }
 
@@ -516,16 +491,16 @@ G4bool G4H3ToolsManager::FillH3(G4int id,
 G4int  G4H3ToolsManager::GetH3Id(const G4String& name, G4bool warn) const
 {
   return GetTId(name, warn);
-}  
-                                      
+}
+
 //_____________________________________________________________________________
 G4int G4H3ToolsManager::GetH3Nxbins(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3NXbins");
   if ( ! h3d ) return 0;
-  
+
   return GetNbins(*h3d, kX);
-}  
+}
 
 //_____________________________________________________________________________
 G4double G4H3ToolsManager::GetH3Xmin(G4int id) const
@@ -533,37 +508,37 @@ G4double G4H3ToolsManager::GetH3Xmin(G4int id) const
 // Returns xmin value with applied unit and histogram function
 
   auto h3d = GetTInFunction(id, "GetH3Xmin");
-  if ( ! h3d ) return 0;
-  
+  if ( ! h3d ) return 0.;
+
   return GetMin(*h3d, kX);
-}  
+}
 
 //_____________________________________________________________________________
 G4double G4H3ToolsManager::GetH3Xmax(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3Xmax");
-  if ( ! h3d ) return 0;
-  
+  if ( ! h3d ) return 0.;
+
   return GetMax(*h3d, kX);
-}  
+}
 
 //_____________________________________________________________________________
 G4double G4H3ToolsManager::GetH3XWidth(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3XWidth", true, false);
-  if ( ! h3d ) return 0;
-  
+  if ( ! h3d ) return 0.;
+
   return GetWidth(*h3d, kX, fHnManager->GetHnType());
-}  
+}
 
 //_____________________________________________________________________________
 G4int G4H3ToolsManager::GetH3Nybins(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3NYbins");
   if ( ! h3d ) return 0;
-  
+
   return GetNbins(*h3d, kY);
-}  
+}
 
 //_____________________________________________________________________________
 G4double G4H3ToolsManager::GetH3Ymin(G4int id) const
@@ -571,37 +546,37 @@ G4double G4H3ToolsManager::GetH3Ymin(G4int id) const
 // Returns xmin value with applied unit and histogram function
 
   auto h3d = GetTInFunction(id, "GetH3Ymin");
-  if ( ! h3d ) return 0;
-  
+  if ( ! h3d ) return 0.;
+
   return GetMin(*h3d, kY);
-}  
+}
 
 //_____________________________________________________________________________
 G4double G4H3ToolsManager::GetH3Ymax(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3Ymax");
-  if ( ! h3d ) return 0;
-  
+  if ( ! h3d ) return 0.;
+
   return GetMax(*h3d, kY);
-}  
+}
 
 //_____________________________________________________________________________
 G4double G4H3ToolsManager::GetH3YWidth(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3YWidth", true, false);
-  if ( ! h3d ) return 0;
-  
+  if ( ! h3d ) return 0.;
+
   return GetWidth(*h3d, kY, fHnManager->GetHnType());
-}  
+}
 
 //_____________________________________________________________________________
 G4int G4H3ToolsManager::GetH3Nzbins(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3NZbins");
   if ( ! h3d ) return 0;
-  
+
   return GetNbins(*h3d, kZ);
-}  
+}
 
 //_____________________________________________________________________________
 G4double G4H3ToolsManager::GetH3Zmin(G4int id) const
@@ -609,150 +584,171 @@ G4double G4H3ToolsManager::GetH3Zmin(G4int id) const
 // Returns xmin value with applied unit and histogram function
 
   auto h3d = GetTInFunction(id, "GetH3Zmin");
-  if ( ! h3d ) return 0;
-  
+  if ( ! h3d ) return 0.;
+
   return GetMin(*h3d, kZ);
-}  
+}
 
 //_____________________________________________________________________________
 G4double G4H3ToolsManager::GetH3Zmax(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3Zmax");
-  if ( ! h3d ) return 0;
-  
+  if ( ! h3d ) return 0.;
+
   return GetMax(*h3d, kZ);
-}  
+}
 
 //_____________________________________________________________________________
 G4double G4H3ToolsManager::GetH3ZWidth(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3ZWidth", true, false);
-  if ( ! h3d ) return 0;
-  
+  if ( ! h3d ) return 0.;
+
   return GetWidth(*h3d, kZ, fHnManager->GetHnType());
-}  
+}
 
 //_____________________________________________________________________________
 G4bool G4H3ToolsManager::SetH3Title(G4int id, const G4String& title)
 {
   auto h3d = GetTInFunction(id, "SetH3Title");
   if ( ! h3d ) return false;
-  
+
   return SetTitle(*h3d, title);
-}  
+}
 
 //_____________________________________________________________________________
 G4bool G4H3ToolsManager::SetH3XAxisTitle(G4int id, const G4String& title)
 {
   auto h3d = GetTInFunction(id, "SetH3XAxisTitle");
   if ( ! h3d ) return false;
-  
+
   return SetAxisTitle(*h3d, kX, title);
-}  
+}
 
 //_____________________________________________________________________________
 G4bool G4H3ToolsManager::SetH3YAxisTitle(G4int id, const G4String& title)
 {
   auto h3d = GetTInFunction(id, "SetH3YAxisTitle");
   if ( ! h3d ) return false;
-  
+
   return SetAxisTitle(*h3d, kY, title);
-}  
+}
 
 //_____________________________________________________________________________
 G4bool G4H3ToolsManager::SetH3ZAxisTitle(G4int id, const G4String& title)
 {
   auto h3d = GetTInFunction(id, "SetH3ZAxisTitle");
   if ( ! h3d ) return false;
-  
+
   return SetAxisTitle(*h3d, kZ, title);
-}  
+}
 
 //_____________________________________________________________________________
 G4String G4H3ToolsManager::GetH3Title(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3Title");
   if ( ! h3d ) return "";
-  
+
   return GetTitle(*h3d);
-}  
+}
 
 //_____________________________________________________________________________
-G4String G4H3ToolsManager::GetH3XAxisTitle(G4int id) const 
+G4String G4H3ToolsManager::GetH3XAxisTitle(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3XAxisTitle");
   if ( ! h3d ) return "";
-  
+
   return GetAxisTitle(*h3d, kX, fHnManager->GetHnType());
-} 
+}
 
 //_____________________________________________________________________________
-G4String G4H3ToolsManager::GetH3YAxisTitle(G4int id) const 
+G4String G4H3ToolsManager::GetH3YAxisTitle(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3YAxisTitle");
   if ( ! h3d ) return "";
-  
+
   return GetAxisTitle(*h3d, kY, fHnManager->GetHnType());
-}  
+}
 
 //_____________________________________________________________________________
-G4String G4H3ToolsManager::GetH3ZAxisTitle(G4int id) const 
+G4String G4H3ToolsManager::GetH3ZAxisTitle(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3ZAxisTitle");
   if ( ! h3d ) return "";
-  
+
   return GetAxisTitle(*h3d, kZ, fHnManager->GetHnType());
-}  
+}
 
 //_____________________________________________________________________________
-G4bool G4H3ToolsManager::WriteOnAscii(std::ofstream& /*output*/)
+G4bool G4H3ToolsManager::WriteOnAscii(std::ofstream& output)
 {
 // Write selected objects on ASCII file
-// According to the implementation by Michel Maire, originally in
-// extended examples.
-// Not yet available for H3
 
-  return ! fHnManager->IsAscii();
-} 
+  // Do nothing if no histograms are selected
+  if ( ! fHnManager->IsAscii() ) return true;
+
+  // Write h3 histograms
+  for ( G4int i=0; i<G4int(fTVector.size()); ++i ) {
+    auto id = i + fHnManager->GetFirstId();
+    auto info = fHnManager->GetHnInformation(id,"WriteOnAscii");
+    // skip writing if activation is enabled and H1 is inactivated
+    if ( ! info->GetAscii() ) continue;
+    auto h3 = fTVector[i];
+
+    Message(kVL3, "write on ascii", "h3d", info->GetName());
+
+    output << "\n  3D histogram " << id << ": " << h3->title()
+           << "\n \n \t \t \t     X \t\t     Y \t\t     Z \t\t Bin Height" << G4endl;
+
+    for (G4int j=0; j< G4int(h3->axis_x().bins()); ++j) {
+      for (G4int k=0; k< G4int(h3->axis_y().bins()); ++k) {
+        for (G4int l=0; l< G4int(h3->axis_y().bins()); ++l) {
+          output << "  " << j << "\t" << k << "\t" << l << "\t"
+                 << h3->axis_x().bin_center(j) << "\t"
+                 << h3->axis_y().bin_center(k) << "\t"
+                 << h3->axis_y().bin_center(l) << "\t"
+                 << h3->bin_height(j, k, l) << G4endl;
+        }
+      }
+    }
+  }
+
+  return output.good();
+}
 
 //
 // public methods
-// 
+//
 
 //_____________________________________________________________________________
 G4int G4H3ToolsManager::AddH3(const G4String& name, tools::histo::h3d* h3d)
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("add", "H3", name);
-#endif
+  Message(kVL4, "add", "H3", name);
 
   // Add annotation
-  AddH3Annotation(h3d, "none", "none", "none", "none", "none", "none");        
+  AddH3Annotation(h3d, "none", "none", "none", "none", "none", "none");
   // Add information
-  AddH3Information(name, "none", "none", "none", "none", "none", "none", 
+  AddH3Information(name, "none", "none", "none", "none", "none", "none",
                    G4BinScheme::kLinear, G4BinScheme::kLinear, G4BinScheme::kLinear);
-    
-  // Register histogram 
-  G4int id = RegisterT(h3d, name); 
-  
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) 
-    fState.GetVerboseL2()->Message("add", "H3", name);
-#endif
+
+  // Register histogram
+  G4int id = RegisterT(h3d, name);
+
+  Message(kVL2, "add", "H3", name);
+
   return id;
-}  
+}
 
 //_____________________________________________________________________________
 void G4H3ToolsManager::AddH3Vector(
                           const std::vector<tools::histo::h3d*>& h3Vector)
 {
   AddTVector(h3Vector);
-}  
+}
 
 //_____________________________________________________________________________
 tools::histo::h3d*  G4H3ToolsManager::GetH3(G4int id, G4bool warn,
-                                                 G4bool onlyIfActive) const 
+                                                 G4bool onlyIfActive) const
 {
   return GetTInFunction(id, "GetH3", warn, onlyIfActive);
 }

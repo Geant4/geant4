@@ -15,6 +15,8 @@
 #ifndef engineIDulong_h
 #define engineIDulong_h 1
 
+#include <string>
+
 namespace CLHEP {
 
 unsigned long crc32ul(const std::string & s);

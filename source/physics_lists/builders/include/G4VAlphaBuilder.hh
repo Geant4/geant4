@@ -34,7 +34,9 @@
 #ifndef G4VAlphaBuilder_h
 #define G4VAlphaBuilder_h
 
-class G4AlphaInelasticProcess;
+#include "G4PhysicsBuilderInterface.hh"
+
+class G4HadronInelasticProcess;
 class G4HadronElasticProcess;
 
 class G4VAlphaBuilder
@@ -43,7 +45,8 @@ public:
   G4VAlphaBuilder();
   virtual ~G4VAlphaBuilder();
   virtual void Build(G4HadronElasticProcess * aP) = 0;
-  virtual void Build(G4AlphaInelasticProcess * aP) = 0;
+  virtual void Build(G4HadronInelasticProcess * aP) = 0;
+  using G4PhysicsBuilderInterface::Build;
 };
 
 #endif

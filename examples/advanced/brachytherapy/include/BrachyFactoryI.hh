@@ -33,36 +33,32 @@
 // Code developed by:
 //  S.Guatelli
 //
-// 
-//
-// 
-// --------------------------------------------------------------
 #ifndef BrachyFactoryI_h
 #define BrachyFactoryI_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "BrachyDetectorConstructionI.hh"
 #include "BrachyFactory.hh"
 #include "G4RunManager.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
+class BrachyFactory;
+class BrachyDetectorConstructionI;
 class G4ParticleGun;
 class G4Run;
 class G4Event;
-class BrachyFactory;
-class BrachyDetectorConstructionI;
 
 // This class manages the creation of Bebig Isoseed I-125 source 
 // used in interstitial brachytherapy ...
 class BrachyFactoryI:public BrachyFactory
 {
 public:
-  BrachyFactoryI();
+  explicit BrachyFactoryI();
  ~BrachyFactoryI();
 
-  void CreateSource(G4VPhysicalVolume*);
-  void CleanSource();
+  void CreateSource(G4VPhysicalVolume*)override;
+  void CleanSource() override;
 
 private:
-  BrachyDetectorConstructionI* iodiumSource;
+  BrachyDetectorConstructionI* fIodineSource;
 };
 #endif

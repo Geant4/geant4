@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrSolidBoolean
+// G4tgrSolidBoolean
 //
 // Class description:
 //
@@ -34,25 +31,22 @@
 // the Boolean operation of two solids. The type of operation can be:
 // Union, Substraction, Intersection.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrSolidBoolean_h
-#define G4tgrSolidBoolean_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrSolidBoolean_hh
+#define G4tgrSolidBoolean_hh 1
 
 #include <vector>
 
+#include "globals.hh"
 #include "G4tgrSolid.hh"
 
 class G4tgrSolidBoolean : public G4tgrSolid
 {
-  public:  // with description
+  public:
 
     G4tgrSolidBoolean(const std::vector<G4String>& wl);
-   ~G4tgrSolidBoolean();
+    ~G4tgrSolidBoolean();
 
     friend std::ostream& operator<<(std::ostream&, const G4tgrSolidBoolean&);
 
@@ -62,12 +56,12 @@ class G4tgrSolidBoolean : public G4tgrSolid
     const G4String& GetRelativeRotMatName() const;
     G4ThreeVector GetRelativePlace() const;
 
-  private:   
+  private:
 
     // Solid types (Box, Tube, etc) of the solids composing the Boolean solid
 
-    std::vector< std::vector<G4double>* > theSolidParams; 
-      // Vectors of parameters. 
+    std::vector<std::vector<G4double>*> theSolidParams;
+      // Vectors of parameters.
 
     G4String theRelativeRotMatName;
     G4ThreeVector theRelativePlace;
@@ -75,18 +69,16 @@ class G4tgrSolidBoolean : public G4tgrSolid
 
     std::vector<const G4tgrSolid*> theSolids;
       // The two G4tgrSolid's that combine to make this one
-
 };
 
-inline const G4tgrSolid* G4tgrSolidBoolean::GetSolid( G4int ii ) const
-{  
+inline const G4tgrSolid* G4tgrSolidBoolean::GetSolid(G4int ii) const
+{
   if((ii != 0) && (ii != 1))
   {
     std::ostringstream message;
-    message << "Only two G4tgrSolids (0,1) possible ! Asking for... "
-            << ii;
-    G4Exception("G4tgrSolidBoolean::GetSolid()", "InvalidInput",
-                FatalException, message); 
+    message << "Only two G4tgrSolids (0,1) possible ! Asking for... " << ii;
+    G4Exception("G4tgrSolidBoolean::GetSolid()", "InvalidInput", FatalException,
+                message);
   }
   return theSolids[ii];
 }

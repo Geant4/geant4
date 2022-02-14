@@ -334,3 +334,20 @@ G4FSALIntegrationDriver<T>::AdvanceChordLimited(G4FieldTrack& track,
    return ChordFinderDelegate::AdvanceChordLimitedImpl(track, hstep,
                                                        eps, chordDistance);
 }
+
+template <class T>
+void G4FSALIntegrationDriver<T>::StreamInfo( std::ostream& os ) const
+{
+// Write out the parameters / state of the driver
+  os << "State of G4IntegrationDriver: " << std::endl;
+  os << "--Base state (G4RKIntegrationDriver): " << std::endl;
+  Base::StreamInfo( os );
+  os << "--Own  state (G4IntegrationDriver<>): " << std::endl;  
+  os << "    fMinimumStep =      " << fMinimumStep  << std::endl;
+  os << "    Smallest Fraction = " << fSmallestFraction << std::endl;
+  
+  os << "    verbose level     = " << fVerboseLevel << std::endl;    
+  os << "    Reintegrates      = " << DoesReIntegrate() << std::endl;
+  os << "--Chord Finder Delegate state: " << std::endl;
+  ChordFinderDelegate::StreamDelegateInfo( os );
+}

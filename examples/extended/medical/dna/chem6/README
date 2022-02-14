@@ -1,0 +1,213 @@
+$Id: $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Chem6
+                            -------
+
+CORRESPONDING AUTHORS
+W. G. Shin (a), S. Incerti (b)
+(a) ukguen _ gmail _ com
+(b) incerti _ cenbg _ in2p3 _ fr
+
+This example is provided by the Geant4-DNA collaboration.
+(http://geant4-dna.org)
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+
+
+J. Appl. Phys. 125 (2019) 104301
+Med. Phys. 45 (2018) e722-e739
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178
+
+ 0 - INTRODUCTION
+    Based on chem4 and chem5 examples, this example provides scoring of the 
+    radiochemical yield G defined as
+        (Number of species X) / (100 eV of deposited energy).
+    as a function of time and LET.
+    The example uses the IRT approach by default.
+
+    The details are described in the following paper:
+    J. Appl. Phys. 125 (2019) 104301
+
+ 1 - GEOMETRY DEFINITION
+
+    The world volume is a simple water box which represents a 'pseudo infinite'
+    homogeneous medium.
+
+    The default geometry is constructed in DetectorConstruction class.
+
+    The size of detector can be controlled by PrimaryKiller class (see section 5.2).
+
+ 2 - PHYSICS LIST
+
+    PhysicsList is Geant4 modular physics list using:
+
+    G4EmDNAPhysics_option2 constructor
+    - the accelerated physics constructor based on G4EmDNAPhysics constructor.
+
+    G4EmDNAChemistry_option3 constructor.
+    - the chemistry constructor is based on the pre-chemical stage of PARTRAC
+    and chemical parameters of RITRACKS.
+    - this chemistry constructor uses independent reaction time method as a
+    default.
+
+ 3 - ACTION INITALIZATION
+
+    The class ActionInitialization instantiates and registers
+    to Geant4 kernel all user action classes.
+
+    While in sequential mode the action classes are instantiated just once,
+    via invoking the method:
+    ActionInitialization::Build()
+    In multi-threading mode the same method is invoked for each thread worker
+    and so all user action classes are defined thread-local.
+
+    A run action class is instantiated both thread-local
+    and global that's why its instance is created also in the method:
+    ActionInitialization::BuildForMaster()
+    which is invoked only in multi-threading mode.
+
+ 4 - AN EVENT: THE PRIMARY GENERATOR
+
+    The primary kinematic consists of a single particle starting at the center
+    of the box. The type of the particle and its energy are set in the
+    PrimaryGeneratorAction class, and can be changed via the G4 build-in
+    commands of G4ParticleGun class.
+    The chemistry module is triggered in the StackingAction class when all
+    physical tracks have been processed.
+
+ 5 - DETECTOR RESPONSE: Scorers
+
+        5.1 - Species scorer
+
+    This scorer computes the energy deposition and the number of species along
+    time in order to extract the radiochemical yields as in chem4 example.
+
+    Run::RecordEvent(), called at end of event, collects informations
+    event per event from the hits collections, and accumulates statistics for
+    RunAction::EndOfRunAction().
+
+    In multi-threading mode the statistics accumulated per worker is merged
+    to the master in Run::Merge().
+
+    These two macro commands can be used to control the scoring time:
+    
+    /scorer/species/addTimeToRecord 1 ps
+    # user can select time bin to score G values.
+    
+    /scorer/species/nOfTimeBins
+    # or user can automatically select time bin logarithmically.
+
+    The information about all the molecular species is scored in a ROOT
+    ntuple file Species(runID).root.
+    e.g.) Species0.root Species1.root ...
+
+    G values at the last time bin are scored in a text file Species.txt in order to
+    obtain G versus LET results.
+    The G versus LET results are accumulated all along, thus, user should remove Species.txt
+    file directly in order to initialize the results.
+
+        5.2 - Primary killer
+
+    The G-values are computed for a range of deposited energy.
+    We are in an infinite volume. Therefore the energy lost by the 
+    primary equals the deposited energy since all secondary particles 
+    will finally slow down to the thermal energy. 
+    The primary is killed once it has deposited more energy than a 
+    minimum threshold.
+    
+    **IMPORTANT**: However, when the primary particle loses more energy 
+    in few interaction steps than the maximum allowed threshold, 
+    the event is disregarded (=aborted). 
+    
+    These two macro commands can be used to control the energy loss by 
+    the primary:
+    
+    /primaryKiller/eLossMin 1 keV 
+    # after 1 keV of energy loss by the primary particle, the primary is killed
+    
+    /primaryKiller/eLossMax 2 keV 
+    # if the primary particle losses more than 2 keV, the event is aborted
+    
+    The G-values are then computed for a deposited energy in the range [1 keV;2 keV].
+ 
+    Note that if the upper boundary of the energy lost by the primary is 
+    not set, the chemistry may take a lot of time to compute. 
+    This set of commands is embedded in the PrimaryKiller class.
+    The species scorer must check whether the event was aborted before taking
+    it or not into account for the computation of the results. 
+
+    The size of detector can be controlled by this class using user macro command:
+
+    /primaryKiller/setSize 5 5 5 um
+    # kills the particles (primary and secondary) outside of the virtual volume
+
+        5.3. - LET scorer
+
+    In order to obtain G versus LET results, LET values are simultaneously calculated 
+    during the simulation in ScorerLET class.
+
+    A macro command can be used to control the LET scorer:
+
+    /scorer/LET/cutoff
+    # selects cut-off energy for restricted LET.
+
+ 6 - TIMESTEP ACTION
+
+    The user defined time steps can be given by G4UserTimeStepAction::AddTimeStep() method.
+    This method is not recommended for IRT method.
+
+    These two method are called before and after every time steps:
+
+    TimeStepAction::UserPreTimeStepAction()
+    TimeStepAction::UserPostTimeStepAction()
+
+    This method is called when a chemical reaction is occurred:
+
+    TimeStepAction::UserReactionAction(const G4Track&, const G4Track&, const std::vector<G4Track*>*)
+     In order to access to molecular information,
+     #include "G4Molecule.hh"
+     G4Molecule* thisIsMyMolecule = GetMolecule(thisIsMyTrack);
+     const G4String& moleculeName = thisIsMyMolecule->GetName();
+
+ 7 - STACKING ACTION
+
+    StackingAction::NewStage is called when a stack of tracks has been processed
+    (for more details, look at the Geant4 documentation).
+    A verification on whether physical tracks remain to be processed is done.
+    If no tracks remain to be processed, the chemical module is then triggered.
+
+ 8 - OUTPUT
+
+    Physics initialization and the defined reaction table are printed.
+    G4Scheduler processes the chemical stage time step after time step.
+    Chemical reactions are printed.
+    The molecular reaction as a function of the elapsed time can be displayed
+    setting the macro command /scheduler/verbose 1
+
+ 9 - RELEVANT MACRO FILES
+
+    Two user macro files can be used:
+
+    ./chem6 beam.in
+    # electron simulations w primary killer method.
+
+    ./chem6 beam_HCP.in
+    # protons and alphas are generated at the edge of a 5x5x5 um3 water phantom.
+
+10 - PLOT
+
+    Two root macros can be used:
+
+    root plotG_time.C
+    # plot G values as a function of time according to the molecular species by importing Species0.root.
+
+    root plotG_LET.C
+    # plot G values as a function of LET according to the molecular species by importing Species.txt.

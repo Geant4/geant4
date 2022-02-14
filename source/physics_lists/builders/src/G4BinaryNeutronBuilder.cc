@@ -53,7 +53,7 @@ G4BinaryNeutronBuilder()
  }
 
  void G4BinaryNeutronBuilder::
- Build(G4NeutronInelasticProcess * aP)
+ Build(G4HadronInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);

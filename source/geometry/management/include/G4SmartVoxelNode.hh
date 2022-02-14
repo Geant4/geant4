@@ -45,16 +45,19 @@
 // 12.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 #ifndef G4SMARTVOXELNODE_HH
-#define G4SMARTVOXELNODE_HH
+#define G4SMARTVOXELNODE_HH 1
 
-#include "G4Types.hh"
 #include <vector>
+
+#include "geomwdefs.hh"
+#include "G4Types.hh"
+#include "G4Allocator.hh"
 
 using G4SliceVector = std::vector<G4int>;
 
 class G4SmartVoxelNode
 {
-  public:  // with description
+  public:
 
     G4SmartVoxelNode(G4int pSlice = 0) : fminEquivalent(pSlice),
                                          fmaxEquivalent(pSlice) {}
@@ -62,7 +65,7 @@ class G4SmartVoxelNode
       // This number is not stored, but used to provide defaults for the
       // minimum and maximum equivalent node numbers.
 
-    ~G4SmartVoxelNode();
+    ~G4SmartVoxelNode() = default;
       // Destructor. No actions.
 
     inline G4int GetVolume(G4int pVolumeNo) const;
@@ -72,10 +75,10 @@ class G4SmartVoxelNode
     inline void Insert(G4int pVolumeNo);
       // Add the specified volume number to the contents.
 
-    inline size_t GetNoContained() const;
+    inline std::size_t GetNoContained() const;
       // Return the number of volumes inside the node.
 
-    inline size_t GetCapacity() const;
+    inline std::size_t GetCapacity() const;
       // Return the maximum capacity of the buffer.
 
     inline void Reserve(G4int noSlices);
@@ -98,6 +101,11 @@ class G4SmartVoxelNode
 
     G4bool operator == (const G4SmartVoxelNode& v) const;
       // Equality operator.
+
+    inline void* operator new(std::size_t);
+      // Override "new" for "G4Allocator".
+    inline void operator delete(void* aNode);
+      // Override "delete" for "G4Allocator".
 
   private:
 

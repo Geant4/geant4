@@ -1,0 +1,1404 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_style_parser
+#define tools_sg_style_parser
+
+#include "senum"
+#include "strings"
+#include "style_colormap"
+
+#include "../mathf"
+#include "../lina/vec3f"
+#include "../sout"
+#include "../colorfs"
+#include "../get_lines"
+
+namespace tools {
+namespace sg {
+
+class style_parser {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::sg::style_parser)
+#endif
+public:
+  style_parser()
+  :m_color(0,0,0)
+  ,m_highlight_color(0,0,0)
+  ,m_back_color(1,1,1)
+  ,m_width(1)
+  ,m_line_width(1)
+  ,m_marker_size(1)
+  ,m_point_size(1)
+  ,m_font_size(10)
+  ,m_font_modeling(font_filled)
+  ,m_pattern(line_solid)
+  ,m_line_pattern(line_solid)
+  ,m_marker_style(marker_dot)
+  ,m_area_style(area_solid)
+  ,m_modeling(modeling_boxes())
+  ,m_light_model(light_model_phong())
+  ,m_tick_modeling(tick_modeling_hippo())
+  ,m_encoding(encoding_none())
+  ,m_smoothing(false)
+  ,m_hinting(false)
+  ,m_cut()
+  ,m_painting(painting_uniform)
+  ,m_hatching(hatching_none)
+  ,m_projection(projection_none)
+  ,m_font("default")
+  ,m_multi_node_limit(no_limit())
+  ,m_divisions(510) //Same as CERN-ROOT/TAttAxis
+  ,m_rotation_steps(24) //Same as SbPolyhedron default.
+  ,m_back_shadow(0)
+  ,m_spacing(0.05F)
+  ,m_angle(fpi()/4.0F)
+  ,m_scale(1)
+  ,m_offset(0)
+  ,m_strip_width(0)
+  ,m_visible(true)
+  ,m_bar_offset(0.25F)
+  ,m_bar_width(0.5F)
+  ,m_editable(false)
+  ,m_automated(true)
+  ,m_options()
+  ,m_color_mapping()
+  ,m_enforced(false)
+  ,m_translation(0,0,0)
+  ,m_front_face(winding_ccw)
+  ,m_hjust(left)
+  ,m_vjust(bottom)
+  ,m_coloring()
+  ,m_title()
+  ,m_pickable(false)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  virtual ~style_parser(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  style_parser(const style_parser& a_from)
+  :m_color(a_from.m_color)
+  ,m_highlight_color(a_from.m_highlight_color)
+  ,m_back_color(a_from.m_back_color)
+  ,m_width(a_from.m_width)
+  ,m_line_width(a_from.m_line_width)
+  ,m_marker_size(a_from.m_marker_size)
+  ,m_point_size(a_from.m_point_size)
+  ,m_font_size(a_from.m_font_size)
+  ,m_font_modeling(a_from.m_font_modeling)
+  ,m_pattern(a_from.m_pattern)
+  ,m_line_pattern(a_from.m_line_pattern)
+  ,m_marker_style(a_from.m_marker_style)
+  ,m_area_style(a_from.m_area_style)
+  ,m_modeling (a_from.m_modeling )
+  ,m_light_model(a_from.m_light_model)
+  ,m_tick_modeling(a_from.m_tick_modeling)
+  ,m_encoding(a_from.m_encoding)
+  ,m_smoothing(a_from.m_smoothing)
+  ,m_hinting(a_from.m_hinting)
+  ,m_cut(a_from.m_cut)
+  ,m_painting(a_from.m_painting)
+  ,m_hatching(a_from.m_hatching)
+  ,m_projection(a_from.m_projection)
+  ,m_font(a_from.m_font)
+  ,m_multi_node_limit(a_from.m_multi_node_limit)
+  ,m_divisions(a_from.m_divisions)
+  ,m_rotation_steps(a_from.m_rotation_steps)
+  ,m_back_shadow(a_from.m_back_shadow)
+  ,m_spacing(a_from.m_spacing)
+  ,m_angle(a_from.m_angle)
+  ,m_scale(a_from.m_scale)
+  ,m_offset(a_from.m_offset)
+  ,m_strip_width(a_from.m_strip_width)
+  ,m_visible(a_from.m_visible)
+  ,m_bar_offset(a_from.m_bar_offset)
+  ,m_bar_width(a_from.m_bar_width)
+  ,m_editable(a_from.m_editable)
+  ,m_automated(a_from.m_automated)
+  ,m_options(a_from.m_options)
+  ,m_color_mapping(a_from.m_color_mapping)
+  ,m_enforced(a_from.m_enforced)
+  ,m_translation(a_from.m_translation)
+  ,m_front_face(a_from.m_front_face)
+  ,m_hjust(a_from.m_hjust)
+  ,m_vjust(a_from.m_vjust)
+  ,m_coloring(a_from.m_coloring)
+  ,m_title(a_from.m_title)
+  ,m_pickable(a_from.m_pickable)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  style_parser& operator=(const style_parser& a_from){
+    copy(a_from);
+    return *this;
+  }
+public:
+  static int no_limit() {return (-1);}
+public:
+  void copy(const style_parser& a_from){
+    m_color = a_from.m_color;
+    m_highlight_color = a_from.m_highlight_color;
+    m_back_color = a_from.m_back_color;
+    m_width = a_from.m_width;
+    m_line_width = a_from.m_line_width;
+    m_marker_size = a_from.m_marker_size;
+    m_point_size = a_from.m_point_size;
+    m_font_size = a_from.m_font_size;
+    m_font_modeling = a_from.m_font_modeling;
+    m_pattern = a_from.m_pattern;
+    m_line_pattern = a_from.m_line_pattern;
+    m_marker_style = a_from.m_marker_style;
+    m_area_style = a_from.m_area_style;
+    m_modeling  = a_from.m_modeling;
+    m_light_model = a_from.m_light_model;
+    m_tick_modeling = a_from.m_tick_modeling;
+    m_encoding = a_from.m_encoding;
+    m_smoothing = a_from.m_smoothing;
+    m_hinting = a_from.m_hinting;
+    m_cut = a_from.m_cut;
+    m_painting = a_from.m_painting;
+    m_hatching = a_from.m_hatching;
+    m_projection = a_from.m_projection;
+    m_font = a_from.m_font;
+    m_multi_node_limit = a_from.m_multi_node_limit;
+    m_divisions = a_from.m_divisions;
+    m_rotation_steps = a_from.m_rotation_steps;
+    m_back_shadow = a_from.m_back_shadow;
+    m_spacing = a_from.m_spacing;
+    m_angle = a_from.m_angle;
+    m_scale = a_from.m_scale;
+    m_offset = a_from.m_offset;
+    m_strip_width = a_from.m_strip_width;
+    m_visible = a_from.m_visible;
+    m_bar_offset = a_from.m_bar_offset;
+    m_bar_width = a_from.m_bar_width;
+    m_editable = a_from.m_editable;
+    m_automated = a_from.m_automated;
+    m_options = a_from.m_options;
+    m_color_mapping = a_from.m_color_mapping;
+    m_enforced = a_from.m_enforced;
+    m_translation = a_from.m_translation;
+    m_front_face = a_from.m_front_face;
+    m_hjust = a_from.m_hjust;
+    m_vjust = a_from.m_vjust;
+    m_coloring  = a_from.m_coloring;
+    m_title  = a_from.m_title;
+    m_pickable  = a_from.m_pickable;
+  }
+
+  bool equal(const style_parser& a_from){
+    if(m_width!=a_from.m_width) return false;
+    if(m_line_width!=a_from.m_line_width) return false;
+    if(m_marker_size!=a_from.m_marker_size) return false;
+    if(m_point_size!=a_from.m_point_size) return false;
+    if(m_font_size!=a_from.m_font_size) return false;
+    if(m_font_modeling!=a_from.m_font_modeling) return false;
+    if(m_pattern!=a_from.m_pattern) return false;
+    if(m_line_pattern!=a_from.m_line_pattern) return false;
+    if(m_marker_style!=a_from.m_marker_style) return false;
+    if(m_area_style!=a_from.m_area_style) return false;
+    if(m_smoothing!=a_from.m_smoothing) return false;
+    if(m_hinting!=a_from.m_hinting) return false;
+    if(m_painting!=a_from.m_painting) return false;
+    if(m_hatching!=a_from.m_hatching) return false;
+    if(m_projection!=a_from.m_projection) return false;
+    if(m_multi_node_limit!=a_from.m_multi_node_limit) return false;
+    if(m_divisions!=a_from.m_divisions) return false;
+    if(m_rotation_steps!=a_from.m_rotation_steps) return false;
+    if(m_back_shadow!=a_from.m_back_shadow) return false;
+    if(m_spacing!=a_from.m_spacing) return false;
+    if(m_angle!=a_from.m_angle) return false;
+    if(m_scale!=a_from.m_scale) return false;
+    if(m_offset!=a_from.m_offset) return false;
+    if(m_strip_width!=a_from.m_strip_width) return false;
+    if(m_visible!=a_from.m_visible) return false;
+    if(m_bar_offset!=a_from.m_bar_offset) return false;
+    if(m_bar_width!=a_from.m_bar_width) return false;
+    if(m_editable!=a_from.m_editable) return false;
+    if(m_automated!=a_from.m_automated) return false;
+    if(m_enforced!=a_from.m_enforced) return false;
+
+    //color
+    if(m_color!=a_from.m_color) return false;
+    if(m_highlight_color!=a_from.m_highlight_color) return false;
+    if(m_back_color!=a_from.m_back_color) return false;
+
+    //std::string
+    if(m_modeling!=a_from.m_modeling) return false;
+    if(m_light_model!=a_from.m_light_model) return false;
+    if(m_tick_modeling!=a_from.m_tick_modeling) return false;
+    if(m_encoding!=a_from.m_encoding) return false;
+    if(m_cut!=a_from.m_cut) return false;
+    if(m_font!=a_from.m_font) return false;
+    if(m_options!=a_from.m_options) return false;
+    if(m_color_mapping!=a_from.m_color_mapping) return false;
+
+    if(m_translation!=a_from.m_translation) return false;
+
+    if(m_front_face!=a_from.m_front_face) return false;
+
+    if(m_hjust!=a_from.m_hjust) return false;
+    if(m_vjust!=a_from.m_vjust) return false;
+
+    if(m_coloring!=a_from.m_coloring) return false;
+    if(m_title!=a_from.m_title) return false;
+    if(m_pickable!=a_from.m_pickable) return false;
+
+    return true;
+  }
+
+  virtual void reset(){ //virtual because of SoGC
+    m_color = colorf_black();
+    m_highlight_color = colorf_lightgrey();
+    m_back_color = colorf_white();
+    m_width = 1;
+    m_line_width = 1;
+    m_marker_size = 1;
+    m_point_size = 1;
+    m_font_size = 10;
+    m_font_modeling = font_filled;
+    m_pattern = line_solid;
+    m_line_pattern = line_solid;
+    m_marker_style = marker_dot;
+    m_area_style = area_solid;
+    m_modeling  = modeling_boxes();
+    m_light_model = light_model_phong();
+    m_tick_modeling = tick_modeling_hippo();
+    m_encoding = encoding_none();
+    m_smoothing = false;
+    m_hinting = false;
+    m_cut = "";
+    m_painting = painting_uniform;
+    m_hatching = hatching_none;
+    m_projection = projection_none;
+    m_font = "default";
+    m_multi_node_limit = no_limit();
+    m_back_shadow = 0;
+    m_divisions = 510;
+    m_rotation_steps = 24;
+    m_spacing = 0.05F;
+    m_angle = fpi()/4;
+    m_scale = 1;
+    m_offset = 0;
+    m_strip_width = 0;
+    m_visible = true;
+    m_bar_offset = 0.25F;
+    m_bar_width = 0.5F;
+    m_editable = false;
+    m_automated = true;
+    m_options = "";
+    m_color_mapping = "";
+    m_enforced = false;
+    m_translation = vec3f(0,0,0);
+    m_front_face = winding_ccw;
+    m_hjust = left;
+    m_vjust = bottom;
+    m_coloring = "";
+    m_title = "";
+    m_pickable = false;
+  }
+
+  std::string tos() const{
+    char ss[40 * 32];
+    snpf(ss,sizeof(ss),
+"color %g %g %g\n\
+highlight_color %g %g %g\n\
+back_color %g %g %g\n\
+width %g\n\
+line_width %g\n\
+marker_size %g\n\
+point_size %g\n\
+font_size %g\n\
+pattern %x\n\
+line_pattern %x\n\
+multi_node_limit %d\n\
+back_shadow %g\n\
+divisions %d\n\
+rotation_steps %d\n\
+angle %g\n\
+scale %g\n\
+offset %g\n\
+strip_width %g\n\
+spacing %g\n\
+bar_offset %g\n\
+bar_width %g\n\
+translation %g %g %g"
+    ,m_color[0],m_color[1],m_color[2]
+    ,m_highlight_color[0],m_highlight_color[1],m_highlight_color[2]
+    ,m_back_color[0],m_back_color[1],m_back_color[2]
+    ,m_width
+    ,m_line_width
+    ,m_marker_size
+    ,m_point_size
+    ,m_font_size
+    ,m_pattern
+    ,m_line_pattern
+    ,m_multi_node_limit
+    ,m_back_shadow
+    ,m_divisions
+    ,m_rotation_steps
+    ,m_angle
+    ,m_scale
+    ,m_offset
+    ,m_strip_width
+    ,m_spacing
+    ,m_bar_offset
+    ,m_bar_width
+    ,m_translation[0],m_translation[1],m_translation[2]);
+
+    std::string lf("\n");
+    std::string s(ss);
+
+    s += lf;
+    s += "smoothing ";
+    s += (m_smoothing?"true":"false");
+
+    s += lf;
+    s += "hinting ";
+    s += (m_hinting?"true":"false");
+
+    s += lf;
+    s += "enforced ";
+    s += (m_enforced?"true":"false");
+
+    s += lf;
+    s += "visible ";
+    s += (m_visible?"true":"false");
+
+    s += lf;
+    s += "editable ";
+    s += (m_editable?"true":"false");
+
+    s += lf;
+    s += "automated ";
+    s += (m_automated?"true":"false");
+
+    s += lf;
+    s += "pickable ";
+    s += (m_pickable?"true":"false");
+
+    s += lf;
+    s += "marker_style ";
+    s += smarker_style(m_marker_style);
+
+    s += lf;
+    s += "area_style ";
+    s += sarea_style(m_area_style);
+
+    s += lf;
+    s += "modeling ";
+    s += m_modeling;
+
+    s += lf;
+    s += "coloring ";
+    s += m_coloring;
+
+    s += lf;
+    s += "title ";
+    s += m_title;
+
+    s += lf;
+    s += "light_model ";
+    s += m_light_model;
+
+    s += lf;
+    s += "tick_modeling ";
+    s += m_tick_modeling;
+
+    s += lf;
+    s += "encoding ";
+    s += m_encoding;
+
+    s += lf;
+    s += "cut ";
+    s += m_cut;
+
+    s += lf;
+    s += "painting ";
+    s += spainting_policy(m_painting);
+
+    s += lf;
+    s += "hatching ";
+    s += shatching_policy(m_hatching);
+
+    s += lf;
+    s += "projection ";
+    s += sprojection_type(m_projection);
+
+    s += lf;
+    s += "font ";
+    s += m_font;
+
+    if(m_font_modeling==font_outline) {
+      s += lf;
+      s += "font_modeling ";
+      s += s_font_outline();
+    } else if(m_font_modeling==font_filled)  {
+      s += lf;
+      s += "font_modeling ";
+      s += s_font_filled();
+    } else if(m_font_modeling==font_pixmap)  {
+      s += lf;
+      s += "font_modeling ";
+      s += s_font_pixmap();
+    }
+
+    s += lf;
+    s += "options ";
+    s += m_options;
+
+    s += lf;
+    s += "color_mapping ";
+    s += m_color_mapping;
+
+    s += lf;
+    s += "front_face ";
+    s += (m_front_face==winding_ccw?"ccw":"cw");
+
+    s += lf;
+    s += "hjust ";
+    s += shjust(m_hjust);
+
+    s += lf;
+    s += "vjust ";
+    s += svjust(m_vjust);
+
+    return s;
+  }
+
+  void color(const colorf& a_v){m_color = a_v;}
+  colorf color() const {return m_color;}
+
+  void highlight_color(const colorf& a_v){m_highlight_color = a_v;}
+  colorf highlight_color() const {return m_highlight_color;}
+
+  void back_color(const colorf& a_v){m_back_color = a_v;}
+  colorf back_color() const {return m_back_color;}
+
+  void width(float a_v){m_width = a_v;}
+  float width() const {return m_width;}
+
+  void line_width(float a_v){m_line_width = a_v;}
+  float line_width() const {return m_line_width;}
+
+  float back_shadow() const {return m_back_shadow;}
+  void back_shadow(float a_v) {m_back_shadow = a_v;}
+
+  void marker_style(sg::marker_style a_v){m_marker_style = a_v;}
+  sg::marker_style marker_style() const {return m_marker_style;}
+
+  void marker_size(float a_v){m_marker_size = a_v;}
+  float marker_size() const {return m_marker_size;}
+
+  void point_size(float a_v){m_point_size = a_v;}
+  float point_size() const {return m_point_size;}
+
+  void font_size(float a_v){m_font_size = a_v;}
+  float font_size() const {return m_font_size;}
+
+  void font_modeling(sg::font_modeling a_v){m_font_modeling = a_v;}
+  sg::font_modeling font_modeling() const {return m_font_modeling;}
+
+  void area_style(sg::area_style a_v){m_area_style = a_v;}
+  sg::area_style area_style() const {return m_area_style;}
+
+  void modeling(const std::string& a_v){m_modeling  = a_v;}
+  const std::string& modeling() const {return m_modeling ;}
+
+  void light_model(const std::string& a_v){m_light_model = a_v;}
+  const std::string& light_model() const {return m_light_model;}
+
+  void tick_modeling(const std::string& a_v){m_tick_modeling = a_v;}
+  const std::string& tick_modeling() const {return m_tick_modeling;}
+
+  void encoding(const std::string& a_v){m_encoding = a_v;}
+  const std::string& encoding() const {return m_encoding;}
+
+  void smoothing(bool a_v){m_smoothing = a_v;}
+  bool smoothing() const {return m_smoothing;}
+
+  void hinting(bool a_v){m_hinting = a_v;}
+  bool hinting() const {return m_hinting;}
+
+  sg::painting_policy painting() const {return m_painting;}
+  void painting(sg::painting_policy a_v){m_painting = a_v;}
+
+  sg::hatching_policy hatching() const {return m_hatching;}
+  void hatching(sg::hatching_policy a_v) {m_hatching = a_v;}
+
+  sg::projection_type projection() const {return m_projection;}
+  void projection(sg::projection_type a_v){m_projection = a_v;}
+
+  void pattern(lpat a_v){m_pattern = a_v;}
+  lpat pattern() const {return m_pattern;}
+
+  void line_pattern(lpat a_v){m_line_pattern = a_v;}
+  lpat line_pattern() const {return m_line_pattern;}
+
+  void font(const std::string& a_v){m_font = a_v;}
+  const std::string& font() const {return m_font;}
+
+  void divisions(int a_v){m_divisions = a_v;}
+  int divisions() const {return m_divisions;}
+
+  void rotation_steps(unsigned int a_v){m_rotation_steps = a_v;}
+  unsigned int rotation_steps() const {return m_rotation_steps;}
+
+  void offset(float a_v){m_offset = a_v;}
+  float offset() const {return m_offset;}
+
+  void strip_width(float a_v){m_strip_width = a_v;}
+  float strip_width() const {return m_strip_width;}
+
+  void angle(float a_v){m_angle = a_v;}
+  float angle() const {return m_angle;}
+
+  void scale(float a_v){m_scale = a_v;}
+  float scale() const {return m_scale;}
+
+  void bar_offset(float a_v){m_bar_offset = a_v;}
+  float bar_offset() const {return m_bar_offset;}
+
+  void bar_width(float a_v){m_bar_width = a_v;}
+  float bar_width() const {return m_bar_width;}
+
+  void multi_node_limit(int a_v){m_multi_node_limit = a_v;}
+  int multi_node_limit() const {return m_multi_node_limit;}
+
+  void spacing(float a_v){m_spacing = a_v;}
+  float spacing() const {return m_spacing;}
+
+  void visible(bool a_v){m_visible = a_v;}
+  bool visible() const{return m_visible;}
+
+  void editable(bool a_v){m_editable = a_v;}
+  bool editable() const{return m_editable;}
+
+  void automated(bool a_v){m_automated = a_v;}
+  bool automated() const{return m_automated;}
+
+  void cut(const std::string& a_v){m_cut = a_v;}
+  const std::string& cut() const {return m_cut;}
+
+  void options(const std::string& a_v){m_options = a_v;}
+  const std::string& options() const{return m_options;}
+
+  void color_mapping(const std::string& a_v){m_color_mapping = a_v;}
+  const std::string& color_mapping() const{return m_color_mapping;}
+
+  void enforced(bool a_v){m_enforced = a_v;}
+  bool enforced() const{return m_enforced;}
+
+  void translation(const vec3f& a_v){m_translation = a_v;}
+  vec3f translation() const {return m_translation;}
+
+  void front_face(winding_type a_v){m_front_face = a_v;}
+  winding_type front_face() const {return m_front_face;}
+
+  void hjust(sg::hjust a_v){m_hjust = a_v;}
+  sg::hjust hjust() const {return m_hjust;}
+
+  void vjust(sg::vjust a_v){m_vjust = a_v;}
+  sg::vjust vjust() const {return m_vjust;}
+
+  void coloring(const std::string& a_v){m_coloring  = a_v;}
+  const std::string& coloring() const {return m_coloring;}
+
+  void title(const std::string& a_v){m_title  = a_v;}
+  const std::string& title() const {return m_title;}
+
+  void pickable(bool a_v){m_pickable  = a_v;}
+  bool pickable() const {return m_pickable;}
+
+public:
+  bool parse(std::ostream& a_out,const cmaps_t& a_cmaps,const std::string& a_s){
+    // a_s = list of "name value" separated by \n
+    //::printf("debug : style_parser::parse : \"%s\"\n",a_s.c_str());
+    std::vector<std::string> lines;
+    get_lines(a_s,lines);
+
+    tools_vforcit(std::string,lines,it) {
+      const std::string& line = *it;
+      if(line.empty()) continue;
+      if(line=="reset") {
+        reset();
+        continue;
+      }
+      std::vector<std::string> ws;
+      words(line," ",false,ws);
+      size_t wordn = ws.size();
+      if(!wordn) {
+        a_out << "style_parser::parse :"
+              << " in " << sout(a_s)
+              << " : " << sout(line)
+              << " has a bad word count (at least two expected)."
+              << std::endl;
+        return false;
+      }
+      const std::string& word0 = ws[0];
+      if(word0=="color") {
+        if(wordn==2) {
+          const std::string& word1 = ws[1];
+          if(!find_color(a_cmaps,word1,m_color)) {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(word1)
+                  << " not a color."
+                  << std::endl;
+            return false;
+          }
+        } else if (wordn==4) {
+          const std::string& rs = ws[1];
+          float r;
+          if(!to<float>(rs,r))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(rs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& gs = ws[2];
+          float g;
+          if(!to<float>(gs,g))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(gs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& bs = ws[3];
+          float b;
+          if(!to<float>(bs,b))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(bs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          m_color.set_value(r,g,b,1);
+
+        } else if (wordn==5) {
+          const std::string& rs = ws[1];
+          float r;
+          if(!to<float>(rs,r))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(rs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& gs = ws[2];
+          float g;
+          if(!to<float>(gs,g))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(gs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& bs = ws[3];
+          float b;
+          if(!to<float>(bs,b))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(bs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& as = ws[4];
+          float a;
+          if(!to<float>(as,a))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(as)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          m_color.set_value(r,g,b,a);
+
+        } else {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(line)
+                << " has a bad word count (two or four expected)."
+                << std::endl;
+          return false;
+        }
+
+      } else if(word0=="highlight_color") {
+        if(wordn==2) {
+          const std::string& word1 = ws[1];
+          if(!find_color(a_cmaps,word1,m_highlight_color)) {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(word1)
+                  << " not a color."
+                  << std::endl;
+            return false;
+          }
+        } else if (wordn==4) {
+          const std::string& rs = ws[1];
+          float r;
+          if(!to<float>(rs,r))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(rs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& gs = ws[2];
+          float g;
+          if(!to<float>(gs,g))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(gs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& bs = ws[3];
+          float b;
+          if(!to<float>(bs,b))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(bs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          m_highlight_color.set_value(r,g,b,1);
+
+        } else if (wordn==5) {
+          const std::string& rs = ws[1];
+          float r;
+          if(!to<float>(rs,r))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(rs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& gs = ws[2];
+          float g;
+          if(!to<float>(gs,g))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(gs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& bs = ws[3];
+          float b;
+          if(!to<float>(bs,b))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(bs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& as = ws[4];
+          float a;
+          if(!to<float>(as,a))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(as)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          m_highlight_color.set_value(r,g,b,a);
+
+        } else {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(line)
+                << " has a bad word count (two or four expected)."
+                << std::endl;
+          return false;
+        }
+
+      } else if(word0=="back_color") {
+        if(wordn==2) {
+          const std::string& word1 = ws[1];
+          if(!find_color(a_cmaps,word1,m_back_color)) {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(word1)
+                  << " not a color."
+                  << std::endl;
+            return false;
+          }
+        } else if (wordn==4) {
+          const std::string& rs = ws[1];
+          float r;
+          if(!to<float>(rs,r))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(rs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& gs = ws[2];
+          float g;
+          if(!to<float>(gs,g))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(gs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& bs = ws[3];
+          float b;
+          if(!to<float>(bs,b))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(bs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          m_back_color.set_value(r,g,b,1);
+
+        } else if (wordn==5) {
+          const std::string& rs = ws[1];
+          float r;
+          if(!to<float>(rs,r))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(rs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& gs = ws[2];
+          float g;
+          if(!to<float>(gs,g))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(gs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& bs = ws[3];
+          float b;
+          if(!to<float>(bs,b))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(bs)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& as = ws[4];
+          float a;
+          if(!to<float>(as,a))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(as)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          m_back_color.set_value(r,g,b,a);
+
+        } else {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(line)
+                << " has a bad word count (two or four expected)."
+                << std::endl;
+          return false;
+        }
+
+      } else if(word0=="pattern") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        const std::string& word1 = ws[1];
+        unsigned long ul;
+        if(!sline_pattern(word1,m_pattern)) {
+          if(!to_ulong(word1,ul)) {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(word1)
+                  << " not a line pattern."
+                  << std::endl;
+            return false;
+          }
+          m_pattern = (lpat)ul;
+        }
+
+      } else if(word0=="line_pattern") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        const std::string& word1 = ws[1];
+        unsigned long ul;
+        if(!sline_pattern(word1,m_line_pattern)) {
+          if(!to_ulong(word1,ul)) {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(word1)
+                  << " not a line pattern."
+                  << std::endl;
+            return false;
+          }
+          m_line_pattern = (lpat)ul;
+        }
+      } else if(word0=="marker_style") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        const std::string& word1 = ws[1];
+        if(!smarker_style(word1,m_marker_style)) {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(word1)
+                << " not a marker_style."
+                << std::endl;
+          return false;
+        }
+      } else if(word0=="area_style") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        const std::string& word1 = ws[1];
+        if(!sarea_style(word1,m_area_style)) {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(word1)
+                << " not a area_style."
+                << std::endl;
+          return false;
+        }
+      } else if(word0=="modeling") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        m_modeling  = ws[1];
+      } else if(word0=="light_model") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        m_light_model = ws[1];
+      } else if(word0=="tick_modeling") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        m_tick_modeling = ws[1];
+      } else if(word0=="encoding") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        m_encoding = ws[1];
+      } else if(word0=="smoothing") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        bool value;
+        if(!check_bool(ws[1],a_s,a_out,value)) return false;
+        m_smoothing = value;
+      } else if(word0=="hinting") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        bool value;
+        if(!check_bool(ws[1],a_s,a_out,value)) return false;
+        m_hinting = value;
+      } else if(word0=="enforced") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        bool value;
+        if(!check_bool(ws[1],a_s,a_out,value)) return false;
+        m_enforced = value;
+      } else if(word0=="cut") {
+        m_cut = "";
+        for(unsigned int wordi=1;wordi<wordn;wordi++) {
+          if(wordi!=1) m_cut += " ";
+          m_cut += ws[wordi];
+        }
+      } else if(word0=="options") {
+        m_options = "";
+        for(unsigned int wordi=1;wordi<wordn;wordi++) {
+          if(wordi!=1) m_options += " ";
+          m_options += ws[wordi];
+        }
+      } else if(word0=="color_mapping") {
+        m_color_mapping = "";
+        for(unsigned int wordi=1;wordi<wordn;wordi++) {
+          if(wordi!=1) m_color_mapping += " ";
+          m_color_mapping += ws[wordi];
+        }
+      } else if(word0=="painting") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        if(!spainting_policy(ws[1],m_painting)) {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(ws[1])
+                << " not a painting_policy."
+                << std::endl;
+          return false;
+        }
+      } else if(word0=="hatching") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        if(!shatching_policy(ws[1],m_hatching)) {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(ws[1])
+                << " not a hatching_policy."
+                << std::endl;
+          return false;
+        }
+      } else if(word0=="projection") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        if(!sprojection_type(ws[1],m_projection)) {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(ws[1])
+                << " not a projection_type."
+                << std::endl;
+          return false;
+        }
+      } else if(word0=="font") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        font(ws[1]);
+      } else if(word0=="width") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_width = value;
+      } else if(word0=="line_width") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_line_width = value;
+      } else if(word0=="marker_size") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_marker_size = value;
+      } else if(word0=="point_size") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_point_size = value;
+      } else if(word0=="font_size") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_font_size = value;
+      } else if(word0=="font_modeling") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+             if(ws[1]==s_font_outline()) m_font_modeling = font_outline;
+        else if(ws[1]==s_font_filled())  m_font_modeling = font_filled;
+        else if(ws[1]==s_font_pixmap())  m_font_modeling = font_pixmap;
+        else {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(ws[1])
+                << " not a font_modeling."
+                << std::endl;
+          return false;
+        }
+      } else if(word0=="back_shadow") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        if(value<0.F) value = 0.F;
+        m_back_shadow = value;
+      } else if(word0=="multi_node_limit") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        int value = 0;
+        if(!check_int(ws[1],a_s,a_out,value)) return false;
+        m_multi_node_limit = value;
+      } else if(word0=="divisions") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        int value = 0;
+        if(!check_int(ws[1],a_s,a_out,value)) return false;
+        m_divisions = value;
+      } else if(word0=="rotation_steps") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        unsigned int value;
+        if(!check_uint(ws[1],a_s,a_out,value)) return false;
+        m_rotation_steps = value;
+      } else if(word0=="angle") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_angle = value;
+      } else if(word0=="scale") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_scale = value;
+      } else if(word0=="offset") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_offset = value;
+      } else if(word0=="strip_width") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_strip_width = value;
+      } else if(word0=="spacing") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_spacing = value;
+      } else if(word0=="visible") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        bool value;
+        if(!check_bool(ws[1],a_s,a_out,value)) return false;
+        m_visible = value;
+      } else if(word0=="editable") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        bool value;
+        if(!check_bool(ws[1],a_s,a_out,value)) return false;
+        m_editable = value;
+      } else if(word0=="pickable") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        bool value;
+        if(!check_bool(ws[1],a_s,a_out,value)) return false;
+        m_pickable = value;
+      } else if(word0=="automated") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        bool value;
+        if(!check_bool(ws[1],a_s,a_out,value)) return false;
+        m_automated = value;
+      } else if(word0=="bar_offset") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_bar_offset = value;
+      } else if(word0=="bar_width") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_bar_width = value;
+
+      } else if(word0=="translation") {
+        if (wordn==4) {
+          const std::string& sx = ws[1];
+          float x;
+          if(!to<float>(sx,x))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(sx)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& sy = ws[2];
+          float y;
+          if(!to<float>(sy,y))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(sy)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          const std::string& sz = ws[3];
+          float z;
+          if(!to<float>(sz,z))  {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(sz)
+                  << " not a number."
+                  << std::endl;
+            return false;
+          }
+          m_translation.set_value(x,y,z);
+        } else {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " has a bad word count (four expected)."
+                << std::endl;
+          return false;
+        }
+
+      } else if(word0=="front_face") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        const std::string& word1 = ws[1];
+        if(word1=="ccw") {
+          m_front_face = winding_ccw;
+        } else if(word1=="cw") {
+          m_front_face = winding_cw;
+        } else { //ccw
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(word1)
+                << " not a winding type."
+                << std::endl;
+          return false;
+        }
+
+      } else if(word0=="hjust") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        const std::string& word1 = ws[1];
+        if(!shjust(word1,m_hjust)) {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(word1)
+                << " not a hjust."
+                << std::endl;
+          return false;
+        }
+
+      } else if(word0=="vjust") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        const std::string& word1 = ws[1];
+        if(!svjust(word1,m_vjust)) {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(word1)
+                << " not a vjust."
+                << std::endl;
+          return false;
+        }
+
+      } else if(word0=="coloring") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        m_coloring  = ws[1];
+
+      } else if(word0=="title") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        m_title  = ws[1];
+
+      } else {
+        a_out << "style_parser::parse :"
+              << " in " << sout(a_s)
+              << " : " << sout(word0)
+              << " bad option."
+              << std::endl;
+        return false;
+      }
+    }
+    return true;
+  }
+
+protected:
+  static bool check_2(size_t a_n,
+                      const std::string& a_s,
+                      const std::string& a_line,std::ostream& a_out) {
+    if(a_n!=2) {
+      a_out << "style_parser::parse :"
+            << " in " << sout(a_s)
+            << " : " << sout(a_line)
+            << " has a bad word count (two expected)."
+            << std::endl;
+      return false;
+    }
+    return true;
+  }
+
+  static bool check_bool(const std::string& a_w,
+                         const std::string& a_s,std::ostream& a_out,bool& a_v){
+    if(!to(a_w,a_v)){
+      a_out << "style_parser::parse :"
+            << " in " << sout(a_s)
+            << " : " << sout(a_w)
+            << " not a boolean."
+            << std::endl;
+      return false;
+    }
+    return true;
+  }
+
+  static bool check_int(const std::string& a_w,
+                        const std::string& a_s,std::ostream& a_out,int& a_v) {
+    if(!to<int>(a_w,a_v)){
+      a_out << "style_parser::parse :"
+            << " in " << sout(a_s)
+            << " : " << sout(a_w)
+            << " not an int."
+            << std::endl;
+      return false;
+    }
+    return true;
+  }
+
+  static bool check_uint(const std::string& a_w,
+                const std::string& a_s,std::ostream& a_out,unsigned int& a_v) {
+    if(!to<unsigned int>(a_w,a_v)){
+      a_out << "style_parser::parse :"
+            << " in " << sout(a_s)
+            << " : " << sout(a_w)
+            << " not an unsigned int."
+            << std::endl;
+      return false;
+    }
+    return true;
+  }
+
+  static bool check_float(const std::string& a_w,
+                const std::string& a_s,std::ostream& a_out,float& a_v) {
+    if(!to<float>(a_w,a_v)){
+      a_out << "style_parser::parse :"
+            << " in " << sout(a_s)
+            << " : " << sout(a_w)
+            << " not a float."
+            << std::endl;
+      return false;
+    }
+    return true;
+  }
+
+protected:
+  colorf m_color;
+  colorf m_highlight_color;
+  colorf m_back_color;
+  float m_width;
+  float m_line_width;
+  float m_marker_size;
+  float m_point_size;
+  float m_font_size;
+  sg::font_modeling m_font_modeling;
+  lpat m_pattern;
+  lpat m_line_pattern;
+  sg::marker_style m_marker_style;
+  sg::area_style m_area_style;
+  std::string m_modeling;
+  std::string m_light_model;
+  std::string m_tick_modeling;
+  std::string m_encoding;
+  bool m_smoothing;
+  bool m_hinting;
+  std::string m_cut;
+  sg::painting_policy m_painting;
+  sg::hatching_policy m_hatching;
+  sg::projection_type m_projection;
+  std::string m_font;
+  int m_multi_node_limit; //could be no_limit = -1.
+  int m_divisions;
+  unsigned int m_rotation_steps;
+  float m_back_shadow;
+  float m_spacing;
+  float m_angle;
+  float m_scale;
+  float m_offset;
+  float m_strip_width;
+  bool m_visible;
+  float m_bar_offset;
+  float m_bar_width;
+  bool m_editable;
+  bool m_automated;
+  std::string m_options;
+  std::string m_color_mapping;
+  bool m_enforced;
+  vec3f m_translation;
+  winding_type m_front_face;
+  sg::hjust m_hjust;
+  sg::vjust m_vjust;
+  std::string m_coloring;
+  std::string m_title;
+  bool m_pickable;
+};
+
+}}
+
+#endif

@@ -72,7 +72,7 @@ public:
 
   G4IonCoulombCrossSection();
 
-  virtual ~G4IonCoulombCrossSection();
+  ~G4IonCoulombCrossSection();
 
   void Initialise(const G4ParticleDefinition*, G4double cosThetaLim);
 
@@ -88,12 +88,13 @@ public:
 
   inline G4double GetMomentum2();
 
+  G4IonCoulombCrossSection & operator=
+  (const  G4IonCoulombCrossSection &right) = delete;
+  G4IonCoulombCrossSection(const  G4IonCoulombCrossSection&) = delete;
+
 private:
 
   void   SetScreenRSquare(G4int iz);
-
-  G4IonCoulombCrossSection & operator=(const  G4IonCoulombCrossSection &right);
-  G4IonCoulombCrossSection(const  G4IonCoulombCrossSection&);
 
   const G4ParticleDefinition* theProton;  
 

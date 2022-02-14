@@ -28,8 +28,6 @@
 // 
 //Base class for all Motif component widgets
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMVWIDGETCOMPONENT_HH
 #define G4OPENGLXMVWIDGETCOMPONENT_HH
 
@@ -52,7 +50,5 @@ public:
 private:
   
 };
-
-#endif
 
 #endif

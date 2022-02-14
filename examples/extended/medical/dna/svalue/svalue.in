@@ -1,11 +1,8 @@
+/run/verbose 1
+/control/verbose 1
+/control/cout/ignoreThreadsExcept 0
 #
-/run/numberOfThreads 2
-#
-/process/em/deexcitationIgnoreCut true
-/process/em/fluo true
-/process/em/pixe true
-/process/em/auger true
-/process/em/augerCascade true
+/run/numberOfThreads 4
 #
 #/svalue/det/setWorldMat G4_Galactic
 /svalue/det/setWorldMat G4_WATER
@@ -25,6 +22,11 @@
 =======
 /svalue/phys/addPhysics  dna_opt2	        
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+#
+/process/em/deexcitationIgnoreCut true
+/process/em/fluo true
+/process/em/pixe true
+/process/em/auger true
 #
 /run/initialize
 #

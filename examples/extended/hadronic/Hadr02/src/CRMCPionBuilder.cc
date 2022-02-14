@@ -34,6 +34,7 @@
 // Author:    2018 Alberto Ribon
 //
 // Modified:
+// -  18-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -43,17 +44,17 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4PionPlusInelasticProcess.hh"
-#include "G4PionMinusInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
+#include "HadronicInelasticModelCRMC.hh"
 #include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
 
 
-CRMCPionBuilder::CRMCPionBuilder() {
+CRMCPionBuilder::CRMCPionBuilder( const G4int crmcModelId, const std::string & crmcModelName ) {
   fMin = 0.0*MeV;  // This value does not matter in practice because we are going
                    // to use this model only at high energies.
   fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
-  fModel = new G4CRMCModel;
+  fModel = new HadronicInelasticModelCRMC( crmcModelId, crmcModelName );
 }
 
 
@@ -63,18 +64,10 @@ CRMCPionBuilder::~CRMCPionBuilder() {}
 void CRMCPionBuilder::Build( G4HadronElasticProcess* ) {}
 
 
-void CRMCPionBuilder::Build( G4PionPlusInelasticProcess* aP ) {
-  fModel->SetMinEnergy( fMin );
-  fModel->SetMaxEnergy( fMax );
-  aP->RegisterMe( fModel );
-}
-
-
-void CRMCPionBuilder::Build( G4PionMinusInelasticProcess* aP ) {
+void CRMCPionBuilder::Build( G4HadronInelasticProcess* aP ) {
   fModel->SetMinEnergy( fMin );
   fModel->SetMaxEnergy( fMax );
   aP->RegisterMe( fModel );
 }
 
 #endif //G4_USE_CRMC
-

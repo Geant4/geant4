@@ -88,7 +88,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fNuclRadiusCmd->SetParameterName("Radius",false);
   fNuclRadiusCmd->SetRange("Radius>0.");
   fNuclRadiusCmd->SetUnitCategory("Length");
-  fNuclRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNuclRadiusCmd->AvailableForStates(G4State_PreInit);
   fNuclRadiusCmd->SetToBeBroadcasted(false);
       
   fCytoThicknessCmd = new G4UIcmdWithADoubleAndUnit("/svalue/det/setCytoThickness",this);
@@ -96,7 +96,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fCytoThicknessCmd->SetParameterName("Thickness",false);
   fCytoThicknessCmd->SetRange("Thickness>0.");
   fCytoThicknessCmd->SetUnitCategory("Length");
-  fCytoThicknessCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fCytoThicknessCmd->AvailableForStates(G4State_PreInit);
   fCytoThicknessCmd->SetToBeBroadcasted(false);
  
   fTrackingCutCmd = 
@@ -105,7 +105,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fTrackingCutCmd->SetParameterName("Cut",false);
   fTrackingCutCmd->SetRange("Cut>0.");
   fTrackingCutCmd->SetUnitCategory("Energy");
-  fTrackingCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTrackingCutCmd->AvailableForStates(G4State_PreInit);
   fTrackingCutCmd->SetToBeBroadcasted(false);
 }
 

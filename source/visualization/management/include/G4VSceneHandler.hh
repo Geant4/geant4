@@ -45,18 +45,8 @@
 #include "G4THitsMap.hh"
 
 class G4Scene;
-class G4VViewer;
-class G4Colour;
-class G4Visible;
-class G4ModelingParameters;
-class G4VModel;
 class G4VGraphicsSystem;
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-class G4Material;
-class G4Event;
 class G4AttHolder;
-class G4DisplacedSolid;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
@@ -139,6 +129,7 @@ public: // With description
   virtual void AddCompound (const G4VDigi&);
   virtual void AddCompound (const G4THitsMap<G4double>&);
   virtual void AddCompound (const G4THitsMap<G4StatDouble>&);
+  virtual void AddCompound (const G4Mesh&);
 
   //////////////////////////////////////////////////////////////
   // Functions for adding primitives.
@@ -181,7 +172,7 @@ public: // With description
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::BeginPrimitives2D
   // (const G4Transform3D& objectTransformation) {
-  //   G4VSceneHandler::BeginPrimitives2D ();
+  //   G4VSceneHandler::BeginPrimitives2D (objectTransformation);
   //   ...
   // }
 
@@ -193,15 +184,14 @@ public: // With description
   // }
 
   virtual void AddPrimitive (const G4Polyline&)   = 0;
-  virtual void AddPrimitive (const G4Scale&);
-  // Default implementation in this class but can be over-ridden.
   virtual void AddPrimitive (const G4Text&)       = 0;
   virtual void AddPrimitive (const G4Circle&)     = 0;      
   virtual void AddPrimitive (const G4Square&)     = 0;      
   virtual void AddPrimitive (const G4Polymarker&);
-  // Default implementation in this class but can be over-ridden.
   virtual void AddPrimitive (const G4Polyhedron&) = 0;
-
+  virtual void AddPrimitive (const G4Plotter&);
+  
+  // Other virtual functions
   virtual const G4VisExtent& GetExtent() const;
 
   //////////////////////////////////////////////////////////////
@@ -235,9 +225,20 @@ public: // With description
   //////////////////////////////////////////////////////////////
   // Public utility functions.
 
-  const G4Colour& GetColour ();
+  const G4Colour& GetColour ();  // To be deprecated?
   const G4Colour& GetColor  ();
   // Returns colour - checks fpVisAttribs and gets applicable colour.
+  // Assumes fpVisAttribs point to the G4VisAttributes of the current object.
+  // If the pointer is null, the colour is obtained from the default view
+  // parameters of the current viewer.
+
+  const G4Colour& GetColour (const G4Visible&);
+  const G4Colour& GetColor  (const G4Visible&);
+  // Returns colour, or viewer default colour.
+  // Makes no assumptions about the validity of data member fpVisAttribs.
+  // If the G4Visible has no vis attributes, i.e., the pointer is null,
+  // the colour is obtained from the default view parameters of the
+  // current viewer.
 
   const G4Colour& GetTextColour (const G4Text&);
   const G4Colour& GetTextColor  (const G4Text&);

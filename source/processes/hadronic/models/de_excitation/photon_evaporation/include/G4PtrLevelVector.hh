@@ -23,31 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PtrLevelVector.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// G4MultiUserSteppingAction class implementation
 //
-// -------------------------------------------------------------------
-//      GEANT 4 class file 
-//
-//      CERN, Geneva, Switzerland
-//
-//      File name:     G4PtrLevelVector
-//
-//      Author:        Maria Grazia Pia (pia@genova.infn.it)
-// 
-//      Creation date: 25 October 1998
-//
-//      Modifications: 
-//      
-// -------------------------------------------------------------------
-
-#ifndef G4PTRLEVELVECTOR_HH
-#define G4PTRLEVELVECTOR_HH 1
-
-#include "G4NuclearLevel.hh"
-#include <vector>
+// Author: Andrea Dotti, SLAC - 17 January 2016
+// --------------------------------------------------------------------
 
 typedef std::vector<G4NuclearLevel *> G4PtrLevelVector;
 struct DeleteLevel { void operator () (G4NuclearLevel * aL) {delete aL;} };
 
-#endif
+void G4MultiSteppingAction::UserSteppingAction(const G4Step* step)
+{
+  std::for_each( begin(), end(),
+    [step](G4UserSteppingActionUPtr& e) { e->UserSteppingAction(step); }
+  );
+}
 
+void G4MultiSteppingAction::SetSteppingManagerPointer(G4SteppingManager* pVal)
+{
+  std::for_each( begin(), end(),
+    [pVal](G4UserSteppingActionUPtr& e) { e->SetSteppingManagerPointer(pVal); }
+  );
+}

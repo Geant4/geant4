@@ -40,12 +40,7 @@
 
 #include "G4PhysicsBuilderInterface.hh"
 #include "G4HadronElasticProcess.hh"
-#include "G4AntiProtonInelasticProcess.hh"
-#include "G4AntiNeutronInelasticProcess.hh"
-#include "G4AntiDeuteronInelasticProcess.hh"
-#include "G4AntiTritonInelasticProcess.hh"
-#include "G4AntiHe3InelasticProcess.hh"
-#include "G4AntiAlphaInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 
 class G4VAntiBarionBuilder : public G4PhysicsBuilderInterface
 {
@@ -53,14 +48,8 @@ public:
   G4VAntiBarionBuilder() = default;
   virtual ~G4VAntiBarionBuilder() {} 
   virtual void Build(G4HadronElasticProcess * aP) = 0;
-  virtual void Build(G4AntiProtonInelasticProcess * aP) = 0;
-  virtual void Build(G4AntiNeutronInelasticProcess * aP) = 0;
-  virtual void Build(G4AntiDeuteronInelasticProcess * aP) = 0;
-  virtual void Build(G4AntiTritonInelasticProcess * aP) = 0;
-  virtual void Build(G4AntiHe3InelasticProcess * aP) = 0;
-  virtual void Build(G4AntiAlphaInelasticProcess * aP) = 0;
+  virtual void Build(G4HadronInelasticProcess * aP) = 0;
   using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 };
 
 #endif
-

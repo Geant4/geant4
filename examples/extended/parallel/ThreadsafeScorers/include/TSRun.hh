@@ -51,7 +51,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #ifndef tsrun_h
 #define tsrun_h 1
 
@@ -69,49 +68,44 @@
 
 class G4Event;
 
-//template <typename _Tp> using G4StatContainer = G4THitsMap<_Tp>;
-//template <typename _Tp> using G4StatContainer = G4THitsVector<_Tp>;
-template <typename _Tp> using G4StatContainer = G4THitsDeque<_Tp>;
+// template <typename _Tp> using G4StatContainer = G4THitsMap<_Tp>;
+// template <typename _Tp> using G4StatContainer = G4THitsVector<_Tp>;
+template <typename _Tp>
+using G4StatContainer = G4THitsDeque<_Tp>;
 
 class TSRun : public G4Run
 {
-public:
-    typedef std::map<G4int, G4double> MutexHitsMap_t;
-    typedef std::vector<G4atomic<G4double>*> AtomicHitsSum_t;
+ public:
+  typedef std::map<G4int, G4double> MutexHitsMap_t;
 
-public:
-    TSRun(const G4String&);
-    virtual ~TSRun();
+ public:
+  TSRun(const G4String&);
+  virtual ~TSRun();
 
-    // virtual method from G4Run.
-    // The method is overriden in this class for scoring.
-    virtual void RecordEvent(const G4Event*);
+  // virtual method from G4Run.
+  // The method is overriden in this class for scoring.
+  virtual void RecordEvent(const G4Event*);
 
-    // Access methods for scoring information.
-    // - Get HitsMap of this RUN.
-    G4THitsMap<G4double>* GetHitsMap(const G4String& collname) const;
-    G4TAtomicHitsMap<G4double>* GetAtomicHitsMap(const G4String&) const;
-    MutexHitsMap_t* GetMutexHitsMap(const G4String&) const;
-    G4StatContainer<G4StatAnalysis>* GetStatMap(const G4String& collname) const;
-    G4StatContainer<G4ConvergenceTester>* GetConvMap(const G4String&) const;
+  // Access methods for scoring information.
+  // - Get HitsMap of this RUN.
+  G4THitsMap<G4double>* GetHitsMap(const G4String& collname) const;
+  G4TAtomicHitsMap<G4double>* GetAtomicHitsMap(const G4String&) const;
+  MutexHitsMap_t* GetMutexHitsMap(const G4String&) const;
+  G4StatContainer<G4StatAnalysis>* GetStatMap(const G4String& collname) const;
+  G4StatContainer<G4ConvergenceTester>* GetConvMap(const G4String&) const;
 
-    void ConstructMFD(const G4String&);
+  void ConstructMFD(const G4String&);
 
-    virtual void Merge(const G4Run*);
+  virtual void Merge(const G4Run*);
 
-private:
-    std::vector<G4String> fCollNames;
-    std::vector<G4int> fCollIDs;
-    std::vector<G4THitsMap<G4double>*> fRunMaps;
-<<<<<<< HEAD
-    static AtomicHitsSum_t fAtomicRunSums;
-=======
-    std::vector<G4StatContainer<G4StatAnalysis>*> fStatMaps;
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
-    static std::vector<G4TAtomicHitsMap<G4double>*> fAtomicRunMaps;
-    static std::map<G4String, MutexHitsMap_t> fMutexRunMaps;
-    static std::vector<G4StatContainer<G4ConvergenceTester>*> fConvMaps;
-
+ private:
+  std::vector<G4String> fCollNames;
+  std::vector<G4int> fCollIDs;
+  std::vector<G4THitsMap<G4double>*> fRunMaps;
+  std::vector<G4StatContainer<G4StatAnalysis>*> fStatMaps;
+  static std::vector<G4TAtomicHitsMap<G4double>*> fAtomicRunMaps;
+  static std::map<G4String, MutexHitsMap_t> fMutexRunMaps;
+  static std::vector<G4StatContainer<G4ConvergenceTester>*> fConvMaps;
 };
 
 #endif

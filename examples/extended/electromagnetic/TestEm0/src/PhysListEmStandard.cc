@@ -23,16 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm0/src/PhysListEmStandard.cc
-/// \brief Implementation of the PhysListEmStandard class
-//
-<<<<<<< HEAD
-// $Id: PhysListEmStandard.cc 102356 2017-01-23 16:22:42Z gcosmo $
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
@@ -63,13 +56,20 @@
 #include "G4ionIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
+
+#include "G4BuilderType.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{}
+{
+    G4EmParameters* param = G4EmParameters::Instance();
+    param->SetDefaults();
+    param->SetVerbose(0);
+    SetPhysicsType(bElectromagnetic);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -92,42 +92,31 @@ void PhysListEmStandard::ConstructProcess()
      
     if (particleName == "gamma") {
 
-      ////ph->RegisterProcess(new G4RayleighScattering, particle);      
-      ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
+      ph->RegisterProcess(new G4RayleighScattering, particle);      
+      ph->RegisterProcess(new G4PhotoElectricEffect, particle);
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion, particle);
      
     } else if (particleName == "e-") {
-
-      ph->RegisterProcess(new G4eMultipleScattering(), particle);
-      //            
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.1, 100*um);      
-      ph->RegisterProcess(eIoni, particle);
-      //
+    
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);            
+      ph->RegisterProcess(new G4eIonisation(), particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);      
             
     } else if (particleName == "e+") {
     
-      ph->RegisterProcess(new G4eMultipleScattering(), particle);
-      //     
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.1, 100*um);      
-      ph->RegisterProcess(eIoni, particle);
-      //
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);       
+      ph->RegisterProcess(new G4eIonisation(), particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
-      //
-      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      ph->RegisterProcess(new G4eplusAnnihilation(), particle);    
                   
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
 
-      ph->RegisterProcess(new G4MuMultipleScattering(), particle);
-      G4MuIonisation* muIoni = new G4MuIonisation();
-      muIoni->SetStepFunction(0.1, 50*um);      
-      ph->RegisterProcess(muIoni, particle);
+      ph->RegisterProcess(new G4MuMultipleScattering(), particle); 
+      ph->RegisterProcess(new G4MuIonisation(), particle);
       ph->RegisterProcess(new G4MuBremsstrahlung(), particle);
       ph->RegisterProcess(new G4MuPairProduction(), particle);
                    
@@ -136,9 +125,7 @@ void PhysListEmStandard::ConstructProcess()
                particleName == "pi+"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);      
-      G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.1, 20*um);
-      ph->RegisterProcess(hIoni, particle);
+      ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(new G4hBremsstrahlung(), particle);
       ph->RegisterProcess(new G4hPairProduction(), particle);            
      
@@ -146,9 +133,7 @@ void PhysListEmStandard::ConstructProcess()
                particleName == "He3"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);           
-      G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetStepFunction(0.1, 1*um);
-      ph->RegisterProcess(ionIoni, particle);
+      ph->RegisterProcess(new G4ionIonisation(), particle);
       ph->RegisterProcess(new G4NuclearStopping(), particle);      
             
     } else if( particleName == "GenericIon" ) {
@@ -156,7 +141,6 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hMultipleScattering(), particle);          
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 1*um);
       ph->RegisterProcess(ionIoni, particle);
       ph->RegisterProcess(new G4NuclearStopping(), particle);                   
       

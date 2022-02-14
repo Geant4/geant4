@@ -16,6 +16,295 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 3, 2021 Gabriele Cosmo (global-V10-07-36)
+- Updated tag IDs for geant4-11-00-ref-00.
+
+October 30, 2021 Vladimir Ivanchenko (global-V10-07-35)
+- G4PhysicsModelCatalog : extended number of EM types
+
+October 28, 2021 Gabriele Cosmo (global-V10-07-34)
+- Updated tag IDs for geant4-10-07-ref-09.
+
+October 25, 2021 Ben Morgan (global-V10-07-33)
+- Deprecate non-std::string member functions, replacing with new free
+  functions in G4StrUtil namespace
+
+October 18, 2021 Ben Morgan (global-V10-07-32)
+- Remove obsolete/std::string synonym member functions from G4String:
+  - hash/stlhash
+  - data
+  - replace
+  - index
+  - isNull
+  - first/last
+  - append/prepend
+  - call operators
+
+October 13, 2021 Alberto Ribon (global-V10-07-31)
+- G4PhysicsModelCatalog : made the last changes as agreed during
+  the Collaboration meeting. This version should be ready for the
+  release G4 11.0
+
+October 8, 2021 Vladimir Ivanchenko (global-V10-07-30)
+- G4PhysicsOrderedFreeVector is back redirected to G4PhysicsFreeVector;
+  CMS request
+
+October 7, 2021 Vladimir Ivanchenko (global-V10-07-29)
+- G4PhysicsModelCatalog : extended number of EM types
+
+October 1, 2021 Ben Morgan (global-V10-07-28)
+- Simplify G4String interfaces and implementation with C++11/17
+
+September 30, 2021 Gabriele Cosmo (global-V10-07-27)
+- Updated tag IDs for geant4-10-07-ref-08.
+
+September 27, 2021 Vladimir Ivanchenko (global-V10-07-26)
+- G4PhysicsModelCatalog : EM part is filled according to proposal
+    agreed at the annual workshop
+
+September 16, 2021 Vladimir Ivanchenko (global-V10-07-25)
+- Fixed G4PhysicsVector::GetMinEnergy() and format icc file
+
+September 10, 2021 Guilherme Amadio (global-V10-07-24)
+- Optimize G4PhysicsVector::Interpolation.
+     
+September 8, 2021 Michel Maire (global-V10-07-23)
+- G4BestUnit : modify previous feature: 
+               for energy = 0, print "eV" instead of "meV"
+
+August 31, 2021 Gabriele Cosmo (global-V10-07-22)
+- Updated tag IDs for geant4-10-07-ref-07.
+
+August 27, 2021 Vladimir Ivanchenko (global-V10-07-21)
+- G4PhysicsVectorType: added enumeration of Spline type, use namespace
+- G4PhysicsVector, G4PhysicsFreeVector, G4PhysicsLogVector,
+  G4PhysicsLinearVector: major update - introduced new public access methods;
+  removed obsolete unused methods; introduced possibility to use different
+  Spline methods; do not fill second derivative vector if Spline not enabled;
+  improved control on input data; reduce number of calls to min/max; attempt
+  to optimise run time code G4PhysicsTable, improved use of the vector type.
+
+August 23, 2021 Guilherme Amadio (global-V10-07-20)
+- G4BackTrace: move from deprecated sigignore() to signal().
+
+August 22, 2021 Michel Maire (global-V10-07-19)
+- G4BestUnit : if value=0, do print unit symbol.
+
+August 4, 2021 Alberto Ribon (global-V10-07-18)
+- G4PhysicsModelCatalog : new version of the catalog of physics models.
+  Introduced a modelID (a unique integer for each physics model, with
+  close values for similar/related physics models), besides an index
+  (the position in a vector) and the name (string) of the physics model.
+  The main difference with respect to the previous version is that
+  the three identifiers of each physics model - modelID, index and
+  name - must stay constant and the same for all applications, 
+  physics lists and future versions of Geant4, starting with 11.0.
+
+July 18, 2021 Vladimir Ivanchenko (global-V10-07-17)
+- G4PhysicsVector, G4PhysicsTable, G4PhysicsFreeVector - removed 
+    obsolete methods SetSpline(); T_G4PhysicsFreeVector type set 
+    to be default;  improved comments and printouts
+
+June 21, 2021 Gabriele Cosmo (global-V10-07-16)
+- Updated G4SIUnits and G4PhysicalConstants to include new symbols
+  (minute, hour, day, year and millielectronvolt) and new constants
+  (Bohr_magneton and nuclear_magneton), based on CLHEP-2.4.4.2.
+- Updated tag IDs for geant4-10-07-ref-06.
+
+June 3, 2021 Gabriele Cosmo (global-V10-07-15)
+- Added protection for WIN32 in G4BackTrace.
+
+May 27, 2021 Gabriele Cosmo (global-V10-07-14)
+- Updated tag IDs for geant4-10-07-ref-05.
+
+May 24, 2021 Vladimir Ivanchenko (global-V10-07-13)
+- Removed deprecated classes: G4LPhysicsFreeVector, G4PhysicsLnVector
+  and G4PhysicsOrderedFreeVector.
+
+May 18, 2021 Ben Morgan (global-V10-07-12)
+- New G4Filesystem header to support transparent use of C++ filesystem
+  whether it is in std:: or std::experimental namespaces.
+
+May 18, 2021 Jonathan Madsen (global-V10-07-11)
+- G4ThreadLocalSingleton: added way to explicitly call Clear() for all
+  TLS singletons.
+- Reworked G4Backtrace to use fewer dynamic memory allocations when
+  printing backtrace in order to avoid overflowing the signal stack.
+
+May 7, 2021 Gabriele Cosmo (global-V10-07-10)
+- Updated G4SIUnits and G4PhysicalConstants to include new commented symbols.
+  (minute, hour, day, year and millielectronvolt) and new constants
+  (Bohr_magneton and nuclear_magneton).
+
+April 29, 2021 Gabriele Cosmo (global-V10-07-09)
+- Updated tag IDs for geant4-10-07-ref-04.
+
+April 28, 2021 Michel Maire (global-V10-07-08)
+- G4UnitsTable: added units for Velocity and Momentum.
+
+March 31, 2021 Gabriele Cosmo (global-V10-07-07)
+- Updated tag IDs for geant4-10-07-ref-03.
+
+March 26, 2021 Gabriele Cosmo (global-V10-07-06)
+- Zero terminate buffer in G4strstreambuf destructor before flushing.
+  Addressing problem report #2350.
+
+March 15, 2021 Gabriele Cosmo (global-V10-07-05)
+- G4ConvergenceTester: fixed potential thread contention likely
+  responsible for crashes in ThreadSafe-Scorers example, observed in
+  system testing. Some code cleanup.
+
+March 12, 2021 Ben Morgan (global-V10-07-04)
+- Modernize CMake build.
+
+March 5, 2021 Ben Morgan (global-V10-07-03)
+- Add patch from Seth Johnson to allow user query of G4PhysicsVector's
+  use or not of spline interpolation.
+
+February 25, 2021 Gabriele Cosmo (global-V10-07-02)
+- Updated tag IDs for geant4-10-07-ref-02.
+
+February 4, 2021 Vladimir Ivanchenko (global-V10-07-01)
+- G4PhysicsFreeVector, G4LPhysicsFreeVector, G4PhysicsLogVector,
+  G4PhysicsLinearFreeVector, G4PhysicsOrderedFreeVector - to
+    each constructor added extra boolean variable making spline;
+    this is needed for later removal of the SetSpline(..) method
+    required forreorganisation of the code using templates
+- G4LPhysicsFreeVector, G4PhysicsOrderedFreeVector - moved
+    implementation to G4PhysicsFreeVector
+- G4PhysicsFreeVector - added control on continues increase
+    energy in the energy vector to all constructors
+- G4PhysicsVector - extended warning printout
+
+January 28, 2021 Gabriele (global-V10-07-00)
+- Updated tag IDs for geant4-10-07-ref-01.
+
+December 2, 2020 Gabriele (global-V10-06-27)
+- Removed condition restricting to __x86_64__ architectures for macOS
+  configuration in tls.hh.
+
+November 21, 2020 Gabriele Cosmo (global-V10-06-26)
+- Fixed compilation warnings in G4Profiler.
+- Updated tag IDs for release 10.7.
+
+November 12, 2020 Jonathan Madsen (global-V10-06-25)
+- Added new G4Profiler.hh header
+- Implemented new profiling routines which allow per-{run,event,track,step}
+  configuration w.r.t. when to profiler, what to collect in the profiler,
+  and how to label the entries.
+  Also, includes user-profiling config and macros.
+- Use of TIMEMORY_AUTO_TIMER is now deprecated.
+
+October 29, 2020 Ben Morgan (global-V10-06-25)
+- Always use new CMake system.
+
+October 30, 2020 Gabriele Cosmo (global-V10-06-24)
+- Updated tag IDs for geant4-10-06-ref-10.
+
+October 20, 2020 Jonathan Madsen (global-V10-06-23)
+- Added G4Backtrace.hh for printing backtraces from raised signals
+- This is a more generic implementation of G4FPEDetection and can
+  catch FPE issues but, by default, does not interfere with it.
+- The default backtraced signals are: SIGQUIT, SIGILL, SIGABRT, SIGKILL,
+  SIGBUS, SIGSEGV.
+- The default signals can be overridden within user-code before and
+  after the creation of the run-manager (See "Usage" section in G4Backtrace.hh)
+- The default signals can be overridden via environment variable
+  G4BACKTRACE.
+
+September 30, 2020 Gabriele Cosmo (global-V10-06-22)
+- Updated tag IDs for geant4-10-06-ref-09.
+
+September 25, 2020 Vladimir Ivanchenko (global-V10-06-21)
+- G4PhysicsLinearVector, G4PhysicsLogVector - fixed scale of energy; this
+  problem does not affect results in general; it fix data table scale
+  and may change dEdx and cross sections numerically on small level.
+
+  September 24, 2020 Gabriele Cosmo (global-V10-06-20)
+- Re-instate static pointer for 'masterG4coutDestination' in G4coutDestination
+  with proper symbol exporting on Windows (necessary for MT builds).
+  Restores trapping of G4cout from workers in Qt GUI.
+
+August 31, 2020 Gabriele Cosmo (global-V10-06-19)
+- Updated tag IDs for geant4-10-06-ref-08.
+
+August 4, 2020 Daren Sawkey (global-V10-06-18)
+- New G4PhysicsOrderedFreeVector(std::vector, std::vector) constructor.
+
+July 23, 2020 Gabriele Cosmo (global-V10-06-17)
+- Updated tag IDs for geant4-10-06-ref-07.
+
+July 17, 2020 Gabriele Cosmo (global-V10-06-16)
+- Updated e_SI value for electron charge in G4SIunits.h, based
+  on May 2019 redefinition of SI units.
+  Reference: https://www.britannica.com/science/electron-charge.
+
+June 26, 2020 Gabriele Cosmo (global-V10-06-15)
+- Updated tag IDs for geant4-10-06-ref-06.
+
+May 31, 2020 Gabriele Cosmo (global-V10-06-14)
+- Updated tag IDs for geant4-10-06-ref-05.
+
+May 28, 2020 Ben Morgan (global-V10-06-13)
+- management/sources.cmake: Add location of generated header to
+  public include directories of G4globman.
+
+May 20, 2020 Gabriele Cosmo (global-V10-06-12)
+- Minor c++11 revision in HepNumerics module.
+- Re-applied clang-format after minor rules adaptations.
+
+May 18, 2020 Gabriele Cosmo (global-V10-06-11)
+- Removed unnecessary use of deprecated G4USE_STD11 flag.
+  Also indicated in GitHub PR#13.
+
+May 10, 2020 Jonathan Madsen (global-V10-06-10)
+- Applied clang-format to G4global category
+
+May 5, 2020 Gabriele Cosmo (global-V10-06-09)
+- C++11 revision in 'management' module and some code cleanup/formatting.
+
+April 29, 2020 Gabriele Cosmo (global-V10-06-08)
+- Updated tag IDs for geant4-10-06-ref-04.
+
+March 31, 2020 Ben Morgan (global-V10-06-07)
+- G4UnitsTable: added inheriting constructors for std::vector.
+
+March 31, 2020 Gabriele Cosmo (global-V10-06-06)
+- Updated tag IDs for geant4-10-06-ref-03.
+
+February 29, 2020 Gabriele Cosmo (global-V10-06-05)
+- Updated tag IDs for geant4-10-06-ref-02.
+
+February 03, 2020 Vladimir Ivanchenko (global-V10-06-04)
+- G4PhysicsLinearVector, G4PhysicsLogVector - more accurate
+  checks in class constructors - fixed Coverity warning
+
+January 30, 2020 Gabriele Cosmo (global-V10-06-03)
+- Fixed symbol exporting problem in G4coutDestination on Windows; define
+  'masterG4coutDestination' static pointer as a normal pointer.
+  Addressing problem report #2217.
+
+January 16, 2020 Vladimir Ivanchenko (global-V10-06-02)
+- G4Physics2DVector - extend number of characters in the table dump
+  from 5 to 8; use similar algorithm for bin selection as in 1d vector;
+  if any dimension is less than 2 through G4Exception
+- G4PhysicsVector - use the same code for interpolation for all types
+  of PhysicsVector; removed obsolete unused methods; maximally use
+  const variables; preserve precision of printout;
+- G4PhysicsLinearVector - added checks on vector
+  length: if it is less than 2 through G4Exception
+- G4PhysicsLogVector - added checks on vector length: if it is less
+  than 3 through G4Exception
+
+January 14, 2020 Gabriele Cosmo (global-V10-06-01)
+- Added windefs.hh header, including protections for double definition
+  of global symbols from Windows Kits code.
+- Updated tag IDs for geant4-10-06-ref-01.
+
+December 09, 2019 Ben Morgan (global-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 December 03, 2019 Gabriele Cosmo (global-V10-05-26)
 - Updated tag IDs for release 10.6.
 
@@ -598,7 +887,7 @@ November 5, 2014 A.Dotti (global-V10-00-41)
 - Added missing G4GLOB_DLL specification for DLL import/export to
   G4CacheDetails specialization of cache reference for double.
 
-October 24, 2014 J.Apostolakis A.Dotti (global-V10-00-39,-40)
+October 24, 2014 J.Apostolakis, A.Dotti (global-V10-00-39,-40)
 - Adding template class G4TWorkspacePool.
 
 October 24, 2014 A.Dotti (global-V10-00-38)
@@ -1882,8 +2171,8 @@ November 20, 2002 G.Cosmo (global-V04-01-02)
 
 August 19, 2002 M.Asai (global-V04-01-01)
 - Introducing a new G4Exception scheme.
- Added : G4VStateDependent.hh G4VStateDependent.cc G4ExceptionSeverity.hh
- Modified : G4Exception.cc G4StateManager.hh globals.hh
+  Added : G4VStateDependent.hh G4VStateDependent.cc G4ExceptionSeverity.hh
+  Modified : G4Exception.cc G4StateManager.hh globals.hh
 
 June 21, 2002 G.Cosmo (global-V04-01-00)
 - G4Allocator.hh: changed definition of page size to become data-member of

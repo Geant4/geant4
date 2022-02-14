@@ -93,7 +93,7 @@ G4VSplitableHadron::~G4VSplitableHadron()
 const G4VSplitableHadron & G4VSplitableHadron::operator=(const G4VSplitableHadron &)
 {
   throw G4HadronicException(__FILE__, __LINE__, 
-                            "G4VSplitableHadron::operator= meant to not be accessable");
+                            "G4VSplitableHadron::operator= meant to not be accessible");
   return *this;
 }
 

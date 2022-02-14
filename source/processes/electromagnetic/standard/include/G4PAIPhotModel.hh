@@ -60,7 +60,7 @@ class G4ParticleChangeForLoss;
 
 class G4PAIPhotData;
 
-class G4PAIPhotModel : public G4VEmModel, public G4VEmFluctuationModel
+class G4PAIPhotModel final : public G4VEmModel, public G4VEmFluctuationModel
 {
 
 public:
@@ -91,16 +91,13 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
-				      const G4DynamicParticle*,
-				      G4double,
-				      G4double,
-				      G4double);
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
+			      const G4DynamicParticle*,
+			      const G4double, const G4double, 
+                              const G4double, const G4double) final;
 
-  virtual G4double Dispersion(    const G4Material*,
-				  const G4DynamicParticle*,
-				  G4double,
-				  G4double);
+  G4double Dispersion(const G4Material*, const G4DynamicParticle*,
+		      const G4double, const G4double, const G4double) final;
 
   void DefineForRegion(const G4Region* r);
 
@@ -112,6 +109,10 @@ public:
 
   inline void SetVerboseLevel(G4int verbose);
 
+  // hide assignment operator 
+  G4PAIPhotModel & operator=(const  G4PAIPhotModel &right) = delete;
+  G4PAIPhotModel(const  G4PAIPhotModel&) = delete;
+
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -122,10 +123,6 @@ private:
   inline G4int FindCoupleIndex(const G4MaterialCutsCouple*);
 
   inline void SetParticle(const G4ParticleDefinition* p);
-
-  // hide assignment operator 
-  G4PAIPhotModel & operator=(const  G4PAIPhotModel &right);
-  G4PAIPhotModel(const  G4PAIPhotModel&);
 
   G4int                       fVerbose; 
 

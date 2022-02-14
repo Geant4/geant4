@@ -45,25 +45,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4MicroElecElastic : public G4VEmProcess
-
 {
 public: 
 
   G4MicroElecElastic(const G4String& processName ="MicroElecElastic",
 		     G4ProcessType type = fElectromagnetic);
-
   virtual ~G4MicroElecElastic();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
-  
-  virtual void PrintInfo();
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
 
 protected:
-
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
-     
   G4bool       isInitialised;
 };
 

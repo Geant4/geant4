@@ -29,8 +29,6 @@
 // Class G4OpenGLStoredQtViewer : a class derived from
 //   G4OpenGLQtViewer and G4OpenGLStoredViewer.
 
-#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
-
 #ifndef G4OPENGLSTOREDQTVIEWER_HH
 #define G4OPENGLSTOREDQTVIEWER_HH
 
@@ -84,7 +82,5 @@ private:
 
   //  QImage glBufferImage;
 };
-
-#endif
 
 #endif

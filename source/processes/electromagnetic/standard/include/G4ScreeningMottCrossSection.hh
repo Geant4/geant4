@@ -99,6 +99,10 @@ public:
   G4double McFcorrection(G4double sin2t2);
   inline void SetupParticle(const G4ParticleDefinition*);
 
+  G4ScreeningMottCrossSection & operator=
+  (const G4ScreeningMottCrossSection &right) = delete;
+  G4ScreeningMottCrossSection(const G4ScreeningMottCrossSection&) = delete;
+
 private:
 
   G4double ComputeAngle(G4int idx, G4double& rand);
@@ -109,10 +113,6 @@ private:
   G4double DifferentialXSection(G4int idx, G4int form);
 
   G4double  GetTransitionRandom();
-
-  G4ScreeningMottCrossSection & operator=
-  (const  G4ScreeningMottCrossSection &right);
-  G4ScreeningMottCrossSection(const  G4ScreeningMottCrossSection&);
 
   G4NistManager*  fNistManager;
   G4Pow*          fG4pow;

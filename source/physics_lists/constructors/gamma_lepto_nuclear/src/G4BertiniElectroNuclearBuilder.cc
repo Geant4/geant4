@@ -51,6 +51,8 @@
 #include "G4GammaGeneralProcess.hh"
 #include "G4LossTableManager.hh"
 
+#include "G4PhotoNuclearCrossSection.hh"
+
 #include "G4HadronicParameters.hh"
 
 G4BertiniElectroNuclearBuilder::G4BertiniElectroNuclearBuilder(G4bool eNucl) : 
@@ -74,7 +76,9 @@ void G4BertiniElectroNuclearBuilder::Build()
   if(wasActivated) return;
   wasActivated=true;
   
-  thePhotoNuclearProcess = new G4PhotoNuclearProcess;
+  thePhotoNuclearProcess = new G4HadronInelasticProcess( "photonNuclear", G4Gamma::Definition() );
+  thePhotoNuclearProcess->AddDataSet( new G4PhotoNuclearCrossSection );
+
   if(eActivated) {
     theElectronNuclearProcess = new G4ElectronNuclearProcess;
     thePositronNuclearProcess = new G4PositronNuclearProcess;

@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // G4InitXscPAI.hh -- header file
 //
@@ -50,7 +47,7 @@ public:
 	  // Constructors
   explicit G4InitXscPAI( const G4MaterialCutsCouple* matCC);
 
-  virtual ~G4InitXscPAI() ;
+  ~G4InitXscPAI() ;
 
   // Methods
   // General control functions
@@ -59,10 +56,7 @@ public:
 
   void Normalisation();
 
-
   // Physical methods
-
-
   G4double RutherfordIntegral( G4int intervalNumber,
 	                               G4double limitLow,
 				       G4double limitHigh     ) ;
@@ -90,9 +84,7 @@ public:
 
   void      IntegralPAIdEdx(G4double bg2, G4double Tmax) ;
 
-
   G4double GetPhotonLambda( G4double omega ) ;
-
 
   G4double GetStepEnergyLoss( G4double step ) ;
   G4double GetStepCerenkovLoss( G4double step ) ;
@@ -116,12 +108,10 @@ public:
   G4PhysicsLogVector* GetChCosSqVector() const { return fChCosSqVector;}
   G4PhysicsLogVector* GetChWidthVector() const { return fChWidthVector;}
 
-protected :
-
-private :
-
   G4InitXscPAI & operator=(const G4InitXscPAI &right) = delete;
   G4InitXscPAI(const G4InitXscPAI&) = delete;
+
+private :
 
   // Local class constants
 
@@ -139,19 +129,16 @@ private :
   G4double fElectronDensity ;    // Current electron (number) density
 
   // Arrays of Sandia coefficients
-
   G4OrderedTable* fMatSandiaMatrix;
   G4SandiaTable*  fSandia;
 
   // vectors of integral cross-sections
-  
   G4PhysicsLogVector* fPAIxscVector;
   G4PhysicsLogVector* fPAIdEdxVector;
   G4PhysicsLogVector* fPAIphotonVector;
   G4PhysicsLogVector* fPAIelectronVector;
   G4PhysicsLogVector* fChCosSqVector;
   G4PhysicsLogVector* fChWidthVector;
-  
 };    
 
 #endif   

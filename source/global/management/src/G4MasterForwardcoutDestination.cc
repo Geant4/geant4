@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// --------------------------------------------------------------------
-//
-// G4MasterForwardcoutDestination.cc
+// G4MasterForwardcoutDestination class implementation
 //
 // Author: A.Dotti (SLAC), April 2017
 // --------------------------------------------------------------------
@@ -39,30 +36,31 @@ namespace
   G4Mutex out_mutex = G4MUTEX_INITIALIZER;
 }
 
-G4MasterForwardcoutDestination::~G4MasterForwardcoutDestination()
-{
-}
+// --------------------------------------------------------------------
+G4MasterForwardcoutDestination::~G4MasterForwardcoutDestination() {}
 
-G4int G4MasterForwardcoutDestination::ReceiveG4cout(const G4String& msg )
+// --------------------------------------------------------------------
+G4int G4MasterForwardcoutDestination::ReceiveG4cout(const G4String& msg)
 {
   // If a master destination is set check that we are not in a recursive
   // situation, send the message to the master, using a lock to serialize calls
   // Master is probably a (G)UI that is not thread-safe
 
-  if ( masterG4coutDestination && this!=masterG4coutDestination)
+  if(masterG4coutDestination && this != masterG4coutDestination)
   {
-      G4AutoLock l(&out_mutex);
-      return masterG4coutDestination->ReceiveG4cout_(msg);
+    G4AutoLock l(&out_mutex);
+    return masterG4coutDestination->ReceiveG4cout_(msg);
   }
   return 0;
 }
 
-G4int G4MasterForwardcoutDestination::ReceiveG4cerr(const G4String& msg )
+// --------------------------------------------------------------------
+G4int G4MasterForwardcoutDestination::ReceiveG4cerr(const G4String& msg)
 {
-  if ( masterG4coutDestination && this!=masterG4coutDestination)
+  if(masterG4coutDestination && this != masterG4coutDestination)
   {
-      G4AutoLock l(&out_mutex);
-      return masterG4coutDestination->ReceiveG4cerr_(msg);
+    G4AutoLock l(&out_mutex);
+    return masterG4coutDestination->ReceiveG4cerr_(msg);
   }
   return 0;
 }

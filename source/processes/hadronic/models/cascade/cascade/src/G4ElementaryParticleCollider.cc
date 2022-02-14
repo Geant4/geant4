@@ -409,8 +409,22 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 
   particle_kinds.clear();
 
-  G4int type1 = particle1->type();
-  G4int type2 = particle2->type();
+  G4int typeProduct = particle1->type() * particle2->type();
+
+  if (typeProduct == G4int(pi0)*G4int(diproton) || typeProduct == G4int(pip)*G4int(unboundPN) ||
+      typeProduct == G4int(gam)*G4int(diproton)) {
+    particle_kinds.push_back(pro);
+    particle_kinds.push_back(pro);
+
+  } else if (typeProduct == G4int(pim)*G4int(diproton) || typeProduct == G4int(pip)*G4int(dineutron) ||
+             typeProduct == G4int(pi0)*G4int(unboundPN) || typeProduct == G4int(gam)*G4int(unboundPN)) {
+    particle_kinds.push_back(pro);
+    particle_kinds.push_back(neu);
+
+  } else if (typeProduct == G4int(pi0)*G4int(dineutron) || typeProduct == G4int(pim)*G4int(unboundPN) ||
+             typeProduct == G4int(gam)*G4int(dineutron)) {
+    particle_kinds.push_back(neu);
+    particle_kinds.push_back(neu);
 
   // Ensure that absportion is valid (charge conservable)
   if (!G4NucleiModel::useQuasiDeuteron(type1, type2)) {
@@ -463,14 +477,17 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
   G4int type1 = particle1->type();
   G4int type2 = particle2->type();
 
-  if (type1 != muonMinus) return;	// Sanity check, only mu- absorption
-
-  // Ensure that absportion is valid (charge conservable)
-  if (!G4NucleiModel::useQuasiDeuteron(type1, type2)) {
-    G4cerr << " mu- absorption: "
-	   << particle1->getDefinition()->GetParticleName() << " + "
-	   << particle2->getDefinition()->GetParticleName() << " -> ?"
-	   << G4endl;
+  if (typeProduct == G4int(mum)*G4int(diproton)) {
+    particle_kinds.push_back(pro);
+    particle_kinds.push_back(neu);
+  } else if (typeProduct == G4int(mum)*G4int(unboundPN)) {
+    particle_kinds.push_back(neu);
+    particle_kinds.push_back(neu);
+  } else {
+    G4cerr << " Illegal absorption: "
+           << particle1->getDefinition()->GetParticleName() << " + "
+           << particle2->getDefinition()->GetParticleName() << " -> ?"
+           << G4endl;
     return;
   }
 

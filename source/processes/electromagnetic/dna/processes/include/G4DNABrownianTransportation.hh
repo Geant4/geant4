@@ -124,8 +124,8 @@ public:
 
   virtual void ComputeStep(const G4Track&,
                            const G4Step&,
-                           const double,
-                           double&);
+                           const G4double,
+                           G4double&);
 
   virtual G4double
   AlongStepGetPhysicalInteractionLength(const G4Track& /*track*/,

@@ -34,7 +34,20 @@
 
 #include "G4ios.hh"
 
-#include "CCalAnalysis.hh"
+#include "G4AnalysisManager.hh"
+#include "G4Threading.hh"
+
+
+CCalRunAction::CCalRunAction()
+{
+  numberOfTimeSlices = 200;
+  Book();
+}
+
+
+CCalRunAction::~CCalRunAction()
+{
+}
 
 
 <<<<<<< HEAD
@@ -46,45 +59,34 @@ void CCalRunAction::BeginOfRunAction(const G4Run* aRun)
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-<<<<<<< HEAD
-  // A.R. Added for visualization of events.
-  if ( G4VVisManager::GetConcreteInstance() ) {
-    G4UImanager* UI = G4UImanager::GetUIpointer(); 
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  } 
-
-  CCalAnalysis* analysis = CCalAnalysis::getInstance();
-  analysis->BeginOfRun(aRun->GetRunID());
-
-  
-=======
-  if (aRun->GetRunID() == 0) //first run
-    Book();
-      
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
+  analysis->SetDefaultFileType("root");
+
   //cleanup
   G4int timeHist = analysis->GetH1Id("h300");
   for (G4int i=0; i<numberOfTimeSlices; ++i) {
     analysis->GetH1(timeHist+i)->reset();
   }
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+
+  // Open an output file
+  analysis->OpenFile("ccal");
+  G4cout << "********************************************" << G4endl
+         << "* o/p file ccal"  << G4endl
+         << "********************************************" << G4endl 
+         << G4endl;
 }
 
 
 void CCalRunAction::EndOfRunAction(const G4Run* aRun) {
 
   G4cout << "### Run " << aRun->GetRunID() << " end." << G4endl;
-<<<<<<< HEAD
 
-  // A.R. Added for visualization of events.
-  if (G4VVisManager::GetConcreteInstance()) {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-
-  CCalAnalysis* analysis = CCalAnalysis::getInstance();
-  analysis->EndOfRun(aRun->GetRunID());
-=======
+  // Close-out analysis: save histograms and ntuple
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->Write();
+  analysisManager->CloseFile();
 }   
+
 
 void CCalRunAction::Book()
 {
@@ -92,16 +94,10 @@ void CCalRunAction::Book()
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetFirstHistoId(1);
   analysisManager->SetFirstNtupleId(1);
-  
-  // Open an output file
-  analysisManager->OpenFile("ccal");
-  G4cout << "********************************************" << G4endl
-         << "* o/p file ccal"  << G4endl
-         << "********************************************" << G4endl 
-         << G4endl;
-  
-  
-  // Create a tuple :
+
+  // Note: merging ntuples is available only with Root output
+  if ( G4Threading::IsMultithreadedApplication() ) analysisManager->SetNtupleMerging(true);
+ 
   // Create ntuple
   analysisManager->CreateNtuple("ntuple1", "Event info");
   for (G4int i=0;i<28;++i) {

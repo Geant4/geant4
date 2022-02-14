@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml_simple_extension xmlns:gdml_simple_extension="http://www.example.org"
+                       xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+                       xs:noNamespaceSchemaLocation="SimpleExtension.xsd">
+    <extension>
+        <color name="test_color"  R="0.1"  G="0.2"  B="0.3"  A="1.0" />
+        <color name="magenta"     R="1.0"  G="0.0"  B="1.0"  A="1.0" />
+        <color name="green"       R="0.0"  G="1.0"  B="0.0"  A="1.0" />
+        <color name="red"         R="1.0"  G="0.0"  B="0.0"  A="1.0" />
+        <color name="blue"        R="0.0"  G="0.0"  B="1.0"  A="1.0" />
+        <color name="yellow"      R="1.0"  G="1.0"  B="0.0"  A="1.0" />
+        <color name="purple"      R="0.5"  G="0.0"  B="0.5"  A="1.0" />
+    </extension>
+    <define>
+        <constant name="cellsize" value="5000"/>
+    </define>
+    <materials>
+        <material Z="1.0" name="AIR">
+            <D value="1e-24"/>
+            <atom value="1.00794"/>
+        </material>
+        <element name="Oxygen"   formula="O"  Z="8.">  
+            <atom value="16.0"/>   
+        </element>
+        <element name="Nitrogen" formula="N"  Z="7.">  
+            <atom value="14.01"/>  
+        </element>
+        <element name="Fluorine" formula="F"  Z="9.">  
+            <atom value="18.9984032"/>  
+        </element>
+        <element name="Lead"     formula="Pb" Z="82."> 
+            <atom value="207.20"/> 
+        </element>
+        <element name="Bismuth"  formula="Bi" Z="83."> 
+            <atom value="208.98040"/> 
+        </element>
+        <element name="Germanium"  formula="Ge" Z="32."> 
+            <atom value="72.63"/> 
+        </element>
+        <element name="Tungsten"  formula="W" Z="74."> 
+            <atom value="183.84"/> 
+        </element>
+        <material name="Air">
+            <D value="1.290" unit="mg/cm3"/>
+            <fraction n="0.7" ref="Nitrogen"/>
+            <fraction n="0.3" ref="Oxygen"/>
+        </material>
+
+        <material name="PbWO4">
+            <D value="8.28" unit="g/cm3"/>
+            <composite n="1" ref="Lead"/>
+            <composite n="1" ref="Tungsten"/>
+            <composite n="4" ref="Oxygen"/>
+        </material>	      
+    </materials>
+    <solids>
+        <box name="WorldBox" lunit="mm" x="cellsize+1000" y="cellsize+1000" z="cellsize+1000"/>
+        <box name="CalorimeterCell"  lunit="mm" x="cellsize" y="cellsize" z="cellsize"/>
+    </solids>
+
+    <structure>
+        <volume name="CalorimeterVolume">
+            <materialref ref="PbWO4"/>
+            <solidref ref="CalorimeterCell"/>
+            <auxiliary auxtype="SensDet" auxvalue="Calorimeter"/>
+            <colorref ref="green"/>
+        </volume>
+    
+        <volume name="TOP">
+            <materialref ref="AIR"/>
+            <solidref ref="WorldBox"/>
+            <physvol name="pvolCalorimeter" copynumber="0" >>
+                <volumeref ref="CalorimeterVolume"/>
+                <position name="posijk" x="0" y="0" z="0"/>
+            </physvol>
+        </volume>
+    </structure>
+
+    <setup version="1.0" name="Default">
+        <world ref="TOP"/>
+    </setup>
+</gdml_simple_extension> 
+
+

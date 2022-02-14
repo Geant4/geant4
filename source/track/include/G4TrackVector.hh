@@ -23,34 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TrackVector
 //
+// Description:
 //
-//---------------------------------------------------------------
-//
-//  G4TrackVector.hh
-//
-//  class description:
-//    This class keeps a List of G4Track objects. It is implemented 
-//    as a RougeWave pointer ordered vector.
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
+// G4TrackVector keeps a list of G4Track objects
 
-#ifndef G4TrackVector_h
-#define G4TrackVector_h 1
+// Authors:
+//   Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//   Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// --------------------------------------------------------------------
+#ifndef G4TrackVector_hh
+#define G4TrackVector_hh 1
 
 #include <vector>
+
 class G4Track;
-class G4Step;
 
-
-typedef std::vector<G4Track*> G4TrackVector;
-
+using G4TrackVector = std::vector<G4Track*>;
 
 #endif
-
-

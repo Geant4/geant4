@@ -30,8 +30,6 @@
 // Class G4OpenGLStoredXViewer : a class derived from G4OpenGLXViewer and
 //                               G4OpenGLStoredViewer.
 
-#if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
-
 #ifndef G4OPENGLSTOREDXVIEWER_HH
 #define G4OPENGLSTOREDXVIEWER_HH
 
@@ -52,6 +50,3 @@ public:
 };
 
 #endif
-
-#endif
-

@@ -32,13 +32,13 @@
 // File name:     G4VWLSTimeGeneratorProfile.hh
 //
 // Author:        Pedro Rodrigues, Andreia Trindade
-//            
-// 
+//
+//
 // Creation date: 2006-05-07
 //
-// Modifications: 
+// Modifications:
 //
-// Class Description: 
+// Class Description:
 //
 // Abstract class for a WLSTimeGeneratorProfile
 
@@ -49,29 +49,26 @@
 #define G4VWLSTimeGeneratorProfile_h 1
 
 #include "G4ios.hh"
-#include "globals.hh"
+//#include "globals.hh"
 #include "G4MaterialPropertiesTable.hh"
+// class G4MaterialPropertiesTable;
 
 class G4VWLSTimeGeneratorProfile
 {
-
-public:
-
+ public:
   G4VWLSTimeGeneratorProfile(const G4String& name);
 
   virtual ~G4VWLSTimeGeneratorProfile();
 
-  virtual G4double GenerateTime(const G4double time_constant) = 0;
+  virtual G4double GenerateTime(const G4double time_constant)     = 0;
   virtual G4double GenerateTime(const G4MaterialPropertiesTable*) = 0;
 
-private:
-
+ private:
   // hide assignment operator
 
-  G4VWLSTimeGeneratorProfile & operator=
-                      (const  G4VWLSTimeGeneratorProfile &right) = delete;
-  G4VWLSTimeGeneratorProfile(const  G4VWLSTimeGeneratorProfile&) = delete;
-
+  G4VWLSTimeGeneratorProfile& operator=
+    (const G4VWLSTimeGeneratorProfile& right) = delete;
+  G4VWLSTimeGeneratorProfile(const G4VWLSTimeGeneratorProfile&) = delete;
 };
 
 #endif

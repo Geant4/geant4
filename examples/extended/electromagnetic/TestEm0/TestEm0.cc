@@ -39,7 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #include "DetectorConstruction.hh"
@@ -54,9 +54,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) {
-    
-  // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = 0;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
+  //Construct a serial run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // set mandatory initialization classes
   DetectorConstruction* det;
@@ -67,23 +71,22 @@ int main(int argc,char** argv) {
       
   // set user action classes
   runManager->SetUserAction(new RunAction(det,prim));
-  
-  if (argc!=1)   // batch mode   
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     G4UImanager::GetUIpointer()->ApplyCommand(command+fileName); 
-    }
-    
-  else           // define UI terminal for interactive mode 
-    { 
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
-#endif
-    }
-  // job termination 
+
+  //get the pointer to the User Interface manager 
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (ui)  {
+    //interactive mode
+    ui->SessionStart();
+    delete ui;
+  } else {
+    //batch mode  
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
+
+  //job termination 
   //
   delete runManager;
 

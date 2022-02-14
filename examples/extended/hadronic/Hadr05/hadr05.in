@@ -1,24 +1,26 @@
-#================================================
-#     Macro file for hadr05
-#     (according to hadr00.in by V.Ivanchneko)
-#================================================
+#
+# Macro file for "Hadr05.cc"
+#
+# Iron-Scintillator 50 layers
+#
 /control/verbose 1
 /run/verbose 1
-/tracking/verbose 0
 #
-/testhadr/TargetMat        G4_Al 
-/testhadr/TargetRadius     2  cm
-/testhadr/TargetLength     50 cm
-/run/printProgress 10
+/process/em/verbose 0
+/process/had/verbose 0
+#
+/testhadr/det/setNbOfLayers 50
+/testhadr/det/setNbOfAbsor  2
+/testhadr/det/setAbsor 1 Iron 36 mm
+/testhadr/det/setAbsor 2 Scintillator 4 mm
+/testhadr/det/setSizeYZ 1.5 m
 #
 /run/initialize
-/process/em/workerVerbose 0
 #
-/run/setCut           1 km
+/testhadr/gun/setDefault
 /gun/particle proton
-/gun/energy 20. GeV
-#/testhadr/HistoType  root
-#/testhadr/HistoName  p_al
-/testhadr/verbose 1
-/run/beamOn 10
+/gun/energy 5 GeV
 #
+/run/printProgress 100
+/run/beamOn 1000
+

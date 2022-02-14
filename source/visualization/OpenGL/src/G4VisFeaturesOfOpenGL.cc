@@ -55,7 +55,7 @@ G4String G4VisFeaturesOfOpenGLSX () {
 G4String G4VisFeaturesOfOpenGLIXm () {
   return
     "    Smart single buffered X Window, No Graphics Database."
-    "\n    Advantages:    resizeable, and has Motif-based view-control panel."
+    "\n    Advantages:    resizable, and has Motif-based view-control panel."
     "\n                   does not gobble server memory."
     "\n                   good for drawing steps and hits."
     "\n    Disadvantages: currently locks out GEANT4 commands, until \"exit\"."
@@ -66,7 +66,7 @@ G4String G4VisFeaturesOfOpenGLIXm () {
 G4String G4VisFeaturesOfOpenGLSXm () {
   return
     "    Smart double buffered X Window with Graphics Database."
-    "\n    Advantages:    resizeable, and has Motif-based view-control panel."
+    "\n    Advantages:    resizable, and has Motif-based view-control panel."
     "\n                   uses display lists as graphics database."
     "\n                   fastest possible redraw, e.g., on simple change"
     "\n                     of viewpoint."
@@ -97,9 +97,4 @@ G4String G4VisFeaturesOfOpenGLIQt () {
 G4String G4VisFeaturesOfOpenGLSQt () {
   return
     "\n It runs everywhere ";
-}
-
-G4String G4VisFeaturesOfOpenGLIWt () {
-  return
-    "\n It runs everywhere";
 }

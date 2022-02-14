@@ -1,0 +1,27 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Hadr08 History file
+                    -------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+10-11-21 Alberto Ribon (exhadr09-V10-07-01)
+- HadronicGenerator : extended interface and functionality;
+  used new methods available in the FTF model.
+
+04-03-21 Alberto Ribon (exhadr09-V10-07-00)
+- HadronicGenerator : migrated per-particle inelastic processes
+  (that have been deleted) to G4HadronInelasticProcess.
+
+08-11-20 Alberto Ribon (exhadr09-V10-06-00)
+- Created this example.
+

@@ -37,7 +37,7 @@ class G4VCoulombBarrier;
 class G4LevelManager;
 class G4GEMProbabilityVI;
 
-class G4GEMChannelVI : public G4VEvaporationChannel
+class G4GEMChannelVI final: public G4VEvaporationChannel
 {
 public:
 
@@ -68,7 +68,8 @@ private:
   G4int resZ;
   G4int fragA;
   G4int fragZ;
-
+  G4int secID;  // Creator model ID for the secondaries created by this model
+  
   G4double mass;
   G4double resMass;
   G4double evapMass;

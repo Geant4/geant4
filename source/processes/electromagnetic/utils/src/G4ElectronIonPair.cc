@@ -171,7 +171,7 @@ void G4ElectronIonPair:: DumpMeanEnergyPerIonPair() const
   G4int nmat = G4Material::GetNumberOfMaterials();
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
   if(nmat > 0) {
-    G4cout << "### G4ElectronIonPair: mean energy per ion pair avalable:" 
+    G4cout << "### G4ElectronIonPair: mean energy per ion pair available:" 
 	   << G4endl;
     for(G4int i=0; i<nmat; ++i) {
       const G4Material* mat = (*mtable)[i];

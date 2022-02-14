@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # ==================================================================
 # python script for Geant4Py test
 #
@@ -6,11 +6,11 @@
 #   - test for using site-module packages
 # ==================================================================
 from Geant4 import *
-import g4py.NISTmaterials
-import g4py.ezgeom
-from g4py.ezgeom import G4EzVolume
-import g4py.EMSTDpl
-import g4py.ParticleGun
+import g4pytest.NISTmaterials
+import g4pytest.ezgeom
+from g4pytest.ezgeom import G4EzVolume
+import g4pytest.EMSTDpl
+import g4pytest.ParticleGun
 
 # ==================================================================
 # intialize
@@ -20,33 +20,33 @@ def Configure():
   # setup for materials
   # ------------------------------------------------------------------
   # simple materials for Qgeom
-  g4py.NISTmaterials.Construct()
+  g4pytest.NISTmaterials.Construct()
 
   # ------------------------------------------------------------------
   # setup for geometry
   # ------------------------------------------------------------------
-  #g4py.Qgeom.Construct()
-  g4py.ezgeom.Construct()  # initialize
+  #g4pytest.Qgeom.Construct()
+  g4pytest.ezgeom.Construct()  # initialize
 
   # ------------------------------------------------------------------
   # setup for physics list
   # ------------------------------------------------------------------
-  g4py.EMSTDpl.Construct()
+  g4pytest.EMSTDpl.Construct()
 
   # ------------------------------------------------------------------
   # setup for primary generator action
   # ------------------------------------------------------------------
-  g4py.ParticleGun.Construct()
+  g4pytest.ParticleGun.Construct()
   gControlExecute("gun.mac")
 
 # ==================================================================
 # constructing geometry
 # ==================================================================
 def ConstructGeom():
-  print "* Constructing geometry..."
+  print("* Constructing geometry...")
   # reset world material
   air= G4Material.GetMaterial("G4_AIR")
-  g4py.ezgeom.SetWorldMaterial(air)
+  g4pytest.ezgeom.SetWorldMaterial(air)
 
   # target
   global target
@@ -69,7 +69,7 @@ def ConstructGeom():
   dd= 5.*cm
   for ical in range(-1, 2):
     calPos= G4ThreeVector(dd*ical, 0., 0.)
-    print calPos
+    print(calPos)
     cal.PlaceIt(calPos, ical+1, detector_box)
 
 
@@ -81,7 +81,7 @@ def ConstructGeom():
 # ------------------------------------------------------------------
 rand_engine= Ranlux64Engine()
 HepRandom.setTheEngine(rand_engine)
-HepRandom.setTheSeed(20050830L)
+HepRandom.setTheSeed(20050830)
 
 # setup...
 Configure()

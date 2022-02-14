@@ -17,8 +17,7 @@
 //                  initialisation of static generator: 5th Jan 1999
 // =======================================================================
 
-#include <assert.h>
-#include "CLHEP/Random/JamesRandom.h"
+#include "CLHEP/Random/MixMaxRng.h"
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Random/StaticRandomStates.h"
 #include "CLHEP/Utility/memory.h"
@@ -29,6 +28,11 @@
 // -----------------------------
 
 #include "CLHEP/Random/SeedTable.h"
+
+#include <assert.h>
+#include <iostream>
+#include <type_traits>
+#include <string>
 
 namespace CLHEP {
 

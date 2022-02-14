@@ -23,10 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+// 
+// If you use this example, please cite the following publication:
+// Rad. Prot. Dos. 133 (2009) 2-11
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #ifndef StepMax_h
 #define StepMax_h 1
 
@@ -37,28 +42,26 @@
 
 class PhysicsListMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class StepMax : public G4VEmProcess
 {
 public:
 
-  StepMax(PhysicsListMessenger* mess);
-  virtual ~StepMax();
+  explicit StepMax(PhysicsListMessenger* mess);
+  ~StepMax() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  void PreparePhysicsTable(const G4ParticleDefinition&)override;
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&)override;
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*)override;
 
-  virtual G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+  G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
                                                         G4double previousStep,
-                                                        G4ForceCondition* cond);
+                                                        G4ForceCondition* cond)override;
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
 private:
 
@@ -67,8 +70,5 @@ private:
   G4double fMaxChargedStep;
   G4bool isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 

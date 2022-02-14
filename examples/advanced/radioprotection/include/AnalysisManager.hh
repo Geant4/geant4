@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: Susanna Guatelli, susanna@uow.edu.au,
-// Authors: Jeremy Davis, jad028@uowmail.edu.au
+// Authors: Susanna Guatelli and Francesco Romano
+// susanna@uow.edu.au, francesco.romano@ct.infn.it
 //
  
 
@@ -32,7 +32,7 @@
 #define ANALYSISMANAGER_HH 
 
 #include "globals.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 // Define the total number of columns in the ntuple
 const G4int MaxNtCol = 5;

@@ -39,13 +39,6 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
@@ -60,18 +53,16 @@
 
 #include "G4WarnPLStatus.hh"
 
-
 FTFP_BERT_ATL::FTFP_BERT_ATL(G4int ver)
 {
-  // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*CLHEP::mm;
-  G4cout << "<<< Geant4 Physics List simulation engine: FTFP_BERT_ATL"<<G4endl;
-  G4cout <<G4endl;
+  if(ver > 0) {
+    G4cout << "<<< Geant4 Physics List simulation engine: FTFP_BERT_ATL"<<G4endl;
+    G4cout <<G4endl;
+    G4WarnPLStatus exp;
+    exp.Experimental("FTFP_BERT_ATL");
+  }
   defaultCutValue = 0.7*CLHEP::mm;  
   SetVerboseLevel(ver);
-
-  G4WarnPLStatus exp;
-  exp.Experimental("FTFP_BERT_ATL");
 
   // EM Physics
   RegisterPhysics( new G4EmStandardPhysics(ver));

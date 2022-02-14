@@ -54,14 +54,9 @@
   GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
 
   ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
-  In perticular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
-  This is enough when spatial distribution of deposited energy do not need
-  to be accurate (see param->SetStepFunction(1., 1*mm)).
 
   Several hadronic physics options are controlled by environment variables.
-  To trigger them, an envHadronic.csh has been added in this example.
-  One must select the options wished, and do
-        source envHadronic.csh  (or sh) 
+  To select them, see Hadr07.cc
 
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -154,3 +149,13 @@
  	Idle> type your commands
  	....
  	Idle> exit
+	
+ Macros provided in this example:
+  - Na22.mac: multilayers. Radioactive source
+  - alpha.mac: alpha (400 MeV). Limit the step size from histo 10
+  - ionC12.mac: C12 (2.4 GeV). Limit the step size from histo 10
+  - water.mac: e- (4 MeV) in Water
+    
+ Macros to be run interactively:
+  - proton.mac: proton (1 GeV). Multilayers
+  - vis.mac: To activate visualization

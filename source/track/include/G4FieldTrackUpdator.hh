@@ -23,46 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4FieldTrackUpdator
 //
+// Class description:
 //
-//   M. Asai - first implementation Apr/28/2006
-//
-//---------------------------------------------------------------
-//
-// G4FieldTrackUpdator.hh
-//
-//---------------------------------------------------------------
+// Utility class to create and update a G4FieldTrack object.
 
-#ifndef G4FieldTrackUpdator_h
-#define G4FieldTrackUpdator_h 1
+// Author: M.Asai, 28 April 2006
+// --------------------------------------------------------------------
+#ifndef G4FieldTrackUpdator_hh
+#define G4FieldTrackUpdator_hh 1
 
 class G4FieldTrack;
 class G4Track;
 
-class G4FieldTrackUpdator 
+class G4FieldTrackUpdator
 {
- private:
-  G4FieldTrackUpdator() {;}
-  ~G4FieldTrackUpdator() {;}
+  public:
 
- public:
-  static G4FieldTrack* CreateFieldTrack(const G4Track*);
-  static void Update(G4FieldTrack*,const G4Track*);
+    static G4FieldTrack* CreateFieldTrack(const G4Track*);
+    static void Update(G4FieldTrack*, const G4Track*);
+
+  private:
+
+    G4FieldTrackUpdator() {}
+   ~G4FieldTrackUpdator() {}
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

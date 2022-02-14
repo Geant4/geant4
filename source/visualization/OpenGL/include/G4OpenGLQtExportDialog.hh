@@ -27,8 +27,6 @@
 //
 // 
 
-#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
-
 #ifndef G4OPENGLQTEXPORTDIALOG_HH
 #define G4OPENGLQTEXPORTDIALOG_HH
 
@@ -100,17 +98,17 @@ class G4OpenGLQtExportDialog : public QDialog
 
  private:
   QString f_name, f_type, f_dir;
-  QLabel* qualityLabel;
-  bool expAll;
+//  QLabel* qualityLabel;
+//  bool expAll;
   QPushButton* buttonOk;
   QPushButton* buttonCancel;
 
   QGroupBox * sizeGroupBox;
 
-  QCheckBox* transparencyEPS,*boxTransparency,*vectorEPSCheckBox;
+  QCheckBox/** transparencyEPS,*boxTransparency,*/*vectorEPSCheckBox;
   QCheckBox* ratioCheckBox;
   QSlider * qualitySlider;
-  QLabel *formatLabel;
+//  QLabel *formatLabel;
   QRadioButton* colorButton,*BWButton;
   QRadioButton* original,* modify;
   QLineEdit* height,*width;
@@ -119,7 +117,5 @@ class G4OpenGLQtExportDialog : public QDialog
   int originalHeight;
   bool isChangingSize;
 };
-
-#endif
 
 #endif

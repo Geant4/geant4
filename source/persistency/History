@@ -15,6 +15,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 October, 21 B.Morgan (persistency-V10-07-01)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+1 April, 21 B. Morgan (persistency-V10-07-00)
+- Migrate build to modular CMake API
+
+16 November, 20 G.Cosmo (persistency-V10-06-02)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+7 October, 20 G.Cosmo (persistency-V10-06-01)
+- Minor c++11 review. Code cleanup and formatting.
+
+11 December, 19 B.Morgan (persistency-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 5 July, 12  G.Cosmo (persistency-V09-05-02)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.
@@ -109,7 +125,7 @@ committal in the CVS repository !
 - added more SRM descriptions
 
 4 July, 01    Y.Morita (persistency-V03-02-00)
-- STL migration: 
+- STL migration:
    modified: G4Pglobals.hh, G4PGeometryObjectMap.ddl, G4PGeometryObjectMap.cc
    removed: G4VPhysVolRefArray.hh, G4LogVolRefArray.hh G4VSolidRefArray.hh
 
@@ -239,7 +255,7 @@ November 4, 99  Y.Morita
   persistency/geometry/management to avoid circular dependency
 - G4PersistencyManager: Allow constructor with the name of Boot file
 
-October 27, 99  J.Allison 
+October 27, 99  J.Allison
 - Created persistency/global/include.
 - Moved management/include/G4PersistentTypes.hh to global/include.
 - Modified GNUmakefiles to add persistency/global/include to -I path.
@@ -263,12 +279,12 @@ November 10, 98  Y.Morita (persistency-00-03-02)
 - G4PersistentGeomMan now handle Replica geometry
 
 November 10, 98  Y.Morita (persistency-00-03-01)
-- G4PersistencyManager splitted into G4PersistentEventMan, 
+- G4PersistencyManager splitted into G4PersistentEventMan,
   G4PersistentGeomMan, G4PersistentRunMan
 - G4Run is now persistent
 
 July 23, 98   Y.Morita (persistency-00-01-09)
-- G4PVPhysicalVolume: protect declare of d_Double with 
+- G4PVPhysicalVolume: protect declare of d_Double with
   OO_VARRAY_D_DOUBLE for different version of HepODBMS
 - G4PVPhysicalVolume: added G4Exception for restoring rotation matrix
   (for now)
@@ -296,7 +312,7 @@ July 10, 98   Y.Morita (persistency-00-01-03)
 - moved GNUmakefile targes 'headers' and 'd_files' to common.gmk and
   globlib.gmk.
 - a few bug fix in G4PPVPlacement.cc, G4PVSolid.cc,
-  G4PGeometryObjectMap.ddl, G4PersistencyManager.hh, 
+  G4PGeometryObjectMap.ddl, G4PersistencyManager.hh,
   G4PGeometryObjectMap.cc, G4PersistencyManager.cc
 
 July  9, 98   Y.Morita

@@ -5,7 +5,7 @@
       <variable name="i" value="0"/>
       <variable name="j" value="0"/>
       <variable name="k" value="0"/>
-      <constant name="num" value="4"/>
+      <constant name="num" value="5"/>
       <constant name="scale" value="200"/>
    </define>
 
@@ -22,27 +22,40 @@
 
    <solids>
       <box name="WorldBox" x="2000" y="2000" z="2000"/>
-      <box name="Box" x="64" y="64" z="64"/>
+      <loop for="i" from="1" to="num" step="1">
+      <loop for="j" from="1" to="num" step="1">
+      <loop for="k" from="1" to="num" step="1">
+	<box name="Box[i][j][k]" x="64-10*i" y="64-10*j" z="64-10*k"/>
+      </loop>
+      </loop>
+      </loop>
+
    </solids>
 
    <structure>
-      <volume name="logBox">
-         <materialref ref="ALU"/>
-         <solidref ref="Box"/>
-      </volume>
-    
+      <loop for="i" from="1" to="num" step="1">
+      <loop for="j" from="1" to="num" step="1">
+      <loop for="k" from="1" to="num" step="1">
+         <volume name="logBox[i][j][k]">
+            <materialref ref="ALU"/>
+            <solidref ref="Box[i][j][k]"/>
+         </volume>
+      </loop>
+      </loop>
+      </loop>
+
       <volume name="TOP">
          <materialref ref="AIR"/>
          <solidref ref="WorldBox"/>
-         <loop for="i" from="0" to="num" step="1">
-         <loop for="j" from="0" to="num" step="1">
-         <loop for="k" from="0" to="num" step="1">
+         <loop for="i" from="1" to="num" step="1">
+         <loop for="j" from="1" to="num" step="1">
+         <loop for="k" from="1" to="num" step="1">
             <physvol>
-	       <volumeref ref="logBox"/>
-               <position name="posijk" x="scale*(i-num/2)" y="scale*(j-num/2)" z="scale*(k-num/2)"/>
+               <volumeref ref="logBox[i][j][k]"/>
+               <position name="pos[i][j][k]" x="scale*(i-num/2)" y="scale*(j-num/2)" z="scale*(k-num/2)"/>
             </physvol>
          </loop>
-	 </loop>
+         </loop>
          </loop>
       </volume>
    </structure>

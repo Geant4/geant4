@@ -36,47 +36,54 @@
 
 #include "G4FluoTransition.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4FluoTransition::G4FluoTransition(G4int finalShell,
 				       const std::vector<G4int>& ids,
 				       const G4DataVector& energies,
 				       const G4DataVector& prob)
-  :finalShellId(finalShell),
-   originatingShellIds(ids),
+  :originatingShellIds(ids),
    transitionEnergies(energies),
-   transitionProbabilities(prob)
+   transitionProbabilities(prob),
+   finalShellId(finalShell)
 { }
 
-G4FluoTransition::~G4FluoTransition()
-{ }
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 const std::vector<G4int>& G4FluoTransition::OriginatingShellIds() const
 {
   return  originatingShellIds;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 const G4DataVector& G4FluoTransition::TransitionEnergies() const
 {
   return transitionEnergies;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 const G4DataVector& G4FluoTransition::TransitionProbabilities() const
 {
   return transitionProbabilities;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4int G4FluoTransition::FinalShellId() const
 { 
   return finalShellId;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4int G4FluoTransition::OriginatingShellId(G4int index) const
 {
   return originatingShellIds[index];
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4FluoTransition::TransitionEnergy(G4int index) const
 {
   return  transitionEnergies[index];
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4FluoTransition::TransitionProbability(G4int index) const
 {
   return  transitionProbabilities[index];

@@ -32,24 +32,21 @@
 /// \brief Definition of the LXeStackingAction class
 //
 //
-#ifndef LXeStackingAction_H
-#define LXeStackingAction_H 1
+#ifndef LXeStackingAction_h
+#define LXeStackingAction_h 1
 
-#include "globals.hh"
 #include "G4UserStackingAction.hh"
 
 class LXeStackingAction : public G4UserStackingAction
 {
-  public:
+ public:
+  LXeStackingAction(LXeEventAction*);
+  ~LXeStackingAction();
 
-    LXeStackingAction();
-    virtual ~LXeStackingAction();
- 
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
-    virtual void NewStage();
-    virtual void PrepareNewEvent();
- 
-  private:
+  G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) override;
+
+ private:
+  LXeEventAction* fEventAction;
 };
 
 #endif

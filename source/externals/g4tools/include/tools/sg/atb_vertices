@@ -1,0 +1,709 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_atb_vertices
+#define tools_sg_atb_vertices
+
+#include "vertices"
+
+namespace tools {
+namespace sg {
+
+class atb_vertices : public vertices {
+  TOOLS_NODE(atb_vertices,tools::sg::atb_vertices,vertices)
+public:
+  mf<float> rgbas;
+  mf<float> nms;
+  sf<bool> do_back;
+  sf<float> epsilon;
+  sf<bool> draw_edges;
+public:
+  virtual const desc_fields& node_desc_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::atb_vertices)
+    static const desc_fields s_v(parent::node_desc_fields(),5, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(rgbas),
+      TOOLS_ARG_FIELD_DESC(nms),
+      TOOLS_ARG_FIELD_DESC(do_back),
+      TOOLS_ARG_FIELD_DESC(epsilon),
+      TOOLS_ARG_FIELD_DESC(draw_edges)
+    );
+    return s_v;
+  }
+  virtual void protocol_one_fields(std::vector<field*>& a_fields) const {
+    parent::protocol_one_fields(a_fields);
+    const field* _draw_edges = static_cast<const field*>(&draw_edges);
+    removep<field>(a_fields,_draw_edges);
+  }
+private:
+  void add_fields(){
+    add_field(&rgbas);
+    add_field(&nms);
+    add_field(&do_back);
+    add_field(&epsilon);
+    add_field(&draw_edges);
+  }
+protected: //gstos
+  virtual unsigned int create_gsto(std::ostream&,sg::render_manager& a_mgr) {
+    //unsigned int npt = xyzs.values().size()/3;
+    //::printf("debug : atb_vertices : %lu : create_gsto : %u\n",this,npt);
+
+    std::vector<float> gsto_data;
+
+    if(rgbas.size()) {
+      if(nms.size()) {
+        if(do_back.value()) {
+          append(gsto_data,xyzs.values());
+          append(gsto_data,nms.values());
+          append(gsto_data,m_back_xyzs);
+          append(gsto_data,m_back_nms);
+          append(gsto_data,rgbas.values());
+        } else {
+          append(gsto_data,xyzs.values());
+          append(gsto_data,nms.values());
+          append(gsto_data,rgbas.values());
+        }
+        if(draw_edges.value()) {
+          // allocate edges :
+          size_t pos_edges = gsto_data.size();
+          append(gsto_data,xyzs.values());
+          append(gsto_data,xyzs.values());
+          float* pxyz = vec_data<float>(xyzs.values());
+          float* pedges = vec_data<float>(gsto_data)+pos_edges;
+          size_t npt = xyzs.values().size()/3;
+          size_t ntri = npt/3;
+          for(size_t itri=0;itri<ntri;itri++) {
+            // first edge :
+            *pedges = *(pxyz+0);pedges++;
+            *pedges = *(pxyz+1);pedges++;
+            *pedges = *(pxyz+2);pedges++;
+
+            *pedges = *(pxyz+3);pedges++;
+            *pedges = *(pxyz+4);pedges++;
+            *pedges = *(pxyz+5);pedges++;
+
+            // second edge :
+            *pedges = *(pxyz+3);pedges++;
+            *pedges = *(pxyz+4);pedges++;
+            *pedges = *(pxyz+5);pedges++;
+
+            *pedges = *(pxyz+6);pedges++;
+            *pedges = *(pxyz+7);pedges++;
+            *pedges = *(pxyz+8);pedges++;
+
+            // third edge :
+            *pedges = *(pxyz+6);pedges++;
+            *pedges = *(pxyz+7);pedges++;
+            *pedges = *(pxyz+8);pedges++;
+
+            *pedges = *(pxyz+0);pedges++;
+            *pedges = *(pxyz+1);pedges++;
+            *pedges = *(pxyz+2);pedges++;
+
+            pxyz += 9;
+          }
+
+        }
+      } else {
+        append(gsto_data,xyzs.values());
+        append(gsto_data,rgbas.values());
+      }
+    } else {
+      if(nms.size()) {
+        append(gsto_data,xyzs.values());
+        append(gsto_data,nms.values());
+      } else {
+        append(gsto_data,xyzs.values());
+      }
+    }
+    return a_mgr.create_gsto_from_data(gsto_data);
+  }
+
+public:
+  virtual void render(render_action& a_action) {
+    if(touched()) {
+      if(do_back.value()) gen_back();
+      if(draw_edges.value()) gen_edges();
+      m_all_a_one = true;
+     {tools_vforcit_npp(float,rgbas.values(),it) {
+        if(*(it+3)!=1) {m_all_a_one = false;break;}
+        it += 4;
+      }}
+      clean_gstos();
+      reset_touched();
+    }
+    if(xyzs.empty()) return;
+
+    if(!have_to_render(a_action)) return;
+
+    const state& state = a_action.state();
+
+    if(state.m_use_gsto) {
+      unsigned int _id = get_gsto_id(a_action.out(),a_action.render_manager());
+      if(_id) {
+        a_action.begin_gsto(_id);
+        if(rgbas.size()) {
+#ifdef __APPLE__
+          bool restore_blend = check_set_blend(a_action);
+#endif
+          if(nms.size()) {
+            size_t npt = xyzs.values().size()/3;
+            bufpos pos_xyzs = 0;
+            bufpos pos_nms = 0;
+            bufpos pos_back_xyzs = 0;
+            bufpos pos_back_nms = 0;
+            bufpos pos_rgbas = 0;
+            bufpos pos_edges = 0;
+           {size_t sz = npt*3;
+            if(do_back.value()) {
+              pos_xyzs = 0;
+              pos_nms = pos_xyzs+sz*sizeof(float);  //bytes
+              pos_back_xyzs = pos_nms+sz*sizeof(float);
+              pos_back_nms = pos_back_xyzs+sz*sizeof(float);
+              pos_rgbas = pos_back_nms+sz*sizeof(float);
+            } else {
+              pos_xyzs = 0;
+              pos_nms = pos_xyzs+sz*sizeof(float);
+              pos_rgbas = pos_nms+sz*sizeof(float);
+            }}
+            if(draw_edges.value()) {
+              pos_edges = pos_rgbas+npt*4*sizeof(float);
+            }
+            if(gl::is_line(mode.value())) {
+              //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+              a_action.set_lighting(false);
+              if(do_back.value()) a_action.draw_gsto_vcn(mode.value(),npt,pos_back_xyzs,pos_rgbas,pos_back_nms);
+              a_action.draw_gsto_vcn(mode.value(),npt,pos_xyzs,pos_rgbas,pos_nms);
+              a_action.set_lighting(state.m_GL_LIGHTING);
+            } else if(mode.value()==gl::triangles()) {
+              if(draw_edges.value()) {
+                a_action.color4f(0,0,0,1);
+                a_action.line_width(1);
+                a_action.draw_gsto_v(gl::lines(),2*npt,pos_edges);
+                //pushes back the filled polygons to avoid z-fighting with lines
+                a_action.set_polygon_offset(true);
+
+                a_action.color4f(state.m_color);
+                a_action.line_width(state.m_line_width);
+                //a_action.set_lighting(state.m_GL_LIGHTING);
+              }
+              if(do_back.value()) a_action.draw_gsto_vcn(mode.value(),npt,pos_back_xyzs,pos_rgbas,pos_back_nms);
+              a_action.draw_gsto_vcn(mode.value(),npt,pos_xyzs,pos_rgbas,pos_nms);
+              if(draw_edges.value()) a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
+            } else {
+              if(do_back.value()) a_action.draw_gsto_vcn(mode.value(),npt,pos_back_xyzs,pos_rgbas,pos_back_nms);
+              a_action.draw_gsto_vcn(mode.value(),npt,pos_xyzs,pos_rgbas,pos_nms);
+            }
+
+          } else {
+            size_t npt = xyzs.values().size()/3;
+            bufpos pos_xyzs = 0;
+            bufpos pos_rgbas = npt*3*sizeof(float);
+            if(gl::is_line(mode.value())) {
+              //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+              a_action.set_lighting(false);
+              a_action.draw_gsto_vc(mode.value(),npt,pos_xyzs,pos_rgbas);
+              a_action.set_lighting(state.m_GL_LIGHTING);
+            } else {
+              a_action.draw_gsto_vc(mode.value(),npt,pos_xyzs,pos_rgbas);
+            }
+          }
+#ifdef __APPLE__
+          if(restore_blend) a_action.set_blend(true);
+#endif
+        } else { //rgbas.empty()
+          if(nms.size()) {
+            size_t npt = xyzs.values().size()/3;
+            bufpos pos_xyzs = 0;
+            bufpos pos_nms = npt*3*sizeof(float);
+            if(gl::is_line(mode.value())) {
+              //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+              a_action.set_lighting(false);
+              a_action.draw_gsto_vn(mode.value(),npt,pos_xyzs,pos_nms);
+              a_action.set_lighting(state.m_GL_LIGHTING);
+            } else {
+              a_action.draw_gsto_vn(mode.value(),npt,pos_xyzs,pos_nms);
+            }
+          } else {
+            size_t npt = xyzs.values().size()/3;
+            bufpos pos = 0;
+            if(gl::is_line(mode.value())) {
+              //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+              a_action.set_lighting(false);
+              a_action.draw_gsto_v(mode.value(),npt,pos);
+              a_action.set_lighting(state.m_GL_LIGHTING);
+            } else {
+              a_action.draw_gsto_v(mode.value(),npt,pos);
+            }
+          }
+        }
+        a_action.end_gsto();
+        return;
+
+      } else { //!_id
+        // use immediate rendering.
+      }
+
+    } else {
+      clean_gstos(&a_action.render_manager());
+    }
+
+    // immediate rendering :
+    if(rgbas.size()) {
+
+#ifdef __APPLE__
+      bool restore_blend = check_set_blend(a_action);
+#endif
+
+      if(nms.size()) {
+          if(gl::is_line(mode.value())) {
+            //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+            a_action.set_lighting(false);
+            if(do_back.value())
+              a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
+            a_action.draw_vertex_color_normal_array(mode.value(),xyzs.values(),rgbas.values(),nms.values());
+            a_action.set_lighting(state.m_GL_LIGHTING);
+          } else if(mode.value()==gl::triangles()) {
+            if(draw_edges.value()) {
+              a_action.color4f(0,0,0,1);
+              a_action.line_width(1);
+              a_action.draw_vertex_array(gl::lines(),m_edges);
+              a_action.set_polygon_offset(true);
+              a_action.color4f(state.m_color);
+              a_action.line_width(state.m_line_width);
+            }
+            if(do_back.value()) a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
+            a_action.draw_vertex_color_normal_array(mode.value(),xyzs.values(),rgbas.values(),nms.values());
+            if(draw_edges.value()) a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
+          } else {
+            if(do_back.value()) a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
+            a_action.draw_vertex_color_normal_array(mode.value(),xyzs.values(),rgbas.values(),nms.values());
+          }
+
+      } else {
+          if(gl::is_line(mode.value())) {
+            //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+            a_action.set_lighting(false);
+            a_action.draw_vertex_color_array(mode.value(),xyzs.values(),rgbas.values());
+            a_action.set_lighting(state.m_GL_LIGHTING);
+          } else {
+            a_action.draw_vertex_color_array(mode.value(),xyzs.values(),rgbas.values());
+          }
+      }
+
+#ifdef __APPLE__
+      if(restore_blend) a_action.set_blend(true);
+#endif
+    } else { //rgbas.empty()
+      if(nms.size()) {
+          if(gl::is_line(mode.value())) {
+            //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+            a_action.set_lighting(false);
+            a_action.draw_vertex_normal_array(mode.value(),xyzs.values(),nms.values());
+            a_action.set_lighting(state.m_GL_LIGHTING);
+          } else {
+            a_action.draw_vertex_normal_array(mode.value(),xyzs.values(),nms.values());
+          }
+      } else {
+          if(gl::is_line(mode.value())) {
+            //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+            a_action.set_lighting(false);
+            a_action.draw_vertex_array(mode.value(),xyzs.values());
+            a_action.set_lighting(state.m_GL_LIGHTING);
+          } else {
+            a_action.draw_vertex_array(mode.value(),xyzs.values());
+          }
+      }
+
+    }
+
+  }
+public:
+  atb_vertices()
+  :parent()
+  ,do_back(false)
+  ,epsilon(0)
+  ,draw_edges(false)
+  ,m_xyzs_pos(0)
+  ,m_rgbas_pos(0)
+  ,m_nms_pos(0)
+  ,m_all_a_one(true)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  virtual ~atb_vertices(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  atb_vertices(const atb_vertices& a_from)
+  :parent(a_from)
+  ,rgbas(a_from.rgbas)
+  ,nms(a_from.nms)
+  ,do_back(a_from.do_back)
+  ,epsilon(a_from.epsilon)
+  ,draw_edges(a_from.draw_edges)
+  ,m_xyzs_pos(a_from.m_xyzs_pos)
+  ,m_rgbas_pos(a_from.m_rgbas_pos)
+  ,m_nms_pos(a_from.m_nms_pos)
+  ,m_all_a_one(true)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  atb_vertices& operator=(const atb_vertices& a_from){
+    parent::operator=(a_from);
+    rgbas = a_from.rgbas;
+    nms = a_from.nms;
+    do_back = a_from.do_back;
+    epsilon = a_from.epsilon;
+    draw_edges = a_from.draw_edges;
+    m_xyzs_pos = a_from.m_xyzs_pos;
+    m_rgbas_pos = a_from.m_rgbas_pos;
+    m_nms_pos = a_from.m_nms_pos;
+    return *this;
+  }
+public:
+  void add_pos_color(float a_x,float a_y,float a_z,float a_r,float a_g,float a_b,float a_a) {
+    xyzs.add(a_x);
+    xyzs.add(a_y);
+    xyzs.add(a_z);
+    rgbas.add(a_r);
+    rgbas.add(a_g);
+    rgbas.add(a_b);
+    rgbas.add(a_a);
+  }
+
+  template <class COLOR>
+  void add_pos_color(float a_x,float a_y,float a_z,const COLOR& a_col) {
+    xyzs.add(a_x);
+    xyzs.add(a_y);
+    xyzs.add(a_z);
+    rgbas.add(a_col.r());
+    rgbas.add(a_col.g());
+    rgbas.add(a_col.b());
+    rgbas.add(a_col.a());
+  }
+
+  template <class VEC,class COLOR>
+  void add_pos_color(const VEC& a_pos,const COLOR& a_col) {
+    xyzs.add(a_pos.x());
+    xyzs.add(a_pos.y());
+    xyzs.add(a_pos.z());
+    rgbas.add(a_col.r());
+    rgbas.add(a_col.g());
+    rgbas.add(a_col.b());
+    rgbas.add(a_col.a());
+  }
+
+  void allocate_pos_color(size_t a_npt) {
+    xyzs.values().resize(a_npt*3);
+    rgbas.values().resize(a_npt*4);
+    m_xyzs_pos = 0;
+    m_rgbas_pos = 0;
+  }
+
+  template <class VEC,class COLOR>
+  void add_pos_color_allocated(const VEC& a_pos,const COLOR& a_col) {
+   {std::vector<float>& v = xyzs.values();
+    v[m_xyzs_pos] = a_pos.x();m_xyzs_pos++;
+    v[m_xyzs_pos] = a_pos.y();m_xyzs_pos++;
+    v[m_xyzs_pos] = a_pos.z();m_xyzs_pos++;
+    xyzs.touch();}
+   {std::vector<float>& v = rgbas.values();
+    v[m_rgbas_pos] = a_col.r();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.g();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.b();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.a();m_rgbas_pos++;
+    rgbas.touch();}
+  }
+
+  template <class VEC,class COLOR>
+  void add_pos_color_normal(const VEC& a_pos,const COLOR& a_col,const VEC& a_nm) {
+    xyzs.add(a_pos.x());
+    xyzs.add(a_pos.y());
+    xyzs.add(a_pos.z());
+    rgbas.add(a_col.r());
+    rgbas.add(a_col.g());
+    rgbas.add(a_col.b());
+    rgbas.add(a_col.a());
+    nms.add(a_nm.x());
+    nms.add(a_nm.y());
+    nms.add(a_nm.z());
+  }
+
+  void allocate_pos_color_normal(size_t a_npt) {
+    xyzs.values().resize(a_npt*3);
+    rgbas.values().resize(a_npt*4);
+    nms.values().resize(a_npt*3);
+    m_xyzs_pos = 0;
+    m_rgbas_pos = 0;
+    m_nms_pos = 0;
+  }
+
+  template <class VEC,class COLOR>
+  void add_pos_color_normal_allocated(const VEC& a_pos,const COLOR& a_col,const VEC& a_nm) {
+   {std::vector<float>& v = xyzs.values();
+    v[m_xyzs_pos] = a_pos.x();m_xyzs_pos++;
+    v[m_xyzs_pos] = a_pos.y();m_xyzs_pos++;
+    v[m_xyzs_pos] = a_pos.z();m_xyzs_pos++;
+    xyzs.touch();}
+   {std::vector<float>& v = rgbas.values();
+    v[m_rgbas_pos] = a_col.r();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.g();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.b();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.a();m_rgbas_pos++;
+    rgbas.touch();}
+   {std::vector<float>& v = nms.values();
+    v[m_nms_pos] = a_nm.x();m_nms_pos++;
+    v[m_nms_pos] = a_nm.y();m_nms_pos++;
+    v[m_nms_pos] = a_nm.z();m_nms_pos++;
+    nms.touch();}
+  }
+
+  void add_rgba(float a_r,float a_g,float a_b,float a_a) {
+    rgbas.add(a_r);
+    rgbas.add(a_g);
+    rgbas.add(a_b);
+    rgbas.add(a_a);
+  }
+  void add_color(const colorf& a_col) {
+    rgbas.add(a_col.r());
+    rgbas.add(a_col.g());
+    rgbas.add(a_col.b());
+    rgbas.add(a_col.a());
+  }
+
+  void add_normal(float a_x,float a_y,float a_z) {
+    nms.add(a_x);
+    nms.add(a_y);
+    nms.add(a_z);
+  }
+  template <class VEC>
+  void add_normal(const VEC& a_nm) {
+    nms.add(a_nm.x());
+    nms.add(a_nm.y());
+    nms.add(a_nm.z());
+  }
+
+  void add_rgba_allocated(size_t& a_pos,float a_r,float a_g,float a_b,float a_a) {
+    std::vector<float>& v = rgbas.values();
+    v[a_pos] = a_r;a_pos++;
+    v[a_pos] = a_g;a_pos++;
+    v[a_pos] = a_b;a_pos++;
+    v[a_pos] = a_a;a_pos++;
+    rgbas.touch();
+  }
+  void add_normal_allocated(size_t& a_pos,float a_x,float a_y,float a_z) {
+    std::vector<float>& v = nms.values();
+    v[a_pos] = a_x;a_pos++;
+    v[a_pos] = a_y;a_pos++;
+    v[a_pos] = a_z;a_pos++;
+    nms.touch();
+  }
+
+  template <class VEC>
+  void add_pos_normal(const VEC& a_pos,const VEC& a_nm) {
+    xyzs.add(a_pos.x());
+    xyzs.add(a_pos.y());
+    xyzs.add(a_pos.z());
+    nms.add(a_nm.x());
+    nms.add(a_nm.y());
+    nms.add(a_nm.z());
+  }
+
+  bool add_dashed_line_rgba(float a_bx,float a_by,float a_bz,
+                            float a_ex,float a_ey,float a_ez,
+                            unsigned int a_num_dash,
+                            float a_r,float a_g,float a_b,float a_a) {
+    if(!parent::add_dashed_line(a_bx,a_by,a_bz,a_ex,a_ey,a_ez,a_num_dash)) return false;
+    for(unsigned int index=0;index<a_num_dash;index++) {
+      add_rgba(a_r,a_g,a_b,a_a);
+      add_rgba(a_r,a_g,a_b,a_a);
+    }
+    return true;
+  }
+
+  void clear() {
+    rgbas.clear();
+    nms.clear();
+    parent::clear();
+  }
+protected:
+  bool have_to_render(render_action& a_action) {
+    bool transparent = false;
+    if(rgbas.size()) {
+      if(!m_all_a_one) transparent = true;
+    } else {
+      if(a_action.state().m_color.a()!=1) transparent = true;
+    }
+    if(transparent) {
+      if(a_action.do_transparency()) return true;
+      a_action.set_have_to_do_transparency(true);
+      return false;
+    } else {
+      if(a_action.do_transparency()) return false;
+    }
+    return true;
+  }
+    
+  void gen_back(){
+    m_back_xyzs.clear();
+    m_back_nms.clear();
+
+    clean_gstos(); //must reset for all render_manager.
+
+    std::vector<float>& _xyzs = xyzs.values();
+    std::vector<float>& _nms = nms.values();
+
+    if(_xyzs.empty()) return;
+
+    m_back_xyzs.resize(_xyzs.size(),0);
+    m_back_nms.resize(_nms.size(),0);
+
+    float epsil = epsilon.value();
+
+    if(mode.value()==gl::triangle_fan()) { //reverse after first point.
+
+      m_back_xyzs[0] = _xyzs[0] - _nms[0] * epsil;
+      m_back_xyzs[1] = _xyzs[1] - _nms[1] * epsil;
+      m_back_xyzs[2] = _xyzs[2] - _nms[2] * epsil;
+
+     {std::vector<float>::const_iterator it = _xyzs.begin()+3;
+      std::vector<float>::const_iterator _end = _xyzs.end();
+      std::vector<float>::const_iterator itn = _nms.begin()+3;
+      std::vector<float>::reverse_iterator it2 = m_back_xyzs.rbegin();
+      for(;it!=_end;it2+=3) {
+        *(it2+2) = *it - *itn * epsil; it++;itn++; //x
+        *(it2+1) = *it - *itn * epsil; it++;itn++; //y
+        *(it2+0) = *it - *itn * epsil; it++;itn++; //z
+      }}
+
+      m_back_nms[0] = _nms[0] * -1.0f;
+      m_back_nms[1] = _nms[1] * -1.0f;
+      m_back_nms[2] = _nms[2] * -1.0f;
+
+     {std::vector<float>::const_iterator it = _nms.begin()+3;
+      std::vector<float>::const_iterator _end = _nms.end();
+      std::vector<float>::reverse_iterator it2 = m_back_nms.rbegin();
+      for(;it!=_end;it2+=3) {
+        *(it2+2) = *it * -1.0f; it++;
+        *(it2+1) = *it * -1.0f; it++;
+        *(it2+0) = *it * -1.0f; it++;
+      }}
+
+    } else {
+
+     {std::vector<float>::const_iterator it = _xyzs.begin();
+      std::vector<float>::const_iterator _end = _xyzs.end();
+      std::vector<float>::const_iterator itn = _nms.begin();
+      std::vector<float>::reverse_iterator it2 = m_back_xyzs.rbegin();
+      for(;it!=_end;it2+=3) {
+        *(it2+2) = *it - *itn * epsil; it++;itn++; //x
+        *(it2+1) = *it - *itn * epsil; it++;itn++; //y
+        *(it2+0) = *it - *itn * epsil; it++;itn++; //z
+      }}
+
+     {std::vector<float>::const_iterator it = _nms.begin();
+      std::vector<float>::const_iterator _end = _nms.end();
+      std::vector<float>::reverse_iterator it2 = m_back_nms.rbegin();
+      for(;it!=_end;it2+=3) {
+        *(it2+2) = *it * -1.0f; it++;
+        *(it2+1) = *it * -1.0f; it++;
+        *(it2+0) = *it * -1.0f; it++;
+      }}
+
+    }
+  }
+
+  void gen_edges(){
+    m_edges.clear();
+
+    clean_gstos(); //must reset for all render_manager.
+
+    std::vector<float>& _xyzs = xyzs.values();
+    if(_xyzs.empty()) return;
+
+    m_edges.resize(2*_xyzs.size(),0);
+
+    float* pxyz = vec_data<float>(xyzs.values());
+    float* pedges = vec_data<float>(m_edges);
+
+    size_t npt = xyzs.values().size()/3;
+    size_t ntri = npt/3;
+    for(size_t itri=0;itri<ntri;itri++) {
+      // first edge :
+      *pedges = *(pxyz+0);pedges++;
+      *pedges = *(pxyz+1);pedges++;
+      *pedges = *(pxyz+2);pedges++;
+
+      *pedges = *(pxyz+3);pedges++;
+      *pedges = *(pxyz+4);pedges++;
+      *pedges = *(pxyz+5);pedges++;
+
+      // second edge :
+      *pedges = *(pxyz+3);pedges++;
+      *pedges = *(pxyz+4);pedges++;
+      *pedges = *(pxyz+5);pedges++;
+
+      *pedges = *(pxyz+6);pedges++;
+      *pedges = *(pxyz+7);pedges++;
+      *pedges = *(pxyz+8);pedges++;
+
+      // third edge :
+      *pedges = *(pxyz+6);pedges++;
+      *pedges = *(pxyz+7);pedges++;
+      *pedges = *(pxyz+8);pedges++;
+
+      *pedges = *(pxyz+0);pedges++;
+      *pedges = *(pxyz+1);pedges++;
+      *pedges = *(pxyz+2);pedges++;
+
+      pxyz += 9;
+    }
+  }
+#ifdef __APPLE__
+protected:
+  // macOS/Mojave : on this version, points are blended even if alpha is one !
+  bool check_set_blend(render_action& a_action) {
+    bool restore_blend = false;
+    const state& state = a_action.state();
+    if(state.m_GL_BLEND) {
+    /*
+      bool all_a_one = true;
+      tools_vforcit_npp(float,rgbas.values(),it) {
+        if(*(it+3)!=1) {all_a_one = false;break;}
+        it += 4;
+      }
+      if(all_a_one) {
+        a_action.set_blend(false);
+        restore_blend = true;
+      }
+      */
+      if(m_all_a_one) {
+        a_action.set_blend(false);
+        restore_blend = true;
+      }
+    }
+    return restore_blend;
+  }
+#endif
+protected:
+  std::vector<float> m_back_xyzs;
+  std::vector<float> m_back_nms;
+  std::vector<float> m_edges;
+protected:
+  size_t m_xyzs_pos;
+  size_t m_rgbas_pos;
+  size_t m_nms_pos;
+  bool m_all_a_one;
+};
+
+}}
+
+#endif

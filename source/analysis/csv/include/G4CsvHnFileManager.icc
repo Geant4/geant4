@@ -1,0 +1,127 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// Author: Ivana Hrivnacova, 15/09/2020  (ivana@ipno.in2p3.fr)
+
+#include "G4AnalysisUtilities.hh"
+
+#include "tools/wcsv_histo"
+#include "tools/histo/h1d"
+#include "tools/histo/h2d"
+#include "tools/histo/h3d"
+#include "tools/histo/p1d"
+#include "tools/histo/p2d"
+
+//_____________________________________________________________________________
+template <>
+inline
+G4bool G4CsvHnFileManager<tools::histo::p1d>::Write(
+  std::ofstream& hnfile, tools::histo::p1d* ht)
+{
+  return tools::wcsv::pto(hnfile, ht->s_cls(), *ht);
+}
+
+//_____________________________________________________________________________
+template <>
+inline
+G4bool G4CsvHnFileManager<tools::histo::p2d>::Write(
+  std::ofstream& hnfile, tools::histo::p2d* ht)
+{
+  return tools::wcsv::pto(hnfile, ht->s_cls(), *ht);
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+G4bool G4CsvHnFileManager<HT>::Write(
+  std::ofstream& hnfile, HT* ht)
+{
+  return tools::wcsv::hto(hnfile, ht->s_cls(), *ht);
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+G4bool G4CsvHnFileManager<HT>::WriteExtra(
+  HT* ht, const G4String& htName, const G4String& fileName)
+{
+  // create a new file
+  std::ofstream hnFile(fileName);
+
+  // Do nothing if there is no file
+  if ( ! hnFile.is_open() ) return false;
+
+  auto result = Write(hnFile, ht);
+
+  if ( ! result ) {
+    G4Analysis::Warn(
+      "Saving " + G4Analysis::GetHnType<HT>() + " " + htName + " failed",
+      fkClass, "WriteExtra");
+    return false;
+  }
+  hnFile.close();
+  return true;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+G4bool G4CsvHnFileManager<HT>::Write(
+  HT* ht, const G4String& htName, G4String& fileName)
+{
+  if ( fileName.empty() ) {
+    // should not happen
+    G4cerr << "!!! Csv file name not defined." << G4endl;
+    G4cerr << "!!! Write " << htName << " failed." << G4endl;
+    return false;
+  }
+
+  auto hnFile = fFileManager->GetTFile(fileName, false);
+  if ( ! hnFile ) {
+    // If histogram file name was not defined per object
+    // a file should be created from the provided default file name
+    auto hnFileName = fFileManager->GetHnFileName(G4Analysis::GetHnType<HT>(), htName);
+
+    // If histo directory name is set and if this directory exists
+    // add directory path to hnFileName
+    if ( fFileManager->IsHistoDirectory() ) {
+      hnFileName = "./" + fFileManager->GetHistoDirectoryName() + "/" + hnFileName;
+    }
+
+    if ( ! hnFileName.empty() ) {
+      hnFile = fFileManager->CreateTFile(hnFileName);
+    }
+
+    if ( ! hnFile ) {
+      G4Analysis::Warn("Failed to get Csv file " + fileName, fkClass, "Write");
+      return false;
+    } else {
+      fileName = hnFileName;
+    }
+  }
+
+  return Write(*hnFile, ht);
+}

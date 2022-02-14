@@ -89,12 +89,6 @@ G4ErrorPlaneSurfaceTarget(const G4Point3D &p1,
 
 //---------------------------------------------------------------------
 
-G4ErrorPlaneSurfaceTarget::~G4ErrorPlaneSurfaceTarget()
-{
-}
-
-//---------------------------------------------------------------------
-
 G4ThreeVector G4ErrorPlaneSurfaceTarget::
 Intersect( const G4ThreeVector& pt, const G4ThreeVector& dir ) const
 {

@@ -29,7 +29,7 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
+// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues
 //
 //   **********************************************
 //   *        UltraPhysicsList.hh
@@ -49,21 +49,16 @@ class UltraPhysicsList : public G4VUserPhysicsList
   public:
     UltraPhysicsList();
     ~UltraPhysicsList();
- 
+
   protected:
     // Construct particles and processes
     void ConstructParticle();
     void ConstructProcess();
 
-    //
-    void SetCuts();
-
-  protected:
-    // these methods Construct particles
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
+  G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fOpPhysicsList;
+  G4VPhysicsConstructor*  fDecayPhysicsList;
+  G4String fEmName;
 
   protected:
     // these methods Construct physics processes and register them
@@ -74,4 +69,3 @@ class UltraPhysicsList : public G4VUserPhysicsList
 };
 
 #endif
-

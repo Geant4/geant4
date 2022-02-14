@@ -35,21 +35,22 @@
 #include "G4Positron.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Log.hh"
+#include "G4AutoLock.hh"
 #include "G4Exp.hh"
 #include "G4ProductionCutsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
+namespace { G4Mutex LivermorePolarizedGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
 
-G4int G4LivermorePolarizedGammaConversionModel::maxZ = 99;
-G4LPhysicsFreeVector* G4LivermorePolarizedGammaConversionModel::data[] = {0};
+G4PhysicsFreeVector* G4LivermorePolarizedGammaConversionModel::data[] = {nullptr};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionModel(
    const G4ParticleDefinition*, const G4String& nam)
-  :G4VEmModel(nam), isInitialised(false),smallEnergy(2.*MeV)
+  :G4VEmModel(nam), smallEnergy(2.*MeV), isInitialised(false)
 {
   fParticleChange = nullptr;
   lowEnergyLimit = 2*electron_mass_c2;
@@ -78,7 +79,7 @@ G4LivermorePolarizedGammaConversionModel::~G4LivermorePolarizedGammaConversionMo
     for(G4int i=0; i<maxZ; ++i) {
       if(data[i]) { 
 	delete data[i];
-	data[i] = 0;
+	data[i] = nullptr;
       }
     }
   }  
@@ -99,16 +100,12 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
              << G4endl;
     }
   
-    
   if(IsMaster()) 
     {
-      
-      // Initialise element selector
-      
+      // Initialise element selector    
       InitialiseElementSelectors(particle, cuts);
       
       // Access to elements
-      
       char* path = std::getenv("G4LEDATA");
       
       G4ProductionCutsTable* theCoupleTable =
@@ -135,9 +132,7 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
-  
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -180,13 +175,9 @@ void G4LivermorePolarizedGammaConversionModel::ReadData(size_t Z, const char* pa
 	  return;
 	}
     }
-  
+  //  
+  data[Z] = new G4PhysicsFreeVector(0,/*spline=*/true);
   //
-  
-  data[Z] = new G4LPhysicsFreeVector();
-  
-  //
-  
   std::ostringstream ost;
   ost << datadir << "/livermore/pair/pp-cs-" << Z <<".dat";
   std::ifstream fin(ost.str().c_str());
@@ -211,7 +202,7 @@ void G4LivermorePolarizedGammaConversionModel::ReadData(size_t Z, const char* pa
     } 
   
   // Activation of spline interpolation
-  data[Z] ->SetSpline(true);  
+  data[Z]->FillSecondDerivatives();  
   
 }
 
@@ -235,7 +226,7 @@ G4double G4LivermorePolarizedGammaConversionModel::ComputeCrossSectionPerAtom(
   
   if(intZ < 1 || intZ > maxZ) { return xs; }
   
-  G4LPhysicsFreeVector* pv = data[intZ];
+  G4PhysicsFreeVector* pv = data[intZ];
   
   // if element was not initialised
   // do initialisation safely for MT mode
@@ -276,12 +267,10 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   // J. Stepanek ,"A program to determine the radiation spectra due to a single atomic
   // subshell ionisation by a particle or due to deexcitation or decay of radionuclides",
   // Comp. Phys. Comm. 1206 pp 1-1-9 (1997)
-
   if (verboseLevel > 3)
     G4cout << "Calling SampleSecondaries() of G4LivermorePolarizedGammaConversionModel" << G4endl;
 
   G4double photonEnergy = aDynamicGamma->GetKineticEnergy();
-  // Within energy limit?
 
   if(photonEnergy <= lowEnergyLimit)
     {
@@ -290,13 +279,11 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
       return;
     }
 
-
   G4ThreeVector gammaPolarization0 = aDynamicGamma->GetPolarization();
   G4ThreeVector gammaDirection0 = aDynamicGamma->GetMomentumDirection();
 
   // Make sure that the polarization vector is perpendicular to the
   // gamma direction. If not
-
   if(!(gammaPolarization0.isOrthogonal(gammaDirection0, 1e-6))||(gammaPolarization0.mag()==0))
     { // only for testing now
       gammaPolarization0 = GetRandomPolarization(gammaDirection0);
@@ -311,7 +298,6 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 
   // End of Protection
 
-
   G4double epsilon ;
   G4double epsilon0Local = electron_mass_c2 / photonEnergy ;
 
@@ -323,30 +309,25 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
     }
   else
     {
-
-      // Select randomly one element in the current material
-      
+      // Select randomly one element in the current material 
       const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
       const G4Element* element = SelectRandomAtom(couple,particle,photonEnergy);
       
-      
-      if (element == 0)
+      if (element == nullptr)
         {
           G4cout << "G4LivermorePolarizedGammaConversionModel::SampleSecondaries - element = 0" << G4endl;
 	  return;
         }
       
       
-      G4IonisParamElm* ionisation = element->GetIonisation();
-      
-      if (ionisation == 0)
+      G4IonisParamElm* ionisation = element->GetIonisation();      
+      if (ionisation == nullptr)
         {
           G4cout << "G4LivermorePolarizedGammaConversionModel::SampleSecondaries - ionisation = 0" << G4endl;
 	  return;
         }
       
       // Extract Coulomb factor for this Element
-
       G4double fZ = 8. * (ionisation->GetlogZ3());
       if (photonEnergy > 50. * MeV) fZ += 8. * (element->GetfCoulomb());
 
@@ -381,20 +362,14 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
             epsilon = epsilonMin + epsilonRange * G4UniformRand();
             screen = screenFactor / (epsilon * (1 - epsilon));
             gReject = (ScreenFunction2(screen) - fZ) / f20 ;
-
-
 	  }
       } while ( gReject < G4UniformRand() );
-
     }   //  End of epsilon sampling
   
   // Fix charges randomly
-  
   G4double electronTotEnergy;
   G4double positronTotEnergy;
 
-
-  //  if (G4int(2*G4UniformRand()))  
   if (G4UniformRand() > 0.5)  
     {
       electronTotEnergy = (1. - epsilon) * photonEnergy;
@@ -409,51 +384,19 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   // Scattered electron (positron) angles. ( Z - axis along the parent photon)
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   // derived from Tsai distribution (Rev. Mod. Phys. 49, 421 (1977)
-
-/*
-  G4double u;
-  const G4double a1 = 0.625;
-  G4double a2 = 3. * a1;
-
-  if (0.25 > G4UniformRand())
-    {
-      u = - log(G4UniformRand() * G4UniformRand()) / a1 ;
-    }
-  else
-    {
-      u = - log(G4UniformRand() * G4UniformRand()) / a2 ;
-    }
-*/
-
   G4double Ene = electronTotEnergy/electron_mass_c2; // Normalized energy
 
   G4double cosTheta = 0.;
   G4double sinTheta = 0.;
 
   SetTheta(&cosTheta,&sinTheta,Ene);
-
-  //  G4double theta = u * electron_mass_c2 / photonEnergy ;
-  //  G4double phi  = twopi * G4UniformRand() ;
-
   G4double phi,psi=0.;
 
   //corrected e+ e- angular angular distribution //preliminary!
-
-  //  if(photonEnergy>50*MeV)
-  // {
   phi = SetPhi(photonEnergy);
   psi = SetPsi(photonEnergy,phi);
-  //  }
-  //else
-  // {
-  //psi = G4UniformRand()*2.*pi;
-  //phi = pi; // coplanar
-  // }
-
   Psi = psi;
   Phi = phi;
-  //G4cout << "PHI " << phi << G4endl;
-  //G4cout << "PSI " << psi << G4endl;
 
   G4double phie, phip; 
   G4double choice, choice2;
@@ -478,14 +421,12 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   else
     {
       // opzione 1 phie / phip equivalenti
-
       phip = psi; //azimuthal angle for the positron
       phie = phip + phi; //azimuthal angle for the electron
     }
 
 
   // Electron Kinematics 
-
   G4double dirX = sinTheta*cos(phie);
   G4double dirY = sinTheta*sin(phie);
   G4double dirZ = cosTheta;
@@ -494,8 +435,6 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   // Kinematics of the created pair:
   // the electron and positron are assumed to have a symetric angular
   // distribution with respect to the Z axis along the parent photon
-
-  //G4double localEnergyDeposit = 0. ;
 
   G4double electronKineEnergy = std::max(0.,electronTotEnergy - electron_mass_c2) ;
 
@@ -507,7 +446,6 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 							electronKineEnergy);
 
   // The e+ is always created (even with kinetic energy = 0) for further annihilation
-
   Ene = positronTotEnergy/electron_mass_c2; // Normalized energy
 
   cosTheta = 0.;
@@ -516,7 +454,6 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   SetTheta(&cosTheta,&sinTheta,Ene);
 
   // Positron Kinematics
-
   dirX = sinTheta*cos(phip);
   dirY = sinTheta*sin(phip);
   dirZ = cosTheta;
@@ -529,15 +466,12 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   // Create G4DynamicParticle object for the particle2
   G4DynamicParticle* particle2 = new G4DynamicParticle(G4Positron::Positron(),
                                                        positronDirection, positronKineEnergy);
-
-
   fvect->push_back(particle1);
   fvect->push_back(particle2);
 
   // Kill the incident photon
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -545,9 +479,7 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 G4double G4LivermorePolarizedGammaConversionModel::ScreenFunction1(G4double screenVariable)
 {
   // Compute the value of the screening function 3*phi1 - phi2
-
   G4double value;
-
   if (screenVariable > 1.)
     value = 42.24 - 8.368 * log(screenVariable + 0.952);
   else
@@ -561,7 +493,6 @@ G4double G4LivermorePolarizedGammaConversionModel::ScreenFunction1(G4double scre
 G4double G4LivermorePolarizedGammaConversionModel::ScreenFunction2(G4double screenVariable)
 {
   // Compute the value of the screening function 1.5*phi1 - 0.5*phi2
-
   G4double value;
 
   if (screenVariable > 1.)
@@ -575,7 +506,6 @@ G4double G4LivermorePolarizedGammaConversionModel::ScreenFunction2(G4double scre
 
 void G4LivermorePolarizedGammaConversionModel::SetTheta(G4double* p_cosTheta, G4double* p_sinTheta, G4double Energy)
 {
-
   // to avoid computational errors since Theta could be very small
   // Energy in Normalized Units (!)
 
@@ -590,20 +520,15 @@ void G4LivermorePolarizedGammaConversionModel::SetTheta(G4double* p_cosTheta, G4
 
 G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
 {
-
-
   G4double value = 0.;
   G4double Ene = Energy/MeV;
 
   G4double pl[4];
-
-
   G4double pt[2];
   G4double xi = 0;
   G4double xe = 0.;
   G4double n1=0.;
   G4double n2=0.;
-
 
   if (Ene>=50.)
     {
@@ -621,13 +546,8 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
       pt[0] = -1.4;
       pt[1] = abf + bbf/Ene;
 
-
-
-      //G4cout << "PL > 50. "<< pl[0] << " " << pl[1] << " " << pl[2] << " " <<pl[3] << " " << G4endl;
-
       xi = 3.0;
       xe = Encu(pl,pt,xi);
-      //G4cout << "ENCU "<< xe << G4endl;
       n1 = Fintlor(pl,pi) - Fintlor(pl,xe);
       n2 = Finttan(pt,xe) - Finttan(pt,0.);
     }
@@ -643,10 +563,7 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
       pl[2] = Poli(aw,bw,cw,Ene);
       pl[3] = Poli(axc,bxc,cxc,Ene);
 
-      //G4cout << "PL < 50."<< pl[0] << " " << pl[1] << " " << pl[2] << " " <<pl[3] << " " << G4endl;
-      //G4cout << "ENCU "<< xe << G4endl;
       n1 = Fintlor(pl,pi) - Fintlor(pl,xe);
-
     }
 
 
@@ -655,11 +572,6 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
 
   G4double c1 = 0.;
   c1 = Glor(pl, xe);
-
-/*
-  G4double xm = 0.;
-  xm = Flor(pl,pl[3])*Glor(pl,pl[3]);
-*/
 
   G4double r1,r2,r3;
   G4double xco=0.;
@@ -692,13 +604,13 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
           r3 = G4UniformRand();
         } while(r3>=xco);
     }
-
-  //  G4cout << "PHI = " <<value <<  G4endl;
   return value;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4double PhiLocal)
 {
-
   G4double value = 0.;
   G4double Ene = Energy/MeV;
 
@@ -737,14 +649,9 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4dou
       ppmt[0] = -0.6;
       ppmt[1] = abfpm + bbfpm/Ene;
 
-      //G4cout << "P0L > 50"<< p0l[0] << " " << p0l[1] << " " << p0l[2] << " " <<p0l[3] << " " << G4endl;
-      //G4cout << "PPML > 50"<< ppml[0] << " " << ppml[1] << " " << ppml[2] << " " <<ppml[3] << " " << G4endl;
-
       xi = 3.0;
       xe0 = Encu(p0l, p0t, xi);
-      //G4cout << "ENCU1 "<< xe0 << G4endl;
       xepm = Encu(ppml, ppmt, xi);
-      //G4cout << "ENCU2 "<< xepm << G4endl;
     }
   else
     {
@@ -766,7 +673,6 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4dou
       ppml[1] = aap + bap*(Ene);
       ppml[2] = Poli(awp, bwp, cwp, Ene);
       ppml[3] = xcp;
-
     }
 
   G4double a,b=0.;
@@ -820,6 +726,7 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4dou
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Poli
 (G4double a, G4double b, G4double c, G4double x)
@@ -835,6 +742,9 @@ G4double G4LivermorePolarizedGammaConversionModel::Poli
     }
   return value;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4LivermorePolarizedGammaConversionModel::Fln
 (G4double a, G4double b, G4double x)
 {
@@ -850,6 +760,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Fln
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Encu
 (G4double* p_p1, G4double* p_p2, G4double x0)
@@ -865,10 +776,6 @@ G4double G4LivermorePolarizedGammaConversionModel::Encu
 	(Fdlor(p_p1,x) - Fdtan(p_p2,x));
       x -= fx;
       if(x > xmax) { return xmax; }
-      //      x -= (Flor(p_p1, x)*Glor(p_p1,x) - Ftan(p_p2, x))/
-      //  (Fdlor(p_p1,x) - Fdtan(p_p2,x));
-      // fx = Flor(p_p1,x)*Glor(p_p1,x) - Ftan(p_p2, x);
-      // G4cout << std::fabs(fx) << " " << i << " " << x << "dentro ENCU " << G4endl;
       if(std::fabs(fx) <= x*1.0e-6) { break; }
     } 
 
@@ -876,12 +783,11 @@ G4double G4LivermorePolarizedGammaConversionModel::Encu
   return x;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Flor(G4double* p_p1, G4double x)
 {
   G4double value =0.;
-  // G4double y0 = p_p1[0];
-  // G4double A = p_p1[1];
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
 
@@ -889,6 +795,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Flor(G4double* p_p1, G4double
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Glor(G4double* p_p1, G4double x)
 {
@@ -902,11 +809,11 @@ G4double G4LivermorePolarizedGammaConversionModel::Glor(G4double* p_p1, G4double
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Fdlor(G4double* p_p1, G4double x)
 {
   G4double value =0.;
-  //G4double y0 = p_p1[0];
   G4double A = p_p1[1];
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
@@ -916,6 +823,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Fdlor(G4double* p_p1, G4doubl
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Fintlor(G4double* p_p1, G4double x)
 {
@@ -934,8 +842,6 @@ G4double G4LivermorePolarizedGammaConversionModel::Finvlor(G4double* p_p1, G4dou
 {
   G4double value = 0.;
   G4double nor = 0.;
-  //G4double y0 = p_p1[0];
-  //  G4double A = p_p1[1];
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
 
@@ -945,6 +851,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Finvlor(G4double* p_p1, G4dou
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Ftan(G4double* p_p1, G4double x)
 {
@@ -956,6 +863,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Ftan(G4double* p_p1, G4double
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Fdtan(G4double* p_p1, G4double x)
 {
@@ -967,6 +875,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Fdtan(G4double* p_p1, G4doubl
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Finttan(G4double* p_p1, G4double x)
 {
@@ -974,11 +883,11 @@ G4double G4LivermorePolarizedGammaConversionModel::Finttan(G4double* p_p1, G4dou
   G4double a = p_p1[0];
   G4double b = p_p1[1];
 
-
   value = a*log(b-x);
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::Finvtan(G4double* p_p1, G4double cnor, G4double r)
 {
@@ -990,9 +899,6 @@ G4double G4LivermorePolarizedGammaConversionModel::Finvtan(G4double* p_p1, G4dou
 
   return value;
 }
-
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -1032,8 +938,7 @@ G4ThreeVector G4LivermorePolarizedGammaConversionModel::GetRandomPolarization(G4
   
   G4ThreeVector c0 = c.unit();
 
-  return c0;
-  
+  return c0;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1041,7 +946,6 @@ G4ThreeVector G4LivermorePolarizedGammaConversionModel::GetRandomPolarization(G4
 G4ThreeVector G4LivermorePolarizedGammaConversionModel::GetPerpendicularPolarization
 (const G4ThreeVector& gammaDirection, const G4ThreeVector& gammaPolarization) const
 {
-
   // 
   // The polarization of a photon is always perpendicular to its momentum direction.
   // Therefore this function removes those vector component of gammaPolarization, which
@@ -1056,7 +960,6 @@ G4ThreeVector G4LivermorePolarizedGammaConversionModel::GetPerpendicularPolariza
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 void G4LivermorePolarizedGammaConversionModel::SystemOfRefChange
     (G4ThreeVector& direction0,G4ThreeVector& direction1,
@@ -1073,23 +976,16 @@ void G4LivermorePolarizedGammaConversionModel::SystemOfRefChange
   G4double direction_y = direction1.getY();
   G4double direction_z = direction1.getZ();
   
-  direction1 = (direction_x*Axis_X0 + direction_y*Axis_Y0 +  direction_z*Axis_Z0).unit();
-  
+  direction1 = (direction_x*Axis_X0 + direction_y*Axis_Y0 +  direction_z*Axis_Z0).unit();  
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4AutoLock.hh"
-namespace { G4Mutex LivermorePolarizedGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
 
 void G4LivermorePolarizedGammaConversionModel::InitialiseForElement(
 								      const G4ParticleDefinition*, 
 								      G4int Z)
 {
   G4AutoLock l(&LivermorePolarizedGammaConversionModelMutex);
-  //  G4cout << "G4LivermorePolarizedGammaConversionModel::InitialiseForElement Z= " 
-  //   << Z << G4endl;
   if(!data[Z]) { ReadData(Z); }
   l.unlock();
 }

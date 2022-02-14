@@ -28,8 +28,6 @@
 //
 // Default resources file for GEANT4 OpenGL Motif windows.
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMRESOURCES_HH
 #define G4OPENGLXMRESOURCES_HH
 
@@ -41,7 +39,5 @@ static String fallbackResources[] = {
   "*frame*shadowType: SHADOW_IN", "*useColorObj: False", 
   NULL
   };
-
-#endif
 
 #endif

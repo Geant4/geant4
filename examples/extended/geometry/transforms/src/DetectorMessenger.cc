@@ -51,6 +51,7 @@ DetectorMessenger::DetectorMessenger(
   fSetMethodCmd->SetParameterName("Method", false);
   fSetMethodCmd->SetCandidates(
     "WithDirectMatrix WithInverseMatrix WithAxialRotations WithEulerAngles WithReflections");
+  fSetMethodCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,32 @@
+# Macro file for sample run of the HGCal testbeam simulation
+#
+
+# Set verbosity levels
+#/control/verbose 2
+#/control/saveHistory
+#/run/verbose 2
+#/tracking/verbose 2
+
+# Initialize kernel
+/run/initialize
+
+# Choose geometry setup
+/HGCalTestbeam/setup/configuration 0
+
+# Electrons
+/gun/energy 30 GeV
+/gun/particle e-
+
+# Smeared beam position and momentum
+# 5% Gaussian spread of momentum
+/HGCalTestbeam/generator/momentumSpread 0.05
+# Gaussian spread of transverse beam position (sigma 1.5 cm)
+/HGCalTestbeam/generator/beamSpread Gaussian # none flat
+/HGCalTestbeam/generator/beamSpreadX 1.5 cm
+/HGCalTestbeam/generator/beamSpreadY 1.5 cm
+/HGCalTestbeam/generator/beamZ0 -1 m
+# Choose max step in silicon pixel (in um)
+/HGCalTestbeam/setup/stepSilicon 20
+
+/HGCalTestbeam/output/file output_eM_smeared_30GeV_10events.root
+/run/beamOn 10

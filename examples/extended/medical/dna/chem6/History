@@ -1,0 +1,39 @@
+$Id $
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example chem6 History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+08-11-2021: H. Tran  chem6-V10-07-02
+- delete limit time step
+- reduce the number of incident particle
+
+21-10-2021: W.G. Shin  chem6-V10-07-01
+- Added limit time step
+
+06-10-2021: I. Hrivnacova  chem6-V10-07-00
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+10-11-2020: B. Morgan chem6-V10-06-03
+- Migration to G4RunManagerFactory.
+
+06-11-20: I. Hrivnacova chem6-V10-06-02
+- Fixed doxygen documentation
+
+19-02-20: W. G. Shin chem6-V10-06-01
+- fixed memory issue
+
+10-02-20: W. G. Shin chem6-V10-06-00
+- created and adapted from chem4

@@ -32,7 +32,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Molecule.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "G4DNAMolecule.hh"
 #include "G4MoleculeTable.hh"
 #include "G4OH.hh"

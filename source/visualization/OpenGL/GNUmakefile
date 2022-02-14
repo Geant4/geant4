@@ -14,7 +14,10 @@ endif
 # CPPFLAGS += -DG4DEBUG_VIS_OGL
 
 GLOBLIBS  = libG4vis_management.lib libG4modeling.lib libG4gl2ps.lib
-GLOBLIBS += libG4zlib.lib libG4interfaces.lib libG4run.lib libG4event.lib
+ifdef G4LIB_BUILD_ZLIB
+  GLOBLIBS += libG4zlib.lib
+endif
+GLOBLIBS += libG4interfaces.lib libG4tasking.lib libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
@@ -49,6 +52,81 @@ CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 CPPFLAGS += -I$(G4BASE)/particles/management/include
 CPPFLAGS += -I$(G4BASE)/event/include
 CPPFLAGS += -I$(G4BASE)/run/include
+CPPFLAGS += -I$(G4BASE)/tasking/include
+
+# Locally adjust source list before including common.gmk
+sources := $(addprefix src/,G4OpenGLImmediateViewer.cc \
+  G4OpenGLImmediateSceneHandler.cc \
+  G4OpenGLViewer.cc \
+  G4OpenGLStoredViewer.cc \
+  G4OpenGLStoredSceneHandler.cc \
+  G4OpenGLFontBaseStore.cc \
+  G4OpenGLSceneHandler.cc \
+  G4OpenGLViewerMessenger.cc \
+  G4OpenGLTransform3D.cc \
+  G4VisFeaturesOfOpenGL.cc)
+
+ifdef G4VIS_BUILD_OPENGLX_DRIVER
+  sources += $(addprefix src/,\
+    G4OpenGLImmediateX.cc \
+    G4OpenGLImmediateXViewer.cc \
+    G4OpenGLStoredX.cc \
+    G4OpenGLStoredXViewer.cc \
+    G4OpenGLXViewer.cc)
+endif
+
+ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+  sources += $(addprefix src/,\
+    G4OpenGLImmediateXm.cc \
+    G4OpenGLImmediateXmViewer.cc \
+    G4OpenGLStoredXm.cc \
+    G4OpenGLStoredXmViewer.cc \
+    G4OpenGLXm.cc \
+    G4OpenGLXmBox.cc \
+    G4OpenGLXmConvenienceRoutines.cc \
+    G4OpenGLXmFourArrowButtons.cc \
+    G4OpenGLXmFramedBox.cc \
+    G4OpenGLXmMainMenubarCallbacks.cc \
+    G4OpenGLXmPanningCallbacks.cc \
+    G4OpenGLXmPushButton.cc \
+    G4OpenGLXmRadioButton.cc \
+    G4OpenGLXmRotationCallbacks.cc \
+    G4OpenGLXmSeparator.cc \
+    G4OpenGLXmSliderBar.cc \
+    G4OpenGLXmStyleCallbacks.cc \
+    G4OpenGLXmTextField.cc \
+    G4OpenGLXmTopLevelShell.cc \
+    G4OpenGLXmViewer.cc \
+    G4OpenGLXmViewerMessenger.cc \
+    G4OpenGLXmVWidgetComponent.cc \
+    G4OpenGLXmVWidgetContainer.cc \
+    G4OpenGLXmVWidgetObject.cc \
+    G4OpenGLXmVWidgetShell.cc \
+    G4OpenGLXmWindowHandlingCallbacks.cc)
+endif
+
+ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+  sources += $(addprefix src/, \
+    G4OpenGLImmediateQt.cc \
+    G4OpenGLImmediateQtViewer.cc \
+    G4OpenGLQt.cc \
+    G4OpenGLQtExportDialog.cc \
+    G4OpenGLQtMovieDialog.cc \
+    G4OpenGLVboDrawer.cc \
+    G4OpenGLQtViewer.cc \
+    G4OpenGLStoredQt.cc \
+    G4OpenGLStoredQtSceneHandler.cc \
+    G4OpenGLStoredQtViewer.cc)
+endif
+
+ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
+  sources += $(addprefix src/, \
+    G4OpenGLImmediateWin32.cc \
+    G4OpenGLImmediateWin32Viewer.cc \
+    G4OpenGLStoredWin32.cc \
+    G4OpenGLStoredWin32Viewer.cc \
+    G4OpenGLWin32Viewer.cc)
+endif
 
 include $(G4INSTALL)/config/moc.gmk
 include $(G4INSTALL)/config/common.gmk

@@ -456,13 +456,13 @@ void  CexmcSetup::ReadRightDetectors( void )
         {
             if ( ( *k )->GetLogicalVolume() == vetoCounterVolume )
             {
-                if ( ( *k )->GetName().contains( "Right" ) )
+                if ( G4StrUtil::contains(( *k )->GetName(), "Right" ) )
                     rightVetoCounter = *k;
                 break;
             }
             if ( ( *k )->GetLogicalVolume() == calorimeterVolume )
             {
-                if ( ( *k )->GetName().contains( "Right" ) )
+                if ( G4StrUtil::contains(( *k )->GetName(), "Right" ) )
                     rightCalorimeter = *k;
                 break;
             }

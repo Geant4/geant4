@@ -75,12 +75,10 @@
 // Comments:
 //
 // ===========================================================================
-
-
 #include "G4IonParametrisedLossModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4IonStoppingData.hh"
 #include "G4VIonDEDXTable.hh"
 #include "G4VIonDEDXScalingAlgorithm.hh"
@@ -98,8 +96,6 @@
 #include "G4Exp.hh"
 
 //#define PRINT_TABLE_BUILT
-
-
 // #########################################################################
 
 G4IonParametrisedLossModel::G4IonParametrisedLossModel(
@@ -692,8 +688,6 @@ void G4IonParametrisedLossModel::SampleSecondaries(
 			     const G4DynamicParticle* particle,
 			     G4double cutKinEnergySec,
 			     G4double userMaxKinEnergySec) {
-
-
   // ############## Sampling of secondaries #################################
   // The probability density function (pdf) of the kinetic energy T of a
   // secondary electron may be written as:
@@ -763,7 +757,6 @@ void G4IonParametrisedLossModel::SampleSecondaries(
     GetAngularDistribution()->SampleDirection(particle, kinEnergySec,
                                               Z, mat),
                                                    kinEnergySec);
-
 
   secondaries->push_back(delta);
 
@@ -912,9 +905,8 @@ void G4IonParametrisedLossModel::UpdateDEDXCache(
 void G4IonParametrisedLossModel::CorrectionsAlongStep(
                              const G4MaterialCutsCouple* couple,
 			     const G4DynamicParticle* dynamicParticle,
-			     G4double& eloss,
-			     G4double&,
-                             G4double length) {
+                             const G4double& length,
+			     G4double& eloss) {
 
   // ############## Corrections for along step energy loss calculation ######
   // The computed energy loss (due to electronic stopping) is overwritten
@@ -1079,10 +1071,11 @@ void G4IonParametrisedLossModel::BuildRangeVector(
 
   G4double logDeltaIntegr = logDeltaEnergy / G4double(nmbSubBins);
 
-  G4LPhysicsFreeVector* energyRangeVector =
-                              new G4LPhysicsFreeVector(nmbBins+1,
-                                                       lowerEnergy,
-                                                       upperEnergy);
+  G4PhysicsFreeVector* energyRangeVector =
+    new G4PhysicsFreeVector(nmbBins+1,
+			    lowerEnergy,
+			    upperEnergy,
+			    /*spline=*/true);
 
   G4double dedxLow = ComputeDEDXPerVolume(material,
                                           particle,
@@ -1141,17 +1134,19 @@ void G4IonParametrisedLossModel::BuildRangeVector(
 #endif
 
   }
-  energyRangeVector -> SetSpline(true);
+  //vector is filled: activate spline
+  energyRangeVector -> FillSecondDerivatives();
 
   G4double lowerRangeEdge =
                     energyRangeVector -> Value(lowerEnergy);
   G4double upperRangeEdge =
                     energyRangeVector -> Value(upperEnergy);
 
-  G4LPhysicsFreeVector* rangeEnergyVector
-                      = new G4LPhysicsFreeVector(nmbBins+1,
-                                                 lowerRangeEdge,
-                                                 upperRangeEdge);
+  G4PhysicsFreeVector* rangeEnergyVector
+    = new G4PhysicsFreeVector(nmbBins+1,
+			      lowerRangeEdge,
+			      upperRangeEdge,
+			      /*spline=*/true);
 
   for(size_t i = 0; i < nmbBins+1; i++) {
       G4double energy = energyRangeVector -> Energy(i);
@@ -1159,7 +1154,7 @@ void G4IonParametrisedLossModel::BuildRangeVector(
              PutValues(i, energyRangeVector -> Value(energy), energy);
   }
 
-  rangeEnergyVector -> SetSpline(true);
+  rangeEnergyVector -> FillSecondDerivatives();
 
 #ifdef PRINT_DEBUG_TABLES
   G4cout << *energyLossVector
@@ -1313,13 +1308,3 @@ G4bool G4IonParametrisedLossModel::RemoveDEDXTable(
 
   return false;
 }
-
-// #########################################################################
-/*
-void G4IonParametrisedLossModel::DeactivateICRU73Scaling() {
-
-  RemoveDEDXTable("ICRU73");
-  AddDEDXTable("ICRU73", new G4IonStoppingData("ion_stopping_data/icru73"));
-}
-*/
-// #########################################################################

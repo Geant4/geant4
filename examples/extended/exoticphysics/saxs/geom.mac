@@ -1,0 +1,28 @@
+/det/setPhantomMaterial 1					
+/det/setPhantomDiameter 20. mm
+/det/setPhantomHeight 20. mm
+/det/setPhantomZ 500. mm                	#default is 0
+	
+/det/setThetaSetup 0.192					#[rad] (default is 0)
+
+/det/setSlits true							#default is false
+/det/setSlit1Thickness 5. mm
+/det/setSlit2Thickness 5. mm
+/det/setSlit3Thickness 5. mm
+/det/setSlit4Thickness 5. mm
+/det/setSlit1SampleDistance 350. mm
+/det/setSlit2SampleDistance 50. mm
+/det/setSlit3SampleDistance 50. mm
+/det/setSlit4SampleDistance 450. mm
+/det/setSlit1xAperture 4. mm
+/det/setSlit2xAperture 4. mm
+/det/setSlit3xAperture 4. mm
+/det/setSlit4xAperture 4. mm
+/det/setSlit1yAperture 4. mm
+/det/setSlit2yAperture 4. mm
+/det/setSlit3yAperture 4. mm
+/det/setSlit4yAperture 4. mm
+
+/det/setDetectorSize 20. mm
+/det/setDetectorThickness 20. mm
+/det/setDetectorSampleDistance 500. mm

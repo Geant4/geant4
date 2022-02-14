@@ -23,24 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//  History :
+//     21/10/2021 : DLa update to modify the material and the size
 // -------------------------------------------------------------------
 // -------------------------------------------------------------------
 
 #include "DetectorConstruction.hh"
+#include "DetectorMessenger.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Region.hh"
 #include "G4ProductionCuts.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::DetectorConstruction()
-:fPhysiWorld(NULL), fLogicWorld(NULL), fSolidWorld(NULL)
-{}  
+:G4VUserDetectorConstruction(), fPhysiWorld(nullptr), fLogicWorld(nullptr),    fSolidWorld(nullptr),  fWorldMaterial(nullptr),  flogicTarget(nullptr),  ftargetSolid(nullptr),  fMaterial(nullptr),   fRegion(nullptr)
+{
+  fBoxSize = 1.0*um;
+  DefineMaterials();
+  SetMaterial("G4_Si");  
+  fDetectorMessenger = new DetectorMessenger(this);
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::~DetectorConstruction()
-{}
+{
+  delete fPhysiWorld;
+  delete fLogicWorld;  
+  delete fSolidWorld;  
+  //delete fWorldMaterial;   // no delete because link to database
+  delete flogicTarget;
+  delete ftargetSolid;
+  delete fMaterial; 
+  delete fRegion;
+  delete fDetectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -58,31 +77,59 @@ void DetectorConstruction::DefineMaterials()
 
   // Silicon is defined from NIST material database
   G4NistManager * man = G4NistManager::Instance();
-  G4Material * Si = man->FindOrBuildMaterial("G4_Si");
-
-  // Default materials in setup.
-  fSiMaterial = Si;
+  fMaterial =  man->FindOrBuildMaterial("G4_Si");
+  fWorldMaterial =  man->FindOrBuildMaterial("G4_Si");  // world material;
   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+void DetectorConstruction::SetMaterial(const G4String& materialChoice)
+{
+  // search the material by its name
+  G4Material* pttoMaterial = 
+     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  
+  if (pttoMaterial) {
+    fMaterial = pttoMaterial;
+    if ( flogicTarget ) { flogicTarget->SetMaterial(fMaterial); }
+  } else {
+    G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
+           << materialChoice << " not found" << G4endl;
+  }
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
   // WORLD VOLUME
   
-  fWorldSizeX  = 1*um; 
-  fWorldSizeY  = 1*um; 
-  fWorldSizeZ  = 1*um;
+  
+    G4double TargetSizeX =  1*um; 
+  G4double TargetSizeY =  TargetSizeX; 
+  G4double TargetSizeZ =  TargetSizeX; 
+  fBoxSize = TargetSizeX;
+
+  fWorldSizeX  = TargetSizeX*2; 
+  fWorldSizeY  = TargetSizeY*2; 
+  fWorldSizeZ  = TargetSizeZ*2; 
 
   fSolidWorld = new G4Box("World",				     //its name
 			   fWorldSizeX/2,fWorldSizeY/2,fWorldSizeZ/2);  //its size
   
 
   fLogicWorld = new G4LogicalVolume(fSolidWorld,	//its solid
-				   fSiMaterial,		//its material
+				   fWorldMaterial,		//its material
 				   "World");		//its name
   
   fPhysiWorld = new G4PVPlacement(0,			//no rotation
@@ -93,20 +140,20 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                                  false,			//no boolean operation
                                  0);			//copy number
 
-  G4double TargetSizeZ =  0.2*um; 
 
-  G4Box* targetSolid = new G4Box("Target",				     //its name
-				 fWorldSizeX/2,fWorldSizeY/2,TargetSizeZ/2);   //its size
+
+  ftargetSolid = new G4Box("Target",				     //its name
+				 TargetSizeX/2,TargetSizeY/2,TargetSizeZ/2);   //its size
   
 
-  G4LogicalVolume* logicTarget = new G4LogicalVolume(targetSolid,       //its solid
-						     fSiMaterial,	//its material
+  flogicTarget = new G4LogicalVolume(ftargetSolid,       //its solid
+						     fMaterial,	//its material
 						     "Target");		//its name
   
   new G4PVPlacement(0,			                               //no rotation
 		    G4ThreeVector(),	                               //at (0,0,0)
 		    "Target",		//its name
-		    logicTarget,	//its logical volume
+		    flogicTarget,	//its logical volume
 		    fPhysiWorld,		//its mother  volume
 		    false,		//no boolean operation
 		    0);			//copy number
@@ -118,7 +165,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
   G4VisAttributes* worldVisAtt1 = new G4VisAttributes(G4Colour(1.0,0.0,0.0)); 
   worldVisAtt1->SetVisibility(true);
-  logicTarget->SetVisAttributes(worldVisAtt1);
+  flogicTarget->SetVisAttributes(worldVisAtt1);
 
   // Create Target G4Region and add logical volume
   
@@ -133,7 +180,31 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   cuts->SetProductionCut(defCut,"proton");
   
   fRegion->SetProductionCuts(cuts);
-  fRegion->AddRootLogicalVolume(logicTarget); 
+  fRegion->AddRootLogicalVolume(flogicTarget); 
 
   return fPhysiWorld;
 }
+ 
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetSize(G4double value)
+{
+  fBoxSize = value;
+  if(ftargetSolid) {
+    ftargetSolid->SetXHalfLength(fBoxSize/2);
+    ftargetSolid->SetYHalfLength(fBoxSize/2);
+    ftargetSolid->SetZHalfLength(fBoxSize/2);
+  }
+  fWorldSizeX = value*2.0;
+  fWorldSizeY = value*2.0;
+  fWorldSizeZ = value*2.0;
+  
+  if(fSolidWorld) {
+    fSolidWorld->SetXHalfLength(fWorldSizeX/2);
+    fSolidWorld->SetYHalfLength(fWorldSizeY/2);
+    fSolidWorld->SetZHalfLength(fWorldSizeZ/2);
+  }
+  
+}
+

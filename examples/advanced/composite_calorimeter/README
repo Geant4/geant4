@@ -54,11 +54,7 @@
      >  . envExample.sh            in the case of bash-shell
  
  The analysis part is based on the native g4analysis tools. As default 
- the output is a ROOT file. This can be changed to XML by commenting 
- the line
-#include "g4root.hh"
- in CCalAnalysis.hh and uncommenting 
-#include "g4xml.hh"
+ the output is a ROOT file. This can be changed to XML by changing the G4AnalysisManager default file type in CCalRunAction::BeginOfRunAction().
 
 
 2. Sample run
@@ -72,7 +68,7 @@
  
     >  ./CompositeCalorimeter test.g4mac
  
- which simulate 10 events, each being a 100 GeV pi- incident on the 
+ which simulate a few events, each being a 100 GeV pi- incident on the 
  electromagnetic crystal calorimeter followed by the hadronic calorimeter,
  without magnetic field.
  The output is the ROOT file "ccal.root" .
@@ -139,10 +135,6 @@
  for example, if you want a magnetic field of 3.0 Tesla the last
  line must be set as follows (the magnetic field unity is kilo Gauss).
      30.0   9               652.0
-
- The default stepper in magnetic field is G4ClassicalRK4, but other
- possibilities can be selected by editing the file 
- src/CCalDetectorConstruction.cc  (look at the string "***STEPPER***").
 
  In order to deactivate either the ECAL or the HCAL, it is enough
  to comment out the corresponding line in the file g4testbeamhcal96.conf, 
@@ -233,26 +225,11 @@
 4. Physics processes
 --------------------
  
- By the default, one of the ufficial High Energy Physics List for 
- Calorimetry, QGSP_BIC_EMY, is used in this example, so that it
- allows to test the low-energy electromagnetic.
- However, it is very easy to use instead either LHEP, QGSP, or QGSC. 
- To do so, it is enough to comment/uncomment a line in the main 
- CompositeCalorimeter.cc : for example, if you want to use LHEP 
- instead of the default QGSP_BIC_EMY you have to change it as follows:
-
-  //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
-  runManager->SetUserInitialization(new LHEP);          // LHEP     
-  // runManager->SetUserInitialization(new QGSP);          // QGSP   
-  // runManager->SetUserInitialization(new QGSC);          // QGSC
-  // runManager->SetUserInitialization(new QGSP_BIC_EMY);  // QGSP_BIC_EMY
-  //***endLOOKHERE***
-
- Notice that, for most of the cases (and certainly also in this case
- in which we don't even take into account the beam profile, noise
- and digitization!) the faster LHEP Physics List would be good enough
- for calorimetry studies. 
-
+ The factory physics list is used, therefore the choice of the physics list
+ is steered by the environmental variable PHYSLIST.
+ (Note: if this environmental variable is not set, the default physics list
+  which is used is FTFP_BERT).
+ 
 
 5. Particle Generator
 ---------------------
@@ -435,18 +412,6 @@ No Noise and Digitization
  and then run some events, for example:
      Idle> /run/beamOn 3
 
- Notice that, by default, OGL is used for the visualization,
- because it is quite fast and it does not produce any files in
- output. However, you can always choose something else, for example
- VRML2FILE or DAWNFILE, either interactively as follows:
-    Idle> /vis/open DAWNFILE
- or by changing the default, by editing the file (main program)
- CompositeCalorimeter.cc and comment/uncomment the lines
- in such a way to have, at the end:
-    visCommand = "/vis/open DAWNFILE";
-    // visCommand = "/vis/open VRML2FILE";
-    // visCommand = "/vis/open OGL";
-
  The tracks that are shown include both charged and neutral particles 
  of any momentum: if you want instead only charged, or only neutral, 
  then you have simply to edit  src/CCalEndOfEventAction.cc 
@@ -530,8 +495,11 @@ No Noise and Digitization
           CCalG4Hit derives from G4VHit and CCalHit;
           CCaloSD derives from G4VSensitiveDetector.          
 
+  CCalActionInitializer
+        User-action initialization.
+	
   CCalAnalysis
-	Analysis manager class which uses Anaphe.
+	Analysis manager class.
 
   CCalRunAction
 	User run action class.

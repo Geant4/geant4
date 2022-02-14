@@ -374,6 +374,38 @@ void G4EmDNAChemistry::ConstructDissociationChannels()
   water->NewConfigurationWithElectronOccupancy("DissociativeAttachment", *occ);
   water->AddDecayChannel("DissociativeAttachment", decCh1);
 
+  //////////////////////////////////////////////////////////
+  //            Electron-hole recombination               //
+  //////////////////////////////////////////////////////////
+  decCh1 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay1");
+  decCh2 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay2");
+  decCh3 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay3");
+
+  //Decay 1 : 2OH + H_2
+  decCh1->AddProduct(H2);
+  decCh1->AddProduct(OH);
+  decCh1->AddProduct(OH);
+  decCh1->SetProbability(0.15);
+  decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::
+                              B1A1_DissociationDecay);
+
+  //Decay 2 : OH + H
+  decCh2->AddProduct(OH);
+  decCh2->AddProduct(H);
+  decCh2->SetProbability(0.55);
+  decCh2->SetDisplacementType(G4DNAWaterDissociationDisplacer::
+                              A1B1_DissociationDecay);
+
+  //Decay 3 : relaxation
+  decCh3->SetProbability(0.30);
+
+  const auto pH2Ovib = G4H2O::Definition()->NewConfiguration("H2Ovib");
+  assert(pH2Ovib != nullptr);
+
+  water->AddDecayChannel(pH2Ovib, decCh1);
+  water->AddDecayChannel(pH2Ovib, decCh2);
+  water->AddDecayChannel(pH2Ovib, decCh3);
+
   delete occ;
 }
 

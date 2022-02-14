@@ -25,7 +25,7 @@
 //
 
 // The main manager for Xml analysis reader.
-// It delegates most of functions to the object specific managers. 
+// It delegates most of functions to the object specific managers.
 
 // Author: Ivana Hrivnacova, 25/07/2014 (ivana@ipno.in2p3.fr)
 
@@ -35,66 +35,51 @@
 #include "G4ToolsAnalysisReader.hh"
 #include "globals.hh"
 
-#include "tools/histo/h1d" 
-#include "tools/histo/h2d" 
-#include "tools/histo/h3d" 
-#include "tools/histo/p1d" 
-#include "tools/histo/p2d" 
 #include "tools/raxml"
 
+#include <memory>
+#include <string_view>
+
+class G4XmlAnalysisReader;
 class G4XmlRFileManager;
-class G4H1ToolsManager;
-class G4H2ToolsManager;
-class G4H3ToolsManager;
-class G4P1ToolsManager;
-class G4P2ToolsManager;
 class G4XmlRNtupleManager;
-  
+template <class T>
+class G4ThreadLocalSingleton;
+
 class G4XmlAnalysisReader : public G4ToolsAnalysisReader
 {
+  friend class G4ThreadLocalSingleton<G4XmlAnalysisReader>;
+
   public:
-    explicit G4XmlAnalysisReader(G4bool isMaster = true);
     virtual ~G4XmlAnalysisReader();
-    
-    // static methods
+
+    // Static methods
     static G4XmlAnalysisReader* Instance();
 
     // Access methods
     tools::aida::ntuple* GetNtuple() const;
     tools::aida::ntuple* GetNtuple(G4int ntupleId) const;
     using G4VAnalysisReader::GetNtuple;
-    
+
   protected:
-    // virtual methods from base class
-    virtual G4int  ReadH1Impl(const G4String& h1Name,   const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadH2Impl(const G4String& h1Name,   const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadH3Impl(const G4String& h1Name,   const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadP1Impl(const G4String& h1Name,   const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadP2Impl(const G4String& h1Name,   const G4String& fileName,
-                              G4bool isUserFileName) final;
-    virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
-                              G4bool isUserFileName) final;
+    G4XmlAnalysisReader();
+
+    // Virtual methods from base class
+    virtual G4bool CloseFilesImpl(G4bool reset) final;
 
   private:
-    // static data members
-    static G4XmlAnalysisReader* fgMasterInstance;
-    static G4ThreadLocal G4XmlAnalysisReader* fgInstance;    
+    // Static data members
+    inline static G4XmlAnalysisReader* fgMasterInstance { nullptr };
 
-    // methods
-    tools::raxml_out* GetHandler(
-                             const G4String& fileName, 
-                             const G4String& objectName,
-                             const G4String& objectType,
-                             const G4String& inFunction);
+    // Methods
     G4bool Reset();
 
-    // data members
-    G4XmlRNtupleManager*  fNtupleManager;
-    G4XmlRFileManager*    fFileManager;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4XmlAnalysisReader" };
+
+    // Data members
+    std::shared_ptr<G4XmlRNtupleManager> fNtupleManager { nullptr };
+    std::shared_ptr<G4XmlRFileManager>   fFileManager { nullptr };
 };
 
 #include "G4XmlAnalysisReader.icc"

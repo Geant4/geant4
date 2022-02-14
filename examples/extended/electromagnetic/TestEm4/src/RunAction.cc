@@ -48,6 +48,7 @@ RunAction::RunAction()
  : G4UserRunAction()
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
   analysisManager->SetVerboseLevel(1);  
   analysisManager->SetFirstHistoId(1);
     
@@ -60,7 +61,6 @@ RunAction::RunAction()
 
 RunAction::~RunAction()
 {
-   delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -114,6 +114,7 @@ HistoManagerMessenger::HistoManagerMessenger(HistoManager * p)
 
 HistoManagerMessenger::~HistoManagerMessenger()
 {
+  delete fbinCmd;
   delete fnOfAbsCmd;
   delete fpartCmd;
   delete fcsCmd;

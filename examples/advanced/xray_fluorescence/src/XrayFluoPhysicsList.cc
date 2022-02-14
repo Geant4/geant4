@@ -36,7 +36,7 @@
 
 #include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
-#include "G4EmProcessOptions.hh"
+#include "G4EmParameters.hh"
 #include "G4ProcessManager.hh"
 
 //#include "PhysListEmStandard.hh"
@@ -96,13 +96,19 @@ XrayFluoPhysicsList::XrayFluoPhysicsList() : G4VModularPhysicsList()
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
   cutForProton    = defaultCutValue;
+ 
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+");
 
+  DumpCutValuesTable();
   SetVerboseLevel(1);
 
   // EM physics
   emName = G4String("emlivermore");
   emPhysicsList = new G4EmLivermorePhysics;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -159,14 +165,10 @@ void XrayFluoPhysicsList::ConstructProcess()
 
   // Em options
   //
-  G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);
-  emOptions.SetDEDXBinningForCSDARange(10*10);
-  //emOptions.SetDeexcitationActiveRegion(true); //TBC
-  emOptions.SetFluo(true);
-  emOptions.SetAuger(true);
-  emOptions.SetPIXE(true);
-
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetFluo(true);
+  param->SetAuger(true);
+  param->SetPixe(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -265,24 +267,6 @@ void XrayFluoPhysicsList::AddPhysicsList(const G4String& name)
            << " is not defined"
            << G4endl;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void XrayFluoPhysicsList::SetCuts()
-{
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-
-  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

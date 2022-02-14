@@ -25,6 +25,4 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
       endif()
     endif()
   endif()
-
-
 endif()

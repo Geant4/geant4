@@ -23,74 +23,71 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
-//
 //
 // File name:     G4PolarizedGammaConversion
 //
 // Author:        Karim Laihem based on code by Michel Maire
 //
-// Creation date: 01.05.2005
-//
 // Class Description:
+//   polarized version of G4GammaConversion
 //
-// polarized version of G4GammaConversion
-// 
 // -----------------------------------------------------------------------------
 
 #include "G4PolarizedGammaConversion.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PolarizedGammaConversionModel.hh"
+
 #include "G4Electron.hh"
 #include "G4EmParameters.hh"
+#include "G4Gamma.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4PolarizedGammaConversionModel.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4PolarizedGammaConversion::G4PolarizedGammaConversion(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+G4PolarizedGammaConversion::G4PolarizedGammaConversion(
+  const G4String& processName, G4ProcessType type)
+  : G4VEmProcess(processName, type)
+  , fIsInitialised(false)
 {
-  SetMinKinEnergy(2.0*electron_mass_c2);
+  SetMinKinEnergy(2.0 * electron_mass_c2);
   SetLambdaBinning(220);
-  //SetMaxKinEnergy(100.0*GeV);
   SetProcessSubType(fGammaConversion);
   SetBuildTableFlag(true);
   SetSecondaryParticle(G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-G4PolarizedGammaConversion::~G4PolarizedGammaConversion()
-{}
+G4PolarizedGammaConversion::~G4PolarizedGammaConversion() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void G4PolarizedGammaConversion::ProcessDescription(std::ostream& out) const
+{
+  out << "Polarized model for gamma conversion.\n";
 
+  G4VEmProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4bool G4PolarizedGammaConversion::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4PolarizedGammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 {
-  if(!isInitialised) {
-    isInitialised = true;
+  if(!fIsInitialised)
+  {
+    fIsInitialised        = true;
     G4EmParameters* param = G4EmParameters::Instance();
-    G4double emin = std::max(param->MinKinEnergy(), 2*electron_mass_c2);
+    G4double emin = std::max(param->MinKinEnergy(), 2. * electron_mass_c2);
     G4double emax = param->MaxKinEnergy();
-    if(!EmModel(0)) { SetEmModel(new G4PolarizedGammaConversionModel()); }
+    if(!EmModel(0))
+    {
+      SetEmModel(new G4PolarizedGammaConversionModel());
+    }
     EmModel(0)->SetLowEnergyLimit(emin);
     EmModel(0)->SetHighEnergyLimit(emax);
     AddEmModel(1, EmModel(0));
-  } 
+  }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4PolarizedGammaConversion::PrintInfo()
-{}         
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

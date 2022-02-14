@@ -37,13 +37,13 @@ class G4VScoringMesh;
 //  This class represents storing the scored quantity into a file.
 //
 
-class G4VScoreWriter {
-
-public:
+class G4VScoreWriter
+{
+ public:
   G4VScoreWriter();
   virtual ~G4VScoreWriter();
 
-public:
+ public:
   // store a quantity into a file
   virtual void DumpQuantityToFile(const G4String& psName,
                                   const G4String& fileName,
@@ -53,22 +53,21 @@ public:
                                        const G4String& option);
 
   // set a socring mesh to retrieve its quantities
-  void SetScoringMesh(G4VScoringMesh * sm); 
+  void SetScoringMesh(G4VScoringMesh* sm);
   // set a verbose level
-  inline void SetVerboseLevel(G4int vl) {
-    verboseLevel = vl;
-  }
+  inline void SetVerboseLevel(G4int vl) { verboseLevel = vl; }
+  inline void SetFactor(G4double val = 1.0) { fact = val; }
+  inline G4double GetFactor() const { return fact; }
 
-protected:
-  // get an index from (x,y,z) 
+ protected:
+  // get an index from (x,y,z)
   G4int GetIndex(G4int x, G4int y, G4int z) const;
 
-protected:
-  G4int fNMeshSegments[3]; // number of segments of the mesh
-  G4VScoringMesh * fScoringMesh;
+ protected:
+  G4int fNMeshSegments[3];  // number of segments of the mesh
+  G4VScoringMesh* fScoringMesh;
   G4int verboseLevel;
-
+  G4double fact;
 };
 
 #endif
-

@@ -23,25 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VHCIOentry.cc
+// G4VHCIOentry implementation
 //
-// History:
-//   '01.09.12  Youhei Morita  Initial creation
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
 
 #include "G4VHCIOentry.hh"
-
-// Addtional Include:
 #include "G4HCIOcatalog.hh"
 
-// Implementation of Constructor #1
-G4VHCIOentry::G4VHCIOentry(std::string n)
- : m_name(n)
+// --------------------------------------------------------------------
+G4VHCIOentry::G4VHCIOentry(const G4String& n)
+  : m_name(n)
 {
   G4HCIOcatalog* c = G4HCIOcatalog::GetHCIOcatalog();
   c->RegisterEntry(this);
 
   m_verbose = G4PersistencyCenter::GetPersistencyCenter()->VerboseLevel();
 }
-
-// End of G4VHCIOentry.cc
-

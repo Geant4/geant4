@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UnitsMessenger
 //
+// Class description
 //
-// class description
-//
-// This class is the messenger of the class which maintain the table of Units.
-// (located in global/management/include/G4UnitsTable.hh)
-// Its contains the commands to interact with the table of Units 
+// This class is the messenger for the table of units G4UnitsTable.
+// It contains the commands to interact with the table of Units
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifndef G4UnitsMessenger_h
-#define G4UnitsMessenger_h 1
+// Author: Michel Maire, 1998
+// --------------------------------------------------------------------
+#ifndef G4UnitsMessenger_hh
+#define G4UnitsMessenger_hh 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
@@ -43,20 +41,19 @@
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class G4UnitsMessenger: public G4UImessenger
+class G4UnitsMessenger : public G4UImessenger
 {
   public:
+
     G4UnitsMessenger();
-   ~G4UnitsMessenger();
-    
+    ~G4UnitsMessenger();
+
     void SetNewValue(G4UIcommand*, G4String);
-    
-  private:    
-    G4UIdirectory*             UnitsTableDir;
-    G4UIcmdWithoutParameter*   ListCmd;
+
+  private:
+
+    G4UIdirectory* UnitsTableDir = nullptr;
+    G4UIcmdWithoutParameter* ListCmd = nullptr;
 };
 
 #endif
-

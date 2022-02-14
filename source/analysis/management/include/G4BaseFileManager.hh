@@ -34,27 +34,35 @@
 #include "G4AnalysisManagerState.hh"
 #include "globals.hh"
 
+#include <vector>
+
 class G4BaseFileManager
 {
   public:
     explicit G4BaseFileManager(const G4AnalysisManagerState& state);
-    virtual ~G4BaseFileManager();
+    G4BaseFileManager() = delete;
+    virtual ~G4BaseFileManager() = default;
 
     virtual G4bool SetFileName(const G4String& fileName);
       // Set the base file name (without extension)
-      // If the current file name is already in use
-      // setting is not performed and false is returned
-    
+    virtual G4String GetFileType() const;
+      // Return the manager type (starts with a lowercase letter)
+
+    void AddFileName(const G4String& fileName);
+      // For handling multiple files
+      // Save file name in a vector if not yet present
+
     G4String GetFileName() const;
       // Return the base file name (without extension)
-
     G4String GetFullFileName(const G4String& baseFileName = "",
                            G4bool isPerThread = true) const;
       // Compose and return the full file name:
       // - add _tN suffix to the file base name if isPerThread
-      // - add file extension if not present
+      // - add file extension if not present and available in state
+    const std::vector<G4String>& GetFileNames() const;
+     // Return the file names vector
 
-    G4String GetHnFileName(const G4String& hnType, 
+    G4String GetHnFileName(const G4String& hnType,
                            const G4String& hnName) const;
       // Compose and return the histogram or profile specific file name:
       // - add _hn_hnName suffix to the file base name
@@ -65,30 +73,48 @@ class G4BaseFileManager
       // - add _nt_ntupleName suffix to the file base name
       // - add _tN suffix if called on thread worker
       // - add file extension if not present
-    
+
+    G4String GetNtupleFileName(G4int ntupleFileNumber) const;
+      // Compose and return the ntuple specific file name:
+      // - add _mN suffix to the file base name
+      // - add file extension if not present
+
     G4String GetPlotFileName() const;
       // Return the file name for batch plotting output
 
-    G4String GetFileType() const;                 
-     // Return the manager file type (starts with a lowercase letter)
-
   protected:
-    // utility function
-    G4String TakeOffExtension(G4String& name) const;
-  
-    // data members
+    // Methods for verbose
+    void Message(G4int level,
+                 const G4String& action,
+                 const G4String& objectType,
+                 const G4String& objectName = "",
+                 G4bool success = true) const;
+
+    // Data members
     const G4AnalysisManagerState& fState;
-    G4String fFileName;
+    G4String fFileName;  // to be changed in fDefaultFileName
+    std::vector<G4String> fFileNames;
 };
 
 inline G4bool G4BaseFileManager::SetFileName(const G4String& fileName) {
+  // CHECK if still needed in this base class
   fFileName = fileName;
   return true;
-}  
+}
 
 inline G4String G4BaseFileManager::GetFileName() const {
   return fFileName;
-}  
-  
-#endif
+}
 
+inline const std::vector<G4String>& G4BaseFileManager::GetFileNames() const {
+  return fFileNames;
+}
+
+inline void G4BaseFileManager::Message(
+  G4int level, const G4String& action, const G4String& objectType,
+  const G4String& objectName, G4bool success) const
+{
+  fState.Message(level, action, objectType, objectName, success);
+}
+
+#endif

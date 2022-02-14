@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessType
 //
+// Description:
 //
-//
-//---------------------------------------------------------------
-//
-// G4ProcessType.hh
-//
-// Class Description:
-//   This is an enumerator to define process type
-//
-//
-//---------------------------------------------------------------
+// This is an enumerator to define process type
 
-#ifndef G4ProcessType_h
-#define G4ProcessType_h 1
+// Author: H.Kurashige
+// --------------------------------------------------------------------
+#ifndef G4ProcessType_hh
+#define G4ProcessType_hh 1
 
 enum G4ProcessType
 {
@@ -55,6 +50,5 @@ enum G4ProcessType
   fPhonon,
   fUCN
 };
+
 #endif
-
-

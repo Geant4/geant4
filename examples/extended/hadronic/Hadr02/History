@@ -18,8 +18,39 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-=======
+07-11-21 I. Hrivnacova (exhadr02-V10-07-05)
+- Added analysis manager Clear() call instead of
+  deleting in the end of run (removed on July 19)
+
+19-07-21 I. Hrivnacova (exhadr02-V10-07-04)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+18-05-21 A. Ribon     (exhadr02-V10-07-03)
+- Migration to newer CRMC, and more modern approach to physics lists.
+
+18-03-21 A. Ribon     (exhadr02-V10-07-02)
+- CRMCNeutronBuilder, HIJINGNeutronBuilder, UrQMDNeutronBuilder :
+  replaced G4HadronCaptureProcess with G4NeutronCaptureProcess, and
+  G4HadronFissionProcess with G4NeutronFissionProcess.
+
+08-03-21 A. Ribon     (exhadr02-V10-07-01)
+- IonUrQMDPhysics : replaced old ion cross sections (that have been
+  deleted) with G4ComponentGGNuclNuclXsc.
+
+04-03-21 A. Ribon     (exhadr02-V10-07-00)
+- Replaced particle-specific inelastic processes (that have been deleted)
+  with G4HadronInelasticProcess.
+
+10-11-20 B. Morgan (exhadr02-V10-06-01)
+- Migration to G4RunManagerFactory.
+
+07-05-20   A. Ribon   (exhadr02-V10-06-00)
+- HadronPhysicsCRMC_FTFP_BERT , HadronPhysicsHIJING , HadronPhysicsUrQMD :
+  introduced the new class G4HyperonBuilder which is now needed when
+  using G4HyperonFTFPBuilder.
+
 06-08-19   A. Ribon   (exhadr02-V10-05-03)
 - HadronPhysicsCRMC_FTFP_BERT : use G4HadronicParameters for the energy
   transition region between FTF and BERT models.
@@ -27,7 +58,7 @@ track of all tags.
 02-08-19   G. Folger   (exhadr02-V10-05-02)
 - remove use of G4DataQuestionaire, following cleanup in
    physicslists, see phys-lists-V10-05-02 and phys-util-V10-04-02
-   
+
 12-06-19  A. Ribon  (exhadr02-V10-05-01)
 - G4CRMCModel : some improvements (e.g. considered the energy-per-nucleon,
   instead of the whole projectile, in the case of nucleus projectile) and
@@ -44,8 +75,8 @@ track of all tags.
   See the README file for more information.
 
 09-08-18  A. Ribon  (exhadr02-V10-04-02)
-- UrQMDProtonBuilder, IonUrQMDPhysics, UrQMDPiKBuilder, 
-  UrQMDAntiBarionBuilder, UrQMDNeutronBuilder, 
+- UrQMDProtonBuilder, IonUrQMDPhysics, UrQMDPiKBuilder,
+  UrQMDAntiBarionBuilder, UrQMDNeutronBuilder,
   HIJINGProtonBuilder, IonHIJINGPhysics, HIJINGNeutronBuilder :
   replaced the explicit high-energy limit of hadronic
   physics with the one from G4HadronicParameters .
@@ -145,7 +176,7 @@ track of all tags.
 17-05-11  G.Folger (exhadr02-V09-04-04)
 -  Allow to build without reference to DPMJET;
     all .cc files linking to DPMJet are pretected by #ifdef G4_USE_DPMJET
-    
+
 21-04-11  V.Ivant (exhadr02-V09-04-03)
 - Fixed problems of energy intervals for models for ions
   allowing to work with different reference Physics Lists

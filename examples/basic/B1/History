@@ -13,9 +13,29 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
-<<<<<<< HEAD
-=======
+
+13-07-21 I. Hrivnacova (exampleB1-V10-07-03)
+- Use B1 in multiple inclusion protection ifdefs
+- Fixes in Doxygen documentation
+
+12-07-21 I. Hrivnacova (exampleB1-V10-07-02)
+- Introduced namespace instead of a class names prefix
+- Declare overriding functions 'override' (and removed 'virtual' keyword)
+
+31-05-21 I. Hrivnacova (exampleB1-V10-07-01)
+- Use nullptr instead of 0
+- Clean trailing whitespaces from all files
+
+30-05-21 M.Maire (exampleB1-V10-07-00)
+- exampleB1.cc: use G4SteppingVerboseWithUnits
+
+02/11/20 B.Morgan (exampleB1-V10-06-01)
+- Support same CMake version range as core Geant4
+
+30/06/20 G. Cosmo (exampleB1-V10-06-00)
+- Migrated to use G4RunManagerFactory, therefore implicitly enabling
+  tasking by default in MT builds.
+
 21/11/19 G. Cosmo (exampleB1-V10-05-00)
 - Use default MixMax random engine.
 
@@ -33,13 +53,13 @@ track of all tags.
 
 04/05/15 I. Hrivnacova (exampleB1-V10-01-02)
 - Coding guidelines: removed empty lines
-     
+
 23/04/15 mma (exampleB1-V10-01-01)
 - RunAction : come back to previous formula
-     
+
 21/04/15 mma (exampleB1-V10-01-00)
 - RunAction : correct calculation of rmsEdep
-  
+
 29/11/14 I. Hrivnacova
 - Use G4endl instead of \n in G4cout;
   this makes each new line in the output on threads preceded with
@@ -52,7 +72,7 @@ track of all tags.
 
 28/10/13 I. Hrivnacova (exampleB1-V09-06-06)
 - Removed SetNumberOfThreads(4) from main (use Geant4 default)
-     
+
 26/10/13 mma (exampleB1-V09-06-05)
 - Use /run/printProgress. Cleanup in EventAction
 
@@ -60,10 +80,10 @@ track of all tags.
 - Removed B1EventInformation for keeping maximum simplicity
 - Improved documentation (added paragraph on Run::Merge())
 - Code clean-up
-     
+
 09/06/13 I. Hrivnacova (exampleB1-V09-06-03)
 - clarify local names in user actions
-     
+
 05/06/13 mma (exampleB1-V09-06-02)
 - add section about ACTION INITALIZATION to README and .README
 - update section DETECTOR RESPONSE
@@ -89,11 +109,11 @@ track of all tags.
 
 14/11/11 I. Hrivnacova
 - The first tagged version of the new B1 example
-  (tagged in basic) 
+  (tagged in basic)
 
 31/10/11 I. Hrivnacova
 - change volume names
-- scoring in 1 volume only, with new scheme     
-     
+- scoring in 1 volume only, with new scheme
+
 05/09/11 M. Maire, P. Gueye
 - Created.

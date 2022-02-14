@@ -10,7 +10,12 @@ ifndef G4LIBDIR
 endif
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
-sources      := $(wildcard src/*.cc)
+# A module may have specified its sources already, so only
+# wildcard if the variable is empty
+# (Temporary feature to support toolkit builds until final retirement)
+ifeq ($(sources),)
+  sources      ?= $(wildcard src/*.cc)
+endif
 dependencies := $(patsubst src/%.cc,$(G4TMPDIR)/%.d,$(sources))
 objects      := $(patsubst src/%.cc,$(G4TMPDIR)/%.o,$(sources))
 

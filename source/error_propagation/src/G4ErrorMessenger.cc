@@ -25,7 +25,7 @@
 //
 //
 // ------------------------------------------------------------
-//      GEANT 4 class implementation file 
+//      GEANT 4 class implementation file
 // ------------------------------------------------------------
 //
 
@@ -40,35 +40,40 @@
 #include "globals.hh"
 
 #ifdef G4VERBOSE
-#include "G4ErrorPropagatorData.hh" //for verbosity checking
+#  include "G4ErrorPropagatorData.hh"  //for verbosity checking
 #endif
 
 //------------------------------------------------------------------------
-G4ErrorMessenger::G4ErrorMessenger(G4ErrorStepLengthLimitProcess* lengthAct, G4ErrorMagFieldLimitProcess* magAct, G4ErrorEnergyLoss* elossAct)
-  :StepLengthAction(lengthAct),MagFieldAction(magAct),EnergyLossAction(elossAct)
+G4ErrorMessenger::G4ErrorMessenger(G4ErrorStepLengthLimitProcess* lengthAct,
+                                   G4ErrorMagFieldLimitProcess* magAct,
+                                   G4ErrorEnergyLoss* elossAct)
+  : StepLengthAction(lengthAct)
+  , MagFieldAction(magAct)
+  , EnergyLossAction(elossAct)
 {
-
   myDir = new G4UIdirectory("/geant4e/");
   myDir->SetGuidance("GEANT4e control commands");
-  
+
   myDirLimits = new G4UIdirectory("/geant4e/limits/");
   myDirLimits->SetGuidance("GEANT4e commands to limit the step");
 
-
-  StepLengthLimitCmd = new G4UIcmdWithADoubleAndUnit("/geant4e/limits/stepLength",this);  
+  StepLengthLimitCmd =
+    new G4UIcmdWithADoubleAndUnit("/geant4e/limits/stepLength", this);
   StepLengthLimitCmd->SetGuidance("Limit the length of an step");
   StepLengthLimitCmd->SetDefaultUnit("mm");
-  StepLengthLimitCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
+  StepLengthLimitCmd->AvailableForStates(G4State_PreInit, G4State_Idle,
+                                         G4State_GeomClosed, G4State_EventProc);
 
-  MagFieldLimitCmd = new G4UIcmdWithADouble("/geant4e/limits/magField",this);  
+  MagFieldLimitCmd = new G4UIcmdWithADouble("/geant4e/limits/magField", this);
   MagFieldLimitCmd->SetGuidance("Limit the length of an step");
-  MagFieldLimitCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
+  MagFieldLimitCmd->AvailableForStates(G4State_PreInit, G4State_Idle,
+                                       G4State_GeomClosed, G4State_EventProc);
 
-  EnergyLossCmd = new G4UIcmdWithADouble("/geant4e/limits/energyLoss",this);  
+  EnergyLossCmd = new G4UIcmdWithADouble("/geant4e/limits/energyLoss", this);
   EnergyLossCmd->SetGuidance("Limit the length of an step");
-  EnergyLossCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
+  EnergyLossCmd->AvailableForStates(G4State_PreInit, G4State_Idle,
+                                    G4State_GeomClosed, G4State_EventProc);
 }
-
 
 //------------------------------------------------------------------------
 G4ErrorMessenger::~G4ErrorMessenger()
@@ -80,31 +85,41 @@ G4ErrorMessenger::~G4ErrorMessenger()
   delete myDirLimits;
 }
 
-
 //------------------------------------------------------------------------
-void G4ErrorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{   
-  if( command == StepLengthLimitCmd ) { 
+void G4ErrorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if(command == StepLengthLimitCmd)
+  {
 #ifdef G4VERBOSE
-    if(G4ErrorPropagatorData::verbose() >= 3 ) { 
-      G4cout << " G4ErrorMessenger::StepLengthAction SetStepLimit " << StepLengthLimitCmd->GetNewDoubleValue(newValue) << G4endl;
+    if(G4ErrorPropagatorData::verbose() >= 3)
+    {
+      G4cout << " G4ErrorMessenger::StepLengthAction SetStepLimit "
+             << StepLengthLimitCmd->GetNewDoubleValue(newValue) << G4endl;
     }
 #endif
-    StepLengthAction->SetStepLimit(StepLengthLimitCmd->GetNewDoubleValue(newValue));
-  } else if( command == MagFieldLimitCmd ) { 
+    StepLengthAction->SetStepLimit(
+      StepLengthLimitCmd->GetNewDoubleValue(newValue));
+  }
+  else if(command == MagFieldLimitCmd)
+  {
 #ifdef G4VERBOSE
-    if(G4ErrorPropagatorData::verbose() >= 3 ) { 
-      G4cout << " G4ErrorMessenger::MagFieldAction SetStepLimit " << MagFieldLimitCmd->GetNewDoubleValue(newValue) << G4endl;
+    if(G4ErrorPropagatorData::verbose() >= 3)
+    {
+      G4cout << " G4ErrorMessenger::MagFieldAction SetStepLimit "
+             << MagFieldLimitCmd->GetNewDoubleValue(newValue) << G4endl;
     }
 #endif
     MagFieldAction->SetStepLimit(MagFieldLimitCmd->GetNewDoubleValue(newValue));
-  } else if( command == EnergyLossCmd ) { 
+  }
+  else if(command == EnergyLossCmd)
+  {
 #ifdef G4VERBOSE
-    if(G4ErrorPropagatorData::verbose() >= 3 ) { 
-      G4cout << " G4ErrorMessenger::EnergyLossAction SetStepLimit " << EnergyLossCmd->GetNewDoubleValue(newValue) << G4endl;
+    if(G4ErrorPropagatorData::verbose() >= 3)
+    {
+      G4cout << " G4ErrorMessenger::EnergyLossAction SetStepLimit "
+             << EnergyLossCmd->GetNewDoubleValue(newValue) << G4endl;
     }
 #endif
     EnergyLossAction->SetStepLimit(EnergyLossCmd->GetNewDoubleValue(newValue));
   }
 }
-

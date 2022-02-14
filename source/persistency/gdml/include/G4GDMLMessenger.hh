@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLMessenger
+// G4GDMLMessenger
 //
 // Class description:
 //
 // GDML UI messenger.
 
-// History:
-// - Created.                                  Witold Pokorski, October 2010
-// -------------------------------------------------------------------------
-
-#ifndef G4GDMLMessenger_h
-#define G4GDMLMessenger_h 1
+// Author: Witold Pokorski, October 2010
+// --------------------------------------------------------------------
+#ifndef G4GDMLMessenger_hh
+#define G4GDMLMessenger_hh 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
@@ -52,31 +47,31 @@ class G4UIcmdWithABool;
 
 class G4GDMLMessenger : public G4UImessenger
 {
-  public:  // with description
+  public:
 
     G4GDMLMessenger(G4GDMLParser*);
-   ~G4GDMLMessenger();
-    
+    ~G4GDMLMessenger();
+
     void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
 
-    G4GDMLParser* myParser;
-    G4LogicalVolume* topvol;
-    
-    G4UIdirectory*             persistencyDir;
-    G4UIdirectory*             gdmlDir;
-    G4UIcmdWithAString*        ReaderCmd;
-    G4UIcmdWithAString*        WriterCmd;    
-    G4UIcmdWithAString*        TopVolCmd;    
-    G4UIcmdWithoutParameter*   ClearCmd;
-    G4UIcmdWithABool*          RegionCmd;    
-    G4UIcmdWithABool*          EcutsCmd;    
-    G4UIcmdWithABool*          SDCmd;    
-    G4UIcmdWithABool*          StripCmd;    
-    G4UIcmdWithABool*          AppendCmd;
+    G4GDMLParser* myParser = nullptr;
+    G4LogicalVolume* topvol = nullptr;
 
-    G4bool pFlag;  // Append pointers to names flag   
+    G4UIdirectory* persistencyDir = nullptr;
+    G4UIdirectory* gdmlDir = nullptr;
+    G4UIcmdWithAString* ReaderCmd = nullptr;
+    G4UIcmdWithAString* WriterCmd = nullptr;
+    G4UIcmdWithAString* TopVolCmd = nullptr;
+    G4UIcmdWithoutParameter* ClearCmd = nullptr;
+    G4UIcmdWithABool* RegionCmd = nullptr;
+    G4UIcmdWithABool* EcutsCmd = nullptr;
+    G4UIcmdWithABool* SDCmd = nullptr;
+    G4UIcmdWithABool* StripCmd = nullptr;
+    G4UIcmdWithABool* AppendCmd = nullptr;
+
+    G4bool pFlag = true;  // Append pointers to names flag
 };
 
 #endif

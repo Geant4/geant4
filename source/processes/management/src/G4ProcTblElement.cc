@@ -23,104 +23,78 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcTblElement class implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	4th Aug 1998, H.Kurashige
-// ------------------------------------------------------------
-//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
-//
+// Author: H.Kurashige, 4 August 1998
+// --------------------------------------------------------------------
+
 #include "G4ProcTblElement.hh"
 
-
-// default constructor ////////////////////////
+// --------------------------------------------------------------------
+// Default constructor
+//
 G4ProcTblElement::G4ProcTblElement()
-   :pProcess(nullptr),pProcMgrVector(nullptr)
 {
 }
 
-//////////////////////////
-G4ProcTblElement::G4ProcTblElement(G4VProcess* aProcess):
-  pProcess(aProcess)
+// --------------------------------------------------------------------
+G4ProcTblElement::G4ProcTblElement(G4VProcess* aProcess)
+  : pProcess(aProcess)
 {
   pProcMgrVector = new G4ProcMgrVector();
 }
 
-// copy constructor //////////////////////////
-G4ProcTblElement::G4ProcTblElement(const G4ProcTblElement &right)
-  :pProcess(nullptr),pProcMgrVector(nullptr)
+// --------------------------------------------------------------------
+// Copy constructor
+//
+G4ProcTblElement::G4ProcTblElement(const G4ProcTblElement& right)
 {
   *this = right;
 }
 
-
-// destructor ////////////////////////
+// --------------------------------------------------------------------
+// Destructor
+//
 G4ProcTblElement::~G4ProcTblElement()
 {
-  if (pProcMgrVector != nullptr) {
+  if (pProcMgrVector != nullptr)
+  {
     pProcMgrVector->clear();
     delete pProcMgrVector;
   }
 }
 
-
-//////////////////////////
-G4ProcTblElement & G4ProcTblElement::operator=(const G4ProcTblElement &right)
+// --------------------------------------------------------------------
+G4ProcTblElement& G4ProcTblElement::operator=(const G4ProcTblElement& right)
 {
-  if (this != &right) {
-    pProcess       = right.pProcess;
+  if (this != &right)
+  {
+    pProcess = right.pProcess;
+
     // copy all contents in  pProcMgrVector
-    if (pProcMgrVector != nullptr) {
+    if (pProcMgrVector != nullptr)
+    {
       pProcMgrVector->clear();
       delete pProcMgrVector;
     }
     pProcMgrVector = new G4ProcMgrVector();
-    G4ProcMgrVector::iterator i;
-    for (i = right.pProcMgrVector->begin(); i!= right.pProcMgrVector->end(); ++i) {
+    for (auto i = right.pProcMgrVector->cbegin();
+              i!= right.pProcMgrVector->cend(); ++i)
+    {
       pProcMgrVector->push_back(*i);
     }
   }
   return *this;
 }
 
-
-//////////////////////////
-G4bool G4ProcTblElement::operator==(const G4ProcTblElement &right) const
+// --------------------------------------------------------------------
+G4bool G4ProcTblElement::operator==(const G4ProcTblElement& right) const
 {
   return (this == &right);
 }
 
-
-//////////////////////////
-G4bool G4ProcTblElement::operator!=(const G4ProcTblElement &right) const
+// --------------------------------------------------------------------
+G4bool G4ProcTblElement::operator!=(const G4ProcTblElement& right) const
 {
   return (this != &right);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -73,20 +73,10 @@ setenv ULTRA_GROUND_USE 1 : A diffusive reflecting surface is used.
 
 The analysis is performed using the native Geant4 analysis tools 
 (g4tools). In the default case, the output histograms are written 
-as xml files.
+in a ROOT file.
 
-The output file can be written in ROOT format by editing the file 
- include/UltraAnalysisManager.hh
-to uncomment
- #include "g4root.hh"
-and comment out
- #include "g4xml.hh"
-
-The output can be get also in hbook format (but this will require a 
-FORTRAN compiler) by following the istructions of Sect. 9.2 of 
-the Geant4 application developer manual (Analysis Manager Classes)
-
--
+The output file can be written in other formats (csv, xml, hdf5) by
+changing the G4AnalysisManager default file type in UltraRunAction::BeginOfRunAction().
 
 -----------------------------------------------------------------------
 ----> How to run the example.                                          
@@ -118,15 +108,14 @@ the Geant4 application developer manual (Analysis Manager Classes)
 ------------------------------------------------------------------------
 ----> Simulation output                                                 
 
-<<<<<<< HEAD
-the output is ultra.xml (or ultra.root) 		                | 
-=======
-the output is ultra.xml (or ultra.root) 		                             
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+the output is ultra.root 		                             
  It contains:
  1)1Dhistogram with the detected photons energy (eV)                    
  2)1Dhistogram with the number of detected photons per event            
 
+
+To plot these histograms run the ROOT macro 'do_plots.C' :
+> root do_plots.C
 ------------------------------------------------------------------------
 
 for comments and questions: bernardo@lip.pt

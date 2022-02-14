@@ -51,7 +51,9 @@
 #include "G4EmDNAPhysics_option5.hh"
 #include "G4EmDNAPhysics_option6.hh"
 #include "G4EmDNAPhysics_option7.hh"
+#include "G4EmDNAPhysics_option8.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
@@ -73,7 +75,7 @@
 
 // decay
 
-#include "G4RadioactiveDecay.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NuclideTable.hh"
 #include "G4LossTableManager.hh"
@@ -82,6 +84,7 @@
 #include "G4DeexPrecoParameters.hh"
 #include "G4NuclideTable.hh"
 #include "G4GenericIon.hh"
+#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -94,42 +97,20 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
 
   // EM physics
   fEmPhysicsList = new G4EmDNAPhysics();
-<<<<<<< HEAD
-  
-=======
+  defaultCutValue = 1. * CLHEP::nm;
 
-  // ***Decay physics from rad01 example***
-  //
+  G4double lowLimit = 10. * CLHEP::eV;
+  G4double highLimit = 100. * CLHEP::GeV;
 
-  //add new units for radioActive decays
-  // 
-  const G4double minute = 60*second;
-  const G4double hour   = 60*minute;
-  const G4double day    = 24*hour;
-  const G4double year   = 365*day;
-  new G4UnitDefinition("minute", "min", "Time", minute);
-  new G4UnitDefinition("hour",   "h",   "Time", hour);
-  new G4UnitDefinition("day",    "d",   "Time", day);
-  new G4UnitDefinition("year",   "y",   "Time", year);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit,
+                                                                  highLimit);
 
-  // mandatory for G4NuclideTable
+  // Change time and other limits in G4NuclideTable
   //
   G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
   G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV);
   
-  //read new PhotonEvaporation data set 
-  //
-  G4DeexPrecoParameters* deex = 
-    G4NuclearLevelData::GetInstance()->GetParameters();
-  
-  deex->SetCorrelatedGamma(false);
-
-  deex->SetStoreAllLevels(true);
-
-  deex->SetMaxLifeTime
-   (G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()/std::log(2.));
-
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  fRadDecay = new G4RadioactiveDecayPhysics();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,44 +119,37 @@ PhysicsList::~PhysicsList()
 {
   delete fMessenger;
   delete fEmPhysicsList;
- 
+  delete fRadDecay;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-    G4BosonConstructor  pBosonConstructor;
-    pBosonConstructor.ConstructParticle();
+  G4BosonConstructor  pBosonConstructor;
+  pBosonConstructor.ConstructParticle();
 
-    G4LeptonConstructor pLeptonConstructor;
-    pLeptonConstructor.ConstructParticle();
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
 
-    G4MesonConstructor pMesonConstructor;
-    pMesonConstructor.ConstructParticle();
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
 
-    G4BaryonConstructor pBaryonConstructor;
-    pBaryonConstructor.ConstructParticle();
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
 
-    G4IonConstructor pIonConstructor;
-    pIonConstructor.ConstructParticle();
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle();
 
-    G4ShortLivedConstructor pShortLivedConstructor;
-    pShortLivedConstructor.ConstructParticle();
-
-
-    G4DNAGenericIonsManager* genericIonsManager;
-    genericIonsManager=G4DNAGenericIonsManager::Instance();
-    genericIonsManager->GetIon("alpha++");
-    genericIonsManager->GetIon("alpha+");
-    genericIonsManager->GetIon("helium");
-    genericIonsManager->GetIon("hydrogen");  
+  G4DNAGenericIonsManager* genericIonsManager;
+  genericIonsManager=G4DNAGenericIonsManager::Instance();
+  genericIonsManager->GetIon("alpha++");
+  genericIonsManager->GetIon("alpha+");
+  genericIonsManager->GetIon("helium");
+  genericIonsManager->GetIon("hydrogen");  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
-#include "G4EmProcessOptions.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -191,43 +165,16 @@ void PhysicsList::ConstructProcess()
   //
   AddTrackingCut();
 
-<<<<<<< HEAD
-=======
-  // decay
+  // raddecay
   //
-
-  G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
-  
-  G4bool ARMflag = true;
-  radioactiveDecay->SetARM(ARMflag);               //Atomic Rearangement
-
-  // need to initialize atomic deexcitation
-  //
-  G4LossTableManager* man = G4LossTableManager::Instance();
-  G4VAtomDeexcitation* deex = man->AtomDeexcitation();
-  if (!deex) {
-     G4EmParameters::Instance()->SetAugerCascade(ARMflag);
-     deex = new G4UAtomicDeexcitation();
-     deex->InitialiseAtomicDeexcitation();
-     man->SetAtomDeexcitation(deex);
-  }
-    
-  // register radioactiveDecay
-  //
-  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
-  ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());  
-
-  //printout
-  //
-  G4cout << "\n  Set atomic relaxation mode " << ARMflag << G4endl;
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  fRadDecay->ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel>0) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -247,9 +194,48 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option2();
-         
-  } else {
-
+  }
+  else if (name == "dna_opt3") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option3();
+  }
+  else if (name == "dna_opt4") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option4();
+  }
+  else if (name == "dna_opt5") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option5();
+  }
+  else if (name == "dna_opt6") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option6();
+  }
+  else if (name == "dna_opt7") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option7();
+  }
+  else if (name == "dna_opt8") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option8();
+  }
+  else if(name == "std_opt3") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();
+  }
+  else if(name == "std_opt4") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+  }
+  else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
@@ -262,17 +248,7 @@ void PhysicsList::AddTrackingCut()
 {
 
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
-
-  auto particleIterator=GetParticleIterator();
-  particleIterator->reset();
-  while( (*particleIterator)() )
-  {
-    G4ParticleDefinition* particle = particleIterator->value();
-    G4String particleName = particle->GetParticleName();
-
-    if (particleName == "e-") 
-      ph->RegisterProcess(new G4UserSpecialCuts(), particle); 
-  }
+  ph->RegisterProcess(new G4UserSpecialCuts(), G4Electron::Electron()); 
 }
 <<<<<<< HEAD
       
@@ -280,28 +256,3 @@ void PhysicsList::AddTrackingCut()
 =======
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-
-//  SetCutsWithDefault();
-
-// or
-
-  defaultCutValue = 1. * nm;
-  SetCutValue(defaultCutValue, "gamma");
-  SetCutValue(defaultCutValue, "e-");
-  SetCutValue(defaultCutValue, "e+");
-  
-  G4double lowLimit = 10. * eV;
-  G4double highLimit = 100. * GeV;
-
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit,
-                                                                highLimit);
-
-  // print cuts 
-  if (verboseLevel>0) DumpCutValuesTable();
-
-}
-
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

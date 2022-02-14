@@ -37,10 +37,13 @@
 // 12.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 #ifndef G4SMARTVOXELPROXY_HH
-#define G4SMARTVOXELPROXY_HH
+#define G4SMARTVOXELPROXY_HH 1
 
-#include "G4Types.hh"
 #include <assert.h>
+
+#include "geomwdefs.hh"
+#include "G4Types.hh"
+#include "G4Allocator.hh"
 
 class G4SmartVoxelNode;
 class G4SmartVoxelHeader;
@@ -48,7 +51,7 @@ class G4SmartVoxelHeader;
 class G4SmartVoxelProxy 
 {
 
-  public:  // with description
+  public:
 
     G4SmartVoxelProxy(G4SmartVoxelHeader *pHeader)
       : fHeader(pHeader) {}
@@ -58,7 +61,7 @@ class G4SmartVoxelProxy
       : fNode(pNode) {}
       // Proxy for the specified node.
 
-    ~G4SmartVoxelProxy();
+    ~G4SmartVoxelProxy() = default;
       // Destructor - do nothing. Not responsible for proxied objects.
 
     G4bool IsHeader() const;
@@ -76,6 +79,11 @@ class G4SmartVoxelProxy
     G4bool operator == (const G4SmartVoxelProxy& v) const;
       // Equality operator.
       // True when objects share same address.
+
+    inline void* operator new(std::size_t);
+      // Override "new" for "G4Allocator".
+    inline void operator delete(void* aProxy);
+      // Override "delete" for "G4Allocator".
 
   private:
 

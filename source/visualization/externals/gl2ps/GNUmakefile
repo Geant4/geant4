@@ -10,7 +10,9 @@ ifndef G4INSTALL
   G4INSTALL = ../../../..
 endif
 
-GLOBLIBS = libG4zlib.lib
+ifdef G4LIB_BUILD_ZLIB
+  GLOBLIBS = libG4zlib.lib
+endif
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk

@@ -43,7 +43,6 @@
 class PhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,7 +53,7 @@ public:
   PhysicsListMessenger(PhysicsList* );
  ~PhysicsListMessenger();
     
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
     
 private:
   

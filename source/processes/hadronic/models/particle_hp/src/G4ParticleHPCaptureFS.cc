@@ -46,6 +46,17 @@
 #include "G4Fragment.hh"
 #include "G4IonTable.hh" 
 #include "G4ParticleHPDataUsed.hh"
+#include "G4PhysicsModelCatalog.hh"
+
+
+G4ParticleHPCaptureFS::G4ParticleHPCaptureFS()
+  {
+    secID = G4PhysicsModelCatalog::GetModelID( "model_NeutronHPCapture" );
+    hasXsec = false; 
+    hasExactMF6 = false;
+    targetMass = 0;
+  }
+
 
   G4HadFinalState * G4ParticleHPCaptureFS::ApplyYourself(const G4HadProjectile & theTrack)
   {
@@ -142,7 +153,7 @@
     nPhotons=thePhotons->size();
 
 ///*
-   if ( DoNotAdjustFinalState() ) {
+    if ( ! G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) {
 //Make at least one photon  
 //101203 TK
     if ( nPhotons == 0 )
@@ -205,7 +216,7 @@
        //theOne->SetMomentum(theMomentum);
        
        theOne->SetMomentum(aMomentum);
-       theResult.Get()->AddSecondary(theOne);
+       theResult.Get()->AddSecondary(theOne, secID);
     }
 
     // Now fill in the gammas.
@@ -215,7 +226,7 @@
       G4DynamicParticle * theOne = new G4DynamicParticle;
       theOne->SetDefinition(thePhotons->operator[](i)->GetDefinition());
       theOne->SetMomentum(thePhotons->operator[](i)->GetMomentum());
-      theResult.Get()->AddSecondary(theOne);
+      theResult.Get()->AddSecondary(theOne, secID);
       delete thePhotons->operator[](i);
     }
     delete thePhotons; 
@@ -224,7 +235,7 @@
     G4bool residual = false;
     G4ParticleDefinition * aRecoil = G4IonTable::GetIonTable()
                                    ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
-    for ( G4int j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
+    for ( std::size_t j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
     {
        if ( theResult.Get()->GetSecondary(j)->GetParticle()->GetDefinition() == aRecoil ) residual = true;
     }
@@ -233,7 +244,7 @@
     {
        G4int nNonZero = 0;
        G4LorentzVector p_photons(0,0,0,0);
-       for ( G4int j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
+       for ( std::size_t j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
        {
           p_photons += theResult.Get()->GetSecondary(j)->GetParticle()->Get4Momentum();
           // To many 0 momentum photons -> Check PhotonDist 
@@ -279,7 +290,7 @@
              G4DynamicParticle * theOne = new G4DynamicParticle;
              theOne->SetDefinition( G4Gamma::Gamma() );
              theOne->SetMomentum( tempVector );
-             theResult.Get()->AddSecondary(theOne);
+             theResult.Get()->AddSecondary(theOne, secID);
           }
 
 //        Add last photon 
@@ -289,7 +300,7 @@
           G4ThreeVector lastPhoton = -p_photons.vect().unit()*vEPhoton.back();
           p_photons += G4LorentzVector( lastPhoton , lastPhoton.mag() );
           theOne->SetMomentum( lastPhoton );
-          theResult.Get()->AddSecondary(theOne);
+          theResult.Get()->AddSecondary(theOne, secID);
        }
 
 //Add residual 
@@ -298,7 +309,7 @@
 			       - p_photons.vect();
        theOne->SetDefinition(aRecoil);
        theOne->SetMomentum( aMomentum );
-       theResult.Get()->AddSecondary(theOne);
+       theResult.Get()->AddSecondary(theOne, secID);
 
     }
 //101203TK END

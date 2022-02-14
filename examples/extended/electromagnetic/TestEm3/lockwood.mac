@@ -1,6 +1,5 @@
 #
 # Macro file for "TestEm3.cc" 
-# (can be run in batch, without graphic)
 #
 # Al-Au-Al  1 layer;
 #
@@ -27,8 +26,7 @@
 /gun/energy 1 MeV
 /testem/gun/rndm 0.8
 #
-/testem/stepMax/absorber 2 5 um
+/testem/stepMax 5 um
 #
 /run/printProgress 1000
-#
-/run/beamOn 10
+/run/beamOn 10000

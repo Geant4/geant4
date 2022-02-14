@@ -30,8 +30,6 @@
 // Class G4OpenGLStoredXmViewer : a class derived from G4OpenGLXmViewer 
 //                              and G4OpenGLStoredViewer.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLStoredXmViewer.hh"
 
 #include "G4OpenGLStoredSceneHandler.hh"
@@ -57,9 +55,8 @@ G4OpenGLStoredXmViewer (G4OpenGLStoredSceneHandler& sceneHandler,
   }
 }
 
-G4OpenGLStoredXmViewer::~G4OpenGLStoredXmViewer () {
-  GetSceneHandler()->RemoveViewerFromList(this);
-}
+G4OpenGLStoredXmViewer::~G4OpenGLStoredXmViewer ()
+{}
 
 void G4OpenGLStoredXmViewer::Initialise () {
 
@@ -83,6 +80,7 @@ void G4OpenGLStoredXmViewer::DrawView () {
   // /vis/viewer/rebuild, but if not, make decision and set flag only
   // if necessary...
   if (!fNeedKernelVisit) KernelVisitDecision ();
+  fLastVP = fVP;
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
 
@@ -137,8 +135,10 @@ void G4OpenGLStoredXmViewer::DrawView () {
 }
 
 void G4OpenGLStoredXmViewer::FinishView () {
-  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+//  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propogated before progressing.
+// JA: Commented out July 2021 - slows rendering down in some cases and I
+// don't see any adverse effects.
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredXmViewer::FinishView () flush \n");
@@ -149,5 +149,3 @@ void G4OpenGLStoredXmViewer::FinishView () {
   glGetIntegerv(GL_RENDER_MODE, &renderMode);
   if (renderMode == GL_RENDER) glXSwapBuffers (dpy, win);  
 }
-
-#endif

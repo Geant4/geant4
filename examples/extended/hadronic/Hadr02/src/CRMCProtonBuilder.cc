@@ -34,6 +34,7 @@
 // Author:    2018 Alberto Ribon
 //
 // Modified:
+// -  18-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -43,16 +44,17 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProtonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
+#include "HadronicInelasticModelCRMC.hh"
 #include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
 
 
-CRMCProtonBuilder::CRMCProtonBuilder() {
+CRMCProtonBuilder::CRMCProtonBuilder( const G4int crmcModelId, const std::string & crmcModelName ) {
   fMin = 0.0*MeV;  // This value does not matter in practice because we are going
                    // to use this model only at high energies.
   fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
-  fModel = new G4CRMCModel();
+  fModel = new HadronicInelasticModelCRMC( crmcModelId, crmcModelName );
 }
 
 
@@ -62,11 +64,10 @@ CRMCProtonBuilder::~CRMCProtonBuilder() {}
 void CRMCProtonBuilder::Build( G4HadronElasticProcess* ) {}
 
 
-void CRMCProtonBuilder::Build( G4ProtonInelasticProcess* aP ) {
+void CRMCProtonBuilder::Build( G4HadronInelasticProcess* aP ) {
   fModel->SetMinEnergy( fMin );
   fModel->SetMaxEnergy( fMax );
   aP->RegisterMe( fModel );
 }
 
 #endif //G4_USE_CRMC
-

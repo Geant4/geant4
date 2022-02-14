@@ -1,0 +1,14 @@
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - CaTS example
+     =========================================================
+
+                       Package History file
+
+19 Novemebr 2021 - tag CaTS-V10-07-01 - I. Hrivnacova
+- Fixed PrimaryGeneratorAction destructor
+
+22 October 2021 - tag CaTS-V10-07-00 - H. Wenzel
+- first version of CaTS example committed

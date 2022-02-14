@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UnitsMessenger
 //
-//
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// Author: Michel Maire, 1998
+// --------------------------------------------------------------------
 
 #include "G4UnitsMessenger.hh"
 
@@ -36,31 +34,28 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+// --------------------------------------------------------------------
 G4UnitsMessenger::G4UnitsMessenger()
-{ 
+{
   UnitsTableDir = new G4UIdirectory("/units/");
   UnitsTableDir->SetGuidance("Available units.");
-      
-  ListCmd = new G4UIcmdWithoutParameter("/units/list",this);
+
+  ListCmd = new G4UIcmdWithoutParameter("/units/list", this);
   ListCmd->SetGuidance("full list of available units.");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+// --------------------------------------------------------------------
 G4UnitsMessenger::~G4UnitsMessenger()
 {
   delete ListCmd;
   delete UnitsTableDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4UnitsMessenger::SetNewValue(G4UIcommand* command,G4String)
-{  
-  if (command == ListCmd)
-    { G4UnitDefinition::PrintUnitsTable(); }
+// --------------------------------------------------------------------
+void G4UnitsMessenger::SetNewValue(G4UIcommand* command, G4String)
+{
+  if(command == ListCmd)
+  {
+    G4UnitDefinition::PrintUnitsTable();
+  }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

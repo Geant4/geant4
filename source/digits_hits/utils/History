@@ -1,4 +1,3 @@
--------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -16,6 +15,71 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 7th, 2021  I. Hrivnacova (detutil-V10-07-06)
+- Updated G4TScoreNtupleWriter for changes in the analysis category:
+  added fDefaultFileType (with default value "root") and its setter
+
+September 27th, 2021 M. Asai (detutil-V10-07-05)
+- Fix indexing of cylindrical scoring mesh commands.
+  Co-working with detscorer-V10-07-01.  Addressing to bug report #2418.
+
+August 23rd, 2021 M. Asai (detutil-V10-07-04)
+- G4VScoringMesh : Correct the warning messages when the size or number 
+  of bins have already been set but tried to change.
+
+July 22nd, 2021 I. Hrivnacova (detutil-V10-07-03)
+- Updated G4TScoreNtupleWriter for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+April 15th, 2021 M. Asai (detutil-V10-07-02)
+- Making sure probe commands are not unnecessarily broadcasted to
+  the worker threads.
+
+April 1st, 2021 B. Morgan (detutil-V10-07-01)
+- Migrate build to modular CMake API
+
+December 7th, 2020  M.Asai (detutil-V10-07-00)
+- Extending cylindrical scoring mesh to tube and tube segment.
+
+November 15th, 2020  M.Asai (detutils-V10-06-10)
+- Adding Mutex lock to G4ScoringProbe::SetMaterial() to avoid the
+  race condition.
+
+September 16th, 2020  M.Asai (detutils-V10-06-09)
+- Adding /score/fill1D command that lets a primitive scorer to
+  directly fill a 1D histogram.
+
+September 3rd, 2020  M.Asai (detutils-V10-06-08)
+- Move G4VPrimitivePlotter.hh to digits_hits/detector
+
+April 29th, 2020  M.Asai (detutils-V10-06-07)
+- G4ScoringProbe.cc : Minor cosmetic changes.
+
+April 22nd, 2020  M.Asai (detutils-V10-06-06)
+- Introducing G4VPrimitivePlotter.hh that enables the user to extend
+  a primitive scorer and directly fill 1D histogram.
+
+April 13th, 2020  M.Asai (detutils-V10-06-05)
+- Introducing Probe mesh.
+
+April 7th, 2020  M.Asai (detutils-V10-06-04)
+- G4VScoringMesh.hh, .cc : further extension for Proble scoring mesh.
+
+April 2nd, 2020  M.Asai (detutils-V10-06-03)
+- G4ScoringMessenger.cc: Fix Coverity error.
+
+March 31st, 2020  M.Asai (detutils-V10-06-02)
+- G4VScoringMesh.hh: Add a new enum entry for future extension.
+
+Feburary 13th, 2020 T.Aso (detutils-V10-06-01)
+- G4ScoreQuantityMessengerQCmd.cc: default parameter for unit
+in trackLength scorer was changed.
+
+December 29th, 2019  M.Asai (detutils-V10-06-00)
+- G4ScoringManager, G4VScoreWriter, G4ScoringMessenger:
+   Add missing setter/getter functions.
+
 October 23rd, 2019  M.Asai (detutils-V10-05-04)
 - Revising utils/src/G4ScoringQuantiryMessenger.cc to better handle
   ther error cases.
@@ -29,7 +93,7 @@ September 30th, 2019  M.Asai (detutils-V10-05-02)
 
 September 19th, 2019  M.Asai (detutils-V10-05-01)
 - Introducing G4ScoringRealWorld that allows to define command-based
-  scorers to a logical volume in the mass world. 
+  scorers to a logical volume in the mass world.
 - Co-working with run-V10-05-05.
 
 July 8th, 2019  I. Hrivnacova (detutils-V10-05-00)
@@ -46,13 +110,13 @@ March 11, 2015  A.Kimura (detutils-V10-01-01)
 
 March 11, 2015  A.Kimura (detutils-V10-01-00)
 March 11, 2015  A.Kimura (detutils-V10-01-00)
-- Revised G4ScoringBox::Draw(...), ::DrawColumn(...), 
-  G4ScoringCylinder::Draw(...) and ::DrawColumn(...) to spped up 
+- Revised G4ScoringBox::Draw(...), ::DrawColumn(...),
+  G4ScoringCylinder::Draw(...) and ::DrawColumn(...) to spped up
   drawing primitive scorers attached to the scoring meshes.
 
 October 03, 2014  A.Kimura (detutils-V10-00-00)
-- Added several sets of G4VisManager::BeginDraw2D() call and 
-  G4VisManager::EndDraw() call in G4VScoreColorMap.cc for the speedup 
+- Added several sets of G4VisManager::BeginDraw2D() call and
+  G4VisManager::EndDraw() call in G4VScoreColorMap.cc for the speedup
   of drawing the texts and the color chart.
 
 October 05, 2013  A.Kimura (detutils-V09-06-00)
@@ -87,7 +151,7 @@ July 11, 2007  M.Asai (detutils-V09-00-00)
 - Move all scorers and filters to digits_hits/scorer.
 
 June 06, 2007  A.Howard (detutils-V08-03-02)
-- Added modified G4PSPopulation removing event (circular) dependency 
+- Added modified G4PSPopulation removing event (circular) dependency
   (file form T.Aso).
 
 June 05, 2007  M.Asai (detutils-V08-03-01)

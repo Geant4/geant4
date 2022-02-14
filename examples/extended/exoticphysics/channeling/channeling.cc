@@ -26,27 +26,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4Types.hh"
+
+#include "G4RunManagerFactory.hh"
+
 #include "G4ScoringManager.hh"
 #include "G4UImanager.hh"
 
-#include "Randomize.hh"
-
-#include "ExExChDetectorConstruction.hh"
-
-#ifdef G4MULTITHREADED
-#include "ExExChUserActionInitialization.hh"
-#else
-#include "ExExChPrimaryGeneratorAction.hh"
-#include "ExExChTrackingAction.hh"
-#include "ExExChStackingAction.hh"
-#include "ExExChEventAction.hh"
-#include "ExExChRunAction.hh"
-#endif
+#include "UserActionInitialization.hh"
 
 #include "ExExChPhysicsList.hh"
 #include "QGSP_BERT.hh"
@@ -55,28 +42,18 @@
 #include "G4VisExecutive.hh"
 #endif
 
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4ChannelingPhysics.hh"
+#include "G4GenericBiasingPhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
     // Construct the default run manager
-#ifdef G4MULTITHREADED
-    G4MTRunManager* runManager = new G4MTRunManager;
-    if(argv[2]){
-        if(atoi(argv[2])>0){
-            runManager->SetNumberOfThreads(atoi(argv[2]));
-        }
-    }
-    G4cout << "MT MODE ON " << runManager->GetNumberOfThreads() << G4endl;
-#else
-    G4RunManager* runManager = new G4RunManager;
-    G4cout << "MT MODE OFF" << G4endl;
-#endif
-    
+    auto* runManager = G4RunManagerFactory::CreateRunManager();
+    runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores() - 2);
+
     // Activate UI-command base scorer
     G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
     scManager->SetVerboseLevel(0);
@@ -87,23 +64,26 @@ int main(int argc,char** argv)
 #endif
     
     // Set mandatory initialization classes
-    G4VUserDetectorConstruction* detector =
-        new ExExChDetectorConstruction;
-    runManager->SetUserInitialization(detector);
-    runManager->SetUserInitialization(new ExExChPhysicsList());
+    G4VModularPhysicsList* physlist= new FTFP_BERT();
+    G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
+    physlist->RegisterPhysics(new G4ChannelingPhysics());
+    physlist->ReplacePhysics(new G4EmStandardPhysics_option4());
+    biasingPhysics->PhysicsBiasAllCharged();
+    physlist->RegisterPhysics(biasingPhysics);
+    runManager->SetUserInitialization(physlist);
 
-#ifndef G4MULTITHREADED
     // Set user action classes
-    runManager->SetUserAction(new ExExChPrimaryGeneratorAction());
-    runManager->SetUserAction(new ExExChEventAction());
-    runManager->SetUserAction(new ExExChStackingAction());
-    runManager->SetUserAction(new ExExChTrackingAction());
-    runManager->SetUserAction(new ExExChRunAction());
-#else
-    runManager->SetUserInitialization(
-                new ExExChUserActionInitialization());
-#endif
-    
+    runManager->SetUserInitialization(new UserActionInitialization());
+
+    runManager->SetUserInitialization(new DetectorConstruction());
+
+    // Initialize visualization
+    //
+    G4VisManager* visManager = new G4VisExecutive;
+    // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+    // G4VisManager* visManager = new G4VisExecutive("Quiet");
+    visManager->Initialize();
+
     // Get the pointer to the User Interface manager
     G4UImanager* UI = G4UImanager::GetUIpointer();  
     

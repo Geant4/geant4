@@ -272,9 +272,6 @@ class G4FTFParamCollection {
       //       ... while for mesons it's 1GeV**2
       double fMaxPt2ofNuclearDestruct;     // D=9GeV**2
 
-   private:
-   
-      void Reset();
 };
 
 

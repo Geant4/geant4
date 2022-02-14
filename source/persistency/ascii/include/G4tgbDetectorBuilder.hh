@@ -23,46 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbDetectorBuilder
+// G4tgbDetectorBuilder
 //
 // Class description:
 //
 // Builder of transient detector.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 #ifndef G4tgbDetectorBuilder_hh
-#define G4tgbDetectorBuilder_hh
+#define G4tgbDetectorBuilder_hh 1
 
 #include "globals.hh"
-
-#include <string>
-#include <vector>
-#include <map>
-
-#include "G4VSolid.hh"
-#include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 
-class G4tgbVolume;
 class G4tgrVolume;
- 
-//-------------------------------------------------------------------------- 
-class G4tgbDetectorBuilder 
-{ 
- public:  // with description
 
-  G4tgbDetectorBuilder();
-  virtual ~G4tgbDetectorBuilder();
+class G4tgbDetectorBuilder
+{
+  public:
 
-  virtual const G4tgrVolume* ReadDetector();
-  virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop );
+    G4tgbDetectorBuilder();
+    virtual ~G4tgbDetectorBuilder();
 
+    virtual const G4tgrVolume* ReadDetector();
+    virtual G4VPhysicalVolume* ConstructDetector(const G4tgrVolume* tgrVoltop);
 };
 
 #endif

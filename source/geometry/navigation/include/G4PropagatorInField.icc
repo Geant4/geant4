@@ -153,6 +153,18 @@ G4bool G4PropagatorInField::GetVerboseTrace()
 // ------------------------------------------------------------------------
 //
 inline
+void G4PropagatorInField::CheckMode(G4bool mode)
+{
+  fCheck = mode;
+  if (fIntersectionLocator != nullptr)
+  {
+    fIntersectionLocator->SetCheckMode(mode);
+  }
+}
+
+// ------------------------------------------------------------------------
+//
+inline
 G4FieldTrack G4PropagatorInField::GetEndState() const
 {
   return End_PointAndTangent;

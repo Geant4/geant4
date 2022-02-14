@@ -32,6 +32,7 @@
 
 #include "G4TwistedTubs.hh"
 
+#include "G4GeomTools.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4GeometryTolerance.hh"
@@ -308,10 +309,31 @@ void G4TwistedTubs::ComputeDimensions(G4VPVParameterisation* /* p */ ,
 void G4TwistedTubs::BoundingLimits(G4ThreeVector& pMin,
                                    G4ThreeVector& pMax) const
 {
-  G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ?
-                             fEndOuterRadius[0] : fEndOuterRadius[1]);
-  pMin.set(-maxEndOuterRad,-maxEndOuterRad,-fZHalfLength);
-  pMax.set( maxEndOuterRad, maxEndOuterRad, fZHalfLength);
+  // Find bounding tube
+  G4double rmin = GetInnerRadius();
+  G4double rmax = GetEndOuterRadius();
+
+  G4double zmin = std::min(GetEndZ(0), GetEndZ(1));
+  G4double zmax = std::max(GetEndZ(0), GetEndZ(1));
+
+  G4double dphi = 0.5*GetDPhi();
+  G4double sphi = std::min(GetEndPhi(0), GetEndPhi(1)) - dphi;
+  G4double ephi = std::max(GetEndPhi(0), GetEndPhi(1)) + dphi;
+  G4double totalphi = ephi - sphi;
+
+  // Find bounding box
+  if (dphi <= 0 || totalphi >= CLHEP::twopi)
+  {
+    pMin.set(-rmax,-rmax, zmin);
+    pMax.set( rmax, rmax, zmax);
+  }
+  else
+  {
+    G4TwoVector vmin,vmax;
+    G4GeomTools::DiskExtent(rmin, rmax, sphi, totalphi, vmin, vmax);
+    pMin.set(vmin.x(), vmin.y(), zmin);
+    pMax.set(vmax.x(), vmax.y(), zmax);
+  }
 
   // Check correctness of the bounding box
   //
@@ -859,15 +881,15 @@ void G4TwistedTubs::DescribeYourselfTo (G4VGraphicsScene& scene) const
 //=====================================================================
 //* GetExtent ---------------------------------------------------------
 
-G4VisExtent G4TwistedTubs::GetExtent() const 
+G4VisExtent G4TwistedTubs::GetExtent() const
 {
   // Define the sides of the box into which the G4Tubs instance would fit.
-
-  G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ?
-                             fEndOuterRadius[0] : fEndOuterRadius[1]);
-  return G4VisExtent( -maxEndOuterRad, maxEndOuterRad, 
-                      -maxEndOuterRad, maxEndOuterRad, 
-                      -fZHalfLength, fZHalfLength );
+  //
+  G4ThreeVector pmin,pmax;
+  BoundingLimits(pmin,pmax);
+  return G4VisExtent(pmin.x(),pmax.x(),
+                     pmin.y(),pmax.y(),
+                     pmin.z(),pmax.z());
 }
 
 //=====================================================================
@@ -1008,9 +1030,23 @@ G4VSolid* G4TwistedTubs::Clone() const
 
 G4double G4TwistedTubs::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) {;}
-  else   { fCubicVolume = fDPhi*fZHalfLength*(fOuterRadius*fOuterRadius
-                                             -fInnerRadius*fInnerRadius); }
+  if (fCubicVolume == 0.)
+  {
+    G4double DPhi  = GetDPhi();
+    G4double Z0    = GetEndZ(0);
+    G4double Z1    = GetEndZ(1);
+    G4double Ain   = GetInnerRadius();
+    G4double Aout  = GetOuterRadius();
+    G4double R0in  = GetEndInnerRadius(0);
+    G4double R1in  = GetEndInnerRadius(1);
+    G4double R0out = GetEndOuterRadius(0);
+    G4double R1out = GetEndOuterRadius(1);
+
+    // V_hyperboloid = pi*h*(2*a*a + R*R)/3
+    fCubicVolume = (2.*(Z1 - Z0)*(Aout + Ain)*(Aout - Ain)
+                    + Z1*(R1out + R1in)*(R1out - R1in)
+                    - Z0*(R0out + R0in)*(R0out - R0in))*DPhi/6.;
+  }
   return fCubicVolume;
 }
 
@@ -1019,8 +1055,7 @@ G4double G4TwistedTubs::GetCubicVolume()
 
 G4double G4TwistedTubs::GetSurfaceArea()
 {
-  if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
+  if (fSurfaceArea == 0.) fSurfaceArea = G4VSolid::GetSurfaceArea();
   return fSurfaceArea;
 }
 

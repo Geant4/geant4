@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbRotationMatrixMgr
+// G4tgbRotationMatrixMgr
 //
 // Class description:
 //
 // Singleton class to manage the building of transient rotation matrix,
 // as well as the construction of the corresponding G4RotationMatrix's.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbRotationMatrixMgr_h
-#define G4tgbRotationMatrixMgr_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbRotationMatrixMgr_hh
+#define G4tgbRotationMatrixMgr_hh 1
 
 #include "globals.hh"
 
@@ -47,32 +42,29 @@
 
 #include "G4tgbRotationMatrix.hh"
 
-typedef std::map< G4String, G4tgbRotationMatrix*,
-                  std::less<G4String> > G4mstgbrotm;
-typedef std::map< G4String, G4RotationMatrix*,
-                  std::less<G4String> > G4msg4rotm;
+using G4mstgbrotm = std::map<G4String, G4tgbRotationMatrix*,
+                             std::less<G4String>>;
+using G4msg4rotm = std::map<G4String, G4RotationMatrix*, std::less<G4String>>;
 
-class G4tgbRotationMatrixMgr 
+class G4tgbRotationMatrixMgr
 {
-  public:  // with description
+  public:
 
     ~G4tgbRotationMatrixMgr();
-  
+
     static G4tgbRotationMatrixMgr* GetInstance();
       // Get only instance (if it does not exists, create it)
 
     G4RotationMatrix* FindOrBuildG4RotMatrix(const G4String& name);
       // Look for a G4RotationMatrix and if not found create it
-       // from the corresponding G4tgbRotationMatrix
+      // from the corresponding G4tgbRotationMatrix
     G4RotationMatrix* FindG4RotMatrix(const G4String& name);
-      // Look for a G4RotationMatrix and if not found return 0
+      // Look for a G4RotationMatrix and if not found return nullptr
 
     G4tgbRotationMatrix* FindOrBuildTgbRotMatrix(const G4String& name);
       // Look for an G4tgbRotationMatrix and if not found exit
     G4tgbRotationMatrix* FindTgbRotMatrix(const G4String& name);
-      // Look for an G4tgbRotationMatrix and if not found return 0
-
-  public:  // without description
+      // Look for an G4tgbRotationMatrix and if not found return nullptr
 
     const G4mstgbrotm GetTgbRotMatList() const { return theTgbRotMats; }
     const G4msg4rotm& GetG4RotMatList() const { return theG4RotMats; }
@@ -83,13 +75,13 @@ class G4tgbRotationMatrixMgr
     void CopyRotMats();
 
     static G4ThreadLocal G4tgbRotationMatrixMgr* theInstance;
-   
+
   private:
 
     G4mstgbrotm theTgbRotMats;
-    G4msg4rotm theG4RotMats; 
+    G4msg4rotm theG4RotMats;
 };
 
-std::ostream& operator<<(std::ostream&, const G4RotationMatrix &);
+std::ostream& operator<<(std::ostream&, const G4RotationMatrix&);
 
 #endif

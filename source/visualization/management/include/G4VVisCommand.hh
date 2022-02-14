@@ -52,11 +52,11 @@ public:
   G4VVisCommand ();
   virtual ~G4VVisCommand ();
 
-  static void SetVisManager (G4VisManager* pVisManager)
-  {fpVisManager = pVisManager;}
+  static G4VisManager* GetVisManager ();
 
-  static const G4Colour& GetCurrentTextColour()
-  {return fCurrentTextColour;}
+  static void SetVisManager (G4VisManager* pVisManager);
+
+  static const G4Colour& GetCurrentTextColour();
 
 protected:
 
@@ -114,9 +114,19 @@ protected:
    G4double& value);
   // Return false if there's a problem
 
+  void CopyMostViewParameters
+  (G4ViewParameters& target, const G4ViewParameters& from);
+  // Copy view parameters except for autoRefresh and background...
+
+  void CopyCameraParameters
+  (G4ViewParameters& target, const G4ViewParameters& from);
+  // Copy view parameters pertaining only to camera
+
   // Other utilities
 
   void CheckSceneAndNotifyHandlers (G4Scene* = nullptr);
+
+  G4bool CheckView();  // False if not valid
 
   void G4VisCommandsSceneAddUnsuccessful(G4VisManager::Verbosity verbosity);
 
@@ -132,8 +142,6 @@ protected:
 
   static G4VisManager* fpVisManager;
 
-  static G4int fErrorCode;
-
   // Current quantities for use in appropriate commands
   static G4int fCurrentArrow3DLineSegmentsPerCircle;
   static G4Colour                   fCurrentColour;
@@ -147,6 +155,13 @@ protected:
   static G4PhysicalVolumeModel::TouchableProperties fCurrentTouchableProperties;
   static G4VisExtent                fCurrentExtentForField;
   static std::vector<G4PhysicalVolumesSearchScene::Findings> fCurrrentPVFindingsForField;
+
+  // When we create a new viewer we would like to use the view parameters of
+  // the existing viewer if there was one. This has to be checked at the
+  // creation of a new viewer and *also* at the creation of a new scene
+  // handler.
+  static G4bool fThereWasAViewer;  // True if there was a viewer
+  static G4ViewParameters fVPExistingViewer;  // Its view parameters
 };
 
 #endif

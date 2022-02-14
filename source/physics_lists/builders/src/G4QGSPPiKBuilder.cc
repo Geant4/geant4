@@ -52,79 +52,37 @@ G4QGSPPiKBuilder(G4bool quasiElastic)
   theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
   theModel = new G4TheoFSGenerator("QGSP");
 
-  theStringModel = new G4QGSModel< G4QGSParticipants >;
-  theStringDecay = new G4ExcitedStringDecay(theQGSM = new G4QGSMFragmentation);
+  G4QGSModel< G4QGSParticipants >* theStringModel = 
+    new G4QGSModel< G4QGSParticipants >;
+  G4ExcitedStringDecay* theStringDecay = 
+    new G4ExcitedStringDecay(new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4GeneratorPrecompoundInterface();
+  G4GeneratorPrecompoundInterface* theCascade = 
+    new G4GeneratorPrecompoundInterface();
 
+  theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}
-   
-  theModel->SetTransport(theCascade);
+    {
+      theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+    } 
 }
  
 G4QGSPPiKBuilder::
 ~G4QGSPPiKBuilder() 
 {
-  if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theStringDecay;
-  delete theStringModel;
-  delete theQGSM;
 }
 
 void G4QGSPPiKBuilder::
-Build(G4PionPlusInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+  if ( aP->GetParticleDefinition() == G4PionPlus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+  } else if ( aP->GetParticleDefinition() == G4PionMinus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
+  }
   aP->RegisterMe(theModel);
 }
-
-void G4QGSPPiKBuilder::
-Build(G4PionMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSPPiKBuilder::
-Build(G4KaonPlusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSPPiKBuilder::
-Build(G4KaonMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSPPiKBuilder::
-Build(G4KaonZeroLInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSPPiKBuilder::
-Build(G4KaonZeroSInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-

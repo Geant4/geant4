@@ -14,9 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-<<<<<<< HEAD
-October 14, 2016 G.Folger
-=======
+Nov 10, 2020 B. Morgan (ExUCN-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 Nov  5, 2019 J.Apostolakis  (ExUCN-V10-05-00)
 - Enabled use of Gravity in physics list
    ( setting flags in G4Transportation. )

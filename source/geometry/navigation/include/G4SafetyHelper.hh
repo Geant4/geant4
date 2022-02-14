@@ -73,20 +73,6 @@ class G4SafetyHelper
     void ReLocateWithinVolume(const G4ThreeVector& pGlobalPoint );
       // Relocate the point in the volume of interest
 
-    G4bool RecheckDistanceToCurrentBoundary(const G4ThreeVector& pGlobalPoint,
-                                   const G4ThreeVector& pDirection,
-                                   const G4double pCurrentProposedStepLength,
-                                         G4double* prDistance,
-                                         G4double* prNewSafety = nullptr) const;
-      // Trial method for checking potential displacement for MS
-      // Check new Globalpoint, to see whether it is in current volume
-      // (mother) and not in potential entering daughter.
-      // If in mother, check distance to boundary along pDirection.
-      // If in entering daughter, check distance back to boundary. 
-      // NOTE:
-      // Can be called only after ComputeStep is called - before ReLocation
-      // Deals only with current volume (and potentially entered)
-
     inline void EnableParallelNavigation(G4bool parallel);
       //  To have parallel worlds considered, must be true.
       //  Alternative is to use single (mass) Navigator directly

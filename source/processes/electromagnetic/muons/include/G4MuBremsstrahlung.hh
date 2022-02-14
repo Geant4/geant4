@@ -83,33 +83,26 @@ public:
 
   ~G4MuBremsstrahlung() = default;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
+  G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, 
-				    G4double cut) override;
-
-  virtual void PrintInfo() override;
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+			    const G4Material*, G4double cut) override;
 
   inline void SetLowestKineticEnergy(G4double e);
 
   // print description in html
-  virtual void ProcessDescription(std::ostream&) const override;
-
-protected:
-
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*) override;
-
-private:
+  void ProcessDescription(std::ostream&) const override;
 
   G4MuBremsstrahlung & operator=(const G4MuBremsstrahlung &right) = delete;
   G4MuBremsstrahlung(const G4MuBremsstrahlung&) = delete;
 
 protected:
 
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                   const G4ParticleDefinition*) override;
+
   G4double  lowestKinEnergy;
-  G4bool    isInitialised;
+  G4bool    isInitialised = false;
 
 };
 

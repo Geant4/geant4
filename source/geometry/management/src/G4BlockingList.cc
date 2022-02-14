@@ -34,12 +34,6 @@ G4BlockingList::G4BlockingList(G4int maxDefault, G4int stride)
 {
 }
 
-// Do nothing destructor
-//
-G4BlockingList::~G4BlockingList()
-{
-}
-
 // Clear List and reset tag
 //
 void G4BlockingList::FullyReset()

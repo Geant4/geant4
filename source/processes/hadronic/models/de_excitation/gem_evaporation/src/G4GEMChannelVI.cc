@@ -37,9 +37,10 @@
 #include "G4LevelManager.hh"
 #include "G4NucleiProperties.hh"
 #include "G4RandomDirection.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4GEMChannelVI::G4GEMChannelVI(G4int theA, G4int theZ)
-  : A(theA), Z(theZ)
+  : A(theA), Z(theZ), secID(-1)
 { 
   G4NuclearLevelData* nData = G4NuclearLevelData::GetInstance();
   pairingCorrection = nData->GetPairingCorrection();
@@ -52,7 +53,8 @@ G4GEMChannelVI::G4GEMChannelVI(G4int theA, G4int theZ)
   fProbability = new G4GEMProbabilityVI(A, Z, lManager);
 
   resA = resZ = fragZ = fragA = 0;
-  mass = resMass = 0.0; 
+  mass = resMass = 0.0;
+  secID = G4PhysicsModelCatalog::GetModelID("model_G4GEMChannelVI");
 }
 
 G4GEMChannelVI::~G4GEMChannelVI()
@@ -113,9 +115,11 @@ G4Fragment* G4GEMChannelVI::EmittedFragment(G4Fragment* theNucleus)
     evFragment->SetMomentum(lv);
     lv0 -= lv; 
   }
+  if(evFragment != nullptr) { evFragment->SetCreatorModelID(secID); }
   theNucleus->SetZandA_asInt(resZ, resA);
   theNucleus->SetMomentum(lv0);
-
+  theNucleus->SetCreatorModelID(secID);
+  
   return evFragment;  
 } 
 

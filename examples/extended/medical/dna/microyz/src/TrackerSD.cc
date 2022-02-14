@@ -35,6 +35,8 @@
 /// \brief Implementation of the TrackerSD class
 
 #include "TrackerSD.hh"
+#include "Randomize.hh"
+#include "G4AnalysisManager.hh"
 #include "G4SDManager.hh"
 
 #include "Randomize.hh"

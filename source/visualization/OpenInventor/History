@@ -18,6 +18,117 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+12 November 2021 - Ben Morgan (openinventor-V10-07-06)
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+8 November 2021 - Ben Morgan (openinventor-V10-07-05)
+- Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+07 June 2021  John Allison  (openinventor-v10-07-04)
+- Requires greps-V10-07-07 (new method AddCompound (const G4Mesh&)).
+- Requires modeling-V10-07-09 (new class G4Mesh).
+- Requires visman-V10-07-10 (new default method and new commands).
+- G4OpenInventorViewer.hh:
+  o Fix hidden function warning.
+- G4OpenInventorViewer.cc:
+  o Force kernel visit if special mesh rendering parameters change.
+
+28 May 2021 Ben Morgan (openinventor-V10-07-03)
+- Migrate to modular CMake build
+
+14 May 2021 Frederick Jones (openinventor-v10-07-02)
+- Minor cleanup and tagged for MR
+
+05 May 2021 Frederick Jones
+- Code clean-up of OpenInventorQt classes
+- G4OpenInventorViewer.cc,hh:
+  o Upgraded the group node sensor to process camera movements,
+    thus eliminating the need for the camera sensor.  The node
+    sensor receives all camera notifications and is immune to
+    changes in the camera type.
+- G4OpenInventorQtExaminerViewer:
+  o Added event handler for mouse wheel to fix the non-intuitive
+    behavior.  Mouse-wheel-forward now zooms/dollys in.
+  o Added viewer button to enable the "axis cross" (3d axes)
+    feedback mechanism.
+
+30 January 2021 Frederick Jones
+- G4OpenInventorQtExaminerViewer
+  o For tabbed viewer in UIQt, added a Detach button to
+    move the viewer to its own dedicated and resizable
+    window on the desktop.
+
+06 January 2021 Frederick Jones (openinventor-v10-07-01)
+- G4OpenInventorQtViewer, G4OpenInventorQtExaminerViewer
+  o Under UIQt: viewer fails (root node is null) if
+    /vis/open/OI command is entered.  Suspected a timing
+    problem and moved uiQt->addTabWidget() from G4OIQtViewer
+    to G4OIQtExaminerviewer::afterRealizeHook().
+
+08 December 2020 Frederick Jones
+- G4OpenInventorQtViewer.hh,cc:
+  o Fixed the uiQt->addTabWidget() call with correct arguments
+    so that tabbed viewer opens correctly.
+  o For UIQt case suppressed the viewer window titling which was
+    changing the UI window title.
+
+22 October 2020 John Allison
+- Some changes to instantiation and initialisation.
+  o G4OpenInventorQtViewer now opens in a tab with correct name.
+  o The main window name is left unchanged (it has same name as executable).
+  o But the G4OpenInventorQtExaminerViewer still opens in a detached window.
+
+20 October 2020 Frederick Jones (openinventor-v10-06-11)
+- Completed all the planned features of the OIQt viewer.
+- This Qt based viewer implements all the functionality
+  of the older Xt/Xm based OIXE viewer and is ready to
+  be used as its replacement.
+
+18 September 2020  John Allison (openinventor-V10-06-10)
+- Part of vis-V10-06-07.
+- G4OpenInventorViewer.cc:
+  o CompareForKernelVisit; Force kernel visit if global parameters change.
+    . GlobalMarkerScale and GlobalLineWidthScale.
+
+07 September 2020 Gabriele Cosmo (openinventor-V10-06-09)
+- Corrected condition for inclusion of GL headers in SbGL.h.
+
+28 August 2020 Ben Morgan (openinventor-V10-06-08)
+- Ensure use of XQuartz/System GL on macOS with SoXt/SoQt
+  respectively.
+
+01 June 2020 Ben Morgan (openinventor-V10-06-07)
+- Use CMake AUTOMOC to automatically generate and compile Moc
+  sources
+
+25 May 2020 Gabriele Cosmo (openinventor-V10-06-06)
+- Corrected GNUmakefile after introduction of dependency on G4UIQt.
+
+21 May 2020 Frederick Jones and John Allison (openinventor-V10-06-05)
+- Corrections to OIQT viewer and changes for use with Qt UI.
+
+30 April 2020 Gabriele Cosmo (openinventor-V10-06-04)
+- Fixed compilation warnings for unused argument/variable in
+  G4OpenInventorQtExaminerViewer and G4OpenInventorQt respectively.
+
+22 April 2020 Frederick Jones (openinventor-V10-06-03)
+- sources.cmake: Configuration for OIQT Vis driver which is
+  orthogonal to OIX and OIXE drivers.
+
+16 April 2020 Ben Morgan (openinventor-V10-06-02)
+- Remove Qt4 support
+
+22 January 2020 Ben Morgan (openinventor-V10-06-01)
+- Add include paths to Inventor et al to usage requirements on G4OpenInventor
+  Inventor does not yet support imported targets, and paths added by
+  include_directories are now explicitly removed.
+  Fixes Bugzilla 2215
+
+12 December 2019 Ben Morgan (openinventor-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
 
 23rd October 2019 Ben Morgan (openinventor-V10-05-07)
 - Remove inclusion of QT_USE_FILE from CMake scripts.
@@ -253,7 +364,7 @@ History file for visualization/OpenInventor
 
 16 October 2012  Frederick Jones  (openinventor-V09-05-10)
 - G4OpenInventorXtExaminerViewer
-  o New class implements functional extensions to the 
+  o New class implements functional extensions to the
     Xt-based viewer.  A plug-in replacement for
     SoXtExaminerViewer (the standard viewer provided
     with Coin3d).
@@ -310,7 +421,7 @@ History file for visualization/OpenInventor
   OpenGL. Needed on Mac to correctly find X11 GL.
 
 8th November 2011 Ben Morgan (openinventor-V09-04-02)
-- source.cmake [BUGFIX #1196]: Added support for CMake build of OpenInventor 
+- source.cmake [BUGFIX #1196]: Added support for CMake build of OpenInventor
   driver (NB requires cotag cmake-V09-04-32).
 
 27th December 2010  Gabriele Cosmo  (openinventor-V09-04-01)
@@ -345,7 +456,7 @@ History file for visualization/OpenInventor
 - Tagged.
 
 18 August 2009 Laurent Garnier
- - G4OpenInventorXt/WinViewer : Fix a wrong initialization introduce by the 
+ - G4OpenInventorXt/WinViewer : Fix a wrong initialization introduce by the
    new way of handling window size hints (January 2009)
 
 24 July 2009, Laurent Garnier
@@ -409,8 +520,8 @@ History file for visualization/OpenInventor
 - This tag includes all the changes below.
 
 2 June 2006  Guy Barrand :
-- G4OpenInvenot, G4OpenInvenotXt, G4OpenInvenotWin : have an Initialize 
-  method in order to init Xt and Inventor only is really used 
+- G4OpenInvenot, G4OpenInvenotXt, G4OpenInvenotWin : have an Initialize
+  method in order to init Xt and Inventor only is really used
   (when creating a viewer or a scene handler).
 
 19th April 2006  Gabriele Cosmo  (openinventor-V08-00-04)
@@ -468,7 +579,7 @@ History file for visualization/OpenInventor
 15th November 2005  Guy Barrand (openinventor-V07-01-03)
 - G4OpenInventorXtViewer : handle fVP.GetXGeometryString().
 - G4OpenInventorSceneHandler : handle global scale view parameter.
-  Done in BeginPrimitives and PreAddSolid by doing a 
+  Done in BeginPrimitives and PreAddSolid by doing a
   SbMatrix::multRight(sbScale) to the incoming global G4Transform3D matrix.
 - G4OpenInventor[Xt,Win]Viewer : handle set background. Done
   in the overloaded SetView method.
@@ -485,7 +596,7 @@ History file for visualization/OpenInventor
   Addition of the SoAlternaterRepAction to traverse a scene graph
   and construct / delete the alternate reps.
   Modification of G4OpenInventorViewer::WriteInventor to write the
-  alternateRep of the SoPolyhedron and then save geometry in a 
+  alternateRep of the SoPolyhedron and then save geometry in a
   .iv file by using Inventor standard lib. In particular the produced
   .iv files are readable by the ivview standard tool.
 
@@ -517,7 +628,7 @@ History file for visualization/OpenInventor
   Code with ';;' does not compile with the "-pedantic" mode of g++-3.4.
 
 26th November 2004  Guy Barrand  (openinventor-V06-02-02)
-- G4OpenInventorXtViewer, SoPolyhedron, SoCounterAction.h : 
+- G4OpenInventorXtViewer, SoPolyhedron, SoCounterAction.h :
   correct some warnings on g++-3.2.1 (reported by Tom Roberts).
 
 25th November 2004  Guy Barrand
@@ -525,7 +636,7 @@ History file for visualization/OpenInventor
 - G4OpenInventorViewer : in SetSolid, etc... avoid to do a FinishView
   that will do a viewAll that may displace the camera.
 - G4OpenInventorViewer : put the camera under a group and put
-  a sensor (fGroupCameraSensor) on the group to detect that the viewer 
+  a sensor (fGroupCameraSensor) on the group to detect that the viewer
   changed the camera type.
 - G4OpenInventor[Xt,Win]Viewer : GetCamera() to get camera of the viewer.
 - G4OpenInventorViewer : delete fSoCameraSensor.
@@ -545,7 +656,7 @@ History file for visualization/OpenInventor
 - So*.cc : have #ifdef G4VIS_BUILD_OIX_DRIVER.
 
 22th November 2004  Guy Barrand
-- G4OpenInventor[Xt,Win]Viewer : "Set preview", "Set preview and full" 
+- G4OpenInventor[Xt,Win]Viewer : "Set preview", "Set preview and full"
   menu items.
 - G4OpenInventorViewer : count nodes and shapes.
 - SoCounterAction : to count nodes.
@@ -554,7 +665,7 @@ History file for visualization/OpenInventor
   transient store.
 - G4OpenInventorViewer : commit commented SoNodeSensor on fSoCamera.
 - G4OpenInventorXtViewer : have a help dialog.
-- G4OpenInventorSceneHandler : delete the SbMatrix returned 
+- G4OpenInventorSceneHandler : delete the SbMatrix returned
   by G4OpenInventorTransform3D::GetSbMatrix. Not done before !
 - G4OpenInventorTransform3D : use SbMatrix instead of SoSFMatrix.
 - G4OpenInventorSceneHandler : cache SoResetTransform.
@@ -584,7 +695,7 @@ History file for visualization/OpenInventor
   then only the generic AddPrimitive(G4Polyhedron). Much simpler.
 
 15th November 2004  Guy Barrand
-- G4OpenInventorViewer : //FIXME comment out on 
+- G4OpenInventorViewer : //FIXME comment out on
   f[Default]VP.SetCulling(false) by default. Not convinced that it is
   the right thing to do.
 - G4OpenInventorViewer : have f[Default]VP.SetCulling(false) by default.
@@ -624,17 +735,17 @@ History file for visualization/OpenInventor
   Solid modeling is used only in case visAtb.SetForceSolid(true).
 - G4OpenInventorSceneHandler::PreAddThis : correct a flaw
   in the non-leaf part ; in case mother not found in fSeparatorMap
-  the SoDetectorTreeKit were added nowhere ! This induced that 
+  the SoDetectorTreeKit were added nowhere ! This induced that
   exaN03Vis5 displayed no gemetry.
 - SoStyleCache : permit to cache commonly used colors, line styles and
   light models.
 - G4OpenInventorSceneHandler : use SoStyleCache to minimize number of nodes.
-- End of the first world war. 
+- End of the first world war.
 - Death of Arrafat.
 
 10th November 2004  Guy Barrand
 - SoMarkerSet, SoGL2PSAction : corrections to work with SGI Inventor.
-- gl2ps : gl2psPrintPostScriptPixmap : fix nbit=2,4 width truncation. 
+- gl2ps : gl2psPrintPostScriptPixmap : fix nbit=2,4 width truncation.
   (On SoMarkerSet, the last column of pixmapswere missing ).
 
 9th November 2004  Guy Barrand
@@ -655,7 +766,7 @@ History file for visualization/OpenInventor
 
 7th November 2004  Guy Barrand
 - Have SoMarkerSet.h, .cc in the repository.
-- G4OpenInventorSceneHandler : 
+- G4OpenInventorSceneHandler :
   Have a AddPrimitive(G4Polymarker) using SoMarkerSet.
   SoMarkerSet draws markers in the frame buffer. It is much
   more performant than having SoSphere and SoCube for markers.
@@ -664,7 +775,7 @@ History file for visualization/OpenInventor
 - G4OpenInventorXtViewer : restore the escape button.
   This button is put in the "app buttons" of the SoXtExaminerViewer.
   (The "app buttons" are put in the left border of decoration).
-  It is ok with SGI-2.1.510 and recent SoXt of Coin, 
+  It is ok with SGI-2.1.510 and recent SoXt of Coin,
 
 21th July 2004  Guy Barrand (openinventor-V06-02-00)
 - G4OpenInventorXtViewer : add include X11/Shell.h to have
@@ -681,7 +792,7 @@ History file for visualization/OpenInventor
 - Have code to run on Windows.
 - Split Viewer to have G4OpenInventorXtViewer and G4OpenInventorWinViewer.
 - Split G4OpenInventor to have G4OpenInventorXt and G4OpenInventorWin.
-  Xt and Win (and not X and Win32 like in vis/OpenGL) to follow 
+  Xt and Win (and not X and Win32 like in vis/OpenGL) to follow
   the conventions found in the OpenInventor world.
 
 29th October 2003  Cosmo Gabriele (openinventor-V05-02-00)
@@ -702,7 +813,7 @@ History file for visualization/OpenInventor
 - Removed vertex.transform (*fpObjectTransformation) from
   G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron).
   Symptom was that polyhedron objects were being transformed twice.
-  The transformation is stored in 
+  The transformation is stored in
   G4OpenInventorSceneHandler::PreAddThis
   ...
   G4OpenInventorTransform3D oiTran (objectTransformation);

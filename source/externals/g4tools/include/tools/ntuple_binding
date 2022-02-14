@@ -1,0 +1,133 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_ntuple_binding
+#define tools_ntuple_binding
+
+// a little class to capture column binding parameters
+// when reading an ntuple.
+
+#include <string>
+#include <vector>
+#include "forit"
+#include "cids"
+
+namespace tools {
+
+class column_binding {
+public:
+  column_binding(const std::string& a_name,cid a_cid,void* a_user_obj)
+  :m_name(a_name)
+  ,m_cid(a_cid)
+  ,m_user_obj(a_user_obj) //WARNING : not owner.
+  {}
+  virtual ~column_binding() {}
+public:
+  column_binding(const column_binding& a_from)
+  :m_name(a_from.m_name)
+  ,m_cid(a_from.m_cid)
+  ,m_user_obj(a_from.m_user_obj)
+  {}
+  column_binding& operator=(const column_binding& a_from) {
+    if(&a_from==this) return *this;
+    m_name = a_from.m_name;
+    m_cid = a_from.m_cid;
+    m_user_obj = a_from.m_user_obj;
+    return *this;
+  }
+public:
+  const std::string& name() const {return m_name;}
+  cid get_cid() const {return m_cid;}
+  void* user_obj() const {return m_user_obj;}
+protected:
+  std::string m_name;
+  cid m_cid;
+  void* m_user_obj;
+};
+
+class ntuple_binding {
+public:
+  ntuple_binding()
+  {}
+  virtual ~ntuple_binding(){}
+public:
+  ntuple_binding(const ntuple_binding& a_from)
+  :m_columns(a_from.m_columns)
+  {}
+  ntuple_binding& operator=(const ntuple_binding& a_from){
+    m_columns = a_from.m_columns;
+    return *this;
+  }
+public:
+  template <class T>
+  void add_column(const std::string& a_name,T& a_user_var) {
+    m_columns.push_back(column_binding(a_name,_cid(T()),(void*)&a_user_var));
+  }
+
+  template <class T>
+  void add_column(const std::string& a_name,std::vector<T>& a_user_var) {
+    m_columns.push_back(column_binding(a_name,_cid_std_vector<T>(),(void*)&a_user_var));
+  }
+
+  // to have consistent naming than in ntuple_booking :
+  template <class T>
+  void add_column_vec(const std::string& a_name,std::vector<T>& a_user_var) {
+    m_columns.push_back(column_binding(a_name,_cid_std_vector<T>(),(void*)&a_user_var));
+  }
+
+  template <class T>
+  void add_column_cid(const std::string& a_name,T& a_user_var) {
+    m_columns.push_back(column_binding(a_name,T::id_class(),(void*)&a_user_var));
+  }
+
+  void add_column_no_var(const std::string& a_name) { //used in rcsv_ntuple.
+    m_columns.push_back(column_binding(a_name,0,0));
+  }
+
+  //void add_column(const std::string& a_name,cid a_id,void* a_user_var) {
+  //  m_columns.push_back(column_binding(a_name,a_id,a_user_var));
+  //}
+
+  const std::vector<column_binding>& columns() const {return m_columns;}
+
+  bool find_user_obj(const std::string& a_name,cid& a_cid,void*& a_obj) const {
+    tools_vforcit(column_binding,m_columns,it) {
+      if((*it).name()==a_name) {
+        a_cid = (*it).get_cid();
+        a_obj = (*it).user_obj();
+	return true;
+      }
+    }
+    a_cid = 0;
+    a_obj = 0;
+    return false;
+  }
+
+  template <class T>
+  T* find_variable(const std::string& a_name) const {
+    tools_vforcit(column_binding,m_columns,it) {
+      if((*it).name()==a_name) {
+        // we should check cid. If so, take care of T=aida::ntuple.
+        return (T*)((*it).user_obj());
+      }
+    }
+    return 0;
+  }
+
+  template <class T>
+  std::vector<T>* find_vector_variable(const std::string& a_name) const {
+    tools_vforcit(column_binding,m_columns,it) {
+      if((*it).name()==a_name) {
+        if((*it).get_cid()!=_cid_std_vector<T>()) return 0;
+        return (std::vector<T>*)((*it).user_obj());
+      }
+    }
+    return 0;
+  }
+protected:
+  std::vector<column_binding> m_columns;
+};
+
+}
+
+#endif

@@ -335,9 +335,9 @@ G4int DicomHandler::ReadFile(FILE* dicom, char* filename2)
       zslice->AddMaterial(ite->second);
     }
     
-    zslice->SetNoVoxelX(fColumns/fCompression);
-    zslice->SetNoVoxelY(fRows/fCompression);
-    zslice->SetNoVoxelZ(1);
+    zslice->SetNoVoxelsX(fColumns/fCompression);
+    zslice->SetNoVoxelsY(fRows/fCompression);
+    zslice->SetNoVoxelsZ(1);
 
     zslice->SetMinX(-fPixelSpacingX*fColumns/2.);
     zslice->SetMaxX(fPixelSpacingX*fColumns/2.);

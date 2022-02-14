@@ -50,8 +50,4 @@ class eRositaEventAction : public G4UserEventAction
     void EndOfEventAction(const G4Event*);
  
 };
-
-
 #endif
-
-    

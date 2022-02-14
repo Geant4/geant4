@@ -23,18 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MatScanMessenger
 //
+// Class description:
 //
-//
+// Messenger class for materials scanner.
 
-// class description:
-//
-
-
-#ifndef G4MatScanMessenger_HH
-#define G4MatScanMessenger_HH 1
+// Author: M.Asai, May 2006
+// --------------------------------------------------------------------
+#ifndef G4MatScanMessenger_hh
+#define G4MatScanMessenger_hh 1
 
 #include "G4UImessenger.hh"
+
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcommand;
@@ -47,27 +48,26 @@ class G4MaterialScanner;
 class G4MatScanMessenger : public G4UImessenger
 {
   public:
+
     G4MatScanMessenger(G4MaterialScanner* p1);
     virtual ~G4MatScanMessenger();
-    
-    virtual G4String GetCurrentValue(G4UIcommand * command);
-    virtual void SetNewValue(G4UIcommand * command,G4String newValue);
+
+    virtual G4String GetCurrentValue(G4UIcommand* command);
+    virtual void SetNewValue(G4UIcommand* command, G4String newValue);
 
   private:
-    G4MaterialScanner* theScanner;
-    
-    G4UIdirectory* msDirectory;
-    G4UIcmdWithoutParameter* scanCmd;
-    G4UIcommand* thetaCmd;
-    G4UIcommand* phiCmd;
-    G4UIcommand* singleCmd;
-    G4UIcmdWith3Vector* single2Cmd;
-    G4UIcmdWithABool* regSenseCmd;
-    G4UIcmdWithAString* regionCmd;
-    G4UIcmdWith3VectorAndUnit* eyePosCmd;
+
+    G4MaterialScanner* theScanner = nullptr;
+
+    G4UIdirectory* msDirectory = nullptr;
+    G4UIcmdWithoutParameter* scanCmd = nullptr;
+    G4UIcommand* thetaCmd = nullptr;
+    G4UIcommand* phiCmd = nullptr;
+    G4UIcommand* singleCmd = nullptr;
+    G4UIcmdWith3Vector* single2Cmd = nullptr;
+    G4UIcmdWithABool* regSenseCmd = nullptr;
+    G4UIcmdWithAString* regionCmd = nullptr;
+    G4UIcmdWith3VectorAndUnit* eyePosCmd = nullptr;
 };
 
 #endif
-
-
-

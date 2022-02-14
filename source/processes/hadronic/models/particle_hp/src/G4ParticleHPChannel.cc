@@ -33,7 +33,9 @@
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
-// June-2019 - E. Mendoza --> Modification to allow using an incomplete data library if the G4NEUTRONHP_SKIP_MISSING_ISOTOPES environmental flag is defined. The missing XS are set to 0.
+// June-2019 - E. Mendoza --> Modification to allow using an incomplete
+//   data library if the G4NEUTRONHP_SKIP_MISSING_ISOTOPES environmental
+//   flag is defined. The missing XS are set to 0.
 
 
 #include <stdlib.h>
@@ -44,23 +46,22 @@
 #include "G4ParticleHPFinalState.hh"
 #include "G4HadTmpUtil.hh"
 
-#include "G4ParticleHPManager.hh"
 #include "G4ParticleHPReactionWhiteBoard.hh"
 
-  G4double G4ParticleHPChannel::GetXsec(G4double energy)
-  {
-    return std::max(0., theChannelData->GetXsec(energy));
-  }
+G4double G4ParticleHPChannel::GetXsec(G4double energy)
+{
+  return std::max(0., theChannelData->GetXsec(energy));
+}
   
-  G4double G4ParticleHPChannel::GetWeightedXsec(G4double energy, G4int isoNumber)
-  {
-    return theIsotopeWiseData[isoNumber].GetXsec(energy);
-  }
+G4double G4ParticleHPChannel::GetWeightedXsec(G4double energy, G4int isoNumber)
+{
+  return theIsotopeWiseData[isoNumber].GetXsec(energy);
+}
   
-  G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber)
-  {
-    return theFinalStates[isoNumber]->GetXsec(energy);
-  }
+G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber)
+{
+  return theFinalStates[isoNumber]->GetXsec(energy);
+}
   
   void G4ParticleHPChannel::
   Init(G4Element * anElement, const G4String dirName, const G4String aFSType) 

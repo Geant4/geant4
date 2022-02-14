@@ -290,6 +290,7 @@ void DetectorConstruction::SetAbsorMaterial(G4int iabs,const G4String& material)
   if (pttoMaterial) {
       fAbsorMaterial[iabs] = pttoMaterial;
       G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+      G4cout << "\n " << pttoMaterial << G4endl; 
   }
 }
 

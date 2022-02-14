@@ -111,6 +111,7 @@ class G4SubtractionSolid : public G4BooleanSolid
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
 
+    virtual G4double GetCubicVolume() final;
 };
 
 #endif

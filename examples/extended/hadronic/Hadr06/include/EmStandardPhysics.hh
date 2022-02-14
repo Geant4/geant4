@@ -29,40 +29,38 @@
 // $Id: EmStandardPhysics.hh 66586 2012-12-21 10:48:39Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef EmStandardPhysics_h
 #define EmStandardPhysics_h 1
 
-#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
+#include "G4ParticleGun.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EmStandardPhysics : public G4VPhysicsConstructor
 {
-  public: 
-    EmStandardPhysics(const G4String& name = "standard");
-   ~EmStandardPhysics();
+ public:
+  PrimaryGeneratorAction();
+  virtual ~PrimaryGeneratorAction();
 
-  public: 
-    // This method is dummy for physics
-    virtual void ConstructParticle() {};
- 
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
+  virtual void GeneratePrimaries(G4Event*);
+
+  G4ParticleGun* GetParticleGun() { return fParticleGun; };
+
+  void SetOptPhotonPolar();
+  void SetOptPhotonPolar(G4double);
+  void SetRandomDirection(G4bool val = true);
+  G4bool GetPolarized() { return fPolarized; };
+  G4double GetPolarization() { return fPolarization; }
+
+ private:
+  G4ParticleGun* fParticleGun;
+  PrimaryGeneratorMessenger* fGunMessenger;
+  G4bool fRandomDirection;
+  G4bool fPolarized;
+  G4double fPolarization;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
-
-
-
-
-
-
 
 

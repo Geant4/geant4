@@ -29,8 +29,6 @@
 //Framed box container class
 //Inherits from G4OpenGLXmBox
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMFRAMEDBOX_HH
 #define G4OPENGLXMFRAMEDBOX_HH
 
@@ -56,7 +54,5 @@ private:
   G4OpenGLXmFramedBox& operator = (const G4OpenGLXmFramedBox&);
   Widget frame;
 };
-
-#endif
 
 #endif

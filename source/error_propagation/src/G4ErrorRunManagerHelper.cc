@@ -25,7 +25,7 @@
 //
 //
 // ------------------------------------------------------------
-//      GEANT 4 class implementation file 
+//      GEANT 4 class implementation file
 // ------------------------------------------------------------
 //
 
@@ -44,17 +44,19 @@
 //-----------------------------------------------------------------------
 
 G4ThreadLocal G4ErrorRunManagerHelper*
-G4ErrorRunManagerHelper::fRunManagerKernel = 0;
+  G4ErrorRunManagerHelper::fRunManagerKernel = 0;
 
 //-----------------------------------------------------------------------
 G4ErrorRunManagerHelper* G4ErrorRunManagerHelper::GetRunManagerKernel()
-{ return fRunManagerKernel; }
-
+{
+  return fRunManagerKernel;
+}
 
 //-----------------------------------------------------------------------
 G4ErrorRunManagerHelper::G4ErrorRunManagerHelper()
 {
-  if(fRunManagerKernel) {
+  if(fRunManagerKernel)
+  {
     G4Exception("G4ErrorRunManagerHelper::G4ErrorRunManagerHelper()",
                 "InvalidSetup", FatalException,
                 "G4eRunManageKernel constructed twice.");
@@ -63,31 +65,28 @@ G4ErrorRunManagerHelper::G4ErrorRunManagerHelper()
 
   //----- Look if somebody has created a G4RunManagerKernel
   theG4RunManagerKernel = G4RunManagerKernel::GetRunManagerKernel();
-  if( theG4RunManagerKernel == 0 ) {
+  if(theG4RunManagerKernel == 0)
+  {
     //--- if not create it
     theG4RunManagerKernel = new G4RunManagerKernel();
-    G4cout << " creating G4RunManagerKernel " <<  theG4RunManagerKernel << G4endl;
+    G4cout << " creating G4RunManagerKernel " << theG4RunManagerKernel
+           << G4endl;
   }
-    
+
   theG4RunManagerKernel->SetVerboseLevel(2);
   theUserPhysicsList = 0;
-  theUserWorld = 0;
-
+  theUserWorld       = 0;
 }
 
+//-----------------------------------------------------------------------
+G4ErrorRunManagerHelper::~G4ErrorRunManagerHelper() {}
 
 //-----------------------------------------------------------------------
-G4ErrorRunManagerHelper::~G4ErrorRunManagerHelper()
+void G4ErrorRunManagerHelper::SetUserInitialization(
+  G4VUserDetectorConstruction* userInit)
 {
-}
-
-
-//-----------------------------------------------------------------------
-void G4ErrorRunManagerHelper::SetUserInitialization(G4VUserDetectorConstruction* userInit)
-{ 
   theUserWorld = userInit->Construct();
 }
-
 
 //-----------------------------------------------------------------------
 void G4ErrorRunManagerHelper::SetUserInitialization(G4VPhysicalVolume* userInit)
@@ -95,66 +94,78 @@ void G4ErrorRunManagerHelper::SetUserInitialization(G4VPhysicalVolume* userInit)
   theUserWorld = userInit;
 }
 
-
 //-----------------------------------------------------------------------
-void G4ErrorRunManagerHelper::SetUserInitialization(G4VUserPhysicsList* userInit)
+void G4ErrorRunManagerHelper::SetUserInitialization(
+  G4VUserPhysicsList* userInit)
 {
   theUserPhysicsList = userInit;
 }
 
-
 //-----------------------------------------------------------------------
 void G4ErrorRunManagerHelper::InitializeGeometry()
 {
-  //check if user world has been directly called or someone initialized the world volume already 
-  //----- First option: geometry has been defined to GEANT4e 
-  if( theUserWorld != 0 ) {
-    theG4RunManagerKernel->DefineWorldVolume( theUserWorld );
-    
-    //----- Second option: geometry has been defined to GEANT4, do nothing GEANT4 should take care 
-  } else {
+  // check if user world has been directly called or someone initialized the
+  // world volume already
+  //----- First option: geometry has been defined to GEANT4e
+  if(theUserWorld != 0)
+  {
+    theG4RunManagerKernel->DefineWorldVolume(theUserWorld);
+
+    //----- Second option: geometry has been defined to GEANT4, do nothing
+    //GEANT4 should take care
+  }
+  else
+  {
     //--- Check that indeed geometry has been defined to GEANT4
-    if ( G4TransportationManager::GetTransportationManager()
-         ->GetNavigatorForTracking()->GetWorldVolume() == 0 ) {
+    if(G4TransportationManager::GetTransportationManager()
+         ->GetNavigatorForTracking()
+         ->GetWorldVolume() == 0)
+    {
       G4Exception("G4ErrorRunManagerHelper::InitializeGeometry()",
                   "InvalisSetup", FatalException,
-                  "No world defined in your geometry!" );
+                  "No world defined in your geometry!");
     }
-    
   }
 }
-
 
 //-----------------------------------------------------------------------
 void G4ErrorRunManagerHelper::InitializePhysics()
 {
+  G4cout << "  G4ErrorRunManagerHelper::InitializePhysics " << G4endl;
 
-  G4cout << "  G4ErrorRunManagerHelper::InitializePhysics "  << G4endl;
-
-  //----- First option: physics list has been defined to GEANT4e 
-  if( theUserPhysicsList != 0 ) {
+  //----- First option: physics list has been defined to GEANT4e
+  if(theUserPhysicsList != 0)
+  {
     theG4RunManagerKernel->SetPhysics(theUserPhysicsList);
     theG4RunManagerKernel->InitializePhysics();
-  }else {
-  //----- Second option: physics list has been defined to GEANT4, do nothing GEANT4 should take care 
-    if( G4RunManager::GetRunManager() != 0 && G4RunManager::GetRunManager()->GetUserPhysicsList() != 0 ){ 
+  }
+  else
+  {
+    //----- Second option: physics list has been defined to GEANT4, do nothing
+    //GEANT4 should take care
+    if(G4RunManager::GetRunManager() != 0 &&
+       G4RunManager::GetRunManager()->GetUserPhysicsList() != 0)
+    {
       //--- Physics should be G4ErrorPhysicsList, else send a warning
-      if( static_cast<const G4ErrorPhysicsList*>(G4RunManager::GetRunManager()->GetUserPhysicsList()) == 0 ) {
+      if(static_cast<const G4ErrorPhysicsList*>(
+           G4RunManager::GetRunManager()->GetUserPhysicsList()) == 0)
+      {
         std::ostringstream message;
         message << "Physics list is not G4ErrorPhysicsList. Are you sure?";
         G4Exception("G4ErrorRunManagerHelper::InitializePhysics()",
                     "GEANT4e-Notification", JustWarning, message);
       }
-    } else {
-      //----- Third option: no physics list has been defined, define a G4ErrorPhysicsList
+    }
+    else
+    {
+      //----- Third option: no physics list has been defined, define a
+      //G4ErrorPhysicsList
       theG4RunManagerKernel->SetPhysics(new G4ErrorPhysicsList);
       //    theG4RunManagerKernel->SetPhysics(new ExN02PhysicsList);
       theG4RunManagerKernel->InitializePhysics();
     }
   }
- 
 }
-
 
 //-----------------------------------------------------------------------
 void G4ErrorRunManagerHelper::RunInitialization()
@@ -162,25 +173,20 @@ void G4ErrorRunManagerHelper::RunInitialization()
   theG4RunManagerKernel->RunInitialization();
 }
 
-
 //-----------------------------------------------------------------------
 void G4ErrorRunManagerHelper::SetUserAction(G4UserTrackingAction* userAction)
 {
-
-  G4EventManager::GetEventManager()->SetUserAction( userAction );
+  G4EventManager::GetEventManager()->SetUserAction(userAction);
 }
-
 
 //-----------------------------------------------------------------------
 void G4ErrorRunManagerHelper::SetUserAction(G4UserSteppingAction* userAction)
 {
-  G4EventManager::GetEventManager()->SetUserAction( userAction );
+  G4EventManager::GetEventManager()->SetUserAction(userAction);
 }
-
 
 //-----------------------------------------------------------------------
 void G4ErrorRunManagerHelper::RunTermination()
 {
   theG4RunManagerKernel->RunTermination();
 }
-

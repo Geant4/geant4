@@ -28,6 +28,7 @@
 #include "G4DNAElastic.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Positron.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,7 +37,7 @@ using namespace std;
 G4DNAElastic::G4DNAElastic(const G4String& processName, G4ProcessType type) :
     G4VEmProcess(processName, type), isInitialised(false)
 {
-  SetProcessSubType(51);
+  SetProcessSubType(fLowEnergyElastic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,7 +94,7 @@ void G4DNAElastic::InitialiseProcess(const G4ParticleDefinition* p)
       AddEmModel(1, EmModel());
     }
 
-    // "alpha" must be explicitely used, not alpha++
+    // "alpha" must be explicitly used, not alpha++
     else if(name == "helium" || name == "alpha" || name == "alpha+")
     {
       if(!EmModel())

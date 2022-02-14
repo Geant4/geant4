@@ -25,7 +25,7 @@
 //
 // 
 #include "SteppingAction.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ITTrackHolder.hh"
 #include "G4Track.hh"

@@ -108,6 +108,7 @@ void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 
 void Run::CountProcesses(const G4VProcess* process) 
 {
+  if (process == nullptr) return;
   G4String procName = process->GetProcessName();
   std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
   if ( it == fProcCounter.end()) {
@@ -185,7 +186,7 @@ G4int Run::GetIonId(G4String ionName)
    std::map<G4String,G4int>::const_iterator it = fgIonMap.find(ionName);
    if ( it == fgIonMap.end()) {
      fgIonMap[ionName] = fgIonId;
-     if (fgIonId < kMaxHisto2) fgIonId++;
+     if (fgIonId < (kMaxHisto2 - 1)) fgIonId++;
    }
    return fgIonMap[ionName];
 }
@@ -265,7 +266,7 @@ void Run::EndOfRun()
   
   //particles count
   //
-  G4cout << "\n List of generated particles:" << G4endl;
+  G4cout << "\n List of generated particles (with meanLife != 0):" << G4endl;
      
  for ( const auto& particleData : fParticleDataMap1 ) {
     G4String name = particleData.first;

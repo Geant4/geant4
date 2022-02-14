@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+ <define>
+  <constant name="thickness" value="5" />
+  <position name="origin" unit="mm" x="0" y="0" z="0" />
+ </define>
+
+ <materials>
+  <material name = "STAINLESS-STEEL" formula="STAINLESS-STEEL" >
+    <D value="8" />
+    <fraction n ="0.169001" ref = "G4_Cr" />
+    <fraction n ="0.746213" ref = "G4_Fe" />
+    <fraction n ="0.0847861" ref = "G4_Ni" />
+  </material>
+ </materials>
+
+ <solids>
+  <box aunit="deg" lunit="mm" name="worldBox" x="6010" y="6010" z="6010" />
+  <cone aunit="deg" lunit="mm" name="OuterCone" rmax1="1850" rmax2="1160" z="1000" deltaphi="360" />
+  <cone aunit="deg" lunit="mm" name="InnerCone" rmax1="1850-2*thickness" rmax2="1160-2*thickness" z="1000-2*thickness" deltaphi="360" />
+ </solids>
+ <structure>
+  <volume name="InnerAir" >
+   <materialref ref="G4_AIR" />
+   <solidref ref="InnerCone" />
+  </volume>
+  <volume name="ConnicalBody" >
+   <materialref ref="STAINLESS-STEEL" />
+   <solidref ref="OuterCone" />
+   <physvol>
+    <volumeref ref="InnerAir" />
+    <positionref ref="origin" />
+   </physvol>
+  </volume>
+  <volume name="World" >
+   <materialref ref="G4_Galactic" />
+   <solidref ref="worldBox" />
+   <physvol>
+    <volumeref ref="ConnicalBody" />
+    <positionref ref="origin" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="World" />
+ </setup>
+</gdml>

@@ -36,7 +36,6 @@
 // Management of electron ionisation cross sections per shell
 
 // -------------------------------------------------------------------
-
 #ifndef G4ECROSSSECTIONHANDLER_HH
 #define G4ECROSSSECTIONHANDLER_HH 1
 
@@ -47,29 +46,20 @@
 
 class G4VDataSetAlgorithm;
 
-
 class G4eCrossSectionHandler : public G4VCrossSectionHandler 
 {
- 
 public:
-
-  G4eCrossSectionHandler(G4VDataSetAlgorithm* alg,
+  explicit G4eCrossSectionHandler(G4VDataSetAlgorithm* alg,
 			 G4double emin, G4double emax, G4int nbin);
 
   virtual ~G4eCrossSectionHandler();
-	
-protected: 
-   
-  virtual std::vector<G4VEMDataSet*>* 
-  BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
-				 const G4DataVector* energyCuts = 0);
- 
-private:
- 
-  // Hide copy constructor and assignment operator
-  G4eCrossSectionHandler(const G4eCrossSectionHandler&);
-  G4eCrossSectionHandler & operator=(const G4eCrossSectionHandler &right);
+  G4eCrossSectionHandler(const G4eCrossSectionHandler&) = delete;
+  G4eCrossSectionHandler & operator=(const G4eCrossSectionHandler &right) = delete;
 
+protected:  
+  std::vector<G4VEMDataSet*>* 
+  BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
+				 const G4DataVector* energyCuts = 0) override;
 };
  
 #endif

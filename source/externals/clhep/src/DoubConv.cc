@@ -9,6 +9,7 @@
 
 #include <sstream>
 #include <iomanip>
+#include <vector>
 
 namespace CLHEP {
 

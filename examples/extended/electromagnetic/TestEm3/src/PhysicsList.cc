@@ -129,9 +129,12 @@ void PhysicsList::ConstructProcess()
   //
   fEmPhysicsList->ConstructProcess();
 
-  // Add Decay Process
-  //
-  G4Decay* fDecayProcess = new G4Decay();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddStepMax()
+{
+  // Step limitation seen as a process
+  StepMax* stepMaxProcess = new StepMax();
 
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();

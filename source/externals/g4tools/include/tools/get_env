@@ -1,0 +1,44 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_get_env
+#define tools_get_env
+
+#include <cstdlib>
+
+#include "sto"
+
+namespace tools {
+
+inline bool is_env(const std::string& a_string){
+  const char* env = ::getenv(a_string.c_str());
+  return (env?true:false);
+}
+
+inline bool get_env(const std::string& a_string,std::string& a_value){
+  const char* env = ::getenv(a_string.c_str());
+  if(env) {
+    a_value = std::string(env?env:"");
+    return true;
+  } else {
+    a_value.clear();
+    return false;
+  }
+}
+
+template <class T>
+inline bool get_env(const std::string& a_string,T& a_v,const T& a_def = T()){
+  std::string s;
+  if(!get_env(a_string,s)) {a_v = a_def;return false;}
+  return to<T>(s,a_v,a_def);
+}
+
+inline bool get_env_bool(const std::string& a_string,bool& a_v){
+  std::string s;
+  if(!get_env(a_string,s)) return false;
+  return to(s,a_v);
+}
+
+}
+
+#endif

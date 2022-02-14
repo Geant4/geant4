@@ -21,8 +21,8 @@
 /process/list
 #
 # rdm is applied only to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+/process/had/rdm/noVolumes
+/process/had/rdm/selectVolume Target
 
 #
 # place the isotopes in the middle of the target, at rest. 
@@ -30,11 +30,14 @@
 /gun/ion 92 238 0 100. keV
 #
 # complete chain decays in VR mode
-/grdm/sourceTimeProfile beam.data
-/grdm/decayBiasProfile measures.data
-#/grdm/nucleusLimits 238 238 90 92
-/grdm/hlThreshold 1e-6 s
-/grdm/analogueMC 0
+/process/had/rdm/sourceTimeProfile beam.data
+/process/had/rdm/decayBiasProfile measures.data
+#/process/had/rdm/nucleusLimits 238 238 90 92
+
+# In biased mode the shortest allowed isomer lifetime is 
+# set to 1 usec regardless of this setting
+/process/had/rdm/hlThreshold 1e-6 s
+/process/had/rdm/analogueMC 0
 #
 /analysis/setFileName u238b
 /analysis/h1/set 6 100 0. 15. MeV

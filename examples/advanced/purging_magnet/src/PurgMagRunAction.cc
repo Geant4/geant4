@@ -38,9 +38,8 @@
 
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
+#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
-
-#include "PurgMagAnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -107,6 +106,7 @@ void PurgMagRunAction::Book()
 {
   // Get/create analysis manager
   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->SetDefaultFileType("csv");
  
   // Open an output file
   man->OpenFile("purgmag"); 

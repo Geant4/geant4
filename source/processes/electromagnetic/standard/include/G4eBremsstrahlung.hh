@@ -84,30 +84,29 @@ public:
 
   explicit G4eBremsstrahlung(const G4String& name = "eBrem");
 
-  virtual ~G4eBremsstrahlung();
+  ~G4eBremsstrahlung() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
+  G4bool IsApplicable(const G4ParticleDefinition& p) final;
   
   // print documentation in html format
-  virtual void ProcessDescription(std::ostream&) const override;
-
-protected:
-
-  // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile) const override;
-
-  virtual void 
-  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-			      const G4ParticleDefinition*) override;
-
-  G4bool   isInitialised;
-
-private:
+  void ProcessDescription(std::ostream&) const override;
 
   // hide assignment operator
   G4eBremsstrahlung & operator=(const G4eBremsstrahlung &right) = delete;
   G4eBremsstrahlung(const G4eBremsstrahlung&) = delete;
 
+protected:
+
+  // Print out of the class parameters
+  void StreamProcessInfo(std::ostream& outFile) const override;
+
+  void 
+  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+			      const G4ParticleDefinition*) override;
+
+private:
+
+  G4bool isInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: Susanna Guatelli, susanna@uow.edu.au,
-// Authors: Jeremy Davis, jad028@uowmail.edu.au
-//
+// Authors: Susanna Guatelli and Francesco Romano
+// susanna@uow.edu.au, francesco.romano@ct.infn.it
+
+// Modified by Jacopo Magini: j.magini@surrey.ac.uk
 
 #ifndef DetectorConstruction_H 
 #define DetectorConstruction_H 1
@@ -40,7 +41,7 @@ class G4LogicalVolume;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-    DetectorConstruction(AnalysisManager* analysis);
+    DetectorConstruction(AnalysisManager* analysis, G4String detector);
     ~DetectorConstruction();
 
     G4VPhysicalVolume* Construct();
@@ -48,6 +49,14 @@ public:
     void ConstructSDandField();
 
 private:
-  AnalysisManager* analysis;
+	AnalysisManager* analysis;
+	
+	G4String detectorType;
+	
+	// Methods called by Construct() depending on the chosen setup
+	G4VPhysicalVolume* ConstructDiamondDetector();
+	G4VPhysicalVolume* ConstructMicroDiamondDetector();
+	G4VPhysicalVolume* ConstructSiliconDetector();
+	G4VPhysicalVolume* ConstructSiliconBridgeDetector();
 };
 #endif

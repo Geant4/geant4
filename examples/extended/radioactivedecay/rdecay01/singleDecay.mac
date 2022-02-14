@@ -1,5 +1,8 @@
+# macro for rdecay01
+#
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /gun/particle ion
 /gun/ion 10 24
@@ -15,6 +18,5 @@
 /analysis/h1/set 7  100  0.    1 eV	#P balance
 /analysis/h1/set 8  100  0.   70 min	#time of life
 #
-/run/printProgress 10000
-#  
+/run/printProgress 10000  
 /run/beamOn 100000

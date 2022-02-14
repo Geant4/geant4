@@ -23,21 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-
-
-#ifndef G4MaterialScanner_H
-#define G4MaterialScanner_H 1
-
-// class description:
-//
 // G4MaterialScanner
 //
+// Class description:
+//
+// Utility class for scanning of materials through ray-tracing
+// in a detector setup.
 
-#include "globals.hh"
+// Author: M.Asai, May 2006
+// --------------------------------------------------------------------
+#ifndef G4MaterialScanner_hh
+#define G4MaterialScanner_hh 1
+
 #include "G4ThreeVector.hh"
+#include "globals.hh"
 
 class G4Event;
 class G4EventManager;
@@ -52,55 +51,15 @@ class G4Region;
 
 class G4MaterialScanner
 {
-  public: // with description
+  public:
+
     G4MaterialScanner();
+   ~G4MaterialScanner();
 
-  public:
-    ~G4MaterialScanner();
-
-  public: // with description
     void Scan();
-    // The main entry point which triggers ray tracing.
-    // This method is available only if Geant4 is at Idle state.
+      // The main entry point which triggers ray tracing.
+      // This method is available only if Geant4 is in Idle state.
 
-  private:
-    void DoScan();
-    // Event loop
-    void StoreUserActions();
-    void RestoreUserActions();
-    // Store and restore user action classes if defined
-
-  private:
-    G4RayShooter * theRayShooter;
-    G4MatScanMessenger * theMessenger;
-
-    G4EventManager * theEventManager;
-
-    G4UserEventAction * theUserEventAction;
-    G4UserStackingAction * theUserStackingAction;
-    G4UserTrackingAction * theUserTrackingAction;
-    G4UserSteppingAction * theUserSteppingAction;
-
-    G4UserEventAction * theMatScannerEventAction;
-    G4UserStackingAction * theMatScannerStackingAction;
-    G4UserTrackingAction * theMatScannerTrackingAction;
-    G4MSSteppingAction * theMatScannerSteppingAction;
-
-    G4ThreeVector eyePosition;
-    G4int nTheta;
-    G4double thetaMin;
-    G4double thetaSpan;
-    G4int nPhi;
-    G4double phiMin;
-    G4double phiSpan;
-
-    G4ThreeVector eyeDirection;
-
-    G4bool regionSensitive;
-    G4String regionName;
-    G4Region* theRegion;
-
-  public:
     inline void SetEyePosition(const G4ThreeVector& val) { eyePosition = val; }
     inline G4ThreeVector GetEyePosition() const { return eyePosition; }
     inline void SetNTheta(G4int val) { nTheta = val; }
@@ -115,11 +74,50 @@ class G4MaterialScanner
     inline G4double GetPhiMin() const { return phiMin; }
     inline void SetPhiSpan(G4double val) { phiSpan = val; }
     inline G4double GetPhiSpan() const { return phiSpan; }
-    inline void SetRegionSensitive(G4bool val=true) { regionSensitive = val; }
+    inline void SetRegionSensitive(G4bool val = true) { regionSensitive = val; }
     inline G4bool GetRegionSensitive() const { return regionSensitive; }
     G4bool SetRegionName(const G4String& val);
-    inline G4String GetRegionName() const { return regionName; }
+    inline const G4String& GetRegionName() const { return regionName; }
 
+  private:
+
+    void DoScan();
+      // Event loop
+
+    void StoreUserActions();
+    void RestoreUserActions();
+      // Store and restore user action classes if defined.
+
+  private:
+
+    G4RayShooter* theRayShooter = nullptr;
+    G4MatScanMessenger* theMessenger = nullptr;
+ 
+    G4EventManager* theEventManager = nullptr;
+
+    G4UserEventAction* theUserEventAction = nullptr;
+    G4UserStackingAction* theUserStackingAction = nullptr;
+    G4UserTrackingAction* theUserTrackingAction = nullptr;
+    G4UserSteppingAction* theUserSteppingAction = nullptr;
+
+    G4UserEventAction* theMatScannerEventAction = nullptr;
+    G4UserStackingAction* theMatScannerStackingAction = nullptr;
+    G4UserTrackingAction* theMatScannerTrackingAction = nullptr;
+    G4MSSteppingAction* theMatScannerSteppingAction = nullptr;
+
+    G4ThreeVector eyePosition;
+    G4int nTheta = 91;
+    G4double thetaMin = 0.0;
+    G4double thetaSpan = 0.0;
+    G4int nPhi = 37;
+    G4double phiMin = 0.0;
+    G4double phiSpan = 0.0;
+
+    G4ThreeVector eyeDirection;
+
+    G4bool regionSensitive = false;
+    G4String regionName = "notDefined";
+    G4Region* theRegion = nullptr;
 };
 
 #endif

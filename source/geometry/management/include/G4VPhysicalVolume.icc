@@ -70,12 +70,6 @@ const G4String& G4VPhysicalVolume::GetName() const
 }
 
 inline
-void G4VPhysicalVolume::SetName(const G4String& pName)
-{
-  fname = pName;
-}
-
-inline
 EVolume G4VPhysicalVolume::DeduceVolumeType() const
 {
   EVolume type;

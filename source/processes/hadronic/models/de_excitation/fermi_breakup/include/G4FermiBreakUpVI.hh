@@ -43,7 +43,7 @@
 class G4FermiFragmentsPoolVI;
 class G4FermiDecayProbability;
 
-class G4FermiBreakUpVI : public G4VFermiBreakUp 
+class G4FermiBreakUpVI final: public G4VFermiBreakUp 
 {
 public:
 
@@ -84,6 +84,8 @@ private:
   G4int A;
   G4int spin;
 
+  G4int secID;  // Creator model ID for the secondaries created by this model
+  
   G4double mass;
   G4double excitation;
   G4double tolerance;

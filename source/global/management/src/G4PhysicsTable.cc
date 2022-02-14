@@ -23,92 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsTable class implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class implementation
-//
-//      G4PhysicsTable
-//
-// ------------------------------------------------------------
+// Author: G.Cosmo, 2 December 1995
+//         First implementation based on object model
+// Revisions:
+// - 1st March 1996, K.Amako: modified
+// - 24th February 2001, H.Kurashige: migration to STL vectors
+// --------------------------------------------------------------------
 
-#include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <iostream>
 
-#include "G4PhysicsVector.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsVectorType.hh"
-#include "G4LPhysicsFreeVector.hh"
-#include "G4PhysicsLogVector.hh"
 #include "G4PhysicsFreeVector.hh"
-#include "G4PhysicsOrderedFreeVector.hh"
 #include "G4PhysicsLinearVector.hh"
-#include "G4PhysicsLnVector.hh"
- 
+#include "G4PhysicsLogVector.hh"
+#include "G4PhysicsTable.hh"
+#include "G4PhysicsVector.hh"
+#include "G4PhysicsVectorType.hh"
+
+// --------------------------------------------------------------------
 G4PhysicsTable::G4PhysicsTable()
   : G4PhysCollection()
-{
-}
+{}
 
-G4PhysicsTable::G4PhysicsTable(size_t cap)
+// --------------------------------------------------------------------
+G4PhysicsTable::G4PhysicsTable(std::size_t cap)
   : G4PhysCollection()
 {
   reserve(cap);
   vecFlag.reserve(cap);
 }
 
-/*
-G4PhysicsTable::G4PhysicsTable(const G4PhysicsTable& right)
-  : G4PhysCollection()
-{
-  *this = right;
-}
-
-G4PhysicsTable& G4PhysicsTable::operator=(const G4PhysicsTable& right)
-{
-  if (this != &right)
-  {
-    size_t idx = 0;
-    for (G4PhysCollection::const_iterator itr=right.begin();
-         itr!=right.end(); ++itr )
-    {
-      G4PhysCollection::push_back(*itr);
-      vecFlag.push_back(right.GetFlag(idx));
-      idx +=1;
-    }
-  }
-  return *this;
-}
-*/
+// --------------------------------------------------------------------
 G4PhysicsTable::~G4PhysicsTable()
 {
   G4PhysCollection::clear();
   vecFlag.clear();
 }
- 
-void   G4PhysicsTable::resize(size_t siz, G4PhysicsVector* vec)
+
+// --------------------------------------------------------------------
+void G4PhysicsTable::resize(std::size_t siz, G4PhysicsVector* vec)
 {
   G4PhysCollection::resize(siz, vec);
   vecFlag.resize(siz, true);
 }
 
-G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,
-                                         G4bool          ascii)
+// --------------------------------------------------------------------
+G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName, G4bool ascii)
 {
-  std::ofstream fOut;  
-  
-  // open output file //
-  if (!ascii)
-    { fOut.open(fileName, std::ios::out|std::ios::binary); }
-  else
-    { fOut.open(fileName, std::ios::out); }
+  std::ofstream fOut;
 
-  // check if the file has been opened successfully 
-  if (!fOut)
+  // open output file
+  if(!ascii)
   {
-#ifdef G4VERBOSE  
+    fOut.open(fileName, std::ios::out | std::ios::binary);
+  }
+  else
+  {
+    fOut.open(fileName, std::ios::out);
+  }
+
+  // check if the file has been opened successfully
+  if(!fOut.is_open())
+  {
+#ifdef G4VERBOSE
     G4cerr << "G4PhysicsTable::StorePhysicsTable():";
     G4cerr << " Cannot open file: " << fileName << G4endl;
 #endif
@@ -117,10 +97,10 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,
   }
 
   // Number of elements
-  size_t tableSize = size(); 
-  if (!ascii)
+  std::size_t tableSize = size();
+  if(!ascii)
   {
-    fOut.write( (char*)(&tableSize), sizeof tableSize); 
+    fOut.write((char*) (&tableSize), sizeof tableSize);
   }
   else
   {
@@ -128,54 +108,59 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,
   }
 
   // Physics Vector
-  for (G4PhysicsTableIterator itr=begin(); itr!=end(); ++itr)
+  for(auto itr = cbegin(); itr != cend(); ++itr)
   {
     G4int vType = (*itr)->GetType();
-    if (!ascii)
+    if(!ascii)
     {
-      fOut.write( (char*)(&vType), sizeof vType); 
+      fOut.write((char*) (&vType), sizeof vType);
     }
     else
     {
       fOut << vType << G4endl;
     }
-    (*itr)->Store(fOut,ascii);
+    (*itr)->Store(fOut, ascii);
   }
   fOut.close();
   return true;
 }
 
-
+// --------------------------------------------------------------------
 G4bool G4PhysicsTable::ExistPhysicsTable(const G4String& fileName) const
 {
-  std::ifstream fIn;  
-  G4bool value=true;
+  std::ifstream fIn;
+  G4bool value = true;
   // open input file
-  fIn.open(fileName,std::ios::in);
+  fIn.open(fileName, std::ios::in);
 
-  // check if the file has been opened successfully 
-  if (!fIn)
+  // check if the file has been opened successfully
+  if(!fIn)
   {
     value = false;
   }
   fIn.close();
   return value;
 }
-    
-G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
-                                            G4bool          ascii)
-{
-  std::ifstream fIn;  
-  // open input file
-  if (ascii)
-    { fIn.open(fileName,std::ios::in|std::ios::binary); }
-  else
-    { fIn.open(fileName,std::ios::in);} 
 
-  // check if the file has been opened successfully 
-  if (!fIn)
+// --------------------------------------------------------------------
+G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
+                                            G4bool ascii, G4bool spline)
+{
+  std::ifstream fIn;
+  // open input file
+  if(ascii)
   {
-#ifdef G4VERBOSE  
+    fIn.open(fileName, std::ios::in | std::ios::binary);
+  }
+  else
+  {
+    fIn.open(fileName, std::ios::in);
+  }
+
+  // check if the file has been opened successfully
+  if(!fIn.is_open())
+  {
+#ifdef G4VERBOSE
     G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
     G4cerr << " Cannot open file: " << fileName << G4endl;
 #endif
@@ -183,54 +168,54 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
     return false;
   }
 
-  // clear 
+  // clear
   clearAndDestroy();
-  
+
   // Number of elements
-  size_t tableSize=0; 
-  if (!ascii)
+  std::size_t tableSize = 0;
+  if(!ascii)
   {
-    fIn.read((char*)(&tableSize), sizeof tableSize); 
+    fIn.read((char*) (&tableSize), sizeof tableSize);
   }
   else
   {
     fIn >> tableSize;
   }
-  reserve(tableSize); 
+  reserve(tableSize);
   vecFlag.clear();
 
   // Physics Vector
-  for (size_t idx=0; idx<tableSize; ++idx)
+  for(std::size_t idx = 0; idx < tableSize; ++idx)
   {
-    G4int vType=0;
-    if (!ascii)
+    G4int vType = 0;
+    if(!ascii)
     {
-      fIn.read( (char*)(&vType), sizeof vType); 
+      fIn.read((char*) (&vType), sizeof vType);
     }
     else
     {
-      fIn >>  vType;
+      fIn >> vType;
     }
-    G4PhysicsVector* pVec = CreatePhysicsVector(vType);
-    if (pVec==nullptr)
+    G4PhysicsVector* pVec = CreatePhysicsVector(vType, spline);
+    if(pVec == nullptr)
     {
-#ifdef G4VERBOSE  
+#ifdef G4VERBOSE
       G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
       G4cerr << " Illegal Physics Vector type: " << vType << " in: ";
       G4cerr << fileName << G4endl;
-#endif          
+#endif
       fIn.close();
       return false;
     }
 
-    if (! (pVec->Retrieve(fIn,ascii)) )
+    if(!(pVec->Retrieve(fIn, ascii)))
     {
-#ifdef G4VERBOSE  
+#ifdef G4VERBOSE
       G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
       G4cerr << " Rrror in retreiving " << idx
              << "-th Physics Vector from file: ";
       G4cerr << fileName << G4endl;
-#endif          
+#endif
       fIn.close();
       return false;
     }
@@ -238,79 +223,65 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
     // add a PhysicsVector to this PhysicsTable
     G4PhysCollection::push_back(pVec);
     vecFlag.push_back(true);
-    
-  } 
+  }
   fIn.close();
   return true;
 }
 
-std::ostream& operator<<(std::ostream& out, 
-                         G4PhysicsTable& right)
+// --------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& out, G4PhysicsTable& right)
 {
   // Printout Physics Vector
-  size_t i=0;
-  for (G4PhysicsTableIterator itr=right.begin(); itr!=right.end(); ++itr)
+  std::size_t i = 0;
+  for(auto itr = right.cbegin(); itr != right.cend(); ++itr)
   {
     out << std::setw(8) << i << "-th Vector   ";
-    out << ": Type    " << G4int((*itr)->GetType()) ;
+    out << ": Type    " << G4int((*itr)->GetType());
     out << ": Flag    ";
-    if (right.GetFlag(i))
+    if(right.GetFlag(i))
     {
       out << " T";
-    } 
+    }
     else
     {
       out << " F";
-    } 
+    }
     out << G4endl;
     out << *(*itr);
-    i +=1;
+    ++i;
   }
   out << G4endl;
-  return out; 
+  return out;
 }
 
+// --------------------------------------------------------------------
 void G4PhysicsTable::ResetFlagArray()
 {
-  size_t tableSize = G4PhysCollection::size(); 
+  size_t tableSize = G4PhysCollection::size();
   vecFlag.clear();
-  for (size_t idx=0; idx<tableSize; idx++)
+  for(std::size_t idx = 0; idx < tableSize; ++idx)
   {
     vecFlag.push_back(true);
   }
 }
 
-G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type)
+// --------------------------------------------------------------------
+G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type, G4bool spline)
 {
   G4PhysicsVector* pVector = nullptr;
-  switch (type)
+  switch(type)
   {
-  case T_G4PhysicsLinearVector: 
-    pVector = new G4PhysicsLinearVector();
-    break;
+    case T_G4PhysicsLinearVector:
+      pVector = new G4PhysicsLinearVector(spline);
+      break;
 
-  case T_G4PhysicsLogVector: 
-    pVector = new G4PhysicsLogVector();
-    break;
+    case T_G4PhysicsLogVector:
+      pVector = new G4PhysicsLogVector(spline);
+      break;
 
-  case T_G4PhysicsLnVector: 
-    pVector = new G4PhysicsLogVector();
-    break;
-
-  case T_G4PhysicsFreeVector: 
-    pVector = new G4PhysicsFreeVector();
-    break;
-
-  case T_G4PhysicsOrderedFreeVector: 
-    pVector = new G4PhysicsOrderedFreeVector();
-    break;
-
-  case T_G4LPhysicsFreeVector: 
-    pVector = new G4PhysicsFreeVector();
-    break;
-  
-  default:
-    break;
+    default:
+      pVector = new G4PhysicsVector(spline);
+      break;
   }
   return pVector;
 }

@@ -163,7 +163,7 @@ G4BetaPlusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
                                           const G4BetaDecayType& betaType)
 {
   G4double e0 = endpointEnergy/CLHEP::electron_mass_c2;
-  G4BetaDecayCorrections corrections(daughterZ, daughterA);
+  G4BetaDecayCorrections corrections(-daughterZ, daughterA);
   spectrumSampler = 0;
 
   // Check for cases in which Q < 2Me (e.g. z67.a162) 

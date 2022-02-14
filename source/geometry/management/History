@@ -16,6 +16,60 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 28, 2021 G.Cosmo (geommng-V10-07-07)
+- Use G4Allocator to dynamically allocate nodes and proxies for the
+  voxels optimisation structure. Should help reducing memory fragmentation.
+
+September 24, 2021 G.Cosmo (geommng-V10-07-06)
+- Basic clang-tidy review of code.
+
+August 31, 2021 B.Morgan (geommng-V10-07-05)
+- Provide operator<< as a free function for G4UAdapter to support Geant4Py
+- Make operator<< for G4VSolid a free function
+
+June 15, 2021  J.Apostolakis (geommng-V10-07-04)
+- G4UAdapter: added std::ostream& operator << to avoid compilation clash
+  between similar methods for G4VSolid and VecGeom UnplacedVolume.
+
+April 12, 2021 G.Cosmo (geommng-V10-07-03)
+- Fixed potential thread contention in stores when clearing/updating maps
+  at initialisation.
+
+April 9, 2021 G.Cosmo (geommng-V10-07-02)
+- Added missing implementation of inline method GetMap() in stores.
+
+March 30, 2021 B.Morgan (geommng-V10-07-01)
+- Migrate sources.cmake to modular build API
+
+March 23, 2021 G.Cosmo (geommng-V10-07-00)
+- Added map for fast search based on name in G4SolidStore, G4RegionStore,
+  G4logicalVolumeStore and G4PhysicalVolumeStore. Pointers to elements are
+  stored in the map as buckets, grouping elements with same name.
+
+November 8, 2020 E.Tcherniaev (geommng-V10-06-06)
+- Bug fix in calculation of normal in G4UAdapter::DistanceToOut()
+
+October 28, 2020 Ben Morgan (geommng-V10-06-05)
+- Remove include of obsolete CMake module
+
+May 28, 2020 B.Morgan (geommng-V10-06-04)
+- When using new CMake build, add location of generated G4GeomConfig.hh
+  header to public include directories of G4geometrymng module.
+
+April 30, 2020 Gabriele Cosmo (geommng-V10-06-03)
+- Adopt new convention for location of headers in VecGeom for wrappers.
+
+April 17, 2020 Gabriele Cosmo (geommng-V10-06-02)
+- Added deleted declarations for copy constructor and assignment operators
+  on store singletons. Based on GitHub PR#12 suggestion.
+
+April 2, 2020 Guilherme Amadio (geommng-V10-06-01)
+- Reduce size of LogicalVolumes by reordering class members
+
+December 10, 2019 Ben Morgan (geommng-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 November 15, 2019 Gabriele Cosmo (geommng-V10-05-15)
 - Fixed cases of implicit type conversions from size_t to G4int.
 
@@ -49,7 +103,7 @@ October 23, 2019 J.Apostolakis (geommng-V10-05-11)
   Preparing for addition of External Navigation, which adds an 'external'
   physical volume type (for use with an External sub-Navigator).
   Note: This is used by G4Navigator's CharacteriseDaughters() method.
-  The old method derived this value from response of IsReplicated() 
+  The old method derived this value from response of IsReplicated()
   virtual method and, in the case of replica/division/parameterised volumes,
   information from a call to the 2nd virtual method ReplicationData.
 - G4VPhysicalVolume copy constructor and assignment operator are now 'deleted'.
@@ -145,7 +199,7 @@ December 19, 2017 G.Cosmo (geommng-V10-04-00)
   Thanks to Raphael Isemann for reporting this.
 
 November 10, 2017 P.Arce (geommng-V10-03-22)
-- Bug report 2011: precision correction in G4ErrorPlaneSurfaceTarget.cc 
+- Bug report 2011: precision correction in G4ErrorPlaneSurfaceTarget.cc
 
 October 16, 2017 G.Cosmo                   geommng-V10-03-21
 - Removed G4USolid base wrapper for USolids. Only native VecGeom
@@ -180,7 +234,7 @@ May 9, 2017 G.Cosmo                        geommng-V10-03-14
 - Moved few key methods to be inline in G4USolid.
 
 March 28, 2017 G.Cosmo                     geommng-V10-03-13
-- Enabled deletion of solids in G4SolidsStore destructor also for MT mode. 
+- Enabled deletion of solids in G4SolidsStore destructor also for MT mode.
 
 March 22, 2017 G.Cosmo                     geommng-V10-03-12
 - Define IsGeometryClosed() in G4GeometryManager as a static method, to
@@ -423,7 +477,7 @@ November 30, 2013 M.Asai                   geommng-V09-06-15
 - Explicitely initialize data members of G4LVData.
 
 November 27, 2013 J.Apostolakis            geommng-V09-06-14
-- Fix in G4GeomSplitter::FreeSlave(): use free() to delete memory 
+- Fix in G4GeomSplitter::FreeSlave(): use free() to delete memory
    which was allocated with malloc().
 
 October 18, 2013, A. Dotti                 geommng-V09-06-13
@@ -433,11 +487,11 @@ October 18, 2013, A. Dotti                 geommng-V09-06-13
 October 3, 2013 J.Apostolakis              geommng-V09-06-12
 - Cleanup of G4LogicalVolume, G4VPhysicalVolume
      Moved long description of helper classes to end of headers.
-     Moved macros to icc file. 
+     Moved macros to icc file.
      Revised source code to use Get/Set methods in place of 'macros'
       introduced with G4MT,  ie G4MT_rot etc
 - LogicalVolume: Added new methods, data member
-     * new methods AssignFieldManager, 
+     * new methods AssignFieldManager,
      * Get/Set Solid( G4LVData, .) for potential performance improvement
      * bool fChangedState.
 
@@ -761,14 +815,14 @@ November 19, 2005  J.Apostolakis           geommng-V07-01-05
   + Additional methods allow nested parameterisation to be identified:
       G4bool IsNested() const;
     and to provide their material via new interface class:
-      G4VVolumeMaterialScanner* GetMaterialScanner(); 
-  + Suppressed temporary G4PhysicalTouchable class in volumes, not needed 
+      G4VVolumeMaterialScanner* GetMaterialScanner();
+  + Suppressed temporary G4PhysicalTouchable class in volumes, not needed
     in the implementation any longer.
 
 November 11, 2005  J.Apostolakis           geommng-V07-01-04
-- Added methods to identify  Regular Structures in  Physical volume 
+- Added methods to identify  Regular Structures in  Physical volume
   New pure virtual methods:
-    - IsRegularStructure()     ,  returns boolean 
+    - IsRegularStructure()     ,  returns boolean
     - GetRegularStructureId()  ,  returns code for structure type
 
 November 9, 2005  G.Cosmo                  geommng-V07-01-03
@@ -1140,7 +1194,7 @@ November 23, 2001  G. Cosmo                geommng-V03-02-03
 
 November 08, 2001  G. Cosmo                geommng-V03-02-02
 - Fixed comments for reference manual in G4TouchableHandle.hh.
- 
+
 October 26, 2001  G. Cosmo                 geommng-V03-02-01
 - Improved printout in G4GeometryManager::ReportVoxelStats().
 
@@ -1262,12 +1316,12 @@ November 09, 1999  J. Apostolakis          geommng-V00-01-01
   ii) Added GetObjectRotationValue() method.
  iii) Minimal changes of comments for Software Ref. Manual in header file
 
-  [ Change i) caused problem with HP aCC compiler A.01.19.  Atlas 
-     was patching the code to try to get around this, but this 
-     resolution is much better ] 
+  [ Change i) caused problem with HP aCC compiler A.01.19.  Atlas
+     was patching the code to try to get around this, but this
+     resolution is much better ]
 
 March 17, 1999  J. Apostolakis             geommng-01-00-02
-- G4AffineTransform.icc:  
-  Corrected a typo in InverseProduct (rzy->ryz) that caused the incorrect 
+- G4AffineTransform.icc:
+  Corrected a typo in InverseProduct (rzy->ryz) that caused the incorrect
   calculation of a compound transformation (if tf1.tz*tf2.ryz != 0).
   This problem was seen in ATLAS code.

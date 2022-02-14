@@ -1,8 +1,11 @@
 #
-# multiLayers
+# Macro file for TestEm11
 #
+# radioactive source in multi layers
+#
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setNbOfAbsor  4
 /testem/det/setAbsor 1 G4_PLEXIGLASS 5 mm
@@ -26,5 +29,4 @@
 /analysis/h1/setAscii 14
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

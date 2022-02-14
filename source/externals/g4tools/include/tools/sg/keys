@@ -1,0 +1,16 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_keys
+#define tools_sg_keys
+
+#include "../typedefs"
+
+namespace tools {
+namespace sg {
+
+inline key_code key_shift() {return 0x01000020;}  //same as in Qt qnamespace.h.
+
+}}
+
+#endif

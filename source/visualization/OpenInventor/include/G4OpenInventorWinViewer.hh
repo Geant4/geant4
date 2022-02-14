@@ -32,8 +32,6 @@
 #ifndef G4OPENINVENTORWINVIEWER_HH
 #define G4OPENINVENTORWINVIEWER_HH
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // Inheritance :
 #include "G4OpenInventorViewer.hh"
 
@@ -60,7 +58,5 @@ private:
   HWND fShell;
   Geant4_SoWinExaminerViewer* fViewer;
 };
-
-#endif
 
 #endif

@@ -25,11 +25,8 @@
 //
 //
 
-#ifdef G4MULTITHREADED
-
-#ifndef ExExChUserActionInitialization_h
-#define ExExChUserActionInitialization_h 1
-#endif
+#ifndef UserActionInitialization_h
+#define UserActionInitialization_h 1
 
 #include "G4VUserActionInitialization.hh"
 class G4GeneralParticleSource;

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 
 // this :
 #include <HEPVis/actions/SoAlternateRepAction.h>
@@ -42,12 +40,16 @@ void SoAlternateRepAction::initClass(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  SO_ACTION_INIT_CLASS(SoAlternateRepAction,SoAction);
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_ACTION_INIT_CLASS(SoAlternateRepAction,SoAction);
 
-  SO_ENABLE(SoAlternateRepAction,SoSwitchElement); //SGI wants that.
-  SO_ENABLE(SoAlternateRepAction,SoCoordinateElement); //For SoMarkerSet.
+    SO_ENABLE(SoAlternateRepAction,SoSwitchElement); //SGI wants that.
+    SO_ENABLE(SoAlternateRepAction,SoCoordinateElement); //For SoMarkerSet.
 
-  SO_ACTION_ADD_METHOD(SoNode,nodeAction);
+    SO_ACTION_ADD_METHOD(SoNode,nodeAction);
+  }
 }
 //////////////////////////////////////////////////////////////////////////////
 SoAlternateRepAction::SoAlternateRepAction(
@@ -145,5 +147,3 @@ void SoAlternateRepAction::nodeAction(
   }
 
 }
-
-#endif

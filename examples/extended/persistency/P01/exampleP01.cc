@@ -32,7 +32,7 @@
 =======
 >>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -45,7 +45,7 @@
 
 #include "FTFP_BERT.hh"
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #ifdef G4VIS_USE
@@ -62,9 +62,9 @@ int main(int argc,char** argv) {
 
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new ExP01SteppingVerbose);
-  
+
   // Run manager
-  G4RunManager * runManager = new G4RunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // UserInitialization classes (mandatory)
   ExP01DetectorConstruction* ExP01detector = new ExP01DetectorConstruction;
@@ -72,40 +72,35 @@ int main(int argc,char** argv) {
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
-  
-#ifdef G4VIS_USE
-  // Visualization, if you choose to have it!
+
+  // Visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
    
   // UserAction classes
   runManager->SetUserAction(new ExP01PrimaryGeneratorAction(ExP01detector));
-  runManager->SetUserAction(new ExP01RunAction);  
+  runManager->SetUserAction(new ExP01RunAction);
   runManager->SetUserAction(new ExP01EventAction);
   runManager->SetUserAction(new ExP01SteppingAction);
 
   //Initialize G4 kernel
   runManager->Initialize();
-      
-  //get the pointer to the User Interface manager 
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
-  if(argc==1)
-  // Define (G)UI terminal for interactive mode  
-  { 
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
+  //get the pointer to the User Interface manager
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
+
+  if(ui)
+  // Define (G)UI terminal for interactive mode
+  {
+    UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
 #endif
   }
   else
   // Batch mode
-  { 
+  {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);

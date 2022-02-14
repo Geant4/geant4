@@ -23,49 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ------------------------------------------------------------
-// GEANT 4 class header file 
+// G4AllocatorList
 //
 // Class Description:
 //
 // A class to store all G4Allocator objects in a thread for the sake
 // of cleanly deleting them.
-//
-// ------------------------------------------------------------
 
-#ifndef G4AllocatorList_h
-#define G4AllocatorList_h 1
+// Authors: M.Asai (SLAC), G.Cosmo (CERN), June 2013
+// --------------------------------------------------------------------
+#ifndef G4AllocatorList_hh
+#define G4AllocatorList_hh 1
 
-#include <vector>
 #include "globals.hh"
+#include <vector>
 
 class G4AllocatorBase;
 
 class G4AllocatorList
 {
-  public:  // with description
+ public:
+  static G4AllocatorList* GetAllocatorList();
+  static G4AllocatorList* GetAllocatorListIfExist();
 
-    static G4AllocatorList* GetAllocatorList();
-    static G4AllocatorList* GetAllocatorListIfExist();
+  ~G4AllocatorList();
+  void Register(G4AllocatorBase*);
+  void Destroy(G4int nStat = 0, G4int verboseLevel = 0);
+  G4int Size() const;
 
-  public:
+ private:
+  G4AllocatorList();
 
-    ~G4AllocatorList();
-    void Register(G4AllocatorBase*);
-    void Destroy(G4int nStat=0, G4int verboseLevel=0);
-    G4int Size() const;
-
-  private:
-
-    G4AllocatorList();
-
-  private:
-
-    static G4ThreadLocal G4AllocatorList* fAllocatorList;
-    std::vector<G4AllocatorBase*> fList;
+ private:
+  static G4ThreadLocal G4AllocatorList* fAllocatorList;
+  std::vector<G4AllocatorBase*> fList;
 };
 
 #endif

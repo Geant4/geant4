@@ -23,43 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////////////////////////////////////////////////////////////////////////////////
+//  Class:    G4eInverseCompton.hh
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4eInverseCompton.hh
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	25 October 2007 creation by L. Desorgher  		
-//
-//-------------------------------------------------------------
-//	Documentation:
-//		Adjoint/reverse Compton
-//
-
+//  Adjoint/reverse Compton
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef G4eInverseCompton_h
 #define G4eInverseCompton_h 1
 
-#include "G4VAdjointReverseReaction.hh"
 #include "globals.hh"
-#include "G4eIonisation.hh"
+#include "G4VAdjointReverseReaction.hh"
+
 class G4AdjointComptonModel;
-class G4eInverseCompton: public G4VAdjointReverseReaction
 
+class G4eInverseCompton : public G4VAdjointReverseReaction
 {
-public:
+ public:
+  explicit G4eInverseCompton(G4bool whichScatCase, G4String process_name,
+                             G4AdjointComptonModel* aEmAdjointModel);
+  ~G4eInverseCompton() override;
 
-  G4eInverseCompton(G4bool whichScatCase, G4String process_name, G4AdjointComptonModel* aEmAdjointModel);
-  ~G4eInverseCompton();
-  
-private:
-    
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
+
+  G4eInverseCompton(G4eInverseCompton&) = delete;
+  G4eInverseCompton& operator=(const G4eInverseCompton& right) = delete;
 };
 
 #endif

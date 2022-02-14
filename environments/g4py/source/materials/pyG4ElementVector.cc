@@ -29,7 +29,8 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4indexing.hh"
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#include "G4Element.hh"
 #include "G4ElementVector.hh"
 
 using namespace boost::python;

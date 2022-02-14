@@ -111,10 +111,23 @@ void PhysicsList::ConstructProcess()
   // electromagnetic physics list
   //
   fEmPhysicsList->ConstructProcess();
-  
-  // decay process
-  //
-  fDecay->ConstructProcess();
+  fDecayPhysics->ConstructProcess();
+  if(fHadPhysicsList) { fHadPhysicsList->ConstructProcess(); }
+  AddStepMax();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddStepMax()
+{
+  // Step limitation seen as a process
+  StepMax* stepMaxProcess = new StepMax();
+
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
 <<<<<<< HEAD
   // step limitation (as a full process)
@@ -179,6 +192,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
         
+  } else if (name == "emstandardSS") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsSS();
+
   } else if (name == "emstandardWVI") {
 
     fEmName = name;

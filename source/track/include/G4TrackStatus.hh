@@ -23,47 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TrackStatus
 //
+// Description:
 //
-//
-//---------------------------------------------------------------
-//
-// G4TrackStatus.hh
-//
-// Class Description:
-//   This is an enumerator to define the current status
-//   of the track which is under the transportation.
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
+// Enumerator to define the current status of the track which
+// is under transportation.
 
-#ifndef G4TrackStatus_h
-#define G4TrackStatus_h 1
+// Authors:
+//   Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//   Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// --------------------------------------------------------------------
+#ifndef G4TrackStatus_hh
+#define G4TrackStatus_hh 1
 
-//////////////////
 enum G4TrackStatus
-//////////////////
 {
-
-  fAlive,             // Continue the tracking
-  fStopButAlive,      // Invoke active rest physics processes and
-                      // and kill the current track afterward
-  fStopAndKill,       // Kill the current track
-
+  fAlive,
+    // Continue the tracking
+  fStopButAlive,
+    // Invoke active rest physics processes and kill the current track afterward
+  fStopAndKill,
+    // Kill the current track
   fKillTrackAndSecondaries,
-                      // Kill the current track and also associated
-                      // secondaries.
-  fSuspend,           // Suspend the current track
+    // Kill the current track and also associated secondaries
+  fSuspend,
+    // Suspend the current track
   fPostponeToNextEvent
-                      // Postpones the tracking of thecurrent track 
-                      // to the next event.
-
+    // Postpone the tracking of the current track to the next event
 };
 
 #endif
-
-
