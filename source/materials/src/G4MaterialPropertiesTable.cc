@@ -308,6 +308,20 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
                 FatalException, ed);
   }
 
+  bool isInverted = false;
+  for (unsigned int i = 0; i < photonEnergies.size() - 1; ++i) {
+    if (photonEnergies.at(i + 1) < photonEnergies.at(i)) {
+      isInverted = true;
+      break;
+    }
+  }
+  if (isInverted) {
+    G4ExceptionDescription ed;
+    ed << "AddProperty warning: Photon energy array is in descending order!";
+    G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat215",
+                JustWarning, ed);
+  }
+
   // if the key doesn't exist, add it if requested
   if(std::find(fMatPropNames.begin(), fMatPropNames.end(), key) ==
      fMatPropNames.end())
