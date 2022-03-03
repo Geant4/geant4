@@ -102,10 +102,11 @@ void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
     {
       for (auto& item : (*fReducedXSTable))
 	{
-	  //G4PhysicsTable* tab = item.second;
-	  //tab->clearAndDestroy();
-	  delete item.second;
+	  G4PhysicsTable* tab = item.second;
+	  tab->clearAndDestroy();
+	  delete tab;
 	}
+      fReducedXSTable->clear();
       delete fReducedXSTable;
       fReducedXSTable = nullptr;
     }
@@ -114,10 +115,11 @@ void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
     {
       for (auto& item : (*fSamplingTable))
 	{
-	  //G4PhysicsTable* tab = item.second;
-	  // tab->clearAndDestroy();
-          delete item.second;
+	  G4PhysicsTable* tab = item.second;
+	  tab->clearAndDestroy();
+          delete tab;
 	}
+      fSamplingTable->clear();
       delete fSamplingTable;
       fSamplingTable = nullptr;
     }
@@ -335,7 +337,7 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
 	  G4double aValue = (*tempMatrix)[ie*fNBinsX+ix];
 	  if (aValue < 1e-20*millibarn) //protection against log(0)
 	    aValue = 1e-20*millibarn;
-	  theVec->PutValue(ie+1,logene,G4Log(aValue));
+	  theVec->PutValues(ie+1,logene,G4Log(aValue));
 	}
       //Add fake point at 1 eV using an extrapolation with the derivative
       //at the first valid point (Penelope approach)
@@ -343,7 +345,7 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
       G4double log1eV = G4Log(1*eV);
       G4double val1eV = (*theVec)[1]+derivative*(log1eV-theVec->Energy(1));
       //fake point at very low energy
-      theVec->PutValue(0,log1eV,val1eV);
+      theVec->PutValues(0,log1eV,val1eV);
     }
   std::pair<const G4Material*,G4double> theKey = std::make_pair(material,cut);
   fReducedXSTable->insert(std::make_pair(theKey,thePhysicsTable));
@@ -555,7 +557,7 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
 	(G4PhysicsFreeVector*) ((*thePhysicsTable)[ie]);
       //Fill the table
       G4double value = 0; //first value
-      theVec->PutValue(0,theXGrid[0],value);
+      theVec->PutValues(0,theXGrid[0],value);
       for (size_t ix=1;ix<fNBinsX;ix++)
 	{
 	  //Here calculate the cumulative distribution
@@ -573,7 +575,7 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
 	  G4double A = y1-B*x1;
 	  G4double dS = A*G4Log(x2/x1)+B*(x2-x1);
 	  value += dS;
-	  theVec->PutValue(ix,theXGrid[ix],value);
+	  theVec->PutValues(ix,theXGrid[ix],value);
 	}
       //fill the PB vector
       G4double xc = cut/theEGrid[ie];
@@ -587,7 +589,7 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
       G4double pbval = (xc<=1) ?
 	GetMomentumIntegral(tempData,xc,-1) :
 	GetMomentumIntegral(tempData,1.0,-1);
-      thePBvec->PutValue(ie,theEGrid[ie],pbval);
+      thePBvec->PutValues(ie,theEGrid[ie],pbval);
       delete[] tempData;
     }
 
@@ -671,13 +673,13 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	{
 	  G4double val = (*theVec1)[iloop]+(((*theVec2)[iloop]-(*theVec1)[iloop]))*
 	    (energy-theEGrid[eBin])/(theEGrid[eBin+1]-theEGrid[eBin]);
-	  theTempVec->PutValue(iloop,theXGrid[iloop],val);
+	  theTempVec->PutValues(iloop,theXGrid[iloop],val);
 	}
     }
   else //first or last bin, no interpolation
     {
       for (size_t iloop=0;iloop<fNBinsX;iloop++)
-	theTempVec->PutValue(iloop,theXGrid[iloop],(*theVec1)[iloop]);
+	theTempVec->PutValues(iloop,theXGrid[iloop],(*theVec1)[iloop]);
     }
 
   //Start the game

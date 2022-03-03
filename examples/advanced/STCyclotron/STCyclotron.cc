@@ -38,7 +38,6 @@
 #include "G4UImanager.hh" 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-#include "STCyclotronAnalysis.hh"
 #include "STCyclotronActionInitialization.hh"
 #include "STCyclotronDetectorConstruction.hh"
 #include "STCyclotronPhysicsList.hh"

@@ -31,6 +31,7 @@
 #include "G4Hdf5NtupleFileManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
+#include "G4ThreadLocalSingleton.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
@@ -41,72 +42,44 @@ using namespace G4Analysis;
 namespace {
   //Mutex to lock master manager when opening a file
   G4Mutex openFileMutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock master manager when merging H1 histograms 
-  G4Mutex mergeH1Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock master manager when merging H1 histograms 
-  G4Mutex mergeH2Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock master manager when merging H1 histograms 
-  G4Mutex mergeH3Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock master manager when merging P1 profiles
-  G4Mutex mergeP1Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock master manager when merging P2 profiles
-  G4Mutex mergeP2Mutex = G4MUTEX_INITIALIZER;
   //Mutex to lock master manager when closing a file
   G4Mutex closeFileMutex = G4MUTEX_INITIALIZER;
-}  
+}
 
-G4Hdf5AnalysisManager* G4Hdf5AnalysisManager::fgMasterInstance = nullptr;
-G4ThreadLocal G4Hdf5AnalysisManager* G4Hdf5AnalysisManager::fgInstance = nullptr;
+// G4Hdf5AnalysisManager* G4Hdf5AnalysisManager::fgMasterInstance = nullptr;
+// G4ThreadLocal G4bool G4Hdf5AnalysisManager::fgIsInstance = false;
 
 //_____________________________________________________________________________
 G4Hdf5AnalysisManager* G4Hdf5AnalysisManager::Instance()
 {
-  if ( fgInstance == nullptr ) {
-    G4bool isMaster = ! G4Threading::IsWorkerThread();
-    fgInstance = new G4Hdf5AnalysisManager(isMaster);
-  }
-  
-  return fgInstance;
+  static G4ThreadLocalSingleton<G4Hdf5AnalysisManager> instance;
+  fgIsInstance = true;
+  return instance.Instance();
 }
 
 //_____________________________________________________________________________
 G4bool G4Hdf5AnalysisManager::IsInstance()
 {
-  return ( fgInstance != 0 );
-}    
+  return fgIsInstance;
+}
 
 //_____________________________________________________________________________
-G4Hdf5AnalysisManager::G4Hdf5AnalysisManager(G4bool isMaster)
- : G4ToolsAnalysisManager("Hdf5", isMaster),
-   fNtupleFileManager(nullptr),
-   fFileManager(nullptr)
+G4Hdf5AnalysisManager::G4Hdf5AnalysisManager()
+ : G4ToolsAnalysisManager("Hdf5")
 {
 #ifdef G4MULTITHREADED
 #ifndef H5_HAVE_THREADSAFE
-    G4ExceptionDescription message;
-    message 
-      << "Your HDF5 lib is not built with H5_HAVE_THREADSAFE.";
     G4Exception("G4Hdf5AnalysisManager::G4Hdf5AnalysisManager",
-                "Analysis_F002", FatalException, message);
+                "Analysis_F001", FatalException,
+                "Your HDF5 lib is not built with H5_HAVE_THREADSAFE.");
 #endif
 #endif
 
-  if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
-    G4ExceptionDescription description;
-    description 
-      << "      " 
-      << "G4Hdf5AnalysisManager already exists." 
-      << "Cannot create another instance.";
-    G4Exception("G4Hdf5AnalysisManager::G4Hdf5AnalysisManager",
-                "Analysis_F001", FatalException, description);
-  }              
-  if ( isMaster ) fgMasterInstance = this;
-  fgInstance = this;
-  
+  if ( ! G4Threading::IsWorkerThread() ) fgMasterInstance = this;
+
   // File manager
   fFileManager = std::make_shared<G4Hdf5FileManager>(fState);
   SetFileManager(fFileManager);
-  fFileManager->SetBasketSize(fgkDefaultBasketSize);
 
   // Ntuple file manager
   fNtupleFileManager = std::make_shared<G4Hdf5NtupleFileManager>(fState);
@@ -116,152 +89,12 @@ G4Hdf5AnalysisManager::G4Hdf5AnalysisManager(G4bool isMaster)
 
 //_____________________________________________________________________________
 G4Hdf5AnalysisManager::~G4Hdf5AnalysisManager()
-{  
+{
   if ( fState.GetIsMaster() ) fgMasterInstance = nullptr;
-  fgInstance = nullptr;
+  fgIsInstance = false;
 }
 
-// 
-// private methods
 //
-
-//_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::WriteH1()
-{
-  auto h1Vector = fH1Manager->GetH1Vector();
-  auto hnVector = fH1Manager->GetHnVector();
-
-  if ( ! h1Vector.size() ) return true;
-
-  auto result = true;
-
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteHn(h1Vector, hnVector, "h1");
-  }  
-  else {
-    // The worker manager just adds its histograms to the master
-    // This operation needs a lock
-    G4AutoLock lH1(&mergeH1Mutex);
-    fgMasterInstance->fH1Manager->AddH1Vector(h1Vector);
-    lH1.unlock();
-  }  
-  
-  return result;
-}
- 
-//_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::WriteH2()
-{
-  auto h2Vector = fH2Manager->GetH2Vector();
-  auto hnVector = fH2Manager->GetHnVector();
-
-  if ( ! h2Vector.size() ) return true;
-
-  auto result = true;
-  
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteHn(h2Vector, hnVector, "h2");
-  }  
-  else {
-    // The worker manager just adds its histograms to the master
-    // This operation needs a lock
-    G4AutoLock lH2(&mergeH2Mutex);
-    fgMasterInstance->fH2Manager->AddH2Vector(h2Vector);
-    lH2.unlock();
-  }  
-  
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::WriteH3()
-{
-  auto h3Vector = fH3Manager->GetH3Vector();
-  auto hnVector = fH3Manager->GetHnVector();
-
-  if ( ! h3Vector.size() ) return true;
-
-  auto result = true;
-  
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteHn(h3Vector, hnVector, "h3");
-  }  
-  else {
-    // The worker manager just adds its histograms to the master
-    // This operation needs a lock
-    G4AutoLock lH3(&mergeH3Mutex);
-    fgMasterInstance->fH3Manager->AddH3Vector(h3Vector);
-    lH3.unlock();
-  }  
-  
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::WriteP1()
-{
-  auto p1Vector = fP1Manager->GetP1Vector();
-  auto hnVector = fP1Manager->GetHnVector();
-
-  if ( ! p1Vector.size() ) return true;
-
-  auto result = true;
-  
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WritePn(p1Vector, hnVector, "p1");
-  }  
-  else {
-    // The worker manager just adds its profiles to the master
-    // This operation needs a lock
-    G4AutoLock lP1(&mergeP1Mutex);
-    fgMasterInstance->fP1Manager->AddP1Vector(p1Vector);
-    lP1.unlock();
-  }  
-  
-  return result;
-}
-    
-//_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::WriteP2()
-{
-  auto p2Vector = fP2Manager->GetP2Vector();
-  auto hnVector = fP2Manager->GetHnVector();
-
-  if ( ! p2Vector.size() ) return true;
-
-  auto result = true;
-  
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WritePn(p2Vector, hnVector, "p2");
-  }  
-  else {
-    // The worker manager just adds its profiles to the master
-    // This operation needs a lock
-    G4AutoLock lP2(&mergeP2Mutex);
-    fgMasterInstance->fP2Manager->AddP2Vector(p2Vector);
-    lP2.unlock();
-  }  
-  
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::Reset()
-{
-// Reset histograms and ntuple
-
-  auto finalResult = true;
-
-  auto result = G4ToolsAnalysisManager::Reset();
-  finalResult = finalResult && result;
-  
-  result = fNtupleFileManager->Reset();
-  finalResult = finalResult && result;
-  
-  return finalResult;
-}  
- 
-// 
 // protected methods
 //
 
@@ -272,89 +105,75 @@ G4bool G4Hdf5AnalysisManager::OpenFileImpl(const G4String& fileName)
   // and set it to base class which takes then their ownership
   SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
 
-  auto finalResult = true;
+  auto result = true;
 
   G4AutoLock lock(&openFileMutex);
-  auto result = fFileManager->OpenFile(fileName);
-  finalResult = finalResult && result;
-
-  result = fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
-  finalResult = finalResult && result;
+  result &= fFileManager->OpenFile(fileName);
+  result &= fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
   lock.unlock();
 
-  return finalResult;
-}  
+  return result;
+}
 
 //_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::WriteImpl() 
+G4bool G4Hdf5AnalysisManager::WriteImpl()
 {
-  auto finalResult = true;
+  auto result = true;
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("write", "files", "");
+  Message(kVL4, "write", "files");
+
+  if ( G4Threading::IsWorkerThread() )  {
+    result &= G4ToolsAnalysisManager::Merge();
   }
-#endif
+  else {
+    // Open all files registered with objects
+    fFileManager->OpenFiles();
 
-  auto result = WriteH1();
-  finalResult = finalResult && result;
+    // Write all histograms/profile on master
+    result &= G4ToolsAnalysisManager::WriteImpl();
+  }
 
-  // H2
-  result = WriteH2();
-  finalResult = finalResult && result;
-  
-  // H3
-  result = WriteH3();
-  finalResult = finalResult && result;
-  
-  // P1
-  result = WriteP1();
-  finalResult = finalResult && result;
-  
-  // P2
-  result = WriteP2();
-  finalResult = finalResult && result;
-  
   // Write ASCII if activated
   if ( IsAscii() ) {
-    result = WriteAscii(fFileManager->GetFileName());
-    finalResult = finalResult && result;
-  }   
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    fState.GetVerboseL2()->Message("write", "files", "", finalResult);
+    result &= WriteAscii(fFileManager->GetFileName());
   }
-#endif
 
-  return finalResult;
+  Message(kVL3, "write", "files", "", result);
+
+  return result;
 }
 
 //_____________________________________________________________________________
 G4bool G4Hdf5AnalysisManager::CloseFileImpl(G4bool reset)
 {
-  auto finalResult = true;
+  auto result = true;
 
   G4AutoLock lock(&closeFileMutex);
-  auto result = fFileManager->CloseFiles();
-  finalResult = finalResult && result;
+  result &= fFileManager->CloseFiles();
 
   if ( reset ) {
     // reset data
-    result = Reset();
+    result = ResetImpl();
     if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "Resetting data failed";
-      G4Exception("G4Hdf5AnalysisManager::CloseFile()",
-                "Analysis_W021", JustWarning, description);
+      Warn("Resetting data failed", fkClass, "OpenDirectory");
     }
   }
-  finalResult = finalResult && result;
-
-  result = fNtupleFileManager->ActionAtCloseFile(reset);
-  finalResult = finalResult && result;
+  result &= fNtupleFileManager->ActionAtCloseFile(reset);
 
   lock.unlock();
 
-  return finalResult; 
+  return result;
+}
+
+//_____________________________________________________________________________
+G4bool G4Hdf5AnalysisManager::ResetImpl()
+{
+  auto result = true;
+
+  result &= G4ToolsAnalysisManager::ResetImpl();
+  if ( fNtupleFileManager != nullptr ) {
+    result &= fNtupleFileManager->Reset();
+  }
+
+  return result;
 }

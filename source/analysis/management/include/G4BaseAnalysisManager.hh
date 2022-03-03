@@ -38,13 +38,14 @@
 
 #include "G4AnalysisManagerState.hh"
 
+#include <string_view>
+
 class G4BaseAnalysisManager
 {
   public:
     explicit G4BaseAnalysisManager(const G4AnalysisManagerState& state);
-    virtual ~G4BaseAnalysisManager();
-    
-    // methods
+    G4BaseAnalysisManager() = delete;
+    virtual ~G4BaseAnalysisManager() = default;
 
     // The ids of objects are generated automatically
     // starting from 0; with the following function it is possible to
@@ -56,21 +57,43 @@ class G4BaseAnalysisManager
     G4int GetFirstId() const;
 
   protected:
-    // data members
+    // Methods for verbose
+    G4bool IsVerbose(G4int verboseLevel) const;
+    void Message(G4int level,
+                 const G4String& action,
+                 const G4String& objectType,
+                 const G4String& objectName = "",
+                 G4bool success = true) const;
+
+    // Data members
     const G4AnalysisManagerState& fState;
-    G4int    fFirstId;
-    G4bool   fLockFirstId;
+    G4int    fFirstId { 0 };
+    G4bool   fLockFirstId { false };
+
+  private:
+    // Static data members
+    static constexpr std::string_view fkClass { "G4BaseAnalysisManager" };
 };
 
 // inline functions
 
+inline G4bool G4BaseAnalysisManager::IsVerbose(G4int verboseLevel) const
+{ return fState.IsVerbose(verboseLevel); }
+
+inline void G4BaseAnalysisManager::Message(
+  G4int level, const G4String& action, const G4String& objectType,
+  const G4String& objectName, G4bool success) const
+{
+  fState.Message(level, action, objectType, objectName, success);
+}
+
 inline void G4BaseAnalysisManager::SetLockFirstId(G4bool lockFirstId) {
   fLockFirstId = lockFirstId;
-}  
+}
 
 inline G4int G4BaseAnalysisManager::GetFirstId() const {
   return fFirstId;
-}  
+}
 
 #endif
 

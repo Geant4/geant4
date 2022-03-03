@@ -72,13 +72,11 @@ public:
 
   // build range
   void BuildRangeTable(const G4PhysicsTable* dedxTable, 
-		       G4PhysicsTable* rangeTable,
-		       G4bool useBM = false);
+		       G4PhysicsTable* rangeTable);
 
   // build inverse range
   void BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
-			      G4PhysicsTable* invRangeTable,
-			      G4bool useBM = false);
+			      G4PhysicsTable* invRangeTable);
 
   // build a table requested by any model class
   G4PhysicsTable* BuildTableForModel(G4PhysicsTable* table, 
@@ -97,9 +95,13 @@ public:
 
   G4bool GetFlag(size_t idx);
 
+  G4bool GetBaseMaterialFlag();
+
   inline void SetSplineFlag(G4bool flag);
 
   inline void SetInitialisationFlag(G4bool flag);
+
+  inline void SetBaseMaterialActive(G4bool flag);
 
   G4LossTableBuilder & operator=(const  G4LossTableBuilder &right) = delete;
   G4LossTableBuilder(const  G4LossTableBuilder&) = delete;
@@ -110,6 +112,8 @@ private:
 
   G4bool splineFlag = true;
   G4bool isInitialized = false;
+  G4bool baseMatFlag = false;
+  G4bool isBaseMatActive = true;
   G4bool isMaster;
 
   static std::vector<G4double>* theDensityFactor;
@@ -128,6 +132,15 @@ inline void G4LossTableBuilder::SetSplineFlag(G4bool flag)
 inline void G4LossTableBuilder::SetInitialisationFlag(G4bool flag)
 {
   isInitialized = flag;
+}
+
+inline void G4LossTableBuilder::SetBaseMaterialActive(G4bool flag)
+{
+  isBaseMatActive = flag;
+  if(!flag) {
+    baseMatFlag = false;
+    isInitialized = false;
+  } 
 }
 
 //....oooOO0OOooo.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -37,6 +37,8 @@
 
 #include "tools/wcsv_ntuple"
 
+#include <string_view>
+
 // Type aliases
 using CsvNtupleDescription = G4TNtupleDescription<tools::wcsv::ntuple, std::ofstream>;
 
@@ -44,8 +46,9 @@ class G4CsvFileManager : public G4VTFileManager<std::ofstream>
 {
   public:
     explicit G4CsvFileManager(const G4AnalysisManagerState& state);
-    ~G4CsvFileManager();
-    
+    G4CsvFileManager() = delete;
+    ~G4CsvFileManager() = default;
+
     using G4BaseFileManager::GetNtupleFileName;
     using G4VTFileManager<std::ofstream>::WriteFile;
     using G4VTFileManager<std::ofstream>::CloseFile;
@@ -53,21 +56,42 @@ class G4CsvFileManager : public G4VTFileManager<std::ofstream>
     // Methods to manipulate output files
     virtual G4bool OpenFile(const G4String& fileName) final;
 
+    virtual G4bool SetHistoDirectoryName(const G4String& dirName) final;
+    virtual G4bool SetNtupleDirectoryName(const G4String& dirName) final;
+
     virtual G4String GetFileType() const final { return "csv"; }
 
     // Specific methods for files per objects
     G4bool CreateNtupleFile(CsvNtupleDescription* ntupleDescription);
-    G4bool CloseNtupleFile(CsvNtupleDescription* ntupleDescription); 
+    G4bool CloseNtupleFile(CsvNtupleDescription* ntupleDescription);
+
+    G4bool IsHistoDirectory() const;
+    G4bool IsNtupleDirectory() const;
 
   protected:
     // Methods derived from templated base class
     virtual std::shared_ptr<std::ofstream> CreateFileImpl(const G4String& fileName) final;
     virtual G4bool WriteFileImpl(std::shared_ptr<std::ofstream> file) final;
-    virtual G4bool CloseFileImpl(std::shared_ptr<std::ofstream> file) final; 
+    virtual G4bool CloseFileImpl(std::shared_ptr<std::ofstream> file) final;
 
   private:
     // Utility method
-    G4String GetNtupleFileName(CsvNtupleDescription* ntupleDescription);   
+    G4String GetNtupleFileName(CsvNtupleDescription* ntupleDescription);
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4CsvFileManager" };
+
+    // Data members
+    G4bool fIsHistoDirectory { false };
+    G4bool fIsNtupleDirectory { false };
 };
+
+// inline functions
+
+inline G4bool G4CsvFileManager::IsHistoDirectory() const
+{ return fIsHistoDirectory; }
+
+inline G4bool G4CsvFileManager::IsNtupleDirectory() const
+{ return fIsNtupleDirectory; }
 
 #endif

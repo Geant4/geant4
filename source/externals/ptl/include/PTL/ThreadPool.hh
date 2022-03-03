@@ -355,7 +355,7 @@ ThreadPool::run_on_this(task_pointer&& _task)
     if(m_tbb_tp && m_tbb_task_group)
     {
         auto _arena = get_task_arena();
-        _arena->execute([=]() { m_tbb_task_group->run(_func); });
+        _arena->execute([this, _func]() { this->m_tbb_task_group->run(_func); });
     }
     else
     {

@@ -34,17 +34,21 @@
 //  20 Oct 2011   ALF updated to take into account ECPSSR Form Factor
 //  09 Mar 2012   LP  update methods
 //  09 Mar 2012   ALF  update for M-shells Simulation
-//
+//  10 Nov 2021   S. Guatelli & S. Bakr Added ECPSSR form factor documented 
+//                in Bakr et al, NIM B, vol. 436, pp:285-291, 2018 and
+//                called here ECPSSR_ANSTO
 
 #include "globals.hh"
 #include "G4teoCrossSection.hh"
 #include "G4Proton.hh"
 #include "G4ecpssrBaseKxsModel.hh"
 #include "G4ecpssrBaseLixsModel.hh"
-
 #include "G4ecpssrFormFactorKxsModel.hh"
 #include "G4ecpssrFormFactorLixsModel.hh"
 #include "G4ecpssrFormFactorMixsModel.hh"
+#include "G4ANSTOecpssrKxsModel.hh"
+#include "G4ANSTOecpssrLixsModel.hh"
+#include "G4ANSTOecpssrMixsModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4teoCrossSection::G4teoCrossSection(const G4String& nam)
@@ -62,6 +66,12 @@ G4teoCrossSection::G4teoCrossSection(const G4String& nam)
       ecpssrShellLi = new G4ecpssrFormFactorLixsModel();
       ecpssrShellMi = new G4ecpssrFormFactorMixsModel();
     }
+  else if (nam == "ECPSSR_ANSTO")
+    {
+      ecpssrShellK  = new G4ANSTOecpssrKxsModel();  
+      ecpssrShellLi = new G4ANSTOecpssrLixsModel();
+      ecpssrShellMi = new G4ANSTOecpssrMixsModel();
+    }   
   else 
     { 
       G4cout << "G4teoCrossSection::G4teoCrossSection: ERROR " 

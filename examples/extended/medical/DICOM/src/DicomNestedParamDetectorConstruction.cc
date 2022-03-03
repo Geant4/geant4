@@ -67,21 +67,21 @@ void DicomNestedParamDetectorConstruction::ConstructPhantom()
     //----- Replication of Water Phantom Volume.
     //--- Y Slice
     G4String yRepName("RepY");
-    G4VSolid* solYRep = new G4Box(yRepName,fNVoxelX*fVoxelHalfDimX,
+    G4VSolid* solYRep = new G4Box(yRepName,fNoVoxelsX*fVoxelHalfDimX,
                                   fVoxelHalfDimY,
-                  fNVoxelZ*fVoxelHalfDimZ);
+                  fNoVoxelsZ*fVoxelHalfDimZ);
     G4LogicalVolume* logYRep = new G4LogicalVolume(solYRep,fAir,yRepName);
     new G4PVReplica(yRepName,logYRep,fContainer_logic,kYAxis,
-    fNVoxelY,fVoxelHalfDimY*2.);
+    fNoVoxelsY,fVoxelHalfDimY*2.);
 
     logYRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
 
     //--- X Slice
     G4String xRepName("RepX");
     G4VSolid* solXRep = new G4Box(xRepName,fVoxelHalfDimX,fVoxelHalfDimY,
-                                  fNVoxelZ*fVoxelHalfDimZ);
+                                  fNoVoxelsZ*fVoxelHalfDimZ);
     G4LogicalVolume* logXRep = new G4LogicalVolume(solXRep,fAir,xRepName);
-    new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,fNVoxelX,fVoxelHalfDimX*2.);
+    new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,fNoVoxelsX,fVoxelHalfDimX*2.);
 
     logXRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
     
@@ -109,11 +109,11 @@ void DicomNestedParamDetectorConstruction::ConstructPhantom()
                           kZAxis,       // Are placed along this axis
                           //kUndefined,
                           // Are placed along this axis
-                          fNVoxelZ,      // Number of cells
+                          fNoVoxelsZ,      // Number of cells
                           param);       // Parameterisation.
 
     param->SetMaterialIndices( fMateIDs );
-    param->SetNoVoxel( fNVoxelX, fNVoxelY, fNVoxelZ );
+    param->SetNoVoxels( fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ );
 
     //phantom_phys->SetRegularStructureId(0);
 

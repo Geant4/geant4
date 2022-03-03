@@ -25,8 +25,6 @@
 //
 //
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMVIEWERMESSENGER_HH
 #define G4OPENGLXMVIEWERMESSENGER_HH
 
@@ -59,6 +57,3 @@ private:
 };
 
 #endif
-
-#endif
-

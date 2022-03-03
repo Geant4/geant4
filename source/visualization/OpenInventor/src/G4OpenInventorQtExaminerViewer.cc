@@ -26,8 +26,6 @@
 
 // Frederick Jones TRIUMF 07 January 2018
 
-#ifdef G4VIS_BUILD_OIQT_DRIVER
-
 #include "G4OpenInventorQtExaminerViewer.hh"
 
 #include "ui_OIQtListsDialog.h"
@@ -2651,13 +2649,6 @@ G4OpenInventorQtExaminerViewer::FileOpenBookmarkCB()
    QStringList filenameinlist = filedialog.selectedFiles();
    QString filenamein = filenameinlist[0];
 
-   // Note null string and empty string are different
-   //   if (filenamein.isNull()) {
-   //      G4cout << "Input file name is NULL" << G4endl;
-   //      return;
-   //   }
-   //   G4cout << "Input file name is " << qPrintable(filenamein) << G4endl;
-
    char* filename = new char[filenamein.size()+1];
    filename = strdup(qPrintable(filenamein));
    //   G4cout << "char[] file name is " << filename << G4endl;
@@ -4122,6 +4113,3 @@ G4bool HookEventProcState::Notify(G4ApplicationState requestedState)
    if (requestedState == G4State_EventProc) viewer->newEvents = true;
    return true;
 }
-
-
-#endif

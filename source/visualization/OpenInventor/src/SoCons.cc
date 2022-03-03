@@ -34,8 +34,6 @@
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodes/SoCons.h"
 
@@ -444,5 +442,3 @@ void SoCons::generateAlternateRep() {
 void SoCons::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

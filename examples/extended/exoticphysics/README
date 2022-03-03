@@ -26,6 +26,12 @@ phonon
 
 This example simulates phonons in sub-Kelvin temperature Germanium crystal.
 
+saxs
+----
+
+The example saxs implements the typical setup of a Small Angle X-ray
+Scattering (SAXS) experiment.
+
 ucn
 ---
 

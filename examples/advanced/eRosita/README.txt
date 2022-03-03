@@ -12,6 +12,8 @@ Authors:
 Dieter Schlosser (pnSensor, Munich), 
 Georg Weidenspointner (MPE Garching and MPI Halbleiterlabor, Munich),
 Maria Grazia Pia (INFN Genova)
+Francesco Longo (INFN Trieste)
+Polsini Andrea (Universita' degli studi di Trieste)
 
 Main references:
 
@@ -26,11 +28,8 @@ Web site:
 
 http://www.ge.infn.it/geant4/physics/pixe/erosita.html
 
-Contact persons:
-
-Dieter Schlosser     : dis@hll.mpg.de
-Georg Weidenspointner: ggw@hll.mpg.de
-Maria Grazia Pia     : Maria.Grazia.Pia@cern.ch
+Contact person:
+Francesco Longo, francesco.longo@ts.infn.it
 
 ---- OVERVIEW ----
 
@@ -101,7 +100,7 @@ Instructions on how to build and run the example:
 
 - To compile the example:
   % cd eRosita
-  % gmake
+  % make
   If the environment variable G4WORKDIR and has been defined, an executable
   named eRosita will be generated in $G4WORKDIR/bin/$G4SYSTEM
 
@@ -124,7 +123,7 @@ Instructions on how to build and run the example:
 
   + To run with visualisation:
     Go to $G4WORKDIR/bin/$G4SYSTEM
-    Copy eRosita/vis.mac to to this directory.
+    Copy eRosita/vis.mac to this directory.
     The macro file vis.mac calls the DAWN visualization driver to
     display the simulation of 100 protons with energy 100 MeV.
 
@@ -150,7 +149,7 @@ cp $G4INSTALL/examples/advanced/eRosita/physics/GNUmakefile $G4INSTALL/source/pr
 
 If one wishes to perform the above operation after having already compiled Geant4, 
 it is recommended to first remove the result of the existing compilation (by issuing
-"gmake clean" in $G4INSTALL/source/); then one can proceed with the above instructions.
+"make clean" in $G4INSTALL/source/); then one can proceed with the above instructions.
 
 Do not forget to delete the content of $G4INSTALL/examples/advanced/eRosita/physics/include/ 
 and $G4INSTALL/examples/advanced/eRosita/physics/src/, if you wish to exercise 

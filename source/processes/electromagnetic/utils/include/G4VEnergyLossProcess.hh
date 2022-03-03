@@ -59,6 +59,7 @@
 #include "G4EmModelManager.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4EmTableType.hh"
+#include "G4EmSecondaryParticleType.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 
@@ -153,15 +154,15 @@ public:
   // Store all PhysicsTable in files.
   // Return false in case of any fatal failure at I/O  
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
-			   const G4String& directory,
-			   G4bool ascii = false) override;
+                           const G4String& directory,
+                           G4bool ascii = false) override;
 
   // Retrieve all Physics from a files.
   // Return true if all the Physics Table are built.
   // Return false if any fatal failure. 
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
-			      const G4String& directory,
-			      G4bool ascii) override;
+                              const G4String& directory,
+                              G4bool ascii) override;
 
 private:
 
@@ -196,7 +197,7 @@ public:
 
   // Access to cross section table
   G4double CrossSectionPerVolume(G4double kineticEnergy,
-				 const G4MaterialCutsCouple* couple);
+                                 const G4MaterialCutsCouple* couple);
   G4double CrossSectionPerVolume(G4double kineticEnergy,
                                  const G4MaterialCutsCouple* couple,
                                  G4double logKineticEnergy);
@@ -214,17 +215,18 @@ protected:
 
   // implementation of the pure virtual method
   G4double GetMeanFreePath(const G4Track& track,
-			   G4double previousStepSize,
-			   G4ForceCondition* condition) override;
+                           G4double previousStepSize,
+                           G4ForceCondition* condition) override;
 
   // implementation of the pure virtual method
   G4double GetContinuousStepLimit(const G4Track& track,
-				  G4double previousStepSize,
-				  G4double currentMinimumStep,
-				  G4double& currentSafety) override;
+                                  G4double previousStepSize,
+                                  G4double currentMinimumStep,
+                                  G4double& currentSafety) override;
 
   // creation of an empty vector for cross sections for derived processes
-  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, G4double cut);
+  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, 
+                                       G4double cut);
 
   inline size_t CurrentMaterialCutsCoupleIndex() const;
 
@@ -379,6 +381,8 @@ public:
   inline G4PhysicsTable* LambdaTable() const;
   inline std::vector<G4TwoPeaksXS*>* TwoPeaksXS() const;
 
+  inline G4bool UseBaseMaterial() const;
+
   //------------------------------------------------------------------------
   // Run time method for simulation of ionisation
   //------------------------------------------------------------------------
@@ -408,15 +412,18 @@ private:
   inline G4double GetScaledRangeForScaledEnergy(G4double scaledKinE);
   inline G4double GetScaledRangeForScaledEnergy(G4double scaledKinE,
                                                 G4double logScaledKinE);
+
   inline G4double GetLimitScaledRangeForScaledEnergy(G4double scaledKinE);
   inline G4double GetLimitScaledRangeForScaledEnergy(G4double scaledKinE,
-						     G4double logScaledKinE);
+                                                     G4double logScaledKinE);
+
   inline G4double ScaledKinEnergyForLoss(G4double range);
   inline G4double GetLambdaForScaledEnergy(G4double scaledKinE);
   inline G4double GetLambdaForScaledEnergy(G4double scaledKinE, 
                                            G4double logScaledKinE);
 
-  void ComputeLambdaForScaledEnergy(G4double scaledKinE, G4double logScaledKinE);
+  void ComputeLambdaForScaledEnergy(G4double scaledKinE,
+                                    G4double logScaledKinE);
 
   G4bool IsRegionForCubcutProcessor(const G4Track& aTrack);
 
@@ -495,47 +502,50 @@ protected:
   G4double preStepLogScaledEnergy = LOG_EKIN_MIN;
   G4double mfpKinEnergy = 0.0;
 
-  size_t   currentCoupleIndex = 0;
+  size_t currentCoupleIndex = 0;
 
 private:
 
-  G4int    nBins;
-  G4int    nBinsCSDA;
-  G4int    numberOfModels = 0;
-  G4int    nSCoffRegions = 0;
+  G4int nBins;
+  G4int nBinsCSDA;
+  G4int numberOfModels = 0;
+  G4int nSCoffRegions = 0;
+  G4int secID = _DeltaElectron;
+  G4int tripletID = _TripletElectron;
+  G4int biasID = _DeltaEBelowCut;
+  G4int mainSecondaries = 1;
 
-  size_t   basedCoupleIndex = 0;
-  size_t   coupleIdxRange = 0;
-  size_t   coupleIdxLambda = 0;
-  size_t   idxDEDX = 0;
-  size_t   idxDEDXunRestricted = 0;
-  size_t   idxIonisation = 0;
-  size_t   idxRange = 0;
-  size_t   idxCSDA = 0;
-  size_t   idxSecRange = 0;
-  size_t   idxInverseRange = 0;
-  size_t   idxLambda = 0;
-  G4int    secID = -1;
-  G4int    biasID = -1;
+  size_t basedCoupleIndex = 0;
+  size_t coupleIdxRange = 0;
+  size_t coupleIdxLambda = 0;
+  size_t idxDEDX = 0;
+  size_t idxDEDXunRestricted = 0;
+  size_t idxIonisation = 0;
+  size_t idxRange = 0;
+  size_t idxCSDA = 0;
+  size_t idxSecRange = 0;
+  size_t idxInverseRange = 0;
+  size_t idxLambda = 0;
 
   G4GPILSelection aGPILSelection;
   G4CrossSectionType fXSType = fEmIncreasing;
 
-  G4bool   lossFluctuationFlag = true;
-  G4bool   rndmStepFlag = false;
-  G4bool   tablesAreBuilt = false;
-  G4bool   spline = true;
-  G4bool   isIon = false;
-  G4bool   isIonisation = true;
-  G4bool   useDeexcitation = false;
-  G4bool   biasFlag = false;
-  G4bool   weightFlag = false;
-  G4bool   isMaster = true;
-  G4bool   actLinLossLimit = false;
-  G4bool   actLossFluc = false;
-  G4bool   actBinning = false;
-  G4bool   actMinKinEnergy = false;
-  G4bool   actMaxKinEnergy = false;
+  G4bool lossFluctuationFlag = true;
+  G4bool rndmStepFlag = false;
+  G4bool tablesAreBuilt = false;
+  G4bool spline = true;
+  G4bool isIon = false;
+  G4bool isIonisation = true;
+  G4bool useDeexcitation = false;
+  G4bool biasFlag = false;
+  G4bool weightFlag = false;
+  G4bool isMaster = true;
+  G4bool baseMat = false;
+  G4bool actLinLossLimit = false;
+  G4bool actLossFluc = false;
+  G4bool actBinning = false;
+  G4bool actMinKinEnergy = false;
+  G4bool actMaxKinEnergy = false;
 
   std::vector<G4DynamicParticle*> secParticles;
   std::vector<G4Track*>           scTracks;
@@ -573,12 +583,15 @@ G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
   if(couple != currentCouple) {
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
-    currentCoupleIndex = couple->GetIndex();
-    basedCoupleIndex   = (*theDensityIdx)[currentCoupleIndex];
-    fFactor = chargeSqRatio*biasFactor*(*theDensityFactor)[currentCoupleIndex];
-    reduceFactor = 1.0/(fFactor*massRatio);
+    basedCoupleIndex = currentCoupleIndex = couple->GetIndex();
+    fFactor = chargeSqRatio*biasFactor;
     mfpKinEnergy = DBL_MAX;
     idxLambda = 0;
+    if(baseMat) {
+      basedCoupleIndex = (*theDensityIdx)[currentCoupleIndex];
+      fFactor *= (*theDensityFactor)[currentCoupleIndex];
+    }
+    reduceFactor = 1.0/(fFactor*massRatio);
   }
 }
 
@@ -992,6 +1005,13 @@ inline G4PhysicsTable* G4VEnergyLossProcess::InverseRangeTable() const
 inline G4PhysicsTable* G4VEnergyLossProcess::LambdaTable() const
 {
   return theLambdaTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4VEnergyLossProcess::UseBaseMaterial() const
+{
+  return baseMat;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

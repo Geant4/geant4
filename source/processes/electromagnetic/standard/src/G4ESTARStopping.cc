@@ -51,13 +51,9 @@
 
 G4ESTARStopping::G4ESTARStopping(const G4String& datatype)
 {
-  currentMaterial = 0;
-  matIndex = -1;
-
   sdata.resize(280,nullptr);
   name.resize(280,"");
 
-  type = 0;
   if("basic" == datatype)     { type = 1; }
   else if("long" == datatype) { type = 2; }
 
@@ -98,6 +94,7 @@ G4double G4ESTARStopping::GetElectronicDEDX(G4int i, G4double energy)
 	   << i << " is out of range!" << G4endl; 
     return res;
   }
+  G4double emin = sdata[i]->Energy(0); 
   if(energy < emin) { res = (*(sdata[i]))[0]*std::sqrt(energy/emin); } 
   else              { res = sdata[i]->Value(energy); }
   return res;
@@ -113,7 +110,6 @@ void G4ESTARStopping::Initialise()
   }
  
 static const G4double T0[25]={1.0E-03,3.0E-03,5.0E-03,9.0E-03,2.5E-02,4.5E-02,8.0E-02,.2,.4,.7,1.5,3.5,6.0,10.,30.,50.,90.,250.,450.,800.,2000.,4.0E+03,6.0E+03,8.0E+03,1.0E+04};
-emin = T0[0]*MeV;
 
 name[1]="G4_1,2-DICHLOROBENZENE";
 static const G4double e1[25]={9.473E+01,4.632E+01,3.203E+01,2.063E+01,9.472,6.123,4.106,2.428,1.878,1.678,1.619,1.716,1.841,2.015,2.762,3.48,4.914,1.07E+01,1.799E+01,3.08E+01,7.487E+01,1.485E+02,2.221E+02,2.958E+02,3.695E+02};

@@ -32,11 +32,18 @@
 #include "G4Threading.hh"
 #include "Analysis.hh"
 #include "RunActionMaster.hh"
-#include "g4root.hh" //ROOT Format for output
 #include "RunMerger.hh"
+#ifndef G4MULTITHREADED
+#include "G4RootMpiAnalysisManager.hh"
+using G4AnalysisManager = G4RootMpiAnalysisManager;
+#else
+#include "G4RootAnalysisManager.hh"
+using G4AnalysisManager = G4RootAnalysisManager;
+#endif
 #include "G4MPIscorerMerger.hh"
 #include "G4MPIhistoMerger.hh"  
 #include "G4MPIntupleMerger.hh"
+#include "G4filesystem.hh"
 #include "Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -206,12 +213,14 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
     }
   
     //Save histograms *before* MPI merging for rank #0
-    if (rank == 0)
-      {
-        Analysis* myana = Analysis::GetAnalysis();
-        myana-> Save();
-        myana-> Close(false);  // close without resetting histograms
-      }
+    if (rank == 0) {
+      Analysis* myana = Analysis::GetAnalysis();
+      myana-> Save();
+      myana-> Close(false);  // close without resetting histograms
+      // Rename file in another file
+      G4fs::rename("dose-rank0.root", "dose-rank0-part.root");
+    }
+    
     //Merge of g4analysis objects
     G4cout << "Go to merge histograms " << G4endl;
     ver=1;
@@ -220,20 +229,19 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
     hm.Merge();
     G4cout << "Done merge histograms " << G4endl;
   }
+  else {
+    G4cout << "Skip merging on the extra worker" << G4endl;
+  }
 
   //Save g4analysis objects to a file
-  //NB: It is important that the save is done *after* MPI-merging of histograms
+  Analysis* myana = Analysis::GetAnalysis();
+  myana-> Save();
+  myana-> Close();
 
-  //One can save all ranks or just rank0, chane the if
-  if (true /*rank == 0*/)
-  // if (rank == 0)
-  {
-    Analysis* myana = Analysis::GetAnalysis();
-    if (rank == 0) {
-      myana->OpenFile("dose-merged");
-    }
-    myana-> Save();
-    myana-> Close();
+  if (rank == 0) {
+    // Rename files
+    G4fs::rename("dose-rank0.root", "dose-merged.root");
+    G4fs::rename("dose-rank0-part.root", "dose-rank0.root");
   }
 
   G4cout << "===================================================" << G4endl;

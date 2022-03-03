@@ -35,9 +35,8 @@
 #include "CCalG4Hit.hh"
 #include "CCaloOrganization.hh"
 #include "CCalSDList.hh"
-#include "CCalAnalysis.hh"
 
-
+#include "G4AnalysisManager.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
@@ -50,8 +49,6 @@
 #include <iostream>
 #include <vector>
 #include <map>
-
-#include "CCalAnalysis.hh"
 
 //#define debug
 //#define ddebug

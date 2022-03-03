@@ -205,12 +205,12 @@ G4String G4ZMQServer::GetCommand(const G4String& input)
   const std::string nullstr = "";
   G4String cmdstr = input;
 
-  G4String cstr = cmdstr.strip(G4String::leading);
+  G4String cstr = G4StrUtil::lstrip_copy(cmdstr);
   if ( cstr.length() == 0 ) {
     cmdstr = nullstr;
 
   // define built-in shell commands...
-  } else if ( cstr(0) == '#' ) {
+  } else if ( cstr[0] == '#' ) {
     G4cout << cstr << G4endl;
     cmdstr = nullstr;
 
@@ -219,7 +219,7 @@ G4String G4ZMQServer::GetCommand(const G4String& input)
     cmdstr = nullstr;
 
   } else if ( cstr == "lc" || cstr.substr(0,3) == "lc " ) {
-    shell_-> ListCommand(cstr.remove(0,2));
+    shell_-> ListCommand(cstr.erase(0,2));
     cmdstr = nullstr;
 
   } else if (cstr == "pwd" ) {

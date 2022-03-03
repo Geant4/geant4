@@ -1,0 +1,158 @@
+
+                 Geant4 10.7 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                            19 November 2021
+
+List of fixes included in this public patch since the public release 10.7.p02:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Renamed Geant4::HDF5 to hdf5::hdf5 to be compatible with imported
+        targets provided since CMake 3.20. Addressing problem report #2426.
+
+  o Environments:
+    ------------
+    + G4py
+      o Removed binding to obsolete member functions of G4Sphere and G4Tubs.
+
+  o Geometry:
+    --------
+    + divisions:
+      o Make G4PVDivision and G4ReplicatedSlice inherit from G4PVReplica
+        rather than G4VPhysicalVolume, in order to have instances properly
+        cloned in MT mode.
+      o Fixed bug in G4ParameterisationTrd for positioning calculation.
+        Debug messages cleanup.
+    + management:
+      o Provide operator<<() as a free function for G4UAdapter to support
+        Geant4Py.
+    + navigation:
+      o G4PhantomParameterisation: reduced warning messages in GetReplicaNo()
+        function; issue warning only when difference is bigger than
+        'kCarTolerance'. Addressing problem report #2314.
+    + solids/Boolean:
+      o In G4BooleanSolid, use G4RecursiveMutex in place of G4Mutex in
+        GetPolyhedron() to avoid potential deadlocks in visualisation
+        in recursive Boolean operations.
+    + solids/specific:
+      o More accurate calculation of distance from point to triangle
+        in G4TriangularFacet. Addressing problem report #2401.
+      o Added missing accessor in G4UTet.
+    + volumes:
+      o Use same strategy for cloning solids for replicated volumes types in
+        G4GeometryWorkspace (required for having proper treatment of divided
+        volumes). Cleanup of unused verbose printouts.
+      o G4PVReplica: moved internal defines for MT split data to source.
+        Avoid deletion of rotation matrix for replication in Phi in destructor
+        as not necessary. Some code cleanup.
+
+  o Global:
+    ------
+    + Updated date and version for 10.7.p03.
+
+  o Materials:
+    ---------
+    + Corrected calculations in G4DensityEffectCalculator.
+      Addressing problem report #2330.
+    + G4IonisParamMat: return exact computations according to the original
+      publication. Addressing problem report #2334.
+
+  o Parameterisations/gflash
+    ------------------------
+    + Fixes in GFlashSamplingShowerParameterisation in the parameters
+      definition.
+
+  o Persistency:
+    -----------
+    + ASCII:
+      o Change prefix to free math functions in G4tgrEvaluator source, to avoid
+        potential clashes with system functions carrying same name/signature.
+        Addressing problem report #2444.
+    + GDML
+      o G4GDMLWriteStructure: added fatal exception in AssemblyWrite() for the
+        case of nested assemblies, not yet supported for exporting.
+      o G4GDMLParser: added utility method to retrieve a generic physical
+        volume by its name.
+
+  o Physics Lists:
+    -------------
+    + constructors/gamma_lepto_nuclear
+      o G4EmExtraPhysics: enable synchrotron radiation only for really stable
+        particles. Fixed typo in registering positron-nuclear process; register
+        model for e-/e+-nuclear in case of general processes, avoid registering
+        synchroton radiation twice for e-/e+.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + standard
+      o G4BetheBlochModel: fixed computation of dedx for alpha if ICRU90 data
+        are used. Addressing problem report #2414.
+    + utils
+      o Fix in G4OpticalParametersMessenger for UI command changing incorrect
+        parameter. Addressing problem report #2392.
+    + xrays
+      o G4Cerenkov: added protection against too small steps (still addressing
+        problem report #1992).
+      o G4GaussXTRadiator, G4VXTRenergyLoss: added Gauss-distributed regular
+        radiator and accessors for angle distribution range.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections
+      o G4NeutronCaptureXS: fixed bug in isotope data access.
+    + models/de_excitation
+      o In G4PhotonEvaporation, changed de-excitation logic from levels, which
+        has no data on transitions: instead of transition to closest level 
+        continue transition is performed.
+        Attempting fix for problem report #2434, by reducing production of
+        fragments with high excitation and high angular momentum.
+    + models/particle_hp
+      o Bug fix in G4ParticleHPLabAngularEnergy.
+    + models/util
+      o G4SampleResonance: bug-fix in the method GetMinimumMass() in the use
+        case rare and light decay channels (e.g. e+ e-) are included for
+        hadronic resonances. Addressing problem report #2299.
+
+  o Run
+    ---
+    + G4VModularPhysicsList: fixed destruction of the vector of
+      G4VPhysicsConstructor for the case when physics list is created
+      but physics is not built.
+
+  o Tracking
+    --------
+    + G4SteppingManager: Making sure Transportation limits the step if a volume
+      boundary in a parallel world is co-limiting the step.
+      Addressing problem report #2240.
+
+  o Examples:
+    --------
+    + advanced/ICRP110_HumanPhantoms:
+      o Updated URL for data download.
+    + advanced/STCyclotron:
+      o Added protection against potential division by zero in function
+        STCyclotronRun::EndOfRun().
+    + extended/hadronic:
+      o Hadr01: in HistoManager, DetectorConstruction and DetectorMessenger 
+        corrected counting of leaking neutrons.
+        Addressing problem report #2441.
+    + extended/persistency:
+      o G01: Fixed minor overlaps in assembly.gdml and axes.gdml samples.
+      o G02, G03: Fixed visualisation settings in input macros.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.7 or 10.7.p01/p02.
+  o  Technical notes distributed for release 10.7 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.7.p03 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

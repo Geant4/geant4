@@ -56,9 +56,11 @@ geant4_add_module(G4analysismng
     G4VNtupleManager.hh
     G4VP1Manager.hh
     G4VP2Manager.hh
+    G4VRFileManager.hh
     G4VRNtupleManager.hh
     G4VTFileManager.hh
     G4VTHnFileManager.hh
+    G4VTHnRFileManager.hh
   SOURCES
     G4AnalysisVerbose.cc
     G4AnalysisManagerState.cc

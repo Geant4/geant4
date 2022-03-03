@@ -37,8 +37,8 @@
 
 // First version: Nov 19, 2002 - Jacek Generowicz
 // ------------------------------------------------------------------------
-#ifndef G4IdentityTrajectoryFilter_hh
-#define G4IdentityTrajectoryFilter_hh
+#ifndef G4IDENTITYTRAJECTORYFILTER_HH
+#define G4IDENTITYTRAJECTORYFILTER_HH 1
 
 #include "G4VCurvedTrajectoryFilter.hh"
 #include "G4ThreeVector.hh"
@@ -46,10 +46,10 @@
 class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter
 {
 
-  public:  // with description
+  public:
 
-    G4IdentityTrajectoryFilter();
-    virtual ~G4IdentityTrajectoryFilter();
+    G4IdentityTrajectoryFilter() = default;
+    virtual ~G4IdentityTrajectoryFilter() = default;
 
     G4IdentityTrajectoryFilter(const G4IdentityTrajectoryFilter&) =  delete;
     G4IdentityTrajectoryFilter& operator=(const G4IdentityTrajectoryFilter&) = delete;
@@ -60,4 +60,4 @@ class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter
       // to consider keeping or rejecting
 };
 
-#endif  /* G4IdentityTrajectoryFilter_hh */
+#endif

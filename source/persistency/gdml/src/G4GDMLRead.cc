@@ -104,13 +104,18 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
 G4String G4GDMLRead::Strip(const G4String& name) const
 {
   G4String sname(name);
-  return sname.remove(sname.find("0x"));
+  StripName(sname);
+  return sname;
 }
 
 // --------------------------------------------------------------------
 void G4GDMLRead::StripName(G4String& name) const
 {
-  name.remove(name.find("0x"));
+  auto idx = name.find("0x");
+  if(idx != G4String::npos)
+  {
+    name.erase(idx);
+  }
 }
 
 // --------------------------------------------------------------------
@@ -140,6 +145,7 @@ void G4GDMLRead::StripNames() const
     StripName(sname);
     psol->SetName(sname);
   }
+  solids->UpdateMap();
 
   // Logical volumes...
   //
@@ -150,6 +156,7 @@ void G4GDMLRead::StripNames() const
     StripName(sname);
     lvol->SetName(sname);
   }
+  lvols->UpdateMap();
 
   // Physical volumes...
   //
@@ -160,6 +167,7 @@ void G4GDMLRead::StripNames() const
     StripName(sname);
     pvol->SetName(sname);
   }
+  pvols->UpdateMap();
 
   // Materials...
   //

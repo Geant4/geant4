@@ -44,6 +44,7 @@
 #include "G4Poisson.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -58,6 +59,7 @@ G4ForwardXrayTR::G4ForwardXrayTR(const G4String& matName1,
                                  const G4String& processName)
   : G4TransitionRadiation(processName)
 {
+  secID = G4PhysicsModelCatalog::GetModelID("model_XrayTR");
   fPtrGamma                = nullptr;
   fGammaCutInKineticEnergy = nullptr;
   fGammaTkinCut = fMinEnergyTR = fMaxEnergyTR = fMaxThetaTR = 0.0;
@@ -532,7 +534,13 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
         directionTR.rotateUz(particleDir);
         G4DynamicParticle* aPhotonTR =
           new G4DynamicParticle(G4Gamma::Gamma(), directionTR, energyTR);
-        aParticleChange.AddSecondary(aPhotonTR);
+
+	// Create the G4Track
+	G4Track* aSecondaryTrack = new G4Track(aPhotonTR, aTrack.GetGlobalTime(), aTrack.GetPosition());
+	aSecondaryTrack->SetTouchableHandle(aStep.GetPostStepPoint()->GetTouchableHandle());
+	aSecondaryTrack->SetParentID(aTrack.GetTrackID());
+	aSecondaryTrack->SetCreatorModelID(secID);
+	aParticleChange.AddSecondary(aSecondaryTrack);	
       }
     }
   }
@@ -607,7 +615,13 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
           directionTR.rotateUz(particleDir);
           G4DynamicParticle* aPhotonTR =
             new G4DynamicParticle(G4Gamma::Gamma(), directionTR, energyTR);
-          aParticleChange.AddSecondary(aPhotonTR);
+
+	  // Create the G4Track
+	  G4Track* aSecondaryTrack = new G4Track(aPhotonTR, aTrack.GetGlobalTime(), aTrack.GetPosition());
+	  aSecondaryTrack->SetTouchableHandle(aStep.GetPostStepPoint()->GetTouchableHandle());
+	  aSecondaryTrack->SetParentID(aTrack.GetTrackID());
+	  aSecondaryTrack->SetCreatorModelID(secID);
+	  aParticleChange.AddSecondary(aSecondaryTrack);		  
         }
       }
     }

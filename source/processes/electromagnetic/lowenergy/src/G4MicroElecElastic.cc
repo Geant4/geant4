@@ -37,6 +37,7 @@
 #include "G4MicroElecElastic.hh"
 #include "G4DummyModel.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,7 +47,7 @@ G4MicroElecElastic::G4MicroElecElastic(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetProcessSubType(51);
+  SetProcessSubType(fLowEnergyElastic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -39,6 +39,7 @@
 #include "globals.hh"
 
 #include <vector>
+#include <string_view>
 
 class G4RootMainNtupleManager;
 
@@ -54,20 +55,20 @@ class imt_ntuple;
 // with replacement tools::mutex -> G4Mutex
 
 class mutex : public virtual tools::wroot::imutex {
-  typedef tools::wroot::imutex parent;
+  using parent = tools::wroot::imutex;
 public:
   virtual bool lock() {
     // G4cout << "!!! Mutex lock" << G4endl;
-    m_mutex.lock(); 
+    m_mutex.lock();
     return true;}
   virtual bool unlock() {
-    m_mutex.unlock(); 
+    m_mutex.unlock();
     // G4cout << "!!! Mutex unlock" << G4endl;
     return true; }
   //virtual bool trylock() {return m_mutex.trylock();}
 public:
   mutex(G4AutoLock& a_mutex):m_mutex(a_mutex){}
-  virtual ~mutex(){}
+  virtual ~mutex() = default;
 protected:
   mutex(const mutex& a_from):parent(a_from),m_mutex(a_from.m_mutex){}
   mutex& operator=(const mutex&){return *this;}
@@ -81,11 +82,12 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
   friend class G4RootNtupleFileManager;
 
   public:
-    explicit G4RootPNtupleManager(const G4AnalysisManagerState& state,
-                                  std::shared_ptr<G4NtupleBookingManager> bookingManger,
-                                  std::shared_ptr<G4RootMainNtupleManager> main,
-                                  G4bool rowWise, G4bool rowMode);
-    ~G4RootPNtupleManager();
+    G4RootPNtupleManager(const G4AnalysisManagerState& state,
+                         std::shared_ptr<G4NtupleBookingManager> bookingManger,
+                         std::shared_ptr<G4RootMainNtupleManager> main,
+                         G4bool rowWise, G4bool rowMode);
+    G4RootPNtupleManager() = delete;
+    virtual ~G4RootPNtupleManager();
 
   private:
     // Methods to manipulate ntuples
@@ -100,23 +102,23 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     virtual G4int CreateNtuple(G4NtupleBooking* booking) final;
 
     // Methods to fill ntuples
-    // Methods for ntuple with id = FirstNtupleId (from base class)                    
+    // Methods for ntuple with id = FirstNtupleId (from base class)
     using G4BaseNtupleManager::FillNtupleIColumn;
     using G4BaseNtupleManager::FillNtupleFColumn;
     using G4BaseNtupleManager::FillNtupleDColumn;
     using G4BaseNtupleManager::FillNtupleSColumn;
     using G4BaseNtupleManager::AddNtupleRow;
-    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
+    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)
     virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) final;
     virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) final;
     virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value) final;
-    virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId, 
+    virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId,
                                      const G4String& value) final;
     virtual G4bool AddNtupleRow(G4int ntupleId) final;
     virtual G4bool Merge() final;
 
-    // Reset
-    virtual G4bool Reset(G4bool deleteNtuple) final;
+    // Clear all data
+    virtual void Clear() final;
 
     // Activation option
     //
@@ -131,18 +133,21 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     void SetNtupleRowWise(G4bool rowWise, G4bool rowMode);
 
   private:
-    G4RootPNtupleDescription*  
-      GetNtupleDescriptionInFunction(G4int id, G4String function, G4bool warn = true) const;
-    tools::wroot::base_pntuple*  
-      GetNtupleInFunction(G4int id, G4String function, G4bool warn = true) const;
-    tools::wroot::ntuple*  
-      GetMainNtupleInFunction(G4int id, G4String function, G4bool warn = true) const;
+    G4RootPNtupleDescription*
+      GetNtupleDescriptionInFunction(G4int id, std::string_view function, G4bool warn = true) const;
+    tools::wroot::base_pntuple*
+      GetNtupleInFunction(G4int id, std::string_view function, G4bool warn = true) const;
+    tools::wroot::ntuple*
+      GetMainNtupleInFunction(G4int id, std::string_view function, G4bool warn = true) const;
 
-    template <typename T> 
+    template <typename T>
     G4bool FillNtupleTColumn(G4int ntupleId, G4int columnId, const T& value);
 
-    template <typename T> 
+    template <typename T>
     G4bool FillNtupleTColumn(G4int columnId, const T& value);
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootPNtupleManager" };
 
     // Data members
     std::shared_ptr<G4NtupleBookingManager> fBookingManager;
@@ -151,7 +156,7 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     std::vector<tools::wroot::imt_ntuple*> fNtupleVector;
     G4bool fRowWise;
     G4bool fRowMode;
-    G4bool fCreateNtuples;
+    G4bool fCreateNtuples { true };
 };
 
 #include "G4RootPNtupleManager.icc"

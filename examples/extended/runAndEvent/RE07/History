@@ -1,0 +1,22 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example RE07 History file
+                    -------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov. 12, 2021 J. Hahnfeld (exampleRE07-V10-07-01)
+- SpecializedTrackingManager: Fix condition for particles switching
+  regions (entering or exiting the Back region in this case)
+
+Oct. 31, 2021 J. Hahnfeld (exampleRE07-V10-07-00)
+- Created

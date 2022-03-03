@@ -61,6 +61,12 @@
 #include "G4AntiNeutrinoTau.hh"
 #include "G4NeutrinoTau.hh"
 
+#include "G4Proton.hh"
+#include "G4AntiProton.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4GenericIon.hh"
+
 #include "G4SynchrotronRadiation.hh"
 #include "G4MuonNuclearProcess.hh"
 #include "G4MuonVDNuclearModel.hh"
@@ -113,6 +119,7 @@
 #include "G4HadronicParameters.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
  
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -134,7 +141,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(G4int ver):
   phadActivated (false),
   fNuActivated (false),
   fNuETotXscActivated (false),
-  fUseGammaNuclearXS(false),
+  fUseGammaNuclearXS(true),
   gmumuFactor (1.0),
   pmumuFactor (1.0),
   phadFactor  (1.0),
@@ -314,8 +321,8 @@ void G4EmExtraPhysics::ConstructProcess()
     G4GammaConversionToMuons* theGammaToMuMu = new G4GammaConversionToMuons();
     theGammaToMuMu->SetCrossSecFactor(gmumuFactor);
     G4GammaGeneralProcess* sp = 
-      (G4GammaGeneralProcess*)emManager->GetGammaGeneralProcess();
-    if(sp) {
+      static_cast<G4GammaGeneralProcess*>(emManager->GetGammaGeneralProcess());
+    if(nullptr != sp) {
       sp->AddMMProcess(theGammaToMuMu);
     } else {
       ph->RegisterProcess(theGammaToMuMu, gamma);
@@ -325,6 +332,9 @@ void G4EmExtraPhysics::ConstructProcess()
     G4AnnihiToMuPair* thePosiToMuMu = new G4AnnihiToMuPair();
     thePosiToMuMu->SetCrossSecFactor(pmumuFactor);
     ph->RegisterProcess(thePosiToMuMu, positron);
+    G4AnnihiToMuPair* thePosiToTauTau = new G4AnnihiToMuPair("AnnihiToTauPair");
+    thePosiToTauTau->SetCrossSecFactor(pmumuFactor);
+    ph->RegisterProcess(thePosiToTauTau, positron);
   }  
   if(phadActivated) {
     G4eeToHadrons* thePosiToHadrons = new G4eeToHadrons();
@@ -336,20 +346,14 @@ void G4EmExtraPhysics::ConstructProcess()
     ph->RegisterProcess( theSynchRad, electron);
     ph->RegisterProcess( theSynchRad, positron);
     if(synActivatedForAll) {
-      auto myParticleIterator=GetParticleIterator();
-      myParticleIterator->reset();
-      G4ParticleDefinition* particle = nullptr;
+      ph->RegisterProcess( theSynchRad, muonplus);
+      ph->RegisterProcess( theSynchRad, muonminus);
 
-      while( (*myParticleIterator)() ) {
-	particle = myParticleIterator->value();
-	if( particle->GetPDGStable() && particle->GetPDGCharge() != 0.0) { 
-	  if(verbose > 1) {
-	    G4cout << "### G4SynchrotronRadiation for " 
-		   << particle->GetParticleName() << G4endl;
-	  }
-	  ph->RegisterProcess( theSynchRad, particle);
-	}
-      }
+      ph->RegisterProcess( theSynchRad, G4Proton::Proton());
+      ph->RegisterProcess( theSynchRad, G4AntiProton::AntiProton());
+      ph->RegisterProcess( theSynchRad, G4PionPlus::PionPlus());
+      ph->RegisterProcess( theSynchRad, G4PionMinus::PionMinus());
+      ph->RegisterProcess( theSynchRad, G4GenericIon::GenericIon());
     }
   }
   if( fNuActivated )
@@ -444,11 +448,17 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
   G4LossTableManager* emManager  = G4LossTableManager::Instance();
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  G4HadronInelasticProcess* gnuc = new G4HadronInelasticProcess( "photonNuclear", G4Gamma::Definition() );
-  gnuc->AddDataSet( new G4PhotoNuclearCrossSection );
+  G4HadronInelasticProcess* gnuc = new G4HadronInelasticProcess( "photonNuclear", G4Gamma::Gamma() );
+  auto xsreg = G4CrossSectionDataSetRegistry::Instance();
+  G4VCrossSectionDataSet* xs = nullptr;
   if(fUseGammaNuclearXS) {
-    gnuc->AddDataSet(new G4GammaNuclearXS());
+    xs = xsreg->GetCrossSectionDataSet("GammaNuclearXS");
+    if(nullptr == xs) xs = new G4GammaNuclearXS();
+  } else {
+    xs = xsreg->GetCrossSectionDataSet("PhotoNuclearXS");
+    if(nullptr == xs) xs = new G4PhotoNuclearCrossSection(); 
   }
+  gnuc->AddDataSet(xs);
 
   G4QGSModel< G4GammaParticipants >* theStringModel = 
     new G4QGSModel< G4GammaParticipants >;
@@ -495,12 +505,14 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
     G4PositronNuclearProcess* pnuc = new G4PositronNuclearProcess;
     G4ElectroVDNuclearModel* eModel = new G4ElectroVDNuclearModel;
 
+    enuc->RegisterMe(eModel);
+    pnuc->RegisterMe(eModel);
+
     G4GammaGeneralProcess* eproc = 
       (G4GammaGeneralProcess*)emManager->GetElectronGeneralProcess();
     if(eproc != nullptr) {
       eproc->AddHadProcess(enuc);
     } else {
-      enuc->RegisterMe(eModel);
       ph->RegisterProcess(enuc, G4Electron::Electron());
     }
   
@@ -509,8 +521,7 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
     if(pproc != nullptr) {
       pproc->AddHadProcess(pnuc);
     } else {
-      pnuc->RegisterMe(eModel);
-      ph->RegisterProcess(enuc, G4Positron::Positron());
+      ph->RegisterProcess(pnuc, G4Positron::Positron());
     }
   }
 }

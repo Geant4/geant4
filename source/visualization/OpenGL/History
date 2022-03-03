@@ -16,6 +16,123 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 November 2021 - Ben Morgan (opengl-V10-07-25)
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+8 November 2021 - Ben Morgan (opengl-V10-07-24)
+- Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+30 October 2021  John Allison  (opengl-V10-07-23)
+- G4OpenGLStoredXmViewer destructor:
+  No need to RemoveViewerFromList - this is done in the G4VViewer base class.
+
+25 October 2021  Guy Barrand (opengl-V10-07-22)
+- G4OpenGLImmediateSceneHandler.hh: idem as below.
+- G4OpenGLStoredSceneHandler.hh: idem as below.
+- G4OpenGLSceneHandler.hh: to quiet g++ about "AddPrimitive(G4Plotter&)", have:
+    using G4VSceneHandler::AddPrimitive;
+
+21 September 2021 Guilherme Amadio (opengl-V10-07-21)
+- G4OpenGLViewer:
+  o Fix C++20 warnings from GCC 11.2.0.
+
+06 September 2021  John Allison  (opengl-V10-07-20)
+- G4OpenGLImmediateQtViewer.cc and G4OpenGLStoredQtViewer.cc:
+  o Set jpg as default export format for Qt viewers.
+    . For use with /vis/ogl/export.
+    . jpg is only available for Qt viewers - pdf is the default for
+      other OpenGL viewers.
+    . jpg is more faithful than pdf. For example, pdf, which uses gl2ps,
+      is not good with transparency. Also gl2ps does not do text.
+    . For complicated images - detectors of many tracks - gl2ps creates
+      *huge* files. I have seen some 1000x bigger than the equivalent jpg.
+
+01 August 2021  John Allison  (opengl-V10-07-19)
+- G4OpenGLQtViewer::DrawText:
+  o Fix text alignment issue with a fudge factor.
+  o Specialise fudge factor for __APPLE__. It seems only Mac has this
+    problem. Maybe it's to do with the retina display. Maybe Qt keeps
+    it's own pixel size.
+
+20 July 2021  John Allison  (opengl-V10-07-18)
+- G4OpenGLViewerMessenger:
+  o Remove /vis/ogl/printEPS.
+  o This command is covered by the more versatile /vis/ogl/export.
+
+19 July 2021  John Allison  (opengl-V10-07-17)
+- G4OpenGLSceneHandler.cc:
+  o Use C++17 [[fallthrough]] instead of // fallthrough in switch statements.
+
+17 July 2021  John Allison  (opengl-V10-07-16)
+- Rationalise image exporting in preparation for removing /vis/ogl/printEPS.
+  o G4OpenGLViewer:
+    . Subsume the code in printEPS into exportImage, thereby allowing
+      the removal of the former function. exportImage is the "primary"
+      function, called by the printEPS and export commands and callback
+      functions. It calls printEPS, and is the only function to do so, so
+      to rationalise and avoid confusion, move all the code to exportImage.
+  o G4OpenGLXmViewer::print_callback:
+    . Call exportImage instead of printEPS.
+
+13 July 2021  John Allison  (opengl-V10-07-15)
+- G4OpenGLStoredSceneHandler.cc, G4OpenGLViewerMessenger.cc:
+  o Increase the default display list limit to 10 million.
+  o The default OpenGL display list limit was 50,000, an archaic value
+    from the days when memory was much more limited than is typical today.
+    This MR increases the default value to 10 million, easily accommodated
+    by modern RAM and GPU memory.
+  o The number can be changed with /vis/ogl/displayListLimit, either to
+    increase it further or lower it, subject to a lower limit of 10,000.
+
+12 July 2021  John Allison  (opengl-V10-07-14)
+- G4OpenGLImmediateXViewer::FinishView()
+- G4OpenGLImmediateXmViewer::FinishView()
+- G4OpenGLStoredXViewer::FinishView()
+- G4OpenGLStoredXmViewer::FinishView()
+- G4OpenGLXViewer::ShowView()
+- G4OpenGLXmViewer::ShowView()
+  o Comment out glXWaitGL().
+    . Wait for effects of all previous OpenGL commands to be propagated
+      before progressing.
+    . Commented out July 2021 - slows rendering down in some cases and I
+      don't see any adverse effects.
+
+08 July 2021  John Allison  (opengl-V10-07-13)
+- G4OpenGLSceneHandler.cc:
+  o Disable (comment out) backface culling.
+- G4OpenGLStoredViewer.cc and G4OpenGLStoredQtViewer.cc:
+  o Suppress kernel visit (no longer needed) for cutaway drawing.
+- Note 1: Section and Cutaway can reveal back-facing faces. If backface culling
+  is implemented, the image can look strange because the back-facing faces are
+  not there. As described above, we have disabled (commented out) backface
+  culling. It seems not to affect performance - in fact, performance seems to
+  improve it. Maybe the feature is archaic and modern GPUs are simply more
+  efficient if backface culling is not requested.
+- Note 2: In G4OpenGLStored(Qt)Viewer::CompareForKernelVisit we decide if a
+  "kernel visit" (which involves a reconstruction of the graphical database
+  from the Geant4 kernel) is required on a change of view parameters. Simple
+  rotating and zooming does not require a kernel visit, but more sophisticated
+  parameters may. In G4OpenGLSceneHandler we implement cutaways using
+  OpenGL cut planes, so now we have disabled backface culling, we do NOT need
+  to visit the kernel. This is the change that makes a huge speed up when
+  a user requests cutaways.
+
+05 July 2021  John Allison  (opengl-V10-07-12)
+- G4OpenGLQtViewer:
+  o Use modelShortName instead of modelDescription for TreeWidgetItem
+    for nonPVmodel.
+
+30 June 2021  John Allison  (opengl-V10-07-11)
+- Requires greps-V10-07-09, modeling-V10-07-11 and visman-V10-07-11.
+- Revise vis models. See visualization/modeling/History for more details.
+- Consequent changes:
+  o AddPrimitive(const G4Scale&) has been removed from all scene handlers.
+
+29 June 2021  Gabriele Cosmo (opengl-V10-07-10)
+- Fixed compilation error in G4OpenGLXmConvenienceRoutines when c++20 is enabled.
+
 07 June 2021  John Allison  (opengl-V10-07-09)
 - Requires greps-V10-07-07 (new method AddCompound (const G4Mesh&)).
 - Requires modeling-V10-07-09 (new class G4Mesh).

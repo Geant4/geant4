@@ -25,8 +25,6 @@
 //
 // John Allison, 18th July 2020
 
-#if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)
-
 #ifndef G4QT3DUTILS_HH
 #define G4QT3DUTILS_HH
 
@@ -59,5 +57,3 @@ void PrintQObjectTree
 }  // namespace G4Qt3DUtils
 
 #endif
-
-#endif  // #if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)

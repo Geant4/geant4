@@ -1,3 +1,26 @@
+5.6.0:
+- tools/tokenize: to help parsing some Geant4 commands "new value".
+- tools/sg/event_dispatcher,bcbk,ecbk,cbks: classes to have a mechanism in G4/G4ToolsSGSceneHandler
+  so that tools::sg::plots be properly resized when doing a mouse G4Viewer resize.
+- tools/sg/plotter_some_styles: have the plotting setup of ROOT_default, hippodraw, style done in C++
+  to avoid the usage of expat for these defaults styles.
+- tools/sg/light_off: a node to switch off light in a sub scene graph.
+- tools/Qt/sg_viewer: in dstor, reset the "interactor" to null in the glarea.
+- tools/waxml/ntuple: add code to write a column of vectors of strings.
+- tools/hdf5/ntuple: add code to write/read a column of vectors of strings.
+- add back: tools/rroot/rall, THistogram.
+- sg//base_freetype, text_freetype: modifs to be able to handle embedded fonts.
+- font/lato_regular_ttf: embedded lato_regular.ttf font.
+- font/roboto_bold_ttf: embedded roboto_bold.ttf font.
+- sg/text_hershey_marker, text_freetype_marker: modifs to avoid 'squashing' of text.
+- sg/render_action, GL_viewer, atb_vertices: handle transparency by using a two pass rendering method.
+- sg/gl2ps_actions/2format: avoid a warning if returning false.
+- have 5.6.0 in tools/version.
+
+5.5.0:
+ - in geant4 repository remove the files not used by other Geant4 categories.
+ - in geant4 repository remove the test directory.
+ - in geant4 repository remove the not used src/csz_inflate.cc file but have a dummy.cc for Geant4/cmake.
  - tools/zb/polygon: in scan() : initialize ET,AET,SLLBlock, before calling
    CreateETandAET, to quiet g++-11 -Wmaybe-uninitialized warnings.
 

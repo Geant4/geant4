@@ -1,0 +1,36 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_light_off
+#define tools_sg_light_off
+
+// A node to cancel/switch of the lighting during a render traversal.
+
+#include "node"
+#include "render_action"
+
+namespace tools {
+namespace sg {
+
+class light_off : public node {
+  TOOLS_NODE(light_off,tools::sg::light_off,node)
+public:
+  virtual void render(render_action& a_action) {
+    state& state = a_action.state();
+    state.m_GL_LIGHTING = false;
+    a_action.set_lighting(false);
+  }
+public:
+  light_off():parent() {}
+  virtual ~light_off(){}
+public:
+  light_off(const light_off& a_from):parent(a_from){}
+  light_off& operator=(const light_off& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif

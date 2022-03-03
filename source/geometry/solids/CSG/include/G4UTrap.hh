@@ -42,7 +42,7 @@
 
 #include "G4Polyhedron.hh"
 
-class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid> 
+class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
 {
   using Shape_t = vecgeom::UnplacedTrapezoid;
   using Base_t = G4UAdapter<vecgeom::UnplacedTrapezoid>;
@@ -77,7 +77,7 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
                    G4double pDy1,  G4double pDy2,
                    G4double pDz );
       //
-      // Constructor for G4Trd       
+      // Constructor for G4Trd
 
     G4UTrap(const G4String& pName,
                   G4double pDx, G4double pDy, G4double pDz,
@@ -100,18 +100,19 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
 
     using Base_t::GetTanAlpha1;
     using Base_t::GetTanAlpha2;
- 
+
   // Accessors
 
     G4double GetZHalfLength()  const;
     G4double GetYHalfLength1() const;
     G4double GetXHalfLength1() const;
     G4double GetXHalfLength2() const;
+    G4double GetTanAlpha1()    const;
     G4double GetYHalfLength2() const;
     G4double GetXHalfLength3() const;
     G4double GetXHalfLength4() const;
-    G4double GetThetaCphi()    const;
-    G4double GetThetaSphi()    const;
+    G4double GetTanAlpha2()    const;
+
     TrapSidePlane GetSidePlane(G4int n) const;
     G4ThreeVector GetSymAxis() const;
 
@@ -128,7 +129,6 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
                           G4double pAlp1,
                           G4double pDy2, G4double pDx3, G4double pDx4,
                           G4double pAlp2);
-    void SetPlanes(const G4ThreeVector pt[8]);
 
     inline G4GeometryType GetEntityType() const;
 
@@ -151,6 +151,20 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
     G4UTrap(const G4UTrap& rhs);
     G4UTrap& operator=(const G4UTrap& rhs);
       // Copy constructor and assignment operator.
+
+  private:
+
+    void SetPlanes(const G4ThreeVector pt[8]);
+      // Set parameters using eight vertices
+
+    void CheckParameters() const;
+      // Check dimensions
+
+    void GetVertices(G4ThreeVector pt[8]) const;
+      // Compute coordinates of vertices
+
+    void CheckPlanarity(const G4ThreeVector pt[8]) const;
+      // Check planarity of lateral planes
 };
 
 // --------------------------------------------------------------------

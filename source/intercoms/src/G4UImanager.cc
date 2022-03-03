@@ -186,7 +186,7 @@ G4String G4UImanager::GetCurrentStringValue(const char* aCommand,
   for(G4int i_thParameter = 0; i_thParameter < parameterNumber; ++i_thParameter)
   {
     token = savedToken();
-    if(token.isNull())
+    if(token.empty())
       return G4String();
     if(token[(size_t) 0] == '"')
     {
@@ -370,23 +370,23 @@ void G4UImanager::ForeachS(const char* valueList)
   G4String vn = parameterToken();
   G4String c1 = parameterToken();
   G4String ca;
-  while(!((ca = parameterToken()).isNull()))
+  while(!((ca = parameterToken()).empty()))
   {
     c1 += " ";
     c1 += ca;
   }
 
   G4String aliasValue = c1;
-  if(aliasValue(0) == '"')
+  if(aliasValue[0] == '"')
   {
     G4String strippedValue;
-    if(aliasValue(aliasValue.length() - 1) == '"')
+    if(aliasValue.back() == '"')
     {
-      strippedValue = aliasValue(1, aliasValue.length() - 2);
+      strippedValue = aliasValue.substr(1, aliasValue.length() - 2);
     }
     else
     {
-      strippedValue = aliasValue(1, aliasValue.length() - 1);
+      strippedValue = aliasValue.substr(1, aliasValue.length() - 1);
     }
     aliasValue = strippedValue;
   }
@@ -402,7 +402,7 @@ void G4UImanager::Foreach(const char* macroFile, const char* variableName,
   G4String candidatesString = candidates;
   G4Tokenizer parameterToken(candidatesString);
   G4String cd;
-  while(!((cd = parameterToken()).isNull()))
+  while(!((cd = parameterToken()).empty()))
   {
     G4String vl = variableName;
     vl += " ";
@@ -424,15 +424,15 @@ void G4UImanager::Foreach(const char* macroFile, const char* variableName,
 G4String G4UImanager::SolveAlias(const char* aCmd)
 {
   G4String aCommand = aCmd;
-  G4int ia          = aCommand.index("{");
-  G4int iz          = aCommand.index("#");
+  G4int ia          = aCommand.find("{");
+  G4int iz          = aCommand.find("#");
   while((ia != G4int(std::string::npos)) &&
         ((iz == G4int(std::string::npos)) || (ia < iz)))
   {
     G4int ibx = -1;
     while(ibx < 0)
     {
-      G4int ib = aCommand.index("}");
+      G4int ib = aCommand.find("}");
       if(ib == G4int(std::string::npos))
       {
         G4cerr << aCommand << G4endl;
@@ -443,9 +443,9 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
         G4String nullStr;
         return nullStr;
       }
-      G4String ps = aCommand(ia + 1, aCommand.length() - (ia + 1));
-      G4int ic    = ps.index("{");
-      G4int id    = ps.index("}");
+      G4String ps = aCommand.substr(ia + 1, aCommand.length() - (ia + 1));
+      G4int ic    = ps.find("{");
+      G4int id    = ps.find("}");
       if(ic != G4int(std::string::npos) && ic < id)
       {
         ia += ic + 1;
@@ -459,9 +459,9 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
     //--- and ibx represents corresponding "}"
     G4String subs;
     if(ia > 0)
-      subs = aCommand(0, ia);
-    G4String alis = aCommand(ia + 1, ibx - ia - 1);
-    G4String rems = aCommand(ibx + 1, aCommand.length() - ibx);
+      subs = aCommand.substr(0, ia);
+    G4String alis = aCommand.substr(ia + 1, ibx - ia - 1);
+    G4String rems = aCommand.substr(ibx + 1, aCommand.length() - ibx);
     G4String* alVal = aliasList->FindAlias(alis);
     if(!alVal)
     {
@@ -470,7 +470,7 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
       return nullStr;
     }
     aCommand = subs + (*alVal) + rems;
-    ia       = aCommand.index("{");
+    ia       = aCommand.find("{");
   }
   return aCommand;
 }
@@ -485,7 +485,7 @@ G4int G4UImanager::ApplyCommand(const G4String& aCmd)
 G4int G4UImanager::ApplyCommand(const char* aCmd)
 {
   G4String aCommand = SolveAlias(aCmd);
-  if(aCommand.isNull())
+  if(aCommand.empty())
     return fAliasNotFound;
   if(verboseLevel) {
     if (isMaster) fLastCommandOutputTreated = false;
@@ -494,11 +494,11 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
   G4String commandString;
   G4String commandParameter;
 
-  std::size_t i = aCommand.index(" ");
+  std::size_t i = aCommand.find(" ");
   if(i != std::string::npos)
   {
-    commandString    = aCommand(0, i);
-    commandParameter = aCommand(i + 1, aCommand.length() - (i + 1));
+    commandString    = aCommand.substr(0, i);
+    commandParameter = aCommand.substr(i + 1, aCommand.length() - (i + 1));
   }
   else
   {
@@ -512,16 +512,17 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
   G4String a2;
   while(ll < len - 1)
   {
-    if(commandString(ll, 2) == "//")
+    if(commandString.substr(ll, 2) == "//")
     {
       if(ll == 0)
       {
-        commandString.remove(ll, 1);
+        // Safe because index argument always 0
+        commandString.erase(ll, 1);
       }
       else
       {
-        a1            = commandString(0, ll);
-        a2            = commandString(ll + 1, len - ll - 1);
+        a1            = commandString.substr(0, ll);
+        a2            = commandString.substr(ll + 1, len - ll - 1);
         commandString = a1 + a2;
       }
       --len;
@@ -537,7 +538,7 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
     for(auto itr = bridges->cbegin(); itr != bridges->cend(); ++itr)
     {
       G4int leng = (*itr)->DirLength();
-      if(commandString(0, leng) == (*itr)->DirName())
+      if(commandString.substr(0, leng) == (*itr)->DirName())
       {
         return (*itr)->LocalUI()->ApplyCommand(commandString + " " +
                                                commandParameter);
@@ -597,6 +598,31 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
   return commandFailureCode;
 }
 
+
+// --------------------------------------------------------------------
+G4UIcommand* G4UImanager::FindCommand(const G4String& aCmd)
+{
+  return FindCommand(aCmd.data());
+}
+
+// --------------------------------------------------------------------
+G4UIcommand* G4UImanager::FindCommand(const char* aCmd)
+{
+  G4String aCommand = SolveAlias(aCmd);
+  if(aCommand.empty()) 
+  { return nullptr; }
+
+  G4String commandString;
+
+  std::size_t i = aCommand.find(" ");
+  if(i != std::string::npos)
+  { commandString = aCommand.substr(0, i); }
+  else
+  { commandString = aCommand; }
+
+  return treeTop->FindPath(commandString);
+}  
+
 // --------------------------------------------------------------------
 void G4UImanager::StoreHistory(const char* fileName)
 {
@@ -648,8 +674,8 @@ void G4UImanager::ListCommands(const char* direct)
 G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
 {
   G4String aDirName  = dirName;
-  G4String targetDir = aDirName.strip(G4String::both);
-  if(targetDir(targetDir.length() - 1) != '/')
+  G4String targetDir = G4StrUtil::strip_copy(aDirName);
+  if(targetDir.back() != '/')
   {
     targetDir += "/";
   }
@@ -661,8 +687,8 @@ G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
   G4int idx = 1;
   while(idx < G4int(targetDir.length()) - 1)
   {
-    G4int i                  = targetDir.index("/", idx);
-    G4String targetDirString = targetDir(0, i + 1);
+    G4int i                  = targetDir.find("/", idx);
+    G4String targetDirString = targetDir.substr(0, i + 1);
     comTree                  = comTree->GetTree(targetDirString);
     if(comTree == nullptr)
     {
@@ -708,19 +734,19 @@ void G4UImanager::SetCoutDestination(G4UIsession* const value)
 void G4UImanager::SetAlias(const char* aliasLine)
 {
   G4String aLine      = aliasLine;
-  G4int i             = aLine.index(" ");
-  G4String aliasName  = aLine(0, i);
-  G4String aliasValue = aLine(i + 1, aLine.length() - (i + 1));
-  if(aliasValue(0) == '"')
+  G4int i             = aLine.find(" ");
+  G4String aliasName  = aLine.substr(0, i);
+  G4String aliasValue = aLine.substr(i + 1, aLine.length() - (i + 1));
+  if(aliasValue[0] == '"')
   {
     G4String strippedValue;
-    if(aliasValue(aliasValue.length() - 1) == '"')
+    if(aliasValue.back() == '"')
     {
-      strippedValue = aliasValue(1, aliasValue.length() - 2);
+      strippedValue = aliasValue.substr(1, aliasValue.length() - 2);
     }
     else
     {
-      strippedValue = aliasValue(1, aliasValue.length() - 1);
+      strippedValue = aliasValue.substr(1, aliasValue.length() - 1);
     }
     aliasValue = strippedValue;
   }
@@ -732,7 +758,7 @@ void G4UImanager::SetAlias(const char* aliasLine)
 void G4UImanager::RemoveAlias(const char* aliasName)
 {
   G4String aL          = aliasName;
-  G4String targetAlias = aL.strip(G4String::both);
+  G4String targetAlias = G4StrUtil::strip_copy(aL);
   aliasList->RemoveAlias(targetAlias);
 }
 
@@ -764,7 +790,7 @@ void G4UImanager::ParseMacroSearchPath()
   std::size_t idxfirst = 0;
   std::size_t idxend   = 0;
   G4String pathstring  = "";
-  while((idxend = searchPath.index(':', idxfirst)) != G4String::npos)
+  while((idxend = searchPath.find(':', idxfirst)) != G4String::npos)
   {
     pathstring = searchPath.substr(idxfirst, idxend - idxfirst);
     if(pathstring.size() != 0)

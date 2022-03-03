@@ -80,14 +80,16 @@ public:
 
   G4double SampleFluctuations(const G4MaterialCutsCouple*,
 			      const G4DynamicParticle*,
-			      G4double tmax,
-			      G4double length,
-			      G4double meanLoss) override;
+                              const G4double tcut,
+                              const G4double tmax,
+			      const G4double length,
+			      const G4double meanLoss) override;
 
   G4double Dispersion(const G4Material*,
 		      const G4DynamicParticle*,
-		      G4double tmax,
-		      G4double length) override;
+                      const G4double tcut,
+                      const G4double tmax,
+                      const G4double length) override;
 
   void SetParticle(const G4ParticleDefinition* p);
 

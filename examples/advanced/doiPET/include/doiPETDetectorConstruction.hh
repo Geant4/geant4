@@ -60,239 +60,241 @@ class doiPETDetectorConstructionMessenger;
 class doiPETDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-	doiPETDetectorConstruction();
-	virtual ~doiPETDetectorConstruction();
+  doiPETDetectorConstruction();
+  virtual ~doiPETDetectorConstruction();
 
 public:
-	virtual G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
-	void ConstructPhantom(G4LogicalVolume*);
-	void ChangePhantom(G4String choice);
-	void SetPhantomPosition(G4ThreeVector);
-	void SetPhantomRadius(G4double);
-	void SetPhantomLength(G4double);
+  void ConstructPhantom(G4LogicalVolume*);
+  void ChangePhantom(G4String choice);
+  void SetPhantomPosition(G4ThreeVector);
+  void SetPhantomRadius(G4double);
+  void SetPhantomLength(G4double);
+  void SetNumberOfSleeves(G4int);
 
 
 private:
-	void DefineMaterials();
-	doiPETDetectorConstructionMessenger* fDetectorMessenger;
-	doiPETAnalysis* pAnalysis;
+  void DefineMaterials();
+  doiPETDetectorConstructionMessenger* fDetectorMessenger;
+  doiPETAnalysis* pAnalysis;
 
-	G4LogicalVolume* phantom_logicalV;
-	G4VPhysicalVolume* phantom_physicalV;
-	// G4LogicalVolume* gelatin_logicalV;
-	// G4VPhysicalVolume* gelatin_physicalV;
+  G4LogicalVolume* phantom_logicalV;
+  G4VPhysicalVolume* phantom_physicalV;
+  //G4LogicalVolume* gelatin_logicalV;
+  //G4VPhysicalVolume* gelatin_physicalV;
 
-	//wolrd
-	G4LogicalVolume* world_logicalV;
-	G4VPhysicalVolume* world_physicalV;
+  //world
+  G4LogicalVolume* world_logicalV;
+  G4VPhysicalVolume* world_physicalV;
 
-	//detector block
-	G4LogicalVolume* blockDetector_logicalV;
-	G4VPhysicalVolume* blockDetector_physicalV;
+  //detector block
+  G4LogicalVolume* blockDetector_logicalV;
+  G4VPhysicalVolume* blockDetector_physicalV;
 
-	//air volume to fill the detector block
-	G4LogicalVolume* airBox_logicalV;
-	G4VPhysicalVolume* airBox_physicalV;
+  //air volume to fill the detector block
+  G4LogicalVolume* airBox_logicalV;
+  G4VPhysicalVolume* airBox_physicalV;
 
-	//crystals
-	G4LogicalVolume* crystal_logicalV;
-	G4VPhysicalVolume* crystal_physicalV;
-
-
-	//water
-	G4LogicalVolume* water_logicalV;
-	G4VPhysicalVolume* water_physicalV;
-
-	//lung
-	G4LogicalVolume* lung_logicalV;
-	G4VPhysicalVolume* lung_physicalV;
-
-	//test line phantom
-	G4LogicalVolume* test_logicalV;
-	G4VPhysicalVolume* test_physicalV;
-
-	G4LogicalVolume* lung_logicalV_PMMA;
-	G4VPhysicalVolume* lung_physicalVPMMA;
-
-	//cold regions
-	// G4LogicalVolume* coldRegion_logicalV;
-	// G4VPhysicalVolume* coldRegion_physicalV;
-
-	//
-	//Surrounding PMMA for hot sphere
-	G4LogicalVolume* hotSpherePMMA_logicalV;
-	G4VPhysicalVolume* hotSpherePMMA_physicalV;
-
-	//hot water phantom (activity is distributed)
-	G4LogicalVolume* hotSphereWater_logicalV;
-	G4VPhysicalVolume* hotSphereWater_physicalV;
-
-	//surrounding PMMA cold sphere
-	G4LogicalVolume* coldSpherePMMA_logicalV;
-	G4VPhysicalVolume* coldSpherePMMA_physicalV;
-
-	//cold Water phantom in the cold PMMA sphere 
-	G4LogicalVolume* coldSphereWater_logicalV;
-	G4VPhysicalVolume* coldSphereWater_physicalV;
-
-	//fillable polyethylene phantom for sensitivity
-	G4LogicalVolume* phantomPE_logicalV;
-	G4VPhysicalVolume* phantomPE_physicalV;
-
-	//Image quality phantom for small animal NEMA NU-4
-	G4LogicalVolume* waterPhantom_logicalV;
-	G4VPhysicalVolume* WaterPhantom_physicalV;
-
-	G4LogicalVolume* rod_phantom_logicalV;
-	G4VPhysicalVolume* rod_phantom_physicalV;
-
-	G4LogicalVolume* chamberPMMA_logicalV;
-	G4VPhysicalVolume* chamberPMMA_physicalV;
-
-	//
-	G4LogicalVolume* chamberWater_logicalV;
-	G4VPhysicalVolume* chamberWater_physicalV;
-
-	//
-	G4LogicalVolume* chamberAir_logicalV;
-	G4VPhysicalVolume* chamberAir_physicalV;
+  //crystals
+  G4LogicalVolume* crystal_logicalV;
+  G4VPhysicalVolume* crystal_physicalV;
 
 
-	//Dimension of the sphere
-	G4double spherePositionX, spherePositionY; // spherePositionZ;
-	G4double sphereDiameter;
-	G4double distanceFromCenter;
-	G4int numberOfSpheres;
-	G4double sphereWallThickness;
-	G4double zOffsetSpherePhantom;
+  //water
+  G4LogicalVolume* water_logicalV;
+  G4VPhysicalVolume* water_physicalV;
 
-	G4String PhantomType;
+  //lung
+  G4LogicalVolume* lung_logicalV;
+  G4VPhysicalVolume* lung_physicalV;
 
-	//materials
-	G4Material* air;
-	G4Material* pmma;
-	G4Material* water;
-	G4Material* polyethylene;
-	G4Material* polyethylene_NEMA;
-	// G4Material* inflatedLung;
-	G4Material* polystyrene;
-	G4Material* Aluminum;
+  //test line phantom
+  G4LogicalVolume* test_logicalV;
+  G4VPhysicalVolume* test_physicalV;
 
-	//elements for GSO
-	G4Element*  O;
-	G4Element* Si;
-	G4Element* Gd;
-	G4Material* GSO;
+  G4LogicalVolume* lung_logicalV_PMMA;
+  G4VPhysicalVolume* lung_physicalVPMMA;
 
-	G4Material* crystalMaterial;
-	//G4Material* phantomMaterial;
+  //cold regions
+  //G4LogicalVolume* coldRegion_logicalV;
+  //G4VPhysicalVolume* coldRegion_physicalV;
 
-	G4bool  fCheckOverlaps;
-	G4bool isotopes;
+  //
+  //Surrounding PMMA for hot sphere
+  G4LogicalVolume* hotSpherePMMA_logicalV;
+  G4VPhysicalVolume* hotSpherePMMA_physicalV;
 
+  //hot water phantom (activity is distributed)
+  G4LogicalVolume* hotSphereWater_logicalV;
+  G4VPhysicalVolume* hotSphereWater_physicalV;
 
-	//size of world
-	G4double worldSizeX;
-	G4double worldSizeY;
-	G4double worldSizeZ;
+  //surrounding PMMA cold sphere
+  G4LogicalVolume* coldSpherePMMA_logicalV;
+  G4VPhysicalVolume* coldSpherePMMA_physicalV;
 
+  //cold Water phantom in the cold PMMA sphere 
+  G4LogicalVolume* coldSphereWater_logicalV;
+  G4VPhysicalVolume* coldSphereWater_physicalV;
 
-	//The following is moved to doiPETGlobalParameters.hh
-	//G4int numberOfCrystal_DOI;
-	//G4int numberOfCrystal_tangential;
-	//G4int numberOfCrystal_axial;
+  //fillable polyethylene phantom for sensitivity
+  G4LogicalVolume* phantomPE_logicalV;
+  G4VPhysicalVolume* phantomPE_physicalV;
 
-	////
-	//G4double sizeOfCrystal_DOI; 
-	//G4double sizeOfCrystal_tangential;
-	//G4double sizeOfCrystal_axial;
+  //Image quality phantom for small animal NEMA NU-4
+  G4LogicalVolume* waterPhantom_logicalV;
+  G4VPhysicalVolume* WaterPhantom_physicalV;
 
-	////
-	//G4double crystalGap_DOI;
-	//G4double crystalGap_tangential;
-	//G4double crystalGap_axial;
+  G4LogicalVolume* rod_phantom_logicalV;
+  G4VPhysicalVolume* rod_phantom_physicalV;
 
-	G4double sizeOfAirBox_DOI;
-	G4double sizeOfAirBox_axial;
-	G4double sizeOfAirBox_tangential;
+  G4LogicalVolume* chamberPMMA_logicalV;
+  G4VPhysicalVolume* chamberPMMA_physicalV;
 
+  //
+  G4LogicalVolume* chamberWater_logicalV;
+  G4VPhysicalVolume* chamberWater_physicalV;
 
-	G4double sizeOfBlockDetector_DOI;
-	G4double sizeOfBlockDetector_axial;
-	G4double sizeOfBlockDetector_tangential;
-
-	//G4double AluminumCoverThickness;
+  //
+  G4LogicalVolume* chamberAir_logicalV;
+  G4VPhysicalVolume* chamberAir_physicalV;
 
 
-	//G4int numberOfPETDetector;
-	//G4int numberOfRings;
+  //Dimension of the sphere
+  G4double spherePositionX, spherePositionY; //, spherePositionZ;
+  G4double sphereDiameter;
+  G4double distanceFromCenter;
+  G4int numberOfSpheres;
+  G4double sphereWallThickness;
+  G4double zOffsetSpherePhantom;
+
+  G4String PhantomType;
+
+  //materials
+  G4Material* air;
+  G4Material* pmma;
+  G4Material* water;
+  G4Material* polyethylene;
+  G4Material* polyethylene_NEMA;
+  //G4Material* inflatedLung;
+  G4Material* polystyrene;
+  G4Material* Aluminum;
+
+  //elements for GSO
+  G4Element*  O;
+  G4Element* Si;
+  G4Element* Gd;
+  G4Material* GSO;
+
+  G4Material* crystalMaterial;
+  //G4Material* phantomMaterial;
+
+  G4bool  fCheckOverlaps;
+  G4bool isotopes;
 
 
-	//G4double scannerRadius;
-	G4double thetaDetector; //The azimuthal angle for arranging the detector in the PET ring 
-	//G4double ringGap;
-	G4int blockIndex;
-	// G4int AlCase_Index;
-	G4int crystalIndex;
-
-	//detector position
-	G4double detectorPositionX;
-	G4double detectorPositionY;
-	G4double detectorPositionZ;
-
-	//crystal position
-	G4double crystalPositionX; 
-	G4double crystalPositionY;
-	G4double crystalPositionZ;
+  //size of world
+  G4double worldSizeX;
+  G4double worldSizeY;
+  G4double worldSizeZ;
 
 
+  //The following is moved to doiPETGlobalParameters.hh
+  //G4int numberOfCrystal_DOI;
+  //G4int numberOfCrystal_tangential;
+  //G4int numberOfCrystal_axial;
 
-	G4ThreeVector phantomPosition;
+  ////
+  //G4double sizeOfCrystal_DOI; 
+  //G4double sizeOfCrystal_tangential;
+  //G4double sizeOfCrystal_axial;
 
-	//
-	G4double phantomRadius;
-	G4double phantomLength;
+  ////
+  //G4double crystalGap_DOI;
+  //G4double crystalGap_tangential;
+  //G4double crystalGap_axial;
 
-	//Phantom dimension for rectangular box (placed for therapy study)
-	// G4double phantomSizeX, phantomSizeY, phantomSizeZ;
-
-	//the following is to make the body phantom 
-	G4double yOffsetBodyPhantom;
-	G4double zOffsetBodyPhantom;
-	G4double lengthOfBodyPhantom; //Interior length ( = 180m mm) + wallthickness (= 3mm)
-	G4double radiusOfBodyPhantom;
-	G4double wallThicknessOfBodyPhantom;
-	G4double radiusOfLungPhantom;
-
-	//Test phantom defnition. The phantom has the same as that that of NECR phantom except
-	G4double hieghtOfTestPhantom; 
-	G4double diameterOfTestPhantom;
-
-	//To the cylindrical phantom to make the body phantom
-	G4double radiusOfSmallcyl;
-	G4double boxWidth;
-	G4double boxHeight;
+  G4double sizeOfAirBox_DOI;
+  G4double sizeOfAirBox_axial;
+  G4double sizeOfAirBox_tangential;
 
 
-	//Image quality phantom for small animals
-	G4double waterPhantomRadius;
-	G4double waterPhantomLength;
+  G4double sizeOfBlockDetector_DOI;
+  G4double sizeOfBlockDetector_axial;
+  G4double sizeOfBlockDetector_tangential;
 
-	G4double rodPhantomLength;
-	G4double rodDiameter;
-	G4int numberOfRods;
-
-	//Declare position for the rod phantoms
-	G4double rodPositionX, rodPositionY, rodPositionZ;
-
-	//Declare position for cold region chanmbers
-	G4double chamberPositionX, chamberPositionY, chamberPositionZ;
-	G4double chamberPhantomLength;
-	G4double chamberDiameter;
-	G4double wallThicknessOfChamber;
+  //G4double AluminumCoverThickness;
 
 
+  //G4int numberOfPETDetector;
+  //G4int numberOfRings;
+
+
+  //G4double scannerRadius;
+  G4double thetaDetector; //The azimuthal angle for arranging the detector in the PET ring 
+  //G4double ringGap;
+  G4int blockIndex;
+  //G4int AlCase_Index;
+  G4int crystalIndex;
+
+  //detector position
+  G4double detectorPositionX;
+  G4double detectorPositionY;
+  G4double detectorPositionZ;
+
+  //crystal position
+  G4double crystalPositionX; 
+  G4double crystalPositionY;
+  G4double crystalPositionZ;
+
+
+
+  G4ThreeVector phantomPosition;
+
+  //
+  G4double phantomRadius;
+  G4double phantomLength;
+
+  //Phantom dimension for rectangular box (placed for therapy study)
+  //G4double phantomSizeX, phantomSizeY, phantomSizeZ;
+
+  //the following is to make the body phantom 
+  G4double yOffsetBodyPhantom;
+  G4double zOffsetBodyPhantom;
+  G4double lengthOfBodyPhantom; //Interior length ( = 180m mm) + wallthickness (= 3mm)
+  G4double radiusOfBodyPhantom;
+  G4double wallThicknessOfBodyPhantom;
+  G4double radiusOfLungPhantom;
+
+  //Test phantom defnition. The phantom has the same as that that of NECR phantom except
+  G4double hieghtOfTestPhantom; 
+  G4double diameterOfTestPhantom;
+
+  //To the cylindrical phantom to make the body phantom
+  G4double radiusOfSmallcyl;
+  G4double boxWidth;
+  G4double boxHeight;
+
+
+  //Image quality phantom for small animals
+  G4double waterPhantomRadius;
+  G4double waterPhantomLength;
+
+  G4double rodPhantomLength;
+  G4double rodDiameter;
+  G4int numberOfRods;
+
+  //Declare position for the rod phantoms
+  G4double rodPositionX, rodPositionY, rodPositionZ;
+
+  //Declare position for cold region chanmbers
+  G4double chamberPositionX, chamberPositionY, chamberPositionZ;
+  G4double chamberPhantomLength;
+  G4double chamberDiameter;
+  G4double wallThicknessOfChamber;
+
+  //Declare the number of concentric (Al) sleeves
+  G4int numOfSleeves;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////

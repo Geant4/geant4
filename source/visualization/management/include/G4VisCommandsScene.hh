@@ -125,6 +125,19 @@ private:
   G4UIcommand* fpCommand;
 };
 
+class G4VisCommandSceneRemoveModel: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneRemoveModel ();
+  virtual ~G4VisCommandSceneRemoveModel ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneRemoveModel (const G4VisCommandSceneRemoveModel&);
+  G4VisCommandSceneRemoveModel& operator =
+  (const G4VisCommandSceneRemoveModel&);
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSceneSelect: public G4VVisCommandScene {
 public:
   G4VisCommandSceneSelect ();

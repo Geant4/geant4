@@ -56,8 +56,7 @@
 /score/mesh/translate/xyz 0. 0. 0. mm 
 
 # Choose the quantity to score via mesh
-/score/quantity/doseDeposit doseDeposit
-#score/quantity/energyDeposit energyDeposit
+/score/quantity/energyDeposit energyDeposit
 
 # Close Scorer
 /score/close
@@ -81,5 +80,5 @@
 #---------------------------------------#
 #----Dump Scoring Mesh Data to File-----#
 #---------------------------------------#
-/score/dumpQuantityToFile PhantomMesh doseDeposit PhantomMesh_Dose.txt
+/score/dumpQuantityToFile PhantomMesh energyDeposit PhantomMesh_Edep.txt
 

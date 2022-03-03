@@ -13,6 +13,22 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 November 2021  Vladimir Ivanchenko (phys-ctor-glnuclear-V10-07-06)
+- G4EmExtraPhysics - added an option for positron annihilation to tau pair 
+
+20 August 2021  Vladimir Ivanchenko (phys-ctor-glnuclear-V10-07-05)
+- G4EmExtraPhysics - enable synkrotron radiation only for really stable 
+    particles
+
+16 August 2021  Jonas Hahnfeld (phys-ctor-glnuclear-V10-07-04)
+- G4EmExtraPhysics - fix typo to register positron-nuclear process,
+  register model for e-/e+-nuclear in case of general processes,
+  avoid registering synchroton radiation twice for e-/e+
+
+13 August 2021  Vladimir Ivanchenko (phys-ctor-glnuclear-V10-07-03)
+- G4EmExtraPhysics - enable updated G4GammaNuclearXS by default 
+    for more detailed tests
+
 16 April 2021 Ben Morgan (phys-ctor-glnuclear-V10-07-02)
 - Migrate build to modular CMake API
 

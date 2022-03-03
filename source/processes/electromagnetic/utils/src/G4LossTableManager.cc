@@ -223,13 +223,14 @@ void G4LossTableManager::ResetParameters()
   verbose = theParameters->Verbose();
   if(!isMaster) {
     verbose = theParameters->WorkerVerbose();
+  } else {
+    if(verbose > 0) { theParameters->Dump(); }
   }
-  tableBuilder->SetSplineFlag(theParameters->Spline());
   tableBuilder->SetInitialisationFlag(false); 
   emCorrections->SetVerbose(verbose); 
-  if(emConfigurator) { emConfigurator->SetVerbose(verbose); };
-  if(emElectronIonPair) { emElectronIonPair->SetVerbose(verbose); };
-  if(atomDeexcitation) {
+  if(nullptr != emConfigurator) { emConfigurator->SetVerbose(verbose); };
+  if(nullptr != emElectronIonPair) { emElectronIonPair->SetVerbose(verbose); };
+  if(nullptr != atomDeexcitation) {
     atomDeexcitation->SetVerboseLevel(verbose);
     atomDeexcitation->InitialiseAtomicDeexcitation();
   }
@@ -694,7 +695,10 @@ void G4LossTableManager::BuildPhysicsTable(
     }
   }
 
-  if (all_tables_are_built) { return; }
+  if (all_tables_are_built) { 
+    theParameters->SetIsPrintedFlag(true);
+    return; 
+  }
 
   // Build tables for given particle
   all_tables_are_built = true;
@@ -714,7 +718,7 @@ void G4LossTableManager::BuildPhysicsTable(
         if(p == curr_proc && 0 == run && p->IsIonisationProcess()) { 
           loss_map[aParticle] = p; 
           //G4cout << "G4LossTableManager::BuildPhysicsTable: " 
-	  //     << aParticle->GetParticleName()
+          //     << aParticle->GetParticleName()
           //         << " added to map " << p <<  G4endl;
         }
       }
@@ -891,8 +895,8 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   if(!invrange) invrange = G4PhysicsTableHelper::PreparePhysicsTable(invrange);
   inv_range_vector[iem]  = invrange;
 
-  tableBuilder->BuildRangeTable(dedx, range, true);
-  tableBuilder->BuildInverseRangeTable(range, invrange, true);
+  tableBuilder->BuildRangeTable(dedx, range);
+  tableBuilder->BuildInverseRangeTable(range, invrange);
 
   //  if(1<verbose) G4cout << *dedx << G4endl;
 
@@ -927,7 +931,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
     }
     G4PhysicsTable* rCSDA = em->CSDARangeTable();
     if(!rCSDA) { rCSDA = G4PhysicsTableHelper::PreparePhysicsTable(rCSDA); }
-    tableBuilder->BuildRangeTable(dedxCSDA, rCSDA, true);
+    tableBuilder->BuildRangeTable(dedxCSDA, rCSDA);
     em->SetCSDARangeTable(rCSDA);
   }
 

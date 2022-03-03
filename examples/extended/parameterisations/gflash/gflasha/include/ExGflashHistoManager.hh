@@ -30,8 +30,8 @@
 #ifndef ExGflashHistoManager_h
 #define ExGflashHistoManager_h 1
 
+#include "G4AnalysisManager.hh"
 #include "globals.hh"
-#include "g4root.hh"
 
 class ExGflashDetectorConstruction;
 
@@ -39,24 +39,23 @@ class ExGflashDetectorConstruction;
 
 class ExGflashHistoManager
 {
-  public:
-    ExGflashHistoManager(ExGflashDetectorConstruction* myDet);
-   ~ExGflashHistoManager();
+ public:
+  ExGflashHistoManager(ExGflashDetectorConstruction* myDet);
+  ~ExGflashHistoManager();
 
   void InitializePerEvent();
-  void FillPerEvent();
+  // void FillPerEvent();
 
-  inline void FillPerTrack(G4double,G4double);
-  inline void FillPerStep (G4double,G4int,G4int);
+  // inline void FillPerTrack(G4double, G4double);
+  // inline void FillPerStep(G4double, G4int, G4int);
 
-private:
+ private:
   void Book();
   G4String fFileName;
-  
-  ExGflashDetectorConstruction*   fDet;
-  
-  G4int    fVerbose;
 
+  ExGflashDetectorConstruction* fDet;
+
+  G4int fVerbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

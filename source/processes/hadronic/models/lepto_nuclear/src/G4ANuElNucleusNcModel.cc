@@ -333,7 +333,7 @@ G4HadFinalState* G4ANuElNucleusNcModel::ApplyYourself(
       theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
       return &theParticleChange;
     } 
-    theParticleChange.AddSecondary( aLept );
+    theParticleChange.AddSecondary( aLept, fSecID );
 
     return &theParticleChange;
   }
@@ -365,7 +365,7 @@ G4HadFinalState* G4ANuElNucleusNcModel::ApplyYourself(
 
     aLept = new G4DynamicParticle( theNuE, lv2 );  
     
-    theParticleChange.AddSecondary( aLept );
+    theParticleChange.AddSecondary( aLept, fSecID );
   }
 
   // hadron part

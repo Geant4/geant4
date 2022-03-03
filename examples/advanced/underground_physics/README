@@ -148,12 +148,7 @@ allow forward compatibility should the GPS change.
 ANALYSIS:
 
 The program should produce ROOT-based histogram files. It is possible to 
-produce the output in XML-compliant format by editing the file 
-  include/DMXAnalysisManager.hh
-and by commenting out
- #include "g4root.hh"
-and uncommenting
- #include "g4xml.hh"
+produce the output in XML-compliant format by changing the G4AnalysisManager default file type in DMXRunAction::Book().
 
 SEEDS:
 

@@ -28,8 +28,6 @@
 // 
 // Laurent Garnier  27th October 2011
 
-#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
-
 #ifndef G4OPENGLSTOREDQTSCENEHANDLER_HH
 #define G4OPENGLSTOREDQTSCENEHANDLER_HH
 
@@ -55,7 +53,5 @@ public:
   void ClearTransientStore ();
   void SetScene(G4Scene*);
 };
-
-#endif
 
 #endif

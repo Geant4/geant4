@@ -89,12 +89,15 @@ public:
 
   void SetVerbose(G4int val);        
 
+  inline void SetTargetRadius(G4double val)            {fRadius  = val;
+                                                        fR2 = val*val;};
   inline void SetTargetLength(G4double val)            {fLength  = val;};
   inline void SetNumberOfSlices(G4int val)             {fNSlices = val;};
   inline void SetNumberOfBinsE(G4int val)              {fNBinsE  = val;};
   inline void SetDefaultBeamPositionFlag(G4bool f)     {fBeamFlag = f;};        
   inline void SetMaxEnergyDeposit(G4double val)        {fEdepMax = val;};
 
+  inline G4double Radius()         const               {return fRadius;};
   inline G4double Length()         const               {return fLength;};
   inline G4bool   DefaultBeamPosition() const          {return fBeamFlag;};
   inline G4int    NumberOfSlices() const               {return fNSlices;};
@@ -107,45 +110,47 @@ private:
   const G4ParticleDefinition* fPrimaryDef;
   const G4ParticleDefinition* fNeutron;
 
-  G4double fEdepMax;
-  G4double fEdepEvt;
-  G4double fEdepEM;
-  G4double fEdepPI;
-  G4double fEdepP;
-  G4double fEdepSum;
-  G4double fEdepSum2;
+  G4double fR2 = 0.0;
+  G4double fRadius;
   G4double fLength;
-  G4double fAbsZ0;
-  G4double fPrimaryKineticEnergy;
- 
-  G4int fVerbose;
-  G4int fNBinsE;
-  G4int fNSlices;
+  G4double fEdepMax;
+  G4double fEdepEvt = 0.0;
+  G4double fEdepEM = 0.0;
+  G4double fEdepPI = 0.0;
+  G4double fEdepP = 0.0;
+  G4double fEdepSum = 0.0;
+  G4double fEdepSum2 = 0.0;
+  G4double fAbsZ0 = 0.0;
+  G4double fPrimaryKineticEnergy = 0.0;
 
-  G4int fNevt;
-  G4int fNelec;
-  G4int fNposit;
-  G4int fNgam;
-  G4int fNprot_leak;
-  G4int fNpiofNleak;
-  G4int fNcpions;
-  G4int fNpi0;
-  G4int fNkaons;
-  G4int fNmuons;
-  G4int fNions;
-  G4int fNdeut;
-  G4int fNalpha;
-  G4int fNneutron;
-  G4int fNproton;
-  G4int fNaproton;
-  G4int fNneu_forw;
-  G4int fNneu_leak;
-  G4int fNneu_back;
-  G4int fNstep;
-  G4int fNHisto;
+  G4int fVerbose = 0;
+  G4int fNBinsE = 100;
+  G4int fNSlices = 300;
 
-  G4bool fBeamFlag;
-  G4bool fHistoBooked;
+  G4int fNevt = 0;
+  G4int fNelec = 0;
+  G4int fNposit = 0;
+  G4int fNgam = 0;
+  G4int fNprot_leak = 0;
+  G4int fNpiofNleak = 0;
+  G4int fNcpions = 0;
+  G4int fNpi0 = 0;
+  G4int fNkaons = 0;
+  G4int fNmuons = 0;
+  G4int fNions = 0;
+  G4int fNdeut = 0;
+  G4int fNalpha = 0;
+  G4int fNneutron = 0;
+  G4int fNproton = 0;
+  G4int fNaproton = 0;
+  G4int fNneu_forw = 0;
+  G4int fNneu_leak = 0;
+  G4int fNneu_back = 0;
+  G4int fNstep = 0;
+  G4int fNHisto = 28;
+
+  G4bool fBeamFlag = true;
+  G4bool fHistoBooked = false;
 
   Histo* fHisto;
 };

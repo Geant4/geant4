@@ -42,12 +42,13 @@
 #define doiPETActionInitialization_h 1
 
 #include "G4VUserActionInitialization.hh"
-
+#include "doiPETAnalysis.hh"
 //
+class doiPETAnalysis;
 class doiPETActionInitialization : public G4VUserActionInitialization
 {
 public:
-	doiPETActionInitialization();
+	doiPETActionInitialization(doiPETAnalysis* );
 	virtual ~doiPETActionInitialization();
 
 	virtual void BuildForMaster() const;
@@ -56,6 +57,7 @@ public:
 	//virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
 
 private:
+	doiPETAnalysis* analysis;
 	// doiPETDetectorConstruction* fDetector;
 };
 //

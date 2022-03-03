@@ -65,6 +65,8 @@ class G4OpMieHG : public G4VDiscreteProcess
   virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
   virtual void Initialise();
 
+  void SetVerboseLevel(G4int);
+
  private:
   G4OpMieHG(const G4OpMieHG& right) = delete;
   G4OpMieHG& operator=(const G4OpMieHG& right) = delete;

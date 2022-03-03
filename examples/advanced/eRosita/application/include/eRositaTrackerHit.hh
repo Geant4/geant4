@@ -40,11 +40,14 @@
 class eRositaTrackerHit : public G4VHit
 {
 public:
-
   eRositaTrackerHit();
+  
   ~eRositaTrackerHit();
+  
   eRositaTrackerHit(const eRositaTrackerHit&);
+  
   const eRositaTrackerHit& operator=(const eRositaTrackerHit&);
+  
   G4bool operator==(const eRositaTrackerHit&) const;
 
   inline void* operator new(size_t);
@@ -55,7 +58,6 @@ public:
   void PrintToFile();
 
 public:
-  
   void SetTrackID  (G4int track)      { trackID = track; };
   void SetChamberNb(G4int chamb)      { chamberNb = chamb; };  
   void SetEdep     (G4double de)      { edep = de; };
@@ -67,31 +69,24 @@ public:
   G4ThreeVector GetPos(){ return pos; };
       
 private:
-  
   G4int         trackID;
   G4int         chamberNb;
   G4double      edep;
   G4ThreeVector pos;
 };
 
-
 typedef G4THitsCollection<eRositaTrackerHit> eRositaTrackerHitsCollection;
-
-extern G4Allocator<eRositaTrackerHit> eRositaTrackerHitAllocator;
-
+extern G4ThreadLocal G4Allocator<eRositaTrackerHit>* eRositaTrackerHitAllocator;
 
 inline void* eRositaTrackerHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) eRositaTrackerHitAllocator.MallocSingle();
-  return aHit;
+  if(!eRositaTrackerHitAllocator) eRositaTrackerHitAllocator = new G4Allocator<eRositaTrackerHit>;
+  
+  return (void*) eRositaTrackerHitAllocator->MallocSingle();
 }
-
 
 inline void eRositaTrackerHit::operator delete(void *aHit)
 {
-  eRositaTrackerHitAllocator.FreeSingle((eRositaTrackerHit*) aHit);
+   eRositaTrackerHitAllocator->FreeSingle((eRositaTrackerHit*) aHit);
 }
-
-
 #endif

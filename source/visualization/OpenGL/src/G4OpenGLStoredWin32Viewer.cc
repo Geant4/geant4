@@ -29,8 +29,6 @@
 // Class G4OpenGLStoredWin32Viewer : a class derived from G4OpenGLWin32Viewer and
 //                             G4OpenGLStoredViewer.
 
-#ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
-
 #include "G4OpenGLStoredWin32Viewer.hh"
 
 #include "G4OpenGLStoredSceneHandler.hh"
@@ -134,5 +132,3 @@ void G4OpenGLStoredWin32Viewer::FinishView (
     ::DispatchMessage (&event);
   }
 }
-
-#endif

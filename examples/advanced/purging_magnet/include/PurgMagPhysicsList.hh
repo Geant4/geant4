@@ -32,27 +32,14 @@
 //    *                              *
 //    ********************************
 //
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef PurgMagPhysicsList_h
 #define PurgMagPhysicsList_h 1
-
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4EmConfigurator.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class G4GammaConversion;     
-class G4ComptonScattering;   
-class G4PhotoElectricEffect;       
-
-class G4eIonisation;          
-class G4eBremsstrahlung;     
-
-
-class PurgMagPhysicsList: public G4VUserPhysicsList
+class PurgMagPhysicsList: public G4VModularPhysicsList
 {
 public:
   PurgMagPhysicsList();
@@ -86,20 +73,8 @@ private:
   G4double cutForElectron;
   G4double cutForPositron;
   G4double cutForProton;
-  
-protected:
-  // these methods Construct particles 
-  void ConstructBosons();
-  void ConstructLeptons();
-  void ConstructBarions();
-  
-protected:
-  // these methods Construct physics processes and register them
-  void ConstructGeneral();
-  void ConstructEM();
-  
-private:
-  
+  G4VPhysicsConstructor* fEmPhysicsList;
+  G4VPhysicsConstructor* fDecPhysicsList;
 };
 #endif
 

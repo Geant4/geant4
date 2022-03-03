@@ -1,0 +1,48 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_event_dispatcher
+#define tools_sg_event_dispatcher
+
+//  Node that holds "callbacks" that can be triggered when an event_action
+// traversed it. A typical example is to handle a mouse resize of the viewer/window
+// and response to it by changing some geomtry in the scene graphs (for example
+// to arrange that a tools::sg::plots maps the full viewer/window area).
+
+#include "node"
+#include "cbks"
+#include "event_action"
+#include "ecbk"
+
+namespace tools {
+namespace sg {
+
+class event_dispatcher : public node {
+  TOOLS_NODE(event_dispatcher,tools::sg::event_dispatcher,node)
+public:
+  virtual void event(event_action& a_action) {
+    ecbk::exec_event_cbks(m_cbks.callbacks(),a_action.get_event(),&a_action,this);
+  }
+public:
+  event_dispatcher():parent(),m_cbks(){}
+  virtual ~event_dispatcher(){}
+public:
+  event_dispatcher(const event_dispatcher& a_from):parent(a_from),m_cbks(a_from.m_cbks){}
+  event_dispatcher& operator=(const event_dispatcher& a_from){
+    parent::operator=(a_from);
+    m_cbks = a_from.m_cbks;
+    return *this;
+  }
+public:
+  const sg::cbks& cbks() const {return m_cbks;}
+  //sg::cbks& cbks() {return m_cbks;}
+  void add_callback(bcbk* a_cbk) {m_cbks.add(a_cbk);} //we take ownership of a_cbk
+  void copy_cbks(const sg::cbks& a_from,bool a_clear = true) {m_cbks.copy(a_from,a_clear);}
+  void clear_cbks(){m_cbks.clear();}
+protected:
+  sg::cbks m_cbks;
+};
+
+}}
+
+#endif

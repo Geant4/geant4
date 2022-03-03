@@ -29,8 +29,6 @@
 // Class G4OpenGLImmediateQtViewer : a class derived from G4OpenGLQtViewer and
 //                                G4OpenGLImmediateViewer.
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
 #include "G4OpenGLImmediateQtViewer.hh"
 #include "G4OpenGLImmediateSceneHandler.hh"
 
@@ -147,6 +145,9 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
   
   // and update it immediatly before wait for SessionStart() (batch mode)
 //  QCoreApplication::sendPostedEvents () ;
+
+  // Set jpg as default export format for Qt viewer
+  setExportImageFormat("jpg");
 }
 
 
@@ -344,4 +345,3 @@ void G4OpenGLImmediateQtViewer::ShowView (
   fHasToRepaint = true;
   activateWindow();
 }
-#endif

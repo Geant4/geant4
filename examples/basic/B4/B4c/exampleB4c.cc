@@ -27,8 +27,8 @@
 /// \file exampleB4c.cc
 /// \brief Main program of the B4c example
 
-#include "B4cDetectorConstruction.hh"
-#include "B4cActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
 #include "G4RunManagerFactory.hh"
 #include "G4SteppingVerbose.hh"
@@ -44,7 +44,7 @@
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " exampleB4a [-m macro ] [-u UIsession] [-t nThreads] [-vDefault]"
+    G4cerr << " exampleB4c [-m macro ] [-u UIsession] [-t nThreads] [-vDefault]"
            << G4endl;
     G4cerr << "   note: -t option is available only for multi-threaded mode."
            << G4endl;
@@ -114,13 +114,13 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  auto detConstruction = new B4cDetectorConstruction();
+  auto detConstruction = new B4c::DetectorConstruction();
   runManager->SetUserInitialization(detConstruction);
 
   auto physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
 
-  auto actionInitialization = new B4cActionInitialization();
+  auto actionInitialization = new B4c::ActionInitialization();
   runManager->SetUserInitialization(actionInitialization);
 
   // Initialize visualization

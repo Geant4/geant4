@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 September 21: V.Ivanchenko  (emmuons-V10-07-09)
+- G4MuPairProduction, G4ePairProduction, G4MuBremsstrahlung
+    spline disabled
+
+12 April 21: V.Ivanchenko  (emmuons-V10-07-08)
+- G4TablesForExtrapolator - use local G4LossTableBuilder with
+    disabled base material flag
+
 24 April 21: V.Ivanchenko  (emmuons-V10-07-07)
 - G4EnergyLossForExtrapolator, G4TablesForExtrapolator - added
   more thread safety for initialisation of the next runs

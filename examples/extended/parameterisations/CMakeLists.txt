@@ -1,6 +1,6 @@
 #---Adding all parameterisations examples subdirectories explicitly 
 
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 find_package(Geant4)
 include(${Geant4_USE_FILE})
@@ -8,6 +8,7 @@ include(${Geant4_USE_FILE})
 add_subdirectory(gflash)
 add_subdirectory(Par01)
 add_subdirectory(Par03)
+add_subdirectory(Par04)
 
 #----------------------------------------------------------------------------
 # Par02 example requires Geant4 build with gdml

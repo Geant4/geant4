@@ -80,6 +80,7 @@ private:
 
   G4UIcmdWithABool*          deCmd;
   G4UIcmdWithABool*          dirFluoCmd;
+  G4UIcmdWithABool*          dirFluoCmd1;
   G4UIcmdWithABool*          auCmd;
   G4UIcmdWithABool*          auCascadeCmd;
   G4UIcmdWithABool*          pixeCmd;

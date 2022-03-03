@@ -33,29 +33,31 @@
 
 #include "globals.hh"
 
+#include <array>
+
 class G4AnalysisVerbose
 {
   public:
-    G4AnalysisVerbose(G4int verboseLevel);
-    ~G4AnalysisVerbose();
+    G4AnalysisVerbose();
+    ~G4AnalysisVerbose() = default;
 
-    void Message(const G4String& action, 
-                 const G4String& object, 
+    void Message(G4int verboseLevel,
+                 const G4String& action,
+                 const G4String& object,
                  const G4String& objectName,
                  G4bool success = true) const;
 
-    void Message(const G4String& action, 
-                 const G4String& object, 
-                 G4ExceptionDescription& description,
-                 G4bool success = true) const;
-        
   private:
-    // data members
-    //
-    G4String fToBeDoneText;
-    G4String fDoneText;
-    G4String fFailureText;
+    // Static data members
+    static constexpr int fkMaxLevel = 4;
+
+    // Data members
+    std::array<G4String, fkMaxLevel> fDoneText 
+      { G4String("- done"), G4String("- done"), G4String(), G4String() };
+    std::array<G4String, fkMaxLevel> fToBeDoneText 
+      { G4String(), G4String(), G4String("done "), G4String("going to ") };
+    G4String fFailureText
+      { "has failed" };
 };
 
 #endif
-

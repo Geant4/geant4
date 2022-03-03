@@ -254,7 +254,8 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
 
   if (verbose)
   {
-    G4cout << "Checking overlaps for volume " << GetName()
+    G4cout << "Checking overlaps for volume "
+           << GetName() << ':' << GetCopyNo()
            << " (" << solid->GetEntityType() << ") ... ";
   }
 
@@ -299,40 +300,50 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
 
   // Check overlap with the mother volume
   //
+  G4int overlapCount = 0;
+  G4double overlapSize = -kInfinity;
+  G4ThreeVector overlapPoint;
   G4VSolid* motherSolid = motherLog->GetSolid();
   for (G4int i = 0; i < res; ++i)
   {
     G4ThreeVector mp = points[i];
     if (motherSolid->Inside(mp) != kOutside) continue;
     G4double distin = motherSolid->DistanceToIn(mp);
-    if (distin > tol)
-    {
-      ++trials;
-      retval = true;
-      std::ostringstream message;
-      message << "Overlap with mother volume !" << G4endl
-              << "          Overlap is detected for volume "
-              << GetName() << ':' << GetCopyNo()
-              << " (" << solid->GetEntityType() << ")" << G4endl
-              << "          with its mother volume " << motherLog->GetName()
-              << " (" << motherSolid->GetEntityType() << ")" << G4endl
-              << "          at mother local point " << mp << ", "
-              << "overlapping by at least: "
-              << G4BestUnit(distin, "Length");
-      if (trials >= maxErr)
-      {
-        message << G4endl
-                << "NOTE: Reached maximum fixed number -" << maxErr
-                << "- of overlaps reports for this volume !";
-      }
-      G4Exception("G4PVPlacement::CheckOverlaps()",
-                  "GeomVol1002", JustWarning, message);
-      if (trials >= maxErr)  { return true; }
-      break;
-    }
+    if (distin < tol) continue; // too small overlap
+    ++overlapCount;
+    if (distin <= overlapSize) continue;
+    overlapSize = distin;
+    overlapPoint = mp;
   }
 
-  // Checking overlaps with each 'sister' volume
+  // Print information on overlap
+  //
+  if (overlapCount > 0)
+  {
+    ++trials;
+    retval = true;
+    std::ostringstream message;
+    message << "Overlap with mother volume !" << G4endl
+            << "          Overlap is detected for volume "
+            << GetName() << ':' << GetCopyNo()
+            << " (" << solid->GetEntityType() << ")"
+            << " with its mother volume " << motherLog->GetName()
+            << " (" << motherSolid->GetEntityType() << ")" << G4endl
+            << "          protrusion at mother local point " << overlapPoint
+            << " by " << G4BestUnit(overlapSize, "Length")
+            << " (max of " << overlapCount << " cases)";
+    if (trials >= maxErr)
+    {
+      message << G4endl
+              << "NOTE: Reached maximum fixed number -" << maxErr
+              << "- of overlaps reports for this volume !";
+    }
+    G4Exception("G4PVPlacement::CheckOverlaps()",
+                "GeomVol1002", JustWarning, message);
+    if (trials >= maxErr)  { return true; }
+  }
+
+  // Checking overlaps with each 'sister' volumes
   //
   G4VSolid* previous = nullptr;
   G4ThreeVector pmin_local(0.,0.,0.), pmax_local(0.,0.,0.);
@@ -341,6 +352,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
   {
     G4VPhysicalVolume* daughter = motherLog->GetDaughter(k);
     if (daughter == this) continue;
+    G4bool check_encapsulation = true;
 
     G4AffineTransform Td(daughter->GetRotation(), daughter->GetTranslation());
     G4VSolid* daughterSolid = daughter->GetLogicalVolume()->GetSolid();
@@ -349,9 +361,9 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
       daughterSolid->BoundingLimits(pmin_local, pmax_local);
       previous = daughterSolid;
     }
-    G4double distout = -kInfinity;
-    G4ThreeVector plocal;
-    if (!Td.IsRotated()) {
+    overlapCount = 0;
+    overlapSize = -kInfinity;
+    if (!Td.IsRotated()) { // no rotation, only translation
       G4ThreeVector offset = Td.NetTranslation();
       G4ThreeVector pmin(pmin_local + offset);
       G4ThreeVector pmax(pmax_local + offset);
@@ -373,15 +385,17 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
         G4ThreeVector md = p - offset;
         if (daughterSolid->Inside(md) == kInside)
         {
-          G4double dtmp = daughterSolid->DistanceToOut(md);
-          if (dtmp <= tol) continue;
-          distout = dtmp;
-          plocal = md;
-          break;
+          check_encapsulation = false;
+          G4double distout = daughterSolid->DistanceToOut(md);
+          if (distout < tol) continue; // too small overlap
+          ++overlapCount;
+          if (distout <= overlapSize) continue;
+          overlapSize = distout;
+          overlapPoint = md;
         }
       }
     }
-    else
+    else // transformation with rotation
     {
       G4ThreeVector pmin(pmin_local), pmax(pmax_local);
       G4ThreeVector dcenter = Td.TransformPoint(0.5*(pmin + pmax));
@@ -434,16 +448,20 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
         G4ThreeVector md = Td.InverseTransformPoint(p);
         if (daughterSolid->Inside(md) == kInside)
         {
-          G4double dtmp = daughterSolid->DistanceToOut(md);
-          if (dtmp <= tol) continue;
-          distout = dtmp;
-          plocal = md;
-          break;
+          check_encapsulation = false;
+          G4double distout = daughterSolid->DistanceToOut(md);
+          if (distout < tol) continue; // too small overlap
+          ++overlapCount;
+          if (distout <= overlapSize) continue;
+          overlapSize = distout;
+          overlapPoint = md;
         }
       }
     }
 
-    if (distout > tol)
+    // Print information on overlap
+    //
+    if (overlapCount > 0)
     {
       ++trials;
       retval = true;
@@ -451,14 +469,12 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
       message << "Overlap with volume already placed !" << G4endl
               << "          Overlap is detected for volume "
               << GetName() << ':' << GetCopyNo()
-              << " (" << solid->GetEntityType() << ")" << G4endl
-              << "          with " << daughter->GetName()
-              << ':' << daughter->GetCopyNo()
-              << " (" << daughterSolid->GetEntityType() << ")"
-              << " volume's" << G4endl
-              << "          local point " << plocal << ", "
-              << "overlapping by at least: "
-              << G4BestUnit(distout, "Length");
+              << " (" << solid->GetEntityType() << ") with "
+              << daughter->GetName() << ':' << daughter->GetCopyNo()
+              << " (" << daughterSolid->GetEntityType() << ")" << G4endl
+              << "          overlap at local point " << overlapPoint
+              << " by " << G4BestUnit(overlapSize, "Length")
+              << " (max of " << overlapCount << " cases)";
       if (trials >= maxErr)
       {
         message << G4endl
@@ -469,14 +485,18 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
                   "GeomVol1002", JustWarning, message);
       if (trials >= maxErr)  { return true; }
     }
-    else if (distout == kInfinity)
+    else if (check_encapsulation)
     {
       // Now checking that 'sister' volume is not totally included
-      // and overlapping. Generate a single point on the surface of
+      // and overlapping. Generate a single point inside of
       // the 'sister' volume and verify that the point in NOT inside
       // the current volume
       //
-      G4ThreeVector dPoint = daughterSolid->GetPointOnSurface();
+      G4ThreeVector pSurface = daughterSolid->GetPointOnSurface();
+      G4ThreeVector normal = daughterSolid->SurfaceNormal(pSurface);
+      G4ThreeVector pInside = pSurface - normal*1.e-4; // move point to inside
+      G4ThreeVector dPoint = (daughterSolid->Inside(pInside) == kInside) ?
+        pInside : pSurface;
 
       // Transform the generated point to the mother's coordinate system
       // and then to current volume's coordinate system
@@ -496,7 +516,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
                 << "          apparently fully encapsulating volume "
                 << daughter->GetName() << ':' << daughter->GetCopyNo()
                 << " (" << daughterSolid->GetEntityType() << ")"
-                << " at the same level !";
+                << " at the same level!";
         if (trials >= maxErr)
         {
           message << G4endl

@@ -35,13 +35,13 @@
 
 #include "EventAction.hh"
 
-#include "Analysis.hh"
 #include "ClusteringAlgo.hh"
 
 #include "G4Event.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

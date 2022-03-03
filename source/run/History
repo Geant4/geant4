@@ -16,6 +16,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 25, 2021 B.Morgan (run-V10-07-13)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+October 21, 2021 Jonas Hahnfeld (run-V10-07-12)
+- G4VUserPhysicsList - use custom tracking manager if registered
+
+October 18, 2021 Ben Morgan (run-V10-07-11)
+- Use std::string member functions from G4String in place of synonyms
+
+October 6, 2021 Alberto Ribon (run-V10-07-10)
+- G4PhysicsListHelper : replaced hardwired numerical process types and
+  sub-types with corresponding enum values
+
+September 10, 2021 Gabriele Cosmo (run-V10-07-09)
+- Added new Ranlux++ engine to the list of supported random engines in
+  G4UserWorkerThreadInitialization. Requires CLHEP-2.4.5.1.
+
+August 04, 2021 Alberto Ribon (run-V10-07-08)
+- G4VUserPhysicsList : invoke the new static initialization of
+  G4PhysicsModelCatalog in the method G4VUserPhysicsList::Construct
+
+July 01, 2021 Vladimir Ivanchenko (run-V10-07-07)
+- G4VModularPhysicsList - fixed destruction of the vector of G4VPhysicsConstructor
+    for the case, when physics list is created but physics is not build (CMS report)
+
 May 20, 2021 Vladimir Ivanchenko (run-V10-07-06)
 - G4VPhysicsConstructor - fix initialisation of hadronic parameters
     avoiding uncontrolled override of the verbosityLevel 

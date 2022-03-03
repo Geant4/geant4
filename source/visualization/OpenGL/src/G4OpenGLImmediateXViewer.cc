@@ -30,8 +30,6 @@
 // Class G4OpenGLImmediateXViewer : a class derived from G4OpenGLXViewer and
 //                                G4OpenGLImmediateViewer.
 
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
-
 #include "G4OpenGLImmediateXViewer.hh"
 #include "G4OpenGLImmediateSceneHandler.hh"
 
@@ -98,9 +96,9 @@ void G4OpenGLImmediateXViewer::DrawView () {
 }
 
 void G4OpenGLImmediateXViewer::FinishView () {
-  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
-                //be propogated before progressing.
+//  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propagated before progressing.
+// JA: Commented out July 2021 - slows rendering down in some cases and I
+// don't see any adverse effects.
   glFlush ();
 }
-
-#endif

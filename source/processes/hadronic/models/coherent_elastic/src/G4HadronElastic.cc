@@ -43,10 +43,11 @@
 #include "G4Exp.hh"
 #include "G4Log.hh"
 #include "G4HadronicParameters.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 
 G4HadronElastic::G4HadronElastic(const G4String& name) 
-  : G4HadronicInteraction(name)
+  : G4HadronicInteraction(name), secID(-1)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
@@ -58,6 +59,8 @@ G4HadronElastic::G4HadronElastic(const G4String& name)
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
+
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + name );
 }
 
 G4HadronElastic::~G4HadronElastic()
@@ -192,7 +195,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 	G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
     }
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, lv.vect().unit(), erec);
-    theParticleChange.AddSecondary(aSec);
+    theParticleChange.AddSecondary(aSec, secID);
   } else {
     theParticleChange.SetLocalEnergyDeposit(erec);
   }

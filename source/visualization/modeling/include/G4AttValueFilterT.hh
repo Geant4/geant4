@@ -113,7 +113,7 @@ template <typename T, typename ConversionErrorPolicy>
 G4bool 
 G4AttValueFilterT<T, ConversionErrorPolicy>::GetValidElement(const G4AttValue& attValue, G4String& element) const 
 {
-  T value;
+  T value{};
   
   G4String input = attValue.GetValue();
   if (!G4ConversionUtils::Convert(input, value)) ConversionErrorPolicy::ReportError(input, "Invalid format. Was the input data formatted correctly ?");	
@@ -141,7 +141,7 @@ template <typename T, typename ConversionErrorPolicy>
 G4bool 
 G4AttValueFilterT<T, ConversionErrorPolicy>::Accept(const G4AttValue& attValue) const 
 {
-  T value;
+  T value{};
 
   G4String input = attValue.GetValue();
   if (!G4ConversionUtils::Convert(input, value)) ConversionErrorPolicy::ReportError(input, "Invalid format. Was the input data formatted correctly ?");	
@@ -163,8 +163,8 @@ template <typename T, typename ConversionErrorPolicy>
 void 
 G4AttValueFilterT<T, ConversionErrorPolicy>::LoadIntervalElement(const G4String& input) 
 {
-  T min;
-  T max;
+  T min{};
+  T max{};
 
   if (!G4ConversionUtils::Convert(input, min, max)) ConversionErrorPolicy::ReportError(input, "Invalid format. Was the input data formatted correctly ?");
 
@@ -176,7 +176,7 @@ template <typename T, typename ConversionErrorPolicy>
 void 
 G4AttValueFilterT<T, ConversionErrorPolicy>::LoadSingleValueElement(const G4String& input) 
 {
-  T output;
+  T output{};
   
   if (!G4ConversionUtils::Convert(input, output)) ConversionErrorPolicy::ReportError(input, "Invalid format. Was the input data formatted correctly ?");
 

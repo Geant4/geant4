@@ -34,7 +34,7 @@
 
 #include "G4ios.hh"
 
-#include "CCalAnalysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Threading.hh"
 
 
@@ -47,7 +47,6 @@ CCalRunAction::CCalRunAction()
 
 CCalRunAction::~CCalRunAction()
 {
-  delete G4AnalysisManager::Instance();
 }
 
 
@@ -56,6 +55,7 @@ void CCalRunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
+  analysis->SetDefaultFileType("root");
 
   //cleanup
   G4int timeHist = analysis->GetH1Id("h300");

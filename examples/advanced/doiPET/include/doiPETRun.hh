@@ -26,6 +26,7 @@
 /// \file electromagnetic/TestEm11/include/doiPETRun.hh
 /// \brief Definition of the doiPETRun class
 //
+// $Id: doiPETRun.hh 71375 2013-06-14 07:39:33Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,23 +67,27 @@ public:
 	void SetAnnihilationTime(G4double);
 	void SetEventID(G4int);
 	virtual void Merge(const G4Run*);
-	// void EndOfRun();     
+	G4ThreeVector CenterOfMassInteractionPos(const std::vector<G4int>&, const std::vector<G4double>&, G4double, const std::vector<G4ThreeVector>&);
+	//void EndOfRun();     
 
 private:
 
 	std::multimap< G4int, InteractionInformation* > mapBlockInteraction;
 	std::set<G4int> setBlockInteraction;
 	std::ofstream ofs;
+
+	std::vector<G4int> crystalID_vec;
+	std::vector<G4ThreeVector> posInter_vec;
+	std::vector<G4double>edepInCry_vec;
+
+	//center of mass interaction of position
+	G4ThreeVector posInterInCrystal;
+
 	G4int eventID;
 	doiPETRunAction* fRunAction;
 	doiPETAnalysis* fAnalysis;
 	G4double totalEdep;
 	G4int blockID, crystalID;
-
-	//
-	G4double activityNow;
-	G4double InitialActivity;
-	G4double halfLife;
 
 	G4double totalTime;
 	G4double prev_totalTime;

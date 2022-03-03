@@ -2,7 +2,6 @@
 # GammaRayTel
 #
 #
-
 /control/verbose 1
 /control/saveHistory
 /run/verbose 1

@@ -14,6 +14,41 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 November 2021 Alberto Ribon (hadr-util-V10-07-08)
+--------------------------------------------------------
+- G4Nucleus : the method  GetBiasedThermalNucleus  has been rewritten
+  (by Loic Thulliez and Eric Dumonteil of CEA Saclay) according to the
+  Sampling of the Velocity of the Target nucleus (SVT) algorithm.
+
+27 October 2021 Alberto Ribon (hadr-util-V10-07-07)
+---------------------------------------------------
+- G4Nucleon, G4Nucleus, G4V3DNucleus, G4Fancy3DNucleus, G4Fragment:
+  extended for hypernuclei and anti-hypernuclei.
+
+22 October 2021 Vladimir Ivanchenko (hadr-util-V10-07-06)
+--------------------------------------------------------
+- G4HadronicParameters - added hyper-nuclei flag
+
+04 August 2021 Alberto Ribon (hadr-util-V10-07-05)
+--------------------------------------------------------
+- G4Fragment, G4KineticTrack, G4HadSecondary, G4ReactionProduct : 
+  introduced consistent naming of the Set/Get methods for the
+  creator model ID.
+- G4DecayKineticTracks, G4KineticTrack, G4DecayStrongResonances : 
+  propagate correctly the information regarding the creator model ID.
+
+19 July 2021 Alberto Ribon (hadr-util-V10-07-04)
+--------------------------------------------------------
+- G4SampleResonance : bug-fix in the method GetMinimumMass in the case
+  that users include rare and light decay channels (e.g. e+ e-) for
+  hadronic resonances.
+  Thanks to Thomas Ruf (SHiP Collaboration) for pointing out this issue
+  (Bug #2299).
+
+09 July 2021 Vladimir Ivanchenko (hadr-util-V10-07-03)
+--------------------------------------------------------
+- G4Nucleus - use const pointer to G4Element
+
 16 April 2021 Ben Morgan (hadr-util-V10-07-02)
 --------------------------------------------------------
 - Migrate build to modular CMake API

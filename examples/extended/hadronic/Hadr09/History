@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-21 Alberto Ribon (exhadr09-V10-07-01)
+- HadronicGenerator : extended interface and functionality;
+  used new methods available in the FTF model.
+
 04-03-21 Alberto Ribon (exhadr09-V10-07-00)
 - HadronicGenerator : migrated per-particle inelastic processes
   (that have been deleted) to G4HadronInelasticProcess.

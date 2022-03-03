@@ -33,7 +33,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashRunAction::ExGflashRunAction(ExGflashDetectorConstruction* det)
-  //  : G4UserRunAction(), fRunID(0), fDetector(det)
   : G4UserRunAction(), fDetector(det)
 {
   fHistoManager = new ExGflashHistoManager(fDetector);
@@ -49,42 +48,46 @@ ExGflashRunAction::~ExGflashRunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashRunAction::BeginOfRunAction(const G4Run* aRun)
-{  
+{
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  //histograms file
+  // histograms file
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
-  if (analysis->IsActive()) analysis->OpenFile();
-  
-  if (IsMaster()) fRunTimer.Start();
+  if ( analysis->IsActive() ) {
+    analysis->OpenFile();
+  }
+
+  if ( IsMaster() ) {
+    fRunTimer.Start();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashRunAction::EndOfRunAction(const G4Run* aRun)
 {
-  if (IsMaster()) {
+  if ( IsMaster() ) {
     // For MT we need Timer Merge
     fRunTimer.Stop();
     G4cout << G4endl;
     G4cout << "******************************************";
     G4cout << G4endl;
-    G4cout << "Run Real Elapsed Time is: "<< fRunTimer.GetRealElapsed();
+    G4cout << "Run Real Elapsed Time is: " << fRunTimer.GetRealElapsed();
     G4cout << G4endl;
     G4cout << "Run System Elapsed Time: " << fRunTimer.GetSystemElapsed();
     G4cout << G4endl;
     G4cout << "Run GetUserElapsed Time: " << fRunTimer.GetUserElapsed();
     G4cout << G4endl;
-    G4cout << "******************************************"<< G4endl;
-    
+    G4cout << "******************************************" << G4endl;
+
     G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
   }
-    //save histograms
-    G4AnalysisManager* analysis = G4AnalysisManager::Instance();   
-    if (analysis->IsActive()) {   
-      analysis->Write();
+  // save histograms
+  G4AnalysisManager* analysis = G4AnalysisManager::Instance();
+  if ( analysis->IsActive() ) {
+    analysis->Write();
     analysis->CloseFile();
-  }    
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

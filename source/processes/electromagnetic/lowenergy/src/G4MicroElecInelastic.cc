@@ -47,6 +47,7 @@
 #include "G4Proton.hh"
 #include "G4GenericIon.hh"
 #include "G4Alpha.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,7 +57,7 @@ G4MicroElecInelastic::G4MicroElecInelastic(const G4String& processName,
                                            G4ProcessType type)
   : G4VEmProcess (processName, type), isInitialised(false)
 {
-  SetProcessSubType(53);
+  SetProcessSubType(fLowEnergyIonisation);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

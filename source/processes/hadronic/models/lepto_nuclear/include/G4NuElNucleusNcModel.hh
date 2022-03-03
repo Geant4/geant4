@@ -61,7 +61,7 @@ class G4NuElNucleusNcModel : public G4NeutrinoNucleusModel
 {
 public:
 
-  G4NuElNucleusNcModel(const G4String& name = "NuMuNuclNcModel");
+  G4NuElNucleusNcModel(const G4String& name = "NuElNuclNcModel");
 
   virtual ~G4NuElNucleusNcModel();
 

@@ -19,6 +19,7 @@ geant4_add_module(G4modeling
     G4HitsModel.hh
     G4LogicalVolumeModel.hh
     G4MagneticFieldModel.hh
+    G4PlotterModel.hh
     G4Mesh.hh
     G4ModelApplyCommandsT.hh
     G4ModelColourMap.hh
@@ -34,7 +35,6 @@ geant4_add_module(G4modeling
     G4PhysicalVolumeSearchScene.hh
     G4PhysicalVolumesSearchScene.hh
     G4PseudoScene.hh
-    G4ScaleModel.hh
     G4TextModel.hh
     G4TouchablePropertiesScene.hh
     G4TouchableUtils.hh
@@ -75,6 +75,7 @@ geant4_add_module(G4modeling
     G4HitsModel.cc
     G4LogicalVolumeModel.cc
     G4MagneticFieldModel.cc
+    G4PlotterModel.cc
     G4Mesh.cc
     G4ModelingParameters.cc
     G4NullModel.cc
@@ -84,7 +85,6 @@ geant4_add_module(G4modeling
     G4PhysicalVolumeSearchScene.cc
     G4PhysicalVolumesSearchScene.cc
     G4PseudoScene.cc
-    G4ScaleModel.cc
     G4TextModel.cc
     G4TouchablePropertiesScene.cc
     G4TouchableUtils.cc

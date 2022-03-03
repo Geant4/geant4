@@ -39,7 +39,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader(const G4String& fname)
-:   fNoVoxelX(0),fNoVoxelY(0),fNoVoxelZ(0),
+:   fNoVoxelsX(0),fNoVoxelsY(0),fNoVoxelsZ(0),
     fMinX(0),fMinY(0),fMinZ(0),
     fMaxX(0),fMaxY(0),fMaxZ(0),
     fFilename(fname),fSliceLocation(0)
@@ -83,10 +83,10 @@ DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
     }
 
     //----- Read number of voxels
-    fin >> fNoVoxelX >> fNoVoxelY >> fNoVoxelZ;
+    fin >> fNoVoxelsX >> fNoVoxelsY >> fNoVoxelsZ;
 #ifdef G4VERBOSE
-    G4cout << " Number of voxels " << fNoVoxelX << " " << fNoVoxelY 
-           << " " << fNoVoxelZ << G4endl;
+    G4cout << " Number of voxels " << fNoVoxelsX << " " << fNoVoxelsY 
+           << " " << fNoVoxelsZ << G4endl;
 #endif
 
     //----- Read minimal and maximal extensions (= walls of phantom)
@@ -131,13 +131,13 @@ DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+(
                        const DicomPhantomZSliceHeader& rhs )
 {
     //----- Check that both slices has the same dimensions
-    if( fNoVoxelX != rhs.GetNoVoxelX()
-       || fNoVoxelY != rhs.GetNoVoxelY() ) {
+    if( fNoVoxelsX != rhs.GetNoVoxelsX()
+       || fNoVoxelsY != rhs.GetNoVoxelsY() ) {
         G4cerr << "DicomPhantomZSliceHeader error adding two slice headers:\
         !!! Different number of voxels: "
-        << "  X= " << fNoVoxelX << " =? " << rhs.GetNoVoxelX()
-        << "  Y=  " << fNoVoxelY << " =? " << rhs.GetNoVoxelY()
-        << "  Z=  " << fNoVoxelZ << " =? " << rhs.GetNoVoxelZ()
+        << "  X= " << fNoVoxelsX << " =? " << rhs.GetNoVoxelsX()
+        << "  Y=  " << fNoVoxelsY << " =? " << rhs.GetNoVoxelsY()
+        << "  Z=  " << fNoVoxelsZ << " =? " << rhs.GetNoVoxelsZ()
         << G4endl;
         G4Exception("DicomPhantomZSliceHeader::DicomPhantomZSliceHeader",
         "",FatalErrorInArgument,"");
@@ -196,7 +196,7 @@ DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+(
     //----- Add data from second slice header
     temp.SetMinZ( std::min( fMinZ, rhs.GetMinZ() ) );
     temp.SetMaxZ( std::max( fMaxZ, rhs.GetMaxZ() ) );
-    temp.SetNoVoxelZ( fNoVoxelZ + rhs.GetNoVoxelZ() );
+    temp.SetNoVoxelsZ( fNoVoxelsZ + rhs.GetNoVoxelsZ() );
 
     return temp;
 }
@@ -228,7 +228,7 @@ void DicomPhantomZSliceHeader::DumpToFile()
     out << i << " " << fMaterialNames.at(i) << std::endl;
   }
   
-  out << fNoVoxelX << " " << fNoVoxelY << " " << fNoVoxelZ << std::endl;
+  out << fNoVoxelsX << " " << fNoVoxelsY << " " << fNoVoxelsZ << std::endl;
   out << fMinX << " " << fMaxX << std::endl;
   out << fMinY << " " << fMaxY << std::endl;
   out << fMinZ << " " << fMaxZ << std::endl;
@@ -276,7 +276,7 @@ void DicomPhantomZSliceHeader::ReadDataFromFile()
     fMaterialNames[index] = str2;
   }
   
-  in >> fNoVoxelX >> fNoVoxelY >> fNoVoxelZ;
+  in >> fNoVoxelsX >> fNoVoxelsY >> fNoVoxelsZ;
   
   G4double tmpMinX, tmpMinY, tmpMinZ;
   G4double tmpMaxX, tmpMaxY, tmpMaxZ;
@@ -302,11 +302,11 @@ void DicomPhantomZSliceHeader::ReadDataFromFile()
   
   fMateIDs.clear();
   fValues.clear();
-  fMateIDs.resize(fNoVoxelY*fNoVoxelZ,std::vector<G4int>(fNoVoxelX,0));
-  fValues.resize(fNoVoxelY*fNoVoxelZ,std::vector<G4double>(fNoVoxelX,0.));
-  for(G4int k = 0; k < fNoVoxelZ; ++k) {
-    for(G4int j = 0; j < fNoVoxelY; ++j) {
-      for(G4int i = 0; i < fNoVoxelX; ++i) {
+  fMateIDs.resize(fNoVoxelsY*fNoVoxelsZ,std::vector<G4int>(fNoVoxelsX,0));
+  fValues.resize(fNoVoxelsY*fNoVoxelsZ,std::vector<G4double>(fNoVoxelsX,0.));
+  for(G4int k = 0; k < fNoVoxelsZ; ++k) {
+    for(G4int j = 0; j < fNoVoxelsY; ++j) {
+      for(G4int i = 0; i < fNoVoxelsX; ++i) {
         G4int tmpMateID;
         in >> tmpMateID;
         G4int row = j*(k+1);
@@ -315,9 +315,9 @@ void DicomPhantomZSliceHeader::ReadDataFromFile()
     }
   }
   
-  for(G4int k = 0; k < fNoVoxelZ; ++k) {
-    for(G4int j = 0; j < fNoVoxelY; ++j) {
-      for(G4int i = 0; i < fNoVoxelX; ++i) {
+  for(G4int k = 0; k < fNoVoxelsZ; ++k) {
+    for(G4int j = 0; j < fNoVoxelsY; ++j) {
+      for(G4int i = 0; i < fNoVoxelsX; ++i) {
         G4double tmpValue;
         in >> tmpValue;
         G4int row = j*(k+1);

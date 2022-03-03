@@ -1086,47 +1086,38 @@ void G4GDMLWriteSolids::PropertyWrite(xercesc::DOMElement* optElement,
 {
   xercesc::DOMElement* propElement;
   G4MaterialPropertiesTable* ptable = surf->GetMaterialPropertiesTable();
-  auto pmap = ptable->GetPropertyMap();
-  auto cmap = ptable->GetConstPropertyMap();
+  auto pvec = ptable->GetProperties();
+  auto cvec = ptable->GetConstProperties();
 
-  for(auto mpos = pmap->cbegin(); mpos != pmap->cend(); ++mpos)
+  for(size_t i = 0; i < pvec.size(); ++i)
   {
-    propElement = NewElement("property");
-    propElement->setAttributeNode(
-      NewAttribute("name", ptable->GetMaterialPropertyNames()[mpos->first]));
-    propElement->setAttributeNode(NewAttribute(
-      "ref", GenerateName(ptable->GetMaterialPropertyNames()[mpos->first],
-                          mpos->second)));
-    if(mpos->second)
-    {
-      PropertyVectorWrite(ptable->GetMaterialPropertyNames()[mpos->first],
-                          mpos->second);
+    if(pvec[i] != nullptr) {
+      propElement = NewElement("property");
+      propElement->setAttributeNode(
+        NewAttribute("name", ptable->GetMaterialPropertyNames()[i]));
+      propElement->setAttributeNode(NewAttribute(
+        "ref", GenerateName(ptable->GetMaterialPropertyNames()[i],
+                            pvec[i])));
+      PropertyVectorWrite(ptable->GetMaterialPropertyNames()[i],
+                          pvec[i]);
       optElement->appendChild(propElement);
     }
-    else
-    {
-      G4String warn_message = "Null pointer for material property -" +
-                              ptable->GetMaterialPropertyNames()[mpos->first] +
-                              "- of optical surface -" + surf->GetName() +
-                              "- !";
-      G4Exception("G4GDMLWriteSolids::PropertyWrite()", "NullPointer",
-                  JustWarning, warn_message);
-      continue;
-    }
   }
-  for(auto cpos = cmap->cbegin(); cpos != cmap->cend(); ++cpos)
+  for(size_t i = 0; i < cvec.size(); ++i)
   {
-    propElement = NewElement("property");
-    propElement->setAttributeNode(NewAttribute(
-      "name", ptable->GetMaterialConstPropertyNames()[cpos->first]));
-    propElement->setAttributeNode(NewAttribute(
-      "ref", ptable->GetMaterialConstPropertyNames()[cpos->first]));
-    xercesc::DOMElement* constElement = NewElement("constant");
-    constElement->setAttributeNode(NewAttribute(
-      "name", ptable->GetMaterialConstPropertyNames()[cpos->first]));
-    constElement->setAttributeNode(NewAttribute("value", cpos->second));
-    defineElement->appendChild(constElement);
-    optElement->appendChild(propElement);
+    if (cvec[i].second == true) {
+      propElement = NewElement("property");
+      propElement->setAttributeNode(NewAttribute(
+        "name", ptable->GetMaterialConstPropertyNames()[i]));
+      propElement->setAttributeNode(NewAttribute(
+        "ref", ptable->GetMaterialConstPropertyNames()[i]));
+      xercesc::DOMElement* constElement = NewElement("constant");
+      constElement->setAttributeNode(NewAttribute(
+        "name", ptable->GetMaterialConstPropertyNames()[i]));
+      constElement->setAttributeNode(NewAttribute("value", cvec[i].first));
+      defineElement->appendChild(constElement);
+      optElement->appendChild(propElement);
+    }
   }
 }
 

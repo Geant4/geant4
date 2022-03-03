@@ -34,62 +34,21 @@
 #ifndef G4RToEConvForGamma_hh
 #define G4RToEConvForGamma_hh 1
 
-#include <vector>
-
 #include "globals.hh"
-#include "G4ios.hh"
 #include "G4VRangeToEnergyConverter.hh"
 
 class G4RToEConvForGamma : public G4VRangeToEnergyConverter
 {
-  public:
+public:
 
-    G4RToEConvForGamma();
-      // Constructor
+  explicit G4RToEConvForGamma();
 
-    virtual ~G4RToEConvForGamma();
-      // Destructor
+  virtual ~G4RToEConvForGamma();
 
-  protected:
+protected:
 
-    using G4CrossSectionTable = G4LossTable;
+  G4double ComputeValue(const G4int Z, const G4double kinEnergy) final;
 
-    virtual G4double ComputeLoss( G4double AtomicNumber,
-                                  G4double KineticEnergy );
-  
-    virtual void BuildRangeVector( const G4Material* aMaterial,
-                                   G4RangeVector* rangeVector );
-      // The Range Table
-
-    void BuildAbsorptionLengthVector( const G4Material* aMaterial,
-                                      G4RangeVector* rangeVector );
- 
-    G4double ComputeCrossSection( G4double AtomicNumber,
-                                  G4double KineticEnergy );
-
-    G4double Z = -1.0;  
-    G4double s200keV = 0.0, s1keV = 0.0;
-    G4double tmin = 0.0, tlow = 0.0; 
-    G4double smin = 0.0, slow = 0.0;
-    G4double cmin = 0.0, clow = 0.0, chigh = 0.0;
 };
-
-// ------------------
-// Inline methods
-// ------------------
-
-inline 
-G4double G4RToEConvForGamma::ComputeLoss(G4double AtomicNumber,
-                                         G4double KineticEnergy) 
-{
-  return ComputeCrossSection(AtomicNumber,KineticEnergy);
-}
-
-inline 
-void G4RToEConvForGamma::BuildRangeVector(const G4Material* aMaterial,
-                                          G4RangeVector* rangeVector)
-{
-  BuildAbsorptionLengthVector(aMaterial, rangeVector);
-}
 
 #endif

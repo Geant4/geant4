@@ -26,21 +26,23 @@
 #include "Par03RunAction.hh"
 #include "Par03DetectorConstruction.hh"
 
-#include "g4analysis.hh"
+#include "G4AnalysisManager.hh"
 
 Par03RunAction::Par03RunAction(Par03DetectorConstruction* aDetector)
   : G4UserRunAction()
   , fDetector(aDetector)
 {
   // Create analysis manager
-  G4AnalysisManager* analysisManager = G4Analysis::ManagerInstance("root");
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
+
   // Default filename, can be overriden with /analysis/setFileName
   analysisManager->SetFileName("Par03Output");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03RunAction::~Par03RunAction() { delete G4AnalysisManager::Instance(); }
+Par03RunAction::~Par03RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -114,4 +116,5 @@ void Par03RunAction::EndOfRunAction(const G4Run*)
   auto analysisManager = G4AnalysisManager::Instance();
   analysisManager->Write();
   analysisManager->CloseFile();
+  analysisManager->Clear();
 }

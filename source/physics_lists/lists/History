@@ -13,6 +13,13 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-October-2021 B.Morgan (phys-lists-V10-07-10)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+25-August-2021 Dennis Wright (phys-lists-V10-07-09)
+- LBE.cc: replace G4RadioactiveDecayBase with G4RadioactiveDecay
+  see top level History file
+ 
 28-April-2021 R. Hatcher (phys-lists-V10-07-08)
 - corresponding changes to G4PhysListFactoryAlt ctor to maintain drop-in
   compatibility with older factory.

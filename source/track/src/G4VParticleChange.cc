@@ -43,7 +43,7 @@ G4VParticleChange::G4VParticleChange()
   : theSizeOftheListOfSecondaries(G4TrackFastVectorSize)
 {
 #ifdef G4VERBOSE
-  // activate CHeckIt if in VERBOSE mode
+  // activate CheckIt if in VERBOSE mode
   debugFlag = true;
 #endif
   theListOfSecondaries = new G4TrackFastVector();

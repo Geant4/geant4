@@ -156,7 +156,7 @@ void eRositaPhysicsList::ConstructMesons()
 
 void eRositaPhysicsList::ConstructBaryons()
 {
-  //  barions
+  //  baryons
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
 

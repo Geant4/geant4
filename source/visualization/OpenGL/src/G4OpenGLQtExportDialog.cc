@@ -27,8 +27,6 @@
 //
 //
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
 #include "G4OpenGLQtExportDialog.hh"
 
 #include <qvariant.h>
@@ -333,6 +331,3 @@ void G4OpenGLQtExportDialog::  textHeightChanged(
 G4OpenGLQtExportDialog::~G4OpenGLQtExportDialog()
 {
 }
-
-
-#endif

@@ -56,13 +56,12 @@ G4VModularPhysicsList::G4VModularPhysicsList()
 // --------------------------------------------------------------------
 G4VModularPhysicsList::~G4VModularPhysicsList()
 {
-  for(auto itr = G4MT_physicsVector->cbegin();
-           itr != G4MT_physicsVector->cend(); ++itr)
-  {
-    delete(*itr);
+  if(G4MT_physicsVector != nullptr)
+  {  
+    for(auto & ptr : *G4MT_physicsVector) { delete ptr; }
+    delete G4MT_physicsVector;
+    G4MT_physicsVector = nullptr;
   }
-  G4MT_physicsVector->clear();
-  delete G4MT_physicsVector;
 }
 
 // --------------------------------------------------------------------
@@ -70,6 +69,7 @@ G4VModularPhysicsList::G4VModularPhysicsList(const G4VModularPhysicsList& right)
   : G4VUserPhysicsList(right)
 {
   g4vmplInstanceID = G4VMPLsubInstanceManager.CreateSubInstance();
+  G4MT_physicsVector = nullptr;
 }
 
 // --------------------------------------------------------------------
@@ -99,14 +99,10 @@ G4VModularPhysicsList& G4VModularPhysicsList::operator=(
     verboseLevel              = right.verboseLevel;
 
     if(G4MT_physicsVector != nullptr)
-    {
-      for(auto itr = G4MT_physicsVector->cbegin();
-               itr != G4MT_physicsVector->cend(); ++itr)
-      {
-        delete(*itr);
-      }
-      G4MT_physicsVector->clear();
+    {  
+      for(auto & ptr : *G4MT_physicsVector) { delete ptr; }
       delete G4MT_physicsVector;
+      G4MT_physicsVector = nullptr;
     }
     g4vmplInstanceID = G4VMPLsubInstanceManager.CreateSubInstance();
   }

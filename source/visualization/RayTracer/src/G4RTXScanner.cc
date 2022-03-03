@@ -27,8 +27,6 @@
 //
 //
 
-#ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
-
 #include "G4RTXScanner.hh"
 
 #include "G4TheRayTracer.hh"
@@ -236,5 +234,3 @@ void G4RTXScanner::Draw
 
   XFlush(display);
 }
-
-#endif

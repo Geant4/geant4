@@ -100,20 +100,20 @@ G4String G4MPIsession::GetCommand(const char* msg)
   // get command from shell...
   newCommand = shell_-> GetCommandLineString(msg);
 
-  G4String nC= newCommand.strip(G4String::leading);
+  G4String nC= G4StrUtil::lstrip_copy(newCommand);
   if( nC.length() == 0 ) {
     newCommand = nullString;
 
-  } else if( nC(0) == '#' ) {
+  } else if( nC[0] == '#' ) {
     G4cout << nC << G4endl;
     newCommand = nullString;
 
-  } else if( nC == "ls" || nC(0,3) == "ls " ) {  // list commands
+  } else if( nC == "ls" || nC.substr(0,3) == "ls " ) {  // list commands
     ListDirectory(nC);
     newCommand = nullString;
 
-  } else if( nC == "lc" || nC(0,3) == "lc " ) {  // ... by shell
-    shell_-> ListCommand(nC.remove(0,2));
+  } else if( nC == "lc" || nC.substr(0,3) == "lc " ) {  // ... by shell
+    shell_-> ListCommand(nC.erase(0,2));
     newCommand = nullString;
 
   } else if( nC == "pwd" ) { // show current directory
@@ -125,16 +125,16 @@ G4String G4MPIsession::GetCommand(const char* msg)
     shell_-> ShowCurrentDirectory();
     newCommand = nullString;
 
-  } else if(nC == "cd" || nC(0,3) == "cd " ) {  // "cd"
+  } else if(nC == "cd" || nC.substr(0,3) == "cd " ) {  // "cd"
     ChangeDirectoryCommand(nC);
     shell_-> SetCurrentDirectory(GetCurrentWorkingDirectory());
     newCommand = nullString;
 
-  } else if( nC == "help" || nC(0,5) == "help " ) {  // "help"
+  } else if( nC == "help" || nC.substr(0,5) == "help " ) {  // "help"
     TerminalHelp(nC);
     newCommand = nullString;
 
-  } else if( nC(0) == '?' ) {   // "show current value of a parameter"
+  } else if( nC[0] == '?' ) {   // "show current value of a parameter"
     ShowCurrent(nC);
     newCommand = nullString;
 
@@ -145,8 +145,8 @@ G4String G4MPIsession::GetCommand(const char* msg)
     }
     newCommand = nullString;
 
-  } else if( nC(0) == '!' ) {   // "!"
-    G4String ss = nC(1, nC.length()-1);
+  } else if( nC[0] == '!' ) {   // "!"
+    G4String ss = nC.substr(1, nC.length()-1);
     G4int vl;
     const char* tt = ss;
     std::istringstream is(tt);

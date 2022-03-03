@@ -38,8 +38,9 @@
 #define G4ELEMENTVECTOR_HH
 
 #include <vector>
-#include "G4Element.hh"
 
-typedef std::vector<G4Element*> G4ElementVector;
+class G4Element;
+
+typedef std::vector<const G4Element*> G4ElementVector;
 
 #endif

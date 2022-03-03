@@ -38,10 +38,8 @@ using namespace boost::python;
 
 void export_G4VisManager();
 void export_G4VGraphicsSystem();
-void export_G4VRML1File();
 void export_G4VRML2File();
 void export_G4DAWNFILE();
-void export_G4HepRep();
 void export_G4HepRepFile();
 void export_G4ASCIITree();
 void export_G4RayTracer();
@@ -60,14 +58,12 @@ void export_G4OpenGLImmediateXm();
 void export_G4RayTracerX();
 #endif
 
-BOOST_PYTHON_MODULE(G4visualization) 
+BOOST_PYTHON_MODULE(G4visualization)
 {
   export_G4VisManager();
   export_G4VGraphicsSystem();
-  export_G4VRML1File();
   export_G4VRML2File();
   export_G4DAWNFILE();
-  export_G4HepRep();
   export_G4HepRepFile();
   export_G4ASCIITree();
   export_G4RayTracer();

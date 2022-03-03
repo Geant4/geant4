@@ -113,9 +113,9 @@ G4bool G4LatticeReader::OpenFile(const G4String& filename) {
   }
 
   // Extract path from filename to use in finding .ssv map files
-  size_t lastdir = filepath.last('/');
+  size_t lastdir = filepath.rfind('/');
   if (lastdir == std::string::npos) fMapPath = ".";	// No path at all
-  else fMapPath = filepath(0,lastdir);
+  else fMapPath = filepath.substr(0,lastdir);
 
   return true;
 }
@@ -138,8 +138,8 @@ G4bool G4LatticeReader::ProcessToken() {
 
   if (verboseLevel>1) G4cout << " ProcessToken " << fToken << G4endl;
 
-  fToken.toLower();
-  if (fToken.contains('#')) return SkipComments();	// Ignore rest of line
+  G4StrUtil::to_lower(fToken);
+  if (G4StrUtil::contains(fToken, '#')) return SkipComments();	// Ignore rest of line
   if (fToken == "vdir")     return ProcessNMap();	// Direction vector map
   if (fToken == "vg")       return ProcessMap();	// Velocity magnitudes
   if (fToken == "dyn")      return ProcessConstants();	// Dynamical parameters
@@ -214,7 +214,7 @@ G4bool G4LatticeReader::ReadMapInfo() {
   fMap = fMapPath + "/" + fMap;
 
   // Convert string code (L,ST,LT) to polarization index
-  fsPol.toLower();
+  G4StrUtil::to_lower(fsPol);
   fPol = ( (fsPol=="l")  ? 0 :		// Longitudinal
 	   (fsPol=="st") ? 1 :		// Slow-transverse
 	   (fsPol=="ft") ? 2 :		// Fast-transverse

@@ -44,8 +44,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-:G4VUserPrimaryGeneratorAction(),
- fParticleGun(0),fDetector(DC),fRndmBeam(0),fGunMessenger(0)
+  :G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0),fDetector(DC),fRndmBeam(0),fGunMessenger(0)
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
@@ -83,6 +83,10 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  if(0 == anEvent->GetEventID()) {
+    G4double x0 = -0.5*(fDetector->GetWorldSizeX());
+    fParticleGun->SetParticlePosition(G4ThreeVector(x0, 0.0, 0.0));  
+  }
   //this function is called at the begining of event
   //
   //randomize the beam, if requested.
@@ -91,8 +95,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4ThreeVector oldPosition = fParticleGun->GetParticlePosition();    
       G4double rbeam = 0.5*(fDetector->GetAbsorberSizeYZ())*fRndmBeam;
       G4double x0 = oldPosition.x();
-      G4double y0 = oldPosition.y() + (2*G4UniformRand()-1.)*rbeam;
-      G4double z0 = oldPosition.z() + (2*G4UniformRand()-1.)*rbeam;
+      G4double y0 = (2*G4UniformRand()-1.)*rbeam;
+      G4double z0 = (2*G4UniformRand()-1.)*rbeam;
       fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
       fParticleGun->GeneratePrimaryVertex(anEvent);
       fParticleGun->SetParticlePosition(oldPosition);      

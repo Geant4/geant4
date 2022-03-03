@@ -53,7 +53,7 @@ RunAction::RunAction()
 {
   TestParameters::GetPointer();
   fAnalysisManager = G4AnalysisManager::Instance();
-  fAnalysisManager->SetFileName("dmp");
+  fAnalysisManager->SetFileName("dmp.root");
   fAnalysisManager->SetVerboseLevel(1);
   fAnalysisManager->SetActivation(true);
 }
@@ -116,8 +116,8 @@ void RunAction::EndOfRunAction(const G4Run*)
   if (fAnalysisManager->IsActive()) { 
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
+    fAnalysisManager->Clear();
   }
-  //delete fAnalysisManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

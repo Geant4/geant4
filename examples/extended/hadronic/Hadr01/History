@@ -14,6 +14,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-11-21 I. Hrivnacova (exhadr01-V10-07-03)
+- Added analysis manager Clear() call instead of
+  deleting in the end of run (removed on July 22)
+
+05-11-21  V.Ivanchenko (exhadr01-V10-07-02)
+- HistoManager, DetectorConstruction, DetectorMessenger 
+    fix #2441 - corect counting of leaking neutrons
+
+19-07-21 I. Hrivnacova (exhadr01-V10-07-01)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
 08-03-21 A. Ribon (exhadr01-V10-07-00)
 - PhysicsList : removed unused header file.
 

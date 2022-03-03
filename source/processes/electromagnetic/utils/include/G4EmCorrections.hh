@@ -230,7 +230,7 @@ private:
   G4int     nEtaK;
   G4int     nEtaL;
 
-  G4int     nbinCorr = 20;
+  G4int     nbinCorr = 52;
   G4int     numberOfElements = 0;
 
   // Ion stopping data

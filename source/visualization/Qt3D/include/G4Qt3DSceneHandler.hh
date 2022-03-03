@@ -25,8 +25,6 @@
 //
 // John Allison  17th June 2019
 
-#if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)
-
 #ifndef G4QT3DSCENEHANDLER_HH
 #define G4QT3DSCENEHANDLER_HH
 
@@ -67,6 +65,8 @@ public:
   void AddPrimitive(const G4Square&);
   void AddPrimitive(const G4Polyhedron&);
 
+  void AddCompound(const G4Mesh&);
+
   void ClearStore ();
   void ClearTransientStore ();
   
@@ -85,5 +85,3 @@ protected:
 };
 
 #endif
-
-#endif  // #if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)

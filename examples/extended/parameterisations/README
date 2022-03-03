@@ -26,6 +26,12 @@
  from the fast simulation model and store it alongside deposits created
  in full/detailed simulation.
 
+ Par04
+ -------
+ This example demonstrates how to use machine-learning aided fast simulation
+ of electromagnetic showers. It runs inference using an external library:
+ either ONNX Runtime, or LWTNN.
+
  gflash
  -------
 

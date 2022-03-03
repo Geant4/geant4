@@ -47,30 +47,26 @@ public:
   
   virtual ~G4PreCompoundIon();
 
+  G4PreCompoundIon(const G4PreCompoundIon &right) = delete;
+  const G4PreCompoundIon& operator =
+  (const G4PreCompoundIon &right) = delete;
+  G4bool operator==(const G4PreCompoundIon &right) const = delete;
+  G4bool operator!=(const G4PreCompoundIon &right) const = delete;
+
 protected:
 
+  G4double ProbabilityDistributionFunction(G4double eKin, 
+					   const G4Fragment&) override;
+
+  G4double GetBeta() const override;
+
   virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const = 0;
-
-  virtual G4double GetBeta() const;
           
-  virtual G4double 
-  ProbabilityDistributionFunction(G4double eKin, 
-				  const G4Fragment& aFragment);
-
   virtual G4double FactorialFactor(G4int N, G4int P) const = 0;
 
   virtual G4double CoalescenceFactor(G4int A) const = 0; 
 
 private:
-
-  // default constructor
-  G4PreCompoundIon();
-  // operators
-  G4PreCompoundIon(const G4PreCompoundIon &right);
-  const G4PreCompoundIon& 
-  operator= (const G4PreCompoundIon &right);
-  G4bool operator==(const G4PreCompoundIon &right) const;
-  G4bool operator!=(const G4PreCompoundIon &right) const;    
 
   G4double fact;
 };

@@ -25,7 +25,6 @@
 //
 // Guy Barrand 6th March 2021
 
-#ifdef G4VIS_BUILD_TOOLSSG_WINDOWS_GLES_DRIVER
 
 #include "G4ToolsSGWindowsGLES.hh"
 
@@ -113,5 +112,3 @@ G4bool G4ToolsSGWindowsGLES::IsUISessionCompatible () const
 //  }
   return isCompatible;
 }
-
-#endif

@@ -41,7 +41,7 @@ T* G4CascadeParamMessenger::CreateCommand(const G4String& cmd,
 
   // If input name begins with '/', treat as absolute path
   G4String path;
-  if (cmd(0) != '/' && cmdDir) path = cmdDir->GetCommandPath();
+  if (cmd[0] != '/' && cmdDir) path = cmdDir->GetCommandPath();
   path += cmd;
 
   T* theCmd = new T(path.c_str(), this);        // <T> must be G4UIcommand!

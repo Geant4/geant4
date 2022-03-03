@@ -30,7 +30,8 @@
 
 #include "CCalDetectorConstruction.hh"
 #include "CCalActionInitializer.hh"
-#include "CCalAnalysis.hh"
+
+#include "G4AnalysisManager.hh"
 
 #include "G4PhysListFactory.hh"
 

@@ -36,15 +36,14 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4ProductionCutsTable.hh"
-#include "G4VEMDataSet.hh"
-#include "G4CompositeEMDataSet.hh"
 
 class G4LivermorePolarizedRayleighModel : public G4VEmModel
 {
 public:
 
-  explicit G4LivermorePolarizedRayleighModel(const G4ParticleDefinition* p = nullptr, 
-		     const G4String& nam = "LivermorePolarizedRayleigh");
+  explicit G4LivermorePolarizedRayleighModel(
+                      const G4ParticleDefinition* p = nullptr, 
+		      const G4String& nam = "LivermorePolarizedRayleigh");
 
   virtual ~G4LivermorePolarizedRayleighModel();
 
@@ -67,12 +66,13 @@ public:
 			 G4double tmin,
 			 G4double maxEnergy) override;
 
-  G4LivermorePolarizedRayleighModel & operator=(const  G4LivermorePolarizedRayleighModel &right) = delete;
+  G4LivermorePolarizedRayleighModel & operator=
+  (const  G4LivermorePolarizedRayleighModel &right) = delete;
   G4LivermorePolarizedRayleighModel(const  G4LivermorePolarizedRayleighModel&) = delete;
 
 private:
   //cross sections
-  void ReadData(size_t Z, const char* path = 0);
+  void ReadData(size_t Z, const char* path = nullptr);
 
   // Polarization   
   //   Generates \f$cos \left ( \theta\right )\f$ of the scattered photon
@@ -92,9 +92,10 @@ private:
   G4ThreeVector GetPhotonPolarization(const G4DynamicParticle&  photon);
 
   G4ParticleChangeForGamma* fParticleChange;
-  static G4VEMDataSet* formFactorData;
-  static const G4int maxZ = 100;
+
+  const G4int maxZ = 100;
   static G4PhysicsFreeVector* dataCS[101];
+  static G4PhysicsFreeVector* formFactorData[101];
 
   G4double lowEnergyLimit;  
   G4int verboseLevel;

@@ -81,7 +81,7 @@ private:
 
     G4VStatMFEnsemble * _theEnsemble;
 
-
+    G4int _secID;  // Creator model ID for the secondaries created by this model
 
 };
 

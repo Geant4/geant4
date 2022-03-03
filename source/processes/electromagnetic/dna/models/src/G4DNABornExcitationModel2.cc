@@ -100,7 +100,7 @@ void G4DNABornExcitationModel2::Initialise(const G4ParticleDefinition* particle,
   fParticleDefinition = particle;
 
   std::ostringstream fullFileName;
-  char *path = getenv("G4LEDATA");
+  char *path = std::getenv("G4LEDATA");
 
   if(G4String(path) == "")
   {
@@ -130,17 +130,16 @@ void G4DNABornExcitationModel2::Initialise(const G4ParticleDefinition* particle,
 
   fTableData = new G4PhysicsTable();
   fTableData->RetrievePhysicsTable(fullFileName.str().c_str(), true);
+  /*
   for(size_t level = 0; level<fTableData->size(); ++level)
   {
     //(*fTableData)(level)->ScaleVector(1,scaleFactor);
-    (*fTableData)(level)->SetSpline(true);
   }
-
+  */
   size_t finalBin_i = 2000;
   G4double E_min = fLowEnergy;
   G4double E_max = fHighEnergy;
-  fTotalXS = new G4PhysicsLogVector(E_min, E_max, finalBin_i);
-  fTotalXS->SetSpline(true);
+  fTotalXS = new G4PhysicsLogVector(E_min, E_max, finalBin_i, true);
   G4double energy;
   G4double finalXS;
 

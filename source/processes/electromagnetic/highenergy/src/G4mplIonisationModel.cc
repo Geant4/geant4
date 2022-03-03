@@ -229,11 +229,12 @@ void G4mplIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 G4double G4mplIonisationModel::SampleFluctuations(
 				       const G4MaterialCutsCouple* couple,
 				       const G4DynamicParticle* dp,
-				       G4double tmax,
-				       G4double length,
-				       G4double meanLoss)
+                                       const G4double tcut,
+                                       const G4double tmax,
+				       const G4double length,
+				       const G4double meanLoss)
 {
-  G4double siga = Dispersion(couple->GetMaterial(),dp,tmax,length);
+  G4double siga = Dispersion(couple->GetMaterial(),dp,tcut,tmax,length);
   G4double loss = meanLoss;
   siga = std::sqrt(siga);
   G4double twomeanLoss = meanLoss + meanLoss;
@@ -258,17 +259,16 @@ G4double G4mplIonisationModel::SampleFluctuations(
 
 G4double G4mplIonisationModel::Dispersion(const G4Material* material,
 					  const G4DynamicParticle* dp,
-					  G4double tmax,
-					  G4double length)
+					  const G4double tcut,
+					  const G4double tmax,
+					  const G4double length)
 {
   G4double siga = 0.0;
   G4double tau   = dp->GetKineticEnergy()/mass;
   if(tau > 0.0) { 
-    G4double electronDensity = material->GetElectronDensity();
-    G4double gam   = tau + 1.0;
-    G4double invbeta2 = (gam*gam)/(tau * (tau+2.0));
-    siga  = (invbeta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
-      * electronDensity * chargeSquare;
+    const G4double beta = dp->GetBeta();
+    siga  = (tmax/(beta*beta) - 0.5*tcut) * twopi_mc2_rcl2 * length
+      * material->GetElectronDensity() * chargeSquare;
   }
   return siga;
 }

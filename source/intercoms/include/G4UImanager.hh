@@ -107,6 +107,13 @@ class G4UImanager : public G4VStateDependent
       //        x00 : G4CommandStatus.hh enumeration
       //         yy : the problematic parameter (first found)
 
+    G4UIcommand* FindCommand(const char* aCommand);
+    G4UIcommand* FindCommand(const G4String& aCommand);
+      // Find the G4UIcommand object. Null pointer is returned if command
+      // is not found.
+      // Please note that each thread returns different objects if this
+      // method is used in multi-threaded mode.
+
     void StoreHistory(const char* fileName = "G4history.macro");
     void StoreHistory(G4bool historySwitch,
                       const char* fileName = "G4history.macro");

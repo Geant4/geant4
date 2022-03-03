@@ -12,7 +12,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -24,318 +24,358 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
     Threads started:      1
 <<< Geant4 Physics List simulation engine: QGSP_BIC_HP
 
-Checking overlaps for volume Plate@Location    X:0.00    Y:1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:6.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-6.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:6.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-6.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:7.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-7.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:7.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-7.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:7.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-7.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:8.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-8.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:8.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-8.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:8.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-8.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:9.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-9.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:9.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-9.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:9.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-9.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:9.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-9.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:10.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-10.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:10.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-10.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:10.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-10.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:11.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-11.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:11.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-11.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:11.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-11.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:0.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-0.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:0.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:0.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-0.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:0.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:0.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-0.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:0.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:0.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-0.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:0.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:6.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-6.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:6.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:6.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-6.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:6.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:7.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-7.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:7.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:7.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-7.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:7.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:7.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-7.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:7.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:8.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-8.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:8.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:8.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-8.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:8.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:8.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-8.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:8.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:9.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-9.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:9.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:9.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-9.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:9.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:9.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-9.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:9.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:9.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-9.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:9.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:10.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-10.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:10.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:10.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-10.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:10.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:10.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-10.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:10.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:0.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-0.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:0.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:0.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-0.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:0.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:0.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-0.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:0.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:0.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-0.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:0.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.90 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.20 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.50 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.80 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.10 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.40 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.70 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.00 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.30 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:6.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-6.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:6.60 (G4Box) ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:1.20:0 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-1.20:1 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:1.50:2 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-1.50:3 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:1.80:4 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-1.80:5 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:2.10:6 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-2.10:7 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:2.40:8 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-2.40:9 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:2.70:10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-2.70:11 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:3.00:12 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-3.00:13 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:3.30:14 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-3.30:15 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:3.60:16 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-3.60:17 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:3.90:18 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-3.90:19 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:4.20:20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-4.20:21 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:4.50:22 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-4.50:23 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:4.80:24 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-4.80:25 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:5.10:26 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-5.10:27 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:5.40:28 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-5.40:29 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:5.70:30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-5.70:31 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:6.00:32 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-6.00:33 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:6.30:34 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-6.30:35 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:6.60:36 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-6.60:37 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:6.90:38 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-6.90:39 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:7.20:40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-7.20:41 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:7.50:42 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-7.50:43 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:7.80:44 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-7.80:45 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:8.10:46 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-8.10:47 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:8.40:48 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-8.40:49 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:8.70:50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-8.70:51 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:9.00:52 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-9.00:53 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:9.30:54 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-9.30:55 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:9.60:56 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-9.60:57 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:9.90:58 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-9.90:59 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:10.20:60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-10.20:61 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:10.50:62 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-10.50:63 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:10.80:64 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-10.80:65 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:11.10:66 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-11.10:67 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:11.40:68 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-11.40:69 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:11.70:70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-11.70:71 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:0.00:72 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-0.00:73 (G4Box) ... 
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomVol1002
+      issued by : G4PVPlacement::CheckOverlaps()
+Overlap with volume already placed !
+          Overlap is detected for volume Plate@Location    X:5.00    Y:-0.00:73 (G4Box)
+          apparently fully encapsulating volume Plate@Location    X:5.00    Y:0.00:72 (G4Box) at the same level!
+NOTE: Reached maximum fixed number -1- of overlaps reports for this volume !
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Checking overlaps for volume Plate@Location    X:-5.00    Y:0.00:74 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.00:75 (G4Box) ... 
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomVol1002
+      issued by : G4PVPlacement::CheckOverlaps()
+Overlap with volume already placed !
+          Overlap is detected for volume Plate@Location    X:-5.00    Y:-0.00:75 (G4Box)
+          apparently fully encapsulating volume Plate@Location    X:-5.00    Y:0.00:74 (G4Box) at the same level!
+NOTE: Reached maximum fixed number -1- of overlaps reports for this volume !
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Checking overlaps for volume Plate@Location    X:5.00    Y:0.30:76 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-0.30:77 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:0.30:78 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.30:79 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:0.60:80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-0.60:81 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:0.60:82 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.60:83 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:0.90:84 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-0.90:85 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:0.90:86 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.90:87 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:1.20:88 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-1.20:89 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:1.20:90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.20:91 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:1.50:92 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-1.50:93 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:1.50:94 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.50:95 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:1.80:96 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-1.80:97 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:1.80:98 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.80:99 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:2.10:100 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-2.10:101 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:2.10:102 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.10:103 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:2.40:104 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-2.40:105 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:2.40:106 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.40:107 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:2.70:108 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-2.70:109 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:2.70:110 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.70:111 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:3.00:112 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-3.00:113 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:3.00:114 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.00:115 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:3.30:116 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-3.30:117 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:3.30:118 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.30:119 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:3.60:120 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-3.60:121 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:3.60:122 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.60:123 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:3.90:124 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-3.90:125 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:3.90:126 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.90:127 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:4.20:128 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-4.20:129 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:4.20:130 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.20:131 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:4.50:132 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-4.50:133 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:4.50:134 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.50:135 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:4.80:136 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-4.80:137 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:4.80:138 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.80:139 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:5.10:140 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-5.10:141 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:5.10:142 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.10:143 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:5.40:144 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-5.40:145 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:5.40:146 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.40:147 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:5.70:148 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-5.70:149 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:5.70:150 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.70:151 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:6.00:152 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-6.00:153 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:6.00:154 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.00:155 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:6.30:156 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-6.30:157 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:6.30:158 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.30:159 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:6.60:160 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-6.60:161 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:6.60:162 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.60:163 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:6.90:164 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-6.90:165 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:6.90:166 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.90:167 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:7.20:168 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-7.20:169 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:7.20:170 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.20:171 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:7.50:172 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-7.50:173 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:7.50:174 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.50:175 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:7.80:176 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-7.80:177 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:7.80:178 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.80:179 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:8.10:180 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-8.10:181 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:8.10:182 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.10:183 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:8.40:184 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-8.40:185 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:8.40:186 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.40:187 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:8.70:188 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-8.70:189 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:8.70:190 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.70:191 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:9.00:192 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-9.00:193 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:9.00:194 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.00:195 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:9.30:196 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-9.30:197 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:9.30:198 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.30:199 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:9.60:200 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-9.60:201 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:9.60:202 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.60:203 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:9.90:204 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-9.90:205 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:9.90:206 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.90:207 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:10.20:208 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-10.20:209 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:10.20:210 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.20:211 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:10.50:212 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-10.50:213 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:10.50:214 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.50:215 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:10.80:216 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-10.80:217 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:10.80:218 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.80:219 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:0.00:220 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-0.00:221 (G4Box) ... 
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomVol1002
+      issued by : G4PVPlacement::CheckOverlaps()
+Overlap with volume already placed !
+          Overlap is detected for volume Plate@Location    X:10.00    Y:-0.00:221 (G4Box)
+          apparently fully encapsulating volume Plate@Location    X:10.00    Y:0.00:220 (G4Box) at the same level!
+NOTE: Reached maximum fixed number -1- of overlaps reports for this volume !
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Checking overlaps for volume Plate@Location    X:-10.00    Y:0.00:222 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.00:223 (G4Box) ... 
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomVol1002
+      issued by : G4PVPlacement::CheckOverlaps()
+Overlap with volume already placed !
+          Overlap is detected for volume Plate@Location    X:-10.00    Y:-0.00:223 (G4Box)
+          apparently fully encapsulating volume Plate@Location    X:-10.00    Y:0.00:222 (G4Box) at the same level!
+NOTE: Reached maximum fixed number -1- of overlaps reports for this volume !
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Checking overlaps for volume Plate@Location    X:10.00    Y:0.30:224 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-0.30:225 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:0.30:226 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.30:227 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:0.60:228 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-0.60:229 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:0.60:230 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.60:231 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:0.90:232 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-0.90:233 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:0.90:234 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.90:235 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:1.20:236 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-1.20:237 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:1.20:238 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.20:239 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:1.50:240 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-1.50:241 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:1.50:242 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.50:243 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:1.80:244 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-1.80:245 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:1.80:246 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.80:247 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:2.10:248 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-2.10:249 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:2.10:250 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.10:251 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:2.40:252 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-2.40:253 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:2.40:254 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.40:255 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:2.70:256 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-2.70:257 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:2.70:258 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.70:259 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:3.00:260 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-3.00:261 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:3.00:262 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.00:263 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:3.30:264 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-3.30:265 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:3.30:266 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.30:267 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:3.60:268 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-3.60:269 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:3.60:270 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.60:271 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:3.90:272 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-3.90:273 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:3.90:274 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.90:275 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:4.20:276 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-4.20:277 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:4.20:278 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.20:279 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:4.50:280 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-4.50:281 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:4.50:282 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.50:283 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:4.80:284 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-4.80:285 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:4.80:286 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.80:287 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:5.10:288 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-5.10:289 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:5.10:290 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.10:291 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:5.40:292 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-5.40:293 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:5.40:294 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.40:295 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:5.70:296 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-5.70:297 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:5.70:298 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.70:299 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:6.00:300 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-6.00:301 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:6.00:302 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.00:303 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:6.30:304 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-6.30:305 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:6.30:306 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.30:307 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:6.60:308 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-6.60:309 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:6.60:310 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.60:311 (G4Box) ... OK! 
 312 plates were added to the subcritical assembly
 /cvmfs/geant4.cern.ch/share/data/G4NDL4.6
 @@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
@@ -351,10 +391,8 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   OpenGLImmediateQt (OGLIQt, OGLI)
@@ -396,6 +434,84 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               20
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 0.01 mm)
+Step function for muons/hadrons                    (0.1, 0.05 mm)
+Step function for light ions                       (0.1, 0.02 mm)
+Step function for general ions                     (0.1, 0.001 mm)
+Lowest e+e- kinetic energy                         100 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    1
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 1
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            1 MeV
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     1
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.08
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      3
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              1
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Fluorescence ANSTO data files enabled              0
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld  1  1  0
@@ -405,29 +521,29 @@ Some /vis commands (optionally) take a string to specify colour.
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 174 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric : Emin=    0 meV Emax=  100 TeV  SauterGavrila Fluo
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
 
 compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 100 eV  to 1 MeV, 20 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 160 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LowEPComptonModel : Emin=    0 meV Emax=   20 MeV Fluo
+   LowEPComptonModel : Emin=    0 eV  Emax=   20 MeV Fluo
         KleinNishina : Emin=   20 MeV Emax=  100 TeV Fluo
 
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      BetheHeitler5D : Emin=    0 meV Emax=  100 TeV  ModifiedTsai
+      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
       LambdaPrime table from 100 keV to 100 TeV in 180 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh : Emin=    0 meV Emax=  100 TeV  CullenGenerator
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  GoudsmitSaunderson : Emin=    0 meV Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
@@ -437,7 +553,7 @@ eIoni:  for e-  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       LowEnergyIoni : Emin=    0 meV Emax=  100 keV  deltaVI
+       LowEnergyIoni : Emin=    0 eV  Emax=  100 keV  deltaVI
         MollerBhabha : Emin=  100 keV Emax=  100 TeV  deltaVI
 
 eBrem:  for e-  XStype:4  SubType=3
@@ -445,25 +561,25 @@ eBrem:  for e-  XStype:4  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB : Emin=    0 meV Emax=    1 GeV  AngularGen2BS
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  AngularGen2BS
 
 ePairProd:  for e-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           ePairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+           ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
-      Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 1
+      Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  GoudsmitSaunderson : Emin=    0 meV Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
@@ -473,7 +589,7 @@ eIoni:  for e+  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PenIoni : Emin=    0 meV Emax=  100 keV
+             PenIoni : Emin=    0 eV  Emax=  100 keV
         MollerBhabha : Emin=  100 keV Emax=  100 TeV  deltaVI
 
 eBrem:  for e+  XStype:4  SubType=3
@@ -481,29 +597,29 @@ eBrem:  for e+  XStype:4  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB : Emin=    0 meV Emax=    1 GeV  AngularGen2BS
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  AngularGen2BS
 
 ePairProd:  for e+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           ePairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+           ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg : Emin=    0 meV Emax=  100 TeV
+            eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
 CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
-      Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 1
+      Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
 msc:  for proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 meV Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 hIoni:  for proton  XStype:1  SubType=2
@@ -511,35 +627,35 @@ hIoni:  for proton  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg : Emin=    0 meV Emax=    2 MeV  deltaVI
+               Bragg : Emin=    0 eV  Emax=    2 MeV  deltaVI
           BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering : Emin=    0 meV Emax=  100 TeV
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 nuclearStopping:  for proton SubType=8 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping : Emin=    0 meV Emax=    1 MeV
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
 
 msc:  for GenericIon  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 meV Emax=  100 TeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 ionIoni:  for GenericIon  XStype:1  SubType=2
@@ -547,11 +663,11 @@ ionIoni:  for GenericIon  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         ParamICRU73 : Emin=    0 meV Emax=  100 TeV  deltaVI
+         ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
 nuclearStopping:  for GenericIon SubType=8 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping : Emin=    0 meV Emax=    1 MeV
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
 ======================================================================
@@ -562,15 +678,15 @@ Enable correlated gamma emission                  0
 Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      1
 Auger electron emission enabled                   1
-Auger cascade enabled                             1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
 Threshold for very long decay time at rest        1e+27  ns
 ======================================================================
 
 msc:  for alpha  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 meV Emax=  100 TeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 ionIoni:  for alpha  XStype:1  SubType=2
@@ -578,16 +694,16 @@ ionIoni:  for alpha  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 meV Emax=7.9452 MeV  deltaVI
+            BraggIon : Emin=    0 eV  Emax=7.9452 MeV  deltaVI
           BetheBloch : Emin=7.9452 MeV Emax=  100 TeV  deltaVI
 
 nuclearStopping:  for alpha SubType=8 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping : Emin=    0 meV Emax=    1 MeV
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
 
 msc:  for anti_proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 meV Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 hIoni:  for anti_proton  XStype:1  SubType=2
@@ -595,31 +711,31 @@ hIoni:  for anti_proton  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO : Emin=    0 meV Emax=    2 MeV  deltaVI
+            ICRU73QO : Emin=    0 eV  Emax=    2 MeV  deltaVI
           BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
 
 hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering : Emin=    0 meV Emax=  100 TeV
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 meV Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 hIoni:  for kaon+  XStype:1  SubType=2
@@ -627,31 +743,31 @@ hIoni:  for kaon+  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg : Emin=    0 meV Emax=1.05231 MeV  deltaVI
+               Bragg : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
 
 hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering : Emin=    0 meV Emax=  100 TeV
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 meV Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 hIoni:  for kaon-  XStype:1  SubType=2
@@ -659,31 +775,31 @@ hIoni:  for kaon-  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO : Emin=    0 meV Emax=1.05231 MeV  deltaVI
+            ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
 
 hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering : Emin=    0 meV Emax=  100 TeV
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for mu+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 meV Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 muIoni:  for mu+  XStype:1  SubType=2
@@ -691,32 +807,32 @@ muIoni:  for mu+  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg : Emin=    0 meV Emax=  200 keV  deltaVI
+               Bragg : Emin=    0 eV  Emax=  200 keV  deltaVI
           BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
         MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering : Emin=    0 meV Emax=  100 TeV
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for mu-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 meV Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 muIoni:  for mu-  XStype:1  SubType=2
@@ -724,28 +840,28 @@ muIoni:  for mu-  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO : Emin=    0 meV Emax=  200 keV  deltaVI
+            ICRU73QO : Emin=    0 eV  Emax=  200 keV  deltaVI
           BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
         MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering : Emin=    0 meV Emax=  100 TeV
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
 NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
 NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic/CrossSection/6_nat_Carbon
@@ -772,7 +888,7 @@ As currently modeled this option precludes production of delayed neutrons from f
 
 msc:  for pi+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 meV Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 hIoni:  for pi+  XStype:1  SubType=2
@@ -780,31 +896,31 @@ hIoni:  for pi+  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg : Emin=    0 meV Emax=297.505 keV  deltaVI
+               Bragg : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
-      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering : Emin=    0 meV Emax=  100 TeV
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for pi-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 meV Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
 hIoni:  for pi-  XStype:1  SubType=2
@@ -812,27 +928,27 @@ hIoni:  for pi-  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO : Emin=    0 meV Emax=297.505 keV  deltaVI
+            ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
 
 hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 meV Emax=  100 TeV  ModifiedMephi
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering : Emin=    0 meV Emax=  100 TeV
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -841,51 +957,51 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for GenericIon
 
   Process: ionElastic
-        Model:          NNDiffuseElastic: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+        Model:          NNDiffuseElastic: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
-  Process: RadioactiveDecayBase
+  Process: RadioactiveDecay
 
 ---------------------------------------------------
                            Hadronic Processes for He3
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100.1 MeV/n
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_He3Inelastic
-        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -893,13 +1009,13 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for anti_alpha
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100.1 MeV/n
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_alphaInelastic
-        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -907,13 +1023,13 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for anti_deuteron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100.1 MeV/n
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
-        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -921,13 +1037,13 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for anti_lambda
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: anti_lambdaInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 0 meV ---> 25 GeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:                      FTFP: 0 eV  ---> 25 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
 
@@ -935,13 +1051,13 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100.1 MeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_neutronInelastic
-        Model:                      FTFP: 0 meV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -949,13 +1065,13 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for anti_proton
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100.1 MeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_protonInelastic
-        Model:                      FTFP: 0 meV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -963,13 +1079,13 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for anti_triton
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100.1 MeV/n
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_tritonInelastic
-        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -977,62 +1093,62 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for deuteron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: electronNuclear
-        Model:   G4ElectroVDNuclearModel: 0 meV ---> 1 PeV
-     Cr_sctns:          ElectroNuclearXS: 0 meV ---> 100 TeV
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e-
 
   Process: electronNuclear
-        Model:   G4ElectroVDNuclearModel: 0 meV ---> 1 PeV
-     Cr_sctns:          ElectroNuclearXS: 0 meV ---> 100 TeV
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:               GammaNPreco: 0 meV ---> 200 MeV
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
         Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
-     Cr_sctns:            PhotoNuclearXS: 0 meV ---> 100 TeV
+     Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -1040,28 +1156,28 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for lambda
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: lambdaInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu+
 
   Process: muonNuclear
-        Model:      G4MuonVDNuclearModel: 0 meV ---> 1 PeV
-     Cr_sctns:     KokoulinMuonNuclearXS: 0 meV ---> 100 TeV
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu-
 
   Process: muonNuclear
-        Model:      G4MuonVDNuclearModel: 0 meV ---> 1 PeV
-     Cr_sctns:     KokoulinMuonNuclearXS: 0 meV ---> 100 TeV
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
 
   Process: muMinusCaptureAtRest
 
@@ -1070,55 +1186,55 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
 
   Process: hadElastic
         Model:             hElasticCHIPS: 19.5 MeV ---> 100 TeV
-        Model:          NeutronHPElastic: 0 meV ---> 20 MeV
-     Cr_sctns:        NeutronHPElasticXS: 0 meV ---> 20 MeV
-     Cr_sctns:        G4NeutronElasticXS: 0 meV ---> 100 TeV
+        Model:          NeutronHPElastic: 0 eV  ---> 20 MeV
+     Cr_sctns:        NeutronHPElasticXS: 0 eV  ---> 20 MeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
 
   Process: neutronInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:            Binary Cascade: 19.9 MeV ---> 6 GeV
-        Model:        NeutronHPInelastic: 0 meV ---> 20 MeV
-     Cr_sctns:      NeutronHPInelasticXS: 0 meV ---> 20 MeV
-     Cr_sctns:      G4NeutronInelasticXS: 0 meV ---> 100 TeV
+        Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
+     Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
   Process: nCapture
-        Model:          NeutronHPCapture: 0 meV ---> 20 MeV
+        Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
         Model:               nRadCapture: 19.9 MeV ---> 100 TeV
-     Cr_sctns:        NeutronHPCaptureXS: 0 meV ---> 20 MeV
-     Cr_sctns:        G4NeutronCaptureXS: 0 meV ---> 100 TeV
+     Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 20 MeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
 
   Process: nFission
-        Model:          NeutronHPFission: 0 meV ---> 20 MeV
+        Model:          NeutronHPFission: 0 eV  ---> 20 MeV
         Model:                G4LFission: 19.9 MeV ---> 100 TeV
-     Cr_sctns:        NeutronHPFissionXS: 0 meV ---> 20 MeV
-     Cr_sctns:                    ZeroXS: 0 meV ---> 100 TeV
+     Cr_sctns:        NeutronHPFissionXS: 0 eV  ---> 20 MeV
+     Cr_sctns:                    ZeroXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:           hElasticGlauber: 0 meV ---> 100 TeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:           hElasticGlauber: 0 meV ---> 100 TeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -1126,27 +1242,27 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for proton
 
   Process: hadElastic
-        Model:             hElasticCHIPS: 0 meV ---> 100 TeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: protonInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            Binary Cascade: 0 meV ---> 6 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
+        Model:            Binary Cascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for sigma-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: sigma-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -1154,13 +1270,13 @@ CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
                            Hadronic Processes for triton
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ================================================================
 ### G4LevelReader: broken transition 0 from level 24 to 24 for isotope Z= 89 A= 219 - use ground level
@@ -1184,7 +1300,6 @@ Time limit for long lived isomeres (ns)             1442.7
 Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
-Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 =======================================================================

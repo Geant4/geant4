@@ -121,10 +121,8 @@ if G4VisManager.GetConcreteInstance() == None:
   if _q_raytracer_x:
     _raytracer_x = G4RayTracerX()
 
-  _vrml1 = G4VRML1File()
   _vrml2 = G4VRML2File()
   _dawn = G4DAWNFILE()
-  _heprep_xml = G4HepRep()
   _heprep_file = G4HepRepFile()
   _atree = G4ASCIITree()
   _raytracer = G4RayTracer()
@@ -140,10 +138,8 @@ if G4VisManager.GetConcreteInstance() == None:
   if _q_raytracer_x:
     gVisManager.RegisterGraphicsSystem(_raytracer_x)
 
-  gVisManager.RegisterGraphicsSystem(_vrml1)
   gVisManager.RegisterGraphicsSystem(_vrml2)
   gVisManager.RegisterGraphicsSystem(_dawn)
-  gVisManager.RegisterGraphicsSystem(_heprep_xml)
   gVisManager.RegisterGraphicsSystem(_heprep_file)
   gVisManager.RegisterGraphicsSystem(_atree)
   gVisManager.RegisterGraphicsSystem(_raytracer)

@@ -72,6 +72,9 @@ public:
   void SetBeardenFluoDir(G4bool val);
   G4bool BeardenFluoDir() const;
 
+  void SetANSTOFluoDir(G4bool val);
+  G4bool ANSTOFluoDir() const;
+
   void SetAuger(G4bool val);
   G4bool Auger() const;
 
@@ -132,6 +135,7 @@ private:
 
   G4bool fluo;
   G4bool beardenFluoDir;
+  G4bool fANSTOFluoDir;
   G4bool auger;
   G4bool pixe;
   G4bool deexIgnoreCut;

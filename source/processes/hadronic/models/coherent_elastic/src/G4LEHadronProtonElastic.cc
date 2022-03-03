@@ -37,13 +37,14 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-
 #include "G4Pow.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 
 G4LEHadronProtonElastic::G4LEHadronProtonElastic():
  G4HadronElastic("G4LEHadronProtonElastic") 
 {
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );  
   SetMinEnergy(0.);
   SetMaxEnergy(20.*MeV);
 }
@@ -241,7 +242,7 @@ G4LEHadronProtonElastic::ApplyYourself(const G4HadProjectile& aTrack,
     theParticleChange.SetMomentumChange(newP->GetMomentumDirection());
     theParticleChange.SetEnergyChange(newP->GetKineticEnergy());
     delete newP;
-    theParticleChange.AddSecondary(targetParticle);    
+    theParticleChange.AddSecondary(targetParticle, secID);    
 
     return &theParticleChange;
 }

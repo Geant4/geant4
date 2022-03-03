@@ -34,6 +34,7 @@
 #include "G4DNADamage.hh"
 #include "G4UnitsTable.hh"
 #include "G4TrackingInformation.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 #ifndef State
 #define State(theXInfo) (GetState<SecondOrderReactionState>()->theXInfo)
@@ -46,7 +47,7 @@ void G4DNASecondOrderReaction::Create()
   enableAlongStepDoIt = false;
   enablePostStepDoIt  = true;
 
-  SetProcessSubType(60);
+  SetProcessSubType(fLowEnergyTransportation);
 
   G4VITProcess::SetInstantiateProcessState(false);
   // meaning G4DNASecondOrderReaction contains a class inheriting from G4ProcessState

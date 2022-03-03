@@ -36,80 +36,87 @@
 #include "globals.hh"
 
 #include <vector>
+#include <string_view>
 
-template <typename TNTUPLE>
+template <typename NT>
 class G4TRNtupleManager : public G4BaseRNtupleManager
 {
   protected:
     explicit G4TRNtupleManager(const G4AnalysisManagerState& state);
+    G4TRNtupleManager() = delete;
     virtual ~G4TRNtupleManager();
 
-    // Methods to manipulate ntuples  
+    // Methods to manipulate ntuples
     G4bool IsEmpty() const;
     G4bool Reset();
 
     // Access methods
-    TNTUPLE* GetNtuple() const;
-    TNTUPLE* GetNtuple(G4int ntupleId) const;
+    NT* GetNtuple() const;
+    NT* GetNtuple(G4int ntupleId) const;
 
-    // Functions independent from the output type 
+    // Functions independent from the output type
     //
     // Methods to read ntuple from a file
-    G4int SetNtuple(G4TRNtupleDescription<TNTUPLE>* rntupleDescription);
+    G4int SetNtuple(G4TRNtupleDescription<NT>* rntupleDescription);
 
-    // Methods to bind ntuple (from base class)                
-    using G4BaseRNtupleManager::SetNtupleIColumn; 
-    using G4BaseRNtupleManager::SetNtupleFColumn; 
-    using G4BaseRNtupleManager::SetNtupleDColumn; 
-    using G4BaseRNtupleManager::SetNtupleSColumn; 
+    // Methods to bind ntuple (from base class)
+    using G4BaseRNtupleManager::SetNtupleIColumn;
+    using G4BaseRNtupleManager::SetNtupleFColumn;
+    using G4BaseRNtupleManager::SetNtupleDColumn;
+    using G4BaseRNtupleManager::SetNtupleSColumn;
 
     // Methods to bind ntuple
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, 
+    virtual G4bool SetNtupleIColumn(G4int ntupleId,
                             const G4String& columnName, G4int& value) final;
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, 
+    virtual G4bool SetNtupleFColumn(G4int ntupleId,
                             const G4String& columnName, G4float& value) final;
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, 
+    virtual G4bool SetNtupleDColumn(G4int ntupleId,
                             const G4String& columnName, G4double& value) final;
-    virtual G4bool SetNtupleSColumn(G4int ntupleId, 
+    virtual G4bool SetNtupleSColumn(G4int ntupleId,
                             const G4String& columnName, G4String& value) final;
 
     // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, 
+    virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName,
                             std::vector<G4int>& vector) override;
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, const G4String& columnName, 
+    virtual G4bool SetNtupleFColumn(G4int ntupleId, const G4String& columnName,
                             std::vector<G4float>& vector) override;
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName, 
+    virtual G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName,
                             std::vector<G4double>& vector) override;
+    virtual G4bool SetNtupleSColumn(G4int ntupleId, const G4String& columnName,
+                            std::vector<std::string>& vector) override;
 
     using G4BaseRNtupleManager::GetNtupleRow;
     virtual G4bool GetNtupleRow(G4int ntupleId) final;
-    
+
     // Access methods
     virtual G4int GetNofNtuples() const final;
-  
+
     // Utility method
-    G4TRNtupleDescription<TNTUPLE>*  GetNtupleDescriptionInFunction(G4int id, 
-                                         G4String function,
+    G4TRNtupleDescription<NT>*  GetNtupleDescriptionInFunction(G4int id,
+                                         std::string_view function,
                                          G4bool warn = true) const;
 
   private:
     // Fuctions which are specific to output type
     //
-    virtual G4bool GetTNtupleRow(G4TRNtupleDescription<TNTUPLE>* rntupleDescription) = 0;
+    virtual G4bool GetTNtupleRow(G4TRNtupleDescription<NT>* rntupleDescription) = 0;
 
     // Common implementation
     //
-    template <typename T> 
-    G4bool SetNtupleTColumn(G4int ntupleId, const G4String& name, 
+    template <typename T>
+    G4bool SetNtupleTColumn(G4int ntupleId, const G4String& name,
                             T& value);
 
-    template <typename T> 
-    G4bool SetNtupleTColumn(G4int ntupleId, const G4String& name, 
+    template <typename T>
+    G4bool SetNtupleTColumn(G4int ntupleId, const G4String& name,
                             std::vector<T>& vector);
 
-    // data members
-    std::vector<G4TRNtupleDescription<TNTUPLE>*> fNtupleDescriptionVector;
-};    
+    // Static data members
+    static constexpr std::string_view fkClass { "G4TRNtupleManager<NT>" };
+
+    // Data members
+    std::vector<G4TRNtupleDescription<NT>*> fNtupleDescriptionVector;
+};
 
 #include "G4TRNtupleManager.icc"
 

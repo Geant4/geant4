@@ -227,6 +227,12 @@
  - mumsc.mac: 100 GeV mu+, transmitted through 1 m of iron
  - mutev.mac: 1 TeV mu+, transmitted through 1 m of iron
  - pixe.mac: to illustrate atomic deexcitation options
+ - pixe_ANSTO.mac: to illustrate how to activate the ANSTO PIXE data libraries, 
+   for both cross sections and fluorescence radiation yields (for materials with Z < 93).
+   The cross sections are available for protons with energy < 5 MeV 
+   and alpha particles with energy < 10 MeV/nucleon. 
+      (S. Bakr et al. (2021) NIM B, 507:1119), 
+      (S. Bakr et al (2018), NIMB B, 436: 285-291). 
  - posi.mac: to test PhysListEm19DStandard for positron
  - shen1.mac: Angle distribution of  high energy (50-200 GeV/c) protons
       transmitted through different targets.

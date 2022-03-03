@@ -416,7 +416,7 @@ void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
 {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
-  if (newValue.isNull()) {
+  if (newValue.empty()) {
     fCurrentTouchableProperties = G4PhysicalVolumeModel::TouchableProperties();
     if (verbosity >= G4VisManager::confirmations) {
       G4cout <<

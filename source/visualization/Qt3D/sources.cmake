@@ -14,8 +14,7 @@ geant4_add_module(G4visQt3D
     G4Qt3DUtils.cc
     G4Qt3DViewer.cc)
 
-geant4_module_compile_definitions(G4visQt3D
-  PRIVATE G4INTY_BUILD_QT G4UI_BUILD_QT_SESSION G4VIS_BUILD_QT3D_DRIVER)
+geant4_module_compile_definitions(G4visQt3D PRIVATE G4VIS_BUILD_QT3D_DRIVER)
 
 geant4_module_link_libraries(G4visQt3D
   PUBLIC

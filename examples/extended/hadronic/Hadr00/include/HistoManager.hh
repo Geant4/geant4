@@ -50,8 +50,7 @@
 
 #include "globals.hh"
 #include "G4Material.hh"
-
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

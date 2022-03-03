@@ -250,9 +250,6 @@ void Run::EndOfRun()
         G4cout << "                 File is closed" << G4endl;
       }
     }
-
-    delete fAnalysisManager;
-    fAnalysisManager = 0;
   }
 }
 

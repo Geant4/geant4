@@ -35,35 +35,40 @@
 #include "G4PlotParameters.hh"
 #include "G4HnInformation.hh"
 
-#include <tools/viewplot>
+#include "tools/viewplot"
 
 #include <vector>
 #include <memory>
+#include <string_view>
 
 class G4PlotManager
 {
   public:
     explicit G4PlotManager(const G4AnalysisManagerState& state);
-    ~G4PlotManager();
+    ~G4PlotManager() = default;
 
     // deleted functions
+    G4PlotManager() = delete;
     G4PlotManager(const G4PlotManager& rhs) = delete;
     G4PlotManager& operator=(const G4PlotManager& rhs) = delete;
-    
+
   public:
-    // methods
+    // Methods
     G4bool OpenFile(const G4String& fileName);
-    template <typename T>
-    G4bool PlotAndWrite(const std::vector<T*>& htVector,
+    template <typename HT>
+    G4bool PlotAndWrite(const std::vector<HT*>& htVector,
                         const std::vector<G4HnInformation*>& hnVector);
     G4bool CloseFile();
 
-  private: 
-    // methods
+  private:
+    // Methods
     G4int  GetNofPlotsPerPage() const;
     G4bool WritePage();
 
-    // data members
+    // Static data members
+    static constexpr std::string_view fkClass { "G4PlotManager" };
+
+    // Data members
     const G4AnalysisManagerState& fState;
     G4PlotParameters fPlotParameters;
     std::unique_ptr<tools::viewplot>  fViewer;
@@ -78,19 +83,19 @@ inline G4int  G4PlotManager::GetNofPlotsPerPage() const
 
 
 //_____________________________________________________________________________
-template <typename T>
-inline G4bool G4PlotManager::PlotAndWrite(const std::vector<T*>& htVector,
+template <typename HT>
+inline G4bool G4PlotManager::PlotAndWrite(const std::vector<HT*>& htVector,
                                           const std::vector<G4HnInformation*>& hnVector)
 {
   if ( ! htVector.size() ) return true;
 
-  fViewer->plots().init_sg(); 
+  fViewer->plots().init_sg();
     //it will recreate the sg::plotters and then reset the styles on new ones.
   fViewer->set_cols_rows(fPlotParameters.GetColumns(), fPlotParameters.GetRows());
   fViewer->plots().set_current_plotter(0);
 
-  G4bool finalResult = true;
-  G4bool isWriteNeeded = false;
+  auto result = true;
+  auto isWriteNeeded = false;
 
   for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
     G4HnInformation* info = hnVector[i];
@@ -102,7 +107,7 @@ inline G4bool G4PlotManager::PlotAndWrite(const std::vector<T*>& htVector,
     if ( ( ! plotting ) ||
          ( fState.GetIsActivation() && ( ! activation ) ) ) continue;
 
-    T* ht = htVector[i];
+    HT* ht = htVector[i];
 
     // plot this object
     fViewer->plot(*ht);
@@ -144,30 +149,25 @@ inline G4bool G4PlotManager::PlotAndWrite(const std::vector<T*>& htVector,
     }
     isWriteNeeded = true;
 
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL3() ) 
-      fState.GetVerboseL3()->Message("plotting", "hd|pd", name);
-#endif
+    fState.Message(G4Analysis::kVL3, "plotting", "hd|pd", name);
 
     // write a page if number of plots per page is achieved
-    if ( G4int(fViewer->plots().current_index()) == (GetNofPlotsPerPage() - 1) ) { 
-      G4bool result = WritePage();
-      finalResult = result && finalResult;
+    if ( G4int(fViewer->plots().current_index()) == (GetNofPlotsPerPage() - 1) ) {
+      result &= WritePage();
       isWriteNeeded = false;
     }
 
     // Prepare for the next plot
-    fViewer->plots().next(); 
+    fViewer->plots().next();
   }
 
   // write a page if loop is finished and there are plots to be written
   if ( isWriteNeeded ) {
-    G4bool result = WritePage();
-    finalResult = result && finalResult;
+    result &= WritePage();
   }
 
   // add test of result
-  return finalResult;
+  return result;
 }
 
 #endif

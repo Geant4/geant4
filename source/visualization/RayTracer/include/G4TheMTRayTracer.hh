@@ -88,6 +88,10 @@ class G4TheMTRayTracer : public G4TheRayTracer
     // here or if SetScanner is not invoked before Trace(), a default
     // G4RTSimpleScanner will be used.
 
+  static G4TheMTRayTracer* Instance();
+  static G4TheMTRayTracer* Instance
+  (G4VFigureFileMaker* figMaker,G4VRTScanner* scanner);
+
   public:
     virtual ~G4TheMTRayTracer();
 

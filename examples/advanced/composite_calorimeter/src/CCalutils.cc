@@ -63,7 +63,7 @@ std::ifstream& readName(std::ifstream& is, G4String& name){
       name += " ";
       name += other;
     };
-    name = name.strip(G4String::both, '\"');
+    G4StrUtil::strip(name, '\"');
   }  
   return is;
 }

@@ -114,6 +114,9 @@ private:
   G4VCoulombBarrier * theCoulombBarrierPtr;
 
   G4NuclearLevelData* fNucData;
+
+  // For creator model ID of the secondaries created by this model
+  G4int secID;
 };
 
 

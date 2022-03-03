@@ -14,7 +14,23 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-16-Apr-2021 B, Morgan         (hadr-string-diff-V10-07-01)
+10-Nov-2021 A. Ribon          (hadr-string-diff-V10-07-04)
+- G4FTFModel, G4FTFParticipants : Vladimir Uzhinsky interface extension
+  of these two classes to provide the following information:
+  number of projectile spectator nucleons, number of target spectator
+  nucleons, number of nucleon-nucleon collisions, and impact parameter
+  (in the latter case, there is also the possibility - switched off by
+  default - to set the range from which to sample the square of the
+  impact parameter).
+
+27-Oct-2021 A. Ribon          (hadr-string-diff-V10-07-03)
+- G4FTFModel : extended for projectile hypernuclei and anti-hypernuclei.
+
+13-Jul-2021 A. Ribon          (hadr-string-diff-V10-07-02)
+- G4FTFParameters : improved initialization in the constructor of
+  G4FTFParamCollection, as suggested by Coverity.
+
+16-Apr-2021 B. Morgan         (hadr-string-diff-V10-07-01)
 - Migrate build to modular CMake API
 
 13-Apr-2021 A. Ribon          (hadr-string-diff-V10-07-00)

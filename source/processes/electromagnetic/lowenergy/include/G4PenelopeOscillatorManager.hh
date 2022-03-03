@@ -104,11 +104,11 @@ public:
   G4PenelopeOscillatorManager& operator=(const 
 					 G4PenelopeOscillatorManager& right) = delete;
   G4PenelopeOscillatorManager(const G4PenelopeOscillatorManager&) = delete;
+   ~G4PenelopeOscillatorManager();
 
 protected:
   explicit G4PenelopeOscillatorManager();
-  ~G4PenelopeOscillatorManager();
-
+ 
 private:
   //create both tables simultaneously
   void CheckForTablesCreated();

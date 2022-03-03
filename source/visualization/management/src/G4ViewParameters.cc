@@ -100,7 +100,8 @@ G4ViewParameters::G4ViewParameters ():
   fDisplayLightFrontT(0.),
   fDisplayLightFrontRed(0.),
   fDisplayLightFrontGreen(1.),
-  fDisplayLightFrontBlue(0.)
+  fDisplayLightFrontBlue(0.),
+  fSpecialMeshRendering(false)
 {
   // Pick up default no of sides from G4Polyhedron.
   // Note that this parameter is variously called:
@@ -450,6 +451,18 @@ G4String G4ViewParameters::DrawingStyleCommands() const
 
   oss << "\n/vis/viewer/set/numberOfCloudPoints "
   << fNumberOfCloudPoints;
+
+  oss << "\n/vis/viewer/set/specialMeshRendering ";
+  if (fSpecialMeshRendering) {
+    oss << "true";
+  } else {
+    oss << "false";
+  }
+
+  oss << "\n/vis/viewer/set/specialMeshVolumes";
+  for (const auto& volume : fSpecialMeshVolumes) {
+    oss << ' ' << volume.GetName() << ' ' << volume.GetCopyNo();
+  }
 
   oss << std::endl;
   

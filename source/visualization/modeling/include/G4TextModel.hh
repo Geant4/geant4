@@ -46,11 +46,9 @@ class G4TextModel: public G4VModel {
 
 public: // With description
 
-  G4TextModel (const G4Text&);
+  G4TextModel (const G4Text&, const G4Transform3D& = G4Transform3D());
    
   virtual ~G4TextModel ();
-
-  void SetTransformation (const G4Transform3D& transform) override;
 
   void DescribeYourselfTo (G4VGraphicsScene&) override;
   // The main task of a model is to describe itself to the graphics scene.
@@ -62,7 +60,6 @@ private:
   G4TextModel& operator = (const G4TextModel&);
 
   G4Text fG4Text;
-  G4Text fG4TextOrig;
 
 };
 

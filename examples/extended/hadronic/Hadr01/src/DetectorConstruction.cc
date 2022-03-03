@@ -85,13 +85,9 @@ DetectorConstruction::DetectorConstruction()
    fInitialized(false)
 {
   fDetectorMessenger = new DetectorMessenger(this);
-
-  fRadius = 10.*cm;
-
   G4NistManager* nist = G4NistManager::Instance();
   fTargetMaterial = nist->FindOrBuildMaterial("G4_Al");
   fWorldMaterial  = nist->FindOrBuildMaterial("G4_Galactic");
-
   //
   // define battery material using Bugzilla 2175 data
   //
@@ -126,14 +122,16 @@ DetectorConstruction::~DetectorConstruction()
 
 void DetectorConstruction::ComputeGeomParameters()
 {
+  HistoManager* histo = HistoManager::GetPointer();
   // Sizes
+  fRadius  = histo->Radius();
   fCheckR  = fRadius + CLHEP::mm;
   fWorldR  = fRadius + CLHEP::cm;
-  fTargetZ = HistoManager::GetPointer()->Length()*0.5; 
+  fTargetZ = histo->Length()*0.5; 
   fCheckZ  = fTargetZ + CLHEP::mm;
   fWorldZ  = fTargetZ + CLHEP::cm;
 
-  fSlices  = HistoManager::GetPointer()->NumberOfSlices();
+  fSlices  = histo->NumberOfSlices();
   fSliceZ  = fTargetZ/G4double(fSlices);
   if(fPhysWorld) {
     fSolidW->SetOuterRadius(fWorldR);
@@ -147,7 +145,7 @@ void DetectorConstruction::ComputeGeomParameters()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  if(fPhysWorld) { return fPhysWorld; }
+  if(nullptr != fPhysWorld) { return fPhysWorld; }
   ComputeGeomParameters();
 
   //
@@ -162,7 +160,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   fSolidC = new G4Tubs("Check",0.,fCheckR,fCheckZ,0.,twopi);
   fLogicCheck = new G4LogicalVolume(fSolidC, fWorldMaterial, "Check"); 
-  new G4PVPlacement(nullptr,G4ThreeVector(),fLogicCheck,"Check",
+  new G4PVPlacement(nullptr,G4ThreeVector(0.,0.,0.),fLogicCheck,"Check",
                     fLogicWorld,false,0);
 
   //
@@ -240,16 +238,6 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
     fWorldMaterial = material;
     if(fLogicWorld) { fLogicWorld->SetMaterial(fWorldMaterial); }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetTargetRadius(G4double val)  
-{
-  if(val > 0.0) {
-    fRadius = val;
-    ComputeGeomParameters();
   }
 }
 

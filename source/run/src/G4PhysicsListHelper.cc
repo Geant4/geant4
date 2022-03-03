@@ -45,6 +45,15 @@
 
 #include "G4ProcessManager.hh"
 
+#include "G4ProcessType.hh"
+#include "G4TransportationProcessType.hh"
+#include "G4DecayProcessType.hh"
+#include "G4EmProcessSubType.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
+#include "G4OpProcessSubType.hh"
+#include "G4HadronicProcessType.hh"
+
+
 G4ThreadLocal G4PhysicsListHelper* G4PhysicsListHelper::pPLHelper = nullptr;
 
 // --------------------------------------------------------------------
@@ -622,9 +631,12 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
 {
   G4PhysicsListOrderingParameter tmp;
 
+  // NOTE: please use enum values, rather than numerical values, 
+  //       for both the processType and processSubType below.
+
   tmp.processTypeName = "Transportation";
-  tmp.processType     = 1;
-  tmp.processSubType  = 91;
+  tmp.processType     = fTransportation;
+  tmp.processSubType  = TRANSPORTATION;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = 0;
   tmp.ordering[2]     = 0;
@@ -633,8 +645,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "CoupleTrans";
-  tmp.processType     = 1;
-  tmp.processSubType  = 92;
+  tmp.processType     = fTransportation;
+  tmp.processSubType  = COUPLED_TRANSPORTATION;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = 0;
   tmp.ordering[2]     = 0;
@@ -643,8 +655,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "CoulombScat";
-  tmp.processType     = 2;
-  tmp.processSubType  = 1;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fCoulombScattering;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -653,8 +665,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Ionisation";
-  tmp.processType     = 2;
-  tmp.processSubType  = 2;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fIonisation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = 2;
   tmp.ordering[2]     = 2;
@@ -663,8 +675,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Brems";
-  tmp.processType     = 2;
-  tmp.processSubType  = 3;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fBremsstrahlung;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 3;
@@ -673,8 +685,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "PairProdCharged";
-  tmp.processType     = 2;
-  tmp.processSubType  = 4;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fPairProdByCharged;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 4;
@@ -683,8 +695,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Annih";
-  tmp.processType     = 2;
-  tmp.processSubType  = 5;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fAnnihilation;
   tmp.ordering[0]     = 5;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 5;
@@ -693,8 +705,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "AnnihToMuMu";
-  tmp.processType     = 2;
-  tmp.processSubType  = 6;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fAnnihilationToMuMu;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 6;
@@ -703,8 +715,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "AnnihToHad";
-  tmp.processType     = 2;
-  tmp.processSubType  = 7;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fAnnihilationToHadrons;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 7;
@@ -713,8 +725,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "NuclearStopp";
-  tmp.processType     = 2;
-  tmp.processSubType  = 8;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fNuclearStopping;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = 8;
   tmp.ordering[2]     = -1;
@@ -723,8 +735,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "ElectronSuper";
-  tmp.processType     = 2;
-  tmp.processSubType  = 9;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fElectronGeneralProcess;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = 1;
   tmp.ordering[2]     = 1;
@@ -733,8 +745,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Msc";
-  tmp.processType     = 2;
-  tmp.processSubType  = 10;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fMultipleScattering;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = 1;
   tmp.ordering[2]     = -1;
@@ -743,8 +755,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Rayleigh";
-  tmp.processType     = 2;
-  tmp.processSubType  = 11;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fRayleigh;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -753,8 +765,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "PhotoElectric";
-  tmp.processType     = 2;
-  tmp.processSubType  = 12;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fPhotoElectricEffect;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -763,8 +775,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Compton";
-  tmp.processType     = 2;
-  tmp.processSubType  = 13;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fComptonScattering;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -773,8 +785,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Conv";
-  tmp.processType     = 2;
-  tmp.processSubType  = 14;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fGammaConversion;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -783,8 +795,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "ConvToMuMu";
-  tmp.processType     = 2;
-  tmp.processSubType  = 15;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fGammaConversionToMuMu;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -793,8 +805,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "GammaSuper";
-  tmp.processType     = 2;
-  tmp.processSubType  = 16;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fGammaGeneralProcess;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -803,8 +815,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "PositronSuper";
-  tmp.processType     = 2;
-  tmp.processSubType  = 17;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fPositronGeneralProcess;
   tmp.ordering[0]     = 1;
   tmp.ordering[1]     = 1;
   tmp.ordering[2]     = 1;
@@ -813,8 +825,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Cerenkov";
-  tmp.processType     = 2;
-  tmp.processSubType  = 21;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fCerenkov;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -823,8 +835,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Scintillation";
-  tmp.processType     = 2;
-  tmp.processSubType  = 22;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fScintillation;
   tmp.ordering[0]     = 9999;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 9999;
@@ -833,8 +845,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "SynchRad";
-  tmp.processType     = 2;
-  tmp.processSubType  = 23;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fSynchrotronRadiation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -843,8 +855,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "TransRad";
-  tmp.processType     = 2;
-  tmp.processSubType  = 24;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fTransitionRadiation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -853,8 +865,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "SurfaceRefl";
-  tmp.processType     = 2;
-  tmp.processSubType  = 25;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fSurfaceReflection;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -863,8 +875,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "OpAbsorb";
-  tmp.processType     = 3;
-  tmp.processSubType  = 31;
+  tmp.processType     = fOptical;
+  tmp.processSubType  = fOpAbsorption;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -873,8 +885,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "OpBoundary";
-  tmp.processType     = 3;
-  tmp.processSubType  = 32;
+  tmp.processType     = fOptical;
+  tmp.processSubType  = fOpBoundary;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -883,8 +895,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "OpRayleigh";
-  tmp.processType     = 3;
-  tmp.processSubType  = 33;
+  tmp.processType     = fOptical;
+  tmp.processSubType  = fOpRayleigh;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -893,8 +905,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "OpWLS";
-  tmp.processType     = 3;
-  tmp.processSubType  = 34;
+  tmp.processType     = fOptical;
+  tmp.processSubType  = fOpWLS;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -903,8 +915,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "OpMieHG";
-  tmp.processType     = 3;
-  tmp.processSubType  = 35;
+  tmp.processType     = fOptical;
+  tmp.processSubType  = fOpMieHG;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -913,8 +925,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "OpWLS2";
-  tmp.processType     = 3;
-  tmp.processSubType  = 36;
+  tmp.processType     = fOptical;
+  tmp.processSubType  = fOpWLS2;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -923,8 +935,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAElastic";
-  tmp.processType     = 2;
-  tmp.processSubType  = 51;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyElastic;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -933,8 +945,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAExcit";
-  tmp.processType     = 2;
-  tmp.processSubType  = 52;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyExcitation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -943,8 +955,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAIonisation";
-  tmp.processType     = 2;
-  tmp.processSubType  = 53;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyIonisation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -953,8 +965,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAVibExcit";
-  tmp.processType     = 2;
-  tmp.processSubType  = 54;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyVibrationalExcitation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -963,8 +975,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAAttachment";
-  tmp.processType     = 2;
-  tmp.processSubType  = 55;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyAttachment;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -973,8 +985,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAChargeDec";
-  tmp.processType     = 2;
-  tmp.processSubType  = 56;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyChargeDecrease;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -983,8 +995,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAChargeInc";
-  tmp.processType     = 2;
-  tmp.processSubType  = 57;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyChargeIncrease;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -993,8 +1005,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAElecSolv";
-  tmp.processType     = 2;
-  tmp.processSubType  = 58;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyElectronSolvation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1003,8 +1015,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAMolecDecay";
-  tmp.processType     = 6;
-  tmp.processSubType  = 59;
+  tmp.processType     = fDecay;
+  tmp.processSubType  = fLowEnergyMolecularDecay;
   tmp.ordering[0]     = 1000;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = -1;
@@ -1013,8 +1025,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "ITTransport";
-  tmp.processType     = 1;
-  tmp.processSubType  = 60;
+  tmp.processType     = fTransportation;
+  tmp.processSubType  = fLowEnergyTransportation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = 0;
   tmp.ordering[2]     = 0;
@@ -1023,8 +1035,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNABrownTrans";
-  tmp.processType     = 1;
-  tmp.processSubType  = 61;
+  tmp.processType     = fTransportation;
+  tmp.processSubType  = fLowEnergyBrownianTransportation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = 0;
   tmp.ordering[2]     = 0;
@@ -1033,8 +1045,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNADoubleIoni";
-  tmp.processType     = 2;
-  tmp.processSubType  = 62;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyDoubleIonisation;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1043,8 +1055,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNADoubleCap";
-  tmp.processType     = 2;
-  tmp.processSubType  = 63;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyDoubleCap;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1053,8 +1065,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAIoniTransfer";
-  tmp.processType     = 2;
-  tmp.processSubType  = 64;
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fLowEnergyIoniTransfer;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1063,8 +1075,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DNAStaticMol";
-  tmp.processType     = 9;
-  tmp.processSubType  = 65;
+  tmp.processType     = fUserDefined;
+  tmp.processSubType  = fLowEnergyStaticMol;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     =  1000;
@@ -1073,8 +1085,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable +=1;
 
   tmp.processTypeName = "HadElastic";
-  tmp.processType     = 4;
-  tmp.processSubType  = 111;
+  tmp.processType     = fHadronic;
+  tmp.processSubType  = fHadronElastic;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1083,8 +1095,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "HadInelastic";
-  tmp.processType     = 4;
-  tmp.processSubType  = 121;
+  tmp.processType     = fHadronic;
+  tmp.processSubType  = fHadronInelastic;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1093,8 +1105,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "HadCapture";
-  tmp.processType     = 4;
-  tmp.processSubType  = 131;
+  tmp.processType     = fHadronic;
+  tmp.processSubType  = fCapture;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1103,8 +1115,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "MuAtomCapture";
-  tmp.processType     = 4;
-  tmp.processSubType  = 132;
+  tmp.processType     = fHadronic;
+  tmp.processSubType  = fMuAtomicCapture;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1113,8 +1125,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "HadFission";
-  tmp.processType     = 4;
-  tmp.processSubType  = 141;
+  tmp.processType     = fHadronic;
+  tmp.processSubType  = fFission;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1123,8 +1135,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "HadAtRest";
-  tmp.processType     = 4;
-  tmp.processSubType  = 151;
+  tmp.processType     = fHadronic;
+  tmp.processSubType  = fHadronAtRest;
   tmp.ordering[0]     = 1000;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = -1;
@@ -1133,8 +1145,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "HadCEX";
-  tmp.processType     = 4;
-  tmp.processSubType  = 161;
+  tmp.processType     = fHadronic;
+  tmp.processSubType  = fChargeExchange;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1143,8 +1155,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "Decay";
-  tmp.processType     = 6;
-  tmp.processSubType  = 201;
+  tmp.processType     = fDecay;
+  tmp.processSubType  = DECAY;
   tmp.ordering[0]     = 1000;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1153,8 +1165,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DecayWSpin";
-  tmp.processType     = 6;
-  tmp.processSubType  = 202;
+  tmp.processType     = fDecay;
+  tmp.processSubType  = DECAY_WithSpin;
   tmp.ordering[0]     = 1000;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1163,8 +1175,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DecayPiSpin";
-  tmp.processType     = 6;
-  tmp.processSubType  = 203;
+  tmp.processType     = fDecay;
+  tmp.processSubType  = DECAY_PionMakeSpin;
   tmp.ordering[0]     = 1000;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1173,8 +1185,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DecayRadio";
-  tmp.processType     = 6;
-  tmp.processSubType  = 210;
+  tmp.processType     = fDecay;
+  tmp.processSubType  = DECAY_Radioactive;
   tmp.ordering[0]     = 1000;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1183,8 +1195,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DecayUnKnown";
-  tmp.processType     = 6;
-  tmp.processSubType  = 211;
+  tmp.processType     = fDecay;
+  tmp.processSubType  = DECAY_Unknown;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1193,8 +1205,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DecayMuAtom";
-  tmp.processType     = 6;
-  tmp.processSubType  = 221;
+  tmp.processType     = fDecay;
+  tmp.processSubType  = DECAY_MuAtom;
   tmp.ordering[0]     = 1000;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1203,8 +1215,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "DecayExt";
-  tmp.processType     = 6;
-  tmp.processSubType  = 231;
+  tmp.processType     = fDecay;
+  tmp.processSubType  = DECAY_External;
   tmp.ordering[0]     = 1000;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1213,8 +1225,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "StepLimiter";
-  tmp.processType     = 7;
-  tmp.processSubType  = 401;
+  tmp.processType     = fGeneral;
+  tmp.processSubType  = STEP_LIMITER;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1223,8 +1235,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "UsrSepcCuts";
-  tmp.processType     = 7;
-  tmp.processSubType  = 402;
+  tmp.processType     = fGeneral;
+  tmp.processSubType  = USER_SPECIAL_CUTS;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1233,8 +1245,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "NeutronKiller";
-  tmp.processType     = 7;
-  tmp.processSubType  = 403;
+  tmp.processType     = fGeneral;
+  tmp.processSubType  = NEUTRON_KILLER;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     = 1000;
@@ -1243,8 +1255,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   sizeOfTable += 1;
 
   tmp.processTypeName = "ParallelWorld";
-  tmp.processType     = 10;
-  tmp.processSubType  = 491;
+  tmp.processType     = fParallel;
+  tmp.processSubType  = PARALLEL_WORLD_PROCESS;
   tmp.ordering[0]     = 9900;
   tmp.ordering[1]     = 1;
   tmp.ordering[2]     = 9900;

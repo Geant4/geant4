@@ -30,5 +30,4 @@
 
 #include "G4ErrorSurfaceTarget.hh"
 
-G4ErrorSurfaceTarget::G4ErrorSurfaceTarget(){}
-G4ErrorSurfaceTarget::~G4ErrorSurfaceTarget(){}
+G4ErrorSurfaceTarget::G4ErrorSurfaceTarget() = default;

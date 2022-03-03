@@ -31,8 +31,6 @@
 //                              an OpenGL viewer, for inheritance by
 //                              derived (X, Xm...) classes.
 
-#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
-
 #ifndef G4OPENGLSTOREDVIEWER_HH
 #define G4OPENGLSTOREDVIEWER_HH
 
@@ -72,7 +70,5 @@ protected:
   G4bool fDepthTestEnable;
   G4Colour fOldDisplayListColor;
 };
-
-#endif
 
 #endif

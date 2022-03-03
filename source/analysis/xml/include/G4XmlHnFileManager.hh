@@ -33,6 +33,8 @@
 
 #include "G4VTHnFileManager.hh"
 
+#include <string_view>
+
 class G4XmlFileManager;
 
 template <typename HT>
@@ -41,7 +43,8 @@ class G4XmlHnFileManager : public G4VTHnFileManager<HT>
   public:
     G4XmlHnFileManager(G4XmlFileManager* fileManger)
       : G4VTHnFileManager<HT>(), fFileManager(fileManger) {}
-    virtual ~G4XmlHnFileManager() {}
+    G4XmlHnFileManager() = delete;
+    virtual ~G4XmlHnFileManager() = default;
 
     // Methods for writing objects
     // Write to a new file (the file is closed after write)
@@ -49,9 +52,11 @@ class G4XmlHnFileManager : public G4VTHnFileManager<HT>
     // Write to the default file (handled with OpenFile()/CloseFile methods)
     virtual G4bool Write(HT* ht, const G4String& htName, G4String& fileName) final;
 
-  private:       
+  private:
+    // Static data members
+    static constexpr std::string_view fkClass { "G4XmlHnFileManager" };
     // Data members
-    G4XmlFileManager* fFileManager;
+    G4XmlFileManager* fFileManager { nullptr };
 };
 
 // inline functions

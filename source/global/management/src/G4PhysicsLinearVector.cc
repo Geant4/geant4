@@ -42,18 +42,18 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4bool spline)
 }
 
 // --------------------------------------------------------------------
-G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin, G4double theEmax,
-                                             std::size_t theNbin, G4bool spline)
+G4PhysicsLinearVector::G4PhysicsLinearVector(G4double Emin, G4double Emax,
+                                             std::size_t Nbin, G4bool spline)
   : G4PhysicsVector(spline)
 {
-  numberOfNodes = theNbin + 1;
-  if(theNbin < 1 || theEmin == theEmax)
+  numberOfNodes = Nbin + 1;
+  if(Nbin < 1 || Emin >= Emax)
   {
     G4ExceptionDescription ed;
-    ed << "G4PhysicsLinearVector with wrong parameters: theNbin= " << theNbin
-       << " theEmin= " << theEmin << " theEmax= " << theEmax;
+    ed << "G4PhysicsLinearVector with wrong parameters: theNbin= " << Nbin
+       << " Emin= " << Emin << " Emax= " << Emax;
     G4Exception("G4PhysicsLinearVector::G4PhysicsLinearVector()", "glob03",
-                FatalException, ed, "theNbins should be > 1");
+                FatalException, ed, "theNbins should be > 0 and Emax > Emin");
   }
   if(numberOfNodes < 2)
   {
@@ -61,46 +61,25 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin, G4double theEmax,
   }
   type = T_G4PhysicsLinearVector;
 
-  invdBin = 1. / ((theEmax - theEmin) / (G4double) (numberOfNodes - 1));
-  baseBin = theEmin * invdBin;
+  binVector.resize(numberOfNodes);
+  dataVector.resize(numberOfNodes, 0.0);
+  binVector[0] = Emin;
+  binVector[numberOfNodes - 1] = Emax;
+  Initialise();
 
-  dataVector.reserve(numberOfNodes);
-  binVector.reserve(numberOfNodes);
-
-  binVector.push_back(theEmin);
-  dataVector.push_back(0.0);
-
-  for(std::size_t i = 1; i < numberOfNodes - 1; ++i)
+  for(G4int i = 1; i <= idxmax; ++i)
   {
-    binVector.push_back(theEmin + i / invdBin);
-    dataVector.push_back(0.0);
+    binVector[i] = edgeMin + i / invdBin;
   }
-  binVector.push_back(theEmax);
-  dataVector.push_back(0.0);
+}
 
+// --------------------------------------------------------------------
+void G4PhysicsLinearVector::Initialise()
+{
+  idxmax  = numberOfNodes - 2;
   edgeMin = binVector[0];
   edgeMax = binVector[numberOfNodes - 1];
+  invdBin = (idxmax + 1) / (edgeMax - edgeMin);
 }
 
 // --------------------------------------------------------------------
-G4PhysicsLinearVector::~G4PhysicsLinearVector() {}
-
-// --------------------------------------------------------------------
-G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
-{
-  G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
-  if(success)
-  {
-    invdBin = 1. / (binVector[1] - edgeMin);
-    baseBin = edgeMin * invdBin;
-  }
-  return success;
-}
-
-// --------------------------------------------------------------------
-void G4PhysicsLinearVector::ScaleVector(G4double factorE, G4double factorV)
-{
-  G4PhysicsVector::ScaleVector(factorE, factorV);
-  invdBin = 1. / (binVector[1] - edgeMin);
-  baseBin = edgeMin * invdBin;
-}

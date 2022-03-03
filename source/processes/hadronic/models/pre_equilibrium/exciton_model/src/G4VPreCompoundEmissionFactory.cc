@@ -29,15 +29,14 @@
 #include "G4VPreCompoundEmissionFactory.hh"
 
 G4VPreCompoundEmissionFactory::G4VPreCompoundEmissionFactory() 
-  : fragvector(nullptr) 
 {}
 
 G4VPreCompoundEmissionFactory::~G4VPreCompoundEmissionFactory()
 {
-  if (fragvector != nullptr)
-    std::for_each(fragvector->begin(), fragvector->end(), 
-		  DeleteFragment());
-  delete fragvector;
+  if (fragvector != nullptr) {
+    for(auto const & ptr : *fragvector) { delete ptr; }
+    delete fragvector;
+  }
 }
 
 

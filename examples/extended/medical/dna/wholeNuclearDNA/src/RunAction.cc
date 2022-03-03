@@ -35,7 +35,7 @@
 #include "RunAction.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Threading.hh"
 #include "CommandLineParser.hh"
 
@@ -158,11 +158,6 @@ void RunAction::EndWorker(const G4Run* run)
   // Write Ntuple
   //
   WriteNtuple();
-
-  ///////////////
-  // Complete cleanup
-  //
-  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,8 +176,6 @@ void RunAction::CreateNtuple()
   // Book histograms, ntuple
 
   // Create analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  // in Analysis.hh
 
   CommandLineParser* parser = CommandLineParser::GetParser();
   Command* command(0);
@@ -190,6 +183,7 @@ void RunAction::CreateNtuple()
 
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
 //  if(!analysisManager->IsActive()) {return; }
 
   G4cout << "Using " << analysisManager->GetType() <<
@@ -246,6 +240,7 @@ void RunAction::WriteNtuple()
   //
   analysisManager->Write();
   analysisManager->CloseFile();
+  analysisManager->Clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

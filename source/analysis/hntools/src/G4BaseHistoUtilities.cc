@@ -31,6 +31,8 @@
 
 #include "tools/histo/axis"
 
+using std::to_string;
+
 namespace G4Analysis
 {
 
@@ -38,7 +40,7 @@ namespace G4Analysis
 G4int GetNbins(const G4ToolsBaseHisto& baseHisto, G4int dimension)
 {
   return baseHisto.get_axis(dimension).bins();
-}  
+}
 
 //_____________________________________________________________________________
 G4double GetMin(const G4ToolsBaseHisto& baseHisto, G4int dimension)
@@ -46,7 +48,7 @@ G4double GetMin(const G4ToolsBaseHisto& baseHisto, G4int dimension)
 // Returns min data value
 
   return baseHisto.get_axis(dimension).lower_edge();
-}  
+}
 
 //_____________________________________________________________________________
 G4double GetMax(const G4ToolsBaseHisto& baseHisto, G4int dimension)
@@ -54,7 +56,7 @@ G4double GetMax(const G4ToolsBaseHisto& baseHisto, G4int dimension)
 // Returns max data value
 
   return baseHisto.get_axis(dimension).upper_edge();
-}  
+}
 
 //_____________________________________________________________________________
 G4double GetWidth(const G4ToolsBaseHisto& baseHisto, G4int dimension,
@@ -62,79 +64,68 @@ G4double GetWidth(const G4ToolsBaseHisto& baseHisto, G4int dimension,
 {
   auto nbins = baseHisto.get_axis(dimension).bins();
   if ( ! nbins ) {
-    G4String functionName = "Get";
-    functionName += hnType;
-    functionName += "Width";
-    G4ExceptionDescription description;
-    description << "    nbins = 0 (for " << hnType << ").";
-    G4Exception(functionName, "Analysis_W014", JustWarning, description);
+    Warn("nbins = 0 ! for " + hnType, kNamespaceName, "GetWidth");
     return 0.;
-  }              
-  
-  return ( baseHisto.get_axis(dimension).upper_edge() 
+  }
+
+  return ( baseHisto.get_axis(dimension).upper_edge()
            - baseHisto.get_axis(dimension).lower_edge() )/nbins;
-}  
+}
 
 //_____________________________________________________________________________
 G4bool SetTitle(G4ToolsBaseHisto& baseHisto, const G4String& title)
 {
   return baseHisto.set_title(title);
-}  
+}
 
 //_____________________________________________________________________________
-G4bool SetAxisTitle(G4ToolsBaseHisto& baseHisto, G4int dimension, 
+G4bool SetAxisTitle(G4ToolsBaseHisto& baseHisto, G4int dimension,
                     const G4String& title)
 {
   if ( dimension == kX ) {
     baseHisto.add_annotation(tools::histo::key_axis_x_title(), title);
   }
-  else if ( dimension == kY ) {  
+  else if ( dimension == kY ) {
     baseHisto.add_annotation(tools::histo::key_axis_y_title(), title);
   }
-  else if ( dimension == kZ ) {  
+  else if ( dimension == kZ ) {
     baseHisto.add_annotation(tools::histo::key_axis_z_title(), title);
   }
-  
+
   return true;
-}  
+}
 
 //_____________________________________________________________________________
 G4String GetTitle(const G4ToolsBaseHisto& baseHisto)
 {
   return baseHisto.title();
-}  
+}
 
 
 //_____________________________________________________________________________
 G4String GetAxisTitle(const G4ToolsBaseHisto& baseHisto, G4int dimension,
-                      const G4String& hnType) 
+                      const G4String& hnType)
 {
   G4String title;
   G4bool result = false;
   if ( dimension == kX ) {
     result = baseHisto.annotation(tools::histo::key_axis_x_title(), title);
-  }  
-  else if ( dimension == kY ) {  
+  }
+  else if ( dimension == kY ) {
     result = baseHisto.annotation(tools::histo::key_axis_y_title(), title);
   }
-  else if ( dimension == kZ ) {  
+  else if ( dimension == kZ ) {
     result = baseHisto.annotation(tools::histo::key_axis_z_title(), title);
   }
 
   if ( ! result ) {
-    G4String axes("xyz");
-    G4String axis = axes(dimension, 1);
-    G4String functionName = "Get";
-    functionName += hnType;
-    functionName += axis;
-    functionName += "Title";
-    G4ExceptionDescription description;
-    description << "    Failed to get " << axis << " axis " << hnType << " title.";
-    G4Exception(functionName, "Analysis_W014", JustWarning, description);
+    Warn("Got wrong dimension " + to_string(dimension) + " for " + hnType,
+      kNamespaceName, "GetAxisTitle");
+
     return "";
   }
-  
-  return title;              
-} 
 
-} 
+  return title;
+}
+
+}

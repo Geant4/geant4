@@ -29,8 +29,6 @@
 
 //#define DEBUG
 
-#ifdef G4UI_BUILD_XM_SESSION
-
 #include "G4Types.hh"
 
 #include <string.h>
@@ -504,6 +502,3 @@ void ExecuteChangeSizeFunction (
   if(aWidget->core.widget_class->core_class.resize==NULL) return;
   (aWidget->core.widget_class->core_class.resize)(aWidget);
 }
-
-
-#endif

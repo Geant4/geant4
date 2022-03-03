@@ -96,6 +96,7 @@
 #include "G4UrbanMscModel.hh"
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4LowEPComptonModel.hh"
+#include "G4BetheHeitler5DModel.hh"
 
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4LivermoreComptonModel.hh"
@@ -250,12 +251,17 @@ void G4EmModelActivator::ActivateEmOptions()
       FindOrAddProcess(phot, "Rayl");
       mod = new G4LivermoreRayleighModel();
       em_config->SetExtraEmModel("gamma", "Rayl", mod, reg);
+      FindOrAddProcess(phot, "phot");
+      mod = new G4LivermorePhotoElectricModel();
       FindOrAddProcess(phot, "compt");
       mod = new G4KleinNishinaModel();
       em_config->SetExtraEmModel("gamma", "compt", mod, reg);
       mod = new G4LowEPComptonModel();
       mod->SetHighEnergyLimit(20*MeV);
       em_config->SetExtraEmModel("gamma", "compt", mod, reg);
+      FindOrAddProcess(phot, "conv");
+      mod = new G4BetheHeitler5DModel();
+      em_config->SetExtraEmModel("gamma", "conv", mod, reg);
 
     } else if("G4EmStandardGS" == typesPhys[i]) {
       G4GoudsmitSaundersonMscModel* msc = new G4GoudsmitSaundersonMscModel();

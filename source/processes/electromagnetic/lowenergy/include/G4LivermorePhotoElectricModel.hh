@@ -96,12 +96,12 @@ private:
   const G4ParticleDefinition*   theGamma;
   const G4ParticleDefinition*   theElectron;
   
-  static G4PhysicsFreeVector*   fCrossSection[99];
-  static G4PhysicsFreeVector*   fCrossSectionLE[99];
-  static std::vector<G4double>*  fParamHigh[99];
-  static std::vector<G4double>*  fParamLow[99];
-  static G4int                   fNShells[99];
-  static G4int                   fNShellsUsed[99];
+  static G4PhysicsFreeVector*   fCrossSection[101]; // 101 because Z range is 1-100
+  static G4PhysicsFreeVector*   fCrossSectionLE[101];
+  static std::vector<G4double>*  fParamHigh[101];
+  static std::vector<G4double>*  fParamLow[101];
+  static G4int                   fNShells[101];
+  static G4int                   fNShellsUsed[101];
   static G4ElementData*          fShellCrossSection;
   static G4Material*             fWater;
   static G4double                fWaterEnergyLimit;

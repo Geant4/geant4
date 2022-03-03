@@ -44,8 +44,7 @@ namespace G4ConversionUtils
   template <typename Value>
   G4bool Convert(const G4String& myInput, Value& output) 
   {
-    G4String input(myInput);
-    input = input.strip();
+    G4String input = G4StrUtil::strip_copy(myInput);
 
     std::istringstream is(input);
     char tester;
@@ -57,8 +56,7 @@ namespace G4ConversionUtils
   template<>
   inline G4bool Convert(const G4String& myInput, G4DimensionedDouble& output) 
   {
-    G4String input(myInput);
-    input = input.strip();
+    G4String input = G4StrUtil::strip_copy(myInput);
 
     G4double value;
     G4String unit;
@@ -76,8 +74,7 @@ namespace G4ConversionUtils
   template<> inline G4bool Convert(const G4String& myInput, 
                                    G4DimensionedThreeVector& output) 
   {
-    G4String input(myInput);
-    input = input.strip();
+    G4String input = G4StrUtil::strip_copy(myInput);
 
     G4double value1, value2, value3;
     G4String unit;
@@ -94,8 +91,7 @@ namespace G4ConversionUtils
   
   template<> inline G4bool Convert(const G4String& myInput, G4ThreeVector& output) 
   {
-    G4String input(myInput);
-    input = input.strip();
+    G4String input = G4StrUtil::strip_copy(myInput);
 
     G4double value1, value2, value3;
     
@@ -114,8 +110,7 @@ namespace G4ConversionUtils
   template <typename Value> G4bool Convert(const G4String& myInput, Value& value1, 
                                            Value& value2) 
   {
-    G4String input(myInput);
-    input = input.strip();
+    G4String input = G4StrUtil::strip_copy(myInput);
 
     std::istringstream is(input);
     char tester;
@@ -127,8 +122,7 @@ namespace G4ConversionUtils
   template<> inline G4bool Convert(const G4String& myInput, G4DimensionedDouble& min, 
                                    G4DimensionedDouble& max) 
   {
-    G4String input(myInput);
-    input = input.strip();
+    G4String input = G4StrUtil::strip_copy(myInput);
 
     G4double valueMin, valueMax;  
     G4String unitsMin, unitsMax;
@@ -147,8 +141,7 @@ namespace G4ConversionUtils
   template<> inline G4bool Convert(const G4String& myInput, G4DimensionedThreeVector& min, 
                                    G4DimensionedThreeVector& max) 
   {   
-    G4String input(myInput);
-    input = input.strip();
+    G4String input = G4StrUtil::strip_copy(myInput);
    
     G4double valueMinX, valueMinY, valueMinZ;
     G4double valueMaxX, valueMaxY, valueMaxZ;
@@ -168,9 +161,8 @@ namespace G4ConversionUtils
   
   template<> inline G4bool Convert(const G4String& myInput, G4ThreeVector& min, 
                                    G4ThreeVector& max) 
-  {      
-    G4String input(myInput);
-    input = input.strip();
+  {
+    G4String input = G4StrUtil::strip_copy(myInput);      
 
     G4double valueMinX, valueMinY, valueMinZ;
     G4double valueMaxX, valueMaxY, valueMaxZ;

@@ -210,6 +210,7 @@ void G4SteppingManager::DefinePhysicalStepLength()
   //
   proposedSafety = DBL_MAX;
   G4double safetyProposedToAndByProcess = proposedSafety;
+  G4bool delegateToTransportation = false;
 
   for(std::size_t kp=0; kp<MAXofAlongStepLoops; ++kp)
   {
@@ -237,10 +238,19 @@ void G4SteppingManager::DefinePhysicalStepLength()
         fStepStatus = fAlongStepDoItProc;
         fStep->GetPostStepPoint()->SetProcessDefinedStep(fCurrentProcess);
       }
+      else if(fCurrentProcess->GetProcessType()==fParallel)
+      { // a parallel world is proposing the shortest but expecting Transportation
+        // to win.
+        delegateToTransportation = true;
+      }
 
       // Transportation is assumed to be the last process in the vector
-      //
-      if(kp == MAXofAlongStepLoops-1) { fStepStatus = fGeomBoundary; }
+      // Transportation is winning
+      if(kp == MAXofAlongStepLoops-1) 
+      {
+        fStepStatus = fGeomBoundary;
+        delegateToTransportation = false;
+      }
     }
 
     // Make sure to check the safety, even if Step is not limited 
@@ -259,6 +269,11 @@ void G4SteppingManager::DefinePhysicalStepLength()
       safetyProposedToAndByProcess = proposedSafety;
     }
   } 
+  if(delegateToTransportation)
+  {
+    fStepStatus = fGeomBoundary;
+    fStep->GetPostStepPoint()->SetProcessDefinedStep(fCurrentProcess);
+  }
 }
 
 //////////////////////////////////////////////////////
@@ -315,102 +330,115 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
   fStep->SetStepLength( 0. );  // the particle has stopped
   fTrack->SetStepLength( 0. );
 
-  // invoke selected process
-  //
-  for(std::size_t np=0; np<MAXofAtRestLoops; ++np)
+
+  // Condition to avoid that stable ions are handled by Radioactive Decay.
+  // We use a very large time threshold (many orders of magnitude bigger than
+  // the universe's age) but not DBL_MAX because shortestLifeTime can be
+  // sometimes slightly smaller for stable ions.
+  if(shortestLifeTime < 1.0e+100)  // Unstable ion at rest: Radioactive Decay will decay it
   {
+    // invoke selected process
     //
-    // Note: DoItVector has inverse order against GetPhysIntVector
-    //       and SelectedAtRestDoItVector.
-    //
-    if( (*fSelectedAtRestDoItVector)[MAXofAtRestLoops-np-1] != InActivated)
+    for(std::size_t np=0; np<MAXofAtRestLoops; ++np)
     {
-      fCurrentProcess = (*fAtRestDoItVector)[np];
-      fParticleChange = fCurrentProcess->AtRestDoIt(*fTrack, *fStep);
-                               
-      // Set the current process as a process which defined this Step length
       //
-      fStep->GetPostStepPoint()->SetProcessDefinedStep(fCurrentProcess);
-
-      // Update Step
+      // Note: DoItVector has inverse order against GetPhysIntVector
+      //       and SelectedAtRestDoItVector.
       //
-      fParticleChange->UpdateStepForAtRest(fStep);
-
-      // Now Store the secondaries from ParticleChange to SecondaryList
-
-      G4Track* tempSecondaryTrack;
-      G4int    num2ndaries;
-
-      num2ndaries = fParticleChange->GetNumberOfSecondaries();
-
-      for(G4int DSecLoop=0; DSecLoop< num2ndaries; ++DSecLoop)
+      if( (*fSelectedAtRestDoItVector)[MAXofAtRestLoops-np-1] != InActivated)
       {
-        tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
-
-        if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
-        {
-          ApplyProductionCut(tempSecondaryTrack);
-        }
-
-        // Set parentID 
-        tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
-
-        // Set the process pointer which created this track 
-        tempSecondaryTrack->SetCreatorProcess( fCurrentProcess );
-         
-        // If this 2ndry particle has 'zero' kinetic energy, make sure
-        // it invokes a rest process at the beginning of the tracking
+        fCurrentProcess = (*fAtRestDoItVector)[np];
+        fParticleChange = fCurrentProcess->AtRestDoIt(*fTrack, *fStep);
+                               
+        // Set the current process as a process which defined this Step length
         //
-        if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN)
+        fStep->GetPostStepPoint()->SetProcessDefinedStep(fCurrentProcess);
+
+        // Update Step
+        //
+        fParticleChange->UpdateStepForAtRest(fStep);
+
+        // Now Store the secondaries from ParticleChange to SecondaryList
+
+        G4Track* tempSecondaryTrack;
+        G4int    num2ndaries;
+
+        num2ndaries = fParticleChange->GetNumberOfSecondaries();
+
+        for(G4int DSecLoop=0; DSecLoop< num2ndaries; ++DSecLoop)
         {
-          G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()
-                                 ->GetProcessManager();
-          if(pm == nullptr)
+          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
+
+          if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
           {
-            G4ExceptionDescription ED;
-            ED << "A track without proper process manager is pushed\n"
-               << "into the track stack.\n"
-               << " Particle name : "
-               << tempSecondaryTrack->GetDefinition()->GetParticleName()
-               << " -- ";
-            if(tempSecondaryTrack->GetParentID()<0)
+            ApplyProductionCut(tempSecondaryTrack);
+          }
+
+          // Set parentID 
+          tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
+
+          // Set the process pointer which created this track 
+          tempSecondaryTrack->SetCreatorProcess( fCurrentProcess );
+         
+          // If this 2ndry particle has 'zero' kinetic energy, make sure
+          // it invokes a rest process at the beginning of the tracking
+          //
+          if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN)
+          {
+            G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()
+                                   ->GetProcessManager();
+            if(pm == nullptr)
             {
-              ED << "created by a primary particle generator.";
+              G4ExceptionDescription ED;
+              ED << "A track without proper process manager is pushed\n"
+                 << "into the track stack.\n"
+                 << " Particle name : "
+                 << tempSecondaryTrack->GetDefinition()->GetParticleName()
+                 << " -- ";
+              if(tempSecondaryTrack->GetParentID()<0)
+              {
+                ED << "created by a primary particle generator.";
+              }
+              else
+              {
+                const G4VProcess* vp = tempSecondaryTrack->GetCreatorProcess();
+                if(vp != nullptr)
+                { ED << "created by " << vp->GetProcessName() << "."; }
+                else
+                { ED << "creaded by unknown process."; }
+              }
+              G4Exception("G4SteppingManager::InvokeAtRestDoItProcs()",
+                          "Tracking10051", FatalException, ED);
+            }
+            if (pm->GetAtRestProcessVector()->entries()>0)
+            {
+              tempSecondaryTrack->SetTrackStatus( fStopButAlive );
+              fSecondary->push_back( tempSecondaryTrack );
+              ++fN2ndariesAtRestDoIt;
             }
             else
             {
-              const G4VProcess* vp = tempSecondaryTrack->GetCreatorProcess();
-              if(vp != nullptr)
-              { ED << "created by " << vp->GetProcessName() << "."; }
-              else
-              { ED << "creaded by unknown process."; }
+              delete tempSecondaryTrack;
             }
-            G4Exception("G4SteppingManager::InvokeAtRestDoItProcs()",
-                        "Tracking10051", FatalException, ED);
-          }
-          if (pm->GetAtRestProcessVector()->entries()>0)
-          {
-            tempSecondaryTrack->SetTrackStatus( fStopButAlive );
-            fSecondary->push_back( tempSecondaryTrack );
-            ++fN2ndariesAtRestDoIt;
           }
           else
           {
-            delete tempSecondaryTrack;
+            fSecondary->push_back( tempSecondaryTrack );
+            ++fN2ndariesAtRestDoIt;
           }
-        }
-        else
-        {
-          fSecondary->push_back( tempSecondaryTrack );
-          ++fN2ndariesAtRestDoIt;
-        }
-      } //end of loop on secondary 
+        } //end of loop on secondary 
 
-      // clear ParticleChange
-      fParticleChange->Clear();
+        // clear ParticleChange
+        fParticleChange->Clear();
 
-    }  // if(fSelectedAtRestDoItVector[np] != InActivated){
-  }  // for(std::size_t np=0; np<MAXofAtRestLoops; ++np){
+      }  // if(fSelectedAtRestDoItVector[np] != InActivated){
+    }  // for(std::size_t np=0; np<MAXofAtRestLoops; ++np){
+  }
+  else  // Stable ion at rest
+  {
+    fStep->GetPostStepPoint()->SetProcessDefinedStep( fNoProcess );
+  }  // if(shortestLifeTime < 1.0e+100)
+
   fStep->UpdateTrack();
 
   fTrack->SetTrackStatus( fStopAndKill );

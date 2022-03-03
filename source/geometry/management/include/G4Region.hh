@@ -34,7 +34,7 @@
 // 18.09.02, G.Cosmo - Initial version
 // --------------------------------------------------------------------
 #ifndef G4REGION_HH
-#define G4REGION_HH
+#define G4REGION_HH 1
 
 #include <vector>
 #include <map>
@@ -90,16 +90,11 @@ class G4RegionData
 // In addition, it invokes a method similiar to the constructor explicitly
 // to achieve the partial effect for each instance in the array.
 //
-typedef G4GeomSplitter<G4RegionData> G4RegionManager;
+using G4RegionManager = G4GeomSplitter<G4RegionData>;
 
 class G4Region
 {
-  typedef std::vector<G4LogicalVolume*> G4RootLVList;
-  typedef std::vector<G4Material*> G4MaterialList;
-  typedef std::pair<G4Material*,G4MaterialCutsCouple*> G4MaterialCouplePair;
-  typedef std::map<G4Material*,G4MaterialCutsCouple*> G4MaterialCoupleMap;
-
-  public:  // with description
+  public:
 
     G4Region(const G4String& name);
     virtual ~G4Region();
@@ -217,7 +212,7 @@ class G4Region
     G4UserSteppingAction* GetRegionalSteppingAction() const;
       // Set/Get method of the regional user stepping action
 
-  public:  // without description
+  public:
 
     G4Region(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -247,6 +242,11 @@ class G4Region
       // if not present adds it.
 
   private:
+
+    using G4RootLVList = std::vector<G4LogicalVolume*>;
+    using G4MaterialList = std::vector<G4Material*>;
+    using G4MaterialCouplePair = std::pair<G4Material*, G4MaterialCutsCouple*>;
+    using G4MaterialCoupleMap = std::map<G4Material*, G4MaterialCutsCouple*>;
 
     G4String fName;
 

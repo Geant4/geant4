@@ -19,6 +19,15 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
+26 August 2021  Ben Morgan (VRML-V10-07-03)
+- Remove obsolete VRML1 and network VRML2 drivers
+
+25 August 2021  John Allison (VRML-V10-07-02)
+- VRML*FILE drivers:
+  o Introduce environment variables G4VRMLFILE_HEADER and G4VRMLFILE_FILE_NAME
+    to allow the user to change the defaults. Also improve messaging to
+    inform the user of this possibility.
+
 07 June 2021  John Allison (VRML-V10-07-01)
 - Fix hidden function warning.
 

@@ -34,7 +34,7 @@
 
   NOTE: As of June 2021, pythia8.3.0.5 is the most current version,
   this it is used in this example.
-  In the future, please check updates at Pythi8 site: https://pythia.org
+  In the future, please check updates at Pythia8 site: https://pythia.org
   
 - 1. cd path/to/your/pythia8/area
 

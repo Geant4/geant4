@@ -63,7 +63,7 @@
 
 #include "G4Decay.hh"
 #include "G4PhysicsListHelper.hh"
-#include "G4RadioactiveDecayBase.hh"
+#include "G4RadioactiveDecay.hh"
 #include "G4GenericIon.hh"
 #include "G4NuclideTable.hh"
 #include "StepMax.hh"
@@ -248,7 +248,7 @@ void PhysicsList::AddDecay()
 
 void PhysicsList::AddRadioactiveDecay()
 {  
-  G4RadioactiveDecayBase* radioactiveDecay = new G4RadioactiveDecayBase();
+  G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
   
   radioactiveDecay->SetARM(true);                //Atomic Rearangement
   

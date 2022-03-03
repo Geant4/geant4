@@ -34,8 +34,6 @@
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 #include <assert.h>
 #include <cmath>
 
@@ -345,5 +343,3 @@ void SoTrd::generateAlternateRep() {
 void SoTrd::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

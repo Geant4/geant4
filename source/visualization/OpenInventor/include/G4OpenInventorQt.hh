@@ -29,8 +29,6 @@
 #ifndef G4OPENINVENTORQT_HH
 #define G4OPENINVENTORQT_HH
 
-#if defined (G4VIS_BUILD_OIQT_DRIVER) || defined (G4VIS_USE_OIQT)
-
 #include "G4OpenInventor.hh"
 
 class G4OpenInventorQt: public G4OpenInventor {
@@ -43,7 +41,5 @@ private:
 private:
   bool fInited;
 };
-
-#endif
 
 #endif

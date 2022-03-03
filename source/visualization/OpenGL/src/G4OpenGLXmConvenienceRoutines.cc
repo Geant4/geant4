@@ -34,8 +34,6 @@
 //
 // See G4OpenGLXmConvenienceRoutines.hh for more information.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewer.hh"
 
 #include <Xm/Form.h>
@@ -526,9 +524,7 @@ void G4OpenGLXmViewer::get_text_callback (Widget w,
 		 XmNvalue, &string,
 		 NULL);
 
-//  sscanf (string, "%s", txt);
-  std::istringstream iss(string);
-  iss >> txt;
+  strcpy(txt, string);
 }
 
 G4bool G4OpenGLXmViewer::get_boolean_userData (Widget w)
@@ -544,10 +540,3 @@ G4int G4OpenGLXmViewer::get_int_userData (Widget w)
   XtVaGetValues (w,XmNuserData,&userData,NULL);
   return (G4int)(unsigned long)userData;
 }
-
-#endif
-
-
-
-
-

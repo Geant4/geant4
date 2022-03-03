@@ -13,6 +13,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27-Oct-2021, Alberto Ribon  had-binary-V10-07-03
+- G4GeneratorPrecompoundInterface : extended the method PropagateNuclNucl
+  to deal with projectile hypernuclei and anti-hypernuclei
+
+04-Aug-2021, Alberto Ribon  had-binary-V10-07-02
+- G4BinaryCascade, G4BinaryLightIonReaction : migrated to the new
+  version of G4PhysicsModelCatalog
+- G4GeneratorPrecompoundInterface : propagated the creator model ID
+  information
+
 16-Apr-2021, Ben Morgan  had-binary-V10-07-01
 - Migrate build to modular CMake API
 

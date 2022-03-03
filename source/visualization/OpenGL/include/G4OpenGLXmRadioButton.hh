@@ -28,8 +28,6 @@
 // 
 //Radio button class. Inherits from G4OpenGLXmVWidgetComponent
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMRADIOBUTTON_HH
 #define G4OPENGLXMRADIOBUTTON_HH
 
@@ -63,7 +61,5 @@ private:
   G4bool default_button;
   G4int number;
 };
-
-#endif
 
 #endif

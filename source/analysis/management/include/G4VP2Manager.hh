@@ -45,8 +45,8 @@ class G4VP2Manager
   friend class G4VAnalysisReader;
 
   public:
-    G4VP2Manager() {}
-    virtual ~G4VP2Manager() {}
+    G4VP2Manager() = default;
+    virtual ~G4VP2Manager() = default;
 
     // deleted copy constructor & assignment operator
     G4VP2Manager(const G4VP2Manager& rhs) = delete;
@@ -55,37 +55,37 @@ class G4VP2Manager
   protected:
     // Methods for handling histograms
     virtual G4int CreateP2(const G4String& name, const G4String& title,
-                           G4int nxbins, G4double xmin, G4double xmax, 
-                           G4int nybins, G4double ymin, G4double ymax, 
+                           G4int nxbins, G4double xmin, G4double xmax,
+                           G4int nybins, G4double ymin, G4double ymax,
                            G4double zmin = 0, G4double zmax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
                            const G4String& zunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& zfcnName = "none",
                            const G4String& xbinScheme = "linear",
                            const G4String& ybinScheme = "linear") = 0;
-                           
+
     virtual G4int CreateP2(const G4String& name, const G4String& title,
                            const std::vector<G4double>& xedges,
                            const std::vector<G4double>& yedges,
                            G4double zmin = 0, G4double zmax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
                            const G4String& zunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& zfcnName = "none") = 0;
-                           
+
     virtual G4bool SetP2(G4int id,
-                           G4int nxbins, G4double xmin, G4double xmax, 
-                           G4int nybins, G4double ymin, G4double ymax, 
+                           G4int nxbins, G4double xmin, G4double xmax,
+                           G4int nybins, G4double ymin, G4double ymax,
                            G4double zmin = 0, G4double zmax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
                            const G4String& zunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& zfcnName = "none",
                            const G4String& xbinScheme = "linear",
@@ -95,20 +95,20 @@ class G4VP2Manager
                            const std::vector<G4double>& xedges,
                            const std::vector<G4double>& yedges,
                            G4double zmin = 0, G4double zmax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
                            const G4String& zunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& zfcnName = "none") = 0;
 
     virtual G4bool ScaleP2(G4int id, G4double factor) = 0;
 
     // Methods to fill histograms
-    virtual G4bool FillP2(G4int id, 
+    virtual G4bool FillP2(G4int id,
                           G4double xvalue, G4double yvalue, G4double zvalue,
                           G4double weight = 1.0) = 0;
-    
+
     // Access methods
     virtual G4int  GetP2Id(const G4String& name, G4bool warn = true) const = 0;
 

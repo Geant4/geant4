@@ -31,7 +31,7 @@
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4GenericMessenger.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

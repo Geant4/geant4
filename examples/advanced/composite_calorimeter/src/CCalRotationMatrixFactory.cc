@@ -245,7 +245,7 @@ CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
   
   is >> name;
   while(name!="*ENDDO") { 
-    if (name.index("#.")==0) { //It is a comment.Skip line.
+    if (name.find("#.")==0) { //It is a comment.Skip line.
       is.getline(rubish,256,'\n');
     } else {
 #ifdef debug

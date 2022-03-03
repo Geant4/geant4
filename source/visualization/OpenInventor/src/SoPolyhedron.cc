@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 /*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */
 /* Node:             SoPolyhedron                                           */
@@ -555,5 +553,3 @@ void Geant4_SoPolyhedron::doAction(
   SO_ALTERNATEREP_DO_ACTION(aAction)
   SoShape::doAction(aAction);
 }
-
-#endif

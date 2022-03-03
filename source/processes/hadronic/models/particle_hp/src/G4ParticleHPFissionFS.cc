@@ -39,6 +39,16 @@
 #include "G4DynamicParticleVector.hh"
 #include "G4ParticleHPFissionERelease.hh"
 #include "G4IonTable.hh"
+#include "G4PhysicsModelCatalog.hh"
+
+
+ G4ParticleHPFissionFS::G4ParticleHPFissionFS()
+ {
+   secID = G4PhysicsModelCatalog::GetModelID( "model_NeutronHPFission" );
+   hasXsec = false;
+   produceFissionFragments = false;
+ }
+
 
  void G4ParticleHPFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition* projectile )
  {
@@ -189,7 +199,7 @@
      //if(thePhotons!=0) nPhotons = thePhotons->size();
      for(i=0; i<theNeutrons->size(); i++)
      {
-       theResult.Get()->AddSecondary(theNeutrons->operator[](i));
+       theResult.Get()->AddSecondary(theNeutrons->operator[](i), secID);
      }
      delete theNeutrons;  
 
@@ -200,7 +210,7 @@
      {
        G4double time = -G4Log(G4UniformRand())/theDecayConstants[i];
        time += theTrack.GetGlobalTime();
-       theResult.Get()->AddSecondary(theDelayed->operator[](i));
+       theResult.Get()->AddSecondary(theDelayed->operator[](i), secID);
        theResult.Get()->GetSecondary(theResult.Get()->GetNumberOfSecondaries()-1)->SetTime(time);
      }
      delete theDelayed;                  
@@ -218,7 +228,7 @@
      G4int i0;
      for(i0=0; i0<Prompt; i0++)
      {
-       theResult.Get()->AddSecondary(theNeutrons->operator[](i0));
+       theResult.Get()->AddSecondary(theNeutrons->operator[](i0), secID);
      }
 
 //G4cout << "delayed" << G4endl;
@@ -236,7 +246,7 @@
        }
 
        time += theTrack.GetGlobalTime();        
-       theResult.Get()->AddSecondary(theNeutrons->operator[](i0));
+       theResult.Get()->AddSecondary(theNeutrons->operator[](i0), secID);
        theResult.Get()->GetSecondary(theResult.Get()->GetNumberOfSecondaries()-1)->SetTime(time);
      }
      delete theNeutrons;   
@@ -249,7 +259,7 @@
      nPhotons = thePhotons->size();
      for(i=0; i<nPhotons; i++)
      {
-       theResult.Get()->AddSecondary(thePhotons->operator[](i));
+       theResult.Get()->AddSecondary(thePhotons->operator[](i), secID);
      }
      delete thePhotons; 
    }
@@ -306,8 +316,8 @@
       G4double EB = ER - EA;
       G4DynamicParticle* dpA = new G4DynamicParticle( pdA , direction , EA);
       G4DynamicParticle* dpB = new G4DynamicParticle( pdB , -direction , EB);
-      theResult.Get()->AddSecondary(dpA);
-      theResult.Get()->AddSecondary(dpB);
+      theResult.Get()->AddSecondary(dpA, secID);
+      theResult.Get()->AddSecondary(dpB, secID);
    }
    //TKWORK 120531 END
 

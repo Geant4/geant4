@@ -455,7 +455,7 @@ inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
   // overflowing the signal stack
 
   // ignore future signals of this type
-  sigignore(sig);
+  signal(sig, SIG_IGN);
 
   os << "\n### CAUGHT SIGNAL: " << sig << " ### ";
   if(sinfo)
@@ -580,9 +580,9 @@ inline void G4Backtrace::Handler(int sig, siginfo_t* sinfo, void*)
   }
 
   // ignore any termination signals
-  sigignore(SIGKILL);
-  sigignore(SIGTERM);
-  sigignore(SIGABRT);
+  signal(SIGKILL, SIG_IGN);
+  signal(SIGTERM, SIG_IGN);
+  signal(SIGABRT, SIG_IGN);
   abort();
 }
 

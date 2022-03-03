@@ -382,6 +382,7 @@ void G4DNAMolecularReactionTable::DeleteInstance()
 G4DNAMolecularReactionTable::G4DNAMolecularReactionTable()
     : G4ITReactionTable()
     , fVerbose(false)
+    , fGeometry(nullptr)
     , fpMessenger(new G4ReactionTableMessenger(this))
 {
 }
@@ -591,6 +592,11 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
 
 //______________________________________________________________________________
 // Get/Set methods
+
+G4VDNAMolecularGeometry* G4DNAMolecularReactionTable::GetGeometry() const
+{
+  return fGeometry;
+}
 
 G4DNAMolecularReactionTable::Data*
 G4DNAMolecularReactionTable::GetReactionData(Reactant* pReactant1,

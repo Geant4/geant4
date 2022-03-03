@@ -226,11 +226,14 @@ class G4Track
     const G4VProcess* GetCreatorProcess() const;
     void SetCreatorProcess(const G4VProcess* aValue);
 
-    inline void SetCreatorModelIndex(G4int idx);
-
-    inline const G4String& GetCreatorModelName() const;
-
-    inline G4int GetCreatorModelID() const;
+    inline void SetCreatorModelID(const G4int id);
+    inline G4int GetCreatorModelID() const;  
+    inline G4int GetCreatorModelIndex() const;
+    inline const G4String GetCreatorModelName() const;
+      // Identification of the physics model that created the track:
+      // each of the three information (ID, index, name) is unique
+      // (the model ID and its name are supposed to be used in Geant4
+      // code, whereas the index is meant for plotting in user code)
 
     G4double GetWeight() const;
     void SetWeight(G4double aValue);
@@ -240,13 +243,13 @@ class G4Track
     void SetUserInformation(G4VUserTrackInformation* aValue) const;
       // User information
 
-    void SetAuxiliaryTrackInformation(G4int idx,
+    void SetAuxiliaryTrackInformation(G4int id,
                                       G4VAuxiliaryTrackInformation* info) const;
-    G4VAuxiliaryTrackInformation* GetAuxiliaryTrackInformation(G4int idx) const;
+    G4VAuxiliaryTrackInformation* GetAuxiliaryTrackInformation(G4int id) const;
     inline std::map<G4int, G4VAuxiliaryTrackInformation*>*
            GetAuxiliaryTrackInformationMap() const;
 
-    void RemoveAuxiliaryTrackInformation(G4int idx);
+    void RemoveAuxiliaryTrackInformation(G4int id);
     void RemoveAuxiliaryTrackInformation(G4String& name);
       // Note: G4VAuxiliaryTrackInformation object itself is *NOT* deleted
 
@@ -311,8 +314,8 @@ class G4Track
     G4int fCurrentStepNumber = 0;
       // Total steps number up to now
 
-    G4int fCreatorModelIndex = -1;
-      // Index of the physics model which created the track
+    G4int fCreatorModelID = -1;
+      // ID of the physics model which created the track
 
     G4int fParentID = 0;
     G4int fTrackID = 0;

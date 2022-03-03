@@ -35,7 +35,3 @@ G4LogicalSurface::G4LogicalSurface(const G4String& name,
   : theName(name), theSurfaceProperty(surfaceProperty)
 {
 }
-
-G4LogicalSurface::~G4LogicalSurface()
-{
-}

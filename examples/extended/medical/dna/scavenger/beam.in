@@ -1,0 +1,24 @@
+/run/numberOfThreads 2
+/process/dna/e-SolvationSubType Meesungnoen2002
+#/process/dna/e-SolvationSubType Ritchie1994
+#/process/dna/e-SolvationSubType Terrisol1990
+
+/chem/reactionTable/name Rtable_O2.txt  # name of the reaction file
+/run/initialize
+/chem/reaction/print
+
+/primaryKiller/eLossMin 10 keV    # primary is killed if deposited E is greater than this value
+/primaryKiller/eLossMax 10.1 keV  # event is aborted if deposited E is greater than this value
+
+/gps/particle e-
+/gps/energy 999.999 keV
+
+/scheduler/endTime 1 microsecond
+/scorer/species/nOfTimeBins 50
+/scorer/species/setRootFileName scorer.root  # dump results to root file
+
+/run/verbose 1
+/event/verbose 0
+/scheduler/verbose 0
+
+/run/beamOn 2

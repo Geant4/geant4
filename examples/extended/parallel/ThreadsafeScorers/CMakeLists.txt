@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 set(name ts_scorers)
 project(ThreadsafeScorers C CXX)

@@ -16,6 +16,80 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-21 V.Ivanchenko (materials-V10-07-26)
+- G4Material - revised and updated all G4Exceptions, provided complete
+    information for all exceptions, text become more precise,
+    functionality does not changed, this is the CMS request.
+
+18-10-21 B.Morgan (materials-V10-07-25)
+- Use std::string member functions from G4String in place of synonyms
+
+16-10-21 D.Sawkey (materials-V10-07-24)
+- G4MaterialPropertiesTable - fix error with ConstPropertyExists(string)
+
+13-10-21 D.Sawkey (materials-V10-07-23)
+- G4MaterialPropertiesTable - return const refs to vectors for
+  material[const]props and names. Rename Get[Const]PropertyMap to
+  Get[Const]Properties.
+
+07-10-21 D.Sawkey (materials-V10-07-22)
+- G4MaterialPropertiesTable - return nullptr when GetProperty(string)
+  called for non-existent property; fix error in GetMatConstPropNames
+
+19-09-21 V.Ivanchenko (materials-V10-07-21)
+- G4IonisParamMat - return exact computations according to the 
+    original publication (fix #2334)
+- G4DensityEffectData - minor clean-up
+
+01-10-21 D.Sawkey (materials-V10-07-20)
+- G4MaterialPropertiesTable - FatalException if asked for index of
+  non-existent property (fix Coverity defect)
+
+19-09-21 V.Ivanchenko (materials-V10-07-19)
+- G4DensityEffectCalculator - Matthew Strait critically updated
+    calculations (fix #2330)
+
+09-09-21 D.Sawkey (materials-V10-07-18)
+- G4MaterialPropertiesTable: - use std::vectors for material properties and
+  material const properties, rather than std::map (speed increase).
+  - use bool flag with mat const property to indicate whether it is defined
+  - renaming of variables: fist letter lower case, class variables start with f
+  - remove iterators to mat prop vectors (use C++11 iteration)
+
+02-09-21 D.Sawkey (materials-V10-07-17)
+- G4MaterialPropertiesTable: fix AddConstProperty with new key;
+  fix RemoveConstProperty; make exception codes unique
+
+17-08-21 J.Hahnfeld (materials-V10-07-16)
+- Define operator<< for G4ElementVector, take const references to avoid
+  needless copy construction
+
+04-08-21 A.Ribon (materials-V10-07-15)
+- G4ExtendedMaterial : removed useless dependence on G4PhysicsModelCatalog,
+  and improved comment.
+
+19-07-21 V.Ivanchenko (materials-V10-07-14)
+- G4MaterialPropertyTable - add "spline" argument to method, which
+    creates G4MaterialPropertyVector
+
+14-07-21 V.Ivanchenko (materials-V10-07-13)
+- G4ElementData - reduce length of internal arrays from 108 to 99,
+    max number 99 is used by G4LivermorePhotoElectricModel, hadronic
+    models use 93
+- G4ElementVector - use const pointer to G4Element
+
+12-07-21 V.Ivanchenko (materials-V10-07-12)
+- G4ElementData - use G4int in method signature instead of size_t;
+  improve initialisation
+
+09-07-21 V.Ivanchenko (materials-V10-07-11)
+- G4Material - fixed Coverity report on non-initialized arrays;
+    use const pointers to G4Elements where; added warnings if
+    there is a mixture of definition of elements by number of atoms and 
+    mass fraction; reduced code duplication and reduce number of
+    new/delete for the case when materials are added to the material
+- G4ElementData - update class to provide more safe destruction end of run
+
 23-05-21 V.Ivanchenko (materials-V10-07-10)
 - G4ExtDEDXTable, G4IonStoppingData - corrected initialisation of spline
 - G4NistMaterialBuilder - removed unused argument "isotopes" from all

@@ -9,7 +9,7 @@
                      s. Larsson, May 2004
 
 -----------------------------------------------------------------
-Acknowledgments to GEANT4 people, in particular to J. Apostolakis,
+Acknowledgments to the GEANT4 Collaboration, in particular to J. Apostolakis,
 J Generowicz, G. Folger, Vladimir Ivanchenko,  M.G.Pia and 
 S. Guatelli. 
 -----------------------------------------------------------------
@@ -24,12 +24,14 @@ environment. It simulates a strong purging magnet in a treatment head.
 The geometry is very simplified. The major idea of this example is to 
 implement an external magnetic field grid and test if the deviation of 
 electrons are as expected in this particular field. The data (position, 
-energy and momentum) are collected in a measurement volume.The data is 
-stored in a CSV file (or, optionally in a ROOT, or a XML file, by 
-commenting/uncommenting the appropriate #includes in PurgMagAnalysisManager.hh)
+energy and momentum) are collected in a measurement volume. The data is
+stored in a CSV file (or, optionally in a ROOT, or a XML file, by changing
+the G4AnalysisManager default file type in PurgMagRunAction::Book().
 
- 
+<<<<<<< HEAD
   
+=======
+>>>>>>> Migration to G4RunManagerFactory done.
 1. Setting up the environment variables
 ---------------------------------------
 

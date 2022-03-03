@@ -61,10 +61,10 @@ public:
   ~DicomPhantomZSliceHeader();
   
   // Get and set methods
-  G4int GetNoVoxelX() const { return fNoVoxelX; };
-  G4int GetNoVoxelY() const { return fNoVoxelY; };
-  G4int GetNoVoxelZ() const { return fNoVoxelZ; };
-  G4int GetNoVoxels() const { return fNoVoxelX*fNoVoxelY*fNoVoxelZ; };
+  G4int GetNoVoxelsX() const { return fNoVoxelsX; };
+  G4int GetNoVoxelsY() const { return fNoVoxelsY; };
+  G4int GetNoVoxelsZ() const { return fNoVoxelsZ; };
+  G4int GetNoVoxels() const { return fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ; };
     
   G4double GetMinX() const { return fMinX; };
   G4double GetMinY() const { return fMinY; };
@@ -73,15 +73,15 @@ public:
   G4double GetMaxY() const { return fMaxY; };
   G4double GetMaxZ() const { return fMaxZ; };
   
-  G4double GetVoxelHalfX() const { return (fMaxX-fMinX)/fNoVoxelX/2.; };
-  G4double GetVoxelHalfY() const { return (fMaxY-fMinY)/fNoVoxelY/2.; };
-  G4double GetVoxelHalfZ() const { return (fMaxZ-fMinZ)/fNoVoxelZ/2.; };
+  G4double GetVoxelHalfX() const { return (fMaxX-fMinX)/fNoVoxelsX/2.; };
+  G4double GetVoxelHalfY() const { return (fMaxY-fMinY)/fNoVoxelsY/2.; };
+  G4double GetVoxelHalfZ() const { return (fMaxZ-fMinZ)/fNoVoxelsZ/2.; };
   
   const std::vector<G4String>& GetMaterialNames() const { return fMaterialNames; };
   
-  void SetNoVoxelX(const G4int& val) { fNoVoxelX = val; }
-  void SetNoVoxelY(const G4int& val) { fNoVoxelY = val; }
-  void SetNoVoxelZ(const G4int& val) { fNoVoxelZ = val; }
+  void SetNoVoxelsX(const G4int& val) { fNoVoxelsX = val; }
+  void SetNoVoxelsY(const G4int& val) { fNoVoxelsY = val; }
+  void SetNoVoxelsZ(const G4int& val) { fNoVoxelsZ = val; }
   
   void SetMinX(const G4double& val) { fMinX = val; };
   void SetMaxX(const G4double& val) { fMaxX = val; };
@@ -162,7 +162,7 @@ private:
   // check that material read exists as a G4Material
   
 private:
-  G4int fNoVoxelX, fNoVoxelY, fNoVoxelZ;  // number of voxels in each dimensions
+  G4int fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ;  // number of voxels in each dimensions
   G4double fMinX,fMinY,fMinZ; // minimum extension of voxels (position of wall)
   G4double fMaxX,fMaxY,fMaxZ; // maximum extension of voxels (position of wall)
   

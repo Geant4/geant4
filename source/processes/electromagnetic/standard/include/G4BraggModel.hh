@@ -80,6 +80,9 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
+  G4double MinEnergyCut(const G4ParticleDefinition*,
+			const G4MaterialCutsCouple* couple) override;
+
   G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,

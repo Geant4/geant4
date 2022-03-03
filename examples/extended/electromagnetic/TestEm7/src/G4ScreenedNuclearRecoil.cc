@@ -1016,8 +1016,8 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey,
                 
             for (G4int iEl=0; iEl<nMatElements; iEl++)
               {
-                G4Element* element = (*elementVector)[iEl];
-                G4int Z = (G4int) element->GetZ();
+                const G4Element* element = (*elementVector)[iEl];
+                G4int Z = element->GetZasInt();
                 G4double a2=element->GetA()*(mole/gram);
                         
                 if(sigmaMap.find(Z)!=sigmaMap.end()) continue; 

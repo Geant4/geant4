@@ -28,20 +28,24 @@ CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 
+# Locally adjust source list before including common.gmk
+sources := src/G4ToolsSGSceneHandler.cc
+
 ifdef G4VIS_BUILD_TOOLSSG_X11_GLES_DRIVER
-  CPPFLAGS += -DG4VIS_BUILD_TOOLSSG_X11_GLES_DRIVER
+  sources += src/G4ToolsSGX11GLES.cc
 endif
 
 ifdef G4VIS_BUILD_TOOLSSG_WINDOWS_GLES_DRIVER
-  CPPFLAGS += -DG4VIS_BUILD_TOOLSSG_WINDOWS_GLES_DRIVER
+  sources += src/G4ToolsSGWindowsGLES.cc
 endif
 
 ifdef G4VIS_BUILD_TOOLSSG_XT_GLES_DRIVER
-  CPPFLAGS += -DG4VIS_BUILD_TOOLSSG_XT_GLES_DRIVER
+  sources += src/G4ToolsSGXtGLES.cc
 endif
 
 ifdef G4VIS_BUILD_TOOLSSG_QT_GLES_DRIVER
-  CPPFLAGS += -DG4VIS_BUILD_TOOLSSG_QT_GLES_DRIVER
+  sources += src/G4ToolsSGQtGLES.cc src/G4ToolsSGQtViewer.cc
 endif
 
+include $(G4INSTALL)/config/moc.gmk
 include $(G4INSTALL)/config/common.gmk

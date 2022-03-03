@@ -57,15 +57,15 @@
 #define G4REPLICATEDSLICE_HH 1
 
 #include "geomdefs.hh"
-#include "G4VPhysicalVolume.hh"
+#include "G4PVReplica.hh"
 #include "G4VDivisionParameterisation.hh"
 
 class G4LogicalVolume;
 class G4VSolid;
 
-class G4ReplicatedSlice : public G4VPhysicalVolume
+class G4ReplicatedSlice : public G4PVReplica
 {
-  public:  // with description
+  public:
     
     G4ReplicatedSlice(const G4String& pName,
                             G4LogicalVolume* pLogical,
@@ -129,8 +129,6 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
     G4ReplicatedSlice& operator=(const G4ReplicatedSlice&) = delete;
 
     virtual G4bool IsMany() const;
-    virtual G4int GetCopyNo() const;
-    virtual void  SetCopyNo(G4int CopyNo);
     virtual G4bool IsReplicated() const;
     virtual G4int GetMultiplicity() const;
     virtual G4VPVParameterisation* GetParameterisation() const;
@@ -177,7 +175,6 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
     EAxis fdivAxis;          // axis of division
     G4int fnReplicas = 0;
     G4double fwidth = 0.0, foffset = 0.0;
-    G4int fcopyNo = -1;
     G4VDivisionParameterisation* fparam = nullptr; 
 };
 

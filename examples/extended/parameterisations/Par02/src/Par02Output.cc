@@ -34,7 +34,7 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,7 +51,6 @@ Par02Output::Par02Output() : fFileNameWithRunNo( false ) {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par02Output::~Par02Output() {
-  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,6 +88,7 @@ void Par02Output::StartAnalysis( G4int aRunID ) {
     fFileName +=  "_run";
     fFileName += G4UIcommand::ConvertToString( aRunID );
   }
+  analysisManager->SetDefaultFileType("root");
   analysisManager->SetVerboseLevel( 1 );
   analysisManager->SetFileName( fFileName );
   analysisManager->OpenFile( fFileName );

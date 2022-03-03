@@ -7,6 +7,7 @@
 #include "base_text"
 #include "gstos"
 #include "sf_string"
+#include <map>
 
 // abstract class to handle freetype text.
 
@@ -73,6 +74,8 @@ public:
   ,modeling(a_from.modeling)
   ,unitext(a_from.unitext)
   //,font_dirs(a_from.font_dirs)
+  ,m_fonts(a_from.m_fonts)
+  ,m_finders(a_from.m_finders)
   {
     add_fields();
   }
@@ -85,9 +88,15 @@ public:
     modeling = a_from.modeling;
     unitext = a_from.unitext;
     //font_dirs = a_from.font_dirs;
+    m_fonts = a_from.m_fonts;
+    m_finders = a_from.m_finders;
     return *this;
   }
 
+public:
+  static base_freetype* create(const base_freetype& a_ttf) {
+    return safe_cast<node,base_freetype>(*(a_ttf.copy()));
+  }
 public:
   void dump_unitext(std::ostream& a_out) {
     //unitext.values().size()
@@ -104,11 +113,38 @@ public:
       a_out << "end line." << std::endl;
     }
   }
-public:
-  static base_freetype* create(const base_freetype& a_ttf) {
-    return safe_cast<node,base_freetype>(*(a_ttf.copy()));
+public:  
+  typedef const unsigned char*(*font_getter)(unsigned int&);
+  void add_embedded_font(const std::string& a_name,font_getter a_getter) {
+    unsigned int size;
+    const unsigned char* buffer = a_getter(size);
+    m_fonts[a_name] = embedded_font(size,buffer); //warning: we do not take ownership of buffer.
   }
-
+  typedef std::pair<unsigned int,const unsigned char*> embedded_font;
+  void add_embedded_font(const std::string& a_name,unsigned int a_size,const unsigned char* a_buffer) {
+    //warning: we do not take ownership of a_buffer.
+    m_fonts[a_name] = embedded_font(a_size,a_buffer);
+  }
+  bool find_embedded_font(const std::string& a_name,unsigned int& a_size,const unsigned char*& a_buffer) {
+    std::map<std::string,embedded_font>::const_iterator it = m_fonts.find(a_name);
+    if(it==m_fonts.end()) {a_size = 0;a_buffer = 0;return false;}
+    a_size = (*it).second.first;
+    a_buffer = (*it).second.second;
+    return true;
+  }
+public:  
+  typedef bool(*font_finder)(const std::string&,std::string&);
+  void add_font_finder(font_finder a_finder) {m_finders.push_back(a_finder);}
+  bool find_font_with_finders(const std::string& a_name,std::string& a_font) {
+    tools_vforcit(font_finder,m_finders,it) {
+      if((*it)(a_name,a_font)) return true;
+    }
+    a_font.clear();
+    return false;
+  }
+protected:
+  std::map<std::string,embedded_font> m_fonts;
+  std::vector<font_finder> m_finders;
 };
 
 }}

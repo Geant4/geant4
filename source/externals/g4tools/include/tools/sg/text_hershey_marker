@@ -33,12 +33,12 @@ public:
     get_segments(segs); //must be after changing the height.
 
     a_action.load_matrices_to_identity();
-
-   {std::vector<float>::iterator it;
-    for(it=segs.begin();it!=segs.end();) {
-       *it += x;it++; //Android don't like *it++.
-       *it += y;it++;
-    }}
+    
+   {tools::mat4f _mtx;
+    _mtx.set_translate(x,y,0);
+    if(state.m_ww) _mtx.mul_scale(float(state.m_wh)/float(state.m_ww),1,1);
+    a_action.load_proj_matrix(_mtx);}
+    
     a_action.draw_vertex_array_xy(gl::lines(),segs);
 
     a_action.load_matrices_from_state();
@@ -65,12 +65,10 @@ public:
     get_segments(segs);
 
     a_action.set_matrices_to_identity();
-
-   {std::vector<float>::iterator it;
-    for(it=segs.begin();it!=segs.end();) {
-       *it += x;it++;
-       *it += y;it++;
-    }}
+    
+   {tools::mat4f& _mtx = a_action.model_matrix();
+    _mtx.set_translate(x,y,0);
+    if(state.m_ww) _mtx.mul_scale(float(state.m_wh)/float(state.m_ww),1,1);}
 
     a_action.add__lines_xy(*this,segs);
 

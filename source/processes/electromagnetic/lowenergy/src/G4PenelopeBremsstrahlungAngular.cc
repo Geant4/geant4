@@ -89,9 +89,10 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
       for (auto j=fLorentzTables1->begin(); j != fLorentzTables1->end(); ++j)
         {
 	  G4PhysicsTable* tab = j->second;
-          //tab->clearAndDestroy();
+          tab->clearAndDestroy();
           delete tab;
         }
+      fLorentzTables1->clear();
       delete fLorentzTables1;
       fLorentzTables1 = nullptr;
     }
@@ -101,8 +102,10 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
       for (auto j=fLorentzTables2->begin(); j != fLorentzTables2->end(); ++j)
         {
 	  G4PhysicsTable* tab = j->second;
+	  tab->clearAndDestroy();
           delete tab;
         }
+      fLorentzTables2->clear();
       delete fLorentzTables2;
       fLorentzTables2 = nullptr;
     }
@@ -214,8 +217,8 @@ void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G
 	  //fill vectors
 	  for (k=0;k<fNumberofZPoints;k++)
 	    {
-	      QQ1vector->PutValue(k,pZ[k],G4Log(fQQ1[k][i][j]));
-	      QQ2vector->PutValue(k,pZ[k],fQQ2[k][i][j]);
+	      QQ1vector->PutValues(k,pZ[k],G4Log(fQQ1[k][i][j]));
+	      QQ2vector->PutValues(k,pZ[k],fQQ2[k][i][j]);
 	    }
 	  //Filled: now calculate derivatives
 	  QQ1vector->FillSecondDerivatives();
@@ -254,8 +257,8 @@ void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G
 
       for (j=0;j<fNumberofKPoints;j++)
 	{
-	  Q1vector->PutValue(j,pK[j],G4Log(Q1[i][j])); //logarithmic
-	  Q2vector->PutValue(j,pK[j],Q2[i][j]);
+	  Q1vector->PutValues(j,pK[j],G4Log(Q1[i][j])); //logarithmic
+	  Q2vector->PutValues(j,pK[j],Q2[i][j]);
 	}
 
       for (j=0;j<reducedEnergyGrid;j++)
@@ -291,8 +294,8 @@ void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G
       G4PhysicsFreeVector* thevec2 = (G4PhysicsFreeVector*) (*theTable2)[j];
       for (i=0;i<fNumberofEPoints;i++)
 	{
-	  thevec->PutValue(i,betas[i],Q1E[i][j]);
-	  thevec2->PutValue(i,betas[i],Q2E[i][j]);
+	  thevec->PutValues(i,betas[i],Q1E[i][j]);
+	  thevec2->PutValues(i,betas[i],Q2E[i][j]);
 	}
       //Vectors are filled: calculate derivatives
       thevec->FillSecondDerivatives();

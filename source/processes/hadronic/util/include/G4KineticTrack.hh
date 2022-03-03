@@ -123,6 +123,8 @@ class G4KineticTrack : public G4VKineticNucleon
       void SetProjectilePotential(const G4double aPotential);
       G4double GetProjectilePotential() const;
 
+      void SetCreatorModelID(G4int id);
+      G4int GetCreatorModelID() const;
       
   private:
 
@@ -186,6 +188,8 @@ public:
       CascadeState theStateToNucleus;
 
       G4double theProjectilePotential;
+
+      G4int theCreatorModel;
 };
 
 // extern G4Allocator<G4KineticTrack> theKTAllocator;
@@ -420,6 +424,17 @@ inline
 G4double G4KineticTrack::GetProjectilePotential() const
 {
 	return theProjectilePotential;
+}
+
+inline
+void G4KineticTrack::SetCreatorModelID(G4int id)
+{
+        theCreatorModel = id;
+}
+inline
+G4int G4KineticTrack::GetCreatorModelID() const
+{
+       return theCreatorModel;
 }
 
 #endif

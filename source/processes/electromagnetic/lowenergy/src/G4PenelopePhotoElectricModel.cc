@@ -104,7 +104,7 @@ G4PenelopePhotoElectricModel::~G4PenelopePhotoElectricModel()
       for(G4int i=0; i<=fMaxZ; ++i) 
 	{
 	  if(fLogAtomicShellXS[i]) { 
-	    //fLogAtomicShellXS[i]->clearAndDestroy();
+	    fLogAtomicShellXS[i]->clearAndDestroy();
 	    delete fLogAtomicShellXS[i];
 	    fLogAtomicShellXS[i] = nullptr;
 	  }

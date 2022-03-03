@@ -32,8 +32,6 @@
 
 G4ErrorTarget::G4ErrorTarget() : theType(G4ErrorTarget_GeomVolume) {}
 
-G4ErrorTarget::~G4ErrorTarget() {}
-
 G4double G4ErrorTarget::GetDistanceFromPoint( const G4ThreeVector&,
                                               const G4ThreeVector& ) const
 {

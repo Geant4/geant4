@@ -16,8 +16,8 @@ geant4_add_module(G4hadronic_radioactivedecay
     G4NuclearDecay.hh
     G4NucleusLimits.hh
     G4ProtonDecay.hh
-    G4RadioactiveDecayBase.hh
-    G4RadioactiveDecayBaseMessenger.hh
+    G4RadioactiveDecay.hh
+    G4RadioactiveDecayMessenger.hh
     G4Radioactivation.hh
     G4RadioactivationMessenger.hh
     G4RadioactiveDecayMode.hh
@@ -41,8 +41,8 @@ geant4_add_module(G4hadronic_radioactivedecay
     G4NuclearDecay.cc
     G4NucleusLimits.cc
     G4ProtonDecay.cc
-    G4RadioactiveDecayBase.cc
-    G4RadioactiveDecayBaseMessenger.cc
+    G4RadioactiveDecay.cc
+    G4RadioactiveDecayMessenger.cc
     G4Radioactivation.cc
     G4RadioactivationMessenger.cc
     G4RadioactiveDecayMode.cc

@@ -44,8 +44,10 @@ G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
     , theTransport(nullptr), theHighEnergyGenerator(nullptr)
     , theQuasielastic(nullptr)
     , theCosmicCoalescence(nullptr)
+    , theStringModelID(-1)
 {
   theParticleChange = new G4HadFinalState;
+  theStringModelID = G4PhysicsModelCatalog::GetModelID( "model_" + name );
 }
 
 G4TheoFSGenerator::~G4TheoFSGenerator()
@@ -113,7 +115,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 		 new G4DynamicParticle(ptr->GetDefinition(),
                         	       ptr->Get4Momentum().e(),
                         	       ptr->Get4Momentum().vect());
-	      theParticleChange->AddSecondary(aNew);
+	      theParticleChange->AddSecondary(aNew, ptr->GetCreatorModelID());
 	      delete ptr;
 	    }
 	    delete result;	   
@@ -123,7 +125,6 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 	    theParticleChange->SetStatusChange(isAlive);
 	    theParticleChange->SetEnergyChange(thePrimary.GetKineticEnergy());
 	    theParticleChange->SetMomentumChange(thePrimary.Get4Momentum().vect().unit());
- 
        }
        return theParticleChange;
      } 
@@ -132,6 +133,11 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   // get result from high energy model
   G4KineticTrackVector * theInitialResult =
                theHighEnergyGenerator->Scatter(theNucleus, aPart);
+
+  // Assign the creator model ID
+  for ( auto & ptr : *theInitialResult ) {
+    ptr->SetCreatorModelID( theStringModelID );
+  }
 
   //#define DEBUG_initial_result
   #ifdef DEBUG_initial_result
@@ -245,7 +251,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
     G4HadSecondary aNew = G4HadSecondary(aNewDP);
     G4double time = std::max(ptr->GetFormationTime(), 0.0);
     aNew.SetTime(timePrimary + time);
-    aNew.SetCreatorModelType(ptr->GetCreatorModel());
+    aNew.SetCreatorModelID(ptr->GetCreatorModelID());
     theParticleChange->AddSecondary(aNew);
     delete ptr;
   }

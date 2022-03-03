@@ -11,6 +11,23 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2 Nov. 2021 B.Morgan (geant4py-V10-07-05)
+- Apply GitHub PR #31 from andriish
+- Use exact version of python for boost.python module
+
+31 Aug. 2021 B.Morgan (geant4py-V10-07-04)
+- Remove binding to obsolete member functions of G4Sphere and G4Tubs
+  - Either no longer used or cause issues when using Vecgeom
+
+27 August 2021 Ben Morgan (geant4py-V10-07-03)
+- Remove obsolete HepRep(WIRED) driver
+
+26 Aug. 2021 B. Morgan (geant4py-V10-07-02)
+- Remove obsolete VRML1 driver
+
+17 Aug. 2021 J. Hahnfeld (geant4py-V10-07-01)
+- Export binding for G4ElementVector, now that it's different from G4ElementTable
+
 12 Nov. 2021 V. Ivanchenko (geant4py-V10-07-00)
 - TestEm0 - use default Geant4 EM physics, do not use obsolete class
   G4EmProcessOptions

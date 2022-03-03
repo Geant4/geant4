@@ -14,6 +14,41 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+8-11-2021, H. Tran, emdna-V10-07-15
+- corrected Circular dependencies for mesoscopic model
+- corrected the problem in IRT
+
+4-11-2021, H. Tran, emdna-V10-07-14
+- define a G4FakeParticleID::fLastValue in the header file,
+  delete G4FakeParticleID.cc,
+  solve arithmetic problems,
+  Added new mesoscopic model for dna chemistry
+
+21-10-2021, W.G.Shin, emdna-V10-07-13
+- Added a virtual classes for DNA geometry - G4VDNAMolecularGeometry
+  Modified classes - G4DNAIRT, G4DNAIRTMoleculeEncounterStepper,
+                     G4ITModelProcessor, G4Scheduler,
+                     G4DNAMolecularReactionTable
+
+23-09-2021, A. Ribon, emdna-V10-07-12
+- G4ITTransportation, G4DNAElastic, G4DNAExcitation, G4DNAIonisation,
+  G4DNAVibExcitation, G4DNAAttachment, G4DNAChargeDecrease, 
+  G4DNAChargeIncrease, G4DNAElectronSolvation, G4DNAMolecularDissociation,
+  G4DNASecondOrderReaction, G4DNAElectronHoleRecombination,
+  G4DNABrownianTransportation : replaced hardwired process-sub-types
+  with enum values introduced in the new class G4LowEnergyEmProcessSubType
+
+18-07-2021, V. Ivanchenko, emdna-V10-07-11
+- G4DNABohrExcitationModel2, G4DNABohrIonisationModel2, 
+  G4VLEPSModel - updated interfaces to G4PhysicsVector
+
+16-07-2021, D. Sakata, emdna-V10-07-10
+- Fixed initialization error in G4DNAELSEPAElasticModel 
+
+28-06-2021, G. Cosmo, emdna-V10-07-09
+- Fixed compilation error in G4ITMultiNavigator when compiling with c++20
+  enabled.
+
 31-05-2021, D.Sakata S. Guatelli, emdna-V10-07-08
 - Added new classes G4DNADiracRMatrixExcitationModel
                     G4DNAQuinnPlasmonExcitationModel

@@ -14,6 +14,47 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 October 2021 Vladimir Ivanchenko radioactive_decay-V10-07-13
+---------------------------------------------------------------
+- G4RadioactiveDecay - updated printout of parameters according
+    to the recent modifications in atomic de-excitation module
+
+11 October 2021 Alberto Ribon radioactive_decay-V10-07-12
+---------------------------------------------------------
+- Included github Pull Request #26 by "mirguest" (Tao), aimed to
+  improve the branching ratio consistency in radioactive decays,
+  by replacing hardwired radioactive-decay-mode numbers with
+  corresponding enum values.
+  Modified classes: G4RadioactiveDecayMode, G4RadioactiveDecay,
+  G4Radioactivation.
+
+7 October 2021 Dennis Wright radioactive_decay-V10-07-11
+--------------------------------------------------------
+- remove obsolete classes G4RadioactiveDecayBase and 
+  G4RadioactiveDecayBaseMessenger
+
+1 October 2021 Ben Morgan radioactive_decay-V10-07-10
+-----------------------------------------------------
+- Use proper enum interface for G4String::strip
+
+12 August 2021 Dennis Wright radioactive_decay-V10-07-09
+--------------------------------------------------------
+- Next to last step in RadioactiveDecay code migration
+   create G4RadioactiveDecay.hh, .cc, G4RadioactiveDecayMessenger.hh, .cc
+   to eventually replace G4RadioactiveDecayBase.hh, .cc,
+   G4RadioactiveDecayBaseMessenger.hh, .cc 
+   Code in new files is identical except for class name changes
+  
+   G4Radioactivation.hh, .cc: replace base class G4RadioactiveDecayBase
+   with G4RadioactiveDecay
+
+   update sources.cmake to add new files
+
+04 August 2021 Alberto Ribon radioactive_decay-V10-07-08
+--------------------------------------------------------
+- G4RadioactiveDecayBase : migrated to the new approach of
+  creator model ID, using the new version of G4PhysicsModelCatalog
+
 21 May 2021 Dennis Wright radioactive_decay-V10-07-07
 -----------------------------------------------------
 - remove G4RadioactiveDecay.hh, .cc

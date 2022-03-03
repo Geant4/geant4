@@ -45,8 +45,8 @@ public:
   inline void SetWeight(G4double aW)         {theWeight= aW;}
   inline void SetTime(G4double aT)           {theTime = aT;}
   inline G4double GetTime() const            {return theTime;}
-  inline void SetCreatorModelType(G4int idx) {theCreatorModel = idx;}
-  inline G4int GetCreatorModelType() const   {return theCreatorModel;}
+  inline void SetCreatorModelID(G4int id)    {theCreatorModel = id;}
+  inline G4int GetCreatorModelID() const     {return theCreatorModel;}
     
 private:
   

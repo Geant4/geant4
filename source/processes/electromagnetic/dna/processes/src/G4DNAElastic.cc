@@ -28,6 +28,7 @@
 #include "G4DNAElastic.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Positron.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,7 +37,7 @@ using namespace std;
 G4DNAElastic::G4DNAElastic(const G4String& processName, G4ProcessType type) :
     G4VEmProcess(processName, type), isInitialised(false)
 {
-  SetProcessSubType(51);
+  SetProcessSubType(fLowEnergyElastic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

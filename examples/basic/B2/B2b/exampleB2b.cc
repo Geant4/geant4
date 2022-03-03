@@ -27,8 +27,8 @@
 /// \file exampleB2b.cc
 /// \brief Main program of the B2b example
 
-#include "B2bDetectorConstruction.hh"
-#include "B2ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
 #include "G4RunManagerFactory.hh"
 #include "G4SteppingVerbose.hh"
@@ -64,14 +64,14 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  runManager->SetUserInitialization(new B2bDetectorConstruction());
+  runManager->SetUserInitialization(new B2b::DetectorConstruction());
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   physicsList->RegisterPhysics(new G4StepLimiterPhysics());
   runManager->SetUserInitialization(physicsList);
 
   // Set user action classes
-  runManager->SetUserInitialization(new B2ActionInitialization());
+  runManager->SetUserInitialization(new B2::ActionInitialization());
 
   // Initialize visualization
   //

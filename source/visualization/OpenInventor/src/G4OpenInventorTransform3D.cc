@@ -31,8 +31,6 @@
 // from G4Transform3D.
 // gb 22 Nov 2004 : use SbMatrix instead of SoSFMatrix.
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "G4OpenInventorTransform3D.hh"
 
@@ -67,5 +65,3 @@ SbMatrix* G4OpenInventorTransform3D::GetSbMatrix () const {
                               m[12],m[13],m[14],m[15]);
   return tm;
 }
-
-#endif

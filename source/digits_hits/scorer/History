@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 27th, 2021 M. Asai (detscorer-V10-07-01)
+- Fix indexing of cylindrical scoring mesh commands.
+  Co-working with detutil-V10-07-05. Addressing to bug report #2418.
+
 April 1, 2021 B. Morgan (detscorer-V10-07-00)
 - Migrate build to modular CMake API
 

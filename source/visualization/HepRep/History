@@ -18,6 +18,17 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+27 August 2021 Ben Morgan (vis-HepRep-V10-07-04)
+- Remove obsolete HepRep(WIRED) driver and associated files
+
+30 June 2021  John Allison  (vis-HepRep-V10-07-03)
+- Requires greps-V10-07-09, modeling-V10-07-11 and visman-V10-07-11.
+- Revise vis models. See visualization/modeling/History for more details.
+- Consequent changes:
+  o AddPrimitive(const G4Scale&) has been removed from all scene handlers.
+
+29 June 2021  Gabriele Cosmo (vis-HepRep-V10-07-02)
+- Fixed compilation error in G4HepRepSceneHandler when c++20 is enabled.
 
 07 June 2021  John Allison (vis-HepRep-V10-07-01)
 - Fix hidden function warning.

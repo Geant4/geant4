@@ -42,4 +42,4 @@ namespace G4Analysis {
 G4Fcn GetFunction(const G4String& fcnName);
 }
 
-#endif  
+#endif

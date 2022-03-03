@@ -65,7 +65,7 @@ class G4GammaGeneralProcess : public G4VEmProcess
 {
 public:
 
-  explicit G4GammaGeneralProcess();
+  explicit G4GammaGeneralProcess(const G4String& pname="GammaGeneralProc");
 
   ~G4GammaGeneralProcess() override;
 
@@ -93,7 +93,7 @@ public:
 
   // Called before tracking of each new G4Track
   void StartTracking(G4Track*) override;
-  
+
   // implementation of virtual method, specific for G4GammaGeneralProcess
   G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -102,7 +102,7 @@ public:
 
   // implementation of virtual method, specific for G4GammaGeneralProcess
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
-  
+
   // Store PhysicsTable in a file.
   // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
@@ -148,18 +148,22 @@ protected:
 
   void SelectHadProcess(const G4Track&, const G4Step&, G4HadronicProcess*);
 
-private:
-
   // It returns the cross section per volume for energy/ material
   G4double TotalCrossSectionPerVolume();
 
-  G4bool RetrieveTable(G4VEmProcess*, const G4String& directory, 
+private:
+
+  G4bool RetrieveTable(G4VEmProcess*, const G4String& directory,
                        G4bool ascii);
 
 protected:
 
   G4HadronicProcess*           theGammaNuclear = nullptr;
   G4VProcess*                  selectedProc = nullptr;
+
+  G4double                     preStepLogE = 1.0;
+  G4double                     factor = 1.0;
+
 
 private:
   static G4EmDataHandler*      theHandler;
@@ -177,8 +181,6 @@ private:
   G4double                     minEEEnergy;
   G4double                     minMMEnergy;
   G4double                     peLambda = 0.0;
-  G4double                     preStepLogE = 1.0;
-  G4double                     factor = 1.0;
 
   size_t                       nLowE = 40;
   size_t                       nHighE = 50;
@@ -187,7 +189,7 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 inline G4double
 G4GammaGeneralProcess::ComputeGeneralLambda(size_t idxe, size_t idxt)
 {
@@ -206,7 +208,7 @@ inline G4double G4GammaGeneralProcess::GetProbability(size_t idxt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void 
+inline void
 G4GammaGeneralProcess::SelectedProcess(const G4Step& step, G4VProcess* ptr)
 {
   selectedProc = ptr;

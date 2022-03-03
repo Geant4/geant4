@@ -33,6 +33,10 @@
 //
 //      M.Kelsey, 28 Jul 2011 -- Replace loop to decay input secondaries
 //		with new utility class, simplify cleanup loops
+//
+//      A.Ribon, 27 Oct 2021 -- Extended the method PropagateNuclNucl
+//               to deal with projectile hypernuclei and anti-hypernuclei
+//
 // -----------------------------------------------------------------------------
 
 #include <algorithm>
@@ -61,6 +65,20 @@
 #include "G4AntiHe3.hh"
 #include "G4AntiAlpha.hh"
 
+#include "G4HyperTriton.hh"
+#include "G4HyperH4.hh"
+#include "G4HyperAlpha.hh"
+#include "G4HyperHe5.hh"
+#include "G4DoubleHyperH4.hh"
+#include "G4DoubleHyperDoubleNeutron.hh"
+
+#include "G4AntiHyperTriton.hh"
+#include "G4AntiHyperH4.hh"
+#include "G4AntiHyperAlpha.hh"
+#include "G4AntiHyperHe5.hh"
+#include "G4AntiDoubleHyperH4.hh"
+#include "G4AntiDoubleHyperDoubleNeutron.hh"
+
 #include "G4FragmentVector.hh"
 #include "G4ReactionProduct.hh"
 #include "G4ReactionProductVector.hh"
@@ -69,6 +87,8 @@
 #include "G4DecayKineticTracks.hh"
 #include "G4HadronicInteractionRegistry.hh"
 
+#include "G4PhysicsModelCatalog.hh"
+#include "G4HyperNucleiProperties.hh"
 //---------------------------------------------------------------------
 #include "Randomize.hh"
 #include "G4Log.hh"
@@ -76,7 +96,7 @@
 //#define debugPrecoInt
 
 G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundModel* preModel)
-: CaptureThreshold(70*MeV), DeltaM(5.0*MeV), DeltaR(0.0)
+  : CaptureThreshold(70*MeV), DeltaM(5.0*MeV), DeltaR(0.0), secID(-1)
 {
    proton = G4Proton::Proton();
    neutron = G4Neutron::Neutron();
@@ -102,6 +122,8 @@ G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundM
       if(!pre) { pre = new G4PreCompoundModel(); }
       SetDeExcitation(pre);
    }
+
+   secID = G4PhysicsModelCatalog::GetModelID("model_PRECO");
 }
 
 G4GeneratorPrecompoundInterface::~G4GeneratorPrecompoundInterface()
@@ -125,7 +147,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       G4cout<<"Final stable particles number "<<theSecondaries->size()<<G4endl;
    #endif
 
-   // prepare the fragment
+   // prepare the fragment (it is assumed that target nuclei are never hypernuclei)
    G4int anA=theNucleus->GetMassNumber();
    G4int aZ=theNucleus->GetCharge();
 // G4double TargetNucleusMass =  G4NucleiProperties::GetNuclearMass(anA, aZ);
@@ -153,6 +175,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
          G4ReactionProduct * theNew = new G4ReactionProduct(part);
          theNew->SetMomentum(mom);
          theNew->SetTotalEnergy(e);
+	 theNew->SetCreatorModelID((*iter)->GetCreatorModelID());
          theTotalResult->push_back(theNew);
          Secondary4Momentum += (*iter)->Get4Momentum();
          #ifdef debugPrecoInt
@@ -164,6 +187,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
             G4ReactionProduct * theNew = new G4ReactionProduct(part);
             theNew->SetMomentum(mom);
             theNew->SetTotalEnergy(e);
+	    theNew->SetCreatorModelID((*iter)->GetCreatorModelID());
             theTotalResult->push_back(theNew);
             Secondary4Momentum += (*iter)->Get4Momentum();
             #ifdef debugPrecoInt
@@ -291,30 +315,32 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       #endif
      }
     }
-      // Need to de-excite the remnant nucleus only if excitation energy > 0.
-      G4Fragment anInitialState(anA, aZ, exciton4Momentum);
-      anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
-      anInitialState.SetNumberOfCharged(numberOfCh);
-      anInitialState.SetNumberOfHoles(numberOfHoles);
 
-      G4ReactionProductVector * aPrecoResult =
-            theDeExcitation->DeExcite(anInitialState);
-      // fill pre-compound part into the result, and return
+    // Need to de-excite the remnant nucleus only if excitation energy > 0.
+    G4Fragment anInitialState(anA, aZ, exciton4Momentum);
+    anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
+    anInitialState.SetNumberOfCharged(numberOfCh);
+    anInitialState.SetNumberOfHoles(numberOfHoles);
+    anInitialState.SetCreatorModelID(secID);
+
+    G4ReactionProductVector * aPrecoResult =
+      theDeExcitation->DeExcite(anInitialState);
+    // fill pre-compound part into the result, and return
+    #ifdef debugPrecoInt
+    G4cout<<"Target fragment number "<<aPrecoResult->size()<<G4endl;
+    #endif
+    for(unsigned int ll=0; ll<aPrecoResult->size(); ++ll)
+    {
+      theTotalResult->push_back(aPrecoResult->operator[](ll));
       #ifdef debugPrecoInt
-         G4cout<<"Target fragment number "<<aPrecoResult->size()<<G4endl;
-      #endif
-      for(unsigned int ll=0; ll<aPrecoResult->size(); ++ll)
-      {
-         theTotalResult->push_back(aPrecoResult->operator[](ll));
-         #ifdef debugPrecoInt
-            G4cout<<"Fragment "<<ll<<" "
-                  <<aPrecoResult->operator[](ll)->GetDefinition()->GetParticleName()<<" "
-                  <<aPrecoResult->operator[](ll)->GetMomentum()<<" "
-                  <<aPrecoResult->operator[](ll)->GetTotalEnergy()<<" "
-                  <<aPrecoResult->operator[](ll)->GetDefinition()->GetPDGMass()<<G4endl;
-         #endif
-      }
-      delete aPrecoResult;
+      G4cout<<"Fragment "<<ll<<" "
+	    <<aPrecoResult->operator[](ll)->GetDefinition()->GetParticleName()<<" "
+	    <<aPrecoResult->operator[](ll)->GetMomentum()<<" "
+	    <<aPrecoResult->operator[](ll)->GetTotalEnergy()<<" "
+	    <<aPrecoResult->operator[](ll)->GetDefinition()->GetPDGMass()<<G4endl;
+       #endif
+    }
+    delete aPrecoResult;
    }
 
    return theTotalResult;
@@ -350,18 +376,21 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
 {
 #ifdef debugPrecoInt
    G4cout<<G4endl<<"G4GeneratorPrecompoundInterface::PropagateNuclNucl "<<G4endl;
-   G4cout<<"Projectile A and Z "<<theProjectileNucleus->GetMassNumber()<<" "
-                                <<theProjectileNucleus->GetCharge()<<G4endl;
+   G4cout<<"Projectile A and Z (and numberOfLambdas) "<<theProjectileNucleus->GetMassNumber()<<" "
+	 <<theProjectileNucleus->GetCharge()<<" ("
+	 <<theProjectileNucleus->GetNumberOfLambdas()<<")"<<G4endl;
    G4cout<<"Target     A and Z "<<theNucleus->GetMassNumber()<<" "
-                                <<theNucleus->GetCharge()<<G4endl;
+         <<theNucleus->GetCharge()<<" ("
+	 <<theNucleus->GetNumberOfLambdas()<<")"<<G4endl;
    G4cout<<"Directly produced particles number "<<theSecondaries->size()<<G4endl;
    G4cout<<"Projectile 4Mom and mass "<<GetPrimaryProjectile()->Get4Momentum()<<" "
                                       <<GetPrimaryProjectile()->Get4Momentum().mag()<<G4endl<<G4endl;
 #endif
 
-   // prepare the target residual
+   // prepare the target residual (assumed to be never a hypernucleus)
    G4int anA=theNucleus->GetMassNumber();
    G4int aZ=theNucleus->GetCharge();
+   //G4int aL=theNucleus->GetNumberOfLambdas();  // Should be 0
    G4int numberOfEx = 0;
    G4int numberOfCh = 0;
    G4int numberOfHoles = 0;
@@ -369,7 +398,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    G4double R = theNucleus->GetNuclearRadius();
    G4LorentzVector Target4Momentum(0.,0.,0.,0.);
 
-   // loop over wounded target nucleus
+   // loop over the wounded target nucleus
    G4Nucleon * theCurrentNucleon =
          theNucleus->StartLoop() ? theNucleus->GetNextNucleon() : 0;
    while(theCurrentNucleon)   /* Loop checking, 31.08.2015, G.Folger */
@@ -387,11 +416,11 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    }
 
 #ifdef debugPrecoInt
-   G4cout<<"Residual Target A Z E* 4mom "<<anA<<" "<<aZ<<" "<<exEnergy<<" "
-         <<Target4Momentum<<G4endl;
+   G4cout<<"Residual Target A Z (numberOfLambdas) E* 4mom "<<anA<<" "<<aZ<<" (0"//<<aL
+         <<") "<<exEnergy<<" "<<Target4Momentum<<G4endl;
 #endif
 
-   // prepare the projectile residual
+   // prepare the projectile residual - which can be a hypernucleus or anti-hypernucleus
 
    G4bool ProjectileIsAntiNucleus=
          GetPrimaryProjectile()->GetDefinition()->GetBaryonNumber() < -1;
@@ -400,6 +429,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
 
    G4int anAb=theProjectileNucleus->GetMassNumber();
    G4int aZb=theProjectileNucleus->GetCharge();
+   G4int aLb=theProjectileNucleus->GetNumberOfLambdas();  // Non negative number of (anti-)lambdas in (anti-)nucleus
    G4int numberOfExB = 0;
    G4int numberOfChB = 0;
    G4int numberOfHolesB = 0;
@@ -407,7 +437,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    G4double Rb = theProjectileNucleus->GetNuclearRadius();
    G4LorentzVector Projectile4Momentum(0.,0.,0.,0.);
 
-   // loop over wounded projectile nucleus
+   // loop over the wounded projectile nucleus or anti-nucleus
    theCurrentNucleon =
          theProjectileNucleus->StartLoop() ? theProjectileNucleus->GetNextNucleon() : 0;
    while(theCurrentNucleon)    /* Loop checking, 31.08.2015, G.Folger */
@@ -419,9 +449,11 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
          if(!ProjectileIsAntiNucleus) {
             aZb -= G4int(theCurrentNucleon->GetDefinition()->GetPDGCharge()/
                   eplus + 0.1);
+	    if (theCurrentNucleon->GetParticleType()==G4Lambda::Definition()) --aLb;
          } else {
             aZb += G4int(theCurrentNucleon->GetDefinition()->GetPDGCharge()/
                   eplus - 0.1);
+	    if (theCurrentNucleon->GetParticleType()==G4AntiLambda::Definition()) --aLb;
          }
          exEnergyB += theCurrentNucleon->GetBindingEnergy();
          Projectile4Momentum -=theCurrentNucleon->Get4Momentum();
@@ -435,8 +467,8 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
          0.3*G4double (numberOfHolesB + anAb);
 
 #ifdef debugPrecoInt
-   G4cout<<"Projectile residual A Z E* 4mom "<<anAb<<" "<<aZb<<" "<<exEnergyB<<" "
-         <<Projectile4Momentum<<G4endl;
+   G4cout<<"Projectile residual A Z (numberOfLambdas) E* 4mom "<<anAb<<" "<<aZb<<" ("<<aLb
+	 <<") "<<exEnergyB<<" "<<Projectile4Momentum<<G4endl;
    G4cout<<" ExistTargetRemnant ExistProjectileRemnant "
          <<ExistTargetRemnant<<" "<< ExistProjectileRemnant<<G4endl;
 #endif
@@ -456,7 +488,14 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    G4int SecondrNum(0);
 #endif
 
-   // loop over secondaries
+   // Loop over secondaries.
+   // We are assuming that only protons and neutrons - for nuclei -
+   // and only antiprotons and antineutrons - for antinuclei - can be absorbed,
+   // not instead lambdas (or hyperons more generally) - for nuclei - or anti-lambdas
+   // (or anti-hyperons more generally) - for antinuclei. This is a simplification,
+   // to be eventually reviewed later on, in particular when generic hypernuclei and
+   // anti-hypernuclei are introduced, instead of the few light hypernuclei and
+   // anti-hypernuclei which currently exist in Geant4.
    G4KineticTrackVector::iterator iter;
    for(iter=theSecondaries->begin(); iter !=theSecondaries->end(); ++iter)
    {
@@ -470,6 +509,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
          G4ReactionProduct * theNew = new G4ReactionProduct(part);
          theNew->SetMomentum(aTrack4Momentum.vect());
          theNew->SetTotalEnergy(aTrack4Momentum.e());
+	 theNew->SetCreatorModelID((*iter)->GetCreatorModelID());
          theTotalResult->push_back(theNew);
 #ifdef debugPrecoInt
          SecondrNum++;
@@ -564,6 +604,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
          G4ReactionProduct * theNew = new G4ReactionProduct(part);
          theNew->SetMomentum(aTrack4Momentum.vect());
          theNew->SetTotalEnergy(aTrack4Momentum.e());
+	 theNew->SetCreatorModelID((*iter)->GetCreatorModelID());
          theTotalResult->push_back(theNew);
 
 #ifdef debugPrecoInt
@@ -583,12 +624,13 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    //-----------------------------------------------------
 
    #ifdef debugPrecoInt
-      G4cout<<"Final target residual A Z E* 4mom "<<anA<<" "<<aZ<<" "
-           <<exEnergy<<" "<<Target4Momentum<<G4endl;
+   G4cout<<"Final target residual A Z (numberOfLambdas) E* 4mom "<<anA<<" "<<aZ<<" (0"//<<aL
+	    <<") "<<exEnergy<<" "<<Target4Momentum<<G4endl;
    #endif
 
    if(0!=anA )
    {
+      // We assume that the target residual is never a hypernucleus
       G4double fMass =  G4NucleiProperties::GetNuclearMass(anA, aZ);
 
       if((anA == theNucleus->GetMassNumber()) && (exEnergy <= 0.))
@@ -611,6 +653,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
       anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
       anInitialState.SetNumberOfCharged(numberOfCh);
       anInitialState.SetNumberOfHoles(numberOfHoles);
+      anInitialState.SetCreatorModelID(secID);
 
       G4ReactionProductVector * aPrecoResult =
             theDeExcitation->DeExcite(anInitialState);
@@ -639,14 +682,20 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    {Projectile4Momentum = GetPrimaryProjectile()->Get4Momentum();}
 
    #ifdef debugPrecoInt
-      G4cout<<"Final projectile residual A Z E* Pmom Pmag2 "<<anAb<<" "<<aZb<<" "
-            <<exEnergyB<<" "<<Projectile4Momentum<<" "
+   G4cout<<"Final projectile residual A Z (numberOfLambdas) E* Pmom Pmag2 "<<anAb<<" "<<aZb<<" ("
+	 <<aLb<<") "<<exEnergyB<<" "<<Projectile4Momentum<<" "
                             <<Projectile4Momentum.mag2()<<G4endl;
    #endif
 
    if(0!=anAb)
    {
-      G4double fMass =  G4NucleiProperties::GetNuclearMass(anAb, aZb);
+      // The projectile residual can be a hypernucleus or anti-hypernucleus
+      G4double fMass = 0.0;
+      if ( aLb > 0 ) {
+	fMass = G4HyperNucleiProperties::GetNuclearMass(anAb, aZb, aLb);
+      } else {
+	fMass = G4NucleiProperties::GetNuclearMass(anAb, aZb);
+      }        
       G4double RemnMass=Projectile4Momentum.mag();
 
       if(RemnMass < fMass)
@@ -663,10 +712,11 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
       Projectile4Momentum.boost(bstToCM);
 
       // Need to de-excite the remnant nucleus
-      G4Fragment anInitialState(anAb, aZb, Projectile4Momentum);
+      G4Fragment anInitialState(anAb, aZb, aLb, Projectile4Momentum);
       anInitialState.SetNumberOfParticles(numberOfExB-numberOfHolesB);
       anInitialState.SetNumberOfCharged(numberOfChB);
       anInitialState.SetNumberOfHoles(numberOfHolesB);
+      anInitialState.SetCreatorModelID(secID);
 
       G4ReactionProductVector * aPrecoResult =
             theDeExcitation->DeExcite(anInitialState);
@@ -696,6 +746,22 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
             else if(aFragment == He4)     {LastFragment=G4AntiAlpha::AntiAlphaDefinition();}
             else {}
 
+            if (aLb > 0) {  // Anti-hypernucleus
+	      if        (aFragment == G4HyperTriton::Definition()) {
+		LastFragment=G4AntiHyperTriton::Definition();
+	      } else if (aFragment == G4HyperH4::Definition()) {
+		LastFragment=G4AntiHyperH4::Definition();
+	      } else if (aFragment == G4HyperAlpha::Definition()) {
+		LastFragment=G4AntiHyperAlpha::Definition();
+	      } else if (aFragment == G4HyperHe5::Definition()) {
+		LastFragment=G4AntiHyperHe5::Definition();
+	      } else if (aFragment == G4DoubleHyperH4::Definition()) {
+		LastFragment=G4AntiDoubleHyperH4::Definition();
+	      } else if (aFragment == G4DoubleHyperDoubleNeutron::Definition()) {
+		LastFragment=G4AntiDoubleHyperDoubleNeutron::Definition();
+	      }
+	    }
+	    
             aPrecoResult->operator[](ll)->SetDefinitionAndUpdateE(LastFragment);
          }
 
@@ -718,7 +784,13 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
 
 
 void G4GeneratorPrecompoundInterface::MakeCoalescence(G4KineticTrackVector *tracks) {
-
+  // This method replaces pairs of proton-neutron - in the case of nuclei - or
+  // antiproton-antineutron - in the case of anti-nuclei - which are close in
+  // momentum, with, respectively, deuterons and anti-deuterons.
+  // Note that in the case of hypernuclei or anti-hypernuclei, lambdas or anti-lambdas
+  // are not considered for coalescence because hyper-deuteron or anti-hyper-deuteron
+  // are assumed not to exist.
+  
   if (!tracks) return;
 
   G4double MassCut = deuteron->GetPDGMass() + DeltaM;   // In MeV
@@ -748,6 +820,7 @@ void G4GeneratorPrecompoundInterface::MakeCoalescence(G4KineticTrackVector *trac
                               (trackP->GetFormationTime() +  trackN->GetFormationTime())/2.0,
                               (trackP->GetPosition()      +  trackN->GetPosition()     )/2.0,
                               ( Prot4Mom                  +  Neut4Mom                        ));
+        aDeuteron->SetCreatorModelID(secID);
         tracks->push_back(aDeuteron);
         delete trackP; delete trackN;
         (*tracks)[i] = nullptr; (*tracks)[j] = nullptr;

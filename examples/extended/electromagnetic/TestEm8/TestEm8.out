@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -524,37 +524,39 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 0 fm 
- Energy thresholds :  gamma  25 eV     e-  25 eV     e+  25 eV  proton 0 meV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 0 fm 
- Energy thresholds :  gamma  2.28293 keV    e-  264.842 keV    e+  257.302 keV proton 0 meV
+ Energy thresholds :  gamma  2.28758 keV    e-  264.814 keV    e+  258.4 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : XeCH4C3H8
  Range cuts        :  gamma  1.8 mm     e-  1.8 mm     e+  1.8 mm  proton 1.8 mm 
- Energy thresholds :  gamma  25 eV     e-  5.46578 keV    e+  5.39804 keV proton 180 keV
+ Energy thresholds :  gamma  1 keV    e-  5.2692 keV    e+  5.15611 keV proton 180 keV
  Region(s) which use this couple : 
     GasDetector
 
 ==================================================================
 
 ### Run 0 starts.
-### Run 0 start analysis activation: 
+### Run 0 start analysis activation rand= 0.13049
  BinsCluster= 1    BinsE= 20   Emax(keV)= 60
  WidthALICE(keV)= 0      FactorALICE= 325
+... set ntuple merging row mode : row-wise - done
 ... create file : testem8.root - done
+... open analysis file : testem8.root - done
 ... open analysis file : testem8.root - done
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.060000s Real=0.060166s Sys=0.000000s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.01658
+  User=0.050000s Real=0.053382s Sys=0.000000s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0162471
  ====================================================
    Beam Particle: proton
    Ekin(MeV)    = 200000
@@ -563,34 +565,35 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.01658
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 16.58 +- 0.42696 keV    RMS/Emean = 0.81434
-   Mean number of steps in absorber= 1.261  mean number of ion-clusters = 828.52 MeanCluster= 828.93
+   Mean energy deposit in absorber = 16.247 +- 0.41916 keV    RMS/Emean = 0.81585
+   Mean number of steps in absorber= 1.259  mean number of ion-clusters = 812.05 MeanCluster= 812.35
 
  ====== Energy deposit distribution   Noverflows= 0.015 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1         3           3       0.003
-    2         6         102       0.102
-    3         9         251       0.251
-    4        12         253       0.253
-    5        15         147       0.147
-    6        18          93       0.093
-    7        21          49       0.049
-    8        24          22       0.022
-    9        27          16       0.016
-   10        30           4       0.004
-   11        33          11       0.011
-   12        36           8       0.008
-   13        39           1       0.001
-   14        42           8       0.008
+    2         6          99       0.099
+    3         9         283       0.283
+    4        12         220        0.22
+    5        15         160        0.16
+    6        18          86       0.086
+    7        21          59       0.059
+    8        24          25       0.025
+    9        27          12       0.012
+   10        30          12       0.012
+   11        33           5       0.005
+   12        36           5       0.005
+   13        39           3       0.003
+   14        42           1       0.001
    15        45           6       0.006
-   16        48           5       0.005
-   17        51           3       0.003
-   18        54           2       0.002
+   16        48           4       0.004
+   17        51           0           0
+   18        54           1       0.001
    19        57           1       0.001
  ================== run end ==========================
 ... write file : testem8.root - done
 ... close file : testem8.root - done
+... clear all data - done
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

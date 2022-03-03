@@ -57,7 +57,7 @@ ifeq ($(G4SYSTEM),Linux-clang)
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/lib$(ARCH)  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+    X11LIBS   := -L/usr/lib$(ARCH)  -lXmu -lXt -lXext -lX11 -lSM -lICE
   endif
   ifndef XMFLAGS
     XMFLAGS   := -I/usr/include
@@ -98,14 +98,14 @@ ifeq ($(G4SYSTEM),Linux-clang)
   ifeq ($(QT_VERSION),5)
     ifndef QTFLAGS              # Qt5
       QTFLAGS   := -I $(QTHOME)/include -I$(QTHOME)/include/Qt
-      QTFLAGS   += -I $(QTHOME)/include/qt5/QtCore
-      QTFLAGS   += -I $(QTHOME)/include/qt5/QtGui
-      QTFLAGS   += -I $(QTHOME)/include/qt5/QtWidgets
-      QTFLAGS   += -I $(QTHOME)/include/qt5/QtOpenGL
-      QTFLAGS   += -I $(QTHOME)/include/qt5/Qt3DCore
-      QTFLAGS   += -I $(QTHOME)/include/qt5/Qt3DExtras
-      QTFLAGS   += -I $(QTHOME)/include/qt5/Qt3DRender
-      QTFLAGS   += -I $(QTHOME)/include/qt5/QtPrintSupport
+      QTFLAGS   += -I $(QTHOME)/include/QtCore
+      QTFLAGS   += -I $(QTHOME)/include/QtGui
+      QTFLAGS   += -I $(QTHOME)/include/QtWidgets
+      QTFLAGS   += -I $(QTHOME)/include/QtOpenGL
+      QTFLAGS   += -I $(QTHOME)/include/Qt3DCore
+      QTFLAGS   += -I $(QTHOME)/include/Qt3DExtras
+      QTFLAGS   += -I $(QTHOME)/include/Qt3DRender
+      QTFLAGS   += -I $(QTHOME)/include/QtPrintSupport
     endif
   else                          # Qt4
     ifndef QTFLAGS

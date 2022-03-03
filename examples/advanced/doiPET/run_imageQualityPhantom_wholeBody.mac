@@ -68,9 +68,9 @@
 /gps/pos/type Volume
 /gps/pos/shape Cylinder
 
-#The body phantom is shifted by 68 mm, 
-/gps/pos/centre 0 0 -23 mm 
-/gps/pos/radius 187 mm #increase the diameter
+#The body phantom is shifted as discribed in the NEMA standard
+/gps/pos/centre 0 -35 -23 mm 
+/gps/pos/radius 147 mm
 /gps/pos/halfz  88.5 mm
 /gps/ang/type iso
 
@@ -93,7 +93,7 @@
 
 #/random/setSeeds  1 2 
 
-/run/beamOn 836431791 #15 minuts scan
+/run/beamOn 10000
 
 
 

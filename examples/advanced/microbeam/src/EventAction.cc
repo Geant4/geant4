@@ -33,11 +33,11 @@
 // Rad. Prot. Dos. 133 (2009) 2-11
 
 #include "G4Event.hh"
+#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
 
 #include "EventAction.hh"
 #include "RunAction.hh"
-#include "Analysis.hh"
 
 EventAction::EventAction(RunAction* run)
 :fRun(run)

@@ -184,7 +184,7 @@ namespace G4INCL {
 
     /** Bias apply for this reaction in order to get the same
      * ParticleBias for all stange particles.
-     * Can be reduced after because of the watchdog.
+     * Can be reduced after because of the safeguard.
      */
     G4double bias_apply = 1.;
     if(bias != 1.) bias_apply = Particle::getBiasFromVector(Particle::MergeVectorBias(particle1,particle2)) * bias;

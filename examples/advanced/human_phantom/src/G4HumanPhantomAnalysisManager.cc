@@ -102,8 +102,7 @@ void G4HumanPhantomAnalysisManager::save()
     G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();    
     AnalysisManager->Write();
     AnalysisManager->CloseFile();  
-      
-    delete G4AnalysisManager::Instance();
+    AnalysisManager->Clear();  
     factoryOn = false;
    }
 }

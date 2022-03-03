@@ -417,7 +417,7 @@ ifdef G4LIB_USE_GDML
     ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
       GDMLLIBS := $(LIB_PATH)$(XERCESCROOT)/lib xerces-c.lib
     else
-      GDMLLIBS := -L$(XERCESCROOT)/lib -lxerces-c
+      GDMLLIBS := -L$(XERCESCROOT)/$(shell [ -d $(XERCESCROOT)/lib64 ] && echo "lib64" || echo "lib") -lxerces-c
     endif
   endif
   CPPFLAGS  += $(GDMLFLAGS)
@@ -432,7 +432,7 @@ G4TREP := $(G4TMP)/$(G4TEMPLATE_REPOSITORY)
 
 # Default archive call. Changed for: SUN-CC.
 #
-AR := ar r
+AR := ar rc
 
 # Default echo used with makedepend. Changed for SUN-CC, Linux-g++, WIN32.
 #

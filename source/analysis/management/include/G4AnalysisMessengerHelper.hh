@@ -36,6 +36,7 @@
 #include "globals.hh"
 
 #include <memory>
+#include <string_view>
 
 class G4VAnalysisManager;
 class G4UIdirectory;
@@ -46,43 +47,37 @@ class G4AnalysisMessengerHelper
   public:
     // types
     struct BinData {
-      BinData() :     
-        fNbins(0),
-        fVmin(0.),
-        fVmax(0.),
-        fSunit(""),
-        fSfcn(""),
-        fSbinScheme("") {}
-      G4int    fNbins;
-      G4double fVmin;
-      G4double fVmax;
+      BinData() {}
+      G4int    fNbins { 0 };
+      G4double fVmin { 0. };
+      G4double fVmax { 0. };
       G4String fSunit;
       G4String fSfcn;
       G4String fSbinScheme;
     };
     // types
     struct ValueData {
-      ValueData() :     
-        fVmin(0.),
-        fVmax(0.),
-        fSunit(""),
-        fSfcn("") {}
-      G4double fVmin;
-      G4double fVmax;
+      ValueData() {}
+      G4double fVmin { 0. };
+      G4double fVmax { 0. };
       G4String fSunit;
       G4String fSfcn;
     };
 
   public:
-    // Make available utility Update method 
+    // Make available utility Update method
     friend class G4HnMessenger;
 
  public:
     explicit G4AnalysisMessengerHelper(const G4String& hnType);
-    ~G4AnalysisMessengerHelper();
-   
-    // methods to create commands
-    std::unique_ptr<G4UIdirectory>  CreateHnDirectory() const; 
+    G4AnalysisMessengerHelper() = delete;
+    ~G4AnalysisMessengerHelper() = default;
+
+    // Methods to create commands
+    std::unique_ptr<G4UIdirectory>  CreateHnDirectory() const;
+
+    std::unique_ptr<G4UIcommand>  CreateGetCommand(
+                                        G4UImessenger* messenger) const;
 
     std::unique_ptr<G4UIcommand>  CreateSetTitleCommand(
                                         G4UImessenger* messenger) const;
@@ -95,23 +90,34 @@ class G4AnalysisMessengerHelper
     std::unique_ptr<G4UIcommand>  CreateSetAxisLogCommand(const G4String& axis,
                                         G4UImessenger* messenger) const;
 
-    // methods to read command paremeters
-    void GetBinData(BinData& data, std::vector<G4String>& parameters, 
+    // Methods to read command paremeters
+    void GetBinData(BinData& data, std::vector<G4String>& parameters,
                     G4int& counter) const;
-    void GetValueData(ValueData& data, std::vector<G4String>& parameters, 
+    void GetValueData(ValueData& data, std::vector<G4String>& parameters,
                     G4int& counter) const;
+
+    // Set methods
+    void SetHnType(const G4String& hnType);
 
     // warnings
     void WarnAboutParameters(G4UIcommand* command, G4int nofParameters) const;
     void WarnAboutSetCommands() const;
 
   private:
-    // methods
+    // Methods
     G4String Update(const G4String& str, const G4String& axis = "") const;
 
-    // data members
+    // Static data members
+    static constexpr std::string_view fkClass { "G4AnalysisMessengerHelper" };
+
+    // Data members
     G4String  fHnType;
 };
-  
+
+// inline functions
+
+inline void G4AnalysisMessengerHelper::SetHnType(const G4String& hnType)
+{ fHnType = hnType; }
+
 #endif
 

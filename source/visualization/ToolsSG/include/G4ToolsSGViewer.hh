@@ -25,8 +25,6 @@
 //
 // John Allison  6th October 2019
 
-#if defined (G4VIS_BUILD_TOOLSSG_DRIVER) || defined (G4VIS_USE_TOOLSSG)
-
 #ifndef G4TOOLSSGVIEWER_HH
 #define G4TOOLSSGVIEWER_HH
 
@@ -34,15 +32,19 @@
 
 #include "G4ToolsSGSceneHandler.hh"
 #include "G4Scene.hh"
+#include "G4VVisCommand.hh"
 
 #include <tools/sg/device_interactor>
 #include <tools/sg/separator>
-#include <tools/sg/head_light>
 #include <tools/sg/ortho>
 #include <tools/sg/perspective>
+#include <tools/sg/torche>
 #include <tools/sg/blend>
 #include <tools/sg/noderef>
 #include <tools/sg/keys>
+
+#include <tools/tokenize>
+#include <tools/sg/write_paper>
 
 template <class SG_SESSION,class SG_VIEWER>
 class G4ToolsSGViewer : public G4VViewer, tools::sg::device_interactor {
@@ -125,12 +127,16 @@ public:
   ,fMousePressedX(0)
   ,fMousePressedY(0)
   {
-    //::printf("debug : G4ToolsSGViewer::G4ToolsSGViewer.\n");
+    //::printf("debug : G4ToolsSGViewer::G4ToolsSGViewer: %lu, %s\n",this,a_name.c_str());
+    Messenger::Create();
   }
 
   virtual ~G4ToolsSGViewer() {
+    //::printf("debug : G4ToolsSGViewer::~G4ToolsSGViewer: %lu\n",this);
+    //WARNING : nodes may refer f_gl2ps_mgr, f_zb_mgr (to handle gstos (for GPU) or textures), then
+    //          we have to delete them first.
+    fSGViewer->sg().clear();
     delete fSGViewer;
-    //::printf("debug : G4ToolsSGViewer::~G4ToolsSGViewer.\n");
   }
 protected:
   G4ToolsSGViewer(const G4ToolsSGViewer& a_from)
@@ -166,8 +172,6 @@ public:
       G4cerr << "G4ToolsSGViewer::Initialise : SG_VIEWER::has_window() failed." << G4endl;
       return;
     }
-
-    fSGViewer->set_clear_color(0.3,0.3,0.3,1);
     fSGViewer->set_device_interactor(this);
   }
   
@@ -178,7 +182,7 @@ public:
       G4cerr << "G4ToolsSGViewer::SetView : no G4Scene.." << G4endl;
       return;
     }
-    
+
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
@@ -206,16 +210,27 @@ public:
       G4cerr << "G4ToolsSGViewer::SetView : null size viewer area." << G4endl;
       return;      
     }
-    //::printf("debug : GB : SetView : 1-001 : %g %g %g : %g %g %g : h %g : %g %g\n",
-    //  targetPoint.x(),targetPoint.y(),targetPoint.z(),
-    //  cameraPosition.x(),cameraPosition.y(),cameraPosition.z(),top-bottom,pnear,pfar);
-
+    
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    /*
+    G4cout << "debug : 0002 : radius " << radius << std::endl;
+    G4cout << "debug : cameraDistance : " << cameraDistance << std::endl;
+    G4cout << "debug : fieldHalfAngle : " << fVP.GetFieldHalfAngle() << std::endl;
+    G4cout << "debug : zoomFactor : " << fVP.GetZoomFactor() << std::endl;
+    G4cout << "debug : up : " << up.x() << " " << up.y() << " " << up.z() << std::endl;
+    G4cout << "debug : targetPoint : " << targetPoint.x() << " " << targetPoint.y() << " " << targetPoint.z() << std::endl;
+    G4cout << "debug : cameraPosition : " << cameraPosition.x() << " " << cameraPosition.y() << " " << cameraPosition.z() << std::endl;
+    G4cout << "debug : camera : znear " << pnear << ", zfar " << pfar << std::endl;
+    */
     //////////////////////////////////////////////////////////
     /// create scene graph ///////////////////////////////////
     //////////////////////////////////////////////////////////
     // Set projection, then create the tools::sg camera node :
     tools::sg::base_camera* _camera = nullptr;
     if (fVP.GetFieldHalfAngle() <= 0.) {
+      //G4cout << "debug : camera : ortho : top " << top << " bottom " << bottom << " top-bottom " << top-bottom << std::endl;
       if((top-bottom)<=0) {
         fSGViewer->set_clear_color(0.3,0.3,0.3,1);
         G4cerr << "G4ToolsSGViewer::SetView : for ortho camera, (top-bottom)<=0." << G4endl;
@@ -225,6 +240,7 @@ public:
       ortho_camera->height.value(float(top-bottom));
       _camera = ortho_camera;
     } else {
+      //G4cout << "debug : camera : perspec : heightAngle " << float(2*fVP.GetFieldHalfAngle()) << std::endl;
       tools::sg::perspective* perspective_camera = new tools::sg::perspective;
       perspective_camera->height_angle.value(float(2*fVP.GetFieldHalfAngle()));
       _camera = perspective_camera;
@@ -238,24 +254,15 @@ public:
     _camera->zfar.value(float(pfar));
 
     _camera->look_at(dir,tools::vec3f(up.x(),up.y(),up.z()));  //same logic as in G4OpenInventorViewer.
-    
-    tools::sg::separator* sep = new tools::sg::separator;
-    sep->add(_camera);
 
-   {tools::sg::head_light* light = new tools::sg::head_light;
-  //light->direction = tools::vec3f(1,-1,-10);
-    light->direction = tools::vec3f(0,0,-1);
-    light->on = true;
-    sep->add(light);}
+    /*
+    const G4Vector3D& lightDirection = fVP.GetLightpointDirection();
+    G4cout << "debug : lightDirection : " << lightDirection.x() << " " << lightDirection.y() << " " << lightDirection.z() << std::endl;
+    const G4Vector3D& actualLightDirection = fVP.GetActualLightpointDirection();
+    G4cout << "debug : actualLightDirection : " << actualLightDirection.x() << " " << actualLightDirection.y() << " " << actualLightDirection.z() << std::endl;
+    */
 
-   {tools::sg::blend* blend = new tools::sg::blend;
-    blend->on = true; //to handle transparency.
-    sep->add(blend);}
- 
-    sep->add(new tools::sg::noderef(*fSGSceneHandler.ToolsSGScene()));
-    
-    fSGViewer->sg().clear();
-    fSGViewer->sg().add(sep); //give sep ownership to the viewer.
+    CreateSG(_camera,fVP.GetActualLightpointDirection());
     
    {G4Color background = fVP.GetBackgroundColour ();
     fSGViewer->set_clear_color(float(background.GetRed()),float(background.GetBlue()),float(background.GetBlue()),1);}
@@ -275,20 +282,16 @@ public:
     FinishView ();       // Flush streams and/or swap buffers.
   }
 
-  virtual void ShowView() {
-    if(!fSGViewer) return;
-    fSGViewer->show();
-    fSGViewer->win_render();
-    fSGSession.sync();
-  }
+  virtual void ShowView() {FinishView();}
 
   virtual void FinishView() {
-    if(!fSGViewer) return;
-    fSGViewer->show();
-    fSGViewer->win_render();
-    fSGSession.sync();
+    if(fSGViewer) {
+      fSGSceneHandler.TouchPlotters(fSGViewer->sg());
+      fSGViewer->show();
+      fSGViewer->win_render();
+      fSGSession.sync();
+    }
   }
-
 
 #ifdef G4MULTITHREADED
   virtual void SwitchToVisSubThread() {}
@@ -381,6 +384,109 @@ protected:
 //  void wheelEvent           (WheelEvent*);
 
 protected:
+  void CreateSG(tools::sg::base_camera* a_camera,const G4Vector3D& a_light_dir) {
+    tools::sg::group& _parent = fSGViewer->sg();
+    _parent.clear();    
+
+    ///////////////////////////////////////////////////
+    /// 2D scene graph: ///////////////////////////////
+    ///////////////////////////////////////////////////
+    tools::sg::separator* scene_2D = new tools::sg::separator;
+    _parent.add(scene_2D);
+    scene_2D->add(new tools::sg::noderef(fSGSceneHandler.GetTransient2DObjects()));
+    scene_2D->add(new tools::sg::noderef(fSGSceneHandler.GetPersistent2DObjects()));
+  
+    ///////////////////////////////////////////////////
+    /// 3D scene graph: ///////////////////////////////
+    ///////////////////////////////////////////////////
+    tools::sg::separator* scene_3D = new tools::sg::separator;
+    _parent.add(scene_3D);
+  
+    scene_3D->add(a_camera);
+  
+   {tools::sg::torche* light = new tools::sg::torche;
+    light->on = true;
+    light->direction = tools::vec3f(-a_light_dir.x(),-a_light_dir.y(),-a_light_dir.z());
+    scene_3D->add(light);}
+  
+   {tools::sg::blend* blend = new tools::sg::blend;
+    blend->on = true; //to handle transparency.
+    scene_3D->add(blend);}
+
+    scene_3D->add(new tools::sg::noderef(fSGSceneHandler.GetTransient3DObjects()));
+    scene_3D->add(new tools::sg::noderef(fSGSceneHandler.GetPersistent3DObjects()));
+  }
+  
+  void Export(const G4String& a_format,const G4String& a_file) {
+    if(!fSGViewer) return;
+    const G4Colour& back_color = fVP.GetBackgroundColour();
+    if(!write_paper(G4cout,f_gl2ps_mgr,f_zb_mgr,0,0,
+                    float(back_color.GetRed()),float(back_color.GetGreen()),float(back_color.GetBlue()),float(back_color.GetAlpha()),
+		    fSGViewer->sg(),
+		    fSGViewer->width(),fSGViewer->height(),a_file,a_format)) {
+      G4cout << "G4ToolsSGViewer::Export: write_paper() failed." << G4endl;
+      return;
+    }
+  }
+
+protected:  
+  class Messenger: public G4VVisCommand {
+  public:  
+    static void Create() {static Messenger s_messenger;}
+  private:  
+    Messenger() {
+      G4UIparameter* parameter;
+      //////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////
+      write_scene = new G4UIcommand("/vis/tsg/export", this);
+      write_scene->SetGuidance("Write the content of the current viewer in a file at various formats.");
+      write_scene->SetGuidance("Default file is out.eps and default format is gl2ps_eps.");
+      write_scene->SetGuidance("Available formats are:");
+      write_scene->SetGuidance("- gl2ps_eps: gl2ps producing eps");
+      write_scene->SetGuidance("- gl2ps_ps:  gl2ps producing ps");
+      write_scene->SetGuidance("- gl2ps_pdf: gl2ps producing pdf");
+      write_scene->SetGuidance("- gl2ps_svg: gl2ps producing svg");
+      write_scene->SetGuidance("- gl2ps_tex: gl2ps producing tex");
+      write_scene->SetGuidance("- gl2ps_pgf: gl2ps producing pgf");
+      write_scene->SetGuidance("- zb_ps: tools::sg offscreen zbuffer put in a PostScript file.");
+
+      parameter = new G4UIparameter("format",'s',true);
+      parameter->SetDefaultValue("gl2ps_eps");
+      write_scene->SetParameter (parameter);
+
+      parameter = new G4UIparameter("file",'s',true);
+      parameter->SetDefaultValue("out.eps");
+      write_scene->SetParameter (parameter);
+    }
+    virtual ~Messenger() {
+      delete write_scene;
+    }
+  public:
+    virtual void SetNewValue(G4UIcommand* a_cmd,G4String a_value) {
+      G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+      G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+      if (!viewer) {
+        if (verbosity >= G4VisManager::errors) G4cerr << "ERROR: No current viewer." << G4endl;
+        return;
+      }
+      G4ToolsSGViewer* tsg_viewer = dynamic_cast<G4ToolsSGViewer*>(viewer);
+      if(!tsg_viewer) {
+        G4cout << "G4ToolsSGViewer::SetNewValue:"
+               << " current viewer is not a G4ToolsSGViewer." << G4endl;
+        return;
+      }
+      std::vector<std::string> args;
+      tools::double_quotes_tokenize(a_value,args);
+      if(args.size()!=a_cmd->GetParameterEntries()) return;
+      if(a_cmd==write_scene) {
+        tsg_viewer->Export(args[0],args[1]);
+      }
+    }
+  private:
+    G4UIcommand* write_scene;
+  };
+  
+protected:
   SG_SESSION& fSGSession;
   G4ToolsSGSceneHandler& fSGSceneHandler;
   SG_VIEWER* fSGViewer;
@@ -390,8 +496,10 @@ protected:
   G4bool fKeyShift;
   G4bool fMousePressed;
   G4double fMousePressedX, fMousePressedY;
-};
 
-#endif
+  tools::sg::zb_manager f_zb_mgr;
+  tools::sg::gl2ps_manager f_gl2ps_mgr;
+  
+};
 
 #endif

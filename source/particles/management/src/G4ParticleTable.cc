@@ -326,7 +326,7 @@ void G4ParticleTable::RemoveAllParticles()
 G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition* particle)
 {
   // check particle name
-  if ((particle == nullptr) || (GetKey(particle).isNull()))
+  if ((particle == nullptr) || (GetKey(particle).empty()))
   {
     G4Exception("G4ParticleTable::Insert()",
 		"PART121", FatalException,
@@ -602,10 +602,13 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
     G4PTblEncodingDictionary* pedic = fEncodingDictionary;
     G4ParticleDefinition* particle = nullptr;  
 
-    G4PTblEncodingDictionary::iterator it =  pedic->find(aPDGEncoding );
-    if (it != pedic->end())
+    if (pedic)
     {
-      particle = (*it).second;
+      G4PTblEncodingDictionary::iterator it =  pedic->find(aPDGEncoding );
+      if (it != pedic->end())
+      {
+        particle = (*it).second;
+      }
     }
 
 #ifdef G4MULTITHREADED

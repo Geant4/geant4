@@ -39,7 +39,7 @@ if(GEANT4_ENABLE_TESTING)
 
   # - Add TOOLS_FONT_PATH if freetype enabled
   if(GEANT4_USE_FREETYPE)
-    list(APPEND GEANT4_TEST_ENVIRONMENT TOOLS_FONT_PATH=${PROJECT_SOURCE_DIR}/source/analysis/fonts)
+    list(APPEND GEANT4_TEST_ENVIRONMENT TOOLS_FONT_PATH=${PROJECT_SOURCE_DIR}/source/externals/g4tools/fonts)
   endif()
 
   # - Configure 'G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default)'

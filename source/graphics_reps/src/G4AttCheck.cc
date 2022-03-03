@@ -404,12 +404,10 @@ G4bool G4AttCheck::Standard
             G4String valueAndUnit;
             G4String unit;
             if (extra == "G4BestUnit") {
-              valueAndUnit = value;
-              valueAndUnit = valueAndUnit.strip();
+              valueAndUnit = G4StrUtil::strip_copy(value);
               unit = valueAndUnit.substr(valueAndUnit.rfind(' ')+1);
             } else {
-              valueAndUnit = value + ' ' + extra;
-              valueAndUnit = valueAndUnit.strip();
+              valueAndUnit = G4StrUtil::strip_copy(value + ' ' + extra);
               unit = extra;
             }
             G4String unitCategory = G4UnitDefinition::GetCategory(unit);

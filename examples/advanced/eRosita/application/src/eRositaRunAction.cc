@@ -33,41 +33,40 @@
 
 
 eRositaRunAction::eRositaRunAction()
-{}
-
+{
+}
 
 eRositaRunAction::~eRositaRunAction()
-{}
-
-
+{
+}
 
 void eRositaRunAction::BeginOfRunAction(const G4Run* run)
 {
-  timerRun.Start();	
-
-  G4cout << "--- Run " << run->GetRunID() << " start." << G4endl;
-
-  AnalysisManager::Instance();
+    timerRun.Start();
+    
+    if (IsMaster()) {
+        G4cout << "--- Run " << run->GetRunID() << " (master) start." << G4endl;
+        AnalysisManager::Instance();
+    }
+    else
+    {
+        G4cout << "--- Run " << run->GetRunID() << " (worker) start." << G4endl;
+    }
 }
-
-
 
 void eRositaRunAction::EndOfRunAction(const G4Run* run)
-{ 
-
-  AnalysisManager::Instance()->Destroy();
-
-  G4cout << "--- Run " << run->GetRunID() 
-	 << run -> GetRunID()
-         << " ends (Number of events = "
-         << run -> GetNumberOfEvent() << ")." 
-	 << G4endl;
-
-  timerRun.Stop();
-  std::cout << "  "  << timerRun << std::endl;
+{
+    if (IsMaster()) {
+        G4cout << "--- Run " << run->GetRunID() << " (master) end."
+            << "Event total count = " << run->GetNumberOfEvent() << "."
+            << G4endl;
+        AnalysisManager::Instance()->Destroy();
+    }
+    else
+    {
+        G4cout << "--- Run " << run->GetRunID() << " (worker) end." << G4endl;
+    }
+    
+    timerRun.Stop();
+    std::cout << "  "  << timerRun << std::endl;
 }
-
-
-
-
-

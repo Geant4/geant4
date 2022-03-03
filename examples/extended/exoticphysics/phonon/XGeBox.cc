@@ -33,11 +33,7 @@
 #include "G4UImanager.hh"
 #include "G4UserSteppingAction.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -59,7 +55,7 @@ int main(int argc,char** argv) {
 
  // Construct the run manager
  //
- auto* runManager = G4RunManagerFactory::CreateRunManager();
+ auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
  // Set mandatory initialization classes
  //

@@ -59,7 +59,7 @@ namespace G4INCL {
        * \param A the mass number
        * \param Z the charge number
        */
-      ParticleSampler(const G4int A, const G4int Z);
+      ParticleSampler(const G4int A, const G4int Z, const G4int S);
 
       /// \brief Destructor
       ~ParticleSampler();
@@ -123,6 +123,9 @@ namespace G4INCL {
 
       /// \brief Charge number
       const G4int theZ;
+
+      /// \brief Strangeness number
+      const G4int theS;
 
       /// \brief Array of pointers to the r-space CDF table
       InterpolationTable const *theRCDFTable[UnknownParticle];

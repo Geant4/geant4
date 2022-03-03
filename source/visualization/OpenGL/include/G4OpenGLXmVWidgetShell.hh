@@ -28,8 +28,6 @@
 // 
 //Base class for all Motif window widgets (shells)
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMVWIDGETSHELL_HH
 #define G4OPENGLXMVWIDGETSHELL_HH
 
@@ -50,7 +48,5 @@ public:
 
 private:
 };
-
-#endif
 
 #endif

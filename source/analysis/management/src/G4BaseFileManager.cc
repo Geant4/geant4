@@ -33,18 +33,10 @@
 
 //_____________________________________________________________________________
 G4BaseFileManager::G4BaseFileManager(const G4AnalysisManagerState& state)
-  : fState(state),
-    fFileName(""),
-    fFileNames()
-{
-}
+  : fState(state)
+{}
 
-//_____________________________________________________________________________
-G4BaseFileManager::~G4BaseFileManager()
-{
-}
-
-// 
+//
 // public methods
 //
 
@@ -54,7 +46,7 @@ void G4BaseFileManager::AddFileName(const G4String& fileName)
   // G4cout << "registering " << fileName << " in manager of " << GetFileType() << G4endl;
 
   // Do nothing in file name is already present
-  for ( auto name : fFileNames ) {
+  for ( const auto& name : fFileNames ) {
     if ( name == fileName ) return;
   }
 
@@ -62,11 +54,9 @@ void G4BaseFileManager::AddFileName(const G4String& fileName)
 }
 
 //_____________________________________________________________________________
-G4String G4BaseFileManager::GetFileType() const 
+G4String G4BaseFileManager::GetFileType() const
 {
-  G4String fileType = fState.GetType();
-  fileType.toLower();
-  return fileType;
+  return G4StrUtil::to_lower_copy(fState.GetType());
 }
 
 //_____________________________________________________________________________
@@ -105,16 +95,16 @@ G4String G4BaseFileManager::GetHnFileName(const G4String& hnType,
 }
 
 //_____________________________________________________________________________
-G4String G4BaseFileManager::GetNtupleFileName(const G4String& ntupleName) const 
-{  
+G4String G4BaseFileManager::GetNtupleFileName(const G4String& ntupleName) const
+{
   return G4Analysis::GetNtupleFileName(fFileName, GetFileType(), ntupleName);
-}  
+}
 
 //_____________________________________________________________________________
-G4String G4BaseFileManager::GetNtupleFileName(G4int ntupleFileNumber) const 
-{  
+G4String G4BaseFileManager::GetNtupleFileName(G4int ntupleFileNumber) const
+{
   return G4Analysis::GetNtupleFileName(fFileName, GetFileType(), ntupleFileNumber);
-}  
+}
 
 //_____________________________________________________________________________
 G4String G4BaseFileManager::GetPlotFileName() const

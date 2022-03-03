@@ -13,7 +13,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+06-10-21 I. Hrivnacova (testem11-V10-07-05)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+27-08-21 Dennis Wright (testem11-V10-07-04)
+- replace G4RadioactiveDecayBase with G4RadioactiveDecay (name migration) 
+
+19-07-21 I. Hrivnacova (testem11-V10-07-03)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
 10-05-21 mma (testem11-V10-07-02)
 - Migration to G4RunManagerFactory and G4SteppingVerboseWithUnits.
 

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 
 // this :
 #include <HEPVis/actions/SoAlternateRepAction.h>
@@ -149,5 +147,3 @@ void SoAlternateRepAction::nodeAction(
   }
 
 }
-
-#endif

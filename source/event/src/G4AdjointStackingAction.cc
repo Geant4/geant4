@@ -55,7 +55,7 @@ G4AdjointStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
   G4ClassificationOfNewTrack classification = fUrgent;
   G4String partType = aTrack->GetParticleDefinition()->GetParticleType();
-  adjoint_mode = partType.contains(G4String("adjoint"));
+  adjoint_mode = G4StrUtil::contains(partType, "adjoint");
   if (!adjoint_mode )
   {
     if (!reclassification_stage)

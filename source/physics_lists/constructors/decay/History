@@ -13,6 +13,14 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-October-2020 Vladimir Ivanchenko  (phys-ctor-decay-V10-07-03)
+- G4RadioactiveDecayPhysics - Use SetAuger(..) method instead of 
+    the obsolete SetAugerCascade(..)
+
+25-August-2021 Dennis Wright      (part of physics-lists-V10-07-02)
+- G4RadioactiveDecayPhysics.cc: replace G4RadioactiveDecayBase with G4RadioactiveDecay
+  see top level History file 
+
 16-April-2021 Ben Morgan                (phys-ctor-decay-V10-07-01)
 - Migrate build to modular CMake API
 

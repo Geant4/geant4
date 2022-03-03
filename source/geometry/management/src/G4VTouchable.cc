@@ -30,14 +30,7 @@
 
 #include "G4VTouchable.hh"
 
-G4VTouchable::G4VTouchable()
-{
-}
-
-G4VTouchable::~G4VTouchable()
-{
-}
-
+// --------------------------------------------------------------------
 G4VPhysicalVolume* G4VTouchable::GetVolume(G4int) const
 {
   G4Exception("G4VTouchable::GetVolume()", "GeomMgt0001",
@@ -45,6 +38,7 @@ G4VPhysicalVolume* G4VTouchable::GetVolume(G4int) const
   return nullptr;
 }
 
+// --------------------------------------------------------------------
 G4VSolid* G4VTouchable::GetSolid(G4int) const
 {
   G4Exception("G4VTouchable::GetSolid()", "GeomMgt0001",
@@ -52,6 +46,7 @@ G4VSolid* G4VTouchable::GetSolid(G4int) const
   return nullptr;
 }
 
+// --------------------------------------------------------------------
 G4int G4VTouchable::GetReplicaNumber(G4int) const
 {
   G4Exception("G4VTouchable::GetReplicaNumber()", "GeomMgt0001",
@@ -59,6 +54,7 @@ G4int G4VTouchable::GetReplicaNumber(G4int) const
   return 0;
 }
 
+// --------------------------------------------------------------------
 G4int G4VTouchable::MoveUpHistory(G4int)
 {
   G4Exception("G4VTouchable::MoveUpHistory()", "GeomMgt0001",
@@ -66,6 +62,7 @@ G4int G4VTouchable::MoveUpHistory(G4int)
   return 0;
 }
 
+// --------------------------------------------------------------------
 void G4VTouchable::UpdateYourself(G4VPhysicalVolume*,
 			          const G4NavigationHistory* ) 
 {
@@ -73,6 +70,7 @@ void G4VTouchable::UpdateYourself(G4VPhysicalVolume*,
               FatalException, "Undefined call to base class.");
 }
 
+// --------------------------------------------------------------------
 G4int G4VTouchable::GetHistoryDepth() const
 {
   G4Exception("G4VTouchable::GetHistoryDepth()", "GeomMgt0001",
@@ -80,9 +78,10 @@ G4int G4VTouchable::GetHistoryDepth() const
   return  0;
 }
 
+// --------------------------------------------------------------------
 const G4NavigationHistory* G4VTouchable::GetHistory() const
 {
   G4Exception("G4VTouchable::GetHistory()", "GeomMgt0001",
               FatalException, "Undefined call to base class.");
-  return 0;
+  return nullptr;
 }

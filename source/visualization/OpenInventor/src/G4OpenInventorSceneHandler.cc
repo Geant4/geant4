@@ -28,7 +28,6 @@
 // 
 // Jeff Kallenbach 01 Aug 1996
 // OpenInventor stored scene - creates OpenInventor display lists.
-#ifdef G4VIS_BUILD_OI_DRIVER
 
 // this :
 #include "G4OpenInventorSceneHandler.hh"
@@ -838,4 +837,3 @@ void G4OpenInventorSceneHandler::AddTransform(const G4Point3D& translation)
   delete sbMatrix;
   fCurrentSeparator->addChild(matrixTransform);
 }
-#endif

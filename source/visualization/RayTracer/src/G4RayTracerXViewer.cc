@@ -25,8 +25,6 @@
 //
 //
 
-#ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
-
 #include "G4RayTracerXViewer.hh"
 
 #include "G4VSceneHandler.hh"
@@ -51,6 +49,9 @@ void G4RayTracerXViewer::Initialise() {
 
   G4RayTracerViewer::Initialise();
 
+  fVP.SetAutoRefresh(true);
+  fDefaultVP.SetAutoRefresh(true);
+
   // Set up X Window...
   G4RTXScanner* theXScanner = (G4RTXScanner*)theTracer->GetScanner();
   if (!theXScanner->GetXWindow(fName,fVP)) {
@@ -59,5 +60,3 @@ void G4RayTracerXViewer::Initialise() {
     return;
   }
 }
-
-#endif

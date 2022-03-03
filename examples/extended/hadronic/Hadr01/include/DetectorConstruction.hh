@@ -62,20 +62,18 @@ public:
   DetectorConstruction();
   virtual ~DetectorConstruction();
 
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
+  G4VPhysicalVolume* Construct() override;
+  void ConstructSDandField() override;
 
   void SetWorldMaterial(const G4String&);
   void SetTargetMaterial(const G4String&);
 
-  void SetTargetRadius(G4double val);
+  DetectorConstruction & operator=(const DetectorConstruction &right) = delete;
+  DetectorConstruction(const DetectorConstruction&) = delete;
 
 private:
 
   void ComputeGeomParameters();
-
-  DetectorConstruction & operator=(const DetectorConstruction &right);
-  DetectorConstruction(const DetectorConstruction&);
 
   G4Material*  fTargetMaterial;
   G4Material*  fWorldMaterial;

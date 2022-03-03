@@ -23,9 +23,6 @@ if(GEANT4_USE_QT)
   list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Qt.hh)
   list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Qt.cc)
 
-  # Must enable Qt source with a def...
-  list(APPEND G4INTERFACES_COMMON_MODULE_COMPILE_DEFINITIONS G4INTY_BUILD_QT)
-
   # It uses Qt core and gui(?) libs
   list(APPEND G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES
     Qt5::Gui Qt5::Core)
@@ -36,9 +33,6 @@ if(MSVC)
   # Add the sources
   list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Win32.hh)
   list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Win32.cc)
-
-  # Add the needed compile definitions to these sources
-  list(APPEND G4INTERFACES_COMMON_MODULE_COMPILE_DEFINITIONS G4INTY_BUILD_WIN32)
 endif()
 
 # X11 options - we only need this for Xm (and Inventor, which activates XM)
@@ -47,13 +41,15 @@ if(UNIX AND GEANT4_USE_XM)
   list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Xt.hh)
   list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Xt.cc)
 
-  # Source needs to have a compile definition
-  list(APPEND G4INTERFACES_COMMON_MODULE_COMPILE_DEFINITIONS G4INTY_BUILD_XT)
-
   # It uses the X11 libs?
   list(APPEND G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES
     X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu X11::Xt
   )
+endif()
+
+if(GEANT4_USE_VTK)
+  list(APPEND G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES
+       ${VTK_LIBRARIES})
 endif()
 
 # Define the Geant4 Module.
@@ -62,9 +58,6 @@ geant4_add_module(G4UIcommon
     ${G4INTERFACES_COMMON_MODULE_HEADERS}
   SOURCES
     ${G4INTERFACES_COMMON_MODULE_SOURCES})
-
-geant4_module_compile_definitions(G4UIcommon
-  PRIVATE ${G4INTERFACES_COMMON_MODULE_COMPILE_DEFINITIONS})
 
 geant4_module_link_libraries(G4UIcommon
   PUBLIC

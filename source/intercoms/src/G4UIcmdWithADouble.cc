@@ -37,6 +37,7 @@ G4UIcmdWithADouble::G4UIcmdWithADouble(const char* theCommandPath,
 {
   G4UIparameter* dblParam = new G4UIparameter('d');
   SetParameter(dblParam);
+  SetCommandType(WithADoubleCmd);
 }
 
 // --------------------------------------------------------------------

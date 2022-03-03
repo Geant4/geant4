@@ -27,10 +27,10 @@
 //
 // file STCyclotronSensitiveTarget.cc
 //
-#include "STCyclotronAnalysis.hh"
 #include "STCyclotronRun.hh"
 #include "STCyclotronSensitiveTarget.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4RunManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4UnitsTable.hh"

@@ -17,4 +17,17 @@
 
 /** @} */
 
+/** @defgroup extended_geometry_vecGeomNavigation vecGeomNavigation
+ *  Geometry example vecGeomNavigation
+ *  @{
+ */
+
+  class VG01ActionInitialization{};
+  class VG01DetectorConstruction{};
+  class VG01DetectorMessenger{};
+  class VG01PrimaryGeneratorAction{};
+  class VG01SteppingVerboseWithDir{};
+
+/** @} */
+
 /** @} */

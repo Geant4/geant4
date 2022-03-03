@@ -89,7 +89,7 @@ public:
 
   // printing
   void StreamInfo(std::ostream& os) const;
-  void Dump() const;
+  void Dump();
   friend std::ostream& operator<< (std::ostream& os, const G4EmParameters&);
 
   // boolean flags
@@ -101,9 +101,6 @@ public:
 
   void SetLPM(G4bool val);
   G4bool LPM() const;
-
-  void SetSpline(G4bool val);
-  G4bool Spline() const;
 
   void SetUseCutAsFinalRange(G4bool val);
   G4bool UseCutAsFinalRange() const;
@@ -117,12 +114,13 @@ public:
   void SetBeardenFluoDir(G4bool val);
   G4bool BeardenFluoDir() const;
 
-  void SetAuger(G4bool val);
-  G4bool Auger() const;
+  void SetANSTOFluoDir(G4bool val);
+  G4bool ANSTOFluoDir() const;
 
-  // obsolete methods
-  void SetAugerCascade(G4bool val);
-  G4bool AugerCascade() const;
+  void SetAuger(G4bool val);
+  void SetAugerCascade(G4bool val) { SetAuger(val); };
+  G4bool Auger() const;
+  G4bool AugerCascade() const { return Auger(); }
 
   void SetPixe(G4bool val);
   G4bool Pixe() const;
@@ -145,8 +143,9 @@ public:
   void SetUseMottCorrection(G4bool val);
   G4bool UseMottCorrection() const;
 
-  void SetIntegral(G4bool) {};
- 
+  void SetIntegral(G4bool val);
+  G4bool Integral() const;
+
   void SetBirksActive(G4bool val);
   G4bool BirksActive() const;
 
@@ -183,13 +182,14 @@ public:
   void SetRetrieveMuDataFromFile(G4bool v);
 
   // 5d
-  void  SetOnIsolated(G4bool val);
-  G4bool  OnIsolated() const;
+  void SetOnIsolated(G4bool val);
+  G4bool OnIsolated() const;
 
-  void  ActivateDNA();
+  void ActivateDNA();
+  void SetIsPrintedFlag(G4bool val);
+  G4bool IsPrintLocked() const;
 
   // double parameters with values
-
   void SetMinEnergy(G4double val);
   G4double MinKinEnergy() const;
 
@@ -386,6 +386,7 @@ private:
   G4bool muhadLateralDisplacement;
   G4bool useAngGeneratorForIonisation;
   G4bool useMottCorrection;
+  G4bool integral;
   G4bool birks;
   G4bool fICRU90;
   G4bool gener;
@@ -394,6 +395,7 @@ private:
   G4bool fMuDataFromFile;
   G4bool onIsolated; // 5d model conversion on free ions
   G4bool fDNA;
+  G4bool fIsPrinted;
   
   G4double minKinEnergy;
   G4double maxKinEnergy;

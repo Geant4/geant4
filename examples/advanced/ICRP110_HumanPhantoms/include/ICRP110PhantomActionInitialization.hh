@@ -30,14 +30,13 @@
 #define ICRP110PhantomActionInitialization_h 1
 
 #include "G4VUserActionInitialization.hh"
-#include "ICRP110PhantomAnalysisManager.hh"
 
 class G4GeneralParticleSource;
 
 class ICRP110PhantomActionInitialization: public G4VUserActionInitialization
 {
   public:
-    ICRP110PhantomActionInitialization();
+    explicit ICRP110PhantomActionInitialization();
     virtual ~ICRP110PhantomActionInitialization();
 
     virtual void BuildForMaster() const;

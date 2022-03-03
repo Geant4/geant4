@@ -218,21 +218,36 @@ exMPI03 (merging of histograms via MPI)
 ---------------------------------------
 This example is the same as exMPI02 with the following
 differences:
-- It uses g4tools instead of ROOT for histogramming
+- It uses Geant4 analysis instead of ROOT for histogramming
 - It shows how to merge, using g4tools, histograms via MPI
   so that the entire statistics is accumulated in a single output file
 - It also shows how to merge G4Run objects from different ranks and 
   how to merge scorers
 - MT is enabled.
+- Root output files from application run with `mpiexec -n 3`
+  - dose-merged.root - merged histograms
+  - dose-rank0,1,2 - histograms data collected on rank 0, 1,2 before merge
 
 exMPI04 (merging of ntuples via MPI)
 ---------------------------------------
 This example is the same as exMPI03 with added ntuple.
-- It uses g4tools for histogramming and ntuples.
+- It uses Geant4 analysis for histogramming and ntuples.
 - It shows how to merge, using g4tools, ntuples via MPI in sequential mode,
   so that the entire statistics is accumulated in a single output file.
 - If MT is enabled, the ntuples are merged from threads to 
   files per ranks.
 - Combined MT + MPI merging is not yet supported.
 - Merging ntuples is actually supported only with Root output format.
+
+- Root output files from application run with `mpiexec -n 4`
+  - Sequential application:
+    (3 working ranks, 1 rank dedicated for collecting ntuple data)
+    - dose-merged.root - merged histograms
+    - dose-rank0,1,2.root - histograms data collected on rank 0  before merge
+    - dose-rank3  - ntuples merged from ranks 0, 1 and 2
+  - MT application:
+    (4 working ranks)
+    - dose-merged.root - merged histograms
+    - dose-rank0, 1, 2, 3.root -  histograms data collected on rank N before merge;
+         ntuples merged on rank N from rank threads
 

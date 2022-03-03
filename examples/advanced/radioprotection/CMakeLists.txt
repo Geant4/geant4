@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(radioprotection)
 
 #----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ target_link_libraries(radioprotection ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(radioprotection_SCRIPTS
-   vis.mac physics.mac primary.mac run.mac geometry.mac  MergeFiles LoadPlotNtuple.C
+   vis.mac physics.mac primary.mac run.mac geometry.mac  MergeFiles LoadPlotNtuple.C ProcessMicro.C
   )
 
 foreach(_script ${radioprotection_SCRIPTS})

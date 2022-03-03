@@ -239,9 +239,6 @@ public: // With description
   void Draw (const G4Polymarker&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  void Draw (const G4Scale&,
-    const G4Transform3D& objectTransformation = G4Transform3D());
-
   void Draw (const G4Square&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 

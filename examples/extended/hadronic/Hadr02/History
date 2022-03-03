@@ -14,6 +14,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-11-21 I. Hrivnacova (exhadr02-V10-07-05)
+- Added analysis manager Clear() call instead of
+  deleting in the end of run (removed on July 19)
+
+19-07-21 I. Hrivnacova (exhadr02-V10-07-04)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
 18-05-21 A. Ribon     (exhadr02-V10-07-03)
 - Migration to newer CRMC, and more modern approach to physics lists.
 

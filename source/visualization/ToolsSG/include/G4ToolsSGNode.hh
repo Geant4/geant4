@@ -25,8 +25,6 @@
 //
 // John Allison, 6th October 2020
 
-#if defined (G4VIS_BUILD_TOOLSSG_DRIVER) || defined (G4VIS_USE_TOOLSSG)
-
 #ifndef G4TOOLSSGNODE_HH
 #define G4TOOLSSGNODE_HH
 
@@ -54,7 +52,5 @@ public:
 private:
   G4PhysicalVolumeModel::G4PhysicalVolumeNodeID fPVNodeID;
 };
-
-#endif
 
 #endif

@@ -22,18 +22,15 @@ activated, otherwise they will run in sequential mode.
 Not migrated examples will run in sequential mode even when built against
 Geant4 libraries built with MT mode activated.
 
-The examples which support MT can be easily recognized by the following lines
+The examples which do NOT support MT can be easily recognized by the following line
 of code in main ():
 \verbatim
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+G4RunManager* runManager = new G4RunManager;
 \endverbatim
-The compiler flag -DG4MULTITHREADED is automatically set when building applications
-using Geant4's CMake (via GEANT4_USE_FILE) and GNUmake systems, and is listed in 
-the flags reported by the --cflags option of the geant4-config program.
+or
+\verbatim
+auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
+\endverbatim
 
 \section HowToRunMT_s2  Set number of threads
 
@@ -43,11 +40,8 @@ ways:
 
 - in the code
 \verbatim
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  auto* runManager = ...;
   runManager->SetNumberOfThreads(4);
-#else
-  ...
 \endverbatim
 
 - in a macro file via UI command added just before /run/initialize
@@ -72,12 +66,6 @@ on the screen. The messeges from threads are preceded with a predefined string
 G4WTi> where i is the thread number.  Users can change this default behaviour 
 and choose
 
-- to buffer the output from each thread at a time, so that the output of each 
-  thread is grouped and printed at the end of the job
-\verbatim
-/control/cout/useBuffer true|false
-\endverbatim
-
 - to limit the output from threads to one selected thread only: 
 \verbatim
 /control/cout/ignoreThreadsExcept 0
@@ -87,6 +75,12 @@ and choose
 \verbatim
 /control/cout/setCoutFile coutFileName
 /control/cout/setCerrFile cerrFileName
+\endverbatim
+
+- to buffer the output from each thread at a time, so that the output of each
+  thread is grouped and printed at the end of the job
+\verbatim
+/control/cout/useBuffer true|false
 \endverbatim
 
 */

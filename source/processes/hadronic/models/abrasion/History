@@ -13,6 +13,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04-Aug-2021 Alberto Ribon (had-abrasion-V10-07-02)
+--------------------------------------------------
+- G4WilsonAbrasionModel : migrated to the new version of
+  G4PhysicsModelCatalog
+
 16-Apr-2021 Ben Morgan (had-abrasion-V10-07-01)
 --------------------------------------------------
 - Migrate build to modular CMake API

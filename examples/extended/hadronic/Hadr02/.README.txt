@@ -207,35 +207,6 @@ be used:
 
 \section Hadr02_s6 HISTOGRAMS
 
-To use histograms any of implementations of AIDA interfaces should
-be available (see http://aida.freehep.org).
-
-A package including AIDA and extended interfaces also using Python
-is PI, available from: http://cern.ch/pi .
-
-Once installed PI or PI-Lite in a specified local area $PI_DIR, it is
-required to add the installation path to $PATH, i.e. for example,
-for release 1.2.1 of PI:
-
-setenv PATH ${PATH}:$PI_DIR/1.3.12/app/releases/PI/PI_1_3_12/slc3_gcc323/bin
-
-CERN users can use the PATH to the LCG area on AFS.
-
-Before compilation of the example it is optimal to clean up old 
-files:
-
-\verbatim
-gmake histclean
-setenv G4ANALYSIS_USE 1
-gmake
-\endverbatim
-
-Before running the example the command should be issued:
-
-\verbatim
-eval `aida-config --runtime csh`
-\endverbatim
-
 It is possible to choose the format of the output file with 
 histograms using UI command:
 
@@ -244,8 +215,8 @@ histograms using UI command:
 /testhadr/HistoType   type
 \endverbatim
 
-The following types are available: hbook, root, aida. They will be 
-stored in the file "name.hbook", "name.root", or "name.aida". 
+The following types are available: root, xml(aida). They will be
+stored in the file "name.root", or "name.xml".
 If the environment variable HISTODIR is defined, files are stored in this 
 subdirectory.
 
@@ -257,5 +228,4 @@ To show the content of a histogram ID=i the commands may be applied:
 
 All histograms are normalized to the number of events.
 
-  
 */

@@ -19,6 +19,39 @@ committal in the CVS repository !
 History file for graphics_reps category
 ---------------------------------------
 
+28 October 2021 Guy Barrand (greps-V10-07-13)
+- sources.cmake: declare G4Plotter.hh,.cc.
+- G4VGraphicsScene: have:
+    virtual void AddPrimitive (const G4Plotter&) = 0;
+- G4Plotter.hh,.cc: some kind of "high level" primitive
+  to capture "what is plotted" (tools::histo:h1d, h2d for the moment) and the style of a plotter.
+  Style description is done by handing named lists of (parameter,value). It is sufficently
+  generic to be usable by various implementations of a plotter. It is assumed that
+  a plotter manages a grid of "regions" to visualize various histograms in a same
+  representation/view/viewport (concept similar to the "zones" in the CERN-PAW plotter).
+
+25 October 2021 Ben Morgan (greps-V10-07-12)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+05 September 2021 Evgueni Tcherniaev (greps-V10-07-11)
+- HepPolyhedron.cc: fixed defect ("resource leak") reported by Coverity
+- G4Visible, G4VMarker, G4Text: implemented move constructor and
+  move assignment, as suggested by Coverity
+
+31 August 2021  John Allison  (greps-V10-07-10)
+- Add G4VMarker::operator==.
+
+30 June 2021  John Allison  (greps-V10-07-09)
+- Revise vis models. See visualization/modeling/History for more details.
+- Remove G4Scale. G4Scale is an anomaly. It is not a "primitive" (obviously),
+  but somehow, from the long distant past, it was implemented as though it was.
+  (/vis/scene/add/scale reimplemented with G4CallBackModel.)
+
+29 June 2021 Evgueni Tcherniaev (greps-V10-07-08)
+- HepPolyhedron.cc: minor fix for Coverity
+- BooleanProcessor.src: redundant std::move(polyhedron) replaced with
+  HepPolyhedron(polyhedron), it fixes complation warnings with c++20
+
 07 June 2021 John Allison (greps-V10-07-07)
 - G4VGraphicsScene.hh:
   o Introduce a new pure virtual function:

@@ -54,11 +54,7 @@
      >  . envExample.sh            in the case of bash-shell
  
  The analysis part is based on the native g4analysis tools. As default 
- the output is a ROOT file. This can be changed to XML by commenting 
- the line
-#include "g4root.hh"
- in CCalAnalysis.hh and uncommenting 
-#include "g4xml.hh"
+ the output is a ROOT file. This can be changed to XML by changing the G4AnalysisManager default file type in CCalRunAction::BeginOfRunAction().
 
 
 2. Sample run

@@ -181,7 +181,7 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
 
     // this does not work.
-    G4String cmd = "/gun/energy " + G4String(sampledEnergy / eV) + " eV";
+    G4String cmd = "/gun/energy " + G4UIcommand::ConvertToString(sampledEnergy / eV) + " eV";
     G4UImanager::GetUIpointer()->ApplyCommand(cmd);
   }
 

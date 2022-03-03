@@ -51,10 +51,11 @@ G4PhaseSpaceDecayChannel(const G4String& theParentName,
                          const G4String& theDaughterName1,
                          const G4String& theDaughterName2,
                          const G4String& theDaughterName3,
-                         const G4String& theDaughterName4 )
+                         const G4String& theDaughterName4,
+                         const G4String& theDaughterName5 )
   : G4VDecayChannel("Phase Space", theParentName,theBR, theNumberOfDaughters,
                     theDaughterName1, theDaughterName2,
-                    theDaughterName3, theDaughterName4)
+                    theDaughterName3, theDaughterName4, theDaughterName5)
 {
 }
 
@@ -586,6 +587,8 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
              << "  " << daughtermass[2]/GeV << G4endl;
       G4cout << "Daughter 4:" << G4MT_daughters[3]->GetParticleName()
              << "  " << daughtermass[3]/GeV << G4endl;
+      G4cout << "Daughter 5:" << G4MT_daughters[4]->GetParticleName()
+             << "  " << daughtermass[4]/GeV << G4endl;
     }
 #endif
     G4Exception("G4PhaseSpaceDecayChannel::ManyBodyDecayIt()",

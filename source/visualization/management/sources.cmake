@@ -28,6 +28,7 @@ geant4_add_module(G4vis_management
     G4VisCommandsSet.hh
     G4VisCommandsScene.hh
     G4VisCommandsSceneAdd.hh
+    G4VisCommandsPlotter.hh
     G4VisCommandsSceneHandler.hh
     G4VisCommandsTouchable.hh
     G4VisCommandsTouchableSet.hh
@@ -42,6 +43,7 @@ geant4_add_module(G4vis_management
     G4VisManager.icc
     G4VisModelManager.hh
     G4VisStateDependent.hh
+    G4PlotterManager.hh
   SOURCES
     G4GraphicsSystemList.cc
     G4Scene.cc
@@ -61,6 +63,7 @@ geant4_add_module(G4vis_management
     G4VisCommandsSet.cc
     G4VisCommandsScene.cc
     G4VisCommandsSceneAdd.cc
+    G4VisCommandsPlotter.cc
     G4VisCommandsSceneHandler.cc
     G4VisCommandsTouchable.cc
     G4VisCommandsTouchableSet.cc
@@ -68,7 +71,8 @@ geant4_add_module(G4vis_management
     G4VisCommandsViewerDefault.cc
     G4VisCommandsViewerSet.cc
     G4VisManager.cc
-    G4VisStateDependent.cc)
+    G4VisStateDependent.cc
+    G4PlotterManager.cc)
 
 geant4_module_link_libraries(G4vis_management
   PUBLIC
@@ -78,6 +82,7 @@ geant4_module_link_libraries(G4vis_management
     G4globman
     G4intercoms
     G4hits
+    G4tools
   PRIVATE
     G4csg
     G4detutils

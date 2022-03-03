@@ -32,7 +32,7 @@
 
 #include "NeutronHPphysics.hh"
 
-#include "NeutronHPMessenger.hh"
+#include "G4GenericMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -63,16 +63,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 NeutronHPphysics::NeutronHPphysics(const G4String& name)
-:  G4VPhysicsConstructor(name), fThermal(true), fNeutronMessenger(0)
+:  G4VPhysicsConstructor(name), fThermal(true), fMessenger(nullptr)
 {
-  fNeutronMessenger = new NeutronHPMessenger(this);
+  // define commands for this class
+  DefineCommands();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 NeutronHPphysics::~NeutronHPphysics()
 {
-  delete fNeutronMessenger;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -157,3 +158,21 @@ void NeutronHPphysics::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void NeutronHPphysics::DefineCommands()
+{
+  // Define /testhadr/phys command directory using generic messenger class
+  fMessenger = new G4GenericMessenger(this,
+                        "/testhadr/phys/",
+                        "physics list commands");
+
+  // thermal scattering command
+  auto& thermalCmd
+    = fMessenger->DeclareProperty("thermalScattering", fThermal);
+
+  thermalCmd.SetGuidance("set thermal scattering model");
+  thermalCmd.SetParameterName("thermal", false);
+  thermalCmd.SetStates(G4State_PreInit);  
+}
+
+//..oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

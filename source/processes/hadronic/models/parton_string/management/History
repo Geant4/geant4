@@ -14,7 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-16-Apr-2021 Ben Morgan     hadr-partonstring-mgt-V10-07-01
+27-Oct-2021 A. Ribon       hadr-partonstring-mgt-V10-07-02
+- G4VParticipants, G4VPartonStringModel : extended for projectile
+  hypernuclei and anti-hypernuclei
+
+16-Apr-2021 B. Morgan      hadr-partonstring-mgt-V10-07-01
 - Migrate build to modular CMake API
 
 13-Apr-2021 A. Ribon       hadr-partonstring-mgt-V10-07-00

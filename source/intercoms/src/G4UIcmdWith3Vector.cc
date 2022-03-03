@@ -41,6 +41,7 @@ G4UIcmdWith3Vector::G4UIcmdWith3Vector(const char* theCommandPath,
   SetParameter(dblParamY);
   G4UIparameter* dblParamZ = new G4UIparameter('d');
   SetParameter(dblParamZ);
+  SetCommandType(With3VectorCmd);
 }
 
 // --------------------------------------------------------------------

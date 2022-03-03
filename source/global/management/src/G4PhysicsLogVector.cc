@@ -30,11 +30,11 @@
 // - 03 Mar. 1996, K.Amako: Implemented the 1st version
 // Revisions:
 // - 11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
-// - 19 Jun. 2009, V.Ivanchenko : removed hidden bin
 // --------------------------------------------------------------------
 
 #include "G4PhysicsLogVector.hh"
 #include "G4Exp.hh"
+#include "G4Log.hh"
 
 // --------------------------------------------------------------------
 G4PhysicsLogVector::G4PhysicsLogVector(G4bool spline)
@@ -44,18 +44,18 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4bool spline)
 }
 
 // --------------------------------------------------------------------
-G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, G4double theEmax,
-                                       std::size_t theNbin, G4bool spline)
+G4PhysicsLogVector::G4PhysicsLogVector(G4double Emin, G4double Emax,
+                                       std::size_t Nbin, G4bool spline)
   : G4PhysicsVector(spline)
 {
-  numberOfNodes = theNbin + 1;
-  if(theNbin < 2 || theEmin == theEmax)
+  numberOfNodes = Nbin + 1;
+  if(Nbin < 2 || Emin >= Emax || Emin <= 0.0)
   {
     G4ExceptionDescription ed;
-    ed << "G4PhysicsLogVector with wrong parameters: theNbin= " << theNbin
-       << " theEmin= " << theEmin << " theEmax= " << theEmax;
+    ed << "G4PhysicsLogVector with wrong parameters: theNbin= " << Nbin
+       << " Emin= " << Emin << " Emax= " << Emax;
     G4Exception("G4PhysicsLogVector::G4PhysicsLogVector()", "glob03",
-                FatalException, ed, "theNbins should be > 2");
+                FatalException, ed, "Nbins should be > 1 and Emax > Emin > 0");
   }
   if(numberOfNodes < 3)
   {
@@ -63,46 +63,26 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, G4double theEmax,
   }
   type = T_G4PhysicsLogVector;
 
-  invdBin = 1. / (G4Log(theEmax / theEmin) / (G4double) (numberOfNodes - 1));
-  baseBin = G4Log(theEmin) * invdBin;
+  binVector.resize(numberOfNodes);
+  dataVector.resize(numberOfNodes, 0.0);
+  binVector[0] = Emin;
+  binVector[numberOfNodes - 1] = Emax;
+  Initialise();
 
-  dataVector.reserve(numberOfNodes);
-  binVector.reserve(numberOfNodes);
-
-  binVector.push_back(theEmin);
-  dataVector.push_back(0.0);
-
-  for(std::size_t i = 1; i < numberOfNodes - 1; ++i)
+  for(G4int i = 1; i <= idxmax; ++i)
   {
-    binVector.push_back(G4Exp((baseBin + i) / invdBin));
-    dataVector.push_back(0.0);
+    binVector[i] = edgeMin*G4Exp(i / invdBin);
   }
-  binVector.push_back(theEmax);
-  dataVector.push_back(0.0);
+}
 
+// --------------------------------------------------------------------
+void G4PhysicsLogVector::Initialise()
+{
+  idxmax  = numberOfNodes - 2;
   edgeMin = binVector[0];
   edgeMax = binVector[numberOfNodes - 1];
+  invdBin = (idxmax + 1) / G4Log(edgeMax/edgeMin);
+  logemin = G4Log(edgeMin);
 }
 
 // --------------------------------------------------------------------
-G4PhysicsLogVector::~G4PhysicsLogVector() {}
-
-// --------------------------------------------------------------------
-G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
-{
-  G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
-  if(success)
-  {
-    invdBin = 1. / G4Log(binVector[1] / edgeMin);
-    baseBin = G4Log(edgeMin) * invdBin;
-  }
-  return success;
-}
-
-// --------------------------------------------------------------------
-void G4PhysicsLogVector::ScaleVector(G4double factorE, G4double factorV)
-{
-  G4PhysicsVector::ScaleVector(factorE, factorV);
-  invdBin = 1. / G4Log(binVector[1] / edgeMin);
-  baseBin = G4Log(edgeMin) * invdBin;
-}

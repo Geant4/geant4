@@ -37,6 +37,7 @@
 
 #include <vector>
 #include <memory>
+#include <string_view>
 
 class G4HnInformation;
 class G4VNtupleFileManager;
@@ -52,7 +53,7 @@ class G4GenericFileManager : public G4VFileManager
 {
   public:
     explicit G4GenericFileManager(const G4AnalysisManagerState& state);
-    virtual ~G4GenericFileManager();
+    virtual ~G4GenericFileManager() = default;
 
     // Method to manipulate a default file
     virtual G4bool OpenFile(const G4String& fileName) final;
@@ -63,50 +64,58 @@ class G4GenericFileManager : public G4VFileManager
     virtual G4bool CloseFiles() final;
     virtual G4bool DeleteEmptyFiles() final;
 
+    // Clear all data
+    virtual void Clear() final;
+
     // Methods applied to file per name
     virtual G4bool CreateFile(const G4String& fileName) final;
     virtual G4bool WriteFile(const G4String& fileName) final;
     virtual G4bool CloseFile(const G4String& fileName) final;
     virtual G4bool SetIsEmpty(const G4String& fileName, G4bool isEmpty) final;
 
+    virtual G4bool SetHistoDirectoryName(const G4String& dirName);
+    virtual G4bool SetNtupleDirectoryName(const G4String& dirName);
+
     virtual G4String GetFileType() const final { return ""; }
 
-    // set default output type (backward compatibility)
+    // Set default output type (backward compatibility)
     // this type will be used for file names without extension
     void SetDefaultFileType(const G4String& value);
     G4String GetDefaultFileType() const;
 
-    template <typename T>
-    G4bool WriteT(const std::vector<T*>& htVector,
-                  const std::vector<G4HnInformation*>& hnVector);
+    // Get file manager for a specific output type
+    std::shared_ptr<G4VFileManager> GetFileManager(const G4String& fileName);
 
-    template <typename T>
-    G4bool WriteTExtra(const G4String& fileName, T* ht, const G4String& htName);
+    template <typename HT>
+    G4bool WriteTExtra(const G4String& fileName, HT* ht, const G4String& htName);
 
-    // methods
+    // Methods
     std::shared_ptr<G4VNtupleFileManager> CreateNtupleFileManager(G4AnalysisOutput output);
 
   private:
-    // methods
+    // Methods
     void CreateFileManager(G4AnalysisOutput output);
-    std::shared_ptr<G4VFileManager> GetFileManager(G4AnalysisOutput output) const;    
-    std::shared_ptr<G4VFileManager> GetFileManager(const G4String& fileName);
+    std::shared_ptr<G4VFileManager> GetFileManager(G4AnalysisOutput output) const;
 
-    // constants
-    static const G4String fgkDefaultFileType;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4GenericFileManager" };
+    // inline static const G4String fgkDefaultFileType { "root" };
+    // inline static const G4String fgkDefaultFileType { "undefined" };
 
-    // data members
+    // Data members
     G4String fDefaultFileType;
-    std::shared_ptr<G4VFileManager> fDefaultFileManager;
-    std::vector<std::shared_ptr<G4VFileManager>> fFileManagers;
-
-    std::shared_ptr<G4CsvFileManager>  fCsvFileManager;
+    std::shared_ptr<G4VFileManager> fDefaultFileManager { nullptr };
+    std::vector<std::shared_ptr<G4VFileManager>> fFileManagers {
+       // Csv,  Hdf5,    Root,    Xml
+       nullptr, nullptr, nullptr, nullptr
+     };
+    std::shared_ptr<G4CsvFileManager>  fCsvFileManager { nullptr };
 #ifdef TOOLS_USE_HDF5
-    std::shared_ptr<G4Hdf5FileManager> fHdf5FileManager;
+    std::shared_ptr<G4Hdf5FileManager> fHdf5FileManager { nullptr };
 #endif
-    std::shared_ptr<G4RootFileManager> fRootFileManager;
-    std::shared_ptr<G4XmlFileManager>  fXmlFileManager;
-    G4bool fHdf5Warn;
+    std::shared_ptr<G4RootFileManager> fRootFileManager { nullptr };
+    std::shared_ptr<G4XmlFileManager>  fXmlFileManager { nullptr };
+    G4bool fHdf5Warn { true };
 };
 
 #include "G4GenericFileManager.icc"

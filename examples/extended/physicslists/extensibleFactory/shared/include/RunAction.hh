@@ -46,8 +46,7 @@ class G4Run;
 /// - Track length in absorber
 /// - Track length in gap
 /// The same values are also saved in the ntuple.
-/// The histograms and ntuple are saved in the output file in a format
-/// accoring to a selected technology in Analysis.hh.
+/// The histograms and ntuple are saved in the Root output file by default.
 ///
 /// In EndOfRunAction(), the accumulated statistic and computed
 /// dispersion is printed.

@@ -29,231 +29,51 @@
 #include "G4RootAnalysisManager.hh"
 #include "G4RootFileManager.hh"
 #include "G4RootNtupleFileManager.hh"
-#include "G4AnalysisVerbose.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
-
+#include "G4ThreadLocalSingleton.hh"
 #include "G4Threading.hh"
-#include "G4AutoLock.hh"
-
-#include <iostream>
-#include <cstdio>
 
 using namespace G4Analysis;
-
-// mutex in a file scope
-
-namespace {
-  //Mutex to lock master manager when merging H1 histograms 
-  G4Mutex mergeH1Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock master manager when merging H1 histograms 
-  G4Mutex mergeH2Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock master manager when merging H1 histograms 
-  G4Mutex mergeH3Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock master manager when merging P1 profiles
-  G4Mutex mergeP1Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock master manager when merging P2 profiles
-  G4Mutex mergeP2Mutex = G4MUTEX_INITIALIZER;
-}  
-
-G4RootAnalysisManager* G4RootAnalysisManager::fgMasterInstance = nullptr;
-G4ThreadLocal G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = nullptr;
 
 //_____________________________________________________________________________
 G4RootAnalysisManager* G4RootAnalysisManager::Instance()
 {
-  if ( fgInstance == nullptr ) {
-    G4bool isMaster = ! G4Threading::IsWorkerThread();
-    fgInstance = new G4RootAnalysisManager(isMaster);
-  }
-  
-  return fgInstance;
-}    
+  static G4ThreadLocalSingleton<G4RootAnalysisManager> instance;
+  fgIsInstance = true;
+  return instance.Instance();
+}
 
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::IsInstance()
 {
-  return ( fgInstance != nullptr );
-}    
+  return fgIsInstance;
+}
 
 //_____________________________________________________________________________
-G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
- : G4ToolsAnalysisManager("Root", isMaster),
-   fFileManager(nullptr),
-   fNtupleFileManager(nullptr)
+G4RootAnalysisManager::G4RootAnalysisManager()
+ : G4ToolsAnalysisManager("Root")
 {
-  if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
-    G4ExceptionDescription description;
-    description 
-      << "      " 
-      << "G4RootAnalysisManager already exists." 
-      << "Cannot create another instance.";
-    G4Exception("G4RootAnalysisManager::G4RootAnalysisManager()",
-                "Analysis_F001", FatalException, description);
-  }
-  if ( isMaster ) fgMasterInstance = this;
-  fgInstance = this;
+  if ( ! G4Threading::IsWorkerThread() ) fgMasterInstance = this;
 
   // File manager
   fFileManager = std::make_shared<G4RootFileManager>(fState);
   SetFileManager(fFileManager);
-  fFileManager->SetBasketSize(fgkDefaultBasketSize);
-  fFileManager->SetBasketEntries(fgkDefaultBasketEntries);
 
   // Ntuple file manager
   fNtupleFileManager = std::make_shared<G4RootNtupleFileManager>(fState);
   fNtupleFileManager->SetFileManager(fFileManager);
   fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 }
-  
+
 //_____________________________________________________________________________
 G4RootAnalysisManager::~G4RootAnalysisManager()
 {
   if ( fState.GetIsMaster() ) fgMasterInstance = nullptr;
-  fgInstance = nullptr;
+  fgIsInstance = false;
 }
 
-// 
-// private methods
 //
-
-//_____________________________________________________________________________
-G4bool G4RootAnalysisManager::WriteH1()
-{
-  auto h1Vector = fH1Manager->GetH1Vector();
-  auto hnVector = fH1Manager->GetHnVector();
-
-  if ( ! h1Vector.size() ) return true;
-
-  auto result = true;
-
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(h1Vector, hnVector, "h1");
-  }  
-  else {
-    // The worker manager just adds its histograms to the master
-    // This operation needs a lock
-    G4AutoLock lH1(&mergeH1Mutex);
-    fgMasterInstance->fH1Manager->AddH1Vector(h1Vector);
-    lH1.unlock();
-  }  
-  
-  return result;
-}
-    
-//_____________________________________________________________________________
-G4bool G4RootAnalysisManager::WriteH2()
-{
-  auto h2Vector = fH2Manager->GetH2Vector();
-  auto hnVector = fH2Manager->GetHnVector();
-
-  if ( ! h2Vector.size() ) return true;
-
-  auto result = true;
-  
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(h2Vector, hnVector, "h2");
-  }  
-  else {
-    // The worker manager just adds its histograms to the master
-    // This operation needs a lock
-    G4AutoLock lH2(&mergeH2Mutex);
-    fgMasterInstance->fH2Manager->AddH2Vector(h2Vector);
-    lH2.unlock();
-  }
-  
-  return result;  
-}  
-
-//_____________________________________________________________________________
-G4bool G4RootAnalysisManager::WriteH3()
-{
-  auto h3Vector = fH3Manager->GetH3Vector();
-  auto hnVector = fH3Manager->GetHnVector();
-
-  if ( ! h3Vector.size() ) return true;
-
-  auto result = true;
-  
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(h3Vector, hnVector, "h3");
-  }  
-  else {
-    // The worker manager just adds its histograms to the master
-    // This operation needs a lock
-    G4AutoLock lH3(&mergeH3Mutex);
-    fgMasterInstance->fH3Manager->AddH3Vector(h3Vector);
-    lH3.unlock();
-  }
-  
-  return result;  
-}  
-
-//_____________________________________________________________________________
-G4bool G4RootAnalysisManager::WriteP1()
-{
-  auto p1Vector = fP1Manager->GetP1Vector();
-  auto hnVector = fP1Manager->GetHnVector();
-
-  if ( ! p1Vector.size() ) return true;
-
-  auto result = true;
-  
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(p1Vector, hnVector, "p1");
-  }  
-  else {
-    // The worker manager just adds its histograms to the master
-    // This operation needs a lock
-    G4AutoLock lP1(&mergeP1Mutex);
-    fgMasterInstance->fP1Manager->AddP1Vector(p1Vector);
-    lP1.unlock();
-  }  
-  
-  return result;
-}
-    
-//_____________________________________________________________________________
-G4bool G4RootAnalysisManager::WriteP2()
-{
-  auto p2Vector = fP2Manager->GetP2Vector();
-  auto hnVector = fP2Manager->GetHnVector();
-
-  if ( ! p2Vector.size() ) return true;
-
-  auto result = true;
-  
-  if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(p2Vector, hnVector, "p2");
-  }  
-  else {
-    // The worker manager just adds its histograms to the master
-    // This operation needs a lock
-    G4AutoLock lP2(&mergeP2Mutex);
-    fgMasterInstance->fP2Manager->AddP2Vector(p2Vector);
-    lP2.unlock();
-  }  
-  
-  return result;
-}
-    
-//_____________________________________________________________________________
-G4bool G4RootAnalysisManager::Reset()
-{
-// Reset histograms and ntuple
-
-  auto finalResult = true;
-  
-  auto result = G4ToolsAnalysisManager::Reset();
-  finalResult = finalResult && result;
-  
-  result = fNtupleFileManager->Reset();
-  finalResult = result && finalResult;
-  
-  return finalResult;
-}
-
-// 
 // protected methods
 //
 
@@ -264,159 +84,118 @@ G4bool G4RootAnalysisManager::OpenFileImpl(const G4String& fileName)
   // and set it to base class which takes then their ownership
   SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
 
-  auto finalResult = true;
+  auto result = true;
 
   // Open file
   if ( fNtupleFileManager->GetMergeMode() != G4NtupleMergeMode::kSlave )  {
-    auto result = fFileManager->OpenFile(fileName);
-    finalResult = finalResult && result;
+    result &= fFileManager->OpenFile(fileName);
   }
 
   // Open ntuple file(s) and create ntuples from bookings
-  auto result = fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
-  finalResult = finalResult && result;
+  result &= fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
 
-  return finalResult;
-}  
+  return result;
+}
 
 //_____________________________________________________________________________
-G4bool G4RootAnalysisManager::WriteImpl() 
+G4bool G4RootAnalysisManager::WriteImpl()
 {
 
-  auto finalResult = true;
+  auto result = true;
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("write", "files", "");
-#endif
+  Message(kVL4, "write", "files");
 
-  if ( ! fgMasterInstance && 
-       ( ( ! fH1Manager->IsEmpty() ) || ( ! fH2Manager->IsEmpty() ) || 
-         ( ! fH3Manager->IsEmpty() ) || ( ! fP1Manager->IsEmpty() ) || 
-         ( ! fP2Manager->IsEmpty() ) ) ) {
-    G4ExceptionDescription description;
-    description 
-      << "      " << "No master G4RootAnalysisManager instance exists." 
-      << G4endl 
-      << "      " << "Histogram/profile data will not be merged.";
-      G4Exception("G4RootAnalysisManager::Write()",
-                "Analysis_W031", JustWarning, description);
+  if ( G4Threading::IsWorkerThread() )  {
+    result &= G4ToolsAnalysisManager::Merge();
   }
-  
-  // H1
-  auto result = WriteH1();
-  finalResult = finalResult && result;
+  else {
+    // Open all files registered with objects
+    fFileManager->OpenFiles();
 
-  // H2
-  result = WriteH2();
-  finalResult = finalResult && result;
-
-  // H3
-  result = WriteH3();
-  finalResult = finalResult && result;
-
-  // P1
-  result = WriteP1();
-  finalResult = finalResult && result;
-
-  // P2
-  result = WriteP2();
-  finalResult = finalResult && result;
+    // Write all histograms/profile on master
+    result &= G4ToolsAnalysisManager::WriteImpl();
+  }
 
   // Ntuples
-  result = fNtupleFileManager->ActionAtWrite();
-  finalResult = finalResult && result;
+  result &= fNtupleFileManager->ActionAtWrite();
 
   // File
   if ( fNtupleFileManager->GetMergeMode() != G4NtupleMergeMode::kSlave )  {
     // write all open files
-    result = fFileManager->WriteFiles();
-    finalResult = finalResult && result;
+    result &= fFileManager->WriteFiles();
   }
 
   // Write ASCII if activated
   if ( IsAscii() ) {
-    result = WriteAscii(fFileManager->GetFileName());
-    finalResult = finalResult && result;
-  }   
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    fState.GetVerboseL2()->Message("write", "files", "", finalResult);
+    result &= WriteAscii(fFileManager->GetFileName());
   }
-#endif
 
-  return finalResult;
+  Message(kVL3, "write", "files", "", result);
+
+  return result;
 }
 
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::CloseFileImpl(G4bool reset)
 {
-  auto finalResult = true;
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("close", "files", "");
-#endif
-
   auto result = true;
-  if ( reset ) {
-    result = Reset();
-    if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "Resetting data failed";
-      G4Exception("G4RootAnalysisManager::CloseFile()",
-                "Analysis_W021", JustWarning, description);
-    }
-  } 
-  finalResult = finalResult && result;
 
-  result = fNtupleFileManager->ActionAtCloseFile(reset);
-  finalResult = finalResult && result;
+  Message(kVL4, "close", "files");
+
+  if ( reset ) {
+    if ( ! Reset() ) {
+      Warn("Resetting data failed", fkClass, "CloseFileImpl");
+      result = false;
+    }
+  }
+
+  result &= fNtupleFileManager->ActionAtCloseFile(reset);
 
   if ( fNtupleFileManager->GetMergeMode() != G4NtupleMergeMode::kSlave )  {
     // close all open files
-    result = fFileManager->CloseFiles();
-    finalResult = finalResult && result;
+    result &= fFileManager->CloseFiles();
   }
 
   // No files clean-up in sequential mode
-  if ( ! G4Threading::IsMultithreadedApplication() )  return finalResult;
+  if ( ! G4Threading::IsMultithreadedApplication() )  return result;
 
   G4bool isNtupleManagerEmpty = fNtupleBookingManager->IsEmpty();
 
   // Delete files if empty in MT mode
-  if ( ( fState.GetIsMaster() && 
-         fH1Manager->IsEmpty() && fH2Manager->IsEmpty() && fH3Manager->IsEmpty() &&
-         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() && isNtupleManagerEmpty ) ||
-       ( ( ! fState.GetIsMaster() ) && isNtupleManagerEmpty &&
-             fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kNone ) ) {
+  if ( ( fState.GetIsMaster() && G4ToolsAnalysisManager::IsEmpty() &&
+         isNtupleManagerEmpty ) ||
+       ( (! fState.GetIsMaster()) && isNtupleManagerEmpty &&
+         fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kNone ) ) {
 
-    result = ! std::remove(fFileManager->GetFullFileName());
-    //  std::remove returns 0 when success
-    if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "Removing file " 
-                  << fFileManager->GetFullFileName() << " failed";
-      G4Exception("G4RootAnalysisManager::CloseFile()",
-                "Analysis_W021", JustWarning, description);
-    }            
-    finalResult = finalResult && result;
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()
-        ->Message("delete", "empty file", fFileManager->GetFullFileName());
-#endif
+    if ( std::remove(fFileManager->GetFullFileName()) ) {
+      //  std::remove returns 0 when success
+      Warn( "Removing file " + fFileManager->GetFullFileName() + " failed",
+        fkClass, "CloseFileImpl");
+      result = false;
+    }
+
+    Message(kVL1, "delete", "empty file", fFileManager->GetFullFileName());
   }
   else {
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL2() ) 
-      fState.GetVerboseL2()
-        ->Message("close", "files", "");
-#endif
+    Message(kVL3, "close", "files");
   }
 
-  return finalResult;
+  return result;
+}
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::ResetImpl()
+{
+// Reset histograms and ntuple
+
+  auto result = true;
+
+  result &= G4ToolsAnalysisManager::ResetImpl();
+  if ( fNtupleFileManager != nullptr ) {
+    result &= fNtupleFileManager->Reset();
+  }
+
+  return result;
 }
 
 //
@@ -424,20 +203,20 @@ G4bool G4RootAnalysisManager::CloseFileImpl(G4bool reset)
 //
 
 //_____________________________________________________________________________
-void G4RootAnalysisManager::SetNtupleMerging(G4bool mergeNtuples, 
+void G4RootAnalysisManager::SetNtupleMerging(G4bool mergeNtuples,
                                              G4int  nofNtupleFiles)
 {
   fNtupleFileManager->SetNtupleMerging(mergeNtuples, nofNtupleFiles);
 }
 
 //_____________________________________________________________________________
-void G4RootAnalysisManager::SetNtupleRowWise(G4bool rowWise, G4bool rowMode) 
+void G4RootAnalysisManager::SetNtupleRowWise(G4bool rowWise, G4bool rowMode)
 {
   fNtupleFileManager->SetNtupleRowWise(rowWise, rowMode);
 }
 
 //_____________________________________________________________________________
-void G4RootAnalysisManager::SetBasketSize(unsigned int basketSize) 
+void G4RootAnalysisManager::SetBasketSize(unsigned int basketSize)
 {
   fFileManager->SetBasketSize(basketSize);
 }

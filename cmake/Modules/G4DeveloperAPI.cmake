@@ -35,14 +35,7 @@
 #
 #-----------------------------------------------------------------
 
-if(NOT __G4DEVELOPERAPI_INCLUDED)
-  set(__G4DEVELOPERAPI_INCLUDED TRUE)
-else()
-  return()
-endif()
-
-# Needed modules
-include(G4ClangFormat)
+include_guard(DIRECTORY)
 
 #-----------------------------------------------------------------------
 #.rst:
@@ -579,13 +572,12 @@ function(geant4_define_module)
   cmake_parse_arguments(G4DEFMOD
     ""
     "NAME"
-    "HEADERS;SOURCES;GRANULAR_DEPENDENCIES;GLOBAL_DEPENDENCIES;LINK_LIBRARIES;HEADERS_EXCLUDE_FORMAT;SOURCES_EXCLUDE_FORMAT"
+    "HEADERS;SOURCES;GRANULAR_DEPENDENCIES;GLOBAL_DEPENDENCIES;LINK_LIBRARIES"
     ${ARGN}
     )
   __geant4_assert_no_unparsed_arguments(G4DEFMOD geant4_define_module)
   # HEADERS -> PUBLIC_HEADERS
   # SOURCES -> SOURCES
-  # Don't support clang-formatting yet.
   geant4_add_module(${G4DEFMOD_NAME}
     PUBLIC_HEADERS ${G4DEFMOD_HEADERS}
     SOURCES ${G4DEFMOD_SOURCES}
@@ -608,7 +600,7 @@ function(geant4_define_module)
 
   # When we are ready, start issuing a deprecation warning here, including instructions for
   # migration...
-  # message(WARNING "Use of geant4_define_module is deprecated, please use... instead")
+  #message(WARNING "Use of geant4_define_module is deprecated, please use... instead")
 endfunction()
 
 #-----------------------------------------------------------------------
@@ -698,8 +690,6 @@ function(geant4_library_target)
   if(NOT (${G4GLOBLIB_NAME} MATCHES "G4clhep|G4expat"))
     message(FATAL_ERROR "geant4_library_target called for '${G4GLOBLIB_NAME}' in '${CMAKE_CURRENT_LIST_DIR}'")
   endif()
-
-  geant4_format_target(NAME ${G4GLOBLIB_NAME}-format SOURCES ${G4GLOBLIB_SOURCES})
 
   if(BUILD_SHARED_LIBS)
     add_library(${G4GLOBLIB_NAME} SHARED ${G4GLOBLIB_SOURCES})
@@ -938,20 +928,12 @@ function(__geant4_add_library _name _type)
     set_target_properties(${_target_name} PROPERTIES OUTPUT_NAME ${_name})
   endif()
 
-  # Compose target sources and links from its constituent modules
-  set(__sources_to_format)
-
   get_property(__g4modules GLOBAL PROPERTY GEANT4_CATEGORIES_${_name}_MODULES)
   foreach(__g4mod ${__g4modules})
     # - Process sources...
     geant4_get_module_property(_headers ${__g4mod} PUBLIC_HEADERS)
     geant4_get_module_property(_srcs ${__g4mod} SOURCES)
     geant4_get_module_property(_cmakescript ${__g4mod} CMAKE_LIST_FILE)
-
-    # Store sources to be formatted (one mode only)
-    if(_type STREQUAL "SHARED")
-      list(APPEND __sources_to_format ${_headers} ${_srcs})
-    endif()
 
     # - Group sources and scripts for IDEs
     # NB: Seemingly has to be done at same level we define target.
@@ -1019,19 +1001,14 @@ function(__geant4_add_library _name _type)
     endforeach()
 
     # Temp workaround for modules needing Qt. We use AUTOMOC, but can't yet set
-    # it on a per module basis. However, only have three modules that require
+    # it on a per module basis. However, only have four modules that require
     # moc-ing, so hard code for now.
     # TODO: likely need an additional "module target properties" to hold things
     # that can be passed to set_target_properties
-    if(__g4mod MATCHES "G4UIbasic|G4OpenGL|G4OpenInventor" AND GEANT4_USE_QT)
+    if(__g4mod MATCHES "G4UIbasic|G4OpenGL|G4OpenInventor|G4ToolsSG" AND GEANT4_USE_QT)
       set_target_properties(${_target_name} PROPERTIES AUTOMOC ON)
     endif()
   endforeach()
-
-  # - Use stored total list of sources to create format target for one mode only
-  if(_type STREQUAL "SHARED")
-    geant4_format_target(NAME ${_name}-format SOURCES ${__sources_to_format})
-  endif()
 
   # - Postprocess target properties to remove duplicates
   # NB: This makes the assumption that there is no order dependence here (and any is considered a bug!)

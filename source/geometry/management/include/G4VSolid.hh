@@ -38,10 +38,10 @@
 // surface normal of the shape at a given point, and to compute
 // the extent of the shape. [see descriptions below]
 //
-// Some protected/private utility functions are implemented for the 
+// Some protected/private utility functions are implemented for the
 // clipping of regions for the computation of a solid's extent. Note that
 // the clipping mechanism is presently inefficient.
-// 
+//
 // Some visualization/graphics functions are also defined.
 //
 // Member Data:
@@ -52,11 +52,11 @@
 // 12.04.00 J.Allison     Implemented GetExtent() in terms of CalculateExtent()
 // 17.06.98 J.Apostolakis Added pure virtual function GetEntityType()
 // 26.07.96 P.Kent        Added ComputeDimensions() for replication mechanism
-// 27.03.96 J.Allison     Methods for visualisation 
+// 27.03.96 J.Allison     Methods for visualisation
 // 30.06.95 P.Kent        Initial version, no scoping or visualisation functions
 // --------------------------------------------------------------------
 #ifndef G4VSOLID_HH
-#define G4VSOLID_HH
+#define G4VSOLID_HH 1
 
 #include "G4Types.hh"
 #include "G4String.hh"
@@ -81,7 +81,7 @@ using G4GeometryType = G4String;
 
 class G4VSolid
 {
-  public:  // with description 
+  public:  // with description
 
     G4VSolid(const G4String& name);
       // Creates a new shape, with the supplied name. No provision is made
@@ -89,11 +89,8 @@ class G4VSolid
     virtual ~G4VSolid();
       // Default destructor.
 
-    inline G4bool operator==( const G4VSolid& s ) const;
+    inline G4bool operator==(const G4VSolid& s) const;
       // Return true only if addresses are the same.
-
-    friend std::ostream& operator<< ( std::ostream& os, const G4VSolid& e );
-      // Streaming operator, using DumpInfo().
 
     inline G4String GetName() const;
       // Returns the current shape's name.
@@ -218,8 +215,8 @@ class G4VSolid
       // If the solid is made up from a Boolean operation of two solids,
       // return the "no" solid. If the solid is not a "Boolean", return 0.
 
-    virtual const G4DisplacedSolid* GetDisplacedSolidPtr() const; 
-    virtual       G4DisplacedSolid* GetDisplacedSolidPtr(); 
+    virtual const G4DisplacedSolid* GetDisplacedSolidPtr() const;
+    virtual       G4DisplacedSolid* GetDisplacedSolidPtr();
       // If the solid is a "G4DisplacedSolid", return a self pointer
       // else return 0.
 
@@ -231,7 +228,7 @@ class G4VSolid
       // persistifiable objects.
 
     G4VSolid(const G4VSolid& rhs);
-    G4VSolid& operator=(const G4VSolid& rhs); 
+    G4VSolid& operator=(const G4VSolid& rhs);
       // Copy constructor and assignment operator.
 
     G4double EstimateCubicVolume(G4int nStat, G4double epsilon) const;
@@ -248,7 +245,7 @@ class G4VSolid
 
     void CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
 				       const G4VoxelLimits& pVoxelLimit,
-				       const EAxis pAxis, 
+				       const EAxis pAxis,
 				       G4double& pMin, G4double& pMax) const;
       // Calculate the maximum and minimum extents of the convex polygon
       // pPolygon along the axis pAxis, within the limits pVoxelLimit.
@@ -261,7 +258,7 @@ class G4VSolid
     void ClipCrossSection(G4ThreeVectorList* pVertices,
 			  const G4int pSectionIndex,
 			  const G4VoxelLimits& pVoxelLimit,
-			  const EAxis pAxis, 
+			  const EAxis pAxis,
 			  G4double& pMin, G4double& pMax) const;
       // Calculate the maximum and minimum extents of the polygon described
       // by the vertices: pSectionIndex->pSectionIndex+1->
@@ -276,7 +273,7 @@ class G4VSolid
     void ClipBetweenSections(G4ThreeVectorList* pVertices,
 			     const G4int pSectionIndex,
 			     const G4VoxelLimits& pVoxelLimit,
-			     const EAxis pAxis, 
+			     const EAxis pAxis,
 			     G4double& pMin, G4double& pMax) const;
       // Calculate the maximum and minimum extents of the polygons
       // joining the CrossSections at pSectionIndex->pSectionIndex+3 and
@@ -294,7 +291,7 @@ class G4VSolid
                      const EAxis              pAxis      ) const;
       // Clip the specified convex polygon to the given limits, where
       // the polygon is described by the vertices at (0),(1),...,(n),(0) in
-      // pPolygon. 
+      // pPolygon.
       // If the polygon is completely clipped away, the polygon is cleared.
 
   protected:
@@ -314,6 +311,9 @@ class G4VSolid
 
     G4String fshapeName;	 // Name
 };
+
+/// Output solid information to given ostream
+std::ostream& operator<<(std::ostream& os, const G4VSolid& e);
 
 #include "G4VSolid.icc"
 

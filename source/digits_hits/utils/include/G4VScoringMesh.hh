@@ -125,6 +125,9 @@ class G4VScoringMesh
   G4ThreeVector GetSize() const;
   // set starting and span angles (used only for tube segment)
   void SetAngles(G4double, G4double);
+  // get angles (used only for tube segment)
+  inline G4double GetStartAngle() const { return fAngle[0]; }
+  inline G4double GetAngleSpan() const { return fAngle[1]; }
   // set position of center of this mesh
   void SetCenterPosition(G4double centerPosition[3]);
   // get position of center of this mesh

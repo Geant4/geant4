@@ -68,6 +68,7 @@ class G4TScoreNtupleWriter : public G4VScoreNtupleWriter
   virtual void Write();
 
   // set methods
+  void SetDefaultFileType(const G4String& value);
   void SetFileName(const G4String& fileName);
   void SetVerboseLevel(G4int value);
 
@@ -87,9 +88,9 @@ class G4TScoreNtupleWriter : public G4VScoreNtupleWriter
   G4TScoreNtupleWriterMessenger<T>* fMessenger;
   std::vector<G4int> fHCIds;
   T* fAnalysisManager;
+  G4String fDefaultFileType;
   G4String fFileName;
   G4int fVerboseLevel;
-  G4bool fHasAnalysisManager;
   G4bool fHasAnalysisFile;
   G4bool fIsBooked;
   G4bool fIsInitialized;

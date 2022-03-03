@@ -41,6 +41,8 @@
 #include "G4VITStepModel.hh"
 #include "G4UserTimeStepAction.hh"
 #include "G4UnitsTable.hh"
+#include "G4Scheduler.hh"
+#include "G4SystemOfUnits.hh"
 #include <vector>
 
 //#define DEBUG_MEM

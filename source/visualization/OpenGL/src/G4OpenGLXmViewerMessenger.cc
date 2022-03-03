@@ -25,8 +25,6 @@
 //
 //
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewerMessenger.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -275,5 +273,3 @@ void G4OpenGLXmViewerMessenger::SetNewValue
 
   G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
 }
-
-#endif

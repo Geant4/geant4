@@ -146,14 +146,6 @@ class G4CutTubs : public G4CSGSolid
     G4CutTubs& operator=(const G4CutTubs& rhs);
       // Copy constructor and assignment operator.
 
-    //  Older names for access functions
-
-    inline G4double GetRMin() const;
-    inline G4double GetRMax() const;
-    inline G4double GetDz  () const;
-    inline G4double GetSPhi() const;
-    inline G4double GetDPhi() const;
-
   protected:
 
     inline void Initialize();

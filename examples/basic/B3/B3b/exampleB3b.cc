@@ -34,14 +34,14 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4AnalysisManager.hh"
 #include "G4TScoreNtupleWriter.hh"
 
 #include "Randomize.hh"
 
-#include "B3DetectorConstruction.hh"
-#include "B3PhysicsList.hh"
-#include "B3bActionInitialization.hh"
-#include "B3Analysis.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "ActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,13 +66,13 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  runManager->SetUserInitialization(new B3DetectorConstruction);
+  runManager->SetUserInitialization(new B3::DetectorConstruction);
   //
-  runManager->SetUserInitialization(new B3PhysicsList);
+  runManager->SetUserInitialization(new B3::PhysicsList);
 
   // Set user action initialization
   //
-  runManager->SetUserInitialization(new B3bActionInitialization());
+  runManager->SetUserInitialization(new B3b::ActionInitialization());
 
   // Initialize visualization
   //
@@ -85,11 +85,12 @@ int main(int argc,char** argv)
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   // Activate score ntuple writer
-  // The Root output type (Root) is selected in B3Analysis.hh.
   // The verbose level can be also set via UI commands
   // /score/ntuple/writerVerbose level
   G4TScoreNtupleWriter<G4AnalysisManager> scoreNtupleWriter;
   scoreNtupleWriter.SetVerboseLevel(1);
+  // The default file type ("root") can be changed in xml, csv, hdf5
+  // scoreNtupleWriter.SetDefaultFileType("xml");
 
   // Process macro or start UI session
   //

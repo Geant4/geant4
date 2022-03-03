@@ -99,7 +99,9 @@ void GRInitialization::Initialize()
 }
 
 #include "G4UIExecutive.hh"
+#ifdef G4UI_USE_QT
 #include "G4UIQt.hh"
+#endif
 
 void GRInitialization::SetWindowText(G4UIExecutive* ui)
 {

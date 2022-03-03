@@ -34,8 +34,6 @@
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodes/SoTubs.h"
 
@@ -471,5 +469,3 @@ void SoTubs::generateAlternateRep() {
 void SoTubs::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

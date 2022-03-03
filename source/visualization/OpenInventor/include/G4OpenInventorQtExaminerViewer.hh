@@ -30,9 +30,6 @@
 #ifndef G4OPENINVENTORQTEXAMINERVIEWER_HH
 #define G4OPENINVENTORQTEXAMINERVIEWER_HH
 
-#if defined (G4VIS_BUILD_OIQT_DRIVER) || defined (G4VIS_USE_OIQT)
-
-
 // Set up notification of event processing
 
 #include "G4VStateDependent.hh"
@@ -465,7 +462,5 @@ protected:
    SoSeparator* newSceneGraph;
 
 };
-
-#endif
 
 #endif /* G4OPENINVENTORQTEXAMINERVIEWER_HH */

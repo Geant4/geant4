@@ -591,8 +591,7 @@ void G4PixeCrossSectionHandler::ActiveElements()
 
       for (G4int iEl=0; iEl<nElements; iEl++)
 	{
-	  G4Element* element = (*elementVector)[iEl];
-	  G4double Z = element->GetZ();
+	  G4double Z = (*elementVector)[iEl]->GetZ();
 	  if (!(activeZ.contains(Z)) && Z >= zMin && Z <= zMax)
 	    {
 	      activeZ.push_back(Z);

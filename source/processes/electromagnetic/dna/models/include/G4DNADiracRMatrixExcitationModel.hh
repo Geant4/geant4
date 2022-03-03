@@ -100,19 +100,19 @@ private:
   const G4double ExcitationEnergyAu[4]={ 2.66 , 1.14 , 4.63 ,  5.11}; 
   // [eV] 5dto6s1,6sto6p1,6sto6p2
 
-  G4double fLowEnergyLimit;
-  G4double fExperimentalEnergyLimit;
-  G4double fHighEnergyLimit;
+  G4double fLowEnergyLimit=0.;
+  G4double fExperimentalEnergyLimit=0.;
+  G4double fHighEnergyLimit=0.;
 
-  G4bool   isInitialised;
-  G4bool   statCode;
-  G4int    verboseLevel;
+  G4bool   isInitialised=false;
+  G4bool   statCode=false;
+  G4int    verboseLevel=0;
 
-  G4String                     fTableFile;
-  G4DNACrossSectionDataSet*    fTableData;
-  const std::vector<G4double>* fpMaterialDensity;
-  const  G4ParticleDefinition* fParticleDefinition;
-  G4VAtomDeexcitation*         fAtomDeexcitation;
+  G4String                     fTableFile="";
+  G4DNACrossSectionDataSet*    fTableData=nullptr;
+  const std::vector<G4double>* fpMaterialDensity=nullptr;
+  const  G4ParticleDefinition* fParticleDefinition=nullptr;
+  G4VAtomDeexcitation*         fAtomDeexcitation=nullptr;
 
   G4int RandomSelect(const G4Material* material,
                      const G4ParticleDefinition*,

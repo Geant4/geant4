@@ -1514,7 +1514,7 @@ void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
     fAtomicNumber = StoI(next());
     fAtomicMass = StoI(next());
     G4String sQ = next();
-    if (sQ.isNull())
+    if (sQ.empty())
     {
       fIonCharge = fAtomicNumber;
     }
@@ -1522,7 +1522,7 @@ void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
     {
       fIonCharge = StoI(sQ);
       sQ = next();
-      if (sQ.isNull())
+      if (sQ.empty())
       {
         fIonExciteEnergy = 0.0;
       }
@@ -1563,7 +1563,7 @@ void G4GeneralParticleSourceMessenger::IonLvlCommand(G4String newValues)
     fAtomicNumberL = StoI(next());
     fAtomicMassL = StoI(next());
     G4String sQ = next();
-    if (sQ.isNull())
+    if (sQ.empty())
     {
       fIonChargeL = fAtomicNumberL;
     }
@@ -1571,7 +1571,7 @@ void G4GeneralParticleSourceMessenger::IonLvlCommand(G4String newValues)
     {
       fIonChargeL = StoI(sQ);
       sQ = next();
-      if (sQ.isNull())
+      if (sQ.empty())
       {
         fIonEnergyLevel = 0;
       }

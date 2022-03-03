@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4VIS_BUILD_OI_DRIVER
 
 /*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */
@@ -791,5 +790,3 @@ GLubyte* getBitmap(
   }
   return bitmap; 
 }
-
-#endif

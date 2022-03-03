@@ -105,9 +105,11 @@ namespace G4INCL {
       vSigmaZero = -16.;  // hypothesis: same potential for each sigma
       vSigmaPlus = -16.;
 
-      vLambda = 28.;
+      vLambda = 30.;
       const G4double asy = (theA - 2.*theZ)/theA;
-      if(asy>0.11)vLambda = 56.549-678.73*asy+4905.35*std::pow(asy,2.)-9789.1*std::pow(asy,3.); // Jose Luis Rodriguez-Sanchez et al., Rapid Communication PRC
+      // Jose Luis Rodriguez-Sanchez et al., Rapid Communication PRC 98, 021602 (2018)
+      if      (asy > 0.236) vLambda = 40.91;
+      else if (asy > 0.133) vLambda = 56.549 - 678.73*asy + 4905.35*asy*asy - 9789.1*asy*asy*asy;
 
       const G4double theLambdaSeparationEnergy = ParticleTable::getSeparationEnergy(Lambda,theA,theZ);
 

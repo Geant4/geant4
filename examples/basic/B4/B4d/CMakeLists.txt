@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 #
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(B4d)
 
 #----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ target_link_libraries(exampleB4d ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
-# build B4c. This is so that we can run the executable directly because it
+# build B4d. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
 set(EXAMPLEB4D_SCRIPTS

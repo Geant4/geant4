@@ -37,6 +37,54 @@ CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 
+# Locally adjust source list before including common.gmk
+sources := $(addprefix src/, \
+  G4OpenInventor.cc \
+  G4OpenInventorSceneHandler.cc \
+  G4OpenInventorTransform3D.cc \
+  G4OpenInventorViewer.cc \
+  G4VisFeaturesOfOpenInventor.cc \
+  SbPainter.cc \
+  SbPainterPS.cc \
+  SoAlternateRepAction.cc \
+  SoBox.cc \
+  SoCons.cc \
+  SoCounterAction.cc \
+  SoDetectorTreeKit.cc \
+  SoGL2PSAction.cc \
+  SoImageWriter.cc \
+  SoMarkerSet.cc \
+  SoPolyhedron.cc \
+  SoStyleCache.cc \
+  SoTrap.cc \
+  SoTrd.cc \
+  SoTubs.cc)
+
+ifdef G4VIS_BUILD_OIX_DRIVER
+  sources += $(addprefix src/, \
+    G4OpenInventorXt.cc \
+    G4OpenInventorXtExaminerViewer.cc \
+    G4OpenInventorXtExaminerViewerMessenger.cc \
+    G4OpenInventorXtExtended.cc \
+    G4OpenInventorXtExtendedViewer.cc \
+    G4OpenInventorXtViewer.cc \
+    wheelmouse.cc)
+endif
+
+ifdef G4VIS_BUILD_OIQT_DRIVER
+  sources += $(addprefix src/, \
+    G4OpenInventorQt.cc \
+    G4OpenInventorQtExaminerViewer.cc \
+    G4OpenInventorQtViewer.cc \
+    G4SoQt.cc)
+endif
+
+ifdef G4VIS_BUILD_OIWIN32_DRIVER
+  sources += $(addprefix src/, \
+    G4OpenInventorWin.cc \
+    G4OpenInventorWinViewer.cc)
+endif
+
 include $(G4INSTALL)/config/common.gmk
 
 debug:

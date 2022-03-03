@@ -7,6 +7,16 @@
 
                       Category History file
                       ---------------------
+16.10.2021 S. Guatelli (purgmag-V10-07-03)
+- Migration to G4RunManagerFactory
+- Physics list updated to Modular physics list, 
+  with G4EmStandardPhysics_option4.
+
+07.10.2021 - I. Hrivnacova (purmag-V10-07-02)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (csv),
+  removed PurgMagAnalysisManager.hh.
+
 24.05.2021 B. Morgan (purmag-V10-07-01)
 - Bump required CMake version range to 3.12...3.20, matching core Geant4
 

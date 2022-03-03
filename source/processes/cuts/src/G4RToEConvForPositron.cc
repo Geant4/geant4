@@ -31,12 +31,12 @@
 #include "G4RToEConvForPositron.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4PhysicsLogVector.hh"
 
-#include "G4ios.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Pow.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 // --------------------------------------------------------------------
 G4RToEConvForPositron::G4RToEConvForPositron() 
@@ -55,35 +55,33 @@ G4RToEConvForPositron::G4RToEConvForPositron()
   }
   else
   {
-    Mass = theParticle->GetPDGMass();
+    fPDG = theParticle->GetPDGEncoding();
   }
 }
 
 // --------------------------------------------------------------------
-G4RToEConvForPositron::~G4RToEConvForPositron()
-{ 
-}
+G4RToEConvForPositron::~G4RToEConvForPositron() 
+{}
 
-// **********************************************************************
-// ************************* ComputeLoss ********************************
-// **********************************************************************
-G4double G4RToEConvForPositron::ComputeLoss(G4double AtomicNumber,
-                                            G4double KineticEnergy) 
+// --------------------------------------------------------------------
+G4double G4RToEConvForPositron::ComputeValue(const G4int Z, 
+                                             const G4double kinEnergy)
 {
   const G4double cbr1=0.02, cbr2=-5.7e-5, cbr3=1., cbr4=0.072;
-  const G4double Tlow=10.*keV, Thigh=1.*GeV;
+  const G4double Tlow=10.*CLHEP::keV, Thigh=1.*CLHEP::GeV;
+  const G4double taul = Tlow/CLHEP::electron_mass_c2;
+  const G4double logtaul = G4Log(taul);
+  const G4double taul12 = std::sqrt(taul);
+  const G4double bremfactor = 0.1;
 
-  // calculate dE/dx for electrons
-  if( std::fabs(AtomicNumber-Z)>0.1 )
-  {
-    Z = AtomicNumber;
-    taul = Tlow/Mass;
-    ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z))/Mass;
-    ionpotlog = std::log(ionpot);
-  } 
+  G4double Zlog = G4Pow::GetInstance()->logZ(Z);
+  G4double ionpot = 
+    1.6e-5*CLHEP::MeV*G4Exp(0.9*Zlog)/CLHEP::electron_mass_c2;
+  G4double ionpotlog = G4Log(ionpot);
 
-  G4double tau = KineticEnergy/Mass;
-  G4double dEdx;
+  G4double tau = kinEnergy/CLHEP::electron_mass_c2;
+  G4double dEdx = 0.0;
+
 
   if(tau<taul)
   {
@@ -91,13 +89,11 @@ G4double G4RToEConvForPositron::ComputeLoss(G4double AtomicNumber,
     G4double t2 = taul+2.;
     G4double tsq = taul*taul;
     G4double beta2 = taul*t2/(t1*t1);
-    G4double     f = 2.*std::log(taul)
-                   -(6.*taul+1.5*tsq-taul*(1.-tsq/3.)/t2
-                     -tsq*(0.5-tsq/12.)/(t2*t2))/(t1*t1);
-    dEdx = (std::log(2.*taul+4.)-2.*ionpotlog+f)/beta2;
-    dEdx = twopi_mc2_rcl2*Z*dEdx;
-    G4double clow = dEdx*std::sqrt(taul);
-    dEdx = clow/std::sqrt(KineticEnergy/Mass);
+    G4double f = 2.*logtaul - 
+      (6.*taul+1.5*tsq-taul*(1.-tsq/3.)/t2
+       -tsq*(0.5-tsq/12.)/(t2*t2))/(t1*t1);
+    dEdx = (G4Log(2.*taul+4.)-2.*ionpotlog+f)/beta2;
+    dEdx *= Z*taul12/std::sqrt(tau);
   }
   else
   {
@@ -105,18 +101,16 @@ G4double G4RToEConvForPositron::ComputeLoss(G4double AtomicNumber,
     G4double t2 = tau+2.;
     G4double tsq = tau*tau;
     G4double beta2 = tau*t2/(t1*t1);
-    G4double f = 2.*std::log(tau)
-               - (6.*tau+1.5*tsq-tau*(1.-tsq/3.)/t2
-                  -tsq*(0.5-tsq/12.)/(t2*t2))/(t1*t1);
-    dEdx = (std::log(2.*tau+4.)-2.*ionpotlog+f)/beta2;
-    dEdx = twopi_mc2_rcl2*Z*dEdx;
+    G4double f = 2.*G4Log(tau) - (6.*tau+1.5*tsq-tau*(1.-tsq/3.)/t2
+			 -tsq*(0.5-tsq/12.)/(t2*t2))/(t1*t1);
+    dEdx = Z*(G4Log(2.*tau+4.)-2.*ionpotlog+f)/beta2;
 
     // loss from bremsstrahlung follows
     G4double cbrem = (cbr1+cbr2*Z)
-                   * (cbr3+cbr4*std::log(KineticEnergy/Thigh));
-    cbrem = Z*(Z+1.)*cbrem*tau/beta2;
-    cbrem *= bremfactor;
-    dEdx += twopi_mc2_rcl2*cbrem;
+                   * (cbr3+cbr4*G4Log(kinEnergy/Thigh));
+    dEdx += cbrem*Z*(Z+1.)*bremfactor*tau/beta2;
   }
-  return dEdx;
+  return dEdx*CLHEP::twopi_mc2_rcl2;
 }
+
+// --------------------------------------------------------------------

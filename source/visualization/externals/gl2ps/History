@@ -15,6 +15,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+12 November 2021 Ben Morgan (visexternalsgl2ps-V10-07-01)
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+15 July 2021 Laurent Garnier (visexternalsgl2ps-V10-07-00)
+- Migrate gl2ps to 1.4.2
+
 23 September 2020 Ben Morgan (visexternalsgl2ps-V10-06-03)
 - Remove remianing include_directories
 

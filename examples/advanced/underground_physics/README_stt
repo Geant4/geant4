@@ -31,9 +31,6 @@ G4NDL3.5 via setting G4LEDATA and NeutronHPCrossSections environment variables.
 Platforms to be tested on:
 SUN and LINUX, NOT WINDOWS.
 
-At a future date G4ANALYSIS_USE should be set and the AIDA/Anaphe packages
-tested.
-
 Alex Howard
 e-mail: alexander.howard@cern.ch
 

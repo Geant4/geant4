@@ -73,8 +73,8 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#ifndef G4MICROELECELASTICMODEL_HH
-#define G4MICROELECELASTICMODEL_HH 1
+#ifndef G4MICROELECELASTICMODEL_NEW_HH
+#define G4MICROELECELASTICMODEL_NEW_HH 1
 
 #include <map>
 #include <CLHEP/Units/SystemOfUnits.h>

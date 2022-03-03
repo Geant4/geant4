@@ -29,7 +29,7 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
+// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues
 //
 //    ****************************************************
 //    *      UltraPhysicsList.cc
@@ -58,8 +58,6 @@
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmLowEPPhysics.hh"
 #include "G4DecayPhysics.hh"
-#include "G4HadronElasticPhysics.hh"
-#include "G4HadronInelasticQBBC.hh"
 #include "G4IonPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4StoppingPhysics.hh"
@@ -96,14 +94,12 @@ UltraPhysicsList::UltraPhysicsList() :  G4VModularPhysicsList(),
   fDecayPhysicsList = new G4DecayPhysics();
 }
 
-UltraPhysicsList::~UltraPhysicsList() 
+UltraPhysicsList::~UltraPhysicsList()
 {
   delete fDecayPhysicsList;
   delete fEmPhysicsList;
   delete fOpPhysicsList;
 //  delete fStepMaxProcess;
-  for(size_t i=0; i<fHadronPhys.size(); i++) 
-    delete fHadronPhys[i];
 }
 
 
@@ -119,15 +115,11 @@ void UltraPhysicsList::ConstructProcess()
   if (fEmPhysicsList)
     fEmPhysicsList->ConstructProcess();
 
-  if (fOpPhysicsList) 
+  if (fOpPhysicsList)
     fOpPhysicsList->ConstructProcess();
-  
-  if (fDecayPhysicsList) 
-    fDecayPhysicsList->ConstructProcess();
 
-  for(size_t i=0; i<fHadronPhys.size(); ++i) {
-    fHadronPhys[i]->ConstructProcess();
-  }
+  if (fDecayPhysicsList)
+    fDecayPhysicsList->ConstructProcess();
 }
 
 
@@ -135,8 +127,8 @@ void UltraPhysicsList::SetCuts()
 {
   if (verboseLevel >1){
     G4cout << "UltraPhysicsList::SetCuts:";
-  }  
-  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
-  //   the default cut value for all particle types 
-  SetCutsWithDefault();   
+  }
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets
+  //   the default cut value for all particle types
+  SetCutsWithDefault();
 }

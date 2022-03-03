@@ -28,8 +28,6 @@
 //
 // John Allison  11th September 2003
 
-#if defined (G4VIS_BUILD_RAYTRACERX_DRIVER) || (G4VIS_USE_RAYTRACERX)
-
 #ifndef G4RAYTRACERX_HH
 #define G4RAYTRACERX_HH
 
@@ -50,5 +48,4 @@ class G4RayTracerX : public G4VGraphicsSystem
     G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& );
 };
 
-#endif
 #endif

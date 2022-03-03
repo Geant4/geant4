@@ -3553,7 +3553,7 @@ void G4GDMLReadSolids::PropertyRead(
   }
   if(matrix.GetCols() == 1)  // constant property assumed
   {
-    matprop->AddConstProperty(Strip(name), matrix.Get(0, 0));
+    matprop->AddConstProperty(Strip(name), matrix.Get(0, 0), true);
   }
   else  // build the material properties vector
   {
@@ -3577,7 +3577,7 @@ void G4GDMLReadSolids::PropertyRead(
       propvect = mapOfMatPropVects[temp];
     }
 
-    matprop->AddProperty(Strip(name), propvect);
+    matprop->AddProperty(Strip(name), propvect, true);
   }
 }
 

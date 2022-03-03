@@ -99,7 +99,7 @@ private:
   G4bool isInitialised = false;
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theElectron;
-  G4int fEntanglementModelIndex;
+  G4int fEntanglementModelID;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

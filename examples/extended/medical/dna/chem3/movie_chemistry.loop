@@ -11,5 +11,5 @@
 /vis/viewer/set/timeWindow/startTime {startTime} ns
 /vis/viewer/set/timeWindow/endTime {upTo} ns
 /vis/set/textColour black
-#/vis/ogl/printEPS
+#/vis/ogl/export
 # {timeRange} ps

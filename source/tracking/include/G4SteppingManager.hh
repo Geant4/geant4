@@ -53,6 +53,7 @@
 #include "G4LogicalVolume.hh"          // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"        // Include from 'geometry'
 #include "G4ProcessManager.hh"         // Include from 'processes'
+#include "G4NoProcess.hh"              // Include from 'processes'
 
 #include "G4Track.hh"                  // Include from 'tracking'
 #include "G4TrackVector.hh"            // Include from 'tracking'
@@ -266,6 +267,10 @@ class G4SteppingManager
       // DefinePhysicalStepLength(). To pass these information to
       // the method Verbose, they are kept at here. Need a more 
       // elegant mechanism.
+
+    G4NoProcess const* fNoProcess = nullptr;
+      // Used in the InvokeAtRestDoItProcs() method to flag the process
+      // of any stable ion at rest. 
 };
 
 //*******************************************************************

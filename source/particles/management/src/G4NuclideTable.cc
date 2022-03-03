@@ -409,7 +409,7 @@ G4NuclideTable::StripFloatLevelBase( const G4String& sFLB )
      G4Exception( "G4NuclideTable", "PART70002", FatalException, text );
    }
    G4Ions::G4FloatLevelBase flb = noFloat;
-   if ( !(sFLB == '-') )
+   if ( !(sFLB == "-") )
    {
      flb = G4Ions::FloatLevelBase( sFLB.back() );
    }

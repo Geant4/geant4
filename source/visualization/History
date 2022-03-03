@@ -12,9 +12,9 @@ and keep track of all category-tags.
 It DOES NOT substitute the  CVS log-message one should put at every
 committal in the CVS repository !
 
-     *************************************************************
-     * Note that modeling and test have their own History files. *
-     *************************************************************
+     *********************************************************
+     * Note that sub-categories have their own History files *
+     *********************************************************
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
@@ -22,6 +22,261 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+14 November 2021 John Allison (vis-V10-07-15)
+- Category tag, comprising:
+  - DAWN-V10-07-02
+  - vis-HepRep-V10-07-04
+  - opengl-V10-07-25
+  - openinventor-V10-07-06
+  - visQt3D-V10-07-12
+  - raytracer-V10-07-05
+  - vis_toolssg-V10-07-16
+  - vistree-V10-07-03
+  - VRML-V10-07-03
+  - visVtk-V10-07-03
+  - visexternals-V10-07-04
+  - gMocren-V10-07-02
+  - visman-V10-07-28
+  - modeling-V10-07-16
+  - vistest-V10-07-00
+- Major features:
+  - New ToolsSG driver, including "in-app plotting".
+    - New primitive, G4Plotter.
+  - New Vtk driver.
+  - New Open Inventor Qt driver.
+  - Continuing development of Qt3D driver.
+  - Remove obsolete drivers: HepRep(WIRED), network FukuiRenderer,
+    VRML1 and network VRML2.
+  - Introduce "special mesh rendering" for 3D rectangular nested
+    parameterisations.
+    - Implemented only in OGL and Qt3D:
+      - As one coloured dot per cell randomly placed in the cell.
+  - Introduce /vis/scene/add/localAxes and /vis/touchable/localAxes.
+
+12 November 2021 - Ben Morgan
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system:
+  - opengl-V10-07-24
+  - openinventor-V10-07-05
+  - visQt3D-V10-07-11
+  - raytracer-V10-07-04
+  - vis_toolssg-V10-07-15
+
+11 November 2021  John Allison
+- visman-V10-07-28: Protect pointers in G4VisManager::GeometryHasChanged.
+
+08 November 2021 - Ben Morgan
+- Retire G4UI/G4INTY_... preprocessor symbols:
+  - opengl-V10-07-24
+  - openinventor-V10-07-05
+  - visQt3D-V10-07-11
+  - vis_toolssg-V10-07-14
+  - vistree-V10-07-03
+  - VRML-V10-07-03
+  - visVtk-V10-07-03
+
+07 November 2021  John Allison
+- visman-V10-07-27: Introduce GetColour(const G4Visible&).
+
+05 November 2021 John Allison
+- modeling-V10-07-16: Fix bug in calculation of extent of G4PhysicalVolumeModel.
+
+05 November 2021  Guy Barrand
+- Remove G4VisPlotMessenger.hh.
+  - visman-V10-07-26
+  - vis_toolssg-V10-07-13
+
+03 November 2021  Guy Barrand
+- visman-V10-07-25: Improve plotting.
+- vis_toolssg-V10-07-12: Handle local list of styles.
+
+02 November 2021  Gabriele Cosmo
+- visman-V10-07-24: Fix Windows static issue in G4VVisCommand.
+
+31 October 2021 Gabriele Cosmo (vis-V10-07-14)
+- Fixed GNUmake dependencies in management and ToolsGS modules.
+
+30 October 2021  John Allison
+- visman-V10-07-23:
+  - Introduce nicknames for TSG and Vtk.
+  - Sort /vis/ commands in alphabetical order.
+
+30 October 2021  John Allison
+- opengl-V10-07-23: Fix G4OpenGLStoredXmViewer destructor:
+
+25 October 2021 Guy Barrand
+- modeling-V10-07-15: Introduce G4Plotter.
+- visman-V10-07-22: Introduce AddPrimitive(const G4Plotter&) and /vis/plotter/.
+- vis_toolssg-V10-07-11: More development.
+- Add "using G4VSceneHandler::AddPrimitive;" appropriately:
+  - opengl-V10-07-22
+  - raytracer-V10-07-04
+  - vistree-V10-07-03
+
+25 October 2021 Ben Morgan (vis-V10-07-13)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+22 October 2021  Guy Barrand
+- vis_toolssg-V10-07-10: Further development.
+
+20 October 2021  Gabriele Cosmo
+- visQt3D-V10-07-10: Fix broken dependency in GNUmakefile.
+
+18 October 2021  John Allison
+- visQt3D-V10-07-09: Introduce AddCompound(const G4Mesh&).
+
+18 October 2021 Ben Morgan (vis-V10-07-12)
+- Use std::string member functions from G4String in place of synonyms
+
+15 October 2021 John Allison
+- visVtk-V10-07-02: Implement G4VtkQt::IsUISessionCompatible.
+
+13 October 2021  Guy Barrand
+- vis_toolssg-V10-07-09: Following g4tools-V10-07-07.
+
+12 October 2021  Ben Morgan
+- vis_toolssg-V10-07-08: Xt backend does not depend on Xm.
+
+10 October 2021  John Allison  (vis-V10-07-11)
+- Coverity fixes and other minor improvements
+- modeling-V10-07-14:
+  - As a result of Coverity warnings, improve the health of...
+    - G4PhysicalVolumeModel:
+      - Clean up tempVisAtts in case of found G4Mesh.
+      - Hold current transform as object, not as a pointer.
+  - G4TouchablePropertiesScene.cc:
+    - Migrate to the above.
+- visman-V10-07-21:
+  - G4VisCommandsCompound.cc, G4VisCommandOpen, G4VisCommandSceneHandlerCreate:
+    - Improve reporting of unrecognised graphics system.
+  - G4VisCommandsTouchable.cc:
+    - Migrate to modeling-V10-07-14:
+- vistree-V10-07-02:
+  - Migrate to modeling-V10-07-14:
+
+04 October 2021 - Stewart Boogert / Laurie Nevay (vis-V10-07-10)
+- visVtk-V10-07-01: Add VtkQt and VtkNative visualisation drivers
+
+30 September 2021  John Allison
+- raytracer-V10-07-03: Fix instantiation of G4The(MT)RayTracer.
+
+27 September 2021  Pedro Arce
+- gMocren-V10-07-02: Use G4PhantomParameterisation::GetNoVoxels.
+
+24 September 2021  John Allison
+- raytracer-V10-07-02: Make RayTracerX viewers "auto refresh".
+
+21 September 2021 Guilherme Amadio
+- opengl-V10-07-21: Fix C++20 warnings from GCC 11.2.0.
+
+06 September 2021  John Allison
+- opengl-V10-07-20: Make jpg default for OpenGL Qt viewers.
+
+02 September 2021 John Allison
+- visman-V10-07-20: Preserve view parameters of any existing viewer and
+  use them in the creation of a new viewer.
+
+01 September 2021  John Allison
+- vis_toolssg-V10-07-07: Store default background in view parameters.
+
+01 September 2021  John Allison
+- visQt3D-V10-07-08: Add some protections.
+
+27 August 2021 Ben Morgan
+- visman-V10-07-19: G4VisExecutive: Remove obsolete drivers.
+- vis-HepRep-V10-07-04: Remove obsolete HepRep(WIRED) driver.
+
+26 August 2021 Ben Morgan
+- visman-V10-07-18: G4VisExecutive: Remove obsolete drivers.
+- DAWN-V10-07-02: Remove obsolete network FukuiRenderer driver.
+- VRML-V10-07-03: Remove obsolete VRML1 and network VRML2 drivers.
+
+25 August 2021  John Allison
+- VRML-V10-07-02:
+  - Introduce environment variables G4VRMLFILE_HEADER and G4VRMLFILE_FILE_NAME.
+
+22 August 2021  John Allison
+- visQt3D-V10-07-07: Fix the problem of drawing from the vis sub-thread.
+
+20 August 2021  John Allison
+- visQt3D-V10-07-06: Minor updates.
+
+18 August 2021 Laurent Garnier
+- visexternals-V10-07-04: Fix issues with GL lib.
+- visexternals-V10-07-03: Fix DBL_MAX issue.
+
+09 August 2021  John Allison  (vis-V10-07-09)
+- Update vis category History file (and fix a few typos in other Histories).
+
+06 August 2021 Laurent Garnier
+- visexternals-V10-07-02: Migrate gl2ps to 1.4.2.
+
+01 August 2021  John Allison
+- opengl-V10-07-19: Fix text alignment issue on Qt.
+
+31 July 2021  John Allison
+- visman-V10-07-17: Improve warning messages.
+
+20 July 2021  John Allison
+- opengl-V10-07-18: Remove /vis/ogl/printEPS.
+  o This command is covered by the more versatile /vis/ogl/export.
+
+19 July 2021  John Allison
+- opengl-V10-07-17: Use C++17 [[fallthrough]] instead of // fallthrough.
+
+18 July 2021  John Allison
+- visman-V10-07-16: Use C++17 [[fallthrough]] instead of // fallthrough.
+
+17 July 2021  John Allison
+- opengl-V10-07-16: Prepare for removing /vis/ogl/printEPS.
+
+15 July 2021  John Allison
+- visman-V10-07-15: Prepare for removing /vis/ogl/printEPS.
+- vistest-V10-07-00: Prepare for removing /vis/ogl/printEPS.
+- vistest-V10-07-00: Replace /vis/ogl/printEPS with /vis/ogl/export.
+
+13 July 2021  John Allison
+- opengl-V10-07-15: Increase the default display list limit to 10 million.
+
+12 July 2021  John Allison
+- visman-V10-07-14: Implement /vis/scene/removeModel.
+- opengl-V10-07-14: Speed up drawing - comment out glXWaitGL().
+
+09 July 2021  John Allison
+- visman-V10-07-13: Add Special Mesh Rendering parameters to /vis/viewer/save.
+
+08 July 2021  John Allison
+- opengl-V10-07-13: Improve handling of cutaways.
+
+06 July 2021  John Allison
+- modeling-V10-07-13: Fix bug in G4AxesModel name.
+- visman-V10-07-12: Miscellaneous small improvements and fixes.
+
+05 July 2021  John Allison
+- modeling-V10-07-12: Miscellaneous small improvements and fixes.
+- opengl-V10-07-12: Improve description of models for Qt scene tree.
+
+30 June 2021  John Allison  (vis-V10-07-08)
+- Requires greps-V10-07-09.
+- Revise vis models. See modeling-V10-07-11 for more details.
+- Includes:
+  - modeling-V10-07-11
+  - visman-V10-07-11
+  - vis-HepRep-V10-07-03
+  - raytracer-V10-07-01
+  - vis_toolssg-V10-07-06
+- Consequent changes:
+  o AddPrimitive(const G4Scale&) has been removed from all scene handlers.
+  o Draw(const G4Scale&) has been removed from G4VisManager.
+  o /vis/scene/add/scale reimplemented with G4CallBackModel.
+  o All commands using G4CallBackModel follow interface change.
+
+29 June 2021  Gabriele Cosmo
+- vis-HepRep-V10-07-02: Fix C++20 compilation error.
+
+15 June 2021  John Allison
+- modeling-V10-07-10: Fix touchables bug.
 
 07 June 2021  John Allison (vis-V10-07-07)
 - Introduce "Special Mesh Rendering":

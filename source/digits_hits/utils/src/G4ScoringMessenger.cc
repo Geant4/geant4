@@ -987,7 +987,7 @@ void G4ScoringMessenger::FillTokenVec(G4String newValues, G4TokenVec& token)
 {
   G4Tokenizer next(newValues);
   G4String val;
-  while(!(val = next()).isNull())
+  while(!(val = next()).empty())
   {  // Loop checking 12.18.2015 M.Asai
     token.push_back(val);
   }

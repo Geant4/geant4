@@ -27,128 +27,6 @@
 #include "G4CsvNtupleManager.hh"
 #include "G4CsvNtupleFileManager.hh"
 #include "G4CsvFileManager.hh"
-#include "G4AnalysisUtilities.hh"
-
-#include "tools/wcsv_histo"
-
-//_____________________________________________________________________________
-template <>
-inline 
-G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p1d*>& htVector,
-                                    const std::vector<G4HnInformation*>& hnVector,
-                                    const G4String& hnType)
-{
-  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
-    auto info = hnVector[i];
-    auto activation = info->GetActivation();
-    auto name = info->GetName();
-    // skip writing if activation is enabled and H1 is inactivated
-    if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
-    auto ht = htVector[i];
-    auto fileName = fFileManager->GetHnFileName(hnType, name);
-    std::ofstream hnFile(fileName);
-
-    // Do nothing if there is no file
-    if ( ! hnFile.is_open() ) return false;
-
-    auto result
-      = tools::wcsv::pto(hnFile, ht->s_cls(), *ht);
-
-    if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "saving " << hnType << " " << name << " failed";
-      G4Exception("G4CsvAnalysisManager::Write()",
-                "Analysis_W022", JustWarning, description);
-      return false;       
-    } 
-    hnFile.close();
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("write", "file", fileName);
-#endif
-  }
-
-  return true;
-}  
-
-//_____________________________________________________________________________
-template <>
-inline 
-G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p2d*>& htVector,
-                                    const std::vector<G4HnInformation*>& hnVector,
-                                    const G4String& hnType)
-{
-  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
-    auto info = hnVector[i];
-    auto activation = info->GetActivation();
-    auto name = info->GetName();
-    // skip writing if activation is enabled and H1 is inactivated
-    if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
-    auto ht = htVector[i];
-    auto fileName = fFileManager->GetHnFileName(hnType, name);
-    std::ofstream hnFile(fileName);
-
-    // Do nothing if there is no file
-    if ( ! hnFile.is_open() ) return false;
-
-    auto result
-      = tools::wcsv::pto(hnFile, ht->s_cls(), *ht);
-
-    if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "saving " << hnType << " " << name << " failed";
-      G4Exception("G4CsvAnalysisManager::Write()",
-                "Analysis_W022", JustWarning, description);
-      return false;       
-    } 
-    hnFile.close();
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("write", "file", fileName);
-#endif
-  }
-
-  return true;
-}  
-
-//_____________________________________________________________________________
-template <typename T>
-inline 
-G4bool G4CsvAnalysisManager::WriteT(const std::vector<T*>& htVector,
-                                    const std::vector<G4HnInformation*>& hnVector,
-                                    const G4String& hnType)
-{
-  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
-    auto info = hnVector[i];
-    auto activation = info->GetActivation();
-    auto name = info->GetName();
-    // skip writing if activation is enabled and H1 is inactivated
-    if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
-    auto ht = htVector[i];
-    auto fileName = fFileManager->GetHnFileName(hnType, name);
-    std::ofstream hnFile(fileName);
-
-    // Do nothing if there is no file
-    if ( ! hnFile.is_open() ) return false;
-
-    auto result
-      = tools::wcsv::hto(hnFile, ht->s_cls(), *ht);
-    if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "saving " << hnType << " " << name << " failed";
-      G4Exception("G4CsvAnalysisManager::Write()",
-                "Analysis_W022", JustWarning, description);
-      return false;       
-    } 
-    hnFile.close();
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("write", "file", fileName);
-#endif
-  }
-
-  return true;
-}  
 
 //_____________________________________________________________________________
 inline
@@ -162,55 +40,55 @@ inline
 tools::wcsv::ntuple* G4CsvAnalysisManager::GetNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->GetNtuple();
-}  
+}
 
 //_____________________________________________________________________________
 inline
 tools::wcsv::ntuple* G4CsvAnalysisManager::GetNtuple(G4int ntupleId) const
 {
   return fNtupleFileManager->GetNtupleManager()->GetNtuple(ntupleId);
-}  
+}
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::wcsv::ntuple*>::iterator G4CsvAnalysisManager::BeginNtuple()
 {
   return fNtupleFileManager->GetNtupleManager()->BeginNtuple();
-}  
+}
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::wcsv::ntuple*>::iterator G4CsvAnalysisManager::EndNtuple()
 {
   return fNtupleFileManager->GetNtupleManager()->EndNtuple();
-}  
+}
 
 //_____________________________________________________________________________
 inline
-std::vector<tools::wcsv::ntuple*>::const_iterator 
+std::vector<tools::wcsv::ntuple*>::const_iterator
 G4CsvAnalysisManager::BeginConstNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->BeginConstNtuple();
-}  
+}
 
 //_____________________________________________________________________________
 inline
-std::vector<tools::wcsv::ntuple*>::const_iterator 
+std::vector<tools::wcsv::ntuple*>::const_iterator
 G4CsvAnalysisManager::EndConstNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->EndConstNtuple();
-}  
+}
 
 //_____________________________________________________________________________
 inline
 void G4CsvAnalysisManager::SetIsCommentedHeader(G4bool isCommentedHeader)
 {
   fNtupleFileManager->GetNtupleManager()->SetIsCommentedHeader(isCommentedHeader);
-}  
+}
 
 //_____________________________________________________________________________
 inline
 void G4CsvAnalysisManager::SetIsHippoHeader(G4bool isHippoHeader)
 {
   fNtupleFileManager->GetNtupleManager()->SetIsHippoHeader(isHippoHeader);
-}  
+}

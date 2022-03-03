@@ -134,6 +134,7 @@
 #include "G4UnboundPN.hh"
 #include "G4Dineutron.hh"
 #include "G4Diproton.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 using namespace G4InuclParticleNames;
 
@@ -149,7 +150,7 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
    maximumTries(20), numberOfTries(0),
    collider(new G4InuclCollider), balance(new G4CascadeCheckBalance(name)), 
    ltcollider(new G4LightTargetCollider),
-   bullet(0), target(0), output(new G4CollisionOutput)
+   bullet(0), target(0), output(new G4CollisionOutput), secID(-1)
 {
   // Set up global objects for master thread or sequential build
   if (G4Threading::IsMasterThread()) Initialize();
@@ -162,6 +163,8 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
     usePreCompoundDeexcitation();
   else
     useCascadeDeexcitation();
+
+  secID = G4PhysicsModelCatalog::GetModelID( "model_BertiniCascade" );
 }
 
 G4CascadeInterface::~G4CascadeInterface() {
@@ -590,7 +593,7 @@ void G4CascadeInterface::copyOutputToHadronicResult() {
   if (!particles.empty()) { 
     particleIterator ipart = particles.begin();
     for (; ipart != particles.end(); ipart++) {
-      theParticleChange.AddSecondary(makeDynamicParticle(*ipart));
+      theParticleChange.AddSecondary(makeDynamicParticle(*ipart), secID);
     }
   }
 
@@ -598,7 +601,7 @@ void G4CascadeInterface::copyOutputToHadronicResult() {
   if (!outgoingNuclei.empty()) { 
     nucleiIterator ifrag = outgoingNuclei.begin();
     for (; ifrag != outgoingNuclei.end(); ifrag++) {
-      theParticleChange.AddSecondary(makeDynamicParticle(*ifrag)); 
+      theParticleChange.AddSecondary(makeDynamicParticle(*ifrag), secID);
     }
   }
 }
@@ -622,6 +625,7 @@ G4ReactionProductVector* G4CascadeInterface::copyOutputToReactionProducts() {
       rp = new G4ReactionProduct;
       dp = makeDynamicParticle(*ipart);
       (*rp) = (*dp);		// This does all the necessary copying
+      rp->SetCreatorModelID(secID);
       propResult->push_back(rp);
       delete dp;
     }
@@ -634,6 +638,7 @@ G4ReactionProductVector* G4CascadeInterface::copyOutputToReactionProducts() {
       rp = new G4ReactionProduct;
       dp = makeDynamicParticle(*ifrag);
       (*rp) = (*dp);		// This does all the necessary copying
+      rp->SetCreatorModelID(secID);
       propResult->push_back(rp);
       delete dp;
     }

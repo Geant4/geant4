@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
-#if defined (G4VIS_BUILD_OIX_DRIVER) || defined (G4VIS_USE_OIX)
-
 #ifndef G4OPENINVENTORXTEXAMINERVIEWERMESSENGER_HH
 #define G4OPENINVENTORXTEXAMINERVIEWERMESSENGER_HH
 
@@ -48,7 +46,5 @@ private:
   G4UIdirectory* fpDirectory;
   G4UIcmdWithAnInteger* fpCommandPathLookahead;
 };
-
-#endif
 
 #endif

@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(gflasha)
 
 #----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ target_link_libraries(ExGflasha ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(gflash_SCRIPTS
-    test.mac test0.mac test1.mac vis.mac power-off.png csi1.mac run01.mac
+    test.mac test0.mac test1.mac vis.mac csi1.mac run01.mac cmpL.C cmpR.C
   )
 
 foreach(_script ${gflash_SCRIPTS})

@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(exgps)
 
 #----------------------------------------------------------------------------
@@ -32,7 +32,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(exgps exgps.cc ${sources} ${headers})
-target_link_libraries(exgps ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
+target_link_libraries(exgps ${Geant4_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

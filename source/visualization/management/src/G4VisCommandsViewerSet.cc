@@ -697,11 +697,8 @@ void G4VisCommandsViewerSet::SetNewValue
       }
       return;
     }
-    // Copy view parameters except for autoRefresh...
-    G4bool currentAutoRefresh =
-    currentViewer->GetViewParameters().IsAutoRefresh();
-    vp = fromViewer->GetViewParameters();
-    vp.SetAutoRefresh(currentAutoRefresh);
+    // Copy view parameters except for autoRefresh and background...
+    CopyMostViewParameters(vp, fromViewer->GetViewParameters());
     // Concatenate any private vis attributes modifiers...
     const std::vector<G4ModelingParameters::VisAttributesModifier>*
     privateVAMs = fromViewer->GetPrivateVisAttributesModifiers();
@@ -1182,9 +1179,9 @@ void G4VisCommandsViewerSet::SetNewValue
     std::istringstream is (newValue);
     is >> choice >> x >> y >> z >> unit >> nx >> ny >> nz;
     G4int iSelector = -1;
-    if (choice.compareTo("off",G4String::ignoreCase) == 0 ||
+    if (G4StrUtil::icompare(choice, "off") == 0 ||
         !G4UIcommand::ConvertToBool(choice)) iSelector = 0;
-    if (choice.compareTo("on",G4String::ignoreCase) == 0 ||
+    if (G4StrUtil::icompare(choice, "on") == 0 ||
         G4UIcommand::ConvertToBool(choice)) iSelector = 1;
     if (iSelector < 0) {
       if (verbosity >= G4VisManager::errors) {
@@ -1234,7 +1231,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandSpecialMeshVolumes) {
     std::vector<G4ModelingParameters::PVNameCopyNo> requestedMeshes;
-    if (newValue.isNull()) {
+    if (newValue.empty()) {
       vp.SetSpecialMeshVolumes(requestedMeshes);  // Empty list
     } else {
       // Algorithm from Josuttis p.476.

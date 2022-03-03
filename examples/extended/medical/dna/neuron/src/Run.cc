@@ -42,7 +42,7 @@
 #include "Run.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 //#include "NeuronLoadDataFile.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"

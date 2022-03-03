@@ -49,7 +49,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double width,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
+  : G4PVReplica(pName, nDivs, pAxis, pLogical, pMotherLogical)
 {
   CheckAndSetParameters(pAxis, nDivs, width, half_gap, offset,
                         DivNDIVandWIDTH, pMotherLogical, pLogical);
@@ -63,7 +63,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4int nDivs,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
+  : G4PVReplica(pName, nDivs, pAxis, pLogical, pMotherLogical)
 {
   CheckAndSetParameters(pAxis, nDivs, 0., half_gap, offset,
                         DivNDIV, pMotherLogical, pLogical);
@@ -77,7 +77,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double width,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
+  : G4PVReplica(pName, 0, pAxis, pLogical, pMotherLogical)
 {
   CheckAndSetParameters(pAxis, 0, width, half_gap, offset,
                         DivWIDTH, pMotherLogical, pLogical);
@@ -92,8 +92,18 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double width,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
+  : G4PVReplica(pName, nDivs, pAxis, pLogical,
+                pMotherPhysical ? pMotherPhysical->GetLogicalVolume() : nullptr)
 {
+  if (pMotherPhysical == nullptr)
+  {
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "NULL pointer specified as mother for volume: " << pName;
+    G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "GeomDiv0002",
+                FatalException, message);
+    return;
+  }
   CheckAndSetParameters(pAxis, nDivs, width, half_gap, offset,
       DivNDIVandWIDTH, pMotherPhysical->GetLogicalVolume(), pLogical);
 }
@@ -106,8 +116,18 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4int nDivs,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
+  : G4PVReplica(pName, nDivs, pAxis, pLogical,
+                pMotherPhysical ? pMotherPhysical->GetLogicalVolume() : nullptr)
 {
+  if (pMotherPhysical == nullptr)
+  {
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "NULL pointer specified as mother for volume: " << pName;
+    G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "GeomDiv0002",
+                FatalException, message);
+    return;
+  }
   CheckAndSetParameters(pAxis, nDivs, 0., half_gap, offset,
       DivNDIV, pMotherPhysical->GetLogicalVolume(), pLogical);
 }
@@ -120,8 +140,18 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double width,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
+  : G4PVReplica(pName, 0, pAxis, pLogical,
+                pMotherPhysical ? pMotherPhysical->GetLogicalVolume() : nullptr)
 {
+  if (pMotherPhysical == nullptr)
+  {
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "NULL pointer specified as mother for volume: " << pName;
+    G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "GeomDiv0002",
+                FatalException, message);
+    return;
+  }
   CheckAndSetParameters(pAxis, 0, width, half_gap, offset,
       DivWIDTH, pMotherPhysical->GetLogicalVolume(), pLogical);
 }
@@ -267,18 +297,6 @@ G4bool G4ReplicatedSlice::IsParameterised() const
 G4bool G4ReplicatedSlice::IsMany() const
 {
   return false; 
-}
-
-//--------------------------------------------------------------------------
-G4int G4ReplicatedSlice::GetCopyNo() const
-{
-  return fcopyNo;
-}
-
-//--------------------------------------------------------------------------
-void  G4ReplicatedSlice::SetCopyNo(G4int newCopyNo)
-{
-  fcopyNo= newCopyNo;
 }
 
 //--------------------------------------------------------------------------

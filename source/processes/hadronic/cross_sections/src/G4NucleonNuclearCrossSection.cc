@@ -39,11 +39,6 @@
 #include "G4Proton.hh"
 #include "G4ComponentBarNucleonNucleusXsc.hh"
 
-// factory
-#include "G4CrossSectionFactory.hh"
-//
-G4_DECLARE_XS_FACTORY(G4NucleonNuclearCrossSection);
-
 ///////////////////////////////////////////////////////////////////////////////
 
 G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()

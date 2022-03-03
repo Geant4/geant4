@@ -8,7 +8,10 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-24th May 2020 B. Morgan (analysisExample-V10-07-00)
+29th November 2021 I. Hrivnacova (analysisExample-V10-07-01)
+- Removed AnaEx03 with the AIDA implementation
+
+24th May 2021 B. Morgan (analysisExample-V10-07-00)
 - Bump required CMake version range to 3.12...3.20, matching core Geant4
 
 13th November 2020 B. Morgan (analysisExample-V10-06-02)

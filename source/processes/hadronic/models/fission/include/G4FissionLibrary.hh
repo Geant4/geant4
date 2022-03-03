@@ -102,5 +102,7 @@ class G4FissionLibrary : public G4ParticleHPFinalState
 
   G4ParticleHPPhotonDist theFinalStatePhotons;
   G4ParticleHPFissionERelease theEnergyRelease;
+
+  G4int secID;  // Creator model ID for the secondaries created by this model
 };
 #endif

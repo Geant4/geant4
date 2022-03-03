@@ -79,69 +79,46 @@ public:
   virtual void ModelDescription(std::ostream& outFile) const final;
   virtual void DeExciteModelDescription(std::ostream& outFile) const final;
 
-  //====== obsolete Set methods =======
-  void UseHETCEmission();
-  void UseDefaultEmission();
-  void UseGNASHTransition();
-  void UseDefaultTransition();
-
-  //for cross section selection
-  void SetOPTxs(G4int opt);
-
-  //for the rest of external choices
-  void UseSICB();
-  void UseNGB();
-  void UseSCO();
-  void UseCEMtr();
-  //======================================
-
 private:  
 
   inline 
   void PerformEquilibriumEmission(const G4Fragment & aFragment, 
-				  G4ReactionProductVector * theResult) const;
-
-  void PrintWarning(const G4String& mname);
+				  G4ReactionProductVector * result) const;
 
   G4PreCompoundModel(const G4PreCompoundModel &) = delete;
   const G4PreCompoundModel& operator=(const G4PreCompoundModel &right) = delete;
   G4bool operator==(const G4PreCompoundModel &right) const = delete;
   G4bool operator!=(const G4PreCompoundModel &right) const = delete;
 
-  //==============
-  // Data Members 
-  //==============
-
-  G4PreCompoundEmission*     theEmission;
-  G4VPreCompoundTransitions* theTransition;
-  G4NuclearLevelData*        fNuclData;
+  G4PreCompoundEmission* theEmission = nullptr;
+  G4VPreCompoundTransitions* theTransition = nullptr;
+  G4NuclearLevelData* fNuclData = nullptr;
 
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
 
-  G4double fLowLimitExc;
-  G4double fHighLimitExc;
+  G4double fLowLimitExc = 0.0;
+  G4double fHighLimitExc = DBL_MAX;
 
-  //for the rest of external choices
-  G4bool useSCO;
-  G4bool isInitialised;
-  G4bool isActive;
+  G4bool useSCO = false;
+  G4bool isInitialised = false;
+  G4bool isActive = true;
 
-  G4int  minZ;
-  G4int  minA;
+  G4int minZ = 3;
+  G4int minA = 5;
+  G4int modelID = -1;
 
   G4HadFinalState theResult;
-
 };
 
-inline void 
-G4PreCompoundModel::PerformEquilibriumEmission(const G4Fragment & aFragment,
-					       G4ReactionProductVector * Result) const 
+inline void G4PreCompoundModel::PerformEquilibriumEmission(
+            const G4Fragment & aFragment,
+            G4ReactionProductVector * result) const 
 {
-  G4ReactionProductVector* theEquilibriumResult = 
+  G4ReactionProductVector* deexResult = 
     GetExcitationHandler()->BreakItUp(aFragment);
-  Result->insert(Result->end(),theEquilibriumResult->begin(), theEquilibriumResult->end());
-  delete theEquilibriumResult;
+  result->insert(result->end(),deexResult->begin(), deexResult->end());
+  delete deexResult;
 }
 
 #endif

@@ -53,79 +53,48 @@
 class G4PhysicsFreeVector : public G4PhysicsVector
 {
 public:
-  explicit G4PhysicsFreeVector(std::size_t length = 0, G4bool spline = false);
+
+  // Constructors of a free vector without filling of data.
+  // The vector will be filled using PutValues(..), Retrieve(..), or 
+  // InsertValues(..) methods. 
+  // If length > 0 energy and data vectors are initialized with zeros
+  explicit G4PhysicsFreeVector(G4bool spline = false);
+  explicit G4PhysicsFreeVector(G4int length);
+  explicit G4PhysicsFreeVector(std::size_t length, G4bool spline = false);
+
+  // Obsolete constructor - emin and emax are not used 
   explicit G4PhysicsFreeVector(std::size_t length, G4double emin,
                                G4double emax, G4bool spline = false);
-  // The vector with 'length' elements will be filled using the PutValues(..)
-  // method; energy and data vectors are initialized with zeros.
 
+  // The vector is filled in these constructor;
+  // 'energies' and 'values' need to have the same vector length;
+  // 'energies' assumed to increase, it is allowed to have consequtive
+  // equal energies
   explicit G4PhysicsFreeVector(const std::vector<G4double>& energies,
                                const std::vector<G4double>& values,
                                G4bool spline = false);
-  // The vector is filled in this constructor;
-  // 'energies' and 'values' need to have the same vector length;
-  // 'energies' assumed to be ordered and controlled in the user code.
-  
   explicit G4PhysicsFreeVector(const G4double* energies, const G4double* values,
                                std::size_t length, G4bool spline = false);
-  // The vector is filled in this constructor;
-  // 'energies' and 'values' need to have the same vector length;
-  // 'energies' assumed to be ordered in the user code.
 
-  virtual ~G4PhysicsFreeVector();
+  virtual ~G4PhysicsFreeVector() = default;
 
-  void PutValues(std::size_t index, G4double e, G4double value);
-  // User code is responsible for correct filling of all elements
+  // Filling of the vector with the check on index and energy
+  void PutValues(const std::size_t index, 
+                 const G4double energy, const G4double value);
 
-  void InsertValues(G4double energy, G4double value);
-
-  G4double GetEnergy(G4double value);
-  // This method can be applied if both energy and data values 
-  // grow monotonically, for example, if in this vector a 
-  // cumulative probability density function is stored. 
-
-  inline G4double GetMaxValue();
-  inline G4double GetMinValue();
-  inline G4double GetMaxLowEdgeEnergy();
-  inline G4double GetMinLowEdgeEnergy();
-  // Obsolete methods
+  // Insert extra pair of energy and value
+  // If energy coincide with previously added energy then
+  // this new pair is added after 
+  void InsertValues(const G4double energy, const G4double value);
  
-  inline void PutValue(std::size_t index, G4double e, G4double value);
-  // User code is responsible for correct filling of all elements
   // Obsolete method
-
-private:
-
-  std::size_t FindValueBinLocation(G4double aValue);
-
-  G4double LinearInterpolationOfEnergy(G4double aValue, std::size_t locBin);
+  inline void PutValue(const std::size_t index, 
+                       const G4double e, const G4double value);
 };
 
-// -----------------------------
-// Inline methods implementation
-// -----------------------------
-inline G4double G4PhysicsFreeVector::GetMaxValue()
-{
-  return dataVector.back();
-}
-
-inline G4double G4PhysicsFreeVector::GetMinValue()
-{
-  return dataVector.front();
-}
-
-inline G4double G4PhysicsFreeVector::GetMaxLowEdgeEnergy()
-{
-  return edgeMax;
-}
-
-inline G4double G4PhysicsFreeVector::GetMinLowEdgeEnergy()
-{
-  return edgeMin;
-}
-
-inline void G4PhysicsFreeVector::PutValue(std::size_t index, G4double e,
-                                          G4double value)
+inline void G4PhysicsFreeVector::PutValue(const std::size_t index, 
+                                          const G4double e,
+                                          const G4double value)
 {
   PutValues(index, e, value);
 }

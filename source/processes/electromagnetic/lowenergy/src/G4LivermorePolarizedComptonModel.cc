@@ -64,7 +64,7 @@
 #include "G4Exp.hh"
 #include "G4Pow.hh"
 #include "G4LogLogInterpolation.hh"
-
+#include "G4PhysicsModelCatalog.hh"
 #include "G4EntanglementAuxInfo.hh"
 #include "G4eplusAnnihilationEntanglementClipBoard.hh"
 
@@ -100,8 +100,7 @@ G4LivermorePolarizedComptonModel::G4LivermorePolarizedComptonModel(const G4Parti
   
   fParticleChange = nullptr;
   fAtomDeexcitation = nullptr;
-  fEntanglementModelIndex
-  = G4PhysicsModelCatalog::Register("G4GammaGammaEntanglement");
+  fEntanglementModelID = G4PhysicsModelCatalog::GetModelID("model_GammaGammaEntanglement");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -468,7 +467,7 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   // Check for entanglement and re-sample phi if necessary
   
   const auto* auxInfo
-  = fParticleChange->GetCurrentTrack()->GetAuxiliaryTrackInformation(fEntanglementModelIndex);
+  = fParticleChange->GetCurrentTrack()->GetAuxiliaryTrackInformation(fEntanglementModelID);
   if (auxInfo) {
     const auto* entanglementAuxInfo = dynamic_cast<const G4EntanglementAuxInfo*>(auxInfo);
     if (entanglementAuxInfo) {

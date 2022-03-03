@@ -54,6 +54,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4EmProcessSubType.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4EmProcessSubType.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -70,7 +71,7 @@ G4MicroElecSurface::G4MicroElecSurface(const G4String& processName,G4ProcessType
     }
   
   isInitialised=false;
-  SetProcessSubType(25);
+  SetProcessSubType(fSurfaceReflection);
   
   theStatus = UndefinedSurf;
   material1 = nullptr;

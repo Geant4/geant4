@@ -56,12 +56,11 @@ public:
   //for use of CEM transition probabilities (if useCEMtr=true, defaut false)
   inline void UseCEMtr(G4bool use){useCEMtr=use;}
 
-private:
-
-  G4VPreCompoundTransitions(const G4VPreCompoundTransitions &);
-  const G4VPreCompoundTransitions& operator=(const G4VPreCompoundTransitions &right);
-  G4bool operator==(const G4VPreCompoundTransitions &right) const;
-  G4bool operator!=(const G4VPreCompoundTransitions &right) const;
+  G4VPreCompoundTransitions(const G4VPreCompoundTransitions &) = delete;
+  const G4VPreCompoundTransitions& operator=
+  (const G4VPreCompoundTransitions &right) = delete;
+  G4bool operator==(const G4VPreCompoundTransitions &right) const = delete;
+  G4bool operator!=(const G4VPreCompoundTransitions &right) const = delete;
 
 protected:
 
@@ -86,6 +85,5 @@ protected:
   {
     return TransitionProb3;
   }
-
 
 #endif

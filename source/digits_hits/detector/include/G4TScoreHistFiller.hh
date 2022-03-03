@@ -79,7 +79,6 @@ class G4TScoreHistFiller : public G4VScoreHistFiller
   // data members
   T* fAnalysisManager        = nullptr;
   G4int fVerboseLevel        = 0;
-  G4bool fHasAnalysisManager = false;
   G4bool fIsInitialized      = false;
 };
 

@@ -84,6 +84,8 @@ private:
   G4int A;
   G4int spin;
 
+  G4int secID;  // Creator model ID for the secondaries created by this model
+  
   G4double mass;
   G4double excitation;
   G4double tolerance;

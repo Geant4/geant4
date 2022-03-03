@@ -52,19 +52,19 @@ G4PreCompoundDeuteron::~G4PreCompoundDeuteron()
  
 G4double G4PreCompoundDeuteron::FactorialFactor(G4int N, G4int P) const
 {
-  return G4double((N-1)*(N-2)*(P-1)*P)*0.5;
+  return static_cast<G4double>((N-1)*(N-2)*(P-1)*P)*0.5;
 }
   
 G4double G4PreCompoundDeuteron::CoalescenceFactor(G4int A) const
 {
-  return 16.0/G4double(A);
+  return 16.0/static_cast<G4double>(A);
 }    
 
 G4double G4PreCompoundDeuteron::GetRj(G4int nParticles, G4int nCharged) const
 {
   G4double rj = 0.0;
   if(nCharged >=1 && (nParticles-nCharged) >=1) {
-    G4double denominator = G4double(nParticles*(nParticles-1));
+    G4double denominator = (nParticles*(nParticles-1));
     rj = 2*nCharged*(nParticles-nCharged)/denominator; 
   }
   return rj;

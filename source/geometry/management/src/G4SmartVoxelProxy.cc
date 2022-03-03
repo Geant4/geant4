@@ -30,8 +30,9 @@
 
 #include "G4SmartVoxelProxy.hh"
 
-// Empty destructor
-//
-G4SmartVoxelProxy::~G4SmartVoxelProxy()
+// --------------------------------------------------------------------
+G4Allocator<G4SmartVoxelProxy>*& aProxyAllocator()
 {
+  G4ThreadLocalStatic G4Allocator<G4SmartVoxelProxy>* _instance = nullptr;
+  return _instance;
 }

@@ -48,8 +48,7 @@
 #include "DMXParticleSource.hh"
 #endif
 
-#include "DMXAnalysisManager.hh"
-
+#include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 
 #include "Randomize.hh"

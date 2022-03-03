@@ -145,4 +145,15 @@
 
 /** @} */
 
+/** @defgroup extended_runAndEvent_RE07 RE07
+ *  RunAndEvent example RE07
+ *  The RE07 example classes have their
+ *  <a href="../html_RE07/html/index.html">standalone documentation </a>
+ *  @ingroup extended_runAndEvent
+ *  @ingroup extended_electromagnetic
+ *  @{
+ */
+
+/** @} */
+
 /** @} */

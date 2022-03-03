@@ -29,9 +29,11 @@
 #include "G4RootMpiNtupleFileManager.hh"
 #include "G4RootMpiNtupleManager.hh"
 #include "G4RootMpiPNtupleManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include <tools/impi>
 
+using namespace G4Analysis;
 using std::make_shared;
 
 //_____________________________________________________________________________
@@ -56,11 +58,7 @@ G4RootMpiNtupleFileManager::~G4RootMpiNtupleFileManager()
 void G4RootMpiNtupleFileManager::SetMpiNtupleMergingMode(
                                G4int nofNtupleFiles)
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    fState.GetVerboseL2()->Message("set", "mpi ntuple merging mode", "");
-  }
-#endif
+  Message(kVL2, "set", "mpi ntuple merging mode");
 
   auto canMerge = true;
 
@@ -98,11 +96,7 @@ void G4RootMpiNtupleFileManager::SetMpiNtupleMergingMode(
     }
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) {
-    fState.GetVerboseL1()->Message("set", "ntuple merging mode", mergingMode);
-  }
-#endif
+  Message(kVL1, "set", "mpi ntuple merging mode", mergingMode);
 }
 
 
@@ -137,11 +131,7 @@ void G4RootMpiNtupleFileManager::SetMpiNtupleMerging(tools::impi* impi,
 //_____________________________________________________________________________
 std::shared_ptr<G4VNtupleManager> G4RootMpiNtupleFileManager::CreateNtupleManager()
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("create", "mpi ntuple managers", "");
-  }
-#endif
+  Message(kVL4, "create", "mpi ntuple manager");
 
   std::shared_ptr<G4VNtupleManager> activeNtupleManager = nullptr;
   switch ( fNtupleMergeMode )
@@ -172,23 +162,19 @@ std::shared_ptr<G4VNtupleManager> G4RootMpiNtupleFileManager::CreateNtupleManage
     }
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL3() ) {
-    G4String mergeMode;
-    switch ( fNtupleMergeMode ) {
-      case G4NtupleMergeMode::kNone:
-        mergeMode = "";
-        break;
-      case G4NtupleMergeMode::kMain:
-        mergeMode = "main ";
-        break;
-      case G4NtupleMergeMode::kSlave:
-        mergeMode = "slave ";
-        break;
-    }
-    fState.GetVerboseL3()->Message("create", mergeMode + "mpi ntuple managers", "");
+  G4String mergeMode;
+  switch ( fNtupleMergeMode ) {
+    case G4NtupleMergeMode::kNone:
+      mergeMode = "";
+      break;
+    case G4NtupleMergeMode::kMain:
+      mergeMode = "main ";
+      break;
+    case G4NtupleMergeMode::kSlave:
+      mergeMode = "slave ";
+      break;
   }
-#endif
+  Message(kVL3, "create", mergeMode + "mpi ntuple manager");
 
   fIsInitialized = true;
 
@@ -207,15 +193,12 @@ G4bool G4RootMpiNtupleFileManager::ActionAtOpenFile(const G4String& fileName)
 
   if ( ! fNtupleBooked ) {
 
-#ifdef G4VERBOSE
     G4String objectType = "analysis file";
     if ( fNtupleMergeMode == G4NtupleMergeMode::kMain ) {
       objectType = "main analysis file";
     }
-    if ( fState.GetVerboseL4() ) {
-      fState.GetVerboseL4()->Message("open", objectType, fileName);
-    }
-#endif
+    Message(kVL4, "open", objectType, fileName);
+
 
     if ( fNtupleMergeMode == G4NtupleMergeMode::kMain )  {
       // Creating files is triggered from CreateNtuple   
@@ -230,11 +213,7 @@ G4bool G4RootMpiNtupleFileManager::ActionAtOpenFile(const G4String& fileName)
         fBookingManager->GetNtupleBookingVector());
     }
 
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() )  {
-      fState.GetVerboseL1()->Message("open", objectType, fileName, finalResult);
-    }
-#endif
+    Message(kVL1, "open", objectType, fileName);
 
     fNtupleBooked = true;
   }
@@ -256,11 +235,7 @@ G4bool G4RootMpiNtupleFileManager::ActionAtWrite()
   if ( fNtupleMergeMode == G4NtupleMergeMode::kMain ) ntupleType = "main ntuples";
   if ( fNtupleMergeMode == G4NtupleMergeMode::kSlave ) ntupleType = "slave ntuples";
 
-#ifdef G4VERBOSE 
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("merge", ntupleType, "");
-  }
-#endif
+  Message(kVL4, "merge", ntupleType);
 
   if ( fNtupleMergeMode == G4NtupleMergeMode::kMain )  {
     auto result = fNtupleManager->Merge();
@@ -272,11 +247,7 @@ G4bool G4RootMpiNtupleFileManager::ActionAtWrite()
     finalResult = result && finalResult;
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) {
-    fState.GetVerboseL1()->Message("merge", ntupleType, "");
-  }
-#endif
+  Message(kVL1, "merge", ntupleType, "", finalResult);
 
   return finalResult;
 }
@@ -326,7 +297,7 @@ G4bool G4RootMpiNtupleFileManager::Reset()
   auto finalResult = true;
   
   if ( fNtupleMergeMode == G4NtupleMergeMode::kMain )  {
-    auto result = fNtupleManager->Reset(false);
+    auto result = fNtupleManager->Reset();
     finalResult = result && finalResult;
   }  
 

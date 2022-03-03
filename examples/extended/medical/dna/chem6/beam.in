@@ -38,35 +38,35 @@
 /primaryKiller/eLossMin 1.2 keV # primary is killed if deposited E is greater than this value
 /primaryKiller/eLossMax 1.212 keV # event is aborted if deposited E is greated than this value
 /gun/energy 2 keV
-/run/beamOn 300
+/run/beamOn 30
 
 /primaryKiller/eLossMin 1.6 keV # primary is killed if deposited E is greater than this value
 /primaryKiller/eLossMax 1.616 keV # event is aborted if deposited E is greated than this value
 /gun/energy 3.5 keV
-/run/beamOn 300
+/run/beamOn 30
 
 /primaryKiller/eLossMin 2.3 keV # primary is killed if deposited E is greater than this value
 /primaryKiller/eLossMax 2.323 keV # event is aborted if deposited E is greated than this value
 /gun/energy 7.5 keV
-/run/beamOn 300
+/run/beamOn 30
 
 /primaryKiller/eLossMin 3.8 keV # primary is killed if deposited E is greater than this value
 /primaryKiller/eLossMax 3.838 keV # event is aborted if deposited E is greated than this value
 /gun/energy 12.5 keV
-/run/beamOn 100
+/run/beamOn 10
 
 /primaryKiller/eLossMin 6.0 keV # primary is killed if deposited E is greater than this value
 /primaryKiller/eLossMax 6.06 keV # event is aborted if deposited E is greated than this value
 /gun/energy 30 keV
-/run/beamOn 100
+/run/beamOn 10
 
 /primaryKiller/eLossMin 8.0 keV # primary is killed if deposited E is greater than this value
 /primaryKiller/eLossMax 8.08 keV # event is aborted if deposited E is greated than this value
 /gun/energy 80 keV
-/run/beamOn 100
+/run/beamOn 10
 
 /primaryKiller/eLossMin 10 keV # primary is killed if deposited E is greater than this value
 /primaryKiller/eLossMax 10.1 keV # event is aborted if deposited E is greated than this value
 /gun/energy 999.999 keV
-/run/beamOn 100
+/run/beamOn 10
 

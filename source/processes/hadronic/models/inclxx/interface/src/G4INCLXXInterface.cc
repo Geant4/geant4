@@ -55,6 +55,15 @@
 #include "G4VEvaporationChannel.hh"
 #include "G4CompetitiveFission.hh"
 #include "G4FissionLevelDensityParameterINCLXX.hh"
+#include "G4PhysicsModelCatalog.hh"
+
+#include "G4HyperNucleiProperties.hh"
+#include "G4HyperTriton.hh"
+#include "G4HyperH4.hh"
+#include "G4HyperAlpha.hh"
+#include "G4DoubleHyperH4.hh"
+#include "G4DoubleHyperDoubleNeutron.hh"
+#include "G4HyperHe5.hh"
 
 G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
   G4VIntraNuclearTransportModel(G4INCLXXInterfaceStore::GetInstance()->getINCLXXVersionName()),
@@ -66,7 +75,8 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
   complainedAboutPreCompound(false),
   theIonTable(G4IonTable::GetIonTable()),
   theINCLXXLevelDensity(NULL),
-  theINCLXXFissionProbability(NULL)
+  theINCLXXFissionProbability(NULL),
+  secID(-1)
 {
   if(!thePreCompoundModel) {
     G4HadronicInteraction* p =
@@ -111,6 +121,7 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
 
   theBackupModel = new G4BinaryLightIonReaction;
   theBackupModelNucleon = new G4BinaryCascade;
+  secID = G4PhysicsModelCatalog::GetModelID( "model_INCLXXCascade" );
 }
 
 G4INCLXXInterface::~G4INCLXXInterface()
@@ -166,11 +177,13 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   const G4bool isIonTrack = trackDefinition->GetParticleType()==G4GenericIon::GenericIon()->GetParticleType();
   const G4int trackA = trackDefinition->GetAtomicMass();
   const G4int trackZ = (G4int) trackDefinition->GetPDGCharge();
+  const G4int trackL = trackDefinition->GetNumberOfLambdasInHypernucleus();
   const G4int nucleusA = theNucleus.GetA_asInt();
   const G4int nucleusZ = theNucleus.GetZ_asInt();
 
   // For reactions induced by weird projectiles (e.g. He2), bail out
-  if((isIonTrack && (trackZ<=0 || trackA<=trackZ)) || (nucleusA>1 && (nucleusZ<=0 || nucleusA<=nucleusZ))) {
+  if((isIonTrack && ((trackZ<=0 && trackL==0) || trackA<=trackZ)) ||
+                    (nucleusA>1 && (nucleusZ<=0 || nucleusA<=nucleusZ))) {
     theResult.Clear();
     theResult.SetStatusChange(isAlive);
     theResult.SetEnergyChange(aTrack.GetKineticEnergy());
@@ -246,10 +259,10 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     if(oldProjectileDef != 0 && oldTargetDef != 0) {
       const G4int newTargetA = oldProjectileDef->GetAtomicMass();
       const G4int newTargetZ = oldProjectileDef->GetAtomicNumber();
-
+      const G4int newTargetL = oldProjectileDef->GetNumberOfLambdasInHypernucleus();
       if(newTargetA > 0 && newTargetZ > 0) {
         // This should give us the same energy per nucleon
-        theTargetNucleus = new G4Nucleus(newTargetA, newTargetZ);
+        theTargetNucleus = new G4Nucleus(newTargetA, newTargetZ, newTargetL);
         toInverseKinematics = new G4LorentzRotation(goodTrack4Momentum.boostVector());
         G4LorentzVector theProjectile4Momentum(0.0, 0.0, 0.0, theNucleusMass);
         G4DynamicParticle swappedProjectileParticle(oldTargetDef, (*toInverseKinematics) * theProjectile4Momentum);
@@ -311,8 +324,11 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     // The INCL model will be created at the first use
     theINCLModel = G4INCLXXInterfaceStore::GetInstance()->GetINCLModel();
 
-    const G4INCL::EventInfo eventInfo = theINCLModel->processEvent(theSpecies, kineticEnergy, theTargetNucleus->GetA_asInt(), theTargetNucleus->GetZ_asInt(),0);
-    //    eventIsOK = !eventInfo.transparent && nTries < maxTries;
+    const G4INCL::EventInfo eventInfo = theINCLModel->processEvent(theSpecies, kineticEnergy,
+								   theTargetNucleus->GetA_asInt(),
+								   theTargetNucleus->GetZ_asInt(),
+								   -theTargetNucleus->GetL());  // Strangeness has opposite sign
+    //    eventIsOK = !eventInfo.transparent && nTries < maxTries;                              // of the number of Lambdas 
     eventIsOK = !eventInfo.transparent;
     if(eventIsOK) {
 
@@ -326,14 +342,15 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
       for(G4int i = 0; i < eventInfo.nParticles; ++i) {
 	G4int A = eventInfo.A[i];
- G4int Z = eventInfo.Z[i];
- G4int PDGCode = eventInfo.PDGCode[i];
-	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << G4endl;
+        G4int Z = eventInfo.Z[i];
+	G4int S = eventInfo.S[i];  // Strangeness
+        G4int PDGCode = eventInfo.PDGCode[i];
+	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << " S = " << S << G4endl;
 	G4double kinE = eventInfo.EKin[i];
 	G4double px = eventInfo.px[i];
 	G4double py = eventInfo.py[i];
 	G4double pz = eventInfo.pz[i];
-	G4DynamicParticle *p = toG4Particle(A, Z, PDGCode, kinE, px, py, pz);
+	G4DynamicParticle *p = toG4Particle(A, Z, S, PDGCode, kinE, px, py, pz);
 	if(p != 0) {
 	  G4LorentzVector momentum = p->Get4Momentum();
 
@@ -348,7 +365,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	  // Set the four-momentum of the reaction products
 	  p->Set4Momentum(momentum);
           fourMomentumOut += momentum;
-	  theResult.AddSecondary(p);
+	  theResult.AddSecondary(p, secID);
 
 	} else {
 	  G4String message = "the model produced a particle that couldn't be converted to Geant4 particle.";
@@ -359,7 +376,8 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
       for(G4int i = 0; i < eventInfo.nRemnants; ++i) {
 	const G4int A = eventInfo.ARem[i];
 	const G4int Z = eventInfo.ZRem[i];
-	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << G4endl;
+	const G4int S = eventInfo.SRem[i];
+	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << " S= " << S << G4endl;
 	const G4double kinE = eventInfo.EKinRem[i];
 	const G4double px = eventInfo.pxRem[i];
 	const G4double py = eventInfo.pyRem[i];
@@ -370,23 +388,27 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
             eventInfo.jzRem[i]*hbar_Planck
             );
 	const G4double excitationE = eventInfo.EStarRem[i];
-	const G4double nuclearMass = G4NucleiProperties::GetNuclearMass(A, Z) + excitationE;
-        const G4double scaling = remnant4MomentumScaling(nuclearMass,
-            kinE,
-            px, py, pz);
+	G4double nuclearMass = excitationE;
+	if ( S == 0 ) {
+	  nuclearMass += G4NucleiProperties::GetNuclearMass(A, Z);
+	} else {
+	  // Assumed that the opposite of the strangeness of the remnant gives the number of Lambdas inside it
+	  nuclearMass += G4HyperNucleiProperties::GetNuclearMass(A, Z, std::abs(S));
+	}
+        const G4double scaling = remnant4MomentumScaling(nuclearMass, kinE, px, py, pz);
 	G4LorentzVector fourMomentum(scaling * px, scaling * py, scaling * pz,
 				     nuclearMass + kinE);
 	if(std::abs(scaling - 1.0) > 0.01) {
           std::stringstream ss;
           ss << "momentum scaling = " << scaling
-            << "\n                Lorentz vector = " << fourMomentum
-            << ")\n                A = " << A << ", Z = " << Z
-            << "\n                E* = " << excitationE << ", nuclearMass = " << nuclearMass
-            << "\n                remnant i=" << i << ", nRemnants=" << eventInfo.nRemnants
-            << "\n                Reaction was: " << aTrack.GetKineticEnergy()/MeV
-            << "-MeV " << trackDefinition->GetParticleName() << " + "
-            << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
-            << ", in " << (inverseKinematics ? "inverse" : "direct") << " kinematics.";
+             << "\n                Lorentz vector = " << fourMomentum
+	     << ")\n                A = " << A << ", Z = " << Z << ", S = " << S
+             << "\n                E* = " << excitationE << ", nuclearMass = " << nuclearMass
+             << "\n                remnant i=" << i << ", nRemnants=" << eventInfo.nRemnants
+             << "\n                Reaction was: " << aTrack.GetKineticEnergy()/MeV
+             << "-MeV " << trackDefinition->GetParticleName() << " + "
+             << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
+             << ", in " << (inverseKinematics ? "inverse" : "direct") << " kinematics.";
           theInterfaceStore->EmitWarning(ss.str());
 	}
 
@@ -400,8 +422,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
         }
 
         fourMomentumOut += fourMomentum;
-	G4Fragment remnant(A, Z, fourMomentum);
+	G4Fragment remnant(A, Z, std::abs(S), fourMomentum);  // Assumed that -strangeness gives the number of Lambdas
         remnant.SetAngularMomentum(spin);
+	remnant.SetCreatorModelID(secID);
         if(dumpRemnantInfo) {
           G4cerr << "G4INCLXX_DUMP_REMNANT: " << remnant << "  spin: " << spin << G4endl;
         }
@@ -478,7 +501,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	const G4ParticleDefinition *def = (*fragment)->GetDefinition();
 	if(def != 0) {
 	  G4DynamicParticle *theFragment = new G4DynamicParticle(def, (*fragment)->GetMomentum());
-	  theResult.AddSecondary(theFragment);
+	  theResult.AddSecondary(theFragment, (*fragment)->GetCreatorModelID());
 	}
       }
 
@@ -537,41 +560,46 @@ G4double G4INCLXXInterface::toINCLKineticEnergy(G4HadProjectile const &aTrack) c
   return aTrack.GetKineticEnergy();
 }
 
-G4ParticleDefinition *G4INCLXXInterface::toG4ParticleDefinition(G4int A, G4int Z, G4int PDGCode) const {
-  if(PDGCode == 2212)      return G4Proton::Proton();
-  else if(PDGCode == 2112) return G4Neutron::Neutron();
-  else if(PDGCode == 211)  return G4PionPlus::PionPlus();
-  else if(PDGCode == 111)  return G4PionZero::PionZero();
-  else if(PDGCode == -211) return G4PionMinus::PionMinus();
+G4ParticleDefinition *G4INCLXXInterface::toG4ParticleDefinition(G4int A, G4int Z, G4int S, G4int PDGCode) const {
+  if       (PDGCode == 2212) { return G4Proton::Proton();
+  } else if(PDGCode == 2112) { return G4Neutron::Neutron();
+  } else if(PDGCode == 211)  { return G4PionPlus::PionPlus();
+  } else if(PDGCode == 111)  { return G4PionZero::PionZero();
+  } else if(PDGCode == -211) { return G4PionMinus::PionMinus();
   
-  else if(PDGCode == 221)  return G4Eta::Eta();
-  else if(PDGCode == 22)   return G4Gamma::Gamma();
+  } else if(PDGCode == 221)  { return G4Eta::Eta();
+  } else if(PDGCode == 22)   { return G4Gamma::Gamma();
   
-  else if(PDGCode == 3122) return G4Lambda::Lambda();
-  else if(PDGCode == 3222) return G4SigmaPlus::SigmaPlus();
-  else if(PDGCode == 3212) return G4SigmaZero::SigmaZero();
-  else if(PDGCode == 3112) return G4SigmaMinus::SigmaMinus();
-  else if(PDGCode == 321)  return G4KaonPlus::KaonPlus();
-  else if(PDGCode == -321) return G4KaonMinus::KaonMinus();
-  else if(PDGCode == 130)  return G4KaonZeroLong::KaonZeroLong();
-  else if(PDGCode == 310)  return G4KaonZeroShort::KaonZeroShort();
+  } else if(PDGCode == 3122) { return G4Lambda::Lambda();
+  } else if(PDGCode == 3222) { return G4SigmaPlus::SigmaPlus();
+  } else if(PDGCode == 3212) { return G4SigmaZero::SigmaZero();
+  } else if(PDGCode == 3112) { return G4SigmaMinus::SigmaMinus();
+  } else if(PDGCode == 321)  { return G4KaonPlus::KaonPlus();
+  } else if(PDGCode == -321) { return G4KaonMinus::KaonMinus();
+  } else if(PDGCode == 130)  { return G4KaonZeroLong::KaonZeroLong();
+  } else if(PDGCode == 310)  { return G4KaonZeroShort::KaonZeroShort();
   
-  else if(PDGCode == 1002) return G4Deuteron::Deuteron();
-  else if(PDGCode == 1003) return G4Triton::Triton();
-  else if(PDGCode == 2003) return G4He3::He3();
-  else if(PDGCode == 2004) return G4Alpha::Alpha();
-  else if(A > 0 && Z > 0 && A > Z) { // Returns ground state ion definition. No hyper-nucleus allows in Geant4
+  } else if(PDGCode == 1002) { return G4Deuteron::Deuteron();
+  } else if(PDGCode == 1003) { return G4Triton::Triton();
+  } else if(PDGCode == 2003) { return G4He3::He3();
+  } else if(PDGCode == 2004) { return G4Alpha::Alpha();
+  } else if(S != 0) {  // Assumed that -S gives the number of Lambdas
+    if (A == 3 && Z == 1 && S == -1 ) return G4HyperTriton::Definition();
+    if (A == 4 && Z == 1 && S == -1 ) return G4HyperH4::Definition();
+    if (A == 4 && Z == 2 && S == -1 ) return G4HyperAlpha::Definition();
+    if (A == 4 && Z == 1 && S == -2 ) return G4DoubleHyperH4::Definition();
+    if (A == 4 && Z == 0 && S == -2 ) return G4DoubleHyperDoubleNeutron::Definition();
+    if (A == 5 && Z == 2 && S == -1 ) return G4HyperHe5::Definition();
+  } else if(A > 0 && Z > 0 && A > Z) { // Returns ground state ion definition.
     return theIonTable->GetIon(Z, A, 0);
-  } else { // Error, unrecognized particle
-    return 0;
   }
+  return 0; // Error, unrecognized particle
 }
 
-G4DynamicParticle *G4INCLXXInterface::toG4Particle(G4int A, G4int Z, G4int PDGCode,
-						 G4double kinE,
-						 G4double px,
-                                                 G4double py, G4double pz) const {
-  const G4ParticleDefinition *def = toG4ParticleDefinition(A, Z, PDGCode);
+G4DynamicParticle *G4INCLXXInterface::toG4Particle(G4int A, G4int Z, G4int S, G4int PDGCode,
+						   G4double kinE, G4double px,
+                                                   G4double py, G4double pz) const {
+  const G4ParticleDefinition *def = toG4ParticleDefinition(A, Z, S, PDGCode);
   if(def == 0) { // Check if we have a valid particle definition
     return 0;
   }

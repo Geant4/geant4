@@ -55,16 +55,17 @@ public:
 
   virtual ~G4PreCompoundTransitions();
 
-  virtual G4double CalculateProbability(const G4Fragment & aFragment);
+  G4double CalculateProbability(const G4Fragment & aFragment) override;
   
-  virtual void PerformTransition(G4Fragment & aFragment);
+  virtual void PerformTransition(G4Fragment & aFragment) override;
+  
+  G4PreCompoundTransitions(const G4PreCompoundTransitions &) = delete;
+  const G4PreCompoundTransitions& operator=
+  (const G4PreCompoundTransitions &right) = delete;
+  G4bool operator==(const G4PreCompoundTransitions &right) const = delete;
+  G4bool operator!=(const G4PreCompoundTransitions &right) const = delete;
 
 private:
-  
-  G4PreCompoundTransitions(const G4PreCompoundTransitions &); 
-  const G4PreCompoundTransitions& operator=(const G4PreCompoundTransitions &right);
-  G4bool operator==(const G4PreCompoundTransitions &right) const;
-  G4bool operator!=(const G4PreCompoundTransitions &right) const;
 
   const G4ParticleDefinition* proton;
   G4NuclearLevelData* fNuclData;  

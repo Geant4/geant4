@@ -27,8 +27,6 @@
 //
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewer.hh"
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetContainer.hh"
@@ -183,5 +181,3 @@ Widget* G4OpenGLXmTextField::GetPointerToWidget ()
 {
   return &text_field;
 }
-
-#endif

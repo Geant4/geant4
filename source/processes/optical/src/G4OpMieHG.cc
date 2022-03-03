@@ -182,3 +182,10 @@ G4double G4OpMieHG::GetMeanFreePath(const G4Track& aTrack, G4double,
   }
   return attLength;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4OpMieHG::SetVerboseLevel(G4int verbose)
+{
+  verboseLevel = verbose;
+  G4OpticalParameters::Instance()->SetMieVerboseLevel(verboseLevel);
+}

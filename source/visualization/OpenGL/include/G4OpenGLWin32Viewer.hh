@@ -29,8 +29,6 @@
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
 //                       functionality for OpenGL in GEANT4
 
-#if defined (G4VIS_BUILD_OPENGLWIN32_DRIVER) || defined (G4VIS_USE_OPENGLWIN32)
-
 #ifndef G4OPENGLWIN32VIEWER_HH
 #define G4OPENGLWIN32VIEWER_HH
 
@@ -72,7 +70,5 @@ private:
   HGLRC fHGLRC;
   G4bool fInCreateWindow;
 };
-
-#endif
 
 #endif

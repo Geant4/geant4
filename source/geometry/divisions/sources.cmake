@@ -29,5 +29,5 @@ geant4_add_module(G4geomdivision
     G4VDivisionParameterisation.cc)
 
 geant4_module_link_libraries(G4geomdivision
-  PUBLIC G4specsolids G4globman G4geometrymng G4hepgeometry
+  PUBLIC G4specsolids G4volumes G4globman G4geometrymng G4hepgeometry
   PRIVATE G4csg)

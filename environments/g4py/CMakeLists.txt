@@ -8,7 +8,7 @@
 # which Python an install of Boost Python uses)...
 find_package(PythonInterp 3.0 REQUIRED)
 find_package(PythonLibs REQUIRED)
-find_package(Boost 1.65 REQUIRED python)
+find_package(Boost 1.65 REQUIRED python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR})
 
 # Variables and Functions to help build, organise, and install modules
 include(${CMAKE_CURRENT_SOURCE_DIR}/G4PythonHelpers.cmake)

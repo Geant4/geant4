@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -76,6 +76,73 @@ The cross section for GammaConversionToMuons is artificially increased by the Cr
 /tracking/verbose 1
 #
 /run/beamOn 5
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           1
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
 #####G4eeToTwoPiModel####
 G4eeToHadronsModel::Initialise: 
 CM System: emin(MeV)= 279.14 epeak(MeV)= 775.5 emax(MeV)= 4521
@@ -98,13 +165,13 @@ CM System: emin(MeV)= 1019.46 epeak(MeV)= 1019.46 emax(MeV)= 4521
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process, SubType= 15
         good cross section parametrization from 211.317 MeV to 1e+12 GeV for all Z.
 
-AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest, SubType=.6
+AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest, SubType=6
         threshold at 43.6931 GeV good description up to 1000 TeV for all Z.
 
 ee2hadr:  for e+ XStype:3 SubType=7 BuildTable=0
       e+ annihilation into hadrons active from 76.2411 GeV to 19999.5 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         eeToHadrons : Emin=    0 meV Emax=  100 TeV
+         eeToHadrons : Emin=    0 eV  Emax=  100 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
  This region is in the mass world.
@@ -124,7 +191,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 GeV
+ Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -156,62 +223,71 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ... create H1 : h16 - done
 ... create H1 : h17 - done
 
-----> Histogram file is opened in testem6_0.root
+----> Histogram file is opened in testem6_0
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1    -249 m        0 fm       0 fm       0 meV          0 meV  98.78 cm   98.78 cm       Iron   GammaToMuPair
+    0    -250 m        0 fm       0 fm     100 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -248.9 m        0 fm       0 fm       0 eV           0 eV   1.078 m    1.078 m        Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1  -249.2 m        0 fm       0 fm       0 meV          0 meV  78.31 cm   78.31 cm       Iron   GammaToMuPair
+    0    -250 m        0 fm       0 fm     100 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -248.9 m        0 fm       0 fm       0 eV           0 eV   1.051 m    1.051 m        Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1    -250 m        0 fm       0 fm       0 meV          0 meV  2.209 cm   2.209 cm       Iron   GammaToMuPair
+    0    -250 m        0 fm       0 fm     100 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -249.7 m        0 fm       0 fm       0 eV           0 eV   33.15 cm   33.15 cm       Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1  -249.8 m        0 fm       0 fm       0 meV          0 meV  22.66 cm   22.66 cm       Iron   GammaToMuPair
+    0    -250 m        0 fm       0 fm     100 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -249.6 m        0 fm       0 fm       0 eV           0 eV   44.68 cm   44.68 cm       Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1  -249.4 m        0 fm       0 fm       0 meV          0 meV  57.42 cm   57.42 cm       Iron   GammaToMuPair
+    0    -250 m        0 fm       0 fm     100 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -249.6 m        0 fm       0 fm       0 eV           0 eV   43.68 cm   43.68 cm       Iron   GammaToMuPair
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.007300s Sys=0.000000s
+  User=0.000000s Real=0.000847s Sys=0.000000s
+### RunAction::EndOfRunAction
 
- Number of process calls --->	GammaToMuPair : 5... write file : testem6_0.root - done
-... write files - done
+ Number of process calls --->	GammaToMuPair : 5
+... write file : testem6_0.root - done
 ... close file : testem6_0.root - done
+... clear h1 - done
+... clear h2 - done
+... clear h3 - done
+... clear p1 - done
+... clear p2 - done
+... clear ntupleBookings - done
+... clear ntuples - done
+... clear files - done
+... clear all data - done
 
 #
 /gun/particle e+
 /gun/energy 1 TeV
 #
 /testem/phys/SetAnnihiToMuPairFac 10000
-The cross section for AnnihiToMuPair is artificially increased by the CrossSecFactor=10000
 /testem/phys/SetAnnihiToHadronFac 10000
 ### G4eeToHadronsMultiModel: The cross section for G4eeToHadronsMultiModel is increased by 10000 times
 #
@@ -235,7 +311,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 GeV
+ Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -244,6 +320,9 @@ Index : 0     used in the geometry : Yes
 ### Run 1 starts.
 ### Run 1 start.
 ###RunAction::BeginOfRunAction  Material:Iron
+... create file : testem6_1.root - done
+... open analysis file : testem6_1.root - done
+... open analysis file : testem6_1.root - done
 ... create H1 : h1 - done
 ... create H1 : h2 - done
 ... create H1 : h3 - done
@@ -262,55 +341,65 @@ Index : 0     used in the geometry : Yes
 ... create H1 : h16 - done
 ... create H1 : h17 - done
 
-----> Histogram file is opened in testem6_1.root
+----> Histogram file is opened in testem6_1
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1  -249.9 m        0 fm       0 fm       1 TeV          0 meV  12.21 cm   12.21 cm       Iron     ee2hadr
+    0    -250 m        0 fm       0 fm       1 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -249.8 m        0 fm       0 fm       0 eV           0 eV   23.05 cm   23.05 cm       Iron   AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1  -244.5 m        0 fm       0 fm       1 TeV          0 meV  5.457 m    5.457 m        Iron     ee2hadr
+    0    -250 m        0 fm       0 fm       1 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -249.4 m        0 fm       0 fm       1 TeV          0 eV   61.83 cm   61.83 cm       Iron     ee2hadr
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1  -249.8 m        0 fm       0 fm       1 TeV          0 meV  15.27 cm   15.27 cm       Iron     ee2hadr
+    0    -250 m        0 fm       0 fm       1 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -246.8 m        0 fm       0 fm       1 TeV          0 eV   3.226 m    3.226 m        Iron     ee2hadr
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1  -246.2 m        0 fm       0 fm       1 TeV          0 meV  3.764 m    3.764 m        Iron     ee2hadr
+    0    -250 m        0 fm       0 fm       1 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -249.3 m        0 fm       0 fm       0 eV           0 eV   73.21 cm   73.21 cm       Iron   AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
-    1  -245.4 m        0 fm       0 fm       1 TeV          0 meV  4.568 m    4.568 m        Iron     ee2hadr
+    0    -250 m        0 fm       0 fm       1 TeV          0 eV       0 fm       0 fm       Iron   initStep
+    1  -249.1 m        0 fm       0 fm       1 TeV          0 eV   90.58 cm   90.58 cm       Iron     ee2hadr
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000365s Sys=0.000000s
+  User=0.000000s Real=0.000535s Sys=0.000000s
+### RunAction::EndOfRunAction
 
- Number of process calls --->	ee2hadr : 5... write file : testem6_1.root - done
-... write files - done
+ Number of process calls --->	AnnihiToMuPair : 2	ee2hadr : 3
+... write file : testem6_1.root - done
 ... close file : testem6_1.root - done
+... clear h1 - done
+... clear h2 - done
+... clear h3 - done
+... clear p1 - done
+... clear p2 - done
+... clear ntupleBookings - done
+... clear ntuples - done
+... clear files - done
+... clear all data - done
 
 #
 #/gun/particle anti_proton

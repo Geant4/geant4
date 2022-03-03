@@ -31,8 +31,8 @@
 
 // Created: P.Arce, September 2004
 // --------------------------------------------------------------------
-#ifndef G4ErrorTarget_hh
-#define G4ErrorTarget_hh
+#ifndef G4ERRORTARGET_HH
+#define G4ERRORTARGET_HH 1
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -45,10 +45,10 @@ enum G4ErrorTargetType{ G4ErrorTarget_PlaneSurface,
                         G4ErrorTarget_TrkL };
 class G4ErrorTarget
 {
-  public:  // with description
+  public:
 
     G4ErrorTarget();
-    virtual ~G4ErrorTarget();
+    virtual ~G4ErrorTarget() = default;
 
     virtual G4double GetDistanceFromPoint( const G4ThreeVector&,
                                            const G4ThreeVector& ) const;

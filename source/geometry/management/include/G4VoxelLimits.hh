@@ -40,7 +40,7 @@
 // 13.07.95, P.Kent - Initial version.
 // --------------------------------------------------------------------
 #ifndef G4VOXELLIMITS_HH
-#define G4VOXELLIMITS_HH
+#define G4VOXELLIMITS_HH 1
 
 #include "G4Types.hh"
 #include "geomdefs.hh"
@@ -51,12 +51,12 @@
 
 class G4VoxelLimits
 {
-  public: // with description
+  public:
   
-    G4VoxelLimits();
+    G4VoxelLimits() = default;
       // Constructor - initialise to be unlimited. Volume unrestricted.
 
-    ~G4VoxelLimits();
+    ~G4VoxelLimits() = default;
       // Destructor. No actions.
 
     void AddLimit(const EAxis pAxis, const G4double pMin, const G4double pMax);

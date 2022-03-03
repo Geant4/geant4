@@ -44,7 +44,6 @@
 #include "G4UIExecutive.hh"
 #include "BrachyActionInitialization.hh"
 #include "G4VisExecutive.hh"
-#include "BrachyAnalysisManager.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
@@ -119,8 +118,6 @@ int main(int argc ,char ** argv)
 
   // Job termination
  // Close the root file
-
-  delete G4AnalysisManager::Instance();
 
   delete visManager;
   delete pRunManager;

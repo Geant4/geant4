@@ -16,7 +16,7 @@
 /vis/ogl/set/displayListLimit 100000
 #
 ####/vis/open OGLSXm
-####/vis/open HepRepXML
+####/vis/open HepRepFile
 #
 #/vis/open DAWNFILE
 #

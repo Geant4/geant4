@@ -35,15 +35,18 @@
 
 #include "tools/hdf5/ntuple" // for hid_t
 
+#include <string_view>
+
 class G4Hdf5FileManager;
 
 template <typename HT>
 class G4Hdf5HnFileManager : public G4VTHnFileManager<HT>
 {
   public:
-    G4Hdf5HnFileManager(G4Hdf5FileManager* fileManger)
-      : G4VTHnFileManager<HT>(), fFileManager(fileManger) {}    
-    virtual ~G4Hdf5HnFileManager() {}
+    explicit G4Hdf5HnFileManager(G4Hdf5FileManager* fileManger)
+      : G4VTHnFileManager<HT>(), fFileManager(fileManger) {}
+    G4Hdf5HnFileManager() = delete;  
+    virtual ~G4Hdf5HnFileManager() = default;
 
     // Methods for writing objects
     // Write to a new file (the file is closed after write)
@@ -51,11 +54,13 @@ class G4Hdf5HnFileManager : public G4VTHnFileManager<HT>
     // Write to the default file  (handled with OpenFile()/CloseFile methods)
     virtual G4bool Write(HT* ht, const G4String& htName, G4String& fileName) final;
 
-  private:       
+  private:
     // Methods
     G4bool WriteImpl(hid_t hdirectory, HT* ht, const G4String& htName);
+    // Static data members
+    static constexpr std::string_view fkClass { "G4Hdf5HnFileManager<HT>" };
     // Data members
-    G4Hdf5FileManager* fFileManager;
+    G4Hdf5FileManager* fFileManager { nullptr };
 };
 
 // inline functions

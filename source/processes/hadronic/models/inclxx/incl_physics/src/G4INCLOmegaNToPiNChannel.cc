@@ -96,7 +96,7 @@ namespace G4INCL {
 		omega->setEnergy(ee);
 		G4double pn=std::sqrt(en*en-mn*mn);
 /*// test isotropy
-		const G4double pi=std::acos(-1.0);		
+		const G4double pi=std::acos(-1.0);
 		G4double x1;
 		G4double u1;
 		G4double fteta;

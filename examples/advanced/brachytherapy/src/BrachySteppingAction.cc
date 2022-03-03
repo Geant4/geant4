@@ -25,8 +25,8 @@
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
-#include "BrachyAnalysisManager.hh"
 #include "BrachySteppingAction.hh"
+#include "G4AnalysisManager.hh"
 #include "G4ios.hh"
 #include "G4SteppingManager.hh"
 #include "G4Step.hh"
@@ -71,7 +71,7 @@ void BrachySteppingAction::UserSteppingAction(const G4Step* aStep)
       
       // Retrieve the process originating it
       // G4cout << "creator process " << process << G4endl;
-        if (process == "RadioactiveDecayBase")
+        if (process == "RadioactiveDecay")
          {
           G4double energy = (*fSecondary)[lp1]  -> GetKineticEnergy();   
           G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();

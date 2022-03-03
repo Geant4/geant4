@@ -127,8 +127,8 @@ ComputeTransformation(const G4int, G4VPhysicalVolume* physVol) const
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationTubsRho " << G4endl
-           << " Offset: " << foffset/deg
-           << " - Width: " << fwidth/deg << G4endl;
+           << " Offset: " << foffset/CLHEP::deg
+           << " - Width: " << fwidth/CLHEP::deg << G4endl;
   }
 #endif
 
@@ -234,9 +234,9 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << " G4ParameterisationTubsPhi - position: " << posi/deg << G4endl
-           << " copyNo: " << copyNo << " - foffset: " << foffset/deg
-           << " - fwidth: " << fwidth/deg << G4endl;
+    G4cout << " G4ParameterisationTubsPhi - position: " << posi/CLHEP::deg << G4endl
+           << " copyNo: " << copyNo << " - foffset: " << foffset/CLHEP::deg
+           << " - fwidth: " << fwidth/CLHEP::deg << G4endl;
   }
 #endif
 
@@ -346,7 +346,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   {
     G4cout << " G4ParameterisationTubsZ::ComputeTransformation()" << G4endl
            << " Position: " << posi << " - copyNo: " << copyNo << G4endl
-           << " foffset " << foffset/deg << " - fwidth " << fwidth/deg
+           << " foffset " << foffset/CLHEP::deg << " - fwidth " << fwidth/CLHEP::deg
            << G4endl;
   }
 #endif

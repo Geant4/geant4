@@ -52,7 +52,7 @@ G4VITReactionProcess(),
 fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable)),
 fpReactionModel(nullptr),
 fTrackHolder(G4ITTrackHolder::Instance()),
-fReactionSet(0)
+fReactionSet(nullptr)
 {
   timeMin = G4Scheduler::Instance()->GetStartTime();
   timeMax = G4Scheduler::Instance()->GetEndTime();
@@ -247,10 +247,11 @@ void G4DNAIRT::Sampling(G4Track* track){
   for(size_t u=0; u<fReactionDatas->size();u++){
     if((*fReactionDatas)[u]->GetReactant2()->GetDiffusionCoefficient() == 0){
       G4double kObs = (*fReactionDatas)[u]->GetObservedReactionRateConstant();
+      if(kObs == 0) continue;
       G4double time = -(std::log(1.0 - G4UniformRand())/kObs) + globalTime;
       if( time < minTime && time >= globalTime && time < timeMax){
         minTime = time;
-        index = (int) u;
+        index = (G4int)u;
       }
     }
   }
@@ -277,18 +278,19 @@ G4double G4DNAIRT::GetIndependentReactionTime(const G4MolecularConfiguration* mo
   G4double irt = -1 * ps;
   G4double D = molA->GetDiffusionCoefficient() +
                molB->GetDiffusionCoefficient();
+  if(D == 0) D += 1e-20*(m2/s);
   G4double rc = fReactionData->GetOnsagerRadius();
 
   if ( reactionType == 0){
     G4double sigma = fReactionData->GetEffectiveReactionRadius();
 
-    if( rc != 0) r0 = -rc / (1-std::exp(rc/r0));
     if(sigma > r0) return 0; // contact reaction
+    if( rc != 0) r0 = -rc / (1-std::exp(rc/r0));
 
     G4double Winf = sigma/r0;
     G4double W = G4UniformRand();
 
-    if ( W < Winf ) irt = (0.25/D) * std::pow( (r0-sigma)/erfc->erfcInv(r0*W/sigma), 2 );
+    if ( W > 0 && W < Winf ) irt = (0.25/D) * std::pow( (r0-sigma)/erfc->erfcInv(r0*W/sigma), 2 );
 
     return irt;
   }
@@ -319,8 +321,8 @@ G4double G4DNAIRT::GetIndependentReactionTime(const G4MolecularConfiguration* mo
     Winf = sigma / r0 * kobs / kdif;
 
     if(Winf > G4UniformRand()) irt = SamplePDC(a,b)/D;
-      return irt;
-    }
+    return irt;
+  }
 
   return -1 * ps;
 }
@@ -404,7 +406,7 @@ std::unique_ptr<G4ITReactionChange> G4DNAIRT::MakeReaction(const G4Track& trackA
 
   G4double dt = globalTime - trackA.GetGlobalTime();
 
-  if(dt != 0){
+  if(dt != 0 && (D1 + D2) != 0 && r0 != 0){
     G4double s12 = 2.0 * D1 * dt;
     G4double s22 = 2.0 * D2 * dt;
     if(s12 == 0) r2 = r1;
@@ -415,6 +417,9 @@ std::unique_ptr<G4ITReactionChange> G4DNAIRT::MakeReaction(const G4Track& trackA
                                                                G4RandGauss::shoot(0, s12 + s22 * s22 / s12),
                                                                G4RandGauss::shoot(0, s12 + s22 * s22 / s12));
 
+      if(alpha == 0){
+        return pChanges;
+      }
       S1.setPhi(rad * G4UniformRand() * 2.0 * CLHEP::pi);
       S1.setTheta(rad * std::acos(1.0 + 1./alpha * std::log(1.0 - G4UniformRand() * (1 - std::exp(-2.0 * alpha)))));
 
@@ -441,6 +446,9 @@ std::unique_ptr<G4ITReactionChange> G4DNAIRT::MakeReaction(const G4Track& trackA
 
     const G4double sqrD1 = D1 == 0. ? 0. : std::sqrt(D1);
     const G4double sqrD2 = D2 == 0. ? 0. : std::sqrt(D2);
+    if((sqrD1 + sqrD2) == 0){
+      return pChanges;
+    }
     const G4double inv_numerator = 1./(sqrD1 + sqrD2);
     const G4ThreeVector reactionSite = sqrD2 * inv_numerator * trackA.GetPosition()
                                      + sqrD1 * inv_numerator * trackB.GetPosition();
@@ -487,9 +495,9 @@ std::unique_ptr<G4ITReactionChange> G4DNAIRT::MakeReaction(const G4Track& trackA
 
 std::vector<std::unique_ptr<G4ITReactionChange>> G4DNAIRT::FindReaction(
   G4ITReactionSet* pReactionSet,
-  const double /*currentStepTime*/,
-  const double fGlobalTime,
-  const bool /*reachedUserStepTimeLimit*/)
+  const G4double /*currentStepTime*/,
+  const G4double fGlobalTime,
+  const G4bool /*reachedUserStepTimeLimit*/)
 {
   std::vector<std::unique_ptr<G4ITReactionChange>> fReactionInfo;
   fReactionInfo.clear();
@@ -528,8 +536,8 @@ std::vector<std::unique_ptr<G4ITReactionChange>> G4DNAIRT::FindReaction(
 
 G4bool G4DNAIRT::TestReactibility(const G4Track& /*trackA*/,
   const G4Track& /*trackB*/,
-  double /*currentStepTime*/,
-  bool /*userStepTimeLimit*/) /*const*/
+  G4double /*currentStepTime*/,
+  G4bool /*userStepTimeLimit*/) /*const*/
 {
   return true;
 }

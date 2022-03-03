@@ -45,6 +45,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,6 +54,7 @@ RunAction::RunAction()
 {
   TestParameters::GetPointer();
   fAnalysisManager = G4AnalysisManager::Instance();
+  fAnalysisManager->SetDefaultFileType("root");  
   fAnalysisManager->SetFileName("testem8");
   fAnalysisManager->SetVerboseLevel(1);
   fAnalysisManager->SetActivation(true);
@@ -102,8 +104,8 @@ G4Run* RunAction::GenerateRun()
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int id = aRun->GetRunID();
-  G4cout << "### Run " << id << " start analysis activation: " 
-         << G4endl;
+  G4cout << "### Run " << id << " start analysis activation; rand= " 
+         << G4UniformRand() << G4endl;
 
   fRun->BeginOfRun();
 
@@ -126,8 +128,8 @@ void RunAction::EndOfRunAction(const G4Run*)
   if (fAnalysisManager->IsActive()) { 
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
+    fAnalysisManager->Clear();
   }
-  //delete fAnalysisManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -164,15 +164,13 @@ void G4AdjointCSManager::RegisterEmProcess(G4VEmProcess* aProcess,
   if(anAdjPartDef && aProcess)
   {
     RegisterAdjointParticle(anAdjPartDef);
-    G4int index = -1;
 
     for(size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
     {
       if(anAdjPartDef->GetParticleName() ==
          fAdjointParticlesInAction[i]->GetParticleName())
-        index = i;
+    	  fForwardProcesses[i]->push_back(aProcess);
     }
-    fForwardProcesses[index]->push_back(aProcess);
   }
 }
 
@@ -185,14 +183,13 @@ void G4AdjointCSManager::RegisterEnergyLossProcess(
   if(anAdjPartDef && aProcess)
   {
     RegisterAdjointParticle(anAdjPartDef);
-    G4int index = -1;
     for(size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
     {
       if(anAdjPartDef->GetParticleName() ==
          fAdjointParticlesInAction[i]->GetParticleName())
-        index = i;
+    	                        fForwardLossProcesses[i]->push_back(aProcess);
+
     }
-    fForwardLossProcesses[index]->push_back(aProcess);
   }
 }
 
@@ -443,9 +440,8 @@ G4double G4AdjointCSManager::GetTotalAdjointCS(
 {
   DefineCurrentMaterial(aCouple);
   DefineCurrentParticle(aPartDef);
-  G4bool b;
   return (((*fTotalAdjSigmaTable[fCurrentParticleIndex])[fCurrentMatIndex])
-            ->GetValue(Ekin * fMassRatio, b));
+            ->Value(Ekin * fMassRatio));
 }
 
 ///////////////////////////////////////////////////////
@@ -455,9 +451,8 @@ G4double G4AdjointCSManager::GetTotalForwardCS(
 {
   DefineCurrentMaterial(aCouple);
   DefineCurrentParticle(aPartDef);
-  G4bool b;
   return (((*fTotalFwdSigmaTable[fCurrentParticleIndex])[fCurrentMatIndex])
-            ->GetValue(Ekin * fMassRatio, b));
+            ->Value(Ekin * fMassRatio));
 }
 
 ///////////////////////////////////////////////////////
@@ -466,15 +461,13 @@ G4double G4AdjointCSManager::GetAdjointSigma(
   const G4MaterialCutsCouple* aCouple)
 {
   DefineCurrentMaterial(aCouple);
-  G4bool b;
   if(is_scat_proj_to_proj)
     return (((*fSigmaTableForAdjointModelScatProjToProj[index_model])
-               [fCurrentMatIndex])
-              ->GetValue(Ekin_nuc, b));
+               [fCurrentMatIndex])->Value(Ekin_nuc));
   else
     return (
       ((*fSigmaTableForAdjointModelProdToProj[index_model])[fCurrentMatIndex])
-        ->GetValue(Ekin_nuc, b));
+        ->Value(Ekin_nuc));
 }
 
 ///////////////////////////////////////////////////////
@@ -500,9 +493,8 @@ void G4AdjointCSManager::GetMaxFwdTotalCS(G4ParticleDefinition* aPartDef,
   DefineCurrentMaterial(aCouple);
   DefineCurrentParticle(aPartDef);
   e_sigma_max = fEkinofFwdSigmaMax[fCurrentParticleIndex][fCurrentMatIndex];
-  G4bool b;
   sigma_max = ((*fTotalFwdSigmaTable[fCurrentParticleIndex])[fCurrentMatIndex])
-                ->GetValue(e_sigma_max, b);
+                ->Value(e_sigma_max);
   e_sigma_max /= fMassRatio;
 }
 
@@ -515,9 +507,8 @@ void G4AdjointCSManager::GetMaxAdjTotalCS(G4ParticleDefinition* aPartDef,
   DefineCurrentMaterial(aCouple);
   DefineCurrentParticle(aPartDef);
   e_sigma_max = fEkinofAdjSigmaMax[fCurrentParticleIndex][fCurrentMatIndex];
-  G4bool b;
   sigma_max = ((*fTotalAdjSigmaTable[fCurrentParticleIndex])[fCurrentMatIndex])
-                ->GetValue(e_sigma_max, b);
+                ->Value(e_sigma_max);
   e_sigma_max /= fMassRatio;
 }
 
@@ -1129,6 +1120,11 @@ G4double G4AdjointCSManager::ComputeAdjointCS(
   anAdjointCSMatrix->GetData(ind + 1, aLogPrimEnergy2, aLogCS2, log02,
                              aLogSecondEnergyVector2, aLogProbVector2,
                              aLogProbVectorIndex2);
+  if (! (aLogProbVector1 && aLogProbVector2 &&
+  		       aLogSecondEnergyVector1 && aLogSecondEnergyVector2)){
+  	 return  0.;
+  }
+
   if(anAdjointCSMatrix->IsScatProjToProj())
   {  // case where the Tcut plays a role
     G4double log_minimum_prob1, log_minimum_prob2;

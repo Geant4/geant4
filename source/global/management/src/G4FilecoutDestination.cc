@@ -43,7 +43,7 @@ G4FilecoutDestination::~G4FilecoutDestination()
 // --------------------------------------------------------------------
 void G4FilecoutDestination::Open(std::ios_base::openmode mode)
 {
-  if(m_name.isNull())
+  if(m_name.empty())
   {
 #ifndef __MIC
     // Cannot use G4Exception, because G4cout/G4cerr is not setup

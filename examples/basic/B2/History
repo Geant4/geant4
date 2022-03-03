@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-07-21 I. Hrivnacova (exampleB2-V10-07-02)
+- Introduced namespace instead of a class names prefix
+- Declare overriding functions 'override' (and removed 'virtual' keyword)
+
 31-05-21 I. Hrivnacova (exampleB2-V10-07-01)
 - Use nullptr instead of 0, NULL
 - Clean trailing whitespaces from all files

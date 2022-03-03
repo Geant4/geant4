@@ -98,7 +98,7 @@ private:
 
   G4int verboseLevel;
   G4bool isInitialised;
-  G4int fEntanglementModelIndex;
+  G4int fEntanglementModelID;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

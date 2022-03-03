@@ -30,8 +30,6 @@
 // OpenGL immediate scene - draws immediately to buffer
 //                           (saving space on server).
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
-
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4OpenGLViewer.hh"
@@ -41,7 +39,6 @@
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
-#include "G4Scale.hh"
 #include "G4Polyhedron.hh"
 #include "G4AttHolder.hh"
 
@@ -189,14 +186,6 @@ void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Square& square)
   }
 }
 
-void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Scale& scale)
-{
-  G4bool furtherprocessing = AddPrimitivePreamble(scale);
-  if (furtherprocessing) {
-    G4OpenGLSceneHandler::AddPrimitive(scale);
-  }
-}
-
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
 {
   // Note: colour is still handled in
@@ -297,5 +286,3 @@ void G4OpenGLImmediateSceneHandler::ClearTransientStore ()
 }
 
 G4int G4OpenGLImmediateSceneHandler::fSceneIdCount = 0;
-
-#endif

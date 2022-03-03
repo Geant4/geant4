@@ -16,6 +16,188 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 15, 2021 I. Hrivnacova (analysis-V10-07-30)
+- Fixed remaining Coverity issues
+
+November 15, 2021 I. Hrivnacova (analysis-V10-07-29)
+- Fixed Coverity issues
+
+November 09, 2021 I. Hrivnacova (analysis-V10-07-28)
+- Fix in G4MPIToolsManager: do not call Receive() twice
+
+November 05, 2021 I. Hrivnacova (analysis-V10-07-27)
+- Added new public function G4VAnalysisManager::Clear()
+  that deletes all allocated analysis objects and clears
+  their collections.
+  This function should be used as a replacement for deleting
+  the analysis manager in the applications that allocate the
+  analysis data in begin of run and deleted the analysis
+  manager in end of run.
+- Minor code clean-up
+
+November 04, 2021 I. Hrivnacova (analysis-V10-07-26)
+- Renamed G4VAnalysisReader::ReadNtuple(const G4String&)
+  back in GetNtuple.  Cannot reproduce the ambiguity error
+  with GetNtuple(G4int).
+
+October 28, 2021 I. Hrivnacova (analysis-V10-07-25)
+- Moved data members initialization in header files;
+  added deleted default constructor where appropriate,
+  added explicit keyword to one argument construtors where
+  missing
+- Use brace data members initialization everywhere
+- Implemented missing WriteOnAscii() - for h2,h3,p1,p2
+- Use fonts from tools in G4PlotManager.cc
+- Removed CMake -DTOOLS_USE_EXPAT definition (not needed)
+- Added G4ToolsAnalysisMessenger that implements "get" commands
+    /analysis/hn|pn/get id
+
+October 27, 2021 B.Morgan (analysis-V10-07-24)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+October 26, 2021 I. Hrivnacova (analysis-V10-07-23)
+- Fixed G4*RFileManager destructors;
+  thanks to B. Morgan for spotting this bug
+
+October 25, 2021 I. Hrivnacova (analysis-V10-07-22)
+- Added public function G4VAnalysisManager::Reset()
+  - Needed when calling files are closed without reset
+    by calling analysisManager->CloseFile(false)
+    (see B5 example with interactive plotting)
+- Minor fixes:
+  - Do not issue same log messages from generic analysis manager
+    and generic file manager
+  - Do not call SetIsEmpty() twice in Hdf5
+
+October 22, 2021 I. Hrivnacova (analysis-V10-07-21)
+- Support for ntuple columns of string vector type
+  for Xml, Hdf5 output type:
+  - added helper code for Xml reader, no update needed for Hdf5
+
+October 19, 2021 I. Hrivnacova (analysis-V10-07-20)
+- Implemented support for file system directories with Csv output
+  as proposed in [GitHub PR #32](https://github.com/Geant4/geant4/pull/32)
+- Fixed reading objects from files with directories (Root, Hdf5)
+- Implemented handling directories in Generic analysis manager
+- Clean-up in G4ToolsAnalysisManager
+- Reimplemented utility functions GetBaseName(), GetExtension() using
+  <filesystem> library
+
+October 6, 2021 I. Hrivnacova (analysis-V10-07-19)
+- Added new G4AnalysisManager.hh header defining
+  using G4AnalysisManager = G4GenericAnalysisManager
+- Removed g4csv.hh, g4hdf5.hh, g4root.hh, g4xml.hh
+- Reduced output specific type definitions in
+  g4xyz_defs.hh to ntuple end rntuple types
+- Removed g4analysis.hh with the
+  G4Analysis::MasterInstance() factory method
+- Removed the default value ("root") for the default file type
+  in G4GenericAnalysisManager - the default must be set by
+  user if using fileNames without extensions
+- Updated exception codes and messages in accummulables
+
+September 20, 2021 I. Hrivnacova (analysis-V10-07-18)
+- clang-tidy performance fixes:
+  - use const auto&, std::move where appropriate
+  - revisited passing by std::shared_ptr
+- clang-tidy modernize fixes:
+  - use make_unique, nullptr, auto, emplace_back, using
+  - use default for disabled constructors and destructors,
+    delete for private member functions not implemented
+- Removed explicit for constructors with more than 1 parameters
+
+September 17, 2021 I. Hrivnacova (analysis-V10-07-17)
+- Fixed evaluation of result of deleting empty file
+  in G4RootAnalysisManager causing wrong warnings
+
+September 3, 2021 I. Hrivnacova (analysis-V10-07-16)
+- Added support for ntuple columns of string vectors via
+  new public functions in G4VAnalysisManager and G4VAnalysisReader:
+  G4bool SetNtupleSColumn(const G4String& columnName,
+                          std::vector<std::string>& vector) final;
+  G4bool SetNtupleSColumn(G4int ntupleId, const G4String& columnName,
+                          std::vector<std::string>& vector) = 0;
+
+August 31, 2021 I. Hrivnacova (analysis-V10-07-15)
+- Code clean-up:
+  - Review of static data members:
+    - changed static const to static constexpr where possible
+      or inline static const otherwise (for G4String)
+    - declares static data members inline and moved their initialization
+      in header file
+  - Be consistent:
+    - "" for includes from g4tools
+    - "fk" prefix for class constexpr data names
+    - Template argument names:
+    HT, NT, FT for histogram/profile, ntuple, file types
+  - Removed redundant includes of "G4Threading.hh", <iostream>
+
+August 26, 2021 B. Morgan (analysis-V10-07-14)
+- Remove default: in switch for GetMergeFunction
+  - Prevents accidental fall through of Windows
+
+August 25, 2021 I. Hrivnacova (analysis-V10-07-13)
+- Separated Hn/Pn object file handling from output specific analysis readers
+  in Hn file manager classes for reading (G4XHnRFileManager)
+- Replaced the explicit Read[Hn|Pn] functions in the analysis readers
+  by a common implementation in G4ToolsAnalysisReader
+  using the newly introduced Hn file manager classes for reading
+- Separated ReadNtuple functions from the analysis readers in
+  the RNtuple manager classes
+- Renamed G4VAnalysisReader::GetNtuple(const G4String&) in ReadNtuple
+  to avoid ambiguity with GetNtuple(G4int).
+  Note that this change brings backward incompatibility.
+- Using more shared pointers
+
+August 18, 2021 I. Hrivnacova (analysis-V10-07-12)
+- Simplified verbosity messages
+- Plus more simplifications in Warn calls
+- Separated inline functions from G4MPIToolsManager.hh
+  to new .icc
+
+August 16, 2021 I. Hrivnacova (analysis-V10-07-11)
+- Simplified calls to G4Exceptions:
+  - Added G4Analysis::Warn() and changed the calls to G4Exception in
+    all analysis classes (except accummulables)
+  - Reduced exception classification to
+    Analysis_F001: Fatal exceptions - all fatal exception
+    Analysis_W001: Warnings - all warnings
+- Replaced some constants with constexpr
+
+August 12, 2021 I. Hrivnacova (analysis-V10-07-10)
+- Replaced the explicit Write[Hn|Pn] functions in the analysis managers
+  by a common implementation in G4ToolsAnalysisManager::WriteImpl() and Merge()
+  using the new Hn file manager classes introduced for the generic file manager
+  last year.
+  The same code is now used for writing histograms/profiles by specific analysis managers and the generic analysis manager.
+- Added new G4ToolsAnalysisManager::IsEmpty() function
+- Removed trailing whitespaces
+
+August 6, 2021 I. Hrivnacova (analysis-V10-07-09)
+- Added new G4VAnalysisReader public function
+    G4bool CloseFiles(G4bool reset = true);
+  to be called by user before the end of program
+  and its implementation for all readers.
+  This prevents from errors in the Hdf5 read test
+  after migration of the readers to G4ThreadLocalSingleton.
+
+July 19, 2021 I. Hrivnacova (analysis-V10-07-08)
+- Migration to G4ThreadLocalSingleton:
+  in all specific analysis manager and reader classes.
+  After this migration the singleton instances are deletes
+  by the Geant4 kernel, that's why their deleting has to be
+  removed from the client code.
+- Removed isMaster argument from managers/reders constructors,
+  and retrieve this info from G4Threading where needed.
+
+July 15, 2021 I. Hrivnacova (analysis-V10-07-07)
+- Replaced G4Analysis::make_unique with std::make_unique
+- Using [[maybe_unused]] where appropriate
+
+June 29, 2021 G. Cosmo (analysis-V10-07-06)
+- Fixed compilation errors in G4CsvAnalysisReader and G4XmlAnalysisReader
+  occurring with c++20 enabled.
+
 May 25, 2021 B. Morgan (analysis-V10-07-05)
 - Move fonts/ directory and install logic to g4tools external, as prime interface
   to Freetype.

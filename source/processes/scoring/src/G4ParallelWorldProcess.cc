@@ -44,6 +44,7 @@
 #include "G4Material.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4TransportationProcessType.hh"
 
 #include "G4SDManager.hh"
 #include "G4VSensitiveDetector.hh"
@@ -62,7 +63,7 @@ G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
  fNavigatorID(-1),fFieldTrack('0'),fGhostSafety(0.),fOnBoundary(false),
  layeredMaterialFlag(false)
 {
-  SetProcessSubType(491);
+  SetProcessSubType(PARALLEL_WORLD_PROCESS);
   if(!fpHyperStep) fpHyperStep = new G4Step();
   iParallelWorld = ++nParallelWorlds;
 

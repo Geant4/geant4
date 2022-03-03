@@ -51,16 +51,18 @@
 #include "G4NuclearLevelData.hh"
 #include "G4LevelManager.hh"
 #include "Randomize.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 const G4int G4UnstableFragmentBreakUp::Zfr[] = {0, 1, 1, 1, 2, 2};
 const G4int G4UnstableFragmentBreakUp::Afr[] = {1, 1, 2, 3, 3, 4};
 
-G4UnstableFragmentBreakUp::G4UnstableFragmentBreakUp() : fVerbose(1)
+G4UnstableFragmentBreakUp::G4UnstableFragmentBreakUp() : fVerbose(1), fSecID(-1)
 { 
   fLevelData = G4NuclearLevelData::GetInstance();
   for(G4int i=0; i<6; ++i) {
     masses[i] = G4NucleiProperties::GetNuclearMass(Afr[i], Zfr[i]);
   }
+  fSecID = G4PhysicsModelCatalog::GetModelID("model_G4UnstableFragmentBreakUp");
 }
 
 G4UnstableFragmentBreakUp::~G4UnstableFragmentBreakUp()
@@ -169,6 +171,7 @@ G4bool G4UnstableFragmentBreakUp::BreakUpChain(G4FragmentVector* results,
   mom2.boost(bst);  
   frag = new G4Fragment(Afr[idx], Zfr[idx], mom2);
   frag->SetCreationTime(time);
+  frag->SetCreatorModelID(fSecID);
   results->push_back(frag);
 
   // residual
@@ -178,6 +181,7 @@ G4bool G4UnstableFragmentBreakUp::BreakUpChain(G4FragmentVector* results,
     
   nucleus->SetZandA_asInt(Z, A);
   nucleus->SetMomentum(lv);
+  nucleus->SetCreatorModelID(fSecID);
   return true;
 }
 

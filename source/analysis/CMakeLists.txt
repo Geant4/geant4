@@ -2,7 +2,6 @@
 
 if(GEANT4_USE_FREETYPE)
   add_definitions(-DTOOLS_USE_FREETYPE)
-  add_definitions(-DTOOLS_USE_EXPAT)
 endif()
 
 set(G4analysis_COMPONENTS

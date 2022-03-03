@@ -28,8 +28,6 @@
 // John Allison  27th October 2012
 // Base class for OpenGLImmediate/StoredQt graphics system factories.
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
 #include "G4OpenGLQt.hh"
 
 #include "G4UIQt.hh"
@@ -73,5 +71,3 @@ G4bool G4OpenGLQt::IsUISessionCompatible () const
   }
   return isCompatible;
 }
-
-#endif

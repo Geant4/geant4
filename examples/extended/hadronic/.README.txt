@@ -38,6 +38,10 @@ energy spectrum of secondary particles.
 This example is focused on neutronHP physics, especially neutron transport,
 including thermal scattering.
 
+\link ExampleHadr05 Hadr05 \endlink
+
+Examples of hadronic calorimeters
+
 \link ExampleHadr06 Hadr06 \endlink
 
 This example demonstrates survey of energy deposition and particle's flux from 
@@ -64,6 +68,12 @@ This example shows how to use Geant4 as a generator for simulating
 inelastic hadron-nuclear interactions.
 Notice that the Geant4 run-manager is not used.
 
+\link ExampleHadr10 Hadr10 \endlink
+
+This example aims to test the treatment of decays in Geant4.
+In particular, we want to test the decays of the tau lepton, charmed and
+bottom hadrons, and the use of pre-assigned decays.
+
 \link ExampleFissionFragment FissionFragment \endlink
 
 This example demonstrates the Fission Fragment model as used within the
@@ -78,11 +88,6 @@ NeutronSource is an example of neutrons production. It illustrates the cooperati
 of nuclear reactions and radioactive decay processes.
 It survey energy deposition and particle's flux.
 It uses PhysicsConstructor objects.
-
-The example Hadr05, which demonstrated the usage of G4GenericPhysicsList to build 
-the concrete physics list at the run time, has been repleced in Geant4 10.4  by 
-extended/physicslists/genericPL the generic physics list was demonstrated in the 
-extended/hadronic/Hadr05 example.
 
 */
 

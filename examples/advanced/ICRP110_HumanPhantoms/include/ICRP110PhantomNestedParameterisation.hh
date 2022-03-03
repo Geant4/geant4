@@ -66,7 +66,7 @@ class ICRP110PhantomNestedParameterisation : public G4VNestedParameterisation
 {
 public:
   
-  ICRP110PhantomNestedParameterisation(const G4ThreeVector& voxelSize,
+  explicit ICRP110PhantomNestedParameterisation(const G4ThreeVector& voxelSize,
                                      std::vector<G4Material*>& mat,
                                      G4int fnX_ = 0, G4int fnY_ = 0, G4int fnZ_ = 0);
                                      // the total number of voxels along X, Y and Z 

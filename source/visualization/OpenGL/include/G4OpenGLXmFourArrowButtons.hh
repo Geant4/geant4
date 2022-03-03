@@ -28,8 +28,6 @@
 // 
 //Four arrow buttons class. Inherits from G4OpenGLXmVWidgetComponent
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMFOURARROWBUTTONS_HH
 #define G4OPENGLXMFOURARROWBUTTONS_HH
 
@@ -62,7 +60,5 @@ private:
   G4OpenGLXmFourArrowButtons (const G4OpenGLXmFourArrowButtons&);
   G4OpenGLXmFourArrowButtons& operator = (const G4OpenGLXmFourArrowButtons&);
 };
-
-#endif
 
 #endif

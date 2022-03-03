@@ -28,8 +28,6 @@
 //
 // 27/06/2003 : G.Barrand : implementation (at last !).
 
-#ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
-
 #include "G4OpenGLWin32Viewer.hh"
 #include "G4VViewer.hh"
 #include "G4VSceneHandler.hh"
@@ -484,4 +482,3 @@ void G4OpenGLWin32Viewer::SetZoom(
     }
 }
 
-#endif

@@ -30,7 +30,8 @@
 // M.G. Pia, 2 Oct 1998: modified GetFermiMomentum (original design was
 //                       the source of memory leaks)
 // G.Folger, spring 2010:  add integer A/Z interface
- 
+// A. Ribon, autumn 2021:  extended to hypernuclei
+
 #ifndef G4Nucleus_h
 #define G4Nucleus_h 1
 // Class Description
@@ -52,8 +53,8 @@ class G4Nucleus
   public:
     
     G4Nucleus();
-    G4Nucleus(const G4double A, const G4double Z);
-    G4Nucleus(const G4int A, const G4int Z);
+    G4Nucleus(const G4double A, const G4double Z, const G4int numberOfLambdas = 0);
+    G4Nucleus(const G4int A, const G4int Z, const G4int numberOfLambdas = 0);
     G4Nucleus(const G4Material* aMaterial);
     
     ~G4Nucleus();
@@ -66,6 +67,7 @@ class G4Nucleus
       if (this != &right) {
         theA=right.theA;
         theZ=right.theZ;
+        theL=right.theL;
         aEff=right.aEff;
         zEff=right.zEff;
         fIsotope = right.fIsotope;
@@ -91,21 +93,9 @@ class G4Nucleus
     
     void ChooseParameters( const G4Material *aMaterial );
 
-    void SetParameters( const G4double A, const G4double Z );
-    void SetParameters( const G4int A, const G4int Z );
+    void SetParameters( const G4double A, const G4double Z, const G4int numberOfLambdas = 0 );
+    void SetParameters( const G4int A, const G4int Z, const G4int numberOfLambdas = 0 );
    
-/* 
-#ifndef G4Hadr_Nucleus_IntegerAZ 
-//deprecated Jan 2010, GF
-    inline G4double GetN() const
-    { return aEff; }
-    
-    inline G4double GetZ() const
-    { return zEff; }
-#endif
-//to be replaced by new 
-*/
-
     inline G4int GetA_asInt() const
     { return theA; }   
     
@@ -114,7 +104,9 @@ class G4Nucleus
     
     inline G4int GetZ_asInt() const
     { return theZ; }   
-//... \GF
+
+    inline G4int GetL() const  // Number of Lambdas (in the case of a hypernucleus)
+    { return theL; }
 
     inline const G4Isotope* GetIsotope()
     { return fIsotope; }
@@ -125,6 +117,7 @@ class G4Nucleus
       if(iso) { 
 	theZ = iso->GetZ();
         theA = iso->GetN();
+	theL = 0;
         aEff = theA;
         zEff = theZ;
       }
@@ -132,9 +125,9 @@ class G4Nucleus
 
     G4DynamicParticle *ReturnTargetParticle() const;
     
-    G4double AtomicMass( const G4double A, const G4double Z ) const;
-    G4double AtomicMass( const G4int A, const G4int Z ) const;
-    
+    G4double AtomicMass( const G4double A, const G4double Z, const G4int numberOfLambdas = 0 ) const;
+    G4double AtomicMass( const G4int A, const G4int Z, const G4int numberOfLambdas = 0 ) const;
+
     G4double GetThermalPz( const G4double mass, const G4double temp ) const;
     
     G4ReactionProduct GetThermalNucleus(G4double aMass, G4double temp=-1) const;
@@ -192,6 +185,7 @@ class G4Nucleus
     
     G4int    theA;
     G4int    theZ;
+    G4int    theL;  // Number of Lambdas (in the case of hypernucleus)
     G4double aEff;  // effective atomic weight
     G4double zEff;  // effective atomic number
 

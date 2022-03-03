@@ -26,6 +26,7 @@ CPPFLAGS += -I$(G4BASE)/geometry/management/include \
 	    -I$(G4BASE)/processes/management/include \
 	    -I$(G4BASE)/processes/hadronic/management/include \
 	    -I$(G4BASE)/processes/hadronic/util/include \
+	    -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
 	    -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
 	    -I$(G4BASE)/track/include \

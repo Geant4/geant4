@@ -29,7 +29,7 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
+// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues
 //
 //    ****************************************************
 //    *      UltraRunAction.cc
@@ -40,8 +40,8 @@
 #include "UltraRunAction.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
-#include "UltraAnalysisManager.hh"
 #include <ctime>
 #include "Randomize.hh"
 
@@ -65,16 +65,17 @@ UltraRunAction::~UltraRunAction()
 void UltraRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   // Get/create analysis manager: need to do that in the master and in the workers
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  auto man = G4AnalysisManager::Instance();
+  man->SetDefaultFileType("root");
 
   // Open an output file
   man->OpenFile("ultra");
   man->SetFirstHistoId(1);
 
   // Create histogram(s)
-  man->CreateH1("PhotonEnergy","Optical photons energy (eV)", //histoID,histo name 
+  man->CreateH1("PhotonEnergy","Optical photons energy (eV)", //histoID,histo name
 		500,0.,5.); //bins' number, xmin, xmax
-  man->CreateH1("NumberDetectedPhotons","Number of Detected Photons", 
+  man->CreateH1("NumberDetectedPhotons","Number of Detected Photons",
 		10,0.,10.); //bins' number, xmin, xmax
 
   if (!IsMaster()) //it is a slave, do nothing else
@@ -90,28 +91,26 @@ void UltraRunAction::BeginOfRunAction(const G4Run* aRun)
       seed=time(0);
       G4Random::setTheSeed(seed,luxury);
       G4Random::showEngineStatus();
-    }      
-      
+    }
+
   // save Rndm status
-  if (saveRndm > 0)       
+  if (saveRndm > 0)
     G4Random::saveEngineStatus("beginOfRun.rndm");
 
-  return; 
+  return;
 }
 
 // //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void UltraRunAction::EndOfRunAction(const G4Run* aRun)
 {
-  // Write histograms to file  
-  
-
+  // Write histograms to file
   // Save histograms
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  auto man = G4AnalysisManager::Instance();
   man->Write();
   man->CloseFile();
   // Complete clean-up
-  delete G4AnalysisManager::Instance();
+  man->Clear();
 
   if (!IsMaster())
     {
@@ -121,9 +120,7 @@ void UltraRunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "### Run " << aRun->GetRunID() << " (global) ended." << G4endl;
   // save Rndm status
-  if (saveRndm == 1)        
+  if (saveRndm == 1)
     G4Random::saveEngineStatus("endOfRun.rndm");
   return;
 }
-
-

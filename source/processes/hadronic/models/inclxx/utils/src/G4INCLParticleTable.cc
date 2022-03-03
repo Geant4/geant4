@@ -529,15 +529,19 @@ namespace G4INCL {
     }
 
     std::string getShortName(const ParticleSpecies &s) {
-      if(s.theType==Composite)
+      if(s.theType==Composite && s.theS == 0)
         return getShortName(s.theA,s.theZ);
+      else if(s.theType==Composite)
+        return getName(s.theA,s.theZ,s.theS);
       else
         return getShortName(s.theType);
     }
 
     std::string getName(const ParticleSpecies &s) {
-      if(s.theType==Composite)
+      if(s.theType==Composite && s.theS == 0)
         return getName(s.theA,s.theZ);
+      else if(s.theType==Composite)
+        return getName(s.theA,s.theZ,s.theS);
       else
         return getName(s.theType);
     }
@@ -545,6 +549,17 @@ namespace G4INCL {
     std::string getName(const G4int A, const G4int Z) {
       std::stringstream stream;
       stream << getElementName(Z) << "-" << A;
+      return stream.str();
+    }
+
+    std::string getName(const G4int A, const G4int Z, const G4int S) {
+      std::stringstream stream;
+      if(S >= 0) // S < 0 for hypernuclei
+        return getName(A, Z);
+      else if(S == -1)
+        stream << getElementName(Z) << "-" << A << "_" << "Lambda";
+      else
+        stream << getElementName(Z) << "-" << A << "_" << S << "-Lambda";
       return stream.str();
     }
 
@@ -1206,7 +1221,7 @@ namespace G4INCL {
     }
 
     G4double getRPCorrelationCoefficient(const ParticleType t) {
-// assert(t==Proton || t==Neutron);
+// assert(t==Proton || t==Neutron || t==Lambda);
       return rpCorrelationCoefficient[t];
     }
 

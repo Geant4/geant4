@@ -39,9 +39,9 @@ class G4UIcmdWithAString;
 class ICRP110PhantomMessenger: public G4UImessenger
 {
 public:
-  ICRP110PhantomMessenger(ICRP110PhantomConstruction* myUsrPhtm);
+  explicit ICRP110PhantomMessenger(ICRP110PhantomConstruction* myUsrPhtm);
   ~ICRP110PhantomMessenger();    
-  void SetNewValue(G4UIcommand* command, G4String newValue);
+  void SetNewValue(G4UIcommand* command, G4String newValue) override;
 
 private:
   ICRP110PhantomConstruction*    fUserPhantom;

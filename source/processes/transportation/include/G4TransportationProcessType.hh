@@ -46,6 +46,7 @@ enum G4TransportationProcessType
   // following processes belong to 'General' type
   STEP_LIMITER = 401,
   USER_SPECIAL_CUTS = 402,
-  NEUTRON_KILLER = 403
+  NEUTRON_KILLER = 403,
+  PARALLEL_WORLD_PROCESS = 491
 };
 #endif

@@ -1,6 +1,20 @@
 /control/execute vis.mac
 /tracking/verbose 0
 
+
+#/microelectronics/det/setMat G4_Ag
+#/microelectronics/det/setMat G4_Al
+#/microelectronics/det/setMat G4_C
+#/microelectronics/det/setMat G4_Cu
+#/microelectronics/det/setMat G4_Ge
+#/microelectronics/det/setMat G4_KAPTON
+#/microelectronics/det/setMat G4_Ni
+#/microelectronics/det/setMat G4_Si   # default material
+#/microelectronics/det/setMat G4_SILICON_DIOXIDE
+#/microelectronics/det/setMat G4_Ti
+#/microelectronics/det/setMat G4_W
+
+
 #/gun/particle ion
 #/gun/ion 20 48 15
 /gun/particle proton

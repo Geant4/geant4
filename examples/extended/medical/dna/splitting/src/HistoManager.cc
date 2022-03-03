@@ -43,7 +43,6 @@ HistoManager::HistoManager() :
 
 HistoManager::~HistoManager()
 {
-    delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

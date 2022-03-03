@@ -16,6 +16,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 October 21: V.Ivanchenko (emhighenergy-V10-07-06)
+- G4AnnihiToMuPair - added option of tau+tau- pair production;
+    optimized computation of cross sections in compounds;
+    added process sub-type via enumerator 
+
+16 August 2021: J.Hahnfeld (emhighenergy-V10-07-05)
+- G4AnnihiToMuPair - return DBL_MAX if below threshold energy,
+  remember G4LossTableManager for correct deregistration in MT mode
+
+18 July 21: V.Ivanchenko  (emhighenergy-V10-07-04)
+- G4mplIonisationModel, G4mplIonisationWithDeltaModel - updated 
+    according to change of G4VEmFluctuationModel signature 
+
 15 May 21: V.Ivanchenko  (emhighenergy-V10-07-03)
 - G4eeToHadrons - updated integral type
 

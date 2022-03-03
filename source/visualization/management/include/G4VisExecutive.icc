@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // John Allison 24th January 1998.
 
 #ifndef G4VISEXECUTIVE_ICC
@@ -36,23 +36,16 @@
 // Not needing external packages or libraries...
 #include "G4ASCIITree.hh"
 #include "G4DAWNFILE.hh"
-#include "G4HepRep.hh"
 #include "G4HepRepFile.hh"
 #include "G4RayTracer.hh"
 #include "G4HitFilterFactories.hh"
 #include "G4DigiFilterFactories.hh"
 #include "G4TrajectoryFilterFactories.hh"
 #include "G4TrajectoryModelFactories.hh"
-#include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
 #include "G4GMocrenFile.hh"
 
 // Needing external packages or libraries...
-
-#ifdef G4VIS_USE_DAWN
-#include "G4FukuiRenderer.hh"
-#endif
-
 #ifdef G4VIS_USE_OPENGLX
 #include "G4OpenGLImmediateX.hh"
 #include "G4OpenGLStoredX.hh"
@@ -90,11 +83,6 @@
 #include "G4RayTracerX.hh"
 #endif
 
-#ifdef G4VIS_USE_VRML
-#include "G4VRML1.hh"
-#include "G4VRML2.hh"
-#endif
-
 #ifdef G4VIS_USE_QT3D
 #include "G4Qt3D.hh"
 #endif
@@ -113,6 +101,14 @@
 
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
 #include "G4ToolsSGQtGLES.hh"
+#endif
+
+#ifdef G4VIS_USE_VTK
+#include "G4Vtk.hh"
+#endif
+
+#ifdef G4VIS_USE_VTK_QT
+#include "G4VtkQt.hh"
 #endif
 
 // The inline keyword prevents the compiler making an external
@@ -135,32 +131,20 @@ G4VisExecutive::RegisterGraphicsSystems () {
  // Graphics Systems not needing external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);
   RegisterGraphicsSystem (new G4DAWNFILE);
-  RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4RayTracer);
-  RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
   RegisterGraphicsSystem (new G4GMocrenFile);
 
 // Graphics systems needing external packages or libraries...
-
-#ifdef G4VIS_USE_DAWN
-  RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_VRML
-  RegisterGraphicsSystem (new G4VRML1);
-  RegisterGraphicsSystem (new G4VRML2);
-#endif
-
 // Register OGL family of drivers with their normal names,
 // super-abbreviated names and fallback names where approproiate.
 
 #ifdef G4VIS_USE_OPENGLQT
   G4VGraphicsSystem* ogliqt = new G4OpenGLImmediateQt;
   G4VGraphicsSystem* oglsqt = new G4OpenGLStoredQt;
-  RegisterGraphicsSystem (ogliqt);
-  RegisterGraphicsSystem (oglsqt);
+  RegisterGraphicsSystem(ogliqt);
+  RegisterGraphicsSystem(oglsqt);
   ogliqt->AddNickname("OGLI");
   oglsqt->AddNickname("OGL");
   oglsqt->AddNickname("OGLS");
@@ -169,107 +153,144 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_OPENGLXM
   G4VGraphicsSystem* oglixm = new G4OpenGLImmediateXm;
   G4VGraphicsSystem* oglsxm = new G4OpenGLStoredXm;
-  RegisterGraphicsSystem (oglixm);
-  RegisterGraphicsSystem (oglsxm);
-#ifdef G4VIS_USE_OPENGLQT
+  RegisterGraphicsSystem(oglixm);
+  RegisterGraphicsSystem(oglsxm);
+#  ifdef G4VIS_USE_OPENGLQT
   oglixm->AddNickname("OGLIQt_FALLBACK");
   oglsxm->AddNickname("OGLSQt_FALLBACK");
-#else
+#  else
   oglixm->AddNickname("OGLI");
   oglsxm->AddNickname("OGL");
   oglsxm->AddNickname("OGLS");
-#endif
+#  endif
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
   G4VGraphicsSystem* oglix = new G4OpenGLImmediateX;
   G4VGraphicsSystem* oglsx = new G4OpenGLStoredX;
-  RegisterGraphicsSystem (oglix);
-  RegisterGraphicsSystem (oglsx);
-#ifdef G4VIS_USE_OPENGLQT
+  RegisterGraphicsSystem(oglix);
+  RegisterGraphicsSystem(oglsx);
+#  ifdef G4VIS_USE_OPENGLQT
   oglix->AddNickname("OGLIQt_FALLBACK");
   oglsx->AddNickname("OGLSQt_FALLBACK");
-#endif
-#ifdef G4VIS_USE_OPENGLXM
+#  endif
+#  ifdef G4VIS_USE_OPENGLXM
   oglix->AddNickname("OGLIXm_FALLBACK");
   oglsx->AddNickname("OGLSXm_FALLBACK");
-#endif
-#if defined (G4VIS_USE_OPENGLQT) || (G4VIS_USE_OPENGLXM)
-#else
+#  endif
+#  if defined(G4VIS_USE_OPENGLQT) || (G4VIS_USE_OPENGLXM)
+#  else
   oglix->AddNickname("OGLI");
   oglsx->AddNickname("OGL");
   oglsx->AddNickname("OGLS");
-#endif
+#  endif
 #endif
 
 #ifdef G4VIS_USE_OPENGLWIN32
   G4VGraphicsSystem* ogliwin32 = new G4OpenGLImmediateWin32;
   G4VGraphicsSystem* oglswin32 = new G4OpenGLStoredWin32;
-  RegisterGraphicsSystem (ogliwin32);
-  RegisterGraphicsSystem (oglswin32);
-#ifdef G4VIS_USE_OPENGLQT
+  RegisterGraphicsSystem(ogliwin32);
+  RegisterGraphicsSystem(oglswin32);
+#  ifdef G4VIS_USE_OPENGLQT
   ogliwin32->AddNickname("OGLIQt_FALLBACK");
   oglswin32->AddNickname("OGLSQt_FALLBACK");
-#else
+#  else
   ogliwin32->AddNickname("OGLI");
   oglswin32->AddNickname("OGL");
   oglswin32->AddNickname("OGLS");
-#endif
+#  endif
 #endif
 
 // Register OI graphics system with super-abbreviated nickname
 #ifdef G4VIS_USE_OI
-  G4VGraphicsSystem* oi  = 0;
-#ifdef G4VIS_USE_OIX
+  G4VGraphicsSystem* oi = 0;
+#  ifdef G4VIS_USE_OIX
   oi = new G4OpenInventorX;
-#elif defined(G4VIS_USE_OIQT)
+#  elif defined(G4VIS_USE_OIQT)
   oi = new G4OpenInventorQt;
-#elif defined(G4VIS_USE_OIWIN32)
+#  elif defined(G4VIS_USE_OIWIN32)
   oi = new G4OpenInventorWin32;
-#endif
-  if (oi) {
-    RegisterGraphicsSystem (oi);
+#  endif
+  if(oi)
+  {
+    RegisterGraphicsSystem(oi);
     oi->AddNickname("OI");
   }
 #endif
 
 // The new, extended OI is registered separately for now.
 #ifdef G4VIS_USE_OIX
-  RegisterGraphicsSystem (new G4OpenInventorXtExtended);
+  RegisterGraphicsSystem(new G4OpenInventorXtExtended);
 #endif
 
 #ifdef G4VIS_USE_RAYTRACERX
-  RegisterGraphicsSystem (new G4RayTracerX);
+  RegisterGraphicsSystem(new G4RayTracerX);
 #endif
 
 #ifdef G4VIS_USE_QT3D
-  RegisterGraphicsSystem (new G4Qt3D);
+  RegisterGraphicsSystem(new G4Qt3D);
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_X11_GLES
-  RegisterGraphicsSystem (new G4ToolsSGX11GLES);
+  G4VGraphicsSystem* tsg_x11_gles = new G4ToolsSGX11GLES;
+  RegisterGraphicsSystem(tsg_x11_gles);
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_WINDOWS_GLES
-  RegisterGraphicsSystem (new G4ToolsSGWindowsGLES);
+  G4VGraphicsSystem* tsg_windows_gles = new G4ToolsSGWindowsGLES;
+  RegisterGraphicsSystem(tsg_windows_gles);
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_XT_GLES
-  RegisterGraphicsSystem (new G4ToolsSGXtGLES);
+  G4VGraphicsSystem* tsg_xt_gles = new G4ToolsSGXtGLES;
+  RegisterGraphicsSystem(tsg_xt_gles);
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
-  RegisterGraphicsSystem (new G4ToolsSGQtGLES);
+  G4VGraphicsSystem* tsg_qt_gles = new G4ToolsSGQtGLES;
+  RegisterGraphicsSystem(tsg_qt_gles);
 #endif
 
+#ifdef G4VIS_USE_TOOLSSG_QT_GLES
+  tsg_qt_gles->AddNickname("TSG");
+#elif defined(G4VIS_USE_TOOLSSG_XT_GLES)
+  tsg_xt_gles->AddNickname("TSG");
+#elif defined(G4VIS_USE_TOOLSSG_X11_GLES)
+  tsg_x11_gles->AddNickname("TSG");
+#elif defined(G4VIS_USE_TOOLSSG_WINDOWS_GLES)
+  tsg_windows_gles->AddNickname("TSG");
+#endif
+
+#ifdef G4VIS_USE_VTK
+  G4Vtk* vtkN = new G4Vtk();
+  RegisterGraphicsSystem(vtkN);
+  vtkN->AddNickname("VTK_NATIVE");
+#  ifdef G4VIS_USE_VTK_QT
+  // Comment out for now until we understand behaviour with a terminal session.
+  // vtkN->AddNickname("VtkQt_FALLBACK");
+#  endif
+#endif
+
+#ifdef G4VIS_USE_VTK_QT
+  G4VtkQt* vtkQt = new G4VtkQt();
+  RegisterGraphicsSystem(vtkQt);
+#endif
+
+#ifdef G4VIS_USE_VTK_QT
+  vtkQt->AddNickname("Vtk");
+  vtkQt->AddNickname("VTK");
+#elif defined(G4VIS_USE_VTK)
+  vtkN->AddNickname("Vtk");
+  vtkN->AddNickname("VTK");
+#endif
 }
 
 // See comments about inlining above.
-inline void 
+inline void
 G4VisExecutive::RegisterModelFactories()
 {
    // Trajectory draw models
-   RegisterModelFactory(new G4TrajectoryGenericDrawerFactory());       
+   RegisterModelFactory(new G4TrajectoryGenericDrawerFactory());
    RegisterModelFactory(new G4TrajectoryDrawByAttributeFactory());
    RegisterModelFactory(new G4TrajectoryDrawByChargeFactory());
    RegisterModelFactory(new G4TrajectoryDrawByOriginVolumeFactory());

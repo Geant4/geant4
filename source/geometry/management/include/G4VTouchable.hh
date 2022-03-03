@@ -88,7 +88,7 @@
 // Created: Paul Kent, August 1996
 // --------------------------------------------------------------------
 #ifndef G4VTOUCHABLE_HH
-#define G4VTOUCHABLE_HH
+#define G4VTOUCHABLE_HH 1
 
 #include "G4Types.hh"
 
@@ -102,10 +102,10 @@ class G4NavigationHistory;
 class G4VTouchable
 {
 
- public:  // with description
+ public:
 
-  G4VTouchable();
-  virtual ~G4VTouchable();
+  G4VTouchable() = default;
+  virtual ~G4VTouchable() = default;
     // Constructor and destructor.
 
   virtual const G4ThreeVector& GetTranslation(G4int depth=0) const = 0;
@@ -125,12 +125,8 @@ class G4VTouchable
 			       const G4NavigationHistory* history = nullptr); 
     // Update method.
 
- public:  // without description
-
-  // virtual void  ResetLevel();
-
   virtual const G4NavigationHistory* GetHistory() const;
-    // Should this method be deprecated ?  It is used in G4Navigator!
+    // Method used in G4Navigator.
 };
 
 #include "G4VTouchable.icc"

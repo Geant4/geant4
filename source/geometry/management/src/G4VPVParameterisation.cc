@@ -34,14 +34,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4VVolumeMaterialScanner.hh"
 
-G4VPVParameterisation::G4VPVParameterisation()
-{
-}
-
-G4VPVParameterisation::~G4VPVParameterisation()
-{
-}
-
+// --------------------------------------------------------------------
 G4VSolid*
 G4VPVParameterisation::ComputeSolid(const G4int,
                                     G4VPhysicalVolume* pPhysicalVol) 
@@ -49,6 +42,7 @@ G4VPVParameterisation::ComputeSolid(const G4int,
   return pPhysicalVol->GetLogicalVolume()->GetSolid();
 }
        
+// --------------------------------------------------------------------
 G4Material*
 G4VPVParameterisation::ComputeMaterial(const G4int,
                                        G4VPhysicalVolume* pPhysicalVol,
@@ -57,15 +51,15 @@ G4VPVParameterisation::ComputeMaterial(const G4int,
   return pPhysicalVol->GetLogicalVolume()->GetMaterial();
 }
 
-
+// --------------------------------------------------------------------
 G4bool G4VPVParameterisation::IsNested() const
 {
   return false;
 }
 
+// --------------------------------------------------------------------
 G4VVolumeMaterialScanner* 
 G4VPVParameterisation::GetMaterialScanner()
 {
   return nullptr;
 }
-//   These enable material scan for nested parameterisations

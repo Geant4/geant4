@@ -53,8 +53,9 @@ class G4ScoringCylinder : public G4VScoringMesh
   virtual void DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
                           G4int idxProj, G4int idxColumn);
 
-  void SetRMax(G4double rMax) { fSize[0] = rMax; }
-  void SetZSize(G4double zSize) { fSize[1] = zSize; }  // half height
+  void SetRMin(G4double rMin) { fSize[0] = rMin; }
+  void SetRMax(G4double rMax) { fSize[1] = rMax; }
+  void SetZSize(G4double zSize) { fSize[2] = zSize; }  // half height
 
   void RegisterPrimitives(std::vector<G4VPrimitiveScorer*>& vps);
 

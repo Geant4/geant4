@@ -42,7 +42,7 @@
 
 namespace
 {
-  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+  G4RecursiveMutex polyhedronMutex = G4MUTEX_INITIALIZER;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -346,7 +346,7 @@ G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
-      G4AutoLock l(&polyhedronMutex);
+      G4RecursiveAutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
       fRebuildPolyhedron = false;

@@ -96,7 +96,7 @@ template<class T, bool withNeutronHP, bool withFTFP> TINCLXXPhysicsListHelper<T,
     this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
   // Hadron Physics
-  this->RegisterPhysics( new G4HadronPhysicsINCLXX(ver,true,withNeutronHP,withFTFP));
+  this->RegisterPhysics( new G4HadronPhysicsINCLXX(G4String(1,static_cast<char>(ver)),true,withNeutronHP,withFTFP));
 
   // Stopping Physics
   this->RegisterPhysics( new G4StoppingPhysics(ver) );

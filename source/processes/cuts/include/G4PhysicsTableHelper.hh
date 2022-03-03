@@ -35,13 +35,9 @@
 #ifndef G4PhysicsTableHelper_hh 
 #define G4PhysicsTableHelper_hh 1
 
-#include <vector>
-
 #include "globals.hh"
-#include "G4ios.hh"
+#include "G4PhysicsVector.hh"
 #include "G4PhysicsTable.hh"
-#include "G4MaterialCutsCouple.hh"
-#include "G4Region.hh"
 
 class G4PhysicsTableHelper
 { 
@@ -78,7 +74,7 @@ class G4PhysicsTableHelper
     G4PhysicsTableHelper();
     ~G4PhysicsTableHelper();
  
-    static G4ThreadLocal G4int verboseLevel;
+    static G4int verboseLevel;
       // Control flag for output message
 };
 

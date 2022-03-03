@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+4 August 2021 Alberto Ribon (hadr-gammanuc-V10-07-02)
+-----------------------------------------------------
+- G4LENDorBERTModel : set creator model ID for the secondaries, using
+  the new version of G4PhysicsModelCatalog
+
 16 April 2021 Ben Morgan (hadr-gammanuc-V10-07-01)
 --------------------------------------------------
 - Migrate build to modular CMake API

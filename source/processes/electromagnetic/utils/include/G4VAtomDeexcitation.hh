@@ -126,8 +126,8 @@ public:
   // generation of deexcitation for given atom and shell vacancy
   // and material cut couple, which defines cut values 
   void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
-			 const G4AtomicShell*, 
-			 G4int Z, G4int coupleIndex);
+                         const G4AtomicShell*, 
+                         G4int Z, G4int coupleIndex);
 
   // generation of deexcitation for given atom and shell vacancy
   virtual void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
@@ -189,9 +189,6 @@ private:
   std::vector<G4String> activeRegions;
 
   G4String name;
-
-  static G4int pixeIDg;
-  static G4int pixeIDe;
 
 #ifdef G4MULTITHREADED
   static G4Mutex atomDeexcitationMutex;

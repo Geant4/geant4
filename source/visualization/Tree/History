@@ -23,6 +23,21 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+25 October 2021  Guy Barrand (vistree-V10-07-03)
+- G4VTreeSceneHandler.hh: to quiet g++ about "AddPrimitive(G4Plotter&)", have:
+    using G4VSceneHandler::AddPrimitive;
+
+10 October 2021  John Allison  (vistree-V10-07-02)
+- Migrate to modeling-V10-07-14:
+  - G4PhysicalVolumeModel: Hold current transform as object, not as a pointer.
+
+30 June 2021  John Allison  (vistree-V10-07-01)
+- Requires greps-V10-07-09, modeling-V10-07-11 and visman-V10-07-11.
+- Revise vis models. See visualization/modeling/History for more details.
+- Consequent changes:
+  o AddPrimitive(const G4Scale&) has been removed from all scene handlers.
+
 14 April 2021 Ben Morgan (vistree-V10-07-00)
 - Migrate to modular CMake build
 

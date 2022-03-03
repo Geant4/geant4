@@ -31,33 +31,48 @@
 #ifndef G4XmlRFileManager_h
 #define G4XmlRFileManager_h 1
 
-#include "G4BaseFileManager.hh"
+#include "G4VRFileManager.hh"
 #include "globals.hh"
 
-#include <tools/raxml>
+#include "tools/raxml"
 
-#include <fstream>
+#include <string_view>
 
 class G4AnalysisManagerState;
 
-class G4XmlRFileManager : public G4BaseFileManager
+class G4XmlRFileManager : public G4VRFileManager
 {
   public:
     explicit G4XmlRFileManager(const G4AnalysisManagerState& state);
-    ~G4XmlRFileManager();
+    G4XmlRFileManager() = delete;
+    virtual ~G4XmlRFileManager();
 
     virtual G4String GetFileType() const final { return "xml"; }
+
+    // Methods from base class
+    virtual void CloseFiles() final {}
 
     // Methods to manipulate input files
     virtual G4bool OpenRFile(const G4String& fileName);
 
     // Specific methods for files per objects
     tools::raxml* GetRFile(const G4String& fileName) const;
-    
+
+    // Helper method
+    template <typename HT>
+    tools::raxml_out* GetHandler(const G4String& fileName,
+                         const G4String& objectName,
+                         std::string_view inFunction);
+
    private:
-    // data members
-    tools::xml::default_factory*  fReadFactory;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4XmRFileManager" };
+
+    // Data members
+    tools::xml::default_factory*  fReadFactory { nullptr };
     std::map<G4String, tools::raxml*> fRFiles;
 };
+
+#include "G4XmlRFileManager.icc"
 
 #endif

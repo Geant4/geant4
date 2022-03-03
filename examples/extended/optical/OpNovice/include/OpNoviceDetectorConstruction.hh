@@ -26,9 +26,6 @@
 /// \file OpNovice/include/OpNoviceDetectorConstruction.hh
 /// \brief Definition of the OpNoviceDetectorConstruction class
 //
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef OpNoviceDetectorConstruction_h
@@ -38,25 +35,33 @@
 #include "G4VUserDetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-class OpNoviceDetectorConstructionMessenger;
+
+class OpNoviceDetectorMessenger;
+
 class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
 {
  public:
   OpNoviceDetectorConstruction();
   ~OpNoviceDetectorConstruction();
+
   G4VPhysicalVolume* Construct() override;
-  void SetDumpgdml(G4bool dumpgdml);
-  G4bool IsDumpgdml() const;
+  void SetDumpGdml(G4bool);
+  G4bool IsDumpGdml() const;
   void SetVerbose(G4bool verbose);
   G4bool IsVerbose() const;
-  void SetDumpgdmlFile(G4String DumpgdmlFile);
-  G4String GetDumpgdmlFile() const;
-  
- private:  
+  void SetDumpGdmlFile(G4String);
+  G4String GetDumpGdmlFile() const;
+
+ private:
+  void PrintError(G4String);
+
+  OpNoviceDetectorMessenger* fDetectorMessenger;
+  G4String fDumpGdmlFileName;
+
   G4double fWorld_x;
   G4double fWorld_y;
   G4double fWorld_z;
-  
+
   G4double fExpHall_x;
   G4double fExpHall_y;
   G4double fExpHall_z;
@@ -69,11 +74,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   G4double fBubble_y;
   G4double fBubble_z;
   
-  G4String DumpgdmlFile;
-  G4bool verbose;
-  G4bool dumpgdml;
-
-  OpNoviceDetectorConstructionMessenger* fDetectorMessenger;
+  G4bool fVerbose;
+  G4bool fDumpGdml;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

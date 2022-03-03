@@ -30,34 +30,34 @@
 //
 // File name:    G4GammaNuclearXS
 //
-// Author  V.Ivantchenko, Geant4, 22 October 2020
+// Authors  V.Ivantchenko, Geant4, 20 October 2020
+//          B.Kutsenko, BINP/NSU, 10 August 2021
 //
 // Modifications:
 //
 
 #include "G4GammaNuclearXS.hh"
-#include "G4Gamma.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ThreeVector.hh"
 #include "G4ElementTable.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
-#include "G4PhysicsLogVector.hh"
+#include "G4PhysicsLinearVector.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4PhotoNuclearCrossSection.hh"
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Gamma.hh"
 #include "G4IsotopeList.hh"
 
 #include <fstream>
 #include <sstream>
+#include <vector>
 
-// factory
-#include "G4CrossSectionFactory.hh"
-//
-G4_DECLARE_XS_FACTORY(G4GammaNuclearXS);
+G4ElementData* G4GammaNuclearXS::data = nullptr;
 
-G4PhysicsVector* G4GammaNuclearXS::data[] = {nullptr};
-G4double G4GammaNuclearXS::coeff[] = {0.0};
+G4double G4GammaNuclearXS::coeff[3][3];
+G4double G4GammaNuclearXS::xs150[MAXZGAMMAXS] = {0.0};
 G4String G4GammaNuclearXS::gDataDirectory = "";
 
 #ifdef G4MULTITHREADED
@@ -65,13 +65,13 @@ G4String G4GammaNuclearXS::gDataDirectory = "";
 #endif
 
 G4GammaNuclearXS::G4GammaNuclearXS() 
- : G4VCrossSectionDataSet(Default_Name()),
+  : G4VCrossSectionDataSet(Default_Name()),
    gamma(G4Gamma::Gamma())
 {
   //  verboseLevel = 0;
   if(verboseLevel > 0){
     G4cout  << "G4GammaNuclearXS::G4GammaNuclearXS Initialise for Z < " 
-	    << MAXZGAMMAN << G4endl;
+	    << MAXZGAMMAXS << G4endl;
   }
   ggXsection = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet("PhotoNuclearXS");
   if(ggXsection == nullptr) ggXsection = new G4PhotoNuclearCrossSection();
@@ -80,21 +80,18 @@ G4GammaNuclearXS::G4GammaNuclearXS()
 
 G4GammaNuclearXS::~G4GammaNuclearXS()
 {
-  if(isMaster) {
-    for(G4int i=0; i<MAXZGAMMAN; ++i) {
-      delete data[i];
-      data[i] = nullptr;
-    }
+  if(isMaster) { 
+    delete data; 
+    data = nullptr; 
   }
 }
 
 void G4GammaNuclearXS::CrossSectionDescription(std::ostream& outFile) const
 {
   outFile << "G4GammaNuclearXS calculates the gamma nuclear\n"
-          << "cross section on nuclei using data from the high precision\n"
-          << "LEND gamma database. The data are simplified and smoothed over\n"
-          << "the resonance region in order to reduce CPU time.\n"
-          << "For high energies Glauber-Gribiv cross section is used.\n";
+          << "cross-section for GDR energy region on nuclei using data from the high precision\n"
+          << "IAEA photonuclear database (2019). Then liniear connection\n"
+	  <<"implemented with previous CHIPS photonuclear model\n";
 }
 
 G4bool 
@@ -115,20 +112,23 @@ G4double
 G4GammaNuclearXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
                                          G4int ZZ, const G4Material* mat)
 {
-  G4double xs = 0.0;
-  G4double ekin = aParticle->GetKineticEnergy();
-
-  G4int Z = (ZZ >= MAXZGAMMAN) ? MAXZGAMMAN - 1 : ZZ; 
-
+  const G4int Z = (ZZ >= MAXZGAMMAXS) ? MAXZGAMMAXS - 1 : ZZ;
   auto pv = GetPhysicsVector(Z);
-  if(pv == nullptr) { return xs; }
-  //  G4cout  << "G4GammaNuclearXS::GetCrossSection e= " << ekin 
-  // << " Z= " << Z << G4endl;
 
-  if(ekin <= pv->GetMaxEnergy()) { 
-    xs = pv->LogVectorValue(ekin, aParticle->GetLogKineticEnergy()); 
-  } else {          
-    xs = coeff[Z]*ggXsection->GetElementCrossSection(aParticle, Z, mat);
+  if(pv == nullptr) {
+    return ggXsection->GetElementCrossSection(aParticle, Z, mat);
+  }
+  const G4double emax = pv->GetMaxEnergy();
+  const G4double ekin = aParticle->GetKineticEnergy();
+  G4double xs = 0.0;
+  if(ekin <= emax) {
+    xs = pv->Value(ekin);
+  } else if(ekin >= rTransitionBound){
+    xs = ggXsection->GetElementCrossSection(aParticle, Z, mat);
+  } else {
+    const G4double rxs = xs150[Z];
+    const G4double lxs = pv->Value(emax);
+    xs = lxs + (ekin - emax)*(rxs - lxs)/(rTransitionBound-emax);
   }
 
 #ifdef G4VERBOSE
@@ -141,33 +141,136 @@ G4GammaNuclearXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
   return xs;
 }
 
-G4double G4GammaNuclearXS::GetIsoCrossSection(
-         const G4DynamicParticle* aParticle, 
-	 G4int Z, G4int A,
-	 const G4Isotope*, const G4Element*,
-	 const G4Material* mat)
+G4double 
+G4GammaNuclearXS::ElementCrossSection(G4double ekin, G4int ZZ)
+{    
+  G4DynamicParticle theGamma(gamma, G4ThreeVector(1,0,0), ekin);
+  return GetElementCrossSection(&theGamma, ZZ);
+}
+
+G4double 
+G4GammaNuclearXS::IsoCrossSection(G4double ekin, G4int ZZ, G4int A)
 {
-  return GetElementCrossSection(aParticle, Z, mat) * A/aeff[Z];
+  G4DynamicParticle theGamma(gamma, G4ThreeVector(1,0,0), ekin);
+  return GetIsoCrossSection(&theGamma, ZZ, A);
+}
+
+G4double G4GammaNuclearXS::GetIsoCrossSection(
+         const G4DynamicParticle* aParticle,
+	 G4int ZZ, G4int A,
+	 const G4Isotope*, const G4Element*,
+         const G4Material*)
+{
+  const G4int Z = (ZZ >= MAXZGAMMAXS) ? MAXZGAMMAXS - 1 : ZZ; 
+  /*
+  G4cout << "IsoCrossSection  Z= " << Z << "  A= " << A 
+         << "  Amin= " << amin[Z] << " Amax= " << amax[Z]
+         << " E(MeV)= " << ekin << G4endl;
+  */
+  auto pv = GetPhysicsVector(Z);
+  if(pv == nullptr) {
+    return ggXsection->GetIsoCrossSection(aParticle, Z, A);
+  }
+  const G4double ekin = aParticle->GetKineticEnergy();
+  const G4double emax = pv->GetMaxEnergy();
+  G4double xs = 0.0;
+
+  // compute isotope cross section if applicable
+  if(amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z] && 
+     ekin < rTransitionBound) {
+    auto pviso = data->GetComponentDataByIndex(Z, A - amin[Z]);
+    // isotope file exists
+    if(nullptr != pviso) {
+      const G4double emaxiso = pviso->GetMaxEnergy();
+      if(ekin <= emaxiso) {
+	xs = pviso->Value(ekin);
+      } else {
+	G4DynamicParticle 
+	  theGamma(gamma, G4ThreeVector(0,0,1.), rTransitionBound);
+	const G4double rxs = ggXsection->GetIsoCrossSection(&theGamma, Z, A);
+	const G4double lxs = pviso->Value(emaxiso);
+	xs = lxs + (ekin - emaxiso)*(rxs - lxs)/(rTransitionBound-emaxiso);
+      }   
+#ifdef G4VERBOSE
+      if(verboseLevel > 1) {
+	G4cout  << "G4GammaNuclearXS::IsoXS: Z= " << Z << " A= " << A 
+		<< " Ekin(MeV)= " << ekin/CLHEP::MeV 
+		<< ", ElmXS(b)= " << xs/CLHEP::barn << G4endl;
+      }
+#endif
+      return xs;
+    }
+  }
+
+  // use element x-section
+  // for the hydrogen target there is no element data
+  if(ekin <= emax && Z != 1) { 
+    xs = pv->Value(ekin)*A/aeff[Z];
+
+    // CHIPS for high energy and for the hydrogen target
+  } else if(ekin >= rTransitionBound || Z == 1) {
+    if(Z <= 2 && ekin > 10.*GeV) { 
+      xs = coeff[Z][A - amin[Z]]*
+	ggXsection->GetElementCrossSection(aParticle, Z, 0);
+    } else {
+      xs = ggXsection->GetIsoCrossSection(aParticle, Z, A);
+    }
+
+    // transition GDR to CHIPS
+  } else {
+    const G4double rxs = xs150[Z];
+    const G4double lxs = pv->Value(emax)*A/aeff[Z];
+    xs = lxs + (ekin - emax)*(rxs - lxs)/(rTransitionBound-emax);
+  }
+#ifdef G4VERBOSE
+  if(verboseLevel > 1) {
+    G4cout  << "G4GammaNuclearXS::IsoXS: Z= " << Z << " A= " << A 
+	    << " Ekin(MeV)= " << ekin/CLHEP::MeV 
+	    << ", ElmXS(b)= " << xs/CLHEP::barn << G4endl;
+  }
+#endif
+  return xs;
 }
 
 const G4Isotope* G4GammaNuclearXS::SelectIsotope(
-      const G4Element* anElement, G4double, G4double)
+       const G4Element* anElement, G4double kinEnergy, G4double)
 {
   size_t nIso = anElement->GetNumberOfIsotopes();
   const G4Isotope* iso = anElement->GetIsotope(0);
 
-  //G4cout << "SelectIsotope NIso= " << nIso << G4endl;
   if(1 == nIso) { return iso; }
 
   const G4double* abundVector = anElement->GetRelativeAbundanceVector();
   G4double q = G4UniformRand();
   G4double sum = 0.0;
   size_t j;
+  G4int Z = anElement->GetZasInt();
 
-  // isotope wise cross section not used
+  // condition to use only isotope abundance
+  if(amax[Z] == amin[Z] || kinEnergy > rTransitionBound || Z >= MAXZGAMMAXS ) {
+    for (j=0; j<nIso; ++j) {
+      sum += abundVector[j];
+      if(q <= sum) {
+	iso = anElement->GetIsotope(j);
+	break;
+      }
+    }
+    return iso;
+  }
+  // use isotope cross sections
+  size_t nn = temp.size();
+  if(nn < nIso) { temp.resize(nIso, 0.); }
+  
   for (j=0; j<nIso; ++j) {
-    sum += abundVector[j];
-    if(q <= sum) {
+    //G4cout << j << "-th isotope " << (*isoVector)[j]->GetN() 
+    //       <<  " abund= " << abundVector[j] << G4endl;
+    sum += abundVector[j]*
+      IsoCrossSection(kinEnergy, Z, anElement->GetIsotope(j)->GetN());
+    temp[j] = sum;
+  }
+  sum *= q;
+  for (j = 0; j<nIso; ++j) {
+    if(temp[j] >= sum) {
       iso = anElement->GetIsotope(j);
       break;
     }
@@ -190,29 +293,40 @@ G4GammaNuclearXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 		FatalException, ed, "");
     return; 
   }
-  if(0. == coeff[0]) { 
+
+    if(nullptr == data) { 
 #ifdef G4MULTITHREADED
     G4MUTEXLOCK(&gNuclearXSMutex);
-    if(0. == coeff[0]) { 
+    if(nullptr == data) { 
 #endif
-      coeff[0] = 1.0;
       isMaster = true;
+      data = new G4ElementData(); 
+      data->SetName("PhotoNuclear");
       FindDirectoryPath();
 #ifdef G4MULTITHREADED
     }
     G4MUTEXUNLOCK(&gNuclearXSMutex);
 #endif
   }
+    
 
   // it is possible re-initialisation for the second run
+  // Upload data for elements used in geometry
+  const G4ElementTable* table = G4Element::GetElementTable();
   if(isMaster) {
-    // Upload data for elements used in geometry
-    const G4ElementTable* table = G4Element::GetElementTable();
     for ( auto & elm : *table ) {
-      G4int Z = std::max( 1, std::min( elm->GetZasInt(), MAXZGAMMAN-1) );
-      if ( nullptr == data[Z] ) { Initialise(Z); }
+      G4int Z = std::max( 1, std::min( elm->GetZasInt(), MAXZGAMMAXS-1) );
+      if ( nullptr == data->GetElementData(Z) ) { Initialise(Z); }
     }
   }
+
+    // prepare isotope selection
+  size_t nIso = temp.size();
+  for ( auto & elm : *table ) {
+    size_t n = elm->GetNumberOfIsotopes();
+    if(n > nIso) { nIso = n; }
+  }
+  temp.resize(nIso, 0.0);   
 }
 
 const G4String& G4GammaNuclearXS::FindDirectoryPath()
@@ -221,7 +335,7 @@ const G4String& G4GammaNuclearXS::FindDirectoryPath()
   // build the complete string identifying the file with the data set
   if(gDataDirectory.empty()) {
     char* path = std::getenv("G4PARTICLEXSDATA");
-    if (path) {
+    if (nullptr != path) {
       std::ostringstream ost;
       ost << path << "/gamma/inel";
       gDataDirectory = ost.str();
@@ -238,7 +352,7 @@ void G4GammaNuclearXS::InitialiseOnFly(G4int Z)
 {
 #ifdef G4MULTITHREADED
    G4MUTEXLOCK(&gNuclearXSMutex);
-   if(data[Z] == nullptr) { 
+   if(nullptr == data->GetElementData(Z)) { 
 #endif
      Initialise(Z);
 #ifdef G4MULTITHREADED
@@ -249,41 +363,74 @@ void G4GammaNuclearXS::InitialiseOnFly(G4int Z)
 
 void G4GammaNuclearXS::Initialise(G4int Z)
 {
-  if(data[Z] != nullptr) { return; }
+  if(nullptr != data->GetElementData(Z)) { return; }
 
   // upload data from file
-  data[Z] = new G4PhysicsLogVector();
-
   std::ostringstream ost;
   ost << FindDirectoryPath() << Z ;
-  std::ifstream filein(ost.str().c_str());
-  if (!(filein)) {
-    G4ExceptionDescription ed;
-    ed << "Data file <" << ost.str().c_str()
-       << "> is not opened!";
-    G4Exception("G4GammaNuclearXS::Initialise(..)","had014",
-                FatalException, ed, "Check G4PARTICLEXSDATA");
-    return;
+  G4PhysicsVector* v = RetrieveVector(ost, true, Z);
+  
+  data->InitialiseForElement(Z, v);
+  /*
+  G4cout << "G4GammaNuclearXS::Initialise for Z= " << Z 
+	 << " A= " << Amean << "  Amin= " << amin[Z] 
+	 << "  Amax= " << amax[Z] << G4endl;
+  */
+  // upload isotope data
+  G4DynamicParticle theGamma(gamma, G4ThreeVector(1,0,0), rTransitionBound);
+  xs150[Z] = ggXsection->GetElementCrossSection(&theGamma, Z, 0);
+  if(amax[Z] > amin[Z]) {
+    size_t nmax = (size_t)(amax[Z]-amin[Z]+1);
+    data->InitialiseForComponent(Z, nmax);
+    for(G4int A=amin[Z]; A<=amax[Z]; ++A) {
+      std::ostringstream ost1;
+      ost1 << gDataDirectory << Z << "_" << A;
+      G4PhysicsVector* v1 = RetrieveVector(ost1, false, Z);
+      data->AddComponent(Z, A, v1);
+      if(Z<=2){
+	theGamma.SetKineticEnergy(10.*GeV);
+	G4double sig1 = ggXsection->GetIsoCrossSection(&theGamma, Z, A);
+	G4double sig2 = ggXsection->GetElementCrossSection(&theGamma, Z, 0);
+	if(sig2 > 0.) coeff[Z][A-amin[Z]]=(sig1/sig2);
+	else coeff[Z][A-amin[Z]]=1.;
+      }
+    }
   }
-  if(verboseLevel > 1) {
-    G4cout << "file " << ost.str() 
-	   << " is opened by G4GammaNuclearXS" << G4endl;
-  }
-    
-  // retrieve data from DB
-  if(!data[Z]->Retrieve(filein, true)) {
-    G4ExceptionDescription ed;
-    ed << "Data file <" << ost.str().c_str()
-       << "> is not retrieved!";
-    G4Exception("G4GammaNuclearXS::Initialise(..)","had015",
-		FatalException, ed, "Check G4PARTICLEXSDATA");
-    return;
-  }
-  // smooth transition 
-  G4Material* mat(nullptr);
-  G4ThreeVector mom(0.0,0.0,1.0);
-  G4DynamicParticle dp(gamma, mom, data[Z]->GetMaxEnergy());
-  G4double sig1  = (*(data[Z]))[data[Z]->GetVectorLength()-1];
-  G4double sig2  = ggXsection->GetElementCrossSection(&dp, Z, mat);
-  coeff[Z] = (sig2 > 0.) ? sig1/sig2 : 1.0; 
 }
+
+G4PhysicsVector* 
+G4GammaNuclearXS::RetrieveVector(std::ostringstream& ost, G4bool isElement, G4int Z)
+{
+  G4PhysicsVector* v = nullptr;
+
+  std::ifstream filein(ost.str().c_str());
+  if (!filein.is_open()) {
+    if(isElement) {
+      G4ExceptionDescription ed;
+      ed << "Data file <" << ost.str().c_str()
+	 << "> is not opened!";
+      G4Exception("G4GammaNuclearXS::RetrieveVector(..)","had014",
+		  FatalException, ed, "Check G4PARTICLEXSDATA");
+    }
+  } else {
+    if(verboseLevel > 1) {
+      G4cout << "File " << ost.str() 
+	     << " is opened by G4GammaNuclearXS" << G4endl;
+    }
+    // retrieve data from DB
+    if(std::find(std::begin(freeVectorException), std::end(freeVectorException), Z ) == std::end(freeVectorException) && isElement) {
+      v = new G4PhysicsLinearVector();
+    } else {
+      v = new G4PhysicsVector();
+    }
+    if(!v->Retrieve(filein, true)) {
+      G4ExceptionDescription ed;
+      ed << "Data file <" << ost.str().c_str()
+	 << "> is not retrieved!";
+      G4Exception("G4GammaNuclearXS::RetrieveVector(..)","had015",
+		  FatalException, ed, "Check G4PARTICLEXSDATA");
+    }
+  }
+ return v;
+}
+

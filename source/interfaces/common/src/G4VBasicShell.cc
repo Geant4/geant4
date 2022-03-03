@@ -47,16 +47,16 @@ G4VBasicShell::~G4VBasicShell()
 G4String G4VBasicShell::ModifyToFullPathCommand(const char* aCommandLine) const
 {
   G4String rawCommandLine = aCommandLine;
-  if(rawCommandLine.isNull()||rawCommandLine(0)=='\0') return rawCommandLine;
-  G4String commandLine = rawCommandLine.strip(G4String::both);
+  if(rawCommandLine.empty()||rawCommandLine[0]=='\0') return rawCommandLine;
+  G4String commandLine = G4StrUtil::strip_copy(rawCommandLine);
   G4String commandString;
   G4String parameterString;
-  size_t i = commandLine.index(" ");
+  size_t i = commandLine.find(" ");
   if( i != std::string::npos )
   {
-    commandString = commandLine(0,i);
+    commandString = commandLine.substr(0,i);
     parameterString = " ";
-    parameterString += commandLine(i+1,commandLine.length()-(i+1));
+    parameterString += commandLine.substr(i+1,commandLine.length()-(i+1));
   }
   else
   { commandString = commandLine; }
@@ -73,10 +73,10 @@ G4String G4VBasicShell::GetCurrentWorkingDirectory() const
 
 G4bool G4VBasicShell::ChangeDirectory(const char* newDir)
 {
-  G4String aNewPrefix = newDir;
-  G4String newPrefix = aNewPrefix.strip(G4String::both);
+  G4String newPrefix = G4StrUtil::strip_copy(newDir);
+
   G4String newDirectory = ModifyPath( newPrefix );
-  if( newDirectory( newDirectory.length() - 1 ) != '/' )
+  if( newDirectory.back() != '/' )
   { newDirectory += "/"; }
   if( FindDirectory( newDirectory.c_str() ) == NULL )
   { return false; }
@@ -86,10 +86,10 @@ G4bool G4VBasicShell::ChangeDirectory(const char* newDir)
 
 G4UIcommandTree* G4VBasicShell::FindDirectory(const char* dirName) const
 {
-  G4String aDirName = dirName;
-  G4String theDir = aDirName.strip(G4String::both);
+  G4String theDir = G4StrUtil::strip_copy(dirName);
+
   G4String targetDir = ModifyPath( theDir );
-  if( targetDir( targetDir.length()-1 ) != '/' )
+  if( targetDir.back() != '/' )
   { targetDir += "/"; }
   G4UIcommandTree* comTree = G4UImanager::GetUIpointer()->GetTree();
   if( targetDir == "/" )
@@ -97,7 +97,7 @@ G4UIcommandTree* G4VBasicShell::FindDirectory(const char* dirName) const
   size_t idx = 1;
   while( idx < targetDir.length()-1 )
   {
-    size_t i = targetDir.index("/",idx);
+    size_t i = targetDir.find("/",idx);
     comTree = comTree->GetTree(targetDir.substr(0,i+1).c_str());
     if( comTree == NULL )
     { return NULL; }
@@ -108,12 +108,12 @@ G4UIcommandTree* G4VBasicShell::FindDirectory(const char* dirName) const
 
 G4UIcommand* G4VBasicShell::FindCommand(const char* commandName) const
 {
-  G4String rawCommandLine = commandName;
-  G4String commandLine = rawCommandLine.strip(G4String::both);
+  G4String commandLine = G4StrUtil::strip_copy(commandName);
+
   G4String commandString;
-  size_t i = commandLine.index(" ");
+  size_t i = commandLine.find(" ");
   if( i != std::string::npos )
-  { commandString = commandLine(0,i); }
+  { commandString = commandLine.substr(0,i); }
   else
   { commandString = commandLine; }
 
@@ -128,7 +128,7 @@ G4String G4VBasicShell::ModifyPath(const G4String& tempPath) const
   G4String newPath = "";
 
   // temporal full path
-  if( tempPath(0) == '/') newPath = tempPath;
+  if( tempPath[0] == '/') newPath = tempPath;
   else newPath = currentDirectory + tempPath;
 
   // body of path...
@@ -151,7 +151,7 @@ G4String G4VBasicShell::ModifyPath(const G4String& tempPath) const
 
   // end of path...
   if ( newPath.size() >= 3 ) {
-    if(newPath(newPath.size()-3,3) == "/..") {
+    if(newPath.substr(newPath.size()-3,3) == "/..") {
       if( newPath.size() == 3) {
         newPath = "/";
       } else {
@@ -162,7 +162,7 @@ G4String G4VBasicShell::ModifyPath(const G4String& tempPath) const
   }
 
   if ( newPath.size() >= 2 ) {
-    if(newPath(newPath.size()-2,2) == "/.") newPath.erase(newPath.size()-1,1);
+    if(newPath.substr(newPath.size()-2,2) == "/.") newPath.erase(newPath.size()-1,1);
   }
 
   // truncate "/////" to "/"
@@ -180,8 +180,9 @@ G4String G4VBasicShell::ModifyPath(const G4String& tempPath) const
 G4String G4VBasicShell::Complete(const G4String& commandName)
 {
   G4String rawCommandLine = commandName;
-  G4String commandLine = rawCommandLine.strip(G4String::both);
-  size_t i = commandLine.index(" ");
+  G4String commandLine = G4StrUtil::strip_copy(rawCommandLine);
+  
+  size_t i = commandLine.find(" ");
   if( i != std::string::npos ) return rawCommandLine; // Already entering parameters,
                                             // assume command path is correct.
   G4String commandString = commandLine;
@@ -237,14 +238,13 @@ void G4VBasicShell::ApplyShellCommand (const G4String& a_string,
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return;
 
-  G4String command = a_string;
-  command.strip(G4String::leading);
+  G4String command = G4StrUtil::lstrip_copy(a_string);
 
-  if( command(0) == '#' ) {
+  if( command[0] == '#' ) {
 
     G4cout << command << G4endl;
 
-  } else if( command == "ls" || command(0,3) == "ls " ) {
+  } else if( command == "ls" || command.substr(0,3) == "ls " ) {
 
     ListDirectory( command );
 
@@ -253,15 +253,15 @@ void G4VBasicShell::ApplyShellCommand (const G4String& a_string,
     G4cout << "Current Working Directory : "
        << GetCurrentWorkingDirectory() << G4endl;
 
-  } else if( command == "cd" || command(0,3) == "cd ") {
+  } else if( command == "cd" || command.substr(0,3) == "cd ") {
 
     ChangeDirectoryCommand ( command );
 
-  } else if( command == "help" || command(0,5) == "help ") {
+  } else if( command == "help" || command.substr(0,5) == "help ") {
 
     TerminalHelp( command );
 
-  } else if( command(0) == '?' ) {
+  } else if( command[0] == '?' ) {
 
     ShowCurrent( command );
 
@@ -272,9 +272,9 @@ void G4VBasicShell::ApplyShellCommand (const G4String& a_string,
       G4cout << i << ": " << UI->GetPreviousCommand(i) << G4endl;
     }
 
-  } else if( command(0) == '!' ) {
+  } else if( command[0] == '!' ) {
 
-    G4String ss = command(1,command.length()-1);
+    G4String ss = command.substr(1,command.length()-1);
     G4int vl;
     const char* tt = ss;
     std::istringstream is(tt);
@@ -317,7 +317,7 @@ void G4VBasicShell::ShowCurrent(const G4String& newCommand) const
   G4String comString = newCommand.substr(1,newCommand.length()-1);
   G4String theCommand = ModifyToFullPathCommand(comString);
   G4String curV = UI->GetCurrentValues(theCommand);
-  if( ! curV.isNull() ) {
+  if( ! curV.empty() ) {
     G4cout << "Current value(s) of the parameter(s) : " << curV << G4endl;
   }
 }
@@ -329,7 +329,7 @@ void G4VBasicShell::ChangeDirectoryCommand(const G4String& newCommand)
     prefix = "/";
   } else {
     G4String aNewPrefix = newCommand.substr(3, newCommand.length()-3);
-    prefix = aNewPrefix.strip(G4String::both);
+    prefix = G4StrUtil::strip_copy(aNewPrefix);
   }
   if(!ChangeDirectory(prefix)) {
     G4cout << "directory <" << prefix << "> not found." << G4endl;
@@ -343,7 +343,7 @@ void G4VBasicShell::ListDirectory(const G4String& newCommand) const
     targetDir = GetCurrentWorkingDirectory();
   } else {
     G4String newPrefix = newCommand.substr(3, newCommand.length()-3);
-    targetDir = newPrefix.strip(G4String::both);
+    targetDir = G4StrUtil::strip_copy(newPrefix);
   }
   G4UIcommandTree* commandTree = FindDirectory( targetDir );
   if( commandTree == NULL ) {
@@ -357,11 +357,11 @@ void G4VBasicShell::TerminalHelp(const G4String& newCommand)
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return;
   G4UIcommandTree * treeTop = UI->GetTree();
-  size_t i = newCommand.index(" ");
+  size_t i = newCommand.find(" ");
   if( i != std::string::npos )
   {
     G4String newValue = newCommand.substr(i+1, newCommand.length()-(i+1));
-    newValue.strip(G4String::both);
+    G4StrUtil::strip(newValue);
     G4String targetCom = ModifyToFullPathCommand(newValue);
     G4UIcommand* theCommand = treeTop->FindPath(targetCom);
     if( theCommand != NULL )
@@ -383,9 +383,9 @@ void G4VBasicShell::TerminalHelp(const G4String& newCommand)
   G4String prefix = GetCurrentWorkingDirectory();
   while( prefixIndex < prefix.length()-1 )
   {
-    size_t ii = prefix.index("/",prefixIndex);
+    size_t ii = prefix.find("/",prefixIndex);
     floor[iFloor+1] =
-      floor[iFloor]->GetTree(G4String(prefix(0,ii+1)));
+      floor[iFloor]->GetTree(G4String(prefix.substr(0,ii+1)));
     prefixIndex = ii+1;
     iFloor++;
   }

@@ -63,21 +63,20 @@
 #include "G4ParticleTable.hh"
 #include "G4LorentzVector.hh"
 #include "G4Exp.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr) 
-  : G4VPreCompoundModel(ptr,"PRECO"),theEmission(nullptr),theTransition(nullptr),
-    useSCO(false),isInitialised(false),isActive(true),minZ(3),minA(5) 
+  : G4VPreCompoundModel(ptr,"PRECO")
 {
   //G4cout << "### NEW PrecompoundModel " << this << G4endl;
-  if(!ptr) { SetExcitationHandler(new G4ExcitationHandler()); }
+  if(nullptr == ptr) { SetExcitationHandler(new G4ExcitationHandler()); }
 
   fNuclData = G4NuclearLevelData::GetInstance();
   proton = G4Proton::Proton();
   neutron = G4Neutron::Neutron();
-  fLowLimitExc = 0.0;
-  fHighLimitExc = DBL_MAX;
+  modelID = G4PhysicsModelCatalog::GetModelID("model_PRECO");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -87,6 +86,7 @@ G4PreCompoundModel::~G4PreCompoundModel()
   delete theEmission;
   delete theTransition;
   delete GetExcitationHandler();
+  theResult.Clear();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +117,6 @@ void G4PreCompoundModel::InitialiseModel()
 
   theEmission = new G4PreCompoundEmission();
   if(param->UseHETC()) { theEmission->SetHETCModel(); }
-  //else { theEmission->SetDefaultModel(); }
   theEmission->SetOPTxs(param->GetPrecoModelType());
 
   if(param->UseGNASH()) { theTransition = new G4GNASHTransitions; }
@@ -168,28 +167,25 @@ G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePrimary,
   anInitialState.SetNumberOfExcitedParticle(2, 1);
   anInitialState.SetNumberOfHoles(1,0);
   anInitialState.SetCreationTime(thePrimary.GetGlobalTime());
+  anInitialState.SetCreatorModelID(modelID);
   
   // call excitation handler
-  G4ReactionProductVector * result = DeExcite(anInitialState);
+  G4ReactionProductVector* result = DeExcite(anInitialState);
 
   // fill particle change
   theResult.Clear();
   theResult.SetStatusChange(stopAndKill);
-  for(G4ReactionProductVector::iterator i= result->begin(); 
-      i != result->end(); ++i)
-    {
-      G4DynamicParticle * aNewDP =
-	       new G4DynamicParticle((*i)->GetDefinition(),
-			      (*i)->GetTotalEnergy(),
-			      (*i)->GetMomentum());
-      G4HadSecondary aNew =  G4HadSecondary(aNewDP);
-      G4double time=(*i)->GetFormationTime();
-      if(time < 0.0) { time = 0.0; }
-      aNew.SetTime(timePrimary + time);
-      aNew.SetCreatorModelType((*i)->GetCreatorModel());
-      delete (*i);
-      theResult.AddSecondary(aNew);
-    }
+  for(auto const & prod : *result) {
+    G4DynamicParticle * aNewDP = new G4DynamicParticle(prod->GetDefinition(),
+						       prod->GetTotalEnergy(),
+						       prod->GetMomentum());
+    G4HadSecondary aNew = G4HadSecondary(aNewDP);
+    G4double time = std::max(prod->GetFormationTime(), 0.0);
+    aNew.SetTime(timePrimary + time);
+    aNew.SetCreatorModelID(prod->GetCreatorModelID());
+    delete prod;
+    theResult.AddSecondary(aNew);
+  }
   delete result;
   
   //return the filled particle change
@@ -262,7 +258,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
         
       // JMQ: WARNING:  CalculateProbability MUST be called prior to Get!! 
       // (O values would be returned otherwise)
-      G4double transProbability = theTransition->CalculateProbability(aFragment);
+      G4double transProbability = 
+	theTransition->CalculateProbability(aFragment);
       G4double P1 = theTransition->GetTransitionProb1();
       G4double P2 = theTransition->GetTransitionProb2();
       G4double P3 = theTransition->GetTransitionProb3();
@@ -279,9 +276,9 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	//G4cout<<"#4 EquilibriumEmission"<<G4endl; 
 	PerformEquilibriumEmission(aFragment,Result);
 	return Result;
-      } 	    
-      G4double emissionProbability = theEmission->GetTotalProbability(aFragment);
-	
+      }
+      G4double emissionProbability = 
+	theEmission->GetTotalProbability(aFragment);
       //G4cout<<"#1 TotalEmissionProbability="<<TotalEmissionProbability
       // <<" Nex= " <<aFragment.GetNumberOfExcitons()<<G4endl;
       //J.M.Quesada (May 08) this has already been done in order to decide  
@@ -320,65 +317,6 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//       Initialisation
-////////////////////////////////////////////////////////////////////////////////
-
-void G4PreCompoundModel::UseHETCEmission() 
-{
-  PrintWarning("UseHETCEmission");
-}
-
-void G4PreCompoundModel::UseDefaultEmission() 
-{ 
-  PrintWarning("UseDefaultEmission");
-}
-
-void G4PreCompoundModel::UseGNASHTransition() 
-{ 
-  PrintWarning("UseGNASHTransition");
-}
-
-void G4PreCompoundModel::UseDefaultTransition() 
-{ 
-  PrintWarning("UseDefaultTransition");
-}
-
-void G4PreCompoundModel::SetOPTxs(G4int) 
-{ 
-  PrintWarning("UseOPTxs");
-}
-
-void G4PreCompoundModel::UseSICB() 
-{ 
-  PrintWarning("UseSICB");
-}
-
-void G4PreCompoundModel::UseNGB()  
-{ 
-  PrintWarning("UseNGB");
-}
-
-void G4PreCompoundModel::UseSCO()  
-{ 
-  PrintWarning("UseSCO");
-}
-
-void G4PreCompoundModel::UseCEMtr() 
-{ 
-  PrintWarning("UseCEMtr");
-}
-
-void G4PreCompoundModel::PrintWarning(const G4String& mname)
-{
-  G4ExceptionDescription ed;
-  ed << "Obsolete method of the preCompound model is called: " 
-     << mname << "() \n Instead a corresponding method of "
-     << "G4DeexPrecoParameters class should be used";
-
-  G4Exception("G4PreCompoundModel::ReadData()","had0803",JustWarning,ed);
-}
-
-////////////////////////////////////////////////////////////////////////////////
 //       Documentation
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -406,9 +344,11 @@ void G4PreCompoundModel::ModelDescription(std::ostream& outFile) const
     << "\n";
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 void G4PreCompoundModel::DeExciteModelDescription(std::ostream& outFile) const
 {
   outFile << "description of precompound model as used with DeExcite()" << "\n";
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////

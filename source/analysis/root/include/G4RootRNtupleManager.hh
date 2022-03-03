@@ -37,23 +37,39 @@
 
 #include "tools/rroot/ntuple"
 
-#include <vector>
+#include <string_view>
 
+class G4RootRFileManager;
 struct G4RootRNtupleDescription;
 
 class G4RootRNtupleManager : public G4TRNtupleManager<tools::rroot::ntuple>
 {
   friend class G4RootAnalysisReader;
 
-  protected:
+  public:
     explicit G4RootRNtupleManager(const G4AnalysisManagerState& state);
-    virtual ~G4RootRNtupleManager();
-  
+    G4RootRNtupleManager() = delete;
+    virtual ~G4RootRNtupleManager() = default;
+
   private:
-    // Methods from the templated base class
-    //
+    // Set methods
+    void SetFileManager(std::shared_ptr<G4RootRFileManager> fileManager);
+
+    // Methods from the base class
+    virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
+                                  const G4String& dirName, G4bool isUserFileName) final;
     virtual G4bool GetTNtupleRow(G4TRNtupleDescription<tools::rroot::ntuple>* ntupleDescription) final;
-};    
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootPNtupleManager" };
+
+    // Data members
+    std::shared_ptr<G4RootRFileManager>  fFileManager { nullptr };
+};
+
+inline void
+G4RootRNtupleManager::SetFileManager(std::shared_ptr<G4RootRFileManager> fileManager)
+{ fFileManager = fileManager; }
 
 #endif
 

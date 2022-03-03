@@ -56,7 +56,7 @@
 #include "G4MaterialPropertiesIndex.hh"
 #include "G4MaterialPropertyVector.hh"
 
-#include <map>
+#include <vector>
 
 class G4MaterialPropertiesTable
 {
@@ -64,23 +64,22 @@ class G4MaterialPropertiesTable
   G4MaterialPropertiesTable();
   virtual ~G4MaterialPropertiesTable();
 
-  void AddConstProperty(const G4String& key, G4double PropertyValue,
+  void AddConstProperty(const G4String& key, G4double propertyValue,
                         G4bool createNewKey = false);
-  void AddConstProperty(const char* key, G4double PropertyValue,
+  void AddConstProperty(const char* key, G4double propertyValue,
                         G4bool createNewKey = false);
   // Add a new property to the table by giving a key-name and value
 
   G4MaterialPropertyVector* AddProperty(
     const G4String& key, const std::vector<G4double>& photonEnergies,
-    const std::vector<G4double>& propertyValues, G4bool createNewKey = false);
+    const std::vector<G4double>& propertyValues, G4bool createNewKey = false,
+    G4bool spline = false);
   // Add a new property to the table by giving a key-name and
   // vectors of values
 
-  G4MaterialPropertyVector* AddProperty(const char* key,
-                                        G4double* PhotonEnergies,
-                                        G4double* PropertyValues,
-                                        G4int NumEntries,
-                                        G4bool createNewKey = false);
+  G4MaterialPropertyVector* AddProperty(
+    const char* key, G4double* photonEnergies, G4double* propertyValues,
+    G4int numEntries, G4bool createNewKey = false, G4bool spline = false);
   // Add a new property to the table by giving a key-name and the
   // arrays x and y of size NumEntries.
 
@@ -106,27 +105,24 @@ class G4MaterialPropertiesTable
 
   G4double GetConstProperty(const G4String& key) const;
   G4double GetConstProperty(const char* key) const;
-  // Get the constant property from the table corresponding to the key-name
-
   G4double GetConstProperty(const G4int index) const;
-  // Get the constant property from the table corresponding to the key-index
+  // Get a constant property from the table
+  // It is an error to ask for a const property that the user has not defined.
+  //  Check if it has been defined with ConstPropertyExists() first.
 
   G4bool ConstPropertyExists(const G4String& key) const;
   G4bool ConstPropertyExists(const char* key) const;
-  // Return true if a const property 'key' exists.
-
   G4bool ConstPropertyExists(const G4int index) const;
-  // Return true if a const property with key-index 'index' exists.
+  // Return true if a const property has been defined by the user.
+  // Despite the name, this returns false for a const property in
+  //  GetMaterialConstPropertyNames() but not defined by user.
+  // Use this method before calling GetConstProperty().
 
-  G4MaterialPropertyVector* GetProperty(const char* key,
-                                        G4bool warning = false);
-  G4MaterialPropertyVector* GetProperty(const G4String& key,
-                                        G4bool warning = false);
-  // Get the property from the table corresponding to the key-name.
-
-  G4MaterialPropertyVector* GetProperty(const G4int index,
-                                        G4bool warning = false);
-  // Get the property from the table corresponding to the key-index.
+  G4MaterialPropertyVector* GetProperty(const char* key) const;
+  G4MaterialPropertyVector* GetProperty(const G4String& key) const;
+  G4MaterialPropertyVector* GetProperty(const G4int index) const;
+  // Get the property from the table corresponding to the key-index or index.
+  // nullptr is returned if the property has not been defined by the user.
 
   void AddEntry(const G4String& key, G4double aPhotonEnergy,
                 G4double aPropertyValue);
@@ -134,44 +130,56 @@ class G4MaterialPropertiesTable
                 G4double aPropertyValue);
   // Add a new entry (pair of numbers) to the table for a given key.
 
-  G4int GetConstPropertyIndex(const G4String& key,
-                              G4bool warning = false) const;
+  G4int GetConstPropertyIndex(const G4String& key) const;
   // Get the constant property index from the key-name
+  // It is an error to request the index of a non-existent key (key not
+  //  present in fMaterialConstPropertyNames()).
 
-  G4int GetPropertyIndex(const G4String& key, G4bool warning = false) const;
+  G4int GetPropertyIndex(const G4String& key) const;
   // Get the property index by the key-name.
+  // It is an error to request the index of a non-existent key (key not
+  //  present in GetMaterialPropertyNames()).
 
-  std::vector<G4String> GetMaterialPropertyNames() const;
-  std::vector<G4String> GetMaterialConstPropertyNames() const;
+  void DumpTable() const;
+  // print the material properties and material constant properties
 
-  void DumpTable();
-
-  const std::map<G4int, G4MaterialPropertyVector*, std::less<G4int>>*
-  GetPropertyMap() const
+  // the next four methods are used in persistency/GDML:
+  const std::vector<G4String>& GetMaterialPropertyNames() const
   {
-    return &MP;
+    return fMatPropNames;
   }
-  const std::map<G4int, G4double, std::less<G4int>>* GetConstPropertyMap() const
+  const std::vector<G4String>& GetMaterialConstPropertyNames() const
   {
-    return &MCP;
+    return fMatConstPropNames;
   }
-  // Accessors required for persistency purposes
+  const std::vector<G4MaterialPropertyVector*>& GetProperties() const
+  {
+    return fMP;
+  }
+  const std::vector<std::pair<G4double, G4bool>>& GetConstProperties()
+    const
+  {
+    return fMCP;
+  }
+  // return references to the vectors of material (constant) properties.
 
  private:
   G4MaterialPropertyVector* CalculateGROUPVEL();
   // Calculate the group velocity based on RINDEX
 
-  std::map<G4int, G4MaterialPropertyVector*, std::less<G4int>> MP;
-  typedef std::map<G4int, G4MaterialPropertyVector*,
-                   std::less<G4int>>::const_iterator MPiterator;
+  std::vector<G4MaterialPropertyVector*> fMP;
+  // Vector of pointer to material property vectors. All entries are
+  // initialized to nullptr.  Pointer is not null when mat.prop. vector defined.
+  // Order of entries in MP defined by enum in G4MaterialPropertiesIndex.
 
-  std::map<G4int, G4double, std::less<G4int>> MCP;
-  typedef std::map<G4int, G4double, std::less<G4int>>::const_iterator
-    MCPiterator;
-  // material property map and constant property map by index types
+  std::vector<std::pair<G4double, G4bool>> fMCP;
+  // Vector of energy-independent (i.e., "constant") material properties. We
+  // need to keep track if a property is defined or not: the bool in the pair
+  // is 'true' if the property is defined.
+  // Order of entries in MCP defined by enum in G4MaterialPropertiesIndex.
 
-  std::vector<G4String> G4MaterialPropertyName;
-  std::vector<G4String> G4MaterialConstPropertyName;
+  std::vector<G4String> fMatPropNames;
+  std::vector<G4String> fMatConstPropNames;
   // vectors of strings of property names
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// Manager class for Xml ntuples 
+// Manager class for Xml ntuples
 //
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -38,6 +38,7 @@
 
 #include <vector>
 #include <memory>
+#include <string_view>
 
 // Types alias
 using XmlNtupleDescription = G4TNtupleDescription<tools::waxml::ntuple, std::ofstream>;
@@ -45,14 +46,15 @@ using XmlNtupleDescription = G4TNtupleDescription<tools::waxml::ntuple, std::ofs
 class G4XmlFileManager;
 
 class G4XmlNtupleManager : public G4TNtupleManager<tools::waxml::ntuple,
-                                                   std::ofstream> 
+                                                   std::ofstream>
 {
   friend class G4XmlAnalysisManager;
   friend class G4XmlNtupleFileManager;
 
   public:
     explicit G4XmlNtupleManager(const G4AnalysisManagerState& state);
-    ~G4XmlNtupleManager();
+    G4XmlNtupleManager() = delete;
+    virtual ~G4XmlNtupleManager() = default;
 
   private:
     // Functions specific to the output type
@@ -60,7 +62,7 @@ class G4XmlNtupleManager : public G4TNtupleManager<tools::waxml::ntuple,
 
     // Set methods
     void SetFileManager(std::shared_ptr<G4XmlFileManager> fileManager);
-    
+
     // Access to ntuple vector (needed for Write())
     const std::vector<XmlNtupleDescription*>& GetNtupleDescriptionVector() const;
 
@@ -73,18 +75,20 @@ class G4XmlNtupleManager : public G4TNtupleManager<tools::waxml::ntuple,
                     XmlNtupleDescription* ntupleDescription,
                     G4bool fromBooking) final;
 
-    // data members
-    //
-    std::shared_ptr<G4XmlFileManager>  fFileManager;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4XmNtupleManager" };
+
+    // Data members
+    std::shared_ptr<G4XmlFileManager>  fFileManager { nullptr };
 };
 
 // inline functions
 
-inline void 
+inline void
 G4XmlNtupleManager::SetFileManager(std::shared_ptr<G4XmlFileManager> fileManager)
 { fFileManager = fileManager; }
 
-inline const std::vector<G4TNtupleDescription<tools::waxml::ntuple, std::ofstream>*>& 
+inline const std::vector<G4TNtupleDescription<tools::waxml::ntuple, std::ofstream>*>&
 G4XmlNtupleManager::GetNtupleDescriptionVector() const
 { return fNtupleDescriptionVector; }
 

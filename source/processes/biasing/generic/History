@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 4, 2021 A. Ribon
+- G4BOptrForceCollision : migrated to the new version of G4PhysicsModelCatalog
+- proc-biasgen-V10-07-01
+
 April 16th, 2021 B. Morgan
 - Migrate build to modular CMake API
 - proc-biasgen-V10-07-00

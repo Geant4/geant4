@@ -28,14 +28,8 @@
 // Original author: H.Kurashige (Kobe University), 9 January 1998
 // --------------------------------------------------------------------
 
-#include <fstream>
-#include <iomanip>
-
 #include "G4PhysicsListHelper.hh"
 #include "G4VUserPhysicsList.hh"
-
-#include "G4VEnergyLossProcess.hh"
-#include "G4VMultipleScattering.hh"
 
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
@@ -50,8 +44,13 @@
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 #include "G4UserPhysicsListMessenger.hh"
+#include "G4VTrackingManager.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+
+#include <fstream>
+#include <iomanip>
+#include <unordered_set>
 
 // This static member is thread local. For each thread, it holds the array
 // size of G4VUPLData instances.
@@ -127,6 +126,7 @@ void G4VUserPhysicsList::InitializeWorker()
 void G4VUserPhysicsList::TerminateWorker()
 {
   RemoveProcessManager();
+  RemoveTrackingManager();
   delete G4MT_theMessenger;
   G4MT_theMessenger = nullptr;
 }
@@ -138,6 +138,7 @@ G4VUserPhysicsList::~G4VUserPhysicsList()
   G4MT_theMessenger = nullptr;
 
   RemoveProcessManager();
+  RemoveTrackingManager();
 
   // invoke DeleteAllParticle
   theParticleTable->DeleteAllParticles();
@@ -319,6 +320,39 @@ void G4VUserPhysicsList::RemoveProcessManager()
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex());
 #endif
+}
+
+// --------------------------------------------------------------------
+void G4VUserPhysicsList::RemoveTrackingManager()
+{
+  // One tracking manager may be registered for multiple particles, make sure
+  // to delete every object only once.
+  std::unordered_set<G4VTrackingManager *> trackingManagers;
+
+  // loop over all particles in G4ParticleTable
+  theParticleIterator->reset();
+  while((*theParticleIterator)())
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    if (auto *trackingManager = particle->GetTrackingManager())
+    {
+#ifdef G4VERBOSE
+      if(verboseLevel > 2)
+      {
+        G4cout << "G4VUserPhysicsList::RemoveTrackingManager: ";
+        G4cout << "remove TrackingManager from ";
+        G4cout << particle->GetParticleName() << G4endl;
+      }
+#endif
+      trackingManagers.insert(trackingManager);
+      particle->SetTrackingManager(nullptr);
+    }
+  }
+
+  for (G4VTrackingManager *tm : trackingManagers)
+  {
+    delete tm;
+  }
 }
 
 // --------------------------------------------------------------------
@@ -609,6 +643,18 @@ void G4VUserPhysicsList::BuildPhysicsTable()
 // --------------------------------------------------------------------
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
+  if (auto *trackingManager = particle->GetTrackingManager())
+  {
+    if(verboseLevel > 2)
+    {
+      G4cout << "G4VUserPhysicsList::BuildPhysicsTable  "
+             << "Calculate Physics Table for " << particle->GetParticleName()
+             << " via custom TrackingManager" << G4endl;
+    }
+    trackingManager->BuildPhysicsTable(*particle);
+    return;
+  }
+
   // Change in order to share physics tables for two kind of process.
 
   if(particle->GetMasterProcessManager() == nullptr)
@@ -741,6 +787,12 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 // --------------------------------------------------------------------
 void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
 {
+  if (auto *trackingManager = particle->GetTrackingManager())
+  {
+    trackingManager->PreparePhysicsTable(*particle);
+    return;
+  }
+
   if(!(particle->GetMasterProcessManager()))
   {
     return;
@@ -875,7 +927,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 {
   G4bool ascii = fStoredInAscii;
   G4String dir = directory;
-  if(dir.isNull())
+  if(dir.empty())
     dir = directoryPhysicsTable;
   else
     directoryPhysicsTable = dir;
@@ -927,7 +979,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 void G4VUserPhysicsList::SetPhysicsTableRetrieved(const G4String& directory)
 {
   fRetrievePhysicsTable = true;
-  if(!directory.isNull())
+  if(!directory.empty())
   {
     directoryPhysicsTable = directory;
   }

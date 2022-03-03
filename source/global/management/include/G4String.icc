@@ -28,30 +28,20 @@
 // Author: G.Cosmo, 11 November 1999
 //---------------------------------------------------------------------
 
-inline G4String::G4String() {}
-
-inline G4String::G4String(const char* astring)
-  : std_string(astring)
+inline G4String::G4String(const std::string& str)
+  : std::string(str)
 {}
-
-inline G4String::G4String(const char* astring, str_size len)
-  : std_string(astring, len)
-{}
-
-inline G4String::G4String(char ch)
-{
-  char str[2];
-  str[0]              = ch;
-  str[1]              = '\0';
-  std_string::operator=(str);
-}
 
 inline G4String::G4String(const G4String& str)
-  : std_string(str)
+  : std::string(str)
 {}
 
-inline G4String::G4String(const std::string& str)
-  : std_string(str)
+inline G4String::G4String(std::string&& str)
+  : std::string(std::move(str))
+{}
+
+inline G4String::G4String(G4String&& str)
+  : std::string(std::move(str))
 {}
 
 inline G4String& G4String::operator=(const G4String& str)
@@ -60,306 +50,248 @@ inline G4String& G4String::operator=(const G4String& str)
   {
     return *this;
   }
-  std_string::operator=(str);
+  std::string::operator=(str);
   return *this;
 }
 
-inline G4String& G4String::operator=(const std::string& str)
+inline G4String& G4String::operator=(G4String&& str)
 {
-  std_string::operator=(str);
+  std::string::operator=(std::move(str));
   return *this;
-}
-
-inline G4String& G4String::operator=(const char* str)
-{
-  std_string::operator=(str);
-  return *this;
-}
-
-// "cmp" optional parameter is NOT implemented !
-// N.B.: The hash value returned is generally DIFFERENT from the
-//       one returned by the original RW function.
-//       Users should not rely on the specific return value.
-//
-inline char G4String::operator()(str_size i) const { return operator[](i); }
-
-inline char& G4String::operator()(str_size i)
-{
-  return std_string::operator[](i);
-}
-
-inline G4String G4String::operator()(str_size start, str_size extent)
-{
-  return G4String(substr(start, extent));
-}
-
-inline G4String& G4String::operator+=(const char* str)
-{
-  std_string::operator+=(str);
-  return *this;
-}
-
-inline G4String& G4String::operator+=(const std::string& str)
-{
-  std_string::operator+=(str);
-  return *this;
-}
-
-inline G4String& G4String::operator+=(const char& ch)
-{
-  std_string::operator+=(ch);
-  return *this;
-}
-
-inline G4bool G4String::operator==(const G4String& str) const
-{
-  if(length() != str.length())
-    return false;
-  return (std_string::compare(str) == 0);
-}
-
-inline G4bool G4String::operator==(const char* str) const
-{
-  return (std_string::compare(str) == 0);
-}
-
-inline G4bool G4String::operator!=(const G4String& str) const
-{
-  return !(*this == str);
-}
-
-inline G4bool G4String::operator!=(const char* str) const
-{
-  return !(*this == str);
 }
 
 inline G4String::operator const char*() const { return c_str(); }
 
-inline G4int G4String::strcasecompare(const char* s1, const char* s2) const
+inline G4int G4String::compareTo(std::string_view str, caseCompare mode) const
 {
-  char* buf1 = new char[strlen(s1) + 1];
-  char* buf2 = new char[strlen(s2) + 1];
-
-  for(str_size i = 0; i <= strlen(s1); ++i)
+  if(mode == exact)
   {
-    buf1[i] = tolower(char(s1[i]));
-  }
-  for(str_size j = 0; j <= strlen(s2); ++j)
-  {
-    buf2[j] = tolower(char(s2[j]));
+    return compare(str);
   }
 
-  G4int res = strcmp(buf1, buf2);
-  delete[] buf1;
-  delete[] buf2;
-  return res;
-}
-
-inline G4int G4String::compareTo(const char* str, caseCompare mode) const
-{
-  return (mode == exact) ? strcmp(c_str(), str) : strcasecompare(c_str(), str);
-}
-
-inline G4int G4String::compareTo(const G4String& str, caseCompare mode) const
-{
-  return compareTo(str.c_str(), mode);
-}
-
-inline G4String& G4String::prepend(const char* str)
-{
-  insert(0, str);
-  return *this;
-}
-
-inline G4String& G4String::append(const G4String& str)
-{
-  std_string::operator+=(str);
-  return *this;
+  return G4StrUtil::icompare(*this, str);
 }
 
 inline std::istream& G4String::readLine(std::istream& strm, G4bool skipWhite)
 {
-  char tmp[1024];
-  if(skipWhite)
-  {
-    strm >> std::ws;
-    strm.getline(tmp, 1024);
-    *this = tmp;
-  }
-  else
-  {
-    strm.getline(tmp, 1024);
-    *this = tmp;
-  }
-  return strm;
+  return G4StrUtil::readline(strm, *this, skipWhite);
 }
 
-inline G4String& G4String::replace(unsigned int start, unsigned int nbytes,
-                                   const char* buff, unsigned int n2)
+inline G4String& G4String::remove(size_type n)
 {
-  std_string::replace(start, nbytes, buff, n2);
+  G4StrUtil::safe_erase(*this, n);
   return *this;
 }
-
-inline G4String& G4String::replace(str_size pos, str_size n, const char* str)
-{
-  std_string::replace(pos, n, str);
-  return *this;
-}
-
-inline G4String& G4String::remove(str_size n)
-{
-  if(n < size())
-  {
-    erase(n, size() - n);
-  }
-  return *this;
-}
-
-inline G4String& G4String::remove(str_size pos, str_size N)
-{
-  erase(pos, N + pos);
-  return *this;
-}
-
-inline std::size_t G4String::first(char ch) const { return find(ch); }
-
-inline std::size_t G4String::last(char ch) const { return rfind(ch); }
 
 inline G4bool G4String::contains(const std::string& str) const
 {
-  return (std_string::find(str) != std_string::npos);
+  // Use of const char* required to resolve ambiguity with std::string_view
+  return G4StrUtil::contains(*this, str.c_str());
 }
 
 inline G4bool G4String::contains(char ch) const
 {
-  return (std_string::find(ch) != std_string::npos);
+  return G4StrUtil::contains(*this, ch);
 }
 
-inline G4String G4String::strip(G4int strip_Type, char ch)
+inline G4String G4String::strip(G4String::stripType strip_Type, char ch)
 {
-  G4String retVal = *this;
-  if(length() == 0)
+  if(empty())
   {
-    return retVal;
+    return "";
   }
-  str_size i = 0;
+
+  G4String retVal = *this;
+
   switch(strip_Type)
   {
-    case leading:
-    {
-      for(i = 0; i < length(); ++i)
-      {
-        if(std_string::operator[](i) != ch)
-        {
-          break;
-        }
-      }
-      retVal = substr(i, length() - i);
-    }
-    break;
-    case trailing:
-    {
-      G4int j = 0;
-      for(j = G4int(length() - 1); j >= 0; --j)
-      {
-        if(std_string::operator[](j) != ch)
-        {
-          break;
-        }
-      }
-      retVal = substr(0, j + 1);
-    }
-    break;
-    case both:
-    {
-      for(i = 0; i < length(); ++i)
-      {
-        if(std_string::operator[](i) != ch)
-        {
-          break;
-        }
-      }
-      G4String tmp(substr(i, length() - i));
-      G4int k = 0;
-      for(k = G4int(tmp.length() - 1); k >= 0; --k)
-      {
-        if(tmp.std_string::operator[](k) != ch)
-        {
-          break;
-        }
-      }
-      retVal = tmp.substr(0, k + 1);
-    }
-    break;
+    case G4String::leading:
+      G4StrUtil::lstrip(retVal, ch);
+      break;
+    case G4String::trailing:
+      G4StrUtil::rstrip(retVal, ch);
+      break;
+    case G4String::both:
+      G4StrUtil::strip(retVal, ch);
+      break;
     default:
       break;
   }
+
   return retVal;
 }
 
-inline void G4String::toLower()
+inline void G4String::toLower() { G4StrUtil::to_lower(*this); }
+
+inline void G4String::toUpper() { G4StrUtil::to_upper(*this); }
+
+namespace G4StrUtil
 {
-  for(str_size i = 0; i < size(); ++i)
+  inline void to_lower(G4String& str)
   {
-    // GB:HP-UX-aCC,Linux-KCC
-    std_string::operator[](i) = tolower(char(std_string::operator[](i)));
-    // at(i) = tolower(at(i));
-  }
-}
-
-inline void G4String::toUpper()
-{
-  for(str_size i = 0; i < size(); ++i)
-  {
-    // GB:HP-UX-aCC,Linux-KCC
-    std_string::operator[](i) = toupper(char(std_string::operator[](i)));
-    // at(i) = toupper(at(i));
-  }
-}
-
-inline G4bool G4String::isNull() const { return empty(); }
-
-// "caseCompare" optional parameter is NOT implemented !
-//
-inline str_size G4String::index(const G4String& str, str_size ln, str_size st,
-                                G4String::caseCompare) const
-{
-  return std_string::find(str.c_str(), st, ln);
-}
-
-inline str_size G4String::index(const char* str, G4int pos) const
-{
-  return std_string::find(str, pos);
-}
-
-inline str_size G4String::index(char ch, G4int pos) const
-{
-  return std_string::find(ch, pos);
-}
-
-inline const char* G4String::data() const { return c_str(); }
-
-inline unsigned int G4String::hash(caseCompare) const
-{
-  const char* str = c_str();
-  unsigned long h = 0;
-  for(; *str; ++str)
-  {
-    h = 5 * h + *str;
+    std::transform(str.begin(), str.end(), str.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
   }
 
-  return str_size(h);
-}
-
-inline unsigned int G4String::stlhash() const
-{
-  const char* str = c_str();
-  unsigned long h = 0;
-  for(; *str; ++str)
+  inline G4String to_lower_copy(G4String str)
   {
-    h = 5 * h + *str;
+    to_lower(str);
+    return str;
   }
 
-  return str_size(h);
-}
+  inline void to_upper(G4String& str)
+  {
+    std::transform(str.begin(), str.end(), str.begin(),
+                   [](unsigned char c) { return std::toupper(c); });
+  }
+
+  inline G4String to_upper_copy(G4String str)
+  {
+    to_upper(str);
+    return str;
+  }
+
+  inline void lstrip(G4String& s, char c)
+  {
+    auto startIndex = s.find_first_not_of(c);
+    s.erase(0, startIndex);
+  }
+
+  inline void rstrip(G4String& s, char c)
+  {
+    auto endIndex = s.find_last_not_of(c);
+    if(endIndex == G4String::npos)
+    {
+      s = "";
+    }
+    else
+    {
+      s.erase(endIndex + 1);
+    }
+  }
+
+  inline void strip(G4String& s, char c)
+  {
+    if(s.empty())
+    {
+      return;
+    }
+
+    lstrip(s, c);
+    rstrip(s, c);
+  }
+
+  inline G4String lstrip_copy(G4String s, char c)
+  {
+    lstrip(s, c);
+    return s;
+  }
+
+  inline G4String rstrip_copy(G4String s, char c)
+  {
+    rstrip(s, c);
+    return s;
+  }
+
+  inline G4String strip_copy(G4String s, char c)
+  {
+    strip(s, c);
+    return s;
+  }
+
+  inline G4bool contains(const G4String& str, std::string_view ss)
+  {
+    return str.find(ss) != G4String::npos;
+  }
+
+  inline G4bool contains(const G4String& str, char ss)
+  {
+    return str.find(ss) != G4String::npos;
+  }
+
+  inline G4bool contains(const G4String& str, const char* ss)
+  {
+    return str.find(ss) != G4String::npos;
+  }
+
+  inline G4bool contains(const G4String& str, const G4String& ss)
+  {
+    return str.find(ss) != G4String::npos;
+  }
+
+  inline G4int icompare(std::string_view lhs, std::string_view rhs)
+  {
+    G4String buf1 = G4StrUtil::to_lower_copy(G4String(lhs.data(), lhs.size()));
+    G4String buf2 = G4StrUtil::to_lower_copy(G4String(rhs.data(), rhs.size()));
+    return buf1.compare(buf2);
+  }
+
+  inline bool starts_with(const G4String& str, std::string_view ss)
+  {
+    return str.rfind(ss, 0) == 0;
+  }
+
+  inline bool starts_with(const G4String& str, G4String::value_type ss)
+  {
+    return !str.empty() && (str[0] == ss);
+  }
+
+  inline bool starts_with(const G4String& str, const char* ss)
+  {
+    return str.rfind(ss, 0) == 0;
+  }
+
+  inline bool starts_with(const G4String& str, const G4String& ss)
+  {
+    return str.rfind(ss, 0) == 0;
+  }
+
+  inline bool ends_with(const G4String& str, std::string_view ss)
+  {
+    if(str.length() < ss.length())
+    {
+      return false;
+    }
+    return str.compare(str.length() - ss.length(), ss.length(), ss) == 0;
+  }
+
+  inline bool ends_with(const G4String& str, G4String::value_type ss)
+  {
+    return !str.empty() && (str.back() == ss);
+  }
+
+  inline bool ends_with(const G4String& str, const char* ss)
+  {
+    std::string_view sv(ss);
+    return ends_with(str, sv);
+  }
+
+  inline bool ends_with(const G4String& str, const G4String& ss)
+  {
+    return ends_with(str, ss.c_str());
+  }
+
+  inline void safe_erase(G4String& str, G4String::size_type index,
+                         G4String::size_type count)
+  {
+    if(index < str.size())
+    {
+      str.erase(index, count);
+    }
+  }
+
+  inline std::istream& readline(std::istream& is, G4String& str,
+                                G4bool skipWhite)
+  {
+    char tmp[1024];
+    if(skipWhite)
+    {
+      is >> std::ws;
+    }
+
+    is.getline(tmp, 1024);
+    str = tmp;
+
+    return is;
+  }
+}  // namespace G4StrUtil

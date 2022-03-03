@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -49,7 +49,9 @@ Index : 0     used in the geometry : Yes
 ==================================================================
 
 ### Run 0 starts.
+... set ntuple merging row mode : row-wise - done
 ... create file : run4.root - done
+... open analysis file : run4.root - done
 ... open analysis file : run4.root - done
 --> Event 0 starts.
 --> Event 100000 starts.
@@ -64,7 +66,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.390000s Real=2.433519s Sys=0.000000s
+  User=2.590000s Real=2.618058s Sys=0.000000s
 ... write file : run4.root - done
 ... close file : run4.root - done
 G4 kernel has come to Quit state.

@@ -75,16 +75,15 @@ protected:
 
 private:
 
-  G4bool   statCode;
+  G4double fLowEnergyLimit=0.;
+  G4double fHighEnergyLimit=0.;
 
-  G4double fLowEnergyLimit;
-  G4double fHighEnergyLimit;
-
-  G4bool   isInitialised;
-  G4int    verboseLevel;
+  G4bool   isInitialised=false;
+  G4bool   statCode=false;
+  G4int    verboseLevel=0;
   G4int    nValenceElectron[100];
 
-  const  std::vector<G4double>* fpMaterialDensity;
+  const  std::vector<G4double>* fpMaterialDensity=nullptr;
 
   G4int GetNValenceElectron(G4int z);
    

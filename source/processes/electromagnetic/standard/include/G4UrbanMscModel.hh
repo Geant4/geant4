@@ -135,7 +135,7 @@ private:
   G4LossTableManager*         theManager;
 
   G4double mass;
-  G4double charge,ChargeSquare;
+  G4double charge,chargeSquare;
   G4double masslimite,fr;
 
   G4double taubig;
@@ -174,6 +174,7 @@ private:
 
   G4double tlow;
   G4double invmev;
+  G4double rndmarray[2];
 
   struct mscData {
     G4double ecut, Zeff, Z23, sqrtZ;
@@ -205,7 +206,7 @@ void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     mass = p->GetPDGMass();
     charge = p->GetPDGCharge()/CLHEP::eplus;
-    ChargeSquare = charge*charge;
+    chargeSquare = charge*charge;
   }
 }
 
@@ -233,10 +234,9 @@ G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
   G4double prob = (a+2.)*xmeanth/a;
 
   // sampling
-  G4double rdm = rndmEngineMod->flat();
-  G4double cth = (rndmEngineMod->flat() < prob)
-    ? -1.+2.*G4Exp(G4Log(rdm)/(a+1.)) : -1.+2.*rdm;
-  return cth;
+  rndmEngineMod->flatArray(2, rndmarray);
+  return (rndmarray[1] < prob) ? 
+    -1.+2.*G4Exp(G4Log(rndmarray[0])/(a+1.)) : -1.+2.*rndmarray[0];
 }
 
 inline G4double G4UrbanMscModel::ComputeStepmin()
@@ -256,7 +256,6 @@ inline G4double G4UrbanMscModel::ComputeTlimitmin()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif
 

@@ -128,6 +128,8 @@ class G4GenericMessenger : public G4UImessenger
         return SetUnit(u, UnitDefault);
       }
       Command& SetParameterName(const G4String&, G4bool, G4bool = false);
+      Command& SetParameterName(const G4String&, const G4String&, const G4String&, 
+                                G4bool, G4bool = false);
       Command& SetDefaultValue(const G4String&);
       Command& SetCandidates(const G4String&);
       Command& SetToBeBroadcasted(G4bool s0)
@@ -189,6 +191,8 @@ class G4GenericMessenger : public G4UImessenger
                                    const G4String& doc = "");
     void SetDirectory(const G4String& dir) { directory = dir; }
     void SetGuidance(const G4String& s);
+    void Sort(G4bool val = true)
+    { if(dircmd) dircmd->Sort(val); }
 
   private:
 

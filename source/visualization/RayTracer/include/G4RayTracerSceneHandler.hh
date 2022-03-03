@@ -50,13 +50,13 @@ public:
   {BuildVisAttsMap(solid);}
 
   // Required pure virtual functions, not used in Ray Tracer.
+  using G4VSceneHandler::AddPrimitive;
   void AddPrimitive(const G4Polyline&){}
   void AddPrimitive(const G4Text&){}
   void AddPrimitive(const G4Circle&){}
   void AddPrimitive(const G4Square&){}
   void AddPrimitive(const G4Polyhedron&){}
   void AddPrimitive(const G4Polymarker&){}
-  void AddPrimitive(const G4Scale&){}
 
   void ClearStore ();
 

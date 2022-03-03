@@ -68,6 +68,7 @@
 #include "G4ChordFinder.hh"
 #include "G4ITSafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4ReferenceCast.hh"
@@ -120,7 +121,7 @@ G4ITTransportation::G4ITTransportation(const G4String& aName, int verbose) :
   enableAtRestDoIt = false;
   enableAlongStepDoIt = true;
   enablePostStepDoIt = true;
-  SetProcessSubType(60);
+  SetProcessSubType(fLowEnergyTransportation);
   SetInstantiateProcessState(true);
   G4VITProcess::SetInstantiateProcessState(false);
   fInstantiateProcessState = true;

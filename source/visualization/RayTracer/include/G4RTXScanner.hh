@@ -27,8 +27,6 @@
 //
 //
 
-#ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
-
 #ifndef G4RTXScanner_H
 #define G4RTXScanner_H 1
 
@@ -85,7 +83,5 @@ protected:
   GC gc;
   XStandardColormap *scmap;
 };
-
-#endif
 
 #endif

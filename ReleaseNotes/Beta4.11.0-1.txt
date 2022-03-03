@@ -707,8 +707,6 @@ List of features and fixes included in this Beta release since 10.7.p02:
       o Added G4HadronInelasticProcess class from hadronic/management module.
       o Renamed G4HadronCaptureProcess as G4NeutronCaptureProcess, as it is
         applied only for neutron projectile.
-      o Renamed G4HadronFissionProcess as G4NeutronFissionProcess, as it is
-        applied only for neutron projectile.
       o Removed use of deleted header file G4HadronicDeprecate.
       o G4HadronCaptureProcess: removed old and unused header file
         corresponding to the Gheisha capture cross-section (that has been
@@ -980,14 +978,14 @@ List of features and fixes included in this Beta release since 10.7.p02:
       o Removed obsolete class CMSEmStandardPhysicsHcal.
       o FTFPCMS_BERT_EMM: use correct combination of physics constructors.
       o Removed use of obsolete RanecuEngine. Updated CMS EM physics.
+    + advanced/ICRP110_HumanPhantoms
+      o Introduced ICRP110PhantomVisAction. Updated vis.mac which shows
+        how to activate it.
     + advanced/iort_therapy
       o Removed dependency on G4EmProcessOptions.
       o Removed SetCuts() from the local PhysicsList.
       o Set cuts per region in ConstructProcess(). RegionStore is not available
         when accessed from the constructor of the Physics List.
-    + advanced/ICRP110_HumanPhantoms
-      o Introduced ICRP110PhantomVisAction. Updated vis.mac which shows
-        how to activate it.
     + advanced/microbeam
       o Added initialisation of 'fDose3DDose' and 'fMapVoxels' in the
         constructor of the RunAction class.

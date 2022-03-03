@@ -25,8 +25,6 @@
 //
 // John Allison  17th June 2019
 
-#if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)
-
 #include "G4Qt3DSceneHandler.hh"
 
 #include "G4PhysicalVolumeModel.hh"
@@ -43,6 +41,10 @@
 #include "G4Polyhedron.hh"
 #include "G4Scene.hh"
 #include "G4Threading.hh"
+#include "G4Mesh.hh"
+#include "G4PseudoScene.hh"
+#include "G4VisManager.hh"
+#include "Randomize.hh"
 
 #include "G4Qt3DViewer.hh"
 #include "G4Qt3DUtils.hh"
@@ -117,12 +119,8 @@ void G4Qt3DSceneHandler::EstablishG4Qt3DQEntities()
 }
 
 G4Qt3DQEntity* G4Qt3DSceneHandler::CreateNewNode()
-{ // Create a G4Qt3DQEntity node suitable for next solid or primitive
-
-  // Avoid Qt errors in MT mode - see G4Qt3DViewer::SwitchToMasterThread
-#ifdef G4MULTITHREADED
-  if (!G4Threading::IsMasterThread()) return nullptr;
-#endif
+{
+  // Create a G4Qt3DQEntity node suitable for next solid or primitive
 
   G4Qt3DQEntity* newNode = nullptr;
 
@@ -265,10 +263,19 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
   << G4endl;
 #endif
   
-  auto currentNode = CreateNewNode();
-  if (!currentNode) return;  // Node not available
-
   if (polyline.size() == 0) return;
+
+  auto currentNode = CreateNewNode();
+  if (!currentNode) {
+    static G4bool first = true;
+    if (first) {
+      first = false;
+      G4Exception("G4Qt3DSceneHandler::AddPrimitive(const G4Polyline&)",
+		  "qt3d-0003", JustWarning,
+		  "No available node!");
+    }
+    return;
+  }
 
   fpVisAttribs = fpViewer->GetApplicableVisAttributes(polyline.GetVisAttributes());
 
@@ -323,7 +330,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
   polylineEntity->addComponent(material);
 
   auto renderer = new Qt3DRender::QGeometryRenderer;
-  renderer->setObjectName("polyhedronWireframeRenderer");
+  renderer->setObjectName("polylineWireframeRenderer");
   renderer->setGeometry(polylineGeometry);
   renderer->setVertexCount(2*nLines);
   renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Lines);
@@ -332,10 +339,19 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
 
 void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 {
-  auto currentNode = CreateNewNode();
-  if (!currentNode) return;  // Node not available
-
   if (polymarker.size() == 0) return;
+
+  auto currentNode = CreateNewNode();
+  if (!currentNode) {
+    static G4bool first = true;
+    if (first) {
+      first = false;
+      G4Exception("G4Qt3DSceneHandler::AddPrimitive(const G4Polymarker&)",
+		  "qt3d-0003", JustWarning,
+		  "No available node!");
+    }
+    return;
+  }
 
   fpVisAttribs = fpViewer->GetApplicableVisAttributes(polymarker.GetVisAttributes());
 
@@ -416,15 +432,17 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         radius =circle.GetWorldRadius();
       } else {  // Screen-size or none
         // Not figured out how to do screen-size, so use scene extent
-        const G4double scale = 200.;  // Roughly pixles per scene
+        const G4double scale = 200.;  // Roughly pixels per scene
         radius = circle.GetScreenRadius()*fpScene->GetExtent().GetExtentRadius()/scale;
       }
       sphereMesh->setRadius(radius);
+//      sphereMesh->setInstanceCount(polymarker.size());  // Not undertood instancing yet
 
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+//      auto currentEntity = new Qt3DCore::QEntity(currentNode);  // Not undertood instancing yet
+      for (size_t iPoint = 0; iPoint < polymarker.size(); iPoint++) {
         auto position = fObjectTransformation*G4Translate3D(polymarker[iPoint]);
         auto transform = G4Qt3DUtils::CreateQTransformFrom(position);
-        auto currentEntity = new Qt3DCore::QEntity(currentNode);
+	auto currentEntity = new Qt3DCore::QEntity(currentNode);  // Not undertood instancing yet
         currentEntity->addComponent(material);
         currentEntity->addComponent(transform);
         currentEntity->addComponent(sphereMesh);
@@ -455,7 +473,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
       boxMesh->setYExtent(side);
       boxMesh->setZExtent(side);
 
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      for (size_t iPoint = 0; iPoint < polymarker.size(); iPoint++) {
         auto position = fObjectTransformation*G4Translate3D(polymarker[iPoint]);
         auto transform = G4Qt3DUtils::CreateQTransformFrom(position);
         auto currentEntity = new Qt3DCore::QEntity(currentNode);
@@ -468,25 +486,36 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   }
 }
 
-void G4Qt3DSceneHandler::AddPrimitive(const G4Text& /*text*/) {
 #ifdef G4QT3DDEBUG
+void G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) {
   G4cout <<
   "G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) called.\n"
   << text
   << G4endl;
+#else
+void G4Qt3DSceneHandler::AddPrimitive(const G4Text& /*text*/) {
 #endif
 
   static G4bool first = true;
   if (first) {
     first = false;
-    G4Exception("G4Qt3DSceneHandler::AddPrimitive(const G4Text& text)",
+    G4Exception("G4Qt3DSceneHandler::AddPrimitive(const G4Text&)",
                 "qt3D-0002", JustWarning,
                 "Text drawing doesn't work yet");
   }  // OK. Not working, but let it execute, which it does without error.
 
   /* But it crashes after /vis/viewer/rebuild!!!
   auto currentNode = CreateNewNode();
-  if (!currentNode) return;  // Node not available
+   if (!currentNode) {
+   static G4bool first = true;
+   if (first) {
+   first = false;
+   G4Exception("G4Qt3DSceneHandler::AddPrimitive(const G4Text&)",
+   "qt3d-0003", JustWarning,
+   "No available node!");
+   }
+   return;
+   }
 
   fpVisAttribs = fpViewer->GetApplicableVisAttributes(text.GetVisAttributes());
 
@@ -555,7 +584,16 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Circle& circle)
 #endif
 
   auto currentNode = CreateNewNode();
-  if (!currentNode) return;  // Node not available
+  if (!currentNode) {
+    static G4bool first = true;
+    if (first) {
+      first = false;
+      G4Exception("G4Qt3DSceneHandler::AddPrimitive(const G4Circle&)",
+		  "qt3d-0003", JustWarning,
+		  "No available node!");
+    }
+    return;
+  }
 
   fpVisAttribs = fpViewer->GetApplicableVisAttributes(circle.GetVisAttributes());
 
@@ -613,7 +651,16 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Square& square)
 #endif
 
   auto currentNode = CreateNewNode();
-  if (!currentNode) return;  // Node not available
+  if (!currentNode) {
+    static G4bool first = true;
+    if (first) {
+      first = false;
+      G4Exception("G4Qt3DSceneHandler::AddPrimitive(const G4Square&)",
+		  "qt3d-0003", JustWarning,
+		  "No available node!");
+    }
+    return;
+  }
 
   fpVisAttribs = fpViewer->GetApplicableVisAttributes(square.GetVisAttributes());
 
@@ -649,7 +696,16 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Square& square)
 void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
 {
   auto currentNode = CreateNewNode();
-  if (!currentNode) return;  // Node not available
+  if (!currentNode) {
+    static G4bool first = true;
+    if (first) {
+      first = false;
+      G4Exception("G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron&)",
+		  "qt3d-0003", JustWarning,
+		  "No available node!");
+    }
+    return;
+  }
 
   if (polyhedron.GetNoFacets() == 0) return;
 
@@ -994,6 +1050,119 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
   }
 }
 
+void G4Qt3DSceneHandler::AddCompound(const G4Mesh& mesh)
+{
+  // Special mesh rendering
+  // Limited to rectangular 3-deep meshes
+  if (mesh.GetMeshType() != G4Mesh::rectangle ||
+      mesh.GetMeshDepth() != 3) {
+    G4VSceneHandler::AddCompound(mesh);
+  }
+
+  auto container = mesh.GetContainerVolume();
+
+  static G4bool firstPrint = true;
+  G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
+  G4bool print = firstPrint && verbosity >= G4VisManager::confirmations;
+
+  if (print) {
+    G4cout
+    << "Special case drawing of G4VNestedParameterisation in G4OpenGLSceneHandler"
+    << '\n' << mesh
+    << G4endl;
+  }
+
+  // Instantiate a temporary G4PhysicalVolumeModel
+  G4ModelingParameters tmpMP;
+  tmpMP.SetCulling(true);  // This avoids drawing transparent...
+  tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+  const G4bool useFullExtent = true;  // To avoid calculating the extent
+  G4PhysicalVolumeModel tmpPVModel
+  (container,
+   G4PhysicalVolumeModel::UNLIMITED,
+   G4Transform3D(),
+   &tmpMP,
+   useFullExtent);
+
+  // Instantiate a pseudo scene so that we can make a "private" descent
+  // into the nested parameterisation and fill a multimap...
+  std::multimap<const G4Colour,G4ThreeVector> positionByColour;
+  G4double halfX = 0., halfY = 0., halfZ = 0.;
+  struct PseudoScene: public G4PseudoScene {
+    PseudoScene
+    (G4PhysicalVolumeModel* pvModel // input...the following are outputs
+     , std::multimap<const G4Colour,G4ThreeVector>& positionByColour
+     , G4double& halfX, G4double& halfY, G4double& halfZ)
+    : fpPVModel(pvModel)
+    , fPositionByColour(positionByColour)
+    , fHalfX(halfX), fHalfY(halfY), fHalfZ(halfZ)
+    {}
+    using G4PseudoScene::AddSolid;  // except for...
+    void AddSolid(const G4Box& box) {
+      const G4Colour& colour = fpPVModel->GetCurrentLV()->GetVisAttributes()->GetColour();
+      const G4ThreeVector& position = fpCurrentObjectTransformation->getTranslation();
+      fPositionByColour.insert(std::make_pair(colour,position));
+      fHalfX = box.GetXHalfLength();
+      fHalfY = box.GetYHalfLength();
+      fHalfZ = box.GetZHalfLength();
+    }
+    G4PhysicalVolumeModel* fpPVModel;
+    std::multimap<const G4Colour,G4ThreeVector>& fPositionByColour;
+    G4double &fHalfX, &fHalfY, &fHalfZ;
+  }
+  pseudoScene(&tmpPVModel,positionByColour,halfX,halfY,halfZ);
+
+  // Make private descent into the nested parameterisation
+  tmpPVModel.DescribeYourselfTo(pseudoScene);
+
+  // Make list of found colours
+  std::set<G4Colour> setOfColours;
+  for (const auto& entry: positionByColour) {
+    setOfColours.insert(entry.first);
+  }
+
+  if (print) {
+    for (const auto& colour: setOfColours) {
+      G4cout << "setOfColours: " << colour << G4endl;
+    }
+  }
+
+  // Draw as dots
+  BeginPrimitives (mesh.GetTransform());
+  G4int nDotsTotal = 0;
+  for (const auto& colour: setOfColours) {
+    G4int nDots = 0;
+    G4Polymarker dots;
+    dots.SetVisAttributes(G4Colour(colour));
+    dots.SetMarkerType(G4Polymarker::dots);
+    dots.SetSize(G4VMarker::screen,1.);
+    dots.SetInfo(container->GetName());
+    const auto range = positionByColour.equal_range(colour);
+    for (auto posByCol = range.first; posByCol != range.second; ++posByCol) {
+      const G4double x = posByCol->second.getX() + (2.*G4UniformRand()-1.)*halfX;
+      const G4double y = posByCol->second.getY() + (2.*G4UniformRand()-1.)*halfY;
+      const G4double z = posByCol->second.getZ() + (2.*G4UniformRand()-1.)*halfZ;
+      dots.push_back(G4ThreeVector(x,y,z));
+      ++nDots;
+    }
+    AddPrimitive(dots);
+    if (print) {
+      G4cout
+      << "Number of dots for colour " << colour
+      << ": " << nDots << G4endl;
+    }
+    nDotsTotal += nDots;
+  }
+  if (print) {
+    G4cout << "Total number of dots: " << nDotsTotal << G4endl;
+  }
+  EndPrimitives ();
+
+  firstPrint = false;
+
+  return;
+}
+
 void G4Qt3DSceneHandler::ClearStore ()
 {
   G4Qt3DUtils::delete_components_and_children_of_entity_recursively(fpQt3DScene);
@@ -1004,5 +1173,3 @@ void G4Qt3DSceneHandler::ClearTransientStore ()
 {
   G4Qt3DUtils::delete_components_and_children_of_entity_recursively(fpTransientObjects);
 }
-
-#endif  // #if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)

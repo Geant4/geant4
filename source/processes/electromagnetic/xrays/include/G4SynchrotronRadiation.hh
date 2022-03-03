@@ -90,6 +90,8 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 
   G4bool FirstTime;
   G4bool FirstTime1;
+
+  G4int secID = -1;  // creator modelID
 };
 
 //////////////////////////  INLINE METHODS  /////////////////////////////

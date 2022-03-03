@@ -77,6 +77,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessVector.hh"
 #include "G4ProcessManager.hh"
+#include "G4LossTableBuilder.hh"
 #include <iostream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -190,6 +191,9 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 	      << " and particle " << part.GetParticleName()
 	      << " Nmodels= " << mscModels.size() << "  " << this << std::endl;
     */
+    G4LossTableBuilder* bld = emManager->GetTableBuilder();
+    baseMat = bld->GetBaseMaterialFlag();
+
     for(G4int i=0; i<numberOfModels; ++i) {
       G4VMscModel* msc = GetModelByIndex(i);
       if(nullptr == msc) { continue; }
@@ -200,6 +204,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
       G4double emax = 
         std::min(msc->HighEnergyLimit(),theParameters->MaxKinEnergy());
       msc->SetHighEnergyLimit(emax);
+      msc->SetUseBaseMaterials(baseMat);
     }
 
     modelManager->Initialise(firstParticle, G4Electron::Electron(), 
@@ -244,15 +249,19 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
                 << GetProcessName() << " and particle " << num
 		<< " Nmod= " << mscModels.size() << " NOT master" << std::endl;
       */
+      baseMat = masterProcess->UseBaseMaterial();
       for(G4int i=0; i<numberOfModels; ++i) {
 	G4VMscModel* msc = GetModelByIndex(i);
 	if(nullptr == msc) { continue; }
         G4VMscModel* msc0 = masterProcess->GetModelByIndex(i);
+        msc->SetUseBaseMaterials(baseMat);
         msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
         msc->InitialiseLocal(firstParticle, msc0);
       }
     }
   }
+  // protection against double printout
+  if(theParameters->IsPrintLocked()) { return; }
 
   // explicitly defined printout by particle name
   if(1 < verboseLevel || 
@@ -339,12 +348,13 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   if(isIon) { 
     ekin *= proton_mass_c2/track.GetParticleDefinition()->GetPDGMass(); 
   }
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
   
   // select new model
   if(1 < numberOfModels) {
-    currentModel = static_cast<G4VMscModel*>(
-      SelectModel(ekin,track.GetMaterialCutsCouple()->GetIndex()));
+    currentModel = static_cast<G4VMscModel*>(SelectModel(ekin,couple->GetIndex()));
   }
+  currentModel->SetCurrentCouple(couple);
   // msc is active is model is active, energy above the limit,
   // and step size is above the limit;
   // if it is active msc may limit the step

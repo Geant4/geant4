@@ -698,7 +698,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
       theSec = new G4DynamicParticle;   
       theSec->SetDefinition(aHadron.GetDefinition());
       theSec->SetMomentum(aHadron.GetMomentum());
-      theResult.Get()->AddSecondary(theSec);    
+      theResult.Get()->AddSecondary(theSec, secID);    
 #ifdef G4PHPDEBUG
       if( std::getenv("G4ParticleHPDebug"))  G4cout << this << " G4ParticleHPInelasticCompFS::BaseApply  add secondary1 " << theSec->GetParticleDefinition()->GetParticleName() << " E= " << theSec->GetKineticEnergy() << " NSECO " << theResult.Get()->GetNumberOfSecondaries() << G4endl;
 #endif
@@ -726,7 +726,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
       theSec = new G4DynamicParticle;   
       theSec->SetDefinition(theResidual.GetDefinition());
       theSec->SetMomentum(theResidual.GetMomentum()-totalPhotonMomentum);
-      theResult.Get()->AddSecondary(theSec);    
+      theResult.Get()->AddSecondary(theSec, secID);    
 #ifdef G4PHPDEBUG
       if( std::getenv("G4ParticleHPDebug"))  G4cout << this << " G4ParticleHPInelasticCompFS::BaseApply add secondary2 " << theSec->GetParticleDefinition()->GetParticleName() << " E= " << theSec->GetKineticEnergy() << " NSECO " << theResult.Get()->GetNumberOfSecondaries() << G4endl;
 #endif
@@ -738,7 +738,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
         theSec = new G4DynamicParticle; 
         theSec->SetDefinition(theParticles->operator[](i0)->GetDefinition());
         theSec->SetMomentum(theParticles->operator[](i0)->GetMomentum());
-        theResult.Get()->AddSecondary(theSec); 
+        theResult.Get()->AddSecondary(theSec, secID); 
 #ifdef G4PHPDEBUG
       if( std::getenv("G4ParticleHPDebug"))  G4cout << this << " G4ParticleHPInelasticCompFS::BaseApply add secondary3 " << theSec->GetParticleDefinition()->GetParticleName() << " E= " << theSec->GetKineticEnergy() << " NSECO " << theResult.Get()->GetNumberOfSecondaries() << G4endl;
 #endif
@@ -766,7 +766,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
         theSec = new G4DynamicParticle;   
         theSec->SetDefinition(theResidual.GetDefinition());
         theSec->SetMomentum(theResidual.GetMomentum());
-        theResult.Get()->AddSecondary(theSec);  
+        theResult.Get()->AddSecondary(theSec, secID);  
 #ifdef G4PHPDEBUG
       if( std::getenv("G4ParticleHPDebug"))  G4cout << this << " G4ParticleHPInelasticCompFS::BaseApply add secondary4 " << theSec->GetParticleDefinition()->GetParticleName() << " E= " << theSec->GetKineticEnergy() << " NSECO " << theResult.Get()->GetNumberOfSecondaries() << G4endl;
 #endif
@@ -783,7 +783,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
         theSec->SetDefinition( thePhotons->operator[](i)->GetDefinition() );
         //But never cause real effect at least with G4NDL3.13 TK
         theSec->SetMomentum(thePhotons->operator[](i)->GetMomentum());
-        theResult.Get()->AddSecondary(theSec); 
+        theResult.Get()->AddSecondary(theSec, secID); 
 #ifdef G4PHPDEBUG
       if( std::getenv("G4ParticleHPDebug"))  G4cout << this << " G4ParticleHPInelasticCompFS::BaseApply add secondary5 " << theSec->GetParticleDefinition()->GetParticleName() << " E= " << theSec->GetKineticEnergy() << " NSECO " << theResult.Get()->GetNumberOfSecondaries() << G4endl;
 #endif
@@ -895,7 +895,7 @@ G4bool G4ParticleHPInelasticCompFS::use_nresp71_model( const G4ParticleDefinitio
 			for ( G4int j=0; j<4; j++ )
 				{
 				theProds[j].Lorentz(theProds[j], -1.*theTarget);
-				theResult.Get()->AddSecondary(new G4DynamicParticle(theProds[j].GetDefinition(), theProds[j].GetMomentum()));
+				theResult.Get()->AddSecondary(new G4DynamicParticle(theProds[j].GetDefinition(), theProds[j].GetMomentum()), secID);
 				}
 
 			/*G4double EN0 = theNeutron.GetKineticEnergy();
@@ -936,7 +936,7 @@ G4bool G4ParticleHPInelasticCompFS::use_nresp71_model( const G4ParticleDefinitio
 				{
 				// Returning to the system of reference where the target was in motion.
 				theProds[j].Lorentz(theProds[j], -1.*theTarget);
-				theResult.Get()->AddSecondary(new G4DynamicParticle(theProds[j].GetDefinition(), theProds[j].GetMomentum()));
+				theResult.Get()->AddSecondary(new G4DynamicParticle(theProds[j].GetDefinition(), theProds[j].GetMomentum()), secID);
 				}
 
 			// Killing the primary neutron.

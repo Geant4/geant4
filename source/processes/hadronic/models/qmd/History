@@ -13,6 +13,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04 August 2021 Alberto Ribon (hadr-qmd-V10-07-03)
+-------------------------------------------------
+- G4QMDReaction : migrated to the new version of G4PhysicsModelCatalog
+  (Note that this erases the second fix made by Dennis in the previous tag)
+
+21 July 2021 Dennis Wright (hadr-qmd-V10-07-02)
+-----------------------------------------------
+- two fixes found by Jeonghyeok Park:
+  G4QMDNucleus::CalEnergyAndAngularMomentumInCM : move constant hbc 
+   outside of sqrt in angular momentum calculation
+ 
+  G4QMDReaction::ApplyYourself : remove creator process ID
+
 16 April 2021 Ben Morgan (hadr-qmd-V10-07-01)
 --------------------------------------------------
 - Migrate build to modular CMake API

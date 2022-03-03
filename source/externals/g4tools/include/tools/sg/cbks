@@ -1,0 +1,57 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_cbks
+#define tools_sg_cbks
+
+// A dedicated container for callbacks.
+
+#include "bcbk"
+#include "../forit"
+#include "../vmanip"
+
+#include <vector>
+
+namespace tools {
+namespace sg {
+
+class cbks {
+public:
+  cbks() {}
+  virtual ~cbks(){clear();}
+public:
+  cbks(const cbks& a_from){copy(a_from);}
+  cbks& operator=(const cbks& a_from){
+    if(&a_from==this) return *this;
+    copy(a_from);
+    return *this;
+  }
+public:
+  void add(bcbk* a_cbk) {
+    //we take ownership of a_cbk
+    m_cbks.push_back(a_cbk);
+  }
+  void copy(const cbks& a_from,bool a_clear = true) {
+    if(&a_from==this) return;
+    if(a_clear) clear();
+    tools_vforcit(bcbk*,a_from.m_cbks,it) m_cbks.push_back((*it)->copy());
+  }
+  void clear() {
+    safe_clear<bcbk>(m_cbks);
+  }
+
+  void do_actions() const {
+    // WARNING : dangerous. Used by offscreen apps.
+    tools_vforcit(bcbk*,m_cbks,it) (*it)->action();
+  }
+
+  const std::vector<bcbk*>& callbacks() const {return m_cbks;}
+  std::vector<bcbk*>& callbacks() {return m_cbks;}
+  bool is_empty() const {return m_cbks.empty();}
+protected:
+  std::vector<bcbk*> m_cbks;
+};
+
+}}
+
+#endif

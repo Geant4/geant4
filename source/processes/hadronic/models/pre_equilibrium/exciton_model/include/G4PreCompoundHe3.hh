@@ -46,22 +46,23 @@ public:
 
   virtual ~G4PreCompoundHe3();
 
-  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const;
+  G4PreCompoundHe3(const G4PreCompoundHe3 &right) = delete;
+  const G4PreCompoundHe3& 
+  operator= (const G4PreCompoundHe3 &right) = delete;
+  G4bool operator==(const G4PreCompoundHe3 &right) const = delete;
+  G4bool operator!=(const G4PreCompoundHe3 &right) const = delete;
 
-  virtual G4double FactorialFactor(G4int N, G4int P) const;
+protected:
 
-  virtual G4double CoalescenceFactor(G4int A) const;
+  G4double GetRj(G4int NumberParticles, G4int NumberCharged) const override;
 
-  virtual G4double GetAlpha() const;
+  G4double FactorialFactor(G4int N, G4int P) const override;
+
+  G4double CoalescenceFactor(G4int A) const override;
+
+  G4double GetAlpha() const override;
   
 private:
-
-  // operators
-  G4PreCompoundHe3(const G4PreCompoundHe3 &right);
-  const G4PreCompoundHe3& 
-  operator= (const G4PreCompoundHe3 &right);
-  G4bool operator==(const G4PreCompoundHe3 &right) const;
-  G4bool operator!=(const G4PreCompoundHe3 &right) const;    
 
   G4He3CoulombBarrier theHe3CoulombBarrier;
 };

@@ -51,7 +51,7 @@ int main(int argc, char** argv)
  
   // Construct geometry
   
-  G4String defaultDetector = "Diamond";
+  G4String defaultDetector = "SiliconBridge";
   
   DetectorConstruction* detector = new DetectorConstruction(analysis, defaultDetector);  
     

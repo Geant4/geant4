@@ -56,14 +56,11 @@
 /score/mesh/translate/xyz 0. 0. 0. mm 
 
 # Choose the quantity to score via mesh
-#/score/quantity/energyDeposit energyDeposit 
-/score/quantity/doseDeposit doseDeposit
+/score/quantity/energyDeposit energyDeposit 
 
 # Close Scorer
 /score/close
 /score/list
-
-
 #
 #---------------------------------------#
 #----------Run Beam-On Command----------#
@@ -78,11 +75,9 @@
 # when running the simulation in interactive mode
 #
 #/score/drawProjection PhantomMesh energyDeposit
-#/score/drawProjection PhantomMesh doseDeposit
-
 #---------------------------------------#
 #----Dump Scoring Mesh Data to File-----#
 #---------------------------------------#
-#/score/dumpQuantityToFile PhantomMesh energyDeposit PhantomMesh_Edep.txt
-/score/dumpQuantityToFile PhantomMesh doseDeposit PhantomMesh_Dose.txt
+/score/dumpQuantityToFile PhantomMesh energyDeposit PhantomMesh_Edep.txt
+
 

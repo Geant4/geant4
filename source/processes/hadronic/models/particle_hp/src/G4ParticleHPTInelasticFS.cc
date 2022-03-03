@@ -31,6 +31,12 @@
 #include "G4ParticleHPTInelasticFS.hh"
 #include "G4Nucleus.hh"
 #include "G4Triton.hh"
+#include "G4PhysicsModelCatalog.hh"
+
+G4ParticleHPTInelasticFS::G4ParticleHPTInelasticFS()
+{
+  secID = G4PhysicsModelCatalog::GetModelID( "model_G4ParticleHPTInelasticFS_F25" );
+}
 
 void G4ParticleHPTInelasticFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition* projectile)
 {

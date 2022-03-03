@@ -37,6 +37,7 @@ G4UIcmdWithABool::G4UIcmdWithABool(const char* theCommandPath,
 {
   G4UIparameter* blParam = new G4UIparameter('b');
   SetParameter(blParam);
+  SetCommandType(WithABoolCmd);
 }
 
 // --------------------------------------------------------------------

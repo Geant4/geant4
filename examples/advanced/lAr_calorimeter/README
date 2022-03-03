@@ -101,8 +101,6 @@
  See their definitions in FCALRunAction.cc 
 
  The histograms are saved (default) as a ROOT file. It is possible to save the 
- histograms in a xml file by editing 
-   include/FCALAnalysisManager.hh
- (comment g4root.hh and uncomment g4xml.hh)
-
+ histograms in a xml file by changing the G4AnalysisManager default file type
+ in the FCALRunAction constructor.
  

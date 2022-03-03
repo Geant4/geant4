@@ -28,8 +28,6 @@
 #ifndef G4OPENINVENTORVIEWER_HH
 #define G4OPENINVENTORVIEWER_HH
 
-#if defined (G4VIS_BUILD_OI_DRIVER) || defined (G4VIS_USE_OI)
-
 // Inheritance :
 #include "G4VViewer.hh"
 
@@ -102,7 +100,5 @@ protected:
   // FWJ no longer needed:
   //  SoNodeSensor* fCameraSensor;
 };
-
-#endif
 
 #endif

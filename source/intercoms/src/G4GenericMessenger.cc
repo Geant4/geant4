@@ -24,7 +24,17 @@
 //
 // G4GenericMessenger
 //
-// Author: P.Mato, CERN - 27 September 2012
+// Author:
+//    P.Mato, CERN - 27 September 2012
+// Updates:
+//    M.Asai, SLAC - 26 November 2013 
+//      Adding methods with unit declaration and making thread-safe for
+//      version 10.
+//    M.Asai, SLAC - 04 May 2014
+//      Fix core dump when GetCurrentValue() method is invoked for
+//      a command defined by DeclareMethod().
+//    M.Asai, SLAC - 11 July 2021
+//      Adding G4ThreeVector type without unit
 // --------------------------------------------------------------------
 
 #include "G4GenericMessenger.hh"
@@ -32,6 +42,7 @@
 #include "G4UImessenger.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIdirectory.hh"
 #include "G4Threading.hh"
@@ -54,18 +65,6 @@ G4GenericMessenger::G4GenericMessenger(void* obj, const G4String& dir,
   : directory(dir)
   , object(obj)
 {
-  // Check if parent commnand is already existing.
-  // In fact there is no way to check this. UImanager->GetTree()->FindPath()
-  // will always rerurn NULL is a dicrectory is given
-  std::size_t pos = dir.find_last_of('/', dir.size() - 2);
-  while(pos != 0 && pos != std::string::npos)
-  {
-    G4UIdirectory* d  = new G4UIdirectory(dir.substr(0, pos + 1).c_str());
-    G4String guidance = "Commands for ";
-    guidance += dir.substr(1, pos - 1);
-    d->SetGuidance(guidance);
-    pos = dir.find_last_of('/', pos - 1);
-  }
   dircmd = new G4UIdirectory(dir);
   dircmd->SetGuidance(doc);
 }
@@ -83,23 +82,33 @@ G4GenericMessenger::Command& G4GenericMessenger::DeclareProperty(
   const G4String& name, const G4AnyType& var, const G4String& doc)
 {
   G4String fullpath = directory + name;
-  G4UIcommand* cmd  = new G4UIcommand(fullpath.c_str(), this);
-  if(doc != "")
-    cmd->SetGuidance(doc);
-  char ptype;
-  if(var.TypeInfo() == typeid(int) || var.TypeInfo() == typeid(long) ||
-     var.TypeInfo() == typeid(unsigned int) ||
-     var.TypeInfo() == typeid(unsigned long))
-    ptype = 'i';
-  else if(var.TypeInfo() == typeid(float) || var.TypeInfo() == typeid(double))
-    ptype = 'd';
-  else if(var.TypeInfo() == typeid(bool))
-    ptype = 'b';
-  else if(var.TypeInfo() == typeid(G4String))
-    ptype = 's';
+  G4UIcommand* cmd = nullptr;
+  if(var.TypeInfo() == typeid(G4ThreeVector))
+  {
+    cmd = new G4UIcmdWith3Vector(fullpath.c_str(), this);
+    (static_cast<G4UIcmdWith3Vector*>(cmd))
+      ->SetParameterName("valueX", "valueY", "valueZ", false, false);
+  }
   else
-    ptype = 's';
-  cmd->SetParameter(new G4UIparameter("value", ptype, false));
+  {
+    cmd  = new G4UIcommand(fullpath.c_str(), this);
+    char ptype;
+    if(var.TypeInfo() == typeid(int) || var.TypeInfo() == typeid(long) ||
+       var.TypeInfo() == typeid(unsigned int) ||
+       var.TypeInfo() == typeid(unsigned long))
+    { ptype = 'i'; }
+    else if(var.TypeInfo() == typeid(float) || var.TypeInfo() == typeid(double))
+    { ptype = 'd'; }
+    else if(var.TypeInfo() == typeid(bool))
+    { ptype = 'b'; }
+    else if(var.TypeInfo() == typeid(G4String))
+    { ptype = 's'; }
+    else
+    { ptype = 's'; }
+    cmd->SetParameter(new G4UIparameter("value", ptype, false));
+  }
+  if(doc != "")
+  { cmd->SetGuidance(doc); }
   return properties[name] = Property(var, cmd);
 }
 
@@ -317,6 +326,31 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetParameterName(
 {
   G4UIparameter* theParam = command->GetParameter(0);
   theParam->SetParameterName(name);
+  theParam->SetOmittable(omittable);
+  theParam->SetCurrentAsDefault(currentAsDefault);
+  return *this;
+}
+
+G4GenericMessenger::Command& G4GenericMessenger::Command::SetParameterName(
+  const G4String& namex, const G4String& namey, const G4String& namez,
+  G4bool omittable, G4bool currentAsDefault)
+{
+  if(*type != typeid(G4ThreeVector))
+  {
+    G4cerr << "This SetParameterName method is for G4ThreeVector!! " 
+           << "Method ignored." << G4endl;
+    return *this;
+  }
+  G4UIparameter* theParam = command->GetParameter(0);
+  theParam->SetParameterName(namex);
+  theParam->SetOmittable(omittable);
+  theParam->SetCurrentAsDefault(currentAsDefault);
+  theParam = command->GetParameter(1);
+  theParam->SetParameterName(namey);
+  theParam->SetOmittable(omittable);
+  theParam->SetCurrentAsDefault(currentAsDefault);
+  theParam = command->GetParameter(2);
+  theParam->SetParameterName(namez);
   theParam->SetOmittable(omittable);
   theParam->SetCurrentAsDefault(currentAsDefault);
   return *this;

@@ -43,8 +43,9 @@ G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit(
   G4UIparameter* dblParam = new G4UIparameter('d');
   SetParameter(dblParam);
   G4UIparameter* untParam = new G4UIparameter('s');
-  SetParameter(untParam);
   untParam->SetParameterName("Unit");
+  SetParameter(untParam);
+  SetCommandType(WithADoubleAndUnitCmd);
 }
 
 // --------------------------------------------------------------------

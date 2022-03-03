@@ -162,10 +162,10 @@ class G4ReactionProduct
     inline G4int GetSide() const
     { return side; }
     
-    inline void SetCreatorModel( const G4int mod )
+    inline void SetCreatorModelID( const G4int mod )
     { theCreatorModel = mod; }
     
-    inline G4int GetCreatorModel() const
+    inline G4int GetCreatorModelID() const
     { return theCreatorModel; }
     
     inline void SetNewlyAdded( const G4bool f )

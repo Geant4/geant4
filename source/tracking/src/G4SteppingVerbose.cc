@@ -84,7 +84,7 @@ void G4SteppingVerbose::AtRestDoItInvoked()
     for(std::size_t np=0; np<MAXofAtRestLoops; ++np)
     {
       std::size_t npGPIL = MAXofAtRestLoops-np-1;
-      if( (*fSelectedAtRestDoItVector)[npGPIL] == 2 )
+      if( (*fSelectedAtRestDoItVector)[npGPIL] == G4ForceCondition::Forced )
       {
         ++npt;                
         ptProcManager = (*fAtRestDoItVector)[np];
@@ -92,7 +92,7 @@ void G4SteppingVerbose::AtRestDoItInvoked()
                << ptProcManager->GetProcessName() 
                << " (Forced)" << G4endl;
       }
-      else if ( (*fSelectedAtRestDoItVector)[npGPIL] == 1 )
+      else if ( (*fSelectedAtRestDoItVector)[npGPIL] == G4ForceCondition::NotForced )
       {
         ++npt;                
         ptProcManager = (*fAtRestDoItVector)[np];
@@ -217,7 +217,7 @@ void G4SteppingVerbose::PostStepDoItAllDone()
       for(std::size_t np=0; np<MAXofPostStepLoops; ++np)
       {
         std::size_t npGPIL = MAXofPostStepLoops-np-1;
-        if( (*fSelectedPostStepDoItVector)[npGPIL] == 2)
+        if( (*fSelectedPostStepDoItVector)[npGPIL] == G4ForceCondition::Forced )
         {
           ++npt;
           ptProcManager = (*fPostStepDoItVector)[np];
@@ -225,7 +225,7 @@ void G4SteppingVerbose::PostStepDoItAllDone()
                  << ptProcManager->GetProcessName()
                  << " (Forced)" << G4endl;
         }
-        else if ( (*fSelectedPostStepDoItVector)[npGPIL] == 1)
+        else if ( (*fSelectedPostStepDoItVector)[npGPIL] == G4ForceCondition::NotForced )
         {
           ++npt;
           ptProcManager = (*fPostStepDoItVector)[np];

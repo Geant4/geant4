@@ -272,7 +272,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       nSecondaries += 1;
 
       G4DynamicParticle* res = new G4DynamicParticle ( resi_pd , dif_4p.v() );    
-      theResult.Get()->AddSecondary ( res );    
+      theResult.Get()->AddSecondary ( res, secID );    
 
       p4 = res->Get4Momentum(); 
       if ( slow > p4.beta() ) 
@@ -293,7 +293,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    {
       nSecondaries += 1;
       G4DynamicParticle* one = new G4DynamicParticle ( oneMoreSec_pd , dif_4p.v() );    
-      theResult.Get()->AddSecondary ( one );    
+      theResult.Get()->AddSecondary ( one, secID );    
       p4 = one->Get4Momentum(); 
       if ( slow > p4.beta() ) 
       {
@@ -314,7 +314,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       {
 
          nSecondaries += 1;
-         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , dif_4p.v() ) );    
+         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , dif_4p.v() ), secID );    
 
       }
       else
@@ -356,8 +356,8 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          G4ThreeVector dir( std::sin(std::acos(costh))*std::cos(phi), 
                             std::sin(std::acos(costh))*std::sin(phi),
                             costh);
-         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , e1*dir ) );    
-         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , -e1*dir ) );    
+         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , e1*dir ),  secID );    
+         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , -e1*dir ), secID );    
       }
       else
       {

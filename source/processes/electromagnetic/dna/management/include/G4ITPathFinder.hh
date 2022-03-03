@@ -116,10 +116,10 @@ protected:
 	G4int         fLastStepNo, fCurrentStepNo;
 
 public:
-	virtual ~G4TrackState<G4ITPathFinder>(){}
+	virtual ~G4TrackState(){}
 
-	G4TrackState<G4ITPathFinder>() :
-      G4TrackStateBase<G4ITPathFinder>(),
+	G4TrackState() :
+        G4TrackStateBase(),
 			fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
 			fFieldExertedForce(false),
 			fRelocatedPoint(true),

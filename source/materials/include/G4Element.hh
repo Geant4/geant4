@@ -90,6 +90,7 @@
 #include "G4IonisParamElm.hh"
 #include "G4IsotopeVector.hh"
 #include "G4ElementTable.hh"
+#include "G4ElementVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -201,7 +202,8 @@ public:  // with description
   //    
   friend std::ostream& operator<<(std::ostream&, const G4Element*);
   friend std::ostream& operator<<(std::ostream&, const G4Element&);
-  friend std::ostream& operator<<(std::ostream&, G4ElementTable);
+  friend std::ostream& operator<<(std::ostream&, const G4ElementTable&);
+  friend std::ostream& operator<<(std::ostream&, const G4ElementVector&);
 
 public:  // without description
 

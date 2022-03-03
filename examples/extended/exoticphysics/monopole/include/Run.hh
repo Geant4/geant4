@@ -34,8 +34,8 @@
 #define Run_h 1
 
 #include "G4Run.hh"
+#include "G4AnalysisManager.hh"
 #include "globals.hh"
-#include "g4root.hh"
 
 class PrimaryGeneratorAction;
 class DetectorConstruction;

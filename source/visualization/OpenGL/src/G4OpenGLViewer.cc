@@ -29,8 +29,6 @@
 // Andrew Walkden  27th March 1996
 // OpenGL view - opens window, hard copy, etc.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
-
 #include "G4ios.hh"
 #include <CLHEP/Units/SystemOfUnits.h>
 #include "G4OpenGLViewer.hh"
@@ -628,42 +626,6 @@ GLubyte* G4OpenGLViewer::grabPixels
   return buffer;
 }
 
-bool G4OpenGLViewer::printEPS() {
-  bool res;
-
-  // Change the LC_NUMERIC value in order to have "." separtor and not ","
-  // This case is only useful for French, Canadien...
-  size_t len = strlen(setlocale(LC_NUMERIC,NULL));
-  char* oldLocale = (char*)(malloc(len+1));
-  if(oldLocale!=NULL) strncpy(oldLocale,setlocale(LC_NUMERIC,NULL),len);
-  setlocale(LC_NUMERIC,"C");
-
-  if (((fExportImageFormat == "eps") || (fExportImageFormat == "ps")) && (!fVectoredPs)) {
-    res = printNonVectoredEPS();
-  } else {
-    res = printVectoredEPS();
-  }
-
-  // restore the local
-  if (oldLocale) {
-    setlocale(LC_NUMERIC,oldLocale);
-    free(oldLocale);
-  }
-
-  if (res == false) {
-    G4cerr << "Error saving file... " << getRealPrintFilename().c_str() << G4endl;
-  } else {
-    G4cout << "File " << getRealPrintFilename().c_str() << " size: " << getRealExportWidth() << "x" << getRealExportHeight() << " has been saved " << G4endl;
-
-    // increment index if necessary
-    if ( fExportFilenameIndex != -1) {
-      fExportFilenameIndex++;
-    }
-  }
-
-  return res;
-}
-
 bool G4OpenGLViewer::printVectoredEPS() {
   return printGl2PS();
 }
@@ -884,7 +846,40 @@ bool G4OpenGLViewer::exportImage(std::string name, int width, int height) {
     setExportImageFormat(fExportImageFormat,true); // will display a message if this format is not correct for the current viewer
     return false;
   }
-  return printEPS();
+
+  bool res;
+
+  // Change the LC_NUMERIC value in order to have "." separtor and not ","
+  // This case is only useful for French, Canadien...
+  size_t len = strlen(setlocale(LC_NUMERIC,NULL));
+  char* oldLocale = (char*)(malloc(len+1));
+  if(oldLocale!=NULL) strncpy(oldLocale,setlocale(LC_NUMERIC,NULL),len);
+  setlocale(LC_NUMERIC,"C");
+
+  if (((fExportImageFormat == "eps") || (fExportImageFormat == "ps")) && (!fVectoredPs)) {
+    res = printNonVectoredEPS();
+  } else {
+    res = printVectoredEPS();
+  }
+
+  // restore the local
+  if (oldLocale) {
+    setlocale(LC_NUMERIC,oldLocale);
+    free(oldLocale);
+  }
+
+  if (res == false) {
+    G4cerr << "Error saving file... " << getRealPrintFilename().c_str() << G4endl;
+  } else {
+    G4cout << "File " << getRealPrintFilename().c_str() << " size: " << getRealExportWidth() << "x" << getRealExportHeight() << " has been saved " << G4endl;
+
+    // increment index if necessary
+    if ( fExportFilenameIndex != -1) {
+      fExportFilenameIndex++;
+    }
+  }
+
+  return res;
 }
 
 
@@ -1517,5 +1512,3 @@ G4String G4OpenGLViewerPickMap::print() {
   }
   return txt.str();
 }
-
-#endif

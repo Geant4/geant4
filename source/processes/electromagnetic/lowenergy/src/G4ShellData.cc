@@ -230,7 +230,7 @@ void G4ShellData::LoadData(const G4String& fileName)
   // Build the complete string identifying the file with the data set
   std::ostringstream ost;
   ost << fileName << ".dat";
-  
+  // G4cout << fileName << G4endl;
   G4String name(ost.str());
   
   char* path = std::getenv("G4LEDATA");

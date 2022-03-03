@@ -29,6 +29,7 @@
 // --------------------------------------------------------------------
 
 #include <iomanip>
+
 #include "G4Timer.hh"
 #include "G4GeometryManager.hh"
 #include "G4SystemOfUnits.hh"
@@ -56,14 +57,6 @@
 //
 G4ThreadLocal G4GeometryManager* G4GeometryManager::fgInstance = nullptr;
 G4ThreadLocal G4bool G4GeometryManager::fIsClosed = false;
-
-// ***************************************************************************
-// Constructor. Set the geometry to be open
-// ***************************************************************************
-//
-G4GeometryManager::G4GeometryManager() 
-{
-}
 
 // ***************************************************************************
 // Destructor
@@ -179,7 +172,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
      //
      head = volume->GetVoxelHeader();
      delete head;
-     volume->SetVoxelHeader(0);
+     volume->SetVoxelHeader(nullptr);
      if (    ( (volume->IsToOptimise())
             && (volume->GetNoDaughters()>=kMinVoxelVolumesLevel1&&allOpts) )
           || ( (volume->GetNoDaughters()==1)

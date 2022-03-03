@@ -74,6 +74,16 @@ class G4FTFModel : public G4VPartonStringModel {
     G4bool operator==( const G4FTFModel& right ) const = delete;
     G4bool operator!=( const G4FTFModel& right ) const = delete;
 
+    void SetImpactParameter( const G4double b_value );
+    G4double GetImpactParameter() const;
+    void SetBminBmax( const G4double bmin_value, const G4double bmax_value );
+    G4bool SampleBinInterval() const;
+    G4double GetBmin() const;
+    G4double GetBmax() const;
+    G4int GetNumberOfProjectileSpectatorNucleons() const;
+    G4int GetNumberOfTargetSpectatorNucleons() const; 
+    G4int GetNumberOfNNcollisions() const;
+
   protected:
     void Init( const G4Nucleus& aNucleus, 
                const G4DynamicParticle& aProjectile ) override;
@@ -95,7 +105,7 @@ class G4FTFModel : public G4VPartonStringModel {
     // The "AdjustNucleons" method uses the following struct and 3 new utility methods:
     struct CommonVariables {
       G4int TResidualMassNumber = 0, TResidualCharge = 0, PResidualMassNumber = 0, 
-        PResidualCharge = 0;
+        PResidualCharge = 0, PResidualLambdaNumber = 0;
       G4double SqrtS = 0.0, S = 0.0, SumMasses = 0.0,
         TResidualExcitationEnergy = 0.0, TResidualMass = 0.0, TNucleonMass = 0.0,
         PResidualExcitationEnergy = 0.0, PResidualMass = 0.0, PNucleonMass = 0.0,
@@ -182,12 +192,21 @@ class G4FTFModel : public G4VPartonStringModel {
     G4LorentzVector ProjectileResidual4Momentum;
     G4int           ProjectileResidualMassNumber;
     G4int           ProjectileResidualCharge;
+    G4int           ProjectileResidualLambdaNumber;  // Number of (anti-)lambdas for projectile (anti-)hypernucleus
     G4double        ProjectileResidualExcitationEnergy;
 
     G4LorentzVector TargetResidual4Momentum;
     G4int           TargetResidualMassNumber;
     G4int           TargetResidualCharge;
     G4double        TargetResidualExcitationEnergy;
+
+    G4double Bimpact;
+    G4bool   BinInterval;
+    G4double Bmin;
+    G4double Bmax;
+    G4int NumberOfProjectileSpectatorNucleons;
+    G4int NumberOfTargetSpectatorNucleons;
+    G4int NumberOfNNcollisions;
 };
 
 inline G4V3DNucleus* G4FTFModel::GetWoundedNucleus() const {
@@ -202,5 +221,44 @@ inline G4V3DNucleus* G4FTFModel::GetProjectileNucleus() const {
   return theParticipants.GetProjectileNucleus();
 }
 
-#endif
+inline void G4FTFModel::SetImpactParameter( const G4double b_value ) {
+  Bimpact = b_value;
+}
 
+inline G4double G4FTFModel::GetImpactParameter() const {
+  return Bimpact;
+}
+
+inline void G4FTFModel::SetBminBmax( const G4double bmin_value, const G4double bmax_value ) {
+  BinInterval = false;
+  if ( bmin_value < 0.0 || bmax_value < 0.0 || bmax_value < bmin_value ) return;
+  BinInterval = true;
+  Bmin = bmin_value;
+  Bmax = bmax_value;
+}
+
+inline G4bool G4FTFModel::SampleBinInterval() const {
+  return BinInterval;
+}
+
+inline G4double G4FTFModel::GetBmin() const {
+  return Bmin;
+}
+
+inline G4double G4FTFModel::GetBmax() const {
+  return Bmax;
+}
+
+inline G4int G4FTFModel::GetNumberOfProjectileSpectatorNucleons() const {
+  return NumberOfProjectileSpectatorNucleons;
+}
+
+inline G4int G4FTFModel::GetNumberOfTargetSpectatorNucleons() const {
+  return NumberOfTargetSpectatorNucleons;
+}
+
+inline G4int G4FTFModel::GetNumberOfNNcollisions() const {
+  return NumberOfNNcollisions;
+}
+
+#endif

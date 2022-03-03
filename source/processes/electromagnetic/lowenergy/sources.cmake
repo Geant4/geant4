@@ -3,6 +3,9 @@
 # Define the Geant4 Module.
 geant4_add_module(G4emlowenergy
   PUBLIC_HEADERS
+    G4ANSTOecpssrKxsModel.hh
+    G4ANSTOecpssrLixsModel.hh
+    G4ANSTOecpssrMixsModel.hh
     G4AtomicDeexcitation.hh
     G4AtomicTransitionManager.hh
     G4AugerData.hh
@@ -50,10 +53,8 @@ geant4_add_module(G4emlowenergy
     G4LinLogLogInterpolation.hh
     G4LivermoreBremsstrahlungModel.hh
     G4LivermoreComptonModel.hh
-    G4LivermoreComptonModifiedModel.hh
     G4LivermoreGammaConversion5DModel.hh
     G4LivermoreGammaConversionModel.hh
-    G4LivermoreGammaConversionModelRC.hh
     G4LivermoreIonisationCrossSection.hh
     G4LivermoreIonisationModel.hh
     G4LivermoreNuclearGammaConversionModel.hh
@@ -121,6 +122,9 @@ geant4_add_module(G4emlowenergy
     G4VIonDEDXScalingAlgorithm.hh
     G4VLowEnergyModel.hh
   SOURCES
+    G4ANSTOecpssrKxsModel.cc
+    G4ANSTOecpssrLixsModel.cc
+    G4ANSTOecpssrMixsModel.cc
     G4AtomicDeexcitation.cc
     G4AtomicTransitionManager.cc
     G4AugerData.cc
@@ -167,10 +171,8 @@ geant4_add_module(G4emlowenergy
     G4LinLogLogInterpolation.cc
     G4LivermoreBremsstrahlungModel.cc
     G4LivermoreComptonModel.cc
-    G4LivermoreComptonModifiedModel.cc
     G4LivermoreGammaConversion5DModel.cc
     G4LivermoreGammaConversionModel.cc
-    G4LivermoreGammaConversionModelRC.cc
     G4LivermoreIonisationCrossSection.cc
     G4LivermoreIonisationModel.cc
     G4LivermoreNuclearGammaConversionModel.cc

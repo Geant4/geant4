@@ -50,15 +50,15 @@
 // 13.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 #ifndef G4SMARTVOXELHEADER_HH
-#define G4SMARTVOXELHEADER_HH
+#define G4SMARTVOXELHEADER_HH 1
+
+#include <vector>
 
 #include "G4Types.hh"
 #include "geomdefs.hh"
 
 #include "G4SmartVoxelProxy.hh"
 #include "G4SmartVoxelNode.hh"
-
-#include <vector>
 
 // Forward declarations
 class G4LogicalVolume;
@@ -73,7 +73,7 @@ using G4VolumeExtentVector = std::vector<G4double>;
 
 class G4SmartVoxelHeader
 {
-  public:  // with description
+  public:
 
     G4SmartVoxelHeader(G4LogicalVolume* pVolume, G4int pSlice = 0);
       // Constructor for topmost header, to begin voxel construction at a
@@ -110,7 +110,7 @@ class G4SmartVoxelHeader
     G4bool AllSlicesEqual() const;
       // True if all slices equal (after collection).
 
-  public:  // without description
+  public:
 
     G4bool operator == (const G4SmartVoxelHeader& pHead) const;
 

@@ -66,6 +66,7 @@
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4GenericIon.hh"
+#include "G4Alpha.hh"
 #include "G4BraggModel.hh"
 #include "G4BraggIonModel.hh"
 #include "G4BetheBlochModel.hh"
@@ -125,10 +126,18 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 
     // define base particle
     const G4ParticleDefinition* theBaseParticle = nullptr;
+    const G4int pdg = part->GetPDGEncoding();
 
-    if(part == ion)           { theBaseParticle = nullptr; }
-    else if(bpart == nullptr) { theBaseParticle = ion; }
-    else                      { theBaseParticle = bpart; }
+    // define base particle
+    if(part == bpart) { 
+      theBaseParticle = nullptr;
+    } else if(nullptr != bpart) { 
+      theBaseParticle = bpart;
+    } else if(part == ion || pdg == 1000020040) { 
+      theBaseParticle = nullptr;
+    } else { 
+      theBaseParticle = ion; 
+    }
 
     SetBaseParticle(theBaseParticle);
 
@@ -138,14 +147,15 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
     EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
 
     // model limit defined for protons
-    eth = (EmModel(0)->HighEnergyLimit())*part->GetPDGMass()/proton_mass_c2;
+    eth = (EmModel(0)->HighEnergyLimit())
+      *part->GetPDGMass()/CLHEP::proton_mass_c2;
     EmModel(0)->SetHighEnergyLimit(eth);
 
     if (nullptr == FluctModel()) { SetFluctModel(new G4IonFluctuations()); }
     AddEmModel(1, EmModel(0), FluctModel());
 
     G4double emax = param->MaxKinEnergy();
-    if(eth < emax) {
+    if(eth < 0.99*emax) {
       if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }  
       EmModel(1)->SetLowEnergyLimit(eth);
       EmModel(1)->SetHighEnergyLimit(emax);
@@ -156,9 +166,11 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
       if(part == ion && (EmModel(1)->GetName() == "BetheBloch" ||
 			 EmModel(1)->GetName() == "BetheBlochGasIon")) {
 	stopDataActive = true;
-	G4WaterStopping  ws(corr);
+	G4WaterStopping  ws(corr, true);
 	corr->SetIonisationModels(EmModel(0),EmModel(1));
       }
+    } else {
+      EmModel(0)->SetHighEnergyLimit(emax);
     }
     isInitialised = true;
   }

@@ -107,9 +107,7 @@ inline
 std::vector<G4LogicalVolume*>::iterator
 G4Region::GetRootLogicalVolumeIterator()
 {
-  G4RootLVList::iterator iterator =
-    G4RootLVList::iterator(fRootVolumes.begin());
-  return iterator;
+  return G4RootLVList::iterator(fRootVolumes.begin());
 }
 
 // ********************************************************************
@@ -120,8 +118,7 @@ inline
 std::vector<G4Material*>::const_iterator
 G4Region::GetMaterialIterator() const
 {
-  G4MaterialList::const_iterator iterator = fMaterials.cbegin();
-  return iterator;
+  return fMaterials.cbegin();
 }
 
 // ********************************************************************

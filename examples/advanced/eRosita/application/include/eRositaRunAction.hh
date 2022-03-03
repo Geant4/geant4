@@ -51,11 +51,4 @@ private:
   G4Timer timerRun;
 
 };
-
-
 #endif
-
-
-
-
-

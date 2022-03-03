@@ -34,15 +34,18 @@
 #include "G4VTHnFileManager.hh"
 #include "globals.hh"
 
+#include <string_view>
+
 class G4RootFileManager;
 
 template <typename HT>
 class G4RootHnFileManager : public G4VTHnFileManager<HT>
 {
   public:
-    G4RootHnFileManager(G4RootFileManager* fileManger)
+    explicit G4RootHnFileManager(G4RootFileManager* fileManger)
       : G4VTHnFileManager<HT>(), fFileManager(fileManger) {}
-    virtual ~G4RootHnFileManager() {}
+    G4RootHnFileManager() = delete;
+    virtual ~G4RootHnFileManager() = default;
 
     // Methods for writing objects
     // Write to a new file (the file is closed after write)
@@ -50,12 +53,15 @@ class G4RootHnFileManager : public G4VTHnFileManager<HT>
     // Write to the default file  (handled with OpenFile()/CloseFile methods)
     virtual G4bool Write(HT* ht, const G4String& htName, G4String& fileName) final;
 
-  private:       
+  private:
     // Methods
     G4bool Write(tools::wroot::directory* directory, HT* ht, const G4String& htName);
 
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootHnFileManager<HT>" };
+
     // Data members
-    G4RootFileManager* fFileManager;
+    G4RootFileManager* fFileManager { nullptr };
 };
 
 #include "G4RootHnFileManager.icc"

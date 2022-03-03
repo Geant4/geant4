@@ -25,6 +25,12 @@ This example demonstrates how to create  multiple energy deposits
 from the fast simulation model and store it alongside deposits created
 in full/detailed simulation.
 
+\link ExamplePar04 Par04 \endlink
+
+This example demonstrates how to use machine-learning aided fast simulation
+of electromagnetic showers. It runs inference using an external library:
+either ONNX Runtime, or LWTNN.
+
 \link Examples_gflash gflash \endlink
 
 Set of examples demonstrating the use of the GFLASH parameterisation library.

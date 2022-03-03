@@ -115,12 +115,10 @@ G4PEEffectFluoModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   CurrentCouple()->GetMaterial()
     ->GetSandiaTable()->GetSandiaCofPerAtom((G4int)Z, energy, fSandiaCof);
 
-  G4double energy2 = energy*energy;
-  G4double energy3 = energy*energy2;
-  G4double energy4 = energy2*energy2;
+  G4double x1 = 1 / energy;
 
-  return fSandiaCof[0]/energy  + fSandiaCof[1]/energy2 +
-    fSandiaCof[2]/energy3 + fSandiaCof[3]/energy4;
+  return x1 * (fSandiaCof[0] + x1 * (fSandiaCof[1] +
+    x1 * (fSandiaCof[2] + x1 * fSandiaCof[3])));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -136,13 +134,11 @@ G4PEEffectFluoModel::CrossSectionPerVolume(const G4Material* material,
   energy = std::max(energy, fMatEnergyTh[material->GetIndex()]);
   const G4double* SandiaCof = 
     material->GetSandiaTable()->GetSandiaCofForMaterial(energy);
-				
-  G4double energy2 = energy*energy;
-  G4double energy3 = energy*energy2;
-  G4double energy4 = energy2*energy2;
-	  
-  return SandiaCof[0]/energy  + SandiaCof[1]/energy2 +
-    SandiaCof[2]/energy3 + SandiaCof[3]/energy4; 
+
+  G4double x1 = 1 / energy;
+
+  return x1 * (SandiaCof[0] + x1 * (SandiaCof[1] +
+    x1 * (SandiaCof[2] + x1 * SandiaCof[3])));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

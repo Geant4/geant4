@@ -110,6 +110,7 @@ class G4GDMLParser
     inline G4ThreeVector GetScale(const G4String& name) const;
     inline G4GDMLMatrix GetMatrix(const G4String& name) const;
     inline G4LogicalVolume* GetVolume(const G4String& name) const;
+    inline G4VPhysicalVolume* GetPhysVolume(const G4String& name) const;
     inline G4VPhysicalVolume*
            GetWorldVolume(const G4String& setupName = "Default") const;
     inline G4GDMLAuxListType

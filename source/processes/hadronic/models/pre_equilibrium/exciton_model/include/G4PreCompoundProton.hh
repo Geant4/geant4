@@ -46,20 +46,21 @@ public:
 
   virtual ~G4PreCompoundProton();
 
-  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const;
+  G4PreCompoundProton(const G4PreCompoundProton &right) = delete;
+  const G4PreCompoundProton& 
+  operator= (const G4PreCompoundProton &right) = delete;
+  G4bool operator==(const G4PreCompoundProton &right) const = delete;
+  G4bool operator!=(const G4PreCompoundProton &right) const = delete;
 
-  virtual G4double GetAlpha() const;
+protected:
 
-  virtual G4double GetBeta() const;
+  G4double GetRj(G4int NumberParticles, G4int NumberCharged) const override;
+
+  G4double GetAlpha() const override;
+
+  G4double GetBeta() const override;
 
 private:
-
-  // operators
-  G4PreCompoundProton(const G4PreCompoundProton &right);
-  const G4PreCompoundProton& 
-  operator= (const G4PreCompoundProton &right);
-  G4bool operator==(const G4PreCompoundProton &right) const;
-  G4bool operator!=(const G4PreCompoundProton &right) const;    
 
   G4ProtonCoulombBarrier theProtonCoulombBarrier;
 };

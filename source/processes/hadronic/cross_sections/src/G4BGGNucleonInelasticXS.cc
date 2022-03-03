@@ -176,7 +176,7 @@ G4BGGNucleonInelasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 
 void G4BGGNucleonInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  if(fNucleon) { return; } 
+  if(nullptr != fNucleon) { return; } 
   if(&p == theProton || &p == G4Neutron::Neutron()) {
     isProton = (theProton == &p);
   } else {
@@ -281,8 +281,8 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
 
     // from G4ProtonInelasticCrossSection
     if(res > 0.0) {
-      G4double ff1 = 5.6  - 0.016*aa;    // slope of the drop at medium energies.
-      G4double ff2 = 1.37 + 1.37/aa;     // start of the slope.
+      G4double ff1 = 5.6  - 0.016*aa; // slope of the drop at medium energies.
+      G4double ff2 = 1.37 + 1.37/aa;  // start of the slope.
       G4double ff3 = 0.8  + 18./aa - 0.002*aa;   // stephight
       res *= (1.0 + ff3*(1.0 - (1.0/(1+G4Exp(-ff1*(elog + ff2))))));
       ff1 = 8.   - 8./aa  - 0.008*aa; // slope of the rise

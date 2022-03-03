@@ -27,16 +27,12 @@
 /// @file Analysis.cc
 /// @brief Define histograms
 
-//#include "TFile.h"
-//#include "TH1.h"
-//#include "TH2.h"
-//#include "TROOT.h"
 #include "G4AutoDelete.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 #include "Analysis.hh"
 
 //Select format of output here
-#include "g4root.hh"
 G4ThreadLocal G4int Analysis::fincidentFlag = false;
 G4ThreadLocal Analysis* the_analysis = 0;
 
@@ -64,7 +60,8 @@ void
 Analysis::Book()
 {
   G4AnalysisManager* mgr = G4AnalysisManager::Instance();
-  //mgr->SetVerboseLevel(1);
+  mgr->SetDefaultFileType("root");
+  mgr->SetVerboseLevel(1);
   fincident_x_hist = mgr->CreateH1("incident_x", "Incident X", 100, -5 * cm,
       5 * cm, "cm");
   fincident_map = mgr->CreateH2("incident_map", "Incident Map", 50, -5 * cm,

@@ -83,6 +83,8 @@ class OpNoviceRun : public G4Run
   void EndOfRun();
 
  private:
+  G4ParticleDefinition* fParticle;
+
   G4double fCerenkovCounter;
   G4double fCerenkov2;
   G4double fScintillationCounter;
@@ -95,8 +97,6 @@ class OpNoviceRun : public G4Run
   G4double fMie2;
   G4double fBoundaryCounter;
   G4double fBoundary2;
-
-  G4ParticleDefinition* fParticle;
   G4double fEnergy;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

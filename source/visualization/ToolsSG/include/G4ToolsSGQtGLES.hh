@@ -25,8 +25,6 @@
 //
 // Guy Barrand 12th March 2021
 
-#if defined (G4VIS_BUILD_TOOLSSG_QT_GLES_DRIVER) || defined (G4VIS_USE_TOOLSSG_QT_GLES)
-
 #ifndef G4TOOLSSGQTGLES_HH
 #define G4TOOLSSGQTGLES_HH
 
@@ -51,7 +49,5 @@ protected:
 protected:
   tools::Qt::session* fSGSession;
 };
-
-#endif
 
 #endif

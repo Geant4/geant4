@@ -34,8 +34,6 @@
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodes/SoBox.h"
 
@@ -280,5 +278,3 @@ void SoBox::generateAlternateRep() {
 void SoBox::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

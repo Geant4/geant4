@@ -25,7 +25,7 @@
 //
 
 // The main manager for Csv analysis.
-// It delegates most of functions to the object specific managers. 
+// It delegates most of functions to the object specific managers.
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -38,17 +38,22 @@
 #include "tools/wcsv_ntuple"
 
 #include <memory>
+#include <string_view>
 
+class G4CsvAnalysisManager;
 class G4CsvFileManager;
 class G4CsvNtupleFileManager;
+template <class T>
+class G4ThreadLocalSingleton;
 
 class G4CsvAnalysisManager : public G4ToolsAnalysisManager
 {
+  friend class G4ThreadLocalSingleton<G4CsvAnalysisManager>;
+
   public:
-    explicit G4CsvAnalysisManager(G4bool isMaster = true);
     ~G4CsvAnalysisManager();
-    
-    // static methods
+
+    // Static methods
     static G4CsvAnalysisManager* Instance();
     static G4bool IsInstance();
 
@@ -61,40 +66,31 @@ class G4CsvAnalysisManager : public G4ToolsAnalysisManager
     std::vector<tools::wcsv::ntuple*>::iterator EndNtuple();
     std::vector<tools::wcsv::ntuple*>::const_iterator BeginConstNtuple() const;
     std::vector<tools::wcsv::ntuple*>::const_iterator EndConstNtuple() const;
-    
+
     // Csv format specific option
     void SetIsCommentedHeader(G4bool isCommentedHeader);
     void SetIsHippoHeader(G4bool isHippoHeader);
 
   protected:
-    // virtual methods from base class
+    // Virtual methods from base class
     virtual G4bool OpenFileImpl(const G4String& fileName) final;
     virtual G4bool WriteImpl() final;
-    virtual G4bool CloseFileImpl(G4bool reset) final; 
+    virtual G4bool CloseFileImpl(G4bool reset) final;
+    virtual G4bool ResetImpl() final;
     virtual G4bool IsOpenFileImpl() const final;
 
   private:
-    // static data members
+    G4CsvAnalysisManager();
+
+    // Static data members
     //
-    static G4CsvAnalysisManager* fgMasterInstance;
-    static G4ThreadLocal G4CsvAnalysisManager* fgInstance;
-    
-    // methods
-    //
-    template <typename T>
-    G4bool WriteT(const std::vector<T*>& htVector,
-                  const std::vector<G4HnInformation*>& hnVector,
-                  const G4String& hnType);
-    G4bool WriteH1();
-    G4bool WriteH2();
-    G4bool WriteH3();
-    G4bool WriteP1();
-    G4bool WriteP2();
-    G4bool Reset();
- 
-    // data members
-    std::shared_ptr<G4CsvFileManager>  fFileManager;
-    std::shared_ptr<G4CsvNtupleFileManager> fNtupleFileManager;
+    inline static G4CsvAnalysisManager* fgMasterInstance { nullptr };
+    inline static G4ThreadLocal G4bool fgIsInstance { false };
+    static constexpr std::string_view fkClass { "G4CsvAnalysisManager" };
+
+    // Data members
+    std::shared_ptr<G4CsvFileManager>  fFileManager { nullptr };
+    std::shared_ptr<G4CsvNtupleFileManager> fNtupleFileManager { nullptr };
 };
 
 #include "G4CsvAnalysisManager.icc"

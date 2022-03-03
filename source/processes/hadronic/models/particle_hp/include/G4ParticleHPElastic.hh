@@ -54,6 +54,7 @@ class G4ParticleHPElastic : public G4HadronicInteraction
   ~G4ParticleHPElastic();
 
   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus, G4bool isFromTSL);
 
   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 

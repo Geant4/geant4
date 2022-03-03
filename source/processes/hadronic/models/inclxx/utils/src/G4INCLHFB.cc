@@ -52,10 +52,17 @@
 namespace G4INCL {
 
   namespace {
-   G4ThreadLocal G4double radiusP[TableZSize][TableASize];
-   G4ThreadLocal G4double radiusN[TableZSize][TableASize];
-   G4ThreadLocal G4double diffusenessP[TableZSize][TableASize];
-   G4ThreadLocal G4double diffusenessN[TableZSize][TableASize];
+   #ifdef INCLXX_IN_GEANT4_MODE
+         G4ThreadLocal G4double radiusP[TableZSize][TableASize];
+         G4ThreadLocal G4double radiusN[TableZSize][TableASize];
+         G4ThreadLocal G4double diffusenessP[TableZSize][TableASize];
+         G4ThreadLocal G4double diffusenessN[TableZSize][TableASize];
+   #else
+         G4double radiusP[TableZSize][TableASize];
+         G4double radiusN[TableZSize][TableASize];
+         G4double diffusenessP[TableZSize][TableASize];
+         G4double diffusenessN[TableZSize][TableASize];
+   #endif
 
    void cleanTable(){
     for(G4int i=0;i<TableZSize;++i)

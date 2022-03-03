@@ -1,0 +1,294 @@
+
+///\file "medical/dna/scavenger/.README.txt"
+///\brief Example scavenger README page
+
+/*! \page Examplescavenger Example scavenger
+
+\author F. Chappuis (a), L. Desorgher (b), H. Tran (c)      \n
+(a) flore.chappuis@chuv.ch                                  \n
+(b) laurent.desorgher@chuv.ch                               \n
+(c) tran@cenbg.in2p3.fr                                     \n
+
+(a,b) Institute of Radiation Physics (IRA), Lausanne University Hospital        \n
+      and University of Lausanne, CH-1007 Lausanne, Switzerland                 \n
+(c) CNRS, CENBG, UMR 5797, Université de Bordeaux, F-33170 Gradignan, France    \n
+
+Funding: FNS Synergia grant MAGIC-FNS CRSII5_186369.
+
+This example is provided by the Geant4-DNA collaboration.
+(http://geant4-dna.org)
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications: \n
+Med. Phys. 45 (2018) e722-e739  \n
+Phys. Med. 31 (2015) 861-874    \n
+Med. Phys. 37 (2010) 4692-4708  \n
+Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178 \n
+
+
+\section SCAVENGER_s0 INTRODUCTION
+
+This example shows how to activate the scavenging process in chemistry
+using the deterministic treatment of the IRT model (see chem6 example).
+It allows to define chemical reactions and the concentration of
+scavengers by means of a user text file (see section 10). The
+concentration of scavengers is assumed to be constant over time.
+
+To run the example:
+
+    mkdir scavenger-build
+    cd scavenger-build
+    cmake ../pathToExamples/scavenger
+    make
+
+In interactive mode, run:
+
+    ./scavenger
+
+(Note: the interactive mode only allows the visualisation of the
+physical stage and does not work for the chemical stage)
+
+In batch mode, the macro beam.in can be used as follows:
+
+    ./scavenger beam.in
+
+or
+
+    ./scavenger beam.in 123
+        123 is the user's seed number
+
+\section SCAVENGER_s1 GEOMETRY DEFINITION
+
+The world volume is a simple water box which represents a 'pseudo infinite'
+homogeneous medium.
+
+Two parameters define the geometry :
+- the material of the box for the physical stage is water.
+- for the chemistry stage, the concentration of scavengers in [mole/l]
+  is added. This concentration is supposed to have no effect on the 
+  physical stage.
+
+The default geometry is constructed in DetectorConstruction class.
+
+\section SCAVENGER_s2 PHYSICS LIST
+
+PhysicsList is Geant4 modular physics list using G4EmDNAPhysics_option2
+and EmDNAChemistry constructors (the chemistry constructor uses the
+independent reaction time method).
+
+\section SCAVENGER_s3  ACTION INITIALIZATION
+
+The class ActionInitialization instantiates and registers
+to Geant4 kernel all user action classes.
+
+While in sequential mode the action classes are instantiated just once,
+via invoking the method
+ActionInitialization::Build()
+in multi-threading mode the same method is invoked for each thread worker
+and so all user action classes are defined thread-local.
+
+A run action class is instantiated both thread-local
+and global that's why its instance is created also in the method
+ActionInitialization::BuildForMaster()
+which is invoked only in multi-threading mode.
+  
+To not register a molecule, add this command:
+G4MoleculeCounter::Instance()->DontRegister(G4O2::Definition());
+
+\section SCAVENGER_s3 AN EVENT: PRIMARY GENERATOR
+    
+The primary kinematic consists of a single particle starting at the
+center of the box. The type of the particle and its energy are set
+in the PrimaryGeneratorAction class, and can be changed via the G4 
+build-in commands of G4GeneralParticleSource class.
+The chemistry module is triggered in the StackingAction class when
+all physical tracks have been processed.
+
+\section SCAVENGER_s5 DETECTOR RESPONSE : Scorers
+
+\subsection SCAVENGER_s5_sub1 Species scorer
+
+Scorers are defined in DetectorConstruction::ConstructSDandField().
+There is one G4MultiFunctionalDetector object which computes the 
+energy deposition and the number of species along time in order to
+extract the radiochemical yields:
+\verbatim
+(Number of species X) / (100 eV of deposited energy).
+\endverbatim
+
+Run::RecordEvent(), called at end of event, collects information
+event per event from the hits collections, and accumulates statistic
+for RunAction::EndOfRunAction().
+
+In multi-threading mode the accumulated statistics per workers is
+merged to the master in Run::Merge().
+    
+These two macro commands can be used to control the scoring time:
+
+\verbatim
+/scorer/species/addTimeToRecord 1 ps
+# user can select time bin to score G values.
+
+/scorer/species/nOfTimeBins
+# or user can automatically select time bin logarithmically.
+\endverbatim
+    
+The information about all the molecular species is scored in a ROOT
+ntuple file, the name of which can be given by the user through the
+macro command: /scoreSpecies/setRootFileName scorer.root.
+The ROOT program plotG.C can be used to plot the G values vs time
+for each species.
+  
+\subsection SCAVENGER_s5_sub2 Primary Killer
+
+The G values are computed for a range of deposited energy. We are
+in an infinite volume. Therefore the energy lost by the primary
+equals the deposited energy since all secondary particles will
+finally slow down to the thermal energy. 
+The primary is killed once it has deposited more energy than a 
+minimum threshold. 
+    
+IMPORTANT: However, when the primary particle loses more energy 
+in few interaction steps than the maximum allowed threshold, the
+event is disregarded (= aborted).
+
+These two macro commands can be used to control the energy loss by 
+the primary:
+
+\verbatim
+/primaryKiller/eLossMin 10 keV
+# after 10 keV of energy loss by the primary particle, the primary is killed
+      
+/primaryKiller/eLossMax 10.1 keV
+# if the primary particle loses more than 10.1 keV, the event is aborted
+\endverbatim
+
+The G values are then computed for a deposited energy in the range
+[10 keV; 10.1 keV].
+ 
+Note that if the upper boundary of the energy lost by the primary
+is not set, the chemistry may take a lot of time to compute. 
+This set of macros is embedded in the PrimaryKiller class.
+The species scorer must check whether the event was aborted before
+taking it or not into account for the computation of the results.
+
+The size of detector can be controlled by this class using user
+macro command:
+
+\verbatim
+/primaryKiller/setSize 5 5 5 um
+# kill the particles (primary and secondary) outside of the virtual volume
+\endverbatim
+
+\section SCAVENGER_s6 STACKING ACTION
+
+StackingAction::NewStage is called when a stack of tracks has been
+processed (for more details, look at the Geant4 documentation).
+A verification on whether physical tracks remain to be processed
+is done. If no tracks remain to be processed, the chemical module
+is then triggered.
+
+\section SCAVENGER_s7 VISUALIZATION
+
+The visualization manager is set via the G4VisExecutive class in the
+main() function in scavenger.cc.
+The initialization of the drawing is done via a set of /vis/ commands
+in the macro vis.mac. To activate the visualization mode, run:
+
+\verbatim
+./scavenger
+\endverbatim
+
+\section SCAVENGER_s8 OUTPUT
+
+Physics initialization and the defined reaction table are printed.
+G4Scheduler processes the chemical stage after the physical stage has been completed.
+   
+\section SCAVENGER_s9 RELEVANT MACRO COMMANDS AND MACRO FILE 
+
+\verbatim
+/primaryKiller/eLossMin 10 keV 
+# after 10 keV of energy loss by the primary particle, the primary is killed
+    
+/primaryKiller/eLossMax 10.1 keV 
+# if the primary particle loses more than 10.1 keV, the event is aborted
+    
+/scheduler/verbose 1 
+# set the verbose level of the G4Scheduler class (time steps, reactions ...)
+
+/scheduler/endTime 1 microsecond 
+# set the time at which the simulation stops
+    
+/scheduler/whyDoYouStop 
+# for advanced users: print information at the end of the chemical stage to know why the simulation has stopped
+\endverbatim
+
+The user macro file is beam.in (electron simulations with primary killer method).
+
+\section SCAVENGER_s10 REACTION PARSER FILE
+
+This file is used to define chemical reactions and the concentration
+of scavengers for the EmDNAChemistry constructor.
+    
+Definition of scavengers:
+\verbatim
+scavenger: NAME  CONCENTRATION
+# concentration in [mole/l]
+\endverbatim
+      
+Definition of chemical reactions:
+\verbatim
+REACTANTS -> PRODUCTS , RATE   TYPE
+# reaction rate in [1/s/(mole/l)], for first order reaction in [1/s]
+# reaction type based on Frongillo et al., Rad. Phys. Chem., 1998
+\endverbatim
+      
+In any reaction, the molecules surrounded by square brackets [] are
+scavengers. In the products of a reaction, the user can also use [] 
+to prevent a molecule from being produced.
+
+In this example, we provide 2 reaction tables for 2 different scavengers:
+one with O2 and another with NO2-/NO3-. We encourage the user to add 
+chemical reactions and/or scavengers. However, the parser does not allow
+the addition of molecules not defined in the model. This aspect will be
+improved in future releases. In the meantime, please refer to the NO2- 
+or NO3- ions defined in EmDNAChemistry::ConstructMolecule() to add new
+molecules.
+
+\section SCAVENGER_s11 PLOT
+
+The information about all the molecular species is scored in a ROOT
+(https://root.cern) ntuple file scorer.root. The ROOT program plotG
+can be used to plot the G values vs time for each species.
+
+Execute plotG as:
+\verbatim
+root plotG.C
+\endverbatim
+
+or print G values to scorer.txt
+\verbatim
+root plotG.C > scorer.txt
+\endverbatim
+
+The results show the molecular species (G values) as a function of
+time (ns). Please ignore the O_2^0 molecule.
+  
+\section SCAVENGER_s12 OTHER
+
+In physics: How can I display the tracking information?
+\verbatim
+/tracking/verbose 1
+\endverbatim
+
+In chemistry: How can I display the reaction information?
+\verbatim
+/scheduler/verbose 1
+\endverbatim
+
+How can I display the step by step information?
+\verbatim
+/scheduler/verbose 3
+\endverbatim
+
+*/

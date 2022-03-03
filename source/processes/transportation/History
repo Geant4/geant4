@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 23rd 2021, Alberto Ribon transport-V10-07-03
+----------------------------
+- Added PARALLEL_WORLD_PROCESS to G4TransportationProcessType
+  (to avoid hardwired value "491" in the constructor of class
+   G4ParallelWorldProcess).
+
 Apr 16th 2021, Ben Morgan transport-V10-07-02
 -------------------------
 - Migrate build to modular CMake API

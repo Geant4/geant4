@@ -39,18 +39,12 @@
 
 #include "G4RunManager.hh"
 #include "G4Track.hh"
+#include "G4EmSecondaryParticleType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction(EventAction* EA)
- : G4UserStackingAction(), fEventAction(EA),
-   fKillSecondary(0),fStackMessenger(0),fPhotoGamma(-1),fComptGamma(-1),
-   fPhotoAuger(-1),fComptAuger(-1),fPixeGamma(-1),fPixeAuger(-1),
-   fElectronDNAGamma(-1),fElectronDNAAuger(-1),fProtonDNAGamma(-1),
-   fProtonDNAAuger(-1),fHydrogenDNAGamma(-1),fHydrogenDNAAuger(-1),
-   fAlphaDNAGamma(-1),fAlphaDNAAuger(-1),fAlphaPlusDNAGamma(-1),
-   fAlphaPlusDNAAuger(-1),fHeliumDNAGamma(-1),fHeliumDNAAuger(-1),
-   fGenericIonDNAGamma(-1),fGenericIonDNAAuger(-1),fIDdefined(false)
+ : G4UserStackingAction(), fEventAction(EA)
 {
   fStackMessenger = new StackingMessenger(this);
 }
@@ -72,47 +66,10 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   //keep primary particle
   if (aTrack->GetParentID() == 0) { return fUrgent; }
 
-  if(!fIDdefined) {
-    fIDdefined = true;
-    fPhotoGamma = G4PhysicsModelCatalog::GetIndex("phot_fluo");
-    fComptGamma = G4PhysicsModelCatalog::GetIndex("compt_fluo");
-    fPhotoAuger = G4PhysicsModelCatalog::GetIndex("phot_auger");
-    fComptAuger = G4PhysicsModelCatalog::GetIndex("compt_auger");
-    fPixeGamma = G4PhysicsModelCatalog::GetIndex("gammaPIXE");
-    fPixeAuger = G4PhysicsModelCatalog::GetIndex("e-PIXE");
-    fElectronDNAGamma = 
-     G4PhysicsModelCatalog::GetIndex("e-_G4DNAIonisation_fluo");
-    fElectronDNAAuger = 
-     G4PhysicsModelCatalog::GetIndex("e-_G4DNAIonisation_auger");
-    fProtonDNAGamma = 
-     G4PhysicsModelCatalog::GetIndex("proton_G4DNAIonisation_fluo");
-    fProtonDNAAuger = 
-     G4PhysicsModelCatalog::GetIndex("proton_G4DNAIonisation_auger");
-    fHydrogenDNAGamma = 
-     G4PhysicsModelCatalog::GetIndex("hydrogen_G4DNAIonisation_fluo");
-    fHydrogenDNAAuger = 
-     G4PhysicsModelCatalog::GetIndex("hydrogen_G4DNAIonisation_auger");
-    fAlphaDNAGamma = 
-     G4PhysicsModelCatalog::GetIndex("alpha_G4DNAIonisation_fluo");
-    fAlphaDNAAuger = 
-     G4PhysicsModelCatalog::GetIndex("alpha_G4DNAIonisation_auger");
-    fAlphaPlusDNAGamma = 
-     G4PhysicsModelCatalog::GetIndex("alpha+_G4DNAIonisation_fluo");
-    fAlphaPlusDNAAuger = 
-     G4PhysicsModelCatalog::GetIndex("alpha+_G4DNAIonisation_auger");
-    fHeliumDNAGamma = 
-     G4PhysicsModelCatalog::GetIndex("helium_G4DNAIonisation_fluo");
-    fHeliumDNAAuger = 
-     G4PhysicsModelCatalog::GetIndex("helium_G4DNAIonisation_auger");
-    fGenericIonDNAGamma = 
-     G4PhysicsModelCatalog::GetIndex("GenericIon_G4DNAIonisation_fluo");
-    fGenericIonDNAAuger = 
-     G4PhysicsModelCatalog::GetIndex("GenericIon_G4DNAIonisation_auger");
-  }
-  G4int idx = aTrack->GetCreatorModelID();
+  G4int procID = aTrack->GetCreatorProcess()->GetProcessSubType();
+  G4int modelID = aTrack->GetCreatorModelID();
 
   //count secondary particles
-    
   Run* run = static_cast<Run*>(
              G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
   run->CountParticles(aTrack->GetDefinition());
@@ -131,55 +88,40 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   if (charge != 0.) {
     analysisManager->FillH1(2,energy);
     analysisManager->FillH1(4,energy);
-    if(idx == fPhotoAuger || idx == fComptAuger) {
-      analysisManager->FillH1(50,energy);
-      analysisManager->FillH1(52,energy);
-    } else if(idx == fPixeAuger) {
-      analysisManager->FillH1(54,energy);
-      analysisManager->FillH1(56,energy);
-    } else if(idx == fElectronDNAAuger || 
-              idx == fProtonDNAAuger || 
-              idx == fHydrogenDNAAuger || 
-              idx == fAlphaDNAAuger || 
-              idx == fAlphaPlusDNAAuger || 
-              idx == fHeliumDNAAuger || 
-              idx == fGenericIonDNAAuger) {
+    if(procID >= 51 && procID <= 65) { 
       analysisManager->FillH1(58,energy);
       analysisManager->FillH1(60,energy);
+    } else if(_AugerElectron == modelID) {
+      analysisManager->FillH1(50,energy);
+      analysisManager->FillH1(52,energy);
+    } else if(_ePIXE == modelID) {
+      analysisManager->FillH1(54,energy);
+      analysisManager->FillH1(56,energy);
     }
   }
 
   if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
     analysisManager->FillH1(3,energy);
     analysisManager->FillH1(5,energy);
-    if(idx == fPhotoGamma || idx == fComptGamma) {
-      analysisManager->FillH1(51,energy);
-      analysisManager->FillH1(53,energy);
-    } else if(idx == fPixeGamma) {
-      analysisManager->FillH1(55,energy);
-      analysisManager->FillH1(57,energy);
-    } else if(idx == fElectronDNAGamma || 
-              idx == fProtonDNAGamma || 
-              idx == fHydrogenDNAGamma || 
-              idx == fAlphaDNAGamma || 
-              idx == fAlphaPlusDNAGamma || 
-              idx == fHeliumDNAGamma || 
-              idx == fGenericIonDNAGamma) {
+    if(procID >= 51 && procID <= 65) { 
       analysisManager->FillH1(59,energy);
       analysisManager->FillH1(61,energy);
+    } else if(_Fluorescence == modelID) {
+      analysisManager->FillH1(51,energy);
+      analysisManager->FillH1(53,energy);
+    } else if(_GammaPIXE == modelID) {
+      analysisManager->FillH1(55,energy);
+      analysisManager->FillH1(57,energy);
     }
   }  
 
   //stack or delete secondaries
   G4ClassificationOfNewTrack status = fUrgent;
-  if (fKillSecondary) {
+  if (0 < fKillSecondary) {
     if (fKillSecondary == 1) {
-     fEventAction->AddEnergy(energy);
-     status = fKill;
+      fEventAction->AddEnergy(energy);
     }  
-    if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
-      status = fKill;
-    }
+    status = fKill;
   }
     
   return status;

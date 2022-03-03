@@ -32,8 +32,6 @@
 #ifndef G4XT_HH
 #define G4XT_HH
 
-#if defined(G4INTY_BUILD_XT) || defined(G4INTY_USE_XT)
-
 #include <X11/Intrinsic.h>
 
 #include "G4VInteractorManager.hh"
@@ -66,7 +64,5 @@ private:
   G4Xt& operator= (const G4Xt&);
   static G4Xt* instance; // Pointer to single instance.
 };
-
-#endif //HAS_XT
 
 #endif

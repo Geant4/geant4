@@ -111,7 +111,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 
   AddNaturalIsotopes();
 
-  for (G4int i=0;i<fNbOfAtomicShells;i++) 
+  for (G4int i=0; i<fNbOfAtomicShells; ++i) 
   {
     fAtomicShells[i] = G4AtomicShells::GetBindingEnergy(iz, i);
     fNbOfShellElectrons[i] = G4AtomicShells::GetNumberOfElectrons(iz, i);
@@ -187,7 +187,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
   if ( fNumberOfIsotopes == (G4int)theIsotopeVector->size() ) {
     G4double wtSum=0.0;
     fAeff = 0.0;
-    for (G4int i=0; i<fNumberOfIsotopes; i++) {
+    for (G4int i=0; i<fNumberOfIsotopes; ++i) {
       fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetA();
       wtSum +=  fRelativeAbundanceVector[i];
     }
@@ -195,7 +195,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     fNeff   = fAeff/(g/mole);
 
     if(wtSum != 1.0) {
-      for(G4int i=0; i<fNumberOfIsotopes; ++i) { 
+      for (G4int i=0; i<fNumberOfIsotopes; ++i) { 
 	fRelativeAbundanceVector[i] /= wtSum; 
       }
     }
@@ -204,7 +204,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     fAtomicShells     = new G4double[fNbOfAtomicShells];
     fNbOfShellElectrons = new G4int[fNbOfAtomicShells];
 
-    for ( G4int j = 0; j < fNbOfAtomicShells; j++ ) 
+    for (G4int j = 0; j < fNbOfAtomicShells; ++j) 
     {
       fAtomicShells[j]       = G4AtomicShells::GetBindingEnergy(iz, j);
       fNbOfShellElectrons[j] = G4AtomicShells::GetNumberOfElectrons(iz, j);
@@ -276,7 +276,7 @@ void G4Element::ComputeDerivedQuantities()
   ComputeLradTsaiFactor(); 
 
   // parameters for energy loss by ionisation 
-  if (fIonisation) { delete fIonisation; }  
+  if (nullptr != fIonisation) { delete fIonisation; }  
   fIonisation = new G4IonisParamElm(fZeff);
   fZ = G4lrint(fZeff);
 }
@@ -463,7 +463,7 @@ std::ostream& operator<<(std::ostream& flux, const G4Element* element)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
      
-std::ostream& operator<<(std::ostream& flux, G4ElementTable ElementTable)
+std::ostream& operator<<(std::ostream& flux, const G4ElementTable& ElementTable)
 {
   //Dump info for all known elements
   flux << "\n***** Table : Nb of elements = " << ElementTable.size() 
@@ -475,4 +475,18 @@ std::ostream& operator<<(std::ostream& flux, G4ElementTable ElementTable)
   return flux;
 }
       
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+std::ostream& operator<<(std::ostream& flux, const G4ElementVector& ElementVector)
+{
+  //Dump info for all known elements
+  flux << "\n***** Vector : Nb of elements = " << ElementVector.size()
+       << " *****\n" << G4endl;
+
+  for (size_t i=0; i<ElementVector.size(); i++) flux << ElementVector[i]
+						    << G4endl << G4endl;
+
+  return flux;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

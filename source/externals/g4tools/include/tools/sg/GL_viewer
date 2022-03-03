@@ -28,11 +28,20 @@ public:
     GL_action action(m_gl_mgr,m_out,m_ww,m_wh);
     action.state().m_use_gsto = m_use_gsto;
 
+    action.set_do_transparency(false);
+    action.set_have_to_do_transparency(false);
+    
     m_sg.render(action);
     if(!action.end()) { //check that matrices stack are ok.
-      m_out << "exib::sg::GL_viewer :"
-            << " bad gl_action end."
-            << std::endl;
+      m_out << "tools::sg::GL_viewer : bad gl_action end." << std::endl;
+    } else {
+      if(action.have_to_do_transparency()) {
+        action.set_do_transparency(true);
+        m_sg.render(action);
+        if(!action.end()) { //check that matrices stack are ok.
+          m_out << "tools::sg::GL_viewer : bad gl_action end." << std::endl;
+        }
+      }
     }
 
     //after_render();

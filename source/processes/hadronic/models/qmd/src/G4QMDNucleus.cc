@@ -196,7 +196,7 @@ void G4QMDNucleus::CalEnergyAndAngularMomentumInCM()
       //G4cout << "rcm " << i << " " << rcm[i] << G4endl;
    }
 
-// Angluar momentum
+// Angular momentum
 
    G4ThreeVector rl ( 0.0 ); 
    for ( G4int i= 0; i < n ; i++ ) 
@@ -204,8 +204,10 @@ void G4QMDNucleus::CalEnergyAndAngularMomentumInCM()
       rl += rcm[i].cross ( pcm[i] );
    }
 
-   jj = int ( std::sqrt ( rl*rl / hbc ) + 0.5 );
+// DHW: move hbc outside of sqrt to get correct units
+//  jj = int ( std::sqrt ( rl*rl / hbc ) + 0.5 );
 
+   jj = int (std::sqrt(rl*rl)/hbc + 0.5);
 
 // kinetic energy per nucleon in CM
 

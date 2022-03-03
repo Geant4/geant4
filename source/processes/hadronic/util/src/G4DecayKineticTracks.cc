@@ -52,8 +52,14 @@ void G4DecayKineticTracks::Decay(G4KineticTrackVector *tracks) const {
 
     // Select decay of current track, put daughters at end of vector
     daughters = track->GetDefinition()->IsShortLived() ? track->Decay() : 0;
-
+  
     if (daughters) {
+      // Assign to the daughters the creator model ID of their parent
+      for (size_t k=0; k<daughters->size(); ++k) {
+	G4KineticTrack* aDaughter = (*daughters)[k];
+	if (aDaughter) aDaughter->SetCreatorModelID(track->GetCreatorModelID());
+      }
+      
       tracks->insert(tracks->end(), daughters->begin(), daughters->end());
       delete track;		// Remove parent track
       delete daughters;

@@ -74,6 +74,7 @@ void Run::SetPrimary (G4ParticleDefinition* particle, G4double energy)
 
 void Run::CountProcesses(const G4VProcess* process) 
 {
+  if (process == nullptr) return;
   G4String procName = process->GetProcessName();
   std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
   if ( it == fProcCounter.end()) {
@@ -283,7 +284,8 @@ void Run::EndOfRun()
   //particles count in absorbers
   //
   for (G4int k=1; k<= nbOfAbsor; k++) {
-  G4cout << "\n List of generated particles in absorber " << k << ":" << G4endl;
+  G4cout << "\n List of created particles (with meanLife != 0) in absorber " 
+         << k << ":" << G4endl;
 
     std::map<G4String,ParticleData>::iterator itc;               
     for (itc  = fParticleDataMap[k].begin();

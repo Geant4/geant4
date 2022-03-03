@@ -47,6 +47,7 @@
 #include "G4VDiscreteProcess.hh"
 #include "globals.hh"
 
+class G4LossTableManager;
 class G4ParticleDefinition;
 class G4Track;
 class G4Step;
@@ -55,67 +56,69 @@ class G4Step;
 
 class G4AnnihiToMuPair : public G4VDiscreteProcess
 {
-  public:  // with description
+public:  // with description
 
-     explicit G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair",
-                               G4ProcessType type = fElectromagnetic);
+  explicit G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair",
+			    G4ProcessType type = fElectromagnetic);
 
-    ~G4AnnihiToMuPair() override;
+  ~G4AnnihiToMuPair() override;
 
-     G4bool IsApplicable(const G4ParticleDefinition&) override;
-       // true for positron only.
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
+  // true for positron only.
 
-     void BuildPhysicsTable(const G4ParticleDefinition&) override;
-       // here dummy, just calling PrintInfoDefinition
-       // the total cross section is calculated analytically
+  void BuildPhysicsTable(const G4ParticleDefinition&) override;
+  // here dummy, just calling PrintInfoDefinition
+  // the total cross section is calculated analytically
 
-     void PrintInfoDefinition();
-       // Print few lines of informations about the process: validity range,
-       // origine ..etc..
-       // Invoked by BuildPhysicsTable().
+  void PrintInfoDefinition();
+  // Print few lines of informations about the process: validity range,
+  // origine ..etc..
+  // Invoked by BuildPhysicsTable().
 
-     void SetCrossSecFactor(G4double fac);
-       // Set the factor to artificially increase the crossSection (default 1)
+  void SetCrossSecFactor(G4double fac);
+  // Set the factor to artificially increase the crossSection (default 1)
 
-     G4double GetCrossSecFactor() {return fCrossSecFactor;};
-       // Get the factor to artificially increase the cross section
+  G4double GetCrossSecFactor() {return fCrossSecFactor;};
+  // Get the factor to artificially increase the cross section
 
-     G4double CrossSectionPerVolume(G4double PositronEnergy, 
-				    const G4Material*);
-       // Compute total cross section					 
+  G4double CrossSectionPerVolume(G4double positronEnergy, const G4Material*);
 
-     G4double ComputeCrossSectionPerAtom(G4double PositronEnergy,
-                                         G4double AtomicZ);
-       // Compute total cross section					 
+  G4double ComputeCrossSectionPerElectron(const G4double energy);
 
-     G4double GetMeanFreePath(const G4Track& aTrack,
-                              G4double previousStepSize,
-                              G4ForceCondition* ) override;
-       // It returns the MeanFreePath of the process for the current track :
-       // (energy, material)
-       // The previousStepSize and G4ForceCondition* are not used.
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the ProcessManager of the Particle.
+  G4double ComputeCrossSectionPerAtom(const G4double energy, const G4double Z);
 
-     G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-				     const G4Step& aStep) override;
-       // It computes the final state of the process (at end of step),
-       // returned as a ParticleChange object.
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the ProcessManager of the Particle.
+  G4double GetMeanFreePath(const G4Track& aTrack,
+			   G4double previousStepSize,
+			   G4ForceCondition* ) override;
+  // It returns the MeanFreePath of the process for the current track :
+  // (energy, material)
+  // The previousStepSize and G4ForceCondition* are not used.
+  // This function overloads a virtual function of the base class.
+  // It is invoked by the ProcessManager of the Particle.
 
-       // hide assignment operator as private
-     G4AnnihiToMuPair& operator=(const G4AnnihiToMuPair &right) = delete;
-     G4AnnihiToMuPair(const G4AnnihiToMuPair& ) = delete;
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
+				  const G4Step& aStep) override;
+  // It computes the final state of the process (at end of step),
+  // returned as a ParticleChange object.
+  // This function overloads a virtual function of the base class.
+  // It is invoked by the ProcessManager of the Particle.
 
-  private:
+  // hide assignment operator as private
+  G4AnnihiToMuPair& operator=(const G4AnnihiToMuPair &right) = delete;
+  G4AnnihiToMuPair(const G4AnnihiToMuPair& ) = delete;
 
-     G4double fLowEnergyLimit;  // Energy threshold of e+
-     G4double fHighEnergyLimit; // Limit of validity of the model
-     G4double fCurrentSigma; // the last value of cross section per volume 
-     G4double fCrossSecFactor;  // factor to artificially increase 
-                                // the cross section, static to make sure
-				// to have single value
+private:
+
+  G4LossTableManager* fManager;
+  const G4ParticleDefinition* part1;
+  const G4ParticleDefinition* part2;
+  G4double fMass;
+
+  G4double fLowEnergyLimit;  // Energy threshold of e+
+  G4double fHighEnergyLimit; // Limit of validity of the model
+  G4double fCurrentSigma;    // the last value of cross section per volume 
+  G4double fCrossSecFactor;  // factor to increase the cross section
+  G4String fInfo = "e+e->mu+mu-";
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

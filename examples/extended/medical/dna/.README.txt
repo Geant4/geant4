@@ -33,19 +33,22 @@ This directory contains a set of Geant4-DNA examples.
 
    - \link Examplewvalue wvalue \endlink Simulation of W-values in liquid water using the Geant4-DNA physics processes and models.
 
+   - \link ExampleAuNP AuNP \endlink Simulation calculates absorbed dose around AuNP.
+
 \section dna_s1 Chemistry
    - \link ExampleChem1  chem1 \endlink   Simple activation of the chemistry module.
    - \link ExampleChem2  chem2 \endlink   Usage of TimeStepAction in the chemistry module.
    - \link ExampleChem3  chem3 \endlink   Activate the full interactivity with the chemistry module.
    - \link ExampleChem4  chem4 \endlink   Simulation of radiochemical yields with the chemistry module.
    - \link ExampleChem5  chem5 \endlink   Variation of chem4, using the contructors G4EmDNAPhysics_option8 and G4EmDNAChemistry_option1.
+   - \link ExampleChem6  chem6 \endlink   Based on chem4 example, this example provides to score the radiochemical yield G.
+   - \link Examplescavenger scavenger \endlink Activation of the scavenging process in chemistry.
 
-\section dna_s2 Geometry and other   
-   - \link ExamplePdb4dna  pdb4dna \endlink  Usage of the Protein Data Bank (PDB) file format to build geometries.
+\section dna_s2 Geometry and other
+   - \link ExamplePdb4dna pdb4dna \endlink  Usage of the Protein Data Bank (PDB) file format to build geometries.
    - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink  Geometrical description of a full simplified cell nucleus.
    - \link Examplednadamage1 dnadamage1  \endlink Damage simulation on a chromatin fiber.
    - \link Exampleneuron  neuron \endlink  Irradiation of a realistic neuron cell.
-
 
 See the README page inside each example for more detail.
 */

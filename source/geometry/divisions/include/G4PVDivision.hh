@@ -65,13 +65,13 @@
 #define G4PVDIVISION_HH
 
 #include "geomdefs.hh"
-#include "G4VPhysicalVolume.hh"
+#include "G4PVReplica.hh"
 #include "G4VDivisionParameterisation.hh"
 
 class G4LogicalVolume;
 class G4VSolid;
 
-class G4PVDivision : public G4VPhysicalVolume
+class G4PVDivision : public G4PVReplica
 {
   public:  // with description
     
@@ -115,8 +115,6 @@ class G4PVDivision : public G4VPhysicalVolume
     G4PVDivision& operator=(const G4PVDivision&) = delete;
 
     virtual G4bool IsMany() const;
-    virtual G4int GetCopyNo() const;
-    virtual void  SetCopyNo(G4int CopyNo);
     virtual G4bool IsReplicated() const;
     virtual G4int GetMultiplicity() const;
     virtual G4VPVParameterisation* GetParameterisation() const;
@@ -159,7 +157,6 @@ class G4PVDivision : public G4VPhysicalVolume
     EAxis fdivAxis;          // axis of division
     G4int fnReplicas = 0;
     G4double fwidth = 0.0, foffset = 0.0;
-    G4int fcopyNo = -1;
     G4VDivisionParameterisation* fparam = nullptr; 
 };
 

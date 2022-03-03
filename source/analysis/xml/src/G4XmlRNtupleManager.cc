@@ -27,9 +27,14 @@
 // Author: Ivana Hrivnacova, 25/07/2014 (ivana@ipno.in2p3.fr)
 
 #include "G4XmlRNtupleManager.hh"
+#include "G4XmlRFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
-// 
+using namespace G4Analysis;
+using std::to_string;
+
+//
 // utility function (to be provided in tools)
 //
 
@@ -61,32 +66,51 @@ G4XmlRNtupleManager::G4XmlRNtupleManager(const G4AnalysisManagerState& state)
  : G4TRNtupleManager<tools::aida::ntuple>(state)
 {}
 
-//_____________________________________________________________________________
-G4XmlRNtupleManager::~G4XmlRNtupleManager()
-{}
-
-// 
+//
 // private methods
 //
 
 //_____________________________________________________________________________
-G4bool G4XmlRNtupleManager::SetNtupleIColumn(G4int ntupleId, 
-                                             const G4String& columnName, 
+G4int G4XmlRNtupleManager::ReadNtupleImpl(const G4String& ntupleName,
+                                          const G4String& fileName,
+                                          const G4String& /*dirName*/,
+                                          G4bool isUserFileName)
+{
+  Message(kVL4, "read", "ntuple", ntupleName);
+
+  // Ntuples are saved per object and per thread
+  // but apply the ntuple name and the thread suffixes
+  // only if fileName is not provided explicitly
+  auto fullFileName = fileName;
+  if ( ! isUserFileName ) {
+    fullFileName = fFileManager->GetNtupleFileName(ntupleName);
+  }
+
+  auto handler = fFileManager->GetHandler<tools::aida::ntuple>(
+                                 fullFileName, ntupleName, "ReadNtupleImpl");
+  if ( ! handler ) return kInvalidId;
+
+  auto rntuple = static_cast<tools::aida::ntuple*>(handler->object());
+  auto id = SetNtuple(new G4TRNtupleDescription<tools::aida::ntuple>(rntuple));
+
+  Message(kVL2, "read", "ntuple", ntupleName, id > kInvalidId);
+
+  return id;
+}
+
+//_____________________________________________________________________________
+G4bool G4XmlRNtupleManager::SetNtupleIColumn(G4int ntupleId,
+                                             const G4String& columnName,
                                              std::vector<G4int>& vector)
 {
 // Override base class default implementation
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL4()->Message("set", "ntuple I column", description);
-  }  
-#endif
+  Message(kVL4, "set", "ntuple I column",
+    " ntupleId " + to_string(ntupleId) + " " + columnName);
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleIColumn");
-  if ( ! ntupleDescription )  return false;   
-  
+  if ( ! ntupleDescription )  return false;
+
   // not supported
   //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   //ntupleBinding->add_column(columnName, vector);
@@ -96,35 +120,26 @@ G4bool G4XmlRNtupleManager::SetNtupleIColumn(G4int ntupleId,
   tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column_cid(columnName, *subNtuple);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple I column", description, true);
-  }  
-#endif
+  Message(kVL2, "set", "ntuple I column",
+    " ntupleId " + to_string(ntupleId) + " " + columnName);
 
   return true;
 }
 
 //_____________________________________________________________________________
-G4bool G4XmlRNtupleManager::SetNtupleFColumn(G4int ntupleId, 
-                                             const G4String& columnName, 
+G4bool G4XmlRNtupleManager::SetNtupleFColumn(G4int ntupleId,
+                                             const G4String& columnName,
                                              std::vector<G4float>& vector)
 {
 // Override base class default implementation
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL4()->Message("set", "ntuple F column of vector", description);
-  }  
-#endif
+  Message(kVL4, "set", "ntuple F column",
+    " ntupleId " + to_string(ntupleId) + " " + columnName);
+
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleFColumn");
-  if ( ! ntupleDescription )  return false;   
-  
+  if ( ! ntupleDescription )  return false;
+
   // not supported
   //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   //ntupleBinding->add_column(columnName, vector);
@@ -134,35 +149,25 @@ G4bool G4XmlRNtupleManager::SetNtupleFColumn(G4int ntupleId,
   tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column_cid(columnName, *subNtuple);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple F column", description, true);
-  }  
-#endif
+  Message(kVL4, "set", "ntuple F column",
+    " ntupleId " + to_string(ntupleId) + " " + columnName);
 
   return true;
 }
 
 //_____________________________________________________________________________
-G4bool G4XmlRNtupleManager::SetNtupleDColumn(G4int ntupleId, 
-                                             const G4String& columnName, 
+G4bool G4XmlRNtupleManager::SetNtupleDColumn(G4int ntupleId,
+                                             const G4String& columnName,
                                              std::vector<G4double>& vector)
 {
 // Override base class default implementation
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL4()->Message("set", "ntuple D column of vector", description);
-  }  
-#endif
+  Message(kVL4, "set", "ntuple D column",
+    " ntupleId " + to_string(ntupleId) + " " + columnName);
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleDColumn");
-  if ( ! ntupleDescription )  return false;   
-  
+  if ( ! ntupleDescription )  return false;
+
   // not supported
   //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   //ntupleBinding->add_column(columnName, vector);
@@ -172,13 +177,36 @@ G4bool G4XmlRNtupleManager::SetNtupleDColumn(G4int ntupleId,
   tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column_cid(columnName, *subNtuple);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple D column", description, true);
-  }  
-#endif
+  Message(kVL2, "set", "ntuple D column",
+    " ntupleId " + to_string(ntupleId) + " " + columnName);
+
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool G4XmlRNtupleManager::SetNtupleSColumn(G4int ntupleId,
+                                             const G4String& columnName,
+                                             std::vector<std::string>& vector)
+{
+// Override base class default implementation
+
+  Message(kVL4, "set", "ntuple S column",
+    " ntupleId " + to_string(ntupleId) + " " + columnName);
+
+  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleSColumn");
+  if ( ! ntupleDescription )  return false;
+
+  // not supported
+  //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
+  //ntupleBinding->add_column(columnName, vector);
+
+  auto subNtuple = new tools::aida::ntuple(G4cout, columnName);
+  ntupleDescription->fSVectorBindingMap[subNtuple] = &vector;
+  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
+  ntupleBinding->add_column_cid(columnName, *subNtuple);
+
+  Message(kVL2, "set", "ntuple S column",
+    " ntupleId " + to_string(ntupleId) + " " + columnName);
 
   return true;
 }
@@ -193,12 +221,7 @@ G4bool G4XmlRNtupleManager::GetTNtupleRow(
   if ( ! isInitialized ) {
     tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
     if ( ! ntuple->set_binding(std::cout, *ntupleBinding) ) {
-      G4ExceptionDescription description;
-      description 
-        << "      " 
-        << "Ntuple initialization failed !!"; 
-      G4Exception("G4XmlRNtuple::GetNtupleRow()",
-                  "Analysis_WR021", JustWarning, description);
+      Warn("Ntuple initialization failed !!", fkClass, "GetTNtupleRow");
       return false;
     }
     ntupleDescription->fIsInitialized = true;
@@ -208,33 +231,24 @@ G4bool G4XmlRNtupleManager::GetTNtupleRow(
   G4bool next = ntuple->next();
   if ( next ) {
     if ( ! ntuple->get_row() ) {
-      G4ExceptionDescription description;
-      description 
-        << "      " 
-        << "Ntuple get_row() failed !!"; 
-      G4Exception("G4XmlRNtuple::GetNtupleRow()",
-                  "Analysis_WR021", JustWarning, description);
+      Warn("Ntuple get_row() failed !!", fkClass, "GetTNtupleRow");
       return false;
     }
 
     // fill vector from sub ntuples
-
-    {std::map<tools::aida::ntuple*, std::vector<int>* >::iterator it;
-    for ( it = ntupleDescription->fIVectorBindingMap.begin(); 
-          it != ntupleDescription->fIVectorBindingMap.end(); it++) {
-      tools::aida::to_vector<int>(*(it->first), *(it->second));        
-    }}
-    {std::map<tools::aida::ntuple*, std::vector<float>* >::iterator it;
-    for ( it = ntupleDescription->fFVectorBindingMap.begin(); 
-          it != ntupleDescription->fFVectorBindingMap.end(); it++) {
-      tools::aida::to_vector<float>(*(it->first), *(it->second));        
-    }}
-    {std::map<tools::aida::ntuple*, std::vector<double>* >::iterator it;
-    for ( it = ntupleDescription->fDVectorBindingMap.begin(); 
-          it != ntupleDescription->fDVectorBindingMap.end(); it++) {
-      tools::aida::to_vector<double>(*(it->first), *(it->second));        
-    }}
-  }  
+    for ( auto [key, value] : ntupleDescription->fIVectorBindingMap) {
+      tools::aida::to_vector<int>(*key, *value);
+    }
+    for ( auto [key, value] : ntupleDescription->fFVectorBindingMap) {
+      tools::aida::to_vector<float>(*key, *value);
+    }
+    for ( auto [key, value] : ntupleDescription->fDVectorBindingMap) {
+      tools::aida::to_vector<double>(*key, *value);
+    }
+    for ( auto [key, value] : ntupleDescription->fSVectorBindingMap) {
+      tools::aida::to_vector<std::string>(*key, *value);
+    }
+  }
 
   return next;
-}   
+}

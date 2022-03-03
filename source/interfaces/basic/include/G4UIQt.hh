@@ -28,8 +28,6 @@
 #ifndef G4UIQt_h
 #define G4UIQt_h 
 
-#if defined(G4UI_BUILD_QT_SESSION) || defined(G4UI_USE_QT)
-
 #include <map>
 
 #include "G4VBasicShell.hh"
@@ -49,6 +47,7 @@ class QListWidget;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QTextEdit;
+class QTextBrowser;
 class QLabel;
 class QResizeEvent;
 class QTabWidget;
@@ -340,7 +339,7 @@ private:
   QLineEdit* fHelpLine;
   G4QTabWidget* fViewerTabWidget;
   QString fCoutText;
-  QTextEdit *fStartPage;
+  QTextBrowser *fStartPage;
   QSplitter * fHelpVSplitter;
   QTextEdit* fParameterHelpLabel;
   QTableWidget* fParameterHelpTable;
@@ -373,6 +372,7 @@ private:
   QPixmap* fRunIcon;
   QPixmap* fParamIcon;
   QPixmap* fPickTargetIcon;
+  QPixmap* fExitIcon;
   
 #ifdef G4MULTITHREADED
   QComboBox* fThreadsFilterComboBox;
@@ -419,8 +419,6 @@ private Q_SLOTS :
   void ViewerPropertiesIconCallback(int);
   void ChangePerspectiveOrtho(const QString&);
 };
-
-#endif
 
 #endif
 

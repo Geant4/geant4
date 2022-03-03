@@ -18,6 +18,8 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+27 September 2021  Pedro Arce (gMocren-V10-07-02)
+- Use updated interface from geomnav to use G4PhantomParameterisation::GetNoVoxels instead of GetNoVoxel
 
 07 June 2021  John Allison (gMocren-V10-07-01)
 - Fix hidden function warning.

@@ -67,20 +67,10 @@ or
 
 The analysis is performed using the native Geant4 analysis tools 
 (g4tools). In the default case, the output histograms are written 
-as xml files.
+in a ROOT file.
 
-The output file can be written in ROOT format by editing the file 
- include/UltraAnalysisManager.hh
-to uncomment
- #include "g4root.hh"
-and comment out
- #include "g4xml.hh"
-
-The output can be get also in hbook format (but this will require a 
-FORTRAN compiler) by following the istructions of Sect. 9.2 of 
-the Geant4 application developer manual (Analysis Manager Classes)
-
--
+The output file can be written in other formats (csv, xml, hdf5) by
+changing the G4AnalysisManager default file type in UltraRunAction::BeginOfRunAction().
 
 -----------------------------------------------------------------------
 ----> How to run the example.                                          

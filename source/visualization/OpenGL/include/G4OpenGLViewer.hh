@@ -29,8 +29,6 @@
 // Andrew Walkden  27th March 1996
 // OpenGL viewer - opens window, hard copy, etc.
 
-#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
-
 #ifndef G4OPENGLVIEWER_HH
 #define G4OPENGLVIEWER_HH
 
@@ -108,12 +106,9 @@ class G4OpenGLViewer: virtual public G4VViewer {
 public:
   void ClearView  ();
   void ClearViewWithoutFlush ();
-//////////////////////////////Vectored PostScript production functions///
-  bool printEPS();
-  virtual bool exportImage(std::string name="", int width=-1, int height=-1);
 
+  virtual bool exportImage(std::string name="", int width=-1, int height=-1);
   bool setExportImageFormat(std::string format,bool quiet = false);
-  // change the export image format according to thoses available for the current viewer
 
 #ifdef G4OPENGL_VERSION_2
 
@@ -280,7 +275,5 @@ protected :
 
 #endif
 };
-
-#endif
 
 #endif

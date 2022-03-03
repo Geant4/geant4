@@ -91,6 +91,9 @@ void G4HadronicProcessStore::Clean()
     delete itr;
   extraProcess.clear();
 
+  m_map.clear();
+  p_map.clear();
+
   n_extra = 0;
   n_proc = 0;
 }

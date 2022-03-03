@@ -33,55 +33,55 @@
 #include "ExGflashMessenger.hh"
 #include "ExGflashDetectorConstruction.hh"
 
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashMessenger::ExGflashMessenger(ExGflashDetectorConstruction * Det)
-:G4UImessenger(),fDetector(Det)
+ExGflashMessenger::ExGflashMessenger(ExGflashDetectorConstruction* Det)
+  : G4UImessenger(), fDetector(Det)
 {
   fExGflashDir = new G4UIdirectory("/exgflash/");
   fExGflashDir->SetGuidance(" Gflash example commands.");
-  
-  fVerbose = new G4UIcmdWithAnInteger("/exgflash/verbose",this);
+
+  fVerbose = new G4UIcmdWithAnInteger("/exgflash/verbose", this);
   fVerbose->SetGuidance("set exglash verbosity");
   fVerbose->SetGuidance("0- silent, 1 - on exit, 2 - run , 3 - event");
-  fVerbose->SetParameterName("ver",false);
+  fVerbose->SetParameterName("ver", false);
   fVerbose->SetRange("ver >= 0");
-  fVerbose->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fVerbose->AvailableForStates(G4State_PreInit, G4State_Idle);
   fVerbose->SetToBeBroadcasted(false);
-  
+
   fDetDir = new G4UIdirectory("/exgflash/det/");
   fDetDir->SetGuidance("detector construction commands");
 
-  fMaterCmd = new G4UIcmdWithAString("/exgflash/det/setMat",this);
+  fMaterCmd = new G4UIcmdWithAString("/exgflash/det/setMat", this);
   fMaterCmd->SetGuidance("Select Material.");
-  fMaterCmd->SetParameterName("material",false);
-  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMaterCmd->SetParameterName("material", false);
+  fMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fMaterCmd->SetToBeBroadcasted(false);
 
-  fLBinCmd = new G4UIcmdWith3Vector("/exgflash/det/setLbin",this);
+  fLBinCmd = new G4UIcmdWith3Vector("/exgflash/det/setLbin", this);
   fLBinCmd->SetGuidance("set longitudinal bining");
   fLBinCmd->SetGuidance("nb of bins; bin thickness (in radl)");
   // must have omitable==true we use 2 values only
-  fLBinCmd->SetParameterName("nLtot","dLradl"," ",true);
+  fLBinCmd->SetParameterName("nLtot", "dLradl", " ", true);
   fLBinCmd->SetRange("nLtot>=1 && dLradl>0");
-  fLBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fLBinCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fLBinCmd->SetToBeBroadcasted(false);
 
-  fRBinCmd = new G4UIcmdWith3Vector("/exgflash/det/setRbin",this);
+  fRBinCmd = new G4UIcmdWith3Vector("/exgflash/det/setRbin", this);
   fRBinCmd->SetGuidance("set radial bining");
   fRBinCmd->SetGuidance("nb of bins; bin thickness (in radl)");
-  fRBinCmd->SetParameterName("nRtot","dRradl"," ",true);
+  fRBinCmd->SetParameterName("nRtot", "dRradl", " ", true);
   fRBinCmd->SetRange("nRtot>=1 && dRradl>0");
-  fRBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  fRBinCmd->SetToBeBroadcasted(false);    
-  }
+  fRBinCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fRBinCmd->SetToBeBroadcasted(false);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,18 +98,22 @@ ExGflashMessenger::~ExGflashMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if( command == fMaterCmd )
-    { fDetector->SetMaterial(newValue);}
-  
-  if( command == fVerbose )
-    { fDetector->SetVerbose(fVerbose->GetNewIntValue(newValue));}
-  
-  if( command == fLBinCmd )
-    { fDetector->SetLBining(fLBinCmd->GetNew3VectorValue(newValue));}
-  
-  if( command == fRBinCmd )
-    { fDetector->SetRBining(fRBinCmd->GetNew3VectorValue(newValue));}  
+{
+  if ( command == fMaterCmd ) {
+    fDetector->SetMaterial(newValue);
+  }
+
+  if ( command == fVerbose ) {
+    fDetector->SetVerbose(fVerbose->GetNewIntValue(newValue));
+  }
+
+  if ( command == fLBinCmd ) {
+    fDetector->SetLBining(fLBinCmd->GetNew3VectorValue(newValue));
+  }
+
+  if ( command == fRBinCmd ) {
+    fDetector->SetRBining(fRBinCmd->GetNew3VectorValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

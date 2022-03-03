@@ -250,11 +250,15 @@ void G4Tet::Initialize(const G4ThreeVector& p0,
 void G4Tet::SetVertices(const G4ThreeVector& p0,
                         const G4ThreeVector& p1,
                         const G4ThreeVector& p2,
-                        const G4ThreeVector& p3)
+                        const G4ThreeVector& p3, G4bool* degeneracyFlag)
 {
   // Check for degeneracy
   G4bool degenerate = CheckDegeneracy(p0, p1, p2, p3);
-  if (degenerate)
+  if (degeneracyFlag)
+  {
+    *degeneracyFlag = degenerate;
+  }
+  else if (degenerate)
   {
     std::ostringstream message;
     message << "Degenerate tetrahedron is not permitted: " << GetName() << " !\n"
@@ -264,7 +268,7 @@ void G4Tet::SetVertices(const G4ThreeVector& p0,
             << "  p3    : " << p3 << "\n"
             << "  volume: "
             << std::abs((p1 - p0).cross(p2 - p0).dot(p3 - p0))/6.;
-    G4Exception("G4Tet::G4SetVertices()", "GeomSolids0002",
+    G4Exception("G4Tet::SetVertices()", "GeomSolids0002",
                 FatalException, message);
   }
 
@@ -310,6 +314,43 @@ void G4Tet::ComputeDimensions(G4VPVParameterisation* ,
                               const G4int ,
                               const G4VPhysicalVolume* )
 {
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Set bounding box
+//
+void G4Tet::SetBoundingLimits(const G4ThreeVector& pMin,
+                              const G4ThreeVector& pMax)
+{
+  G4int iout[4] = { 0, 0, 0, 0 };
+  for (G4int i = 0; i < 4; ++i)
+  {
+    iout[i] = (fVertex[i].x() < pMin.x() ||
+               fVertex[i].y() < pMin.y() ||
+               fVertex[i].z() < pMin.z() ||
+               fVertex[i].x() > pMax.x() ||
+               fVertex[i].y() > pMax.y() ||
+               fVertex[i].z() > pMax.z());
+  }
+  if (iout[0] + iout[1] + iout[2] + iout[3] != 0)
+  {
+    std::ostringstream message;
+    message << "Attempt to set bounding box that does not encapsulate solid: "
+            << GetName() << " !\n"
+            << "  Specified bounding box limits:\n"
+            << "    pmin: " << pMin << "\n"
+            << "    pmax: " << pMax << "\n"
+            << "  Tetrahedron vertices:\n"
+            << "    anchor " << fVertex[0] << ((iout[0]) ? " is outside\n" : "\n")
+            << "    p1 "     << fVertex[1] << ((iout[1]) ? " is outside\n" : "\n")
+            << "    p2 "     << fVertex[2] << ((iout[2]) ? " is outside\n" : "\n")
+            << "    p3 "     << fVertex[3] << ((iout[3]) ? " is outside"   : "");
+    G4Exception("G4Tet::SetBoundingLimits()", "GeomSolids0002",
+                FatalException, message);
+  }
+  fBmin = pMin;
+  fBmax = pMax;
 }
 
 ////////////////////////////////////////////////////////////////////////

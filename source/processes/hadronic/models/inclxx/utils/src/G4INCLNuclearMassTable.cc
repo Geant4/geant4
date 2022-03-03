@@ -202,7 +202,7 @@ namespace G4INCL {
 			return mL+ParticleTable::getRealMass(Neutron);
 		}
 		else if( Z == 0) { // No stable hypernuclei with Z=0
-			return ParticleTable::getRealMass(Neutron)-mL*S;
+			return (A+S)*ParticleTable::getRealMass(Neutron)-mL*S;
 		}
 		else if( A==2 && Z == 1) {
 			return mL+ParticleTable::getRealMass(Proton);

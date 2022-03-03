@@ -11,7 +11,6 @@ ifndef G4UI_NONE
 
 # The following sessions are built by default (no environment
 #   variables needed)...
-# GAG_SESSION
 # TERMINAL_SESSION
 
 # Special case: if OPENGLXM vis driver requested, G4Xt must be built.

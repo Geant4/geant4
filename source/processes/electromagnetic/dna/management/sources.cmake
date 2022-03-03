@@ -57,6 +57,7 @@ geant4_add_module(G4emdna-man
     G4TrackList.hh
     G4TrackState.hh
     G4UserTimeStepAction.hh
+    G4VDNAMolecularGeometry.hh
     G4VITDiscreteProcess.hh
     G4VITProcess.hh
     G4VITReactionProcess.hh
@@ -75,6 +76,8 @@ geant4_add_module(G4emdna-man
     G4ChemicalMoleculeFinder.hh
     G4DNAReactionTypeManager.hh
     G4VReactionType.hh
+    G4UserMeshAction.hh
+    G4VScavengerMaterial.hh
   SOURCES
     G4AllITFinder.cc
     G4ITBox.cc

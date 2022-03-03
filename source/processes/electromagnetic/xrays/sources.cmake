@@ -6,6 +6,7 @@ geant4_add_module(G4xrays
     G4Cerenkov.hh
     G4ForwardXrayTR.hh
     G4GammaXTRadiator.hh
+    G4GaussXTRadiator.hh
     G4RegularXTRadiator.hh
     G4Scintillation.hh
     G4ScintillationTrackInformation.hh
@@ -24,6 +25,7 @@ geant4_add_module(G4xrays
     G4Cerenkov.cc
     G4ForwardXrayTR.cc
     G4GammaXTRadiator.cc
+    G4GaussXTRadiator.cc
     G4RegularXTRadiator.cc
     G4Scintillation.cc
     G4ScintillationTrackInformation.cc

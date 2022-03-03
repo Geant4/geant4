@@ -16,12 +16,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 24, 2021 G.Cosmo geom-csg-V10-07-06
+- Corrected typo in G4UPara::GetXHalfLength().
+  Addressing problem report #2446.
+
+November 01, 2021 E.Tcherniaev geom-csg-V10-07-05
+- Revision of G4UTrap:
+  o List of accessors and modifiers made consistent with G4Trap
+  o Implemented check of parameters similar to G4Trap
+
+August 31, 2021 B.Morgan geom-csg-V10-07-04
+- Remove old Get-er methods that simply forward to the new main Get-er
+  methods
 
 May 18, 2021 J.Apostolakis geom-csg-V10-07-03
-
 - Added method to enable simpler conversion of G4 solids to VecGeom:
   o G4Trap: added methods to calculate Phi & Theta
-  o G4Para: added methods to calculate original alpha, theta, phi 
+  o G4Para: added methods to calculate original alpha, theta, phi
 
 May 17, 2021 E.Tcherniaev geom-csg-V10-07-02
 - Bux fix in G4Sphere::GetSurfaceArea()

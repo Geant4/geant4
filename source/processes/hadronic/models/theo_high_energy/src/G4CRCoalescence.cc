@@ -76,10 +76,13 @@
 #include "G4CRCoalescence.hh"
 #include "G4ReactionProduct.hh"
 #include "G4IonTable.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 
 G4CRCoalescence::G4CRCoalescence() : G4HadronicInteraction("G4CRCoalescence" ),
- fP0_d( 0.0 ), fP0_dbar( 0.0 ) {}
+  fP0_d( 0.0 ), fP0_dbar( 0.0 ), secID( -1 ) {
+  secID = G4PhysicsModelCatalog::GetModelID( "model_G4CRCoalescence" );
+}
 
 
 G4CRCoalescence::~G4CRCoalescence() {}
@@ -238,6 +241,7 @@ void G4CRCoalescence::PushDeuteron( const G4ThreeVector &p1, const G4ThreeVector
     finaldeut->SetMomentum( psum );
     finaldeut->SetTotalEnergy( totalEnergy );
     finaldeut->SetMass( massd );
+    finaldeut->SetCreatorModelID( secID );
     result->push_back( finaldeut );
   } else {
     G4ParticleDefinition* antideuteron = G4ParticleTable::GetParticleTable()->FindAntiParticle( "deuteron" );	
@@ -249,6 +253,7 @@ void G4CRCoalescence::PushDeuteron( const G4ThreeVector &p1, const G4ThreeVector
     finalantideut->SetMomentum( psum );
     finalantideut->SetTotalEnergy( totalEnergy );
     finalantideut->SetMass( massd );
+    finalantideut->SetCreatorModelID( secID );
     result->push_back( finalantideut );
   }
 }

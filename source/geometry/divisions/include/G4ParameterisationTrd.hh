@@ -81,8 +81,6 @@ class G4ParameterisationTrdX : public G4VParameterisationTrd
                             G4VSolid* motherSolid, DivisionType divType );
    ~G4ParameterisationTrdX();
 
-    void CheckParametersValidity();
-
     G4double GetMaxParameter() const;
 
     void ComputeTransformation(const G4int copyNo,
@@ -92,11 +90,8 @@ class G4ParameterisationTrdX : public G4VParameterisationTrd
                            const G4VPhysicalVolume* pv) const;
 
     void ComputeDimensions(G4Trap& trd, const G4int copyNo,
-                           const G4VPhysicalVolume* pv) const;
+			   const G4VPhysicalVolume* pv) const;
   
-    G4VSolid*   ComputeSolid(const G4int, G4VPhysicalVolume *);
-
-
   private:  // Dummy declarations to get rid of warnings ...
 
     void ComputeDimensions (G4Cons&,const G4int,
@@ -121,8 +116,6 @@ class G4ParameterisationTrdX : public G4VParameterisationTrd
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polyhedra&,const G4int,
                             const G4VPhysicalVolume*) const {}
-
-    void ComputeTrapParams();
 };
 
 
@@ -135,8 +128,6 @@ class G4ParameterisationTrdY : public G4VParameterisationTrd
                             G4VSolid* motherSolid, DivisionType divType );
    ~G4ParameterisationTrdY();
 
-    void CheckParametersValidity();
-
     G4double GetMaxParameter() const;
 
     void ComputeTransformation(const G4int copyNo,
@@ -144,6 +135,9 @@ class G4ParameterisationTrdY : public G4VParameterisationTrd
  
     void ComputeDimensions(G4Trd& trd, const G4int copyNo,
                            const G4VPhysicalVolume* pv) const;
+
+    void ComputeDimensions (G4Trap&,const G4int,
+                            const G4VPhysicalVolume*) const;
 
   private:  // Dummy declarations to get rid of warnings ...
 
@@ -160,8 +154,6 @@ class G4ParameterisationTrdY : public G4VParameterisationTrd
     void ComputeDimensions (G4Torus&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,
-                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trap&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,
                             const G4VPhysicalVolume*) const {}

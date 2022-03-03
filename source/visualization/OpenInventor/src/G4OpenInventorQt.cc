@@ -26,8 +26,6 @@
 //
 // Frederick Jones TRIUMF 30 NOV 2017
 
-#ifdef G4VIS_BUILD_OIQT_DRIVER
-
 // this :
 #include "G4OpenInventorQt.hh"
 
@@ -99,5 +97,3 @@ G4VViewer* G4OpenInventorQt::CreateViewer(G4VSceneHandler& scene,
   
   return pView;
 }
-
-#endif

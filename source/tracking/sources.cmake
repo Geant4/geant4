@@ -22,6 +22,7 @@ geant4_add_module(G4tracking
     G4UserTrackingAction.hh
     G4MultiTrackingAction.hh
     G4VSteppingVerbose.hh
+    G4VTrackingManager.hh
     G4VTrajectory.hh
     G4VTrajectoryPoint.hh
     trkgdefs.hh

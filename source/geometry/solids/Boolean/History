@@ -19,12 +19,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- May  6, 2021  J.Apostolakis  geom-bool-V10-07-02
+October 12, 2021 G.Cosmo geom-bool-V10-07-03
+- In G4BooleanSolid, use G4RecursiveMutex in place of G4Mutex in GetPolyhedron()
+  to avoid potential deadlocks in recursive Boolean operations.
+  Courtesy of S.Boogert (London Univ.).
+
+May 6, 2021 J.Apostolakis geom-bool-V10-07-02
 - Revised GetCubicVolume of UnionSolid and SubtractionSolid to use cubic volume
   of constituent volume(s) and the intersection solid.
   Test cases show the potential for improvement: factors of 40-3000.
-    Cases with small overlap will improve most. Not all cases will improve. 
-
+  Cases with small overlap will improve most. Not all cases will improve. 
   Need to monitor cpu cost in most difficult cases: 
    - Union now   involves 3 calculations (a, b, a n b) - likely 2x cost. 
    - Subtraction involves 2 calculations (a, a n b) -  1.5x cost.

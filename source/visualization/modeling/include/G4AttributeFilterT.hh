@@ -100,7 +100,7 @@ G4bool
 G4AttributeFilterT<T>::Evaluate(const T& object) const
 {
   // Return true (i.e., do not filter out) if attribute name has not yet been set.
-  if (fAttName.isNull()) return true;
+  if (fAttName.empty()) return true;
   
   // ...or required attribute value has not yet been set
   if (fConfigVect.size() == 0) return true;

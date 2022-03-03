@@ -25,8 +25,6 @@
 //
 // Guy Barrand 12th March 2021
 
-#if defined (G4VIS_BUILD_TOOLSSG_X11_GLES_DRIVER) || defined (G4VIS_USE_TOOLSSG_X11_GLES)
-
 #ifndef G4TOOLSSGX11GLES_HH
 #define G4TOOLSSGX11GLES_HH
 
@@ -51,7 +49,5 @@ protected:
 protected:
   tools::X11::session* fSGSession;
 };
-
-#endif
 
 #endif

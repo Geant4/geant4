@@ -80,7 +80,7 @@ G4double G4Tubs::GetCosEndPhi () const
   return cosEPhi;
 }
 
-inline 
+inline
 void G4Tubs::Initialize()
 {
   fCubicVolume = 0.;
@@ -90,11 +90,11 @@ void G4Tubs::Initialize()
   fRebuildPolyhedron = true;
 }
 
-inline 
+inline
 void G4Tubs::InitializeTrigonometry()
 {
   G4double hDPhi = 0.5*fDPhi;                       // half delta phi
-  G4double cPhi  = fSPhi + hDPhi; 
+  G4double cPhi  = fSPhi + hDPhi;
   G4double ePhi  = fSPhi + fDPhi;
 
   sinCPhi    = std::sin(cPhi);
@@ -229,38 +229,6 @@ void G4Tubs::SetDeltaPhiAngle (G4double newDPhi)
 {
   CheckPhiAngles(fSPhi, newDPhi);
   Initialize();
-}
-
-//  Older names for access functions
-
-inline
-G4double G4Tubs::GetRMin () const
-{
-  return GetInnerRadius();
-}
-
-inline
-G4double G4Tubs::GetRMax () const
-{
-  return GetOuterRadius();
-}
-
-inline
-G4double G4Tubs::GetDz () const
-{
-  return GetZHalfLength()  ;
-}
-
-inline
-G4double G4Tubs::GetSPhi () const
-{
-  return GetStartPhiAngle();
-}
-
-inline
-G4double G4Tubs::GetDPhi () const
-{
-  return GetDeltaPhiAngle();
 }
 
 inline

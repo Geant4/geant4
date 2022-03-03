@@ -37,15 +37,15 @@
 
 // 21/10/2003 - M.Asai, Created.
 // --------------------------------------------------------------------
-#ifndef G4VUserRegionInformation_HH
-#define G4VUserRegionInformation_HH 1
+#ifndef G4VUSERREGIONINFORMATION_HH
+#define G4VUSERREGIONINFORMATION_HH 1
 
 class G4VUserRegionInformation
 {
-  public:  // with description
+  public:
   
-    G4VUserRegionInformation() {}
-    virtual ~G4VUserRegionInformation() {}
+    G4VUserRegionInformation() = default;
+    virtual ~G4VUserRegionInformation() = default;
 
     virtual void Print() const = 0;
 };

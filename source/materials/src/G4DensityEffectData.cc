@@ -1295,15 +1295,13 @@ void G4DensityEffectData::Initialize()
 //G4_GRAPHITE_POROUS  index=277
   G4double  M277[NDENSARRAY]={26.555,2.49,3.155,0.048,2.5387,0.20762,2.9532,0.14,0.038,78.0 }; 
   AddMaterial(M277,"G4_GRAPHITE_POROUS");
-
 }
 
 G4int G4DensityEffectData::GetElementIndex(G4int Z, G4State st) const
 {
   G4int idx = -1;
   if(Z > 0 && Z < NDENSELEM) { 
-    if(st == state[Z])             { idx = indexZ[Z]; } 
-    else if(st == kStateUndefined) { idx = indexZ[Z]; }
+    if(st == state[Z] || st == kStateUndefined) { idx = indexZ[Z]; }
   } 
   return idx;
 }

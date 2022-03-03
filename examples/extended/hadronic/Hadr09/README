@@ -17,6 +17,13 @@ to change some of its configurations.
 Notice that Hadr09.cc does nothing really useful: users should consider
 to use eventually only the class HadronicGenerator.
 
+(
+  The file Hadr09.cc-ION_PROJECTILE shows an example of a ion-ion
+  collision, for fixed type of projectile ion, target ion, projectile
+  kinetic energy, and projectile direction.
+  This file is obtained from Hadr09.cc with minimal changes.
+)
+
 Notice that the Geant4 run-manager is not used.
 
 To build this example:

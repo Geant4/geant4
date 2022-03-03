@@ -362,6 +362,15 @@ void G4VEmModel::DefineForRegion(const G4Region*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4VEmModel::FillNumberOfSecondaries(G4int& numberOfTriplets,
+                                         G4int& numberOfRecoil)
+{
+  numberOfTriplets = 0;
+  numberOfRecoil = 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4VEmModel::ChargeSquareRatio(const G4Track& track)
 {
   return GetChargeSquareRatio(track.GetParticleDefinition(), 

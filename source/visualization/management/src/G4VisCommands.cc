@@ -254,7 +254,7 @@ G4VisCommandReviewKeptEvents::G4VisCommandReviewKeptEvents ()
   "\nevent."
   "\nUseful commands might be:"
   "\n  \"/vis/viewer/...\" to change the view (zoom, set/viewpoint,...)."
-  "\n  \"/vis/oglx/printEPS\" to get hard copy."
+  "\n  \"/vis/ogl/export\" to get hard copy."
   "\n  \"/vis/open\" to get alternative viewer."
   "\n  \"/vis/abortReviewKeptEvents\", then \"cont[inue]\", to abort.");
   fpCommand -> SetParameterName("macro-file-name", omitable=true);
@@ -352,7 +352,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   "  Useful commands might be:"
   "\n    \"/vis/scene/add/trajectories\" if not already added."
   "\n    \"/vis/viewer/...\" to change the view (zoom, set/viewpoint,...)."
-  "\n    \"/vis/oglx/printEPS\" to get hard copy."
+  "\n    \"/vis/ogl/export\" to get hard copy."
   "\n    \"/vis/open\" to get alternative viewer."
   "\n    \"/vis/abortReviewKeptEvents\", then \"cont[inue]\", to abort."
 		 << G4endl;

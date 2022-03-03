@@ -40,6 +40,8 @@
 G4ParticleChangeForMSC::G4ParticleChangeForMSC()
   : G4VParticleChange()
 {
+  // Disable flag that is enabled in G4VParticleChange if G4VERBOSE.
+  debugFlag = false;
 }
 
 // --------------------------------------------------------------------

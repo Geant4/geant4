@@ -11,10 +11,8 @@
 #include <QtCore/qglobal.h> //For QT_VERSION.
 
 #if QT_VERSION < 0x050000
-#include <QtGui/qpushbutton.h>
 #include <QtGui/qboxlayout.h>
 #else
-#include <QtWidgets/qpushbutton.h>
 #include <QtWidgets/qboxlayout.h>
 #endif
 
@@ -47,6 +45,7 @@ public:
     m_shell->setLayout(layout);
   }
   virtual ~sg_viewer() {
+    if(m_glarea) m_glarea->set_device_interactor(0);
     if(m_shell && m_own_shell) {
       m_session.delete_window(m_shell);
       //m_session.sync();

@@ -1,3 +1,8 @@
+///\file "hadronic/Hadr10/.README.txt"
+///\brief Example Hadr10 README page
+
+/*! \page ExampleHadr10 Example Hadr10
+
 This is an example that aims to test the treatment of decays in Geant4.
 In particular, we want to test the decays of the tau lepton, charmed and
 bottom hadrons, and the use of pre-assigned decays.
@@ -56,16 +61,18 @@ physics list is used).
 
 To build this example:
 
-  mkdir Build; cd Build
-  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-        -DGeant4_DIR=/path-to-geant4-libraries ../.
-  make
+    mkdir Build; cd Build
+    cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          -DGeant4_DIR=/path-to-geant4-libraries ../.
+    make
 
 To run it:
 
-  ./Hadr10 hadr10.in
+    ./Hadr10 hadr10.in
 
 which shoots 500 GeV TeV particles - one run of 10'000 events for each
 type of particle - along the x-axis, and print out some information
 regarding their decays, as well as some summary information at the end
 of each run.
+
+*/

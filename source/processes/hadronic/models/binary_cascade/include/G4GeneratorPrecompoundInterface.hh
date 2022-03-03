@@ -108,6 +108,8 @@ private:
   const G4ParticleDefinition* ANTItriton;
   const G4ParticleDefinition* ANTIHe3;
   const G4ParticleDefinition* ANTIHe4;
+
+  G4int secID;  // Creator model ID
 };
 
 inline

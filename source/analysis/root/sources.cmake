@@ -11,6 +11,8 @@ geant4_add_module(G4root
     G4RootFileManager.hh
     G4RootHnFileManager.hh
     G4RootHnFileManager.icc
+    G4RootHnRFileManager.hh
+    G4RootHnRFileManager.icc
     G4RootMainNtupleManager.hh
     G4RootNtupleFileManager.hh
     G4RootNtupleManager.hh
@@ -21,7 +23,6 @@ geant4_add_module(G4root
     G4RootRFileManager.hh
     G4RootRNtupleManager.hh
     g4root_defs.hh
-    g4root.hh
   SOURCES
     G4RootAnalysisManager.cc
     G4RootAnalysisReader.cc

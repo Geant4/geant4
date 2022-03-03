@@ -178,7 +178,7 @@ void G4UIterminal::ExecuteCommand(const G4String& aCommand)
     break;
   case fCommandNotFound:
     G4cerr << "command <" << UI->SolveAlias(aCommand) << "> not found" << G4endl;
-    if( aCommand.index("@@") != G4String::npos) {
+    if( aCommand.find("@@") != G4String::npos) {
       G4cout << "@@G4UIterminal" << G4endl;
     }
     break;
@@ -211,16 +211,15 @@ void G4UIterminal::ExecuteCommand(const G4String& aCommand)
 G4String G4UIterminal::GetCommand(const char* msg)
 //////////////////////////////////////////////////
 {
-  G4String newCommand;
-  G4String nullString;
+  G4String newCommand = shell->GetCommandLineString(msg);
+  G4String nullString = "";
 
-  newCommand= shell-> GetCommandLineString(msg);
-
-  G4String nC = newCommand.strip(G4String::leading);
+  G4String nC = G4StrUtil::lstrip_copy(newCommand);
+  
   if( nC.length() == 0 ) {
     newCommand= nullString;
 
-  } else if( nC(0) == '#' ) {  
+  } else if( nC[0] == '#' ) {  
     G4cout << nC << G4endl;
     newCommand= nullString;
 
@@ -229,7 +228,7 @@ G4String G4UIterminal::GetCommand(const char* msg)
     newCommand= nullString;
 
   } else if(nC=="lc" || nC.substr(0,3)=="lc " ) {  // ... by shell
-    shell-> ListCommand(nC.remove(0,2)); 
+    shell-> ListCommand(nC.erase(0,2)); 
     newCommand= nullString;
 
   } else if(nC == "pwd") { // show current directory
@@ -250,7 +249,7 @@ G4String G4UIterminal::GetCommand(const char* msg)
     TerminalHelp(nC);
     newCommand= nullString;
 
-  } else if(nC(0) == '?') {   // "show current value of a parameter"
+  } else if(nC[0] == '?') {   // "show current value of a parameter"
     ShowCurrent(nC);
     newCommand= nullString;
 
@@ -261,8 +260,8 @@ G4String G4UIterminal::GetCommand(const char* msg)
     }
     newCommand= nullString;
 
-  } else if(nC(0) == '!') {   // "!"
-    G4String ss= nC(1, nC.length()-1);
+  } else if(nC[0] == '!') {   // "!"
+    G4String ss= nC.substr(1, nC.length()-1);
     G4int vl;
     const char* tt= ss;
     std::istringstream is(tt);

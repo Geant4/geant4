@@ -38,8 +38,6 @@
 #ifndef G4WIN32_HH
 #define G4WIN32_HH
 
-#if defined(G4INTY_BUILD_WIN32) || defined(G4INTY_USE_WIN32)
-
 #include <windows.h>
 #include <windowsx.h>
 
@@ -61,7 +59,5 @@ class G4Win32 : public G4VInteractorManager
     G4Win32();
     static G4Win32* instance; // Pointer to single instance.
 };
-
-#endif
 
 #endif

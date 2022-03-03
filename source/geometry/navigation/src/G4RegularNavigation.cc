@@ -404,7 +404,7 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
   //
   replicaNo = pParam->GetReplicaNo( localPoint, localDir );
 
-  if( replicaNo < 0 || replicaNo >= G4int(pParam->GetNoVoxel()) )
+  if( replicaNo < 0 || replicaNo >= G4int(pParam->GetNoVoxels()) )
   {
     return false;
   }

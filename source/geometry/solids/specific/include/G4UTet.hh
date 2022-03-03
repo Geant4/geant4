@@ -50,11 +50,11 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
 
   public:  // with description
 
-    G4UTet(const G4String& pName, 
-                 G4ThreeVector anchor,
-                 G4ThreeVector p2,
-                 G4ThreeVector p3,
-                 G4ThreeVector p4, 
+    G4UTet(const G4String& pName,
+           const G4ThreeVector& anchor,
+           const G4ThreeVector& p1,
+           const G4ThreeVector& p2,
+           const G4ThreeVector& p3,
                  G4bool* degeneracyFlag = nullptr);
 
    ~G4UTet();
@@ -75,9 +75,10 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
       // persistifiable objects.
 
     G4UTet(const G4UTet& rhs);
-    G4UTet& operator=(const G4UTet& rhs); 
+    G4UTet& operator=(const G4UTet& rhs);
       // Copy constructor and assignment operator.
 
+    void SetBoundingLimits(const G4ThreeVector& pMin, const G4ThreeVector& pMax);
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
@@ -87,12 +88,29 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
 
     G4Polyhedron* CreatePolyhedron() const;
 
+    void SetVertices(const G4ThreeVector& anchor,
+                     const G4ThreeVector& p1,
+                     const G4ThreeVector& p2,
+                     const G4ThreeVector& p3,
+                     G4bool* degeneracyFlag = nullptr);
+      // Set new position of the vertices.
+
     void GetVertices(G4ThreeVector& anchor,
                      G4ThreeVector& p1,
                      G4ThreeVector& p2,
                      G4ThreeVector& p3) const;
     std::vector<G4ThreeVector> GetVertices() const;
       // Return the four vertices of the shape.
+
+    G4bool CheckDegeneracy(const G4ThreeVector& p0,
+                           const G4ThreeVector& p1,
+                           const G4ThreeVector& p2,
+                           const G4ThreeVector& p3) const;
+      // Return true if the tetrahedron is degenerate.
+
+  private:
+
+    G4ThreeVector fBmin, fBmax; // bounding box
 };
 
 // --------------------------------------------------------------------

@@ -86,7 +86,7 @@ namespace G4INCL {
 // From Kamano
      else {
 
-						const G4double pi=std::acos(-1.0);		
+						const G4double pi=std::acos(-1.0);
 						G4double x1;
 						G4double u1;
 						G4double fteta;

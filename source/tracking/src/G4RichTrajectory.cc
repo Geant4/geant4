@@ -44,6 +44,7 @@
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
 #include "G4VProcess.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 //#define G4ATTDEBUG
 #ifdef G4ATTDEBUG
@@ -284,7 +285,7 @@ std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
     values->push_back
     (G4AttValue("CMID",G4UIcommand::ConvertToString(fCreatorModelID),""));
     const G4String& creatorModelName =
-    G4PhysicsModelCatalog::GetModelName(fCreatorModelID);
+    G4PhysicsModelCatalog::GetModelNameFromID(fCreatorModelID);
     values->push_back(G4AttValue("CMN",creatorModelName,""));
   }
   else

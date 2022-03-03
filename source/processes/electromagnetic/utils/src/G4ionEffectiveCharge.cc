@@ -89,30 +89,28 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   lastKinEnergy = kineticEnergy;
 
   G4double mass   = p->GetPDGMass();
-  G4double charge = p->GetPDGCharge();
-  G4double Zi     = charge*inveplus;
-
+  effCharge = p->GetPDGCharge();
+  G4int Zi = G4lrint(effCharge*inveplus);
   chargeCorrection = 1.0;
-  effCharge = charge;
 
   // The aproximation of ion effective charge from:
   // J.F.Ziegler, J.P. Biersack, U. Littmark
   // The Stopping and Range of Ions in Matter,
   // Vol.1, Pergamon Press, 1985
   // Fast ions or hadrons
-  G4double reducedEnergy = kineticEnergy * CLHEP::proton_mass_c2/mass ;
+  G4double reducedEnergy = kineticEnergy * CLHEP::proton_mass_c2/mass;
 
   //G4cout << "e= " << reducedEnergy << " Zi= " << Zi << "  " 
   //<< material->GetName() << G4endl;
 
-  if(Zi < 1.5 || reducedEnergy > Zi*energyHighLimit ) {
-    return charge;
+  if(Zi <= 1 || reducedEnergy > effCharge*energyHighLimit ) {
+    return effCharge;
   }
-  G4double z    = material->GetIonisation()->GetZeffective();
+  G4double z = material->GetIonisation()->GetZeffective();
   reducedEnergy = std::max(reducedEnergy,energyLowLimit);
 
   // Helium ion case
-  if( Zi < 2.5 ) {
+  if( Zi <= 2 ) {
 
     static const G4double c[6] = 
       {0.2865,0.1266,-0.001429,0.02402,-0.01135,0.001475};
@@ -132,13 +130,12 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     if(tq2 < 0.2) { tt *= (1.0 - tq2 + 0.5*tq2*tq2); }
     else          { tt *= G4Exp(-tq2); }
 
-    effCharge = charge*(1.0 + tt) * std::sqrt(ex);
+    effCharge *= (1.0 + tt) * std::sqrt(ex);
 
     // Heavy ion case
   } else {
     
-    G4double y;
-    G4double zi13 = g4calc->A13(Zi);
+    G4double zi13 = g4calc->Z13(Zi);
     G4double zi23 = zi13*zi13;
 
     // v1 is ion velocity in vF unit
@@ -147,24 +144,18 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     G4double vFsq = eF/energyBohr;
     G4double vF   = std::sqrt(eF/energyBohr);
 
-    // Faster than Fermi velocity
-    if ( v1sq > 1.0 ) {
-      y = vF * std::sqrt(v1sq) * ( 1.0 + 0.2/v1sq ) / zi23 ;
-
+    G4double y = ( v1sq > 1.0 ) 
+      // Faster than Fermi velocity
+      ? vF * std::sqrt(v1sq) * ( 1.0 + 0.2/v1sq ) / zi23
       // Slower than Fermi velocity
-    } else {
-      y = 0.692308 * vF * (1.0 + 0.666666*v1sq + v1sq*v1sq/15.0) / zi23 ;
-    }
+      : 0.692308 * vF * (1.0 + 0.666666*v1sq + v1sq*v1sq/15.0) / zi23;
 
     G4double y3 = G4Exp(0.3*G4Log(y));
     // G4cout<<"y= "<<y<<" y3= "<<y3<<" v1= "<<v1<<" vF= "<<vF<<G4endl; 
     G4double q = std::max(1.0 - G4Exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y
-                                     - 0.008983*y*y), minCharge/Zi); 
-  
-    effCharge = q*charge;
+                                     - 0.008983*y*y), minCharge/effCharge);
     
-    // compute chage correction
-
+    // compute charge correction
     G4double tq = 7.6 - G4Log(reducedEnergy/CLHEP::keV);
     G4double tq2= tq*tq;
     G4double sq = 1.0 + ( 0.18 + 0.0015 * z )*G4Exp(-tq2)/ (Zi*Zi); 
@@ -175,13 +166,11 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
     G4double lambda = 10.0 * vF *g4calc->A23(1.0 - q)/ (zi13 * (6.0 + q));
-
     G4double lambda2 = lambda*lambda;
-
     G4double xx = (0.5/q - 0.5)*G4Log(1.0 + lambda2)/vFsq;
 
+    effCharge *= q;
     chargeCorrection = sq * (1.0 + xx);
-    
   }
   //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
   //         << " chargeCor= " << chargeCorrection 

@@ -84,6 +84,7 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       G4HadFinalState * theParticleChange;
       G4QuasiElasticChannel * theQuasielastic;
       G4CRCoalescence * theCosmicCoalescence;
+      G4int theStringModelID;
 };
 
 

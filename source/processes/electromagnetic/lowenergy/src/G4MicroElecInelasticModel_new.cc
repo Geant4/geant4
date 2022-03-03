@@ -373,9 +373,9 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
       eIncidentEnergyStorage[mat] = eTdummyVec;
 
       //Cleanup support vectors
-      delete eProbaShellMap;
-      delete eDiffCrossSectionData;
-      delete eNrjTransfData;
+      // delete eProbaShellMap;
+      // delete eDiffCrossSectionData;
+      // delete eNrjTransfData;
     }
     
     // *** PROTON
@@ -476,10 +476,10 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
 	pIncidentEnergyStorage[mat] = pTdummyVec;
          
 	//Cleanup support vectors
-	delete pNrjTransfData;
-	delete eVecm;
-	delete pDiffCrossSectionData;
-	delete pProbaShellMap;
+	// delete pNrjTransfData;
+	// delete eVecm;
+	// delete pDiffCrossSectionData;
+	// delete pProbaShellMap;
       }
     tableTCS[mat] = tableData;
 } 

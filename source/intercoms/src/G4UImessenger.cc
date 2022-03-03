@@ -136,8 +136,7 @@ G4double G4UImessenger::StoD(G4String str)
 // --------------------------------------------------------------------
 G4bool G4UImessenger::StoB(G4String str)
 {
-  G4String v = str;
-  v.toUpper();
+  G4String v = G4StrUtil::to_upper_copy(str);
   G4bool vl = false;
   if(v == "Y" || v == "YES" || v == "1" || v == "T" || v == "TRUE")
   {
@@ -160,7 +159,7 @@ void G4UImessenger::CreateDirectory(const G4String& path, const G4String& dsc,
   G4UImanager* ui = G4UImanager::GetUIpointer();
 
   G4String fullpath = path;
-  if(fullpath(fullpath.length() - 1) != '/')
+  if(fullpath.back() != '/')
     fullpath.append("/");
 
   G4UIcommandTree* tree = ui->GetTree()->FindCommandTree(fullpath.c_str());

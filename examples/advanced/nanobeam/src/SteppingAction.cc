@@ -27,7 +27,7 @@
 // Nucl.Instrum.Meth.B260:20-27, 2007
 
 #include "SteppingAction.hh"
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -50,7 +50,7 @@
 Run::Run(const DetectorConstruction* /*detector*/)
 : G4Run(),
   fParticle(0), fEkin(0.), fEdeposit(0.),
-  fCollName(0.),
+  fCollName(),
   fRunMap(0)
 
   

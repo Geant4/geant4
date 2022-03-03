@@ -71,6 +71,8 @@ class G4tgbGeometryDumper
     void DumpIsotope(G4Isotope* ele);
     G4String DumpSolid(G4VSolid* solid, const G4String& extraName = "");
     void DumpBooleanVolume(const G4String& solidType, G4VSolid* so);
+    void DumpMultiUnionVolume(  G4VSolid* so);
+    void DumpScaledVolume( G4VSolid* so);
     void DumpSolidParams(G4VSolid* so);
     std::vector<G4double> GetSolidParams(const G4VSolid* so);
     void DumpPolySections(G4int zPlanes, G4double* z, G4double* rmin,

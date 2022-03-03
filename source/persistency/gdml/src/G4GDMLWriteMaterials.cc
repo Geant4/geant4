@@ -281,47 +281,39 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
   xercesc::DOMElement* propElement;
   G4MaterialPropertiesTable* ptable = mat->GetMaterialPropertiesTable();
 
-  auto pmap = ptable->GetPropertyMap();
-  auto cmap = ptable->GetConstPropertyMap();
+  auto pvec = ptable->GetProperties();
+  auto cvec = ptable->GetConstProperties();
 
-  for(auto mpos = pmap->cbegin(); mpos != pmap->cend(); ++mpos)
+  for(size_t i = 0; i < pvec.size(); ++i)
   {
-    propElement = NewElement("property");
-    propElement->setAttributeNode(
-      NewAttribute("name", ptable->GetMaterialPropertyNames()[mpos->first]));
-    propElement->setAttributeNode(NewAttribute(
-      "ref", GenerateName(ptable->GetMaterialPropertyNames()[mpos->first],
-                          mpos->second)));
-    if(mpos->second)
+    if (pvec[i] != nullptr)
     {
-      PropertyVectorWrite(ptable->GetMaterialPropertyNames()[mpos->first],
-                          mpos->second);
+      propElement = NewElement("property");
+      propElement->setAttributeNode(
+        NewAttribute("name", ptable->GetMaterialPropertyNames()[i]));
+      propElement->setAttributeNode(NewAttribute(
+        "ref", GenerateName(ptable->GetMaterialPropertyNames()[i],
+                            pvec[i])));
+      PropertyVectorWrite(ptable->GetMaterialPropertyNames()[i],
+                          pvec[i]);
       matElement->appendChild(propElement);
-    }
-    else
-    {
-      G4String warn_message = "Null pointer for material property -" +
-                              ptable->GetMaterialPropertyNames()[mpos->first] +
-                              "- of material -" + mat->GetName() + "- !";
-      G4Exception("G4GDMLWriteMaterials::PropertyWrite()", "NullPointer",
-                  JustWarning, warn_message);
-      continue;
     }
   }
 
-  for(auto cpos = cmap->cbegin(); cpos != cmap->cend(); ++cpos)
+  for(size_t i = 0; i < cvec.size(); ++i)
   {
-    propElement = NewElement("property");
-    propElement->setAttributeNode(NewAttribute(
-      "name", ptable->GetMaterialConstPropertyNames()[cpos->first]));
-    propElement->setAttributeNode(NewAttribute(
-      "ref", GenerateName(ptable->GetMaterialConstPropertyNames()[cpos->first],
-                          ptable)));
-
-    PropertyConstWrite(ptable->GetMaterialConstPropertyNames()[cpos->first],
-                       cpos->second, ptable);
-
-    matElement->appendChild(propElement);
+    if (cvec[i].second == true)
+    {
+      propElement = NewElement("property");
+      propElement->setAttributeNode(NewAttribute(
+        "name", ptable->GetMaterialConstPropertyNames()[i]));
+      propElement->setAttributeNode(NewAttribute(
+        "ref", GenerateName(ptable->GetMaterialConstPropertyNames()[i],
+                            ptable)));
+      PropertyConstWrite(ptable->GetMaterialConstPropertyNames()[i],
+                         cvec[i].first, ptable);
+      matElement->appendChild(propElement);
+    }
   }
 }
 

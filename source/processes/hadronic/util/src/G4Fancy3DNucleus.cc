@@ -42,6 +42,7 @@
 #include "G4NuclearFermiDensity.hh"
 #include "G4NuclearShellModelDensity.hh"
 #include "G4NucleiProperties.hh"
+#include "G4HyperNucleiProperties.hh"
 #include "G4Nucleon.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -57,7 +58,7 @@
 #include "G4PhysicalConstants.hh"
 
 G4Fancy3DNucleus::G4Fancy3DNucleus()
-  : myA(0), myZ(0), theNucleons(250), currentNucleon(-1), theDensity(0), 
+  : myA(0), myZ(0), myL(0), theNucleons(250), currentNucleon(-1), theDensity(0), 
     nucleondistance(0.8*fermi),excitationEnergy(0.),
     places(250), momentum(250), fermiM(250), testSums(250)
 {
@@ -69,17 +70,17 @@ G4Fancy3DNucleus::~G4Fancy3DNucleus()
 }
 
 #if defined(NON_INTEGER_A_Z)
-void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
+void G4Fancy3DNucleus::Init(G4double theA, G4double theZ, G4int numberOfLambdas)
 {
   G4int intZ = G4int(theZ);
   G4int intA= ( G4UniformRand()>theA-G4int(theA) ) ? G4int(theA) : G4int(theA)+1;
    // forward to integer Init()
-  Init(intA, intZ);
+  Init(intA, intZ, std::max(numberOfLambdas, 0));
 
 }
 #endif
 
-void G4Fancy3DNucleus::Init(G4int theA, G4int theZ)
+void G4Fancy3DNucleus::Init(G4int theA, G4int theZ, G4int numberOfLambdas)
 {
   currentNucleon=-1;
   theNucleons.clear();
@@ -90,10 +91,14 @@ void G4Fancy3DNucleus::Init(G4int theA, G4int theZ)
   testSums.clear();
 
   myZ = theZ;
-  myA= theA;
+  myA = theA;
+  myL = std::max(numberOfLambdas, 0);  // Cannot be negative
   excitationEnergy=0;
 
   theNucleons.resize(myA);	// Pre-loads vector with empty elements
+
+  // For simplicity, we neglect eventual Lambdas in the nucleus as far as the
+  // density of nucler levels and the Fermi level are concerned.
   
   if(theDensity) delete theDensity;
   if ( myA < 17 ) {
@@ -197,9 +202,10 @@ G4double G4Fancy3DNucleus::GetOuterRadius()
 
 G4double G4Fancy3DNucleus::GetMass()
 {
-        return   myZ*G4Proton::Proton()->GetPDGMass() + 
-                 (myA-myZ)*G4Neutron::Neutron()->GetPDGMass() -
-                 BindingEnergy();
+  if ( myL <= 0 ) return myZ*G4Proton::Proton()->GetPDGMass() + 
+                         (myA-myZ)*G4Neutron::Neutron()->GetPDGMass() -
+                         BindingEnergy();
+  else            return G4HyperNucleiProperties::GetNuclearMass(myA, myZ, myL); 
 }
 
 
@@ -273,22 +279,28 @@ const G4VNuclearDensity * G4Fancy3DNucleus::GetNuclearDensity() const
 
 void G4Fancy3DNucleus::ChooseNucleons()
 {
-	G4int protons=0,nucleons=0;
-	
-	while (nucleons < myA )  /* Loop checking, 30-Oct-2015, G.Folger */
-	{
-	  if ( protons < myZ && G4UniformRand() < (G4double)(myZ-protons)/(G4double)(myA-nucleons) )
-	  {
-	     protons++;
-	     theNucleons[nucleons++].SetParticleType(G4Proton::Proton());
-	  }
-	  else if ( (nucleons-protons) < (myA-myZ) )
-	  {
-	       theNucleons[nucleons++].SetParticleType(G4Neutron::Neutron());
-	  }
-	  else G4cout << "G4Fancy3DNucleus::ChooseNucleons not efficient" << G4endl;
-	}
-	return;
+  G4int protons=0, nucleons=0, lambdas=0;
+  G4double probProton = ( G4double(myZ) )/( G4double(myA) );
+  G4double probLambda = myL > 0 ? ( G4double(myL) )/( G4double(myA) ) : 0.0;
+  while ( nucleons < myA ) {  /* Loop checking, 30-Oct-2015, G.Folger */
+    G4double rnd = G4UniformRand();
+    if ( rnd < probProton ) {
+      if ( protons < myZ ) {
+	protons++;
+	theNucleons[nucleons++].SetParticleType(G4Proton::Proton());
+      }
+    } else if ( rnd < probProton + probLambda ) {
+      if ( lambdas < myL ) {
+	lambdas++;
+	theNucleons[nucleons++].SetParticleType(G4Lambda::Lambda());
+      }
+    } else {
+      if ( (nucleons - protons - lambdas) < (myA - myZ - myL) ) {
+	theNucleons[nucleons++].SetParticleType(G4Neutron::Neutron());
+      }
+    }
+  }
+  return;
 }
 
 void G4Fancy3DNucleus::ChoosePositions()

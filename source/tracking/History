@@ -15,7 +15,41 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+October 25, 2021 B.Morgan (tracking-V10-07-19)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+October 13, 2021 J. Hahnfeld (tracking-V10-07-18)
+- Introduce G4VTrackingManager, an interface for custom tracking
+  managers specialized for one or a small number of particle types
+
+September 21, 2021 A. Ribon (tracking-V10-07-17)
+- G4SteppingManager : Added a new, private member variable, corresponding
+  to a pointer to a G4NoProcess instance, and used it in the method
+  InvokeAtRestDoItProcs() to flag a stable ion at rest.
+  This avoids the otherwise confusing (but correct and harmless)
+  information that Radioactive Decay is the process defining the 
+  last step of a stable ion at rest.
+
+August 13, 2021 M. Asai (tracking-V10-07-16)
+- G4SteppingManager2.cc : Making sure Transportation limits the step 
+  if a volume boundary in a parallel world is co-limiting the step.
+  Addressing to Bugzilla Report #2240.
+
+August 4, 2021 A. Ribon (tracking-V10-07-15)
+- G4RichTrajectory : migrated to the new version of G4PhysicsModelCatalog.
+
+July 15, 2021 A. Ribon (tracking-V10-07-14)
+- G4SteppingVerboseWithUnits.cc : forgotten corresponding fix
+  done below (tracking-V10-07-13) for G4SteppingVerbose.
+
+July 12, 2021 A. Ribon (tracking-V10-07-13)
+- G4SteppingVerbose.cc : fixed bug that wrongly put the "Forced"
+  label in the print-out information of non-forced processes,
+  and vice versa, omitting it for real forced processes.
+  Obviously, simulation results were not impacted by this bug,
+  but the print-out was confusing and misleading.
+
 June 21, 2021 M. Asai (tracking-V10-07-12)
 - G4SteppingVerbose.hh : add explicit virtual keyward to all virtual
   methods.

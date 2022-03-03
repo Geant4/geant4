@@ -52,6 +52,7 @@
 #include "G4VDiscreteProcess.hh"
 #include "G4VParticleChange.hh"
 #include "G4VSolid.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 ////////////////////////////////////////////////////////////////////////////
 // Constructor, destructor
@@ -70,13 +71,30 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume* anEnvelope,
   , fGammaTkinCut(0.0)
 {
   verboseLevel = 1;
+  secID = G4PhysicsModelCatalog::GetModelID("model_XTRenergyLoss");
   SetProcessSubType(fTransitionRadiation);
 
   fPtrGamma    = nullptr;
   fMinEnergyTR = fMaxEnergyTR = fMaxThetaTR = fGamma = fEnergy = 0.0;
   fVarAngle = fLambda = fTotalDist = fPlateThick = fGasThick = 0.0;
-  fAlphaPlate = fAlphaGas = 0.0;
+  fAlphaPlate = 100.;
+  fAlphaGas = 40.;
 
+  fTheMinEnergyTR = CLHEP::keV * 1.; //  1.; // 
+  fTheMaxEnergyTR = CLHEP::keV * 100.; // 40.; //
+
+  fTheMinAngle    = 1.e-8;  //
+  fTheMaxAngle    = 4.e-4;
+
+  fTotBin = 50;  //  number of bins in log scale 
+  fBinTR  =  100; //   number of bins in TR vectors
+
+  // min/max angle2 in log-vectors
+
+  fMinThetaTR = 3.0e-9; 
+  fMaxThetaTR = 1.0e-4;
+
+  
   // Proton energy vector initialization
   fProtonEnergyVector =
     new G4PhysicsLogVector(fMinProtonTkin, fMaxProtonTkin, fTotBin);
@@ -97,6 +115,8 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume* anEnvelope,
   }
   // default is XTR dEdx, not flux after radiator
   fExitFlux      = false;
+  // default angle distribution according numerical integration
+  fFastAngle     = false; // no angle according sum of delta-functions by default
   fAngleRadDistr = true;
   fCompton       = false;
 
@@ -338,7 +358,11 @@ void G4VXTRenergyLoss::BuildEnergyTable()
       // Legendre96 or Legendre10
 
       energySum += radiatorCof * fCofTR *
-                   integral.Legendre10(this, &G4VXTRenergyLoss::SpectralXTRdEdx,
+	
+	// integral.Legendre10(this, &G4VXTRenergyLoss::SpectralXTRdEdx,
+	
+                   integral.Legendre96(this, &G4VXTRenergyLoss::SpectralXTRdEdx,
+				       
                                        energyVector->GetLowEdgeEnergy(iTR),
                                        energyVector->GetLowEdgeEnergy(iTR + 1));
 
@@ -366,14 +390,16 @@ void G4VXTRenergyLoss::BuildEnergyTable()
 
 //////////////////////////////////////////////////////////////////////////
 // Bank of angle distributions for given energies (slow!)
+
 void G4VXTRenergyLoss::BuildAngleForEnergyBank()
 {
-  if(this->GetProcessName() == "TranspRegXTRadiator" ||
-     this->GetProcessName() == "TranspRegXTRmodel" ||
-     this->GetProcessName() == "RegularXTRadiator" ||
-     this->GetProcessName() == "RegularXTRmodel")
+  
+  if( ( this->GetProcessName() == "TranspRegXTRadiator" ||
+        this->GetProcessName() == "TranspRegXTRmodel" ||
+        this->GetProcessName() == "RegularXTRadiator" ||
+	this->GetProcessName() == "RegularXTRmodel"  )       && fFastAngle    ) // ffastAngle=true!
   {
-    BuildAngleTable();
+    BuildAngleTable(); // by sum of delta-functions
     return;
   }
   G4int i, iTkin, iTR;
@@ -407,8 +433,6 @@ void G4VXTRenergyLoss::BuildAngleForEnergyBank()
     fGamma =
       1.0 + (fProtonEnergyVector->GetLowEdgeEnergy(iTkin) / proton_mass_c2);
 
-    fMaxThetaTR = 25. * 2500.0 / (fGamma * fGamma);  // theta^2
-
     if(fMaxThetaTR > fTheMaxAngle)
       fMaxThetaTR = fTheMaxAngle;
     else if(fMaxThetaTR < fTheMinAngle)
@@ -420,8 +444,11 @@ void G4VXTRenergyLoss::BuildAngleForEnergyBank()
     {
       angleSum = 0.0;
       fEnergy  = energyVector->GetLowEdgeEnergy(iTR);
-      G4PhysicsLinearVector* angleVector =
-        new G4PhysicsLinearVector(0.0, fMaxThetaTR, fBinTR);
+      
+     // log-vector to increase number of thin bins for small angles
+      G4PhysicsLogVector* angleVector = new G4PhysicsLogVector(fMinThetaTR, fMaxThetaTR, fBinTR);
+ 
+      
 
       angleVector->PutValue(fBinTR - 1, angleSum);
 
@@ -486,7 +513,7 @@ void G4VXTRenergyLoss::BuildAngleTable()
     fGamma =
       1.0 + (fProtonEnergyVector->GetLowEdgeEnergy(iTkin) / proton_mass_c2);
 
-    fMaxThetaTR = 25. * 2500.0 / (fGamma * fGamma);  // theta^2
+    // fMaxThetaTR = 25. * 2500.0 / (fGamma * fGamma);  // theta^2
 
     if(fMaxThetaTR > fTheMaxAngle)
       fMaxThetaTR = fTheMaxAngle;
@@ -560,7 +587,8 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
 
     if(k == kMin && kMin == G4int(cofMin))
     {
-      angleSum += 0.5 * tmp;
+      // angleSum += 0.5 * tmp;
+      angleSum += tmp; // ATLAS TB 
     }
     else if(iTheta == n - 1)
       ;
@@ -580,8 +608,9 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
   }
   if(theta > 0.)
   {
-    angleSum += 0.5 * tmp;
-    theta = 0.;
+    // angleSum += 0.5 * tmp;
+    angleSum += 0.;  // ATLAS TB
+    theta     = 0.;
   }
   if(verboseLevel > 2)
   {
@@ -632,7 +661,8 @@ void G4VXTRenergyLoss::BuildGlobalAngleTable()
     fGamma =
       1.0 + (fProtonEnergyVector->GetLowEdgeEnergy(iTkin) / proton_mass_c2);
 
-    fMaxThetaTR = 25.0 / (fGamma * fGamma);  // theta^2
+    // fMaxThetaTR = 25.0 / (fGamma * fGamma);  // theta^2
+    // fMaxThetaTR = 1.e-4;  // theta^2
 
     if(fMaxThetaTR > fTheMaxAngle)
       fMaxThetaTR = fTheMaxAngle;
@@ -642,7 +672,9 @@ void G4VXTRenergyLoss::BuildGlobalAngleTable()
         fMaxThetaTR = fTheMinAngle;
     }
     G4PhysicsLinearVector* angleVector =
+    // G4PhysicsLogVector* angleVector =
       new G4PhysicsLinearVector(0.0, fMaxThetaTR, fBinTR);
+    //  new G4PhysicsLogVector(1.e-8, fMaxThetaTR, fBinTR);
 
     angleSum = 0.0;
 
@@ -1425,6 +1457,7 @@ G4double G4VXTRenergyLoss::GetXTRenergy(G4int iPlace, G4double, G4int iTransfer)
 
 /////////////////////////////////////////////////////////////////////////
 //  Get XTR photon angle at given energy and Tkin
+
 G4double G4VXTRenergyLoss::GetRandomAngle(G4double energyXTR, G4int iTkin)
 {
   G4int iTR, iAngle;
@@ -1444,8 +1477,10 @@ G4double G4VXTRenergyLoss::GetRandomAngle(G4double energyXTR, G4int iTkin)
     --iTR;
 
   position = (*(*fAngleForEnergyTable)(iTR))(0) * G4UniformRand();
+  // position = (*(*fAngleForEnergyTable)(iTR))(1) * G4UniformRand(); // ATLAS TB
 
   for(iAngle = 0;; ++iAngle)
+  // for(iAngle = 1;; ++iAngle) // ATLAS TB
   {
     if(position >= (*(*fAngleForEnergyTable)(iTR))(iAngle))
       break;
@@ -1457,12 +1492,14 @@ G4double G4VXTRenergyLoss::GetRandomAngle(G4double energyXTR, G4int iTkin)
 ////////////////////////////////////////////////////////////////////////
 // Returns approximate position of X-ray photon angle at given energy during
 // random sampling over integral energy distribution
+
 G4double G4VXTRenergyLoss::GetAngleXTR(G4int iPlace, G4double position,
                                        G4int iTransfer)
 {
   G4double x1, x2, y1, y2, result;
 
-  if(iTransfer == 0)
+  if( iTransfer == 0 )
+  // if( iTransfer == 1 ) // ATLAS TB
   {
     result = (*fAngleForEnergyTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
   }
@@ -1474,15 +1511,15 @@ G4double G4VXTRenergyLoss::GetAngleXTR(G4int iPlace, G4double position,
     x1 = (*fAngleForEnergyTable)(iPlace)->GetLowEdgeEnergy(iTransfer - 1);
     x2 = (*fAngleForEnergyTable)(iPlace)->GetLowEdgeEnergy(iTransfer);
 
-    if(x1 == x2)
-      result = x2;
+    if(x1 == x2) result = x2;
     else
     {
-      if(y1 == y2)
-        result = x1 + (x2 - x1) * G4UniformRand();
+      if( y1 == y2 )  result = x1 + (x2 - x1) * G4UniformRand();
       else
       {
         result = x1 + (position - y1) * (x2 - x1) / (y2 - y1);
+        // result = x1 + 0.1*(position - y1) * (x2 - x1) / (y2 - y1); // ATLAS TB
+        // result = x1 + 0.05*(position - y1) * (x2 - x1) / (y2 - y1); // ATLAS TB
       }
     }
   }

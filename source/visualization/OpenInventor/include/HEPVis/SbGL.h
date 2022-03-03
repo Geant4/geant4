@@ -33,6 +33,8 @@
 // Needs setting based on choice of driver
 // Apple system for SoQt on Apple
 // Native otherwise (Apple Framework)
+// NOTE: This header is private to the OI category, and the OI lib can only be built in one mode
+// so rhis can be simplified....
 #if defined(__APPLE__) && (!defined(G4VIS_BUILD_OIX_DRIVER) || !defined(G4VIS_USE_OIX_DRIVER))
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>

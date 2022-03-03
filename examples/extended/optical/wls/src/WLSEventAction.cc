@@ -35,8 +35,8 @@
 #include "WLSPhotonDetHit.hh"
 #include "WLSRun.hh"
 #include "WLSRunAction.hh"
-#include "WLSTrajectory.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4RunManager.hh"
@@ -75,7 +75,6 @@ void WLSEventAction::BeginOfEventAction(const G4Event*)
   fClad1Bounce = 0;
   fClad2Bounce = 0;
   fReflected   = 0;
-  fDetected    = 0;
   fEscaped     = 0;
   fMirror      = 0;
 }
@@ -108,6 +107,14 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
     n_hit = mppcHC->entries();
   }
 
+  auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(2, mppcHC->entries());
+  for (size_t i = 0; i < mppcHC->entries(); ++i) {
+    auto pdHit = (*mppcHC)[i];
+    analysisManager->FillH1(0, pdHit->GetEnergy());
+    analysisManager->FillH1(1, pdHit->GetArrivalTime());
+  }
+
   if(fVerboseLevel > 1)
   {
     G4cout << "-------------------------------------" << G4endl
@@ -121,7 +128,6 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
            << "  Clad1 Bounce:  " << fClad1Bounce << G4endl
            << "  Clad2 Bounce:  " << fClad2Bounce << G4endl
            << "  Reflected:     " << fReflected << G4endl
-           << "  Detected:      " << fDetected << G4endl
            << "  Escaped:       " << fEscaped << G4endl
            << "  Mirror:        " << fMirror << G4endl
            << "  Detector hit:  " << n_hit << G4endl;

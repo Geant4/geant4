@@ -45,7 +45,7 @@
 // 24.02.05, J.Apostolakis - First created version.
 // --------------------------------------------------------------------
 #ifndef G4VNESTEDPARAMETERISATION_HH
-#define G4VNESTEDPARAMETERISATION_HH
+#define G4VNESTEDPARAMETERISATION_HH 1
 
 #include "G4Types.hh"
 #include "G4VPVParameterisation.hh" 
@@ -72,13 +72,13 @@ class G4Polycone;
 class G4Polyhedra;
 class G4Hype;
 
-class G4VNestedParameterisation: public G4VPVParameterisation, 
-                                 public G4VVolumeMaterialScanner
+class G4VNestedParameterisation : public G4VPVParameterisation, 
+                                  public G4VVolumeMaterialScanner
 {
-  public:  // with description
+  public:
 
-    G4VNestedParameterisation(); 
-    virtual ~G4VNestedParameterisation(); 
+    G4VNestedParameterisation() = default; 
+    virtual ~G4VNestedParameterisation() = default; 
 
     // Methods required in derived classes
     // -----------------------------------

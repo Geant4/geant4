@@ -25,8 +25,6 @@
 //
 // John Allison  17th June 2019
 
-#if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)
-
 #include "G4Qt3DViewer.hh"
 
 #include "G4Qt3DSceneHandler.hh"
@@ -54,10 +52,6 @@ void G4Qt3DViewer::Initialise()
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
 
-  // Background is white (not figured out how to change it) so...
-  fVP.SetDefaultColour(G4Colour::Black());
-  fDefaultVP.SetDefaultColour(G4Colour::Black());
-
   auto UI = G4UImanager::GetUIpointer();
   auto uiQt = dynamic_cast<G4UIQt*>(UI->GetG4UIWindow());
   if (!uiQt) {
@@ -67,6 +61,9 @@ void G4Qt3DViewer::Initialise()
     return;
   }
   fUIWidget = QWidget::createWindowContainer(this);
+  fUIWidget->setMinimumSize(QSize(200, 100));
+  fUIWidget->setMaximumSize(screen()->size());
+//  fUIWidget->setFocusPolicy(Qt::NoFocus);  //??
   uiQt->AddTabWidget(fUIWidget,QString(fName));
 
   setRootEntity(fQt3DSceneHandler.fpQt3DScene);
@@ -77,6 +74,9 @@ G4Qt3DViewer::~G4Qt3DViewer()
 
 void G4Qt3DViewer::SetView()
 {
+  // Background colour
+  defaultFrameGraph()->setClearColor(G4Qt3DUtils::ConvertToQColor(fVP.GetBackgroundColour()));
+
   // Get radius of scene, etc.
   // Note that this procedure properly takes into account zoom, dolly and pan.
   const G4Point3D targetPoint
@@ -154,60 +154,77 @@ void G4Qt3DViewer::DrawView()
 
 void G4Qt3DViewer::ShowView()
 {
-  show();
+  // show() may only be called from master thread
+  if (G4Threading::IsMasterThread()) {
+    show();
+  }
+  // The way Qt seems to work, we don't seem to need a show() anyway, but
+  // we'll leave it in - it seems not to have any effect, good or bad.
 }
 
 void G4Qt3DViewer::FinishView()
 {
-  show();
+  if (G4Threading::IsMasterThread()) {
+    show();
+  }
+}
+
+namespace {
+  QThread* masterQThread = nullptr;
+  QThread* visSubThreadQThread = nullptr;
+}
+
+#  include <chrono>
+
+void G4Qt3DViewer::MovingToVisSubThread()
+{
+#ifdef G4QT3DDEBUG
+  G4cout << "G4Qt3DViewer::MovingToVisSubThread" << G4endl;
+#endif
+  // Still on master thread but vis thread has been launched
+  // Make note of master QThread
+  masterQThread = QThread::currentThread();
+  // Wait until SwitchToVisSubThread has found vis sub-thread QThread
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  // Move relevant stuff to vis sub-thread QThread
+  auto p1 = fQt3DSceneHandler.fpQt3DScene->parent();
+  auto p2 = p1->parent();
+  p2->moveToThread(visSubThreadQThread);
 }
 
 void G4Qt3DViewer::SwitchToVisSubThread()
 {
-//  fUIWidget->moveToThread(QThread::currentThread());
-//  moveToThread(QThread::currentThread());
-//  fQt3DSceneHandler.fpQt3DScene->moveToThread(QThread::currentThread());
-//  fQt3DSceneHandler.fpTransientObjects->moveToThread(QThread::currentThread());
 #ifdef G4QT3DDEBUG
-//  G4cout
-//  << "G4Qt3DViewer::SwitchToVisSubThread: (void*)fQt3DSceneHandler.fpQt3DScene: "
-//  << (void*)fQt3DSceneHandler.fpQt3DScene
-//  << G4endl;
+  G4cout << "G4Qt3DViewer::SwitchToVisSubThread" << G4endl;
 #endif
+  // On vis sub-thread before any drawing
+  // Make note of vis-subthread QThread for MovingToVisSubThread
+  visSubThreadQThread = QThread::currentThread();
+  // Wait until SwitchToVisSubThread has moved stuff
+  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+}
+
+void G4Qt3DViewer::MovingToMasterThread()
+{
+#ifdef G4QT3DDEBUG
+  G4cout << "G4Qt3DViewer::MovingToMasterThread" << G4endl;
+#endif
+  // On vis sub-thread just before exit
+  // Move relevant stuff to master QThread.
+  auto p1 = fQt3DSceneHandler.fpQt3DScene->parent();
+  auto p2 = p1->parent();
+  p2->moveToThread(masterQThread);
+  // Zero - will be different next run
+  visSubThreadQThread = nullptr;
 }
 
 void G4Qt3DViewer::SwitchToMasterThread()
 {
-//  fUIWidget->moveToThread(QThread::currentThread());
-//  moveToThread(QThread::currentThread());
-//  fQt3DSceneHandler.fpQt3DScene->moveToThread(QThread::currentThread());
-//  fQt3DSceneHandler.fpTransientObjects->moveToThread(QThread::currentThread());
 #ifdef G4QT3DDEBUG
-//  G4cout
-//  << "G4Qt3DViewer::SwitchToMasterThread: (void*)fQt3DSceneHandler.fpQt3DScene: "
-//  << (void*)fQt3DSceneHandler.fpQt3DScene
-//  << G4endl;
+  G4cout << "G4Qt3DViewer::SwitchToMasterThread" << G4endl;
 #endif
-
-#ifdef G4MULTITHREADED
-  if (G4Threading::IsMultithreadedApplication()) {
-    // I have not figured out how to draw during a run. In fact, even attempting
-    // to fill nodes gives the error "Cannot create children for a parent that
-    // is in a different thread." So instead draw events from kept events.
-    //
-    // Setting fNeedKernelVisit=true causes scene deletion and a complete rebuild,
-    // including trajectories, hits, etc. from kept events.
-    //
-    // Clearly this is a limitation because even if you run 1000 events you only
-    // get those kept (default 100), and even worse, if end-if-event-action is
-    // "refresh", you only get one event (the last I think).
-    //
-    // Also, strictly, there is no need to rebuid run-duration models (detector),
-    // but a complete rebuild is the easiest way (already imeplemented).
-    fNeedKernelVisit = true;
-    DrawView();  // Draw trajectories, etc., from kept events
-  }
-#endif
+  // On master thread after vis sub-thread has terminated
+  // Nothing to do
 }
 
 void G4Qt3DViewer::KernelVisitDecision () {
@@ -366,5 +383,3 @@ void G4Qt3DViewer::wheelEvent(QWheelEvent* ev)
   SetView();
   DrawView();
 }
-
-#endif  // #if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)

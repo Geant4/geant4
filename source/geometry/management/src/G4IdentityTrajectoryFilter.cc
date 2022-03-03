@@ -30,14 +30,6 @@
 
 #include "G4IdentityTrajectoryFilter.hh"
 
-G4IdentityTrajectoryFilter::G4IdentityTrajectoryFilter()
-{
-}
-
-G4IdentityTrajectoryFilter::~G4IdentityTrajectoryFilter()
-{
-}
-
 void
 G4IdentityTrajectoryFilter::TakeIntermediatePoint( G4ThreeVector newPoint )
 {

@@ -25,6 +25,188 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+11 November 2021  John Allison (visman-V10-07-28)
+- G4VisManager.cc:
+  - Bug exposed by G03.
+  - Protect null pointers in GeometryHasChanged when called before any
+    scenes, scene handlers or viewers had been created.
+
+07 November 2021  John Allison (visman-V10-07-27)
+- G4VSceneHandler:
+  - Introduce GetColour (const G4Visible&).
+    - This makes no assumptions about the validity of data member fpVisAttribs.
+    - If the G4Visible has no vis attributes, i.e., the pointer is null,
+      the colour is obtained from the default view parameters of the
+      current viewer.
+    - It is safer than GetColour () (no arguments), which might be deprecated
+      in future.
+  - Add explanatory comment regarding view destruction in RemoveViewerFromList.
+- G4Scene.cc:
+  - Remove misleading comments.
+- G4VisCommansCompound.cc:
+  - /vis/drawTree: Invoke /vis/viewer/reset to ensure culling is off, so that
+    all volumes are printed.
+
+05 November 2021  Guy Barrand (visman-V10-07-26)
+- suppress G4VisPlotMessenger.hh. The relationship G4/analysis
+  versus G4/visualization is going to be done by using G4/commands.
+- sources.cmake: remove G4VisPlotMessenger.hh.
+- G4VisCommandsPlotter, G4VisManager.cc: have now the commands:
+    /vis/plotter/add/h1
+    /vis/plotter/add/h2
+  managed here (and no more in G4VisPlotMessenger).    
+
+03 November 2021  Guy Barrand (visman-V10-07-25)
+- G4PlotterManager: have:
+    /vis/plotter/style/select
+    /vis/plotter/style/add
+    /vis/plotter/style/remove
+  commands to be able to create styles from G4 commands.
+  To handle properly these commands, a local list of
+  styles is managed (do not use the tools::xml::styles
+  for this).
+- G4PlotterManager: remove the:
+    /vis/plotter/style/load
+  command and the logic to define a style through an
+  XML file. It then removes a dependancy toward expat.
+- sources.cmake: since expat is no more used, remove:
+    ${EXPAT_LIBRARIES}
+
+02 November 2021  Gabriele Cosmo  (visman-V10-07-24)
+- G4VVisCommand: move static functions to be not inline, to support Windows DLL
+  builds. Added GetVisManager() accessor.
+- G4VisPlotMessenger: use GetVisManager() accessor instead of static pointer
+  in inline method AddRegionHistogram().
+
+30 October 2021  John Allison  (visman-V10-07-23)
+- G4VisExecutive.icc:
+  - Introduce additional nicknames:
+    - "TSG" for the selected ToolsSG driver.
+    - "VTK_NATIVE" for the G4Vtk driver.
+    - "Vtk" and "VTK" for the selected Vtk driver.
+    - So now the names (and nicknames) are, for example:
+      - TOOLSSG_QT_GLES (TSG_QT_GLES, TSG)
+      - VtkNative (VTKN, VTK_NATIVE)
+      - VtkQt (VTKQt, Vtk, VTK)
+- G4VisManager.cc:
+  - Invoke G4UIdirectory::Sort() for /vis/.
+    - Command names now appear in alphabetical order.
+    - Sort() was recently introduced in intercoms-V10-07-14.
+    - By default, sorting is propagated to subdirectories, but this may
+      be intercepted by Sort(false) on the subdirectory.
+  - Protect against nullptr in SetCurrentViewer().
+  - Fix a bug which prevented the number of events to be kept being set
+    to zero. 
+- G4VSceneHandler.hh:
+  - Remove redundant forward declarations.
+  - Tidy AddPrimitive section.
+- G4VSceneHandler.cc:
+  - Reset current viewer to nullptr after RemoveViewerFromList.
+  - Improve warning messages in the default AddPrimitive (const G4Plotter&).
+
+25 October 2021 Guy Barrand (visman-V10-07-22)
+- sources.cmake: declare to cmake:
+    G4VisCommandsPlotter.hh,.cc
+    G4PlotterManager.hh,.cc
+    G4VisPlotMessenger.hh
+  Have G4tools in the module dependencies (mainly to have -I toward g4tools/include/tools).
+  Because G4PlotterManager.cc uses expat to load an XML style file, have also:
+    ${EXPAT_LIBRARIES}
+- include/G4VisPlotMessenger.hh: a template pure header messenger for the commands:
+    /vis/plotter/add/h1
+    /vis/plotter/add/h2
+  This file is intended to be used in user code and does the connection of the
+  G4/vis/plotting with G4/analysis that manages the histograms. (Done in this way,
+  it avoids a strong relationship between the vis and analysis categories).
+- include/G4VSceneHandler.hh,.cc: default implementation of AddPrimitive(G4Plotter).
+- G4VisManager.cc: declare the /vis/scene/add/plotter along the /vis/plotter commands.
+- G4VisCommandsSceneAdd.hh,.cc: /vis/scene/add/plotter command.
+- G4VisCommandsPlotter.hh,.cc: new files: have commands:
+    /vis/plotter/create
+    /vis/plotter/setLayout
+    /vis/plotter/addStyle
+    /vis/plotter/addRegionStyle
+    /vis/plotter/addRegionParameter
+    /vis/plotter/clear
+    /vis/plotter/clearRegion
+    /vis/plotter/list
+- G4PlotterManager.hh,.cc: new files: a singleton to handle named G4Plotter instances
+  and the commands:
+    /vis/plotter/style/load
+    /vis/plotter/style/list
+    /vis/plotter/style/print
+
+10 October 2021 John Allison (visman-V10-07-21)
+- G4VisCommandsCompound.cc, G4VisCommandOpen, G4VisCommandSceneHandlerCreate:
+  - Improve reporting of unrecognised graphics system.
+- G4VisCommandsTouchable.cc: Migrate to modeling-V10-07-14:
+  - G4PhysicalVolumeModel: Hold current transform as object, not as a pointer.
+
+02 September 2021 John Allison (visman-V10-07-20)
+- G4VVisCommand, G4VisCommandsSceneHandler and G4VisCommandsViewer:
+  o Preserve view parameters of any existing viewer and use them in
+    the creation of a new viewer.
+  o So if the user requests a new viewer of the same or a new graphics
+    system, the upcoming view will inherit the view parameters of
+    the previously existing viewer.
+  o The idea is that it makes the response a command /vis/viewer/open
+    (or /vis/viewer/create) more natural. (Hitherto, it might have
+    opened a virgin viewer without any reference to what the user had
+    previously specified.)
+  o The first /vis/open in not affected.
+
+27 August 2021 Ben Morgan (visman-V10-07-19)
+- Remove obsolete HepRep(WIRED) driver
+
+26 August 2021 Ben Morgan (visman-V10-07-18)
+- G4VisExecutive:
+  o Remove obsolete VRML1 and network VRML2 drivers
+  o Remove obsolete network FukuiRenderer driver
+
+31 July 2021  John Allison  (visman-V10-07-17)
+- G4Scene: Remove misleading warning message.
+  o AddRunDurationModel: Allow multiple models fo the same name, but
+    different parameters, to be added without warning.
+
+18 July 2021  John Allison  (visman-V10-07-16)
+- G4VSceneHandler.cc:
+  o Use C++17 [[fallthrough]] instead of // fallthrough in switch statement.
+
+15 July 2021  John Allison  (visman-V10-07-15)
+- G4VisCommands.cc:
+  o Replace /vis/ogl/printEPS with /vis/ogl/export in guidance.
+
+12 July 2021  John Allison  (visman-V10-07-14)
+- G4VisCommandsScene:
+  o Implement /vis/scene/removeModel.
+
+09 July 2021  John Allison  (visman-V10-07-13)
+- G4ViewParameters.cc:
+  o Add Special Mesh Rendering parameters to /vis/viewer/save.
+
+06 July 2021  John Allison  (visman-V10-07-12)
+- G4VSceneHandler.cc:
+  o Add code for drawing the extents of models in a scene.
+    . For debug only; commented out.
+- G4VViewer.cc:
+  o Trap request to set touchable of a physical volume no longer in the
+    physical volume store and issue message.
+- G4ViewParameters:
+  o Fix Coverity warning.
+- G4VVisCommandGeometrySet.cc:
+  o Recalculate extent of any physical volume model in run duration lists
+    after any /vis/geometry command (the scene's extent might have been
+    changed by the command).
+
+30 June 2021  John Allison  (visman-V10-07-11)
+- Requires greps-V10-07-09 and modeling-V10-07-11.
+- Revise vis models. See visualization/modeling/History for more details.
+- Consequent changes:
+  o AddPrimitive(const G4Scale&) has been removed from all scene handlers.
+  o Draw(const G4Scale&) has been removed from G4VisManager.
+  o /vis/scene/add/scale reimplemented with G4CallBackModel.
+  o All commands using G4CallBackModel follow interface change.
+
 07 June 2021  John Allison  (visman-V10-07-10)
 - G4VSceneHandler:
   o Implement a default AddCompound (const G4Mesh&).

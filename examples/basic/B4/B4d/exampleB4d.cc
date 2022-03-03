@@ -27,10 +27,10 @@
 /// \file exampleB4d.cc
 /// \brief Main program of the B4d example
 
-#include "B4dDetectorConstruction.hh"
-#include "B4dActionInitialization.hh"
-#include "B4Analysis.hh"
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4RunManagerFactory.hh"
 #include "G4SteppingVerbose.hh"
 #include "G4TScoreNtupleWriter.hh"
@@ -46,7 +46,7 @@
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " exampleB4a [-m macro ] [-u UIsession] [-t nThreads] [-vDefault]"
+    G4cerr << " exampleB4d [-m macro ] [-u UIsession] [-t nThreads] [-vDefault]"
            << G4endl;
     G4cerr << "   note: -t option is available only for multi-threaded mode."
            << G4endl;
@@ -116,13 +116,13 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  auto detConstruction = new B4dDetectorConstruction();
+  auto detConstruction = new B4d::DetectorConstruction();
   runManager->SetUserInitialization(detConstruction);
 
   auto physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
 
-  auto actionInitialization = new B4dActionInitialization();
+  auto actionInitialization = new B4d::ActionInitialization();
   runManager->SetUserInitialization(actionInitialization);
 
   // Initialize visualization

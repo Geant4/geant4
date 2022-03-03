@@ -29,8 +29,94 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 November 2021 - Ben Morgan (cmake-V10-07-53)
+- Only configure public release contribution guide if present
+
+30 November 2021 - Ivana Hrivnacova (cmake-V10-07-52)
+- Removed FindAIDA.cmake from Modules
+
+29 November 2021 - Ben Morgan (cmake-V10-07-51)
+- Require VecGeom 1.1.18 or newer
+- Configure/find Vtk alongside other UI/Vis options
+
+26 November 2021 - Ben Morgan (cmake-V10-07-50)
+- Strip .git{ignore,lab,hub} files/dirs from source package
+- Use XZ compression instead of BZIP for source package
+
+22 November 2021 - Ben Morgan (cmake-V10-07-49)
+- Improve/modernize CPack source packaging
+
+12 November 2021 - Ben Morgan (cmake-V10-07-48)
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+8 November 2021 - Ben Morgan (cmake-V10-07-47)
+- Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+  
+2 November 2021 - Gunter Folger (cmake-V10-07-46)
+- switch to new dataset G4EMLOW8.0, given by Vladimir
+
+27 October 2021 - Guy Barrand (cmake-V10-07-45)
+- Modules/G4DeveloperAPI.cmake: ToolsSG => G4ToolsSG in the list of Qt moc-able modules.
+
+25/27/28 October 2021 - Gunter Folger (cmake-V10-07-44)
+- switch to new dataset G4TENDL1.4 provided by Alberto
+
+22 October 2021 - Guy Barrand (cmake-V10-07-43)
+- Modules/G4DeveloperAPI.cmake: have ToolsSG as a Qt moc-able module.
+
+13 October 2021 - Ben Morgan (cmake-V10-07-42)
+- Add XercesC library directory to Linux LD_LIBRARY_PATH for GNUmake.
+  Workaround for incorrect setup on LCG stacks for Nightly builds
+
+12 October 2021 - Ben Morgan (cmake-V10-07-41)
+- Make ToolsSG options mutually exclusive
+
+04 October 2021 - Stewart Boogert / Laurie Nevay (cmake-V10-07-40)
+- Add options and find module for VTK visualisation driver
+
+27 September 2021 - Ben Morgan (cmake-V10-07-39)
+- Change default value of GEANT4_BUILD_MULTITHREADED to ON
+
+22 September 2021 - Guilherme Amadio (cmake-V10-07-38)
+- geant4_add_test:
+  - Ensure that Geant4 being built is picked up to build examples.
+  - Ensure that the same compiler is used to build the tests.
+
+13 September 2021 - Gabriele Cosmo (cmake-V10-04-37)
+- Set CLHEP-2.4.5.1 as the required minimum version.
+
+3 September 2021 - Ben Morgan (cmake-V10-04-36)
+- geant4_add_test creates separate build/run tests when asked to do both
+  - Required to support valgrind/memcheck runs without valgrind-ing
+    the build part of the test.
+
+1 September 2021 - Ben Morgan (cmake-V10-04-35)
+- Remove obsolete geant4_{executable,link_library} options
+
+26 August 2021 - Ben Morgan (cmake-V10-07-34)
+- Remove obsolete network VRML driver option
+- Remove obsolete network FukuiRenderer driver option
+
+23 August 2021 - Guilherme Amadio (cmake-V10-07-33)
+- Rename Geant4::HDF5 to hdf5::hdf5 to be compatible with
+  imported target provided since CMake 3.20.
+
+20 August 2021    - Gunter Folger  (cmake-V10-07-32)
+- Switch to G4ParticleXS 4.0
+
+22 July 2021 - Ivana Hrivnacova (cmake-V10-07-31)
+- Fixed path to g4tools/fonts, now in source/externals
+
+30 June 2021 - Ben Morgan (cmake-V10-07-30)
+- Remove obsolete GEANT4_USE_SYSTEM_CLHEP_GRANULAR option
+
+29 June 2021 - Ben Morgan (cmake-V10-07-29)
+- Disable creation of clang-formatting targets
+
 21 June 2021   - Julia Yarba    (cmake-V10-07-28)
-- Clean cmake/Modules/FindPythia8.cmake 
+- Clean cmake/Modules/FindPythia8.cmake
   (remove trailing whitespaces)
 
 18 June 2021   - Julia Yarba    (cmake-V10-07-27)

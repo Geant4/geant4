@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // John Allison  5th April 2001
 // A base class for a dummy viewer to dump geometry hierarchy.
 
@@ -39,17 +39,18 @@
 #include "G4HepRepFileXMLWriter.hh"
 #include "G4HepRepFileSceneHandler.hh"
 
-class G4HepRepFileViewer: public G4VViewer {
-public:
-  G4HepRepFileViewer(G4VSceneHandler&,const G4String& name);
+class G4HepRepFileViewer : public G4VViewer
+{
+ public:
+  G4HepRepFileViewer(G4VSceneHandler&, const G4String& name);
   virtual ~G4HepRepFileViewer();
   void SetView();
   void ClearView();
   void DrawView();
   void ShowView();
 
-private:
-  G4HepRepFileXMLWriter *hepRepXMLWriter;
+ private:
+  G4HepRepFileXMLWriter* hepRepXMLWriter;
 };
 
 #endif

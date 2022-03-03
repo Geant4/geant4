@@ -5,88 +5,9 @@
 #
 # IT SHOULD NOT BE INSTALLED!
 
-include(CMakeParseArguments)
-
 #-----------------------------------------------------------------------
 # Special internal functions for building tests.
 #-----------------------------------------------------------------------
-# function geant4_link_library(<name> source1 source2 ...
-#                              [TYPE STATIC|SHARED]
-#                              LIBRARIES library1 library2 ...)
-#
-function(geant4_link_library library)
-  cmake_parse_arguments(ARG "TYPE;LIBRARIES" "" ${ARGN})
-  set(sources)
-
-  # - Fill sources
-  foreach(fp ${ARG_UNPARSED_ARGUMENTS})
-    if(IS_ABSOLUTE ${fp})
-      file(GLOB files ${fp})
-    else()
-      file(GLOB files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${fp})
-    endif()
-    if(files)
-      set(sources ${sources} ${files})
-    else()
-      set(sources ${sources} ${fp})
-    endif()
-  endforeach()
-
-  # - Shared library unless specified
-  if(NOT ARG_TYPE)
-    set(ARG_TYPE SHARED)
-  endif()
-
-  # - Make sure we can access our own headers
-  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-  # - Deal with Win32 DLLs that don't export via declspec
-  if(WIN32 AND ARG_TYPE STREQUAL SHARED)
-    # - Dummy archive library
-    add_library( ${library}-arc STATIC EXCLUDE_FROM_ALL ${sources})
-
-    # - Use genwindef to create .def file listing symbols
-    add_custom_command(
-      OUTPUT ${library}.def
-      COMMAND ${genwindef_cmd} -o ${library}.def -l ${library} ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/${library}-arc.lib
-      DEPENDS ${library}-arc genwindef)
-
-    #- Dummy cpp file needed to satisfy Visual Studio.
-    file( WRITE ${CMAKE_CURRENT_BINARY_DIR}/${library}.cpp "// empty file\n" )
-    add_library( ${library} SHARED ${library}.cpp ${library}.def)
-    target_link_libraries(${library} ${library}-arc ${ARG_LIBRARIES})
-    set_target_properties(${library} PROPERTIES LINK_INTERFACE_LIBRARIES ${ARG_LIBRARIES} ${Geant4_LIBRARIES})
-  else()
-    add_library( ${library} ${ARG_TYPE} ${sources})
-    target_link_libraries(${library} ${ARG_LIBRARIES} ${Geant4_LIBRARIES})
-  endif()
-endfunction()
-
-#-----------------------------------------------------------------------
-# function geant4_executable(<name> source1 source2 ...
-#                            LIBRARIES library1 library2 ... )
-#
-function(geant4_executable executable)
-  cmake_parse_arguments(ARG "" "" "LIBRARIES" ${ARGN})
-
-  set(sources)
-
-  foreach(fp ${ARG_UNPARSED_ARGUMENTS})
-    file(GLOB files ${fp})
-    if(files)
-      set(sources ${sources} ${files})
-    else()
-      set(sources ${sources} ${fp})
-    endif()
-  endforeach()
-
-  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/include ${GEANT4_INCLUDE_DIR})
-
-  add_executable(${executable} EXCLUDE_FROM_ALL ${sources})
-  target_link_libraries(${executable} ${ARG_LIBRARIES} ${Geant4_LIBRARIES} )
-  set_target_properties(${executable} PROPERTIES OUTPUT_NAME ${executable})
-endfunction()
-
 #-----------------------------------------------------------------------
 # function geant4_add_test(<name> COMMAND cmd [arg1... ]
 #                          [PRECMD cmd [arg1...]] [POSTCMD cmd [arg1...]]
@@ -117,6 +38,14 @@ function(geant4_add_test test)
     set(_cfg $<CONFIGURATION>/)
   endif()
 
+  # COMMAND AND BUILD: split test
+  # - In this case, we have to create a -build and a -run test with the latter depending on the former
+  # NOT COMMAND AND BUILD: pure build
+  # COMMAND AND NOT BUILD: pure test
+  if(ARG_COMMAND AND ARG_BUILD)
+    set(_is_split_test TRUE)
+  endif()
+
   #- Handle COMMAND argument
   list(LENGTH ARG_COMMAND _len)
   if(_len LESS 1)
@@ -127,8 +56,13 @@ function(geant4_add_test test)
     list(GET ARG_COMMAND 0 _prg)
     list(REMOVE_AT ARG_COMMAND 0)
     if(NOT IS_ABSOLUTE ${_prg})
-      set(_prg ${CMAKE_CURRENT_BINARY_DIR}/${_cfg}${_prg})
+      if(TARGET ${_prg})
+        set(_prg "$<TARGET_FILE:${_prg}>")
+      else()
+        set(_prg ${CMAKE_CURRENT_BINARY_DIR}/${_cfg}${_prg})
+      endif()
     elseif(EXISTS ${_prg})
+      # Calling a prexisting/system program
     else()
       get_filename_component(_path ${_prg} PATH)
       get_filename_component(_file ${_prg} NAME)
@@ -203,21 +137,61 @@ function(geant4_add_test test)
          set(ARG_PROJECT ${ARG_BUILD})
        endif()
     endif()
-    add_test(NAME ${test} COMMAND ${CMAKE_CTEST_COMMAND}
-      --build-and-test  ${ARG_SOURCE_DIR} ${ARG_BINARY_DIR}
-      --build-generator ${CMAKE_GENERATOR}
-      --build-makeprogram ${CMAKE_MAKE_PROGRAM}
-      --build-target ${ARG_BUILD}
-      --build-project ${ARG_PROJECT}
-      --build-config $<CONFIGURATION>
-      --build-noclean
-      --build-options --no-warn-unused-cli -DCMAKE_DISABLE_FIND_PACKAGE_ROOT=$<BOOL:${CMAKE_DISABLE_FIND_PACKAGE_ROOT}>
-      --test-command ${_command} )
-    set_property(TEST ${test} PROPERTY ENVIRONMENT Geant4_DIR=${CMAKE_BINARY_DIR})
+
+    set(__build_test_name "${test}")
+    set(__run_test_name "")
+
+    if(_is_split_test)
+      set(__build_test_name "${test}-build")
+      set(__run_test_name "${test}")
+    endif()
+
+    # Build part of the test
+    add_test(NAME ${__build_test_name} COMMAND ${CMAKE_CTEST_COMMAND}
+        --build-and-test  ${ARG_SOURCE_DIR} ${ARG_BINARY_DIR}
+        --build-generator ${CMAKE_GENERATOR}
+        --build-makeprogram ${CMAKE_MAKE_PROGRAM}
+        --build-target ${ARG_BUILD}
+        --build-project ${ARG_PROJECT}
+        --build-config $<CONFIGURATION>
+        --build-noclean
+        --build-options
+          --no-warn-unused-cli
+          -DGeant4_DIR=${CMAKE_BINARY_DIR}
+          -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+          -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+          -DCMAKE_DISABLE_FIND_PACKAGE_ROOT=$<BOOL:${CMAKE_DISABLE_FIND_PACKAGE_ROOT}>
+    )
+    set_property(TEST ${__build_test_name} PROPERTY ENVIRONMENT Geant4_DIR=${CMAKE_BINARY_DIR})
+
+    # Build part of the test should have additional regex, and *must* have same labels
     if(ARG_FAILREGEX)
-      set_property(TEST ${test} PROPERTY FAIL_REGULAR_EXPRESSION "warning:|(${ARG_FAILREGEX})")
+      set_property(TEST ${__build_test_name} PROPERTY FAIL_REGULAR_EXPRESSION "warning:|(${ARG_FAILREGEX})")
     else()
-      set_property(TEST ${test} PROPERTY FAIL_REGULAR_EXPRESSION "warning:")
+      set_property(TEST ${__build_test_name} PROPERTY FAIL_REGULAR_EXPRESSION "warning:")
+    endif()
+
+    if(ARG_LABELS)
+      set_property(TEST ${__build_test_name} PROPERTY LABELS ${ARG_LABELS})
+    else()
+      set_property(TEST ${__build_test_name} PROPERTY LABELS Nightly)
+    endif()
+
+    # (Optional) Run part of the test
+    if(__run_test_name)
+      add_test(NAME ${__run_test_name} COMMAND ${_command})
+      set_property(TEST ${__run_test_name} PROPERTY DEPENDS ${__build_test_name})
+      if(ARG_FAILREGEX)
+        set_property(TEST ${__run_test_name} PROPERTY FAIL_REGULAR_EXPRESSION ${ARG_FAILREGEX})
+      endif()
+
+      # If WORKING_DIRECTORY supplied, make sure testdriver is run in
+      # that directory, otherwise use specific binary dir
+      if(ARG_WORKING_DIRECTORY)
+        set_property(TEST ${__run_test_name} PROPERTY WORKING_DIRECTORY "${ARG_WORKING_DIRECTORY}")
+      else()
+        set_property(TEST ${__run_test_name} PROPERTY WORKING_DIRECTORY "${ARG_BINARY_DIR}")
+      endif()
     endif()
   else()
     add_test(NAME ${test} COMMAND ${_command})
@@ -238,7 +212,8 @@ function(geant4_add_test test)
   endif()
 
   if(ARG_DEPENDS)
-    set_property(TEST ${test} PROPERTY DEPENDS ${ARG_DEPENDS})
+    # MUST be append because a split test may set this earlier
+    set_property(TEST ${test} APPEND PROPERTY DEPENDS ${ARG_DEPENDS})
   endif()
 
   if(ARG_PASSREGEX)

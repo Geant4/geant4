@@ -48,11 +48,12 @@
 
 namespace G4INCL {
 
-  ParticleSampler::ParticleSampler(const G4int A, const G4int Z) :
+  ParticleSampler::ParticleSampler(const G4int A, const G4int Z, const G4int S) :
     sampleOneProton(&ParticleSampler::sampleOneParticleWithoutRPCorrelation),
     sampleOneNeutron(&ParticleSampler::sampleOneParticleWithoutRPCorrelation),
     theA(A),
     theZ(Z),
+    theS(S),
     theDensity(NULL),
     thePotential(NULL)
   {
@@ -61,6 +62,7 @@ namespace G4INCL {
     std::fill(rpCorrelationCoefficient, rpCorrelationCoefficient + UnknownParticle, 1.);
     rpCorrelationCoefficient[Proton] = ParticleTable::getRPCorrelationCoefficient(Proton);
     rpCorrelationCoefficient[Neutron] = ParticleTable::getRPCorrelationCoefficient(Neutron);
+    rpCorrelationCoefficient[Lambda] = ParticleTable::getRPCorrelationCoefficient(Lambda);
   }
 
   ParticleSampler::~ParticleSampler() {
@@ -108,6 +110,8 @@ namespace G4INCL {
       thePCDFTable[Proton] = NuclearDensityFactory::createPCDFTable(Proton, theA, theZ);
       theRCDFTable[Neutron] = NuclearDensityFactory::createRCDFTable(Neutron, theA, theZ);
       thePCDFTable[Neutron] = NuclearDensityFactory::createPCDFTable(Neutron, theA, theZ);
+      theRCDFTable[Lambda] = NuclearDensityFactory::createRCDFTable(Lambda, theA, theZ);
+      thePCDFTable[Lambda] = NuclearDensityFactory::createPCDFTable(Lambda, theA, theZ);
     }
 
     theList.resize(theA);
@@ -116,9 +120,10 @@ namespace G4INCL {
       ParticleSamplerMethod sampleOneParticle = sampleOneProton;
       for(G4int i = 0; i < theA; ++i) {
         if(i == theZ) { // Nucleons [Z..A-1] are neutrons
-          type = Neutron;
-          sampleOneParticle = sampleOneNeutron;
+          type = Lambda;
+          sampleOneParticle = sampleOneNeutron; // hypothesis: Lambdas follow the same rules than neutrons
         }
+        if(i == theZ - theS) type = Neutron;
         Particle *p = (this->*sampleOneParticle)(type);
         p->setPosition(position + p->getPosition());
         theList[i] = p;

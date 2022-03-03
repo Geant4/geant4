@@ -1,0 +1,172 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Hadr05
+                            ------
+  
+ How to collect energy deposition in a sampling calorimeter.
+ How to survey energy flow.
+ Hadr05 is the hadronic equivalent of TestEm3.
+
+
+ 1- GEOMETRY DEFINITION
+ 
+  The calorimeter is a box made of a given number of layers.
+  A layer consists of a sequence of various absorbers (maximum MaxAbsor=9).
+  The layer is replicated.
+ 
+  Parameters defining the calorimeter :
+    - the number of layers,
+    - the number of absorbers within a layer,		
+    - the material of the absorbers,
+    - the thickness of the absorbers,
+    - the transverse size of the calorimeter (the input face is a square). 
+ 
+  In addition a transverse uniform magnetic field can be applied.
+ 
+  The default geometry is constructed in DetectorConstruction class, but all
+  of the above parameters can be modified interactively via the commands 
+  defined in the DetectorMessenger class.
+
+
+        |<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+        |           |           |                       |                       |
+        ==========================================================================
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||   abs 1  | abs 2     ||   abs 1  | abs 2     ||   abs 1  | abs 2     ||
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+ beam   ||          |           ||          |           ||          |           ||
+======> ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||          |           ||          |           ||          |           ||
+        ||   cell 1 | cell 2    ||   cell 3 | cell 4    ||   cell 5 | cell 6    ||
+        ==========================================================================
+        ^           ^           ^           ^           ^           ^           ^
+        pln1        pln2        pln3       pln4        pln5        pln6       pln7
+ 
+  NB. The number of absorbers and the number of layers can be set to 1.
+  In this case we have a unique homogeneous block of matter, which looks like 
+  a bubble chamber rather than a calorimeter ...
+  (see the macro emtutor.mac)
+  
+  A function, and its associated UI command, allows to build a material
+  directly from a single isotope.
+  
+  To be identified by the ThermalScattering module, the elements composing a
+  material must have a specific name (see G4ParticleHPThermalScatteringNames.cc)
+  Examples of such materials are build in Hadr06/src/DetectorConstruction.cc
+    
+ 2- PHYSICS LISTS
+ 
+  "Full" set of physics processes are registered, but via PhysicsConstructor
+  objects rather than complete pre-defined G4 physics lists. This alternative 
+  way gives more freedom to register physics.
+  
+  Physics constructors are either constructors provided in Geant4 (with G4 prefix)
+  or 'local'. They include : HadronElastic, HadronInelastic, IonsInelastic,
+  GammaNuclear, RadioactiveDecay and Electomagnetic.
+  (see geant4/source/physics_lists/constructors)
+
+  HadronElasticPhysicsHP include a model for thermalized neutrons,
+  under the control of the command /testhadr/phys/thermalScattering
+ 
+  GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
+
+  ElectromagneticPhysics is a readable version of G4EmStandardPhysics_opt3.
+
+  Several hadronic physics options are controlled by environment variables.
+  To select them, see Hadr07.cc
+    
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle which hits the calorimeter
+  perpendicular to the input face. The type of the particle and its energy are 
+  set in the PrimaryGeneratorAction class, and can be changed via the 
+  G4 build-in commands of G4ParticleGun class (see the macros provided with this 
+  example).
+ 	
+  In addition one can choose randomly the impact point of the incident particle.
+  The corresponding interactive command is built in PrimaryGeneratorAction.
+ 	
+  A RUN is a set of events.
+  
+  Hadr05 computes the energy deposited per absorber and the energy flow through
+  the calorimeter.
+ 				
+ 4- VISUALIZATION
+ 
+  The Visualization Manager is set in the main() (see Hadr05.cc).
+  The initialisation of the drawing is done via the commands :
+  /vis/... in the macro vis.mac. In interactive session:
+  PreInit or Idle > /control/execute vis.mac
+ 	
+  The default view is a longitudinal view of the calorimeter.
+ 	
+ 5- PHYSICS DEMO
+ 
+  The particle's type and the physics processes which will be available
+  in this example are set in PhysicsList class.
+ 	
+  In addition a built-in interactive command (/process/inactivate processName)
+  allows to activate/inactivate the processes one by one.
+  Then one can well visualize the processes one by one, especially 
+  in the bubble chamber setup with a transverse magnetic field.
+ 
+ 6- HOW TO START ?
+ 
+  - Execute Hadr05 in 'batch' mode from macro files
+      % Hadr05   Cu-lAr.mac
+ 
+  - Execute Hadr05 in 'interactive mode' with visualization
+    % Hadr05
+    ....
+    Idle> type your commands. For instance:
+    Idle> /control/execute vis.mac
+    ....
+    Idle> exit
+
+  Macros provided in this example:
+  - Fe-Sci.mac, Cu-lAr.mac, Pb-lAr.mac, W-lAr.mac : names are self explanatory
+  - emtest.mac, emtutor.mac : to be run interactively
+  - vis.mac: to activate visualization
+
+ 7- HISTOGRAMS
+ 
+ Hadr05 can produce histograms : 
+  histo 1 : energy deposit in absorber 1
+  histo 2 : energy deposit in absorber 2
+  ...etc...........
+    
+  histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV/event)
+  histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV/event)  
+  ...etc...........  
+  
+  histo 21 : energy flow (MeV/event)
+  histo 22 : lateral energy leak (MeV/event)  
+      
+  NB. Numbering scheme for histograms:
+  layer     : from 1 to NbOfLayers (included)
+  absorbers : from 1 to NbOfAbsor (included)
+  planes    : from 1 to NbOfLayers*NbOfAbsor + 1 (included)
+  
+ One can control the binning of the histo with the command:
+  /analysis/h1/set   idAbsor  nbin  Emin  Emax  unit 
+  where unit is the desired energy unit for that histo
+         
+  One can control the name of the histograms file with the command:
+  /analysis/setFileName  name  (default hadr05)
+   
+  It is possible to choose the format of the histogram file : root (default),
+  xml, csv, by using namespace in HistoManager.hh 
+   	
+ It is also possible to print selected histograms on an ascii file:
+ /analysis/h1/setAscii id
+ All selected histos will be written on a file name.ascii  (default hadr05)
+    

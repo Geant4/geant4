@@ -25,8 +25,6 @@
 //
 // John Allison  17th June 2019
 
-#if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)
-
 #include "G4Qt3D.hh"
 #include "G4Qt3DSceneHandler.hh"
 #include "G4Qt3DViewer.hh"
@@ -99,5 +97,3 @@ G4bool G4Qt3D::IsUISessionCompatible () const
   }
   return isCompatible;
 }
-
-#endif  // #if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)

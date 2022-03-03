@@ -22,96 +22,118 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// 
-// Geant4 headers
-#include "G4RunManager.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4VisAttributes.hh"
-#include "G4NistManager.hh"
+//
+
+#include "OpNoviceGDMLDetectorConstruction.hh"
+#include "OpNoviceDetectorMessenger.hh"
+
 #include "globals.hh"
 #include "G4GDMLParser.hh"
-// project headers
-#include "OpNoviceGDMLDetectorConstruction.hh"
-#include "OpNoviceGDMLDetectorConstructionMessenger.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4NistManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4RunManager.hh"
+#include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-OpNoviceGDMLDetectorConstruction::OpNoviceGDMLDetectorConstruction(G4String fname)
-: G4VUserDetectorConstruction() {
-    fDumpgdmlFile = "OpNovice_dump.gdml";
-    fverbose = false;
-    fdumpgdml = false;
-    gdmlFile = fname;
-    // create a messenger for this class
-    fDetectorMessenger = new OpNoviceGDMLDetectorConstructionMessenger(this);
-}
+OpNoviceGDMLDetectorConstruction::OpNoviceGDMLDetectorConstruction(
+  G4String fname)
+  : G4VUserDetectorConstruction()
+{
+  fDumpGdmlFileName = "OpNovice_dump.gdml";
+  fVerbose          = false;
+  fDumpGdml         = false;
+  fGdmlFile         = fname;
+  // create a messenger for this class
+  fDetectorMessenger = new OpNoviceDetectorMessenger(this);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-OpNoviceGDMLDetectorConstruction::~OpNoviceGDMLDetectorConstruction() {
-    delete fDetectorMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4VPhysicalVolume *OpNoviceGDMLDetectorConstruction::Construct() {
-    ReadGDML();
-    G4VPhysicalVolume *worldPhysVol = parser->GetWorldVolume();
-    if (fdumpgdml) parser->Write(fDumpgdmlFile, worldPhysVol);
-    return worldPhysVol;
+  G4cout << "Building detector from GDML file: " << fname << G4endl << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void OpNoviceGDMLDetectorConstruction::ConstructSDandField() {
+OpNoviceGDMLDetectorConstruction::~OpNoviceGDMLDetectorConstruction()
+{
+  delete fDetectorMessenger;
+  delete fParser;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void OpNoviceGDMLDetectorConstruction::ReadGDML() {
-    parser = new G4GDMLParser();
-    parser->Read(gdmlFile, false);
-    G4VPhysicalVolume *world = parser->GetWorldVolume();
-    //----- GDML parser makes world invisible, this is a hack to make it
-    //visible again...
-    G4LogicalVolume *pworldLogical = world->GetLogicalVolume();
-    pworldLogical->SetVisAttributes(0);
-    G4cout << world->GetTranslation() << G4endl << G4endl;
-    if (fverbose) {
-        G4cout << "Found world:  " << world-> GetName() << G4endl;
-        G4cout << "world LV:  " << world->GetLogicalVolume()->GetName() << G4endl;
-    }
-    G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
-    if (fverbose) {
-        G4cout << "Found " << pLVStore->size()
-                << " logical volumes."
-                << G4endl << G4endl;
-    }
-    G4PhysicalVolumeStore *pPVStore = G4PhysicalVolumeStore::GetInstance();
-    if (fverbose) {
-        G4cout << "Found " << pPVStore->size()
-                << " physical volumes."
-                << G4endl << G4endl;
-    }
+G4VPhysicalVolume* OpNoviceGDMLDetectorConstruction::Construct()
+{
+  ReadGDML();
+  G4VPhysicalVolume* worldPhysVol = fParser->GetWorldVolume();
+  if(fDumpGdml)
+    fParser->Write(fDumpGdmlFileName, worldPhysVol);
+  return worldPhysVol;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void OpNoviceGDMLDetectorConstruction::UpdateGeometry() {
-    G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
+void OpNoviceGDMLDetectorConstruction::ConstructSDandField() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void OpNoviceGDMLDetectorConstruction::ReadGDML()
+{
+  fParser = new G4GDMLParser();
+  fParser->Read(fGdmlFile, false);
+  G4VPhysicalVolume* world = fParser->GetWorldVolume();
+  // GDML parser makes world invisible. make it visible again.
+  G4LogicalVolume* pworldLogical = world->GetLogicalVolume();
+  pworldLogical->SetVisAttributes(0);
+  G4cout << world->GetTranslation() << G4endl << G4endl;
+  if(fVerbose)
+  {
+    G4cout << "Found world:  " << world->GetName() << G4endl;
+    G4cout << "world LV:  " << world->GetLogicalVolume()->GetName() << G4endl;
+  }
+  G4LogicalVolumeStore* pLVStore = G4LogicalVolumeStore::GetInstance();
+  if(fVerbose)
+  {
+    G4cout << "Found " << pLVStore->size() << " logical volumes." << G4endl
+           << G4endl;
+  }
+  G4PhysicalVolumeStore* pPVStore = G4PhysicalVolumeStore::GetInstance();
+  if(fVerbose)
+  {
+    G4cout << "Found " << pPVStore->size() << " physical volumes." << G4endl
+           << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void OpNoviceGDMLDetectorConstruction::SetDumpgdml(G4bool fdumpgdml1) {
-    this->fdumpgdml = fdumpgdml1;
+void OpNoviceGDMLDetectorConstruction::UpdateGeometry()
+{
+  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
-G4bool OpNoviceGDMLDetectorConstruction::IsDumpgdml() const {
-    return fdumpgdml;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void OpNoviceGDMLDetectorConstruction::SetDumpGdml(G4bool val)
+{
+  fDumpGdml = val;
 }
-void OpNoviceGDMLDetectorConstruction::SetVerbose(G4bool fverbose1) {
-    this->fverbose = fverbose1;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4bool OpNoviceGDMLDetectorConstruction::IsDumpGdml() const
+{
+  return fDumpGdml;
 }
-G4bool OpNoviceGDMLDetectorConstruction::IsVerbose() const {
-    return fverbose;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void OpNoviceGDMLDetectorConstruction::SetVerbose(G4bool val)
+{
+  fVerbose = val;
 }
-void OpNoviceGDMLDetectorConstruction::SetDumpgdmlFile(G4String fDumpgdmlFile1) {
-    this->fDumpgdmlFile = fDumpgdmlFile1;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4bool OpNoviceGDMLDetectorConstruction::IsVerbose() const { return fVerbose; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void OpNoviceGDMLDetectorConstruction::SetDumpGdmlFile(G4String val)
+{
+  fDumpGdmlFileName = val;
 }
-G4String OpNoviceGDMLDetectorConstruction::GetDumpgdmlFile() const {
-    return fDumpgdmlFile;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4String OpNoviceGDMLDetectorConstruction::GetDumpGdmlFileName() const
+{
+  return fDumpGdmlFileName;
 }

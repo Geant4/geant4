@@ -51,11 +51,6 @@
 #include <fstream>
 #include <sstream>
 
-// factory
-#include "G4CrossSectionFactory.hh"
-//
-G4_DECLARE_XS_FACTORY(G4NeutronElasticXS);
-
 G4PhysicsVector* G4NeutronElasticXS::data[] = {nullptr};
 G4double G4NeutronElasticXS::coeff[] = {0.0};
 G4String G4NeutronElasticXS::gDataDirectory = "";
@@ -108,7 +103,7 @@ G4bool G4NeutronElasticXS::IsIsoApplicable(const G4DynamicParticle*,
                                            G4int, G4int,
                                            const G4Element*, const G4Material*)
 {
-  return true;
+  return false;
 }
 
 G4double 
@@ -225,7 +220,7 @@ const G4String& G4NeutronElasticXS::FindDirectoryPath()
   // build the complete string identifying the file with the data set
   if(gDataDirectory.empty()) {
     char* path = std::getenv("G4PARTICLEXSDATA");
-    if (path) {
+    if (nullptr != path) {
       std::ostringstream ost;
       ost << path << "/neutron/el";
       gDataDirectory = ost.str();
@@ -261,7 +256,7 @@ void G4NeutronElasticXS::Initialise(G4int Z)
   std::ostringstream ost;
   ost << FindDirectoryPath() << Z ;
   std::ifstream filein(ost.str().c_str());
-  if (!(filein)) {
+  if (!filein.is_open()) {
     G4ExceptionDescription ed;
     ed << "Data file <" << ost.str().c_str()
        << "> is not opened!";

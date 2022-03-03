@@ -795,9 +795,6 @@ INPUT                  = Doxymain.h \
                          ../extended/analysis/.README.txt \
                          ../extended/analysis/AnaEx01/.README.txt \
                          ../extended/analysis/AnaEx02/.README.txt \
-                         ../extended/analysis/AnaEx03/.README.txt \
-                         ../extended/analysis/AnaEx03/.README.AIDA.txt \
-                         ../extended/analysis/AnaEx03/.README.OpenScientist.txt \
                          ../extended/analysis/B1Con \
                          ../extended/biasing \
                          ../extended/electromagnetic/.README.txt \
@@ -830,6 +827,7 @@ INPUT                  = Doxymain.h \
                          ../extended/eventgenerator/particleGun/.README.txt \
                          ../extended/eventgenerator/pythia/.README.txt \
                          ../extended/eventgenerator/pythia/decayer6 \
+                         ../extended/eventgenerator/pythia/py8decayer/.README.txt \
                          ../extended/eventgenerator/userPrimaryGenerator/.README.txt \
                          ../extended/exoticphysics/.README.txt \
                          ../extended/exoticphysics/channeling/.README.txt \
@@ -842,16 +840,19 @@ INPUT                  = Doxymain.h \
                          ../extended/g3tog4 \
                          ../extended/geometry/.README.txt \
                          ../extended/geometry/transforms/.README.txt \
+                         ../extended/geometry/vecGeomNavigation \
                          ../extended/hadronic/.README.txt \
                          ../extended/hadronic/Hadr00/.README.txt \
                          ../extended/hadronic/Hadr01/.README.txt \
                          ../extended/hadronic/Hadr02/.README.txt \
                          ../extended/hadronic/Hadr03/.README.txt \
                          ../extended/hadronic/Hadr04/.README.txt \
+                         ../extended/hadronic/Hadr05/.README.txt \
                          ../extended/hadronic/Hadr06/.README.txt \
                          ../extended/hadronic/Hadr07/.README.txt \
                          ../extended/hadronic/Hadr08/.README.txt \
                          ../extended/hadronic/Hadr09/.README.txt \
+                         ../extended/hadronic/Hadr10/.README.txt \
                          ../extended/hadronic/FissionFragment \
                          ../extended/hadronic/NeutronSource/.README.txt \
                          ../extended/medical/.README.txt \
@@ -863,6 +864,7 @@ INPUT                  = Doxymain.h \
                          ../extended/medical/fanoCavity2/.README.txt \
                          ../extended/medical/GammaTherapy/.README.txt \
                          ../extended/medical/dna/.README.txt \
+                         ../extended/medical/dna/AuNP/.README.txt \
                          ../extended/medical/dna/chem1/.README.txt \
                          ../extended/medical/dna/chem2/.README.txt \
                          ../extended/medical/dna/chem3/.README.txt \
@@ -880,6 +882,7 @@ INPUT                  = Doxymain.h \
                          ../extended/medical/dna/neuron/.README.txt \
                          ../extended/medical/dna/pdb4dna/.README.txt \
                          ../extended/medical/dna/range/.README.txt \
+                         ../extended/medical/dna/scavenger \
                          ../extended/medical/dna/slowing/.README.txt \
                          ../extended/medical/dna/splitting/.README.txt \
                          ../extended/medical/dna/spower/.README.txt \
@@ -916,7 +919,14 @@ INPUT                  = Doxymain.h \
                          ../extended/radioactivedecay/Activation/.README.txt \
                          ../extended/radioactivedecay/rdecay01/.README.txt \
                          ../extended/radioactivedecay/rdecay02/.README.txt \
-                         ../extended/runAndEvent \
+                         ../extended/runAndEvent/.README.txt \
+                         ../extended/runAndEvent/RE01 \
+                         ../extended/runAndEvent/RE02 \
+                         ../extended/runAndEvent/RE03 \
+                         ../extended/runAndEvent/RE04 \
+                         ../extended/runAndEvent/RE05 \
+                         ../extended/runAndEvent/RE06 \
+                         ../extended/runAndEvent/RE07/.README.txt \
                          ../extended/visualization \
                          .README.novice.txt
 
@@ -957,48 +967,48 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = ../basic/B2/B2b/include/B2ActionInitialization.hh \
-                         ../basic/B2/B2b/include/B2EventAction.hh \
-                         ../basic/B2/B2b/include/B2FieldMessenger.hh \
-                         ../basic/B2/B2b/include/B2MagneticField.hh \
-                         ../basic/B2/B2b/include/B2PrimaryGeneratorAction.hh \
-                         ../basic/B2/B2b/include/B2RunAction.hh \
-                         ../basic/B2/B2b/include/B2TrackerHit.hh \
-                         ../basic/B2/B2b/include/B2TrackerSD.hh \
-                         ../basic/B2/B2b/src/B2ActionInitialization.cc \
-                         ../basic/B2/B2b/src/B2EventAction.cc \
-                         ../basic/B2/B2b/src/B2FieldMessenger.cc \
-                         ../basic/B2/B2b/src/B2MagneticField.cc \
-                         ../basic/B2/B2b/src/B2PrimaryGeneratorAction.cc \
-                         ../basic/B2/B2b/src/B2RunAction.cc \
-                         ../basic/B2/B2b/src/B2TrackerHit.cc \
-                         ../basic/B2/B2b/src/B2TrackerSD.cc \
-                         ../basic/B3/B3b/include/B3Analysis.hh \
-                         ../basic/B3/B3b/include/B3DetectorConstruction.hh \
-                         ../basic/B3/B3b/include/B3PhysicsList.hh \
-                         ../basic/B3/B3b/include/B3PrimaryGeneratorAction.hh \
-                         ../basic/B3/B3b/include/B3StackingAction.hh \
-                         ../basic/B3/B3b/src/B3DetectorConstruction.cc \
-                         ../basic/B3/B3b/src/B3PhysicsList.cc \
-                         ../basic/B3/B3b/src/B3PrimaryGeneratorAction.cc \
-                         ../basic/B3/B3b/src/B3StackingAction.cc \
-                         ../basic/B4/B4b/include/B4Analysis.hh \
-                         ../basic/B4/B4c/include/B4Analysis.hh \
-                         ../basic/B4/B4d/include/B4Analysis.hh \
-                         ../basic/B4/B4b/include/B4DetectorConstruction.hh \
-                         ../basic/B4/B4b/include/B4DetectorMessenger.hh \
-                         ../basic/B4/B4b/src/B4DetectorConstruction.cc \
-                         ../basic/B4/B4b/src/B4DetectorMessenger.cc \
-                         ../basic/B4/B4b/include/B4PrimaryGeneratorAction.hh \
-                         ../basic/B4/B4c/include/B4PrimaryGeneratorAction.hh \
-                         ../basic/B4/B4d/include/B4PrimaryGeneratorAction.hh \
-                         ../basic/B4/B4b/src/B4PrimaryGeneratorAction.cc \
-                         ../basic/B4/B4c/src/B4PrimaryGeneratorAction.cc \
-                         ../basic/B4/B4d/src/B4PrimaryGeneratorAction.cc \
-                         ../basic/B4/B4c/include/B4RunAction.hh \
-                         ../basic/B4/B4d/include/B4RunAction.hh \
-                         ../basic/B4/B4c/src/B4RunAction.cc \
-                         ../basic/B4/B4d/src/B4RunAction.cc \
+EXCLUDE                = ../basic/B2/B2b/include/ActionInitialization.hh \
+                         ../basic/B2/B2b/include/EventAction.hh \
+                         ../basic/B2/B2b/include/FieldMessenger.hh \
+                         ../basic/B2/B2b/include/MagneticField.hh \
+                         ../basic/B2/B2b/include/PrimaryGeneratorAction.hh \
+                         ../basic/B2/B2b/include/RunAction.hh \
+                         ../basic/B2/B2b/include/TrackerHit.hh \
+                         ../basic/B2/B2b/include/TrackerSD.hh \
+                         ../basic/B2/B2b/src/ActionInitialization.cc \
+                         ../basic/B2/B2b/src/EventAction.cc \
+                         ../basic/B2/B2b/src/FieldMessenger.cc \
+                         ../basic/B2/B2b/src/MagneticField.cc \
+                         ../basic/B2/B2b/src/PrimaryGeneratorAction.cc \
+                         ../basic/B2/B2b/src/RunAction.cc \
+                         ../basic/B2/B2b/src/TrackerHit.cc \
+                         ../basic/B2/B2b/src/TrackerSD.cc \
+                         ../basic/B3/B3b/include/Analysis.hh \
+                         ../basic/B3/B3b/include/DetectorConstruction.hh \
+                         ../basic/B3/B3b/include/PhysicsList.hh \
+                         ../basic/B3/B3b/include/PrimaryGeneratorAction.hh \
+                         ../basic/B3/B3b/include/StackingAction.hh \
+                         ../basic/B3/B3b/src/DetectorConstruction.cc \
+                         ../basic/B3/B3b/src/PhysicsList.cc \
+                         ../basic/B3/B3b/src/PrimaryGeneratorAction.cc \
+                         ../basic/B3/B3b/src/StackingAction.cc \
+                         ../basic/B4/B4b/include/Analysis.hh \
+                         ../basic/B4/B4c/include/Analysis.hh \
+                         ../basic/B4/B4d/include/Analysis.hh \
+                         ../basic/B4/B4b/include/DetectorConstruction.hh \
+                         ../basic/B4/B4b/include/DetectorMessenger.hh \
+                         ../basic/B4/B4b/src/DetectorConstruction.cc \
+                         ../basic/B4/B4b/src/DetectorMessenger.cc \
+                         ../basic/B4/B4b/include/PrimaryGeneratorAction.hh \
+                         ../basic/B4/B4c/include/PrimaryGeneratorAction.hh \
+                         ../basic/B4/B4d/include/PrimaryGeneratorAction.hh \
+                         ../basic/B4/B4b/src/PrimaryGeneratorAction.cc \
+                         ../basic/B4/B4c/src/PrimaryGeneratorAction.cc \
+                         ../basic/B4/B4d/src/PrimaryGeneratorAction.cc \
+                         ../basic/B4/B4c/include/RunAction.hh \
+                         ../basic/B4/B4d/include/RunAction.hh \
+                         ../basic/B4/B4c/src/RunAction.cc \
+                         ../basic/B4/B4d/src/RunAction.cc \
                          ../extended/analysis/B1Con/include/B1DetectorConstruction.hh \
                          ../extended/analysis/B1Con/include/B1EventAction.hh \
                          ../extended/analysis/B1Con/include/B1EventInformation.hh \

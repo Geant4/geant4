@@ -119,7 +119,7 @@ G4HadFinalState * G4LENDCapture::ApplyYourself(const G4HadProjectile& aTrack, G4
          }
 */
 
-         theResult->AddSecondary( theSec );
+         theResult->AddSecondary( theSec, secID );
       } 
    }
    else 
@@ -150,7 +150,7 @@ G4HadFinalState * G4LENDCapture::ApplyYourself(const G4HadProjectile& aTrack, G4
             theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( (*it)->GetZ_asInt() , (*it)->GetA_asInt() ) );
             theSec->Set4Momentum( (*it)->GetMomentum() );
          }
-         theResult->AddSecondary( theSec );
+         theResult->AddSecondary( theSec, secID );
       }
       delete products_from_PE;
    }
@@ -160,7 +160,7 @@ G4HadFinalState * G4LENDCapture::ApplyYourself(const G4HadProjectile& aTrack, G4
       G4DynamicParticle* residual = new G4DynamicParticle;
       residual->SetDefinition( G4IonTable::GetIonTable()->GetIon( iZ + ipZ , iA + ipA ) );
       residual->SetMomentum( -p*MeV ); 
-      theResult->AddSecondary( residual );
+      theResult->AddSecondary( residual, secID );
    }
 
    delete products;

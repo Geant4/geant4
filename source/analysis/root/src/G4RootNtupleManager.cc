@@ -35,16 +35,14 @@
 #include "tools/wroot/file"
 
 using namespace G4Analysis;
+using std::to_string;
 
 //_____________________________________________________________________________
 G4RootNtupleManager::G4RootNtupleManager(const G4AnalysisManagerState& state,
-                       std::shared_ptr<G4NtupleBookingManager> bookingManger,
+                       const std::shared_ptr<G4NtupleBookingManager>& bookingManger,
                        G4int nofMainManagers, G4int nofFiles,
                        G4bool rowWise, G4bool rowMode)
  : G4TNtupleManager<tools::wroot::ntuple, G4RootFile>(state),
-   fFileManager(nullptr),
-   fMainNtupleManagers(),
-   fNtupleFile(nullptr),
    fRowWise(rowWise),
    fRowMode(rowMode)
 {
@@ -56,15 +54,11 @@ G4RootNtupleManager::G4RootNtupleManager(const G4AnalysisManagerState& state,
     }
     fMainNtupleManagers.push_back(
       std::make_shared<G4RootMainNtupleManager>(
-        this, bookingManger.get(), rowWise, fileNumber, fState));
+        this, bookingManger, rowWise, fileNumber, fState));
   }
 }
 
-//_____________________________________________________________________________
-G4RootNtupleManager::~G4RootNtupleManager()
-{}
-
-// 
+//
 // private methods
 //
 
@@ -75,38 +69,34 @@ void G4RootNtupleManager::CreateTNtupleFromBooking(
   if ( ! fMainNtupleManagers.size() ) {
     // No merging
     if ( ntupleDescription->fNtuple ) {
-      G4String inFunction = "G4RootNtupleManager::::CreateTNtupleFromBooking";
-      G4ExceptionDescription description;
-      description << "Cannot create ntuple. Ntuple already exists." << G4endl;
-      G4Exception(inFunction, "Analysis_W002", JustWarning, description);
+      Warn("Cannot create ntuple. Ntuple already exists.",
+        fkClass, "CreateTNtupleFromBooking");
       return;
-    }        
-  
+    }
+
     // Create ntuple file from ntuple description
     auto ntupleFile = fFileManager->CreateNtupleFile(ntupleDescription);
     if ( ! ntupleFile ) {
-      G4String inFunction = "G4RootNtupleManager::::CreateTNtupleFromBooking";
-      G4ExceptionDescription description;
-      description << "Cannot create ntuple. Ntuple file does not exist." << G4endl;
-      G4Exception(inFunction, "Analysis_W002", JustWarning, description);
+      Warn("Cannot create ntuple. Ntuple file does not exist.",
+        fkClass, "CreateTNtupleFromBooking");
       return;
     }
-    
+
     auto directory = std::get<2>(*ntupleFile);
     ntupleDescription->fNtuple
       = new tools::wroot::ntuple(
               *directory, ntupleDescription->fNtupleBooking, fRowWise);
-    
+
     auto basketSize = fFileManager->GetBasketSize();
     ntupleDescription->fNtuple->set_basket_size(basketSize);
-    
-    ntupleDescription->fIsNtupleOwner = false;  
+
+    ntupleDescription->fIsNtupleOwner = false;
            // ntuple object is deleted automatically when closing a file
     fNtupleVector.push_back(ntupleDescription->fNtuple);
-  } 
+  }
   else {
-    // Merging activated  
-    for ( auto manager : fMainNtupleManagers ) {
+    // Merging activated
+    for ( const auto& manager : fMainNtupleManagers ) {
       manager->CreateNtuple(ntupleDescription);
     }
   }
@@ -120,41 +110,51 @@ void G4RootNtupleManager::FinishTNtuple(
 }
 
 //_____________________________________________________________________________
-G4bool G4RootNtupleManager::Reset(G4bool deleteNtuple)
+G4bool G4RootNtupleManager::Reset()
 {
-  G4TNtupleManager<tools::wroot::ntuple, G4RootFile> ::Reset(deleteNtuple);
+  G4TNtupleManager<tools::wroot::ntuple, G4RootFile> ::Reset();
     // this will clear ntuple vector
 
-  auto finalResult = true;
+  auto result = true;
 
-  for ( auto manager : fMainNtupleManagers ) {
-    auto result = manager->Reset(false);
-    finalResult = result && finalResult;
+  for ( const auto& manager : fMainNtupleManagers ) {
+    result &= manager->Reset();
   }
 
-  return finalResult;
+  return result;
+}
+
+//_____________________________________________________________________________
+void G4RootNtupleManager::Clear()
+{
+  G4TNtupleManager<tools::wroot::ntuple, G4RootFile> ::Clear();
+    // this will clear ntuple vector
+
+  for ( const auto& manager : fMainNtupleManagers ) {
+    manager->ClearData();
+  }
 }
 
 //_____________________________________________________________________________
 G4bool G4RootNtupleManager::Merge()
 {
-  auto finalResult = true;
+  auto result = true;
 
-  for ( auto manager : fMainNtupleManagers ) {
-    auto result = manager->Merge();
-    finalResult = result && finalResult;
+  for ( const auto& manager : fMainNtupleManagers ) {
+    result &= manager->Merge();
   }
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
-void  G4RootNtupleManager::SetFileManager(std::shared_ptr<G4RootFileManager> fileManager)
-{ 
-  fFileManager = fileManager; 
+void  G4RootNtupleManager::SetFileManager(
+  const std::shared_ptr<G4RootFileManager>& fileManager)
+{
+  fFileManager = fileManager;
 
-  for ( auto mainNtupleManager : fMainNtupleManagers) {
-    mainNtupleManager->SetFileManager(fileManager);
+  for ( const auto& manager : fMainNtupleManagers ) {
+    manager->SetFileManager(fileManager);
   }
 }
 
@@ -176,11 +176,9 @@ std::shared_ptr<G4RootMainNtupleManager>
 G4RootNtupleManager::GetMainNtupleManager(G4int index) const
 {
   if ( index < 0 || index >= G4int(fMainNtupleManagers.size()) ) {
-    G4String inFunction = "G4RootNtupleManager::::GetMainNtupleManager";
-    G4ExceptionDescription description;
-    description << "      " << "main ntuple manager " << index << " does not exist.";
-    G4Exception(inFunction, "Analysis_W011", JustWarning, description);
-    return nullptr;         
+    Warn("main ntuple manager " + to_string(index) + " does not exist.",
+      fkClass, "GetMainNtupleManager");
+    return nullptr;
   }
 
   return fMainNtupleManagers[index];
@@ -188,28 +186,22 @@ G4RootNtupleManager::GetMainNtupleManager(G4int index) const
 
 //_____________________________________________________________________________
 unsigned int G4RootNtupleManager::GetBasketSize() const
-{ 
+{
   if ( ! fFileManager ) {
-    G4String inFunction = "G4RootNtupleManager::::GetBasketSize";
-    G4ExceptionDescription description;
-    description << "      " << "File manager must be defined first.";
-    G4Exception(inFunction, "Analysis_W011", JustWarning, description);
-    return 0;         
+    Warn("File manager must be defined first.", fkClass, "GetBasketSize");
+    return 0;
   }
 
-  return fFileManager->GetBasketSize(); 
+  return fFileManager->GetBasketSize();
 }
 
 //_____________________________________________________________________________
 unsigned int G4RootNtupleManager::GetBasketEntries() const
-{ 
+{
   if ( ! fFileManager ) {
-    G4String inFunction = "G4RootNtupleManager::::GetBasketEntries";
-    G4ExceptionDescription description;
-    description << "      " << "File manager must be defined first.";
-    G4Exception(inFunction, "Analysis_W011", JustWarning, description);
-    return 0;         
+    Warn("File manager must be defined first.", fkClass, "GetBasketEntries");
+    return 0;
   }
 
-  return fFileManager->GetBasketEntries(); 
+  return fFileManager->GetBasketEntries();
 }

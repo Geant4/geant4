@@ -119,10 +119,11 @@ void G4AtimaFluctuations::InitialiseMe(const G4ParticleDefinition* part)
 
 G4double 
 G4AtimaFluctuations::SampleFluctuations(const G4MaterialCutsCouple* couple,
-                                       const G4DynamicParticle* dp,
-                                       G4double tmax,
-                                       G4double length,
-                                       G4double meanLoss)
+                                        const G4DynamicParticle* dp,
+                                        const G4double tcut,
+                                        const G4double tmax,
+                                        const G4double length,
+                                        const G4double meanLoss)
 {
   //  G4cout << "### meanLoss= " << meanLoss << G4endl;
   if(meanLoss <= minLoss) return meanLoss;
@@ -133,7 +134,7 @@ G4AtimaFluctuations::SampleFluctuations(const G4MaterialCutsCouple* couple,
  //    << " " << parameter << " " << charge << " " << particleMass << G4endl; 
 
   const G4Material* material = couple->GetMaterial();
-  G4double siga = Dispersion(material,dp,tmax,length);
+  G4double siga = Dispersion(material,dp,tcut,tmax,length);
   
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
   //G4cout << "meanLoss= " << meanLoss << " loss= " << siga << G4endl;
@@ -143,12 +144,13 @@ G4AtimaFluctuations::SampleFluctuations(const G4MaterialCutsCouple* couple,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4AtimaFluctuations::Dispersion(const G4Material* mat,
-                                       const G4DynamicParticle* dp,
-                                       G4double,
-                                       G4double length)
+                                         const G4DynamicParticle* dp,
+				         const G4double, const G4double,
+                                         const G4double length)
 {
   kineticEnergy = dp->GetKineticEnergy();
   const G4ParticleDefinition* p = dp->GetDefinition();
+  if(particle != p) { InitialiseMe(p); }
 
   G4double ap = p->GetPDGMass()/atomic_mass_unit;
   G4double zp = p->GetPDGCharge();

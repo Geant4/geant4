@@ -82,6 +82,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "Randomize.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Scintillation::G4Scintillation(const G4String& processName,
@@ -93,6 +94,7 @@ G4Scintillation::G4Scintillation(const G4String& processName,
   , fEmSaturation(nullptr)
   , fNumPhotons(0)
 {
+  secID = G4PhysicsModelCatalog::GetModelID("model_Scintillation");
   SetProcessSubType(fScintillation);
 
 #ifdef G4DEBUG_SCINTILLATION
@@ -147,9 +149,9 @@ void G4Scintillation::ProcessDescription(std::ostream& out) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-  if (aParticleType.GetParticleName() == "opticalphoton")
+  if(aParticleType.GetParticleName() == "opticalphoton")
     return false;
-  if (aParticleType.IsShortLived())
+  if(aParticleType.IsShortLived())
     return false;
   return true;
 }
@@ -218,7 +220,8 @@ void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
 
     if(MPT)
     {
-      G4MaterialPropertyVector* MPV = MPT->GetProperty(kSCINTILLATIONCOMPONENT1);
+      G4MaterialPropertyVector* MPV =
+        MPT->GetProperty(kSCINTILLATIONCOMPONENT1);
       if(MPV)
       {
         // Retrieve the first intensity point in vector
@@ -387,7 +390,6 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
   G4double yield3     = 0.;
   G4double sum_yields = 0.;
 
-
   if(fScintillationByParticleType)
   {
     MeanNumberOfPhotons = GetScintillationYieldByParticleType(
@@ -406,8 +408,7 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
                : 0.;
     // The default linear scintillation process
     // Units: [# scintillation photons / MeV]
-    MeanNumberOfPhotons =
-      MPT->GetConstProperty(kSCINTILLATIONYIELD);
+    MeanNumberOfPhotons = MPT->GetConstProperty(kSCINTILLATIONYIELD);
     // Birk's correction via fEmSaturation and specifying scintillation by
     // by particle type are physically mutually exclusive
     if(fEmSaturation)
@@ -417,7 +418,6 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       MeanNumberOfPhotons *= TotalEnergyDeposit;
   }
   sum_yields = yield1 + yield2 + yield3;
-
 
   if(MeanNumberOfPhotons > 10.)
   {
@@ -577,6 +577,7 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       secTrack->SetTouchableHandle(
         aStep.GetPreStepPoint()->GetTouchableHandle());
       secTrack->SetParentID(aTrack.GetTrackID());
+      secTrack->SetCreatorModelID(secID);
       if(fScintillationTrackInfo)
         secTrack->SetUserInformation(
           new G4ScintillationTrackInformation(scintType));
@@ -591,20 +592,6 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
   }
 
   return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void G4Scintillation::SetScintillationByParticleType(const G4bool scintType)
-{
-  if(fEmSaturation && scintType)
-  {
-    G4Exception("G4Scintillation::SetScintillationByParticleType", "Scint02",
-                JustWarning,
-                "Redefinition: Birks Saturation is replaced by "
-                "ScintillationByParticleType!");
-    RemoveSaturation();
-  }
-  fScintillationByParticleType = scintType;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -865,4 +852,56 @@ void G4Scintillation::DumpPhysicsTable() const
       ((G4PhysicsFreeVector*) (*fIntegralTable3)[i])->DumpValues();
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4Scintillation::SetTrackSecondariesFirst(const G4bool state)
+{
+  fTrackSecondariesFirst = state;
+  G4OpticalParameters::Instance()->SetScintTrackSecondariesFirst(
+    fTrackSecondariesFirst);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4Scintillation::SetFiniteRiseTime(const G4bool state)
+{
+  fFiniteRiseTime = state;
+  G4OpticalParameters::Instance()->SetScintFiniteRiseTime(fFiniteRiseTime);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4Scintillation::SetScintillationByParticleType(const G4bool scintType)
+{
+  if(fEmSaturation && scintType)
+  {
+    G4Exception("G4Scintillation::SetScintillationByParticleType", "Scint02",
+                JustWarning,
+                "Redefinition: Birks Saturation is replaced by "
+                "ScintillationByParticleType!");
+    RemoveSaturation();
+  }
+  fScintillationByParticleType = scintType;
+  G4OpticalParameters::Instance()->SetScintByParticleType(
+    fScintillationByParticleType);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4Scintillation::SetScintillationTrackInfo(const G4bool trackType)
+{
+  fScintillationTrackInfo = trackType;
+  G4OpticalParameters::Instance()->SetScintTrackInfo(fScintillationTrackInfo);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4Scintillation::SetStackPhotons(const G4bool stackingFlag)
+{
+  fStackingFlag = stackingFlag;
+  G4OpticalParameters::Instance()->SetScintStackPhotons(fStackingFlag);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4Scintillation::SetVerboseLevel(G4int verbose)
+{
+  verboseLevel = verbose;
+  G4OpticalParameters::Instance()->SetScintVerboseLevel(verboseLevel);
 }

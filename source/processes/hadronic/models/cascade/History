@@ -14,8 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-17 May 2021 Jonathan Madsen (hadr-casc-V10-07-02)
+ 4 August 2021 Alberto Ribon (hadr-casc-V10-07-04)
 --------------------------------------------------
+- G4CascadeInterface : set the creator model ID for the secondaries
+  produced by Bertini model using the new version of G4PhysicsModelCatalog
+
+29 June 2021 Gabriele Cosmo (hadr-casc-V10-07-03)
+-------------------------------------------------
+- Fixed compilation warnings occurring when c++20 is enabled.
+
+17 May 2021 Jonathan Madsen (hadr-casc-V10-07-02)
+-------------------------------------------------
 - Fixed TLS usage of G4CascadeChannelTables and G4CascadeParameters
 
 16 April 2021  Ben Morgan (hadr-casc-V10-07-01)

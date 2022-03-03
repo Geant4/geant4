@@ -51,6 +51,9 @@ set(G4clhep_HEADERS
     include/CLHEP/Geometry/Point3D.h
     include/CLHEP/Geometry/Transform3D.h
     include/CLHEP/Geometry/Vector3D.h
+    include/CLHEP/Random/ranluxpp/helpers.h
+    include/CLHEP/Random/ranluxpp/mulmod.h
+    include/CLHEP/Random/ranluxpp/ranlux_lcg.h
     include/CLHEP/Random/DoubConv.h
     include/CLHEP/Random/DualRand.h
     include/CLHEP/Random/EngineFactory.h
@@ -96,6 +99,7 @@ set(G4clhep_HEADERS
     include/CLHEP/Random/Randomize.h
     include/CLHEP/Random/RanecuEngine.h
     include/CLHEP/Random/Ranlux64Engine.h
+    include/CLHEP/Random/RanluxppEngine.h
     include/CLHEP/Random/RanluxEngine.h
     include/CLHEP/Random/RanshiEngine.h
     include/CLHEP/Random/SeedTable.h
@@ -194,6 +198,7 @@ set(G4clhep_SOURCES
     src/RandStudentT.cc
     src/RanecuEngine.cc
     src/Ranlux64Engine.cc
+    src/RanluxppEngine.cc
     src/RanluxEngine.cc
     src/RanshiEngine.cc
     src/RotationA.cc

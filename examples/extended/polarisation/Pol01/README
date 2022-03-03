@@ -116,7 +116,7 @@
 	execute Pol01 in 'batch' mode from the default macro file :
  		% Pol01   pol01.in
 
-	or execute Pol01 in 'batch' mode including aida output :
+	or execute Pol01 in 'batch' mode including analysis output :
  		% Pol01   histos.mac
 
         if available use JAIDA to display the results via

@@ -41,8 +41,8 @@
 
 // First version: Oct 30, 2002 - Jacek Generowicz
 // ------------------------------------------------------------------------
-#ifndef G4VCurvedTrajectoryFilter_hh
-#define G4VCurvedTrajectoryFilter_hh
+#ifndef G4VCURVEDTRAJECTORYFILTER_HH
+#define G4VCURVEDTRAJECTORYFILTER_HH 1
 
 #include "G4ThreeVector.hh"
 #include <vector>
@@ -50,27 +50,27 @@
 class G4VCurvedTrajectoryFilter
 {
 
-public:  // with description
+  public:
 
-  G4VCurvedTrajectoryFilter();
-  virtual ~G4VCurvedTrajectoryFilter();
+    G4VCurvedTrajectoryFilter() = default;
+    virtual ~G4VCurvedTrajectoryFilter() = default;
 
-    // Probably do not want these objects to be copied,
-    // so make the copy constructor private
+      // Probably do not want these objects to be copied,
+      // so make the copy constructor private
   
-  void CreateNewTrajectorySegment();
-    // Each segment stores the auxiliary points of a single step.
+    void CreateNewTrajectorySegment();
+      // Each segment stores the auxiliary points of a single step.
 
-  virtual void TakeIntermediatePoint( G4ThreeVector newPoint ) = 0;
-    // Submit intermediate points for the filter to consider keeping or
-    // rejecting. Derived classes should implement the filtering algorithm
-    // in this method.
+    virtual void TakeIntermediatePoint( G4ThreeVector newPoint ) = 0;
+      // Submit intermediate points for the filter to consider keeping or
+      // rejecting. Derived classes should implement the filtering algorithm
+      // in this method.
 
-  std::vector<G4ThreeVector>* GimmeThePointsAndForgetThem();
+    std::vector<G4ThreeVector>* GimmeThePointsAndForgetThem();
   
-protected:
+  protected:
 
-  std::vector<G4ThreeVector>* fpFilteredPoints = nullptr;
+    std::vector<G4ThreeVector>* fpFilteredPoints = nullptr;
 };
 
-#endif  /* G4VCurvedTrajectoryFilter_hh */
+#endif

@@ -31,23 +31,17 @@
 #include "G4XmlNtupleManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
-#include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
+using namespace G4Analysis;
 using std::make_shared;
 
 //_____________________________________________________________________________
 G4XmlNtupleFileManager::G4XmlNtupleFileManager(const G4AnalysisManagerState& state)
- : G4VNtupleFileManager(state, "csv"),
-   fFileManager(nullptr),
-   fNtupleManager(nullptr)
+ : G4VNtupleFileManager(state, "csv")
 {}
 
-//_____________________________________________________________________________
-G4XmlNtupleFileManager::~G4XmlNtupleFileManager()
-{}
-
-// 
+//
 // private methods
 //
 
@@ -56,17 +50,16 @@ G4bool G4XmlNtupleFileManager::CloseNtupleFiles()
 {
  // Close ntuple files
 
-  auto finalResult = true;
+  auto result = true;
   auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
   for ( auto ntupleDescription : ntupleVector) {
-    auto result = fFileManager->CloseNtupleFile(ntupleDescription);
-    finalResult = finalResult && result;
+    result &= fFileManager->CloseNtupleFile(ntupleDescription);
   }
 
-  return finalResult;
-}    
+  return result;
+}
 
-// 
+//
 // public methods
 //
 
@@ -75,7 +68,7 @@ std::shared_ptr<G4VNtupleManager> G4XmlNtupleFileManager::CreateNtupleManager()
 {
   fNtupleManager = std::make_shared<G4XmlNtupleManager>(fState);
   fNtupleManager->SetFileManager(fFileManager);
-  
+
   return fNtupleManager;
 }
 
@@ -86,44 +79,39 @@ G4bool G4XmlNtupleFileManager::ActionAtOpenFile(const G4String& /*fileName*/)
   // (The files will be created with creating ntuples)
   fNtupleManager->CreateNtuplesFromBooking(
     fBookingManager->GetNtupleBookingVector());
-  
+
   return true;
-}  
-  
+}
+
 //_____________________________________________________________________________
-G4bool G4XmlNtupleFileManager::ActionAtWrite() 
+G4bool G4XmlNtupleFileManager::ActionAtWrite()
 {
   auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
 
   for ( auto ntuple : ntupleVector ) {
     if ( ntuple->fNtuple ) ntuple->fNtuple->write_trailer();
   }
-  
+
   return true;
 }
 
 //_____________________________________________________________________________
 G4bool G4XmlNtupleFileManager::ActionAtCloseFile(G4bool reset)
 {
-  auto finalResult = true;
-  
+  auto result = true;
+
   // Close ntuple files
-  auto result = CloseNtupleFiles();
-  finalResult = finalResult && result;
+  result &= CloseNtupleFiles();
 
   // Reset data
   if ( ! reset ) {
     result = Reset();
     if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "Resetting data failed";
-        G4Exception("G4XmlNtupleFileManager::CloseFile()",
-                  "Analysis_W021", JustWarning, description);
+      Warn("Resetting data failed", fkClass, "ActionAtCloseFile");
     }
-    finalResult = finalResult && result;
   }
 
-  return finalResult; 
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -131,6 +119,6 @@ G4bool G4XmlNtupleFileManager::Reset()
 {
 // Reset histograms and ntuple
 
-  return fNtupleManager->Reset(true);
-}  
- 
+  return fNtupleManager->Reset();
+}
+

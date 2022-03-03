@@ -50,20 +50,20 @@ G4String G4UIcsh::GetCommandLineString(const char* msg)
   G4cout << promptString << std::flush;
 
   G4String newCommand;
-  newCommand.readLine(G4cin, FALSE);
+  G4StrUtil::readline(G4cin, newCommand, false);
   if (!G4cin.good()) {
     G4cin.clear(); 
     newCommand= "exit";
     return newCommand;
   }
-  newCommand = newCommand.strip(1,'\r'); // fix for odd behavior on Windows
+  G4StrUtil::rstrip(newCommand, '\r'); // fix for odd behavior on Windows
 
   // multi-line
   while( (newCommand.length() > 0) &&
 	 (newCommand[newCommand.length()-1] == '_') ) {
     G4String newLine;
-    newCommand.remove(newCommand.length()-1);
-    newLine.readLine(G4cin, FALSE);
+    newCommand.erase(newCommand.length()-1);
+    G4StrUtil::readline(G4cin, newLine, false);
     if (!G4cin.good()) { 
       G4cin.clear(); 
       newCommand= "exit";

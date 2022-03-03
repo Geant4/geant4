@@ -103,6 +103,7 @@ namespace G4INCL {
 
     /// \brief Get the native INCL name of the ion
     std::string getName(const G4int A, const G4int Z);
+    std::string getName(const G4int A, const G4int Z, const G4int S);
 
     /// \brief Get the short INCL name of the ion
     std::string getShortName(const G4int A, const G4int Z);

@@ -185,7 +185,7 @@ CalculateProbability(const G4Fragment & aFragment)
         
 	  // Transition probability for \Delta n = 0 (at F(p,h) = 0)
 	  TransitionProb3 = std::max(0.0,((N+1)*(P*(P-1) + 4*P*H + H*(H-1)))*x1
-				     /G4double(N));
+				     /static_cast<G4double>(N));
 	}
       }
     }
@@ -249,7 +249,7 @@ void G4PreCompoundTransitions::PerformTransition(G4Fragment & result)
     // With weight Z/A, number of charged particles is increased with +1
     G4int A = result.GetA_asInt() - Npart;
     G4int Z = result.GetZ_asInt() - Ncharged;
-    if((Z == A) ||  (Z > 0 && G4int(A*G4UniformRand()) <= Z)) 
+    if((Z == A) ||  (Z > 0 && G4lrint(A*G4UniformRand()) <= Z)) 
       {
 	result.SetNumberOfCharged(Ncharged+deltaN);
       }

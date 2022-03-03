@@ -26,29 +26,28 @@
 // Code developed by:
 // S.Guatelli, M. Large and A. Malaroda, University of Wollongong
 //
-#include <map>
-#include <cstdlib>
 
-#include "globals.hh"
+
+
 
 #include "ICRP110PhantomConstruction.hh"
-
-#include "G4SystemOfUnits.hh"
-
-#include "G4RunManager.hh"
+#include "ICRP110PhantomNestedParameterisation.hh"
 #include "ICRP110PhantomMaterial_Female.hh"
 #include "ICRP110PhantomMaterial_Male.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-
 #include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4PVParameterised.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
-#include "ICRP110PhantomNestedParameterisation.hh"
+#include "G4RunManager.hh"
+#include "G4VisAttributes.hh"
+#include <map>
+#include <cstdlib>
 
 ICRP110PhantomConstruction::ICRP110PhantomConstruction():
    fMotherVolume(nullptr), fPhantomContainer(nullptr),
@@ -92,7 +91,8 @@ G4VPhysicalVolume* ICRP110PhantomConstruction::Construct()
   matAir -> AddElement(elO,0.2); 
 
  std::vector<G4Material*> pMaterials;
-if(fSex == "female"){
+
+ if(fSex == "female"){
 
   fMaterial_Female -> DefineMaterials();
 //----- Store materials in a vector

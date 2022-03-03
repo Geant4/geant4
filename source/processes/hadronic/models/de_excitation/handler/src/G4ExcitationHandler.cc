@@ -81,6 +81,7 @@
 #include "G4FermiBreakUpVI.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4Pow.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4ExcitationHandler::G4ExcitationHandler()
   : icID(0),maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),
@@ -136,7 +137,7 @@ void G4ExcitationHandler::SetParameters()
   minEForMultiFrag = param->GetMinExPerNucleounForMF();
   minExcitation = param->GetMinExcitation();
   maxExcitation = param->GetPrecoHighEnergy();
-  icID = param->GetInternalConversionID();
+  icID = G4PhysicsModelCatalog::GetModelID("model_e-InternalConversion");
 
   // allowing local debug printout 
   fVerbose = std::max(fVerbose, param->GetVerbose());
@@ -501,7 +502,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
       theNew->SetMomentum(frag->GetMomentum().vect());
       theNew->SetTotalEnergy(etot);
       theNew->SetFormationTime(frag->GetCreationTime());
-      if(theKindOfFragment == theElectron) { theNew->SetCreatorModel(icID); }
+      if(theKindOfFragment == theElectron) {
+	theNew->SetCreatorModelID(icID);
+      } else {
+	theNew->SetCreatorModelID(frag->GetCreatorModelID());
+      }
       theReactionProductVector->push_back(theNew);
 
       // fragment not found out ground state is created
@@ -521,6 +526,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	theNew->SetMomentum(mom);
 	theNew->SetTotalEnergy(etot);
 	theNew->SetFormationTime(frag->GetCreationTime());
+	theNew->SetCreatorModelID(frag->GetCreatorModelID());
 	theReactionProductVector->push_back(theNew);
 	if(fVerbose > 3) {
 	  G4cout << "          ground state, energy corrected E(MeV)= " 

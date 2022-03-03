@@ -172,8 +172,8 @@
 #/vis/ogl/set/printMode vectored
 # set print size larger than screen
 #/vis/ogl/set/printSize 20 20
-# print
-#/vis/ogl/printEPS 
+# Export
+#/vis/ogl/export
 #
 # https://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/ForApplicationDeveloper/html/ch08s07.html
 #/vis/modeling/trajectories/drawByAttribute-0/addValue muIon_key muIoni

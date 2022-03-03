@@ -39,9 +39,8 @@
 
 G4TextModel::~G4TextModel () {}
 
-G4TextModel::G4TextModel (const G4Text& g4Text)
+G4TextModel::G4TextModel (const G4Text& g4Text, const G4Transform3D& transform)
 : fG4Text(g4Text)
-, fG4TextOrig(g4Text)
 {
   fType = "G4TextModel";
   std::ostringstream oss;
@@ -51,12 +50,7 @@ G4TextModel::G4TextModel (const G4Text& g4Text)
       << " with offsets " << g4Text.GetXOffset() << ',' << g4Text.GetYOffset();
   fGlobalTag = oss.str();
   fGlobalDescription = fGlobalTag;
-}
 
-void G4TextModel::SetTransformation (const G4Transform3D& transform)
-{
-  fTransform = transform;
-  fG4Text = fG4TextOrig;
   fG4Text.SetPosition(fG4Text.GetPosition()+transform.getTranslation());
 }
 

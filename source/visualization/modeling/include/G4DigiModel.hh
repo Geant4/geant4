@@ -48,7 +48,7 @@ class G4DigiModel: public G4VModel {
 public: // With description
 
   G4DigiModel ();
-   
+
   virtual ~G4DigiModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);

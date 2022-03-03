@@ -65,7 +65,7 @@ ProbabilityDistributionFunction(G4double eKin,
   G4double g0 = sixoverpi2*fNucData->GetLevelDensity(theFragZ, theFragA, U);
   G4double g1 = sixoverpi2*fNucData->GetLevelDensity(theResZ, theResA, 0.0);
   
-  G4double A0 = G4double(P*P+H*H+P-3*H)/(4.0*g0);
+  G4double A0 = (P*P+H*H+P-3*H)/(4.0*g0);
   G4double A1 = (A0 - 0.5*P)/g1;  
 
   G4double E0 = U - A0;

@@ -26,7 +26,7 @@
 
 // Manager class for tools::histo::h1d.
 // It implements functions specific to the H1 type
-// (defined in g4tools). 
+// (defined in g4tools).
 //
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -41,10 +41,11 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <string_view>
 
 namespace tools {
-namespace histo { 
-class h1d; 
+namespace histo {
+class h1d;
 }
 }
 
@@ -53,28 +54,29 @@ class G4H1ToolsManager : public G4VH1Manager,
 {
   public:
     explicit G4H1ToolsManager(const G4AnalysisManagerState& state);
-    virtual ~G4H1ToolsManager();
+    G4H1ToolsManager() = delete;
+    virtual ~G4H1ToolsManager() = default;
 
     // Method to add histograms read from a file
     G4int AddH1(const G4String& name, tools::histo::h1d* h1d);
     // Method for merge (MT)
     void  AddH1Vector(const std::vector<tools::histo::h1d*>& h1Vector);
-    
+
     // Access methods
     //
     tools::histo::h1d*  GetH1(G4int id, G4bool warn = true,
                               G4bool onlyIfActive = true) const;
-                              
+
     // Iterators
     std::vector<tools::histo::h1d*>::iterator BeginH1();
     std::vector<tools::histo::h1d*>::iterator EndH1();
     std::vector<tools::histo::h1d*>::const_iterator BeginConstH1() const;
     std::vector<tools::histo::h1d*>::const_iterator EndConstH1() const;
-                              
+
     // Access to histogram vector (needed for Write())
     const std::vector<tools::histo::h1d*>& GetH1Vector() const;
-    const std::vector<G4HnInformation*>&   GetHnVector() const;  
-    
+    const std::vector<G4HnInformation*>&   GetHnVector() const;
+
   protected:
     // Virtual functions from base class
     //
@@ -90,7 +92,7 @@ class G4H1ToolsManager : public G4VH1Manager,
                            const std::vector<G4double>& edges,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none") final;
-                           
+
     virtual G4bool SetH1(G4int id,
                            G4int nbins, G4double xmin, G4double xmax,
                            const G4String& unitName = "none",
@@ -101,7 +103,7 @@ class G4H1ToolsManager : public G4VH1Manager,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none") final;
     virtual G4bool ScaleH1(G4int id, G4double factor) final;
-    
+
     // Method to fill histograms
     //
     virtual G4bool FillH1(G4int id, G4double value, G4double weight = 1.0) final;
@@ -136,16 +138,16 @@ class G4H1ToolsManager : public G4VH1Manager,
     virtual std::shared_ptr<G4HnManager> GetHnManager() final;
 
   private:
-    // methods
+    // Methods
     //
-    void AddH1Information(const G4String& name,  
-                          const G4String& unitName, 
+    void AddH1Information(const G4String& name,
+                          const G4String& unitName,
                           const G4String& fcnName,
                           G4BinScheme binScheme) const;
 
-    // data members
-    //static constexpr G4int kDimension = 1;  // not yet supported on vc12
-    static const G4int kDimension;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4H1ToolsManager" };
+    static constexpr G4int fkDimension = 1;
 };
 
 // inline methods
@@ -156,11 +158,11 @@ inline  std::vector<tools::histo::h1d*>::iterator G4H1ToolsManager::BeginH1()
 inline  std::vector<tools::histo::h1d*>::iterator G4H1ToolsManager::EndH1()
 { return EndT(); }
 
-inline  std::vector<tools::histo::h1d*>::const_iterator 
+inline  std::vector<tools::histo::h1d*>::const_iterator
 G4H1ToolsManager::BeginConstH1() const
 { return BeginConstT(); }
 
-inline  std::vector<tools::histo::h1d*>::const_iterator 
+inline  std::vector<tools::histo::h1d*>::const_iterator
 G4H1ToolsManager::EndConstH1() const
 { return EndConstT(); }
 
@@ -170,7 +172,7 @@ inline const std::vector<tools::histo::h1d*>& G4H1ToolsManager::GetH1Vector() co
 inline const std::vector<G4HnInformation*>& G4H1ToolsManager::GetHnVector() const
 { return fHnManager->GetHnVector(); }
 
-inline std::shared_ptr<G4HnManager> G4H1ToolsManager::GetHnManager() 
+inline std::shared_ptr<G4HnManager> G4H1ToolsManager::GetHnManager()
 { return std::shared_ptr<G4HnManager>(fHnManager); }
 
 #endif

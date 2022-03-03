@@ -26,6 +26,7 @@
 
 #include "G4DNAAttachment.hh"
 #include "G4LEPTSAttachmentModel.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4Positron.hh"
@@ -38,7 +39,7 @@ G4DNAAttachment::G4DNAAttachment(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetProcessSubType(55);
+  SetProcessSubType(fLowEnergyAttachment);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

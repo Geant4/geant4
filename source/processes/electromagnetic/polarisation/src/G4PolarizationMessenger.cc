@@ -153,15 +153,15 @@ void G4PolarizationMessenger::SetNewValue(G4UIcommand* command,
     G4String volumeName = next();
     G4double px = 0., py = 0., pz = 0.;
     G4String dvalue = next();
-    if(!dvalue.isNull())
+    if(!dvalue.empty())
     {
       px     = StoD(dvalue);
       dvalue = next();
-      if(!dvalue.isNull())
+      if(!dvalue.empty())
       {
         py     = StoD(dvalue);
         dvalue = next();
-        if(!dvalue.isNull())
+        if(!dvalue.empty())
           pz = StoD(dvalue);
       }
     }

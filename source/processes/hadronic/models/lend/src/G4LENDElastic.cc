@@ -142,7 +142,7 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
 
      theRecoil->SetDefinition( target_pd );
      theRecoil->SetMomentum( theTarget.GetMomentum() );
-     theResult->AddSecondary( theRecoil );
+     theResult->AddSecondary( theRecoil, secID );
 
    return theResult; 
 

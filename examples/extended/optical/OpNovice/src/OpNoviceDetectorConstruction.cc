@@ -26,14 +26,14 @@
 /// \file OpNovice/src/OpNoviceDetectorConstruction.cc
 /// \brief Implementation of the OpNoviceDetectorConstruction class
 //
-//
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNoviceDetectorConstruction.hh"
-#include "OpNoviceDetectorConstructionMessenger.hh"
+#include "OpNoviceDetectorMessenger.hh"
+
 #include "G4Box.hh"
 #include "G4Element.hh"
+#include "G4GDMLParser.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalVolume.hh"
@@ -42,17 +42,16 @@
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
-#include "G4GDMLParser.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   : G4VUserDetectorConstruction()
 {
-  DumpgdmlFile = "OpNovice_dump.gdml";
-  verbose      = false;
-  dumpgdml     = false;
+  fDumpGdmlFileName = "OpNovice_dump.gdml";
+  fVerbose          = false;
+  fDumpGdml         = false;
   // create a messenger for this class
-  fDetectorMessenger = new OpNoviceDetectorConstructionMessenger(this);
+  fDetectorMessenger = new OpNoviceDetectorMessenger(this);
   fWorld_x = fWorld_y = fWorld_z = 15.0 * m;
   fExpHall_x = fExpHall_y = fExpHall_z = 10.0 * m;
   fTank_x = fTank_y = fTank_z = 5.0 * m;
@@ -60,7 +59,10 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-OpNoviceDetectorConstruction::~OpNoviceDetectorConstruction() {}
+OpNoviceDetectorConstruction::~OpNoviceDetectorConstruction()
+{
+  delete fDetectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
@@ -69,21 +71,22 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   // ------------- Materials -------------
   G4double a, z, density;
   G4int nelements;
+
   // Air
-  //
   G4Element* N = new G4Element("Nitrogen", "N", z = 7, a = 14.01 * g / mole);
   G4Element* O = new G4Element("Oxygen", "O", z = 8, a = 16.00 * g / mole);
   G4Material* air =
     new G4Material("Air", density = 1.29 * mg / cm3, nelements = 2);
   air->AddElement(N, 70. * perCent);
   air->AddElement(O, 30. * perCent);
-  // Water
   //
+  // Water
   G4Element* H = new G4Element("Hydrogen", "H", z = 1, a = 1.01 * g / mole);
   G4Material* water =
     new G4Material("Water", density = 1.0 * g / cm3, nelements = 2);
   water->AddElement(H, 2);
   water->AddElement(O, 1);
+
   // ------------ Generate & Add Material Properties Table ------------
   //
   std::vector<G4double> photonEnergy = {
@@ -94,8 +97,8 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
     3.353 * eV, 3.446 * eV, 3.545 * eV, 3.649 * eV, 3.760 * eV, 3.877 * eV,
     4.002 * eV, 4.136 * eV
   };
+
   // Water
-  //
   std::vector<G4double> refractiveIndex1 = {
     1.3435, 1.344,  1.3445, 1.345,  1.3455, 1.346,  1.3465, 1.347,
     1.3475, 1.348,  1.3485, 1.3492, 1.35,   1.3505, 1.351,  1.3518,
@@ -110,21 +113,25 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
     30.000 * m, 28.500 * m, 27.000 * m, 24.500 * m, 22.000 * m, 19.500 * m,
     17.500 * m, 14.500 * m
   };
-  std::vector<G4double> scintilFast = {
-    1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-    1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-    1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00
-  };
+
+  // Material properties can be added as arrays. However, in this case it is
+  // up to the user to make sure both arrays have the same number of elements.
+  G4double scintilFastArray[]{ 1.0, 1.0 };
+  G4double energyArray[]{ 2.034 * eV, 4.136 * eV };
+  G4int lenArray = 2;
+
   std::vector<G4double> scintilSlow = {
     0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
     7.00, 6.00, 4.00, 3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00, 4.00,
     5.00, 6.00, 7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 5.00, 4.00
   };
+
   G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
+
   // Values can be added to the material property table individually.
   // Check that group velocity is calculated from RINDEX
-  myMPT1->AddProperty("RINDEX", &photonEnergy[0], &refractiveIndex1[0], 1)
-    ->SetSpline(true);
+  myMPT1->AddProperty("RINDEX", &photonEnergy[0], &refractiveIndex1[0], true,
+                      true);
   for(size_t i = 1; i < photonEnergy.size(); ++i)
   {
     myMPT1->AddEntry("RINDEX", photonEnergy[i], refractiveIndex1[i]);
@@ -138,11 +145,13 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
     G4Exception("OpNovice::OpNoviceDetectorConstruction", "OpNovice001",
                 FatalException, ed);
   }
-  myMPT1->AddProperty("ABSLENGTH", photonEnergy, absorption)->SetSpline(true);
-  myMPT1->AddProperty("SCINTILLATIONCOMPONENT1", photonEnergy, scintilFast)
-    ->SetSpline(true);
-  myMPT1->AddProperty("SCINTILLATIONCOMPONENT2", photonEnergy, scintilSlow)
-    ->SetSpline(true);
+
+  myMPT1->AddProperty("ABSLENGTH", photonEnergy, absorption, false, true);
+  // adding property with a C-style array
+  myMPT1->AddProperty("SCINTILLATIONCOMPONENT1", energyArray, scintilFastArray,
+                      lenArray, false, true);
+  myMPT1->AddProperty("SCINTILLATIONCOMPONENT2", photonEnergy, scintilSlow,
+                      false, true);
   myMPT1->AddConstProperty("SCINTILLATIONYIELD", 50. / MeV);
   myMPT1->AddConstProperty("RESOLUTIONSCALE", 1.0);
   myMPT1->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 1. * ns);
@@ -184,7 +193,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   // gforward, gbackward, forward backward ratio
   G4double mie_water_const[3] = { 0.99, 0.99, 0.8 };
 
-  myMPT1->AddProperty("MIEHG", energy_water, mie_water)->SetSpline(true);
+  myMPT1->AddProperty("MIEHG", energy_water, mie_water, false, true);
   myMPT1->AddConstProperty("MIEHG_FORWARD", mie_water_const[0]);
   myMPT1->AddConstProperty("MIEHG_BACKWARD", mie_water_const[1]);
   myMPT1->AddConstProperty("MIEHG_FORWARD_RATIO", mie_water_const[2]);
@@ -198,12 +207,11 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   water->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);
 
   // Air
-  //
-  std::vector<G4double> refractiveIndex2 = {
-    1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-    1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-    1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00
-  };
+  std::vector<G4double> refractiveIndex2 = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                                             1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                                             1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                                             1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                                             1.0, 1.0, 1.0, 1.0 };
 
   G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
   myMPT2->AddProperty("RINDEX", photonEnergy, refractiveIndex2);
@@ -221,30 +229,31 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
     new G4LogicalVolume(world_box, air, "World", 0, 0, 0);
   G4VPhysicalVolume* world_phys = new G4PVPlacement(
     0, G4ThreeVector(), world_log, "world", 0, false, 0, checkOverlaps);
+
   // The experimental Hall
-  //
   G4Box* expHall_box = new G4Box("expHall", fExpHall_x, fExpHall_y, fExpHall_z);
   G4LogicalVolume* expHall_log =
     new G4LogicalVolume(expHall_box, air, "expHall", 0, 0, 0);
   G4VPhysicalVolume* expHall_phys = new G4PVPlacement(
     0, G4ThreeVector(), expHall_log, "expHall", world_log, false, 0);
+
   // The Water Tank
-  //
   G4Box* waterTank_box = new G4Box("Tank", fTank_x, fTank_y, fTank_z);
   G4LogicalVolume* waterTank_log =
     new G4LogicalVolume(waterTank_box, water, "Tank", 0, 0, 0);
   G4VPhysicalVolume* waterTank_phys = new G4PVPlacement(
     0, G4ThreeVector(), waterTank_log, "Tank", expHall_log, false, 0);
+
   // The Air Bubble
-  //
   G4Box* bubbleAir_box = new G4Box("Bubble", fBubble_x, fBubble_y, fBubble_z);
   G4LogicalVolume* bubbleAir_log =
     new G4LogicalVolume(bubbleAir_box, air, "Bubble", 0, 0, 0);
   new G4PVPlacement(0, G4ThreeVector(0, 2.5 * m, 0), bubbleAir_log, "Bubble",
                     waterTank_log, false, 0);
+
   // ------------- Surfaces --------------
+
   // Water Tank
-  //
   G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
   opWaterSurface->SetType(dielectric_LUTDAVIS);
   opWaterSurface->SetFinish(Rough_LUT);
@@ -260,7 +269,6 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
     opticalSurface->DumpInfo();
 
   // Air Bubble
-  //
   G4OpticalSurface* opAirSurface = new G4OpticalSurface("AirSurface");
   opAirSurface->SetType(dielectric_dielectric);
   opAirSurface->SetFinish(polished);
@@ -286,43 +294,113 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 
   myST2->AddProperty("REFLECTIVITY", ephoton, reflectivity);
   myST2->AddProperty("EFFICIENCY", ephoton, efficiency);
-  if(verbose)
+  if(fVerbose)
   {
     G4cout << "Air Surface G4MaterialPropertiesTable:" << G4endl;
     myST2->DumpTable();
   }
   opAirSurface->SetMaterialPropertiesTable(myST2);
 
-  if(dumpgdml)
+  if(fDumpGdml)
   {
     G4GDMLParser* parser = new G4GDMLParser();
-    parser->Write(DumpgdmlFile, world_phys);
+    parser->Write(fDumpGdmlFileName, world_phys);
   }
+
+  ////////////////////////////////////////////////////////////////////////////
+  // test user-defined properties
+  G4String ed;
+  if(myMPT1->GetProperty("USERDEFINED") != nullptr)
+  {
+    ed = "USERDEFINED != nullptr";
+    PrintError(ed);
+  }
+  myMPT1->AddProperty("USERDEFINED", energy_water, mie_water, true, true);
+  if(myMPT1->GetProperty("USERDEFINED") == nullptr)
+  {
+    ed = "USERDEFINED == nullptr";
+    PrintError(ed);
+  }
+  [[maybe_unused]] G4int index_userdefined = -1;
+  if(myMPT1->GetProperty("USERDEFINED") != nullptr)
+  {
+    index_userdefined = myMPT1->GetPropertyIndex("USERDEFINED");
+  }
+  if(!(index_userdefined >= 0 &&
+        index_userdefined <
+        (G4int) myMPT1->GetMaterialPropertyNames().size()))
+  {
+    ed = "USERDEFINED index out of range";
+    PrintError(ed);
+  }
+  myMPT1->RemoveProperty("USERDEFINED");
+  if(myMPT1->GetProperty("USERDEFINED") != nullptr)
+  {
+    ed = "USERDEFINED != nullptr at end";
+    PrintError(ed);
+  }
+
+  if(myMPT1->ConstPropertyExists("USERDEFINEDCONST") == true)
+  {
+    ed = "ConstProperty USERDEFINEDCONST already exists.";
+    PrintError(ed);
+  }
+  myMPT1->AddConstProperty("USERDEFINEDCONST", 3.14, true);
+  if(myMPT1->ConstPropertyExists("USERDEFINEDCONST") == false)
+  {
+    ed = "ConstProperty USERDEFINEDCONST doesn't exist.";
+    PrintError(ed);
+  }
+  [[maybe_unused]] G4int index_pi = -1;
+  if(myMPT1->ConstPropertyExists("USERDEFINEDCONST") == true)
+  {
+    index_pi = myMPT1->GetConstPropertyIndex("USERDEFINEDCONST");
+  }
+  if (!(index_pi >= 0 &&
+         index_pi < (G4int) myMPT1->GetMaterialConstPropertyNames().size()))
+  {
+    ed = "ConstProperty USERDEFINEDCONST index out of range.";
+    PrintError(ed);
+  }
+  myMPT1->RemoveConstProperty("USERDEFINEDCONST");
+  if (myMPT1->ConstPropertyExists("USERDEFINEDCONST") == true)
+  {
+    ed = "ConstProperty USERDEFINEDCONST still exists.";
+    PrintError(ed);
+  }
+  // done testing user-defined properties
+  ////////////////////////////////////////////////////////////////////////////
+
   return world_phys;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void OpNoviceDetectorConstruction::SetDumpGdml(G4bool val) { fDumpGdml = val; }
 
-void OpNoviceDetectorConstruction::SetDumpgdml(G4bool dumpgdml1)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4bool OpNoviceDetectorConstruction::IsDumpGdml() const { return fDumpGdml; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void OpNoviceDetectorConstruction::SetVerbose(G4bool val) { fVerbose = val; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4bool OpNoviceDetectorConstruction::IsVerbose() const { return fVerbose; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void OpNoviceDetectorConstruction::SetDumpGdmlFile(G4String filename)
 {
-  this->dumpgdml = dumpgdml1;
+  fDumpGdmlFileName = filename;
 }
 
-G4bool OpNoviceDetectorConstruction::IsDumpgdml() const { return dumpgdml; }
-
-void OpNoviceDetectorConstruction::SetVerbose(G4bool verbose1)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4String OpNoviceDetectorConstruction::GetDumpGdmlFile() const
 {
-  this->verbose = verbose1;
+  return fDumpGdmlFileName;
 }
 
-G4bool OpNoviceDetectorConstruction::IsVerbose() const { return verbose; }
-
-void OpNoviceDetectorConstruction::SetDumpgdmlFile(G4String DumpgdmlFile1)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void OpNoviceDetectorConstruction::PrintError(G4String ed)
 {
-  this->DumpgdmlFile = DumpgdmlFile1;
-}
-
-G4String OpNoviceDetectorConstruction::GetDumpgdmlFile() const
-{
-  return DumpgdmlFile;
+  G4Exception("OpNoviceDetectorConstruction:MaterialProperty test", "op001",
+              FatalException, ed);
 }

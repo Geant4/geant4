@@ -35,8 +35,7 @@
 // Class description:
 //
 // Is used to define the additional material information. This class
-// contains a map of G4VMaterialExtension associated with an integer
-// key of G4PhysicsModelCatalog index.
+// contains a map of G4VMaterialExtension associated with an integer key.
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1318,8 +1318,8 @@ c       Clear BU_TAB (array of multifragmentation products)
          EV_TAB[i][4] = VZOUT;
         }
         if(IMULTBU>200)std::cout << "IMULTBU>200 " << IMULTBU << std::endl;
-        delete problamb;
-        delete Nblamb;
+        delete[] problamb;
+        delete[] Nblamb;
         }// if(T_diff>0.1)
         // End of multi-fragmentation
       mult7777:
@@ -7793,32 +7793,65 @@ G4double G4Abla::gethyperseparation(G4double A, G4double Z, G4int ny){
  if(A<1.)return 1.e38;
 // For light nuclei we take experimental values
 // Journal of Physics G, Nucl Part Phys 32,363 (2006)
- if(ny==1){
- if(Z==1 && A==4) return 2.04;
- else if(Z==2 && A==4) return 2.39;
- else if(Z==2 && A==5) return 3.12;
- else if(Z==2 && A==6) return 4.18;
- else if(Z==2 && A==7) return 5.23;
- else if(Z==2 && A==8) return 7.16;
- else if(Z==3 && A==6) return 4.50;
- else if(Z==3 && A==7) return 5.58;
- else if(Z==3 && A==8) return 6.80;
- else if(Z==3 && A==9) return 8.50;
- else if(Z==4 && A==7) return 5.16;
- else if(Z==4 && A==8) return 6.84;
- else if(Z==4 && A==9) return 6.71;
- else if(Z==4 && A==10) return 9.11;
- else if(Z==5 && A==9) return 8.29;
- else if(Z==5 && A==10) return 8.89;
- else if(Z==5 && A==11) return 10.24;
- else if(Z==5 && A==12) return 11.37;
- else if(Z==6 && A==12) return 10.76;
- else if(Z==6 && A==13) return 11.69;
- else if(Z==6 && A==14) return 12.17;
- else if(Z==14 && A==28) return 16.0;
- else if(Z==39 && A==89) return 22.1;
- else if(Z==57 && A==139) return 23.8;
- else if(Z==82 && A==208) return 26.5;
+  if (ny == 1) {
+    if (Z == 1 && A == 4)
+      return 2.04;
+    else if (Z == 2 && A == 4)
+      return 2.39;
+    else if (Z == 2 && A == 5)
+      return 3.12;
+    else if (Z == 2 && A == 6)
+      return 4.18;
+    else if (Z == 2 && A == 7)
+      return 5.23;
+    else if (Z == 2 && A == 8)
+      return 7.16;
+    else if (Z == 3 && A == 6)
+      return 4.50;
+    else if (Z == 3 && A == 7)
+      return 5.58;
+    else if (Z == 3 && A == 8)
+      return 6.80;
+    else if (Z == 3 && A == 9)
+      return 8.50;
+    else if (Z == 4 && A == 7)
+      return 5.16;
+    else if (Z == 4 && A == 8)
+      return 6.84;
+    else if (Z == 4 && A == 9)
+      return 6.71;
+    else if (Z == 4 && A == 10)
+      return 9.11;
+    else if (Z == 5 && A == 9)
+      return 8.29;
+    else if (Z == 5 && A == 10)
+      return 9.01;
+    else if (Z == 5 && A == 11)
+      return 10.29;
+    else if (Z == 5 && A == 12)
+      return 11.43;
+    else if (Z == 6 && A == 12)
+      return 10.95;
+    else if (Z == 6 && A == 13)
+      return 11.81;
+    else if (Z == 6 && A == 14)
+      return 12.50;
+    else if (Z == 7 && A == 14)
+      return 12.17;
+    else if (Z == 7 && A == 15)
+      return 13.59;
+    else if (Z == 8 && A == 16)
+      return 12.50;
+    else if (Z == 8 && A == 17)
+      return 13.59;
+    else if (Z == 14 && A == 28)
+      return 16.0;
+    else if (Z == 39 && A == 89)
+      return 22.1;
+    else if (Z == 57 && A == 139)
+      return 23.8;
+    else if (Z == 82 && A == 208)
+      return 26.5;
  }//ny==1
 // For other nuclei we take Bethe-Weizsacker mass formula
  return gethyperbinding(A, Z, ny)-gethyperbinding(A-1., Z, ny-1);

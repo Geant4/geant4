@@ -29,18 +29,7 @@
 // --------------------------------------------------------------------
 
 #include "G4GeometryWorkspace.hh"
-
-#include "G4PVReplica.hh"
-#include "G4PVParameterised.hh"
-#include "G4VPVParameterisation.hh"
 #include "G4PhysicalVolumeStore.hh"
-#include "G4VSolid.hh"
-
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVReplica.hh"
-#include "G4Region.hh"
-
 #include "G4AutoLock.hh"
 
 namespace
@@ -94,11 +83,6 @@ G4GeometryWorkspace::~G4GeometryWorkspace()
 void
 G4GeometryWorkspace::UseWorkspace()
 {
-  if( fVerbose ) 
-  { 
-    G4cout << "G4GeometryWorkspace::UseWorkspace: Start " << G4endl;
-  }
-
   // Geometry related, split classes mechanism: instantiate sub-instance
   // for this thread
   //
@@ -112,11 +96,6 @@ G4GeometryWorkspace::UseWorkspace()
   //   - it must be a lightweight operation, to reuse a valid work area
   //   - so it must NOT Initialise anything!
   // Do not call InitialisePhysicalVolumes();
-
-  if( fVerbose )
-  { 
-     G4cout << "G4GeometryWorkspace::UseWorkspace:  End " << G4endl;
-  }
 }
 
 // ----------------------------------------------------------------------
@@ -148,44 +127,25 @@ void G4GeometryWorkspace::InitialisePhysicalVolumes()
     {
       // Placement volume
       //
-      logicalVol->InitialiseWorker(logicalVol,solid,0);
+      logicalVol->InitialiseWorker(logicalVol,solid,nullptr);
     }
     else
     {          
       g4PVReplica->InitialiseWorker(g4PVReplica);
-      if( !g4PVReplica->IsParameterised() )
-      {
-        logicalVol->InitialiseWorker(logicalVol,solid,0);
+      logicalVol->InitialiseWorker(logicalVol,solid,nullptr);
 
-        // If the replica's solid (in LV) is changed during navigation,
-        // it must be thread-private
-        //
-        CloneReplicaSolid( g4PVReplica );
-      }
-      else
-      {
-        G4PVParameterised* paramVol = dynamic_cast<G4PVParameterised*>(physVol);
-        if (paramVol == nullptr)
-        {
-          G4Exception("G4GeometryWorkspace::CreateAndUseWorkspace()",
-                      "GeomVol0003", FatalException,
-                      "Cannot find Parameterisation for parameterised volume.");
-        }
-        CloneParameterisedSolids( paramVol );
-      }
+      // If the replica's solid (in LV) is changed during navigation,
+      // it must be thread-private
+      //
+      CloneReplicaSolid( g4PVReplica );
     }
-  }
-  if( fVerbose )
-  {
-    G4cout << "G4GeometryWorkspace::InitialisePhysicalVolumes: "
-           << "Copying geometry - Done!" << G4endl;
   }
 }
 
 // ----------------------------------------------------------------------
 // Create a clone of the solid for this replica in this thread
 //
-G4bool G4GeometryWorkspace::CloneReplicaSolid( G4PVReplica *replicaPV )
+G4bool G4GeometryWorkspace::CloneReplicaSolid( G4PVReplica* replicaPV )
 {
   G4LogicalVolume* logicalV = replicaPV->GetLogicalVolume();
   G4VSolid* solid = logicalV->GetSolid();
@@ -196,7 +156,7 @@ G4bool G4GeometryWorkspace::CloneReplicaSolid( G4PVReplica *replicaPV )
 
   if( workerSolid != nullptr )
   {
-    logicalV->InitialiseWorker(logicalV,workerSolid,0);
+    logicalV->InitialiseWorker(logicalV,workerSolid,nullptr);
   }
   else
   {
@@ -209,77 +169,9 @@ G4bool G4GeometryWorkspace::CloneReplicaSolid( G4PVReplica *replicaPV )
        << "A solid lacks the Clone() method - or Clone() failed." << "\n"
        << "   Type of solid: " << solid->GetEntityType() << "\n"
        << "   Parameters: " << *solid;
-    G4Exception("G4GeometryWorkspace::CloneParameterisedVolume()",
+    G4Exception("G4GeometryWorkspace::CloneReplicaSolid()",
                 "GeomVol0003", FatalException, ed);
     return false; 
-  }
-  return true; // It Worked
-}
-
-// ----------------------------------------------------------------------
-// Each G4PVParameterised instance has associated with it at least one
-// solid for each worker thread.
-// *Simple* Parameterisations have a single type of solid, and the
-// pointer points to the same instance of a solid during the simulation.
-// For this case, it is possible to adapt automatically to
-// multi-threading, simply by cloning the solid - so long
-// as all solids support the Clone() method.
-//
-G4bool G4GeometryWorkspace::
-CloneParameterisedSolids( G4PVParameterised* paramVol )
-{
-  // Check whether it is a simple parameterisation or not
-  //
-  // G4VPVParameterisation *param= paramVol->GetParameterisation();
-  // unsigned int numCopies= paramVol->GetMultiplicity();
-  // unsigned int numDifferent= 0;
-
-  G4LogicalVolume* logicalV= paramVol->GetLogicalVolume();
-  G4VSolid* solid= logicalV->GetSolid();
-  
-  //  for( unsigned int i=0; i< numCopies; ++i)
-  //  {
-  //    G4VSolid *solidChk= param->ComputeSolid(i, paramVol);
-  //    if( solidChk != solid)
-  //    {
-  //      ++numDifferent;
-  //    }
-  //  }
-  //  if( numDifferent>0 )
-  //  {
-  //    G4ExceptionDescription ed;
-  //    ed << "ERROR - Parameterisation using several instances of Solids \n"
-  //       << "potentially to support different types of solids. \n"
-  //       << "Geant4-MT currently does not support this type of \n"
-  //       << "parameterisation, sorry !";
-  //    G4Exception("G4GeometryWorkspace::CloneParameterisedVolume()",
-  //                "GeomVol0001", FatalException, ed);
-  //  }
-  
-  // Threads may attempt to clone a solid simultaneously.
-  // Those cloned solids will be registered into a shared solid
-  // store (C++ container). Need a lock to guarantee thread safety
-  //
-  G4AutoLock aLock(&mutex_init);
-  G4VSolid *workerSolid = solid->Clone();
-  aLock.unlock();
-  if( workerSolid != nullptr )
-  {
-    logicalV->InitialiseWorker(logicalV, workerSolid, nullptr);
-  }
-  else
-  {
-    // In the case that not all solids support(ed) the Clone()
-    // method, we do similar thing here to dynamically cast
-    // and then get the clone method
-    //
-    G4ExceptionDescription ed;
-    ed << "ERROR - Unable to initialise geometry for worker node. \n"
-       << "A solid lacks the Clone() method - or Clone() failed. \n"
-       << "   Type of solid: " << solid->GetEntityType() << "\n"
-       << "   Parameters: " << *solid;
-    G4Exception("G4GeometryWorkspace::CloneParameterisedVolume()",
-                "GeomVol0003", FatalException, ed);
   }
   return true; // It Worked
 }
@@ -288,12 +180,6 @@ CloneParameterisedSolids( G4PVParameterised* paramVol )
 //
 void G4GeometryWorkspace::InitialiseWorkspace()
 {
-  if( fVerbose )
-  {
-    G4cout << "G4GeometryWorkspace::InitialiseWorkspace():"
-           << " Copying geometry - Start " << G4endl;
-  }
-  
   // Geometry related, split classes mechanism:
   // Do *NOT* instantiate sub-instance for this thread, just copy the contents!
   //
@@ -303,12 +189,6 @@ void G4GeometryWorkspace::InitialiseWorkspace()
   fpRegionSIM->SlaveInitializeSubInstance();
 
   InitialisePhysicalVolumes();
-  
-  if( fVerbose )
-  {
-    G4cout << "G4GeometryWorkspace::InitialiseWorkspace: "
-           << "Copying geometry - Done!" << G4endl;
-  }
 }
 
 // ----------------------------------------------------------------------

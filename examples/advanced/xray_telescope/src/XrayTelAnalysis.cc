@@ -115,6 +115,7 @@ void XrayTelAnalysis::book(G4bool isMaster)
 
   // Get/create analysis manager
   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->SetDefaultFileType("root");
 
   // Open an output file: it is done in master and threads. The 
   // printout is done only by the master, for tidyness
@@ -153,8 +154,7 @@ void XrayTelAnalysis::finish(G4bool isMaster)
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->Write();
   man->CloseFile();
-  // Complete clean-up
-  delete G4AnalysisManager::Instance();
+  man->Clear();
 
   if (!isMaster)
     return;

@@ -37,7 +37,7 @@
 // 17.02.98, J.Apostolakis - Allowing the parameterisation of solid type
 // --------------------------------------------------------------------
 #ifndef G4VPVPARAMETERISATION_HH
-#define G4VPVPARAMETERISATION_HH
+#define G4VPVPARAMETERISATION_HH 1
 
 #include "G4Types.hh"
 #include "G4VVolumeMaterialScanner.hh"
@@ -69,10 +69,8 @@ class G4VPVParameterisation
 {
   public:
 
-    G4VPVParameterisation();
-    virtual ~G4VPVParameterisation();
-
-  public:  // with description
+    G4VPVParameterisation() = default;
+    virtual ~G4VPVParameterisation() = default;
 
     virtual void ComputeTransformation(const G4int,
                                        G4VPhysicalVolume * ) const = 0;

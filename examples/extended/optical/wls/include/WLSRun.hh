@@ -96,12 +96,6 @@ class WLSRun : public G4Run
     fReflected += nd;
     fReflected2 += nd * nd;
   };
-  void AddDetected(G4int n)
-  {
-    G4double nd(n);
-    fDetected += nd;
-    fDetected2 += nd * nd;
-  };
   void AddEscaped(G4int n)
   {
     G4double nd(n);
@@ -143,8 +137,6 @@ class WLSRun : public G4Run
   G4double fClad2Bounce2;
   G4double fReflected;
   G4double fReflected2;
-  G4double fDetected;
-  G4double fDetected2;
   G4double fEscaped;
   G4double fEscaped2;
   G4double fMirror;

@@ -27,7 +27,7 @@
 
 #include "RunAction.hh"
 #include "G4Run.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "globals.hh"
 #include <map>
 
@@ -61,6 +61,7 @@ void RunAction::EndOfRunAction(const G4Run*)
 void RunAction::CreateNtuple(const G4String& name)
 {
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    analysisManager->SetDefaultFileType("root");
     analysisManager->SetVerboseLevel(0);
     analysisManager->SetNtupleDirectoryName("ntuple");
 
@@ -104,5 +105,6 @@ void RunAction::WriteNtuple()
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     analysisManager->Write();
     analysisManager->CloseFile();
+    analysisManager->Clear();
     G4cout << "\n----> Histograms are saved" << G4endl;
 }

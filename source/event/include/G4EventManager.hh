@@ -88,6 +88,10 @@ class G4EventManager
       // object has valid primary vertices/particles, they will be added to
       // the given "trackvector" input.
 
+    void StackTracks(G4TrackVector* trackVector, G4bool IDhasAlreadySet= false);
+      // Helper function to stack a vector of tracks for processing in the
+      // current event.
+
     inline const G4Event* GetConstCurrentEvent()
       { return currentEvent; }
     inline G4Event* GetNonconstCurrentEvent()
@@ -156,7 +160,6 @@ class G4EventManager
   private:
 
     void DoProcessing(G4Event* anEvent);
-    void StackTracks(G4TrackVector* trackVector, G4bool IDhasAlreadySet= false);
   
   private:
 

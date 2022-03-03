@@ -66,7 +66,7 @@ class G4UIcommandTree
     void List() const;
     void ListCurrent() const;
     void ListCurrentWithNum() const;
-    void CreateHTML();
+    void CreateHTML(G4String = "");
 
     inline const G4UIcommand* GetGuidance() const { return guidance; }
     inline const G4String& GetPathName() const { return pathName; }
@@ -91,6 +91,8 @@ class G4UIcommandTree
     G4UIcommand* guidance = nullptr;
     G4String pathName;
     G4bool broadcastCommands = true;
+    G4bool ifSort = false;
+    G4int createHTMLTreeLevel = 0;
 };
 
 #endif

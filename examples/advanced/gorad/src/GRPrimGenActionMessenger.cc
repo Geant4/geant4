@@ -165,9 +165,9 @@ void GRPrimGenActionMessenger::SetNewValue(G4UIcommand * command,G4String newVal
   {
     specFile.getline(line,bufsize);
     if(line[(size_t)0]=='#') continue;
-    G4String valStr(line);
-    valStr = valStr.strip(G4String::both);
-    valStr = valStr.strip(G4String::trailing,0x0d);
+    G4String valStr = line;
+    G4StrUtil::strip(valStr);
+    G4StrUtil::rstrip(valStr, 0x0d);
     if(valStr.size()==0) continue;
     cmd = "/gps/hist/point " + valStr;
     ec = std::max(UI->ApplyCommand(cmd),ec);

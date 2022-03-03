@@ -50,14 +50,12 @@
 #ifndef G4BetheBlochModel_h
 #define G4BetheBlochModel_h 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
 #include "G4VEmModel.hh"
-#include "G4NistManager.hh"
 
 class G4EmCorrections;
 class G4ParticleChangeForLoss;
 class G4ICRU90StoppingData;
+class G4NistManager;
 
 class G4BetheBlochModel : public G4VEmModel
 {
@@ -118,8 +116,8 @@ public:
 			 G4double maxEnergy) override;
 
   // hide assignment operator
-  G4BetheBlochModel & operator=(const  G4BetheBlochModel &right) = delete;
-  G4BetheBlochModel(const  G4BetheBlochModel&) = delete;
+  G4BetheBlochModel & operator=(const G4BetheBlochModel &right) = delete;
+  G4BetheBlochModel(const G4BetheBlochModel&) = delete;
 
 protected:
 
@@ -132,55 +130,32 @@ protected:
 
 private:
 
-  void SetupParameters();
+  void SetupParameters(const G4ParticleDefinition* p);
 
-  inline void SetParticle(const G4ParticleDefinition* p);
-
-  inline void SetGenericIon(const G4ParticleDefinition* p);
-
-  const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* particle = nullptr;
   const G4ParticleDefinition* theElectron;
   G4EmCorrections*            corr;
-  G4ParticleChangeForLoss*    fParticleChange;
+  G4ParticleChangeForLoss*    fParticleChange = nullptr;
   G4NistManager*              nist;
-  G4ICRU90StoppingData*       fICRU90;
-  const G4Material*           currentMaterial;
-  const G4Material*           baseMaterial;
+  G4ICRU90StoppingData*       fICRU90 = nullptr;
+  const G4Material*           currentMaterial = nullptr;
+  const G4Material*           baseMaterial = nullptr;
 
-  G4double mass;
-  G4double tlimit;
-  G4double spin;
-  G4double magMoment2;
-  G4double chargeSquare;
-  G4double ratio;
-  G4double formfact;
+  G4double mass = 0.0;
+  G4double tlimit = DBL_MAX;
+  G4double spin = 0.0;
+  G4double magMoment2 = 0.0;
+  G4double chargeSquare = 1.0;
+  G4double ratio = 1.0;
+  G4double formfact = 0.0;
   G4double twoln10;
-  G4double corrFactor;
   G4double fAlphaTlimit;
   G4double fProtonTlimit;
 
-  G4int    iICRU90;
-  G4bool   isIon;
+  G4int    iICRU90 = -1;
+  G4bool   isIon = false;
+  G4bool   isAlpha = false;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(particle != p) {
-    particle = p;
-    if(p->GetBaryonNumber() > 3 || p->GetPDGCharge() > CLHEP::eplus) 
-      { isIon = true; } 
-    SetupParameters();
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4BetheBlochModel::SetGenericIon(const G4ParticleDefinition* p)
-{
-  if(p && p->GetParticleName() == "GenericIon") { isIon = true; }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

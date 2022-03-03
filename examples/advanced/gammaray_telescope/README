@@ -236,24 +236,6 @@ the last run always override the root file.
   GammaRayTelPhysicsList
 	Determination of modular physics classes
 
-  GammaRayTelGeneralPhysics
-	Decay processes
-
-  GammaRayTelEMPhysics
-	Std and LowE physics processes (for gamma & e-/e+)
-
-  GammaRayTelMuonPhysics
-	Muon & its processes
-
-  GammaRayTelIonPhysics
-	Ions and their processes
-
-  GammaRayTelHadronPhysics
-	Sample of hadronic processes
-
-  GammaRayTelTelVisManager
-	Visualization manager class
-
   GammaRayTelDetectorConstruction
 	Geometry and material definitions for the detector
  	

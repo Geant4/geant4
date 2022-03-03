@@ -284,6 +284,27 @@
 
 /** @} */
 
+/** @defgroup extended_medical_dna_scavenger scavenger
+ *  Medical dna scavenger example
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+  class scavenger::ActionInitialization{};
+  class scavenger::DetectorConstruction{};
+  class scavenger::EmDNAChemistry{};
+  class scavenger::ParserChemReaction{};
+  class scavenger::PhysicsList{};
+  class scavenger::PrimaryGeneratorAction{};
+  class scavenger::PrimaryKiller{};
+  class scavenger::Run{};
+  class scavenger::RunAction{};
+  class scavenger::ScoreSpecies{};
+  class scavenger::StackingAction{};
+  class scavenger::TimeStepAction{};
+
+/** @} */
+
 /** @defgroup extended_medical_dna_splitting splitting
  *  Medical dna splitting example has its
  *  <a href="../html_splitting/html/index.html">standalone documentation </a>

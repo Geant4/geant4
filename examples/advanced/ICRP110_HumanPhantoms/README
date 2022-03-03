@@ -3,12 +3,14 @@
      =======================================================================
 
 The ICRP110_HumanPhantoms example is developed and mantained by Susanna Guatelli, Matthew Large and Alessandra Malaroda,
-Centre For Medical Radiation Physics (CMRP), University of Wollongong, NSW, Australia.
+Centre For Medical Radiation Physics (CMRP), University of Wollongong, NSW, Australia, and John Allison, Geant4 Associates International 
+and University of Manchester, UK.
 
   Contacts:     
     - susanna@uow.edu.au 
     - mjl970@uowmail.edu.au
     - malaroda@uow.edu.au
+    - John.Allison@g4ai.org
 
 The example is based on the extended/medical/DICOM example
 
@@ -264,7 +266,7 @@ After completion of a simulation run, the phantom mesh records the deposited dos
 The output PhantomMesh_Dose.txt file is created by the User Score Writer class defined in the source code ICRP110UserScoreWriter.cc. In the same class the dose 
 in the voxels is analysed and associated to organs. 
 
-A final output file "OrganDoses.out" is then created which contains the total dose delivered to each organ.   
+A final output file "ICRP.out" is then created which contains the total dose delivered to each organ.   
 
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------> Further Info <--------------------------------------------

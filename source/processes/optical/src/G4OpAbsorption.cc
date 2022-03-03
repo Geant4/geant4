@@ -119,3 +119,10 @@ G4double G4OpAbsorption::GetMeanFreePath(const G4Track& aTrack, G4double,
 
   return attLength;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4OpAbsorption::SetVerboseLevel(G4int verbose)
+{
+  verboseLevel = verbose;
+  G4OpticalParameters::Instance()->SetAbsorptionVerboseLevel(verboseLevel);
+}

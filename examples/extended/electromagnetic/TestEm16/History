@@ -14,6 +14,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+06-10-21 I. Hrivnacova (testem16-V10-07-02)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+19-07-21 I. Hrivnacova (testem16-V10-07-01)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
 11-05-21 mma (testem16-V10-07-00)
 - Migration to G4RunManagerFactory and G4SteppingVerboseWithUnits.
        

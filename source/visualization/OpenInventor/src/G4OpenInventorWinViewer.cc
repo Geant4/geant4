@@ -34,8 +34,6 @@
  * gb 14 November 2004 : inherit G4OpenInventorViewer.
  */
 
-#ifdef G4VIS_BUILD_OIWIN32_DRIVER
-
 // this :
 #include "G4OpenInventorWinViewer.hh"
 
@@ -323,5 +321,3 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
     return (::DefWindowProc(aWindow,aMessage,aWParam,aLParam));
   }
 }
-
-#endif

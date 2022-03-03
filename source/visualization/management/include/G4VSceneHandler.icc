@@ -129,14 +129,12 @@ inline void G4VSceneHandler::SetObjectTransformation (const G4Transform3D& t) {
   fObjectTransformation = t;
 }
 
-inline const G4Colour& G4VSceneHandler::GetColour () {
-  fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
-  const G4Colour& colour = fpVisAttribs -> GetColour ();
-  return colour;
-}
-
 inline const G4Colour& G4VSceneHandler::GetColor () {
   return GetColour ();
+}
+
+inline const G4Colour& G4VSceneHandler::GetColor (const G4Visible& visible) {
+  return GetColour (visible);
 }
 
 inline const G4Colour& G4VSceneHandler::GetTextColor (const G4Text& text) {

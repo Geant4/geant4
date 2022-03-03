@@ -59,3 +59,10 @@ Defines different geometrical regions with different production
 thresholds. Shows customization of the G4Run.
 It was moved in extended examples from novice/N07 with removal of
 novice examples. 
+
+RE07
+----
+
+Based on extended/electromagnetic/TestEm3, this example demonstrates
+how to register specialized tracking managers for a particle or a set
+of particles.

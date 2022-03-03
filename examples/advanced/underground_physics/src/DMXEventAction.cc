@@ -52,9 +52,8 @@
 // note DMXPmtHit.hh and DMXScintHit.hh are included in DMXEventAction.hh
 
 #include "DMXEventActionMessenger.hh"
-#include "DMXAnalysisManager.hh"
 
-
+#include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"

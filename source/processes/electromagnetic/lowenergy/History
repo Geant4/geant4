@@ -15,6 +15,62 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25.11.2021 S. Guatelli, emlowen-V10-07-27
+- Added option to activate the ANSTO fluorescence radiation yield (Z < 93)
+
+18.11.2021 L.Pandola, emlowen-V10-07-26
+- Fix memory leak reported by Valgrind in Penelope models
+
+10.11.2021 S. Guatelli, emlowen-V10-07-25    
+- included new PIXE data libraries following ANSTO 
+  reccommendations      
+- included new classes to model the ANSTO ECPSSR cross sections
+  for protons and alpha particles
+
+04.11.2021 D.Lambert, emlowen-V10-07-24          
+- G4MicroElecInelasticModel_new: fix delete pointer pb
+        in initialisation/destructor
+
+02.11.2021 Z.Li, emlowen-V10-07-23
+- G4LivermoreGammaConversionModel: code clean-up
+- G4LivermoreComptonModel: code clean-up
+- G4LivermorePhotoElectricModel: code clean-up
+
+01.11.2021 V.Ivanchenko, emlowen-V10-07-22
+- G4LivermorePolarizedRayleighModel - read data from the 
+    $G4LEDATA/livermore directory; code clean-up
+- G4LivermoreRayleighModel - code clean-up
+- G4MicroElecCrossSectionDataSet_new, G4MicroElecElasticModel_new -
+    fixed headers
+- G4LivermoreGammaConversionModelRC, G4LivermoreComptonModifiedModel
+    removed because are not used in any PhysicsList, example, or test
+
+15.10.2021 Z.li, emlowen-V10-07-21
+- G4LivermoreComptonModel, G4LivermoreGammaConversionModel, 
+  G4LivermorePhotoElectricModel, G4LivermoreRayleighModel, 
+  G4RayleighAngularGenerator: updated to use EPICS2017 data
+
+23.09.2021 A.Ribon, emlowen-V10-07-20
+- G4MicroElecSurface.cc : replaced hardwired process-sub-type 25
+  with (already existing) fSurfaceReflection
+- G4MicroElecElastic, G4MicroElecLOPhononScattering, G4MicroElecInelastic :
+  replaced hardwired process-sub-types 51 and 53 with new enum values
+  fLowEnergyElastic and fLowEnergyIonisation
+
+20.08.2021 V.Ivanchenko, emlowen-V10-07-19
+- G4PenelopeBremsstrahlungAngular, G4PenelopeBremsstrahlungFS,
+  G4PenelopeCrossSection, G4JAEAElasticScatteringModel,
+  G4JAEAPolarizedElasticScatteringModel - use optimal methods
+    of G4PhysicsVector
+
+04.08.2021 A.Ribon, emlowen-V10-07-18
+- G4LivermorePolarizedComptonModel : migrated to the new version of
+  G4PhysicsModelCatalog
+
+09.07.2021 V.Ivanchenko, emlowen-V10-07-17
+- G4AugerData - removed dead code
+- G4VCrossSectionHandler, G4eIonisationParameters - use const 
+    pointers to G4Element
 
 31.05.2021 J.Allison, emlowen-V10-07-16
 - G4LivermorePolarizedComptonModel:

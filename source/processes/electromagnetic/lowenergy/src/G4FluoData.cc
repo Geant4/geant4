@@ -40,7 +40,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4DataVector.hh"
 #include "G4FluoTransition.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4FluoData::G4FluoData(const G4String& dir)
 {
@@ -213,6 +212,7 @@ void G4FluoData::LoadData(G4int Z)
     ost << "/fl-tr-pr-"<<".dat"; 
   }
   G4String name(ost.str());
+ 
   
   char* path = std::getenv("G4LEDATA");
   if (!path)
@@ -223,7 +223,12 @@ void G4FluoData::LoadData(G4int Z)
     }
   
   G4String pathString(path);
+  
   G4String dirFile = pathString + fluoDirectory + name;
+   
+  //G4cout << "G4FluoData:: LoadData() name: " << dirFile << G4endl;
+   
+   
   std::ifstream file(dirFile);
   std::filebuf* lsdp = file.rdbuf();
   

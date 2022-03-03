@@ -144,7 +144,8 @@ void G4CloneDaughters(G3VolTableEntry* vte, G3VolTableEntry* vteClone)
         G4int cloneNo = dvteMaster->GetNoClones();
         char index[5]; sprintf(index,"%d",cloneNo);
         G4String newName = dvteMaster->GetName();
-        newName.append(gSeparator); newName = newName + index;
+        newName += gSeparator;
+        newName = newName + index;
         
         // create dvteClone
         G4String  dvteShape = dvte->GetShape();
@@ -268,7 +269,8 @@ void G4CreateCloneVTE(G3VolTableEntry* vte, G3VolTableEntry* mvte,
         G4int cloneNo = vte->GetNoClones();
         char index[5]; sprintf(index,"%d",cloneNo);
         G4String newName = vte->GetName();
-        newName.append(gSeparator); newName = newName + index;
+        newName += gSeparator;
+        newName = newName + index;
         
         // update vteClone
         vteClone->SetName(newName);

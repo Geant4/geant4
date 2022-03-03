@@ -31,23 +31,26 @@
 
 #include "G4SmartVoxelNode.hh"
 
-// Empty destructor
-//
-G4SmartVoxelNode::~G4SmartVoxelNode()
+// --------------------------------------------------------------------
+G4Allocator<G4SmartVoxelNode>*& aNodeAllocator()
 {
+  G4ThreadLocalStatic G4Allocator<G4SmartVoxelNode>* _instance = nullptr;
+  return _instance;
 }
 
+// --------------------------------------------------------------------
 // Return true if contents equal
 //
 // Preconditions:
 //
 // Node contents were entered in the same order
+//
 G4bool G4SmartVoxelNode::operator == (const G4SmartVoxelNode& v) const
 {
-  size_t maxNode = GetNoContained();
+  std::size_t maxNode = GetNoContained();
   if (maxNode == v.GetNoContained())
   {
-    for (size_t node=0; node<maxNode; ++node)
+    for (std::size_t node=0; node<maxNode; ++node)
     {
       if (GetVolume(node) != v.GetVolume(node))
       {

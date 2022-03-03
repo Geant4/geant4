@@ -46,11 +46,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-
-// uncomment g4root.hh and comment g4xml.hh for a ROOT-based output file
-
-#include "g4root.hh"
-//#include "g4xml.hh"
+#include "G4AnalysisManager.hh"
 
 class G4Track;
 

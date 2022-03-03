@@ -58,8 +58,4 @@ class eRositaPhysicsList: public G4VUserPhysicsList
   private:
    
 };
-
-
 #endif
-
- 

@@ -37,26 +37,35 @@ else()
     " timing.out${_MTsuffix} references, using default timing.out")
 endif()
 
-# Split tests into build-run, then comparison
-GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
-  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon/XGeBox
-  ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/run.in
-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon
-  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
-  BUILD XGeBox PROJECT dmc
+# Split tests into build, run, then comparison
+# 1. Build
+geant4_add_test(example-ext-exoticphysics-phonons-build
+  SOURCE_DIR ${PROJECT_SOURCE_DIR}/examples/extended/exoticphysics/phonon
+  BINARY_DIR ${PROJECT_BINARY_DIR}/examples/extended/exoticphysics/phonon
+  BUILD XGeBox
+  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+
+# GF: disable temporarily
+if(FALSE)
+
+# 2. Run
+geant4_add_test(example-ext-exoticphysics-phonons-run
+  COMMAND ${PROJECT_BINARY_DIR}/examples/extended/exoticphysics/phonon/XGeBox
+          ${PROJECT_SOURCE_DIR}/examples/extended/exoticphysics/phonon/run.in
+  WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/examples/extended/exoticphysics/phonon
+  DEPENDS example-ext-exoticphysics-phonons-build
   ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-  G4LATTICEDATA=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps
-  )
+              G4LATTICEDATA=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps)
 
-GEANT4_ADD_TEST(example-ext-exoticphysics-phonons-timecomp
-  DEPENDS example-ext-exoticphysics-phonons
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
-  COMMAND ${CMAKE_COMMAND} -Dtest_file=timing.ssv -Dreference_file=${_timingRef} -P ${_compareScript}
-  )
+# 3. Compare
+geant4_add_test(example-ext-exoticphysics-phonons-timecomp
+  DEPENDS example-ext-exoticphysics-phonons-run
+  WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/examples/extended/exoticphysics/phonon
+  COMMAND ${CMAKE_COMMAND} -Dtest_file=timing.ssv -Dreference_file=${_timingRef} -P ${_compareScript})
 
-GEANT4_ADD_TEST(example-ext-exoticphysics-phonons-causticcomp
-  DEPENDS example-ext-exoticphysics-phonons
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
-  COMMAND ${CMAKE_COMMAND} -Dtest_file=caustic.ssv -Dreference_file=${_causticRef} -P ${_compareScript}
-  )
+geant4_add_test(example-ext-exoticphysics-phonons-causticcomp
+  DEPENDS example-ext-exoticphysics-phonons-run
+  WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/examples/extended/exoticphysics/phonon
+  COMMAND ${CMAKE_COMMAND} -Dtest_file=caustic.ssv -Dreference_file=${_causticRef} -P ${_compareScript})
 
+endif()

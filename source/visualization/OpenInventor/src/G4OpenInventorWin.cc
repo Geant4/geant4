@@ -27,8 +27,6 @@
 //
 // OpenInventor graphics system factory.
 
-#ifdef G4VIS_BUILD_OIWIN32_DRIVER
-
 // this :
 #include "G4OpenInventorWin.hh"
 
@@ -68,6 +66,3 @@ G4VViewer* G4OpenInventorWin::CreateViewer (G4VSceneHandler& scene, const G4Stri
   G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
   return new G4OpenInventorWinViewer (*pScene, name);
 }
-
-
-#endif

@@ -1,0 +1,128 @@
+// Copyright (C) 2018, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_write_paper
+#define tools_sg_write_paper
+
+//  To traverse a scene graph and "export" it at various file formats
+// by using various rendering actions.
+//  For example by using gl2ps_action, handle the formats:
+//    gl2ps_eps: gl2ps producing eps
+//    gl2ps_ps:  gl2ps producing ps
+//    gl2ps_pdf: gl2ps producing pdf
+//    gl2ps_svg: gl2ps producing svg
+//    gl2ps_tex: gl2ps producing tex
+//    gl2ps_pgf: gl2ps producing pgf
+// By using the zb_action (zb for zbuffer):
+//    zb_ps: tools::sg offscreen zbuffer put in a PostScript file.
+//    zb_png: zbuffer put in a png file. It needs to provide a "png_writer" function.
+//    zb_jpeg: zbuffer put in a jpeg file. It needs to provide a "jpeg_writer" function.
+
+#include "zb_action"
+#include "node"
+#include "gl2ps_action"
+#include "../wps"
+#include "../typedefs"
+#include "../touplow"
+
+namespace tools {
+namespace sg {
+
+typedef bool (*png_writer)(std::ostream&,const std::string&,
+                           unsigned char*,unsigned int,unsigned int,unsigned int);
+
+typedef bool (*jpeg_writer)(std::ostream&,const std::string&,
+                            unsigned char*,unsigned int,unsigned int,unsigned int,int);
+
+inline bool write_paper(std::ostream& a_out,
+                        gl2ps_manager& a_gl2ps_mgr,zb_manager& a_zb_mgr,
+                        png_writer a_png_writer,jpeg_writer a_jpeg_writer,
+                        float a_back_r,float a_back_g,float a_back_b,float a_back_a,
+                        node& a_scene_graph,
+                        unsigned int a_width,unsigned int a_height,
+                        const std::string& a_file,const std::string& a__format) {
+  if(!a_width || !a_height) return false;
+  std::string a_format = a__format;
+  tolowercase(a_format);  //handle legacy.
+  int gl2ps_format;
+  if(s2format(a_format,gl2ps_format)) {
+    gl2ps_action action(a_gl2ps_mgr,a_out,a_width,a_height);
+    action.clear_color(a_back_r,a_back_g,a_back_b,a_back_a);
+    if(!action.open(a_file,gl2ps_format)) return false;
+    a_scene_graph.render(action);
+    action.close();
+    return true;
+  }
+
+  zb_action action(a_zb_mgr,a_out,a_width,a_height);
+  action.zbuffer().clear_color_buffer(0);
+  action.add_color(a_back_r,a_back_g,a_back_b,a_back_a);
+  action.zbuffer().clear_depth_buffer();
+  a_scene_graph.render(action);
+
+  if((a_format=="zb_ps")||(a_format=="inzb_ps")) {
+    wps wps(a_out);
+    if(!wps.open_file(a_file)) {
+      a_out << "tools::sg::write_paper : can't open " << a_file << "." << std::endl;
+      return false;
+    }
+    wps.PS_BEGIN_PAGE();
+    wps.PS_PAGE_SCALE(float(a_width),float(a_height));
+    wps.PS_IMAGE(a_width,a_height,wps::rgb_4,zb_action::get_rgb,&action);
+    wps.PS_END_PAGE();
+    wps.close_file();
+    return true;
+  }
+
+  if((a_format=="zb_png")||(a_format=="inzb_png")) {
+    if(!a_png_writer) {
+      a_out << "tools::sg::write_paper : no png_writer given." << std::endl;
+      return false;
+    }
+
+    size_t sz;
+    unsigned char* buffer = action.get_rgbas(sz);
+    if(!buffer) {
+      a_out << "tools::sg::write_paper : can't get rgba image." << std::endl;
+      return false;
+    }
+
+    if(!a_png_writer(a_out,a_file,buffer,a_width,a_height,4)) {
+      a_out << "tools::sg::write_paper : tools::png::write() failed." << std::endl;
+      delete [] buffer;
+      return false;
+    }
+    delete [] buffer;
+    return true;
+  }
+
+  if((a_format=="zb_jpeg")||(a_format=="zb_jpg")||(a_format=="inzb_jpeg")) {
+
+    if(!a_jpeg_writer) {
+      a_out << "tools::sg::write_paper : no jpeg_writer given." << std::endl;
+      return false;
+    }
+
+    size_t sz;
+    unsigned char* buffer = action.get_rgbs(sz);
+    if(!buffer) {
+      a_out << "tools::sg::write_paper : can't get rgb image." << std::endl;
+      return false;
+    }
+
+    if(!a_jpeg_writer(a_out,a_file,buffer,a_width,a_height,3,100)) {
+      a_out << "tools::sg::write_paper : tools::jpeg::write() failed." << std::endl;
+      delete [] buffer;
+      return false;
+    }
+    delete [] buffer;
+    return true;
+  }
+
+  a_out << "tools::sg::write_paper : unknown format " << a_format << std::endl;
+  return false;
+}
+
+}}
+
+#endif

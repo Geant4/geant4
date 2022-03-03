@@ -77,17 +77,40 @@ public:
   virtual sg::render_manager& render_manager() = 0; //sg:: is needed.
 public:
   render_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
-  :parent(a_out,a_ww,a_wh){}
+  :parent(a_out,a_ww,a_wh)
+  ,m_do_transparency(false)
+  ,m_have_to_do_transparency(false)
+  {}
   virtual ~render_action(){}
 public:
   render_action(const render_action& a_from)
   :parent(a_from)
+  ,m_do_transparency(a_from.m_do_transparency)
+  ,m_have_to_do_transparency(a_from.m_have_to_do_transparency)
   {}
   render_action& operator=(const render_action& a_from){
     parent::operator=(a_from);
+    m_do_transparency = a_from.m_do_transparency;
+    m_have_to_do_transparency = a_from.m_have_to_do_transparency;
     return *this;
   }
 public:
+  void set_do_transparency(bool a_value) {m_do_transparency = a_value;}
+  bool do_transparency() const {return m_do_transparency;}
+  void set_have_to_do_transparency(bool a_value) {m_have_to_do_transparency = a_value;}
+  bool have_to_do_transparency() const {return m_have_to_do_transparency;}
+
+  bool have_to_render() {
+    bool transparent = state().m_color.a()!=1?true:false;
+    if(transparent) {
+      if(m_do_transparency) return true;
+      m_have_to_do_transparency = true;
+      return false;
+    }
+    if(m_do_transparency) return false;
+    return true;
+  }
+
   void load_matrices_to_identity() {
     load_proj_matrix(m_identity);
     load_model_matrix(m_identity);
@@ -288,6 +311,9 @@ public:
     }
     a_out << "dump_vertex_array_xy : end." << std::endl;
   }
+protected:
+  bool m_do_transparency;
+  bool m_have_to_do_transparency;
 };
 
 }}

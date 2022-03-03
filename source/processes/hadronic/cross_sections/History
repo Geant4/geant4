@@ -14,6 +14,48 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 October 2021 - Alberto Ribon (hadr-cross-V10-07-21)
+- G4IonsShenCrossSection : reintroduced this (old) ion-ion cross section
+    (that was removed in 10.7.ref03), as required by Vladimir Uzhinsky
+    for his nucleus-nucleus validation of NA61/SHINE experimental data
+
+06 October 2021 - Vladimir Grichine (hadr-cross-V10-07-20)
+- G4ElNuclearSFcs - e-A XS according to structure function approach by corrections of CHIPS CS 
+
+30 September 2021 - Vladimir Ivanchenko (hadr-cross-V10-07-19)
+- G4GammaNuclearXS - fixed Coverity warnings
+- G4PhotoNuclearCrossSection - code clean-up
+
+17 August 2021 - Vladimir Ivanchenko (hadr-cross-V10-07-18)
+- G4GammaNuclearXS - Bogdan Kutsenko impruved isotope x-section
+
+16 August 2021 - Vladimir Ivanchenko (hadr-cross-V10-07-17)
+- G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS,
+  G4ComponentBarNucleonNucleusXsc, G4NucleonNuclearCrossSection,
+  G4CrossSectionDataSetRegistry, G4PhotoNuclearCrossSection - clean-up
+
+13 August 2021 - Vladimir Ivanchenko (hadr-cross-V10-07-16)
+- G4IsotopeList - extended list of isotopes to cover all data for 
+    neutrons, protons, and gamma.
+- G4GammaNuclearXS - new version of the code (Bogdan Kutsenko, BINP,
+    CERN summer student program), which is based on IAEA/PD-2019.
+- G4CrossSectionDataSetRegistry - improved debug printout and not use 
+    CrossSectionFactory for XS.
+- G4NeutronInelasticXS, G4NeutronElasticXS, G4NeutronCaptureXS - cleanup
+
+29 July 2021 - Vladimir Ivanchenko (hadr-cross-V10-07-15)
+- G4IsotopeList - extended from Zmax=92 to Zmax=94; do not use zero 
+    values for amin and amax for all Z; this is needed for
+    migration to the new dataset G4PARTICLEXS4.0
+- G4NeutronInelasticXS, G4NeutronElasticXS, G4NeutronCaptureXS,
+  G4ParticleInelasticXS, GammaNuclearXS : instead of check (amin[Z]==0)
+    use the check (amin[Z]==amax[Z])
+
+12 July 2021 - Vladimir Ivanchenko (hadr-cross-V10-07-14)
+- G4NeutronInelasticXS, G4NeutronElasticXS, G4NeutronCaptureXS,
+  G4ParticleInelasticXS, GammaNuclearXS : clean-up access to data
+- G4NeutronCaptureXS - fixed bug in isotope data access
+
 30 May 2021 - Vladimir Ivanchenko (hadr-cross-V10-07-13)
 - G4UPiNuclearCrossSection - disable spline interpolation
 

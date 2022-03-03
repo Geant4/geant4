@@ -47,24 +47,25 @@ class G4PlotMessenger : public G4UImessenger
 {
   public:
     explicit G4PlotMessenger(G4PlotParameters* plotParameters);
+    G4PlotMessenger() = delete;
     virtual ~G4PlotMessenger();
-   
-    // methods
+
+    // Methods
     virtual void SetNewValue(G4UIcommand* command, G4String value) final;
-    
+
   private:
     void SetStyleCmd();
     void SetLayoutCmd();
     void SetDimensionsCmd();
- 
-    G4PlotParameters*  fPlotParameters; ///< Associated class
-    std::unique_ptr<G4AnalysisMessengerHelper>  fHelper; 
+
+    G4PlotParameters*  fPlotParameters { nullptr }; ///< Associated class
+    std::unique_ptr<G4AnalysisMessengerHelper>  fHelper;
     std::unique_ptr<G4UIdirectory>  fDirectory;
 
     std::unique_ptr<G4UIcommand>  fSetLayoutCmd;
     std::unique_ptr<G4UIcommand>  fSetDimensionsCmd;
     std::unique_ptr<G4UIcmdWithAString>  fSetStyleCmd;
 };
-  
+
 #endif
 

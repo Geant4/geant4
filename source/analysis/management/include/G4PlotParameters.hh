@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// The data class which defined the configuration parameters for plotting 
+// The data class which defined the configuration parameters for plotting
 // which can be modified via UI commands.
 //
 // Author: Ivana Hrivnacova, 21/10/2015  (ivana@ipno.in2p3.fr)
@@ -36,22 +36,23 @@
 #include "G4PlotMessenger.hh"
 
 #include <memory>
+#include <string_view>
 
-class G4PlotParameters 
+class G4PlotParameters
 {
   public:
     G4PlotParameters();
 
     // setters
-    void SetLayout(G4int columns, G4int rows); 
+    void SetLayout(G4int columns, G4int rows);
     void SetDimensions(G4int width, G4int height);
     void SetStyle(const G4String& style);
 
     // getters
     // limits
-    G4int GetMaxColumns(); 
+    G4int GetMaxColumns();
     G4int GetMaxRows();
-    G4String GetAvailableStyles(); 
+    G4String GetAvailableStyles();
     // data
     G4int GetColumns() const;
     G4int GetRows() const;
@@ -60,36 +61,51 @@ class G4PlotParameters
     G4float  GetScale() const;
     G4String GetStyle() const;
 
-  private: 
-    // data members
+  private:
+    // Static data members
+    static constexpr std::string_view fkClass { "G4PlotParameters" };
+    static constexpr G4int fkHRDefaultWidth { 2000 };
+    static constexpr G4int fkLRDefaultWidth { 700 };
+    static constexpr G4int fkDefaultColumns { 1 };
+    static constexpr G4int fkDefaultRows    { 2 };
+    static constexpr G4float fkDefaultScale { 0.9f };
+#if defined(TOOLS_USE_FREETYPE)
+   //Have vertical A4 :
+    static constexpr G4int fkDefaultWidth   { fkHRDefaultWidth };
+    static constexpr G4int fkDefaultHeight  { static_cast<G4int>(29.7f/21.0f*fkHRDefaultWidth) };
+    // limits
+    static constexpr G4int fkMaxColumns { 3 };
+    static constexpr G4int fkMaxRows    { 5 };
+#else
+   //Have vertical A4 :
+    static constexpr G4int fkDefaultWidth   { fkLRDefaultWidth };
+    static constexpr G4int fkDefaultHeight  { static_cast<G4int>(29.7f/21.0f*fkLRDefaultWidth) };
+    // limits
+    static constexpr G4int fkMaxColumns { 2 };
+    static constexpr G4int fkMaxRows    { 3 };
+#endif
+
+    // Data members
     std::unique_ptr<G4PlotMessenger> fMessenger;
     // defaults
-    G4int fDefaultColumns; 
-    G4int fDefaultRows; 
-    G4int fDefaultWidth;
-    G4int fDefaultHeight;
     G4String fDefaultStyle;
-    G4float fDefaultScale;
-    // limits
-    G4int fMaxColumns; 
-    G4int fMaxRows; 
-    G4String fAvailableStyles; 
+    G4String fAvailableStyles;
     // data
-    G4int fColumns; 
-    G4int fRows; 
-    G4int fWidth;
-    G4int fHeight;
-    G4float fScale;
+    G4int fColumns  { fkDefaultColumns };
+    G4int fRows     { fkDefaultRows };
+    G4int fWidth    { fkDefaultWidth };
+    G4int fHeight   { fkDefaultHeight };
+    G4float fScale  { fkDefaultScale };
     G4String fStyle;
-};  
+};
 
 // inline functions
 
 inline G4int G4PlotParameters::GetMaxColumns()
-{ return fMaxColumns; }
+{ return fkMaxColumns; }
 
 inline G4int G4PlotParameters::GetMaxRows()
-{ return fMaxRows; }
+{ return fkMaxRows; }
 
 inline G4String G4PlotParameters::GetAvailableStyles()
 { return fAvailableStyles; }

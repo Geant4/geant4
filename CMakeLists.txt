@@ -16,7 +16,7 @@ endif()
 #-----------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 3.12...3.20 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 # - Make overrides for default flags, so they appear in interfaces
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
@@ -27,7 +27,9 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
 #   Version handled manually as project(... VERSION ...) is not used
 #   in tests/examples which are subprojects. All calls must use
 #   the same form.
-project(Geant4)
+project(Geant4
+  DESCRIPTION "C++ toolkit for simulating the passage of particles through matter"
+  HOMEPAGE_URL "https://geant4.cern.ch")
 set(${PROJECT_NAME}_VERSION_MAJOR 11)
 set(${PROJECT_NAME}_VERSION_MINOR  0)
 set(${PROJECT_NAME}_VERSION_PATCH  0)

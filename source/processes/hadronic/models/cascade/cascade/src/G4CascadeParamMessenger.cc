@@ -136,8 +136,8 @@ void G4CascadeParamMessenger::CreateDirectory(const char* path,
 
   // Directory path must be absolute, prepend "/" if ncessary
   G4String fullPath = path;
-  if (fullPath(0) != '/') fullPath.prepend("/");
-  if (fullPath(fullPath.length()-1) != '/') fullPath.append("/");
+  if (fullPath[0] != '/') fullPath.insert(0, "/");
+  if (fullPath.back() != '/') fullPath.append("/");
 
   // See if input path has already been registered
   G4UIcommand* foundPath = UIman->GetTree()->FindPath(fullPath);

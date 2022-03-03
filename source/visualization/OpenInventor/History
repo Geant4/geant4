@@ -18,6 +18,13 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+12 November 2021 - Ben Morgan (openinventor-V10-07-06)
+- Retire G4VIS_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+8 November 2021 - Ben Morgan (openinventor-V10-07-05)
+- Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
 
 07 June 2021  John Allison  (openinventor-v10-07-04)
 - Requires greps-V10-07-07 (new method AddCompound (const G4Mesh&)).

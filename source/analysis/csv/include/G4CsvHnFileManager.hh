@@ -33,6 +33,8 @@
 
 #include "G4VTHnFileManager.hh"
 
+#include <string_view>
+
 class G4CsvFileManager;
 
 template <typename HT>
@@ -40,9 +42,10 @@ class G4CsvHnFileManager : public G4VTHnFileManager<HT>
 
 {
   public:
-    G4CsvHnFileManager(G4CsvFileManager* fileManger)
+    explicit G4CsvHnFileManager(G4CsvFileManager* fileManger)
       : G4VTHnFileManager<HT>(), fFileManager(fileManger) {}
-    virtual ~G4CsvHnFileManager() {}
+    G4CsvHnFileManager() = delete;
+    virtual ~G4CsvHnFileManager() = default;
 
     // Methods for writing objects
     virtual G4bool WriteExtra(HT* ht, const G4String& htName, const G4String& fileName) final;
@@ -52,7 +55,10 @@ class G4CsvHnFileManager : public G4VTHnFileManager<HT>
   private:
     // Methods
     G4bool Write(std::ofstream& hnfile, HT* ht);
-    
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4CsvHnFileManager" };
+
     // Data members
     G4CsvFileManager* fFileManager;
 };

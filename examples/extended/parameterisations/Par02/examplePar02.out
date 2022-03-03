@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -29,27 +29,27 @@ G4GDML: Reading 'Par02FullDetector.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 Geometry loaded from  file .......Par02FullDetector.gdml 
 
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-ecal !!!
-
-ecal !!!
-
-ecal !!!
-
 ecal !!!
 
 ecal !!!
 
 tracker !!!
+
+ecal !!!
+
+ecal !!!
+
+ecal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
 Warning : Region <MuonEndCap_1> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
@@ -95,10 +95,8 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   OpenGLImmediateQt (OGLIQt, OGLI)
@@ -143,7 +141,9 @@ Some /vis commands (optionally) take a string to specify colour.
 Magnetic field is active, fieldValue = (0 0 1 T ).
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
+... set ntuple merging row mode : row-wise - done
 ... create file : DefaultOutput.root - done
+... open analysis file : DefaultOutput.root - done
 ... open analysis file : DefaultOutput.root - done
  ________Tracker model triggered _________
  ________Tracker model triggered _________

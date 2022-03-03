@@ -14,6 +14,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-11-21 I. Hrivnacova (AnaEx01-V10-07-03)
+- Always close analysis files in EndOfRunAction
+
+03-11-21 I. Hrivnacova (AnaEx01-V10-07-02)
+- Define analysis manager configuration and create
+  histograms only once. (This is needed since AnaEx01-V10-07-00,
+  as the analysis manager is not re-created for each run.)
+
+06-10-21 I. Hrivnacova (AnaEx01-V10-07-01)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  use auto for histograms get via GetH1()
+
+19-07-21 I. Hrivnacova (AnaEx01-V10-07-00)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
 10-11-20 B. Morgan, I. Hrivnacova (AnaEx01-V10-06-00)
 - Migration to G4RunManagerFactory.
 - Call SetNtupleMerging only in MT to suppress warning in Seq mode.

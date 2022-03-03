@@ -35,7 +35,13 @@
 
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
+#ifdef G4MULTITHREADED
+#include "G4TheMTRayTracer.hh"
+#else
 #include "G4TheRayTracer.hh"
+#endif
+#include "G4RTJpegMaker.hh"
+#include "G4RTSimpleScanner.hh"
 #include "G4UImanager.hh"
 
 G4RayTracerViewer::G4RayTracerViewer
@@ -44,7 +50,12 @@ G4RayTracerViewer::G4RayTracerViewer
  G4TheRayTracer* aTracer)
 : G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name)
 , fFileCount(0)
-, theTracer(aTracer)
+#ifdef G4MULTITHREADED
+#include "G4TheMTRayTracer.hh"
+, theTracer(aTracer? aTracer: G4TheMTRayTracer::Instance(new G4RTJpegMaker, new G4RTSimpleScanner))
+#else
+, theTracer(aTracer? aTracer: new G4TheRayTracer(new G4RTJpegMaker, new G4RTSimpleScanner))
+#endif
 {
   if (!theTracer) {
     G4cerr << "G4RayTracerViewer::Initialise: No tracer" << G4endl;

@@ -143,7 +143,7 @@ G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
   std::vector<char> toremove = { ' ', '/', ':', '#', '+' };
   for(auto c : toremove)
   {
-    if(nameOut.contains(c))
+    if(G4StrUtil::contains(nameOut, c))
     {
       std::replace(nameOut.begin(), nameOut.end(), c, '_');
     }

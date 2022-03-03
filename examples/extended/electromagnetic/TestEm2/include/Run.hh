@@ -34,8 +34,7 @@
 #define Run_h 1
 
 #include "G4Run.hh"
-
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 #include <vector>
 typedef std::vector<G4double> MyVector;

@@ -56,7 +56,7 @@ class G4NuElNucleusCcModel : public G4NeutrinoNucleusModel      // G4HadronicInt
 {
 public:
 
-  G4NuElNucleusCcModel(const G4String& name = "NuMuNucleCcModel");
+  G4NuElNucleusCcModel(const G4String& name = "NuElNuclCcModel");
 
   virtual ~G4NuElNucleusCcModel();
 

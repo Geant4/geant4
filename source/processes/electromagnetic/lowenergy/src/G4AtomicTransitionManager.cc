@@ -283,8 +283,12 @@ void G4AtomicTransitionManager::Initialise()
   isInitialized = true;
 
   // Selection of fluorescence files
-  G4String fluoDirectory = (G4EmParameters::Instance()->BeardenFluoDir()?
+  
+  G4String fluoDirectory = "/fluor";
+  
+  fluoDirectory = (G4EmParameters::Instance()->BeardenFluoDir()?
 			    "/fluor_Bearden":"/fluor");
+ 
   // infTableLimit is initialized to 6 because EADL lacks data for Z<=5
   G4ShellData* shellManager = new G4ShellData;
   shellManager->LoadData(fluoDirectory+"/binding");
@@ -292,15 +296,23 @@ void G4AtomicTransitionManager::Initialise()
   // initialization of the data for auger effect
   augerData = new G4AugerData;
   
+  if (G4EmParameters::Instance()->ANSTOFluoDir()) 
+     {
+      fluoDirectory = "/fluor_ANSTO";                                 
+       G4cout << "The ANSTO fluorescence radiation yields substitute the EADL data libraries" << G4endl;
+      }                                     
   // Fills shellTable with the data from EADL, identities and binding 
   // energies of shells
   for (G4int Z = zMin; Z<= zMax; ++Z) 
     {
+    
+    if ((Z > 92) && (G4EmParameters::Instance()->ANSTOFluoDir())) fluoDirectory ="/fluor";   
+    
       std::vector<G4AtomicShell*> vectorOfShells;  
       size_t shellIndex = 0; 
 
       size_t numberOfShells = shellManager->NumberOfShells(Z);
-      // G4cout << "For Z= " << Z << "  " << numberOfShells << " shells" << G4endl;
+      // G4cout << fluoDirectory <<"    For Z= " << Z << "  " << numberOfShells << " shells" << G4endl;
       for (shellIndex = 0; shellIndex<numberOfShells; ++shellIndex) 
 	{ 
 	  G4int shellId = shellManager->ShellId(Z,shellIndex);
@@ -315,8 +327,12 @@ void G4AtomicTransitionManager::Initialise()
   
   // Fills transitionTable with the data from EADL, identities, transition 
   // energies and transition probabilities
+   if (G4EmParameters::Instance()->ANSTOFluoDir()) fluoDirectory = "/fluor_ANSTO"; 
+  
+  
   for (G4int Znum= infTableLimit; Znum<=supTableLimit; ++Znum)
     {  
+      if ((Znum > 92) && (G4EmParameters::Instance()->ANSTOFluoDir())) fluoDirectory ="/fluor";    
       G4FluoData* fluoManager = new G4FluoData(fluoDirectory);
       std::vector<G4FluoTransition*> vectorOfTransitions;
       fluoManager->LoadData(Znum);

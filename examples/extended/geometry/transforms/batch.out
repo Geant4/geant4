@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -33,10 +33,10 @@
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0       0 fm       0 fm       0 fm       1 eV           0 meV      0 fm       0 fm      World   initStep
-    1   1.299 cm     7.5 mm       0 fm       1 eV           0 meV    1.5 cm     1.5 cm      World   Transportation
-    2   3.897 cm    2.25 cm       0 fm       1 eV           0 meV      3 cm     4.5 cm        Trd   Transportation
-    3    4.33 cm     2.5 cm       0 fm       1 eV           0 meV      5 mm       5 cm      World   OutOfWorld
+    0       0 fm       0 fm       0 fm       1 eV           0 eV       0 fm       0 fm      World   initStep
+    1   1.299 cm     7.5 mm       0 fm       1 eV           0 eV     1.5 cm     1.5 cm      World   Transportation
+    2   3.897 cm    2.25 cm       0 fm       1 eV           0 eV       3 cm     4.5 cm        Trd   Transportation
+    3    4.33 cm     2.5 cm       0 fm       1 eV           0 eV       5 mm       5 cm      World   OutOfWorld
 /placement/setMethod WithInverseMatrix
 
  --> phi = 30 deg  inverse rotation matrix : 
@@ -51,7 +51,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0       0 fm       0 fm       0 fm       1 eV           0 meV      0 fm       0 fm      World   initStep
-    1    -7.5 mm   1.299 cm       0 fm       1 eV           0 meV    1.5 cm     1.5 cm      World   Transportation
-    2   -2.25 cm   3.897 cm       0 fm       1 eV           0 meV      3 cm     4.5 cm        Trd   Transportation
-    3    -2.5 cm    4.33 cm       0 fm       1 eV           0 meV      5 mm       5 cm      World   OutOfWorld
+    0       0 fm       0 fm       0 fm       1 eV           0 eV       0 fm       0 fm      World   initStep
+    1    -7.5 mm   1.299 cm       0 fm       1 eV           0 eV     1.5 cm     1.5 cm      World   Transportation
+    2   -2.25 cm   3.897 cm       0 fm       1 eV           0 eV       3 cm     4.5 cm        Trd   Transportation
+    3    -2.5 cm    4.33 cm       0 fm       1 eV           0 eV       5 mm       5 cm      World   OutOfWorld

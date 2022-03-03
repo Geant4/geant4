@@ -25,6 +25,11 @@ monopole.
 
 This example simulates phonons in sub-Kelvin temperature Germanium crystal.
 
+\link Examplesaxs saxs \endlink
+
+The example saxs implements the typical setup of a Small Angle X-ray
+Scattering (SAXS) experiment.
+
 \link Exampleucn ucn \endlink
 
 This example simulates the passage of ultra-cold neutrons (UCN) in a

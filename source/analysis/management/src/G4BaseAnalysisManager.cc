@@ -28,37 +28,30 @@
 
 #include "G4BaseAnalysisManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
-#include <iostream>
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4BaseAnalysisManager::G4BaseAnalysisManager(
                          const G4AnalysisManagerState& state)
-  : fState(state),
-    fFirstId(0),
-    fLockFirstId(false)
+  : fState(state)
 {}
 
-//_____________________________________________________________________________
-G4BaseAnalysisManager::~G4BaseAnalysisManager()
-{}
-
-// 
+//
 // public methods
 //
 
 //_____________________________________________________________________________
-G4bool G4BaseAnalysisManager::SetFirstId(G4int firstId) 
+G4bool G4BaseAnalysisManager::SetFirstId(G4int firstId)
 {
   if ( fLockFirstId ) {
-    G4ExceptionDescription description;
-    description 
-      << "Cannot set FirstId as its value was already used.";
-    G4Exception("G4BaseAnalysisManager::SetFirstId()",
-                "Analysis_W013", JustWarning, description);
+    Warn("Cannot set FirstId as its value was already used.",
+      fkClass, "SetFirstId");
+
     return false;
-  }              
+  }
 
   fFirstId = firstId;
   return true;
-}  
+}

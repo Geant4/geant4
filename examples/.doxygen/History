@@ -17,6 +17,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06/12/20 I.Hrivnacova (doxygen-V10-07-02)
+- Added new extended example RE07 in documentation
+
+29/11/20 I.Hrivnacova (doxygen-V10-07-01)
+- Updated for removing AnaEx03
+
+7/11/20 I.Hrivnacova (doxygen-V10-07-00)
+- Added new extended examples in documentation:
+  - eventgenerator/pythia/py8decayer
+  - geometry/vecGeomNavigation
+  - hadronic/Hadr05
+  - hadronic/Hadr10
+  - medical/dna/AuNP
+  - medical/dna/scavenger
+
 9/11/20 I.Hrivnacova (doxygen-V10-06-03)
 - Added new extended example Hadr09 in documentation
 

@@ -68,7 +68,7 @@ using namespace std;
 
 G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4String& nam)
   : G4VEmModel(nam),fParticleChange(nullptr), fAtomDeexcitation(nullptr),
-    maxZ(99),nShellLimit(100),fDeexcitationActive(false),isInitialised(false)
+    maxZ(100),nShellLimit(100),fDeexcitationActive(false),isInitialised(false)
 {
     verboseLevel= 0;
     // Verbosity scale:
@@ -99,18 +99,29 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4String& nam
 
 G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
 {
-  if(IsMaster()) {
+  if(IsMaster())
+  {
     delete fShellCrossSection;
     fShellCrossSection = nullptr;
-    for(G4int i=0; i<maxZ; ++i) {
-      delete fParamHigh[i];
-      fParamHigh[i] = nullptr;
-      delete fParamLow[i];
-      fParamLow[i] = nullptr;
-      delete fCrossSection[i];
-      fCrossSection[i] = nullptr;
-      delete fCrossSectionLE[i];
-      fCrossSectionLE[i] = nullptr;
+    for(G4int i = 0; i <= maxZ; ++i)
+    {
+      if(fParamHigh[i]){
+        delete fParamHigh[i];
+        fParamHigh[i] = nullptr;
+      }
+      if(fParamLow[i]){
+        delete fParamLow[i];
+        fParamLow[i] = nullptr;
+      }
+      if(fCrossSection[i]){
+        delete fCrossSection[i];
+        fCrossSection[i] = nullptr;
+      }
+      if(fCrossSectionLE[i]){
+        delete fCrossSectionLE[i];
+        fCrossSectionLE[i] = nullptr;
+      }
+
     }
   }
 }
@@ -127,28 +138,23 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   
   if(IsMaster()) {
     
-    if(!fWater) {
+    if(fWater == nullptr) {
       fWater = G4Material::GetMaterial("G4_WATER", false);
-      if(!fWater) { fWater = G4Material::GetMaterial("Water", false); }
+      if(fWater == nullptr) { fWater = G4Material::GetMaterial("Water", false); }
       if(fWater)  { fWaterEnergyLimit = 13.6*eV; }
     }
     
-    if(!fShellCrossSection) { fShellCrossSection = new G4ElementData(); }
-    
-    G4ProductionCutsTable* theCoupleTable =
-      G4ProductionCutsTable::GetProductionCutsTable();
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-    
-    for(G4int i=0; i<numOfCouples; ++i) {
-      const G4MaterialCutsCouple* couple =
-	theCoupleTable->GetMaterialCutsCouple(i);
-      const G4Material* material = couple->GetMaterial();
-      const G4ElementVector* theElementVector = material->GetElementVector();
-      G4int nelm = material->GetNumberOfElements();
-      
-      for (G4int j=0; j<nelm; ++j) {
-	G4int Z = std::min(maxZ, (*theElementVector)[j]->GetZasInt());
-	if(!fCrossSection[Z]) { ReadData(Z); }
+    if(fShellCrossSection == nullptr) { fShellCrossSection = new G4ElementData(); }
+
+    const G4ElementTable* elemTable = G4Element::GetElementTable();
+    size_t numElems                 = (*elemTable).size();
+    for(size_t ie = 0; ie < numElems; ++ie)
+    {
+      const G4Element* elem = (*elemTable)[ie];
+      const G4int Z         = std::min(maxZ, elem->GetZasInt());
+      if(fCrossSection[Z] == nullptr)
+      {
+        ReadData(Z);
       }
     }
   }
@@ -217,11 +223,11 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
   }
   G4double cs = 0.0;
   G4int Z = G4lrint(ZZ);
-  if(Z >= maxZ) { return cs; }
+  if(Z > maxZ) { return cs; }
   // if element was not initialised
   
   // do initialisation safely for MT mode
-  if(!fCrossSection[Z]) { InitialiseForElement(theGamma, Z); }
+  if(fCrossSection[Z] == nullptr) { InitialiseForElement(theGamma, Z); }
   
   //7: rows in the parameterization file; 5: number of parameters
   G4int idx = fNShells[Z]*7 - 5;
@@ -308,10 +314,10 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   // Select the ionised shell in the current atom according to shell
   //   cross sections
   // G4cout << "Select random shell Z= " << Z << G4endl;   
-  if(Z >= maxZ) { Z = maxZ-1; }
+  if(Z > maxZ) { Z = maxZ; }
   
   // element was not initialised gamma should be absorbed
-  if(!fCrossSection[Z]) {
+  if(fCrossSection[Z] == nullptr) {
     fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy);
     return;
   }
@@ -495,7 +501,12 @@ const G4String& G4LivermorePhotoElectricModel::FindDirectoryPath()
     const char* path = std::getenv("G4LEDATA");
     if (path) {
       std::ostringstream ost;
-      ost << path << "/livermore/phot_epics2014/";
+      if(G4EmParameters::Instance()->LivermoreDataDir() =="livermore"){
+        ost << path << "/livermore/phot_epics2014/";
+      }else{
+        ost << path << "/epics2017/phot/";
+      }
+
       fDataDirectory = ost.str();
     } else {
       G4Exception("G4SeltzerBergerModel::FindDirectoryPath()","em0006",
@@ -516,11 +527,11 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
 	     << G4endl;
     }
   
-  if(fCrossSection[Z]) { return; }
+  if(fCrossSection[Z]!= nullptr) { return; }
   
-  // spline for photoeffect total x-section above K-shell 
+  // no spline for photoeffect total x-section above K-shell
   // but below the parameterized ones
-  fCrossSection[Z] = new G4PhysicsFreeVector(0,/*spline=*/true);
+  fCrossSection[Z] = new G4PhysicsFreeVector();
   std::ostringstream ost;
   ost << FindDirectoryPath() << "pe-cs-" << Z <<".dat";
   std::ifstream fin(ost.str().c_str());
@@ -698,10 +709,10 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
 
 G4double G4LivermorePhotoElectricModel::GetBindingEnergy(G4int Z, G4int shell)
 {
-  if(Z < 1 || Z >= maxZ) { return -1;} //If Z is out of the supported return 0
+  if(Z < 1 || Z > maxZ) { return -1;} //If Z is out of the supported return 0
   //If necessary load data for Z
   InitialiseForElement(theGamma, Z);
-  if(!fCrossSection[Z] || shell < 0 || shell >= fNShellsUsed[Z]) { return -1; } 
+  if(fCrossSection[Z] == nullptr || shell < 0 || shell >= fNShellsUsed[Z]) { return -1; }
 
   if(Z>2)
     return fShellCrossSection->GetComponentDataByIndex(Z, shell)->Energy(0);
@@ -714,10 +725,10 @@ G4double G4LivermorePhotoElectricModel::GetBindingEnergy(G4int Z, G4int shell)
 void G4LivermorePhotoElectricModel::InitialiseForElement(
 							 const G4ParticleDefinition*, G4int Z)
 {
-  if (!fCrossSection[Z]) {
+  if (fCrossSection[Z] == nullptr) {
 #ifdef G4MULTITHREADED
     G4MUTEXLOCK(&livPhotoeffMutex);
-    if (!fCrossSection[Z]) {
+    if (fCrossSection[Z] == nullptr) {
 #endif
       ReadData(Z);
 #ifdef G4MULTITHREADED

@@ -34,6 +34,7 @@
 
 #include "G4UImessenger.hh"
 #include "G4AnalysisMessengerHelper.hh"
+#include "G4AnalysisUtilities.hh"
 #include "globals.hh"
 
 #include <memory>
@@ -46,33 +47,34 @@ class G4H2Messenger : public G4UImessenger
 {
   public:
     explicit G4H2Messenger(G4VAnalysisManager* manager);
+    G4H2Messenger() = delete;
     virtual ~G4H2Messenger();
-   
-    // methods
+
+    // Methods
     virtual void SetNewValue(G4UIcommand* command, G4String value) final;
-    
+
   private:
     void CreateH2Cmd();
     void SetH2Cmd();
- 
-    G4VAnalysisManager*  fManager; ///< Associated class
-    std::unique_ptr<G4AnalysisMessengerHelper>  fHelper;     
+
+    G4VAnalysisManager*  fManager { nullptr }; ///< Associated class
+    std::unique_ptr<G4AnalysisMessengerHelper>  fHelper;
     std::unique_ptr<G4UIdirectory>  fDirectory;
-    
+
     std::unique_ptr<G4UIcommand>  fCreateH2Cmd;
     std::unique_ptr<G4UIcommand>  fSetH2Cmd;
     std::unique_ptr<G4UIcommand>  fSetH2XCmd;
     std::unique_ptr<G4UIcommand>  fSetH2YCmd;
-    std::unique_ptr<G4UIcommand>  fSetH2TitleCmd;   
-    std::unique_ptr<G4UIcommand>  fSetH2XAxisCmd;   
-    std::unique_ptr<G4UIcommand>  fSetH2YAxisCmd;   
+    std::unique_ptr<G4UIcommand>  fSetH2TitleCmd;
+    std::unique_ptr<G4UIcommand>  fSetH2XAxisCmd;
+    std::unique_ptr<G4UIcommand>  fSetH2YAxisCmd;
     std::unique_ptr<G4UIcommand>  fSetH2ZAxisCmd;
     std::unique_ptr<G4UIcommand>  fSetH2XAxisLogCmd;
     std::unique_ptr<G4UIcommand>  fSetH2YAxisLogCmd;
     std::unique_ptr<G4UIcommand>  fSetH2ZAxisLogCmd;
 
-    G4int fXId;
+    G4int fXId { G4Analysis::kInvalidId };
     G4AnalysisMessengerHelper::BinData  fXData;
 };
-  
+
 #endif

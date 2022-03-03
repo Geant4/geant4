@@ -125,8 +125,7 @@
   - initial energy of the particles
   - scattering angle
 
-   The ntuples are saved in the output file in a format
-   selected in SAXSAnalysis.hh.
+   The ntuples are saved in the output file in the Root format.
 
    When running in multi-threading mode, the ntuples accumulated 
    on threads are automatically merged in a single output file.

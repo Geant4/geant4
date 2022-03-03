@@ -582,8 +582,7 @@ const G4Element* G4VCrossSectionHandler::SelectRandomElement(const G4MaterialCut
   // Special case: the material consists of one element
   if (nElements == 1)
     {
-      G4Element* element = (*elementVector)[0];
-      return element;
+      return (*elementVector)[0];
     }
   else
     {
@@ -673,8 +672,7 @@ void G4VCrossSectionHandler::ActiveElements()
 
       for (G4int iEl=0; iEl<nElements; iEl++)
 	{
-	  G4Element* element = (*elementVector)[iEl];
-	  G4double Z = element->GetZ();
+	  G4double Z = (*elementVector)[iEl]->GetZ();
 	  if (!(activeZ.contains(Z)) && Z >= zMin && Z <= zMax)
 	    {
 	      activeZ.push_back(Z);

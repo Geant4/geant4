@@ -118,7 +118,7 @@ G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
   fParticleChange(nullptr) 
 {
   // gamma energy below which the parametrized atomic x-section is used (80 GeV) 
-  fParametrizedXSectionThreshold = 80.0*CLHEP::GeV;
+  fParametrizedXSectionThreshold = 30.0*CLHEP::GeV;
   // gamma energy below the Coulomb correction is turned off (50 MeV)
   fCoulombCorrectionThreshold    = 50.0*CLHEP::MeV;
   // set angular generator used in the final state kinematics computation 

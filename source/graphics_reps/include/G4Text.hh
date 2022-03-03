@@ -74,12 +74,14 @@ class G4Text: public G4VMarker {
 public: // With description
 
   enum Layout {left, centre, right};
-  G4Text (const G4String& text);
+  G4Text (const G4String& text = "none");
   G4Text (const G4String& text, const G4Point3D& position);
   G4Text (const G4VMarker&);
-  G4Text (const G4Text&);
+  G4Text (const G4Text&) = default;
+  G4Text (G4Text&&) = default;
   virtual ~G4Text ();
-  G4Text& operator= (const G4Text&);
+  G4Text& operator= (const G4Text&) = default;
+  G4Text& operator= (G4Text&&) = default;
 
   G4String GetText   () const;
   Layout   GetLayout () const;

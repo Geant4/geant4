@@ -13,6 +13,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-October-2021, Vladimir Ivanchenko (phys-util-V10-07-02)
+- G4HadParticles - added hyper-nuclei
+
 16-April-2021 Ben Morgan             (phys-util-V10-07-01)
 - Migrate build to modular CMake API
 

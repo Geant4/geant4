@@ -43,6 +43,7 @@
 //            removed not needed 'const'; removed old debug staff and unused
 //            private methods; add comments and reorder methods for 
 //            better reading
+// 27.10.2021 A.Ribon extension for hypernuclei.
 
 #ifndef G4Fragment_h
 #define G4Fragment_h 1
@@ -53,6 +54,7 @@
 #include "G4ThreeVector.hh"
 #include "G4NuclearPolarization.hh"
 #include "G4NucleiProperties.hh"
+#include "G4HyperNucleiProperties.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include <vector>
@@ -80,6 +82,9 @@ public:
   // A,Z and 4-momentum - main constructor for fragment
   G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum, G4bool warning=true);
 
+  // A,Z,numberOfLambdas and 4-momentum
+  G4Fragment(G4int A, G4int Z, G4int numberOfLambdas, const G4LorentzVector& aMomentum, G4bool warning=true);
+
   // 4-momentum and pointer to G4particleDefinition (for gammas, e-)
   G4Fragment(const G4LorentzVector& aMomentum, 
 	     const G4ParticleDefinition* aParticleDefinition);
@@ -101,7 +106,11 @@ public:
   inline G4int GetZ_asInt() const;
   inline G4int GetA_asInt() const;
   inline void SetZandA_asInt(G4int Znew, G4int Anew);
-  
+
+  inline G4int GetNumberOfLambdas() const;
+  inline void SetNumberOfLambdas(G4int numberOfLambdas);
+  // Non-negative number of lambdas/anti-lambdas inside the nucleus/anti-nucleus
+
   inline G4double GetExcitationEnergy() const;
   inline void SetExcEnergyAndMomentum(G4double eexc, const G4LorentzVector&);
 
@@ -112,15 +121,15 @@ public:
   inline const G4LorentzVector& GetMomentum() const;
   inline void SetMomentum(const G4LorentzVector& value);
   
-  // computation of mass for any Z and A
-  inline G4double ComputeGroundStateMass(G4int Z, G4int A) const;
+  // computation of mass for any Z, A and numberOfLambdas
+  inline G4double ComputeGroundStateMass(G4int Z, G4int A, G4int numberOfLambdas = 0) const;
 
   // extra methods
   inline G4double GetSpin() const;
   inline void SetSpin(G4double value);
 
-  inline G4int GetCreatorModelType() const;
-  inline void SetCreatorModelType(G4int value);
+  inline G4int GetCreatorModelID() const;
+  inline void SetCreatorModelID(G4int value);
 
   // obsolete methods
   
@@ -185,6 +194,8 @@ private:
   G4int theA;
   
   G4int theZ;
+
+  G4int theL;  // Non-negative number of lambdas/anti-lambdas inside the nucleus/anti-nucleus
   
   G4double theExcitationEnergy;
 
@@ -245,14 +256,16 @@ inline void G4Fragment::CalculateExcitationEnergy(G4bool warning)
 }
 
 inline G4double 
-G4Fragment::ComputeGroundStateMass(G4int Z, G4int A) const
+G4Fragment::ComputeGroundStateMass(G4int Z, G4int A, G4int numberOfLambdas) const
 {
-  return G4NucleiProperties::GetNuclearMass(A, Z); 
+  if ( numberOfLambdas <= 0 ) return G4NucleiProperties::GetNuclearMass(A, Z); 
+  else                        return G4HyperNucleiProperties::GetNuclearMass(A, Z, numberOfLambdas); 
 }
 	 
 inline void G4Fragment::CalculateGroundStateMass() 
 {
-  theGroundStateMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
+  if ( theL <= 0 ) theGroundStateMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
+  else             theGroundStateMass = G4HyperNucleiProperties::GetNuclearMass(theA, theZ, theL); 
 }
 
 inline G4int G4Fragment::GetA_asInt() const
@@ -269,6 +282,17 @@ inline void G4Fragment::SetZandA_asInt(G4int Znew, G4int Anew)
 {
   theZ = Znew;
   theA = Anew;
+  CalculateGroundStateMass();
+}
+
+inline G4int G4Fragment::GetNumberOfLambdas() const
+{
+  return theL;
+}
+
+inline void G4Fragment::SetNumberOfLambdas(G4int numberOfLambdas)
+{
+  theL = std::max( numberOfLambdas, 0 );  // Cannot be negative
   CalculateGroundStateMass();
 }
 
@@ -396,12 +420,12 @@ inline void G4Fragment::SetNumberOfElectrons(G4int value)
   numberOfShellElectrons = value;
 }
 
-inline G4int G4Fragment::GetCreatorModelType() const
+inline G4int G4Fragment::GetCreatorModelID() const
 {
   return creatorModel;
 }
 
-inline void G4Fragment::SetCreatorModelType(G4int value)
+inline void G4Fragment::SetCreatorModelID(G4int value)
 {
   creatorModel = value;
 }

@@ -194,6 +194,20 @@ class G4UIcommand
       failureDescription = "";
     }
 
+  public:
+    enum CommandType 
+    { BaseClassCmd, WithoutParameterCmd,
+      WithABoolCmd, WithAnIntegerCmd, WithALongIntCmd, 
+      WithADoubleCmd, WithADoubleAndUnitCmd, With3VectorCmd, With3VectorAndUnitCmd,
+      WithAStringCmd, CmdDirectory = -1 };
+      
+    inline CommandType GetCommandType() const
+    { return commandType; }
+    void SetCommandType(CommandType);
+
+    inline void SetDefaultSortFlag(G4bool val)
+    { ifSort = val; }
+
   protected:
 
     // --- the following is used by CheckNewValue() --------
@@ -208,6 +222,8 @@ class G4UIcommand
 
     G4int commandFailureCode = 0;
     G4String failureDescription = "";
+
+    G4bool ifSort = false;
 
   private:
 
@@ -246,6 +262,8 @@ class G4UIcommand
 
     // Data -----------------------------------------------------------
 
+  private:
+    CommandType commandType = BaseClassCmd;
     G4UImessenger* messenger = nullptr;
     G4String commandPath;
     G4String commandName;

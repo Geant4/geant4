@@ -39,6 +39,7 @@
 void G4PDefData::initialize()
 {
   theProcessManager = nullptr;
+  theTrackingManager = nullptr;
 }
 
 G4int& G4PDefManager::slavetotalspace()

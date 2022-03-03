@@ -12,6 +12,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-11-21 I. Hrivnacova (exgps-V10-07-03)
+-  Removed obsolete references to AIDA analysis tools
+
+06-10-21 I. Hrivnacova (exgps-V10-07-02)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+03-08-21 B. Morgan (exgps-V10-07-01)
+- Tidy up CTests definition file
+
+19-07-21 I. Hrivnacova (exgps-V10-07-00)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
 10-11-20 Ben Morgan (exgps-V10-06-00)
 - Migration to G4RunManagerFactory.
 

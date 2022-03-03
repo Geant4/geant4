@@ -191,7 +191,7 @@ G4ParticleInelasticXS::IsoCrossSection(G4double ekin, G4double logE,
 
   // compute isotope cross section if applicable 
   const G4double emax = pv->GetMaxEnergy(); 
-  if(ekin <= emax && amin[Z]>0 && A >= amin[Z] && A <= amax[Z]) {
+  if(ekin <= emax && amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z]) {
     auto pviso = data[index]->GetComponentDataByIndex(Z, A - amin[Z]);
     if(pviso != nullptr) { 
       xs = pviso->LogVectorValue(ekin, logE);
@@ -247,7 +247,7 @@ const G4Isotope* G4ParticleInelasticXS::SelectIsotope(
   size_t j;
 
   // isotope wise cross section not available
-  if(0 == amin[Z] || Z >= MAXZINELP) {
+  if(amax[Z] == amin[Z] || Z >= MAXZINELP) {
     for (j=0; j<nIso; ++j) {
       sum += abundVector[j];
       if(q <= sum) {
@@ -303,7 +303,7 @@ G4ParticleInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     if(data[index] == nullptr) { 
 #endif
       isMaster = true;
-      data[index] = new G4ElementData(); 
+      data[index] = new G4ElementData();
       data[index]->SetName(particle->GetParticleName() + "Inelastic");
       FindDirectoryPath();
 #ifdef G4MULTITHREADED
@@ -337,7 +337,7 @@ const G4String& G4ParticleInelasticXS::FindDirectoryPath()
   // build the complete string identifying the file with the data set
   if(gDataDirectory[index].empty()) {
     char* path = std::getenv("G4PARTICLEXSDATA");
-    if (path) {
+    if (nullptr != path) {
       std::ostringstream ost;
       ost << path << "/" << particle->GetParticleName() << "/inel";
       gDataDirectory[index] = ost.str();
@@ -380,8 +380,8 @@ void G4ParticleInelasticXS::Initialise(G4int Z)
 	 << "  " << FindDirectoryPath() << G4endl;
   */
   // upload isotope data
-  if(amin[Z] > 0) {
-    size_t nmax = (size_t)(amax[Z]-amin[Z]+1);
+  if(amin[Z] < amax[Z]) {
+    G4int nmax = amax[Z] - amin[Z] + 1;
     data[index]->InitialiseForComponent(Z, nmax);
 
     for(G4int A=amin[Z]; A<=amax[Z]; ++A) {
@@ -412,7 +412,7 @@ G4ParticleInelasticXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
 {
   G4PhysicsLogVector* v = nullptr;
   std::ifstream filein(ost.str().c_str());
-  if (!(filein)) {
+  if (!filein.is_open()) {
     if(warn) { 
       G4ExceptionDescription ed;
       ed << "Data file <" << ost.str().c_str()

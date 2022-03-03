@@ -33,20 +33,21 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "PhysListEmStandard.hh"
-#include "PhysListEmStandardSS.hh"
-#include "PhysListEmStandardGS.hh"
-#include "PhysListEmStandardWVI.hh"
-
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 
 #include "G4UnitsTable.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4Decay.hh"
+#include "StepMax.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -75,13 +76,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
- fMessenger(0), fEmName("local"), fEmPhysicsList(0)
+  fMessenger(0), fEmName("emstandard_opt0"), fEmPhysicsList(0)
 {
   fMessenger = new PhysicsListMessenger(this); 
    
   // EM physics
-  fEmName = G4String("local");
-  fEmPhysicsList = new PhysListEmStandard(fEmName);
+  fEmPhysicsList = new G4EmStandardPhysics();
     
   SetDefaultCutValue(1.*mm);
   SetVerboseLevel(1);
@@ -145,8 +145,6 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Decay.hh"
-
 void PhysicsList::AddDecay()
 {
   // Add Decay Process
@@ -172,8 +170,6 @@ void PhysicsList::AddDecay()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
 {
@@ -203,13 +199,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == fEmName) return;
 
-  if (name == "local") {
-
-    fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandard(name);
-
-  } else if (name == "emstandard_opt0") {
+  if (name == "emstandard_opt0") {
 
     fEmName = name;
     delete fEmPhysicsList;
@@ -233,23 +223,29 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
     
+  } else if (name == "emstandard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+    
   } else if (name == "standardSS") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardSS(name);
+    fEmPhysicsList = new G4EmStandardPhysicsSS();
         
   } else if (name == "standardGS") {
   
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardGS(name);
+    fEmPhysicsList = new G4EmStandardPhysicsGS();
 
   } else if (name == "standardWVI") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardWVI(name);
+    fEmPhysicsList = new G4EmStandardPhysicsWVI();
                 
   } else {
 

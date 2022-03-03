@@ -66,7 +66,6 @@ Histo::Histo()
 Histo::~Histo()
 {
   delete fMessenger;
-  delete fManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -145,8 +144,7 @@ void Histo::Save()
   if(fManager->CloseFile() && fVerbose > 0) {
     G4cout << "                 File is closed" << G4endl;
   }
-  delete G4RootAnalysisManager::Instance();
-  fManager = 0;
+  fManager->Clear();
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

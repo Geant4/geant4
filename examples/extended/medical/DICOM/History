@@ -5,6 +5,9 @@
      =========================================================
 
                       Category History file
+27.09.2021  Pedro Arce (DICOM-V10-07-01)
+- Use updated interface from geomnav to use G4PhantomParameterisation::GetNoVoxels instead of GetNoVoxel
+
 31.12.2020 - John Allison (DICOM-V10-07-00)
              vis.mac: "Change /vis/ogl/set/eventsDrawInterval" to
              "/vis/ogl/flushAt NthPrimitive".

@@ -31,13 +31,7 @@
 //_____________________________________________________________________________
 G4BaseRNtupleManager::G4BaseRNtupleManager(const G4AnalysisManagerState& state)
   : G4VRNtupleManager(state)
-{
-}
-
-//_____________________________________________________________________________
-G4BaseRNtupleManager::~G4BaseRNtupleManager()
-{
-}
+{}
 
 //
 // private methods
@@ -49,55 +43,62 @@ G4int  G4BaseRNtupleManager::GetCurrentNtupleId() const
 }
 
 //_____________________________________________________________________________
-G4bool G4BaseRNtupleManager::SetNtupleIColumn(const G4String& columnName, 
+G4bool G4BaseRNtupleManager::SetNtupleIColumn(const G4String& columnName,
                                            G4int& value)
 {
   return SetNtupleIColumn(GetCurrentNtupleId(), columnName, value);
 }
 //_____________________________________________________________________________
-G4bool G4BaseRNtupleManager::SetNtupleFColumn(const G4String& columnName, 
+G4bool G4BaseRNtupleManager::SetNtupleFColumn(const G4String& columnName,
                                            G4float& value)
 {
-  return SetNtupleFColumn(GetCurrentNtupleId(), columnName, value);  
+  return SetNtupleFColumn(GetCurrentNtupleId(), columnName, value);
 }
 
 //_____________________________________________________________________________
-G4bool G4BaseRNtupleManager::SetNtupleDColumn(const G4String& columnName, 
+G4bool G4BaseRNtupleManager::SetNtupleDColumn(const G4String& columnName,
                                            G4double& value)
 {
-  return SetNtupleDColumn(GetCurrentNtupleId(), columnName, value);    
+  return SetNtupleDColumn(GetCurrentNtupleId(), columnName, value);
 }
 
 //_____________________________________________________________________________
-G4bool G4BaseRNtupleManager::SetNtupleSColumn(const G4String& columnName, 
+G4bool G4BaseRNtupleManager::SetNtupleSColumn(const G4String& columnName,
                                            G4String& value)
 {
-  return SetNtupleSColumn(GetCurrentNtupleId(), columnName, value);      
+  return SetNtupleSColumn(GetCurrentNtupleId(), columnName, value);
 }
 
 //_____________________________________________________________________________
-G4bool G4BaseRNtupleManager::SetNtupleIColumn(const G4String& columnName, 
+G4bool G4BaseRNtupleManager::SetNtupleIColumn(const G4String& columnName,
                                            std::vector<G4int>& vector)
 {
   return SetNtupleIColumn(GetCurrentNtupleId(), columnName, vector);
 }
 
 //_____________________________________________________________________________
-G4bool G4BaseRNtupleManager::SetNtupleFColumn(const G4String& columnName, 
+G4bool G4BaseRNtupleManager::SetNtupleFColumn(const G4String& columnName,
                                            std::vector<G4float>& vector)
 {
   return SetNtupleFColumn(GetCurrentNtupleId(), columnName, vector);
 }
 
 //_____________________________________________________________________________
-G4bool G4BaseRNtupleManager::SetNtupleDColumn(const G4String& columnName, 
+G4bool G4BaseRNtupleManager::SetNtupleDColumn(const G4String& columnName,
                                            std::vector<G4double>& vector)
 {
   return SetNtupleDColumn(GetCurrentNtupleId(), columnName, vector);
 }
 
 //_____________________________________________________________________________
+G4bool G4BaseRNtupleManager::SetNtupleSColumn(const G4String& columnName,
+                                           std::vector<std::string>& vector)
+{
+  return SetNtupleSColumn(GetCurrentNtupleId(), columnName, vector);
+}
+
+//_____________________________________________________________________________
 G4bool G4BaseRNtupleManager::GetNtupleRow()
 {
-  return GetNtupleRow(fFirstId);  
+  return GetNtupleRow(fFirstId);
 }

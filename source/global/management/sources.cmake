@@ -60,6 +60,7 @@ geant4_add_module(G4globman
     G4PhysicsLinearVector.hh
     G4PhysicsLogVector.hh
     G4PhysicsModelCatalog.hh
+    G4PhysicsOrderedFreeVector.hh
     G4PhysicsTable.hh
     G4PhysicsTable.icc
     G4PhysicsVector.hh

@@ -29,8 +29,6 @@
 // Andrew Walkden  10th February 1997
 // OpenGL graphics system factory.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLStoredSceneHandler.hh"
@@ -73,5 +71,3 @@ G4VViewer* G4OpenGLStoredXm::CreateViewer (G4VSceneHandler& scene, const G4Strin
   }
   return pView;
 }
-
-#endif

@@ -31,20 +31,14 @@
 #include "G4AnalysisUtilities.hh"
 
 using namespace G4Analysis;
+using std::to_string;
 
 //_____________________________________________________________________________
 G4HnManager::G4HnManager(const G4String& hnType,
                          const G4AnalysisManagerState& state)
   : G4BaseAnalysisManager(state),
-    fHnType(hnType),
-    fNofActiveObjects(0),
-    fNofAsciiObjects(0),
-    fNofPlottingObjects(0),
-    fNofFileNameObjects(0),
-    fHnVector(),
-    fFileManager(nullptr)
-{
-}
+    fHnType(hnType)
+{}
 
 //_____________________________________________________________________________
 G4HnManager::~G4HnManager()
@@ -99,12 +93,9 @@ void  G4HnManager::SetFileName(G4HnInformation* info, const G4String& fileName)
   if (fFileManager) {
     fFileManager->AddFileName(fileName);
   } else {
-    G4ExceptionDescription description;
-    description
-      << "Failed to set fileName " << fileName << " for object " << info->GetName() << G4endl
-      << "File manager is not set.";
-    G4Exception("G4HnManager::SetFileName",
-                "Analysis_W012", JustWarning, description);
+    Warn("Failed to set fileName " + fileName +
+         " for object " + info->GetName() + ".\nFile manager is not set.",
+         fkClass, "SetFileName");
     return;
   }
 
@@ -115,7 +106,7 @@ void  G4HnManager::SetFileName(G4HnInformation* info, const G4String& fileName)
   }
 }
 
-// 
+//
 // public methods
 //
 
@@ -127,34 +118,37 @@ G4HnInformation*  G4HnManager::AddHnInformation(const G4String& name, G4int nofD
   ++fNofActiveObjects;
 
   return info;
-}  
+}
 
 //_____________________________________________________________________________
-G4HnInformation* G4HnManager::GetHnInformation(G4int id, 
-                                 G4String functionName, G4bool warn) const
+void G4HnManager::ClearData()
+{
+  for ( auto info : fHnVector ) {
+    delete info;
+  }
+  fHnVector.clear();
+  SetLockFirstId(false);
+}
+
+//_____________________________________________________________________________
+G4HnInformation* G4HnManager::GetHnInformation(G4int id,
+                                 std::string_view functionName, G4bool warn) const
 {
   G4int index = id - fFirstId;
   if ( index < 0 || index >= G4int(fHnVector.size()) ) {
     if ( warn ) {
-      G4String inFunction = "G4HnManager::";
-      if ( functionName.size() )
-        inFunction += functionName;
-      else
-        inFunction += "GetHnInformation"; 
-      G4ExceptionDescription description;
-      description << "      " << fHnType << " histogram " << id 
-                  << " does not exist.";
-      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
-    }  
-    return nullptr;         
+      Warn(fHnType + " histogram " + to_string(id) + " does not exist.",
+        fkClass, functionName);
+    }
+    return nullptr;
   }
   return fHnVector[index];
-}    
+}
 
 //_____________________________________________________________________________
-G4HnDimensionInformation* G4HnManager::GetHnDimensionInformation(G4int id, 
+G4HnDimensionInformation* G4HnManager::GetHnDimensionInformation(G4int id,
                                 G4int dimension,
-                                G4String functionName, G4bool warn) const
+                                std::string_view functionName, G4bool warn) const
 {
   auto info = GetHnInformation(id, functionName, warn);
   if ( ! info ) return nullptr;
@@ -166,19 +160,19 @@ G4HnDimensionInformation* G4HnManager::GetHnDimensionInformation(G4int id,
 G4bool G4HnManager::IsActive() const
 {
   return ( fNofActiveObjects > 0 );
-}  
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::IsAscii() const
 {
   return ( fNofAsciiObjects > 0 );
-}  
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::IsPlotting() const
 {
   return ( fNofPlottingObjects > 0 );
-}  
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::IsFileName() const
@@ -196,7 +190,7 @@ void  G4HnManager::SetActivation(G4int id, G4bool activation)
   if ( ! info ) return;
 
   SetActivation(info, activation);
-}    
+}
 
 //_____________________________________________________________________________
 void  G4HnManager::SetActivation(G4bool activation)
@@ -221,14 +215,14 @@ void  G4HnManager::SetAscii(G4int id, G4bool ascii)
 
   // Do nothing if ascii does not change
   if ( info->GetAscii() == ascii ) return;
-  
+
   // Change ascii and account it in fNofAsciiObjects
   info->SetAscii(ascii);
-  if ( ascii ) 
+  if ( ascii )
     fNofAsciiObjects++;
   else
-    fNofAsciiObjects--;   
-}    
+    fNofAsciiObjects--;
+}
 
 //_____________________________________________________________________________
 void  G4HnManager::SetPlotting(G4int id, G4bool plotting)
@@ -258,7 +252,7 @@ void  G4HnManager::SetFileName(G4int id, const G4String& fileName)
   if ( ! info ) return;
 
   SetFileName(info, fileName);
-}    
+}
 
 //_____________________________________________________________________________
 void  G4HnManager::SetFileName(const G4String& fileName)
@@ -268,7 +262,7 @@ void  G4HnManager::SetFileName(const G4String& fileName)
   for ( auto info : fHnVector )  {
     SetFileName(info, fileName);
   }
-}    
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::SetXAxisIsLog(G4int id, G4bool isLog)
@@ -309,9 +303,9 @@ G4String G4HnManager::GetName(G4int id) const
   auto info = GetHnInformation(id, "GetName");
 
   if ( ! info ) return "";
-    
+
   return info->GetName();
-}    
+}
 
 //_____________________________________________________________________________
 G4double G4HnManager::GetXUnit(G4int id) const
@@ -319,9 +313,9 @@ G4double G4HnManager::GetXUnit(G4int id) const
   auto info = GetHnDimensionInformation(id, kX, "GetXUnit");
 
   if ( ! info ) return 1.0;
-  
+
   return info->fUnit;
-}    
+}
 
 //_____________________________________________________________________________
 G4double G4HnManager::GetYUnit(G4int id) const
@@ -329,9 +323,9 @@ G4double G4HnManager::GetYUnit(G4int id) const
   auto info = GetHnDimensionInformation(id, kY, "GetYUnit");
 
   if ( ! info ) return 1.0;
-  
+
   return info->fUnit;
-}    
+}
 
 //_____________________________________________________________________________
 G4double G4HnManager::GetZUnit(G4int id) const
@@ -339,9 +333,9 @@ G4double G4HnManager::GetZUnit(G4int id) const
   auto info = GetHnDimensionInformation(id, kZ, "GetZUnit");
 
   if ( ! info ) return 1.0;
-  
+
   return info->fUnit;
-}    
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::GetXAxisIsLog(G4int id) const
@@ -349,9 +343,9 @@ G4bool G4HnManager::GetXAxisIsLog(G4int id) const
   auto info = GetHnInformation(id, "GetXAxisIsLog");
 
   if ( ! info ) return false;
-  
+
   return info->GetIsLogAxis(kX);
-}    
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::GetYAxisIsLog(G4int id) const
@@ -359,9 +353,9 @@ G4bool G4HnManager::GetYAxisIsLog(G4int id) const
   auto info = GetHnInformation(id, "GetYAxisIsLog");
 
   if ( ! info ) return 1.0;
-  
+
   return info->GetIsLogAxis(kY);
-}    
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::GetZAxisIsLog(G4int id) const
@@ -369,9 +363,9 @@ G4bool G4HnManager::GetZAxisIsLog(G4int id) const
   auto info = GetHnInformation(id, "GetZAxisIsLog");
 
   if ( ! info ) return 1.0;
-  
+
   return info->GetIsLogAxis(kZ);
-}    
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::GetActivation(G4int id) const
@@ -379,9 +373,9 @@ G4bool G4HnManager::GetActivation(G4int id) const
   auto info = GetHnInformation(id, "GetActivation");
 
   if ( ! info ) return true;
-  
+
   return info->GetActivation();
-}    
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::GetAscii(G4int id) const
@@ -389,9 +383,9 @@ G4bool G4HnManager::GetAscii(G4int id) const
   auto info = GetHnInformation(id, "GetAscii");
 
   if ( ! info ) return false;
-  
+
   return info->GetAscii();
-}    
+}
 
 //_____________________________________________________________________________
 G4bool G4HnManager::GetPlotting(G4int id) const
@@ -399,7 +393,7 @@ G4bool G4HnManager::GetPlotting(G4int id) const
   auto info = GetHnInformation(id, "GetPlotting");
 
   if ( ! info ) return false;
-  
+
   return info->GetPlotting();
 }
 
@@ -409,6 +403,6 @@ G4String G4HnManager::GetFileName(G4int id) const
   auto info = GetHnInformation(id, "GetFileName");
 
   if ( ! info ) return "";
-    
+
   return info->GetFileName();
 }

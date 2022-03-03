@@ -28,8 +28,6 @@
 // Original author: G.Barrand, 1998
 // --------------------------------------------------------------------
 
-#if defined(G4INTY_BUILD_WIN32) || defined(G4INTY_USE_WIN32)
-
 // this :
 #include "G4Win32.hh"
 
@@ -148,6 +146,3 @@ G4bool G4Win32::DispatchWin32Event  (
   ::DispatchMessage ((MSG*)a_event);
   return TRUE;
 }
-
-#endif //HAS_WIN32
-

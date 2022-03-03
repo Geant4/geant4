@@ -6,6 +6,8 @@ francesco.romano@lns.infn.it
          ====================================================
              History file of the GammaKnife application
          ====================================================
+29.10.2021 S. Guatelli (gammaknife-V10-07-03)
+           - runManager deleted at the end of the main
 
 24.05.2021 B. Morgan (gammaknife-V10-07-02)
            - Bump required CMake version range to 3.12...3.20, matching core Geant4

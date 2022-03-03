@@ -1357,7 +1357,7 @@ G4bool G4IonTable::IsLightIon(const G4ParticleDefinition* particle) const
   = { "proton", "alpha", "deuteron", "triton", "He3"};
 
   // Return true if the particle is pre-defined ion
-  return std::find(names, names+5, particle->GetParticleName())!=names+5;
+  return std::find(names, names+5, (particle->GetParticleName()).c_str())!=names+5;
 } 
 
 // --------------------------------------------------------------------
@@ -1369,7 +1369,7 @@ G4bool G4IonTable::IsLightAntiIon(const G4ParticleDefinition* particle) const
   = { "anti_proton", "anti_alpha", "anti_deuteron", "anti_triton", "anti_He3"};
 
   // Return true if the particle is pre-defined ion
-  return std::find(names, names+5, particle->GetParticleName())!=names+5;
+  return std::find(names, names+5, (particle->GetParticleName()).c_str())!=names+5;
 } 
 
 // --------------------------------------------------------------------

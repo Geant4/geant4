@@ -30,25 +30,12 @@
 #define g4xml_defs_h
 
 #include "tools/waxml/ntuple"
-#include "G4XmlAnalysisManager.hh"
-#include "G4XmlAnalysisReader.hh"
 #include "g4hntools_defs.hh"
 
-namespace G4Xml
-{
-  // Ntuple types
-  using G4Ntuple = tools::waxml::ntuple; 
-  using G4NtupleIterator = std::vector<tools::waxml::ntuple*>::iterator;
-  using G4NtupleConstIterator = std::vector<tools::waxml::ntuple*>::const_iterator;
-
-  // RNtuple types
-  using G4RNtuple = tools::aida::ntuple; 
-
-  // Managers
-  using G4AnalysisManager = G4XmlAnalysisManager; 
-  using G4AnalysisReader = G4XmlAnalysisReader; 
-}  
+// Xml output specific types
+using G4XmlNtuple = tools::waxml::ntuple;
+using G4XmlRNtuple = tools::aida::ntuple;
 
 #endif
 
-  
+

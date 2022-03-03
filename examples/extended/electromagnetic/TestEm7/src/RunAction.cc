@@ -177,8 +177,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     // save histograms
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
-    delete fAnalysisManager;
-    fAnalysisManager = 0;
   }
    
   // show Rndm status
@@ -194,6 +192,7 @@ void RunAction::BookHisto()
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
   fAnalysisManager = G4AnalysisManager::Instance();
+  fAnalysisManager->SetDefaultFileType("root");
   fAnalysisManager->SetFileName("testem7");
   fAnalysisManager->SetVerboseLevel(1);
   fAnalysisManager->SetActivation(true);  // enable inactivation of histograms

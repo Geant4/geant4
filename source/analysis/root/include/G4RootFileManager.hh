@@ -33,16 +33,18 @@
 
 #include "G4VTFileManager.hh"
 #include "G4RootFileDef.hh"
+#include "G4AnalysisUtilities.hh"
 #include "globals.hh"
 
 #include <vector>
 #include <memory>
 #include <tuple>
+#include <string_view>
 
 namespace tools {
 namespace wroot{
-class ntuple;  
-}  
+class ntuple;
+}
 }
 
 // Types alias
@@ -52,7 +54,8 @@ class G4RootFileManager : public G4VTFileManager<G4RootFile>
 {
   public:
     explicit G4RootFileManager(const G4AnalysisManagerState& state);
-    virtual ~G4RootFileManager();
+    G4RootFileManager() = delete;
+    virtual ~G4RootFileManager() = default;
 
     using G4BaseFileManager::GetNtupleFileName;
     using G4VTFileManager<G4RootFile>::WriteFile;
@@ -64,13 +67,13 @@ class G4RootFileManager : public G4VTFileManager<G4RootFile>
     virtual G4String GetFileType() const final { return "root"; }
 
     // Specific methods for files per objects
-    std::shared_ptr<G4RootFile> CreateNtupleFile(RootNtupleDescription* ntupleDescription, 
+    std::shared_ptr<G4RootFile> CreateNtupleFile(RootNtupleDescription* ntupleDescription,
                                   G4int mainNumber = -1);
-    std::shared_ptr<G4RootFile> GetNtupleFile(RootNtupleDescription* ntupleDescription, 
+    std::shared_ptr<G4RootFile> GetNtupleFile(RootNtupleDescription* ntupleDescription,
                                   G4bool perThread = true,
                                   G4int mainNumber = -1) const;
     G4bool WriteNtupleFile(RootNtupleDescription* ntupleDescription);
-    G4bool CloseNtupleFile(RootNtupleDescription* ntupleDescription); 
+    G4bool CloseNtupleFile(RootNtupleDescription* ntupleDescription);
 
     // Set methods
     void  SetBasketSize(unsigned int basketSize);
@@ -84,32 +87,35 @@ class G4RootFileManager : public G4VTFileManager<G4RootFile>
     // Methods derived from templated base class
     virtual std::shared_ptr<G4RootFile> CreateFileImpl(const G4String& fileName) final;
     virtual G4bool WriteFileImpl(std::shared_ptr<G4RootFile> file) final;
-    virtual G4bool CloseFileImpl(std::shared_ptr<G4RootFile> file) final;    
+    virtual G4bool CloseFileImpl(std::shared_ptr<G4RootFile> file) final;
 
   private:
-    // methods
+    // Methods
     tools::wroot::directory* CreateDirectory(
-                               std::shared_ptr<tools::wroot::file> rfile,
-                               const G4String& directoryName, 
+                               tools::wroot::file* rfile,
+                               const G4String& directoryName,
                                const G4String& objectType) const;
     G4String GetNtupleFileName(
-                RootNtupleDescription* ntupleDescription, 
+                RootNtupleDescription* ntupleDescription,
                 G4bool perThread = true,
                 G4int mainNumber = -1) const;
 
-    // data members
-    unsigned int fBasketSize;
-    unsigned int fBasketEntries;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootFileManager" };
+
+    // Data members
+    unsigned int fBasketSize { G4Analysis::kDefaultBasketSize };
+    unsigned int fBasketEntries { G4Analysis::kDefaultBasketEntries };
 };
 
 // inline functions
 
 //_____________________________________________________________________________
-inline void  G4RootFileManager::SetBasketSize(unsigned int basketSize)  
+inline void  G4RootFileManager::SetBasketSize(unsigned int basketSize)
 { fBasketSize = basketSize; }
 
 //_____________________________________________________________________________
-inline void  G4RootFileManager::SetBasketEntries(unsigned int basketEntries)  
+inline void  G4RootFileManager::SetBasketEntries(unsigned int basketEntries)
 { fBasketEntries = basketEntries; }
 
 //_____________________________________________________________________________

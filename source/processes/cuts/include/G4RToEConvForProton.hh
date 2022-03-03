@@ -34,41 +34,24 @@
 #ifndef G4RToEConvForProton_hh
 #define G4RToEConvForProton_hh 1
 
-#include <vector>
-
 #include "globals.hh"
-#include "G4ios.hh"
 #include "G4VRangeToEnergyConverter.hh"
 
 class G4RToEConvForProton : public G4VRangeToEnergyConverter
 {
-  public: 
+public:
 
-    G4RToEConvForProton();
-      // Constructor
+  explicit G4RToEConvForProton();
 
-    virtual ~G4RToEConvForProton();
-      // Destructor
+  virtual ~G4RToEConvForProton();
 
-    virtual G4double Convert(G4double rangeCut, const G4Material* material);
+  // Calculate energy cut from given range cut for the material
+  G4double Convert(const G4double rangeCut, const G4Material* material) final;
 
-    virtual void Reset();
-      // Reset Loss Table and Range Vectors
+protected:
 
-  protected:
+  G4double ComputeValue(const G4int Z, const G4double kinEnergy) final;
 
-    virtual G4double ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy);
-
-    G4double Mass = 0.0;
-    G4double Z = -1.0;  
-    G4double tau0 = 0.0;
-    G4double taul = 0.0;
-    G4double taum = 0.0;
-    G4double ionpot = 0.0;
-    G4double ca = 0.0;
-    G4double cba = 0.0;
-    G4double cc = 0.0;  
 };
 
 #endif

@@ -34,8 +34,6 @@
 #include "G4KDTreeResult.hh"
 #include "G4IRTUtils.hh"
 #include "G4VReactionType.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
 #include <memory>
 #include <set>
 

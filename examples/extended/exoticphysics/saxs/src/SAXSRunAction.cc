@@ -32,23 +32,18 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 
 #include "SAXSRunAction.hh"
 #include "SAXSRunActionMessenger.hh"
 #include "SAXSDetectorConstruction.hh"
-#include "SAXSAnalysis.hh"
 
 #include "G4SDManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SAXSRunAction::SAXSRunAction():
-  G4UserRunAction(),
-  fIsFileOpened(false)
+SAXSRunAction::SAXSRunAction(): G4UserRunAction()
 {
-  //set the number of events to print progress during the simulation
-  G4RunManager::GetRunManager()->SetPrintProgress(10000);
-  
   //define the messenger  
   fMessenger = new SAXSRunActionMessenger(this);
   
@@ -56,48 +51,46 @@ SAXSRunAction::SAXSRunAction():
   fFileName = "output";
   
   //Create the analysis manager  
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->SetFileName(fFileName);
-  analysisManager->SetNtupleMerging(true); //only for root
-  analysisManager->SetVerboseLevel(1);
+  fAnalysisManager = G4AnalysisManager::Instance();
+
+  fAnalysisManager->SetDefaultFileType("root");
+  fAnalysisManager->SetFileName(fFileName);
+  fAnalysisManager->SetNtupleMerging(true); //only for root
+  fAnalysisManager->SetVerboseLevel(1);
   
   //Creating the SD scoring ntuple
-  analysisManager->CreateNtuple("part","Particle");
-  analysisManager->CreateNtupleDColumn("e");
-  analysisManager->CreateNtupleDColumn("posx");
-  analysisManager->CreateNtupleDColumn("posy");
-  analysisManager->CreateNtupleDColumn("posz");
-  analysisManager->CreateNtupleDColumn("momx");
-  analysisManager->CreateNtupleDColumn("momy");
-  analysisManager->CreateNtupleDColumn("momz");
-  analysisManager->CreateNtupleDColumn("t");
-  analysisManager->CreateNtupleIColumn("type");
-  analysisManager->CreateNtupleIColumn("trackID");
-  analysisManager->CreateNtupleIColumn("NRi");
-  analysisManager->CreateNtupleIColumn("NCi");
-  analysisManager->CreateNtupleIColumn("NDi");
-  analysisManager->CreateNtupleIColumn("eventID");
-  analysisManager->CreateNtupleDColumn("weight");
-  analysisManager->FinishNtuple();
+  fAnalysisManager->CreateNtuple("part","Particle");
+  fAnalysisManager->CreateNtupleDColumn("e");
+  fAnalysisManager->CreateNtupleDColumn("posx");
+  fAnalysisManager->CreateNtupleDColumn("posy");
+  fAnalysisManager->CreateNtupleDColumn("posz");
+  fAnalysisManager->CreateNtupleDColumn("momx");
+  fAnalysisManager->CreateNtupleDColumn("momy");
+  fAnalysisManager->CreateNtupleDColumn("momz");
+  fAnalysisManager->CreateNtupleDColumn("t");
+  fAnalysisManager->CreateNtupleIColumn("type");
+  fAnalysisManager->CreateNtupleIColumn("trackID");
+  fAnalysisManager->CreateNtupleIColumn("NRi");
+  fAnalysisManager->CreateNtupleIColumn("NCi");
+  fAnalysisManager->CreateNtupleIColumn("NDi");
+  fAnalysisManager->CreateNtupleIColumn("eventID");
+  fAnalysisManager->CreateNtupleDColumn("weight");
+  fAnalysisManager->FinishNtuple();
     
   //Creating ntuple for scattering
-  analysisManager->CreateNtuple("scatt","Scattering");
-  analysisManager->CreateNtupleIColumn("processID");
-  analysisManager->CreateNtupleDColumn("e");
-  analysisManager->CreateNtupleDColumn("theta");
-  analysisManager->CreateNtupleDColumn("weight");
-  analysisManager->FinishNtuple();
+  fAnalysisManager->CreateNtuple("scatt","Scattering");
+  fAnalysisManager->CreateNtupleIColumn("processID");
+  fAnalysisManager->CreateNtupleDColumn("e");
+  fAnalysisManager->CreateNtupleDColumn("theta");
+  fAnalysisManager->CreateNtupleDColumn("weight");
+  fAnalysisManager->FinishNtuple();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SAXSRunAction::~SAXSRunAction() {
-   //write results
-  if (fIsFileOpened)
-    {
-      G4AnalysisManager* analysisManager = G4AnalysisManager::Instance(); 
-      analysisManager->Write();
-    }
+SAXSRunAction::~SAXSRunAction()
+{
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,7 +100,7 @@ void SAXSRunAction::BeginOfRunAction(const G4Run*)
   //open the output file         
   if (!fIsFileOpened)
     {
-      G4AnalysisManager::Instance()->OpenFile(fFileName);
+      fAnalysisManager->OpenFile(fFileName);
       fIsFileOpened = true;
     }
 }
@@ -133,12 +126,15 @@ void SAXSRunAction::EndOfRunAction(const G4Run* run)
           << G4endl
           << " The run had " << nofEvents << " events";
   }      
-    
+  if (fIsFileOpened) {
+    fAnalysisManager->Write();
+    fAnalysisManager->CloseFile();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SAXSRunAction::SetFileName(G4String filename)
+void SAXSRunAction::SetFileName(const G4String& filename)
 {
   //method to set the output filename
   if (filename != "") fFileName = filename;

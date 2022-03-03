@@ -41,10 +41,10 @@ class G4UIcmdWithoutParameter;
 class ICRP110ScoreWriterMessenger: public G4UImessenger
 {
 public:
-  ICRP110ScoreWriterMessenger(ICRP110UserScoreWriter* myUsrScWriter);
+  explicit ICRP110ScoreWriterMessenger(ICRP110UserScoreWriter* myUsrScWriter);
   ~ICRP110ScoreWriterMessenger();
     
-  void SetNewValue(G4UIcommand* command, G4String newValue);
+  void SetNewValue(G4UIcommand* command, G4String newValue) override;
 
 private:
   ICRP110UserScoreWriter*    fUserScoreWriter;
@@ -52,6 +52,5 @@ private:
   G4UIcmdWithAString*        fSexCmd;  
   G4UIcmdWithAString*        fSectionCmd;
 };
-
 #endif
 

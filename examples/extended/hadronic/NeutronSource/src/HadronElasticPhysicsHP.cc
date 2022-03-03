@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file HadronElasticPhysicsHP.hh
+/// \file HadronElasticPhysicsHP.cc
 /// \brief Definition of the HadronElasticPhysicsHP class
 //
 //
@@ -34,8 +34,7 @@
 
 #include "HadronElasticPhysicsHP.hh"
 
-#include "NeutronHPMessenger.hh"
-
+#include "G4GenericMessenger.hh"
 #include "G4HadronicProcess.hh"
 #include "G4ParticleHPElastic.hh"
 #include "G4ParticleHPElasticData.hh"
@@ -48,16 +47,17 @@
 
 HadronElasticPhysicsHP::HadronElasticPhysicsHP(G4int ver)
 : G4HadronElasticPhysics(ver),
-  fThermal(false), fNeutronMessenger(0)  
+  fMessenger(nullptr), fThermal(false)   
 {
-  fNeutronMessenger   = new NeutronHPMessenger(this);  
+  // define commands for this class
+  DefineCommands();    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HadronElasticPhysicsHP::~HadronElasticPhysicsHP()
 {
-  delete fNeutronMessenger;  
+  delete fMessenger;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,11 +73,30 @@ void HadronElasticPhysicsHP::ConstructProcess()
   process->AddDataSet(new G4ParticleHPElasticData());
 
   if (fThermal) {
-    model1->SetMinEnergy(4*eV);  
+    model1->SetMinEnergy(4*eV);
     G4ParticleHPThermalScattering* model2 = new G4ParticleHPThermalScattering();
     process->RegisterMe(model2);
-    process->AddDataSet(new G4ParticleHPThermalScatteringData());  
+    process->AddDataSet(new G4ParticleHPThermalScatteringData());
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HadronElasticPhysicsHP::DefineCommands()
+{
+  // Define /testhadr/phys command directory using generic messenger class
+  fMessenger = new G4GenericMessenger(this,
+                        "/testhadr/phys/",
+                        "physics list commands");
+
+  // thermal scattering command
+  auto& thermalCmd
+    = fMessenger->DeclareProperty("thermalScattering", fThermal);
+
+  thermalCmd.SetGuidance("set thermal scattering model");
+  thermalCmd.SetParameterName("thermal", false);
+  thermalCmd.SetDefaultValue("false");
+  thermalCmd.SetStates(G4State_PreInit);  
+}
+
+//..oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

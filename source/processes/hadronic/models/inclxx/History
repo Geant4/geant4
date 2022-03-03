@@ -15,6 +15,26 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+09 November 2021 - Alberto Ribon (hadr-inclxx-V10-07-06)
+-------------------------------------------------------
+- G4INCLNuclearPotentialIsospin : improved nuclear potential for
+  Lambda particles, fixing crashes observed due to unphysical zero
+  Fermi momentum for these particles.
+  Changed made by Jean-Christophe David.
+
+27 October 2021 - Alberto Ribon (hadr-inclxx-V10-07-05)
+-------------------------------------------------------
+- G4INCLXXInterface : extended to projectile hypernuclei
+
+15 October 2021 - Jean-Christophe David (hadr-inclxx-V10-07-04)
+---------------------------------------------------------------
+- Implementation of hypercluster emission
+
+04 August 2021 - Alberto Ribon (hadr-inclxx-V10-07-03)
+------------------------------------------------------
+- G4INCLXXInterface : set creator model ID for secondaries, using the
+  new version of G4PhysicsModelCatalog
+
 16 April 2021 - Ben Morgan (hadr-inclxx-V10-07-02)
 --------------------------------------------------
 - Migrate build to modular CMake API

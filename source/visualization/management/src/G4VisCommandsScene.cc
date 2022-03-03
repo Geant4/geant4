@@ -630,7 +630,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   std::istringstream is (newValue);
   is >> sceneName >> refresh_flush;
   G4bool flush = false;
-  if (refresh_flush(0) == 'f') flush = true;
+  if (refresh_flush[0] == 'f') flush = true;
 
   const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
   G4SceneHandlerList& sceneHandlerList =
@@ -772,6 +772,111 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   }
 }
 
+////////////// /vis/scene/removeModel ////////////////////////////
+
+G4VisCommandSceneRemoveModel::G4VisCommandSceneRemoveModel () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/removeModel", this);
+  fpCommand -> SetGuidance("Remove model.");
+  fpCommand -> SetGuidance
+  ("Attempts to match search string to name of model - use unique sub-string.");
+  fpCommand -> SetGuidance
+  ("Use \"/vis/scene/list\" to see model names.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("search-string", 's', omitable = false);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneRemoveModel::~G4VisCommandSceneRemoveModel () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneRemoveModel::GetCurrentValue(G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneRemoveModel::SetNewValue (G4UIcommand*,
+						  G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String searchString;
+  std::istringstream is (newValue);
+  is >> searchString;
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  if (!pSceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4bool any = false;
+
+  std::vector<G4Scene::Model>& runDurationModelList =
+  pScene->SetRunDurationModelList();
+  for (size_t i = 0; i < runDurationModelList.size(); i++) {
+    const G4String& modelName =
+    runDurationModelList[i].fpModel->GetGlobalDescription();
+    if (modelName.find(searchString) != std::string::npos) {
+      runDurationModelList.erase(runDurationModelList.begin()+i);
+      any = true;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Model \"" << modelName << "\" removed." << G4endl;
+      }
+      break;  // Allow only one model at a time to be removed.
+    }
+  }
+
+  std::vector<G4Scene::Model>& endOfEventModelList =
+  pScene->SetEndOfEventModelList();
+  for (size_t i = 0; i < endOfEventModelList.size(); i++) {
+    const G4String& modelName =
+    endOfEventModelList[i].fpModel->GetGlobalDescription();
+    if (modelName.find(searchString) != std::string::npos) {
+      endOfEventModelList.erase(endOfEventModelList.begin()+i);
+      any = true;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Model \"" << modelName << "\" removed." << G4endl;
+      }
+      break;  // Allow only one model at a time to be removed.
+    }
+  }
+
+  std::vector<G4Scene::Model>& endOfRunModelList =
+  pScene->SetEndOfRunModelList();
+  for (size_t i = 0; i < endOfRunModelList.size(); i++) {
+    const G4String& modelName =
+    endOfRunModelList[i].fpModel->GetGlobalDescription();
+    if (modelName.find(searchString) != std::string::npos) {
+      endOfRunModelList.erase(endOfRunModelList.begin()+i);
+      any = true;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Model \"" << modelName << "\" removed." << G4endl;
+      }
+      break;  // Allow only one model at a time to be removed.
+    }
+  }
+
+  if (!any) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: No match found." << G4endl;
+    }
+    return;
+  }
+
+  CheckSceneAndNotifyHandlers (pScene);
+}
+
 ////////////// /vis/scene/select ///////////////////////////////////////
 
 G4VisCommandSceneSelect::G4VisCommandSceneSelect () {
@@ -874,7 +979,7 @@ void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
       G4cout << "\n   Active:   ";
     else G4cout << "\n   Inactive: ";
     G4VModel* pModel = pCurrentScene -> GetRunDurationModelList()[i].fpModel;
-    const G4VisExtent& transformedExtent = pModel -> GetTransformedExtent();
+    const G4VisExtent& transformedExtent = pModel -> GetExtent();
     G4cout << pModel -> GetGlobalDescription ()
     << "\n" << transformedExtent;
     DrawExtent(transformedExtent);
@@ -889,7 +994,7 @@ void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
       G4cout << "\n   Active:   ";
     else G4cout << "\n   Inactive: ";
     G4VModel* pModel = pCurrentScene -> GetEndOfEventModelList()[i].fpModel;
-    const G4VisExtent& transformedExtent = pModel -> GetTransformedExtent();
+    const G4VisExtent& transformedExtent = pModel -> GetExtent();
     G4cout << pModel -> GetGlobalDescription ()
     << "\n" << transformedExtent;
     DrawExtent(transformedExtent);
@@ -904,7 +1009,7 @@ void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
       G4cout << "\n   Active:   ";
     else G4cout << "\n   Inactive: ";
     G4VModel* pModel = pCurrentScene -> GetEndOfRunModelList()[i].fpModel;
-    const G4VisExtent& transformedExtent = pModel -> GetTransformedExtent();
+    const G4VisExtent& transformedExtent = pModel -> GetExtent();
     G4cout << pModel -> GetGlobalDescription ()
     << "\n" << transformedExtent;
     DrawExtent(transformedExtent);

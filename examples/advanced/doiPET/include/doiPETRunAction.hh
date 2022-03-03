@@ -43,6 +43,7 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "doiPETAnalysis.hh"
 
 class doiPETDetectorConstruction;
 class doiPETRun;
@@ -54,8 +55,13 @@ class doiPETPrimaryGeneratorAction;
 class doiPETRunAction : public G4UserRunAction
 {
 public:
+#ifdef ANALYSIS_USE
+    doiPETRunAction(doiPETAnalysis* analysis);
+#else
+    doiPETRunAction();
+#endif
 	//doiPETRunAction();
-	doiPETRunAction(/*doiPETDetectorConstruction*, doiPETPrimaryGeneratorAction**/);
+	//doiPETRunAction(/*doiPETDetectorConstruction*, doiPETPrimaryGeneratorAction**/);
 	virtual ~doiPETRunAction();
 	virtual G4Run* GenerateRun();  
 
@@ -63,8 +69,10 @@ public:
 	virtual void   EndOfRunAction(const G4Run*);
 
 private:
-	doiPETRun*                       fRun;    
-	//HistoManager*              fHistoManager;
+	doiPETRun* fRun;    
+#ifdef ANALYSIS_USE
+	doiPETAnalysis* analysisMan;
+#endif
 
 };
 #endif

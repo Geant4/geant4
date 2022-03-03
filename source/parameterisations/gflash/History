@@ -15,7 +15,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-April 1st, 2021, B. Morgan (gflash-V10-07-00)
+
+October 25th, 2021, B.Morgan (gflash-V10-07-02)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+Aug 31st, 2021, M. Verderi (gflash-V10-07-01)
+- many fixes in src/GFlashSamplingShowerParameterisation.cc in the parameters definition and just cosmetics in src/GFlashSamplingShowerParameterisation.cc
+
+Apr 1st, 2021, B. Morgan (gflash-V10-07-00)
 - Migrate build to modular CMake API
 
 Sep 23rd, 2020, B. Morgan (gflash-V10-06-02)

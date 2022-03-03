@@ -132,9 +132,7 @@ private:
   
   int fNEvent; // number of processed events
   double fEdep; // total energy deposition
-  G4bool fOutputToRoot; // flag to output to a ROOT file
-  G4bool fOutputToXml; // flag to output to a XML file
-  G4bool fOutputToCsv; // flag to output to a CSV file (text)
+  G4String fOutputType; // output type 
 
 protected:
   virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);

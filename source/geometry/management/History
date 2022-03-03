@@ -15,6 +15,18 @@ commit in the repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 28, 2021 G.Cosmo (geommng-V10-07-07)
+- Use G4Allocator to dynamically allocate nodes and proxies for the
+  voxels optimisation structure. Should help reducing memory fragmentation.
+
+September 24, 2021 G.Cosmo (geommng-V10-07-06)
+- Basic clang-tidy review of code.
+
+August 31, 2021 B.Morgan (geommng-V10-07-05)
+- Provide operator<< as a free function for G4UAdapter to support Geant4Py
+- Make operator<< for G4VSolid a free function
+
 June 15, 2021  J.Apostolakis (geommng-V10-07-04)
 - G4UAdapter: added std::ostream& operator << to avoid compilation clash
   between similar methods for G4VSolid and VecGeom UnplacedVolume.
