@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+03 January 2022 - Alberto Ribon (hadr-cross-V10-07-22)
+- G4ComponentAntiNuclNuclearXS : extension, by Vladimir Uzhinsky, of
+  the class to compute the cross sections of light anti-nuclei on
+  hydrogen. This relies on the isospin symmetry assumption, according
+  to which the properties of the reactions between anti-proton and
+  light nuclei are equivalent to those between light anti-nuclei and
+  hydrogen.
+
 21 October 2021 - Alberto Ribon (hadr-cross-V10-07-21)
 - G4IonsShenCrossSection : reintroduced this (old) ion-ion cross section
     (that was removed in 10.7.ref03), as required by Vladimir Uzhinsky

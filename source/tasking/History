@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 24th, 2022  Makoto Asai (tasking-V10-07-07)
+- Adding verbosity control to some G4cout. Addressing to bug report #2397.
+ 
+January 3rd, 2022  Makoto Asai 
+- Fixing number of seeds to be generated for the sedds from master are seeded
+  only once per task.
+
 September 10th, 2021 Gabriele Cosmo (tasking-V10-07-06)
 - Added new Ranlux++ engine to the list of supported random engines in
   G4UserTaskThreadInitialization. Requires CLHEP-2.4.5.1.

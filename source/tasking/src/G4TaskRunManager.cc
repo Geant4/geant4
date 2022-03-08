@@ -209,21 +209,14 @@ void G4TaskRunManager::SetNumberOfThreads(G4int n)
 {
   if(forcedNwokers > 0)
   {
-    std::stringstream ss;
-    ss << "\n### Number of threads is forced to " << forcedNwokers
-       << " by G4FORCENUMBEROFTHREADS environment variable. G4TaskRunManager::"
-       << __FUNCTION__ << "(" << n << ") ignored ###";
-
-    if(verboseLevel > 1)
+    if(verboseLevel > 0)
     {
       G4ExceptionDescription msg;
-      msg << ss.str();
+      msg << "\n### Number of threads is forced to " << forcedNwokers
+       << " by G4FORCENUMBEROFTHREADS environment variable. G4TaskRunManager::"
+       << __FUNCTION__ << "(" << n << ") ignored ###";
       G4Exception("G4TaskRunManager::SetNumberOfThreads(G4int)", "Run0132",
                   JustWarning, msg);
-    }
-    else
-    {
-      G4cout << ss.str() << "\n" << G4endl;
     }
     nworkers = forcedNwokers;
   }
@@ -232,10 +225,13 @@ void G4TaskRunManager::SetNumberOfThreads(G4int n)
     nworkers = n;
     if(poolInitialized)
     {
-      std::stringstream ss;
-      ss << "\n### Thread-pool already initialized. Resizing  to " << nworkers
-         << "threads ###";
-      G4cout << ss.str() << "\n" << G4endl;
+      if(verboseLevel > 0)
+      {
+         std::stringstream ss;
+         ss << "\n### Thread-pool already initialized. Resizing  to " << nworkers
+            << "threads ###";
+         G4cout << ss.str() << "\n" << G4endl;
+      }
       GetThreadPool()->resize(n);
     }
   }
@@ -269,28 +265,31 @@ void G4TaskRunManager::InitializeThreadPool()
     return;
   }
 
-  std::stringstream ss;
-  ss.fill('=');
-  ss << std::setw(90) << "";
-  G4cout << "\n" << ss.str() << G4endl;
-
   PTL::TaskRunManager::SetVerbose(GetVerbose());
   PTL::TaskRunManager::Initialize(nworkers);
 
   // create the joiners
-  if(threadPool->is_tbb_threadpool())
-  {
-    G4cout << "G4TaskRunManager :: Using TBB..." << G4endl;
-  }
-  else
-  {
-    G4cout << "G4TaskRunManager :: Using G4ThreadPool..." << G4endl;
-  }
-
   if(!workTaskGroup)
-    workTaskGroup = new RunTaskGroup(threadPool);
+  { workTaskGroup = new RunTaskGroup(threadPool); }
 
-  G4cout << ss.str() << "\n" << G4endl;
+  if(verboseLevel > 0)
+  {
+    std::stringstream ss;
+    ss.fill('=');
+    ss << std::setw(90) << "";
+    G4cout << "\n" << ss.str() << G4endl;
+
+    if(threadPool->is_tbb_threadpool())
+    {
+      G4cout << "G4TaskRunManager :: Using TBB..." << G4endl;
+    }
+    else
+    {
+      G4cout << "G4TaskRunManager :: Using G4ThreadPool..." << G4endl;
+    }
+
+    G4cout << ss.str() << "\n" << G4endl;
+  }
 }
 
 //============================================================================//
@@ -488,7 +487,7 @@ void G4TaskRunManager::RefillSeeds()
       nFill = numberOfEventToBeProcessed - nSeedsFilled;
       break;
     case 1:
-      nFill = numberOfEventsPerTask - nSeedsFilled;
+      nFill = numberOfTasks - nSeedsFilled;
       break;
     case 2:
     default:
@@ -558,7 +557,7 @@ void G4TaskRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
             nSeedsFilled = n_event;
             break;
           case 1:
-            nSeedsFilled = numberOfEventsPerTask;
+            nSeedsFilled = numberOfTasks;
             break;
           case 2:
             nSeedsFilled = n_event / eventModulo + 1;

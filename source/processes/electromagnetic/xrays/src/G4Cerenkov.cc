@@ -584,7 +584,7 @@ void G4Cerenkov::SetTrackSecondariesFirst(const G4bool state)
 void G4Cerenkov::SetMaxBetaChangePerStep(const G4double value)
 {
   fMaxBetaChange = value * CLHEP::perCent;
-  G4OpticalParameters::Instance()->SetCerenkovMaxBetaChange(fMaxBetaChange);
+  G4OpticalParameters::Instance()->SetCerenkovMaxBetaChange(value);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -16,6 +16,13 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 8, 2022 Gabriele Cosmo (global-V10-07-38)
+- Updated tag IDs for geant4-11-00-patch-01.
+
+February 18, 2022 Ben Morgan (global-V10-07-37)
+- Provide overload G4String::operator[](int) to workaround MSVC compiler
+  error C2666. Addressing problem report #2463.
+
 December 3, 2021 Gabriele Cosmo (global-V10-07-36)
 - Updated tag IDs for geant4-11-00-ref-00.
 

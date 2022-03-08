@@ -128,10 +128,13 @@ class G4GenericMessenger : public G4UImessenger
         return SetUnit(u, UnitDefault);
       }
       Command& SetParameterName(const G4String&, G4bool, G4bool = false);
+      Command& SetParameterName(G4int pIdx, const G4String&, G4bool, G4bool = false);
       Command& SetParameterName(const G4String&, const G4String&, const G4String&, 
                                 G4bool, G4bool = false);
       Command& SetDefaultValue(const G4String&);
+      Command& SetDefaultValue(G4int pIdx, const G4String&);
       Command& SetCandidates(const G4String&);
+      Command& SetCandidates(G4int pIdx, const G4String&);
       Command& SetToBeBroadcasted(G4bool s0)
       {
         command->SetToBeBroadcasted(s0);

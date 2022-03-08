@@ -1,0 +1,176 @@
+
+                 Geant4 11.0 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                             8 March 2022
+
+List of fixes included in this public patch since the public release 11.0:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Adding missing G4ptl and G4tasking libraries to link list in
+        geant4-config script. Addressing GitHub PR#37.
+
+  o Analysis:
+    --------
+    + Fix in notifying about closing file in G4GenericAnalysisManager.
+
+  o Externals:
+    ---------
+    + Fix in CMAke script to export built-in PTL include directory to include
+      path list for use of geant4-config.
+
+  o Geometry:
+    --------
+    + solids/Boolean:
+      o In G4MultiUnion, added alternative signature for AddNode() taking a
+        pointer to solid. Added 'const' qualification to transformation passed
+        as argument. Addressing problem report #2457.
+
+  o Global:
+    ------
+    + G4String: provide overload G4String::operator[](int) to workaround MSVC
+      compiler error C2666. Addressing problem report #2463.
+    + Updated date and version for 11.0.1.
+
+  o Intercoms:
+    ---------
+    + Check and set proper argument types for each individual argument when
+      G4GenericMessenger::DeclareMethod() is used.
+      Addressing problem report #2420.
+
+  o Materials:
+    ---------
+    + G4MaterialPropertiesTable: set G4MaterialPropertyVector verbosity to 1.
+    + G4DensityEffectData: fixed typos in the density effect data table for 8
+      materials; the most significant fix is for G4_Tm; of minor entity for
+      G4_Be, G4_Mg, G4_Fe, and G4_Y. Addressing problem report #2423.
+    + G4SandiaTable: fixed compilation warning on unused variable.
+
+  o Persistency:
+    -----------
+    + ASCII:
+      o Corrected wrong automatic conversion degree-radian for G4Polycone phi
+        angle parameter. Based on GitHub PR#36.
+
+  o Physics Lists:
+    -------------
+    + constructors/electromagnetic
+      o G4EmStandardPhysics_option3: use options providing more accurate 
+        simulation without loss of CPU performance: set RangeFactor to 0.03;
+        use 'SafetyPlus' step limitation instead of 'DistanceToBoundary'.
+        Significantly improving fanoCavity results.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + low-energy
+      o G4MicroElecInelasticModel_new: changed interpolate() method; making a
+        choice between log-log, lin-log, and lin-lin interpolations and added a
+        protection for zero input energy. When sampling transition, the choice
+        is implemented for transition from atomic level and Fermi level.
+        Should fix rare crash observed in this model.
+      o Prefer pointer to 'const G4Material' where possible.
+      o G4hIonEffChargeSquare, G4PenelopeRayleighModel,
+        G4PenelopeRayleighModelMI: fixed compilation warning on unused variable.
+    + standard
+      o G4UniversalFluctuation: introduced new protected method SampleGlandz(),
+        which provides sampling of non-Gauss fluctuations; improved arithmetics;
+        same results as in release 11.0.0.
+      o G4UrbanFluctuation: reorganized version of fluctuation model from
+        release 10.7 in SampleGlandz() method.
+      o G4UniversalFluctuation, G4UrbanFluctuation: use the same fw=4 and a0=42
+        parameters of the model providing similar fluctuation results for small
+        steps in thin layers as in version 10.7.
+        Addressing problem report #2466.
+      o G4LossFluctuationDummy: new class with zero fluctuations.
+      o G4UrbanMscModel: minor optimisation of arithmetics. Removed multiple
+        initialisation of the cache data structure and possible data race.
+      o G4CoulombScattering: for single scattering used in restricted interval
+        of large angles, use 'fEmIncreasing' type of cross-section shape.
+    + utils
+      o G4VEmProcess: fixed methods where implementation is based on assumption
+        that the lambda table is defined for full energy range:
+        LambdaPhysicsVector(..), CrossSEctionPerVolume(..), FindLambdaMax(..).
+        No change is expected for the default physics configuration; fix mainly
+        affecting positron annihilation processes at high energies. 
+      o G4VMscModel, G4VEmProcess: move few methods and header files from
+        header to source in order to reduce dependencies between packages.
+      o G4EmParametersMessenger: added forgotten UI command to enable
+        polarisation.
+      o Added info in 'setMaxBetaChange' command description.
+    + xrays
+      o Fix in 'MaxBetaChange' value in Cerenkov process.
+        Addressing problem report #2456.
+      o G4Scintillation: removed unused 'YieldFactor' declarations.
+        Addressing problem report #2470.
+
+  o Processes - Generic:
+    -------------------
+    + cuts
+      o G4VRangeToEnergyConverter: fixed construction/destruction of static
+        data.
+    + optical
+      o Removed G4lrint/G4lint to calculate angle bin for Davis/LBNL LUT;
+        fixes crash when angle = 0.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections
+      o G4ComponentAntiNuclNuclearXS: correct treatment of the cross-sections
+        of light anti-nuclei on hydrogen target. This relies on the isospin
+        symmetry assumption, according to which the properties of the reactions
+        between anti-proton and light nuclei are equivalent to those between
+        light anti-nuclei and hydrogen.
+    + models/coherent_elastic
+      o G4AntiNuclElastic: correction in SampleInvariantT() method of the
+        highest momentum transfer (which was causing the cosine of the polar
+        angle in the center-of-mass system to be larger than 1 in some cases).
+        Addressing problem report #2204.
+    + models/inclxx
+      o G4INCLXXInterface: fixed treatment of kaon0, anti_kaon0, kaon0L, and
+        kaon0S. In current reference physics lists, INCLXX is never used for
+        handling kaons, although it is capable of doing so, but at process-
+        level or in custom physics lists one could observe crashes when trying
+        to use INCLXX for neutral kaon projectiles. The change fixes this
+        misbehavior.
+
+  o Run
+    ---
+    + Fixed missing 'AnnihToTauTau' entry from default physics list ordering
+      that would cause a fatal exception if 'EmExtra' is used with
+      PositronToMuMu=True.
+    + Adding verbosity control to some printouts to standard output.
+      Addressing problem report #2397.
+
+  o Tasking
+    -------
+    + Fixing number of seeds to be generated for the case when seeds from
+      master are seeded only once per task.
+    + Adding verbosity control to some printouts to standard output.
+      Addressing problem report #2397.
+
+  o Examples:
+    --------
+    + extended/medical/fanoCavity
+    + extended/medical/fanoCavity2
+      o Make PhysicsLists coherent with main physics_list library.
+    + extended/optical/OpNovice
+      o Fixed incorrect call to G4MaterialPropertiesTable::AddProperty().
+        Added comments explaining use.
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.0.
+  o  Technical notes distributed for release 11.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.0.1 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

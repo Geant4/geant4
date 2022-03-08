@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -214,31 +214,31 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.050000s Real=0.056268s Sys=0.000000s
+  User=0.050000s Real=0.052054s Sys=0.000000s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 31184
-	pol-conv = 229
-	msc = 1806
-	pol-eIoni = 741
-	pol-eBrem = 336
-	pol-annihil = 75
-	pol-compt = 285
-	pol-phot = 180
+	Transportation = 31086
+	pol-conv = 215
+	msc = 1720
+	pol-eIoni = 680
+	pol-eBrem = 328
+	pol-annihil = 63
+	pol-compt = 267
+	pol-phot = 181
  Gamma: 
-Mean Number per Event :1.0071
-Mean Energy :9.5719 MeV +- 1.923 MeV
-Mean Polarization :-0.96345 +- 0.18582
+Mean Number per Event :1.0049
+Mean Energy :9.6174 MeV +- 1.8107 MeV
+Mean Polarization :-0.96796 +- 0.17566
  Electron: 
-Mean Number per Event :0.0365
-Mean Energy :5.3556 MeV +- 2.4606 MeV
-Mean Polarization :-0.74507 +- 0.28333
+Mean Number per Event :0.034
+Mean Energy :5.3002 MeV +- 2.4975 MeV
+Mean Polarization :-0.73746 +- 0.277
  Positron: 
-Mean Number per Event :0.0156
-Mean Energy :3.9054 MeV +- 2.0267 MeV
-Mean Polarization :-0.54327 +- 0.34605
+Mean Number per Event :0.0154
+Mean Energy :3.8935 MeV +- 2.047 MeV
+Mean Polarization :-0.53895 +- 0.34771
 ... write file : pol01.root - done
 ... close file : pol01.root - done
 ... delete empty file : pol01.root - done
@@ -246,7 +246,7 @@ Mean Polarization :-0.54327 +- 0.34605
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1883766887621258172, 445260673900121858, 1495747664081991833, 154728272166703337, 783765121210404421, 364296141077971942, 1499610218231124573, 1675248323824583760, 1440307099525015875, 1159860002200486021, 590729407651023665, 1027050997351495804, 950076689074687500, 1513081478329614161, 129981774455909486, 2001839909826765720, 1899088457471448255} counter= 4sumtot= 567695044291054775
+N=17 V[N]={955943411254245590, 72259121523786958, 1340945982774403612, 655683260130628283, 1698691160663485308, 977040384656083413, 1399676571507148751, 950792055637263529, 716153072720142876, 879188186308298042, 560924658810887561, 1590500326380121268, 1300733520291919387, 2237537514665408110, 1031802280473427018, 987927727888494743, 2009123632190529179} counter= 15sumtot= 918178794166722020
 ---------------------------------------
 #
 G4 kernel has come to Quit state.

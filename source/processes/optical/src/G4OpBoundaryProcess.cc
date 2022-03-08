@@ -801,7 +801,7 @@ void G4OpBoundaryProcess::DielectricLUT()
       // Calculate Angle between Normal and Photon Momentum
       G4double anglePhotonToNormal = fOldMomentum.angle(-fGlobalNormal);
       // Round to closest integer: LBNL model array has 91 values
-      G4int angleIncident = G4lrint(anglePhotonToNormal / CLHEP::deg);
+      G4int angleIncident = std::lrint(anglePhotonToNormal / CLHEP::deg);
 
       // Take random angles THETA and PHI,
       // and see if below Probability - if not - Redo
@@ -857,7 +857,9 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
     anglePhotonToNormal = fOldMomentum.angle(-fGlobalNormal);
 
     // Davis model has 90 reflection bins: round down
-    angleIncident     = G4lint(anglePhotonToNormal / CLHEP::deg);
+    // don't allow angleIncident to be 90 for anglePhotonToNormal close to 90
+    angleIncident = std::min(static_cast<G4int>(
+      std::floor(anglePhotonToNormal / CLHEP::deg)), 89);
     reflectivityValue = fOpticalSurface->GetReflectivityLUTValue(angleIncident);
 
     if(rand > reflectivityValue)

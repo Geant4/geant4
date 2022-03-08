@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 24, 2022  Makoto Asai (run-V10-07-14)
+- Adding verbosity control to some G4cout. Addressing to bug report #2397.
+
+December 11, 2021  Laurie Nevay 
+- Fix missing AnnihToTauTau entry from default physics list ordering that
+  would cause a fatal exception if EmExtra is used with PositronToMuMu=True.
+
 October 25, 2021 B.Morgan (run-V10-07-13)
 - Use G4StrUtil functions replacing deprecated G4String member functions
 

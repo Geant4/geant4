@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -208,7 +208,7 @@ eBrem:  for e-  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -240,7 +240,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -272,7 +272,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -331,7 +331,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -363,7 +363,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -395,7 +395,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -428,7 +428,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -461,7 +461,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -493,7 +493,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -525,7 +525,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -882,331 +882,260 @@ Max 2J for sampling of angular correlations         10
 =======================================================================
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
-         gamma, kinetic energy (MeV) =      6.82297, position (cm) = (20.9521,-81.5038,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      54.7875, position (cm) = (36.9996,-74.7791,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.198544, position (cm) = (50.3259,-78.5056,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      75.6834, position (cm) = (44.8545,-77.756,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.980963, position (cm) = (54.3793,-78.0549,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      17.2384, position (cm) = (47.644,-77.7003,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.296084, position (cm) = (64.4624,-123.784,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      3.84307, position (cm) = (80.4019,-125.469,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      4.44254, position (cm) = (67.3438,-121.335,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      8.40652, position (cm) = (79.4523,-125.408,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      3.36589, position (cm) = (74.5566,-125.339,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0611924, position (cm) = (81.3688,-132.611,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.724392, position (cm) = (84.7014,-124.151,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.122603, position (cm) = (71.25,-128.236,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      12.1425, position (cm) = (90.0476,-120.201,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      10.4155, position (cm) = (24.9249,-66.9022,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.112833, position (cm) = (53.7031,-73.6588,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =       2.5848, position (cm) = (59.8573,-83.8359,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.53683, position (cm) = (48.2647,-87.0339,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.96725, position (cm) = (25.4285,-116.698,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =    0.0001408, position (cm) = (57.8662,-142.421,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      13.4098, position (cm) = (26.2447,-106.116,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.09064, position (cm) = (16.3698,-131.256,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =       2.1882, position (cm) = (50.1964,-127.366,500),	 weight = 3.8147e-06
-         gamma, kinetic energy (MeV) =      1.94295, position (cm) = (-12.2266,9.75549,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  3.47149e-07, position (cm) = (-13.8378,-18.2597,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  1.02391e-06, position (cm) = (22.3485,-46.3035,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  0.000777835, position (cm) = (40.8587,-59.4834,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.170267, position (cm) = (10.1683,-35.5191,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      5.42603, position (cm) = (29.7087,-38.7416,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      21.5802, position (cm) = (21.5666,-16.4956,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =       1.4298, position (cm) = (67.0185,-67.8624,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      2.20632, position (cm) = (83.0477,-84.5627,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      51.8463, position (cm) = (76.7154,-82.468,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      42.2659, position (cm) = (79.5131,-79.9154,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.89789, position (cm) = (92.7339,-91.3299,500),	 weight = 3.8147e-06
-         gamma, kinetic energy (MeV) =    0.0849534, position (cm) = (87.5115,-79.7208,500),	 weight = 3.8147e-06
-       neutron, kinetic energy (MeV) =      49.9445, position (cm) = (51.0119,-98.0847,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.446892, position (cm) = (40.491,-102.872,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0694982, position (cm) = (58.008,-92.6558,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =        22.41, position (cm) = (62.4586,-93.288,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.32041, position (cm) = (121.093,18.0322,500),	 weight = 7.62939e-06
-         gamma, kinetic energy (MeV) =      1.11131, position (cm) = (115.483,-11.7912,500),	 weight = 7.62939e-06
-       neutron, kinetic energy (MeV) =      91.5077, position (cm) = (131.061,-27.8444,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      0.54533, position (cm) = (128.503,-23.6634,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      57.3204, position (cm) = (129.082,-23.2068,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =   0.00148733, position (cm) = (112.035,-8.52922,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      29.5469, position (cm) = (114.432,-7.79514,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  6.19617e-06, position (cm) = (31.6166,-22.4359,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.131824, position (cm) = (59.2751,-28.6303,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.91905, position (cm) = (47.2263,-44.7869,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.22306, position (cm) = (46.6764,-34.052,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      0.54199, position (cm) = (8.62482,-97.8896,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.105482, position (cm) = (12.2068,-96.2409,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       58.954, position (cm) = (1.41191,-93.1469,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      85.1054, position (cm) = (3.40617,-97.3566,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  6.84395e-10, position (cm) = (-0.47916,-126.016,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.128385, position (cm) = (-21.9642,-116.469,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      1.28028, position (cm) = (-12.762,-118.205,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0984828, position (cm) = (96.9175,-133.403,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      4.79655, position (cm) = (92.0161,-123.593,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      66.6263, position (cm) = (95.985,-128.792,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      77.2743, position (cm) = (94.0536,-118.957,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      44.3084, position (cm) = (97.5378,-112.256,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =       1.1638, position (cm) = (114.869,-82.2087,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  1.30342e-09, position (cm) = (107.686,-110.507,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.25058, position (cm) = (117.537,-118.308,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      6.19112, position (cm) = (106.506,-102.772,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       17.423, position (cm) = (116.446,-89.6042,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.398404, position (cm) = (133.382,-53.8221,500),	 weight = 3.8147e-06
-         gamma, kinetic energy (MeV) =       5.8401, position (cm) = (122.244,-81.1003,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  4.78963e-10, position (cm) = (101.741,-112.234,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.721672, position (cm) = (133.038,-94.9281,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.834221, position (cm) = (115.736,-116.96,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      10.0439, position (cm) = (133.071,-119.313,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.22306, position (cm) = (-55.1355,-12.6368,500),	 weight = 3.8147e-06
-       neutron, kinetic energy (MeV) =  2.79966e-08, position (cm) = (-63.0768,-20.4999,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.510999, position (cm) = (-69.483,3.20425,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  1.50628e-08, position (cm) = (-85.1468,7.16079,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      41.8455, position (cm) = (-55.6652,-9.38279,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      9.45211, position (cm) = (-51.9042,-6.7433,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.70229, position (cm) = (-90.7318,20.0838,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.147296, position (cm) = (-68.3923,8.89959,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.158434, position (cm) = (-66.1187,49.9233,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      3.61357, position (cm) = (-63.7309,35.3277,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      97.2972, position (cm) = (-67.1176,-0.40927,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.723747, position (cm) = (-1.00798,20.795,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      4.56349, position (cm) = (72.604,-29.635,500),	 weight = 3.8147e-06
-       neutron, kinetic energy (MeV) =      1.45225, position (cm) = (117.576,-35.7335,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.337153, position (cm) = (124.741,-35.3811,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      18.1292, position (cm) = (98.8675,20.6738,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.358552, position (cm) = (122.949,10.96,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.92464, position (cm) = (73.9986,1.27444,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.668339, position (cm) = (41.9834,0.999452,500),	 weight = 3.8147e-06
-         gamma, kinetic energy (MeV) =    0.0705392, position (cm) = (61.1455,11.0459,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.307574, position (cm) = (73.123,23.3626,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      4.43913, position (cm) = (73.1882,20.6536,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       26.553, position (cm) = (72.6754,20.6065,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =    0.0362864, position (cm) = (39.3374,0.0867714,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.771552, position (cm) = (29.8919,19.4359,500),	 weight = 1.90735e-06
-            e-, kinetic energy (MeV) =       1.7919, position (cm) = (28.5265,20.0833,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       70.363, position (cm) = (17.7278,-27.4576,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  9.12368e-06, position (cm) = (0.394446,-23.5924,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      33.8288, position (cm) = (14.2465,-23.991,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =       8.5359, position (cm) = (143.362,32.8503,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.212394, position (cm) = (135.143,12.7131,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.623717, position (cm) = (121.836,20.17,500),	 weight = 3.8147e-06
-         gamma, kinetic energy (MeV) =      2.22306, position (cm) = (116.03,44.3276,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      52.3404, position (cm) = (144.133,24.3817,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.570005, position (cm) = (144.816,33.3763,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      62.3049, position (cm) = (122.054,13.4427,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.155799, position (cm) = (113.676,15.6985,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      4.20499, position (cm) = (106.87,14.2023,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      1.37281, position (cm) = (86.8593,14.0707,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      61.8969, position (cm) = (122.462,27.3734,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      62.0843, position (cm) = (123.721,28.7463,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.809413, position (cm) = (141.114,85.0314,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.100643, position (cm) = (116.394,-21.5525,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       79.528, position (cm) = (128.506,-2.29205,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       82.766, position (cm) = (131.15,0.260389,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.100586, position (cm) = (100.699,13.9699,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      38.2107, position (cm) = (136.043,-41.9533,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.222829, position (cm) = (72.3173,-5.2698,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0892668, position (cm) = (137.034,-16.2737,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      79.3459, position (cm) = (-113.017,1.22227,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      78.6219, position (cm) = (-117.076,1.74726,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.238442, position (cm) = (-88.0936,-0.0698714,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.127051, position (cm) = (-84.413,9.6721,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.19225, position (cm) = (-86.8492,12.8542,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       1.4702, position (cm) = (-88.1033,18.0528,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.565731, position (cm) = (-84.1037,18.5623,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      10.7833, position (cm) = (-60.7827,7.77341,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =   4.9555e-07, position (cm) = (-122.487,-33.4406,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      54.9437, position (cm) = (-131.446,-14.0799,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      80.1649, position (cm) = (-134.585,-16.2987,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      78.6876, position (cm) = (-74.4747,-37.8735,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  0.000304791, position (cm) = (-120.719,-37.3811,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.245961, position (cm) = (-80.8891,-58.9411,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      80.0755, position (cm) = (-93.5469,-40.5818,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       80.332, position (cm) = (-97.3057,-44.0553,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      11.8287, position (cm) = (-104.141,-48.3909,500),	 weight = 3.8147e-06
-       neutron, kinetic energy (MeV) =  1.41983e-07, position (cm) = (-86.9553,-53.898,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      1.38124, position (cm) = (-80.4444,-41.6893,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      7.44142, position (cm) = (-85.6243,-37.4389,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.231456, position (cm) = (-104.985,24.3376,500),	 weight = 3.8147e-06
-       neutron, kinetic energy (MeV) =       96.911, position (cm) = (-105.681,-114.662,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.273571, position (cm) = (-112.194,-98.619,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.850748, position (cm) = (-95.1779,-95.2997,500),	 weight = 3.8147e-06
-         gamma, kinetic energy (MeV) =     0.258521, position (cm) = (-122.947,-119.46,500),	 weight = 3.8147e-06
-       neutron, kinetic energy (MeV) =       23.359, position (cm) = (-124.678,-78.9885,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      14.2621, position (cm) = (-28.4919,42.9084,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      2.90298, position (cm) = (-37.5704,41.2547,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      1.13693, position (cm) = (-31.9311,20.6451,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.590393, position (cm) = (-62.5684,18.4552,500),	 weight = 3.8147e-06
-         gamma, kinetic energy (MeV) =       3.8656, position (cm) = (-54.6372,12.422,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      54.4285, position (cm) = (-44.1682,6.96093,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      95.8216, position (cm) = (-128.112,2.11948,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.184709, position (cm) = (-123.283,3.06701,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.69182, position (cm) = (-129.622,16.7342,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      89.2196, position (cm) = (-128.48,6.21695,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      95.8906, position (cm) = (-122.75,-1.01762,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      95.3408, position (cm) = (-122.495,-0.466134,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  8.38203e-05, position (cm) = (-67.1902,47.2087,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.106297, position (cm) = (-95.7876,-6.93991,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      94.0052, position (cm) = (-93.6902,23.9712,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      94.3911, position (cm) = (-69.1087,29.0703,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      43.1484, position (cm) = (-68.6886,20.2322,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      93.8976, position (cm) = (-104.284,12.7437,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      94.9545, position (cm) = (-96.6065,10.7542,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      8.24789, position (cm) = (-95.5637,9.72752,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0623433, position (cm) = (-99.3621,11.0194,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.145203, position (cm) = (-90.0091,8.18279,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.456797, position (cm) = (0.949797,-15.7222,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.107564, position (cm) = (18.4824,-34.4708,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      96.7808, position (cm) = (-25.5386,-41.44,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.266263, position (cm) = (-29.1087,-50.5144,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      7.57565, position (cm) = (-16.1451,-52.9962,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.947138, position (cm) = (-66.7631,-78.5153,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.603675, position (cm) = (-66.1199,-80.449,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      39.8132, position (cm) = (-60.6669,-74.2411,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0983147, position (cm) = (-49.7245,-61.3616,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0897981, position (cm) = (-28.3066,-66.5943,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       26.111, position (cm) = (-23.0349,-67.0386,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      49.0729, position (cm) = (-65.9143,-81.4332,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      36.9965, position (cm) = (-51.9624,-42.3591,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      38.3121, position (cm) = (-52.0778,-50.6051,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.139865, position (cm) = (-43.7916,-64.3366,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.244812, position (cm) = (-42.1314,-64.6745,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.732668, position (cm) = (-41.8363,-65.0541,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      15.6331, position (cm) = (-43.2706,-64.0952,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =       2.7735, position (cm) = (-58.5002,-71.5658,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      37.1176, position (cm) = (-37.4834,-62.832,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.54242, position (cm) = (-22.0899,-85.1728,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.708164, position (cm) = (-0.0805837,-86.9947,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  0.000970114, position (cm) = (-25.0689,-102.397,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.697386, position (cm) = (-27.6508,-38.0201,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      4.37564, position (cm) = (-11.1906,-72.6483,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      6.41953, position (cm) = (21.7771,-112.841,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      4.57068, position (cm) = (33.98,-39.5904,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.208955, position (cm) = (-81.8118,-96.9266,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.14448, position (cm) = (-69.9182,-100.215,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      3.70677, position (cm) = (60.613,-34.9659,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.860082, position (cm) = (88.7596,-108.721,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0903522, position (cm) = (41.5951,-78.8895,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      33.0824, position (cm) = (65.524,-79.4466,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      3.17696, position (cm) = (72.493,-118.739,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      49.9954, position (cm) = (88.5923,-133.19,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.126983, position (cm) = (92.2884,-126.088,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.01493, position (cm) = (92.3834,-148.907,500),	 weight = 3.8147e-06
-         gamma, kinetic energy (MeV) =       1.9158, position (cm) = (147.088,-61.7696,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.232148, position (cm) = (144.321,-57.6168,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.82127, position (cm) = (145.927,-61.8215,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      70.1079, position (cm) = (146.976,-98.7776,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      61.9444, position (cm) = (146.533,-84.7313,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.903621, position (cm) = (72.9069,-117.08,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      62.5257, position (cm) = (68.4526,-110.742,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      62.2129, position (cm) = (72.1152,-102.652,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.165962, position (cm) = (122.893,-50.6061,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.688607, position (cm) = (128.773,-74.442,500),	 weight = 1.90735e-06
-            e-, kinetic energy (MeV) =     0.217871, position (cm) = (128.156,-74.046,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0762106, position (cm) = (50.7369,-47.6296,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.182032, position (cm) = (69.2057,-38.9833,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      18.5774, position (cm) = (64.556,-31.5135,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      62.6084, position (cm) = (61.9546,-42.1984,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      0.36142, position (cm) = (-11.3875,-59.8722,500),	 weight = 3.8147e-06
-       neutron, kinetic energy (MeV) =      2.94795, position (cm) = (-14.3679,-74.0724,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.045561, position (cm) = (60.5498,-58.7047,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      22.2254, position (cm) = (36.2791,-34.4634,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      52.2881, position (cm) = (33.7179,-51.0204,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      64.7429, position (cm) = (36.1586,-92.8626,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      64.5008, position (cm) = (31.6967,-91.2143,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      64.8016, position (cm) = (43.7812,-75.618,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      37.8108, position (cm) = (39.0598,-71.4767,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      37.7401, position (cm) = (41.8501,-71.8715,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      3.05846, position (cm) = (80.9931,-62.6995,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      62.1445, position (cm) = (100.128,8.73362,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      4.72583, position (cm) = (104.414,1.5074,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  0.000564127, position (cm) = (77.7973,-38.9143,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.248218, position (cm) = (31.4583,100.503,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      3.71378, position (cm) = (36.4582,130.417,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      45.8724, position (cm) = (23.0899,90.033,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      38.1958, position (cm) = (16.8008,22.8373,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0811356, position (cm) = (26.9496,5.44261,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =       1.0547, position (cm) = (23.7987,67.1019,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.291291, position (cm) = (-101.832,-9.79622,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      7.73891, position (cm) = (-112.851,43.652,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  1.77145e-05, position (cm) = (-111.885,4.45866,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      71.7263, position (cm) = (-124.372,18.1156,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      4.45953, position (cm) = (-119.73,22.9627,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.88367, position (cm) = (-134.633,26.3993,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      54.9267, position (cm) = (-135.32,28.0818,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  3.00438e-08, position (cm) = (-126.527,99.4644,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      82.4477, position (cm) = (61.0133,-9.12688,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.813135, position (cm) = (52.4122,-36.9281,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.452638, position (cm) = (79.7445,0.63865,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      2.30511, position (cm) = (77.0042,-9.13737,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      28.8091, position (cm) = (71.5138,-19.7737,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      35.5026, position (cm) = (68.2266,-12.614,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      84.5537, position (cm) = (73.4984,-17.969,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      3.70009, position (cm) = (63.4574,-27.7497,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  0.000197181, position (cm) = (96.9638,-14.4882,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.063869, position (cm) = (81.1331,-12.5972,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.847864, position (cm) = (90.1542,-15.7557,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      4.24259, position (cm) = (87.855,-15.2981,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      84.3618, position (cm) = (71.9938,-26.3156,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.073457, position (cm) = (117.547,-39.8266,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.322898, position (cm) = (148.633,9.34477,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.376537, position (cm) = (125.941,-44.1759,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      10.2216, position (cm) = (133.443,-57.2787,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      13.2803, position (cm) = (101.444,-30.3666,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      6.03372, position (cm) = (93.266,-21.1463,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =       1.4789, position (cm) = (128.684,-13.9031,500),	 weight = 7.62939e-06
-       neutron, kinetic energy (MeV) =     0.686862, position (cm) = (89.1778,-61.9695,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.402338, position (cm) = (120.563,-61.2176,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      7.56153, position (cm) = (118.054,-53.6218,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      80.9381, position (cm) = (104.799,-71.8856,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      80.8867, position (cm) = (105.416,-72.7379,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.079387, position (cm) = (121.991,34.6389,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.82909, position (cm) = (63.5012,-5.94342,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      82.6312, position (cm) = (-8.97285,-76.4816,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      81.3074, position (cm) = (-3.35063,-65.8433,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.175135, position (cm) = (99.1243,68.7281,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.41988, position (cm) = (80.2932,27.9506,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.830534, position (cm) = (85.5572,73.1416,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.75751, position (cm) = (92.2411,70.7419,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.175723, position (cm) = (90.2239,47.5514,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       2.2216, position (cm) = (96.6949,52.3521,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      7.76899, position (cm) = (72.1833,-4.74818,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  1.78407e-06, position (cm) = (91.9469,17.7102,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      28.1366, position (cm) = (62.9801,33.5349,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      75.7377, position (cm) = (62.4676,25.557,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       51.098, position (cm) = (-47.0818,-80.2343,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.118981, position (cm) = (-43.5324,-69.0422,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      5.27831, position (cm) = (-43.9017,-70.6432,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      4.74817, position (cm) = (-38.2281,-61.678,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      40.2606, position (cm) = (-116.992,-17.5904,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =  1.57721e-08, position (cm) = (-125.812,-16.241,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.927455, position (cm) = (-126.454,-27.0307,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      6.54455, position (cm) = (-111.683,3.55641,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.60092, position (cm) = (-131.688,5.78503,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =       5.7281, position (cm) = (-121.323,-3.55732,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.164072, position (cm) = (-130.368,2.43683,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      59.1031, position (cm) = (-64.873,-16.6807,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =   0.00121881, position (cm) = (-50.5123,-32.8254,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      60.2685, position (cm) = (-64.1566,-31.7867,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =       72.286, position (cm) = (-3.46045,3.27167,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      72.5205, position (cm) = (-3.6138,-4.73127,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      2.25658, position (cm) = (-29.5086,4.64846,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      2.41332, position (cm) = (5.89868,10.9861,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.118618, position (cm) = (-10.5713,-14.7034,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      25.7578, position (cm) = (-28.8891,35.3153,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      6.97298, position (cm) = (-19.8568,41.9814,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      54.8526, position (cm) = (20.8514,18.7266,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.234921, position (cm) = (-20.5579,13.6115,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      1.02641, position (cm) = (-68.9105,-20.5979,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      41.7186, position (cm) = (-80.321,-17.6813,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.562702, position (cm) = (-9.26323,-46.543,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =     0.134511, position (cm) = (-43.3655,-23.2577,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =      4.42437, position (cm) = (-46.5877,0.317888,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.116996, position (cm) = (-45.4406,-23.187,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =    0.0979942, position (cm) = (-24.1217,4.40936,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.096555, position (cm) = (-12.8113,-14.1538,500),	 weight = 1.90735e-06
-       neutron, kinetic energy (MeV) =      43.9049, position (cm) = (-42.605,5.64444,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.236069, position (cm) = (-53.1332,-20.6559,500),	 weight = 1.90735e-06
-         gamma, kinetic energy (MeV) =     0.169619, position (cm) = (-47.7924,-19.8171,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.18555, position (cm) = (123.311,-34.7943,500),	 weight = 3.8147e-06
+       neutron, kinetic energy (MeV) =      2.60401, position (cm) = (94.6989,-105.407,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =       7.2238, position (cm) = (107.262,-99.8425,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      58.3021, position (cm) = (96.9928,-102.733,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      57.4349, position (cm) = (105.569,-90.7415,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.15321, position (cm) = (101.393,-42.4651,500),	 weight = 3.8147e-06
+       neutron, kinetic energy (MeV) =    0.0757794, position (cm) = (-58.3156,-83.3359,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =    0.0972736, position (cm) = (-20.7119,-4.64652,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.57918, position (cm) = (-20.1013,6.92647,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.679537, position (cm) = (-45.3729,3.47483,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      6.58559, position (cm) = (4.38862,-5.99423,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      96.1654, position (cm) = (23.8152,-19.5054,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      93.8946, position (cm) = (22.5654,-26.1227,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      96.9517, position (cm) = (42.3817,2.36104,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.10168, position (cm) = (64.3261,-22.5907,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.201656, position (cm) = (71.7555,-9.09061,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.277911, position (cm) = (49.7022,-5.94048,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =    0.0653412, position (cm) = (59.5559,-15.3473,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =       48.352, position (cm) = (44.11,4.73624,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =       70.253, position (cm) = (51.5759,3.96993,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.908153, position (cm) = (73.8829,-1.46584,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      51.1349, position (cm) = (67.0971,17.8392,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      97.3326, position (cm) = (55.1119,5.1145,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      96.5732, position (cm) = (71.3688,2.32028,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      7.02512, position (cm) = (55.2999,6.35517,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  2.20291e-09, position (cm) = (63.7904,-2.55854,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.22306, position (cm) = (-13.4332,-72.8126,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.928659, position (cm) = (17.9729,-31.2573,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      7.31675, position (cm) = (7.22009,-20.8506,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      18.2731, position (cm) = (12.2482,-29.878,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.38016, position (cm) = (89.8325,-55.9996,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      0.21053, position (cm) = (117.829,-51.2886,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      20.3233, position (cm) = (129.841,-46.1739,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      58.9352, position (cm) = (71.661,-47.6602,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      6.12507, position (cm) = (25.8028,-56.2911,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      70.5619, position (cm) = (27.8933,-35.4029,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      97.7788, position (cm) = (32.3573,-59.2863,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      97.5461, position (cm) = (29.4026,-57.22,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      97.8017, position (cm) = (28.5894,-54.5764,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.22306, position (cm) = (45.6186,-45.6777,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.85011, position (cm) = (53.3591,-76.8479,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =    0.0785431, position (cm) = (48.6397,-77.3242,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      3.47348, position (cm) = (56.8687,-16.3889,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  1.37788e-10, position (cm) = (92.5122,-37.0782,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      8.04537, position (cm) = (27.7835,31.359,500),	 weight = 3.8147e-06
+         gamma, kinetic energy (MeV) =      0.40261, position (cm) = (46.8231,39.8871,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      13.6951, position (cm) = (42.7909,32.2279,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      31.5321, position (cm) = (34.8535,46.0486,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.45454, position (cm) = (92.0197,-71.9434,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =       1.7009, position (cm) = (109.682,-86.1161,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.434137, position (cm) = (104.645,-82.7878,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      66.8852, position (cm) = (17.5865,-35.1105,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =    0.0370131, position (cm) = (16.413,-52.906,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      67.0505, position (cm) = (17.7378,-35.7445,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      7.21342, position (cm) = (31.3268,-19.3546,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.68282, position (cm) = (8.93748,-26.0613,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      65.0124, position (cm) = (41.0193,-20.7037,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =       67.918, position (cm) = (32.8528,-34.0624,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  8.89316e-08, position (cm) = (70.9778,-31.8388,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      21.6058, position (cm) = (76.2805,-1.9715,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.90926, position (cm) = (88.0201,-81.0121,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      9.28412, position (cm) = (94.1787,-66.7541,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      37.9461, position (cm) = (87.3071,-81.8574,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.562787, position (cm) = (127.345,-29.3987,500),	 weight = 3.8147e-06
+         gamma, kinetic energy (MeV) =    0.0948022, position (cm) = (-63.6877,25.4543,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.236815, position (cm) = (-90.4837,22.842,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.173906, position (cm) = (-68.718,20.5867,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =     0.368825, position (cm) = (-69.9453,33.7231,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.54241, position (cm) = (-61.3825,54.8839,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =   5.4149e-10, position (cm) = (-15.4725,34.4433,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =    0.0755515, position (cm) = (-57.4554,-24.0791,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.23405, position (cm) = (19.4661,46.3879,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      10.4353, position (cm) = (-44.9148,65.7238,500),	 weight = 7.62939e-06
+         gamma, kinetic energy (MeV) =     0.442717, position (cm) = (-61.8965,69.0057,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      46.3394, position (cm) = (-78.6855,78.9965,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.231579, position (cm) = (-22.8613,86.1561,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      63.7253, position (cm) = (-81.5872,58.2953,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.695726, position (cm) = (-113.531,143.876,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.151953, position (cm) = (-116.599,147.772,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.43876, position (cm) = (-101.773,116.859,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      3.67963, position (cm) = (-92.7221,101.315,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      3.70904, position (cm) = (-93.2366,100.203,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =     0.423669, position (cm) = (-103.643,96.3541,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.27181, position (cm) = (-98.7202,105.352,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =     0.129591, position (cm) = (-103.26,118.128,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      82.8945, position (cm) = (24.3134,33.8324,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      82.8778, position (cm) = (24.3517,33.7353,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      82.4793, position (cm) = (4.25672,42.6967,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.08357, position (cm) = (4.73521,34.8954,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      44.2174, position (cm) = (1.31248,43.2153,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.470002, position (cm) = (43.4443,40.5664,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      3.90735, position (cm) = (75.6391,-20.9147,500),	 weight = 3.8147e-06
+       neutron, kinetic energy (MeV) =      37.4806, position (cm) = (107.387,-7.3392,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  4.58984e-08, position (cm) = (-12.1552,31.7819,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      3.79594, position (cm) = (-44.559,-9.58443,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      4.61251, position (cm) = (-57.9106,89.3388,500),	 weight = 3.8147e-06
+         gamma, kinetic energy (MeV) =     0.257624, position (cm) = (-74.1203,100.921,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      7.52377, position (cm) = (-70.4336,114.638,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.471511, position (cm) = (-82.9588,110.796,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.97438, position (cm) = (-78.8158,130.558,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.68579, position (cm) = (-37.2331,-5.66183,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      3.73226, position (cm) = (-46.0602,-24.6452,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.604894, position (cm) = (-43.719,-25.0766,500),	 weight = 3.8147e-06
+       neutron, kinetic energy (MeV) =   0.00106275, position (cm) = (-32.3149,-22.1265,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.47516, position (cm) = (-26.5233,-26.9875,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      9.37045, position (cm) = (-55.1777,-11.1614,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      24.8805, position (cm) = (-44.4858,-0.776162,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      13.6177, position (cm) = (-21.2585,27.9888,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =    0.0422419, position (cm) = (-30.7447,14.0175,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      0.73034, position (cm) = (-7.46229,5.49975,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.416768, position (cm) = (-30.1782,21.1837,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      20.8389, position (cm) = (-11.4421,-0.942825,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      75.4147, position (cm) = (-147.825,-18.1987,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      7.97181, position (cm) = (-15.4642,-4.82342,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.27328, position (cm) = (-14.8389,-45.141,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =       2.1958, position (cm) = (-14.8626,-56.5802,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.456818, position (cm) = (8.97234,-42.1487,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.490662, position (cm) = (4.12712,-43.8387,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.05555, position (cm) = (-11.8174,-46.9106,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      64.2887, position (cm) = (30.8908,-30.8591,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.27324, position (cm) = (41.0458,-50.6988,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.80625, position (cm) = (30.1709,-45.1487,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.82127, position (cm) = (34.781,-36.5792,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =       1.7333, position (cm) = (33.9994,-24.6529,500),	 weight = 3.8147e-06
+         gamma, kinetic energy (MeV) =     0.474916, position (cm) = (-29.9319,-47.7985,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.36035, position (cm) = (-30.6831,-51.6476,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.662305, position (cm) = (-17.1422,-59.9488,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =     0.502457, position (cm) = (-39.9307,-56.162,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      25.6752, position (cm) = (-37.9203,-56.9548,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.107083, position (cm) = (-35.3505,12.4504,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.89669, position (cm) = (-39.5084,41.8634,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.262088, position (cm) = (-12.9424,36.7365,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =     0.285412, position (cm) = (-5.93403,18.7539,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =    0.0980983, position (cm) = (-34.5889,9.42914,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      0.73146, position (cm) = (-36.4116,-60.9423,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.724544, position (cm) = (90.3797,-46.488,500),	 weight = 3.8147e-06
+         gamma, kinetic energy (MeV) =     0.187473, position (cm) = (65.4347,18.6406,500),	 weight = 3.8147e-06
+       neutron, kinetic energy (MeV) =      31.8192, position (cm) = (31.1383,7.38832,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.381515, position (cm) = (87.1672,-47.6551,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.855244, position (cm) = (102.794,-30.3495,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.541134, position (cm) = (103.444,-31.323,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =     0.627787, position (cm) = (115.793,-29.9832,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.610252, position (cm) = (105.958,-25.4393,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.190859, position (cm) = (114.203,-27.5258,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =     0.213822, position (cm) = (96.186,-26.6565,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  7.18512e-09, position (cm) = (80.8057,-27.1432,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      49.6583, position (cm) = (82.5213,-4.09311,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =       14.867, position (cm) = (84.3489,-22.357,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      1.64784, position (cm) = (122.169,-53.4303,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.754264, position (cm) = (117.579,-57.5117,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      0.54431, position (cm) = (126.146,-64.7806,500),	 weight = 1.90735e-06
+            e-, kinetic energy (MeV) =     0.918644, position (cm) = (109.068,-77.335,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  4.06095e-05, position (cm) = (100.955,-86.0684,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.269007, position (cm) = (-127.718,68.0639,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      1.44836, position (cm) = (17.991,-8.50551,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      33.8351, position (cm) = (-31.4202,-47.5213,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      93.5826, position (cm) = (49.5404,-2.65989,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.055618, position (cm) = (66.8517,-5.93219,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  8.49332e-08, position (cm) = (55.8106,8.4373,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      49.1734, position (cm) = (43.1791,-5.11641,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.68628, position (cm) = (48.3207,-3.7589,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      9.28797, position (cm) = (43.4517,-5.78944,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      93.5978, position (cm) = (44.8937,-3.0235,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.50502, position (cm) = (14.4746,-53.2669,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.654585, position (cm) = (11.127,-49.5041,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =    0.0460489, position (cm) = (-7.13027,-28.2909,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      0.10044, position (cm) = (36.1356,-17.9283,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.80632, position (cm) = (61.7727,-3.11324,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      3.78702, position (cm) = (33.8975,-18.384,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.149146, position (cm) = (-28.5347,-66.9508,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.381803, position (cm) = (-27.3878,-66.9769,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  8.53962e-06, position (cm) = (-33.0546,-93.0218,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.766467, position (cm) = (-40.8482,-56.3256,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      21.7985, position (cm) = (-41.2013,-55.3341,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.269974, position (cm) = (-59.6782,-40.552,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      3.07509, position (cm) = (-45.8903,-52.7013,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      3.97429, position (cm) = (-50.0491,-50.8065,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.131016, position (cm) = (2.31404,-79.0427,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      54.9231, position (cm) = (8.44252,41.852,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      67.6107, position (cm) = (146.582,8.9032,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      67.6002, position (cm) = (146.562,8.93969,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      56.5723, position (cm) = (-67.0331,84.0198,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      56.6286, position (cm) = (-64.9588,88.8158,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.436521, position (cm) = (-80.4519,90.8038,500),	 weight = 3.8147e-06
+         gamma, kinetic energy (MeV) =      1.27325, position (cm) = (-77.6742,90.1781,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =    0.0978349, position (cm) = (-66.0043,58.2676,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  3.52592e-06, position (cm) = (-32.4565,80.2246,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      10.3507, position (cm) = (-20.1401,3.33193,500),	 weight = 3.8147e-06
+         gamma, kinetic energy (MeV) =    0.0718565, position (cm) = (-20.3703,8.78981,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  1.01067e-05, position (cm) = (-67.5001,74.157,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.14254, position (cm) = (-77.0031,74.3643,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.40041, position (cm) = (-54.1052,70.8128,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.130788, position (cm) = (-68.7117,54.5721,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.232985, position (cm) = (-75.6482,47.1078,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.108478, position (cm) = (-84.3104,104.802,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      94.6451, position (cm) = (-73.6899,83.4198,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      94.9001, position (cm) = (-82.9753,86.1893,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      94.9001, position (cm) = (-82.9753,86.1893,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      40.6099, position (cm) = (-99.3238,69.1169,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      21.7318, position (cm) = (-108.559,58.2054,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      76.5425, position (cm) = (-103.606,43.6317,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      4.18813, position (cm) = (-100.383,48.4004,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  7.51587e-05, position (cm) = (-82.9188,42.4532,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =    0.0633701, position (cm) = (-100.356,41.1603,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =        0.167, position (cm) = (-101.106,44.0038,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      38.4457, position (cm) = (-102.095,43.0823,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      32.9109, position (cm) = (-102.382,68.6536,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      94.7551, position (cm) = (-67.9478,75.4014,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      72.9196, position (cm) = (-84.6667,75.5486,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =     0.067411, position (cm) = (-69.671,84.2586,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.84268, position (cm) = (-66.5571,86.3647,500),	 weight = 1.90735e-06
+        proton, kinetic energy (MeV) =      35.6059, position (cm) = (-67.112,85.0695,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.675042, position (cm) = (-75.9762,94.3469,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.215736, position (cm) = (-37.4141,92.3829,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      72.0058, position (cm) = (-74.5148,96.8853,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      88.3816, position (cm) = (-85.7885,75.4144,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =       2.1438, position (cm) = (-93.4488,89.3682,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =  0.000431783, position (cm) = (-100.83,59.7304,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.656961, position (cm) = (-110.976,35.987,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      4.12295, position (cm) = (-107.784,79.0188,500),	 weight = 3.8147e-06
+       neutron, kinetic energy (MeV) =      70.8955, position (cm) = (-96.0098,56.2131,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =     0.117257, position (cm) = (-66.9855,37.6482,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      13.3751, position (cm) = (-89.5932,60.7518,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      4.62842, position (cm) = (-90.2651,78.5332,500),	 weight = 3.8147e-06
+         gamma, kinetic energy (MeV) =      1.63581, position (cm) = (-73.8781,56.1816,500),	 weight = 3.8147e-06
+       neutron, kinetic energy (MeV) =      83.2165, position (cm) = (-139.228,41.8422,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =       78.817, position (cm) = (-131.985,62.1869,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.767265, position (cm) = (-56.7151,40.3748,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.191525, position (cm) = (-66.6714,29.4963,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.22306, position (cm) = (-101.853,8.81575,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      90.5563, position (cm) = (-14.9597,43.621,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =    0.0951923, position (cm) = (-48.1203,33.9613,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      1.47532, position (cm) = (-17.075,42.854,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.541436, position (cm) = (-48.5977,34.9539,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      2.74552, position (cm) = (-62.8761,65.2418,500),	 weight = 7.62939e-06
+       neutron, kinetic energy (MeV) =   0.00127371, position (cm) = (-112.62,91.7356,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =        8.666, position (cm) = (-82.7864,121.333,500),	 weight = 3.8147e-06
+         gamma, kinetic energy (MeV) =     0.293726, position (cm) = (-113.352,137.987,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      88.8132, position (cm) = (-98.5399,145.369,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      88.5239, position (cm) = (-99.6444,134.44,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      14.9011, position (cm) = (-43.1135,104.611,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =     0.952281, position (cm) = (-64.0447,76.9867,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      2.07037, position (cm) = (-44.3037,85.9055,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      80.6188, position (cm) = (-58.7614,86.0854,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      80.6287, position (cm) = (-59.1489,85.8335,500),	 weight = 1.90735e-06
+     anti_nu_e, kinetic energy (MeV) =     0.447637, position (cm) = (-77.4282,104.286,500),	 weight = 3.8147e-06
+       neutron, kinetic energy (MeV) =      81.5806, position (cm) = (-87.53,64.3752,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      80.3275, position (cm) = (-96.9625,57.4978,500),	 weight = 1.90735e-06
+         gamma, kinetic energy (MeV) =      4.09115, position (cm) = (-82.8141,108.664,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      81.6365, position (cm) = (-84.643,61.1651,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      76.9177, position (cm) = (84.0522,-44.0065,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      76.8971, position (cm) = (83.7309,-44.337,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      60.5999, position (cm) = (82.0536,-24.6798,500),	 weight = 1.90735e-06
+       neutron, kinetic energy (MeV) =      77.5303, position (cm) = (82.5649,-18.9178,500),	 weight = 1.90735e-06
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.

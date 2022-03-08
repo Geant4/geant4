@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -555,8 +555,8 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.050000s Real=0.053382s Sys=0.000000s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0162471
+  User=0.050000s Real=0.055374s Sys=0.000000s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0166649
  ====================================================
    Beam Particle: proton
    Ekin(MeV)    = 200000
@@ -565,31 +565,31 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0162471
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 16.247 +- 0.41916 keV    RMS/Emean = 0.81585
-   Mean number of steps in absorber= 1.259  mean number of ion-clusters = 812.05 MeanCluster= 812.35
+   Mean energy deposit in absorber = 16.665 +- 0.46178 keV    RMS/Emean = 0.87627
+   Mean number of steps in absorber= 1.249  mean number of ion-clusters = 833.95 MeanCluster= 833.25
 
- ====== Energy deposit distribution   Noverflows= 0.015 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.02 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           3       0.003
+    1         3           4       0.004
     2         6          99       0.099
-    3         9         283       0.283
-    4        12         220        0.22
-    5        15         160        0.16
-    6        18          86       0.086
-    7        21          59       0.059
-    8        24          25       0.025
-    9        27          12       0.012
-   10        30          12       0.012
-   11        33           5       0.005
+    3         9         274       0.274
+    4        12         216       0.216
+    5        15         167       0.167
+    6        18         100         0.1
+    7        21          48       0.048
+    8        24          22       0.022
+    9        27           9       0.009
+   10        30          10        0.01
+   11        33           8       0.008
    12        36           5       0.005
-   13        39           3       0.003
-   14        42           1       0.001
-   15        45           6       0.006
-   16        48           4       0.004
-   17        51           0           0
+   13        39           4       0.004
+   14        42           2       0.002
+   15        45           5       0.005
+   16        48           2       0.002
+   17        51           1       0.001
    18        54           1       0.001
-   19        57           1       0.001
+   19        57           3       0.003
  ================== run end ==========================
 ... write file : testem8.root - done
 ... close file : testem8.root - done

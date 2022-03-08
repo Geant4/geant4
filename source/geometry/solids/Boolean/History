@@ -19,6 +19,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 10, 2022, G.Cosmo geom-bool-V10-07-04
+- Added alternative signature for AddNode() taking a pointer to solid.
+  Added 'const' qualification to transformation passed as argument.
+  Addressing problem report #2457.
+
 October 12, 2021 G.Cosmo geom-bool-V10-07-03
 - In G4BooleanSolid, use G4RecursiveMutex in place of G4Mutex in GetPolyhedron()
   to avoid potential deadlocks in recursive Boolean operations.

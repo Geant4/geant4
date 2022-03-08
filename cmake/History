@@ -29,6 +29,13 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 February 2022 - Ben Morgan (cmake-V10-07-54)
+- Apply [GitHub PR 37](https://github.com/Geant4/geant4/pull/37) from gondiaz.
+  - Add G4ptl and G4tasking libraries to link list in geant4-config
+- Fixup: place G4tasking in correct location in dependency list
+- Fixup: Update order of G4analysis for ALICE patch:
+  - https://github.com/alisw/geant4/commit/ee32bad38f5ccfac458869d8c546e0df474f5529 
+
 09 November 2021 - Ben Morgan (cmake-V10-07-53)
 - Only configure public release contribution guide if present
 

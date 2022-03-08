@@ -129,13 +129,20 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
 
   // Values can be added to the material property table individually.
-  // Check that group velocity is calculated from RINDEX
-  myMPT1->AddProperty("RINDEX", &photonEnergy[0], &refractiveIndex1[0], true,
-                      true);
+  // With this method, spline interpolation cannot be set. Arguments
+  // createNewKey and spline both take their default values of false.
+  // Need to specify the number of entries (1) in the arrays, as an argument
+  // to AddProperty.
+  G4int numEntries = 1;
+  myMPT1->AddProperty("RINDEX", &photonEnergy[0], &refractiveIndex1[0],
+                      numEntries);
+
   for(size_t i = 1; i < photonEnergy.size(); ++i)
   {
     myMPT1->AddEntry("RINDEX", photonEnergy[i], refractiveIndex1[i]);
   }
+
+  // Check that group velocity is calculated from RINDEX
   if(myMPT1->GetProperty("RINDEX")->GetVectorLength() !=
      myMPT1->GetProperty("GROUPVEL")->GetVectorLength())
   {

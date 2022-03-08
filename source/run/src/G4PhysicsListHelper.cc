@@ -714,12 +714,22 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   theTable->push_back(tmp);
   sizeOfTable += 1;
 
+  tmp.processTypeName = "AnnihToTauTau";
+  tmp.processType     = fElectromagnetic;
+  tmp.processSubType  = fAnnihilationToTauTau;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     = 7;
+  tmp.isDuplicable    = false;
+  theTable->push_back(tmp);
+  sizeOfTable += 1;
+
   tmp.processTypeName = "AnnihToHad";
   tmp.processType     = fElectromagnetic;
   tmp.processSubType  = fAnnihilationToHadrons;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
-  tmp.ordering[2]     = 7;
+  tmp.ordering[2]     = 8;
   tmp.isDuplicable    = false;
   theTable->push_back(tmp);
   sizeOfTable += 1;
@@ -728,7 +738,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processType     = fElectromagnetic;
   tmp.processSubType  = fNuclearStopping;
   tmp.ordering[0]     = -1;
-  tmp.ordering[1]     = 8;
+  tmp.ordering[1]     = 9;
   tmp.ordering[2]     = -1;
   tmp.isDuplicable    = false;
   theTable->push_back(tmp);

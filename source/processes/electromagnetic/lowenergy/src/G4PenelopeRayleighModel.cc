@@ -352,11 +352,6 @@ void G4PenelopeRayleighModel::BuildFormFactorTable(const G4Material* material)
   for (G4int i=0;i<nElements;i++)
     (*StechiometricFactors)[i] /=  MaxStechiometricFactor;
 
-  // Equivalent atoms per molecule
-  G4double atomsPerMolecule = 0;
-  for (G4int i=0;i<nElements;i++)
-    atomsPerMolecule += (*StechiometricFactors)[i];
-
   /*
     CREATE THE FORM FACTOR TABLE
   */

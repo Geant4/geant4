@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -191,7 +191,7 @@ eBrem:  for e-  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -223,7 +223,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -255,7 +255,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -314,7 +314,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -346,7 +346,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -378,7 +378,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -411,7 +411,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -444,7 +444,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -476,7 +476,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -508,7 +508,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -896,53 +896,53 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 900
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =         0.183
-             MEAN =   4.26381e-14
-              VAR =   1.48717e-26
-               SD =   1.21949e-13
-                R =     0.0904446
-            SHIFT =   1.80055e-13
-              VOV =    0.00951838
-              FOM =       4074.87
-THE LARGEST SCORE =   5.55155e-13 and it happened at 348th event
-    Affected Mean =   4.31501e-14 and its ratio to original is 1.01201
-     Affected VAR =   1.51192e-26 and its ratio to original is 1.01665
-       Affected R =     0.0900671 and its ratio to original is 0.995826
-   Affected SHIFT =    1.8061e-13 and its ratio to original is 1.00309
-     Affected FOM =       4074.87 and its ratio to original is 1
-MEAN distribution is  RANDOM
+       EFFICIENCY =         0.182
+             MEAN =   4.26027e-14
+              VAR =   1.49955e-26
+               SD =   1.22456e-13
+                R =     0.0908957
+            SHIFT =   1.82296e-13
+              VOV =    0.00961549
+              FOM =       4034.52
+THE LARGEST SCORE =   5.55155e-13 and it happened at 936th event
+    Affected Mean =   4.31148e-14 and its ratio to original is 1.01202
+     Affected VAR =    1.5243e-26 and its ratio to original is 1.0165
+       Affected R =      0.090509 and its ratio to original is 0.995746
+   Affected SHIFT =   1.82803e-13 and its ratio to original is 1.00278
+     Affected FOM =       4034.52 and its ratio to original is 1
+MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0904446
+r is less than 0.1. r = 0.0908957
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
 Number of non zero history too small to calculate SLOPE
-This result passes 6 / 8 Convergence Test.
+This result passes 5 / 8 Convergence Test.
 
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  3.50166e-14  1.36886e-26  1.16999e-13     0.420955     0.206516      188.108  1.98495e-13     0.111111     0.126984    0.0474063
-   2   124  4.25786e-14  1.58781e-26  1.26008e-13     0.264699      0.08295      475.744  1.92386e-13        0.168     0.039619    0.0298861
-   3   187  3.78165e-14  1.37703e-26  1.17347e-13     0.226314    0.0642827      650.813   1.9386e-13     0.170213    0.0259309    0.0250147
-   4   249  3.88164e-14  1.32569e-26  1.15138e-13     0.187601    0.0455981       947.13  1.83221e-13        0.172    0.0192558    0.0157975
-   5   312  3.65651e-14   1.2484e-26  1.11732e-13     0.172718    0.0383519      1117.39  1.83069e-13     0.162939     0.016413    0.0133232
-   6   374  3.56565e-14  1.25117e-26  1.11856e-13     0.161996    0.0332946       1270.2  1.87933e-13     0.165333    0.0134624    0.0127102
-   7   437   3.6155e-14  1.28146e-26  1.13202e-13     0.149605    0.0277403      1489.31  1.87995e-13       0.1621    0.0118014    0.0105293
-   8   499  4.18975e-14   1.4904e-26  1.22082e-13      0.13031    0.0196857      1963.01  1.83117e-13        0.176   0.00936364   0.00758314
-   9   562   4.5188e-14  1.59116e-26  1.26141e-13     0.117647    0.0156967      2408.34  1.79223e-13     0.182948   0.00793254   0.00588367
-  10   624  4.40473e-14  1.55817e-26  1.24827e-13     0.113357    0.0147201      2594.08  1.81161e-13       0.1824   0.00717193   0.00565727
-  11   687   4.5729e-14  1.59633e-26  1.26346e-13     0.105336    0.0126106      3004.18  1.77744e-13     0.188953   0.00623882   0.00484069
-  12   749  4.62595e-14  1.62428e-26  1.27447e-13       0.1006    0.0113954      3293.68  1.78254e-13     0.186667   0.00580952   0.00429738
-  13   812  4.40609e-14  1.53612e-26   1.2394e-13    0.0986539    0.0112792      3424.92  1.79489e-13     0.186962   0.00534894   0.00437168
-  14   874  4.23898e-14  1.48166e-26  1.21723e-13    0.0970754    0.0109668       3537.2  1.80528e-13     0.179429   0.00522657    0.0041863
-  15   937  4.12561e-14  1.45341e-26  1.20557e-13    0.0954123    0.0106438      3661.59  1.82546e-13     0.179104   0.00488628   0.00420753
-  16   999  4.26381e-14  1.48717e-26  1.21949e-13    0.0904446   0.00951838      4074.87  1.80055e-13        0.183   0.00446448   0.00370756
+   1    62  1.34348e-14  3.78474e-27  6.15203e-14     0.576922     0.578261      100.149  1.72069e-13     0.111111     0.126984     0.200572
+   2   124  2.47128e-14  7.74395e-27  8.79997e-14     0.318496     0.156898      328.601  1.82052e-13        0.168     0.039619    0.0610094
+   3   187  2.79259e-14  8.91929e-27   9.4442e-14     0.246649    0.0872767      547.925  1.80114e-13     0.154255    0.0291636    0.0313484
+   4   249  2.65537e-14  8.36598e-27  9.14658e-14     0.217853    0.0694968      702.348  1.80116e-13        0.152    0.0223158    0.0249542
+   5   312  2.86797e-14  9.50144e-27  9.74754e-14     0.192109    0.0504116      903.197  1.84652e-13      0.15655    0.0172133    0.0195748
+   6   374  3.08803e-14  1.05325e-26  1.02628e-13     0.171621    0.0378314      1131.72  1.85098e-13         0.16        0.014    0.0153752
+   7   437   3.2721e-14  1.15852e-26  1.07634e-13     0.157176    0.0306673      1349.29  1.89696e-13     0.157534    0.0122096    0.0124384
+   8   499  3.63779e-14  1.30338e-26  1.14166e-13      0.14035    0.0229516       1692.2  1.86455e-13        0.164    0.0101951   0.00946373
+   9   562   3.6875e-14  1.30371e-26   1.1418e-13     0.130498    0.0199321      1957.36  1.84149e-13     0.165187   0.00897649   0.00802302
+  10   624  3.95478e-14  1.39928e-26  1.18291e-13     0.119644    0.0166292      2328.62  1.83395e-13       0.1744   0.00757431    0.0067174
+  11   687  3.95027e-14  1.39007e-26  1.17901e-13     0.113788    0.0151589      2574.45  1.82948e-13     0.174419   0.00687984   0.00604907
+  12   749  4.25665e-14  1.49963e-26  1.22459e-13     0.105049    0.0126493      3020.59  1.81302e-13     0.182667   0.00596594   0.00505471
+  13   812  4.16046e-14  1.45262e-26  1.20525e-13     0.101599    0.0120141      3229.22  1.80925e-13     0.179582    0.0056193    0.0046904
+  14   874  4.07751e-14  1.43422e-26  1.19759e-13    0.0992906    0.0114207      3381.13   1.8211e-13     0.179429   0.00522657   0.00462079
+  15   937   4.1114e-14  1.46471e-26  1.21025e-13    0.0961136    0.0107088      3608.36   1.8454e-13     0.178038   0.00492193   0.00430605
+  16   999  4.26027e-14  1.49955e-26  1.22456e-13    0.0908957   0.00961549      4034.52  1.82296e-13        0.182   0.00449451   0.00375927
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume : 42.6381 picoGy  +- 3.85445 picoGy 
+ Dose in scoring volume : 42.6027 picoGy  +- 3.87047 picoGy 
 ------------------------------------------------------------
 
 0 events have been kept for refreshing and/or reviewing.
@@ -971,53 +971,53 @@ i/16 till_ith      mean          var           sd            r          vov     
 ---> Begin of event: 900
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =         0.619
-             MEAN =   4.86323e-12
-              VAR =   2.15489e-23
-               SD =   4.64207e-12
-                R =     0.0301847
-            SHIFT =   1.72849e-13
-              VOV =   0.000155711
-              FOM =       4573.14
-THE LARGEST SCORE =   1.07286e-11 and it happened at 285th event
-    Affected Mean =   4.86909e-12 and its ratio to original is 1.0012
-     Affected VAR =   2.15617e-23 and its ratio to original is 1.00059
-       Affected R =     0.0301423 and its ratio to original is 0.998594
-   Affected SHIFT =   1.68468e-13 and its ratio to original is 0.974653
-     Affected FOM =       4573.14 and its ratio to original is 1
-MEAN distribution is not RANDOM
+       EFFICIENCY =         0.612
+             MEAN =   4.82852e-12
+              VAR =   2.12261e-23
+               SD =   4.60718e-12
+                R =     0.0301732
+            SHIFT =   2.09659e-13
+              VOV =    0.00018065
+              FOM =       4775.63
+THE LARGEST SCORE =   1.08259e-11 and it happened at 601th event
+    Affected Mean =   4.83451e-12 and its ratio to original is 1.00124
+     Affected VAR =   2.12408e-23 and its ratio to original is 1.00069
+       Affected R =     0.0301311 and its ratio to original is 0.998607
+   Affected SHIFT =   2.05399e-13 and its ratio to original is 0.979682
+     Affected FOM =       4775.63 and its ratio to original is 1
+MEAN distribution is  RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0301847
+r is less than 0.1. r = 0.0301732
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
 SLOPE is not large enough
-This result passes 5 / 8 Convergence Test.
+This result passes 6 / 8 Convergence Test.
 
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  4.43617e-12  2.32728e-23  4.82418e-12     0.137008   0.00279853      221.972  6.21844e-13     0.571429    0.0119048   0.00656843
-   2   124  4.41428e-12   2.2087e-23  4.69969e-12    0.0952256   0.00170079      459.495   6.1343e-13         0.56   0.00628571   0.00270966
-   3   187  4.54436e-12  2.21526e-23  4.70665e-12    0.0755371  0.000947419      730.244  4.78318e-13      0.56383   0.00411481   0.00156069
-   4   249  4.59798e-12  2.15974e-23   4.6473e-12     0.063924  0.000748534      1019.67  4.02402e-13        0.576   0.00294444   0.00112549
-   5   312  4.77736e-12     2.16e-23  4.64758e-12    0.0549878  0.000539178      1378.02  2.36407e-13     0.603834   0.00209612  0.000917886
-   6   374  4.74916e-12  2.17656e-23  4.66536e-12    0.0507285  0.000431256      1619.14  2.70728e-13          0.6   0.00177778   0.00078874
-   7   437  4.71814e-12  2.17251e-23  4.66102e-12    0.0472033   0.00037257      1870.01  2.93393e-13     0.598174   0.00153369  0.000689378
-   8   499  4.73031e-12  2.18544e-23  4.67487e-12    0.0441973  0.000312232      2133.04  2.83989e-13        0.598   0.00134448  0.000605009
-   9   562  4.67611e-12  2.17719e-23  4.66603e-12    0.0420541  0.000287008      2355.98  3.37671e-13     0.595027   0.00120888  0.000556532
-  10   624  4.76534e-12  2.16399e-23  4.65187e-12    0.0390475   0.00025248      2732.76  2.39175e-13       0.6048    0.0010455  0.000476769
-  11   687  4.83656e-12  2.17915e-23  4.66814e-12    0.0367971  0.000217009      3077.25  1.75699e-13     0.604651  0.000950358  0.000401698
-  12   749  4.73693e-12  2.16388e-23  4.65175e-12    0.0358582  0.000216286      3240.49  2.76961e-13     0.601333  0.000883962  0.000400137
-  13   812  4.75086e-12  2.16198e-23  4.64971e-12    0.0343249  0.000198064      3536.48  2.63194e-13     0.602706  0.000810804  0.000365943
-  14   874  4.76492e-12  2.15314e-23  4.64019e-12    0.0329212  0.000187733      3844.48  2.58521e-13        0.608  0.000736842  0.000345725
-  15   937  4.82328e-12  2.15299e-23  4.64003e-12    0.0314107  0.000171392      4223.13  2.06906e-13     0.614072  0.000670013  0.000315564
-  16   999  4.86323e-12  2.15489e-23  4.64207e-12    0.0301847  0.000155711      4573.14  1.72849e-13        0.619  0.000615509  0.000294696
+   1    62   5.3302e-12  2.21148e-23  4.70264e-12     0.111155    0.0023602      351.897 -3.63117e-13     0.619048   0.00976801   0.00239127
+   2   124  5.08013e-12  2.09543e-23  4.57759e-12    0.0805948   0.00152792      669.358 -1.09839e-13        0.616   0.00498701   0.00145654
+   3   187   5.1462e-12  2.11825e-23  4.60245e-12    0.0652263  0.000965541      1021.94 -9.80844e-14     0.632979   0.00308421   0.00114763
+   4   249  5.06485e-12  2.11935e-23  4.60364e-12    0.0574864  0.000695975      1315.66 -1.68824e-14        0.628   0.00236943  0.000922037
+   5   312  5.14079e-12   2.1336e-23  4.61909e-12    0.0507872  0.000550545      1685.64 -7.59996e-14     0.638978   0.00180511  0.000765988
+   6   374   5.2572e-12  2.17172e-23  4.66018e-12    0.0457754   0.00042205      2074.95 -1.83537e-13         0.64       0.0015  0.000589803
+   7   437  5.15334e-12  2.14152e-23  4.62766e-12    0.0429077    0.0003833      2361.57 -8.75699e-14     0.636986   0.00130112  0.000535743
+   8   499  5.10341e-12  2.13083e-23  4.61609e-12     0.040451  0.000342355      2657.14  -4.8509e-14        0.632   0.00116456  0.000468451
+   9   562  5.02573e-12  2.12573e-23  4.61056e-12    0.0386634  0.000308434      2908.52  2.12688e-14     0.625222   0.00106471  0.000427495
+  10   624   4.9829e-12   2.1235e-23  4.60815e-12    0.0369917  0.000280621      3177.34  6.16979e-14       0.6208   0.00097732  0.000388879
+  11   687  4.90672e-12  2.10995e-23  4.59341e-12    0.0356903  0.000267826      3413.28  1.36212e-13     0.619186  0.000893929  0.000378015
+  12   749  4.92921e-12  2.11531e-23  4.59925e-12    0.0340705  0.000240212      3745.54  1.13004e-13     0.621333  0.000812589  0.000346663
+  13   812  4.84199e-12  2.11232e-23    4.596e-12    0.0332898  0.000225605      3923.29  1.87941e-13     0.615006  0.000769988  0.000336859
+  14   874  4.81584e-12  2.12033e-23   4.6047e-12     0.032324   0.00020701      4161.23  2.19536e-13     0.611429  0.000726302  0.000317345
+  15   937  4.81347e-12  2.12619e-23  4.61106e-12    0.0312782  0.000189994      4444.16  2.22258e-13     0.609808  0.000682154  0.000295127
+  16   999  4.82852e-12  2.12261e-23  4.60718e-12    0.0301732   0.00018065      4775.63  2.09659e-13        0.612  0.000633987  0.000275522
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 4.86323 nanoGy  +- 146.722 picoGy 
+ Dose in scoring volume : 4.82852 nanoGy  +- 145.619 picoGy 
 ------------------------------------------------------------
 
 0 events have been kept for refreshing and/or reviewing.

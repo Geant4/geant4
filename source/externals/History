@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 February 2022 - Ben Morgan (externals-V10-07-08)
+- Export builtin PTL include directory to build directory include path list
+  - Allows use of geant4-config from build directory
+
 01 September 2021 - G.Cosmo (externals-V10-07-07)
 - Synchronised with CLHEP-2.4.5.1:
   o New random engine RANLUX++ and related helper classes (J.Hahnfeld).

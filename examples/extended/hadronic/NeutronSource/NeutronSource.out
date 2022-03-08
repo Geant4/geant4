@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -466,56 +466,57 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.770000s Real=2.913944s Sys=0.010000s
+  User=2.780000s Real=3.317757s Sys=0.010000s
 
  The run is 10000 Am241 of 0 eV  within BeO (D =  3 cm  L = 6 cm )
 
  Process calls frequency :
-            NoProcess=  10009       Radioactivation= 224872                  Rayl=   2497
-       Transportation= 170025        alphaInelastic=     12                 compt=  21942
-                eIoni= 193840               ionIoni= 286258                   msc=  11534
-                 phot=  13022 
+            NoProcess=  10006       Radioactivation= 224907                  Rayl=   2550
+       Transportation= 169906        alphaInelastic=      6                 compt=  22254
+                eIoni= 194377               ionIoni= 286325                   msc=  11245
+                 phot=  13100 
 
  List of generated particles (with meanLife != 0):
-          Ac225:    9998  Emean =  165.62 meV	( 2.6193 meV --> 1.1184 eV )	mean life = 14.427 d  
-          At217:    9992  Emean =  116.36 keV	( 106.32 keV --> 117.05 keV)	mean life = 46.599 ms 
-          Bi209:   10000  Emean =  1.2278 eV 	( 1.6589 meV --> 2.739 eV )	stable
-          Bi213:    9992  Emean =  132.94 keV	( 118.77 keV --> 132.95 keV)	mean life = 1.0962 h  
-            C12:       9  Emean =  1.6167 MeV	( 378.16 keV --> 3.0124 MeV)	stable
-          Fr221:   10000  Emean =  104.86 keV	( 18.19 meV --> 105.65 keV)	mean life = 7.0692 min
-          Np237:   10000  Emean =  92.571 keV	( 90.64 keV --> 93.678 keV)	mean life = 3.0953e+06 y  
-          Pa233:   10000  Emean =  81.966 keV	( 77.331 keV --> 83.776 keV)	mean life = 38.917 d  
-          Pb209:   10000  Emean =  157.33 keV	( 6.309 eV  --> 160.59 keV)	mean life = 4.6931 h  
-          Po213:    9797  Emean =  122.15 eV 	( 2.7067 meV --> 145.62 keV)	mean life = 5.3668 us 
-          Ra221:       8  Emean =  318.92 meV	( 105.97 meV --> 720 meV)	mean life = 40.395 s  
-          Ra225:   10000  Emean =  96.976 keV	( 16.997 meV --> 343.3 keV)	mean life = 21.496 d  
-          Rn217:       8  Emean =  122.76 keV	( 121.59 keV --> 124.71 keV)	mean life = 779.06 us 
-          Rn221:       2  Emean =  90.714 keV	( 90.714 keV --> 90.714 keV)	mean life = 36.067 min
-          Th229:    8766  Emean =  84.327 keV	( 78.82 keV --> 84.358 keV)	mean life = 11376 y  
-          Tl209:     203  Emean =  111.99 keV	( 105.95 keV --> 112.51 keV)	mean life = 3.1739 min
-           U233:   10000  Emean =  356.19 meV	( 3.7544 meV --> 2.044 eV )	mean life = 2.2983e+05 y  
-          alpha:   80000  Emean =  5.9276 MeV	( 4.4056 MeV --> 8.3755 MeV)	stable
-      anti_nu_e:   40000  Emean =  424.61 keV	( 4.4694 keV --> 1.8208 MeV)	stable
-             e-:  154564  Emean =  83.298 keV	( 14.376 eV  --> 4.0835 MeV)	stable
-          gamma:   25039  Emean =  197.51 keV	( 6.6702 keV --> 4.51 MeV)	stable
-        neutron:       9  Emean =  4.1356 MeV	( 2.0393 MeV --> 8.7798 MeV)	mean life = 14.67 min
+          Ac225:    9997  Emean =  165.58 meV	( 2.6193 meV --> 1.1334 eV )	mean life = 14.427 d  
+          At217:    9988  Emean =  116.35 keV	( 106.73 keV --> 117.05 keV)	mean life = 46.599 ms 
+            Be9:       1  Emean =    4.99 MeV	( 4.99 MeV --> 4.99 MeV)	stable
+          Bi209:   10000  Emean =  1.2173 eV 	( 3.2596 meV --> 2.733 eV )	stable
+          Bi213:    9988  Emean =  132.94 keV	( 121.49 keV --> 132.95 keV)	mean life = 1.0962 h  
+            C12:       5  Emean =  1.2239 MeV	( 378.16 keV --> 2.528 MeV)	stable
+          Fr221:   10000  Emean =  104.85 keV	( 18.19 meV --> 105.65 keV)	mean life = 7.0692 min
+          Np237:   10000  Emean =  92.569 keV	( 89.673 keV --> 93.678 keV)	mean life = 3.0953e+06 y  
+          Pa233:   10000  Emean =  81.949 keV	( 77.803 keV --> 83.776 keV)	mean life = 38.917 d  
+          Pb209:   10000  Emean =  157.73 keV	( 5.2021 eV  --> 160.59 keV)	mean life = 4.6931 h  
+          Po213:    9822  Emean =  181.18 eV 	( 13.068 meV --> 145.62 keV)	mean life = 5.3668 us 
+          Ra221:      12  Emean =  278.69 meV	( 106.96 meV --> 541.86 meV)	mean life = 40.395 s  
+          Ra225:   10000  Emean =  96.728 keV	( 16.997 meV --> 339.82 keV)	mean life = 21.496 d  
+          Rn217:      12  Emean =  122.89 keV	( 120.41 keV --> 124.71 keV)	mean life = 779.06 us 
+          Rn221:       3  Emean =  90.714 keV	( 90.714 keV --> 90.714 keV)	mean life = 36.067 min
+          Th229:    8835  Emean =  84.324 keV	( 81.436 keV --> 84.358 keV)	mean life = 11376 y  
+          Tl209:     178  Emean =  111.86 keV	( 106.1 keV --> 112.51 keV)	mean life = 3.1739 min
+           U233:   10000  Emean =  357.78 meV	( 3.7544 meV --> 2.044 eV )	mean life = 2.2983e+05 y  
+          alpha:   80001  Emean =   5.928 MeV	( 1.5807 MeV --> 8.3755 MeV)	stable
+      anti_nu_e:   40000  Emean =  422.79 keV	( 6.137 keV --> 1.8193 MeV)	stable
+             e-:  154961  Emean =   83.32 keV	( 5.1689 eV  --> 1.6559 MeV)	stable
+          gamma:   25054  Emean =  195.95 keV	( 5.4389 keV --> 9.7227 MeV)	stable
+        neutron:       5  Emean =  3.5168 MeV	( 726.54 keV --> 6.1477 MeV)	mean life = 14.67 min
 
- Mean energy deposit per event = 49.573 MeV  rms = 473.54 keV
- Mean energy flow per event    = 2.0348 MeV  rms = 525.01 keV
+ Mean energy deposit per event = 49.581 MeV  rms = 460.6 keV
+ Mean energy flow per event    = 2.0229 MeV  rms = 501.87 keV
 
  List of particles emerging from the container :
-      anti_nu_e:   40000  Emean =  424.61 keV	( 4.4694 keV --> 1.8208 MeV) 	Eflow/event = 1.6984 MeV
-             e-:      12  Emean =  244.55 keV	( 10.105 keV --> 1.2039 MeV) 	Eflow/event = 293.46 eV 
-          gamma:   12017  Emean =  276.57 keV	( 45.78 keV --> 4.51 MeV) 	Eflow/event = 332.35 keV
-        neutron:       9  Emean =  4.1356 MeV	( 2.0393 MeV --> 8.7798 MeV) 	Eflow/event = 3.722 keV
+      anti_nu_e:   40000  Emean =  422.79 keV	( 6.137 keV --> 1.8193 MeV) 	Eflow/event = 1.6912 MeV
+             e-:      19  Emean =  217.31 keV	( 45.323 keV --> 1.2046 MeV) 	Eflow/event = 412.9 eV 
+          gamma:   11954  Emean =  275.72 keV	( 39.943 keV --> 9.7227 MeV) 	Eflow/event = 329.59 keV
+        neutron:       5  Emean =  3.5168 MeV	( 726.54 keV --> 6.1477 MeV) 	Eflow/event = 1.7584 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1631294035, 1297362144
+ Current couple of seeds = 674301575, 7710055
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.032 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.029 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

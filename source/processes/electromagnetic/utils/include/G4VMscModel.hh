@@ -55,13 +55,13 @@
 #include "G4ThreeVector.hh"
 #include "G4Track.hh"
 #include "G4SafetyHelper.hh"
-#include "G4VEnergyLossProcess.hh"
 #include "G4PhysicsTable.hh"
 #include "G4ThreeVector.hh"
 #include <vector>
 
 class G4ParticleChangeForMSC;
 class G4ParticleDefinition;
+class G4VEnergyLossProcess;
 
 class G4VMscModel : public G4VEmModel
 {
@@ -145,25 +145,25 @@ public:
   inline G4double ComputeGeomLimit(const G4Track&, G4double& presafety, 
 				   G4double limit);
 
-  inline G4double GetDEDX(const G4ParticleDefinition* part,
+  G4double GetDEDX(const G4ParticleDefinition* part,
                           G4double kineticEnergy,
                           const G4MaterialCutsCouple* couple);
 
-  inline G4double GetDEDX(const G4ParticleDefinition* part,
+  G4double GetDEDX(const G4ParticleDefinition* part,
                           G4double kineticEnergy,
                           const G4MaterialCutsCouple* couple,
                           G4double logKineticEnergy);
 
-  inline G4double GetRange(const G4ParticleDefinition* part,
+  G4double GetRange(const G4ParticleDefinition* part,
                            G4double kineticEnergy,
                            const G4MaterialCutsCouple* couple);
 
-  inline G4double GetRange(const G4ParticleDefinition* part,
+  G4double GetRange(const G4ParticleDefinition* part,
                            G4double kineticEnergy,
                            const G4MaterialCutsCouple* couple,
                            G4double logKineticEnergy);
 
-  inline G4double GetEnergy(const G4ParticleDefinition* part,
+  G4double GetEnergy(const G4ParticleDefinition* part,
 			    G4double range,
 			    const G4MaterialCutsCouple* couple);
 
@@ -295,99 +295,6 @@ inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track,
           track.GetStep()->GetPreStepPoint()->GetPosition(),
 	  track.GetMomentumDirection(),
 	  limit, presafety);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
-                     const G4MaterialCutsCouple* couple)
-{
-  G4double x;
-  if (nullptr != ionisation) {
-    x = ionisation->GetDEDX(kinEnergy, couple);
-  } else {
-    const G4double q = part->GetPDGCharge()*inveplus;
-    x = dedx*q*q;
-  }
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
-                     const G4MaterialCutsCouple* couple, G4double logKinEnergy)
-{
-  G4double x;
-  if (nullptr != ionisation) {
-    x = ionisation->GetDEDX(kinEnergy, couple, logKinEnergy);
-  } else {
-    const G4double q = part->GetPDGCharge()*inveplus;
-    x = dedx*q*q;
-  }
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4VMscModel::GetRange(const G4ParticleDefinition* part, G4double kinEnergy,
-                      const G4MaterialCutsCouple* couple)
-{
-  //G4cout << "G4VMscModel::GetRange E(MeV)= " << kinEnergy << "  " 
-  //  << ionisation << "  " << part->GetParticleName()
-  //  << G4endl;
-  localtkin = kinEnergy;
-  if (nullptr != ionisation) {
-    localrange = ionisation->GetRange(kinEnergy, couple); 
-  } else {
-    const G4double q = part->GetPDGCharge()*inveplus;
-    localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity()); 
-  }
-  //G4cout << "R(mm)= " << localrange << "  "  << ionisation << G4endl;
-  return localrange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy, 
-                      const G4MaterialCutsCouple* couple, G4double logKinEnergy)
-{
-  //G4cout << "G4VMscModel::GetRange E(MeV)= " << kinEnergy << "  " 
-  //  << ionisation << "  " << part->GetParticleName()
-  //	<< G4endl;
-  localtkin = kinEnergy;
-  if (nullptr != ionisation) { 
-    localrange = ionisation->GetRange(kinEnergy, couple, logKinEnergy);
-  } else { 
-    const G4double q = part->GetPDGCharge()*inveplus;
-    localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity());
-  }
-  //G4cout << "R(mm)= " << localrange << "  "  << ionisation << G4endl;
-  return localrange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4VMscModel::GetEnergy(const G4ParticleDefinition* part,
-		       G4double range, const G4MaterialCutsCouple* couple)
-{
-  G4double e;
-  //G4cout << "G4VMscModel::GetEnergy R(mm)= " << range << "  " << ionisation
-  //	 << "  Rlocal(mm)= " << localrange << "  Elocal(MeV)= " << localtkin
-  //	 << G4endl;
-  if(nullptr != ionisation) { e = ionisation->GetKineticEnergy(range, couple); }
-  else { 
-    e = localtkin;
-    if(localrange > range) {
-      G4double q = part->GetPDGCharge()*inveplus;
-      e -= (localrange - range)*dedx*q*q*couple->GetMaterial()->GetDensity(); 
-    } 
-  }
-  return e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

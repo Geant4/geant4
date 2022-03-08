@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-
 //---------------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -32,10 +30,6 @@
 // Description: Data on density effect
 //
 // Authors:    A.Bagulya, A.Ivanchenko 28.10.2009
-//
-// Modifications:
-// 
-// 
 //
 //----------------------------------------------------------------------------
 //
@@ -62,6 +56,9 @@ G4DensityEffectData::~G4DensityEffectData()
 
 void G4DensityEffectData::Initialize()
 {
+  // R.M. Sternheimer et al. Density Effect for the Ionization Loss of Charged
+  // Particles in Various Substances. Atom. Data Nucl. Data Tabl. 30 (1984) 261-271.
+  //
   // Data[10]:  Eplasma rho -C X_0 X_1 a m delta_0 DELTA_{max} I        
   // Eplasma - Plasma energy (in eV)
   // rho     - Sternheimer adjustment factor for the atomic excitation energies
@@ -99,7 +96,7 @@ void G4DensityEffectData::Initialize()
   indexZ[3]=3;
 
 //G4_Be  index=4
-  G4double M4[NDENSARRAY]={26.096,1.908,2.7847,0.0392,1.6922,0.80392,2.4339,0.14,0.029,63.7 };
+  G4double M4[NDENSARRAY]={26.098,1.908,2.7847,0.0392,1.6922,0.80392,2.4339,0.14,0.029,63.7 };
   AddMaterial(M4,"G4_Be");
   indexZ[4]=4;
 
@@ -143,7 +140,7 @@ void G4DensityEffectData::Initialize()
   indexZ[11]=11;
 
 //G4_Mg  index=12
-  G4double M12[NDENSARRAY]={26.708,2.331,4.5297,0.1499,3.0668,0.081163,3.6166,0.08,0.073,156. };
+  G4double M12[NDENSARRAY]={26.708,2.331,4.5297,0.1499,3.0668,0.08163,3.6166,0.08,0.073,156. };
   AddMaterial(M12,"G4_Mg");
   indexZ[12]=12;
 
@@ -215,7 +212,7 @@ void G4DensityEffectData::Initialize()
   indexZ[25]=25;
 
 //G4_Fe  index=26
-  G4double M26[NDENSARRAY]={55.172,2.504,4.2911,-0.0012,3.1531,0.146,2.9632,0.12,0.021,286. };
+  G4double M26[NDENSARRAY]={55.172,2.504,4.2911,-0.0012,3.1531,0.1468,2.9632,0.12,0.021,286. };
   AddMaterial(M26,"G4_Fe");
   indexZ[26]=26;
 
@@ -282,7 +279,7 @@ void G4DensityEffectData::Initialize()
   indexZ[38]=38;
 
 //G4_Y  index=39
-  G4double M39[NDENSARRAY]={40.346,1.649,5.4801,0.3608,3.5542,0.07138,3.4565,0.14,0.027,379. };
+  G4double M39[NDENSARRAY]={40.346,1.649,5.4801,0.3608,3.5542,0.07138,3.4585,0.14,0.027,379. };
   AddMaterial(M39,"G4_Y");
   indexZ[39]=39;
 
@@ -433,7 +430,7 @@ void G4DensityEffectData::Initialize()
   indexZ[68]=68;
 
 //G4_Tm  index=69
-  G4double M69[NDENSARRAY]={56.225,2.333,5.9677,0.0812,3.5085,0.24189,2.5469,0.14,0.062,674. };
+  G4double M69[NDENSARRAY]={56.225,2.333,5.9677,0.0812,3.5085,0.24889,2.5469,0.14,0.062,674. };
   AddMaterial(M69,"G4_Tm");
   indexZ[69]=69;
 
@@ -669,7 +666,7 @@ void G4DensityEffectData::Initialize()
   AddMaterial(M120,"G4_BRAIN_ICRP");
 
 //G4_BUTANE  index=121
-  G4double M121[NDENSARRAY]={1.101,1.727,8.5633,1.3788,3.7524,0.10852,3.4184,0,0.1,48.3 };
+  G4double M121[NDENSARRAY]={1.101,1.727,8.5633,1.3788,3.7524,0.10852,3.4884,0,0.1,48.3 };
   AddMaterial(M121,"G4_BUTANE");
 
 //G4_N-BUTYL_ALCOHOL  index=122
@@ -973,7 +970,7 @@ void G4DensityEffectData::Initialize()
   AddMaterial(M196,"G4_MIX_D_WAX");
 
 //G4_MS20_TISSUE  index=197
-  G4double M197[NDENSARRAY]={21.153,2.07,3.5241,0.1997,2.8033,0.08294,3.6061,0,0.053,75.1 };
+  G4double M197[NDENSARRAY]={21.153,2.07,3.5341,0.1997,2.8033,0.08294,3.6061,0,0.053,75.1 };
   AddMaterial(M197,"G4_MS20_TISSUE");
 
 //G4_MUSCLE_SCELETAL_ICRP  index=198
@@ -1265,7 +1262,7 @@ void G4DensityEffectData::Initialize()
   AddMaterial(M269,"G4_URANIUM_OXIDE");
 
 //G4_UREA  index=270
-  G4double M270[NDENSARRAY]={24.194,2.022,3.2032,0.1603,2.6225,0.11609,3.3461,0,0.06,72.8 };
+  G4double M270[NDENSARRAY]={24.194,2.022,3.2032,0.1603,2.6525,0.11609,3.3461,0,0.06,72.8 };
   AddMaterial(M270,"G4_UREA");
 
 //G4_VALINE  index=271

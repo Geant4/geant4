@@ -97,6 +97,7 @@ private:
   G4UIcmdWithABool*          mottCmd;
   G4UIcmdWithABool*          birksCmd;
   G4UIcmdWithABool*          sharkCmd;
+  G4UIcmdWithABool*          poCmd;
   G4UIcmdWithABool*          onIsolatedCmd;
   G4UIcmdWithABool*          sampleTCmd;
   G4UIcmdWithABool*          icru90Cmd;

@@ -259,6 +259,8 @@ G4bool G4GenericFileManager::CloseFiles()
     result &= fileManager->CloseFiles();
   }
 
+  fIsOpenFile = false;
+
   Message(kVL3, "close", "analysis files", "", result);
 
   return result;

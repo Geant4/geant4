@@ -126,8 +126,8 @@ private:
   G4ThreeVector oldMomentum, previousMomentum; 
   G4ThreeVector theGlobalNormal; 
   G4ThreeVector theFacetNormal; 
-  G4Material* material1; 
-  G4Material* material2; 
+  const G4Material* material1;
+  const G4Material* material2;
   G4MicroElecSurfaceStatus theStatus; 
 
   G4double theParticleMomentum; 

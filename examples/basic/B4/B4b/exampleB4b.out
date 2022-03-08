@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -233,7 +233,7 @@ eBrem:  for e-  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -265,7 +265,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -297,7 +297,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -356,7 +356,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -388,7 +388,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -420,7 +420,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -453,7 +453,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -486,7 +486,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -518,7 +518,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -550,7 +550,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -925,15 +925,15 @@ Setting was ignored.
 Using 
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 281.979 MeV       total track length: 20.3632 cm 
-        Gap: total energy: 7.05731 MeV       total track length:  3.5668 cm 
+   Absorber: total energy: 284.291 MeV       total track length: 20.6343 cm 
+        Gap: total energy:  5.4349 MeV       total track length: 2.66954 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 281.979 MeV rms = 0 eV 
- EGap : mean = 7.05731 MeV rms = 0 eV 
- LAbs : mean = 20.3632 cm  rms = 0 fm 
- LGap : mean = 3.5668 cm  rms = 0 fm 
+ EAbs : mean = 284.291 MeV rms = 0 eV 
+ EGap : mean = 5.4349 MeV rms = 0 eV 
+ LAbs : mean = 20.6343 cm  rms = 0 fm 
+ LGap : mean = 2.66954 cm  rms = 0 fm 
 ... write file : B4.root - done
 ... close file : B4.root - done
 0 events have been kept for refreshing and/or reviewing.
@@ -1002,15 +1002,15 @@ hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest,         dInela
 Using 
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy:  280.59 MeV       total track length: 20.2565 cm 
-        Gap: total energy: 17.1134 MeV       total track length: 8.57952 cm 
+   Absorber: total energy: 272.283 MeV       total track length: 19.3459 cm 
+        Gap: total energy: 17.6822 MeV       total track length:  8.3154 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 280.59 MeV rms = 0 eV 
- EGap : mean = 17.1134 MeV rms = 0 eV 
- LAbs : mean = 20.2565 cm  rms = 0 fm 
- LGap : mean = 8.57952 cm  rms = 0 fm 
+ EAbs : mean = 272.283 MeV rms = 0 eV 
+ EGap : mean = 17.6822 MeV rms = 0 eV 
+ LAbs : mean = 19.3459 cm  rms = 0 fm 
+ LGap : mean = 8.3154 cm  rms = 0 fm 
 ... write file : B4.root - done
 ... close file : B4.root - done
 0 events have been kept for refreshing and/or reviewing.
@@ -1024,15 +1024,15 @@ Using
 Using 
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 469.283 MeV       total track length: 33.8386 cm 
-        Gap: total energy: 18.5204 MeV       total track length: 9.32324 cm 
+   Absorber: total energy: 443.861 MeV       total track length: 32.1822 cm 
+        Gap: total energy: 29.1484 MeV       total track length: 14.2825 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 469.283 MeV rms = 0 eV 
- EGap : mean = 18.5204 MeV rms = 0 eV 
- LAbs : mean = 33.8386 cm  rms = 0 fm 
- LGap : mean = 9.32324 cm  rms = 0 fm 
+ EAbs : mean = 443.861 MeV rms = 0 eV 
+ EGap : mean = 29.1484 MeV rms = 0 eV 
+ LAbs : mean = 32.1822 cm  rms = 0 fm 
+ LGap : mean = 14.2825 cm  rms = 0 fm 
 ... write file : B4.root - done
 ... close file : B4.root - done
 0 events have been kept for refreshing and/or reviewing.

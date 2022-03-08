@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 Jan 22: D. Sawkey (op-V10-07-06)
+- Remove G4lrint/G4lint to calculate angle bin for Davis/LBNL LUT. Fixes crash
+  when angle = 0. Addresses issue 116.
+
 21 Oct 21: D. Sawkey (op-V10-07-05)
 - G4OpBoundaryProcess - rename variables: class start with f; lowercase
   - make comparison to nullptr explicit

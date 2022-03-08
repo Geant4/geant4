@@ -53,13 +53,13 @@
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Track.hh"
-#include "G4EmModelManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4EmParameters.hh"
 #include "G4EmDataHandler.hh"
 #include "G4EmTableType.hh"
+#include "G4EmModelManager.hh"
 #include "G4EmSecondaryParticleType.hh"
 
 class G4Step;
@@ -184,6 +184,9 @@ public:
   // Max kinetic energy for tables
   void SetMaxKinEnergy(G4double e);
 
+  // for cross section with one peak
+  void SetEnergyOfCrossSectionMax(std::vector<G4double>*);
+
   // Cross section table pointers
   inline G4PhysicsTable* LambdaTable() const;
   inline G4PhysicsTable* LambdaTablePrim() const;
@@ -223,11 +226,11 @@ public:
   // return a model from the local list
   inline G4VEmModel* EmModel(size_t index = 0) const;
 
-  // Access to models
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
-
   // Access to active model
   inline const G4VEmModel* GetCurrentModel() const;
+
+  // Access to models
+  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
 
   // Access to the current G4Element
   const G4Element* GetCurrentElement() const;
@@ -243,6 +246,8 @@ public:
 
   void ActivateSecondaryBiasing(const G4String& region, G4double factor,
                                 G4double energyLimit);
+
+  std::vector<G4double>* FindLambdaMax();
 
   inline void SetEmMasterProcess(const G4VEmProcess*);
           
@@ -323,8 +328,6 @@ private:
 
   void StreamInfo(std::ostream& outFile, const G4ParticleDefinition&,
                   G4bool rst=false) const;
-
-  void FindLambdaMax();
 
   void PrintWarning(G4String tit, G4double val);
 
@@ -802,13 +805,6 @@ inline G4int G4VEmProcess::NumberOfModels() const
 inline G4VEmModel* G4VEmProcess::EmModel(size_t index) const
 {
   return (index < emModels.size()) ? emModels[index] : nullptr;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver) const
-{
-  return modelManager->GetModel(idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

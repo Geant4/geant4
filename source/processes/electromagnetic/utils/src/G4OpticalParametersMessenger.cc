@@ -123,7 +123,7 @@ G4OpticalParametersMessenger::G4OpticalParametersMessenger(
   fCerenkovMaxBetaChangeCmd =
     new G4UIcmdWithADouble("/process/optical/cerenkov/setMaxBetaChange", this);
   fCerenkovMaxBetaChangeCmd->SetGuidance(
-    "Set maximum change of beta of parent particle per step");
+    "Set maximum change of beta of parent particle per step (in percent)");
   fCerenkovMaxBetaChangeCmd->SetParameterName("CerenkovMaxBetaChange", false);
   fCerenkovMaxBetaChangeCmd->SetRange("CerenkovMaxBetaChange>=0");
   fCerenkovMaxBetaChangeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);

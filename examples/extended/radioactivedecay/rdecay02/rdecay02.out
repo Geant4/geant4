@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -198,7 +198,7 @@ eBrem:  for e-  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -230,7 +230,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -262,7 +262,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -336,7 +336,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -368,7 +368,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -400,7 +400,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -433,7 +433,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -466,7 +466,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -498,7 +498,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -530,7 +530,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -888,55 +888,55 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.710000s Real=0.745763s Sys=0.000000s
+  User=0.680000s Real=0.699233s Sys=0.000000s
 
  The run is 10000 Ne24 of 0 eV  through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 809.46 keV  rms = 422.05 keV
- Mean energy deposit in detector, in time window = 17.632 keV  rms = 106.32 keV
+ Mean energy deposit in target,   in time window = 811.05 keV  rms = 423.55 keV
+ Mean energy deposit in detector, in time window = 17.535 keV  rms = 105.98 keV
 
  Process calls frequency in target :
-            NoProcess=  10000       Radioactivation=  50725                  Rayl=    258
-       Transportation=  50135               annihil=    188                 compt=   4131
-                 conv=    194                 eIoni=  25946               ionIoni=  39558
-                  msc=   3150                  phot=   1529 
+            NoProcess=  10000       Radioactivation=  50713                  Rayl=    249
+       Transportation=  50128               annihil=    155                 compt=   4115
+                 conv=    165                 eIoni=  25885               ionIoni=  39566
+                  msc=   3404                  phot=   1559 
 
  Process calls frequency in detector:
-                 Rayl=   1228        Transportation=  45896               annihil=    330
-                compt=  22533                  conv=    331                 eIoni=  27403
-                  msc=   5611                  phot=   4273 
+                 Rayl=   1235        Transportation=  45917               annihil=    368
+                compt=  22361                  conv=    363                 eIoni=  27298
+                  msc=   5968                  phot=   4270 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.502 eV 	( 41.932 eV  --> 909.16 eV )
-  Mg24[1368.672]:    9991  Emean =  169.91 eV 	( 46.779 eV  --> 419.89 eV )
-  Mg24[4122.889]:    9976  Emean =  39.283 eV 	( 141.48 meV --> 74.745 eV )
-  Mg24[5235.120]:       2  Emean =  2.0865 eV 	( 673.5 meV --> 3.4995 eV )
-           Na24:    9991  Emean =  4.9989 eV 	( 4.9901 eV  --> 15.742 eV )
-  Na24[1346.621]:     754  Emean =  28.528 eV 	( 414.97 meV --> 52.407 eV )
-  Na24[472.207]:    9999  Emean =  69.191 eV 	( 64.48 meV --> 134.33 eV )
-  Na24[563.199]:      12  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =   984.8 keV	( 27.785 keV --> 5.1042 MeV)
-             e+:     194  Emean =  788.59 keV	( 1.7574 keV --> 1.6659 MeV)
-             e-:   25881  Emean =  635.43 keV	( 72.285 eV  --> 3.457 MeV)
-          gamma:   31092  Emean =  1.5027 MeV	( 90.991 keV --> 3.8661 MeV)
+           Mg24:   10000  Emean =  42.576 eV 	( 41.932 eV  --> 909.16 eV )
+  Mg24[1368.672]:    9990  Emean =  169.89 eV 	( 85.066 eV  --> 419.89 eV )
+  Mg24[4122.889]:    9977  Emean =  39.456 eV 	( 45.26 meV --> 74.652 eV )
+  Mg24[5235.120]:       5  Emean =  3.5752 eV 	( 566.67 meV --> 6.3863 eV )
+           Na24:    9990  Emean =  4.9957 eV 	( 4.9901 eV  --> 15.742 eV )
+  Na24[1346.621]:     745  Emean =  27.333 eV 	( 81.88 meV --> 52.586 eV )
+  Na24[472.207]:    9999  Emean =  69.232 eV 	( 64.48 meV --> 134.33 eV )
+  Na24[563.199]:       7  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
+      anti_nu_e:   20000  Emean =   981.3 keV	( 27.785 keV --> 5.1042 MeV)
+             e+:     165  Emean =  808.27 keV	( 1.7574 keV --> 1.6659 MeV)
+             e-:   25854  Emean =  636.61 keV	( 72.317 eV  --> 3.457 MeV)
+          gamma:   31018  Emean =  1.5055 MeV	( 90.991 keV --> 3.8661 MeV)
 
  List of generated particles in detector:
-             e+:     331  Emean =  872.71 keV	( 11.228 keV --> 1.6904 MeV)
-             e-:   27127  Emean =  377.87 keV	( 105.46 eV  --> 2.743 MeV)
-          gamma:     658  Emean =   519.2 keV	( 354.47 keV --> 1.4365 MeV)
+             e+:     363  Emean =  836.48 keV	( 10.405 keV --> 1.6692 MeV)
+             e-:   26981  Emean =  378.47 keV	( 100.64 eV  --> 2.743 MeV)
+          gamma:     734  Emean =  518.27 keV	( 384.68 keV --> 1.3099 MeV)
 
 ... write file : rdecay02.root - done
 ... close file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1268488396, 2098735751
+ Current couple of seeds = 774449033, 695641812
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.026 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.028 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

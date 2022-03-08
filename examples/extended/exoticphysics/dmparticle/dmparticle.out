@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -201,7 +201,7 @@ eBrem:  for e-  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -233,7 +233,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -265,7 +265,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -331,7 +331,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -363,7 +363,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -395,7 +395,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -428,7 +428,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -461,7 +461,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -493,7 +493,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -525,7 +525,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -563,543 +563,583 @@ Event = 0 z0 = -779.999  Primary direction = (0,0,1)
 ### New exotic particle produced: ldmphoton Ekin(GeV)= 1.65215 Mass(GeV)= 0.5 TrackId= 19
 ### New exotic particle produced: ldmphoton Ekin(GeV)= 1.3618 Mass(GeV)= 0.5 TrackId= 23
 ### New exotic particle produced: ldmphoton Ekin(GeV)= 0.796834 Mass(GeV)= 0.5 TrackId= 24
-### New exotic particle produced: ldmphoton Ekin(GeV)= 9.81071 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.81072 Mass(GeV)= 0.5 TrackId= 57
 ### New exotic particle produced: ldmphoton Ekin(GeV)= 0.688083 Mass(GeV)= 0.5 TrackId= 59
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.80884 Mass(GeV)= 0.5 TrackId= 67
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.23709 Mass(GeV)= 0.5 TrackId= 2
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.952997 Mass(GeV)= 0.5 TrackId= 27
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.14532 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 28.2916 Mass(GeV)= 0.5 TrackId= 63
-### New exotic particle produced: ldmphoton Ekin(GeV)= 18.9182 Mass(GeV)= 0.5 TrackId= 19
-### New exotic particle produced: ldmphoton Ekin(GeV)= 14.7573 Mass(GeV)= 0.5 TrackId= 34
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.83005 Mass(GeV)= 0.5 TrackId= 35
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.21179 Mass(GeV)= 0.5 TrackId= 51
-### New exotic particle produced: ldmphoton Ekin(GeV)= 16.1767 Mass(GeV)= 0.5 TrackId= 52
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.82343 Mass(GeV)= 0.5 TrackId= 67
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.10545 Mass(GeV)= 0.5 TrackId= 72
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.903697 Mass(GeV)= 0.5 TrackId= 77
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.38882 Mass(GeV)= 0.5 TrackId= 15
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.31709 Mass(GeV)= 0.5 TrackId= 18
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.03562 Mass(GeV)= 0.5 TrackId= 28
-### New exotic particle produced: ldmphoton Ekin(GeV)= 41.7931 Mass(GeV)= 0.5 TrackId= 83
-### New exotic particle produced: ldmphoton Ekin(GeV)= 15.7414 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.18662 Mass(GeV)= 0.5 TrackId= 21
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.12891 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 9.53352 Mass(GeV)= 0.5 TrackId= 92
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.44888 Mass(GeV)= 0.5 TrackId= 8
-### New exotic particle produced: ldmphoton Ekin(GeV)= 13.5226 Mass(GeV)= 0.5 TrackId= 9
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.82696 Mass(GeV)= 0.5 TrackId= 15
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.91164 Mass(GeV)= 0.5 TrackId= 31
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.92984 Mass(GeV)= 0.5 TrackId= 53
-### New exotic particle produced: ldmphoton Ekin(GeV)= 12.35 Mass(GeV)= 0.5 TrackId= 54
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.05078 Mass(GeV)= 0.5 TrackId= 58
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.86761 Mass(GeV)= 0.5 TrackId= 59
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.875754 Mass(GeV)= 0.5 TrackId= 73
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.958325 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.96556 Mass(GeV)= 0.5 TrackId= 24
-### New exotic particle produced: ldmphoton Ekin(GeV)= 35.2055 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 15.0647 Mass(GeV)= 0.5 TrackId= 33
-### New exotic particle produced: ldmphoton Ekin(GeV)= 25.4855 Mass(GeV)= 0.5 TrackId= 36
-### New exotic particle produced: ldmphoton Ekin(GeV)= 21.6853 Mass(GeV)= 0.5 TrackId= 4
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.29856 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.20748 Mass(GeV)= 0.5 TrackId= 14
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.20813 Mass(GeV)= 0.5 TrackId= 75
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.06952 Mass(GeV)= 0.5 TrackId= 77
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.62486 Mass(GeV)= 0.5 TrackId= 78
-### New exotic particle produced: ldmphoton Ekin(GeV)= 25.6057 Mass(GeV)= 0.5 TrackId= 2
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.87554 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.09959 Mass(GeV)= 0.5 TrackId= 49
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.10056 Mass(GeV)= 0.5 TrackId= 3
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.3243 Mass(GeV)= 0.5 TrackId= 17
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.34626 Mass(GeV)= 0.5 TrackId= 50
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.782556 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.19192 Mass(GeV)= 0.5 TrackId= 70
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.36727 Mass(GeV)= 0.5 TrackId= 78
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.91936 Mass(GeV)= 0.5 TrackId= 87
+### New exotic particle produced: ldmphoton Ekin(GeV)= 8.80885 Mass(GeV)= 0.5 TrackId= 67
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.47172 Mass(GeV)= 0.5 TrackId= 6
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.85657 Mass(GeV)= 0.5 TrackId= 19
+### New exotic particle produced: ldmphoton Ekin(GeV)= 25.7135 Mass(GeV)= 0.5 TrackId= 30
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.67161 Mass(GeV)= 0.5 TrackId= 37
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.13362 Mass(GeV)= 0.5 TrackId= 48
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.26644 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.94122 Mass(GeV)= 0.5 TrackId= 10
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.76876 Mass(GeV)= 0.5 TrackId= 29
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.804647 Mass(GeV)= 0.5 TrackId= 33
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.54428 Mass(GeV)= 0.5 TrackId= 54
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.927523 Mass(GeV)= 0.5 TrackId= 69
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.768801 Mass(GeV)= 0.5 TrackId= 20
+### New exotic particle produced: ldmphoton Ekin(GeV)= 8.46236 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.621891 Mass(GeV)= 0.5 TrackId= 29
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.676877 Mass(GeV)= 0.5 TrackId= 47
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.719744 Mass(GeV)= 0.5 TrackId= 61
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.24537 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.43538 Mass(GeV)= 0.5 TrackId= 78
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.51012 Mass(GeV)= 0.5 TrackId= 79
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.04229 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.68253 Mass(GeV)= 0.5 TrackId= 10
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.11561 Mass(GeV)= 0.5 TrackId= 20
+### New exotic particle produced: ldmphoton Ekin(GeV)= 19.5737 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.06138 Mass(GeV)= 0.5 TrackId= 52
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.74538 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.19543 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.9957 Mass(GeV)= 0.5 TrackId= 73
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.01845 Mass(GeV)= 0.5 TrackId= 74
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.903743 Mass(GeV)= 0.5 TrackId= 8
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.03968 Mass(GeV)= 0.5 TrackId= 22
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.627929 Mass(GeV)= 0.5 TrackId= 31
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.3862 Mass(GeV)= 0.5 TrackId= 53
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.19135 Mass(GeV)= 0.5 TrackId= 58
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.606639 Mass(GeV)= 0.5 TrackId= 64
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.09023 Mass(GeV)= 0.5 TrackId= 69
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.53445 Mass(GeV)= 0.5 TrackId= 83
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.26323 Mass(GeV)= 0.5 TrackId= 7
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.897039 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.94112 Mass(GeV)= 0.5 TrackId= 47
+### New exotic particle produced: ldmphoton Ekin(GeV)= 51.6458 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.87177 Mass(GeV)= 0.5 TrackId= 7
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.13182 Mass(GeV)= 0.5 TrackId= 18
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.46913 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.04608 Mass(GeV)= 0.5 TrackId= 47
+### New exotic particle produced: ldmphoton Ekin(GeV)= 29.076 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.36827 Mass(GeV)= 0.5 TrackId= 67
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.46638 Mass(GeV)= 0.5 TrackId= 18
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.918839 Mass(GeV)= 0.5 TrackId= 20
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.63358 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.2968 Mass(GeV)= 0.5 TrackId= 46
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.0378 Mass(GeV)= 0.5 TrackId= 48
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.21858 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.787722 Mass(GeV)= 0.5 TrackId= 63
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.65754 Mass(GeV)= 0.5 TrackId= 71
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.58102 Mass(GeV)= 0.5 TrackId= 72
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.31672 Mass(GeV)= 0.5 TrackId= 80
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.667144 Mass(GeV)= 0.5 TrackId= 7
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.38744 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.30519 Mass(GeV)= 0.5 TrackId= 64
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.614318 Mass(GeV)= 0.5 TrackId= 69
 --> Event 10 starts.
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.78186 Mass(GeV)= 0.5 TrackId= 9
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.80207 Mass(GeV)= 0.5 TrackId= 13
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.1212 Mass(GeV)= 0.5 TrackId= 25
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.14143 Mass(GeV)= 0.5 TrackId= 34
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.29689 Mass(GeV)= 0.5 TrackId= 55
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.16368 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.718486 Mass(GeV)= 0.5 TrackId= 73
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.09771 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.29315 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.57957 Mass(GeV)= 0.5 TrackId= 33
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.27116 Mass(GeV)= 0.5 TrackId= 47
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.57409 Mass(GeV)= 0.5 TrackId= 50
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.25834 Mass(GeV)= 0.5 TrackId= 11
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.823614 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.66035 Mass(GeV)= 0.5 TrackId= 57
-### New exotic particle produced: ldmphoton Ekin(GeV)= 11.375 Mass(GeV)= 0.5 TrackId= 9
-### New exotic particle produced: ldmphoton Ekin(GeV)= 11.9949 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 10.2079 Mass(GeV)= 0.5 TrackId= 40
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.764084 Mass(GeV)= 0.5 TrackId= 52
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.12182 Mass(GeV)= 0.5 TrackId= 67
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.99861 Mass(GeV)= 0.5 TrackId= 3
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.9802 Mass(GeV)= 0.5 TrackId= 53
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.872007 Mass(GeV)= 0.5 TrackId= 58
-### New exotic particle produced: ldmphoton Ekin(GeV)= 18.0692 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.05945 Mass(GeV)= 0.5 TrackId= 68
-### New exotic particle produced: ldmphoton Ekin(GeV)= 15.1644 Mass(GeV)= 0.5 TrackId= 20
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.43154 Mass(GeV)= 0.5 TrackId= 25
-### New exotic particle produced: ldmphoton Ekin(GeV)= 63.43 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.762091 Mass(GeV)= 0.5 TrackId= 45
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.719557 Mass(GeV)= 0.5 TrackId= 4
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.779798 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.10965 Mass(GeV)= 0.5 TrackId= 18
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.28557 Mass(GeV)= 0.5 TrackId= 32
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.80493 Mass(GeV)= 0.5 TrackId= 42
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.7737 Mass(GeV)= 0.5 TrackId= 53
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.62145 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.20772 Mass(GeV)= 0.5 TrackId= 14
-### New exotic particle produced: ldmphoton Ekin(GeV)= 58.0298 Mass(GeV)= 0.5 TrackId= 18
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.49492 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.689639 Mass(GeV)= 0.5 TrackId= 39
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.75078 Mass(GeV)= 0.5 TrackId= 31
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.23229 Mass(GeV)= 0.5 TrackId= 68
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.802491 Mass(GeV)= 0.5 TrackId= 21
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.86303 Mass(GeV)= 0.5 TrackId= 27
-### New exotic particle produced: ldmphoton Ekin(GeV)= 30.355 Mass(GeV)= 0.5 TrackId= 61
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.619274 Mass(GeV)= 0.5 TrackId= 86
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.06026 Mass(GeV)= 0.5 TrackId= 87
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.08941 Mass(GeV)= 0.5 TrackId= 91
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.902317 Mass(GeV)= 0.5 TrackId= 9
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.9732 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.781494 Mass(GeV)= 0.5 TrackId= 39
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.30496 Mass(GeV)= 0.5 TrackId= 50
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.876034 Mass(GeV)= 0.5 TrackId= 51
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.35325 Mass(GeV)= 0.5 TrackId= 75
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.92704 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.99749 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.9082 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.76789 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.819193 Mass(GeV)= 0.5 TrackId= 42
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.43089 Mass(GeV)= 0.5 TrackId= 43
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.53721 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.41075 Mass(GeV)= 0.5 TrackId= 59
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.63721 Mass(GeV)= 0.5 TrackId= 69
+### New exotic particle produced: ldmphoton Ekin(GeV)= 8.32556 Mass(GeV)= 0.5 TrackId= 72
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.12604 Mass(GeV)= 0.5 TrackId= 30
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.60349 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.04661 Mass(GeV)= 0.5 TrackId= 44
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.2128 Mass(GeV)= 0.5 TrackId= 45
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.854485 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 88.8463 Mass(GeV)= 0.5 TrackId= 4
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.882991 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.879652 Mass(GeV)= 0.5 TrackId= 12
+### New exotic particle produced: ldmphoton Ekin(GeV)= 12.7183 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.90497 Mass(GeV)= 0.5 TrackId= 26
+### New exotic particle produced: ldmphoton Ekin(GeV)= 13.9128 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 31.7095 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.847463 Mass(GeV)= 0.5 TrackId= 7
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.12165 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.106 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.60067 Mass(GeV)= 0.5 TrackId= 27
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.692281 Mass(GeV)= 0.5 TrackId= 39
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.39894 Mass(GeV)= 0.5 TrackId= 42
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.09263 Mass(GeV)= 0.5 TrackId= 44
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.59121 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.26197 Mass(GeV)= 0.5 TrackId= 73
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.19694 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.612475 Mass(GeV)= 0.5 TrackId= 46
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.797098 Mass(GeV)= 0.5 TrackId= 47
+### New exotic particle produced: ldmphoton Ekin(GeV)= 11.9206 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.38187 Mass(GeV)= 0.5 TrackId= 68
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.55539 Mass(GeV)= 0.5 TrackId= 5
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.21443 Mass(GeV)= 0.5 TrackId= 7
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.755269 Mass(GeV)= 0.5 TrackId= 15
+### New exotic particle produced: ldmphoton Ekin(GeV)= 25.1683 Mass(GeV)= 0.5 TrackId= 37
+### New exotic particle produced: ldmphoton Ekin(GeV)= 17.0431 Mass(GeV)= 0.5 TrackId= 42
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.17739 Mass(GeV)= 0.5 TrackId= 46
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.92748 Mass(GeV)= 0.5 TrackId= 50
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.55277 Mass(GeV)= 0.5 TrackId= 26
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.41944 Mass(GeV)= 0.5 TrackId= 48
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.17741 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.89116 Mass(GeV)= 0.5 TrackId= 43
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.78515 Mass(GeV)= 0.5 TrackId= 44
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.09363 Mass(GeV)= 0.5 TrackId= 45
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.51351 Mass(GeV)= 0.5 TrackId= 52
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.747068 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.38227 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 36.3624 Mass(GeV)= 0.5 TrackId= 64
 --> Event 20 starts.
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.05653 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.39364 Mass(GeV)= 0.5 TrackId= 34
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.03744 Mass(GeV)= 0.5 TrackId= 35
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.34353 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 18.8939 Mass(GeV)= 0.5 TrackId= 47
-### New exotic particle produced: ldmphoton Ekin(GeV)= 27.0042 Mass(GeV)= 0.5 TrackId= 48
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.84873 Mass(GeV)= 0.5 TrackId= 49
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.08713 Mass(GeV)= 0.5 TrackId= 58
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.11411 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.97413 Mass(GeV)= 0.5 TrackId= 10
-### New exotic particle produced: ldmphoton Ekin(GeV)= 13.4377 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 12.6143 Mass(GeV)= 0.5 TrackId= 28
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.06973 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.67354 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.14537 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.21971 Mass(GeV)= 0.5 TrackId= 76
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.19364 Mass(GeV)= 0.5 TrackId= 11
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.48904 Mass(GeV)= 0.5 TrackId= 24
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.55341 Mass(GeV)= 0.5 TrackId= 30
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.680637 Mass(GeV)= 0.5 TrackId= 33
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.86636 Mass(GeV)= 0.5 TrackId= 34
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.3856 Mass(GeV)= 0.5 TrackId= 75
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.54363 Mass(GeV)= 0.5 TrackId= 76
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.32346 Mass(GeV)= 0.5 TrackId= 6
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.693639 Mass(GeV)= 0.5 TrackId= 17
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.1333 Mass(GeV)= 0.5 TrackId= 20
-### New exotic particle produced: ldmphoton Ekin(GeV)= 24.0444 Mass(GeV)= 0.5 TrackId= 35
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.44233 Mass(GeV)= 0.5 TrackId= 68
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.30565 Mass(GeV)= 0.5 TrackId= 78
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.06566 Mass(GeV)= 0.5 TrackId= 6
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.901809 Mass(GeV)= 0.5 TrackId= 19
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.26689 Mass(GeV)= 0.5 TrackId= 21
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.61598 Mass(GeV)= 0.5 TrackId= 28
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.48413 Mass(GeV)= 0.5 TrackId= 33
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.21991 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.668162 Mass(GeV)= 0.5 TrackId= 72
-### New exotic particle produced: ldmphoton Ekin(GeV)= 63.8116 Mass(GeV)= 0.5 TrackId= 22
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.74 Mass(GeV)= 0.5 TrackId= 55
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.52154 Mass(GeV)= 0.5 TrackId= 57
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.13858 Mass(GeV)= 0.5 TrackId= 58
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.57173 Mass(GeV)= 0.5 TrackId= 4
-### New exotic particle produced: ldmphoton Ekin(GeV)= 32.9192 Mass(GeV)= 0.5 TrackId= 11
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.39906 Mass(GeV)= 0.5 TrackId= 17
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.97367 Mass(GeV)= 0.5 TrackId= 38
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.16638 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.909821 Mass(GeV)= 0.5 TrackId= 74
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.96043 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.7232 Mass(GeV)= 0.5 TrackId= 51
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.84132 Mass(GeV)= 0.5 TrackId= 62
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.92895 Mass(GeV)= 0.5 TrackId= 2
-### New exotic particle produced: ldmphoton Ekin(GeV)= 9.44062 Mass(GeV)= 0.5 TrackId= 34
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.82373 Mass(GeV)= 0.5 TrackId= 56
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.05576 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.34107 Mass(GeV)= 0.5 TrackId= 14
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.23753 Mass(GeV)= 0.5 TrackId= 17
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.55689 Mass(GeV)= 0.5 TrackId= 49
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.05592 Mass(GeV)= 0.5 TrackId= 57
-### New exotic particle produced: ldmphoton Ekin(GeV)= 20.3853 Mass(GeV)= 0.5 TrackId= 60
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.05664 Mass(GeV)= 0.5 TrackId= 9
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.22322 Mass(GeV)= 0.5 TrackId= 34
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.33359 Mass(GeV)= 0.5 TrackId= 60
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.765045 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.61713 Mass(GeV)= 0.5 TrackId= 72
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.41009 Mass(GeV)= 0.5 TrackId= 76
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.61689 Mass(GeV)= 0.5 TrackId= 14
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.30942 Mass(GeV)= 0.5 TrackId= 34
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.85505 Mass(GeV)= 0.5 TrackId= 38
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.989345 Mass(GeV)= 0.5 TrackId= 58
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.33309 Mass(GeV)= 0.5 TrackId= 75
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.643016 Mass(GeV)= 0.5 TrackId= 80
+### New exotic particle produced: ldmphoton Ekin(GeV)= 22.8803 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.70773 Mass(GeV)= 0.5 TrackId= 10
+### New exotic particle produced: ldmphoton Ekin(GeV)= 8.57387 Mass(GeV)= 0.5 TrackId= 26
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.9966 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.54671 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.95384 Mass(GeV)= 0.5 TrackId= 2
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.30667 Mass(GeV)= 0.5 TrackId= 27
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.54475 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.59996 Mass(GeV)= 0.5 TrackId= 51
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.93331 Mass(GeV)= 0.5 TrackId= 61
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.71433 Mass(GeV)= 0.5 TrackId= 73
+### New exotic particle produced: ldmphoton Ekin(GeV)= 27.7848 Mass(GeV)= 0.5 TrackId= 78
+### New exotic particle produced: ldmphoton Ekin(GeV)= 10.4324 Mass(GeV)= 0.5 TrackId= 8
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.34093 Mass(GeV)= 0.5 TrackId= 27
+### New exotic particle produced: ldmphoton Ekin(GeV)= 34.3346 Mass(GeV)= 0.5 TrackId= 31
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.21496 Mass(GeV)= 0.5 TrackId= 40
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.827838 Mass(GeV)= 0.5 TrackId= 53
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.50759 Mass(GeV)= 0.5 TrackId= 11
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.21749 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.39393 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.82335 Mass(GeV)= 0.5 TrackId= 4
+### New exotic particle produced: ldmphoton Ekin(GeV)= 22.9376 Mass(GeV)= 0.5 TrackId= 14
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.2511 Mass(GeV)= 0.5 TrackId= 24
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.777261 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.65978 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.8979 Mass(GeV)= 0.5 TrackId= 7
+### New exotic particle produced: ldmphoton Ekin(GeV)= 19.3516 Mass(GeV)= 0.5 TrackId= 40
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.21791 Mass(GeV)= 0.5 TrackId= 75
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.50248 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.1963 Mass(GeV)= 0.5 TrackId= 11
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.08137 Mass(GeV)= 0.5 TrackId= 15
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.78335 Mass(GeV)= 0.5 TrackId= 34
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.11371 Mass(GeV)= 0.5 TrackId= 38
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.932082 Mass(GeV)= 0.5 TrackId= 42
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.61043 Mass(GeV)= 0.5 TrackId= 46
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.60858 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.44077 Mass(GeV)= 0.5 TrackId= 58
 --> Event 30 starts.
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.65478 Mass(GeV)= 0.5 TrackId= 15
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.23153 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 24.0579 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.71515 Mass(GeV)= 0.5 TrackId= 52
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.8598 Mass(GeV)= 0.5 TrackId= 60
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.55565 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 14.9574 Mass(GeV)= 0.5 TrackId= 21
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.55393 Mass(GeV)= 0.5 TrackId= 47
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.23548 Mass(GeV)= 0.5 TrackId= 62
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.54259 Mass(GeV)= 0.5 TrackId= 3
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.59066 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 14.9017 Mass(GeV)= 0.5 TrackId= 47
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.90287 Mass(GeV)= 0.5 TrackId= 51
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.24017 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 22.179 Mass(GeV)= 0.5 TrackId= 33
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.870389 Mass(GeV)= 0.5 TrackId= 36
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.75193 Mass(GeV)= 0.5 TrackId= 20
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.31547 Mass(GeV)= 0.5 TrackId= 25
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.24741 Mass(GeV)= 0.5 TrackId= 41
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.17556 Mass(GeV)= 0.5 TrackId= 42
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.16407 Mass(GeV)= 0.5 TrackId= 22
-### New exotic particle produced: ldmphoton Ekin(GeV)= 13.9661 Mass(GeV)= 0.5 TrackId= 31
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.927669 Mass(GeV)= 0.5 TrackId= 38
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.966593 Mass(GeV)= 0.5 TrackId= 40
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.656316 Mass(GeV)= 0.5 TrackId= 43
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.908097 Mass(GeV)= 0.5 TrackId= 49
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.52008 Mass(GeV)= 0.5 TrackId= 50
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.11631 Mass(GeV)= 0.5 TrackId= 52
-### New exotic particle produced: ldmphoton Ekin(GeV)= 10.1672 Mass(GeV)= 0.5 TrackId= 57
-### New exotic particle produced: ldmphoton Ekin(GeV)= 15.8476 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.01999 Mass(GeV)= 0.5 TrackId= 9
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.62665 Mass(GeV)= 0.5 TrackId= 20
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.05249 Mass(GeV)= 0.5 TrackId= 28
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.5975 Mass(GeV)= 0.5 TrackId= 35
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.31049 Mass(GeV)= 0.5 TrackId= 70
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.8716 Mass(GeV)= 0.5 TrackId= 39
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.62322 Mass(GeV)= 0.5 TrackId= 46
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.11223 Mass(GeV)= 0.5 TrackId= 63
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.53649 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 30.7059 Mass(GeV)= 0.5 TrackId= 69
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.988673 Mass(GeV)= 0.5 TrackId= 10
-### New exotic particle produced: ldmphoton Ekin(GeV)= 11.2939 Mass(GeV)= 0.5 TrackId= 40
-### New exotic particle produced: ldmphoton Ekin(GeV)= 27.8404 Mass(GeV)= 0.5 TrackId= 48
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.19389 Mass(GeV)= 0.5 TrackId= 67
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.30782 Mass(GeV)= 0.5 TrackId= 26
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.967507 Mass(GeV)= 0.5 TrackId= 37
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.850794 Mass(GeV)= 0.5 TrackId= 54
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.68034 Mass(GeV)= 0.5 TrackId= 55
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.02938 Mass(GeV)= 0.5 TrackId= 61
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.83426 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.692864 Mass(GeV)= 0.5 TrackId= 39
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.60519 Mass(GeV)= 0.5 TrackId= 53
+### New exotic particle produced: ldmphoton Ekin(GeV)= 8.56753 Mass(GeV)= 0.5 TrackId= 66
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.02763 Mass(GeV)= 0.5 TrackId= 67
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.74904 Mass(GeV)= 0.5 TrackId= 70
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.16029 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 13.5054 Mass(GeV)= 0.5 TrackId= 47
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.07331 Mass(GeV)= 0.5 TrackId= 61
+### New exotic particle produced: ldmphoton Ekin(GeV)= 26.8294 Mass(GeV)= 0.5 TrackId= 70
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.25034 Mass(GeV)= 0.5 TrackId= 10
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.84638 Mass(GeV)= 0.5 TrackId= 12
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.29941 Mass(GeV)= 0.5 TrackId= 39
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.3073 Mass(GeV)= 0.5 TrackId= 48
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.59358 Mass(GeV)= 0.5 TrackId= 78
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.15504 Mass(GeV)= 0.5 TrackId= 79
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.84422 Mass(GeV)= 0.5 TrackId= 83
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.85798 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 13.0352 Mass(GeV)= 0.5 TrackId= 45
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.42359 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.791023 Mass(GeV)= 0.5 TrackId= 75
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.02499 Mass(GeV)= 0.5 TrackId= 2
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.603132 Mass(GeV)= 0.5 TrackId= 12
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.628913 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.70112 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.55587 Mass(GeV)= 0.5 TrackId= 37
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.42845 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.1012 Mass(GeV)= 0.5 TrackId= 58
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.89673 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.08008 Mass(GeV)= 0.5 TrackId= 74
+### New exotic particle produced: ldmphoton Ekin(GeV)= 12.9264 Mass(GeV)= 0.5 TrackId= 11
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.12661 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.935917 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.56521 Mass(GeV)= 0.5 TrackId= 38
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.33632 Mass(GeV)= 0.5 TrackId= 10
+### New exotic particle produced: ldmphoton Ekin(GeV)= 37.1262 Mass(GeV)= 0.5 TrackId= 15
+### New exotic particle produced: ldmphoton Ekin(GeV)= 31.744 Mass(GeV)= 0.5 TrackId= 22
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.10144 Mass(GeV)= 0.5 TrackId= 67
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.45573 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.58901 Mass(GeV)= 0.5 TrackId= 5
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.2269 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.988156 Mass(GeV)= 0.5 TrackId= 31
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.34572 Mass(GeV)= 0.5 TrackId= 50
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.4902 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.22368 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.40958 Mass(GeV)= 0.5 TrackId= 34
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.97211 Mass(GeV)= 0.5 TrackId= 39
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.3258 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.49926 Mass(GeV)= 0.5 TrackId= 68
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.28377 Mass(GeV)= 0.5 TrackId= 19
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.61974 Mass(GeV)= 0.5 TrackId= 60
+### New exotic particle produced: ldmphoton Ekin(GeV)= 22.9044 Mass(GeV)= 0.5 TrackId= 76
 --> Event 40 starts.
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.640703 Mass(GeV)= 0.5 TrackId= 14
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.25652 Mass(GeV)= 0.5 TrackId= 20
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.768595 Mass(GeV)= 0.5 TrackId= 24
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.20088 Mass(GeV)= 0.5 TrackId= 37
-### New exotic particle produced: ldmphoton Ekin(GeV)= 9.22275 Mass(GeV)= 0.5 TrackId= 39
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.615884 Mass(GeV)= 0.5 TrackId= 46
-### New exotic particle produced: ldmphoton Ekin(GeV)= 13.6071 Mass(GeV)= 0.5 TrackId= 51
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.696893 Mass(GeV)= 0.5 TrackId= 55
-### New exotic particle produced: ldmphoton Ekin(GeV)= 10.5139 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.82099 Mass(GeV)= 0.5 TrackId= 35
-### New exotic particle produced: ldmphoton Ekin(GeV)= 13.4484 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.713354 Mass(GeV)= 0.5 TrackId= 46
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.18147 Mass(GeV)= 0.5 TrackId= 60
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.73052 Mass(GeV)= 0.5 TrackId= 68
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.27134 Mass(GeV)= 0.5 TrackId= 17
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.80988 Mass(GeV)= 0.5 TrackId= 40
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.11096 Mass(GeV)= 0.5 TrackId= 48
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.11667 Mass(GeV)= 0.5 TrackId= 28
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.2394 Mass(GeV)= 0.5 TrackId= 35
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.24892 Mass(GeV)= 0.5 TrackId= 50
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.917526 Mass(GeV)= 0.5 TrackId= 22
-### New exotic particle produced: ldmphoton Ekin(GeV)= 64.4107 Mass(GeV)= 0.5 TrackId= 25
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.12596 Mass(GeV)= 0.5 TrackId= 26
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.17625 Mass(GeV)= 0.5 TrackId= 11
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.00814 Mass(GeV)= 0.5 TrackId= 18
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.03077 Mass(GeV)= 0.5 TrackId= 32
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.990119 Mass(GeV)= 0.5 TrackId= 18
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.87317 Mass(GeV)= 0.5 TrackId= 22
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.816382 Mass(GeV)= 0.5 TrackId= 24
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.63246 Mass(GeV)= 0.5 TrackId= 26
-### New exotic particle produced: ldmphoton Ekin(GeV)= 14.7706 Mass(GeV)= 0.5 TrackId= 39
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.954051 Mass(GeV)= 0.5 TrackId= 40
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.65036 Mass(GeV)= 0.5 TrackId= 42
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.22875 Mass(GeV)= 0.5 TrackId= 48
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.43596 Mass(GeV)= 0.5 TrackId= 63
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.27765 Mass(GeV)= 0.5 TrackId= 69
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.89539 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.70202 Mass(GeV)= 0.5 TrackId= 57
-### New exotic particle produced: ldmphoton Ekin(GeV)= 34.8171 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.674677 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.76604 Mass(GeV)= 0.5 TrackId= 68
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.920952 Mass(GeV)= 0.5 TrackId= 71
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.653701 Mass(GeV)= 0.5 TrackId= 83
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.69853 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.764046 Mass(GeV)= 0.5 TrackId= 14
-### New exotic particle produced: ldmphoton Ekin(GeV)= 10.9814 Mass(GeV)= 0.5 TrackId= 19
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.12161 Mass(GeV)= 0.5 TrackId= 31
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.06792 Mass(GeV)= 0.5 TrackId= 58
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.70796 Mass(GeV)= 0.5 TrackId= 4
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.06956 Mass(GeV)= 0.5 TrackId= 20
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.68124 Mass(GeV)= 0.5 TrackId= 68
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.48314 Mass(GeV)= 0.5 TrackId= 84
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.17204 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.06772 Mass(GeV)= 0.5 TrackId= 59
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.18742 Mass(GeV)= 0.5 TrackId= 78
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.10348 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 8.99499 Mass(GeV)= 0.5 TrackId= 15
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.83118 Mass(GeV)= 0.5 TrackId= 22
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.89477 Mass(GeV)= 0.5 TrackId= 45
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.51114 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.19448 Mass(GeV)= 0.5 TrackId= 9
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.892952 Mass(GeV)= 0.5 TrackId= 11
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.6203 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 27.1294 Mass(GeV)= 0.5 TrackId= 23
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.65737 Mass(GeV)= 0.5 TrackId= 34
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.44513 Mass(GeV)= 0.5 TrackId= 35
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.14709 Mass(GeV)= 0.5 TrackId= 41
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.87871 Mass(GeV)= 0.5 TrackId= 59
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.804635 Mass(GeV)= 0.5 TrackId= 6
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.1493 Mass(GeV)= 0.5 TrackId= 10
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.48633 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.722498 Mass(GeV)= 0.5 TrackId= 18
+### New exotic particle produced: ldmphoton Ekin(GeV)= 14.0342 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.4015 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.55174 Mass(GeV)= 0.5 TrackId= 69
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.21943 Mass(GeV)= 0.5 TrackId= 71
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.600375 Mass(GeV)= 0.5 TrackId= 75
+### New exotic particle produced: ldmphoton Ekin(GeV)= 10.4331 Mass(GeV)= 0.5 TrackId= 83
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.248 Mass(GeV)= 0.5 TrackId= 26
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.605636 Mass(GeV)= 0.5 TrackId= 48
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.37469 Mass(GeV)= 0.5 TrackId= 52
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.658725 Mass(GeV)= 0.5 TrackId= 66
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.607282 Mass(GeV)= 0.5 TrackId= 73
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.19 Mass(GeV)= 0.5 TrackId= 81
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.832725 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 17.3994 Mass(GeV)= 0.5 TrackId= 22
+### New exotic particle produced: ldmphoton Ekin(GeV)= 51.6254 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.20129 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 8.61029 Mass(GeV)= 0.5 TrackId= 44
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.0553 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.2703 Mass(GeV)= 0.5 TrackId= 4
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.716419 Mass(GeV)= 0.5 TrackId= 18
+### New exotic particle produced: ldmphoton Ekin(GeV)= 14.9423 Mass(GeV)= 0.5 TrackId= 23
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.2079 Mass(GeV)= 0.5 TrackId= 24
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.9234 Mass(GeV)= 0.5 TrackId= 41
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.45836 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 24.5154 Mass(GeV)= 0.5 TrackId= 14
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.75086 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.615835 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.48661 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.13293 Mass(GeV)= 0.5 TrackId= 29
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.31075 Mass(GeV)= 0.5 TrackId= 30
+### New exotic particle produced: ldmphoton Ekin(GeV)= 10.6921 Mass(GeV)= 0.5 TrackId= 47
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.661572 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.33722 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.626886 Mass(GeV)= 0.5 TrackId= 76
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.58875 Mass(GeV)= 0.5 TrackId= 77
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.26394 Mass(GeV)= 0.5 TrackId= 95
 --> Event 50 starts.
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.704459 Mass(GeV)= 0.5 TrackId= 13
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.82355 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.57228 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 11.2187 Mass(GeV)= 0.5 TrackId= 37
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.629038 Mass(GeV)= 0.5 TrackId= 54
-### New exotic particle produced: ldmphoton Ekin(GeV)= 15.8452 Mass(GeV)= 0.5 TrackId= 56
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.54733 Mass(GeV)= 0.5 TrackId= 72
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.11 Mass(GeV)= 0.5 TrackId= 32
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.836879 Mass(GeV)= 0.5 TrackId= 33
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.603563 Mass(GeV)= 0.5 TrackId= 35
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.30662 Mass(GeV)= 0.5 TrackId= 41
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.29795 Mass(GeV)= 0.5 TrackId= 55
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.92429 Mass(GeV)= 0.5 TrackId= 63
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.22446 Mass(GeV)= 0.5 TrackId= 9
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.0324 Mass(GeV)= 0.5 TrackId= 27
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.603414 Mass(GeV)= 0.5 TrackId= 31
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.657121 Mass(GeV)= 0.5 TrackId= 63
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.93455 Mass(GeV)= 0.5 TrackId= 67
-### New exotic particle produced: ldmphoton Ekin(GeV)= 27.927 Mass(GeV)= 0.5 TrackId= 71
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.35772 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.75354 Mass(GeV)= 0.5 TrackId= 11
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.19497 Mass(GeV)= 0.5 TrackId= 14
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.2224 Mass(GeV)= 0.5 TrackId= 52
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.63719 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.21801 Mass(GeV)= 0.5 TrackId= 14
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.72483 Mass(GeV)= 0.5 TrackId= 17
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.46426 Mass(GeV)= 0.5 TrackId= 21
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.72565 Mass(GeV)= 0.5 TrackId= 30
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.40552 Mass(GeV)= 0.5 TrackId= 42
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.919954 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.49672 Mass(GeV)= 0.5 TrackId= 49
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.861366 Mass(GeV)= 0.5 TrackId= 61
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.709523 Mass(GeV)= 0.5 TrackId= 76
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.819265 Mass(GeV)= 0.5 TrackId= 8
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.826 Mass(GeV)= 0.5 TrackId= 13
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.63475 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.56544 Mass(GeV)= 0.5 TrackId= 33
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.81078 Mass(GeV)= 0.5 TrackId= 35
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.914668 Mass(GeV)= 0.5 TrackId= 64
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.94554 Mass(GeV)= 0.5 TrackId= 10
-### New exotic particle produced: ldmphoton Ekin(GeV)= 9.38213 Mass(GeV)= 0.5 TrackId= 42
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.37594 Mass(GeV)= 0.5 TrackId= 47
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.59065 Mass(GeV)= 0.5 TrackId= 54
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.680978 Mass(GeV)= 0.5 TrackId= 55
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.888499 Mass(GeV)= 0.5 TrackId= 60
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.724035 Mass(GeV)= 0.5 TrackId= 81
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.08471 Mass(GeV)= 0.5 TrackId= 94
-### New exotic particle produced: ldmphoton Ekin(GeV)= 15.223 Mass(GeV)= 0.5 TrackId= 11
-### New exotic particle produced: ldmphoton Ekin(GeV)= 37.245 Mass(GeV)= 0.5 TrackId= 22
-### New exotic particle produced: ldmphoton Ekin(GeV)= 16.4568 Mass(GeV)= 0.5 TrackId= 42
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.05017 Mass(GeV)= 0.5 TrackId= 59
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.53683 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.68866 Mass(GeV)= 0.5 TrackId= 48
-### New exotic particle produced: ldmphoton Ekin(GeV)= 28.5047 Mass(GeV)= 0.5 TrackId= 53
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.47779 Mass(GeV)= 0.5 TrackId= 54
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.26401 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.70019 Mass(GeV)= 0.5 TrackId= 22
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.66595 Mass(GeV)= 0.5 TrackId= 30
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.8468 Mass(GeV)= 0.5 TrackId= 52
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.6728 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.702935 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.622809 Mass(GeV)= 0.5 TrackId= 4
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.768832 Mass(GeV)= 0.5 TrackId= 15
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.50735 Mass(GeV)= 0.5 TrackId= 27
+### New exotic particle produced: ldmphoton Ekin(GeV)= 23.6962 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.20788 Mass(GeV)= 0.5 TrackId= 52
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.90304 Mass(GeV)= 0.5 TrackId= 54
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.49413 Mass(GeV)= 0.5 TrackId= 4
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.662661 Mass(GeV)= 0.5 TrackId= 15
+### New exotic particle produced: ldmphoton Ekin(GeV)= 17.9896 Mass(GeV)= 0.5 TrackId= 41
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.09413 Mass(GeV)= 0.5 TrackId= 42
+### New exotic particle produced: ldmphoton Ekin(GeV)= 10.3826 Mass(GeV)= 0.5 TrackId= 50
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.06181 Mass(GeV)= 0.5 TrackId= 73
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.20391 Mass(GeV)= 0.5 TrackId= 14
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.22848 Mass(GeV)= 0.5 TrackId= 26
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.828474 Mass(GeV)= 0.5 TrackId= 29
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.87183 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.49219 Mass(GeV)= 0.5 TrackId= 38
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.489 Mass(GeV)= 0.5 TrackId= 40
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.68598 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.64171 Mass(GeV)= 0.5 TrackId= 9
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.610491 Mass(GeV)= 0.5 TrackId= 22
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.47761 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.28195 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.65164 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.89365 Mass(GeV)= 0.5 TrackId= 73
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.42294 Mass(GeV)= 0.5 TrackId= 86
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.36373 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.11073 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 52.3615 Mass(GeV)= 0.5 TrackId= 60
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.69315 Mass(GeV)= 0.5 TrackId= 63
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.25655 Mass(GeV)= 0.5 TrackId= 64
+### New exotic particle produced: ldmphoton Ekin(GeV)= 28.3273 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.79051 Mass(GeV)= 0.5 TrackId= 6
+### New exotic particle produced: ldmphoton Ekin(GeV)= 13.0792 Mass(GeV)= 0.5 TrackId= 12
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.41594 Mass(GeV)= 0.5 TrackId= 19
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.38366 Mass(GeV)= 0.5 TrackId= 20
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.38464 Mass(GeV)= 0.5 TrackId= 60
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.00205 Mass(GeV)= 0.5 TrackId= 61
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.37564 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 33.2451 Mass(GeV)= 0.5 TrackId= 66
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.00575 Mass(GeV)= 0.5 TrackId= 83
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.78291 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.635695 Mass(GeV)= 0.5 TrackId= 22
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.3783 Mass(GeV)= 0.5 TrackId= 59
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.967976 Mass(GeV)= 0.5 TrackId= 76
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.9894 Mass(GeV)= 0.5 TrackId= 45
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.44988 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.0641 Mass(GeV)= 0.5 TrackId= 62
 --> Event 60 starts.
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.50939 Mass(GeV)= 0.5 TrackId= 3
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.13396 Mass(GeV)= 0.5 TrackId= 15
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.651654 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.33932 Mass(GeV)= 0.5 TrackId= 32
-### New exotic particle produced: ldmphoton Ekin(GeV)= 17.187 Mass(GeV)= 0.5 TrackId= 46
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.97003 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.761108 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 67.4206 Mass(GeV)= 0.5 TrackId= 20
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.7621 Mass(GeV)= 0.5 TrackId= 37
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.675745 Mass(GeV)= 0.5 TrackId= 48
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.30238 Mass(GeV)= 0.5 TrackId= 72
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.08619 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.46104 Mass(GeV)= 0.5 TrackId= 13
-### New exotic particle produced: ldmphoton Ekin(GeV)= 21.5615 Mass(GeV)= 0.5 TrackId= 19
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.992684 Mass(GeV)= 0.5 TrackId= 25
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.81802 Mass(GeV)= 0.5 TrackId= 47
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.65328 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.601078 Mass(GeV)= 0.5 TrackId= 74
-### New exotic particle produced: ldmphoton Ekin(GeV)= 48.5924 Mass(GeV)= 0.5 TrackId= 79
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.731286 Mass(GeV)= 0.5 TrackId= 2
-### New exotic particle produced: ldmphoton Ekin(GeV)= 41.3114 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.3039 Mass(GeV)= 0.5 TrackId= 28
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.90336 Mass(GeV)= 0.5 TrackId= 55
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.87045 Mass(GeV)= 0.5 TrackId= 2
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.606311 Mass(GeV)= 0.5 TrackId= 22
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.770267 Mass(GeV)= 0.5 TrackId= 33
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.628688 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.74296 Mass(GeV)= 0.5 TrackId= 73
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.00627 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 9.87867 Mass(GeV)= 0.5 TrackId= 21
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.647416 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.896674 Mass(GeV)= 0.5 TrackId= 14
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.16613 Mass(GeV)= 0.5 TrackId= 19
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.46229 Mass(GeV)= 0.5 TrackId= 43
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.13587 Mass(GeV)= 0.5 TrackId= 10
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.5027 Mass(GeV)= 0.5 TrackId= 62
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.88646 Mass(GeV)= 0.5 TrackId= 70
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.12714 Mass(GeV)= 0.5 TrackId= 11
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.76916 Mass(GeV)= 0.5 TrackId= 25
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.16055 Mass(GeV)= 0.5 TrackId= 63
-### New exotic particle produced: ldmphoton Ekin(GeV)= 19.293 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.88602 Mass(GeV)= 0.5 TrackId= 22
-### New exotic particle produced: ldmphoton Ekin(GeV)= 18.7636 Mass(GeV)= 0.5 TrackId= 32
-### New exotic particle produced: ldmphoton Ekin(GeV)= 15.5238 Mass(GeV)= 0.5 TrackId= 46
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.97925 Mass(GeV)= 0.5 TrackId= 54
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.635632 Mass(GeV)= 0.5 TrackId= 60
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.35093 Mass(GeV)= 0.5 TrackId= 79
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.3976 Mass(GeV)= 0.5 TrackId= 4
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.2316 Mass(GeV)= 0.5 TrackId= 6
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.34855 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.633865 Mass(GeV)= 0.5 TrackId= 18
+### New exotic particle produced: ldmphoton Ekin(GeV)= 11.8579 Mass(GeV)= 0.5 TrackId= 35
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.96513 Mass(GeV)= 0.5 TrackId= 61
+### New exotic particle produced: ldmphoton Ekin(GeV)= 11.0858 Mass(GeV)= 0.5 TrackId= 2
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.728394 Mass(GeV)= 0.5 TrackId= 14
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.29201 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.33507 Mass(GeV)= 0.5 TrackId= 37
+### New exotic particle produced: ldmphoton Ekin(GeV)= 35.3575 Mass(GeV)= 0.5 TrackId= 51
+### New exotic particle produced: ldmphoton Ekin(GeV)= 10.6271 Mass(GeV)= 0.5 TrackId= 5
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.757692 Mass(GeV)= 0.5 TrackId= 7
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.49144 Mass(GeV)= 0.5 TrackId= 31
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.3781 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 10.1022 Mass(GeV)= 0.5 TrackId= 35
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.10975 Mass(GeV)= 0.5 TrackId= 66
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.67361 Mass(GeV)= 0.5 TrackId= 76
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.8165 Mass(GeV)= 0.5 TrackId= 5
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.20991 Mass(GeV)= 0.5 TrackId= 11
+### New exotic particle produced: ldmphoton Ekin(GeV)= 38.1465 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.705668 Mass(GeV)= 0.5 TrackId= 18
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.29184 Mass(GeV)= 0.5 TrackId= 35
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.16819 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.648129 Mass(GeV)= 0.5 TrackId= 61
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.6316 Mass(GeV)= 0.5 TrackId= 73
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.735644 Mass(GeV)= 0.5 TrackId= 8
+### New exotic particle produced: ldmphoton Ekin(GeV)= 27.8228 Mass(GeV)= 0.5 TrackId= 11
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.89727 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.877378 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 22.3065 Mass(GeV)= 0.5 TrackId= 24
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.624791 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 11.7975 Mass(GeV)= 0.5 TrackId= 2
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.17674 Mass(GeV)= 0.5 TrackId= 12
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.16032 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.856005 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.613823 Mass(GeV)= 0.5 TrackId= 61
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.608233 Mass(GeV)= 0.5 TrackId= 74
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.961295 Mass(GeV)= 0.5 TrackId= 6
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.16149 Mass(GeV)= 0.5 TrackId= 40
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.90751 Mass(GeV)= 0.5 TrackId= 54
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.79095 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 10.4241 Mass(GeV)= 0.5 TrackId= 59
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.827546 Mass(GeV)= 0.5 TrackId= 8
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.92958 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 48.736 Mass(GeV)= 0.5 TrackId= 35
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.843667 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 20.4997 Mass(GeV)= 0.5 TrackId= 2
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.27012 Mass(GeV)= 0.5 TrackId= 7
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.18219 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.10123 Mass(GeV)= 0.5 TrackId= 29
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.832562 Mass(GeV)= 0.5 TrackId= 45
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.8476 Mass(GeV)= 0.5 TrackId= 48
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.11353 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.09579 Mass(GeV)= 0.5 TrackId= 52
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.624012 Mass(GeV)= 0.5 TrackId= 64
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.665848 Mass(GeV)= 0.5 TrackId= 70
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.25049 Mass(GeV)= 0.5 TrackId= 24
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.48577 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.99334 Mass(GeV)= 0.5 TrackId= 36
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.53942 Mass(GeV)= 0.5 TrackId= 50
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.57944 Mass(GeV)= 0.5 TrackId= 58
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.65656 Mass(GeV)= 0.5 TrackId= 71
 --> Event 70 starts.
-### New exotic particle produced: ldmphoton Ekin(GeV)= 45.3423 Mass(GeV)= 0.5 TrackId= 3
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.94782 Mass(GeV)= 0.5 TrackId= 6
-### New exotic particle produced: ldmphoton Ekin(GeV)= 13.5586 Mass(GeV)= 0.5 TrackId= 47
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.803623 Mass(GeV)= 0.5 TrackId= 15
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.13044 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.65573 Mass(GeV)= 0.5 TrackId= 61
-### New exotic particle produced: ldmphoton Ekin(GeV)= 20.9548 Mass(GeV)= 0.5 TrackId= 73
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.21469 Mass(GeV)= 0.5 TrackId= 18
-### New exotic particle produced: ldmphoton Ekin(GeV)= 11.4355 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.89708 Mass(GeV)= 0.5 TrackId= 50
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.22968 Mass(GeV)= 0.5 TrackId= 55
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.995206 Mass(GeV)= 0.5 TrackId= 60
-### New exotic particle produced: ldmphoton Ekin(GeV)= 16.5522 Mass(GeV)= 0.5 TrackId= 17
-### New exotic particle produced: ldmphoton Ekin(GeV)= 44.4438 Mass(GeV)= 0.5 TrackId= 31
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.809988 Mass(GeV)= 0.5 TrackId= 38
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.72213 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.682576 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.03404 Mass(GeV)= 0.5 TrackId= 24
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.03548 Mass(GeV)= 0.5 TrackId= 48
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.75869 Mass(GeV)= 0.5 TrackId= 53
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.47244 Mass(GeV)= 0.5 TrackId= 62
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.93282 Mass(GeV)= 0.5 TrackId= 63
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.11649 Mass(GeV)= 0.5 TrackId= 64
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.95728 Mass(GeV)= 0.5 TrackId= 68
-### New exotic particle produced: ldmphoton Ekin(GeV)= 26.3777 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.97936 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.81943 Mass(GeV)= 0.5 TrackId= 21
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.21446 Mass(GeV)= 0.5 TrackId= 50
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.1505 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.32878 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.37271 Mass(GeV)= 0.5 TrackId= 45
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.91644 Mass(GeV)= 0.5 TrackId= 20
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.31268 Mass(GeV)= 0.5 TrackId= 28
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.11684 Mass(GeV)= 0.5 TrackId= 54
-### New exotic particle produced: ldmphoton Ekin(GeV)= 60.8311 Mass(GeV)= 0.5 TrackId= 69
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.12239 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 32.2991 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.44102 Mass(GeV)= 0.5 TrackId= 23
-### New exotic particle produced: ldmphoton Ekin(GeV)= 17.4506 Mass(GeV)= 0.5 TrackId= 51
-### New exotic particle produced: ldmphoton Ekin(GeV)= 81.0295 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.94002 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.93725 Mass(GeV)= 0.5 TrackId= 71
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.60321 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.709816 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.53151 Mass(GeV)= 0.5 TrackId= 50
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.24957 Mass(GeV)= 0.5 TrackId= 52
+### New exotic particle produced: ldmphoton Ekin(GeV)= 54.933 Mass(GeV)= 0.5 TrackId= 54
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.1947 Mass(GeV)= 0.5 TrackId= 58
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.98973 Mass(GeV)= 0.5 TrackId= 5
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.43464 Mass(GeV)= 0.5 TrackId= 6
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.20434 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 44.8468 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 19.5937 Mass(GeV)= 0.5 TrackId= 22
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.66954 Mass(GeV)= 0.5 TrackId= 23
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.616244 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.40685 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 26.1421 Mass(GeV)= 0.5 TrackId= 24
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.601021 Mass(GeV)= 0.5 TrackId= 27
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.89374 Mass(GeV)= 0.5 TrackId= 39
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.601093 Mass(GeV)= 0.5 TrackId= 45
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.67644 Mass(GeV)= 0.5 TrackId= 48
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.66155 Mass(GeV)= 0.5 TrackId= 16
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.2593 Mass(GeV)= 0.5 TrackId= 18
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.857019 Mass(GeV)= 0.5 TrackId= 23
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.96489 Mass(GeV)= 0.5 TrackId= 46
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.46936 Mass(GeV)= 0.5 TrackId= 47
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.84646 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.725738 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.85424 Mass(GeV)= 0.5 TrackId= 10
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.881431 Mass(GeV)= 0.5 TrackId= 47
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.41791 Mass(GeV)= 0.5 TrackId= 5
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.658879 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.79553 Mass(GeV)= 0.5 TrackId= 34
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.693581 Mass(GeV)= 0.5 TrackId= 35
+### New exotic particle produced: ldmphoton Ekin(GeV)= 24.2192 Mass(GeV)= 0.5 TrackId= 45
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.0309 Mass(GeV)= 0.5 TrackId= 52
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.71845 Mass(GeV)= 0.5 TrackId= 58
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.65181 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 35.3122 Mass(GeV)= 0.5 TrackId= 8
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.07279 Mass(GeV)= 0.5 TrackId= 26
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.796343 Mass(GeV)= 0.5 TrackId= 42
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.05458 Mass(GeV)= 0.5 TrackId= 88
+### New exotic particle produced: ldmphoton Ekin(GeV)= 48.0628 Mass(GeV)= 0.5 TrackId= 2
+### New exotic particle produced: ldmphoton Ekin(GeV)= 22.9819 Mass(GeV)= 0.5 TrackId= 18
+### New exotic particle produced: ldmphoton Ekin(GeV)= 19.4778 Mass(GeV)= 0.5 TrackId= 66
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.45007 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.799251 Mass(GeV)= 0.5 TrackId= 19
+### New exotic particle produced: ldmphoton Ekin(GeV)= 12.4306 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.6604 Mass(GeV)= 0.5 TrackId= 38
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.0227 Mass(GeV)= 0.5 TrackId= 48
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.24677 Mass(GeV)= 0.5 TrackId= 63
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.624584 Mass(GeV)= 0.5 TrackId= 66
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.76238 Mass(GeV)= 0.5 TrackId= 16
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.90606 Mass(GeV)= 0.5 TrackId= 22
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.30469 Mass(GeV)= 0.5 TrackId= 27
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.78385 Mass(GeV)= 0.5 TrackId= 53
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.04508 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.50135 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 10.7314 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.55228 Mass(GeV)= 0.5 TrackId= 66
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.931449 Mass(GeV)= 0.5 TrackId= 74
 --> Event 80 starts.
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.91045 Mass(GeV)= 0.5 TrackId= 2
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.925253 Mass(GeV)= 0.5 TrackId= 4
-### New exotic particle produced: ldmphoton Ekin(GeV)= 61.2912 Mass(GeV)= 0.5 TrackId= 8
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.09812 Mass(GeV)= 0.5 TrackId= 27
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.49775 Mass(GeV)= 0.5 TrackId= 68
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.53461 Mass(GeV)= 0.5 TrackId= 9
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.46321 Mass(GeV)= 0.5 TrackId= 21
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.64742 Mass(GeV)= 0.5 TrackId= 28
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.75687 Mass(GeV)= 0.5 TrackId= 49
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.18687 Mass(GeV)= 0.5 TrackId= 50
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.64328 Mass(GeV)= 0.5 TrackId= 67
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.78204 Mass(GeV)= 0.5 TrackId= 73
-### New exotic particle produced: ldmphoton Ekin(GeV)= 12.219 Mass(GeV)= 0.5 TrackId= 77
-### New exotic particle produced: ldmphoton Ekin(GeV)= 9.47984 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.5365 Mass(GeV)= 0.5 TrackId= 23
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.89424 Mass(GeV)= 0.5 TrackId= 24
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.23171 Mass(GeV)= 0.5 TrackId= 27
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.95364 Mass(GeV)= 0.5 TrackId= 35
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.627875 Mass(GeV)= 0.5 TrackId= 40
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.81236 Mass(GeV)= 0.5 TrackId= 48
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.07171 Mass(GeV)= 0.5 TrackId= 60
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.71727 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.89428 Mass(GeV)= 0.5 TrackId= 5
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.8643 Mass(GeV)= 0.5 TrackId= 8
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.804275 Mass(GeV)= 0.5 TrackId= 19
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.22578 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.90114 Mass(GeV)= 0.5 TrackId= 47
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.36785 Mass(GeV)= 0.5 TrackId= 54
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.977433 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.645633 Mass(GeV)= 0.5 TrackId= 71
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.760082 Mass(GeV)= 0.5 TrackId= 77
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.19172 Mass(GeV)= 0.5 TrackId= 8
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.17985 Mass(GeV)= 0.5 TrackId= 38
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.20238 Mass(GeV)= 0.5 TrackId= 45
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.29678 Mass(GeV)= 0.5 TrackId= 72
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.35514 Mass(GeV)= 0.5 TrackId= 76
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.50019 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.16084 Mass(GeV)= 0.5 TrackId= 25
-### New exotic particle produced: ldmphoton Ekin(GeV)= 14.8676 Mass(GeV)= 0.5 TrackId= 39
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.19233 Mass(GeV)= 0.5 TrackId= 42
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.2429 Mass(GeV)= 0.5 TrackId= 48
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.69116 Mass(GeV)= 0.5 TrackId= 80
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.60453 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 37.3859 Mass(GeV)= 0.5 TrackId= 19
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.7186 Mass(GeV)= 0.5 TrackId= 33
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.92337 Mass(GeV)= 0.5 TrackId= 43
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.91203 Mass(GeV)= 0.5 TrackId= 4
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.52577 Mass(GeV)= 0.5 TrackId= 9
-### New exotic particle produced: ldmphoton Ekin(GeV)= 22.5176 Mass(GeV)= 0.5 TrackId= 46
-### New exotic particle produced: ldmphoton Ekin(GeV)= 12.2999 Mass(GeV)= 0.5 TrackId= 51
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.54368 Mass(GeV)= 0.5 TrackId= 68
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.36619 Mass(GeV)= 0.5 TrackId= 72
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.60691 Mass(GeV)= 0.5 TrackId= 16
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.42797 Mass(GeV)= 0.5 TrackId= 36
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.85285 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 12.2673 Mass(GeV)= 0.5 TrackId= 52
-### New exotic particle produced: ldmphoton Ekin(GeV)= 12.756 Mass(GeV)= 0.5 TrackId= 58
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.29099 Mass(GeV)= 0.5 TrackId= 65
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.3436 Mass(GeV)= 0.5 TrackId= 6
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.23982 Mass(GeV)= 0.5 TrackId= 7
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.01562 Mass(GeV)= 0.5 TrackId= 8
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.973463 Mass(GeV)= 0.5 TrackId= 10
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.35128 Mass(GeV)= 0.5 TrackId= 11
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.35462 Mass(GeV)= 0.5 TrackId= 20
+### New exotic particle produced: ldmphoton Ekin(GeV)= 13.7617 Mass(GeV)= 0.5 TrackId= 33
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.82941 Mass(GeV)= 0.5 TrackId= 46
+### New exotic particle produced: ldmphoton Ekin(GeV)= 13.2726 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.52899 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 63.6217 Mass(GeV)= 0.5 TrackId= 6
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.0462 Mass(GeV)= 0.5 TrackId= 20
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.6378 Mass(GeV)= 0.5 TrackId= 56
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.67624 Mass(GeV)= 0.5 TrackId= 61
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.94442 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 59.4644 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.29751 Mass(GeV)= 0.5 TrackId= 8
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.4249 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.879439 Mass(GeV)= 0.5 TrackId= 15
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.85474 Mass(GeV)= 0.5 TrackId= 16
+### New exotic particle produced: ldmphoton Ekin(GeV)= 24.1157 Mass(GeV)= 0.5 TrackId= 43
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.51674 Mass(GeV)= 0.5 TrackId= 47
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.98599 Mass(GeV)= 0.5 TrackId= 50
+### New exotic particle produced: ldmphoton Ekin(GeV)= 30.5618 Mass(GeV)= 0.5 TrackId= 72
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.85728 Mass(GeV)= 0.5 TrackId= 75
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.19886 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.52348 Mass(GeV)= 0.5 TrackId= 12
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.42079 Mass(GeV)= 0.5 TrackId= 14
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.882137 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 28.0062 Mass(GeV)= 0.5 TrackId= 59
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.01691 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.608665 Mass(GeV)= 0.5 TrackId= 16
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.89893 Mass(GeV)= 0.5 TrackId= 22
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.07836 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.17225 Mass(GeV)= 0.5 TrackId= 39
+### New exotic particle produced: ldmphoton Ekin(GeV)= 7.30195 Mass(GeV)= 0.5 TrackId= 40
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.44018 Mass(GeV)= 0.5 TrackId= 53
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.15915 Mass(GeV)= 0.5 TrackId= 78
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.2283 Mass(GeV)= 0.5 TrackId= 82
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.35905 Mass(GeV)= 0.5 TrackId= 83
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.47077 Mass(GeV)= 0.5 TrackId= 88
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.13274 Mass(GeV)= 0.5 TrackId= 90
+### New exotic particle produced: ldmphoton Ekin(GeV)= 41.3018 Mass(GeV)= 0.5 TrackId= 4
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.620855 Mass(GeV)= 0.5 TrackId= 31
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.83216 Mass(GeV)= 0.5 TrackId= 4
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.53165 Mass(GeV)= 0.5 TrackId= 19
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.797845 Mass(GeV)= 0.5 TrackId= 40
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.18721 Mass(GeV)= 0.5 TrackId= 93
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.809292 Mass(GeV)= 0.5 TrackId= 97
+### New exotic particle produced: ldmphoton Ekin(GeV)= 24.9092 Mass(GeV)= 0.5 TrackId= 20
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.14783 Mass(GeV)= 0.5 TrackId= 43
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.939024 Mass(GeV)= 0.5 TrackId= 46
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.6087 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 23.3978 Mass(GeV)= 0.5 TrackId= 52
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.56298 Mass(GeV)= 0.5 TrackId= 3
+### New exotic particle produced: ldmphoton Ekin(GeV)= 17.6625 Mass(GeV)= 0.5 TrackId= 11
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.96472 Mass(GeV)= 0.5 TrackId= 16
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.02896 Mass(GeV)= 0.5 TrackId= 34
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.823331 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.79071 Mass(GeV)= 0.5 TrackId= 54
+### New exotic particle produced: ldmphoton Ekin(GeV)= 8.88065 Mass(GeV)= 0.5 TrackId= 63
+### New exotic particle produced: ldmphoton Ekin(GeV)= 30.4567 Mass(GeV)= 0.5 TrackId= 72
 --> Event 90 starts.
-### New exotic particle produced: ldmphoton Ekin(GeV)= 64.5443 Mass(GeV)= 0.5 TrackId= 10
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.995356 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 6.13138 Mass(GeV)= 0.5 TrackId= 14
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.39779 Mass(GeV)= 0.5 TrackId= 17
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.55121 Mass(GeV)= 0.5 TrackId= 44
-### New exotic particle produced: ldmphoton Ekin(GeV)= 10.0447 Mass(GeV)= 0.5 TrackId= 49
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.53907 Mass(GeV)= 0.5 TrackId= 70
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.03793 Mass(GeV)= 0.5 TrackId= 20
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.793582 Mass(GeV)= 0.5 TrackId= 23
-### New exotic particle produced: ldmphoton Ekin(GeV)= 12.9786 Mass(GeV)= 0.5 TrackId= 41
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.54743 Mass(GeV)= 0.5 TrackId= 45
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.88243 Mass(GeV)= 0.5 TrackId= 70
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.32153 Mass(GeV)= 0.5 TrackId= 83
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.22836 Mass(GeV)= 0.5 TrackId= 88
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.867789 Mass(GeV)= 0.5 TrackId= 6
-### New exotic particle produced: ldmphoton Ekin(GeV)= 20.8562 Mass(GeV)= 0.5 TrackId= 26
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.841 Mass(GeV)= 0.5 TrackId= 29
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.6439 Mass(GeV)= 0.5 TrackId= 37
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.42588 Mass(GeV)= 0.5 TrackId= 66
-### New exotic particle produced: ldmphoton Ekin(GeV)= 7.75609 Mass(GeV)= 0.5 TrackId= 67
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.693462 Mass(GeV)= 0.5 TrackId= 30
-### New exotic particle produced: ldmphoton Ekin(GeV)= 16.5355 Mass(GeV)= 0.5 TrackId= 72
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.869763 Mass(GeV)= 0.5 TrackId= 76
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.64191 Mass(GeV)= 0.5 TrackId= 26
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.65449 Mass(GeV)= 0.5 TrackId= 70
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.92727 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.16338 Mass(GeV)= 0.5 TrackId= 67
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.05342 Mass(GeV)= 0.5 TrackId= 77
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.67253 Mass(GeV)= 0.5 TrackId= 4
-### New exotic particle produced: ldmphoton Ekin(GeV)= 12.5893 Mass(GeV)= 0.5 TrackId= 21
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.968359 Mass(GeV)= 0.5 TrackId= 49
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.47585 Mass(GeV)= 0.5 TrackId= 50
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.17892 Mass(GeV)= 0.5 TrackId= 54
-### New exotic particle produced: ldmphoton Ekin(GeV)= 4.03408 Mass(GeV)= 0.5 TrackId= 56
-### New exotic particle produced: ldmphoton Ekin(GeV)= 5.19122 Mass(GeV)= 0.5 TrackId= 74
-### New exotic particle produced: ldmphoton Ekin(GeV)= 40.4346 Mass(GeV)= 0.5 TrackId= 75
-### New exotic particle produced: ldmphoton Ekin(GeV)= 27.7335 Mass(GeV)= 0.5 TrackId= 17
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.82417 Mass(GeV)= 0.5 TrackId= 42
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.75895 Mass(GeV)= 0.5 TrackId= 43
-### New exotic particle produced: ldmphoton Ekin(GeV)= 3.9659 Mass(GeV)= 0.5 TrackId= 47
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.831731 Mass(GeV)= 0.5 TrackId= 53
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.17348 Mass(GeV)= 0.5 TrackId= 71
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.26839 Mass(GeV)= 0.5 TrackId= 77
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.02482 Mass(GeV)= 0.5 TrackId= 8
-### New exotic particle produced: ldmphoton Ekin(GeV)= 13.7098 Mass(GeV)= 0.5 TrackId= 12
-### New exotic particle produced: ldmphoton Ekin(GeV)= 2.85226 Mass(GeV)= 0.5 TrackId= 24
-### New exotic particle produced: ldmphoton Ekin(GeV)= 8.4889 Mass(GeV)= 0.5 TrackId= 30
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.671766 Mass(GeV)= 0.5 TrackId= 31
-### New exotic particle produced: ldmphoton Ekin(GeV)= 17.5822 Mass(GeV)= 0.5 TrackId= 46
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.72563 Mass(GeV)= 0.5 TrackId= 50
-### New exotic particle produced: ldmphoton Ekin(GeV)= 1.71587 Mass(GeV)= 0.5 TrackId= 52
-### New exotic particle produced: ldmphoton Ekin(GeV)= 0.699973 Mass(GeV)= 0.5 TrackId= 65
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.39413 Mass(GeV)= 0.5 TrackId= 13
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.55356 Mass(GeV)= 0.5 TrackId= 37
+### New exotic particle produced: ldmphoton Ekin(GeV)= 22.0512 Mass(GeV)= 0.5 TrackId= 40
+### New exotic particle produced: ldmphoton Ekin(GeV)= 52.1561 Mass(GeV)= 0.5 TrackId= 70
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.34899 Mass(GeV)= 0.5 TrackId= 34
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.15623 Mass(GeV)= 0.5 TrackId= 42
+### New exotic particle produced: ldmphoton Ekin(GeV)= 13.8787 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.790365 Mass(GeV)= 0.5 TrackId= 53
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.03625 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.633441 Mass(GeV)= 0.5 TrackId= 58
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.44521 Mass(GeV)= 0.5 TrackId= 29
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.262 Mass(GeV)= 0.5 TrackId= 54
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.45688 Mass(GeV)= 0.5 TrackId= 80
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.27469 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.722551 Mass(GeV)= 0.5 TrackId= 30
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.62786 Mass(GeV)= 0.5 TrackId= 44
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.799384 Mass(GeV)= 0.5 TrackId= 78
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.52549 Mass(GeV)= 0.5 TrackId= 80
+### New exotic particle produced: ldmphoton Ekin(GeV)= 20.7972 Mass(GeV)= 0.5 TrackId= 2
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.67271 Mass(GeV)= 0.5 TrackId= 19
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.26749 Mass(GeV)= 0.5 TrackId= 34
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.850894 Mass(GeV)= 0.5 TrackId= 63
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.31521 Mass(GeV)= 0.5 TrackId= 87
+### New exotic particle produced: ldmphoton Ekin(GeV)= 20.789 Mass(GeV)= 0.5 TrackId= 88
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.73883 Mass(GeV)= 0.5 TrackId= 18
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.86768 Mass(GeV)= 0.5 TrackId= 23
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.49495 Mass(GeV)= 0.5 TrackId= 51
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.44789 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.851008 Mass(GeV)= 0.5 TrackId= 62
+### New exotic particle produced: ldmphoton Ekin(GeV)= 8.3403 Mass(GeV)= 0.5 TrackId= 68
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.75702 Mass(GeV)= 0.5 TrackId= 73
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.25811 Mass(GeV)= 0.5 TrackId= 17
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.953332 Mass(GeV)= 0.5 TrackId= 20
+### New exotic particle produced: ldmphoton Ekin(GeV)= 2.13742 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.843204 Mass(GeV)= 0.5 TrackId= 45
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.793585 Mass(GeV)= 0.5 TrackId= 48
+### New exotic particle produced: ldmphoton Ekin(GeV)= 15.2013 Mass(GeV)= 0.5 TrackId= 49
+### New exotic particle produced: ldmphoton Ekin(GeV)= 32.6901 Mass(GeV)= 0.5 TrackId= 59
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.609798 Mass(GeV)= 0.5 TrackId= 79
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.03252 Mass(GeV)= 0.5 TrackId= 19
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.11033 Mass(GeV)= 0.5 TrackId= 21
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.740686 Mass(GeV)= 0.5 TrackId= 25
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.56817 Mass(GeV)= 0.5 TrackId= 28
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.797116 Mass(GeV)= 0.5 TrackId= 33
+### New exotic particle produced: ldmphoton Ekin(GeV)= 9.53515 Mass(GeV)= 0.5 TrackId= 57
+### New exotic particle produced: ldmphoton Ekin(GeV)= 10.2996 Mass(GeV)= 0.5 TrackId= 73
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.08614 Mass(GeV)= 0.5 TrackId= 74
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.708086 Mass(GeV)= 0.5 TrackId= 81
+### New exotic particle produced: ldmphoton Ekin(GeV)= 6.02633 Mass(GeV)= 0.5 TrackId= 10
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.37228 Mass(GeV)= 0.5 TrackId= 15
+### New exotic particle produced: ldmphoton Ekin(GeV)= 3.07899 Mass(GeV)= 0.5 TrackId= 32
+### New exotic particle produced: ldmphoton Ekin(GeV)= 1.25688 Mass(GeV)= 0.5 TrackId= 37
+### New exotic particle produced: ldmphoton Ekin(GeV)= 4.96935 Mass(GeV)= 0.5 TrackId= 53
+### New exotic particle produced: ldmphoton Ekin(GeV)= 5.18224 Mass(GeV)= 0.5 TrackId= 55
+### New exotic particle produced: ldmphoton Ekin(GeV)= 0.882046 Mass(GeV)= 0.5 TrackId= 60
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.660000s Real=0.678289s Sys=0.000000s
-RunAction: End of run actions are started 1  Nevt=  100  Edep= 4084.82
+  User=0.670000s Real=0.747865s Sys=0.010000s
+RunAction: End of run actions are started 1  Nevt=  100  Edep= 4130.15
  ====================================================
    Beam Particle: proton
    Ekin(GeV)    = 100
@@ -1107,8 +1147,8 @@ RunAction: End of run actions are started 1  Nevt=  100  Edep= 4084.82
  ================== run summary =====================
    End of Run TotNbofEvents    = 100
 
-   Mean energy deposit in absorber = 4.0848 +- 0.080111 GeV    RMS/Emean = 0.19612
-   Mean number of steps in absorber= 85.4
+   Mean energy deposit in absorber = 4.1302 +- 0.10892 GeV    RMS/Emean = 0.26372
+   Mean number of steps in absorber= 86.52
 
  ================== run end ==========================
 ... write file : dmp.root - done
@@ -1122,6 +1162,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.072 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.083 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

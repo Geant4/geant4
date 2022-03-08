@@ -42,7 +42,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4MuMultipleScattering.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
@@ -73,8 +72,9 @@ PhysListEmStandard_WVI::PhysListEmStandard_WVI(const G4String& name,
   param->SetMinEnergy(10*eV);
   param->SetMaxEnergy(10*GeV);
   param->SetNumberOfBinsPerDecade(20);
-  param->SetLowestElectronEnergy(10*eV);
+  param->SetLowestElectronEnergy(100*eV);
   param->SetStepFunction(0.2, 100*um);
+  param->SetUseMottCorrection(true);
   param->SetBuildCSDARange(true);
   param->SetMaxEnergyForCSDARange(10*GeV);
   param->SetMscThetaLimit(0.15);
@@ -116,7 +116,7 @@ void PhysListEmStandard_WVI::ConstructProcess()
     } else if (particleName == "e-") {
       //electron
 
-      G4MuMultipleScattering* eMsc = new G4MuMultipleScattering();
+      G4eMultipleScattering* eMsc = new G4eMultipleScattering();
       G4WentzelVIModel* wvi = new G4WentzelVIModel();
       eMsc->SetEmModel(wvi); 
 
@@ -134,7 +134,7 @@ void PhysListEmStandard_WVI::ConstructProcess()
     } else if (particleName == "e+") {
       //positron
 
-      G4MuMultipleScattering* pMsc = new G4MuMultipleScattering();
+      G4eMultipleScattering* pMsc = new G4eMultipleScattering();
       pMsc->SetEmModel(new G4WentzelVIModel());
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);

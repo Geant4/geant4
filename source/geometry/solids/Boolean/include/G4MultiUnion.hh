@@ -61,7 +61,8 @@ class G4MultiUnion : public G4VSolid
     ~G4MultiUnion();
 
     // Build the multiple union by adding nodes
-    void AddNode(G4VSolid& solid, G4Transform3D& trans);
+    void AddNode(G4VSolid& solid, const G4Transform3D& trans);
+    void AddNode(G4VSolid* solid, const G4Transform3D& trans);
 
     G4MultiUnion(const G4MultiUnion& rhs);
     G4MultiUnion& operator=(const G4MultiUnion& rhs);

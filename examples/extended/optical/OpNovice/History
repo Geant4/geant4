@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 17, 2022 D. Sawkey (OpNovice-V10-07-07)
+- Fix incorrect call to G4MaterialPropertiesTable::AddProperty. Add comments explaining
+  use. Addresses issue 115.
+
 October 15, 2021 D. Sawkey (OpNovice-V10-07-06)
 - remove OpNoviceGDMLDetectorMessenger: use OpNoviceDetectorMessenger instead
 - rename class variables to start with f

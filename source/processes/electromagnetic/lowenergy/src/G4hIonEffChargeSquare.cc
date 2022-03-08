@@ -184,18 +184,6 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     0.66401, 0.84912, 0.88433, 0.80746, 0.43357, 0.41923, 0.43638, 0.51464, 0.73087, 0.81065,
     1.9578,  1.0257} ;
 
-  static const G4double lFactor[92] = {
-    1.0,  1.0,  1.1,  1.06, 1.01, 1.03, 1.04, 0.99, 0.95, 0.9,
-    0.82, 0.81, 0.83, 0.88, 1.0,  0.95, 0.97, 0.99, 0.98, 0.97,
-    0.98, 0.97, 0.96, 0.93, 0.91, 0.9,  0.88, 0.9,  0.9,  0.9,
-    0.9,  0.85, 0.9,  0.9,  0.91, 0.92, 0.9,  0.9,  0.9,  0.9,
-    0.9,  0.88, 0.9,  0.88, 0.88, 0.9,  0.9,  0.88, 0.9,  0.9,
-    0.9,  0.9,  0.96, 1.2,  0.9,  0.88, 0.88, 0.85, 0.9,  0.9,
-    0.92, 0.95, 0.99, 1.03, 1.05, 1.07, 1.08, 1.1,  1.08, 1.08,
-    1.08, 1.08, 1.09, 1.09, 1.1,  1.11, 1.12, 1.13, 1.14, 1.15,
-    1.17, 1.2,  1.18, 1.17, 1.17, 1.16, 1.16, 1.16, 1.16, 1.16,
-    1.16, 1.16} ;
-
   static const G4double c[6] = {0.2865,  0.1266, -0.001429,
                           0.02402,-0.01135, 0.001475} ;
 
@@ -207,7 +195,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
 
   //  loop for the elements in the material
   //  to find out average values Z, vF, lF
-  G4double z = 0.0, vF = 0.0, lF = 0.0, norm = 0.0 ;
+  G4double z = 0.0, vF = 0.0, norm = 0.0 ;
 
   if( 1 == NumberOfElements ) {
     z = material->GetZ() ;
@@ -215,7 +203,6 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     if(iz < 0) iz = 0 ;
     else if(iz > 91) iz = 91 ;
     vF   = vFermi[iz] ;
-    lF   = lFactor[iz] ;
 
   } else {
     for (G4int iel=0; iel<NumberOfElements; iel++)
@@ -229,11 +216,9 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
         if(iz < 0) iz = 0 ;
         else if(iz > 91) iz =91 ;
         vF   += vFermi[iz] * weight ;
-        lF   += lFactor[iz] * weight ;
       }
     z  /= norm ;
     vF /= norm ;
-    lF /= norm ;
   }
 
   // Helium ion case

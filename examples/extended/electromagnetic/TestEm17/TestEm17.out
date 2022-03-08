@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -256,7 +256,7 @@ eBrem:  for e-  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax= 1000 PeV  ModifiedTsai
 
-CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 1000 PeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -288,7 +288,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 1000 PeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -320,7 +320,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -379,7 +379,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -411,7 +411,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -443,7 +443,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -476,7 +476,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -509,7 +509,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -541,7 +541,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -573,7 +573,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -629,13 +629,13 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.340000s Real=1.371603s Sys=0.000000s
+  User=1.240000s Real=1.329997s Sys=0.010000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	CoulombScat : 5817	muIoni : 466662	muPairProd : 63738	muBrems : 679
+ Number of process calls --->	CoulombScat : 5609	muIoni : 465460	muPairProd : 63845	muBrems : 633
 
- Simulation: total CrossSection = 0.5369 /cm	 MeanFreePath = 1.8626 cm 	 massicCrossSection = 0.068221 cm2/g
+ Simulation: total CrossSection = 0.53555 /cm	 MeanFreePath = 1.8672 cm 	 massicCrossSection = 0.068049 cm2/g
  Theory:     total CrossSection = 0.52947 /cm	 MeanFreePath = 1.8887 cm 	 massicCrossSection = 0.067277 cm2/g
 #
 /gun/particle pi+
@@ -671,7 +671,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1598010390838924911, 172597997736781017, 386477711235779885, 1284536982436762262, 990673172980676356, 231286784210782504, 5472931185737299, 2003976382851868857, 652266868830649472, 2080657514090258439, 1222040013034173308, 1761953819816300378, 2262522810952436924, 2236711936340635379, 1120421396472526233, 1580292933338951628, 2133888456181900084} counter= 6sumtot= 971201019611899377
+N=17 V[N]={235111648556098168, 316769674826657036, 1324819056878075668, 187519902960746374, 2009087781667608690, 499409753739204757, 315019246073380315, 890600977740292910, 1101614299214045087, 2159612907541538825, 270857188699032576, 1714019803938225423, 2267951935475200266, 1986260144364270885, 1667965121016590776, 525930192876433815, 1296107385891854908} counter= 5sumtot= 321912947749704871
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -686,13 +686,13 @@ N=17 V[N]={1598010390838924911, 172597997736781017, 386477711235779885, 12845369
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.210000s Real=1.215669s Sys=0.010000s
+  User=1.150000s Real=1.217317s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 437128	hPairProd : 59261	CoulombScat : 5495	hBrems : 359
+ Number of process calls --->	hIoni : 436817	hPairProd : 59767	CoulombScat : 5577	hBrems : 355
 
- Simulation: total CrossSection = 0.50224 /cm	 MeanFreePath = 1.9911 cm 	 massicCrossSection = 0.063817 cm2/g
+ Simulation: total CrossSection = 0.50252 /cm	 MeanFreePath = 1.99 cm 	 massicCrossSection = 0.063852 cm2/g
 #
 /gun/particle proton
 /run/beamOn 10000
@@ -727,7 +727,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2058552003268553355, 1514200655791511296, 301812466116409819, 1269999323883602591, 1489009438370666343, 884813405892113843, 203656083150014476, 489384045424733960, 319405920364031605, 248923159767178278, 1449442086696991620, 693465522451322794, 114079628761891609, 115127949726627120, 2103729930526302458, 3464794468615430, 1260048199776360254} counter= 6sumtot= 684056559154763145
+N=17 V[N]={1508607969306287352, 1791867730457931969, 1738067224946617316, 2007935747096887633, 1306443592768877490, 992133989202938259, 1974062234776938355, 846884695187391062, 2152429126693427328, 715130086937459148, 1131541624573232947, 1993804955950227479, 2049477571311589037, 1926698848375365154, 250494825515888879, 1258619328067853475, 304836802032966014} counter= 14sumtot= 890606261064939387
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -742,13 +742,13 @@ N=17 V[N]={2058552003268553355, 1514200655791511296, 301812466116409819, 1269999
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.120000s Real=1.192762s Sys=0.000000s
+  User=1.070000s Real=1.093297s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 436625	hPairProd : 34132	CoulombScat : 5641	hBrems : 5
+ Number of process calls --->	hIoni : 435956	hPairProd : 34092	CoulombScat : 5620	hBrems : 6
 
- Simulation: total CrossSection = 0.4764 /cm	 MeanFreePath = 2.0991 cm 	 massicCrossSection = 0.060534 cm2/g
+ Simulation: total CrossSection = 0.47567 /cm	 MeanFreePath = 2.1023 cm 	 massicCrossSection = 0.060441 cm2/g
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -771,12 +771,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0163 MB
-Pool ID '7G4Track', size : 0.0317 MB
+Pool ID '17G4DynamicParticle', size : 0.0154 MB
+Pool ID '7G4Track', size : 0.0308 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.061 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.059 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

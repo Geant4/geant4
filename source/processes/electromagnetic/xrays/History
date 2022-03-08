@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 Jan 22: D. Sawkey (xrays-V10-07-10)
+- G4Scintillation - remove unused YieldFactor declarations
+  Addresses bug 2470.
+
+18 Jan 22: D. Sawkey (xrays-V10-07-09)
+- Fix MaxBetaChange value in Cerenkov process.
+  Addressing problem report 2456.
+
 19 Oct 21: D. Sawkey (xrays-V10-07-08)
 - G4Cerenkov, G4Scintillation - update G4OpticalParameters when process
   parameters updated directly. Addresses bug 2425.

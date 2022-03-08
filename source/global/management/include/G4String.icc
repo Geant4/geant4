@@ -62,6 +62,16 @@ inline G4String& G4String::operator=(G4String&& str)
 
 inline G4String::operator const char*() const { return c_str(); }
 
+inline G4String::reference G4String::operator[](int pos)
+{
+  return std::string::operator[](pos);
+}
+
+inline G4String::const_reference G4String::operator[](int pos) const
+{
+    return std::string::operator[](pos);
+}
+
 inline G4int G4String::compareTo(std::string_view str, caseCompare mode) const
 {
   if(mode == exact)

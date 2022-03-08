@@ -1050,22 +1050,18 @@ G4SandiaTable::GetSandiaMatTablePAI(G4int interval, G4int j) const
 
 void G4SandiaTable::ComputeMatTable()
 {
-  G4int MaxIntervals = 0;
   G4int elm, c, i, j, jj, k, kk, k1, k2, c1, n1;    
 
   const G4int noElm = fMaterial->GetNumberOfElements();
   const G4ElementVector* ElementVector = fMaterial->GetElementVector();  
   G4int* Z = new G4int[noElm];               //Atomic number
 
+  fMaxInterval = 0;
   for (elm = 0; elm<noElm; ++elm)
   { 
-    Z[elm] = (G4int)(*ElementVector)[elm]->GetZ();
-    MaxIntervals += fNbOfIntervals[Z[elm]];
-  }  
-  fMaxInterval = 0;
-
-  for(i = 0; i < noElm; ++i)  fMaxInterval += fNbOfIntervals[Z[i]]; 
-  
+    Z[elm] = (*ElementVector)[elm]->GetZasInt();
+    fMaxInterval += fNbOfIntervals[Z[elm]];
+  }
   fMaxInterval += 2;
 
   //  G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl;

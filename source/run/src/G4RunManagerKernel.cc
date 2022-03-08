@@ -949,7 +949,7 @@ void G4RunManagerKernel::CheckRegions()
     G4ProductionCuts* cuts = region->GetProductionCuts();
     if(cuts == nullptr)
     {
-      if(region->IsInMassGeometry())
+      if(region->IsInMassGeometry() && verboseLevel > 0)
       {
         G4cout << "Warning : Region <" << region->GetName()
                << "> does not have specific production cuts," << G4endl

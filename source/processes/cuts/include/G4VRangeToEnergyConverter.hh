@@ -117,6 +117,7 @@ protected:
 
   G4int fPDG = 0;
   G4int verboseLevel = 1;
+  G4bool isFirstInstance = false;
 };
 
 // ------------------

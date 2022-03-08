@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-02-22 V.Ivanchenko (materials-V10-07-27)
+- G4SandiaTable - fixed compilation warning on unused variable
+
+17-01-22 D.Sawkey
+- G4MaterialPropertiesTable - set G4MaterialPropertyVector verbosity to 1.
+
+19-12-21 V.Ivanchenko
+- G4DensityEffectData - Matthew Strait fix typos in the density effect data table
+    (problem #2423) for 8 materials, the most significant fix for G4_Tm, small 
+    for G4_Be, G4_Mg, G4_Fe, and G4_Y.
+
 10-11-21 V.Ivanchenko (materials-V10-07-26)
 - G4Material - revised and updated all G4Exceptions, provided complete
     information for all exceptions, text become more precise,

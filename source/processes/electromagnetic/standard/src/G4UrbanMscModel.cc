@@ -70,10 +70,16 @@
 #include "globals.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 std::vector<G4UrbanMscModel::mscData*> G4UrbanMscModel::msc;
+
+namespace
+{
+  G4Mutex theUrbanMutex = G4MUTEX_INITIALIZER;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -135,7 +141,7 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
 
 G4UrbanMscModel::~G4UrbanMscModel()
 {
-  if(IsMaster()) {
+  if(isFirstInstance) {
     for(auto & ptr : msc) { delete ptr; }
     msc.clear();
   } 
@@ -153,7 +159,19 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
 
   latDisplasmentbackup = latDisplasment;
   dispAlg96 = (G4EmParameters::Instance()->LateralDisplacementAlg96());
-  if(IsMaster() || msc.size() == 0) { InitialiseModelCache(); }
+
+  // initialise cache only once
+  if(0 == msc.size()) {
+    G4AutoLock l(&theUrbanMutex);
+    if(0 == msc.size()) {
+      isFirstInstance = true;
+      msc.resize(1, nullptr);
+    }
+    l.unlock();
+  }
+  // initialise cache for each new run
+  if(isFirstInstance) { InitialiseModelCache(); }
+
   /*
   G4cout << "### G4UrbanMscModel::Initialise done for " 
  	 << p->GetParticleName() << " type= " << steppingAlgorithm << G4endl;
@@ -788,8 +806,9 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
       if(par1 <  0.) {
         tlength = -lambda0*G4Log(1.-geomStepLength/lambda0) ;
       } else {
-        if(par1*par3*geomStepLength < 1.) {
-          tlength = (1.-G4Exp(G4Log(1.-par1*par3*geomStepLength)/par3))/par1 ;
+        const G4double par4 = par1*par3;
+        if(par4*geomStepLength < 1.) {
+          tlength = (1.-G4Exp(G4Log(1.-par4*geomStepLength)/par3))/par1;
         } else {
           tlength = currentRange;
         }
@@ -1214,14 +1233,14 @@ void G4UrbanMscModel::InitialiseModelCache()
   // of a new G4MaterialCutsCouple is possible
   auto theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
-  if(numOfCouples != msc.size()) { msc.resize(numOfCouples); }
+  if(numOfCouples != msc.size()) { msc.resize(numOfCouples, nullptr); }
   
   for(size_t j=0; j<numOfCouples; ++j) {
     auto aCouple = theCoupleTable->GetMaterialCutsCouple(j);
 
     // cut may be changed before runs
     G4double cut = aCouple->GetProductionCuts()->GetProductionCut(1);
-    if(msc[j]) { 
+    if(nullptr != msc[j]) {
       msc[j]->ecut = cut;
       continue; 
     }
