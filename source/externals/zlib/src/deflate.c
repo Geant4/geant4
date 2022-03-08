@@ -319,6 +319,10 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 
     s->window = (Bytef *) ZALLOC(strm, s->w_size, 2*sizeof(Byte));
     s->prev   = (Posf *)  ZALLOC(strm, s->w_size, sizeof(Pos));
+    /* Avoid use of uninitialized value, see:
+     * https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=11360
+     */
+    zmemzero(s->prev, s->w_size * sizeof(Pos));
     s->head   = (Posf *)  ZALLOC(strm, s->hash_size, sizeof(Pos));
 
     s->high_water = 0;      /* nothing written to s->window yet */
