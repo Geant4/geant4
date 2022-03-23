@@ -156,6 +156,11 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   sharkCmd->AvailableForStates(G4State_PreInit);
   sharkCmd->SetToBeBroadcasted(false);
 
+  poCmd = new G4UIcmdWithABool("/process/em/Polarisation",this);
+  poCmd->SetGuidance("Enable polarisation");
+  poCmd->AvailableForStates(G4State_PreInit);
+  poCmd->SetToBeBroadcasted(false);
+
   sampleTCmd = new G4UIcmdWithABool("/process/em/enableSamplingTable",this);
   sampleTCmd->SetGuidance("Enable usage of sampling table for secondary generation");
   sampleTCmd->SetParameterName("sampleT",true);
@@ -436,6 +441,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete sharkCmd;
   delete onIsolatedCmd;
   delete sampleTCmd;
+  delete poCmd;
   delete icru90Cmd;
   delete mudatCmd;
 
@@ -515,6 +521,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetUseICRU90Data(icru90Cmd->GetNewBoolValue(newValue));
   } else if (command == sharkCmd) {
     theParameters->SetGeneralProcessActive(sharkCmd->GetNewBoolValue(newValue));
+  } else if (command == poCmd) {
+    theParameters->SetEnablePolarisation(poCmd->GetNewBoolValue(newValue));
   } else if (command == sampleTCmd) {
     theParameters->SetEnableSamplingTable(sampleTCmd->GetNewBoolValue(newValue));
   } else if (command == mudatCmd) {

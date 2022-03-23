@@ -645,12 +645,14 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
   if (auto *trackingManager = particle->GetTrackingManager())
   {
+#ifdef G4VERBOSE
     if(verboseLevel > 2)
     {
       G4cout << "G4VUserPhysicsList::BuildPhysicsTable  "
              << "Calculate Physics Table for " << particle->GetParticleName()
              << " via custom TrackingManager" << G4endl;
     }
+#endif
     trackingManager->BuildPhysicsTable(*particle);
     return;
   }
@@ -659,9 +661,12 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 
   if(particle->GetMasterProcessManager() == nullptr)
   {
-    G4cout
+#ifdef G4VERBOSE
+    if(verboseLevel > 0)
+    { G4cout
       << "#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable("
-      << particle->GetParticleName() << ") skipped..." << G4endl;
+      << particle->GetParticleName() << ") skipped..." << G4endl; }
+#endif
     return;
   }
   if(fRetrievePhysicsTable)

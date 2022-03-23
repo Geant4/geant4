@@ -13,6 +13,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 December 2021, V.Ivanchenko (phys-ctor-em-V10-07-24)
+- G4EmStandardPhysics_option3 - use options providing more accurate 
+    simulation without loss of CPU performance: RangeFactor=0.03,
+    and SafetyPlus step limitation instead of DistanceToBoundary,
+    which significantly improving fanoCavity results
+
 12 November 2021, V.Ivanchenko (phys-ctor-em-V10-07-23)
 - G4EmStandardPhysicsWVI - making this experimantal configuration 
     compatible for CPU performance with Opt3 (it was similar to SS)

@@ -330,6 +330,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
 
   G4MaterialPropertyVector* mpv =
     new G4MaterialPropertyVector(photonEnergies, propertyValues, spline);
+  mpv->SetVerboseLevel(1);
   if(spline)
   {
     mpv->FillSecondDerivatives();
@@ -351,6 +352,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
   const char* key, G4double* photonEnergies, G4double* propertyValues,
   G4int numEntries, G4bool createNewKey, G4bool spline)
 {
+
   // Provides a way of adding a property to the Material Properties
   // Table given a pair of arrays and a key
   G4String k(key);
@@ -564,6 +566,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::CalculateGROUPVEL()
 
   // add GROUPVEL vector
   G4MaterialPropertyVector* groupvel = new G4MaterialPropertyVector();
+  groupvel->SetVerboseLevel(1);
 
   // fill GROUPVEL vector using RINDEX values
   // rindex built-in "iterator" was advanced to first entry above

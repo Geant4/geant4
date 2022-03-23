@@ -127,7 +127,9 @@ public:
 
   G4MicroElecInelasticModel_new & operator=(const  G4MicroElecInelasticModel_new &right) = delete;
   G4MicroElecInelasticModel_new(const  G4MicroElecInelasticModel_new&) = delete;
+
 protected:
+
   G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
 
 private:
@@ -188,6 +190,7 @@ private:
   G4int verboseLevel;  
   G4bool isInitialised ;
   G4bool fasterCode;
+  G4bool SEFromFermiLevel;
 };
 
 #endif

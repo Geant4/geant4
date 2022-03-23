@@ -52,7 +52,21 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter()
 {
   if(nullptr == Energy)
   {
-    Energy = new std::vector<G4double>(Nbin + 1);
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&theMutex);
+    if(nullptr == Energy)
+    {
+#endif
+      isFirstInstance = true;
+      Energy = new std::vector<G4double>(Nbin + 1);
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&theMutex);
+#endif
+  }
+  // this method defines lock itself
+  if(isFirstInstance)
+  {
     FillEnergyVector(1*CLHEP::keV, 10.0*CLHEP::GeV);
   }
 }
@@ -60,7 +74,7 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter()
 // --------------------------------------------------------------------
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 {
-  if(nullptr != Energy) 
+  if(isFirstInstance)
   { 
     delete Energy;
     Energy = nullptr; 
@@ -145,25 +159,26 @@ void G4VRangeToEnergyConverter::SetMaxEnergyCut(const G4double value)
 void G4VRangeToEnergyConverter::FillEnergyVector(const G4double emin, 
                                                  const G4double emax)
 {
-  if(emin == Emin && emax == Emax) { return; }
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&theMutex);
-  if(emin == Emin && emax == Emax) { return; }
-#endif
-  Emin = emin;
-  Emax = emax;
-  Nbin = NbinPerDecade*static_cast<G4int>(std::log10(emax/emin));
-  Energy->resize(Nbin + 1);
-  (*Energy)[0] = emin;
-  (*Energy)[Nbin] = emax;
-  G4double fact = G4Log(emax/emin)/Nbin;
-  for(G4int i=1; i<Nbin; ++i)
+  if(emin != Emin || emax != Emax) 
   {
-    (*Energy)[i] = emin*G4Exp(i * fact);
-  }
 #ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&theMutex);
+    G4MUTEXLOCK(&theMutex);
+    if(emin != Emin || emax != Emax) 
+    { 
 #endif
+      Emin = emin;
+      Emax = emax;
+      Nbin = NbinPerDecade*static_cast<G4int>(std::log10(emax/emin));
+      Energy->resize(Nbin + 1);
+      (*Energy)[0] = emin;
+      (*Energy)[Nbin] = emax;
+      G4double fact = G4Log(emax/emin)/Nbin;
+      for(G4int i=1; i<Nbin; ++i) { (*Energy)[i] = emin*G4Exp(i * fact); }
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&theMutex);
+#endif
+  }
 }
 
 // --------------------------------------------------------------------

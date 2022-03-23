@@ -15,6 +15,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06.02.2022 V. Ivanchenko, emlowen-V10-07-28
+- G4MicroElecInelasticModel_new - removed not working if{} block
+
+06.02.2022 V. Ivanchenko
+- G4MicroElecInelasticModel_new - C. Inguimbert change interpolate method 
+    making a choice between log-log, lin-log, and lin-lin interpolations and
+    added a protection for zero input energy. When sample transition the choice
+    the choice is implemented for transition from atomic level and Fermi level.
+    This MR should fix rare crash due to this model.
+
+04.02.2022 V. Ivanchenko
+- G4hIonEffChargeSquare, G4PenelopeRayleighModel, G4PenelopeRayleighModelMI
+    fixed compilation warning on unused variable
+
+18.01.2022 J. Hahnfeld
+- Prefer pointer to `const G4Material` if possible
+
 25.11.2021 S. Guatelli, emlowen-V10-07-27
 - Added option to activate the ANSTO fluorescence radiation yield (Z < 93)
 

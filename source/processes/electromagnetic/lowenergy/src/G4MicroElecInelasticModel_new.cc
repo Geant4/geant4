@@ -120,7 +120,9 @@ G4MicroElecInelasticModel_new::G4MicroElecInelasticModel_new(
   // default generator
   SetAngularDistribution(new G4DeltaAngle());
 
+  // Selection of computation method
   fasterCode = true;
+  SEFromFermiLevel = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -687,23 +689,26 @@ void G4MicroElecInelasticModel_new::SampleSecondaries(std::vector<G4DynamicParti
       G4int shellEnum = currentMaterialStructure->GetEADL_Enumerator(Shell);
       if (currentMaterialStructure->IsShellWeaklyBound(Shell)) { shellEnum = -1; }
       
-      if(fAtomDeexcitation && shellEnum >=0) {
-	//		G4cout << "enter if deex and shell 0" << G4endl;
-	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(shellEnum);
-	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
-	secNumberInit = fvect->size();
-	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
-	secNumberFinal = fvect->size();
-      }
+      if(fAtomDeexcitation && shellEnum >=0) 
+	{
+	  //		G4cout << "enter if deex and shell 0" << G4endl;
+	  G4AtomicShellEnumerator as = G4AtomicShellEnumerator(shellEnum);
+	  const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
+	  secNumberInit = fvect->size();
+	  fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
+	  secNumberFinal = fvect->size();
+	}
             
       G4double secondaryKinetic=-1000*eV;
+      SEFromFermiLevel = false;
       if (!fasterCode)
 	{
 	  secondaryKinetic = RandomizeEjectedElectronEnergy(PartDef, k, Shell, originalMass, originalZ);	  
 	}
-      else {
-	secondaryKinetic = RandomizeEjectedElectronEnergyFromCumulatedDcs(PartDef, k, Shell) ;
-      }
+      else 
+	{
+	  secondaryKinetic = RandomizeEjectedElectronEnergyFromCumulatedDcs(PartDef, k, Shell) ;
+	}
 
       if (verboseLevel > 3)
 	{
@@ -731,17 +736,18 @@ void G4MicroElecInelasticModel_new::SampleSecondaries(std::vector<G4DynamicParti
 	  G4ThreeVector direction;
 	  direction.set(finalPx,finalPy,finalPz);
 	  
-	  fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
+	  fParticleChangeForGamma->ProposeMomentumDirection(direction.unit());
 	}
-      else fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection) ;
+      else fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
       
       // note that secondaryKinetic is the energy of the delta ray, not of all secondaries.
       G4double deexSecEnergy = 0;
-      for (G4int j=secNumberInit; j < secNumberFinal; j++) {
-	deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();}
-            
-      fParticleChangeForGamma->SetProposedKineticEnergy(ekin - secondaryKinetic-limitEnergy); //Ef = Ei-(Q-El)-El = Ei-Q
-      fParticleChangeForGamma->ProposeLocalEnergyDeposit(limitEnergy-deexSecEnergy);
+      for (G4int j=secNumberInit; j < secNumberFinal; ++j) {
+	deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();
+      }      
+      if (SEFromFermiLevel) limitEnergy = currentMaterialStructure->GetEnergyGap();
+      fParticleChangeForGamma->SetProposedKineticEnergy(ekin - secondaryKinetic - limitEnergy); //Ef = Ei-(Q-El)-El = Ei-Q
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(limitEnergy - deexSecEnergy);
            
       if (secondaryKinetic>0)
 	{  
@@ -837,8 +843,11 @@ G4double G4MicroElecInelasticModel_new::RandomizeEjectedElectronEnergyFromCumula
   secondaryElectronKineticEnergy = TransferedEnergy(particleDefinition, k, shell, random)
     - currentMaterialStructure->GetLimitEnergy(shell) ;
 
+  if (isnan(secondaryElectronKineticEnergy)) { secondaryElectronKineticEnergy = k - currentMaterialStructure->GetLimitEnergy(shell); }
+
   if (secondaryElectronKineticEnergy < 0.) {
-    secondaryElectronKineticEnergy = 0.;
+    secondaryElectronKineticEnergy = k - currentMaterialStructure->GetEnergyGap();
+    SEFromFermiLevel = true;
   }
   return secondaryElectronKineticEnergy;
 }
@@ -1252,12 +1261,35 @@ G4double G4MicroElecInelasticModel_new::Interpolate(G4double e1,
 					 G4double xs1,
 					 G4double xs2)
 {
-  G4double a = (std::log10(xs2)-std::log10(xs1)) / (std::log10(e2)-std::log10(e1));
-  G4double b = std::log10(xs2) - a*std::log10(e2);
-  G4double sigma = a*std::log10(e) + b;
-  G4double value = (std::pow(10.,sigma));
+  G4double value = 0.;
+
+  // Log-log interpolation by default
+  if (e1 != 0 && e2 != 0 && (e2-e1) != 0 && !fasterCode)
+    {
+      G4double a = std::log(xs2/xs1)/ std::log(e2/e1);
+      G4double b = std::log(xs2) - a * std::log(e2);
+      G4double sigma = a * std::log(e) + b;
+      value = (std::exp(sigma));
+    }
+
+  // Switch to log-lin interpolation for faster code
+  if ((e2 - e1) != 0 && xs1 != 0 && xs2 != 0 && fasterCode)
+    {
+      G4double d1 = std::log(xs1);
+      G4double d2 = std::log(xs2);
+      value = std::exp((d1 + (d2 - d1) * (e - e1) / (e2 - e1)));
+    }
+
+  // Switch to lin-lin interpolation for faster code
+  // in case one of xs1 or xs2 (=cum proba) value is zero
+  if ((e2 - e1) != 0 && (xs1 == 0 || xs2 == 0) && fasterCode)
+    {
+      G4double d1 = xs1;
+      G4double d2 = xs2;
+      value = (d1 + (d2 - d1) * (e - e1) / (e2 - e1));
+    }
+
   return value;
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

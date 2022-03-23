@@ -152,7 +152,22 @@ G4GenericMessenger::Command& G4GenericMessenger::DeclareMethod(
     cmd->SetGuidance(doc);
   for(std::size_t i = 0; i < fun.NArg(); ++i)
   {
-    cmd->SetParameter(new G4UIparameter("arg", 's', false));
+    G4String argNam = "arg" + ItoS(i);
+    char ptype = 's';
+    auto& tInfo = fun.ArgType(i);
+    if(tInfo == typeid(int) || tInfo == typeid(long) ||
+       tInfo == typeid(unsigned int) ||
+       tInfo == typeid(unsigned long))
+    { ptype = 'i'; }
+    else if(tInfo == typeid(float) || tInfo == typeid(double))
+    { ptype = 'd'; }
+    else if(tInfo == typeid(bool))
+    { ptype = 'b'; }
+    else if(tInfo == typeid(G4String))
+    { ptype = 's'; }
+    else
+    { ptype = 's'; }
+    cmd->SetParameter(new G4UIparameter(argNam, ptype, false));
   }
   return methods[name] = Method(fun, object, cmd);
 }
@@ -323,8 +338,21 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(
 
 G4GenericMessenger::Command& G4GenericMessenger::Command::SetParameterName(
   const G4String& name, G4bool omittable, G4bool currentAsDefault)
+{ 
+  return SetParameterName(0,name,omittable,currentAsDefault);
+}
+
+G4GenericMessenger::Command& G4GenericMessenger::Command::SetParameterName(
+  G4int pIdx,
+  const G4String& name, G4bool omittable, G4bool currentAsDefault)
 {
-  G4UIparameter* theParam = command->GetParameter(0);
+  if(pIdx < 0 || pIdx >= (G4int)(command->GetParameterEntries()))
+  {
+    G4cerr << "Invalid parameter index : " << pIdx << "\nMethod ignored."
+           << G4endl;
+    return *this;
+  }
+  G4UIparameter* theParam = command->GetParameter(pIdx);
   theParam->SetParameterName(name);
   theParam->SetOmittable(omittable);
   theParam->SetCurrentAsDefault(currentAsDefault);
@@ -359,7 +387,19 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetParameterName(
 G4GenericMessenger::Command& G4GenericMessenger::Command::SetCandidates(
   const G4String& candList)
 {
-  G4UIparameter* theParam = command->GetParameter(0);
+  return SetCandidates(0,candList);
+}
+
+G4GenericMessenger::Command& G4GenericMessenger::Command::SetCandidates(
+  G4int pIdx, const G4String& candList)
+{
+  if(pIdx < 0 || pIdx >= (G4int)(command->GetParameterEntries()))
+  {
+    G4cerr << "Invalid parameter index : " << pIdx << "\nMethod ignored."
+           << G4endl;
+    return *this;
+  }
+  G4UIparameter* theParam = command->GetParameter(pIdx);
   theParam->SetParameterCandidates(candList);
   return *this;
 }
@@ -367,7 +407,19 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetCandidates(
 G4GenericMessenger::Command& G4GenericMessenger::Command::SetDefaultValue(
   const G4String& defVal)
 {
-  G4UIparameter* theParam = command->GetParameter(0);
+  return SetDefaultValue(0,defVal);
+}
+
+G4GenericMessenger::Command& G4GenericMessenger::Command::SetDefaultValue(
+  G4int pIdx, const G4String& defVal)
+{
+  if(pIdx < 0 || pIdx >= (G4int)(command->GetParameterEntries()))
+  {
+    G4cerr << "Invalid parameter index : " << pIdx << "\nMethod ignored."
+           << G4endl;
+    return *this;
+  }
+  G4UIparameter* theParam = command->GetParameter(pIdx);
   theParam->SetDefaultValue(defVal);
   return *this;
 }

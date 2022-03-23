@@ -66,9 +66,16 @@ G4MultiUnion::~G4MultiUnion()
 }
 
 //______________________________________________________________________________
-void G4MultiUnion::AddNode(G4VSolid& solid, G4Transform3D& trans)
+void G4MultiUnion::AddNode(G4VSolid& solid, const G4Transform3D& trans)
 {
   fSolids.push_back(&solid);
+  fTransformObjs.push_back(trans);  // Store a local copy of transformations
+}
+
+//______________________________________________________________________________
+void G4MultiUnion::AddNode(G4VSolid* solid, const G4Transform3D& trans)
+{
+  fSolids.push_back(solid);
   fTransformObjs.push_back(trans);  // Store a local copy of transformations
 }
 

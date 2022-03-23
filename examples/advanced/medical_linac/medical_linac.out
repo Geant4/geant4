@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -390,7 +390,7 @@ ePairProd:  for e-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -429,7 +429,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -461,7 +461,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -530,7 +530,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -562,7 +562,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -594,7 +594,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -627,7 +627,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -660,7 +660,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -692,7 +692,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -724,7 +724,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -974,10 +974,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=14.130000s Real=14.282806s Sys=0.010000s
+  User=14.000000s Real=15.582784s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 133
-loop elapsed time [s] : 14.16
+ Number of entries 189
+loop elapsed time [s] : 14.02
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1201,10 +1201,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=14.720000s Real=14.922940s Sys=0.010000s
+  User=14.100000s Real=16.167279s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 186
-loop elapsed time [s] : 14.74
+ Number of entries 167
+loop elapsed time [s] : 14.13
 
 ################ END NEW GEOMETRY ########################
 /run/geometryModified
@@ -1498,10 +1498,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=14.070000s Real=14.207678s Sys=0.000000s
+  User=14.340000s Real=14.937184s Sys=0.010000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 87
-loop elapsed time [s] : 14.1
+ Number of entries 112
+loop elapsed time [s] : 14.37
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1725,13 +1725,13 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=14.110000s Real=14.287277s Sys=0.010000s
+  User=14.520000s Real=15.058369s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 82
-loop elapsed time [s] : 14.14
+ Number of entries 72
+loop elapsed time [s] : 14.55
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 60.14
+loop elapsed time [s] : 60.08
 
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1746,10 +1746,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 19
+Total navigation history collections cleaned: 20
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0279 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0288 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00577 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.00288 MB
@@ -1760,13 +1760,13 @@ Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00385 MB
 Pool ID '7G4Track', size : 0.00673 MB
-Pool ID '18G4TouchableHistory', size : 0.00192 MB
+Pool ID '18G4TouchableHistory', size : 0.00288 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '12G4Trajectory', size : 0.00385 MB
-Pool ID '17G4TrajectoryPoint', size : 0.0356 MB
+Pool ID '12G4Trajectory', size : 0.00288 MB
+Pool ID '17G4TrajectoryPoint', size : 0.0385 MB
 Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
 Number of memory pools allocated: 16 of which, static: 0
-Dynamic pools deleted: 16 / Total memory freed: 0.095 MB
+Dynamic pools deleted: 16 / Total memory freed: 0.099 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -209,42 +209,42 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.440000s Real=0.454103s Sys=0.000000s
+  User=0.410000s Real=0.417211s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
  Process defining step :
-      Edep alone=     42   Transportation=  99997            eBrem=  37456            eIoni=  23948
+      Edep alone=     40   Transportation=  99997            eBrem=  37471            eIoni=  23966
 
 
- TrackLength = 1 cm   nb of steps = 1.614  stepSize = 6.194 mm   (86.42 nm --> 1.008 cm )
+ TrackLength = 1 cm   nb of steps = 1.615  stepSize = 6.193 mm   (86.42 nm --> 1.008 cm )
 
- Energy continuously deposited along primary track (restricted dE/dx)  dE1 = 1.744 MeV  (1.328 MeV --> 3.138 MeV)
+ Energy continuously deposited along primary track (restricted dE/dx)  dE1 = 1.744 MeV  (1.329 MeV --> 3.138 MeV)
 
  Evaluation of dE1 from reading restricted Range table : dE1_table = 1.744 MeV   ---> dE1/dE1_table = 1
 
  Energy transfered to secondary particles :
-       due to eBrem:  dE2 =  2.325 MeV  (2.938 keV --> 98.4 MeV)
-       due to eIoni:  dE2 =  446.5 keV  (351.3 keV --> 51.82 MeV)
+       due to eBrem:  dE2 =  2.323 MeV  (2.938 keV --> 98.4 MeV)
+       due to eIoni:  dE2 =  446.2 keV  (351.3 keV --> 51.82 MeV)
 
- Total energy transfered to secondaries : dE3 = sum of dE2 = 2.771 MeV  (2.938 keV --> 98.4 MeV)
+ Total energy transfered to secondaries : dE3 = sum of dE2 = 2.769 MeV  (2.938 keV --> 98.4 MeV)
 
- Total energy lost by incident particle : dE4 = dE1 + dE3 = 4.516 MeV  (1.328 MeV --> 100 MeV)
+ Total energy lost by incident particle : dE4 = dE1 + dE3 = 4.513 MeV  (1.329 MeV --> 100 MeV)
 
- calcul of dE4 from energy balance : dE4_bal = E_in - E_out = 4.516 MeV  (1.328 MeV --> 100 MeV)
+ calcul of dE4 from energy balance : dE4_bal = E_in - E_out = 4.513 MeV  (1.329 MeV --> 100 MeV)
 
- Evaluation of dE4 from reading full Range table : dE4_table = 4.578 MeV   ---> dE4/dE4_table = 0.9864
+ Evaluation of dE4 from reading full Range table : dE4_table = 4.578 MeV   ---> dE4/dE4_table = 0.9858
 
  Energy spectrum of secondary particles :
-             e-:   23948  Emean =  1.864 MeV  (351.3 keV --> 49.39 MeV)
-          gamma:   37440  Emean =   6.21 MeV  (2.938 keV --> 98.4 MeV)
+             e-:   23966  Emean =  1.862 MeV  (351.3 keV --> 49.39 MeV)
+          gamma:   37457  Emean =  6.201 MeV  (2.938 keV --> 98.4 MeV)
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 663847090, 1426555084
+ Current couple of seeds = 1678481677, 1961356788
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

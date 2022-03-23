@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -179,12 +179,12 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for e+-           2
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for e+-            0.03
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
@@ -220,7 +220,7 @@ conv:  for gamma SubType=14 BuildTable=1
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
-          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
@@ -233,7 +233,7 @@ eIoni:  for e-  XStype:1  SubType=2
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
-          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e+  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
@@ -283,18 +283,18 @@ Index : 1     used in the geometry : Yes
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 1000 starts.
- ---> NbofEvents= 1000   NbOfelectr= 69755   Tkin= 586.556 keV (0.000 %)   NbOfelec in cav= 4633   Dose/EnFluence= 24.541 cm2/g (0.000 %) 
+ ---> NbofEvents= 1000   NbOfelectr= 70111   Tkin= 589.355 keV (0.000 %)   NbOfelec in cav= 4602   Dose/EnFluence= 30.969 cm2/g (0.000 %) 
 
 --> Event 2000 starts.
- ---> NbofEvents= 2000   NbOfelectr= 140305   Tkin= 586.951 keV (0.067 %)   NbOfelec in cav= 9211   Dose/EnFluence= 25.899 cm2/g (5.533 %) 
+ ---> NbofEvents= 2000   NbOfelectr= 140982   Tkin= 589.004 keV (-0.060 %)   NbOfelec in cav= 9508   Dose/EnFluence= 31.895 cm2/g (2.991 %) 
 
 --> Event 3000 starts.
- ---> NbofEvents= 3000   NbOfelectr= 210411   Tkin= 587.690 keV (0.126 %)   NbOfelec in cav= 13840   Dose/EnFluence= 26.887 cm2/g (3.816 %) 
+ ---> NbofEvents= 3000   NbOfelectr= 211272   Tkin= 588.919 keV (-0.015 %)   NbOfelec in cav= 14413   Dose/EnFluence= 32.146 cm2/g (0.785 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=6.580000s Real=6.689815s Sys=0.010000s
+  User=6.440000s Real=6.674117s Sys=0.010000s
 
  ======================== run summary ======================
 
@@ -304,31 +304,31 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 280800  Transportation= 76336  msc= 636736  eIoni= 2186971
+ Process calls frequency --->  compt= 281773  Transportation= 78120  msc= 458646  eIoni= 2209974
 
  Gamma crossSections in wall material :  compt= 63.464 cm2/g   --> total= 63.464 cm2/g
 
- Mean energy of secondary e- = 587.9922 keV +- 0.1033 %  (--> range in wall material = 2.2199 mm )
- Mass_energy_transfer coef: 29.8529 cm2/g
+ Mean energy of secondary e- = 588.9642 keV +- 0.1028 %  (--> range in wall material = 2.2248 mm )
+ Mass_energy_transfer coef: 29.9023 cm2/g
 
- StoppingPower in wall   = 1.9645 MeV*cm2/g
-               in cavity = 1.9645 MeV*cm2/g
+ StoppingPower in wall   = 1.9640 MeV*cm2/g
+               in cavity = 1.9640 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 18529	 Energy = 9.4373 GeV
-      Exit  --> nbParticles = 18533	 Energy = 9.4365 GeV
+      Enter --> nbParticles = 19201	 Energy = 9.6793 GeV
+      Exit  --> nbParticles = 19207	 Energy = 9.6792 GeV
 
- Total edep in cavity = 12.1060 MeV +- 2.2586 %	 Total charged trackLength = 51.0861 m     (mean value = 2.7571 mm )
- Total dose in cavity = 19.2673 MeV/mg
- Dose/EnergyFluence   = 27.2385 cm2/g
+ Total edep in cavity = 13.9516 MeV +- 3.3499 %	 Total charged trackLength = 53.9141 m     (mean value = 2.8079 mm )
+ Total dose in cavity = 22.2047 MeV/mg
+ Dose/EnergyFluence   = 31.3912 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.91242 +- 0.02063
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.04979 +- 0.03518
 
- StepSize of ch. tracks in wall   = 167.6347 um  +- 186.0520 um 	 (nbSteps/track = 10.0342)
- StepSize of ch. tracks in cavity = 682.4589 um  +- 739.9919 um 	 (nbSteps/track = 4.0399)
+ StepSize of ch. tracks in wall   = 174.6683 um  +- 187.8429 um 	 (nbSteps/track = 9.6492)
+ StepSize of ch. tracks in cavity = 2.6620 mm  +- 2.0560 mm 	 (nbSteps/track = 1.0548)
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.069 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.071 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

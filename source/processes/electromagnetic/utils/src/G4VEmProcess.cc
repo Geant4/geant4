@@ -165,6 +165,13 @@ void G4VEmProcess::SetEmModel(G4VEmModel* ptr, G4int)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver) const
+{
+  return modelManager->GetModel(idx, ver);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   isTheMaster = lManager->IsMaster();
@@ -321,7 +328,9 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(!isTheMaster) {
       theLambdaTable = masterProc->LambdaTable();
       theLambdaTablePrim = masterProc->LambdaTablePrim();
-      theEnergyOfCrossSectionMax = masterProc->EnergyOfCrossSectionMax();
+      if(fXSType == fEmOnePeak) {
+	SetEnergyOfCrossSectionMax(masterProc->EnergyOfCrossSectionMax());
+      }
       baseMat = masterProc->UseBaseMaterial();
 
       // local initialisation of models
@@ -338,6 +347,11 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     } else {
       if(buildLambdaTable || minKinEnergyPrim < maxKinEnergy) {
         BuildLambdaTable();
+      }
+      if(fXSType == fEmOnePeak) { 
+	delete theEnergyOfCrossSectionMax;
+	theEnergyOfCrossSectionMax = nullptr;
+	SetEnergyOfCrossSectionMax(FindLambdaMax());
       }
     }
   }
@@ -450,8 +464,6 @@ void G4VEmProcess::BuildLambdaTable()
       }
     }
   }
-
-  if(buildLambdaTable && fXSType == fEmOnePeak) { FindLambdaMax(); }
 
   if(1 < verboseLevel) {
     G4cout << "Lambda table is built for "
@@ -963,25 +975,11 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double 
-G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
-                                    const G4MaterialCutsCouple* couple,
-                                    G4double logKinEnergy)
+G4double G4VEmProcess::CrossSectionPerVolume(G4double kinEnergy,
+                                       const G4MaterialCutsCouple* couple,
+                                             G4double)
 {
-  // Cross section per atom is calculated
-  DefineMaterial(couple);
-  G4double cross = 0.0;
-  if(buildLambdaTable) {
-    cross = GetCurrentLambda(kineticEnergy, 
-      (logKinEnergy < DBL_MAX) ? logKinEnergy : G4Log(kineticEnergy));
-  } else {
-    SelectModel(kineticEnergy, currentCoupleIndex);
-    if(currentModel) {
-      cross = fFactor*currentModel->CrossSectionPerVolume(currentMaterial,
-                                                          currentParticle,
-                                                          kineticEnergy);
-    }
-  }
+  G4double cross = RecalculateLambda(kinEnergy, couple);
   return std::max(cross, 0.0);
 }
 
@@ -1020,54 +1018,73 @@ G4VEmProcess::ComputeCrossSectionPerAtom(G4double kinEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::FindLambdaMax()
+std::vector<G4double>* G4VEmProcess::FindLambdaMax()
 {
   if(1 < verboseLevel) {
     G4cout << "### G4VEmProcess::FindLambdaMax: " 
            << particle->GetParticleName() 
            << " and process " << GetProcessName() << "  " << G4endl; 
   }
-  size_t n = theLambdaTable->length();
-  
-  G4PhysicsVector* pv;
-  G4double e, ss, emax, smax;
+  std::vector<G4double>* ptr = nullptr;
+  if(fXSType != fEmOnePeak) { return ptr; }
 
-  size_t i;
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t n = theCoupleTable->GetTableSize();
+  ptr = new std::vector<G4double>;
+  ptr->resize(n, DBL_MAX);
 
-  // first loop on existing vectors
-  for (i=0; i<n; ++i) {
-    pv = (*theLambdaTable)[i];
-    if(nullptr != pv) {
-      size_t nb = pv->GetVectorLength();
-      emax = DBL_MAX;
-      smax = 0.0;
-      if(nb > 0) {
-        for (size_t j=0; j<nb; ++j) {
-          e = pv->Energy(j);
-          ss = (*pv)(j);
-          if(ss > smax) {
-            smax = ss;
-            emax = e;
-          } else {
-            break;
-          }
-        }
+  G4bool isPeak = false;
+  const G4double g4log10 = G4Log(10.);
+  const G4double scale = theParameters->NumberOfBinsPerDecade()/g4log10;
+
+  for(size_t i=0; i<n; ++i) {
+    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+    G4double emin = std::max(minKinEnergy, MinPrimaryEnergy(particle, couple->GetMaterial()));
+    G4double emax = std::max(maxKinEnergy, emin + emin);
+    G4double ee = G4Log(emax/emin);
+    G4int nbin = G4lrint(ee*scale);
+    if(nbin < 4) { nbin = 4; }
+    G4double x = G4Exp(ee/nbin);
+    G4double sm = 0.0;
+    G4double em = emin;
+    G4double e = emin;
+    for(G4int j=0; j<=nbin; ++j) {
+      G4double sig = RecalculateLambda(e, couple);
+      //G4cout << j << "  E=" << e << " Lambda=" << sig << G4endl;
+      if(sig >= sm) {
+	em = e;
+	sm = sig;
+	e *= x;
+      } else {
+	isPeak = true;
+	(*ptr)[i] = em;
+	break;
       }
-      (*theEnergyOfCrossSectionMax)[i] = emax;
-      if(1 < verboseLevel) {
-        G4cout << "For " << particle->GetParticleName() 
-               << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
-               << " lambda= " << smax << G4endl;
-      }
+    }
+    if(1 < verboseLevel) {
+      G4cout << "  " << i << ".  Epeak(GeV)=" << em/GeV
+	     << " SigmaMax(1/mm)=" << sm
+	     << " Emin(GeV)=" << emin/GeV << " Emax(GeV)=" << emax/GeV
+	     << "   " << couple->GetMaterial()->GetName() << G4endl;
     }
   }
-  // second loop using base materials
-  for (i=0; i<n; ++i) {
-    pv = (*theLambdaTable)[i];
-    if(nullptr == pv) {
-      G4int j = (*theDensityIdx)[i];
-      (*theEnergyOfCrossSectionMax)[i] = (*theEnergyOfCrossSectionMax)[j];
-    }
+  // there is no peak for any material
+  if(!isPeak) {
+    delete ptr;
+    ptr = nullptr;
+  }
+  return ptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetEnergyOfCrossSectionMax(std::vector<G4double>* ptr)
+{
+  if(nullptr == ptr) {
+    fXSType = fEmIncreasing;
+  } else {
+    theEnergyOfCrossSectionMax = ptr;
   }
 }
 
@@ -1077,13 +1094,8 @@ G4PhysicsVector*
 G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
-  G4PhysicsVector* newv = nullptr;
-  if(nullptr == theLambdaTable) {
-    newv = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, 
-                                  nLambdaBins, splineFlag);
-  } else {   
-    newv = new G4PhysicsVector(*((*theLambdaTable)[basedCoupleIndex]));
-  }
+  G4PhysicsVector* newv = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, 
+                                                 nLambdaBins, splineFlag);
   return newv;
 }
 

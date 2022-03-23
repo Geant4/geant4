@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -242,7 +242,7 @@ eBrem:  for e-  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -274,7 +274,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -306,7 +306,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -365,7 +365,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -397,7 +397,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -429,7 +429,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -462,7 +462,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -495,7 +495,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -527,7 +527,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -559,7 +559,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -931,24 +931,24 @@ Max 2J for sampling of angular correlations         10
 =============================================================
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            36 |           128 |             0 |             0 |     0.0570954 |       2.12918 |             1 |       5564.17 |       5564.17 |       8214.28 |       11847.1 |       468.998 |
-       cell_01 |           153 |           181 |           581 |           581 |     0.0215162 |        4.4369 |             1 |       25510.5 |       25510.5 |        146701 |        113188 |       3156.44 |
-       cell_02 |           199 |           305 |          1375 |         687.5 |     0.0115991 |       2.87302 |           0.5 |       51409.5 |       25704.8 |        198474 |       73850.2 |       2302.13 |
-       cell_03 |           299 |           438 |          2540 |           635 |    0.00496444 |       2.01451 |          0.25 |       80454.6 |       20113.7 |        269714 |       40519.2 |       1338.98 |
-       cell_04 |           341 |           531 |          3249 |       406.125 |    0.00386703 |       1.75447 |         0.125 |         97837 |       12229.6 |        190802 |       21456.5 |       737.839 |
-       cell_05 |           356 |           530 |          3306 |       206.625 |    0.00337696 |       1.64761 |        0.0625 |       99078.6 |       6192.41 |        106820 |       10202.7 |       360.726 |
-       cell_06 |           352 |           539 |          3146 |       98.3125 |    0.00394783 |       1.74588 |       0.03125 |        101048 |       3157.75 |       49618.2 |       5513.06 |       195.884 |
-       cell_07 |           367 |           563 |          3257 |       50.8906 |    0.00400396 |       1.62726 |      0.015625 |        101280 |       1582.51 |       23599.6 |       2575.15 |       94.4917 |
-       cell_08 |           368 |           522 |          3237 |       25.2891 |    0.00350625 |       1.37743 |     0.0078125 |       96601.9 |       754.703 |       11387.7 |       1039.55 |       39.9282 |
-       cell_09 |           372 |           527 |          3454 |       13.4922 |    0.00273609 |       1.06195 |    0.00390625 |        100075 |       390.919 |       6191.97 |       415.135 |       16.9418 |
-       cell_10 |           346 |           504 |          3280 |       6.40625 |     0.0020755 |       1.11392 |    0.00195312 |       95633.3 |       186.784 |       4142.06 |       208.062 |       8.59685 |
-       cell_11 |           321 |           486 |          3008 |        2.9375 |    0.00255958 |       1.18738 |   0.000976562 |       88442.2 |       86.3693 |       1617.11 |       102.553 |       4.13911 |
-       cell_12 |           311 |           457 |          3080 |       1.50391 |    0.00254905 |       1.11498 |   0.000488281 |       87993.7 |       42.9657 |       770.734 |       47.9059 |       1.96464 |
-       cell_13 |           267 |           394 |          2434 |      0.594238 |    0.00285518 |       1.25895 |   0.000244141 |       73784.3 |       18.0138 |       327.423 |       22.6784 |      0.934852 |
-       cell_14 |           252 |           378 |          2483 |      0.303101 |    0.00303517 |       1.16278 |    0.00012207 |       74746.4 |       9.12431 |       145.687 |       10.6096 |      0.442185 |
-       cell_15 |           232 |           354 |          2134 |      0.130249 |    0.00405514 |       1.44894 |   6.10352e-05 |       68480.3 |       4.17971 |       60.0434 |       6.05614 |      0.243484 |
-       cell_16 |           253 |           355 |          2419 |      0.073822 |    0.00345348 |       1.14662 |   3.05176e-05 |       73289.6 |       2.23662 |       32.2903 |       2.56456 |      0.111514 |
-       cell_17 |           209 |           313 |          2205 |     0.0336456 |     0.0024706 |      0.924358 |   1.52588e-05 |       60891.9 |      0.929137 |       15.7566 |      0.858855 |     0.0389282 |
-       cell_18 |           117 |           226 |          1434 |     0.0109406 |     0.0031454 |       1.11301 |   7.62939e-06 |       40417.9 |      0.308364 |       4.77121 |      0.343213 |     0.0150074 |
-       cell_19 |            69 |            69 |             0 |             0 |    0.00891489 |       1.45329 |   7.62939e-06 |       11193.2 |     0.0853975 |      0.610473 |      0.124108 |     0.0054423 |
+       cell_00 |            47 |           142 |             0 |             0 |     0.0144047 |       1.55588 |             1 |       7758.42 |       7758.42 |       38509.9 |       12071.2 |       554.723 |
+       cell_01 |           151 |           191 |           643 |           643 |     0.0133036 |       4.27276 |             1 |       26688.9 |       26688.9 |        239987 |        114035 |        3192.7 |
+       cell_02 |           146 |           243 |           996 |           498 |    0.00779301 |       3.24407 |           0.5 |       37065.1 |       18532.5 |        232226 |       60120.8 |       1809.74 |
+       cell_03 |           193 |           317 |          1480 |           370 |    0.00749734 |       2.70692 |          0.25 |       51156.9 |       12789.2 |        145110 |       34619.4 |       1087.94 |
+       cell_04 |           259 |           397 |          2399 |       299.875 |    0.00427979 |       1.92951 |         0.125 |       75696.6 |       9462.08 |        145814 |       18257.2 |       624.054 |
+       cell_05 |           267 |           417 |          2626 |       164.125 |    0.00469878 |       1.65536 |        0.0625 |       79606.4 |        4975.4 |       62709.2 |       8236.05 |       294.657 |
+       cell_06 |           296 |           444 |          2795 |       87.3438 |    0.00365421 |       1.67787 |       0.03125 |       84868.1 |       2652.13 |       42177.5 |       4449.94 |       154.125 |
+       cell_07 |           323 |           476 |          3029 |       47.3281 |    0.00341457 |       1.32272 |      0.015625 |       90799.1 |       1418.74 |       20862.1 |       1876.59 |       71.2352 |
+       cell_08 |           326 |           465 |          3030 |       23.6719 |    0.00319944 |       1.36252 |     0.0078125 |       90360.2 |       705.939 |       11547.3 |       961.857 |       36.9449 |
+       cell_09 |           302 |           458 |          2750 |       10.7422 |    0.00409749 |       1.45431 |    0.00390625 |         81599 |       318.746 |       4325.65 |       463.556 |       17.7243 |
+       cell_10 |           295 |           425 |          3016 |       5.89062 |    0.00358446 |       1.26869 |    0.00195312 |       87643.3 |       171.178 |       2461.86 |       217.173 |       8.82445 |
+       cell_11 |           271 |           399 |          2561 |       2.50098 |    0.00323477 |       1.23387 |   0.000976562 |       77814.1 |       75.9904 |       1191.31 |       93.7624 |       3.85362 |
+       cell_12 |           276 |           382 |          2552 |       1.24609 |    0.00233322 |      0.964723 |   0.000488281 |       74522.2 |       36.3878 |       670.221 |       35.1041 |       1.56377 |
+       cell_13 |           289 |           417 |          2869 |      0.700439 |    0.00253236 |      0.878908 |   0.000244141 |       80139.8 |       19.5654 |       315.559 |       17.1962 |      0.799107 |
+       cell_14 |           247 |           358 |          2508 |      0.306152 |    0.00194399 |      0.831887 |    0.00012207 |       72512.1 |       8.85158 |       182.866 |       7.36352 |       0.35549 |
+       cell_15 |           169 |           255 |          1745 |      0.106506 |     0.0016204 |      0.750899 |   6.10352e-05 |       46298.8 |       2.82585 |       59.7637 |       2.12193 |     0.0968409 |
+       cell_16 |           111 |           168 |           955 |     0.0291443 |    0.00234703 |       1.13301 |   3.05176e-05 |       29630.6 |      0.904253 |       18.1877 |       1.02453 |      0.042687 |
+       cell_17 |            92 |           138 |          1014 |     0.0154724 |    0.00227045 |       0.84355 |   1.52588e-05 |       26572.3 |      0.405461 |       7.01126 |      0.342027 |     0.0159187 |
+       cell_18 |            52 |            92 |           603 |    0.00460052 |    0.00232884 |       1.15296 |   7.62939e-06 |       17235.9 |      0.131499 |       2.69744 |      0.151613 |    0.00628192 |
+       cell_19 |            27 |            27 |             0 |             0 |    0.00465782 |       1.74384 |   7.62939e-06 |       3916.88 |     0.0298835 |      0.476278 |      0.052112 |    0.00221842 |
 =============================================

@@ -16,6 +16,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 January 22: V.Ivanchenko (emutils-V10-07-39)
+- G4EmParametersMessenger - added forgotten UI command to enable polarisation
+
+08 January 22: V.Ivanchenko
+- G4VEmProcess - fixed methods, which implementation based on assumption that
+    the lambda table defined for full energy range: LambdaPhysicsVector(..),
+    CrossSEctionPerVolume(...), FindLambdaMax(...). No change is expected for
+    the default physics configuration, fix mainly affect positron annihilation
+    processes at high energies. 
+
+05 January 22: V.Ivanchenko
+- G4VMscModel, G4VEmProcess - move few methods and header files from header to
+    source in order to reduce dependencies between packages.
+
+17 December 21: I.Hrivnacova
+- Added info in setMaxBetaChange command description.
+
 19 November 21: V.Ivanchenko (emutils-V10-07-38)
 - G4EmCalculator - fixed computation of dedx for He3 and alpha
     (complete fix of #2440)

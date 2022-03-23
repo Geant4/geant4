@@ -574,11 +574,6 @@ void G4PenelopeRayleighModelMI::BuildFormFactorTable(const G4Material* material)
   for (G4int i=0;i<nElements;i++)
     (*StoichiometricFactors)[i] /=  MaxStoichiometricFactor;
   
-  //Equivalent atoms per molecule
-  G4double atomsPerMolecule = 0;
-  for (G4int i=0;i<nElements;i++)
-    atomsPerMolecule += (*StoichiometricFactors)[i];
-  
   //Equivalent molecular weight (dimensionless)
   G4double MolWeight = 0.;
   for (G4int i=0;i<nElements;i++)

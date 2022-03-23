@@ -15,12 +15,12 @@
 /source/processes/scoring @makotoasai @jrmadsen
 
 # Tracking
-/source/tracking/ @ts-kek @amakoG4AI @makotoasai
+/source/tracking/ @ts-kek @shogo0416 @makotoasai
 
 # Particles and Track
 # TBA: Hisaya Kurashige
-/source/track/     @makotoasai
-/source/particles/ @makotoasai
+/source/track/     @shogo0416 @makotoasai
+/source/particles/ @shogo0416 @makotoasai
 
 # Geometry and Transport
 /source/geometry/                 @gcosmo @jonapost

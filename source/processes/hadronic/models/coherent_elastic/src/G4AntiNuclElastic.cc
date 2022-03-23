@@ -108,13 +108,13 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
   
   const G4ParticleDefinition* theParticle = particle;
 
-  G4ParticleDefinition * theDef = 0;
+  G4ParticleDefinition * theTargetDef = 0;
 
-  if(Z == 1 && A == 1)       theDef = theProton;
-  else if (Z == 1 && A == 2) theDef = theDeuteron;
-  else if (Z == 1 && A == 3) theDef = G4Triton::Triton();
-  else if (Z == 2 && A == 3) theDef = G4He3::He3();
-  else if (Z == 2 && A == 4) theDef = theAlpha;
+  if      (Z == 1 && A == 1) theTargetDef = theProton;
+  else if (Z == 1 && A == 2) theTargetDef = theDeuteron;
+  else if (Z == 1 && A == 3) theTargetDef = G4Triton::Triton();
+  else if (Z == 2 && A == 3) theTargetDef = G4He3::He3();
+  else if (Z == 2 && A == 4) theTargetDef = theAlpha;
 
 
   G4double TargMass =G4NucleiProperties::GetNuclearMass(A,Z); 
@@ -133,11 +133,21 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
 
   fbst = bst;
   fptot= ptot;
-  fTmax = 4.0*ptot*ptot;  
+  fTmax = 4.0*ptot*ptot;  // In (MeV/c)^2
 
-  if(Plab < (std::abs(particle->GetBaryonNumber())*100)*MeV)   // Uzhi 24 Nov. 2011
-  {return fTmax*G4UniformRand();}                              // Uzhi 24 Nov. 2011
+  if(Plab < (std::abs(particle->GetBaryonNumber())*100)*MeV)
+  {return fTmax*G4UniformRand();}
   
+  // Calculation of NN collision properties
+  G4double PlabPerN = Plab/std::abs(theParticle->GetBaryonNumber());
+  G4double NucleonMass = 0.5*( theProton->GetPDGMass() + theNeutron->GetPDGMass() );
+  G4double PrNucleonMass(0.);  // Projectile average nucleon mass
+  if( std::abs(theParticle->GetBaryonNumber()) == 1 ) { PrNucleonMass = theParticle->GetPDGMass(); }
+  else                                                { PrNucleonMass = NucleonMass;               }
+  G4double energyPerN = std::sqrt( sqr(PlabPerN) + sqr(PrNucleonMass));
+  energyPerN -= PrNucleonMass;
+  //---
+
   G4double  Z1 = particle->GetPDGCharge();
   G4double  Z2 = Z;  
   
@@ -147,239 +157,210 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
   fWaveVector = ptot;     //   /hbarc; 
 	    
   G4LorentzVector Fproj(0.,0.,0.,0.);  
-  G4double  XsCoulomb = sqr(n/fWaveVector)*pi*(1+ctet1)/(1.+Am)/(1.+2.*Am-ctet1); 
-  XsCoulomb=XsCoulomb*0.38938e+6;
+  const G4double mevToBarn = 0.38938e+6;
+  G4double XsCoulomb = mevToBarn*sqr(n/fWaveVector)*pi*(1+ctet1)/(1.+Am)/(1.+2.*Am-ctet1);
 
-  G4double XsElastHad =cs->GetElasticElementCrossSection(particle, energy, Z, (G4double)A);
-  G4double XstotalHad =cs->GetTotalElementCrossSection(particle, energy, Z, (G4double)A);
+  G4double XsElastHadronic =cs->GetElasticElementCrossSection(particle, energy, Z, (G4double)A);
+  G4double XsTotalHadronic =cs->GetTotalElementCrossSection(particle, energy, Z, (G4double)A);
 
-  XsElastHad/=millibarn; XstotalHad/=millibarn;
+  XsElastHadronic/=millibarn; XsTotalHadronic/=millibarn;
 
-  G4double CoulombProb =  XsCoulomb/(XsCoulomb+XsElastHad);
-
-// G4cout<<" XselastHadron " << XsElastHad << "  XsCol "<< XsCoulomb <<G4endl; 
-// G4cout <<"  XsTotal" << XstotalHad <<G4endl;  
-// G4cout<<"XsInel"<< XstotalHad-XsElastHad<<G4endl;        
+  G4double CoulombProb =  XsCoulomb/(XsCoulomb+XsElastHadronic);
 
   if(G4UniformRand() < CoulombProb)
   {  // Simulation of Coulomb scattering
 
-   G4double phi = twopi * G4UniformRand();
-   G4double Ksi =  G4UniformRand();
+    G4double phi = twopi * G4UniformRand();
+    G4double Ksi =  G4UniformRand();
 
-   G4double par1 = 2.*(1.+Am)/(1.+ctet1);
+    G4double par1 = 2.*(1.+Am)/(1.+ctet1);
 
-// ////sample ThetaCMS in Coulomb part
+    // ////sample ThetaCMS in Coulomb part
 
-   G4double cosThetaCMS = (par1*ctet1- Ksi*(1.+2.*Am))/(par1-Ksi);
+    G4double cosThetaCMS = (par1*ctet1- Ksi*(1.+2.*Am))/(par1-Ksi);
 
-   G4double PtZ=ptot*cosThetaCMS;
-   Fproj.setPz(PtZ);
-   G4double PtProjCMS = ptot*std::sqrt(1.0 - cosThetaCMS*cosThetaCMS);
-   G4double PtX= PtProjCMS * std::cos(phi);
-   G4double PtY= PtProjCMS * std::sin(phi);
-   Fproj.setPx(PtX);     
-   Fproj.setPy(PtY);
-   Fproj.setE(std::sqrt(PtX*PtX+PtY*PtY+PtZ*PtZ+Mproj*Mproj));    
-   T =  -(Pproj-Fproj).mag2();      
-  } else
-
+    G4double PtZ=ptot*cosThetaCMS;
+    Fproj.setPz(PtZ);
+    G4double PtProjCMS = ptot*std::sqrt(1.0 - cosThetaCMS*cosThetaCMS);
+    G4double PtX= PtProjCMS * std::cos(phi);
+    G4double PtY= PtProjCMS * std::sin(phi);
+    Fproj.setPx(PtX);     
+    Fproj.setPy(PtY);
+    Fproj.setE(std::sqrt(PtX*PtX+PtY*PtY+PtZ*PtZ+Mproj*Mproj));    
+    T =  -(Pproj-Fproj).mag2();      
+  } 
+  else 
   {  
-///////Simulation of strong interaction scattering////////////////////////////
+    // Simulation of strong interaction scattering
 
-//   G4double Qmax = 2.*ptot*197.33;    // in fm^-1
-   G4double Qmax = 2.*3.0*197.33;    // in fm^-1
-   G4double Amag = 70*70;          //  A1 in Magora funct:A1*exp(-q*A2)
-   G4double SlopeMag = 2.*3.0;    // A2 in Magora funct:A1*exp(-q*A2)
+    G4double Qmax = 2.*ptot/197.33;   // in fm^-1
 
-   G4double sig_pbarp= cs->GetAntiHadronNucleonTotCrSc(particle,energy); 
-   
-   fRa = 1.113*G4Pow::GetInstance()->Z13(A) -                     
-         0.227/G4Pow::GetInstance()->Z13(A);                      
-   if(A == 3) fRa=1.81;
-   if(A == 4) fRa=1.37;
+    G4double Amag      = 1.0;  // A1 in Majorant funct:A1*exp(-q*A2)
+    G4double SlopeMag  = 0.5;  // A2 in Majorant funct:A1*exp(-q*A2)
+    
+    G4double sig_pbarp = cs->GetAntiHadronNucleonTotCrSc(theAProton,energyPerN);  //mb
+
+    fRa = 1.113*G4Pow::GetInstance()->Z13(A) -                     
+          0.227/G4Pow::GetInstance()->Z13(A);                      
+    if(A == 3) fRa=1.81;
+    if(A == 4) fRa=1.37;
  
-   if((A>=12.) && (A<27) ) fRa=fRa*0.85;
-   if((A>=27.) && (A<48) ) fRa=fRa*0.90;
-   if((A>=48.) && (A<65) ) fRa=fRa*0.95;
+    if((A>=12.) && (A<27) ) fRa=fRa*0.85;
+    if((A>=27.) && (A<48) ) fRa=fRa*0.90;
+    if((A>=48.) && (A<65) ) fRa=fRa*0.95;
 
-   G4double Ref2 = 0;
-   G4double ceff2 =0;
-   G4double rho = 0;
-   if  ((theParticle == theAProton) || (theParticle == theANeutron))  
-   {
-    if(theDef == theProton)
-    { 
-//   G4double Mp2=sqr(theDef->GetPDGMass()/GeV ); 
+    G4double Ref2 = XsTotalHadronic/10./2./pi;  // in fm^2
+    G4double ceff2 =0;
+    G4double rho = 0;
 
-// change 30 October
-  
-     if(Plab < 610.) 
-     { rho = 1.3347-10.342*Plab/1000.+22.277*Plab/1000.*Plab/1000.-
-      13.634*Plab/1000.*Plab/1000.*Plab/1000. ;}
-     if((Plab < 5500.)&&(Plab >= 610.) )
-     { rho = 0.22; }
-     if((Plab >= 5500.)&&(Plab < 12300.) )
-     { rho = -0.32; }
-     if( Plab >= 12300.)
-     { rho = 0.135-2.26/(std::sqrt(S)) ;}
-
-     Ref2 = 0.35 + 0.9/std::sqrt(std::sqrt(S-4.*0.88))+0.04*G4Log(S) ;
-     ceff2 = 0.375 - 2./S + 0.44/(sqr(S-4.)+1.5) ;
-
-/*   
-   Ref2=0.8/std::sqrt(std::sqrt(S-4.*Mp2)) + 0.55; 
-   if(S>1000.) Ref2=0.62+0.02*G4Log(S) ;
-   ceff2 = 0.035/(sqr(S-4.3)+0.4) + 0.085 * G4Log(S) ;
-   if(S>1000.) ceff2 = 0.005 * G4Log(S) + 0.29;
-*/
-
-     Ref2=Ref2*Ref2;
-     ceff2 = ceff2*ceff2;
-
-     SlopeMag = 0.5;        // Uzhi
-     Amag= 1.;              // Uzhi
-    }
-
-    if(Z>2) 
-    {  Ref2 = fRa*fRa +2.48*0.01*sig_pbarp*fRa - 2.23e-6*sig_pbarp*sig_pbarp*fRa*fRa; 
-       ceff2 = 0.16+3.3e-4*sig_pbarp+0.35*G4Exp(-0.03*sig_pbarp);
-    }
-    if( (Z==2)&&(A==4) )
-    {  Ref2 = fRa*fRa -0.46 +0.03*sig_pbarp - 2.98e-6*sig_pbarp*sig_pbarp;
-       ceff2= 0.078 + 6.657e-4*sig_pbarp + 0.3359*G4Exp(-0.03*sig_pbarp);
-    }
-    if( (Z==1)&&(A==3) )
-    {  Ref2 = fRa*fRa - 1.36 + 0.025 * sig_pbarp - 3.69e-7 * sig_pbarp*sig_pbarp;
-       ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*G4Exp(-0.03*sig_pbarp);
-    }
-    if( (Z==2)&&(A==3) )
-    {  Ref2 = fRa*fRa - 1.36 + 0.025 * sig_pbarp - 3.69e-7 * sig_pbarp*sig_pbarp;
-       ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*G4Exp(-0.03*sig_pbarp);
-    }  
-    if( (Z==1)&&(A==2) )
+    if  ((theParticle == theAProton) || (theParticle == theANeutron))  
     {
-       Ref2 = fRa*fRa - 0.28 + 0.019 * sig_pbarp + 2.06e-6 * sig_pbarp*sig_pbarp;  
-       ceff2 = 0.297 + 7.853e-04*sig_pbarp + 0.2899*G4Exp(-0.03*sig_pbarp);
-    }
-   }
+      if(theTargetDef == theProton)
+      { 
+        // Determination of the real part of Pbar+N amplitude
+        if(Plab < 610.) 
+        { rho = 1.3347-10.342*Plab/1000.+22.277*Plab/1000.*Plab/1000.-
+                13.634*Plab/1000.*Plab/1000.*Plab/1000. ;}
+        if((Plab < 5500.)&&(Plab >= 610.) )
+        { rho = 0.22; }
+        if((Plab >= 5500.)&&(Plab < 12300.) )
+        { rho = -0.32; }
+        if( Plab >= 12300.)
+        { rho = 0.135-2.26/(std::sqrt(S)) ;}
+        Ref2  = 0.35 + 0.9/std::sqrt(std::sqrt(S-4.*0.88))+0.04*G4Log(S) ;
+        ceff2 = 0.375 - 2./S + 0.44/(sqr(S-4.)+1.5) ;
+        Ref2  =Ref2*Ref2;
+        ceff2 = ceff2*ceff2;
+      }
 
-   if (theParticle == theADeuteron)
-   {
-    sig_pbarp= cs->GetAntiHadronNucleonTotCrSc(particle,energy/2.); 
-    Ref2 = XstotalHad/10./2./pi ;
-    if(Z>2)
-    {
-     ceff2 = 0.38 + 2.0e-4 *sig_pbarp + 0.5 * G4Exp(-0.03*sig_pbarp);
-    }
-    if(theDef == theProton)
-    { 
-     ceff2 = 0.297 + 7.853e-04*sig_pbarp + 0.2899*G4Exp(-0.03*sig_pbarp);
-    }
-    if(theDef == theDeuteron)
-    { 
-     ceff2 = 0.65 + 3.0e-4*sig_pbarp + 0.55 * G4Exp(-0.03*sig_pbarp);
-    }
-    if( (theDef == G4Triton::Triton()) || (theDef == G4He3::He3() ) )
-    {
-     ceff2 = 0.57 + 2.5e-4*sig_pbarp + 0.65 * G4Exp(-0.02*sig_pbarp);
-    }
-    if(theDef == theAlpha)
-    {
-     ceff2 = 0.40 + 3.5e-4 *sig_pbarp + 0.45 * G4Exp(-0.02*sig_pbarp);
-    }
-   }
+      if( (Z==1)&&(A==2) )
+      {
+        Ref2 = fRa*fRa - 0.28 + 0.019 * sig_pbarp + 2.06e-6 * sig_pbarp*sig_pbarp;  
+        ceff2 = 0.297 + 7.853e-04*sig_pbarp + 0.2899*G4Exp(-0.03*sig_pbarp);
+      }
+      if( (Z==1)&&(A==3) )
+      { 
+        Ref2 = fRa*fRa - 1.36 + 0.025 * sig_pbarp - 3.69e-7 * sig_pbarp*sig_pbarp;
+        ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*G4Exp(-0.03*sig_pbarp);
+      }
+      if( (Z==2)&&(A==3) )
+      { 
+        Ref2 = fRa*fRa - 1.36 + 0.025 * sig_pbarp - 3.69e-7 * sig_pbarp*sig_pbarp;
+        ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*G4Exp(-0.03*sig_pbarp);
+      }  
+      if( (Z==2)&&(A==4) )
+      { 
+        Ref2 = fRa*fRa -0.46 +0.03*sig_pbarp - 2.98e-6*sig_pbarp*sig_pbarp;
+        ceff2= 0.078 + 6.657e-4*sig_pbarp + 0.3359*G4Exp(-0.03*sig_pbarp);
+      }
+      if(Z>2) 
+      { 
+        Ref2 = fRa*fRa +2.48*0.01*sig_pbarp*fRa - 2.23e-6*sig_pbarp*sig_pbarp*fRa*fRa; 
+        ceff2 = 0.16+3.3e-4*sig_pbarp+0.35*G4Exp(-0.03*sig_pbarp);
+      }
+    }  // End of if ((theParticle == theAProton) || (theParticle == theANeutron))
 
-   if( (theParticle ==theAHe3) || (theParticle ==theATriton) )
-   {
-    sig_pbarp = cs->GetAntiHadronNucleonTotCrSc(particle,energy/3.);
-    Ref2 = XstotalHad/10./2./pi ;
-    if(Z>2)
+    if (theParticle == theADeuteron)
     {
-     ceff2 = 0.26 + 2.2e-4*sig_pbarp + 0.33*G4Exp(-0.03*sig_pbarp);
-    }  
-    if(theDef == theProton)
-    {
-     ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*G4Exp(-0.03*sig_pbarp);         
+      if(theTargetDef == theProton)
+      { 
+        ceff2 = 0.297 + 7.853e-04*sig_pbarp + 0.2899*G4Exp(-0.03*sig_pbarp);
+      }
+      if(theTargetDef == theDeuteron)
+      { 
+        ceff2 = 0.65 + 3.0e-4*sig_pbarp + 0.55 * G4Exp(-0.03*sig_pbarp);
+      }
+      if( (theTargetDef == G4Triton::Triton()) || (theTargetDef == G4He3::He3() ) )
+      {
+        ceff2 = 0.57 + 2.5e-4*sig_pbarp + 0.65 * G4Exp(-0.02*sig_pbarp);
+      }
+      if(theTargetDef == theAlpha)
+      {
+        ceff2 = 0.40 + 3.5e-4 *sig_pbarp + 0.45 * G4Exp(-0.02*sig_pbarp);
+      }
+      if(Z>2)
+      {
+        ceff2 = 0.38 + 2.0e-4 *sig_pbarp + 0.5 * G4Exp(-0.03*sig_pbarp);
+      }
     }
-    if(theDef == theDeuteron)
-    {
-     ceff2 = 0.57 + 2.5e-4*sig_pbarp + 0.65 * G4Exp(-0.02*sig_pbarp);
-    }
-    if( (theDef == G4Triton::Triton()) || (theDef == G4He3::He3() ) )
-    {
-     ceff2 = 0.39 + 2.7e-4*sig_pbarp + 0.7 * G4Exp(-0.02*sig_pbarp);
-    }
-    if(theDef == theAlpha)
-    {
-     ceff2 = 0.24 + 3.5e-4*sig_pbarp + 0.75 * G4Exp(-0.03*sig_pbarp);
-    }
-   }
 
-
-   if (theParticle == theAAlpha)
-   {
-    sig_pbarp = cs->GetAntiHadronNucleonTotCrSc(particle,energy/3.);
-    Ref2 = XstotalHad/10./2./pi ;
-    if(Z>2)
+    if( (theParticle ==theAHe3) || (theParticle ==theATriton) )
     {
-     ceff2 = 0.22 + 2.0e-4*sig_pbarp + 0.2 * G4Exp(-0.03*sig_pbarp);
+      if(theTargetDef == theProton)
+      {
+        ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*G4Exp(-0.03*sig_pbarp);         
+      }
+      if(theTargetDef == theDeuteron)
+      {
+        ceff2 = 0.57 + 2.5e-4*sig_pbarp + 0.65 * G4Exp(-0.02*sig_pbarp);
+      }
+      if( (theTargetDef == G4Triton::Triton()) || (theTargetDef == G4He3::He3() ) )
+      {
+        ceff2 = 0.39 + 2.7e-4*sig_pbarp + 0.7 * G4Exp(-0.02*sig_pbarp);
+      }
+      if(theTargetDef == theAlpha)
+      {
+        ceff2 = 0.24 + 3.5e-4*sig_pbarp + 0.75 * G4Exp(-0.03*sig_pbarp);
+      }
+      if(Z>2)
+      {
+        ceff2 = 0.26 + 2.2e-4*sig_pbarp + 0.33*G4Exp(-0.03*sig_pbarp);
+      }  
     }
-    if(theDef == theProton)
+
+    if (theParticle == theAAlpha)
     {
-     ceff2= 0.078 + 6.657e-4*sig_pbarp + 0.3359*G4Exp(-0.03*sig_pbarp);   
+      if(theTargetDef == theProton)
+      {
+        ceff2= 0.078 + 6.657e-4*sig_pbarp + 0.3359*G4Exp(-0.03*sig_pbarp);   
+      }
+      if(theTargetDef == theDeuteron)  
+      {
+        ceff2 = 0.40 + 3.5e-4 *sig_pbarp + 0.45 * G4Exp(-0.02*sig_pbarp);
+      }   
+      if( (theTargetDef == G4Triton::Triton()) || (theTargetDef == G4He3::He3() ) )
+      {
+        ceff2 = 0.24 + 3.5e-4*sig_pbarp + 0.75 * G4Exp(-0.03*sig_pbarp);   
+      }
+      if(theTargetDef == theAlpha)   
+      {
+        ceff2 = 0.17 + 3.5e-4*sig_pbarp + 0.45 * G4Exp(-0.03*sig_pbarp);
+      }
+      if(Z>2)
+      {
+        ceff2 = 0.22 + 2.0e-4*sig_pbarp + 0.2 * G4Exp(-0.03*sig_pbarp);
+      }
     }
-    if(theDef == theDeuteron)  
+
+    fRef=std::sqrt(Ref2);
+    fceff = std::sqrt(ceff2);     
+
+    G4double Q = 0.0 ;
+    G4double BracFunct;
+
+    const G4int maxNumberOfLoops = 10000;
+    G4int loopCounter = 0;
+    do 
     {
-     ceff2 = 0.40 + 3.5e-4 *sig_pbarp + 0.45 * G4Exp(-0.02*sig_pbarp);
-    }   
-    if( (theDef == G4Triton::Triton()) || (theDef == G4He3::He3() ) )
-    {
-     ceff2 = 0.24 + 3.5e-4*sig_pbarp + 0.75 * G4Exp(-0.03*sig_pbarp);   
+      Q = -G4Log(1.-(1.- G4Exp(-SlopeMag * Qmax))* G4UniformRand() )/SlopeMag;
+      G4double x = fRef * Q;
+      BracFunct = ( ( sqr(BesselOneByArg(x))+sqr(rho/2. * BesselJzero(x)) )
+		    *   sqr(DampFactor(pi*fceff*Q))) /(Amag*G4Exp(-SlopeMag*Q));
+      BracFunct = BracFunct * Q;
+    } 
+    while ( (G4UniformRand()>BracFunct) && 
+            ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+    if ( loopCounter >= maxNumberOfLoops ) {
+      fTetaCMS = 0.0;
+      return 0.0;
     }
-    if(theDef == theAlpha)   
-    {
-     ceff2 = 0.17 + 3.5e-4*sig_pbarp + 0.45 * G4Exp(-0.03*sig_pbarp);
-    }
-   }
 
-   fRef=std::sqrt(Ref2);
-   fceff = std::sqrt(ceff2);     
-// G4cout<<" Ref  "<<fRef<<" c_eff "<<fceff<< " rho "<< rho<<G4endl; 
+    T= sqr(Q); 
+    T*=3.893913e+4;  // fm^(-2) -> MeV^2
 
- 
-   G4double Q = 0.0 ;
-   G4double BracFunct;
-   const G4int maxNumberOfLoops = 10000;
-   G4int loopCounter = 0;
-   do 
-   {
-    Q = -G4Log(1.-(1.- G4Exp(-SlopeMag * Qmax))* G4UniformRand() )/SlopeMag;
-    G4double x = fRef * Q;
-    BracFunct = ( ( sqr(BesselOneByArg(x))+sqr(rho/2. * BesselJzero(x)) )
-*   sqr(DampFactor(pi*fceff*Q))) /(Amag*G4Exp(-SlopeMag*Q));
+  }  // End of simulation of strong interaction scattering
 
-    BracFunct = BracFunct * Q * sqr(sqr(fRef));   
-   } 
-   while ( (G4UniformRand()>BracFunct) && 
-           ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
-   if ( loopCounter >= maxNumberOfLoops ) {
-     fTetaCMS = 0.0;
-     return 0.0;
-   }
-
-   T= sqr(Q); 
-   T*=3.893913e+4;                // fm -> MeV^2
-   }
-
-  // VI: 29.04.2019 unnecessary computation of trigonometry
-  /*
-   G4double cosTet=1.0-T/(2.*ptot*ptot);
-   if(cosTet >  1.0 ) cosTet= 1.;          // Uzhi 30 Nov. 
-   if(cosTet < -1.0 ) cosTet=-1.;          // Uzhi 30 Nov. 
-   fTetaCMS=std::acos(cosTet);
-  */
-   return T;
+  return T;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -404,17 +385,17 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
  
   }
 
-  if(fptot > 0.)                             // Uzhi 24 Nov. 2011
+  if(fptot > 0.)
   {
    G4double cosTet=1.0-T/(2.*fptot*fptot);
-   if(cosTet >  1.0 ) cosTet= 1.;          // Uzhi 30 Nov. 
-   if(cosTet < -1.0 ) cosTet=-1.;          // Uzhi 30 Nov. 
+   if(cosTet >  1.0 ) cosTet= 1.;
+   if(cosTet < -1.0 ) cosTet=-1.;
    fTetaCMS=std::acos(cosTet); 
    return fTetaCMS;
-  } else                                    // Uzhi 24 Nov. 2011
-  {                                         // Uzhi 24 Nov. 2011
-   return 2.*G4UniformRand()-1.;            // Uzhi 24 Nov. 2011
-  }                                         // Uzhi 24 Nov. 2011
+  } else
+  {
+   return 2.*G4UniformRand()-1.;
+  }
 }  
 
 
@@ -442,7 +423,7 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
   G4double phi  = G4UniformRand()*twopi;
 
   G4double cost(1.);
-  if(fTmax > 0.) {cost = 1. - 2.0*T/fTmax;}             // Uzhi 24 Nov. 2011
+  if(fTmax > 0.) {cost = 1. - 2.0*T/fTmax;}
 
   G4double sint;
   if( cost >= 1.0 )

@@ -191,8 +191,9 @@ G4MTRunManager::G4MTRunManager()
     if(forcedNwokers > 0)
     {
       nworkers = forcedNwokers;
-      G4cout << "### Number of threads is forced to " << forcedNwokers
-             << " by Environment variable G4FORCENUMBEROFTHREADS." << G4endl;
+      if(verboseLevel > 0)
+      { G4cout << "### Number of threads is forced to " << forcedNwokers
+             << " by Environment variable G4FORCENUMBEROFTHREADS." << G4endl; }
     }
   }
 }
@@ -334,6 +335,7 @@ void G4MTRunManager::CreateAndStartWorkers()
   // number of threads: threads area created once
   if(threads.size() == 0)
   {
+    if(verboseLevel > 0)
     {
       // for consistency with G4TaskRunManager
       std::stringstream msg;

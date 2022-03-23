@@ -113,15 +113,16 @@ done
 
 libs="-lG4interfaces \
 -lG4persistency \
--lG4analysis \
 -lG4error_propagation \
 -lG4readout \
 -lG4physicslists \
+-lG4tasking \
 -lG4run \
 -lG4event \
 -lG4tracking \
 -lG4parmodels \
 -lG4processes \
+-lG4analysis \
 -lG4digits_hits \
 -lG4track \
 -lG4particles \
@@ -173,6 +174,14 @@ feature_list="${feature_list} gdml[${have_gdml}]"
 
 if test "x${have_gdml}" = "xyes" ; then
   cflags="${cflags} @G4_XERCESC_CFLAGS@"
+fi
+
+# - PTL
+have_ptl="@G4_BUILTWITH_PTL@"
+feature_list="${feature_list} ptl[${have_ptl}]"
+
+if test "x${have_ptl}" = "xyes" ; then
+  libs="${libs} -lG4ptl"
 fi
 
 # - USolids

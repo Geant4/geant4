@@ -47,13 +47,11 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Poisson.hh"
-#include "G4Step.hh"
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Log.hh"
-#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -104,7 +102,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   // (out of validity of the model)
   //
   if (averageLoss < minLoss) { return averageLoss; }
-  G4double meanLoss = averageLoss;
+  meanLoss = averageLoss;
   const G4double tkin  = dp->GetKineticEnergy();
   //G4cout<< "Emean= "<< meanLoss<< " tmax= "<< tmax<< " L= "<<length<<G4endl;
 
@@ -151,38 +149,39 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     return loss;
   }
 
-  // Glandz regime : initialisation
-  //
-  if (material != lastMaterial) {
-    ipotFluct    = material->GetIonisation()->GetMeanExcitationEnergy();
-    ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
-    e0 = material->GetIonisation()->GetEnergy0fluct();
-    lastMaterial = material;   
-  }
+  auto ioni = material->GetIonisation();
+  e0 = ioni->GetEnergy0fluct();
 
   // very small step or low-density material
   if(tcut <= e0) { return meanLoss; }
 
+  ipotFluct = ioni->GetMeanExcitationEnergy();
+  ipotLogFluct = ioni->GetLogMeanExcEnergy();
+
   // width correction for small cuts
-  const G4double scaling = std::min(1.+0.5*CLHEP::keV/tcut,1.50);
+  const G4double scaling = std::min(1.+0.5*CLHEP::keV/tcut, 1.50);
   meanLoss /= scaling;
 
+  w2 = (tcut > ipotFluct) ? 
+    G4Log(2.*CLHEP::electron_mass_c2*beta2*gam2)-beta2 : 0.0;
+  return SampleGlandz(rndmEngineF, material, tcut)*scaling;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double 
+G4UniversalFluctuation::SampleGlandz(CLHEP::HepRandomEngine* rndmEngineF,
+                                     const G4Material*,
+                                     const G4double tcut)
+{
   G4double a1(0.0), a3(0.0);
-    
-  loss = 0.0;
+  G4double loss = 0.0;
+  G4double e1 = ipotFluct;
 
-  e1 = ipotFluct;
-
-  if(tcut > ipotFluct) {
-    const G4double w2 = G4Log(2.*CLHEP::electron_mass_c2*beta2*gam2)-beta2;
-    if(w2 > ipotLogFluct)  {
-      const G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
-      a1 = C*(w2-ipotLogFluct)/ipotFluct;
-    } else {
-      a1 = meanLoss*(1.-rate)/e1;
-    }
+  if(tcut > e1) {
+    a1 = meanLoss*(1.-rate)/e1;
     if(a1 < a0) {
-      const G4double fwnow = fw*a1/a0;
+      const G4double fwnow = 0.1+(fw-0.1)*std::sqrt(a1/a0);
       a1 /= fwnow;
       e1 *= fwnow;
     } else {
@@ -192,12 +191,9 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   }
 
   const G4double w1 = tcut/e0;
-  if(tcut > e0) {
-    a3 = rate*meanLoss*(tcut-e0)/(e0*tcut*G4Log(w1));
-    if(a1 <= 0.) { 
-      a3 /= rate;
-    }
-  }
+  a3 = rate*meanLoss*(tcut - e0)/(e0*tcut*G4Log(w1));
+  if(a1 <= 0.) { a3 /= rate; }
+  
   //'nearly' Gaussian fluctuation if a1>nmaxCont&&a2>nmaxCont&&a3>nmaxCont  
   G4double emean = 0.;
   G4double sig2e = 0.;
@@ -219,12 +215,12 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
       const G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
       emean += namean*e0*alfa1;
       sig2e += e0*e0*namean*(alfa-alfa1*alfa1);
-      p3 = a3-namean;
+      p3 = a3 - namean;
     }
 
-    const G4double w2 = alfa*e0;
-    if(tcut > w2) {
-      const G4double w = (tcut-w2)/tcut;
+    const G4double w3 = alfa*e0;
+    if(tcut > w3) {
+      const G4double w = (tcut-w3)/tcut;
       const G4int nnb = G4Poisson(p3);
       if(nnb > 0) {
         if(nnb > sizearray) {
@@ -233,13 +229,13 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
           rndmarray = new G4double[nnb];
         }
         rndmEngineF->flatArray(nnb, rndmarray);
-        for (G4int k=0; k<nnb; ++k) { loss += w2/(1.-w*rndmarray[k]); }
+        for (G4int k=0; k<nnb; ++k) { loss += w3/(1.-w*rndmarray[k]); }
       }
     }
     if(sig2e > 0.0) { SampleGauss(rndmEngineF, emean, sig2e, loss); }
   }
-  //G4cout << "### loss=" << loss << " scaling=" << scaling << G4endl;
-  return loss*scaling;
+  //G4cout << "### loss=" << loss << G4endl;
+  return loss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

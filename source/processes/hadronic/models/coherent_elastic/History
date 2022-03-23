@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+03 January 2022 - A.Ribon (hadr-cohe-V10-07-05)
+--------------------------------------------------
+- G4AntiNuclElastic : Vladimir Uzhinsky's correction in the SampleInvariantT
+  method of the highest momentum transfer (which was causing the cosine of
+  the polar angle in the center-of-mass system to be larger than 1 in some
+  cases). This should fix the bug #2204.
+
 04 August 2021 - A.Ribon (hadr-cohe-V10-07-04)
 --------------------------------------------------
 - G4HadronElastic, G4LEnp, G4LEpp, G4LEHadronProtonElastic,

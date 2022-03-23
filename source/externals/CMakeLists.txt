@@ -35,6 +35,9 @@ if(NOT GEANT4_USE_SYSTEM_PTL)
   add_subdirectory(ptl)
   # Needs to be in defined category list for static/shared to be linked correctly.
   set_property(GLOBAL APPEND PROPERTY GEANT4_DEFINED_CATEGORIES G4ptl)
+  # ... and added to build dir include paths in scripts
+  set_property(GLOBAL APPEND PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS 
+    ${CMAKE_CURRENT_SOURCE_DIR}/ptl/include)
 endif()
 
 #----------------------------------------------------------------------------

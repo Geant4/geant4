@@ -186,14 +186,14 @@ private:
   static std::vector<mscData*> msc;
 
   // index of G4MaterialCutsCouple
-  G4int    idx;
+  G4int idx;
 
-  G4bool   firstStep;
-  G4bool   insideskin;
+  G4bool firstStep;
+  G4bool insideskin;
 
-  G4bool   latDisplasmentbackup;
-  G4bool   dispAlg96;
-
+  G4bool latDisplasmentbackup;
+  G4bool dispAlg96;
+  G4bool isFirstInstance = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

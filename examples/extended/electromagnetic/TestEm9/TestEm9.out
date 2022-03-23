@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -194,7 +194,7 @@ eBrem:  for e-  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-CoulombScat:  for e- XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -240,7 +240,7 @@ annihil:  for e+ XStype:2 applyCuts:1  SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -276,7 +276,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -335,7 +335,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -367,7 +367,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -399,7 +399,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -432,7 +432,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -465,7 +465,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -497,7 +497,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -529,7 +529,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 applyCuts:1  SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 applyCuts:1  SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -603,40 +603,40 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.580000s Real=0.591350s Sys=0.010000s
+  User=0.560000s Real=0.603738s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         402.9
-Average number of gamma      637.2
-Average number of e+         48.37
-Average number of steps      2955
-Edep 1x1 =                   0.8327 +- 0.002858  res=  3.432 %   100
-Edep 3x3 =                   0.9573 +- 0.001276  res=  1.333 %   100
-Edep 5x5 =                   0.9787 +- 0.0009226  res=  0.9426 %   100
+Average number of e-         402.2
+Average number of gamma      636.8
+Average number of e+         47.82
+Average number of steps      2957
+Edep 1x1 =                   0.8398 +- 0.002632  res=  3.134 %   100
+Edep 3x3 =                   0.9607 +- 0.001031  res=  1.074 %   100
+Edep 5x5 =                   0.9809 +- 0.0007589  res=  0.7736 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8699 +- 0.002632
-  E1/E25 =                   0.8508 +- 0.002693
-  E9/E25 =                   0.9781 +- 0.0007731
+  E1/E9  =                   0.874 +- 0.002447
+  E1/E25 =                   0.8561 +- 0.002569
+  E9/E25 =                   0.9795 +- 0.0007586
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8327  delEdep1x1= -0.1673 nrms= -1.673
-Erms1x1: 0.02858  delErms1x1= -0.9714 nrms= -9.714
-Edep3x3: 0.9573  delEdep3x3= -0.04273 nrms= -0.4273
-Erms3x3: 0.01276  delErms3x3= -0.9872 nrms= -9.872
-Edep5x5: 0.9787  delEdep5x5= -0.02128 nrms= -0.2128
-Erms5x5: 0.009226  delErms5x5= -0.9908 nrms= -9.908
+Edep1x1: 0.8398  delEdep1x1= -0.1602 nrms= -1.602
+Erms1x1: 0.02632  delErms1x1= -0.9737 nrms= -9.737
+Edep3x3: 0.9607  delEdep3x3= -0.03925 nrms= -0.3925
+Erms3x3: 0.01031  delErms3x3= -0.9897 nrms= -9.897
+Edep5x5: 0.9809  delEdep5x5= -0.01913 nrms= -0.1913
+Erms5x5: 0.007589  delErms5x5= -0.9924 nrms= -9.924
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
   13           0           0           5           0
   26           0           1           0           0
-  53         260         133           0          23
-  55         279         154           0          24
+  53         259         131           0          23
+  55         281         155           0          23
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -714,22 +714,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.090000s Real=1.112103s Sys=0.000000s
+  User=0.870000s Real=0.972344s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         79.09
-Average number of gamma      78.42
-Average number of e+         4.69
-Average number of steps      509.6
-Edep 1x1 =                   0.01516 +- 0.0005402
-Edep 3x3 =                   0.01563 +- 0.0006087
-Edep 5x5 =                   0.01571 +- 0.0006204
+Average number of e-         66.47
+Average number of gamma      55.26
+Average number of e+         2.794
+Average number of steps      404.2
+Edep 1x1 =                   0.01373 +- 0.0001457
+Edep 3x3 =                   0.01403 +- 0.0001649
+Edep 5x5 =                   0.01409 +- 0.000168
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9827 +- 0.0007437
-  E1/E25 =                   0.9797 +- 0.0008466
-  E9/E25 =                   0.9969 +- 0.0001992
+  E1/E9  =                   0.9845 +- 0.0006706
+  E1/E25 =                   0.9815 +- 0.0007715
+  E9/E25 =                   0.9969 +- 0.0001953
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -837,22 +837,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.400000s Real=0.407926s Sys=0.000000s
+  User=0.390000s Real=0.401406s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         173.6
-Average number of gamma      221.9
-Average number of e+         47.15
-Average number of steps      1854
-Edep 1x1 =                   0.8322 +- 0.004258  res=  5.116 %   100
-Edep 3x3 =                   0.9614 +- 0.003569  res=  3.712 %   100
-Edep 5x5 =                   0.9838 +- 0.003594  res=  3.653 %   100
+Average number of e-         171.9
+Average number of gamma      218.8
+Average number of e+         46.18
+Average number of steps      1837
+Edep 1x1 =                   0.8323 +- 0.003391  res=  4.074 %   100
+Edep 3x3 =                   0.9571 +- 0.003099  res=  3.238 %   100
+Edep 5x5 =                   0.9774 +- 0.003098  res=  3.169 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8657 +- 0.00313
-  E1/E25 =                   0.846 +- 0.003382
-  E9/E25 =                   0.9772 +- 0.001304
+  E1/E9  =                   0.8699 +- 0.003034
+  E1/E25 =                   0.8519 +- 0.003126
+  E9/E25 =                   0.9792 +- 0.00113
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -960,22 +960,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.880000s Real=0.891942s Sys=0.000000s
+  User=0.580000s Real=0.595923s Sys=0.010000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         170.8
-Average number of gamma      363.4
-Average number of e+         47.47
-Average number of steps      1985
-Edep 1x1 =                   0.8387 +- 0.003506  res=  4.18 %   100
-Edep 3x3 =                   0.9612 +- 0.003533  res=  3.675 %   100
-Edep 5x5 =                   0.9816 +- 0.00361  res=  3.678 %   100
+Average number of e-         171.4
+Average number of gamma      359.6
+Average number of e+         47.63
+Average number of steps      1979
+Edep 1x1 =                   0.8338 +- 0.003625  res=  4.347 %   100
+Edep 3x3 =                   0.9558 +- 0.003284  res=  3.436 %   100
+Edep 5x5 =                   0.9766 +- 0.002952  res=  3.023 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8729 +- 0.003106
-  E1/E25 =                   0.8548 +- 0.003329
-  E9/E25 =                   0.9792 +- 0.001045
+  E1/E9  =                   0.8726 +- 0.002866
+  E1/E25 =                   0.8539 +- 0.00311
+  E9/E25 =                   0.9786 +- 0.001322
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -983,6 +983,6 @@ Beam Energy                  1 GeV
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.14 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.13 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

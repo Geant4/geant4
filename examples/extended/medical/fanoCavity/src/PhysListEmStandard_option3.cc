@@ -80,8 +80,9 @@ PhysListEmStandard_option3::PhysListEmStandard_option3(const G4String& name,
   param->SetStepFunction(0.2, 100*um);
   param->SetBuildCSDARange(true);
   param->SetMaxEnergyForCSDARange(10*GeV);
-  param->SetMscStepLimitType(fUseDistanceToBoundary);
+  param->SetMscStepLimitType(fUseSafetyPlus); 
   param->SetLateralDisplacementAlg96(true);
+  param->SetMscRangeFactor(0.03);
   SetPhysicsType(bElectromagnetic);
 }
 

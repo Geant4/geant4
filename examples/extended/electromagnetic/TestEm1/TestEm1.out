@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -239,7 +239,7 @@ eBrem:  for e-  XStype:4  SubType=3
              eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-CoulombScat:  for e- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -272,7 +272,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
-CoulombScat:  for e+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -305,7 +305,7 @@ hPairProd:  for proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -382,7 +382,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for anti_proton XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -415,7 +415,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -448,7 +448,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for kaon- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -482,7 +482,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -516,7 +516,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for mu- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -549,7 +549,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi+ XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -582,7 +582,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
-CoulombScat:  for pi- XStype:3 SubType=1 BuildTable=1
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -619,31 +619,31 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.110000s Real=1.136675s Sys=0.000000s
+  User=1.050000s Real=1.083970s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit:   99.816 MeV
+ Total energy deposit:   99.793 MeV
  NIEL energy calculated: 0 eV 
 
- Nb tracks/event   neutral:  25.422   charged:  138.42
- Nb  steps/event   neutral:  140.55   charged:  204.87
+ Nb tracks/event   neutral:  25.067   charged:  136.77
+ Nb  steps/event   neutral:  138.94   charged:  202.53
 
  Process calls frequency :
-                 Rayl=  17814        Transportation=   1822               annihil=   2863
-                compt= 212439                  conv=   2853                 eBrem=  46338
-                eIoni= 360228                   msc=    300                  phot=  46176
+                 Rayl=  17578        Transportation=   1772               annihil=   2780
+                compt= 210162                  conv=   2763                 eBrem=  45811
+                eIoni= 356136                   msc=    323                  phot=  45606
 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 10.963 cm    rms = 3.857 cm 
- proj Range = 9.5012 cm    rms = 3.573 cm 
- proj/true  = 0.86664
- transverse dispersion at end = 1.6291 cm 
-      mass true Range from simulation = 29.601 g/cm2 
+ true Range = 10.991 cm    rms = 3.7856 cm 
+ proj Range = 9.559 cm    rms = 3.5027 cm 
+ proj/true  = 0.8697
+ transverse dispersion at end = 1.5917 cm 
+      mass true Range from simulation = 29.676 g/cm2 
        from PhysicsTable (csda range) = 32.101 g/cm2 
 ---------------------------------------------------------
 
@@ -651,7 +651,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={569715375853059726, 1512787961385085996, 159385066433723610, 631305360847012361, 868736571017629199, 1849689694718704750, 2262222494328793823, 1296135396667370463, 1848800380547805365, 2127533035138291734, 368664117569056731, 76707054733608429, 977374032953158612, 2124670233721861618, 1025343182502388661, 1561953137578727511, 2153480873874088594} counter= 9sumtot= 661916886947121624
+N=17 V[N]={1199157010510595525, 1644498781111636774, 1053149034509071624, 1714307047695650363, 871199266626458370, 68792630573611062, 1739960981233686301, 627819966774448655, 2065260925238679297, 978116403995403167, 499861741137701771, 1978837191135332926, 2255419265549163564, 289164191733428157, 1939027172259720987, 717558470551816425, 1607937049532363312} counter= 2sumtot= 497480047245522721
 ---------------------------------------
 #
 /gun/particle proton
@@ -673,7 +673,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={569715375853059726, 1512787961385085996, 159385066433723610, 631305360847012361, 868736571017629199, 1849689694718704750, 2262222494328793823, 1296135396667370463, 1848800380547805365, 2127533035138291734, 368664117569056731, 76707054733608429, 977374032953158612, 2124670233721861618, 1025343182502388661, 1561953137578727511, 2153480873874088594} counter= 9sumtot= 661916886947121624
+N=17 V[N]={1199157010510595525, 1644498781111636774, 1053149034509071624, 1714307047695650363, 871199266626458370, 68792630573611062, 1739960981233686301, 627819966774448655, 2065260925238679297, 978116403995403167, 499861741137701771, 1978837191135332926, 2255419265549163564, 289164191733428157, 1939027172259720987, 717558470551816425, 1607937049532363312} counter= 2sumtot= 497480047245522721
 ---------------------------------------
 --> Event 0 starts.
 --> Event 200 starts.
@@ -688,29 +688,29 @@ N=17 V[N]={569715375853059726, 1512787961385085996, 159385066433723610, 63130536
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.060000s Real=0.057071s Sys=0.000000s
+  User=0.060000s Real=0.059293s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 proton of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
  Total energy deposit:   100 MeV
- NIEL energy calculated: 226.72 eV 
+ NIEL energy calculated: 241.36 eV 
 
  Nb tracks/event   neutral:       0   charged:   1.007
- Nb  steps/event   neutral:       0   charged:  19.276
+ Nb  steps/event   neutral:       0   charged:  19.326
 
  Process calls frequency :
-          CoulombScat=     40             NoProcess=     14                 hIoni=  38484
+          CoulombScat=     47             NoProcess=     14                 hIoni=  38576
               ionIoni=     14 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 3.711 cm    rms = 410.15 um 
- proj Range = 3.703 cm    rms = 416.37 um 
- proj/true  = 0.99785
- transverse dispersion at end = 1.0796 mm 
-      mass true Range from simulation = 10.02 g/cm2 
+ true Range = 3.7113 cm    rms = 411.19 um 
+ proj Range = 3.7032 cm    rms = 421.05 um 
+ proj/true  = 0.99782
+ transverse dispersion at end = 1.0938 mm 
+      mass true Range from simulation = 10.021 g/cm2 
        from PhysicsTable (csda range) = 10.012 g/cm2 
 ---------------------------------------------------------
 
@@ -718,7 +718,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={777423108757527838, 704508982502545851, 951674060730419548, 596006347471717738, 593741351132277324, 1444882825628062695, 1840028270197348749, 136247308043229535, 2212635163244783581, 2030244094028654428, 1051979449125752941, 1973640127354343795, 1148940797978927289, 1830580337482237514, 1179516898147585605, 659264550228523480, 786622168720590139} counter= 7sumtot= 1471191767064976442
+N=17 V[N]={431801811213743487, 854886199924416613, 260531773953405415, 2289446942256091459, 58527661204284952, 1766078178177857190, 483505007552547042, 810525114436391377, 1684840218395290208, 1272317455890027472, 1451155726963212329, 734293691582830903, 425424908876082454, 876482437178859190, 904717241713568241, 1060460907654252289, 154620842949410776} counter= 6sumtot= 1684558064640107691
 ---------------------------------------
 #
 G4 kernel has come to Quit state.

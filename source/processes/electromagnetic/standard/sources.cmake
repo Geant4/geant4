@@ -34,6 +34,7 @@ geant4_add_module(G4emstandard
     G4KleinNishinaModel.hh
     G4LindhardSorensenData.hh
     G4LindhardSorensenIonModel.hh
+    G4LossFluctuationDummy.hh
     G4ModifiedTsai.hh
     G4MollerBhabhaModel.hh
     G4MottData.hh
@@ -54,6 +55,7 @@ geant4_add_module(G4emstandard
     G4ScreeningMottCrossSection.hh
     G4SeltzerBergerModel.hh
     G4UniversalFluctuation.hh
+    G4UrbanFluctuation.hh
     G4UrbanMscModel.hh
     G4WaterStopping.hh
     G4WentzelOKandVIxSection.hh
@@ -111,6 +113,7 @@ geant4_add_module(G4emstandard
     G4KleinNishinaModel.cc
     G4LindhardSorensenData.cc
     G4LindhardSorensenIonModel.cc
+    G4LossFluctuationDummy.cc
     G4ModifiedTsai.cc
     G4MollerBhabhaModel.cc
     G4NuclearStopping.cc
@@ -129,6 +132,7 @@ geant4_add_module(G4emstandard
     G4ScreeningMottCrossSection.cc
     G4SeltzerBergerModel.cc
     G4UniversalFluctuation.cc
+    G4UrbanFluctuation.cc
     G4UrbanMscModel.cc
     G4WaterStopping.cc
     G4WentzelOKandVIxSection.cc

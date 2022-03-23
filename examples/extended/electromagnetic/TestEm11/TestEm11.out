@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -118,12 +118,12 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for e+-           2
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     1
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for e+-            0.03
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
@@ -180,7 +180,7 @@ Rayl:  for gamma SubType=11 BuildTable=1
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
-          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -208,7 +208,7 @@ ePairProd:  for e-  XStype:1  SubType=4
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
-          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e+  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -538,27 +538,27 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=0.590000s Real=0.593177s Sys=0.010000s
+  User=0.580000s Real=0.590438s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 20000 e- of 500.00 keV through 1 absorbers: 
     1      1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
- Edep in absorber 1 = 448.322 keV	(17.192 keV-->500.000 keV)
+ Edep in absorber 1 = 447.593 keV	(14.281 keV-->500.000 keV)
 
- Track length of primary track = 883.600 um  +- 191.932 um 
+ Track length of primary track = 881.771 um  +- 192.378 um 
  Range from EmCalculator = 942.776 um  (from full dE/dx)
 
- Projected range               = 321.544 um  +- 194.272 um 
+ Projected range               = 323.624 um  +- 195.124 um 
 
- Nb of steps of primary track  = 11.41 +- 2.83	 Step size= 80.146 um  +- 20.906 um 
+ Nb of steps of primary track  = 12.02 +- 2.96	 Step size= 75.665 um  +- 19.239 um 
 
- absorbed = 78.01 %   transmit = 5.28 %   reflected = 16.71 %
+ absorbed = 77.34 %   transmit = 6.07 %   reflected = 16.59 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 581941925, 1742193306
+ Current couple of seeds = 1548490251, 1478647226
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

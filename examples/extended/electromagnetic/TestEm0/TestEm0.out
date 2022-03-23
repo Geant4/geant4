@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
+ Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -78,12 +78,12 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for e+-           2
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     1
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for e+-            0.03
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
@@ -144,18 +144,18 @@ Index : 0     used in the geometry : Yes
 
  
   compCrossSectionPerVolume: 	0.0761844 cm^-1	 0.489918 cm^-1	        0 cm^-1	0.0338962 cm^-1	 0.599999 cm^-1
-  cross section per volume : 	0.0761844 cm^-1	 0.489918 cm^-1	        0 cm^-1	0.0339035 cm^-1	 0.600006 cm^-1
-  cross section per mass   : 	  1.43123 mm2/g 	  9.20379 mm2/g 	        0 um2/mg	  636.924 um2/mg	  11.2719 mm2/g 
+  cross section per volume : 	0.0761844 cm^-1	 0.489918 cm^-1	        0 cm^-1	0.0338962 cm^-1	 0.599999 cm^-1
+  cross section per mass   : 	  1.43123 mm2/g 	   9.2038 mm2/g 	        0 um2/mg	  636.788 um2/mg	  11.2718 mm2/g 
  
-  mean free path           : 	   13.126 cm 	  2.04116 cm 	5.82593e+288 pc 	  29.4955 cm 	  1.66665 cm 
-        (g/cm2)            : 	  69.8699 g/cm2 	  10.8651 g/cm2 	2.88022e+285 kg/cm2	  157.005 g/cm2 	  8.87158 g/cm2 
+  mean free path           : 	   13.126 cm 	  2.04116 cm 	5.82593e+288 pc 	  29.5018 cm 	  1.66667 cm 
+        (g/cm2)            : 	  69.8699 g/cm2 	  10.8651 g/cm2 	2.88022e+285 kg/cm2	  157.038 g/cm2 	  8.87169 g/cm2 
 
 -----------------------------------------------------------
 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000377s Sys=0.000000s
+  User=0.000000s Real=0.000350s Sys=0.000000s
 
   Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
                        Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
@@ -225,7 +225,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000122s Sys=0.000000s
+  User=0.000000s Real=0.000116s Sys=0.000000s
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

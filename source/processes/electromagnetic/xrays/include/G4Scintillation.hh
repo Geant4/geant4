@@ -133,14 +133,6 @@ class G4Scintillation : public G4VRestDiscreteProcess
   G4bool GetFiniteRiseTime() const;
   // Returns the boolean flag for a finite scintillation rise time.
 
-  void SetScintillationYieldFactor(const G4double yieldfactor);
-  // Called to set the scintillation photon yield factor, needed when
-  // the yield is different for different types of particles. This
-  // scales the yield obtained from the G4MaterialPropertiesTable.
-
-  G4double GetScintillationYieldFactor() const;
-  // Returns the photon yield factor.
-
   G4PhysicsTable* GetIntegralTable1() const;
   // Returns the address of scintillation integral table #1.
 

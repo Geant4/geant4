@@ -96,6 +96,21 @@ class G4String : public std::string
   ///   to match the `std::string` interface.
   inline operator const char*() const;
 
+  /// @brief Override of subscript operator for `int` to suppress C2666 errors with MSVC
+  /// @deprecated Will be removed at the same time as `operator const char*` that requires it
+  ///
+  /// This override is required because of G4String's provision of an implicit conversion
+  /// operator to `const char*`. Together with the subscript operator and C++'s built-in
+  /// `operator[](const char*, int) operator, use of G4String::operator[] will trigger
+  /// [MSVC error C2666](https://docs.microsoft.com/en-us/cpp/error-messages/compiler-errors-2/compiler-error-c2666?view=msvc-170)
+  /// This is a known issue with mixing implicit conversion to `const char*` and subscript
+  /// operators. Provision of the override with `int` argument is thus a workaround
+  /// until the conversion operator is removed.
+  inline reference operator[](int);
+
+  /// @overload  
+  inline const_reference operator[](int) const;
+
   /// @brief Deprecated function
   /// @deprecated Use `std::string::compare` or `G4StrUtil::icompare` instead
   [[deprecated("Use std::string::compare, or G4StrUtil::icompare for case-insensitive comparison")]]

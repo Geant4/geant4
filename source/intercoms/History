@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 December, 2021  M. Asai (intercoms-V10-07-15)
+- Check and set proper argument types for each individual argument when
+  G4GenericMessenger::DeclareMethod() is used. Addressing to the Bugzilla
+  report #2420.
+
 26 October, 2021  M. Asai (intercoms-V10-07-14)
 - G4UIcommandTree, G4UIdirectory, G4GenericMessenger
  - Improve output HTML file layout (L.Garnier)
