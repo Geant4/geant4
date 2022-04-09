@@ -64,7 +64,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 add_executable(HepMCEx02 HepMCEx02.cc ${sources} ${headers} ${generator_sources})
 target_link_libraries(HepMCEx02 ${Geant4_LIBRARIES}
                       ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-                      ${PYTHIA6_LIBRARIES} ${LHAPDF_LIBARIES})
+                      ${PYTHIA6_LIBRARIES} ${LHAPDF_LIBRARIES})
 target_include_directories(HepMCEx02 PRIVATE ${PROJECT_SOURCE_DIR}/include 
                                              ${Geant4_INCLUDE_DIR}
                                              ${HEPMC_INCLUDE_DIR})
