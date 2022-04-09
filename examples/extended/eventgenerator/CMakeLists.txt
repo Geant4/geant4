@@ -2,6 +2,7 @@
 
 cmake_minimum_required(VERSION 3.16...3.21)
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 find_package(Geant4)
 include(${Geant4_USE_FILE})
 
@@ -24,7 +25,7 @@ endif()
 #----------------------------------------------------------------------------
 # decayer6 example requires Pythia6
 #
-find_package(Pythia6 QUIET)
+find_package(Pythia6)
 if(PYTHIA6_FOUND)
   add_subdirectory(pythia/decayer6)
 else()
