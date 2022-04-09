@@ -69,8 +69,9 @@ target_link_libraries(HepMCEx02 ${Geant4_LIBRARIES}
 target_include_directories(HepMCEx02 PRIVATE ${PROJECT_SOURCE_DIR}/include 
                                              ${Geant4_INCLUDE_DIR}
                                              ${HEPMC_INCLUDE_DIR})
-set_target_properties(HepMCEx02 PROPERTIES LINKER_LANGUAGE Fortran)
-
+if(PYTHIA6_FOUND)
+  set_target_properties(HepMCEx02 PROPERTIES LINKER_LANGUAGE Fortran)
+endif()
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
