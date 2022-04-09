@@ -5,7 +5,7 @@
 #  PYTHIA6_FOUND
 #  PYTHIA6_LIBRARIES
 
-find_library(PYTHIA6_LIBRARY NAMES Pythia6 pythia6-$ENV{PYTHIA6_VERSION}
+find_library(PYTHIA6_LIBRARY NAMES Pythia6 pythia6 pythia6-$ENV{PYTHIA6_VERSION}
 			     HINTS $ENV{PYTHIA6} $ENV{PYTHIA6}/lib $ENV{PYTHIA6}/lib64)
 
 set(PYTHIA6_LIBRARIES ${PYTHIA6_LIBRARY})                              
