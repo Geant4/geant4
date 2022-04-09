@@ -4,7 +4,7 @@ uname -a
 cat /etc/issue
 yum -y install dnf-plugins-core
 yum -y install  gcc gcc-c++ gcc-gfortran make which cmake cmake-data cmake-filesystem
-yum -y install  HepMC3 HepMC3-devel HepMC HepMC-devel
+yum -y install  HepMC3 HepMC3-devel HepMC HepMC-devel redhat-rpm-config
 yum -y install  expat-devel  xerces-c-devel xerces-c expat expat-devel zlib zlib-devel lhapdf lhapdf-devel
 yum -y install yum-plugin-copr
 yum -y copr enable averbyts/HEPrpms
