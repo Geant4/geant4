@@ -15,7 +15,7 @@ export FC=gfortran
 export FCFLAGS=
 mkdir -p test
 cd test
-cmake -B. -S ../examples/extended/eventgenerator -DGeant4_DIR=/usr/lib64/Geant4-11.0.0  -DPYTHIA6_DIR=/usr -DHEPMC_DIR=/usr -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
+cmake -B. -S ../examples/extended/eventgenerator -DGeant4_DIR=/usr/lib64/Geant4-11.0.0  -DPythia6_DIR=/usr -DHEPMC_DIR=/usr -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
 make -j 2
 
 

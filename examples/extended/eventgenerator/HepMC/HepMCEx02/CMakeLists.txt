@@ -35,7 +35,6 @@ find_package(LHAPDF REQUIRED)
 find_package(Pythia6 QUIET)
 SET(OLD_CMAKE_POSITION_INDEPENDENT_CODE ${CMAKE_POSITION_INDEPENDENT_CODE})
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-message("Flags  ${CMAKE_Fortran_FLAGS}" )
 include(CheckLanguage)
 check_language(Fortran)
 SET(CMAKE_POSITION_INDEPENDENT_CODE ${OLD_CMAKE_POSITION_INDEPENDENT_CODE})
@@ -65,7 +64,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 add_executable(HepMCEx02 HepMCEx02.cc ${sources} ${headers} ${generator_sources})
 target_link_libraries(HepMCEx02 ${Geant4_LIBRARIES}
                       ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-                      ${PYTHIA6_LIBRARIES} ${LHAPDF_LIBARIES}})
+                      ${PYTHIA6_LIBRARIES} ${LHAPDF_LIBARIES})
 target_include_directories(HepMCEx02 PRIVATE ${PROJECT_SOURCE_DIR}/include 
                                              ${Geant4_INCLUDE_DIR}
                                              ${HEPMC_INCLUDE_DIR})
