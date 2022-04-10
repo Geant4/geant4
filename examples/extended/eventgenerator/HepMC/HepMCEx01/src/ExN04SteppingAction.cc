@@ -70,11 +70,11 @@ void ExN04SteppingAction::UserSteppingAction(const G4Step * theStep)
   G4StepPoint * thePrePoint = theStep->GetPreStepPoint();
   G4VPhysicalVolume * thePrePV = thePrePoint->GetPhysicalVolume();
   G4String thePrePVname = thePrePV->GetName();
-  if(thePrePVname(0,4)=="calo") { return; }
+  if(thePrePVname.substr(0,4)=="calo") { return; }
   G4StepPoint * thePostPoint = theStep->GetPostStepPoint();
   G4VPhysicalVolume * thePostPV = thePostPoint->GetPhysicalVolume();
   G4String thePostPVname = thePostPV->GetName();
-  if(thePostPVname(0,4)!="calo") { return; }
+  if(thePostPVname.substr(0,4)!="calo") { return; }
 
   // then suspend the track
   theTrack->SetTrackStatus(fSuspend);
