@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 3.16...3.21)
-project(HepMCEx01)
+project(HepMCEx01 LANGUAGES C CXX Fortran )
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -32,13 +32,6 @@ find_package(LHAPDF REQUIRED)
 # Find Pythia6 (optional package)
 #
 find_package(Pythia6 QUIET)
-if (NOT CMAKE_Fortran_COMPILER)
-  SET(OLD_CMAKE_POSITION_INDEPENDENT_CODE ${CMAKE_POSITION_INDEPENDENT_CODE})
-  SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-  include(CheckLanguage)
-  check_language(Fortran)
-  SET(CMAKE_POSITION_INDEPENDENT_CODE ${OLD_CMAKE_POSITION_INDEPENDENT_CODE})
-endif()
 if(PYTHIA6_FOUND)
   message(STATUS "G4 Examples: Pythia6 found. --> HepMCEx01 example with Pythia6 enabled.") 
   add_definitions(-DG4LIB_USE_PYTHIA)

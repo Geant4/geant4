@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 3.16...3.21)
-project(decayer6)
+project(decayer6 LANGUAGES C CXX Fortran )
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -24,13 +24,6 @@ include(${Geant4_USE_FILE})
 # Find Pythia6 (required package)
 #
 find_package(Pythia6 REQUIRED)
-if (NOT CMAKE_Fortran_COMPILER)
-  SET(OLD_CMAKE_POSITION_INDEPENDENT_CODE ${CMAKE_POSITION_INDEPENDENT_CODE})
-  SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-  include(CheckLanguage)
-  check_language(Fortran)
-  SET(CMAKE_POSITION_INDEPENDENT_CODE ${OLD_CMAKE_POSITION_INDEPENDENT_CODE})
-endif()
 #----------------------------------------------------------------------------
 # Find LHAPDF (required package)
 #
