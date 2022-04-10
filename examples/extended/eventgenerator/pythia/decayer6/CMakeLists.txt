@@ -24,11 +24,13 @@ include(${Geant4_USE_FILE})
 # Find Pythia6 (required package)
 #
 find_package(Pythia6 REQUIRED)
-SET(OLD_CMAKE_POSITION_INDEPENDENT_CODE ${CMAKE_POSITION_INDEPENDENT_CODE})
-SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-include(CheckLanguage)
-check_language(Fortran)
-SET(CMAKE_POSITION_INDEPENDENT_CODE ${OLD_CMAKE_POSITION_INDEPENDENT_CODE})
+if (NOT CMAKE_Fortran_COMPILER)
+  SET(OLD_CMAKE_POSITION_INDEPENDENT_CODE ${CMAKE_POSITION_INDEPENDENT_CODE})
+  SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+  include(CheckLanguage)
+  check_language(Fortran)
+  SET(CMAKE_POSITION_INDEPENDENT_CODE ${OLD_CMAKE_POSITION_INDEPENDENT_CODE})
+endif()
 #----------------------------------------------------------------------------
 # Find LHAPDF (required package)
 #
