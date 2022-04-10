@@ -14,11 +14,12 @@ yum -y install geant4 geant4-devel  clhep clhep-devel PTL-devel  pythia6
 
 export FC=gfortran
 export FCFLAGS=
+TOP=$(pwd)
 mkdir -p test
 cd test
-cmake -B. -S ../examples/extended/eventgenerator -DGeant4_DIR=/usr/lib64/Geant4-11.0.0  -DPYTHIA6_ROOT_DIR=/usr -DHEPMC_DIR=/usr -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
+cmake -B. -S ../examples/extended/eventgenerator  -DCMAKE_INSTALL_PREFIX=$TOP/INSTALL -DGeant4_DIR=/usr/lib64/Geant4-11.0.0  -DPYTHIA6_ROOT_DIR=/usr -DHEPMC_DIR=/usr -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
 make -j 2
-
+make install
 
 out=$?
 echo ::set-output name=out::$out
