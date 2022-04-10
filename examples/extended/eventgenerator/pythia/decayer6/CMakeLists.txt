@@ -24,13 +24,13 @@ include(${Geant4_USE_FILE})
 # Find Pythia6 (required package)
 #
 find_package(Pythia6 REQUIRED)
-if (NOT CMAKE_Fortran_COMPILER)
-  SET(OLD_CMAKE_POSITION_INDEPENDENT_CODE ${CMAKE_POSITION_INDEPENDENT_CODE})
-  SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-  include(CheckLanguage)
-  check_language(Fortran)
-  SET(CMAKE_POSITION_INDEPENDENT_CODE ${OLD_CMAKE_POSITION_INDEPENDENT_CODE})
-endif()
+#if (NOT CMAKE_Fortran_COMPILER)
+#  SET(OLD_CMAKE_POSITION_INDEPENDENT_CODE ${CMAKE_POSITION_INDEPENDENT_CODE})
+#  SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+#  include(CheckLanguage)
+#  check_language(Fortran)
+#  SET(CMAKE_POSITION_INDEPENDENT_CODE ${OLD_CMAKE_POSITION_INDEPENDENT_CODE})
+#endif()
 #----------------------------------------------------------------------------
 # Find LHAPDF (required package)
 #
@@ -65,7 +65,7 @@ target_include_directories(pythia6_decayer PRIVATE ${PROJECT_SOURCE_DIR}/include
                     ${PYTHIA6_INCLUDE_DIR}
                     ${LHAPDF_INCLUDE_DIR}
                     )
-set_target_properties(pythia6_decayer PROPERTIES LINKER_LANGUAGE Fortran)
+#set_target_properties(pythia6_decayer PROPERTIES LINKER_LANGUAGE Fortran)
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build decayer6. This is so that we can run the executable directly because it
