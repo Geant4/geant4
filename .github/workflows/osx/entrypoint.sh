@@ -30,7 +30,7 @@ cp /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
 
 mkdir -p pythia6428-split
 cd pythia6428-split
-wget https://pythia.org/download/pythia6/pythia6428-split.tgz
+wget -q  https://pythia.org/download/pythia6/pythia6428-split.tgz
 tar -xzf pythia6428-split.tgz
 gsed -i 's/pdfset.f//g' Makefile
 gsed -i 's/gfortran/gfortran-11/g' Makefile
@@ -39,23 +39,23 @@ mv libpythia.a /usr/local/lib/libpythia6.a
 cd $TOP
 
 ls -lah
-wget https://geant4-data.web.cern.ch/releases/lib_11.0.1/Darwin-clang13.0.0-Monterey.tar.gz
+wget -q  https://geant4-data.web.cern.ch/releases/lib_11.0.1/Darwin-clang13.0.0-Monterey.tar.gz
 tar -xzf Darwin-clang13.0.0-Monterey.tar.gz
 ls -lah
 
 mkdir -p Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
 cd Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
-wget https://geant4-data.web.cern.ch/datasets/G4NDL.4.6.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/G4EMLOW.8.0.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/PhotonEvaporation.5.7.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/RadioactiveDecay.5.6.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/G4PARTICLEXS.4.0.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/G4PII.1.3.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/RealSurface.2.2.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/G4SAIDDATA.2.0.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/G4ABLA.3.1.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/G4INCL.1.0.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/G4ENSDFSTATE.2.3.tar.gz
+wget -q https://geant4-data.web.cern.ch/datasets/G4NDL.4.6.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4EMLOW.8.0.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/PhotonEvaporation.5.7.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/RadioactiveDecay.5.6.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4PARTICLEXS.4.0.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4PII.1.3.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/RealSurface.2.2.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4SAIDDATA.2.0.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4ABLA.3.1.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4INCL.1.0.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4ENSDFSTATE.2.3.tar.gz
 tar -xzf *.tar.gz
 ls -lah
 cd $TOP
