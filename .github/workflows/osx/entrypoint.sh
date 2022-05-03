@@ -56,7 +56,19 @@ wget -q  https://geant4-data.web.cern.ch/datasets/G4SAIDDATA.2.0.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4ABLA.3.1.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4INCL.1.0.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4ENSDFSTATE.2.3.tar.gz
-tar -xzf *.tar.gz
+ 
+tar -xzf G4NDL.4.6.tar.gz
+tar -xzf G4EMLOW.8.0.tar.gz
+tar -xzf PhotonEvaporation.5.7.tar.gz
+tar -xzf RadioactiveDecay.5.6.tar.gz
+tar -xzf G4PARTICLEXS.4.0.tar.gz
+tar -xzf G4PII.1.3.tar.gz
+tar -xzf RealSurface.2.2.tar.gz
+tar -xzf G4SAIDDATA.2.0.tar.gz
+tar -xzf G4ABLA.3.1.tar.gz
+tar -xzf G4INCL.1.0.tar.gz
+tar -xzf G4ENSDFSTATE.2.3.tar.gz
+
 ls -lah
 cd $TOP
 
