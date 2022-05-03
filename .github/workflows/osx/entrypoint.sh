@@ -3,6 +3,8 @@ set -x
 export TOP=$(pwd)
 brew tap davidchall/hep
 brew install hepmc lhapdf wget cmake coreutils  
+brew install gnu-sed
+brew install gcc
 
 which gfortran-11
 if [ "$?" = "0" ]; then 
@@ -29,6 +31,7 @@ make lib
 mv libpythia.a /usr/local
 cd $TOP
 
+ls -lah
 wget https://geant4-data.web.cern.ch/releases/lib_11.0.1/Darwin-clang13.0.0-Monterey.tar.gz
 tar -xzvf Darwin-clang13.0.0-Monterey.tar.gz
 ls -lah
