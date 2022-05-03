@@ -5,6 +5,7 @@ brew tap davidchall/hep
 brew install hepmc lhapdf wget cmake coreutils  
 brew install gnu-sed
 brew install gcc
+brew install expat
 brew install --cask xquartz
 
 which gfortran-11
@@ -32,7 +33,7 @@ tar -xzf pythia6428-split.tgz
 gsed -i 's/pdfset.f//g' Makefile
 gsed -i 's/gfortran/gfortran-11/g' Makefile
 make lib
-mv libpythia.a /usr/local/lib
+mv libpythia.a /usr/local/lib/libpythia6.a
 cd $TOP
 
 ls -lah
@@ -40,7 +41,8 @@ wget https://geant4-data.web.cern.ch/releases/lib_11.0.1/Darwin-clang13.0.0-Mont
 tar -xzf Darwin-clang13.0.0-Monterey.tar.gz
 ls -lah
 source $TOP/Geant4-11.0.1-Darwin/bin/geant4.sh
-mkdir -p /opt/local/include
+#mkdir -p /opt/local/include
+gsed -i 's@/opt/local/@/usr/local/Cellar/expat/2.4.7/@g'  Geant4-11.0.1-Darwin/lib/Geant4-11.0.1/Geant4PackageCache.cmake
 
 mkdir -p test
 cd test
