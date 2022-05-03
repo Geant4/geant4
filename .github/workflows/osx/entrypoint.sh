@@ -45,13 +45,13 @@ ls -lah
 
 mkdir -p Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
 cd Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
-wget -q https://geant4-data.web.cern.ch/datasets/G4NDL.4.6.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4NDL.4.6.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4EMLOW.8.0.tar.gz
-wget -q  https://geant4-data.web.cern.ch/datasets/PhotonEvaporation.5.7.tar.gz
-wget -q  https://geant4-data.web.cern.ch/datasets/RadioactiveDecay.5.6.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4PhotonEvaporation.5.7.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4RadioactiveDecay.5.6.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4PARTICLEXS.4.0.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4PII.1.3.tar.gz
-wget -q  https://geant4-data.web.cern.ch/datasets/RealSurface.2.2.tar.gz
+wget -q  https://geant4-data.web.cern.ch/datasets/G4RealSurface.2.2.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4SAIDDATA.2.0.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4ABLA.3.1.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4INCL.1.0.tar.gz
@@ -59,11 +59,11 @@ wget -q  https://geant4-data.web.cern.ch/datasets/G4ENSDFSTATE.2.3.tar.gz
  
 tar -xzf G4NDL.4.6.tar.gz
 tar -xzf G4EMLOW.8.0.tar.gz
-tar -xzf PhotonEvaporation.5.7.tar.gz
-tar -xzf RadioactiveDecay.5.6.tar.gz
+tar -xzf G4PhotonEvaporation.5.7.tar.gz
+tar -xzf G4RadioactiveDecay.5.6.tar.gz
 tar -xzf G4PARTICLEXS.4.0.tar.gz
 tar -xzf G4PII.1.3.tar.gz
-tar -xzf RealSurface.2.2.tar.gz
+tar -xzf G4RealSurface.2.2.tar.gz
 tar -xzf G4SAIDDATA.2.0.tar.gz
 tar -xzf G4ABLA.3.1.tar.gz
 tar -xzf G4INCL.1.0.tar.gz
