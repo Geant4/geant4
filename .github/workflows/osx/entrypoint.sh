@@ -6,6 +6,7 @@ brew install hepmc lhapdf wget cmake coreutils
 brew install gnu-sed
 brew install gcc
 brew install expat
+brew install libxmu
 brew install --cask xquartz
 
 which gfortran-11
