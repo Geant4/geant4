@@ -22,13 +22,14 @@ else
 fi
 export CXX=clang++
 export CC=clang
+cp /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
 
 wget https://pythia.org/download/pythia6/pythia6428-split.tgz
 tar -xzvf pythia6428-split.tgz
 cd pythia6428-split
 gsed -i 's/pdfset.f//g' Makefile
 make lib
-mv libpythia.a /usr/local
+mv libpythia.a /usr/local/lib
 cd $TOP
 
 ls -lah
@@ -36,6 +37,7 @@ wget https://geant4-data.web.cern.ch/releases/lib_11.0.1/Darwin-clang13.0.0-Mont
 tar -xzvf Darwin-clang13.0.0-Monterey.tar.gz
 ls -lah
 source $TOP/Geant4-11.0.1-Darwin/bin/geant4.sh
+mkdir -p /opt/local/include
 
 mkdir -p test
 cd test
