@@ -5,6 +5,7 @@ brew tap davidchall/hep
 brew install hepmc lhapdf wget cmake coreutils  
 brew install gnu-sed
 brew install gcc
+brew install --cask xquartz
 
 which gfortran-11
 if [ "$?" = "0" ]; then 
@@ -24,10 +25,12 @@ export CXX=clang++
 export CC=clang
 cp /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
 
+mkdir -p pythia6428-split
+cd pythia6428-split
 wget https://pythia.org/download/pythia6/pythia6428-split.tgz
 tar -xzf pythia6428-split.tgz
-cd pythia6428-split
 gsed -i 's/pdfset.f//g' Makefile
+gsed -i 's/gfortran/gfortran-11/g' Makefile
 make lib
 mv libpythia.a /usr/local/lib
 cd $TOP
