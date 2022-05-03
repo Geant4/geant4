@@ -6,6 +6,7 @@ brew install hepmc lhapdf wget cmake coreutils
 brew install gnu-sed
 brew install gcc
 brew install expat
+brew install pythia
 brew install libxmu
 brew install --cask xquartz
 
@@ -41,8 +42,28 @@ ls -lah
 wget https://geant4-data.web.cern.ch/releases/lib_11.0.1/Darwin-clang13.0.0-Monterey.tar.gz
 tar -xzf Darwin-clang13.0.0-Monterey.tar.gz
 ls -lah
+
+mkdir -p Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
+cd Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
+wget https://geant4-data.web.cern.ch/datasets/G4NDL4.6.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/G4EMLOW8.0.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/PhotonEvaporation5.7.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/RadioactiveDecay5.6.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/G4PARTICLEXS4.0.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/G4PII1.3.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/RealSurface2.2.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/G4SAIDDATA2.0.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/data/G4ABLA3.1.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/data/G4INCL1.0.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/G4ENSDFSTATE2.3.tar.gz
+tar -xzf *.tar.gz
+ls -lah
+cd $TOP
+
+
+gsed -i 's@/Users/gcosmo/Software/release/install/@'$TOP'/Geant4-11.0.1-Darwin/@g'  $TOP/Geant4-11.0.1-Darwin/bin/geant4.sh
+
 source $TOP/Geant4-11.0.1-Darwin/bin/geant4.sh
-#mkdir -p /opt/local/include
 gsed -i 's@/opt/local/@/usr/local/Cellar/expat/2.4.7/@g'  Geant4-11.0.1-Darwin/lib/Geant4-11.0.1/Geant4PackageCache.cmake
 
 mkdir -p test
