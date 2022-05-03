@@ -53,8 +53,8 @@ wget https://geant4-data.web.cern.ch/datasets/G4PARTICLEXS4.0.tar.gz
 wget https://geant4-data.web.cern.ch/datasets/G4PII1.3.tar.gz
 wget https://geant4-data.web.cern.ch/datasets/RealSurface2.2.tar.gz
 wget https://geant4-data.web.cern.ch/datasets/G4SAIDDATA2.0.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/data/G4ABLA3.1.tar.gz
-wget https://geant4-data.web.cern.ch/datasets/data/G4INCL1.0.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/G4ABLA3.1.tar.gz
+wget https://geant4-data.web.cern.ch/datasets/G4INCL1.0.tar.gz
 wget https://geant4-data.web.cern.ch/datasets/G4ENSDFSTATE2.3.tar.gz
 tar -xzf *.tar.gz
 ls -lah
