@@ -55,7 +55,6 @@ target_link_libraries(pythia6_decayer ${common_prefix}common
 target_include_directories(pythia6_decayer PRIVATE ${PROJECT_SOURCE_DIR}/include 
                     ${PROJECT_SOURCE_DIR}/common/include 
                     ${Geant4_INCLUDE_DIR}
-                    ${PYTHIA6_INCLUDE_DIR}
                     ${LHAPDF_INCLUDE_DIR}
                     )
 set_target_properties(pythia6_decayer PROPERTIES LINKER_LANGUAGE Fortran)

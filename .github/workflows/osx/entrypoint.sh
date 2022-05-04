@@ -28,16 +28,6 @@ export CXX=clang++
 export CC=clang
 cp /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
 
-mkdir -p pythia6428-split
-cd pythia6428-split
-wget -q  https://pythia.org/download/pythia6/pythia6428-split.tgz
-tar -xzf pythia6428-split.tgz
-gsed -i 's/pdfset.f//g' Makefile
-gsed -i 's/gfortran/gfortran-11/g' Makefile
-make lib
-mv libpythia.a /usr/local/lib/libpythia6.a
-cd $TOP
-
 ls -lah
 wget -q  https://geant4-data.web.cern.ch/releases/lib_11.0.1/Darwin-clang13.0.0-Monterey.tar.gz
 tar -xzf Darwin-clang13.0.0-Monterey.tar.gz
@@ -80,7 +70,7 @@ gsed -i 's@/opt/local/@/usr/local/Cellar/expat/2.4.7/@g'  Geant4-11.0.1-Darwin/l
 
 mkdir -p test
 cd test
-cmake -B. -S ../examples/extended/eventgenerator  -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON -DCMAKE_INSTALL_PREFIX=$TOP/INSTALL -DGeant4_DIR=$TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1  -DPYTHIA6_ROOT_DIR=/usr/local -DHEPMC_DIR=/usr/local -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
+cmake -B. -S ../examples/extended/eventgenerator -DPYTHIA6_INTERNAL=ON -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON -DCMAKE_INSTALL_PREFIX=$TOP/INSTALL -DGeant4_DIR=$TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1  -DHEPMC_DIR=/usr/local -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
 cmake --build . -j 2
 cmake --install .
 
