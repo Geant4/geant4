@@ -13,7 +13,7 @@ file(GLOB fh_sources ${CMAKE_CURRENT_SOURCE_DIR}/fh*.f)
 #----------------------------------------------------------------------------
 # Add library
 #
-add_library(Pythia6 SHARED ${py_sources} ${struct_sources} ${up_sources} ${fh_sources} ${CMAKE_CURRENT_SOURCE_DIR}/ssmssm.f ${CMAKE_CURRENT_SOURCE_DIR}/sugra.f ${CMAKE_CURRENT_SOURCE_DIR}/visaje.f)
+add_library(G4Pythia6 SHARED ${py_sources} ${struct_sources} ${up_sources} ${fh_sources} ${CMAKE_CURRENT_SOURCE_DIR}/ssmssm.f ${CMAKE_CURRENT_SOURCE_DIR}/sugra.f ${CMAKE_CURRENT_SOURCE_DIR}/visaje.f)
 
 #----------------------------------------------------------------------------
 # Install library
