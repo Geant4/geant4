@@ -23,7 +23,9 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find Pythia6 (required package)
 #
-find_package(Pythia6 REQUIRED)
+if (NOT PYTHIA6_INTERNAL)
+  find_package(Pythia6 REQUIRED)
+endif()
 #----------------------------------------------------------------------------
 # Find LHAPDF (required package)
 #
