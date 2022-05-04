@@ -66,17 +66,17 @@ cd $TOP
 gsed -i 's@/Users/gcosmo/Software/release/install/@'$TOP'/Geant4-11.0.1-Darwin/@g'  $TOP/Geant4-11.0.1-Darwin/bin/geant4.sh
 
 source $TOP/Geant4-11.0.1-Darwin/bin/geant4.sh
-gsed -i 's@/opt/local/@/usr/local/Cellar/expat/2.4.7/@g'  Geant4-11.0.1-Darwin/lib/Geant4-11.0.1/Geant4PackageCache.cmake
+gsed -i 's@/opt/local/@/usr/local/Cellar/expat/2.4.7/@g'  $TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1/Geant4PackageCache.cmake
 
-mkdir -p test
-cd test
+mkdir -p $TOP/test
+cd $TOP/test
 cmake -B. -S ../examples/extended/eventgenerator -DPYTHIA6_INTERNAL=ON -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON -DCMAKE_INSTALL_PREFIX=$TOP/INSTALL -DGeant4_DIR=$TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1  -DHEPMC_DIR=/usr/local -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
 cmake --build . -j 2
 cmake --install .
 
 
 #Running tests
-
+find $TOP | grep hepmc_pygen.in
 cd  $TOP/test/HepMC/HepMCEx01  
 $TOP/INSTALL/bin/HepMCEx01 hepmc_pygen.in
 $TOP/INSTALL/bin/HepMCEx01 hepmc_ascii.in
