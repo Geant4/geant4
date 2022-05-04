@@ -33,8 +33,8 @@ wget -q  https://geant4-data.web.cern.ch/releases/lib_11.0.1/Darwin-clang13.0.0-
 tar -xzf Darwin-clang13.0.0-Monterey.tar.gz
 ls -lah
 
-mkdir -p Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
-cd Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
+mkdir -p $TOP/Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
+cd $TOP/Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
 wget -q  https://geant4-data.web.cern.ch/datasets/G4NDL.4.6.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4EMLOW.8.0.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4PhotonEvaporation.5.7.tar.gz
@@ -69,18 +69,18 @@ source $TOP/Geant4-11.0.1-Darwin/bin/geant4.sh
 gsed -i 's@/opt/local/@/usr/local/Cellar/expat/2.4.7/@g'  $TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1/Geant4PackageCache.cmake
 
 mkdir -p $TOP/test
-cd $TOP/test
-cmake -B. -S ../examples/extended/eventgenerator -DPYTHIA6_INTERNAL=ON -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON -DCMAKE_INSTALL_PREFIX=$TOP/INSTALL -DGeant4_DIR=$TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1  -DHEPMC_DIR=/usr/local -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
-cmake --build . -j 2
-cmake --install .
+cmake -B $TOP/test -S $TOP/examples/extended/eventgenerator -DPYTHIA6_INTERNAL=ON -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON -DCMAKE_INSTALL_PREFIX=$TOP/INSTALL -DGeant4_DIR=$TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1  -DHEPMC_DIR=/usr/local -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
+cmake --build $TOP/test -j 2
+cmake --install $TOP/test
 
 
 #Running tests
+pwd
 find $TOP | grep hepmc_pygen.in
-cd  $TOP/test/HepMC/HepMCEx01  
+cd  $TOP/examples/extended/eventgenerator/HepMC/HepMCEx01
 $TOP/INSTALL/bin/HepMCEx01 hepmc_pygen.in
 $TOP/INSTALL/bin/HepMCEx01 hepmc_ascii.in
 
-cd  $TOP/test/HepMC/HepMCEx02
+cd  $TOP/examples/extended/eventgenerator/HepMC/HepMCEx02
 $TOP/INSTALL/bin/HepMCEx02 hepmc_pygen.in
 $TOP/INSTALL/bin/HepMCEx02 hepmc_ascii.in
