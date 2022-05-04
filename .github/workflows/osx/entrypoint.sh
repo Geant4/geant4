@@ -8,6 +8,7 @@ brew install gcc
 brew install expat
 brew install pythia
 brew install libxmu
+brew install --cask xquartz
 
 mkdir Formula
 cat <<EOF > Formula/hepmc2.rb
