@@ -8,7 +8,6 @@ brew install gcc
 brew install expat
 brew install pythia
 brew install libxmu
-#brew install --cask xquartz
 
 cat <<EOF > hepmc2.rb
 class Hepmc2 < Formula
@@ -38,7 +37,7 @@ class Hepmc2 < Formula
 end
 EOF
 
-brew install --build-from-source hepmc2.rb
+brew install --build-from-source ./hepmc2.rb
 
 which gfortran-11
 if [ "$?" = "0" ]; then 
@@ -63,8 +62,8 @@ wget -q  https://geant4-data.web.cern.ch/releases/lib_11.0.1/Darwin-clang13.0.0-
 tar -xzf Darwin-clang13.0.0-Monterey.tar.gz
 ls -lah
 
-mkdir -p $TOP/Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
-cd $TOP/Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
+mkdir -p Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
+cd Geant4-11.0.1-Darwin/share/Geant4-11.0.1/data/
 wget -q  https://geant4-data.web.cern.ch/datasets/G4NDL.4.6.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4EMLOW.8.0.tar.gz
 wget -q  https://geant4-data.web.cern.ch/datasets/G4PhotonEvaporation.5.7.tar.gz
@@ -96,21 +95,21 @@ cd $TOP
 gsed -i 's@/Users/gcosmo/Software/release/install/@'$TOP'/Geant4-11.0.1-Darwin/@g'  $TOP/Geant4-11.0.1-Darwin/bin/geant4.sh
 
 source $TOP/Geant4-11.0.1-Darwin/bin/geant4.sh
-gsed -i 's@/opt/local/@/usr/local/Cellar/expat/2.4.7/@g'  $TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1/Geant4PackageCache.cmake
+gsed -i 's@/opt/local/@/usr/local/Cellar/expat/2.4.7/@g'  Geant4-11.0.1-Darwin/lib/Geant4-11.0.1/Geant4PackageCache.cmake
 
-mkdir -p $TOP/test
-cmake -B $TOP/test -S $TOP/examples/extended/eventgenerator -DPYTHIA6_INTERNAL=ON -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON -DCMAKE_INSTALL_PREFIX=$TOP/INSTALL -DGeant4_DIR=$TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1  -DHEPMC_DIR=/usr/local -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
-cmake --build $TOP/test -j 2
-cmake --install $TOP/test
+mkdir -p test
+cd test
+cmake -B. -S ../examples/extended/eventgenerator  -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON -DCMAKE_INSTALL_PREFIX=$TOP/INSTALL -DGeant4_DIR=$TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1  -DPYTHIA6_ROOT_DIR=/usr/local -DHEPMC_DIR=/usr/local -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
+cmake --build . -j 2
+cmake --install .
 
 
 #Running tests
-pwd
-find $TOP | grep hepmc_pygen.in
-cd  $TOP/examples/extended/eventgenerator/HepMC/HepMCEx01
+
+cd  $TOP/test/HepMC/HepMCEx01  
 $TOP/INSTALL/bin/HepMCEx01 hepmc_pygen.in
 $TOP/INSTALL/bin/HepMCEx01 hepmc_ascii.in
 
-cd  $TOP/examples/extended/eventgenerator/HepMC/HepMCEx02
+cd  $TOP/test/HepMC/HepMCEx02
 $TOP/INSTALL/bin/HepMCEx02 hepmc_pygen.in
 $TOP/INSTALL/bin/HepMCEx02 hepmc_ascii.in
