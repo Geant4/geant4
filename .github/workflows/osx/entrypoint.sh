@@ -9,7 +9,8 @@ brew install expat
 brew install pythia
 brew install libxmu
 
-cat <<EOF > hepmc2.rb
+mkdir Formula
+cat <<EOF > Formula/hepmc2.rb
 class Hepmc2 < Formula
   desc "C++ event record for Monte Carlo generators"
   homepage "https://hepmc.web.cern.ch/"
@@ -37,7 +38,7 @@ class Hepmc2 < Formula
 end
 EOF
 
-brew install --build-from-source ./hepmc2.rb
+brew install --build-from-source ./Formula/hepmc2.rb
 
 which gfortran-11
 if [ "$?" = "0" ]; then 
