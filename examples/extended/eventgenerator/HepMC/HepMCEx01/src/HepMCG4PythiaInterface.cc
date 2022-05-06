@@ -46,6 +46,7 @@ extern "C" {
   void pygive(const char*, int);
   void pyrget(int*, int*);
   void pyrset(int*, int*);
+//  void initpydata();
 }
 
 void call_pygive(G4String s) { pygive(s.c_str(), s.length()); }
@@ -56,6 +57,7 @@ void call_pyrset(int a, int b) { pyrset(&a, &b); }
 HepMCG4PythiaInterface::HepMCG4PythiaInterface()
   : verbose(0), mpylist(0)
 {
+//	#define NEED_INITPYDATA
 #ifdef NEED_INITPYDATA
   initpydata();
   // Some platforms may require the initialization of pythia PYDATA block
@@ -82,7 +84,10 @@ void HepMCG4PythiaInterface::CallPygive(G4String par)
 void HepMCG4PythiaInterface::CallPyinit(G4String frame, G4String beam,
                                         G4String target, G4double win)
 {
+	printf("OKammm \n");
+	std::cout<< frame<<beam<<target<< win<<strlen(frame)<<strlen(beam)<<strlen(target)<<std::endl;
   call_pyinit(frame.c_str(), beam.c_str(), target.c_str(), win);
+  printf("OKammm2222\n");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

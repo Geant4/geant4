@@ -32,8 +32,10 @@ find_package(LHAPDF REQUIRED)
 #----------------------------------------------------------------------------
 # Find Pythia6 (optional package)
 #
-find_package(Pythia6 QUIET)
-if(PYTHIA6_FOUND)
+if (NOT PYTHIA6_INTERNAL)
+  find_package(Pythia6)
+endif()
+if(PYTHIA6_FOUND OR PYTHIA6_INTERNAL)
   message(STATUS "G4 Examples: Pythia6 found. --> HepMCEx02 example with Pythia6 enabled.") 
   add_definitions(-DG4LIB_USE_PYTHIA)
   enable_language(Fortran)
