@@ -74,6 +74,8 @@ cd test
 cmake -B. -S ../examples/extended/eventgenerator -DPYTHIA6_INTERNAL=ON -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON -DCMAKE_INSTALL_PREFIX=$TOP/INSTALL -DGeant4_DIR=$TOP/Geant4-11.0.1-Darwin/lib/Geant4-11.0.1  -DPYTHIA6_ROOT_DIR=/usr/local -DHEPMC_DIR=/usr/local -DLHAPDF_DIR=/usr/local -DCMAKE_Fortran_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC
 cmake --build . -j 2
 cmake --install .
+#Temporarly!
+cp $TOP/INSTALL/lib/libG4Pythia6.dylib $TOP/Geant4-11.0.1-Darwin/lib
 
 
 #Running tests
