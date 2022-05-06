@@ -12,7 +12,6 @@ add_subdirectory(particleGun)
 add_subdirectory(exgps)
 add_subdirectory(userPrimaryGenerator)
 
- 
 
 #----------------------------------------------------------------------------
 # decayer6 example requires Pythia6

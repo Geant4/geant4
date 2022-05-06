@@ -23,6 +23,6 @@ C...User process event common block.
      &ISTUP(MAXNUP),MOTHUP(2,MAXNUP),ICOLUP(2,MAXNUP),PUP(5,MAXNUP),
      &VTIMUP(MAXNUP),SPINUP(MAXNUP)
       SAVE /HEPEUP/
-       write(*,*)"OK2"
+ 
       RETURN
       END

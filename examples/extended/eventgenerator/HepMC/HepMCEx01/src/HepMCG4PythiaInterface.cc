@@ -41,15 +41,12 @@
 #define pygive pygive_
 #define pyrget pyrget_
 #define pyrset pyrset_
-#define pyinit pyinit_
-//#define initpydata initpydata_
 
 extern "C" {
   void pygive(const char*, int);
   void pyrget(int*, int*);
   void pyrset(int*, int*);
-  void initpydata();
-  //void pyinit(const char*,const char*,const char*,float &);
+//  void initpydata();
 }
 
 void call_pygive(G4String s) { pygive(s.c_str(), s.length()); }
@@ -60,16 +57,15 @@ void call_pyrset(int a, int b) { pyrset(&a, &b); }
 HepMCG4PythiaInterface::HepMCG4PythiaInterface()
   : verbose(0), mpylist(0)
 {
-	#define NEED_INITPYDATA
+//	#define NEED_INITPYDATA
 #ifdef NEED_INITPYDATA
   initpydata();
   // Some platforms may require the initialization of pythia PYDATA block
   // data as external - if you get pythia initialization errors try
   // commenting in/out the below call to initpydata().
 #endif
-printf("OKaaaa\n");
+
   messenger= new HepMCG4PythiaMessenger(this);
-printf("OKaaaa3333\n");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,7 +77,6 @@ HepMCG4PythiaInterface::~HepMCG4PythiaInterface()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void HepMCG4PythiaInterface::CallPygive(G4String par)
 {
-	printf("OKaarrrrrr\n");
   call_pygive(par);
 }
 
@@ -91,10 +86,8 @@ void HepMCG4PythiaInterface::CallPyinit(G4String frame, G4String beam,
 {
 	printf("OKammm \n");
 	std::cout<< frame<<beam<<target<< win<<strlen(frame)<<strlen(beam)<<strlen(target)<<std::endl;
-	//float wn=win;
-	//pyinit( frame.c_str(),beam.c_str(),target.c_str(),&win,strlen(frame),strlen(beam),strlen(target) );
   call_pyinit(frame.c_str(), beam.c_str(), target.c_str(), win);
-printf("OKammm2222\n");
+  printf("OKammm2222\n");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,14 +137,13 @@ void HepMCG4PythiaInterface::SetUserParameters()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 HepMC::GenEvent* HepMCG4PythiaInterface::GenerateHepMCEvent()
 {
-	printf("OKbbbbb\n");
   static G4int nevent= 0; // event counter
 
   call_pyevnt(); // generate one event with Pythia
   if(mpylist >=1 && mpylist<= 3) call_pylist(mpylist);
-printf("OKcccc\n");
+
   call_pyhepc(1);
-printf("OKdddd\n");
+
   HepMC::GenEvent* evt= hepevtio.read_next_event();
   evt-> set_event_number(nevent++);
   if(verbose>0) evt-> print();

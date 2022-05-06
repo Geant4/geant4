@@ -30,7 +30,6 @@ c (Often necessary for the initialization of Pythia)
 c
       subroutine initpydata
       EXTERNAL PYDATA
-            write(*,*)"OK0"
       return
       end
 

@@ -107,7 +107,6 @@ int main(int argc,char** argv)
       visManager->SetVerboseLevel("quiet");
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-            printf("IIIIIIIII\n");
       UImanager->ApplyCommand(command+fileName);
     }
   else
