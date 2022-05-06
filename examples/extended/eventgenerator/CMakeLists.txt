@@ -12,21 +12,15 @@ add_subdirectory(particleGun)
 add_subdirectory(exgps)
 add_subdirectory(userPrimaryGenerator)
 
-#----------------------------------------------------------------------------
-# HepMC examples require HepMC
-#
-find_package(HepMC QUIET)
-if(HEPMC_FOUND)
-  add_subdirectory(HepMC)
-else()
-  message(STATUS "G4 Examples: HepMC package not found. --> HepMC examples disabled.") 
-endif()   
+ 
 
 #----------------------------------------------------------------------------
 # decayer6 example requires Pythia6
 #
 option(PYTHIA6_INTERNAL "Download and compile Pythia6" OFF)
-find_package(Pythia6)
+if (NOT PYTHIA6_INTERNAL)
+  find_package(Pythia6)
+endif()
 if(PYTHIA6_FOUND OR PYTHIA6_INTERNAL)
   if (PYTHIA6_INTERNAL)
     message(STATUS "Pythia6 will be downloaded and compiled")
@@ -50,7 +44,15 @@ else()
   message(STATUS "G4 Examples: Pythia6 package not found. --> decayer6 example disabled.") 
 endif()
 
-
+#----------------------------------------------------------------------------
+# HepMC examples require HepMC
+#
+find_package(HepMC QUIET)
+if(HEPMC_FOUND)
+  add_subdirectory(HepMC)
+else()
+  message(STATUS "G4 Examples: HepMC package not found. --> HepMC examples disabled.") 
+endif()  
 #----------------------------------------------------------------------------
 # py8decayer example requires Pythia8
 #

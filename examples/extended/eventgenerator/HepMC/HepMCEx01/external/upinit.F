@@ -21,6 +21,6 @@ C...User process initialization commonblock.
      &IDWTUP,NPRUP,XSECUP(MAXPUP),XERRUP(MAXPUP),XMAXUP(MAXPUP),
      &LPRUP(MAXPUP)
       SAVE /HEPRUP/
- 
+      write(*,*)"OK1"
       RETURN
       END

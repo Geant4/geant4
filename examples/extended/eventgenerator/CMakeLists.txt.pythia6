@@ -22,7 +22,7 @@ add_library(G4Pythia6 SHARED ${py_sources}
                              ${CMAKE_CURRENT_SOURCE_DIR}/visaje.f 
                              ${CMAKE_CURRENT_SOURCE_DIR}/pdfset.f
                              )
-
+target_compile_options(G4Pythia6 PRIVATE -fdefault-real-8 -fdefault-double-8)
 #----------------------------------------------------------------------------
 # Install library
 #
