@@ -45,9 +45,9 @@ class DetectorConstruction;
 /// Messenger class that defines commands for DetectorConstruction.
 ///
 /// It implements commands:
-/// - //det/setTargetMaterial name
-/// - //det/setChamberMaterial name
-/// - //det/stepMax value unit
+/// - /B2/det/setTargetMaterial name
+/// - /B2/det/setChamberMaterial name
+/// - /B2/det/stepMax value unit
 
 class DetectorMessenger: public G4UImessenger
 {
