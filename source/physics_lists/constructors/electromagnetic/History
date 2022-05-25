@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 February 2022, V.Ivanchenko (phys-ctor-em-V10-07-25)
+- G4EmStandardPhysics_option4 - use G4UrbanFluctuation model 
+    for e+- to address problem #2466
+
 11 December 2021, V.Ivanchenko (phys-ctor-em-V10-07-24)
 - G4EmStandardPhysics_option3 - use options providing more accurate 
     simulation without loss of CPU performance: RangeFactor=0.03,

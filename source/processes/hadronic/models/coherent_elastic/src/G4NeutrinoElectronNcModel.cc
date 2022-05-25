@@ -63,24 +63,21 @@ G4NeutrinoElectronNcModel::G4NeutrinoElectronNcModel(const G4String& name)
 G4NeutrinoElectronNcModel::~G4NeutrinoElectronNcModel()
 {}
 
-
 void G4NeutrinoElectronNcModel::ModelDescription(std::ostream& outFile) const
 {
-
-    outFile << "G4NeutrinoElectronNcModel is a neutrino-electron (neutral current) elastic scattering\n"
-            << "model which uses the standard model \n"
-            << "transfer parameterization.  The model is fully relativistic\n";
-
+  outFile << "G4NeutrinoElectronNcModel is a neutrino-electron (neutral current) elastic scattering\n"
+	  << "model which uses the standard model \n"
+	  << "transfer parameterization.  The model is fully relativistic\n";
 }
 
 /////////////////////////////////////////////////////////
 
-G4bool G4NeutrinoElectronNcModel::IsApplicable(const G4HadProjectile & aTrack, 
-  			      G4Nucleus & targetNucleus)
+G4bool G4NeutrinoElectronNcModel::IsApplicable(const G4HadProjectile & aTrack, G4Nucleus&)
 {
   G4bool result  = false;
   G4String pName = aTrack.GetDefinition()->GetParticleName();
-  G4double minEnergy = 0., energy = aTrack.GetTotalEnergy();
+  G4double minEnergy = 0.;
+  G4double energy = aTrack.GetTotalEnergy();
 
   if( fCutEnergy > 0. ) // min detected recoil electron energy
   {
@@ -93,9 +90,6 @@ G4bool G4NeutrinoElectronNcModel::IsApplicable(const G4HadProjectile & aTrack,
   {
     result = true;
   }
-  G4int Z = targetNucleus.GetZ_asInt();
-        Z *= 1;
-
   return result;
 }
 
@@ -104,7 +98,7 @@ G4bool G4NeutrinoElectronNcModel::IsApplicable(const G4HadProjectile & aTrack,
 //
 
 G4HadFinalState* G4NeutrinoElectronNcModel::ApplyYourself(
-		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
+		 const G4HadProjectile& aTrack, G4Nucleus&)
 {
   theParticleChange.Clear();
 
@@ -166,9 +160,6 @@ G4HadFinalState* G4NeutrinoElectronNcModel::ApplyYourself(
     theParticleChange.SetEnergyChange( nuTkin );
     theParticleChange.SetMomentumChange( aTrack.Get4Momentum().vect().unit() );
   }
-  G4int Z = targetNucleus.GetZ_asInt();
-        Z *= 1;
- 
   return &theParticleChange;
 }
 

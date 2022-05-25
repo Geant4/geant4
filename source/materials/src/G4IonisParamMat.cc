@@ -212,11 +212,12 @@ void G4IonisParamMat::ComputeDensityEffectParameters()
   G4double corr = 0.0;
 
   if(idx < 0 && 1 == nelm) {
-    idx = fDensityData->GetElementIndex(Z0, fMaterial->GetState());
+    G4int z = (1 == Z0 &&  State == kStateLiquid) ? 0 : Z0;
+    idx = fDensityData->GetElementIndex(z);
 
     // Correction for base material or for non-nominal density
     // Except cases of very different density defined in user code
-    if(idx >= 0) {
+    if(idx >= 0 && 0 < z) {
       G4double dens = nist->GetNominalDensity(Z0);
       if(dens <= 0.0) { idx = -1; }
       else {

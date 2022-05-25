@@ -734,7 +734,7 @@ void G4NistMaterialBuilder::NistSimpleMaterials()
   AddMaterial("G4_Li",  0.534     ,  3,  40. );
   AddMaterial("G4_Be",  1.848     ,  4,  63.7);
   AddMaterial("G4_B" ,  2.37      ,  5,  76. );
-  AddMaterial("G4_C" ,  2.        ,  6,  81. );
+  AddMaterial("G4_C" ,  2.        ,  6,  78. );
   AddMaterial("G4_N" ,  1.16520e-3,  7,  82. , 1, kStateGas);
   AddMaterial("G4_O" ,  1.33151e-3,  8,  95. , 1, kStateGas);
   AddMaterial("G4_F" ,  1.58029e-3,  9, 115. , 1, kStateGas);

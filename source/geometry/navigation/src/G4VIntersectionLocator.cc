@@ -296,17 +296,19 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
       G4Exception("G4VIntersectionLocator::ReEstimateEndpoint()",
                   "GeomNav1002", JustWarning, message);
     }
+/*
 #else
   // Statistics on the RMS value of the corrections
 
-  static G4ThreadLocal G4int    noCorrections = 0;
-  static G4ThreadLocal G4double sumCorrectionsSq = 0;
+  static G4ThreadLocal G4int noCorrections = 0;
   ++noCorrections; 
   if( goodAdvance )
   {
+    static G4ThreadLocal G4double sumCorrectionsSq;
     sumCorrectionsSq += (EstimatedEndStateB.GetPosition() - 
                          newEndPoint.GetPosition()).mag2();
   }
+*/
 #endif
 
   return retEndPoint;

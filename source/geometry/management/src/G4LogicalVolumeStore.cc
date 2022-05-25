@@ -216,11 +216,12 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
 }
 
 // ***************************************************************************
-// Retrieve the first volume pointer in the container having that name
+// Retrieve the first or last volume pointer in the container having that name
 // ***************************************************************************
 //
 G4LogicalVolume*
-G4LogicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
+G4LogicalVolumeStore::GetVolume(const G4String& name, G4bool verbose,
+                                G4bool reverseSearch) const
 {
   G4LogicalVolumeStore* store = GetInstance();
   if (!store->mvalid)  { store->UpdateMap(); }
@@ -236,7 +237,14 @@ G4LogicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
       G4Exception("G4LogicalVolumeStore::GetVolume()",
                   "GeomMgt1001", JustWarning, message);
     }
-    return pos->second[0];
+    if(reverseSearch)
+    {
+      return pos->second[pos->second.size()-1];
+    }
+    else
+    {
+      return pos->second[0];
+    }
   }
   if (verbose)
   {

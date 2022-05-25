@@ -61,7 +61,7 @@ public:
   ~G4DensityEffectData();
 
   // return index by Z, -1 if material is not in the table 
-  G4int GetElementIndex(G4int Z, G4State mState) const;
+  G4int GetElementIndex(G4int Z, G4State st = kStateUndefined) const;
 
   // return index by material name, -1 if material is not in the table 
   G4int GetIndex(const G4String& matName) const;

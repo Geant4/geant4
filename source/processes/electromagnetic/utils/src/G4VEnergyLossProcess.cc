@@ -218,8 +218,9 @@ void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* ptr,
                                       const G4Region* region)
 {
   if(nullptr == ptr) { return; }
-  modelManager->AddEmModel(order, ptr, fluc, region);
-  ptr->SetParticleChange(pParticleChange, fluc);
+  G4VEmFluctuationModel* afluc = (nullptr == fluc) ? fluctModel : fluc;
+  modelManager->AddEmModel(order, ptr, afluc, region);
+  ptr->SetParticleChange(pParticleChange, afluc);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -408,7 +409,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   // defined ID of secondary particles
   G4int stype = GetProcessSubType();
   if(stype == fBremsstrahlung) {
-    secID = _Bremsstruhlung;
+    secID = _Bremsstrahlung;
     biasID = _SplitBremsstrahlung;
   } else if(stype == fPairProdByCharged) {
     secID = _PairProduction;

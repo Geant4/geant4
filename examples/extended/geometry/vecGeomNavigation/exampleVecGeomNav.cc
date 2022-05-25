@@ -57,7 +57,6 @@ static G4bool       parCompareG4  = false;
 static G4bool       parInteractive = false;
 static std::string  parMacroFileName = "";
 static std::string  parGDMLFile = "TestNTST.gdml";
-static G4int        parThreads = 2;
 
 void GetInputArguments(int argc, char** argv);
 void PrintUsage();
@@ -71,9 +70,6 @@ int main(int argc, char** argv) {
         << "   Geant4 macro                =  " << parMacroFileName  << G4endl
         << "   Use VecGeom (VG) navigation =  " << parUseVecGeom     << G4endl
         << "   Compare G4 vs VG navigation =  " << parCompareG4      << G4endl
-#ifdef G4MULTITHREADED
-        << "   Number of threads           =  " << parThreads        << G4endl
-#endif
         << " ===================================================== " << G4endl;
 
   // Use custom stepping verbosity
@@ -175,9 +171,6 @@ void PrintUsage() {
             << " (and report differences.) \n"
             << "      and other(s): \n"
             << "       -g :   GDML file with geometry \n"
-#ifdef G4MULTITHREADED
-            << "       -t :   number of threads\n"
-#endif
             << "\n"
             << std::endl;
   horizontal_line('=');
@@ -218,11 +211,6 @@ void GetInputArguments(int argc, char** argv) {
          exit(1);
       }
     }
-#ifdef G4MULTITHREADED
-    else if ( G4String(argv[i]) == "-t" ) {
-      parThreads = G4UIcommand::ConvertToInt(argv[++i]);
-    }
-#endif
     else if ( G4String(argv[i]) == "-v" ) { parUseVecGeom = true; }
     else if ( G4String(argv[i]) == "-o" ) { parUseVecGeom = false; }
     else if ( G4String(argv[i]) == "-c" ) { parCompareG4 = true;  parUseVecGeom= true; }

@@ -79,6 +79,7 @@
 #include "G4LivermoreIonisationModel.hh"
 #include "G4PenelopeIonisationModel.hh"
 #include "G4UniversalFluctuation.hh"
+#include "G4UrbanFluctuation.hh"
 
 #include "G4eplusAnnihilation.hh"
 
@@ -244,6 +245,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   // ionisation
   G4eIonisation* eioni = new G4eIonisation();
   G4VEmModel* theIoniLiv = new G4LivermoreIonisationModel();
+  eioni->SetFluctModel(new G4UrbanFluctuation());
   theIoniLiv->SetHighEnergyLimit(0.1*CLHEP::MeV); 
   eioni->AddEmModel(0, theIoniLiv, new G4UniversalFluctuation() );
 
@@ -289,6 +291,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
   // ionisation
   eioni = new G4eIonisation();
+  eioni->SetFluctModel(new G4UrbanFluctuation());
   G4VEmModel* pen = new G4PenelopeIonisationModel();
   pen->SetHighEnergyLimit(0.1*CLHEP::MeV);
   eioni->AddEmModel(0, pen, new G4UniversalFluctuation());

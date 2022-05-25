@@ -1,5 +1,4 @@
 # -------------------------------------------------------------------
-# -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -14,6 +13,10 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14.02.2022  G. Cosmo Tag:XRayFluo-V10-07-08
+- XrayFluoEventAction: fixed compilation warning on Intel-icx compiler
+  for unused variable.
 
 04.11.2021  I. Hrivnacova Tag:XRayFluo-V10-07-07
 - Updated for changes in the analysis category:

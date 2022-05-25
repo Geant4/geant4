@@ -1111,6 +1111,7 @@ void G4RadioactiveDecay::DecayAnalog(const G4Track& theTrack)
     fParticleChangeForRadDecay.ProposeTrackStatus(fStopAndKill);
     fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(0.0);
     ClearNumberOfInteractionLengthLeft();
+    delete products;
     return;
   }
 
@@ -1158,6 +1159,7 @@ void G4RadioactiveDecay::DecayAnalog(const G4Track& theTrack)
       fParticleChangeForRadDecay.ProposeTrackStatus(fStopAndKill) ;
       fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(0.0);
       ClearNumberOfInteractionLengthLeft();
+      delete products;
       return;
     }     
   }

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -23,7 +23,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 ***** Table : Nb of materials = 11 *****
 
  Material:      Air    density:  1.205 mg/cm3  RadL: 303.867 m    Nucl.Int.Length: 709.970 m  
-                       Imean:  85.669 eV   temperature: 293.00 K  pressure:   1.00 atm
+                       Imean:  85.668 eV   temperature: 293.00 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -70,7 +70,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:    Mylar    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.923 cm 
-                       Imean:  75.967 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  74.266 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -115,7 +115,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Graphite    density:  2.180 g/cm3   RadL:  19.586 cm   Nucl.Int.Length:  36.768 cm 
-                       Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -735,7 +735,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.160000s Real=4.775615s Sys=0.000000s
+  User=4.860000s Real=4.915200s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -746,7 +746,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1428141744129925393, 377269978168208559, 717333830619462014, 378426031215187258, 2182629445950348883, 1457372977224129693, 1017413813537086789, 406160907945980615, 1859186035309470027, 1231627085899659778, 1862643746556328147, 854151466652958873, 1736304097774872957, 1361497386753452712, 501255901225958686, 1168086676288269436, 875434189452472486} counter= 3sumtot= 968191240994220698
+N=17 V[N]={640169636817715404, 87090689986296013, 1130185708058750878, 1339038178148453370, 360216788601817321, 1081387088429516783, 655608892750126957, 1458936165549095864, 1806960345811006739, 1983802734411458313, 1599132619829283106, 560333063740242756, 247849373598508382, 1129811319933652397, 1973826512887815719, 717192870004739870, 337571408510559667} counter= 17sumtot= 968212332573181882
 ---------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

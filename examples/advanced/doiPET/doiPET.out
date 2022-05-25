@@ -1,0 +1,885 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+Initial activity: 1e+06 Bq.
+Half life of the isotope 6586.26 sec.
+Dead time of the detector: 256 ns.
+Dead time of the module (axially multiplexed detectors): 0 ns.
+ 
+ Crystal dependent resolution is used. preparing look-up table .... 
+Done. 
+
+crystal Resolution (Min.): 13 %.
+crystal Resolution (Max.): 17 %
+Energy of refernce: 511 keV.
+Quantum Efficiency 100 % 
+Lower energy threshold: 400 keV.
+Upper energy threshold: 600 keV.
+Trigger energy threshold: 0.05 keV.
+Angler Logic calculation is applied. 
+PMTblurring position response blurring at FWHM (tan x axial) 1.5 x 1.5 mm2
+Single mode output enabled. 
+PMT positions: 
+PMT1 (mm) (15, -23, -23)
+PMT2 (mm) (15, 23, -23)
+PMT3 (mm) (15, -23, 23)
+PMT4 (mm) (15, 23, 23)
+ Reflector pattern is being read 
+
+========= Reflector Pattern ===========
+Layer 1
+1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+Layer 2
+1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+Layer 3
+0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+Layer 4
+0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 
+========= Reflector Pattern Ended ===========
+
+Preparing DOI look-up table... 
+done.
+Initial activity: 500000 Bq.
+Half life of the isotope 6586.2 sec.
+------------------================- Phantom_sensitivity Phantom has been used  -==================-----------
+
+Total number of sleeves : 1
+Sleeve 1 is placed, Rmin = 1.95 mm, Rmax = 3.2 mm, length = 216 mm.
+Checking overlaps for volume phantom_physicalV:0 (G4Tubs) ... OK! 
+Checking overlaps for volume phantom_physicalV:0 (G4Tubs) ... OK! 
+---------------Phantom dimension: radius (mm) = 100 Length (mm) = 216
+---------------Phantom position (mm) : (0,0,0)
+size of crytal element: 2.8 2.8 7.5
+Size of detector block (without Al cover): 46 46 30
+Checking overlaps for volume airBox_physicalV:0 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:0 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:1 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:2 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:3 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:4 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:5 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:6 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:7 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:8 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:9 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:10 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:11 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:12 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:13 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:14 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:15 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:16 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:17 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:18 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:19 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:20 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:21 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:22 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:23 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:24 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:25 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:26 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:27 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:28 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:29 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:30 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:31 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:32 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:33 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:34 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:35 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:36 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:37 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:38 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:39 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:40 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:41 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:42 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:43 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:44 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:45 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:46 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:47 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:48 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:49 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:50 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:51 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:52 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:53 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:54 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:55 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:56 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:57 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:58 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:59 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:60 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:61 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:62 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:63 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:64 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:65 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:66 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:67 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:68 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:69 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:70 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:71 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:72 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:73 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:74 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:75 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:76 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:77 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:78 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:79 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:80 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:81 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:82 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:83 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:84 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:85 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:86 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:87 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:88 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:89 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:90 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:91 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:92 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:93 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:94 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:95 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:96 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:97 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:98 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:99 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:100 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:101 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:102 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:103 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:104 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:105 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:106 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:107 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:108 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:109 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:110 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:111 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:112 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:113 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:114 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:115 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:116 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:117 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:118 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:119 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:120 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:121 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:122 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:123 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:124 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:125 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:126 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:127 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:128 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:129 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:130 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:131 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:132 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:133 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:134 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:135 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:136 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:137 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:138 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:139 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:140 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:141 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:142 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:143 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:144 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:145 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:146 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:147 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:148 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:149 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:150 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:151 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:152 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:153 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:154 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:155 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:156 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:157 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:158 (G4Box) ... OK! 
+Checking overlaps for volume blockDetector_physicalV:159 (G4Box) ... OK! 
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      10 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               20
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 0.1 mm)
+Step function for muons/hadrons                    (0.2, 0.05 mm)
+Step function for light ions                       (0.1, 0.02 mm)
+Step function for general ions                     (0.1, 0.001 mm)
+Lowest e+e- kinetic energy                         100 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    1
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 1
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            1 MeV
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     1
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.03
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              1
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Fluorescence ANSTO data files enabled              0
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+### ===  Auger flag: 1
+### ===  Ignore cuts flag:   1
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      10 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               20
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 0.1 mm)
+Step function for muons/hadrons                    (0.2, 0.05 mm)
+Step function for light ions                       (0.1, 0.02 mm)
+Step function for general ions                     (0.1, 0.001 mm)
+Lowest e+e- kinetic energy                         100 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    1
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 1
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            1 MeV
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     1
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.03
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              1
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Fluorescence ANSTO data files enabled              0
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger flag: 1
+### ===  Ignore cuts flag:   1
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 174 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 10 eV  to 1 MeV, 20 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 160 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        KleinNishina : Emin=    0 eV  Emax=  100 TeV Fluo
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 10 eV  to 100 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+
+msc:  for e-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e-  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV  deltaVI
+
+eBrem:  for e-  XStype:4  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  AngularGen2BS
+
+ePairProd:  for e-  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 25x1001 from 0.1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+msc:  for e+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e+  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV  deltaVI
+
+eBrem:  for e+  XStype:4  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  AngularGen2BS
+
+ePairProd:  for e+  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 25x1001 from 0.1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+hIoni:  for proton  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=    2 MeV  deltaVI
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for proton  XStype:1  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for proton  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+nuclearStopping:  for proton SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
+Max life time                                     1.4427e+06 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        1e+27  ns
+======================================================================
+
+msc:  for GenericIon  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+ionIoni:  for GenericIon  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
+
+nuclearStopping:  for GenericIon SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+
+msc:  for alpha  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+ionIoni:  for alpha  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 eV  Emax=7.9452 MeV  deltaVI
+          BetheBloch : Emin=7.9452 MeV Emax=  100 TeV  deltaVI
+
+nuclearStopping:  for alpha SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+
+msc:  for anti_proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+hIoni:  for anti_proton  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=    2 MeV  deltaVI
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for anti_proton  XStype:1  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for anti_proton  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+msc:  for kaon+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+hIoni:  for kaon+  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for kaon+  XStype:1  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon+  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+msc:  for kaon-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+hIoni:  for kaon-  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for kaon-  XStype:1  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon-  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+msc:  for mu+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+muIoni:  for mu+  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=  200 keV  deltaVI
+          BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
+        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+
+muBrems:  for mu+  XStype:1  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu+  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+msc:  for mu-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+muIoni:  for mu-  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=  200 keV  deltaVI
+          BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
+        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+
+muBrems:  for mu-  XStype:1  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu-  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+msc:  for pi+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+hIoni:  for pi+  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=297.505 keV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
+
+hBrems:  for pi+  XStype:1  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi+  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+msc:  for pi-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+hIoni:  for pi-  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
+
+hBrems:  for pi-  XStype:1  SubType=3
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi-  XStype:1  SubType=4
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+Region <DefaultRegionForTheWorld> --  -- appears in <world_physicalV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : world_logicalV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_AIR G4_Al G4_POLYETHYLENE GSO 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_AIR
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Al
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  2.34147 keV    e-  131.214 keV    e+  128.744 keV proton 10 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : G4_POLYETHYLENE
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 keV    e-  85.2799 keV    e+  84.1824 keV proton 10 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes
+ Material : GSO
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  12.1658 keV    e-  196.357 keV    e+  191.153 keV proton 10 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   475 kByte
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+     100.00         0.01         0.00           69k world_logicalV
+       0.00         0.00         0.00          406k airBox_logicalV
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      85.51        406k       931     5788       8898         0.00    airBox_logicalV
+      14.49         68k       182      683       3080         0.01    world_logicalV
+### Run 0 starts.
+### Begin of Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1140500198, 1822882361
+----------------------------------------
+
+---> Begin of event: 0
+---> End of event: 0
+
+---> Begin of event: 100000
+---> End of event: 100000
+
+---> Begin of event: 200000
+---> End of event: 200000
+
+---> Begin of event: 300000
+---> End of event: 300000
+
+---> Begin of event: 400000
+---> End of event: 400000
+
+---> Begin of event: 500000
+---> End of event: 500000
+
+---> Begin of event: 600000
+---> End of event: 600000
+
+---> Begin of event: 700000
+---> End of event: 700000
+
+---> Begin of event: 800000
+---> End of event: 800000
+
+---> Begin of event: 900000
+---> End of event: 900000
+ Run terminated.
+Run Summary
+  Number of events processed : 1000000
+  User=131.630000s Real=136.199126s Sys=1.870000s
+
+### End of Run (1000000 events)
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserActionInitialization deleted.
+UserWorkerInitialization deleted.
+UserWorkerThreadInitialization deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
+EventManager deleted.
+Units table cleared.
+TransportationManager deleted.
+Total navigation history collections cleaned: 14
+G4RNGHelper object is deleted.
+================== Deleting memory pools ===================
+Pool ID '20G4NavigationLevelRep', size : 0.0202 MB
+Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '16G4SmartVoxelNode', size : 0.201 MB
+Pool ID '17G4SmartVoxelProxy', size : 0.116 MB
+Pool ID '7G4Event', size : 0.000961 MB
+Pool ID '15G4PrimaryVertex', size : 0.000961 MB
+Pool ID '17G4PrimaryParticle', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 0.0115 MB
+Pool ID '19G4ElectronOccupancy', size : 0.000961 MB
+Pool ID '7G4Track', size : 0.0221 MB
+Pool ID '18G4TouchableHistory', size : 0.00192 MB
+Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.38 MB
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

@@ -351,6 +351,11 @@ private:
   G4int fIdxComponent;             // Index of a new component
   G4bool fMassFraction;            // Flag of the method to add components
 
+  // For composites built 
+  std::vector<G4int>* fAtoms; 
+  std::vector<G4double>* fElmFrac; 
+  std::vector<const G4Element*>* fElm;
+
   // For composites built via AddMaterial()
   std::map<G4Material*, G4double> fMatComponents; 
 

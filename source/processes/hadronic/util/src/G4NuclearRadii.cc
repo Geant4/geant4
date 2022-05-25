@@ -139,9 +139,9 @@ G4double G4NuclearRadii::RadiusND(G4int A)
 {
   G4double R = CLHEP::fermi;
   if(1 == A) { return R*0.895; }
-  G4double x = R*fG4pow->Z13(A);
-  if(A <= 3.) { x *= 0.8; }
-  else { x *= 1.7; }
+//  G4double x = R*fG4pow->Z13(A);
+//  if(A <= 3.) { x *= 0.8; }
+//  else { x *= 1.7; }
   return R;
 }
 

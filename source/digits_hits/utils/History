@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 17th, 2022 M. Asai (detutil-V10-07-07)
+- G4VScoringMesh.hh : Fixing virtual keyword.
+
 October 7th, 2021  I. Hrivnacova (detutil-V10-07-06)
 - Updated G4TScoreNtupleWriter for changes in the analysis category:
   added fDefaultFileType (with default value "root") and its setter

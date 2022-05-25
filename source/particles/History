@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 09 February 2022 Gabriele Cosmo (particles-V10-07-11)
+- Fixed compilation warnings on Intel compiler for unused variables.
+
 - 02 November 2021 Gabriele Cosmo (particles-V10-07-10)
 - Fix for potential null pointer dereference in G4ParticleTable::FindParticle().
   Based on GitHub PR#30 (https://github.com/Geant4/geant4/pull/30).

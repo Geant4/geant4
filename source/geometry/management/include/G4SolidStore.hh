@@ -66,8 +66,9 @@ class G4SolidStore : public std::vector<G4VSolid*>
     static void Clean();
       // Delete all solids from the store.
 
-    G4VSolid* GetSolid(const G4String& name, G4bool verbose = true) const;
-      // Return the pointer of the first solid in the collection having
+    G4VSolid* GetSolid(const G4String& name, G4bool verbose = true,
+                       G4bool reverseSearch = false) const;
+      // Return the pointer of the first or last solid in the collection having
       // that name. Uses the internal map for fast search and warns if
       // a solid in the collection is not unique or not found.
 

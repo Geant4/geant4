@@ -88,7 +88,7 @@ EventAction::EventAction()
 #endif
 }
 
-void EventAction::BeginOfEventAction(const G4Event* anEvent) {
+void EventAction::BeginOfEventAction(const G4Event*) {
 }
 
 void EventAction::EndOfEventAction(const G4Event* event) {

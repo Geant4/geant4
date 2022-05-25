@@ -46,8 +46,6 @@ public:
 			 G4int index)
     : Vector(vec), Size(size), Index(index) {}
 
-  G4Fancy3DNucleusHelper& operator=(const G4Fancy3DNucleusHelper &right)=default;
-
   void Fill(const G4ThreeVector &vec, G4double size, G4int index) {
     Vector = vec;
     Size = size;

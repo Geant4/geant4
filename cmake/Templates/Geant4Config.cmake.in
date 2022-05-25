@@ -249,15 +249,6 @@ set(Geant4_system_clhep_FOUND @GEANT4_USE_SYSTEM_CLHEP@)
 if(Geant4_system_clhep_FOUND)
   set(Geant4_builtin_clhep_FOUND FALSE)
   find_dependency(CLHEP @CLHEP_VERSION@ EXACT CONFIG)
-  # Explicitly use include_directories.
-  # - Geant4 and CLHEP use full imported targets with usage requirements,
-  #   but ROOT (used in the examples), ignores usage requirements in dictionary
-  #   generation steps.
-  #   To retain comptibility with examples, explictly include_directories
-  #   for CLHEP. This is a *pure workaround* for the use case of a project
-  #   using ROOT that generates dictionaries for class headers that
-  #   #include Geant4 headers...
-  include_directories(${CLHEP_INCLUDE_DIRS})
 else()
   set(Geant4_builtin_clhep_FOUND TRUE)
 endif()

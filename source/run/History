@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 17, 2022 Ben Morgan (run-V10-07-15)
+- Apply patches from Seth Johnson:
+  - Check for correct state in default exception handler before trying to access
+    manager classes that may be nullptr in other states
+  - Don't create a default exception manager in run manager kernel if one exists
+    already.
+
 February 24, 2022  Makoto Asai (run-V10-07-14)
 - Adding verbosity control to some G4cout. Addressing to bug report #2397.
 

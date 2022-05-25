@@ -216,7 +216,7 @@ void G4NuElNucleusCcModel::InitialiseModel()
 /////////////////////////////////////////////////////////
 
 G4bool G4NuElNucleusCcModel::IsApplicable(const G4HadProjectile & aPart, 
-					       G4Nucleus & targetNucleus)
+					        G4Nucleus & )
 {
   G4bool result  = false;
   G4String pName = aPart.GetDefinition()->GetParticleName();
@@ -229,8 +229,6 @@ G4bool G4NuElNucleusCcModel::IsApplicable(const G4HadProjectile & aPart,
   {
     result = true;
   }
-  G4int Z = targetNucleus.GetZ_asInt();
-        Z *= 1;
 
   return result;
 }

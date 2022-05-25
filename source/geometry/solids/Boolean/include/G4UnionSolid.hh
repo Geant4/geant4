@@ -44,7 +44,7 @@
 
 class G4UnionSolid : public G4BooleanSolid
 {
-  public:  // with description
+  public:
 
     G4UnionSolid( const G4String& pName,
                         G4VSolid* pSolidA ,
@@ -66,8 +66,6 @@ class G4UnionSolid : public G4BooleanSolid
     G4GeometryType  GetEntityType() const ;
 
     G4VSolid* Clone() const;
-
-  public:  // without description
 
     G4UnionSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -114,7 +112,10 @@ class G4UnionSolid : public G4BooleanSolid
 
   private:
 
+    void Init();
+
     G4ThreeVector fPMin, fPMax; // bounding box extended by half-tolerance
+    G4double halfCarTolerance;
 };
 
 #endif

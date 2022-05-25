@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2117,7 +2117,7 @@ writing Event_1
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.330000s Real=5.742331s Sys=0.410000s
+  User=0.360000s Real=2.653871s Sys=0.400000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -2649,7 +2649,7 @@ writing Event_4
  Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.000000s Real=0.008523s Sys=0.000000s
+  User=0.000000s Real=0.009622s Sys=0.010000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.

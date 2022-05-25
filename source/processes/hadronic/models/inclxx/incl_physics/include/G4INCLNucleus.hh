@@ -345,9 +345,9 @@ namespace G4INCL {
     std::string print();
 
     Store* getStore() const {return theStore; };
-    void setStore(Store *s) {
+    void setStore(Store *str) {
       delete theStore;
-      theStore = s;
+      theStore = str;
     };
 
     G4double getInitialInternalEnergy() const { return initialInternalEnergy; };

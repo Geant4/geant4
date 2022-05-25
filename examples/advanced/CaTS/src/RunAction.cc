@@ -57,7 +57,7 @@ RunAction::RunAction()
 : G4UserRunAction() {
 }
 
-void RunAction::BeginOfRunAction(const G4Run* aRun) {
+void RunAction::BeginOfRunAction(const G4Run*) {
 #ifdef WITH_ROOT
     if (ConfigurationManager::getInstance()->isdoAnalysis()) {
         // Create the generic analysis manager

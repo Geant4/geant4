@@ -124,8 +124,9 @@ G4float CCaloOrganization::energyInMatrix(G4int nCellInEta, G4int nCellInPhi,
 
   G4int det,z,eta,phi;
   this->unpackindex(crystalWithMaxEnergy, det, z, eta, phi);
+#ifdef debug
   G4int ncristals=0;
-        
+#endif
   G4int goBackInEta = nCellInEta/2;
   G4int goBackInPhi = nCellInPhi/2;
   G4int startEta = eta-goBackInEta;
@@ -138,8 +139,8 @@ G4float CCaloOrganization::energyInMatrix(G4int nCellInEta, G4int nCellInPhi,
       
       G4int index = this->packindex(det,z,ieta,iphi);
       totalEnergy += themap[index];
-      ncristals+=1;
 #ifdef debug
+      ncristals+=1;
       G4cout << "ieta - iphi - E = " << ieta << "  " << iphi << " " 
              << themap[index] << G4endl;
 #endif

@@ -214,7 +214,9 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
     IDenergy = man->GetH1Id("h4000");
   man->FillH1(IDenergy,fullE); 
   //2)
+#ifdef debug
   G4double totalFilledEnergyHcal = 0.0;
+#endif    
   static G4int IDhcalE = -1;
   if (IDhcalE < 0)
     IDhcalE = man->GetH1Id("h100");
@@ -222,30 +224,28 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
     man->FillH1(IDhcalE+j,hcalE[j]);
 #ifdef debug
     G4cout << "Fill Hcal histo " << j << " with " << hcalE[j] << G4endl;
-#endif    
     totalFilledEnergyHcal += hcalE[j];  
+#endif    
   }
 #ifdef debug
-    G4cout << 
-      "CCalAnalysis::InsertEnergyHcal: Total filled Energy Hcal histo " 
-           << totalFilledEnergyHcal << G4endl;
+  G4cout << "CCalAnalysis::InsertEnergyHcal: Total filled Energy Hcal histo " 
+         << totalFilledEnergyHcal << G4endl;
+  totalFilledEnergyEcal = 0.0;
 #endif
 
-    //3)
-    static G4int IDecalE = -1;
-    if (IDecalE < 0)
-      IDecalE = man->GetH1Id("h200");
-    G4double totalFilledEnergyEcal = 0.0;
+  //3)
+  static G4int IDecalE = -1;
+  if (IDecalE < 0)
+    IDecalE = man->GetH1Id("h200");
   for (G4int j=0; j<49; j++) {
     man->FillH1(IDecalE+j,ecalE[j]);
 #ifdef debug
     G4cout << "Fill Ecal histo " << j << " with " << ecalE[j] << G4endl;
-#endif    
     totalFilledEnergyEcal += ecalE[j];  
+#endif    
   }
 #ifdef debug
-  G4cout << 
-    "CCalAnalysis::InsertEnergyEal: Total filled Energy Ecal histo " 
+  G4cout << "CCalAnalysis::InsertEnergyEal: Total filled Energy Ecal histo " 
          << totalFilledEnergyEcal << G4endl;
 #endif
   // 4)

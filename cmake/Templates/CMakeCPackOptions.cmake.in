@@ -6,6 +6,7 @@
 if(CPACK_GENERATOR STREQUAL "NSIS")
   # There is a bug in NSI that does not handle full unix paths properly. 
   # Make sure there is at least one set of two (2) backlasshes.
+  set(CPACK_PACKAGE_ICON "@PROJECT_SOURCE_DIR@\\cmake\\Templates\\g4_small.bmp")
   set(CPACK_NSIS_MUI_ICON "@PROJECT_SOURCE_DIR@\\cmake\\Templates\\G4.ico")
   set(CPACK_NSIS_MUI_UNIICON "@PROJECT_SOURCE_DIR@\\cmake\\Templates\\G4.ico")
   set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY}")

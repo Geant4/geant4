@@ -67,7 +67,6 @@
 // #include "G4QGSMFragmentation.hh"
 // #include "G4QGSParticipants.hh"
 
-
 #include "G4MuonMinus.hh"
 #include "G4MuonPlus.hh"
 #include "G4Nucleus.hh"
@@ -205,7 +204,7 @@ void G4NeutrinoNucleusModel::ModelDescription(std::ostream& outFile) const
 /////////////////////////////////////////////////////////
 
 G4bool G4NeutrinoNucleusModel::IsApplicable(const G4HadProjectile & aPart, 
-					       G4Nucleus & targetNucleus)
+					          G4Nucleus & )
 {
   G4bool result  = false;
   G4String pName = aPart.GetDefinition()->GetParticleName();
@@ -217,8 +216,6 @@ G4bool G4NeutrinoNucleusModel::IsApplicable(const G4HadProjectile & aPart,
   {
     result = true;
   }
-  G4int Z = targetNucleus.GetZ_asInt();
-        Z *= 1;
 
   return result;
 }
@@ -580,20 +577,16 @@ void G4NeutrinoNucleusModel::RecoilDeexcitation( G4Fragment& fragment)
 
   if( products != nullptr )
   {
-    for( auto iter = products->cbegin(); iter != products->cend(); ++iter )
-      // for( auto & prod : products ) // prod = (*iter) is the pointer to final hadronic particle
+    for( auto & prod : *products ) // prod is the pointer to final hadronic particle
     {
-      theParticleChange.AddSecondary(new G4DynamicParticle( (*iter)->GetDefinition(),
-                                                            (*iter)->GetTotalEnergy(),
-                                                            (*iter)->GetMomentum() ), fSecID );
-      // delete prod;
+      theParticleChange.AddSecondary(new G4DynamicParticle( prod->GetDefinition(),
+                                                            prod->GetTotalEnergy(),
+                                                            prod->GetMomentum() ), fSecID );
+      delete prod;
     }
-    // delete products;
-    products->clear();
+    delete products;
   }
-  return;
 }
-
 
 ///////////////////////////////////////////
 //

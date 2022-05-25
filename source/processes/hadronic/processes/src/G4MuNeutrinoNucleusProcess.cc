@@ -210,8 +210,6 @@ G4MuNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& ste
   const G4DynamicParticle* aParticle = track.GetDynamicParticle();
   G4ThreeVector      position  = pPostStepPoint->GetPosition(), newPosition=position;
   G4ParticleMomentum direction = aParticle->GetMomentumDirection();
-  G4double           startTime = pPostStepPoint->GetGlobalTime();
-
   
   if( fNuNuclCcBias > 1.0 ||  fNuNuclNcBias > 1.0) // = true, if fBiasingfactor != 1., i.e. xsc is biased
   {
@@ -235,29 +233,16 @@ G4MuNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& ste
 
     G4double range = -backward+G4UniformRand()*distance;
 
-    G4double delta = range - backward;
-
-    startTime += delta/track.GetVelocity();
-
     newPosition = position + range*direction;
 
     safetyHelper->ReLocateWithinVolume(newPosition);
 
     theTotalResult->ProposePosition(newPosition); // G4Exception : GeomNav1002
-    // theTotalResult->ProposeGlobalTime(startTime); // time is updated for 'elastic' only
   }
   G4HadProjectile theProj( track );
   G4HadronicInteraction* hadi = nullptr;
   G4HadFinalState* result = nullptr;
 
-  // Select element
-  const G4Element* elm = nullptr;
-  G4int ZZ=1;
-
-  if( elm ) ZZ = elm->GetZ();
-
-  G4double xsc = fTotXsc->GetElementCrossSection(dynParticle, ZZ, material);
-  xsc *= 1.;
   G4double ccTotRatio = fTotXsc->GetCcTotRatio();
 
   if( G4UniformRand() < ccTotRatio )  // Cc-model
@@ -305,7 +290,7 @@ G4MuNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& ste
       G4ExceptionDescription ed;
       aR.Report(ed);
       ed << "Call for " << hadi->GetModelName() << G4endl;
-      ed << "Target element "<< elm->GetName()<<"  Z= " 
+      ed << "  Z= " 
 	 << targNucleus->GetZ_asInt() 
 	 << "  A= " << targNucleus->GetA_asInt() << G4endl;
       DumpState(track,"ApplyYourself",ed);

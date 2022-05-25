@@ -88,7 +88,7 @@ GetFissionProduct( void )
 {
 G4FFG_FUNCTIONENTER__
 
-    G4Ions* Particle;
+    G4Ions* Particle=nullptr;
 
     // Generate a (0, 1] random number and return the respective particle.
     // The ENDF data tables lists 72172 as the largest fission fragment produced

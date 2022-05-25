@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -974,10 +974,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=14.000000s Real=15.582784s Sys=0.000000s
+  User=17.120000s Real=17.344744s Sys=0.010000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 189
-loop elapsed time [s] : 14.02
+loop elapsed time [s] : 17.16
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1201,10 +1201,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=14.100000s Real=16.167279s Sys=0.000000s
+  User=16.840000s Real=17.022293s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 167
-loop elapsed time [s] : 14.13
+loop elapsed time [s] : 16.87
 
 ################ END NEW GEOMETRY ########################
 /run/geometryModified
@@ -1498,10 +1498,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=14.340000s Real=14.937184s Sys=0.010000s
+  User=16.760000s Real=16.956064s Sys=0.010000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 112
-loop elapsed time [s] : 14.37
+loop elapsed time [s] : 16.79
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1725,13 +1725,13 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=14.520000s Real=15.058369s Sys=0.000000s
+  User=16.950000s Real=17.204220s Sys=0.010000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 72
-loop elapsed time [s] : 14.55
+loop elapsed time [s] : 17
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 60.08
+loop elapsed time [s] : 71.11
 
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

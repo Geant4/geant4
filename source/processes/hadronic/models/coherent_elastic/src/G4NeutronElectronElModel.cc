@@ -69,7 +69,7 @@ G4NeutronElectronElModel::G4NeutronElectronElModel(const G4String& name)
   fEnergyBin = 200;
   fMinEnergy = 1.*MeV;
   fMaxEnergy = 10000.*GeV;
-  fEnergyVector = new G4PhysicsLogVector(fMinEnergy, fMaxEnergy, fEnergyBin);
+  fEnergyVector = new G4PhysicsLogVector(fMinEnergy, fMaxEnergy, fEnergyBin, false);
 
   fAngleBin = 500;
   fAngleTable = 0;
@@ -86,7 +86,7 @@ G4NeutronElectronElModel::~G4NeutronElectronElModel()
   if( fEnergyVector ) 
   {
     delete fEnergyVector;
-    fEnergyVector = 0;
+    fEnergyVector = nullptr;
   }
   if( fAngleTable )
   {
@@ -100,36 +100,19 @@ G4NeutronElectronElModel::~G4NeutronElectronElModel()
 
 void G4NeutronElectronElModel::ModelDescription(std::ostream& outFile) const
 {
-
-    outFile << "G4NeutronElectronElModel is a neutrino-electron (neutral current) elastic scattering\n"
-            << "model which uses the standard model \n"
-            << "transfer parameterization.  The model is fully relativistic\n";
-
+  outFile << "G4NeutronElectronElModel is a neutrino-electron (neutral current) elastic scattering\n"
+	  << "model which uses the standard model \n"
+	  << "transfer parameterization.  The model is fully relativistic\n";
 }
 
 /////////////////////////////////////////////////////////
 
-G4bool G4NeutronElectronElModel::IsApplicable(const G4HadProjectile & aTrack, 
-  			      G4Nucleus & targetNucleus)
+G4bool G4NeutronElectronElModel::IsApplicable(const G4HadProjectile & aTrack, G4Nucleus&)
 {
-  G4bool result  = false;
   G4String pName = aTrack.GetDefinition()->GetParticleName();
-  // G4double minEnergy = 0.; 
   G4double energy = aTrack.GetTotalEnergy();
 
-  if( fCutEnergy > 0. ) // min detected recoil electron energy
-  {
-    // minEnergy = 0.5*(fCutEnergy+sqrt(fCutEnergy*(fCutEnergy+2.*electron_mass_c2)));
-  }
-  if( pName == "neutron"   &&
-      energy >= fMinEnergy  && energy <= fMaxEnergy   )                            
-  {
-    result = true;
-  }
-  G4int Z = targetNucleus.GetZ_asInt();
-        Z *= 1;
-
-  return result;
+  return (pName == "neutron" && energy >= fMinEnergy && energy <= fMaxEnergy);                            
 }
 
 ////////////////////////////////////////////////////
@@ -180,7 +163,7 @@ G4double G4NeutronElectronElModel::SampleSin2HalfTheta(G4double Tkin)
 
   for( iTkin = 0; iTkin < fEnergyBin; iTkin++)
   {
-    if( Tkin < fEnergyVector->GetLowEdgeEnergy(iTkin) ) break;
+    if( Tkin < fEnergyVector->Energy(iTkin) ) break;
   }  
   if ( iTkin >= fEnergyBin ) iTkin = fEnergyBin-1;   // Tkin is more then theMaxEnergy
   if ( iTkin < 0 )           iTkin = 0; // against negative index, Tkin < theMinEnergy
@@ -214,8 +197,7 @@ G4NeutronElectronElModel:: GetTransfer( G4int iTkin, G4int iTransfer, G4double p
 
   if( iTransfer == 0 ||  iTransfer == fAngleBin-1 )
   {
-    randTransfer = (*fAngleTable)(iTkin)->GetLowEdgeEnergy(iTransfer);
-    // iTransfer++;
+    randTransfer = (*fAngleTable)(iTkin)->Energy(iTransfer);
   }
   else
   {
@@ -226,8 +208,8 @@ G4NeutronElectronElModel:: GetTransfer( G4int iTkin, G4int iTransfer, G4double p
     y1 = (*(*fAngleTable)(iTkin))(iTransfer-1);
     y2 = (*(*fAngleTable)(iTkin))(iTransfer);
 
-    x1 = (*fAngleTable)(iTkin)->GetLowEdgeEnergy(iTransfer-1);
-    x2 = (*fAngleTable)(iTkin)->GetLowEdgeEnergy(iTransfer);
+    x1 = (*fAngleTable)(iTkin)->Energy(iTransfer-1);
+    x2 = (*fAngleTable)(iTkin)->Energy(iTransfer);
 
     delta = y2 - y1;
     mean  = y2 + y1;
@@ -235,8 +217,6 @@ G4NeutronElectronElModel:: GetTransfer( G4int iTkin, G4int iTransfer, G4double p
     if ( x1 == x2 ) randTransfer = x2;
     else
     {
-      // if ( y1 == y2 ) 
-
       if ( delta < epsilon*mean ) 
       {
         randTransfer = x1 + ( x2 - x1 )*G4UniformRand();
@@ -280,7 +260,7 @@ G4double G4NeutronElectronElModel::XscIntegrand(G4double x)
 //
 
 G4HadFinalState* G4NeutronElectronElModel::ApplyYourself(
-		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
+		 const G4HadProjectile& aTrack, G4Nucleus&)
 {
   theParticleChange.Clear();
 
@@ -363,9 +343,6 @@ G4HadFinalState* G4NeutronElectronElModel::ApplyYourself(
     theParticleChange.SetEnergyChange( Tkin );
     theParticleChange.SetMomentumChange( aTrack.Get4Momentum().vect().unit() );
   }
-  G4int Z = targetNucleus.GetZ_asInt();
-        Z *= 1;
- 
   return &theParticleChange;
 }
 

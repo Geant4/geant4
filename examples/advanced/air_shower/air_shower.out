@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -62,7 +62,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:  Acrylic    density:  1.190 g/cm3   RadL:  34.080 cm   Nucl.Int.Length:  62.658 cm 
-                       Imean:  68.609 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  67.185 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -691,8 +691,8 @@ See commands in /vis/modeling/trajectories/ for other options.
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1646501291
- float_seed_table[] = 0.086067 0.928671 0.921383 0.361887 0.693424 0.872036 0.729923 0.165756 0.641889 0.568678 0.137955 0.196064 0.341429 0.969661 0.041258 0.0670421 0.720583 0.460776 0.504701 0.230154 0.496428 0.2614 0.84158 0.0370094 
+ Initial seed = 1653387435
+ float_seed_table[] = 0.679642 0.282378 0.22417 0.9985 0.0862005 0.282983 0.473305 0.903354 0.99085 0.984021 0.808208 0.749773 0.506064 0.683597 0.56733 0.21337 0.914387 0.414573 0.780641 0.711102 0.130292 0.648337 0.56436 0.362236 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -703,7 +703,7 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.050000s Real=0.051851s Sys=0.000000s
+  User=0.050000s Real=0.049342s Sys=0.000000s
 ### Run 0 (global) ended.
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -723,10 +723,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 10
+Total navigation history collections cleaned: 9
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0135 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0115 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00192 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.000961 MB
@@ -735,13 +735,12 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0221 MB
-Pool ID '7G4Track', size : 0.0433 MB
+Pool ID '17G4DynamicParticle', size : 0.0106 MB
+Pool ID '7G4Track', size : 0.0202 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '15UltraOpticalHit', size : 0.00481 MB
-Number of memory pools allocated: 14 of which, static: 0
-Dynamic pools deleted: 14 / Total memory freed: 0.094 MB
+Number of memory pools allocated: 13 of which, static: 0
+Dynamic pools deleted: 13 / Total memory freed: 0.053 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

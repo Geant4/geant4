@@ -1,0 +1,395 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+===== Register constructor ==== G4EmDNAPhysics_option2
+===== Register constructor ==== G4EmDNAChemistry_option3
+*** /run/numberOfThreads command is issued in sequential mode.
+Command is ignored.
+G4SDManager::AddNewCollection : the collection <mfDetector/PrimaryKiller> is registered at 1
+G4SDManager::AddNewCollection : the collection <mfDetector/LET> is registered at 2
+G4SDManager::AddNewCollection : the collection <mfDetector/Species> is registered at 3
+New sensitive detector <mfDetector> is registered at /
+Number of chemical species involved in reactions = 18
+Reaction                                    Reaction Rate [dm3/(mol*s)]   
+----------------------------------------------------------------------------
+H3O^1 + OH^-1 -> No product                 1.13e+11                      
+----------------------------------------------------------------------------
+H3O^1 + O_3^-1 -> OH^0 + O_2^0              9e+10                         
+----------------------------------------------------------------------------
+H3O^1 + e_aq^-1 -> H^0                      2.11e+10                      
+----------------------------------------------------------------------------
+H3O^1 + O_2^-1 -> HO_2^0                    4.78e+10                      
+----------------------------------------------------------------------------
+H3O^1 + HO_2^-1 -> H2O2^0                   5e+10                         
+----------------------------------------------------------------------------
+H3O^1 + O^-1 -> OH^0                        4.78e+10                      
+----------------------------------------------------------------------------
+H3O^1 + OH^-1 -> No product                 0.0112                        
+----------------------------------------------------------------------------
+OH^0 + O^0 -> HO_2^0                        2.02e+10                      
+----------------------------------------------------------------------------
+OH^0 + H^0 -> No product                    1.55e+10                      
+----------------------------------------------------------------------------
+OH^0 + OH^0 -> H2O2^0                       5.5e+09                       
+----------------------------------------------------------------------------
+OH^0 + H2O2^0 -> HO_2^0                     2.88e+07                      
+----------------------------------------------------------------------------
+OH^0 + H_2^0 -> H^0                         3.28e+07                      
+----------------------------------------------------------------------------
+OH^0 + e_aq^-1 -> OH^-1                     2.95e+10                      
+----------------------------------------------------------------------------
+OH^0 + OH^-1 -> O^-1                        6.3e+09                       
+----------------------------------------------------------------------------
+OH^0 + HO_2^0 -> O_2^0                      7.9e+09                       
+----------------------------------------------------------------------------
+OH^0 + O_2^-1 -> O_2^0 + OH^-1              1.07e+10                      
+----------------------------------------------------------------------------
+OH^0 + HO_2^-1 -> HO_2^0 + OH^-1            8.32e+09                      
+----------------------------------------------------------------------------
+OH^0 + O^-1 -> HO_2^-1                      1e+09                         
+----------------------------------------------------------------------------
+OH^0 + O_3^-1 -> O_2^-1 + HO_2^0            8.5e+09                       
+----------------------------------------------------------------------------
+OH^0 + OH^-1 -> O^-1                        0.000624                      
+----------------------------------------------------------------------------
+OH^-1 + H^0 -> e_aq^-1                      2.51e+07                      
+----------------------------------------------------------------------------
+OH^-1 + H2O2^0 -> HO_2^-1                   4.71e+08                      
+----------------------------------------------------------------------------
+OH^-1 + HO_2^0 -> O_2^-1                    6.3e+09                       
+----------------------------------------------------------------------------
+OH^-1 + O^0 -> HO_2^-1                      4.2e+08                       
+----------------------------------------------------------------------------
+OH^-1 + H3O^1 -> No product                 0.0112                        
+----------------------------------------------------------------------------
+e_aq^-1 + H^0 -> OH^-1 + H_2^0              2.5e+10                       
+----------------------------------------------------------------------------
+e_aq^-1 + e_aq^-1 -> OH^-1 + OH^-1 + H_2^0  6.36e+09                      
+----------------------------------------------------------------------------
+e_aq^-1 + H2O2^0 -> OH^-1 + OH^0            1.1e+10                       
+----------------------------------------------------------------------------
+e_aq^-1 + O_2^0 -> O_2^-1                   1.74e+10                      
+----------------------------------------------------------------------------
+e_aq^-1 + HO_2^0 -> HO_2^-1                 1.29e+10                      
+----------------------------------------------------------------------------
+e_aq^-1 + O_2^-1 -> H2O2^0 + OH^-1 + OH^-1  1.29e+10                      
+----------------------------------------------------------------------------
+e_aq^-1 + HO_2^-1 -> O^-1 + OH^-1           3.51e+09                      
+----------------------------------------------------------------------------
+e_aq^-1 + O^-1 -> OH^-1 + OH^-1             2.31e+10                      
+----------------------------------------------------------------------------
+e_aq^-1 + H2O^0 -> H^0 + OH^-1              1.58e-05                      
+----------------------------------------------------------------------------
+e_aq^-1 + H3O^1 -> H^0                      0.00209                       
+----------------------------------------------------------------------------
+H^0 + H^0 -> H_2^0                          5.03e+09                      
+----------------------------------------------------------------------------
+H^0 + O^0 -> OH^0                           2.02e+10                      
+----------------------------------------------------------------------------
+H^0 + O^-1 -> OH^-1                         2e+10                         
+----------------------------------------------------------------------------
+H^0 + H2O2^0 -> OH^0                        3.5e+07                       
+----------------------------------------------------------------------------
+H^0 + O_2^0 -> HO_2^0                       2.1e+10                       
+----------------------------------------------------------------------------
+H^0 + HO_2^0 -> H2O2^0                      1e+10                         
+----------------------------------------------------------------------------
+H^0 + O_2^-1 -> HO_2^-1                     1e+10                         
+----------------------------------------------------------------------------
+H^0 + H2O^0 -> e_aq^-1 + H3O^1              5.94e-06                      
+----------------------------------------------------------------------------
+H^0 + OH^-1 -> e_aq^-1                      2.48e-06                      
+----------------------------------------------------------------------------
+H_2^0 + O^0 -> H^0 + OH^0                   4770                          
+----------------------------------------------------------------------------
+H_2^0 + O^-1 -> H^0 + OH^-1                 1.21e+08                      
+----------------------------------------------------------------------------
+H2O2^0 + O^0 -> HO_2^0 + OH^0               1.6e+09                       
+----------------------------------------------------------------------------
+H2O2^0 + O^-1 -> HO_2^0 + OH^-1             5.55e+08                      
+----------------------------------------------------------------------------
+H2O2^0 + OH^-1 -> HO_2^-1                   4.66e-05                      
+----------------------------------------------------------------------------
+HO_2^0 + O^0 -> O_2^0 + OH^0                2.02e+10                      
+----------------------------------------------------------------------------
+HO_2^0 + HO_2^0 -> H2O2^0 + O_2^0           980000                        
+----------------------------------------------------------------------------
+HO_2^0 + O_2^-1 -> HO_2^-1 + O_2^0          9.7e+07                       
+----------------------------------------------------------------------------
+HO_2^0 + H2O^0 -> H3O^1 + O_2^-1            0.715                         
+----------------------------------------------------------------------------
+HO_2^0 + OH^-1 -> O_2^-1                    0.000624                      
+----------------------------------------------------------------------------
+HO_2^-1 + O^0 -> O_2^-1 + OH^0              5.3e+09                       
+----------------------------------------------------------------------------
+HO_2^-1 + O^-1 -> O_2^-1 + OH^-1            3.5e+08                       
+----------------------------------------------------------------------------
+HO_2^-1 + H2O^0 -> H2O2^0 + OH^-1           1.36                          
+----------------------------------------------------------------------------
+HO_2^-1 + H3O^1 -> H2O2^0                   0.00495                       
+----------------------------------------------------------------------------
+O^0 + O^0 -> O_2^0                          2.2e+10                       
+----------------------------------------------------------------------------
+O^0 + O_2^0 -> O_3^0                        4e+09                         
+----------------------------------------------------------------------------
+O^0 + H2O^0 -> OH^0 + OH^0                  0.001                         
+----------------------------------------------------------------------------
+O^0 + OH^-1 -> HO_2^-1                      4.16e-05                      
+----------------------------------------------------------------------------
+O^-1 + O_2^0 -> O_3^-1                      3.7e+09                       
+----------------------------------------------------------------------------
+O^-1 + O_2^-1 -> O_2^0 + OH^-1 + OH^-1      6e+08                         
+----------------------------------------------------------------------------
+O^-1 + O^-1 -> H2O2^0 + OH^-1 + OH^-1       1e+08                         
+----------------------------------------------------------------------------
+O^-1 + O_3^-1 -> O_2^-1 + O_2^-1            7e+08                         
+----------------------------------------------------------------------------
+O^-1 + H2O^0 -> OH^0 + OH^-1                1.36                          
+----------------------------------------------------------------------------
+O^-1 + H3O^1 -> OH^0                        0.00473                       
+----------------------------------------------------------------------------
+O_2^-1 + H2O^0 -> HO_2^0 + OH^-1            1.5e-07                       
+----------------------------------------------------------------------------
+O_2^-1 + H3O^1 -> HO_2^0                    0.00473                       
+----------------------------------------------------------------------------
+O_3^-1 + None^0 -> H3O^1 + O_2^-1           0.00266                       
+----------------------------------------------------------------------------
+O_3^-1 + H3O^1 -> OH^0 + O_2^0              0.00891                       
+----------------------------------------------------------------------------
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Fluorescence ANSTO data files enabled              0
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+======                 DNA Physics Parameters                  ========
+=======================================================================
+Use fast sampling in DNA models                    0
+Use Stationary option in DNA models                0
+Use DNA with multiple scattering of e-             0
+Use DNA e- solvation model type                    11003
+=======================================================================
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger flag: 1
+### ===  Ignore cuts flag:   1
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton : Emin=    0 eV  Emax=  100 TeV Fluo
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermoreConversion : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+
+e-_G4DNAElectronSolvation:  for e- SubType=58 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAOneStepThermalizationModel_Meesungnoen2002 : Emin=    0 eV  Emax=  7.4 eV 
+
+e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAChampionElasticModel : Emin=    0 eV  Emax=    1 MeV
+
+e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNABornExcitationModel : Emin=    0 eV  Emax=    1 MeV
+
+e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNABornIonisationModel : Emin=    0 eV  Emax=  100 TeV  deltaBorn Fluo
+
+e-_G4DNAVibExcitation:  for e- SubType=54 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNASancheExcitationModel : Emin=    0 eV  Emax=  100 eV 
+
+e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
+
+msc:  for e+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+### Run 0 starts.
+### Run 0 starts.
+--> Event 0 starts.
+DNAMolecularIRTModel will be used
+
+--------------------End of Global Run-----------------------
+  The run has 10 events 
+Number of events recorded by the species scorer = 10
+ Total energy deposited in the world volume : 12053 eV
+ ------------------------------------------------------------
+
+### Run 1 starts.
+### Run 1 starts.
+--> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 9 events 
+Number of events recorded by the species scorer = 9
+ Total energy deposited in the world volume : 14490 eV
+ ------------------------------------------------------------
+
+### Run 2 starts.
+### Run 2 starts.
+--> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 11 events 
+Number of events recorded by the species scorer = 11
+ Total energy deposited in the world volume : 25440 eV
+ ------------------------------------------------------------
+
+### Run 3 starts.
+### Run 3 starts.
+--> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 2 events 
+Number of events recorded by the species scorer = 2
+ Total energy deposited in the world volume : 7633 eV
+ ------------------------------------------------------------
+
+### Run 4 starts.
+### Run 4 starts.
+--> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 5 events 
+Number of events recorded by the species scorer = 5
+ Total energy deposited in the world volume : 30060 eV
+ ------------------------------------------------------------
+
+### Run 5 starts.
+### Run 5 starts.
+--> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 6 events 
+Number of events recorded by the species scorer = 6
+ Total energy deposited in the world volume : 48123 eV
+ ------------------------------------------------------------
+
+### Run 6 starts.
+### Run 6 starts.
+--> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 4 events 
+Number of events recorded by the species scorer = 4
+ Total energy deposited in the world volume : 40108 eV
+ ------------------------------------------------------------
+

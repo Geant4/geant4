@@ -2,8 +2,8 @@
 #======================================================================
 # i. Subprojects that may be cloned for testing
 #======================================================================
-benchmarks/
-verification/
+/benchmarks/
+/verification/
 
 #======================================================================
 # ii. Formatting
@@ -326,7 +326,7 @@ CTestTestfile.cmake
 
 # Executables
 *.exe
-*.out
+a.out
 *.app
 
 # Debug files

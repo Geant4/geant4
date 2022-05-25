@@ -220,11 +220,12 @@ void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
 }
 
 // ***************************************************************************
-// Retrieve the first volume pointer in the container having that name
+// Retrieve the first or last volume pointer in the container having that name
 // ***************************************************************************
 //
 G4VPhysicalVolume*
-G4PhysicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
+G4PhysicalVolumeStore::GetVolume(const G4String& name, G4bool verbose,
+                                 G4bool reverseSearch) const
 {
   G4PhysicalVolumeStore* store = GetInstance();
   if (!store->mvalid)  { store->UpdateMap(); }
@@ -240,7 +241,14 @@ G4PhysicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
       G4Exception("G4PhysicalVolumeStore::GetVolume()",
                   "GeomMgt1001", JustWarning, message);
     }
-    return pos->second[0];
+    if(reverseSearch)
+    {
+      return pos->second[pos->second.size()-1];
+    }
+    else
+    {
+      return pos->second[0];
+    }
   }
   if (verbose)
   {

@@ -99,8 +99,8 @@
 #include <csignal>
 #include <type_traits>
 
-template <typename FuncT>
-using G4ResultOf_t = typename std::result_of<FuncT>::type;
+template <typename FuncT, typename... ArgTypes>
+using G4ResultOf_t = std::invoke_result_t<FuncT, ArgTypes...>;
 
 // compatible OS and compiler
 #if defined(G4UNIX) &&                                                         \
@@ -302,14 +302,14 @@ class G4Backtrace
   // to ignore initial frames (such as this function). A callback
   // can be provided to inspect and/or tweak the frame string
   template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
-  static std::array<G4ResultOf_t<FuncT(const char*)>, Depth> GetMangled(
+  static std::array<G4ResultOf_t<FuncT, const char*>, Depth> GetMangled(
     FuncT&& func = FrameFunctor());
 
   // gets a demangled backtrace of "Depth" frames. The offset parameter is
   // used to ignore initial frames (such as this function). A callback
   // can be provided to inspect and/or tweak the frame string
   template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
-  static std::array<G4ResultOf_t<FuncT(const char*)>, Depth> GetDemangled(
+  static std::array<G4ResultOf_t<FuncT, const char*>, Depth> GetDemangled(
     FuncT&& func = FrameFunctor());
 
  private:
@@ -358,12 +358,12 @@ inline void G4Backtrace::ExitAction(int sig)
 //----------------------------------------------------------------------------//
 
 template <size_t Depth, size_t Offset, typename FuncT>
-inline std::array<G4ResultOf_t<FuncT(const char*)>, Depth>
+inline std::array<G4ResultOf_t<FuncT, const char*>, Depth>
 G4Backtrace::GetMangled(FuncT&& func)
 {
   static_assert((Depth - Offset) >= 1, "Error Depth - Offset should be >= 1");
 
-  using type = G4ResultOf_t<FuncT(const char*)>;
+  using type = G4ResultOf_t<FuncT, const char*>;
   // destination
   std::array<type, Depth> btrace;
   btrace.fill((std::is_pointer<type>::value) ? nullptr : type{});
@@ -393,7 +393,7 @@ G4Backtrace::GetMangled(FuncT&& func)
 //----------------------------------------------------------------------------//
 
 template <size_t Depth, size_t Offset, typename FuncT>
-inline std::array<G4ResultOf_t<FuncT(const char*)>, Depth>
+inline std::array<G4ResultOf_t<FuncT, const char*>, Depth>
 G4Backtrace::GetDemangled(FuncT&& func)
 {
   auto demangle_bt = [&](const char* cstr) {
@@ -764,20 +764,20 @@ class G4Backtrace
   {}
 
   template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
-  static std::array<G4ResultOf_t<FuncT(const char*)>, Depth> GetMangled(
+  static std::array<G4ResultOf_t<FuncT, const char*>, Depth> GetMangled(
     FuncT&& func = FrameFunctor())
   {
-    using type = G4ResultOf_t<FuncT(const char*)>;
+    using type = G4ResultOf_t<FuncT, const char*>;
     auto ret = std::array<type, Depth>{};
     ret.fill(func(""));
     return ret;
   }
 
   template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
-  static std::array<G4ResultOf_t<FuncT(const char*)>, Depth> GetDemangled(
+  static std::array<G4ResultOf_t<FuncT, const char*>, Depth> GetDemangled(
     FuncT&& func = FrameFunctor())
   {
-    using type = G4ResultOf_t<FuncT(const char*)>;
+    using type = G4ResultOf_t<FuncT, const char*>;
     auto ret = std::array<type, Depth>{};
     ret.fill(func(""));
     return ret;

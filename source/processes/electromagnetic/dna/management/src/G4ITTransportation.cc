@@ -943,7 +943,7 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt(const G4Track& track,
 
     // Update the Step flag which identifies the Last Step in a volume
     isLastStep = fLinearNavigator->ExitedMotherVolume()
-        | fLinearNavigator->EnteredDaughterVolume();
+              || fLinearNavigator->EnteredDaughterVolume();
 
 #ifdef G4DEBUG_TRANSPORT
     //  Checking first implementation of flagging Last Step in Volume

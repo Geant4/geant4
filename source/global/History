@@ -16,6 +16,15 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 23, 2022 Gabriele Cosmo (global-V10-07-39)
+- Updated tag IDs for geant4-11-00-patch-02.
+
+April 1, 2022 Jonas Hahnfeld
+- Fix two typos in Bremsstrahlung.
+
+March 18, 2022 Ben Morgan
+- Replace use of deprecated std::result_of with std::invoke_result_t.
+
 March 8, 2022 Gabriele Cosmo (global-V10-07-38)
 - Updated tag IDs for geant4-11-00-patch-01.
 

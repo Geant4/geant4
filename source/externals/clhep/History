@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 March 2022 - E.Tcherniaev (clhep-V10-07-00)
+- Fixed compilation warnings in LorentzRotation.h when c++20 is enabled.
+
+08 February 2022 - G.Cosmo
+- Fixed compilation warnings for shadowing data member in RandPoisson.
+
 01 September 2021 - G.Cosmo
 - Synchronised with CLHEP-2.4.5.1.
   * Random (J.Hahnfeld)

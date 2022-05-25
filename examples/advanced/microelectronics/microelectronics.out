@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -330,7 +330,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
-##### Create analysis manager   0x221cdb0
+##### Create analysis manager   0x27d8d70
 Using  analysis manager
 ... set ntuple merging row mode : row-wise - done
 ... create file : microelectronics.root - done
@@ -352,15 +352,15 @@ Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.0/micro
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.230000s Real=0.655733s Sys=0.050000s
+  User=0.300000s Real=0.328252s Sys=0.020000s
 ... write file : microelectronics.root - done
 ... close file : microelectronics.root - done
 ... clear all data - done
 Number and type of particles created outside region "Target" :
-N e- : 3
+N e- : 1
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 577
+N e- : 884
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -387,12 +387,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.00769 MB
-Pool ID '7G4Track', size : 0.0154 MB
+Pool ID '17G4DynamicParticle', size : 0.0106 MB
+Pool ID '7G4Track', size : 0.0202 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.037 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.044 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

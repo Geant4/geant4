@@ -92,8 +92,8 @@ void G4PhysicsModelCatalog::Initialize() {
     InsertModel( 10014, "model_TripletElectron" );
 
     // gamma production
-    InsertModel( 10020, "model_Bremsstruhlung" );
-    InsertModel( 10021, "model_SplitBremssrahlung" );
+    InsertModel( 10020, "model_Bremsstrahlung" );
+    InsertModel( 10021, "model_SplitBremsstrahlung" );
     InsertModel( 10022, "model_ComptonGamma" );
     InsertModel( 10023, "model_Annihilation" );
     InsertModel( 10024, "model_TripletGamma" );

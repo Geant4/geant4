@@ -134,7 +134,6 @@ void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
 
 void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
 {
-  
   if (detectorType) {
     
     // extracted from hits, compute the total energy deposit (and total charged
@@ -143,7 +142,7 @@ void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
     
     XrayFluoSensorHitsCollection* HPGeHC = 0;
     G4int n_hit = 0;
-    G4double totEnergyDetect=0., totEnergy=0., energyD=0.;
+    G4double totEnergy=0., energyD=0.;
     
     if (HCE) HPGeHC = 
       (XrayFluoSensorHitsCollection*)(HCE->GetHC(HPGeCollID));
@@ -158,7 +157,6 @@ void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
 	    energyD = detectorType->ResponseFunction(totEnergy);	    
 	    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
 	    analysis->analyseEnergyDep(energyD);
-	    totEnergyDetect += energyD;	    	    
 	  }
       }
   }  

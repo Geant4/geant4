@@ -67,8 +67,9 @@ class G4LogicalVolumeStore : public std::vector<G4LogicalVolume*>
     static void Clean();
       // Delete all volumes from the store.
 
-    G4LogicalVolume* GetVolume(const G4String& name, G4bool verbose=true) const;
-      // Return the pointer of the first volume in the collection having
+    G4LogicalVolume* GetVolume(const G4String& name, G4bool verbose=true,
+                               G4bool reverseSearch=false) const;
+      // Return the pointer of the first or last volume in the collection having
       // that name. Uses the internal map for fast search and warns if
       // a volume in the collection is not unique or not found.
 

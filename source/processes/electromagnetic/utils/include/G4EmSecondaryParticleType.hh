@@ -50,6 +50,8 @@ enum G4EmSecondaryParticleType
     _ComptonElectron = 10013,
     _TripletElectron = 10014,
 
+    _Bremsstrahlung = 10020,
+     // Legacy name for compatibility with Geant4 11.0 and patch01.
     _Bremsstruhlung = 10020,
     _SplitBremsstrahlung = 10021,
     _ComptonGamma = 10022,

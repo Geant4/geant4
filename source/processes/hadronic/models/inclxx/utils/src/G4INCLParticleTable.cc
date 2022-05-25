@@ -528,22 +528,22 @@ namespace G4INCL {
       return -10; // Unknown
     }
 
-    std::string getShortName(const ParticleSpecies &s) {
-      if(s.theType==Composite && s.theS == 0)
-        return getShortName(s.theA,s.theZ);
-      else if(s.theType==Composite)
-        return getName(s.theA,s.theZ,s.theS);
+    std::string getShortName(const ParticleSpecies &sp) {
+      if(sp.theType==Composite && sp.theS == 0)
+        return getShortName(sp.theA,sp.theZ);
+      else if(sp.theType==Composite)
+        return getName(sp.theA,sp.theZ,sp.theS);
       else
-        return getShortName(s.theType);
+        return getShortName(sp.theType);
     }
 
-    std::string getName(const ParticleSpecies &s) {
-      if(s.theType==Composite && s.theS == 0)
-        return getName(s.theA,s.theZ);
-      else if(s.theType==Composite)
-        return getName(s.theA,s.theZ,s.theS);
+    std::string getName(const ParticleSpecies &sp) {
+      if(sp.theType==Composite && sp.theS == 0)
+        return getName(sp.theA,sp.theZ);
+      else if(sp.theType==Composite)
+        return getName(sp.theA,sp.theZ,sp.theS);
       else
-        return getName(s.theType);
+        return getName(sp.theType);
     }
 
     std::string getName(const G4int A, const G4int Z) {
@@ -1140,11 +1140,11 @@ namespace G4INCL {
 
     G4double getLambdaSeparationEnergy() { return lambdaSeparationEnergy; }
 
-    void setProtonSeparationEnergy(const G4double s) { protonSeparationEnergy = s; }
+    void setProtonSeparationEnergy(const G4double sen) { protonSeparationEnergy = sen; }
 
-    void setNeutronSeparationEnergy(const G4double s) { neutronSeparationEnergy  = s; }
+    void setNeutronSeparationEnergy(const G4double sen) { neutronSeparationEnergy  = sen; }
 
-    void setLambdaSeparationEnergy(const G4double s) { lambdaSeparationEnergy  = s; }
+    void setLambdaSeparationEnergy(const G4double sen) { lambdaSeparationEnergy  = sen; }
 
     std::string getElementName(const G4int Z) {
       if(Z<1) {
@@ -1177,9 +1177,9 @@ namespace G4INCL {
         return ParticleTable::parseIUPACElement(pS);
     }
 
-    G4int parseIUPACElement(std::string const &s) {
+    G4int parseIUPACElement(std::string const &sel) {
       // Normalise to lower case
-      std::string elementName(s);
+      std::string elementName(sel);
       std::transform(elementName.begin(), elementName.end(), elementName.begin(), ::tolower);
       // Return 0 if the element name contains anything but IUPAC digits
       if(elementName.find_first_not_of(elementIUPACDigits)!=std::string::npos)

@@ -29,6 +29,13 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 April 2022 - Ben Morgan (cmake-V10-07-56)
+- Don't add CLHEP_INCLUDE_DIRS directly through include_directories to prevent potential
+  issues with it holding relative paths (reported by Seth Johnson)
+
+7 March 2022 - Gunter Folger  (cmake-V10-07-55)
+- fix in CMakeCPackOptions.cmake.in to avoid PATH with only /, without \, for g4_small.bmp
+
 11 February 2022 - Ben Morgan (cmake-V10-07-54)
 - Apply [GitHub PR 37](https://github.com/Geant4/geant4/pull/37) from gondiaz.
   - Add G4ptl and G4tasking libraries to link list in geant4-config

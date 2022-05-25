@@ -1294,13 +1294,9 @@ void G4DensityEffectData::Initialize()
   AddMaterial(M277,"G4_GRAPHITE_POROUS");
 }
 
-G4int G4DensityEffectData::GetElementIndex(G4int Z, G4State st) const
+G4int G4DensityEffectData::GetElementIndex(G4int Z, G4State) const
 {
-  G4int idx = -1;
-  if(Z > 0 && Z < NDENSELEM) { 
-    if(st == state[Z] || st == kStateUndefined) { idx = indexZ[Z]; }
-  } 
-  return idx;
+  return (Z >= 0 && Z < NDENSELEM) ? indexZ[Z] : -1;
 }
 
 G4int G4DensityEffectData::GetIndex(const G4String& matName) const
