@@ -1122,12 +1122,7 @@ G4double G4HadronNucleonXsc::HadronNucleonXscVU(
   G4int PDGcode = theParticle->GetPDGEncoding();
   G4int absPDGcode = std::abs(PDGcode);
   G4double mass = theParticle->GetPDGMass();
-  G4double Elab = ekin + mass;              
-  // (s - 2*0.88*GeV*GeV)/(2*0.939*GeV)/GeV;
-  G4double Plab = std::sqrt(ekin*(ekin + 2.*mass));            
-
-  Elab *= invGeV;
-  Plab *= invGeV;
+  G4double Plab = std::sqrt(ekin*(ekin + 2.*mass))*invGeV;
 
   G4double logPlab = G4Log( Plab );
   G4double sqrLogPlab = logPlab * logPlab;

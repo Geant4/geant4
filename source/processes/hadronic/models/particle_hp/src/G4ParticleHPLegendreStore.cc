@@ -43,7 +43,7 @@
 //080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #3 
 G4double G4ParticleHPLegendreStore::SampleDiscreteTwoBody (G4double anEnergy)
 {
-  G4double result;
+  G4double result=0.;
   
   G4int i0;
   G4int low(0), high(0);
@@ -125,7 +125,7 @@ G4double G4ParticleHPLegendreStore::SampleDiscreteTwoBody (G4double anEnergy)
 
 G4double G4ParticleHPLegendreStore::SampleMax (G4double anEnergy)
 {
-  G4double result;
+  G4double result=0.;
   
   G4int i0;
   G4int low(0), high(0);
@@ -201,7 +201,7 @@ G4double G4ParticleHPLegendreStore::SampleMax (G4double anEnergy)
 
 G4double G4ParticleHPLegendreStore::SampleElastic (G4double anEnergy)
 {
-  G4double result;
+  G4double result=0.;
   
   G4int i0;
   G4int low(0), high(0);
@@ -322,7 +322,7 @@ G4double G4ParticleHPLegendreStore::Sample (G4double energy) // still in interpo
 
 G4double G4ParticleHPLegendreStore::Integrate(G4int k, G4double costh) // still in interpolation; not used anymore
 {
-  G4double result=0;
+  G4double result=0.;
   G4ParticleHPFastLegendre theLeg;
 //  G4cout <<"the COEFFS "<<k<<" ";
 //  G4cout <<theCoeff[k].GetNumberOfPoly()<<" ";

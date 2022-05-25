@@ -43,19 +43,6 @@ if(GEANT4_USE_SYSTEM_CLHEP)
   geant4_save_package_variables(CLHEP CLHEP_DIR)
 else()
   set(CLHEP_FOUND TRUE)
-  # TODO: CLHEP_INCLUDE_DIRS still required for windows support
-  #       Current way of building DLLs requires build of a temporary
-  #       archive lib, and this does not link to dependencies, hence
-  #       it does not get their usage requirements.
-  #       May be fixable by linking or use of better DLL build mechanism
-  #       available in CMake >= 3.4
-  #       As other externals will need the same treatment, return
-  #       to old CLHEP_INCLUDE_DIRS setting
-  #
-  set(CLHEP_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/source/externals/clhep/include")
-
-  # All G4*** targets are handled internally to use static or shared
-  # as appropriate, so only need to declare core target name
   set(CLHEP_LIBRARIES G4clhep)
 endif()
 
@@ -115,7 +102,6 @@ geant4_add_feature(GEANT4_USE_SYSTEM_EXPAT "Using system EXPAT library")
 
 #-----------------------------------------------------------------------
 # Find required ZLIB package, defaulting in internal
-# Rely on ZLIB::ZLIB imported target (since CMake 3.1)
 option(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_ZLIB)
   find_package(ZLIB REQUIRED)
@@ -140,16 +126,14 @@ endif()
 
 option(GEANT4_USE_TBB "Enable (optional) use of TBB as a tasking backend" ${_default_use_tbb})
 if(GEANT4_USE_TBB)
-    find_package(TBB REQUIRED)
-    geant4_save_package_variables(TBB TBB_INCLUDE_DIR TBB_LIBRARY TBB_LIBRARY_DEBUG
-        TBB_LIBRARY_RELEASE TBB_ROOT_DIR)
+  find_package(TBB REQUIRED)
+  geant4_save_package_variables(TBB TBB_INCLUDE_DIR TBB_LIBRARY TBB_LIBRARY_DEBUG TBB_LIBRARY_RELEASE TBB_ROOT_DIR)
 endif()
 
 geant4_add_feature(GEANT4_USE_TBB "Enable (optional) use of TBB as a tasking backend")
 
 #-----------------------------------------------------------------------
-# Find required PTL package, defaulting in internal
-# Rely on PTL::PTL imported target (since CMake 3.1)
+# Find required PTL package, defaulting to internal
 option(GEANT4_USE_SYSTEM_PTL "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_PTL)
   find_package(PTL 2.0.0 REQUIRED)
@@ -329,13 +313,13 @@ if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
 
   if(GEANT4_USE_ALL_USOLIDS)
     set(G4GEOM_USE_USOLIDS TRUE)
-    GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with all VecGeom equivalents (EXPERIMENTAL)")
+    geant4_add_feature(GEANT4_USE_USOLIDS "Replacing Geant4 solids with all VecGeom equivalents (EXPERIMENTAL)")
   else()
     set(G4GEOM_USE_PARTIAL_USOLIDS TRUE)
     foreach(__g4_usolid_shape ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST})
       set(G4GEOM_USE_U${__g4_usolid_shape} TRUE)
     endforeach()
-    GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with VecGeom equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
+    geant4_add_feature(GEANT4_USE_USOLIDS "Replacing Geant4 solids with VecGeom equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
   endif()
 endif()
 
@@ -376,10 +360,8 @@ if(GEANT4_USE_HDF5)
     geant4_save_package_variables(HDF5 HDF5_DIR)
   else()
     # Otherwise almost certainly used compiler wrapper
-    geant4_save_package_variables(HDF5
-      HDF5_C_COMPILER_EXECUTABLE
-      HDF5_C_LIBRARY_hdf5)
-    endif()
+    geant4_save_package_variables(HDF5 HDF5_C_COMPILER_EXECUTABLE HDF5_C_LIBRARY_hdf5)
+  endif()
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_HDF5 "Building Geant4 analysis library with HDF5 support")
+geant4_add_feature(GEANT4_USE_HDF5 "Building Geant4 analysis library with HDF5 support")

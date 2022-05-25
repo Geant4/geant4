@@ -229,6 +229,11 @@ inline void G4GDMLParser::SetSDExport(G4bool flag)
   writer->SetSDExport(flag);
 }
 
+inline void G4GDMLParser::SetReverseSearch(G4bool flag)
+{
+  reader->SetReverseSearch(flag);
+}
+
 inline G4int G4GDMLParser::GetMaxExportLevel() const
 {
   return writer->GetMaxExportLevel();

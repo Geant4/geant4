@@ -148,11 +148,11 @@ G4DecayProducts* G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 
   // daughters'mass
   G4double daughtermass[4]; 
-  G4double sumofdaughtermass = 0.0;
+  //G4double sumofdaughtermass = 0.0;
   for (G4int index=0; index<4; ++index)
   {
     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
-    sumofdaughtermass += daughtermass[index];
+    //sumofdaughtermass += daughtermass[index];
   }
 
   G4double EMASS = daughtermass[0];

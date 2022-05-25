@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 April 2022 Alberto Ribon (hard-lend-V10-07-03)
+-------------------------------------------------
+- MCGIDI_energy.cc : fixed compilation warnings for 'may be used uninitialized'
+  variables.
+
+20 April 2022 Alberto Ribon
+---------------------------
+- MCGIDI_energy.cc, ptwXY_methods.cc, ptwXY_misc.cc : fixed compilation
+  warnings for 'may be used uninitialized' variables.
+
+9 February 2022 Gabriele Cosmo
+------------------------------
+- Fixed compilation warning on Intel compilers for unused variable.
+
 4 August 2021 Alberto Ribon (hadr-lend-V10-07-02)
 -------------------------------------------------
 - G4LENDModel, G4LENDCapture, G4LENDElastic, G4LENDFission, G4LENDInelastic :

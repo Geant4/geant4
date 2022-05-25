@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 Apr 22: D. Sawkey (op-V10-07-08)
+- G4OpBoundaryProcess: fix nullptr dereference. Address bug 2471.
+
+07 Apr 22: D. Sawkey (op-V10-07-07)
+- G4OpWLS2: fix incorrect call to set time profile. Addresses bug 2482.
+
 10 Jan 22: D. Sawkey (op-V10-07-06)
 - Remove G4lrint/G4lint to calculate angle bin for Davis/LBNL LUT. Fixes crash
   when angle = 0. Addresses issue 116.

@@ -313,7 +313,7 @@ G4FFG_FUNCTIONENTER__
         // distribution is dependant on the alpha particle generation and the
         // Watt fission sampling for neutrons, we only have the left-over energy
         // to work with for the fission daughter products.
-        G4double FragmentsKE;
+        G4double FragmentsKE=0.;
         G4int icounter=0;
         G4int icounter_max=1024;
         do
@@ -1327,8 +1327,8 @@ G4FFG_FUNCTIONENTER__
     // The condition of sampling more energy from the fission products than is
     // alloted is statistically unfavorable, but it could still happen. The
     // do-while loop prevents such an occurrence from happening
-    G4double TotalNeutronEnergy;
-	G4double NeutronEnergy;
+    G4double TotalNeutronEnergy=0.;
+    G4double NeutronEnergy=0.;
 
     // Make sure that we don't sample more energy than is available
     G4int icounter=0;

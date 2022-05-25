@@ -15,11 +15,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14.02.2022, G.Cosmo eRosita-V10-07-02
+            eRositaTrackerSD: fixed compilation warning on Intel-icx compiler
+            for unused variable.
+
 12.05.2021, A.Polsini,F.Longo eRosita-V10-07-01
             Migration to multithreading (MT) mode
             
--24.05.2021, B. Morgan (eRosita-V10-07-00)
-             Bump required CMake version range to 3.12...3.20, matching core Geant4
+24.05.2021, B. Morgan (eRosita-V10-07-00)
+            Bump required CMake version range to 3.12...3.20, matching core Geant4
 
             
 02.11.2020, B.Morgan eRosita-V10-06-00

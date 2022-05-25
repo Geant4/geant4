@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -97,7 +97,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:   Butane    density:  0.026 mg/cm3  RadL:  17.729 km   Nucl.Int.Length:  25.658 km 
-                       Imean:  53.040 eV   temperature: 293.16 K  pressure:   0.01 atm
+                       Imean:  51.646 eV   temperature: 293.16 K  pressure:   0.01 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -111,7 +111,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Polyprop    density: 900.000 mg/cm3  RadL:  49.764 cm   Nucl.Int.Length:  75.110 cm 
-                       Imean:  56.518 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  54.941 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -188,7 +188,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Cytoplasm2    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  69.537 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -232,7 +232,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Nucleus1    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  69.537 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -261,7 +261,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Nucleus2    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  69.537 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -290,7 +290,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Nucleus3    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  69.537 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -804,7 +804,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
-##### Create analysis manager   0x25c60b0
+##### Create analysis manager   0xe67130
 Using  analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 

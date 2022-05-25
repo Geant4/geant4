@@ -14,8 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09 February 2022 Gabriele Cosmo (hadr-util-V10-07-09)
+-----------------------------------------------------
+- Fixed compilation warning on Intel compilers for unused variables
+  and deprecated declaration of operator=().
+
 05 November 2021 Alberto Ribon (hadr-util-V10-07-08)
---------------------------------------------------------
+----------------------------------------------------
 - G4Nucleus : the method  GetBiasedThermalNucleus  has been rewritten
   (by Loic Thulliez and Eric Dumonteil of CEA Saclay) according to the
   Sampling of the Velocity of the Target nucleus (SVT) algorithm.

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -20,7 +20,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 **************************************************************
 
  Material: FluorCarbonate    density:  1.610 g/cm3   RadL:  22.435 cm   Nucl.Int.Length:  54.514 cm 
-                       Imean:  99.957 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  98.459 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -206,11 +206,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.640000s Real=0.664867s Sys=0.000000s
+  User=0.670000s Real=0.672822s Sys=0.000000s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1712417739, 2078247784
+ Current couple of seeds = 596112525, 973948830
 ----------------------------------------
 ... write file : testem4.root - done
 ... close file : testem4.root - done

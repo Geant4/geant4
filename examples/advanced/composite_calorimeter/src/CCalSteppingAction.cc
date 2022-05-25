@@ -85,8 +85,9 @@ void CCalSteppingAction::UserSteppingAction(const G4Step* aStep)
 void CCalSteppingAction::endOfEvent(){
 
   G4AnalysisManager* man = G4AnalysisManager::Instance();
+#ifdef debug
   G4double totalFilledProfileHcal = 0.0;
-
+#endif
   static G4int IDlateralProfile = -1;
   if (IDlateralProfile < 0) {
     IDlateralProfile = man->GetH1Id("h500");
@@ -95,8 +96,8 @@ void CCalSteppingAction::endOfEvent(){
     man->FillH1(IDlateralProfile+i,LateralProfile[i]);
 #ifdef debug
     G4cout << "Fill Profile Hcal histo " << i << " with " << LateralProfile[i] << G4endl;
-#endif
     totalFilledProfileHcal += LateralProfile[i];          
+#endif
   }
  
 #ifdef debug
@@ -112,13 +113,15 @@ void CCalSteppingAction::endOfEvent(){
   if (IDTimeProfile < 0) {
     IDTimeProfile = man->GetH1Id("h901");
   }
+#ifdef debug
   G4double totalFilledTimeProfile = 0.0;
+#endif
   for (G4int j=0; j<timeHistoMaxBin; ++j) {     
     man->FillH1(IDTimeHist+j,timeDeposit[j]);
 #ifdef debug
     G4cout << "Fill Time slice histo " << j << " with " << timeDeposit[j] << G4endl;
-#endif
     totalFilledTimeProfile += timeDeposit[j];
+#endif
       
     G4double t = j + 0.5;
     man->FillH1(IDTimeProfile+1,t,timeDeposit[j]);

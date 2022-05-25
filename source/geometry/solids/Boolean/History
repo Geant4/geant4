@@ -19,6 +19,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 4, 2022, G.Cosmo (geom-bool-V10-07-05)
+- Minor cleanup in G4UnionSolid constructors.
+
+April 29, 2022, G.Cosmo
+- G4UnionSolid: added missing data initialisation in copy-ctr and operator=().
+
+April 5, 2022, G.Cosmo
+- G4UnionSolid: add surface tolerance in Inside(p) for check on Z.
+  Minor optimisation in caching half-tolerance.
+
 January 10, 2022, G.Cosmo geom-bool-V10-07-04
 - Added alternative signature for AddNode() taking a pointer to solid.
   Added 'const' qualification to transformation passed as argument.

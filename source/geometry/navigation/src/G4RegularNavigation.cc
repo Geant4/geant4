@@ -205,16 +205,16 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
                                    .InverseTransformPoint(localPoint);
       std::ostringstream message;
       message << "G4RegularNavigation::ComputeStepSkippingEqualMaterials()"
-	      << "Stuck Track: potential geometry or navigation problem."
-	      << G4endl
-	      << "        Track stuck, moving for more than " 
-	      << ii << " steps" << G4endl
-	      << "- at point " << pGlobalpoint << G4endl
-	      << "        local direction: " << localDirection << G4endl;
+        << "Stuck Track: potential geometry or navigation problem."
+        << G4endl
+        << "        Track stuck, moving for more than " 
+        << ii << " steps" << G4endl
+        << "- at point " << pGlobalpoint << G4endl
+        << "        local direction: " << localDirection << G4endl;
       G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
-		  "GeomRegNav1001",
-		  EventMustBeAborted,
-		  message);
+      "GeomRegNav1001",
+      EventMustBeAborted,
+      message);
     }
     newStep = voxelBox->DistanceToOut( localPoint, localDirection );
     fLastStepWasZero = (newStep<fMinStep);
@@ -226,63 +226,67 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
       {
         G4ThreeVector pGlobalpoint = history.GetTransform(ide)
                                      .InverseTransformPoint(localPoint);
-	std::ostringstream message;
-	message.precision(16);
-	message << "G4RegularNavigation::ComputeStepSkippingEqualMaterials(): another 'zero' step, # "
-	       << fNumberZeroSteps
-	       << ", at " << pGlobalpoint
-	       << ", nav-comp-step calls # " << ii
-	       << ", Step= " << newStep;
-        G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
-                    "GeomRegNav1002", JustWarning, message,
-                    "Potential overlap in geometry!");
+      std::ostringstream message;
+      message.precision(16);
+      message << "G4RegularNavigation::ComputeStepSkippingEqualMaterials(): another 'zero' step, # "
+            << fNumberZeroSteps
+            << ", at " << pGlobalpoint
+            << ", nav-comp-step calls # " << ii
+            << ", Step= " << newStep;
+            G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
+                        "GeomRegNav1002", JustWarning, message,
+                        "Potential overlap in geometry!");
       }
 #endif
       if( fNumberZeroSteps > fActionThreshold_NoZeroSteps-1 )
       {
-	// Act to recover this stuck track. Pushing it along direction
-	//
-	newStep = std::min(101*kCarTolerance*std::pow(10,fNumberZeroSteps-2),0.1);
+        // Act to recover this stuck track. Pushing it along direction
+        //
+        newStep = std::min(101*kCarTolerance*std::pow(10,fNumberZeroSteps-2),0.1);
 #ifdef G4DEBUG_NAVIGATION
         G4ThreeVector pGlobalpoint = history.GetTransform(ide)
                                        .InverseTransformPoint(localPoint);
-	std::ostringstream message;
-	message.precision(16);
-	message << "Track stuck or not moving." << G4endl
-                << "          Track stuck, not moving for " 
-                << fNumberZeroSteps << " steps" << G4endl
-                << "- at point " << pGlobalpoint
-                << " (local point " << localPoint << ")" << G4endl
-                << "        local direction: " << localDirection 
-                << "          Potential geometry or navigation problem !"
-                << G4endl
-                << "          Trying pushing it of " << newStep << " mm ...";
-        G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
-                    "GeomRegNav1003", JustWarning, message,
-                    "Potential overlap in geometry!");
+        std::ostringstream message;
+        message.precision(16);
+        message << "Track stuck or not moving." << G4endl
+                      << "          Track stuck, not moving for " 
+                      << fNumberZeroSteps << " steps" << G4endl
+                      << "- at point " << pGlobalpoint
+                      << " (local point " << localPoint << ")" << G4endl
+                      << "        local direction: " << localDirection 
+                      << "          Potential geometry or navigation problem !"
+                      << G4endl
+                      << "          Trying pushing it of " << newStep << " mm ...";
+              G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
+                          "GeomRegNav1003", JustWarning, message,
+                          "Potential overlap in geometry!");
 #endif
       }
       if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps-1 )
       {
-	// Must kill this stuck track
-	//
-	G4ThreeVector pGlobalpoint = history.GetTransform(ide)
-                                     .InverseTransformPoint(localPoint);
-	std::ostringstream message;
-	message << "G4RegularNavigation::ComputeStepSkippingEqualMaterials()"
-		<< "Stuck Track: potential geometry or navigation problem."
-		<< G4endl
-		<< "        Track stuck, not moving for " 
-		<< fNumberZeroSteps << " steps" << G4endl
-		<< "- at point " << pGlobalpoint << G4endl	
-		<< "        local direction: " << localDirection << G4endl;
-	G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
-		    "GeomRegNav1004",
-		    EventMustBeAborted,
-		    message);
+        // Must kill this stuck track
+        //
+        G4ThreeVector pGlobalpoint = history.GetTransform(ide)
+                                          .InverseTransformPoint(localPoint);
+        std::ostringstream message;
+        message << "G4RegularNavigation::ComputeStepSkippingEqualMaterials()"
+          << "Stuck Track: potential geometry or navigation problem."
+          << G4endl
+          << "        Track stuck, not moving for " 
+          << fNumberZeroSteps << " steps" << G4endl
+          << "- at point " << pGlobalpoint << G4endl	
+          << "        local direction: " << localDirection << G4endl;
+        G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
+              "GeomRegNav1004",
+              EventMustBeAborted,
+              message);
       }
     }
-    
+    else
+    {
+      // reset the zero step counter when a non-zero step was performed
+      fNumberZeroSteps = 0;
+    }
     if( (bFirstStep) && (newStep < currentProposedStepLength) )
     {
       exiting  = true;

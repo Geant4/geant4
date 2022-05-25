@@ -1,0 +1,527 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+===== Register constructor ==== G4EmDNAPhysics
+===== Register constructor ==== G4EmDNAChemistry_option2
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered models:
+  None
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+Registered filters:
+  None
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
+/run/numberOfThreads 2
+*** /run/numberOfThreads command is issued in sequential mode.
+Command is ignored.
+/run/initialize
+userDetector->Construct() start.
+logicWorld is registered to the default region.
+physicsList->Construct() start.
+--- G4CoupledTransportation is used 
+G4ParticleDefinition (other than ions and shortlived) should be created in Pre_Init state - mu+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART101
+      issued by : G4ParticleDefintion::G4ParticleDefinition()
+G4ParticleDefinition should be created in PreInit state
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+G4ParticleDefinition (other than ions and shortlived) should be created in Pre_Init state - mu-
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART101
+      issued by : G4ParticleDefintion::G4ParticleDefinition()
+G4ParticleDefinition should be created in PreInit state
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+/gun/particle proton
+/gun/energy 5 keV
+/scheduler/maxNullTimeSteps 50
+#/scheduler/verbose 2
+#/scheduler/whyDoYouStop
+/run/beamOn 2
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      10 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               20
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 0.1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         0 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Fluorescence ANSTO data files enabled              0
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+======                 DNA Physics Parameters                  ========
+=======================================================================
+Use fast sampling in DNA models                    0
+Use Stationary option in DNA models                0
+Use DNA with multiple scattering of e-             0
+Use DNA e- solvation model type                    11003
+=======================================================================
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger flag: 1
+### ===  Ignore cuts flag:   1
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 174 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 10 eV  to 1 MeV, 20 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 160 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        KleinNishina : Emin=    0 eV  Emax=  100 TeV Fluo
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 10 eV  to 100 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+
+e-_G4DNAElectronSolvation:  for e- SubType=58 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAOneStepThermalizationModel_Meesungnoen2002 : Emin=    0 eV  Emax=  7.4 eV 
+
+e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAChampionElasticModel : Emin=    0 eV  Emax=    1 MeV
+
+e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNABornExcitationModel : Emin=    0 eV  Emax=    1 MeV
+
+e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNABornIonisationModel : Emin=    0 eV  Emax=    1 MeV  deltaBorn Fluo
+
+e-_G4DNAVibExcitation:  for e- SubType=54 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNASancheExcitationModel : Emin=    0 eV  Emax=  100 eV 
+
+e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
+
+msc:  for e+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e+  XStype:1  SubType=2
+      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(mu+) skipped...
+#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(mu-) skipped...
+
+Region <DefaultRegionForTheWorld> --  -- appears in <physWorld> world volume
+ This region is in the mass world.
+ Root logical volume(s) : logicWorld 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_WATER 
+ Production cuts :   gamma 1 nm      e- 1 nm      e+ 1 nm  proton 1 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- appears in <ChemistryWorld> world volume
+ This region is in the parallel world.
+ Root logical volume(s) : ChemistryWorld 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_WATER 
+ Production cuts :   gamma 1 nm      e- 1 nm      e+ 1 nm  proton 1 nm 
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_WATER
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+    DefaultRegionForParallelWorld
+
+==================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   2913 kByte
+    Total CPU time elapsed for geometry optimisation: 7.5 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+      99.20         7.45         0.01         2914k VoxelStraight_logic
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+     100.00       2913k     20884    21735      54614         7.45    VoxelStraight_logic
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
+### Run 0 starts.
+
+----> Histogram file is opened in output.root
+Physics stage ends
+Number of chemical species involved in reactions = 13
+Reaction                                          Reaction Rate [dm3/(mol*s)]   Interaction Range for chosen reaction model [nm]
+------------------------------------------------------------------------------------------------------------------------------------
+H3O^1 + e_aq^-1 -> H^0                            2.11e+10                      0.200589
+------------------------------------------------------------------------------------------------------------------------------------
+H3O^1 + OH^-1 -> No product                       1.43e+11                      1.34973
+------------------------------------------------------------------------------------------------------------------------------------
+H3O^1 + Histone^0 -> Histone^0                    0                             2.4961
+------------------------------------------------------------------------------------------------------------------------------------
+OH^-1 + Histone^0 -> Histone^0                    0                             2.4958
+------------------------------------------------------------------------------------------------------------------------------------
+OH^0 + e_aq^-1 -> OH^-1                           2.95e+10                      0.506256
+------------------------------------------------------------------------------------------------------------------------------------
+OH^0 + OH^0 -> H2O2^0                             4.4e+09                       0.207651
+------------------------------------------------------------------------------------------------------------------------------------
+OH^0 + H^0 -> No product                          1.44e+10                      0.194167
+------------------------------------------------------------------------------------------------------------------------------------
+OH^0 + Deoxyribose^0 -> Damaged_Deoxyribose^0     1.8e+09                       0.0849481
+------------------------------------------------------------------------------------------------------------------------------------
+OH^0 + Adenine^0 -> Damaged_Adenine^0             6.1e+09                       0.28788
+------------------------------------------------------------------------------------------------------------------------------------
+OH^0 + Guanine^0 -> Damaged_Guanine^0             9.2e+09                       0.434179
+------------------------------------------------------------------------------------------------------------------------------------
+OH^0 + Thymine^0 -> Damaged_Thymine^0             6.4e+09                       0.302038
+------------------------------------------------------------------------------------------------------------------------------------
+OH^0 + Cytosine^0 -> Damaged_Cytosine^0           6.1e+09                       0.28788
+------------------------------------------------------------------------------------------------------------------------------------
+OH^0 + Histone^0 -> Histone^0                     0                             2.4958
+------------------------------------------------------------------------------------------------------------------------------------
+e_aq^-1 + e_aq^-1 -> OH^-1 + OH^-1 + H_2^0        5e+09                         0.134838
+------------------------------------------------------------------------------------------------------------------------------------
+e_aq^-1 + H^0 -> OH^-1 + H_2^0                    2.65e+10                      0.294265
+------------------------------------------------------------------------------------------------------------------------------------
+e_aq^-1 + H2O2^0 -> OH^-1 + OH^0                  1.41e+10                      0.295745
+------------------------------------------------------------------------------------------------------------------------------------
+e_aq^-1 + Deoxyribose^0 -> Damaged_Deoxyribose^0  1e+07                         0.000269677
+------------------------------------------------------------------------------------------------------------------------------------
+e_aq^-1 + Adenine^0 -> Damaged_Adenine^0          9e+09                         0.242709
+------------------------------------------------------------------------------------------------------------------------------------
+e_aq^-1 + Guanine^0 -> Damaged_Guanine^0          1.4e+10                       0.377547
+------------------------------------------------------------------------------------------------------------------------------------
+e_aq^-1 + Thymine^0 -> Damaged_Thymine^0          1.8e+10                       0.485418
+------------------------------------------------------------------------------------------------------------------------------------
+e_aq^-1 + Cytosine^0 -> Damaged_Cytosine^0        1.3e+10                       0.350579
+------------------------------------------------------------------------------------------------------------------------------------
+e_aq^-1 + Histone^0 -> Histone^0                  0                             2.63
+------------------------------------------------------------------------------------------------------------------------------------
+H^0 + H^0 -> H_2^0                                1.2e+10                       0.226528
+------------------------------------------------------------------------------------------------------------------------------------
+H^0 + Deoxyribose^0 -> Damaged_Deoxyribose^0      2.9e+07                       0.000547443
+------------------------------------------------------------------------------------------------------------------------------------
+H^0 + Adenine^0 -> Damaged_Adenine^0              1e+08                         0.00188774
+------------------------------------------------------------------------------------------------------------------------------------
+H^0 + Thymine^0 -> Damaged_Thymine^0              5.7e+08                       0.0107601
+------------------------------------------------------------------------------------------------------------------------------------
+H^0 + Cytosine^0 -> Damaged_Cytosine^0            9.2e+07                       0.00173672
+------------------------------------------------------------------------------------------------------------------------------------
+H^0 + Histone^0 -> Histone^0                      0                             2.45
+------------------------------------------------------------------------------------------------------------------------------------
+H_2^0 + Histone^0 -> Histone^0                    0                             2.4958
+------------------------------------------------------------------------------------------------------------------------------------
+H2O2^0 + Histone^0 -> Histone^0                   0                             2.7
+------------------------------------------------------------------------------------------------------------------------------------
+DNAMolecularStepByStepModel will be used
+*** G4Scheduler starts processing 
+At time :       1 ps  Reaction : Guanine^0 (-2931) + OH^0 (-14623) -> Damaged_Guanine^0 (-14637)
+At time :       1 ps  Reaction : Thymine^0 (-2928) + OH^0 (-14622) -> Damaged_Thymine^0 (-14638)
+At time :       1 ps  Reaction : OH^0 (-14558) + OH^0 (-14611) -> H2O2^0 (-14639)
+At time :       1 ps  Reaction : OH^0 (-14584) + Cytosine^0 (-2932) -> Damaged_Cytosine^0 (-14640)
+At time :       1 ps  Reaction : OH^0 (-14536) + OH^0 (-14544) -> H2O2^0 (-14641)
+At time :    1.35 ps  Reaction : OH^0 (-14577) + OH^0 (-14619) -> H2O2^0 (-14642)
+At time :    1.35 ps  Reaction : Cytosine^0 (-2636) + OH^0 (-14533) -> Damaged_Cytosine^0 (-14643)
+At time :     1.7 ps  Reaction : OH^0 (-14556) + OH^0 (-14609) -> H2O2^0 (-14644)
+At time :     1.7 ps  Reaction : OH^0 (-14567) + OH^0 (-14566) -> H2O2^0 (-14645)
+At time :     2.4 ps  Reaction : Adenine^0 (-2959) + e_aq^-1 (-14535) -> Damaged_Adenine^0 (-14646)
+At time :    2.75 ps  Reaction : OH^0 (-14571) + OH^0 (-14613) -> H2O2^0 (-14647)
+At time :     3.1 ps  Reaction : OH^0 (-14615) + OH^0 (-14617) -> H2O2^0 (-14648)
+At time :     4.5 ps  Reaction : H^0 (-14634) + OH^0 (-14548) -> No product
+At time :     4.5 ps  Reaction : OH^0 (-14528) + OH^0 (-14529) -> H2O2^0 (-14649)
+At time :    6.25 ps  Reaction : OH^0 (-14563) + OH^0 (-14560) -> H2O2^0 (-14650)
+At time :     7.3 ps  Reaction : OH^0 (-14590) + OH^0 (-14588) -> H2O2^0 (-14651)
+At time :  10.581 ps  Reaction : OH^0 (-14564) + H^0 (-14608) -> No product
+At time :  12.281 ps  Reaction : H^0 (-14585) + OH^0 (-14580) -> No product
+At time :  14.281 ps  Reaction : OH^0 (-14582) + Thymine^0 (-2936) -> Damaged_Thymine^0 (-14652)
+At time :  15.281 ps  Reaction : OH^0 (-14586) + Guanine^0 (-2627) -> Damaged_Guanine^0 (-14653)
+At time :  26.281 ps  Reaction : OH^0 (-14603) + H^0 (-14604) -> No product
+At time :  27.281 ps  Reaction : H^0 (-14593) + H^0 (-14545) -> H_2^0 (-14654)
+At time :  31.281 ps  Reaction : H^0 (-14579) + OH^0 (-14524) -> No product
+At time :  43.281 ps  Reaction : OH^0 (-14576) + H^0 (-14618) -> No product
+At time :  46.281 ps  Reaction : H^0 (-14555) + Cytosine^0 (-12236) -> Damaged_Cytosine^0 (-14655)
+At time :  54.281 ps  Reaction : OH^0 (-14572) + H^0 (-14569) -> No product
+At time :  66.768 ps  Reaction : OH^0 (-14552) + Deoxyribose^0 (-12209) -> Damaged_Deoxyribose^0 (-14656)
+At time :  85.768 ps  Reaction : H^0 (-14581) + Histone^0 (-2449) -> Histone^0 (-14657)
+At time :  86.768 ps  Reaction : H^0 (-14591) + Thymine^0 (-2632) -> Damaged_Thymine^0 (-14658)
+At time :  101.15 ps  Reaction : H^0 (-14589) + H^0 (-14597) -> H_2^0 (-14659)
+At time :  116.15 ps  Reaction : OH^0 (-14633) + OH^0 (-14547) -> H2O2^0 (-14660)
+At time :  116.15 ps  Reaction : H^0 (-14557) + H^0 (-14559) -> H_2^0 (-14661)
+At time :  122.15 ps  Reaction : OH^0 (-14596) + OH^0 (-14599) -> H2O2^0 (-14662)
+At time :  146.15 ps  Reaction : H^0 (-14543) + Deoxyribose^0 (-7420) -> Damaged_Deoxyribose^0 (-14663)
+At time :  164.29 ps  Reaction : H^0 (-14587) + OH^0 (-14624) -> No product
+At time :  227.94 ps  Reaction : OH^0 (-14578) + H^0 (-14620) -> No product
+At time :  266.94 ps  Reaction : H2O2^0 (-14642) + e_aq^-1 (-14532) -> OH^-1 (-14664) + OH^0 (-14665)
+At time :  293.94 ps  Reaction : H_2^0 (-14575) + Histone^0 (-14657) -> Histone^0 (-14666)
+At time :  363.64 ps  Reaction : H^0 (-14612) + Histone^0 (-7255) -> Histone^0 (-14667)
+At time :  449.87 ps  Reaction : e_aq^-1 (-112) + H^0 (-14610) -> OH^-1 (-14668) + H_2^0 (-14669)
+At time :  455.87 ps  Reaction : H^0 (-14561) + Thymine^0 (-8267) -> Damaged_Thymine^0 (-14670)
+At time :  479.87 ps  Reaction : OH^0 (-14574) + Histone^0 (-14667) -> Histone^0 (-14671)
+At time :  568.93 ps  Reaction : OH^0 (-14635) + Deoxyribose^0 (-7735) -> Damaged_Deoxyribose^0 (-14672)
+At time :  583.93 ps  Reaction : OH^0 (-14540) + H^0 (-14550) -> No product
+At time :  624.27 ps  Reaction : H^0 (-14583) + Deoxyribose^0 (-2065) -> Damaged_Deoxyribose^0 (-14673)
+At time :  636.27 ps  Reaction : Deoxyribose^0 (-2558) + H^0 (-14627) -> Damaged_Deoxyribose^0 (-14674)
+At time :  699.59 ps  Reaction : Histone^0 (-14671) + H3O^1 (-14525) -> Histone^0 (-14675)
+At time :  705.59 ps  Reaction : Histone^0 (-1648) + H^0 (-14625) -> Histone^0 (-14676)
+At time :  708.59 ps  Reaction : H^0 (-14537) + Histone^0 (-14666) -> Histone^0 (-14677)
+At time :   747.3 ps  Reaction : OH^0 (-14607) + Histone^0 (-14675) -> Histone^0 (-14678)
+At time :  792.79 ps  Reaction : H3O^1 (-14601) + Histone^0 (-14677) -> Histone^0 (-14679)
+At time :  920.72 ps  Reaction : Histone^0 (-14676) + H3O^1 (-14531) -> Histone^0 (-14680)
+At time :  936.43 ps  Reaction : OH^0 (-14553) + Guanine^0 (-7733) -> Damaged_Guanine^0 (-14681)
+At time :  945.43 ps  Reaction : H^0 (-14614) + Histone^0 (-14679) -> Histone^0 (-14682)
+At time :  1.1132 ns  Reaction : H^0 (-14616) + Deoxyribose^0 (-6862) -> Damaged_Deoxyribose^0 (-14683)
+At time :  1.2253 ns  Reaction : OH^0 (-14542) + OH^0 (-14665) -> H2O2^0 (-14684)
+At time :  1.2753 ns  Reaction : H^0 (-14539) + Histone^0 (-12061) -> Histone^0 (-14685)
+At time :  1.3357 ns  Reaction : H_2^0 (-14565) + Histone^0 (-12862) -> Histone^0 (-14686)
+At time :  1.3657 ns  Reaction : H2O2^0 (-14651) + Histone^0 (-14682) -> Histone^0 (-14687)
+At time :  1.3757 ns  Reaction : Thymine^0 (-2087) + e_aq^-1 (-14526) -> Damaged_Thymine^0 (-14688)
+At time :  1.3957 ns  Reaction : H^0 (-14636) + Histone^0 (-14685) -> Histone^0 (-14689)
+At time :  1.5465 ns  Reaction : H_2^0 (-14669) + Histone^0 (-14678) -> Histone^0 (-14690)
+At time :  1.5565 ns  Reaction : Histone^0 (-14690) + H2O2^0 (-14647) -> Histone^0 (-14691)
+At time :  2.1262 ns  Reaction : H_2^0 (-14562) + Histone^0 (-14689) -> Histone^0 (-14692)
+At time :  2.3755 ns  Reaction : OH^0 (-14568) + Cytosine^0 (-8223) -> Damaged_Cytosine^0 (-14693)
+At time :  2.4255 ns  Reaction : H_2^0 (-14661) + Histone^0 (-11260) -> Histone^0 (-14694)
+At time :  2.4355 ns  Reaction : Deoxyribose^0 (-2486) + OH^0 (-14626) -> Damaged_Deoxyribose^0 (-14695)
+*** G4Scheduler ends at time : 2.5 ns 
+___________________________________
+Physics stage ends
+*** G4Scheduler starts processing 
+At time :       1 ps  Reaction : OH^0 (-14514) + OH^0 (-14551) -> H2O2^0 (-14553)
+At time :       1 ps  Reaction : OH^0 (-14536) + OH^0 (-14508) -> H2O2^0 (-14554)
+At time :       1 ps  Reaction : OH^0 (-14534) + OH^0 (-14504) -> H2O2^0 (-14555)
+At time :       1 ps  Reaction : OH^0 (-14532) + OH^0 (-14496) -> H2O2^0 (-14556)
+At time :       1 ps  Reaction : OH^0 (-14512) + OH^0 (-14510) -> H2O2^0 (-14557)
+At time :  10.954 ps  Reaction : e_aq^-1 (-73) + OH^0 (-14525) -> OH^-1 (-14558)
+At time :  15.321 ps  Reaction : H^0 (-14526) + H^0 (-14524) -> H_2^0 (-14559)
+At time :  58.085 ps  Reaction : OH^0 (-14498) + OH^0 (-14500) -> H2O2^0 (-14560)
+At time :  137.95 ps  Reaction : OH^0 (-14527) + e_aq^-1 (-78) -> OH^-1 (-14561)
+At time :  183.46 ps  Reaction : OH^0 (-14493) + OH^0 (-14492) -> H2O2^0 (-14562)
+At time :  313.84 ps  Reaction : H^0 (-14546) + OH^0 (-14502) -> No product
+At time :  350.72 ps  Reaction : OH^0 (-14516) + H^0 (-14552) -> No product
+At time :  363.16 ps  Reaction : H3O^1 (-14521) + OH^-1 (-14558) -> No product
+At time :  363.16 ps  Reaction : H^0 (-14495) + OH^0 (-14494) -> No product
+At time :   384.6 ps  Reaction : OH^0 (-14543) + Cytosine^0 (-4353) -> Damaged_Cytosine^0 (-14563)
+At time :  428.76 ps  Reaction : OH^0 (-14490) + OH^0 (-14522) -> H2O2^0 (-14564)
+At time :  494.19 ps  Reaction : OH^0 (-14484) + Guanine^0 (-4064) -> Damaged_Guanine^0 (-14565)
+At time :  890.99 ps  Reaction : H^0 (-14533) + Deoxyribose^0 (-4114) -> Damaged_Deoxyribose^0 (-14566)
+At time :  928.62 ps  Reaction : OH^0 (-14545) + H^0 (-14499) -> No product
+At time :  1.0581 ns  Reaction : H^0 (-14539) + OH^0 (-14520) -> No product
+At time :  1.2157 ns  Reaction : OH^0 (-14542) + OH^0 (-14541) -> H2O2^0 (-14567)
+At time :  1.3725 ns  Reaction : H^0 (-14511) + H^0 (-14509) -> H_2^0 (-14568)
+At time :  1.4625 ns  Reaction : OH^0 (-14485) + Guanine^0 (-4784) -> Damaged_Guanine^0 (-14569)
+At time :  1.4825 ns  Reaction : H^0 (-14537) + Deoxyribose^0 (-4354) -> Damaged_Deoxyribose^0 (-14570)
+At time :  1.5025 ns  Reaction : H_2^0 (-14559) + Histone^0 (-4010) -> Histone^0 (-14571)
+At time :  1.5125 ns  Reaction : OH^0 (-14550) + H^0 (-14505) -> No product
+At time :  1.5344 ns  Reaction : OH^0 (-14530) + Deoxyribose^0 (-4030) -> Damaged_Deoxyribose^0 (-14572)
+At time :  1.5644 ns  Reaction : Histone^0 (-14571) + H_2^0 (-14488) -> Histone^0 (-14573)
+At time :   1.944 ns  Reaction : H_2^0 (-14529) + Histone^0 (-14573) -> Histone^0 (-14574)
+At time :   1.964 ns  Reaction : e_aq^-1 (-14487) + H^0 (-14503) -> OH^-1 (-14575) + H_2^0 (-14576)
+At time :   2.284 ns  Reaction : H3O^1 (-14549) + Histone^0 (-806) -> Histone^0 (-14577)
+*** G4Scheduler ends at time : 2.5 ns 
+___________________________________
+ Run terminated.
+Run Summary
+  Number of events processed : 2
+  User=139.190000s Real=140.707366s Sys=0.080000s
+
+----> Histograms are saved
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserActionInitialization deleted.
+UserWorkerInitialization deleted.
+UserWorkerThreadInitialization deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
+EventManager deleted.
+Units table cleared.
+TransportationManager deleted.
+Total navigation history collections cleaned: 29052
+G4RNGHelper object is deleted.
+================== Deleting memory pools ===================
+Pool ID '20G4NavigationLevelRep', size : 27.9 MB
+Pool ID '19G4ElectronOccupancy', size : 0.000961 MB
+Pool ID '15G4CountedObjectIvE', size : 0.667 MB
+Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '16G4SmartVoxelNode', size : 0.691 MB
+Pool ID '17G4SmartVoxelProxy', size : 0.657 MB
+Pool ID '7G4Event', size : 0.000961 MB
+Pool ID '15G4PrimaryVertex', size : 0.000961 MB
+Pool ID '17G4PrimaryParticle', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 2.33 MB
+Pool ID '7G4Track', size : 4.67 MB
+Pool ID '18G4TouchableHistory', size : 1.75 MB
+Pool ID '10G4Molecule', size : 1.4 MB
+Pool ID '8G4KDTree', size : 0.000961 MB
+Pool ID '8G4KDNodeI4G4ITE', size : 1 MB
+Pool ID '14G4KDTreeResult', size : 0.000961 MB
+Pool ID '8G4KDNodeI10G4MoleculeE', size : 0.000961 MB
+Number of memory pools allocated: 17 of which, static: 0
+Dynamic pools deleted: 17 / Total memory freed: 41 MB
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

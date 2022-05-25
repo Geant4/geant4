@@ -138,14 +138,18 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
 // --------------------------------------------------------------------
 void G4ExceptionHandler::DumpTrackInfo()
 {
-  G4ApplicationState aps = G4StateManager::GetStateManager()->GetCurrentState();
-  G4SteppingManager* steppingMgr = G4RunManagerKernel::GetRunManagerKernel()
-                                     ->GetTrackingManager()
-                                     ->GetSteppingManager();
-  const G4Track* theTrack = steppingMgr->GetfTrack();
-  const G4Step* theStep   = steppingMgr->GetfStep();
+  const G4Track *theTrack = nullptr;
+  const G4Step *theStep = nullptr;
+  if (G4StateManager::GetStateManager()->GetCurrentState() == G4State_EventProc)
+  {
+    G4SteppingManager *steppingMgr = G4RunManagerKernel::GetRunManagerKernel()
+                                         ->GetTrackingManager()
+                                         ->GetSteppingManager();
+    theTrack = steppingMgr->GetfTrack();
+    theStep = steppingMgr->GetfStep();
+  }
 
-  if(aps != G4State_EventProc || theTrack == nullptr)
+  if (theTrack == nullptr)
   {
     G4cerr << " **** Track information is not available at this moment"
            << G4endl;
@@ -174,7 +178,7 @@ void G4ExceptionHandler::DumpTrackInfo()
            << G4endl;
   }
 
-  if(aps != G4State_EventProc || !theStep)
+  if (theStep == nullptr)
   {
     G4cerr << " **** Step information is not available at this moment"
            << G4endl;

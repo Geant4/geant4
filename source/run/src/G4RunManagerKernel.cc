@@ -122,7 +122,11 @@ G4RunManagerKernel::G4RunManagerKernel()
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
   if(allocList != nullptr)
     numberOfStaticAllocators = allocList->Size();
-  defaultExceptionHandler = new G4ExceptionHandler();
+
+  if(G4StateManager::GetStateManager()->GetExceptionHandler() == nullptr)
+  {  
+     defaultExceptionHandler = new G4ExceptionHandler();
+  }
   if(fRunManagerKernel != nullptr)
   {
     G4Exception("G4RunManagerKernel::G4RunManagerKernel()", "Run0001",
@@ -222,7 +226,11 @@ G4RunManagerKernel::G4RunManagerKernel(RMKType rmkType)
     }
   #endif
 
-  defaultExceptionHandler = new G4ExceptionHandler();
+  if(G4StateManager::GetStateManager()->GetExceptionHandler() == nullptr)
+  {
+     defaultExceptionHandler = new G4ExceptionHandler();
+  }
+
   if(fRunManagerKernel != nullptr)
   {
     G4Exception("G4RunManagerKernel::G4RunManagerKernel()", "Run0001",

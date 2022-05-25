@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 3, 2022 - P.Arce (geomnav-V10-07-06)
+-------------
+- G4RegularNavigation: reset the zero step counter when a non-zero step was
+  performed, to avoid aborted events. Correct tabulation.
+  Fixes as proposed in [GitHub PR #38](https://github.com/Geant4/geant4/pull/38)
+
+January 1, 2022 - G.Cosmo
+-------------------------
+- G4VIntersectionLocator: fixed compilation warning on Intel-icx compiler
+  for unused data.
+
 September 25, 2021 - P.Arce  (geomnav-V10-07-05)
 ----------------------------
 - Reduce warning messages in GetReplicaNo: only when difference is > kCarTolerance 

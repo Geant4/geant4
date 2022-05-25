@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -19,7 +19,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0x1f48910
+##### Create analysis manager   0x228a8d0
 Using  analysis manager
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -738,7 +738,7 @@ Setting was ignored.
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=3.490000s Real=3.569010s Sys=0.030000s
+  User=3.920000s Real=3.984336s Sys=0.030000s
 ... write file : dna.root - done
 ... close file : dna.root - done
 0 events have been kept for refreshing and/or reviewing.

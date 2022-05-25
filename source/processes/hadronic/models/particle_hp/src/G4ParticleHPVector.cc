@@ -371,7 +371,7 @@
 
   G4double G4ParticleHPVector::Sample() // Samples X according to distribution Y
   {
-    G4double result;
+    G4double result=0.;
     G4int j;
     for(j=0; j<GetVectorLength(); j++)
     {
@@ -417,7 +417,7 @@
         result = value;
 */
         G4double rand;
-        G4double value, test;
+        G4double value = 0., test;
         G4int jcounter=0;
         G4int jcounter_max=1024;
         do 

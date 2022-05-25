@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09 February 2022 Gabriele Cosmo (hadr-proc-V11-00-02)
+-----------------------------------------------------
+- Fixed compilation warning on Intel compilers for unused variables.
+
 04 August 2021 Alberto Ribon (hadr-proc-V10-07-06)
 --------------------------------------------------
 - G4HadronElasticProcess : set the creator model ID for the elastic recoil,

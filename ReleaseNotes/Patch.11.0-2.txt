@@ -1,0 +1,200 @@
+
+                 Geant4 11.0 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                             25 May 2022
+
+List of fixes included in this public patch since the public release 11.0.1:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Fix for CPack on Windows to avoid PATH with only '/', without '\'.
+      o Don't add CLHEP_INCLUDE_DIRS directly through include_directories
+        to prevent potential issues with it holding relative paths.
+
+  o Digits_Hits:
+    -----------
+    + Added missing virtual keywords in G4VScoringMesh.
+
+  o Externals:
+    ---------
+    + CLHEP:
+      o Fixed compilation warnings on macOS in LorentzRotation header
+        when c++20 is enabled.
+      o Fixed compilation warnings for shadowing data member in RandPoisson.
+
+  o Geometry:
+    --------
+    + management:
+      o G4SolidStore, G4LogicalVolumeStore, G4PhysicalVolumeStore:
+        extend getter methods to optionally return the last-found object.
+    + navigation:
+      o G4RegularNavigation: reset the zero step counter when a non-zero step
+        is performed, to avoid aborted events. Removed tabs in source code.
+        Based on GitHub PR#38 (https://github.com/Geant4/geant4/pull/38).
+      o G4VIntersectionLocator: fixed compilation warning for unused data.
+    + solids/Boolean:
+      o G4UnionSolid: add surface tolerance in Inside(p) for check on Z.
+        Minor optimisation in constructors and in caching half-tolerance.
+
+  o Global:
+    ------
+    + Replaced use of deprecated std::result_of with std::invoke_result_t,
+      fixes compilation warnings on Apple clang version 13.1.6.
+    + In G4PhysicsModelCatalog, fixed two typos in Bremsstrahlung models name.
+    + Fixed compilation warnings for shadowing variables in G4String.
+    + Updated date and version for 11.0.2.
+
+  o Materials:
+    ---------
+    + G4DensityEffectData, G4IonisParamMat: fixed density effect correction
+      for liquid hydrogen. Addressing problem report #2346. Some code clean-up.
+    + G4Material: reorganised AddElement(..) and AddMaterial(..) methods;
+      using temporary vector to allow addition of the same elements during
+      initialisation, once addition is completed the vector of elements and
+      arrays of fractions are created, filled and temporary vectors are deleted,
+      as a result the code become more transparent.
+      Addressing problem report #2486.
+    + G4NistMaterialBuilder: fixed mean ionisation potentilal of carbon to the
+      current NIST value from 81 eV to 78 eV. Addressing problem report #2474.
+
+  o Particles:
+    ---------
+    + Fixed compilation warnings on Intel compiler for unused variables.
+
+  o Persistency:
+    -----------
+    + GDML:
+      o In G4GDMLReadMaterials, fixed default temperature to 20°C
+        (NTP_Temperature).
+      o Addressing to the case of solid/volume name duplication when reading
+        more than one GDML files.
+      o G4GDMLReadSolids: removed a forgotten (used for debugging) cout in
+        PropertyRead() function.
+
+  o Physics Lists:
+    -------------
+    + constructors/electromagnetic
+      o G4EmStandardPhysics_option4: use G4UrbanFluctuation model for e+-.
+        Addressing problem report #2466.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna
+      o G4ITTransportation: fixed misuse of bitwise '|' operator instead of
+        logical.
+    + utils
+      o G4VMultipleScattering: fixed problem responsible for energy deposition
+        shift in custom CMS Physics List. Addressing problem report #2480.
+      o G4VEnergyLossProcess: fixed fluctuation model pointer for the case an
+        extra model is added on top of the default list of models.
+      o Fixed typo in Bremsstrahlung model names.
+
+  o Processes - Generic:
+    -------------------
+    + cuts
+      o G4VRangeToEnergyConverter: fixed clearing of static data in destructor.
+    + optical
+      o G4OpBoundaryProcess: check for nullptr before dereferencing.
+        Addressing problem report #2471.
+      o G4OpWLS2: fix incorrect call to set time profile.
+        Addressing problem report #2482.
+    + transportation
+      o G4Transportation, G4CoupledTransportation: fixed misuse of bitwise '|'
+        operator instead of logical.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections
+      o G4HadronNucleonXsc: fixed compilation warning on unused variable.
+    + models/abla
+      o G4Abla: fixed compilation warnings for potentially uninitialised
+        variables.
+    + models/cascade
+      o Fixed compilation warnings on Intel compilers for unused variables.
+      o Use const iterator in G4InuclEvaporation::BreakItUp(..).
+    + models/coherent_elastic
+      o G4ElasticHadrNucleusHE, G4NeutronElectronElModel and
+        G4NeutrinoElectronNcModel: fixed compilation warnings on unused
+        variables; removed commented lines; use Energy() method of
+        G4PhysicsVector instead of obsolete GetLowEdgeEnergy().
+    + models/inclxx
+      o Fixed misuse of bitwise '|' operator instead of logical in
+        INCL::postCascade() and in INCL::makeCompoundNucleus().
+      o Fixed compilation warnings for shadowing of variables, not used
+        or potentially uninitialised variables.
+    + models/lepto_nuclear
+      o G4NeutrinoNucleusModel: fixed memory leak reported by Coverity.
+      o Fixed compilation warning on Intel compilers for unused variables.
+      o G4MuonVDNuclearModel: fixed compilation warnings for potentially
+        uninitialised variables.
+    + models/particle_hp
+      o Fixed issue for photons too high in energy generated from
+        G4NDL/Capture/FSMF6 data. Addressing problem report #2468.
+      o Code cleanup in G4ParticleHPContEnergyAngular and 
+        G4ParticleHPContAngularPar.
+      o Fixed compilation warnings on Intel compilers for deprecated use of
+        operator=() in G4ParticleHPDataPoint.
+      o Fixed compilation warnings for potentially uninitialised variables.
+    + models/parton_string
+      o G4QGSParticipants: do not print warning in the case of precision loss;
+        a confusing exception message was observed in CMS simulation, observed
+        in high energy gamma-nuclear interaction.
+      o Fixed compilation warning on Intel compilers for unused variables.
+    + models/radioactive_decay
+      o G4RadioactiveDecay: fixed memory leak (due to decay products that were
+        not deleted) in the case of a radioactive decay happening later than the
+        time threshold.
+    + processes
+      o Fixed compilation warning on Intel compilers for unused variables.
+    + util
+      o Fixed compilation warning on Intel compilers for unused variables
+        and deprecated declaration of operator=().
+
+  o Run
+    ---
+    + In G4RunManagerKernel, check for correct state in default exception
+      handler before trying to access manager classes that may be nullptr
+      in other states. Don't create a default exception manager if one exists
+      already.
+
+  o Examples:
+    --------
+    + advanced/CaTS
+      o Fixed compilation warnings for unused arguments.
+    + advanced/composite_calorimeter
+      o Fixed compilation warning for unused variables.
+    + advanced/eRosita
+      o Fixed compilation warning for unused variable.
+    + advanced/xray_fluorescence
+      o Fixed compilation warnings on Intel-icx compiler for unused variables.
+    + basic/B2
+      o Restored top UI commands directory name ("B2") in
+        B2a::DetectorMessenger removed by mistake.
+        Based on GitHub PR#46 (https://github.com/Geant4/geant4/pull/46).
+    + extended/eventgenerator/HepMC/HepMCEx01
+      o Fixed compilation due to G4String changes in release 11.0.
+        Part of the GitHub PR #45 (https://github.com/Geant4/geant4/pull/45).
+    + extended/geometry/vecGeomNavigation
+      o Enable use with static libraries; build g4vecgeomnav as a static
+        library if only Geant4 static libraries are available.
+      o Removed unused setting of threads causing compilation warning.
+    + extended/electromagnetic/TestEm6
+      o Fixed compilation warning in RunAction.
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.0 series.
+  o  Technical notes distributed for release 11.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.0.2 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

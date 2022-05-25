@@ -255,11 +255,11 @@ namespace G4INCL {
 
       // First compute the current CM position and total momentum
       ThreeVector theCMPosition, theTotalMomentum;
-      G4double theTotalEnergy = 0.0;
+//    G4double theTotalEnergy = 0.0;
       for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         theCMPosition += (*p)->getPosition();
         theTotalMomentum += (*p)->getMomentum();
-        theTotalEnergy += (*p)->getEnergy();
+//      theTotalEnergy += (*p)->getEnergy();
       }
       theCMPosition /= theA;
 // assert((unsigned int)theA==particles.size());

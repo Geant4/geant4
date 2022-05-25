@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-04-22 V.Ivanchenko (materials-V10-07-28)
+- G4DensityEffectData, G4IonisParamMat - fixed density effect correction
+    for liquid hydrogen (problem #2346), code clean-up
+- G4NistMaterialBuilder - fixed mean ionisation potentilal of carbon
+    to the current NIST value from 81 eV to 78 eV (problem #2474)
+- G4Material - reorganized AddElement(..) and AddMaterial(..) methods,
+    temporary vector are used that allows addition of the same elements
+    during initialisation, when addition completed the vector of elements
+    and arrays of fractions are created, filled and temporary vectors
+    are deleted, as a result the code become more transparent and 
+    fixing problem #2486
+
 04-02-22 V.Ivanchenko (materials-V10-07-27)
 - G4SandiaTable - fixed compilation warning on unused variable
 

@@ -142,11 +142,11 @@ G4DecayProducts* G4MuonDecayChannel::DecayIt(G4double)
 
   // daughters'mass
   G4double daughtermass[N_DAUGHTER]; 
-  G4double sumofdaughtermass = 0.0;
+  //G4double sumofdaughtermass = 0.0;
   for (G4int index=0; index<N_DAUGHTER; ++index)
   {
     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
-    sumofdaughtermass += daughtermass[index];
+    //sumofdaughtermass += daughtermass[index];
   }
 
   // create parent G4DynamicParticle at rest

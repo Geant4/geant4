@@ -151,7 +151,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 
     if (strings->empty()) { Success=false; continue; }
 
-    G4double stringEnergy(0);
+    // G4double stringEnergy(0);
     SumStringMom=G4LorentzVector(0.,0.,0.,0.);
 
     #ifdef debug_PartonStringModel
@@ -173,8 +173,8 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
       //    rotate string to lab frame, models have it aligned to z
       if((*strings)[astring]->IsExcited())
       {
-        stringEnergy += (*strings)[astring]->GetLeftParton()->Get4Momentum().t();
-        stringEnergy += (*strings)[astring]->GetRightParton()->Get4Momentum().t();
+        // stringEnergy += (*strings)[astring]->GetLeftParton()->Get4Momentum().t();
+        // stringEnergy += (*strings)[astring]->GetRightParton()->Get4Momentum().t();
         (*strings)[astring]->LorentzRotate(toLab);
         SumStringMom+=(*strings)[astring]->Get4Momentum();
         #ifdef debug_PartonStringModel
@@ -205,7 +205,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
       }
       else
       {
-        stringEnergy += (*strings)[astring]->GetKineticTrack()->Get4Momentum().t();
+        // stringEnergy += (*strings)[astring]->GetKineticTrack()->Get4Momentum().t();
         (*strings)[astring]->LorentzRotate(toLab);
         SumStringMom+=(*strings)[astring]->GetKineticTrack()->Get4Momentum();
         #ifdef debug_PartonStringModel

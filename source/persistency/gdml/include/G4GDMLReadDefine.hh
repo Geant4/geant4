@@ -78,6 +78,9 @@ class G4GDMLReadDefine : public G4GDMLRead
 
     virtual void DefineRead(const xercesc::DOMElement* const);
 
+    inline void SetReverseSearch(G4bool flag)
+    { reverseSearch = flag; }
+
   protected:
 
     G4GDMLReadDefine();
@@ -97,7 +100,7 @@ class G4GDMLReadDefine : public G4GDMLRead
     void ExpressionRead(const xercesc::DOMElement* const);
 
   protected:
-
+    G4bool reverseSearch = false;
     std::map<G4String, G4double> quantityMap;
     std::map<G4String, G4ThreeVector> positionMap;
     std::map<G4String, G4ThreeVector> rotationMap;

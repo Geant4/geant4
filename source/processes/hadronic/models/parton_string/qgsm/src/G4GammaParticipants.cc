@@ -75,7 +75,6 @@ G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProd
 
 	std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
 	theInteractions.clear();
-	G4int totalCuts = 0;
 
 //	#ifdef debug_G4GammaParticipants
 //		G4double eK = thePrimary.GetKineticEnergy()/GeV;
@@ -110,7 +109,6 @@ G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProd
       		aInteraction->SetStatus(1);
 
       		theInteractions.push_back(aInteraction);
-		totalCuts += 1;
 	  }
 	  else
 	  {
@@ -129,7 +127,6 @@ G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProd
 		aInteraction->SetNumberOfSoftCollisions(1);
         	aInteraction->SetStatus(0);                        // Mark that is non-Diffr. interaction
 		theInteractions.push_back(aInteraction);
-		totalCuts += 1;
 	  }
         }
 	return theProjectileSplitable;

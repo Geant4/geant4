@@ -373,7 +373,6 @@ void G4QGSParticipants::GetList( const G4ReactionProduct& thePrimary ) {
   std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
   theInteractions.clear();
 
-  G4int totalCuts = 0;
   G4int MaxPower=thePrimary.GetMomentum().mag()/(3.3*GeV); if(MaxPower < 1) MaxPower=1;
 
   const G4int maxNumberOfLoops = 1000;
@@ -509,7 +508,6 @@ void G4QGSParticipants::GetList( const G4ReactionProduct& thePrimary ) {
 
 	  if( nCuts == 0 ) {delete aTargetSPB; tNucleon->Hit(nullptr); continue;} 
 
-          totalCuts += nCuts;
           #ifdef debugQGSParticipants
             G4cout<<"Number of cuts in the interaction "<<nCuts<<G4endl;
           #endif
@@ -587,10 +585,6 @@ void G4QGSParticipants::GetList( const G4ReactionProduct& thePrimary ) {
         }
       }
     }
-
-    #ifdef debugQGSParticipants
-      G4cout <<"Total number of cuts "<< totalCuts <<G4endl;
-    #endif
   }
 }
 
@@ -898,12 +892,14 @@ G4bool G4QGSParticipants::PutOnMassShell() {
                                         TheInvolvedNucleonsOfTarget, M2target );
 
       if ( M2proj < 0.0 ) {
-        G4ExceptionDescription ed;
-        ed << "Projectile " << theProjectile.GetDefinition()->GetParticleName()
-           << "  Target (Z,A)=(" << theTargetNucleus->GetCharge() << "," << theTargetNucleus->GetMassNumber() 
+        if( M2proj < -0.000001 ) { 
+	  G4ExceptionDescription ed;
+	  ed << "Projectile " << theProjectile.GetDefinition()->GetParticleName()
+	     << "  Target (Z,A)=(" << theTargetNucleus->GetCharge() << "," << theTargetNucleus->GetMassNumber() 
            << ")  M2proj=" << M2proj << "  ->  sets it to 0.0 !" << G4endl;
-        G4Exception( "G4QGSParticipants::PutOnMassShell(): negative projectile squared mass!",
-                    "HAD_QGSPARTICIPANTS_002", JustWarning, ed );
+	  G4Exception( "G4QGSParticipants::PutOnMassShell(): negative projectile squared mass!",
+		       "HAD_QGSPARTICIPANTS_002", JustWarning, ed );
+	}
         M2proj = 0.0;
       } 
       sqrtM2proj = std::sqrt( M2proj );
@@ -1788,7 +1784,6 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
       SumPy = (*i)->Get4Momentum().py() * (-1.);
       SumZ  = 0.;
 
-      G4double SumZw=0.;
       NumberOfUnsampledSeaQuarks = 2*nSeaPair;
 
       Qmass=0;	
@@ -1808,7 +1803,6 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
         tmp.setPz(SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta)*(1.0-SumZ));
         SumZ += tmp.z();
         tmp.setPz((*i)->Get4Momentum().pz()*tmp.pz());
-        SumZw+=tmp.pz();
         NumberOfUnsampledSeaQuarks--;
         TargSumMt2perX +=sqr(Mt)/tmp.pz();
         tmp.setE(sqr(Mt));
@@ -1817,7 +1811,7 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
         aParton = (*i)->GetNextAntiParton();   // for anti-quarks
         #ifdef debugQGSParticipants
           G4cout<<" "<<aParton->GetDefinition()->GetParticleName()<<G4endl;
-          G4cout<<"              "<<tmp<<" "<<SumZw<<" "<<SumZ<<G4endl;
+          G4cout<<"              "<<tmp<<" "<<SumZ<<G4endl;
         #endif
         aPtVector = GaussianPt(SigPt, aHugeValue);
         tmp.setPx(aPtVector.x()); tmp.setPy(aPtVector.y());
@@ -1829,13 +1823,12 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
         tmp.setPz(SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta)*(1.0-SumZ)); 
         SumZ += tmp.z();
         tmp.setPz((*i)->Get4Momentum().pz()*tmp.pz());
-        SumZw+=tmp.pz();
         NumberOfUnsampledSeaQuarks--;
         TargSumMt2perX +=sqr(Mt)/tmp.pz();
         tmp.setE(sqr(Mt));
         aParton->Set4Momentum(tmp);
         #ifdef debugQGSParticipants
-          G4cout<<"              "<<tmp<<" "<<SumZw<<" "<<SumZ<<G4endl;
+          G4cout<<"              "<<tmp<<" "<<" "<<SumZ<<G4endl;
         #endif
       } 
 
@@ -1854,7 +1847,6 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
       tmp.setPz(SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta)*(1.0-SumZ)); 
       SumZ += tmp.z();
       tmp.setPz((*i)->Get4Momentum().pz()*tmp.pz());
-      SumZw+=tmp.pz();
       TargSumMt2perX +=sqr(Mt)/tmp.pz();
       tmp.setE(sqr(Mt));
       aParton->Set4Momentum(tmp);
@@ -1863,7 +1855,7 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
       aParton = (*i)->GetNextAntiParton();   // for quarks
       #ifdef debugQGSParticipants
         G4cout<<" "<<aParton->GetDefinition()->GetParticleName()<<G4endl;
-        G4cout<<"              "<<tmp<<" "<<SumZw<<" (sum z-fracs) "<<SumZ<<" (total z-sum) "<<G4endl;
+        G4cout<<"              "<<tmp<<" "<<SumZ<<" (total z-sum) "<<G4endl;
       #endif
       tmp.setPx(-SumPx);                  tmp.setPy(-SumPy);
       //Uzhi 2019  Mt=std::sqrt(aPtVector.mag2()+sqr(VqqM_tr));
@@ -1871,12 +1863,11 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
       TargSumMt += Mt; 
 
       tmp.setPz((*i)->Get4Momentum().pz()*(1.0 - SumZ));
-      SumZw+=tmp.pz();
       TargSumMt2perX +=sqr(Mt)/tmp.pz();
       tmp.setE(sqr(Mt));
       aParton->Set4Momentum(tmp);
       #ifdef debugQGSParticipants
-        G4cout<<"              "<<tmp<<" "<<SumZw<<" "<<1.0<<" "<<(*i)->Get4Momentum().pz()<<G4endl;
+        G4cout<<"              "<<tmp<<" "<<1.0<<" "<<(*i)->Get4Momentum().pz()<<G4endl;
       #endif
 
     }   // End of for(i = theTargets.begin(); i != theTargets.end(); i++ )
@@ -2045,9 +2036,8 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
 
 //======================================================
 G4double G4QGSParticipants::
-SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
+SampleX(G4double, G4int nSea, G4int, G4double aBeta)
 {
-  G4double Xmin=anXmin; G4int Nsea=totalSea;   Xmin*=1.; Nsea++;  // Must be erased 
   G4double Oalfa = 1./(alpha + 1.);
   G4double Obeta = 1./(aBeta + (alpha + 1.)*nSea + 1.);  // ?
  
@@ -2430,7 +2420,6 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
   // first find the collisions HPW
   std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
   theInteractions.clear();
-  G4int totalCuts = 0;
 
   G4int theCurrent = G4int(theNucleus->GetMassNumber()*G4UniformRand());
   G4int NucleonNo=0;
@@ -2461,7 +2450,6 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
       aInteraction->SetStatus(1);
 
       theInteractions.push_back(aInteraction);
-      totalCuts += 1;
     }
     else
     {
@@ -2479,7 +2467,6 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
       aInteraction->SetNumberOfSoftCollisions(1);
       aInteraction->SetStatus(3);
       theInteractions.push_back(aInteraction);
-      totalCuts += 1;
     }
   }
   return theProjectileSplitable;

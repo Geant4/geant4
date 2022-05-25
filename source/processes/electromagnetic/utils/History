@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 April 2022 V.Ivanchenko (emutils-V10-07-40)
+- G4VMultipleScattering - fix #2480 responsible for energy deposition shift of
+    custom CMS Physics List FTFP_BERT_EMM
+
+01 April 2022 J.Hahnfeld
+- Fix typo in Bremsstrahlung.
+
+24 March 2022: V.Ivanchenko
+- G4VEnergyLossProcess - fix fluctuation model pointer if an extra 
+    model is added on top of the default list of models
+
 22 January 22: V.Ivanchenko (emutils-V10-07-39)
 - G4EmParametersMessenger - added forgotten UI command to enable polarisation
 

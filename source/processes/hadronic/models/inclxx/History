@@ -15,15 +15,24 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+18 May 2022 - Gabriele Cosmo (hadr-inclxx-V10-07-08)
+----------------------------------------------------
+- Fixed misuse of bitwise '|' operator instead of logical in INCL::postCascade()
+  and in INCL::makeCompoundNucleus().
 
 03 March 2022 - Alberto Ribon (hadr-inclxx-V10-07-07)
--------------------------------------------------------
+-----------------------------------------------------
 - G4INCLXXInterface : fixed treatment of kaon0, anti_kaon0, kaon0L, and kaon0S.
   In current reference physics lists, INCLXX is never used for handling kaons,
   although it is capable of doing so, but at process-level or in custom
   physics lists one could observe crashes when trying to use INCLXX for
   neutral kaon projectiles. The change (provided by Jean-Christophe David)
   fixes this misbehavior.
+
+09 February 2022 - Gabriele Cosmo
+---------------------------------
+- Fixed compilation warnings on Intel compilers for shadowing of variables
+  and not used variable.
 
 09 November 2021 - Alberto Ribon (hadr-inclxx-V10-07-06)
 -------------------------------------------------------

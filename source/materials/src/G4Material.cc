@@ -167,15 +167,6 @@ G4Material::G4Material(const G4String& name, G4double density,
   fPressure = pressure;
     
   fNbComponents = nComponents;
-  theElementVector = new G4ElementVector();
-  theElementVector->reserve(fNbComponents);  
-
-  fAtomsVector = new G4int[fNbComponents];
-  fMassFractionVector = new G4double[fNbComponents];
-  for(G4int i=0; i<fNbComponents; ++i) {
-    fAtomsVector[i] = 0;
-    fMassFractionVector[i] = 0.0;
-  }
   fMassFraction = true;
     
   if (fState == kStateUndefined) 
@@ -301,7 +292,7 @@ void G4Material::ComputeDerivedQuantities()
   // Number of atoms per volume (per element), total nb of electrons per volume
   G4double Zi, Ai;
   fTotNbOfAtomsPerVolume = 0.;
-  if (fVecNbOfAtomsPerVolume) { delete [] fVecNbOfAtomsPerVolume; }
+  delete [] fVecNbOfAtomsPerVolume;
   fVecNbOfAtomsPerVolume = new G4double[fNumberOfElements];
   fTotNbOfElectPerVolume = 0.;
   fFreeElecDensity = 0.;
@@ -369,7 +360,11 @@ void
 G4Material::AddElementByNumberOfAtoms(const G4Element* elm, G4int nAtoms)
 {   
   // perform checks consistency
-  if(0 == fIdxComponent) { fMassFraction = false; }
+  if(0 == fIdxComponent) {
+    fMassFraction = false;
+    fAtoms = new std::vector<G4int>;
+    fElm = new std::vector<const G4Element*>;
+  }
   if(fIdxComponent >= fNbComponents) {
     G4ExceptionDescription ed;
     ed << "For material " << fName << " and added element "
@@ -381,51 +376,51 @@ G4Material::AddElementByNumberOfAtoms(const G4Element* elm, G4int nAtoms)
   }
   if(fMassFraction) {
     G4ExceptionDescription ed;
-    G4cout << "For material " << fName << " and added element "
-	   << elm->GetName() << " with Natoms=" << nAtoms
-	   << " problem: cannot add by number of atoms after "
-           << "addition of elements by mass fraction";
+    ed << "For material " << fName << " and added element "
+       << elm->GetName() << " with Natoms=" << nAtoms
+       << " problem: cannot add by number of atoms after "
+       << "addition of elements by mass fraction";
     G4Exception ("G4Material::AddElementByNumberOfAtoms()", "mat031",
                  FatalException, ed, "");
   }
-  G4Element* element = const_cast<G4Element*>(elm);
-  // filling 
-  if (fIdxComponent < fNbComponents) {
-    G4bool isAdded = false;
+  // filling
+  G4bool isAdded = false;
+  if(!fElm->empty()) {
     for (G4int i=0; i<fNumberOfElements; ++i) {
-      if ( element == (*theElementVector)[i] ) {
-	G4ExceptionDescription ed;
-	ed << "For material " << fName << " and added element "
-	   << elm->GetName() << ", Natoms=" << nAtoms
-	   << ", fIdxComponent=" << fIdxComponent
-           << " problem: attempt to add the same element, which already is at idx=" 
-	   << i << " with the Natoms=" << fAtomsVector[i];
-	G4Exception ("G4Material::AddElementByNumberOfAtoms()", "mat031",
-		     JustWarning, ed, "");
-	fAtomsVector[i] += nAtoms;
+      if ( elm == (*fElm)[i] ) {
+	(*fAtoms)[i] += nAtoms;
+	isAdded = true;
 	break;
       }
     }
-    if(!isAdded) {
-      theElementVector->push_back(element);     
-      fAtomsVector[fNumberOfElements] = nAtoms;
-      ++fNumberOfElements;
-    }
+  }
+  if(!isAdded) {
+    fElm->push_back(elm);     
+    fAtoms->push_back(nAtoms);
+    ++fNumberOfElements;
   } 
   ++fIdxComponent;
-  // is filled
+
+  // is filled - complete composition of atoms
   if (fIdxComponent == fNbComponents) {     
-    // compute proportion by mass
+    theElementVector = new G4ElementVector();
+    theElementVector->reserve(fNumberOfElements);
+    fAtomsVector = new G4int[fNumberOfElements];
+    fMassFractionVector = new G4double[fNumberOfElements];
+
     G4double Amol = 0.;
     for (G4int i=0; i<fNumberOfElements; ++i) {
-      G4double w = fAtomsVector[i]*(*theElementVector)[i]->GetA(); 
+      theElementVector->push_back((*fElm)[i]);
+      fAtomsVector[i] = (*fAtoms)[i];
+      G4double w = fAtomsVector[i]*(*fElm)[i]->GetA(); 
       Amol += w;
       fMassFractionVector[i] = w;
     }
     for (G4int i=0; i<fNumberOfElements; ++i) {
       fMassFractionVector[i] /= Amol;
     }
-
+    delete fAtoms;
+    delete fElm;
     fMassOfMolecule = Amol/Avogadro;
     ComputeDerivedQuantities();
   }
@@ -462,36 +457,31 @@ G4Material::AddElementByMassFraction(const G4Element* elm, G4double fraction)
     ed << "For material " << fName << " and added element " 
        << elm->GetName() << ", massFraction= " << fraction
        << ", fIdxComponent=" << fIdxComponent
-       << " problem: attempt to add more than the declared number of elements "
+       << "; attempt to add more than the declared number of components "
        << fIdxComponent << " >= " << fNbComponents;
     G4Exception ("G4Material::AddElementByMassFraction()", "mat031",
 		 FatalException, ed, "");
   }
-  G4Element* element = const_cast<G4Element*>(elm);
+  if(0 == fIdxComponent) {
+    fElmFrac = new std::vector<G4double>;
+    fElm = new std::vector<const G4Element*>;
+  }
 
   // filling 
-  if (fIdxComponent < fNbComponents) {
-    G4bool isAdded = false;
+  G4bool isAdded = false;
+  if(!fElm->empty()) {
     for (G4int i=0; i<fNumberOfElements; ++i) {
-      if ( element == (*theElementVector)[i] ) {
-	G4ExceptionDescription ed;
-	ed << "For material " << fName << " and added element "
-	   << elm->GetName() << ", massFraction= " << fraction
-	   << ", fIdxComponent=" << fIdxComponent
-           << " problem: attempt to add the same element, which is already at idx=" 
-	   << i << " with the fraction " << fMassFractionVector[i];
-	G4Exception ("G4Material::AddElementByMassFraction()", "mat031",
-		     JustWarning, ed, "");
-	fMassFractionVector[i] += fraction;
+      if ( elm == (*fElm)[i] ) {
+	(*fElmFrac)[i] += fraction;
 	isAdded = true;
         break;
       }
     }
-    if(!isAdded) {
-      theElementVector->push_back(element); 
-      fMassFractionVector[fNumberOfElements] = fraction;
-      ++fNumberOfElements;
-    }
+  }
+  if(!isAdded) {
+    fElm->push_back(elm);
+    fElmFrac->push_back(fraction);
+    ++fNumberOfElements;
   }
   ++fIdxComponent;
 
@@ -527,15 +517,40 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
     G4ExceptionDescription ed;
     ed << "For material " << fName << " and added material " 
        << material->GetName() << ", massFraction= " << fraction
-       << " attempt to add more than the declared number of elements "
+       << "; attempt to add more than the declared number of components "
        << fIdxComponent << " >= " << fNbComponents;
     G4Exception ("G4Material::AddMaterial()", "mat031", FatalException, 
 		 ed, "");
   }
-  // filling 
-  if (fIdxComponent < fNbComponents) {
-    fMatComponents[material] = fraction;
+
+  if(0 == fIdxComponent) {
+    fElmFrac = new std::vector<G4double>;
+    fElm = new std::vector<const G4Element*>;
   }
+
+  // filling 
+  G4int nelm = material->GetNumberOfElements();
+  for(G4int j=0; j<nelm; ++j) {
+    auto elm = material->GetElement(j);
+    auto frac = material->GetFractionVector();
+    G4bool isAdded = false;
+    if(!fElm->empty()) {
+      for (G4int i=0; i<fNumberOfElements; ++i) {
+	if ( elm == (*fElm)[i] ) {
+	  (*fElmFrac)[i] += fraction*frac[j];
+	  isAdded = true;
+	  break;
+	}
+      }
+    }
+    if(!isAdded) {
+      fElm->push_back(elm);     
+      fElmFrac->push_back(fraction*frac[j]);
+      ++fNumberOfElements;
+    }
+  }
+
+  fMatComponents[material] = fraction;
   ++fIdxComponent;
 
   // is filled
@@ -547,70 +562,20 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 void G4Material::FillVectors()
 {
   // there are material components
-  if(!fMatComponents.empty()) {
-    G4int nel = fNumberOfElements;
-    // check list of materials
-    for(auto & x : fMatComponents) {
-      const G4Material* mat = x.first;
-      G4int nn = mat->GetNumberOfElements();
-      for(G4int j=0; j<nn; ++j) {
-        G4bool yes = true;
-	const G4Element* elm = mat->GetElement(j);
-        for(G4int k=0; k<fNumberOfElements; ++k) {
-	  if(elm == (*theElementVector)[k]) {
-	    yes = false;
-            break;
-	  }
-	}
-        if(yes) { ++nel; }
-      }
-    }
-    // resize vectors
-    if(nel > fNbComponents) {
-      delete [] fAtomsVector;
-      fAtomsVector = new G4int[nel];
-      G4double* v = new G4double[nel];
-      for(G4int i=0; i<fNumberOfElements; ++i) {
-	fAtomsVector[i] = 0;
-        v[i] = fMassFractionVector[i];
-      }
-      delete [] fMassFractionVector;
-      fMassFractionVector = v;
-      for(G4int i=fNumberOfElements; i<nel; ++i) {
-	fAtomsVector[i] = 0;
-        fMassFractionVector[i] = 0.0;
-      }
-    }
-    // filling
-    for(auto & x : fMatComponents) {
-      const G4Material* mat = x.first;
-      G4double frac = x.second;
-      G4int nn = mat->GetNumberOfElements();
-      const G4double* elmFrac = mat->GetFractionVector();
-      for(G4int j=0; j<nn; ++j) {
-        G4bool yes = true;
-	const G4Element* elm = mat->GetElement(j);
-        for(G4int k=0; k<fNumberOfElements; ++k) {
-	  if(elm == (*theElementVector)[k]) {
-	    fMassFractionVector[k] += frac*elmFrac[j];
-            yes = false;
-            break;
-	  }
-	}
-        if(yes) {
-	  theElementVector->push_back(const_cast<G4Element*>(elm));
-	  fMassFractionVector[fNumberOfElements] = frac*elmFrac[j];
-	  ++fNumberOfElements;
-	}
-      }
-    }
-  }
-
-  // check sum of weights -- OK?
+  theElementVector = new G4ElementVector();
+  theElementVector->reserve(fNumberOfElements);
+  fAtomsVector = new G4int[fNumberOfElements];
+  fMassFractionVector = new G4double[fNumberOfElements];
   G4double wtSum(0.0);
   for (G4int i=0; i<fNumberOfElements; ++i) {
+    theElementVector->push_back((*fElm)[i]);
+    fMassFractionVector[i] = (*fElmFrac)[i];
     wtSum += fMassFractionVector[i];
   }
+  delete fElmFrac;
+  delete fElm;
+
+  // check sum of weights -- OK?
   if (std::abs(1.-wtSum) > perThousand) {
     G4ExceptionDescription ed;
     ed << "For material " << fName << " sum of fractional masses "

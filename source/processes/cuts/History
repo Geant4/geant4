@@ -16,9 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March. 14th, 2022 - I. Hrivnacova (proccuts-V10-07-07)
+- G4VRangeToEnergyConverter - fixed clearing of static data
+    in destructor
+
 January. 19th, 2022 - V.Ivantchenko (proccuts-V10-07-06)
 - G4VRangeToEnergyConverter - fixed construction/destruction of
-    static data (initial problem identified by I. Hrivnakova)
+    static data (initial problem identified by I. Hrivnacova)
 
 October. 12th, 2021 - V.Ivanchenko (proccuts-V10-07-05)
 - G4PhysicsTableHelper - fixed Coverity warning due to index type,
