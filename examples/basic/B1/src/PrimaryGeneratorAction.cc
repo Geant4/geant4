@@ -70,7 +70,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of ecah event
+  //this function is called at the beginning of each event
   //
 
   // In order to avoid dependence of PrimaryGeneratorAction
