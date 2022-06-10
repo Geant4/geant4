@@ -189,8 +189,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   *selection = CandidateForSelection ;
 
-  fFirstStepInMassVolume = fNewTrack | fMassGeometryLimitedStep ; 
-  fFirstStepInAnyVolume =  fNewTrack | fAnyGeometryLimitedStep ;
+  fFirstStepInMassVolume = fNewTrack || fMassGeometryLimitedStep ; 
+  fFirstStepInAnyVolume =  fNewTrack || fAnyGeometryLimitedStep ;
 
 #ifdef G4DEBUG_TRANSPORT
   G4cout << "  CoupledTransport::AlongStep GPIL:  "

@@ -368,7 +368,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
         G4double dqi = 0.0;
         if ( QI[it] < 0 || 849 < QI[it] ) dqi = QI[it]; //For backword compatibility QI introduced since G4NDL3.15
 	G4double MaxEne=eKinetic+dqi;
-	G4double eSecN;
+	G4double eSecN=0.;
 
         G4int icounter=0;
         G4int icounter_max=1024;

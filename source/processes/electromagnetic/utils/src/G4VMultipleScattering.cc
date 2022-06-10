@@ -300,9 +300,11 @@ void G4VMultipleScattering::StreamInfo(std::ostream& outFile,
 
 void G4VMultipleScattering::StartTracking(G4Track* track)
 {
+  G4VEnergyLossProcess* eloss = nullptr;
   if(track->GetParticleDefinition() != currParticle) {
     currParticle = track->GetParticleDefinition();
     fIonisation = emManager->GetEnergyLossProcess(currParticle);
+    eloss = fIonisation;
   }
   /*
   G4cout << "G4VMultipleScattering::StartTracking Nmod= " << numberOfModels
@@ -312,7 +314,8 @@ void G4VMultipleScattering::StartTracking(G4Track* track)
          << G4LossTableManager::Instance()->IsMaster() 
          << G4endl;
   */
-  for(auto & msc : mscModels) {
+  for(G4int i=0; i<numberOfModels; ++i) {
+    G4VMscModel* msc = GetModelByIndex(i);
     /*
       G4cout << "Next model " << msc 
       << " Emin= " << msc->LowEnergyLimit() 
@@ -320,7 +323,9 @@ void G4VMultipleScattering::StartTracking(G4Track* track)
       << " Eact= " << msc->LowEnergyActivationLimit() << G4endl;
     */
     msc->StartTracking(track);
-    msc->SetIonisation(fIonisation, currParticle);
+    if(nullptr != eloss) {
+      msc->SetIonisation(eloss, currParticle);
+    }
   }
 }
 

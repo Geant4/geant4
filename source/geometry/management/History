@@ -16,6 +16,10 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 5 2022 M.Asai (geommng-V10-07-08)
+- G4SolidStore, G4LogicalVolumeStore, G4PhysicalVolumeStore:
+  extend getter methods to optionally return the last-found object.
+
 September 28, 2021 G.Cosmo (geommng-V10-07-07)
 - Use G4Allocator to dynamically allocate nodes and proxies for the
   voxels optimisation structure. Should help reducing memory fragmentation.

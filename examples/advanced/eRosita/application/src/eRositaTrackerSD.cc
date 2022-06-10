@@ -105,21 +105,8 @@ void eRositaTrackerSD::EndOfEvent(G4HCofThisEvent*)
       
     } 
 
-  // ofstream out("ASCII");
-  //if (!out.is_open())
-  //  {
-  //   G4cout <<"...opening ASCII file failed";
-  // }
-  
-  double eTot = 0.;
-  
   for (G4int i=0; i<NbHits; i++)
     {
       (*trackerCollection)[i]->PrintToFile();
-      eTot += (*trackerCollection)[i]->GetEdep();
-    };
-
-//   if (eTot > 0.) AnalysisManager::Instance()->ScoreTot(eTot);
-
-//out.close();
+    }
 }

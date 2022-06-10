@@ -36,7 +36,7 @@
   {
     G4double a = theApar.GetY(anEnergy)*eV;
     G4double b = theBpar.GetY(anEnergy)/eV;
-    G4double result;
+    G4double result=0.;
     G4double random, cut, max;
     max = std::sinh(std::sqrt(b*15.*a));
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-01    (8-March-2022)
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -148,7 +148,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:   Kr7CH4    density:  3.491 mg/cm3  RadL:  32.924 m    Nucl.Int.Length: 429.528 m  
-                       Imean: 337.765 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean: 337.610 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.799 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:  0.350 %
@@ -187,7 +187,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:  TRT_CO2    density:  1.842 mg/cm3  RadL: 196.499 m    Nucl.Int.Length: 466.034 m  
-                       Imean:  90.958 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  90.026 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -202,7 +202,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: TRT_CO2p    density:  1.842 mg/cm3  RadL: 196.499 m    Nucl.Int.Length: 466.034 m  
-                       Imean:  90.958 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  90.026 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -217,7 +217,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:  TRT_CF4    density:  3.900 mg/cm3  RadL:  87.158 m    Nucl.Int.Length: 234.187 m  
-                       Imean: 109.384 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean: 108.796 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -230,7 +230,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: XeCO2CF4    density:  4.760 mg/cm3  RadL:  20.851 m    Nucl.Int.Length: 314.638 m  
-                       Imean: 345.469 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean: 344.984 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
@@ -261,7 +261,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:     C3H8    density:  3.758 mg/cm3  RadL: 120.742 m    Nucl.Int.Length: 172.576 m  
-                       Imean:  52.014 eV   temperature: 293.15 K  pressure:   2.00 atm
+                       Imean:  50.673 eV   temperature: 293.15 K  pressure:   2.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -275,7 +275,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:    C3H8p    density:  3.415 mg/cm3  RadL: 132.867 m    Nucl.Int.Length: 189.905 m  
-                       Imean:  52.014 eV   temperature: 293.15 K  pressure:   2.00 atm
+                       Imean:  50.673 eV   temperature: 293.15 K  pressure:   2.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -289,7 +289,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: XeCH4C3H8    density:  4.920 mg/cm3  RadL:  17.657 m    Nucl.Int.Length: 343.553 m  
-                       Imean: 438.262 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean: 437.806 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
@@ -315,7 +315,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:   Ar7CH4    density:  1.709 mg/cm3  RadL: 116.342 m    Nucl.Int.Length: 680.811 m  
-                       Imean: 177.716 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 177.556 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
@@ -335,7 +335,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:    ArCO2    density:  1.822 mg/cm3  RadL: 119.168 m    Nucl.Int.Length: 604.881 m  
-                       Imean: 158.492 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 158.109 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
@@ -356,7 +356,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.033 m  
-                       Imean: 412.596 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 412.201 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
@@ -383,7 +383,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.157 m    Nucl.Int.Length: 391.553 m  
-                       Imean: 296.925 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 296.541 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.799 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:  0.350 %
@@ -407,7 +407,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: TPC_Ne-CO2-2    density:  0.939 mg/cm3  RadL: 320.739 m    Nucl.Int.Length: 993.359 m  
-                       Imean: 126.355 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean: 126.099 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ne (Ne)   Z = 10.0   N =    20   A = 20.180 g/mole
          --->  Isotope:  Ne20   Z = 10   N =  20   A =  19.99 g/mole   abundance: 90.480 %
@@ -428,7 +428,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: TPC_Ne-CO2-2p    density:  0.939 mg/cm3  RadL: 320.749 m    Nucl.Int.Length: 993.343 m  
-                       Imean: 126.350 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean: 126.093 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ne (Ne)   Z = 10.0   N =    20   A = 20.180 g/mole
          --->  Isotope:  Ne20   Z = 10   N =  20   A =  19.99 g/mole   abundance: 90.480 %
@@ -449,7 +449,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:  Xe15CO2    density:  4.939 mg/cm3  RadL:  17.942 m    Nucl.Int.Length: 339.776 m  
-                       Imean: 430.867 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean: 430.569 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
@@ -555,7 +555,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.050000s Real=0.055374s Sys=0.000000s
+  User=0.070000s Real=0.066956s Sys=0.000000s
 RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0166649
  ====================================================
    Beam Particle: proton

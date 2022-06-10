@@ -288,6 +288,7 @@ public:
 
   void dump()
   {
+/*
     G4double totA = 0.0, totZ = 0.0, totP = 0.0;
     //    G4cout <<"i \t ACV \t ZPCV \t PCV" << G4endl; 
     for(G4int i = 0; i <= iv; i++) {
@@ -301,6 +302,7 @@ public:
     }
     //    G4cout <<"Particle count index (iv) = " << iv << G4endl;
     //    G4cout <<"ABLA Total: A = " << totA << " Z = " << totZ <<  " momentum = " << totP << G4endl;
+*/
   }
 
   G4double acv[VOLANTSIZE],zpcv[VOLANTSIZE],pcv[VOLANTSIZE],xcv[VOLANTSIZE];

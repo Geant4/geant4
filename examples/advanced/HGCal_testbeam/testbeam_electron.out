@@ -1,0 +1,2432 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+<<< Geant4 Physics List simulation engine: FTFP_BERT
+
+Checking overlaps for volume SiCell:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:2 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:3 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:6 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:7 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:8 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:9 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:10 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:11 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:12 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:13 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:14 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:15 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:16 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:17 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:18 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:19 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:20 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:21 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:22 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:23 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:24 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:25 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:26 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:27 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:28 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:29 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:30 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:31 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:32 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:33 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:34 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:35 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:36 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:37 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:38 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:39 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:40 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:41 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:42 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:43 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:44 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:45 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:46 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:47 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:48 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:49 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:50 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:51 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:52 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:53 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:54 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:55 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:56 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:57 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:58 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:59 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:60 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:61 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:62 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:63 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:64 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:65 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:66 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:67 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:68 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:69 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:70 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:71 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:72 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:73 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:74 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:75 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:76 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:77 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:78 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:79 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:80 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:81 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:82 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:83 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:84 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:85 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:86 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:87 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:88 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:89 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:90 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:91 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:92 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:93 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:94 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:95 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:96 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:97 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:98 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:99 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:100 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:101 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:102 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:103 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:104 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:105 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:106 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:107 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:108 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume SiCell:109 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:0 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:1 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:2 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:3 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:4 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:5 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:6 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:7 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:8 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:9 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:10 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:11 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:12 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:13 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:14 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:15 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:16 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:17 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:18 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:19 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:20 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:21 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:22 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:23 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:24 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:25 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:26 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:27 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:28 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:29 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:30 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:31 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:32 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:33 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:34 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:35 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:36 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:37 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:38 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:39 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:40 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:41 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:42 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:43 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:44 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:45 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:46 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:47 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:48 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:49 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:50 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:51 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:52 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:53 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:54 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:55 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:56 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:57 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:58 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:59 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:60 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:61 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:62 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:63 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:64 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:65 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:66 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:67 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:68 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:69 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:70 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:71 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:72 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:73 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:74 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:75 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:76 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:77 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:78 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:79 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:80 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:81 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:82 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:83 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:84 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:85 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:86 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:87 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:88 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:89 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:90 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:91 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:92 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:93 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:94 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:95 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:96 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:97 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:98 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:99 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:100 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:101 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:102 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:103 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:104 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:105 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:106 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:107 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:108 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:109 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:110 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:111 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:112 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:113 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:114 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:115 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:116 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:117 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:118 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:119 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:120 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:121 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:122 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:123 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:124 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:125 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:126 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:127 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:128 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:129 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:130 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:131 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:132 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:133 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:134 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:135 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:136 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:137 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:138 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:139 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:140 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:141 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:142 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:143 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:144 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:145 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:146 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:147 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:148 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:149 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:150 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:151 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:152 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:153 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:154 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:155 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:156 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:157 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:158 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:159 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:160 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:161 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:162 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:163 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:164 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:165 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:166 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:167 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:168 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:169 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:170 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:171 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:172 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:173 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:174 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:175 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:176 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:177 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:178 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:179 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:180 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:181 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:182 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:183 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:184 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:185 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:186 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:187 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:188 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:189 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:190 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:191 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:192 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:193 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:194 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:195 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:196 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:197 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:198 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:199 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:200 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:201 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:202 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:203 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:204 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:205 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:206 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:207 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:208 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:209 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:210 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:211 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:212 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:213 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:214 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:215 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:216 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:217 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:218 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:219 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:220 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:221 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:222 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:223 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:224 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:225 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:226 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:227 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:228 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:229 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:230 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:231 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:232 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:233 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:234 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:235 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:236 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:237 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:238 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:239 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:240 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:241 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:242 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:243 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:244 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:245 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:246 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:247 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:248 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:249 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:250 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:251 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:252 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:253 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:254 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:255 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:256 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:257 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:258 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:259 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:260 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:261 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:262 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:263 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:264 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:265 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:266 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:267 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:268 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:269 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:270 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:271 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:272 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:273 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:274 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:275 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:276 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:277 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:278 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:279 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:280 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:281 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:282 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:283 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:284 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:285 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:286 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:287 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:288 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:289 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:290 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:291 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:292 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:293 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:294 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:295 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:296 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:297 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:298 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:299 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:300 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:301 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:302 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:303 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:304 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:305 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:306 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:307 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:308 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:309 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:310 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:311 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:312 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:313 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:314 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:315 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:316 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:317 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:318 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:319 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:320 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:321 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:322 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:323 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:324 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:325 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:326 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:327 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:328 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:329 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:330 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:331 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:332 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:333 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:334 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:335 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:336 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:337 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:338 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:339 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:340 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:341 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:342 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:343 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:344 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:345 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:346 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:347 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:348 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:349 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:350 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:351 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:352 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:353 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:354 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:355 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:356 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:357 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:358 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:359 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:360 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:361 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:362 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:363 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:364 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:365 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:366 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:367 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:368 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:369 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:370 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:371 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:372 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:373 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:374 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:375 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:376 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:377 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:378 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:379 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:380 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:381 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:382 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:383 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:384 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:385 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:386 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:387 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:388 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:389 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:390 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:391 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:392 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:393 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:394 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:395 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:396 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:397 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:398 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:399 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:400 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:401 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:402 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:403 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:404 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:405 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:406 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:407 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:408 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:409 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:410 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:411 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:412 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:413 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:414 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:415 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:416 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:417 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:418 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:419 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:420 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:421 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:422 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:423 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:424 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:425 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:426 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:427 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:428 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:429 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:430 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:431 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:432 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:433 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:434 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:435 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:436 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:437 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:438 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:439 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:440 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:441 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:442 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:443 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:444 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:445 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:446 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:447 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:448 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:449 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:450 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:451 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:452 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:453 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:454 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:455 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:456 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:457 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:458 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:459 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:460 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:461 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:462 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:463 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:464 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:465 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:466 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:467 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:468 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:469 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:470 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:471 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:472 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:473 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:474 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:475 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:476 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:477 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:478 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:479 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:480 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:481 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:482 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:483 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:484 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:485 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:486 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:487 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:488 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:489 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:490 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:491 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:492 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:493 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:494 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:495 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:496 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:497 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:498 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:499 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:500 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:501 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:502 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:503 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:504 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:505 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:506 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:507 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:508 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:509 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:510 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:511 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:512 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:513 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:514 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:515 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:516 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:517 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:518 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:519 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:520 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:521 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:522 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:523 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:524 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:525 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:526 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:527 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:528 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:529 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:530 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:531 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:532 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:533 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:534 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:535 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:536 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:537 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:538 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:539 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:540 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:541 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:542 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:543 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:544 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:545 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:546 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:547 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:548 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:549 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:550 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:551 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:552 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:553 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:554 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:555 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:556 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:557 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:558 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:559 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:560 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:561 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:562 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:563 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:564 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:565 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:566 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:567 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:568 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:569 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:570 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:571 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:572 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:573 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:574 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM:575 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gas:0 (G4Box) ... OK! 
+Checking overlaps for volume DWC_window_0:0 (G4Box) ... OK! 
+Checking overlaps for volume DWC_window_1:1 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al1_0:0 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al1_1:1 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al1_2:2 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al1_3:3 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al1_4:4 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al1_5:5 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al1_6:6 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al1_7:7 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al2_0:0 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al2_1:1 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al2_2:2 (G4Box) ... OK! 
+Checking overlaps for volume DWC_al2_3:3 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_0:0 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_1:1 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_2:2 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_3:3 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_4:4 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_5:5 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_6:6 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_7:7 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_8:8 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_9:9 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_10:10 (G4Box) ... OK! 
+Checking overlaps for volume DWC_gasVet_11:11 (G4Box) ... OK! 
+creating a sensitive detector with name: SiCell_sensitive
+creating a sensitive detector with name: AHCAL_SiPM_sensitive
+
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+Constructing configuration 0
+Checking overlaps for volume Al_case_thick:0 (G4Box) ... OK! 
+Checking overlaps for volume Al_case:0 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:0 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:0 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:1 (G4Box) ... OK! 
+Checking overlaps for volume PCB:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:0 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:2 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:1 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:3 (G4Box) ... OK! 
+Checking overlaps for volume PCB:2 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:2 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:2 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:2 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:2 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:2 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:1 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:3 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:3 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:3 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:3 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:3 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:3 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:4 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:2 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:5 (G4Box) ... OK! 
+Checking overlaps for volume PCB:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:2 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:6 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:3 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:7 (G4Box) ... OK! 
+Checking overlaps for volume PCB:6 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:6 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:6 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:6 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:6 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:6 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:3 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:7 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:7 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:7 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:7 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:7 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:7 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:8 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:4 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:9 (G4Box) ... OK! 
+Checking overlaps for volume PCB:8 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:8 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:8 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:8 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:8 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:8 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:4 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:9 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:9 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:9 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:9 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:9 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:9 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:10 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:5 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:11 (G4Box) ... OK! 
+Checking overlaps for volume PCB:10 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:10 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:10 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:10 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:10 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:10 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:5 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:11 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:11 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:11 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:11 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:11 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:11 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:12 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:6 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:13 (G4Box) ... OK! 
+Checking overlaps for volume PCB:12 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:12 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:12 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:12 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:12 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:12 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:6 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:13 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:13 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:13 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:13 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:13 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:13 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:14 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:7 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:15 (G4Box) ... OK! 
+Checking overlaps for volume PCB:14 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:14 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:14 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:14 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:14 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:14 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:7 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:15 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:15 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:15 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:15 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:15 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:15 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:16 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:8 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:17 (G4Box) ... OK! 
+Checking overlaps for volume PCB:16 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:16 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:16 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:16 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:16 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:16 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:8 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:17 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:17 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:17 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:17 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:17 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:17 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:18 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:9 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:19 (G4Box) ... OK! 
+Checking overlaps for volume PCB:18 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:18 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:18 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:18 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:18 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:18 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:9 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:19 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:19 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:19 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:19 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:19 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:19 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:20 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:10 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:21 (G4Box) ... OK! 
+Checking overlaps for volume PCB:20 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:20 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:20 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:20 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:20 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:20 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:10 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:21 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:21 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:21 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:21 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:21 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:21 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:22 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:11 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:23 (G4Box) ... OK! 
+Checking overlaps for volume PCB:22 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:22 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:22 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:22 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:22 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:2 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:22 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:11 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate:23 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:3 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:23 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:23 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:23 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:23 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:23 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:24 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:12 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:25 (G4Box) ... OK! 
+Checking overlaps for volume PCB:24 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:24 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:24 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:24 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:24 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:24 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate_550um:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:12 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate_610um:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:25 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:25 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:25 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:25 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:25 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:25 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:26 (G4Box) ... OK! 
+Checking overlaps for volume Pb_absorber_EE:13 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_EE:27 (G4Box) ... OK! 
+Checking overlaps for volume PCB:26 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:26 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:26 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:26 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:26 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:26 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate_610um:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_EE:13 (G4Box) ... OK! 
+Checking overlaps for volume CuW_baseplate_710um:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:27 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:27 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:27 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:27 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:27 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:27 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Steel_case_thick:0 (G4Box) ... OK! 
+Checking overlaps for volume Al_case:1 (G4Box) ... OK! 
+Checking overlaps for volume Steel_case:0 (G4Box) ... OK! 
+Checking overlaps for volume PCB:28 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:29 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:30 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:31 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:32 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:33 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:34 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:28 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:29 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:30 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:31 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:32 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:33 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:34 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:28 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:29 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:30 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:31 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:32 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:33 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:34 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:28 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:29 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:30 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:31 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:32 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:33 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:34 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:28 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:29 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:30 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:31 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:32 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:33 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:34 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:6 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:7 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:8 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:9 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:10 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:11 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:12 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:13 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:14 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:15 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:16 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:17 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:0 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:0 (G4Box) ... OK! 
+Checking overlaps for volume PCB:35 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:36 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:37 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:38 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:39 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:40 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:41 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:35 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:36 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:37 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:38 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:39 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:40 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:41 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:35 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:36 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:37 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:38 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:39 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:40 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:41 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:35 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:36 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:37 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:38 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:39 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:40 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:41 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:35 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:36 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:37 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:38 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:39 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:40 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:41 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:18 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:19 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:20 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:21 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:22 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:23 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:24 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:25 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:26 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:27 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:28 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:29 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:30 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:31 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:1 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:1 (G4Box) ... OK! 
+Checking overlaps for volume PCB:42 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:43 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:44 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:45 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:46 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:47 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:48 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:42 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:43 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:44 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:45 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:46 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:47 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:48 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:42 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:43 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:44 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:45 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:46 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:47 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:48 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:42 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:43 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:44 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:45 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:46 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:47 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:48 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:42 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:43 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:44 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:45 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:46 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:47 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:48 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:32 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:33 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:34 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:35 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:36 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:37 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:38 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:39 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:40 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:41 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:42 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:43 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:44 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:45 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:2 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:2 (G4Box) ... OK! 
+Checking overlaps for volume PCB:49 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:50 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:51 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:52 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:53 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:54 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:55 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:49 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:50 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:51 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:52 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:53 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:54 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:55 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:49 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:50 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:51 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:52 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:53 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:54 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:55 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:49 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:50 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:51 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:52 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:53 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:54 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:55 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:49 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:50 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:51 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:52 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:53 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:54 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:55 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:46 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:47 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:48 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:49 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:50 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:51 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:52 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:53 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:54 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:55 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:56 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:57 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:58 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:59 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:3 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:3 (G4Box) ... OK! 
+Checking overlaps for volume PCB:56 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:57 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:58 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:59 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:60 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:61 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:62 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:56 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:57 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:58 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:59 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:60 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:61 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:62 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:56 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:57 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:58 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:59 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:60 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:61 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:62 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB_thin:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB_thin:1 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB_thin:2 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB_thin:3 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB_thin:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB_thin:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB_thin:6 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:60 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:61 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:62 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:63 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:64 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:65 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:66 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:4 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:4 (G4Box) ... OK! 
+Checking overlaps for volume PCB:63 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:64 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:65 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:66 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:67 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:68 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:69 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:63 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:64 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:65 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:66 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:67 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:68 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:69 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:63 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:64 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:65 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:66 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:67 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:68 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:69 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:56 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:57 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:58 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:59 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:60 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:61 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:62 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:56 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:57 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:58 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:59 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:60 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:61 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:62 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:63 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:64 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:65 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:66 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:67 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:68 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:69 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:63 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:64 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:65 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:66 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:67 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:68 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:69 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:67 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:68 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:69 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:70 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:71 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:72 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:73 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:74 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:75 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:76 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:77 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:78 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:79 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:80 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:5 (G4Box) ... OK! 
+Checking overlaps for volume Steel_case:1 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:5 (G4Box) ... OK! 
+Checking overlaps for volume Steel_case:2 (G4Box) ... OK! 
+Checking overlaps for volume PCB:70 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:71 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:72 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:73 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:74 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:75 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:76 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:70 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:71 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:72 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:73 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:74 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:75 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:76 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:70 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:71 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:72 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:73 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:74 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:75 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:76 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:70 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:71 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:72 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:73 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:74 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:75 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:76 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:70 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:71 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:72 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:73 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:74 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:75 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:76 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:81 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:82 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:83 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:84 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:85 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:86 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:87 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:88 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:89 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:90 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:91 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:92 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:93 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:94 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:6 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:6 (G4Box) ... OK! 
+Checking overlaps for volume PCB:77 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:78 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:79 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:80 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:81 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:82 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:83 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:77 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:78 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:79 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:80 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:81 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:82 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:83 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:77 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:78 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:79 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:80 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:81 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:82 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:83 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:77 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:78 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:79 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:80 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:81 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:82 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:83 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:77 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:78 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:79 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:80 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:81 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:82 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:83 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:95 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:96 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:97 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:98 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:99 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:100 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:101 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:102 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:103 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:104 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:105 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:106 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:107 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:108 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:7 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:7 (G4Box) ... OK! 
+Checking overlaps for volume PCB:84 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:85 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:86 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:87 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:88 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:89 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume PCB:90 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:84 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:85 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:86 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:87 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:88 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:89 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:90 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:84 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:85 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:86 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:87 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:88 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:89 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:90 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:84 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:85 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:86 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:87 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:88 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:89 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:90 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:84 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:85 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:86 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:87 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:88 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:89 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:90 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:28 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:29 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:30 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:31 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:32 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:33 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:34 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:109 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:110 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:111 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:112 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:113 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:114 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:115 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:8 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:8 (G4Box) ... OK! 
+Checking overlaps for volume PCB:91 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:91 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:91 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:91 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:91 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume CuW_baseplate:35 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:9 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:9 (G4Box) ... OK! 
+Checking overlaps for volume PCB:92 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:92 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:92 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:92 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:92 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:116 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:10 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_FH:10 (G4Box) ... OK! 
+Checking overlaps for volume PCB:93 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_175um:93 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Si_wafer:93 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate_25um:93 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Kapton_layer:93 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_baseplate:117 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume Cu_absorber_FH:11 (G4Box) ... OK! 
+Checking overlaps for volume Steel_case:3 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:0 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:0 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:0 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:1 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:1 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:2 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:1 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:3 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:2 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:4 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:2 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:5 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:3 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:6 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:3 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:7 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:4 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:8 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:4 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:9 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:5 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:10 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:5 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:11 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:6 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:12 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:6 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:13 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:7 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:14 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:7 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:15 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:8 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:16 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:8 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:17 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:9 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:18 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:9 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:19 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:10 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:20 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:10 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:21 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:11 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:22 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:11 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:23 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:12 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:24 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:12 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:25 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:13 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:26 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:13 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:27 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:14 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:28 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:14 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:29 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:15 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:30 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:15 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:31 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:16 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:32 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:16 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:33 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:17 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:34 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:17 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:35 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:18 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:36 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:18 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:37 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:19 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:38 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:19 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:39 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:20 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:40 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:20 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:41 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:21 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:42 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:21 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:43 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:22 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:44 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:22 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:45 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:23 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:46 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:23 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:47 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:24 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:48 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:24 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:49 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:25 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:50 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:25 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:51 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:26 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:52 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:26 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:53 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:27 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:54 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:27 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:55 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:28 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:56 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:28 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:57 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:29 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:58 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:29 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:59 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:30 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:60 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:30 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:61 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:31 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:62 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:31 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:63 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:32 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:64 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:32 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:65 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:33 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:66 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:33 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:67 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:34 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:68 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:34 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:69 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:35 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:70 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:35 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:71 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:36 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:72 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:36 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:73 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:37 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:74 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:37 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:75 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:38 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:76 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:38 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:77 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:39 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:40 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:41 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:78 (G4Box) ... OK! 
+Checking overlaps for volume AHCAL_SiPM_2x2HUB:39 (G4Box) ... OK! 
+Checking overlaps for volume Al_absorber_AHCAL:79 (G4Box) ... OK! 
+Checking overlaps for volume Fe_absorber_AHCAL:42 (G4Box) ... OK! 
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           1
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina : Emin=    0 eV  Emax=  100 TeV
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+
+msc:  for e-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e-  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+
+eBrem:  for e-  XStype:4  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
+
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for e+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+
+eBrem:  for e+  XStype:4  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
+
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for proton  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=    2 MeV
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV
+
+hBrems:  for proton  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for proton  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for GenericIon  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+ionIoni:  for GenericIon  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      Stopping Power data for 17 ion/material pairs
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 eV  Emax=    2 MeV
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV
+
+msc:  for alpha  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+ionIoni:  for alpha  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 eV  Emax=7.9452 MeV
+          BetheBloch : Emin=7.9452 MeV Emax=  100 TeV
+
+msc:  for anti_proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for anti_proton  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=    2 MeV
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV
+
+hBrems:  for anti_proton  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for anti_proton  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for kaon+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=1.05231 MeV
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
+
+hBrems:  for kaon+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for kaon-  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
+
+hBrems:  for kaon-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of kaon+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+muIoni:  for mu+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=  200 keV
+          BetheBloch : Emin=  200 keV Emax=    1 GeV
+        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+
+muBrems:  for mu+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+muIoni:  for mu-  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=  200 keV
+          BetheBloch : Emin=  200 keV Emax=    1 GeV
+        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+
+muBrems:  for mu-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of mu+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for pi+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=297.505 keV
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV
+
+hBrems:  for pi+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for pi-  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=297.505 keV
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV
+
+hBrems:  for pi-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of pi+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for B-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: B-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for D-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: D-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: anti_lambdaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: lambdaInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: protonInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation+GEM
+Number of de-excitation channels                    68
+Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 2e+05
+Limit excitation energy for Fermi BreakUp (MeV)     20
+Level density (1/MeV)                               0.075
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
+Time limit for long lived isomeres (ns)             1
+Isomer production flag                              1
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
+Using 
+Output file is: output_eM_smeared_30GeV_10events.root
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Analysis_W001
+      issued by : G4RootNtupleFileManager::SetNtupleMergingMode
+Merging ntuples is not applicable in sequential application.
+Setting was ignored.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+... set ntuple merging row mode : row-wise - done
+... create file : output_eM_smeared_30GeV_10events.root - done
+... open analysis file : output_eM_smeared_30GeV_10events.root - done
+... open analysis file : output_eM_smeared_30GeV_10events.root - done
+... write file : output_eM_smeared_30GeV_10events.root - done
+... close file : output_eM_smeared_30GeV_10events.root - done

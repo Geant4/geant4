@@ -419,7 +419,7 @@ static nfu_status MCGIDI_energy_parseMadlandNixFromTOM_callback( double Ep, doub
 */
 static double MCGIDI_energy_parseMadlandNixFromTOM_callback_g( double Ep, double E_F, double T_M, nfu_status *status ) {
 
-    double u1, u2, E1, E2, gamma1, gamma2, signG = 1;
+    double u1, u2, E1, E2 = 0., gamma1 = 0., gamma2 = 0., signG = 1;
 
     u1 = std::sqrt( Ep ) - std::sqrt( E_F );
     u1 *= u1 / T_M;
@@ -612,7 +612,7 @@ static int MCGIDI_energy_sampleWatt( statusMessageReporting * /*smr*/, double e_
 /*
 *   From MCAPM via Sample Watt Spectrum as in TART ( Kalos algorithm ).
 */
-    double WattMin = 0., WattMax = e_in_U, x, y, z, energyOut, rand1, rand2;
+    double WattMin = 0., WattMax = e_in_U, x, y, z, energyOut = 0., rand1, rand2;
 
     x = 1. + ( Watt_b / ( 8. * Watt_a ) );
     y = ( x + std::sqrt( x * x - 1. ) ) / Watt_a;

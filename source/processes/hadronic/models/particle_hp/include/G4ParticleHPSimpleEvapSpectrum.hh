@@ -67,7 +67,7 @@ class G4ParticleHPSimpleEvapSpectrum : public G4VParticleHPEDis
   inline G4double Sample(G4double anEnergy) 
   {
     G4double theta = theThetaDist.GetY(anEnergy)*CLHEP::eV;
-    G4double random, cut, max, result;
+    G4double random, cut, max, result=0.;
     max = 10.*theta;
     G4int icounter=0;
     G4int icounter_max=1024;

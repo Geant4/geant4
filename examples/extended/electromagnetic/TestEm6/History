@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-02-22 V. Ivanchenko (testem6-V10-07-05)
+- RunAction - fixed compilation warning
+
 07-11-21 I. Hrivnacova (testem6-V10-07-04)
 - Added analysis manager Clear() call instead of
   deleting in the end of run (removed on July 19)

@@ -1,0 +1,202 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+Using 
+ G4Material WARNING: define a material with density=0 is not allowed. 
+ The material vacuumBeam will be constructed with the default minimal density: 1e-25g/cm3
+Checking overlaps for volume Layer_PART1:0 (G4UnionSolid) ... OK! 
+Checking overlaps for volume Tube_PART1:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer_PART2:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Tube_PART2:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Grid:0 (G4Polyhedra) ... OK! 
+Checking overlaps for volume Foil:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer_PART3:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Tube_PART3:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer_PART4:0 (G4UnionSolid) ... OK! 
+Checking overlaps for volume Layer1_PART4:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Tube_PART4:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Target:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer1_PART5:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer2_PART5:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer3_PART5:0 (G4Tubs) ... OK! 
+The new beam current is the following : 3e-05 Ampere.
+The time of irradiation is now the following : 6 hour(s).
+The new diameter of the target is 6 mm.
+... Geometry is notified .... 
+The new thickness of the target is 0.6 mm.
+Position 1 = 185.82 -- Position 2 = 186.42
+... Geometry is notified .... 
+The new thickness of the foil is 0.32 mm.
+... Geometry is notified .... 
+Set file name: STCyclotron
+... Geometry is notified .... 
+... Geometry is notified .... 
+... Geometry is notified .... 
+Set file name: STCyclotron
+/run/verbose 2
+/event/verbose 0
+/tracking/verbose 0
+#
+/run/beamOn 10
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_AIR G4_Al vacuumBeam helium G4_Pt 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
+
+Region <Target> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Target 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Ni 
+ Production cuts :   gamma 175 um      e- 175 um      e+ 175 um  proton 175 um 
+
+Region <Foil> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Foil 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Al 
+ Production cuts :   gamma 5 Ang     e- 5 Ang     e+ 5 Ang proton 5 Ang
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_AIR
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Al
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  2.34147 keV    e-  131.214 keV    e+  128.744 keV proton 10 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : vacuumBeam
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes
+ Material : helium
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 4     used in the geometry : Yes
+ Material : G4_Pt
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  42.2904 keV    e-  374.921 keV    e+  359.657 keV proton 10 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 5     used in the geometry : Yes
+ Material : G4_Ni
+ Range cuts        :  gamma  175 um     e-  175 um     e+  175 um  proton 175 um 
+ Energy thresholds :  gamma  9.71418 keV    e-  374.785 keV    e+  361.68 keV proton 17.5 keV
+ Region(s) which use this couple : 
+    Target
+
+Index : 6     used in the geometry : Yes
+ Material : G4_Al
+ Range cuts        :  gamma  5 Ang    e-  5 Ang    e+  5 Ang proton 5 Ang
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 50 meV
+ Region(s) which use this couple : 
+    Foil
+
+==================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   1 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            2k World
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+     100.00          1k         5       13         86         0.00    World
+### Run 0 starts.
+... set ntuple merging row mode : row-wise - done
+... create file : SolidTargetCyclotron.root - done
+... open analysis file : SolidTargetCyclotron.root - done
+... open analysis file : SolidTargetCyclotron.root - done
+ Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=35.760000s Real=36.120555s Sys=0.020000s
+... write file : SolidTargetCyclotron.root - done
+... close file : SolidTargetCyclotron.root - done
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserActionInitialization deleted.
+UserWorkerInitialization deleted.
+UserWorkerThreadInitialization deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
+EventManager deleted.
+Units table cleared.
+TransportationManager deleted.
+Total navigation history collections cleaned: 12
+G4RNGHelper object is deleted.
+================== Deleting memory pools ===================
+Pool ID '20G4NavigationLevelRep', size : 0.0163 MB
+Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '16G4SmartVoxelNode', size : 0.00192 MB
+Pool ID '17G4SmartVoxelProxy', size : 0.000961 MB
+Pool ID '7G4Event', size : 0.000961 MB
+Pool ID '15G4PrimaryVertex', size : 0.000961 MB
+Pool ID '17G4PrimaryParticle', size : 0.258 MB
+Pool ID '17G4DynamicParticle', size : 0.517 MB
+Pool ID '7G4Track', size : 1.03 MB
+Pool ID '18G4TouchableHistory', size : 0.00192 MB
+Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
+Pool ID '17G4ReactionProduct', size : 0.00192 MB
+Pool ID '10G4Fragment', size : 0.000961 MB
+Number of memory pools allocated: 13 of which, static: 0
+Dynamic pools deleted: 13 / Total memory freed: 1.8 MB
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

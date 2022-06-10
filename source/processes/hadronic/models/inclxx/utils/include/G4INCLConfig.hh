@@ -115,7 +115,7 @@ namespace G4INCL {
     ParticleSpecies getProjectileSpecies() const { return projectileSpecies; }
 
     /// \brief Set the projectile species
-    void setProjectileSpecies(ParticleSpecies const &ps) { projectileSpecies=ps; }
+    void setProjectileSpecies(ParticleSpecies const &pars) { projectileSpecies=pars; }
 
     /// \brief Get the projectile kinetic energy.
     G4double getProjectileKineticEnergy() const { return projectileKineticEnergy; }
@@ -199,7 +199,7 @@ namespace G4INCL {
     G4int getClusterMaxMass() const { return clusterMaxMass; }
 
     /// \brief Set the maximum mass for production of clusters.
-    void setClusterMaxMass(const G4int m){ clusterMaxMass=m; }
+    void setClusterMaxMass(const G4int clm){ clusterMaxMass=clm; }
 
     /// \brief Get back-to-spectator
     G4bool getBackToSpectator() const { return backToSpectator; }
@@ -214,7 +214,7 @@ namespace G4INCL {
     void setUseRealMasses(G4bool use) { useRealMasses = use; }
 
     /// \brief Set the INCLXX datafile path
-    void setINCLXXDataFilePath(std::string const &s) { INCLXXDataFilePath=s; }
+    void setINCLXXDataFilePath(std::string const &path) { INCLXXDataFilePath=path; }
 
     std::string const &getINCLXXDataFilePath() const {
       return INCLXXDataFilePath;

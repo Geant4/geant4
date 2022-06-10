@@ -336,7 +336,7 @@ void G4OpWLS2::UseTimeProfile(const G4String name)
     G4Exception("G4OpWLS::UseTimeProfile", "em0202", FatalException,
                 "generator does not exist");
   }
-  G4OpticalParameters::Instance()->SetWLSTimeProfile(name);
+  G4OpticalParameters::Instance()->SetWLS2TimeProfile(name);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -38,11 +38,7 @@ class G4ParticleHPDataPoint
   
   G4ParticleHPDataPoint(){energy = 0; xSec = 0;}
   G4ParticleHPDataPoint(G4double e, G4double x){ energy = e; xSec = x;}
-  
-  G4ParticleHPDataPoint & operator= (const G4ParticleHPDataPoint & aSet) = default;
-
-//  ~G4ParticleHPDataPoint(){}
-  
+    
   inline G4double GetEnergy() const   {return energy;}
   inline G4double GetXsection() const {return xSec;}
   

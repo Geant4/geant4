@@ -873,7 +873,7 @@ G4ElasticHadrNucleusHE::HadrNucDifferCrSec(G4int A, G4double aQ2)
 
   G4double ImElasticAmpl0 = 0;
   G4double ReElasticAmpl0 = 0;
-  G4double Tot1=0, exp1;
+  G4double exp1;
 
   for(G4int i=1; i<=A; ++i) {
     N  *= (-Unucl*Rho2*(A-i+1)/(G4double)i);
@@ -892,14 +892,12 @@ G4ElasticHadrNucleusHE::HadrNucDifferCrSec(G4int A, G4double aQ2)
     G4double dcos = N*std::cos(FiH*i);
     ReElasticAmpl0  += Prod1*N*std::sin(FiH*i);
     ImElasticAmpl0  += Prod1*dcos;
-    Tot1            += medTot*dcos;
     if(std::abs(Prod1*N/ImElasticAmpl0) < 0.000001) break;
   }      // i
 
   static const G4double pi25 = CLHEP::pi/2.568;
   ImElasticAmpl0 *= pi25;   // The amplitude in mB
   ReElasticAmpl0 *= pi25;   // The amplitude in mB
-  Tot1           *= 2*pi25;
 
   G4double C1 = R13Ap*R13Ap*0.5*DDSec1p;
   G4double C2 = 2*R23Ap*R13Ap*0.5*DDSec2p;
@@ -952,7 +950,6 @@ G4ElasticHadrNucleusHE::HadrNucDifferCrSec(G4int A, G4double aQ2)
 			 (ImElasticAmpl0+Din1)*
 			 (ImElasticAmpl0+Din1))/twopi;
 
-  Tot1  -= DTot1;
   Dtot11 = DTot1;
   aAIm   = ImElasticAmpl0;
   aDIm   = Din1;

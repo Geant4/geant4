@@ -43,7 +43,7 @@
 
 G4double G4ParticleHPKallbachMannSyst::Sample(G4double anEnergy)
 {
-  G4double result;
+  G4double result=0.;
   
   G4double zero = GetKallbachZero(anEnergy);
   if(zero>1) zero=1.;

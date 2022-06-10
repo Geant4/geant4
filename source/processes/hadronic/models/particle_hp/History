@@ -14,6 +14,49 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 May 2022 Dennis Wright (hadr-hpp-V10-07-12)
+----------------------------------------------
+- code cleanup of G4ParticleHPContEnergyAngular.cc and 
+  G4ParticleHPContAngularPar.cc : remove debug code, remove commented out code,
+  fix indentation of loops and if branches   
+
+27 April 2022 Dennis Wright
+---------------------------
+- fix of bug #2468: many or most photons generated from G4NDL/Capture/FSMF6 data
+  are too high in energy.  Bug reported and fixed by Sven Menke.
+- G4ParticleHPContEnergyAngular
+   ::Sample: do not call ClearHistories - needed in case of multiple photons
+   ::ClearHistories: check cache before clear
+- G4ParticleHPContAngularPar - much code replaced here
+   ::Sample: reduce remaining energy before sampling next photon
+   ::PrepareTableInterpolation: fix to handle table entries with identical energies
+                              : disable code that incorrectly assumes identical min
+                                and max energies for two different data sets
+   ::BuildByInterpolation: re-build interpolation table only if new interaction
+                         : re-write merge of two data sets to fix incorrect
+                           assignment of elements
+                         : disable and replace code with incorrect assignment of
+                           continuous energies
+
+26 April 2022 Alberto Ribon
+---------------------------
+-  G4ParticleHPVector : fixed compilation warning for 'may be used uninitialized'
+   variable.
+
+20 April 2022 Alberto Ribon
+---------------------------
+-  G4ParticleHPFissionSpectrum.hh, G4ParticleHPSimpleEvapSpectrum.hh,
+   G4FPYNormalFragmentDist.cc, G4FissionProductYieldDist.cc, 
+   G4ParticleHPInelasticCompFS.cc, G4ParticleHPKallbachMannSyst.cc,
+   G4ParticleHPLegendreStore.cc, G4ParticleHPNBodyPhaseSpace.cc,
+   G4ParticleHPVector.cc, G4ParticleHPWattSpectrum.cc : fixed compilation
+   warnings for 'may be used uninitialized' variables.
+
+09 February 2022 Gabriele Cosmo
+-------------------------------
+- Fixed compilation warnings on Intel compilers for deprecated use of
+  operator=() in G4ParticleHPDataPoint.
+
 05 November 2021 Alberto Ribon (hadr-hpp-V10-07-11)
 --------------------------------------------------
 Improvements made by Loic Thulliez and Eric Dumonteil (CEA Saclay):

@@ -215,10 +215,11 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 }
 
 // ***************************************************************************
-// Retrieve the first solid pointer in the container having that name
+// Retrieve the first or last solid pointer in the container having that name
 // ***************************************************************************
 //
-G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
+G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose,
+                                 G4bool reverseSearch) const
 {
   G4SolidStore* store = GetInstance();
   if (!store->mvalid)  { store->UpdateMap(); }
@@ -234,7 +235,14 @@ G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
       G4Exception("G4SolidStore::GetSolid()",
                   "GeomMgt1001", JustWarning, message);
     }
-    return pos->second[0];
+    if(reverseSearch)
+    {
+      return pos->second[pos->second.size()-1];
+    }
+    else
+    {
+      return pos->second[0];
+    }
   }
   if (verbose)
   {

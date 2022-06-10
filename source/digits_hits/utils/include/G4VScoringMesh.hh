@@ -72,12 +72,11 @@ class G4VScoringMesh
   virtual ~G4VScoringMesh();
 
  public:  // with description
-  // a pure virtual function to construct this mesh geometry
-  void Construct(G4VPhysicalVolume* fWorldPhys);
-
-  void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
+  virtual void Construct(G4VPhysicalVolume* fWorldPhys);
+  virtual void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
 
  protected:
+  // a pure virtual function to construct this mesh geometry
   virtual void SetupGeometry(G4VPhysicalVolume* fWorldPhys) = 0;
 
  public:  // with description

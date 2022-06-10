@@ -15,8 +15,17 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+20 April 2022 - Alberto Ribon (hadr-abla-V10-07-06)
+---------------------------------------------------
+- G4Abla.cc : fixed compilation warnings for 'may be used uninitialized' 
+  variables.
+
+9 February 2022 - Gabriele Cosmo
+--------------------------------
+- Fixed compilation warnings on Intel compilers for unused variables.
+
 8 November 2021 - Jose Luis Rodriguez Sanchez (hadr-abla-V10-07-05)
------------------------------------------------------
+-------------------------------------------------------------------
 - Update of G4Abla for hypernuclei.
 
 27 October 2021 - Alberto Ribon (hadr-abla-V10-07-04)

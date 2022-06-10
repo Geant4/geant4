@@ -78,6 +78,8 @@ G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
   { 
     delete Energy;
     Energy = nullptr; 
+    Emin = 0.;
+    Emax = 0.;
   }
 }
 

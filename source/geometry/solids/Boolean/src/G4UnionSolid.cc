@@ -55,11 +55,7 @@ G4UnionSolid:: G4UnionSolid( const G4String& pName,
                                    G4VSolid* pSolidB )
   : G4BooleanSolid(pName,pSolidA,pSolidB)
 {
-  G4ThreeVector pdelta(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
-  G4ThreeVector pmin, pmax;
-  BoundingLimits(pmin, pmax);
-  fPMin = pmin - pdelta;
-  fPMax = pmax + pdelta;
+  Init();
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -74,11 +70,7 @@ G4UnionSolid::G4UnionSolid( const G4String& pName,
   : G4BooleanSolid(pName,pSolidA,pSolidB,rotMatrix,transVector)
 
 {
-  G4ThreeVector pdelta(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
-  G4ThreeVector pmin, pmax;
-  BoundingLimits(pmin, pmax);
-  fPMin = pmin - pdelta;
-  fPMax = pmax + pdelta;
+  Init();
 }
 
 ///////////////////////////////////////////////////////////
@@ -91,11 +83,7 @@ G4UnionSolid::G4UnionSolid( const G4String& pName,
                             const G4Transform3D& transform )
   : G4BooleanSolid(pName,pSolidA,pSolidB,transform)
 {
-  G4ThreeVector pdelta(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
-  G4ThreeVector pmin, pmax;
-  BoundingLimits(pmin, pmax);
-  fPMin = pmin - pdelta;
-  fPMax = pmax + pdelta;
+  Init();
 } 
 
 //////////////////////////////////////////////////////////////////
@@ -125,6 +113,7 @@ G4UnionSolid::G4UnionSolid(const G4UnionSolid& rhs)
 {
   fPMin = rhs.fPMin;
   fPMax = rhs.fPMax;
+  halfCarTolerance=0.5*kCarTolerance;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -143,8 +132,24 @@ G4UnionSolid& G4UnionSolid::operator = (const G4UnionSolid& rhs)
 
   fPMin = rhs.fPMin;
   fPMax = rhs.fPMax;
+  halfCarTolerance = rhs.halfCarTolerance;
+
   return *this;
 }  
+
+///////////////////////////////////////////////////////////////
+//
+// Initialisation
+
+void G4UnionSolid::Init()
+{
+  G4ThreeVector pdelta(kCarTolerance,kCarTolerance,kCarTolerance);
+  G4ThreeVector pmin, pmax;
+  BoundingLimits(pmin, pmax);
+  fPMin = pmin - pdelta;
+  fPMax = pmax + pdelta;
+  halfCarTolerance=0.5*kCarTolerance;
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -221,7 +226,7 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
 
 EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
 {
-  if (std::max(p.z()-fPMax.z(),fPMin.z()-p.z()) > 0) return kOutside;
+  if (std::max(p.z()-fPMax.z(), fPMin.z()-p.z()) > 0) { return kOutside; }
 
   EInside positionA = fPtrSolidA->Inside(p);
   if (positionA == kInside)  { return positionA; } // inside A
@@ -286,7 +291,7 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
 
 G4double 
 G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
-                                   const G4ThreeVector& v  ) const 
+                            const G4ThreeVector& v  ) const 
 {
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
@@ -305,7 +310,7 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
 #endif
 
   return std::min(fPtrSolidA->DistanceToIn(p,v),
-                    fPtrSolidB->DistanceToIn(p,v) ) ;
+                  fPtrSolidB->DistanceToIn(p,v) ) ;
 }
 
 ////////////////////////////////////////////////////////
@@ -394,7 +399,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
         }
       }
       while( (fPtrSolidA->Inside(p+dist*v) != kOutside)
-          && (disTmp > 0.5*kCarTolerance) );
+          && (disTmp > halfCarTolerance) );
     }
     else // if( positionB != kOutside )
     {
@@ -412,7 +417,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
         }
       }
       while( (fPtrSolidB->Inside(p+dist*v) != kOutside)
-          && (disTmp > 0.5*kCarTolerance) );
+          && (disTmp > halfCarTolerance) );
     }
   }
   if( calcNorm )
@@ -457,7 +462,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
        (positionA == kSurface && positionB == kInside  )     )
     {     
       distout= std::max(fPtrSolidA->DistanceToOut(p),
-                          fPtrSolidB->DistanceToOut(p) ) ;
+                        fPtrSolidB->DistanceToOut(p) ) ;
     }
     else
     {

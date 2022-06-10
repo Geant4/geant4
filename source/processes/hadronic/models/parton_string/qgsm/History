@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06-May-2022 Vladimir Ivanchenko (hadr-qgsm-V10-07-03)
+- G4QGSParticipants - do not print warning in the case of precision loss;
+    a confusing exception message was observed in CMS simulation, the problem
+    happens in high energy gamma-nuclear interaction
+
+09-Feb-2022 Gabriele Cosmo
+- Fixed compilation warning on Intel compilers for unused variables.
+
 13-Jul-2021 Alberto Ribon (hadr-qgsm-V10-07-02)
 - G4QGSParticipants : improved initialization in the constructors,
   as suggested by Coverity.

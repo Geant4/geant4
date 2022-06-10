@@ -266,7 +266,7 @@ static nfu_status ptwXY_thin2( ptwXYPoints *thinned, char *thin, double accuracy
     int64_t i, iMax = 0;
     double y, s, dY, dYMax = 0., dYR, dYRMax = 0;
     double x1 = thinned->points[i1].x, y1 = thinned->points[i1].y, x2 = thinned->points[i2].x, y2 = thinned->points[i2].y;
-    nfu_status status;
+    nfu_status status = nfu_Okay;
 
     if( i1 + 1 >= i2 ) return( nfu_Okay );
     for( i = i1 + 1; i < i2; i++ ) {

@@ -68,7 +68,7 @@ class G4ParticleHPFissionSpectrum : public G4VParticleHPEDis
     G4double theta = theThetaDist.GetY(anEnergy);
     // here we need to sample Maxwells distribution, if 
     // need be.
-    G4double result, cut;
+    G4double result=0., cut;
     G4double range =50*CLHEP::MeV;
     G4double max = Maxwell((theta*CLHEP::eV)/2., theta);
     G4double value;

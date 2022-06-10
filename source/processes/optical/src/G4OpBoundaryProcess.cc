@@ -189,8 +189,12 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
     if(verboseLevel > 1)
       BoundaryProcessVerbose();
 
-    G4MaterialPropertyVector* groupvel =
-      fMaterial2->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
+    G4MaterialPropertyVector* groupvel = nullptr;
+    G4MaterialPropertiesTable* aMPT = fMaterial2->GetMaterialPropertiesTable();
+    if(aMPT != nullptr)
+    {
+      groupvel = aMPT->GetProperty(kGROUPVEL);
+    }
     if(groupvel != nullptr)
     {
       aParticleChange.ProposeVelocity(
@@ -410,6 +414,7 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
       }
       MPT = fMaterial2->GetMaterialPropertiesTable();
+      rIndexMPV = nullptr;
       if(MPT != nullptr)
       {
         rIndexMPV = MPT->GetProperty(kRINDEX);
@@ -502,8 +507,13 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
 
   if(fStatus == FresnelRefraction || fStatus == Transmission)
   {
-    G4MaterialPropertyVector* groupvel =
-      fMaterial2->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
+    // not all surface types check that fMaterial2 has an MPT
+    G4MaterialPropertiesTable* aMPT = fMaterial2->GetMaterialPropertiesTable();
+    G4MaterialPropertyVector* groupvel = nullptr;
+    if(aMPT != nullptr)
+    {
+      groupvel = aMPT->GetProperty(kGROUPVEL);
+    }
     if(groupvel != nullptr)
     {
       aParticleChange.ProposeVelocity(

@@ -1,0 +1,228 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+/run/verbose 1
+#
+/testem/det/setWorldMat Aluminium
+/testem/det/setWorldX 5 cm
+/testem/det/setWorldYZ 3 cm
+#
+/testem/det/setAbsMat H2Liq
+/testem/det/setAbsThick 3 cm
+/testem/det/setAbsYZ 2 cm
+#
+/testem/det/setAbsXpos 5 mm
+#
+/process/em/verbose 0
+#
+##/control/execute vis.mac
+##/vis/viewer/zoom 0.8
+#
+/run/initialize
+
+ Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.880 cm 
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    H2Liq    density: 70.800 mg/cm3  RadL:   8.904 m    Nucl.Int.Length:   4.944 m  
+                       Imean:  19.200 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ The  WORLD   is made of 4.8 cm  of Aluminium. The transverse size (YZ) of the world is 2.4 cm 
+ The ABSORBER is made of 3 cm  of H2Liq. The transverse size (YZ) is 2 cm 
+ X position of the middle of the absorber 5 mm 
+#
+/testem/gun/setDefault
+/gun/particle geantino
+/gun/position -20 0 0 mm
+/gun/energy 1 eV
+#
+/tracking/verbose 2
+/run/beamOn 1
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  6.91818 keV    e-  597.592 keV    e+  574.294 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : H2Liq
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  1 keV    e-  108.778 keV    e+  107.414 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 0 starts.
+
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -2.4 cm       0 fm       0 fm       1 eV           0 eV       0 fm       0 fm      World   initStep
+    1      -1 cm       0 fm       0 fm       1 eV           0 eV     1.4 cm     1.4 cm      World   Transportation
+    2       2 cm       0 fm       0 fm       1 eV           0 eV       3 cm     4.4 cm   Absorber   Transportation
+    3     2.4 cm       0 fm       0 fm       1 eV           0 eV       4 mm     4.8 cm      World   OutOfWorld
+ Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.000000s Real=0.000697s Sys=0.000000s
+
+ ======================== run summary ======================
+
+ The run was 1 geantino of 1 eV  through 3 cm  of H2Liq (density: 70.8 mg/cm3)
+
+ Total energy deposit in absorber per event = 0 eV  +- 0 eV 
+
+ -----> Mean dE/dx = 0 MeV/cm	(0 MeV*cm2/g)
+
+ From formulas :
+   restricted dEdx = 0 MeV/cm	(0 MeV*cm2/g)
+   full dEdx       = 0 MeV/cm	(0 MeV*cm2/g)
+
+ Leakage :  primary = 1 eV  +- 0 eV    secondaries = 0 eV  +- 0 eV 
+ Energy balance :  edep + eleak = 1 eV 
+
+ Total track length (charged) in absorber per event = 0 fm  +- 0 fm 
+ Total track length (neutral) in absorber per event = 3 cm  +- 0 fm 
+
+ Number of steps (charged) in absorber per event = 0 +- 0
+ Number of steps (neutral) in absorber per event = 1 +- 0
+
+ Number of secondaries per event : Gammas = 0   electrons = 0   positrons = 0
+
+ Number of events with the primary particle transmitted = 100 %
+ Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
+
+ Number of events with the primary particle reflected = 0 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0 %
+
+ MultipleScattering:
+  rms proj angle of transmit primary particle = 0 mrad (central part only)
+  computed theta0 (Highland formula)          = 0 mrad
+  central part defined as +- 0 mrad   Tail ratio = 0 %
+
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
+/tracking/verbose 0
+#
+/testem/gun/rndm 0.8
+/run/beamOn 6
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  6.91818 keV    e-  597.592 keV    e+  574.294 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : H2Liq
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  1 keV    e-  108.778 keV    e+  107.414 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 1 starts.
+
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
+ Run terminated.
+Run Summary
+  Number of events processed : 6
+  User=0.000000s Real=0.000079s Sys=0.000000s
+
+ ======================== run summary ======================
+
+ The run was 6 geantino of 1 eV  through 3 cm  of H2Liq (density: 70.8 mg/cm3)
+
+ Total energy deposit in absorber per event = 0 eV  +- 0 eV 
+
+ -----> Mean dE/dx = 0 MeV/cm	(0 MeV*cm2/g)
+
+ From formulas :
+   restricted dEdx = 0 MeV/cm	(0 MeV*cm2/g)
+   full dEdx       = 0 MeV/cm	(0 MeV*cm2/g)
+
+ Leakage :  primary = 1 eV  +- 0 eV    secondaries = 0 eV  +- 0 eV 
+ Energy balance :  edep + eleak = 1 eV 
+
+ Total track length (charged) in absorber per event = 0 fm  +- 0 fm 
+ Total track length (neutral) in absorber per event = 3 cm  +- 0 fm 
+
+ Number of steps (charged) in absorber per event = 0 +- 0
+ Number of steps (neutral) in absorber per event = 1 +- 0
+
+ Number of secondaries per event : Gammas = 0   electrons = 0   positrons = 0
+
+ Number of events with the primary particle transmitted = 100 %
+ Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
+
+ Number of events with the primary particle reflected = 0 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0 %
+
+ MultipleScattering:
+  rms proj angle of transmit primary particle = 0 mrad (central part only)
+  computed theta0 (Highland formula)          = 0 mrad
+  central part defined as +- 0 mrad   Tail ratio = 0 %
+
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={1977567618660788324, 300890354879745607, 1424437069285335120, 2296497209797367902, 1143472681269825295, 260370018537989708, 668395878522115384, 1090766064544254753, 1931418983504702790, 828618339300030337, 2137373994898626588, 1263575693625627220, 316400124824195510, 274418011581707120, 1512294095604459534, 166310252540771229, 2260588327282429663} counter= 13sumtot= 1406650644950420476
+---------------------------------------
+G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.017 MB
+============================================================
+RunManagerKernel is deleted. Good bye :)

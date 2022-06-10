@@ -223,8 +223,8 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4double y2 = 0.5*yy*yy;
   G4double y3 = y1+y2;
 
-  G4double t;
-  G4double rej;
+  G4double t = 0.0;
+  G4double rej = 0.0;
 
   // Now sample t
   G4int ntry = 0; 

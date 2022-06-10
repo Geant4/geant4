@@ -219,8 +219,6 @@ G4NeutrinoElectronProcess::PostStepDoIt(const G4Track& track, const G4Step& step
   const G4DynamicParticle* aParticle = track.GetDynamicParticle();
   G4ThreeVector      position  = pPostStepPoint->GetPosition(), newPosition=position;
   G4ParticleMomentum direction = aParticle->GetMomentumDirection();
-  G4double           startTime = pPostStepPoint->GetGlobalTime();
-
   
   if( fNuEleCcBias > 1.0 ||  fNuEleNcBias > 1.0) // = true, if fBiasingfactor != 1., i.e. xsc is biased
   {
@@ -244,16 +242,11 @@ G4NeutrinoElectronProcess::PostStepDoIt(const G4Track& track, const G4Step& step
 
     G4double range = -backward+G4UniformRand()*distance;
 
-    G4double delta = range - backward;
-
-    startTime += delta/track.GetVelocity();
-
     newPosition = position + range*direction;
 
     safetyHelper->ReLocateWithinVolume(newPosition);
 
     theTotalResult->ProposePosition(newPosition); // G4Exception : GeomNav1002
-    // theTotalResult->ProposeGlobalTime(startTime); // time is updated for 'elastic' only
   }
   G4HadProjectile theProj( track );
   G4HadronicInteraction* hadi = nullptr;
@@ -261,7 +254,6 @@ G4NeutrinoElectronProcess::PostStepDoIt(const G4Track& track, const G4Step& step
 
   // Select element
   const G4Element* elm = nullptr;
-  G4int ZZ=1;
 
   try
   {
@@ -277,10 +269,7 @@ G4NeutrinoElectronProcess::PostStepDoIt(const G4Track& track, const G4Step& step
       G4Exception("G4NeutrinoElectronProcess::PostStepDoIt", "had003", 
 		  FatalException, ed);
   }
-  if( elm ) ZZ = elm->GetZ();
 
-  G4double xsc = fTotXsc->GetElementCrossSection(dynParticle, ZZ, material);
-  xsc *= 1.;
   G4double ccTotRatio = fTotXsc->GetCcRatio();
 
   if( G4UniformRand() < ccTotRatio )  // Cc-model

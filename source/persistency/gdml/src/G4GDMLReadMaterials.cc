@@ -242,7 +242,7 @@ G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const PElement)
 // --------------------------------------------------------------------
 G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const TElement)
 {
-  G4double value = STP_Temperature;
+  G4double value = NTP_Temperature;
   G4double unit  = kelvin;
 
   const xercesc::DOMNamedNodeMap* const attributes = TElement->getAttributes();
@@ -552,7 +552,7 @@ void G4GDMLReadMaterials::MaterialRead(
   G4double a    = 0.0;
   G4double D    = 0.0;
   G4State state = kStateUndefined;
-  G4double T    = STP_Temperature;
+  G4double T    = NTP_Temperature;
   G4double P    = STP_Pressure;
   G4double MEE  = -1.0;
 

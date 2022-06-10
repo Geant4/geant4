@@ -41,7 +41,7 @@ ptwXYPoints *ptwXY_createFromFunction( int n, double *xs, ptwXY_createFromFuncti
     int biSectionMax, nfu_status *status ) {
 
     int64_t i;
-    double x1, y1, x2, y2, eps = ClosestAllowXFactor * DBL_EPSILON;
+    double x1, y1, x2 = 0., y2, eps = ClosestAllowXFactor * DBL_EPSILON;
     ptwXYPoints *ptwXY;
     ptwXYPoint *p1, *p2;
 

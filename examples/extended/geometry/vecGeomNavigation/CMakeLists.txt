@@ -28,6 +28,14 @@ if(BUILTIN_G4VECGEOMNAV)
 
   FetchContent_GetProperties(g4vecgeomnav)
 
+  # G4VecGeomNav builds a shared lib by default. As this links to Geant4 libs, if Geant4 is 
+  # static-only, then we should also build G4VecGeomNav statically because:
+  # - Geant4 static libs are not guaranteed to be PIC
+  # - Geant4 symbols will be duplicated in g4vecgeomnav and the exampleVecGeomNac program
+  if(Geant4_static_FOUND AND (NOT Geant4_shared_FOUND))
+    set(BUILD_STATIC_LIBS ON)
+  endif()
+
   if(NOT g4vecgeomnav_POPULATED)
     FetchContent_Populate(g4vecgeomnav)
     message(STATUS "${g4vecgeomnav_SOURCE_DIR}, ${g4vecgeomnav_BINARY_DIR}")

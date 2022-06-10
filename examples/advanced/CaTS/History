@@ -7,7 +7,10 @@
 
                        Package History file
 
-19 Novemebr 2021 - tag CaTS-V10-07-01 - I. Hrivnacova
+26 March 2022 - tag CaTS-V10-07-02 - G. Cosmo
+- Fixed compilation warnings for unused arguments.
+
+19 November 2021 - tag CaTS-V10-07-01 - I. Hrivnacova
 - Fixed PrimaryGeneratorAction destructor
 
 22 October 2021 - tag CaTS-V10-07-00 - H. Wenzel

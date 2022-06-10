@@ -148,8 +148,8 @@ namespace G4INCL {
          **/
         inline G4double getFermiMomentum(const Particle * const p) const {
           if(p->isDelta()) {
-            const G4double Tf = getFermiEnergy(p), m = p->getMass();
-            return std::sqrt(Tf*(Tf+2.*m));
+            const G4double Tf = getFermiEnergy(p), mass = p->getMass();
+            return std::sqrt(Tf*(Tf+2.*mass));
           } else {
             std::map<ParticleType, G4double>::const_iterator i = fermiMomentum.find(p->getType());
 // assert(i!=fermiMomentum.end());

@@ -134,23 +134,20 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   const std::vector<G4InuclNuclei>& outgoingNuclei = output.getOutgoingNuclei();
   const std::vector<G4InuclElementaryParticle>& particles = output.getOutgoingParticles();
 
-  G4double eTot=0.0;
   G4int  i=1;
 
   if (!particles.empty()) { 
     G4int outgoingType;
-    particleIterator ipart = particles.begin();
-    for (; ipart != particles.end(); ipart++) {
+    particleIterator ipart = particles.cbegin();
+    for (; ipart != particles.cend(); ++ipart) {
       outgoingType = ipart->type();
 
       if (verboseLevel > 2) {
 	G4cout << "Evaporated particle:  " << i << " of type: "
 	       << outgoingType << G4endl;
-        i++;
+        ++i;
       }
 
-      eTot += ipart->getEnergy();
-      
       G4LorentzVector vlab = ipart->getMomentum().boost(boostToLab);
 
       // TEMPORARY:  Remove constness on PD until G4Fragment is fixed
@@ -159,13 +156,11 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   }
 
   if (!outgoingNuclei.empty()) { 
-    nucleiIterator ifrag = outgoingNuclei.begin();
-    for (i=1; ifrag != outgoingNuclei.end(); ifrag++) {
+    nucleiIterator ifrag = outgoingNuclei.cbegin();
+    for (i=1; ifrag != outgoingNuclei.cend(); ++ifrag) {
       if (verboseLevel > 2) {
-	G4cout << " Nuclei fragment: " << i << G4endl; i++;
+	G4cout << " Nuclei fragment: " << i << G4endl; ++i;
       }
-
-      eTot += ifrag->getEnergy();
 
       G4LorentzVector vlab = ifrag->getMomentum().boost(boostToLab);
  

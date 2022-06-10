@@ -487,7 +487,7 @@ namespace G4INCL {
       }
 
       // Cluster decay
-      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() | nucleus->decayMe();
+      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() || nucleus->decayMe();
 
 #ifndef INCLXX_IN_GEANT4_MODE
       // Global checks of conservation laws
@@ -645,7 +645,7 @@ namespace G4INCL {
       theEventInfo.emitKaon = nucleus->emitInsideKaon();
         
       // Cluster decay
-      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() | nucleus->decayMe();
+      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() || nucleus->decayMe();
 
       // Fill the EventInfo structure
       nucleus->fillEventInfo(&theEventInfo);

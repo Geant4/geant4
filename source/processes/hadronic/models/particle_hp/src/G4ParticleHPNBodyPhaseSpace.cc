@@ -87,7 +87,7 @@ G4ReactionProduct * G4ParticleHPNBodyPhaseSpace::Sample(G4double anEnergy, G4dou
    if(maxE<=0){
      maxE=1.*CLHEP::eV;
    }
-   G4double energy;
+   G4double energy=0.;
    G4double max(0);
    if(theTotalCount<=3)
    {

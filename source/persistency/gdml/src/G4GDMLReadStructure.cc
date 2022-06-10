@@ -823,7 +823,15 @@ void G4GDMLReadStructure::AssemblyRead(
   xercesc::XMLString::release(&name_attr);
 
   G4AssemblyVolume* pAssembly = new G4AssemblyVolume();
-  assemblyMap.insert(std::make_pair(GenerateName(name), pAssembly));
+  auto aName = GenerateName(name);
+  if(reverseSearch)
+  {
+    assemblyMap.insert_or_assign(aName, pAssembly);
+  }
+  else
+  { 
+    assemblyMap.insert(std::make_pair(aName, pAssembly));
+  }
 
   for(xercesc::DOMNode* iter = assemblyElement->getFirstChild();
                         iter != nullptr; iter = iter->getNextSibling())
@@ -1067,8 +1075,8 @@ void G4GDMLReadStructure::StructureRead(
 // --------------------------------------------------------------------
 G4VPhysicalVolume* G4GDMLReadStructure::GetPhysvol(const G4String& ref) const
 {
-  G4VPhysicalVolume* physvolPtr =
-    G4PhysicalVolumeStore::GetInstance()->GetVolume(ref, false);
+  G4VPhysicalVolume* physvolPtr
+    = G4PhysicalVolumeStore::GetInstance()->GetVolume(ref,false,reverseSearch);
 
   if(physvolPtr == nullptr)
   {
@@ -1083,8 +1091,8 @@ G4VPhysicalVolume* G4GDMLReadStructure::GetPhysvol(const G4String& ref) const
 // --------------------------------------------------------------------
 G4LogicalVolume* G4GDMLReadStructure::GetVolume(const G4String& ref) const
 {
-  G4LogicalVolume* volumePtr =
-    G4LogicalVolumeStore::GetInstance()->GetVolume(ref, false);
+  G4LogicalVolume* volumePtr
+    = G4LogicalVolumeStore::GetInstance()->GetVolume(ref,false,reverseSearch);
 
   if(volumePtr == nullptr)
   {

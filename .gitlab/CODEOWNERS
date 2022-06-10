@@ -1,0 +1,271 @@
+# Codeowners for Geant4
+# Maps directories to Working Group Coordinators only for now
+# Add finer grain control as time progresses
+
+# Software Management
+/CMakeLists.txt @bmorgan
+/cmake/         @bmorgan @gunter
+/config/        @gcosmo
+/ReleaseNotes/  @gcosmo
+/source/global/ @gcosmo @bmorgan @gunter
+
+# Run, Event, and Detector Response
+/source/run/              @asaim @jmadsen
+/source/event/            @asaim @jmadsen
+/source/digits_hits/      @asaim @jmadsen
+/source/processes/scoring @asaim @jmadsen
+
+# Tracking
+/source/tracking/ @tsasaki @shokada @asaim
+
+# Particles and Track
+/source/track/     @kurashige @shokada @asaim
+/source/particles/ @kurashige @shokada @asaim
+
+# Geometry and Transport
+/source/geometry/                 @gcosmo @japost
+/source/processes/transportation/ @gcosmo @japost
+
+# Generic Processes and Materials
+/source/materials/ @maire @vnivanch @mverderi @dsawkey @asaim @ebagli
+/source/parameterisations/ @mverderi
+/source/processes/biasing/ @mverderi @vnivanch @asaim
+/source/processes/biasing/generic/ @mverderi
+/source/processes/biasing/importance/ @ahoward
+/source/processes/biasing/management/ @ahoward @mverderi
+/source/processes/parameterisation/ @mverderi @vnivanch @asaim
+
+# Electromagnetic Standard Physics
+/source/processes/electromagnetic/highenergy/   @vnivanch @dsawkey
+/source/processes/electromagnetic/muons/        @vnivanch @dsawkey
+/source/processes/electromagnetic/polarisation/ @vnivanch @dsawkey
+/source/processes/electromagnetic/standard/     @vnivanch @dsawkey
+/source/processes/electromagnetic/xrays/        @vnivanch @dsawkey
+/source/processes/optical/                      @vnivanch @dsawkey
+
+# Low Energy Electromagnetic Physics
+/source/processes/electromagnetic/dna/       @sincerti @pandola
+/source/processes/electromagnetic/lowenergy/ @sincerti @pandola
+/source/processes/electromagnetic/pii/       @sincerti @pandola
+
+# Hadronic Physics
+/source/processes/hadronic/cross_sections/            @witoldp @ribon @dwright @vnivanch
+/source/processes/hadronic/management/                @ribon @dwright @vnivanch
+/source/processes/hadronic/models/abrasion/           @ribon @dwright @vnivanch
+/source/processes/hadronic/models/binary_cascade/     @gunter @ribon @dwright @vnivanch
+/source/processes/hadronic/models/cascade/            @mkelsey @ribon @dwright @vnivanch
+/source/processes/hadronic/models/coherent/           @vnivanch @ribon @dwright @vnivanch
+/source/processes/hadronic/models/de_excitation/      @quesada @ribon @dwright @vnivanch
+/source/processes/hadronic/models/em_dissociation/    @tkoi @ribon @dwright @vnivanch
+/source/processes/hadronic/models/im_r_matrix/        @gunter @ribon @dwright @vnivanch
+/source/processes/hadronic/models/inclxx/             @dmancusi @ribon @dwright @vnivanch
+/source/processes/hadronic/models/management/         @gunter @ribon @dwright @vnivanch
+/source/processes/hadronic/models/particle_hp/        @tkoi @ribon @dwright @vnivanch
+/source/processes/hadronic/models/parton_string/      @gunter @vuzhinsk @ribon @dwright @vnivanch
+/source/processes/hadronic/models/photolepton_hadron/ @ribon @dwright @vnivanch
+/source/processes/hadronic/models/pre_equilibrium/    @quesada @ribon @dwright @vnivanch
+/source/processes/hadronic/models/radioactive_decay/  @ldesorgh @ribon @dwright @vnivanch
+/source/processes/hadronic/models/theo_high_energy/   @gunter @ribon @dwright @vnivanch
+/source/processes/hadronic/models/utils/              @gunter @ribon @dwright @vnivanch
+/source/processes/hadronic/processes/                 @ribon @dwright @vnivanch
+/source/processes/hadronic/stopping/                  @ribon @dwright @vnivanch
+/source/processes/hadronic/util/                      @ribon @dwright @vnivanch
+
+# Persistency
+/source/persistency/       @gcosmo
+/source/persistency/ascii/ @arce
+/source/persistency/gdml/  @gcosmo @witoldp
+/source/analysis/          @ihrivnac
+/source/analysis/g4tools/  @gybarran @ihrivnac
+/source/analysis/test/     @gybarran @ihrivnac
+
+# User and Category Interfaces
+/source/intercoms/  @asaim @hajime @kmura
+/source/interfaces/ @hajime @kmura @lgarnier
+/environments/      @hajime @kmura
+
+# Visualization
+/source/graphics_reps/               @allison @lgarnier @perl
+/source/visualization/management/    @allison @lgarnier @perl
+/source/visualization/modeling/      @allison @lgarnier @perl
+/source/visualization/FukuiRenderer/ @stanaka @lgarnier @perl
+/source/visualization/HepRep/        @perl @lgarnier
+/source/visualization/OpenGL/        @allison @lgarnier @perl
+/source/visualization/OpenInventor/  @fjones @allison @lgarnier @perl
+/source/visualization/RayTracer/     @asaim @allison @lgarnier @perl
+/source/visualization/Tree/          @allison @lgarnier @perl
+/source/visualization/VRML/          @stanaka @lgarnier @perl
+/source/visualization/gMocren/       @akimura @lgarnier @perl
+
+# Physics Lists
+/source/physics_lists/ @gunter @wenzel
+
+# Novice+Extended Examples (Individual Examples assigned to Responsibles)
+/examples/basic/    @ihrivnac @ahoward
+/examples/novice/   @ihrivnac @ahoward
+/examples/extended/ @ihrivnac @ahoward
+
+/examples/basic/B1/ @maire @ihrivnac
+/examples/basic/B2/ @ihrivnac
+/examples/basic/B3/ @maire @ihrivnac
+/examples/basic/B4/ @ihrivnac
+/examples/basic/B5/ @ihrivnac
+
+/examples/extended/analysis/AnaEx01/        @maire @ihrivnac
+/examples/extended/analysis/AnaEx02/        @maire @ihrivnac
+/examples/extended/analysis/AnaEx03/        @gybarran @ihrivnac
+/examples/extended/analysis/B1Con/          @tkoi @ihrivnac
+/examples/extended/analysis/B3aScoreWriter/ @ihrivnac
+/examples/extended/analysis/B4dScoreWriter/ @ihrivnac
+/examples/extended/analysis/shared/         @ihrivnac
+
+/examples/extended/biasing/B01/         @ahoward @ihrivnac
+/examples/extended/biasing/B02/         @ahoward @ihrivnac
+/examples/extended/biasing/B03/         @ahoward @ihrivnac
+/examples/extended/biasing/GB01/        @mverderi @ihrivnac
+/examples/extended/biasing/GB02/        @mverderi @ihrivnac
+/examples/extended/biasing/GB03/        @mverderi @ihrivnac
+/examples/extended/biasing/GB04/        @mverderi @ihrivnac
+/examples/extended/biasing/GB05/        @mverderi @ihrivnac
+/examples/extended/biasing/GB06/        @mverderi @ihrivnac
+/examples/extended/biasing/ReverseMC01/ @ldesorgh @ihrivnac
+
+/examples/extended/common/ @ihrivnac
+
+/examples/extended/electromagnetic/TestEm0/  @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm1/  @vnivanch @ihrivnac
+/examples/extended/electromagnetic/TestEm2/  @vnivanch @ihrivnac
+/examples/extended/electromagnetic/TestEm3/  @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm4/  @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm5/  @vnivanch @ihrivnac
+/examples/extended/electromagnetic/TestEm6/  @vnivanch @ihrivnac
+/examples/extended/electromagnetic/TestEm7/  @vnivanch @ihrivnac
+/examples/extended/electromagnetic/TestEm8/  @grichine @ihrivnac
+/examples/extended/electromagnetic/TestEm9/  @vnivanch @ihrivnac
+/examples/extended/electromagnetic/TestEm10/ @grichine @ihrivnac
+/examples/extended/electromagnetic/TestEm11/ @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm12/ @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm13/ @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm14/ @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm15/ @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm16/ @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm17/ @maire @ihrivnac
+/examples/extended/electromagnetic/TestEm18/ @maire @ihrivnac
+
+/examples/extended/errorpropagation/  @arce @ihrivnac
+
+/examples/extended/eventgenerator/basicPrimary/ @maire @ihrivnac
+/examples/extended/eventgenerator/particleGun/  @maire @ihrivnac
+/examples/extended/eventgenerator/exgps/        @ldesorgh @ihrivnac
+/examples/extended/eventgenerator/HepMCEx01/    @kmura @ihrivnac
+/examples/extended/eventgenerator/HepMCEx01/    @kmura @ihrivnac
+/examples/extended/eventgenerator/MCTruth/      @witoldp @ihrivnac
+/examples/extended/eventgenerator/pythia/       @ihrivnac
+
+/examples/extended/exoticphysics/channeling/ @ebagli @ihrivnac
+/examples/extended/exoticphysics/dmparticle/ @vnivanch @ihrivnac
+/examples/extended/exoticphysics/monopole/   @vnivanch @ihrivnac
+/examples/extended/exoticphysics/phonon/     @asaim @ihrivnac
+/examples/extended/exoticphysics/ucn/        @ihrivnac
+
+/examples/extended/field/BlineTracer/ @ldesorgh @ihrivnac
+/examples/extended/field/field01/     @japost @ihrivnac
+/examples/extended/field/field02/     @japost @ihrivnac
+/examples/extended/field/field03/     @japost @ihrivnac
+/examples/extended/field/field04/     @japost @ihrivnac
+/examples/extended/field/field05/     @japost @ihrivnac
+/examples/extended/field/field06/     @japost @ihrivnac
+
+/examples/extended/g3tog4/clGeometry/ @ihrivnac
+
+/examples/extended/geometry/transforms/ @maire @ihrivnac
+
+/examples/extended/hadronic/FissionFragment/ @bwendt @ihrivnac
+/examples/extended/hadronic/Hadr00/          @vnivanch @ihrivnac
+/examples/extended/hadronic/Hadr01/          @vnivanch @ihrivnac
+/examples/extended/hadronic/Hadr02/          @vnivanch @ihrivnac
+/examples/extended/hadronic/Hadr03/          @maire @ihrivnac
+/examples/extended/hadronic/Hadr04/          @maire @ihrivnac
+/examples/extended/hadronic/Hadr06/          @maire @ihrivnac
+/examples/extended/hadronic/Hadr07/          @maire @ihrivnac
+/examples/extended/hadronic/NeutronSource/   @maire @ihrivnac
+
+/examples/extended/medical/DICOM/  @arce @ihrivnac
+/examples/extended/medical/DICOM2/ @jmadsen @ihrivnac
+
+/examples/extended/medical/dna/chem1/           @matkara @ihrivnac
+/examples/extended/medical/dna/chem2/           @matkara @ihrivnac
+/examples/extended/medical/dna/chem3/           @matkara @ihrivnac
+/examples/extended/medical/dna/chem4/           @matkara @ihrivnac
+/examples/extended/medical/dna/clustering/      @matkara @ihrivnac
+/examples/extended/medical/dna/dnaphysics/      @sincerti @ihrivnac
+/examples/extended/medical/dna/icsd/            @cvillagr @ihrivnac
+/examples/extended/medical/dna/mfp/             @sincerti @ihrivnac
+/examples/extended/medical/dna/microdosimetry/  @sincerti @ihrivnac
+/examples/extended/medical/dna/microyz/         @sincerti @ihrivnac
+/examples/extended/medical/dna/neuron/          @sincerti @ihrivnac
+/examples/extended/medical/dna/pdb4dna/         @sincerti @ihrivnac
+/examples/extended/medical/dna/range/           @sincerti @ihrivnac
+/examples/extended/medical/dna/slowing/         @sincerti @ihrivnac
+/examples/extended/medical/dna/splitting/       @sincerti @ihrivnac
+/examples/extended/medical/dna/spower/          @sincerti @ihrivnac
+/examples/extended/medical/dna/svalue/          @sincerti @ihrivnac
+/examples/extended/medical/dna/wholeNuclearDNA/ @cvillagr @ihrivnac
+/examples/extended/medical/dna/wvalue/          @sincerti @ihrivnac
+
+/examples/extended/medical/electronScattering/  @maire @ihrivnac
+/examples/extended/medical/electronScattering2/ @perl @ihrivnac
+/examples/extended/medical/fanoCavity/          @maire @ihrivnac
+/examples/extended/medical/fanoCavity2/         @maire @ihrivnac
+/examples/extended/medical/GammaTherapy/        @vnivanch @ihrivnac
+
+/examples/extended/optical/OpNovice/  @dsawkey @ihrivnac
+/examples/extended/optical/OpNovice2/ @dsawkey @ihrivnac
+/examples/extended/optical/LXe/       @dsawkey @ihrivnac
+/examples/extended/optical/wls/       @dsawkey @ihrivnac
+
+/examples/extended/parallel/MPI/exMPI01/       @kmura @ihrivnac
+/examples/extended/parallel/MPI/exMPI02/       @kmura @ihrivnac
+/examples/extended/parallel/MPI/exMPI03/       @kmura @ihrivnac
+/examples/extended/parallel/MPI/exMPI04/       @ihrivnac
+/examples/extended/parallel/TBB/               @dotti @ihrivnac
+/examples/extended/parallel/ThreadsafeScorers/ @jmadsen @ihrivnac
+/examples/extended/parallel/TopC/              @cooperma @ihrivnac
+
+/examples/extended/parameterisations/gflash/ @mverderi @ihrivnac
+/examples/extended/parameterisations/Par01/  @mverderi @ihrivnac
+/examples/extended/parameterisations/Par02/  @ribon @ihrivnac
+
+/examples/extended/persistency/gdml/ @witoldp @ihrivnac
+/examples/extended/persistency/P01/  @witoldp @ihrivnac
+/examples/extended/persistency/P02/  @witoldp @ihrivnac
+/examples/extended/persistency/P03/  @arce @ihrivnac
+
+/examples/extended/physicslists/extensibleFactory/ @rhatcher @ihrivnac @gunter
+/examples/extended/physicslists/factory/           @ihrivnac @gunter
+/examples/extended/physicslists/genericPL/         @witoldp @ihrivnac @gunter
+/examples/extended/physicslists/shared/            @ihrivnac @gunter
+
+/examples/extended/polarisation/Pol01/ @vnivanch @ihrivnac
+
+/examples/extended/radioactivedecay/Activation/ @maire @ihrivnac
+/examples/extended/radioactivedecay/rdecay01/   @maire @ihrivnac
+/examples/extended/radioactivedecay/rdecay02/   @ldesorgh @ihrivnac
+
+/examples/extended/runAndEvent/RE01/ @asaim @ihrivnac
+/examples/extended/runAndEvent/RE02/ @asaim @ihrivnac
+/examples/extended/runAndEvent/RE03/ @asaim @ihrivnac
+/examples/extended/runAndEvent/RE04/ @asaim @ihrivnac
+/examples/extended/runAndEvent/RE05/ @asaim @ihrivnac
+/examples/extended/runAndEvent/RE06/ @asaim @ihrivnac
+
+/examples/extended/visualization/perspective/   @allison @ihrivnac
+/examples/extended/visualization/standalone/    @allison @ihrivnac
+/examples/extended/visualization/userVisAction/ @allison @ihrivnac
+
+# Advanced Examples (Can be extended with responsibles per example)
+/examples/advanced/ @guatelli @fromano @pandola
+
+# Testing
+/tests/ @gunter @syjun
+

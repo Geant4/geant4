@@ -8162,7 +8162,7 @@ c      Delta_u2_shell.
       G4double re1,re2,re3;
       G4double eps1,eps2;
       G4double Z1UCD,Z2UCD;
-      G4double beta,beta1,beta2;
+      G4double beta=0.,beta1=0.,beta2=0.;
      // double betacomplement;
       G4double DN1_POL;
       /* shift of most probable neutron number for given Z,
@@ -8184,9 +8184,9 @@ c      Delta_u2_shell.
       G4double E_eff1_saddle,E_eff2_saddle;
       G4double Epot0_mode1_saddle,Epot0_mode2_saddle,Epot0_symm_saddle;
       G4double Epot_mode1_saddle,Epot_mode2_saddle,Epot_symm_saddle;
-      G4double E_defo,E_defo1,E_defo2,E_scission_pre,E_scission_post;
+      G4double E_defo,E_defo1,E_defo2,E_scission_pre=0.,E_scission_post;
       G4double E_asym;
-      G4double E1exc,E2exc;
+      G4double E1exc=0.,E2exc=0.;
       G4double E1exc_sigma,E2exc_sigma;
       G4double TKER;
       G4double EkinR1,EkinR2;
@@ -8199,7 +8199,7 @@ c      Delta_u2_shell.
       G4double E_HELP;
       G4double Z_scission,N_scission,A_scission;
       G4double Z2_over_A_eff;
-      G4double beta1gs,beta2gs,betags;
+      G4double beta1gs=0.,beta2gs=0.,betags=0.;
       G4double sigZmin;   // 'Minimum neutron width for constant Z'
       G4double DSN132,Delta_U1_shell,E_eff0_saddle;//,e_scission;
       G4int NbLam0= (*NbLam0_par);

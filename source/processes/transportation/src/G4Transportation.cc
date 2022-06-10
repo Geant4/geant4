@@ -692,7 +692,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     // Update the Step flag which identifies the Last Step in a volume
     if( !fFieldExertedForce )
        isLastStep =  fLinearNavigator->ExitedMotherVolume() 
-                   | fLinearNavigator->EnteredDaughterVolume() ;
+                  || fLinearNavigator->EnteredDaughterVolume() ;
     else
        isLastStep = fFieldPropagator->IsLastStepInVolume(); 
   }

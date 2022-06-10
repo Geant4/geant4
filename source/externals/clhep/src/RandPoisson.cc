@@ -102,10 +102,10 @@ long RandPoisson::shoot(double xm) {
   double om = getOldMean();
   HepRandomEngine* anEngine = HepRandom::getTheEngine();
 
-  double* status = getPStatus();
-  sq = status[0];
-  alxm = status[1];
-  g1 = status[2];
+  double* pstatus = getPStatus();
+  sq = pstatus[0];
+  alxm = pstatus[1];
+  g1 = pstatus[2];
 
   if( xm == -1 ) return 0;
   if( xm < 12.0 ) {
@@ -162,10 +162,10 @@ long RandPoisson::shoot(HepRandomEngine* anEngine, double xm) {
   double sq, alxm, g1;
   double om = getOldMean();
 
-  double* status = getPStatus();
-  sq = status[0];
-  alxm = status[1];
-  g1 = status[2];
+  double* pstatus = getPStatus();
+  sq = pstatus[0];
+  alxm = pstatus[1];
+  g1 = pstatus[2];
 
   if( xm == -1 ) return 0;
   if( xm < 12.0 ) {

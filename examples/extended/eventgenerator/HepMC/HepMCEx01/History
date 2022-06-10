@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24th 2022 I. Hrivnacova (HepMCEx01-V10-07-00)
+- Fix failing compilation due to G4String changes in Geant4 11
+  (Makes part of the GitHub PR #45)
+
 Novemebr 13th 2020 Ben Morgan (HepMCEx01-V10-06-01)
 - Enforce use of Serial RunManager.
 
