@@ -56,8 +56,7 @@ G4BetheBlochIonGasModel::G4BetheBlochIonGasModel(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4BetheBlochIonGasModel::~G4BetheBlochIonGasModel()
-{}
+G4BetheBlochIonGasModel::~G4BetheBlochIonGasModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

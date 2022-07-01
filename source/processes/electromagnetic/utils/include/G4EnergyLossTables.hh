@@ -223,7 +223,7 @@ private:
   static G4ThreadLocal G4int  let_max_num_warnings;
   static G4ThreadLocal G4bool first_loss;
   */
-  typedef std::map<K,G4EnergyLossTablesHelper,std::less<K> > helper_map;
+  using helper_map = std::map<K, G4EnergyLossTablesHelper, std::less<K> >;
   static helper_map *dict;
 
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);

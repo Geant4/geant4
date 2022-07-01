@@ -1,21 +1,34 @@
--------------------------------------------------------------------
+# Category track History
 
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+## 2022-05-25 Alberto Ribon (track-V11-00-04)
+- `G4Track`: add methods to get/set information on (short-lived) parent resonance
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2022-04-19 Jonas Hahnfeld (track-V11-00-03)
+- `G4ParticleChangeForTransport`:
+  * Apply proposed step length
+  * Further simplify `UpdateStepForAlongStep` method, assuming that
+    transportation is always the first process
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-01-28 Ben Morgan (track-V11-00-02)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+- Make DLL export symbol a CMake module-level compile definition to aid
+  future modularization
+
+## 2021-12-13 Jonas Hahnfeld (track-V11-00-01)
+- Simplify `G4ParticleChangeForTransport::UpdateStepForAlongStep`, assuming
+  that transportation is always the first process
+
+## 2021-12-10 Ben Morgan (track-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 - September 28, 2021 J. Hahnfeld (track-V10-07-06)
 - G4ParticleChangeForMSC, G4ParticleChangeForTransport: Disable debugFlag

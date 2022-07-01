@@ -45,8 +45,7 @@
 G4AngleDirect::G4AngleDirect() : G4VEmAngularDistribution("AngleDirect")
 {}
 
-G4AngleDirect::~G4AngleDirect() 
-{}
+G4AngleDirect::~G4AngleDirect() = default;
 
 G4ThreeVector& G4AngleDirect::SampleDirection(const G4DynamicParticle* dp,
 					      G4double, G4int,

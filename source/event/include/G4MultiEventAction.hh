@@ -59,10 +59,10 @@ class G4MultiEventAction : public G4UserEventAction
   public:
 
     G4MultiEventAction() = default;
-    virtual ~G4MultiEventAction() override = default;
-    virtual void SetEventManager(G4EventManager* ) override;
-    virtual void BeginOfEventAction(const G4Event* ) override;
-    virtual void EndOfEventAction(const G4Event* ) override;
+    ~G4MultiEventAction() override = default;
+    void SetEventManager(G4EventManager* ) override;
+    void BeginOfEventAction(const G4Event* ) override;
+    void EndOfEventAction(const G4Event* ) override;
 };
 
 #endif

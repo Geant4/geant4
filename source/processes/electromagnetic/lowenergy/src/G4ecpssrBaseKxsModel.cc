@@ -56,9 +56,7 @@ G4ecpssrBaseKxsModel::G4ecpssrBaseKxsModel()
     tableC3 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
 
     // Storing FK data needed for medium velocities region
-    char *path = 0;
-
-    path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
 
     if (!path) {
       G4Exception("G4ecpssrBaseKxsModel::G4ecpssrBaseKxsModel()", "em0006", FatalException,"G4LEDATA environment variable not set" );

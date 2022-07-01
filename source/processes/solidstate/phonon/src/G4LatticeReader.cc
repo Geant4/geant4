@@ -46,7 +46,7 @@
 // Default path to lattice files, for use with filenames below
 
 const G4String G4LatticeReader::fDataDir =
-  std::getenv("G4LATTICEDATA") ? (const char*)std::getenv("G4LATTICEDATA") : "./CrystalMaps";
+  G4FindDataDir("G4LATTICEDATA") ? (const char*)G4FindDataDir("G4LATTICEDATA") : "./CrystalMaps";
 
 
 // Constructor and destructor

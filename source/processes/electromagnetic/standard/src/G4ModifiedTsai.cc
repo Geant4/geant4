@@ -68,8 +68,7 @@ G4ModifiedTsai::G4ModifiedTsai(const G4String&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ModifiedTsai::~G4ModifiedTsai() 
-{}
+G4ModifiedTsai::~G4ModifiedTsai() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

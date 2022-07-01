@@ -63,6 +63,8 @@
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4LivermorePolarizedRayleighModel.hh"
 #include "G4PhotoElectricAngularGeneratorPolarized.hh"
+#include "G4LindhardSorensenIonModel.hh"
+#include "G4IonFluctuations.hh"
 
 //#include "G4eSingleCoulombScatteringModel.hh"
 #include "G4eDPWACoulombScatteringModel.hh"
@@ -211,6 +213,9 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   // generic ion
   particle = G4GenericIon::GenericIon();
   G4ionIonisation* ionIoni = new G4ionIonisation();
+  auto fluc = new G4IonFluctuations();
+  ionIoni->SetFluctModel(fluc);
+  ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
   ph->RegisterProcess(ionIoni, particle);
   ph->RegisterProcess(new G4CoulombScattering(), particle);
 

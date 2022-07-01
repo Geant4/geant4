@@ -81,8 +81,7 @@ G4LindhardSorensenIonModel::G4LindhardSorensenIonModel(const G4ParticleDefinitio
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4LindhardSorensenIonModel::~G4LindhardSorensenIonModel()
-{}
+G4LindhardSorensenIonModel::~G4LindhardSorensenIonModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -399,8 +398,7 @@ void G4LindhardSorensenIonModel::SampleSecondaries(
            << G4endl;
   */
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = 
-    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  auto delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
 
   vdp->push_back(delta);
 

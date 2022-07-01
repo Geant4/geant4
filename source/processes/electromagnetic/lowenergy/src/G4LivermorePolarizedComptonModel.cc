@@ -134,7 +134,7 @@ void G4LivermorePolarizedComptonModel::Initialise(const G4ParticleDefinition* pa
   // Initialise element selector 
   if(IsMaster()) {
     // Access to elements 
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable = 
       G4ProductionCutsTable::GetProductionCutsTable();
@@ -217,7 +217,7 @@ void G4LivermorePolarizedComptonModel::ReadData(size_t Z, const char* path)
   const char* datadir = path;
   if(!datadir) 
     {
-      datadir = std::getenv("G4LEDATA");
+      datadir = G4FindDataDir("G4LEDATA");
       if(!datadir) 
 	{
 	  G4Exception("G4LivermorePolarizedComptonModel::ReadData()",

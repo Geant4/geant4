@@ -35,9 +35,6 @@
 G4ShellCorrection::G4ShellCorrection()
 {}
 
-G4ShellCorrection::~G4ShellCorrection()
-{}
-
 const G4CameronTruranHilfShellCorrections* 
 G4ShellCorrection::GetCameronTruranHilfShellCorrections() const
 {

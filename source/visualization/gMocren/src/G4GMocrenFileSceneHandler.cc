@@ -83,7 +83,6 @@
 #include "G4GMocrenTouchable.hh"
 #include "G4GMocrenFileCTtoDensityMap.hh"
 #include "G4PhantomParameterisation.hh"
-#include "G4PhysicalVolumeSearchScene.hh"
 
 #include "G4ScoringManager.hh"
 #include "G4ScoringBox.hh"

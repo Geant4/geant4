@@ -98,9 +98,13 @@ public:
 
   void ProcessDescription(std::ostream& outFile) const override;
 
-protected:
-
   virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
+
+  // Print out of generic class parameters
+  void StreamInfo(std::ostream& outFile, const G4ParticleDefinition&,
+                  G4bool rst = false) const;
+
+protected:
 
   virtual void StreamProcessInfo(std::ostream&) const {};
 
@@ -178,7 +182,7 @@ public:
 
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
-  void AddEmModel(G4int order, G4VEmModel*, const G4Region* region = nullptr);
+  void AddEmModel(G4int order, G4VMscModel*, const G4Region* region = nullptr);
 
   // Assign a model to a process local list, to enable the list in run time 
   // the derived process should execute AddEmModel(..) for all such models
@@ -190,14 +194,12 @@ public:
   // Access to run time models 
   inline G4int NumberOfModels() const;
 
-  inline G4VMscModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
+  inline G4VMscModel* GetModelByIndex(G4int idx, G4bool ver = false) const;
 
   //------------------------------------------------------------------------
   // Get/Set parameters for simulation of multiple scattering
   //------------------------------------------------------------------------
 
-  void SetIonisation(G4VEnergyLossProcess*);
-  
   inline G4bool LateralDisplasmentFlag() const;
   
   inline G4double Skin() const;
@@ -236,10 +238,6 @@ protected:
                                   G4double& currentSafety) override;
 
 private:
-
-  // Print out of generic class parameters
-  void StreamInfo(std::ostream& outFile, const G4ParticleDefinition&,
-                  G4bool rst = false) const;
 
   // ======== Parameters of the class fixed at construction =========
 
@@ -337,7 +335,7 @@ inline  G4double G4VMultipleScattering::PolarAngleLimit() const
 
 inline G4MscStepLimitType G4VMultipleScattering::StepLimitType() const
 {
-  return theParameters->MscStepLimitType();
+  return stepLimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -387,6 +385,7 @@ inline G4int G4VMultipleScattering::NumberOfModels() const
 inline G4VMscModel* 
 G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
 {
+  // static cast is possible inside this class
   return static_cast<G4VMscModel*>(modelManager->GetModel(idx, ver));
 }
 

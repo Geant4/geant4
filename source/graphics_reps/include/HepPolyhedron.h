@@ -71,6 +71,10 @@
 //                                        - create polyhedron for Hype;
 //   HepPolyhedronHyperbolicMirror (a,h,r)
 //                                        - create polyhedron for Hyperbolic mirror;
+//   HepPolyhedronTetMesh (vector<p>)
+//                                        - create polyhedron for tetrahedron mesh;
+//   HepPolyhedronBoxMesh (sx,sy,sz,vector<p>)
+//                                        - create polyhedron for box mesh;
 // Public functions:
 //
 //   GetNoVertices ()       - returns number of vertices;
@@ -107,7 +111,12 @@
 //                            in order; returns false when finished all faces;
 //   GetSurfaceArea()       - get surface area of the polyhedron;
 //   GetVolume()            - get volume of the polyhedron;
-//   GetNumberOfRotationSteps()   - get number of steps for whole circle;
+//   GetNumberOfRotationSteps() - get number of steps for whole circle;
+//   SetVertex(index, v)    - set vertex;
+//   SetFacet(index,iv1,iv2,iv3,iv4) - set facet;
+//   SetReferences()        - set references to neighbouring facets;
+//   JoinCoplanarFacets(tolerance) - join coplanar facets where it is possible
+//   InvertFacets()         - invert the order on nodes in facets;
 //   SetNumberOfRotationSteps (n) - set number of steps for whole circle;
 //   ResetNumberOfRotationSteps() - reset number of steps for whole circle
 //                            to default value;
@@ -180,6 +189,14 @@
 // - added TriangulatePolygon(), RotateContourAroundZ()
 // - added HepPolyhedronPgon, HepPolyhedronPcon given by rz-countour
 //
+// 26.03.22 E.Chernyaev
+// - added HepPolyhedronTetMesh
+//
+// 04.04.22 E.Chernyaev
+// - added JoinCoplanarFacets()
+//
+// 07.04.22 E.Chernyaev
+// - added HepPolyhedronBoxMesh
 
 #ifndef HEP_POLYHEDRON_HH
 #define HEP_POLYHEDRON_HH
@@ -187,6 +204,7 @@
 #include <vector>
 #include "G4Types.hh"
 #include "G4TwoVector.hh"
+#include "G4ThreeVector.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
 #include "G4Transform3D.hh"
@@ -261,15 +279,12 @@ class HepPolyhedron {
                    G4int a, G4int b, G4int c,
                    G4int n, const G4int* V);
 
-  // For each edge set reference to neighbouring facet
-  void SetReferences();
-
-  // Invert the order on nodes in facets
-  void InvertFacets();
-
  public:
-  // Constructor
+  // Default constructor
   HepPolyhedron() : nvert(0), nface(0), pV(0), pF(0) {}
+
+  // Constructor with allocation of memory
+  HepPolyhedron(G4int Nvert, G4int Nface);
 
   // Copy constructor
   HepPolyhedron(const HepPolyhedron & from);
@@ -365,6 +380,23 @@ class HepPolyhedron {
 
   // Get number of steps for whole circle
   static G4int GetNumberOfRotationSteps();
+
+  // Set vertex (1 <= index <= Nvert)
+  void SetVertex(G4int index, const G4Point3D& v);
+
+  // Set facet (1 <= index <= Nface)
+  void SetFacet(G4int index, G4int iv1, G4int iv2, G4int iv3, G4int iv4 = 0);
+
+  // For each edge set reference to neighbouring facet,
+  // call this after all vertices and facets have been set
+  void SetReferences();
+
+  // Join couples of triangular facets to quadrangular facets
+  // where it is possible
+  void JoinCoplanarFacets(G4double tolerance);
+
+  // Invert the order on nodes in facets
+  void InvertFacets();
 
   // Set number of steps for whole circle
   static void SetNumberOfRotationSteps(G4int n);
@@ -573,6 +605,21 @@ class HepPolyhedronHyperbolicMirror : public HepPolyhedron
  public:
   HepPolyhedronHyperbolicMirror(G4double a, G4double h, G4double r);
   virtual ~HepPolyhedronHyperbolicMirror();
+};
+
+class HepPolyhedronTetMesh : public HepPolyhedron
+{
+ public:
+  HepPolyhedronTetMesh(const std::vector<G4ThreeVector>& tetrahedra);
+  virtual ~HepPolyhedronTetMesh();
+};
+
+class HepPolyhedronBoxMesh : public HepPolyhedron
+{
+ public:
+  HepPolyhedronBoxMesh(G4double sizeX, G4double sizeY, G4double sizeZ,
+                       const std::vector<G4ThreeVector>& positions);
+  virtual ~HepPolyhedronBoxMesh();
 };
 
 #endif /* HEP_POLYHEDRON_HH */

@@ -1,43 +1,66 @@
--------------------------------------------------------------------
+# Category materials History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-05-23 Gabriele Cosmo (materials-V11-00-11)
+- Corrected G4UCNMicroRoughnessHelper destructor.
 
-12-04-22 V.Ivanchenko (materials-V10-07-28)
+## 2022-05-16 Guilherme Amadio (materials-V11-00-10)
+- Replace getenv() calls for data variables with G4FindDataDir()
+
+## 2022-05-02 Vladimir Ivanchenko (materials-V11-00-09)
+- G4Material - fixed trivial Coverity warnings.
+
+## 2022-04-12 Vladimir Ivanchenko (materials-V11-00-08)
+- G4NistManager, G4NistMaterialBuilder, G4NistElementBuilder -
+    used G4AutoLock for code simplification.
+- G4Material - fixed exception messenges, moved G4Exp, G4Log headers 
+    from include to source.
+
+## 2022-04-12 Vladimir Ivanchenko (materials-V11-00-07)
 - G4DensityEffectData, G4IonisParamMat - fixed density effect correction
-    for liquid hydrogen (problem #2346), code clean-up
+    for liquid hydrogen (problem #2346), code clean-up.
 - G4NistMaterialBuilder - fixed mean ionisation potentilal of carbon
-    to the current NIST value from 81 eV to 78 eV (problem #2474)
+    to the current NIST value from 81 eV to 78 eV (problem #2474).
 - G4Material - reorganized AddElement(..) and AddMaterial(..) methods,
     temporary vector are used that allows addition of the same elements
     during initialisation, when addition completed the vector of elements
     and arrays of fractions are created, filled and temporary vectors
     are deleted, as a result the code become more transparent and 
-    fixing problem #2486
+    fixing problem #2486.
 
-04-02-22 V.Ivanchenko (materials-V10-07-27)
+## 2022-02-28 Ben Morgan (materials-V11-00-06)
+- Apply set of clang-tidy modernize, readability and performance fixes.
+
+## 2022-02-22 Daren Sawkey (materials-V11-00-05)
+- G4MaterialPropertyVector, G4OpticalMaterialProperties. Insist material property
+  vectors are in increasing order of energy. Modified from pull request 42.
+
+## 2022-02-04 Vladimir Ivanchenko (materials-V11-00-04)
 - G4SandiaTable - fixed compilation warning on unused variable
 
-17-01-22 D.Sawkey
-- G4MaterialPropertiesTable - set G4MaterialPropertyVector verbosity to 1.
+## 2022-01-28 Ben Morgan (materials-V11-00-03)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
 
-19-12-21 V.Ivanchenko
+## 2022-01-17 Daren Sawkey (materials-V11-00-02)
+- G4MaterialPropertiesTable - set G4MaterialPropertyVector verbosity to 1
+
+## 2021-12-19 Vladimir Ivanchenko (materials-V11-00-01)
 - G4DensityEffectData - Matthew Strait fix typos in the density effect data table
     (problem #2423) for 8 materials, the most significant fix for G4_Tm, small 
     for G4_Be, G4_Mg, G4_Fe, and G4_Y.
+
+## 2021-12-10 Ben Morgan (materials-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 10-11-21 V.Ivanchenko (materials-V10-07-26)
 - G4Material - revised and updated all G4Exceptions, provided complete

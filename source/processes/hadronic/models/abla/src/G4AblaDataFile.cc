@@ -68,7 +68,7 @@ G4AblaDataFile::~G4AblaDataFile()
 bool G4AblaDataFile::readData()
 {
 #ifdef ABLAXX_IN_GEANT4_MODE
-  if(!std::getenv("G4ABLADATA")) {
+  if(!G4FindDataDir("G4ABLADATA")) {
     //    throw G4HadronicException(__FILE__, __LINE__, "ERROR: Data
     //    missing. Set environment variable G4ABLA3.0 to point to the
     //    directory containing data files needed by INCL and ABLA
@@ -85,7 +85,7 @@ bool G4AblaDataFile::readData()
     G4Exception("G4AblaDataFile::readData()","ABLA_001",
                 FatalException, ed);
   }
-  G4String dataPath(std::getenv("G4ABLADATA"));
+  G4String dataPath(G4FindDataDir("G4ABLADATA"));
 #else
   G4String dataPath(theConfig->getABLAXXDataFilePath().c_str());
 #endif

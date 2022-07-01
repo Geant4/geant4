@@ -118,6 +118,8 @@ namespace G4INCL {
 
     EKin[nParticles] = EKinRem[remnantIndex];
     origin[nParticles] = -1; // Origin: cascade
+    parentResonancePDGCode[nParticles] = 0;  // No parent resonance
+    parentResonanceID[nParticles] = 0;       // No parent resonance
     history.push_back(""); // history
     nParticles++;
 // assert(history.size()==(unsigned int)nParticles);

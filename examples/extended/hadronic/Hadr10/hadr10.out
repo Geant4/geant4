@@ -1,0 +1,3029 @@
+
+ ===================================================== 
+ Initial seed = 1656510490
+ ===================================================== 
+
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
+    Default Physics Lists FTFP_BERT is instantiated
+G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
+
+
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material            = G4_Be
+ Target Inner Radius = 9 mm
+ Target Outer Radius = 11 mm
+ B [T]               = (0,0,0)
+ ------------------------------------------------------ 
+
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 1010 mm 	 y : -/+ 1010 mm 	 z : -/+ 1010 mm 
+	 Layer (cylinder) size : 
+	 	 radii : 9 , 11 mm 	 	 length (along z) : 2000 mm 
+
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material            = G4_Si
+ Target Inner Radius = 9 mm
+ Target Outer Radius = 29 mm
+ B [T]               = (0,0,4)
+ ------------------------------------------------------ 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material            = G4_Si
+ Target Inner Radius = 9 mm
+ Target Outer Radius = 29 mm
+ B [T]               = (0,0,4)
+ ------------------------------------------------------ 
+
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 1010 mm 	 y : -/+ 1010 mm 	 z : -/+ 1010 mm 
+	 Layer (cylinder) size : 
+	 	 radii : 9 , 29 mm 	 	 length (along z) : 2000 mm 
+
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 0 starts.
+### Run 0 starts.
+ Event#=0  t[ns]=0.246466  r[mm]=73.8882  deltaR[mum]=5.51105e-05  deltaEkin[MeV]=6.67018  deltaAngle(deg)=0.00841525
+ Event#=1000  t[ns]=0.154613  r[mm]=46.3516  deltaR[mum]=2.62396e-05  deltaEkin[MeV]=9.15849  deltaAngle(deg)=0.00677146
+ Event#=2000  t[ns]=0.112171  r[mm]=33.6279  deltaR[mum]=1.00116e-05  deltaEkin[MeV]=7.69782  deltaAngle(deg)=0.00501021
+ Event#=3000  t[ns]=0.178842  r[mm]=53.6152  deltaR[mum]=2.54285e-05  deltaEkin[MeV]=6.90605  deltaAngle(deg)=0.00604041
+ Event#=4000  t[ns]=0.0907513  r[mm]=27.2064  deltaR[mum]=4.21922e-06  deltaEkin[MeV]=7.31798  deltaAngle(deg)=0.00345772
+ Event#=5000  t[ns]=0.0517937  r[mm]=15.5273  deltaR[mum]=8.01341e-07  deltaEkin[MeV]=2.39105  deltaAngle(deg)=0.00223385
+ Event#=6000  t[ns]=0.230527  r[mm]=69.1099  deltaR[mum]=5.30845e-05  deltaEkin[MeV]=6.63255  deltaAngle(deg)=0.00902901
+ Event#=7000  t[ns]=0.000557668  r[mm]=0.167184  deltaR[mum]=1.11022e-12  deltaEkin[MeV]=0  deltaAngle(deg)=2.28909e-05
+ Event#=8000  t[ns]=0.0352386  r[mm]=10.5642  deltaR[mum]=3.17002e-07  deltaEkin[MeV]=0.618776  deltaAngle(deg)=0.00131967
+ Event#=9000  t[ns]=0.0868452  r[mm]=26.0354  deltaR[mum]=2.96883e-06  deltaEkin[MeV]=5.80424  deltaAngle(deg)=0.00293033
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.200000s Real=0.197782s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 0
+ primary PDG code                     = 15
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 501.777
+ primary initial momentum [GeV]       = 501.774
+ primary initial Lorentz beta         = 0.999994
+ primary initial Lorentz gamma        = 282.395
+ primary initial 3 momentum [GeV]     = (501.774,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 10000
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=3.34153e-06	 mean=0.0803817	 max=0.835075
+ decay R [mm] : min=0.00100176	 mean=24.0977	 max=250.348
+ decay X [mm] : min=0.00100176	 mean=24.0977	 max=250.348
+ decay Y [mm] : min=-0.000422745	 mean=0.00159188	 max=0.0775748
+ decay Z [mm] : min=-0.00312303	 mean=1.74213e-06	 max=0.0042392
+ Delta decay R [mm] : min=-3.46945e-18	 mean=1.8949e-08	 max=3.7019e-06
+ deflection angle [deg] : min=0	 mean=0.00332581	 max=0.0347639
+ Delta Ekin [MeV] : min=0	 mean=5.26297	 max=5608.94
+ decay Ekin [GeV] : min=494.391	 mean=499.995	 max=500
+ decay Px [GeV]   : min=496.165	 mean=501.768	 max=501.774
+ decay Py [GeV]   : min=-0.0390533	 mean=0.0288828	 max=0.304422
+ decay Pz [GeV]   : min=-0.0330291	 mean=1.09608e-05	 max=0.0410966
+ decay Etot violation [MeV] : min=-1.0064e-05	 mean=5.49666e-06	 max=2.64479e-05
+ decay Px violation [MeV]   : min=-1.0064e-05	 mean=5.49669e-06	 max=2.6448e-05
+ decay Py violation [MeV]   : min=-1.04359e-09	 mean=4.41221e-10	 max=6.74984e-09
+ decay Pz violation [MeV]   : min=-9.64487e-10	 mean=7.65696e-13	 max=1.16187e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.40972e-05 , 0.0615967 (mean=0.0099122)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 4.87358e-09 , 4.87358e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 8.52651e-11 (mean=5.28353e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -114.457 (mean=-0.219643)	 (#above threshold = 97)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 83.3579 (mean=0.174008)	 (#above threshold = 347)
+ minUnderestimated_rDeltaPos [mum]           = -114.456 (mean=-0.219624)	 (#above threshold = 97)
+ maxOverestimated_rDeltaPos [mum]            = 83.359 (mean=0.174027)	 (#above threshold = 347)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0342195
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 1 starts.
+### Run 1 starts.
+ Event#=0  t[ns]=0.0564851  r[mm]=16.9337  deltaR[mum]=9.76843e-07  deltaEkin[MeV]=2.84857  deltaAngle(deg)=0.00245413
+ Event#=1000  t[ns]=0.157346  r[mm]=47.1709  deltaR[mum]=2.45435e-05  deltaEkin[MeV]=7.3798  deltaAngle(deg)=0.0067783
+ Event#=2000  t[ns]=0.0983243  r[mm]=29.4767  deltaR[mum]=5.54497e-06  deltaEkin[MeV]=8.8514  deltaAngle(deg)=0.00351833
+ Event#=3000  t[ns]=0.016008  r[mm]=4.79904  deltaR[mum]=2.63025e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000657061
+ Event#=4000  t[ns]=0.0613018  r[mm]=18.3777  deltaR[mum]=5.65149e-06  deltaEkin[MeV]=24.8892  deltaAngle(deg)=0.00192804
+ Event#=5000  t[ns]=0.0409749  r[mm]=12.2839  deltaR[mum]=4.70745e-07  deltaEkin[MeV]=1.22592  deltaAngle(deg)=0.00181004
+ Event#=6000  t[ns]=0.199646  r[mm]=59.8521  deltaR[mum]=4.17774e-05  deltaEkin[MeV]=7.12973  deltaAngle(deg)=0.0077454
+ Event#=7000  t[ns]=0.102385  r[mm]=30.6942  deltaR[mum]=5.71649e-06  deltaEkin[MeV]=7.35724  deltaAngle(deg)=0.00443213
+ Event#=8000  t[ns]=0.0315844  r[mm]=9.46871  deltaR[mum]=2.17813e-07  deltaEkin[MeV]=0.131092  deltaAngle(deg)=0.00121929
+ Event#=9000  t[ns]=0.132233  r[mm]=39.6423  deltaR[mum]=2.52943e-05  deltaEkin[MeV]=12.4582  deltaAngle(deg)=0.00686576
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.190000s Real=0.192455s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 1
+ primary PDG code                     = -15
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 501.777
+ primary initial momentum [GeV]       = 501.774
+ primary initial Lorentz beta         = 0.999994
+ primary initial Lorentz gamma        = 282.395
+ primary initial 3 momentum [GeV]     = (501.774,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 10000
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.8666e-06	 mean=0.0810547	 max=0.698366
+ decay R [mm] : min=0.00055959	 mean=24.2994	 max=209.364
+ decay X [mm] : min=0.00055959	 mean=24.2994	 max=209.364
+ decay Y [mm] : min=-0.0523021	 mean=-0.00161334	 max=-3.74181e-13
+ decay Z [mm] : min=-0.00489275	 mean=3.82894e-06	 max=0.00377365
+ Delta decay R [mm] : min=0	 mean=1.93598e-08	 max=2.23229e-06
+ deflection angle [deg] : min=0	 mean=0.00334765	 max=0.0286601
+ Delta Ekin [MeV] : min=0	 mean=4.59737	 max=1016.37
+ decay Ekin [GeV] : min=498.984	 mean=499.995	 max=500
+ decay Px [GeV]   : min=500.757	 mean=501.769	 max=501.774
+ decay Py [GeV]   : min=-0.250831	 mean=-0.0290766	 max=0.00752494
+ decay Pz [GeV]   : min=-0.0383301	 mean=8.13764e-05	 max=0.0403097
+ decay Etot violation [MeV] : min=-1.14021e-05	 mean=5.65336e-06	 max=2.55692e-05
+ decay Px violation [MeV]   : min=-1.14023e-05	 mean=5.65338e-06	 max=2.55693e-05
+ decay Py violation [MeV]   : min=-5.85158e-09	 mean=-4.48933e-10	 max=1.3342e-09
+ decay Pz violation [MeV]   : min=-7.10724e-10	 mean=1.39441e-12	 max=9.31447e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.40972e-05 , 0.053009 (mean=0.0101315)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 5.55112e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 4.58959e-09 , 4.58959e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 8.52651e-11 (mean=5.40065e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -44.1749 (mean=-0.206777)	 (#above threshold = 94)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 34.9547 (mean=0.178257)	 (#above threshold = 395)
+ minUnderestimated_rDeltaPos [mum]           = -44.1744 (mean=-0.206758)	 (#above threshold = 94)
+ maxOverestimated_rDeltaPos [mum]            = 34.9551 (mean=0.178276)	 (#above threshold = 395)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0327499
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 2 starts.
+### Run 2 starts.
+ Event#=0  t[ns]=0.155737  r[mm]=46.6883  deltaR[mum]=3.30354e-05  deltaEkin[MeV]=6.76188  deltaAngle(deg)=0.00786371
+ Event#=1000  t[ns]=0.144885  r[mm]=43.4351  deltaR[mum]=1.3551e-05  deltaEkin[MeV]=7.36233  deltaAngle(deg)=0.00500489
+ Event#=2000  t[ns]=0.0839052  r[mm]=25.154  deltaR[mum]=2.69157e-06  deltaEkin[MeV]=5.49614  deltaAngle(deg)=0.00459968
+ Event#=3000  t[ns]=0.0591505  r[mm]=17.7328  deltaR[mum]=1.08788e-06  deltaEkin[MeV]=3.50468  deltaAngle(deg)=0.00209344
+ Event#=4000  t[ns]=0.231285  r[mm]=69.337  deltaR[mum]=7.04954e-05  deltaEkin[MeV]=7.57803  deltaAngle(deg)=0.0104241
+ Event#=5000  t[ns]=0.359804  r[mm]=107.866  deltaR[mum]=0.000265163  deltaEkin[MeV]=8.44555  deltaAngle(deg)=0.0136677
+ Event#=6000  t[ns]=0.376096  r[mm]=112.75  deltaR[mum]=0.000404917  deltaEkin[MeV]=10.1216  deltaAngle(deg)=0.0162403
+ Event#=7000  t[ns]=0.231465  r[mm]=69.391  deltaR[mum]=5.90516e-05  deltaEkin[MeV]=6.78949  deltaAngle(deg)=0.00971607
+ Event#=8000  t[ns]=0.166391  r[mm]=49.8823  deltaR[mum]=3.22995e-05  deltaEkin[MeV]=9.28176  deltaAngle(deg)=0.00748544
+ Event#=9000  t[ns]=0.902995  r[mm]=270.709  deltaR[mum]=0.00459915  deltaEkin[MeV]=7.57814  deltaAngle(deg)=0.0363399
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.390000s Real=0.397369s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 2
+ primary PDG code                     = 411
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 501.87
+ primary initial momentum [GeV]       = 501.866
+ primary initial Lorentz beta         = 0.999993
+ primary initial Lorentz gamma        = 268.44
+ primary initial 3 momentum [GeV]     = (501.866,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9799
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=5.34279e-07	 mean=0.279248	 max=3.23561
+ decay R [mm] : min=0.000160172	 mean=83.716	 max=970.004
+ decay X [mm] : min=0.000160172	 mean=83.716	 max=970.003
+ decay Y [mm] : min=-1.1203	 mean=-0.0175202	 max=0.00933676
+ decay Z [mm] : min=-0.074951	 mean=-5.25667e-06	 max=0.0466814
+ Delta decay R [mm] : min=2.71051e-20	 mean=9.11192e-07	 max=0.000217278
+ deflection angle [deg] : min=8.53688e-07	 mean=0.0115124	 max=0.132553
+ Delta Ekin [MeV] : min=0	 mean=8.61295	 max=4510.52
+ decay Ekin [GeV] : min=495.489	 mean=499.991	 max=500
+ decay Px [GeV]   : min=497.356	 mean=501.857	 max=501.866
+ decay Py [GeV]   : min=-1.16114	 mean=-0.100336	 max=0.115779
+ decay Pz [GeV]   : min=-0.165422	 mean=-0.000100873	 max=0.11703
+ decay Etot violation [MeV] : min=-8.71834e-06	 mean=1.14588e-05	 max=2.96573e-05
+ decay Px violation [MeV]   : min=-8.71834e-06	 mean=1.1459e-05	 max=2.96574e-05
+ decay Py violation [MeV]   : min=-4.08825e-08	 mean=-2.59102e-09	 max=3.35739e-09
+ decay Pz violation [MeV]   : min=-4.73511e-09	 mean=-2.51684e-12	 max=3.78292e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.63709e-05 , 0.0581499 (mean=0.0113339)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 4.24393e-09 , 4.24393e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -137.815 (mean=-0.395461)	 (#above threshold = 161)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 1582.17 (mean=1.44276)	 (#above threshold = 3498)
+ minUnderestimated_rDeltaPos [mum]           = -137.809 (mean=-0.39455)	 (#above threshold = 161)
+ maxOverestimated_rDeltaPos [mum]            = 1582.2 (mean=1.44367)	 (#above threshold = 3498)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0952076
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 3 starts.
+### Run 3 starts.
+ Event#=0  t[ns]=0.0156142  r[mm]=4.68098  deltaR[mum]=2.44e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000640779
+ Event#=1000  t[ns]=0.205715  r[mm]=61.6715  deltaR[mum]=4.89047e-05  deltaEkin[MeV]=9.51542  deltaAngle(deg)=0.00818384
+ Event#=2000  t[ns]=0.21546  r[mm]=64.5927  deltaR[mum]=7.47054e-05  deltaEkin[MeV]=15.5612  deltaAngle(deg)=0.00964354
+ Event#=3000  t[ns]=0.271957  r[mm]=81.5302  deltaR[mum]=0.000115661  deltaEkin[MeV]=8.33094  deltaAngle(deg)=0.0110144
+ Event#=4000  t[ns]=0.171272  r[mm]=51.3456  deltaR[mum]=3.50934e-05  deltaEkin[MeV]=11.8546  deltaAngle(deg)=0.00715322
+ Event#=5000  t[ns]=0.185771  r[mm]=55.6924  deltaR[mum]=3.5183e-05  deltaEkin[MeV]=10.1755  deltaAngle(deg)=0.00711104
+ Event#=6000  t[ns]=0.208609  r[mm]=62.5391  deltaR[mum]=5.79858e-05  deltaEkin[MeV]=9.2662  deltaAngle(deg)=0.00863614
+ Event#=7000  t[ns]=0.984691  r[mm]=295.201  deltaR[mum]=0.00594707  deltaEkin[MeV]=11.2112  deltaAngle(deg)=0.039846
+ Event#=8000  t[ns]=0.401455  r[mm]=120.352  deltaR[mum]=0.000422472  deltaEkin[MeV]=6.99503  deltaAngle(deg)=0.0167113
+ Event#=9000  t[ns]=0.198134  r[mm]=59.3988  deltaR[mum]=5.07895e-05  deltaEkin[MeV]=7.17635  deltaAngle(deg)=0.0086325
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.400000s Real=0.501021s Sys=0.010000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 3
+ primary PDG code                     = -411
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 501.87
+ primary initial momentum [GeV]       = 501.866
+ primary initial Lorentz beta         = 0.999993
+ primary initial Lorentz gamma        = 268.44
+ primary initial 3 momentum [GeV]     = (501.866,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9802
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=0.000126346	 mean=0.284644	 max=2.74116
+ decay R [mm] : min=0.0378774	 mean=85.3334	 max=821.774
+ decay X [mm] : min=0.0378774	 mean=85.3334	 max=821.774
+ decay Y [mm] : min=-0.00498224	 mean=0.0178504	 max=0.81419
+ decay Z [mm] : min=-0.076427	 mean=-1.33539e-05	 max=0.0509318
+ Delta decay R [mm] : min=6.93889e-18	 mean=9.05189e-07	 max=0.000131753
+ deflection angle [deg] : min=5.19278e-06	 mean=0.0117322	 max=0.112976
+ Delta Ekin [MeV] : min=0	 mean=9.01996	 max=6795.85
+ decay Ekin [GeV] : min=493.204	 mean=499.991	 max=500
+ decay Px [GeV]   : min=495.07	 mean=501.857	 max=501.866
+ decay Py [GeV]   : min=-0.0683636	 mean=0.10234	 max=0.989651
+ decay Pz [GeV]   : min=-0.226346	 mean=-6.65806e-05	 max=0.1303
+ decay Etot violation [MeV] : min=-8.71834e-06	 mean=1.16371e-05	 max=2.86729e-05
+ decay Px violation [MeV]   : min=-8.71834e-06	 mean=1.16373e-05	 max=2.8673e-05
+ decay Py violation [MeV]   : min=-2.05759e-09	 mean=2.63696e-09	 max=2.9091e-08
+ decay Pz violation [MeV]   : min=-6.90446e-09	 mean=-1.35618e-12	 max=4.86702e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.63709e-05 , 0.0499883 (mean=0.0111715)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 4.44112e-09 , 4.44112e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -257.205 (mean=-0.418393)	 (#above threshold = 172)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 1312.76 (mean=1.49054)	 (#above threshold = 3595)
+ minUnderestimated_rDeltaPos [mum]           = -257.186 (mean=-0.417488)	 (#above threshold = 172)
+ maxOverestimated_rDeltaPos [mum]            = 1312.78 (mean=1.49145)	 (#above threshold = 3596)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.109613
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 4 starts.
+### Run 4 starts.
+ Event#=0  t[ns]=0.527745  r[mm]=158.213  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.0243459  r[mm]=7.29867  deltaR[mum]=8.88178e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.0517093  r[mm]=15.5019  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.0145642  r[mm]=4.3662  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.0322098  r[mm]=9.65619  deltaR[mum]=-1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.0466351  r[mm]=13.9808  deltaR[mum]=1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.0224677  r[mm]=6.73559  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.0434551  r[mm]=13.0274  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.0583778  r[mm]=17.5011  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.171823  r[mm]=51.5109  deltaR[mum]=-7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.170000s Real=0.362203s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 4
+ primary PDG code                     = 421
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 501.865
+ primary initial momentum [GeV]       = 501.861
+ primary initial Lorentz beta         = 0.999993
+ primary initial Lorentz gamma        = 269.12
+ primary initial 3 momentum [GeV]     = (501.861,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9870
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=6.48563e-06	 mean=0.109402	 max=1.05875
+ decay R [mm] : min=0.00194433	 mean=32.7978	 max=317.404
+ decay X [mm] : min=0.00194433	 mean=32.7978	 max=317.404
+ decay Y [mm] : min=-0.0114726	 mean=-1.36549e-06	 max=0.00814979
+ decay Z [mm] : min=-0.0135443	 mean=-5.44031e-06	 max=0.00425167
+ Delta decay R [mm] : min=-5.68434e-14	 mean=5.62167e-10	 max=5.62568e-07
+ deflection angle [deg] : min=0	 mean=4.31028e-05	 max=0.0198284
+ Delta Ekin [MeV] : min=0	 mean=0.00065021	 max=0.579018
+ decay Ekin [GeV] : min=499.999	 mean=500	 max=500
+ decay Px [GeV]   : min=501.861	 mean=501.861	 max=501.861
+ decay Py [GeV]   : min=-0.130771	 mean=-1.92066e-05	 max=0.173683
+ decay Pz [GeV]   : min=-0.143252	 mean=-4.92042e-05	 max=0.116874
+ decay Etot violation [MeV] : min=-7.97532e-06	 mean=2.91877e-06	 max=1.22131e-05
+ decay Px violation [MeV]   : min=-7.97532e-06	 mean=2.91885e-06	 max=1.22133e-05
+ decay Py violation [MeV]   : min=-1.22859e-09	 mean=-3.45075e-13	 max=1.01538e-09
+ decay Pz violation [MeV]   : min=-9.23819e-10	 mean=-1.81462e-13	 max=3.73632e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.54659e-05 , 0.0371413 (mean=0.00383014)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 4.09813e-09 , 4.09813e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 5.68434e-11 (mean=3.61611e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.0180074 (mean=-2.20115e-05)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.0278459 (mean=3.24187e-05)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0174448 (mean=-2.14494e-05)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.028151 (mean=3.29809e-05)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0305176
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 5 starts.
+### Run 5 starts.
+ Event#=0  t[ns]=0.0686067  r[mm]=20.5676  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.198613  r[mm]=59.5423  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.140683  r[mm]=42.1753  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.0440707  r[mm]=13.212  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.141515  r[mm]=42.4248  deltaR[mum]=7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.00646075  r[mm]=1.93687  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.0313979  r[mm]=9.41278  deltaR[mum]=-1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.204817  r[mm]=61.4022  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.119855  r[mm]=35.9314  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.435662  r[mm]=130.607  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.170000s Real=0.343501s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 5
+ primary PDG code                     = -421
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 501.865
+ primary initial momentum [GeV]       = 501.861
+ primary initial Lorentz beta         = 0.999993
+ primary initial Lorentz gamma        = 269.12
+ primary initial 3 momentum [GeV]     = (501.861,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9858
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=2.31941e-06	 mean=0.108066	 max=1.10695
+ decay R [mm] : min=0.000695337	 mean=32.3971	 max=331.852
+ decay X [mm] : min=0.000695337	 mean=32.3971	 max=331.852
+ decay Y [mm] : min=-0.0135094	 mean=3.46724e-06	 max=0.0159734
+ decay Z [mm] : min=-0.0188508	 mean=1.29072e-06	 max=0.015888
+ Delta decay R [mm] : min=-5.68434e-14	 mean=6.21145e-10	 max=4.94441e-07
+ deflection angle [deg] : min=0	 mean=4.48915e-05	 max=0.0186714
+ Delta Ekin [MeV] : min=0	 mean=0.000684701	 max=0.513417
+ decay Ekin [GeV] : min=499.999	 mean=500	 max=500
+ decay Px [GeV]   : min=501.861	 mean=501.861	 max=501.861
+ decay Py [GeV]   : min=-0.121698	 mean=6.6246e-05	 max=0.160744
+ decay Pz [GeV]   : min=-0.123343	 mean=3.04112e-05	 max=0.128379
+ decay Etot violation [MeV] : min=-7.21397e-06	 mean=2.92084e-06	 max=1.28807e-05
+ decay Px violation [MeV]   : min=-7.21397e-06	 mean=2.92093e-06	 max=1.28809e-05
+ decay Py violation [MeV]   : min=-1.4812e-09	 mean=9.95093e-14	 max=7.52451e-10
+ decay Pz violation [MeV]   : min=-1.29241e-09	 mean=4.62173e-13	 max=1.95161e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.54659e-05 , 0.0371413 (mean=0.00381591)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 3.55004e-09 , 3.55004e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 5.68434e-11 (mean=3.55236e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.0163985 (mean=-2.29473e-05)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.045473 (mean=4.09961e-05)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0162062 (mean=-2.23262e-05)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.0457584 (mean=4.16172e-05)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0305176
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 6 starts.
+### Run 6 starts.
+ Event#=0  t[ns]=0.181593  r[mm]=54.4399  deltaR[mum]=2.9953e-05  deltaEkin[MeV]=6.71423  deltaAngle(deg)=0.00737437
+ Event#=1000  t[ns]=0.129696  r[mm]=38.8815  deltaR[mum]=1.64024e-05  deltaEkin[MeV]=8.52415  deltaAngle(deg)=0.00479947
+ Event#=2000  t[ns]=0.423889  r[mm]=127.078  deltaR[mum]=0.000524817  deltaEkin[MeV]=7.10353  deltaAngle(deg)=0.0179968
+ Event#=3000  t[ns]=0.0986555  r[mm]=29.5759  deltaR[mum]=6.92232e-06  deltaEkin[MeV]=7.28177  deltaAngle(deg)=0.00422205
+ Event#=4000  t[ns]=0.0300521  r[mm]=9.00931  deltaR[mum]=1.74246e-07  deltaEkin[MeV]=0.00196952  deltaAngle(deg)=0.00124059
+ Event#=5000  t[ns]=0.0554937  r[mm]=16.6365  deltaR[mum]=9.3695e-07  deltaEkin[MeV]=2.45427  deltaAngle(deg)=0.00259946
+ Event#=6000  t[ns]=0.0638351  r[mm]=19.1371  deltaR[mum]=1.30698e-06  deltaEkin[MeV]=3.0805  deltaAngle(deg)=0.00269122
+ Event#=7000  t[ns]=0.210033  r[mm]=62.9658  deltaR[mum]=3.87837e-05  deltaEkin[MeV]=7.14969  deltaAngle(deg)=0.00785555
+ Event#=8000  t[ns]=0.188554  r[mm]=56.5267  deltaR[mum]=0.000170153  deltaEkin[MeV]=95.6926  deltaAngle(deg)=0.00958816
+ Event#=9000  t[ns]=0.0234321  r[mm]=7.0247  deltaR[mum]=8.24301e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000961423
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.320000s Real=0.668427s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 6
+ primary PDG code                     = 431
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 501.968
+ primary initial momentum [GeV]       = 501.964
+ primary initial Lorentz beta         = 0.999992
+ primary initial Lorentz gamma        = 255.03
+ primary initial 3 momentum [GeV]     = (501.964,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9862
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=4.13207e-05	 mean=0.124756	 max=1.69543
+ decay R [mm] : min=0.0123875	 mean=37.4006	 max=508.273
+ decay X [mm] : min=0.0123875	 mean=37.4006	 max=508.272
+ decay Y [mm] : min=-0.29839	 mean=-0.00364963	 max=-1.83294e-10
+ decay Z [mm] : min=-0.0276993	 mean=7.07764e-06	 max=0.029738
+ Delta decay R [mm] : min=-3.46945e-18	 mean=7.58895e-08	 max=3.08185e-05
+ deflection angle [deg] : min=1.9089e-06	 mean=0.00517061	 max=0.0683184
+ Delta Ekin [MeV] : min=0	 mean=6.30709	 max=3041.66
+ decay Ekin [GeV] : min=496.958	 mean=499.994	 max=500
+ decay Px [GeV]   : min=498.923	 mean=501.958	 max=501.964
+ decay Py [GeV]   : min=-0.598488	 mean=-0.0449741	 max=0.0201892
+ decay Pz [GeV]   : min=-0.131869	 mean=3.34131e-05	 max=0.157363
+ decay Etot violation [MeV] : min=-9.94018e-06	 mean=3.22331e-06	 max=1.75469e-05
+ decay Px violation [MeV]   : min=-9.94012e-06	 mean=3.22336e-06	 max=1.7547e-05
+ decay Py violation [MeV]   : min=-7.97132e-09	 mean=-3.66958e-10	 max=4.39132e-09
+ decay Pz violation [MeV]   : min=-3.10746e-09	 mean=9.94731e-14	 max=2.36976e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.86446e-05 , 0.0562266 (mean=0.0120607)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 3.25502e-09 , 3.25502e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -58.6135 (mean=-0.284509)	 (#above threshold = 131)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 355.773 (mean=0.435649)	 (#above threshold = 1055)
+ minUnderestimated_rDeltaPos [mum]           = -58.6096 (mean=-0.284433)	 (#above threshold = 131)
+ maxOverestimated_rDeltaPos [mum]            = 355.781 (mean=0.435725)	 (#above threshold = 1056)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0652104
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 7 starts.
+### Run 7 starts.
+ Event#=0  t[ns]=0.212525  r[mm]=63.7129  deltaR[mum]=5.97528e-05  deltaEkin[MeV]=6.86149  deltaAngle(deg)=0.00885578
+ Event#=1000  t[ns]=0.30815  r[mm]=92.3804  deltaR[mum]=0.000168692  deltaEkin[MeV]=7.12709  deltaAngle(deg)=0.0127445
+ Event#=2000  t[ns]=0.0259706  r[mm]=7.78574  deltaR[mum]=1.12228e-07  deltaEkin[MeV]=0  deltaAngle(deg)=0.00106558
+ Event#=3000  t[ns]=0.223342  r[mm]=66.9557  deltaR[mum]=6.79021e-05  deltaEkin[MeV]=6.85597  deltaAngle(deg)=0.0103313
+ Event#=4000  t[ns]=0.130854  r[mm]=39.2287  deltaR[mum]=2.30681e-05  deltaEkin[MeV]=12.5445  deltaAngle(deg)=0.00631822
+ Event#=5000  t[ns]=0.0893639  r[mm]=26.7904  deltaR[mum]=4.60603e-06  deltaEkin[MeV]=7.08337  deltaAngle(deg)=0.00335882
+ Event#=6000  t[ns]=0.529651  r[mm]=158.784  deltaR[mum]=0.000935799  deltaEkin[MeV]=7.61825  deltaAngle(deg)=0.0218177
+ Event#=7000  t[ns]=0.0655424  r[mm]=19.649  deltaR[mum]=1.39529e-06  deltaEkin[MeV]=3.65838  deltaAngle(deg)=0.00305937
+ Event#=8000  t[ns]=7.12424e-05  r[mm]=0.0213578  deltaR[mum]=-3.46945e-15  deltaEkin[MeV]=0  deltaAngle(deg)=2.95726e-06
+ Event#=9000  t[ns]=0.00444323  r[mm]=1.33204  deltaR[mum]=5.61995e-10  deltaEkin[MeV]=0  deltaAngle(deg)=0.000182308
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.320000s Real=0.756749s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 7
+ primary PDG code                     = -431
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 501.968
+ primary initial momentum [GeV]       = 501.964
+ primary initial Lorentz beta         = 0.999992
+ primary initial Lorentz gamma        = 255.03
+ primary initial 3 momentum [GeV]     = (501.964,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9868
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.04695e-05	 mean=0.127186	 max=1.24656
+ decay R [mm] : min=0.00313865	 mean=38.1292	 max=373.706
+ decay X [mm] : min=0.00313865	 mean=38.1292	 max=373.706
+ decay Y [mm] : min=-0.00137221	 mean=0.00381297	 max=0.161663
+ decay Z [mm] : min=-0.0129005	 mean=2.62872e-06	 max=0.0121638
+ Delta decay R [mm] : min=-3.46945e-18	 mean=8.06513e-08	 max=1.23502e-05
+ deflection angle [deg] : min=8.53688e-07	 mean=0.00526962	 max=0.0502972
+ Delta Ekin [MeV] : min=0	 mean=6.65635	 max=2308.7
+ decay Ekin [GeV] : min=497.691	 mean=499.993	 max=500
+ decay Px [GeV]   : min=499.656	 mean=501.958	 max=501.964
+ decay Py [GeV]   : min=-0.106579	 mean=0.0457756	 max=0.440664
+ decay Pz [GeV]   : min=-0.131559	 mean=8.17478e-05	 max=0.155135
+ decay Etot violation [MeV] : min=-1.21722e-05	 mean=3.20272e-06	 max=1.73551e-05
+ decay Px violation [MeV]   : min=-1.21721e-05	 mean=3.20277e-06	 max=1.73552e-05
+ decay Py violation [MeV]   : min=-3.50832e-09	 mean=3.72152e-10	 max=6.54745e-09
+ decay Pz violation [MeV]   : min=-2.31253e-09	 mean=7.92174e-13	 max=1.54712e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.86446e-05 , 0.0562266 (mean=0.0117912)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 3.51278e-09 , 3.51278e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -84.2873 (mean=-0.299358)	 (#above threshold = 134)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 118.77 (mean=0.416777)	 (#above threshold = 1140)
+ minUnderestimated_rDeltaPos [mum]           = -84.2871 (mean=-0.299277)	 (#above threshold = 134)
+ maxOverestimated_rDeltaPos [mum]            = 118.772 (mean=0.416858)	 (#above threshold = 1141)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0733853
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 8 starts.
+### Run 8 starts.
+ Event#=0  t[ns]=0.329819  r[mm]=98.8717  deltaR[mum]=0.000304561  deltaEkin[MeV]=7.19948  deltaAngle(deg)=0.0135728
+ Event#=1000  t[ns]=0.106207  r[mm]=31.8382  deltaR[mum]=1.25767e-05  deltaEkin[MeV]=7.30778  deltaAngle(deg)=0.00340045
+ Event#=2000  t[ns]=0.228244  r[mm]=68.4222  deltaR[mum]=0.000109522  deltaEkin[MeV]=6.8261  deltaAngle(deg)=0.00947171
+ Event#=3000  t[ns]=0.284568  r[mm]=85.3066  deltaR[mum]=0.000218945  deltaEkin[MeV]=6.59795  deltaAngle(deg)=0.0123731
+ Event#=4000  t[ns]=0.350976  r[mm]=105.214  deltaR[mum]=0.000387171  deltaEkin[MeV]=7.79629  deltaAngle(deg)=0.0139194
+ Event#=5000  t[ns]=0.13044  r[mm]=39.1028  deltaR[mum]=2.57206e-05  deltaEkin[MeV]=7.03849  deltaAngle(deg)=0.00534953
+ Event#=6000  t[ns]=0.0120879  r[mm]=3.62365  deltaR[mum]=1.11666e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000492717
+ Event#=7000  t[ns]=0.00559703  r[mm]=1.67786  deltaR[mum]=1.10867e-09  deltaEkin[MeV]=0  deltaAngle(deg)=0.000228142
+ Event#=8000  t[ns]=0.116922  r[mm]=35.0503  deltaR[mum]=4.43632e-05  deltaEkin[MeV]=11.1784  deltaAngle(deg)=0.00546905
+ Event#=9000  t[ns]=0.200586  r[mm]=60.1309  deltaR[mum]=8.90298e-05  deltaEkin[MeV]=7.7622  deltaAngle(deg)=0.00819505
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.350000s Real=0.740280s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 8
+ primary PDG code                     = 521
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.279
+ primary initial momentum [GeV]       = 505.252
+ primary initial Lorentz beta         = 0.999945
+ primary initial Lorentz gamma        = 95.7097
+ primary initial 3 momentum [GeV]     = (505.252,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9840
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=2.14216e-05	 mean=0.155006	 max=1.54647
+ decay R [mm] : min=0.00642167	 mean=46.4672	 max=463.593
+ decay X [mm] : min=0.00642167	 mean=46.4672	 max=463.593
+ decay Y [mm] : min=-0.254936	 mean=-0.0055232	 max=0.00575116
+ decay Z [mm] : min=-0.0106866	 mean=-1.39754e-06	 max=0.0168168
+ Delta decay R [mm] : min=-3.46945e-18	 mean=1.96921e-07	 max=2.40167e-05
+ deflection angle [deg] : min=8.53688e-07	 mean=0.00635227	 max=0.0629994
+ Delta Ekin [MeV] : min=0	 mean=6.69465	 max=1606.42
+ decay Ekin [GeV] : min=498.394	 mean=499.993	 max=500
+ decay Px [GeV]   : min=503.645	 mean=505.245	 max=505.252
+ decay Py [GeV]   : min=-0.555593	 mean=-0.0556157	 max=0.105156
+ decay Pz [GeV]   : min=-0.0974442	 mean=-7.16241e-05	 max=0.132654
+ decay Etot violation [MeV] : min=-1.88395e-06	 mean=3.97575e-07	 max=2.67767e-06
+ decay Px violation [MeV]   : min=-1.88412e-06	 mean=3.9756e-07	 max=2.67761e-06
+ decay Py violation [MeV]   : min=-1.62288e-09	 mean=-5.18899e-11	 max=6.71548e-10
+ decay Pz violation [MeV]   : min=-1.65798e-10	 mean=-1.36404e-13	 max=2.13447e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.09184e-05 , 0.0218188 (mean=0.00447507)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.62615e-10 , 1.62615e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 1.7053e-10 (mean=1.03065e-11)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -64.542 (mean=-0.306313)	 (#above threshold = 114)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 214.22 (mean=0.544699)	 (#above threshold = 1592)
+ minUnderestimated_rDeltaPos [mum]           = -64.5409 (mean=-0.306116)	 (#above threshold = 114)
+ maxOverestimated_rDeltaPos [mum]            = 214.244 (mean=0.544896)	 (#above threshold = 1593)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0677771
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 9 starts.
+### Run 9 starts.
+ Event#=0  t[ns]=0.0647526  r[mm]=19.4113  deltaR[mum]=1.33615e-06  deltaEkin[MeV]=4.25646  deltaAngle(deg)=0.00317381
+ Event#=1000  t[ns]=0.0599799  r[mm]=17.9805  deltaR[mum]=1.10932e-06  deltaEkin[MeV]=3.40535  deltaAngle(deg)=0.00306019
+ Event#=2000  t[ns]=0.397761  r[mm]=119.239  deltaR[mum]=0.00064166  deltaEkin[MeV]=12.0022  deltaAngle(deg)=0.0163041
+ Event#=3000  t[ns]=0.13259  r[mm]=39.7474  deltaR[mum]=3.49458e-05  deltaEkin[MeV]=7.47999  deltaAngle(deg)=0.00530905
+ Event#=4000  t[ns]=0.225544  r[mm]=67.6128  deltaR[mum]=0.000168615  deltaEkin[MeV]=7.34023  deltaAngle(deg)=0.0112727
+ Event#=5000  t[ns]=0.0232798  r[mm]=6.97873  deltaR[mum]=7.97735e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000948917
+ Event#=6000  t[ns]=0.0574826  r[mm]=17.2319  deltaR[mum]=4.44047e-06  deltaEkin[MeV]=4.80837  deltaAngle(deg)=0.00222381
+ Event#=7000  t[ns]=0.0514155  r[mm]=15.4131  deltaR[mum]=7.77321e-07  deltaEkin[MeV]=2.15138  deltaAngle(deg)=0.00253217
+ Event#=8000  t[ns]=0.0686663  r[mm]=20.5845  deltaR[mum]=1.54885e-06  deltaEkin[MeV]=4.5443  deltaAngle(deg)=0.00210425
+ Event#=9000  t[ns]=0.157083  r[mm]=47.0897  deltaR[mum]=4.27535e-05  deltaEkin[MeV]=6.71854  deltaAngle(deg)=0.00606352
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.370000s Real=1.094064s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 9
+ primary PDG code                     = -521
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.279
+ primary initial momentum [GeV]       = 505.252
+ primary initial Lorentz beta         = 0.999945
+ primary initial Lorentz gamma        = 95.7097
+ primary initial 3 momentum [GeV]     = (505.252,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9829
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=2.63583e-06	 mean=0.153804	 max=1.29183
+ decay R [mm] : min=0.000790159	 mean=46.1066	 max=387.261
+ decay X [mm] : min=0.000790159	 mean=46.1066	 max=387.261
+ decay Y [mm] : min=-0.0063197	 mean=0.00537638	 max=0.177371
+ decay Z [mm] : min=-0.0233137	 mean=-8.47805e-06	 max=0.0232755
+ Delta decay R [mm] : min=0	 mean=1.85051e-07	 max=1.45317e-05
+ deflection angle [deg] : min=0	 mean=0.0063201	 max=0.0525319
+ Delta Ekin [MeV] : min=0	 mean=6.48664	 max=692.112
+ decay Ekin [GeV] : min=499.308	 mean=499.994	 max=500
+ decay Px [GeV]   : min=504.56	 mean=505.245	 max=505.252
+ decay Py [GeV]   : min=-0.0453603	 mean=0.0553676	 max=0.463264
+ decay Pz [GeV]   : min=-0.104321	 mean=-7.03367e-05	 max=0.156691
+ decay Etot violation [MeV] : min=-1.51515e-06	 mean=3.95035e-07	 max=2.75607e-06
+ decay Px violation [MeV]   : min=-1.51509e-06	 mean=3.95017e-07	 max=2.75613e-06
+ decay Py violation [MeV]   : min=-5.27109e-10	 mean=5.09886e-11	 max=1.26619e-09
+ decay Pz violation [MeV]   : min=-1.70402e-10	 mean=-1.22038e-13	 max=1.14085e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.09184e-05 , 0.0218188 (mean=0.00448599)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 5.55112e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.63965e-10 , 1.63965e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 1.13687e-10 (mean=1.03683e-11)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -28.644 (mean=-0.301467)	 (#above threshold = 139)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 112 (mean=0.527746)	 (#above threshold = 1546)
+ minUnderestimated_rDeltaPos [mum]           = -28.6438 (mean=-0.301282)	 (#above threshold = 139)
+ maxOverestimated_rDeltaPos [mum]            = 112.014 (mean=0.527931)	 (#above threshold = 1546)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0680494
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 10 starts.
+### Run 10 starts.
+ Event#=0  t[ns]=0.086345  r[mm]=25.8842  deltaR[mum]=3.55271e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.288813  r[mm]=86.5794  deltaR[mum]=1.42109e-11  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.0316293  r[mm]=9.48171  deltaR[mum]=1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.123439  r[mm]=37.0042  deltaR[mum]=7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.031171  r[mm]=9.34433  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.214551  r[mm]=64.3173  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.338176  r[mm]=101.377  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.011052  r[mm]=3.31312  deltaR[mum]=-4.44089e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.0512802  r[mm]=15.3726  deltaR[mum]=1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.0634323  r[mm]=19.0155  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.190000s Real=0.400719s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 10
+ primary PDG code                     = 511
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.28
+ primary initial momentum [GeV]       = 505.252
+ primary initial Lorentz beta         = 0.999945
+ primary initial Lorentz gamma        = 95.704
+ primary initial 3 momentum [GeV]     = (505.252,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9833
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.43748e-06	 mean=0.145332	 max=1.50061
+ decay R [mm] : min=0.000430921	 mean=43.567	 max=449.848
+ decay X [mm] : min=0.000430921	 mean=43.567	 max=449.848
+ decay Y [mm] : min=-0.0397257	 mean=-3.11651e-06	 max=0.0203628
+ decay Z [mm] : min=-0.020235	 mean=4.47724e-06	 max=0.0320344
+ Delta decay R [mm] : min=-5.68434e-14	 mean=1.03727e-09	 max=1.0891e-06
+ deflection angle [deg] : min=0	 mean=5.30816e-05	 max=0.0490347
+ Delta Ekin [MeV] : min=0	 mean=0.00117036	 max=3.46515
+ decay Ekin [GeV] : min=499.997	 mean=500	 max=500
+ decay Px [GeV]   : min=505.248	 mean=505.252	 max=505.252
+ decay Py [GeV]   : min=-0.207835	 mean=1.43298e-05	 max=0.166581
+ decay Pz [GeV]   : min=-0.106854	 mean=8.49518e-05	 max=0.379226
+ decay Etot violation [MeV] : min=-1.51701e-06	 mean=-1.77012e-07	 max=1.08854e-06
+ decay Px violation [MeV]   : min=-1.51707e-06	 mean=-1.77037e-07	 max=1.08854e-06
+ decay Py violation [MeV]   : min=-2.69893e-10	 mean=8.87437e-14	 max=3.71244e-10
+ decay Pz violation [MeV]   : min=-6.76494e-10	 mean=-5.64142e-14	 max=2.2608e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.36424e-05 , 0.0139089 (mean=0.00235965)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 3.33067e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 9.65628e-11 , 9.65628e-11
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.105805 (mean=-4.25135e-05)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.126266 (mean=7.27864e-05)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.104715 (mean=-4.14762e-05)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.127092 (mean=7.38237e-05)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0305176
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 11 starts.
+### Run 11 starts.
+ Event#=0  t[ns]=0.141983  r[mm]=42.5631  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.382708  r[mm]=114.727  deltaR[mum]=-1.42109e-11  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.0294344  r[mm]=8.82373  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.0512784  r[mm]=15.372  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.182954  r[mm]=54.8453  deltaR[mum]=7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.167538  r[mm]=50.2239  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.0253864  r[mm]=7.61024  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.00529891  r[mm]=1.58849  deltaR[mum]=-2.22045e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.157717  r[mm]=47.2797  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.118797  r[mm]=35.6124  deltaR[mum]=7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.180000s Real=0.382399s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 11
+ primary PDG code                     = -511
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.28
+ primary initial momentum [GeV]       = 505.252
+ primary initial Lorentz beta         = 0.999945
+ primary initial Lorentz gamma        = 95.704
+ primary initial 3 momentum [GeV]     = (505.252,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9839
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.97359e-06	 mean=0.144042	 max=1.19921
+ decay R [mm] : min=0.000591636	 mean=43.1804	 max=359.496
+ decay X [mm] : min=0.000591636	 mean=43.1804	 max=359.496
+ decay Y [mm] : min=-0.0185421	 mean=-3.33881e-07	 max=0.0209007
+ decay Z [mm] : min=-0.00963885	 mean=8.38669e-06	 max=0.0321689
+ Delta decay R [mm] : min=-5.68434e-14	 mean=9.75822e-10	 max=8.05856e-07
+ deflection angle [deg] : min=0	 mean=5.55064e-05	 max=0.0207251
+ Delta Ekin [MeV] : min=0	 mean=0.000989019	 max=0.641154
+ decay Ekin [GeV] : min=499.999	 mean=500	 max=500
+ decay Px [GeV]   : min=505.251	 mean=505.252	 max=505.252
+ decay Py [GeV]   : min=-0.131023	 mean=-3.97277e-05	 max=0.118272
+ decay Pz [GeV]   : min=-0.159209	 mean=5.05528e-05	 max=0.164735
+ decay Etot violation [MeV] : min=-2.25758e-06	 mean=-1.79902e-07	 max=1.03575e-06
+ decay Px violation [MeV]   : min=-2.2577e-06	 mean=-1.79927e-07	 max=1.03598e-06
+ decay Py violation [MeV]   : min=-1.89573e-10	 mean=-2.75739e-14	 max=2.47539e-10
+ decay Pz violation [MeV]   : min=-2.97916e-10	 mean=2.27023e-14	 max=1.70246e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.36424e-05 , 0.0121017 (mean=0.00236152)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 3.33067e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.21616e-10 , 1.21616e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.0358106 (mean=-3.71424e-05)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.102871 (mean=7.94626e-05)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0355223 (mean=-3.61666e-05)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.103323 (mean=8.04384e-05)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0305176
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 12 starts.
+### Run 12 starts.
+ Event#=0  t[ns]=0.0326431  r[mm]=9.78561  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.224291  r[mm]=67.237  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.116004  r[mm]=34.7751  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.312889  r[mm]=93.7965  deltaR[mum]=1.42109e-11  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.111503  r[mm]=33.4259  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.439622  r[mm]=131.788  deltaR[mum]=2.84217e-11  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.0705327  r[mm]=21.144  deltaR[mum]=7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.164321  r[mm]=49.2594  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.090961  r[mm]=27.2679  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.154574  r[mm]=46.3376  deltaR[mum]=-7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.160000s Real=0.346914s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 12
+ primary PDG code                     = 531
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.367
+ primary initial momentum [GeV]       = 505.338
+ primary initial Lorentz beta         = 0.999944
+ primary initial Lorentz gamma        = 94.1638
+ primary initial 3 momentum [GeV]     = (505.338,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9868
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.51677e-05	 mean=0.140926	 max=1.39159
+ decay R [mm] : min=0.00454689	 mean=42.2461	 max=417.165
+ decay X [mm] : min=0.00454689	 mean=42.2461	 max=417.165
+ decay Y [mm] : min=-0.00311212	 mean=3.59846e-06	 max=0.0145728
+ decay Z [mm] : min=-0.0122546	 mean=1.63076e-06	 max=0.0271971
+ Delta decay R [mm] : min=-5.68434e-14	 mean=4.16678e-10	 max=9.03279e-07
+ deflection angle [deg] : min=0	 mean=2.50047e-05	 max=0.0335227
+ Delta Ekin [MeV] : min=0	 mean=0.00052532	 max=1.678
+ decay Ekin [GeV] : min=499.998	 mean=500	 max=500
+ decay Px [GeV]   : min=505.337	 mean=505.338	 max=505.338
+ decay Py [GeV]   : min=-0.108052	 mean=-6.05916e-06	 max=0.102213
+ decay Pz [GeV]   : min=-0.275244	 mean=-3.31374e-05	 max=0.127491
+ decay Etot violation [MeV] : min=-1.54291e-06	 mean=3.33281e-08	 max=1.32213e-06
+ decay Px violation [MeV]   : min=-1.54285e-06	 mean=3.33076e-08	 max=1.3223e-06
+ decay Py violation [MeV]   : min=-1.08955e-10	 mean=-5.11974e-14	 max=7.17719e-11
+ decay Pz violation [MeV]   : min=-4.52246e-10	 mean=-9.21743e-15	 max=2.00473e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.45519e-05 , 0.0108821 (mean=0.000502312)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 3.33067e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.465e-10 , 1.465e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.036655 (mean=-1.49597e-05)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.0743089 (mean=2.79582e-05)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0357517 (mean=-1.4543e-05)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.0746748 (mean=2.83748e-05)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0305176
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 13 starts.
+### Run 13 starts.
+ Event#=0  t[ns]=0.0103382  r[mm]=3.09914  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.108243  r[mm]=32.4487  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.167499  r[mm]=50.2121  deltaR[mum]=7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.0604396  r[mm]=18.1183  deltaR[mum]=3.55271e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.00693448  r[mm]=2.07879  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.128033  r[mm]=38.3813  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.19031  r[mm]=57.0502  deltaR[mum]=7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.132206  r[mm]=39.632  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.191446  r[mm]=57.3908  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.0103894  r[mm]=3.11447  deltaR[mum]=-4.44089e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.170000s Real=0.321212s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 13
+ primary PDG code                     = -531
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.367
+ primary initial momentum [GeV]       = 505.338
+ primary initial Lorentz beta         = 0.999944
+ primary initial Lorentz gamma        = 94.1638
+ primary initial 3 momentum [GeV]     = (505.338,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9873
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=2.69139e-05	 mean=0.140294	 max=1.42699
+ decay R [mm] : min=0.00806814	 mean=42.0568	 max=427.778
+ decay X [mm] : min=0.00806814	 mean=42.0568	 max=427.778
+ decay Y [mm] : min=-0.00646946	 mean=1.30832e-06	 max=0.0205125
+ decay Z [mm] : min=-0.017846	 mean=-3.85604e-06	 max=0.00593354
+ Delta decay R [mm] : min=-5.68434e-14	 mean=2.64666e-10	 max=4.51045e-07
+ deflection angle [deg] : min=0	 mean=1.92819e-05	 max=0.0167954
+ Delta Ekin [MeV] : min=0	 mean=0.000267944	 max=0.421206
+ decay Ekin [GeV] : min=500	 mean=500	 max=500
+ decay Px [GeV]   : min=505.338	 mean=505.338	 max=505.338
+ decay Py [GeV]   : min=-0.0663515	 mean=2.31716e-06	 max=0.0890636
+ decay Pz [GeV]   : min=-0.093944	 mean=-9.03787e-06	 max=0.147538
+ decay Etot violation [MeV] : min=-1.35769e-06	 mean=3.11638e-08	 max=1.24448e-06
+ decay Px violation [MeV]   : min=-1.35775e-06	 mean=3.11406e-08	 max=1.24454e-06
+ decay Py violation [MeV]   : min=-2.35659e-10	 mean=-4.76766e-14	 max=7.48699e-11
+ decay Pz violation [MeV]   : min=-1.27343e-10	 mean=-2.23562e-14	 max=9.01892e-11
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.45519e-05 , 0.0108821 (mean=0.000500589)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 2.22045e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.27216e-10 , 1.27216e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.0101582 (mean=-9.55581e-06)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.0572923 (mean=1.65342e-05)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.00970711 (mean=-9.29115e-06)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.0577433 (mean=1.67988e-05)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0305176
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 14 starts.
+### Run 14 starts.
+ Event#=0  t[ns]=0.0448191  r[mm]=13.4354  deltaR[mum]=5.69033e-07  deltaEkin[MeV]=1.50638  deltaAngle(deg)=0.00160069
+ Event#=1000  t[ns]=0.00274435  r[mm]=0.822671  deltaR[mum]=1.30118e-10  deltaEkin[MeV]=0  deltaAngle(deg)=0.000111641
+ Event#=2000  t[ns]=0.0230147  r[mm]=6.8991  deltaR[mum]=7.6775e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000936266
+ Event#=3000  t[ns]=0.0326041  r[mm]=9.7737  deltaR[mum]=2.41588e-07  deltaEkin[MeV]=0.212602  deltaAngle(deg)=0.00145294
+ Event#=4000  t[ns]=0.0150309  r[mm]=4.5058  deltaR[mum]=2.13873e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000611474
+ Event#=5000  t[ns]=0.000243835  r[mm]=0.0730941  deltaR[mum]=8.32667e-14  deltaEkin[MeV]=0  deltaAngle(deg)=9.95562e-06
+ Event#=6000  t[ns]=0.108852  r[mm]=32.6304  deltaR[mum]=1.75103e-05  deltaEkin[MeV]=7.65934  deltaAngle(deg)=0.00511255
+ Event#=7000  t[ns]=0.0300568  r[mm]=9.01012  deltaR[mum]=1.71395e-07  deltaEkin[MeV]=0.0042005  deltaAngle(deg)=0.00124076
+ Event#=8000  t[ns]=0.00116568  r[mm]=0.349436  deltaR[mum]=9.9365e-12  deltaEkin[MeV]=0  deltaAngle(deg)=4.74315e-05
+ Event#=9000  t[ns]=0.108816  r[mm]=32.6197  deltaR[mum]=2.2128e-05  deltaEkin[MeV]=7.51543  deltaAngle(deg)=0.0042381
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.170000s Real=0.288656s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 14
+ primary PDG code                     = 541
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 506.275
+ primary initial momentum [GeV]       = 506.236
+ primary initial Lorentz beta         = 0.999923
+ primary initial Lorentz gamma        = 80.6825
+ primary initial 3 momentum [GeV]     = (506.236,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9975
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.20679e-05	 mean=0.0411388	 max=0.388058
+ decay R [mm] : min=0.00361758	 mean=12.3321	 max=116.328
+ decay X [mm] : min=0.00361758	 mean=12.3321	 max=116.328
+ decay Y [mm] : min=-0.017443	 mean=-0.000437116	 max=0.000479484
+ decay Z [mm] : min=-0.00164826	 mean=-9.74566e-07	 max=0.00137196
+ Delta decay R [mm] : min=-3.46945e-18	 mean=8.2363e-09	 max=7.31744e-06
+ deflection angle [deg] : min=8.53688e-07	 mean=0.00169732	 max=0.0164629
+ Delta Ekin [MeV] : min=0	 mean=2.40591	 max=1130.03
+ decay Ekin [GeV] : min=498.87	 mean=499.998	 max=500
+ decay Px [GeV]   : min=505.106	 mean=506.234	 max=506.236
+ decay Py [GeV]   : min=-0.145156	 mean=-0.0147941	 max=0.0446485
+ decay Pz [GeV]   : min=-0.0907408	 mean=-3.10623e-05	 max=0.0373693
+ decay Etot violation [MeV] : min=-1.53197e-06	 mean=1.45658e-07	 max=1.59832e-06
+ decay Px violation [MeV]   : min=-1.53185e-06	 mean=1.45678e-07	 max=1.59832e-06
+ decay Py violation [MeV]   : min=-1.74964e-10	 mean=-8.48985e-13	 max=2.18364e-10
+ decay Pz violation [MeV]   : min=-1.24885e-10	 mean=-4.41483e-14	 max=4.92655e-11
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.36469e-05 , 0.0153686 (mean=0.00315191)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 9.88223e-11 , 9.88223e-11
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 4.26326e-11 (mean=2.73728e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -46.6087 (mean=-0.0999526)	 (#above threshold = 35)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 47.4889 (mean=0.0395033)	 (#above threshold = 36)
+ minUnderestimated_rDeltaPos [mum]           = -46.6014 (mean=-0.0999443)	 (#above threshold = 35)
+ maxOverestimated_rDeltaPos [mum]            = 47.4962 (mean=0.0395115)	 (#above threshold = 36)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.00818302
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 15 starts.
+### Run 15 starts.
+ Event#=0  t[ns]=0.012218  r[mm]=3.6626  deltaR[mum]=1.14873e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000497045
+ Event#=1000  t[ns]=0.0411265  r[mm]=12.3285  deltaR[mum]=4.66489e-07  deltaEkin[MeV]=1.22699  deltaAngle(deg)=0.00133447
+ Event#=2000  t[ns]=0.0493018  r[mm]=14.7792  deltaR[mum]=7.04683e-07  deltaEkin[MeV]=1.71775  deltaAngle(deg)=0.00159655
+ Event#=3000  t[ns]=0.033419  r[mm]=10.018  deltaR[mum]=2.63382e-07  deltaEkin[MeV]=0.316511  deltaAngle(deg)=0.00148743
+ Event#=4000  t[ns]=0.0173606  r[mm]=5.20417  deltaR[mum]=3.29523e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000706249
+ Event#=5000  t[ns]=0.0462149  r[mm]=13.8538  deltaR[mum]=6.09736e-07  deltaEkin[MeV]=1.58707  deltaAngle(deg)=0.00154242
+ Event#=6000  t[ns]=0.00439163  r[mm]=1.31648  deltaR[mum]=5.33795e-10  deltaEkin[MeV]=0  deltaAngle(deg)=0.000178655
+ Event#=7000  t[ns]=0.0367648  r[mm]=11.021  deltaR[mum]=3.51273e-07  deltaEkin[MeV]=0.799317  deltaAngle(deg)=0.00144387
+ Event#=8000  t[ns]=0.0326416  r[mm]=9.78497  deltaR[mum]=2.42599e-07  deltaEkin[MeV]=0.359932  deltaAngle(deg)=0.00122213
+ Event#=9000  t[ns]=0.0219938  r[mm]=6.59308  deltaR[mum]=6.70042e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000894736
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.170000s Real=0.208273s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 15
+ primary PDG code                     = -541
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 506.275
+ primary initial momentum [GeV]       = 506.236
+ primary initial Lorentz beta         = 0.999923
+ primary initial Lorentz gamma        = 80.6825
+ primary initial 3 momentum [GeV]     = (506.236,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9959
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=8.99843e-06	 mean=0.0406232	 max=0.387481
+ decay R [mm] : min=0.00269746	 mean=12.1776	 max=116.155
+ decay X [mm] : min=0.00269746	 mean=12.1776	 max=116.155
+ decay Y [mm] : min=-0.00310864	 mean=0.00042268	 max=0.0146452
+ decay Z [mm] : min=-0.00935096	 mean=-9.18057e-07	 max=0.00297407
+ Delta decay R [mm] : min=-1.73472e-18	 mean=7.97404e-09	 max=5.50493e-06
+ deflection angle [deg] : min=0	 mean=0.00167681	 max=0.0228387
+ Delta Ekin [MeV] : min=0	 mean=2.24303	 max=326.198
+ decay Ekin [GeV] : min=499.674	 mean=499.998	 max=500
+ decay Px [GeV]   : min=505.91	 mean=506.234	 max=506.236
+ decay Py [GeV]   : min=-0.0591531	 mean=0.0146248	 max=0.130256
+ decay Pz [GeV]   : min=-0.192944	 mean=-3.80836e-05	 max=0.0453197
+ decay Etot violation [MeV] : min=-1.42201e-06	 mean=1.51008e-07	 max=1.83465e-06
+ decay Px violation [MeV]   : min=-1.4219e-06	 mean=1.51029e-07	 max=1.83471e-06
+ decay Py violation [MeV]   : min=-2.68841e-10	 mean=1.03461e-12	 max=1.32566e-10
+ decay Pz violation [MeV]   : min=-3.35163e-11	 mean=-1.32437e-14	 max=9.72875e-11
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.36469e-05 , 0.0178006 (mean=0.00315514)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.00471e-10 , 1.00471e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 2.84217e-11 (mean=2.67078e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -13.1972 (mean=-0.0915212)	 (#above threshold = 43)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 35.3031 (mean=0.038215)	 (#above threshold = 45)
+ minUnderestimated_rDeltaPos [mum]           = -13.1971 (mean=-0.0915133)	 (#above threshold = 43)
+ maxOverestimated_rDeltaPos [mum]            = 35.3086 (mean=0.0382229)	 (#above threshold = 45)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0150292
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 16 starts.
+### Run 16 starts.
+ Event#=0  t[ns]=0.0250113  r[mm]=7.49813  deltaR[mum]=1.00118e-07  deltaEkin[MeV]=0  deltaAngle(deg)=0.00102557
+ Event#=1000  t[ns]=0.0141718  r[mm]=4.24856  deltaR[mum]=1.8213e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000581105
+ Event#=2000  t[ns]=0.0308806  r[mm]=9.25769  deltaR[mum]=1.97653e-07  deltaEkin[MeV]=0.0761308  deltaAngle(deg)=0.00124037
+ Event#=3000  t[ns]=0.0666905  r[mm]=19.9931  deltaR[mum]=1.45549e-06  deltaEkin[MeV]=3.49594  deltaAngle(deg)=0.00311264
+ Event#=4000  t[ns]=0.00495608  r[mm]=1.48578  deltaR[mum]=7.78932e-10  deltaEkin[MeV]=0  deltaAngle(deg)=0.000203219
+ Event#=5000  t[ns]=0.0447501  r[mm]=13.4156  deltaR[mum]=5.76103e-07  deltaEkin[MeV]=1.33243  deltaAngle(deg)=0.00213074
+ Event#=6000  t[ns]=0.116072  r[mm]=34.7972  deltaR[mum]=1.0287e-05  deltaEkin[MeV]=7.94436  deltaAngle(deg)=0.00453916
+ Event#=7000  t[ns]=0.023942  r[mm]=7.17757  deltaR[mum]=8.78204e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000981725
+ Event#=8000  t[ns]=0.0521425  r[mm]=15.6318  deltaR[mum]=8.11923e-07  deltaEkin[MeV]=2.30842  deltaAngle(deg)=0.00204827
+ Event#=9000  t[ns]=0.0122458  r[mm]=3.67115  deltaR[mum]=1.1751e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000502129
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.270000s Real=0.535692s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 16
+ primary PDG code                     = 4122
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 502.286
+ primary initial momentum [GeV]       = 502.281
+ primary initial Lorentz beta         = 0.99999
+ primary initial Lorentz gamma        = 219.679
+ primary initial 3 momentum [GeV]     = (502.281,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9895
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.50418e-06	 mean=0.0430198	 max=0.348698
+ decay R [mm] : min=0.000450938	 mean=12.8969	 max=104.536
+ decay X [mm] : min=0.000450938	 mean=12.8969	 max=104.536
+ decay Y [mm] : min=-0.0181954	 mean=-0.000476611	 max=0.00740374
+ decay Z [mm] : min=-0.0151454	 mean=-1.98574e-07	 max=0.0180936
+ Delta decay R [mm] : min=-1.73472e-18	 mean=3.86407e-09	 max=9.19642e-07
+ deflection angle [deg] : min=0	 mean=0.00181599	 max=0.0305646
+ Delta Ekin [MeV] : min=0	 mean=2.905	 max=2860.78
+ decay Ekin [GeV] : min=497.139	 mean=499.997	 max=500
+ decay Px [GeV]   : min=499.42	 mean=502.278	 max=502.281
+ decay Py [GeV]   : min=-0.252783	 mean=-0.0154872	 max=0.11174
+ decay Pz [GeV]   : min=-0.164375	 mean=-3.53192e-05	 max=0.13885
+ decay Etot violation [MeV] : min=-1.23332e-05	 mean=-8.46024e-07	 max=8.39558e-06
+ decay Px violation [MeV]   : min=-1.23331e-05	 mean=-8.46012e-07	 max=8.39564e-06
+ decay Py violation [MeV]   : min=-1.12706e-09	 mean=4.26978e-11	 max=2.43469e-09
+ decay Pz violation [MeV]   : min=-1.68458e-09	 mean=-2.1823e-13	 max=1.08122e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.09184e-05 , 0.0542641 (mean=0.00971275)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.82118e-09 , 1.82118e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -96.976 (mean=-0.11418)	 (#above threshold = 40)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 16.7025 (mean=0.0424993)	 (#above threshold = 43)
+ minUnderestimated_rDeltaPos [mum]           = -96.9759 (mean=-0.114176)	 (#above threshold = 40)
+ maxOverestimated_rDeltaPos [mum]            = 16.7029 (mean=0.0425032)	 (#above threshold = 43)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0160836
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 17 starts.
+### Run 17 starts.
+ Event#=0  t[ns]=0.127753  r[mm]=38.299  deltaR[mum]=1.54785e-05  deltaEkin[MeV]=7.26978  deltaAngle(deg)=0.00574668
+ Event#=1000  t[ns]=0.014468  r[mm]=4.33734  deltaR[mum]=1.93783e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000593248
+ Event#=2000  t[ns]=0.0184384  r[mm]=5.52764  deltaR[mum]=4.01128e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000756052
+ Event#=3000  t[ns]=0.0552922  r[mm]=16.576  deltaR[mum]=9.27962e-07  deltaEkin[MeV]=2.4323  deltaAngle(deg)=0.00248759
+ Event#=4000  t[ns]=0.0544144  r[mm]=16.3129  deltaR[mum]=8.94524e-07  deltaEkin[MeV]=2.40342  deltaAngle(deg)=0.00274651
+ Event#=5000  t[ns]=0.0483849  r[mm]=14.5053  deltaR[mum]=6.86489e-07  deltaEkin[MeV]=1.79608  deltaAngle(deg)=0.00243625
+ Event#=6000  t[ns]=0.000511417  r[mm]=0.153317  deltaR[mum]=8.60423e-13  deltaEkin[MeV]=0  deltaAngle(deg)=2.09632e-05
+ Event#=7000  t[ns]=0.0392998  r[mm]=11.7817  deltaR[mum]=4.24441e-07  deltaEkin[MeV]=0.839798  deltaAngle(deg)=0.00141975
+ Event#=8000  t[ns]=0.0865326  r[mm]=25.9415  deltaR[mum]=4.58117e-06  deltaEkin[MeV]=8.03358  deltaAngle(deg)=0.00397611
+ Event#=9000  t[ns]=0.0453406  r[mm]=13.5926  deltaR[mum]=5.93415e-07  deltaEkin[MeV]=1.48382  deltaAngle(deg)=0.00113158
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.270000s Real=0.494654s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 17
+ primary PDG code                     = -4122
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 502.286
+ primary initial momentum [GeV]       = 502.281
+ primary initial Lorentz beta         = 0.99999
+ primary initial Lorentz gamma        = 219.679
+ primary initial 3 momentum [GeV]     = (502.281,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9895
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.79314e-06	 mean=0.0434359	 max=0.34675
+ decay R [mm] : min=0.000537563	 mean=13.0216	 max=103.952
+ decay X [mm] : min=0.000537563	 mean=13.0216	 max=103.952
+ decay Y [mm] : min=-0.0122758	 mean=0.00048773	 max=0.0190704
+ decay Z [mm] : min=-0.0180517	 mean=-1.79541e-06	 max=0.00625053
+ Delta decay R [mm] : min=-3.46945e-18	 mean=4.49006e-09	 max=2.79392e-06
+ deflection angle [deg] : min=0	 mean=0.00184131	 max=0.0447381
+ Delta Ekin [MeV] : min=0	 mean=2.57955	 max=678.613
+ decay Ekin [GeV] : min=499.321	 mean=499.997	 max=500
+ decay Px [GeV]   : min=501.603	 mean=502.279	 max=502.281
+ decay Py [GeV]   : min=-0.215553	 mean=0.0155959	 max=0.319304
+ decay Pz [GeV]   : min=-0.327682	 mean=-1.52753e-05	 max=0.150271
+ decay Etot violation [MeV] : min=-1.16272e-05	 mean=-8.03298e-07	 max=8.78063e-06
+ decay Px violation [MeV]   : min=-1.16272e-05	 mean=-8.03285e-07	 max=8.78057e-06
+ decay Py violation [MeV]   : min=-1.76584e-09	 mean=-4.06493e-11	 max=1.02561e-09
+ decay Pz violation [MeV]   : min=-1.06829e-09	 mean=-1.35453e-13	 max=1.55831e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.09184e-05 , 0.0475902 (mean=0.00974115)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 5.55112e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.69561e-09 , 1.69561e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -26.8296 (mean=-0.107539)	 (#above threshold = 58)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 15.5177 (mean=0.046374)	 (#above threshold = 57)
+ minUnderestimated_rDeltaPos [mum]           = -26.8295 (mean=-0.107535)	 (#above threshold = 58)
+ maxOverestimated_rDeltaPos [mum]            = 15.5181 (mean=0.0463785)	 (#above threshold = 57)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0153731
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 18 starts.
+### Run 18 starts.
+ Event#=0  t[ns]=0.0197817  r[mm]=5.93033  deltaR[mum]=4.94973e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000810841
+ Event#=1000  t[ns]=0.321227  r[mm]=96.3003  deltaR[mum]=0.0001528  deltaEkin[MeV]=6.97004  deltaAngle(deg)=0.0121785
+ Event#=2000  t[ns]=0.113264  r[mm]=33.9553  deltaR[mum]=9.40648e-06  deltaEkin[MeV]=6.62753  deltaAngle(deg)=0.00475938
+ Event#=3000  t[ns]=0.0618338  r[mm]=18.5371  deltaR[mum]=1.58072e-06  deltaEkin[MeV]=4.04886  deltaAngle(deg)=0.00241719
+ Event#=4000  t[ns]=0.406816  r[mm]=121.959  deltaR[mum]=0.000511511  deltaEkin[MeV]=9.0899  deltaAngle(deg)=0.0177069
+ Event#=5000  t[ns]=0.0150329  r[mm]=4.50668  deltaR[mum]=2.17213e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000616189
+ Event#=6000  t[ns]=0.0972426  r[mm]=29.1522  deltaR[mum]=8.82847e-06  deltaEkin[MeV]=8.54255  deltaAngle(deg)=0.00537487
+ Event#=7000  t[ns]=0.00137873  r[mm]=0.413329  deltaR[mum]=1.67644e-11  deltaEkin[MeV]=0  deltaAngle(deg)=5.65177e-05
+ Event#=8000  t[ns]=0.0507865  r[mm]=15.2252  deltaR[mum]=7.64594e-07  deltaEkin[MeV]=1.90974  deltaAngle(deg)=0.00241767
+ Event#=9000  t[ns]=0.0021438  r[mm]=0.642688  deltaR[mum]=6.27276e-11  deltaEkin[MeV]=0  deltaAngle(deg)=8.78759e-05
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.360000s Real=0.431925s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 18
+ primary PDG code                     = 4232
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 502.468
+ primary initial momentum [GeV]       = 502.462
+ primary initial Lorentz beta         = 0.999988
+ primary initial Lorentz gamma        = 203.604
+ primary initial 3 momentum [GeV]     = (502.462,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9817
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=2.25876e-05	 mean=0.0885834	 max=0.711989
+ decay R [mm] : min=0.0067715	 mean=26.5563	 max=213.446
+ decay X [mm] : min=0.0067715	 mean=26.5563	 max=213.446
+ decay Y [mm] : min=-0.0594567	 mean=-0.00193409	 max=0.00386268
+ decay Z [mm] : min=-0.0186535	 mean=9.94078e-06	 max=0.0317826
+ Delta decay R [mm] : min=-3.46945e-18	 mean=3.04391e-08	 max=2.38326e-06
+ deflection angle [deg] : min=8.53688e-07	 mean=0.00368	 max=0.0316501
+ Delta Ekin [MeV] : min=0	 mean=5.02413	 max=1488.7
+ decay Ekin [GeV] : min=498.511	 mean=499.995	 max=500
+ decay Px [GeV]   : min=500.973	 mean=502.457	 max=502.462
+ decay Py [GeV]   : min=-0.27003	 mean=-0.0316624	 max=0.197479
+ decay Pz [GeV]   : min=-0.112949	 mean=8.64686e-05	 max=0.137246
+ decay Etot violation [MeV] : min=-9.7836e-06	 mean=-1.4802e-07	 max=9.29425e-06
+ decay Px violation [MeV]   : min=-9.78366e-06	 mean=-1.48047e-07	 max=9.29437e-06
+ decay Py violation [MeV]   : min=-1.93421e-09	 mean=2.84706e-11	 max=2.98905e-09
+ decay Pz violation [MeV]   : min=-1.77474e-09	 mean=-8.98197e-13	 max=6.69132e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 4.54747e-06 , 0.04613 (mean=0.00845335)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.56231e-09 , 1.56231e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 8.52651e-11 (mean=5.95239e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -45.148 (mean=-0.223215)	 (#above threshold = 109)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 47.9326 (mean=0.217252)	 (#above threshold = 485)
+ minUnderestimated_rDeltaPos [mum]           = -45.1468 (mean=-0.223184)	 (#above threshold = 109)
+ maxOverestimated_rDeltaPos [mum]            = 47.9338 (mean=0.217282)	 (#above threshold = 485)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0325221
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 19 starts.
+### Run 19 starts.
+ Event#=0  t[ns]=0.0200292  r[mm]=6.00453  deltaR[mum]=5.13793e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000820985
+ Event#=1000  t[ns]=0.0814768  r[mm]=24.4258  deltaR[mum]=2.47327e-06  deltaEkin[MeV]=5.30646  deltaAngle(deg)=0.00468161
+ Event#=2000  t[ns]=0.00325022  r[mm]=0.974379  deltaR[mum]=2.19602e-10  deltaEkin[MeV]=0  deltaAngle(deg)=0.000133224
+ Event#=3000  t[ns]=0.0323271  r[mm]=9.6913  deltaR[mum]=2.37709e-07  deltaEkin[MeV]=0.401475  deltaAngle(deg)=0.00122423
+ Event#=4000  t[ns]=0.0610328  r[mm]=18.297  deltaR[mum]=1.16949e-06  deltaEkin[MeV]=3.66402  deltaAngle(deg)=0.00272333
+ Event#=5000  t[ns]=0.132504  r[mm]=39.7232  deltaR[mum]=1.48216e-05  deltaEkin[MeV]=6.2716  deltaAngle(deg)=0.00546713
+ Event#=6000  t[ns]=0.102852  r[mm]=30.8339  deltaR[mum]=9.58378e-06  deltaEkin[MeV]=9.05234  deltaAngle(deg)=0.00497969
+ Event#=7000  t[ns]=0.00125512  r[mm]=0.376271  deltaR[mum]=1.2601e-11  deltaEkin[MeV]=0  deltaAngle(deg)=5.14413e-05
+ Event#=8000  t[ns]=0.00660099  r[mm]=1.9789  deltaR[mum]=1.8392e-09  deltaEkin[MeV]=0  deltaAngle(deg)=0.00027057
+ Event#=9000  t[ns]=0.0755362  r[mm]=22.6449  deltaR[mum]=2.01095e-06  deltaEkin[MeV]=4.33223  deltaAngle(deg)=0.00328173
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.360000s Real=0.367085s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 19
+ primary PDG code                     = -4232
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 502.468
+ primary initial momentum [GeV]       = 502.462
+ primary initial Lorentz beta         = 0.999988
+ primary initial Lorentz gamma        = 203.604
+ primary initial 3 momentum [GeV]     = (502.462,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9809
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=8.75901e-06	 mean=0.0891079	 max=0.806767
+ decay R [mm] : min=0.00262585	 mean=26.7135	 max=241.86
+ decay X [mm] : min=0.00262585	 mean=26.7135	 max=241.86
+ decay Y [mm] : min=-0.0114886	 mean=0.00193783	 max=0.069145
+ decay Z [mm] : min=-0.0223804	 mean=-2.53786e-06	 max=0.0178873
+ Delta decay R [mm] : min=-3.46945e-18	 mean=3.09484e-08	 max=3.83572e-06
+ deflection angle [deg] : min=0	 mean=0.00370966	 max=0.0327887
+ Delta Ekin [MeV] : min=0	 mean=5.40188	 max=2224.89
+ decay Ekin [GeV] : min=497.775	 mean=499.995	 max=500
+ decay Px [GeV]   : min=500.237	 mean=502.456	 max=502.462
+ decay Py [GeV]   : min=-0.148236	 mean=0.0319474	 max=0.287314
+ decay Pz [GeV]   : min=-0.207713	 mean=-2.84519e-05	 max=0.177199
+ decay Etot violation [MeV] : min=-1.048e-05	 mean=-1.0965e-07	 max=9.14303e-06
+ decay Px violation [MeV]   : min=-1.048e-05	 mean=-1.09677e-07	 max=9.14303e-06
+ decay Py violation [MeV]   : min=-2.08485e-09	 mean=-2.59165e-11	 max=2.60596e-09
+ decay Pz violation [MeV]   : min=-8.4718e-10	 mean=-1.62851e-13	 max=1.29822e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 4.54747e-06 , 0.0466148 (mean=0.00861987)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.48646e-09 , 1.48646e-09
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 8.52651e-11 (mean=5.95261e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -58.5291 (mean=-0.241081)	 (#above threshold = 118)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 138.156 (mean=0.259445)	 (#above threshold = 477)
+ minUnderestimated_rDeltaPos [mum]           = -58.528 (mean=-0.24105)	 (#above threshold = 118)
+ maxOverestimated_rDeltaPos [mum]            = 138.16 (mean=0.259476)	 (#above threshold = 477)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0323391
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 20 starts.
+### Run 20 starts.
+ Event#=0  t[ns]=0.0152275  r[mm]=4.56504  deltaR[mum]=8.88178e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.0686373  r[mm]=20.5767  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.0129585  r[mm]=3.8848  deltaR[mum]=4.44089e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.0315976  r[mm]=9.47262  deltaR[mum]=1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.0947453  r[mm]=28.4036  deltaR[mum]=3.55271e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.0728051  r[mm]=21.8261  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.00434134  r[mm]=1.30149  deltaR[mum]=-2.22045e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.0248101  r[mm]=7.4378  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.0314077  r[mm]=9.41569  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.0117916  r[mm]=3.535  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.110000s Real=0.102823s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 20
+ primary PDG code                     = 4132
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 502.471
+ primary initial momentum [GeV]       = 502.465
+ primary initial Lorentz beta         = 0.999988
+ primary initial Lorentz gamma        = 203.36
+ primary initial 3 momentum [GeV]     = (502.465,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9968
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=2.039e-06	 mean=0.0230499	 max=0.259724
+ decay R [mm] : min=0.000611269	 mean=6.9101	 max=77.8624
+ decay X [mm] : min=0.000611269	 mean=6.9101	 max=77.8624
+ decay Y [mm] : min=-0.00175001	 mean=4.71031e-07	 max=0.00292046
+ decay Z [mm] : min=-0.00194563	 mean=1.80317e-07	 max=0.00224522
+ Delta decay R [mm] : min=-7.10543e-15	 mean=4.93062e-11	 max=1.23818e-07
+ deflection angle [deg] : min=0	 mean=6.52431e-06	 max=0.0110856
+ Delta Ekin [MeV] : min=0	 mean=8.13549e-05	 max=0.181418
+ decay Ekin [GeV] : min=500	 mean=500	 max=500
+ decay Px [GeV]   : min=502.465	 mean=502.465	 max=502.465
+ decay Py [GeV]   : min=-0.0530748	 mean=1.93078e-05	 max=0.0824876
+ decay Pz [GeV]   : min=-0.0694241	 mean=8.20648e-06	 max=0.0680935
+ decay Etot violation [MeV] : min=-1.12527e-06	 mean=7.44905e-07	 max=1.08378e-05
+ decay Px violation [MeV]   : min=-1.12533e-06	 mean=7.44913e-07	 max=1.08381e-05
+ decay Py violation [MeV]   : min=-6.65494e-10	 mean=2.78488e-13	 max=1.53391e-09
+ decay Pz violation [MeV]   : min=-9.57101e-10	 mean=1.33575e-13	 max=9.00492e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.31921e-05 , 0.0239611 (mean=0.00544335)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 3.33067e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 7.23446e-10 , 7.23446e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.00404321 (mean=-2.04075e-06)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.006423 (mean=2.08851e-06)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.00399147 (mean=-1.99144e-06)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.00654682 (mean=2.13782e-06)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.00762939
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 21 starts.
+### Run 21 starts.
+ Event#=0  t[ns]=0.0138005  r[mm]=4.13723  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.0358981  r[mm]=10.7618  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.0234249  r[mm]=7.02252  deltaR[mum]=8.88178e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.0145225  r[mm]=4.35368  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.00272239  r[mm]=0.816141  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.00430893  r[mm]=1.29177  deltaR[mum]=2.22045e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.00806061  r[mm]=2.41648  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.0453646  r[mm]=13.5998  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.0185742  r[mm]=5.56833  deltaR[mum]=8.88178e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.0422286  r[mm]=12.6596  deltaR[mum]=1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.090000s Real=0.096619s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 21
+ primary PDG code                     = -4132
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 502.471
+ primary initial momentum [GeV]       = 502.465
+ primary initial Lorentz beta         = 0.999988
+ primary initial Lorentz gamma        = 203.36
+ primary initial 3 momentum [GeV]     = (502.465,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9976
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=7.91885e-07	 mean=0.0225786	 max=0.213724
+ decay R [mm] : min=0.000237398	 mean=6.76881	 max=64.0721
+ decay X [mm] : min=0.000237398	 mean=6.76881	 max=64.0721
+ decay Y [mm] : min=-0.000789901	 mean=-1.62115e-07	 max=0.000726778
+ decay Z [mm] : min=-0.001585	 mean=-6.15206e-08	 max=0.000549069
+ Delta decay R [mm] : min=-7.10543e-15	 mean=4.38775e-11	 max=1.56955e-07
+ deflection angle [deg] : min=0	 mean=8.15777e-06	 max=0.0228811
+ Delta Ekin [MeV] : min=0	 mean=0.000187392	 max=0.772886
+ decay Ekin [GeV] : min=499.999	 mean=500	 max=500
+ decay Px [GeV]   : min=502.464	 mean=502.465	 max=502.465
+ decay Py [GeV]   : min=-0.164781	 mean=-4.51813e-06	 max=0.170154
+ decay Pz [GeV]   : min=-0.103838	 mean=2.79881e-06	 max=0.114541
+ decay Etot violation [MeV] : min=-1.12515e-06	 mean=6.96819e-07	 max=1.20274e-05
+ decay Px violation [MeV]   : min=-1.12521e-06	 mean=6.96827e-07	 max=1.20275e-05
+ decay Py violation [MeV]   : min=-2.87298e-09	 mean=-2.53228e-13	 max=1.8039e-09
+ decay Pz violation [MeV]   : min=-2.47383e-09	 mean=-2.25337e-14	 max=1.99709e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.31921e-05 , 0.0116097 (mean=0.00543515)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 2.22045e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 9.23677e-10 , 9.23677e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.018327 (mean=-5.05011e-06)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.0038568 (mean=1.11262e-06)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0182086 (mean=-5.00623e-06)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.00398585 (mean=1.1565e-06)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.00762939
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 22 starts.
+### Run 22 starts.
+ Event#=0  t[ns]=0.0108381  r[mm]=3.24914  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.00867377  r[mm]=2.60029  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.0111251  r[mm]=3.33516  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.00892365  r[mm]=2.6752  deltaR[mum]=-4.44089e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.00124471  r[mm]=0.373148  deltaR[mum]=-5.55112e-14  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.00373489  r[mm]=1.11968  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.0277915  r[mm]=8.33158  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.0140925  r[mm]=4.22478  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.00878256  r[mm]=2.63291  deltaR[mum]=-4.44089e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.00111556  r[mm]=0.334431  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.080000s Real=0.078186s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 22
+ primary PDG code                     = 4332
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 502.695
+ primary initial momentum [GeV]       = 502.688
+ primary initial Lorentz beta         = 0.999986
+ primary initial Lorentz gamma        = 186.515
+ primary initial 3 momentum [GeV]     = (502.688,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9997
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=5.74789e-07	 mean=0.0128115	 max=0.113814
+ decay R [mm] : min=0.000172315	 mean=3.84073	 max=34.1202
+ decay X [mm] : min=0.000172315	 mean=3.84073	 max=34.1202
+ decay Y [mm] : min=-0.00280709	 mean=-3.08943e-07	 max=6.14174e-05
+ decay Z [mm] : min=-0.00433347	 mean=-3.81363e-07	 max=0.000332611
+ Delta decay R [mm] : min=-7.10543e-15	 mean=1.29747e-10	 max=1.2655e-06
+ deflection angle [deg] : min=0	 mean=6.3796e-06	 max=0.0432399
+ Delta Ekin [MeV] : min=0	 mean=0.000288525	 max=2.66726
+ decay Ekin [GeV] : min=499.997	 mean=500	 max=500
+ decay Px [GeV]   : min=502.685	 mean=502.688	 max=502.688
+ decay Py [GeV]   : min=-0.206271	 mean=-3.0768e-05	 max=0.0103589
+ decay Pz [GeV]   : min=-0.318433	 mean=-2.11652e-05	 max=0.0560996
+ decay Etot violation [MeV] : min=-4.53106e-06	 mean=-2.06262e-07	 max=3.82285e-06
+ decay Px violation [MeV]   : min=-4.53112e-06	 mean=-2.06272e-07	 max=3.82285e-06
+ decay Py violation [MeV]   : min=-2.89027e-10	 mean=1.2219e-13	 max=1.36748e-09
+ decay Pz violation [MeV]   : min=-5.99663e-11	 mean=2.19554e-13	 max=2.1106e-09
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.18234e-05 , 0.0267219 (mean=0.00159116)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 1.11022e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 7.41124e-10 , 7.41124e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.0671013 (mean=-7.16528e-06)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.0362975 (mean=3.70604e-06)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0658358 (mean=-7.03553e-06)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.037563 (mean=3.83579e-06)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0038147
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 23 starts.
+### Run 23 starts.
+ Event#=0  t[ns]=0.0396188  r[mm]=11.8772  deltaR[mum]=1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.000642725  r[mm]=0.192681  deltaR[mum]=2.77556e-14  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.0269569  r[mm]=8.08135  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.0027019  r[mm]=0.809997  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.00417632  r[mm]=1.25201  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.0106004  r[mm]=3.17788  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.0246518  r[mm]=7.39032  deltaR[mum]=-8.88178e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.0085543  r[mm]=2.56448  deltaR[mum]=-4.44089e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.0625044  r[mm]=18.7381  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.0173595  r[mm]=5.20416  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.080000s Real=0.081907s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 23
+ primary PDG code                     = -4332
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 502.695
+ primary initial momentum [GeV]       = 502.688
+ primary initial Lorentz beta         = 0.999986
+ primary initial Lorentz gamma        = 186.515
+ primary initial 3 momentum [GeV]     = (502.688,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9993
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=4.93721e-06	 mean=0.0129209	 max=0.169916
+ decay R [mm] : min=0.00148012	 mean=3.87352	 max=50.9387
+ decay X [mm] : min=0.00148012	 mean=3.87352	 max=50.9387
+ decay Y [mm] : min=-0.000789301	 mean=-1.11974e-07	 max=0.000467614
+ decay Z [mm] : min=-0.0005653	 mean=-1.17378e-07	 max=8.04393e-05
+ Delta decay R [mm] : min=-3.55271e-15	 mean=1.24379e-11	 max=4.73413e-08
+ deflection angle [deg] : min=0	 mean=3.4541e-06	 max=0.0100842
+ Delta Ekin [MeV] : min=0	 mean=3.99093e-05	 max=0.150256
+ decay Ekin [GeV] : min=500	 mean=500	 max=500
+ decay Px [GeV]   : min=502.688	 mean=502.688	 max=502.688
+ decay Py [GeV]   : min=-0.0666341	 mean=-1.80018e-05	 max=0.0325865
+ decay Pz [GeV]   : min=-0.0686867	 mean=-1.14804e-05	 max=0.0206037
+ decay Etot violation [MeV] : min=-4.81401e-06	 mean=-2.02958e-07	 max=4.40463e-06
+ decay Px violation [MeV]   : min=-4.81406e-06	 mean=-2.02968e-07	 max=4.40486e-06
+ decay Py violation [MeV]   : min=-3.28654e-10	 mean=3.81709e-14	 max=5.03022e-10
+ decay Pz violation [MeV]   : min=-3.74758e-11	 mean=5.695e-14	 max=3.60124e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.18234e-05 , 0.0242312 (mean=0.0015911)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 2.22045e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 3.97108e-10 , 3.97108e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.00482131 (mean=-1.11314e-06)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.00144029 (mean=3.30062e-07)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.00477707 (mean=-1.1007e-06)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.00148763 (mean=3.425e-07)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.00195159
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 24 starts.
+### Run 24 starts.
+ Event#=0  t[ns]=0.161904  r[mm]=48.5345  deltaR[mum]=0.000121938  deltaEkin[MeV]=0.127374  deltaAngle(deg)=0.00923139
+ Event#=1000  t[ns]=0.179134  r[mm]=53.6997  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.00372469  r[mm]=1.11657  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.190173  r[mm]=57.0089  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.162635  r[mm]=48.7537  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.176772  r[mm]=52.9916  deltaR[mum]=7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.0901183  r[mm]=27.0151  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.0688857  r[mm]=20.6501  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.016282  r[mm]=4.88093  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.0110955  r[mm]=3.32613  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.260000s Real=0.259368s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 24
+ primary PDG code                     = 5122
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.62
+ primary initial momentum [GeV]       = 505.588
+ primary initial Lorentz beta         = 0.999938
+ primary initial Lorentz gamma        = 89.9746
+ primary initial 3 momentum [GeV]     = (505.588,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9783
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=2.90444e-07	 mean=0.13159	 max=1.39082
+ decay R [mm] : min=8.70676e-05	 mean=39.4473	 max=416.931
+ decay X [mm] : min=8.70676e-05	 mean=39.4473	 max=416.931
+ decay Y [mm] : min=-0.0216075	 mean=3.72753e-06	 max=0.0552784
+ decay Z [mm] : min=-0.0297042	 mean=7.53197e-06	 max=0.0183538
+ Delta decay R [mm] : min=-5.68434e-14	 mean=1.8163e-09	 max=2.10576e-06
+ deflection angle [deg] : min=0	 mean=9.41255e-05	 max=0.0373606
+ Delta Ekin [MeV] : min=0	 mean=0.00171222	 max=2.08628
+ decay Ekin [GeV] : min=499.998	 mean=500	 max=500
+ decay Px [GeV]   : min=505.586	 mean=505.588	 max=505.588
+ decay Py [GeV]   : min=-0.142113	 mean=5.36184e-05	 max=0.158617
+ decay Pz [GeV]   : min=-0.327958	 mean=5.00915e-05	 max=0.196427
+ decay Etot violation [MeV] : min=-1.59064e-06	 mean=-3.66634e-07	 max=1.47754e-06
+ decay Px violation [MeV]   : min=-1.59058e-06	 mean=-3.66535e-07	 max=1.4776e-06
+ decay Py violation [MeV]   : min=-4.29111e-10	 mean=2.58216e-14	 max=2.95415e-10
+ decay Pz violation [MeV]   : min=-3.83011e-10	 mean=-1.25178e-13	 max=2.31083e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.63709e-05 , 0.0139153 (mean=0.00306332)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 3.33067e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 8.7951e-11 , 8.7951e-11
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.0604973 (mean=-6.02729e-05)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.207788 (mean=0.000136258)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0583916 (mean=-5.84566e-05)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.208983 (mean=0.000138074)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0305176
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 25 starts.
+### Run 25 starts.
+ Event#=0  t[ns]=0.0289086  r[mm]=8.66605  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.0506789  r[mm]=15.1922  deltaR[mum]=-1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.0621911  r[mm]=18.6433  deltaR[mum]=3.55271e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.778272  r[mm]=233.306  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.0958814  r[mm]=28.7427  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.199048  r[mm]=59.6695  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.039384  r[mm]=11.8063  deltaR[mum]=-1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.16878  r[mm]=50.5959  deltaR[mum]=-7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.210895  r[mm]=63.2209  deltaR[mum]=-7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.00627662  r[mm]=1.88157  deltaR[mum]=2.22045e-13  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.280000s Real=0.278549s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 25
+ primary PDG code                     = -5122
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.62
+ primary initial momentum [GeV]       = 505.588
+ primary initial Lorentz beta         = 0.999938
+ primary initial Lorentz gamma        = 89.9746
+ primary initial 3 momentum [GeV]     = (505.588,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9760
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.0344e-05	 mean=0.132066	 max=1.58476
+ decay R [mm] : min=0.00310087	 mean=39.5898	 max=475.069
+ decay X [mm] : min=0.00310087	 mean=39.5898	 max=475.069
+ decay Y [mm] : min=-0.0152793	 mean=2.67703e-07	 max=0.0218214
+ decay Z [mm] : min=-0.0131339	 mean=1.04704e-05	 max=0.0240083
+ Delta decay R [mm] : min=-5.68434e-14	 mean=1.59695e-09	 max=2.1395e-06
+ deflection angle [deg] : min=0	 mean=8.34629e-05	 max=0.0415992
+ Delta Ekin [MeV] : min=0	 mean=0.00168232	 max=2.58651
+ decay Ekin [GeV] : min=499.997	 mean=500	 max=500
+ decay Px [GeV]   : min=505.586	 mean=505.588	 max=505.588
+ decay Py [GeV]   : min=-0.166228	 mean=3.35139e-05	 max=0.314564
+ decay Pz [GeV]   : min=-0.147977	 mean=0.000108989	 max=0.228189
+ decay Etot violation [MeV] : min=-1.58255e-06	 mean=-3.77658e-07	 max=9.86969e-07
+ decay Px violation [MeV]   : min=-1.58243e-06	 mean=-3.77559e-07	 max=9.87027e-07
+ decay Py violation [MeV]   : min=-4.26951e-10	 mean=-1.82849e-14	 max=1.29646e-10
+ decay Pz violation [MeV]   : min=-2.57018e-10	 mean=-5.22964e-15	 max=2.15238e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 1.63709e-05 , 0.0112004 (mean=0.00306348)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 3.33067e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.04535e-10 , 1.04535e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.0587036 (mean=-5.39859e-05)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.138146 (mean=0.000107106)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0565641 (mean=-5.23889e-05)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.140286 (mean=0.000108703)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0610352
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 26 starts.
+### Run 26 starts.
+ Event#=0  t[ns]=0.112192  r[mm]=33.6321  deltaR[mum]=-7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.0905034  r[mm]=27.1304  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.0496211  r[mm]=14.8751  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.066849  r[mm]=20.0395  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.0373722  r[mm]=11.2032  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.178561  r[mm]=53.5278  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.0125036  r[mm]=3.74824  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.0103228  r[mm]=3.09448  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.112971  r[mm]=33.8657  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.233929  r[mm]=70.1256  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.220000s Real=0.364506s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 26
+ primary PDG code                     = 5232
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.792
+ primary initial momentum [GeV]       = 505.759
+ primary initial Lorentz beta         = 0.999934
+ primary initial Lorentz gamma        = 87.3275
+ primary initial 3 momentum [GeV]     = (505.759,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9814
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.93834e-05	 mean=0.128779	 max=1.30217
+ decay R [mm] : min=0.00581061	 mean=38.6043	 max=390.354
+ decay X [mm] : min=0.00581061	 mean=38.6043	 max=390.354
+ decay Y [mm] : min=-0.0227143	 mean=-2.60052e-06	 max=0.0101444
+ decay Z [mm] : min=-0.0204277	 mean=7.75738e-06	 max=0.035892
+ Delta decay R [mm] : min=-5.68434e-14	 mean=1.22112e-09	 max=7.3526e-07
+ deflection angle [deg] : min=0	 mean=6.64338e-05	 max=0.0188719
+ Delta Ekin [MeV] : min=0	 mean=0.00109276	 max=0.532683
+ decay Ekin [GeV] : min=499.999	 mean=500	 max=500
+ decay Px [GeV]   : min=505.758	 mean=505.759	 max=505.759
+ decay Py [GeV]   : min=-0.138353	 mean=-2.61001e-05	 max=0.117991
+ decay Pz [GeV]   : min=-0.148035	 mean=5.46365e-05	 max=0.154412
+ decay Etot violation [MeV] : min=-5.88247e-07	 mean=6.31503e-07	 max=1.94699e-06
+ decay Px violation [MeV]   : min=-5.8813e-07	 mean=6.31529e-07	 max=1.9471e-06
+ decay Py violation [MeV]   : min=-3.85484e-10	 mean=-7.12159e-15	 max=4.26724e-10
+ decay Pz violation [MeV]   : min=-4.40423e-10	 mean=1.47328e-13	 max=5.87704e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.36469e-05 , 0.011908 (mean=0.00138964)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 2.22045e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 9.92912e-11 , 9.92912e-11
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 5.68434e-11 (mean=4.23027e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.0189354 (mean=-3.93895e-05)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.0779305 (mean=8.8514e-05)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0182001 (mean=-3.81683e-05)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.0784447 (mean=8.97351e-05)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0305176
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 27 starts.
+### Run 27 starts.
+ Event#=0  t[ns]=0.0432049  r[mm]=12.9516  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=1000  t[ns]=0.172704  r[mm]=51.7718  deltaR[mum]=-7.10543e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=2000  t[ns]=0.121187  r[mm]=36.3287  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=3000  t[ns]=0.0252893  r[mm]=7.58104  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=4000  t[ns]=0.0549635  r[mm]=16.4765  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=5000  t[ns]=0.0173834  r[mm]=5.21108  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=6000  t[ns]=0.0463836  r[mm]=13.9045  deltaR[mum]=-1.77636e-12  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=7000  t[ns]=0.301755  r[mm]=90.4578  deltaR[mum]=1.42109e-11  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=8000  t[ns]=0.0662705  r[mm]=19.8661  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Event#=9000  t[ns]=0.292467  r[mm]=87.6738  deltaR[mum]=0  deltaEkin[MeV]=0  deltaAngle(deg)=0
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.250000s Real=0.451234s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 27
+ primary PDG code                     = -5232
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.792
+ primary initial momentum [GeV]       = 505.759
+ primary initial Lorentz beta         = 0.999934
+ primary initial Lorentz gamma        = 87.3275
+ primary initial 3 momentum [GeV]     = (505.759,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9786
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=3.78931e-06	 mean=0.128796	 max=1.33258
+ decay R [mm] : min=0.00113593	 mean=38.6095	 max=399.471
+ decay X [mm] : min=0.00113593	 mean=38.6095	 max=399.471
+ decay Y [mm] : min=-0.0140506	 mean=-1.57837e-06	 max=0.0106168
+ decay Z [mm] : min=-0.0107867	 mean=8.77462e-06	 max=0.0140725
+ Delta decay R [mm] : min=-5.68434e-14	 mean=1.04703e-09	 max=8.45212e-07
+ deflection angle [deg] : min=0	 mean=6.83804e-05	 max=0.0255093
+ Delta Ekin [MeV] : min=0	 mean=0.00122975	 max=0.973273
+ decay Ekin [GeV] : min=499.999	 mean=500	 max=500
+ decay Px [GeV]   : min=505.758	 mean=505.759	 max=505.759
+ decay Py [GeV]   : min=-0.115468	 mean=9.16847e-08	 max=0.135628
+ decay Pz [GeV]   : min=-0.155991	 mean=6.2627e-05	 max=0.179774
+ decay Etot violation [MeV] : min=-1.94297e-07	 mean=6.24061e-07	 max=2.01201e-06
+ decay Px violation [MeV]   : min=-1.94355e-07	 mean=6.24086e-07	 max=2.01195e-06
+ decay Py violation [MeV]   : min=-1.99904e-10	 mean=5.54261e-14	 max=2.94364e-10
+ decay Pz violation [MeV]   : min=-4.88029e-10	 mean=1.29095e-14	 max=3.9023e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.36469e-05 , 0.011908 (mean=0.00138566)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 3.33067e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.11086e-10 , 1.11086e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 1.13687e-10 (mean=4.27757e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -0.0275285 (mean=-4.2326e-05)	 (#above threshold = 0)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 0.0761816 (mean=6.39243e-05)	 (#above threshold = 0)
+ minUnderestimated_rDeltaPos [mum]           = -0.0273884 (mean=-4.1279e-05)	 (#above threshold = 0)
+ maxOverestimated_rDeltaPos [mum]            = 0.0770268 (mean=6.49713e-05)	 (#above threshold = 0)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0305176
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 28 starts.
+### Run 28 starts.
+ Event#=0  t[ns]=0.00785693  r[mm]=2.3553  deltaR[mum]=3.06155e-09  deltaEkin[MeV]=0  deltaAngle(deg)=0.000319932
+ Event#=1000  t[ns]=0.32884  r[mm]=98.5774  deltaR[mum]=0.000324852  deltaEkin[MeV]=6.78886  deltaAngle(deg)=0.014202
+ Event#=2000  t[ns]=0.176101  r[mm]=52.7904  deltaR[mum]=9.55368e-05  deltaEkin[MeV]=7.79668  deltaAngle(deg)=0.00820883
+ Event#=3000  t[ns]=0.0222034  r[mm]=6.65596  deltaR[mum]=6.90701e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000904117
+ Event#=4000  t[ns]=0.0331552  r[mm]=9.93903  deltaR[mum]=2.56849e-07  deltaEkin[MeV]=0.272124  deltaAngle(deg)=0.00137215
+ Event#=5000  t[ns]=0.0540416  r[mm]=16.2002  deltaR[mum]=8.68393e-07  deltaEkin[MeV]=2.20534  deltaAngle(deg)=0.00168327
+ Event#=6000  t[ns]=0.16363  r[mm]=49.052  deltaR[mum]=0.000178494  deltaEkin[MeV]=23.126  deltaAngle(deg)=0.00639688
+ Event#=7000  t[ns]=0.152594  r[mm]=45.7436  deltaR[mum]=5.32942e-05  deltaEkin[MeV]=6.7995  deltaAngle(deg)=0.00716592
+ Event#=8000  t[ns]=0.0800421  r[mm]=23.9944  deltaR[mum]=8.19599e-06  deltaEkin[MeV]=5.48676  deltaAngle(deg)=0.00314691
+ Event#=9000  t[ns]=0.164889  r[mm]=49.4292  deltaR[mum]=6.08774e-05  deltaEkin[MeV]=7.28644  deltaAngle(deg)=0.00713134
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.410000s Real=0.418574s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 28
+ primary PDG code                     = 5132
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.795
+ primary initial momentum [GeV]       = 505.761
+ primary initial Lorentz beta         = 0.999934
+ primary initial Lorentz gamma        = 87.2887
+ primary initial 3 momentum [GeV]     = (505.761,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9773
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=3.53096e-08	 mean=0.138141	 max=1.15826
+ decay R [mm] : min=1.05849e-05	 mean=41.411	 max=347.215
+ decay X [mm] : min=1.05849e-05	 mean=41.411	 max=347.215
+ decay Y [mm] : min=-0.0057637	 mean=0.00445581	 max=0.151239
+ decay Z [mm] : min=-0.0331643	 mean=-3.11847e-06	 max=0.0172479
+ Delta decay R [mm] : min=3.38813e-21	 mean=1.57916e-07	 max=1.31817e-05
+ deflection angle [deg] : min=0	 mean=0.00567617	 max=0.0486465
+ Delta Ekin [MeV] : min=0	 mean=6.43447	 max=2578.45
+ decay Ekin [GeV] : min=497.422	 mean=499.994	 max=500
+ decay Px [GeV]   : min=503.183	 mean=505.755	 max=505.761
+ decay Py [GeV]   : min=-0.0949269	 mean=0.0495476	 max=0.429401
+ decay Pz [GeV]   : min=-0.179684	 mean=5.06843e-05	 max=0.167874
+ decay Etot violation [MeV] : min=-1.86986e-06	 mean=-7.24258e-08	 max=1.82533e-06
+ decay Px violation [MeV]   : min=-1.8698e-06	 mean=-7.24269e-08	 max=1.82528e-06
+ decay Py violation [MeV]   : min=-6.24595e-10	 mean=-8.03078e-12	 max=5.51836e-10
+ decay Pz violation [MeV]   : min=-1.16131e-10	 mean=-9.99645e-15	 max=1.96565e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 0 , 0.0184336 (mean=0.00345132)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 5.55112e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.19257e-10 , 1.19257e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -114.505 (mean=-0.296108)	 (#above threshold = 122)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 97.2764 (mean=0.449951)	 (#above threshold = 1275)
+ minUnderestimated_rDeltaPos [mum]           = -114.503 (mean=-0.29595)	 (#above threshold = 122)
+ maxOverestimated_rDeltaPos [mum]            = 97.2895 (mean=0.450109)	 (#above threshold = 1276)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0386569
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 29 starts.
+### Run 29 starts.
+ Event#=0  t[ns]=0.137902  r[mm]=41.3393  deltaR[mum]=4.38994e-05  deltaEkin[MeV]=7.47742  deltaAngle(deg)=0.00683087
+ Event#=1000  t[ns]=0.107131  r[mm]=32.1151  deltaR[mum]=1.16974e-05  deltaEkin[MeV]=7.35531  deltaAngle(deg)=0.0040856
+ Event#=2000  t[ns]=0.274372  r[mm]=82.2494  deltaR[mum]=0.000417652  deltaEkin[MeV]=19.2077  deltaAngle(deg)=0.0109502
+ Event#=3000  t[ns]=0.150441  r[mm]=45.0982  deltaR[mum]=5.90709e-05  deltaEkin[MeV]=7.67604  deltaAngle(deg)=0.00625371
+ Event#=4000  t[ns]=0.00198504  r[mm]=0.59506  deltaR[mum]=4.92939e-11  deltaEkin[MeV]=0  deltaAngle(deg)=8.08303e-05
+ Event#=5000  t[ns]=0.038005  r[mm]=11.3929  deltaR[mum]=3.84436e-07  deltaEkin[MeV]=0.84926  deltaAngle(deg)=0.00123782
+ Event#=6000  t[ns]=0.0523952  r[mm]=15.7066  deltaR[mum]=8.0948e-07  deltaEkin[MeV]=2.6039  deltaAngle(deg)=0.0022347
+ Event#=7000  t[ns]=0.00699385  r[mm]=2.09656  deltaR[mum]=2.15872e-09  deltaEkin[MeV]=0  deltaAngle(deg)=0.000284789
+ Event#=8000  t[ns]=0.183429  r[mm]=54.9871  deltaR[mum]=8.81302e-05  deltaEkin[MeV]=7.44524  deltaAngle(deg)=0.007086
+ Event#=9000  t[ns]=0.0162549  r[mm]=4.87278  deltaR[mum]=2.7101e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000661897
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.390000s Real=0.401119s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 29
+ primary PDG code                     = -5132
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 505.795
+ primary initial momentum [GeV]       = 505.761
+ primary initial Lorentz beta         = 0.999934
+ primary initial Lorentz gamma        = 87.2887
+ primary initial 3 momentum [GeV]     = (505.761,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9787
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=1.71585e-06	 mean=0.134144	 max=1.14407
+ decay R [mm] : min=0.000514366	 mean=40.2126	 max=342.962
+ decay X [mm] : min=0.000514366	 mean=40.2126	 max=342.962
+ decay Y [mm] : min=-0.144025	 mean=-0.00419421	 max=0.0107079
+ decay Z [mm] : min=-0.0140403	 mean=1.84844e-06	 max=0.0224891
+ Delta decay R [mm] : min=-1.73472e-18	 mean=1.46307e-07	 max=1.63134e-05
+ deflection angle [deg] : min=8.53688e-07	 mean=0.00552879	 max=0.0472785
+ Delta Ekin [MeV] : min=0	 mean=6.52211	 max=3389.23
+ decay Ekin [GeV] : min=496.611	 mean=499.993	 max=500
+ decay Px [GeV]   : min=502.372	 mean=505.755	 max=505.761
+ decay Py [GeV]   : min=-0.417345	 mean=-0.0482422	 max=0.10523
+ decay Pz [GeV]   : min=-0.192462	 mean=-4.71925e-05	 max=0.164106
+ decay Etot violation [MeV] : min=-1.9244e-06	 mean=-7.81117e-08	 max=1.71759e-06
+ decay Px violation [MeV]   : min=-1.92452e-06	 mean=-7.81111e-08	 max=1.71777e-06
+ decay Py violation [MeV]   : min=-5.13126e-10	 mean=8.90853e-12	 max=6.807e-10
+ decay Pz violation [MeV]   : min=-2.73047e-10	 mean=6.55751e-14	 max=2.97632e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 0 , 0.0157997 (mean=0.00342567)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 3.33067e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.166e-10 , 1.166e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 0 (mean=0)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -116.049 (mean=-0.297964)	 (#above threshold = 132)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 123.363 (mean=0.452228)	 (#above threshold = 1166)
+ minUnderestimated_rDeltaPos [mum]           = -116.032 (mean=-0.297817)	 (#above threshold = 132)
+ maxOverestimated_rDeltaPos [mum]            = 123.379 (mean=0.452374)	 (#above threshold = 1166)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0405849
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 30 starts.
+### Run 30 starts.
+ Event#=0  t[ns]=0.0999288  r[mm]=29.9558  deltaR[mum]=1.4524e-05  deltaEkin[MeV]=7.17056  deltaAngle(deg)=0.00545063
+ Event#=1000  t[ns]=1.09268  r[mm]=327.553  deltaR[mum]=0.00904742  deltaEkin[MeV]=9.63413  deltaAngle(deg)=0.044604
+ Event#=2000  t[ns]=0.00114913  r[mm]=0.344476  deltaR[mum]=9.54792e-12  deltaEkin[MeV]=0  deltaAngle(deg)=4.67662e-05
+ Event#=3000  t[ns]=0.0714758  r[mm]=21.4264  deltaR[mum]=1.71271e-06  deltaEkin[MeV]=4.49493  deltaAngle(deg)=0.00220193
+ Event#=4000  t[ns]=0.116855  r[mm]=35.0299  deltaR[mum]=1.92987e-05  deltaEkin[MeV]=6.7624  deltaAngle(deg)=0.00466511
+ Event#=5000  t[ns]=0.074202  r[mm]=22.2436  deltaR[mum]=1.89031e-06  deltaEkin[MeV]=4.26299  deltaAngle(deg)=0.00338956
+ Event#=6000  t[ns]=0.153814  r[mm]=46.1091  deltaR[mum]=6.07941e-05  deltaEkin[MeV]=8.90849  deltaAngle(deg)=0.00509871
+ Event#=7000  t[ns]=0.0111973  r[mm]=3.35662  deltaR[mum]=8.84981e-09  deltaEkin[MeV]=0  deltaAngle(deg)=0.000455724
+ Event#=8000  t[ns]=0.0190264  r[mm]=5.70358  deltaR[mum]=4.34177e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000774369
+ Event#=9000  t[ns]=0.509545  r[mm]=152.747  deltaR[mum]=0.0011263  deltaEkin[MeV]=7.83073  deltaAngle(deg)=0.0209893
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.350000s Real=0.355727s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 30
+ primary PDG code                     = 5332
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 506.046
+ primary initial momentum [GeV]       = 506.01
+ primary initial Lorentz beta         = 0.999929
+ primary initial Lorentz gamma        = 83.6979
+ primary initial 3 momentum [GeV]     = (506.01,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9838
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=4.31639e-06	 mean=0.136759	 max=1.20257
+ decay R [mm] : min=0.00129393	 mean=40.9964	 max=360.494
+ decay X [mm] : min=0.00129393	 mean=40.9964	 max=360.494
+ decay Y [mm] : min=-0.0209275	 mean=0.00437069	 max=0.156584
+ decay Z [mm] : min=-0.0209209	 mean=-9.10008e-06	 max=0.0272621
+ Delta decay R [mm] : min=0	 mean=1.55742e-07	 max=1.16692e-05
+ deflection angle [deg] : min=0	 mean=0.00561548	 max=0.0493932
+ Delta Ekin [MeV] : min=0	 mean=6.13712	 max=2625.03
+ decay Ekin [GeV] : min=497.375	 mean=499.994	 max=500
+ decay Px [GeV]   : min=503.385	 mean=506.004	 max=506.01
+ decay Py [GeV]   : min=-0.371733	 mean=0.0490591	 max=0.436218
+ decay Pz [GeV]   : min=-0.158178	 mean=-8.93152e-05	 max=0.19094
+ decay Etot violation [MeV] : min=-1.48593e-06	 mean=1.49607e-07	 max=1.89513e-06
+ decay Px violation [MeV]   : min=-1.48593e-06	 mean=1.49589e-07	 max=1.89513e-06
+ decay Py violation [MeV]   : min=-9.07846e-10	 mean=9.78721e-12	 max=5.54678e-10
+ decay Pz violation [MeV]   : min=-2.49116e-10	 mean=1.15444e-13	 max=1.85054e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.36469e-05 , 0.0183736 (mean=0.00440242)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.09253e-10 , 1.09253e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 1.13687e-10 (mean=4.6311e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -55.9377 (mean=-0.278975)	 (#above threshold = 105)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 50.4515 (mean=0.426973)	 (#above threshold = 1271)
+ minUnderestimated_rDeltaPos [mum]           = -55.9314 (mean=-0.278819)	 (#above threshold = 105)
+ maxOverestimated_rDeltaPos [mum]            = 50.4588 (mean=0.427129)	 (#above threshold = 1271)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.055975
+ ============================================= 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 31 starts.
+### Run 31 starts.
+ Event#=0  t[ns]=0.00201399  r[mm]=0.603737  deltaR[mum]=5.15143e-11  deltaEkin[MeV]=0  deltaAngle(deg)=8.19673e-05
+ Event#=1000  t[ns]=0.161444  r[mm]=48.3962  deltaR[mum]=5.82469e-05  deltaEkin[MeV]=6.87177  deltaAngle(deg)=0.00694975
+ Event#=2000  t[ns]=0.230102  r[mm]=68.9781  deltaR[mum]=0.000138414  deltaEkin[MeV]=7.57481  deltaAngle(deg)=0.0098667
+ Event#=3000  t[ns]=0.358242  r[mm]=107.391  deltaR[mum]=0.000400279  deltaEkin[MeV]=6.73686  deltaAngle(deg)=0.0142456
+ Event#=4000  t[ns]=0.179291  r[mm]=53.7462  deltaR[mum]=8.72089e-05  deltaEkin[MeV]=7.54958  deltaAngle(deg)=0.00591304
+ Event#=5000  t[ns]=0.0171671  r[mm]=5.14619  deltaR[mum]=3.18918e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000698692
+ Event#=6000  t[ns]=0.395263  r[mm]=118.488  deltaR[mum]=0.000524644  deltaEkin[MeV]=6.97731  deltaAngle(deg)=0.015458
+ Event#=7000  t[ns]=0.0197279  r[mm]=5.91384  deltaR[mum]=4.84004e-08  deltaEkin[MeV]=0  deltaAngle(deg)=0.000802915
+ Event#=8000  t[ns]=0.00741388  r[mm]=2.22247  deltaR[mum]=2.56906e-09  deltaEkin[MeV]=0  deltaAngle(deg)=0.000301742
+ Event#=9000  t[ns]=0.207867  r[mm]=62.3126  deltaR[mum]=0.000111159  deltaEkin[MeV]=7.1344  deltaAngle(deg)=0.0090056
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.340000s Real=0.344389s Sys=0.000000s
+
+
+ ============ Run::printInfo() =============== 	 RunID = 31
+ primary PDG code                     = -5332
+ primary initial kinetic energy [GeV] = 500
+ primary initial total energy [GeV]   = 506.046
+ primary initial momentum [GeV]       = 506.01
+ primary initial Lorentz beta         = 0.999929
+ primary initial Lorentz gamma        = 83.6979
+ primary initial 3 momentum [GeV]     = (506.01,0,0)
+ primary initial position [mm]        = (0,0,0)
+ toleranceEPviolations [eV]           = 500
+ toleranceDeltaDecayRadius [mum]      = 1
+ isPreassignedDecayEnabled            = 1
+ isBoostToLabEnabled                  = 1
+ # Events               = 10000
+ # Decays               = 9854
+   (# Bad decays        = 0 )
+   (# Unexpected decays = 0 )
+ # E violations         = 0
+ # P violations         = 0
+ decay T [ns] : min=8.31742e-06	 mean=0.138041	 max=1.62863
+ decay R [mm] : min=0.00249332	 mean=41.3806	 max=488.217
+ decay X [mm] : min=0.00249332	 mean=41.3806	 max=488.217
+ decay Y [mm] : min=-0.278752	 mean=-0.00443766	 max=0.016258
+ decay Z [mm] : min=-0.029889	 mean=-2.05905e-05	 max=0.0161724
+ Delta decay R [mm] : min=-3.46945e-18	 mean=1.71703e-07	 max=8.03438e-05
+ deflection angle [deg] : min=0	 mean=0.00567085	 max=0.0658314
+ Delta Ekin [MeV] : min=0	 mean=6.57137	 max=1397.59
+ decay Ekin [GeV] : min=498.602	 mean=499.993	 max=500
+ decay Px [GeV]   : min=504.612	 mean=506.003	 max=506.01
+ decay Py [GeV]   : min=-0.581394	 mean=-0.0496615	 max=0.0887578
+ decay Pz [GeV]   : min=-0.138071	 mean=-8.66905e-05	 max=0.118599
+ decay Etot violation [MeV] : min=-1.68744e-06	 mean=1.52025e-07	 max=1.85566e-06
+ decay Px violation [MeV]   : min=-1.68744e-06	 mean=1.5201e-07	 max=1.8556e-06
+ decay Py violation [MeV]   : min=-6.09589e-10	 mean=-1.09376e-11	 max=5.65478e-10
+ decay Pz violation [MeV]   : min=-1.77565e-10	 mean=4.64736e-15	 max=1.77778e-10
+ --- Consistency checks --- 
+ maxEkin_deltaMax [eV]           = 0
+ maxEtot_deltaMax [eV]           = 0
+ maxP_deltaMax [eV]              = 0
+ maxPdir_deltaMax                = 0
+ maxMass_deltaMax{1,2,3} [eV]    = 0 , 2.36469e-05 , 0.0183736 (mean=0.00443477)
+ maxBeta_deltaMax{1,2}           = 1.11022e-16 , 4.44089e-16
+ maxGamma_deltaMax{1,2,3}        = 0 , 1.08699e-10 , 1.08699e-10
+ maxT_proper_deltaMax [fs]       = 0
+ maxT_lab_deltaMax [fs]          = 0
+ maxMc_truth_rPos_deltaMax [mum] = 1.13687e-10 (mean=4.58297e-12)	 (# above threshold = 0)
+ --- Extra checks --- 
+ minUnderestimated_mc_truth_rPos_delta [mum] = -61.944 (mean=-0.298958)	 (#above threshold = 133)
+ maxOverestimated_mc_truth_rPos_delta [mum]  = 544.809 (mean=0.501638)	 (#above threshold = 1259)
+ minUnderestimated_rDeltaPos [mum]           = -61.8636 (mean=-0.298786)	 (#above threshold = 133)
+ maxOverestimated_rDeltaPos [mum]            = 544.89 (mean=0.50181)	 (#above threshold = 1259)
+ --- float  instead of  double --- 
+ fMaxFloat_rDeltaPos_deltaMax [mum] = 0.0734891
+ ============================================= 
+
+G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.068 MB
+============================================================
+RunManagerKernel is deleted. Good bye :)

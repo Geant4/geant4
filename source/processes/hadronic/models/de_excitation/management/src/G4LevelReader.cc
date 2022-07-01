@@ -58,7 +58,7 @@ G4LevelReader::G4LevelReader(G4NuclearLevelData* ptr)
   fAlphaMax = (G4float)1.e15;
   fParam = fData->GetParameters();
   fTimeFactor = CLHEP::second/G4Pow::GetInstance()->logZ(2);
-  char* directory = std::getenv("G4LEVELGAMMADATA");
+  const char* directory = G4FindDataDir("G4LEVELGAMMADATA");
   if(directory) {
     fDirectory = directory;
   } else {
@@ -319,7 +319,8 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
     vEnergy[i] = ener;
     if(fTime > 0.0f)  { fTime *= fTimeFactor; }
     if(fSpin > 48.0f) { fSpin = 0.0f; }
-    vSpin[i]   = (G4int)(100 + fSpin + fSpin) + k*100000;
+    G4int twos = G4lrint(2*fSpin);
+    vSpin[i] = 100 + twos + k*100000;
     if(fVerbose > 2) {
       G4cout << "   Level #" << i1 << " E(MeV)= " << ener/CLHEP::MeV
 	     << "  LTime(s)= " << fTime << " 2S= " << vSpin[i]

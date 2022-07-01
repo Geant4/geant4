@@ -1,3 +1,3 @@
 # - G4modeling category build
-
-geant4_global_library_target(COMPONENTS sources.cmake)
+include(sources.cmake)
+geant4_add_category(G4modeling MODULES G4modeling)

@@ -47,7 +47,7 @@ class G4UIcmdWithADoubleAndUnit : public G4UIcommand
       // Constructor. The command string with full path directory
       // and the pointer to the messenger must be given
 
-    virtual G4int DoIt(G4String parameterList);
+    G4int DoIt(G4String parameterList) override;
 
     static G4double GetNewDoubleValue(const char* paramString);
       // Convert string which represents a double value and a unit to

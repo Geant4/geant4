@@ -1,30 +1,23 @@
--------------------------------------------------------------------
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+# Category ascii History
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2021-12-22 Pedro Arce (ascii-V11-00-01)
+- Correct wrong automatic conversion degree-radian for G4Polycone phi angle parameter
 
-22 December 2021 - Pedro Arce (ascii-V10-07-05)
-- Correct wrong automatic conversion degree-radian for G4Polycone phi angle
-  parameter.
+## 2021-12-10 Ben Morgan (ascii-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 22 November 2021 - P. Arce (ascii-V10-07-04)
-- Add G4MultiUnion and G4ScaledSolid from user contribution (Pooria Heidary):
-  GitHub PR #28
+- Add G4MultiUnion and G4ScaledSolid from user contribution (Pooria Heidary): GitHub PR #28
 - G4tgbVolume.cc: correct lacking conversion degree-radian in polycone
-- G4tgbMaterialSimple.cc,G4tgrMaterial.cc: Change STP_Temperature to
-  NTP_Temperature to be consistent with NIST materials 
+- G4tgbMaterialSimple.cc,G4tgrMaterial.cc: Change STP_Temperature to NTP_Temperature to be consistent with NIST materials 
 
 16 November 2021 - G. Cosmo (ascii-V10-07-03)
 - Change prefix to free math functions in G4tgrEvaluator source, to avoid

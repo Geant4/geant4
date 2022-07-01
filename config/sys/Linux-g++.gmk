@@ -5,13 +5,13 @@ ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++
   CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
-  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe -pthread
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
   CPPFLAGS  += -std=c++17
   CXXFLAGS  += -std=c++17
   G4USE_STD17 := 1
   ifdef G4MULTITHREADED
-    CXXFLAGS += -ftls-model=initial-exec
+    CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O3

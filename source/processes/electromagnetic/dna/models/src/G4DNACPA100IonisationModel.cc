@@ -136,7 +136,7 @@ void G4DNACPA100IonisationModel::Initialise(const G4ParticleDefinition* particle
 
     G4double scaleFactor = 1.e-20 * m*m;
 
-    char *path = getenv("G4LEDATA");
+    const char *path = G4FindDataDir("G4LEDATA");
 
     // *** ELECTRON
 
@@ -952,8 +952,16 @@ G4double G4DNACPA100IonisationModel::RandomTransferedEnergy
                << nrjTransf12 << " " << nrjTransf21 << " " <<nrjTransf22 << G4endl;
         */
 
-      }
+        // Avoids cases where cum xs is 1 in last bin only and zero everywhere else
+        
+        if (valuePROB11==0. && valuePROB12==1.)
+        {
+          G4double interpolatedvalue2 = Interpolate(valuePROB21, valuePROB22, random, nrjTransf21, nrjTransf22);
+          G4double valueNrjTransf = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
+          return valueNrjTransf;
+        }
 
+      }
 
       // Avoids cases where cum xs is zero for k1 and is not for k2 (with always k1<k2)
 

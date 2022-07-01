@@ -155,6 +155,15 @@ G4FastSimulationManager::GetFastSimulationModel(const G4String& modelName,
   return model;
 }
 
+void G4FastSimulationManager::FlushModels()
+{
+  for (size_t iModel=0; iModel<ModelList.size(); iModel++)
+  {
+    ModelList[iModel]->Flush();
+  }  
+}
+
+
 
 //------------------------------------------------------------------
 // Interface trigger method for the G4ParameterisationManagerProcess

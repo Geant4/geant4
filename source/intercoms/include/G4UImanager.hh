@@ -63,7 +63,7 @@ class G4UImanager : public G4VStateDependent
       // A static method to get the pointer to the only existing object
       // of this class
 
-    ~G4UImanager();
+    ~G4UImanager() override;
 
     G4UImanager(const G4UImanager&) = delete;
     const G4UImanager& operator=(const G4UImanager&) = delete;
@@ -146,8 +146,8 @@ class G4UImanager : public G4VStateDependent
       // These methods are used by G4UIcontrolMessenger to use Loop()
       // and Foreach() methods
 
-    virtual G4bool Notify(G4ApplicationState requestedState);
-      // This method is exclusively invoked by G4StateManager
+    G4bool Notify(G4ApplicationState requestedState) override;
+    // This method is exclusively invoked by G4StateManager
 
     G4String GetCurrentStringValue(const char* aCommand,
                                    G4int parameterNumber = 1,
@@ -220,7 +220,7 @@ class G4UImanager : public G4VStateDependent
     {
       isMaster = val;
       stackCommandsForBroadcast = val;
-      if(val && !bridges)
+      if(val && (bridges == nullptr))
       {
         bridges            = new std::vector<G4UIbridge*>;
         fMasterUImanager() = this;
@@ -234,7 +234,7 @@ class G4UImanager : public G4VStateDependent
     void SetUpForAThread(G4int tId);
       // Setups as above but for a non-worker thread (e.g. vis)
 
-    void SetUpForSpecialThread(G4String aPrefix);
+    void SetUpForSpecialThread(const G4String& aPrefix);
 
     inline G4int GetThreadID() const { return threadID; }
 

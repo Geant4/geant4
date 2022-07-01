@@ -140,7 +140,7 @@ namespace G4StrUtil
   inline void to_lower(G4String& str)
   {
     std::transform(str.begin(), str.end(), str.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
+                   [](unsigned char ch) { return std::tolower(ch); });
   }
 
   inline G4String to_lower_copy(G4String str)
@@ -152,7 +152,7 @@ namespace G4StrUtil
   inline void to_upper(G4String& str)
   {
     std::transform(str.begin(), str.end(), str.begin(),
-                   [](unsigned char c) { return std::toupper(c); });
+                   [](unsigned char ch) { return std::toupper(ch); });
   }
 
   inline G4String to_upper_copy(G4String str)
@@ -161,52 +161,52 @@ namespace G4StrUtil
     return str;
   }
 
-  inline void lstrip(G4String& s, char c)
+  inline void lstrip(G4String& str, char ch)
   {
-    auto startIndex = s.find_first_not_of(c);
-    s.erase(0, startIndex);
+    auto startIndex = str.find_first_not_of(ch);
+    str.erase(0, startIndex);
   }
 
-  inline void rstrip(G4String& s, char c)
+  inline void rstrip(G4String& str, char ch)
   {
-    auto endIndex = s.find_last_not_of(c);
+    auto endIndex = str.find_last_not_of(ch);
     if(endIndex == G4String::npos)
     {
-      s = "";
+      str = "";
     }
     else
     {
-      s.erase(endIndex + 1);
+      str.erase(endIndex + 1);
     }
   }
 
-  inline void strip(G4String& s, char c)
+  inline void strip(G4String& str, char ch)
   {
-    if(s.empty())
+    if(str.empty())
     {
       return;
     }
 
-    lstrip(s, c);
-    rstrip(s, c);
+    lstrip(str, ch);
+    rstrip(str, ch);
   }
 
-  inline G4String lstrip_copy(G4String s, char c)
+  inline G4String lstrip_copy(G4String str, char ch)
   {
-    lstrip(s, c);
-    return s;
+    lstrip(str, ch);
+    return str;
   }
 
-  inline G4String rstrip_copy(G4String s, char c)
+  inline G4String rstrip_copy(G4String str, char ch)
   {
-    rstrip(s, c);
-    return s;
+    rstrip(str, ch);
+    return str;
   }
 
-  inline G4String strip_copy(G4String s, char c)
+  inline G4String strip_copy(G4String str, char ch)
   {
-    strip(s, c);
-    return s;
+    strip(str, ch);
+    return str;
   }
 
   inline G4bool contains(const G4String& str, std::string_view ss)

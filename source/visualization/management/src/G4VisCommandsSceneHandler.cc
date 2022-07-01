@@ -243,16 +243,6 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   }
   if (!found) {
     // Shouldn't happen, since graphicsSystem should be a candidate
-    // Use set to get alphabetical order
-    std::set<G4String> candidates;
-    for (const auto gs: fpVisManager -> GetAvailableGraphicsSystems()) {
-      // Just list nicknames, but exclude FALLBACK nicknames
-      for (const auto& nickname: gs->GetNicknames()) {
-	if (!G4StrUtil::contains(nickname, "FALLBACK")) {
-	  candidates.insert(nickname);
-	}
-      }
-    }
     G4ExceptionDescription ed;
     ed <<
     "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
@@ -260,9 +250,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     << graphicsSystem
     << "\" requested."
     << "\n  Candidates are:";
-    for (const auto& candidate: candidates) {
-      ed << ' ' << candidate;
-    };
+    fpVisManager->PrintAvailableGraphicsSystems(verbosity,ed);
     command->CommandFailed(ed);
     return;
   }
@@ -337,7 +325,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   // If there is an existing viewer, store its view parameters
   if (fpVisManager->GetCurrentViewer()) {
     fThereWasAViewer = true;
-    fVPExistingViewer = fpVisManager->GetCurrentViewer()->GetViewParameters();
+    fExistingVP = fpVisManager->GetCurrentViewer()->GetViewParameters();
   }
 
   // Set current graphics system in preparation for

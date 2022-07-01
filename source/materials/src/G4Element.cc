@@ -95,7 +95,10 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
   fAeff   = aeff;
   fNeff   = fAeff/(g/mole);
 
-  if(fNeff < 1.0) fNeff = 1.0;
+  if(fNeff < 1.0)
+  {
+    fNeff = 1.0;
+  }
 
   if (fNeff < zeff) {
     G4ExceptionDescription ed;
@@ -139,7 +142,7 @@ G4Element::G4Element(const G4String& name,
        << " isotopes.";
     G4Exception ("G4Element::G4Element()", "mat012",  FatalException, ed);
   } else {
-    theIsotopeVector         = new G4IsotopeVector(n,0);
+    theIsotopeVector         = new G4IsotopeVector(n, nullptr);
     fRelativeAbundanceVector = new G4double[nIsotopes];
   }
 }
@@ -150,7 +153,8 @@ G4Element::G4Element(const G4String& name,
 
 void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 {
-  if (theIsotopeVector == 0) {
+  if(theIsotopeVector == nullptr)
+  {
     G4ExceptionDescription ed;
     ed << "Failed to add Isotope to G4Element " << fName
        << " with Z= " << fZeff << "  N= " << fNeff;
@@ -251,14 +255,14 @@ G4Element::G4Element( __void__& )
 
 G4Element::~G4Element()
 {
-  if (theIsotopeVector)         { delete theIsotopeVector; }
-  if (fRelativeAbundanceVector) { delete [] fRelativeAbundanceVector; }
-  if (fAtomicShells)            { delete [] fAtomicShells; }
-  if (fNbOfShellElectrons)      { delete [] fNbOfShellElectrons; }
-  if (fIonisation)              { delete    fIonisation; }
-  
+  delete theIsotopeVector;
+  delete[] fRelativeAbundanceVector;
+  delete[] fAtomicShells;
+  delete[] fNbOfShellElectrons;
+  delete fIonisation;
+
   //remove this element from theElementTable
-  theElementTable[fIndexInTable] = 0;
+  theElementTable[fIndexInTable] = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -275,8 +279,8 @@ void G4Element::ComputeDerivedQuantities()
   ComputeCoulombFactor();
   ComputeLradTsaiFactor(); 
 
-  // parameters for energy loss by ionisation 
-  if (nullptr != fIonisation) { delete fIonisation; }  
+  // parameters for energy loss by ionisation
+  delete fIonisation;
   fIonisation = new G4IonisParamElm(fZeff);
   fZ = G4lrint(fZeff);
 }
@@ -328,7 +332,8 @@ void G4Element::AddNaturalIsotopes()
   G4int n = nist->GetNumberOfNistIsotopes(Z);
   G4int N0 = nist->GetNistFirstIsotopeN(Z);
 
-  if("" == fSymbol) {
+  if(fSymbol.empty())
+  {
     const std::vector<G4String> elmnames = 
       G4NistManager::Instance()->GetNistElementNames();
     if(Z < (G4int)elmnames.size()) { fSymbol = elmnames[Z]; }
@@ -339,7 +344,8 @@ void G4Element::AddNaturalIsotopes()
   for(G4int i=0; i<n; ++i) {
     if(nist->GetIsotopeAbundance(Z, N0+i) > 0.0) { ++fNumberOfIsotopes; }
   }
-  theIsotopeVector = new G4IsotopeVector((unsigned int)fNumberOfIsotopes,0);
+  theIsotopeVector =
+    new G4IsotopeVector((unsigned int) fNumberOfIsotopes, nullptr);
   fRelativeAbundanceVector = new G4double[fNumberOfIsotopes];
   G4int idx = 0;
   G4double xsum = 0.0;
@@ -408,14 +414,16 @@ size_t G4Element::GetNumberOfElements()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Element* G4Element::GetElement(G4String elementName, G4bool warning)
+G4Element* G4Element::GetElement(const G4String& elementName, G4bool warning)
 {  
-  // search the element by its name 
-  for (size_t J=0; J<theElementTable.size(); ++J)
-   {
-     if (theElementTable[J]->GetName() == elementName)
-       return theElementTable[J];
-   }
+  // search the element by its name
+  for(auto J : theElementTable)
+  {
+    if(J->GetName() == elementName)
+    {
+      return J;
+    }
+  }
    
   // the element does not exist in the table
   if (warning) {
@@ -441,13 +449,14 @@ std::ostream& operator<<(std::ostream& flux, const G4Element* element)
     <<  G4lrint(element->fNeff)
     << "   A = " << std::setw(6) << std::setprecision(3)
                  << (element->fAeff)/(g/mole) << " g/mole";
-   
-  for (G4int i=0; i<element->fNumberOfIsotopes; i++)
-  flux 
-    << "\n         ---> " << (*(element->theIsotopeVector))[i] 
-    << "   abundance: " << std::setw(6) << std::setprecision(3) 
-    << (element->fRelativeAbundanceVector[i])/perCent << " %";
-    
+
+  for(G4int i = 0; i < element->fNumberOfIsotopes; i++)
+  {
+    flux << "\n         ---> " << (*(element->theIsotopeVector))[i]
+         << "   abundance: " << std::setw(6) << std::setprecision(3)
+         << (element->fRelativeAbundanceVector[i]) / perCent << " %";
+  }
+
   flux.precision(prec);        
   flux.setf(mode,std::ios::floatfield);         
   return flux;
@@ -468,9 +477,11 @@ std::ostream& operator<<(std::ostream& flux, const G4ElementTable& ElementTable)
   //Dump info for all known elements
   flux << "\n***** Table : Nb of elements = " << ElementTable.size() 
        << " *****\n" << G4endl;
-        
-  for (size_t i=0; i<ElementTable.size(); i++) flux << ElementTable[i] 
-						    << G4endl << G4endl;
+
+  for(auto i : ElementTable)
+  {
+    flux << i << G4endl << G4endl;
+  }
 
   return flux;
 }
@@ -483,8 +494,10 @@ std::ostream& operator<<(std::ostream& flux, const G4ElementVector& ElementVecto
   flux << "\n***** Vector : Nb of elements = " << ElementVector.size()
        << " *****\n" << G4endl;
 
-  for (size_t i=0; i<ElementVector.size(); i++) flux << ElementVector[i]
-						    << G4endl << G4endl;
+  for(auto i : ElementVector)
+  {
+    flux << i << G4endl << G4endl;
+  }
 
   return flux;
 }

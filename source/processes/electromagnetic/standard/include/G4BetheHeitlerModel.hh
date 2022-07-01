@@ -62,7 +62,7 @@ class G4BetheHeitlerModel : public G4VEmModel
 
 public:
 
-  explicit G4BetheHeitlerModel(const G4ParticleDefinition* p = 0, 
+  explicit G4BetheHeitlerModel(const G4ParticleDefinition* p = nullptr,
                                const G4String& nam = "BetheHeitler");
  
   ~G4BetheHeitlerModel() override;

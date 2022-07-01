@@ -97,6 +97,7 @@
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4LowEPComptonModel.hh"
 #include "G4BetheHeitler5DModel.hh"
+#include "G4LindhardSorensenIonModel.hh"
 
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4LivermoreComptonModel.hh"
@@ -469,24 +470,32 @@ void G4EmModelActivator::ActivatePAI()
 	em = mod;
 	fm = mod;
       }
-      // added PAI model above low energy limit
-      em->SetLowEnergyLimit(emin);
-      proc->AddEmModel(0, em, fm, r);
-
-      // added low energy model
+      // first added the default model for world
+      // second added low energy model below PAI threshold in the region
+      // finally added PAI for the region
+      G4VEmModel* em0 = nullptr;
+      G4VEmFluctuationModel* fm0 = nullptr;
       if(namep == "eIoni") {
-	em = new G4MollerBhabhaModel();
-	fm = new G4UniversalFluctuation();
+        fm0 = new G4UniversalFluctuation();
+        proc->SetEmModel(new G4MollerBhabhaModel());
+        proc->SetFluctModel(fm0);
+        em0 = new G4MollerBhabhaModel();
       } else if(namep == "ionIoni") {
-	em = new G4BraggIonModel();
-        fm = new G4IonFluctuations();
+        fm0 = new G4IonFluctuations();
+        proc->SetEmModel(new G4LindhardSorensenIonModel());
+        proc->SetFluctModel(fm0);
+        em0 = new G4LindhardSorensenIonModel();
       } else {
-	em = new G4BraggModel();
-	fm = new G4UniversalFluctuation();
+        fm0 = new G4UniversalFluctuation();
+        proc->SetEmModel(new G4BraggModel());
+        proc->SetEmModel(new G4BetheBlochModel());
+        proc->SetFluctModel(fm0);
+        em0 = new G4BraggModel();
       }
-      em->SetHighEnergyLimit(emin);
+      em0->SetHighEnergyLimit(emin);
+      proc->AddEmModel(-1, em0, fm0, r);
+      em->SetLowEnergyLimit(emin);
       proc->AddEmModel(-1, em, fm, r);
-
       if(verbose > 0) {
 	G4cout << "### G4EmModelActivator: add <" << typesPAI[i]
 	       << "> model for " << particlesPAI[i]

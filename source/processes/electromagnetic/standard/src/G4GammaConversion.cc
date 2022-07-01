@@ -54,8 +54,7 @@ G4GammaConversion::G4GammaConversion(const G4String& processName,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4GammaConversion::~G4GammaConversion()
-{}
+G4GammaConversion::~G4GammaConversion() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

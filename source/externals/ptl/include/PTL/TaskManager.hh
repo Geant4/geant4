@@ -42,6 +42,7 @@
 #include <cmath>
 #include <cstdint>
 #include <iomanip>
+#include <stdexcept>
 
 namespace PTL
 {
@@ -55,13 +56,13 @@ public:
 
 public:
     // Constructor and Destructors
-    explicit TaskManager(ThreadPool*);
+    explicit TaskManager(ThreadPool*, bool _manage_pool = true);
     virtual ~TaskManager();
 
-    TaskManager(const this_type&) = delete;
-    TaskManager(this_type&&)      = default;
-    this_type& operator=(const this_type&) = delete;
-    this_type& operator=(this_type&&) = default;
+    TaskManager(const TaskManager&) = delete;
+    TaskManager(TaskManager&&)      = default;
+    TaskManager& operator=(const TaskManager&) = delete;
+    TaskManager& operator=(TaskManager&&) = default;
 
 public:
     /// get the singleton pointer
@@ -76,11 +77,18 @@ public:
 
     //------------------------------------------------------------------------//
     // return the number of threads in the thread pool
-    inline size_type size() const { return m_pool->size(); }
+    inline size_type size() const { return (m_pool) ? m_pool->size() : 0; }
 
     //------------------------------------------------------------------------//
     // kill all the threads
-    inline void finalize() { m_pool->destroy_threadpool(); }
+    inline void finalize()
+    {
+        if(m_is_finalized)
+            return;
+        m_is_finalized = true;
+        if(m_pool)
+            m_pool->destroy_threadpool();
+    }
     //------------------------------------------------------------------------//
 
 public:
@@ -90,6 +98,8 @@ public:
     template <typename... Args>
     void exec(Task<Args...>* _task)
     {
+        if(!m_pool)
+            throw std::runtime_error("Nullptr to thread-pool");
         m_pool->add_task(_task);
     }
 
@@ -100,6 +110,9 @@ public:
     std::shared_ptr<PackagedTask<RetT, Args...>> async(FuncT&& func, Args&&... args)
     {
         typedef PackagedTask<RetT, Args...> task_type;
+
+        if(!m_pool)
+            throw std::runtime_error("Nullptr to thread-pool");
 
         auto _ptask = std::make_shared<task_type>(std::forward<FuncT>(func),
                                                   std::forward<Args>(args)...);
@@ -112,6 +125,9 @@ public:
     {
         typedef PackagedTask<RetT> task_type;
 
+        if(!m_pool)
+            throw std::runtime_error("Nullptr to thread-pool");
+
         auto _ptask = std::make_shared<task_type>(std::forward<FuncT>(func));
         m_pool->add_task(_ptask);
         return _ptask;
@@ -123,6 +139,9 @@ public:
     {
         using RetT = decay_t<decltype(func(args...))>;
         typedef PackagedTask<RetT, Args...> task_type;
+
+        if(!m_pool)
+            throw std::runtime_error("Nullptr to thread-pool");
 
         auto _ptask = std::make_shared<task_type>(std::forward<FuncT>(func),
                                                   std::forward<Args>(args)...);
@@ -193,7 +212,8 @@ public:
 
 protected:
     // Protected variables
-    ThreadPool* m_pool = nullptr;
+    ThreadPool* m_pool         = nullptr;
+    bool        m_is_finalized = false;
 
 private:
     static TaskManager*& fgInstance();
@@ -238,8 +258,9 @@ PTL::TaskManager::GetInstanceIfExists()
 
 //--------------------------------------------------------------------------------------//
 
-inline PTL::TaskManager::TaskManager(ThreadPool* _pool)
+inline PTL::TaskManager::TaskManager(ThreadPool* _pool, bool _manage_pool)
 : m_pool(_pool)
+, m_is_finalized(!_manage_pool)
 {
     if(!fgInstance())
         fgInstance() = this;

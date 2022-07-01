@@ -74,8 +74,7 @@ G4EmBiasingManager::G4EmBiasingManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EmBiasingManager::~G4EmBiasingManager()
-{}
+G4EmBiasingManager::~G4EmBiasingManager() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -415,7 +414,7 @@ G4EmBiasingManager::ApplySecondaryBiasing(std::vector<G4Track*>& track,
           if(G4UniformRand()*weight > 1.0) {
             const G4Track* t = track[k];
             delete t;
-            track[k] = 0;
+            track[k] = nullptr;
           }
         }
       }
@@ -444,7 +443,7 @@ G4EmBiasingManager::ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
         if(eIonisation->GetRange(e, track.GetMaterialCutsCouple()) < safety) {
           eloss += e;
           delete dp;
-          vd[k] = 0;
+          vd[k] = nullptr;
         }
       }
     }
@@ -589,9 +588,9 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
             foundPrimaryParticle = true;
             primaryWeight = weight;
           } else {
-            G4DynamicParticle* dp = new G4DynamicParticle(theGamma,
-                                    partChange->GetProposedMomentumDirection(),
-                                    partChange->GetProposedKineticEnergy());
+            auto dp = new G4DynamicParticle(theGamma,
+                          partChange->GetProposedMomentumDirection(),
+                          partChange->GetProposedKineticEnergy());
             vd.push_back(dp);
             fDirectionalSplittingWeights.push_back(1.);
           }
@@ -602,9 +601,9 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
             primaryMomdir = momdir;
             primaryWeight = 1.;
           } else {
-            G4DynamicParticle* dp = new G4DynamicParticle(theGamma,
-                                    partChange->GetProposedMomentumDirection(),
-                                    partChange->GetProposedKineticEnergy());
+            auto dp = new G4DynamicParticle(theGamma,
+                          partChange->GetProposedMomentumDirection(),
+                          partChange->GetProposedKineticEnergy());
             vd.push_back(dp);
             fDirectionalSplittingWeights.push_back(1./weight);
           }

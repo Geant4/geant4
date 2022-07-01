@@ -73,8 +73,7 @@ G4KleinNishinaCompton::G4KleinNishinaCompton(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4KleinNishinaCompton::~G4KleinNishinaCompton()
-{}
+G4KleinNishinaCompton::~G4KleinNishinaCompton() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -242,7 +241,7 @@ void G4KleinNishinaCompton::SampleSecondaries(
     eDirection = eDirection.unit();
 
     // create G4DynamicParticle object for the electron.
-    G4DynamicParticle* dp = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
+    auto dp = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
     fvect->push_back(dp);
   } else {
     edep += eKinEnergy;  

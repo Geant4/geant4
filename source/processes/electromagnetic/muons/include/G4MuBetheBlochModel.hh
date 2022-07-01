@@ -58,8 +58,6 @@
 #ifndef G4MuBetheBlochModel_h
 #define G4MuBetheBlochModel_h 1
 
-#include <CLHEP/Units/PhysicalConstants.h>
-
 #include "G4VEmModel.hh"
 
 class G4ParticleChangeForLoss;
@@ -121,7 +119,7 @@ protected:
 
 private:
 
-  inline void SetParticle(const G4ParticleDefinition* p);
+  void SetParticle(const G4ParticleDefinition* p);
 
   const G4ParticleDefinition* particle = nullptr;
   G4ParticleDefinition*       theElectron = nullptr;
@@ -137,18 +135,6 @@ private:
   G4double alphaprime;
   static G4double xgi[8],wgi[8];
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(nullptr == particle) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    massSquare = mass*mass;
-    ratio = CLHEP::electron_mass_c2/mass;
-  }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

@@ -1061,6 +1061,8 @@ namespace G4INCL {
       eventInfo->theta[eventInfo->nParticles] = Math::toDegrees(mom.theta());
       eventInfo->phi[eventInfo->nParticles] = Math::toDegrees(mom.phi());
       eventInfo->origin[eventInfo->nParticles] = -1;
+      eventInfo->parentResonancePDGCode[eventInfo->nParticles] = (*i)->getParentResonancePDGCode();
+      eventInfo->parentResonanceID[eventInfo->nParticles] = (*i)->getParentResonanceID();
       eventInfo->history.push_back("");
       if ((*i)->getType() != Composite) {
         ParticleSpecies pt((*i)->getType());

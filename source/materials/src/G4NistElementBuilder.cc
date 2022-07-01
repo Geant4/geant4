@@ -58,10 +58,12 @@
 #include "G4NistElementBuilder.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AutoLock.hh"
 
-#ifdef G4MULTITHREADED
-G4Mutex G4NistElementBuilder::nistElementMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex nistElementMutex = G4MUTEX_INITIALIZER;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -72,13 +74,11 @@ G4NistElementBuilder::G4NistElementBuilder(G4int vb):
   nIsotopes[0] = 0;
   relAbundance[0] = 0.0;
   Initialise();
-  for(G4int i=0; i<maxNumElements; ++i) {elmIndex[i] = -1;}
+  for(int& i : elmIndex)
+  {
+    i = -1;
+  }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4NistElementBuilder::~G4NistElementBuilder()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -106,18 +106,10 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z, G4bool)
 {
   G4Element* anElement = FindElement(Z);
   if(anElement == nullptr && Z > 0 && Z < maxNumElements) {
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&nistElementMutex);
-#endif
-    if(elmIndex[Z] < 0) { anElement = BuildElement(Z); }
-    if(anElement) { elmIndex[Z] = anElement->GetIndex(); }
-#ifdef G4MULTITHREADED
-    G4MUTEXUNLOCK(&nistElementMutex);
-#endif
+    anElement = BuildElement(Z);
   }
   return anElement;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -136,14 +128,7 @@ G4NistElementBuilder::FindOrBuildElement(const G4String& symb, G4bool)
   if(nullptr == elm) {
     for(G4int Z = 1; Z<maxNumElements; ++Z) {
       if(symb == elmSymbol[Z]) { 
-#ifdef G4MULTITHREADED
-	G4MUTEXLOCK(&nistElementMutex);
-#endif
-	if(elmIndex[Z] < 0) { elm = BuildElement(Z); }
-	if(elm) { elmIndex[Z] = elm->GetIndex(); }
-#ifdef G4MULTITHREADED
-	G4MUTEXUNLOCK(&nistElementMutex);
-#endif
+	elm = BuildElement(Z);
 	break;
       }
     }
@@ -157,44 +142,53 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z)
 {
   G4Element* theElement = nullptr;
   if(Z<1 || Z>=maxNumElements) { return theElement; }
-  G4double Aeff = atomicMass[Z];
-  if (verbose > 1) {
-    G4cout << "G4NistElementBuilder: Build Element <" << elmSymbol[Z]
-           << ">  Z= " << Z
-	   << "  Aeff= " << Aeff;
-    G4cout << "  with natural isotope composition" << G4endl; 
-  }
-  
-  //build Element with its Isotopes
-  //
-  G4int nc  = nIsotopes[Z];
-  G4int n0  = nFirstIsotope[Z];
-  G4int idx = idxIsotopes[Z];
-  std::vector<G4Isotope*> iso;
-  G4Isotope* ist;
-  for (G4int i=0; i<nc; ++i) {
-    if (relAbundance[idx + i] > 0.0) {
-      std::ostringstream os; 
-      os << elmSymbol[Z] << n0 + i;
-      ist = new G4Isotope(os.str(), Z, n0 + i, 
-			  GetAtomicMass(Z, n0 + i)*g/(mole*amu_c2));
-      /*
-	G4cout << " Z= " << Z << " N= " << n0 + i
-	<< " miso(amu)= " <<  GetIsotopeMass(Z, n0 + i)/amu_c2
-	<< " matom(amu)= " << GetAtomicMass(Z, n0 + i)/amu_c2 << G4endl;
-      */
-      iso.push_back(ist);
+
+  G4AutoLock l(&nistElementMutex);
+  if(0 <= elmIndex[Z]) {
+    // Nist element was already built
+    const G4ElementTable* theTable = G4Element::GetElementTable();
+    theElement = (*theTable)[elmIndex[Z]]; 
+  } else {
+    G4double Aeff = atomicMass[Z];
+    if (verbose > 1) {
+      G4cout << "G4NistElementBuilder: Build Element <" << elmSymbol[Z]
+	     << ">  Z= " << Z << "  Aeff= " << Aeff;
+      G4cout << "  with natural isotope composition" << G4endl; 
     }
-  }
-  G4int ni = iso.size();
-  G4double w;
-  theElement = new G4Element(elmSymbol[Z],elmSymbol[Z],ni);
-  for(G4int j=0; j<ni; ++j) {
-    w = relAbundance[idx + (iso[j])->GetN() - n0];
-    ist = iso[j];
-    theElement->AddIsotope(ist, w);
-  }
-  theElement->SetNaturalAbundanceFlag(true);  
+  
+    //build Element with its Isotopes
+    //
+    G4int nc  = nIsotopes[Z];
+    G4int n0  = nFirstIsotope[Z];
+    G4int idx = idxIsotopes[Z];
+    std::vector<G4Isotope*> iso;
+    G4Isotope* ist;
+    for (G4int i=0; i<nc; ++i) {
+      if (relAbundance[idx + i] > 0.0) {
+	std::ostringstream os; 
+	os << elmSymbol[Z] << n0 + i;
+	ist = new G4Isotope(os.str(), Z, n0 + i, 
+			    GetAtomicMass(Z, n0 + i)*g/(mole*amu_c2));
+	/*
+	  G4cout << " Z= " << Z << " N= " << n0 + i
+	  << " miso(amu)= " <<  GetIsotopeMass(Z, n0 + i)/amu_c2
+	  << " matom(amu)= " << GetAtomicMass(Z, n0 + i)/amu_c2 << G4endl;
+	*/
+	iso.push_back(ist);
+      }
+    }
+    G4int ni = iso.size();
+    G4double w;
+    theElement = new G4Element(elmSymbol[Z],elmSymbol[Z],ni);
+    for(G4int j=0; j<ni; ++j) {
+      w = relAbundance[idx + (iso[j])->GetN() - n0];
+      ist = iso[j];
+      theElement->AddIsotope(ist, w);
+    }
+    theElement->SetNaturalAbundanceFlag(true);
+    elmIndex[Z] = theElement->GetIndex();
+  }  
+  l.unlock();
   return theElement;
 }
 
@@ -266,7 +260,8 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
   for(G4int i=0; i<nc; ++i) {
     www = 0.01*(&W)[i];
     // mass of the isotope in G4 units
-    massIsotopes[index] = (&A)[i]*amu_c2 - Z*electron_mass_c2 + bindingEnergy[Z]; 
+    massIsotopes[index] = 
+      (&A)[i]*amu_c2 - Z*electron_mass_c2 + bindingEnergy[Z]; 
     sigMass[index]      = (&sA)[i]*amu_c2;
     relAbundance[index] = www;
 
@@ -2507,8 +2502,11 @@ void G4NistElementBuilder::Initialise()
   
   AddElement("Bh", 107, 8, *BhN , *BhA , *BhS , *BhW);
 
-  for(G4int i=0; i<maxNumElements; ++i) {elmNames.push_back(elmSymbol[i]);}
-  
+  for(auto& i : elmSymbol)
+  {
+    elmNames.push_back(i);
+  }
+
   if(0<verbose) {
     G4cout << "G4NistElementBuilder: " << maxNumElements-1 << " Elements  "
            << index << " Isotopes"

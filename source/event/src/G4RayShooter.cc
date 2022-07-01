@@ -36,25 +36,7 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 
-G4RayShooter::G4RayShooter()
-{
-  SetInitialValues();
-}
-
-void G4RayShooter::SetInitialValues()
-{
-  G4ThreeVector zero;
-  particle_momentum_direction = (G4ParticleMomentum)zero;
-  particle_energy = 1.0*GeV;
-  particle_position = zero;
-  particle_polarization = zero;
-}
-
-G4RayShooter::~G4RayShooter()
-{
-}
-
-void G4RayShooter::Shoot(G4Event* evt,G4ThreeVector vtx, G4ThreeVector direc)
+void G4RayShooter::Shoot(G4Event* evt, G4ThreeVector vtx, G4ThreeVector direc)
 {
   if(particle_definition == nullptr)
   {
@@ -72,12 +54,12 @@ void G4RayShooter::Shoot(G4Event* evt,G4ThreeVector vtx, G4ThreeVector direc)
 
   // Create a new vertex
   //
-  G4PrimaryVertex* vertex = new G4PrimaryVertex(vtx,particle_time);
+  auto* vertex = new G4PrimaryVertex(vtx,particle_time);
 
   // Create new primaries and set them to the vertex
   //
   G4double mass = particle_definition->GetPDGMass();
-  G4PrimaryParticle* particle = new G4PrimaryParticle(particle_definition);
+  auto* particle = new G4PrimaryParticle(particle_definition);
   particle->SetKineticEnergy( particle_energy );
   particle->SetMass( mass );
   particle->SetMomentumDirection( direc );

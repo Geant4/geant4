@@ -27,18 +27,15 @@
 #ifndef PAR04INFEERENCESETUP_HH
 #define PAR04INFEERENCESETUP_HH
 
-#include "G4ThreeVector.hh"
-#include "globals.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
-
-#include "Par04DetectorConstruction.hh"
-#include "Par04InferenceMessenger.hh"
-#include "Par04InferenceInterface.hh"
-
-namespace CLHEP
-{
-  class HepRandomEngine;
-}
+#include <G4String.hh>                   // for G4String
+#include <G4SystemOfUnits.hh>            // for mm
+#include <G4Types.hh>                    // for G4int, G4double, G4bool, G4f...
+#include <memory>                        // for unique_ptr
+#include <vector>                        // for vector
+#include "CLHEP/Units/SystemOfUnits.h"   // for mm
+#include "G4ThreeVector.hh"              // for G4ThreeVector
+class Par04DetectorConstruction;
+class Par04InferenceInterface;
 class Par04InferenceMessenger;
 
 /**
@@ -65,10 +62,6 @@ class Par04InferenceSetup
   /// Check if inference should be performed for the particle
   /// @param[in] aEnergy Particle's energy
   G4bool IfTrigger(G4double aEnergy);
-  /// Specify if cylindrical coordinates are to be used (or Carthesian instead).
-  inline void SetIfCylindrical(const G4bool aIfCylindrical) { fIfCylindrical = aIfCylindrical; };
-  /// Get flag specifying if cylindrical are used (or Carthesian instead).
-  inline G4double GetIfCylindrical() const { return fIfCylindrical; };
   /// Set mesh size.
   /// @param aSize (x,y,x) size for Carthesian coordinates, or (R, phi, z) for
   /// cylindrical coordinates.
@@ -145,12 +138,6 @@ class Par04InferenceSetup
                     G4ThreeVector aParticleDirection);
 
  private:
-  /// Pointer to detector construction to retrieve (once) the detector
-  /// dimensions
-  Par04DetectorConstruction* fDetector;
-  // Alpha parameter of the Sigma distribution
-  /// Can be changed with UI command `/example/mesh/cylindrical <true/false>`
-  bool fIfCylindrical = true;
   /// Cell's size: (x,y,x) for Carthesian, and (R, phi, z) for cylindrical
   /// coordinates Can be changed with UI command `/example/mesh/size <x y z>/<r
   /// phi z> <unit>`. For cylindrical coordinates phi is ignored and calculated

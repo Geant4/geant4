@@ -832,15 +832,15 @@ protected:
           }
 
          {for(unsigned int index=0;index<dimension;index++) {
-            std::string s = "binNum";
+            std::string _s = "binNum";
             if(dimension!=1) {
-              if(index==0) s += "X";
-              else if(index==1) s += "Y";
-              else if(index==2) s += "Z";
+              if(index==0) _s += "X";
+              else if(index==1) _s += "Y";
+              else if(index==2) _s += "Z";
             }
-            if(!_elem->attribute_value(s,svalue)) {
+            if(!_elem->attribute_value(_s,svalue)) {
               a_out << "tools::xml::aidas::read_bins :"
-                  << " a <bin1d> has no " << s << std::endl;
+                  << " a <bin1d> has no " << _s << std::endl;
               return false;
             }
             if(svalue=="UNDERFLOW") {
@@ -1055,11 +1055,11 @@ protected:
             return false;
           }
 
-          std::string s;
-          if(_elem->attribute_value(s_booking(),s)) {
-            a_booking.push_back(colbook(stype,sname,s,true));
-          } else if(_elem->attribute_value(s_default(),s)) {
-            a_booking.push_back(colbook(stype,sname,s,false));
+          std::string _s;
+          if(_elem->attribute_value(s_booking(),_s)) {
+            a_booking.push_back(colbook(stype,sname,_s,true));
+          } else if(_elem->attribute_value(s_default(),_s)) {
+            a_booking.push_back(colbook(stype,sname,_s,false));
           } else {
             a_booking.push_back(colbook(stype,sname,"",false));
           }
@@ -1485,10 +1485,10 @@ protected:
             if(!to<double>(svalue,errorMinus)) return false;
           }
 
-          histo::measurement& m = point.coordinate(coord);
-          m.set_value(value);
-          m.set_error_plus(errorPlus);
-          m.set_error_minus(errorMinus);
+          histo::measurement& _m = point.coordinate(coord);
+          _m.set_value(value);
+          _m.set_error_plus(errorPlus);
+          _m.set_error_minus(errorMinus);
 
           coord++;
         }

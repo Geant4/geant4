@@ -22,6 +22,7 @@ geant4_add_module(G4emdna-processes
     G4DNASecondOrderReaction.hh
     G4DNAVibExcitation.hh
     G4DNAScavengerProcess.hh
+    G4DNAPolyNucleotideReactionProcess.hh
   SOURCES
     G4DNAAttachment.cc
     G4DNABrownianTransportation.cc
@@ -40,7 +41,8 @@ geant4_add_module(G4emdna-processes
     G4DNAWaterDissociationDisplacer.cc
     G4DNASecondOrderReaction.cc
     G4DNAVibExcitation.cc
-    G4DNAScavengerProcess.cc)
+    G4DNAScavengerProcess.cc
+    G4DNAPolyNucleotideReactionProcess.cc)
 
 geant4_module_link_libraries(G4emdna-processes
   PUBLIC

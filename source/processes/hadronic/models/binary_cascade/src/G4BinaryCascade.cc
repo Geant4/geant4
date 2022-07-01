@@ -354,6 +354,8 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
             if(time < 0.0) { time = 0.0; }
             aNew.SetTime(timePrimary + time);
             aNew.SetCreatorModelID((*iter)->GetCreatorModelID());
+            aNew.SetParentResonanceDef((*iter)->GetParentResonanceDef());
+            aNew.SetParentResonanceID((*iter)->GetParentResonanceID());	    
             theParticleChange.AddSecondary(aNew);
         }
 
@@ -697,12 +699,11 @@ G4double G4BinaryCascade::GetExcitationEnergy()
     {
         nucleusMass = GetIonMass(currentZ,currentA);
     }
-    else if (currentZ==0 )     // Uzhi && currentA==1 )                     // Uzhi
-    {                                                                       // Uzhi
-        if(currentA == 1) {nucleusMass = G4Neutron::Neutron()->GetPDGMass();}// Uzhi
-        else              {nucleusMass = GetFinalNucleusMomentum().mag()     // Uzhi
-            - 3.*MeV*currentA;}                 // Uzhi
-    }                                                                       // Uzhi
+    else if (currentZ==0 )
+    {
+        if(currentA == 1) {nucleusMass = G4Neutron::Neutron()->GetPDGMass();}
+        else              {nucleusMass = GetFinalNucleusMomentum().mag() - 3.*MeV*currentA;}
+    }
     else
     {
 #ifdef debug_G4BinaryCascade
@@ -933,14 +934,11 @@ G4ReactionProductVector *  G4BinaryCascade::DeExcite()
    G4LorentzVector pFragment(0);
    // G4cout << " final4mon " << GetFinal4Momentum() /MeV << G4endl;
 
-   //   if ( ExcitationEnergy >= 0 )                                         // closed by Uzhi
-   //   {                                                                    // closed by Uzhi
    fragment = FindFragments();
 
-
-   if(fragment)                                                            // Uzhi
-   {                                                                       // Uzhi
-      if(fragment->GetA_asInt() >1)                                          // Uzhi
+   if(fragment)
+   {
+      if(fragment->GetA_asInt() >1)
       {
          pFragment=fragment->GetMomentum();
          // G4cout << " going to preco with fragment 4 mom " << pFragment << G4endl;
@@ -961,10 +959,12 @@ G4ReactionProductVector *  G4BinaryCascade::DeExcite()
 
          std::vector<G4KineticTrack *>::iterator i;
          if ( theTargetList.size() == 1 )  {i=theTargetList.begin();}
-         if ( theCapturedList.size() == 1 ) {i=theCapturedList.begin();}                             // Uzhi
+         if ( theCapturedList.size() == 1 ) {i=theCapturedList.begin();}
          G4ReactionProduct * aNew = new G4ReactionProduct((*i)->GetDefinition());
          aNew->SetTotalEnergy((*i)->GetDefinition()->GetPDGMass());
          aNew->SetCreatorModelID(theBIC_ID);
+	 aNew->SetParentResonanceDef((*i)->GetParentResonanceDef());
+	 aNew->SetParentResonanceID((*i)->GetParentResonanceID());	 
          aNew->SetMomentum(G4ThreeVector(0));// see boost for preCompoundProducts below..
          precompoundProducts = new G4ReactionProductVector();
          precompoundProducts->push_back(aNew);
@@ -973,7 +973,7 @@ G4ReactionProductVector *  G4BinaryCascade::DeExcite()
       fragment=0;
 
    } else                            // End of if(fragment)
-   {                                 // No fragment, can be neutrons only  // Uzhi
+   {                                 // No fragment, can be neutrons only
 
       precompoundProducts = DecayVoidNucleus();
    }
@@ -1011,24 +1011,23 @@ G4ReactionProductVector *  G4BinaryCascade::DecayVoidNucleus()
       std::vector<G4double> masses;
       G4double sumMass(0);
 
-      if ( theTargetList.size() != 0)                                      // Uzhi
-            {
+      if ( theTargetList.size() != 0)
+      {
          for ( aNuc=theTargetList.begin(); aNuc != theTargetList.end(); aNuc++)
          {
             G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();
             masses.push_back(mass);
             sumMass += mass;
          }
-            }                                                                    // Uzhi
+      }
 
-      if ( theCapturedList.size() != 0)                                    // Uzhi
-      {                                                                    // Uzhi
-         for(aNuc = theCapturedList.begin();                               // Uzhi
-               aNuc != theCapturedList.end(); aNuc++)                        // Uzhi
-         {                                                                 // Uzhi
-            G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();          // Uzhi
-            masses.push_back(mass);                                        // Uzhi
-            sumMass += mass;                                               // Uzhi
+      if ( theCapturedList.size() != 0)
+      {
+         for(aNuc = theCapturedList.begin(); aNuc != theCapturedList.end(); aNuc++)
+         {
+            G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();
+            masses.push_back(mass);
+            sumMass += mass;
          }
       }
 
@@ -1059,27 +1058,29 @@ G4ReactionProductVector *  G4BinaryCascade::DecayVoidNucleus()
             aNew->SetTotalEnergy((*aMom)->e());
             aNew->SetMomentum((*aMom)->vect());
             aNew->SetCreatorModelID(theBIC_ID);
+	    aNew->SetParentResonanceDef((*aNuc)->GetParentResonanceDef());
+	    aNew->SetParentResonanceID((*aNuc)->GetParentResonanceID());
             result->push_back(aNew);
-
             delete *aMom;
          }
       }
 
-      if ( theCapturedList.size() != 0)                                    // Uzhi
-            {                                                                    // Uzhi
-         for ( aNuc=theCapturedList.begin();                                // Uzhi
-               (aNuc != theCapturedList.end()) && (aMom!=momenta->end());    // Uzhi
-               aNuc++, aMom++ )                                             // Uzhi
-         {                                                                  // Uzhi
-            G4ReactionProduct * aNew = new G4ReactionProduct(               // Uzhi
-                  (*aNuc)->GetDefinition());            // Uzhi
-            aNew->SetTotalEnergy((*aMom)->e());                             // Uzhi
-            aNew->SetMomentum((*aMom)->vect());                             // Uzhi
+      if ( theCapturedList.size() != 0)
+      {
+         for ( aNuc=theCapturedList.begin();
+               (aNuc != theCapturedList.end()) && (aMom!=momenta->end());
+               aNuc++, aMom++ )
+         {
+            G4ReactionProduct * aNew = new G4ReactionProduct((*aNuc)->GetDefinition());
+            aNew->SetTotalEnergy((*aMom)->e());
+            aNew->SetMomentum((*aMom)->vect());
             aNew->SetCreatorModelID(theBIC_ID);
-            result->push_back(aNew);                           // Uzhi
-            delete *aMom;                                                   // Uzhi
-         }                                                                  // Uzhi
-            }                                                                    // Uzhi
+            aNew->SetParentResonanceDef((*aNuc)->GetParentResonanceDef());
+            aNew->SetParentResonanceID((*aNuc)->GetParentResonanceID());	    
+            result->push_back(aNew);
+            delete *aMom;
+         }
+      }
 
       delete momenta;
    }
@@ -1103,6 +1104,8 @@ G4ReactionProductVector * G4BinaryCascade::ProductsAddFinalState(G4ReactionProdu
         aNew->SetTotalEnergy(kt->Get4Momentum().e());
         aNew->SetNewlyAdded(kt->IsParticipant());
         aNew->SetCreatorModelID(theBIC_ID);
+        aNew->SetParentResonanceDef(kt->GetParentResonanceDef());
+        aNew->SetParentResonanceID(kt->GetParentResonanceID());	
         products->push_back(aNew);
 
 #ifdef debug_BIC_Propagate_finals
@@ -2721,6 +2724,8 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
         aNew->SetMomentum(kt->Get4Momentum().vect());
         aNew->SetTotalEnergy(kt->Get4Momentum().e());
         aNew->SetCreatorModelID(theBIC_ID);
+        aNew->SetParentResonanceDef(kt->GetParentResonanceDef());
+        aNew->SetParentResonanceID(kt->GetParentResonanceID());	
         products->push_back(aNew);
 #ifdef debug_H1_BinaryCascade
         if (! kt->GetDefinition()->GetPDGStable() )
@@ -2896,6 +2901,8 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
         aNew->SetCreatorModelID(theBIC_ID);
+	aNew->SetParentResonanceDef((*iter)->GetParentResonanceDef());
+	aNew->SetParentResonanceID((*iter)->GetParentResonanceID());	
         Esecondaries +=(*iter)->Get4Momentum().e();
         psecondaries +=(*iter)->Get4Momentum();
         aNew->SetNewlyAdded(true);
@@ -2920,6 +2927,8 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
                 aNew->SetMomentum(atrack->Get4Momentum().vect());
                 aNew->SetTotalEnergy(atrack->Get4Momentum().e());
                 aNew->SetCreatorModelID(atrack->GetCreatorModelID());
+		aNew->SetParentResonanceDef(atrack->GetParentResonanceDef());
+		aNew->SetParentResonanceID(atrack->GetParentResonanceID());		
                 Esecondaries +=atrack->Get4Momentum().e();
                 psecondaries +=atrack->Get4Momentum();
                 aNew->SetNewlyAdded(true);
@@ -2949,12 +2958,13 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
         aNew->SetCreatorModelID(theBIC_ID);
+	aNew->SetParentResonanceDef((*iter)->GetParentResonanceDef());
+	aNew->SetParentResonanceID((*iter)->GetParentResonanceID());	
         Esecondaries +=(*iter)->Get4Momentum().e();
         psecondaries +=(*iter)->Get4Momentum();
         if ( (*iter)->IsParticipant() ) aNew->SetNewlyAdded(true);
         products->push_back(aNew);
     }
-
 
     for(iter = theCapturedList.begin(); iter != theCapturedList.end(); ++iter)
     {
@@ -2963,6 +2973,8 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
         aNew->SetCreatorModelID(theBIC_ID);
+	aNew->SetParentResonanceDef((*iter)->GetParentResonanceDef());
+	aNew->SetParentResonanceID((*iter)->GetParentResonanceID());	
         Esecondaries +=(*iter)->Get4Momentum().e();
         psecondaries +=(*iter)->Get4Momentum();
         aNew->SetNewlyAdded(true);
@@ -3022,6 +3034,8 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         aNew->SetMomentum(aNew->GetTotalMomentum() * ((*iter)->Get4Momentum().vect().unit()));
         aNew->SetNewlyAdded(true);
         aNew->SetCreatorModelID(theBIC_ID);
+	aNew->SetParentResonanceDef((*iter)->GetParentResonanceDef());
+	aNew->SetParentResonanceID((*iter)->GetParentResonanceID());	
         products->push_back(aNew);
         Esecondaries += aNew->GetTotalEnergy();
         psecondaries += G4LorentzVector(aNew->GetMomentum(),aNew->GetTotalEnergy() );
@@ -3030,8 +3044,6 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
     for (rpiter=products->begin(); rpiter!=products->end(); ++rpiter){
     	psecondaries += G4LorentzVector((*rpiter)->GetMomentum(),(*rpiter)->GetTotalEnergy() );
     }
-
-
 
     G4LorentzVector initial4Mom=theProjectile4Momentum + G4LorentzVector(initial_nuclear_mass);
 
@@ -3059,7 +3071,6 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
 		}
     }
 
-
     return products;
 }
 G4ReactionProductVector * G4BinaryCascade::HighEnergyModelFSProducts(G4ReactionProductVector * products,
@@ -3073,6 +3084,8 @@ G4ReactionProductVector * G4BinaryCascade::HighEnergyModelFSProducts(G4ReactionP
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
         aNew->SetNewlyAdded(true);
         aNew->SetCreatorModelID((*iter)->GetCreatorModelID());
+        aNew->SetParentResonanceDef((*iter)->GetParentResonanceDef());
+        aNew->SetParentResonanceID((*iter)->GetParentResonanceID());
         //G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
         products->push_back(aNew);
     }

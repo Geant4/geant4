@@ -630,7 +630,7 @@ void G4PenelopeRayleighModelMI::BuildFormFactorTable(const G4Material* material)
 	  G4cout << " -- MedMat comp[" << j+1 << "]: "  << comp[j] << G4endl;
       }
       
-      char* path = std::getenv("G4LEDATA");
+      const char* path = G4FindDataDir("G4LEDATA");
       if (!path) {
 	G4String excep = "G4LEDATA environment variable not set!";
 	G4Exception("G4PenelopeRayleighModelMI::BuildFormFactorTable()",
@@ -872,7 +872,7 @@ void G4PenelopeRayleighModelMI::ReadDataFile(const G4int Z)
     G4cout << "Going to read Rayleigh data files for Z=" << Z << G4endl;
   }
   
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path) {
     G4String excep = "G4LEDATA environment variable not set!";
     G4Exception("G4PenelopeRayleighModelMI::ReadDataFile()",
@@ -1000,7 +1000,7 @@ void G4PenelopeRayleighModelMI::ReadMolInterferenceData(const G4String& matname,
   }
   G4bool isLocalFile = (FFfilename != "NULL");
     
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path) {
     G4String excep = "G4LEDATA environment variable not set!";
     G4Exception("G4PenelopeRayleighModelMI::ReadMolInterferenceData()",

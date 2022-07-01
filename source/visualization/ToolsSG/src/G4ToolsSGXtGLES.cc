@@ -28,12 +28,12 @@
 #include "G4ToolsSGXtGLES.hh"
 
 #include "G4ToolsSGViewer.hh"
-#include <tools/Xt/sg_viewer>
+#include <toolx/Xt/sg_viewer>
 
 #include "G4Xt.hh"
 
-class session : public tools::Xt::session {
-  typedef tools::Xt::session parent;
+class session : public toolx::Xt::session {
+  typedef toolx::Xt::session parent;
 public:
   session(std::ostream& a_out,int a_argc,char** a_argv)
   :parent(a_out,a_argc,a_argv)
@@ -88,7 +88,7 @@ G4VViewer* G4ToolsSGXtGLES::CreateViewer(G4VSceneHandler& a_scene,const G4String
   if(!fSGSession) Initialise();
   if(!fSGSession) return nullptr;
   G4VViewer* pView =
-    new G4ToolsSGViewer<tools::Xt::session,tools::Xt::sg_viewer>(*fSGSession,(G4ToolsSGSceneHandler&)a_scene,a_name);
+    new G4ToolsSGViewer<toolx::Xt::session,toolx::Xt::sg_viewer>(*fSGSession,(G4ToolsSGSceneHandler&)a_scene,a_name);
   if (pView) {
     if (pView->GetViewId() < 0) {
       G4cerr <<

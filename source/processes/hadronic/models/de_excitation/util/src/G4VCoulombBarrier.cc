@@ -38,9 +38,6 @@ G4VCoulombBarrier::G4VCoulombBarrier(G4int anA, G4int aZ)
   theR0 = 1.5*CLHEP::fermi;
 }
 
-G4VCoulombBarrier::~G4VCoulombBarrier()
-{}
-
 void G4VCoulombBarrier::SetParameters(G4double rho, G4double r0)
 {
   theRho = rho;

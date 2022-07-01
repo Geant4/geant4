@@ -49,7 +49,7 @@ class G4SimpleIntegration
 
   G4SimpleIntegration(function pFunction, G4double pTolerance);
 
-  ~G4SimpleIntegration();
+  ~G4SimpleIntegration() = default;
 
   G4SimpleIntegration(const G4SimpleIntegration&) = delete;
   G4SimpleIntegration& operator=(const G4SimpleIntegration&) = delete;

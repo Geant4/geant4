@@ -188,7 +188,7 @@ void G4NuclideTable::GenerateNuclide()
   if ( threshold_of_half_life < minimum_threshold_of_half_life )
   {
     // Need to update full list
-    char* path = std::getenv("G4ENSDFSTATEDATA");
+    const char* path = G4FindDataDir("G4ENSDFSTATEDATA");
 
     if ( path == nullptr )
     {

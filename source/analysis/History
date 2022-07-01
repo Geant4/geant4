@@ -1,25 +1,36 @@
--------------------------------------------------------------------
+# Category analysis History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  SVN log-message one should put at every
-committal in the SVN repository !
+## 2022-05-18 Guy Barrand (analysis-V11-00-05)
+- have "toolx" namespace for g4tools classes related to "externals", then:
+  - tools::[hdf5,zlib,xml::xml_style,raxml,sg::text_freetype] become toolx::[hdf5,zlib,xml::xml_style,raxml,sg::text_freetype].
+  - corresponding includes #include <tools/...> become #include <toolx/...>
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-03-24 Ben Morgan (analysis-V11-00-04)
+- Use geant4_category_modules to optionaly add G4hdf5 module to category
 
-March 2, 2022 I. Hrivnacova (analysis-V10-07-31)
+## 2022-03-02 I. Hrivnacova (analysis-V11-00-03)
 - Fix notifying about closing file in G4GenericAnalysisManager;
-  this fixes saving scorers in analysis file in B3 example
+  this fixes savinng scorers in analysis file in B3 example
   for the second and further runs.
+
+## 2022-02-23 I. Hrivnacova (analysis-V11-00-02)
+- Added "getVector" commands (for visualization): 
+    /analysis/hn|pn/getVector
+
+## 2022-01-28 Ben Morgan (analysis-V11-00-01)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2021-12-10 Ben Morgan (analysis-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 November 15, 2021 I. Hrivnacova (analysis-V10-07-30)
 - Fixed remaining Coverity issues

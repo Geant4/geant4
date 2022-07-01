@@ -84,7 +84,7 @@ G4double G4VLEPTSModel::GetMeanFreePath(const G4Material* aMaterial,
 void G4VLEPTSModel::BuildPhysicsTable(const G4ParticleDefinition& aParticleType) 
 {
   //CHECK IF PATH VARIABLE IS DEFINED
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if( !path ) {
     G4Exception("G4VLEPTSModel",
 		"",

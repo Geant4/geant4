@@ -64,18 +64,15 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
-#include "G4Proton.hh"
 #include "G4GenericIon.hh"
-#include "G4Alpha.hh"
 #include "G4BraggModel.hh"
 #include "G4BraggIonModel.hh"
 #include "G4BetheBlochModel.hh"
-#include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
 #include "G4WaterStopping.hh"
 #include "G4EmCorrections.hh"
-#include "G4IonFluctuations.hh"
 #include "G4EmParameters.hh"
+#include "G4EmStandUtil.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -94,8 +91,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ionIonisation::~G4ionIonisation()
-{}
+G4ionIonisation::~G4ionIonisation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -151,11 +147,14 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
       *part->GetPDGMass()/CLHEP::proton_mass_c2;
     EmModel(0)->SetHighEnergyLimit(eth);
 
-    if (nullptr == FluctModel()) { SetFluctModel(new G4IonFluctuations()); }
+    if (nullptr == FluctModel()) {
+      SetFluctModel(G4EmStandUtil::ModelOfFluctuations(true));
+    }
     AddEmModel(1, EmModel(0), FluctModel());
 
+    // an extra high-energy model is needed or not?
     G4double emax = param->MaxKinEnergy();
-    if(eth < 0.99*emax) {
+    if(eth*1.01 < emax) {
       if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }  
       EmModel(1)->SetLowEnergyLimit(eth);
       EmModel(1)->SetHighEnergyLimit(emax);
@@ -170,6 +169,7 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 	corr->SetIonisationModels(EmModel(0),EmModel(1));
       }
     } else {
+      // to avoid numerical problem
       EmModel(0)->SetHighEnergyLimit(emax);
     }
     isInitialised = true;

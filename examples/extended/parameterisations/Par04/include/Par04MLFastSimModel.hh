@@ -27,12 +27,18 @@
 #ifndef PAR04MLFASTSIMMODEL_HH
 #define PAR04MLFASTSIMMODEL_HH
 
-#include "G4VFastSimulationModel.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4ios.hh"
-#include "Par04InferenceSetup.hh"
-
+#include <G4String.hh>                // for G4String
+#include <G4ThreeVector.hh>           // for G4ThreeVector
+#include <G4Types.hh>                 // for G4bool, G4double
+#include <memory>                     // for unique_ptr
+#include <vector>                     // for vector
+#include "G4VFastSimulationModel.hh"  // for G4VFastSimulationModel
 class G4FastSimHitMaker;
+class G4FastStep;
+class G4FastTrack;
+class G4ParticleDefinition;
+class G4Region;
+class Par04InferenceSetup;
 
 /**
  * @brief Inference for the fast simulation model.

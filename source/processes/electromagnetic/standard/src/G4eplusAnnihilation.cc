@@ -82,8 +82,7 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eplusAnnihilation::~G4eplusAnnihilation()
-{}
+G4eplusAnnihilation::~G4eplusAnnihilation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

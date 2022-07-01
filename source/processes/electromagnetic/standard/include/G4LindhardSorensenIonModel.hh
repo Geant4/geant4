@@ -51,7 +51,6 @@
 
 #include "G4VEmModel.hh"
 #include "G4NistManager.hh"
-#include "G4Threading.hh"
 
 class G4EmCorrections;
 class G4ParticleChangeForLoss;
@@ -169,11 +168,6 @@ private:
   G4double formfact = 0.0;
   G4double twoln10;
   G4double fElimit;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex theLSMutex;
-#endif
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -109,10 +109,10 @@ void G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M,G4double abun, G4Partic
   }
 
   G4String baseName;
-  if ( std::getenv( dataDirVariable ) ) {
-     baseName = std::getenv( dataDirVariable );
+  if ( G4FindDataDir( dataDirVariable ) ) {
+     baseName = G4FindDataDir( dataDirVariable );
   } else {
-     baseName = std::getenv( "G4PARTICLEHPDATA" );
+     baseName = G4FindDataDir( "G4PARTICLEHPDATA" );
      baseName += "/" + particleName;
   }
     

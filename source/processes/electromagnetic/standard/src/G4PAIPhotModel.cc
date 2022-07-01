@@ -287,7 +287,7 @@ void G4PAIPhotModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
                                                   dp->GetLogKineticEnergy());
     G4int Z = G4lrint(anElement->GetZ());
  
-    G4DynamicParticle* deltaRay = new G4DynamicParticle(fElectron, 
+    auto deltaRay = new G4DynamicParticle(fElectron,
 	    GetAngularDistribution()->SampleDirection(dp, deltaTkin,
 		 				      Z, matCC->GetMaterial()),
 						      deltaTkin);
@@ -351,7 +351,7 @@ void G4PAIPhotModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     }
     // create G4DynamicParticle object for photon ray
  
-    G4DynamicParticle* photonRay = new G4DynamicParticle;
+    auto photonRay = new G4DynamicParticle;
     photonRay->SetDefinition( G4Gamma::Gamma() );
     photonRay->SetKineticEnergy( deltaTkin );
     photonRay->SetMomentumDirection(deltaDirection); 

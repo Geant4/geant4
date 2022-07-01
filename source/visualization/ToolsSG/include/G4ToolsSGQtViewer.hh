@@ -34,7 +34,7 @@
 #include "G4UIQt.hh"
 #include "G4UImanager.hh"
 
-#include <tools/Qt/sg_viewer>
+#include <toolx/Qt/sg_viewer>
 
 #include <qmainwindow.h>
 
@@ -55,10 +55,10 @@ private:
   G4VViewer* fViewer;
 };
 
-class G4ToolsSGQtViewer : public G4ToolsSGViewer<tools::Qt::session,tools::Qt::sg_viewer> {
-  typedef G4ToolsSGViewer<tools::Qt::session,tools::Qt::sg_viewer> parent;
+class G4ToolsSGQtViewer : public G4ToolsSGViewer<toolx::Qt::session,toolx::Qt::sg_viewer> {
+  typedef G4ToolsSGViewer<toolx::Qt::session,toolx::Qt::sg_viewer> parent;
 public:
-  G4ToolsSGQtViewer(tools::Qt::session& a_session,G4ToolsSGSceneHandler& a_scene_handler, const G4String& a_name)
+  G4ToolsSGQtViewer(toolx::Qt::session& a_session,G4ToolsSGSceneHandler& a_scene_handler, const G4String& a_name)
   :parent(a_session,a_scene_handler,a_name)
   ,fSGQWidget(nullptr)
   ,fDestroyCallback(0)
@@ -76,12 +76,12 @@ public:
     if(fSGQWidget) return; //done.
     parent::Initialise();
     if(!fSGViewer) {
-      G4cerr << "G4ToolsSGQtViewer::Initialise: ERROR: G4ToolsSGQtViewer has no tools::Qt::sg_viewer." << G4endl;
+      G4cerr << "G4ToolsSGQtViewer::Initialise: ERROR: G4ToolsSGQtViewer has no toolx::Qt::sg_viewer." << G4endl;
       return;
     }
     fSGQWidget = fSGViewer->shell();
     if (!fSGQWidget) {
-      G4cerr << "G4ToolsSGQtViewer::Initialise: ERROR: tools::Qt::sg_viewer has no QWidget shell." << G4endl;
+      G4cerr << "G4ToolsSGQtViewer::Initialise: ERROR: toolx::Qt::sg_viewer has no QWidget shell." << G4endl;
       return;
     }
 

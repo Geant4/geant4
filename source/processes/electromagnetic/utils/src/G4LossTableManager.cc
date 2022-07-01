@@ -772,10 +772,6 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
                 << G4endl;
       }
     }
-
-    if (theElectron == part && theElectron == proc->SecondaryParticle() ) {
-      proc->SetSecondaryRangeTable(base_proc->RangeTableForLoss());
-    }
   }
 }
 
@@ -809,7 +805,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
       // possible case of process sharing between particle/anti-particle
       if(!yes) {
-        G4VProcess* ptr = static_cast<G4VProcess*>(p);
+        auto ptr = static_cast<G4VProcess*>(p);
         for(G4int j=0; j<nvec; ++j) {
           //G4cout << "j= " << j << " " << (*pvec)[j] << " " << ptr << G4endl;
           if(ptr == (*pvec)[j]) {
@@ -847,7 +843,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   if (0 == n_dedx || !em) {
     G4cout << "G4LossTableManager WARNING: no DEDX processes for " 
            << aParticle->GetParticleName() << G4endl;
-    return 0;
+    return nullptr;
   }
   G4int nSubRegions = em->NumberOfSubCutoffRegions();
 
@@ -870,7 +866,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   em->SetDEDXTable(dedx, fIsIonisation);
 
   if (1 < n_dedx) {
-    dedx = 0;
+    dedx = nullptr;
     dedx = G4PhysicsTableHelper::PreparePhysicsTable(dedx);
     tableBuilder->BuildDEDXTable(dedx, t_list);
     em->SetDEDXTable(dedx, fRestricted);

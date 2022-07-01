@@ -151,7 +151,7 @@ public:
 
   const G4DataVector* Initialise(const G4ParticleDefinition* part,
                                  const G4ParticleDefinition* secPart,
-                                 G4double, G4int verb);
+                                 G4int verb);
 
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
                       G4EmTableType t = fRestricted);
@@ -163,10 +163,8 @@ public:
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel* fm, 
                   const G4Region* r);
 
-  void UpdateEmModel(const G4String& model_name, G4double emin, G4double emax);
-
   // Get model pointer from the model list
-  G4VEmModel* GetModel(G4int idx, G4bool ver = false);
+  G4VEmModel* GetModel(G4int idx, G4bool ver = false) const;
 
   // Get model pointer from the model list for a given material cuts couple
   // no check on material cuts couple index

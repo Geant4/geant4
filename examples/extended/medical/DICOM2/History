@@ -1,10 +1,16 @@
--------------------------------------------------------------------
+# Example DICOM2 History
 
-     =========================================================
- 		      Geant4 - DICOM2 example
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
+
+## 2021-12-10 Ben Morgan (DICOM2-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 10.11.2020 - Ben Morgan (DICOM2-V10-06-01)
              Migration to G4RunManagerFactory.

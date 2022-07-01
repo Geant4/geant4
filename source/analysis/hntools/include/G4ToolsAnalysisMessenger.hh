@@ -54,9 +54,13 @@ class G4ToolsAnalysisMessenger : public G4UImessenger
     // Methods
     template <typename HT>
     G4String GetHnAddress(G4int id, G4THnManager<HT>* htManager) const;
+    template <typename HT>
+    G4String GetHnVectorAddress(G4THnManager<HT>* htManager) const;
 
     // Data members
     G4ToolsAnalysisManager*  fManager; ///< Associated class
+
+    // analysis/hn|pn/get command
     std::unique_ptr<G4UIcommand>  fGetH1Cmd;
     std::unique_ptr<G4UIcommand>  fGetH2Cmd;
     std::unique_ptr<G4UIcommand>  fGetH3Cmd;
@@ -67,6 +71,18 @@ class G4ToolsAnalysisMessenger : public G4UImessenger
     G4String fH3Value;
     G4String fP1Value;
     G4String fP2Value;
+
+    // analysis/hn|pn/getVector command
+    std::unique_ptr<G4UIcommand>  fGetH1VectorCmd;
+    std::unique_ptr<G4UIcommand>  fGetH2VectorCmd;
+    std::unique_ptr<G4UIcommand>  fGetH3VectorCmd;
+    std::unique_ptr<G4UIcommand>  fGetP1VectorCmd;
+    std::unique_ptr<G4UIcommand>  fGetP2VectorCmd;
+    G4String fH1VectorValue;
+    G4String fH2VectorValue;
+    G4String fH3VectorValue;
+    G4String fP1VectorValue;
+    G4String fP2VectorValue;
 };
 
 // inline functions
@@ -80,6 +96,20 @@ G4String G4ToolsAnalysisMessenger::GetHnAddress(
   if ( ht != nullptr ) {
     std::ostringstream os;
     os << static_cast<void*>(ht);
+    return os.str();
+  }
+  return G4String();
+}
+
+template <typename HT>
+inline
+G4String G4ToolsAnalysisMessenger::GetHnVectorAddress(
+  G4THnManager<HT>* htManager) const
+{
+  auto htVector = htManager->GetTVector();
+  if ( htVector != nullptr ) {
+    std::ostringstream os;
+    os << static_cast<void*>(htVector);
     return os.str();
   }
   return G4String();

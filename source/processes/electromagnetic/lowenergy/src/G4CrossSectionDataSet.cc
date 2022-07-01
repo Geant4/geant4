@@ -465,7 +465,7 @@ G4bool G4CrossSectionDataSet::SaveData(const G4String & argFileName) const
 
 G4String G4CrossSectionDataSet::FullFileName(const G4String& argFileName) const
 {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     {
       G4Exception("G4CrossSectionDataSet::FullFileName",

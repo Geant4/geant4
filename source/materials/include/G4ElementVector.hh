@@ -41,6 +41,6 @@
 
 class G4Element;
 
-typedef std::vector<const G4Element*> G4ElementVector;
+using G4ElementVector = std::vector<const G4Element*>;
 
 #endif

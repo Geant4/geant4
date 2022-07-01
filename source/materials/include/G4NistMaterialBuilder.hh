@@ -60,7 +60,6 @@
 
 #include "globals.hh"
 #include "G4Material.hh"
-#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -72,7 +71,7 @@ public:
 
   G4NistMaterialBuilder(G4NistElementBuilder*, G4int verb=0);
 			
-  ~G4NistMaterialBuilder();
+  ~G4NistMaterialBuilder() = default;
  
   // Find or build a G4Material by name, from dataBase
   //
@@ -217,11 +216,6 @@ private:
   std::vector<G4int>     idxGas;
   std::vector<G4double>  gasTemperature;
   std::vector<G4double>  gasPressure;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex nistMaterialMutex;
-#endif
-
 };
 
 inline const std::vector<G4String>& 

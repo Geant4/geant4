@@ -117,16 +117,18 @@ G4UImanager::~G4UImanager()
 {
   if(bridges != nullptr)
   {
-    for(auto itr = bridges->cbegin(); itr != bridges->cend(); ++itr)
+    for(auto bridge : *bridges)
     {
-      delete *itr;
+      delete bridge;
     }
     delete bridges;
   }
   SetCoutDestination(nullptr);
   histVec.clear();
   if(saveHistory)
+  {
     historyFile.close();
+  }
   delete CoutMessenger;
   delete ProfileMessenger;
   delete UnitsMessenger;
@@ -187,7 +189,9 @@ G4String G4UImanager::GetCurrentStringValue(const char* aCommand,
   {
     token = savedToken();
     if(token.empty())
+    {
       return G4String();
+    }
     if(token[(size_t) 0] == '"')
     {
       token.append(" ");
@@ -209,7 +213,9 @@ G4String G4UImanager::GetCurrentStringValue(const char* aCommand,
   for(std::size_t i = 0; i < savedCommand->GetParameterEntries(); ++i)
   {
     if(aParameterName == savedCommand->GetParameter(i)->GetParameterName())
+    {
       return GetCurrentStringValue(aCommand, i + 1, false);
+    }
   }
   return G4String();
 }
@@ -437,7 +443,9 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
       {
         G4cerr << aCommand << G4endl;
         for(G4int i = 0; i < ia; ++i)
+        {
           G4cerr << " ";
+        }
         G4cerr << "^" << G4endl;
         G4cerr << "Unmatched alias parenthesis -- command ignored" << G4endl;
         G4String nullStr;
@@ -459,11 +467,13 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
     //--- and ibx represents corresponding "}"
     G4String subs;
     if(ia > 0)
+    {
       subs = aCommand.substr(0, ia);
+    }
     G4String alis = aCommand.substr(ia + 1, ibx - ia - 1);
     G4String rems = aCommand.substr(ibx + 1, aCommand.length() - ibx);
     G4String* alVal = aliasList->FindAlias(alis);
-    if(!alVal)
+    if(alVal == nullptr)
     {
       G4cerr << "Alias <" << alis << "> not found -- command ignored" << G4endl;
       G4String nullStr;
@@ -486,9 +496,15 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
 {
   G4String aCommand = SolveAlias(aCmd);
   if(aCommand.empty())
+  {
     return fAliasNotFound;
-  if(verboseLevel) {
-    if (isMaster) fLastCommandOutputTreated = false;
+  }
+  if(verboseLevel != 0)
+  {
+    if(isMaster)
+    {
+      fLastCommandOutputTreated = false;
+    }
     G4cout << aCommand << G4endl;
   }
   G4String commandString;
@@ -535,12 +551,12 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
 
   if(isMaster && bridges != nullptr)
   {
-    for(auto itr = bridges->cbegin(); itr != bridges->cend(); ++itr)
+    for(auto bridge : *bridges)
     {
-      G4int leng = (*itr)->DirLength();
-      if(commandString.substr(0, leng) == (*itr)->DirName())
+      G4int leng = bridge->DirLength();
+      if(commandString.substr(0, leng) == bridge->DirName())
       {
-        return (*itr)->LocalUI()->ApplyCommand(commandString + " " +
+        return bridge->LocalUI()->ApplyCommand(commandString + " " +
                                                commandParameter);
       }
     }
@@ -574,7 +590,9 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
   }
 
   if(saveHistory)
+  {
     historyFile << aCommand << G4endl;
+  }
   if(G4int(histVec.size()) >= maxHistSize)
   {
     histVec.erase(histVec.begin());
@@ -652,8 +670,10 @@ void G4UImanager::StoreHistory(G4bool historySwitch, const char* fileName)
 // --------------------------------------------------------------------
 void G4UImanager::PauseSession(const char* msg)
 {
-  if(session)
+  if(session != nullptr)
+  {
     session->PauseSessionStart(msg);
+  }
 }
 
 // --------------------------------------------------------------------
@@ -793,14 +813,18 @@ void G4UImanager::ParseMacroSearchPath()
   while((idxend = searchPath.find(':', idxfirst)) != G4String::npos)
   {
     pathstring = searchPath.substr(idxfirst, idxend - idxfirst);
-    if(pathstring.size() != 0)
+    if(!pathstring.empty())
+    {
       searchDirs.push_back(pathstring);
+    }
     idxfirst = idxend + 1;
   }
 
   pathstring = searchPath.substr(idxfirst, searchPath.size() - idxfirst);
-  if(pathstring.size() != 0)
+  if(!pathstring.empty())
+  {
     searchDirs.push_back(pathstring);
+  }
 }
 
 // --------------------------------------------------------------------
@@ -822,9 +846,9 @@ G4String G4UImanager::FindMacroPath(const G4String& fname) const
 {
   G4String macrofile = fname;
 
-  for(std::size_t i = 0; i < searchDirs.size(); ++i)
+  for(const auto& searchDir : searchDirs)
   {
-    G4String fullpath = searchDirs[i] + "/" + fname;
+    G4String fullpath = searchDir + "/" + fname;
     if(FileFound(fullpath))
     {
       macrofile = fullpath;
@@ -866,7 +890,7 @@ void G4UImanager::SetUpForAThread(G4int tId)
 }
 
 // --------------------------------------------------------------------
-void G4UImanager::SetUpForSpecialThread(G4String pref)
+void G4UImanager::SetUpForSpecialThread(const G4String& pref)
 {
   threadID = G4Threading::GENERICTHREAD_ID;
   G4Threading::G4SetThreadId(threadID);
@@ -881,7 +905,9 @@ void G4UImanager::SetCoutFileName(const G4String& fileN, G4bool ifAppend)
 {
   // for sequential mode, ignore this method.
   if(threadID < 0)
+  {
     return;
+  }
 
   if(fileN == "**Screen**")
   {
@@ -900,7 +926,9 @@ void G4UImanager::SetCerrFileName(const G4String& fileN, G4bool ifAppend)
 {
   // for sequential mode, ignore this method.
   if(threadID < 0)
+  {
     return;
+  }
 
   if(fileN == "**Screen**")
   {
@@ -919,7 +947,9 @@ void G4UImanager::SetThreadPrefixString(const G4String& s)
 {
   // for sequential mode, ignore this method.
   if(threadID < 0)
+  {
     return;
+  }
   threadCout->SetPrefixString(s);
 }
 
@@ -928,7 +958,9 @@ void G4UImanager::SetThreadUseBuffer(G4bool flg)
 {
   // for sequential mode, ignore this method.
   if(threadID < 0)
+  {
     return;
+  }
   threadCout->EnableBuffering(flg);
 }
 

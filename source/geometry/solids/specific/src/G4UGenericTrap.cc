@@ -38,7 +38,6 @@
 #include "G4BoundingEnvelope.hh"
 
 #include "G4Polyhedron.hh"
-#include "G4PolyhedronArbitrary.hh"
 
 using namespace CLHEP;
 
@@ -256,86 +255,88 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
   // Approximation of Twisted Side
   // Construct extra Points, if Twisted Side
   //
-  G4PolyhedronArbitrary* polyhedron;
+  G4Polyhedron* polyhedron;
   size_t nVertices, nFacets;
   G4double fDz = GetZHalfLength();
 
-  G4int subdivisions=0;
-  G4int i;
-  if(IsTwisted())
+  G4int subdivisions = 0;
+  if (IsTwisted())
   {
-    if ( GetVisSubdivisions() != 0 )
+    if (GetVisSubdivisions() != 0)
     {
-      subdivisions=GetVisSubdivisions();
+      subdivisions = GetVisSubdivisions();
     }
     else
     {
       // Estimation of Number of Subdivisions for smooth visualisation
       //
-      G4double maxTwist=0.;
-      for(i=0; i<4; ++i)
+      G4double maxTwist = 0.;
+      for(G4int i = 0; i < 4; ++i)
       {
-        if(GetTwistAngle(i)>maxTwist) { maxTwist=GetTwistAngle(i); }
+        if (GetTwistAngle(i) > maxTwist) { maxTwist = GetTwistAngle(i); }
       }
 
       // Computes bounding vectors for the shape
       //
-      G4double Dx,Dy;
+      G4double Dx, Dy;
       G4ThreeVector minVec, maxVec;
-      BoundingLimits(minVec,maxVec);
-      Dx = 0.5*(maxVec.x()- minVec.y());
-      Dy = 0.5*(maxVec.y()- minVec.y());
-      if (Dy > Dx)  { Dx=Dy; }
-    
-      subdivisions=8*G4int(maxTwist/(Dx*Dx*Dx)*fDz);
-      if (subdivisions<4)  { subdivisions=4; }
-      if (subdivisions>30) { subdivisions=30; }
+      BoundingLimits(minVec, maxVec);
+      Dx = 0.5*(maxVec.x() - minVec.y());
+      Dy = 0.5*(maxVec.y() - minVec.y());
+      if (Dy > Dx) { Dx = Dy; }
+
+      subdivisions = 8*G4int(maxTwist/(Dx*Dx*Dx)*fDz);
+      if (subdivisions < 4)  { subdivisions = 4; }
+      if (subdivisions > 30) { subdivisions = 30; }
     }
   }
-  G4int sub4=4*subdivisions;
-  nVertices = 8+subdivisions*4;
-  nFacets = 6+subdivisions*4;
-  G4double cf=1./(subdivisions+1);
-  polyhedron = new G4PolyhedronArbitrary (nVertices, nFacets);
+  G4int sub4 = 4*subdivisions;
+  nVertices = 8 + subdivisions*4;
+  nFacets = 6 + subdivisions*4;
+  G4double cf = 1./(subdivisions + 1);
+  polyhedron = new G4Polyhedron(nVertices, nFacets);
 
-  // Add Vertex
+  // Set vertices
   //
-  for (i=0; i<4; ++i)
+  G4int icur = 0;
+  for (G4int i = 0; i < 4; ++i)
   {
-    polyhedron->AddVertex(G4ThreeVector(GetVertex(i).x(),
-                                        GetVertex(i).y(),-fDz));
+    G4ThreeVector v(GetVertex(i).x(),GetVertex(i).y(),-fDz);
+    polyhedron->SetVertex(++icur, v);
   }
-  for(i=0; i<subdivisions; ++i)
+  for (G4int i = 0; i < subdivisions; ++i)
   {
-    for(G4int j=0; j<4 ; ++j)
+    for (G4int j = 0; j < 4; ++j)
     {
-      G4TwoVector u=GetVertex(j)+cf*(i+1)*( GetVertex(j+4)-GetVertex(j));
-      polyhedron->AddVertex(G4ThreeVector(u.x(),u.y(),-fDz+cf*2*fDz*(i+1)));
-    }    
+      G4TwoVector u = GetVertex(j)+cf*(i+1)*( GetVertex(j+4)-GetVertex(j));
+      G4ThreeVector v(u.x(),u.y(),-fDz+cf*2*fDz*(i+1));
+      polyhedron->SetVertex(++icur, v);
+    }
   }
-  for (i=4; i<8; ++i)
+  for (G4int i = 4; i < 8; ++i)
   {
-    polyhedron->AddVertex(G4ThreeVector(GetVertex(i).x(),
-                                        GetVertex(i).y(),fDz));
+    G4ThreeVector v(GetVertex(i).x(),GetVertex(i).y(),fDz);
+    polyhedron->SetVertex(++icur, v);
   }
 
-  // Add Facets
+  // Set facets
   //
-  polyhedron->AddFacet(1,4,3,2);  //Z-plane
-  for (i=0; i<subdivisions+1; ++i)
+  icur = 0;
+  polyhedron->SetFacet(++icur, 1, 4, 3, 2); // Z-plane
+  for (G4int i = 0; i < subdivisions + 1; ++i)
   {
-    G4int is=i*4;
-    polyhedron->AddFacet(5+is,8+is,4+is,1+is);
-    polyhedron->AddFacet(8+is,7+is,3+is,4+is);
-    polyhedron->AddFacet(7+is,6+is,2+is,3+is);
-    polyhedron->AddFacet(6+is,5+is,1+is,2+is); 
+    G4int is = i*4;
+    polyhedron->SetFacet(++icur, 5+is, 8+is, 4+is, 1+is);
+    polyhedron->SetFacet(++icur, 8+is, 7+is, 3+is, 4+is);
+    polyhedron->SetFacet(++icur, 7+is, 6+is, 2+is, 3+is);
+    polyhedron->SetFacet(++icur, 6+is, 5+is, 1+is, 2+is);
   }
-  polyhedron->AddFacet(5+sub4,6+sub4,7+sub4,8+sub4);  //Z-plane
+  polyhedron->SetFacet(++icur, 5+sub4, 6+sub4, 7+sub4, 8+sub4); // Z-plane
 
   polyhedron->SetReferences();
   polyhedron->InvertFacets();
 
-  return (G4Polyhedron*) polyhedron;
+  return polyhedron;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

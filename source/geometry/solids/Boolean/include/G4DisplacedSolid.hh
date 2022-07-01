@@ -44,7 +44,7 @@
 
 class G4DisplacedSolid : public G4VSolid
 {
-  public:  // with description
+  public:
 
     G4DisplacedSolid( const G4String& pName,
                             G4VSolid* pSolid ,
@@ -61,10 +61,6 @@ class G4DisplacedSolid : public G4VSolid
       // For use in instantiating a transient instance from a persistent one.
 
     virtual ~G4DisplacedSolid() ;
-
-  public:  // without description 
-
-    // It also has all the methods that a solid requires, eg.
 
     EInside Inside( const G4ThreeVector& p ) const ; 
 
@@ -97,9 +93,10 @@ class G4DisplacedSolid : public G4VSolid
 
     void CleanTransformations();
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
 
-  public:  // with description 
+    G4ThreeVector GetPointOnSurface() const;
 
     G4GeometryType  GetEntityType() const;
     G4VSolid* Clone() const;
@@ -133,8 +130,6 @@ class G4DisplacedSolid : public G4VSolid
       // Get/Set the rotation/translation, as applied to the object.
 
     std::ostream& StreamInfo(std::ostream& os) const;
-
-  public:  // without description
 
     G4DisplacedSolid(__void__&);
       // Fake default constructor for usage restricted to direct object

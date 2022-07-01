@@ -35,8 +35,7 @@
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
 
-G4SPSAngDistribution::G4SPSAngDistribution()
-  : Theta(0.), Phi(0.)
+G4SPSAngDistribution::G4SPSAngDistribution() 
 {
   // Angular distribution Variables
   G4ThreeVector zero;
@@ -657,41 +656,39 @@ G4double G4SPSAngDistribution::GenerateUserDefTheta()
     G4cout << "UserDistType = " << UserDistType << G4endl;
     return (0.);
   }
-  else
+  
+  // UserDistType = theta or both and so a theta distribution
+  // is defined. This should be integrated if not already done.
+  G4AutoLock l(&mutex);
+  if(!IPDFThetaExist)
   {
-    // UserDistType = theta or both and so a theta distribution
-    // is defined. This should be integrated if not already done.
-    G4AutoLock l(&mutex);
-    if(IPDFThetaExist == false)
-    {
-      // IPDF has not been created, so create it
-      //
-      G4double bins[1024],vals[1024], sum;
-      G4int ii;
-      G4int maxbin = G4int(UDefThetaH.GetVectorLength());
-      bins[0] = UDefThetaH.GetLowEdgeEnergy(std::size_t(0));
-      vals[0] = UDefThetaH(std::size_t(0));
-      sum = vals[0];
-      for(ii=1; ii<maxbin; ++ii)
-      {
-        bins[ii] = UDefThetaH.GetLowEdgeEnergy(std::size_t(ii));
-        vals[ii] = UDefThetaH(std::size_t(ii)) + vals[ii-1];
-        sum = sum + UDefThetaH(std::size_t(ii));
-      }
-      for(ii=0; ii<maxbin; ++ii)
-      {
-        vals[ii] = vals[ii]/sum;
-        IPDFThetaH.InsertValues(bins[ii], vals[ii]);
-      }
-        IPDFThetaExist = true;
-    }
-    l.unlock();
-
-    // IPDF has been created so carry on
+    // IPDF has not been created, so create it
     //
-    G4double rndm = G4UniformRand();
-    return(IPDFThetaH.GetEnergy(rndm));
+    G4double bins[1024],vals[1024], sum;
+    G4int ii;
+    G4int maxbin = G4int(UDefThetaH.GetVectorLength());
+    bins[0] = UDefThetaH.GetLowEdgeEnergy(std::size_t(0));
+    vals[0] = UDefThetaH(std::size_t(0));
+    sum = vals[0];
+    for(ii=1; ii<maxbin; ++ii)
+    {
+      bins[ii] = UDefThetaH.GetLowEdgeEnergy(std::size_t(ii));
+      vals[ii] = UDefThetaH(std::size_t(ii)) + vals[ii-1];
+      sum = sum + UDefThetaH(std::size_t(ii));
+    }
+    for(ii=0; ii<maxbin; ++ii)
+    {
+      vals[ii] = vals[ii]/sum;
+      IPDFThetaH.InsertValues(bins[ii], vals[ii]);
+    }
+      IPDFThetaExist = true;
   }
+  l.unlock();
+
+  // IPDF has been created so carry on
+  //
+  G4double rndm = G4UniformRand();
+  return IPDFThetaH.GetEnergy(rndm);
 }
 
 G4double G4SPSAngDistribution::GenerateUserDefPhi()
@@ -706,42 +703,39 @@ G4double G4SPSAngDistribution::GenerateUserDefPhi()
     G4cout << "UserDistType = " << UserDistType << G4endl;
     return(0.);
   }
-  else
+  
+  // UserDistType = phi or both and so a phi distribution
+  // is defined. This should be integrated if not already done.
+  G4AutoLock l(&mutex);
+  if(!IPDFPhiExist)
   {
-    // UserDistType = phi or both and so a phi distribution
-    // is defined. This should be integrated if not already done.
-    G4AutoLock l(&mutex);
-    if(IPDFPhiExist == false)
-    {
-      // IPDF has not been created, so create it
-      //
-      G4double bins[1024],vals[1024], sum;
-      G4int ii;
-      G4int maxbin = G4int(UDefPhiH.GetVectorLength());
-      bins[0] = UDefPhiH.GetLowEdgeEnergy(std::size_t(0));
-      vals[0] = UDefPhiH(std::size_t(0));
-      sum = vals[0];
-      for(ii=1; ii<maxbin; ++ii)
-      {
-        bins[ii] = UDefPhiH.GetLowEdgeEnergy(std::size_t(ii));
-        vals[ii] = UDefPhiH(std::size_t(ii)) + vals[ii-1];
-        sum = sum + UDefPhiH(std::size_t(ii));
-      }
-      for(ii=0; ii<maxbin; ++ii)
-      {
-        vals[ii] = vals[ii]/sum;
-        IPDFPhiH.InsertValues(bins[ii], vals[ii]);
-      }
-      IPDFPhiExist = true;
-    }
-    l.unlock();
-
-    // IPDF has been create so carry on
+    // IPDF has not been created, so create it
     //
-    G4double rndm = G4UniformRand();
-
-    return(IPDFPhiH.GetEnergy(rndm));
+    G4double bins[1024],vals[1024], sum;
+    G4int ii;
+    G4int maxbin = G4int(UDefPhiH.GetVectorLength());
+    bins[0] = UDefPhiH.GetLowEdgeEnergy(std::size_t(0));
+    vals[0] = UDefPhiH(std::size_t(0));
+    sum = vals[0];
+    for(ii=1; ii<maxbin; ++ii)
+    {
+      bins[ii] = UDefPhiH.GetLowEdgeEnergy(std::size_t(ii));
+      vals[ii] = UDefPhiH(std::size_t(ii)) + vals[ii-1];
+      sum = sum + UDefPhiH(std::size_t(ii));
+    }
+    for(ii=0; ii<maxbin; ++ii)
+    {
+      vals[ii] = vals[ii]/sum;
+      IPDFPhiH.InsertValues(bins[ii], vals[ii]);
+    }
+    IPDFPhiExist = true;
   }
+  l.unlock();
+
+  // IPDF has been create so carry on
+  //
+  G4double rndm = G4UniformRand();
+  return IPDFPhiH.GetEnergy(rndm); 
 }
 
 void G4SPSAngDistribution::ReSetHist(const G4String& atype)

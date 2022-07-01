@@ -221,7 +221,7 @@ void G4ComponentSAIDTotalXS::Initialise(G4SAIDCrossSectionType tp)
 #endif
     // check environment variable 
     // Build the complete string identifying the file with the data set
-    char* path = std::getenv("G4SAIDXSDATA");
+    const char* path = G4FindDataDir("G4SAIDXSDATA");
     if (!path){
       G4Exception("G4ComponentSAIDTotalXS::Initialise(..)","had013",
 		  FatalException,

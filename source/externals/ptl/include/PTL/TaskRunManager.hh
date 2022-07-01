@@ -52,7 +52,7 @@ public:
     //      useTBB: only relevant if PTL_USE_TBB defined
     //      grainsize:  0 = auto
     explicit TaskRunManager(bool useTBB = false);
-    virtual ~TaskRunManager() = default;
+    virtual ~TaskRunManager();
 
 public:
     virtual int GetNumberOfThreads() const
@@ -80,6 +80,7 @@ public:  // with description
     static TaskRunManager* GetMasterRunManager(bool useTBB = false);
 
 private:
+    static pointer& GetPrivateMasterRunManager();
     static pointer& GetPrivateMasterRunManager(bool init, bool useTBB = false);
 
 protected:

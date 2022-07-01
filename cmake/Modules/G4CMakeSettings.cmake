@@ -138,8 +138,8 @@ set(CMAKE_INSTALL_DATAROOTDIR "share" CACHE PATH
   "Read-only architecture-independent data root (share)")
 
 set(CMAKE_INSTALL_DATADIR
-  "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}" CACHE PATH
-  "Read-only architecture-independent data (DATAROOTDIR/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION})")
+  "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}" CACHE PATH
+  "Read-only architecture-independent data (DATAROOTDIR/${PROJECT_NAME})")
 
 #
 # CMake's builtin `GNUInstallDirs` module is used to set and provide variables

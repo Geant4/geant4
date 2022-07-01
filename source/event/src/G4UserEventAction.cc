@@ -50,9 +50,6 @@ G4UserEventAction::G4UserEventAction()
  }
 }
 
-G4UserEventAction::~G4UserEventAction()
-{;}
-
 void G4UserEventAction::SetEventManager(G4EventManager* value)
 {
   fpEventManager = value;

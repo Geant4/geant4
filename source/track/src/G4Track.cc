@@ -106,6 +106,10 @@ G4Track& G4Track::operator=(const G4Track& right)
     // Creator model ID
     fCreatorModelID = right.fCreatorModelID;
 
+    // Parent resonance
+    fParentResonanceDef = right.fParentResonanceDef;
+    fParentResonanceID  = right.fParentResonanceID;
+   
     // velocity information
     fVelocity = right.fVelocity;
 

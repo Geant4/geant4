@@ -1,23 +1,61 @@
--------------------------------------------------------------------
+# Category greps History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2022-05-01 Evgueni Tcherniaev (greps-V11-00-09)
+- Faster version of HepPolyhedronTetMesh
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-04-22 Evgueni Tcherniaev (greps-V11-00-08)
+- `G4Polyhedron`: added move constructor and move assignment
 
-History file for graphics_reps category
----------------------------------------
+## 2022-04-10 Evgueni Tcherniaev (greps-V11-00-07)
+- `HepPolyhedron`, `G4Polyhedron`:
+  - Added `HepPolyhedronBoxMesh`, `G4PolyhedronBoxMesh`
+  - Selection of most coplanar neighboring facets in `JoinCoplanarFacets()`
+
+## 2022-04-06 John Allison (greps-V11-00-06)
+- `G4Visible`:
+  - Add "user" data member `fInfo`, with access and operator<< functions.
+  - This is intended to offer the user/developer a way of communicating
+    information. For example, with "special mesh rendering" in G4 vis, we
+    use it to communicate the name of the material - heart, lungs, etc. - to
+    the viewer and the vis user can identify the different organs.
+- `G4VMarker`:
+  - Previously, `fInfo` was here. It has been moved to `G4Visible`.
+  - `G4VMarker` *is* a `G4Visible`, so it still has a `fInfo` data member
+    by inheritance (and access and operator<< functions).    
+
+## 2022-04-05 Evgueni Tcherniaev (greps-V11-00-05)
+- Implemented `HepPolyhedron::JoinCoplanarFacets()`
+
+## 2022-04-01 Evgueni Tcherniaev (greps-V11-00-04)
+- `HepPolyhedron`, `G4Polyhedron`:
+  - Added `HepPolyhedron(Nvert, Nface)`, `G4Polyhedron(nvert, nface)`
+  - Added derived classes `HepPolyhedronTetMesh`, `G4PolyhedronTetMesh`
+  - Added `SetVertex()`, `SetFacet()`
+  - Made public `SetReferences()`, `InvertFacets()`;
+
+## 2022-01-28 Ben Morgan (greps-V11-00-03)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+- Make DLL export symbol a CMake module-level compile definition to aid
+  future modularization
+
+## 2022-01-21 Evgueni Tcherniaev (greps-V11-00-02)
+- Revised HepPolyhedronEllipsoid, it fixes visibility
+  of edges in case of cut ellipsoid
+
+## 2021-12-11 John Allison (greps-V11-00-01)
+- G4VisExtent::Transform: Use const auto& to avoid copying.
+
+## 2021-12-10 Ben Morgan (greps-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 28 October 2021 Guy Barrand (greps-V10-07-13)
 - sources.cmake: declare G4Plotter.hh,.cc.

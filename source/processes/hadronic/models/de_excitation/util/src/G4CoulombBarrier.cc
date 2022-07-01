@@ -40,22 +40,27 @@ G4CoulombBarrier::G4CoulombBarrier(G4int A, G4int Z)
   : G4VCoulombBarrier(A, Z), g4calc(G4Pow::GetInstance())
 {
   factor = CLHEP::elm_coupling*Z;
-  SetParameters(0.4*G4NuclearRadii::RadiusCB(Z, A),1.3*CLHEP::fermi);
+  SetParameters(0.4*G4NuclearRadii::RadiusCB(Z, A), 1.5*CLHEP::fermi);
 }
 
-G4CoulombBarrier::~G4CoulombBarrier() 
-{}
-
 G4double G4CoulombBarrier::GetCoulombBarrier(
-         G4int ARes, G4int ZRes, G4double) const 
+         G4int ARes, G4int ZRes, G4double U) const 
 {
-  return factor*ZRes/(G4NuclearRadii::RadiusCB(ZRes,ARes) + GetRho());
-  //return factor*ZRes/((G4NuclearRadii::RadiusCB(ZRes,ARes) 
-  //	     + GetRho())*(1.0 + std::sqrt(U/(G4double)(2*ARes))));
+  G4double cb = factor*ZRes/(G4NuclearRadii::RadiusCB(ZRes,ARes) + GetRho());
+  if(U > 0.0) { cb /= (1.0 + std::sqrt( U/((2*ARes)*CLHEP::MeV) )); }
+  return cb;
 }
 
 G4double G4CoulombBarrier::BarrierPenetrationFactor(G4int aZ) const 
 {
+  // Data comes from 
+  // Dostrovsky, Fraenkel and Friedlander
+  // Physical Review, vol 116, num. 3 1959
+  // 
+  // const G4int size = 5;
+  // const G4double Zlist[size] = {10.0, 20.0, 30.0, 50.0, 70.0};
+  // const G4double Kprot[size] = {0.42, 0.58, 0.68, 0.77, 0.80};
+  // 
   G4double res = 1.0;
   if(GetZ() == 1) {
     res = (aZ >= 70) ? 0.80 :

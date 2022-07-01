@@ -46,6 +46,7 @@
 #ifndef G4CrystalAtomBase_HH
 #define G4CrystalAtomBase_HH 1
 
+#include <utility>
 #include <vector>
 #include <G4ThreeVector.hh>
 
@@ -58,7 +59,7 @@ public:  // with description
     // Constructor to create a lattice
     //
     G4CrystalAtomBase() {;};
-    G4CrystalAtomBase(G4ThreeVector apos) {AddPos(apos);};
+    G4CrystalAtomBase(const G4ThreeVector& apos) { AddPos(apos); };
     ~G4CrystalAtomBase() {;};
     
     //
@@ -76,10 +77,11 @@ public:
 
     inline
     G4ThreeVector GetPos(G4int idx) {return thePos[idx];}
+    inline void AddPos(const G4ThreeVector& a3vec) { thePos.push_back(a3vec); }
     inline
-    void AddPos(G4ThreeVector a3vec) {thePos.push_back(a3vec);}
-    inline
-    void SetPos(std::vector<G4ThreeVector> a3vecvec) {thePos = a3vecvec;}
+    void SetPos(std::vector<G4ThreeVector> a3vecvec) {
+      thePos = std::move(a3vecvec);
+    }
     inline
     void DelPos(G4int idx) {thePos.erase(thePos.begin()+idx);}
 };

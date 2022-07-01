@@ -121,7 +121,7 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
   // Initialise element selector  
   if(IsMaster()) {
     // Access to elements
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
 
     const G4ElementTable* elemTable = G4Element::GetElementTable();
     size_t numElems                 = (*elemTable).size();
@@ -188,7 +188,7 @@ void G4LivermoreComptonModel::ReadData(size_t Z, const char* path)
   const char* datadir = path;
   if(datadir == nullptr)
   {
-    datadir = std::getenv("G4LEDATA");
+    datadir = G4FindDataDir("G4LEDATA");
     if(datadir == nullptr)
     {
       G4Exception("G4LivermoreComptonModel::ReadData()",

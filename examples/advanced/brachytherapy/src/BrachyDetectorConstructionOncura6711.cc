@@ -72,9 +72,6 @@ BrachyDetectorConstructionOncura6711::BrachyDetectorConstructionOncura6711()
    fOncuraSilverCoreVisAtt(nullptr)
 {}
 
-BrachyDetectorConstructionOncura6711::~BrachyDetectorConstructionOncura6711()
-{}
-
 void BrachyDetectorConstructionOncura6711::ConstructOncura6711(G4VPhysicalVolume* mother)
 {
 G4Colour  red     (1.0, 0.0, 0.0) ;
@@ -87,21 +84,21 @@ G4Material* silver = nist -> FindOrBuildMaterial("G4_Ag");
 
 //Capsule shell
 fOncuraCapsule = new G4Tubs("OncuraCapsule",0,0.4*mm,1.875*mm,0.*deg,360.*deg);
-fOncuraCapsuleLog = new G4LogicalVolume(fOncuraCapsule,titanium,"OncuraCapsuleLog", 0,0,0);
+fOncuraCapsuleLog = new G4LogicalVolume(fOncuraCapsule,titanium,"OncuraCapsuleLog", nullptr,nullptr,nullptr);
 fOncuraCapsulePhys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,0), 
   								"OncuraCapsulePhys", fOncuraCapsuleLog, 
   								mother, false, 0, true);
 						
 //Capsule tips
 fOncuraCapsuleTip1 = new G4Sphere("OncuraCapsuleTip1", 0, 0.4*mm, 0., 360*deg, 0., 90*deg);
-fOncuraCapsuleTip1Log = new G4LogicalVolume(fOncuraCapsuleTip1, titanium, "OncuraCapsuleTip1Log",0,0,0);
+fOncuraCapsuleTip1Log = new G4LogicalVolume(fOncuraCapsuleTip1, titanium, "OncuraCapsuleTip1Log",nullptr,nullptr,nullptr);
 fOncuraCapsuleTip1Phys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,1.875*mm), 
 								"OncuraCapsuleTip1Phys", fOncuraCapsuleTip1Log,
 								mother, false, 
 								0, true);
 
 fOncuraCapsuleTip2 = new G4Sphere("OncuraCapsuleTip2", 0, 0.4*mm, 0., 360*deg, 90*deg, 90*deg);
-fOncuraCapsuleTip2Log = new G4LogicalVolume(fOncuraCapsuleTip2, titanium, "OncuraCapsuleTip2Log",0,0,0);
+fOncuraCapsuleTip2Log = new G4LogicalVolume(fOncuraCapsuleTip2, titanium, "OncuraCapsuleTip2Log", nullptr,nullptr,nullptr);
 fOncuraCapsuleTip2Phys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,-1.875*mm), 
 								"OncuraCapsuleTip2Phys", fOncuraCapsuleTip2Log,
 								mother, false, 

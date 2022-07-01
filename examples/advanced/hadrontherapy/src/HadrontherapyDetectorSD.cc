@@ -147,7 +147,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
                     G4double eKinMean = (eKinPre + eKinPost) * 0.5;
                     
                     // get the material
-                    G4Material * materialStep = aStep -> GetPreStepPoint() -> GetMaterial();
+                    const G4Material * materialStep = aStep -> GetPreStepPoint() -> GetMaterial();
                     
                     // get the secondary paticles
                     G4Step fstep = *theTrack -> GetStep();

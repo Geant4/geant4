@@ -128,7 +128,7 @@ void G4DNABornIonisationModel2::Initialise(const G4ParticleDefinition* particle,
   fParticleDef = particle;
 
   // Energy limits
-  char *path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
 
   // ***
 

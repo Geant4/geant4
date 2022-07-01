@@ -43,6 +43,7 @@
 #include "G4UnitsTable.hh"                 // for G4BestUnit
 #include "G4VVisManager.hh"                // for G4VVisManager
 #include "G4VisAttributes.hh"              // for G4VisAttributes
+#include <cmath>                           // for log10
 template <class Type> class G4Allocator;
 
 G4ThreadLocal G4Allocator<Par04Hit>* Par04HitAllocator;
@@ -100,7 +101,7 @@ int Par04Hit::operator==(const Par04Hit& aRight) const
 
 void Par04Hit::Draw()
 {
-  /// TOFIX do not hardcode size
+  /// Arbitrary size corresponds to the example macros
   G4ThreeVector meshSize(2.325 * mm, 2 * CLHEP::pi / 50. * CLHEP::rad, 3.4 * mm);
   G4int numPhiCells           = CLHEP::pi * 2. / meshSize.y();
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -123,7 +124,11 @@ void Par04Hit::Draw()
     G4double colR = fType == 0 ? 0 : 1;
     G4double colG = fType == 0 ? 1 : 0;
     G4double colB = 0;
-    G4Colour colour(colR, colG, colB, 0.5);
+    // Set transparency depending on the energy
+    // Arbitrary formula
+    G4double alpha = 2 * std::log10(fEdep + 1);
+    G4cout << "alpha = " << alpha << G4endl;
+    G4Colour colour(colR, colG, colB, alpha);
     attribs.SetColour(colour);
     attribs.SetForceSolid(true);
     pVVisManager->Draw(solid, attribs, trans);
@@ -163,6 +168,7 @@ std::vector<G4AttValue>* Par04Hit::CreateAttValues() const
 
 void Par04Hit::Print()
 {
-  std::cout << "\tHit " << fEdep / MeV << " MeV at " << fPos / cm << " cm (R,phi,z)= (" << fRhoId
-            << ", " << fPhiId << ", " << fZId << "), " << fTime << " ns" << std::endl;
+  std::cout << "\tHit " << fEdep / MeV << " MeV at " << fPos / cm << " cm rotation " << fRot
+            << " (R,phi,z)= (" << fRhoId << ", " << fPhiId << ", " << fZId << "), " << fTime << " ns"
+            << std::endl;
 }

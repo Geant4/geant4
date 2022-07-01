@@ -31,6 +31,7 @@
 #include "globals.hh"
 
 class G4DynamicParticle;
+class G4ParticleDefinition;
 
 class G4HadSecondary
 {
@@ -47,7 +48,11 @@ public:
   inline G4double GetTime() const            {return theTime;}
   inline void SetCreatorModelID(G4int id)    {theCreatorModel = id;}
   inline G4int GetCreatorModelID() const     {return theCreatorModel;}
-    
+  inline const G4ParticleDefinition* GetParentResonanceDef() const {return theParentResonanceDef;}
+  inline void SetParentResonanceDef(const G4ParticleDefinition* parentDef) {theParentResonanceDef = parentDef;}
+  inline G4int GetParentResonanceID() const {return theParentResonanceID;}
+  inline void SetParentResonanceID(const G4int parentID) {theParentResonanceID = parentID;}
+   
 private:
   
    G4HadSecondary(){};
@@ -56,6 +61,8 @@ private:
    G4double theWeight;
    G4double theTime;
    G4int theCreatorModel;
+   const G4ParticleDefinition* theParentResonanceDef = nullptr;
+   G4int theParentResonanceID;
 };
 
 #endif

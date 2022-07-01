@@ -47,7 +47,6 @@
 
 #include "globals.hh"
 #include "G4DeexPrecoParameters.hh"
-#include "G4Threading.hh"
 #include <vector>
 #include <iostream>
 
@@ -131,10 +130,6 @@ private:
 
   std::vector<const G4LevelManager*> fLevelManagers[ZMAX];
   std::vector<G4bool> fLevelManagerFlags[ZMAX];
-
-#ifdef G4MULTITHREADED
-  static G4Mutex nuclearLevelDataMutex;
-#endif
 };
 
 #endif

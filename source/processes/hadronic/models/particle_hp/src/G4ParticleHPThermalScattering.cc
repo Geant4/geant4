@@ -1198,9 +1198,9 @@ void G4ParticleHPThermalScattering::buildPhysicsTable()
       if ( inelasticFSs == nullptr ) inelasticFSs = new std::map < G4int , std::map < G4double , std::vector < E_P_E_isoAng* >* >* >;
 
        G4String dirName;
-       if ( !std::getenv( "G4NEUTRONHPDATA" ) ) 
+       if ( !G4FindDataDir( "G4NEUTRONHPDATA" ) )
           throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-       dirName = std::getenv( "G4NEUTRONHPDATA" );
+       dirName = G4FindDataDir( "G4NEUTRONHPDATA" );
 
    //G4String name;
 

@@ -93,34 +93,16 @@ extern G4DLLIMPORT G4Allocator<G4HCofThisEvent>*& anHCoTHAllocator_G4MT_TLS_();
 
 inline void* G4HCofThisEvent::operator new(size_t)
 {
-  ;
-  ;
-  ;
-  if(!anHCoTHAllocator_G4MT_TLS_())
+  if(anHCoTHAllocator_G4MT_TLS_() == nullptr)
+  {
     anHCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4HCofThisEvent>;
-  G4Allocator<G4HCofThisEvent>& anHCoTHAllocator =
-    *anHCoTHAllocator_G4MT_TLS_();
-  ;
-  ;
-  ;
-  void* anHCoTH;
-  anHCoTH = (void*) anHCoTHAllocator.MallocSingle();
-  return anHCoTH;
+  }
+  return (void*) anHCoTHAllocator_G4MT_TLS_()->MallocSingle();
 }
 
 inline void G4HCofThisEvent::operator delete(void* anHCoTH)
 {
-  ;
-  ;
-  ;
-  if(!anHCoTHAllocator_G4MT_TLS_())
-    anHCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4HCofThisEvent>;
-  G4Allocator<G4HCofThisEvent>& anHCoTHAllocator =
-    *anHCoTHAllocator_G4MT_TLS_();
-  ;
-  ;
-  ;
-  anHCoTHAllocator.FreeSingle((G4HCofThisEvent*) anHCoTH);
+  anHCoTHAllocator_G4MT_TLS_()->FreeSingle((G4HCofThisEvent*) anHCoTH);
 }
 
 #endif

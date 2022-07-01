@@ -36,10 +36,15 @@
 #include "G4EmParameters.hh"
 #include "G4VEnergyLossProcess.hh"
 
+#include "G4eMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4WentzelVIModel.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4TransportationWithMsc.hh"
+#include "G4TransportationProcessType.hh"
 
 #include "G4MuBremsstrahlungModel.hh"
 #include "G4MuPairProductionModel.hh"
@@ -379,5 +384,38 @@ void G4EmBuilder::PrepareEMPhysics()
   if(!ad) {
     ad = new G4UAtomicDeexcitation();
     man->SetAtomDeexcitation(ad);
+  }
+}
+
+void G4EmBuilder::ConstructElectronMscProcess(G4VMscModel* msc1, G4VMscModel* msc2,
+                                              G4ParticleDefinition* particle)
+{
+  G4TransportationWithMscType type =
+    G4EmParameters::Instance()->TransportationWithMsc();
+  G4ProcessManager* procManager = particle->GetProcessManager();
+  auto plist = procManager->GetProcessList();
+  G4int ptype = (0 < plist->size()) ? (*plist)[0]->GetProcessSubType() : 0;
+  if(type != G4TransportationWithMscType::fDisabled && ptype == TRANSPORTATION) {
+    // Remove default G4Transportation and replace with G4TransportationWithMsc.
+    procManager->RemoveProcess(0);
+    G4TransportationWithMsc* transportWithMsc = new G4TransportationWithMsc(
+      G4TransportationWithMsc::ScatteringType::MultipleScattering);
+    if(type == G4TransportationWithMscType::fMultipleSteps) {
+      transportWithMsc->SetMultipleSteps(true);
+    }
+    transportWithMsc->AddMscModel(msc1);
+    if(msc2 != nullptr) {
+      transportWithMsc->AddMscModel(msc2);
+    }
+    procManager->AddProcess(transportWithMsc, -1, 0, 0);
+  } else {
+    // Register as a separate process.
+    G4eMultipleScattering* msc = new G4eMultipleScattering;
+    msc->SetEmModel(msc1);
+    if(msc2 != nullptr) {
+      msc->SetEmModel(msc2);
+    }
+    G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+    ph->RegisterProcess(msc, particle);
   }
 }

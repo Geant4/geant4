@@ -150,13 +150,21 @@ G4ProfilerMessenger::~G4ProfilerMessenger()
   delete profileDirectory;
   delete profileOutputDirectory;
   for(auto& itr : profileTypeDirs)
+  {
     delete itr;
+  }
   for(auto& itr : profileEnableCmds)
+  {
     delete itr.first;
+  }
   for(auto& itr : profileGeneralCmds)
+  {
     delete itr.first;
+  }
   for(auto& itr : profileCompCmds)
+  {
     delete itr.first;
+  }
 }
 
 // --------------------------------------------------------------------
@@ -202,7 +210,9 @@ void G4ProfilerMessenger::SetNewValue(G4UIcommand* command, G4String value)
   }
 
   if(command_line.size() > 1)
+  {
     G4Profiler::Configure(command_line);
+  }
 }
 
 // --------------------------------------------------------------------

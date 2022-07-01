@@ -189,11 +189,8 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       // needs a kernel visit.  (In this respect, it differs from the
       // OpenGL drivers, where it's done in SetView.)
       (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
-      // If G4OpenInventor ever introduces VAMs, the following might need
-      // changing to a complete comparison, i.e., remove ".size()".  See
-      // G4OpenGLStoredViewer::CompareForKernelVisit.
       (vp.GetVisAttributesModifiers() !=
-       fVP.GetVisAttributesModifiers())                           ||
+       fVP.GetVisAttributesModifiers())                       ||
       (vp.IsSpecialMeshRendering() !=
        fVP.IsSpecialMeshRendering())
       )
@@ -525,29 +522,25 @@ void G4OpenInventorViewer::Escape(){
 void G4OpenInventorViewer::WritePostScript(const G4String& aFile) {
   if(!fGL2PSAction) return;
   fGL2PSAction->setFileName(aFile.c_str());
-  fGL2PSAction->setExportImageFormat(GL2PS_EPS);
-  // Use gl2ps default buffer (2048*2048)
-  fGL2PSAction->setBufferSize(0);
+  fGL2PSAction->setExportImageFormat_EPS();
+  fGL2PSAction->setTitleAndProducer("Geant4 output","Geant4");
   G4cout << "Produce " << aFile << "..." << G4endl;
   if (fGL2PSAction->enableFileWriting()) {
     ViewerRender();
     fGL2PSAction->disableFileWriting();
   }
-  fGL2PSAction->resetBufferSizeParameters();
 }
 
 void G4OpenInventorViewer::WritePDF(const G4String& aFile) {
   if(!fGL2PSAction) return;
   fGL2PSAction->setFileName(aFile.c_str());
-  fGL2PSAction->setExportImageFormat(GL2PS_PDF);
-  // Use gl2ps default buffer (2048*2048)
-  fGL2PSAction->setBufferSize(0);
+  fGL2PSAction->setExportImageFormat_PDF();
+  fGL2PSAction->setTitleAndProducer("Geant4 output","Geant4");
   G4cout << "Produce " << aFile << "..." << G4endl;
   if (fGL2PSAction->enableFileWriting()) {
     ViewerRender();
     fGL2PSAction->disableFileWriting();
   }
-  fGL2PSAction->resetBufferSizeParameters();
 }
 
 void G4OpenInventorViewer::WritePixmapPostScript(const G4String& aFile) {

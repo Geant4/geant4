@@ -40,6 +40,6 @@
 #include <vector>
 #include "G4Isotope.hh"
 
-typedef std::vector<G4Isotope*> G4IsotopeVector;
+using G4IsotopeVector = std::vector<G4Isotope*>;
 
 #endif

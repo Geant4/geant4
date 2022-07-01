@@ -357,123 +357,123 @@ translation %g %g %g"
     ,m_translation[0],m_translation[1],m_translation[2]);
 
     std::string lf("\n");
-    std::string s(ss);
+    std::string _s(ss);
 
-    s += lf;
-    s += "smoothing ";
-    s += (m_smoothing?"true":"false");
+    _s += lf;
+    _s += "smoothing ";
+    _s += (m_smoothing?"true":"false");
 
-    s += lf;
-    s += "hinting ";
-    s += (m_hinting?"true":"false");
+    _s += lf;
+    _s += "hinting ";
+    _s += (m_hinting?"true":"false");
 
-    s += lf;
-    s += "enforced ";
-    s += (m_enforced?"true":"false");
+    _s += lf;
+    _s += "enforced ";
+    _s += (m_enforced?"true":"false");
 
-    s += lf;
-    s += "visible ";
-    s += (m_visible?"true":"false");
+    _s += lf;
+    _s += "visible ";
+    _s += (m_visible?"true":"false");
 
-    s += lf;
-    s += "editable ";
-    s += (m_editable?"true":"false");
+    _s += lf;
+    _s += "editable ";
+    _s += (m_editable?"true":"false");
 
-    s += lf;
-    s += "automated ";
-    s += (m_automated?"true":"false");
+    _s += lf;
+    _s += "automated ";
+    _s += (m_automated?"true":"false");
 
-    s += lf;
-    s += "pickable ";
-    s += (m_pickable?"true":"false");
+    _s += lf;
+    _s += "pickable ";
+    _s += (m_pickable?"true":"false");
 
-    s += lf;
-    s += "marker_style ";
-    s += smarker_style(m_marker_style);
+    _s += lf;
+    _s += "marker_style ";
+    _s += smarker_style(m_marker_style);
 
-    s += lf;
-    s += "area_style ";
-    s += sarea_style(m_area_style);
+    _s += lf;
+    _s += "area_style ";
+    _s += sarea_style(m_area_style);
 
-    s += lf;
-    s += "modeling ";
-    s += m_modeling;
+    _s += lf;
+    _s += "modeling ";
+    _s += m_modeling;
 
-    s += lf;
-    s += "coloring ";
-    s += m_coloring;
+    _s += lf;
+    _s += "coloring ";
+    _s += m_coloring;
 
-    s += lf;
-    s += "title ";
-    s += m_title;
+    _s += lf;
+    _s += "title ";
+    _s += m_title;
 
-    s += lf;
-    s += "light_model ";
-    s += m_light_model;
+    _s += lf;
+    _s += "light_model ";
+    _s += m_light_model;
 
-    s += lf;
-    s += "tick_modeling ";
-    s += m_tick_modeling;
+    _s += lf;
+    _s += "tick_modeling ";
+    _s += m_tick_modeling;
 
-    s += lf;
-    s += "encoding ";
-    s += m_encoding;
+    _s += lf;
+    _s += "encoding ";
+    _s += m_encoding;
 
-    s += lf;
-    s += "cut ";
-    s += m_cut;
+    _s += lf;
+    _s += "cut ";
+    _s += m_cut;
 
-    s += lf;
-    s += "painting ";
-    s += spainting_policy(m_painting);
+    _s += lf;
+    _s += "painting ";
+    _s += spainting_policy(m_painting);
 
-    s += lf;
-    s += "hatching ";
-    s += shatching_policy(m_hatching);
+    _s += lf;
+    _s += "hatching ";
+    _s += shatching_policy(m_hatching);
 
-    s += lf;
-    s += "projection ";
-    s += sprojection_type(m_projection);
+    _s += lf;
+    _s += "projection ";
+    _s += sprojection_type(m_projection);
 
-    s += lf;
-    s += "font ";
-    s += m_font;
+    _s += lf;
+    _s += "font ";
+    _s += m_font;
 
     if(m_font_modeling==font_outline) {
-      s += lf;
-      s += "font_modeling ";
-      s += s_font_outline();
+      _s += lf;
+      _s += "font_modeling ";
+      _s += s_font_outline();
     } else if(m_font_modeling==font_filled)  {
-      s += lf;
-      s += "font_modeling ";
-      s += s_font_filled();
+      _s += lf;
+      _s += "font_modeling ";
+      _s += s_font_filled();
     } else if(m_font_modeling==font_pixmap)  {
-      s += lf;
-      s += "font_modeling ";
-      s += s_font_pixmap();
+      _s += lf;
+      _s += "font_modeling ";
+      _s += s_font_pixmap();
     }
 
-    s += lf;
-    s += "options ";
-    s += m_options;
+    _s += lf;
+    _s += "options ";
+    _s += m_options;
 
-    s += lf;
-    s += "color_mapping ";
-    s += m_color_mapping;
+    _s += lf;
+    _s += "color_mapping ";
+    _s += m_color_mapping;
 
-    s += lf;
-    s += "front_face ";
-    s += (m_front_face==winding_ccw?"ccw":"cw");
+    _s += lf;
+    _s += "front_face ";
+    _s += (m_front_face==winding_ccw?"ccw":"cw");
 
-    s += lf;
-    s += "hjust ";
-    s += shjust(m_hjust);
+    _s += lf;
+    _s += "hjust ";
+    _s += shjust(m_hjust);
 
-    s += lf;
-    s += "vjust ";
-    s += svjust(m_vjust);
+    _s += lf;
+    _s += "vjust ";
+    _s += svjust(m_vjust);
 
-    return s;
+    return _s;
   }
 
   void color(const colorf& a_v){m_color = a_v;}

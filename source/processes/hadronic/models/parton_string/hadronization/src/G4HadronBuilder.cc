@@ -44,10 +44,11 @@
 
 G4HadronBuilder::G4HadronBuilder(G4double mesonMix, G4double barionMix,
 		                 std::vector<double> scalarMesonMix,
-		                 std::vector<double> vectorMesonMix,
-                                 G4double Eta_cProb, G4double Eta_bProb)
+                                 std::vector<double> vectorMesonMix,
+                                 G4double Eta_cProb, G4double Eta_bProb, G4double mesonMixSSbar)
 {
-	mesonSpinMix       = mesonMix;	     
+	mesonSpinMix       = mesonMix;
+        mesonSpinMixSSbar  = mesonMixSSbar;
 	barionSpinMix      = barionMix;
 	scalarMesonMixings = scalarMesonMix;
 	vectorMesonMixings = vectorMesonMix;
@@ -64,7 +65,12 @@ G4ParticleDefinition * G4HadronBuilder::Build(G4ParticleDefinition * black, G4Pa
 	   return Barion(black,white,spin);
 	} else {
            // Meson
-	   Spin spin = (G4UniformRand() < mesonSpinMix) ? SpinZero : SpinOne;
+           Spin spin = SpinZero;
+           if ( std::abs(black->GetPDGEncoding()) == 3 && std::abs(white->GetPDGEncoding()) == 3 ) {
+            spin = (G4UniformRand() < mesonSpinMixSSbar) ? SpinZero : SpinOne;
+           } else {
+	    spin = (G4UniformRand() < mesonSpinMix) ? SpinZero : SpinOne;
+           }
 	   return Meson(black,white,spin);
 	}
 }

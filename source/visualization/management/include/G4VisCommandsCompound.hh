@@ -80,10 +80,23 @@ class G4VisCommandOpen: public G4VVisCommand {
 public:
   G4VisCommandOpen ();
   virtual ~G4VisCommandOpen ();
+  G4String GetCurrentValue(G4UIcommand*);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
   G4VisCommandOpen (const G4VisCommandOpen&);
   G4VisCommandOpen& operator = (const G4VisCommandOpen&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandPlot: public G4VVisCommand {
+public:
+  G4VisCommandPlot ();
+  virtual ~G4VisCommandPlot ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandPlot (const G4VisCommandPlot&);
+  G4VisCommandPlot& operator = (const G4VisCommandPlot&);
   G4UIcommand* fpCommand;
 };
 

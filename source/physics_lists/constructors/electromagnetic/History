@@ -1,27 +1,129 @@
--------------------------------------------------------------------
+# Category phys-ctor-em History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-              physics-list/constructors/electromagnetic History
-              --------------------------------------------------
-This file should be used  to briefly summarize all major modifications
-introduced in the code and keeptrack of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-06-17 Vladimir Ivanchenko (phys-ctor-em-V11-00-25)
+- G4EmStandardPhysics_option4 - use Penelope ionisation model for e- 
+    below 100 keV
 
-24 February 2022, V.Ivanchenko (phys-ctor-em-V10-07-25)
+## 2022-06-05 Vladimir Ivanchenko (phys-ctor-em-V11-00-24)
+- G4EmBuilder - use check on process sub-type, do not substitute
+    G4CoupledTransportation with G4TransportationWithMsc   
+
+## 2022-05-27 Vladimir Ivanchenko (phys-ctor-em-V11-00-23)
+- G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmStandardPhysics_option4,
+    G4EmStandardPhysics_option3, G4EmStandardPhysics - selection of the 
+    model of energy loss fluctuation is inside processes of ionisation 
+    according to the type defined in G4EmParameters
+
+## 2022-05-24 Vladimir Ivanchenko (phys-ctor-em-V11-00-22)
+- G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmStandardPhysics_option4 -
+    provided identical configuration for msc, muon, hadron, and ion
+    physics.
+
+## 2022-05-19 Vladimir Ivanchenko (phys-ctor-em-V11-00-21)
+- GNUmakefile, source.cmake - updated list of sub-libraries and includes
+
+## 2022-05-16 Vladimir Ivanchenko (phys-ctor-em-V11-00-20)
+- G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmStandardPhysicsSS - use 
+    G4LinhardSorensenIonModel for GenericIon
+- G4EmStandardPhysics, G4EmStandardPhysics_option3, 
+  G4EmStandardPhysics_option4 - use G4GammaGeneralProcess by default
+
+## 2022-05-11 Jonas Hahnfeld (phys-ctor-em-V11-00-19)
+- Remove dependency on `G4magneticfield`
+
+## 2022-05-10 Jonas Hahnfeld (phys-ctor-em-V11-00-18)
+- `G4GammaGeneralProcess`: Implement new method `GetCreatorProcess()`
+
+## 2022-05-02 Jonas Hahnfeld (phys-ctor-em-V11-00-17)
+- `G4EmBuilder`: Enable internal stepping in `G4TransportationWithMsc`
+  if requested
+
+## 2022-04-27 Vladimir Ivanchenko (phys-ctor-em-V11-00-16)
+- G4EmStandardPhysics_option4 - use G4LinhardSorensenIonModel for GenericIon
+
+## 2022-04-24 Vladimir Ivanchenko (phys-ctor-em-V11-00-15)
+- GNUmakefile, source.cmake - updated according to really used sub-libraries
+
+## 2022-04-22 Vladimir Ivanchenko (phys-ctor-em-V11-00-14)
+- G4EmDNABuilder, G4EmDNAPhysicsActivator, and DNA constructors - updated 
+    configuration for Opt2 
+
+## 2022-04-19 Jonas Hahnfeld (phys-ctor-em-V11-00-13)
+- Honor option to enable `G4TransportationWithMsc`
+- Enable by default in `G4EmStandardPhysics_option1`
+
+## 2022-04-05 Vladimir Ivanchenko (phys-ctor-em-V11-00-12)
+- G4EmDNABuilder, G4EmDNAPhysicsActivator - fixed Opt4 and Opt5 
+    configurations according to prescription
+
+## 2022-04-05 Vladimir Ivanchenko (phys-ctor-em-V11-00-11)
+- G4EmDNABuilder, G4EmDNAPhysicsActivator - fixed instantiation 
+    of DNA elastic scattering and ionisation for e-
+
+## 2022-03-28 Vladimir Ivanchenko (phys-ctor-em-V11-00-10)
+- G4EmStandardPhysics_option3 - use G4LinhardSorensenIonModel for GenericIon
+
+## 2022-03-24 Vladimir Ivanchenko (phys-ctor-em-V11-00-09)
+- G4EmDNABuilder, G4EmDNAPhysicsActivator - make consistent
+    configuration of DNA physics on top of standard physics 
+
+## 2022-03-15 Hoang Tran (phys-ctor-em-V11-00-08)
+- add SBS and IRT_syn models in G4EmDNAChemistry_option3
+
+## 2022-03-10 Vladimir Ivanchenko (phys-ctor-em-V11-00-07)
+- G4EmDNABuilder - added extra utility methods to find or to build 
+    electron processes
+- G4EmDNAPhysics_option6, G4EmDNAPhysics_option8 - use "fast" option
+
+## 2022-03-04 Hoang Tran (phys-ctor-em-V11-00-06)
+- add G4DNABrownianTransportation in G4EmDNAChemistry_option3
+
+## 2022-02-24 Vladimir Ivanchenko (phys-ctor-em-V11-00-05)
+- G4EmDNABuilder - added option2,3,6,8 configurations
+- G4EmDNAPhysics_option6, G4EmDNAPhysics_option6,
+  G4EmDNAPhysics_option8 - use G4EmDNABuilder
+- G4EmDNAPhysics_option7, G4EmDNAPhysics_stationary_option6
+  G4EmDNAPhysics_option3, G4EmDNAPhysics_stationary_option2
+    maximally simplified
+- G4EmDNAPhysicsActivator - fixed for light ions
 - G4EmStandardPhysics_option4 - use G4UrbanFluctuation model 
     for e+- to address problem #2466
 
-11 December 2021, V.Ivanchenko (phys-ctor-em-V10-07-24)
+## 2022-02-23 Vladimir Ivanchenko (phys-ctor-em-V11-00-04)
+- G4EmDNABuilder - added option4 configuration
+- G4EmDNAPhysics - address interface to G4EmDNABuilder 
+- G4EmDNAPhysics_option4 - use G4EmDNABuilder
+- G4EmDNAPhysics_option5, G4EmDNAPhysics_stationary_option4
+    maximally simplified
+
+## 2022-02-22 Vladimir Ivanchenko (phys-ctor-em-V11-00-03)
+- G4EmDNABuilder - new utility class, which provides instantiation of 
+    standard and DNA processes/models; this reduces code duplication
+    for DNA physics, energy intervals for DNA models are defined
+    in one place
+- G4EmDNAPhysics is the base class for DNA physics constructors
+- G4EmDNAPhysics_option1, G4EmDNAPhysics_stationary - maximally simplified 
+
+## 2022-02-10 Vladimir Ivanchenko (phys-ctor-em-V11-00-02)
+- G4EmModelActivator - fixed mechanism to define PAI model per region
+
+## 2021-12-11 Vladimir Ivanchenko (phys-ctor-em-V11-00-01)
 - G4EmStandardPhysics_option3 - use options providing more accurate 
     simulation without loss of CPU performance: RangeFactor=0.03,
     and SafetyPlus step limitation instead of DistanceToBoundary,
     which significantly improving fanoCavity results
+
+## 2021-12-10 Ben Morgan (phys-ctor-em-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 12 November 2021, V.Ivanchenko (phys-ctor-em-V10-07-23)
 - G4EmStandardPhysicsWVI - making this experimantal configuration 

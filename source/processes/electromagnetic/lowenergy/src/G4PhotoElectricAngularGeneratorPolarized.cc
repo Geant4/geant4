@@ -90,7 +90,7 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
     if(level == 0) filename = nameChar0;
     if(level == 1) filename = nameChar1;
 
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     if (!path)
       {
         G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";

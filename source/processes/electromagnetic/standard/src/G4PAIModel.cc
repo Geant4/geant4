@@ -305,7 +305,7 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   G4int Z = G4lrint(anElement->GetZ());
  
-  G4DynamicParticle* deltaRay = new G4DynamicParticle(fElectron, 
+  auto deltaRay = new G4DynamicParticle(fElectron,
 	    GetAngularDistribution()->SampleDirection(dp, deltaTkin,
 		 				      Z, matCC->GetMaterial()),
 						      deltaTkin);

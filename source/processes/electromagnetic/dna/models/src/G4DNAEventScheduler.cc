@@ -36,31 +36,17 @@
 #include "G4UserMeshAction.hh"
 #include "G4MoleculeCounter.hh"
 #include "G4DNAScavengerMaterial.hh"
+#include "G4Molecule.hh"
 
 G4DNAEventScheduler::G4DNAEventScheduler(const G4DNABoundingBox& boundingBox,
                                          G4int pixel)
   : IEventScheduler()
-  , fVerbose(0)
-  , fInitialized(false)
-  , fStartTime(1 * ps)
-  , fEndTime(10000 * s)
-  , fStepNumber(0)
-  , fMaxStep(INT_MAX)
-  , fRunning(true)
-  , fTimeStep(DBL_MAX)
-  , fGlobalTime(fStartTime)
-  , fJumpingNumber(0)
-  , fReactionNumber(0)
   , fPixel(pixel)
-  , fIsChangeMesh(false)
-  , fSetChangeMesh(true)
-  , fStepNumberInMesh(0)
   , fInitialPixels(fPixel)
   , fpMesh(new G4DNAMesh(boundingBox, fPixel))
   , fpGillespieReaction(new G4DNAGillespieDirectMethod())
   , fpEventSet(new G4DNAEventSet())
   , fpUpdateSystem(new G4DNAUpdateSystemModel())
-  , fpUserMeshAction(nullptr)
 {
   if(!CheckingReactionRadius(fpMesh->GetResolution()))
   {
@@ -76,7 +62,9 @@ void G4DNAEventScheduler::ClearAndReChargeCounter()
   fCounterMap.clear();
   if(fTimeToRecord.empty())
   {
-    G4cout << "fTimeToRecord is empty " << G4endl;
+    G4String WarMessage = "fTimeToRecord is empty ";
+    G4Exception("G4DNAEventScheduler::ClearAndReChargeCounter()",
+                "TimeToRecord is empty", JustWarning, WarMessage);
   }
   fLastRecoredTime = fTimeToRecord.begin();
 
@@ -114,11 +102,17 @@ void G4DNAEventScheduler::ClearAndReChargeCounter()
         }
         fCounterMap[time_mol][molecule] = n_mol;
       }
-
       fLastRecoredTime++;
     }
     G4MoleculeCounter::Instance()->ResetCounter();  // reset
     G4MoleculeCounter::Instance()->Use(false);      // no more used
+  }
+  else
+  {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "G4VMoleculeCounter is not used";
+    G4Exception("G4DNAEventScheduler::ClearAndReChargeCounter()",
+                "G4DNAEventScheduler010", JustWarning, exceptionDescription);
   }
 }
 
@@ -135,7 +129,7 @@ G4DNAEventScheduler::~G4DNAEventScheduler() = default;
 void G4DNAEventScheduler::Voxelizing()
 {
   auto pMainList = G4ITTrackHolder::Instance()->GetMainList();
-  std::map<G4DNAMesh::Key, MapList> TrackKeyMap;
+  std::map<G4VDNAMesh::Index, MapList> TrackKeyMap;
   for(auto track : *pMainList)
   {
     auto molType = GetMolecule(track)->GetMolecularConfiguration();
@@ -148,7 +142,7 @@ void G4DNAEventScheduler::Voxelizing()
       continue;
     }
 
-    auto key = fpMesh->GetKey(track->GetPosition());
+    auto key = fpMesh->GetIndex(track->GetPosition());
     if(TrackKeyMap.find(key) != TrackKeyMap.end())
     {
       std::map<MolType, size_t>& TrackTypeMap = TrackKeyMap[key];
@@ -169,7 +163,7 @@ void G4DNAEventScheduler::Voxelizing()
 
   for(auto& it : TrackKeyMap)
   {
-    fpMesh->SetVoxelMapList(it.first, std::move(it.second));
+    fpMesh->InitializeVoxel(it.first, std::move(it.second));
   }
 }
 
@@ -180,29 +174,26 @@ void G4DNAEventScheduler::ReVoxelizing(G4int pixel)
 
   auto begin = fpMesh->begin();
   auto end   = fpMesh->end();
-  std::map<G4DNAMesh::Key, MapList> TrackKeyMap;
+  std::map<G4VDNAMesh::Index, MapList> TrackKeyMap;
   for(; begin != end; begin++)
   {
-    auto index  = fpMesh->GetIndex(begin->first);
-    auto newKey = newMesh->GetKey(fpMesh->GetIndex(index, fPixel));
-    auto node   = begin->second;
-    // if (node == nullptr) continue;
-    if(TrackKeyMap.find(newKey) == TrackKeyMap.end())
+    auto index    = std::get<0>(*begin);
+    auto newIndex = fpMesh->ConvertIndex(index, fPixel);
+    if(TrackKeyMap.find(newIndex) == TrackKeyMap.end())
     {
-      TrackKeyMap[newKey] = node->GetMapList();
+      TrackKeyMap[newIndex] = std::get<2>(*begin);
     }
     else
     {
-      for(const auto& it : node->GetMapList())
+      for(const auto& it : std::get<2>(*begin))
       {
-        TrackKeyMap[newKey][it.first] += it.second;
+        TrackKeyMap[newIndex][it.first] += it.second;
       }
       if(fVerbose > 1)
       {
-        G4cout << "key : " << begin->first << " index : " << index
-               << " new index : " << fpMesh->GetIndex(index, fPixel)
-               << " new key : " << newKey
-               << " number: " << node->GetMapList().begin()->second << G4endl;
+        G4cout << " ReVoxelizing:: Old index : " << index
+               << " new index : " << fpMesh->ConvertIndex(index, fPixel)
+               << " number: " << std::get<2>(*begin).begin()->second << G4endl;
       }
     }
   }
@@ -210,7 +201,7 @@ void G4DNAEventScheduler::ReVoxelizing(G4int pixel)
 
   for(auto& it : TrackKeyMap)
   {
-    fpMesh->SetVoxelMapList(it.first, std::move(it.second));
+    fpMesh->InitializeVoxel(it.first, std::move(it.second));
   }
 }
 void G4DNAEventScheduler::Reset()
@@ -252,7 +243,7 @@ void G4DNAEventScheduler::Initialize()
       G4Scheduler::Instance()->GetScavengerMaterial());
     if(pScavengerMaterial == nullptr)
     {
-      G4cout << "pScavengerMaterial == nullptr" << G4endl;
+      G4cout << "There is no scavenger" << G4endl;
     }
     else
     {
@@ -319,22 +310,29 @@ G4double G4DNAEventScheduler::GetStartTime() const { return fStartTime; }
 
 G4double G4DNAEventScheduler::GetEndTime() const { return fEndTime; }
 
-[[maybe_unused]] G4double G4DNAEventScheduler::GetTimeStep() const { return fTimeStep; }
+[[maybe_unused]] G4double G4DNAEventScheduler::GetTimeStep() const
+{
+  return fTimeStep;
+}
 
 G4int G4DNAEventScheduler::GetVerbose() const { return fVerbose; }
 
-[[maybe_unused]] void G4DNAEventScheduler::SetMaxNbSteps(G4int max) { fMaxStep = max; }
+[[maybe_unused]] void G4DNAEventScheduler::SetMaxNbSteps(G4int max)
+{
+  fMaxStep = max;
+}
 
 [[maybe_unused]] void G4DNAEventScheduler::SetStartTime(G4double time)
 {
-  fStartTime = time;
+  fStartTime  = time;
+  fGlobalTime = fStartTime;
 }
 
 void G4DNAEventScheduler::Stop() { fRunning = false; }
 void G4DNAEventScheduler::Run()
 {
   G4Timer localtimer;
-  if(fVerbose > 0)
+  if(fVerbose > 2)
   {
     localtimer.Start();
     G4cout << "***G4DNAEventScheduler::Run*** for Pixel : " << fPixel << G4endl;
@@ -343,7 +341,7 @@ void G4DNAEventScheduler::Run()
   {
     RunInMesh();
   }
-  if(fVerbose > 0)
+  if(fVerbose > 2)
   {
     if(!fRunning)
     {
@@ -360,7 +358,8 @@ void G4DNAEventScheduler::Run()
     G4cout << "***G4DNAEventScheduler::Ending::"
            << G4BestUnit(fGlobalTime, "Time")
            << " Events left : " << fpEventSet->size() << G4endl;
-    if(fVerbose > 1) {
+    if(fVerbose > 1)
+    {
       fpMesh->PrintMesh();
     }
     G4cout << " Computing Time : " << localtimer << G4endl;
@@ -374,18 +373,14 @@ void G4DNAEventScheduler::RunInMesh()
   {
     InitializeInMesh();
   }
-  G4Timer localtimerInMesh;
-  // if (fVerbose > 0)
+  if(fVerbose > 0)
   {
-    localtimerInMesh.Start();
-    G4double C = 20;
-    G4double D = G4MoleculeTable::Instance()
-                 ->GetConfiguration("H2O2")
-                 ->GetDiffusionCoefficient();
-    G4double transferTime = std::pow(fpMesh->GetResolution(), 2) * C / (6 * D);
-    G4cout << "***G4DNAEventScheduler::RunInMesh*** for Pixel : " << fPixel
-           << "  transferTime : " << G4BestUnit(transferTime, "Time") << G4endl;
-    G4cout << "  resolution : " << G4BestUnit(fpMesh->GetResolution(), "Length")
+    G4double resolution = fpMesh->GetResolution();
+    G4cout << "At Time : " << std::setw(7) << G4BestUnit(fGlobalTime, "Time")
+           << " the Mesh has " << fPixel << " x " << fPixel << " x " << fPixel
+           << " voxels with Resolution " << G4BestUnit(resolution, "Length")
+           << " during next "
+           << G4BestUnit(resolution * resolution * C / (6 * D), "Time")
            << G4endl;
   }
 
@@ -400,6 +395,7 @@ void G4DNAEventScheduler::RunInMesh()
   }
 
   // if diffusive jumping is avaiable, EventSet is never empty
+
   while(!fpEventSet->Empty() && !fIsChangeMesh && fEndTime > fGlobalTime)
   {
     Stepping();
@@ -415,37 +411,31 @@ void G4DNAEventScheduler::RunInMesh()
       G4cout << "fGlobalTime : " << G4BestUnit(fGlobalTime, "Time")
              << " fTimeStep : " << G4BestUnit(fTimeStep, "Time") << G4endl;
     }
-
-    G4double C = 20;
-    G4double D = G4MoleculeTable::Instance()
-                 ->GetConfiguration("H2O2")
-                 ->GetDiffusionCoefficient();
-    if(D == 0)
+    G4double resolution = fpMesh->GetResolution();
+    fTransferTime       = resolution * resolution * C / (6 * D);
+    if(fTransferTime == 0)
     {
       G4ExceptionDescription exceptionDescription;
-      exceptionDescription << "D == 0";
+      exceptionDescription << "fTransferTime == 0";
       G4Exception("G4DNAEventScheduler::RunInMesh", "G4DNAEventScheduler001",
                   FatalErrorInArgument, exceptionDescription);
     }
-    G4double transferTime = std::pow(fpMesh->GetResolution(), 2) * C / (6 * D);
-
-    // if(fStepNumberInMesh > 40000 && fPixel != 1)
-    if(transferTime < fTimeStep &&
-       fPixel != 1)  // dont change Mesj if fPixel == 1
+    if(fTransferTime < fTimeStep &&
+       fPixel != 1)  // dont change Mesh if fPixel == 1
     {
-      if(fVerbose > 1)
-      {
-        G4cout << " Pixels : " << fPixel << "  resolution : "
-               << G4BestUnit(fpMesh->GetResolution(), "Length")
-               << "  fStepNumberInMesh : " << fStepNumberInMesh
-               << " at fGlobalTime : " << G4BestUnit(fGlobalTime, "Time")
-               << " at fTimeStep : " << G4BestUnit(fTimeStep, "Time")
-               << "  fReactionNumber : " << fReactionNumber
-               << " transferTime : " << G4BestUnit(transferTime, "Time")
-               << G4endl;
-      }
       if(fSetChangeMesh)
       {
+        if(fVerbose > 1)
+        {
+          G4cout << " Pixels : " << fPixel << "  resolution : "
+                 << G4BestUnit(fpMesh->GetResolution(), "Length")
+                 << "  fStepNumberInMesh : " << fStepNumberInMesh
+                 << " at fGlobalTime : " << G4BestUnit(fGlobalTime, "Time")
+                 << " at fTimeStep : " << G4BestUnit(fTimeStep, "Time")
+                 << "  fReactionNumber : " << fReactionNumber
+                 << " transferTime : " << G4BestUnit(fTransferTime, "Time")
+                 << G4endl;
+        }
         fIsChangeMesh = true;
       }
     }
@@ -453,11 +443,10 @@ void G4DNAEventScheduler::RunInMesh()
 
   if(fVerbose > 1)
   {
-    localtimerInMesh.Stop();
     G4cout << "***G4DNAEventScheduler::Ending::"
            << G4BestUnit(fGlobalTime, "Time")
            << " Event left : " << fpEventSet->size() << G4endl;
-    G4cout << " Computing Time : " << localtimerInMesh << " Due to : ";
+    G4cout << " Due to : ";
     if(fpEventSet->Empty())
     {
       G4cout << "EventSet is Empty" << G4endl;
@@ -492,18 +481,17 @@ void G4DNAEventScheduler::RunInMesh()
 void G4DNAEventScheduler::Stepping()  // this event loop
 {
   fStepNumber < fMaxStep ? fStepNumber++ : fRunning = false;
-
   if(fpEventSet->size() > fpMesh->size())
   {
     G4ExceptionDescription exceptionDescription;
-    exceptionDescription << "fpEventSet->size() > fpMesh->size()";
+    exceptionDescription
+      << "impossible that fpEventSet->size() > fpMesh->size()";
     G4Exception("G4DNAEventScheduler::Stepping", "G4DNAEventScheduler002",
                 FatalErrorInArgument, exceptionDescription);
-  };
+  }
 
-  auto selected   = fpEventSet->begin();
-  const auto& key = (*selected)->GetKey();
-  auto index      = fpMesh->GetIndex(key);
+  auto selected = fpEventSet->begin();
+  auto index    = (*selected)->GetIndex();
 
   if(fVerbose > 1)
   {
@@ -522,8 +510,31 @@ void G4DNAEventScheduler::Stepping()  // this event loop
 
   fpUpdateSystem->SetGlobalTime(fTimeStep +
                                 fStartTime);  // this is just for printing
-
-  if(pJumping == nullptr && pReaction == nullptr)
+  fpGillespieReaction->SetTimeStep(fTimeStep);
+  if(pJumping == nullptr && pReaction != nullptr)
+  {
+    fpUpdateSystem->UpdateSystem(index, *pReaction);
+    fpEventSet->RemoveEvent(selected);
+    // create new event
+    fpGillespieReaction->CreateEvent(index);
+    fReactionNumber++;
+    // recordTime in reaction
+    RecordTime();
+  }
+  else if(pJumping != nullptr && pReaction == nullptr)
+  {
+    // dont change this
+    fpUpdateSystem->UpdateSystem(index, *pJumping);
+    // save jumping Index before delete selected event
+    auto jumpingIndex = pJumping->second;
+    fpEventSet->RemoveEvent(selected);
+    // create new event
+    // should create Jumping before key
+    fpGillespieReaction->CreateEvent(jumpingIndex);
+    fpGillespieReaction->CreateEvent(index);
+    fJumpingNumber++;
+  }
+  else
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "pJumping == nullptr && pReaction == nullptr";
@@ -531,34 +542,6 @@ void G4DNAEventScheduler::Stepping()  // this event loop
                 FatalErrorInArgument, exceptionDescription);
   }
 
-  fpGillespieReaction->SetTimeStep(fTimeStep);
-
-  if(pJumping == nullptr)
-  {
-    fpUpdateSystem->UpdateSystem(index, *pReaction);
-
-    fpEventSet->RemoveEvent(selected);
-    // create new event
-    fpGillespieReaction->CreateEvent(key);
-    fReactionNumber++;
-
-    // recordTime in reaction
-    RecordTime();
-  }
-  else if(pReaction == nullptr)
-  {
-    // dont change this
-    fpUpdateSystem->UpdateSystem(index, *pJumping);
-    auto jumpingKey = fpMesh->GetKey(pJumping->second);
-    fpEventSet->RemoveEvent(selected);
-
-    // create new event
-    // should create Jumping before key
-    fpGillespieReaction->CreateEvent(jumpingKey);
-    fpGillespieReaction->CreateEvent(key);
-
-    fJumpingNumber++;
-  }
   if(fVerbose > 1)
   {
     G4cout << "G4DNAEventScheduler::Stepping::end "
@@ -583,45 +566,23 @@ void G4DNAEventScheduler::RecordTime()
     auto end   = fpMesh->end();
     for(; begin != end; begin++)
     {
-      auto node = begin->second;
-      if(node == nullptr) {
+      const auto& mapData = std::get<2>(*begin);
+      if(mapData.empty())
+      {
         continue;
       }
-      for(const auto& it : node->GetMapList())
+      for(const auto& it : mapData)
       {
         fCounterMap[recordTime][it.first] += it.second;
       }
     }
     fLastRecoredTime++;
-
-#ifdef DEBUG
-    PrintRecordTime();
-    G4MoleculeTable* pMoleculeTable = G4MoleculeTable::Instance();
-    auto iter = pMoleculeTable->GetConfigurationIterator();
-    iter.reset();
-    while(iter())
-    {
-      auto conf = iter.value();
-
-      G4cout << "GlobalTime : " << G4BestUnit(fGlobalTime, "Time")
-             << "  recordTime : " << G4BestUnit(recordTime, "Time") << "  "
-             << conf->GetName()
-             << "  number : " << fCounterMap[recordTime][conf]
-             << "  MoleculeCounter : "
-             << G4MoleculeCounter::Instance()->GetCurrentNumberOf(conf)
-             << G4endl;
-
-      assert(G4MoleculeCounter::Instance()->GetCurrentNumberOf(conf) ==
-             fCounterMap[recordTime][conf]);
-    }
-#endif
   }
 }
 
 void G4DNAEventScheduler::PrintRecordTime()
 {
-  G4cout << "fCounterMap.size : " << fCounterMap.size() << G4endl;
-
+  G4cout << "CounterMap.size : " << fCounterMap.size() << G4endl;
   for(const auto& i : fCounterMap)
   {
     auto map   = i.second;

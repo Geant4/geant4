@@ -498,7 +498,7 @@ const G4String& G4LivermorePhotoElectricModel::FindDirectoryPath()
   // check environment variable
   // build the complete string identifying the file with the data set
   if(fDataDirectory.empty()) {
-    const char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     if (path) {
       std::ostringstream ost;
       if(G4EmParameters::Instance()->LivermoreDataDir() =="livermore"){
@@ -529,9 +529,14 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
   
   if(fCrossSection[Z]!= nullptr) { return; }
   
-  // no spline for photoeffect total x-section above K-shell
+  // spline for photoeffect total x-section above K-shell when using EPDL97
   // but below the parameterized ones
-  fCrossSection[Z] = new G4PhysicsFreeVector();
+
+  if(G4EmParameters::Instance()->LivermoreDataDir() =="livermore"){
+    fCrossSection[Z] = new G4PhysicsFreeVector(true);
+  }else{
+    fCrossSection[Z] = new G4PhysicsFreeVector();
+  }
   std::ostringstream ost;
   ost << FindDirectoryPath() << "pe-cs-" << Z <<".dat";
   std::ifstream fin(ost.str().c_str());

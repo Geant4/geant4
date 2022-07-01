@@ -229,3 +229,10 @@ HT* G4THnManager<HT>::GetT(G4int id) const
 {
   return GetTInFunction(id, "GetT");
 }
+
+//_____________________________________________________________________________
+template <typename HT>
+std::vector<HT*>* G4THnManager<HT>::GetTVector()
+{
+  return &fTVector;
+}

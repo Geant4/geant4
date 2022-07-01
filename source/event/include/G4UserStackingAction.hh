@@ -46,7 +46,7 @@ class G4UserStackingAction
   public:
 
     G4UserStackingAction();
-    virtual ~G4UserStackingAction();
+    virtual ~G4UserStackingAction() = default;
 
     inline void SetStackManager(G4StackManager* value) { stackManager=value; }
 
@@ -112,7 +112,7 @@ class G4UserStackingAction
 
   protected:
 
-    G4StackManager* stackManager = nullptr;
+    G4StackManager* stackManager = nullptr; // Not owned
 };
 
 #endif

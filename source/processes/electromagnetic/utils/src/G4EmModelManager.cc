@@ -147,32 +147,13 @@ void G4EmModelManager::AddEmModel(G4int num, G4VEmModel* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmModelManager::UpdateEmModel(const G4String& nam, 
-                                     G4double emin, G4double emax)
-{
-  if (nEmModels > 0) {
-    for(G4int i=0; i<nEmModels; ++i) {
-      if(nam == models[i]->GetName()) {
-        models[i]->SetLowEnergyLimit(emin);
-        models[i]->SetHighEnergyLimit(emax);
-        return;
-      }
-    }
-  }
-  G4cout << "G4EmModelManager::UpdateEmModel WARNING: no model <"
-         << nam << "> is found out"
-         << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VEmModel* G4EmModelManager::GetModel(G4int i, G4bool ver)
+G4VEmModel* G4EmModelManager::GetModel(G4int idx, G4bool ver) const
 {
   G4VEmModel* model = nullptr;
-  if(i < nEmModels) { model = models[i]; }
+  if(idx >= 0 && idx < nEmModels) { model = models[idx]; }
   else if(verboseLevel > 0 && ver) { 
     G4cout << "G4EmModelManager::GetModel WARNING: "
-           << "index " << i << " is wrong Nmodels= "
+           << "index " << idx << " is wrong Nmodels= "
            << nEmModels;
     if(nullptr != particle) { 
       G4cout << " for " << particle->GetParticleName(); 
@@ -203,7 +184,7 @@ G4int G4EmModelManager::NumberOfRegionModels(size_t idx) const
 const G4DataVector* 
 G4EmModelManager::Initialise(const G4ParticleDefinition* p,
                              const G4ParticleDefinition* secondaryParticle,
-                             G4double, G4int verb)
+                             G4int verb)
 {
   verboseLevel = verb;
   if(1 < verboseLevel) {
@@ -267,10 +248,10 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   // or only one region
   if(nRegions > 1 && nEmModels > 1) {
     idxOfRegionModels.resize(numOfCouples,0);
-    setOfRegionModels.resize((size_t)nRegions,0); 
+    setOfRegionModels.resize((size_t)nRegions,nullptr);
   } else {
     idxOfRegionModels.resize(1,0);
-    setOfRegionModels.resize(1,0); 
+    setOfRegionModels.resize(1,nullptr);
   }
 
   std::vector<G4int>    modelAtRegion(nEmModels);
@@ -469,7 +450,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       for(G4int iii=0; iii<=n; ++iii) {G4cout << eLow[iii]/MeV << " ";}
       G4cout << G4endl;
     }
-    G4RegionModels* rm = new G4RegionModels(n, modelAtRegion, eLow, region);
+    auto rm = new G4RegionModels(n, modelAtRegion, eLow, region);
     setOfRegionModels[reg] = rm;
     // shortcut
     if(1 == nEmModels) { break; }
@@ -758,7 +739,7 @@ void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb)
 	    out << " Fluo"; 
 	  }
 	  out << G4endl;
-          G4VMscModel* msc = dynamic_cast<G4VMscModel*>(model);
+          auto msc = dynamic_cast<G4VMscModel*>(model);
           if(msc != nullptr) msc->DumpParameters(out);
 	}
       }  

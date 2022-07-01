@@ -47,7 +47,7 @@ private:
   G4VisCommandsTouchable& operator = (const G4VisCommandsTouchable&);
   G4UIcmdWithoutParameter* fpCommandCentreOn;
   G4UIcmdWithoutParameter* fpCommandCentreAndZoomInOn;
-  G4UIcmdWithoutParameter* fpCommandDraw;
+  G4UIcmdWithABool*        fpCommandDraw;
   G4UIcmdWithoutParameter* fpCommandDump;
   G4UIcmdWithABool*        fpCommandExtentForField;
   G4UIcommand*             fpCommandFindPath;

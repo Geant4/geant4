@@ -181,18 +181,8 @@ class G4GenericTrap : public G4VSolid
     G4ThreeVector NormalToPlane(const G4ThreeVector& p,
                                 const G4int ipl) const;
     G4double SafetyToFace(const G4ThreeVector& p, const G4int iseg) const;
-    G4double GetFaceSurfaceArea(const G4ThreeVector& p0,
-                                const G4ThreeVector& p1,
-                                const G4ThreeVector& p2,
-                                const G4ThreeVector& p3) const;
-    G4double GetTwistedFaceSurfaceArea(const G4ThreeVector& p0,
-                                       const G4ThreeVector& p1,
-                                       const G4ThreeVector& p2,
-                                       const G4ThreeVector& p3) const;
-    G4double GetFaceCubicVolume(const G4ThreeVector& p0,
-                                const G4ThreeVector& p1,
-                                const G4ThreeVector& p2,
-                                const G4ThreeVector& p3) const;
+    G4double GetLateralFaceArea(G4int iface) const;
+
   protected:
 
      mutable G4bool fRebuildPolyhedron = false;

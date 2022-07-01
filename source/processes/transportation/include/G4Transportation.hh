@@ -44,17 +44,14 @@
 #define G4Transportation_hh 1
 
 #include "G4VProcess.hh"
-#include "G4FieldManager.hh"
 
-#include "G4Navigator.hh"
-#include "G4TransportationManager.hh"
-#include "G4PropagatorInField.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
 
+class G4Navigator;
+class G4PropagatorInField;
 class G4SafetyHelper; 
-class G4CoupledTransportation;
 class G4TransportationLogger;
 
 class G4Transportation : public G4VProcess 
@@ -63,7 +60,7 @@ class G4Transportation : public G4VProcess
 
   public:  // with description
 
-     G4Transportation( G4int verbosityLevel= 1);
+     G4Transportation( G4int verbosityLevel= 1, const G4String& aName = "Transportation");
      ~G4Transportation(); 
 
      G4double      AlongStepGetPhysicalInteractionLength(
@@ -155,15 +152,15 @@ class G4Transportation : public G4VProcess
    
   protected:
 
-     G4bool DoesAnyFieldExist();
-       // Check whether any field exists in the geometry
-       //  - replaces method that checked only whether a field for the world volume
-   
+     void SetTouchableInformation(const G4TouchableHandle& touchable);
+
      void ReportMissingLogger(const char * methodName);
    
-  private:
+  protected:
 
      G4Navigator* fLinearNavigator;
+       // The navigator for the 'mass' geometry
+       // (the real one, that physics occurs in)
      G4PropagatorInField* fFieldPropagator;
        // The Propagators used to transport the particle
 
@@ -235,9 +232,8 @@ class G4Transportation : public G4VProcess
      G4SafetyHelper* fpSafetyHelper;    // To pass it the safety value obtained
      G4TransportationLogger* fpLogger;  // Reports issues / raises warnings
 
-  private:
+  protected:
 
-     friend class G4CoupledTransportation;
      static G4bool fUseMagneticMoment;
      static G4bool fUseGravity;
      static G4bool fSilenceLooperWarnings;  // Flag to *Supress* all 'looper' warnings

@@ -398,7 +398,9 @@ G4int G4DataInterpolation::LocateArgument(G4double pX) const
     return fNumber - 2;
   }
   else
+  {
     return kLow;
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////

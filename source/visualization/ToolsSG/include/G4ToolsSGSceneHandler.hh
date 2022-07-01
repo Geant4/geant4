@@ -51,7 +51,10 @@ public:
   virtual void AddPrimitive(const G4Polymarker&);
   virtual void AddPrimitive(const G4Polyhedron&);
   virtual void AddPrimitive(const G4Plotter&);
-  
+
+  using G4VSceneHandler::AddCompound;
+  virtual void AddCompound(const G4Mesh&);
+
   virtual void ClearStore ();
   virtual void ClearTransientStore ();
 

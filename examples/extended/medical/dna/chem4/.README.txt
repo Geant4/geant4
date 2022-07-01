@@ -39,7 +39,22 @@ The default geometry is constructed in DetectorConstruction class.
   G4EmDNAChemistry constructors.
   It will later be updated to use the G4EmDNAModelActivator constructor
 
-\section CHEM4_s3  ACTION INITALIZATION
+\section CHEM4_s3 CHEMISTRY MODEL AND CHEMICAL REACTION LIST
+
+  UI species are defined by format :
+  username [ molecule | charge | D(m2/s) | Radius(nm) ]
+  where : *username* is decided by users, *molecule* is used by Geant4,
+  *D* is diffusion constant, *Radius* is reaction radius.
+  Spaces between characters are needed.
+
+  UI reactions are defined by format :
+  /chem/reaction/add H + H -> H2  | Fix |  1.2e10 | 0
+  where : *H* is username, *1.2e10* is reaction rate, *0* is reaction type.
+  Spaces between characters are needed.
+
+  (parameters can be found in Prog. Nucl. Sci. Tec. 2 (2011))
+
+\section CHEM4_s4  ACTION INITALIZATION
 
   The class ActionInitialization instantiates and registers
   to Geant4 kernel all user action classes.
@@ -55,7 +70,7 @@ The default geometry is constructed in DetectorConstruction class.
     ActionInitialization::BuildForMaster()
   which is invoked only in multi-threading mode.
 
-\section CHEM4_s4 AN EVENT: PRIMARY GENERATOR
+\section CHEM4_s5 AN EVENT: PRIMARY GENERATOR
 
   The primary kinematic consists of a single particle starting at the center
    of the box. The type of the particle and its energy are set in the
@@ -64,9 +79,9 @@ The default geometry is constructed in DetectorConstruction class.
   The chemistry module is triggered in the StackingAction class when all
   physical tracks have been processed.
 
-\section CHEM4_s5 DETECTOR RESPONSE : Scorers
+\section CHEM4_s6 DETECTOR RESPONSE : Scorers
 
-\subsection CHEM4_s5_sub1 Species scorer
+\subsection CHEM4_s6_sub1 Species scorer
 
   Scorers are defined in DetectorConstruction::ConstructSDandField(). There is
   one G4MultiFunctionalDetector object which computes the energy deposition and
@@ -87,7 +102,7 @@ The default geometry is constructed in DetectorConstruction class.
   ntuple file Species.root. The root macro program PlotNtuple.C can be used to
   plot the G values vs time, for each species.
   
-\subsection CHEM4_s5_sub2 Primary Killer
+\subsection CHEM4_s6_sub2 Primary Killer
   The G-values are computing for a range of deposited energy. 
   We are in an infinite volume. Therefore the energy lost by the 
   primary equals the deposited energy since all secondary particles 
@@ -116,14 +131,14 @@ The default geometry is constructed in DetectorConstruction class.
   The species scorer must check whether the event was aborted before taking it or not into
   account for the computation of the results. 
 
-\section CHEM4_s6 STACKING ACTION
+\section CHEM4_s7 STACKING ACTION
 
   StackingAction::NewStage is called when a stack of tracks has been processed
   (for more details, look at the Geant4 documentation).
   A verification on whether physical tracks remain to be processed is done.
   If no tracks remain to be processed, the chemical module is then triggered.
 
-\section CHEM4_s7 VISUALISATION
+\section CHEM4_s8 VISUALISATION
 
   The visualization manager is set via the G4VisExecutive class
   in the main() function in chem4.cc.
@@ -133,7 +148,7 @@ The default geometry is constructed in DetectorConstruction class.
 ./chem4 -vis
 \endverbatim
 
-\section CHEM4_s8 OUTPUT
+\section CHEM4_s9 OUTPUT
 
   Physics initialization and the defined reaction table are printed.
   G4Scheduler processes the chemical stage time step after time step.
@@ -141,7 +156,7 @@ The default geometry is constructed in DetectorConstruction class.
     The molecular reaction as a function of the elapsed time can be displayed
    setting the macro command /scheduler/verbose 1
    
-\section CHEM4_s9 RELEVANT MACRO COMMANDS
+\section CHEM4_s10 RELEVANT MACRO COMMANDS
 \verbatim
 /primaryKiller/eLoss 1 keV       # after 1 keV of energy loss by the primary particle, the primary is killed
 /scheduler/verbose 1             # set the verbose level of the G4Scheduler class (time steps, reactions ...)
@@ -150,7 +165,7 @@ The default geometry is constructed in DetectorConstruction class.
                                  # to know why the simulation has stopped
 \endverbatim
 
-\section CHEM4_s10 PLOT
+\section CHEM4_s11 PLOT
   The information about all the molecular species is scored in a ROOT
   ntuple file Species.root during the run of chem4.
   The ROOT program plotG can be used to plot the G values vs time, 
@@ -163,7 +178,7 @@ The default geometry is constructed in DetectorConstruction class.
 \endverbatim
   where Species.root is the file output by the chem4 application.
   
-\section CHEM4_s11 OTHER INFORMATION
+\section CHEM4_s12 OTHER INFORMATION
   I have access to a track. How do I access to its molecular information?
 \verbatim
 #include "G4Molecule.hh"

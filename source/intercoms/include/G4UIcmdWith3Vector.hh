@@ -64,10 +64,10 @@ class G4UIcmdWith3Vector : public G4UIcommand
       // the user omits some of the parameters. If this flag is false, the
       // values given by the next SetDefaultValue() method are used
 
-    void SetDefaultValue(G4ThreeVector defVal);
-      // Set the default values of the parameters. These default values are
-      // used when the user of this command omits some of the parameter values,
-      // and "omittable" is true and "currentAsDefault" is false
+    void SetDefaultValue(const G4ThreeVector& defVal);
+    // Set the default values of the parameters. These default values are
+    // used when the user of this command omits some of the parameter values,
+    // and "omittable" is true and "currentAsDefault" is false
 };
 
 #endif

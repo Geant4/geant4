@@ -56,8 +56,7 @@ G4DeltaAngleFreeScat::G4DeltaAngleFreeScat(const G4String&)
   : G4VEmAngularDistribution("deltaFree")
 {}    
 
-G4DeltaAngleFreeScat::~G4DeltaAngleFreeScat() 
-{}
+G4DeltaAngleFreeScat::~G4DeltaAngleFreeScat() = default;
 
 G4ThreeVector& 
 G4DeltaAngleFreeScat::SampleDirection(const G4DynamicParticle* dp,

@@ -104,7 +104,7 @@ geant4_module_include_directories(G4geometrymng
 # - Link to modules/deps
 geant4_module_link_libraries(G4geometrymng
   PUBLIC G4globman G4hepgeometry G4graphics_reps ${VECGEOM_LIBRARIES}
-  PRIVATE G4materials)
+  PRIVATE G4materials G4heprandom)
 
 # WORKAROUND: When building/testing examples uing ROOT, ROOT's
 # dictionary generation is not smart enough to handle target usage

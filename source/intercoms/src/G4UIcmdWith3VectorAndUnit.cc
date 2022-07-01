@@ -39,13 +39,13 @@ G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit(
   const char* theCommandPath, G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter* dblParamX = new G4UIparameter('d');
+  auto* dblParamX = new G4UIparameter('d');
   SetParameter(dblParamX);
-  G4UIparameter* dblParamY = new G4UIparameter('d');
+  auto* dblParamY = new G4UIparameter('d');
   SetParameter(dblParamY);
-  G4UIparameter* dblParamZ = new G4UIparameter('d');
+  auto* dblParamZ = new G4UIparameter('d');
   SetParameter(dblParamZ);
-  G4UIparameter* untParam = new G4UIparameter('s');
+  auto* untParam = new G4UIparameter('s');
   untParam->SetParameterName("Unit");
   SetParameter(untParam);
   SetCommandType(With3VectorAndUnitCmd);
@@ -57,7 +57,7 @@ G4int G4UIcmdWith3VectorAndUnit::DoIt(G4String parameterList)
   std::vector<G4String> token_vector;
   G4Tokenizer tkn(parameterList);
   G4String str;
-  while((str = tkn()) != "")
+  while(!(str = tkn()).empty())
   {
     token_vector.push_back(str);
   }
@@ -65,7 +65,7 @@ G4int G4UIcmdWith3VectorAndUnit::DoIt(G4String parameterList)
   // convert a value in default unit
   G4String converted_parameter;
   G4String default_unit = GetParameter(3)->GetDefaultValue();
-  if(default_unit != "" && token_vector.size() >= 4)
+  if(!default_unit.empty() && token_vector.size() >= 4)
   {
     if(CategoryOf(token_vector[3]) != CategoryOf(default_unit))
     {
@@ -134,7 +134,7 @@ G4double G4UIcmdWith3VectorAndUnit::GetNewUnitValue(const char* paramString)
 
 // --------------------------------------------------------------------
 G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithBestUnit(
-  G4ThreeVector vec)
+  const G4ThreeVector& vec)
 {
   G4UIparameter* unitParam = GetParameter(3);
   G4String canList         = unitParam->GetParameterCandidates();
@@ -150,7 +150,7 @@ G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithBestUnit(
 
 // --------------------------------------------------------------------
 G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithDefaultUnit(
-  G4ThreeVector vec)
+  const G4ThreeVector& vec)
 {
   G4UIparameter* unitParam = GetParameter(3);
   G4String st;
@@ -187,7 +187,7 @@ void G4UIcmdWith3VectorAndUnit::SetParameterName(const char* theNameX,
 }
 
 // --------------------------------------------------------------------
-void G4UIcmdWith3VectorAndUnit::SetDefaultValue(G4ThreeVector vec)
+void G4UIcmdWith3VectorAndUnit::SetDefaultValue(const G4ThreeVector& vec)
 {
   G4UIparameter* theParamX = GetParameter(0);
   theParamX->SetDefaultValue(vec.x());

@@ -5312,7 +5312,7 @@ static void gl2psPrintSVGPrimitive(void *data)
   GL2PSxyz xyz[4];
   GL2PSrgba rgba[4];
   char col[32];
-  char lcap[7], ljoin[7];
+  char lcap[7]="", ljoin[7]="";
   int newline;
 
   prim = *(GL2PSprimitive**)data;

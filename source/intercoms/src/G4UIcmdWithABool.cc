@@ -35,7 +35,7 @@ G4UIcmdWithABool::G4UIcmdWithABool(const char* theCommandPath,
                                    G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter* blParam = new G4UIparameter('b');
+  auto* blParam = new G4UIparameter('b');
   SetParameter(blParam);
   SetCommandType(WithABoolCmd);
 }
@@ -60,5 +60,5 @@ void G4UIcmdWithABool::SetParameterName(const char* theName, G4bool omittable,
 void G4UIcmdWithABool::SetDefaultValue(G4bool defVal)
 {
   G4UIparameter* theParam = GetParameter(0);
-  theParam->SetDefaultValue(defVal);
+  theParam->SetDefaultValue(static_cast<G4int>(defVal));
 }

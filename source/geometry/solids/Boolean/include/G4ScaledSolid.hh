@@ -44,7 +44,7 @@ class G4ScaleTransform;
 
 class G4ScaledSolid : public G4VSolid
 {
-  public:  // with description
+  public:
 
     G4ScaledSolid( const G4String& pName,
                          G4VSolid* pSolid ,
@@ -97,8 +97,6 @@ class G4ScaledSolid : public G4VSolid
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
-  public:  // without description
-
     G4ScaledSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
@@ -121,6 +119,6 @@ class G4ScaledSolid : public G4VSolid
     G4double fSurfaceArea = -1.0;
     mutable G4bool fRebuildPolyhedron = false;
     mutable G4Polyhedron* fpPolyhedron = nullptr;
-} ;
+};
 
 #endif

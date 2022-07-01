@@ -47,16 +47,20 @@ static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
     {
       pos = str.find_first_of("\"", pos0 + 1);
       if(pos != G4String::npos)
+      {
         pos++;
+      }
     }
     if(str[pos0] == '\'')
     {
       pos = str.find_first_of("\'", pos0 + 1);
       if(pos != G4String::npos)
+      {
         pos++;
+      }
     }
 
-    tokens.push_back(str.substr(pos0, pos - pos0));
+    tokens.emplace_back(str.substr(pos0, pos - pos0));
     pos0 = str.find_first_not_of(delimiter, pos);
     pos  = str.find_first_of(delimiter, pos0);
   }
@@ -87,7 +91,9 @@ G4UIbatch::G4UIbatch(const char* fileName, G4UIsession* prevSession)
 G4UIbatch::~G4UIbatch()
 {
   if(isOpened)
+  {
     macroStream.close();
+  }
 }
 
 // --------------------------------------------------------------------
@@ -97,9 +103,11 @@ G4String G4UIbatch::ReadCommand()
   {
     BUFSIZE = 4096
   };
-  static G4ThreadLocal char* linebuf = 0;
-  if(!linebuf)
+  static G4ThreadLocal char* linebuf = nullptr;
+  if(linebuf == nullptr)
+  {
     linebuf = new char[BUFSIZE];
+  }
   const char ctrM = 0x0d;
 
   G4String cmdtotal = "";
@@ -122,12 +130,16 @@ G4String G4UIbatch::ReadCommand()
     G4StrUtil::rstrip(cmdline, ctrM);
 
     // skip null line if single line
-    if(!qcontinued && cmdline.size() == 0)
+    if(!qcontinued && cmdline.empty())
+    {
       continue;
+    }
 
     // '#' is treated as echoing something
     if(cmdline[(std::size_t) 0] == '#')
+    {
       return cmdline;
+    }
 
     // tokenize...
     std::vector<G4String> tokens;
@@ -137,7 +149,9 @@ G4String G4UIbatch::ReadCommand()
     {
       // string after '#" is ignored
       if(tokens[i][(std::size_t) 0] == '#')
+      {
         break;
+      }
       // '\' or '_' is treated as continued line.
       if(tokens[i] == "\\" || tokens[i] == "_")
       {
@@ -155,19 +169,25 @@ G4String G4UIbatch::ReadCommand()
     }
 
     if(qcontinued)
+    {
       continue;  // read the next line
+    }
 
-    if(cmdtotal.size() != 0)
+    if(!cmdtotal.empty())
+    {
       break;
+    }
     if(macroStream.eof())
+    {
       break;
+    }
   }
 
   // strip again
   G4StrUtil::strip(cmdtotal);
 
   // finally,
-  if(macroStream.eof() && cmdtotal.size() == 0)
+  if(macroStream.eof() && cmdtotal.empty())
   {
     return "exit";
   }
@@ -205,9 +225,11 @@ G4int G4UIbatch::ExecCommand(const G4String& command)
 G4UIsession* G4UIbatch::SessionStart()
 {
   if(!isOpened)
+  {
     return previousSession;
+  }
 
-  while(1)
+  while(true)
   {
     G4String newCommand = ReadCommand();
 

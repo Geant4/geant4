@@ -463,6 +463,8 @@ class G4FTFParameters {
     G4double Pt2ofNuclearDestruction;     // Pt2
     G4double MaxPt2ofNuclearDestruction;  // Max Pt2
 
+    G4bool EnableDiffDissociationForBGreater10; ///< Control over whether to do nucleon-hadron diffractive dissociation or not.
+
   private:
     G4LundStringFragmentation* StringMass;
     G4double GetMinMass( const G4ParticleDefinition* aParticle );

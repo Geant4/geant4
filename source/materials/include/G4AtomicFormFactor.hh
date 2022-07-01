@@ -61,9 +61,10 @@ private:
     
 public:
     static G4AtomicFormFactor* GetManager() {
-        if(!s_G4AtomicFormFactorManager){
-            s_G4AtomicFormFactorManager = new G4AtomicFormFactor();
-        }
+      if(s_G4AtomicFormFactorManager == nullptr)
+      {
+        s_G4AtomicFormFactorManager = new G4AtomicFormFactor();
+      }
         return s_G4AtomicFormFactorManager;
     }
     
@@ -88,10 +89,12 @@ private:
     // IUCr Eq. 6.1.1.15, Coefficients Table 6.1.1.4
     //
 private:
-    void InsertCoefficients(G4int index,std::vector<G4double> aDoubleVec){
-        theCoefficientsMap.insert(std::pair<G4int,std::vector<G4double>>(index,aDoubleVec));
-    }
-    
+ void InsertCoefficients(G4int index, const std::vector<G4double>& aDoubleVec)
+ {
+   theCoefficientsMap.insert(
+     std::pair<G4int, std::vector<G4double>>(index, aDoubleVec));
+ }
+
     void LoadCoefficiencts(G4int index){
         loadedIndex = index;
         for(unsigned int i0=0;i0<9;i0++){
@@ -344,7 +347,7 @@ protected:
         
         loadedIndex = -1;
     }
-    
-    ~G4AtomicFormFactor() {};
+
+    ~G4AtomicFormFactor() = default;
 };
 #endif

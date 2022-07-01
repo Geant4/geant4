@@ -53,4 +53,4 @@
 
 G4VWLSTimeGeneratorProfile::G4VWLSTimeGeneratorProfile(const G4String&) {}
 
-G4VWLSTimeGeneratorProfile::~G4VWLSTimeGeneratorProfile() {}
+G4VWLSTimeGeneratorProfile::~G4VWLSTimeGeneratorProfile() = default;

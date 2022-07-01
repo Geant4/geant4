@@ -37,8 +37,6 @@
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
 
-#include "G4PolyhedronArbitrary.hh"
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Constructors
@@ -382,14 +380,13 @@ G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
   unsigned int nFacets = Base_t::GetStruct().fTslHelper.fFacets.size();
   unsigned int nVertices = Base_t::GetStruct().fTslHelper.fVertices.size();
 
-  G4PolyhedronArbitrary* polyhedron =
-    new G4PolyhedronArbitrary (nVertices, nFacets);
+  G4Polyhedron* polyhedron = new G4Polyhedron(nVertices, nFacets);
 
   // Copy vertices
   for (unsigned int i = 0; i < nVertices; ++i)
   {
     U3Vector v = Base_t::GetStruct().fTslHelper.fVertices[i];
-    polyhedron->AddVertex(G4ThreeVector(v.x(), v.y(), v.z()));
+    polyhedron->SetVertex(i+1, G4ThreeVector(v.x(), v.y(), v.z()));
   }
 
   // Copy facets
@@ -399,11 +396,11 @@ G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
     G4int i1 = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[0] + 1;
     G4int i2 = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[1] + 1;
     G4int i3 = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[2] + 1;
-    polyhedron->AddFacet(i1, i2, i3);
+    polyhedron->SetFacet(i+1, i1, i2, i3);
   }
   polyhedron->SetReferences();
 
-  return (G4Polyhedron*) polyhedron;
+  return polyhedron;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

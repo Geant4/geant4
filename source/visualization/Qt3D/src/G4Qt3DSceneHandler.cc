@@ -110,10 +110,10 @@ void G4Qt3DSceneHandler::EstablishG4Qt3DQEntities()
   = transportationManager->GetWorldsIterator();
   fpPhysicalVolumeObjects.resize(nWorlds);
   for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
-    G4VPhysicalVolume* world = (*iterWorld);
+    G4VPhysicalVolume* wrld = (*iterWorld);
     auto entity = new G4Qt3DQEntity(fpPersistentObjects);
-    entity->setObjectName("G4Qt3DPORoot_"+QString(world->GetName()));
-    entity->SetPVNodeID(G4PhysicalVolumeModel::G4PhysicalVolumeNodeID(world));
+    entity->setObjectName("G4Qt3DPORoot_"+QString(wrld->GetName()));
+    entity->SetPVNodeID(G4PhysicalVolumeModel::G4PhysicalVolumeNodeID(wrld));
     fpPhysicalVolumeObjects[i] = entity;
   }
 }
@@ -169,11 +169,11 @@ G4Qt3DQEntity* G4Qt3DSceneHandler::CreateNewNode()
   }
 
   // (Re-)establish pv path of root entity
-  G4Qt3DQEntity* world = fpPhysicalVolumeObjects[iWorld];
-  world->SetPVNodeID(fullPVPath[0]);
+  G4Qt3DQEntity* wrld = fpPhysicalVolumeObjects[iWorld];
+  wrld->SetPVNodeID(fullPVPath[0]);
 
   // Create nodes as required
-  G4Qt3DQEntity* node = world;
+  G4Qt3DQEntity* node = wrld;
   newNode = node;
   const size_t depth = fullPVPath.size();
   size_t iDepth = 1;
@@ -355,6 +355,9 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 
   fpVisAttribs = fpViewer->GetApplicableVisAttributes(polymarker.GetVisAttributes());
 
+  MarkerSizeType markerSizeType;
+  G4double markerSize = GetMarkerSize(polymarker, markerSizeType);
+
   switch (polymarker.GetMarkerType()) {
     default:
     case G4Polymarker::dots:
@@ -427,13 +430,11 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 
       auto sphereMesh = new Qt3DExtras::QSphereMesh;
       sphereMesh->setObjectName("sphereMesh");
-      G4double radius;
-      if (circle.GetSizeType() == G4VMarker::world ) {
-        radius =circle.GetWorldRadius();
-      } else {  // Screen-size or none
+      G4double radius = markerSize/2.;
+      if (markerSizeType == G4VSceneHandler::screen ) {
         // Not figured out how to do screen-size, so use scene extent
         const G4double scale = 200.;  // Roughly pixels per scene
-        radius = circle.GetScreenRadius()*fpScene->GetExtent().GetExtentRadius()/scale;
+        radius *= fpScene->GetExtent().GetExtentRadius()/scale;
       }
       sphereMesh->setRadius(radius);
 //      sphereMesh->setInstanceCount(polymarker.size());  // Not undertood instancing yet
@@ -461,13 +462,11 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 
       auto boxMesh = new Qt3DExtras::QCuboidMesh();
       boxMesh->setObjectName("boxMesh");
-      G4double side;
-      if (square.GetSizeType() == G4VMarker::world ) {
-        side = square.GetWorldDiameter();
-      } else {  // Screen-size or none
+      G4double side = markerSize;
+      if (markerSizeType == G4VSceneHandler::screen ) {
         // Not figured out how to do screen-size, so use scene extent
         const G4double scale = 200.;  // Roughly pixles per scene
-        side = square.GetScreenDiameter()*fpScene->GetExtent().GetExtentRadius()/scale;
+        side *= fpScene->GetExtent().GetExtentRadius()/scale;
       }
       boxMesh->setXExtent(side);
       boxMesh->setYExtent(side);
@@ -726,11 +725,14 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
   typedef std::pair<G4Point3D,G4Point3D> Line;
   std::vector<Line> lines;
   auto insertIfNew = [&lines](const Line& newLine) {
-    for (const auto& line: lines) {
-      if ((newLine.first==line.first && newLine.second==line.second) ||
-          (newLine.first==line.second && newLine.second==line.first))
-      return;
-    }
+    // For a large polyhedron, eliminating lines like this is prohibitively
+    // expensive. Comment out for now, and maybe unwind altogether in future.
+    // Allow the graphics-reps utilities to optimise things like this.
+//    for (const auto& line: lines) {
+//      if ((newLine.first==line.first && newLine.second==line.second) ||
+//          (newLine.first==line.second && newLine.second==line.first))
+//      return;
+//    }
     lines.push_back(newLine);
   };
 
@@ -1052,115 +1054,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
 
 void G4Qt3DSceneHandler::AddCompound(const G4Mesh& mesh)
 {
-  // Special mesh rendering
-  // Limited to rectangular 3-deep meshes
-  if (mesh.GetMeshType() != G4Mesh::rectangle ||
-      mesh.GetMeshDepth() != 3) {
-    G4VSceneHandler::AddCompound(mesh);
-  }
-
-  auto container = mesh.GetContainerVolume();
-
-  static G4bool firstPrint = true;
-  G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
-  G4bool print = firstPrint && verbosity >= G4VisManager::confirmations;
-
-  if (print) {
-    G4cout
-    << "Special case drawing of G4VNestedParameterisation in G4OpenGLSceneHandler"
-    << '\n' << mesh
-    << G4endl;
-  }
-
-  // Instantiate a temporary G4PhysicalVolumeModel
-  G4ModelingParameters tmpMP;
-  tmpMP.SetCulling(true);  // This avoids drawing transparent...
-  tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
-  const G4bool useFullExtent = true;  // To avoid calculating the extent
-  G4PhysicalVolumeModel tmpPVModel
-  (container,
-   G4PhysicalVolumeModel::UNLIMITED,
-   G4Transform3D(),
-   &tmpMP,
-   useFullExtent);
-
-  // Instantiate a pseudo scene so that we can make a "private" descent
-  // into the nested parameterisation and fill a multimap...
-  std::multimap<const G4Colour,G4ThreeVector> positionByColour;
-  G4double halfX = 0., halfY = 0., halfZ = 0.;
-  struct PseudoScene: public G4PseudoScene {
-    PseudoScene
-    (G4PhysicalVolumeModel* pvModel // input...the following are outputs
-     , std::multimap<const G4Colour,G4ThreeVector>& positionByColour
-     , G4double& halfX, G4double& halfY, G4double& halfZ)
-    : fpPVModel(pvModel)
-    , fPositionByColour(positionByColour)
-    , fHalfX(halfX), fHalfY(halfY), fHalfZ(halfZ)
-    {}
-    using G4PseudoScene::AddSolid;  // except for...
-    void AddSolid(const G4Box& box) {
-      const G4Colour& colour = fpPVModel->GetCurrentLV()->GetVisAttributes()->GetColour();
-      const G4ThreeVector& position = fpCurrentObjectTransformation->getTranslation();
-      fPositionByColour.insert(std::make_pair(colour,position));
-      fHalfX = box.GetXHalfLength();
-      fHalfY = box.GetYHalfLength();
-      fHalfZ = box.GetZHalfLength();
-    }
-    G4PhysicalVolumeModel* fpPVModel;
-    std::multimap<const G4Colour,G4ThreeVector>& fPositionByColour;
-    G4double &fHalfX, &fHalfY, &fHalfZ;
-  }
-  pseudoScene(&tmpPVModel,positionByColour,halfX,halfY,halfZ);
-
-  // Make private descent into the nested parameterisation
-  tmpPVModel.DescribeYourselfTo(pseudoScene);
-
-  // Make list of found colours
-  std::set<G4Colour> setOfColours;
-  for (const auto& entry: positionByColour) {
-    setOfColours.insert(entry.first);
-  }
-
-  if (print) {
-    for (const auto& colour: setOfColours) {
-      G4cout << "setOfColours: " << colour << G4endl;
-    }
-  }
-
-  // Draw as dots
-  BeginPrimitives (mesh.GetTransform());
-  G4int nDotsTotal = 0;
-  for (const auto& colour: setOfColours) {
-    G4int nDots = 0;
-    G4Polymarker dots;
-    dots.SetVisAttributes(G4Colour(colour));
-    dots.SetMarkerType(G4Polymarker::dots);
-    dots.SetSize(G4VMarker::screen,1.);
-    dots.SetInfo(container->GetName());
-    const auto range = positionByColour.equal_range(colour);
-    for (auto posByCol = range.first; posByCol != range.second; ++posByCol) {
-      const G4double x = posByCol->second.getX() + (2.*G4UniformRand()-1.)*halfX;
-      const G4double y = posByCol->second.getY() + (2.*G4UniformRand()-1.)*halfY;
-      const G4double z = posByCol->second.getZ() + (2.*G4UniformRand()-1.)*halfZ;
-      dots.push_back(G4ThreeVector(x,y,z));
-      ++nDots;
-    }
-    AddPrimitive(dots);
-    if (print) {
-      G4cout
-      << "Number of dots for colour " << colour
-      << ": " << nDots << G4endl;
-    }
-    nDotsTotal += nDots;
-  }
-  if (print) {
-    G4cout << "Total number of dots: " << nDotsTotal << G4endl;
-  }
-  EndPrimitives ();
-
-  firstPrint = false;
-
-  return;
+  StandardSpecialMeshRendering(mesh);
 }
 
 void G4Qt3DSceneHandler::ClearStore ()

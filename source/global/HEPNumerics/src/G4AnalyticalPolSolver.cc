@@ -379,7 +379,9 @@ G4int G4AnalyticalPolSolver::QuarticRoots(G4double p[5], G4double r[3][5])
       reRoot[k] = r[1][k];
     }
     else
+    {
       reRoot[k] = DBL_MAX;  // kInfinity;
+    }
   }
   y1 = DBL_MAX;  // kInfinity;
   for(k = 1; k < 4; k++)

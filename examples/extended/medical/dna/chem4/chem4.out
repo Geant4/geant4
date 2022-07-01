@@ -1,4 +1,4 @@
-Seed used : 1653387419
+Seed used : 1656510628
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
@@ -12,7 +12,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -45,6 +45,10 @@ Registered graphics systems are:
   OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
+  Qt3D (Qt3D)
+  TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
 
 Registering model factories...
 
@@ -80,7 +84,7 @@ Some /vis commands (optionally) take a string to specify colour.
 G4SDManager::AddNewCollection : the collection <mfDetector/PrimaryKiller> is registered at 1
 G4SDManager::AddNewCollection : the collection <mfDetector/Species> is registered at 2
 New sensitive detector <mfDetector> is registered at /
-G4ParticleDefinition (other than ions and shortlived) should be created in Pre_Init state - mu+
+G4ParticleDefinition (other than ions and shortlived) should be created in Pre_Init state - O2
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
 *** G4Exception : PART101
@@ -89,27 +93,85 @@ G4ParticleDefinition should be created in PreInit state
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
-G4ParticleDefinition (other than ions and shortlived) should be created in Pre_Init state - mu-
 
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART101
-      issued by : G4ParticleDefintion::G4ParticleDefinition()
-G4ParticleDefinition should be created in PreInit state
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
+Molecular Config | Diffusion Coefficient (m2 / s)       | Radius (nm) 
+_____________________________________________________________________________
+H3O^1                    9e-09                          0.25
+_____________________________________________________________________________
+OH^-1                    5e-09                          0.33
+_____________________________________________________________________________
+OH^0                   2.8e-09                          0.22
+_____________________________________________________________________________
+e_aq^-1                4.9e-09                           0.5
+_____________________________________________________________________________
+H^0                      7e-09                          0.19
+_____________________________________________________________________________
+H_2^0                    5e-09                          0.14
+_____________________________________________________________________________
+H2O2^0                 1.4e-09                           0.3
+_____________________________________________________________________________
+H2O^0                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^0                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^0                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^0                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^0                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^1                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^1                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^1                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^1                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^1                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^-1                   2e-09                         0.275
+_____________________________________________________________________________
+H2O^0                    2e-09                         0.275
+_____________________________________________________________________________
+H2O^0                    2e-09                         0.275
+_____________________________________________________________________________
+O2^0                   2.4e-09                             0
+_____________________________________________________________________________
+Number of chemical species involved in reactions = 6
+Reaction                                    Reaction Rate [dm3/(mol*s)]   
+----------------------------------------------------------------------------
+H3O^1 + OH^-1 -> No product                 1.43e+11                      
+----------------------------------------------------------------------------
+H3O^1 + e_aq^-1 -> H^0                      2.11e+10                      
+----------------------------------------------------------------------------
+OH^0 + e_aq^-1 -> OH^-1                     2.95e+10                      
+----------------------------------------------------------------------------
+OH^0 + OH^0 -> H2O2^0                       4.4e+09                       
+----------------------------------------------------------------------------
+OH^0 + H^0 -> No product                    1.44e+10                      
+----------------------------------------------------------------------------
+e_aq^-1 + H^0 -> H_2^0 + OH^-1              2.65e+10                      
+----------------------------------------------------------------------------
+e_aq^-1 + e_aq^-1 -> H_2^0 + OH^-1 + OH^-1  5e+09                         
+----------------------------------------------------------------------------
+e_aq^-1 + H2O2^0 -> OH^-1 + OH^0            1.41e+10                      
+----------------------------------------------------------------------------
+H^0 + H^0 -> H_2^0                          1.2e+10                       
+----------------------------------------------------------------------------
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
-Max kinetic energy for tables                      100 TeV
+Max kinetic energy for tables                      100 MeV
 Number of bins per decade of a table               20
 Verbose level                                      1
 Verbose level for worker thread                    0
@@ -121,22 +183,23 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
-Step function for e+-                              (0.2, 0.1 mm)
-Step function for muons/hadrons                    (0.2, 0.1 mm)
-Step function for light ions                       (0.2, 0.1 mm)
-Step function for general ions                     (0.2, 0.1 mm)
+Step function for e+-                              (0.2, 0.01 mm)
+Step function for muons/hadrons                    (0.1, 0.05 mm)
+Step function for light ions                       (0.1, 0.02 mm)
+Step function for general ions                     (0.1, 0.001 mm)
 Lowest e+e- kinetic energy                         0 eV 
 Lowest muon/hadron kinetic energy                  1 keV
+Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
-Use ICRU90 data                                    0
+Type of fluctuation model                          1
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
-Enable angular generator interface                 0
+Enable angular generator interface                 1
 Max kinetic energy for CSDA tables                 1 GeV
 Max kinetic energy for NIEL computation            0 eV 
 Linear loss limit                                  0.01
@@ -144,18 +207,18 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for e+-           2
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for e+-            0.08
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
-Skin parameter for msc step limitation of e+-      1
+Skin parameter for msc step limitation of e+-      3
 Lambda limit for msc step limit for e+-            1 mm
-Use Mott correction for e- scattering              0
+Use Mott correction for e- scattering              1
 Factor used for dynamic computation of angular 
   limit between single and multiple scattering     1
 Fixed angular limit between single 
@@ -190,64 +253,76 @@ Use DNA e- solvation model type                    11001
 ### ===  Ignore cuts flag:   1
 
 phot:  for gamma SubType=12 BuildTable=0
-      LambdaPrime table from 200 keV to 100 TeV in 174 bins 
+      LambdaPrime table from 200 keV to 100 MeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 MeV  SauterGavrila Fluo
 
 compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 10 eV  to 1 MeV, 20 bins/decade, spline: 1
-      LambdaPrime table from 1 MeV to 100 TeV in 160 bins 
+      LambdaPrime table from 1 MeV to 100 MeV in 40 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        KleinNishina : Emin=    0 eV  Emax=  100 TeV Fluo
+   LowEPComptonModel : Emin=    0 eV  Emax=   20 MeV Fluo
+        KleinNishina : Emin=   20 MeV Emax=  100 MeV Fluo
 
 conv:  for gamma SubType=14 BuildTable=1
-      Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
+      Lambda table from 1.022 MeV to 100 MeV, 32 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 MeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 10 eV  to 100 keV, 20 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
+      LambdaPrime table from 100 keV to 100 MeV in 60 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 MeV  CullenGenerator
 
 e-_G4DNAElectronSolvation:  for e- SubType=58 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAOneStepThermalizationModel_Ritchie1994 : Emin=    0 eV  Emax=  7.4 eV 
+          DummyModel : Emin=  7.4 eV  Emax=  100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAChampionElasticModel : Emin=    0 eV  Emax=    1 MeV
+          DummyModel : Emin=    1 MeV Emax=  100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNABornExcitationModel : Emin=    0 eV  Emax=    1 MeV
+          DummyModel : Emin=    1 MeV Emax=  100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNABornIonisationModel : Emin=    0 eV  Emax=    1 MeV  deltaBorn Fluo
+          DummyModel : Emin=    1 MeV Emax=  100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAVibExcitation:  for e- SubType=54 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNASancheExcitationModel : Emin=    0 eV  Emax=  100 eV 
+          DummyModel : Emin=  100 eV  Emax=  100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
+          DummyModel : Emin=   13 eV  Emax=  100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
-          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+          StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-eIoni:  for e+  XStype:1  SubType=2
-      dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+eIoni:  for e+  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 100 MeV in 140 bins
+      Lambda tables from threshold to 100 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.01 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
-#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(mu+) skipped...
-#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(mu-) skipped...
+        MollerBhabha : Emin=    0 eV  Emax=  100 MeV  deltaVI
+#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(O2) skipped...
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
@@ -256,9 +331,9 @@ Start event 0
 Number of chemical species involved in reactions = 6
 Reaction                                    Reaction Rate [dm3/(mol*s)]   Interaction Range for chosen reaction model [nm]
 ------------------------------------------------------------------------------------------------------------------------------
-H3O^1 + e_aq^-1 -> H^0                      2.11e+10                      0.200589
-------------------------------------------------------------------------------------------------------------------------------
 H3O^1 + OH^-1 -> No product                 1.43e+11                      1.34973
+------------------------------------------------------------------------------------------------------------------------------
+H3O^1 + e_aq^-1 -> H^0                      2.11e+10                      0.200589
 ------------------------------------------------------------------------------------------------------------------------------
 OH^0 + e_aq^-1 -> OH^-1                     2.95e+10                      0.506256
 ------------------------------------------------------------------------------------------------------------------------------
@@ -266,9 +341,9 @@ OH^0 + OH^0 -> H2O2^0                       4.4e+09                       0.2076
 ------------------------------------------------------------------------------------------------------------------------------
 OH^0 + H^0 -> No product                    1.44e+10                      0.194167
 ------------------------------------------------------------------------------------------------------------------------------
-e_aq^-1 + e_aq^-1 -> OH^-1 + OH^-1 + H_2^0  5e+09                         0.134838
+e_aq^-1 + H^0 -> H_2^0 + OH^-1              2.65e+10                      0.294265
 ------------------------------------------------------------------------------------------------------------------------------
-e_aq^-1 + H^0 -> OH^-1 + H_2^0              2.65e+10                      0.294265
+e_aq^-1 + e_aq^-1 -> H_2^0 + OH^-1 + OH^-1  5e+09                         0.134838
 ------------------------------------------------------------------------------------------------------------------------------
 e_aq^-1 + H2O2^0 -> OH^-1 + OH^0            1.41e+10                      0.295745
 ------------------------------------------------------------------------------------------------------------------------------
@@ -282,19 +357,14 @@ Start event 4
 Start event 5
 Start event 6
 Start event 7
- * PrimaryKiller: aborts event 7, energy loss is too large. 
- * Energy loss by primary is: 2.2927 keV. Event is aborted if the Eloss is > 2 keV
 Start event 8
 Start event 9
 
 --------------------End of Global Run-----------------------
-  The run has 9 events 
-Number of events recorded by the species scorer = 9
- Total energy deposited in the world volume : 10683 eV
+  The run has 10 events 
+Number of events recorded by the species scorer = 10
+ Total energy deposited in the world volume : 11902 eV
  ------------------------------------------------------------
 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...

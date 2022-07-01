@@ -33,15 +33,15 @@
 #include "G4VITTimeStepComputer.hh"
 #include "G4KDTreeResult.hh"
 #include "G4IRTUtils.hh"
-#include "G4VReactionType.hh"
 #include <memory>
 #include <set>
+#include "G4ITTrackHolder.hh"
+#include "G4ITReaction.hh"
+#include "G4ReferenceCast.hh"
 
-class G4VReactionTypeManager;
 class G4VDNAReactionModel;
 class G4DNAMolecularReactionTable;
 class G4MolecularConfiguration;
-class G4DNAReactionTypeManager;
 class G4Molecule;
 class G4ITReactionSet;
 class G4ITReactionChange;
@@ -50,61 +50,56 @@ class G4ITTrackHolder;
 
 class G4DNAIndependentReactionTimeStepper : public G4VITTimeStepComputer
 {
-public:
-    G4DNAIndependentReactionTimeStepper();
-    ~G4DNAIndependentReactionTimeStepper() override = default;
-    G4DNAIndependentReactionTimeStepper(const G4DNAIndependentReactionTimeStepper&) = delete;
-    G4DNAIndependentReactionTimeStepper& operator=(const G4DNAIndependentReactionTimeStepper&) = delete;
+ public:
+  G4DNAIndependentReactionTimeStepper();
+  ~G4DNAIndependentReactionTimeStepper() override = default;
+  G4DNAIndependentReactionTimeStepper(
+    const G4DNAIndependentReactionTimeStepper&) = delete;
+  G4DNAIndependentReactionTimeStepper& operator =(
+    const G4DNAIndependentReactionTimeStepper&) = delete;
 
-    void Prepare() override;
-    G4double CalculateStep(const G4Track&, const G4double&) override;
-    G4double CalculateMinTimeStep(G4double, G4double) override;
+  void Prepare() override;
+  G4double CalculateStep(const G4Track&, const G4double&) override;
+  G4double CalculateMinTimeStep(G4double, G4double) override;
 
-    void SetReactionModel(G4VDNAReactionModel*);
-    G4VDNAReactionModel* GetReactionModel();
+  void SetReactionModel(G4VDNAReactionModel*);
+  G4VDNAReactionModel* GetReactionModel();
 
-    std::unique_ptr<G4ITReactionChange>
-    FindReaction(G4ITReactionSet* pReactionSet,
-                 const G4double& currentStepTime = 0,
-                 const G4double& previousStepTime = 0,
-                 const G4bool& reachedUserStepTimeLimit = false);
+  std::unique_ptr<G4ITReactionChange> FindReaction(
+    G4ITReactionSet* pReactionSet, const G4double& currentStepTime = 0,
+    const G4double& previousStepTime       = 0,
+    const G4bool& reachedUserStepTimeLimit = false);
+  void SetReactionProcess(G4VITReactionProcess* pReactionProcess);
+  void SetVerbose(G4int);
 
-    void SetReactionProcess(G4VITReactionProcess* pReactionProcess);
+ private:
+  void InitializeForNewTrack();
+  class Utils;
+  void CheckAndRecordResults(const Utils& utils);
 
-    void SetReactionTypeManager(G4VReactionTypeManager* typeManager);
-    void SetVerbose(G4int);
-private:
-    void InitializeForNewTrack();
-    ReactionType GetReactionType(const G4Track& trackA, const G4Track& trackB);
+  G4double GetTimeToEncounter(const G4Track& trackA, const G4Track& trackB);
 
-    class Utils;
+  G4bool fHasAlreadyReachedNullTime = false;
+  const G4DNAMolecularReactionTable*& fMolecularReactionTable =
+    reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable);
+  G4VDNAReactionModel* fReactionModel     = nullptr;
+  G4ITTrackHolder* fpTrackContainer       = G4ITTrackHolder::Instance();
+  G4ITReactionSet* fReactionSet           = G4ITReactionSet::Instance();
+  G4int fVerbose                          = 0;
+  G4double fRCutOff                       = G4IRTUtils::GetRCutOff();
+  G4VITReactionProcess* fpReactionProcess = nullptr;
+  std::map<G4int, G4ThreeVector> fSampledPositions;
+  std::set<G4int> fCheckedTracks;
 
-    void CheckAndRecordResults(const Utils& utils);
-
-    G4double GetTimeToEncounter(const G4Track& trackA,
-                                const G4Track& trackB);
-
-    G4bool fHasAlreadyReachedNullTime;
-    const G4DNAMolecularReactionTable*& fMolecularReactionTable;
-    G4VDNAReactionModel* fReactionModel;
-    G4ITTrackHolder* fpTrackContainer;
-    G4ITReactionSet* fReactionSet;
-    G4int fVerbose;
-    G4double fRCutOff;
-    G4DNAReactionTypeManager* fReactionTypeManager;
-
-    G4VITReactionProcess* fpReactionProcess;
-    std::map<G4int,G4ThreeVector> fSampledPositions;
-
-    class Utils
-    {
-    public:
-        Utils(const G4Track& tA, const G4Track& tB);
-        ~Utils() = default;
-        const G4Track& fTrackA;
-        const G4Track& fTrackB;
-        const G4Molecule* fpMoleculeA;
-        const G4Molecule* fpMoleculeB;
-    };
+  class Utils
+  {
+   public:
+    Utils(const G4Track& tA, const G4Track& tB);
+    ~Utils() = default;
+    const G4Track& fTrackA;
+    const G4Track& fTrackB;
+    const G4Molecule* fpMoleculeA;
+    const G4Molecule* fpMoleculeB;
+  };
 };
 #endif

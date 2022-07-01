@@ -1,17 +1,22 @@
--------------------------------------------------------------------
--------------------------------------------------------------------
+# Example composite_calorimeter History
 
-     =========================================================
- 		      Geant4 - Composite calorimeter example
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Example History file
-                      ---------------------
+-------------------------------------------------------------------------------
 
-24.02.2022 - G. Cosmo (ccal-V10-07-07)
+## 2022-02-14 Gabriele Cosmo (ccal-V11-00-01)
 - Fixed compilation warnings on Intel-icx compiler for unused variables.
 
-25.10.2021 - B. Morgan (ccal-V10-07-06)
+## 2021-12-10 Ben Morgan (ccal-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
+
+25.10.2021 - B.Morgan (ccal-V10-07-06)
 - Use G4StrUtil functions replacing deprecated G4String member functions
 
 18.10.2021 - B. Morgan (ccal-V10-07-05)

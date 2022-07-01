@@ -68,7 +68,8 @@
 #include "G4ElementVector.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4ModifiedTsai.hh"
-//#include "G4DipBustGenerator.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 
 const G4int G4eBremsstrahlungRelModel::gMaxZet = 120;
 
@@ -253,10 +254,9 @@ G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(const G4Material* material,
   // the restricted dE/dx by numerical integration of the dependent part of DCS
   for (size_t ie = 0; ie < numberOfElements; ++ie) {
     G4VEmModel::SetCurrentElement((*theElemVector)[ie]);
-    //SetCurrentElement((*theElementVector)[i]->GetZasInt());
-    const G4double zet = (*theElemVector)[ie]->GetZ();
-    fCurrentIZ         = std::min(G4lrint(zet), gMaxZet);
-    dedx              += theAtomNumDensVector[ie]*zet*zet*ComputeBremLoss(tmax);
+    G4int zet = (*theElemVector)[ie]->GetZasInt();
+    fCurrentIZ = std::min(zet, gMaxZet);
+    dedx              += (zet*zet)*theAtomNumDensVector[ie]*ComputeBremLoss(tmax);
   }
   // apply the constant factor C/Z = 16\alpha r_0^2/3
   dedx *= gBremFactor;
@@ -332,7 +332,7 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
   if (tmin >= tmax) {
     return crossSection;
   }
-  fCurrentIZ   = std::min(G4lrint(Z), gMaxZet);
+  fCurrentIZ = std::min(G4lrint(Z), gMaxZet);
   // integrate numerically (dependent part of) the DCS between the kin. limits:
   // a. integrate between tmin and kineticEnergy of the e-
   crossSection = ComputeXSectionPerAtom(tmin);
@@ -592,8 +592,7 @@ G4eBremsstrahlungRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vd
     GetAngularDistribution()->SampleDirection(dp,fPrimaryTotalEnergy-gammaEnergy,
                                               fCurrentIZ, couple->GetMaterial());
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* gamma = new G4DynamicParticle(fGammaParticle, gamDir,
-                                                   gammaEnergy);
+  auto gamma = new G4DynamicParticle(fGammaParticle, gamDir, gammaEnergy);
   vdp->push_back(gamma);
   // compute post-interaction kinematics of primary e-/e+ based on
   // energy-momentum conservation
@@ -608,7 +607,7 @@ G4eBremsstrahlungRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vd
   if (gammaEnergy > SecondaryThreshold()) {
     fParticleChange->ProposeTrackStatus(fStopAndKill);
     fParticleChange->SetProposedKineticEnergy(0.0);
-    G4DynamicParticle* el = new G4DynamicParticle(
+    auto el = new G4DynamicParticle(
               const_cast<G4ParticleDefinition*>(fPrimaryParticle), dir, finalE);
     vdp->push_back(el);
   } else { // continue tracking the primary e-/e+ otherwise
@@ -631,7 +630,7 @@ void G4eBremsstrahlungRelModel::InitialiseElementData()
     const G4double    zet = elem->GetZ();
     const G4int      izet = std::min(G4lrint(zet),gMaxZet);
     if (!gElementData[izet]) {
-      ElementData *elemData  = new ElementData();
+      auto elemData  = new ElementData();
       const G4double fc = elem->GetfCoulomb();
       G4double Fel      = 1.;
       G4double Finel    = 1.;

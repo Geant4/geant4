@@ -56,6 +56,7 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4EmParameters.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4EmUtility.hh"
 #include "G4Log.hh"
 #include "Randomize.hh"
 #include <iostream>
@@ -138,65 +139,8 @@ G4ParticleChangeForGamma* G4VEmModel::GetParticleChangeForGamma()
 void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part, 
                                             const G4DataVector& cuts)
 {
-  // using spline for element selectors should be investigated in details
-  // because small number of points may provide biased results
-  // large number of points requires significant increase of memory
-  G4bool spline = false;
-  
-  //G4cout << "IES: for " << GetName() << " Emin(MeV)= " << lowLimit/MeV 
-  //         << " Emax(MeV)= " << highLimit/MeV << G4endl;
-  
-  // two times less bins because probability functon is normalized 
-  // so correspondingly is more smooth
   if(highLimit <= lowLimit) { return; }
-
-  G4int nbinsPerDec = G4EmParameters::Instance()->NumberOfBinsPerDecade();
-
-  G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
-
-  // prepare vector
-  if(!elmSelectors) {
-    elmSelectors = new std::vector<G4EmElementSelector*>;
-  }
-  if(numOfCouples > nSelectors) { 
-    for(G4int i=nSelectors; i<numOfCouples; ++i) { 
-      elmSelectors->push_back(nullptr); 
-    }
-    nSelectors = numOfCouples;
-  }
-
-  // initialise vector
-  for(G4int i=0; i<numOfCouples; ++i) {
-
-    // no need in element selectors for infinite cuts
-    if(cuts[i] == DBL_MAX) { continue; }
-   
-    auto couple = theCoupleTable->GetMaterialCutsCouple(i); 
-    auto material = couple->GetMaterial();
-    SetCurrentCouple(couple);
-
-    // selector already exist then delete
-    delete (*elmSelectors)[i];
-
-    G4double emin = std::max(lowLimit, MinPrimaryEnergy(material, part, cuts[i]));
-    G4double emax = std::max(highLimit, 10*emin);
-    static const G4double invlog106 = 1.0/(6*G4Log(10.));
-    G4int nbins = (G4int)(nbinsPerDec*G4Log(emax/emin)*invlog106);
-    nbins = std::max(nbins, 3);
-
-    (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
-						 emin,emax,spline);
-    ((*elmSelectors)[i])->Initialise(part, cuts[i]);
-    /*      
-      G4cout << "G4VEmModel::InitialiseElmSelectors i= " << i 
-             << "  "  << part->GetParticleName() 
-             << " for " << GetName() << "  cut= " << cuts[i] 
-             << "  " << (*elmSelectors)[i] << G4endl;      
-      ((*elmSelectors)[i])->Dump(part);
-    */
-  } 
+  G4EmUtility::InitialiseElementSelectors(this,part,cuts,lowLimit,highLimit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -292,48 +236,47 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* mat,
   }
   return fCurrentElement;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
+const G4Element* G4VEmModel::GetCurrentElement(const G4Material* mat) const
 {
-  // this algorith assumes that cross section is proportional to
-  // number electrons multiplied by number of atoms
-  const size_t nn = mat->GetNumberOfElements();
-  fCurrentElement = mat->GetElement(0);
-  if(1 < nn) {
-    const G4double* at = mat->GetVecNbOfAtomsPerVolume();
-    G4double tot = mat->GetTotNbOfAtomsPerVolume()*G4UniformRand();
-    for(size_t i=0; i<nn; ++i) {
-      tot -= at[i];
-      if(tot <= 0.0) { 
-	fCurrentElement = mat->GetElement(i);
-	break; 
-      }
-    }
+  const G4Element* elm = fCurrentElement;
+  if(nullptr == elm && nullptr != mat) {
+    elm = G4EmUtility::SampleRandomElement(mat);
   }
-  return fCurrentElement->GetZasInt();
+  return elm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
+G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat) const
 {
-  SetCurrentElement(elm);
-  const size_t ni = elm->GetNumberOfIsotopes();
-  fCurrentIsotope = elm->GetIsotope(0);
-  size_t idx = 0;
-  if(ni > 1) {
-    const G4double* ab = elm->GetRelativeAbundanceVector();
-    G4double x = G4UniformRand();
-    for(; idx<ni; ++idx) {
-      x -= ab[idx];
-      if (x <= 0.0) { 
-	fCurrentIsotope = elm->GetIsotope(idx);
-	break; 
-      }
-    }
+  const G4Element* elm = GetCurrentElement(mat);
+  return (nullptr == elm) ? 0 : elm->GetZasInt();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4Isotope* G4VEmModel::GetCurrentIsotope(const G4Element* elm) const
+{
+  const G4Isotope* iso = nullptr;
+  const G4Element* el = elm;
+  if(nullptr == el && nullptr != fCurrentCouple) { 
+    el = GetCurrentElement(fCurrentCouple->GetMaterial());
   }
-  return fCurrentIsotope->GetN();
+  if(nullptr != el) {
+    iso = G4EmUtility::SampleRandomIsotope(el);
+  }
+  return iso;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm) const
+{
+  auto iso = GetCurrentIsotope(elm);
+  return (nullptr != iso) ? iso->GetN() : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

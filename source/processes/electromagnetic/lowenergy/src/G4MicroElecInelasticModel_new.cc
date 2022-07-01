@@ -243,7 +243,7 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
   if (verboseLevel > 3)
     G4cout << "Calling G4MicroElecInelasticModel_new::Initialise()" << G4endl;
   
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     {
       G4Exception("G4MicroElecElasticModel_new::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");

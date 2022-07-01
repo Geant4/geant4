@@ -1,0 +1,63 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_X11_simple_dispatcher
+#define toolx_X11_simple_dispatcher
+
+#include "base_session"
+
+#include <tools/saui>
+
+namespace toolx {
+namespace X11 {
+
+class simple_dispatcher : public dispatcher {
+  typedef dispatcher parent;
+public:
+  virtual void win_render() = 0;
+  virtual void set_size(unsigned int a_width,unsigned int a_height) = 0;
+public:
+  virtual bool dispatch(XEvent& a_event) {
+    if(!m_win) return false;
+    if(a_event.xany.window!=m_win) return false;
+    if( (a_event.type==Expose) || (a_event.type==ConfigureNotify) ){
+      int width,height;
+      m_session.window_size(m_win,width,height);
+      set_size(width,height);   //viewer::set_size()
+      win_render();
+      return true;
+    } else if(a_event.type==ClientMessage) {
+      if(a_event.xclient.data.l[0]==(long)m_session.WM_DELETE_WINDOW_atom()) {
+        m_session.post(m_win,m_session.SESSION_EXIT_STEER_atom());
+        return true;
+      }
+    }
+    return false;
+  }
+  virtual Window window() const {return m_win;}
+public:
+  simple_dispatcher(base_session& a_session,Window a_win)
+  :parent()
+  ,m_session(a_session)
+  ,m_win(a_win)
+  {}
+  virtual ~simple_dispatcher(){}
+public:
+  simple_dispatcher(const simple_dispatcher& a_from)
+  :parent(a_from)
+  ,m_session(a_from.m_session)
+  ,m_win(a_from.m_win)
+  {}
+  simple_dispatcher& operator=(const simple_dispatcher& a_from) {
+    parent::operator=(a_from);
+    m_win = a_from.m_win;
+    return *this;
+  }
+protected:
+  base_session& m_session;
+  Window m_win;
+};
+
+}}
+
+#endif

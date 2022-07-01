@@ -86,6 +86,7 @@ private:
   G4UIdirectory*             dnaDirectory;
 
   G4UIcmdWithABool*          flucCmd;
+  G4UIcmdWithABool*          intCmd;
   G4UIcmdWithABool*          rangeCmd;
   G4UIcmdWithABool*          lpmCmd;
   G4UIcmdWithABool*          rsCmd;
@@ -132,10 +133,12 @@ private:
   G4UIcmdWithAnInteger*      ver2Cmd;
   G4UIcmdWithAnInteger*      tripletCmd;
 
+  G4UIcmdWithAString*        transWithMscCmd;
   G4UIcmdWithAString*        mscCmd;
   G4UIcmdWithAString*        msc1Cmd;
   G4UIcmdWithAString*        nffCmd;
   G4UIcmdWithAString*        ssCmd;
+  G4UIcmdWithAString*        fluc1Cmd;
 
   G4UIcommand*               dumpCmd;
 

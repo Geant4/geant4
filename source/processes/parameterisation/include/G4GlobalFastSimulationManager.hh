@@ -146,7 +146,7 @@ public: // Without description
   void   ActivateFastSimulationModel(const G4String&);
   void InActivateFastSimulationModel(const G4String&);
 
-
+  void Flush();
 
 private:
   // Private construtor insures singleton class

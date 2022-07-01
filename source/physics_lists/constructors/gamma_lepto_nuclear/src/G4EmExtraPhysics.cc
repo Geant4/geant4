@@ -529,7 +529,7 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
 void G4EmExtraPhysics::ConstructLENDGammaNuclear(
      G4CascadeInterface* cascade, G4HadronInelasticProcess* gnuc)
 {
-  if (std::getenv("G4LENDDATA") == nullptr ) { 
+  if (G4FindDataDir("G4LENDDATA") == nullptr ) {
     G4String message = "\n Skipping activation of Low Energy Nuclear Data (LEND) model for gamma nuclear interactions.\n The LEND model needs data files and they are available from ftp://gdo-nuclear.ucllnl.org/GND_after2013/GND_v1.3.tar.gz.\n Please set the environment variable G4LENDDATA to point to the directory named v1.3 extracted from the archive file.\n"; 
     G4Exception( "G4EmExtraPhysics::ConstructLENDGammaNuclear()"
                  , "G4LENDBertiniGammaElectroNuclearBuilder001"

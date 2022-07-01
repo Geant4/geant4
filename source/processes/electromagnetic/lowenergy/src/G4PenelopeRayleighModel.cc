@@ -550,8 +550,8 @@ void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
       G4cout << "G4PenelopeRayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Going to read Rayleigh data files for Z=" << Z << G4endl;
     }
-  char* path = std::getenv("G4LEDATA");
-  if (!path)
+    const char* path = G4FindDataDir("G4LEDATA");
+    if(!path)
     {
       G4String excep = "G4LEDATA environment variable not set!";
       G4Exception("G4PenelopeRayleighModel::ReadDataFile()",

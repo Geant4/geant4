@@ -1051,11 +1051,93 @@ G4double G4TwistedTubs::GetCubicVolume()
 }
 
 //=====================================================================
+//* GetLateralArea ----------------------------------------------------
+
+G4double
+G4TwistedTubs::GetLateralArea(G4double a, G4double r, G4double z) const
+{
+  if (z == 0) return 0.;
+  G4double h = std::abs(z);
+  G4double area = h*a;
+  if (std::abs(a - r) > kCarTolerance)
+  {
+    G4double aa = a*a;
+    G4double hh = h*h;
+    G4double rr = r*r;
+    G4double cc = aa*hh/(rr - aa);
+    G4double k  = std::sqrt(aa + cc)/cc;
+    G4double kh = k*h;
+    area = 0.5*a*(h*std::sqrt(1. + kh*kh) + std::asinh(kh)/k);
+  }
+  return GetDPhi()*area;
+}
+
+//=====================================================================
+//* GetPhiCutArea -----------------------------------------------------
+
+G4double
+G4TwistedTubs::GetPhiCutArea(G4double a, G4double r, G4double z) const
+{
+  if (GetDPhi() >= CLHEP::twopi || r <= 0 || z == 0) return 0.;
+  G4double h = std::abs(z);
+  G4double area = h*a;
+  if (GetPhiTwist() > kCarTolerance)
+  {
+    G4double sinw = std::sin(0.5*GetPhiTwist())*h/GetZHalfLength();
+    G4double p = sinw*r/h;
+    G4double q = sinw*r/a;
+    G4double pp = p*p;
+    G4double qq = q*q;
+    G4double pq = p*q;
+    G4double sqroot = std::sqrt(pp + qq + 1);
+    area = (pq*sqroot +
+            0.5*p*(pp + 3.)*std::atanh(q/sqroot) +
+            0.5*q*(qq + 3.)*std::atanh(p/sqroot) +
+            std::atan(sqroot/(pq)) - CLHEP::halfpi)*h*a/(3.*pq);
+  }
+  return area;
+}
+
+//=====================================================================
 //* GetSurfaceArea ----------------------------------------------------
 
 G4double G4TwistedTubs::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0.) fSurfaceArea = G4VSolid::GetSurfaceArea();
+  if (fSurfaceArea == 0.)
+  {
+    G4double dphi = GetDPhi();
+    G4double Ainn = GetInnerRadius();
+    G4double Aout = GetOuterRadius();
+    G4double Rinn0 = GetEndInnerRadius(0);
+    G4double Rout0 = GetEndOuterRadius(0);
+    G4double Rinn1 = GetEndInnerRadius(1);
+    G4double Rout1 = GetEndOuterRadius(1);
+    G4double z0 = GetEndZ(0);
+    G4double z1 = GetEndZ(1);
+
+    G4double base0 = 0.5*dphi*(Rout0*Rout0 - Rinn0*Rinn0); // lower base
+    G4double inner0 = GetLateralArea(Ainn, Rinn0, z0); // lower inner surface
+    G4double outer0 = GetLateralArea(Aout, Rout0, z0); // lower outer surface
+    G4double cut0 =                                    // lower phi cut
+      GetPhiCutArea(Aout, Rout0, z0) - GetPhiCutArea(Ainn, Rinn0, z0);
+
+    G4double base1 = base0;
+    G4double inner1 = inner0;
+    G4double outer1 = outer0;
+    G4double cut1 = cut0;
+    if (std::abs(z0) != std::abs(z1))
+    {
+      base1 = 0.5*dphi*(Rout1*Rout1 - Rinn1*Rinn1); // upper base
+      inner1 = GetLateralArea(Ainn, Rinn1, z1); // upper inner surface
+      outer1 = GetLateralArea(Aout, Rout1, z1); // upper outer surface
+      cut1 =                                    // upper phi cut
+      GetPhiCutArea(Aout, Rout1, z1) - GetPhiCutArea(Ainn, Rinn1, z1);
+    }
+    fSurfaceArea = base0 + base1 +
+      ((z0*z1 < 0) ?
+      (inner0 + inner1 + outer0 + outer1 + 2.*(cut0 + cut1)) :
+      std::abs(inner0 - inner1 + outer0 - outer1 + 2.*(cut0 - cut1)));
+  }
   return fSurfaceArea;
 }
 

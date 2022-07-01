@@ -35,7 +35,7 @@
 #include "G4ToolsAnalysisManager.hh"
 #include "globals.hh"
 
-#include "tools/hdf5/ntuple"
+#include "toolx/hdf5/ntuple"
 
 #include <memory>
 #include <string_view>
@@ -58,14 +58,14 @@ class G4Hdf5AnalysisManager : public G4ToolsAnalysisManager
     static G4bool IsInstance();
 
     // Access methods
-    tools::hdf5::ntuple* GetNtuple() const;
-    tools::hdf5::ntuple* GetNtuple(G4int ntupleId) const;
+    toolx::hdf5::ntuple* GetNtuple() const;
+    toolx::hdf5::ntuple* GetNtuple(G4int ntupleId) const;
 
     // Iterators
-    std::vector<tools::hdf5::ntuple*>::iterator BeginNtuple();
-    std::vector<tools::hdf5::ntuple*>::iterator EndNtuple();
-    std::vector<tools::hdf5::ntuple*>::const_iterator BeginConstNtuple() const;
-    std::vector<tools::hdf5::ntuple*>::const_iterator EndConstNtuple() const;
+    std::vector<toolx::hdf5::ntuple*>::iterator BeginNtuple();
+    std::vector<toolx::hdf5::ntuple*>::iterator EndNtuple();
+    std::vector<toolx::hdf5::ntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<toolx::hdf5::ntuple*>::const_iterator EndConstNtuple() const;
 
   protected:
     // Virtual methods from base class

@@ -67,7 +67,10 @@ G4bool G4LatticeLogical::LoadMap(G4int tRes, G4int pRes,
   }
 
   std::ifstream fMapFile(map.data());
-  if (!fMapFile.is_open()) return false;
+  if(!fMapFile.is_open())
+  {
+    return false;
+  }
 
   G4double vgrp = 0.;
   for (G4int theta = 0; theta<tRes; theta++) {
@@ -77,7 +80,8 @@ G4bool G4LatticeLogical::LoadMap(G4int tRes, G4int pRes,
     }
   }
 
-  if (verboseLevel) {
+  if(verboseLevel != 0)
+  {
     G4cout << "\nG4LatticeLogical::LoadMap(" << map << ") successful"
 	   << " (Vg scalars " << tRes << " x " << pRes << " for polarization "
 	   << polarizationState << ")." << G4endl;
@@ -103,7 +107,10 @@ G4bool G4LatticeLogical::Load_NMap(G4int tRes, G4int pRes,
   }
 
   std::ifstream fMapFile(map.data());
-  if(!fMapFile.is_open()) return false;
+  if(!fMapFile.is_open())
+  {
+    return false;
+  }
 
   G4double x,y,z;	// Buffers to read coordinates from file
   G4ThreeVector dir;
@@ -115,7 +122,8 @@ G4bool G4LatticeLogical::Load_NMap(G4int tRes, G4int pRes,
     }
   }
 
-  if (verboseLevel) {
+  if(verboseLevel != 0)
+  {
     G4cout << "\nG4LatticeLogical::Load_NMap(" << map << ") successful"
 	   << " (Vdir " << tRes << " x " << pRes << " for polarization "
 	   << polarizationState << ")." << G4endl;
@@ -142,8 +150,14 @@ G4double G4LatticeLogical::MapKtoV(G4int polarizationState,
   theta=k.getTheta();
   phi=k.getPhi();
 
-  if(phi<0) phi = phi + twopi;
-  if(theta>pi) theta=theta-pi;
+  if(phi < 0)
+  {
+    phi = phi + twopi;
+  }
+  if(theta > pi)
+  {
+    theta = theta - pi;
+  }
 
   G4double Vg = fMap[polarizationState][int(theta/tRes)][int(phi/pRes)];
 
@@ -176,11 +190,17 @@ G4ThreeVector G4LatticeLogical::MapKtoVDir(G4int polarizationState,
   pRes=2*pi/(fDresPhi-1);
 
   theta=k.getTheta();
-  phi=k.getPhi(); 
+  phi=k.getPhi();
 
-  if(theta>pi) theta=theta-pi;
+  if(theta > pi)
+  {
+    theta = theta - pi;
+  }
   //phi=[0 to 2 pi] in accordance with DMC //if(phi>pi/2) phi=phi-pi/2;
-  if(phi<0) phi = phi + 2*pi;
+  if(phi < 0)
+  {
+    phi = phi + 2 * pi;
+  }
 
   G4int iTheta = int(theta/tRes+0.5);
   G4int iPhi = int(phi/pRes+0.5);

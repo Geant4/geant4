@@ -13,11 +13,11 @@ endif
 # For debug mode
 # CPPFLAGS += -DG4DEBUG_VIS_OGL
 
-GLOBLIBS  = libG4vis_management.lib libG4modeling.lib libG4gl2ps.lib
+GLOBLIBS  = libG4vis_management.lib libG4modeling.lib libG4tools.lib
 ifdef G4LIB_BUILD_ZLIB
   GLOBLIBS += libG4zlib.lib
 endif
-GLOBLIBS += libG4interfaces.lib libG4tasking.lib libG4run.lib libG4event.lib
+GLOBLIBS += libG4interfaces.lib libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
@@ -31,6 +31,7 @@ include $(G4INSTALL)/config/interactivity.gmk
 CPPFLAGS += -I$(G4BASE)/visualization/externals/gl2ps/include
 CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
+CPPFLAGS += -I$(G4BASE)/externals/g4tools/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
@@ -64,7 +65,8 @@ sources := $(addprefix src/,G4OpenGLImmediateViewer.cc \
   G4OpenGLSceneHandler.cc \
   G4OpenGLViewerMessenger.cc \
   G4OpenGLTransform3D.cc \
-  G4VisFeaturesOfOpenGL.cc)
+  G4VisFeaturesOfOpenGL.cc \
+  G4gl2ps.cc)
 
 ifdef G4VIS_BUILD_OPENGLX_DRIVER
   sources += $(addprefix src/,\

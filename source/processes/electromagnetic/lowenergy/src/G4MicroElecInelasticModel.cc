@@ -134,9 +134,9 @@ void G4MicroElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
   G4String proton = protonDef->GetParticleName();;
   
   G4double scaleFactor = 1e-18 * cm *cm;
-  
-  char *path = std::getenv("G4LEDATA");
-  
+
+  const char* path = G4FindDataDir("G4LEDATA");
+
   // *** ELECTRON
   tableFile[electron] = fileElectron;  
   lowEnergyLimit[electron] = 16.7 * eV;

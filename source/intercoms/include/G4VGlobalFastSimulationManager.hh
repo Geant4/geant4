@@ -63,7 +63,7 @@ class G4VGlobalFastSimulationManager
       // Returns pointer to the actual Global Fast Simulation manager if
       // at least a parameterisation envelope exists
 
-    virtual ~G4VGlobalFastSimulationManager() {}
+    virtual ~G4VGlobalFastSimulationManager() = default;
 
     virtual G4VFlavoredParallelWorld* GetFlavoredWorldForThis(
                                                      G4ParticleDefinition*) = 0;

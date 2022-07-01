@@ -35,6 +35,8 @@
 #ifndef G4SmartTrackStack_hh
 #define G4SmartTrackStack_hh 1
 
+#include <array>
+
 #include "G4StackedTrack.hh"
 #include "G4TrackStack.hh"
 #include "globals.hh"
@@ -62,29 +64,17 @@ class G4SmartTrackStack
     inline G4int GetMaxNTrack() const { return maxNTracks; }
 
   private:
-
-    inline G4int n_stackedTrack() const
-    {
-      return G4int(stacks[0]->GetNTrack() +
-                   stacks[1]->GetNTrack() +
-                   stacks[2]->GetNTrack() +
-                   stacks[3]->GetNTrack() +
-                   stacks[4]->GetNTrack());
-    }
-
-  private:
-
-    G4int fTurn;
-    G4int nTurn; // should be 5
-    G4double energies[5];
-    G4TrackStack* stacks[5];
+    G4int fTurn = 0;
+    static constexpr G4int nTurn{5};
+    std::array<G4double,nTurn> energies;
+    std::array<G4TrackStack*,nTurn> stacks;
     // = 0 : all primaries and secondaries except followings
     // = 1 : secondary neutrons
     // = 2 : secondary electrons
     // = 3 : secondary gammas
     // = 4 : secondary positrons
-    G4int maxNTracks;
-    G4int nTracks;
+    G4int maxNTracks{0};
+    G4int nTracks{0};
 };
 
 #endif

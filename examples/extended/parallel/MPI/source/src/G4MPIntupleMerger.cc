@@ -31,7 +31,7 @@
 #include "G4RootMpiAnalysisManager.hh"
 #include "G4ios.hh"
 
-#include "tools/mpi/wrmpi"
+#include "toolx/mpi/wrmpi"
 
 #include <mpi.h>
 
@@ -57,7 +57,7 @@ G4MPIntupleMerger::G4MPIntupleMerger(G4int nofReducedNtupleFiles,
   auto comm  = mpiManager->GetAllComm();
 
   // G4int tag = G4MPImanager::kTAG_NTUPLE;
-  fWrmpi = new tools::mpi::wrmpi(G4cout, *comm);
+  fWrmpi = new toolx::mpi::wrmpi(G4cout, *comm);
 
   analysisManager->SetMpiNtupleMerging(
     fWrmpi, mpiRank, mpiSize, nofReducedNtupleFiles);

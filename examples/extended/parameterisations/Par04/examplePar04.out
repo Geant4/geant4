@@ -1,0 +1,698 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+<<< Geant4 Physics List simulation engine: FTFP_BERT
+
+Instantiating Visualization Manager.......
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
+  Qt3D (Qt3D)
+  TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered models:
+  None
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+Registered filters:
+  None
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
+Checking overlaps for volume Detector:99 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:0 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:1 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:2 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:3 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:4 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:5 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:6 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:7 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:8 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:9 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:10 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:11 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:12 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:13 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:14 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:15 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:16 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:17 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:18 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:19 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:20 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:21 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:22 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:23 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:24 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:25 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:26 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:27 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:28 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:29 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:30 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:31 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:32 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:33 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:34 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:35 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:36 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:37 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:38 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:39 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:40 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:41 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:42 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:43 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:44 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:45 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:46 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:47 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:48 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:49 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:50 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:51 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:52 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:53 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:54 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:55 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:56 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:57 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:58 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:59 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:60 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:61 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:62 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:63 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:64 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:65 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:66 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:67 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:68 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:69 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:70 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:71 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:72 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:73 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:74 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:75 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:76 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:77 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:78 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:79 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:80 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:81 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:82 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:83 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:84 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:85 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:86 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:87 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:88 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:89 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:90 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:91 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:92 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:93 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:94 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:95 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:96 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:97 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:98 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:99 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:100 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:101 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:102 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:103 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:104 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:105 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:106 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:107 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:108 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:109 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:110 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:111 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:112 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:113 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:114 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:115 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:116 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:117 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:118 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:119 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:120 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:121 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:122 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:123 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:124 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:125 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:126 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:127 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:128 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:129 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:130 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:131 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:132 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:133 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:134 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:135 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:136 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:137 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:138 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:139 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:140 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:141 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:142 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:143 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:144 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:145 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:146 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:147 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:148 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:149 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:150 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:151 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:152 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:153 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:154 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:155 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:156 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:157 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:158 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:159 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:160 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:161 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:162 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:163 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:164 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:165 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:166 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:167 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:168 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:169 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:170 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:171 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:172 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:173 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:174 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:175 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:176 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:177 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:178 (G4Tubs) ... OK! 
+Checking overlaps for volume Layer:179 (G4Tubs) ... OK! 
+
+------------------------------------------------------
+--- Detector length:	2 m  
+--- Detector inner radius:	80 cm 
+--- Number of layers:	90
+
+--- 1st layer: 	1.4 mm  of passive G4_W
+--- 2nd layer: 	300 um  of active G4_Si
+-----------------------------------------------------
+
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+            e+ : fastSimProcess_massGeom[geom:World] 
+            e- : fastSimProcess_massGeom[geom:World] 
+         gamma : fastSimProcess_massGeom[geom:World] 
+Set file name: 10GeV_100events_fullsim.root
+Model defineMesh activated.
+Model inferenceModel not found.
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for B-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: B-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for D-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: D-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: anti_lambdaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: lambdaInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: protonInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: sigma-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound excitation low energy                  100 keV
+Pre-compound excitation high energy                 30 MeV
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation+GEM
+Number of de-excitation channels                    68
+Min excitation energy                               10 eV 
+Min energy per nucleon for multifragmentation       200 GeV
+Limit excitation energy for Fermi BreakUp           20 MeV
+Level density (1/MeV)                               0.075
+Use simple level density model                      1
+Use discrete excitation energy of the residual      1
+Time limit for long lived isomeres                  1 ns 
+Isomer production flag                              1
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Analysis_W001
+      issued by : G4RootNtupleFileManager::SetNtupleMergingMode
+Merging ntuples is not applicable in sequential application.
+Setting was ignored.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+There are 14 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
+Graphics systems deleted.
+Visualization Manager deleting...

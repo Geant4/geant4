@@ -31,6 +31,8 @@
 
 #include "G4VViewer.hh"
 
+#include "G4Timer.hh"
+
 #include "G4ios.hh"
 #include <sstream>
 
@@ -111,9 +113,13 @@ void G4VViewer::ProcessView ()
   if (fNeedKernelVisit) {
     // Reset flag.  This must be done before ProcessScene to prevent
     // recursive calls when recomputing transients...
+    G4Timer timer;
+    timer.Start();
     fNeedKernelVisit = false;
     fSceneHandler.ClearStore ();
     fSceneHandler.ProcessScene ();
+    timer.Stop();
+    fKernelVisitElapsedTimeSeconds = timer.GetRealElapsed();
   }
 }
 

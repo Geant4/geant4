@@ -1,23 +1,100 @@
--------------------------------------------------------------------
+# Category modeling History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-06-09 Laurie Nevay (modeling-V11-00-10)
 
-History file for visualization/modeling
----------------------------------------
+- Allow arrow proportions to be greater than 1/100. Produces more
+  visible arrows for field visualisation and also obeys the input
+  parameters more closely.
+
+## 2022-05-23 John Allison (modeling-V11-00-09)
+- Co-works with visman-V11-00-18.
+- Simplify `G4Mesh`.
+  - Now finds 1-deep rectangular meshes such as `G4PhantomParameterisation`.
+  - Improve commenting in `G4Mesh.hh`. Consult `G4Mesh.hh` for further
+    information.
+
+## 2022-04-17 John Allison (modeling-V11-00-08)
+- Co-works with `visman-V11-00-14`.
+- Retire `G4BoundingSphereScene` and `G4PhysicalVolumeSearchScene`.
+  - `G4BoundingSphereScene` is superseded by `G4BoundingExtentScene`.
+    - `G4BoundingSphereScene` accumulated blinding spheres and often
+      overestimated the extent of the scene.
+    - `G4BoundingExtentScene` deals directly with extents, which makes
+      it neater and more tightly estimates. the overall extent of the
+      scene. It has existed and has been in normal use for some time. It
+      takes advantage of developments in `G4VisExtent` - see
+      modeling-V10-05-00 (19 February 2019).
+  - `G4PhysicalVolumeSearchScene` is superseded by
+    `G4PhysicalVolumesSearchScene` (note the extra 's').
+    - `G4PhysicalVolumeSearchScene` found only the first occurrence of
+      a physical volume.
+    - `G4PhysicalVolumesSearchScene` finds all occurrences and returns
+      a "findings vector". It has existed and has been in normal use
+      for some time.
+  - `G4PhysicalVolumesSearchScene`:
+    - Remove last ambiguous and misleading argument in the constructor.
+      - It was used only once in `G4VisCommandsSceneAdd.cc`
+        (`/vis/scene/add/volume`) and a better way has been found in
+        `visman-V11-00-14`.
+
+## 2022-04-09 John Allison (modeling-V11-00-07)
+- `G4Mesh`:
+  - Add `fpParameterisedVolume` and accessor.
+- `G4PhysicalVolumeModel`:
+  - `G4PhysicalVolumeNodeID`: Add `Set` accessors.
+  - For `AddCompound(mesh)`:
+    - Provide an "artificial" node as an (optional) hook for anything that
+      might be generated.
+
+## 2022-04-03 John Allison (modeling-V11-00-06)
+- `G4PseudoScene`:
+  - Add `AddCompound(const G4Mesh&)`.
+    - If special mesh rendering is set, this catches mesh candidates
+      (certain types of parameterisations) and avoids descending into
+      the parameterisations.
+    - It is used in `G4PhysicalVolumeModel::CalculateExtent` (the
+      parameterised volumes anyway are enclosed in the "container" volume).
+- `G4PhysicalVolumeModel.cc`:
+  - `SetSpecialMeshRendering(true);` to avoids traversing (certain
+     types of) parameterisations (see above).
+- `G4BoundingExtentScene.cc`:
+  - Removed unnecessary blank line.
+
+## 2022-03-30 John Allison (modeling-V11-00-05)
+- `G4PhysicalVolumeModel.cc`: eliminate goto statements.
+
+## 2022-02-02 John Allison (modeling-V11-00-04)
+- G4Mesh: Programmed for parameterised tetrahedron mesh.
+
+## 2022-01-28 Ben Morgan (modeling-V11-00-03)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2021-12-16 John Allison (modeling-V11-00-02)
+- G4Mesh:
+  - Augment available data for 3D rectangular mesh.
+
+## 2021-12-11 John Allison (modeling-V11-00-01)
+- G4PhysicalVolumeModel:
+  - Add LocalExtent and GlobalExtent to G4PhysicalVolumeModel::GetAttDefs.
+  - G4PhysicalVolumeModel::TouchableProperties:
+    - Add fTouchableFullPVPath.
+- G4PhysicalVolumesSearchScene::Findings:
+- G4PhysicalVolumesSearchScene::ProcessVolume:
+- G4TouchablePropertiesScene::ProcessVolume: 
+  - Migrate to the above (fTouchableFullPVPath).
+
+## 2021-12-10 Ben Morgan (modeling-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 05 November 2021  John Allison  (modeling-V10-07-16)
 - Fix bug in G4PhysicalVolumeModel::CalculateExtent.

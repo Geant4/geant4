@@ -32,8 +32,8 @@
 #include "G4ios.hh"
 
 #if defined(TOOLS_USE_FREETYPE)
-#include "tools/sg/text_freetype"
-#include "tools/xml/xml_style"
+#include "toolx/sg/text_freetype"
+#include "toolx/xml/xml_style"
 #include "tools/xml/wrap_viewplot_fonts_google_style"
   //inlib/xml/viewplot.style file embeded in an inline function.
 #include "tools/font/lato_regular_ttf"
@@ -137,7 +137,7 @@ bool load_embeded_styles(tools::xml::styles& a_styles) {
     tools::replace(s,"@@back_slash@@","\\");
     ss += s + "\n";
   }
-  return tools::xml::load_style_string(a_styles,ss);
+  return toolx::xml::load_style_string(a_styles,ss);
 }
 
 }
@@ -162,7 +162,7 @@ G4PlotManager::G4PlotManager(const G4AnalysisManagerState& state)
   // unsigned int ww = 2000; //to have better antialising on freetype fonts.
   // float A4 = 29.7f/21.0f;
   // unsigned int wh = (unsigned int)(float(ww)*A4*0.80);
-  static tools::sg::text_freetype ttf;
+  static toolx::sg::text_freetype ttf;
   ttf.add_embedded_font(tools::sg::font_lato_regular_ttf(),tools::font::lato_regular_ttf);
   ttf.add_embedded_font(tools::sg::font_roboto_bold_ttf(),tools::font::roboto_bold_ttf);
   fViewer = std::make_unique<tools::viewplot>(G4cout, ttf,

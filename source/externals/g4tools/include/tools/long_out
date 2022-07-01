@@ -13,9 +13,9 @@ class long_out : public std::string {
   typedef std::string parent;
 public:
   long_out(long a_value) {
-    char s[512];
-    snpf(s,sizeof(s),"%ld",a_value);
-    parent::operator+=(s);
+    char _s[512];
+    snpf(_s,sizeof(_s),"%ld",a_value);
+    parent::operator+=(_s);
   }
 public:
   long_out(const long_out& a_from):parent(a_from){}

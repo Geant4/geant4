@@ -22,13 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-// 
-// John Allison  5th April 2001
-// A template for a simplest possible graphics driver.
-//?? Lines or sections marked like this require specialisation for your driver.
 
 #include "G4VtkViewer.hh"
 
@@ -62,6 +55,8 @@
 G4VtkViewer::G4VtkViewer(G4VSceneHandler& sceneHandler, const G4String& name)
   : G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name)
 {
+  vtkObject::GlobalWarningDisplayOff();
+
   // Set default and current view parameters
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
@@ -74,16 +69,33 @@ void G4VtkViewer::Initialise()
 
 #ifdef G4VTKDEBUG
   G4cout << "G4VtkViewer::G4VtkViewer" << G4endl;
-
   G4cout << "G4VtkViewer::G4VtkViewer> " << fVP.GetWindowSizeHintX() << " "
-         << fVP.GetWindowSizeHintY() << G4endl;
+  << fVP.GetWindowSizeHintY() << G4endl;
   G4cout << "G4VtkViewer::G4VtkViewer> " << fVP.GetWindowLocationHintX() << " "
-         << fVP.GetWindowLocationHintY() << G4endl;
+  << fVP.GetWindowLocationHintY() << G4endl;
 #endif
 
-  _renderWindow->SetSize(fVP.GetWindowSizeHintX(), fVP.GetWindowSizeHintY());
-  _renderWindow->SetPosition(fVP.GetWindowLocationHintX(),
-                             fVP.GetWindowLocationHintY());
+  // Need windowSizeX/Y - obtain from _renderWindow?
+  G4int screenSizeX = _renderWindow->GetScreenSize()[0];
+  G4int screenSizeY = _renderWindow->GetScreenSize()[1];
+  G4int positionX = fVP.GetWindowLocationHintX();
+  if (fVP.IsWindowLocationHintXNegative()) {
+    positionX = screenSizeX + positionX - fVP.GetWindowSizeHintX();
+  }
+  G4int positionY = fVP.GetWindowLocationHintY();
+  if (!fVP.IsWindowLocationHintYNegative()) {
+    positionY = screenSizeY + positionY - fVP.GetWindowSizeHintY();
+  }
+  _renderWindow->SetPosition(positionX, positionY);
+#ifdef __APPLE__
+  // Adjust window size for Apple to make it correspond to OpenGL.
+  // Maybe it's OpenGL that shoud be adjusted.
+  const G4double pixelFactor = 2.;
+#else
+  const G4double pixelFactor = 1.;
+#endif
+  _renderWindow->SetSize
+  (pixelFactor*fVP.GetWindowSizeHintX(),pixelFactor*fVP.GetWindowSizeHintY());
   _renderWindow->SetWindowName("Vtk viewer");
 
   _renderWindow->AddRenderer(renderer);
@@ -188,18 +200,20 @@ void G4VtkViewer::SetView() {
   }
 
   // Rotation style
+#if 0
   G4ViewParameters::RotationStyle rotationStyle  = fVP.GetRotationStyle();
   if (rotationStyle == G4ViewParameters::RotationStyle::freeRotation) {
     vtkSmartPointer<vtkInteractorStyleTrackballCamera> style =
       vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
-    renderWindowInteractor->SetInteractorStyle(style);
+    _renderWindow->GetInteractor()->SetInteractorStyle(style);
   }
   else if(rotationStyle == G4ViewParameters::RotationStyle::constrainUpDirection) {
     // camera->SetViewUp(upVector.x(), upVector.y(), upVector.z());
     vtkSmartPointer<vtkInteractorStyleTerrain> style =
       vtkSmartPointer<vtkInteractorStyleTerrain>::New();
-    renderWindowInteractor->SetInteractorStyle(style);
+    _renderWindow->GetInteractor()->SetInteractorStyle(style);
   }
+#endif
 }
 
 void G4VtkViewer::ClearView() {
@@ -224,10 +238,6 @@ void G4VtkViewer::ClearView() {
     renderer->RemoveViewProp(prop);
     prop = props->GetLastProp();
   }
-
-  G4VtkSceneHandler& fVtkSceneHandler =
-    dynamic_cast<G4VtkSceneHandler&>(fSceneHandler);
-  fVtkSceneHandler.Clear();
 }
 
 void G4VtkViewer::DrawView() {
@@ -290,8 +300,7 @@ void G4VtkViewer::ShowView()
   // static_cast<G4VtkSceneHandler&>(fSceneHandler).PrintStores();
 #endif
 
-  G4VtkSceneHandler& fVtkSceneHandler =
-    dynamic_cast<G4VtkSceneHandler&>(fSceneHandler);
+  G4VtkSceneHandler& fVtkSceneHandler = dynamic_cast<G4VtkSceneHandler&>(fSceneHandler);
   fVtkSceneHandler.Modified();
 
   infoTextActor->GetTextProperty()->SetFontSize(28);
@@ -307,19 +316,16 @@ void G4VtkViewer::ShowView()
   geant4Callback->SetGeant4ViewParameters(&fVP);
   renderer->AddObserver(vtkCommand::EndEvent, geant4Callback);
   renderer->AddActor(infoTextActor);
-
-  _renderWindow->Render();
-  renderWindowInteractor->Initialize();
-  renderWindowInteractor->Start();
 }
 
 void G4VtkViewer::FinishView()
 {
-  G4VtkSceneHandler& fVtkSceneHandler =
-    dynamic_cast<G4VtkSceneHandler&>(fSceneHandler);
+  G4VtkSceneHandler& fVtkSceneHandler = dynamic_cast<G4VtkSceneHandler&>(fSceneHandler);
   fVtkSceneHandler.Modified();
 
   _renderWindow->Render();
+  _renderWindow->GetInteractor()->Initialize();
+  _renderWindow->GetInteractor()->Start();
 }
 
 void G4VtkViewer::ExportScreenShot(G4String path, G4String format)

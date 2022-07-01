@@ -190,7 +190,7 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
       G4int Z = G4int(activeZ[i]);
 
       // Build the complete string identifying the file with the data set      
-      char* path = std::getenv("G4LEDATA");
+      const char* path = G4FindDataDir("G4LEDATA");
       if (!path)
 	{ 
           G4Exception("G4VCrossSectionHandler::LoadData",
@@ -265,7 +265,7 @@ void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
       G4int Z = G4int(activeZ[i]);
 
       // Build the complete string identifying the file with the data set      
-      char* path = std::getenv("G4LEDATA");
+      const char* path = G4FindDataDir("G4LEDATA");
       if (!path)
 	{ 
           G4Exception("G4VCrossSectionHandler::LoadNonLogData",

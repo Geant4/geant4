@@ -66,94 +66,94 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable()
 {
   // elements of these 2 vectors must be in same order as
   // the corresponding enums in G4MaterialPropertiesIndex.hh
-  fMatPropNames.push_back(G4String("RINDEX"));
-  fMatPropNames.push_back(G4String("REFLECTIVITY"));
-  fMatPropNames.push_back(G4String("REALRINDEX"));
-  fMatPropNames.push_back(G4String("IMAGINARYRINDEX"));
-  fMatPropNames.push_back(G4String("EFFICIENCY"));
-  fMatPropNames.push_back(G4String("TRANSMITTANCE"));
-  fMatPropNames.push_back(G4String("SPECULARLOBECONSTANT"));
-  fMatPropNames.push_back(G4String("SPECULARSPIKECONSTANT"));
-  fMatPropNames.push_back(G4String("BACKSCATTERCONSTANT"));
-  fMatPropNames.push_back(G4String("GROUPVEL"));
-  fMatPropNames.push_back(G4String("MIEHG"));
-  fMatPropNames.push_back(G4String("RAYLEIGH"));
-  fMatPropNames.push_back(G4String("WLSCOMPONENT"));
-  fMatPropNames.push_back(G4String("WLSABSLENGTH"));
-  fMatPropNames.push_back(G4String("WLSCOMPONENT2"));
-  fMatPropNames.push_back(G4String("WLSABSLENGTH2"));
-  fMatPropNames.push_back(G4String("ABSLENGTH"));
-  fMatPropNames.push_back(G4String("PROTONSCINTILLATIONYIELD"));
-  fMatPropNames.push_back(G4String("DEUTERONSCINTILLATIONYIELD"));
-  fMatPropNames.push_back(G4String("TRITONSCINTILLATIONYIELD"));
-  fMatPropNames.push_back(G4String("ALPHASCINTILLATIONYIELD"));
-  fMatPropNames.push_back(G4String("IONSCINTILLATIONYIELD"));
-  fMatPropNames.push_back(G4String("ELECTRONSCINTILLATIONYIELD"));
-  fMatPropNames.push_back(G4String("SCINTILLATIONCOMPONENT1"));
-  fMatPropNames.push_back(G4String("SCINTILLATIONCOMPONENT2"));
-  fMatPropNames.push_back(G4String("SCINTILLATIONCOMPONENT3"));
+  fMatPropNames.emplace_back("RINDEX");
+  fMatPropNames.emplace_back("REFLECTIVITY");
+  fMatPropNames.emplace_back("REALRINDEX");
+  fMatPropNames.emplace_back("IMAGINARYRINDEX");
+  fMatPropNames.emplace_back("EFFICIENCY");
+  fMatPropNames.emplace_back("TRANSMITTANCE");
+  fMatPropNames.emplace_back("SPECULARLOBECONSTANT");
+  fMatPropNames.emplace_back("SPECULARSPIKECONSTANT");
+  fMatPropNames.emplace_back("BACKSCATTERCONSTANT");
+  fMatPropNames.emplace_back("GROUPVEL");
+  fMatPropNames.emplace_back("MIEHG");
+  fMatPropNames.emplace_back("RAYLEIGH");
+  fMatPropNames.emplace_back("WLSCOMPONENT");
+  fMatPropNames.emplace_back("WLSABSLENGTH");
+  fMatPropNames.emplace_back("WLSCOMPONENT2");
+  fMatPropNames.emplace_back("WLSABSLENGTH2");
+  fMatPropNames.emplace_back("ABSLENGTH");
+  fMatPropNames.emplace_back("PROTONSCINTILLATIONYIELD");
+  fMatPropNames.emplace_back("DEUTERONSCINTILLATIONYIELD");
+  fMatPropNames.emplace_back("TRITONSCINTILLATIONYIELD");
+  fMatPropNames.emplace_back("ALPHASCINTILLATIONYIELD");
+  fMatPropNames.emplace_back("IONSCINTILLATIONYIELD");
+  fMatPropNames.emplace_back("ELECTRONSCINTILLATIONYIELD");
+  fMatPropNames.emplace_back("SCINTILLATIONCOMPONENT1");
+  fMatPropNames.emplace_back("SCINTILLATIONCOMPONENT2");
+  fMatPropNames.emplace_back("SCINTILLATIONCOMPONENT3");
 
   assert(fMatPropNames.size() == kNumberOfPropertyIndex);
 
   fMP.assign(kNumberOfPropertyIndex, nullptr);
 
-  fMatConstPropNames.push_back(G4String("SURFACEROUGHNESS"));
-  fMatConstPropNames.push_back(G4String("ISOTHERMAL_COMPRESSIBILITY"));
-  fMatConstPropNames.push_back(G4String("RS_SCALE_FACTOR"));
-  fMatConstPropNames.push_back(G4String("WLSMEANNUMBERPHOTONS"));
-  fMatConstPropNames.push_back(G4String("WLSTIMECONSTANT"));
-  fMatConstPropNames.push_back(G4String("WLSMEANNUMBERPHOTONS2"));
-  fMatConstPropNames.push_back(G4String("WLSTIMECONSTANT2"));
-  fMatConstPropNames.push_back(G4String("MIEHG_FORWARD"));
-  fMatConstPropNames.push_back(G4String("MIEHG_BACKWARD"));
-  fMatConstPropNames.push_back(G4String("MIEHG_FORWARD_RATIO"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONYIELD"));
-  fMatConstPropNames.push_back(G4String("RESOLUTIONSCALE"));
-  fMatConstPropNames.push_back(G4String("FERMIPOT"));
-  fMatConstPropNames.push_back(G4String("DIFFUSION"));
-  fMatConstPropNames.push_back(G4String("SPINFLIP"));
-  fMatConstPropNames.push_back(G4String("LOSS"));
-  fMatConstPropNames.push_back(G4String("LOSSCS"));
-  fMatConstPropNames.push_back(G4String("ABSCS"));
-  fMatConstPropNames.push_back(G4String("SCATCS"));
-  fMatConstPropNames.push_back(G4String("MR_NBTHETA"));
-  fMatConstPropNames.push_back(G4String("MR_NBE"));
-  fMatConstPropNames.push_back(G4String("MR_RRMS"));
-  fMatConstPropNames.push_back(G4String("MR_CORRLEN"));
-  fMatConstPropNames.push_back(G4String("MR_THETAMIN"));
-  fMatConstPropNames.push_back(G4String("MR_THETAMAX"));
-  fMatConstPropNames.push_back(G4String("MR_EMIN"));
-  fMatConstPropNames.push_back(G4String("MR_EMAX"));
-  fMatConstPropNames.push_back(G4String("MR_ANGNOTHETA"));
-  fMatConstPropNames.push_back(G4String("MR_ANGNOPHI"));
-  fMatConstPropNames.push_back(G4String("MR_ANGCUT"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONTIMECONSTANT1"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONTIMECONSTANT2"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONTIMECONSTANT3"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONRISETIME1"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONRISETIME2"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONRISETIME3"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONYIELD1"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONYIELD2"));
-  fMatConstPropNames.push_back(G4String("SCINTILLATIONYIELD3"));
-  fMatConstPropNames.push_back(G4String("PROTONSCINTILLATIONYIELD1"));
-  fMatConstPropNames.push_back(G4String("PROTONSCINTILLATIONYIELD2"));
-  fMatConstPropNames.push_back(G4String("PROTONSCINTILLATIONYIELD3"));
-  fMatConstPropNames.push_back(G4String("DEUTERONSCINTILLATIONYIELD1"));
-  fMatConstPropNames.push_back(G4String("DEUTERONSCINTILLATIONYIELD2"));
-  fMatConstPropNames.push_back(G4String("DEUTERONSCINTILLATIONYIELD3"));
-  fMatConstPropNames.push_back(G4String("TRITONSCINTILLATIONYIELD1"));
-  fMatConstPropNames.push_back(G4String("TRITONSCINTILLATIONYIELD2"));
-  fMatConstPropNames.push_back(G4String("TRITONSCINTILLATIONYIELD3"));
-  fMatConstPropNames.push_back(G4String("ALPHASCINTILLATIONYIELD1"));
-  fMatConstPropNames.push_back(G4String("ALPHASCINTILLATIONYIELD2"));
-  fMatConstPropNames.push_back(G4String("ALPHASCINTILLATIONYIELD3"));
-  fMatConstPropNames.push_back(G4String("IONSCINTILLATIONYIELD1"));
-  fMatConstPropNames.push_back(G4String("IONSCINTILLATIONYIELD2"));
-  fMatConstPropNames.push_back(G4String("IONSCINTILLATIONYIELD3"));
-  fMatConstPropNames.push_back(G4String("ELECTRONSCINTILLATIONYIELD1"));
-  fMatConstPropNames.push_back(G4String("ELECTRONSCINTILLATIONYIELD2"));
-  fMatConstPropNames.push_back(G4String("ELECTRONSCINTILLATIONYIELD3"));
+  fMatConstPropNames.emplace_back("SURFACEROUGHNESS");
+  fMatConstPropNames.emplace_back("ISOTHERMAL_COMPRESSIBILITY");
+  fMatConstPropNames.emplace_back("RS_SCALE_FACTOR");
+  fMatConstPropNames.emplace_back("WLSMEANNUMBERPHOTONS");
+  fMatConstPropNames.emplace_back("WLSTIMECONSTANT");
+  fMatConstPropNames.emplace_back("WLSMEANNUMBERPHOTONS2");
+  fMatConstPropNames.emplace_back("WLSTIMECONSTANT2");
+  fMatConstPropNames.emplace_back("MIEHG_FORWARD");
+  fMatConstPropNames.emplace_back("MIEHG_BACKWARD");
+  fMatConstPropNames.emplace_back("MIEHG_FORWARD_RATIO");
+  fMatConstPropNames.emplace_back("SCINTILLATIONYIELD");
+  fMatConstPropNames.emplace_back("RESOLUTIONSCALE");
+  fMatConstPropNames.emplace_back("FERMIPOT");
+  fMatConstPropNames.emplace_back("DIFFUSION");
+  fMatConstPropNames.emplace_back("SPINFLIP");
+  fMatConstPropNames.emplace_back("LOSS");
+  fMatConstPropNames.emplace_back("LOSSCS");
+  fMatConstPropNames.emplace_back("ABSCS");
+  fMatConstPropNames.emplace_back("SCATCS");
+  fMatConstPropNames.emplace_back("MR_NBTHETA");
+  fMatConstPropNames.emplace_back("MR_NBE");
+  fMatConstPropNames.emplace_back("MR_RRMS");
+  fMatConstPropNames.emplace_back("MR_CORRLEN");
+  fMatConstPropNames.emplace_back("MR_THETAMIN");
+  fMatConstPropNames.emplace_back("MR_THETAMAX");
+  fMatConstPropNames.emplace_back("MR_EMIN");
+  fMatConstPropNames.emplace_back("MR_EMAX");
+  fMatConstPropNames.emplace_back("MR_ANGNOTHETA");
+  fMatConstPropNames.emplace_back("MR_ANGNOPHI");
+  fMatConstPropNames.emplace_back("MR_ANGCUT");
+  fMatConstPropNames.emplace_back("SCINTILLATIONTIMECONSTANT1");
+  fMatConstPropNames.emplace_back("SCINTILLATIONTIMECONSTANT2");
+  fMatConstPropNames.emplace_back("SCINTILLATIONTIMECONSTANT3");
+  fMatConstPropNames.emplace_back("SCINTILLATIONRISETIME1");
+  fMatConstPropNames.emplace_back("SCINTILLATIONRISETIME2");
+  fMatConstPropNames.emplace_back("SCINTILLATIONRISETIME3");
+  fMatConstPropNames.emplace_back("SCINTILLATIONYIELD1");
+  fMatConstPropNames.emplace_back("SCINTILLATIONYIELD2");
+  fMatConstPropNames.emplace_back("SCINTILLATIONYIELD3");
+  fMatConstPropNames.emplace_back("PROTONSCINTILLATIONYIELD1");
+  fMatConstPropNames.emplace_back("PROTONSCINTILLATIONYIELD2");
+  fMatConstPropNames.emplace_back("PROTONSCINTILLATIONYIELD3");
+  fMatConstPropNames.emplace_back("DEUTERONSCINTILLATIONYIELD1");
+  fMatConstPropNames.emplace_back("DEUTERONSCINTILLATIONYIELD2");
+  fMatConstPropNames.emplace_back("DEUTERONSCINTILLATIONYIELD3");
+  fMatConstPropNames.emplace_back("TRITONSCINTILLATIONYIELD1");
+  fMatConstPropNames.emplace_back("TRITONSCINTILLATIONYIELD2");
+  fMatConstPropNames.emplace_back("TRITONSCINTILLATIONYIELD3");
+  fMatConstPropNames.emplace_back("ALPHASCINTILLATIONYIELD1");
+  fMatConstPropNames.emplace_back("ALPHASCINTILLATIONYIELD2");
+  fMatConstPropNames.emplace_back("ALPHASCINTILLATIONYIELD3");
+  fMatConstPropNames.emplace_back("IONSCINTILLATIONYIELD1");
+  fMatConstPropNames.emplace_back("IONSCINTILLATIONYIELD2");
+  fMatConstPropNames.emplace_back("IONSCINTILLATIONYIELD3");
+  fMatConstPropNames.emplace_back("ELECTRONSCINTILLATIONYIELD1");
+  fMatConstPropNames.emplace_back("ELECTRONSCINTILLATIONYIELD2");
+  fMatConstPropNames.emplace_back("ELECTRONSCINTILLATIONYIELD3");
 
   assert(fMatConstPropNames.size() == kNumberOfConstPropertyIndex);
 
@@ -177,7 +177,9 @@ G4int G4MaterialPropertiesTable::GetConstPropertyIndex(
     fMatConstPropNames.begin(),
     std::find(fMatConstPropNames.begin(), fMatConstPropNames.end(), key));
   if(index < fMatConstPropNames.size())
+  {
     return index;
+  }
 
   G4ExceptionDescription ed;
   ed << "Constant Material Property Index for key " << key << " not found.";
@@ -193,7 +195,9 @@ G4int G4MaterialPropertiesTable::GetPropertyIndex(const G4String& key) const
     std::distance(fMatPropNames.begin(),
                   std::find(fMatPropNames.begin(), fMatPropNames.end(), key));
   if(index < fMatPropNames.size())
+  {
     return index;
+  }
   G4ExceptionDescription ed;
   ed << "Material Property Index for key " << key << " not found.";
   G4Exception("G4MaterialPropertiesTable::GetPropertyIndex()", "mat201",
@@ -206,8 +210,10 @@ G4double G4MaterialPropertiesTable::GetConstProperty(const G4int index) const
   // Returns the constant material property corresponding to an index
   // fatal exception if property not found
 
-  if(index < (G4int) fMCP.size() && fMCP[index].second == true)
+  if(index < (G4int) fMCP.size() && fMCP[index].second)
+  {
     return fMCP[index].first;
+  }
   G4ExceptionDescription ed;
   ed << "Constant Material Property Index " << index << " not found.";
   G4Exception("G4MaterialPropertiesTable::GetConstProperty()", "mat202",
@@ -232,11 +238,7 @@ G4bool G4MaterialPropertiesTable::ConstPropertyExists(const G4int index) const
 {
   // Returns true if a const property corresponding to 'index' exists
 
-  if(index >= 0 && index < (G4int) fMCP.size() && fMCP[index].second == true)
-  {
-    return true;
-  }
-  return false;
+  return index >= 0 && index < (G4int) fMCP.size() && fMCP[index].second;
 }
 
 G4bool G4MaterialPropertiesTable::ConstPropertyExists(const G4String& key) const
@@ -245,8 +247,10 @@ G4bool G4MaterialPropertiesTable::ConstPropertyExists(const G4String& key) const
   size_t index = std::distance(
     fMatConstPropNames.begin(),
     std::find(fMatConstPropNames.begin(), fMatConstPropNames.end(), key));
-  if(index < fMatConstPropNames.size()) // index is type size_t so >= 0
+  if(index < fMatConstPropNames.size())
+  {  // index is type size_t so >= 0
     return ConstPropertyExists(index);
+  }
   return false;
 }
 
@@ -255,8 +259,10 @@ G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char* key) const
   size_t index = std::distance(
     fMatConstPropNames.begin(),
     std::find(fMatConstPropNames.begin(), fMatConstPropNames.end(), key));
-  if(index < fMatConstPropNames.size()) // index is type size_t so >= 0
+  if(index < fMatConstPropNames.size())
+  {  // index is type size_t so >= 0
     return ConstPropertyExists(index);
+  }
   return false;
 }
 
@@ -291,7 +297,9 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(
   // Returns a Material Property Vector corresponding to an index
   // returns nullptr if the property has not been defined by user
   if(index >= 0 && index < (G4int) fMP.size())
+  {
     return fMP[index];
+  }
   return nullptr;
 }
 
@@ -306,6 +314,19 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
     ed << "AddProperty error!";
     G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat204",
                 FatalException, ed);
+  }
+
+  // G4PhysicsVector assumes energies are in increasing order
+  for (size_t i = 0; i < photonEnergies.size() - 1; ++i)
+  {
+    if(photonEnergies.at(i+1) < photonEnergies.at(i))
+    {
+      G4ExceptionDescription ed;
+      ed << "Energies in material property table must be in increasing "
+         << "order. Key: " << key << " Energy: " << photonEnergies.at(i+1);
+      G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat215",
+                  FatalException, ed);
+    }
   }
 
   // if the key doesn't exist, add it if requested
@@ -328,7 +349,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
     }
   }
 
-  G4MaterialPropertyVector* mpv =
+  auto* mpv =
     new G4MaterialPropertyVector(photonEnergies, propertyValues, spline);
   mpv->SetVerboseLevel(1);
   if(spline)
@@ -368,6 +389,23 @@ void G4MaterialPropertiesTable::AddProperty(const G4String& key,
 {
   //  Provides a way of adding a property to the Material Properties
   //  Table given an G4MaterialPropertyVector Reference and a key
+
+  // G4PhysicsVector assumes energies are in increasing order
+  // An MPV with size==0 or 1 is also ok
+  if (mpv->GetVectorLength() > 1) {
+    for (size_t i = 0; i < mpv->GetVectorLength() - 1; ++i)
+    {
+      if(mpv->Energy(i+1) < mpv->Energy(i))
+      {
+        G4ExceptionDescription ed;
+        ed << "Energies in material property vector must be in increasing "
+           << "order. Key: " << key << " Energy: " << mpv->Energy(i+1);
+        G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat216",
+                    FatalException, ed);
+      }
+    }
+  }
+
   // if the key doesn't exist, add it
   if(std::find(fMatPropNames.begin(), fMatPropNames.end(), key) ==
      fMatPropNames.end())
@@ -426,7 +464,7 @@ void G4MaterialPropertiesTable::AddConstProperty(const G4String& key,
     if(createNewKey)
     {
       fMatConstPropNames.push_back(key);
-      fMCP.push_back(std::pair<G4double, G4bool>{ 0., true });
+      fMCP.emplace_back(0., true);
     }
     else
     {
@@ -456,7 +494,9 @@ void G4MaterialPropertiesTable::RemoveConstProperty(const G4String& key)
 {
   G4int index = GetConstPropertyIndex(key);
   if(index < (G4int) fMCP.size())
+  {
     fMCP[index] = std::pair<G4double, G4bool>{ 0., false };
+  }
 }
 
 void G4MaterialPropertiesTable::RemoveConstProperty(const char* key)
@@ -481,7 +521,7 @@ void G4MaterialPropertiesTable::AddEntry(const G4String& key,
                                          G4double aPropertyValue)
 {
   // Allows to add an entry pair directly to the Material Property Vector
-  // given a key
+  // given a key.
   if(std::find(fMatPropNames.begin(), fMatPropNames.end(), key) ==
      fMatPropNames.end())
   {
@@ -493,6 +533,19 @@ void G4MaterialPropertiesTable::AddEntry(const G4String& key,
   G4MaterialPropertyVector* targetVector = fMP[index];
   if(targetVector != nullptr)
   {
+    // do not allow duplicate energies
+    for (size_t i = 0; i < targetVector->GetVectorLength(); ++i)
+    {
+      if(aPhotonEnergy == targetVector->Energy(i))
+      {
+        G4ExceptionDescription ed;
+        ed << "Energy values in material property vector must be unique. "
+           << "Key: " << key;
+        G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat217",
+                    FatalException, ed);
+      }
+    }
+
     targetVector->InsertValues(aPhotonEnergy, aPropertyValue);
   }
   else
@@ -530,7 +583,7 @@ void G4MaterialPropertiesTable::DumpTable() const
   j = 0;
   for(const auto& cprop : fMCP)
   {
-    if(cprop.second == true)
+    if(cprop.second)
     {
       G4cout << j << ": " << fMatConstPropNames[j] << " " << cprop.first
              << G4endl;
@@ -565,7 +618,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::CalculateGROUPVEL()
   }
 
   // add GROUPVEL vector
-  G4MaterialPropertyVector* groupvel = new G4MaterialPropertyVector();
+  auto* groupvel = new G4MaterialPropertyVector();
   groupvel->SetVerboseLevel(1);
 
   // fill GROUPVEL vector using RINDEX values

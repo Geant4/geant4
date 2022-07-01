@@ -147,6 +147,12 @@ void G4GlobalFastSimulationManager::InActivateFastSimulationModel(const G4String
   G4cout << G4endl;
 }
 
+void G4GlobalFastSimulationManager::Flush()
+{
+  // loop over all models (that need flushing?) and flush
+  for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+    ManagedManagers[ifsm]->FlushModels();
+}
 
 // ---------------------------------
 // -- display fast simulation setup:

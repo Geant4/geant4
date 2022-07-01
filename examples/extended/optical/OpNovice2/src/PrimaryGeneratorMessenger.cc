@@ -50,8 +50,7 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
 
   fPolarCmd =
     new G4UIcmdWithADoubleAndUnit("/opnovice2/gun/optPhotonPolar", this);
-  fPolarCmd->SetGuidance("Set linear polarization");
-  fPolarCmd->SetGuidance("  angle w.r.t. (k,n) plane");
+  fPolarCmd->SetGuidance("Set linear polarization angle w.r.t. (k,n) plane");
   fPolarCmd->SetParameterName("angle", true);
   fPolarCmd->SetUnitCategory("Angle");
   fPolarCmd->SetDefaultValue(-360.0);
@@ -60,6 +59,9 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
 
   fRandomDirectionCmd =
     new G4UIcmdWithABool("/opnovice2/gun/randomDirection", this);
+  fRandomDirectionCmd->SetGuidance(
+    "Set direction of each primary particle randomly.");
+  fRandomDirectionCmd->SetDefaultValue(true);
   fRandomDirectionCmd->AvailableForStates(G4State_Idle, G4State_PreInit);
 }
 

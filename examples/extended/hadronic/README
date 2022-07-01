@@ -99,3 +99,12 @@ NeutronSource is an example of neutrons production. It illustrates the cooperati
 of nuclear reactions and radioactive decay processes.
 It survey energy deposition and particle's flux.
 It uses PhysicsConstructor objects.
+
+ParticleFluence
+---------------
+This example aims to monitor the particle fluence for various particle types
+and set-ups. The particle fluence at a given position is defined as the
+average number of particles crossing a unit surface in that position
+(normalized per one incident primary). The particle fluence is conveniently
+estimated by summing the particles' track lengths in a thin scoring volume
+and dividing for the cubic volume of such a scoring volume.

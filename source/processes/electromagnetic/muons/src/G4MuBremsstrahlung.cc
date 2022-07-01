@@ -74,7 +74,7 @@ using namespace std;
 
 G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
   : G4VEnergyLossProcess(name),
-    lowestKinEnergy(1.*CLHEP::GeV)
+    lowestKinEnergy(0.1*CLHEP::GeV)
 {
   SetProcessSubType(fBremsstrahlung);
   SetSecondaryParticle(G4Gamma::Gamma());

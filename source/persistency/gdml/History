@@ -1,36 +1,32 @@
--------------------------------------------------------------------
+# Category gdml History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2022-04-04 Sergio Losilla (gdml-V11-00-04)
+- Changed default temperature to 20 Â°C (followup to commit ba61d0).
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
-
-04 April 2022 S. Losilla (gdml-V10-07-16)
-- Changed default temperature to 20 °C (followup to commit ba61d0).
-
-14 March 2022 W. Pokorski
+## 2022-03-14 W. Pokorski (gdml-V11-00-03)
 - Removed a forgotten (used for debugging) cout in G4GDMLReadSolids::PropertyRead.
 
-5 March 2022 M. Asai
+## 2022-03-05 M. Asai (gdml-V11-00-02)
 - G4GDMLReadSolids, G4GDMLReadStructure:
   Use original find methods in G4SolidStore, G4LogicalVolumeStore and
   G4PhysicalVolumeStore to simplify the code.
+  Co-working with geommng-V11-00-03.
 
-16 February 2022 M. Asai
+## 2022-02-16 M. Asai (gdml-V11-00-01)
 - G4GDMLParser, G4GDMLReadDefine, G4GDMLReadSolids, G4GDMLReadStructure:
   Addressing to the case of solid/volune name duplication when reading
   more than one gdml files.
+
+## 2021-12-10 Ben Morgan (gdml-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 05 November 2021 G. Cosmo (gdml-V10-07-15)
 - G4GDMLParser: issue notification warning in ImportRegions() in case

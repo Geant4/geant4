@@ -1,18 +1,31 @@
--------------------------------------------------------------------
+# Category hadr-man History
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-            History file for hadronic/management directory
-            ----------------------------------------------
+## 2022-06-16 Alberto Ribon (hadr-man-V11-00-03)
+- G4HadronicProcess: temporary check and protection against the crashes
+  that have been seen recently with neutronHP; when a secondary particle
+  has a huge kinetic energy (i.e. higher than the max energy allowed in
+  Geant4 hadronic physics - by default 100 TeV), a JustWarning is thrown
+  and the particle is neglected (i.e. a corresponding G4Track object is
+  not created).
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-05-25 Alberto Ribon (hadr-man-V11-00-02)
+- G4HadronicProcess: propagate the information on parent resonance
+  (in the FillResults method, from G4HadSecondary to G4Track)
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2022-05-14 Vladimir Ivanchenko (hadr-man-V11-00-01)
+- G4HadronicProcess - implemented integral method
+- G4HadXSTypes, G4HadXSHelper - new helper objects 
+
+## 2021-12-10 Ben Morgan (hadr-man-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 16 November 2021 V. Ivanchenko (hadr-man-V10-07-10)
 ---------------------------------------------------

@@ -28,15 +28,15 @@ inline bool get_env(const std::string& a_string,std::string& a_value){
 
 template <class T>
 inline bool get_env(const std::string& a_string,T& a_v,const T& a_def = T()){
-  std::string s;
-  if(!get_env(a_string,s)) {a_v = a_def;return false;}
-  return to<T>(s,a_v,a_def);
+  std::string _s;
+  if(!get_env(a_string,_s)) {a_v = a_def;return false;}
+  return to<T>(_s,a_v,a_def);
 }
 
 inline bool get_env_bool(const std::string& a_string,bool& a_v){
-  std::string s;
-  if(!get_env(a_string,s)) return false;
-  return to(s,a_v);
+  std::string _s;
+  if(!get_env(a_string,_s)) return false;
+  return to(_s,a_v);
 }
 
 }

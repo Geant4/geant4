@@ -164,7 +164,7 @@ inline void G4eBremParametrizedModel::SetCurrentElement(const G4double Z)
   if(Z != currentZ) {
     currentZ = Z;
 
-    G4int iz = G4int(Z);
+    G4int iz = G4lrint(Z);
     z13 = nist->GetZ13(iz);
     z23 = z13*z13;
     lnZ = nist->GetLOGZ(iz);

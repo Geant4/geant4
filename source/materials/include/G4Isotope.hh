@@ -64,7 +64,7 @@
 #include <vector>
 
 class G4Isotope;
-typedef std::vector<G4Isotope*> G4IsotopeTable;
+using G4IsotopeTable = std::vector<G4Isotope*>;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

@@ -95,7 +95,7 @@ public:
                    const G4Region* r = nullptr);
   inline G4double GetDEDX(G4double kinEnergy, const G4String& part, 
 		   const G4String& mat,
-                   const G4String& s = "world");
+                   const G4String& regname = "world");
 
   G4double GetRangeFromRestricteDEDX(G4double kinEnergy, 
 				     const G4ParticleDefinition*, 
@@ -104,28 +104,28 @@ public:
   inline G4double GetRangeFromRestricteDEDX(G4double kinEnergy, 
 					    const G4String& part, 
 					    const G4String& mat,
-					    const G4String& s = "world");
+					    const G4String& regname = "world");
 
   G4double GetCSDARange(G4double kinEnergy, const G4ParticleDefinition*, 
 			const G4Material*,
 			const G4Region* r = nullptr);
   inline G4double GetCSDARange(G4double kinEnergy, const G4String& part, 
 			const G4String& mat,
-			const G4String& s = "world");
+			const G4String& regname = "world");
 
   G4double GetRange(G4double kinEnergy, const G4ParticleDefinition*, 
 			const G4Material*,
 			const G4Region* r = nullptr);
   inline G4double GetRange(G4double kinEnergy, const G4String& part, 
 			const G4String& mat,
-			const G4String& s = "world");
+			const G4String& regname = "world");
 
   G4double GetKinEnergy(G4double range, const G4ParticleDefinition*, 
 			const G4Material*,
 			const G4Region* r = nullptr);
   inline G4double GetKinEnergy(G4double range, const G4String& part, 
 			const G4String& mat,
-			const G4String& s = "world");
+			const G4String& regname = "world");
 
   G4double GetCrossSectionPerVolume(
                    G4double kinEnergy, const G4ParticleDefinition*,
@@ -133,7 +133,7 @@ public:
 		   const G4Region* r = nullptr);
   inline G4double GetCrossSectionPerVolume(
                    G4double kinEnergy, const G4String& part, const G4String& proc,
-                   const G4String& mat, const G4String& s = "world");
+                   const G4String& mat, const G4String& regname = "world");
 
   G4double GetShellIonisationCrossSectionPerAtom(
                    const G4String& part, G4int Z, 
@@ -145,7 +145,7 @@ public:
 			   const G4Region* r = nullptr);
   inline G4double GetMeanFreePath(G4double kinEnergy, const G4String& part, 
 				  const G4String& proc, const G4String& mat, 
-				  const G4String& s = "world");
+				  const G4String& regname = "world");
 
   void PrintDEDXTable(const G4ParticleDefinition*);
 

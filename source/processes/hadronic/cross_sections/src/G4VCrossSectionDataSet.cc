@@ -79,8 +79,8 @@ G4VCrossSectionDataSet::IsIsoApplicable(const G4DynamicParticle*,
 
 G4double 
 G4VCrossSectionDataSet::ComputeCrossSection(const G4DynamicParticle* part, 
-					    const G4Element* elm,
-					    const G4Material* mat)
+                                            const G4Element* elm,
+                                            const G4Material* mat)
 {
   G4int Z = elm->GetZasInt();
 
@@ -98,7 +98,6 @@ G4VCrossSectionDataSet::ComputeCrossSection(const G4DynamicParticle* part,
   // user-defined isotope abundances        
   const G4IsotopeVector* isoVector = elm->GetIsotopeVector();
   const G4double* abundVector = elm->GetRelativeAbundanceVector();
-
   for (size_t j=0; j<nIso; ++j) {
     const G4Isotope* iso = (*isoVector)[j];
     G4int A = iso->GetN();

@@ -1,17 +1,23 @@
 # - G4geometry category builds
-
-# Add (private) allocation export symbol
 add_definitions(-DG4GEOM_ALLOC_EXPORT)
 
-# Compose library from subcategories
-geant4_global_library_target(NAME G4geometry
-  COMPONENTS
-    biasing/sources.cmake
-    divisions/sources.cmake
-    magneticfield/sources.cmake
-    management/sources.cmake
-    navigation/sources.cmake
-    solids/Boolean/sources.cmake
-    solids/CSG/sources.cmake
-    solids/specific/sources.cmake
-    volumes/sources.cmake)
+include(biasing/sources.cmake)
+include(divisions/sources.cmake)
+include(magneticfield/sources.cmake)
+include(management/sources.cmake)
+include(navigation/sources.cmake)
+include(solids/Boolean/sources.cmake)
+include(solids/CSG/sources.cmake)
+include(solids/specific/sources.cmake)
+include(volumes/sources.cmake)
+
+geant4_add_category(G4geometry MODULES
+  G4geombias
+  G4geomdivision
+  G4magneticfield
+  G4geometrymng
+  G4navigation
+  G4geomBoolean
+  G4csg
+  G4specsolids
+  G4volumes)

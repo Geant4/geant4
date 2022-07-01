@@ -233,7 +233,7 @@ void G4ShellData::LoadData(const G4String& fileName)
   // G4cout << fileName << G4endl;
   G4String name(ost.str());
   
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4ShellData::LoadData()");

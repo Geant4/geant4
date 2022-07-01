@@ -1,0 +1,47 @@
+#  examplePar04_lwtnn.mac
+#
+# Detector Construction
+/Par04/detector/setDetectorInnerRadius 80 cm
+/Par04/detector/setDetectorLength 2 m
+/Par04/detector/setNbOfLayers 90
+/Par04/detector/setAbsorber 0 G4_W 1.4 mm true
+/Par04/detector/setAbsorber 1 G4_Si 0.3 mm true
+## 2.325 mm of tungsten =~ 0.25 * 9.327 mm = 0.25 * R_Moliere
+/Par04/mesh/setSizeOfRhoCells 2.325 mm
+## 2 * 1.4 mm of tungsten =~ 0.65 X_0
+/Par04/mesh/setSizeOfZCells 3.4 mm
+/Par04/mesh/setNbOfRhoCells 18
+/Par04/mesh/setNbOfPhiCells 50
+/Par04/mesh/setNbOfZCells 45
+
+# Initialize
+/run/initialize
+
+/gun/energy 10 GeV
+/gun/position 0 0 0
+/gun/direction 0 1 0
+
+# Inference Setup
+## dimension of the latent vector (encoded vector in a Variational Autoencoder model)
+/Par04/inference/setSizeLatentVector 10
+## size of the condition vector (energy, angle and geometry)
+/Par04/inference/setSizeConditionVector 4
+## path to the model which is set to download by cmake
+/Par04/inference/setModelPathName MLModels/Generator.json
+/Par04/inference/setInferenceLibrary LWTNN
+## set mesh size for inference == mesh size of a full sim that
+## was used for training; it coincides with readout mesh size
+/Par04/inference/setSizeOfRhoCells 2.325 mm
+/Par04/inference/setSizeOfZCells 3.4 mm
+/Par04/inference/setNbOfRhoCells 18
+/Par04/inference/setNbOfPhiCells 50
+/Par04/inference/setNbOfZCells 45
+
+# Fast Simulation
+/analysis/setFileName 10GeV_100events_fastsim_lwtnn.root
+## dynamically set readout mesh from particle direction
+## needs to be the first fast sim model!
+/param/ActivateModel defineMesh
+## ML fast sim, configured with the inference setup /Par04/inference
+/param/ActivateModel inferenceModel
+/run/beamOn 100

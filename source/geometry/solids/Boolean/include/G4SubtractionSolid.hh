@@ -45,7 +45,7 @@
 
 class G4SubtractionSolid : public G4BooleanSolid
 {
-  public:  // with description
+  public:
 
     G4SubtractionSolid(  const G4String& pName,
                                G4VSolid* pSolidA ,
@@ -67,8 +67,6 @@ class G4SubtractionSolid : public G4BooleanSolid
     G4GeometryType  GetEntityType() const ;
 
     G4VSolid* Clone() const;
-
-  public:  // without description
 
     G4SubtractionSolid(__void__&);
       // Fake default constructor for usage restricted to direct object

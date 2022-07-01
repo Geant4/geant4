@@ -435,6 +435,24 @@ G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
               "Method not applicable in this context!");
 }
 
+//////////////////////////////////////////////////////////////
+//
+// Return volume
+
+G4double G4DisplacedSolid::GetCubicVolume()
+{
+  return fPtrSolid->GetCubicVolume();
+}
+
+//////////////////////////////////////////////////////////////
+//
+// Return surface area
+
+G4double G4DisplacedSolid::GetSurfaceArea()
+{
+  return fPtrSolid->GetSurfaceArea();
+}
+
 //////////////////////////////////////////////////////////////////////////
 //
 // Returns a point (G4ThreeVector) randomly and uniformly selected

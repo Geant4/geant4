@@ -1,0 +1,110 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_sg_gl
+#define toolx_sg_gl
+
+#include "../OpenGL"
+
+#include <tools/platform> //for APPLE TargetConditionals.h
+#include <tools/img>
+
+#include <ostream>
+
+namespace toolx {
+namespace sg {
+//namespace gl : no, problem with g4tools.
+
+inline void gl_clear_errors() {
+  GLenum glerror = ::glGetError();
+  while(glerror!=GL_NO_ERROR) {
+    glerror = ::glGetError();
+  }
+}
+
+inline bool gl_dump_if_errors(std::ostream& a_out,const std::string& a_head) {
+  bool retval = false;
+  GLenum glerror = ::glGetError();
+  if(glerror!=GL_NO_ERROR) {
+    a_out << a_head
+          << " we have gl errors :"
+          << std::endl;
+    retval = true;
+  }
+  while(glerror!=GL_NO_ERROR) {
+    //#define GL_NO_ERROR                       0
+    //#define GL_INVALID_ENUM                   0x0500
+    //#define GL_INVALID_VALUE                  0x0501
+    //#define GL_INVALID_OPERATION              0x0502
+    //#define GL_STACK_OVERFLOW                 0x0503
+    //#define GL_STACK_UNDERFLOW                0x0504
+    //#define GL_OUT_OF_MEMORY                  0x0505
+
+    //#define GL_INVALID_FRAMEBUFFER_OPERATION  0x0506
+
+    a_out << "0x" << std::hex << glerror << std::endl;
+
+    glerror = ::glGetError();
+  }
+  return retval;
+}
+
+inline void gl_dump_infos(std::ostream& a_out) {
+    std::string gl_version;
+   {const char* _sv = (const char*)::glGetString(GL_VERSION);
+    if(_sv) gl_version = _sv;}
+
+    std::string gl_vendor;
+   {const char* _sv = (const char*)::glGetString(GL_VENDOR);
+    if(_sv) gl_vendor = _sv;}
+
+    std::string gl_renderer;
+   {const char* _sv = (const char*)::glGetString(GL_RENDERER);
+    if(_sv) gl_renderer = _sv;}
+
+    std::string gl_extensions;
+   {const char* _sv = (const char*)::glGetString(GL_EXTENSIONS);
+    if(_sv) gl_extensions = _sv;}
+
+    GLint gl_texture_size;
+    ::glGetIntegerv(GL_MAX_TEXTURE_SIZE, &gl_texture_size);
+
+    //GLint gl_buffer_size;
+    //::glGetIntegerv(GL_BUFFER_SIZE, &gl_buffer_size);
+
+    a_out << "toolx::sg::gl::dump_infos :" << std::endl;
+    a_out << " GL_VERSION " << gl_version << std::endl;
+    a_out << " GL_VENDOR " << gl_vendor << std::endl;
+    a_out << " GL_RENDERER " << gl_renderer << std::endl;
+    a_out << " GL_EXTENSIONS " << gl_extensions << std::endl;
+    a_out << " GL_MAX_TEXTURE_SIZE " << gl_texture_size << std::endl;
+    //a_out << " GL_BUFFER_SIZE " << gl_buffer_size << std::endl;
+}
+
+inline bool gl_tex_img(std::ostream& a_out,const tools::img_byte& a_img) {
+    if(a_img.bpp()==1) {
+      //to pass eiffel-tower.png
+#if defined(ANDROID) || TARGET_OS_IPHONE
+      tools::img_byte res;
+      if(!a_img.bw2x(3,res)) {
+        a_out << "toolx::sg::gl::tex_img : toolx::img.bw2x() failed." << std::endl;
+        return false;
+      }
+      ::glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,res.width(),res.height(),0,GL_RGB,GL_UNSIGNED_BYTE,res.buffer());
+#else
+      ::glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,a_img.width(),a_img.height(),0,GL_LUMINANCE,GL_UNSIGNED_BYTE,a_img.buffer());
+#endif
+    } else if(a_img.bpp()==3) {
+      ::glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,a_img.width(),a_img.height(),0,GL_RGB,GL_UNSIGNED_BYTE,a_img.buffer());
+    } else if(a_img.bpp()==4) {
+      ::glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,a_img.width(),a_img.height(),0,GL_RGBA,GL_UNSIGNED_BYTE,a_img.buffer());
+    } else {
+      a_out << "toolx::sg::gl::tex_img : img.bpp() " << a_img.bpp() << " not treated." << std::endl;
+      return false;
+    }
+    return true;
+}
+
+}}
+
+#endif

@@ -40,10 +40,6 @@ G4Allocator<G4Event>*& anEventAllocator()
   return _instance;
 }
 
-G4Event::G4Event()
-{
-}
-
 G4Event::G4Event(G4int evID)
   : eventID(evID)
 {
@@ -92,7 +88,7 @@ void G4Event::Draw() const
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager == nullptr) return;
 
-  if(trajectoryContainer)
+  if(trajectoryContainer != nullptr)
   {
     G4int n_traj = trajectoryContainer->entries();
     for(G4int i=0; i<n_traj; ++i)
@@ -115,7 +111,7 @@ void G4Event::Draw() const
     for(G4int j=0; j<n_DC; ++j)
     {
       G4VDigiCollection* VDC = DC->GetDC(j);
-      if(VDC) VDC->DrawAllDigi();
+      if(VDC != nullptr) VDC->DrawAllDigi();
     }
   }
 }

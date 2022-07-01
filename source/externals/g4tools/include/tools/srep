@@ -66,9 +66,9 @@ inline void toxml(std::string& a_string){
 }
 
 inline std::string to_xml(const std::string& a_string){
-  std::string s = a_string;
-  toxml(s);
-  return s;
+  std::string _s = a_string;
+  toxml(_s);
+  return _s;
 }
 
 inline void to_win(std::string& a_string) {

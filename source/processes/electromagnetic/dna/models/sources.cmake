@@ -23,7 +23,6 @@ geant4_add_module(G4emdna-models
     G4DNAELSEPAElasticModel.hh
     G4DNAIonElasticModel.hh
     G4DNAIRT.hh
-    G4DNAIRT_geometries.hh
     G4DNAIRTMoleculeEncounterStepper.hh
     G4DNAMeltonAttachmentModel.hh
     G4DNAMillerGreenExcitationModel.hh
@@ -67,13 +66,14 @@ geant4_add_module(G4emdna-models
     G4DNAIndependentReactionTimeModel.hh
     G4DNAIndependentReactionTimeStepper.hh
     G4DNAMakeReaction.hh
-    G4DNAPartiallyDiffusionControlled.hh
-    G4DNATotallyDiffusionControlled.hh
     G4DNAUpdateSystemModel.hh
     G4DNAGillespieDirectMethod.hh
     G4VUpdateSystemModel.hh
     G4DNAUpdateSystemModel.hh
     G4DNAEventScheduler.hh
+    G4DNARPWBAExcitationModel.hh
+    G4DNARPWBAIonisationModel.hh
+    G4VDNAHitModel.hh
   SOURCES
     G4DNABornAngle.cc
     G4DNABornExcitationModel1.cc
@@ -93,7 +93,6 @@ geant4_add_module(G4emdna-models
     G4DNAEmfietzoglouIonisationModel.cc
     G4DNAIonElasticModel.cc
     G4DNAIRT.cc
-    G4DNAIRT_geometries.cc
     G4DNAIRTMoleculeEncounterStepper.cc
     G4DNAMeltonAttachmentModel.cc
     G4DNAMillerGreenExcitationModel.cc
@@ -136,12 +135,13 @@ geant4_add_module(G4emdna-models
     G4DNAIndependentReactionTimeModel.cc
     G4DNAIndependentReactionTimeStepper.cc
     G4DNAMakeReaction.cc
-    G4DNAPartiallyDiffusionControlled.cc
-    G4DNATotallyDiffusionControlled.cc
     G4DNAUpdateSystemModel.cc
     G4DNAGillespieDirectMethod.cc
     G4DNAUpdateSystemModel.cc
-    G4DNAEventScheduler.cc)
+    G4DNAEventScheduler.cc
+    G4DNARPWBAExcitationModel.cc
+    G4DNARPWBAIonisationModel.cc
+    G4VDNAHitModel.cc)
 
 geant4_module_link_libraries(G4emdna-models
   PUBLIC

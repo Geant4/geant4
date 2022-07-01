@@ -42,7 +42,7 @@ class G4StatDouble
  public:
   G4StatDouble();
   G4StatDouble(G4double);
-  virtual ~G4StatDouble();
+  virtual ~G4StatDouble() = default;
 
   G4StatDouble(const G4StatDouble&) = default;
 

@@ -1,0 +1,151 @@
+#
+# ------ GNU/LINUX ------         Intel OneAPI DPC++ 2022.x and higher
+#
+ifeq ($(G4SYSTEM),Linux-icx)
+  CXX       := icpx
+  CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
+  CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
+  CXXFLAGS  += -fp-model precise
+  CPPFLAGS  += -std=c++17
+  CXXFLAGS  += -std=c++17
+  G4USE_STD17 := 1
+  ifdef G4MULTITHREADED
+    CXXFLAGS += -ftls-model=initial-exec -pthread
+  endif
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -O3
+    FCFLAGS   := -O3
+    CCFLAGS   := -O3
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  += -g
+      FCFLAGS   := -g
+      CCFLAGS   := -g
+    endif
+  endif
+  ifdef G4PROFILE
+    CXXFLAGS  += -qp
+    FCFLAGS   += -qp
+    CCFLAGS   += -pg
+  endif
+  ifdef G4LIB_BUILD_SHARED
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
+  endif
+  G4RUNPATHOPTION := -Wl,-rpath -Wl,
+  G4STATIC_MODE += -Wl,--whole-archive
+  G4NOSTATIC_MODE += -Wl,--no-whole-archive
+  CC := icx
+  FC := ifx
+  FCFLAGS += -noautomatic -assume nobscc -assume no2underscores
+  FCLIBS := -lg2c -lnsl
+  AR := ar r
+  ECHO    := /bin/echo -e
+  SHEXT   := so
+  LOADLIBS += -limf
+  ifndef X11FLAGS
+    X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  endif
+  ifndef X11LIBS
+    X11LIBS   := -L/usr/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
+  endif
+  ifndef XMFLAGS
+    XMFLAGS   := -I/usr/include
+  endif
+  ifndef XMLIBS
+    XMLIBS    := -lXm -lXpm
+  endif
+  ifndef XAWFLAGS
+    XAWFLAGS   := -I/usr/include
+  endif
+  ifndef XAWLIBS
+    XAWLIBS    := -lXaw
+  endif
+  DLDLIBS   := -ldl
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLHOME
+    OGLHOME     := /usr
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGL
+  endif
+
+# ---- QT Setup block -------------------------------------------------------
+
+  ifndef QTHOME
+    QTHOME     := /usr
+  endif
+  ifndef QTMOC
+    QTMOC      := $(QTHOME)/bin/moc
+  endif
+
+  ifndef QT_VERSION
+    QT_VERSION := 5
+  endif
+
+  ifeq ($(QT_VERSION),5)
+    ifndef QTFLAGS              # Qt5
+      QTFLAGS   := -I $(QTHOME)/include -I$(QTHOME)/include/Qt
+      QTFLAGS   += -I $(QTHOME)/include/QtCore
+      QTFLAGS   += -I $(QTHOME)/include/QtGui
+      QTFLAGS   += -I $(QTHOME)/include/QtWidgets
+      QTFLAGS   += -I $(QTHOME)/include/QtOpenGL
+      QTFLAGS   += -I $(QTHOME)/include/Qt3DCore
+      QTFLAGS   += -I $(QTHOME)/include/Qt3DExtras
+      QTFLAGS   += -I $(QTHOME)/include/Qt3DRender
+      QTFLAGS   += -I $(QTHOME)/include/QtPrintSupport
+    endif
+  else                          # Qt4
+    ifndef QTFLAGS
+      QTFLAGS   := -I$(QTHOME)/include -I$(QTHOME)/include/Qt
+      QTFLAGS   += -I$(QTHOME)/include/QtCore 
+      QTFLAGS   += -I$(QTHOME)/include/QtGui 
+      QTFLAGS   += -I$(QTHOME)/include/QtOpenGL 
+    endif
+  endif
+  ifndef QTLIBPATH
+    QTLIBPATH := $(QTHOME)/lib
+    QT_SEARCH_LIB := $(shell ls  $(QTLIBPATH)/qt$(QT_VERSION)/libq* 2>/dev/null | wc -l )
+    ifneq ($(QT_SEARCH_LIB),0)
+      QTLIBPATH := $(QTHOME)/lib/qt$(QT_VERSION)
+    endif
+  endif
+  ifeq ($(QT_VERSION),5)
+    ifndef QTLIBS              # Qt5
+      QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt5PrintSupport
+    endif
+    ifndef QT3DLIBS
+      QT3DLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt53DCore -lQt53DExtras -lQt53DRender -lQt5PrintSupport
+    endif
+    ifndef GLQTLIBS
+      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL -lQt5PrintSupport
+    endif
+  else                         # Qt4
+    ifndef QTLIBS
+      QTLIBS   := -L$(QTLIBPATH) -lQtCore -lQtGui
+    endif
+    ifndef GLQTLIBS
+      GLQTLIBS := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtOpenGL
+    endif
+  endif
+
+#----------------------------------------------------------------------------
+
+  define build-granular-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMPDIR); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) *.o
+  endef
+  define build-global-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMP)/$(G4SYSTEM); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) \
+                    $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+  endef
+
+endif

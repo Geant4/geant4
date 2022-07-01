@@ -111,7 +111,7 @@ void G4LivermoreGammaConversionModel::Initialise(
     InitialiseElementSelectors(particle, cuts);
 
     // Access to elements
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     const G4ElementTable* elemTable = G4Element::GetElementTable();
     size_t numElems                 = (*elemTable).size();
     for(size_t ie = 0; ie < numElems; ++ie)
@@ -143,7 +143,7 @@ void G4LivermoreGammaConversionModel::ReadData(size_t Z, const char* path)
 
   if(datadir == nullptr)
   {
-    datadir = std::getenv("G4LEDATA");
+    datadir = G4FindDataDir("G4LEDATA");
     if(datadir == nullptr)
     {
       G4Exception("G4LivermoreGammaConversionModel::ReadData()",
@@ -152,11 +152,13 @@ void G4LivermoreGammaConversionModel::ReadData(size_t Z, const char* path)
       return;
     }
   }
-  data[Z] = new G4PhysicsFreeVector();
+
   std::ostringstream ost;
   if(G4EmParameters::Instance()->LivermoreDataDir() == "livermore"){
+    data[Z] = new G4PhysicsFreeVector(true);
     ost << datadir << "/livermore/pair/pp-cs-" << Z <<".dat";
   }else{
+    data[Z] = new G4PhysicsFreeVector();
     ost << datadir << "/epics2017/pair/pp-cs-" << Z <<".dat";
   }
 

@@ -41,6 +41,6 @@
 
 class G4Element;
 
-typedef std::vector<G4Element*> G4ElementTable;
+using G4ElementTable = std::vector<G4Element*>;
 
 #endif

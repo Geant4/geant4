@@ -46,7 +46,7 @@ class G4UIparameter
 {
   public:
 
-    G4UIparameter();
+    G4UIparameter() = default;
     G4UIparameter(char theType);
     G4UIparameter(const char* theName, char theType, G4bool theOmittable);
       // Constructors, where "theName" is the name of the parameter which will
@@ -144,23 +144,23 @@ class G4UIparameter
     G4int IsDouble(const char* str);
     G4int ExpectExponent(const char* str);
     //  syntax nodes
-    yystype Expression(void);
-    yystype LogicalORExpression(void);
-    yystype LogicalANDExpression(void);
-    yystype EqualityExpression(void);
-    yystype RelationalExpression(void);
-    yystype AdditiveExpression(void);
-    yystype MultiplicativeExpression(void);
-    yystype UnaryExpression(void);
-    yystype PrimaryExpression(void);
+    yystype Expression();
+    yystype LogicalORExpression();
+    yystype LogicalANDExpression();
+    yystype EqualityExpression();
+    yystype RelationalExpression();
+    yystype AdditiveExpression();
+    yystype MultiplicativeExpression();
+    yystype UnaryExpression();
+    yystype PrimaryExpression();
     //  semantics routines
-    G4int Eval2(yystype arg1, G4int op, yystype arg2);
+    G4int Eval2(const yystype& arg1, G4int op, const yystype& arg2);
     G4int CompareInt(G4int arg1, G4int op, G4int arg2);
     G4int CompareLong(G4long arg1, G4int op, G4long arg2);
     G4int CompareDouble(double arg1, G4int op, double arg2);
     //  utility
-    tokenNum Yylex(void);        // returns next token
-    G4int G4UIpGetc(void);       // read one char from rangeBuf
+    tokenNum Yylex();            // returns next token
+    G4int G4UIpGetc();           // read one char from rangeBuf
     G4int G4UIpUngetc(G4int c);  // put back
     G4int Backslash(G4int c);
     G4int Follow(G4int expect, G4int ifyes, G4int ifno);

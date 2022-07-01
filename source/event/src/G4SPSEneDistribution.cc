@@ -100,10 +100,10 @@ G4SPSEneDistribution::~G4SPSEneDistribution()
   delete BBHist;
   delete CP_x;
   delete CPHist;
-  for ( auto it=SplineInt.begin() ; it!=SplineInt.end() ; ++it )
+  for (auto & it : SplineInt)
   {
-    delete *it;
-    *it = nullptr;
+    delete it;
+    it = nullptr;
   }
   SplineInt.clear();
 }
@@ -594,7 +594,7 @@ void G4SPSEneDistribution::LinearInterpolation()  // MT: Lock in caller
   // Points are now in x,y arrays. If the spectrum is integral it has to be
   // made differential and if momentum it has to be made energy
 
-  if (DiffSpec == false)
+  if (!DiffSpec)
   {
     // Converts integral point-wise spectra to Differential
     //
@@ -606,7 +606,7 @@ void G4SPSEneDistribution::LinearInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (EnergySpec == false)
+  if (!EnergySpec)
   {
     // change currently stored values (emin etc) which are actually momenta
     // to energies
@@ -737,7 +737,7 @@ void G4SPSEneDistribution::LogInterpolation()  // MT: Lock in caller
   // Points are now in x,y arrays. If the spectrum is integral it has to be
   // made differential and if momentum it has to be made energy
 
-  if (DiffSpec == false)
+  if (!DiffSpec)
   {
     // Converts integral point-wise spectra to Differential
     //
@@ -749,7 +749,7 @@ void G4SPSEneDistribution::LogInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (EnergySpec == false)
+  if (!EnergySpec)
   {
     // Change currently stored values (emin etc) which are actually momenta
     // to energies
@@ -783,8 +783,8 @@ void G4SPSEneDistribution::LogInterpolation()  // MT: Lock in caller
 
   i = 1;
 
-  if ( Arb_ezero ) { delete [] Arb_ezero; Arb_ezero = 0; }
-  if ( Arb_Const ) { delete [] Arb_Const; Arb_Const = 0; }
+  if ( Arb_ezero != nullptr ) { delete [] Arb_ezero; Arb_ezero = nullptr; }
+  if ( Arb_Const != nullptr ) { delete [] Arb_Const; Arb_Const = nullptr; }
   Arb_alpha = new G4double [1024];
   Arb_Const = new G4double [1024];
   Arb_alpha_Const_flag = true;
@@ -892,7 +892,7 @@ void G4SPSEneDistribution::ExpInterpolation()  // MT: Lock in caller
   // Points are now in x,y arrays. If the spectrum is integral it has to be
   // made differential and if momentum it has to be made energy
 
-  if (DiffSpec == false)
+  if (!DiffSpec)
   {
     // Converts integral point-wise spectra to Differential
     //
@@ -904,7 +904,7 @@ void G4SPSEneDistribution::ExpInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (EnergySpec == false)
+  if (!EnergySpec)
   {
     // Change currently stored values (emin etc) which are actually momenta
     // to energies
@@ -938,8 +938,8 @@ void G4SPSEneDistribution::ExpInterpolation()  // MT: Lock in caller
 
   i = 1;
 
-  if ( Arb_ezero ) { delete[] Arb_ezero; Arb_ezero = 0; }
-  if ( Arb_Const ) { delete[] Arb_Const; Arb_Const = 0; }
+  if ( Arb_ezero != nullptr ) { delete[] Arb_ezero; Arb_ezero = nullptr; }
+  if ( Arb_Const != nullptr ) { delete[] Arb_Const; Arb_Const = nullptr; }
   Arb_ezero = new G4double [1024];
   Arb_Const = new G4double [1024];
   Arb_ezero_flag = true;
@@ -1018,7 +1018,7 @@ void G4SPSEneDistribution::SplineInterpolation()  // MT: Lock in caller
   // Points are now in x,y arrays. If the spectrum is integral it has to be
   // made differential and if momentum it has to be made energy
 
-  if (DiffSpec == false)
+  if (!DiffSpec)
   {
     // Converts integral point-wise spectra to Differential
     //
@@ -1030,7 +1030,7 @@ void G4SPSEneDistribution::SplineInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (EnergySpec == false)
+  if (!EnergySpec)
   {
     // Change currently stored values (emin etc) which are actually momenta
     // to energies
@@ -1067,10 +1067,10 @@ void G4SPSEneDistribution::SplineInterpolation()  // MT: Lock in caller
   sum = 0.;
   Splinetemp = new G4DataInterpolation(Arb_x, Arb_y, maxi, 0., 0.);
   G4double ei[101], prob[101];
-  for ( auto it = SplineInt.begin(); it!=SplineInt.end() ; ++it)
+  for (auto & it : SplineInt)
   {
-    delete *it;
-    *it = 0;
+    delete it;
+    it = 0;
   }
   SplineInt.clear();
   SplineInt.resize(1024,nullptr);
@@ -1582,7 +1582,7 @@ void G4SPSEneDistribution::GenUserHistEnergies()
 
   G4AutoLock l(&mutex);
 
-  if (IPDFEnergyExist == false)
+  if (!IPDFEnergyExist)
   {
     G4int ii;
     G4int maxbin = G4int(UDefEnergyH.GetVectorLength());
@@ -1590,7 +1590,7 @@ void G4SPSEneDistribution::GenUserHistEnergies()
     for ( ii = 0 ; ii<1024 ; ++ii ) { bins[ii]=0; vals[ii]=0; }
     sum = 0.;
 
-    if ( (EnergySpec == false)
+    if ( (!EnergySpec)
       && (threadLocalData.Get().particle_definition == nullptr))
     {
       G4Exception("G4SPSEneDistribution::GenUserHistEnergies",
@@ -1606,7 +1606,7 @@ void G4SPSEneDistribution::GenUserHistEnergies()
       maxbin = 1024;
     }
 
-    if (DiffSpec == false)
+    if (!DiffSpec)
     {
       G4cout << "Histograms are Differential!!! " << G4endl;
     }
@@ -1623,7 +1623,7 @@ void G4SPSEneDistribution::GenUserHistEnergies()
       }
     }
 
-    if (EnergySpec == false)
+    if (!EnergySpec)
     {
       G4double mass = threadLocalData.Get().particle_definition->GetPDGMass();
 
@@ -1793,13 +1793,13 @@ void G4SPSEneDistribution::GenEpnHistEnergies()
 
   G4AutoLock l(&mutex);
 
-  if (Epnflag == true)  // true means spectrum is epn, false means e
+  if (Epnflag)  // true means spectrum is epn, false means e
   {
     // Convert to energy by multiplying by A number
     //
     ConvertEPNToEnergy();
   }
-  if (IPDFEnergyExist == false)
+  if (!IPDFEnergyExist)
   {
     // IPDF has not been created, so create it
     //

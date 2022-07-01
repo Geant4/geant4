@@ -175,9 +175,9 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
                            G4double ImaginaryRindex);
   // Returns the Reflectivity on a metalic surface
 
-  void CalculateReflectivity(void);
+  void CalculateReflectivity();
 
-  void BoundaryProcessVerbose(void) const;
+  void BoundaryProcessVerbose() const;
 
   // Invoke SD for post step point if the photon is 'detected'
   G4bool InvokeSD(const G4Step* step);
@@ -191,8 +191,8 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   G4ThreeVector fGlobalNormal;
   G4ThreeVector fFacetNormal;
 
-  G4Material* fMaterial1;
-  G4Material* fMaterial2;
+  const G4Material* fMaterial1;
+  const G4Material* fMaterial2;
 
   G4OpticalSurface* fOpticalSurface;
 

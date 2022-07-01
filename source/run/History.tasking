@@ -1,0 +1,157 @@
+# Category tasking History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2022-03-25 Ben Morgan (tasking-V11-00-04)
+- Functionality split into global/management (core Task interfaces) and
+  run (implementations). Category retired.
+
+## 2022-02-24 Makoto Asai (tasking-V11-00-03)
+- Adding verbosity control to some G4cout. Addressing to bug report #2397.
+
+## 2022-01-28 Ben Morgan (tasking-V11-00-02)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+- Make DLL export symbol a CMake module-level compile definition to aid
+  future modularization
+
+## 2022-01-03 Makoto Asai (tasking-V11-00-01)
+- Fixing number of seeds to be generated for the sedds from master are seeded
+  only once per task.
+
+## 2021-12-10 Ben Morgan (tasking-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
+September 10th, 2021 Gabriele Cosmo (tasking-V10-07-06)
+- Added new Ranlux++ engine to the list of supported random engines in
+  G4UserTaskThreadInitialization. Requires CLHEP-2.4.5.1.
+
+June 6th, 2021 Jonathan Madsen (tasking-V10-07-05)
+- Check for valid threadPool pointer in
+  G4TaskRunManager::RequestWorkersProcessCommandsStack()
+  (causes seg-fault when ui/viz inited but run not inited)
+
+May 24th, 2021 Jonathan Madsen (tasking-V10-07-04)
+- Update to PTL v2.0.0 (shared_ptr usage) included some minor API
+  changes to direct async usage
+
+May 17th, 2021 Jonathan Madsen (tasking-V10-07-03)
+- Fixes to TBB task-group usage
+
+Apr 21st, 2021 Jonathan Madsen (tasking-V10-07-02)
+- Fix for G4FORCENUMBEROFTHREADS env lookup
+
+Mar 30th, 2021 Makoto Asai (tasking-V10-07-01)
+- G4RunManagerFactory : Set default run manager type to Tasking for
+  release 11.0.
+
+Jan 25th, 2021 Makoto Asai (tasking-V10-07-00)
+- G4WorkerTaskRunManager.cc : Correct the way to count the number of events
+  processed in a worker thread. This correction also fixes a rare crash due to
+  accessing to the seed vector more than necessary.
+- G4TaskRunManager.cc : Reduce number of events per task to evenly distribute
+  evnets to all available threads.
+
+Nov 12th, 2020 Jonathan Madsen (tasking-V10-06-13)
+- Added G4Profiler support
+- Removed TIMEMORY_AUTO_TIMER
+
+Nov 12th, 2020, B. Morgan (tasking-V10-06-12)
+- G4RunManagerFactory : simplify logic of choosing type from function
+  inputs or environment. Provide new "SerialOnly"... entries for G4RunManagerType
+  to allow users to force use of a specific (but available) type.
+
+Nov 4th, 2020, M. Asai (tasking-V10-06-11)
+- G4TaskRunManager.cc : not resetting the run ID counter for the
+  run initialization except the first run.
+
+Oct 28th, 2020, M. Asai (tasking-V10-06-10)
+- G4RunManagerFactory : Set default run manager type to MT for
+  release 10.7.
+
+Oct 20th, 2020, J. Madsen (tasking-V10-06-09)
+- Implemented GetMasterRunManager in G4RunManagerFactory
+- Added DoCleanup() for worker task run managers
+- Replaced worker DoWork(int) with DoWork()
+- Resolved issues with G4Run number of events to be processed
+- Resolved issues with G4Run number of events processed
+
+Sept 23rd, 2020, B. Morgan (tasking-V10-06-08)
+- Remove no longer required include_directories
+
+Sept 21st, 2020 J. Madsen (tasking-V10-06-07)
+- Added checks for currentRun before calling routines with currentRun
+- updated docs using G4RunManagerCreator instead of G4RunManagerFactory
+- G4WorkerTaskRunManager: minor tweaks to ProcessUI
+- G4TaskRunManagerKernel: memory cleanup + initCmdStack
+- G4TaskRunManager:
+    - appears to fix previous issues with geometry changes
+    - inherited scoring-worlds, master-worlds, fMasterRM data from G4MTRunManager
+    - CreateAndStartWorkers processes command stack on second fakeRun
+    - cleaned up header
+
+Sept 12th, 2020, J. Madsen (tasking-V10-06-06)
+- Tasking stability fixes
+- removed a bunch of excess functions from G4WorkerTaskRunManager
+- Got rid of regular task group vs. TBB task group implementation
+  - this is thanks to the generic execute_on_all_threads function
+
+July 17th, 2020, I. Hrivnacova (tasking-V10-06-05)
+- Adding call to G4VScoreNtupleWriter in G4WorkerTaskRunManager,
+  which missing was causing a break in B4d basic example.
+
+June 22nd, 2020, G. Cosmo (tasking-V10-06-04)
+- Fixed recursive inclusion in G4TaskRunManager.
+
+June 18th, 2020, G. Cosmo (tasking-V10-06-03)
+- Added DLL macros for Windows build.
+- Fixed cases of static inline methods and static symbols to export
+  in G4TaskRunManager and G4RunManagerFactory. Some code cleanup for
+  use of G4 types.
+- Fixed compilation warnings for unused mutexes in G4TaskRunManager
+  and G4WorkerTaskRunManager.
+
+June 17th, 2020, G. Folger
+- Fixes for Windows: in G4TaskRunManager, replaced direct access to
+  static data by access functions.
+
+June 10th, 2020, J. Madsen
+- Updated README.md
+- generated README via `pandoc -f markdown -t plain -o README README.md`
+- generated .README.txt via `pandoc -f markdown -t latex -o .README.txt README.md`
+
+June 10th, 2020, J. Madsen (tasking-V10-06-02)
+- Fixed numberOfEventsPerTask < nworker reproducibility
+- Migrated G4RunManagerCreator to own header/source
+- cleaned up sources.cmake
+
+June 4th, 2020, J. Madsen (tasking-V10-06-01)
+- Added G4TaskRunManager constructor overload taking boolean
+  for whether to use TBB
+- Added warning if using TBB is requested but no compile support
+- Default arguments in G4TaskRunManager query G4USE_TBB environment
+  variable to set default bool
+
+May 28th, 2020, J. Madsen (tasking-V10-06-00)
+- Created
+- Added tasking classes:
+    - G4TBBTask
+    - G4TBBTaskGroup
+    - G4Task
+    - G4TaskGroup
+    - G4TaskManager
+    - G4TaskRunManager
+    - G4TaskRunManagerKernel
+    - G4ThreadPool
+    - G4UserTaskInitialization
+    - G4UserTaskQueue
+    - G4UserTaskThreadInitialization
+    - G4VTask
+    - G4VTaskGroup
+    - G4VUserTaskQueue

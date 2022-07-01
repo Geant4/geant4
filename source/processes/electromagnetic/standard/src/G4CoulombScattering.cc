@@ -71,8 +71,7 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4CoulombScattering::~G4CoulombScattering()
-{}
+G4CoulombScattering::~G4CoulombScattering() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

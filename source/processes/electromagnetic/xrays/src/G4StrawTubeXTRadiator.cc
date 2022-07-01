@@ -78,7 +78,7 @@ G4StrawTubeXTRadiator::G4StrawTubeXTRadiator(G4LogicalVolume* anEnvelope,
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4StrawTubeXTRadiator::~G4StrawTubeXTRadiator() {}
+G4StrawTubeXTRadiator::~G4StrawTubeXTRadiator() = default;
 
 void G4StrawTubeXTRadiator::ProcessDescription(std::ostream& out) const
 {

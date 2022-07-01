@@ -163,6 +163,7 @@ public:
   gl2ps_action(gl2ps_manager& a_mgr,std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
   :parent(a_out,a_ww,a_wh)
   ,m_mgr(a_mgr)
+  ,m_gl2ps_context(0)
   ,m_FILE(0)
   ,m_pv(get_me())
   ,m_light_color(colorf_white())
@@ -193,11 +194,14 @@ public:
     m_model.set_identity();
     m_normal_matrix.set_identity();
   }
-  virtual ~gl2ps_action(){}
+  virtual ~gl2ps_action(){
+    close();
+  }
 protected:
   gl2ps_action(const gl2ps_action& a_from)
   :parent(a_from)
   ,m_mgr(a_from.m_mgr)
+  ,m_gl2ps_context(0)
   ,m_FILE(0)
 
   ,m_vp_mtx(a_from.m_vp_mtx)
@@ -255,12 +259,23 @@ protected:
   }
 public:
   bool open(const std::string& a_name,int a_format = TOOLS_GL2PS_EPS) {
-    if(m_FILE) return false;
+    close();
+
+    m_gl2ps_context = ::tools_gl2psCreateContext();
+    if(!m_gl2ps_context) {
+      m_out << "tools::sg::gl2ps_action::open :"
+            << " can't create gl2ps context."
+            << std::endl;
+      return false;
+    }
+    
     m_FILE = ::fopen(a_name.c_str(),"w");
     if(!m_FILE) {
       m_out << "tools::sg::gl2ps_action::open :"
             << " can't open file " << a_name << "."
             << std::endl;
+      ::tools_gl2psDeleteContext(m_gl2ps_context);
+      m_gl2ps_context = 0;
       return false;
     }
 
@@ -279,12 +294,21 @@ public:
     vp[3] = m_wh;
 
     int bufsize = 0;
-    ::tools_gl2psBeginPage("","tools_sg_write_gl2ps",
+    if(::tools_gl2psBeginPage(m_gl2ps_context,"","tools_sg_write_gl2ps",
                      vp,a_format,sort,options,
                      TOOLS_GL_RGBA,0, NULL,0,0,0,bufsize,
-                     m_FILE,a_name.c_str());
-
-    ::tools_gl2psSetBackgroundColor(m_back[0],m_back[1],m_back[2]);
+                     m_FILE,a_name.c_str())==TOOLS_GL2PS_ERROR) {
+      m_out << "tools::sg::gl2ps_action::open :"
+            << " tools_gl2psBeginPage() failed."
+            << std::endl;
+      ::fclose(m_FILE);
+      m_FILE = 0;
+      ::tools_gl2psDeleteContext(m_gl2ps_context);
+      m_gl2ps_context = 0;
+      return false;
+    }
+    
+    ::tools_gl2psSetBackgroundColor(m_gl2ps_context,m_back[0],m_back[1],m_back[2]);
 
     m_vp_mtx.set_identity();
     m_vp_mtx.mul_translate(float(m_ww)/2,float(m_wh)/2,0);
@@ -294,10 +318,19 @@ public:
   }
 
   bool close() {
-    if(!m_FILE) return false;
-    ::tools_gl2psEndPage();
-    ::fclose(m_FILE);
-    m_FILE = 0;
+    tools_GLint _status = 0;
+    if(m_gl2ps_context) {
+      _status = ::tools_gl2psEndPage(m_gl2ps_context);
+    }
+    if(m_FILE) {
+      ::fclose(m_FILE);
+      m_FILE = 0;
+    }      
+    if(m_gl2ps_context) {
+      ::tools_gl2psDeleteContext(m_gl2ps_context);
+      m_gl2ps_context = 0;
+    }
+    if (_status == TOOLS_GL2PS_OVERFLOW) return false;
     return true;
   }
   void set_background(float a_r,float a_g,float a_b) {
@@ -349,6 +382,8 @@ protected:
       return m_this.project_point(a_x,a_y,a_z,a_w);
     }
     virtual bool add_point(float a_x,float a_y,float a_z,float) {
+      if(!m_this.m_gl2ps_context) return false;
+      
       float r = m_this.m_color[0];
       float g = m_this.m_color[1];
       float b = m_this.m_color[2];
@@ -369,13 +404,14 @@ protected:
       m_this.m_vp_mtx.mul_3f(a_x,a_y,a_z);
 
       m_this.set_vtx(vertices,0, a_x,a_y,a_z, r,g,b,a);
-
-      ::tools_gl2psAddPolyPrimitive(_GL2PS_POINT(),1,vertices,offset,ofactor,ounits,pattern,factor,sz,linecap,linejoin,boundary);
+      ::tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_POINT(),1,vertices,offset,ofactor,ounits,pattern,factor,sz,linecap,linejoin,boundary);
       return true;
     }
 
     virtual bool add_point(float a_x,float a_y,float a_z,float,
                            float a_r,float a_g,float a_b,float a_a) {
+      if(!m_this.m_gl2ps_context) return false;
+      
       tools_GLint offset = 0;
       tools_GLfloat ofactor = 0; //
       tools_GLfloat ounits = 0;  //
@@ -392,13 +428,15 @@ protected:
 
       m_this.set_vtx(vertices,0, a_x,a_y,a_z, a_r,a_g,a_b,a_a);
 
-      //::tools_gl2psAddPolyPrimitive(_GL2PS_POINT(),1,vertices,0,pattern,factor,sz,0);
-      ::tools_gl2psAddPolyPrimitive(_GL2PS_POINT(),1,vertices,offset,ofactor,ounits,pattern,factor,sz,linecap,linejoin,boundary);
+      //::tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_POINT(),1,vertices,0,pattern,factor,sz,0);
+      ::tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_POINT(),1,vertices,offset,ofactor,ounits,pattern,factor,sz,linecap,linejoin,boundary);
       return true;
     }
 
     virtual bool add_line(float a_bx,float a_by,float a_bz,float,
                           float a_ex,float a_ey,float a_ez,float) {
+      if(!m_this.m_gl2ps_context) return false;
+      
       float r = m_this.m_color[0];
       float g = m_this.m_color[1];
       float b = m_this.m_color[2];
@@ -422,8 +460,8 @@ protected:
       m_this.set_vtx(vertices,0, a_bx,a_by,a_bz, r,g,b,a);
       m_this.set_vtx(vertices,1, a_ex,a_ey,a_ez, r,g,b,a);
 
-      //::tools_gl2psAddPolyPrimitive(_GL2PS_LINE(),2,vertices,0,pattern,factor,lwidth,0);
-      ::tools_gl2psAddPolyPrimitive(_GL2PS_LINE(),2,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
+      //::tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_LINE(),2,vertices,0,pattern,factor,lwidth,0);
+      ::tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_LINE(),2,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
 
       return true;
     }
@@ -432,6 +470,7 @@ protected:
                           float a_br,float a_bg,float a_bb,float a_ba,
                           float a_ex,float a_ey,float a_ez,float,
                           float a_er,float a_eg,float a_eb,float a_ea){
+      if(!m_this.m_gl2ps_context) return false;
 
       tools_GLint offset = 0;
       tools_GLfloat ofactor = 0; //
@@ -451,8 +490,8 @@ protected:
       m_this.set_vtx(vertices,0, a_bx,a_by,a_bz, a_br,a_bg,a_bb,a_ba);
       m_this.set_vtx(vertices,1, a_ex,a_ey,a_ez, a_er,a_eg,a_eb,a_ea);
 
-      //tools_gl2psAddPolyPrimitive(_GL2PS_LINE(),2,vertices,0,pattern,factor,lwidth,0);
-      ::tools_gl2psAddPolyPrimitive(_GL2PS_LINE(),2,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
+      //tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_LINE(),2,vertices,0,pattern,factor,lwidth,0);
+      ::tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_LINE(),2,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
 
       return true;
     }
@@ -460,6 +499,8 @@ protected:
     virtual bool add_triangle(float a_p1x,float a_p1y,float a_p1z,float,
                               float a_p2x,float a_p2y,float a_p2z,float,
                               float a_p3x,float a_p3y,float a_p3z,float){
+      if(!m_this.m_gl2ps_context) return false;
+      
       float r = m_this.m_color[0];
       float g = m_this.m_color[1];
       float b = m_this.m_color[2];
@@ -485,8 +526,8 @@ protected:
       m_this.set_vtx(vertices,1, a_p2x,a_p2y,a_p2z, r,g,b,a);
       m_this.set_vtx(vertices,2, a_p3x,a_p3y,a_p3z, r,g,b,a);
 
-      //tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,0,pattern,factor,lwidth,0);
-      ::tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
+      //tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_TRIANGLE(),3,vertices,0,pattern,factor,lwidth,0);
+      ::tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_TRIANGLE(),3,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
 
       return true;
     }
@@ -499,6 +540,8 @@ protected:
       float a_p3x,float a_p3y,float a_p3z,float,
       float a_r3,float a_g3,float a_b3,float a_a3){
 
+      if(!m_this.m_gl2ps_context) return false;
+      
       tools_GLint offset = 0;
       tools_GLfloat ofactor = 0; //
       tools_GLfloat ounits = 0;  //
@@ -519,8 +562,8 @@ protected:
       m_this.set_vtx(vertices,1, a_p2x,a_p2y,a_p2z, a_r2,a_g2,a_b2,a_a2);
       m_this.set_vtx(vertices,2, a_p3x,a_p3y,a_p3z, a_r3,a_g3,a_b3,a_a3);
 
-      //tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,0,pattern,factor,lwidth,0);
-      ::tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
+      //tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_TRIANGLE(),3,vertices,0,pattern,factor,lwidth,0);
+      ::tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_TRIANGLE(),3,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
 
       return true;
     }
@@ -616,6 +659,8 @@ protected:
 
 protected:
   gl2ps_manager& m_mgr;
+  tools_GL2PScontext* m_gl2ps_context;
+
   FILE* m_FILE;
   float m_back[3];
   mat4f m_vp_mtx;

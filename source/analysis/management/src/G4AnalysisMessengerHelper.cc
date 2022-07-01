@@ -140,8 +140,22 @@ G4AnalysisMessengerHelper::CreateGetCommand(G4UImessenger* messenger) const
 
   std::unique_ptr<G4UIcommand> command(
     new G4UIcommand(Update("/analysis/HNTYPE_/get"), messenger));
-  command->SetGuidance(Update("Get the address of the NDIM_D LOBJECT of given id"));
+  command->SetGuidance(Update("Get the address of the NDIM_D LOBJECT of given id.\n"
+                              "This command is only for Geant4 internal use."));
   command->SetParameter(parId);
+  command->AvailableForStates(G4State_Idle, G4State_GeomClosed, G4State_EventProc);
+
+  return command;
+}
+
+//_____________________________________________________________________________
+std::unique_ptr<G4UIcommand>
+G4AnalysisMessengerHelper::CreateGetVectorCommand(G4UImessenger* messenger) const
+{
+  std::unique_ptr<G4UIcommand> command(
+    new G4UIcommand(Update("/analysis/HNTYPE_/getVector"), messenger));
+  command->SetGuidance(Update("Get the address of the NDIM_D LOBJECT vector.\n"
+                              "This command is only for Geant4 internal use."));
   command->AvailableForStates(G4State_Idle, G4State_GeomClosed, G4State_EventProc);
 
   return command;

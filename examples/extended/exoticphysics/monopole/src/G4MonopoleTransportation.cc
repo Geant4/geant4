@@ -416,6 +416,11 @@ G4VParticleChange* G4MonopoleTransportation::AlongStepDoIt(
 {
   ++noCalls;
 
+  if(fGeometryLimitedStep)
+  {
+    stepData.GetPostStepPoint()->SetStepStatus(fGeomBoundary);
+  }
+
   fParticleChange.Initialize(track) ;
 
   //  Code for specific process 
@@ -599,7 +604,7 @@ G4VParticleChange* G4MonopoleTransportation::PostStepDoIt( const G4Track& track,
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;
   const G4Material* pNewMaterial   = 0 ;
-  const G4VSensitiveDetector* pNewSensitiveDetector   = 0 ;
+  G4VSensitiveDetector* pNewSensitiveDetector = 0;
   if( pNewVol != 0 )
   {
     pNewMaterial= pNewVol->GetLogicalVolume()->GetMaterial();
@@ -607,12 +612,10 @@ G4VParticleChange* G4MonopoleTransportation::PostStepDoIt( const G4Track& track,
   }
 
   // ( <const_cast> pNewMaterial ) ;
-  // ( <const_cast> pNewSensitiveDetector) ;
 
   fParticleChange.SetMaterialInTouchable( 
                      (G4Material *) pNewMaterial ) ;
-  fParticleChange.SetSensitiveDetectorInTouchable( 
-                     (G4VSensitiveDetector *) pNewSensitiveDetector ) ;
+  fParticleChange.SetSensitiveDetectorInTouchable( pNewSensitiveDetector ) ;
 
   const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
   if( pNewVol != 0 )

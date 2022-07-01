@@ -114,6 +114,13 @@ private:
   G4DNADingfelderChargeDecreaseModel & operator=(const  G4DNADingfelderChargeDecreaseModel &right);
   G4DNADingfelderChargeDecreaseModel(const  G4DNADingfelderChargeDecreaseModel&);
 
+  // Reusable particle definitions
+  G4ParticleDefinition* protonDef;
+  G4ParticleDefinition* alphaPlusPlusDef;
+  G4ParticleDefinition* alphaPlusDef;
+  G4ParticleDefinition* hydrogenDef;
+  G4ParticleDefinition* heliumDef;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

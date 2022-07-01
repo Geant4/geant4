@@ -38,7 +38,7 @@
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-
+#include <memory>
 class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,24 +46,17 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VModularPhysicsList
 {
   public:
-  
     PhysicsList();
-   ~PhysicsList();
-
-    virtual void ConstructParticle();
-        
+   ~PhysicsList() override;
+   void ConstructParticle() override;
     void AddPhysicsList(const G4String& name);
-    virtual void ConstructProcess();
-
+    void ConstructProcess() override;
     void AddTrackingCut();       
-    void AddMaxStepSize();       
-
-  private:       
-  
+    void AddMaxStepSize();
+  private:
     G4String                      fEmName;
-    G4VPhysicsConstructor*        fEmPhysicsList;    
-    
-    PhysicsListMessenger*         fMessenger;
+    std::unique_ptr<G4VPhysicsConstructor>        fEmPhysicsList;
+    std::unique_ptr<PhysicsListMessenger>         fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

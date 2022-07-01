@@ -22,11 +22,11 @@ geant4_module_link_libraries(G4visQt3D
     G4globman
     G4hepgeometry
     G4vis_management
-    Qt5::Gui
-    Qt5::Widgets
-    Qt5::3DCore
-    Qt5::3DExtras
-    Qt5::3DRender
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::3DCore
+    Qt${QT_VERSION_MAJOR}::3DExtras
+    Qt${QT_VERSION_MAJOR}::3DRender
   PRIVATE
     G4csg
     G4graphics_reps

@@ -35,7 +35,7 @@
 #include "G4TRNtupleManager.hh"
 #include "globals.hh"
 
-#include "tools/raxml"
+#include "toolx/raxml"
 
 #include <vector>
 #include <string_view>

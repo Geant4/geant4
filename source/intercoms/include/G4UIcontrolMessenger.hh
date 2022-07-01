@@ -82,11 +82,11 @@ class G4UIcontrolMessenger : public G4UImessenger
   public:
 
     G4UIcontrolMessenger();
-    ~G4UIcontrolMessenger();
-    void SetNewValue(G4UIcommand* command, G4String newValue);
-    G4String GetCurrentValue(G4UIcommand* command);
+    ~G4UIcontrolMessenger() override;
+    void SetNewValue(G4UIcommand* command, G4String newValue) override;
+    G4String GetCurrentValue(G4UIcommand* command) override;
 
-  private:
+   private:
 
     G4UIdirectory* controlDirectory = nullptr;
     G4UIcmdWithAString* macroPathCommand = nullptr;

@@ -1,23 +1,62 @@
--------------------------------------------------------------------
+# Category visQt3D History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2022-04-06 John Allison (visQt3D-V11-00-07)
+- Fix compiler warnings:
+  - G4Qt3DSceneHandler.hh: Add `using G4VSceneHandler::AddCompound` to
+    avoid warnings.
+  - G4Qt3DSceneHandler.cc: Change `world` to `wrld` to avoid warnings.
+    - `world` shadows an `enum` in `G4VSceneHandler`. Maybe a better solution
+       is to encapsulate the enum.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-05-03 Ben Morgan (visQt3D-V11-00-06)
+- Preliminary build support for Qt5 and Qt6
 
-History file for visualization/Qt3D sub-category
------------------------------------------------
+## 2022-04-06 John Allison (visQt3D-V11-00-05)
+- `G4Qt3DSceneHandler`:
+  - `void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)`:
+    - Update to current usage.
+  - `void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)`:
+    - Comment out common line elimination - too expensive for a large
+      polyhedron.
+    - Maybe eliminate altogether in future?.
+    - Allow the graphics-reps utilities to optimise things like this.
+  - Use StandardSpecialMeshRendering(mesh).
+    - Of course, only if special mesh rendering is requested.
+
+## 2022-03-05 John Allison (visQt3D-V11-00-04)
+- G4Qt3DSceneHandler::AddCompound(const G4Mesh& mesh):
+  - For parameterised tetrahedron mesh, call default
+    G4VSceneHandler::DrawTetMeshAsDots(mesh).
+  - Tested on "ICRP145", a Geant4 application that we hope can become
+    a Geant4 advanced example, downloaded from the supplementary material
+    of Kim et al, ICRP, 2020. Adult mesh-type reference computational phantoms,
+    ICRP Publication 145, Ann. ICRP 49(3).
+
+## 2022-01-28 Ben Morgan (visQt3D-V11-00-03)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2022-01-16 John Allison (visQt3D-V11-00-02)
+- G4Qt3DViewer::wheelEvent:
+  - Re-program wheelEvent for perspective projection:
+    - Takes into account the extent of the scene.
+
+## 2021-12-16 John Allison (visQt3D-V11-00-01)
+- G4Qt3DSceneHandler.cc:
+  - AddCompound(const G4Mesh& mesh):
+    - Use base class utility G4VSceneHandler::Draw3DRectMeshAsDots(mesh);
+
+## 2021-12-10 Ben Morgan (visQt3D-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 12 November 2021 - Ben Morgan (visQt3D-V10-07-12)
 - Retire G4VIS_... preprocessor symbols in toolkit build, only required
   by obsolete GNUmake system

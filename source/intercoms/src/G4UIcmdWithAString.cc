@@ -35,7 +35,7 @@ G4UIcmdWithAString::G4UIcmdWithAString(const char* theCommandPath,
                                        G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter* strParam = new G4UIparameter('s');
+  auto* strParam = new G4UIparameter('s');
   SetParameter(strParam);
   SetCommandType(WithAStringCmd);
 }

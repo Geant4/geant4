@@ -207,7 +207,7 @@ void OCTREE::Node::init_internal(
 {
     std::array<NodeVector, 8> childVectors;
     std::array<G4DNABoundingBox, 8> boxes = fBigVolume.partition();
-    std::array<Node*, 8> children;
+    std::array<Node*, 8> children{};
     for (size_t child = 0; child < 8; ++child)
     {
         NodeVector& childVector = childVectors[child];

@@ -1,0 +1,289 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+/run/verbose 1
+#
+/testem/det/setAbsMat Gold
+/testem/det/setAbsThick 50 um
+/testem/det/setAbsYZ 50 um
+#
+/testem/phys/addPhysics emstandard_opt4
+PhysicsList::AddPhysicsList: <emstandard_opt4>
+###/testem/phys/addPhysics emlivermore
+#
+/run/setCut 2 um
+/run/setCutForAGivenParticle gamma 0.5 um
+#
+# to (de)activate pixe or atomic deexcitation
+/process/em/pixe true
+/run/physicsModified
+/process/em/augerCascade true
+/run/physicsModified
+/process/em/deexcitationIgnoreCut true
+/run/physicsModified
+#
+# to activate the ANSTO cross sections
+/process/em/pixeXSmodel ECPSSR_ANSTO
+/run/physicsModified
+#
+# to activate the ANSTO fluorescence
+# radiation yields
+/process/em/fluoANSTO true
+/run/physicsModified
+#
+/process/em/verbose 0
+/process/em/printParameters
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
+Use general process                                1
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               20
+Verbose level                                      0
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           epics_2017
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 0.01 mm)
+Step function for muons/hadrons                    (0.1, 0.05 mm)
+Step function for light ions                       (0.1, 0.02 mm)
+Step function for general ions                     (0.1, 0.001 mm)
+Lowest e+e- kinetic energy                         100 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Use ICRU90 data                                    1
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model                          2
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 1
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            1 MeV
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     1
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.08
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      3
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              1
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Fluorescence ANSTO data files enabled              1
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  1
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             ECPSSR_ANSTO
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+#
+/run/initialize
+
+ Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
+                       Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.540 cm 
+                       Imean: 790.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Au (Au)   Z = 79.0   N =   197   A = 196.967 g/mole
+         --->  Isotope: Au197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.000 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ The  WORLD   is made of 60 um  of G4_Galactic. The transverse size (YZ) of the world is 60 um 
+ The ABSORBER is made of 50 um  of Gold. The transverse size (YZ) is 50 um 
+ X position of the middle of the absorber 0 fm 
+#
+/testem/gun/setDefault
+/gun/particle proton
+/gun/energy 3 MeV
+#
+# to be run interactively
+###/control/execute vis.mac
+###/tracking/verbose 2
+###/run/beamOn 1
+#
+/analysis/setFileName pixe
+Set file name: pixe
+/analysis/h1/set 3 1000 0 100 keV
+/analysis/h1/set 51 1000 0 100 keV
+/analysis/h1/set 55 1000 0 100 keV
+#
+/analysis/h1/set 2 500 0 50 keV
+/analysis/h1/set 50 200 0 20 keV
+/analysis/h1/set 54 200 0 20 keV
+#
+/analysis/h1/set 4 500 0.01 50 keV log10
+/analysis/h1/set 52 200 0.01 20 keV log10
+/analysis/h1/set 56 200 0.01 20 keV log10
+#
+/tracking/verbose 0
+/run/printProgress 10000
+/run/beamOn 100000
+The ANSTO fluorescence radiation yields substitute the EADL data libraries
+
+### === G4UAtomicDeexcitation::InitialiseForNewRun()
+Using ANSTO K Cross Sections! 
+Using ANSTO L Cross Sections! 
+Using ANSTO M Cross Sections! 
+======================================================================
+The G4PenelopeIonisationModel is being used with the PIXE flag ON.
+Atomic de-excitation will be produced statistically by the PIXE 
+interface by using the shell cross section --> Livermore
+The built-in model procedure for atomic de-excitation is disabled. 
+*Please be sure this is intended*, or disable PIXE by
+/process/em/pixe false
+======================================================================
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  500 nm     e-  2 um     e+  2 um  proton 2 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 200 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Gold
+ Range cuts        :  gamma  500 nm     e-  2 um     e+  2 um  proton 2 um 
+ Energy thresholds :  gamma  1.07128 keV    e-  30.6738 keV    e+  30.1802 keV proton 200 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 0 starts.
+
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
+... set ntuple merging row mode : row-wise - done
+... create file : pixe.root - done
+... open analysis file : pixe.root - done
+... open analysis file : pixe.root - done
+--> Event 0 starts.
+--> Event 10000 starts.
+--> Event 20000 starts.
+--> Event 30000 starts.
+--> Event 40000 starts.
+--> Event 50000 starts.
+--> Event 60000 starts.
+--> Event 70000 starts.
+--> Event 80000 starts.
+--> Event 90000 starts.
+ Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=68.150000s Real=78.655958s Sys=0.020000s
+
+ ======================== run summary ======================
+
+ The run was 100000 proton of 3 MeV through 50 um  of Gold (density: 19.3 g/cm3 )
+
+ Total energy deposit in absorber per event = 3 MeV +- 33.77 eV 
+
+ -----> Mean dE/dx = 600 MeV/cm	(31.06 MeV*cm2/g)
+
+ From formulas :
+   restricted dEdx = 676.4 MeV/cm	(35.01 MeV*cm2/g)
+   full dEdx       = 676.5 MeV/cm	(35.01 MeV*cm2/g)
+
+ Leakage :  primary = 52.45 eV  +- 33.51 eV    secondaries = 14.26 eV  +- 1.184 eV 
+ Energy balance :  edep + eleak = 3 MeV
+
+ Total track length (charged) in absorber per event = 31.06 um  +- 1.079 nm 
+ Total track length (neutral) in absorber per event = 362.3 nm  +- 3.164 nm 
+
+ Number of steps (charged) in absorber per event = 141.8 +- 0.1264
+ Number of steps (neutral) in absorber per event = 0.587 +- 0.002453
+
+ Number of secondaries per event : Gammas = 0.5845   electrons = 109.7   positrons = 0
+
+ Number of events with the primary particle transmitted = 0 %
+ Number of events with at least  1 particle transmitted (same charge as primary) = 0 %
+
+ Number of events with the primary particle reflected = 0.003 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.003 %
+
+ MultipleScattering:
+  rms proj angle of transmit primary particle = 0 mrad (central part only)
+  computed theta0 (Highland formula)          = 233.3 mrad
+  central part defined as +- 699.8 mrad   Tail ratio = 0 %
+... write file : pixe.root - done
+... close file : pixe.root - done
+
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={1575258209681380324, 502268587721984320, 1265333753759368, 474264208644985106, 1151878254013493547, 1483930652511092178, 2145339813694232495, 149443267521788243, 598331707926294923, 205239878707861393, 1658426149017994571, 261898008556819608, 1328410559873084242, 346152083954518470, 442818399680857434, 1302852778065642940, 971632776144456411} counter= 2sumtot= 764352614188081867
+---------------------------------------
+G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.16 MB
+============================================================
+RunManagerKernel is deleted. Good bye :)

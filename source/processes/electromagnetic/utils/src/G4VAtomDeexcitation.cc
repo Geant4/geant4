@@ -79,8 +79,7 @@ G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VAtomDeexcitation::~G4VAtomDeexcitation()
-{}
+G4VAtomDeexcitation::~G4VAtomDeexcitation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -306,7 +305,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
       G4double rho = truelength*theAtomNumDensityVector[i];
       //G4cout<<"   Z "<< Z <<" is active  x(mm)= " << truelength/mm << G4endl;
       for(G4int ii=0; ii<nshells; ++ii) {
-        G4AtomicShellEnumerator as = G4AtomicShellEnumerator(ii);
+        auto as = (G4AtomicShellEnumerator)(ii);
         const G4AtomicShell* shell = GetAtomicShell(Z, as);
         const G4double bindingEnergy = shell->BindingEnergy();
 

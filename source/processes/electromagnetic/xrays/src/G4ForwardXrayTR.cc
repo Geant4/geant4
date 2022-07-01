@@ -221,7 +221,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
         }
         for(iTkin = 0; iTkin < fTotBin; ++iTkin)  // Lorentz factor loop
         {
-          G4PhysicsLogVector* energyVector =
+          auto energyVector =
             new G4PhysicsLogVector(fMinEnergyTR, fMaxEnergyTR, fBinTR);
 
           fGamma = 1.0 + (fProtonEnergyVector->GetLowEdgeEnergy(iTkin) /
@@ -240,7 +240,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
               fMaxThetaTR = fTheMinAngle;
             }
           }
-          G4PhysicsLinearVector* angleVector =
+          auto angleVector =
             new G4PhysicsLinearVector(0.0, fMaxThetaTR, fBinTR);
           G4double energySum = 0.0;
           G4double angleSum  = 0.0;
@@ -532,11 +532,10 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
         dirZ = std::cos(theta);
         G4ThreeVector directionTR(dirX, dirY, dirZ);
         directionTR.rotateUz(particleDir);
-        G4DynamicParticle* aPhotonTR =
-          new G4DynamicParticle(G4Gamma::Gamma(), directionTR, energyTR);
+        auto aPhotonTR = new G4DynamicParticle(G4Gamma::Gamma(), directionTR, energyTR);
 
 	// Create the G4Track
-	G4Track* aSecondaryTrack = new G4Track(aPhotonTR, aTrack.GetGlobalTime(), aTrack.GetPosition());
+	auto aSecondaryTrack = new G4Track(aPhotonTR, aTrack.GetGlobalTime(), aTrack.GetPosition());
 	aSecondaryTrack->SetTouchableHandle(aStep.GetPostStepPoint()->GetTouchableHandle());
 	aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 	aSecondaryTrack->SetCreatorModelID(secID);
@@ -613,7 +612,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
           dirZ = std::cos(theta);
           G4ThreeVector directionTR(dirX, dirY, dirZ);
           directionTR.rotateUz(particleDir);
-          G4DynamicParticle* aPhotonTR =
+          auto aPhotonTR =
             new G4DynamicParticle(G4Gamma::Gamma(), directionTR, energyTR);
 
 	  // Create the G4Track

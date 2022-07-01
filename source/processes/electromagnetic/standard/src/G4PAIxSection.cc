@@ -89,8 +89,8 @@ const G4int G4PAIxSection::fMaxSplineSize = 1000;  // Max size of output spline
 
 G4PAIxSection::G4PAIxSection()
 {
-  fSandia = 0;
-  fMatSandiaMatrix = 0;
+  fSandia = nullptr;
+  fMatSandiaMatrix = nullptr;
   fDensity = fElectronDensity = fNormalizationCof = fLowEnergyCof = 0.0;
   fIntervalNumber = fSplineNumber = 0;
   fVerbose = 0;
@@ -160,8 +160,8 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
 G4PAIxSection::G4PAIxSection(G4int materialIndex,
                              G4double maxEnergyTransfer)
 {
-  fSandia = 0;
-  fMatSandiaMatrix = 0;
+  fSandia = nullptr;
+  fMatSandiaMatrix = nullptr;
   fVerbose = 0;
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int i, j;   
@@ -275,7 +275,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
                               G4double** photoAbsCof, 
                               G4int intNumber                   )
 {
-  fSandia = 0;
+  fSandia = nullptr;
   fDensity = fElectronDensity = fNormalizationCof = fLowEnergyCof = 0.0;
   fIntervalNumber = fSplineNumber = 0;
   fVerbose = 0;
@@ -301,8 +301,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
     for( G4int j = 0; j < 112; ++j )  fPAItable[i][j] = 0.0; 
   }
 
-  fSandia = 0;
-  fMatSandiaMatrix = 0;
+  fSandia = nullptr;
+  fMatSandiaMatrix = nullptr;
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int i, j; 
   
@@ -434,8 +434,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
                               G4double maxEnergyTransfer,
                               G4double betaGammaSq          )
 {
-  fSandia = 0;
-  fMatSandiaMatrix = 0;
+  fSandia = nullptr;
+  fMatSandiaMatrix = nullptr;
   fVerbose = 0;
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 

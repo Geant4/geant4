@@ -1,12 +1,16 @@
--------------------------------------------------------------------
--------------------------------------------------------------------
+# Example microelectronics History
 
-     =========================================================
- 		      Geant4 - Microelectronics example
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                       Package History file
-                       --------------------
+
+## 2021-12-10 Ben Morgan (microelectronics-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 25 November 2021 D. Lambert microelectronics-V10-07-07
 - README and microelectronics.mac files have been updated

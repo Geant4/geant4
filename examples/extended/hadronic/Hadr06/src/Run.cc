@@ -292,7 +292,7 @@ void Run::EndOfRun()
   //particles at creation
   //
  if (fParticleDataMap1.size() > 0) {       
-  G4cout << "\n List of particles at creation (with meanLife != 0):"
+  G4cout << "\n List of particles at creation :"
          << G4endl;
   std::map<G4String,ParticleData>::iterator itc;               
   for (itc = fParticleDataMap1.begin(); itc != fParticleDataMap1.end(); itc++) { 

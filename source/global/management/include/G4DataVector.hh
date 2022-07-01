@@ -46,7 +46,7 @@
 class G4DataVector : public std::vector<G4double>
 {
  public:
-  G4DataVector();
+  G4DataVector() = default;
   // Default constructor.
 
   G4DataVector(const G4DataVector&) = default;
@@ -60,7 +60,7 @@ class G4DataVector : public std::vector<G4double>
   // Constructor given a 'capacity' defining the initial number of elements
   // and initialising them to 'value'.
 
-  virtual ~G4DataVector();
+  virtual ~G4DataVector() = default;
   // Empty destructor
 
   G4DataVector& operator=(const G4DataVector&) = default;

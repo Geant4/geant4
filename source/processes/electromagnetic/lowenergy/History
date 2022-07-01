@@ -1,37 +1,45 @@
--------------------------------------------------------------------
+# Category emlowen History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-05-23 Gabriele Cosmo (emlowen-V11-00-07)
+- Fixed use of potential uninitialised pointer in
+  G4AtomicDeexcitation::GenerateParticles(..).
 
-06.02.2022 V. Ivanchenko, emlowen-V10-07-28
-- G4MicroElecInelasticModel_new - removed not working if{} block
+## 2022-05-20 Z. Li (emlowen-V11-00-06)
+- G4LivermoreGammaConversionModel, G4LivermorePhotoElectricModel,
+  G4LivermoreGammaConversion5DModel: set spline interpolation for EPDL97.
 
-06.02.2022 V. Ivanchenko
+## 2022-04-13 Ben Morgan (emlowen-V11-00-05)
+- Remove Latin-1 characters.
+
+## 2022-02-06 V. Ivanchenko (emlowen-V11-00-04)
+- G4MicroElecInelasticModel_new - removed not working if{} block.
+
+## 2022-02-06 V. Ivanchenko (emlowen-V11-00-03)
 - G4MicroElecInelasticModel_new - C. Inguimbert change interpolate method 
     making a choice between log-log, lin-log, and lin-lin interpolations and
     added a protection for zero input energy. When sample transition the choice
     the choice is implemented for transition from atomic level and Fermi level.
     This MR should fix rare crash due to this model.
 
-04.02.2022 V. Ivanchenko
+## 2022-02-04 V. Ivanchenko (emlowen-V11-00-02)
 - G4hIonEffChargeSquare, G4PenelopeRayleighModel, G4PenelopeRayleighModelMI
-    fixed compilation warning on unused variable
+    fixed compilation warning on unused variable.
 
-18.01.2022 J. Hahnfeld
-- Prefer pointer to `const G4Material` if possible
+## 2022-01-18 Jonas Hahnfeld (emlowen-V11-00-01)
+- Prefer pointer to `const G4Material` if possible.
+
+## 2021-12-10 Ben Morgan (emlowen-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
 
 25.11.2021 S. Guatelli, emlowen-V10-07-27
 - Added option to activate the ANSTO fluorescence radiation yield (Z < 93)

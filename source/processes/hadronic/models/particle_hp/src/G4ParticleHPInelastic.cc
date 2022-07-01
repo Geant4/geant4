@@ -51,8 +51,8 @@ G4ParticleHPInelastic::G4ParticleHPInelastic(G4ParticleDefinition* projectile, c
   ,theProjectile(projectile)
 {
     G4String baseName; 
-    if ( std::getenv("G4PARTICLEHPDATA") ) {
-      baseName = std::getenv( "G4PARTICLEHPDATA" );
+    if ( G4FindDataDir("G4PARTICLEHPDATA") ) {
+      baseName = G4FindDataDir( "G4PARTICLEHPDATA" );
     }
     //const char* dataDirVariable;
     G4String particleName;
@@ -82,13 +82,13 @@ G4ParticleHPInelastic::G4ParticleHPInelastic(G4ParticleDefinition* projectile, c
     SetMaxEnergy( 20.*MeV );
 
     //G4cout << " entering G4ParticleHPInelastic constructor"<<G4endl;
-    if ( !std::getenv("G4PARTICLEHPDATA") && !std::getenv(dataDirVariable) ) {
+    if ( !G4FindDataDir("G4PARTICLEHPDATA") && !G4FindDataDir(dataDirVariable) ) {
       G4String message("Please setenv G4PARTICLEHPDATA (recommended) or, at least setenv " +
 		       G4String(dataDirVariable) + " to point to the " + theProjectile->GetParticleName() + " cross-section files." );      
       throw G4HadronicException(__FILE__, __LINE__,message.c_str());
     }
-    if ( std::getenv(dataDirVariable) ) {
-      dirName = std::getenv(dataDirVariable);
+    if ( G4FindDataDir(dataDirVariable) ) {
+      dirName = G4FindDataDir(dataDirVariable);
     } else {
       dirName = baseName + "/" + particleName;
     }

@@ -56,7 +56,7 @@ G4OpMieHG::G4OpMieHG(const G4String& processName, G4ProcessType type)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4OpMieHG::~G4OpMieHG() {}
+G4OpMieHG::~G4OpMieHG() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4OpMieHG::PreparePhysicsTable(const G4ParticleDefinition&)

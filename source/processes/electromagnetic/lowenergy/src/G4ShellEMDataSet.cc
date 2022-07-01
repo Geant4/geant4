@@ -409,7 +409,7 @@ void G4ShellEMDataSet::CleanUpComponents()
 
 G4String G4ShellEMDataSet::FullFileName(const G4String& fileName) const
 {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   
   if (!path)
   {

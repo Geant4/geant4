@@ -63,18 +63,23 @@
 
 #include "G4HadronicException.hh"
 #include "G4HadronicProcessStore.hh"
+#include "G4HadronicParameters.hh"
 #include "G4VCrossSectionDataSet.hh"
 
 #include "G4NistManager.hh"
 #include "G4VLeadingParticleBiasing.hh"
+#include "G4HadXSHelper.hh"
+#include "G4Threading.hh"
 #include "G4Exp.hh"
 
 #include <typeinfo>
 #include <sstream>
 #include <iostream>
 
-// File-scope variable to capture environment variable at startup
+constexpr G4double lambdaFactor = 0.8;
+constexpr G4double invLambdaFactor = 1.0/lambdaFactor;
 
+// File-scope variable to capture environment variable at startup
 static const char* G4Hadronic_Random_File = std::getenv("G4HADRONIC_RANDOM_FILE");
 
 //////////////////////////////////////////////////////////////////
@@ -86,8 +91,6 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   SetProcessSubType(fHadronInelastic);	// Default unless subclass changes
   InitialiseLocal();
 }
-
-//////////////////////////////////////////////////////////////////
 
 G4HadronicProcess::G4HadronicProcess(const G4String& processName,
                                      G4HadronicProcessType aHadSubType)
@@ -102,28 +105,24 @@ G4HadronicProcess::~G4HadronicProcess()
   theProcessStore->DeRegister(this);
   delete theTotalResult;
   delete theCrossSectionDataStore;
+  if(isMaster) {
+    delete fXSpeaks;
+    delete theEnergyOfCrossSectionMax;
+  }
 }
 
 void G4HadronicProcess::InitialiseLocal() {  
   theTotalResult = new G4ParticleChange();
   theTotalResult->SetSecondaryWeightByProcess(true);
-  theInteraction = nullptr;
   theCrossSectionDataStore = new G4CrossSectionDataStore();
   theProcessStore = G4HadronicProcessStore::Instance();
   theProcessStore->Register(this);
-  theInitialNumberOfInteractionLength = 0.0;
-  aScaleFactor = 1.0;
-  fWeight = 1.0;
-  nMatWarn = nKaonWarn = 0;
-  useIntegralXS = true;
-  theLastCrossSection = 0.0;
-  nICelectrons = 0;
-  G4HadronicProcess_debug_flag = false;
-  levelsSetByProcess = false;
-  epReportLevel = 0;
+  minKinEnergy = 1*CLHEP::MeV;
   epCheckLevels.first = DBL_MAX;
   epCheckLevels.second = DBL_MAX;
   GetEnergyMomentumCheckEnvvars();
+  unitVector.set(0.0, 0.0, 0.1);
+  if(G4Threading::IsWorkerThread()) { isMaster = false; }
 }
 
 void G4HadronicProcess::GetEnergyMomentumCheckEnvvars() {
@@ -140,17 +139,17 @@ void G4HadronicProcess::GetEnergyMomentumCheckEnvvars() {
 
 void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
 {
-  if(!a) { return; }
+  if(nullptr == a) { return; }
   theEnergyRangeManager.RegisterMe( a );
   G4HadronicProcessStore::Instance()->RegisterInteraction(this, a);
 }
 
 G4double 
-G4HadronicProcess::GetElementCrossSection(const G4DynamicParticle * part,
+G4HadronicProcess::GetElementCrossSection(const G4DynamicParticle * dp,
 					  const G4Element * elm, 
 					  const G4Material* mat)
 {
-  if(!mat) 
+  if(nullptr == mat)
   {
     static const G4int nmax = 5;
     if(nMatWarn < nmax) {
@@ -164,8 +163,7 @@ G4HadronicProcess::GetElementCrossSection(const G4DynamicParticle * part,
 		  JustWarning, ed);
     }
   }
-  return
-    std::max(theCrossSectionDataStore->GetCrossSection(part, elm, mat),0.0);
+  return theCrossSectionDataStore->GetCrossSection(dp, elm, mat);
 }
 
 void G4HadronicProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
@@ -173,31 +171,160 @@ void G4HadronicProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
   if(std::getenv("G4HadronicProcess_debug")) {
     G4HadronicProcess_debug_flag = true;
   }
+  if(nullptr == firstParticle) { firstParticle = &p; }
   theProcessStore->RegisterParticle(this, &p);
 }
 
 void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
+  if(firstParticle != &p) { return; }
+
   theCrossSectionDataStore->BuildPhysicsTable(p);
   theEnergyRangeManager.BuildPhysicsTable(p);
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+
+  G4int subtype = GetProcessSubType();
+  if(useIntegralXS) {
+    if(subtype == fHadronInelastic) {
+      useIntegralXS = param->EnableIntegralInelasticXS();
+    } else if(subtype == fHadronElastic) {
+      useIntegralXS = param->EnableIntegralElasticXS();
+    } 
+  }
+  fXSType = fHadNoIntegral;
+
+  // check particle for integral method
+  if(isMaster) {
+    G4double charge = p.GetPDGCharge()/eplus;
+    G4bool isLepton = (p.GetLeptonNumber() != 0);
+    G4bool ok = (p.GetAtomicNumber() != 0 || p.GetPDGMass() < GeV);
+
+    // select cross section shape
+    if(charge != 0.0 && useIntegralXS && !isLepton && ok) {
+      G4double tmax = param->GetMaxEnergy();
+      fXSType = (charge > 0.0) ? fHadIncreasing : fHadDecreasing;
+      currentParticle = firstParticle;
+      // initialisation in the master thread
+      G4int pdg = p.GetPDGEncoding();
+      if(std::abs(pdg) == 211) {
+	fXSType = fHadTwoPeaks;
+      } else if(pdg == 321) {
+	fXSType = fHadOnePeak;
+      } else if(pdg == 2212) {
+	fXSType = fHadTwoPeaks;
+      }
+      delete theEnergyOfCrossSectionMax;
+      theEnergyOfCrossSectionMax = nullptr;
+      if(fXSType == fHadTwoPeaks) {
+	delete fXSpeaks;
+	fXSpeaks =
+	  G4HadXSHelper::FillPeaksStructure(this, &p, minKinEnergy, tmax);
+	if(nullptr == fXSpeaks) {
+	  fXSType = fHadOnePeak;
+	}
+      }
+      if(fXSType == fHadOnePeak) {
+	theEnergyOfCrossSectionMax =
+	  G4HadXSHelper::FindCrossSectionMax(this, &p,  minKinEnergy, tmax);
+	if(nullptr == theEnergyOfCrossSectionMax) {
+	  fXSType = fHadIncreasing;
+	}
+      }
+    }
+  } else {
+    if(nullptr == masterProcess) {
+      masterProcess = 
+	dynamic_cast<const G4HadronicProcess*>(GetMasterProcess());
+    }
+    if(nullptr == masterProcess) {
+      G4cout << "G4HadronicProcess::BuildPhysicsTable: for "
+	     << GetProcessName() << " and " << p.GetParticleName()
+	     << " fail due to undefined pointer to the master process" 
+	     << G4endl;
+    } else {
+      // initialisation in worker threads
+      fXSType = masterProcess->CrossSectionType();
+      fXSpeaks = masterProcess->TwoPeaksXS();
+      theEnergyOfCrossSectionMax = 
+	masterProcess->EnergyOfCrossSectionMax();
+    }
+  }
+  if(isMaster && 1 < param->GetVerboseLevel()) {
+    G4cout << "G4HadronicProcess::BuildPhysicsTable: for "
+	   << GetProcessName() << " and " << p.GetParticleName()
+	   << " typeXS=" << fXSType << G4endl;
+  }
   G4HadronicProcessStore::Instance()->PrintInfo(&p);
 }
 
-G4double G4HadronicProcess::
-GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
+void G4HadronicProcess::StartTracking(G4Track* track)
 {
-  //G4cout << "GetMeanFreePath " << aTrack.GetDefinition()->GetParticleName()
-  //	 << " Ekin= " << aTrack.GetKineticEnergy() << G4endl;
-  theLastCrossSection = aScaleFactor*theCrossSectionDataStore
+  currentMat = nullptr;
+  currentParticle = track->GetDefinition();
+  fDynParticle = track->GetDynamicParticle();
+  theNumberOfInteractionLengthLeft = -1.0;
+}
+
+G4double G4HadronicProcess::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track, 
+			     G4double previousStepSize,
+                             G4ForceCondition* condition)
+{
+  *condition = NotForced;
+
+  const G4Material* mat = track.GetMaterial();
+  if(mat != currentMat) {
+    currentMat = mat;
+    mfpKinEnergy = DBL_MAX;
+    matIdx = track.GetMaterial()->GetIndex();
+  }
+  /*
+  G4cout << GetProcessName() << " E=" << track.GetKineticEnergy()
+	 << " " << currentParticle->GetParticleName()
+	 << " lastxs=" << theLastCrossSection 
+	 << " lastmfp=" << theMFP << G4endl;
+  */
+  UpdateCrossSectionAndMFP(track.GetKineticEnergy());
+  /*
+  G4cout << "          xs=" << theLastCrossSection 
+	 << " mfp=" << theMFP << " nleft=" << theNumberOfInteractionLengthLeft  
+	 << G4endl;
+  */
+  // zero cross section
+  if(theLastCrossSection <= 0.0) { 
+    theNumberOfInteractionLengthLeft = -1.0;
+    currentInteractionLength = DBL_MAX;
+    return DBL_MAX;
+  }
+
+  // non-zero cross section
+  if (theNumberOfInteractionLengthLeft < 0.0) {
+    theNumberOfInteractionLengthLeft = -G4Log( G4UniformRand() );
+    theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
+  } else {
+    theNumberOfInteractionLengthLeft -= 
+      previousStepSize/currentInteractionLength;
+    theNumberOfInteractionLengthLeft = 
+      std::max(theNumberOfInteractionLengthLeft, 0.0);
+  }
+  currentInteractionLength = theMFP;
+  return theNumberOfInteractionLengthLeft*theMFP;
+}
+
+G4double G4HadronicProcess::GetMeanFreePath(
+                            const G4Track &aTrack, G4double,
+                            G4ForceCondition*)
+{
+  G4double xs = aScaleFactor*theCrossSectionDataStore
      ->ComputeCrossSection(aTrack.GetDynamicParticle(),aTrack.GetMaterial());
-  G4double res = (theLastCrossSection>0.0) ? 1.0/theLastCrossSection : DBL_MAX;
-  //G4cout << "         xsection= " << theLastCrossSection << G4endl;
-  return res;
+  return (xs > 0.0) ? 1.0/xs : DBL_MAX;
 }
 
 G4VParticleChange*
 G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
+  theNumberOfInteractionLengthLeft = -1.0;
+
   //G4cout << "PostStepDoIt " << aTrack.GetDefinition()->GetParticleName()
   //	 << " Ekin= " << aTrack.GetKineticEnergy() << G4endl;
   // if primary is not Alive then do nothing
@@ -213,10 +340,13 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   const G4Material* aMaterial = aTrack.GetMaterial();
 
   // check only for charged particles
-  if(aParticle->GetDefinition()->GetPDGCharge() != 0.0) {
+  if(fXSType != fHadNoIntegral) {
+    mfpKinEnergy = DBL_MAX;
     G4double xs = aScaleFactor*
       theCrossSectionDataStore->ComputeCrossSection(aParticle,aMaterial);
-    if(xs <= 0.0 || xs < theLastCrossSection*G4UniformRand()) {
+    //G4cout << "xs=" << xs << " xs0=" << theLastCrossSection
+    //	   << "  " << aMaterial->GetName() << G4endl;
+    if(xs < theLastCrossSection*G4UniformRand()) {
       // No interaction
       return theTotalResult;
     }    
@@ -248,14 +378,15 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 
   theInteraction = ChooseHadronicInteraction(thePro, targetNucleus, 
                                              aMaterial, anElement);
-  if(!theInteraction) {
+  if(nullptr == theInteraction) {
     G4ExceptionDescription ed;
     ed << "Target element "<<anElement->GetName()<<"  Z= "
        << targetNucleus.GetZ_asInt() << "  A= "
        << targetNucleus.GetA_asInt() << G4endl;
     DumpState(aTrack,"ChooseHadronicInteraction",ed);
     ed << " No HadronicInteraction found out" << G4endl;
-    G4Exception("G4HadronicProcess::PostStepDoIt", "had005", FatalException, ed);
+    G4Exception("G4HadronicProcess::PostStepDoIt", "had005",
+                FatalException, ed);
     return theTotalResult;
   }
 
@@ -320,11 +451,10 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   G4int nSec = result->GetNumberOfSecondaries();
   if ( nSec > 0 ) {
     for ( G4int i = 0; i < nSec; ++i ) {
-      G4DynamicParticle* dynamicParticle = result->GetSecondary(i)->GetParticle();
-      const G4ParticleDefinition* particleDefinition = 
-        dynamicParticle->GetParticleDefinition();
-      if ( particleDefinition == G4KaonZero::Definition() || 
-           particleDefinition == G4AntiKaonZero::Definition() ) {
+      auto dynamicParticle = result->GetSecondary(i)->GetParticle();
+      auto part = dynamicParticle->GetParticleDefinition();
+      if ( part == G4KaonZero::Definition() || 
+           part == G4AntiKaonZero::Definition() ) {
         G4ParticleDefinition* newPart;
         if( G4UniformRand() > 0.5 ) { newPart = G4KaonZeroShort::Definition(); }
         else { newPart = G4KaonZeroLong::Definition(); }
@@ -333,7 +463,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 	  ++nKaonWarn;
 	  G4ExceptionDescription ed;
 	  ed << " Hadronic model " << theInteraction->GetModelName() << G4endl;
-	  ed << " created " << particleDefinition->GetParticleName() << G4endl;
+	  ed << " created " << part->GetParticleName() << G4endl;
 	  ed << " -> forced to be " << newPart->GetParticleName() << G4endl;
 	  G4Exception( "G4HadronicProcess::PostStepDoIt", "had007", JustWarning, ed );
 	}
@@ -342,9 +472,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   }
 
   result->SetTrafoToLab(thePro.GetTrafoToLab());
-
-  ClearNumberOfInteractionLengthLeft();
-
   FillResult(result, aTrack);
 
   if (epReportLevel != 0) {
@@ -358,7 +485,6 @@ void G4HadronicProcess::ProcessDescription(std::ostream& outFile) const
 {
   outFile << "The description for this process has not been written yet.\n";
 }
-
 
 G4double G4HadronicProcess::XBiasSurvivalProbability()
 {
@@ -421,8 +547,29 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
 
     // apply rotation
     G4ThreeVector newDir = dynParticle->GetMomentumDirection();
+    G4double secondaryEkinBeforeRotation = dynParticle->GetKineticEnergy();
     newDir.rotateUz(dir);
     dynParticle->SetMomentumDirection(newDir);
+
+    // Check energy after Lorentz rotation and boost, and do not create a track
+    // in the case of unphysical kinetic energy (either before or after the
+    // Lorentz rotation and boost).
+    // Note: this only a temporary fix, until we are able to reproduce, understand
+    //       and solve the source of the problem!
+    G4double secondaryEkinAfterRotation = dynParticle->GetKineticEnergy();
+    if ( std::abs( secondaryEkinAfterRotation - secondaryEkinBeforeRotation ) > 
+	 G4HadronicParameters::Instance()->GetMaxEnergy()                                ||
+         secondaryEkinBeforeRotation > G4HadronicParameters::Instance()->GetMaxEnergy()  || 
+         secondaryEkinAfterRotation  > G4HadronicParameters::Instance()->GetMaxEnergy() ) {
+      G4ExceptionDescription ed;
+      ed << "  " << dynParticle->GetDefinition()->GetParticleName()
+	 << " Target Z=" << targetNucleus.GetZ_asInt() << "  A=" << targetNucleus.GetA_asInt() 
+	 << " Ekin(GeV) : before=" << secondaryEkinBeforeRotation/CLHEP::GeV 
+         << "  after Lorentz rotation=" << secondaryEkinAfterRotation/CLHEP::GeV 
+         << "  -> Unphysical candidate secondary, skip it! " << G4endl;
+      G4Exception( "G4HadronicProcess::FillResults", "had012", JustWarning, ed );
+      continue;  // Give up: do not create a track for this candidate secondary
+    }
 
     // check if secondary is on the mass shell
     const G4ParticleDefinition* part = dynParticle->GetDefinition();
@@ -431,7 +578,8 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
     const G4double delta_mass_lim = 1.0*CLHEP::keV;
     const G4double delta_ekin = 0.001*CLHEP::eV;
     if(std::abs(dmass - mass) > delta_mass_lim) {
-      G4double e = std::max(dynParticle->GetKineticEnergy() + dmass - mass, delta_ekin);
+      G4double e =
+        std::max(dynParticle->GetKineticEnergy() + dmass - mass, delta_ekin);
       if(G4HadronicProcess_debug_flag) {
 	G4ExceptionDescription ed;
 	ed << "TrackID= "<< aT.GetTrackID()
@@ -455,6 +603,8 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
 
     G4Track* track = new G4Track(dynParticle, time, aT.GetPosition());
     track->SetCreatorModelID(idModel);
+    track->SetParentResonanceDef(aR->GetSecondary(i)->GetParentResonanceDef());
+    track->SetParentResonanceID(aR->GetSecondary(i)->GetParentResonanceID());
     G4double newWeight = fWeight*aR->GetSecondary(i)->GetWeight();
     track->SetWeight(newWeight);
     track->SetTouchableHandle(aT.GetTouchableHandle());
@@ -498,10 +648,9 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
 {
   // check for catastrophic energy non-conservation
   // to re-sample the interaction
-
   G4HadronicInteraction * theModel = GetHadronicInteraction();
   G4double nuclearMass(0);
-  if (theModel) {
+  if (nullptr != theModel) {
 
     // Compute final-state total energy
     G4double finalE(0.);
@@ -775,8 +924,121 @@ G4HadronicProcess::GetHadronicModel(const G4String& modelName)
 { 
   std::vector<G4HadronicInteraction*>& list
         = theEnergyRangeManager.GetHadronicInteractionList();
-  for (size_t li=0; li<list.size(); li++) {
-    if (list[li]->GetModelName() == modelName) return list[li];
+  for (auto & mod : list) {
+    if (mod->GetModelName() == modelName) return mod;
   }
   return nullptr;
+}
+
+G4double 
+G4HadronicProcess::ComputeCrossSection(const G4ParticleDefinition* part,
+				       const G4Material* mat,
+				       const G4double kinEnergy)
+{
+  auto dp = new G4DynamicParticle(part, unitVector, kinEnergy);
+  G4double xs = theCrossSectionDataStore->ComputeCrossSection(dp, mat);
+  delete dp;
+  return xs;
+}
+
+void G4HadronicProcess::RecomputeXSandMFP(const G4double kinEnergy)
+{
+  auto dp = new G4DynamicParticle(currentParticle, unitVector, kinEnergy);
+  theLastCrossSection = aScaleFactor*
+    theCrossSectionDataStore->ComputeCrossSection(dp, currentMat);
+  theMFP = (theLastCrossSection > 0.0) ? 1.0/theLastCrossSection : DBL_MAX;
+  delete dp;
+}
+
+void G4HadronicProcess::UpdateCrossSectionAndMFP(const G4double e)
+{
+  if(fXSType == fHadNoIntegral) {
+    DefineXSandMFP();
+
+  } else if(fXSType == fHadIncreasing) {
+    if(e*invLambdaFactor < mfpKinEnergy) {
+      mfpKinEnergy = e;
+      ComputeXSandMFP();
+    }
+
+  } else if(fXSType == fHadDecreasing) {
+    if(e < mfpKinEnergy && mfpKinEnergy > minKinEnergy) {
+      G4double e1 = std::max(e*lambdaFactor, minKinEnergy);
+      mfpKinEnergy = e1;
+      RecomputeXSandMFP(e1);
+    }
+
+  } else if(fXSType == fHadOnePeak) {
+    G4double epeak = (*theEnergyOfCrossSectionMax)[matIdx];
+    if(e <= epeak) {
+      if(e*invLambdaFactor < mfpKinEnergy) {
+        mfpKinEnergy = e;
+	ComputeXSandMFP();
+      }
+    } else if(e < mfpKinEnergy) { 
+      G4double e1 = std::max(epeak, e*lambdaFactor);
+      mfpKinEnergy = e1;
+      RecomputeXSandMFP(e1);
+    }
+
+  } else if(fXSType == fHadTwoPeaks) {
+    G4TwoPeaksHadXS* xs = (*fXSpeaks)[matIdx];
+    const G4double e1peak = xs->e1peak;
+
+    // below the 1st peak
+    if(e <= e1peak) {
+      if(e*invLambdaFactor < mfpKinEnergy) {
+        mfpKinEnergy = e;
+	ComputeXSandMFP();
+      }
+      return;
+    }
+    const G4double e1deep = xs->e1deep;
+    // above the 1st peak, below the deep
+    if(e <= e1deep) {
+      if(mfpKinEnergy >= e1deep || e <= mfpKinEnergy) { 
+        const G4double e1 = std::max(e1peak, e*lambdaFactor);
+        mfpKinEnergy = e1;
+	RecomputeXSandMFP(e1);
+      }
+      return;
+    }
+    const G4double e2peak = xs->e2peak;
+    // above the deep, below 2nd peak
+    if(e <= e2peak) {
+      if(e*invLambdaFactor < mfpKinEnergy) {
+        mfpKinEnergy = e;
+	ComputeXSandMFP();
+      }
+      return;
+    }
+    const G4double e2deep = xs->e2deep;
+    // above the 2nd peak, below the deep
+    if(e <= e2deep) {
+      if(mfpKinEnergy >= e2deep || e <= mfpKinEnergy) { 
+        const G4double e1 = std::max(e2peak, e*lambdaFactor);
+        mfpKinEnergy = e1;
+	RecomputeXSandMFP(e1);
+      }
+      return;
+    }
+    const G4double e3peak = xs->e3peak;
+    // above the deep, below 3d peak
+    if(e <= e3peak) {
+      if(e*invLambdaFactor < mfpKinEnergy) {
+        mfpKinEnergy = e;
+	ComputeXSandMFP();
+      }
+      return;
+    }
+    // above 3d peak
+    if(e <= mfpKinEnergy) { 
+      const G4double e1 = std::max(e3peak, e*lambdaFactor);
+      mfpKinEnergy = e1;
+      RecomputeXSandMFP(e1);
+    }
+
+  } else {
+    DefineXSandMFP();
+  }  
 }

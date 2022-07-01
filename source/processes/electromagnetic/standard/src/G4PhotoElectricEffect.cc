@@ -53,8 +53,7 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4PhotoElectricEffect::~G4PhotoElectricEffect()
-{}
+G4PhotoElectricEffect::~G4PhotoElectricEffect() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

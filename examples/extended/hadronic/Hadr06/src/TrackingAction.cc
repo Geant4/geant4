@@ -75,9 +75,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4String name     = particle->GetParticleName();
   G4double meanLife = particle->GetPDGLifeTime();
   G4double energy   = track->GetKineticEnergy();
-  //do not count excited states with meanlife = 0.
-  if (fParticleCount && (meanLife != 0.)) 
-     run->ParticleCount(name,energy,meanLife);
+  if (fParticleCount) run->ParticleCount(name,energy,meanLife);
        
   // histograms: energy at creation
   //

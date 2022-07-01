@@ -35,11 +35,7 @@
 #include "G4UIcommandTree.hh"
 #include "G4ios.hh"
 #include <sstream>
-
-// --------------------------------------------------------------------
-G4UImessenger::G4UImessenger()
-{
-}
+#include <utility>
 
 // --------------------------------------------------------------------
 G4UImessenger::G4UImessenger(const G4String& path, const G4String& dsc,
@@ -99,12 +95,14 @@ G4String G4UImessenger::BtoS(G4bool b)
 {
   G4String vl = "0";
   if(b)
+  {
     vl = "true";
+  }
   return vl;
 }
 
 // --------------------------------------------------------------------
-G4int G4UImessenger::StoI(G4String str)
+G4int G4UImessenger::StoI(const G4String& str)
 {
   G4int vl;
   const char* t = str;
@@ -114,7 +112,7 @@ G4int G4UImessenger::StoI(G4String str)
 }
 
 // --------------------------------------------------------------------
-G4long G4UImessenger::StoL(G4String str)
+G4long G4UImessenger::StoL(const G4String& str)
 {
   G4long vl;
   const char* t = str;
@@ -124,7 +122,7 @@ G4long G4UImessenger::StoL(G4String str)
 }
 
 // --------------------------------------------------------------------
-G4double G4UImessenger::StoD(G4String str)
+G4double G4UImessenger::StoD(const G4String& str)
 {
   G4double vl;
   const char* t = str;
@@ -136,7 +134,7 @@ G4double G4UImessenger::StoD(G4String str)
 // --------------------------------------------------------------------
 G4bool G4UImessenger::StoB(G4String str)
 {
-  G4String v = G4StrUtil::to_upper_copy(str);
+  G4String v = G4StrUtil::to_upper_copy(std::move(str));
   G4bool vl = false;
   if(v == "Y" || v == "YES" || v == "1" || v == "T" || v == "TRUE")
   {
@@ -160,7 +158,9 @@ void G4UImessenger::CreateDirectory(const G4String& path, const G4String& dsc,
 
   G4String fullpath = path;
   if(fullpath.back() != '/')
+  {
     fullpath.append("/");
+  }
 
   G4UIcommandTree* tree = ui->GetTree()->FindCommandTree(fullpath.c_str());
   if(tree != nullptr)

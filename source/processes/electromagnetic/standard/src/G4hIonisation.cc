@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -36,7 +35,6 @@
 // Creation date: 30.05.1997
 //
 // Modified by Laszlo Urban, Michel Maire and Vladimir Ivanchenko
-//
 //
 // -------------------------------------------------------------------
 //
@@ -51,9 +49,7 @@
 #include "G4AntiProton.hh"
 #include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
-#include "G4IonFluctuations.hh"
-#include "G4UniversalFluctuation.hh"
-#include "G4UnitsTable.hh"
+#include "G4EmStandUtil.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4KaonPlus.hh"
@@ -76,8 +72,7 @@ G4hIonisation::G4hIonisation(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hIonisation::~G4hIonisation()
-{}
+G4hIonisation::~G4hIonisation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -143,13 +138,11 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 
     G4EmParameters* param = G4EmParameters::Instance();
     G4double emin = std::min(param->MinKinEnergy(), 0.1*eth);
-    G4double emax = std::max(param->MaxKinEnergy(), 100*eth);
+    G4double emax = std::max(param->MaxKinEnergy(), 10*eth);
 
     if(emin != param->MinKinEnergy() || emax != param->MaxKinEnergy()) {
       SetMinKinEnergy(emin);
       SetMaxKinEnergy(emax);
-      G4int bin = G4lrint(param->NumberOfBinsPerDecade()*std::log10(emax/emin));
-      SetDEDXBinning(bin);
     }
 
     if (nullptr == EmModel(0)) { 
@@ -158,9 +151,12 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     }
     EmModel(0)->SetLowEnergyLimit(emin);
     EmModel(0)->SetHighEnergyLimit(eth);
-    AddEmModel(1, EmModel(0), new G4IonFluctuations());
-
-    if (nullptr == FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
+    
+    if (nullptr == FluctModel()) {
+      G4bool ion = (pname == "GenericIon" || pname == "alpha"); 
+      SetFluctModel(G4EmStandUtil::ModelOfFluctuations(ion));
+    }
+    AddEmModel(1, EmModel(0), FluctModel());
 
     if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
     EmModel(1)->SetLowEnergyLimit(eth);

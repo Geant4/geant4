@@ -49,7 +49,7 @@ class G4AllocatorPool
   ~G4AllocatorPool();
   // Destructor. Return storage to the free store
 
-  G4AllocatorPool(const G4AllocatorPool& right);
+  G4AllocatorPool(const G4AllocatorPool& right) = default;
   // Copy constructor
   G4AllocatorPool& operator=(const G4AllocatorPool& right);
   // Equality operator

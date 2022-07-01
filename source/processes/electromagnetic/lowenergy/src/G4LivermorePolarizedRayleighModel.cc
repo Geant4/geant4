@@ -115,7 +115,7 @@ void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* p
     InitialiseElementSelectors(particle, cuts);
     
     // Access to elements
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     auto elmTable = G4Element::GetElementTable();
     for (auto const & elm : *elmTable) {
       G4int Z = std::min(elm->GetZasInt(), maxZ);
@@ -152,7 +152,7 @@ void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
   
   if(nullptr == datadir) 
     {
-      datadir = std::getenv("G4LEDATA");
+      datadir = G4FindDataDir("G4LEDATA");
       if(nullptr == datadir) 
 	{
 	  G4Exception("G4LivermoreRayleighModelModel::ReadData()","em0006",

@@ -32,7 +32,7 @@
 #include "G4AnalysisUtilities.hh"
 #include "G4AutoLock.hh"
 
-#include "tools/hdf5/h2file"
+#include "toolx/hdf5/h2file"
 
 using namespace G4Analysis;
 using namespace tools;
@@ -82,7 +82,7 @@ hid_t G4Hdf5FileManager::CreateDirectory(hid_t& file,
   auto success = true;
 
   // create directory
-  auto directory = tools_H5Gcreate(file, newDirectoryName, 0);
+  auto directory = toolx_H5Gcreate(file, newDirectoryName, 0);
        // 0 seems to be an optional parameter. The web doc does not say what should
        // be the default value but 0 is what is found in examples, and in the code, if we pass 0, clearly some
        // default value is taken.
@@ -93,7 +93,7 @@ hid_t G4Hdf5FileManager::CreateDirectory(hid_t& file,
   }
   else {
     // write atb (header?)
-    auto result = hdf5::write_atb(directory, "type", "directory");
+    auto result = toolx::hdf5::write_atb(directory, "type", "directory");
     if ( !result) {
       Warn("Write_atb class failed for " + directoryName,
         fkClass, "CreateDirectory");
@@ -139,8 +139,8 @@ std::shared_ptr<G4Hdf5File> G4Hdf5FileManager::CreateFileImpl(const G4String& fi
   }
 
   // create a header with general infos
-  if(!tools::hdf5::write_header(file)) {
-    Warn("tools::hdf5::write_header() failed for " + fileName,
+  if(!toolx::hdf5::write_header(file)) {
+    Warn("toolx::hdf5::write_header() failed for " + fileName,
       fkClass, "CreateFileImpl");
     return std::make_shared<G4Hdf5File>(-1, -1, -1);
   }

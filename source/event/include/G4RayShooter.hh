@@ -48,8 +48,8 @@ class G4RayShooter
 {
   public:
 
-    G4RayShooter();
-    virtual ~G4RayShooter();
+    G4RayShooter() = default;
+    virtual ~G4RayShooter() = default;
 
     void Shoot(G4Event* evt, G4ThreeVector vtx, G4ThreeVector direc);
       // Generates a primary vertex and a primary particle at the given
@@ -57,12 +57,9 @@ class G4RayShooter
       // by G4RayTracer and G4MaterialScanner.
 
   private:
- 
-    void SetInitialValues();
-
     G4ParticleDefinition* particle_definition = nullptr;
     G4ParticleMomentum    particle_momentum_direction;
-    G4double              particle_energy = 0.0;
+    G4double              particle_energy = 1.0*CLHEP::GeV;
     G4ThreeVector         particle_position;
     G4double              particle_time = 0.0;
     G4ThreeVector         particle_polarization;

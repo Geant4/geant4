@@ -480,7 +480,7 @@ size_t G4EMDataSet::FindLowerBound(G4double x, G4DataVector* values) const
 
 G4String G4EMDataSet::FullFileName(const G4String& name) const
 {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path) {
      G4Exception("G4EMDataSet::FullFileName",
 		    "em0006",FatalException,"G4LEDATA environment variable not set");

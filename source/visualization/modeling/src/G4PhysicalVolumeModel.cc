@@ -42,7 +42,6 @@
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 #include "G4BoundingExtentScene.hh"
-#include "G4PhysicalVolumeSearchScene.hh"
 #include "G4TransportationManager.hh"
 #include "G4Polyhedron.hh"
 #include "HepPolyhedronProcessor.h"
@@ -162,6 +161,7 @@ void G4PhysicalVolumeModel::CalculateExtent ()
        0.,     // Density (not relevant if density culling false).
        true,   // Cull daughters of opaque mothers.
        24);    // No of sides (not relevant for this operation).
+    mParams.SetSpecialMeshRendering(true);  // Avoids traversing parameterisations
     fpMP = &mParams;
     DescribeYourselfTo (beScene);
     fExtent = beScene.GetBoundingExtent();
@@ -555,42 +555,47 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 
   // Check for special mesh rendering
   if (fpMP->IsSpecialMeshRendering()) {
+    G4bool potentialG4Mesh = false;
     if (fpMP->GetSpecialMeshVolumes().empty()) {
       // No volumes specified - all are potentially possible
-      goto create_mesh;
+      potentialG4Mesh = true;
     } else {
+      // Name and (optionally) copy number of container volume is specified
       for (const auto& pvNameCopyNo: fpMP->GetSpecialMeshVolumes()) {
-	if (pVPV->GetName() == pvNameCopyNo.GetName()) {
-	  // We have a name match
-	  if (pvNameCopyNo.GetCopyNo() < 0) {
-	    // Any copy number is OK
-	    goto create_mesh;
-	  } else {
-	    if (pVPV->GetCopyNo() == pvNameCopyNo.GetCopyNo()) {
-	      // We have a name and copy number match
-	      goto create_mesh;
-	    }
-	  }
-	}
+        if (pVPV->GetName() == pvNameCopyNo.GetName()) {
+          // We have a name match
+          if (pvNameCopyNo.GetCopyNo() < 0) {
+            // Any copy number is OK
+            potentialG4Mesh = true;
+          } else {
+            if (pVPV->GetCopyNo() == pvNameCopyNo.GetCopyNo()) {
+              // We have a name and copy number match
+              potentialG4Mesh = true;
+            }
+          }
+        }
       }
-      // We have fallen out of this loop without finding a match
-      goto continue_processing;
     }
-  create_mesh:
-    // Create - or at least attempt to create - a mesh. If it cannot be created
-    // out of this pVPV the type will be "invalid".
-    G4Mesh mesh(pVPV,theNewAT);
-    if (mesh.GetMeshType() != G4Mesh::invalid) {
-      fFullPVPath.push_back(nodeID);
-      fDrawnPVPath.push_back(nodeID);
-      sceneHandler.AddCompound(mesh);
-      fFullPVPath.pop_back();
-      fDrawnPVPath.pop_back();
-      delete tempVisAtts;  // Needs cleaning up (Coverity warning!!)
-      return;
-    }  // else continue processing
+    if (potentialG4Mesh) {
+      // Create - or at least attempt to create - a mesh. If it cannot be created
+      // out of this pVPV the type will be "invalid".
+      G4Mesh mesh(pVPV,theNewAT);
+      if (mesh.GetMeshType() != G4Mesh::invalid) {
+        // Create "artificial" nodeID to represent the replaced volumes
+        G4int artCopyNo = 0;
+        auto artPV = mesh.GetParameterisedVolume();
+        auto artDepth = fCurrentDepth + 1;
+        auto artNodeID = G4PhysicalVolumeNodeID(artPV,artCopyNo,artDepth);
+        fFullPVPath.push_back(artNodeID);
+        fDrawnPVPath.push_back(artNodeID);
+        sceneHandler.AddCompound(mesh);
+        fFullPVPath.pop_back();
+        fDrawnPVPath.pop_back();
+        delete tempVisAtts;  // Needs cleaning up (Coverity warning!!)
+        return;  // Mesh found and processed - nothing more to do.
+      }  // else continue processing
+    }
   }
-continue_processing:
 
   // Make decision to draw...
   G4bool thisToBeDrawn = true;
@@ -839,7 +844,6 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
 // the geometry tree but under some circumstances this consumed lots of CPU
 // time. Instead, let us simply check that the volume (fpTopPV) exists in the
 // physical volume store.
-
   const auto& pvStore = G4PhysicalVolumeStore::GetInstance();
   auto iterator = find(pvStore->begin(),pvStore->end(),fpTopPV);
   if (iterator == pvStore->end()) {
@@ -852,56 +856,6 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   } else {
     return true;
   }
-
-  // Previous algorithm
-//  G4TransportationManager* transportationManager =
-//    G4TransportationManager::GetTransportationManager ();
-//  size_t nWorlds = transportationManager->GetNoWorlds();
-//  G4bool found = false;
-//  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
-//    transportationManager->GetWorldsIterator();
-//  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
-//    G4VPhysicalVolume* world = (*iterWorld);
-//    if (!world) break; // This can happen if geometry has been cleared/destroyed.
-//    // The idea now is to seek a PV with the same name and copy no
-//    // in the hope it's the same one!!
-//    G4PhysicalVolumeModel searchModel (world);
-//    G4int verbosity = 0;  // Suppress messages from G4PhysicalVolumeSearchScene.
-//    G4PhysicalVolumeSearchScene searchScene
-//      (&searchModel, fTopPVName, fTopPVCopyNo, verbosity);
-//    G4ModelingParameters mp;  // Default modeling parameters for this search.
-//    mp.SetDefaultVisAttributes(fpMP? fpMP->GetDefaultVisAttributes(): 0);
-//    searchModel.SetModelingParameters (&mp);
-//    searchModel.DescribeYourselfTo (searchScene);
-//    G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
-//    if (foundVolume) {
-//      if (foundVolume != fpTopPV && warn) {
-//	G4cout <<
-//	  "G4PhysicalVolumeModel::Validate(): A volume of the same name and"
-//	  "\n  copy number (\""
-//	       << fTopPVName << "\", copy " << fTopPVCopyNo
-//	       << ") still exists and is being used."
-//	  "\n  But it is not the same volume you originally specified"
-//	  "\n  in /vis/scene/add/."
-//	       << G4endl;
-//      }
-//      fpTopPV = foundVolume;
-//      CalculateExtent ();
-//      found = true;
-//    }
-//  }
-//  if (found) return true;
-//  else {
-//    if (warn) {
-//      G4cout <<
-//	"G4PhysicalVolumeModel::Validate(): No volume of name and"
-//	"\n  copy number (\""
-//	     << fTopPVName << "\", copy " << fTopPVCopyNo
-//	     << ") exists."
-//	     << G4endl;
-//    }
-//    return false;
-//  }
 }
 
 const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
@@ -915,29 +869,33 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
       (*store)["BasePVPath"] =
       G4AttDef("BasePVPath","Base Physical Volume Path","Physics","","G4String");
       (*store)["LVol"] =
-	G4AttDef("LVol","Logical Volume","Physics","","G4String");
+      G4AttDef("LVol","Logical Volume","Physics","","G4String");
       (*store)["Solid"] =
-	G4AttDef("Solid","Solid Name","Physics","","G4String");
+      G4AttDef("Solid","Solid Name","Physics","","G4String");
       (*store)["EType"] =
-	G4AttDef("EType","Entity Type","Physics","","G4String");
+      G4AttDef("EType","Entity Type","Physics","","G4String");
       (*store)["DmpSol"] =
-	G4AttDef("DmpSol","Dump of Solid properties","Physics","","G4String");
+      G4AttDef("DmpSol","Dump of Solid properties","Physics","","G4String");
       (*store)["LocalTrans"] =
-    G4AttDef("LocalTrans","Local transformation of volume","Physics","","G4String");
+      G4AttDef("LocalTrans","Local transformation of volume","Physics","","G4String");
+      (*store)["LocalExtent"] =
+      G4AttDef("LocalExtent","Local extent of volume","Physics","","G4String");
       (*store)["GlobalTrans"] =
-    G4AttDef("GlobalTrans","Global transformation of volume","Physics","","G4String");
+      G4AttDef("GlobalTrans","Global transformation of volume","Physics","","G4String");
+      (*store)["GlobalExtent"] =
+      G4AttDef("GlobalExtent","Global extent of volume","Physics","","G4String");
       (*store)["Material"] =
-	G4AttDef("Material","Material Name","Physics","","G4String");
+      G4AttDef("Material","Material Name","Physics","","G4String");
       (*store)["Density"] =
-	G4AttDef("Density","Material Density","Physics","G4BestUnit","G4double");
+      G4AttDef("Density","Material Density","Physics","G4BestUnit","G4double");
       (*store)["State"] =
-	G4AttDef("State","Material State (enum undefined,solid,liquid,gas)","Physics","","G4String");
+      G4AttDef("State","Material State (enum undefined,solid,liquid,gas)","Physics","","G4String");
       (*store)["Radlen"] =
-	G4AttDef("Radlen","Material Radiation Length","Physics","G4BestUnit","G4double");
+      G4AttDef("Radlen","Material Radiation Length","Physics","G4BestUnit","G4double");
       (*store)["Region"] =
-	G4AttDef("Region","Cuts Region","Physics","","G4String");
+      G4AttDef("Region","Cuts Region","Physics","","G4String");
       (*store)["RootRegion"] =
-	G4AttDef("RootRegion","Root Region (0/1 = false/true)","Physics","","G4bool");
+      G4AttDef("RootRegion","Root Region (0/1 = false/true)","Physics","","G4bool");
     }
   return store;
 }
@@ -996,34 +954,54 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
 
   std::ostringstream oss; oss << fFullPVPath;
   values->push_back(G4AttValue("PVPath", oss.str(),""));
+
   oss.str(""); oss << fBaseFullPVPath;
   values->push_back(G4AttValue("BasePVPath", oss.str(),""));
+
   values->push_back(G4AttValue("LVol", fpCurrentLV->GetName(),""));
   G4VSolid* pSol = fpCurrentLV->GetSolid();
+
   values->push_back(G4AttValue("Solid", pSol->GetName(),""));
+
   values->push_back(G4AttValue("EType", pSol->GetEntityType(),""));
+
   oss.str(""); oss << '\n' << *pSol;
   values->push_back(G4AttValue("DmpSol", oss.str(),""));
+
   const G4RotationMatrix localRotation = fpCurrentPV->GetObjectRotationValue();
   const G4ThreeVector& localTranslation = fpCurrentPV->GetTranslation();
   oss.str(""); oss << '\n' << G4Transform3D(localRotation,localTranslation);
   values->push_back(G4AttValue("LocalTrans", oss.str(),""));
+
+  oss.str(""); oss << '\n' << pSol->GetExtent() << std::endl;
+  values->push_back(G4AttValue("LocalExtent", oss.str(),""));
+
   oss.str(""); oss << '\n' << fCurrentTransform;
   values->push_back(G4AttValue("GlobalTrans", oss.str(),""));
+
+  oss.str(""); oss << '\n' << (pSol->GetExtent()).Transform(fCurrentTransform) << std::endl;
+  values->push_back(G4AttValue("GlobalExtent", oss.str(),""));
+
   G4String matName = fpCurrentMaterial? fpCurrentMaterial->GetName(): G4String("No material");
   values->push_back(G4AttValue("Material", matName,""));
+
   G4double matDensity = fpCurrentMaterial? fpCurrentMaterial->GetDensity(): 0.;
   values->push_back(G4AttValue("Density", G4BestUnit(matDensity,"Volumic Mass"),""));
+
   G4State matState = fpCurrentMaterial? fpCurrentMaterial->GetState(): kStateUndefined;
   oss.str(""); oss << matState;
   values->push_back(G4AttValue("State", oss.str(),""));
+
   G4double matRadlen = fpCurrentMaterial? fpCurrentMaterial->GetRadlen(): 0.;
   values->push_back(G4AttValue("Radlen", G4BestUnit(matRadlen,"Length"),""));
+
   G4Region* region = fpCurrentLV->GetRegion();
   G4String regionName = region? region->GetName(): G4String("No region");
   values->push_back(G4AttValue("Region", regionName,""));
+
   oss.str(""); oss << fpCurrentLV->IsRootRegion();
   values->push_back(G4AttValue("RootRegion", oss.str(),""));
+
   return values;
 }
 

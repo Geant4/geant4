@@ -143,7 +143,6 @@ public:
 
     void ScaleForNewTemperature(double temp_K);
 
-private:
     void ComputeEffectiveRadius();
 
 protected:
@@ -238,6 +237,8 @@ public:
 
     //_________________________________________________________________
     void PrintTable(G4VDNAReactionModel* = 0);
+
+    void Reset();
 
 protected:
     G4bool fVerbose;

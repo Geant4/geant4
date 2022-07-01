@@ -47,7 +47,7 @@ G4GaussXTRadiator::G4GaussXTRadiator(
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4GaussXTRadiator::~G4GaussXTRadiator() {}
+G4GaussXTRadiator::~G4GaussXTRadiator() = default;
 
 ///////////////////////////////////////////////////////////////////////////
 void G4GaussXTRadiator::ProcessDescription(std::ostream& out) const

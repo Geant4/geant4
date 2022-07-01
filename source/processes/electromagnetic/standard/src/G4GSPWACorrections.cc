@@ -180,7 +180,7 @@ void G4GSPWACorrections::LoadDataElement(const G4Element *elem) {
     izet = gMaxZet;
   }
   // load data from file
-  char* tmppath = std::getenv("G4LEDATA");
+  const char* tmppath = G4FindDataDir("G4LEDATA");
   if (!tmppath) {
     G4Exception("G4GSPWACorrection::LoadDataElement()","em0006",
 		FatalException,
@@ -201,7 +201,7 @@ void G4GSPWACorrections::LoadDataElement(const G4Element *elem) {
     return;
   }
   // allocate data structure
-  DataPerMaterial *perElem = new DataPerMaterial();
+  auto perElem = new DataPerMaterial();
   perElem->fCorScreening.resize(gNumEkin,0.0);
   perElem->fCorFirstMoment.resize(gNumEkin,0.0);
   perElem->fCorSecondMoment.resize(gNumEkin,0.0);
@@ -225,7 +225,7 @@ void G4GSPWACorrections::InitDataMaterial(const G4Material *mat) {
   G4double constFactor        = CLHEP::electron_mass_c2*CLHEP::fine_structure_const/0.88534;
   constFactor                *= constFactor;  // (mc^2)^2\alpha^2/( C_{TF}^2)
   // allocate memory
-  DataPerMaterial *perMat     = new DataPerMaterial();
+  auto perMat = new DataPerMaterial();
   perMat->fCorScreening.resize(gNumEkin,0.0);
   perMat->fCorFirstMoment.resize(gNumEkin,0.0);
   perMat->fCorSecondMoment.resize(gNumEkin,0.0);

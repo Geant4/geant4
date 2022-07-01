@@ -1,12 +1,20 @@
--------------------------------------------------------------------
--------------------------------------------------------------------
+# Example ICRP110_HumanPhantoms History
 
-     =========================================================
- 		      Geant4 - ICRP110Phantoms example
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
+## 2022-06-02 Susanna Guatelli (ICRP110Phantoms-V11-00-01)
+- Error reading the first voxels (in x=0, y=0) corrected
+- Migration to features of C++11/14/17
+
+## 2021-12-10 Ben Morgan (ICRP110Phantoms-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 07.10.2021 - I. Hrivnacova; ICRP110Phantoms-V10-07-07
              Removed unused ICRP110PhantomAnalysisManager.hh.
 

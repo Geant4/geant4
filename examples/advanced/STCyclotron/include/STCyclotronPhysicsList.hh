@@ -52,8 +52,8 @@ public:
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
-  void SetCutFoil(G4double cutProton, G4double cutElectron, G4double cutPositron, G4double cutGamma, G4double cutNeutron);
-  void SetCutTarget(G4double cutProton, G4double cutElectron, G4double cutPositron, G4double cutGamma, G4double cutNeutron);
+  void SetCutFoil(G4double cutProton, G4double cutElectron, G4double cutPositron, G4double cutGamma);
+  void SetCutTarget(G4double cutProton, G4double cutElectron, G4double cutPositron, G4double cutGamma);
   
  
 
@@ -77,13 +77,11 @@ private:
   G4double fCutTargetElectron;
   G4double fCutTargetPositron;
   G4double fCutTargetGamma;
-  G4double fCutTargetNeutron;
 
   G4double fCutFoilProton;
   G4double fCutFoilElectron;
   G4double fCutFoilPositron;
   G4double fCutFoilGamma;
-  G4double fCutFoilNeutron;
   
   STCyclotronDetectorConstruction* fDetector;
 

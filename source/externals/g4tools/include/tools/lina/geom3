@@ -50,10 +50,10 @@ public:
   void get_point(unsigned int a_index,unsigned int a_num,vec3<T>& a_p){
     //a_index = 0        is a_p0
     //a_index = a_num-1  is a_p1
-    T s = T(a_index)/T(a_num-1);
-    T s2 = s*s;
-    T s3 = s2*s;
-    a_p = m_a*s3 + m_b*s2 + m_c*s + m_d;
+    T _s = T(a_index)/T(a_num-1);
+    T s2 = _s*_s;
+    T s3 = s2*_s;
+    a_p = m_a*s3 + m_b*s2 + m_c*_s + m_d;
   }
   void get_point(unsigned int a_index,unsigned int a_num,T& a_x,T& a_y,T& a_z){
     //a_index = 0        is a_p0

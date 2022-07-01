@@ -48,7 +48,7 @@ class G4UIbridge
   public:
 
     G4UIbridge(G4UImanager* localUI, G4String dir);
-    ~G4UIbridge();
+    ~G4UIbridge() = default;
 
     G4int ApplyCommand(const G4String& aCmd);
 

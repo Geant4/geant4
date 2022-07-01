@@ -65,7 +65,6 @@ namespace G4INCL {
             pion = particle1;
         }
 
-		
         G4int iso=ParticleTable::getIsospin(nucleon->getType())+ParticleTable::getIsospin(pion->getType());
 // assert(iso == 1 || iso == -1);
         if (iso == 1) {
@@ -75,6 +74,13 @@ namespace G4INCL {
 			nucleon->setType(Neutron);
         }
 		pion->setType(Omega);
+
+                // Erase the parent resonance information of the nucleon and pion
+	        nucleon->setParentResonancePDGCode(0);
+	        nucleon->setParentResonanceID(0);
+                pion->setParentResonancePDGCode(0);
+                pion->setParentResonanceID(0);
+		
 //        nucleon->setEnergy(std::sqrt((nucleon->getMass())*(nucleon->getMass())+(mom_nucleon.mag()*mom_nucleon.mag())));
 //        pion->setEnergy(std::sqrt((pion->getMass())*(pion->getMass())+(mom_nucleon.mag()*mom_nucleon.mag())));
   G4double sh=nucleon->getEnergy()+pion->getEnergy();

@@ -1,34 +1,49 @@
--------------------------------------------------------------------
+# Category run History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
-
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
-
-May 17, 2022 Ben Morgan (run-V10-07-15)
+## 2022-05-17 Ben Morgan (run-V11-00-08)
 - Apply patches from Seth Johnson:
   - Check for correct state in default exception handler before trying to access
     manager classes that may be nullptr in other states
   - Don't create a default exception manager in run manager kernel if one exists
     already.
 
-February 24, 2022  Makoto Asai (run-V10-07-14)
+## 2022-04-13 Ben Morgan (run-V11-00-07)
+- Add missing dependency on G4decay, remove unneeded dependency on G4hadronic_util
+
+## 2022-03-29 Hoang Tran (run-V11-00-06)
+- Added new DNAScavenger in PhysicsListHelper for DNA processes
+
+## 2022-03-25 Ben Morgan (run-V11-00-05)
+- Move implementations of task-based Run interfaces/implementations into Run
+  category from tasking category.
+  - See `History.tasking` file for History of tasking prior this tag of `run`.
+
+## 2022-02-24 Makoto Asai (run-V11-00-04)
 - Adding verbosity control to some G4cout. Addressing to bug report #2397.
 
-December 11, 2021  Laurie Nevay 
+## 2022-01-28 Ben Morgan (run-V11-00-03)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+- Make DLL export symbol a CMake module-level compile definition to aid
+  future modularization
+  
+## 2022-01-18 Jonas Hahnfeld (run-V11-00-02)
+- Prefer pointer to `const G4Material` if possible
+
+## 2021-12-11 Laurie Nevay (run-V11-00-01)
 - Fix missing AnnihToTauTau entry from default physics list ordering that
   would cause a fatal exception if EmExtra is used with PositronToMuMu=True.
+
+## 2021-12-10 Ben Morgan (run-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October 25, 2021 B.Morgan (run-V10-07-13)
 - Use G4StrUtil functions replacing deprecated G4String member functions

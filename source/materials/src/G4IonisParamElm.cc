@@ -146,9 +146,6 @@ G4IonisParamElm::G4IonisParamElm(__void__&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4IonisParamElm::~G4IonisParamElm()
-{
-  if (fShellCorrectionVector) { delete [] fShellCorrectionVector; }
-}
+G4IonisParamElm::~G4IonisParamElm() { delete[] fShellCorrectionVector; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

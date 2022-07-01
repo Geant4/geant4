@@ -83,10 +83,6 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(0 == anEvent->GetEventID()) {
-    G4double x0 = -0.5*(fDetector->GetWorldSizeX());
-    fParticleGun->SetParticlePosition(G4ThreeVector(x0, 0.0, 0.0));  
-  }
   //this function is called at the begining of event
   //
   //randomize the beam, if requested.

@@ -66,8 +66,7 @@ G4DeltaAngle::G4DeltaAngle(const G4String&)
   prob.resize(nprob,0.0);
 }    
 
-G4DeltaAngle::~G4DeltaAngle() 
-{}
+G4DeltaAngle::~G4DeltaAngle() = default;
 
 G4ThreeVector& 
 G4DeltaAngle::SampleDirectionForShell(const G4DynamicParticle* dp,

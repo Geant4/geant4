@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -75,63 +75,63 @@ Region <Target> --  -- appears in <World> world volume
  Root logical volume(s) : Target 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : G4_Ni 
- Production cuts :   gamma 175 um      e- 175 um      e+ 175 um  proton 175 um 
+ Production cuts :   gamma 175 um      e- 175 um      e+ 175 um  proton 10 um 
 
 Region <Foil> --  -- appears in <World> world volume
  This region is in the mass world.
  Root logical volume(s) : Foil 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : G4_Al 
- Production cuts :   gamma 5 Ang     e- 5 Ang     e+ 5 Ang proton 5 Ang
+ Production cuts :   gamma 5 Ang     e- 5 Ang     e+ 5 Ang proton 100 um 
 
 ========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Al
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  2.34147 keV    e-  131.214 keV    e+  128.744 keV proton 10 keV
+ Energy thresholds :  gamma  2.34157 keV    e-  131.218 keV    e+  128.746 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : vacuumBeam
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : helium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : G4_Pt
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  42.2904 keV    e-  374.921 keV    e+  359.657 keV proton 10 keV
+ Energy thresholds :  gamma  42.2897 keV    e-  374.929 keV    e+  359.669 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : G4_Ni
- Range cuts        :  gamma  175 um     e-  175 um     e+  175 um  proton 175 um 
- Energy thresholds :  gamma  9.71418 keV    e-  374.785 keV    e+  361.68 keV proton 17.5 keV
+ Range cuts        :  gamma  175 um     e-  175 um     e+  175 um  proton 10 um 
+ Energy thresholds :  gamma  9.71407 keV    e-  374.794 keV    e+  361.684 keV proton 1 keV
  Region(s) which use this couple : 
     Target
 
 Index : 6     used in the geometry : Yes
  Material : G4_Al
- Range cuts        :  gamma  5 Ang    e-  5 Ang    e+  5 Ang proton 5 Ang
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 50 meV
+ Range cuts        :  gamma  5 Ang    e-  5 Ang    e+  5 Ang proton 100 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     Foil
 
@@ -160,7 +160,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=35.760000s Real=36.120555s Sys=0.020000s
+  User=21.240000s Real=21.718533s Sys=0.000000s
 ... write file : SolidTargetCyclotron.root - done
 ... close file : SolidTargetCyclotron.root - done
 G4 kernel has come to Quit state.
@@ -176,19 +176,19 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 12
+Total navigation history collections cleaned: 10
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0163 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0135 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 0.522 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00192 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.258 MB
-Pool ID '17G4DynamicParticle', size : 0.517 MB
-Pool ID '7G4Track', size : 1.03 MB
-Pool ID '18G4TouchableHistory', size : 0.00192 MB
+Pool ID '7G4Track', size : 1.04 MB
+Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '17G4ReactionProduct', size : 0.00192 MB
 Pool ID '10G4Fragment', size : 0.000961 MB

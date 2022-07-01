@@ -139,17 +139,17 @@ protected:
     if(!parent::read(tag)) return false;
 
     if(tag==kNewClassTag()) {
-      char s[80];
-      if(!read_string(s, 80)) {
+      char _s[80];
+      if(!read_string(_s, 80)) {
         m_out << "tools::rroot::read_class_tag :"
               << " read string." << std::endl;
         return false;
       }
       //m_out << "tools::rroot::read_class_tag :"
       //      << " tag kNewClassTag"
-      //      << " class " << s
+      //      << " class " << _s
       //      << std::endl;
-      a_class = s;
+      a_class = _s;
       return true;
 
     } else if(tag & kClassMask()) {
@@ -661,7 +661,7 @@ inline bool pointer_stream(buffer& a_buffer,
     a_obj = (T*)obj->cast(a_T_class);
     if(!a_obj) {
       a_buffer.out() << "tools::rroot::pointer_stream : "
-                     << " inlib::cast to " << a_T_class << " failed."
+                     << " tools::cast to " << a_T_class << " failed."
                      << ". Object is a " << obj->s_cls() << "."
                      << std::endl;
       if(a_created) delete obj;
@@ -691,7 +691,7 @@ inline bool pointer_stream(buffer& a_buffer,
     a_obj = (T*)obj->cast(a_T_class);
     if(!a_obj) {
       a_buffer.out() << "tools::rroot::pointer_stream : "
-                     << " inlib::cast to " << a_T_class << " failed."
+                     << " tools::cast to " << a_T_class << " failed."
                      << ". Object is a " << obj->s_cls() << "."
                      << std::endl;
       if(a_created) delete obj;

@@ -45,9 +45,8 @@ class G4TrackStack : public std::vector<G4StackedTrack>
 {
   public:
 
-    G4TrackStack()
-      : safetyValue1(0), safetyValue2(0), nstick(0) {}
-    G4TrackStack(std::size_t n)
+    G4TrackStack() = default;
+    explicit G4TrackStack(std::size_t n)
       : safetyValue1(G4int(4*n/5)),
         safetyValue2(G4int(4*n/5-100)), nstick(100) { reserve(n); }
    ~G4TrackStack();
@@ -71,14 +70,14 @@ class G4TrackStack : public std::vector<G4StackedTrack>
     inline G4int GetSafetyValue2() const { return safetyValue2; }
     inline G4int GetNStick() const { return nstick; }
   
-    G4double getTotalEnergy(void) const;
+    G4double getTotalEnergy() const;
     inline void SetSafetyValue2(G4int x) { safetyValue2 = x  < 0 ? 0 : x; }
   
   private:
 
-    G4int safetyValue1;
-    G4int safetyValue2;
-    G4int nstick;
+    G4int safetyValue1{0};
+    G4int safetyValue2{0};
+    G4int nstick{0};
 };
 
 #endif

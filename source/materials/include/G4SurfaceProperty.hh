@@ -55,7 +55,7 @@
 
 class G4SurfaceProperty;
 
-typedef std::vector<G4SurfaceProperty*> G4SurfacePropertyTable;
+using G4SurfacePropertyTable = std::vector<G4SurfaceProperty*>;
 
 enum G4SurfaceType
 {
@@ -75,7 +75,7 @@ class G4SurfaceProperty
   // Constructor of a X-ray optical surface object.
 
   G4SurfaceProperty();
-  virtual ~G4SurfaceProperty();
+  virtual ~G4SurfaceProperty() = default;
 
   const G4String& GetName() const { return theName; }
   // Returns the surface name.

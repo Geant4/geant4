@@ -132,14 +132,14 @@ geant4_add_module(G4hadronic_xsect
 
 geant4_module_link_libraries(G4hadronic_xsect
   PUBLIC
-	  G4baryons
-		G4globman
-		G4hadronic_util
-		G4heprandom
-		G4ions
-		G4leptons
-		G4materials
-		G4partman
-	PRIVATE
-	  G4bosons
-		G4mesons)
+    G4baryons
+    G4globman
+    G4hadronic_util
+    G4heprandom
+    G4ions
+    G4leptons
+    G4materials
+    G4partman
+  PRIVATE
+    G4bosons
+    G4mesons)

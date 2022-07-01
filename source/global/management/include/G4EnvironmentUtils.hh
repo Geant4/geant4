@@ -220,6 +220,8 @@ inline G4String G4GetDataEnv(const std::string& env_id,
   return "";
 }
 
+const char* G4FindDataDir(const char*);
+
 // ---------------------------------------------------------------------------
 // Use this function to print the environment
 //

@@ -45,7 +45,6 @@ G4MinEkineCuts::G4MinEkineCuts(const G4String& aName)
    if (verboseLevel>1) {
      G4cout << GetProcessName() << " is created "<< G4endl;
    }
-   SetProcessType(fUserDefined);
 }
 
 G4MinEkineCuts::~G4MinEkineCuts()

@@ -35,13 +35,13 @@
 #include "G4TRNtupleManager.hh"
 #include "globals.hh"
 
-#include "tools/hdf5/ntuple"
+#include "toolx/hdf5/ntuple"
 
 #include <string_view>
 
 class G4Hdf5RFileManager;
 
-class G4Hdf5RNtupleManager : public G4TRNtupleManager<tools::hdf5::ntuple>
+class G4Hdf5RNtupleManager : public G4TRNtupleManager<toolx::hdf5::ntuple>
 {
   friend class G4Hdf5AnalysisReader;
 
@@ -57,7 +57,7 @@ class G4Hdf5RNtupleManager : public G4TRNtupleManager<tools::hdf5::ntuple>
     // Methods from the base class
     virtual G4int  ReadNtupleImpl(const G4String& ntupleName, const G4String& fileName,
                               const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4bool GetTNtupleRow(G4TRNtupleDescription<tools::hdf5::ntuple>* ntupleDescription) final;
+    virtual G4bool GetTNtupleRow(G4TRNtupleDescription<toolx::hdf5::ntuple>* ntupleDescription) final;
 
     // Static data members
     static constexpr std::string_view fkClass { "G4Hdf5RNtupleManager" };

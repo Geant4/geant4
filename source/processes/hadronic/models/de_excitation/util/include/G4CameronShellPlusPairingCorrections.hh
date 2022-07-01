@@ -41,6 +41,8 @@ public:
 
   explicit G4CameronShellPlusPairingCorrections();
 
+  ~G4CameronShellPlusPairingCorrections() = default;
+
   inline G4bool GetPairingCorrection(G4int N, G4int Z, G4double& result) const
   {
     G4bool res = false;
@@ -53,10 +55,11 @@ public:
   
   enum  { TableSize = 200 };
   
-private:
-  
   G4CameronShellPlusPairingCorrections(const G4CameronShellPlusPairingCorrections & right) = delete;
-  const G4CameronShellPlusPairingCorrections & operator=(const G4CameronShellPlusPairingCorrections & right) = delete;
+  const G4CameronShellPlusPairingCorrections & operator=
+  (const G4CameronShellPlusPairingCorrections & right) = delete;
+
+private:
 
   static G4double SPZTable[TableSize];
   static G4double SPNTable[TableSize];

@@ -41,26 +41,24 @@
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
 #include "G4HadronicParametersMessenger.hh"
-
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 G4HadronicParameters* G4HadronicParameters::sInstance = nullptr;
 
-#ifdef G4MULTITHREADED
-G4Mutex G4HadronicParameters::paramMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex paramMutex = G4MUTEX_INITIALIZER;
+}
 
 G4HadronicParameters* G4HadronicParameters::Instance() {
   if ( sInstance == nullptr ) {
-    #ifdef G4MULTITHREADED
-    G4MUTEXLOCK( &paramMutex );
+    G4AutoLock l(&paramMutex);
     if ( sInstance == nullptr ) {
-    #endif
       static G4HadronicParameters theHadronicParametersObject;
       sInstance = &theHadronicParametersObject;
-    #ifdef G4MULTITHREADED
     }
-    G4MUTEXUNLOCK(&paramMutex);
-    #endif
+    l.unlock();
   }
   return sInstance;
 }
@@ -199,4 +197,18 @@ void G4HadronicParameters::SetApplyFactorXS( G4bool val ) {
 
 void G4HadronicParameters::SetEnableCRCoalescence( G4bool val ) {
   if ( ! IsLocked() ) fEnableCRCoalescence = val;
+}
+
+
+void G4HadronicParameters::SetEnableIntegralInelasticXS( G4bool val ) {
+  if ( ! IsLocked() ) fEnableIntegralInelasticXS = val;
+}
+
+
+void G4HadronicParameters::SetEnableIntegralElasticXS( G4bool val ) {
+  if ( ! IsLocked() ) fEnableIntegralElasticXS = val;
+}
+
+void G4HadronicParameters::SetEnableDiffDissociationForBGreater10(G4bool val) {
+  if ( ! IsLocked() ) fEnableDiffDissociationForBGreater10 = val;
 }

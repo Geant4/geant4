@@ -64,9 +64,6 @@ BrachyDetectorConstructionFlexi::BrachyDetectorConstructionFlexi()
     fSteelAttributes(nullptr), fEndAttributes(nullptr), fSimpleIridiumVisAtt(nullptr)
 {}
 
-BrachyDetectorConstructionFlexi::~BrachyDetectorConstructionFlexi()
-{}
-
 void BrachyDetectorConstructionFlexi::ConstructFlexi(G4VPhysicalVolume* mother)
 {
   G4NistManager* nist = G4NistManager::Instance();
@@ -84,7 +81,7 @@ void BrachyDetectorConstructionFlexi::ConstructFlexi(G4VPhysicalVolume* mother)
   G4Element* elNi = nist -> FindOrBuildElement(Z=28);
  
   constexpr G4double d = 7.999*g/cm3;
-  G4Material* steelMat = new G4Material("Stainless steel 304",d,6);
+  auto steelMat = new G4Material("Stainless steel 304",d,6);
   steelMat -> AddElement(elMn, 0.02);
   steelMat -> AddElement(elSi, 0.01);
   steelMat -> AddElement(elCr, 0.19);
@@ -98,7 +95,7 @@ void BrachyDetectorConstructionFlexi::ConstructFlexi(G4VPhysicalVolume* mother)
   G4double shellr_max = 0.85 * mm;
   G4double shell_length = 3.6 * mm; 
   fSteelShell = new G4Tubs("steel_shell",shellr_min, shellr_max/2, shell_length/2.,0.*deg,360.*deg);
-  fLogicalSteelShell = new G4LogicalVolume(fSteelShell, steelMat, "steel_shell_log", 0, 0, 0);
+  fLogicalSteelShell = new G4LogicalVolume(fSteelShell, steelMat, "steel_shell_log", nullptr, nullptr, nullptr);
   fPhysicalSteelShell = new G4PVPlacement(nullptr,G4ThreeVector(0,0,0),"phys_steel_shell", fLogicalSteelShell, mother, false, 0, true);
 
 //Define dimensions of the air gap between Steel shell and Iridium core
@@ -106,7 +103,7 @@ void BrachyDetectorConstructionFlexi::ConstructFlexi(G4VPhysicalVolume* mother)
   G4double airr_max = 0.67 * mm;
   G4double air_length = 3.6 * mm; 
   fAirGap = new G4Tubs("air_gap", airr_min, airr_max/2, air_length/2, 0.*deg, 360.*deg);
-  fLogicalAirGap = new G4LogicalVolume(fAirGap, airMat, "air_gap_log", 0, 0, 0);
+  fLogicalAirGap = new G4LogicalVolume(fAirGap, airMat, "air_gap_log", nullptr, nullptr, nullptr);
   fPhysicalAirGap = new G4PVPlacement(nullptr, G4ThreeVector(0,0,0), "phys_air_gap", fLogicalAirGap, fPhysicalSteelShell, false, 0, true);
 
 //Define the non-cable weld end of the Steel shell 
@@ -114,7 +111,7 @@ void BrachyDetectorConstructionFlexi::ConstructFlexi(G4VPhysicalVolume* mother)
   G4double end1r_max = 0.85 * mm;
   G4double end1length = 0.65 * mm; 
   fEnd1SteelShell = new G4Tubs("End_1_steel_shell", end1r_min, end1r_max/2, end1length/2.,0.*deg,360.*deg);
-  fLogicalEnd1SteelShell = new G4LogicalVolume(fEnd1SteelShell, steelMat, "End1_steel_shell_log", 0, 0, 0);
+  fLogicalEnd1SteelShell = new G4LogicalVolume(fEnd1SteelShell, steelMat, "End1_steel_shell_log", nullptr, nullptr, nullptr);
   G4double end1offset_x = 0.0 * mm;
   G4double end1offset_y = 0.0 * mm;
   G4double end1offset_z = 2.125 * mm;
@@ -127,7 +124,7 @@ void BrachyDetectorConstructionFlexi::ConstructFlexi(G4VPhysicalVolume* mother)
   G4double end2r_max2 = 0.5 * mm;
   G4double end2length = 0.4 * mm;
   fEnd2SteelShell = new G4Cons("End_2_steel_shell", end2r_min2, end2r_max2/2, end2r_min1, end2r_max1/2, end2length/2.0, 0.0, 360.0*deg);
-  fLogicalEnd2SteelShell = new G4LogicalVolume(fEnd2SteelShell, steelMat, "End2_steel_shell_log", 0, 0, 0);
+  fLogicalEnd2SteelShell = new G4LogicalVolume(fEnd2SteelShell, steelMat, "End2_steel_shell_log", nullptr, nullptr, nullptr);
   G4double end2offset_x = 0.0 * mm;
   G4double end2offset_y = 0.0 * mm;
   G4double end2offset_z = -2.0 * mm; 
@@ -138,7 +135,7 @@ void BrachyDetectorConstructionFlexi::ConstructFlexi(G4VPhysicalVolume* mother)
   G4double cable_max = 0.5 * mm;
   G4double cablelength = 5.0 * mm; 
   fCable = new G4Tubs("cable",cable_min, cable_max/2, cablelength/2.,0.*deg,360.*deg);
-  fLogicalCable = new G4LogicalVolume(fCable, steelMat, "cable_log", 0, 0, 0);
+  fLogicalCable = new G4LogicalVolume(fCable, steelMat, "cable_log", nullptr, nullptr, nullptr);
   G4double cableoffset_x = 0.0 * mm;
   G4double cableoffset_y = 0.0 * mm;
   G4double cableoffset_z = -4.7 * mm;
@@ -149,7 +146,7 @@ void BrachyDetectorConstructionFlexi::ConstructFlexi(G4VPhysicalVolume* mother)
   G4double corer_max = 0.6 * mm;
   G4double core_length = 3.5 * mm; 
   fIridiumCore = new G4Tubs("iridium_core",corer_min, corer_max/2,core_length/2.,0.*deg,360.*deg);
-  fLogicalIridiumCore = new G4LogicalVolume(fIridiumCore, iridiumMat, "iridium_core_log", 0, 0, 0);
+  fLogicalIridiumCore = new G4LogicalVolume(fIridiumCore, iridiumMat, "iridium_core_log", nullptr, nullptr, nullptr);
   fPhysicalIridiumCore = new G4PVPlacement(nullptr,G4ThreeVector(0,0,0), "phys_iridium_core", fLogicalIridiumCore, fPhysicalAirGap, false, 0, true);
 
 // Visualisations

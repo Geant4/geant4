@@ -15,5 +15,6 @@
 /gun/particle ion
 /gun/ion 6 11
 #
+/analysis/setFileName scoring2
 /run/printProgress 10000
 /run/beamOn 40000

@@ -40,6 +40,8 @@
 #include "G4RadioactiveDecayMessenger.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+#include "G4NuclideTable.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4DecayTable.hh"
@@ -135,7 +137,7 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   // DHW deex->SetCorrelatedGamma(true);
 
   // Check data directory
-  char* path_var = std::getenv("G4RADIOACTIVEDATA");
+  const char* path_var = G4FindDataDir("G4RADIOACTIVEDATA");
   if (!path_var) {
     G4Exception("G4RadioactiveDecay()","HAD_RDM_200",FatalException,
                 "Environment variable G4RADIOACTIVEDATA is not set");
@@ -470,6 +472,8 @@ G4RadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
   G4DeexPrecoParameters* deex =
     G4NuclearLevelData::GetInstance()->GetParameters();
   G4EmParameters* emparam = G4EmParameters::Instance();
+  G4double minMeanLife
+      = G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()/std::log(2.);
 
   G4int prec = os.precision(5);
   os << "======================================================================"
@@ -478,8 +482,10 @@ G4RadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
      << endline;
   os << "======================================================================"
      << endline;
-  os << "Max life time                                     "
-     << deex->GetMaxLifeTime()/CLHEP::ps << " ps" << endline;
+  os << "min MeanLife (from G4NuclideTable)                "
+     << G4BestUnit(minMeanLife, "Time") << endline;     
+  os << "Max life time (from G4DeexPrecoParameters)        "
+     << G4BestUnit(deex->GetMaxLifeTime(), "Time") << endline;
   os << "Internal e- conversion flag                       "
      << deex->GetInternalConversionFlag() << endline;
   os << "Stored internal conversion coefficients           "
@@ -499,7 +505,7 @@ G4RadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
   os << "Use ANSTO fluorescence model                      "
      << emparam->ANSTOFluoDir() << endline;
   os << "Threshold for very long decay time at rest        "
-     << fThresholdForVeryLongDecayTime/CLHEP::ns << "  ns" << endline;
+     << G4BestUnit(fThresholdForVeryLongDecayTime, "Time") << endline;
   os << "======================================================================"
      << G4endl;
   os.precision(prec);

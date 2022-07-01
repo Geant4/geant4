@@ -64,17 +64,17 @@ public:
 
   G4CrossSectionDataStore();
 
-  ~G4CrossSectionDataStore();
+  ~G4CrossSectionDataStore() = default;
 
-  // Cross section per unit volume is computed (inverse mean free path)
-  G4double GetCrossSection(const G4DynamicParticle*, const G4Material*);
+  // Run time cross section per unit volume
+  inline G4double GetCrossSection(const G4DynamicParticle*, const G4Material*);
   G4double ComputeCrossSection(const G4DynamicParticle*, const G4Material*);
 
-  // Cross section per element is computed
+  // Cross section per element
   G4double GetCrossSection(const G4DynamicParticle*, 
 			   const G4Element*, const G4Material*);
 
-  // Cross section per isotope is computed
+  // Cross section per isotope 
   G4double GetCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
                            const G4Isotope*,
 			   const G4Element*, const G4Material*);
@@ -94,40 +94,50 @@ public:
   void PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs) const;
   
   void AddDataSet(G4VCrossSectionDataSet*);
-  void AddDataSet(G4VCrossSectionDataSet*,size_t);
+  void AddDataSet(G4VCrossSectionDataSet*, size_t);
 
   inline void SetVerboseLevel(G4int value);
+
+  G4CrossSectionDataStore & operator=
+  (const G4CrossSectionDataStore &right) = delete;
+  G4CrossSectionDataStore(const G4CrossSectionDataStore&) = delete;
 
 private:
 
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
-			      const G4Isotope*,
-			      const G4Element*, const G4Material* aMaterial,
-			      G4int index);
-
-  G4CrossSectionDataStore & operator=(const G4CrossSectionDataStore &right);
-  G4CrossSectionDataStore(const G4CrossSectionDataStore&);
+			      const G4Isotope*, const G4Element*,
+                              const G4Material*, const G4int index);
 
   G4String HtmlFileName(const G4String & in) const;
 
   G4NistManager* nist;
+  const G4Material* currentMaterial = nullptr;
+  const G4ParticleDefinition* matParticle = nullptr;
+  G4double matKinEnergy = 0.0;
+  G4double matCrossSection = 0.0;
+
+  G4int nDataSetList = 0;
+  G4int verboseLevel = 1;
 
   std::vector<G4VCrossSectionDataSet*> dataSetList;
   std::vector<G4double> xsecelm;
   std::vector<G4double> xseciso;
-
-  const G4Material* currentMaterial;
-  const G4ParticleDefinition* matParticle;
-  G4double matKinEnergy;
-  G4double matCrossSection;
-
-  G4int nDataSetList;
-  G4int verboseLevel;
 };
 
 inline void G4CrossSectionDataStore::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
+}
+
+inline G4double 
+G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* dp,
+                                         const G4Material* mat)
+{
+  if(dp->GetKineticEnergy() != matKinEnergy || mat != currentMaterial ||
+     dp->GetDefinition() != matParticle) {
+    ComputeCrossSection(dp, mat);
+  }
+  return matCrossSection;
 }
 
 #endif

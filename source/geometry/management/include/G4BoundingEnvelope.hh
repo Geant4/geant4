@@ -104,7 +104,8 @@ class G4BoundingEnvelope
       // Find max scale factor of the transformation
 
     void TransformVertices(const G4Transform3D& pTransform3D,
-                                 std::vector<G4Polygon3D*>& pBases) const;
+                                 std::vector<G4Point3D>& pVertices,
+                                 std::vector<std::pair<G4int,G4int>>& pBases) const;
       // Create list of transformed polygons
 
     void GetPrismAABB(const G4Polygon3D& pBaseA,
@@ -116,7 +117,7 @@ class G4BoundingEnvelope
                            const G4Polygon3D& baseB,
                                  std::vector<G4Segment3D>& pEdges) const;
       // Create list of edges of a prism
-  
+
     void CreateListOfPlanes(const G4Polygon3D& baseA,
                             const G4Polygon3D& baseB,
                                   std::vector<G4Plane3D>& pPlanes) const;
@@ -136,7 +137,7 @@ class G4BoundingEnvelope
 
   private:
 
-    G4ThreeVector fMin, fMax; 
+    G4ThreeVector fMin, fMax;
       // original bounding box
 
     const std::vector<const G4ThreeVectorList*>* fPolygons = nullptr;

@@ -52,6 +52,7 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
 
     struct ZSection
     {
+      ZSection() : fZ(0.), fOffset(0.,0.), fScale(1.) {}
       ZSection(G4double z, G4TwoVector offset, G4double scale)
         : fZ(z), fOffset(offset), fScale(scale) {}
 
@@ -70,8 +71,10 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
     G4UExtrudedSolid(const G4String&                 pName,
                      const std::vector<G4TwoVector>& polygon,
                      G4double                        halfZ,
-                     const G4TwoVector& off1, G4double scale1,
-                     const G4TwoVector& off2, G4double scale2);
+                     const G4TwoVector& off1 = G4TwoVector(0.,0.),
+                           G4double scale1 = 1.,
+                     const G4TwoVector& off2 = G4TwoVector(0.,0.),
+                           G4double scale2 = 1. );
     // Special constructor for solid with 2 z-sections
 
    ~G4UExtrudedSolid();

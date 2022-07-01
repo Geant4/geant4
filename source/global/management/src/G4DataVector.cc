@@ -32,11 +32,6 @@
 #include <iomanip>
 
 // --------------------------------------------------------------------
-G4DataVector::G4DataVector()
-  : std::vector<G4double>()
-{}
-
-// --------------------------------------------------------------------
 G4DataVector::G4DataVector(std::size_t cap)
   : std::vector<G4double>(cap, 0.0)
 {}
@@ -45,9 +40,6 @@ G4DataVector::G4DataVector(std::size_t cap)
 G4DataVector::G4DataVector(std::size_t cap, G4double value)
   : std::vector<G4double>(cap, value)
 {}
-
-// --------------------------------------------------------------------
-G4DataVector::~G4DataVector() {}
 
 // --------------------------------------------------------------------
 G4bool G4DataVector::Store(std::ofstream& fOut, G4bool ascii)

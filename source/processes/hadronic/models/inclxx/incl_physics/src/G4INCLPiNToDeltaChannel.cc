@@ -87,6 +87,12 @@ namespace G4INCL {
     nucleon->setType(deltaType); // nucleon becomes the delta
     nucleon->setEnergy(deltaEnergy); // set the energy of the delta
 
+    // Erase the parent resonance information of the nucleon and pion
+    nucleon->setParentResonancePDGCode(0);
+    nucleon->setParentResonanceID(0);
+    pion->setParentResonancePDGCode(0);
+    pion->setParentResonanceID(0);
+    
     ThreeVector deltaMomentum = nucleon->getMomentum() + pion->getMomentum();
     nucleon->setMomentum(deltaMomentum);
 

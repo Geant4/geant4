@@ -95,7 +95,7 @@ void G4VtkMessenger::SetNewValue(G4UIcommand *command, G4String newValue)
 
   auto* pVtkViewer = dynamic_cast<G4VtkViewer*>(pViewer);
   if (!pVtkViewer) {
-    G4cout << "G4OpenGLViewerMessenger::SetNewValue: Current viewer is not of type VTK. \n"
+    G4cout << "G4VtkMessenger::SetNewValue: Current viewer is not of type VTK. \n"
            << "(It is \""
            << pViewer->GetName()
            << "\".)\n"

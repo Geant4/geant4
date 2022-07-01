@@ -1,11 +1,17 @@
--------------------------------------------------------------------------------
-History File, 2012/10/24 F.Romano, Created
-francesco.romano@lns.infn.it
--------------------------------------------------------------------------------
+# Example gammaknife History
 
-         ====================================================
-             History file of the GammaKnife application
-         ====================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+
+## 2021-12-10 Ben Morgan (gammaknife-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 29.10.2021 S. Guatelli (gammaknife-V10-07-03)
            - runManager deleted at the end of the main
 

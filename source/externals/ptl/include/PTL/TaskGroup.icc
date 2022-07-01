@@ -30,6 +30,7 @@
 // ---------------------------------------------------------------
 
 #include "PTL/Types.hh"
+#include "PTL/Utility.hh"
 
 namespace PTL
 {
@@ -102,6 +103,7 @@ TaskGroup<Tp, Arg, MaxDepth>::wait()
     ThreadData* data = ThreadData::GetInstance();
     if(!data)
         return;
+
     // if no pool was initially present at creation
     if(!m_pool)
     {

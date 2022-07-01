@@ -129,8 +129,15 @@ void RunAction::EndOfRunAction(const G4Run* run)
     LET_mean /= nOfEvent;
     LET_square = std::sqrt(LET_square/nOfEvent - std::pow(LET_mean,2));
 
-    out<<std::setw(12)<<"LET"<<std::setw(12)<<LET_mean
-       <<std::setw(12)<<"LET_SD"<<std::setw(12)<<LET_square/(nOfEvent-1)<<'\n';
+    if(nOfEvent > 1)
+    {
+      out<<std::setw(12)<<"LET"<<std::setw(12)<<LET_mean
+          <<std::setw(12)<<"LET_SD"<<std::setw(12)<<LET_square/(nOfEvent-1)<<'\n';
+    }else
+    {
+      out<<std::setw(12)<<"LET"<<std::setw(12)<<LET_mean
+          <<std::setw(12)<<"LET_SD"<<std::setw(12)<<LET_square<<'\n';
+    }
 
     masterScorer->OutputAndClear();
 

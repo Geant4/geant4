@@ -1,20 +1,22 @@
--------------------------------------------------------------------
+# Category ptl History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the log-message one should put at every
-committal in the code repository !
+## 2022-06-14 Ben Morgan (ptl-V11-00-02)
+- Use any existing value of PTL_SANITIZER_TYPE to set the cache value to prevent
+  override. Fixes Issue #128.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-05-19 Ben Morgan (ptl-V11-00-01)
+- Import PTL v2.3.3, patching for Geant4 organisation of source code
+
+## 2021-12-10 Ben Morgan (ptl-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 21 September 2021 - G. Amadio (ptl-V10-07-08)
 - Fix C++20 warnings from GCC 11.2.0.

@@ -35,11 +35,13 @@
 #include "G4CrystalExtension.hh"
 #include "G4AtomicFormFactor.hh"
 
-
-G4CrystalExtension::G4CrystalExtension(G4Material* mat,const G4String& name):
-G4VMaterialExtension(name),
-fMaterial(mat),
-theUnitCell(0){;}
+G4CrystalExtension::G4CrystalExtension(G4Material* mat, const G4String& name)
+  : G4VMaterialExtension(name)
+  , fMaterial(mat)
+  , theUnitCell(nullptr)
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,8 +63,8 @@ ComputeStructureFactor(G4double kScatteringVector,
         G4double AFF = G4AtomicFormFactor::GetManager()->Get(kScatteringVector,anElement->GetZ());
         
         G4complex GFS = G4complex(0.,0.);
-        
-        for(auto anAtomPos: GetAtomBase(anElement)->GetPos())
+
+        for(const auto& anAtomPos : GetAtomBase(anElement)->GetPos())
         {
             G4double aDouble = h * anAtomPos.x()
             + k * anAtomPos.y()
@@ -87,13 +89,12 @@ ComputeStructureFactorGeometrical(G4int h,
     G4complex GFS = G4complex(0.,0.);
     
     for(auto anElement: *(fMaterial->GetElementVector())){
-        for(auto anAtomPos: GetAtomBase(anElement)->GetPos())
-        {
-            G4double aDouble = h * anAtomPos.x()
-            + k * anAtomPos.y()
-            + l * anAtomPos.z();
-            GFS += G4complex(std::cos(2 * CLHEP::pi * aDouble),
-                             std::sin(2 * CLHEP::pi * aDouble));
+      for(const auto& anAtomPos : GetAtomBase(anElement)->GetPos())
+      {
+        G4double aDouble =
+          h * anAtomPos.x() + k * anAtomPos.y() + l * anAtomPos.z();
+        GFS += G4complex(std::cos(2 * CLHEP::pi * aDouble),
+                         std::sin(2 * CLHEP::pi * aDouble));
         }
     }
     return GFS;
@@ -112,7 +113,10 @@ void G4CrystalExtension::SetElReduced(const ReducedElasticity& mat) {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CrystalExtension::SetCpq(G4int p, G4int q, G4double value) {
-    if (p>0 && p<7 && q>0 && q<7) fElReduced[p-1][q-1] = value;
+  if(p > 0 && p < 7 && q > 0 && q < 7)
+  {
+    fElReduced[p - 1][q - 1] = value;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

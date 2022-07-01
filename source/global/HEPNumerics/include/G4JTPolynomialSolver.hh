@@ -66,8 +66,8 @@
 class G4JTPolynomialSolver
 {
  public:
-  G4JTPolynomialSolver();
-  ~G4JTPolynomialSolver();
+  G4JTPolynomialSolver() = default;
+  ~G4JTPolynomialSolver() = default;
 
   G4int FindRoots(G4double* op, G4int degree, G4double* zeror, G4double* zeroi);
 

@@ -28,7 +28,7 @@
 #define PAR04INFERENCEINTERFACE_HH
 
 #include "globals.hh"
-using namespace std;
+#include <vector>
 
 /**
  * @brief Inference interface
@@ -46,7 +46,7 @@ class Par04InferenceInterface
   /// @param[in] aGenVector Input latent space and conditions
   /// @param[out] aEnergies Model output = generated shower energies
   /// @param[in] aSize Size of the output
-  virtual void RunInference(vector<float> aGenVector, std::vector<G4double>& aEnergies,
+  virtual void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies,
                             int aSize) = 0;
 };
 

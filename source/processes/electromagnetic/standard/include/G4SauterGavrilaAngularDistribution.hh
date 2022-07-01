@@ -61,7 +61,7 @@ public:
   G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
                                  G4double e = 0.0,
                                  G4int shellId = 0,
-                                 const G4Material* mat = 0) final;
+                                 const G4Material* mat = nullptr) final;
 
   void PrintGeneratorInformation() const override;
 

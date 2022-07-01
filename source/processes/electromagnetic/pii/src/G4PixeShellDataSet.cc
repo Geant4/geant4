@@ -201,7 +201,7 @@ void G4PixeShellDataSet::CleanUpComponents(void)
 G4String G4PixeShellDataSet::FullFileName(const G4String& file,
 					  const G4String& subShell) const
 {
-  char* path = std::getenv("G4PIIDATA");
+  const char* path = G4FindDataDir("G4PIIDATA");
   if (!path)
     G4Exception("G4PixeShellDataSet::FullFileName",
 				  "pii00000320",

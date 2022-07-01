@@ -50,7 +50,7 @@ class G4ProfilerMessenger : public G4UImessenger
 {
  public:
   G4ProfilerMessenger();
-  ~G4ProfilerMessenger();
+  ~G4ProfilerMessenger() override;
 
   // no copy but move is fine
   G4ProfilerMessenger(const G4ProfilerMessenger&) = delete;
@@ -60,7 +60,7 @@ class G4ProfilerMessenger : public G4UImessenger
   G4ProfilerMessenger& operator=(const G4ProfilerMessenger&) = delete;
   G4ProfilerMessenger& operator=(G4ProfilerMessenger&&) = default;
 
-  void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
   // G4String GetCurrentValue(G4UIcommand* command);
 
  private:

@@ -118,12 +118,11 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
 
   fpCommandDisplayListLimit =
-    new G4UIcmdWithAnInteger("/vis/ogl/set/displayListLimit", this);
+    new G4UIcmdWithoutParameter("/vis/ogl/set/displayListLimit", this);
   fpCommandDisplayListLimit->SetGuidance
-    ("Set/reset display list number of primitive limit (to avoid memory exhaustion).");
-  fpCommandDisplayListLimit->SetParameterName("limit", omitable = true);
-  fpCommandDisplayListLimit->SetDefaultValue(1e7);
-  fpCommandDisplayListLimit->SetRange("limit>=10000");
+  ("This command is no longer relevant. There is no longer any limit on the"
+   "\nnumber of display lists - except, of course, the available memory in"
+   "\nyour computer. Keep an eye on that. Good luck!");
 
   fpCommandExportFormat =
   new G4UIcommand("/vis/ogl/set/exportFormat", this);
@@ -355,9 +354,7 @@ void G4OpenGLViewerMessenger::SetNewValue
 
   if (command == fpCommandDisplayListLimit)
     {
-      G4int displayListLimit =
-	fpCommandDisplayListLimit->GetNewIntValue(newValue);
-      pOGLSSceneHandler->SetDisplayListLimit(displayListLimit);
+      G4cerr << command->GetGuidanceLine(0) << G4endl;
       return;
     }
 }

@@ -79,7 +79,9 @@ G4KineticTrack::G4KineticTrack() :
                 theDaughterWidth(0),
 		theStateToNucleus(undefined),
 		theProjectilePotential(0),
-                theCreatorModel(-1)
+                theCreatorModel(-1),
+                theParentResonanceDef(nullptr),
+                theParentResonanceID(0)
 {
 ////////////////
 //    DEBUG   //
@@ -116,9 +118,12 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right) : G4VKineticNucleon(
   }
  theDaughterMass = 0;
  theDaughterWidth = 0;
- theStateToNucleus=right.theStateToNucleus;
- theProjectilePotential=right.theProjectilePotential;
+ theStateToNucleus = right.theStateToNucleus;
+ theProjectilePotential = right.theProjectilePotential;
  theCreatorModel = right.GetCreatorModelID();
+ theParentResonanceDef = right.GetParentResonanceDef();
+ theParentResonanceID = right.GetParentResonanceID();
+
 ////////////////
 //    DEBUG   //
 ////////////////
@@ -148,7 +153,9 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
 		theNucleon(0),
 		theStateToNucleus(undefined),
 		theProjectilePotential(0),
-                theCreatorModel(-1)
+                theCreatorModel(-1),
+                theParentResonanceDef(nullptr),
+                theParentResonanceID(0)
 {
   if(G4KaonZero::KaonZero() == theDefinition ||
     G4AntiKaonZero::AntiKaonZero() == theDefinition)
@@ -429,7 +436,9 @@ G4KineticTrack::G4KineticTrack(G4Nucleon * nucleon,
 	theDaughterWidth(0),
 	theStateToNucleus(undefined),
 	theProjectilePotential(0),
-        theCreatorModel(-1)
+        theCreatorModel(-1),
+        theParentResonanceDef(nullptr),
+        theParentResonanceID(0) 
 {
 	theFermi3Momentum.setE(0);
 	Set4Momentum(a4Momentum);
@@ -455,13 +464,15 @@ G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
      the4Momentum = right.GetTrackingMomentum();
      theFermi3Momentum = right.theFermi3Momentum;
      theTotal4Momentum = right.theTotal4Momentum;
-     theNucleon=right.theNucleon;
-     theStateToNucleus=right.theStateToNucleus;
+     theNucleon = right.theNucleon;
+     theStateToNucleus = right.theStateToNucleus;
      if (theActualWidth != 0) delete [] theActualWidth;
      nChannels = right.GetnChannels();      
      theActualWidth = new G4double[nChannels];
      for (G4int i = 0; i < nChannels; ++i) theActualWidth[i] = right.theActualWidth[i];
      theCreatorModel = right.GetCreatorModelID();
+     theParentResonanceDef = right.GetParentResonanceDef();
+     theParentResonanceID = right.GetParentResonanceID();
     }
  return *this;
 }
@@ -710,6 +721,8 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4KineticTrackVector* theDecayProductList = new G4KineticTrackVector;
      G4int dEntries = theDecayProducts->entries();
      const G4ParticleDefinition * aProduct = 0;
+     // Use the integer round mass in keV to get an unique ID for the parent resonance
+     G4int uniqueID = static_cast< G4int >( round( Get4Momentum().mag() / CLHEP::keV ) );
      for (G4int i=dEntries; i > 0; --i)
         {
 	 theDynamicParticle = theDecayProducts->PopProducts();
@@ -723,7 +736,12 @@ G4KineticTrackVector* G4KineticTrack::Decay()
                                                          formationTime,
                                                          position,
                                                          momentum);
-         if (aDaughter != nullptr) aDaughter->SetCreatorModelID(GetCreatorModelID());
+         if (aDaughter != nullptr) 
+	   {
+             aDaughter->SetCreatorModelID(GetCreatorModelID());
+             aDaughter->SetParentResonanceDef(GetDefinition());
+             aDaughter->SetParentResonanceID(uniqueID);
+           }
          theDecayProductList->push_back(aDaughter);
          delete theDynamicParticle;
         }

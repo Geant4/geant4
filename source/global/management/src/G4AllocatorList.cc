@@ -53,9 +53,6 @@ G4AllocatorList* G4AllocatorList::GetAllocatorListIfExist()
 }
 
 // --------------------------------------------------------------------
-G4AllocatorList::G4AllocatorList() {}
-
-// --------------------------------------------------------------------
 G4AllocatorList::~G4AllocatorList() { fAllocatorList = nullptr; }
 
 // --------------------------------------------------------------------

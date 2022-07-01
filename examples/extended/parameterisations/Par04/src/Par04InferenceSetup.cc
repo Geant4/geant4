@@ -25,16 +25,26 @@
 //
 #ifdef USE_INFERENCE
 #include "Par04InferenceSetup.hh"
-
-#include "Par04InferenceInterface.hh"
+#include "Par04InferenceInterface.hh"   // for Par04InferenceInterface
+#include "Par04InferenceMessenger.hh"   // for Par04InferenceMessenger
 #ifdef USE_INFERENCE_ONNX
-#include "Par04OnnxInference.hh"
+#include "Par04OnnxInference.hh"        // for Par04OnnxInference
 #endif
 #ifdef USE_INFERENCE_LWTNN
-#include "Par04LwtnnInference.hh"
+#include "Par04LwtnnInference.hh"       // for Par04LwtnnInference
 #endif
-#include "G4RotationMatrix.hh"
-#include "CLHEP/Random/RandGauss.h"
+#include <CLHEP/Units/SystemOfUnits.h>  // for pi, GeV, deg
+#include <CLHEP/Vector/Rotation.h>      // for HepRotation
+#include <CLHEP/Vector/ThreeVector.h>   // for Hep3Vector
+#include <G4Exception.hh>               // for G4Exception
+#include <G4ExceptionSeverity.hh>       // for FatalException
+#include <G4ThreeVector.hh>             // for G4ThreeVector
+#include "CLHEP/Random/RandGauss.h"     // for RandGauss
+#include "G4RotationMatrix.hh"          // for G4RotationMatrix
+#include <algorithm>                    // for max, copy
+#include <string>                       // for char_traits, basic_string
+#include <ext/alloc_traits.h>           // for __alloc_traits<>::value_type
+#include <cmath>                        // for cos, sin
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,6 +63,7 @@ G4bool Par04InferenceSetup::IfTrigger(G4double aEnergy)
   /// Energy of electrons used in training dataset
   if(aEnergy > 1 * CLHEP::GeV || aEnergy < 1024 * CLHEP::GeV)
     return true;
+  return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

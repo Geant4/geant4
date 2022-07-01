@@ -39,6 +39,8 @@
 #include "G4ITReaction.hh"
 #include "G4DNAEventSet.hh"
 #include "G4DNAUpdateSystemModel.hh"
+#include "G4H2O2.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
 class G4VITStepModel;
 class G4DNAGillespieDirectMethod;
 class G4UserMeshAction;
@@ -66,8 +68,8 @@ class G4DNAEventScheduler : public IEventScheduler
   void SetEndTime(const G4double&);
   G4double GetStartTime() const;
   G4double GetEndTime() const;
-  [[maybe_unused]] G4double GetTimeStep() const;
-  [[maybe_unused]] void SetStartTime(G4double time);
+  G4double GetTimeStep() const;
+  void SetStartTime(G4double time);
 
   inline void SetVerbose(G4int verbose) { fVerbose = verbose; }
   inline G4int GetVerbose() const;
@@ -79,13 +81,13 @@ class G4DNAEventScheduler : public IEventScheduler
   void RunInMesh();
   void Run();
 
-  [[maybe_unused]] void AddTimeToRecord(const G4double& time);
+  void AddTimeToRecord(const G4double& time);
 
   void RecordTime();
   void ClearAndReChargeCounter();
   void PrintRecordTime();
   void Stop();
-  [[maybe_unused]] void SetMaxNbSteps(G4int);
+  void SetMaxNbSteps(G4int);
   std::map<G4double /*time*/, MapCounter> GetCounterMap() const;
   G4DNAMesh* GetMesh() const;
   G4int GetPixels() const;
@@ -93,22 +95,25 @@ class G4DNAEventScheduler : public IEventScheduler
   static G4bool CheckingReactionRadius(G4double resolution);
 
  private:
-  G4int fVerbose;
-  G4bool fInitialized;
-  G4double fStartTime;
-  G4double fEndTime;
-  G4int fStepNumber;
-  G4int fMaxStep;
-  G4bool fRunning;
-  G4double fTimeStep;
-  G4double fGlobalTime;
-  G4double fJumpingNumber;
-  G4double fReactionNumber;
+  G4int fVerbose = 0;
+  G4bool fInitialized = false;
+  G4double fStartTime = 1 * CLHEP::picosecond;
+  G4double fEndTime = 10000 * CLHEP::second;
+  G4int fStepNumber = 0;
+  G4int fMaxStep = INT_MAX;
+  G4bool fRunning = true;
+  G4double fTimeStep = DBL_MAX;
+  G4double fGlobalTime = 1 * CLHEP::picosecond;
+  G4double fJumpingNumber = 0;
+  G4double fReactionNumber = 0;
   G4int fPixel;
-  G4bool fIsChangeMesh;
-  G4bool fSetChangeMesh;
-  G4int fStepNumberInMesh;
+  G4bool fIsChangeMesh = false;
+  G4bool fSetChangeMesh = true;
+  G4int fStepNumberInMesh = 0;
   G4double fInitialPixels;
+  G4double fTransferTime = 0.;
+  const G4double C = 20;
+  const G4double D = G4H2O2::Definition()->GetDiffusionCoefficient();  // this is the biggest D
 
   std::unique_ptr<G4DNAMesh> fpMesh;
   std::unique_ptr<G4DNAGillespieDirectMethod> fpGillespieReaction;
@@ -116,7 +121,6 @@ class G4DNAEventScheduler : public IEventScheduler
   std::unique_ptr<G4DNAUpdateSystemModel> fpUpdateSystem;
   std::unique_ptr<G4UserMeshAction> fpUserMeshAction;
   // an aternative Counter
-
   std::map<G4double /*time*/, MapCounter> fCounterMap;
   std::set<G4double> fTimeToRecord;
   std::set<G4double>::iterator fLastRecoredTime;

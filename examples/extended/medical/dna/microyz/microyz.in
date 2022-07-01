@@ -16,6 +16,7 @@
 #/cuts/setLowEdge 100 eV
 #/process/em/lowestElectronEnergy 100 eV
 #/microyz/det/setMaxStepSize 1 nm
+/microyz/det/Radius 2 nm
 # ***
 #
 /run/initialize

@@ -195,7 +195,7 @@ G4VParticleChange* G4OpWLS::PostStepDoIt(const G4Track& aTrack,
     photonPolarization = (cosp * photonPolarization + sinp * perp).unit();
 
     // Generate a new photon:
-    G4DynamicParticle* sec_dp =
+    auto sec_dp =
       new G4DynamicParticle(G4OpticalPhoton::OpticalPhoton(), photonMomentum);
     sec_dp->SetPolarization(photonPolarization);
     sec_dp->SetKineticEnergy(sampledEnergy);
@@ -242,7 +242,7 @@ void G4OpWLS::BuildPhysicsTable(const G4ParticleDefinition&)
   // loop for materials
   for(G4int i = 0; i < numOfMaterials; ++i)
   {
-    G4PhysicsFreeVector* physVector = new G4PhysicsFreeVector();
+    auto physVector = new G4PhysicsFreeVector();
 
     // Retrieve vector of WLS wavelength intensity for
     // the material from the material's optical properties table.
@@ -318,11 +318,11 @@ void G4OpWLS::UseTimeProfile(const G4String name)
     delete WLSTimeGeneratorProfile;
     WLSTimeGeneratorProfile = nullptr;
   }
-  if(name.compare("delta") == 0)
+  if(name == "delta")
   {
     WLSTimeGeneratorProfile = new G4WLSTimeGeneratorProfileDelta("delta");
   }
-  else if(name.compare("exponential") == 0)
+  else if(name == "exponential")
   {
     WLSTimeGeneratorProfile =
       new G4WLSTimeGeneratorProfileExponential("exponential");

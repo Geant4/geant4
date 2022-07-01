@@ -24,10 +24,15 @@
 // ********************************************************************
 //
 #ifdef USE_INFERENCE_ONNX
-#include "Par04InferenceInterface.hh"
-#include "G4RotationMatrix.hh"
 #include "Par04OnnxInference.hh"
-#include <cassert>
+#include <core/session/onnxruntime_cxx_api.h>  // for Value, Session, Env
+#include <algorithm>                           // for copy, max
+#include <cassert>                             // for assert
+#include <cstddef>                             // for size_t
+#include <cstdint>                             // for int64_t
+#include <utility>                             // for move
+#include "Par04InferenceInterface.hh"          // for Par04InferenceInterface
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,7 +66,7 @@ Par04OnnxInference::Par04OnnxInference(G4String modelPath, G4int profileFlag, G4
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par04OnnxInference::RunInference(vector<float> aGenVector, std::vector<G4double>& aEnergies,
+void Par04OnnxInference::RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies,
                                       int aSize)
 {
   // input nodes
@@ -76,9 +81,8 @@ void Par04OnnxInference::RunInference(vector<float> aGenVector, std::vector<G4do
     input_node_names[i]            = input_name;
     Ort::TypeInfo type_info        = fSession->GetInputTypeInfo(i);
     auto tensor_info               = type_info.GetTensorTypeAndShapeInfo();
-    ONNXTensorElementDataType type = tensor_info.GetElementType();
     input_node_dims                = tensor_info.GetShape();
-    for(int j = 0; j < input_node_dims.size(); j++)
+    for(std::size_t j = 0; j < input_node_dims.size(); j++)
     {
       if(input_node_dims[j] < 0)
         input_node_dims[j] = 1;
@@ -94,9 +98,8 @@ void Par04OnnxInference::RunInference(vector<float> aGenVector, std::vector<G4do
     output_node_names[i]           = output_name;
     Ort::TypeInfo type_info        = fSession->GetOutputTypeInfo(i);
     auto tensor_info               = type_info.GetTensorTypeAndShapeInfo();
-    ONNXTensorElementDataType type = tensor_info.GetElementType();
     output_node_dims               = tensor_info.GetShape();
-    for(int j = 0; j < output_node_dims.size(); j++)
+    for(std::size_t j = 0; j < output_node_dims.size(); j++)
     {
       if(output_node_dims[j] < 0)
         output_node_dims[j] = 1;
@@ -104,13 +107,9 @@ void Par04OnnxInference::RunInference(vector<float> aGenVector, std::vector<G4do
   }
 
   // create input tensor object from data values
-  float genVector[(unsigned) (aGenVector.size())];
-  for(int i = 0; i < (unsigned) (aGenVector.size()); i++)
-    genVector[i] = aGenVector[i];
-  int values_length         = sizeof(genVector) / sizeof(genVector[0]);
   std::vector<int64_t> dims = { 1, (unsigned) (aGenVector.size()) };
   Ort::Value Input_noise_tensor =
-    Ort::Value::CreateTensor<float>(fInfo, genVector, values_length, dims.data(), dims.size());
+    Ort::Value::CreateTensor<float>(fInfo, aGenVector.data(), aGenVector.size(), dims.data(), dims.size());
   assert(Input_noise_tensor.IsTensor());
   std::vector<Ort::Value> ort_inputs;
   ort_inputs.push_back(std::move(Input_noise_tensor));

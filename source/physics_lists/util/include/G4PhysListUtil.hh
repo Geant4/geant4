@@ -42,12 +42,15 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4HadronicProcess.hh"
+#include "G4VProcess.hh"
 
 class G4PhysListUtil
 {
 public:
 
   static void InitialiseParameters();
+
+  static G4VProcess* FindProcess(const G4ParticleDefinition*, G4int subtype);
 
   static G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
 
@@ -57,9 +60,5 @@ public:
 
   static G4HadronicProcess* FindFissionProcess(const G4ParticleDefinition*);
 
-private:
-  // no instance needed
-  G4PhysListUtil();
-  ~G4PhysListUtil();
 };
 #endif

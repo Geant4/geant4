@@ -67,10 +67,19 @@ public:
 
   ~G4EmDataHandler();
 
+  // add table
   size_t SetTable(G4PhysicsTable*);
 
+  // update existing table
+  void UpdateTable(G4PhysicsTable*, size_t idx);
+
+  // assuming that the table is already defined
   G4PhysicsTable* MakeTable(size_t idx);
 
+  // existing table may be substituted
+  G4PhysicsTable* MakeTable(G4PhysicsTable*, size_t idx);
+
+  // clean existing table 
   void CleanTable(size_t idx);
 
   G4bool StorePhysicsTable(size_t idx,
@@ -82,7 +91,7 @@ public:
 			      const G4ParticleDefinition* part,
 			      const G4String& fname,
 			      G4bool ascii, G4bool spline);
-
+  
   void SetMasterProcess(const G4VEmProcess*);
 
   const G4VEmProcess* GetMasterProcess(size_t idx) const;

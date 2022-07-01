@@ -57,7 +57,7 @@ protected:
 
 namespace tools {
 
-//for inlib::holder<raxml_outs>
+//for tools::holder<raxml_outs>
 class raxml_outs : public std::vector<raxml_out> {
 public:
   static const std::string& s_class() {

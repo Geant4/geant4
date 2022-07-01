@@ -101,6 +101,8 @@ namespace G4INCL {
       uncorrelatedMomentum(rhs.uncorrelatedMomentum),
       theParticleBias(rhs.theParticleBias),
       theNKaon(rhs.theNKaon),
+      theParentResonancePDGCode(rhs.theParentResonancePDGCode),
+      theParentResonanceID(rhs.theParentResonanceID),
       theHelicity(rhs.theHelicity),
       emissionTime(rhs.emissionTime),
       outOfWell(rhs.outOfWell),
@@ -146,6 +148,9 @@ namespace G4INCL {
       std::swap(thePotentialEnergy, rhs.thePotentialEnergy);
       // ID intentionally not swapped
 
+      std::swap(theParentResonancePDGCode, rhs.theParentResonancePDGCode);
+      std::swap(theParentResonanceID, rhs.theParentResonanceID);
+
       std::swap(theHelicity, rhs.theHelicity);
       std::swap(emissionTime, rhs.emissionTime);
       std::swap(outOfWell, rhs.outOfWell);
@@ -156,7 +161,6 @@ namespace G4INCL {
       
       std::swap(theParticleBias, rhs.theParticleBias);
       std::swap(theBiasCollisionVector, rhs.theBiasCollisionVector);
-
     }
 
   public:
@@ -1052,7 +1056,12 @@ namespace G4INCL {
      
     G4int getNumberOfKaon() const { return theNKaon; };
     void setNumberOfKaon(const G4int NK) { theNKaon = NK; }
-  
+
+    G4int getParentResonancePDGCode() const { return theParentResonancePDGCode; };
+    void setParentResonancePDGCode(const G4int parentPDGCode) { theParentResonancePDGCode = parentPDGCode; };    
+    G4int getParentResonanceID() const { return theParentResonanceID; };
+    void setParentResonanceID(const G4int parentID) { theParentResonanceID = parentID; };
+    
   public:
     /** \brief Time ordered vector of all bias applied
      * 
@@ -1099,6 +1108,9 @@ namespace G4INCL {
     /// \brief The number of Kaons inside the nucleus (update during the cascade)
     G4int theNKaon;
 
+    G4int theParentResonancePDGCode;
+    G4int theParentResonanceID;
+    
   private:
     G4double theHelicity;
     G4double emissionTime;

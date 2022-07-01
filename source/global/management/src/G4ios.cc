@@ -36,27 +36,25 @@
 
 G4strstreambuf*& _G4coutbuf_p()
 {
-  G4ThreadLocalStatic G4strstreambuf* _instance = new G4strstreambuf();
+  G4ThreadLocalStatic auto* _instance = new G4strstreambuf();
   return _instance;
 }
 
 G4strstreambuf*& _G4cerrbuf_p()
 {
-  G4ThreadLocalStatic G4strstreambuf* _instance = new G4strstreambuf();
+  G4ThreadLocalStatic auto* _instance = new G4strstreambuf();
   return _instance;
 }
 
 std::ostream*& _G4cout_p()
 {
-  G4ThreadLocalStatic std::ostream* _instance =
-    new std::ostream(_G4coutbuf_p());
+  G4ThreadLocalStatic auto* _instance = new std::ostream(_G4coutbuf_p());
   return _instance;
 }
 
 std::ostream*& _G4cerr_p()
 {
-  G4ThreadLocalStatic std::ostream* _instance =
-    new std::ostream(_G4cerrbuf_p());
+  G4ThreadLocalStatic auto* _instance = new std::ostream(_G4cerrbuf_p());
   return _instance;
 }
 
@@ -68,13 +66,21 @@ std::ostream*& _G4cerr_p()
 void G4iosInitialization()
 {
   if(_G4coutbuf_p() == nullptr)
+  {
     _G4coutbuf_p() = new G4strstreambuf;
+  }
   if(_G4cerrbuf_p() == nullptr)
+  {
     _G4cerrbuf_p() = new G4strstreambuf;
+  }
   if(_G4cout_p() == &std::cout || _G4cout_p() == nullptr)
+  {
     _G4cout_p() = new std::ostream(_G4coutbuf_p());
+  }
   if(_G4cerr_p() == &std::cerr || _G4cerr_p() == nullptr)
+  {
     _G4cerr_p() = new std::ostream(_G4cerrbuf_p());
+  }
 }
 
 void G4iosFinalization()
@@ -94,11 +100,11 @@ void G4iosFinalization()
 namespace
 {
 #  ifndef WIN32
-  void setupG4ioSystem(void) __attribute__((constructor));
-  void cleanupG4ioSystem(void) __attribute__((destructor));
+  void setupG4ioSystem() __attribute__((constructor));
+  void cleanupG4ioSystem() __attribute__((destructor));
 #  endif
-  void setupG4ioSystem(void) { G4iosInitialization(); }
-  void cleanupG4ioSystem(void) { G4iosFinalization(); }
+  void setupG4ioSystem() { G4iosInitialization(); }
+  void cleanupG4ioSystem() { G4iosFinalization(); }
 }  // namespace
 
 #else  // Sequential

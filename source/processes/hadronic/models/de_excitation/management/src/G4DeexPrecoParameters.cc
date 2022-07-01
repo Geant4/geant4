@@ -33,6 +33,7 @@
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4PhysicsModelCatalog.hh"
 #include "G4DeexParametersMessenger.hh"
 #include "G4HadronicParameters.hh"
@@ -87,7 +88,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fStoreAllLevels = false;
   fInternalConversion = true;
   fLD = true;
-  fFD = false;
+  fFD = true;
   fIsomerFlag = true;
   fDeexChannelType = fCombined;
 #ifdef G4MULTITHREADED
@@ -299,31 +300,31 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
   os << "=======================================================================" << "\n";
   os << "Type of pre-compound inverse x-section              " << fPrecoType << "\n";
   os << "Pre-compound model active                           " << (!fPrecoDummy) << "\n";
-  os << "Pre-compound excitation low energy (MeV)            " 
-     << fPrecoLowEnergy/CLHEP::MeV << "\n";
-  os << "Pre-compound excitation high energy (MeV)           " 
-     << fPrecoHighEnergy/CLHEP::MeV << "\n";
+  os << "Pre-compound excitation low energy                  " 
+     << G4BestUnit(fPrecoLowEnergy, "Energy") << "\n";
+  os << "Pre-compound excitation high energy                 " 
+     << G4BestUnit(fPrecoHighEnergy, "Energy") << "\n";
   os << "Type of de-excitation inverse x-section             " << fDeexType << "\n";
   os << "Type of de-excitation factory                       " << namm[idx] << "\n";
   os << "Number of de-excitation channels                    " << nmm[idx] << "\n";
-  os << "Min excitation energy (keV)                         " 
-     << fMinExcitation/CLHEP::keV << "\n";
-  os << "Min energy per nucleon for multifragmentation (MeV) " 
-     << fMinExPerNucleounForMF/CLHEP::MeV << "\n";
-  os << "Limit excitation energy for Fermi BreakUp (MeV)     " 
-     << fFBUEnergyLimit/CLHEP::MeV << "\n";
+  os << "Min excitation energy                               " 
+     << G4BestUnit(fMinExcitation, "Energy") << "\n";
+  os << "Min energy per nucleon for multifragmentation       " 
+     << G4BestUnit(fMinExPerNucleounForMF, "Energy") << "\n";
+  os << "Limit excitation energy for Fermi BreakUp           " 
+     << G4BestUnit(fFBUEnergyLimit, "Energy") << "\n";
   os << "Level density (1/MeV)                               " 
      << fLevelDensity*CLHEP::MeV << "\n";
   os << "Use simple level density model                      " << fLD << "\n";
   os << "Use discrete excitation energy of the residual      " << fFD << "\n";
-  os << "Time limit for long lived isomeres (ns)             " 
-     << fMaxLifeTime/CLHEP::ns << "\n";
+  os << "Time limit for long lived isomeres                  " 
+     << G4BestUnit(fMaxLifeTime, "Time") << "\n";
   os << "Isomer production flag                              " << fIsomerFlag << "\n";
   os << "Internal e- conversion flag                         " 
      << fInternalConversion << "\n";
   os << "Store e- internal conversion data                   " << fStoreAllLevels << "\n";
   os << "Correlated gamma emission flag                      " << fCorrelatedGamma << "\n";
-  os << "Max 2J for sampling of angular correlations         " << fTwoJMAX << "\n";
+  os << "Max 2J for sampling of angular correlations         " << fTwoJMAX << "\n";  
   os << "=======================================================================" << G4endl;
   os.precision(prec);
   return os;

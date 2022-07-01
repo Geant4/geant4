@@ -99,9 +99,9 @@ public:  // with description
                    G4double  temp     = NTP_Temperature,	//temperature
                    G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
-public:  
-  virtual ~G4ExtendedMaterial() {};
-  
+public:
+ ~G4ExtendedMaterial() override = default;
+
 private:
   G4MaterialExtensionMap fExtensionMap;
 public:  // with description
@@ -127,8 +127,8 @@ public:  // with description
   G4MaterialExtensionMap::const_iterator cend() const { return fExtensionMap.cend(); }
 
 public:
-  virtual G4bool IsExtended() const;
-  void Print(std::ostream& flux) const;
+ G4bool IsExtended() const override;
+ void Print(std::ostream& flux) const;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

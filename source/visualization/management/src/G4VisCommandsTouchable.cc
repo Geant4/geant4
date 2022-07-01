@@ -59,10 +59,14 @@ G4VisCommandsTouchable::G4VisCommandsTouchable()
   // Pick up additional guidance from /vis/viewer/centreAndZoomInOn
   CopyGuidanceFrom(fpCommandCentreAndZoomInOn,fpCommandCentreOn,1);
 
-  fpCommandDraw = new G4UIcmdWithoutParameter("/vis/touchable/draw",this);
+  fpCommandDraw = new G4UIcmdWithABool("/vis/touchable/draw",this);
   fpCommandDraw->SetGuidance("Draw touchable.");
+  fpCommandDraw->SetGuidance
+  ("If parameter == true, also draw extent as a white wireframe box.");
   // Pick up additional guidance from /vis/viewer/centreAndZoomInOn
   CopyGuidanceFrom(fpCommandCentreAndZoomInOn,fpCommandDraw,1);
+  fpCommandDraw->SetParameterName("extent", omitable = true);
+  fpCommandDraw->SetDefaultValue(false);
 
   fpCommandDump = new G4UIcmdWithoutParameter("/vis/touchable/dump",this);
   fpCommandDump->SetGuidance("Dump touchable attributes.");
@@ -185,7 +189,10 @@ void G4VisCommandsTouchable::SetNewValue
   }
 
   if (command == fpCommandCentreOn || command == fpCommandCentreAndZoomInOn) {
-    
+
+    // For twinkling...
+    std::vector<std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>> touchables;
+
     G4PhysicalVolumeModel::TouchableProperties properties =
     G4TouchableUtils::FindTouchableProperties(fCurrentTouchableProperties.fTouchablePath);
     if (properties.fpTouchablePV) {
@@ -198,17 +205,18 @@ void G4VisCommandsTouchable::SetNewValue
        nullptr, // Modelling parameters (not used)
        true, // use full extent (prevents calculating own extent, which crashes)
        properties.fTouchableBaseFullPVPath);
+      touchables.push_back(properties.fTouchableFullPVPath);  // Only one in this case
       // Use a temporary scene in order to find vis extent
       G4Scene tempScene("Centre Scene");
       G4bool successful = tempScene.AddRunDurationModel(&tempPVModel,warn);
-      if (successful) {
-        if (verbosity >= G4VisManager::confirmations) {
-          G4cout
-          << "Touchable " << fCurrentTouchableProperties.fTouchablePath
-          << ",\n  has been added to temporary scene \"" << tempScene.GetName() << "\"."
-          << G4endl;
-        }
+      if (!successful) return;
+      if (verbosity >= G4VisManager::parameters) {
+        G4cout
+        << "Touchable " << fCurrentTouchableProperties.fTouchablePath
+        << ",\n  has been added to temporary scene \"" << tempScene.GetName() << "\"."
+        << G4endl;
       }
+
       const G4VisExtent& newExtent = tempScene.GetExtent();
       const G4ThreeVector& newTargetPoint = newExtent.GetExtentCentre();
       G4ViewParameters saveVP = currentViewer->GetViewParameters();
@@ -222,8 +230,15 @@ void G4VisCommandsTouchable::SetNewValue
       // Change the target point
       const G4Point3D& standardTargetPoint = currentScene->GetStandardTargetPoint();
       newVP.SetCurrentTargetPoint(newTargetPoint - standardTargetPoint);
+
       // Interpolate
-      InterpolateToNewView(currentViewer, saveVP, newVP);
+      auto keepVerbose = fpVisManager->GetVerbosity();
+      fpVisManager->SetVerboseLevel(G4VisManager::errors);
+      if (newVP != saveVP) InterpolateToNewView(currentViewer, saveVP, newVP);
+      // ...and twinkle
+      Twinkle(currentViewer,newVP,touchables);
+      fpVisManager->SetVerboseLevel(keepVerbose);
+
       if (verbosity >= G4VisManager::confirmations) {
         G4cout
         << "Viewer \"" << currentViewer->GetName()
@@ -238,6 +253,7 @@ void G4VisCommandsTouchable::SetNewValue
     } else {
       G4cout << "Touchable not found." << G4endl;
     }
+
     return;
     
   } else if (command == fpCommandDraw) {
@@ -267,10 +283,23 @@ void G4VisCommandsTouchable::SetNewValue
       UImanager->SetVerboseLevel(keepVerbose);
 
       if (successful) {
+        if (fpCommandDraw->GetNewBoolValue(newValue)) {
+          const auto& extent = pvModel->GetExtent();
+          const G4double halfX = (extent.GetXmax()-extent.GetXmin())/2.;
+          const G4double halfY = (extent.GetYmax()-extent.GetYmin())/2.;
+          const G4double halfZ = (extent.GetZmax()-extent.GetZmin())/2.;
+          G4Box extentBox("extent",halfX,halfY,halfZ);
+          G4VisAttributes extentVA;
+          extentVA.SetForceWireframe();
+          fpVisManager->Draw(extentBox,extentVA,G4Translate3D(extent.GetExtentCentre()));
+        }
         if (verbosity >= G4VisManager::confirmations) {
           G4cout << "\"" << properties.fpTouchablePV->GetName()
-          << "\", copy no. " << properties.fCopyNo << " drawn"
-          << G4endl;
+          << "\", copy no. " << properties.fCopyNo << " drawn";
+          if (fpCommandDraw->GetNewBoolValue(newValue)) {
+            G4cout << " with extent box";
+          }
+          G4cout << '.' << G4endl;
         }
       } else {
         G4VisCommandsSceneAddUnsuccessful(verbosity);
@@ -298,8 +327,9 @@ void G4VisCommandsTouchable::SetNewValue
       std::vector<G4AttValue>* attValues = tempPVModel.CreateCurrentAttValues();
       G4cout << G4AttCheck(attValues,attDefs);
       delete attValues;
-      G4Polyhedron* polyhedron =
-      properties.fpTouchablePV->GetLogicalVolume()->GetSolid()->GetPolyhedron();
+      const auto lv = properties.fpTouchablePV->GetLogicalVolume();
+      const auto polyhedron = lv->GetSolid()->GetPolyhedron();
+      polyhedron->SetVisAttributes(lv->GetVisAttributes());
       G4cout << "\nLocal polyhedron coordinates:\n" << *polyhedron;
       const G4Transform3D& transform = tempPVModel.GetCurrentTransform();
       polyhedron->Transform(transform);

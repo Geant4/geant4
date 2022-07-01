@@ -159,10 +159,10 @@ G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
   if(0 >= nCouples) { return; }
 
   for (size_t i=0; i<nCouples; ++i) {
-    G4PhysicsLogVector* pv0 = static_cast<G4PhysicsLogVector*>((*(list[0]))[i]);
+    auto pv0 = static_cast<G4PhysicsLogVector*>((*(list[0]))[i]);
     if(pv0 == nullptr) { continue; } 
     size_t npoints = pv0->GetVectorLength();
-    G4PhysicsLogVector* pv = new G4PhysicsLogVector(*pv0);
+    auto pv = new G4PhysicsLogVector(*pv0);
     for (size_t j=0; j<npoints; ++j) {
       G4double dedx = 0.0;
       for (size_t k=0; k<n_processes; ++k) {
@@ -193,7 +193,7 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
   const G4double del = 1.0/(G4double)n;
 
   for (std::size_t i=0; i<nCouples; ++i) {
-    G4PhysicsLogVector* pv = static_cast<G4PhysicsLogVector*>((*dedxTable)[i]);
+    auto pv = static_cast<G4PhysicsLogVector*>((*dedxTable)[i]);
     if((pv == nullptr) || (isBaseMatActive && !(*theFlag)[i])) { continue; } 
     std::size_t npoints = pv->GetVectorLength();
     std::size_t bin0    = 0;
@@ -273,7 +273,7 @@ G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
     std::size_t npoints = pv->GetVectorLength();
       
     delete (*invRangeTable)[i];
-    G4PhysicsFreeVector* v = new G4PhysicsFreeVector(npoints,splineFlag);
+    auto v = new G4PhysicsFreeVector(npoints,splineFlag);
 
     for (std::size_t j=0; j<npoints; ++j) {
       G4double e  = pv->Energy(j);

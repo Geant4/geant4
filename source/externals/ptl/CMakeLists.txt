@@ -1,185 +1,111 @@
-################################################################################
-#   cmake settings
+# -------------------------------------------------------------------------------------- #
+# cmake settings
 #
-cmake_minimum_required(VERSION 3.8...3.18 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.23)
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
- cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-# Add allocation export symbol for the PLT module
-add_compile_definitions(PTL_ALLOC_EXPORT)
-
-cmake_policy(SET CMP0048 NEW)
-cmake_policy(SET CMP0042 NEW)
-if(NOT CMAKE_VERSION VERSION_LESS 3.12)
-    cmake_policy(SET CMP0077 NEW)
+# Warn about an in-source build, but don't error out
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+    message(STATUS "Warning! Building from the source directory is not recommended")
+    message(STATUS "If unintented, please remove 'CMakeCache.txt' and 'CMakeFiles'")
+    message(STATUS "and build from a separate directory")
+    message(WARNING "In-source build")
 endif()
 
 # Check if project is being used directly or via add_subdirectory
 set(PTL_MASTER_PROJECT ON)
 if(NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  set(PTL_MASTER_PROJECT OFF)
-  set(CMAKE_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}/Geant4")
+    set(PTL_MASTER_PROJECT OFF)
+else()
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
-################################################################################
-#   version
-#
+# Version
 file(READ "${CMAKE_CURRENT_LIST_DIR}/VERSION" VERSION_STRING LIMIT_COUNT 1)
 string(REGEX REPLACE "(\n|\r)" "" VERSION_STRING "${VERSION_STRING}")
 string(REGEX REPLACE "[A-Za-z].*" "" VERSION_STRING "${VERSION_STRING}")
 set(PTL_VERSION "${VERSION_STRING}")
 
-################################################################################
-#   project
+# -------------------------------------------------------------------------------------- #
+# -------------------------------------------------------------------------------------- #
+# project setup
 #
-project(PTL LANGUAGES C CXX VERSION ${PTL_VERSION})
-if(NOT PTL_MASTER_PROJECT)
-    unset(${PROJECT_NAME}_C_FLAGS CACHE)
-    unset(${PROJECT_NAME}_CXX_FLAGS CACHE)
-endif()
+project(
+    PTL
+    LANGUAGES C CXX
+    VERSION ${PTL_VERSION})
+
+# Postprocess version info to create variables for export to Version.hh
+set(PTL_VERSION_STRING "${PTL_VERSION_MAJOR}.${PTL_VERSION_MINOR}.${PTL_VERSION_PATCH}")
+math(EXPR PTL_VERSION_CODE
+     "10000 * ${PTL_VERSION_MAJOR} + 100 * ${PTL_VERSION_MINOR} + ${PTL_VERSION_PATCH}")
+
+# Project-local CMake settings
 set(CMAKE_DIRECTORY_LABELS "PTL")
-
-################################################################################
-#
-#
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
+set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
 set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME Development)
+set(CMAKE_INSTALL_MESSAGE LAZY)
+set(CMAKE_LINK_DEPENDS_NO_SHARED ON)
+list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules)
+include(PTLCMakeUtilities)
 
-if("${CMAKE_BUILD_TYPE}" STREQUAL "")
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "CMake build type" FORCE)
+# -------------------------------------------------------------------------------------- #
+# Build/Install settings and options
+include(PTLInstallDirs)
+include(PTLBuildSettings)
+
+# -------------------------------------------------------------------------------------- #
+# User options
+ptl_add_option(PTL_USE_TBB "Enable TBB" ON)
+ptl_add_option(PTL_USE_LOCKS "Enable mutex locking in task subqueues for extra safety"
+               OFF)
+ptl_add_option(PTL_INSTALL_HEADERS "Install the headers" ON)
+ptl_add_option(PTL_INSTALL_CONFIG "Install the cmake configuration" ON)
+
+if(DEFINED PTL_DEVELOPER_INSTALL)
+    set(PTL_INSTALL_HEADERS
+        ${PTL_DEVELOPER_INSTALL}
+        CACHE BOOL "Set via PTL_DEVELOPER_INSTALL" FORCE)
+    set(PTL_INSTALL_CONFIG
+        ${PTL_DEVELOPER_INSTALL}
+        CACHE BOOL "Set via PTL_DEVELOPER_INSTALL" FORCE)
 endif()
 
-################################################################################
+# -------------------------------------------------------------------------------------- #
+# Build Dependencies - Threads
+if(NOT WIN32)
+    set(CMAKE_THREAD_PREFER_PTHREAD ON)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+endif()
+find_package(Threads REQUIRED)
 
-include(MacroUtilities)
-include(Options)
-include(Compilers)
-include(GNUInstallDirs)
-include(ProjectSettings)
-include(BuildSettings)
-include(Packages)
-include(ClangFormat)
-
-################################################################################
-#   PTL source
-################################################################################
-
-cmake_policy(SET CMP0053 NEW)
-
-################################################################################
-#                                                                              #
-#                               General                                        #
-#                                                                              #
-################################################################################
-
+# * TBB
 if(PTL_USE_TBB)
-    list(APPEND ${PROJECT_NAME}_DEFINITIONS PTL_USE_TBB)
+    find_package(TBB 2017 REQUIRED)
 endif()
 
-# libraries to install
-set(INSTALL_LIBRARIES )
+# -------------------------------------------------------------------------------------- #
+# PTL Primary Build
+add_subdirectory(src)
 
-#------------------------------------------------------------------------------#
-# Locate sources and headers for this project
-# - headers are included so they will show up in IDEs
-file(GLOB_RECURSE ptl_headers ${CMAKE_CURRENT_LIST_DIR}/include/PTL/*.hh
-                              ${CMAKE_CURRENT_LIST_DIR}/include/PTL/*.icc)
-file(GLOB_RECURSE ptl_sources ${CMAKE_CURRENT_LIST_DIR}/src/*.cc)
+# -------------------------------------------------------------------------------------- #
+# CMake/PkgConfig Support files
+include(PTLPackageConfigHelpers)
 
-get_property(PTL_INTERFACE_LIBRARIES GLOBAL PROPERTY ${PROJECT_NAME}_INTERFACE_LIBRARIES)
-export(TARGETS ${PTL_INTERFACE_LIBRARIES} FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-interface.cmake)
-################################################################################
-#                                                                              #
-#                              PTL Library                                     #
-#                                                                              #
-################################################################################
-
-if(BUILD_SHARED_LIBS)
-    ptl_build_library(VERSION
-        TYPE SHARED
-        TARGET_NAME ptl-shared
-        OUTPUT_NAME G4ptl
-        SOURCES ${ptl_headers} ${ptl_sources}
-        EXTRA_ARGS POSITION_INDEPENDENT_CODE ON
-                   WINDOWS_EXPORT_ALL_SYMBOLS ON)
-
-    target_link_libraries(ptl-shared PUBLIC
-        ptl-public-options
-        ptl-sanitizer-options
-        ptl-external-packages)
-
-    target_link_libraries(ptl-shared PRIVATE
-        ptl-compile-options
-        ptl-external-libraries)
-
-    target_include_directories(ptl-shared PUBLIC
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-
-    list(APPEND INSTALL_LIBRARIES ptl-shared)
-    export(TARGETS ptl-shared FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-shared.cmake)
+# -------------------------------------------------------------------------------------- #
+# Examples build/test
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/examples)
+    ptl_add_option(PTL_BUILD_EXAMPLES "Build examples" OFF)
+    if(PTL_BUILD_EXAMPLES)
+        set(PTL_DIR ${CMAKE_BINARY_DIR})
+        add_subdirectory(examples)
+    endif()
 endif()
 
-if(BUILD_STATIC_LIBS)
-
-    ptl_build_library(
-        TYPE STATIC
-        TARGET_NAME ptl-static
-        OUTPUT_NAME $<IF:$<PLATFORM_ID:Windows>,G4ptl-static,G4ptl>
-        SOURCES ${ptl_headers} ${ptl_sources}
-        EXTRA_ARGS POSITION_INDEPENDENT_CODE ON)
-
-    target_link_libraries(ptl-static PUBLIC
-        ptl-public-options
-        ptl-external-packages)
-
-    target_link_libraries(ptl-static PRIVATE
-        ptl-compile-options
-        ptl-external-libraries)
-
-    target_include_directories(ptl-static PUBLIC
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-
-    list(APPEND INSTALL_LIBRARIES ptl-static)
-    export(TARGETS ptl-static FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-static.cmake)
-endif()
-
-
-################################################################################
-#                                                                              #
-#                              Installation                                    #
-#                                                                              #
-################################################################################
-
-# Install the targets and export libraries
-install(TARGETS ${INSTALL_LIBRARIES}
-    EXPORT ${PROJECT_NAME}Targets
-    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT Development
-    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT Runtime
-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT Runtime)
-
-# install export
-install(EXPORT ${PROJECT_NAME}Targets
-    NAMESPACE PTL::
-    DESTINATION ${CMAKE_INSTALL_CONFIGDIR}
-    COMPONENT Development)
-
-# headers
-install(FILES ${ptl_headers}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/PTL
-    COMPONENT Development)
-
-# set
-set(PTL_BUILT_LIBRARIES "${INSTALL_LIBRARIES}" CACHE INTERNAL "Built libraries" FORCE)
-
-################################################################################
-#   Installation and info
-################################################################################
-
-include(ConfigurePackage)
-
+# -------------------------------------------------------------------------------------- #
+# Reporting if master project
 if(PTL_MASTER_PROJECT)
-    print_features()
+    ptl_print_features()
 endif()

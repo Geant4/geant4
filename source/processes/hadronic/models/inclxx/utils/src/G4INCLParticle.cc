@@ -74,6 +74,8 @@ namespace G4INCL {
     uncorrelatedMomentum(0.),
     theParticleBias(1.),
     theNKaon(0),
+    theParentResonancePDGCode(0),
+    theParentResonanceID(0),
     theHelicity(0.0),
     emissionTime(0.0),
     outOfWell(false),
@@ -98,6 +100,8 @@ namespace G4INCL {
     uncorrelatedMomentum(theMomentum.mag()),
     theParticleBias(1.),
     theNKaon(0),
+    theParentResonancePDGCode(0),
+    theParentResonanceID(0),
     theHelicity(0.0),
     emissionTime(0.0), outOfWell(false)
   {
@@ -124,6 +128,8 @@ namespace G4INCL {
     uncorrelatedMomentum(theMomentum.mag()),
     theParticleBias(1.),
     theNKaon(0),
+    theParentResonancePDGCode(0),
+    theParentResonanceID(0),
     theHelicity(0.0),
     emissionTime(0.0), outOfWell(false)
   {

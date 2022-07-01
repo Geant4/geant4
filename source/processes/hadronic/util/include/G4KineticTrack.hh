@@ -125,7 +125,12 @@ class G4KineticTrack : public G4VKineticNucleon
 
       void SetCreatorModelID(G4int id);
       G4int GetCreatorModelID() const;
-      
+
+      const G4ParticleDefinition* GetParentResonanceDef() const;
+      void SetParentResonanceDef(const G4ParticleDefinition* parent);      
+      G4int GetParentResonanceID() const;
+      void SetParentResonanceID(const G4int parentID);
+   
   private:
 
 
@@ -190,6 +195,9 @@ public:
       G4double theProjectilePotential;
 
       G4int theCreatorModel;
+
+      const G4ParticleDefinition* theParentResonanceDef = nullptr;
+      G4int theParentResonanceID;
 };
 
 // extern G4Allocator<G4KineticTrack> theKTAllocator;
@@ -437,7 +445,28 @@ G4int G4KineticTrack::GetCreatorModelID() const
        return theCreatorModel;
 }
 
+inline
+const G4ParticleDefinition* G4KineticTrack::GetParentResonanceDef() const
+{
+        return theParentResonanceDef;
+}
+
+inline
+void G4KineticTrack::SetParentResonanceDef(const G4ParticleDefinition* parentDef)
+{
+        theParentResonanceDef = parentDef;
+}
+
+inline
+G4int G4KineticTrack::GetParentResonanceID() const
+{
+        return theParentResonanceID;
+}
+
+inline
+void G4KineticTrack::SetParentResonanceID(const G4int parentID)
+{
+        theParentResonanceID = parentID;
+}
+
 #endif
-
-
-

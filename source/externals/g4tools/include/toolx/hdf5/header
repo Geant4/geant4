@@ -1,0 +1,37 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_hdf5_header
+#define toolx_hdf5_header
+
+#include "tools"
+#include "T_tools"
+
+namespace toolx {
+namespace hdf5 {
+
+inline bool write_header(hid_t a_file,int a_version = 1) {
+  hid_t header = toolx_H5Gcreate(a_file,"header",0);
+  if(header<0) return false;
+  if(!write_atb(header,"writer","exlib")) {::H5Gclose(header);return false;}
+  if(!write_scalar_atb<int>(header,"data_schema_version",a_version)) {::H5Gclose(header);return false;}
+  ::H5Gclose(header);
+  return true;
+}
+
+inline bool read_header(hid_t a_file,std::string& a_writer,int& a_data_schema_version) {
+  hid_t header = toolx_H5Gopen(a_file,"header");
+  if(header<0) {a_writer.clear();a_data_schema_version=0;return false;}
+  if(!read_atb(header,"writer",a_writer)) {::H5Gclose(header);a_writer.clear();a_data_schema_version=0;return false;}
+  if(!read_atb(header,"data_schema_version",a_data_schema_version)) {
+    ::H5Gclose(header);
+    a_writer.clear();a_data_schema_version=0;
+    return false;
+  }
+  ::H5Gclose(header);
+  return true;
+}
+
+}}
+
+#endif

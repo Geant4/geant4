@@ -1,0 +1,10 @@
+# Example ParticleFluence History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+
+## 2021-06-10 Alberto Ribon (exhadrParticleFluenceCalo-V11-00-00)
+- Created the Calo variant of the ParticleFluence example.
+

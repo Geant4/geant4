@@ -76,11 +76,13 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
+#include "G4AutoLock.hh"
 #include <iomanip>
 
-#ifdef G4MULTITHREADED
-G4Mutex G4NistMaterialBuilder::nistMaterialMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex nistMaterialMutex = G4MUTEX_INITIALIZER;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -93,11 +95,6 @@ G4NistMaterialBuilder::G4NistMaterialBuilder(G4NistElementBuilder* eb, G4int vb)
 {
   Initialise();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4NistMaterialBuilder::~G4NistMaterialBuilder()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -129,9 +126,6 @@ G4Material* G4NistMaterialBuilder::BuildNistMaterial(const G4String& name,
   for (G4int i=0; i<nMaterials; ++i) {
 
     if (name == names[i]) {
-#ifdef G4MULTITHREADED
-      G4MUTEXLOCK(&nistMaterialMutex);
-#endif
       if(matIndex[i] == -1) { 
 	// Build new Nist material 
 	mat = BuildMaterial(i); 
@@ -141,9 +135,6 @@ G4Material* G4NistMaterialBuilder::BuildNistMaterial(const G4String& name,
 	  G4Material::GetMaterialTable();
 	mat = (*theMaterialTable)[matIndex[i]]; 
       }
-#ifdef G4MULTITHREADED
-      G4MUTEXUNLOCK(&nistMaterialMutex);
-#endif
       return mat;
     }
   }
@@ -172,74 +163,82 @@ G4NistMaterialBuilder::FindOrBuildSimpleMaterial(G4int Z, G4bool warn)
 
 G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
 {
-  if (verbose > 1) {
-    G4cout << "G4NistMaterialBuilder: BuildMaterial #" << i
-	   << G4endl;
-  }
-  G4Material* mat = 0;
+  G4Material* mat = nullptr;
   if(i >= nMaterials) { return mat; }
 
-  G4int nc = components[i];
+  G4AutoLock l(&nistMaterialMutex);
+  if(matIndex[i] >= 0) {
+    // Nist material was already built
+    const G4MaterialTable* theMaterialTable = 
+      G4Material::GetMaterialTable();
+    mat = (*theMaterialTable)[matIndex[i]]; 
 
-  // Check gas parameters:
-  // defaults may be changed via AddGas() method
-  G4double t = NTP_Temperature;
-  G4double p = STP_Pressure;
-  if(kStateGas == states[i]) {
-    size_t nn = idxGas.size();
-    if(nn > 0) {
-      for(size_t j=0; j<nn; ++j) {
-        if(i == idxGas[j]) {
-	  t = gasTemperature[j];
-          p = gasPressure[j];
-          break;
+  } else {
+    if (verbose > 1) {
+      G4cout << "G4NistMaterialBuilder: BuildMaterial #" << i
+	     << G4endl;
+    }
+
+    G4int nc = components[i];
+
+    // Check gas parameters:
+    // defaults may be changed via AddGas() method
+    G4double t = NTP_Temperature;
+    G4double p = STP_Pressure;
+    if(kStateGas == states[i]) {
+      size_t nn = idxGas.size();
+      if(nn > 0) {
+	for(size_t j=0; j<nn; ++j) {
+	  if(i == idxGas[j]) {
+	    t = gasTemperature[j];
+	    p = gasPressure[j];
+	    break;
+	  }
 	}
       }
     }
-  }
-    // liquids
-  //  } else if( !STP[i] ) { t = 0.0; }
+    mat = new G4Material(names[i],densities[i],nc,states[i],t,p);
 
-  mat = new G4Material(names[i],densities[i],nc,states[i],t,p);
-
-  if (verbose>1) { G4cout << "New material nComponents= " << nc << G4endl; }
-  if (nc > 0) {
-    G4int idx = indexes[i];
-    for (G4int j=0; j<nc; ++j) {
-      G4int Z = elements[idx+j];
-      G4Element* el = elmBuilder->FindOrBuildElement(Z);
-      if(!el) {
-	G4cout << "G4NistMaterialBuilder::BuildMaterial:"
-	       << "  ERROR: elements Z= " << Z << " is not found"
-	       << " for material " << names[i]
-	       << G4endl;
-	G4Exception("G4NistMaterialBuilder::BuildMaterial()", "mat103",
-	             FatalException, "Failed to construct material");
-	return 0;
-      }
-      if(atomCount[i]) {
-	mat->AddElement(el,G4lrint(fractions[idx+j]));
-      } else {
-	mat->AddElement(el,fractions[idx+j]);
+    if (verbose>1) { G4cout << "New material nComponents= " << nc << G4endl; }
+    if (nc > 0) {
+      G4int idx = indexes[i];
+      for (G4int j=0; j<nc; ++j) {
+	G4int Z = elements[idx+j];
+	G4Element* el = elmBuilder->FindOrBuildElement(Z);
+	if(el == nullptr)
+	  {
+	    G4cout << "G4NistMaterialBuilder::BuildMaterial:"
+		   << "  ERROR: elements Z= " << Z << " is not found"
+		   << " for material " << names[i] << G4endl;
+	    G4Exception("G4NistMaterialBuilder::BuildMaterial()", "mat103",
+			FatalException, "Failed to construct material");
+	    return nullptr;
+	  }
+	if(atomCount[i]) {
+	  mat->AddElement(el,G4lrint(fractions[idx+j]));
+	} else {
+	  mat->AddElement(el,fractions[idx+j]);
+	}
       }
     }
-  }
 
-  // Ionisation potential can be defined via NIST DB or 
-  // Chemical Formula (ICRU37 Report data)
-  G4IonisParamMat* ion = mat->GetIonisation();
-  G4double exc0 = ion->GetMeanExcitationEnergy();
-  G4double exc1 = exc0;
-  if(chFormulas[i] != "") {
-    mat->SetChemicalFormula(chFormulas[i]);
-    exc1 = ion->FindMeanExcitationEnergy(mat);
-  }
-  // If exists, NIST DB data always overwrites other data 
-  if(ionPotentials[i] > 0.0) { exc1 = ionPotentials[i]; }
-  if(exc0 != exc1) { ion->SetMeanExcitationEnergy(exc1); }
+    // Ionisation potential can be defined via NIST DB or 
+    // Chemical Formula (ICRU37 Report data)
+    G4IonisParamMat* ion = mat->GetIonisation();
+    G4double exc0 = ion->GetMeanExcitationEnergy();
+    G4double exc1 = exc0;
+    if(!chFormulas[i].empty()) {
+      mat->SetChemicalFormula(chFormulas[i]);
+      exc1 = ion->FindMeanExcitationEnergy(mat);
+    }
+    // If exists, NIST DB data always overwrites other data 
+    if(ionPotentials[i] > 0.0) { exc1 = ionPotentials[i]; }
+    if(exc0 != exc1) { ion->SetMeanExcitationEnergy(exc1); }
 
-  // Index in Material Table
-  matIndex[i] = mat->GetIndex();
+    // Index in Material Table
+    matIndex[i] = mat->GetIndex();
+  }
+  l.unlock();
   return mat;
 }
 
@@ -256,13 +255,14 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 {
   // Material is in DB
   G4Material* mat = FindOrBuildMaterial(name);
-  if(mat) { 
+  if(mat != nullptr)
+  {
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: the material <" << name
 	   << "> already exists." << G4endl;
     G4cout << "      New material will NOT be built!"
 	   << G4endl;
-    return mat; 
+    return mat;
   }
 
   // Material not in DB
@@ -273,7 +273,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 	   << G4endl;
     G4cout << "      New material will NOT be built!"
 	   << G4endl;
-    return 0;
+    return nullptr;
   } 
 
   // add parameters of material into internal vectors
@@ -306,13 +306,14 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 {
   // Material is in DB
   G4Material* mat = FindOrBuildMaterial(name);
-  if(mat) { 
+  if(mat != nullptr)
+  {
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: the material <" << name
 	   << "> already exists." << G4endl;
     G4cout << "      New material will NOT be built!"
 	   << G4endl;
-    return mat; 
+    return mat;
   }
 
   // Material not in DB
@@ -323,7 +324,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 	   << G4endl;
     G4cout << "      New material will NOT be built!"
 	   << G4endl;
-    return 0;
+    return nullptr;
   } 
 
   // add parameters of material into internal vectors
@@ -352,29 +353,31 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
 {
   // Material name is in DB
   G4Material* mat = FindOrBuildMaterial(name);
-  if(mat) { 
+  if(mat != nullptr)
+  {
     G4cout << "G4NistMaterialBuilder::ConstructNewGasMaterial:"
            << "  WARNING: the material <" << name
 	   << "> already exists." << G4endl;
     G4cout << "      New material will NOT be built!"
 	   << G4endl;
-    return mat; 
+    return mat;
   }
 
   G4Material* bmat = FindOrBuildMaterial(nameDB);
-  if(!bmat) {
+  if(bmat == nullptr)
+  {
     G4cout << "G4NistMaterialBuilder::ConstructNewGasMaterial:"
 	   << "  WARNING: the Name <" << nameDB 
 	   << "> is NOT in the database: no new gas will be constructed."
 	   << G4endl;
-    return 0;
+    return nullptr;
   }
   if(bmat->GetState() != kStateGas) {
     G4cout << "G4NistMaterialBuilder::ConstructNewGasMaterial:"
 	   << "  WARNING:  <" << nameDB 
 	   << "> is NOT a gas -  no new gas will be constructed."
 	   << G4endl;
-    return 0;
+    return nullptr;
   }
 
   G4double dens = bmat->GetDensity()*pres*bmat->GetTemperature()
@@ -401,7 +404,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
 
   // Material is in DB
   G4Material* mat = FindOrBuildMaterial(name);
-  if(mat) {
+  if(mat != nullptr)
+  {
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: the material <" << name
            << "> already exists." << G4endl;
@@ -418,7 +422,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
            << G4endl;
     G4cout << "      New material will NOT be built!"
            << G4endl;
-    return 0;
+    return nullptr;
   }
 
   // add parameters of material into internal vectors
@@ -476,7 +480,7 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   // density in g/cm3, mean ionisation potential in eV
 
   names.push_back(nameMat);
-  chFormulas.push_back("");
+  chFormulas.emplace_back("");
   densities.push_back(dens*CLHEP::g/CLHEP::cm3);
   ionPotentials.push_back(pot*CLHEP::eV);
   states.push_back(state);
@@ -666,7 +670,13 @@ void G4NistMaterialBuilder::AddElementByWeightFraction(G4int Z, G4double w)
 
     if(!atomCount[n]) {
       for(G4int i=imin; i<imax; ++i) {sum += fractions[i];}
-      if (sum > 0.0) for (G4int i=imin; i<imax; ++i) {fractions[i] /= sum;}
+      if(sum > 0.0)
+      {
+        for(G4int i = imin; i < imax; ++i)
+        {
+          fractions[i] /= sum;
+        }
+      }
     }
   }
 }

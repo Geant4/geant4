@@ -252,6 +252,8 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
     G4double time = std::max(ptr->GetFormationTime(), 0.0);
     aNew.SetTime(timePrimary + time);
     aNew.SetCreatorModelID(ptr->GetCreatorModelID());
+    aNew.SetParentResonanceDef(ptr->GetParentResonanceDef());
+    aNew.SetParentResonanceID(ptr->GetParentResonanceID());    
     theParticleChange->AddSecondary(aNew);
     delete ptr;
   }

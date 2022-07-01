@@ -53,17 +53,17 @@ class G4GenericMessenger : public G4UImessenger
                        const G4String& doc = "");
       // Contructor
 
-    virtual ~G4GenericMessenger();
-      // Destructor
+    ~G4GenericMessenger() override;
+    // Destructor
 
-    virtual G4String GetCurrentValue(G4UIcommand* command);
-      // The concrete, but generic implementation of this method.
+    G4String GetCurrentValue(G4UIcommand* command) override;
+    // The concrete, but generic implementation of this method.
 
-    virtual void SetNewValue(G4UIcommand* command, G4String newValue);
-      // The concrete, generic  implementation of this method converts
-      // the string "newValue" to action.
+    void SetNewValue(G4UIcommand* command, G4String newValue) override;
+    // The concrete, generic  implementation of this method converts
+    // the string "newValue" to action.
 
-  public:
+   public:
 
     struct Command
     {
@@ -76,8 +76,7 @@ class G4GenericMessenger : public G4UImessenger
         : command(cmd)
         , type(&ti)
       {}
-      Command()
-      {}
+      Command() = default;
 
       Command& SetStates(G4ApplicationState s0)
       {
@@ -161,7 +160,7 @@ class G4GenericMessenger : public G4UImessenger
         : Command(cmd, var.TypeInfo())
         , variable(var)
       {}
-      Property() {}
+      Property() = default;
       G4AnyType variable;
     };
 
@@ -172,8 +171,7 @@ class G4GenericMessenger : public G4UImessenger
         , method(fun)
         , object(obj)
       {}
-      Method()
-      {}
+      Method() = default;
       G4AnyMethod method;
       void* object = nullptr;
     };
@@ -195,7 +193,12 @@ class G4GenericMessenger : public G4UImessenger
     void SetDirectory(const G4String& dir) { directory = dir; }
     void SetGuidance(const G4String& s);
     void Sort(G4bool val = true)
-    { if(dircmd) dircmd->Sort(val); }
+    {
+      if(dircmd != nullptr)
+      {
+        dircmd->Sort(val);
+      }
+    }
 
   private:
 

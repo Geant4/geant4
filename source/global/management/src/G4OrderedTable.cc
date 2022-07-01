@@ -37,23 +37,15 @@
 #include <iostream>
 
 // --------------------------------------------------------------------
-G4OrderedTable::G4OrderedTable()
-  : std::vector<G4DataVector*>()
-{}
-
-// --------------------------------------------------------------------
 G4OrderedTable::G4OrderedTable(std::size_t cap)
-  : std::vector<G4DataVector*>(cap, (G4DataVector*) (0))
+  : std::vector<G4DataVector*>(cap, (G4DataVector*) nullptr)
 {}
-
-// --------------------------------------------------------------------
-G4OrderedTable::~G4OrderedTable() {}
 
 // --------------------------------------------------------------------
 void G4OrderedTable::clearAndDestroy()
 {
   G4DataVector* a = nullptr;
-  while(size() > 0)
+  while(!empty())
   {
     a = back();
     pop_back();
@@ -65,10 +57,8 @@ void G4OrderedTable::clearAndDestroy()
         --i;
       }
     }
-    if(a != nullptr)
-    {
-      delete a;
-    }
+
+    delete a;
   }
 }
 
@@ -109,7 +99,7 @@ G4bool G4OrderedTable::Store(const G4String& fileName, G4bool ascii)
   }
 
   G4int vType = G4DataVector::T_G4DataVector;  // Data Vector
-  for(auto itr = cbegin(); itr != cend(); ++itr)
+  for(const auto itr : *this)
   {
     if(!ascii)
     {
@@ -119,7 +109,7 @@ G4bool G4OrderedTable::Store(const G4String& fileName, G4bool ascii)
     {
       fOut << vType << G4endl;
     }
-    (*itr)->Store(fOut, ascii);
+    itr->Store(fOut, ascii);
   }
   fOut.close();
   return true;
@@ -196,7 +186,7 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName, G4bool ascii)
       return false;
     }
 
-    G4DataVector* pVec = new G4DataVector;
+    auto* pVec = new G4DataVector;
 
     if(!(pVec->Retrieve(fIn, ascii)))
     {
@@ -223,11 +213,11 @@ std::ostream& operator<<(std::ostream& out, G4OrderedTable& right)
 {
   // Printout Data Vector
   std::size_t i = 0;
-  for(auto itr = right.cbegin(); itr != right.cend(); ++itr)
+  for(const auto itr : right)
   {
     out << std::setw(8) << i << "-th Vector   ";
     out << ": Type    " << G4DataVector::T_G4DataVector << G4endl;
-    out << *(*itr);
+    out << *itr;
     i += 1;
   }
   out << G4endl;

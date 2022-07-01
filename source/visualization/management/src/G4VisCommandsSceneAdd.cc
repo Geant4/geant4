@@ -348,9 +348,9 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 
   // Consult scene for arrow width...
   G4double arrowWidth =
-    0.005 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
-  // ...but limit it to length/50.
-  if (arrowWidth > length/50.) arrowWidth = length/50.;
+    0.05 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
+  // ...but limit it to length/30.
+  if (arrowWidth > length/30.) arrowWidth = length/30.;
 
   G4VModel* model = new G4AxesModel
     (x0, y0, z0, length, arrowWidth, colourString, newValue,
@@ -3077,7 +3077,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter = new G4UIparameter ("depth-of-descent", 'i', omitable = true);
   parameter -> SetGuidance
     ("Depth of descent of geometry hierarchy. Default = unlimited depth.");
-  parameter -> SetDefaultValue (G4Scene::UNLIMITED);
+  parameter -> SetDefaultValue (G4PhysicalVolumeModel::UNLIMITED);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("clip-volume-type", 's', omitable = true);
   parameter -> SetParameterCandidates("none box -box *box");
@@ -3259,12 +3259,11 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
       G4ModelingParameters mp;  // Default - no culling.
       G4PhysicalVolumeModel searchModel
       (*iterWorld,
-       G4PhysicalVolumeModel::UNLIMITED,
+       requestedDepthOfDescent,
        G4Transform3D(),
        &mp,
        useFullExtent);
-      G4PhysicalVolumesSearchScene searchScene
-      (&searchModel, name, copyNo, requestedDepthOfDescent);
+      G4PhysicalVolumesSearchScene searchScene(&searchModel, name, copyNo);
       searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
       for (const auto& findings: searchScene.GetFindings()) {
         findingsVector.push_back(findings);
@@ -3357,14 +3356,16 @@ void G4VisCommandSceneAddPlotter::SetNewValue (G4UIcommand*, G4String newValue)
   }
 
   G4Plotter& _plotter = G4PlotterManager::GetInstance().GetPlotter(newValue);
-  
-  G4VModel* model = new G4PlotterModel(_plotter);
+  G4VModel* model = new G4PlotterModel(_plotter,newValue);
 
   const G4String& currentSceneName = pScene -> GetName ();
-  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  G4bool successful = pScene -> AddEndOfRunModel(model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Arrow has been added to scene \"" << currentSceneName << "\"." << G4endl;
+      G4cout
+      << "Plotter \"" << model->GetCurrentDescription()
+      << "\" has been added to scene \"" << currentSceneName << "\"."
+      << G4endl;
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);

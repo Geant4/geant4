@@ -852,8 +852,7 @@ void G4EmCorrections::BuildCorrectionVector()
            << ion->GetParticleName() << G4endl;
   }
 
-  G4PhysicsLogVector* vv = 
-    new G4PhysicsLogVector(eCorrMin,eCorrMax,nbinCorr,false);
+  auto vv = new G4PhysicsLogVector(eCorrMin,eCorrMax,nbinCorr,false);
   const G4double eth0 = v->Energy(0);
   const G4double escal = eth/massFactor;
   G4double qe = 
@@ -904,8 +903,7 @@ void G4EmCorrections::InitialiseForNewRun()
   ncouples = tb->GetTableSize();
   if(currmat.size() != ncouples) {
     currmat.resize(ncouples);
-    for(std::map< G4int, std::vector<G4double> >::iterator it = 
-        thcorr.begin(); it != thcorr.end(); ++it){
+    for(auto it = thcorr.begin(); it != thcorr.end(); ++it){
       (it->second).clear();
     }
     thcorr.clear();

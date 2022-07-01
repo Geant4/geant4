@@ -86,7 +86,7 @@ if(!ofile)
 // retrieve the map
 MeshScoreMap fSMap = fScoringMesh -> GetScoreMap();
   
-MeshScoreMap::const_iterator msMapItr = fSMap.find(psName);
+auto msMapItr = fSMap.find(psName);
   
 if(msMapItr == fSMap.end()) 
   {

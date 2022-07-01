@@ -1,3 +1,3 @@
 # - G4materials category build(s)
-
-geant4_global_library_target(NAME G4materials COMPONENTS sources.cmake)
+include(sources.cmake)
+geant4_add_category(G4materials MODULES G4materials)

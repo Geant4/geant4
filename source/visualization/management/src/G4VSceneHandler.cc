@@ -64,6 +64,7 @@
 #include "G4Ellipsoid.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
+#include "G4Tet.hh"
 #include "G4DisplacedSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
@@ -425,24 +426,28 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4StatDouble>& hits) {
 
 void G4VSceneHandler::AddCompound(const G4Mesh& mesh)
 {
-  G4ExceptionDescription ed;
-  ed << "There has been an attempt to draw a mesh (a nested parameterisation),"
-  "\nbut it is not implemented by the current graphics driver. Here we simply"
-  "\ndraw the container, \"" << mesh.GetContainerVolume()->GetName() << "\".";
-  G4Exception("G4VSceneHandler::AddCompound(const G4Mesh&)",
-	      "visman0107", JustWarning, ed);
-
+  G4cerr <<
+  "There has been an attempt to draw a mesh with option \""
+  << fpViewer->GetViewParameters().GetSpecialMeshRenderingOption()
+  << "\":\n" << mesh
+  << "but it is not of a recognised type or is not implemented"
+  "\nby the current graphics driver. Instead we draw its"
+  "\ncontainer \"" << mesh.GetContainerVolume()->GetName() << "\"."
+  << G4endl;
   const auto& pv = mesh.GetContainerVolume();
   const auto& lv = pv->GetLogicalVolume();
   const auto& solid = lv->GetSolid();
   const auto& transform = mesh.GetTransform();
   // Make sure container is visible
+  G4VisAttributes tmpVisAtts;  // Visible, white, not forced.
   const auto& saveVisAtts = lv->GetVisAttributes();
-  auto tmpVisAtts = *saveVisAtts;
-  tmpVisAtts.SetVisibility(true);
-  auto colour = saveVisAtts->GetColour();
-  colour.SetAlpha(1.);
-  tmpVisAtts.SetColour(colour);
+  if (saveVisAtts) {
+    tmpVisAtts = *saveVisAtts;
+    tmpVisAtts.SetVisibility(true);
+    auto colour = saveVisAtts->GetColour();
+    colour.SetAlpha(1.);
+    tmpVisAtts.SetColour(colour);
+  }
   // Draw container
   PreAddSolid(transform,tmpVisAtts);
   solid->DescribeYourselfTo(*this);
@@ -1146,4 +1151,688 @@ std::ostream& operator << (std::ostream& os, const G4VSceneHandler& sh) {
   }
 
   return os;
+}
+
+void G4VSceneHandler::PseudoSceneFor3DRectMeshPositions::AddSolid(const G4Box&) {
+  if (fpPVModel->GetCurrentDepth() == fDepth) {  // Leaf-level cells only
+    const auto& material = fpPVModel->GetCurrentLV()->GetMaterial();
+    const auto& name = material->GetName();
+    const auto* pVisAtts = fpPVModel->GetCurrentLV()->GetVisAttributes();
+    // Get position in world coordinates
+    // As a parameterisation the box is transformed by the current transformation
+    // and its centre, originally by definition at (0,0,0), is now translated.
+    const G4ThreeVector& position = fpCurrentObjectTransformation->getTranslation();
+    fPositionByMaterial.insert(std::make_pair(material,position));
+    if (fNameAndVisAttsByMaterial.find(material) == fNameAndVisAttsByMaterial.end())
+      // Store name and vis attributes of first encounter with this material
+      fNameAndVisAttsByMaterial[material] = NameAndVisAtts(name,*pVisAtts);
+  }
+}
+
+void G4VSceneHandler::PseudoSceneForTetVertices::AddSolid(const G4VSolid& solid) {
+  if (fpPVModel->GetCurrentDepth() == fDepth) {  // Leaf-level cells only
+    // Need to know it's a tet !!!! or implement G4VSceneHandler::AddSolid (const G4Tet&) !!!!
+    try {
+      const G4Tet& tet = dynamic_cast<const G4Tet&>(solid);
+      const auto& material = fpPVModel->GetCurrentLV()->GetMaterial();
+      const auto& name = material->GetName();
+      const auto* pVisAtts = fpPVModel->GetCurrentLV()->GetVisAttributes();
+      // Transform into world coordinates if necessary
+      if (fpCurrentObjectTransformation->xx() == 1. &&
+          fpCurrentObjectTransformation->yy() == 1. &&
+          fpCurrentObjectTransformation->zz() == 1.) { // No transformation necessary
+        const auto& vertices = tet.GetVertices();
+        fVerticesByMaterial.insert(std::make_pair(material,vertices));
+      } else {
+        auto vertices = tet.GetVertices();
+        for (auto&& vertex: vertices) {
+          vertex = G4Point3D(vertex).transform(*fpCurrentObjectTransformation);
+        }
+        fVerticesByMaterial.insert(std::make_pair(material,vertices));
+      }
+      if (fNameAndVisAttsByMaterial.find(material) == fNameAndVisAttsByMaterial.end())
+        // Store name and vis attributes of first encounter with this material
+        fNameAndVisAttsByMaterial[material] = NameAndVisAtts(name,*pVisAtts);
+    }
+    catch (const std::bad_cast&) {
+      G4ExceptionDescription ed;
+      ed << "Called for a mesh that is not a tetrahedron mesh: " << solid.GetName();
+      G4Exception("PseudoSceneForTetVertices","visman0108",JustWarning,ed);
+    }
+  }
+}
+
+void G4VSceneHandler::StandardSpecialMeshRendering(const G4Mesh& mesh)
+// Standard way of special mesh rendering.
+// MySceneHandler::AddCompound(const G4Mesh& mesh) may use this if
+// appropriate or implement its own special mesh rendereing.
+{
+  G4bool implemented = false;
+  switch (mesh.GetMeshType()) {
+    case G4Mesh::rectangle: [[fallthrough]];
+    case G4Mesh::nested3DRectangular:
+      switch (fpViewer->GetViewParameters().GetSpecialMeshRenderingOption()) {
+        case G4ViewParameters::meshAsDots:
+          Draw3DRectMeshAsDots(mesh);  // Rectangular 3-deep mesh as dots
+          implemented = true;
+          break;
+        case G4ViewParameters::meshAsSurfaces:
+          Draw3DRectMeshAsSurfaces(mesh);  // Rectangular 3-deep mesh as surfaces
+          implemented = true;
+          break;
+      }
+      break;
+    case G4Mesh::tetrahedron:
+      switch (fpViewer->GetViewParameters().GetSpecialMeshRenderingOption()) {
+        case G4ViewParameters::meshAsDots:
+          DrawTetMeshAsDots(mesh);  // Tetrahedron mesh as dots
+          implemented = true;
+          break;
+        case G4ViewParameters::meshAsSurfaces:
+          DrawTetMeshAsSurfaces(mesh);  // Tetrahedron mesh as surfaces
+          implemented = true;
+          break;
+      }
+      break;
+    case G4Mesh::cylinder: [[fallthrough]];
+    case G4Mesh::sphere: [[fallthrough]];
+    case G4Mesh::invalid: break;
+  }
+  if (!implemented) {
+    G4VSceneHandler::AddCompound(mesh);  // Base class function - just print warning
+  }
+  return;
+}
+
+void G4VSceneHandler::Draw3DRectMeshAsDots(const G4Mesh& mesh)
+// For a rectangular 3-D mesh, draw as coloured dots by colour and material,
+// one dot randomly placed in each visible mesh cell.
+{
+  // Check
+  if (mesh.GetMeshType() != G4Mesh::rectangle &&
+      mesh.GetMeshType() != G4Mesh::nested3DRectangular) {
+    G4ExceptionDescription ed;
+    ed << "Called with a mesh that is not rectangular:" << mesh;
+    G4Exception("G4VSceneHandler::Draw3DRectMeshAsDots","visman0108",JustWarning,ed);
+    return;
+  }
+
+  static G4bool firstPrint = true;
+  const auto& verbosity = G4VisManager::GetVerbosity();
+  G4bool print = firstPrint && verbosity >= G4VisManager::errors;
+  if (print) {
+    G4cout
+    << "Special case drawing of 3D rectangular G4VNestedParameterisation as dots:"
+    << '\n' << mesh
+    << G4endl;
+  }
+
+  const auto& container = mesh.GetContainerVolume();
+
+  // This map is static so that once filled it stays filled.
+  static std::map<G4String,std::map<const G4Material*,G4Polymarker>> dotsByMaterialAndMesh;
+  auto& dotsByMaterial = dotsByMaterialAndMesh[mesh.GetContainerVolume()->GetName()];
+
+  // Fill map if not already filled
+  if (dotsByMaterial.empty()) {
+
+    // Get positions and material one cell at a time (using PseudoSceneFor3DRectMeshPositions).
+    // The pseudo scene allows a "private" descent into the parameterisation.
+    // Instantiate a temporary G4PhysicalVolumeModel
+    G4ModelingParameters tmpMP;
+    tmpMP.SetCulling(true);  // This avoids drawing transparent...
+    tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+    const G4bool useFullExtent = true;  // To avoid calculating the extent
+    G4PhysicalVolumeModel tmpPVModel
+    (container,
+     G4PhysicalVolumeModel::UNLIMITED,
+     G4Transform3D(),  // so that positions are in local coordinates
+     &tmpMP,
+     useFullExtent);
+    // Accumulate information in temporary maps by material
+    std::multimap<const G4Material*,const G4ThreeVector> positionByMaterial;
+    std::map<const G4Material*,G4VSceneHandler::NameAndVisAtts> nameAndVisAttsByMaterial;
+    // Instantiate the pseudo scene
+    PseudoSceneFor3DRectMeshPositions pseudoScene
+    (&tmpPVModel,mesh.GetMeshDepth(),positionByMaterial,nameAndVisAttsByMaterial);
+    // Make private descent into the parameterisation
+    tmpPVModel.DescribeYourselfTo(pseudoScene);
+    // Now we have a map of positions by material.
+    // Also a map of name and colour by material.
+
+    const auto& prms = mesh.GetThreeDRectParameters();
+    const auto& halfX = prms.fHalfX;
+    const auto& halfY = prms.fHalfY;
+    const auto& halfZ = prms.fHalfZ;
+
+    // Fill the permanent (static) map of dots by material
+    G4int nDotsTotal = 0;
+    for (const auto& entry: nameAndVisAttsByMaterial) {
+      G4int nDots = 0;
+      const auto& material = entry.first;
+      const auto& nameAndVisAtts = nameAndVisAttsByMaterial[material];
+      const auto& name = nameAndVisAtts.fName;
+      const auto& visAtts = nameAndVisAtts.fVisAtts;
+      G4Polymarker dots;
+      dots.SetInfo(name);
+      dots.SetVisAttributes(visAtts);
+      dots.SetMarkerType(G4Polymarker::dots);
+      dots.SetSize(G4VMarker::screen,1.);
+      // Enter empty polymarker into the map
+      dotsByMaterial[material] = dots;
+      // Now fill it in situ
+      auto& dotsInMap = dotsByMaterial[material];
+      const auto& range = positionByMaterial.equal_range(material);
+      for (auto posByMat = range.first; posByMat != range.second; ++posByMat) {
+        const G4double x = posByMat->second.getX() + (2.*G4UniformRand()-1.)*halfX;
+        const G4double y = posByMat->second.getY() + (2.*G4UniformRand()-1.)*halfY;
+        const G4double z = posByMat->second.getZ() + (2.*G4UniformRand()-1.)*halfZ;
+        dotsInMap.push_back(G4ThreeVector(x,y,z));
+        ++nDots;
+      }
+
+      if (print) {
+        G4cout
+        << std::setw(30) << std::left << name.substr(0,30) << std::right
+        << ": " << std::setw(7) << nDots << " dots"
+        << ": colour " << std::fixed << std::setprecision(2)
+        << visAtts.GetColour() << std::defaultfloat
+        << G4endl;
+      }
+
+      nDotsTotal += nDots;
+    }
+
+    if (print) {
+      G4cout << "Total number of dots: " << nDotsTotal << G4endl;
+    }
+  }
+
+  // Some subsequent expressions apply only to G4PhysicalVolumeModel
+  auto pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+
+  G4String parameterisationName;
+  if (pPVModel) {
+    parameterisationName = pPVModel->GetFullPVPath().back().GetPhysicalVolume()->GetName();
+  }
+
+  // Draw the dots by material
+  // Ensure they are "hidden", i.e., use the z-buffer as non-marker primitives do
+  auto keepVP = fpViewer->GetViewParameters();
+  auto vp = fpViewer->GetViewParameters();
+  vp.SetMarkerHidden();
+  fpViewer->SetViewParameters(vp);
+  // Now we transform to world coordinates
+  BeginPrimitives (mesh.GetTransform());
+  for (const auto& entry: dotsByMaterial) {
+    const auto& dots = entry.second;
+    // The current "leaf" node in the PVPath is the parameterisation. Here it has
+    // been converted into polymarkers by material. So...temporarily...change
+    // its name to that of the material (whose name has been stored in Info)
+    // so that its appearance in the scene tree of, e.g., G4OpenGLQtViewer, has
+    // an appropriate name and its visibility and colour may be changed.
+    if (pPVModel) {
+      const auto& fullPVPath = pPVModel->GetFullPVPath();
+      auto leafPV = fullPVPath.back().GetPhysicalVolume();
+      leafPV->SetName(dots.GetInfo());
+    }
+    // Add dots to the scene
+    AddPrimitive(dots);
+  }
+  EndPrimitives ();
+  // Restore view parameters
+  fpViewer->SetViewParameters(keepVP);
+  // Restore parameterisation name
+  if (pPVModel) {
+    pPVModel->GetFullPVPath().back().GetPhysicalVolume()->SetName(parameterisationName);
+  }
+
+  firstPrint = false;
+  return;
+}
+
+void G4VSceneHandler::Draw3DRectMeshAsSurfaces(const G4Mesh& mesh)
+// For a rectangular 3-D mesh, draw as surfaces by colour and material
+// with inner shared faces removed.
+{
+  // Check
+  if (mesh.GetMeshType() != G4Mesh::rectangle &&
+      mesh.GetMeshType() != G4Mesh::nested3DRectangular) {
+    G4ExceptionDescription ed;
+    ed << "Called with a mesh that is not rectangular:" << mesh;
+    G4Exception("G4VSceneHandler::Draw3DRectMeshAsSurfaces","visman0108",JustWarning,ed);
+    return;
+  }
+
+  static G4bool firstPrint = true;
+  const auto& verbosity = G4VisManager::GetVerbosity();
+  G4bool print = firstPrint && verbosity >= G4VisManager::errors;
+  if (print) {
+    G4cout
+    << "Special case drawing of 3D rectangular G4VNestedParameterisation as surfaces:"
+    << '\n' << mesh
+    << G4endl;
+  }
+
+  const auto& container = mesh.GetContainerVolume();
+
+  // This map is static so that once filled it stays filled.
+  static std::map<G4String,std::map<const G4Material*,G4Polyhedron>> boxesByMaterialAndMesh;
+  auto& boxesByMaterial = boxesByMaterialAndMesh[mesh.GetContainerVolume()->GetName()];
+
+  // Fill map if not already filled
+  if (boxesByMaterial.empty()) {
+
+    // Get positions and material one cell at a time (using PseudoSceneFor3DRectMeshPositions).
+    // The pseudo scene allows a "private" descent into the parameterisation.
+    // Instantiate a temporary G4PhysicalVolumeModel
+    G4ModelingParameters tmpMP;
+    tmpMP.SetCulling(true);  // This avoids drawing transparent...
+    tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+    const G4bool useFullExtent = true;  // To avoid calculating the extent
+    G4PhysicalVolumeModel tmpPVModel
+    (container,
+     G4PhysicalVolumeModel::UNLIMITED,
+     G4Transform3D(),  // so that positions are in local coordinates
+     &tmpMP,
+     useFullExtent);
+    // Accumulate information in temporary maps by material
+    std::multimap<const G4Material*,const G4ThreeVector> positionByMaterial;
+    std::map<const G4Material*,G4VSceneHandler::NameAndVisAtts> nameAndVisAttsByMaterial;
+    // Instantiate the pseudo scene
+    PseudoSceneFor3DRectMeshPositions pseudoScene
+    (&tmpPVModel,mesh.GetMeshDepth(),positionByMaterial,nameAndVisAttsByMaterial);
+    // Make private descent into the parameterisation
+    tmpPVModel.DescribeYourselfTo(pseudoScene);
+    // Now we have a map of positions by material.
+    // Also a map of name and colour by material.
+
+    const auto& prms = mesh.GetThreeDRectParameters();
+    const auto& sizeX = 2.*prms.fHalfX;
+    const auto& sizeY = 2.*prms.fHalfY;
+    const auto& sizeZ = 2.*prms.fHalfZ;
+
+    // Fill the permanent (static) map of boxes by material
+    G4int nBoxesTotal = 0, nFacetsTotal = 0;
+    for (const auto& entry: nameAndVisAttsByMaterial) {
+      G4int nBoxes = 0;
+      const auto& material = entry.first;
+      const auto& nameAndVisAtts = nameAndVisAttsByMaterial[material];
+      const auto& name = nameAndVisAtts.fName;
+      const auto& visAtts = nameAndVisAtts.fVisAtts;
+      // Transfer positions into a vector ready for creating polyhedral surface
+      std::vector<G4ThreeVector> positionsForPolyhedron;
+      const auto& range = positionByMaterial.equal_range(material);
+      for (auto posByMat = range.first; posByMat != range.second; ++posByMat) {
+        const auto& position = posByMat->second;
+        positionsForPolyhedron.push_back(position);
+        ++nBoxes;
+      }
+      // The polyhedron will be in local coordinates
+      // Add an empty place-holder to the map and get a reference to it
+      auto& polyhedron = boxesByMaterial[material];
+      // Replace with the desired polyhedron (uses efficient "move assignment")
+      polyhedron = G4PolyhedronBoxMesh(sizeX,sizeY,sizeZ,positionsForPolyhedron);
+      polyhedron.SetVisAttributes(visAtts);
+      polyhedron.SetInfo(name);
+
+      if (print) {
+        G4cout
+        << std::setw(30) << std::left << name.substr(0,30) << std::right
+        << ": " << std::setw(7) << nBoxes << " boxes"
+        << " (" << std::setw(7) << 6*nBoxes << " faces)"
+        << ": reduced to " << std::setw(7) << polyhedron.GetNoFacets() << " facets ("
+        << std::setw(2) << std::fixed << std::setprecision(2) << 100*polyhedron.GetNoFacets()/(6*nBoxes)
+        << "%): colour " << std::fixed << std::setprecision(2)
+        << visAtts.GetColour() << std::defaultfloat
+        << G4endl;
+      }
+
+      nBoxesTotal += nBoxes;
+      nFacetsTotal += polyhedron.GetNoFacets();
+    }
+
+    if (print) {
+      G4cout << "Total number of boxes: " << nBoxesTotal << " (" << 6*nBoxesTotal << " faces)"
+      << ": reduced to " << nFacetsTotal << " facets ("
+      << std::setw(2) << std::fixed << std::setprecision(2) << 100*nFacetsTotal/(6*nBoxesTotal) << "%)"
+      << G4endl;
+    }
+  }
+
+  // Some subsequent expressions apply only to G4PhysicalVolumeModel
+  auto pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+
+  G4String parameterisationName;
+  if (pPVModel) {
+    parameterisationName = pPVModel->GetFullPVPath().back().GetPhysicalVolume()->GetName();
+  }
+
+  // Draw the boxes by material
+  // Now we transform to world coordinates
+  BeginPrimitives (mesh.GetTransform());
+  for (const auto& entry: boxesByMaterial) {
+    const auto& poly = entry.second;
+    // The current "leaf" node in the PVPath is the parameterisation. Here it has
+    // been converted into polyhedra by material. So...temporarily...change
+    // its name to that of the material (whose name has been stored in Info)
+    // so that its appearance in the scene tree of, e.g., G4OpenGLQtViewer, has
+    // an appropriate name and its visibility and colour may be changed.
+    if (pPVModel) {
+      const auto& fullPVPath = pPVModel->GetFullPVPath();
+      auto leafPV = fullPVPath.back().GetPhysicalVolume();
+      leafPV->SetName(poly.GetInfo());
+    }
+    AddPrimitive(poly);
+  }
+  EndPrimitives ();
+  // Restore parameterisation name
+  if (pPVModel) {
+    pPVModel->GetFullPVPath().back().GetPhysicalVolume()->SetName(parameterisationName);
+  }
+
+  firstPrint = false;
+  return;
+}
+
+void G4VSceneHandler::DrawTetMeshAsDots(const G4Mesh& mesh)
+// For a tetrahedron mesh, draw as coloured dots by colour and material,
+// one dot randomly placed in each visible mesh cell.
+{
+  // Check
+  if (mesh.GetMeshType() != G4Mesh::tetrahedron) {
+    G4ExceptionDescription ed;
+    ed << "Called with mesh that is not a tetrahedron mesh:" << mesh;
+    G4Exception("G4VSceneHandler::DrawTetMeshAsDots","visman0108",JustWarning,ed);
+    return;
+  }
+
+  static G4bool firstPrint = true;
+  const auto& verbosity = G4VisManager::GetVerbosity();
+  G4bool print = firstPrint && verbosity >= G4VisManager::errors;
+
+  if (print) {
+    G4cout
+    << "Special case drawing of tetrahedron mesh as dots"
+    << '\n' << mesh
+    << G4endl;
+  }
+
+  const auto& container = mesh.GetContainerVolume();
+
+  // This map is static so that once filled it stays filled.
+  static std::map<G4String,std::map<const G4Material*,G4Polymarker>> dotsByMaterialAndMesh;
+  auto& dotsByMaterial = dotsByMaterialAndMesh[mesh.GetContainerVolume()->GetName()];
+
+  // Fill map if not already filled
+  if (dotsByMaterial.empty()) {
+
+    // Get vertices and colour one cell at a time (using PseudoSceneForTetVertices).
+    // The pseudo scene allows a "private" descent into the parameterisation.
+    // Instantiate a temporary G4PhysicalVolumeModel
+    G4ModelingParameters tmpMP;
+    tmpMP.SetCulling(true);  // This avoids drawing transparent...
+    tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+    const G4bool useFullExtent = true;  // To avoid calculating the extent
+    G4PhysicalVolumeModel tmpPVModel
+    (container,
+     G4PhysicalVolumeModel::UNLIMITED,
+     G4Transform3D(),  // so that positions are in local coordinates
+     &tmpMP,
+     useFullExtent);
+    // Accumulate information in temporary maps by material
+    std::multimap<const G4Material*,std::vector<G4ThreeVector>> verticesByMaterial;
+    std::map<const G4Material*,G4VSceneHandler::NameAndVisAtts> nameAndVisAttsByMaterial;
+    // Instantiate a pseudo scene
+    PseudoSceneForTetVertices pseudoScene
+    (&tmpPVModel,mesh.GetMeshDepth(),verticesByMaterial,nameAndVisAttsByMaterial);
+    // Make private descent into the parameterisation
+    tmpPVModel.DescribeYourselfTo(pseudoScene);
+    // Now we have a map of vertices by material.
+    // Also a map of name and colour by material.
+
+    // Fill the permanent (static) map of dots by material
+    G4int nDotsTotal = 0;
+    for (const auto& entry: nameAndVisAttsByMaterial) {
+      G4int nDots = 0;
+      const auto& material = entry.first;
+      const auto& nameAndVisAtts = nameAndVisAttsByMaterial[material];
+      const auto& name = nameAndVisAtts.fName;
+      const auto& visAtts = nameAndVisAtts.fVisAtts;
+      G4Polymarker dots;
+      dots.SetVisAttributes(visAtts);
+      dots.SetMarkerType(G4Polymarker::dots);
+      dots.SetSize(G4VMarker::screen,1.);
+      dots.SetInfo(name);
+      // Enter empty polymarker into the map
+      dotsByMaterial[material] = dots;
+      // Now fill it in situ
+      auto& dotsInMap = dotsByMaterial[material];
+      const auto& range = verticesByMaterial.equal_range(material);
+      for (auto vByMat = range.first; vByMat != range.second; ++vByMat) {
+        const std::vector<G4ThreeVector>& vertices = vByMat->second;
+        // Calculate extent/bounding box
+        G4double xmin, xmax, ymin, ymax, zmin, zmax;
+        xmin = ymin = zmin = DBL_MAX;
+        xmax = ymax = zmax = -DBL_MAX;
+        for (const auto& vertex: vertices) {
+          if (xmin > vertex.x()) xmin = vertex.x();
+          if (ymin > vertex.y()) ymin = vertex.y();
+          if (zmin > vertex.z()) zmin = vertex.z();
+          if (xmax < vertex.x()) xmax = vertex.x();
+          if (ymax < vertex.y()) ymax = vertex.y();
+          if (zmax < vertex.z()) zmax = vertex.z();
+        }
+        // Place dot at random in the extent/bounding box. Yes, I know this will
+        // be bigger than the tetrahedron, so sometimes the position will be outside
+        // the tetrahedron, but it will still give a reasonable visual representation.
+        // If you have a smart algorithm for generating a random point in a
+        // tetrahedron, please let us know.
+        const G4double x = xmin + G4UniformRand()*(xmax - xmin);
+        const G4double y = ymin + G4UniformRand()*(ymax - ymin);
+        const G4double z = zmin + G4UniformRand()*(zmax - zmin);
+        dotsInMap.push_back(G4ThreeVector(x,y,z));
+        ++nDots;
+      }
+
+      if (print) {
+        G4cout
+        << std::setw(30) << std::left << name.substr(0,30) << std::right
+        << ": " << std::setw(7) << nDots << " dots"
+        << ": colour " << std::fixed << std::setprecision(2)
+        << visAtts.GetColour() << std::defaultfloat
+        << G4endl;
+      }
+
+      nDotsTotal += nDots;
+    }
+
+    if (print) {
+      G4cout << "Total number of dots: " << nDotsTotal << G4endl;
+    }
+  }
+
+  // Some subsequent expressions apply only to G4PhysicalVolumeModel
+  auto pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+
+  G4String parameterisationName;
+  if (pPVModel) {
+    parameterisationName = pPVModel->GetFullPVPath().back().GetPhysicalVolume()->GetName();
+  }
+
+  // Draw the dots by material
+  // Ensure they are "hidden", i.e., use the z-buffer as non-marker primitives do
+  auto keepVP = fpViewer->GetViewParameters();
+  auto vp = fpViewer->GetViewParameters();
+  vp.SetMarkerHidden();
+  fpViewer->SetViewParameters(vp);
+
+  // Now we transform to world coordinates
+  BeginPrimitives (mesh.GetTransform());
+  for (const auto& entry: dotsByMaterial) {
+    const auto& dots = entry.second;
+    // The current "leaf" node in the PVPath is the parameterisation. Here it has
+    // been converted into polymarkers by material. So...temporarily...change
+    // its name to that of the material (whose name has been stored in Info)
+    // so that its appearance in the scene tree of, e.g., G4OpenGLQtViewer, has
+    // an appropriate name and its visibility and colour may be changed.
+    if (pPVModel) {
+      const auto& fullPVPath = pPVModel->GetFullPVPath();
+      auto leafPV = fullPVPath.back().GetPhysicalVolume();
+      leafPV->SetName(dots.GetInfo());
+    }
+    AddPrimitive(dots);
+  }
+  EndPrimitives ();
+
+  // Restore view parameters
+  fpViewer->SetViewParameters(keepVP);
+  // Restore parameterisation name
+  if (pPVModel) {
+    pPVModel->GetFullPVPath().back().GetPhysicalVolume()->SetName(parameterisationName);
+  }
+
+  firstPrint = false;
+  return;
+}
+
+void G4VSceneHandler::DrawTetMeshAsSurfaces(const G4Mesh& mesh)
+// For a tetrahedron mesh, draw as surfaces by colour and material
+// with inner shared faces removed.
+{
+  // Check
+  if (mesh.GetMeshType() != G4Mesh::tetrahedron) {
+    G4ExceptionDescription ed;
+    ed << "Called with mesh that is not a tetrahedron mesh:" << mesh;
+    G4Exception("G4VSceneHandler::DrawTetMeshAsSurfaces","visman0108",JustWarning,ed);
+    return;
+  }
+
+  static G4bool firstPrint = true;
+  const auto& verbosity = G4VisManager::GetVerbosity();
+  G4bool print = firstPrint && verbosity >= G4VisManager::errors;
+
+  if (print) {
+    G4cout
+    << "Special case drawing of tetrahedron mesh as surfaces"
+    << '\n' << mesh
+    << G4endl;
+  }
+
+  const auto& container = mesh.GetContainerVolume();
+
+  // This map is static so that once filled it stays filled.
+  static std::map<G4String,std::map<const G4Material*,G4Polyhedron>> surfacesByMaterialAndMesh;
+  auto& surfacesByMaterial = surfacesByMaterialAndMesh[mesh.GetContainerVolume()->GetName()];
+
+  // Fill map if not already filled
+  if (surfacesByMaterial.empty()) {
+
+    // Get vertices and colour one cell at a time (using PseudoSceneForTetVertices).
+    // The pseudo scene allows a "private" descent into the parameterisation.
+    // Instantiate a temporary G4PhysicalVolumeModel
+    G4ModelingParameters tmpMP;
+    tmpMP.SetCulling(true);  // This avoids drawing transparent...
+    tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+    const G4bool useFullExtent = true;  // To avoid calculating the extent
+    G4PhysicalVolumeModel tmpPVModel
+    (container,
+     G4PhysicalVolumeModel::UNLIMITED,
+     G4Transform3D(),  // so that positions are in local coordinates
+     &tmpMP,
+     useFullExtent);
+    // Accumulate information in temporary maps by material
+    std::multimap<const G4Material*,std::vector<G4ThreeVector>> verticesByMaterial;
+    std::map<const G4Material*,G4VSceneHandler::NameAndVisAtts> nameAndVisAttsByMaterial;
+    // Instantiate a pseudo scene
+    PseudoSceneForTetVertices pseudoScene
+    (&tmpPVModel,mesh.GetMeshDepth(),verticesByMaterial,nameAndVisAttsByMaterial);
+    // Make private descent into the parameterisation
+    tmpPVModel.DescribeYourselfTo(pseudoScene);
+    // Now we have a map of vertices by material.
+    // Also a map of name and colour by material.
+
+    // Fill the permanent (static) map of surfaces by material
+    G4int nTetsTotal = 0, nFacetsTotal = 0;
+    for (const auto& entry: nameAndVisAttsByMaterial) {
+      G4int nTets = 0;
+      const auto& material = entry.first;
+      const auto& nameAndVisAtts = nameAndVisAttsByMaterial[material];
+      const auto& name = nameAndVisAtts.fName;
+      const auto& visAtts = nameAndVisAtts.fVisAtts;
+      // Transfer vertices into a vector ready for creating polyhedral surface
+      std::vector<G4ThreeVector> verticesForPolyhedron;
+      const auto& range = verticesByMaterial.equal_range(material);
+      for (auto vByMat = range.first; vByMat != range.second; ++vByMat) {
+        const std::vector<G4ThreeVector>& vertices = vByMat->second;
+        for (const auto& vertex: vertices)
+          verticesForPolyhedron.push_back(vertex);
+        ++nTets;
+      }
+      // The polyhedron will be in local coordinates
+      // Add an empty place-holder to the map and get a reference to it
+      auto& polyhedron = surfacesByMaterial[material];
+      // Replace with the desired polyhedron (uses efficient "move assignment")
+      polyhedron = G4PolyhedronTetMesh(verticesForPolyhedron);
+      polyhedron.SetVisAttributes(visAtts);
+      polyhedron.SetInfo(name);
+
+      if (print) {
+        G4cout
+        << std::setw(30) << std::left << name.substr(0,30) << std::right
+        << ": " << std::setw(7) << nTets << " tetrahedra"
+        << " (" << std::setw(7) << 4*nTets << " faces)"
+        << ": reduced to " << std::setw(7) << polyhedron.GetNoFacets() << " facets ("
+        << std::setw(2) << std::fixed << std::setprecision(2) << 100*polyhedron.GetNoFacets()/(4*nTets)
+        << "%): colour " << std::fixed << std::setprecision(2)
+        << visAtts.GetColour() << std::defaultfloat
+        << G4endl;
+     }
+
+      nTetsTotal += nTets;
+      nFacetsTotal += polyhedron.GetNoFacets();
+    }
+
+    if (print) {
+      G4cout << "Total number of tetrahedra: " << nTetsTotal << " (" << 4*nTetsTotal << " faces)"
+      << ": reduced to " << nFacetsTotal << " facets ("
+      << std::setw(2) << std::fixed << std::setprecision(2) << 100*nFacetsTotal/(4*nTetsTotal) << "%)"
+      << G4endl;
+    }
+  }
+
+  // Some subsequent expressions apply only to G4PhysicalVolumeModel
+  auto pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+
+  G4String parameterisationName;
+  if (pPVModel) {
+    parameterisationName = pPVModel->GetFullPVPath().back().GetPhysicalVolume()->GetName();
+  }
+
+  // Draw the surfaces by material
+  // Now we transform to world coordinates
+  BeginPrimitives (mesh.GetTransform());
+  for (const auto& entry: surfacesByMaterial) {
+    const auto& poly = entry.second;
+    // The current "leaf" node in the PVPath is the parameterisation. Here it has
+    // been converted into polyhedra by material. So...temporarily...change
+    // its name to that of the material (whose name has been stored in Info)
+    // so that its appearance in the scene tree of, e.g., G4OpenGLQtViewer, has
+    // an appropriate name and its visibility and colour may be changed.
+    if (pPVModel) {
+      const auto& fullPVPath = pPVModel->GetFullPVPath();
+      auto leafPV = fullPVPath.back().GetPhysicalVolume();
+      leafPV->SetName(poly.GetInfo());
+    }
+    AddPrimitive(poly);
+  }
+  EndPrimitives ();
+
+  // Restore parameterisation name
+  if (pPVModel) {
+    pPVModel->GetFullPVPath().back().GetPhysicalVolume()->SetName(parameterisationName);
+  }
+
+  firstPrint = false;
+  return;
 }

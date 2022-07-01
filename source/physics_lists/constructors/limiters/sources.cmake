@@ -13,6 +13,7 @@ geant4_add_module(G4phys_ctor_limiters
     G4SpecialCuts.hh
     G4StepLimiterPhysics.hh
     G4ParallelWorldPhysics.hh
+    G4UserSpecialCuts.hh
   SOURCES
     G4ImportanceBiasing.cc
     G4WeightWindowBiasing.cc
@@ -23,7 +24,8 @@ geant4_add_module(G4phys_ctor_limiters
     G4NeutronTrackingCut.cc
     G4SpecialCuts.cc
     G4StepLimiterPhysics.cc
-    G4ParallelWorldPhysics.cc)
+    G4ParallelWorldPhysics.cc
+    G4UserSpecialCuts.cc)
 
 geant4_module_link_libraries(G4phys_ctor_limiters
   PUBLIC

@@ -1,0 +1,155 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+/run/verbose 1
+/process/em/verbose 0
+/process/had/verbose 0
+/testhadr/det/setNbOfLayers 50
+/testhadr/det/setNbOfAbsor 2
+/testhadr/det/setAbsor 1 Iron 36 mm
+/testhadr/det/setAbsor 2 Scintillator 4 mm
+/testhadr/det/setSizeYZ 1.5 m
+/run/initialize
+
+-------------------------------------------------------------
+ ---> The calorimeter is 50 layers of:
+           Iron:    3.6 cm   --->  sum =    1.8 m   =  102.4 Radl  =  10.59 NuclearInteractionLength 
+   Scintillator:      4 mm   --->  sum =     20 cm  = 0.4701 Radl  = 0.2858 NuclearInteractionLength 
+
+                       total thickness =      2 m   =  102.8 Radl  =  10.87 NuclearInteractionLength 
+                     transverse sizeYZ =    1.5 m  
+-------------------------------------------------------------
+
+ Material: Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
+                       Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:     Iron    density:  7.870 g/cm3   RadL:   1.758 cm   Nucl.Int.Length:  16.999 cm 
+                       Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance: 91.754 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:  2.119 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:  0.282 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material: Scintillator    density:  1.032 g/cm3   RadL:  42.544 cm   Nucl.Int.Length:  69.969 cm 
+                       Imean:  62.657 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
+          ElmMassFraction:  91.47 %  ElmAbundance  47.37 % 
+
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction:   8.53 %  ElmAbundance  52.63 % 
+
+
+-------------------------------------------------------------
+/testhadr/gun/setDefault
+/gun/particle proton
+/gun/energy 5 GeV
+/run/printProgress 100
+/run/beamOn 1000
+### G4LevelReader: broken transition 0 from level 24 to 24 for isotope Z= 89 A= 219 - use ground level
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Iron
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 0 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : Scintillator
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  2.3988 keV    e-  356.841 keV    e+  347.078 keV proton 0 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 0 starts.
+--> Event 0 starts.
+--> Event 100 starts.
+--> Event 200 starts.
+--> Event 300 starts.
+--> Event 400 starts.
+--> Event 500 starts.
+--> Event 600 starts.
+--> Event 700 starts.
+--> Event 800 starts.
+--> Event 900 starts.
+ Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=78.650000s Real=84.688196s Sys=0.210000s
+
+ ---> The run is 1000 proton of 5 GeV through calorimeter
+
+ Process calls frequency :
+                  Decay=      3745            He3Inelastic=         2               NoProcess=   4052062
+        Radioactivation=     80759                    Rayl=    215969          Transportation=   3998258
+         alphaInelastic=         3                 annihil=     57916                   compt=   2649589
+                   conv=     54627              dInelastic=        78                   eBrem=    389207
+                  eIoni=   6188997   hBertiniCaptureAtRest=       467                   hIoni=   1425675
+             hadElastic=   4492144              ionElastic=         2                 ionIoni=   4140715
+         kaon+Inelastic=        16          kaon-Inelastic=         2         kaon0LInelastic=        13
+        kaon0SInelastic=         3         lambdaInelastic=        12                     msc=    257743
+                 muIoni=      8017    muMinusCaptureAtRest=        12                nCapture=     52834
+       neutronInelastic=     91833                    phot=    849821           photonNuclear=       212
+           pi+Inelastic=      1006            pi-Inelastic=       928         protonInelastic=      4181
+        sigma-Inelastic=         1              tInelastic=         9 
+
+------------------------------------------------------------
+        material      Edep        rmsE        sqrt(E0(GeV))*rmsE/Edep     total tracklen 
+ 
+ 1          Iron    4.0414 GeV   297.7 MeV     16.47 +- 0.521 %       2.172 m   +-    48 cm 
+ 2  Scintillator    115.45 MeV   33.47 MeV     64.82 +-  2.05 %       22.64 cm  +-  6.84 cm 
+
+   Total Edep = 4.157 GeV
+   Leakage :  primary = 0 eV    secondaries = 191.1 MeV  ---> total = 191.1 MeV
+   Total energy released :  Edep + Eleak = 4.348 GeV
+------------------------------------------------------------
+G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 13 of which, static: 0
+Dynamic pools deleted: 13 / Total memory freed: 0.31 MB
+============================================================
+RunManagerKernel is deleted. Good bye :)

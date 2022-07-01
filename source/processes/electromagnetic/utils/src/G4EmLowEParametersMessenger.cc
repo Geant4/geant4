@@ -169,10 +169,10 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   dnaCmd->AvailableForStates(G4State_PreInit);
   dnaCmd->SetToBeBroadcasted(false);
 
-  G4UIparameter* regName = new G4UIparameter("regName",'s',false);
+  auto regName = new G4UIparameter("regName",'s',false);
   dnaCmd->SetParameter(regName);
 
-  G4UIparameter* type = new G4UIparameter("dnaType",'s',false);
+  auto type = new G4UIparameter("dnaType",'s',false);
   dnaCmd->SetParameter(type);
   type->SetParameterCandidates("DNA_Opt0 DNA_Opt2 DNA_Opt4 DNA_Opt4a DNA_Opt6 DNA_Opt6a DNA_Opt7");
 
@@ -185,16 +185,16 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   deexCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
   deexCmd->SetToBeBroadcasted(false);
 
-  G4UIparameter* regNameD = new G4UIparameter("regName",'s',false);
+  auto regNameD = new G4UIparameter("regName",'s',false);
   deexCmd->SetParameter(regNameD);
 
-  G4UIparameter* flagFluo = new G4UIparameter("flagFluo",'s',false);
+  auto flagFluo = new G4UIparameter("flagFluo",'s',false);
   deexCmd->SetParameter(flagFluo);
 
-  G4UIparameter* flagAuger = new G4UIparameter("flagAuger",'s',false);
+  auto flagAuger = new G4UIparameter("flagAuger",'s',false);
   deexCmd->SetParameter(flagAuger);
 
-  G4UIparameter* flagPIXE = new G4UIparameter("flagPIXE",'s',false);
+  auto flagPIXE = new G4UIparameter("flagPIXE",'s',false);
   deexCmd->SetParameter(flagPIXE);
 
 }

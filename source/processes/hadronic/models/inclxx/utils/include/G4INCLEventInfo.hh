@@ -131,6 +131,8 @@ namespace G4INCL {
         std::fill_n(theta, maxSizeParticles, (Float_t)0.0);
         std::fill_n(phi, maxSizeParticles, (Float_t)0.0);
         std::fill_n(origin, maxSizeParticles, 0);
+        std::fill_n(parentResonancePDGCode, maxSizeParticles, 0);
+        std::fill_n(parentResonanceID, maxSizeParticles, 0);
         std::fill_n(emissionTime, maxSizeParticles, (Float_t)0.0);
         std::fill_n(ARem, maxSizeRemnants, 0);
         std::fill_n(ZRem, maxSizeRemnants, 0);
@@ -191,6 +193,10 @@ namespace G4INCL {
        * Should be -1 for cascade particles, or the number of the remnant for
        * de-excitation particles. */
       Short_t origin[maxSizeParticles];
+      /** \brief Particle's parent resonance PDG code */
+      Int_t parentResonancePDGCode[maxSizeParticles];
+      /** \brief Particle's parent resonance unique ID identifier */
+      Int_t parentResonanceID[maxSizeParticles];
       /** \brief Emission time [fm/c] */
       Float_t emissionTime[maxSizeParticles];
       /** \brief History of the particle

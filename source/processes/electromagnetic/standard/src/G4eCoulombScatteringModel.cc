@@ -295,7 +295,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
     G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
     G4ThreeVector dir = (direction*sqrt(mom2) - 
 			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
-    G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);
+    auto newdp = new G4DynamicParticle(ion, dir, trec);
     fvect->push_back(newdp);
   } else {
     edep = trec;

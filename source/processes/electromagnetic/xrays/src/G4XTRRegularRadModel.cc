@@ -43,7 +43,7 @@ G4XTRRegularRadModel::G4XTRRegularRadModel(G4LogicalVolume* anEnvelope,
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4XTRRegularRadModel::~G4XTRRegularRadModel() {}
+G4XTRRegularRadModel::~G4XTRRegularRadModel() = default;
 
 ///////////////////////////////////////////////////////////////////////////
 void G4XTRRegularRadModel::ProcessDescription(std::ostream& out) const

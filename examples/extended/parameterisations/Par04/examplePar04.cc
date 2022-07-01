@@ -31,8 +31,8 @@
 // --------------------------------------------------------------
 // Comments
 //
-// Example of a main program demonstrating multiple energy deposition
-// from fast simulation model.
+// Example of a main program demonstrating inference in C++
+// for fast simulation in calorimeters.
 //
 //-------------------------------------------------------------------
 #include <G4Exception.hh>                // for G4Exception
@@ -54,17 +54,23 @@
 #include "G4VisExecutive.hh"             // for G4VisExecutive
 #include "Par04ActionInitialisation.hh"  // for Par04ActionInitialisation
 #include "Par04DetectorConstruction.hh"  // for Par04DetectorConstruction
+#include "time.h"                        // for time
 
 int main(int argc, char** argv)
 {
   // Macro name from arguments
   G4String batchMacroName;
-  G4bool useInteractiveMode = true;
+  G4bool useInteractiveMode = false;
   G4String helpMsg(
     "Usage: " + G4String(argv[0]) +
-    " [option(s)] \n No additional arguments triggers an interactive mode "
-    "executing vis.mac macro. \n Options:\n\t-h\t\tdisplay this help "
-    "message\n\t-m MACRO\ttriggers a batch mode executing MACRO\n");
+    " [option(s)] \n You need to specify the mode and the macro file.\nOptions:"
+    "\n\t-h\t\tdisplay this help message\n\t-m MACRO\ttriggers a batch mode "
+     "executing MACRO\n\t-i\t\truns interactive mode, use it together with vis*mac macros.");
+  if(argc < 2 ) {
+    G4Exception("main", "No arguments", FatalErrorInArgument,
+                ("No arguments passed to " + G4String(argv[0]) + "\n" + helpMsg)
+                .c_str());
+  }
   for(G4int i = 1; i < argc; ++i)
   {
     G4String argument(argv[i]);
@@ -76,8 +82,11 @@ int main(int argc, char** argv)
     else if(argument == "-m")
     {
       batchMacroName     = G4String(argv[i + 1]);
-      useInteractiveMode = false;
       ++i;
+    }
+    else if(argument == "-i")
+    {
+      useInteractiveMode = true;
     }
     else
     {
@@ -88,16 +97,24 @@ int main(int argc, char** argv)
     }
   }
 
+  //choose the Random engine
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+  //set random seed with system time
+  G4long seed = time(NULL);
+  CLHEP::HepRandom::setTheSeed(seed);
+
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
+  G4RunManagerType runManagerType = G4RunManagerType::Default;
   if(useInteractiveMode)
   {
     ui = new G4UIExecutive(argc, argv);
+    runManagerType = G4RunManagerType::Serial;
   }
 
   // Initialization of default Run manager
   auto* runManager =
-    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+    G4RunManagerFactory::CreateRunManager(runManagerType);
 
   // Detector geometry:
   auto detector = new Par04DetectorConstruction();
@@ -132,7 +149,14 @@ int main(int argc, char** argv)
 
   if(useInteractiveMode)
   {
-    UImanager->ApplyCommand("/control/execute vis.mac");
+    if(batchMacroName.empty())
+    {
+      G4Exception("main", "Unknown macro name", FatalErrorInArgument,
+                  ("No macro name passed to " + G4String(argv[0]))
+                    .c_str());
+    }
+    G4String command = "/control/execute ";
+    UImanager->ApplyCommand(command + batchMacroName);
     ui->SessionStart();
     delete ui;
   }

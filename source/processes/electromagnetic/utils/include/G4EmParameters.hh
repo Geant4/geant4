@@ -59,15 +59,28 @@
 #include "G4DNAModelSubType.hh"
 #include "G4EmSaturation.hh"
 #include "G4ThreeVector.hh"
-#include "G4Threading.hh"
 #include <vector>
 
 enum G4eSingleScatteringType
-  {
-    fWVI = 0,
-    fMott,
-    fDPWA
-  };
+{
+  fWVI = 0,
+  fMott,
+  fDPWA
+};
+
+enum class G4TransportationWithMscType
+{
+  fDisabled = 0,
+  fEnabled,
+  fMultipleSteps,
+};
+
+enum G4EmFluctuationType 
+{
+  fDummyFluctuation = 0,
+  fUniversalFluctuation,
+  fUrbanFluctuation
+};
 
 class G4EmParametersMessenger;
 class G4EmExtraParameters;
@@ -151,6 +164,9 @@ public:
 
   void SetUseICRU90Data(G4bool val);
   G4bool UseICRU90Data() const;
+
+  void SetFluctuationType(G4EmFluctuationType val);
+  G4EmFluctuationType FluctuationType() const;
 
   void SetDNAFast(G4bool val);
   G4bool DNAFast() const;
@@ -278,6 +294,9 @@ public:
 
   void SetWorkerVerbose(G4int val);
   G4int WorkerVerbose() const;
+
+  void SetTransportationWithMsc(G4TransportationWithMscType val);
+  G4TransportationWithMscType TransportationWithMsc() const;
 
   void SetMscStepLimitType(G4MscStepLimitType val);
   G4MscStepLimitType MscStepLimitType() const;
@@ -425,14 +444,12 @@ private:
   G4int workerVerbose;
   G4int tripletConv;  // 5d model triplet generation type
 
+  G4TransportationWithMscType fTransportationWithMsc;
   G4MscStepLimitType mscStepLimit;
   G4MscStepLimitType mscStepLimitMuHad;
   G4NuclearFormfactorType nucFormfactor;
   G4eSingleScatteringType fSStype;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex emParametersMutex;
-#endif
+  G4EmFluctuationType fFluct;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

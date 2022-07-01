@@ -1080,8 +1080,11 @@ G4VSolid* G4Hype::Clone() const
 //
 G4double G4Hype::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) {;}
-    else { fCubicVolume = G4VSolid::GetCubicVolume(); }
+  if (fCubicVolume == 0.)
+  {
+    fCubicVolume = CLHEP::twopi*halfLenZ*
+      (2.*(outerRadius2 - innerRadius2) + endOuterRadius2 - endInnerRadius2)/3.;
+  }
   return fCubicVolume;
 }
 
@@ -1089,8 +1092,33 @@ G4double G4Hype::GetCubicVolume()
 //
 G4double G4Hype::GetSurfaceArea()
 {
-  if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
+  if (fSurfaceArea == 0.)
+  {
+    G4double h = halfLenZ;
+    G4double innS = 2.*h*innerRadius;
+    if (std::abs(endInnerRadius - innerRadius) > kCarTolerance)
+    {
+      G4double A  = innerRadius;
+      G4double AA = innerRadius2;
+      G4double RR = endInnerRadius2;
+      G4double CC = AA*h*h/(RR - AA);
+      G4double K  = std::sqrt(AA + CC)/CC;
+      G4double Kh = K*h;
+      innS = A*(h*std::sqrt(1. + Kh*Kh) + std::asinh(Kh)/K);
+    }
+    G4double outS = 2.*h*outerRadius;
+    if (std::abs(endOuterRadius - outerRadius) > kCarTolerance)
+    {
+      G4double A  = outerRadius;
+      G4double AA = outerRadius2;
+      G4double RR = endOuterRadius2;
+      G4double CC = AA*h*h/(RR - AA);
+      G4double K  = std::sqrt(AA + CC)/CC;
+      G4double Kh = K*h;
+      outS  = A*(h*std::sqrt(1. + Kh*Kh) + std::asinh(Kh)/K);
+    }
+    fSurfaceArea = CLHEP::twopi*(endOuterRadius2 - endInnerRadius2 + innS + outS);
+  }
   return fSurfaceArea;
 }
 

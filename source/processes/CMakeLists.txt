@@ -1,13 +1,11 @@
 # - G4processes category build
-
 # Add (private) allocation export symbol for the EM category
 add_definitions(-DG4EM_ALLOC_EXPORT)
 
 # Add (private) allocation export symbol for the hadronic category
 add_definitions(-DG4HADRONIC_ALLOC_EXPORT)
 
-geant4_global_library_target(NAME G4processes
-  COMPONENTS
+foreach(modfile
     biasing/management/sources.cmake
     biasing/generic/sources.cmake
     biasing/importance/sources.cmake
@@ -74,4 +72,74 @@ geant4_global_library_target(NAME G4processes
     parameterisation/sources.cmake
     scoring/sources.cmake
     transportation/sources.cmake)
+  include(${modfile})
+endforeach()
 
+geant4_add_category(G4processes
+  MODULES
+    G4biasing_mgt
+    G4biasing_gen
+    G4biasing_imp
+    G4cuts
+    G4decay
+    G4emadjoint
+    G4emdna-processes
+    G4emdna-models
+    G4emdna-utils
+    G4emdna-man
+    G4emdna-molman
+    G4emdna-moltypes
+    G4emhighenergy
+    G4emlowenergy
+    G4muons
+    G4empii
+    G4empolar
+    G4emstandard
+    G4emutils
+    G4xrays
+    G4hadronic_xsect
+    G4hadronic_mgt
+    G4hadronic_abla
+    G4hadronic_abrasion
+    G4hadronic_binary
+    G4hadronic_bert_cascade
+    G4hadronic_coherent_elastic
+    G4hadronic_ablation
+    G4hadronic_deex_evaporation
+    G4hadronic_deex_fermi_breakup
+    G4hadronic_deex_fission
+    G4hadronic_deex_gem_evaporation
+    G4hadronic_deex_handler
+    G4hadronic_deex_management
+    G4hadronic_deex_multifragmentation
+    G4hadronic_deex_photon_evaporation
+    G4hadronic_deex_util
+    G4hadronic_em_dissociation
+    G4had_fission
+    G4had_im_r_matrix
+    G4hadronic_inclxx_utils
+    G4hadronic_inclxx_physics
+    G4hadronic_inclxx_interface
+    G4had_gamma_nuclear
+    G4had_lend
+    G4had_lept_nuclear
+    G4had_par_hp
+    G4had_string_diff
+    G4had_string_frag
+    G4had_string_man
+    G4hadronic_qgstring
+    G4had_preequ_exciton
+    G4hadronic_qmd
+    G4hadronic_quasi_elastic
+    G4hadronic_radioactivedecay
+    G4had_theo_max
+    G4hadronic_proc
+    G4hadronic_stop
+    G4hadronic_util
+    G4procman
+    G4optical
+    G4solidstate_phonon
+    G4solidstate_channeling
+    G4parameterisation
+    G4scoring
+    G4transportation )

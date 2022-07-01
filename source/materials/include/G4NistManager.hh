@@ -73,7 +73,6 @@
 #include "G4NistMaterialBuilder.hh"
 #include "G4ICRU90StoppingData.hh"
 #include "G4Pow.hh"
-#include "G4Threading.hh"
 
 class G4NistMessenger;
 
@@ -310,10 +309,6 @@ private:
   size_t   nElements;
   size_t   nMaterials;  
   G4int    verbose;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex nistManagerMutex;
-#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -49,7 +49,7 @@ PhysicsList::PhysicsList()
 {
   // mandatory for G4NuclideTable
   //
-  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(1*ps*std::log(2.));
   G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV);
 
   //read new PhotonEvaporation data set 

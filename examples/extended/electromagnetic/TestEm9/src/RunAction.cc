@@ -26,14 +26,6 @@
 /// \file electromagnetic/TestEm9/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-//
-//
-// -------------------------------------------------------------
-//  
-//    GEANT4
-//
-//
-// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -45,11 +37,6 @@
 
 RunAction::RunAction()
  : G4UserRunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-RunAction::~RunAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

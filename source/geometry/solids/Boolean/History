@@ -1,38 +1,35 @@
+# Category geom-bool History
 
--------------------------------------------------------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+------------------------------------------------------------------------------
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2022-05-04 Gabriele Cosmo (geom-bool-V11-00-05)
+- Minor cleanup in headers and G4UnionSolid constructors.
 
-   Please keep a summary of these message in geometry/History!
-
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
-
-May 4, 2022, G.Cosmo (geom-bool-V10-07-05)
-- Minor cleanup in G4UnionSolid constructors.
-
-April 29, 2022, G.Cosmo
+## 2022-04-29 Gabriele Cosmo (geom-bool-V11-00-04)
 - G4UnionSolid: added missing data initialisation in copy-ctr and operator=().
 
-April 5, 2022, G.Cosmo
+## 2022-04-05 Gabriele Cosmo (geom-bool-V11-00-03)
 - G4UnionSolid: add surface tolerance in Inside(p) for check on Z.
   Minor optimisation in caching half-tolerance.
 
-January 10, 2022, G.Cosmo geom-bool-V10-07-04
+## 2022-01-19 Evgueni Tcherniaev (geom-bool-V11-00-02)
+- G4DisplacedSolid: added GetCubicVolume(), GetSurfaceArea()
+
+## 2022-01-10 Gabriele Cosmo (geom-bool-V11-00-01)
 - Added alternative signature for AddNode() taking a pointer to solid.
   Added 'const' qualification to transformation passed as argument.
   Addressing problem report #2457.
+
+## 2021-12-10 Ben Morgan (geom-bool-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October 12, 2021 G.Cosmo geom-bool-V10-07-03
 - In G4BooleanSolid, use G4RecursiveMutex in place of G4Mutex in GetPolyhedron()

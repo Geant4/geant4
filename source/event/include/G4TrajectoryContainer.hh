@@ -42,7 +42,7 @@
 #include "G4VTrajectory.hh"
 #include "G4Allocator.hh"
 
-typedef std::vector<G4VTrajectory*> TrajectoryVector;
+using TrajectoryVector = std::vector<G4VTrajectory*>;
 
 class G4TrajectoryContainer
 {
@@ -82,8 +82,10 @@ G4Allocator<G4TrajectoryContainer>*& aTrajectoryContainerAllocator();
 
 inline void* G4TrajectoryContainer::operator new(std::size_t)
 {
-  if (!aTrajectoryContainerAllocator())
+  if (aTrajectoryContainerAllocator() == nullptr)
+  {
     aTrajectoryContainerAllocator() = new G4Allocator<G4TrajectoryContainer>;
+  }
   return (void*)aTrajectoryContainerAllocator()->MallocSingle();
 }
 

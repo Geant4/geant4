@@ -46,11 +46,11 @@ class G4UnitsMessenger : public G4UImessenger
   public:
 
     G4UnitsMessenger();
-    ~G4UnitsMessenger();
+    ~G4UnitsMessenger() override;
 
-    void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  private:
+   private:
 
     G4UIdirectory* UnitsTableDir = nullptr;
     G4UIcmdWithoutParameter* ListCmd = nullptr;

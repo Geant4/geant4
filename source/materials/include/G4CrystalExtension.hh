@@ -64,11 +64,12 @@ public:  // with description
     // Constructor to create a material
     //
     G4CrystalExtension(G4Material* ,const G4String& name = "crystal");
-    
-    ~G4CrystalExtension();
 
-    void Print() const {;};
-private:
+    ~G4CrystalExtension() override;
+
+    void Print() const override { ; };
+
+   private:
     G4Material* fMaterial;
     
 public:

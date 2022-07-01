@@ -65,7 +65,8 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LossTableManager.hh"
 #include "G4ModifiedTsai.hh"
-
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 
 const G4int G4PairProductionRelModel::gMaxZet = 120; 
 
@@ -481,12 +482,10 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   GetAngularDistribution()->SamplePairDirections(aDynamicGamma, 
 						 eKinEnergy, pKinEnergy, eDirection, pDirection);
   // create G4DynamicParticle object for the particle1
-  G4DynamicParticle* aParticle1= new G4DynamicParticle(
-                     fTheElectron,eDirection,eKinEnergy);
+  auto aParticle1 = new G4DynamicParticle(fTheElectron,eDirection,eKinEnergy);
 
   // create G4DynamicParticle object for the particle2
-  G4DynamicParticle* aParticle2= new G4DynamicParticle(
-                     fThePositron,pDirection,pKinEnergy);
+  auto aParticle2 = new G4DynamicParticle(fThePositron,pDirection,pKinEnergy);
   // Fill output vector
   fvect->push_back(aParticle1);
   fvect->push_back(aParticle2);
@@ -523,7 +522,7 @@ void G4PairProductionRelModel::InitialiseElementData()
         Fel   = G4Log(184.)  -    logZ13;
         Finel = G4Log(1194.) - 2.*logZ13;
       }
-      ElementData* elD     = new ElementData(); 
+      auto elD             = new ElementData();
       elD->fLogZ13         = logZ13;
       elD->fCoulomb        = fc;
       elD->fLradEl         = Fel;

@@ -33,7 +33,7 @@
 #include "G4MPImanager.hh"
 #include "G4VMPIextraWorker.hh"
 
-namespace tools {
+namespace toolx {
 namespace mpi {
 class wrmpi;    
 }
@@ -49,7 +49,7 @@ public:
   ~G4MPIntupleMerger();
 
 private:
-  tools::mpi::wrmpi* fWrmpi;
+  toolx::mpi::wrmpi* fWrmpi;
 };
 
 #endif //G4MPINTUPLEMERGER_HH

@@ -78,12 +78,12 @@ public:
   virtual iro* copy() const {return new leaf<T>(*this);}
   virtual bool stream(buffer& a_buffer) {
     short v;
-    unsigned int s,c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
     if(!base_leaf::stream(a_buffer)) return false;
     if(!a_buffer.read(m_min)) return false;
     if(!a_buffer.read(m_max)) return false;
-    if(!a_buffer.check_byte_count(s,c,leaf_store_class(T()))) return false;
+    if(!a_buffer.check_byte_count(_s,_c,leaf_store_class(T()))) return false;
     return true;
   }
 public: //base_leaf
@@ -230,12 +230,12 @@ public:
   virtual iro* copy() const {return new leaf_string(*this);}
   virtual bool stream(buffer& a_buffer) {
     short v;
-    unsigned int s,c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
     if(!base_leaf::stream(a_buffer)) return false;
     if(!a_buffer.read(m_min)) return false;
     if(!a_buffer.read(m_max)) return false;
-    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    if(!a_buffer.check_byte_count(_s,_c,s_store_class())) return false;
     return true;
   }
 public: //base_leaf
@@ -337,12 +337,12 @@ public:
   virtual iro* copy() const {return new leaf_element(*this);}
   virtual bool stream(buffer& a_buffer) {
     short v;
-    unsigned int s,c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
     if(!base_leaf::stream(a_buffer)) return false;
     if(!a_buffer.read(fID)) return false;
     if(!a_buffer.read(fType)) return false;
-    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    if(!a_buffer.check_byte_count(_s,_c,s_store_class())) return false;
     return true;
   }
 public: //base_leaf
@@ -401,11 +401,11 @@ public:
   virtual iro* copy() const {return new leaf_object(*this);}
   virtual bool stream(buffer& a_buffer) {
     short v;
-    unsigned int s,c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
     if(!base_leaf::stream(a_buffer)) return false;
     if(!a_buffer.read(fVirtual)) return false;
-    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    if(!a_buffer.check_byte_count(_s,_c,s_store_class())) return false;
     return true;
   }
 public: //base_leaf

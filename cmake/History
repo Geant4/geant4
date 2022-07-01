@@ -1,47 +1,145 @@
--------------------------------------------------------------------
+# Category cmake History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
+-------------------------------------------------------------------------------
 
-History file for Geant4 CMake build scripts.
-It DOES NOT substitute the SVN log-message one should put at every
-committal in the SVN repository !
+## 2022-06-09 Igor Semeniouk (cmake-V11-00-32)
+- G4ConfigureGNUMakeHelpers.cmake (geant4.[c]sh, geant4.bat generation )
+   - use the environment variable GEANT4_DATA_DIR as top data dir
+   - the environment variables for individual dataset commented in scripts
 
-Entries MUST use the following format:
+## 2022-06-07 Ben Morgan (cmake-V11-00-31)
+- Rationalize interlinked PTL/TBB build options 
 
+## 2022-05-30 Guilherme Amadio (cmake-V11-00-30)
+- Add options --sh and --csh to geant4-config script
 
-MONTH DAY YEAR - INITIAL.SURNAME (TAG)
-- FILECHANGED : Document changes made.
+## 2022-05-18 Guilherme Amadio (cmake-V11-00-29)
+- Use more standard install location for CMake files
+- Remove version from default installation directories
+- Add required configuration to be able to generate DEB/RPM packages with CPack
 
-- OTHERFILECHANGED : Document changes made.
+## 2022-05-16 Guilherme Amadio (cmake-V11-00-28)
+- Add source validation exception for G4FindDataDir.hh generated header
 
+## 2022-05-03 Ben Morgan (cmake-V11-00-27)
+- Preliminary configuration support for Qt5 and Qt6
 
-You should keep two lines between each date.
-TAG is optional. If your changes fix a bug listed in the Geant4 Bugzilla,
-add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
+## 2022-04-27 Gunter Folger (cmake-V11-00-26)
+- add new dataset G4NDL 4.7 with new TermalScattering data
 
+## 2022-04-11 Ben Morgan (cmake-V11-00-25)
+- Allow library composition to be overriden in developer builds
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-04-11 Ben Morgan (cmake-V11-00-24)
+- Do not use "readlink -f" to support pre-Monterey macOS systems
 
-06 April 2022 - Ben Morgan (cmake-V10-07-56)
+## 2022-04-08 Ben Morgan (cmake-V11-00-23)
+- Add -Og to GNU/Clang default debug flags
+
+## 2022-04-06 Ben Morgan (cmake-V11-00-22)
 - Don't add CLHEP_INCLUDE_DIRS directly through include_directories to prevent potential
   issues with it holding relative paths (reported by Seth Johnson)
 
-7 March 2022 - Gunter Folger  (cmake-V10-07-55)
+## 2022-04-05 Ben Morgan (cmake-V11-00-21)
+- Copy .clang-tidy file to build directory to assist run-clang-tidy reporting.
+
+## 2022-04-04 Igor Semeniouk (cmake-V11-00-20)
+- In G4ConfigurePkgConfigHelpers.cmake, geant4-config.in (geant4-config generation)
+  - new flag "--features", add vtk and qt3d feature
+  - allow use md5sun if openssl missing
+  - canonicalize prefix path
+- In G4ConfigureGNUMakeHelpers.cmake (geant4.[c]sh, geant4.bat generation )
+   - allow full path source in zsh, sh
+   - unset local variables at the end
+   - introduced GEANT4_DATA_DIR, all DS path relative to this
+
+## 2022-03-25 Ben Morgan (cmake-V11-00-19)
+- Add commands for working with categories analagous to module commands
+
+## 2022-03-28 Ben Morgan (cmake-V11-00-18)
+- Remove retired G4tasking library from configuration files
+
+## 2022-03-28 Ben Morgan (cmake-V11-00-17)
+- Fix typo in G4DeveloperAPI that prevented install of headers
+
+## 2022-03-25 Ben Morgan (cmake-V11-00-16)
+- Do not use CMAKE_VERBOSE_MAKEFILE when building tests
+
+## 2022-03-22 Ben Morgan (cmake-V11-00-15)
+- Add geant4_module_sources command to enable appending of headers/sources
+  to a module after creation
+
+## 2022-03-18 Ben Morgan (cmake-V11-00-14)
+- Change default value of GEANT4_BUILD_BUILTIN_BACKTRACE to OFF
+
+## 2022-03-15 Ben Morgan (cmake-V11-00-13)
+- Rationalize declaration and use of internal builds of required externals CLHEP, 
+  zlib, expat, PTL and tools libraries.
+
+## 2022-03-10 Ben Morgan (cmake-V11-00-12)
+- Remove deprecated functions in G4DeveloperAPI
+- Support declaration and composition of header-only modules and libraries  
+
+## 2022-03-03 Ben Morgan (cmake-V11-00-11)
+- Provide GEANT4_BUILD_ENABLE_ASSERTIONS option to enable assert() in all
+  release build modes (Release, RelWithDebInfo, MinSizeRel)
+  - Addresses GitLab Issue #104
+- Forward `CMAKE_<LANG>_FLAGS[_<MODE>]` flags to `geant4_add_test` so that
+  a consistent set is used through the project. 
+
+## 2022-03-07 Gunter Folger (cmake-V11-00-10)
 - fix in CMakeCPackOptions.cmake.in to avoid PATH with only /, without \, for g4_small.bmp
 
-11 February 2022 - Ben Morgan (cmake-V10-07-54)
+## 2022-02-11 Gunter Folger (cmake-V11-00-09)
+- add new dataset G4EMLOW 8.1
+
+## 2022-02-11 Igor Semeniouk (cmake-V11-00-08)
+- Bug fix introduced in cmake-V11-00-06
+  - G4ConfigureGNUMakeHelpers.cmake - Fix for _g4tc_prepend_path on geant4.bat genaration ( Windows only)
+  - History - fix comment syntax
+
+## 2022-02-11 Ben Morgan (cmake-V11-00-07)
 - Apply [GitHub PR 37](https://github.com/Geant4/geant4/pull/37) from gondiaz.
   - Add G4ptl and G4tasking libraries to link list in geant4-config
-- Fixup: place G4tasking in correct location in dependency list
-- Fixup: Update order of G4analysis for ALICE patch:
-  - https://github.com/alisw/geant4/commit/ee32bad38f5ccfac458869d8c546e0df474f5529 
+- Fixup: place G4tasking in correct location in dependency list 
+
+## 2022-02-11 Igor Semeniouk (cmake-V11-00-06)
+- Bug fix in functions _g4tc_prepend_path, _g4tc_apppend_path on geant4.bat genaration ( Windows only)
+
+## 2022-02-10 Igor Semeniouk (cmake-V11-00-05)
+- In G4ConfigureGNUMakeHelpers.cmake
+  - not set LD_LIBRARY_PATH configuration on MacOS (Darwin)
+  - add paths to DLL into PATH on Windows
+
+## 2022-02-08 Ben Morgan (cmake-V11-00-04)
+- Enable ToolsSG and backends based on use of external libraries (Qt, X11, Xm, Win32)
+  - Backends made non-mutally exclusive
+  - Remove GEANT4_USE_TOOLSSG public CMake option
+  - Addresses #117
+
+## 2022-02-06 Gabriele Cosmo (cmake-V11-00-03)
+- Updated compilation flags for Intel icc/icx compilers.
+
+## 2022-02-05 Gunter Folger (cmake-V11-00-02)
+- Add icpx/icx compiler to G4ConfigureGNUMakeHelpers.cmake
+
+## 2022-01-28 Ben Morgan (cmake-V11-00-01)
+- Correct logic error in checking whether module is already composed
+- **DEPRECATIONS**
+  - `geant4_define_module`
+  - `geant4_global_library_target`
+  - Implementation reduced to emitting a CMake warning message on what to replace with
+
+## 2021-12-10 Ben Morgan (cmake-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 09 November 2021 - Ben Morgan (cmake-V10-07-53)
 - Only configure public release contribution guide if present

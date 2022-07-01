@@ -61,8 +61,7 @@ G4VEmAngularDistribution::G4VEmAngularDistribution(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEmAngularDistribution::~G4VEmAngularDistribution() 
-{}
+G4VEmAngularDistribution::~G4VEmAngularDistribution() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

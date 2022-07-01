@@ -58,6 +58,7 @@
 class G4VEnergyLossProcess;
 class G4VEmProcess;
 class G4VMultipleScattering;
+class G4TransportationWithMsc;
 
 class G4EmConfigurator 
 {
@@ -93,7 +94,8 @@ public:
                      G4VEmProcess* p);
 
   void PrepareModels(const G4ParticleDefinition* aParticle,
-                     G4VMultipleScattering* p);
+                     G4VMultipleScattering* p,
+                     G4TransportationWithMsc* trans = nullptr);
 
   void Clear();
 
@@ -104,8 +106,6 @@ public:
   G4EmConfigurator(const G4EmConfigurator&) = delete;
 
 private:
-
-  const G4Region* FindRegion(const G4String&);
 
   void SetModelForRegion(G4VEmModel* model,
                          G4VEmFluctuationModel* fm,

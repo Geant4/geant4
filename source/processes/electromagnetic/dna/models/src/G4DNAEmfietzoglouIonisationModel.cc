@@ -127,7 +127,7 @@ void G4DNAEmfietzoglouIonisationModel::Initialise(const G4ParticleDefinition* pa
 
   G4double scaleFactor = (1.e-22 / 3.343) * m*m;
 
-  char *path = getenv("G4LEDATA");
+  const char *path = G4FindDataDir("G4LEDATA");
 
   // *** ELECTRON
 

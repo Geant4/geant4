@@ -35,7 +35,7 @@ G4UIcmdWithAnInteger::G4UIcmdWithAnInteger(const char* theCommandPath,
                                            G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter* intParam = new G4UIparameter('i');
+  auto* intParam = new G4UIparameter('i');
   SetParameter(intParam);
   SetCommandType(WithAnIntegerCmd);
 }

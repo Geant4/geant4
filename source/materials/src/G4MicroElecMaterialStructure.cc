@@ -93,15 +93,10 @@ G4MicroElecMaterialStructure::G4MicroElecMaterialStructure(const G4String& matNa
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MicroElecMaterialStructure::~G4MicroElecMaterialStructure()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4MicroElecMaterialStructure::ReadMaterialFile() 
 {
-  char *path = std::getenv("G4LEDATA");
-  
+  const char* path = G4FindDataDir("G4LEDATA");
+
   if (materialName[0] == 'G' && materialName[1] == '4') {
     //in the case the NIST database is used
     materialName.erase(0, 1);
@@ -143,30 +138,69 @@ void G4MicroElecMaterialStructure::ReadMaterialFile()
 	for (int i = 0; i < varLength; i++)
 	  {
 	    line >> data;	data = data*unitValue;
-	    
-	    if (nameParameter == "WorkFunction") workFunction = data;
-	    if (nameParameter == "EnergyGap") energyGap = data;
-	    
-	    if (nameParameter == "EnergyPeak") energyConstant.push_back(data);
-	    if (nameParameter == "EnergyLimit") LimitEnergy.push_back(data);
-	    if (nameParameter == "EADL") EADL_Enumerator.push_back(data);
-	    
-	    if (nameParameter == "WeaklyBoundShell")
+
+      if(nameParameter == "WorkFunction")
+      {
+        workFunction = data;
+      }
+      if(nameParameter == "EnergyGap")
+      {
+        energyGap = data;
+      }
+
+      if(nameParameter == "EnergyPeak")
+      {
+        energyConstant.push_back(data);
+      }
+      if(nameParameter == "EnergyLimit")
+      {
+        LimitEnergy.push_back(data);
+      }
+      if(nameParameter == "EADL")
+      {
+        EADL_Enumerator.push_back(data);
+      }
+
+      if (nameParameter == "WeaklyBoundShell")
 	      {if (data == 0) { isShellWeaklyBoundVector.push_back(false); }
 		else {isShellWeaklyBoundVector.push_back(true);}}
-	    
-	    if (nameParameter == "WeaklyBoundInitialEnergy") initialEnergy = data;
-	    
-	    if (nameParameter == "ShellAtomicNumber") compoundShellZ.push_back(data);
-	    
-	    if (nameParameter == "DielectricModelLowEnergyLimit_e") limitInelastic[0]=data;
-	    if (nameParameter == "DielectricModelHighEnergyLimit_e") limitInelastic[1] = data;
-	    if (nameParameter == "DielectricModelLowEnergyLimit_p") limitInelastic[2] = data;
-	    if (nameParameter == "DielectricModelHighEnergyLimit_p") limitInelastic[3] = data;
-	    
-	    if (nameParameter == "ElasticModelLowEnergyLimit") limitElastic[0] = data;
-	    if (nameParameter == "ElasticModelHighEnergyLimit") limitElastic[1] = data;
-	  }
+
+        if(nameParameter == "WeaklyBoundInitialEnergy")
+        {
+          initialEnergy = data;
+        }
+
+        if(nameParameter == "ShellAtomicNumber")
+        {
+          compoundShellZ.push_back(data);
+        }
+
+        if(nameParameter == "DielectricModelLowEnergyLimit_e")
+        {
+          limitInelastic[0] = data;
+        }
+        if(nameParameter == "DielectricModelHighEnergyLimit_e")
+        {
+          limitInelastic[1] = data;
+        }
+        if(nameParameter == "DielectricModelLowEnergyLimit_p")
+        {
+          limitInelastic[2] = data;
+        }
+        if(nameParameter == "DielectricModelHighEnergyLimit_p")
+        {
+          limitInelastic[3] = data;
+        }
+
+        if(nameParameter == "ElasticModelLowEnergyLimit")
+        {
+          limitElastic[0] = data;
+        }
+        if(nameParameter == "ElasticModelHighEnergyLimit")
+        {
+          limitElastic[1] = data;
+        }
+    }
       }
       fichier.close();  // on ferme le fichier
     }
@@ -189,10 +223,19 @@ G4double G4MicroElecMaterialStructure::Energy(G4int level)
 G4double G4MicroElecMaterialStructure::GetZ(G4int Shell)
 {
   if (Shell >= 0 && Shell < nLevels) {
-    if (!isCompound) return Z;
-    else return compoundShellZ[Shell];
+    if(!isCompound)
+    {
+      return Z;
+    }
+    else
+    {
+      return compoundShellZ[Shell];
+    }
   }
-  else return 0;
+  else
+  {
+    return 0;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -200,12 +243,27 @@ G4double G4MicroElecMaterialStructure::GetZ(G4int Shell)
 G4double G4MicroElecMaterialStructure::ConvertUnit(const G4String& unitName)
 {
   G4double unitValue = 0;
-  if (unitName == "meV") unitValue = 1e-3*CLHEP::eV;
-  else if (unitName == "eV") unitValue = CLHEP::eV;
-  else if (unitName == "keV") unitValue = CLHEP::keV;
-  else if (unitName == "MeV") unitValue = CLHEP::MeV;
-  else if (unitName == "noUnit") unitValue = 1;
-  
+  if(unitName == "meV")
+  {
+    unitValue = 1e-3 * CLHEP::eV;
+  }
+  else if(unitName == "eV")
+  {
+    unitValue = CLHEP::eV;
+  }
+  else if(unitName == "keV")
+  {
+    unitValue = CLHEP::keV;
+  }
+  else if(unitName == "MeV")
+  {
+    unitValue = CLHEP::MeV;
+  }
+  else if(unitName == "noUnit")
+  {
+    unitValue = 1;
+  }
+
   return unitValue;
 }
 
@@ -223,8 +281,14 @@ G4double G4MicroElecMaterialStructure::GetLimitEnergy(G4int level)
 G4double G4MicroElecMaterialStructure::GetInelasticModelLowLimit(G4int pdg)
 {
   G4double res = 0.0;
-  if (pdg == 11) res = limitInelastic[0];
-  else if (pdg == 2212) res = limitInelastic[2];
+  if(pdg == 11)
+  {
+    res = limitInelastic[0];
+  }
+  else if(pdg == 2212)
+  {
+    res = limitInelastic[2];
+  }
   return res;
 }
 
@@ -233,8 +297,14 @@ G4double G4MicroElecMaterialStructure::GetInelasticModelLowLimit(G4int pdg)
 G4double G4MicroElecMaterialStructure::GetInelasticModelHighLimit(G4int pdg)
 {
   G4double res = 0.0;
-  if (pdg == 11) res = limitInelastic[1];
-  else if (pdg == 2212) res = limitInelastic[3];
+  if(pdg == 11)
+  {
+    res = limitInelastic[1];
+  }
+  else if(pdg == 2212)
+  {
+    res = limitInelastic[3];
+  }
   return res;
 }
 

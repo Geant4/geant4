@@ -31,7 +31,7 @@
 #include "G4MPIhistoMerger.hh"
 #include "G4MPImanager.hh"
 #include "G4ios.hh"
-#include "tools/mpi/hmpi"
+#include "toolx/mpi/hmpi"
 #include <mpi.h>
 #include "G4VAnalysisManager.hh"
 
@@ -54,8 +54,8 @@ void G4MPIhistoMerger::Merge()
   G4bool verbose = ( verboseLevel > 1 );
   G4int tag = G4MPImanager::kTAG_HISTO;
   //const MPI::Intracomm* comm = &COMM_G4COMMAND_;
-  tools::mpi::hmpi* hmpi 
-    = new tools::mpi::hmpi(G4cout, destination, tag, comm, verbose);
+  toolx::mpi::hmpi* hmpi 
+    = new toolx::mpi::hmpi(G4cout, destination, tag, comm, verbose);
   if ( ! manager->Merge(hmpi) ) {
       G4cout<<" Merge FAILED"<<G4endl;
   }

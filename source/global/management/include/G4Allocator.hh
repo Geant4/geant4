@@ -48,7 +48,7 @@ class G4AllocatorBase
 {
  public:
   G4AllocatorBase();
-  virtual ~G4AllocatorBase();
+  virtual ~G4AllocatorBase() = default;
   virtual void ResetStorage()                    = 0;
   virtual std::size_t GetAllocatedSize() const   = 0;
   virtual int GetNoPages() const                 = 0;

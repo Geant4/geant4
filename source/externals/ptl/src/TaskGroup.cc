@@ -52,8 +52,13 @@ task_group_counter()
 ThreadPool*
 get_default_threadpool()
 {
-    if(TaskRunManager::GetMasterRunManager())
-        return TaskRunManager::GetMasterRunManager()->GetThreadPool();
+    auto* mrm = TaskRunManager::GetMasterRunManager();
+    if(mrm)
+    {
+        if(!mrm->GetThreadPool())
+            mrm->Initialize();
+        return mrm->GetThreadPool();
+    }
     return nullptr;
 }
 

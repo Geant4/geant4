@@ -33,7 +33,7 @@
 
 #include "G4VTHnFileManager.hh"
 
-#include "tools/hdf5/ntuple" // for hid_t
+#include "toolx/hdf5/ntuple" // for hid_t
 
 #include <string_view>
 

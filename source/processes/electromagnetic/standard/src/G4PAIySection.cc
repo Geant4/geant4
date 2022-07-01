@@ -74,7 +74,7 @@ const G4int G4PAIySection::fMaxSplineSize = 500;  // Max size of output spline
 
 G4PAIySection::G4PAIySection()
 {
-  fSandia = 0;
+  fSandia = nullptr;
   fDensity = fElectronDensity = fNormalizationCof = fLowEnergyCof = 0.0;
   fIntervalNumber = fSplineNumber = 0;
   fVerbose = 0;

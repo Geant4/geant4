@@ -723,29 +723,40 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
 
 	if (string->IsAFourQuarkString() )
 	{
-		// The string is qq-qqbar type. Diquarks are on the string ends
-	        if (StringMass-MinimalStringMass < 0.)
-		{
-			if (! Diquark_AntiDiquark_belowThreshold_lastSplitting(string, LeftHadron, RightHadron) )
+                G4int IDleft  = std::abs( string->GetLeftParton()->GetPDGEncoding() );
+                G4int IDright = std::abs( string->GetRightParton()->GetPDGEncoding() );
+                if ( IDleft > 3100 || IDright > 3100 ) 
+                {
+                        if (! Diquark_AntiDiquark_belowThreshold_lastSplitting(string, LeftHadron, RightHadron) )
                         {
-				return false;
+	                        return false;
                         }
-		} else
-		{
-			Diquark_AntiDiquark_aboveThreshold_lastSplitting(string, LeftHadron, RightHadron);
+                } else 
+                {
+		        // The string is qq-qqbar type. Diquarks are on the string ends
+	                if (StringMass-MinimalStringMass < 0.)
+		        {
+			        if (! Diquark_AntiDiquark_belowThreshold_lastSplitting(string, LeftHadron, RightHadron) )
+                                {
+			                return false;
+                                }
+		        } else
+		        {
+			        Diquark_AntiDiquark_aboveThreshold_lastSplitting(string, LeftHadron, RightHadron);
 
-			if (NumberOf_FS == 0) return false;
+			        if (NumberOf_FS == 0) return false;
 
-                        sampledState = SampleState();
-			if (string->GetLeftParton()->GetPDGEncoding() < 0)
-			{
-				LeftHadron =FS_LeftHadron[sampledState];
-				RightHadron=FS_RightHadron[sampledState];
-			} else
-			{
-				LeftHadron =FS_RightHadron[sampledState];
-				RightHadron=FS_LeftHadron[sampledState];
-			}
+                                sampledState = SampleState();
+			        if (string->GetLeftParton()->GetPDGEncoding() < 0)
+			        {
+				        LeftHadron =FS_LeftHadron[sampledState];
+				        RightHadron=FS_RightHadron[sampledState];
+			        } else
+			        {
+				        LeftHadron =FS_RightHadron[sampledState];
+				        RightHadron=FS_LeftHadron[sampledState];
+			        }
+		        }
 		}
         } else
 	{
@@ -1134,6 +1145,7 @@ G4bool G4LundStringFragmentation::Quark_AntiQuark_lastSplitting(G4FragmentingStr
 	NumberOf_FS=0;
 	for (G4int ProdQ=1; ProdQ < 4; ProdQ++)  // Loop over quark-antiquark cases: u-ubar, d-dbar, s-sbar 
 	{                                        // (as last splitting, do not consider c-cbar and b-bbar cases)
+                //G4cout << "NumberOf_FS ProdQ " << NumberOf_FS << " " << ProdQ << G4endl;
 		LeftHadronCharge = QuarkCharge - Qcharge[ProdQ-1];
 		G4int SignQ = LeftHadronCharge/3; if (SignQ == 0) SignQ = 1;
 

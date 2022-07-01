@@ -29,6 +29,11 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
+#include "G4Alpha.hh"
+
+static G4Pow * gpow = G4Pow::GetInstance();
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -85,9 +90,10 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
 
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
-  G4ParticleDefinition* hydrogenDef = instance->GetIon("hydrogen");
-  G4ParticleDefinition* alphaPlusDef = instance->GetIon("alpha+");
-  G4ParticleDefinition* heliumDef = instance->GetIon("helium");
+  hydrogenDef = instance->GetIon("hydrogen");
+  alphaPlusPlusDef = G4Alpha::Alpha();
+  alphaPlusDef = instance->GetIon("alpha+");
+  heliumDef = instance->GetIon("helium");
 
   G4String hydrogen;
   G4String alphaPlus;
@@ -208,15 +214,12 @@ G4double G4DNADingfelderChargeIncreaseModel::CrossSectionPerVolume(const G4Mater
 
   // Calculate total cross section for model
 
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
-
   if (
-      particleDefinition != instance->GetIon("hydrogen")
+      particleDefinition != hydrogenDef
       &&
-      particleDefinition != instance->GetIon("alpha+")
+      particleDefinition != alphaPlusDef
       &&
-      particleDefinition != instance->GetIon("helium")
+      particleDefinition != heliumDef
   )
 
   return 0;
@@ -248,7 +251,7 @@ G4double G4DNADingfelderChargeIncreaseModel::CrossSectionPerVolume(const G4Mater
   if (k >= lowLim && k <= highLim)
   {
     //HYDROGEN
-    if (particleDefinition == instance->GetIon("hydrogen"))
+    if (particleDefinition == hydrogenDef)
     {
       const G4double aa = 2.835;
       const G4double bb = 0.310;
@@ -260,8 +263,8 @@ G4double G4DNADingfelderChargeIncreaseModel::CrossSectionPerVolume(const G4Mater
       G4double t = k / (proton_mass_c2/electron_mass_c2);
       G4double x = t / rr;
       G4double temp = 4.0 * pi * Bohr_radius/nm * Bohr_radius/nm * fac;
-      G4double sigmal = temp * cc * (std::pow(x,dd));
-      G4double sigmah = temp * (aa * std::log(1.0 + x) + bb) / x;
+      G4double sigmal = temp * cc * (gpow->powA(x,dd));
+      G4double sigmah = temp * (aa * G4Log(1.0 + x) + bb) / x;
       totalCrossSection = 1.0/(1.0/sigmal + 1.0/sigmah) *m*m;
     }
     else
@@ -327,11 +330,8 @@ void G4DNADingfelderChargeIncreaseModel::SampleSecondaries(std::vector<
 
   fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
 
-  G4DNAGenericIonsManager* instance;
-  instance = G4DNAGenericIonsManager::Instance();
-
   G4double electronK;
-  if (definition == instance->GetIon("hydrogen")) electronK = inK*electron_mass_c2/proton_mass_c2;
+  if (definition == hydrogenDef) electronK = inK*electron_mass_c2/proton_mass_c2;
   else electronK = inK*electron_mass_c2/(particleMass);
 
   if (outK<0)
@@ -362,16 +362,14 @@ G4int G4DNADingfelderChargeIncreaseModel::NumberOfFinalStates(G4ParticleDefiniti
                                                               G4int finalStateIndex)
 
 {
-    G4DNAGenericIonsManager* instance;
-  instance = G4DNAGenericIonsManager::Instance();
 
-  if (particleDefinition == instance->GetIon("hydrogen"))
+  if (particleDefinition == hydrogenDef)
     return 2;
 
-  if (particleDefinition == instance->GetIon("alpha+"))
+  if (particleDefinition == alphaPlusDef)
     return 2;
 
-  if (particleDefinition == instance->GetIon("helium"))
+  if (particleDefinition == heliumDef)
   {
     if (finalStateIndex == 0)
       return 2;
@@ -386,19 +384,18 @@ G4int G4DNADingfelderChargeIncreaseModel::NumberOfFinalStates(G4ParticleDefiniti
 G4ParticleDefinition* G4DNADingfelderChargeIncreaseModel::OutgoingParticleDefinition(G4ParticleDefinition* particleDefinition,
                                                                                      G4int finalStateIndex)
 {
-  G4DNAGenericIonsManager * instance(G4DNAGenericIonsManager::Instance());
 
-  if (particleDefinition == instance->GetIon("hydrogen"))
+  if (particleDefinition == hydrogenDef)
     return G4Proton::Proton();
 
-  if (particleDefinition == instance->GetIon("alpha+"))
-    return instance->GetIon("alpha++");
+  if (particleDefinition == alphaPlusDef)
+    return alphaPlusPlusDef;
 
-  if (particleDefinition == instance->GetIon("helium"))
+  if (particleDefinition == heliumDef)
   {
     if (finalStateIndex == 0)
-      return instance->GetIon("alpha+");
-    return instance->GetIon("alpha++");
+      return alphaPlusDef;
+    return alphaPlusPlusDef;
   }
 
   return 0;
@@ -409,19 +406,18 @@ G4ParticleDefinition* G4DNADingfelderChargeIncreaseModel::OutgoingParticleDefini
 G4double G4DNADingfelderChargeIncreaseModel::IncomingParticleBindingEnergyConstant(G4ParticleDefinition* particleDefinition,
                                                                                    G4int finalStateIndex)
 {
-  G4DNAGenericIonsManager * instance(G4DNAGenericIonsManager::Instance());
 
-  if (particleDefinition == instance->GetIon("hydrogen"))
+  if (particleDefinition == hydrogenDef)
     return 13.6 * eV;
 
-  if (particleDefinition == instance->GetIon("alpha+"))
+  if (particleDefinition == alphaPlusDef)
   {
     // Binding energy for    He+ -> He++ + e-    54.509 eV
     // Binding energy for    He  -> He+  + e-    24.587 eV
     return 54.509 * eV;
   }
 
-  if (particleDefinition == instance->GetIon("helium"))
+  if (particleDefinition == heliumDef)
   {
     // Binding energy for    He+ -> He++ + e-    54.509 eV
     // Binding energy for    He  -> He+  + e-    24.587 eV
@@ -441,13 +437,11 @@ G4double G4DNADingfelderChargeIncreaseModel::PartialCrossSection(G4double k,
                                                                  const G4ParticleDefinition* particleDefinition)
 {
   G4int particleTypeIndex = 0;
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
 
-  if (particleDefinition == instance->GetIon("alpha+"))
+  if (particleDefinition == alphaPlusDef)
     particleTypeIndex = 0;
 
-  if (particleDefinition == instance->GetIon("helium"))
+  if (particleDefinition == heliumDef)
     particleTypeIndex = 1;
 
   //
@@ -481,7 +475,7 @@ G4double G4DNADingfelderChargeIncreaseModel::PartialCrossSection(G4double k,
     //
 
     x1[index][particleTypeIndex] = x0[index][particleTypeIndex]
-        + std::pow((a0[index][particleTypeIndex] - a1[index][particleTypeIndex])
+        + gpow->powA((a0[index][particleTypeIndex] - a1[index][particleTypeIndex])
                        / (c0[index][particleTypeIndex]
                            * d0[index][particleTypeIndex]),
                    1. / (d0[index][particleTypeIndex] - 1.));
@@ -489,12 +483,12 @@ G4double G4DNADingfelderChargeIncreaseModel::PartialCrossSection(G4double k,
         - a1[index][particleTypeIndex]) * x1[index][particleTypeIndex]
         + b0[index][particleTypeIndex]
         - c0[index][particleTypeIndex]
-            * std::pow(x1[index][particleTypeIndex]
+            * gpow->powA(x1[index][particleTypeIndex]
                            - x0[index][particleTypeIndex],
                        d0[index][particleTypeIndex]);
   }
 
-  G4double x(std::log10(k / eV));
+  G4double x(G4Log(k / eV)/gpow->logZ(10));
   G4double y;
 
   if (x < x0[index][particleTypeIndex])
@@ -502,12 +496,12 @@ G4double G4DNADingfelderChargeIncreaseModel::PartialCrossSection(G4double k,
   else if (x < x1[index][particleTypeIndex])
     y = a0[index][particleTypeIndex] * x + b0[index][particleTypeIndex]
         - c0[index][particleTypeIndex]
-            * std::pow(x - x0[index][particleTypeIndex],
+            * gpow->powA(x - x0[index][particleTypeIndex],
                        d0[index][particleTypeIndex]);
   else
     y = a1[index][particleTypeIndex] * x + b1[index][particleTypeIndex];
 
-  return f0[index][particleTypeIndex] * std::pow(10., y) * m * m;
+  return f0[index][particleTypeIndex] * gpow->powA(10., y) * m * m;
 
 }
 
@@ -517,16 +511,14 @@ G4int G4DNADingfelderChargeIncreaseModel::RandomSelect(G4double k,
                                                        const G4ParticleDefinition* particleDefinition)
 {
   G4int particleTypeIndex = 0;
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
 
-  if (particleDefinition == instance->GetIon("hydrogen"))
+  if (particleDefinition == hydrogenDef)
     return 0;
 
-  if (particleDefinition == instance->GetIon("alpha+"))
+  if (particleDefinition == alphaPlusDef)
     particleTypeIndex = 0;
 
-  if (particleDefinition == instance->GetIon("helium"))
+  if (particleDefinition == heliumDef)
     particleTypeIndex = 1;
 
   const G4int n = numberOfPartialCrossSections[particleTypeIndex];
@@ -565,13 +557,11 @@ G4double G4DNADingfelderChargeIncreaseModel::Sum(G4double k,
                                                  const G4ParticleDefinition* particleDefinition)
 {
   G4int particleTypeIndex = 0;
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
 
-  if (particleDefinition == instance->GetIon("alpha+"))
+  if (particleDefinition == alphaPlusDef)
     particleTypeIndex = 0;
 
-  if (particleDefinition == instance->GetIon("helium"))
+  if (particleDefinition == heliumDef)
     particleTypeIndex = 1;
 
   G4double totalCrossSection = 0.;

@@ -78,6 +78,10 @@
 //                    tan1,tan2,halfz)      - create polyhedron for Hype;
 //   G4PolyhedronHyperbolicMirror(a,h,r)    - create polyhedron for Hyperbolic mirror;
 //
+//   G4PolyhedronTetMesh(vector<p>)         - create polyhedron for tetrahedron mesh;
+//
+//   G4PolyhedronBoxMesh(sx,sy,sz,vector<p>) - create polyhedron for box mesh;
+//
 // Public functions inherited from HepPolyhedron (this list might be
 // incomplete):
 //   GetNoVertices()  - returns number of vertices
@@ -100,8 +104,13 @@
 //                      returns false for the last edge;
 //   GetNextEdge(p1, p2, edgeFlag) - get next edge;
 //                      returns false for the last edge;
-//   SetNumberOfRotationSteps(G4int n) - Set number of steps for whole circle;
-
+//   SetVertex(index, v) - set vertex;
+//   SetFacet(index,iv1,iv2,iv3,iv4) - set facet;
+//   SetReferences()     - set references to neighbouring facets;
+//   JoinCoplanarFacets(tol) - join couples of triangles into quadrilaterals;
+//   InvertFacets()      - invert the order on nodes in facets;
+//   SetNumberOfRotationSteps(G4int n) - set number of steps for whole circle;
+//
 // History:
 // 21st February 2000  Evgeni Chernaev, John Allison
 // - Re-written to inherit HepPolyhedron.
@@ -122,17 +131,29 @@
 
 class G4Polyhedron : public HepPolyhedron, public G4Visible {
 public:
+  // Default constructor
   G4Polyhedron ();
+
+  // Constructors
+  G4Polyhedron (G4int Nvert, G4int Nface);
   G4Polyhedron (const HepPolyhedron& from);
-  // Use compiler defaults for copy contructor and assignment.  (They
-  // invoke their counterparts in HepPolyhedron and G4Visible.)
+
+  // Copy and move constructors
+  G4Polyhedron (const G4Polyhedron& from) = default;
+  G4Polyhedron (G4Polyhedron&& from) = default;
+
+  // Assignment and move assignment
+  G4Polyhedron & operator=(const G4Polyhedron & from) = default;
+  G4Polyhedron & operator=(G4Polyhedron && from) = default;
+
+  // Destructor
   virtual ~G4Polyhedron ();
 
   G4int GetNumberOfRotationStepsAtTimeOfCreation() const {
     return fNumberOfRotationStepsAtTimeOfCreation;
   }
 private:
-  G4int fNumberOfRotationStepsAtTimeOfCreation;
+  G4int fNumberOfRotationStepsAtTimeOfCreation = fNumberOfRotationSteps;
 };
 
 class G4PolyhedronBox: public G4Polyhedron {
@@ -279,6 +300,20 @@ class G4PolyhedronHyperbolicMirror : public G4Polyhedron {
  public:
   G4PolyhedronHyperbolicMirror(G4double a, G4double h, G4double r);
   virtual ~G4PolyhedronHyperbolicMirror ();
+};
+
+class G4PolyhedronTetMesh : public G4Polyhedron {
+ public:
+  G4PolyhedronTetMesh(const std::vector<G4ThreeVector>& tetrahedra);
+  virtual ~G4PolyhedronTetMesh ();
+};
+
+class G4PolyhedronBoxMesh : public G4Polyhedron {
+ public:
+  G4PolyhedronBoxMesh(G4double sizeX, G4double sizeY, G4double sizeZ,
+                      const std::vector<G4ThreeVector>& positions);
+
+  virtual ~G4PolyhedronBoxMesh ();
 };
 
 std::ostream& operator<<(std::ostream& os, const G4Polyhedron&);

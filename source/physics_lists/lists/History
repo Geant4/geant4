@@ -1,17 +1,16 @@
--------------------------------------------------------------------
+# Category phys-lists History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                  Hadronic physics-list/lists History
-                  -----------------------------
-This file should be used  to briefly summarize all major modifications
-introduced in the code and keeptrack of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2021-12-10 Ben Morgan (phys-lists-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 25-October-2021 B.Morgan (phys-lists-V10-07-10)
 - Use G4StrUtil functions replacing deprecated G4String member functions

@@ -25,6 +25,10 @@
 
 #pragma once
 
+#ifndef G4GMAKE
+#include "PTL/Config.hh"
+#endif
+
 #include <cstddef>
 #include <cstdint>
 #include <deque>

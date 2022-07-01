@@ -81,6 +81,13 @@ protected:
    const G4int waitTimePerPointmilliseconds = 20,
    const G4String exportString = "");
 
+  void Twinkle
+  // Twinkles the touchables in paths
+  // /vis/viewer/centreOn to see its effect
+  (G4VViewer* currentViewer,
+   const G4ViewParameters& baseVP,
+   const std::vector<std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>>& paths);
+
   // Conversion routines augmenting those in G4UIcommand.
 
   static G4String ConvertToString(G4double x, G4double y,
@@ -113,10 +120,6 @@ protected:
    const G4String& category,
    G4double& value);
   // Return false if there's a problem
-
-  void CopyMostViewParameters
-  (G4ViewParameters& target, const G4ViewParameters& from);
-  // Copy view parameters except for autoRefresh and background...
 
   void CopyCameraParameters
   (G4ViewParameters& target, const G4ViewParameters& from);
@@ -161,7 +164,7 @@ protected:
   // creation of a new viewer and *also* at the creation of a new scene
   // handler.
   static G4bool fThereWasAViewer;  // True if there was a viewer
-  static G4ViewParameters fVPExistingViewer;  // Its view parameters
+  static G4ViewParameters fExistingVP;  // Its view parameters
 };
 
 #endif

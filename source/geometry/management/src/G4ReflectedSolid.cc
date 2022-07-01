@@ -350,6 +350,24 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
 
 //////////////////////////////////////////////////////////////
 //
+// Return volume
+
+G4double G4ReflectedSolid::GetCubicVolume()
+{
+  return fPtrSolid->GetCubicVolume();
+}
+
+//////////////////////////////////////////////////////////////
+//
+// Return surface area
+
+G4double G4ReflectedSolid::GetSurfaceArea()
+{
+  return fPtrSolid->GetSurfaceArea();
+}
+
+//////////////////////////////////////////////////////////////
+//
 // Return a point (G4ThreeVector) randomly and uniformly selected
 // on the solid surface
 

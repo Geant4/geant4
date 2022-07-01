@@ -65,12 +65,13 @@
 \section TestEm5_s3 AN EVENT : THE PRIMARY GENERATOR
  
  The primary kinematic consists of a single particle which hits the absorber 
- perpendicular to the input face. The type of the particle and its energy are 
- set in the PrimaryGeneratorAction class, and can be changed via the G4 build-in
+ perpendicular to the input face, so the default beam direction is along X 
+ axis. The type of the particle and its energy are set in the 
+ PrimaryGeneratorAction class, and can be changed via the G4 build-in 
  commands of G4ParticleGun class (see the macros provided with this example).
-	
- In addition one can choose randomly the impact point of the incident particle.
- The interactive command is built in PrimaryGeneratorMessenger class.
+
+ If thickness of absorber is changed for some run in the same macro, then
+ gun position should be modifined using /gun/position IU command.
  
 \section TestEm5_s4 VISUALIZATION
  

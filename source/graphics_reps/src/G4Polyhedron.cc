@@ -27,8 +27,11 @@
 
 #include "G4Polyhedron.hh"
 
-G4Polyhedron::G4Polyhedron ():
-  fNumberOfRotationStepsAtTimeOfCreation (fNumberOfRotationSteps)
+G4Polyhedron::G4Polyhedron ()
+{}
+
+G4Polyhedron::G4Polyhedron (G4int Nvert, G4int Nface):
+  HepPolyhedron (Nvert, Nface)
 {}
 
 G4Polyhedron::~G4Polyhedron () {}
@@ -179,6 +182,19 @@ G4PolyhedronHyperbolicMirror::G4PolyhedronHyperbolicMirror (G4double a,
   G4Polyhedron (HepPolyhedronHyperbolicMirror(a, h, r)) {}
 
 G4PolyhedronHyperbolicMirror::~G4PolyhedronHyperbolicMirror () {}
+
+G4PolyhedronTetMesh::
+G4PolyhedronTetMesh(const std::vector<G4ThreeVector>& tetrahedra):
+  G4Polyhedron (HepPolyhedronTetMesh(tetrahedra)) {}
+
+G4PolyhedronTetMesh::~G4PolyhedronTetMesh () {}
+
+G4PolyhedronBoxMesh::
+G4PolyhedronBoxMesh(G4double sizeX, G4double sizeY, G4double sizeZ,
+                    const std::vector<G4ThreeVector>& positions):
+  G4Polyhedron (HepPolyhedronBoxMesh(sizeX, sizeY, sizeZ, positions)) {}
+
+G4PolyhedronBoxMesh::~G4PolyhedronBoxMesh () {}
 
 std::ostream& operator<<(std::ostream& os, const G4Polyhedron& polyhedron)
 {

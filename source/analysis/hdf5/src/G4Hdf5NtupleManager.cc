@@ -38,7 +38,7 @@ using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4Hdf5NtupleManager::G4Hdf5NtupleManager(const G4AnalysisManagerState& state)
- : G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>(state)
+ : G4TNtupleManager<toolx::hdf5::ntuple, G4Hdf5File>(state)
 {}
 
 //
@@ -73,7 +73,7 @@ void G4Hdf5NtupleManager::CreateTNtuple(
 
   // create ntuple
   ntupleDescription->fNtuple
-    = new tools::hdf5::ntuple(
+    = new toolx::hdf5::ntuple(
             G4cout, directory, ntupleDescription->fNtupleBooking,
             compressionLevel, basketSize);
 

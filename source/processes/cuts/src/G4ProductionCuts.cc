@@ -31,7 +31,7 @@
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 
-#include <iomanip>
+#include <sstream>
 
 G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::gammaDef = nullptr;
 G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::electDef = nullptr;
@@ -81,6 +81,73 @@ G4bool G4ProductionCuts::operator==(const G4ProductionCuts& right) const
 G4bool G4ProductionCuts::operator!=(const G4ProductionCuts& right) const
 {
   return (this != &right);
+}
+
+void G4ProductionCuts::SetProductionCut(G4double cut, G4int index)
+{
+  if(index >= 0 && index < NumberOfG4CutIndex)
+  {
+    fRangeCuts[index] = cut;
+    isModified = true;
+  }
+  else
+  {
+    std::ostringstream os;
+    os << "Setting cuts for particles other than photon, e-, e+ or proton has "
+          "no effect.";
+    G4Exception("G4ProductionCuts::SetProductionCut", "ProcCuts110",
+                JustWarning, os.str().c_str());
+  }
+}
+
+void G4ProductionCuts::SetProductionCut(G4double cut)
+{
+  for(G4int i = 0; i < NumberOfG4CutIndex; ++i)
+  {
+    fRangeCuts[i] = cut;
+  }
+  isModified = true;
+}
+
+void G4ProductionCuts::SetProductionCut(G4double cut, G4ParticleDefinition* ptcl)
+{
+  SetProductionCut(cut,GetIndex(ptcl));
+}
+
+void G4ProductionCuts::SetProductionCut(G4double cut, const G4String& pName)
+{
+  SetProductionCut(cut,GetIndex(pName));
+}
+
+G4double G4ProductionCuts::GetProductionCut(G4int index) const
+{
+  G4double cut=-1.0;
+  if ( (index>=0) && (index<NumberOfG4CutIndex) )
+  {
+    cut = fRangeCuts[index];
+  }
+  return cut;
+}
+
+G4double G4ProductionCuts::GetProductionCut(const G4String& name) const
+{
+  return GetProductionCut(GetIndex(name));
+}
+
+
+const std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const
+{
+  return fRangeCuts;
+}
+
+G4bool G4ProductionCuts::IsModified() const
+{
+  return isModified;
+}
+
+void G4ProductionCuts::PhysicsTableUpdated()
+{
+  isModified = false;
 }
 
 G4int G4ProductionCuts::GetIndex(const G4String& name)

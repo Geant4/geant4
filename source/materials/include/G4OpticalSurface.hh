@@ -133,7 +133,7 @@ class G4OpticalSurface : public G4SurfaceProperty
                    G4double value                = 1.0);
   // Constructor of an optical surface object.
 
-  virtual ~G4OpticalSurface();
+  ~G4OpticalSurface() override;
 
   void SetType(const G4SurfaceType& type) override;
 
@@ -173,13 +173,13 @@ class G4OpticalSurface : public G4SurfaceProperty
   void DumpInfo() const;
   // Prints information about the optical surface.
 
-  void ReadDataFile(void);
+  void ReadDataFile();
   // call the correct ReadXXXFile
 
-  void ReadCompressedFile(G4String, std::istringstream&);
+  void ReadCompressedFile(const G4String&, std::istringstream&);
   // read a zlib-compressed file
 
-  void ReadLUTFile(void);
+  void ReadLUTFile();
   // Method to read the Look-Up-Table into array AngularDistribution
 
   inline G4double GetAngularDistributionValue(G4int, G4int, G4int);
@@ -189,28 +189,28 @@ class G4OpticalSurface : public G4SurfaceProperty
   inline G4double GetAngularDistributionValueLUT(G4int);
   // Returns the AngularDistributionValue
 
-  void ReadLUTDAVISFile(void);
+  void ReadLUTDAVISFile();
   // Method to read the Davis Look-Up-Table into array AngularDistribution
 
-  void ReadReflectivityLUTFile(void);
+  void ReadReflectivityLUTFile();
   // Method to read the Look-Up-Table for reflectivity
 
   inline G4double GetReflectivityLUTValue(G4int);
   // Returns the reflectivity value from the Davis Look-Up-Table
 
-  G4int GetInmax(void) const;
+  G4int GetInmax() const;
   // Returns the number of lines in the Davis Look-Up-Table
 
-  G4int GetLUTbins(void) const;
+  G4int GetLUTbins() const;
   // Returns the number of probability values per incidentangle
 
-  G4int GetRefMax(void) const;
+  G4int GetRefMax() const;
   // Returns the number of reflectivity values per angle
 
-  G4int GetThetaIndexMax(void) const;
-  G4int GetPhiIndexMax(void) const;
+  G4int GetThetaIndexMax() const;
+  G4int GetPhiIndexMax() const;
 
-  void ReadDichroicFile(void);
+  void ReadDichroicFile();
   // Method to read the dichroic surface data file into Dichroic
 
   inline G4Physics2DVector* GetDichroicVector();

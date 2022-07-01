@@ -435,7 +435,7 @@ G4GoudsmitSaundersonTable::GSMSCAngularDtr* G4GoudsmitSaundersonTable::GetGSAngu
 
 
 void G4GoudsmitSaundersonTable::LoadMSCData() {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path) {
     G4Exception("G4GoudsmitSaundersonTable::LoadMSCData()","em0006",
 		FatalException,
@@ -455,7 +455,7 @@ void G4GoudsmitSaundersonTable::LoadMSCData() {
       return;
     }
     for (G4int iq=0; iq<gQNUM1; ++iq) {
-      GSMSCAngularDtr *gsd = new GSMSCAngularDtr();
+      auto gsd = new GSMSCAngularDtr();
       infile >> gsd->fNumData;
       gsd->fUValues = new G4double[gsd->fNumData]();
       gsd->fParamA  = new G4double[gsd->fNumData]();
@@ -488,7 +488,7 @@ void G4GoudsmitSaundersonTable::LoadMSCData() {
       G4int numData;
       infile >> numData;
       if (numData>1) {
-        GSMSCAngularDtr *gsd = new GSMSCAngularDtr();
+        auto gsd = new GSMSCAngularDtr();
         gsd->fNumData = numData;
         gsd->fUValues = new G4double[gsd->fNumData]();
         gsd->fParamA  = new G4double[gsd->fNumData]();

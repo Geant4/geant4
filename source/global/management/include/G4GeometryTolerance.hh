@@ -64,7 +64,7 @@ class G4GeometryTolerance
   // Returns the current radial tolerance.
 
  public:  // without description
-  ~G4GeometryTolerance();
+  ~G4GeometryTolerance() = default;
   // Destructor.
 
  protected:

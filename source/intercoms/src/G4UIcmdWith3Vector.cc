@@ -35,11 +35,11 @@ G4UIcmdWith3Vector::G4UIcmdWith3Vector(const char* theCommandPath,
                                        G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter* dblParamX = new G4UIparameter('d');
+  auto* dblParamX = new G4UIparameter('d');
   SetParameter(dblParamX);
-  G4UIparameter* dblParamY = new G4UIparameter('d');
+  auto* dblParamY = new G4UIparameter('d');
   SetParameter(dblParamY);
-  G4UIparameter* dblParamZ = new G4UIparameter('d');
+  auto* dblParamZ = new G4UIparameter('d');
   SetParameter(dblParamZ);
   SetCommandType(With3VectorCmd);
 }
@@ -72,7 +72,7 @@ void G4UIcmdWith3Vector::SetParameterName(const char* theNameX,
 }
 
 // --------------------------------------------------------------------
-void G4UIcmdWith3Vector::SetDefaultValue(G4ThreeVector vec)
+void G4UIcmdWith3Vector::SetDefaultValue(const G4ThreeVector& vec)
 {
   G4UIparameter* theParamX = GetParameter(0);
   theParamX->SetDefaultValue(vec.x());

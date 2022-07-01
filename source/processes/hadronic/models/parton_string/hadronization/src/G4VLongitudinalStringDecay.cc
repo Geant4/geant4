@@ -80,7 +80,8 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay(const G4String& name)
    DiquarkBreakProb = 0.1;     // Probability of (qq)->h+(qq)'
    
    //... pspin_meson is probability to create pseudo-scalar meson 
-   pspin_meson = 0.5;
+   pspin_meson = 0.4;
+   pspin_mesonSSbar = 0.3;
 
    //... pspin_barion is probability to create 1/2 barion 
    pspin_barion = 0.5;
@@ -110,9 +111,8 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay(const G4String& name)
 
    // Parameters may be changed until the first fragmentation starts
    PastInitPhase=false;
-   hadronizer = new G4HadronBuilder(pspin_meson,pspin_barion,
-		   		    scalarMesonMix,vectorMesonMix,
-                                    ProbEta_c, ProbEta_b);
+   hadronizer = new G4HadronBuilder( pspin_meson, pspin_barion, scalarMesonMix, vectorMesonMix,
+                                     ProbEta_c, ProbEta_b, pspin_mesonSSbar );
 
    MaxMass=-350.0*GeV;  // If there will be a particle with mass larger than Higgs the value must be changed.
 
@@ -505,7 +505,8 @@ void G4VLongitudinalStringDecay::SetVectorMesonProbability(G4double aValue)
   } else {
     pspin_meson = aValue;
     delete hadronizer;
-    hadronizer = new G4HadronBuilder( pspin_meson, pspin_barion, scalarMesonMix, vectorMesonMix, ProbEta_c, ProbEta_b );
+    hadronizer = new G4HadronBuilder( pspin_meson, pspin_barion, scalarMesonMix, vectorMesonMix,
+                                      ProbEta_c, ProbEta_b , pspin_mesonSSbar );
   }
 }
 
@@ -519,7 +520,8 @@ void G4VLongitudinalStringDecay::SetSpinThreeHalfBarionProbability(G4double aVal
   } else {
     pspin_barion = aValue;
     delete hadronizer;
-    hadronizer = new G4HadronBuilder( pspin_meson, pspin_barion, scalarMesonMix, vectorMesonMix, ProbEta_c, ProbEta_b );
+    hadronizer = new G4HadronBuilder( pspin_meson, pspin_barion, scalarMesonMix, vectorMesonMix,
+                                      ProbEta_c, ProbEta_b, pspin_mesonSSbar );
   }
 }
 
@@ -541,7 +543,8 @@ void G4VLongitudinalStringDecay::SetScalarMesonMixings(std::vector<G4double> aVe
     scalarMesonMix[4] = aVector[4];
     scalarMesonMix[5] = aVector[5];
     delete hadronizer;
-    hadronizer = new G4HadronBuilder( pspin_meson, pspin_barion, scalarMesonMix, vectorMesonMix, ProbEta_c, ProbEta_b );
+    hadronizer = new G4HadronBuilder( pspin_meson, pspin_barion, scalarMesonMix, vectorMesonMix,
+                                      ProbEta_c, ProbEta_b, pspin_mesonSSbar );
   }
 }
 
@@ -563,7 +566,8 @@ void G4VLongitudinalStringDecay::SetVectorMesonMixings(std::vector<G4double> aVe
     vectorMesonMix[4] = aVector[4];
     vectorMesonMix[5] = aVector[5];
     delete hadronizer;
-    hadronizer = new G4HadronBuilder( pspin_meson, pspin_barion, scalarMesonMix, vectorMesonMix, ProbEta_c, ProbEta_b );
+    hadronizer = new G4HadronBuilder( pspin_meson, pspin_barion, scalarMesonMix, vectorMesonMix,
+                                      ProbEta_c, ProbEta_b, pspin_mesonSSbar );
   }
 }
 
@@ -704,12 +708,20 @@ void G4VLongitudinalStringDecay::SetMinMasses()
     Meson[0][0][2] = 221; MesonWeight[0][0][3] = (   pspin_meson) * (1-scalarMesonMix[0]-scalarMesonMix[1]);  // Eta
     Meson[0][0][3] = 331; MesonWeight[0][0][4] = (   pspin_meson) * (                    scalarMesonMix[1]);  // Eta'
 
+    /*
     //dd3 -> vectorMesonMix[0] * 113 + (1-vectorMesonMix[0]-vectorMesonMix[1]) * 223 + vectorMesonMix[1] * 333     (001)
     //dd3 ->                    rho_0                                           omega                      phi
 
     Meson[0][0][1] = 113; MesonWeight[0][0][1] = (1.-pspin_meson) * (  vectorMesonMix[0]                  );  // Rho
     Meson[0][0][4] = 223; MesonWeight[0][0][4] = (1.-pspin_meson) * (1-vectorMesonMix[0]-vectorMesonMix[1]);  // omega
     Meson[0][0][5] = 333; MesonWeight[0][0][5] = (1.-pspin_meson) * (                    vectorMesonMix[1]);  // phi
+    */
+
+    //dd3 -> (1-vectorMesonMix[1] * 113 + vectorMesonMix[1] * 223                                                  (001)
+    //dd3 ->                       rho_0                     omega
+
+    Meson[0][0][1] = 113; MesonWeight[0][0][1] = (1.-pspin_meson) * (1-vectorMesonMix[1]);                    // Rho
+    Meson[0][0][4] = 223; MesonWeight[0][0][4] = (1.-pspin_meson) * (  vectorMesonMix[1]);                    // omega
 
     //uu1 -> scalarMesonMix[0] * 111 + (1-scalarMesonMix[0]-scalarMesonMix[1]) * 221 + scalarMesonMix[1] * 331     (110)
     //uu1 ->                     Pi0                                             Eta                       Eta'
@@ -718,12 +730,20 @@ void G4VLongitudinalStringDecay::SetMinMasses()
     Meson[1][1][2] = 221; MesonWeight[1][1][2] = (   pspin_meson) * (1-scalarMesonMix[0]-scalarMesonMix[1]);  // Eta
     Meson[1][1][3] = 331; MesonWeight[1][1][3] = (   pspin_meson) * (                    scalarMesonMix[1]);  // Eta'
 
+    /*
     //uu3 -> vectorMesonMix[0] * 113 + (1-vectorMesonMix[0]-vectorMesonMix[1]) * 223 + vectorMesonMix[1] * 333     (111)
     //uu3 ->                    rho_0                                           omega                      phi
 
     Meson[1][1][1] = 113; MesonWeight[1][1][1] = (1.-pspin_meson) * (  vectorMesonMix[0]                  );  // Rho
     Meson[1][1][4] = 223; MesonWeight[1][1][4] = (1.-pspin_meson) * (1-vectorMesonMix[0]-vectorMesonMix[1]);  // omega
     Meson[1][1][5] = 333; MesonWeight[1][1][5] = (1.-pspin_meson) * (                    vectorMesonMix[1]);  // phi
+    */
+
+    //uu3 -> (1-vectorMesonMix[1]) * 113 + vectorMesonMix[1] * 223                                                 (111)
+    //uu3 ->                        rho_0                     omega
+
+    Meson[1][1][1] = 113; MesonWeight[1][1][1] = (1.-pspin_meson) * (1-vectorMesonMix[1]);                    // Rho
+    Meson[1][1][4] = 223; MesonWeight[1][1][4] = (1.-pspin_meson) * (  vectorMesonMix[1]);                    // omega
 
     //ss1     ->                                             (1-scalarMesonMix[5]) * 221 + scalarMesonMix[5] * 331   (220)
     //ss1     ->                                                                     Eta                       Eta'
@@ -731,11 +751,18 @@ void G4VLongitudinalStringDecay::SetMinMasses()
     Meson[2][2][0] = 221; MesonWeight[2][2][0] = (   pspin_meson) * (1-scalarMesonMix[5]                  );  // Eta
     Meson[2][2][2] = 331; MesonWeight[2][2][2] = (   pspin_meson) * (                    scalarMesonMix[5]);  // Eta'
 
+    /*
     //ss3     ->                                             (1-vectorMesonMix[5]) * 223 + vectorMesonMix[5] * 333   (221)
     //ss3     ->                                                                    omega                      phi
 
     Meson[2][2][1] = 223; MesonWeight[2][2][1] = (1.-pspin_meson) * (1-vectorMesonMix[5]                  );  // omega
     Meson[2][2][3] = 333; MesonWeight[2][2][3] = (1.-pspin_meson) * (                    vectorMesonMix[5]);  // phi
+    */
+
+    //ss3     ->                                                                           vectorMesonMix[5] * 333   (221)
+    //ss3     ->                                                                                               phi
+
+    Meson[2][2][1] = 333; MesonWeight[2][2][3] = (1.-pspin_mesonSSbar) * (                 vectorMesonMix[5]);  // phi
 
     //cc1     ->    ProbEta_c /(1-pspin_meson) 441  (330) Probability of Eta_c
     //cc3     -> (1-ProbEta_c)/(  pspin_meson) 443  (331) Probability of J/Psi

@@ -109,8 +109,16 @@ public: // With description
     freeRotation           // Free, Google-like rotation, using mouse-grab.
   };
 
+  enum SMROption {  // Special Mesh Rendering Option
+    meshAsDots,
+    meshAsSurfaces
+  };
+
   friend std::ostream& operator <<
-  (std::ostream&, const DrawingStyle&);
+  (std::ostream&, DrawingStyle);
+
+  friend std::ostream& operator <<
+  (std::ostream&, SMROption);
 
   friend std::ostream& operator <<
   (std::ostream&, const G4ViewParameters&);
@@ -165,6 +173,8 @@ public: // With description
         G4int            GetWindowAbsoluteLocationHintY (G4int) const;
         G4int            GetWindowLocationHintX  () const;
         G4int            GetWindowLocationHintY  () const;
+        G4bool           IsWindowLocationHintXNegative () const;
+        G4bool           IsWindowLocationHintYNegative () const;
   const G4String&        GetXGeometryString      () const;
   // GetXGeometryString is intended to be parsed by XParseGeometry.
   // It contains the size information, as in GetWindowSizeHint, but
@@ -202,6 +212,7 @@ public: // With description
         G4double         GetDisplayLightFrontGreen () const;
         G4double         GetDisplayLightFrontBlue () const;
         G4bool           IsSpecialMeshRendering  () const;
+        SMROption        GetSpecialMeshRenderingOption () const;
   const std::vector<G4ModelingParameters::PVNameCopyNo>& GetSpecialMeshVolumes() const;
 
   // Here Follow functions to evaluate useful quantities as a
@@ -296,6 +307,7 @@ public: // With description
   void SetDisplayLightFrontGreen (G4double);
   void SetDisplayLightFrontBlue (G4double);
   void SetSpecialMeshRendering (G4bool);
+  void SetSpecialMeshRenderingOption (SMROption);
   void SetSpecialMeshVolumes   (const std::vector<G4ModelingParameters::PVNameCopyNo>&);
 
   // Command dumping functions.
@@ -392,6 +404,7 @@ private:
                fDisplayLightFrontT;
   G4double     fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
   G4bool       fSpecialMeshRendering;  // Request special rendering of parameterised volumes
+  SMROption    fSpecialMeshRenderingOption;  // Special rendering option
   std::vector<G4ModelingParameters::PVNameCopyNo> fSpecialMeshVolumes;  // If empty, all meshes.
 
   enum { // Constants for geometry mask in ParseGeometry and related functions.

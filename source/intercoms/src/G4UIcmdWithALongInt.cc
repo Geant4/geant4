@@ -35,7 +35,7 @@ G4UIcmdWithALongInt::G4UIcmdWithALongInt(const char* theCommandPath,
                                            G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter* longParam = new G4UIparameter('l');
+  auto* longParam = new G4UIparameter('l');
   SetParameter(longParam);
   SetCommandType(WithALongIntCmd);
 }

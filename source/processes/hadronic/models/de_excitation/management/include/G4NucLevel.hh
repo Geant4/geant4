@@ -84,16 +84,13 @@ public:
 
   void StreamInfo(std::ostream& os) const;
 
-private:  
-
-#ifdef G4VERBOSE
-  void PrintError(size_t idx, const G4String&) const;  
-#endif
   G4NucLevel(const G4NucLevel &right) = delete;
   G4bool operator==(const G4NucLevel &right) const = delete;
   G4bool operator!=(const G4NucLevel &right) const = delete;
   G4bool operator<(const G4NucLevel &right) const = delete;
   const G4NucLevel& operator=(const G4NucLevel &right) = delete;
+
+private:  
 
   size_t   length;
   G4double fTimeGamma;
@@ -110,19 +107,13 @@ inline size_t G4NucLevel::NumberOfTransitions() const
   return length;
 }
 
-inline size_t G4NucLevel::FinalExcitationIndex(size_t idx) const
+inline size_t G4NucLevel::FinalExcitationIndex(const size_t idx) const
 {
-#ifdef G4VERBOSE
-  if(idx >= length) { PrintError(idx, "FinalExcitationIndex(idx)"); }
-#endif
   return (size_t)(fTrans[idx]/10000);
 }
 
-inline G4int G4NucLevel::TransitionType(size_t idx) const
+inline G4int G4NucLevel::TransitionType(const size_t idx) const
 {
-#ifdef G4VERBOSE
-  if(idx >= length) { PrintError(idx, "TransitionType(idx)"); }
-#endif
   return fTrans[idx]%10000;
 }
 
@@ -131,33 +122,24 @@ inline G4double G4NucLevel::GetTimeGamma() const
   return fTimeGamma;
 }
 
-inline G4float G4NucLevel::GammaProbability(size_t idx) const
+inline G4float G4NucLevel::GammaProbability(const size_t idx) const
 {
-#ifdef G4VERBOSE
-  if(idx >= length) { PrintError(idx, "GammaProbability(idx)"); }
-#endif
   return fGammaProbability[idx];
 }
 
-inline G4float G4NucLevel::GammaCumProbability(size_t idx) const
+inline G4float G4NucLevel::GammaCumProbability(const size_t idx) const
 {
-#ifdef G4VERBOSE
-  if(idx >= length) { PrintError(idx, "GammaCumProbability(idx)"); }
-#endif
   return fGammaCumProbability[idx];
 }
 
-inline G4float G4NucLevel::MultipolarityRatio(size_t idx) const
+inline G4float G4NucLevel::MultipolarityRatio(const size_t idx) const
 {
-#ifdef G4VERBOSE
-  if(idx >= length) { PrintError(idx, "MultipolarityRatio(idx)"); }
-#endif
   return fMpRatio[idx];
 }
 
-inline size_t G4NucLevel::SampleGammaTransition(G4double rndm) const
+inline size_t G4NucLevel::SampleGammaTransition(const G4double rndm) const
 {
-  G4float x = (G4float)rndm;
+  G4float x = rndm;
   size_t idx = 0;
   for(; idx<length; ++idx) { 
     if(x <= fGammaCumProbability[idx]) { break; } 
@@ -165,16 +147,14 @@ inline size_t G4NucLevel::SampleGammaTransition(G4double rndm) const
   return idx;
 }
 
-inline G4int G4NucLevel::SampleShell(size_t idx, G4double rndm) const
+inline G4int 
+G4NucLevel::SampleShell(const size_t idx, const G4double rndm) const
 {
-#ifdef G4VERBOSE
-  if(idx >= length) { PrintError(idx, "SampleShell(idx,rndm)"); }
-#endif
   const std::vector<G4float>* prob = fShellProbability[idx];
   G4int i(-1);
-  if(prob) {
+  if(nullptr != prob) {
     G4int nn = prob->size();
-    G4float x = (G4float)rndm;
+    G4float x = rndm;
     for(i=0; i<nn; ++i) { if(x <= (*prob)[i]) { break; } }
   } 
   return i;
@@ -183,9 +163,6 @@ inline G4int G4NucLevel::SampleShell(size_t idx, G4double rndm) const
 inline const std::vector<G4float>* 
 G4NucLevel::ShellProbabilty(size_t idx) const
 {
-#ifdef G4VERBOSE
-  if(idx >= length) { PrintError(idx, "ShellProbability(idx)"); }
-#endif
   return fShellProbability[idx];
 }
 

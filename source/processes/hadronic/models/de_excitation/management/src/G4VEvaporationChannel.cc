@@ -37,17 +37,22 @@
 
 G4VEvaporationChannel::G4VEvaporationChannel(const G4String &) 
   :OPTxs(3),useSICB(true)
-{
-  //G4cout << "New G4VEvaporationChannel " << this << G4endl;
-}
-
-G4VEvaporationChannel::~G4VEvaporationChannel() 
 {}
 
 void G4VEvaporationChannel::Initialise()
 {}
 
 G4double G4VEvaporationChannel::GetLifeTime(G4Fragment*)
+{
+  return 0.0;
+}
+
+G4double G4VEvaporationChannel::ComputeInverseXSection(G4Fragment*, G4double)
+{
+  return 0.0;
+}
+
+G4double G4VEvaporationChannel::ComputeProbability(G4Fragment*, G4double)
 {
   return 0.0;
 }

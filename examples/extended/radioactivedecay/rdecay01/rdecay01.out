@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -34,7 +34,8 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
 ======================================================================
-Max life time                                     0.14427 ps
+min MeanLife (from G4NuclideTable)                1 ps 
+Max life time (from G4DeexPrecoParameters)        1 ps 
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
 Enable correlated gamma emission                  0
@@ -44,7 +45,7 @@ Auger electron emission enabled                   0
 Check EM cuts disabled for atomic de-excitation   0
 Use Bearden atomic level energies                 0
 Use ANSTO fluorescence model                      0
-Threshold for very long decay time at rest        1e+27  ns
+Threshold for very long decay time at rest        3.171e+10 y  
 ======================================================================
 
 ========= Table of registered couples ============================
@@ -52,7 +53,7 @@ Threshold for very long decay time at rest        1e+27  ns
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -103,7 +104,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.002660s Sys=0.000000s
+  User=0.010000s Real=0.010993s Sys=0.010000s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -138,7 +139,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -178,7 +179,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.060000s Real=1.107888s Sys=0.000000s
+  User=0.810000s Real=0.816016s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -213,7 +214,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -253,7 +254,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=3.080000s Real=3.113603s Sys=0.010000s
+  User=1.960000s Real=1.989283s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -264,7 +265,7 @@ Run Summary
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
              Ni60:  100000  Emean =  15.91 eV 	( 15.91 eV  --> 41.74 eV )	stable
    Ni60[1332.514]:   99999  Emean =  12.34 eV 	( 347.1 meV --> 32.26 eV )	mean life = 1.06 ps 
-   Ni60[2158.632]:       6  Emean =  1.079 eV 	( 1.079 eV  --> 1.079 eV )	mean life = 0.8512 ps 
+   Ni60[2158.632]:       6  Emean =  1.079 eV 	( 1.079 eV  --> 1.079 eV )
    Ni60[2505.753]:   99878  Emean =  1.476 eV 	( 0.5675 meV --> 3.762 eV )	mean life = 4.761 ps 
         anti_nu_e:  100000  Emean =  222.1 keV	( 3.749 keV --> 1.49 MeV)	stable
                e-:  100028  Emean =  96.66 keV	( 3.218 eV  --> 1.458 MeV)	stable

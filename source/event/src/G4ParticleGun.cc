@@ -215,7 +215,7 @@ void G4ParticleGun::GeneratePrimaryVertex(G4Event* evt)
 
   // Create a new vertex
   //
-  G4PrimaryVertex* vertex = 
+  auto* vertex = 
     new G4PrimaryVertex(particle_position,particle_time);
 
   // Create new primaries and set them to the vertex
@@ -223,7 +223,7 @@ void G4ParticleGun::GeneratePrimaryVertex(G4Event* evt)
   G4double mass =  particle_definition->GetPDGMass();
   for( G4int i=0; i<NumberOfParticlesToBeGenerated; ++i )
   {
-    G4PrimaryParticle* particle =
+    auto* particle =
       new G4PrimaryParticle(particle_definition);
     particle->SetKineticEnergy( particle_energy );
     particle->SetMass( mass );

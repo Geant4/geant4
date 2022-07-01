@@ -81,7 +81,7 @@ void G4EmLowEParameters::Initialise()
 
   namePIXE = "Empirical";
   nameElectronPIXE = "Livermore";
-  livDataDir = "livermore";
+  livDataDir = "epics_2017";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -71,6 +71,7 @@ void G4TouchablePropertiesScene::ProcessVolume (const G4VSolid& /*solid*/) {
       fFoundTouchableProperties.fTouchableBaseFullPVPath  = fpSearchPVModel->GetFullPVPath();
       // Base path is one down from found PV
       fFoundTouchableProperties.fTouchableBaseFullPVPath.pop_back();
+      fFoundTouchableProperties.fTouchableFullPVPath      = fpSearchPVModel->GetFullPVPath();
       fpSearchPVModel->Abort();  // No need to look further.
     }
   }

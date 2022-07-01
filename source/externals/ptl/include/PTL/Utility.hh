@@ -25,6 +25,7 @@
 
 #include <chrono>
 #include <cstdlib>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <map>
@@ -312,7 +313,7 @@ GetEnv(const std::string& env_id, const EnvChoiceList<Tp>& _choices, Tp _default
 
 template <typename Tp>
 Tp
-GetChoice(const EnvChoiceList<Tp>& _choices, const std::string str_var)
+GetChoice(const EnvChoiceList<Tp>& _choices, const std::string& str_var)
 {
     auto asupper = [](std::string var) {
         for(auto& itr : var)
@@ -360,6 +361,42 @@ PrintEnv(std::ostream& os = std::cout)
 {
     os << (*EnvSettings::GetInstance());
 }
+
+//--------------------------------------------------------------------------------------//
+
+struct ScopeDestructor
+{
+    template <typename FuncT>
+    ScopeDestructor(FuncT&& _func)
+    : m_functor(std::forward<FuncT>(_func))
+    {}
+
+    // delete copy operations
+    ScopeDestructor(const ScopeDestructor&) = delete;
+    ScopeDestructor& operator=(const ScopeDestructor&) = delete;
+
+    // allow move operations
+    ScopeDestructor(ScopeDestructor&& rhs) noexcept
+    : m_functor(std::move(rhs.m_functor))
+    {
+        rhs.m_functor = []() {};
+    }
+
+    ScopeDestructor& operator=(ScopeDestructor&& rhs) noexcept
+    {
+        if(this != &rhs)
+        {
+            m_functor     = std::move(rhs.m_functor);
+            rhs.m_functor = []() {};
+        }
+        return *this;
+    }
+
+    ~ScopeDestructor() { m_functor(); }
+
+private:
+    std::function<void()> m_functor = []() {};
+};
 
 //--------------------------------------------------------------------------------------//
 

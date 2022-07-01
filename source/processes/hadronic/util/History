@@ -1,26 +1,55 @@
--------------------------------------------------------------------
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+# Category hadr-util History
 
-           History file for hadronic/util directory
-           ----------------------------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+-------------------------------------------------------------------------------
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2022-06-09 Laurie Nevay (hadr-util-V11-00-07)
+- Add option to G4HadronicParameters to control diffraction for baryon
+  number greater than 10.
 
-09 February 2022 Gabriele Cosmo (hadr-util-V10-07-09)
------------------------------------------------------
+## 2022-05-25 Alberto Ribon (hadr-util-V11-00-06)
+- G4KineticTrack, G4HadSecondary, G4ReactionProduct, G4DecayKineticTracks,
+  G4DecayStrongResonances: propagate the information on parent resonance 
+
+## 2022-05-14 Vladimir Ivanchenko (hadr-util-V11-00-05)
+- G4HadronicParameters - changed integral flags from per particle
+    to for elastic and inelastic processes; by default enable
+    for inelastic
+
+## 2022-05-04 Vladimir Ivanchenko (hadr-util-V11-00-04)
+- G4HadronicParameters - moved G4Threading header to the source;
+    added flags for integral method per particle type for
+    protons, pions, kaons, and anti-protons
+
+## 2022-04-04 Vladimir Ivanchenko (hadr-util-V11-00-03)
+- G4Fragment - fixed computation of binding energy for hypernuclei;
+    added a new private method to recompute ground state mass, 
+    excitation energy, and to check consistency of input;
+    left inlined only simple methods; added new methods
+    SetZAandMomentum(...) and RecomputeGroundStateMass();
+    improved comments and warning messages
+
+## 2022-02-09 Gabriele Cosmo (hadr-util-V11-00-02)
 - Fixed compilation warning on Intel compilers for unused variables
   and deprecated declaration of operator=().
 
+## 2021-12-11 Vladimir Ivanchenko (hadr-util-V11-00-01)
+- G4Fragment - added IsLongLived flag and Get/Set methods needed
+  for the de-excitation module; clean-up inline methods.
+
+## 2021-12-10 Ben Morgan (hadr-util-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
+
 05 November 2021 Alberto Ribon (hadr-util-V10-07-08)
-----------------------------------------------------
+--------------------------------------------------------
 - G4Nucleus : the method  GetBiasedThermalNucleus  has been rewritten
   (by Loic Thulliez and Eric Dumonteil of CEA Saclay) according to the
   Sampling of the Velocity of the Target nucleus (SVT) algorithm.

@@ -110,6 +110,12 @@ namespace G4INCL {
 		
 		available_iso += nbr_pions*2;
 		nbr_particle += nbr_pions;
+
+		// Erase the parent resonance information of the initial particles
+		particle1->setParentResonancePDGCode(0);
+		particle1->setParentResonanceID(0);
+		particle2->setParentResonancePDGCode(0);
+		particle2->setParentResonanceID(0);
 		
 		ParticleList list;
 		ParticleType PionType = PiZero;

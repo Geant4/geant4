@@ -132,8 +132,8 @@ void G4MicroElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*
   tableE->LoadData(fileElectron);
   tableData[electron] = tableE;
 
-  // For final state  
-  char *path = std::getenv("G4LEDATA");
+  // For final state
+  const char* path = G4FindDataDir("G4LEDATA");
 
   if (!path)
     {

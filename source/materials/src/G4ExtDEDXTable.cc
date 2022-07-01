@@ -63,13 +63,6 @@
 #include <sstream>
 #include <iomanip>
 
-
-// #########################################################################
-
-G4ExtDEDXTable::G4ExtDEDXTable() {
-
-}
-
 // #########################################################################
 
 G4ExtDEDXTable::~G4ExtDEDXTable() {
@@ -102,9 +95,9 @@ G4bool G4ExtDEDXTable::IsApplicable(
 {
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
-  G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
+  auto iter = dedxMapElements.find(key);
 
-  return (iter == dedxMapElements.end()) ? false : true; 
+  return iter != dedxMapElements.end();
 }
 
 // #########################################################################
@@ -116,9 +109,9 @@ G4bool G4ExtDEDXTable::IsApplicable(
 {
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
-  G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
+  auto iter = dedxMapMaterials.find(key);
 
-  return (iter == dedxMapMaterials.end()) ? false : true; 
+  return iter != dedxMapMaterials.end();
 }
 
 // #########################################################################
@@ -130,7 +123,7 @@ G4PhysicsVector* G4ExtDEDXTable::GetPhysicsVector(
 {
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
-  G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
+  auto iter = dedxMapElements.find(key);
 
   return (iter != dedxMapElements.end()) ? iter->second : nullptr; 
 }
@@ -144,7 +137,7 @@ G4PhysicsVector*  G4ExtDEDXTable::GetPhysicsVector(
 {
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
-  G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
+  auto iter = dedxMapMaterials.find(key);
 
   return (iter != dedxMapMaterials.end()) ? iter->second : nullptr; 
 }
@@ -159,7 +152,7 @@ G4double G4ExtDEDXTable::GetDEDX(
 {
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
-  G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
+  auto iter = dedxMapElements.find(key);
 
   return ( iter != dedxMapElements.end() ) ?
     (iter->second)->Value( kinEnergyPerNucleon) : 0.0;
@@ -175,7 +168,7 @@ G4double G4ExtDEDXTable::GetDEDX(
 {
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
-  G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
+  auto iter = dedxMapMaterials.find(key);
 
   return (iter != dedxMapMaterials.end()) ?
     (iter->second)->Value( kinEnergyPerNucleon) : 0.0;
@@ -249,7 +242,7 @@ G4bool G4ExtDEDXTable::RemovePhysicsVector(
   // Deleting key of physics vector from material map
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
-  G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
+  auto iter = dedxMapMaterials.find(key);
 
   if(iter == dedxMapMaterials.end()) {
     G4Exception ("G4ExtDEDXTable::RemovePhysicsVector() for material", 
@@ -300,10 +293,10 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(
 
      size_t nmbMatTables = dedxMapMaterials.size();
 
-     ofilestream << nmbMatTables << G4endl << G4endl; 
+     ofilestream << nmbMatTables << G4endl << G4endl;
 
-     G4IonDEDXMapMat::iterator iterMat = dedxMapMaterials.begin();
-     G4IonDEDXMapMat::iterator iterMat_end = dedxMapMaterials.end();
+     auto iterMat     = dedxMapMaterials.begin();
+     auto iterMat_end = dedxMapMaterials.end();
 
      for(;iterMat != iterMat_end; iterMat++) {
          G4IonDEDXKeyMat key = iterMat -> first;
@@ -317,11 +310,17 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(
          if(physicsVector != nullptr) {
   	    ofilestream << atomicNumberIon << "  " << matIdentifier;
 
-            if(atomicNumberElem > 0) ofilestream << "  " << atomicNumberElem;
+        if(atomicNumberElem > 0)
+        {
+          ofilestream << "  " << atomicNumberElem;
+        }
 
             ofilestream << "  # <Atomic number ion>  <Material name>  ";
 
-            if(atomicNumberElem > 0) ofilestream << "<Atomic number element>";
+            if(atomicNumberElem > 0)
+            {
+              ofilestream << "<Atomic number element>";
+            }
 
             ofilestream << G4endl << physicsVector -> GetType() << G4endl;
 
@@ -483,9 +482,9 @@ G4int G4ExtDEDXTable::FindAtomicNumberElement(
 
   G4int atomicNumber = 0;
 
-  G4IonDEDXMapElem::iterator iter = dedxMapElements.begin();
-  G4IonDEDXMapElem::iterator iter_end = dedxMapElements.end();
-  
+  auto iter     = dedxMapElements.begin();
+  auto iter_end = dedxMapElements.end();
+
   for(;iter != iter_end; ++iter) {
 
      if( (*iter).second == physicsVector ) {
@@ -501,15 +500,14 @@ G4int G4ExtDEDXTable::FindAtomicNumberElement(
 // #########################################################################
 
 void G4ExtDEDXTable::ClearTable() {
-
-  G4IonDEDXMapMat::iterator iterMat = dedxMapMaterials.begin();
-  G4IonDEDXMapMat::iterator iterMat_end = dedxMapMaterials.end();
+  auto iterMat     = dedxMapMaterials.begin();
+  auto iterMat_end = dedxMapMaterials.end();
 
   for(;iterMat != iterMat_end; ++iterMat) { 
 
     G4PhysicsVector* vec = iterMat -> second;
 
-    if(vec != 0) delete vec;
+    delete vec;
   }
 
   dedxMapElements.clear();
@@ -519,9 +517,8 @@ void G4ExtDEDXTable::ClearTable() {
 // #########################################################################
 
 void G4ExtDEDXTable::DumpMap() {
-
-  G4IonDEDXMapMat::iterator iterMat = dedxMapMaterials.begin();
-  G4IonDEDXMapMat::iterator iterMat_end = dedxMapMaterials.end();
+  auto iterMat     = dedxMapMaterials.begin();
+  auto iterMat_end = dedxMapMaterials.end();
 
   G4cout << std::setw(15) << std::right
          << "Atomic nmb ion"
@@ -540,17 +537,22 @@ void G4ExtDEDXTable::DumpMap() {
 
       G4int atomicNumberElem = FindAtomicNumberElement(physicsVector);
 
-      if(physicsVector != 0) {
-         G4cout << std::setw(15) << std::right
-                << atomicNumberIon
-                << std::setw(25) << std::right
-                << matIdentifier
-                << std::setw(25) << std::right;
+      if(physicsVector != nullptr)
+      {
+        G4cout << std::setw(15) << std::right << atomicNumberIon
+               << std::setw(25) << std::right << matIdentifier << std::setw(25)
+               << std::right;
 
-         if(atomicNumberElem > 0) G4cout << atomicNumberElem;
-         else G4cout << "N/A";
+        if(atomicNumberElem > 0)
+        {
+          G4cout << atomicNumberElem;
+        }
+        else
+        {
+          G4cout << "N/A";
+        }
 
-         G4cout << G4endl;
+        G4cout << G4endl;
       }
   }
 

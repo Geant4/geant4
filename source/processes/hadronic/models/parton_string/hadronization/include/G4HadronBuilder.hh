@@ -51,9 +51,8 @@ class G4HadronBuilder
 
      //  ctor
      G4HadronBuilder(G4double mesonMix, G4double barionMix,
-		     std::vector<double> scalarMesonMix,
-		     std::vector<double> vectorMesonMix,
-                     G4double Eta_cProb, G4double Eta_bProb);
+		     std::vector<double> scalarMesonMix, std::vector<double> vectorMesonMix,
+                     G4double Eta_cProb, G4double Eta_bProb, G4double mesonMixSSbar);
 
   private:
      G4HadronBuilder(); // no default ctor
@@ -65,6 +64,7 @@ class G4HadronBuilder
      G4ParticleDefinition * Barion(G4ParticleDefinition * black, G4ParticleDefinition * white, Spin spin);
      
      G4double mesonSpinMix;
+     G4double mesonSpinMixSSbar;
      G4double barionSpinMix;
      std::vector<double> scalarMesonMixings;
      std::vector<double> vectorMesonMixings;

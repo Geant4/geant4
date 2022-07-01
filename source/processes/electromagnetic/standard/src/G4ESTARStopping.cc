@@ -102,7 +102,7 @@ G4double G4ESTARStopping::GetElectronicDEDX(G4int i, G4double energy)
  
 void G4ESTARStopping::Initialise()
 {
-  dirPath = std::getenv("G4LEDATA");
+  dirPath = G4FindDataDir("G4LEDATA");
   if(!dirPath) {
     G4Exception("G4ESTARStopping()","em0006",FatalException,
 		"Environment variable G4LEDATA not defined");

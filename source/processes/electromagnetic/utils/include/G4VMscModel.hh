@@ -328,6 +328,8 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
   return (x > 0.0) ? 1.0/x : DBL_MAX;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double 
 G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
                                       G4double ekin, G4double logekin)

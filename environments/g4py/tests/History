@@ -1,17 +1,16 @@
--------------------------------------------------------------------
+# Category g4py-tests History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
 
-A set of tests for python wrapping of C++ elements.
+## 2021-12-10 Ben Morgan (g4py-tests-V11-00-00)
+- Change to new Markdown History format
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+---
+
+# History entries prior to 11.0
 
 Nov.30, 2008 K.Murakami
 - gtest01-07: modified with g4py namespace

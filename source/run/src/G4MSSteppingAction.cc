@@ -62,7 +62,7 @@ void G4MSSteppingAction::UserSteppingAction(const G4Step* aStep)
     return;
 
   G4double stlen       = aStep->GetStepLength();
-  G4Material* material = preStepPoint->GetMaterial();
+  const G4Material* material = preStepPoint->GetMaterial();
   length += stlen;
   x0 += stlen / (material->GetRadlen());
   lambda += stlen / (material->GetNuclearInterLength());

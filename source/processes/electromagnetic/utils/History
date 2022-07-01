@@ -1,48 +1,152 @@
--------------------------------------------------------------------
+# Category emutils History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-06-19 V.Ivanchenko (emutils-V11-00-30)
+- G4EmExtraParametersMessenger - fixed typo (problem #2492)
 
-07 April 2022 V.Ivanchenko (emutils-V10-07-40)
+## 2022-06-17 V.Ivanchenko (emutils-V11-00-29)
+- G4VEnergyLossProcess - fixed trivial Coverity warnings
+
+## 2022-06-07 V.Ivanchenko (emutils-V11-00-28)
+- G4VEnergyLossProcess, G4EmDataHandler - improve StorePhysicsTable(..)
+    method and debug pritouts
+
+## 2022-06-07 V.Ivanchenko (emutils-V11-00-27)
+- G4VEnergyLossProcess - moved out common computations to G4EmTableUtil,
+    use G4EmDataHandler, removed unused headers and methods 
+
+## 2022-05-31 V.Ivanchenko (emutils-V11-00-26)
+- G4VEmModel - fixed Coverity warning
+
+## 2022-05-28 V.Ivanchenko (emutils-V11-00-25)
+- G4EmParametersMessenger - added extra UI command to define model of
+    fluctuations
+
+## 2022-05-23 V.Ivanchenko (emutils-V11-00-24)
+- G4EmTableUtil - added extra methods
+- G4VEmModel, G4VEmProcess, G4VEnergyLossProcess,
+  G4VMultipleScattering, G4LossTableManager - use new utiity methods,
+    updated sampling of random element in compounds and random 
+    isotopes, code cleanup
+- G4EmParameters - added extra parameter: type for of fluctuation model
+
+## 2022-05-20 Z.Li (emutils-V11-00-23)
+- G4EmLowEParameters, change default photon database to EPICS2017
+
+## 2022-05-13 V.Ivanchenko (emutils-V11-00-22) 
+- G4EmUtility - added methods to sample isotopes or element
+- G4VEmModel, G4EmCalculator, G4EmConfigurator - use G4EmUtility
+
+## 2022-05-12 V.Ivanchenko (emutils-V11-00-21)
+- G4EmUtility - removed precision lost in energy value at 
+    initialisation of integral method
+- G4VEmProcess, G4VEnergyLossProcess - for integral method
+    use master thread cross section type and pointers directly
+    simplifing initialisation 
+
+## 2022-05-11 J.Hahnfeld (emutils-V11-00-20)
+- Remove dependency on `G4magneticfield`
+
+## 2022-05-02 J.Hahnfeld (emutils-V11-00-19)
+- `G4TransportationWithMsc`: Add possibility of internal stepping
+- `G4EmParameters`: Update flag to tristate for enabling it
+
+## 2022-04-29 V.Ivanchenko (emutils-V11-00-18)
+- G4EmTableUtil - new utility to perform common computations at
+    initialisation
+- G4VMultipleScattering - use G4EmTableUtil and fix Coverity warnings
+- G4EmConfigurator, G4VEnergyLossProcess - fixed Coverity warnings
+
+## 2022-04-27 D.Sawkey (emutils-V11-00-17)
+- many files: run clang-tidy. Use default ctors; keywords nullptr, auto, using
+
+## 2022-04-23 V.Ivanchenko (emutils-V11-00-16)
+- G4EmConfigurator - implement model per region for G4TransportationWithMsc 
+- GNUmakefile, source.cmake - updated accordingly
+
+## 2022-04-19 J.Hahnfeld (emutil-V11-00-15)
+- Create `G4TransportationWithMsc` process, add flag to `G4EmParameters`
+
+## 2022-04-13 V.Ivanchenko (emutils-V11-00-14)
+- G4VEnergyLossProcess, G4VEmProcess - use G4EmUtility to compute cross 
+    section shape parameters 
+- G4VMultipleScattering - updated arguments for AddEmModel, SetEmModel,
+    and EmModel methods from G4VEmModel* to G4VMscModel*
+- G4EmConfigurator - updated interfaces
+
+## 2022-04-10 V.Ivanchenko (emutils-V11-00-13)
+- G4EmUtility - added new static methods to prepare data structures for 
+    integral method using EM tables or using GetCrossSection(..) method 
+    from G4VDiscreteProcess based class, this will allow using it for hadronics
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - minor clean-up
+
+## 2022-04-07 V.Ivanchenko (emutils-V11-00-12)
 - G4VMultipleScattering - fix #2480 responsible for energy deposition shift of
     custom CMS Physics List FTFP_BERT_EMM
 
-01 April 2022 J.Hahnfeld
+## 2022-04-01 J.Hahnfeld (emutils-V11-00-11)
 - Fix typo in Bremsstrahlung.
 
-24 March 2022: V.Ivanchenko
+## 2022-03-29 H.Tran (emutils-V11-00-10)
+- G4LowEnergyEmProcessSubType - add fLowEnergyScavenger (66) for DNAScavenger process
+
+## 2022-03-24 V.Ivanchenko (emutils-V11-00-09)
 - G4VEnergyLossProcess - fix fluctuation model pointer if an extra 
     model is added on top of the default list of models
 
-22 January 22: V.Ivanchenko (emutils-V10-07-39)
+## 2022-03-17 V.Ivanchenko (emutils-V11-00-08)
+- G4EmParametersMessenger - restored UI command "/process/em/integral"
+- G4VEmProcess - updated methods to access cross section in run time,
+    implement new virtual method GetCrossSection, removed unused
+    methods
+- G4EmCalculator - use updated method from G4VEmProcess
+- G4EmUtility - a new utility class
+
+## 2022-03-09 V.Ivanchenko (emutils-V11-00-07)
+- G4EmCalculator - fixed variable shadowing
+
+## 2022-03-07 V.Ivanchenko (emutils-V11-00-06)
+- G4EmModelManager - updated interface to Initialise(.. ) method,
+    removed obsolete method Update(..)
+- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering - use updated
+    method of G4EmModelManager
+
+## 2022-02-17 V.Ivanchenko (emutils-V11-00-05)
+- G4EmParametersMessenger - instantion order of UI directories improved,
+    directories are created only in the master thread
+
+## 2022-01-22 V.Ivanchenko (emutils-V11-00-04)
 - G4EmParametersMessenger - added forgotten UI command to enable polarisation
 
-08 January 22: V.Ivanchenko
+## 2022-01-08 V.Ivanchenko (emutils-V11-00-03)
 - G4VEmProcess - fixed methods, which implementation based on assumption that
     the lambda table defined for full energy range: LambdaPhysicsVector(..),
     CrossSEctionPerVolume(...), FindLambdaMax(...). No change is expected for
     the default physics configuration, fix mainly affect positron annihilation
     processes at high energies. 
 
-05 January 22: V.Ivanchenko
+## 2022-01-05 V.Ivanchenko (emutils-V11-00-02)
+- Complete internal redesign started in 2021, results are identical
+- G4EmTableType - added 3d peak energy in the data structure needed for bremsstrahlung
+- G4VEnergyLossProcess - fill data structure for bremsstrahlung type of x-section
+    only in the master thread - do not repeat in each thread; removed ineffective
+    cache from run time computation of cross section.
 - G4VMscModel, G4VEmProcess - move few methods and header files from header to
     source in order to reduce dependencies between packages.
 
-17 December 21: I.Hrivnacova
+## 2021-12-17 Ivana Hrivnacova (emutils-V11-00-01)
 - Added info in setMaxBetaChange command description.
+
+## 2021-12-10 Ben Morgan (emutils-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 19 November 21: V.Ivanchenko (emutils-V10-07-38)
 - G4EmCalculator - fixed computation of dedx for He3 and alpha

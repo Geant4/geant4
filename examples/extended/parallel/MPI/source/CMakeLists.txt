@@ -147,7 +147,7 @@ if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
 endif()
 #If this is built as part of G4 CMAKE_INSTALL_LIBDIR is defined, we need to
 #so force check of what we should use
-include(Geant4MacroLibraryTargets OPTIONAL RESULT_VARIABLE _internal_build)
+include(G4DeveloperAPI OPTIONAL RESULT_VARIABLE _internal_build)
 if(_internal_build)
   set(_dolib64 TRUE)
 endif()

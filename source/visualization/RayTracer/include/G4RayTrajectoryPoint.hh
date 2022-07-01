@@ -78,7 +78,7 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
     // Dummy function (not used) to satisfy base class pure virtual function.
 };
 
-#if defined G4VIS_ALLOC_EXPORT
+#if defined G4RAYTRACER_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4RayTrajectoryPoint>*& rayTrajectoryPointAllocator();
 #else
   extern G4DLLIMPORT G4Allocator<G4RayTrajectoryPoint>*& rayTrajectoryPointAllocator();

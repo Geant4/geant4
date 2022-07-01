@@ -281,11 +281,9 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
                                                  eKinEnergy, pKinEnergy,
                                                  eDirection, pDirection);
   // create G4DynamicParticle object for the particle1
-  G4DynamicParticle* aParticle1= new G4DynamicParticle(
-                     fTheElectron,eDirection,eKinEnergy);
+  auto aParticle1= new G4DynamicParticle(fTheElectron,eDirection,eKinEnergy);
   // create G4DynamicParticle object for the particle2
-  G4DynamicParticle* aParticle2= new G4DynamicParticle(
-                     fThePositron,pDirection,pKinEnergy);
+  auto aParticle2= new G4DynamicParticle(fThePositron,pDirection,pKinEnergy);
   // Fill output vector
   fvect->push_back(aParticle1);
   fvect->push_back(aParticle2);
@@ -310,7 +308,7 @@ void G4BetheHeitlerModel::InitialiseElementData()
     if (!gElementData[iz]) { // create it if doesn't exist yet
       G4double FZLow     = 8.*elem->GetIonisation()->GetlogZ3();
       G4double FZHigh    = FZLow + 8.*elem->GetfCoulomb();
-      ElementData* elD   = new ElementData(); 
+      auto elD           = new ElementData();
       elD->fDeltaMaxLow  = G4Exp((42.038 - FZLow )/8.29) - 0.958;
       elD->fDeltaMaxHigh = G4Exp((42.038 - FZHigh)/8.29) - 0.958;
       gElementData[iz]   = elD;

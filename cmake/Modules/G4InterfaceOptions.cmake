@@ -56,37 +56,15 @@ if(GEANT4_USE_INVENTOR_QT)
   set(GEANT4_USE_INVENTOR ON)
 endif()
 
-# - ToolsSG/Xt/X11/Qt/Win
-# Though this option has platform differences, we configure here because it can
-# trigger the Qt requirement
-if(WIN32)
-  set(_g4_toolssg_backends "OFF" "WIN32")
-else()
-  # TODO: Difference between X11, XT?
-  set(_g4_toolssg_backends "OFF" "X11" "XT" "QT")
-endif()
-
-enum_option(GEANT4_USE_TOOLSSG
-  DOC "Build Geant4 ToolsSG Visualization Driver with Backend"
-  VALUES ${_g4_toolssg_backends}
-)
-geant4_add_feature(GEANT4_USE_TOOLSSG "Build ToolsSG Visualization Driver with backend '${GEANT4_USE_TOOLSSG}'")
-
-foreach(_tsg_backend IN LISTS _g4_toolssg_backends)
-  set(GEANT4_USE_TOOLSSG_${_tsg_backend}_GLES OFF)
-  if(_tsg_backend STREQUAL GEANT4_USE_TOOLSSG)
-    set(GEANT4_USE_TOOLSSG_${_tsg_backend}_GLES ON)
-  endif()
-endforeach()
-
-# - Qt (may be required by Coin/ToolsSG driver)
+# - Qt
+# May be required by Coin driver
+# Selection also enables ToolsSG driver
 option(GEANT4_USE_QT "Build Geant4 with Qt support" OFF)
-if((GEANT4_USE_INVENTOR_QT OR GEANT4_USE_TOOLSSG_QT_GLES) AND NOT GEANT4_USE_QT)
+if(GEANT4_USE_INVENTOR_QT AND NOT GEANT4_USE_QT)
   set(GEANT4_USE_QT ON CACHE BOOL "Build Geant4 with Qt support" FORCE)
-  message(STATUS "Forcing GEANT4_USE_QT to ON, required by Inventor/ToolsSG Driver(s)")
+  message(STATUS "Forcing GEANT4_USE_QT to ON, required by selection of GEANT4_USE_INVENTOR_QT as ON")
 endif()
-
-geant4_add_feature(GEANT4_USE_QT "Build Geant4 with Qt support")
+set(GEANT4_USE_TOOLSSG_QT_GLES ${GEANT4_USE_QT})
 
 # - Vtk
 option(GEANT4_USE_VTK "Build Geant4 with VTK visualisation" OFF)
@@ -94,23 +72,26 @@ mark_as_advanced(GEANT4_USE_VTK)
 if(GEANT4_USE_VTK)
   find_package(VTK 8.2 REQUIRED)
 endif()
-
 geant4_add_feature(GEANT4_USE_VTK "Using VTK for visualisation (EXPERIMENTAL)")
 
 # - Unix only
 if(UNIX)
-  # - Motif UI/Vis (may be required by Coin Vis driver)
+  # - Motif UI/Vis
+  # May be required by Coin Vis driver
+  # Selection also enables ToolsSG driver Xt backend
   option(GEANT4_USE_XM "Build Geant4 with Motif (X11) support" OFF)
   if((GEANT4_USE_INVENTOR AND NOT GEANT4_USE_INVENTOR_QT)
       AND NOT GEANT4_USE_XM)
     set(GEANT4_USE_XM ON CACHE BOOL "Build Geant4 with Motif (X11) support" FORCE)
     message(STATUS "Forcing GEANT4_USE_XM to ON, required by Inventor driver")
   endif()
-
+  set(GEANT4_USE_TOOLSSG_XT_GLES ${GEANT4_USE_XM})
   geant4_add_feature(GEANT4_USE_XM "Build Geant4 with Xm Support")
 
-  # OpenGL/X11 Vis Driver
+  # - OpenGL/X11 Vis Driver
+  # Selection also enables ToolsSG driver X11 backend
   option(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support" OFF)
+  set(GEANT4_USE_TOOLSSG_X11_GLES ${GEANT4_USE_OPENGL_X11})
   geant4_add_feature(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support")
 
   # RayTracer driver with X11 support
@@ -120,8 +101,18 @@ endif()
 
 # Windows only
 if(WIN32)
-  option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
+  option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support" OFF)
+  set(GEANT4_USE_TOOLSSG_WINDOWS_GLES ${GEANT4_USE_OPENGL_WIN32})
   geant4_add_feature(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
+endif()
+
+# Overall ToolsSG enable flag
+set(GEANT4_USE_TOOLSSG OFF)
+if(GEANT4_USE_TOOLSSG_QT_GLES 
+   OR GEANT4_USE_TOOLSSG_XT_GLES 
+   OR GEANT4_USE_TOOLSSG_X11_GLES 
+   OR GEANT4_USE_TOOLSSG_WINDOWS_GLES)
+  set(GEANT4_USE_TOOLSSG ON)
 endif()
 
 #-----------------------------------------------------------------------
@@ -151,46 +142,61 @@ if(GEANT4_USE_INVENTOR)
   endif()
 endif()
 
-# - Qt5
+# - Qt5/6
 if(GEANT4_USE_QT)
-  find_package(Qt5Core REQUIRED)
-  find_package(Qt5Gui REQUIRED)
-  find_package(Qt5Widgets REQUIRED)
-  find_package(Qt5OpenGL REQUIRED)
-  find_package(Qt5PrintSupport REQUIRED)
-  set(QT_QTCORE_LIBRARY Qt5::Core Qt5::PrintSupport)
-  set(QT_QTGUI_LIBRARY Qt5::Gui Qt5::Widgets)
-  set(QT_OPENGL_LIBRARY Qt5::Gui Qt5::OpenGL)
-  set(QT_LIBRARIES Qt5::OpenGL Qt5::Gui Qt5::PrintSupport Qt5::Widgets)
-  get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} IMPORTED_LOCATION)
-  geant4_save_package_variables(Qt5 Qt5Core_DIR Qt5Gui_DIR Qt5Widgets_DIR Qt5OpenGL_DIR Qt5PrintSupport_DIR)
+  # Use versioned targets to support Qt5 < 5.15
+  # Once 5.15 is the minimum version, the "Qt${QT_VERSION_MAJOR}_..." variables can be dropped
+  # - https://doc.qt.io/qt-6/cmake-manual.html
+  find_package(QT NAMES Qt5 Qt6 COMPONENTS Core REQUIRED)
+  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL PrintSupport REQUIRED)
+
+  if(QT_VERSION_MAJOR VERSION_LESS 6)
+    get_target_property(QT_QMAKE_EXECUTABLE ${Qt${QT_VERSION_MAJOR}Core_QMAKE_EXECUTABLE} IMPORTED_LOCATION)
+  else()
+    get_target_property(QT_QMAKE_EXECUTABLE Qt6::qmake IMPORTED_LOCATION)
+  endif()
+  geant4_save_package_variables(Qt${QT_VERSION_MAJOR}
+    Qt${QT_VERSION_MAJOR}Core_DIR
+    Qt${QT_VERSION_MAJOR}Gui_DIR
+    Qt${QT_VERSION_MAJOR}Widgets_DIR
+    Qt${QT_VERSION_MAJOR}OpenGL_DIR
+    Qt${QT_VERSION_MAJOR}PrintSupport_DIR)
+
+
+  geant4_add_feature(GEANT4_USE_QT "Build Geant4 with Qt${QT_VERSION_MAJOR} support")
 
   # Qt3D is only supported on 5.15 and above, but always on if available
   set(QT3D_MINIMUM_VERSION 5.15.0)
   set(GEANT4_USE_QT3D OFF)
 
-  if(Qt5Core_VERSION GREATER_EQUAL QT3D_MINIMUM_VERSION)
-    find_package(Qt53DCore ${QT3D_MINIMUM_VERSION} QUIET)
-    find_package(Qt53DExtras ${QT3D_MINIMUM_VERSION} QUIET)
-    find_package(Qt53DRender ${QT3D_MINIMUM_VERSION} QUIET)
+  if(QT_VERSION GREATER_EQUAL QT3D_MINIMUM_VERSION)
+    find_package(Qt${QT_VERSION_MAJOR}3DCore ${QT_VERSION} EXACT QUIET)
+    find_package(Qt${QT_VERSION_MAJOR}3DExtras ${QT_VERSION} EXACT QUIET)
+    find_package(Qt${QT_VERSION_MAJOR}3DRender ${QT_VERSION} EXACT QUIET)
 
-    if(Qt53DCore_FOUND AND Qt53DExtras_FOUND AND Qt53DRender_FOUND)
+    # Forward correct minimum version to CMake/etc files
+    set(QT3D_MINIMUM_VERSION ${QT_VERSION})
+
+    if(Qt${QT_VERSION_MAJOR}3DCore_FOUND AND Qt${QT_VERSION_MAJOR}3DExtras_FOUND AND Qt${QT_VERSION_MAJOR}3DRender_FOUND)
       set(GEANT4_USE_QT3D ON)
-      geant4_save_package_variables(Qt5 Qt53DCore_DIR Qt53DExtras_DIR Qt53DRender_DIR)
+      geant4_save_package_variables(Qt${QT_VERSION_MAJOR}
+        Qt${QT_VERSION_MAJOR}3DCore_DIR
+        Qt${QT_VERSION_MAJOR}3DExtras_DIR
+        Qt${QT_VERSION_MAJOR}3DRender_DIR)
       geant4_add_feature(GEANT4_USE_QT3D "Build Geant4 Qt3D driver")
     else()
-      set(_g4_qt53d_missing)
-      if(NOT Qt53DCore_FOUND)
-        list(APPEND _g4_qt53d_missing "Qt53DCore")
+      set(_g4_qt3d_missing)
+      if(NOT Qt${QT_VERSION_MAJOR}3DCore_FOUND)
+        list(APPEND _g4_qt3d_missing "Qt${QT_VERSION_MAJOR}3DCore")
       endif()
-      if(NOT Qt53DExtras_FOUND)
-        list(APPEND _g4_qt53d_missing "Qt53DExtras")
+      if(NOT Qt${QT_VERSION_MAJOR}3DExtras_FOUND)
+        list(APPEND _g4_qt3d_missing "Qt${QT_VERSION_MAJOR}3DExtras")
       endif()
-      if(NOT Qt53DRender_FOUND)
-        list(APPEND _g4_qt53d_missing "Qt53DRender")
+      if(NOT Qt${QT_VERSION_MAJOR}3DRender_FOUND)
+        list(APPEND _g4_qt3d_missing "Qt${QT_VERSION_MAJOR}3DRender")
       endif()
 
-      message(STATUS "Disabling Geant4 Qt3D driver, missing Qt5 packages: ${_g4_qt53d_missing}")
+      message(STATUS "Disabling Geant4 Qt3D driver, missing Qt packages: ${_g4_qt3d_missing}")
     endif()
   endif()
   # Variables for export to GNUmake
@@ -203,7 +209,6 @@ if(GEANT4_USE_INVENTOR
    OR GEANT4_USE_QT
    OR GEANT4_USE_OPENGL_X11
    OR GEANT4_USE_XM
-   OR GEANT4_USE_TOOLSSG
    OR GEANT4_USE_OPENGL_WIN32)
   find_package(OpenGL REQUIRED)
   geant4_save_package_variables(OpenGL OPENGL_INCLUDE_DIR OPENGL_gl_LIBRARY)
@@ -212,9 +217,7 @@ if(GEANT4_USE_INVENTOR
   if(APPLE AND
      (GEANT4_USE_INVENTOR_XT
       OR GEANT4_USE_OPENGL_X11
-      OR GEANT4_USE_XM
-      OR GEANT4_USE_TOOLSSG_X11_GLES
-      OR GEANT4_USE_TOOLSSG_XT_GLES))
+      OR GEANT4_USE_XM))
     find_package(XQuartzGL REQUIRED)
     geant4_save_package_variables(XQuartzGL XQuartzGL_INCLUDE_DIR XQuartzGL_gl_LIBRARY)
   endif()
@@ -233,9 +236,7 @@ if(UNIX)
   if(GEANT4_USE_OPENGL_X11
      OR GEANT4_USE_RAYTRACER_X11
      OR GEANT4_USE_XM
-     OR GEANT4_USE_INVENTOR_XT
-     OR GEANT4_USE_TOOLSSG_X11_GLES
-     OR GEANT4_USE_TOOLSSG_XT_GLES)
+     OR GEANT4_USE_INVENTOR_XT)
     find_package(X11 REQUIRED)
     include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
 
@@ -270,4 +271,3 @@ if(UNIX)
     geant4_save_package_variables(Motif MOTIF_INCLUDE_DIR MOTIF_LIBRARIES)
   endif()
 endif()
-

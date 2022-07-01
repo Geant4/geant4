@@ -234,21 +234,35 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_TOOLSSG_X11_GLES
   G4VGraphicsSystem* tsg_x11_gles = new G4ToolsSGX11GLES;
   RegisterGraphicsSystem(tsg_x11_gles);
+  tsg_x11_gles->AddNickname("TSGX11");
+#ifdef G4VIS_USE_TOOLSSG_XT_GLES
+  tsg_x11_gles->AddNickname("TSG_XT_GLES_FALLBACK");
 #endif
-
-#ifdef G4VIS_USE_TOOLSSG_WINDOWS_GLES
-  G4VGraphicsSystem* tsg_windows_gles = new G4ToolsSGWindowsGLES;
-  RegisterGraphicsSystem(tsg_windows_gles);
+#ifdef G4VIS_USE_TOOLSSG_QT_GLES
+#ifndef G4VIS_USE_TOOLSSG_XT_GLES
+  tsg_x11_gles->AddNickname("TSG_QT_GLES_FALLBACK");
+#endif
+#endif
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_XT_GLES
   G4VGraphicsSystem* tsg_xt_gles = new G4ToolsSGXtGLES;
   RegisterGraphicsSystem(tsg_xt_gles);
+  tsg_xt_gles->AddNickname("TSGXt");
+#ifdef G4VIS_USE_TOOLSSG_QT_GLES
+  tsg_xt_gles->AddNickname("TSG_QT_GLES_FALLBACK");
+#endif
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
   G4VGraphicsSystem* tsg_qt_gles = new G4ToolsSGQtGLES;
   RegisterGraphicsSystem(tsg_qt_gles);
+  tsg_qt_gles->AddNickname("TSGQt");
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_WINDOWS_GLES
+  G4VGraphicsSystem* tsg_windows_gles = new G4ToolsSGWindowsGLES;
+  RegisterGraphicsSystem(tsg_windows_gles);
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
@@ -264,16 +278,15 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_VTK
   G4Vtk* vtkN = new G4Vtk();
   RegisterGraphicsSystem(vtkN);
-  vtkN->AddNickname("VTK_NATIVE");
 #  ifdef G4VIS_USE_VTK_QT
-  // Comment out for now until we understand behaviour with a terminal session.
-  // vtkN->AddNickname("VtkQt_FALLBACK");
+  vtkN->AddNickname("VTKQt_FALLBACK");
 #  endif
 #endif
 
 #ifdef G4VIS_USE_VTK_QT
   G4VtkQt* vtkQt = new G4VtkQt();
   RegisterGraphicsSystem(vtkQt);
+  vtkQt->AddNickname("VTKQt");
 #endif
 
 #ifdef G4VIS_USE_VTK_QT

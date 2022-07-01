@@ -383,7 +383,7 @@ G4ProfilerConfig<Ct>::GetPersistent()
   // assigned defaults in G4RunManager::ConfigureProfilers() but if the user
   // assigns new settings before creating G4RunManager, those defaults will
   // be ignored
-  static PersistentSettings<Idx>* _instance =
+  static auto* _instance =
     new PersistentSettings<Idx>(GetPersistentFallback<Idx>());
   static thread_local PersistentSettings<Idx>* _tlinstance = [=]() {
     static std::mutex mtx;
@@ -392,8 +392,10 @@ G4ProfilerConfig<Ct>::GetPersistent()
     // above. Modifying that instance will result in all threads created later
     // to inherit those settings
     static bool _first = true;
-    if(_first)  // below uses comma operator to assign to false before return
+    if(_first)
+    {  // below uses comma operator to assign to false before return
       return ((_first = false), _instance);
+    }
     // if not first, make a copy from the primary thread
     return new PersistentSettings<Idx>(*_instance);
   }();

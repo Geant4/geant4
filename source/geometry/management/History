@@ -1,24 +1,29 @@
--------------------------------------------------------------------
+# Category geommng History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the log-message one should put in every
-commit in the repository !
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-04-13 Ben Morgan (geommng-V11-00-04)
+- Add missing dependency on G4heprandom
 
-March 5 2022 M.Asai (geommng-V10-07-08)
+## 2021-03-05 Makoto Asai (geommng-V11-00-03)
 - G4SolidStore, G4LogicalVolumeStore, G4PhysicalVolumeStore:
   extend getter methods to optionally return the last-found object.
+
+## 2021-02-05 Evgueni Tcherniaev (geommng-V11-00-02)
+- G4BoundingEnvelope: get rid of "new" operators
+
+## 2021-01-19 Evgueni Tcherniaev (geommng-V11-00-01)
+- G4ReflectedSolid: added GetCubicVolume(), GetSurfaceArea()
+
+## 2021-12-10 Ben Morgan (geommng-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 September 28, 2021 G.Cosmo (geommng-V10-07-07)
 - Use G4Allocator to dynamically allocate nodes and proxies for the

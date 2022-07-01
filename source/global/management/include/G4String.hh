@@ -139,7 +139,7 @@ class G4String : public std::string
   /// @brief Deprecated function
   /// @deprecated Use `G4StrUtil` functions instead
   [[deprecated("Use G4StrUtil::{lstrip,rstrip,strip}_copy instead")]]
-  [[nodiscard]] inline G4String strip(stripType strip_Type = trailing, char c = ' ');
+  [[nodiscard]] inline G4String strip(stripType strip_Type = trailing, char ch = ' ');
 
   /// @brief Deprecated function
   /// @deprecated Use `G4StrUtil` functions instead
@@ -180,39 +180,39 @@ namespace G4StrUtil
 
   /// @brief Remove leading characters from string
   /// @param[in,out] str string to strip
-  /// @param[in] c character to remove
-  /// @post `str` has any leading sequence of `c` removed
-  void lstrip(G4String& str, char c = ' ');
+  /// @param[in] ch character to remove
+  /// @post `str` has any leading sequence of `ch` removed
+  void lstrip(G4String& str, char ch = ' ');
 
   /// @brief Remove trailing characters from string
   /// @param[in,out] str string to strip
-  /// @param[in] c character to remove
-  /// @post `str` has any trailing sequence of `c` removed
-  void rstrip(G4String& str, char c = ' ');
+  /// @param[in] ch character to remove
+  /// @post `str` has any trailing sequence of `ch` removed
+  void rstrip(G4String& str, char ch = ' ');
 
   /// @brief Remove leading and trailing characters from string
   /// @param[in,out] str string to strip
-  /// @param[in] c character to remove
-  /// @post `str` has any leading and trailing sequence of `c` removed
-  void strip(G4String& str, char c = ' ');
+  /// @param[in] ch character to remove
+  /// @post `str` has any leading and trailing sequence of `ch` removed
+  void strip(G4String& str, char ch = ' ');
 
   /// @brief Return copy of string with leading characters removed
   /// @param[in] str string to copy and strip
-  /// @param[in] c character to remove
-  /// @return copy of `str` with any leading sequence of `c` removed
-  G4String lstrip_copy(G4String str, char c = ' ');
+  /// @param[in] ch character to remove
+  /// @return copy of `str` with any leading sequence of `ch` removed
+  G4String lstrip_copy(G4String str, char ch = ' ');
 
   /// @brief Return copy of string with trailing characters removed
   /// @param[in] str string to copy and strip
-  /// @param[in] c character to remove
-  /// @return copy of `str` with any trailing sequence of `c` removed
-  G4String rstrip_copy(G4String str, char c = ' ');
+  /// @param[in] ch character to remove
+  /// @return copy of `str` with any trailing sequence of `ch` removed
+  G4String rstrip_copy(G4String str, char ch = ' ');
 
   /// @brief Return copy of string with leading and trailing characters removed
   /// @param[in] str string to copy and strip
-  /// @param[in] c character to remove
-  /// @return copy of `str` with any leading and trailing sequence of `c` removed
-  G4String strip_copy(G4String str, char c = ' ');
+  /// @param[in] ch character to remove
+  /// @return copy of `str` with any leading and trailing sequence of `ch` removed
+  G4String strip_copy(G4String str, char ch = ' ');
 
   /// @brief Check if a string contains a given substring
   /// @param[in] str string to be checked

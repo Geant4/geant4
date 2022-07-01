@@ -34,7 +34,7 @@
 #include "G4VRFileManager.hh"
 #include "globals.hh"
 
-#include "tools/raxml"
+#include "toolx/raxml"
 
 #include <string_view>
 
@@ -56,7 +56,7 @@ class G4XmlRFileManager : public G4VRFileManager
     virtual G4bool OpenRFile(const G4String& fileName);
 
     // Specific methods for files per objects
-    tools::raxml* GetRFile(const G4String& fileName) const;
+    toolx::raxml* GetRFile(const G4String& fileName) const;
 
     // Helper method
     template <typename HT>
@@ -70,7 +70,7 @@ class G4XmlRFileManager : public G4VRFileManager
 
     // Data members
     tools::xml::default_factory*  fReadFactory { nullptr };
-    std::map<G4String, tools::raxml*> fRFiles;
+    std::map<G4String, toolx::raxml*> fRFiles;
 };
 
 #include "G4XmlRFileManager.icc"

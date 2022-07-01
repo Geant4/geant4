@@ -1381,7 +1381,7 @@ G4ElasticHadrNucleusHE::InFileName(std::ostringstream& ss,
 				   const G4ParticleDefinition* p, G4int Z)
 {
   if(!fDirectory) {
-    fDirectory = std::getenv("G4LEDATA");
+    fDirectory = G4FindDataDir("G4LEDATA");
     if (fDirectory) { 
       ss << fDirectory << "/";
     }

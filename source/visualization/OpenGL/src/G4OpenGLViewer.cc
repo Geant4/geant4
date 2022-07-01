@@ -34,7 +34,11 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"
-#include "G4OpenGL2PSAction.hh"
+
+#include "G4gl2ps.hh"
+#define GL2PS_TEXT_B  TOOLS_GL2PS_TEXT_B
+#define GL2PS_TEXT_BL TOOLS_GL2PS_TEXT_BL
+#define GL2PS_TEXT_BR TOOLS_GL2PS_TEXT_BR
 
 #include "G4Scene.hh"
 #include "G4VisExtent.hh"
@@ -52,7 +56,7 @@
 #endif
 
 // GL2PS
-#include "Geant4_gl2ps.h"
+//#include "Geant4_gl2ps.h"
 
 #include <sstream>
 #include <string>
@@ -99,9 +103,21 @@ fIsGettingPickInfos(false)
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
-
-  fGL2PSAction = new G4OpenGL2PSAction();
-
+  fGL2PSAction = new G4gl2ps();
+  tools_gl2ps_gl_funcs_t _funcs = {
+    (tools_glIsEnabled_func)glIsEnabled,
+    (tools_glBegin_func)glBegin,
+    (tools_glEnd_func)glEnd,
+    (tools_glGetFloatv_func)glGetFloatv,
+    (tools_glVertex3f_func)glVertex3f,
+    (tools_glGetBooleanv_func)glGetBooleanv,
+    (tools_glGetIntegerv_func)glGetIntegerv,
+    (tools_glRenderMode_func)glRenderMode,
+    (tools_glFeedbackBuffer_func)glFeedbackBuffer,
+    (tools_glPassThrough_func)glPassThrough
+  };
+  fGL2PSAction->setOpenGLFunctions(&_funcs);
+  
   // add supported export image format
   addExportImageFormat("eps");
   addExportImageFormat("ps");
@@ -708,7 +724,7 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   delete [] pixels;
   fclose (fp);
 
-  // Reset for next time (useful is size change)
+  // Reset for next time (useful if size change)
   //  fPrintSizeX = -1;
   //  fPrintSizeY = -1;
 
@@ -775,7 +791,7 @@ void G4OpenGLViewer::DrawText(const G4Text& g4text)
     case G4Text::right: align = GL2PS_TEXT_BR;
     }
     
-    gl2psTextOpt(textString.c_str(),"Times-Roman",GLshort(size),align,0);
+    fGL2PSAction->addTextOpt(textString.c_str(),"Times-Roman",GLshort(size),align,0);
 
   } else {
 
@@ -835,13 +851,13 @@ bool G4OpenGLViewer::exportImage(std::string name, int width, int height) {
   }
 
   if (fExportImageFormat == "eps") {
-    fGL2PSAction->setExportImageFormat(GL2PS_EPS);
+    fGL2PSAction->setExportImageFormat_EPS();
   } else if (fExportImageFormat == "ps") {
-    fGL2PSAction->setExportImageFormat(GL2PS_PS);
+    fGL2PSAction->setExportImageFormat_PS();
   } else if (fExportImageFormat == "svg") {
-    fGL2PSAction->setExportImageFormat(GL2PS_SVG);
+    fGL2PSAction->setExportImageFormat_SVG();
   } else if (fExportImageFormat == "pdf") {
-    fGL2PSAction->setExportImageFormat(GL2PS_PDF);
+    fGL2PSAction->setExportImageFormat_PDF();
   } else {
     setExportImageFormat(fExportImageFormat,true); // will display a message if this format is not correct for the current viewer
     return false;
@@ -918,8 +934,15 @@ bool G4OpenGLViewer::printGl2PS() {
    bool beginWriteAction = true;
    bool filePointerOk = true;
    while ((extendBuffer) && (! endWriteAction) && (filePointerOk)) {
-     
+
      beginWriteAction = fGL2PSAction->enableFileWriting();
+     if(beginWriteAction) {
+       GLint vp[4];
+       ::glGetIntegerv(GL_VIEWPORT,vp);
+       fGL2PSAction->setViewport(vp[0],vp[1],vp[2],vp[3]);
+       beginWriteAction = fGL2PSAction->beginPage();
+     }
+
      // 3 cases :
      // - true
      // - false && ! fGL2PSAction->fileWritingEnabled() => bad file name
@@ -928,7 +951,7 @@ bool G4OpenGLViewer::printGl2PS() {
      filePointerOk = fGL2PSAction->fileWritingEnabled();
        
      if (beginWriteAction) {
-       
+
        // Set the viewport
        // By default, we choose the line width (trajectories...)
        fGL2PSAction->setLineWidth(fGl2psDefaultLineWith);
@@ -936,7 +959,9 @@ bool G4OpenGLViewer::printGl2PS() {
        fGL2PSAction->setPointSize(fGl2psDefaultPointSize);
        
        DrawView ();
-       endWriteAction = fGL2PSAction->disableFileWriting();
+       
+       endWriteAction = fGL2PSAction->endPage();
+       fGL2PSAction->disableFileWriting();
      }
      if (filePointerOk) {
        if ((! endWriteAction) || (! beginWriteAction)) {

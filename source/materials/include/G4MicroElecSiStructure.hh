@@ -54,7 +54,7 @@ public:
   
   G4MicroElecSiStructure();
   
-  virtual ~G4MicroElecSiStructure();
+  virtual ~G4MicroElecSiStructure() = default;
   
   G4double Energy(G4int level);
 

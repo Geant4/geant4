@@ -31,6 +31,7 @@
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
+#include "SteppingVerbose.hh"
 
 #include "FTFP_BERT.hh"
 #include "G4EmStandardPhysics_option4.hh"
@@ -50,6 +51,9 @@ int main(int argc, char** argv)
   G4UIExecutive* ui = nullptr;
   if(argc == 1)
     ui = new G4UIExecutive(argc, argv);
+
+  // application-specific SteppingVerbose
+  auto steppingVerbose = new SteppingVerbose;
 
   auto runManager = G4RunManagerFactory::CreateRunManager();
 
@@ -90,6 +94,7 @@ int main(int argc, char** argv)
   // job termination
   delete visManager;
   delete runManager;
+  delete steppingVerbose;
   return 0;
 }
 

@@ -50,14 +50,14 @@ class G4UIbatch : public G4UIsession
     G4UIbatch(const char* fileName, G4UIsession* prevSession = nullptr);
       // "prevSession" must be null if this class is constructed from main().
 
-    ~G4UIbatch();
+    ~G4UIbatch() override;
 
     inline G4UIsession* GetPreviousSession() const;
 
-    virtual G4UIsession* SessionStart();
-    virtual void PauseSessionStart(const G4String& Prompt);
+    G4UIsession* SessionStart() override;
+    void PauseSessionStart(const G4String& Prompt) override;
 
-  private:
+   private:
 
     G4String ReadCommand();
       // Get command from a batch script file

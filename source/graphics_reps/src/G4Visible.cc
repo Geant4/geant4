@@ -63,6 +63,7 @@ G4Visible::~G4Visible () {
 
 G4Visible& G4Visible::operator= (const G4Visible& rhs) {
   if (&rhs == this) return *this;
+  fInfo = rhs.fInfo;
   fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
   if (fAllocatedVisAttributes) {
     delete fpVisAttributes;
@@ -74,6 +75,7 @@ G4Visible& G4Visible::operator= (const G4Visible& rhs) {
 
 G4Visible& G4Visible::operator= (G4Visible&& rhs) {
   if (&rhs == this) return *this;
+  fInfo = rhs.fInfo;
   if (fAllocatedVisAttributes) delete fpVisAttributes;
   fpVisAttributes = rhs.fpVisAttributes;
   fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
@@ -101,6 +103,7 @@ void G4Visible::SetVisAttributes (const G4VisAttributes* pVA) {
 }
 
 G4bool G4Visible::operator != (const G4Visible& right) const {
+  if (fInfo != right.fInfo) return false;
   if (fpVisAttributes && right.fpVisAttributes)
     return *fpVisAttributes != *right.fpVisAttributes;
   else if (!fpVisAttributes && !right.fpVisAttributes) return false;
@@ -108,6 +111,9 @@ G4bool G4Visible::operator != (const G4Visible& right) const {
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {
+  os << "G4Visible: ";
+  if (!v.fInfo.empty()) os << "User information: " << v.fInfo;
+  os << '\n';
   if (v.fpVisAttributes) return os << *(v.fpVisAttributes);
   else return os << "No Visualization Attributes";
 }

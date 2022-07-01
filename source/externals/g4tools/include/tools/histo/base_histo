@@ -276,7 +276,7 @@ public: //histo_data
     return number;
   }
 
-  // for inlib/wroot/streamers :
+  // for tools/wroot/streamers :
   TN get_entries() const {
     TN number = 0;
     for(TO ibin=0;ibin<m_bin_number;ibin++) {

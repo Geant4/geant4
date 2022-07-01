@@ -33,7 +33,7 @@
 
 #include "tools/wroot/file"
 #include "tools/wroot/to"
-#include "tools/zlib"
+#include "toolx/zlib"
 
 using namespace tools;
 using namespace G4Analysis;
@@ -118,7 +118,7 @@ G4RootFileManager::CreateFileImpl(const G4String& fileName)
 {
   // create file
   std::shared_ptr<wroot::file> file = std::make_shared<wroot::file>(G4cout, fileName);
-  file->add_ziper('Z',compress_buffer);
+  file->add_ziper('Z',toolx::compress_buffer);
   file->set_compression(fState.GetCompressionLevel());
 
   if ( ! file->is_open() ) {

@@ -50,7 +50,7 @@ G4RegularXTRadiator::G4RegularXTRadiator(G4LogicalVolume* anEnvelope,
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4RegularXTRadiator::~G4RegularXTRadiator() {}
+G4RegularXTRadiator::~G4RegularXTRadiator() = default;
 
 void G4RegularXTRadiator::ProcessDescription(std::ostream& out) const
 {

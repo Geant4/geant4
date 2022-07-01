@@ -43,14 +43,14 @@
 class G4OrderedTable : public std::vector<G4DataVector*>
 {
  public:
-  G4OrderedTable();
+  G4OrderedTable() = default;
   // Default constructor
 
   explicit G4OrderedTable(std::size_t cap);
   // Constructor given a 'capacity' defining the initial
   // number of elements (NULL pointers are filled up)
 
-  virtual ~G4OrderedTable();
+  virtual ~G4OrderedTable() = default;
   // Empty Destructor
 
   void clearAndDestroy();

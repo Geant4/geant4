@@ -1034,8 +1034,8 @@ void G4PenelopeOscillatorManager::ReadElementData()
       G4cout << "G4PenelopeOscillatorManager::ReadElementData()" << G4endl;
       G4cout << "Going to read Element Data" << G4endl;
     }
-  char* path = std::getenv("G4LEDATA");
-  if (!path)
+    const char* path = G4FindDataDir("G4LEDATA");
+    if(!path)
     {
       G4String excep = "G4PenelopeOscillatorManager - G4LEDATA environment variable not set!";
       G4Exception("G4PenelopeOscillatorManager::ReadElementData()",

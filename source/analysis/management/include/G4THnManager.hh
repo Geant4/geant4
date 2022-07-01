@@ -72,6 +72,7 @@ class G4THnManager
 
     // Get method
     HT*  GetT(G4int id) const;
+    std::vector<HT*>*   GetTVector();
 
   protected:
     // Iterators

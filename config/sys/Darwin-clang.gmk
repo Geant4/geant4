@@ -1,6 +1,6 @@
 #
-# ------ MacOS-X ------
-#                                 macOS 11, Apple clang-12 and higher
+# ------ macOS ------
+#                                 macOS, Apple clang-12 and higher
 #
 # Original author: Gabriele Cosmo - CERN
 #
@@ -15,7 +15,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   CXXFLAGS  += -std=c++17
   G4USE_STD17 := 1
   ifdef G4MULTITHREADED
-    CXXFLAGS += -ftls-model=initial-exec
+    CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O3

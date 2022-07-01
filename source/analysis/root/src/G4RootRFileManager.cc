@@ -32,7 +32,7 @@
 #include "G4AnalysisUtilities.hh"
 
 #include "tools/rroot/file"
-#include "tools/zlib"
+#include "toolx/zlib"
 
 using namespace G4Analysis;
 using namespace tools;
@@ -72,7 +72,7 @@ G4bool G4RootRFileManager::OpenRFile(const G4String& fileName,
 
   // create new file
   auto newFile = new tools::rroot::file(G4cout, name);
-  newFile->add_unziper('Z',tools::decompress_buffer);
+  newFile->add_unziper('Z',toolx::decompress_buffer);
 
   if ( ! newFile->is_open() ) {
     Warn("Cannot open file " + name, fkClass, "OpenRFile");

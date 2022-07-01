@@ -1,20 +1,68 @@
--------------------------------------------------------------------
+# Category opengl History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-           Category History file for visualization/OpenGL
-           ----------------------------------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-05-03 Ben Morgan (opengl-V11-00-12)
+- Preliminary build support for Qt5 and Qt6
+
+## 2022-05-03 Gabriele Cosmo (opengl-V11-00-11)
+- Fixed GNUmakefile for missing compilation of `G4gl2ps`.
+
+## 2022-04-27 John Allison (opengl-V11-00-10)
+- Co-works with `visman-V11-00-15`.
+- Move `G4gl2ps` from `management` to `OpenGL`.
+
+## 2022-04-07 Guy Barrand (opengl-V11-00-09)
+- Added missing dependency to G4tools in GNUmakefile...
+
+## 2022-04-07 Guy Barrand (opengl-V11-00-08)
+- Have G4OpenGLViewer use the thread safe tools/gl2ps.
+
+## 2022-04-06 John Allison (opengl-V11-00-07)
+- Use `StandardSpecialMeshRendering(mesh)`.
+
+## 2022-03-24 John Allison (opengl-V11-00-06)
+- Retire display list re-use and display list limit.
+
+## 2022-03-22 Ben Morgan (opengl-V11-00-05)
+- Use geant4_module_sources to add optional sources
+
+## 2022-03-05 John Allison (opengl-V11-00-04)
+- G4OpenGLSceneHandler::AddCompound(const G4Mesh& mesh):
+  - For parameterised tetrahedron mesh, call default
+    G4VSceneHandler::DrawTetMeshAsDots(mesh).
+  - Tested on "ICRP145", a Geant4 application that we hope can become
+    a Geant4 advanced example, downloaded from the supplementary material
+    of Kim et al, ICRP, 2020. Adult mesh-type reference computational phantoms,
+    ICRP Publication 145, Ann. ICRP 49(3).
+
+## 2022-01-28 Ben Morgan (opengl-V11-00-03)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+- Make DLL export symbol a CMake module-level compile definition to aid
+  future modularization
+
+## 2021-12-16 John Allison (opengl-V11-00-02)
+- G4OpenGLSceneHandler.cc:
+  - AddCompound(const G4Mesh& mesh):
+    - Use base class utility G4VSceneHandler::Draw3DRectMeshAsDots(mesh);
+
+## 2021-12-11 John Allison (opengl-V11-00-01)
+- G4OpenGLSceneHandler:
+  - void AddCompound(const G4Mesh& mesh):
+    - Add missing return statement for unimplemented cases.
+    - Tidy.
+
+## 2021-12-10 Ben Morgan (opengl-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 12 November 2021 - Ben Morgan (opengl-V10-07-25)
 - Retire G4VIS_... preprocessor symbols in toolkit build, only required

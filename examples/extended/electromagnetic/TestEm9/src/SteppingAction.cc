@@ -26,8 +26,6 @@
 /// \file electromagnetic/TestEm9/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-//
-//
 /////////////////////////////////////////////////////////////////////////
 //
 // TestEm9: Crystal calorimeter
@@ -43,8 +41,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "G4SteppingManager.hh"
-#include "G4VTouchable.hh"
 #include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,14 +51,16 @@ SteppingAction::SteppingAction():
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   fHisto->AddStep();
+  auto tracks = aStep->GetSecondaryInCurrentStep();
+  if(nullptr != tracks) {
+    for(auto track : *tracks) {
+      fHisto->ScoreNewTrack(track);
+    }
+  }
+
   G4double edep = aStep->GetTotalEnergyDeposit()*aStep->GetTrack()->GetWeight();
   if(edep == 0.) { return; }
 

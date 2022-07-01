@@ -51,6 +51,7 @@ inline TDirectory* find_dir(directory& a_dir,const std::string& a_name) {
     out << "tools::rroot::find_dir :"
         << " can't stream TDirectory."
         << std::endl;
+    delete tdir;
     return 0;
   }
   return tdir;

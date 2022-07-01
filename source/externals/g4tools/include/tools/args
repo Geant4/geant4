@@ -39,14 +39,14 @@ public:
     mem::increment(s_class().c_str());
 #endif
     for(int index=0;index<a_argc;index++) {
-      std::string s(a_argv[index]);
-      std::string::size_type pos = s.find('=');
+      std::string _s(a_argv[index]);
+      std::string::size_type pos = _s.find('=');
       if(pos==std::string::npos) {
-        m_args.push_back(arg(s,""));
+        m_args.push_back(arg(_s,""));
       } else {
-	std::string key = s.substr(0,pos);
+	std::string key = _s.substr(0,pos);
         pos++;
-	std::string value = s.substr(pos,s.size()-pos);
+	std::string value = _s.substr(pos,_s.size()-pos);
         m_args.push_back(arg(key,value));
       }
     }
@@ -125,9 +125,9 @@ public:
   }
 
   bool find(const std::string& a_string,bool& a_value,const bool& a_def = false) const {
-    std::string s;
-    if(!find(a_string,s)) {a_value = a_def;return false;}
-    return to(s,a_value,a_def);
+    std::string _s;
+    if(!find(a_string,_s)) {a_value = a_def;return false;}
+    return to(_s,a_value,a_def);
   }
   template <class aT>
   bool find(const std::string& a_string,aT& a_value,const aT& a_def = aT()) const {
@@ -141,15 +141,15 @@ public:
     // Return a vector of string <name=value>
     std::vector<std::string> vec;
     tools_vforcit(arg,m_args,it) {
-      std::string s;
+      std::string _s;
       if((*it).second.empty()) {
-        s = (*it).first;
+        _s = (*it).first;
       } else {
-        s = (*it).first;
-        s += "=";
-        s += (*it).second;
+        _s = (*it).first;
+        _s += "=";
+        _s += (*it).second;
       }
-      vec.push_back(s);
+      vec.push_back(_s);
     }
     return vec;
   }
@@ -157,14 +157,14 @@ public:
   void to_vector(std::vector<std::string>& a_vec) const {
     // Return a vector of string <name=value>
     a_vec.clear();
-    std::string s;
+    std::string _s;
     tools_vforcit(arg,m_args,it) {
-      s = (*it).first;
+      _s = (*it).first;
       if((*it).second.size()) {
-        s += "=";
-        s += (*it).second;
+        _s += "=";
+        _s += (*it).second;
       }
-      a_vec.push_back(s);
+      a_vec.push_back(_s);
     }
   }
 
@@ -279,11 +279,11 @@ public:
 
   bool file(std::string& a_file) const {
     std::string slast;
-    std::string s;
+    std::string _s;
     if((m_args.size()>1) //first arg is the program name !
-       && last(slast,s)
+       && last(slast,_s)
        && (slast.find('-')!=0)
-       && (s.empty()) ) {
+       && (_s.empty()) ) {
       a_file = slast; //Last argument is not an option.
       return true;
     } else {
@@ -294,11 +294,11 @@ public:
 
   bool file(std::string& a_file,bool a_remove) {
     std::string slast;
-    std::string s;
+    std::string _s;
     if((m_args.size()>1) //first arg is the program name !
-       && last(slast,s)
+       && last(slast,_s)
        && (slast.find('-')!=0)
-       && (s.empty()) ) {
+       && (_s.empty()) ) {
       a_file = slast; //Last argument is not an option.
       if(a_remove) m_args.erase(m_args.end()-1);
       return true;

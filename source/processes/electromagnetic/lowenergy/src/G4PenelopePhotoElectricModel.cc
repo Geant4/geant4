@@ -517,8 +517,8 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
       G4cout << "Going to read PhotoElectric data files for Z=" << Z << G4endl;
     }
 
-  char* path = std::getenv("G4LEDATA");
-  if (!path)
+    const char* path = G4FindDataDir("G4LEDATA");
+    if(!path)
     {
       G4String excep = "G4PenelopePhotoElectricModel - G4LEDATA environment variable not set!";
       G4Exception("G4PenelopePhotoElectricModel::ReadDataFile()",

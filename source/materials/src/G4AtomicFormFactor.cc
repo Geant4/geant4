@@ -46,4 +46,4 @@
 
 #include "G4AtomicFormFactor.hh"
 
-G4AtomicFormFactor *G4AtomicFormFactor::s_G4AtomicFormFactorManager = 0;
+G4AtomicFormFactor* G4AtomicFormFactor::s_G4AtomicFormFactorManager = nullptr;

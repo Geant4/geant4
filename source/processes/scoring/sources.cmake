@@ -31,4 +31,6 @@ geant4_module_link_libraries(G4scoring
     G4materials
     G4muons
     G4partman
-    G4track)
+    G4track
+    G4transportation
+    G4volumes)

@@ -985,6 +985,118 @@ void G4VTwistedFaceted::CreateSurfaces()
 
 }
 
+//=====================================================================
+//* GetCubicVolume ----------------------------------------------------
+
+G4double G4VTwistedFaceted::GetCubicVolume()
+{
+  if(fCubicVolume == 0.)
+  {
+    fCubicVolume = ((fDx1 + fDx2 + fDx3 + fDx4)*(fDy1 + fDy2) +
+                    (fDx4 + fDx3 - fDx2 - fDx1)*(fDy2 - fDy1)/3)*fDz;
+  }
+  return fCubicVolume;
+}
+
+//=====================================================================
+//* GetLateralFaceArea ------------------------------------------------
+
+G4double
+G4VTwistedFaceted::GetLateralFaceArea(const G4TwoVector& p1,
+                                      const G4TwoVector& p2,
+                                      const G4TwoVector& p3,
+                                      const G4TwoVector& p4) const
+{
+  constexpr G4int NSTEP = 100;
+  constexpr G4double dt = 1./NSTEP;
+
+  G4double h = 2.*fDz;
+  G4double hh = h*h;
+  G4double hTanTheta = h*std::tan(fTheta);
+  G4double x1 = p1.x();
+  G4double y1 = p1.y();
+  G4double x21 = p2.x() - p1.x();
+  G4double y21 = p2.y() - p1.y();
+  G4double x31 = p3.x() - p1.x();
+  G4double y31 = p3.y() - p1.y();
+  G4double x42 = p4.x() - p2.x();
+  G4double y42 = p4.y() - p2.y();
+  G4double x43 = p4.x() - p3.x();
+  G4double y43 = p4.y() - p3.y();
+
+  // check if face is plane (just in case)
+  G4double lmax = std::max(std::max(std::abs(x21),std::abs(y21)),
+                           std::max(std::abs(x43),std::abs(y43)));
+  G4double eps = lmax*kCarTolerance;
+  if (std::abs(fPhiTwist) < kCarTolerance &&
+      std::abs(x21*y43 - y21*x43) < eps)
+  {
+    G4double x0 = hTanTheta*std::cos(fPhi);
+    G4double y0 = hTanTheta*std::sin(fPhi);
+    G4ThreeVector A(p4.x() - p1.x() + x0, p4.y() - p1.y() + y0, h);
+    G4ThreeVector B(p3.x() - p2.x() + x0, p3.y() - p2.y() + y0, h);
+    return (A.cross(B)).mag()*0.5;
+  }
+
+  // twisted face
+  G4double area = 0.;
+  for (G4int i = 0; i < NSTEP; ++i)
+  {
+    G4double t = (i + 0.5)*dt;
+    G4double I = x21 + (x42 - x31)*t;
+    G4double J = y21 + (y42 - y31)*t;
+    G4double II = I*I;
+    G4double JJ = J*J;
+    G4double IIJJ = hh*(I*I + J*J);
+
+    G4double ang = fPhi + fPhiTwist*(0.5 - t);
+    G4double A = fPhiTwist*(II + JJ) + x21*y43 - x43*y21;
+    G4double B = fPhiTwist*(I*(x1 + x31*t) + J*(y1 + y31*t)) +
+      hTanTheta*(I*std::sin(ang) - J*std::cos(ang)) +
+      (I*y31 - J*x31);
+
+    G4double invAA = 1./(A*A);
+    G4double sqrtAA = 2.*std::abs(A);
+    G4double invSqrtAA = 1./sqrtAA;
+
+    G4double aa = A*A;
+    G4double bb = 2.*A*B;
+    G4double cc = IIJJ + B*B;
+
+    G4double R1 = std::sqrt(aa + bb + cc);
+    G4double R0 = std::sqrt(cc);
+    G4double log1 = std::log(std::abs(sqrtAA*R1 + 2.*aa + bb));
+    G4double log0 = std::log(std::abs(sqrtAA*R0 + bb));
+
+    area += 0.5*R1 + 0.25*bb*invAA*(R1 - R0) + IIJJ*invSqrtAA*(log1 - log0);
+  }
+  return area*dt;
+}
+
+//=====================================================================
+//* GetSurfaceArea ----------------------------------------------------
+
+G4double G4VTwistedFaceted::GetSurfaceArea()
+{
+  if (fSurfaceArea == 0.)
+  {
+    G4TwoVector vv[8];
+    vv[0] = G4TwoVector(-fDx1 - fDy1*fTAlph,-fDy1);
+    vv[1] = G4TwoVector( fDx1 - fDy1*fTAlph,-fDy1);
+    vv[2] = G4TwoVector(-fDx2 + fDy1*fTAlph, fDy1);
+    vv[3] = G4TwoVector( fDx2 + fDy1*fTAlph, fDy1);
+    vv[4] = G4TwoVector(-fDx3 - fDy2*fTAlph,-fDy2);
+    vv[5] = G4TwoVector( fDx3 - fDy2*fTAlph,-fDy2);
+    vv[6] = G4TwoVector(-fDx4 + fDy2*fTAlph, fDy2);
+    vv[7] = G4TwoVector( fDx4 + fDy2*fTAlph, fDy2);
+    fSurfaceArea = 2.*(fDy1*(fDx1 + fDx2) + fDy2*(fDx3 + fDx4)) +
+      GetLateralFaceArea(vv[0], vv[1], vv[4], vv[5]) +
+      GetLateralFaceArea(vv[1], vv[3], vv[5], vv[7]) +
+      GetLateralFaceArea(vv[3], vv[2], vv[7], vv[6]) +
+      GetLateralFaceArea(vv[2], vv[0], vv[6], vv[4]);
+  }
+  return fSurfaceArea;
+}
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

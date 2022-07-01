@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -82,9 +81,7 @@
 #include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
 #include "G4MuBetheBlochModel.hh"
-#include "G4UniversalFluctuation.hh"
-#include "G4IonFluctuations.hh"
-#include "G4UnitsTable.hh"
+#include "G4EmStandUtil.hh"
 #include "G4ICRU73QOModel.hh"
 #include "G4EmParameters.hh"
 
@@ -132,7 +129,6 @@ G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
     G4EmParameters* param = G4EmParameters::Instance();
     G4double elow = 0.2*CLHEP::MeV;
     G4double emax = param->MaxKinEnergy();
-    G4double ehigh = std::min(1*CLHEP::GeV, emax);
 
     // Bragg peak model
     if (nullptr == EmModel(0)) {
@@ -141,26 +137,21 @@ G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
     }
     EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel(0)->SetHighEnergyLimit(elow); 
-    AddEmModel(1, EmModel(0), new G4IonFluctuations());
 
     // high energy fluctuation model
-    if (nullptr == FluctModel()) { 
-      SetFluctModel(new G4UniversalFluctuation()); 
+    if (nullptr == FluctModel()) {
+      SetFluctModel(G4EmStandUtil::ModelOfFluctuations());
     }
-
-    // moderate energy model
-    if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
-    EmModel(1)->SetLowEnergyLimit(elow);
-    EmModel(1)->SetHighEnergyLimit(ehigh);
-    AddEmModel(2, EmModel(1), FluctModel());
+    // low-energy fluctuation model
+    G4VEmFluctuationModel* f = G4EmStandUtil::ModelOfFluctuations(true);
+    AddEmModel(1, EmModel(0), f);
 
     // high energy model
-    if(ehigh < emax) {
-      if (nullptr == EmModel(2)) { SetEmModel(new G4MuBetheBlochModel()); }
-      EmModel(2)->SetLowEnergyLimit(ehigh);
-      EmModel(2)->SetHighEnergyLimit(emax);
-      AddEmModel(3, EmModel(2), FluctModel());
-    }
+    if (nullptr == EmModel(1)) { SetEmModel(new G4MuBetheBlochModel()); }
+    EmModel(1)->SetLowEnergyLimit(elow);
+    EmModel(1)->SetHighEnergyLimit(emax);
+    AddEmModel(1, EmModel(1), FluctModel());
+
     ratio = CLHEP::electron_mass_c2/mass;
     isInitialised = true;
   }

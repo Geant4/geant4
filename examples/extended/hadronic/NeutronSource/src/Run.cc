@@ -258,7 +258,7 @@ void Run::EndOfRun()
   
   //particles count
   //
-  G4cout << "\n List of generated particles (with meanLife != 0):" << G4endl;
+  G4cout << "\n List of generated particles (with meanLife != 0) :" << G4endl;
      
  std::map<G4String,ParticleData>::iterator itc;               
  for (itc = fParticleDataMap1.begin(); itc != fParticleDataMap1.end(); itc++) { 

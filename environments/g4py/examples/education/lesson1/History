@@ -1,3 +1,17 @@
+# Category g4py-examples-education History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+
+## 2021-12-10 Ben Morgan (g4py-examples-education-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 27 Sep. 2006  Hajime Yoshida
    - Lesson1.py as before
    - Lesson1withN03.py with the physics list of N03

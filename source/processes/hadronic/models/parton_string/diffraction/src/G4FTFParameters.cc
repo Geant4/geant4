@@ -52,6 +52,7 @@
 #include "G4Pow.hh"
 
 #include "G4HadronicDeveloperParameters.hh"
+#include "G4HadronicParameters.hh"
 
 //============================================================================
 
@@ -69,6 +70,8 @@ G4FTFParameters::G4FTFParameters()
     csGGinstance = new G4ComponentGGHadronNucleusXsc();
   }
 
+  EnableDiffDissociationForBGreater10 = G4HadronicParameters::Instance()->EnableDiffDissociationForBGreater10();
+  
   // Set parameters of a string kink
   SetPt2Kink( 0.0*GeV*GeV );  // To switch off kinky strings (bad results obtained with 6.0*GeV*GeV)
   G4double Puubar( 1.0/3.0 ), Pddbar( 1.0/3.0 ), Pssbar( 1.0/3.0 );  // SU(3) symmetry
@@ -427,7 +430,7 @@ void G4FTFParameters::InitForInteraction( const G4ParticleDefinition* particle,
       SetParams( 4, 0.0, 0.0 ,0.0, 0.0 , 0.0, 0.0  ,     0.0);
     }
 
-    if ( AbsProjectileBaryonNumber > 10  ||  NumberOfTargetNucleons > 10 ) {
+    if ( (AbsProjectileBaryonNumber > 10 || NumberOfTargetNucleons > 10) && !EnableDiffDissociationForBGreater10 ) {
       //
       // It is not decided what to do with diffraction dissociation in Had-Nucl and Nucl-Nucl interactions
       // For the moment both ProjDiffDisso & TgtDiffDisso for A > 10 are set to false,

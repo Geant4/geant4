@@ -31,7 +31,6 @@
 // *** Processes and models
 
 // gamma
-
 #include "G4PhotoElectricEffect.hh"
 #include "G4PenelopePhotoElectricModel.hh"
 
@@ -48,9 +47,7 @@
 #include "G4KleinNishinaModel.hh"
 
 // e- and e+
-
 #include "G4eMultipleScattering.hh"
-#include "G4UniversalFluctuation.hh"
 
 #include "G4eIonisation.hh"
 #include "G4PenelopeIonisationModel.hh"
@@ -59,12 +56,10 @@
 #include "G4PenelopeBremsstrahlungModel.hh"
 
 // e+ only
-
 #include "G4eplusAnnihilation.hh"
 #include "G4PenelopeAnnihilationModel.hh"
 
 // hadrons
-
 #include "G4hMultipleScattering.hh"
 #include "G4MscStepLimitType.hh"
 
@@ -74,6 +69,7 @@
 #include "G4ionIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
+#include "G4LindhardSorensenIonModel.hh"
 
 // msc models
 #include "G4UrbanMscModel.hh"
@@ -81,12 +77,12 @@
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
-//
 
+// utilities
 #include "G4EmBuilder.hh"
+#include "G4EmStandUtil.hh"
 
 // particles
-
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -125,6 +121,8 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
   param->SetMscRangeFactor(0.08);
   param->SetMuHadLateralDisplacement(true);
   param->SetFluo(true);
+  param->SetUseICRU90Data(true);
+  param->SetFluctuationType(fUrbanFluctuation);
   param->SetMaxNIELEnergy(1*CLHEP::MeV);
   param->SetPIXEElectronCrossSectionModel("Penelope");
   SetPhysicsType(bElectromagnetic);
@@ -209,13 +207,11 @@ void G4EmPenelopePhysics::ConstructProcess()
   particle = G4Electron::Electron();
 
   // multiple scattering
-  G4eMultipleScattering* msc = new G4eMultipleScattering;
   G4GoudsmitSaundersonMscModel* msc1 = new G4GoudsmitSaundersonMscModel();
   G4WentzelVIModel* msc2 = new G4WentzelVIModel();
   msc1->SetHighEnergyLimit(highEnergyLimit);
   msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
 
   G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
   G4CoulombScattering* ss = new G4CoulombScattering();
@@ -226,9 +222,10 @@ void G4EmPenelopePhysics::ConstructProcess()
       
   //Ionisation
   G4eIonisation* eioni = new G4eIonisation();
+  eioni->SetFluctModel(G4EmStandUtil::ModelOfFluctuations());
   G4PenelopeIonisationModel* theIoniPenelope = new G4PenelopeIonisationModel();
   theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);     
-  eioni->AddEmModel(0, theIoniPenelope, new G4UniversalFluctuation());
+  eioni->AddEmModel(0, theIoniPenelope);
       
   //Bremsstrahlung
   G4eBremsstrahlung* brem = new G4eBremsstrahlung();
@@ -239,7 +236,6 @@ void G4EmPenelopePhysics::ConstructProcess()
   G4ePairProduction* ee = new G4ePairProduction();
 
   // register processes
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eioni, particle);
   ph->RegisterProcess(brem, particle);
   ph->RegisterProcess(ee, particle);
@@ -249,13 +245,11 @@ void G4EmPenelopePhysics::ConstructProcess()
   particle = G4Positron::Positron();
     
   // multiple scattering
-  msc = new G4eMultipleScattering;
   msc1 = new G4GoudsmitSaundersonMscModel();
   msc2 = new G4WentzelVIModel();
   msc1->SetHighEnergyLimit(highEnergyLimit);
   msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
 
   ssm = new G4eCoulombScatteringModel(); 
   ss = new G4CoulombScattering();
@@ -266,9 +260,10 @@ void G4EmPenelopePhysics::ConstructProcess()
       
   //Ionisation
   eioni = new G4eIonisation();
+  eioni->SetFluctModel(G4EmStandUtil::ModelOfFluctuations());
   theIoniPenelope = new G4PenelopeIonisationModel();
   theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-  eioni->AddEmModel(0,theIoniPenelope, new G4UniversalFluctuation());
+  eioni->AddEmModel(0,theIoniPenelope);
 
   //Bremsstrahlung
   brem = new G4eBremsstrahlung();
@@ -283,7 +278,6 @@ void G4EmPenelopePhysics::ConstructProcess()
   anni->AddEmModel(0, theAnnPenelope);
 
   // register processes
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eioni, particle);
   ph->RegisterProcess(brem, particle);
   ph->RegisterProcess(ee, particle);
@@ -293,7 +287,7 @@ void G4EmPenelopePhysics::ConstructProcess()
   // generic ion
   particle = G4GenericIon::GenericIon();
   G4ionIonisation* ionIoni = new G4ionIonisation();
-  ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+  ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
   ph->RegisterProcess(hmsc, particle);
   ph->RegisterProcess(ionIoni, particle);
   if(nullptr != pnuc) { ph->RegisterProcess(pnuc, particle); }

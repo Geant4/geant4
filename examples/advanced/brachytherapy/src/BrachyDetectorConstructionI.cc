@@ -63,9 +63,6 @@ fCapsulePhys(nullptr),fCapsuleTipPhys1(nullptr),fCapsuleTipPhys2(nullptr), fIodi
 fSimpleIodineVisAtt(nullptr), fSimpleCapsuleVisAtt(nullptr), fSimpleCapsuleTipVisAtt(nullptr)
 {}
 
-BrachyDetectorConstructionI::~BrachyDetectorConstructionI()
-{}
-
 void BrachyDetectorConstructionI::ConstructIodine(G4VPhysicalVolume* mother)
 {
   // Model of the Bebig Isoseed I-125 brachy source
@@ -116,7 +113,7 @@ void BrachyDetectorConstructionI::ConstructIodine(G4VPhysicalVolume* mother)
                                       false,
                                       0, true);
 
-  G4RotationMatrix* rotateMatrix = new G4RotationMatrix();
+  auto rotateMatrix = new G4RotationMatrix();
   rotateMatrix -> rotateX(180.0*deg);
   fCapsuleTipPhys2 = new G4PVPlacement(rotateMatrix, 
                                       G4ThreeVector(0,0,-1.84*mm),

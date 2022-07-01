@@ -56,7 +56,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance("UI commands specific to this example.");
   
-  fDetDir = new G4UIdirectory("/testem/det/");
+  fDetDir = new G4UIdirectory("/testem/det/", false);
   fDetDir->SetGuidance("detector construction commands");
       
   fAbsMaterCmd = new G4UIcmdWithAString("/testem/det/setAbsMat",this);

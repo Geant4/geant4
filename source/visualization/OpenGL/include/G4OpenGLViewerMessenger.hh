@@ -55,7 +55,7 @@ private:
   G4UIcommand*             fpCommandFlushAt;
 
   G4UIdirectory* fpDirectorySet;
-  G4UIcmdWithAnInteger* fpCommandDisplayListLimit;
+  G4UIcmdWithoutParameter* fpCommandDisplayListLimit;
   G4UIcommand*          fpCommandExportFormat;
   G4UIcommand*          fpCommandPrintFilename;
   G4UIcmdWithAString*   fpCommandPrintMode;

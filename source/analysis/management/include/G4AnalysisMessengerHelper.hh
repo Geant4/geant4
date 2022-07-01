@@ -78,6 +78,8 @@ class G4AnalysisMessengerHelper
 
     std::unique_ptr<G4UIcommand>  CreateGetCommand(
                                         G4UImessenger* messenger) const;
+    std::unique_ptr<G4UIcommand>  CreateGetVectorCommand(
+                                        G4UImessenger* messenger) const;
 
     std::unique_ptr<G4UIcommand>  CreateSetTitleCommand(
                                         G4UImessenger* messenger) const;

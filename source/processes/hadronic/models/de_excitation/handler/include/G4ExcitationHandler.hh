@@ -187,7 +187,7 @@ inline void G4ExcitationHandler::SortSecondaryFragment(G4Fragment* frag)
   G4int A = frag->GetA_asInt();  
 
   // gamma, e-, p, n
-  if(A <= 1) { 
+  if(A <= 1 || frag->IsLongLived()) { 
     theResults.push_back(frag); 
   } else if(frag->GetExcitationEnergy() < minExcitation) {
     // cold fragments

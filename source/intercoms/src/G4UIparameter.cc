@@ -40,11 +40,6 @@
 using namespace G4UItokenNum;
 
 // --------------------------------------------------------------------
-G4UIparameter::G4UIparameter()
-{
-}
-
-// --------------------------------------------------------------------
 G4UIparameter::G4UIparameter(char theType)
 {
   parameterType        = theType;
@@ -60,9 +55,7 @@ G4UIparameter::G4UIparameter(const char* theName, char theType,
 }
 
 // --------------------------------------------------------------------
-G4UIparameter::~G4UIparameter()
-{
-}
+G4UIparameter::~G4UIparameter() = default;
 
 // --------------------------------------------------------------------
 G4bool G4UIparameter::operator==(const G4UIparameter& right) const
@@ -81,7 +74,9 @@ void G4UIparameter::List()
 {
   G4cout << G4endl << "Parameter : " << parameterName << G4endl;
   if(!parameterGuidance.empty())
+  {
     G4cout << parameterGuidance << G4endl;
+  }
   G4cout << " Parameter type  : " << parameterType << G4endl;
   if(omittable)
   {
@@ -100,9 +95,13 @@ void G4UIparameter::List()
     G4cout << " Default value   : " << defaultValue << G4endl;
   }
   if(!parameterRange.empty())
+  {
     G4cout << " Parameter range : " << parameterRange << G4endl;
+  }
   if(!parameterCandidate.empty())
+  {
     G4cout << " Candidates      : " << parameterCandidate << G4endl;
+  }
 }
 
 // --------------------------------------------------------------------
@@ -173,16 +172,22 @@ void G4UIparameter::SetDefaultUnit(const char* theDefaultUnit)
 G4int G4UIparameter::CheckNewValue(const char* newValue)
 {
   if(TypeCheck(newValue) == 0)
+  {
     return fParameterUnreadable;
+  }
   if(!parameterRange.empty())
   {
     if(RangeCheck(newValue) == 0)
+    {
       return fParameterOutOfRange;
+    }
   }
   if(!parameterCandidate.empty())
   {
     if(CandidateCheck(newValue) == 0)
+    {
       return fParameterOutOfCandidates;
+    }
   }
   return 0;  // succeeded
 }
@@ -197,7 +202,9 @@ G4int G4UIparameter::CandidateCheck(const char* newValue)
   {
     ++iToken;
     if(aToken == newValue)
+    {
       return iToken;
+    }
   }
   G4cerr << "parameter value (" << newValue
          << ") is not listed in the candidate List." << G4endl;
@@ -235,13 +242,19 @@ G4int G4UIparameter::RangeCheck(const char* newValue)
   // PrintToken();          // Print tokens (consumes all tokens)
   token  = Yylex();
   result = Expression();
-  if(paramERR == 1) return 0;
+  if(paramERR == 1)
+  {
+    return 0;
+  }
   if(result.type != CONSTINT)
   {
     G4cerr << "Illegal Expression in parameter range." << G4endl;
     return 0;
   }
-  if(result.I) return 1;
+  if(result.I != 0)
+  {
+    return 1;
+  }
   G4cerr << "parameter out of range: " << parameterRange << G4endl;
   return 0;
 }
@@ -283,7 +296,9 @@ G4int G4UIparameter::TypeCheck(const char* newValue)
          newValueString == "1" || newValueString == "0" ||
          newValueString == "T" || newValueString == "F" ||
          newValueString == "TRUE" || newValueString == "FALSE")
+      {
         return 1;
+      }
       else
       {
         G4cerr << newValue << ": bool expected." << G4endl;
@@ -304,9 +319,9 @@ G4int G4UIparameter::IsInt(const char* buf,
   {
     ++p;
   }
-  if(isdigit((G4int)(*p)))
+  if(isdigit((G4int) (*p)) != 0)
   {
-    while(isdigit((G4int)(*p)))
+    while(isdigit((G4int) (*p)) != 0)
     {
       ++p;
       ++length;
@@ -336,10 +351,14 @@ G4int G4UIparameter::IsInt(const char* buf,
 G4int G4UIparameter::ExpectExponent(const char* str)  // used only by IsDouble()
 {
   G4int maxExplength;
-  if(IsInt(str, maxExplength = 7))
+  if(IsInt(str, maxExplength = 7) != 0)
+  {
     return 1;
+  }
   else
+  {
     return 0;
+  }
 }
 
 // --------------------------------------------------------------------
@@ -352,9 +371,9 @@ G4int G4UIparameter::IsDouble(
     case '+':
     case '-':
       ++p;
-      if(isdigit(*p))
+      if(isdigit(*p) != 0)
       {
-        while(isdigit((G4int)(*p)))
+        while(isdigit((G4int) (*p)) != 0)
         {
           ++p;
         }
@@ -368,22 +387,32 @@ G4int G4UIparameter::IsDouble(
           case '.':
             ++p;
             if(*p == '\0')
-              return 1;
-            if(*p == 'e' || *p == 'E')
-              return ExpectExponent(++p);
-            if(isdigit(*p))
             {
-              while(isdigit((G4int)(*p)))
+              return 1;
+            }
+            if(*p == 'e' || *p == 'E')
+            {
+              return ExpectExponent(++p);
+            }
+            if(isdigit(*p) != 0)
+            {
+              while(isdigit((G4int) (*p)) != 0)
               {
                 ++p;
               }
               if(*p == '\0')
+              {
                 return 1;
+              }
               if(*p == 'e' || *p == 'E')
+              {
                 return ExpectExponent(++p);
+              }
             }
             else
+            {
               return 0;
+            }
             break;
           default:
             return 0;
@@ -392,61 +421,81 @@ G4int G4UIparameter::IsDouble(
       if(*p == '.')
       {
         ++p;
-        if(isdigit(*p))
+        if(isdigit(*p) != 0)
         {
-          while(isdigit((G4int)(*p)))
+          while(isdigit((G4int) (*p)) != 0)
           {
             ++p;
           }
           if(*p == '\0')
+          {
             return 1;
+          }
           if(*p == 'e' || *p == 'E')
+          {
             return ExpectExponent(++p);
+          }
         }
       }
       break;
     case '.':
       ++p;
-      if(isdigit(*p))
+      if(isdigit(*p) != 0)
       {
-        while(isdigit((G4int)(*p)))
+        while(isdigit((G4int) (*p)) != 0)
         {
           ++p;
         }
         if(*p == '\0')
+        {
           return 1;
+        }
         if(*p == 'e' || *p == 'E')
+        {
           return ExpectExponent(++p);
+        }
       }
       break;
     default:  // digit is expected
-      if(isdigit(*p))
+      if(isdigit(*p) != 0)
       {
-        while(isdigit((G4int)(*p)))
+        while(isdigit((G4int) (*p)) != 0)
         {
           ++p;
         }
         if(*p == '\0')
+        {
           return 1;
+        }
         if(*p == 'e' || *p == 'E')
+        {
           return ExpectExponent(++p);
+        }
         if(*p == '.')
         {
           ++p;
           if(*p == '\0')
-            return 1;
-          if(*p == 'e' || *p == 'E')
-            return ExpectExponent(++p);
-          if(isdigit(*p))
           {
-            while(isdigit((G4int)(*p)))
+            return 1;
+          }
+          if(*p == 'e' || *p == 'E')
+          {
+            return ExpectExponent(++p);
+          }
+          if(isdigit(*p) != 0)
+          {
+            while(isdigit((G4int) (*p)) != 0)
             {
               ++p;
             }
             if(*p == '\0')
+            {
               return 1;
+            }
             if(*p == 'e' || *p == 'E')
+            {
               return ExpectExponent(++p);
+            }
           }
         }
       }
@@ -456,7 +505,7 @@ G4int G4UIparameter::IsDouble(
 
 // ------------------ syntax node functions  ------------------
 
-yystype G4UIparameter::Expression(void)
+yystype G4UIparameter::Expression()
 {
   yystype result;
 #ifdef DEBUG
@@ -467,13 +516,15 @@ yystype G4UIparameter::Expression(void)
 }
 
 // --------------------------------------------------------------------
-yystype G4UIparameter::LogicalORExpression(void)
+yystype G4UIparameter::LogicalORExpression()
 {
   yystype result;
   yystype p;
   p = LogicalANDExpression();
   if(token != LOGICALOR)
+  {
     return p;
+  }
   if(p.type == CONSTSTRING || p.type == IDENTIFIER)
   {
     G4cerr << "Parameter range: illegal type at '||'" << G4endl;
@@ -496,11 +547,11 @@ yystype G4UIparameter::LogicalORExpression(void)
         result.type = CONSTINT;
         break;
       case CONSTLONG:
-        result.I += (p.L != 0L);
+        result.I += static_cast<int>(p.L != 0L);
         result.type = CONSTINT;
         break;
       case CONSTDOUBLE:
-        result.I += (p.D != 0.0);
+        result.I += static_cast<int>(p.D != 0.0);
         result.type = CONSTINT;
         break;
       default:
@@ -512,13 +563,15 @@ yystype G4UIparameter::LogicalORExpression(void)
 }
 
 // --------------------------------------------------------------------
-yystype G4UIparameter::LogicalANDExpression(void)
+yystype G4UIparameter::LogicalANDExpression()
 {
   yystype result;
   yystype p;
   p = EqualityExpression();
   if(token != LOGICALAND)
+  {
     return p;
+  }
   if(p.type == CONSTSTRING || p.type == IDENTIFIER)
   {
     G4cerr << "Parameter range: illegal type at '&&'" << G4endl;
@@ -541,11 +594,11 @@ yystype G4UIparameter::LogicalANDExpression(void)
         result.type = CONSTINT;
         break;
       case CONSTLONG:
-        result.I *= (p.L != 0L);
+        result.I *= static_cast<int>(p.L != 0L);
         result.type = CONSTINT;
         break;
       case CONSTDOUBLE:
-        result.I *= (p.D != 0.0);
+        result.I *= static_cast<int>(p.D != 0.0);
         result.type = CONSTINT;
         break;
       default:
@@ -557,7 +610,7 @@ yystype G4UIparameter::LogicalANDExpression(void)
 }
 
 // --------------------------------------------------------------------
-yystype G4UIparameter::EqualityExpression(void)
+yystype G4UIparameter::EqualityExpression()
 {
   yystype arg1, arg2;
   G4int operat;
@@ -590,7 +643,7 @@ yystype G4UIparameter::EqualityExpression(void)
 }
 
 // --------------------------------------------------------------------
-yystype G4UIparameter::RelationalExpression(void)
+yystype G4UIparameter::RelationalExpression()
 {
   yystype arg1, arg2;
   G4int operat;
@@ -622,12 +675,14 @@ yystype G4UIparameter::RelationalExpression(void)
 }
 
 // --------------------------------------------------------------------
-yystype G4UIparameter::AdditiveExpression(void)
+yystype G4UIparameter::AdditiveExpression()
 {
   yystype result;
   result = MultiplicativeExpression();
   if(token != '+' && token != '-')
+  {
     return result;
+  }
   G4cerr << "Parameter range: operator " << (char) token << " is not supported."
          << G4endl;
   paramERR = 1;
@@ -635,12 +690,14 @@ yystype G4UIparameter::AdditiveExpression(void)
 }
 
 // --------------------------------------------------------------------
-yystype G4UIparameter::MultiplicativeExpression(void)
+yystype G4UIparameter::MultiplicativeExpression()
 {
   yystype result;
   result = UnaryExpression();
   if(token != '*' && token != '/' && token != '%')
+  {
     return result;
+  }
   G4cerr << "Parameter range: operator " << (char) token << " is not supported."
          << G4endl;
   paramERR = 1;
@@ -648,7 +705,7 @@ yystype G4UIparameter::MultiplicativeExpression(void)
 }
 
 // --------------------------------------------------------------------
-yystype G4UIparameter::UnaryExpression(void)
+yystype G4UIparameter::UnaryExpression()
 {
   yystype result;
   yystype p;
@@ -694,7 +751,7 @@ yystype G4UIparameter::UnaryExpression(void)
 }
 
 // --------------------------------------------------------------------
-yystype G4UIparameter::PrimaryExpression(void)
+yystype G4UIparameter::PrimaryExpression()
 {
   yystype result;
 #ifdef DEBUG
@@ -740,7 +797,7 @@ yystype G4UIparameter::PrimaryExpression(void)
 
 //---------------- semantic routines ---------------------------------
 
-G4int G4UIparameter::Eval2(yystype arg1, G4int op, yystype arg2)
+G4int G4UIparameter::Eval2(const yystype& arg1, G4int op, const yystype& arg2)
 {
   if((arg1.type != IDENTIFIER) && (arg2.type != IDENTIFIER))
   {
@@ -847,27 +904,27 @@ G4int G4UIparameter::CompareInt(G4int arg1, G4int op, G4int arg2)
   switch(op)
   {
     case GT:
-      result = (arg1 > arg2);
+      result = static_cast<G4int>(arg1 > arg2);
       opr    = ">";
       break;
     case GE:
-      result = (arg1 >= arg2);
+      result = static_cast<G4int>(arg1 >= arg2);
       opr    = ">=";
       break;
     case LT:
-      result = (arg1 < arg2);
+      result = static_cast<G4int>(arg1 < arg2);
       opr    = "<";
       break;
     case LE:
-      result = (arg1 <= arg2);
+      result = static_cast<G4int>(arg1 <= arg2);
       opr    = "<=";
       break;
     case EQ:
-      result = (arg1 == arg2);
+      result = static_cast<G4int>(arg1 == arg2);
       opr    = "==";
       break;
     case NE:
-      result = (arg1 != arg2);
+      result = static_cast<G4int>(arg1 != arg2);
       opr    = "!=";
       break;
     default:
@@ -889,27 +946,27 @@ G4int G4UIparameter::CompareLong(G4long arg1, G4int op, G4long arg2)
   switch(op)
   {
     case GT:
-      result = (arg1 > arg2);
+      result = static_cast<G4int>(arg1 > arg2);
       opr    = ">";
       break;
     case GE:
-      result = (arg1 >= arg2);
+      result = static_cast<G4int>(arg1 >= arg2);
       opr    = ">=";
       break;
     case LT:
-      result = (arg1 < arg2);
+      result = static_cast<G4int>(arg1 < arg2);
       opr    = "<";
       break;
     case LE:
-      result = (arg1 <= arg2);
+      result = static_cast<G4int>(arg1 <= arg2);
       opr    = "<=";
       break;
     case EQ:
-      result = (arg1 == arg2);
+      result = static_cast<G4int>(arg1 == arg2);
       opr    = "==";
       break;
     case NE:
-      result = (arg1 != arg2);
+      result = static_cast<G4int>(arg1 != arg2);
       opr    = "!=";
       break;
     default:
@@ -931,27 +988,27 @@ G4int G4UIparameter::CompareDouble(G4double arg1, G4int op, G4double arg2)
   switch(op)
   {
     case GT:
-      result = (arg1 > arg2);
+      result = static_cast<G4int>(arg1 > arg2);
       opr    = ">";
       break;
     case GE:
-      result = (arg1 >= arg2);
+      result = static_cast<G4int>(arg1 >= arg2);
       opr    = ">=";
       break;
     case LT:
-      result = (arg1 < arg2);
+      result = static_cast<G4int>(arg1 < arg2);
       opr    = "<";
       break;
     case LE:
-      result = (arg1 <= arg2);
+      result = static_cast<G4int>(arg1 <= arg2);
       opr    = "<=";
       break;
     case EQ:
-      result = (arg1 == arg2);
+      result = static_cast<G4int>(arg1 == arg2);
       opr    = "==";
       break;
     case NE:
-      result = (arg1 != arg2);
+      result = static_cast<G4int>(arg1 != arg2);
       opr    = "!=";
       break;
     default:
@@ -973,27 +1030,31 @@ tokenNum G4UIparameter::Yylex()  // reads input and returns token number KR486
   G4String buf;
 
   while((c = G4UIpGetc()) == ' ' || c == '\t' || c == '\n')
+  {
     ;
+  }
   if(c == EOF)
+  {
     return (tokenNum) EOF;  // KR488
+  }
   buf = "";
-  if(isdigit(c) || c == '.')
+  if((isdigit(c) != 0) || c == '.')
   {  // I or D
     do
     {
       buf += (unsigned char) c;
       c = G4UIpGetc();
-    } while(c == '.' || isdigit(c) || c == 'e' || c == 'E' || c == '+' ||
+    } while(c == '.' || (isdigit(c) != 0) || c == 'e' || c == 'E' || c == '+' ||
             c == '-');
     G4UIpUngetc(c);
     const char* t = buf;
     std::istringstream is(t);
-    if(IsInt(buf.data(), 20))
+    if(IsInt(buf.data(), 20) != 0)
     {
       is >> yylval.I;
       return CONSTINT;
     }
-    else if(IsDouble(buf.data()))
+    else if(IsDouble(buf.data()) != 0)
     {
       is >> yylval.D;
       return CONSTDOUBLE;
@@ -1004,12 +1065,12 @@ tokenNum G4UIparameter::Yylex()  // reads input and returns token number KR486
     }
   }
   buf = "";
-  if(isalpha(c) || c == '_')
+  if((isalpha(c) != 0) || c == '_')
   {  // IDENTIFIER
     do
     {
       buf += (unsigned char) c;
-    } while((c = G4UIpGetc()) != EOF && (isalnum(c) || c == '_'));
+    } while((c = G4UIpGetc()) != EOF && ((isalnum(c) != 0) || c == '_'));
     G4UIpUngetc(c);
     if(buf == parameterName)
     {
@@ -1046,7 +1107,9 @@ G4int G4UIparameter::Follow(G4int expect, G4int ifyes, G4int ifno)
 {
   G4int c = G4UIpGetc();
   if(c == expect)
+  {
     return ifyes;
+  }
   G4UIpUngetc(c);
   return ifno;
 }
@@ -1057,16 +1120,22 @@ G4int G4UIparameter::G4UIpGetc()
 {  // emulation of getc()
   G4int length = parameterRange.length();
   if(bp < length)
+  {
     return parameterRange[bp++];
+  }
   else
+  {
     return EOF;
+  }
 }
 
 // --------------------------------------------------------------------
 G4int G4UIparameter::G4UIpUngetc(G4int c)
 {  // emulation of ungetc()
   if(c < 0)
+  {
     return -1;
+  }
   if(bp > 0 && c == parameterRange[bp - 1])
   {
     --bp;

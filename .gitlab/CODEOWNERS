@@ -10,10 +10,10 @@
 /source/global/ @gcosmo @bmorgan @gunter
 
 # Run, Event, and Detector Response
-/source/run/              @asaim @jmadsen
-/source/event/            @asaim @jmadsen
-/source/digits_hits/      @asaim @jmadsen
-/source/processes/scoring @asaim @jmadsen
+/source/run/              @asaim @bmorgan
+/source/event/            @asaim @bmorgan
+/source/digits_hits/      @asaim @bmorgan
+/source/processes/scoring @asaim @bmorgan
 
 # Tracking
 /source/tracking/ @tsasaki @shokada @asaim

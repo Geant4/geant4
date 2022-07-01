@@ -335,7 +335,7 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
        if ( rest == "/CrossSection" )
        {
           G4String reac = base;
-          G4String dir = std::getenv("G4NEUTRONHPDATA"); 
+          G4String dir = G4FindDataDir("G4NEUTRONHPDATA");
           reac.erase ( 0 , dir.length() );
           if ( G4ParticleHPManager::GetInstance()->GetSkipMissingIsotopes() && !( Z == result.GetZ() && result.IsThisNaturalAbundance() ) )
           {

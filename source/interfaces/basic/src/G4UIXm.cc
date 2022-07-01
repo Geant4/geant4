@@ -364,17 +364,16 @@ void G4UIXm::CommandEnteredCallback (
 
   XmString cps  = ((XmCommandCallbackStruct*)a_data)->value;
   char*    ss = XmConvertCompoundStringToString(cps,0);
-  G4String command (ss);
+  G4String scommand (ss);
   XtFree   (ss);
 
   if(This->fHelp==true) {
     exitHelp = true;
-    This->fHelp = ConvertStringToInt(command.data(),This->fHelpChoice);
+    This->fHelp = ConvertStringToInt(scommand.data(),This->fHelpChoice);
   } else {
-    This->ApplyShellCommand (command,exitSession,exitPause);
+    This->ApplyShellCommand (scommand,exitSession,exitPause);
   }
 
-  //a_widget     = NULL;  Not used (1st argument).  Comment out to avoid compiler warnings. (JA)
   a_tag    = NULL;
 }
 /***************************************************************************/

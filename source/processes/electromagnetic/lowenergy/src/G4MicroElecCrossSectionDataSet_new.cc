@@ -462,8 +462,7 @@ G4bool G4MicroElecCrossSectionDataSet_new::SaveData(const G4String & argFileName
 
 G4String G4MicroElecCrossSectionDataSet_new::FullFileName(const G4String& argFileName) const
 {
-  
-  char *path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     {
       G4Exception("G4MicroElecCrossSectionDataSet_new::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");

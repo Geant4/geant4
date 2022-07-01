@@ -329,9 +329,9 @@ namespace tools {
 namespace sg {
 
 inline bool scolor(const colorf& a_col,std::string& a_s){
-  char s[256];
-  snpf(s,sizeof(s),"%g %g %g",a_col[0],a_col[1],a_col[2]);
-  a_s = s;
+  char _s[256];
+  snpf(_s,sizeof(_s),"%g %g %g",a_col[0],a_col[1],a_col[2]);
+  a_s = _s;
   return true;
 }
 

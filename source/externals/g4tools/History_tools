@@ -1,3 +1,55 @@
+6.0.1:
+- toolx/X11/base_session: show_window(): check that the window is not already mapped. (Else it hangs in the XIfEvent).
+- tools/version: pass to 6.0.1.
+
+
+6.0.0: toolx directory and namespace.
+- have code related to "externals" under toolx directory and namespaced with toolx. It concerns code related to Qt, Windows, X11, Xt, OpenGL, hdf5, expat, mpi, zlib.
+- tools/version: have 6.0.0.
+
+5.7.1: patches for Coverity.
+- gl2ps: gl2psPrintPostScriptPixmap(): pass greyscale, nbit in arguments to avoid a "Logically dead code" issue.
+- gl2ps: gl2psPDFgroupListInit(): have a gl2psPDFgroupObjectInit(&gro) to avoid an "Uninitialized pointer read" issue.
+- gl2ps: remove commented out code about a "class gl2ps" at end.
+- sg/text: corrections in update_sg() about "Copy-paste error". 
+
+5.7.0: have a thread safe gl2ps.
+- gl2ps, gl2ps_def.h, sg/gl2ps_action: have a thread safe version of gl2ps-1.4.2.
+- gl2ps_begin.icc, gl2ps_end.icc: remove.
+- tools/version: have 5.7.0.
+
+5.6.3: intel: rename some local variables to avoid the 'hidden variable' warnings.
+- charp_out,long_out,out_error,pointer,sprintf,typedefs,
+  raxml_out,stype,colorf,histo/base_histo,histo/dps,rtausmeui,smatch,tess_contour,
+  columns,get_env,hdf5/T_tools,path,rcsv_ntuple,srep,strip,value,value.icc,
+  args,s2time,tos,waxml/histos,waxml/ntuple,buf2lines,spline,tosu,xml/aidas,
+  lina/MATCOM,lina/vec2,lina/vec3,lina/vec4,lina/geom3,
+  xml/aidas,xml/styles,xml/loader,xml/tree,xml/wrap_viewplot_fonts_google_style
+  mpi/world,mpi/wrmpi,
+  sg/path,sg/style_parser,sg/base_tex,sg/group,sg/node,sg/plotter,sg/f2plot,sg/h2plot,
+  sg/infos_box,sg/style_colormap,
+  rroot/base_leaf,rroot/branch,rroot/buffer,rroot/dummy,
+  rroot/info,rroot/named,rroot/rbuf,
+  rroot/branch_element,rroot/branch_object,rroot/buffer,
+  rroot/graph,rroot/info,
+  rroot/leaf,rroot/matrix,rroot/obj_array,rroot/obj_list,rroot/stl_vector,
+  rroot/streamers rroot/tree rroot/tree_index rroot/vector3,
+  wroot/date,wroot/element,sg/senum,
+  wroot/mpi_ntuple_column_wise,wroot/mpi_ntuple_row_wise,
+  Windows/glarea: rename some local variables (mainly "s" that clashes with CLHEP::s).
+- tools/version: pass to 5.6.3.
+
+5.6.2:
+- tools/version: pass to 5.6.2.
+- tools/gl2ps: in tools_gl2psFindRoot(), have a '*root = 0" initialisation before the first in "if()" return.
+- tools/gl2ps: in tools_gl2psBuildBspTree(), initialize *prim to NULL.
+
+5.6.1:
+- tools/version: pass to 5.6.1
+- tools/typedefs: static const char s[] => static const char s_v[] to quiet "hides variable" warnings with intel compiler.
+- tools/sg/text_hershey: in decode_PAW(), font_type font => font_type hershey_font to quiet "hides variable" warnings with intel compiler.
+- tools/rroot/rall: in find_dir(), have a "delete tdir;" in the "if(!tdir->stream(b)) {}". Seen by Coverity.
+
 5.6.0:
 - tools/tokenize: to help parsing some Geant4 commands "new value".
 - tools/sg/event_dispatcher,bcbk,ecbk,cbks: classes to have a mechanism in G4/G4ToolsSGSceneHandler

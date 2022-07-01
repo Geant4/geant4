@@ -29,7 +29,7 @@
 
 #include "G4ToolsSGViewer.hh"
 
-#include <tools/X11/sg_viewer>
+#include <toolx/X11/sg_viewer>
 
 G4ToolsSGX11GLES::G4ToolsSGX11GLES():
 parent
@@ -47,7 +47,7 @@ G4ToolsSGX11GLES::~G4ToolsSGX11GLES() {
 
 void G4ToolsSGX11GLES::Initialise() {
   if(fSGSession) return; //done.
-  fSGSession = new tools::X11::session(G4cout);
+  fSGSession = new toolx::X11::session(G4cout);
   if(!fSGSession->is_valid()) {
     G4cerr << "G4ToolsSGX11GLES::Initialise : session::is_valid() failed." << G4endl;
     delete fSGSession;
@@ -65,7 +65,7 @@ G4VViewer* G4ToolsSGX11GLES::CreateViewer(G4VSceneHandler& a_scene,const G4Strin
   if(!fSGSession) Initialise();
   if(!fSGSession) return nullptr;
   G4VViewer* pView =
-    new G4ToolsSGViewer<tools::X11::session,tools::X11::sg_viewer>
+    new G4ToolsSGViewer<toolx::X11::session,toolx::X11::sg_viewer>
     (*fSGSession,(G4ToolsSGSceneHandler&)a_scene,a_name);
   if (pView) {
     if (pView->GetViewId() < 0) {

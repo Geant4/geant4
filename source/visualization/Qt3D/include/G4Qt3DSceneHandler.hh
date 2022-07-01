@@ -65,6 +65,7 @@ public:
   void AddPrimitive(const G4Square&);
   void AddPrimitive(const G4Polyhedron&);
 
+  using G4VSceneHandler::AddCompound;
   void AddCompound(const G4Mesh&);
 
   void ClearStore ();

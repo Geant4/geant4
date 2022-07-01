@@ -45,8 +45,8 @@ class G4VPrimaryGenerator
 {
   public:
 
-    G4VPrimaryGenerator();
-    virtual ~G4VPrimaryGenerator();
+    G4VPrimaryGenerator() = default;
+    virtual ~G4VPrimaryGenerator() = default;
       // Constructor and destructor
 
     static G4bool CheckVertexInsideWorld(const G4ThreeVector& pos);

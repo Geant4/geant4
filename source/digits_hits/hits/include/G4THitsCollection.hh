@@ -88,22 +88,16 @@ class G4THitsCollection : public G4HitsCollection
  public:  // with description
   inline T* operator[](size_t i) const
   {
-    if(!anHCAllocator_G4MT_TLS_())
-      anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
     return (*((std::vector<T*>*) theCollection))[i];
   }
   //  Returns a pointer to a concrete hit object.
   inline std::vector<T*>* GetVector() const
   {
-    if(!anHCAllocator_G4MT_TLS_())
-      anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
     return (std::vector<T*>*) theCollection;
   }
   //  Returns a collection vector.
   inline size_t insert(T* aHit)
   {
-    if(!anHCAllocator_G4MT_TLS_())
-      anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
     std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
     theHitsCollection->push_back(aHit);
     return theHitsCollection->size();
@@ -112,8 +106,6 @@ class G4THitsCollection : public G4HitsCollection
   // collection is returned.
   inline size_t entries() const
   {
-    if(!anHCAllocator_G4MT_TLS_())
-      anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
     std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
     return theHitsCollection->size();
   }
@@ -122,14 +114,10 @@ class G4THitsCollection : public G4HitsCollection
  public:
   virtual G4VHit* GetHit(size_t i) const
   {
-    if(!anHCAllocator_G4MT_TLS_())
-      anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
     return (*((std::vector<T*>*) theCollection))[i];
   }
   virtual size_t GetSize() const
   {
-    if(!anHCAllocator_G4MT_TLS_())
-      anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
     return ((std::vector<T*>*) theCollection)->size();
   }
 };
@@ -137,34 +125,22 @@ class G4THitsCollection : public G4HitsCollection
 template <class T>
 inline void* G4THitsCollection<T>::operator new(size_t)
 {
-  if(!anHCAllocator_G4MT_TLS_())
+  if(anHCAllocator_G4MT_TLS_() == nullptr)
+  {
     anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
-  G4Allocator<G4HitsCollection>& anHCAllocator = *anHCAllocator_G4MT_TLS_();
-  ;
-  ;
-  ;
-  void* anHC;
-  anHC = (void*) anHCAllocator.MallocSingle();
-  return anHC;
+  }
+  return (void*) anHCAllocator_G4MT_TLS_()->MallocSingle();
 }
 
 template <class T>
 inline void G4THitsCollection<T>::operator delete(void* anHC)
 {
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
-  G4Allocator<G4HitsCollection>& anHCAllocator = *anHCAllocator_G4MT_TLS_();
-  ;
-  ;
-  ;
-  anHCAllocator.FreeSingle((G4HitsCollection*) anHC);
+  anHCAllocator_G4MT_TLS_()->FreeSingle((G4HitsCollection*) anHC);
 }
 
 template <class T>
 G4THitsCollection<T>::G4THitsCollection()
 {
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
   std::vector<T*>* theHitsCollection = new std::vector<T*>;
   theCollection                      = (void*) theHitsCollection;
 }
@@ -173,8 +149,6 @@ template <class T>
 G4THitsCollection<T>::G4THitsCollection(G4String detName, G4String colNam)
   : G4HitsCollection(detName, colNam)
 {
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
   std::vector<T*>* theHitsCollection = new std::vector<T*>;
   theCollection                      = (void*) theHitsCollection;
 }
@@ -182,8 +156,6 @@ G4THitsCollection<T>::G4THitsCollection(G4String detName, G4String colNam)
 template <class T>
 G4THitsCollection<T>::~G4THitsCollection()
 {
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
   std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
   // theHitsCollection->clearAndDestroy();
   for(size_t i = 0; i < theHitsCollection->size(); ++i)
@@ -197,16 +169,12 @@ G4THitsCollection<T>::~G4THitsCollection()
 template <class T>
 G4bool G4THitsCollection<T>::operator==(const G4THitsCollection<T>& right) const
 {
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
   return (collectionName == right.collectionName);
 }
 
 template <class T>
 void G4THitsCollection<T>::DrawAllHits()
 {
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
   std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
   size_t n                           = theHitsCollection->size();
   for(size_t i = 0; i < n; ++i)
@@ -218,8 +186,6 @@ void G4THitsCollection<T>::DrawAllHits()
 template <class T>
 void G4THitsCollection<T>::PrintAllHits()
 {
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
   std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
   size_t n                           = theHitsCollection->size();
   for(size_t i = 0; i < n; ++i)

@@ -66,34 +66,33 @@ class G4AnyType
 
     /** Constructors */
 
-    G4AnyType()
-    {}
+   G4AnyType() = default;
 
-    template <typename ValueType>
-    G4AnyType(ValueType& value)
-      : fContent(new Ref<ValueType>(value))
-    {}
+   template <typename ValueType>
+   G4AnyType(ValueType& value)
+     : fContent(new Ref<ValueType>(value))
+   {}
 
-    /** Copy Constructor */
+   /** Copy Constructor */
 
-    G4AnyType(const G4AnyType& other)
-      : fContent(other.fContent ? other.fContent->Clone() : 0)
-    {}
+   G4AnyType(const G4AnyType& other)
+     : fContent(other.fContent != nullptr ? other.fContent->Clone() : nullptr)
+   {}
 
-    /** Destructor */
+   /** Destructor */
 
-    ~G4AnyType() { delete fContent; }
+   ~G4AnyType() { delete fContent; }
 
-    /** bool operator */
+   /** bool operator */
 
-    operator bool() { return !Empty(); }
+   operator bool() { return !Empty(); }
 
-    /** Modifiers */
+   /** Modifiers */
 
-    G4AnyType& Swap(G4AnyType& rhs)
-    {
-      std::swap(fContent, rhs.fContent);
-      return *this;
+   G4AnyType& Swap(G4AnyType& rhs)
+   {
+     std::swap(fContent, rhs.fContent);
+     return *this;
     }
 
     template <typename ValueType>
@@ -111,16 +110,18 @@ class G4AnyType
 
     /** Queries */
 
-    G4bool Empty() const { return !fContent; }
+    G4bool Empty() const { return fContent == nullptr; }
 
     const std::type_info& TypeInfo() const
     {
-      return fContent ? fContent->TypeInfo() : typeid(void);
+      return fContent != nullptr ? fContent->TypeInfo() : typeid(void);
     }
 
     /** Address */
 
-    void* Address() const { return fContent ? fContent->Address() : 0; }
+    void* Address() const {
+      return fContent != nullptr ? fContent->Address() : nullptr;
+    }
 
     /** String conversions */
 
@@ -133,26 +134,25 @@ class G4AnyType
     class Placeholder
     {
       public:
-   
-        Placeholder() {}
+       Placeholder() = default;
 
-        virtual ~Placeholder() {}
+       virtual ~Placeholder() = default;
 
-        /** Queries */
+       /** Queries */
 
-        virtual const std::type_info& TypeInfo() const = 0;
+       virtual const std::type_info& TypeInfo() const = 0;
 
-        virtual Placeholder* Clone() const = 0;
+       virtual Placeholder* Clone() const = 0;
 
-        virtual void* Address() const = 0;
+       virtual void* Address() const = 0;
 
-        /** ToString */
+       /** ToString */
 
-        virtual std::string ToString() const = 0;
+       virtual std::string ToString() const = 0;
 
-        /** FromString */
+       /** FromString */
 
-        virtual void FromString(const std::string& val) = 0;
+       virtual void FromString(const std::string& val) = 0;
     };
 
     template <typename ValueType>
@@ -168,22 +168,22 @@ class G4AnyType
 
         /** Query */
 
-        virtual const std::type_info& TypeInfo() const
+        const std::type_info& TypeInfo() const override
         {
           return typeid(ValueType);
         }
 
         /** Clone */
 
-        virtual Placeholder* Clone() const { return new Ref(fRef); }
+        Placeholder* Clone() const override { return new Ref(fRef); }
 
         /** Address */
 
-        virtual void* Address() const { return (void*) (&fRef); }
+        void* Address() const override { return (void*) (&fRef); }
 
         /** ToString */
 
-        virtual std::string ToString() const
+        std::string ToString() const override
         {
           std::stringstream ss;
           ss << fRef;
@@ -192,7 +192,7 @@ class G4AnyType
 
         /** FromString */
 
-        virtual void FromString(const std::string& val)
+        void FromString(const std::string& val) override
         {
           std::stringstream ss(val);
           ss >> fRef;
@@ -223,9 +223,13 @@ template <>
 inline void G4AnyType::Ref<G4String>::FromString(const std::string& val)
 {
   if(val[0] == '"')
+  {
     fRef = val.substr(1, val.size() - 2);
+  }
   else
+  {
     fRef = val;
+  }
 }
 
 template <>
@@ -241,12 +245,11 @@ inline void G4AnyType::Ref<G4ThreeVector>::FromString(const std::string& val)
 class G4BadAnyCast : public std::bad_cast
 {
   public:
+   G4BadAnyCast() = default;
 
-    G4BadAnyCast() {}
-
-    virtual const char* what() const throw()
-    {
-      return "G4BadAnyCast: failed conversion using any_cast";
+   const char* what() const throw() override
+   {
+     return "G4BadAnyCast: failed conversion using any_cast";
     }
 };
 

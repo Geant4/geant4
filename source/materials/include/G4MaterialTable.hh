@@ -41,6 +41,6 @@
 
 class G4Material;
 
-typedef std::vector<G4Material*> G4MaterialTable;
+using G4MaterialTable = std::vector<G4Material*>;
 
 #endif

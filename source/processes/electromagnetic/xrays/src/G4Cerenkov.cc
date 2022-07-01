@@ -337,7 +337,7 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
     photonPolarization.rotateUz(p0);
 
     // Generate a new photon:
-    G4DynamicParticle* aCerenkovPhoton =
+    auto aCerenkovPhoton =
       new G4DynamicParticle(G4OpticalPhoton::OpticalPhoton(), photonMomentum);
 
     aCerenkovPhoton->SetPolarization(photonPolarization);

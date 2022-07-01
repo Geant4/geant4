@@ -39,6 +39,12 @@
 #include "G4DNARuddAngle.hh"
 #include "G4DeltaAngle.hh"
 #include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
+#include "G4Alpha.hh"
+
+static G4Pow * gpow = G4Pow::GetInstance();
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -130,9 +136,9 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     G4String fileAlphaPlusPlus("dna/sigma_ionisation_alphaplusplus_rudd");
     G4String fileAlphaPlus("dna/sigma_ionisation_alphaplus_rudd");
     G4String fileHelium("dna/sigma_ionisation_he_rudd");
-    G4String fileLithium("dna/sigma_ionisation_li_rudd");
-    G4String fileBeryllium("dna/sigma_ionisation_be_rudd");
-    G4String fileBoron("dna/sigma_ionisation_b_rudd");
+    //G4String fileLithium("dna/sigma_ionisation_li_rudd");
+    //G4String fileBeryllium("dna/sigma_ionisation_be_rudd");
+    //G4String fileBoron("dna/sigma_ionisation_b_rudd");
     G4String fileCarbon("dna/sigma_ionisation_c_rudd");
     G4String fileNitrogen("dna/sigma_ionisation_n_rudd");
     G4String fileOxygen("dna/sigma_ionisation_o_rudd");
@@ -141,35 +147,29 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
 
     G4DNAGenericIonsManager *instance;
     instance = G4DNAGenericIonsManager::Instance();
-    G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
-    G4ParticleDefinition* hydrogenDef = instance->GetIon("hydrogen");
-    G4ParticleDefinition* alphaPlusPlusDef = instance->GetIon("alpha++");
-    G4ParticleDefinition* alphaPlusDef = instance->GetIon("alpha+");
-    G4ParticleDefinition* heliumDef = instance->GetIon("helium");
+    protonDef = G4Proton::ProtonDefinition();
+    hydrogenDef = instance->GetIon("hydrogen");
+    alphaPlusPlusDef = G4Alpha::Alpha();
+    alphaPlusDef = instance->GetIon("alpha+");
+    heliumDef = instance->GetIon("helium");
 
-    //G4ParticleDefinition* carbonDef = instance->GetIon("carbon");
-    //G4ParticleDefinition* nitrogenDef = instance->GetIon("nitrogen");
-    //G4ParticleDefinition* oxygenDef = instance->GetIon("oxygen");
-    //G4ParticleDefinition* siliconDef = instance->GetIon("silicon");
-    //G4ParticleDefinition* ironDef = instance->GetIon("iron");
-    G4ParticleDefinition* lithiumDef =  G4IonTable::GetIonTable()->GetIon(3,7);
-    G4ParticleDefinition* berylliumDef =  G4IonTable::GetIonTable()->GetIon(4,9);
-    G4ParticleDefinition* boronDef =  G4IonTable::GetIonTable()->GetIon(5,11);
-    G4ParticleDefinition* carbonDef =  G4IonTable::GetIonTable()->GetIon(6,12);
-    G4ParticleDefinition* nitrogenDef =  G4IonTable::GetIonTable()->GetIon(7,14);
-    G4ParticleDefinition* oxygenDef =  G4IonTable::GetIonTable()->GetIon(8,16);
-    G4ParticleDefinition* siliconDef = G4IonTable::GetIonTable()->GetIon(14,28);
-    G4ParticleDefinition* ironDef =  G4IonTable::GetIonTable()->GetIon(26,56);
-    //
+    carbonDef = instance->GetIon("carbon");
+    nitrogenDef = instance->GetIon("nitrogen");
+    oxygenDef = instance->GetIon("oxygen");
+    siliconDef = instance->GetIon("silicon");
+    ironDef = instance->GetIon("iron");
+    //lithiumDef =  G4IonTable::GetIonTable()->GetIon(3,7);
+    //berylliumDef =  G4IonTable::GetIonTable()->GetIon(4,9);
+    //boronDef =  G4IonTable::GetIonTable()->GetIon(5,11);
 
     G4String proton;
     G4String hydrogen;
     G4String alphaPlusPlus;
     G4String alphaPlus;
     G4String helium;
-    G4String lithium;
-    G4String beryllium;
-    G4String boron;
+    //G4String lithium;
+    //G4String beryllium;
+    //G4String boron;
     G4String carbon;
     G4String nitrogen;
     G4String oxygen;
@@ -262,7 +262,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     tableData[helium] = tableHelium;
 
     // **********************************************************************************************
-    
+    /*
     lithium = lithiumDef->GetParticleName();
     tableFile[lithium] = fileLithium;
 
@@ -272,7 +272,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     lowEnergyLimit[lithium] = 0.5*7*MeV;
     highEnergyLimit[lithium] = 1e6*7*MeV;
     //
-
+    
     // Cross section
 
     G4DNACrossSectionDataSet* tableLithium = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
@@ -280,7 +280,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
                                                                          scaleFactor );
     tableLithium->LoadData(fileLithium);
     tableData[lithium] = tableLithium;
-
+    
     // **********************************************************************************************
     
     beryllium = berylliumDef->GetParticleName();
@@ -320,7 +320,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
                                                                          scaleFactor );
     tableBoron->LoadData(fileBoron);
     tableData[boron] = tableBoron;
-
+    */
     // **********************************************************************************************
     
     carbon = carbonDef->GetParticleName();
@@ -457,7 +457,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
       SetLowEnergyLimit(lowEnergyLimit[alphaPlusPlus]);
       SetHighEnergyLimit(highEnergyLimit[alphaPlusPlus]);
     }
-
+    /*
     if (particle==lithiumDef)
     {
       SetLowEnergyLimit(lowEnergyLimit[lithium]);
@@ -475,7 +475,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
       SetLowEnergyLimit(lowEnergyLimit[boron]);
       SetHighEnergyLimit(highEnergyLimit[boron]);
     }
-
+    */
     if (particle==carbonDef)
     {
       SetLowEnergyLimit(lowEnergyLimit[carbon]);
@@ -533,7 +533,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Material* material,
-                                                                 const G4ParticleDefinition* particleDefinition,
+                                                                 const G4ParticleDefinition* partDef,
                                                                  G4double k,
                                                                  G4double,
                                                                  G4double)
@@ -545,21 +545,20 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
     if (verboseLevel > 3)
         G4cout << "Calling CrossSectionPerVolume() of G4DNARuddIonisationExtendedModel" << G4endl;
 
+    auto particleDefinition = GetDNAIonParticleDefinition(partDef);
+
     // Calculate total cross section for model
 
-    G4DNAGenericIonsManager *instance;
-    instance = G4DNAGenericIonsManager::Instance();
-
     if (
-            particleDefinition != G4Proton::ProtonDefinition()
+            particleDefinition != protonDef
             &&
-            particleDefinition != instance->GetIon("hydrogen")
+            particleDefinition != hydrogenDef
             &&
-            particleDefinition != instance->GetIon("alpha++")
+            particleDefinition != alphaPlusPlusDef
             &&
-            particleDefinition != instance->GetIon("alpha+")
+            particleDefinition != alphaPlusDef
             &&
-            particleDefinition != instance->GetIon("helium")
+            particleDefinition != heliumDef
             &&
             // SI
             //particleDefinition != instance->GetIon("carbon")
@@ -569,21 +568,23 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
             //particleDefinition != instance->GetIon("oxygen")
             //&&
             //particleDefinition != instance->GetIon("iron")
-            particleDefinition != G4IonTable::GetIonTable()->GetIon(3,7)
+            /*
+            particleDefinition != lithiumDef
             &&
-            particleDefinition != G4IonTable::GetIonTable()->GetIon(4,9)
+            particleDefinition != berylliumDef
             &&
-            particleDefinition != G4IonTable::GetIonTable()->GetIon(5,11)
+            particleDefinition != boronDef
             &&
-            particleDefinition != G4IonTable::GetIonTable()->GetIon(6,12)
+            */
+            particleDefinition != carbonDef
             &&
-            particleDefinition != G4IonTable::GetIonTable()->GetIon(7,14)
+            particleDefinition != nitrogenDef
             &&
-            particleDefinition != G4IonTable::GetIonTable()->GetIon(8,16)
+            particleDefinition != oxygenDef
             &&
-            particleDefinition != G4IonTable::GetIonTable()->GetIon(14,28)
+            particleDefinition != siliconDef
             &&
-            particleDefinition != G4IonTable::GetIonTable()->GetIon(26,56)
+            particleDefinition != ironDef
             //
             )
 
@@ -591,15 +592,15 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
 
     G4double lowLim = 0;
 
-    if (     particleDefinition == G4Proton::ProtonDefinition()
-             ||  particleDefinition == instance->GetIon("hydrogen")
+    if (     particleDefinition == protonDef
+             ||  particleDefinition == hydrogenDef
              )
 
         lowLim = lowEnergyLimitOfModelForA[1];
 
-    else if (     particleDefinition == instance->GetIon("alpha++")
-                  ||       particleDefinition == instance->GetIon("alpha+")
-                  ||       particleDefinition == instance->GetIon("helium")
+    else if (     particleDefinition == alphaPlusPlusDef
+                  ||       particleDefinition == alphaPlusDef
+                  ||       particleDefinition == heliumDef
                   )
 
         lowLim = lowEnergyLimitOfModelForA[4];
@@ -682,29 +683,30 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
 
     if (verboseLevel > 3)
         G4cout << "Calling SampleSecondaries() of G4DNARuddIonisationExtendedModel" << G4endl;
+    auto particleDefinition = GetDNAIonParticleDefinition(particle->GetDefinition());
 
     G4double lowLim = 0;
     G4double highLim = 0;
 
     // ZF: the following line summarizes the commented part
 
-    if(particle->GetDefinition()->GetAtomicMass() <= 4) lowLim = killBelowEnergyForA[particle->GetDefinition()->GetAtomicMass()];
+    if(particle->GetDefinition()->GetAtomicMass() <= 4) lowLim = killBelowEnergyForA[particleDefinition->GetAtomicMass()];
     
-    else lowLim = killBelowEnergyForA[5]*particle->GetDefinition()->GetAtomicMass();
+    else lowLim = killBelowEnergyForA[5]*particleDefinition->GetAtomicMass();
 
     /* 
 
     if(particle->GetDefinition()->GetAtomicMass() >= 5) lowLim = killBelowEnergyForA[5]*particle->GetDefinition()->GetAtomicMass();
     
-    if (     particle->GetDefinition() == G4Proton::ProtonDefinition()
-       ||  particle->GetDefinition() == instance->GetIon("hydrogen")
+    if (     particle->GetDefinition() == protonDef
+       ||  particle->GetDefinition() == hydrogenDef
        )
 
        lowLim = killBelowEnergyForA[1];
        
-    if (     particle->GetDefinition() == instance->GetIon("alpha++")
-       ||  particle->GetDefinition() == instance->GetIon("alpha+")
-       ||  particle->GetDefinition() == instance->GetIon("helium")
+    if (     particle->GetDefinition() == alphaPlusPlusDef
+       ||  particle->GetDefinition() == alphaPlusDef
+       ||  particle->GetDefinition() == heliumDef
        )
 
        lowLim = killBelowEnergyForA[4];
@@ -714,7 +716,7 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
 
     G4double k = particle->GetKineticEnergy();
 
-    const G4String& particleName = particle->GetDefinition()->GetParticleName();
+    const G4String& particleName = particleDefinition->GetParticleName();
 
     // SI - the following is useless since lowLim is already defined
     /*
@@ -736,7 +738,7 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
     
     // SI: no strict limits, like in the non extended version of the model
     {
-        G4ParticleDefinition* definition = particle->GetDefinition();
+        G4ParticleDefinition* definition = particleDefinition;
         G4ParticleMomentum primaryDirection = particle->GetMomentumDirection();
         /*
         G4double particleMass = definition->GetPDGMass();
@@ -987,8 +989,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
 
     G4double energyTransfer = proposed_ws + Bj_energy;
     proposed_ws/=Bj_energy;
-    G4DNAGenericIonsManager *instance;
-    instance = G4DNAGenericIonsManager::Instance();
+
     G4double tau = 0.;
     G4double A_ion = 0.;
     tau = (electron_mass_c2 / particleDefinition->GetPDGMass()) * k;
@@ -1017,8 +1018,8 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
 
     G4bool isHelium = false;
 
-    if (    particleDefinition == G4Proton::ProtonDefinition()
-            || particleDefinition == instance->GetIon("hydrogen")
+    if (    particleDefinition == protonDef
+            || particleDefinition == hydrogenDef
             )
     {
         return(rejection_term);
@@ -1028,12 +1029,12 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
     {
         G4double Z = particleDefinition->GetAtomicNumber();
 
-        G4double x = 100.*std::sqrt(beta2)/std::pow(Z,(2./3.));
+        G4double x = 100.*std::sqrt(beta2)/gpow->powA(Z,(2./3.));
         G4double Zeffion = Z*(1.-G4Exp(-1.316*x+0.112*x*x-0.0650*x*x*x));
         rejection_term*=Zeffion*Zeffion;
     }
 
-    else if (particleDefinition == instance->GetIon("alpha++") )
+    else if (particleDefinition == alphaPlusPlusDef )
     {
         isHelium = true;
         slaterEffectiveCharge[0]=0.;
@@ -1044,7 +1045,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         sCoefficient[2]=0.;
     }
 
-    else if (particleDefinition == instance->GetIon("alpha+") )
+    else if (particleDefinition == alphaPlusDef )
     {
         isHelium = true;
         slaterEffectiveCharge[0]=2.0;
@@ -1057,7 +1058,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         sCoefficient[2]=0.15;
     }
 
-    else if (particleDefinition == instance->GetIon("helium") )
+    else if (particleDefinition == heliumDef )
     {
         isHelium = true;
         slaterEffectiveCharge[0]=1.7;
@@ -1068,9 +1069,9 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         sCoefficient[2]=0.25;
     }
 
-   //    if (    particleDefinition == instance->GetIon("helium")
-   //            || particleDefinition == instance->GetIon("alpha+")
-   //            || particleDefinition == instance->GetIon("alpha++")
+   //    if (    particleDefinition == heliumDef
+   //            || particleDefinition == alphaPlusDef
+   //            || particleDefinition == alphaPlusPlusDef
    //            )
 
     if (isHelium)
@@ -1167,9 +1168,9 @@ G4double G4DNARuddIonisationExtendedModel::ProposedSampledEnergy(G4ParticleDefin
 
     G4double v = std::sqrt(v2);
     //G4double wc = 4.*v2 - 2.*v - (Ry/(4.*Bj_energy));
-    G4double L1 = (C1* std::pow(v,(D1))) / (1.+ E1*std::pow(v, (D1+4.)));
-    G4double L2 = C2*std::pow(v,(D2));
-    G4double H1 = (A1*std::log(1.+v2)) / (v2+(B1/v2));
+    G4double L1 = (C1* gpow->powA(v,(D1))) / (1.+ E1*gpow->powA(v, (D1+4.)));
+    G4double L2 = C2*gpow->powA(v,(D2));
+    G4double H1 = (A1*G4Log(1.+v2)) / (v2+(B1/v2));
     G4double H2 = (A2/v2) + (B2/(v2*v2));
     G4double F1 = L1+H1;
     G4double F2 = (L2*H2)/(L2+H2);
@@ -1280,12 +1281,10 @@ G4double G4DNARuddIonisationExtendedModel::R(G4double t,
 G4double G4DNARuddIonisationExtendedModel::CorrectionFactor(G4ParticleDefinition* particleDefinition, G4double k, G4int shell) 
 {
     // ZF Shortened
-    G4DNAGenericIonsManager *instance;
-    instance = G4DNAGenericIonsManager::Instance();
 
-    if (particleDefinition == instance->GetIon("hydrogen") && shell < 4)
+    if (particleDefinition == hydrogenDef && shell < 4)
     {
-        G4double value = (std::log10(k/eV)-4.2)/0.5;
+        G4double value = ((G4Log(k/eV)/gpow->logZ(10))-4.2)/0.5;
         // The following values are provided by M. Dingfelder (priv. comm)
         return((0.6/(1+G4Exp(value))) + 0.9);
     }
@@ -1416,3 +1415,34 @@ G4double G4DNARuddIonisationExtendedModel::Sum(G4double /* energy */, const G4St
     return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ParticleDefinition* G4DNARuddIonisationExtendedModel::GetDNAIonParticleDefinition(const G4ParticleDefinition* particleDefinition)
+{
+  //for proton, hydrogen, alphas
+  if(particleDefinition->GetAtomicMass() <= 4)
+  {
+    return const_cast<G4ParticleDefinition*>(particleDefinition);
+  }
+  else{
+    auto instance = G4DNAGenericIonsManager::Instance();
+
+    auto PDGEncoding = particleDefinition->GetPDGEncoding();
+    if(PDGEncoding == 1000140280){
+      return instance->GetIon("silicon");
+    }else if(PDGEncoding == 1000260560){
+      return instance->GetIon("iron");
+    }else if(PDGEncoding == 1000080160){
+      return instance->GetIon("oxygen");
+    }else if(PDGEncoding == 1000070140){
+      return instance->GetIon("nitrogen");
+    }else if(PDGEncoding == 1000060120){
+      return instance->GetIon("carbon");
+    }
+    G4ExceptionDescription description;
+    description << "DNA physics does not support this ion : "<<particleDefinition->GetParticleName()<< G4endl;
+    G4Exception("G4DNARuddIonisationExtendedModel::GetDNAIonParticleDefinition()",
+                "em2051",FatalException,description);
+    return nullptr;
+  }
+}

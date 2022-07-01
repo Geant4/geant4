@@ -46,7 +46,6 @@
 #include "G4PhotoElectricEffect.hh"
 #include "G4LivermorePhotoElectricModel.hh"
 
-#include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
 #include "G4CoulombScattering.hh"
@@ -90,6 +89,8 @@ G4EmStandardPhysics_option1::G4EmStandardPhysics_option1(G4int ver,
   param->SetVerbose(ver);
   param->SetApplyCuts(true);
   param->SetGeneralProcessActive(true);
+  // Enable the combined G4TransportationWithMsc, but not the internal stepping.
+  param->SetTransportationWithMsc(G4TransportationWithMscType::fEnabled);
   param->SetStepFunction(0.8, 1*CLHEP::mm);
   param->SetMscRangeFactor(0.2);
   param->SetMscStepLimitType(fMinimal);
@@ -152,13 +153,11 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 
   G4eIonisation* eioni = new G4eIonisation();
 
-  G4eMultipleScattering* msc = new G4eMultipleScattering;
   G4UrbanMscModel* msc1 = new G4UrbanMscModel();
   G4WentzelVIModel* msc2 = new G4WentzelVIModel();
   msc1->SetHighEnergyLimit(highEnergyLimit);
   msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
 
   G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
   G4CoulombScattering* ss = new G4CoulombScattering();
@@ -167,7 +166,6 @@ void G4EmStandardPhysics_option1::ConstructProcess()
   ssm->SetLowEnergyLimit(highEnergyLimit);
   ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eioni, particle);
   ph->RegisterProcess(new G4eBremsstrahlung(), particle);
   ph->RegisterProcess(ss, particle);
@@ -176,13 +174,11 @@ void G4EmStandardPhysics_option1::ConstructProcess()
   particle = G4Positron::Positron();
   eioni = new G4eIonisation();
 
-  msc = new G4eMultipleScattering;
   msc1 = new G4UrbanMscModel();
   msc2 = new G4WentzelVIModel();
   msc1->SetHighEnergyLimit(highEnergyLimit);
   msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
 
   ssm = new G4eCoulombScatteringModel(); 
   ss = new G4CoulombScattering();
@@ -191,7 +187,6 @@ void G4EmStandardPhysics_option1::ConstructProcess()
   ssm->SetLowEnergyLimit(highEnergyLimit);
   ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eioni, particle);
   ph->RegisterProcess(new G4eBremsstrahlung(), particle);
   ph->RegisterProcess(new G4eplusAnnihilation(), particle);

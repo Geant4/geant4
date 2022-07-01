@@ -35,14 +35,14 @@
 #include "G4AnalysisUtilities.hh"
 #include "globals.hh"
 
-#include "tools/hdf5/ntuple" // for hid_t
+#include "toolx/hdf5/ntuple" // for hid_t
 
 #include <memory>
 #include <tuple>
 #include <string_view>
 
 using G4Hdf5File = std::tuple<hid_t, hid_t, hid_t>;
-using Hdf5NtupleDescription = G4TNtupleDescription<tools::hdf5::ntuple, G4Hdf5File>;
+using Hdf5NtupleDescription = G4TNtupleDescription<toolx::hdf5::ntuple, G4Hdf5File>;
 
 class G4Hdf5FileManager : public G4VTFileManager<G4Hdf5File>
 {

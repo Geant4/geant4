@@ -49,13 +49,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4WentzelVIRelXSection::G4WentzelVIRelXSection()
-{}
+G4WentzelVIRelXSection::G4WentzelVIRelXSection() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4WentzelVIRelXSection::~G4WentzelVIRelXSection()
-{}
+G4WentzelVIRelXSection::~G4WentzelVIRelXSection() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

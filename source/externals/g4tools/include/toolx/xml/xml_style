@@ -1,0 +1,44 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_xml_style
+#define toolx_xml_style
+
+#include <tools/xml/styles>
+
+#include "loader"
+
+namespace toolx {
+namespace xml {
+
+inline bool load_style_file(std::ostream&,const std::string& a_file,tools::xml::styles& a_styles) {
+  tools::xml::default_factory factory;
+  toolx::xml::loader ml(factory,a_styles.out(),false);
+  std::vector<std::string> tags;
+  tags.push_back("styles");
+  tags.push_back("style");
+  tags.push_back("plotter_style");
+  ml.set_tags(tags);
+  if(!ml.load_file(a_file,false)) return false;
+  tools::xml::tree* top = ml.top_item();
+  if(!top) return true; //File could be empty.
+  return scan_style_tree(a_styles,*top);
+}
+
+inline bool load_style_string(tools::xml::styles& a_styles,const std::string& a_string) {
+  tools::xml::default_factory factory;
+  toolx::xml::loader ml(factory,a_styles.out(),false);
+  std::vector<std::string> tags;
+  tags.push_back("styles");
+  tags.push_back("style");
+  tags.push_back("plotter_style");
+  ml.set_tags(tags);
+  if(!ml.load_string(a_string)) return false;
+  tools::xml::tree* top = ml.top_item();
+  if(!top) return true;
+  return scan_style_tree(a_styles,*top);
+}
+
+}}
+
+#endif

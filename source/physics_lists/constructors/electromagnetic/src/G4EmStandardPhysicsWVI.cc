@@ -73,6 +73,7 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4LindhardSorensenIonModel.hh"
 #include "G4BraggIonModel.hh"
+#include "G4IonFluctuations.hh"
 #include "G4NuclearStopping.hh"
 #include "G4eplusTo2GammaOKVIModel.hh"
 
@@ -225,6 +226,8 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
   // generic ion
   particle = G4GenericIon::GenericIon();
   G4ionIonisation* ionIoni = new G4ionIonisation();
+  auto fluc = new G4IonFluctuations();
+  ionIoni->SetFluctModel(fluc);
   ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
   ph->RegisterProcess(hmsc, particle);
   ph->RegisterProcess(ionIoni, particle);

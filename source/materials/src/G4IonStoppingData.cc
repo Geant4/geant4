@@ -79,9 +79,9 @@ G4bool G4IonStoppingData::IsApplicable(
 {
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
-  G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
+  auto iter = dedxMapElements.find(key);
 
-  return (iter == dedxMapElements.end()) ? false : true; 
+  return iter != dedxMapElements.end();
 }
 
 // #########################################################################
@@ -93,9 +93,9 @@ G4bool G4IonStoppingData::IsApplicable(
 {
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
-  G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
+  auto iter = dedxMapMaterials.find(key);
 
-  return (iter == dedxMapMaterials.end()) ? false : true; 
+  return iter != dedxMapMaterials.end();
 }
 
 // #########################################################################
@@ -107,7 +107,7 @@ G4PhysicsVector* G4IonStoppingData::GetPhysicsVector(
 {
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
-  G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
+  auto iter = dedxMapElements.find(key);
 
   return (iter != dedxMapElements.end()) ? iter->second : nullptr; 
 }
@@ -121,7 +121,7 @@ G4PhysicsVector*  G4IonStoppingData::GetPhysicsVector(
 {
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
-  G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
+  auto iter = dedxMapMaterials.find(key);
 
   return (iter != dedxMapMaterials.end()) ? iter->second : nullptr; 
 }
@@ -136,7 +136,7 @@ G4double G4IonStoppingData::GetDEDX(
 {
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
-  G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
+  auto iter = dedxMapElements.find(key);
 
   return ( iter != dedxMapElements.end()) ?
     (iter->second)->Value( kinEnergyPerNucleon) : 0.0;
@@ -152,7 +152,7 @@ G4double G4IonStoppingData::GetDEDX(
 {
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
-  G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
+  auto iter = dedxMapMaterials.find(key);
 
   return (iter != dedxMapMaterials.end()) ?
     (iter->second)->Value(kinEnergyPerNucleon) : 0.0;
@@ -254,7 +254,7 @@ G4bool G4IonStoppingData::RemovePhysicsVector(
 
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
-  G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
+  auto iter = dedxMapMaterials.find(key);
 
   if(iter == dedxMapMaterials.end()) {
     G4Exception ("G4IonStoppingData::RemovePhysicsVector() for material", 
@@ -281,7 +281,7 @@ G4bool G4IonStoppingData::RemovePhysicsVector(
 				      ) {
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
-  G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
+  auto iter = dedxMapElements.find(key);
 
   if(iter == dedxMapElements.end()) {
     G4Exception ("G4IonStoppingData::RemovePhysicsVector() for element", 
@@ -306,16 +306,19 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
 	G4int atomicNumberIon,          // Atomic number of ion
         const G4String& matname         // Name of material
         					     ) {
+  if(IsApplicable(atomicNumberIon, matname))
+  {
+    return true;
+  }
 
-  if( IsApplicable(atomicNumberIon, matname) ) return true;
-
-  const char* path = std::getenv("G4LEDATA");
-  if ( !path ) {
+  const char* path = G4FindDataDir("G4LEDATA");
+  if(path == nullptr)
+  {
     G4Exception("G4IonStoppingData::BuildPhysicsVector()", "mat521",
                 FatalException, "G4LEDATA environment variable not set");
     return false;
   }
-  
+
   std::ostringstream file;
   G4String ww = (fICRU90 && (matname == "G4_WATER" || 
 			     matname == "G4_AIR" || 
@@ -327,9 +330,12 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
 
   std::ifstream ifilestream( fileName );
 
-  if ( !ifilestream.is_open() ) return false;
-  
-  G4PhysicsFreeVector* physicsVector = new G4PhysicsFreeVector(true); 
+  if(!ifilestream.is_open())
+  {
+    return false;
+  }
+
+  auto* physicsVector = new G4PhysicsFreeVector(true);
 
   if( !physicsVector -> Retrieve(ifilestream, true) ) {
  
@@ -358,10 +364,14 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
         G4int ZElem          // Atomic number of elemental material
         					     ) 
 {
-  if( IsApplicable(ZIon, ZElem) ) return true;
+  if(IsApplicable(ZIon, ZElem))
+  {
+    return true;
+  }
 
-  char* path = std::getenv("G4LEDATA");
-  if ( !path ) {
+  const char* path = G4FindDataDir("G4LEDATA");
+  if(path == nullptr)
+  {
     G4Exception("G4IonStoppingData::BuildPhysicsVector()", "mat522",
                 FatalException, "G4LEDATA environment variable not set");
     return false;
@@ -377,8 +387,11 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
   G4String fileName = G4String( file.str().c_str() );
   std::ifstream ifilestream( fileName );
 
-  if ( !ifilestream.is_open() ) return false;  
-  G4PhysicsFreeVector* physicsVector = new G4PhysicsFreeVector(true); 
+  if(!ifilestream.is_open())
+  {
+    return false;
+  }
+  auto* physicsVector = new G4PhysicsFreeVector(true);
 
   if( !physicsVector -> Retrieve(ifilestream, true) ) {
      ifilestream.close();
@@ -402,27 +415,26 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
 // #########################################################################
 
 void G4IonStoppingData::ClearTable() {
-
-  G4IonDEDXMapMat::iterator iterMat = dedxMapMaterials.begin();
-  G4IonDEDXMapMat::iterator iterMat_end = dedxMapMaterials.end();
+  auto iterMat     = dedxMapMaterials.begin();
+  auto iterMat_end = dedxMapMaterials.end();
 
   for(;iterMat != iterMat_end; iterMat++) { 
 
     G4PhysicsVector* vec = iterMat -> second;
 
-    if(vec != 0) delete vec;
+    delete vec;
   }
 
   dedxMapMaterials.clear();
 
-  G4IonDEDXMapElem::iterator iterElem = dedxMapElements.begin();
-  G4IonDEDXMapElem::iterator iterElem_end = dedxMapElements.end();
+  auto iterElem     = dedxMapElements.begin();
+  auto iterElem_end = dedxMapElements.end();
 
   for(;iterElem != iterElem_end; iterElem++) { 
 
     G4PhysicsVector* vec = iterElem -> second;
 
-    if(vec != 0) delete vec;
+    delete vec;
   }
 
   dedxMapElements.clear();
@@ -431,9 +443,8 @@ void G4IonStoppingData::ClearTable() {
 // #########################################################################
 
 void G4IonStoppingData::DumpMap() {
-
-  G4IonDEDXMapMat::iterator iterMat = dedxMapMaterials.begin();
-  G4IonDEDXMapMat::iterator iterMat_end = dedxMapMaterials.end();
+  auto iterMat     = dedxMapMaterials.begin();
+  auto iterMat_end = dedxMapMaterials.end();
 
   G4cout << std::setw(15) << std::right
          << "Atomic nmb ion"
@@ -448,17 +459,15 @@ void G4IonStoppingData::DumpMap() {
       G4int atomicNumberIon = key.first;
       G4String matIdentifier = key.second;
 
-      if(physicsVector != 0) {
-         G4cout << std::setw(15) << std::right
-                << atomicNumberIon
-                << std::setw(25) << std::right
-                << matIdentifier
-                << G4endl;
+      if(physicsVector != nullptr)
+      {
+        G4cout << std::setw(15) << std::right << atomicNumberIon
+               << std::setw(25) << std::right << matIdentifier << G4endl;
       }
   }
 
-  G4IonDEDXMapElem::iterator iterElem = dedxMapElements.begin();
-  G4IonDEDXMapElem::iterator iterElem_end = dedxMapElements.end();
+  auto iterElem     = dedxMapElements.begin();
+  auto iterElem_end = dedxMapElements.end();
 
   G4cout << std::setw(15) << std::right
          << "Atomic nmb ion"
@@ -473,12 +482,10 @@ void G4IonStoppingData::DumpMap() {
       G4int atomicNumberIon = key.first;
       G4int atomicNumberElem = key.second;
 
-      if(physicsVector != 0) {
-         G4cout << std::setw(15) << std::right
-                << atomicNumberIon
-                << std::setw(25) << std::right
-                << atomicNumberElem
-                << G4endl;
+      if(physicsVector != nullptr)
+      {
+        G4cout << std::setw(15) << std::right << atomicNumberIon
+               << std::setw(25) << std::right << atomicNumberElem << G4endl;
       }
   }
 

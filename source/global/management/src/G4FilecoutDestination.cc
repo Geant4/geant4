@@ -31,13 +31,16 @@
 #include "G4FilecoutDestination.hh"
 
 #include <ios>
+#include <memory>
 
 // --------------------------------------------------------------------
 G4FilecoutDestination::~G4FilecoutDestination()
 {
   Close();
   if(m_output)
+  {
     m_output.reset();
+  }
 }
 
 // --------------------------------------------------------------------
@@ -51,8 +54,10 @@ void G4FilecoutDestination::Open(std::ios_base::openmode mode)
 #endif
   }
   if(m_output != nullptr && m_output->is_open())
+  {
     Close();
-  m_output.reset(new std::ofstream(m_name, std::ios_base::out | mode));
+  }
+  m_output = std::make_unique<std::ofstream>(m_name, std::ios_base::out | mode);
 }
 
 // --------------------------------------------------------------------
@@ -68,7 +73,9 @@ void G4FilecoutDestination::Close()
 G4int G4FilecoutDestination::ReceiveG4cout(const G4String& msg)
 {
   if(m_output == nullptr || !m_output->is_open())
+  {
     Open(m_mode);
+  }
   *m_output << msg;
   return 0;
 }
@@ -77,7 +84,9 @@ G4int G4FilecoutDestination::ReceiveG4cout(const G4String& msg)
 G4int G4FilecoutDestination::ReceiveG4cerr(const G4String& msg)
 {
   if(m_output == nullptr || !m_output->is_open())
+  {
     Open(m_mode);
+  }
   *m_output << msg;
   return 0;
 }

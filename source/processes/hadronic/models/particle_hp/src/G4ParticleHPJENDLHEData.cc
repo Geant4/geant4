@@ -104,7 +104,7 @@ void G4ParticleHPJENDLHEData::BuildPhysicsTable( const G4ParticleDefinition& aP 
 //      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
    particleName = aP.GetParticleName();
 
-   G4String baseName = std::getenv( "G4NEUTRONHPDATA" );
+   G4String baseName = G4FindDataDir( "G4NEUTRONHPDATA" );
    G4String dirName = baseName+"/JENDL_HE/"+particleName+"/"+reactionName ;
    G4String aFSType = "/CrossSection/";
    G4ParticleHPNames theNames; 

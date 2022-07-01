@@ -27,9 +27,9 @@
 //
 // Class description:
 //
-//  A G4TwistedTrd is a twisted trapezoid with the x and y dimensions 
-//  varying along z 
-// 
+//  A G4TwistedTrd is a twisted trapezoid with the x and y dimensions
+//  varying along z
+//
 //
 //   Member Data:
 //
@@ -54,7 +54,7 @@ class G4TwistedTrd : public G4VTwistedFaceted
     G4TwistedTrd( const G4String& pName,
                         G4double  pDx1,
                         G4double  pDx2,
-                        G4double  pDy1, 
+                        G4double  pDy1,
                         G4double  pDy2,
                         G4double  pDz,
                         G4double  pPhiTwist );
@@ -72,6 +72,9 @@ class G4TwistedTrd : public G4VTwistedFaceted
 
     G4GeometryType GetEntityType() const;
 
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
+
     G4VSolid* Clone() const;
 
     std::ostream&  StreamInfo(std::ostream& os) const;
@@ -84,7 +87,7 @@ class G4TwistedTrd : public G4VTwistedFaceted
       // persistifiable objects.
 
     G4TwistedTrd(const G4TwistedTrd& rhs);
-    G4TwistedTrd& operator=(const G4TwistedTrd& rhs); 
+    G4TwistedTrd& operator=(const G4TwistedTrd& rhs);
       // Copy constructor and assignment operator.
 
 } ;

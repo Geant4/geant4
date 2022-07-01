@@ -28,12 +28,12 @@
 // Class description:
 //
 //  A G4TwistedBox is a twisted cuboid of given half lengths pDx,pDy,pDz
-//  and twist angle pPhiTwist. 
+//  and twist angle pPhiTwist.
 //  The Box is  centred on the origin with sides parallel to the x/y/z axes.
 //
 //   Member Data:
 //
-//     pDx    Half-length along x axis 
+//     pDx    Half-length along x axis
 //     pDy    Half-length along y asis
 //     pDz    Half-length along z axis
 //     pPhiTwist Twist angle
@@ -52,7 +52,7 @@ class G4TwistedBox : public G4VTwistedFaceted
     G4TwistedBox(const G4String& pName,
                        G4double  pPhiTwist,
                        G4double  pDx,
-                       G4double  pDy, 
+                       G4double  pDy,
                        G4double  pDz );
 
     virtual ~G4TwistedBox();
@@ -66,6 +66,9 @@ class G4TwistedBox : public G4VTwistedFaceted
 
     G4GeometryType GetEntityType()    const;
 
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
+
     G4VSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -78,7 +81,7 @@ class G4TwistedBox : public G4VTwistedFaceted
       // persistifiable objects.
 
     G4TwistedBox(const G4TwistedBox& rhs);
-    G4TwistedBox& operator=(const G4TwistedBox& rhs); 
+    G4TwistedBox& operator=(const G4TwistedBox& rhs);
       // Copy constructor and assignment operator.
 };
 

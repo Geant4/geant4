@@ -37,7 +37,9 @@ extern G4PART_DLL G4Allocator<G4DynamicParticle>*& pDynamicParticleAllocator();
 inline void * G4DynamicParticle::operator new(size_t)
 {
   if (pDynamicParticleAllocator() == nullptr)
+  {
     pDynamicParticleAllocator() = new G4Allocator<G4DynamicParticle>;
+  }
   return pDynamicParticleAllocator()->MallocSingle();
 }
 

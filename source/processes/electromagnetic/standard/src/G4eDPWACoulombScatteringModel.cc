@@ -90,9 +90,7 @@ void G4eDPWACoulombScatteringModel::Initialise(const G4ParticleDefinition* pdef,
   fIsMixedModel = (fMuMin > 0.0);
   if(IsMaster()) {
     // clean the G4eDPWAElasticDCS object if any
-    if (fTheDCS) {
-      delete fTheDCS;
-    }
+    delete fTheDCS;
     fTheDCS = new G4eDPWAElasticDCS(pdef==G4Electron::Electron(), fIsMixedModel);
     // init only for the elements that are used in the geometry
     G4ProductionCutsTable* theCpTable = G4ProductionCutsTable::GetProductionCutsTable();

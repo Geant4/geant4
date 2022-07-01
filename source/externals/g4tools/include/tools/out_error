@@ -12,15 +12,15 @@ namespace tools {
 
 inline void out_error(std::ostream& a_out,
                       const char* location, const char* fmt,...) {
-  char s[1024];
+  char _s[1024];
   va_list args;
   va_start(args,fmt);
-  vsnpf(s,sizeof(s),fmt,args);
+  vsnpf(_s,sizeof(_s),fmt,args);
   va_end(args);
   if(location) {
-    a_out << location << " : " << s << std::endl;
+    a_out << location << " : " << _s << std::endl;
   } else {
-    a_out << s << std::endl;
+    a_out << _s << std::endl;
   }
 }
 

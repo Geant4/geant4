@@ -88,8 +88,7 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MollerBhabhaModel::~G4MollerBhabhaModel()
-{}
+G4MollerBhabhaModel::~G4MollerBhabhaModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -377,8 +376,7 @@ G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   }  
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = 
-    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  auto delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);
 
   // primary change

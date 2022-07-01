@@ -4,7 +4,7 @@
 #ifndef tools_sg_h2plot
 #define tools_sg_h2plot
 
-// Connexion inlib/histo to sg/plotter.
+// Connexion tools/histo to sg/plotter.
 
 // Inheritance :
 #include "plottables"

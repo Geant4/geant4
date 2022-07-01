@@ -208,7 +208,7 @@ G4bool G4CrystalUnitCell::FillAtomicUnitPos(G4ThreeVector& pos, std::vector<G4Th
     // Just for testing the infrastructure
     G4ThreeVector aaa = pos;
     vecout.push_back(aaa);
-    vecout.push_back(G4ThreeVector(2.,5.,3.));
+    vecout.emplace_back(2., 5., 3.);
     return true;
 }
 
@@ -273,9 +273,18 @@ G4bool G4CrystalUnitCell::FillCubic(G4double Cij[6][6]) const {
     
     for (size_t i=0; i<6; i++) {
         for (size_t j=i; j<6; j++) {
-            if (i<3 && j<3) Cij[i][j] = (i==j) ? C11 : C12;
-            else if (i==j && i>=3) Cij[i][i] = C44;
-            else Cij[i][j] = 0.;
+          if(i < 3 && j < 3)
+          {
+            Cij[i][j] = (i == j) ? C11 : C12;
+          }
+          else if(i == j && i >= 3)
+          {
+            Cij[i][i] = C44;
+          }
+          else
+          {
+            Cij[i][j] = 0.;
+          }
         }
     }
     
@@ -309,8 +318,10 @@ G4bool G4CrystalUnitCell::FillOrthorhombic(G4double Cij[6][6]) const {
     
     G4bool good = true;
     for (size_t i=0; i<6; i++) {
-        for (size_t j=i+1; j<3; j++)
-            good &= (Cij[i][j] != 0);
+      for(size_t j = i + 1; j < 3; j++)
+      {
+        good &= (Cij[i][j] != 0);
+      }
     }
     
     return good;
@@ -354,7 +365,10 @@ G4bool G4CrystalUnitCell::FillTriclinic(G4double Cij[6][6]) const {
     
     G4bool good = true;
     for (size_t i=0; i<6; i++) {
-        for (size_t j=i; j<6; j++) good &= (Cij[i][j] != 0);
+      for(size_t j = i; j < 6; j++)
+      {
+        good &= (Cij[i][j] != 0);
+      }
     }
     
     return good;

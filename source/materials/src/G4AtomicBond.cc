@@ -35,17 +35,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4AtomicBond::G4AtomicBond(theBondType aType,
-                           G4Element* firstAtomKind,
-                           G4int firstAtomNumber,
-                           G4Element* secondAtomKind,
-                           G4int secondAtomNumber):
-theFirstAtomKind(firstAtomKind),
-theFirstAtomNumber(firstAtomNumber),
-theSecondAtomKind(secondAtomKind),
-theSecondAtomNumber(secondAtomNumber),
-theType(aType),
-theAromaticity(0){;}
+G4AtomicBond::G4AtomicBond(theBondType aType, G4Element* firstAtomKind,
+                           G4int firstAtomNumber, G4Element* secondAtomKind,
+                           G4int secondAtomNumber)
+  : theFirstAtomKind(firstAtomKind)
+  , theFirstAtomNumber(firstAtomNumber)
+  , theSecondAtomKind(secondAtomKind)
+  , theSecondAtomNumber(secondAtomNumber)
+  , theType(aType)
+  , theAromaticity(false)
+{
+  ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

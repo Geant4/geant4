@@ -45,7 +45,7 @@ class HepPolyhedronProcessor;
 
 class G4BooleanSolid : public G4VSolid
 {
-  public:  // with description
+  public:
  
     G4BooleanSolid( const G4String& pName,
                           G4VSolid* pSolidA ,
@@ -89,8 +89,6 @@ class G4BooleanSolid : public G4VSolid
     inline void SetAreaAccuracy(G4double ep);
    
     G4ThreeVector GetPointOnSurface() const;
-
-  public:  // without description
 
     G4BooleanSolid(__void__&);
       // Fake default constructor for usage restricted to direct object

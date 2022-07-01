@@ -831,3 +831,11 @@ size_t G4DNAMolecularReactionTable::GetNReactions() const
 {
     return fVectorOfReactionData.size();
 }
+
+void G4DNAMolecularReactionTable::Reset()
+{
+    fReactionData.clear();
+    fReactantsMV.clear();
+    fReactionDataMV.clear();
+    fVectorOfReactionData.clear();
+}

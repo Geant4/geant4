@@ -61,7 +61,7 @@ class G4eeToTwoGammaModel : public G4VEmModel
 
 public:
 
-  explicit G4eeToTwoGammaModel(const G4ParticleDefinition* p = 0,
+  explicit G4eeToTwoGammaModel(const G4ParticleDefinition* p = nullptr,
                                const G4String& nam = "eplus2gg");
 
   ~G4eeToTwoGammaModel() override;

@@ -59,7 +59,12 @@ public:
   virtual void ConstructDissociationChannels();
   virtual void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable);
   virtual void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable);
-
+  inline void SetTimeStepModel(const TimeStepModel& model)
+  {
+    fTimeStepModel = model;
+  }
+ private:
+  TimeStepModel fTimeStepModel = fIRT;
 };
 
 #endif

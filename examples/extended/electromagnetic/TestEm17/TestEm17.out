@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -150,7 +150,8 @@ physicsList->setCut() start.
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
-Use general process                                0
+Use combined TransportationWithMsc                 Disabled
+Use general process                                1
 Enable linear polarisation for gamma               0
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
@@ -167,7 +168,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -177,8 +178,9 @@ Step function for light ions                       (0.2, 0.1 mm)
 Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
-Fluctuations of dE/dx are enabled                  1
 Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model                          2
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -460,8 +462,7 @@ muIoni:  for mu+  XStype:1  SubType=2
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=  200 keV
-          BetheBloch : Emin=  200 keV Emax=    1 GeV
-        MuBetheBloch : Emin=    1 GeV Emax= 1000 PeV
+        MuBetheBloch : Emin=  200 keV Emax= 1000 PeV
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
@@ -472,7 +473,7 @@ muBrems:  for mu+  XStype:1  SubType=3
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
       Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
-      Sampling table 37x1001 from 1 GeV to 1e+06 TeV 
+      Sampling table 37x1001 from 0.85 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
@@ -493,8 +494,7 @@ muIoni:  for mu-  XStype:1  SubType=2
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=  200 keV
-          BetheBloch : Emin=  200 keV Emax=    1 GeV
-        MuBetheBloch : Emin=    1 GeV Emax= 1000 PeV
+        MuBetheBloch : Emin=  200 keV Emax= 1000 PeV
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
@@ -505,7 +505,7 @@ muBrems:  for mu-  XStype:1  SubType=3
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
       Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
-      Sampling table 37x1001 from 1 GeV to 1e+06 TeV 
+      Sampling table 37x1001 from 0.85 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
@@ -597,7 +597,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7499 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -629,13 +629,13 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.430000s Real=1.453049s Sys=0.000000s
+  User=1.440000s Real=1.457015s Sys=0.010000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	CoulombScat : 5609	muIoni : 465460	muPairProd : 63845	muBrems : 633
+ Number of process calls --->	CoulombScat : 5620	muIoni : 465037	muPairProd : 63681	muBrems : 674
 
- Simulation: total CrossSection = 0.53555 /cm	 MeanFreePath = 1.8672 cm 	 massicCrossSection = 0.068049 cm2/g
+ Simulation: total CrossSection = 0.53501 /cm	 MeanFreePath = 1.8691 cm 	 massicCrossSection = 0.067981 cm2/g
  Theory:     total CrossSection = 0.52947 /cm	 MeanFreePath = 1.8887 cm 	 massicCrossSection = 0.067277 cm2/g
 #
 /gun/particle pi+
@@ -659,7 +659,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7499 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -671,7 +671,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={235111648556098168, 316769674826657036, 1324819056878075668, 187519902960746374, 2009087781667608690, 499409753739204757, 315019246073380315, 890600977740292910, 1101614299214045087, 2159612907541538825, 270857188699032576, 1714019803938225423, 2267951935475200266, 1986260144364270885, 1667965121016590776, 525930192876433815, 1296107385891854908} counter= 5sumtot= 321912947749704871
+N=17 V[N]={1111323058175034053, 2219571529747864716, 1069225865531133458, 1786506845338941393, 1935013210759851380, 349585805575696260, 1993614072488559195, 1885260945220592720, 1413556240485707667, 1419468572945530101, 1340774300150050309, 951031430873258563, 1328985317224310871, 64854999470698771, 46181671661416646, 1089417454510634018, 2252006864151095279} counter= 3sumtot= 1503791101387129841
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -686,13 +686,13 @@ N=17 V[N]={235111648556098168, 316769674826657036, 1324819056878075668, 18751990
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.340000s Real=1.365755s Sys=0.000000s
+  User=1.340000s Real=1.358147s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 436817	hPairProd : 59767	CoulombScat : 5577	hBrems : 355
+ Number of process calls --->	hIoni : 437237	hPairProd : 59690	CoulombScat : 5590	hBrems : 367
 
- Simulation: total CrossSection = 0.50252 /cm	 MeanFreePath = 1.99 cm 	 massicCrossSection = 0.063852 cm2/g
+ Simulation: total CrossSection = 0.50288 /cm	 MeanFreePath = 1.9885 cm 	 massicCrossSection = 0.063899 cm2/g
 #
 /gun/particle proton
 /run/beamOn 10000
@@ -715,7 +715,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7499 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -727,7 +727,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1508607969306287352, 1791867730457931969, 1738067224946617316, 2007935747096887633, 1306443592768877490, 992133989202938259, 1974062234776938355, 846884695187391062, 2152429126693427328, 715130086937459148, 1131541624573232947, 1993804955950227479, 2049477571311589037, 1926698848375365154, 250494825515888879, 1258619328067853475, 304836802032966014} counter= 14sumtot= 890606261064939387
+N=17 V[N]={537023527533468854, 703812045741405464, 171213233908340175, 933330624680751405, 2203148970244648759, 512658506687823402, 1778397713677469090, 330802693336808204, 2107902079155251765, 1601928885110878506, 2097741705555375678, 524031588890635998, 191552279909649363, 263904406007914025, 824612488799371489, 1495538769821971155, 181999444041337785} counter= 13sumtot= 318697898607243460
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -742,13 +742,13 @@ N=17 V[N]={1508607969306287352, 1791867730457931969, 1738067224946617316, 200793
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.290000s Real=1.346359s Sys=0.000000s
+  User=1.390000s Real=1.428053s Sys=0.010000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 435956	hPairProd : 34092	CoulombScat : 5620	hBrems : 6
+ Number of process calls --->	hIoni : 436366	hPairProd : 33766	CoulombScat : 5659	hBrems : 7
 
- Simulation: total CrossSection = 0.47567 /cm	 MeanFreePath = 2.1023 cm 	 massicCrossSection = 0.060441 cm2/g
+ Simulation: total CrossSection = 0.4758 /cm	 MeanFreePath = 2.1017 cm 	 massicCrossSection = 0.060457 cm2/g
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -768,15 +768,15 @@ G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 0.0163 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0154 MB
-Pool ID '7G4Track', size : 0.0308 MB
+Pool ID '7G4Track', size : 0.0327 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.059 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.062 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

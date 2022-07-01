@@ -55,28 +55,27 @@
 #include "G4Region.hh"
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 G4EmParameters* G4EmParameters::theInstance = nullptr;
 
-#ifdef G4MULTITHREADED
-  G4Mutex G4EmParameters::emParametersMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex emParametersMutex = G4MUTEX_INITIALIZER;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4EmParameters* G4EmParameters::Instance()
 {
   if(nullptr == theInstance) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&emParametersMutex);
+    G4AutoLock l(&emParametersMutex);
     if(nullptr == theInstance) {
-#endif
       static G4EmParameters manager;
       theInstance = &manager;
-#ifdef G4MULTITHREADED
     }
-    G4MUTEXUNLOCK(&emParametersMutex);
-#endif
+    l.unlock();
   }
   return theInstance;
 }
@@ -165,10 +164,12 @@ void G4EmParameters::Initialise()
   workerVerbose = 0;
   tripletConv = 0;
 
+  fTransportationWithMsc = G4TransportationWithMscType::fDisabled;
   mscStepLimit = fUseSafety;
   mscStepLimitMuHad = fMinimal;
   nucFormfactor = fExponentialNF;
   fSStype = fWVI;
+  fFluct = fUniversalFluctuation;
 }
 
 void G4EmParameters::SetLossFluctuations(G4bool val)
@@ -952,6 +953,28 @@ G4int G4EmParameters::WorkerVerbose() const
   return workerVerbose;
 }
 
+void G4EmParameters::SetTransportationWithMsc(G4TransportationWithMscType val)
+{
+  if(IsLocked()) { return; }
+  fTransportationWithMsc = val;
+}
+
+G4TransportationWithMscType G4EmParameters::TransportationWithMsc() const
+{
+  return fTransportationWithMsc;
+}
+
+void G4EmParameters::SetFluctuationType(G4EmFluctuationType val)
+{
+  if(IsLocked()) { return; }
+  fFluct = val;
+}
+
+G4EmFluctuationType G4EmParameters::FluctuationType() const
+{
+  return fFluct;
+}
+
 void G4EmParameters::SetMscStepLimitType(G4MscStepLimitType val)
 {
   if(IsLocked()) { return; }
@@ -1234,6 +1257,13 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "LPM effect enabled                                 " <<flagLPM << "\n";
   os << "Enable creation and use of sampling tables         " <<fSamplingTable << "\n";
   os << "Apply cuts on all EM processes                     " <<applyCuts << "\n";
+  const char* transportationWithMsc = "Disabled";
+  if(fTransportationWithMsc == G4TransportationWithMscType::fEnabled) {
+    transportationWithMsc = "Enabled";
+  } else if (fTransportationWithMsc == G4TransportationWithMscType::fMultipleSteps) {
+    transportationWithMsc = "MultipleSteps";
+  }
+  os << "Use combined TransportationWithMsc                 " <<transportationWithMsc << "\n";
   os << "Use general process                                " <<gener << "\n";
   os << "Enable linear polarisation for gamma               " <<fPolarisation << "\n";
   os << "Enable sampling of quantum entanglement            " 
@@ -1283,8 +1313,9 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
      <<G4BestUnit(lowestElectronEnergy,"Energy") << "\n";
   os << "Lowest muon/hadron kinetic energy                  " 
      <<G4BestUnit(lowestMuHadEnergy,"Energy") << "\n";
-  os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
   os << "Use ICRU90 data                                    " << fICRU90 << "\n";
+  os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
+  os << "Type of fluctuation model                          " << fFluct << "\n";
   os << "Use built-in Birks satuaration                     " << birks << "\n";
   os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
   os << "Use cut as a final range enabled                   " <<cutAsFinalRange << "\n";

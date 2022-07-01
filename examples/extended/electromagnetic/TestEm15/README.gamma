@@ -1,6 +1,9 @@
-TestEm15 : gamma.mac
+TestEm15 : gamma.mac gamma2mumu.mac
 
--- tests of the 5D gamma -> e+e- conversion model G4BetheHeitler5DModel
+ - gamma.mac -
+     tests of the 5D gamma -> e+ e- conversion model G4BetheHeitler5DModel
+ - gamma2mumu.mac -
+     tests of the 5D gamma -> mu+ mu- conversion model G4BetheHeitler5DModel
 
 All discrete processes are inactivated (see macro),
 so Gamma Conversion is 'forced'.
@@ -8,9 +11,10 @@ so Gamma Conversion is 'forced'.
 Histograms :
 
   10    # Open Angle (rad)* E gamma (MeV)
-The most probable value of the pair opening angle multiplied by the
-photon energy is 1.6 rad*MeV.
-Olsen, Phys. Rev. 131 (1963) 406. See also Fig. 7 of arXiv:1802.08253
+The most probable value of the e+ e- pair opening angle multiplied by the
+photon energy is 1.6 rad*MeV and 338 rad*MeV in case mu+ mu- pair.
+See: Olsen, Phys. Rev. 131 (1963) 406.
+See also: Fig. 7 of arXiv:1802.08253 and Fig. 6 arXiv:1910.12501.
 
   11    # Log10 ( recoil momentum)
 The distribution of the  recoil momentum is described by
@@ -18,11 +22,15 @@ Jost, Phys. Rev. 80 (1950) 189 (no form factor).
 See also Fig. 2 of Astroparticle Physics 88 (2017) 60.
 
   12    # Phi recoil 
-  13    # Phi positron 
+  13    # Phi positron
+  For linearly polarized incident photons, the distributions should show
+  a sinusoidal shape with period 180°, for non polarized incident photons,
+  the distribution of azimuthal angles should be flat.
+
 
  14    # Asymmetry 2 * cos(phi_+ + phi_-)
-For a photon propagating along x, polarized along y, the average value of 
- 2 * cos(phi_+ + phi_-),
+For a photon propagating along x, polarized along y,
+the average value of ( 2.0 * cos(phi_+ + phi_-) ),
 provides a measurement of the polarization asymmetry, A.
 Eq. (12) of Nucl. Instrum. Meth. A 729 (2013) 765 
 The azimuthal angle of the event defined as the bisector angle
@@ -46,3 +54,37 @@ See Fig. 16 page 261 of "The Quantum Theory of Radiation", W. Heitler,
  16  # Phi of Gamma Polarization
 The phi of polarization vector after transformation into reference system
  defined by gamma direction (z) , gamma polarization (x).
+
+UI commands:
+
+There are two commands to control G4BetheHeitler5DModel:
+
+/process/gconv/conversionType itype
+/process/gconv/onIsolated bool
+
+The command:
+/process/gconv/conversionType
+
+Allow to force conversion on nuclear or electron
+The parameter values
+0 - (default) both triplet and nuclear conversion in proportion triplet/nuclear 1/Z
+1 - force nuclear conversion
+2 - force triplet
+
+The command:
+/process/gconv/onIsolated
+
+Allow simulate conversion on isolated particles without screening
+The perimeter values:
+false - (default) atomic electron screening
+true - conversion on isolated particles
+
+One more command for G4GammaConversionToMuons.
+
+To enable gamma to mu+ mu- conversion use command:
+
+/process/em/max5DMuPairEnergy emax5D units
+The conversion disabled by default, emax5D set to 0.0
+
+The model tested for the energies about the threshold up to PeV range.
+

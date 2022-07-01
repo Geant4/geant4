@@ -68,16 +68,13 @@ BrachyDetectorConstructionTG186::BrachyDetectorConstructionTG186():
    fTG186simpleCableVisAtt(nullptr)
 {}
 
-BrachyDetectorConstructionTG186::~BrachyDetectorConstructionTG186()
-{}
-
 void BrachyDetectorConstructionTG186::ConstructTG186(G4VPhysicalVolume* mother)
 {
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
 
   G4NistManager* nist = G4NistManager::Instance();
-  G4Material* iridium = nist -> FindOrBuildMaterial("G4_Ir");
+  auto iridium = nist -> FindOrBuildMaterial("G4_Ir");
  
   // Stainless steel (Medical Physics, Vol 25, No 10, Oct 1998)
   constexpr G4double d = 8.02*g/cm3;
@@ -87,7 +84,7 @@ void BrachyDetectorConstructionTG186::ConstructTG186(G4VPhysicalVolume* mother)
   G4Element* elCr = nist -> FindOrBuildElement(Z=24);
   G4Element* elFe = nist -> FindOrBuildElement(Z=26);
   G4Element* elNi = nist -> FindOrBuildElement(Z=28);
-  G4Material* capsuleMat = new G4Material("Stainless steel",d,5);
+  auto capsuleMat = new G4Material("Stainless steel",d,5);
   capsuleMat -> AddElement(elMn, 0.02);
   capsuleMat -> AddElement(elSi, 0.01);
   capsuleMat -> AddElement(elCr, 0.19);

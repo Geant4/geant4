@@ -27,27 +27,50 @@
 #define HEPVis_SoGL2PSAction_h 
 
 #include <Inventor/actions/SoGLRenderAction.h>
-#include "G4OpenGL2PSAction.hh"
+
+#include <tools/gl2ps_def.h>
+
+#include <string>
 
 /**
  *  SoGL2PSAction inherits Inventor/SoGLRenderAction.
  * It uses the gl2ps software to produce vector PostScript of a scene graph.
- *  See applications/DetectorTreeKit, Polyhedron for examples.
  */
 
 #define SoGL2PSAction Geant4_SoGL2PSAction
 
-class SoGL2PSAction : public SoGLRenderAction, public G4OpenGL2PSAction {
+class SoGL2PSAction : public SoGLRenderAction {
   SO_ACTION_HEADER(SoGL2PSAction);
 public:
   SoGL2PSAction(const SbViewportRegion&);
+  virtual ~SoGL2PSAction();
 public: /*SoINTERNAL*/
   static void initClass();
+public:  
+  void setFileName(const std::string&);
+  void setTitleAndProducer(const std::string&,const std::string&);
+  void setExportImageFormat_PS();
+  void setExportImageFormat_EPS();
+  void setExportImageFormat_TEX();
+  void setExportImageFormat_PDF();
+  void setExportImageFormat_SVG();
+  void setExportImageFormat_PGF();
   bool enableFileWriting();
   void disableFileWriting();
   bool addBitmap(int,int,float=0,float=0,float=0,float=0);
 protected:
   virtual void beginTraversal(SoNode*);
+private:  
+  bool openFile();
+  void closeFile();
+  bool beginPage(int,int,int,int);
+  bool endPage();
+  tools_GL2PScontextPointer fContext;
+  FILE* fFile;
+  std::string fFileName;
+  std::string fTitle;
+  std::string fProducer;
+  unsigned int fFormat;
 };
 
 #endif

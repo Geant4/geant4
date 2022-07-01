@@ -67,7 +67,6 @@
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
 
-#include "G4PolyhedronArbitrary.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
 
@@ -1925,34 +1924,31 @@ void G4TessellatedSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4Polyhedron *G4TessellatedSolid::CreatePolyhedron () const
+G4Polyhedron* G4TessellatedSolid::CreatePolyhedron () const
 {
   G4int nVertices = fVertexList.size();
-  G4int nFacets   = fFacets.size();
-  G4PolyhedronArbitrary* polyhedron =
-    new G4PolyhedronArbitrary (nVertices, nFacets);
-  for (auto v= fVertexList.cbegin(); v!=fVertexList.cend(); ++v)
+  G4int nFacets = fFacets.size();
+  G4Polyhedron* polyhedron = new G4Polyhedron(nVertices, nFacets);
+  for (G4int i = 0; i < nVertices; ++i)
   {
-    polyhedron->AddVertex(*v);
+    polyhedron->SetVertex(i+1, fVertexList[i]);
   }
 
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)
+  for (G4int i = 0; i < nFacets; ++i)
   {
     G4VFacet* facet = fFacets[i];
     G4int v[4] = {0};
     G4int n = facet->GetNumberOfVertices();
     if (n > 4) n = 4;
-    for (G4int j=0; j<n; ++j)
+    for (G4int j = 0; j < n; ++j)
     {
-      G4int k = facet->GetVertexIndex(j);
-      v[j] = k+1;
+      v[j] = facet->GetVertexIndex(j) + 1;
     }
-    polyhedron->AddFacet(v[0],v[1],v[2],v[3]);
+    polyhedron->SetFacet(i+1, v[0], v[1], v[2], v[3]);
   }
   polyhedron->SetReferences();
 
-  return (G4Polyhedron*) polyhedron;
+  return polyhedron;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

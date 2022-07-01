@@ -57,6 +57,6 @@
 // Class Definition
 /////////////////////
 
-typedef G4PhysicsFreeVector G4MaterialPropertyVector;
+using G4MaterialPropertyVector = G4PhysicsFreeVector;
 
 #endif /* G4MaterialPropertyVector_h */

@@ -336,7 +336,7 @@ void G4VXTRenergyLoss::BuildEnergyTable()
   }
   for(iTkin = 0; iTkin < fTotBin; ++iTkin)  // Lorentz factor loop
   {
-    G4PhysicsLogVector* energyVector =
+    auto energyVector =
       new G4PhysicsLogVector(fMinEnergyTR, fMaxEnergyTR, fBinTR);
 
     fGamma =
@@ -418,7 +418,7 @@ void G4VXTRenergyLoss::BuildAngleForEnergyBank()
   else
     fMaxEnergyTR = fTheMaxEnergyTR;
 
-  G4PhysicsLogVector* energyVector =
+  auto energyVector =
     new G4PhysicsLogVector(fMinEnergyTR, fMaxEnergyTR, fBinTR);
 
   G4Integrator<G4VXTRenergyLoss, G4double (G4VXTRenergyLoss::*)(G4double)>
@@ -446,7 +446,7 @@ void G4VXTRenergyLoss::BuildAngleForEnergyBank()
       fEnergy  = energyVector->GetLowEdgeEnergy(iTR);
       
      // log-vector to increase number of thin bins for small angles
-      G4PhysicsLogVector* angleVector = new G4PhysicsLogVector(fMinThetaTR, fMaxThetaTR, fBinTR);
+      auto angleVector = new G4PhysicsLogVector(fMinThetaTR, fMaxThetaTR, fBinTR);
  
       
 
@@ -556,7 +556,7 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
            angleSum = 0.;
   G4int iTheta, k, kMin;
 
-  G4PhysicsFreeVector* angleVector = new G4PhysicsFreeVector(n);
+  auto angleVector = new G4PhysicsFreeVector(n);
 
   cofPHC = 4. * pi * hbarc;
   tmp    = (fSigma1 - fSigma2) / cofPHC / energy;
@@ -671,7 +671,7 @@ void G4VXTRenergyLoss::BuildGlobalAngleTable()
       if(fMaxThetaTR < fTheMinAngle)
         fMaxThetaTR = fTheMinAngle;
     }
-    G4PhysicsLinearVector* angleVector =
+    auto angleVector =
     // G4PhysicsLogVector* angleVector =
       new G4PhysicsLinearVector(0.0, fMaxThetaTR, fBinTR);
     //  new G4PhysicsLogVector(1.e-8, fMaxThetaTR, fBinTR);
@@ -808,7 +808,7 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt(const G4Track& aTrack,
       directionTR.rotateUz(direction);
       directionTR.unit();
 
-      G4DynamicParticle* aPhotonTR =
+      auto aPhotonTR =
         new G4DynamicParticle(G4Gamma::Gamma(), directionTR, energyTR);
 
       // A XTR photon is set on the particle track inside the radiator

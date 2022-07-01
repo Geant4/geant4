@@ -92,7 +92,6 @@ class G4SafetyHelper
 
     G4PathFinder* fpPathFinder = nullptr;
     G4Navigator* fpMassNavigator = nullptr;
-    G4int fMassNavigatorId = -1;
 
     G4bool fUseParallelGeometries = false; 
       // Flag whether to use PathFinder or single (mass) Navigator directly

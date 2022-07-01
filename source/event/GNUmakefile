@@ -26,6 +26,7 @@ CPPFLAGS += \
             -I$(G4BASE)/tracking/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
+            -I$(G4BASE)/processes/parameterisation/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/leptons/include \
@@ -35,6 +36,7 @@ CPPFLAGS += \
             -I$(G4BASE)/particles/hadrons/mesons/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/geometry/management/include \
+            -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/navigation/include \
 	    -I$(G4BASE)/geometry/biasing/include \

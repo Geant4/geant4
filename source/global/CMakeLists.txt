@@ -1,13 +1,13 @@
 # - G4global category build(s)
-
-# Add (private) allocation export symbol
 add_definitions(-DG4GLOB_ALLOC_EXPORT)
 
-# Compose library from subcategories
-geant4_global_library_target(NAME G4global
-  COMPONENTS
-    HEPGeometry/sources.cmake
-    HEPNumerics/sources.cmake
-    HEPRandom/sources.cmake
-    management/sources.cmake
-  )
+include(HEPGeometry/sources.cmake)
+include(HEPNumerics/sources.cmake)
+include(HEPRandom/sources.cmake)
+include(management/sources.cmake)
+
+geant4_add_category(G4global MODULES 
+  G4hepgeometry
+  G4hepnumerics
+  G4heprandom
+  G4globman )

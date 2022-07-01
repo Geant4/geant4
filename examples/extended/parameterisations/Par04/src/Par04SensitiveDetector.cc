@@ -185,8 +185,8 @@ Par04Hit* Par04SensitiveDetector::RetrieveAndSetupHit(G4ThreeVector aGlobalPosit
   std::size_t hitID =
     fMeshNbOfCells.x() * fMeshNbOfCells.z() * phiNo + fMeshNbOfCells.z() * rhoNo + zNo;
 
-  if(hitID >= fHitsCollection->entries() || zNo > fMeshNbOfCells.z() ||
-     rhoNo > fMeshNbOfCells.x() || zNo < 0)
+  if(hitID >= fHitsCollection->entries() || zNo >= fMeshNbOfCells.z() ||
+     rhoNo >= fMeshNbOfCells.x() || zNo < 0)
   {
     return nullptr;
   }

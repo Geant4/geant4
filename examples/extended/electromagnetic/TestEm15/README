@@ -125,4 +125,7 @@
 
        The example of Gamma Conversion macro :
        gamma.mac - gamma to e+ e- 
-       gamma2mumu.mac gamma to mu+ mu- 
+       gamma2mumu.mac - gamma to mu+ mu-
+
+       See README.gamma for details about Gamma Conversion
+       macros and histograsms.

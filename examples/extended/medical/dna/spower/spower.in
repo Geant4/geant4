@@ -1,5 +1,8 @@
 #
+/control/verbose 1
+/control/cout/ignoreThreadsExcept 0
 /run/numberOfThreads 8
+/run/verbose 1
 #
 /spower/det/setMat G4_WATER
 /spower/det/setRadius 1 m
@@ -30,4 +33,4 @@
 #
 /gun/energy 1000 eV
 /run/beamOn 10000
-
+#

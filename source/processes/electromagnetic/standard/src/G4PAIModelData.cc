@@ -113,9 +113,9 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
   const G4Material* mat = couple->GetMaterial();     
   fSandia.Initialize(const_cast<G4Material*>(mat));
 
-  G4PhysicsTable* PAItransferTable = new G4PhysicsTable(fTotBin+1);
-  G4PhysicsTable* PAIdEdxTable = new G4PhysicsTable(fTotBin+1);
-  G4PhysicsLogVector* dEdxMeanVector =
+  auto PAItransferTable = new G4PhysicsTable(fTotBin+1);
+  auto PAIdEdxTable = new G4PhysicsTable(fTotBin+1);
+  auto dEdxMeanVector =
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
 			   fTotBin);
@@ -150,8 +150,8 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
     }
     n -= kmin;
 
-    G4PhysicsFreeVector* transferVector = new G4PhysicsFreeVector(n);
-    G4PhysicsFreeVector* dEdxVector = new G4PhysicsFreeVector(n);
+    auto transferVector = new G4PhysicsFreeVector(n);
+    auto dEdxVector = new G4PhysicsFreeVector(n);
 
     //G4double tr0 = 0.0;
     G4double tr = 0.0;
@@ -301,7 +301,7 @@ G4double G4PAIModelData::SampleAlongStepTransfer(G4int coupleIndex,
   G4double meanN22 = 0.0;
 
   G4PhysicsVector* v1 = (*(fPAIxscBank[coupleIndex]))(iPlace);
-  G4PhysicsVector* v2 = 0;
+  G4PhysicsVector* v2 = nullptr;
 
   G4double e1 = v1->Energy(0);
   G4double e2 = std::min(tmax, v1->GetMaxEnergy());

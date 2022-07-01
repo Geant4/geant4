@@ -235,6 +235,29 @@ class G4Track
       // (the model ID and its name are supposed to be used in Geant4
       // code, whereas the index is meant for plotting in user code)
 
+    inline const G4ParticleDefinition* GetParentResonanceDef() const;
+    inline void SetParentResonanceDef(const G4ParticleDefinition* parent);
+    inline G4int GetParentResonanceID() const;
+    inline void SetParentResonanceID(const G4int parentID );
+    inline G4bool HasParentResonance() const;
+    inline G4int GetParentResonancePDGEncoding() const;
+    inline G4String GetParentResonanceName() const;
+    inline G4double GetParentResonanceMass() const;
+      // Because short-lived resonances (e.g. omega, phi, rho, delta, etc.)
+      // do not have corresponding track objects, if the track is produced
+      // by a resonance parent, these methods allow to get/set information
+      // regarding this short-lived parent.
+      // The ID is a unique (integer) identifier for each resonance (which
+      // corresponds to the rounded integer of the mass of the resonance
+      // in keV), which allows to know if two (or more) tracks originated
+      // from the same parent resonance: this should not be confused with
+      // the parent-track-ID (fParentID) which corresponds to its closest
+      // ancestor which is not a short-lived resonance (and therefore has
+      // a corresponding track object).
+      // In the case of a track non originating from a resonance parent,
+      // the above "Get" methods return, respectively: nullptr, 0, false,
+      // 0, "", 0.
+  
     G4double GetWeight() const;
     void SetWeight(G4double aValue);
       // Track weight; methods for manipulating a weight for this track
@@ -316,6 +339,14 @@ class G4Track
 
     G4int fCreatorModelID = -1;
       // ID of the physics model which created the track
+
+    const G4ParticleDefinition* fParentResonanceDef = nullptr;
+      // Pointer to the particle definition of a short-lived resonance,
+      // in the case that the track is produced by a resonance parent
+      // (which does not have a corresponding track object)
+    G4int fParentResonanceID = 0;
+      // Unique ID for the parent resonance, in the case that the track
+      // is produced by a resonance parent, else 0
 
     G4int fParentID = 0;
     G4int fTrackID = 0;

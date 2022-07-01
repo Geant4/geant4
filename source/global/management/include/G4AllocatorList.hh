@@ -52,7 +52,7 @@ class G4AllocatorList
   G4int Size() const;
 
  private:
-  G4AllocatorList();
+  G4AllocatorList() = default;
 
  private:
   static G4ThreadLocal G4AllocatorList* fAllocatorList;

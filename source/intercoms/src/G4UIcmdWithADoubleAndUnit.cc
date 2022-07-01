@@ -40,9 +40,9 @@ G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit(
   const char* theCommandPath, G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter* dblParam = new G4UIparameter('d');
+  auto* dblParam = new G4UIparameter('d');
   SetParameter(dblParam);
-  G4UIparameter* untParam = new G4UIparameter('s');
+  auto* untParam = new G4UIparameter('s');
   untParam->SetParameterName("Unit");
   SetParameter(untParam);
   SetCommandType(WithADoubleAndUnitCmd);
@@ -54,7 +54,7 @@ G4int G4UIcmdWithADoubleAndUnit::DoIt(G4String parameterList)
   std::vector<G4String> token_vector;
   G4Tokenizer tkn(parameterList);
   G4String str;
-  while((str = tkn()) != "")
+  while(!(str = tkn()).empty())
   {
     token_vector.push_back(str);
   }
@@ -62,7 +62,7 @@ G4int G4UIcmdWithADoubleAndUnit::DoIt(G4String parameterList)
   // convert a value in default unit
   G4String converted_parameter;
   G4String default_unit = GetParameter(1)->GetDefaultValue();
-  if(default_unit != "" && token_vector.size() >= 2)
+  if(!default_unit.empty() && token_vector.size() >= 2)
   {
     if(CategoryOf(token_vector[1]) != CategoryOf(default_unit))
     {

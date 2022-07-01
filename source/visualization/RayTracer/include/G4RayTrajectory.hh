@@ -94,7 +94,7 @@ class G4RayTrajectory : public G4VTrajectory
    std::vector<G4RayTrajectoryPoint*>* positionRecord;
 };
 
-#if defined G4VIS_ALLOC_EXPORT
+#if defined G4RAYTRACER_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4RayTrajectory>*& rayTrajectoryAllocator();
 #else
   extern G4DLLIMPORT G4Allocator<G4RayTrajectory>*& rayTrajectoryAllocator();

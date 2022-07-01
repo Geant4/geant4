@@ -46,8 +46,7 @@ class G4coutDestination
  public:
 
   G4coutDestination() = default;
-  virtual ~G4coutDestination();
-  // Note: limitation on ICC for MIC cannot use 'default'
+  virtual ~G4coutDestination() = default;
 
   // The type of the functions defining a transformation of the message.
   // The function manipulates the input message, for example, to add a

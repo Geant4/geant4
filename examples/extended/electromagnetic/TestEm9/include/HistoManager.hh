@@ -107,7 +107,7 @@ public: // Without description
   // Acceptance parameters
   inline void SetBeamEnergy(G4double val) {fBeamEnergy = val;};
 
-  void SetEdepAndRMS(G4int, G4ThreeVector);
+  void SetEdepAndRMS(G4int, const G4ThreeVector&);
 
 private:
 
@@ -117,6 +117,8 @@ private:
   const G4ParticleDefinition* fGamma;
   const G4ParticleDefinition* fElectron;
   const G4ParticleDefinition* fPositron;
+
+  Histo*    fHisto;
 
   G4int fNHisto;
   G4int fVerbose;
@@ -129,14 +131,11 @@ private:
 
   G4double fTrackLength;
   G4double fStep;
-//  G4double fStepTarget;
   G4bool fTrackAbs;        // Track is in absorber
   G4int fEvt;
   G4int fElec;
   G4int fPosit;
   G4int fGam;
-//  G4int fGamph;
-//  G4int fGamTar;
   G4int fLowe;
   G4int fBinsE, fBinsEA, fBinsED;
 
@@ -158,11 +157,6 @@ private:
   G4double  fErmstr[6];
   G4int     fStat[6];
   G4int     fNmax;
-
-  Histo*    fHisto;
-  
-
-
 };
 
 #endif

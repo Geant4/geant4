@@ -1,20 +1,44 @@
--------------------------------------------------------------------
+# Category tracking History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2022-06-21 Ben Morgan (tracking-V11-00-06)
+- Merge `G4SteppingManager` implementation files
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-06-05 Vladimir Ivanchenko (tracking-V11-00-05)
+- `G4SteppingManager2`: removed check on cuts and removed dependence of
+  tracking from EM physics; ApplyCut method in this place was never used and cannot be
+  use consistently, because energy deposition strongly depend on particle type, physics
+  models, and user requirement. It is very difficult implementing ApplyCuts here for
+  all use cases, it is why the real implementation is done within EM physics classes  
+
+## 2022-05-10 Jonas Hahnfeld (tracking-V11-00-04)
+- `G4SteppingManager`:
+  * Use new virtual method `GetCreatorProcess()` when processing secondaries
+  * Correct ProcessDefinedStep for AtRest case
+
+## 2022-05-04 Jonas Hahnfeld (tracking-V11-00-03)
+- `G4SteppingManager`:
+  * Refactor and simplify processing of secondaries
+  * Use process from PostStepPoint as creator
+
+## 2022-04-19 Jonas Hahnfeld (tracking-V11-00-02)
+- Only set step status of `fGeomBoundary` on volume boundary
+
+## 2022-01-28 Ben Morgan (tracking-V11-00-01)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+- Make DLL export symbol a CMake module-level compile definition to aid
+  future modularization
+
+## 2021-12-10 Ben Morgan (tracking-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October 25, 2021 B.Morgan (tracking-V10-07-19)
 - Use G4StrUtil functions replacing deprecated G4String member functions

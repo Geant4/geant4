@@ -102,12 +102,16 @@ public: // With description
       fTransform(transform),
       fDrawn(drawn) {}
     G4VPhysicalVolume* GetPhysicalVolume() const {return fpPV;}
-    G4int GetCopyNo() const {return fCopyNo;}
-    G4int GetNonCulledDepth() const {return fNonCulledDepth;}
-    const G4Transform3D& GetTransform() const {return fTransform;}
-    G4bool GetDrawn() const {return fDrawn;}
-    void SetDrawn(G4bool drawn) {fDrawn = drawn;}
-    G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
+    G4int  GetCopyNo()                     const {return fCopyNo;}
+    G4int  GetNonCulledDepth()             const {return fNonCulledDepth;}
+    const  G4Transform3D& GetTransform()   const {return fTransform;}
+    G4bool GetDrawn()                      const {return fDrawn;}
+    void SetPhysicalVolume(G4VPhysicalVolume* v)   {fpPV = v;}
+    void SetCopyNo        (G4int n)                {fCopyNo = n;}
+    void SetNonCulledDepth(G4int d)                {fNonCulledDepth = d;}
+    void SetTransform     (const G4Transform3D& t) {fTransform = t;}
+    void SetDrawn         (G4bool b)               {fDrawn = b;}
+    G4bool operator<  (const G4PhysicalVolumeNodeID& right) const;
     G4bool operator!= (const G4PhysicalVolumeNodeID& right) const;
     G4bool operator== (const G4PhysicalVolumeNodeID& right) const {
       return !operator!= (right);
@@ -143,6 +147,7 @@ public: // With description
     G4int                                  fCopyNo;
     G4Transform3D                          fTouchableGlobalTransform;
     std::vector<G4PhysicalVolumeNodeID>    fTouchableBaseFullPVPath;
+    std::vector<G4PhysicalVolumeNodeID>    fTouchableFullPVPath;
   };
 
   G4PhysicalVolumeModel

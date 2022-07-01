@@ -28,6 +28,11 @@
 // 
 // John Allison  30th October 1996
 
+
+inline const G4String& G4Visible::GetInfo() const {return fInfo;}
+
+inline void G4Visible::SetInfo(const G4String& info) {fInfo = info;}
+
 inline const G4VisAttributes* G4Visible::GetVisAttributes () const {
   return fpVisAttributes;
 }

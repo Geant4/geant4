@@ -1,18 +1,25 @@
--------------------------------------------------------------------
+# Example Par04 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Example Par04 History file
-                    ---------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2022-02-28 Dalila Salamani (expar04-V11-00-02)
+- Add python training scripts
+- Add model conversion to ONNX and LWTNN to the train script and update README
+- Change visualization scripts for fast simulation
+- Add new control histograms
+- Change extension of macros from .in to .mac
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2021-12-20 Anna Zaborowska (expar04-V11-00-01)
+- Fix warnings and lwtnn macro
+
+## 2021-12-10 Ben Morgan (expar04-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 08-Nov-21  D. Salamani, A. Zaborowska (expar04-V10-07-00)
 - Create Par04 example

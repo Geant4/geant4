@@ -64,15 +64,15 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   loopCommand = new G4UIcommand("/control/loop", this);
   loopCommand->SetGuidance("Execute a macro file more than once.");
   loopCommand->SetGuidance("Loop counter can be used as an aliased variable.");
-  G4UIparameter* param1 = new G4UIparameter("macroFile", 's', false);
+  auto* param1 = new G4UIparameter("macroFile", 's', false);
   loopCommand->SetParameter(param1);
-  G4UIparameter* param2 = new G4UIparameter("counterName", 's', false);
+  auto* param2 = new G4UIparameter("counterName", 's', false);
   loopCommand->SetParameter(param2);
-  G4UIparameter* param3 = new G4UIparameter("initialValue", 'd', false);
+  auto* param3 = new G4UIparameter("initialValue", 'd', false);
   loopCommand->SetParameter(param3);
-  G4UIparameter* param4 = new G4UIparameter("finalValue", 'd', false);
+  auto* param4 = new G4UIparameter("finalValue", 'd', false);
   loopCommand->SetParameter(param4);
-  G4UIparameter* param5 = new G4UIparameter("stepSize", 'd', true);
+  auto* param5 = new G4UIparameter("stepSize", 'd', true);
   param5->SetDefaultValue(1.0);
   loopCommand->SetParameter(param5);
   loopCommand->SetToBeBroadcasted(false);
@@ -82,11 +82,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   foreachCommand->SetGuidance(
     "Loop counter can be used as an aliased variable.");
   foreachCommand->SetGuidance("Values must be separated by a space.");
-  G4UIparameter* param6 = new G4UIparameter("macroFile", 's', false);
+  auto* param6 = new G4UIparameter("macroFile", 's', false);
   foreachCommand->SetParameter(param6);
-  G4UIparameter* param7 = new G4UIparameter("counterName", 's', false);
+  auto* param7 = new G4UIparameter("counterName", 's', false);
   foreachCommand->SetParameter(param7);
-  G4UIparameter* param8 = new G4UIparameter("valueList", 's', false);
+  auto* param8 = new G4UIparameter("valueList", 's', false);
   foreachCommand->SetParameter(param8);
   foreachCommand->SetToBeBroadcasted(false);
 
@@ -147,9 +147,9 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
     "the string must be enclosed by double quotes (\").");
   aliasCommand->SetGuidance("To use an alias, enclose the alias name with");
   aliasCommand->SetGuidance("parenthesis \"{\" and \"}\".");
-  G4UIparameter* aliasNameParam = new G4UIparameter("aliasName", 's', false);
+  auto* aliasNameParam = new G4UIparameter("aliasName", 's', false);
   aliasCommand->SetParameter(aliasNameParam);
-  G4UIparameter* aliasValueParam = new G4UIparameter("aliasValue", 's', false);
+  auto* aliasValueParam = new G4UIparameter("aliasValue", 's', false);
   aliasCommand->SetParameter(aliasValueParam);
 
   unaliasCommand = new G4UIcmdWithAString("/control/unalias", this);
@@ -170,11 +170,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   getValCmd->SetGuidance(
     "Command is ignored if the UI command does not support GetCurrentValue().");
   getValCmd->SetGuidance(" Syntax : <alias_name> <UI_command> <iIdx>");
-  G4UIparameter* aliName = new G4UIparameter("alias_name", 's', false);
+  auto* aliName = new G4UIparameter("alias_name", 's', false);
   getValCmd->SetParameter(aliName);
-  G4UIparameter* comName = new G4UIparameter("UI_command", 's', false);
+  auto* comName = new G4UIparameter("UI_command", 's', false);
   getValCmd->SetParameter(comName);
-  G4UIparameter* iIdxParam = new G4UIparameter("iIdx", 'i', true);
+  auto* iIdxParam = new G4UIparameter("iIdx", 'i', true);
   iIdxParam->SetDefaultValue(0);
   getValCmd->SetParameter(iIdxParam);
   getValCmd->SetToBeBroadcasted(false);
@@ -212,28 +212,28 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ifCommand = new G4UIcommand("/control/if", this);
   ifCommand->SetGuidance("Execute a macro file if the expression is true.");
   ifCommand->SetGuidance(" Syntax : <double> <comp> <double> <macro_file>");
-  G4UIparameter* leftParam = new G4UIparameter("left", 'd', false);
+  auto* leftParam = new G4UIparameter("left", 'd', false);
   ifCommand->SetParameter(leftParam);
-  G4UIparameter* compParam = new G4UIparameter("comp", 's', false);
+  auto* compParam = new G4UIparameter("comp", 's', false);
   compParam->SetParameterCandidates("> >= < <= == !=");
   ifCommand->SetParameter(compParam);
-  G4UIparameter* rightParam = new G4UIparameter("right", 'd', false);
+  auto* rightParam = new G4UIparameter("right", 'd', false);
   ifCommand->SetParameter(rightParam);
-  G4UIparameter* macroFileParam = new G4UIparameter("macroFile", 's', false);
+  auto* macroFileParam = new G4UIparameter("macroFile", 's', false);
   ifCommand->SetParameter(macroFileParam);
   ifCommand->SetToBeBroadcasted(false);
 
   doifCommand = new G4UIcommand("/control/doif", this);
   doifCommand->SetGuidance("Execute a UI command if the expression is true.");
   doifCommand->SetGuidance(" Syntax : <double> <comp> <double> <UI_command>");
-  G4UIparameter* doleftParam = new G4UIparameter("left", 'd', false);
+  auto* doleftParam = new G4UIparameter("left", 'd', false);
   doifCommand->SetParameter(doleftParam);
-  G4UIparameter* docompParam = new G4UIparameter("comp", 's', false);
+  auto* docompParam = new G4UIparameter("comp", 's', false);
   docompParam->SetParameterCandidates("> >= < <= == !=");
   doifCommand->SetParameter(docompParam);
-  G4UIparameter* dorightParam = new G4UIparameter("right", 'd', false);
+  auto* dorightParam = new G4UIparameter("right", 'd', false);
   doifCommand->SetParameter(dorightParam);
-  G4UIparameter* comParam = new G4UIparameter("UI_command", 's', false);
+  auto* comParam = new G4UIparameter("UI_command", 's', false);
   doifCommand->SetParameter(comParam);
   doifCommand->SetToBeBroadcasted(false);
 
@@ -243,11 +243,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   addCommand->SetGuidance(
     " <new_alias> may be an already existing alias. If it is the case,");
   addCommand->SetGuidance(" aliased value is alternated.");
-  G4UIparameter* newAlias1 = new G4UIparameter("new_alias", 's', false);
+  auto* newAlias1 = new G4UIparameter("new_alias", 's', false);
   addCommand->SetParameter(newAlias1);
-  G4UIparameter* val1a = new G4UIparameter("value1", 'd', false);
+  auto* val1a = new G4UIparameter("value1", 'd', false);
   addCommand->SetParameter(val1a);
-  G4UIparameter* val1b = new G4UIparameter("value2", 'd', false);
+  auto* val1b = new G4UIparameter("value2", 'd', false);
   addCommand->SetParameter(val1b);
   addCommand->SetToBeBroadcasted(false);
 
@@ -258,11 +258,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   subtractCommand->SetGuidance(
     " <new_alias> may be an already existing alias. If it is the case,");
   subtractCommand->SetGuidance(" aliased value is alternated.");
-  G4UIparameter* newAlias2 = new G4UIparameter("new_alias", 's', false);
+  auto* newAlias2 = new G4UIparameter("new_alias", 's', false);
   subtractCommand->SetParameter(newAlias2);
-  G4UIparameter* val2a = new G4UIparameter("value1", 'd', false);
+  auto* val2a = new G4UIparameter("value1", 'd', false);
   subtractCommand->SetParameter(val2a);
-  G4UIparameter* val2b = new G4UIparameter("value2", 'd', false);
+  auto* val2b = new G4UIparameter("value2", 'd', false);
   subtractCommand->SetParameter(val2b);
   subtractCommand->SetToBeBroadcasted(false);
 
@@ -273,11 +273,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   multiplyCommand->SetGuidance(
     " <new_alias> may be an already existing alias. If it is the case,");
   multiplyCommand->SetGuidance(" aliased value is alternated.");
-  G4UIparameter* newAlias3 = new G4UIparameter("new_alias", 's', false);
+  auto* newAlias3 = new G4UIparameter("new_alias", 's', false);
   multiplyCommand->SetParameter(newAlias3);
-  G4UIparameter* val3a = new G4UIparameter("value1", 'd', false);
+  auto* val3a = new G4UIparameter("value1", 'd', false);
   multiplyCommand->SetParameter(val3a);
-  G4UIparameter* val3b = new G4UIparameter("value2", 'd', false);
+  auto* val3b = new G4UIparameter("value2", 'd', false);
   multiplyCommand->SetParameter(val3b);
   multiplyCommand->SetToBeBroadcasted(false);
 
@@ -288,11 +288,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   divideCommand->SetGuidance(
     " <new_alias> may be an already existing alias. If it is the case,");
   divideCommand->SetGuidance(" aliased value is alternated.");
-  G4UIparameter* newAlias4 = new G4UIparameter("new_alias", 's', false);
+  auto* newAlias4 = new G4UIparameter("new_alias", 's', false);
   divideCommand->SetParameter(newAlias4);
-  G4UIparameter* val4a = new G4UIparameter("value1", 'd', false);
+  auto* val4a = new G4UIparameter("value1", 'd', false);
   divideCommand->SetParameter(val4a);
-  G4UIparameter* val4b = new G4UIparameter("value2", 'd', false);
+  auto* val4b = new G4UIparameter("value2", 'd', false);
   val4b->SetParameterRange("value2 != 0.");
   divideCommand->SetParameter(val4b);
   divideCommand->SetToBeBroadcasted(false);
@@ -304,11 +304,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   remainderCommand->SetGuidance(
     " <new_alias> may be an already existing alias. If it is the case,");
   remainderCommand->SetGuidance(" aliased value is alternated.");
-  G4UIparameter* newAlias5 = new G4UIparameter("new_alias", 's', false);
+  auto* newAlias5 = new G4UIparameter("new_alias", 's', false);
   remainderCommand->SetParameter(newAlias5);
-  G4UIparameter* val5a = new G4UIparameter("value1", 'i', false);
+  auto* val5a = new G4UIparameter("value1", 'i', false);
   remainderCommand->SetParameter(val5a);
-  G4UIparameter* val5b = new G4UIparameter("value2", 'i', false);
+  auto* val5b = new G4UIparameter("value2", 'i', false);
   val4b->SetParameterRange("value2 != 0");
   remainderCommand->SetParameter(val5b);
   remainderCommand->SetToBeBroadcasted(false);
@@ -316,14 +316,14 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   strifCommand = new G4UIcommand("/control/strif", this);
   strifCommand->SetGuidance("Execute a macro file if the expression is true.");
   strifCommand->SetGuidance(" Syntax : <string> <comp> <string> <macro_file>");
-  G4UIparameter* strleftParam = new G4UIparameter("left", 's', false);
+  auto* strleftParam = new G4UIparameter("left", 's', false);
   strifCommand->SetParameter(strleftParam);
-  G4UIparameter* strcompParam = new G4UIparameter("comp", 's', false);
+  auto* strcompParam = new G4UIparameter("comp", 's', false);
   strcompParam->SetParameterCandidates("== !=");
   strifCommand->SetParameter(strcompParam);
-  G4UIparameter* strrightParam = new G4UIparameter("right", 's', false);
+  auto* strrightParam = new G4UIparameter("right", 's', false);
   strifCommand->SetParameter(strrightParam);
-  G4UIparameter* strmacroFileParam = new G4UIparameter("macroFile", 's', false);
+  auto* strmacroFileParam = new G4UIparameter("macroFile", 's', false);
   strifCommand->SetParameter(strmacroFileParam);
   strifCommand->SetToBeBroadcasted(false);
 
@@ -332,15 +332,14 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
     "Execute a UI command if the expression is true.");
   strdoifCommand->SetGuidance(
     " Syntax : <string> <comp> <string> <UI_command>");
-  G4UIparameter* strdoleftParam = new G4UIparameter("left", 's', false);
+  auto* strdoleftParam = new G4UIparameter("left", 's', false);
   strdoifCommand->SetParameter(strdoleftParam);
-  G4UIparameter* strdocompParam = new G4UIparameter("comp", 's', false);
+  auto* strdocompParam = new G4UIparameter("comp", 's', false);
   strdocompParam->SetParameterCandidates("== !=");
   strdoifCommand->SetParameter(strdocompParam);
-  G4UIparameter* strdorightParam = new G4UIparameter("right", 's', false);
+  auto* strdorightParam = new G4UIparameter("right", 's', false);
   strdoifCommand->SetParameter(strdorightParam);
-  G4UIparameter* strdomacroFileParam =
-    new G4UIparameter("UI_command", 's', false);
+  auto* strdomacroFileParam = new G4UIparameter("UI_command", 's', false);
   strdoifCommand->SetParameter(strdomacroFileParam);
   strdoifCommand->SetToBeBroadcasted(false);
 
@@ -470,7 +469,7 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if(command == getEnvCmd)
   {
     command->ResetFailure();
-    if(std::getenv(newValue))
+    if(std::getenv(newValue) != nullptr)
     {
       G4String st = newValue;
       st += " ";
@@ -564,19 +563,33 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4String mac  = next();
     G4bool x      = false;
     if(comp == ">")
+    {
       x = (l > r);
+    }
     else if(comp == ">=")
+    {
       x = (l >= r);
+    }
     else if(comp == "<")
+    {
       x = (l < r);
+    }
     else if(comp == "<=")
+    {
       x = (l <= r);
+    }
     else if(comp == "==")
+    {
       x = (l == r);
+    }
     else if(comp == "!=")
+    {
       x = (l != r);
+    }
     if(x)
+    {
       UI->ExecuteMacroFile(mac);
+    }
   }
   if(command == doifCommand)
   {
@@ -608,19 +621,33 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
     G4bool x = false;
     if(comp == ">")
+    {
       x = (l > r);
+    }
     else if(comp == ">=")
+    {
       x = (l >= r);
+    }
     else if(comp == "<")
+    {
       x = (l < r);
+    }
     else if(comp == "<=")
+    {
       x = (l <= r);
+    }
     else if(comp == "==")
+    {
       x = (l == r);
+    }
     else if(comp == "!=")
+    {
       x = (l != r);
+    }
     if(x)
+    {
       UI->ApplyCommand(c1);
+    }
   }
   if(command == addCommand)
   {
@@ -699,7 +726,9 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       x = (l != r);
     }
     if(x)
+    {
       UI->ExecuteMacroFile(mac);
+    }
   }
   if(command == strdoifCommand)
   {
@@ -739,27 +768,37 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       x = (l != r);
     }
     if(x)
+    {
       UI->ApplyCommand(c1);
+    }
   }
   if(command == ifBatchCommand)
   {
     if(G4UIsession::InSession() == 0)
+    {
       UI->ExecuteMacroFile(UI->FindMacroPath(newValue));
+    }
   }
   if(command == ifInteractiveCommand)
   {
     if(G4UIsession::InSession() > 0)
+    {
       UI->ExecuteMacroFile(UI->FindMacroPath(newValue));
+    }
   }
   if(command == doifBatchCommand)
   {
     if(G4UIsession::InSession() == 0)
+    {
       UI->ApplyCommand(newValue);
+    }
   }
   if(command == doifInteractiveCommand)
   {
     if(G4UIsession::InSession() > 0)
+    {
       UI->ApplyCommand(newValue);
+    }
   }
 }
 

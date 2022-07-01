@@ -42,10 +42,14 @@
 #include "G4VParticleChange.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
+#include "G4TransportationProcessType.hh"
 
 G4SpecialCuts::G4SpecialCuts(const G4String& aName)
-  : G4VProcess(aName)
+  : G4VProcess(aName, fGeneral)
 {
+  // set Process Sub Type
+  SetProcessSubType(USER_SPECIAL_CUTS);
+
    if (verboseLevel>1) {
      G4cout << GetProcessName() << " is created "<< G4endl;
    }

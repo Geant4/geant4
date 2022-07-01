@@ -106,7 +106,7 @@ void G4JAEAPolarizedElasticScatteringModel::Initialise(const G4ParticleDefinitio
     InitialiseElementSelectors(particle, cuts);
 
     // Access to elements
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
     G4int numOfCouples = theCoupleTable->GetTableSize();
@@ -158,7 +158,7 @@ void G4JAEAPolarizedElasticScatteringModel::ReadData(size_t Z, const char* path)
   const char* datadir = path;
   if(!datadir)
     {
-      datadir = std::getenv("G4LEDATA");
+      datadir = G4FindDataDir("G4LEDATA");
       if(!datadir)
 	{
 	  G4Exception("G4JAEAPolarizedElasticScatteringModel::ReadData()","em0006",

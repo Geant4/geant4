@@ -5,6 +5,8 @@ geant4_add_module(G4hadronic_mgt
   PUBLIC_HEADERS
     G4EnergyRangeManager.hh
     G4HadLeadBias.hh
+    G4HadXSHelper.hh
+    G4HadXSTypes.hh
     G4HadronicEPTestMessenger.hh
     G4HadronicInteraction.hh
     G4HadronicInteractionRegistry.hh
@@ -19,6 +21,7 @@ geant4_add_module(G4hadronic_mgt
   SOURCES
     G4EnergyRangeManager.cc
     G4HadLeadBias.cc
+    G4HadXSHelper.cc
     G4HadronicEPTestMessenger.cc
     G4HadronicInteraction.cc
     G4HadronicInteractionRegistry.cc
@@ -39,8 +42,8 @@ geant4_module_link_libraries(G4hadronic_mgt
     G4procman
     G4track
   PRIVATE
+    G4heprandom
     G4baryons
     G4bosons
-    G4heprandom
     G4leptons
     G4mesons)

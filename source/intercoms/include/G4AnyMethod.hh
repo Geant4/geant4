@@ -53,8 +53,8 @@
 class G4BadArgument : public std::bad_cast
 {
  public:
-  G4BadArgument() {}
-  virtual const char* what() const throw()
+  G4BadArgument() = default;
+  const char* what() const throw() override
   {
     return "G4BadArgument: failed operator()";
   }
@@ -70,13 +70,12 @@ class G4AnyMethod
 
     /** contructors */
 
-    G4AnyMethod()
-    {}
+   G4AnyMethod() = default;
 
-    template <class S, class T>
-    G4AnyMethod(S (T::*f)())
-    {
-      fContent = new FuncRef<S, T>(f);
+   template <class S, class T>
+   G4AnyMethod(S (T::*f)())
+   {
+     fContent = new FuncRef<S, T>(f);
     }
 
     template <class S, class T, class A0>
@@ -94,7 +93,7 @@ class G4AnyMethod
     }
 
     G4AnyMethod(const G4AnyMethod& other)
-      : fContent(other.fContent ? other.fContent->Clone() : nullptr)
+      : fContent(other.fContent != nullptr ? other.fContent->Clone() : nullptr)
       , narg(other.narg)
     {}
 
@@ -143,7 +142,7 @@ class G4AnyMethod
 
     /** Query */
 
-    G4bool Empty() const { return !fContent; }
+    G4bool Empty() const { return fContent == nullptr; }
 
     /** call operators */
 
@@ -159,7 +158,7 @@ class G4AnyMethod
 
     const std::type_info& ArgType(size_t n = 0) const
     {
-      return fContent ? fContent->ArgType(n) : typeid(void);
+      return fContent != nullptr ? fContent->ArgType(n) : typeid(void);
     }
 
   private:
@@ -167,13 +166,12 @@ class G4AnyMethod
     class Placeholder
     {
       public:
-
-        Placeholder() {}
-        virtual ~Placeholder() {}
-        virtual Placeholder* Clone() const                  = 0;
-        virtual void operator()(void*)                      = 0;
-        virtual void operator()(void*, const std::string&)  = 0;
-        virtual const std::type_info& ArgType(size_t) const = 0;
+       Placeholder()                                       = default;
+       virtual ~Placeholder()                              = default;
+       virtual Placeholder* Clone() const                  = 0;
+       virtual void operator()(void*)                      = 0;
+       virtual void operator()(void*, const std::string&)  = 0;
+       virtual const std::type_info& ArgType(size_t) const = 0;
     };
 
     template <class S, class T>
@@ -183,13 +181,13 @@ class G4AnyMethod
         : fRef(f)
       {}
 
-      virtual void operator()(void* obj) { ((T*) obj->*fRef)(); }
-      virtual void operator()(void*, const std::string&)
+      void operator()(void* obj) override { ((T*) obj->*fRef)(); }
+      void operator()(void*, const std::string&) override
       {
         throw G4BadArgument();
       }
-      virtual Placeholder* Clone() const { return new FuncRef(fRef); }
-      virtual const std::type_info& ArgType(std::size_t) const
+      Placeholder* Clone() const override { return new FuncRef(fRef); }
+      const std::type_info& ArgType(std::size_t) const override
       {
         return typeid(void);
       }
@@ -199,40 +197,43 @@ class G4AnyMethod
     template <class S, class T, class A0>
     struct FuncRef1 : public Placeholder
     {
-      typedef
-      typename remove_const<typename remove_reference<A0>::type>::type nakedA0;
+      using nakedA0 =
+        typename remove_const<typename remove_reference<A0>::type>::type;
 
       FuncRef1(S (T::*f)(A0))
         : fRef(f)
       {}
 
-      virtual void operator()(void*) { throw G4BadArgument(); }
-      virtual void operator()(void* obj, const std::string& s0)
+      void operator()(void*) override { throw G4BadArgument(); }
+      void operator()(void* obj, const std::string& s0) override
       {
         nakedA0 a0;
         std::stringstream strs(s0);
         strs >> a0;
         ((T*) obj->*fRef)(a0);
       }
-      virtual Placeholder* Clone() const { return new FuncRef1(fRef); }
-      virtual const std::type_info& ArgType(size_t) const { return typeid(A0); }
+      Placeholder* Clone() const override { return new FuncRef1(fRef); }
+      const std::type_info& ArgType(size_t) const override
+      {
+        return typeid(A0);
+      }
       S (T::*fRef)(A0);
     };
 
     template <class S, class T, class A0, class A1>
     struct FuncRef2 : public Placeholder
     {
-      typedef
-      typename remove_const<typename remove_reference<A0>::type>::type nakedA0;
-      typedef
-      typename remove_const<typename remove_reference<A1>::type>::type nakedA1;
+      using nakedA0 =
+        typename remove_const<typename remove_reference<A0>::type>::type;
+      using nakedA1 =
+        typename remove_const<typename remove_reference<A1>::type>::type;
 
       FuncRef2(S (T::*f)(A0, A1))
         : fRef(f)
       {}
 
-      virtual void operator()(void*) { throw G4BadArgument(); }
-      virtual void operator()(void* obj, const std::string& s0)
+      void operator()(void*) override { throw G4BadArgument(); }
+      void operator()(void* obj, const std::string& s0) override
       {
         nakedA0 a0;
         nakedA1 a1;
@@ -240,8 +241,8 @@ class G4AnyMethod
         strs >> a0 >> a1;
         ((T*) obj->*fRef)(a0, a1);
       }
-      virtual Placeholder* Clone() const { return new FuncRef2(fRef); }
-      virtual const std::type_info& ArgType(size_t i) const
+      Placeholder* Clone() const override { return new FuncRef2(fRef); }
+      const std::type_info& ArgType(size_t i) const override
       {
         return i == 0 ? typeid(A0) : typeid(A1);
       }

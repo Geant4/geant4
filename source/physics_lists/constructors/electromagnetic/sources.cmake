@@ -4,6 +4,7 @@
 geant4_add_module(G4phys_ctor_em
   PUBLIC_HEADERS
     G4EmBuilder.hh
+    G4EmDNABuilder.hh
     G4EmDNAChemistry.hh
     G4EmDNAChemistry_option1.hh
     G4EmDNAChemistry_option2.hh
@@ -40,6 +41,7 @@ geant4_add_module(G4phys_ctor_em
     G4OpticalPhysics.hh
   SOURCES
     G4EmBuilder.cc
+    G4EmDNABuilder.cc
     G4EmDNAChemistry.cc
     G4EmDNAChemistry_option1.cc
     G4EmDNAChemistry_option2.cc
@@ -85,7 +87,6 @@ geant4_module_link_libraries(G4phys_ctor_em
     G4partman
     G4procman
     G4run
-    G4transportation
   PRIVATE
     G4baryons
     G4bosons
@@ -100,7 +101,9 @@ geant4_module_link_libraries(G4phys_ctor_em
     G4emstandard
     G4geometrymng
     G4hadronic_mgt
+    G4hadronic_proc
     G4hadronic_util
+    G4hadronic_xsect
     G4ions
     G4leptons
     G4mesons

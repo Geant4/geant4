@@ -82,7 +82,7 @@ private:
 
   void AddData(const G4double* energy, const G4double* xs, G4int idx);
 
-  char* dirPath = nullptr;
+  const char* dirPath = nullptr;
   const G4Material* currentMaterial = nullptr;
 
   G4int type = 0;

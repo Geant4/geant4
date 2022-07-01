@@ -9,10 +9,10 @@
 /source/global/ @gcosmo @drbenmorgan @gunterfolger
 
 # Run, Event, and Detector Response
-/source/run/              @makotoasai @jrmadsen
-/source/event/            @makotoasai @jrmadsen
-/source/digits_hits/      @makotoasai @jrmadsen
-/source/processes/scoring @makotoasai @jrmadsen
+/source/run/              @makotoasai @drbenmorgan
+/source/event/            @makotoasai @drbenmorgan
+/source/digits_hits/      @makotoasai @drbenmorgan
+/source/processes/scoring @makotoasai @drbenmorgan
 
 # Tracking
 /source/tracking/ @ts-kek @shogo0416 @makotoasai

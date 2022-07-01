@@ -774,3 +774,10 @@ G4VEmProcess* G4GammaGeneralProcess::GetEmProcess(const G4String& name)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4VProcess* G4GammaGeneralProcess::GetCreatorProcess() const
+{
+  return selectedProc;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

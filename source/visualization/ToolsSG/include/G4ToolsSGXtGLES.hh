@@ -30,7 +30,7 @@
 
 #include "G4VGraphicsSystem.hh"
 
-namespace tools {namespace Xt {class session;}}
+namespace toolx {namespace Xt {class session;}}
 
 class G4ToolsSGXtGLES: public G4VGraphicsSystem {
   typedef G4VGraphicsSystem parent;
@@ -47,7 +47,7 @@ public:
 protected:  
   void Initialise();
 protected:
-  tools::Xt::session* fSGSession;
+  toolx::Xt::session* fSGSession;
 };
 
 #endif

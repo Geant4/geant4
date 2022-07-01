@@ -88,13 +88,13 @@ endif()
 # relies on these scripts being in the current working directory.
 #
 set(Par04_SCRIPTS
-    examplePar04.in vis.mac
+    examplePar04.mac vis.mac
   )
 if(lwtnn_FOUND)
-  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_lwtnn.in)
+  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_lwtnn.mac vis_lwtnn.mac)
 endif()
 if(OnnxRuntime_FOUND)
-  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_onnx.in)
+  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_onnx.mac vis_onnx.mac)
 endif()
 
 foreach(_script ${Par04_SCRIPTS})

@@ -88,7 +88,7 @@ G4IonCoulombScatteringModel::G4IonCoulombScatteringModel(const G4String& nam)
 
   recoilThreshold = 0.*eV;
   heavycorr =0;
-  particle = 0;
+  particle = nullptr;
   mass=0;
   currentMaterialIndex = -1;
 
@@ -109,7 +109,7 @@ void G4IonCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 					     const G4DataVector& cuts)
 {
   SetupParticle(p);
-  currentCouple = 0;
+  currentCouple = nullptr;
   currentMaterialIndex = -1;
   ioncross->Initialise(p,cosThetaMin);
  
@@ -228,7 +228,7 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
     G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
     newDirection = v0.vect().unit();
     newDirection.rotateUz(dir);   
-    G4DynamicParticle* newdp = new G4DynamicParticle(ion, newDirection, trec);
+    auto newdp = new G4DynamicParticle(ion, newDirection, trec);
     fvect->push_back(newdp);
   } else if(trec > 0.0) {
     edep = trec;

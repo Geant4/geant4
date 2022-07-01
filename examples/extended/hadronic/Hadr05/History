@@ -1,18 +1,22 @@
-----------------------------------------------------
+# Example Hadr05 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Hadr05 History file
-                    --------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-04-01 mma (exhadr05-V11-00-02)
+- PhysicsList: add G4NuclideTable::SetThresholdOfHalfLife(1ns*log2)
+
+## 2022-01-18 Jonas Hahnfeld (exhadr05-V11-00-01)
+- Prefer pointer to `const G4Material` if possible
+
+## 2021-12-10 Ben Morgan (exhadr05-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 25-10-21 B.Morgan (exhadr05-V10-07-07)
 - Use G4StrUtil functions replacing deprecated G4String member functions

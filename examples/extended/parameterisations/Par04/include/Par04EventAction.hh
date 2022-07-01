@@ -70,6 +70,8 @@ class Par04EventAction : public G4UserEventAction
   G4double fCellSizeZ = 0;
   /// Size of cell along radius of cylinder
   G4double fCellSizeRho = 0;
+  /// Size of cell in azimuthal angle
+  G4double fCellSizePhi = 0;
   /// Number of readout cells along radius
   G4int fCellNbRho = 0;
   /// Number of readout cells in azimuthal angle

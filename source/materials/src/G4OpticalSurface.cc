@@ -56,24 +56,20 @@ G4OpticalSurface& G4OpticalSurface::operator=(const G4OpticalSurface& right)
     polish                     = right.polish;
     theMaterialPropertiesTable = right.theMaterialPropertiesTable;
 
-    if(AngularDistribution)
-      delete[] AngularDistribution;
+    delete[] AngularDistribution;
     AngularDistribution =
       new G4float[incidentIndexMax * thetaIndexMax * phiIndexMax];
     *(AngularDistribution) = *(right.AngularDistribution);
 
-    if(AngularDistributionLUT)
-      delete[] AngularDistributionLUT;
+    delete[] AngularDistributionLUT;
     AngularDistributionLUT    = new G4float[indexmax];
     *(AngularDistributionLUT) = *(right.AngularDistributionLUT);
 
-    if(Reflectivity)
-      delete[] Reflectivity;
+    delete[] Reflectivity;
     Reflectivity    = new G4float[RefMax];
     *(Reflectivity) = *(right.Reflectivity);
 
-    if(DichroicVector)
-      delete DichroicVector;
+    delete DichroicVector;
     DichroicVector  = new G4Physics2DVector();
     *DichroicVector = *(right.DichroicVector);
   }
@@ -119,15 +115,12 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 
 G4OpticalSurface::~G4OpticalSurface()
 {
-  if(AngularDistribution)
     delete[] AngularDistribution;
 
-  if(AngularDistributionLUT)
     delete[] AngularDistributionLUT;
-  if(Reflectivity)
+
     delete[] Reflectivity;
 
-  if(DichroicVector)
     delete DichroicVector;
 }
 
@@ -143,22 +136,19 @@ G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface& right)
   this->polish                     = right.polish;
   this->theMaterialPropertiesTable = right.theMaterialPropertiesTable;
 
-  if(this->AngularDistribution)
     delete[] AngularDistribution;
   this->AngularDistribution =
     new G4float[incidentIndexMax * thetaIndexMax * phiIndexMax];
   *(this->AngularDistribution) = *(right.AngularDistribution);
 
-  if(this->AngularDistributionLUT)
     delete[] AngularDistributionLUT;
   this->AngularDistributionLUT    = new G4float[indexmax];
   *(this->AngularDistributionLUT) = *(right.AngularDistributionLUT);
-  if(this->Reflectivity)
+
     delete[] Reflectivity;
   this->Reflectivity    = new G4float[RefMax];
   *(this->Reflectivity) = *(right.Reflectivity);
 
-  if(this->DichroicVector)
     delete DichroicVector;
   this->DichroicVector    = new G4Physics2DVector();
   *(this->DichroicVector) = *(right.DichroicVector);
@@ -174,15 +164,15 @@ G4bool G4OpticalSurface::operator!=(const G4OpticalSurface& right) const
   return (this != (G4OpticalSurface*) &right);
 }
 
-G4int G4OpticalSurface::GetInmax(void) const { return indexmax; }
+G4int G4OpticalSurface::GetInmax() const { return indexmax; }
 
-G4int G4OpticalSurface::GetLUTbins(void) const { return LUTbins; }
+G4int G4OpticalSurface::GetLUTbins() const { return LUTbins; }
 
-G4int G4OpticalSurface::GetRefMax(void) const { return RefMax; }
+G4int G4OpticalSurface::GetRefMax() const { return RefMax; }
 
-G4int G4OpticalSurface::GetThetaIndexMax(void) const { return thetaIndexMax; }
+G4int G4OpticalSurface::GetThetaIndexMax() const { return thetaIndexMax; }
 
-G4int G4OpticalSurface::GetPhiIndexMax(void) const { return phiIndexMax; }
+G4int G4OpticalSurface::GetPhiIndexMax() const { return phiIndexMax; }
 
 void G4OpticalSurface::DumpInfo() const
 {
@@ -224,23 +214,31 @@ void G4OpticalSurface::ReadDataFile()
   switch(theType)
   {
     case dielectric_LUT:
-      if(!AngularDistribution)
+      if(AngularDistribution == nullptr)
+      {
         AngularDistribution =
           new G4float[incidentIndexMax * thetaIndexMax * phiIndexMax];
+      }
       ReadLUTFile();
       break;
     case dielectric_LUTDAVIS:
-      if(!AngularDistributionLUT)
+      if(AngularDistributionLUT == nullptr)
+      {
         AngularDistributionLUT = new G4float[indexmax];
+      }
       ReadLUTDAVISFile();
 
-      if(!Reflectivity)
+      if(Reflectivity == nullptr)
+      {
         Reflectivity = new G4float[RefMax];
+      }
       ReadReflectivityLUTFile();
       break;
     case dielectric_dichroic:
-      if(!DichroicVector)
+      if(DichroicVector == nullptr)
+      {
         DichroicVector = new G4Physics2DVector();
+      }
       ReadDichroicFile();
       break;
     default:
@@ -429,11 +427,11 @@ void G4OpticalSurface::ReadReflectivityLUTFile()
 }
 
 // uncompress one data file into the input string stream
-void G4OpticalSurface::ReadCompressedFile(G4String filename,
+void G4OpticalSurface::ReadCompressedFile(const G4String& filename,
                                           std::istringstream& iss)
 {
   G4String* dataString  = nullptr;
-  G4String path         = std::getenv("G4REALSURFACEDATA");
+  G4String path         = G4FindDataDir("G4REALSURFACEDATA");
   G4String compfilename = path + "/" + filename;
   // create input stream with binary mode operation and position at end of file
   std::ifstream in(compfilename, std::ios::binary | std::ios::ate);
@@ -475,7 +473,7 @@ void G4OpticalSurface::ReadCompressedFile(G4String filename,
     return;
   }
   // create the input string stream from the data string
-  if(dataString)
+  if(dataString != nullptr)
   {
     iss.str(*dataString);
     in.close();
@@ -487,9 +485,9 @@ void G4OpticalSurface::ReadCompressedFile(G4String filename,
 
 void G4OpticalSurface::ReadDichroicFile()
 {
-  const char* datadir = std::getenv("G4DICHROICDATA");
+  const char* datadir = G4FindDataDir("G4DICHROICDATA");
 
-  if(!datadir)
+  if(datadir == nullptr)
   {
     G4Exception("G4OpticalSurface::ReadDichroicFile()", "mat313",
                 FatalException,
@@ -531,9 +529,13 @@ void G4OpticalSurface::ReadDichroicFile()
   G4cout << "numberOfYNodes: " << numberOfYNodes << G4endl;
 
   if(0 > numberOfXNodes || numberOfXNodes >= INT_MAX)
+  {
     numberOfXNodes = 0;
+  }
   if(0 > numberOfYNodes || numberOfYNodes >= INT_MAX)
+  {
     numberOfYNodes = 0;
+  }
 
   G4PV2DDataVector xVector;
   G4PV2DDataVector yVector;

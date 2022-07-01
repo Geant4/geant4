@@ -1,20 +1,58 @@
--------------------------------------------------------------------
+# Example examples History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-06-30 Gabriele Cosmo (examples-V11-00-06)
+- Updated reference outputs according to reference tag geant4-11-00-ref-06.
+- Includes tags: brachy-V11-00-01, ICRP110Phantoms-V11-00-01,
+                 iort_therapy-V11-00-01, STCyclotron-V11-00-01,
+                 exHadronic-V11-00-01, exhadrParticleFluence-V11-00-00,
+                 chem6-V11-00-06, microyz-V11-00-02, molecularDNA-V11-00-05.
+
+## 2022-05-31 Gabriele Cosmo (examples-V11-00-05)
+- Updated reference outputs according to reference tag geant4-11-00-ref-05.
+- Includes tags: ChargeExchangeMC-V11-00-01, eRosita-V11-00-02,
+                 exampleB2-V11-00-01, testem9-V11-00-01, HepMCEx01-V11-00-01,
+                 chem4-V11-00-04, chem5-V11-00-01, chem6-V11-00-05,
+                 microyz-V11-00-01, molecularDNA-V11-00-04, scavenger-V11-00-01,
+                 OpNovice2-V11-00-02, MPI-V11-00-02.
+
+## 2022-04-30 Gabriele Cosmo (examples-V11-00-04)
+- Updated reference outputs according to reference tag geant4-11-00-ref-04.
+- Includes tags: testem5-V11-00-01, monopole-V11-00-02, rdecay01-V11-00-01,
+                 VecGeomNavigation-V11-00-02, NeutronSource-V11-00-01,
+                 exhadr03-V11-00-01, exhadr05-V11-00-02, exhadr06-V11-00-01,
+                 exhadr07-V11-00-01, molecularDNA-V11-00-03, OpNovice2-V11-00-01,
+                 activation-V11-00-01.
+
+## 2022-03-31 Gabriele Cosmo (examples-V11-00-03)
+- Updated reference outputs according to reference tag geant4-11-00-ref-03.
+- Includes tags: CaTS-V11-00-01, microbeam-V11-00-01, exampleB3-V11-00-01,
+                 VecGeomNavigation-V11-00-01, dnaphysics-V11-00-01,
+                 chem4-V11-00-03, chem6-V11-00-04, molecularDNA-V11-00-02,
+                 spower-V11-00-01, MPI-V11-00-01, expar04-V11-00-02.
+
+## 2022-02-28 Gabriele Cosmo (examples-V11-00-02)
+- Updated reference outputs according to reference tag geant4-11-00-ref-02.
+- Includes tags: air_shower-V11-00-01, ccal-V11-00-01, eRosita-V11-00-01,
+                 XRayFluo-V11-00-01, testem6-V11-00-01, testem15-V11-00-02,
+                 exdna-V11-00-01, chem6-V11-00-01, molecularDNA-V11-00-01.
+
+## 2022-01-31 Gabriele Cosmo (examples-V11-00-01)
+- Updated reference outputs according to reference tag geant4-11-00-ref-01.
+- Includes tags: amsEcal-V11-00-01, hadrontherapy-V11-00-01, testem3-V11-00-01,
+                 testem15-V11-00-01, particleGunExample-V11-00-01,
+                 monopole-V11-00-01, exhadr05-V11-00-01, fano-V11-00-01,
+                 fano2-V11-00-01, OpNovice-V11-00-01, expar04-V11-00-01.
+- Changed to new Markdown History format (B.Morgan).
+
+---
+
+# History entries prior to 11.0
 
 6th December 2021  Gabriele Cosmo (examples-V11-00-00)
 - Updated reference outputs according to reference tag geant4-11-00-ref-00.

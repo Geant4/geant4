@@ -60,7 +60,7 @@
  Energy is sampled from a tabulated function defined in InitFunction().
  The function is assumed positive, linear per segment, continuous.
  Two sampling methods are illustrated : RejectAccept() and InverseCumul()
- (see Particle Data book, Monte Carlo techniques).
+ (see Particle Data Group: pdg.lbl.gov --> Monte Carlo techniques)
  Histogram 1 shows generated energy spectrum.
        
  3.3- Divergent beam in an arbitrary direction with rotation matrix 

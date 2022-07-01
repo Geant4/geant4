@@ -80,7 +80,7 @@ public:
   void AddCompound (const G4VDigi&)       {}
   void AddCompound (const G4THitsMap<G4double>&)     {}
   void AddCompound (const G4THitsMap<G4StatDouble>&) {}
-  void AddCompound (const G4Mesh&)        {}
+  void AddCompound (const G4Mesh&);  // Catches mesh if special mesh rendering set
   // Primitives
   void BeginPrimitives   (const G4Transform3D&) {}
   void EndPrimitives     ()                     {}

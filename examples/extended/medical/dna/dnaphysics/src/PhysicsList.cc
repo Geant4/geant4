@@ -45,16 +45,17 @@
 #include "G4EmDNAPhysics_option5.hh"
 #include "G4EmDNAPhysics_option6.hh"
 #include "G4EmDNAPhysics_option7.hh"
+#include "G4EmDNAPhysics_option8.hh"
 
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4DecayPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 
 #include "G4EmDNAPhysicsActivator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() 
-: G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   SetDefaultCutValue(1.0*micrometer);
   SetVerboseLevel(1);
@@ -84,6 +85,7 @@ PhysicsList::PhysicsList()
   RegisterPhysics(new G4EmStandardPhysics_option4());
   
   RegisterPhysics(new G4DecayPhysics());
+  RegisterPhysics(new G4RadioactiveDecayPhysics());
   
   RegisterPhysics(new G4EmDNAPhysicsActivator());
 

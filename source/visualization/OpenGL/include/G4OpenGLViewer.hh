@@ -39,7 +39,7 @@
 #endif
 
 class G4OpenGLSceneHandler;
-class G4OpenGL2PSAction;
+class G4gl2ps;
 class G4Text;
 
 class G4OpenGLViewerPickMap {
@@ -200,7 +200,7 @@ protected:
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
-  G4OpenGL2PSAction* fGL2PSAction;
+  G4gl2ps* fGL2PSAction;
 
   G4double     fRot_sens;        // Rotation sensibility in degrees
   G4double     fPan_sens;        // Translation sensibility

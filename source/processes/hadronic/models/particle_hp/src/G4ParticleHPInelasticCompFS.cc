@@ -86,9 +86,9 @@ void G4ParticleHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
 void G4ParticleHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition*)
 {
   gammaPath = "/Inelastic/Gammas/";  //only in neutron data base 
-    if(!std::getenv("G4NEUTRONHPDATA")) 
+    if(!G4FindDataDir("G4NEUTRONHPDATA"))
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files where Inelastic/Gammas data is found.");
-  G4String tBase = std::getenv("G4NEUTRONHPDATA");
+  G4String tBase = G4FindDataDir("G4NEUTRONHPDATA");
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;
   G4bool dbool;

@@ -1094,6 +1094,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   theTable->push_back(tmp);
   sizeOfTable +=1;
 
+  tmp.processTypeName = "DNAScavenger";
+  tmp.processType     = fUserDefined;
+  tmp.processSubType  = fLowEnergyScavenger;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     = 1000;
+  tmp.isDuplicable    = false;
+  theTable->push_back(tmp);
+  sizeOfTable += 1;
+
   tmp.processTypeName = "HadElastic";
   tmp.processType     = fHadronic;
   tmp.processSubType  = fHadronElastic;

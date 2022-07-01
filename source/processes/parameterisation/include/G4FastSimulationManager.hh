@@ -140,6 +140,7 @@ public:  // without description
   const std::vector<G4VFastSimulationModel*>& GetFastSimulationModelList() const
   {return ModelList;}
 
+  void FlushModels();
 
   //----------------------------------------------
   // Interface methods for the 

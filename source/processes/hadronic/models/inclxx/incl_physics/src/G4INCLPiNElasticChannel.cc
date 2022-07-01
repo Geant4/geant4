@@ -94,6 +94,9 @@ namespace G4INCL {
         nucleon->setMomentum(mom_nucleon);
         pion->setMomentum(-mom_nucleon);
 
+	ParticleType startingNucleonType = nucleon->getType();
+	ParticleType startingPionType = pion->getType();
+	    
         G4int iso=ParticleTable::getIsospin(nucleon->getType())+ParticleTable::getIsospin(pion->getType());
         if (iso == 1 || iso == -1) {
             rndm=3*Random::shoot();
@@ -116,6 +119,14 @@ namespace G4INCL {
             pion->setType(pionType);
         }
 
+	// Erase the parent resonance information if the nucleon or pion changes type
+	if ( startingNucleonType != nucleon->getType() || startingPionType != pion->getType() ) {
+	  nucleon->setParentResonancePDGCode(0);
+	  nucleon->setParentResonanceID(0);
+	  pion->setParentResonancePDGCode(0);
+	  pion->setParentResonanceID(0);
+	}
+	
         fs->addModifiedParticle(nucleon);
         fs->addModifiedParticle(pion);
     }

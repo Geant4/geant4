@@ -175,9 +175,9 @@ class G4SteppingManager
     void InvokeAlongStepDoItProcs();
     void InvokePostStepDoItProcs();
     void InvokePSDIP(size_t); // 
+    G4int ProcessSecondariesFromParticleChange();
     G4double CalculateSafety();
       // Return the estimated safety value at the PostStepPoint
-    void ApplyProductionCut(G4Track*);
 
     // Member data 
 

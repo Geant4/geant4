@@ -202,7 +202,7 @@ G4double G4PolarizedCompton::ComputeSaturationFactor(const G4Track& aTrack)
   const G4ParticleMomentum GammaDirection0 =
     aDynamicGamma->GetMomentumDirection();
 
-  G4Material* aMaterial       = aTrack.GetMaterial();
+  const G4Material* aMaterial = aTrack.GetMaterial();
   G4VPhysicalVolume* aPVolume = aTrack.GetVolume();
   G4LogicalVolume* aLVolume   = aPVolume->GetLogicalVolume();
 

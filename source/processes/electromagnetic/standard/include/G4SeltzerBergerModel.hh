@@ -61,7 +61,6 @@
 
 #include "G4eBremsstrahlungRelModel.hh"
 #include "globals.hh"
-#include "G4Threading.hh"
 
 class G4Physics2DVector;
 class G4SBBremTable;
@@ -123,11 +122,6 @@ private:
 
   size_t                    fIndx;
   size_t                    fIndy;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex theSBMutex;
-#endif
-
 };
 
 #endif

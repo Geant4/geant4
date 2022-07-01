@@ -101,75 +101,36 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
   // the auxiliary trajectory points (jacek 30/10/2002)
   pStep->SetPointerToVectorOfAuxiliaryPoints(fpVectorOfAuxiliaryPointsPointer);
 
-  // copy of G4ParticleChange::UpdateStepForAlongStep
-  // i.e. no effect for touchable
-
-  // A physics process always calculates the final state of the
-  // particle relative to the initial state at the beginning
-  // of the Step, i.e., based on information of G4Track (or
-  // equivalently the PreStepPoint).
-  // So, the differences (delta) between these two states have to be
-  // calculated and be accumulated in PostStepPoint.
-
-  // Take note that the return type of GetMomentumChange is a
-  // pointer to G4ThreeVector. Also it is a normalized
-  // momentum vector.
-
+  // Most of the code assumes that transportation is always the first process,
+  // so the pre- and post-step point are still equal.
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint();
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
-  G4Track* aTrack             = pStep->GetTrack();
-  G4double mass               = aTrack->GetDynamicParticle()->GetMass();
-
-  // update kinetic energy
-  // now assume that no energy change in transportation
-  // However it is not true in electric fields
-  // Case for changing energy will be implemented in future
 
   // update momentum direction and energy
   if(isMomentumChanged)
   {
-    G4double energy;
-    energy = pPostStepPoint->GetKineticEnergy() +
-             (theEnergyChange - pPreStepPoint->GetKineticEnergy());
-
-    // calculate new momentum
-    G4ThreeVector pMomentum =
-      pPostStepPoint->GetMomentum() +
-      (CalcMomentum(theEnergyChange, theMomentumDirectionChange, mass) -
-       pPreStepPoint->GetMomentum());
-    G4double tMomentum = pMomentum.mag();
-    G4ThreeVector direction(1.0, 0.0, 0.0);
-    if(tMomentum > 0.)
-    {
-      G4double inv_Momentum = 1.0 / tMomentum;
-      direction             = pMomentum * inv_Momentum;
-    }
-    pPostStepPoint->SetMomentumDirection(direction);
-    pPostStepPoint->SetKineticEnergy(energy);
+    pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
+    pPostStepPoint->SetKineticEnergy(theEnergyChange);
   }
   if(isVelocityChanged)
     pPostStepPoint->SetVelocity(theVelocityChange);
 
-  // stop case should not occur
-  // pPostStepPoint->SetMomentumDirection(G4ThreeVector(1., 0., 0.));
-
   // update polarization
-  pPostStepPoint->AddPolarization(thePolarizationChange -
-                                  pPreStepPoint->GetPolarization());
+  pPostStepPoint->SetPolarization(thePolarizationChange);
 
   // update position and time
-  pPostStepPoint->AddPosition(thePositionChange - pPreStepPoint->GetPosition());
+  pPostStepPoint->SetPosition(thePositionChange);
   pPostStepPoint->AddGlobalTime(theTimeChange - pPreStepPoint->GetLocalTime());
   pPostStepPoint->AddLocalTime(theTimeChange - pPreStepPoint->GetLocalTime());
-  pPostStepPoint->AddProperTime(theProperTimeChange -
-                                pPreStepPoint->GetProperTime());
+  pPostStepPoint->SetProperTime(theProperTimeChange);
 
 #ifdef G4VERBOSE
+  G4Track* aTrack = pStep->GetTrack();
   if(debugFlag) { CheckIt(*aTrack); }
 #endif
 
   // Update the G4Step specific attributes
-  // pStep->SetStepLength( theTrueStepLength );
+  pStep->SetStepLength( theTrueStepLength );
   // pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   pStep->SetControlFlag(theSteppingControlFlag);
 

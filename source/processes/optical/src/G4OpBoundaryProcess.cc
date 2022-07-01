@@ -89,8 +89,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
-                                         G4ProcessType type)
-  : G4VDiscreteProcess(processName, type)
+                                         G4ProcessType ptype)
+  : G4VDiscreteProcess(processName, ptype)
 {
   Initialise();
 
@@ -126,7 +126,7 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4OpBoundaryProcess::~G4OpBoundaryProcess() {}
+G4OpBoundaryProcess::~G4OpBoundaryProcess() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4OpBoundaryProcess::PreparePhysicsTable(const G4ParticleDefinition&)
@@ -195,6 +195,7 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
     {
       groupvel = aMPT->GetProperty(kGROUPVEL);
     }
+
     if(groupvel != nullptr)
     {
       aParticleChange.ProposeVelocity(
@@ -413,7 +414,7 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
           BoundaryProcessVerbose();
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
       }
-      MPT = fMaterial2->GetMaterialPropertiesTable();
+      MPT       = fMaterial2->GetMaterialPropertiesTable();
       rIndexMPV = nullptr;
       if(MPT != nullptr)
       {
@@ -742,7 +743,7 @@ void G4OpBoundaryProcess::DielectricMetal()
             {
               fFacetNormal = GetFacetNormal(fOldMomentum, fGlobalNormal);
             }
-            //else
+            // else
             //  case of complex rindex needs to be implemented
           }
           fNewMomentum =
@@ -868,8 +869,8 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
 
     // Davis model has 90 reflection bins: round down
     // don't allow angleIncident to be 90 for anglePhotonToNormal close to 90
-    angleIncident = std::min(static_cast<G4int>(
-      std::floor(anglePhotonToNormal / CLHEP::deg)), 89);
+    angleIncident = std::min(
+      static_cast<G4int>(std::floor(anglePhotonToNormal / CLHEP::deg)), 89);
     reflectivityValue = fOpticalSurface->GetReflectivityLUTValue(angleIncident);
 
     if(rand > reflectivityValue)

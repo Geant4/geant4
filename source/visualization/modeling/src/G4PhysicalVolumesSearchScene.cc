@@ -36,14 +36,12 @@
 #include <regex>
 
 G4PhysicalVolumesSearchScene::G4PhysicalVolumesSearchScene
-(G4PhysicalVolumeModel* pSearchVolumesModel,      // usually a world
+(G4PhysicalVolumeModel* pSearchVolumesModel,
  const G4String&        requiredPhysicalVolumeName,
- G4int                  requiredCopyNo,
- G4int                  requiredContinuation)
+ G4int                  requiredCopyNo)
 : fpSearchVolumesModel  (pSearchVolumesModel)
 , fMatcher              (requiredPhysicalVolumeName)
 , fRequiredCopyNo       (requiredCopyNo)
-, fRequiredContinuation (requiredContinuation)
 {}
 
 void G4PhysicalVolumesSearchScene::ProcessVolume (const G4VSolid&)
@@ -69,15 +67,8 @@ void G4PhysicalVolumesSearchScene::ProcessVolume (const G4VSolid&)
         copyNo,
         fpSearchVolumesModel->GetCurrentDepth(),
         basePath,
+        fpSearchVolumesModel->GetFullPVPath(),
         *fpCurrentObjectTransformation));
-      // If user has asked for limited descent
-      if (fRequiredContinuation >= 0) {
-	static G4int firstFoundDepth = fpSearchVolumesModel->GetCurrentDepth();
-	G4int foundDepth = fpSearchVolumesModel->GetCurrentDepth();
-	if (foundDepth >= firstFoundDepth + fRequiredContinuation) {
-	  fpSearchVolumesModel->CurtailDescent();
-	}
-      }
     }
   }
 }

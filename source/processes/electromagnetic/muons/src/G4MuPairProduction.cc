@@ -80,7 +80,7 @@
 
 G4MuPairProduction::G4MuPairProduction(const G4String& name)
   : G4VEnergyLossProcess(name),
-    lowestKinEnergy(1.*GeV)
+    lowestKinEnergy(0.85*CLHEP::GeV)
 {
   SetProcessSubType(fPairProdByCharged);
   SetSecondaryParticle(G4Positron::Positron());
@@ -114,11 +114,13 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
   isInitialised = true;
 
   theParticle = part;
-  lowestKinEnergy = std::max(lowestKinEnergy, part->GetPDGMass()*8.0);
 
   G4VEmModel* mod = EmModel(0);
   if(nullptr == mod) {
-    mod = new G4MuPairProductionModel(part); 
+    lowestKinEnergy = std::max(lowestKinEnergy, part->GetPDGMass()*8.0);
+    auto ptr = new G4MuPairProductionModel(part);
+    ptr->SetLowestKineticEnergy(lowestKinEnergy);
+    mod = ptr; 
     SetEmModel(mod);
   }
 

@@ -44,17 +44,14 @@ class G4StackChecker : public G4UserStackingAction
 {
   public:
 
-    G4StackChecker();
-    virtual ~G4StackChecker();
+    G4StackChecker() = default;
+    ~G4StackChecker() override = default;
 
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* track);
-
-    virtual void NewStage();
-    virtual void PrepareNewEvent();
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* track) override;
 
   private:
 
-    G4ThreeVector nullDirection;
+    G4ThreeVector nullDirection{0.0,0.0,0.0};
 };
 
 #endif

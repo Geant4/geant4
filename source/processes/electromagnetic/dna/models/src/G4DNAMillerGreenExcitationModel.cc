@@ -30,7 +30,10 @@
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
 #include "G4Exp.hh"
+#include "G4Pow.hh"
+#include "G4Alpha.hh"
 
+static G4Pow * gpow = G4Pow::GetInstance();
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
@@ -86,11 +89,11 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
 
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
-  G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
-  G4ParticleDefinition* hydrogenDef = instance->GetIon("hydrogen");
-  G4ParticleDefinition* alphaPlusPlusDef = instance->GetIon("alpha++");
-  G4ParticleDefinition* alphaPlusDef = instance->GetIon("alpha+");
-  G4ParticleDefinition* heliumDef = instance->GetIon("helium");
+  protonDef = G4Proton::ProtonDefinition();
+  hydrogenDef = instance->GetIon("hydrogen");
+  alphaPlusPlusDef = G4Alpha::Alpha();
+  alphaPlusDef = instance->GetIon("alpha+");
+  heliumDef = instance->GetIon("helium");
 
   G4String proton;
   G4String hydrogen;
@@ -232,19 +235,16 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
 
   // Calculate total cross section for model
 
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
-
   if (
-       particleDefinition != G4Proton::ProtonDefinition()
+       particleDefinition != protonDef
        &&
-       particleDefinition != instance->GetIon("hydrogen")
+       particleDefinition != hydrogenDef
        &&
-       particleDefinition != instance->GetIon("alpha++")
+       particleDefinition != alphaPlusPlusDef
        &&
-       particleDefinition != instance->GetIon("alpha+")
+       particleDefinition != alphaPlusDef
        &&
-       particleDefinition != instance->GetIon("helium")
+       particleDefinition != heliumDef
      )
 
      return 0;
@@ -279,9 +279,9 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
 
     // add ONE or TWO electron-water excitation for alpha+ and helium
     /*
-      if ( particleDefinition == instance->GetIon("alpha+")
+      if ( particleDefinition == alphaPlusDef
            ||
-           particleDefinition == instance->GetIon("helium")
+           particleDefinition == heliumDef
          )
       {
 
@@ -295,10 +295,10 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
         excitationXS->CrossSectionPerVolume(material,G4Electron::ElectronDefinition(),k*0.511/3728,tmp,tmp)
         /material->GetAtomicNumDensityVector()[1];
 
-      if ( particleDefinition == instance->GetIon("alpha+") )
+      if ( particleDefinition == alphaPlusDef )
         crossSection = crossSection +  sigmaExcitation ;
 
-      if ( particleDefinition == instance->GetIon("helium") )
+      if ( particleDefinition == heliumDef )
         crossSection = crossSection + 2*sigmaExcitation ;
 
       delete excitationXS;
@@ -315,10 +315,10 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
         excitationXS->CrossSectionPerVolume(material,G4Electron::ElectronDefinition(),k*0.511/3728,tmp,tmp)
         /material->GetAtomicNumDensityVector()[1];
 
-      if ( particleDefinition == instance->GetIon("alpha+") )
+      if ( particleDefinition == alphaPlusDef )
         crossSection = crossSection +  sigmaExcitation ;
 
-      if ( particleDefinition == instance->GetIon("helium") )
+      if ( particleDefinition == heliumDef )
         crossSection = crossSection + 2*sigmaExcitation ;
 
       delete excitationXS;
@@ -421,14 +421,12 @@ G4double G4DNAMillerGreenExcitationModel::PartialCrossSection(G4double k, G4int 
   const G4double Eliq[5]={ 8.17*eV, 10.13*eV, 11.31*eV, 12.91*eV, 14.50*eV};
 
   G4int particleTypeIndex = 0;
-  G4DNAGenericIonsManager* instance;
-  instance = G4DNAGenericIonsManager::Instance();
-
-  if (particleDefinition == G4Proton::ProtonDefinition()) particleTypeIndex=0;
-  if (particleDefinition == instance->GetIon("hydrogen")) particleTypeIndex=0;
-  if (particleDefinition == instance->GetIon("alpha++")) particleTypeIndex=1;
-  if (particleDefinition == instance->GetIon("alpha+")) particleTypeIndex=2;
-  if (particleDefinition == instance->GetIon("helium")) particleTypeIndex=3;
+ 
+  if (particleDefinition == protonDef) particleTypeIndex=0;
+  if (particleDefinition == hydrogenDef) particleTypeIndex=0;
+  if (particleDefinition == alphaPlusPlusDef) particleTypeIndex=1;
+  if (particleDefinition == alphaPlusDef) particleTypeIndex=2;
+  if (particleDefinition == heliumDef) particleTypeIndex=3;
 
   G4double tCorrected;
   tCorrected = k * kineticEnergyCorrection[particleTypeIndex];
@@ -440,21 +438,21 @@ G4double G4DNAMillerGreenExcitationModel::PartialCrossSection(G4double k, G4int 
   G4int z = 10;
 
   G4double numerator;
-  numerator = std::pow(z * aj[excitationLevel], omegaj[excitationLevel]) *
-              std::pow(tCorrected - Eliq[excitationLevel], nu);
+  numerator = gpow->powA(z * aj[excitationLevel], omegaj[excitationLevel]) *
+              gpow->powA(tCorrected - Eliq[excitationLevel], nu);
 
   // H case : see S. Uehara et al. IJRB 77, 2, 139-154 (2001) - section 3.3
 
-  if (particleDefinition == instance->GetIon("hydrogen"))
-      numerator = std::pow(z * 0.75*aj[excitationLevel], omegaj[excitationLevel]) *
-                  std::pow(tCorrected - Eliq[excitationLevel], nu);
+  if (particleDefinition == hydrogenDef)
+      numerator = gpow->powA(z * 0.75*aj[excitationLevel], omegaj[excitationLevel]) *
+                  gpow->powA(tCorrected - Eliq[excitationLevel], nu);
 
 
   G4double power;
   power = omegaj[excitationLevel] + nu;
 
   G4double denominator;
-  denominator = std::pow(jj[excitationLevel], power) + std::pow(tCorrected, power);
+  denominator = gpow->powA(jj[excitationLevel], power) + gpow->powA(tCorrected, power);
 
   G4double zEff = particleDefinition->GetPDGCharge() / eplus + particleDefinition->GetLeptonNumber();
 
@@ -462,7 +460,7 @@ G4double G4DNAMillerGreenExcitationModel::PartialCrossSection(G4double k, G4int 
           sCoefficient[1][particleTypeIndex] * S_2s(k, Eliq[excitationLevel], slaterEffectiveCharge[1][particleTypeIndex], 2.) +
           sCoefficient[2][particleTypeIndex] * S_2p(k, Eliq[excitationLevel], slaterEffectiveCharge[2][particleTypeIndex], 2.) );
 
-  if (particleDefinition == instance->GetIon("hydrogen")) zEff = 1.;
+  if (particleDefinition == hydrogenDef) zEff = 1.;
 
   G4double cross = sigma0 * zEff * zEff * numerator / denominator;
 
@@ -478,14 +476,11 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
   G4double value = 0.;
   std::deque<G4double> values;
 
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
-
-  if ( particle == instance->GetIon("alpha++") ||
-       particle == G4Proton::ProtonDefinition()||
-       particle == instance->GetIon("hydrogen")  ||
-       particle == instance->GetIon("alpha+")  ||
-       particle == instance->GetIon("helium")
+  if ( particle == alphaPlusPlusDef ||
+       particle == protonDef||
+       particle == hydrogenDef  ||
+       particle == alphaPlusDef  ||
+       particle == heliumDef
        )
   {
     while (i > 0)
@@ -511,9 +506,9 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
   /*
   // add ONE or TWO electron-water excitation for alpha+ and helium
 
-  if ( particle == instance->GetIon("alpha+")
+  if ( particle == alphaPlusDef
        ||
-       particle == instance->GetIon("helium")
+       particle == heliumDef
      )
   {
     while (i>0)
@@ -529,8 +524,8 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
 
       G4double partial = PartialCrossSection(k,i,particle);
 
-      if (particle == instance->GetIon("alpha+")) partial = PartialCrossSection(k,i,particle) + sigmaExcitation;
-      if (particle == instance->GetIon("helium")) partial = PartialCrossSection(k,i,particle) + 2*sigmaExcitation;
+      if (particle == alphaPlusDef) partial = PartialCrossSection(k,i,particle) + sigmaExcitation;
+      if (particle == heliumDef) partial = PartialCrossSection(k,i,particle) + 2*sigmaExcitation;
 
       values.push_front(partial);
       value += partial;

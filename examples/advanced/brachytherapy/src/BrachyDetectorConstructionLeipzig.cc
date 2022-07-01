@@ -62,9 +62,6 @@ fApplicator2Log(nullptr), fCapsulePhys(nullptr), fCapsuleTipPhys(nullptr), fIrid
 fApplicator1Phys(nullptr), fApplicator2Phys(nullptr)
 {}
 
-BrachyDetectorConstructionLeipzig::~BrachyDetectorConstructionLeipzig()
-{}
-
 void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume* mother)
 {
   G4Colour  red     (1.0, 0.0, 0.0) ; 
@@ -82,7 +79,7 @@ void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume* mot
   G4Element* elCr = nist -> FindOrBuildElement(Z=24);
   G4Element* elFe = nist -> FindOrBuildElement(Z=26);
   G4Element* elNi = nist -> FindOrBuildElement(Z=28);
-  G4Material* steel = new G4Material("Stainless steel",d,5);
+  auto steel = new G4Material("Stainless steel",d,5);
   steel -> AddElement(elMn, 0.02);
   steel -> AddElement(elSi, 0.01);
   steel -> AddElement(elCr, 0.19);

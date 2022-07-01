@@ -83,6 +83,9 @@ class G4ReflectedSolid : public G4VSolid
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
+
     G4ThreeVector GetPointOnSurface() const;
 
     G4VSolid* Clone() const;

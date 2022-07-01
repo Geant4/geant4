@@ -223,9 +223,9 @@ public:
 
     std::string _title;
     if(!read_line(a_reader,sz,_title)) return false;
-    std::string s;
-    if(!read_line(a_reader,sz,s)) return false;
-    if(s.find('\t')==std::string::npos) return false;
+    std::string _s;
+    if(!read_line(a_reader,sz,_s)) return false;
+    if(_s.find('\t')==std::string::npos) return false;
 
     //std::vector<std::string> labels;
     //words(s,"\t",false,labels);
@@ -344,14 +344,14 @@ public:
         m_rows = -1;
         return false;
       }
-      std::string s;
-      if(!read_line(m_reader,m_sz,s)) {
+      std::string _s;
+      if(!read_line(m_reader,m_sz,_s)) {
         a_out << "tools::rcsv::ntuple::initialize : (2) read_line() failed." << std::endl;
         m_sz = 0;
         m_rows = -1;
 	return false;
       }
-      words(s,"\t",false,labels); //false for glast.tnt that has a trailing \t.
+      words(_s,"\t",false,labels); //false for glast.tnt that has a trailing \t.
     } else {
       while(skip_comment(m_reader,m_sz)){}
     }
@@ -875,7 +875,7 @@ protected:
     return true;
   }
   static bool _read_time(std::istream& a_reader,std::streampos a_sz,char a_sep,time_t& a_v) {
-    std::string s;
+    std::string _s;
     char c;
     while(true){
       if(a_reader.tellg()>=a_sz) break;
@@ -884,9 +884,9 @@ protected:
         a_reader.putback(c);
         break;
       }
-      s += c;
+      _s += c;
     }
-    if(!s2time(s,a_v)) return false;
+    if(!s2time(_s,a_v)) return false;
     return true;
   }
   static bool _read(std::istream& a_reader,std::streampos a_sz,char a_sep,std::string& a_v) {

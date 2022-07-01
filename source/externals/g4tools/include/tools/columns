@@ -73,35 +73,35 @@ public:
   bool parse(const std::string& a_s){
     m_top.clear();
     tree* prev = &m_top;
-   {std::string s;
+   {std::string _s;
     for(std::string::const_iterator it=a_s.begin();;++it) {
       if(it==a_s.end()) {
-        if(s.size()) {
-          new tree(prev,s);
-          s.clear();
+        if(_s.size()) {
+          new tree(prev,_s);
+          _s.clear();
         }
         break;
       } else {
         const char& c = *it;
         if(c==',') {
-          if(s.size()) {
-            new tree(prev,s);
-            s.clear();
+          if(_s.size()) {
+            new tree(prev,_s);
+            _s.clear();
           }
         } else if(c=='{') {
-          tree* _tree = new tree(prev,s);
-          s.clear();
+          tree* _tree = new tree(prev,_s);
+          _s.clear();
 
           prev = _tree;
         } else if(c=='}') {
-          if(s.size()) {
-            new tree(prev,s);
-            s.clear();
+          if(_s.size()) {
+            new tree(prev,_s);
+            _s.clear();
           }
           prev = prev->m_parent;
           if(!prev) return false; //should not happen.
         } else {
-          s += c;
+          _s += c;
         }
       }
     }}

@@ -53,7 +53,7 @@ class BrachyDetectorConstructionOncura6711
 {
 public:
   explicit BrachyDetectorConstructionOncura6711();
-  ~BrachyDetectorConstructionOncura6711();
+  ~BrachyDetectorConstructionOncura6711()=default;
 
   void  ConstructOncura6711(G4VPhysicalVolume*);
   // Model the Oncura 6711 reference source

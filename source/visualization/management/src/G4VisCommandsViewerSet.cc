@@ -30,6 +30,7 @@
 #include "G4VisCommandsViewerSet.hh"
 
 #include "G4UIcommand.hh"
+#include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -282,6 +283,13 @@ fViewpointVector (G4ThreeVector(0.,0.,1.))
   fpCommandLineSegments->SetParameterName("line-segments",omitable = true);
   fpCommandLineSegments->SetDefaultValue(24);
 
+  fpCommandLineWidth = new G4UIcmdWithoutParameter
+  ("/vis/viewer/set/lineWidth",this);
+  fpCommandLineWidth->SetGuidance
+  ("Use \"/vis/viewer/set/globalLineWidthScale\" instead."
+   "\nFor trajectories use \"/vis/modeling/trajectories/*/default/setLineWidth\"."
+   "\nFor volumes use \"/vis/geometry/set/lineWidth\".");
+
   fpCommandNumberOfCloudPoints = new G4UIcmdWithAnInteger
   ("/vis/viewer/set/numberOfCloudPoints",this);
   fpCommandNumberOfCloudPoints->SetGuidance
@@ -371,9 +379,17 @@ fViewpointVector (G4ThreeVector(0.,0.,1.))
   fpCommandSpecialMeshRendering = new G4UIcmdWithABool
   ("/vis/viewer/set/specialMeshRendering",this);
   fpCommandSpecialMeshRendering -> SetGuidance
-  ("Request special rendering of volumes (meshes) that use G4VNestedParameterisation.");
+  ("Request special rendering of volumes (meshes) that use G4VParameterisation.");
   fpCommandSpecialMeshRendering->SetParameterName("render",omitable = true);
   fpCommandSpecialMeshRendering->SetDefaultValue(true);
+
+  fpCommandSpecialMeshRenderingOption = new G4UIcmdWithAString
+  ("/vis/viewer/set/specialMeshRenderingOption",this);
+  fpCommandSpecialMeshRenderingOption->SetGuidance
+  ("Set special mesh rendering option - \"dots\" or \"surfaces\".");
+  fpCommandSpecialMeshRenderingOption->SetParameterName ("option",omitable = true);
+  fpCommandSpecialMeshRenderingOption->SetCandidates("dots surfaces");
+  fpCommandSpecialMeshRenderingOption->SetDefaultValue("dots");
 
   fpCommandSpecialMeshVolumes = new G4UIcommand
   ("/vis/viewer/set/specialMeshVolumes",this);
@@ -630,12 +646,14 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandTargetPoint;
   delete fpCommandStyle;
   delete fpCommandSpecialMeshVolumes;
+  delete fpCommandSpecialMeshRenderingOption;
   delete fpCommandSpecialMeshRendering;
   delete fpCommandSectionPlane;
   delete fpCommandRotationStyle;
   delete fpCommandProjection;
   delete fpCommandPicking;
   delete fpCommandNumberOfCloudPoints;
+  delete fpCommandLineWidth;
   delete fpCommandLineSegments;
   delete fpCommandLightsVector;
   delete fpCommandLightsThetaPhi;
@@ -698,7 +716,11 @@ void G4VisCommandsViewerSet::SetNewValue
       return;
     }
     // Copy view parameters except for autoRefresh and background...
-    CopyMostViewParameters(vp, fromViewer->GetViewParameters());
+    auto keepAutoRefresh = vp.IsAutoRefresh();
+    auto keepBackground  = vp.GetBackgroundColour();
+    vp = fromViewer->GetViewParameters();
+    vp.SetAutoRefresh(keepAutoRefresh);
+    vp.SetBackgroundColour(keepBackground);
     // Concatenate any private vis attributes modifiers...
     const std::vector<G4ModelingParameters::VisAttributesModifier>*
     privateVAMs = fromViewer->GetPrivateVisAttributesModifiers();
@@ -1076,6 +1098,13 @@ void G4VisCommandsViewerSet::SetNewValue
     }
   }
 
+  else if (command == fpCommandLineWidth) {
+    if (verbosity >= G4VisManager::errors) {
+      // A do-nothing command
+      G4cerr << command->GetGuidanceLine(0) << G4endl;
+    }
+  }
+
   else if (command == fpCommandLineSegments) {
     G4int nSides = G4UIcommand::ConvertToInt(newValue);
     nSides = vp.SetNoOfSides(nSides);
@@ -1222,10 +1251,35 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandSpecialMeshRendering) {
     vp.SetSpecialMeshRendering(G4UIcommand::ConvertToBool(newValue));
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Special mesh rendering ";
-      if (vp.IsSpecialMeshRendering()) G4cout << "requested.";
-      else G4cout << "inhibited.";
+      G4cout << "Special mesh rendering";
+      if (vp.IsSpecialMeshRendering()) {
+        G4cout << " requested. Current option is \""
+        << vp.GetSpecialMeshRenderingOption() << "\" for ";
+        if (vp.GetSpecialMeshVolumes().empty()) {
+          G4cout << "any mesh.";
+        } else{
+          G4cout << "selected volumes:";
+          for (const auto& pvNameCopyNo: vp.GetSpecialMeshVolumes()) {
+            G4cout << "\n  " << pvNameCopyNo.GetName();
+            if (pvNameCopyNo.GetCopyNo() >= 0) G4cout << ':' << pvNameCopyNo.GetCopyNo();
+          }
+        }
+      }
+      else G4cout << ": off.";
       G4cout << G4endl;
+    }
+  }
+
+  else if (command == fpCommandSpecialMeshRenderingOption) {
+    G4ViewParameters::SMROption option = G4ViewParameters::meshAsDots;
+    if (newValue == "surfaces") {
+      option = G4ViewParameters::meshAsSurfaces;
+    }
+    vp.SetSpecialMeshRenderingOption(option);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Special mesh rendering option set to \""
+      << vp.GetSpecialMeshRenderingOption() << "\"."
+      << G4endl;
     }
   }
 

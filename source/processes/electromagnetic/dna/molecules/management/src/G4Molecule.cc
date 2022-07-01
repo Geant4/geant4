@@ -56,8 +56,6 @@
 
 using namespace std;
 
-ITImp(G4Molecule)
-
 G4Allocator<G4Molecule>*& aMoleculeAllocator()
 {
     G4ThreadLocalStatic G4Allocator<G4Molecule>* _instance = nullptr;
@@ -396,7 +394,7 @@ G4Track* G4Molecule::BuildTrack(G4double globalTime,
         fpMolecularConfiguration->GetDefinition(), MomentumDirection,
         KineticEnergy);
 
-    if (G4VMoleculeCounter::InUse())
+    if (G4VMoleculeCounter::Instance()->InUse())
     {
         G4VMoleculeCounter::Instance()->
             AddAMoleculeAtTime(fpMolecularConfiguration,

@@ -121,7 +121,7 @@ void G4RDDopplerProfile::LoadBiggsP(const G4String& fileName)
   ost << fileName << ".dat";
   G4String name(ost.str());
   
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4LEDATA environment variable not set!");
@@ -163,7 +163,7 @@ void G4RDDopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
   ost << fileName << "-" << Z << ".dat";
   G4String name(ost.str());
   
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4LEDATA environment variable not set!");

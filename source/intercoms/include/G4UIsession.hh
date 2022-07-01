@@ -45,7 +45,7 @@ class G4UIsession : public G4coutDestination
 
     G4UIsession();
     G4UIsession(G4int iBatch);
-    virtual ~G4UIsession();
+    ~G4UIsession() override;
 
     virtual G4UIsession* SessionStart();
       // This method will be invoked by main().
@@ -55,9 +55,9 @@ class G4UIsession : public G4coutDestination
       // This method will be invoked by G4UImanager
       // when the kernel comes to Pause state
 
-    virtual G4int ReceiveG4cout(const G4String& coutString);
-    virtual G4int ReceiveG4cerr(const G4String& cerrString);
-      // These two methods will be invoked by G4strstreambuf
+    G4int ReceiveG4cout(const G4String& coutString) override;
+    G4int ReceiveG4cerr(const G4String& cerrString) override;
+    // These two methods will be invoked by G4strstreambuf
 
     static G4int InSession();
     inline G4int GetLastReturnCode() const { return lastRC; }

@@ -12,7 +12,8 @@
  and LWTNN [2] libraries.
 
  The model used in this example was trained externally (in Python) on data
- from this examples' full simulation and can be applied to perform fast simulation
+ from this examples' full simulation and can be applied to perform fast simulation.
+ The python scripts are availbale in the training folder.
 
  The geometry used in the example is a cylindrical setup of layers: tungsten
  absorber and silicon as the active material. 3D readout geometry (cylindrical)
@@ -107,10 +108,10 @@
  The execution of the program (examplePar04) produces an output with histograms.
  Ntuples are also stored. They are not merged if the application is run on multiple threads.
 
- The macro file examplePar04.in is used to run full simulation. It will simulate 100
+ The macro file examplePar04.mac is used to run full simulation. It will simulate 100
  events, for single 10 GeV electron beams.
  If CMake is able to find inference libraries (lwtnn and/or ONNX Runtime), a configuration
- macro will be available for that library (examplePar04_lwtnn.in and/or examplePar04_onnx.in).
+ macro will be available for that library (examplePar04_lwtnn.mac and/or examplePar04_onnx.mac).
  It will use a trained model to run inference and create showers in the detector by directly
  depositing energy.
 
@@ -124,18 +125,22 @@
   % make
 
 - Execute the application (in batch mode):
-  % ./examplePar04 -m examplePar04.in
+  % ./examplePar04 -m examplePar04.mac
   which produces two root file for full simulation.
 
 - Execute the application (in interactive mode):
-  % ./examplePar04
-  which allows to visualize hits.
+  % ./examplePar04 -i -m vis.mac
+  which allows to visualize hits (from full simulation).
 
 - If ONNX Runtime is available:
-  % ./examplePar04 -m examplePar04_onnx.in
+  % ./examplePar04 -m examplePar04_onnx.mac
+  For interactive mode with visualization:
+  % ./examplePar04 -i -m vis_onnx.mac
 
 - If LWTNN is available:
-  % ./examplePar04 -m examplePar04_lwtnn.in
+  % ./examplePar04 -m examplePar04_lwtnn.mac
+  For interactive mode with visualization:
+  % ./examplePar04 -i -m vis_lwtnn.mac
 
  By default, CMake will attempt to build fast simulation with ONNX Runtime and LWTNN. However, if none
  of those libraries is found, it will proceed with full simulation only. The search can be switched
@@ -144,16 +149,24 @@
  9. Macros
  ---------
 
- vis.mac - Allows to run visualization. It will be automatically run in interactive mode, if no
-           argument is passed to the executable (examplePar04)
+ vis.mac - Allows to run visualization. Pass it to the example in interactive mode ("-i" passed to the executable).
+           It can be used to visualize full simulation.
 
- examplePar04.in - Runs full simulation. It will run 100 events with single electrons, 10 GeV and
+ vis_onnx.mac - Allows to run visualization with ONNX Runtime inference. Pass it to the example in interactive mode
+              ("-i" passed to the executable). It contains ecessary settings of the inference, and it treats full
+              calorimeter as sensitive material (due to deposition of hits regardless of the volume).
+
+ vis_lwtnn.mac - Allows to run visualization with LWTNN inference. Pass it to the example in interactive mode
+              ("-i" passed to the executable). It contains ecessary settings of the inference, and it treats full
+              calorimeter as sensitive material (due to deposition of hits regardless of the volume).
+
+ examplePar04.mac - Runs full simulation. It will run 100 events with single electrons, 10 GeV and
                    along y axis.
 
- examplePar04_onnx.in - Available only if ONNX Runtime is found by CMake. Runs fast simulation with
+ examplePar04_onnx.mac - Available only if ONNX Runtime is found by CMake. Runs fast simulation with
                         a NN stored in onnx file.
 
- examplePar04_lwtnn.in - Available only if LWTNN is found by CMake. Runs fast simulation with
+ examplePar04_lwtnn.mac - Available only if LWTNN is found by CMake. Runs fast simulation with
                         a NN stored in json file.
 
  10. UI commands
@@ -198,3 +211,54 @@
     /Par04/inference/setNbOfRhoCells 18
     /Par04/inference/setNbOfPhiCells 50
     /Par04/inference/setNbOfZCells 45
+
+ 11. Python scripts for training
+ --------------
+
+ The scripts available in the training folder were used to train
+ the VAE model of this example.
+
+ - model: defines the VAE model as a class which contains the architecture,
+ the loss function and the training function.
+
+ - utils: defines the data loading and preprocessing function and returns
+ the preprocessed array of shower energies and the condition arrays of energy,
+ angle and geometry. The input is expected to be in local directory 'detector_*'.
+ In this example, the model is trained on 2 detector geometries and the input
+ directories are 'detector_SiW' and 'detector_SciPb'. Each directory contains the
+ HDF5 files for each primary particle energy and angle.
+
+ - train: defines data loading parameters and calls the data preprocessing function.
+ It defines the model parameters and instantiates the VAE model, performs the training
+ and then coverts the model into an ONNX format.
+
+    A history object is returned from the training function of the VAE. The history is a callback
+    object registered during the training which records metrics for each epoch such as the loss.
+    The user can list the metrics collected in the history object using:
+
+      % print(history.history.keys())
+
+    The data collected in the history object can be used to create plots such as the loss function
+    as function of the epochs. If the loss metric collected in the history object is called loss,
+    then to plot it using for example the matplotlib library:
+
+      % matplotlib.pyplot.plot(history.history['loss'])
+
+    The traing function can also generate intermediate files representing checkpoints of the model
+    that can be used for validation purposes. These checkpoints are generated if the early stopping flag
+    of the training is off, which means to train the model for the predefined number of epochs. The weights
+    of the model are saved every 100 epochs.
+
+    After the training, the model (only the decoder part) is saved as an HDF5 file and then is converted
+    into an ONNX format. The final output model called Generator.onnx can be used to perform the inference
+    in this example.
+
+ To perform the training run:
+  % python train.py
+
+
+ 12. Public data
+ --------------
+
+ Data generated with full simulation with this example has been published on zenodo:
+ https://doi.org/10.5281/zenodo.6082201

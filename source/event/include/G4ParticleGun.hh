@@ -66,21 +66,21 @@ class G4ParticleGun : public G4VPrimaryGenerator
   public:
 
     G4ParticleGun();
-    G4ParticleGun(G4int numberofparticles);
-    G4ParticleGun(G4ParticleDefinition* particleDef, 
+    explicit G4ParticleGun(G4int numberofparticles);
+    explicit G4ParticleGun(G4ParticleDefinition* particleDef, 
                   G4int numberofparticles = 1);
       // Costructors. "numberofparticles" is the number of particles to be
       // shot at one invokation of GeneratePrimaryVertex() method.
       // All particles are shot with the same physical quantities.
 
-    virtual ~G4ParticleGun();
+    ~G4ParticleGun() override;
 
     G4ParticleGun(const G4ParticleGun&) = delete;
     const G4ParticleGun& operator=(const G4ParticleGun&) = delete;
     G4bool operator==(const G4ParticleGun&) const = delete;
     G4bool operator!=(const G4ParticleGun&) const = delete;
 
-    virtual void GeneratePrimaryVertex(G4Event* evt);
+    void GeneratePrimaryVertex(G4Event* evt) override;
       // Creates a primary vertex at the given point
       // and put primary particles to it.
 

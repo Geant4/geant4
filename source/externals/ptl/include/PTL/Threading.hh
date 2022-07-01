@@ -125,18 +125,16 @@ TypeMutex(const unsigned int& _n = 0)
 //======================================================================================//
 
 // global thread types
-typedef std::thread                     Thread;
-typedef std::thread::native_handle_type NativeThread;
-
+using Thread       = std::thread;
+using NativeThread = std::thread::native_handle_type;
 // std::thread::id does not cast to integer
-typedef std::thread::id Pid_t;
+using Pid_t = std::thread::id;
 
 // Condition
-typedef std::condition_variable Condition;
-//
+using Condition = std::condition_variable;
 
 // Thread identifier
-typedef Thread::id ThreadId;
+using ThreadId = Thread::id;
 
 //======================================================================================//
 
@@ -154,6 +152,9 @@ Pid_t
 GetPidId();
 
 unsigned
+GetNumberOfPhysicalCpus();
+
+unsigned
 GetNumberOfCores();
 
 int
@@ -163,7 +164,16 @@ void
 SetThreadId(int aNewValue);
 
 bool
-SetPinAffinity(int idx, NativeThread& at);
+SetPinAffinity(int idx);
+
+bool
+SetThreadPriority(int _v);
+
+bool
+SetPinAffinity(int idx, NativeThread& _t);
+
+bool
+SetThreadPriority(int _v, NativeThread& _t);
 
 }  // namespace Threading
 }  // namespace PTL

@@ -57,12 +57,10 @@
 
 #include "G4VEmModel.hh"
 #include "G4Log.hh"
-#include "G4Exp.hh"
-#include "G4Pow.hh"
-
 #include <vector>
 
 class G4ParticleChangeForGamma;
+class G4Pow;
 
 class G4PairProductionRelModel : public G4VEmModel
 {

@@ -48,11 +48,11 @@ class G4LocalThreadCoutMessenger : public G4UImessenger
   public:
 
     G4LocalThreadCoutMessenger();
-    ~G4LocalThreadCoutMessenger();
+    ~G4LocalThreadCoutMessenger() override;
 
-    void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  private:
+   private:
 
     G4UIdirectory* coutDir = nullptr;
     G4UIcommand* coutFileNameCmd = nullptr;

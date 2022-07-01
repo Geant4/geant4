@@ -257,12 +257,12 @@ void G4GSMottCorrection::LoadMCDataElement(const G4Element *elem) {
   if (izet>gMaxZet) {
     izet = gMaxZet;
   }
-  DataPerMaterial *perElem = new DataPerMaterial();
+  auto perElem = new DataPerMaterial();
   AllocateDataPerMaterial(perElem);
   fMCDataPerElement[izet]  = perElem;
   //
   // load data from file
-  char* tmppath = std::getenv("G4LEDATA");
+  const char* tmppath = G4FindDataDir("G4LEDATA");
   if (!tmppath) {
     G4Exception("G4GSMottCorrection::LoadMCDataElement()","em0006",
 		FatalException,
@@ -354,7 +354,7 @@ void G4GSMottCorrection::InitMCDataMaterial(const G4Material *mat) {
   G4double constFactor        = CLHEP::electron_mass_c2*CLHEP::fine_structure_const/0.88534;
   constFactor                *= constFactor;  // (mc^2)^2\alpha^2/( C_{TF}^2)
   // allocate memory
-  DataPerMaterial *perMat     = new DataPerMaterial();
+  auto perMat = new DataPerMaterial();
   AllocateDataPerMaterial(perMat);
   fMCDataPerMaterial[mat->GetIndex()] = perMat;
   //
@@ -506,10 +506,10 @@ void G4GSMottCorrection::InitMCDataMaterial(const G4Material *mat) {
 void G4GSMottCorrection::AllocateDataPerMaterial(DataPerMaterial *data) {
   data->fDataPerEkin = new DataPerEkin*[gNumEkin]();
   for (G4int iek=0; iek<gNumEkin; ++iek) {
-    DataPerEkin *perEkin   = new DataPerEkin();
+    auto perEkin = new DataPerEkin();
     perEkin->fDataPerDelta = new DataPerDelta*[gNumDelta]();
     for (G4int idel=0; idel<gNumDelta; ++idel) {
-      DataPerDelta *perDelta       = new DataPerDelta();
+      auto perDelta                = new DataPerDelta();
       perDelta->fRejFuntion        = new double[gNumAngle]();
       perEkin->fDataPerDelta[idel] = perDelta;
     }

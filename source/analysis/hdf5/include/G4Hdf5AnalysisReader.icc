@@ -28,14 +28,14 @@
 
 //_____________________________________________________________________________
 inline
-tools::hdf5::ntuple* G4Hdf5AnalysisReader::GetNtuple() const
+toolx::hdf5::ntuple* G4Hdf5AnalysisReader::GetNtuple() const
 {
   return fNtupleManager->GetNtuple();
 }
 
 //_____________________________________________________________________________
 inline
-tools::hdf5::ntuple* G4Hdf5AnalysisReader::GetNtuple(G4int ntupleId) const
+toolx::hdf5::ntuple* G4Hdf5AnalysisReader::GetNtuple(G4int ntupleId) const
 {
   return fNtupleManager->GetNtuple(ntupleId);
 }

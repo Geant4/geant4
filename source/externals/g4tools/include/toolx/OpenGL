@@ -1,0 +1,28 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_OpenGL
+#define toolx_OpenGL
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+#if TARGET_OS_IPHONE
+#include <OpenGLES/ES1/gl.h>
+#elif defined(ANDROID)
+#include <GLES/gl.h>
+#elif _WIN32
+#include <windows.h>
+#include <GL/gl.h>
+#elif __APPLE__
+#if defined(TOOLX_USE_GL_GL_H) || defined(TOOLS_USE_GL_GL_H)
+#include <GL/gl.h>  //Macports X11 GL.
+#else
+#include <OpenGL/gl.h> //Apple/OpenGL.
+#endif
+#else
+#include <GL/gl.h>
+#endif
+
+#endif

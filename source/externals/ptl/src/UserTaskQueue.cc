@@ -27,8 +27,10 @@
 #include "PTL/Task.hh"
 #include "PTL/TaskGroup.hh"
 #include "PTL/ThreadPool.hh"
+#include "PTL/Utility.hh"
 
 #include <cassert>
+#include <stdexcept>
 
 using namespace PTL;
 
@@ -41,6 +43,7 @@ UserTaskQueue::UserTaskQueue(intmax_t nworkers, UserTaskQueue* parent)
 , m_insert_bin((parent) ? (ThreadPool::get_this_thread_id() % (nworkers + 1)) : 0)
 , m_hold((parent) ? parent->m_hold : new std::atomic_bool(false))
 , m_ntasks((parent) ? parent->m_ntasks : new std::atomic_uintmax_t(0))
+, m_mutex((parent) ? parent->m_mutex : new Mutex{})
 , m_subqueues((parent) ? parent->m_subqueues : new TaskSubQueueContainer())
 {
     // create nthreads + 1 subqueues so there is always a subqueue available
@@ -85,6 +88,7 @@ UserTaskQueue::~UserTaskQueue()
         m_subqueues->clear();
         delete m_hold;
         delete m_ntasks;
+        delete m_mutex;
         delete m_subqueues;
     }
 }
@@ -94,7 +98,9 @@ UserTaskQueue::~UserTaskQueue()
 void
 UserTaskQueue::resize(intmax_t n)
 {
-    AutoLock l(m_mutex);
+    if(!m_mutex)
+        throw std::runtime_error("nullptr to mutex");
+    AutoLock lk(m_mutex);
     if(m_workers < n)
     {
         while(m_workers < n)

@@ -4,6 +4,7 @@
 geant4_add_module(G4vis_management
   PUBLIC_HEADERS
     G4GraphicsSystemList.hh
+    G4PlotterManager.hh
     G4Scene.hh
     G4Scene.icc
     G4SceneHandlerList.hh
@@ -43,9 +44,9 @@ geant4_add_module(G4vis_management
     G4VisManager.icc
     G4VisModelManager.hh
     G4VisStateDependent.hh
-    G4PlotterManager.hh
   SOURCES
     G4GraphicsSystemList.cc
+    G4PlotterManager.cc
     G4Scene.cc
     G4SceneHandlerList.cc
     G4SceneList.cc
@@ -71,8 +72,7 @@ geant4_add_module(G4vis_management
     G4VisCommandsViewerDefault.cc
     G4VisCommandsViewerSet.cc
     G4VisManager.cc
-    G4VisStateDependent.cc
-    G4PlotterManager.cc)
+    G4VisStateDependent.cc)
 
 geant4_module_link_libraries(G4vis_management
   PUBLIC
@@ -94,7 +94,6 @@ geant4_module_link_libraries(G4vis_management
     G4partman
     G4tracking
     G4run
-    G4tasking
     G4navigation
     G4digits
     G4heprandom)

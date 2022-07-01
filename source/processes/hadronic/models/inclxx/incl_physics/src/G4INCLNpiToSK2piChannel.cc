@@ -226,6 +226,12 @@ namespace G4INCL {
 				pion->setType(PiZero);
 			}
 		}
+
+		// Erase the parent resonance information of the nucleon and pion
+		nucleon->setParentResonancePDGCode(0);
+		nucleon->setParentResonanceID(0);
+		pion->setParentResonancePDGCode(0);
+		pion->setParentResonanceID(0);
 		
 		ParticleList list;
 		list.push_back(nucleon);

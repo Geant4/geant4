@@ -46,26 +46,27 @@
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-
+#include "G4VUserChemistryList.hh"
 class G4VPhysicsConstructor;
-//class G4VUserChemistryList;
-//class G4EmDNAChemistry;
-//class G4EmDNAChemistry_option1;
+class PhysicsListMessenger;
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
-  public:
-    explicit PhysicsList();
-    ~PhysicsList() override;
+ public:
+  explicit PhysicsList();
+  ~PhysicsList() override;
 
-    void ConstructParticle() override;
-    void ConstructProcess() override;
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
-    void RegisterConstructor(const G4String& name);
+  void RegisterTimeStepModel(const TimeStepModel& timeStepModel);
 
-  private:
-    G4VPhysicsConstructor*    fEmDNAPhysicsList;
-    G4VPhysicsConstructor*    fEmDNAChemistryList;
-    G4String                  fPhysDNAName;
+  void RegisterConstructor(const G4String& name);
+
+ private:
+  std::unique_ptr<G4VPhysicsConstructor> fEmDNAPhysicsList;
+  std::unique_ptr<G4VPhysicsConstructor> fEmDNAChemistryList;
+  std::unique_ptr<PhysicsListMessenger> fpMessenger;
+  G4String fPhysDNAName;
 };
 #endif

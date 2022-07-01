@@ -207,9 +207,9 @@ void IORTPhysicsList::SetDetectorCut(G4double cut)
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
 
   G4ProductionCuts* cuts = new G4ProductionCuts ;
-  cuts -> SetProductionCut(cut,G4ProductionCuts::GetIndex("gamma"));
-  cuts -> SetProductionCut(cut,G4ProductionCuts::GetIndex("e-"));
-  cuts -> SetProductionCut(cut,G4ProductionCuts::GetIndex("e+"));
+  cuts -> SetProductionCut(cut,"gamma");
+  cuts -> SetProductionCut(cut,"e-");
+  cuts -> SetProductionCut(cut,"e+");
   region -> SetProductionCuts(cuts);
 }
 

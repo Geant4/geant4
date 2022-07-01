@@ -63,7 +63,6 @@
 #include "G4NuclearFormfactorType.hh"
 #include "G4ThreeVector.hh"
 #include "G4Pow.hh"
-#include "G4Threading.hh"
 
 class G4ParticleDefinition;
 class G4ScreeningMottCrossSection;
@@ -176,11 +175,6 @@ protected:
   static G4double ScreenRSquareElec[100];
   static G4double ScreenRSquare[100];
   static G4double FormFactor[100];
-
-#ifdef G4MULTITHREADED
-  static G4Mutex WentzelOKandVIxSectionMutex;
-#endif
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

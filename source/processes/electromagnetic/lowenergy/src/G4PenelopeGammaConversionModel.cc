@@ -523,8 +523,8 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
       G4cout << "Going to read Gamma Conversion data files for Z=" << Z << G4endl;
     }
 
-  char* path = std::getenv("G4LEDATA");
-  if (!path)
+    const char* path = G4FindDataDir("G4LEDATA");
+    if(!path)
     {
       G4String excep =
 	"G4PenelopeGammaConversionModel - G4LEDATA environment variable not set!";

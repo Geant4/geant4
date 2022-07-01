@@ -56,7 +56,7 @@ int main(int argc,char** argv)
 //====================================================================
 
  // Set mandatory initialization classes
-  ICRP110PhantomConstruction* userPhantom = new ICRP110PhantomConstruction();
+  auto userPhantom = new ICRP110PhantomConstruction();
   runManager -> SetUserInitialization(userPhantom);
   
   runManager -> SetUserInitialization(new QGSP_BIC_HP());
@@ -68,7 +68,7 @@ int main(int argc,char** argv)
   ("phantom",new ICRP110PhantomVisAction(userPhantom));
   visManager -> Initialize();
  
-  ICRP110PhantomActionInitialization* actions = new ICRP110PhantomActionInitialization();
+  auto actions = new ICRP110PhantomActionInitialization();
   runManager -> SetUserInitialization(actions);
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -76,7 +76,7 @@ int main(int argc,char** argv)
   if (argc==1)   // Define UI session for interactive mode.
     { 
       G4cout << " UI session starts ..." << G4endl;
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      auto ui = new G4UIExecutive(argc, argv);
       UImanager -> ApplyCommand("/control/execute vis.mac");     
       ui -> SessionStart();
       delete ui;

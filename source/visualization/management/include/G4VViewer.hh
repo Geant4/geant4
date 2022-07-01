@@ -140,6 +140,7 @@ public: // With description
   G4VSceneHandler*        GetSceneHandler   () const;
   const G4ViewParameters& GetViewParameters        () const;
   const G4ViewParameters& GetDefaultViewParameters () const;
+  G4double                GetKernelVisitElapsedTimeSeconds () const;
 
   virtual const std::vector<G4ModelingParameters::VisAttributesModifier>*
   GetPrivateVisAttributesModifiers() const;
@@ -218,6 +219,8 @@ protected:
   G4String         fShortName; // Up to first ' ' character, if any.
   G4ViewParameters fVP;        // View parameters.
   G4ViewParameters fDefaultVP; // Default view parameters.
+  G4double         fKernelVisitElapsedTimeSeconds = 999.;  // Default to a large number
+  // Note: fKernelVisitElapsedTimeSeconds is measured in ProcessView().
 
   //////////////////////////////////////////////////////////////
   // Other parameters.

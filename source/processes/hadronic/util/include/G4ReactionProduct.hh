@@ -167,6 +167,17 @@ class G4ReactionProduct
     
     inline G4int GetCreatorModelID() const
     { return theCreatorModel; }
+
+    inline const G4ParticleDefinition* GetParentResonanceDef() const
+    { return theParentResonanceDef; }
+
+    inline void SetParentResonanceDef( const G4ParticleDefinition* parentDef )
+    { theParentResonanceDef = parentDef; }
+
+    inline G4int GetParentResonanceID() const { return theParentResonanceID; }
+
+    inline void SetParentResonanceID ( const G4int parentID )
+    { theParentResonanceID = parentID; }
     
     inline void SetNewlyAdded( const G4bool f )
     { NewlyAdded = f; }
@@ -236,6 +247,9 @@ private:
     G4int side;
 
     G4int theCreatorModel;
+
+    const G4ParticleDefinition* theParentResonanceDef = nullptr;
+    G4int theParentResonanceID;
 
     // NewlyAdded refers to particles added by "nuclear excitation", or as
     //  "black track" particles, or as deuterons, tritons, and alphas

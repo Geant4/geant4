@@ -54,12 +54,12 @@ class G4AdjointStackingAction : public G4UserStackingAction
 {
   public:
 
-    G4AdjointStackingAction(G4AdjointTrackingAction* anAction);
-    virtual ~G4AdjointStackingAction();
+    explicit G4AdjointStackingAction(G4AdjointTrackingAction* anAction);
+    ~G4AdjointStackingAction() override = default;
 
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
-    virtual void NewStage();
-    virtual void PrepareNewEvent();
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) override;
+    void NewStage() override;
+    void PrepareNewEvent() override;
     inline void SetUserFwdStackingAction(G4UserStackingAction* anAction)
       { theFwdStackingAction = anAction; }
     inline void SetUserAdjointStackingAction(G4UserStackingAction* anAction)
@@ -73,9 +73,10 @@ class G4AdjointStackingAction : public G4UserStackingAction
 
     G4UserStackingAction* theFwdStackingAction = nullptr;
     G4UserStackingAction* theUserAdjointStackingAction = nullptr;
-    G4bool reclassification_stage = false,
-           first_reclassification_stage = false,
-           kill_tracks = false, adjoint_mode = false;
+    G4bool reclassification_stage = false;
+    G4bool first_reclassification_stage = false;
+    G4bool kill_tracks = false;
+    G4bool adjoint_mode = false;
     G4AdjointTrackingAction* theAdjointTrackingAction = nullptr;
 };
 

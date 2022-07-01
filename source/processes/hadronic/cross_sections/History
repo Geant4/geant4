@@ -1,29 +1,31 @@
--------------------------------------------------------------------
+# Category hadr-cross History
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-        History file for hadronic/cross_sections directory
-        --------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-05-08 Vladimir Ivanchenko (hadr-cross-V11-00-03)
+- G4CrossSectionDataStore, G4VCrossSectionDataSet - preparation
+    for integral method, removed unused methods
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
-
-04 February 2022 - Vladimir Ivanchenko (hadr-cross-V10-07-23)
+## 2022-01-03 Vladimir Ivanchenko (hadr-cross-V11-00-02)
 - G4HadronNucleonXsc - fixed compilation warning on unused variable
 
-03 January 2022 - Alberto Ribon (hadr-cross-V10-07-22)
+## 2022-01-03 Alberto Ribon (hadr-cross-V11-00-01)
 - G4ComponentAntiNuclNuclearXS : extension, by Vladimir Uzhinsky, of
   the class to compute the cross sections of light anti-nuclei on
   hydrogen. This relies on the isospin symmetry assumption, according
   to which the properties of the reactions between anti-proton and
   light nuclei are equivalent to those between light anti-nuclei and
   hydrogen.
+
+## 2021-12-10 Ben Morgan (hadr-cross-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 21 October 2021 - Alberto Ribon (hadr-cross-V10-07-21)
 - G4IonsShenCrossSection : reintroduced this (old) ion-ion cross section

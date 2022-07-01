@@ -29,7 +29,7 @@
 #include "G4ToolsSGWindowsGLES.hh"
 
 #include "G4ToolsSGViewer.hh"
-#include <tools/Windows/sg_viewer>
+#include <toolx/Windows/sg_viewer>
 
 G4ToolsSGWindowsGLES::G4ToolsSGWindowsGLES():
 parent
@@ -47,7 +47,7 @@ G4ToolsSGWindowsGLES::~G4ToolsSGWindowsGLES() {
 
 void G4ToolsSGWindowsGLES::Initialise() {
   if(fSGSession) return; //done.
-  fSGSession = new tools::Windows::session(G4cout);
+  fSGSession = new toolx::Windows::session(G4cout);
   if(!fSGSession->is_valid()) {
     G4cerr << "G4ToolsSGWindowsGLES::Initialise : session::is_valid() failed." << G4endl;
     delete fSGSession;
@@ -65,7 +65,7 @@ G4VViewer* G4ToolsSGWindowsGLES::CreateViewer(G4VSceneHandler& a_scene,const G4S
   if(!fSGSession) Initialise();
   if(!fSGSession) return nullptr;
   G4VViewer* pView =
-    new G4ToolsSGViewer<tools::Windows::session,tools::Windows::sg_viewer>(*fSGSession,(G4ToolsSGSceneHandler&)a_scene,a_name);
+    new G4ToolsSGViewer<toolx::Windows::session,toolx::Windows::sg_viewer>(*fSGSession,(G4ToolsSGSceneHandler&)a_scene,a_name);
   if (pView) {
     if (pView->GetViewId() < 0) {
       G4cerr <<

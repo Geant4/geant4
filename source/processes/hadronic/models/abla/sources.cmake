@@ -23,5 +23,7 @@ geant4_module_link_libraries(G4hadronic_abla
     G4hadronic_mgt
     G4hadronic_util
   PRIVATE
+    G4hadronic_deex_handler
     G4heprandom
+    G4ions
     G4partman)

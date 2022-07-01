@@ -47,13 +47,10 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4Log.hh"
-#include "G4Exp.hh"
-#include "G4Threading.hh"
+#include "G4DensityEffectCalculator.hh"
 
 class G4Material;
 class G4DensityEffectData;
-class G4DensityEffectCalculator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -105,15 +102,17 @@ public:
 
   void ComputeDensityEffectOnFly(G4bool);
 
-  // compute density correction as a function of the kinematic variable
-  // x = log10(beta*gamma)  
-  G4double DensityCorrection(G4double x);
-
-  inline G4DensityEffectCalculator* GetDensityEffectCalculator()
+  inline G4DensityEffectCalculator* GetDensityEffectCalculator() const
   { return fDensityEffectCalc; }
-    
+
+  // compute density correction as a function of the kinematic variable
+  // x = log10(beta*gamma) using parameterisation of calculator
+  inline G4double DensityCorrection(G4double x) const
+  { return (nullptr == fDensityEffectCalc) ? GetDensityCorrection(x) 
+      : fDensityEffectCalc->ComputeDensityCorrection(x); }
+
   // use parameterisation
-  inline G4double GetDensityCorrection(G4double x);
+  G4double GetDensityCorrection(G4double x) const;
 
   static G4DensityEffectData* GetDensityEffectData();
 
@@ -153,9 +152,9 @@ public:
 
   // parameters for average energy per ion 
   inline
-  void      SetMeanEnergyPerIonPair(G4double value) {fMeanEnergyPerIon = value;}; 
+  void SetMeanEnergyPerIonPair(G4double value) {fMeanEnergyPerIon = value;}; 
   inline
-  G4double  GetMeanEnergyPerIonPair()         const {return fMeanEnergyPerIon;};
+  G4double  GetMeanEnergyPerIonPair()    const {return fMeanEnergyPerIon;};
       
   G4IonisParamMat(__void__&);
   // Fake default constructor for usage restricted to direct object
@@ -187,7 +186,7 @@ private:
   //
   const G4Material* fMaterial;             // this material
 
-  G4DensityEffectCalculator* fDensityEffectCalc; // calculator of the density effect
+  G4DensityEffectCalculator* fDensityEffectCalc; // online calculator
   G4double* fShellCorrectionVector;        // shell correction coefficients
 
   // parameters for mean energy loss calculation
@@ -226,27 +225,11 @@ private:
   G4double fBirks;
   // average energy per ion pair
   G4double fMeanEnergyPerIon;
+  G4double twoln10;
 
   // static data created only once
   static G4DensityEffectData* fDensityData;
-  G4double twoln10;
-#ifdef G4MULTITHREADED
-  static G4Mutex ionisMutex;
-#endif
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-inline G4double G4IonisParamMat::GetDensityCorrection(G4double x)
-{
-  // x = log10(beta*gamma)  
-  G4double y = 0.0;
-  if(x < fX0density) {
-    if(fD0density > 0.0) { y = fD0density*G4Exp(twoln10*(x - fX0density)); }
-  } else if(x >= fX1density) { y = twoln10*x - fCdensity; }
-  else {y = twoln10*x - fCdensity + fAdensity*G4Exp(G4Log(fX1density - x)*fMdensity);}
-  return y;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 

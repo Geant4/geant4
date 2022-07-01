@@ -40,7 +40,6 @@ G4BoundingExtentScene::G4BoundingExtentScene (G4VModel* pModel)
 
 G4BoundingExtentScene::~G4BoundingExtentScene () {}
 
-
 void G4BoundingExtentScene::ProcessVolume(const G4VSolid& solid)
 {
   G4VisExtent newExtent = solid.GetExtent ();

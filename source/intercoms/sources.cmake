@@ -60,4 +60,6 @@ geant4_add_module(G4intercoms
     G4UnitsMessenger.cc
     G4VGlobalFastSimulationManager.cc)
 
+geant4_module_compile_definitions(G4intercoms PRIVATE G4ICOMS_ALLOC_EXPORT)
+
 geant4_module_link_libraries(G4intercoms PUBLIC G4globman PRIVATE ${timemory_LIBRARIES})

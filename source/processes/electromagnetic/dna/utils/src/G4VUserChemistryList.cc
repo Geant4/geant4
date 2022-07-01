@@ -38,7 +38,7 @@
 #include "G4ProcessManager.hh"
 #include "G4DNAChemistryManager.hh"
 
-G4VUserChemistryList::G4VUserChemistryList(bool flag) :
+G4VUserChemistryList::G4VUserChemistryList(G4bool flag) :
 fIsPhysicsConstructor(flag)
 {
   verboseLevel = 1;
@@ -47,14 +47,14 @@ fIsPhysicsConstructor(flag)
 G4VUserChemistryList::~G4VUserChemistryList()
 {
   G4DNAChemistryManager* chemMan = G4DNAChemistryManager::GetInstanceIfExists();
-  if (chemMan)
+  if (chemMan != nullptr)
   {
     chemMan->Deregister(*this);
   }
 }
 
 void G4VUserChemistryList::RegisterTimeStepModel(G4VITStepModel* timeStepModel,
-                                                 double startingTime)
+                                                 G4double startingTime)
 {
   G4VScheduler::Instance()->RegisterModel(timeStepModel, startingTime);
 }
@@ -79,7 +79,7 @@ void G4VUserChemistryList::BuildPhysicsTable(G4MoleculeDefinition* moleculeDef)
   //Get processes from master thread;
   G4ProcessManager* pManager = moleculeDef->GetProcessManager();
 
-  if (!pManager)
+  if (pManager == nullptr)
   {
 #ifdef G4VERBOSE
     if (verboseLevel > 0)
@@ -99,7 +99,7 @@ void G4VUserChemistryList::BuildPhysicsTable(G4MoleculeDefinition* moleculeDef)
 
   G4ProcessManager* pManagerShadow = moleculeDef->GetMasterProcessManager();
   G4ProcessVector* pVector = pManager->GetProcessList();
-  if (!pVector)
+  if (pVector == nullptr)
   {
 #ifdef G4VERBOSE
     if (verboseLevel > 0)

@@ -43,8 +43,8 @@ G4ecpssrBaseLixsModel::G4ecpssrBaseLixsModel()
   verboseLevel=0;
 
   // Storing FLi data needed for 0.2 to 3.0  velocities region
-  char *path = std::getenv("G4LEDATA");
-    
+  const char* path = G4FindDataDir("G4LEDATA");
+
   if (!path) {
     G4Exception("G4ecpssrLCrossSection::G4ecpssrBaseLixsModel()","em0006", FatalException ,"G4LEDATA environment variable not set");
     return;

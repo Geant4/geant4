@@ -128,6 +128,8 @@ public:
 
   inline const G4VProcess* GetSelectedProcess() const;
 
+  const G4VProcess* GetCreatorProcess() const override;
+
   // hide copy constructor and assignment operator
   G4GammaGeneralProcess(G4GammaGeneralProcess &) = delete;
   G4GammaGeneralProcess & operator=

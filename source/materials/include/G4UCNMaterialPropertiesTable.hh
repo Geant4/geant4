@@ -53,7 +53,7 @@ class G4UCNMaterialPropertiesTable : public G4MaterialPropertiesTable
 public:
 
   G4UCNMaterialPropertiesTable();
-  virtual ~G4UCNMaterialPropertiesTable();
+  ~G4UCNMaterialPropertiesTable() override;
 
   // returns the pointer to the mr-reflection table
   G4double* GetMicroRoughnessTable();

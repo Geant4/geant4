@@ -463,7 +463,7 @@ G4bool G4DNACrossSectionDataSet::SaveData(const G4String & argFileName) const
 
 G4String G4DNACrossSectionDataSet::FullFileName(const G4String& argFileName) const
 {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
   {
       G4Exception("G4DNACrossSectionDataSet::FullFileName","em0006",

@@ -48,7 +48,7 @@ G4XrayRayleighModel::G4XrayRayleighModel(const G4ParticleDefinition*,
 						   const G4String& nam)
   :G4VEmModel(nam),isInitialised(false)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   lowEnergyLimit  = 250*eV; 
   highEnergyLimit = 10.*MeV;
   fFormFactor     = 0.0;
@@ -76,10 +76,7 @@ G4XrayRayleighModel::G4XrayRayleighModel(const G4ParticleDefinition*,
 
 //////////////////////////////////////////////////////////////////////////////////
 
-G4XrayRayleighModel::~G4XrayRayleighModel()
-{  
-
-}
+G4XrayRayleighModel::~G4XrayRayleighModel() = default;
 
 //////////////////////////////////////////////////////////////////////////////////
 

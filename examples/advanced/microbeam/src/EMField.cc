@@ -67,8 +67,7 @@ void EMField::GetFieldValue(const double point[4], double *Bfield ) const
 // ***********************
   
   // MAGNETIC FIELD VALUE FOR 3 MeV ALPHAS
-  //  G4double switchingField = 0.0589768635 * tesla ;
-  G4double switchingField =   0.0590201 * tesla ;
+  G4double switchingField = 0.0589768635 * tesla ;
   
   // BEAM START
   G4double beamStart = -10*m;

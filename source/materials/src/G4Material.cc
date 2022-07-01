@@ -77,16 +77,14 @@
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Exp.hh"
-#include "G4Log.hh"
 #include "G4ExtendedMaterial.hh"
 #include "G4AtomicShells.hh"
+#include "G4ApplicationState.hh"
+#include "G4StateManager.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 
 G4MaterialTable G4Material::theMaterialTable;
-
-#ifdef G4MULTITHREADED
-  G4Mutex G4Material::materialMutex = G4MUTEX_INITIALIZER;
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -123,7 +121,10 @@ G4Material::G4Material(const G4String& name, G4double z,
   G4NistManager* nist = G4NistManager::Instance();
   G4int iz = G4lrint(z);
   auto elm = nist->FindOrBuildElement(iz);
-  if(!elm) { elm = new G4Element("ELM_" + name, name, z, a); }
+  if(elm == nullptr)
+  {
+    elm = new G4Element("ELM_" + name, name, z, a);
+  }
   theElementVector->push_back(elm);  
 
   fMassFractionVector    = new G4double[1];
@@ -262,14 +263,9 @@ void G4Material::InitializePointers()
   fRadlen = fNuclInterLen = fMassOfMolecule = 0.0;
     
   fState = kStateUndefined;
-
   fNumberOfElements = fNbComponents = fIdxComponent = 0;
-
   fMassFraction = true;
-
   fChemicalFormula = "";
-
-  // initilized data members
 
   // Store in the static Table of Materials
   fIndexInTable = theMaterialTable.size();
@@ -292,7 +288,7 @@ void G4Material::ComputeDerivedQuantities()
   // Number of atoms per volume (per element), total nb of electrons per volume
   G4double Zi, Ai;
   fTotNbOfAtomsPerVolume = 0.;
-  delete [] fVecNbOfAtomsPerVolume;
+  delete[] fVecNbOfAtomsPerVolume;
   fVecNbOfAtomsPerVolume = new G4double[fNumberOfElements];
   fTotNbOfElectPerVolume = 0.;
   fFreeElecDensity = 0.;
@@ -312,8 +308,14 @@ void G4Material::ComputeDerivedQuantities()
   ComputeRadiationLength();
   ComputeNuclearInterLength();
 
-  if (!fIonisation) { fIonisation  = new G4IonisParamMat(this); }
-  if (!fSandiaTable){ fSandiaTable = new G4SandiaTable(this); }
+  if(fIonisation == nullptr)
+  {
+    fIonisation = new G4IonisParamMat(this);
+  }
+  if(fSandiaTable == nullptr)
+  {
+    fSandiaTable = new G4SandiaTable(this);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -327,14 +329,14 @@ void G4Material::CopyPointersOfBaseMaterial()
 
   if(fState == kStateUndefined) { fState = fBaseMaterial->GetState(); }
 
-  theElementVector = 
+  theElementVector =
     const_cast<G4ElementVector*>(fBaseMaterial->GetElementVector());
   fMassFractionVector = 
     const_cast<G4double*>(fBaseMaterial->GetFractionVector());
   fAtomsVector = const_cast<G4int*>(fBaseMaterial->GetAtomsVector());
 
   const G4double* v = fBaseMaterial->GetVecNbOfAtomsPerVolume();
-  if (fVecNbOfAtomsPerVolume)  { delete [] fVecNbOfAtomsPerVolume; }
+  delete[] fVecNbOfAtomsPerVolume;
   fVecNbOfAtomsPerVolume = new G4double[fNumberOfElements];
   for (G4int i=0; i<fNumberOfElements; ++i) {
     fVecNbOfAtomsPerVolume[i] = factor*v[i];
@@ -342,9 +344,13 @@ void G4Material::CopyPointersOfBaseMaterial()
   fRadlen = fBaseMaterial->GetRadlen()/factor;
   fNuclInterLen = fBaseMaterial->GetNuclearInterLength()/factor;
 
-  if(!fIonisation) { fIonisation = new G4IonisParamMat(this); }
+  if(fIonisation == nullptr)
+  {
+    fIonisation = new G4IonisParamMat(this);
+  }
   fIonisation->SetMeanExcitationEnergy(fBaseMaterial->GetIonisation()->GetMeanExcitationEnergy());
-  if(fBaseMaterial->GetIonisation()->GetDensityEffectCalculator()) {
+  if(fBaseMaterial->GetIonisation()->GetDensityEffectCalculator() != nullptr)
+  {
     ComputeDensityEffectOnFly(true);
   }
 
@@ -353,8 +359,6 @@ void G4Material::CopyPointersOfBaseMaterial()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// AddElement -- composition by atom count
 
 void 
 G4Material::AddElementByNumberOfAtoms(const G4Element* elm, G4int nAtoms)
@@ -383,6 +387,7 @@ G4Material::AddElementByNumberOfAtoms(const G4Element* elm, G4int nAtoms)
     G4Exception ("G4Material::AddElementByNumberOfAtoms()", "mat031",
                  FatalException, ed, "");
   }
+
   // filling
   G4bool isAdded = false;
   if(!fElm->empty()) {
@@ -407,7 +412,7 @@ G4Material::AddElementByNumberOfAtoms(const G4Element* elm, G4int nAtoms)
     theElementVector->reserve(fNumberOfElements);
     fAtomsVector = new G4int[fNumberOfElements];
     fMassFractionVector = new G4double[fNumberOfElements];
-
+    
     G4double Amol = 0.;
     for (G4int i=0; i<fNumberOfElements; ++i) {
       theElementVector->push_back((*fElm)[i]);
@@ -421,14 +426,12 @@ G4Material::AddElementByNumberOfAtoms(const G4Element* elm, G4int nAtoms)
     }
     delete fAtoms;
     delete fElm;
-    fMassOfMolecule = Amol/Avogadro;
+    fMassOfMolecule = Amol/CLHEP::Avogadro;
     ComputeDerivedQuantities();
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// AddElement -- composition by fraction of mass
 
 void 
 G4Material::AddElementByMassFraction(const G4Element* elm, G4double fraction)
@@ -491,8 +494,7 @@ G4Material::AddElementByMassFraction(const G4Element* elm, G4double fraction)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// AddMaterial -- composition by fraction of mass
-
+// composition by fraction of mass
 void G4Material::AddMaterial(G4Material* material, G4double fraction)
 {
   if(fraction < 0.0 || fraction > 1.0) {
@@ -522,7 +524,6 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
     G4Exception ("G4Material::AddMaterial()", "mat031", FatalException, 
 		 ed, "");
   }
-
   if(0 == fIdxComponent) {
     fElmFrac = new std::vector<G4double>;
     fElm = new std::vector<const G4Element*>;
@@ -566,6 +567,7 @@ void G4Material::FillVectors()
   theElementVector->reserve(fNumberOfElements);
   fAtomsVector = new G4int[fNumberOfElements];
   fMassFractionVector = new G4double[fNumberOfElements];
+    
   G4double wtSum(0.0);
   for (G4int i=0; i<fNumberOfElements; ++i) {
     theElementVector->push_back((*fElm)[i]);
@@ -602,7 +604,7 @@ void G4Material::ComputeRadiationLength()
 {
   G4double radinv = 0.0 ;
   for (G4int i=0; i<fNumberOfElements; ++i) {
-     radinv += fVecNbOfAtomsPerVolume[i]*((*theElementVector)[i]->GetfRadTsai());
+    radinv += fVecNbOfAtomsPerVolume[i]*((*theElementVector)[i]->GetfRadTsai());
   }
   fRadlen = (radinv <= 0.0 ? DBL_MAX : 1./radinv);
 }
@@ -629,42 +631,28 @@ void G4Material::ComputeNuclearInterLength()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4Material::SetChemicalFormula(const G4String& chF) 
+void G4Material::SetChemicalFormula(const G4String& chF)  
 {
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&materialMutex);
-#endif
-  fChemicalFormula = chF;
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&materialMutex);
-#endif
+  if(!IsLocked()) { fChemicalFormula = chF; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4Material::SetFreeElectronDensity(G4double val)
 {
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&materialMutex);
-#endif
-  if(val >= 0.) { fFreeElecDensity = val; }
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&materialMutex);
-#endif
+  if(val >= 0. && !IsLocked()) { fFreeElecDensity = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4Material::ComputeDensityEffectOnFly(G4bool val)
 {
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&materialMutex);
-#endif
-  if (nullptr == fIonisation) { fIonisation  = new G4IonisParamMat(this); }
-  fIonisation->ComputeDensityEffectOnFly(val);
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&materialMutex);
-#endif
+  if(!IsLocked()) {
+    if (nullptr == fIonisation) {
+      fIonisation  = new G4IonisParamMat(this);
+    }
+    fIonisation->ComputeDensityEffectOnFly(val);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -685,13 +673,15 @@ size_t G4Material::GetNumberOfMaterials()
 
 G4Material* G4Material::GetMaterial(const G4String& materialName, G4bool warn)
 {  
-  // search the material by its name 
-  for (size_t j=0; j<theMaterialTable.size(); ++j) {
-    if (theMaterialTable[j]->GetName() == materialName) {
-      return theMaterialTable[j];
+  // search the material by its name
+  for(auto& j : theMaterialTable)
+  {
+    if(j->GetName() == materialName)
+    {
+      return j;
     }
   }
-   
+
   // the material does not exist in the table
   if (warn) {
     G4cout << "G4Material::GetMaterial() WARNING: The material: "
@@ -706,12 +696,13 @@ G4Material* G4Material::GetMaterial(const G4String& materialName, G4bool warn)
 
 G4Material* G4Material::GetMaterial(G4double z, G4double a, G4double dens)
 {  
-  // search the material by its name 
-  for (size_t j=0; j<theMaterialTable.size(); ++j) {
-    G4Material* mat = theMaterialTable[j]; 
-    if (1 == mat->GetNumberOfElements() && 
-	z == mat->GetZ() && a == mat->GetA() && dens == mat->GetDensity()) {
-      return mat; 
+  // search the material by its name
+  for(auto mat : theMaterialTable)
+  {
+    if(1 == mat->GetNumberOfElements() && z == mat->GetZ() &&
+       a == mat->GetA() && dens == mat->GetDensity())
+    {
+      return mat;
     }
   }
   return nullptr;
@@ -721,11 +712,12 @@ G4Material* G4Material::GetMaterial(G4double z, G4double a, G4double dens)
 
 G4Material* G4Material::GetMaterial(size_t nComp, G4double dens)
 {  
-  // search the material by its name 
-  for (size_t j=0; j<theMaterialTable.size(); ++j) {
-    G4Material* mat = theMaterialTable[j]; 
-    if (nComp == mat->GetNumberOfElements() && dens == mat->GetDensity()) {
-      return mat; 
+  // search the material by its name
+  for(auto mat : theMaterialTable)
+  {
+    if(nComp == mat->GetNumberOfElements() && dens == mat->GetDensity())
+    {
+      return mat;
     }
   }
   return nullptr;
@@ -819,9 +811,10 @@ std::ostream& operator<<(std::ostream& flux, const G4MaterialTable& MaterialTabl
   //Dump info for all known materials
   flux << "\n***** Table : Nb of materials = " << MaterialTable.size() 
        << " *****\n" << G4endl;
-        
-  for (size_t i=0; i<MaterialTable.size(); ++i) { 
-    flux << MaterialTable[i] << G4endl << G4endl; 
+
+  for(auto i : MaterialTable)
+  {
+    flux << i << G4endl << G4endl;
   }
 
   return flux;
@@ -838,18 +831,20 @@ G4bool G4Material::IsExtended() const
 
 void G4Material::SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
 {
-  if(nullptr != anMPT && fMaterialPropertiesTable != anMPT) {
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&materialMutex);
-    if(fMaterialPropertiesTable != anMPT) {
-#endif
-      delete fMaterialPropertiesTable;
-      fMaterialPropertiesTable = anMPT;
-#ifdef G4MULTITHREADED
-    }
-    G4MUTEXUNLOCK(&materialMutex);
-#endif
+  if(fMaterialPropertiesTable != anMPT && !IsLocked()) {
+    delete fMaterialPropertiesTable;
+    fMaterialPropertiesTable = anMPT;
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4Material::IsLocked()
+{
+  auto state = G4StateManager::GetStateManager()->GetCurrentState();
+  return !(state == G4State_PreInit ||
+	   state == G4State_Init || 
+	   state == G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

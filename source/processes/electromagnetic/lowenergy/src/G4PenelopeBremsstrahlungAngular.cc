@@ -121,7 +121,7 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
 void G4PenelopeBremsstrahlungAngular::ReadDataFile()
 {
    //Read information from DataBase file
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     {
       G4String excep =

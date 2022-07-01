@@ -28,10 +28,14 @@
 #ifndef PAR04LWTNNINFERENCE_HH
 #define PAR04LWTNNINFERENCE_HH
 
-#include "Par04InferenceInterface.hh"
-#include "lwtnn/LightweightGraph.hh"
-#include "lwtnn/parse_json.hh"
-#include <fstream>
+#include <G4String.hh>                 // for G4String
+#include <G4Types.hh>                  // for G4double
+#include <map>                         // for map, map<>::value_compare
+#include <memory>                      // for unique_ptr
+#include <string>                      // for string, basic_string, operator<
+#include <vector>                      // for vector
+#include "Par04InferenceInterface.hh"  // for Par04InferenceInterface
+#include "lwtnn/LightweightGraph.hh"   // for LightweightGraph
 
 /**
  * @brief Inference using the LWTNN library.
@@ -41,8 +45,6 @@
  * Runs the inference by evaluating the graph on the input vector from Par04InferenceSetup.
  *
  **/
-
-using namespace std;
 
 class Par04LwtnnInference : public Par04InferenceInterface
 {
@@ -54,7 +56,7 @@ class Par04LwtnnInference : public Par04InferenceInterface
   /// @param[in] aGenVector Input latent space and conditions
   /// @param[out] aEnergies Model output = generated shower energies
   /// @param[in] aSize Size of the output
-  void RunInference(vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
+  void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
 
  private:
   /// LWTNN graph , Network input and output vectors

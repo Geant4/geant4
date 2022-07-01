@@ -1,16 +1,32 @@
 # - G4physicslists category build definition
-
-geant4_global_library_target(NAME G4physicslists
-  COMPONENTS
+foreach(modfile
     builders/sources.cmake
-	  constructors/decay/sources.cmake
-	  constructors/electromagnetic/sources.cmake
-	  constructors/factory/sources.cmake
-	  constructors/gamma_lepto_nuclear/sources.cmake
-	  constructors/hadron_elastic/sources.cmake
-	  constructors/hadron_inelastic/sources.cmake
-	  constructors/ions/sources.cmake
-	  constructors/limiters/sources.cmake
-	  constructors/stopping/sources.cmake
+    constructors/decay/sources.cmake
+    constructors/electromagnetic/sources.cmake
+    constructors/factory/sources.cmake
+    constructors/gamma_lepto_nuclear/sources.cmake
+    constructors/hadron_elastic/sources.cmake
+    constructors/hadron_inelastic/sources.cmake
+    constructors/ions/sources.cmake
+    constructors/limiters/sources.cmake
+    constructors/stopping/sources.cmake
     lists/sources.cmake
-	  util/sources.cmake)
+    util/sources.cmake)
+  include(${modfile})
+endforeach()
+
+geant4_add_category(G4physicslists
+  MODULES
+    G4phys_builders
+    G4phys_ctor_decay
+    G4phys_ctor_em
+    G4phys_ctor_factory
+    G4phys_ctor_glnuclear
+    G4phys_ctor_helastic
+    G4phys_ctor_hinelastic
+    G4phys_ctor_ions
+    G4phys_ctor_limiters
+    G4phys_ctor_stopping
+    G4phys_lists
+    G4physlist_util 
+)

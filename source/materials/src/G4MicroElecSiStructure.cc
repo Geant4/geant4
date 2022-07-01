@@ -55,16 +55,14 @@ G4MicroElecSiStructure::G4MicroElecSiStructure(): nLevels(6)
   nLevels = energyConstant.size();
 }
 
-
-G4MicroElecSiStructure::~G4MicroElecSiStructure()
-{ }
- 
-
 G4double G4MicroElecSiStructure::Energy(G4int level)
 {
   G4double energ = 0.;
 
-  if (level >=0 && level < nLevels) energ = energyConstant[level];
+  if(level >= 0 && level < nLevels)
+  {
+    energ = energyConstant[level];
+  }
 
   return energ;
 }

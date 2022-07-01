@@ -88,14 +88,12 @@ set(G4expat_SOURCES
   src/xmltok_impl.h
   src/xmltok_ns.cc)
 
-
 # - Create target(s) and set usage requirements
-geant4_library_target(NAME G4expat SOURCES ${G4expat_SOURCES} ${G4expat_HEADERS})
+geant4_add_external_library(NAME G4expat SOURCES ${G4expat_SOURCES} ${G4expat_HEADERS})
 foreach(__g4expat_target G4expat G4expat-static)
   if(TARGET ${__g4expat_target})
     target_include_directories(${__g4expat_target}
       PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
       PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
@@ -106,11 +104,6 @@ endforeach()
 if(TARGET G4expat-static)
   target_compile_definitions(G4expat-static PUBLIC XML_STATIC)
 endif()
-
-# - Ensure the header directory gets added to the list of ones to export
-set_property(GLOBAL APPEND PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
 
 # Install headers alongside Geant4
 install(FILES ${G4expat_HEADERS}

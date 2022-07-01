@@ -47,7 +47,7 @@ class G4UImessenger
 {
   public:
 
-    G4UImessenger();
+    G4UImessenger() = default;
     G4UImessenger(const G4String& path, const G4String& dsc,
                   G4bool commandsToBeBroadcasted = true);
       // Constructor. In the implementation of the concrete messenger,
@@ -84,9 +84,9 @@ class G4UImessenger
     G4String ItoS(G4int i);
     G4String DtoS(G4double a);
     G4String BtoS(G4bool b);
-    G4int StoI(G4String s);
-    G4long StoL(G4String s);
-    G4double StoD(G4String s);
+    G4int StoI(const G4String& s);
+    G4long StoL(const G4String& s);
+    G4double StoD(const G4String& s);
     G4bool StoB(G4String s);
 
     void AddUIcommand(G4UIcommand* newCommand);
@@ -114,7 +114,9 @@ T* G4UImessenger::CreateCommand(const G4String& cname, const G4String& dsc)
   {
     path = baseDirName + cname;
     if(path[0] != '/')
+    {
       path = "/" + path;
+    }
   }
 
   T* command = new T(path.c_str(), this);

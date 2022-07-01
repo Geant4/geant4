@@ -45,7 +45,7 @@ class G4UIcommandTree
 {
   public:
 
-    G4UIcommandTree();
+    G4UIcommandTree() = default;
     G4UIcommandTree(const char* thePathName);
 
     ~G4UIcommandTree();
@@ -66,7 +66,7 @@ class G4UIcommandTree
     void List() const;
     void ListCurrent() const;
     void ListCurrentWithNum() const;
-    void CreateHTML(G4String = "");
+    void CreateHTML(const G4String& = "");
 
     inline const G4UIcommand* GetGuidance() const { return guidance; }
     inline const G4String& GetPathName() const { return pathName; }

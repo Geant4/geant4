@@ -1,22 +1,19 @@
--------------------------------------------------------------------
+# Example OpNovice History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Example OpNovice History file
-                    -----------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
-
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
-
-January 17, 2022 D. Sawkey (OpNovice-V10-07-07)
+## 2022-01-17 Daren Sawkey (OpNovice-V11-00-01)
 - Fix incorrect call to G4MaterialPropertiesTable::AddProperty. Add comments explaining
   use. Addresses issue 115.
+
+## 2021-12-10 Ben Morgan (OpNovice-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October 15, 2021 D. Sawkey (OpNovice-V10-07-06)
 - remove OpNoviceGDMLDetectorMessenger: use OpNoviceDetectorMessenger instead

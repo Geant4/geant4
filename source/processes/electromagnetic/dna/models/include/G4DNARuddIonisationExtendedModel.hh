@@ -158,11 +158,29 @@ private:
   G4double Sum(G4double energy, const G4String& particle);
 
   G4int RandomSelect(G4double energy,const G4String& particle );
+
+  G4ParticleDefinition* GetDNAIonParticleDefinition(const G4ParticleDefinition* particleDefinition);
    
   //
    
   G4DNARuddIonisationExtendedModel & operator=(const  G4DNARuddIonisationExtendedModel &right);
   G4DNARuddIonisationExtendedModel(const  G4DNARuddIonisationExtendedModel&);
+
+  // Reusable particle definitions
+  G4ParticleDefinition* protonDef;
+  G4ParticleDefinition* hydrogenDef;
+  G4ParticleDefinition* alphaPlusPlusDef;
+  G4ParticleDefinition* alphaPlusDef;
+  G4ParticleDefinition* heliumDef;
+
+  //G4ParticleDefinition* lithiumDef;
+  //G4ParticleDefinition* berylliumDef;
+  //G4ParticleDefinition* boronDef;
+  G4ParticleDefinition* carbonDef;
+  G4ParticleDefinition* nitrogenDef;
+  G4ParticleDefinition* oxygenDef;
+  G4ParticleDefinition* siliconDef;
+  G4ParticleDefinition* ironDef;
 
 };
 

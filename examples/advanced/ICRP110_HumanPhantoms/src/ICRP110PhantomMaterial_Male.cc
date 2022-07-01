@@ -67,43 +67,43 @@ void ICRP110PhantomMaterial_Male::DefineMaterials()
   // General elements
  
   A = 1.01*g/mole;
-  G4Element* elH = new G4Element ("Hydrogen","H",Z = 1.,A);
+  auto elH = new G4Element ("Hydrogen","H",Z = 1.,A);
 
   A = 12.011*g/mole;
-  G4Element* elC = new G4Element("Carbon","C",Z = 6.,A);  
+  auto elC = new G4Element("Carbon","C",Z = 6.,A);  
 
   A = 14.01*g/mole;
-  G4Element* elN = new G4Element("Nitrogen","N",Z = 7.,A);
+  auto elN = new G4Element("Nitrogen","N",Z = 7.,A);
 
   A = 16.00*g/mole;
-  G4Element* elO = new G4Element("Oxygen","O",Z = 8.,A);
+  auto elO = new G4Element("Oxygen","O",Z = 8.,A);
 
   A = 22.99*g/mole;
-  G4Element* elNa = new G4Element("Sodium","Na",Z = 11.,A);
+  auto elNa = new G4Element("Sodium","Na",Z = 11.,A);
 
   A = 24.305*g/mole;
-  G4Element* elMg = new G4Element("Magnesium","Mg",Z = 12.,A);
+  auto elMg = new G4Element("Magnesium","Mg",Z = 12.,A);
 
   A = 30.974*g/mole;
-  G4Element* elP = new G4Element("Phosphorus","P",Z = 15.,A);
+  auto elP = new G4Element("Phosphorus","P",Z = 15.,A);
  
   A = 32.064*g/mole;
-  G4Element* elS = new G4Element("Sulfur","S",Z = 16.,A);
+  auto elS = new G4Element("Sulfur","S",Z = 16.,A);
  
   A = 35.453*g/mole;
-  G4Element* elCl = new G4Element("Chlorine","Cl",Z = 17.,A);
+  auto elCl = new G4Element("Chlorine","Cl",Z = 17.,A);
  
   A = 39.098*g/mole;
-  G4Element* elK = new G4Element("Potassium","K",Z = 19.,A);
+  auto elK = new G4Element("Potassium","K",Z = 19.,A);
 
   A = 40.08*g/mole;
-  G4Element* elCa = new G4Element("Calcium","Ca",Z = 20.,A);
+  auto elCa = new G4Element("Calcium","Ca",Z = 20.,A);
 
   A = 55.85*g/mole;
-  G4Element* elFe  = new G4Element("Iron","Fe",Z = 26.,A);
+  auto elFe  = new G4Element("Iron","Fe",Z = 26.,A);
  
   A = 126.90447 *g/mole;
-  G4Element*elI = new G4Element("Iodine","I", Z = 53.,A);
+  auto elI = new G4Element("Iodine","I", Z = 53.,A);
 
   
   //Added tissues for phantom including their tissue ID

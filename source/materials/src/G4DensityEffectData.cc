@@ -50,10 +50,6 @@ G4DensityEffectData::G4DensityEffectData():index(0)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4DensityEffectData::~G4DensityEffectData()
-{
-}
-
 void G4DensityEffectData::Initialize()
 {
   // R.M. Sternheimer et al. Density Effect for the Ionization Loss of Charged
@@ -1325,7 +1321,8 @@ void G4DensityEffectData::AddMaterial(G4double* val, const G4String& matName)
 
 void G4DensityEffectData::PrintData(const G4String& matName) const
 {
-  if("" == matName || "all" == matName) {
+  if(matName.empty() || "all" == matName)
+  {
     DumpData();
     return;
   }

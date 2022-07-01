@@ -34,6 +34,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
+#include "G4NuclideTable.hh"
+
 #include "HadronElasticPhysicsHP.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
@@ -69,7 +71,12 @@ PhysicsList::PhysicsList()
   //
   new G4UnitDefinition( "mm2/g",  "mm2/g", "Surface/Mass", mm2/g);
   new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
-      
+  
+  // mandatory for G4NuclideTable
+  //
+  const G4double meanLife = 1*nanosecond, halfLife = meanLife*std::log(2);
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(halfLife);
+        
   // Hadron Elastic scattering
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
   

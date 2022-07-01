@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -137,6 +137,7 @@ PhysicsList::AddPhysicsList: <standard_opt3>
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
 Enable sampling of quantum entanglement            0
@@ -154,7 +155,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -164,8 +165,9 @@ Step function for light ions                       (0.2, 0.1 mm)
 Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         100 eV 
 Lowest muon/hadron kinetic energy                  1 keV
-Fluctuations of dE/dx are enabled                  1
 Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model                          1
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -264,14 +266,14 @@ hIoni:  for proton  XStype:1  SubType=2
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 10 km 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 1 TeV
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 TeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : g4Water_gas
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 10 km 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 1 TeV
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 TeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -300,47 +302,47 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 10000 starts.
---->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52676 Ne-_cav= 2929 doseCavity/Ebeam= 1.36059  (100*(ratio-1) = 36.05883 %) 
+--->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52676 Ne-_cav= 2935 doseCavity/Ebeam= 1.38478  (100*(ratio-1) = 38.47829 %) 
 
 --> Event 20000 starts.
---->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.79022 Ne-_cav= 5833 doseCavity/Ebeam= 1.29966  (100*(ratio-1) = 29.96607 %) 
+--->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.79022 Ne-_cav= 5837 doseCavity/Ebeam= 1.30960  (100*(ratio-1) = 30.95961 %) 
 
 --> Event 30000 starts.
---->evntNb= 30000 Nwall= 29995 Ncav= 6 Ic/Iw= 1.05370 Ne-_cav= 8640 doseCavity/Ebeam= 1.28234  (100*(ratio-1) = 28.23411 %) 
+--->evntNb= 30000 Nwall= 29995 Ncav= 6 Ic/Iw= 1.05370 Ne-_cav= 8639 doseCavity/Ebeam= 1.31119  (100*(ratio-1) = 31.11949 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=1.160000s Real=1.183206s Sys=0.000000s
+  User=1.160000s Real=1.177376s Sys=0.000000s
 
- Process calls frequency --->  eIoni= 328377  msc= 138784  Transportation= 22921
+ Process calls frequency --->  eIoni= 328414  msc= 138727  Transportation= 22903
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11460	 Energy = 7.208 GeV
-      Exit  --> nbParticles = 11460	 Energy = 7.210 GeV
+      Enter --> nbParticles = 11451	 Energy = 7.205 GeV
+      Exit  --> nbParticles = 11451	 Energy = 7.207 GeV
 
  beamFluence in wall = 39988	 in cavity = 12	 Icav/Iwall = 1.58076	 energyFluence = 37.96066 MeV*cm2/mg
 
- Total edep in cavity = 10.07848 MeV +- 5.09793 %
- Total dose in cavity = 50.39241 MeV*cm2/mg +- 5.09793 %
+ Total edep in cavity = 10.22817 MeV +- 5.11570 %
+ Total dose in cavity = 51.14086 MeV*cm2/mg +- 5.11570 %
 
- DoseCavity/EnergyFluence = 1.32749 +- 0.06767
+ DoseCavity/EnergyFluence = 1.34721 +- 0.06892
 
- Total charged trackLength in cavity = 42.8034 m     (mean value = 3.7350 mm )
+ Total charged trackLength in cavity = 43.4676 m     (mean value = 3.7960 mm )
 
- StepSize of ch. tracks in wall   = 369.4254 um  +- 284.3910 um 	 (nbSteps/track = 11.9580)
- StepSize of ch. tracks in cavity = 3.5957 mm  +- 9.2429 mm 	 (nbSteps/track = 1.0387)
+ StepSize of ch. tracks in wall   = 369.4681 um  +- 284.3692 um 	 (nbSteps/track = 11.9571)
+ StepSize of ch. tracks in cavity = 3.6518 mm  +- 1.0372 cm 	 (nbSteps/track = 1.0395)
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2092749592497649197, 434579495461712601, 1079543112934438194, 797730376220763308, 1337486248454233144, 1174329573933619888, 1032000357783861353, 1381706112479479715, 872079550668714938, 632043008343258040, 2069486147796826259, 420930916164881579, 1639547228898432769, 1114128558910937107, 1649250808378474067, 334790215466680627, 1210915680774403351} counter= 7sumtot= 826552911458814529
+N=17 V[N]={1654413378427596061, 2083774194714727894, 435632633583180387, 1249217075862885945, 1841610948578514178, 2195212315604842651, 604850147562425736, 71370128272451398, 692251873205795303, 688961742426314054, 1568443410653060393, 934486371783296866, 250285745308568758, 981911920856436405, 1911439761393675093, 1678696166129964874, 1107850824324498422} counter= 3sumtot= 1503664564978682810
 ---------------------------------------
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2092749592497649197, 434579495461712601, 1079543112934438194, 797730376220763308, 1337486248454233144, 1174329573933619888, 1032000357783861353, 1381706112479479715, 872079550668714938, 632043008343258040, 2069486147796826259, 420930916164881579, 1639547228898432769, 1114128558910937107, 1649250808378474067, 334790215466680627, 1210915680774403351} counter= 7sumtot= 826552911458814529
+N=17 V[N]={1654413378427596061, 2083774194714727894, 435632633583180387, 1249217075862885945, 1841610948578514178, 2195212315604842651, 604850147562425736, 71370128272451398, 692251873205795303, 688961742426314054, 1568443410653060393, 934486371783296866, 250285745308568758, 981911920856436405, 1911439761393675093, 1678696166129964874, 1107850824324498422} counter= 3sumtot= 1503664564978682810
 ---------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

@@ -196,7 +196,7 @@ void G4AdjointComptonModel::RapidSampleSecondaries(
   if(diffCS > 0.)
     diffCS /= fDirectCS;  // here we have the normalised diffCS
   // And we remultiply by the lambda of the forward process
-  diffCS *= fDirectProcess->GetLambda(gammaE1, fCurrentCouple);
+  diffCS *= fDirectProcess->GetCrossSection(gammaE1, fCurrentCouple);
 
   w_corr *= diffCS / diffCSUsed;
 

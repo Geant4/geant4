@@ -35,6 +35,7 @@
 #include "PTL/Task.hh"
 #include "PTL/ThreadData.hh"
 #include "PTL/ThreadPool.hh"
+#include "PTL/Utility.hh"
 
 #include <atomic>
 #include <cstdint>
@@ -62,6 +63,7 @@ get_default_threadpool();
 intmax_t
 get_task_depth();
 }  // namespace internal
+
 template <typename Tp, typename Arg = Tp, intmax_t MaxDepth = 0>
 class TaskGroup
 {
@@ -112,9 +114,9 @@ public:
     // define move-construct
     TaskGroup(this_type&& rhs) = default;
     // delete copy-assign
-    this_type& operator=(const this_type& rhs) = delete;
+    TaskGroup& operator=(const this_type& rhs) = delete;
     // define move-assign
-    this_type& operator=(this_type&& rhs) = default;
+    TaskGroup& operator=(this_type&& rhs) = default;
 
 public:
     template <typename Up>
@@ -156,6 +158,7 @@ public:
 
     void notify();
     void notify_all();
+
     void reserve(size_t _n)
     {
         m_task_list.reserve(_n);

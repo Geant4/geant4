@@ -1,0 +1,266 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_mpi_hmpi
+#define toolx_mpi_hmpi
+
+// code to send, receive histos through MPI.
+
+#include <tools/histo/hmpi>
+#include <tools/histo/hd2mpi>
+
+#include <tools/histo/h1d>
+#include <tools/histo/h2d>
+#include <tools/histo/h3d>
+#include <tools/histo/p1d>
+#include <tools/histo/p2d>
+
+#include "wrmpi"
+
+namespace toolx {
+namespace mpi {
+
+class hmpi : public virtual tools::histo::hmpi {
+  typedef tools::histo::hmpi parent;
+protected:
+  typedef unsigned int num_t;
+  static const std::string& s_class() {
+    static const std::string s_v("toolx::mpi::hmpi");
+    return s_v;
+  }
+public:
+  virtual bool pack(const tools::histo::h1d& a_h) {
+    if(!m_wrmpi.spack(a_h.s_cls())) return false;
+    if(!histo_data_duiuid_pack(m_wrmpi,a_h.dac())) return false;
+    return true;
+  }
+  virtual bool pack(const tools::histo::h2d& a_h) {
+    if(!m_wrmpi.spack(a_h.s_cls())) return false;
+    if(!histo_data_duiuid_pack(m_wrmpi,a_h.dac())) return false;
+    return true;
+  }
+  virtual bool pack(const tools::histo::h3d& a_h) {
+    if(!m_wrmpi.spack(a_h.s_cls())) return false;
+    if(!histo_data_duiuid_pack(m_wrmpi,a_h.dac())) return false;
+    return true;
+  }
+  virtual bool pack(const tools::histo::p1d& a_h) {
+    if(!m_wrmpi.spack(a_h.s_cls())) return false;
+    if(!profile_data_duiuidd_pack(m_wrmpi,a_h.get_histo_data())) return false;
+    return true;
+  }
+  virtual bool pack(const tools::histo::p2d& a_h) {
+    if(!m_wrmpi.spack(a_h.s_cls())) return false;
+    if(!profile_data_duiuidd_pack(m_wrmpi,a_h.get_histo_data())) return false;
+    return true;
+  }
+public:
+  virtual bool beg_send(unsigned int a_nhist) {
+    m_wrmpi.pack_reset();
+    return m_wrmpi.pack(a_nhist);
+  }
+  virtual bool send(int a_dest) {
+    if(::MPI_Send(m_wrmpi.buffer(),m_wrmpi.ipos(),MPI_CHAR,a_dest,m_tag,m_comm)!=MPI_SUCCESS) {
+      m_out << "toolx::mpi::hmpi::send : rank " << m_rank << " : MPI_Send failed." << std::endl;
+      return false;
+    }
+    m_wrmpi.pack_reset();
+    return true;
+  }
+public:
+  virtual bool wait_histos(int a_src,std::vector< std::pair<std::string,void*> >& a_hists) {
+    a_hists.clear();
+
+    typedef std::pair<std::string,void*> class_pointer;
+
+    MPI_Status status;
+    if(::MPI_Probe(a_src,m_tag,m_comm,&status)!=MPI_SUCCESS) {
+      m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank << " : MPI_Probe : failed." << std::endl;
+      return false;
+    }
+
+    int buffer_size = 0;
+    if(::MPI_Get_count(&status,MPI_CHAR,&buffer_size)!=MPI_SUCCESS) {
+      m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank << " : MPI_Get_count : failed." << std::endl;
+      return false;
+    }
+
+    if(!buffer_size) {
+      m_out << "exlb::mpi::wait_histos : MPI_Get_count returns zero data." << std::endl;
+      return false;
+    }
+
+    if(m_verbose) m_out << "rank " << m_rank << " : get_count " << buffer_size << std::endl;
+
+    char* buffer = new char[buffer_size];
+    if(!buffer) {
+      m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank << " : can't alloc buffer of size " << buffer_size << std::endl;
+      return false;
+    }
+
+    if(::MPI_Recv(buffer,buffer_size,MPI_CHAR,a_src,m_tag,m_comm,&status)!=MPI_SUCCESS) {
+      m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank << " : MPI_Recv : failed." << std::endl;
+      delete [] buffer;
+      return false;
+    }
+
+    if(m_verbose) m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank << " : unpack data ..." << std::endl;
+
+    wrmpi _mpi(m_out,m_comm,buffer_size,buffer); //give ownership of buffer to _mpi.
+
+    num_t nhist;
+    if(!_mpi.unpack(nhist)) return false;
+
+    if(m_verbose)
+      m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank << " : number of histos to unpack " << nhist << std::endl;
+
+   {for(num_t ihist=0;ihist<nhist;ihist++) {
+
+      std::string scls;
+      if(!_mpi.sunpack(scls)) return false;
+
+      if(scls==tools::histo::h1d::s_class()) {
+        tools::histo::histo_data<double,unsigned int,unsigned int,double> hdata;
+        if(!histo_data_duiuid_unpack(_mpi,hdata)) return false;
+        tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
+        h->copy_from_data(hdata);
+        if(m_verbose) {
+          m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank
+                << " : got a " << scls
+                << ", title " << h->title()
+                << ", mean_x " << h->mean() << ", rms " << h->rms()
+                << std::endl;
+        }
+        a_hists.push_back(class_pointer(h->s_cls(),h)); //give ownership of h.
+
+      } else if(scls==tools::histo::h2d::s_class()) {
+        tools::histo::histo_data<double,unsigned int,unsigned int,double> hdata;
+        if(!histo_data_duiuid_unpack(_mpi,hdata)) return false;
+        tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
+        h->copy_from_data(hdata);
+        if(m_verbose) {
+          m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank
+                << " : got a " << scls
+                << ", title " << h->title()
+                << ", mean_x " << h->mean_x() << ", rms_x " << h->rms_x()
+                << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
+                << std::endl;
+        }
+        a_hists.push_back(class_pointer(h->s_cls(),h)); //give ownership of h.
+
+      } else if(scls==tools::histo::h3d::s_class()) {
+        tools::histo::histo_data<double,unsigned int,unsigned int,double> hdata;
+        if(!histo_data_duiuid_unpack(_mpi,hdata)) return false;
+        tools::histo::h3d* h = new tools::histo::h3d("",10,0,1,10,0,1,10,0,1);
+        h->copy_from_data(hdata);
+        if(m_verbose) {
+          m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank
+                << " : got a " << scls
+                << ", title " << h->title()
+                << ", mean_x " << h->mean_x() << ", rms_x " << h->rms_x()
+                << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
+                << ", mean_z " << h->mean_z() << ", rms_z " << h->rms_z()
+                << std::endl;
+        }
+        a_hists.push_back(class_pointer(h->s_cls(),h)); //give ownership of h.
+
+      } else if(scls==tools::histo::p1d::s_class()) {
+        tools::histo::profile_data<double,unsigned int,unsigned int,double,double> pdata;
+        if(!profile_data_duiuidd_unpack(_mpi,pdata)) return false;
+        tools::histo::p1d* h = new tools::histo::p1d("",10,0,1);
+        h->copy_from_data(pdata);
+        if(m_verbose) {
+          m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank
+                << " : got a " << scls
+                << ", title " << h->title()
+                << ", mean_x " << h->mean() << ", rms " << h->rms()
+                << std::endl;
+        }
+        a_hists.push_back(class_pointer(h->s_cls(),h)); //give ownership of h.
+
+      } else if(scls==tools::histo::p2d::s_class()) {
+        tools::histo::profile_data<double,unsigned int,unsigned int,double,double> pdata;
+        if(!profile_data_duiuidd_unpack(_mpi,pdata)) return false;
+        tools::histo::p2d* h = new tools::histo::p2d("",10,0,1,10,0,1);
+        h->copy_from_data(pdata);
+        if(m_verbose) {
+          m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank
+                << " : got a " << scls
+                << ", title " << h->title()
+                << ", mean_x " << h->mean_x() << ", rms_x " << h->rms_x()
+                << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
+                << std::endl;
+        }
+        a_hists.push_back(class_pointer(h->s_cls(),h)); //give ownership of h.
+
+      } else {
+        m_out << "toolx::mpi::hmpi::wait_histos : rank " << m_rank
+              << " : got not treated class " << scls
+              << std::endl;
+      }
+
+    }} //ihist
+
+    return true;
+  }
+
+public:
+  virtual int rank() const { return m_rank;}
+  virtual bool comm_rank(int& a_rank) const {
+    if(::MPI_Comm_rank(m_comm,&a_rank)!=MPI_SUCCESS) {a_rank=-1;return false;}
+    return true;
+  }
+  virtual bool comm_size(int& a_size) const {
+    if(::MPI_Comm_size(m_comm,&a_size)!=MPI_SUCCESS) {a_size=0;return false;}
+    return true;
+  }
+public:
+  hmpi(std::ostream& a_out,int a_rank,int a_tag,const MPI_Comm& a_comm,bool a_verbose = false)
+  :m_out(a_out)
+  ,m_rank(a_rank)
+  ,m_tag(a_tag)
+  ,m_comm(a_comm)
+  ,m_verbose(a_verbose)
+  ,m_wrmpi(a_out,a_comm)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~hmpi(){
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  hmpi(const hmpi& a_from)
+  :parent(a_from)
+  ,m_out(a_from.m_out)
+  ,m_rank(a_from.m_rank)
+  ,m_tag(a_from.m_tag)
+  ,m_comm(a_from.m_comm)
+  ,m_verbose(a_from.m_verbose)
+  ,m_wrmpi(a_from.m_out,a_from.m_comm)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+  }
+  hmpi& operator=(const hmpi& a_from){
+    m_rank = a_from.m_rank;
+    m_tag = a_from.m_tag;
+    m_verbose = a_from.m_verbose;
+    return *this;
+  }
+protected:
+  std::ostream& m_out;
+  int m_rank;
+  int m_tag;
+  const MPI_Comm& m_comm;
+  bool m_verbose;
+  wrmpi m_wrmpi;
+};
+
+}}
+
+#endif

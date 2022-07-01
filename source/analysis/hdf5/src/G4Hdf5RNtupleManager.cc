@@ -33,7 +33,7 @@ using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4Hdf5RNtupleManager::G4Hdf5RNtupleManager(const G4AnalysisManagerState& state)
- : G4TRNtupleManager<tools::hdf5::ntuple>(state)
+ : G4TRNtupleManager<toolx::hdf5::ntuple>(state)
 {}
 
 //
@@ -60,8 +60,8 @@ G4int G4Hdf5RNtupleManager::ReadNtupleImpl(const G4String& ntupleName,
   if ( directory < 0 ) return kInvalidId;
 
   // Create ntuple
-  auto rntuple = new tools::hdf5::ntuple(G4cout, directory, ntupleName);
-  auto rntupleDescription = new G4TRNtupleDescription<tools::hdf5::ntuple>(rntuple);
+  auto rntuple = new toolx::hdf5::ntuple(G4cout, directory, ntupleName);
+  auto rntupleDescription = new G4TRNtupleDescription<toolx::hdf5::ntuple>(rntuple);
   auto id = SetNtuple(rntupleDescription);
 
   Message(kVL2, "read", "ntuple", ntupleName, id > kInvalidId);
@@ -71,7 +71,7 @@ G4int G4Hdf5RNtupleManager::ReadNtupleImpl(const G4String& ntupleName,
 
 //_____________________________________________________________________________
 G4bool G4Hdf5RNtupleManager::GetTNtupleRow(
-  G4TRNtupleDescription<tools::hdf5::ntuple>* ntupleDescription)
+  G4TRNtupleDescription<toolx::hdf5::ntuple>* ntupleDescription)
 {
   auto ntuple = ntupleDescription->fNtuple;
 

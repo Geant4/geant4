@@ -36,7 +36,7 @@
 #include "Run.hh"
 
 #include "G4MPIscorerMerger.hh"
-#include "tools/mpi/wrmpi"
+#include "toolx/mpi/wrmpi"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

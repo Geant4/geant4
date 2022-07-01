@@ -42,21 +42,17 @@
 
 #include <iomanip>
 
-G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator=0;
+G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackerHit::TrackerHit()
- : G4VHit(),
-   fTrackID(-1),
-   fEdep(0.),
-   fPos(G4ThreeVector()),
-   fIncidentEnergy(0.)
+ : G4VHit()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackerHit::~TrackerHit() {}
+TrackerHit::~TrackerHit() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -85,7 +81,7 @@ const TrackerHit& TrackerHit::operator=(const TrackerHit& right)
 
 G4bool TrackerHit::operator==(const TrackerHit& right) const
 {
-  return ( this == &right ) ? true : false;
+  return this == &right;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -28,6 +28,7 @@
 #
 set(GEANT4_FALSEPOSITIVE_SOURCES
   # G4{Global,Geom}Config.hh generated
+  G4FindDataDir.hh
   G4GlobalConfig.hh
   G4GeomConfig.hh
   # - Xaw is deprecated...

@@ -75,7 +75,7 @@ G4IonCoulombCrossSection::G4IonCoulombCrossSection():
   fNistManager = G4NistManager::Instance();
   fG4pow = G4Pow::GetInstance();
   theProton   = G4Proton::Proton();
-  particle=0;
+  particle = nullptr;
 
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
@@ -89,10 +89,6 @@ G4IonCoulombCrossSection::G4IonCoulombCrossSection():
 
   targetZ = targetMass = screenZ = ScreenRSquare = etag = 0.0;
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4IonCoulombCrossSection::~G4IonCoulombCrossSection()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -39,17 +39,16 @@
 // 27.10.2021 A.Ribon extension for hypernuclei.
 
 #include "G4Fragment.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4ios.hh"
 #include <iomanip>
 
 G4Allocator<G4Fragment>*& pFragmentAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4Fragment>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4Fragment>* _instance = nullptr;
+  return _instance;
 }
-
-const G4double G4Fragment::minFragExcitation = 10.*CLHEP::eV;
 
 // Default constructor
 G4Fragment::G4Fragment() :
@@ -90,13 +89,14 @@ G4Fragment::G4Fragment(const G4Fragment &right) :
    xLevel(right.xLevel),
    theParticleDefinition(right.theParticleDefinition),
    spin(right.spin),
-   theCreationTime(right.theCreationTime)
+   theCreationTime(right.theCreationTime),
+   isLongLived(right.isLongLived)
 {}
 
 G4Fragment::~G4Fragment()
 {}
 
-G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum, G4bool warning) :
+G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   theA(A),
   theZ(Z),
   theL(0),
@@ -116,12 +116,12 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum, G4boo
   theCreationTime(0.0)
 {
   if(theA > 0) { 
-    CalculateGroundStateMass();
-    CalculateExcitationEnergy(warning); 
+    CalculateMassAndExcitationEnergy();
   }
 }
 
-G4Fragment::G4Fragment(G4int A, G4int Z, G4int numberOfLambdas, const G4LorentzVector& aMomentum, G4bool warning) :
+G4Fragment::G4Fragment(G4int A, G4int Z, G4int numberOfLambdas,
+                       const G4LorentzVector& aMomentum) :
   theA(A),
   theZ(Z),
   theL(std::max(numberOfLambdas,0)),
@@ -141,8 +141,7 @@ G4Fragment::G4Fragment(G4int A, G4int Z, G4int numberOfLambdas, const G4LorentzV
   theCreationTime(0.0)
 {
   if(theA > 0) { 
-    CalculateGroundStateMass();
-    CalculateExcitationEnergy(warning); 
+    CalculateMassAndExcitationEnergy();
   }
 }
 
@@ -175,6 +174,48 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   theGroundStateMass = aParticleDefinition->GetPDGMass();
 }
 
+void G4Fragment::CalculateMassAndExcitationEnergy()
+{
+  // check input
+  if(theZ > theA || theZ + theL > theA) {
+    G4String text = "G4Fragment::CalculateMassAndExcitationEnergy: inconsistent number of nucleons is ignored";
+    G4cout << text << G4endl; 
+    G4cout << "       Z=" << theZ << " A=" << theA 
+	   << " nLambdas=" << theL << G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, text);
+  }
+  // compute mass
+  theGroundStateMass = ( theL == 0 )
+    ? G4NucleiProperties::GetNuclearMass(theA, theZ)
+    : G4HyperNucleiProperties::GetNuclearMass(theA, theZ, theL); 
+
+  // excitation energy
+  const G4double minFragExcitation = 10.*CLHEP::eV;
+  theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
+  if(theExcitationEnergy < minFragExcitation) {
+    if(theExcitationEnergy < -minFragExcitation) {
+      ExcitationEnergyWarning();
+    }
+    theExcitationEnergy = 0.0;
+  }
+}
+
+void G4Fragment::SetExcEnergyAndMomentum(G4double eexc, 
+					 const G4LorentzVector& v)
+{
+  theExcitationEnergy = eexc;
+  theMomentum.set(0.0, 0.0, 0.0, theGroundStateMass + eexc);
+  theMomentum.boost(v.boostVector());
+}
+
+G4double G4Fragment::GetBindingEnergy() const
+{
+  const G4double lambdaMass = 1.115683*CLHEP::GeV;
+  return (theA-theZ-theL)*CLHEP::neutron_mass_c2 
+    + theZ*CLHEP::proton_mass_c2 + theL*lambdaMass
+    - theGroundStateMass;
+}
+
 G4Fragment & G4Fragment::operator=(const G4Fragment &right)
 {
   if (this != &right) {
@@ -195,6 +236,7 @@ G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     theParticleDefinition = right.theParticleDefinition;
     spin = right.spin;
     theCreationTime = right.theCreationTime;
+    isLongLived = right.isLongLived;
   }
   return *this;
 }
@@ -264,7 +306,9 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 void G4Fragment::ExcitationEnergyWarning()
 {
 #ifdef G4VERBOSE
-  G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
+  G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "
+	 << " GraundStateMass(MeV)= " << theGroundStateMass 
+	 <<G4endl;
   G4cout << *this << G4endl;
 #endif
 }

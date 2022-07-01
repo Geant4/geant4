@@ -40,7 +40,6 @@
 #define G4HadronicParameters_h 1
 
 #include "globals.hh"
-#include "G4Threading.hh"
 
 class G4HadronicParametersMessenger;
 
@@ -125,15 +124,24 @@ class G4HadronicParameters {
     // Boolean switch that allows to apply the Cosmic Ray (CR) coalescence algorithm
     // to the secondaries produced by a string model. By default it is disabled.
 
+    inline G4bool EnableIntegralInelasticXS() const;
+    inline G4bool EnableIntegralElasticXS() const;
+    void SetEnableIntegralInelasticXS( G4bool val );
+    void SetEnableIntegralElasticXS( G4bool val );
+    // Enable/disable integral method for main hadrons
+  
+    inline G4bool EnableDiffDissociationForBGreater10() const;
+    /// For nucleon-hadron interactions, it's not decided what to do with diffraction
+    /// dissociation. For the moment, they are turned off. This option allows it to
+    /// be turned back on. Applies to Baryon Number > 10 or # target nucleons > 10.
+    void SetEnableDiffDissociationForBGreater10(G4bool val);
+
   private:
     G4HadronicParameters();
 
     G4bool IsLocked() const;
 
     static G4HadronicParameters* sInstance;
-    #ifdef G4MULTITHREADED
-    static G4Mutex paramMutex;
-    #endif
 
     G4HadronicParametersMessenger* fMessenger;
 
@@ -157,6 +165,9 @@ class G4HadronicParameters {
     G4bool   fEnableHyperNuclei = false;
     G4bool   fApplyFactorXS = false;
     G4bool   fEnableCRCoalescence = false;
+    G4bool   fEnableIntegralInelasticXS = true;
+    G4bool   fEnableIntegralElasticXS = true;
+    G4bool fEnableDiffDissociationForBGreater10 = false;
 };
 
 inline G4double G4HadronicParameters::GetMaxEnergy() const { 
@@ -228,6 +239,18 @@ inline G4bool G4HadronicParameters::ApplyFactorXS() const {
 
 inline G4bool G4HadronicParameters::EnableCRCoalescence() const {
   return fEnableCRCoalescence;
+}
+
+inline G4bool G4HadronicParameters::EnableIntegralInelasticXS() const {
+  return fEnableIntegralInelasticXS;
+}
+
+inline G4bool G4HadronicParameters::EnableIntegralElasticXS() const {
+  return fEnableIntegralElasticXS;
+}
+
+inline G4bool G4HadronicParameters::EnableDiffDissociationForBGreater10() const {
+  return fEnableDiffDissociationForBGreater10;
 }
 
 #endif

@@ -40,20 +40,21 @@
 
 class G4LatticePhysical {
 public:
-  G4LatticePhysical(const G4LatticeLogical* Lat=0,
-		    const G4RotationMatrix* Rot=0);	// Use FRAME rotation
-  virtual ~G4LatticePhysical();
+ G4LatticePhysical(
+   const G4LatticeLogical* Lat = nullptr,
+   const G4RotationMatrix* Rot = nullptr);  // Use FRAME rotation
+ virtual ~G4LatticePhysical();
 
-  void SetVerboseLevel(G4int vb) { verboseLevel = vb; }
+ void SetVerboseLevel(G4int vb) { verboseLevel = vb; }
 
-  // NOTE:  Pass by value to allow in-situ rotations
-  G4double MapKtoV(G4int, G4ThreeVector) const;
-  G4ThreeVector MapKtoVDir(G4int, G4ThreeVector) const;
+ // NOTE:  Pass by value to allow in-situ rotations
+ G4double MapKtoV(G4int, G4ThreeVector) const;
+ G4ThreeVector MapKtoVDir(G4int, G4ThreeVector) const;
 
-  void SetLatticeLogical(const G4LatticeLogical* Lat) { fLattice = Lat; }
-  void SetPhysicalOrientation(const G4RotationMatrix* Rot); // FRAME rotation
-  void SetLatticeOrientation(G4double, G4double);
-  void SetMillerOrientation(G4int, G4int, G4int);
+ void SetLatticeLogical(const G4LatticeLogical* Lat) { fLattice = Lat; }
+ void SetPhysicalOrientation(const G4RotationMatrix* Rot);  // FRAME rotation
+ void SetLatticeOrientation(G4double, G4double);
+ void SetMillerOrientation(G4int, G4int, G4int);
 
 public:  
   const G4LatticeLogical* GetLattice() const { return fLattice; }

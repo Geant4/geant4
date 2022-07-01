@@ -44,7 +44,7 @@ class G4VMoleculeCounter
 {
 protected:
     static G4ThreadLocal G4VMoleculeCounter* fpInstance;
-    static G4bool fUse;
+    G4bool fUse = false;
 
     G4VMoleculeCounter() = default;
 
@@ -70,9 +70,9 @@ public:
      * at every creation/deletion of a molecule to
      * to increase/decrease the number at a given time.
      */
-    static void Use(G4bool flag = true);
+    void Use(G4bool flag = true);
 
-    static G4bool InUse();
+    G4bool InUse();
 
     //----------------------------------------------------
 

@@ -76,6 +76,10 @@ public:
     // time2 to the end of simulation
     void RegisterModel(G4VITStepModel* pModel, G4double globalTime);
 
+    void Reset();
+
+    void Finalize();
+
     std::vector<G4VITStepModel*> GetActiveModels(G4double globalTime) const;
 
     bool GetTimeStepComputerFlag();
@@ -88,4 +92,5 @@ protected:
 
     G4bool fTimeStepComputerFlag; // Set true if a time stepper is registered
     G4bool fReactionProcessFlag; // Set true if a reaction process is registered
+    G4bool fFinalize = false;
 };

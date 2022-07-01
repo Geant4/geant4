@@ -171,7 +171,7 @@ void G4RDeIonisationParameters::LoadData()
     }
   }
   
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4LEDATA environment variable not set!");

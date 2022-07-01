@@ -22,10 +22,10 @@ namespace waxml {
   inline std::string soutd(std::ostringstream& a_oss,double a_value) {
     a_oss.str("");
     a_oss << a_value;
-    std::string s("\"");
-    s += a_oss.str();
-    s += "\"";
-    return s;
+    std::string _s("\"");
+    _s += a_oss.str();
+    _s += "\"";
+    return _s;
   }
 
   inline std::string bin_to_string(std::ostringstream& a_oss,int a_index) {

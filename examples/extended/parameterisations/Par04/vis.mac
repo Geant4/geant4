@@ -1,4 +1,3 @@
-
 /Par04/detector/setDetectorInnerRadius 80 cm
 /Par04/detector/setDetectorLength 4 m
 /Par04/detector/setNbOfLayers 90
@@ -13,6 +12,9 @@
 
 # Use default detector dimensions and initialize
 /run/initialize
+
+# If inference model is active, de-activate it because it needs configuration
+/param/InActivateModel inferenceModel
 
 # Use this open statement to create an OpenGL view:
 /vis/open OGL 600x600-0+0

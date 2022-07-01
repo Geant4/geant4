@@ -86,13 +86,11 @@ STCyclotronPhysicsList::STCyclotronPhysicsList(STCyclotronDetectorConstruction* 
   fCutTargetElectron = fThickness_target;
   fCutTargetPositron = fThickness_target;
   fCutTargetGamma = fThickness_target;
-  fCutTargetNeutron = fThickness_target;
 
   fCutFoilProton = fThickness_foil;
   fCutFoilElectron = fThickness_foil;
   fCutFoilPositron = fThickness_foil;
   fCutFoilGamma = fThickness_foil;
-  fCutFoilNeutron = fThickness_foil;
   
   //EM physics
   fEmPhysicsList = new G4EmStandardPhysics_option3(0);
@@ -163,7 +161,7 @@ void STCyclotronPhysicsList::ConstructProcess()
   //Update the cuts with the 1/2 of the thickness of the foil/target
   //SetCuts();
 
-  SetCutTarget(0.01,fThickness_target/2.,fThickness_target/2.,fThickness_target/2.,fThickness_target/2.);
+  SetCutTarget(0.01,fThickness_target/2.,fThickness_target/2.,fThickness_target/2.);
   
   
 
@@ -184,8 +182,8 @@ void STCyclotronPhysicsList::SetCuts()
   SetCutValue(fCutForPositron, "e+");
 
   // Set cuts for detector
-  SetCutFoil(0.1,fThickness_foil/2.,fThickness_foil/2.,fThickness_foil/2.,fThickness_foil/2.);
-  SetCutTarget(0.01,fThickness_target/2.,fThickness_target/2.,fThickness_target/2.,fThickness_target/2.);
+  SetCutFoil(0.1,fThickness_foil/2.,fThickness_foil/2.,fThickness_foil/2.);
+  SetCutTarget(0.01,fThickness_target/2.,fThickness_target/2.,fThickness_target/2.);
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
@@ -207,48 +205,42 @@ void STCyclotronPhysicsList::SetCutForPositron(G4double cut)
   SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
-void STCyclotronPhysicsList::SetCutTarget(G4double cutProton, G4double cutElectron, G4double cutPositron, G4double cutGamma, G4double cutNeutron){
+void STCyclotronPhysicsList::SetCutTarget(G4double cutProton, G4double cutElectron, G4double cutPositron, G4double cutGamma){
   
   fCutTargetProton = cutProton*mm;
   fCutTargetElectron = cutElectron*mm;
   fCutTargetPositron = cutPositron*mm;
   fCutTargetGamma = cutGamma*mm;
-  fCutTargetNeutron = cutNeutron*mm;
 
   G4String regionNameTarget = "Target";
   G4Region* regionTarget = G4RegionStore::GetInstance()->GetRegion(regionNameTarget);
 
   G4ProductionCuts* cutsTarget = new G4ProductionCuts ;
-  cutsTarget -> SetProductionCut(fCutTargetGamma,G4ProductionCuts::GetIndex("gamma"));
-  cutsTarget -> SetProductionCut(fCutTargetElectron,G4ProductionCuts::GetIndex("e-"));
-  cutsTarget -> SetProductionCut(fCutTargetPositron,G4ProductionCuts::GetIndex("e+"));
-  cutsTarget -> SetProductionCut(fCutTargetProton,G4ProductionCuts::GetIndex("proton"));
-  cutsTarget->SetProductionCut(fCutTargetProton, G4ProductionCuts::GetIndex("deuteron"));
-  cutsTarget -> SetProductionCut(fCutTargetNeutron,G4ProductionCuts::GetIndex("neutron"));
+  cutsTarget -> SetProductionCut(fCutTargetGamma,"gamma");
+  cutsTarget -> SetProductionCut(fCutTargetElectron,"e-");
+  cutsTarget -> SetProductionCut(fCutTargetPositron,"e+");
+  cutsTarget -> SetProductionCut(fCutTargetProton,"proton");
   
   regionTarget -> SetProductionCuts(cutsTarget);
     
 }
 
-void STCyclotronPhysicsList::SetCutFoil(G4double cutProton, G4double cutElectron, G4double cutPositron, G4double cutGamma, G4double cutNeutron){
+void STCyclotronPhysicsList::SetCutFoil(G4double cutProton, G4double cutElectron, G4double cutPositron, G4double cutGamma){
   
   fCutFoilProton = cutProton*mm;
   fCutFoilElectron = cutElectron*mm;
   fCutFoilPositron = cutPositron*mm;
   fCutFoilGamma = cutGamma*mm;
-  fCutFoilNeutron = cutNeutron*mm;
 
   G4RegionStore::GetInstance()->GetRegion("Foil");
   G4String regionNameFoil = "Foil";
   G4Region* regionFoil = G4RegionStore::GetInstance()->GetRegion(regionNameFoil);
   
   G4ProductionCuts* cutsFoil = new G4ProductionCuts ;
-  cutsFoil -> SetProductionCut(fCutFoilGamma,G4ProductionCuts::GetIndex("gamma"));
-  cutsFoil -> SetProductionCut(fCutFoilElectron,G4ProductionCuts::GetIndex("e-"));
-  cutsFoil -> SetProductionCut(fCutFoilPositron,G4ProductionCuts::GetIndex("e+"));
-  cutsFoil -> SetProductionCut(fCutFoilProton,G4ProductionCuts::GetIndex("proton"));
-  cutsFoil->SetProductionCut(fCutFoilProton, G4ProductionCuts::GetIndex("deuteron"));
-  cutsFoil -> SetProductionCut(fCutFoilNeutron,G4ProductionCuts::GetIndex("neutron"));
+  cutsFoil -> SetProductionCut(fCutFoilGamma,"gamma");
+  cutsFoil -> SetProductionCut(fCutFoilElectron,"e-");
+  cutsFoil -> SetProductionCut(fCutFoilPositron,"e+");
+  cutsFoil -> SetProductionCut(fCutFoilProton,"proton");
 
   regionFoil -> SetProductionCuts(cutsFoil);
 

@@ -376,8 +376,8 @@ void G4Qt3DViewer::wheelEvent(QWheelEvent* ev)
     const G4double scale = 500;  // Empirically chosen
     fVP.MultiplyZoomFactor(1.+angleY/scale);
   } else {                              // Perspective projection
-    const G4double scale = fVP.GetFieldHalfAngle()/(10.*deg);  // Empirical
-    fVP.SetDolly(fVP.GetDolly()+angleY/scale);
+    const G4double delta = fSceneHandler.GetExtent().GetExtentRadius()/200.;  // Empirical
+    fVP.SetDolly(fVP.GetDolly()+angleY*delta);
   }
   
   SetView();

@@ -79,8 +79,7 @@ geant4_add_module(G4materials
 		G4SandiaTable.cc
 		G4SurfaceProperty.cc
 		G4UCNMaterialPropertiesTable.cc
-		G4UCNMicroRoughnessHelper.cc
-		G4VIonDEDXTable.cc)
+		G4UCNMicroRoughnessHelper.cc)
 
 geant4_module_link_libraries(G4materials
   PUBLIC

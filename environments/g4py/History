@@ -1,15 +1,16 @@
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+# Category geant4py History
 
-                       Geant4Py History file
-                       ---------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-Geant4Py is a Geant4-Python bridge.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2021-12-10 Ben Morgan (geant4py-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 2 Nov. 2021 B.Morgan (geant4py-V10-07-05)
 - Apply GitHub PR #31 from andriish

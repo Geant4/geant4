@@ -55,11 +55,11 @@ G4LocalThreadCoutMessenger::G4LocalThreadCoutMessenger()
     "If append flag is true output is appended to file,");
   coutFileNameCmd->SetGuidance("otherwise file output is overwritten.");
   coutFileNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  G4UIparameter* pp = new G4UIparameter("fileName", 's', true);
+  auto* pp = new G4UIparameter("fileName", 's', true);
   pp->SetDefaultValue("**Screen**");
   coutFileNameCmd->SetParameter(pp);
   pp = new G4UIparameter("append", 'b', true);
-  pp->SetDefaultValue(true);
+  pp->SetDefaultValue(1);
   coutFileNameCmd->SetParameter(pp);
 
   cerrFileNameCmd = new G4UIcommand("/control/cout/setCerrFile", this);
@@ -75,7 +75,7 @@ G4LocalThreadCoutMessenger::G4LocalThreadCoutMessenger()
   pp->SetDefaultValue("**Screen**");
   cerrFileNameCmd->SetParameter(pp);
   pp = new G4UIparameter("append", 'b', true);
-  pp->SetDefaultValue(true);
+  pp->SetDefaultValue(1);
   cerrFileNameCmd->SetParameter(pp);
 
   bufferCoutCmd = new G4UIcmdWithABool("/control/cout/useBuffer", this);

@@ -64,8 +64,7 @@ G4NuclearStopping::G4NuclearStopping(const G4String& processName)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4NuclearStopping::~G4NuclearStopping()
-{}
+G4NuclearStopping::~G4NuclearStopping() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

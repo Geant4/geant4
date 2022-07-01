@@ -140,7 +140,7 @@ void G4ANuElNucleusCcModel::InitialiseModel()
   
   if(fMaster)
   {  
-    char* path = getenv("G4PARTICLEXSDATA");
+    const char* path = G4FindDataDir("G4PARTICLEXSDATA");
     std::ostringstream ost1, ost2, ost3, ost4;
     ost1 << path << "/" << "neutrino" << "/" << pName << "/xarraycckr";
 

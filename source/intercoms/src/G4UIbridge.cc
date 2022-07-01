@@ -50,7 +50,7 @@ G4UIbridge::G4UIbridge(G4UImanager* localUI, G4String dir)
 
   // register to the master G4UImanager
   G4UImanager* masterUI = G4UImanager::GetMasterUIpointer();
-  if(masterUI)
+  if(masterUI != nullptr)
   {
     masterUI->RegisterBridge(this);
   }
@@ -60,11 +60,6 @@ G4UIbridge::G4UIbridge(G4UImanager* localUI, G4String dir)
                 "G4UImanager for the master thread is not yet instantiated. "
                 "Instantiate G4MTRunManager first.");
   }
-}
-
-// --------------------------------------------------------------------
-G4UIbridge::~G4UIbridge()
-{
 }
 
 // --------------------------------------------------------------------

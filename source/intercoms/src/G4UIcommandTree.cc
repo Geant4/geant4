@@ -38,11 +38,6 @@
 #include "G4ios.hh"
 
 // --------------------------------------------------------------------
-G4UIcommandTree::G4UIcommandTree()
-{
-}
-
-// --------------------------------------------------------------------
 G4UIcommandTree::G4UIcommandTree(const char* thePathName)
 {
   pathName = thePathName;
@@ -80,7 +75,7 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand* newCommand,
   remainingPath.erase(0, pathName.length());
   if(remainingPath.empty())
   {
-    if(!guidance)
+    if(guidance == nullptr)
     {
       guidance = newCommand;
       if(!(newCommand->ToBeBroadcasted()))
@@ -91,9 +86,9 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand* newCommand,
     return;
   }
 
-  if(guidance)
+  if(guidance != nullptr)
   {
-    G4UIdirectory* dir = static_cast<G4UIdirectory*>(guidance);
+    auto* dir = static_cast<G4UIdirectory*>(guidance);
     ifSort = dir->IfSort();
   }
   G4int i = remainingPath.find('/');
@@ -145,13 +140,15 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand* newCommand,
       if(nextPath == tree[i_thTree]->GetPathName())
       {
         if(!broadcastCommands)
+        {
           newCommand->SetToBeBroadcasted(false);
+        }
         tree[i_thTree]->AddNewCommand(newCommand, workerThreadOnly);
         return;
       }
     }
     // Creating a new sub-directory
-    G4UIcommandTree* newTree = new G4UIcommandTree(nextPath);
+    auto* newTree = new G4UIcommandTree(nextPath);
     if(ifSort)
     {
       auto j = tree.begin();
@@ -177,7 +174,9 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand* aCommand,
                                     G4bool workerThreadOnly)
 {
   if(workerThreadOnly && !(aCommand->IsWorkerThreadOnly()))
+  {
     return;
+  }
   G4String commandPath   = aCommand->GetCommandPath();
   G4String remainingPath = commandPath;
   remainingPath.erase(0, pathName.length());
@@ -318,16 +317,20 @@ G4String G4UIcommandTree::CompleteCommandPath(const G4String& aCommandPath)
   // find the tree
   auto jpre = pName.rfind('/');
   if(jpre != G4String::npos)
+  {
     pName.erase(jpre + 1);
+  }
   G4UIcommandTree* aTree = FindCommandTree(pName);
 
-  if(!aTree)
+  if(aTree == nullptr)
   {
     return empty;
   }
 
   if(pName.find(pName) == std::string::npos)
+  {
     return empty;
+  }
 
   std::vector<G4String> paths;
 
@@ -361,9 +364,9 @@ G4String G4UIcommandTree::CompleteCommandPath(const G4String& aCommandPath)
   if(paths.size() >= 2)
   {
     G4cout << "Matching directories :" << G4endl;
-    for(unsigned int i_thCommand = 0; i_thCommand < paths.size(); ++i_thCommand)
+    for(const auto& path : paths)
     {
-      G4cout << paths[i_thCommand] << G4endl;
+      G4cout << path << G4endl;
     }
   }
 
@@ -387,17 +390,16 @@ G4String G4UIcommandTree::CompleteCommandPath(const G4String& aCommandPath)
         matchingPath = GetFirstMatchedString(matchingPath, strtmp);
       }
       nMatch++;
-      commands.push_back(fpcmd + " ");
+      commands.emplace_back(fpcmd + " ");
     }
   }
 
   if(commands.size() >= 2)
   {
     G4cout << "Matching commands :" << G4endl;
-    for(unsigned int i_thCommand = 0; i_thCommand < commands.size();
-        ++i_thCommand)
+    for(const auto& matched : commands)
     {
-      G4cout << commands[i_thCommand] << G4endl;
+      G4cout << matched << G4endl;
     }
   }
 
@@ -434,13 +436,15 @@ void G4UIcommandTree::ListCurrent() const
 {
   G4cout << "Command directory path : " << pathName << G4endl;
   if(guidance != nullptr)
+  {
     guidance->List();
+  }
   G4cout << " Sub-directories : " << G4endl;
   G4int n_treeEntry = tree.size();
   for(G4int i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
   {
     G4cout << "   " << tree[i_thTree]->GetPathName();
-    if(tree[i_thTree]->GetGuidance() &&
+    if((tree[i_thTree]->GetGuidance() != nullptr) &&
        tree[i_thTree]->GetGuidance()->IsWorkerThreadOnly())
     {
       G4cout << " @ ";
@@ -473,7 +477,9 @@ void G4UIcommandTree::ListCurrentWithNum() const
 {
   G4cout << "Command directory path : " << pathName << G4endl;
   if(guidance != nullptr)
+  {
     guidance->List();
+  }
   G4int i = 0;
   G4cout << " Sub-directories : " << G4endl;
   G4int n_treeEntry = tree.size();
@@ -549,7 +555,7 @@ G4String G4UIcommandTree::ModStr(const char* strS)
 }
 
 // --------------------------------------------------------------------
-void G4UIcommandTree::CreateHTML(G4String sideBar)
+void G4UIcommandTree::CreateHTML(const G4String& sideBar)
 {
   G4String ofileName = CreateFileName(pathName);
   std::ofstream oF(ofileName, std::ios::out);
@@ -642,38 +648,39 @@ void G4UIcommandTree::CreateHTML(G4String sideBar)
       oF << ModStr(guidance->GetGuidanceLine(i)) << "<br>" << G4endl;
     }
   }
-  if (tree.size() >0 ){
+  if(!tree.empty())
+  {
     G4String menu = "";
     G4String newSideBar = "";
     menu += "<h2>Sub-directories </h2><table>";
       newSideBar += "<h2><a href=\"" + ofileName + "\">Top level </a></h2><table>";
     // Build menu short version
-    for(std::size_t i_thTree = 0; i_thTree < tree.size(); ++i_thTree)
-    {
-        newSideBar += "<tr><td><a href=\""
-         + CreateFileName(tree[i_thTree]->GetPathName()) + "\">"
-         + ModStr(tree[i_thTree]->GetPathName()) + "</a>";
+      for(auto& i_thTree : tree)
+      {
+        newSideBar += "<tr><td><a href=\"" +
+                      CreateFileName(i_thTree->GetPathName()) + "\">" +
+                      ModStr(i_thTree->GetPathName()) + "</a>";
     }
     // Build menu
-      for(std::size_t i_thTree = 0; i_thTree < tree.size(); ++i_thTree)
+    for(auto& i_thTree : tree)
     {
-      menu += "<tr><td><a href=\""
-         + CreateFileName(tree[i_thTree]->GetPathName()) + "\">"
-         + ModStr(tree[i_thTree]->GetPathName()) + "</a>";
-      menu += "</td><td>" + ModStr(tree[i_thTree]->GetTitle()) + "</tr>";
+      menu += "<tr><td><a href=\"" + CreateFileName(i_thTree->GetPathName()) +
+              "\">" + ModStr(i_thTree->GetPathName()) + "</a>";
+      menu += "</td><td>" + ModStr(i_thTree->GetTitle()) + "</tr>";
     }
     menu += "</table>";
       newSideBar += "</table>";
-    for(std::size_t i_thTree = 0; i_thTree < tree.size(); ++i_thTree)
-    {
+      for(auto& i_thTree : tree)
+      {
         createHTMLTreeLevel ++;
-        tree[i_thTree]->CreateHTML(newSideBar);
+        i_thTree->CreateHTML(newSideBar);
         createHTMLTreeLevel --;
     }
     oF << menu << G4endl;
   }
 
-  if (command.size() >0 ){
+  if(!command.empty())
+  {
     oF << "<h2>Commands </h2>" << G4endl;
       
     // resume
@@ -717,11 +724,10 @@ void G4UIcommandTree::CreateHTML(G4String sideBar)
       else
       {
         oF << "<p>Available Geant4 state(s) : ";
-        for(std::size_t ias = 0; ias < availabelStateList->size(); ++ias)
+        for(auto& ias : *availabelStateList)
         {
-          oF << G4StateManager::GetStateManager()->GetStateString(
-                  (*availabelStateList)[ias])
-             << " " << G4endl;
+          oF << G4StateManager::GetStateManager()->GetStateString(ias) << " "
+             << G4endl;
         }
       }
       if(cmd->GetParameterEntries() > 0)
@@ -770,11 +776,11 @@ void G4UIcommandTree::CreateHTML(G4String sideBar)
 G4UIcommandTree* G4UIcommandTree::GetTree(const char* comNameC)
 {
   G4String comName = comNameC;
-  for(std::size_t i = 0; i < tree.size(); ++i)
+  for(auto& i : tree)
   {
-    if(comName == tree[i]->GetPathName())
+    if(comName == i->GetPathName())
     {
-      return tree[i];
+      return i;
     }
   }
   return nullptr;

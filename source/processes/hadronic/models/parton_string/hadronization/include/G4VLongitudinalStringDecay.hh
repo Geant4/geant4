@@ -194,6 +194,7 @@ class G4VLongitudinalStringDecay : public G4HadronicInteraction
     G4HadronBuilder *hadronizer;
 
     G4double pspin_meson;
+    G4double pspin_mesonSSbar;
     G4double pspin_barion;
     std::vector<G4double> vectorMesonMix;
     std::vector<G4double> scalarMesonMix;

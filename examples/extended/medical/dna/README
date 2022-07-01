@@ -83,6 +83,9 @@ This directory contains a set of Geant4-DNA examples.
 
    - neuron 
        Irradiation of a realistic neuron cell.
+
+   - moleculardna
+       Damage simulation on DNA geometries.
    
 See the README page inside each example for more detail.
 

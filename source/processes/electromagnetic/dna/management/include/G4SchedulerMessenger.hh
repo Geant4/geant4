@@ -36,8 +36,8 @@
 // We would be very happy hearing from you, send us your feedback! :)
 //
 // In order for Geant4-DNA to be maintained and still open-source,
-// article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// article citations are crucial.
+// If you use Geant4-DNA chemistry and you publish papers about your software,
 // in addition to the general paper on Geant4-DNA:
 //
 // Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
@@ -46,7 +46,7 @@
 // reference papers on chemistry:
 //
 // J. Comput. Phys. 274 (2014) 841-882
-// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508
 
 #ifndef G4ITSTEPPINGMESSENGER_H
 #define G4ITSTEPPINGMESSENGER_H
@@ -58,35 +58,33 @@ class G4UIcmdWithAnInteger;
 class G4UIcommand;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithABool;
-
+class G4UIcmdWithAString;
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4SchedulerMessenger: public G4UImessenger
+class G4SchedulerMessenger : public G4UImessenger
 {
-  public:
-    G4SchedulerMessenger(G4Scheduler* runMgr);
-    ~G4SchedulerMessenger();
+ public:
+  explicit G4SchedulerMessenger(G4Scheduler* runMgr);
+  ~G4SchedulerMessenger();
+  void SetNewValue(G4UIcommand* command, G4String newValues);
+  G4String GetCurrentValue(G4UIcommand* command);
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+ private:
+  G4Scheduler* fScheduler;
 
-  private:
-    G4Scheduler * fScheduler;
-
-  private: //commands
-    G4UIdirectory*              fITDirectory;
-
-    G4UIcmdWithADoubleAndUnit*  fEndTime;
-    G4UIcmdWithADoubleAndUnit*  fTimeTolerance;
-    G4UIcmdWithAnInteger*       fVerboseCmd;
-    G4UIcmdWithAnInteger*       fMaxStepNumber;
-    G4UIcmdWithoutParameter*    fInitCmd;
-    G4UIcmdWithoutParameter*    fProcessCmd;
-    G4UIcmdWithAnInteger*       fMaxNULLTimeSteps;
-    G4UIcmdWithoutParameter*    fWhyDoYouStop;
-    G4UIcmdWithABool*           fUseDefaultTimeSteps;
+ private:  // commands
+  std::unique_ptr<G4UIdirectory> fITDirectory;
+  std::unique_ptr<G4UIcmdWithADoubleAndUnit> fEndTime;
+  std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTimeTolerance;
+  std::unique_ptr<G4UIcmdWithAnInteger> fVerboseCmd;
+  std::unique_ptr<G4UIcmdWithAnInteger> fMaxStepNumber;
+  std::unique_ptr<G4UIcmdWithoutParameter> fInitCmd;
+  std::unique_ptr<G4UIcmdWithoutParameter> fProcessCmd;
+  std::unique_ptr<G4UIcmdWithAnInteger> fMaxNULLTimeSteps;
+  std::unique_ptr<G4UIcmdWithoutParameter> fWhyDoYouStop;
+  std::unique_ptr<G4UIcmdWithABool> fUseDefaultTimeSteps;
+  std::unique_ptr<G4UIcmdWithABool> fResetScavenger;
 };
 
-#endif // G4ITSTEPPINGMESSENGER_H
+#endif  // G4ITSTEPPINGMESSENGER_H

@@ -74,7 +74,7 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
   std::vector<G4DynamicParticle*>* vectorOfParticles;
   vectorOfParticles = new std::vector<G4DynamicParticle*>;
 
-  G4DynamicParticle* aParticle;
+  G4DynamicParticle* aParticle = nullptr;
   G4int provShellId = 0;
   G4int counter = 0;
   
@@ -120,7 +120,7 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
 	    }
 	}
       counter++;
-      if (aParticle != 0) {vectorOfParticles->push_back(aParticle);}
+      if (aParticle != nullptr) {vectorOfParticles->push_back(aParticle);}
       else {provShellId = -2;}
     }
   

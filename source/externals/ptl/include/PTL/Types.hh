@@ -21,7 +21,41 @@
 
 #pragma once
 
+#ifndef G4GMAKE
+#    include "PTL/Config.hh"
+#endif
+
+#if defined(__APPLE__) || defined(__MACH__)
+#    if !defined(PTL_MACOS)
+#        define PTL_MACOS 1
+#    endif
+#    if !defined(PTL_UNIX)
+#        define PTL_UNIX 1
+#    endif
+#endif
+
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#    if !defined(PTL_WINDOWS)
+#        define PTL_WINDOWS 1
+#    endif
+#endif
+
+#if defined(__linux__) || defined(__linux) || defined(linux) || defined(__gnu_linux__)
+#    if !defined(PTL_LINUX)
+#        define PTL_LINUX 1
+#    endif
+#    if !defined(PTL_UNIX)
+#        define PTL_UNIX 1
+#    endif
+#endif
+
+#if defined(__unix__) || defined(__unix) || defined(unix)
+#    if !defined(PTL_UNIX)
+#        define PTL_UNIX 1
+#    endif
+#endif
+
+#if defined(PTL_WINDOWS)
 // Disable warning C4786 on WIN32 architectures:
 // identifier was truncated to '255' characters
 // in the debug information
@@ -31,7 +65,7 @@
 // Define DLL export macro for WIN32 systems for
 // importing/exporting external symbols to DLLs
 //
-#    if defined G4LIB_BUILD_DLL
+#    if defined PTL_BUILD_DLL
 #        define DLLEXPORT __declspec(dllexport)
 #        define DLLIMPORT __declspec(dllimport)
 #    else
@@ -54,12 +88,12 @@
 
 #if !defined(PTL_DEFAULT_OBJECT)
 #    define PTL_DEFAULT_OBJECT(NAME)                                                     \
-        NAME()            = default;                                                     \
-        ~NAME()           = default;                                                     \
-        NAME(const NAME&) = default;                                                     \
-        NAME(NAME&&)      = default;                                                     \
+        NAME()                       = default;                                          \
+        ~NAME()                      = default;                                          \
+        NAME(const NAME&)            = default;                                          \
+        NAME(NAME&&)                 = default;                                          \
         NAME& operator=(const NAME&) = default;                                          \
-        NAME& operator=(NAME&&) = default;
+        NAME& operator=(NAME&&)      = default;
 #endif
 
 #include <atomic>
@@ -118,41 +152,6 @@ GetSharedPointerPairMasterInstance()
     static auto  _inst  = _pinst.first;
     return _inst;
 }
-
-//======================================================================================//
-
-struct ScopeDestructor
-{
-    template <typename FuncT>
-    ScopeDestructor(FuncT&& _func)
-    : m_functor(std::forward<FuncT>(_func))
-    {}
-
-    // delete copy operations
-    ScopeDestructor(const ScopeDestructor&) = delete;
-    ScopeDestructor& operator=(const ScopeDestructor&) = delete;
-
-    // allow move operations
-    ScopeDestructor(ScopeDestructor&& rhs) noexcept
-    : m_functor(std::move(rhs.m_functor))
-    {
-        rhs.m_functor = []() {};
-    }
-    ScopeDestructor& operator=(ScopeDestructor&& rhs) noexcept
-    {
-        if(this != &rhs)
-        {
-            m_functor     = std::move(rhs.m_functor);
-            rhs.m_functor = []() {};
-        }
-        return *this;
-    }
-
-    ~ScopeDestructor() { m_functor(); }
-
-private:
-    std::function<void()> m_functor = []() {};
-};
 
 //======================================================================================//
 

@@ -1,0 +1,35 @@
+# Example molecularDNA History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2022-06-10 Sergio Losilla (molecularDNA-V11-00-05)
+- Added missing headers.
+
+## 2022-05-03 Konstantinos Chatzipapas (molecularDNA-V11-00-04)
+- add ecoli.C macro file
+- add createSDD.py
+
+## 2022-04-14 Hoang Tran (molecularDNA-V11-00-03)
+- correct a minor mistake in AnalysisManager
+- Add Complexity Frequency in cylinder.C
+- add human_cell.C macro file
+
+## 2022-02-27 Vladimir Ivanchenko (molecularDNA-V11-00-02)
+- PhysicsList - added DecayPhysics and RadioactiveDecayPhysics
+- ParallelWorldPhysics - minor clean-up
+- molecular.cc - updated according to the recent recommendations:
+    removed ifdef, removed RanecuEngine, use visualisation in 
+    the interactive session only, use G4RunManagerFactory
+
+## 2022-02-17 Hoang Tran (molecularDNA-V11-00-01)
+- modify Chemistry list
+- timeout for the geometry data download
+- the exception message in DNAGeometryMessenger::SetNewValue
+
+## 2022-01-07 Hoang Tran (molecularDNA-V11-00-00)
+- initial tag
+
+
+

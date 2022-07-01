@@ -216,6 +216,7 @@ G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4double massCode,
           if (j == nDiscreteEnergies) {
             e_low = 0.0/eV;
           } else {
+	    if ( j < 1 ) j = 1;  // Protection against evaluation of arrays at index j-1
             e_low = theAngular[j-1].GetLabel()/eV;
           }
           e_high = theAngular[j].GetLabel()/eV;
@@ -274,6 +275,8 @@ G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4double massCode,
             break;
           }
         }
+
+	if ( it < 1 ) it = 1;  // Protection against evaluation of arrays at index it-1
 
         G4double x1 = running[it-1];
         G4double x2 = running[it];
@@ -398,6 +401,7 @@ G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4double massCode,
         }
 
       } else { // continuum contribution
+	if ( it < 1 ) it = 1;  // Protection against evaluation of arrays at index it-1	
         G4double x1 = running[it-1]/running[nEnergies-1];
         G4double x2 = running[it]/running[nEnergies-1];
         G4double y1 = theAngular[it-1].GetLabel();
@@ -586,6 +590,7 @@ G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4double massCode,
       }
 
     } else {
+      if ( it < 1 ) it = 1;  // Protection against evaluation of arrays at index it-1      
       G4double x1 = running[it-1]/running[nEnergies-1];
       G4double x2 = running[it]/running[nEnergies-1];
       G4double y1 = theAngular[it-1].GetLabel();
@@ -691,7 +696,7 @@ void G4ParticleHPContAngularPar::PrepareTableInterpolation()
     G4double ener = theAngular[ie].GetLabel();
     G4double enerT = (ener-theMinEner)/(theMaxEner-theMinEner);
     theEnergiesTransformed.insert(enerT);
-    if( getenv("G4PHPTEST2") ) G4cout <<this << " G4ParticleHPContAngularPar::PrepareTableInterpolation  theEnergiesTransformed1 " << enerT << G4endl; //GDEB
+    if( std::getenv("G4PHPTEST2") ) G4cout <<this << " G4ParticleHPContAngularPar::PrepareTableInterpolation  theEnergiesTransformed1 " << enerT << G4endl; //GDEB
   } 
   G4int nEnergiesPrev = angParPrev->GetNEnergies();
   G4double minEnerPrev = angParPrev->GetMinEner();
@@ -700,7 +705,7 @@ void G4ParticleHPContAngularPar::PrepareTableInterpolation()
     G4double ener = angParPrev->theAngular[ie].GetLabel();
     G4double enerT = (ener-minEnerPrev)/(maxEnerPrev-minEnerPrev);
     theEnergiesTransformed.insert(enerT);
-    if( getenv("G4PHPTEST2") ) G4cout << this << " G4ParticleHPContAngularPar::PrepareTableInterpolation  theEnergiesTransformed2 " << enerT << G4endl; //GDEB
+    if( std::getenv("G4PHPTEST2") ) G4cout << this << " G4ParticleHPContAngularPar::PrepareTableInterpolation  theEnergiesTransformed2 " << enerT << G4endl; //GDEB
   }
   // add the maximum energy
   //theEnergiesTransformed.insert(1.);

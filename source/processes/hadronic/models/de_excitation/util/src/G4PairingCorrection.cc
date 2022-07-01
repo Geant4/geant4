@@ -33,25 +33,22 @@
 #include "G4PairingCorrection.hh"
 #include "G4SystemOfUnits.hh"
 
-static const G4double PairingConstant = 12.0*CLHEP::MeV;
+const G4double PairingConstant = 12.0*CLHEP::MeV;
 
 G4PairingCorrection::G4PairingCorrection()
-{}
-
-G4PairingCorrection::~G4PairingCorrection()
 {}
 
 G4double G4PairingCorrection::GetPairingCorrection(G4int A, G4int Z) const
 {
   G4double pairCorr = 0.0;
   G4int N = A - Z;
-  //  if(!theCookPairingCorrections.GetPairingCorrection(N,Z,pairCorr)) {
 
   if(!theCameronGilbertPairingCorrections.GetPairingCorrection(N,Z,pairCorr)) {
-
     pairCorr = ((1 - Z + 2*(Z/2)) + (1 - N + 2*(N/2)))
       *PairingConstant/std::sqrt(static_cast<G4double>(A));
   }
+  //theCorr.GetPairingCorrection(N,Z,pairCorr);
+
   return std::max(pairCorr, 0.0);
 }
 

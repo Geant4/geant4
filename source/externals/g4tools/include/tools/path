@@ -25,12 +25,12 @@ inline void nosuffix(const std::string& a_string,std::string& a_value,bool a_bac
   if(pos==std::string::npos) pos = a_string.rfind('\\');
   if(pos==std::string::npos) pos = 0;
   else pos++;
-  std::string s = a_string.substr(pos,a_string.size()-pos);
-  std::string::size_type dot_pos = a_back?s.rfind('.'):s.find('.');
+  std::string _s = a_string.substr(pos,a_string.size()-pos);
+  std::string::size_type dot_pos = a_back?_s.rfind('.'):_s.find('.');
   if(dot_pos==std::string::npos) {
-    a_value = s;
+    a_value = _s;
   } else {
-    a_value = s.substr(0,dot_pos);
+    a_value = _s.substr(0,dot_pos);
   }
 }
 
@@ -192,15 +192,15 @@ inline bool path_name_suffix(const std::string& a_string,std::string& a_path,std
     a_path = a_string.substr(0,pos);
     pos++;
   }
-  std::string s = a_string.substr(pos,a_string.size()-pos);
-  pos = s.rfind('.');
+  std::string _s = a_string.substr(pos,a_string.size()-pos);
+  pos = _s.rfind('.');
   if(pos==std::string::npos) {
-    a_name = s;
+    a_name = _s;
     a_suffix.clear();
   } else {
-    a_name = s;
+    a_name = _s;
     pos++;
-    a_suffix = s.substr(pos,s.size()-pos);
+    a_suffix = _s.substr(pos,_s.size()-pos);
   }
   return true;
 }
@@ -208,8 +208,8 @@ inline bool path_name_suffix(const std::string& a_string,std::string& a_path,std
 inline std::string dir_name(const std::string& a_path,unsigned int a_num = 1){
   std::string path = a_path;
   for(unsigned int index=0;index<a_num;index++) {
-    std::string p,n,s;
-    path_name_suffix(path,p,n,s);
+    std::string p,n,_s;
+    path_name_suffix(path,p,n,_s);
     path = p;
   }
   return path;
@@ -278,11 +278,11 @@ inline bool is_python(const std::string& a_path){
 namespace tools {
 
 inline bool url_parse(const std::string& a_url,std::string& a_host,unsigned int& a_port,std::string& a_path) {
-  std::string s;
+  std::string _s;
   if((a_url.size()>=7)&&(a_url.substr(0,7)=="http://")) {
-    s = a_url.substr(7,a_url.size()-7);
+    _s = a_url.substr(7,a_url.size()-7);
   } else if((a_url.size()>=8)&&(a_url.substr(0,8)=="https://")) {
-    s = a_url.substr(8,a_url.size()-8);
+    _s = a_url.substr(8,a_url.size()-8);
   } else {
     a_host.clear();
     a_port = 0;
@@ -290,13 +290,13 @@ inline bool url_parse(const std::string& a_url,std::string& a_host,unsigned int&
     return false;
   }
 
- {std::string::size_type pos = s.find('/');
+ {std::string::size_type pos = _s.find('/');
   if(pos==std::string::npos) {
-    a_host = s;
+    a_host = _s;
     a_path = "/";
   } else {
-    a_host = s.substr(0,pos);
-    a_path = s.substr(pos,s.size()-pos);
+    a_host = _s.substr(0,pos);
+    a_path = _s.substr(pos,_s.size()-pos);
   }}
 
  {std::string::size_type pos = a_host.find(':');

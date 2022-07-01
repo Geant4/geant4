@@ -84,7 +84,7 @@ class G4MicroElecMaterialStructure
 {
 public:
   G4MicroElecMaterialStructure(const G4String& matName = "");
-  virtual ~G4MicroElecMaterialStructure();
+  virtual ~G4MicroElecMaterialStructure() = default;
 	
   void ReadMaterialFile();
   G4double Energy(G4int level);

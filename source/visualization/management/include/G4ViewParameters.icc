@@ -195,6 +195,14 @@ inline G4int G4ViewParameters::GetWindowLocationHintY () const {
   return fWindowLocationHintY;
 }
 
+inline G4bool G4ViewParameters::IsWindowLocationHintXNegative () const {
+  return fWindowLocationHintXNegative;
+}
+
+inline G4bool G4ViewParameters::IsWindowLocationHintYNegative () const {
+  return fWindowLocationHintYNegative;
+}
+
 inline const G4String& G4ViewParameters::GetXGeometryString () const {
   return fXGeometryString;
 }
@@ -297,6 +305,9 @@ inline G4int G4ViewParameters::GetNumberOfCloudPoints () const {
 
 inline G4bool G4ViewParameters::IsSpecialMeshRendering () const
 {return fSpecialMeshRendering;}
+
+inline G4ViewParameters::SMROption G4ViewParameters::GetSpecialMeshRenderingOption () const
+{return fSpecialMeshRenderingOption;}
 
 inline const std::vector<G4ModelingParameters::PVNameCopyNo>&
 G4ViewParameters::GetSpecialMeshVolumes() const
@@ -563,6 +574,9 @@ inline void G4ViewParameters::SetDisplayLightFrontBlue (G4double displayLightFro
 
 inline void G4ViewParameters::SetSpecialMeshRendering (G4bool smr)
 {fSpecialMeshRendering = smr;}
+
+inline void G4ViewParameters::SetSpecialMeshRenderingOption (G4ViewParameters::SMROption option)
+{fSpecialMeshRenderingOption = option;}
 
 inline void G4ViewParameters::SetSpecialMeshVolumes
 (const std::vector<G4ModelingParameters::PVNameCopyNo>& smvs)

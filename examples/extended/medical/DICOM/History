@@ -1,10 +1,17 @@
--------------------------------------------------------------------
+# Example DICOM History
 
-     =========================================================
- 		      Geant4 - DICOM example
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
+
+## 2021-12-10 Ben Morgan (DICOM-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 27.09.2021  Pedro Arce (DICOM-V10-07-01)
 - Use updated interface from geomnav to use G4PhantomParameterisation::GetNoVoxels instead of GetNoVoxel
 

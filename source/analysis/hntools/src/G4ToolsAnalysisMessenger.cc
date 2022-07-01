@@ -44,18 +44,23 @@ G4ToolsAnalysisMessenger::G4ToolsAnalysisMessenger(G4ToolsAnalysisManager* manag
   // Create get commands
   G4AnalysisMessengerHelper helper("h1");
   fGetH1Cmd = helper.CreateGetCommand(this);
+  fGetH1VectorCmd = helper.CreateGetVectorCommand(this);
 
   helper.SetHnType("h2");
   fGetH2Cmd = helper.CreateGetCommand(this);
+  fGetH2VectorCmd = helper.CreateGetVectorCommand(this);
 
   helper.SetHnType("h3");
   fGetH3Cmd = helper.CreateGetCommand(this);
+  fGetH3VectorCmd = helper.CreateGetVectorCommand(this);
 
   helper.SetHnType("p1");
   fGetP1Cmd = helper.CreateGetCommand(this);
+  fGetP1VectorCmd = helper.CreateGetVectorCommand(this);
 
   helper.SetHnType("p2");
   fGetP2Cmd = helper.CreateGetCommand(this);
+  fGetP2VectorCmd = helper.CreateGetVectorCommand(this);
 }
 
 //_____________________________________________________________________________
@@ -73,6 +78,13 @@ G4String G4ToolsAnalysisMessenger::GetCurrentValue (G4UIcommand* command)
   if ( command == fGetH3Cmd.get() ) return fH3Value;
   if ( command == fGetP1Cmd.get() ) return fP1Value;
   if ( command == fGetP2Cmd.get() ) return fP2Value;
+
+  if ( command == fGetH1VectorCmd.get() ) return fH1VectorValue;
+  if ( command == fGetH2VectorCmd.get() ) return fH2VectorValue;
+  if ( command == fGetH3VectorCmd.get() ) return fH3VectorValue;
+  if ( command == fGetP1VectorCmd.get() ) return fP1VectorValue;
+  if ( command == fGetP2VectorCmd.get() ) return fP2VectorValue;
+
   return "";
 }
 
@@ -94,5 +106,20 @@ void G4ToolsAnalysisMessenger::SetNewValue(G4UIcommand* command, G4String value)
   }
   else if ( command == fGetP2Cmd.get() ) {
     fP2Value = GetHnAddress(id, fManager->fP2Manager);
+  }
+  if ( command == fGetH1VectorCmd.get() ) {
+    fH1VectorValue = GetHnVectorAddress(fManager->fH1Manager);
+  }
+  else if ( command == fGetH2VectorCmd.get() ) {
+    fH2VectorValue = GetHnVectorAddress(fManager->fH2Manager);
+  }
+  else if ( command == fGetH3VectorCmd.get() ) {
+    fH3VectorValue = GetHnVectorAddress(fManager->fH3Manager);
+  }
+  else if ( command == fGetP1VectorCmd.get() ) {
+    fP1VectorValue = GetHnVectorAddress(fManager->fP1Manager);
+  }
+  else if ( command == fGetP2VectorCmd.get() ) {
+    fP2VectorValue = GetHnVectorAddress(fManager->fP2Manager);
   }
 }

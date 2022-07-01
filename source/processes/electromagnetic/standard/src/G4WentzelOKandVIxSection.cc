@@ -54,6 +54,7 @@
 #include "G4EmParameters.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,9 +62,10 @@ G4double G4WentzelOKandVIxSection::ScreenRSquareElec[] = {0.0};
 G4double G4WentzelOKandVIxSection::ScreenRSquare[]     = {0.0};
 G4double G4WentzelOKandVIxSection::FormFactor[]        = {0.0};
 
-#ifdef G4MULTITHREADED
-G4Mutex G4WentzelOKandVIxSection::WentzelOKandVIxSectionMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex theWOKVIMutex = G4MUTEX_INITIALIZER;
+}
 
 const G4double alpha2 = CLHEP::fine_structure_const*CLHEP::fine_structure_const;
 const G4double factB1= 0.5*CLHEP::pi*CLHEP::fine_structure_const;
@@ -133,10 +135,9 @@ void G4WentzelOKandVIxSection::InitialiseA()
 {
   // Thomas-Fermi screening radii
   // Formfactors from A.V. Butkevich et al., NIM A 488 (2002) 282
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4WentzelOKandVIxSection::WentzelOKandVIxSectionMutex);
+  if(0.0 != ScreenRSquare[0]) { return; }
+  G4AutoLock l(&theWOKVIMutex);
   if(0.0 == ScreenRSquare[0]) {
-#endif
     const G4double invmev2 = 1./(CLHEP::MeV*CLHEP::MeV);
     G4double a0 = CLHEP::electron_mass_c2/0.88534; 
     G4double constn = 6.937e-6*invmev2;
@@ -155,15 +156,8 @@ void G4WentzelOKandVIxSection::InitialiseA()
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
     } 
-#ifdef G4MULTITHREADED
-  }
-  G4MUTEXUNLOCK(&G4WentzelOKandVIxSection::WentzelOKandVIxSectionMutex);
-#endif
-  
-  //G4cout << "G4WentzelOKandVIxSection::Initialise  mass= " << mass
-  //         << "  " << p->GetParticleName() 
-  //     << "  cosThetaMax= " << cosThetaMax << G4endl; 
-  
+  }  
+  l.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

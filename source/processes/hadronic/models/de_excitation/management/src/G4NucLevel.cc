@@ -74,25 +74,6 @@ G4NucLevel::~G4NucLevel()
   }
 }
 
-#ifdef G4VERBOSE
-void G4NucLevel::PrintError(size_t idx, const G4String& ss) const
-{
-  G4cout << "G4NucLevel::PrintError: length= " << length << G4endl;
-  for(size_t i=0; i<length; ++i) {
-    G4cout << i << ". " /*<< fFinalIndex[i] << "  "*/ << fTrans[i]
-	   << fGammaCumProbability[i] << " " << fTimeGamma << " "
-           << fGammaProbability[i] << " "
-	   << fMpRatio[i] << G4endl;
-  }
-  G4String sss = "G4NucLevel::"+ss+"()";
-  G4ExceptionDescription ed;
-  ed << "Index of a level " << idx << " >= " 
-     << length << " (number of transitions)";
-  G4Exception(sss,"had061",JustWarning,ed,"");
-  throw G4HadronicException(__FILE__, __LINE__,"FATAL Hadronic Exception");
-}  
-#endif
-
 void G4NucLevel::StreamInfo(std::ostream& out) const
 {
   G4int prec = out.precision(4);

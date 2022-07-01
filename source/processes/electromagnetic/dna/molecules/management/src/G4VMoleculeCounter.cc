@@ -32,8 +32,6 @@
 
 #include "G4VMoleculeCounter.hh"
 #include "G4MoleculeCounter.hh"
-
-G4bool G4VMoleculeCounter::fUse = false;
 G4ThreadLocal
 G4VMoleculeCounter* G4VMoleculeCounter::fpInstance = nullptr;
 

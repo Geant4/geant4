@@ -39,10 +39,10 @@ public:
     _clear();
 
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
-    //::printf("debug : inlib::branch_element::stream : version %d, count %d\n",v,c);
+    //::printf("debug : tools::branch_element::stream : version %d, count %d\n",v,c);
 
     if(!parent::stream(a_buffer)) {
       m_out << "tools::rroot::branch_element::stream : parent::stream() failed." << std::endl;
@@ -57,34 +57,34 @@ public:
       if(!a_buffer.read(fStreamerType)) return false;
     } else { //v>=8
       if(!a_buffer.read(fClassName)) return false;
-      //::printf("debug : inlib::branch_element::stream : fClassName \"%s\"\n",fClassName.c_str());
+      //::printf("debug : tools::branch_element::stream : fClassName \"%s\"\n",fClassName.c_str());
       std::string fParentName;
       if(!a_buffer.read(fParentName)) return false;
-      //::printf("debug : inlib::branch_element::stream : fParentName \"%s\"\n",fParentName.c_str());
+      //::printf("debug : tools::branch_element::stream : fParentName \"%s\"\n",fParentName.c_str());
       std::string fCloneName;
       if(!a_buffer.read(fCloneName)) return false;
-      //::printf("debug : inlib::branch_element::stream : fCloneName \"%s\"\n",fCloneName.c_str());
+      //::printf("debug : tools::branch_element::stream : fCloneName \"%s\"\n",fCloneName.c_str());
       int dummy_int;
       if(!a_buffer.read(dummy_int)) return false; //fCheckSum
-      //::printf("debug : inlib::branch_element::stream : fCheckSum %d\n",dummy_int);
+      //::printf("debug : tools::branch_element::stream : fCheckSum %d\n",dummy_int);
 
       if(v>=10) {
         short dummy_short;
         if(!a_buffer.read(dummy_short)) return false; //fClassVersion
-        //::printf("debug : inlib::branch_element::stream : fClassVersion %d\n",dummy_short);
+        //::printf("debug : tools::branch_element::stream : fClassVersion %d\n",dummy_short);
       } else {
         if(!a_buffer.read(dummy_int)) return false; //fClassVersion
       }
 
       if(!a_buffer.read(fID)) return false;
-      //::printf("debug : inlib::branch_element::stream : fID %d\n",fID);
+      //::printf("debug : tools::branch_element::stream : fID %d\n",fID);
       if(!a_buffer.read(fType)) return false;
-      //::printf("debug : inlib::branch_element::stream : fType %d\n",fType);
+      //::printf("debug : tools::branch_element::stream : fType %d\n",fType);
       if(!a_buffer.read(fStreamerType)) return false;
-      //::printf("debug : inlib::branch_element::stream : fStreamerType %d\n",fStreamerType);
+      //::printf("debug : tools::branch_element::stream : fStreamerType %d\n",fStreamerType);
 
       if(!a_buffer.read(dummy_int)) return false; //fMaximum
-      //::printf("debug : inlib::branch_element::stream : fMaximum %d\n",dummy_int);
+      //::printf("debug : tools::branch_element::stream : fMaximum %d\n",dummy_int);
 
       //TBranchElement* fBranchCount;
       ifac::args args;
@@ -106,7 +106,7 @@ public:
 
     }
 
-    if(!a_buffer.check_byte_count(s,c,"TBranchElement")) {_clear();return false;}
+    if(!a_buffer.check_byte_count(_s,_c,"TBranchElement")) {_clear();return false;}
     return true;
   }
 public: //branch
@@ -607,10 +607,10 @@ public: //branch
     uint32 n;
     if(!find_entry(a_file,a_entry,n)) return false;
 
-   {std::string s;
+   {std::string _s;
     uint32 len = uint32(name().size())+128;
-    sprintf(s,len," %-15s = ",name().c_str());
-    a_out << s;}
+    sprintf(_s,len," %-15s = ",name().c_str());
+    a_out << _s;}
 
     a_out << m_obj << std::endl;
 

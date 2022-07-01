@@ -227,7 +227,10 @@ G4double G4DensityEffectCalculator::FermiDeltaCalculation(G4double x)
   // positive infinity. In the code we don't return inf, though, but
   // rather set that term to zero, which means that if this test were
   // used, it would give the wrong result for some materials.
-  if(fConductivity == 0 && Ell(0) <= 0) return 0;
+  if(fConductivity == 0 && Ell(0) <= 0)
+  {
+    return 0;
+  }
 
   // Attempt to find the root from 40 starting points evenly distributed
   // in log space.  Trying a single starting point is not sufficient for

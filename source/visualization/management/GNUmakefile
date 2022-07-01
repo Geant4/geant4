@@ -11,7 +11,7 @@ endif
 # CPPFLAGS += -DG4DEBUG_VIS_MANAGEMENT
 
 GLOBLIBS  = libG4modeling.lib libG4tools.lib
-GLOBLIBS += libG4tasking.lib libG4run.lib libG4event.lib
+GLOBLIBS += libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib

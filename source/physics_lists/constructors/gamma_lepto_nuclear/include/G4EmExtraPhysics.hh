@@ -59,10 +59,10 @@ public:
   // obsolete
   G4EmExtraPhysics(const G4String& name);
 
-  virtual ~G4EmExtraPhysics();
+  ~G4EmExtraPhysics() override;
 
-  void ConstructParticle();
-  void ConstructProcess();
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
   void Synch(G4bool val);
   void SynchAll(G4bool val);

@@ -53,11 +53,11 @@ class G4ParticleGunMessenger : public G4UImessenger
 {
   public:
 
-    G4ParticleGunMessenger(G4ParticleGun* fPtclGun);
-    ~G4ParticleGunMessenger();
+    explicit G4ParticleGunMessenger(G4ParticleGun* fPtclGun);
+    ~G4ParticleGunMessenger() override;
     
-    void SetNewValue(G4UIcommand* command, G4String newValues);
-    G4String GetCurrentValue(G4UIcommand* command);
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
+    G4String GetCurrentValue(G4UIcommand* command) override;
 
   private:
 
@@ -66,7 +66,7 @@ class G4ParticleGunMessenger : public G4UImessenger
 
   private:
 
-    G4ParticleGun* fParticleGun = nullptr;
+    G4ParticleGun* fParticleGun = nullptr; // Not owned, cannot be null post construction
     G4ParticleTable* particleTable = nullptr;
 
     // Commands

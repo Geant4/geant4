@@ -1,30 +1,33 @@
--------------------------------------------------------------------
+# Category op History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2022-04-27 Daren Sawkey (op-V11-00-05)
+- many files: apply clang-tidy recommendations. Use default ctor, auto keyword,
+  remove (void) function argument, don't check for nullptr before delete, == for
+  string comparisons.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-04-11 Daren Sawkey (op-V11-00-04)
+- G4OpBoundaryProcess: Check for nullptr before dereferencing. Addresses bug 2471.
 
-11 Apr 22: D. Sawkey (op-V10-07-08)
-- G4OpBoundaryProcess: fix nullptr dereference. Address bug 2471.
-
-07 Apr 22: D. Sawkey (op-V10-07-07)
+## 2022-04-07 Daren Sawkey (op-V11-00-03)
 - G4OpWLS2: fix incorrect call to set time profile. Addresses bug 2482.
 
-10 Jan 22: D. Sawkey (op-V10-07-06)
+## 2022-01-18 Jonas Hahnfeld (op-V11-00-02)
+- Prefer pointer to `const G4Material` if possible
+
+## 2022-01-10 Daren Sawkey (op-V11-00-01)
 - Remove G4lrint/G4lint to calculate angle bin for Davis/LBNL LUT. Fixes crash
   when angle = 0. Addresses issue 116.
+
+## 2021-12-10 Ben Morgan (op-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 21 Oct 21: D. Sawkey (op-V10-07-05)
 - G4OpBoundaryProcess - rename variables: class start with f; lowercase

@@ -145,7 +145,7 @@ G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
       if (successful) {
 	if (warn) {
 	  G4cout <<
-    "G4Scene::AddWorldIfEmpty: The scene was empty of run-duration models."
+    "G4Scene::AddWorldIfEmpty: The scene had no extent."
     "\n  \"world\" has been added.";
 	  G4cout << G4endl;
 	}
@@ -196,6 +196,7 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
     return false;
   }
   fEndOfEventModelList.push_back (Model(pModel));
+  CalculateExtent ();
   return true;
 }
 
@@ -216,6 +217,7 @@ G4bool G4Scene::AddEndOfRunModel (G4VModel* pModel, G4bool warn) {
     return false;
   }
   fEndOfRunModelList.push_back (pModel);
+  CalculateExtent ();
   return true;
 }
 

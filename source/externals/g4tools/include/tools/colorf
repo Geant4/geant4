@@ -54,7 +54,7 @@ public:
 public:
 //#define tools_stat_colorfs
 #ifdef tools_stat_colorfs
-  //NOTE : the below are deprecated, use functions in inlib/colorfs.
+  //NOTE : the below are deprecated, use functions in tools/colorfs.
   //       colorf::white() replaced by colorf_white()
 
   // our forever 65 named colors taken long time ago from X11.

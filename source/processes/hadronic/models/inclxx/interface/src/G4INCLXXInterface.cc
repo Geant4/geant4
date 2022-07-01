@@ -44,6 +44,8 @@
 #include "G4INCLCascade.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
+#include "G4HadSecondary.hh"
+#include "G4ParticleTable.hh"
 #include "G4INCLXXInterfaceStore.hh"
 #include "G4INCLXXVInterfaceTally.hh"
 #include "G4String.hh"
@@ -365,7 +367,17 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	  // Set the four-momentum of the reaction products
 	  p->Set4Momentum(momentum);
           fourMomentumOut += momentum;
-	  theResult.AddSecondary(p, secID);
+
+	  // Propagate the particle's parent resonance information
+	  G4HadSecondary secondary(p, 1.0, secID);
+	  G4ParticleDefinition* parentResonanceDef = nullptr;
+	  if ( eventInfo.parentResonancePDGCode[i] != 0 ) {
+	    parentResonanceDef = G4ParticleTable::GetParticleTable()->FindParticle(eventInfo.parentResonancePDGCode[i]);
+	  }
+	  secondary.SetParentResonanceDef(parentResonanceDef);
+	  secondary.SetParentResonanceID(eventInfo.parentResonanceID[i]);
+	  
+	  theResult.AddSecondary(secondary);
 
 	} else {
 	  G4String message = "the model produced a particle that couldn't be converted to Geant4 particle.";

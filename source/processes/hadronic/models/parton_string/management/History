@@ -1,21 +1,26 @@
--------------------------------------------------------------------
+# Category hadr-partonstring-mgt History
 
-       ==========================================================
-       Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-      History file for hadronic/models/parton_string/diffraction directory
-      -------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-06-07 Alberto Ribon (hadr-partonstring-mgt-V11-00-02)
+- G4VSplitableHadron : changed the method Splitting() from "protected" to
+  "public" (this is needed to change the status of SplitableHadron in
+  G4FTFAnnihilation, to get isotropic distributions in annihilations at rest).
+  This change was made by Vladimir Uzhinsky. 
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
-
-09-Feb-2022 G. Cosmo       hadr-partonstring-mgt-V10-07-03
+## 2022-02-09 Gabriele Cosmo (hadr-partonstring-mgt-V11-00-01)
 - Fixed compilation warning on Intel compilers for unused variable.
+
+## 2021-12-10 Ben Morgan (hadr-partonstring-mgt-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
 
 27-Oct-2021 A. Ribon       hadr-partonstring-mgt-V10-07-02
 - G4VParticipants, G4VPartonStringModel : extended for projectile

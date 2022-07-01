@@ -60,6 +60,7 @@ CexmcHadronicProcess::CexmcHadronicProcess( const G4String &  name ) :
     theTotalResult( NULL ), isInitialized( false )
 {
     theTotalResult = new G4ParticleChange();
+    SetIntegral(false);
 }
 
 

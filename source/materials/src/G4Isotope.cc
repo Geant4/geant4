@@ -169,9 +169,11 @@ std::ostream& operator<<(std::ostream& flux, G4IsotopeTable IsotopeTable)
    flux 
      << "\n***** Table : Nb of isotopes = " << IsotopeTable.size() 
      << " *****\n" << G4endl;
-        
-   for (size_t i=0; i<IsotopeTable.size(); i++)
-     flux << IsotopeTable[i] << G4endl;
+
+   for(auto& i : IsotopeTable)
+   {
+     flux << i << G4endl;
+   }
 
    return flux;
 }
@@ -194,11 +196,13 @@ size_t G4Isotope::GetNumberOfIsotopes()
 
 G4Isotope* G4Isotope::GetIsotope(const G4String& isotopeName, G4bool warning)
 {  
-  // search the isotope by its name 
-  for (size_t J=0 ; J<theIsotopeTable.size() ; J++)
-   {
-     if (theIsotopeTable[J]->GetName() == isotopeName)
-       { return theIsotopeTable[J]; }
+  // search the isotope by its name
+  for(auto& J : theIsotopeTable)
+  {
+    if(J->GetName() == isotopeName)
+    {
+      return J;
+    }
    }
    
   // the isotope does not exist in the table
@@ -206,8 +210,8 @@ G4Isotope* G4Isotope::GetIsotope(const G4String& isotopeName, G4bool warning)
     G4cout << "\n---> warning from G4Isotope::GetIsotope(). The isotope: "
 	   << isotopeName << " does not exist in the table. Return NULL pointer."
 	   << G4endl;
-  }     
-  return 0;          
+  }
+  return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

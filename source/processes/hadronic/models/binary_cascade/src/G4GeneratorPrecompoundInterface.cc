@@ -176,6 +176,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
          theNew->SetMomentum(mom);
          theNew->SetTotalEnergy(e);
 	 theNew->SetCreatorModelID((*iter)->GetCreatorModelID());
+	 theNew->SetParentResonanceDef((*iter)->GetParentResonanceDef());
+	 theNew->SetParentResonanceID((*iter)->GetParentResonanceID());
          theTotalResult->push_back(theNew);
          Secondary4Momentum += (*iter)->Get4Momentum();
          #ifdef debugPrecoInt
@@ -188,6 +190,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
             theNew->SetMomentum(mom);
             theNew->SetTotalEnergy(e);
 	    theNew->SetCreatorModelID((*iter)->GetCreatorModelID());
+	    theNew->SetParentResonanceDef((*iter)->GetParentResonanceDef());
+	    theNew->SetParentResonanceID((*iter)->GetParentResonanceID());	    
             theTotalResult->push_back(theNew);
             Secondary4Momentum += (*iter)->Get4Momentum();
             #ifdef debugPrecoInt
@@ -311,7 +315,6 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       exciton4Momentum.setE(ResE);
       #ifdef debugPrecoInt
          G4cout<<"ActualMass - fMass < 0. "<<ActualMass<<" "<<fMass<<" "<<ActualMass - fMass<<G4endl;
-         G4int Uzhi; G4cin>>Uzhi;
       #endif
      }
     }
@@ -510,6 +513,8 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
          theNew->SetMomentum(aTrack4Momentum.vect());
          theNew->SetTotalEnergy(aTrack4Momentum.e());
 	 theNew->SetCreatorModelID((*iter)->GetCreatorModelID());
+	 theNew->SetParentResonanceDef((*iter)->GetParentResonanceDef());
+	 theNew->SetParentResonanceID((*iter)->GetParentResonanceID());	 
          theTotalResult->push_back(theNew);
 #ifdef debugPrecoInt
          SecondrNum++;
@@ -605,6 +610,8 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
          theNew->SetMomentum(aTrack4Momentum.vect());
          theNew->SetTotalEnergy(aTrack4Momentum.e());
 	 theNew->SetCreatorModelID((*iter)->GetCreatorModelID());
+	 theNew->SetParentResonanceDef((*iter)->GetParentResonanceDef());
+	 theNew->SetParentResonanceID((*iter)->GetParentResonanceID());	 
          theTotalResult->push_back(theNew);
 
 #ifdef debugPrecoInt

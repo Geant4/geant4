@@ -1,25 +1,46 @@
--------------------------------------------------------------------
+# Category transport History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
-
-May 5th 2022, Gabriele Cosmo transport-V10-07-04
-----------------------------
-- G4Transportation, G4CoupledTransportation: fixed misuse of bitwise '|'
+## 2022-05-18 Gabriele Cosmo (transport-V11-00-06)
+- `G4Transportation`, `G4CoupledTransportation`: fixed misuse of bitwise '|'
   operator instead of logical.
+
+## 2022-05-11 Jonas Hahnfeld (transport-V11-00-05)
+- `G4Transportation`: Remove non-working check for any field
+- Remove `PUBLIC` dependency on `G4magneticfield`, `G4navigation`
+
+## 2022-04-24 Vladimir Ivanchenko (transport-V11-00-04)
+- moved G4UserSpecialCuts to physics_lists/constructors/limiters
+- GNUmakefile, source.cmake - removed dependence on electromagnetic/utils 
+
+## 2022-04-20 Jonas Hahnfeld (transport-V11-00-03)
+- `G4CoupledTransportation`: Set flags from `G4Transportation`
+  * Replace `fFirstStepInAnyVolume` with `fFirstStepInVolume`
+  * Replace `fAnyGeometryLimitedStep` with `fGeometryLimitedStep`
+  * Remove wrong check in case of zero steps
+- `G4Transportation`:
+  * Remove wrong check in case of zero steps
+  * Set step status on volume boundary
+
+## 2022-01-17 Jonas Hahnfeld (transport-V11-00-02)
+- Remove useless `const_cast` of `G4VSensitiveDetector`
+
+## 2022-01-05 Jonas Hahnfeld (transport-V11-00-01)
+- `G4CoupledTransportation`:
+  * Use new constant `G4TransportationManager::kMassNavigatorId`
+  * Inherit from `G4Transportation`, remove duplicated variables and methods
+
+## 2021-12-10 Ben Morgan (transport-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 Sep 23rd 2021, Alberto Ribon transport-V10-07-03
 ----------------------------

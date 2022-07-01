@@ -1292,8 +1292,8 @@ void G4OpenInventorQtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
          SoGetBoundingBoxAction bAction(viewportRegion);
          bAction.apply((SoFullPath*)path);
          SbBox3f bBox = bAction.getBoundingBox();
-         SbVec3f center = bBox.getCenter();
-         center.getValue(x,y,z);
+         SbVec3f centr = bBox.getCenter();
+         centr.getValue(x,y,z);
          ssZPos << "Pos:  " << x << "  " << y << "  " << z;
 
          G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(node);

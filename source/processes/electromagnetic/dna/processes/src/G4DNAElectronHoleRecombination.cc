@@ -179,7 +179,7 @@ void G4DNAElectronHoleRecombination::MakeReaction(const G4Track& track)
 
     if (pSelectedReactant)
     {
-        if (G4VMoleculeCounter::InUse())
+        if (G4VMoleculeCounter::Instance()->InUse())
         {
             G4VMoleculeCounter::Instance()->
                     RemoveAMoleculeAtTime(GetMolecule(track)->GetMolecularConfiguration(),
@@ -188,7 +188,7 @@ void G4DNAElectronHoleRecombination::MakeReaction(const G4Track& track)
         }
         GetMolecule(track)->ChangeConfigurationToLabel("H2Ovib");
 
-        if (G4VMoleculeCounter::InUse())
+        if (G4VMoleculeCounter::Instance()->InUse())
         {
             G4VMoleculeCounter::Instance()->
                     AddAMoleculeAtTime(GetMolecule(track)->GetMolecularConfiguration(),

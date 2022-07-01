@@ -5,7 +5,7 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-GLOBLIBS  = libG4vis_management.lib libG4modeling.lib libG4gl2ps.lib
+GLOBLIBS  = libG4vis_management.lib libG4modeling.lib libG4tools.lib
 ifdef G4LIB_BUILD_ZLIB
   GLOBLIBS += libG4zlib.lib
 endif
@@ -20,9 +20,9 @@ include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/G4UI_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
-CPPFLAGS += -I$(G4BASE)/visualization/externals/gl2ps/include
 CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
+CPPFLAGS += -I$(G4BASE)/externals/g4tools/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include

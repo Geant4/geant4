@@ -120,7 +120,7 @@ G4DNAIonElasticModel::Initialise (
 
   G4double scaleFactor = 1e-16*cm*cm;
 
-  char *path = getenv("G4LEDATA");
+  const char *path = G4FindDataDir("G4LEDATA");
 
   if (!path)
   {

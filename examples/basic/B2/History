@@ -1,24 +1,21 @@
--------------------------------------------------------------------
+# Example B2 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
-
-                    Example B2 History file
-                    -----------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
-
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
 
-20-05-22 I. Hrivnacova (exampleB2-V10-07-03)
+## 2022-05-20 I. Hrivnacova (exampleB2-V11-00-01)
 - Restore the top UI commands directory name ("B2") in B2a::DetectorMessenger
   removed by mistake in exampleB2-V10-07-02
   (https://github.com/Geant4/geant4/pull/46)
+
+## 2021-12-10 Ben Morgan (exampleB2-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 13-07-21 I. Hrivnacova (exampleB2-V10-07-02)
 - Introduced namespace instead of a class names prefix

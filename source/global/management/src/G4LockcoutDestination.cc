@@ -37,9 +37,6 @@ namespace
 }
 
 // --------------------------------------------------------------------
-G4LockcoutDestination::~G4LockcoutDestination() {}
-
-// --------------------------------------------------------------------
 G4int G4LockcoutDestination::ReceiveG4cout(const G4String& msg)
 {
   G4AutoLock l(&out_mutex);

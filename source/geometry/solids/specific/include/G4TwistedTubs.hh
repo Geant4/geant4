@@ -162,8 +162,8 @@ class G4TwistedTubs : public G4VSolid
     // Returns an estimation of the geometrical cubic volume of the
     // solid. Caches the computed value once computed the first time.
   G4double GetSurfaceArea();
-    // Returns an estimation of the geometrical surface area of the
-    // solid. Caches the computed value once computed the first time.
+    // Returns the geometrical surface area of the solid.
+    // Caches the computed value once computed the first time.
 
   G4ThreeVector GetPointOnSurface() const ;
 
@@ -184,11 +184,12 @@ class G4TwistedTubs : public G4VSolid
   
  private:
  
-  inline void  SetFields(G4double phitwist, G4double innerrad,
-                         G4double outerrad,
-                         G4double negativeEndz, G4double positiveEndz);
-                     
+  inline void SetFields(G4double phitwist, G4double innerrad,
+                        G4double outerrad,
+                        G4double negativeEndz, G4double positiveEndz);
   void CreateSurfaces();
+  G4double GetLateralArea(G4double a, G4double r, G4double z) const;
+  G4double GetPhiCutArea(G4double a, G4double r, G4double z) const;
 
  private:
  

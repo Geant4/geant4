@@ -17,6 +17,7 @@ geant4_add_module(G4emdna-molman
     G4Serialize.hh
     G4VMolecularDissociationDisplacer.hh
     G4VMoleculeCounter.hh
+    G4MoleculeTableMessenger.hh
   SOURCES
     G4MolecularConfiguration.cc
     G4MolecularDissociationChannel.cc
@@ -28,7 +29,8 @@ geant4_add_module(G4emdna-molman
     G4MoleculeTable.cc
     G4Serialize.cc
     G4VMolecularDissociationDisplacer.cc
-    G4VMoleculeCounter.cc)
+    G4VMoleculeCounter.cc
+    G4MoleculeTableMessenger.cc)
 
 geant4_module_link_libraries(G4emdna-molman
   PUBLIC

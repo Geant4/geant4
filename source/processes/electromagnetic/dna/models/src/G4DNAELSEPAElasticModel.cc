@@ -212,7 +212,7 @@ const G4DataVector& )
         fpData_Au->LoadData(fileZElectron);
       
         std::ostringstream eFullFileNameZ;
-        char *path = getenv("G4LEDATA");
+	const char *path = G4FindDataDir("G4LEDATA");
         if (!path)
         {
           G4Exception("G4DNAELSEPAElasticModel::Initialise","em0002",
@@ -306,7 +306,7 @@ const G4DataVector& )
 
         std::ostringstream eFullFileNameZ;
 
-        char *path = getenv("G4LEDATA");
+	const char *path = G4FindDataDir("G4LEDATA");
         if (!path)
         {
           G4Exception("G4DNAELSEPAElasticModel::Initialise","em0004",

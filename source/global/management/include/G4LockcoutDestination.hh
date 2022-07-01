@@ -43,7 +43,7 @@ class G4LockcoutDestination : public G4coutDestination
 {
  public:
   G4LockcoutDestination() = default;
-  virtual ~G4LockcoutDestination();
+  virtual ~G4LockcoutDestination() = default;
   virtual G4int ReceiveG4cout(const G4String& msg) override;
   virtual G4int ReceiveG4cerr(const G4String& msg) override;
 };

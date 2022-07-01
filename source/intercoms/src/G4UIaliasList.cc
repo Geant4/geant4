@@ -32,9 +32,6 @@
 #include "G4ios.hh"
 
 // --------------------------------------------------------------------
-G4UIaliasList::G4UIaliasList() {}
-
-// --------------------------------------------------------------------
 G4UIaliasList::~G4UIaliasList()
 {
   G4int n_treeEntry = alias.size();
@@ -60,7 +57,7 @@ G4bool G4UIaliasList::operator!=(const G4UIaliasList& right) const
 // --------------------------------------------------------------------
 void G4UIaliasList::AddNewAlias(const char* aliasName, const char* aliasValue)
 {
-  if(FindAlias(aliasName))
+  if(FindAlias(aliasName) != nullptr)
   {
     G4cerr << "Alias <" << aliasName << "> already exists. Command ignored."
            << G4endl;
@@ -104,7 +101,7 @@ G4String* G4UIaliasList::FindAlias(const char* aliasName)
   G4int i = FindAliasID(aliasName);
   if(i < 0)
   {
-    return 0;
+    return nullptr;
   }
   return value[i];
 }
@@ -116,7 +113,9 @@ G4int G4UIaliasList::FindAliasID(const char* aliasName)
   for(G4int i = 0; i < i_entry; ++i)
   {
     if(*(alias[i]) == aliasName)
+    {
       return i;
+    }
   }
   return -1;
 }
@@ -126,6 +125,7 @@ void G4UIaliasList::List()
 {
   G4int i_entry = alias.size();
   for(G4int i1 = 0; i1 < i_entry - 1; ++i1)
+  {
     for(G4int i2 = i1 + 1; i2 < i_entry; ++i2)
     {
       if(*(alias[i1]) > *(alias[i2]))
@@ -138,6 +138,7 @@ void G4UIaliasList::List()
         value[i2]     = tmp;
       }
     }
+  }
 
   for(G4int i = 0; i < i_entry; ++i)
   {

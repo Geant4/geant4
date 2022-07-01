@@ -44,6 +44,7 @@
 #include "Randomize.hh"
 #include "G4Profiler.hh"
 #include "G4TiMemory.hh"
+#include "G4GlobalFastSimulationManager.hh"
 
 #include <unordered_set>
 
@@ -108,7 +109,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   G4ThreeVector center(0,0,0);
   G4Navigator* navigator = G4TransportationManager::GetTransportationManager()
                          ->GetNavigatorForTracking();
-  navigator->LocateGlobalPointAndSetup(center,0,false);
+  navigator->LocateGlobalPointAndSetup(center,nullptr,false);
                                                                                       
   G4Track* track = nullptr;
   G4TrackStatus istop = fAlive;
@@ -132,7 +133,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   if(sdManager != nullptr)
   { currentEvent->SetHCofThisEvent(sdManager->PrepareNewEvent()); }
 
-  if(userEventAction) userEventAction->BeginOfEventAction(currentEvent);
+  if(userEventAction != nullptr) userEventAction->BeginOfEventAction(currentEvent);
 
 #if defined(GEANT4_USE_TIMEMORY)
   eventProfiler.reset(new ProfilerConfig(currentEvent));
@@ -224,7 +225,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
           delete aTrajectory;
           aTrajectory = previousTrajectory;
         }
-        if(aTrajectory&&(istop!=fStopButAlive)&&(istop!=fSuspend))
+        if((aTrajectory != nullptr)&&(istop!=fStopButAlive)&&(istop!=fSuspend))
         {
           if(trajectoryContainer == nullptr)
           {
@@ -260,10 +261,10 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
                 " Continue with simulation.");
             break;
           case fKillTrackAndSecondaries:
-            if( secondaries )
+            if( secondaries != nullptr )
             {
-              for(std::size_t i=0; i<secondaries->size(); ++i)
-              { delete (*secondaries)[i]; }
+              for(auto & secondarie : *secondaries)
+              { delete secondarie; }
               secondaries->clear();
             }
             delete track;
@@ -279,7 +280,11 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
     }
     trackingManagersToFlush.clear();
 
-    // Check if flushing one of the tracking managers stacked new secondaries.
+    // flush any fast simulation models
+    G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->Flush();
+
+    // Check if flushing one of the tracking managers or a fast simulation model
+    // stacked new secondaries.
   } while (trackContainer->GetNUrgentTrack() > 0);
 
 #ifdef G4VERBOSE
@@ -299,7 +304,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   eventProfiler.reset();
 #endif
 
-  if(userEventAction)
+  if(userEventAction != nullptr)
   {
     userEventAction->EndOfEventAction(currentEvent);
   }
@@ -314,16 +319,16 @@ void G4EventManager::StackTracks(G4TrackVector* trackVector,
 {
   if( trackVector != nullptr )
   {
-    if( trackVector->size() == 0 ) return;
+    if( trackVector->empty() ) return;
     for( auto newTrack : *trackVector )
     {
       ++trackIDCounter;
       if(!IDhasAlreadySet)
       {
         newTrack->SetTrackID( trackIDCounter );
-        if(newTrack->GetDynamicParticle()->GetPrimaryParticle())
+        if(newTrack->GetDynamicParticle()->GetPrimaryParticle() != nullptr)
         {
-          G4PrimaryParticle* pp
+          auto* pp
             = (G4PrimaryParticle*)(newTrack->GetDynamicParticle()->GetPrimaryParticle());
           pp->SetTrackID(trackIDCounter);
         }
@@ -405,7 +410,7 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,
 void G4EventManager::SetUserInformation(G4VUserEventInformation* anInfo)
 { 
   G4ApplicationState currentState = stateManager->GetCurrentState();
-  if(currentState != G4State_EventProc || currentEvent == 0)
+  if(currentState != G4State_EventProc || currentEvent == nullptr)
   {
     G4Exception("G4EventManager::SetUserInformation",
                 "Event0003", JustWarning,
@@ -420,7 +425,7 @@ void G4EventManager::SetUserInformation(G4VUserEventInformation* anInfo)
 G4VUserEventInformation* G4EventManager::GetUserInformation()
 { 
   G4ApplicationState currentState = stateManager->GetCurrentState();
-  if(currentState != G4State_EventProc || currentEvent == 0)
+  if(currentState != G4State_EventProc || currentEvent == nullptr)
   {
     return nullptr;
   }

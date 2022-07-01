@@ -342,22 +342,40 @@ G4VisCommandOpen::G4VisCommandOpen() {
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/open", this);
   fpCommand->SetGuidance
-    ("Creates a scene handler ready for drawing.");
+    ("Creates a scene handler and viewer ready for drawing.");
   fpCommand->SetGuidance
-    ("The scene handler becomes current (the name is auto-generated).");
+    ("The scene handler and viewer names are auto-generated.");
+  // Pick up guidance from /vis/viewer/create
+  const G4UIcommandTree* tree = G4UImanager::GetUIpointer()->GetTree();
+  const G4UIcommand* viewerCreateCmd = tree->FindPath("/vis/viewer/create");
+  CopyGuidanceFrom(viewerCreateCmd,fpCommand,2);
   G4UIparameter* parameter;
-  parameter = new G4UIparameter("graphics-system-name", 's', omitable = false);
+  parameter = new G4UIparameter("graphics-system-name", 's', omitable = true);
+  parameter->SetCurrentAsDefault(true);
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("window-size-hint", 's', omitable = true);
   parameter->SetGuidance
     ("integer (pixels) for square window placed by window manager or"
      " X-Windows-type geometry string, e.g. 600x600-100+100");
-  parameter->SetDefaultValue("600");
+  parameter->SetDefaultValue("none");
   fpCommand->SetParameter(parameter);
 }
 
 G4VisCommandOpen::~G4VisCommandOpen() {
   delete fpCommand;
+}
+
+G4String G4VisCommandOpen::GetCurrentValue(G4UIcommand*)
+{
+  G4String graphicsSystemName;
+  auto graphicsSystem = fpVisManager->GetCurrentGraphicsSystem();
+  if (graphicsSystem) {
+    graphicsSystemName = graphicsSystem->GetName ();
+  }
+  else {
+    graphicsSystemName = "none";
+  }
+  return graphicsSystemName;
 }
 
 void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue)
@@ -390,24 +408,78 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue)
 
 finish:
   if (errorCode) {
-    std::set<G4String> candidates;
-    for (const auto gs: fpVisManager -> GetAvailableGraphicsSystems()) {
-      // Just list nicknames, but exclude FALLBACK nicknames
-      for (const auto& nickname: gs->GetNicknames()) {
-	if (!G4StrUtil::contains(nickname, "FALLBACK")) {
-	  candidates.insert(nickname);
-	}
-      }
-    }
     G4ExceptionDescription ed;
-    ed << "Invoked command has failed - see above. Available graphics systems are (short names):\n ";
-    for (const auto& candidate: candidates) {
-      ed << ' ' << candidate;
-    };
+    ed << "Invoked command has failed - see above. Available graphics systems are:\n ";
+    fpVisManager->PrintAvailableGraphicsSystems(G4VisManager::warnings,ed);
     command->CommandFailed(errorCode,ed);
   }
 
   UImanager->SetVerboseLevel(keepVerbose);
+}
+
+////////////// /vis/plot ///////////////////////////////////////
+
+G4VisCommandPlot::G4VisCommandPlot ()
+{
+  G4bool omitable;
+  G4UIparameter* parameter;
+
+  fpCommand = new G4UIcommand("/vis/plot", this);
+  fpCommand -> SetGuidance("Draws plots.");
+  parameter = new G4UIparameter ("type", 's', omitable = false);
+  parameter -> SetParameterCandidates("h1 h2");
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("id", 'i', omitable = false);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandPlot::~G4VisCommandPlot ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandPlot::GetCurrentValue (G4UIcommand*)
+{
+  return "";
+}
+
+void G4VisCommandPlot::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  auto currentViewer = fpVisManager->GetCurrentViewer();
+  if (currentViewer->GetName().find("TOOLSSG") == std::string::npos) {
+    G4cerr <<
+    "WARNING: Current viewer not able to draw plots."
+    "\n  Try \"/vis/open TSG\", then \"/vis/plot " << newValue << "\" again."
+    << G4endl;
+    return;
+  }
+
+  G4String type, id;
+  std::istringstream is (newValue);
+  is >> type >> id;
+
+  auto keepEnable = fpVisManager->IsEnabled();
+
+  auto ui = G4UImanager::GetUIpointer();
+  ui->ApplyCommand("/vis/enable");
+  ui->ApplyCommand("/vis/viewer/resetCameraParameters");
+  ui->ApplyCommand("/vis/scene/create");
+  ui->ApplyCommand("/vis/scene/endOfEventAction accumulate 0");  // Don't keep events
+  static G4int plotterID = 0;
+  std::ostringstream ossPlotter;
+  ossPlotter << "plotter-" << plotterID++;
+  const G4String& plotterName = ossPlotter.str();
+  ui->ApplyCommand("/vis/plotter/create " + plotterName);
+  ui->ApplyCommand("/vis/scene/add/plotter " + plotterName);
+  ui->ApplyCommand("/vis/plotter/add/" + type + ' ' + id + ' ' + plotterName);
+  ui->ApplyCommand("/vis/sceneHandler/attach");
+
+  if (!keepEnable) {
+    fpVisManager->Disable();
+    G4cerr <<
+    "WARNING: drawing was enabled for plotting but is now restored to disabled mode."
+    << G4endl;
+  }
 }
 
 ////////////// /vis/specify ///////////////////////////////////////

@@ -58,8 +58,6 @@ void G4SafetyHelper::InitialiseNavigator()
                 "GeomNav0003", FatalException, 
                 "Found that existing tracking Navigator has NULL world"); 
   }
-
-  fMassNavigatorId = pTransportMgr->ActivateNavigator( fpMassNavigator ); 
 }
 
 void G4SafetyHelper::InitialiseHelper()

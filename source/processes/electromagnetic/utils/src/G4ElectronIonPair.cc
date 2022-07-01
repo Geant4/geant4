@@ -66,8 +66,7 @@ G4ElectronIonPair::G4ElectronIonPair(G4int verb)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ElectronIonPair::~G4ElectronIonPair()
-{}
+G4ElectronIonPair::~G4ElectronIonPair() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -106,7 +105,7 @@ G4double G4ElectronIonPair::MeanNumberOfIonsAlongStep(
 std::vector<G4ThreeVector>* 
 G4ElectronIonPair::SampleIonsAlongStep(const G4Step* step)
 {
-  std::vector<G4ThreeVector>* v = 0;
+  std::vector<G4ThreeVector>* v = nullptr;
 
   G4int nion = SampleNumberOfIonsAlongStep(step);
 

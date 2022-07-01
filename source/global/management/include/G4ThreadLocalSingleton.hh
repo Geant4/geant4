@@ -193,8 +193,8 @@ G4ThreadLocalSingleton<T>::G4ThreadLocalSingleton()
   }
   */
   G4ThreadLocalSingleton<void>::Insert([&]() {
-    printf("Deleting G4ThreadLocalSingletons for type %s ...\n",
-           G4Demangle<T>().c_str());
+    // printf("Deleting G4ThreadLocalSingletons for type %s ...\n",
+    //       G4Demangle<T>().c_str());
     this->Clear();
   });
 }

@@ -69,8 +69,7 @@ G4VMscModel::G4VMscModel(const G4String& nam):
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VMscModel::~G4VMscModel()
-{}
+G4VMscModel::~G4VMscModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

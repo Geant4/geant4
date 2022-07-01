@@ -54,7 +54,10 @@
 #include "G4EquationOfMotion.hh"
 
 #include "G4FieldManagerStore.hh"
-#include "G4CoupledTransportation.hh"
+
+#include "G4Navigator.hh"
+#include "G4PropagatorInField.hh"
+#include "G4TransportationManager.hh"
 
 class G4VSensitiveDetector;
 
@@ -66,8 +69,8 @@ G4bool G4Transportation::fSilenceLooperWarnings= false;
 //
 // Constructor
 
-G4Transportation::G4Transportation( G4int verbosity )
-  : G4VProcess( G4String("Transportation"), fTransportation ),
+G4Transportation::G4Transportation( G4int verbosity, const G4String& aName )
+  : G4VProcess( aName, fTransportation ),
     fFieldExertedForce( false ),
     fPreviousSftOrigin( 0.,0.,0. ),
     fPreviousSafety( 0.0 ),
@@ -95,13 +98,6 @@ G4Transportation::G4Transportation( G4int verbosity )
   
   PushThresholdsToLogger();
   // Should be done by Set methods in SetHighLooperThresholds -- making sure
-  
-  // Cannot determine whether a field exists here, as it would 
-  //  depend on the relative order of creating the detector's 
-  //  field and this process. That order is not guaranted.
-  fAnyFieldExists= DoesAnyFieldExist();
-  //  This value must be updated using DoesAnyFieldExist() at least at the
-  //    start of each Run -- for now this is at the Start of every Track. TODO
   
   static G4ThreadLocal G4TouchableHandle* pNullTouchableHandle = 0;
   if ( !pNullTouchableHandle)
@@ -259,8 +255,7 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
   if(currentMinimumStep == 0.0)
   {
     fEndPointDistance = 0.0;
-    // flag step as geometry limited if current safety is also zero
-    fGeometryLimitedStep = (currentSafety == 0.0);
+    fGeometryLimitedStep = false;
 
     fMomentumChanged           = false;
     fParticleIsLooping         = false;
@@ -499,6 +494,11 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   #define noCallsASDI 0
 #endif
 
+  if(fGeometryLimitedStep)
+  {
+    stepData.GetPostStepPoint()->SetStepStatus(fGeomBoundary);
+  }
+
   fParticleChange.Initialize(track) ;
 
   //  Code for specific process 
@@ -571,7 +571,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 
         // Simple statistics
         fSumEnergyKilled += endEnergy;
-        fSumEnerSqKilled = endEnergy * endEnergy;
+        fSumEnerSqKilled += endEnergy * endEnergy;
         fNumLoopersKilled++;
         
         if( endEnergy > fMaxEnergyKilled ) {
@@ -650,6 +650,50 @@ PostStepGetPhysicalInteractionLength( const G4Track&,
 }
 
 /////////////////////////////////////////////////////////////////////////////
+
+void G4Transportation::SetTouchableInformation(const G4TouchableHandle& touchable)
+{
+  const G4VPhysicalVolume* pNewVol = touchable->GetVolume() ;
+  const G4Material* pNewMaterial   = 0 ;
+  G4VSensitiveDetector* pNewSensitiveDetector = 0;
+
+  if( pNewVol != 0 )
+  {
+    pNewMaterial= pNewVol->GetLogicalVolume()->GetMaterial();
+    pNewSensitiveDetector= pNewVol->GetLogicalVolume()->GetSensitiveDetector();
+  }
+
+  fParticleChange.SetMaterialInTouchable( (G4Material *) pNewMaterial ) ;
+  fParticleChange.SetSensitiveDetectorInTouchable( pNewSensitiveDetector ) ;
+  // temporarily until Get/Set Material of ParticleChange,
+  // and StepPoint can be made const.
+
+  const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
+  if( pNewVol != 0 )
+  {
+    pNewMaterialCutsCouple=pNewVol->GetLogicalVolume()->GetMaterialCutsCouple();
+  }
+
+  if ( pNewVol!=0 && pNewMaterialCutsCouple!=0
+    && pNewMaterialCutsCouple->GetMaterial()!=pNewMaterial )
+  {
+    // for parametrized volume
+    //
+    pNewMaterialCutsCouple =
+      G4ProductionCutsTable::GetProductionCutsTable()
+                             ->GetMaterialCutsCouple(pNewMaterial,
+                               pNewMaterialCutsCouple->GetProductionCuts());
+  }
+  fParticleChange.SetMaterialCutsCoupleInTouchable( pNewMaterialCutsCouple );
+
+  // Set the touchable in ParticleChange
+  // this must always be done because the particle change always
+  // uses this value to overwrite the current touchable pointer.
+  //
+  fParticleChange.SetTouchableHandle(touchable) ;
+}
+
+/////////////////////////////////////////////////////////////////////////////
 //
 
 G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
@@ -717,44 +761,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
   fParticleChange.ProposeFirstStepInVolume(fFirstStepInVolume);
   fParticleChange.ProposeLastStepInVolume(isLastStep);    
 
-  const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;
-  const G4Material* pNewMaterial   = 0 ;
-  const G4VSensitiveDetector* pNewSensitiveDetector   = 0 ;
-                                                                                       
-  if( pNewVol != 0 )
-  {
-    pNewMaterial= pNewVol->GetLogicalVolume()->GetMaterial();
-    pNewSensitiveDetector= pNewVol->GetLogicalVolume()->GetSensitiveDetector();
-  }
-
-  fParticleChange.SetMaterialInTouchable( (G4Material *) pNewMaterial ) ;
-  fParticleChange.SetSensitiveDetectorInTouchable( (G4VSensitiveDetector *) pNewSensitiveDetector ) ;
-
-  const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
-  if( pNewVol != 0 )
-  {
-    pNewMaterialCutsCouple=pNewVol->GetLogicalVolume()->GetMaterialCutsCouple();
-  }
-
-  if ( pNewVol!=0 && pNewMaterialCutsCouple!=0
-    && pNewMaterialCutsCouple->GetMaterial()!=pNewMaterial )
-  {
-    // for parametrized volume
-    //
-    pNewMaterialCutsCouple =
-      G4ProductionCutsTable::GetProductionCutsTable()
-                             ->GetMaterialCutsCouple(pNewMaterial,
-                               pNewMaterialCutsCouple->GetProductionCuts());
-  }
-  fParticleChange.SetMaterialCutsCoupleInTouchable( pNewMaterialCutsCouple );
-
-  // temporarily until Get/Set Material of ParticleChange, 
-  // and StepPoint can be made const. 
-  // Set the touchable in ParticleChange
-  // this must always be done because the particle change always
-  // uses this value to overwrite the current touchable pointer.
-  //
-  fParticleChange.SetTouchableHandle(retCurrentTouchable) ;
+  SetTouchableInformation(retCurrentTouchable);
 
   return &fParticleChange ;
 }
@@ -777,7 +784,8 @@ G4Transportation::StartTracking(G4Track* aTrack)
   // when track.GetCurrentStepNumber()==1
 
   // Whether field exists should be determined at run level -- TODO
-  fAnyFieldExists= DoesAnyFieldExist(); 
+  G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+  fAnyFieldExists = fieldMgrStore->size() > 0;
   
   // reset safety value and center
   //
@@ -801,7 +809,6 @@ G4Transportation::StartTracking(G4Track* aTrack)
 
   // Make sure to clear the chord finders of all fields (i.e. managers)
   //
-  G4FieldManagerStore* fieldMgrStore = G4FieldManagerStore::GetInstance();
   fieldMgrStore->ClearAllChordFindersState(); 
 
   // Update the current touchable handle  (from the track's)
@@ -820,7 +827,6 @@ G4bool G4Transportation::EnableMagneticMoment(G4bool useMoment)
 {
   G4bool lastValue= fUseMagneticMoment;
   fUseMagneticMoment= useMoment;
-  G4CoupledTransportation::fUseMagneticMoment= useMoment;
   return lastValue;
 }
 
@@ -831,7 +837,6 @@ G4bool G4Transportation::EnableGravity(G4bool useGravity)
 {
   G4bool lastValue= fUseGravity;
   fUseGravity= useGravity;
-  G4CoupledTransportation::fUseGravity= useGravity;
   return lastValue;
 }
 
@@ -842,7 +847,6 @@ G4bool G4Transportation::EnableGravity(G4bool useGravity)
 void G4Transportation::SetSilenceLooperWarnings( G4bool val)
 {
   fSilenceLooperWarnings= val;  // Flag to *Supress* all 'looper' warnings  
-  // G4CoupledTransportation::fSilenceLooperWarnings= val;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -3195,56 +3195,56 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
 */
 
 inline std::string value::to_string(const value& aThis){
-  std::string s;
+  std::string _s;
   switch(aThis.m_type) {
   case value::NONE:
-    sprintf(s,5,"(nil)");
-    return s;
+    sprintf(_s,5,"(nil)");
+    return _s;
   case value::INT:
-    sprintf(s,16,"%d",aThis.u.m_int);
-    return s;
+    sprintf(_s,16,"%d",aThis.u.m_int);
+    return _s;
   case value::DOUBLE:
-    sprintf(s,16,"%g",aThis.u.m_double);
-    return s;
+    sprintf(_s,16,"%g",aThis.u.m_double);
+    return _s;
   case value::VOID_STAR:
-    sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_void_star);
-    return s;
+    sprintf(_s,32,upointer_format_x(),(upointer)aThis.u.m_void_star);
+    return _s;
   case value::UNSIGNED_SHORT:
-    sprintf(s,16,"%u",aThis.u.m_unsigned_short);
-    return s;
+    sprintf(_s,16,"%u",aThis.u.m_unsigned_short);
+    return _s;
   case value::UNSIGNED_INT:
-    sprintf(s,16,"%u",aThis.u.m_unsigned_int);
-    return s;
+    sprintf(_s,16,"%u",aThis.u.m_unsigned_int);
+    return _s;
   case value::BOOL:
-    sprintf(s,5,"%s",aThis.u.m_bool?"true":"false");
-    return s;
+    sprintf(_s,5,"%s",aThis.u.m_bool?"true":"false");
+    return _s;
   case value::SHORT:
-    sprintf(s,16,"%d",aThis.u.m_short);
-    return s;
+    sprintf(_s,16,"%d",aThis.u.m_short);
+    return _s;
   case value::INT64:{
-    sprintf(s,16,int64_format(),aThis.u.m_int64);
-   }return s;
+    sprintf(_s,16,int64_format(),aThis.u.m_int64);
+   }return _s;
   case value::UNSIGNED_INT64:{
-    sprintf(s,16,int64_format(),aThis.u.m_unsigned_int64);
-   }return s;
+    sprintf(_s,16,int64_format(),aThis.u.m_unsigned_int64);
+   }return _s;
   case value::FLOAT:
-    sprintf(s,16,"%g",aThis.u.m_float);
-    return s;
+    sprintf(_s,16,"%g",aThis.u.m_float);
+    return _s;
   //case value::UNSIGNED_CHAR:
-  //  sprintf(s,16,"%c",aThis.u.m_unsigned_char);
-  //  return s;
+  //  sprintf(_s,16,"%c",aThis.u.m_unsigned_char);
+  //  return _s;
   //case value::CHAR:
-  //  sprintf(s,16,"%c",aThis.u.m_char);
-  //  return s;
+  //  sprintf(_s,16,"%c",aThis.u.m_char);
+  //  return _s;
   case value::DOUBLE_STAR:
-    sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_double_star);
-    return s;
+    sprintf(_s,32,upointer_format_x(),(upointer)aThis.u.m_double_star);
+    return _s;
   case value::FLOAT_STAR:
-    sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_float_star);
-    return s;
+    sprintf(_s,32,upointer_format_x(),(upointer)aThis.u.m_float_star);
+    return _s;
   case value::INT_STAR:
-    sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_int_star);
-    return s;
+    sprintf(_s,32,upointer_format_x(),(upointer)aThis.u.m_int_star);
+    return _s;
   case value::STRING:
     return *aThis.u.m_string;
 
@@ -3253,38 +3253,38 @@ inline std::string value::to_string(const value& aThis){
   //case value::ARRAY_CHAR:
   //  return tos<char>(aThis.u.m_array_char->vector());
   case value::ARRAY_UNSIGNED_SHORT:
-    if(!nums2s<unsigned short>(aThis.u.m_array_unsigned_short->vector(),s)) {}
-    return s;
+    if(!nums2s<unsigned short>(aThis.u.m_array_unsigned_short->vector(),_s)) {}
+    return _s;
   case value::ARRAY_SHORT:
-    if(!nums2s<short>(aThis.u.m_array_short->vector(),s)) {}
-    return s;
+    if(!nums2s<short>(aThis.u.m_array_short->vector(),_s)) {}
+    return _s;
 
   case value::ARRAY_UNSIGNED_INT:
-    if(!nums2s<unsigned int>(aThis.u.m_array_unsigned_int->vector(),s)) {}
-    return s;
+    if(!nums2s<unsigned int>(aThis.u.m_array_unsigned_int->vector(),_s)) {}
+    return _s;
   case value::ARRAY_INT:
-    if(!nums2s<int>(aThis.u.m_array_int->vector(),s)) {}
-    return s;
+    if(!nums2s<int>(aThis.u.m_array_int->vector(),_s)) {}
+    return _s;
 
   case value::ARRAY_UNSIGNED_INT64:
-    if(!nums2s<uint64>(aThis.u.m_array_unsigned_int64->vector(),s)) {}
-    return s;
+    if(!nums2s<uint64>(aThis.u.m_array_unsigned_int64->vector(),_s)) {}
+    return _s;
   case value::ARRAY_INT64:
-    if(!nums2s<int64>(aThis.u.m_array_int64->vector(),s)) {}
-    return s;
+    if(!nums2s<int64>(aThis.u.m_array_int64->vector(),_s)) {}
+    return _s;
 
   case value::ARRAY_FLOAT:
-    if(!nums2s<float>(aThis.u.m_array_float->vector(),s)) {}
-    return s;
+    if(!nums2s<float>(aThis.u.m_array_float->vector(),_s)) {}
+    return _s;
   case value::ARRAY_DOUBLE:
-    if(!nums2s<double>(aThis.u.m_array_double->vector(),s)) {}
-    return s;
+    if(!nums2s<double>(aThis.u.m_array_double->vector(),_s)) {}
+    return _s;
   case value::ARRAY_BOOL:
-    b2s(aThis.u.m_array_bool->vector(),s);
-    return s;
+    b2s(aThis.u.m_array_bool->vector(),_s);
+    return _s;
   case value::ARRAY_STRING:
-    if(!nums2s<std::string>(aThis.u.m_array_string->vector(),s)) {}
-    return s;
+    if(!nums2s<std::string>(aThis.u.m_array_string->vector(),_s)) {}
+    return _s;
   default:
     return "unknown"; //it should not happen.
   }

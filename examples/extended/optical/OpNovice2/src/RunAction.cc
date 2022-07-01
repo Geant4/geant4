@@ -243,13 +243,37 @@ void RunAction::EndOfRunAction(const G4Run*)
            << analysisManager->GetH1(id)->mean()
            << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
   }
-  id = analysisManager->GetH1Id("Reflected");
+  id = analysisManager->GetH1Id("Fresnel reflection");
   if(analysisManager->GetH1Activation(id))
   {
-    G4cout << " Angle of reflected photons: mean = "
+    G4cout << " Angle of Fresnel-reflected photons: mean = "
            << analysisManager->GetH1(id)->mean()
            << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
   }
+  id = analysisManager->GetH1Id("Total internal reflection");
+  if(analysisManager->GetH1Activation(id))
+  {
+    G4cout << " Angle of total internal reflected photons: mean = "
+           << analysisManager->GetH1(id)->mean()
+           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+  }
+
+  id = analysisManager->GetH1Id("Fresnel refraction");
+  if(analysisManager->GetH1Activation(id))
+  {
+    G4cout << " Angle of Fresnel-refracted photons: mean = "
+           << analysisManager->GetH1(id)->mean()
+           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+  }
+
+  id = analysisManager->GetH1Id("Absorption");
+  if(analysisManager->GetH1Activation(id))
+  {
+    G4cout << " Angle of absorbed photons: mean = "
+           << analysisManager->GetH1(id)->mean()
+           << "; rms = " << analysisManager->GetH1(id)->rms() << G4endl;
+  }
+
   G4cout << G4endl;
 
   if(analysisManager->IsActive())

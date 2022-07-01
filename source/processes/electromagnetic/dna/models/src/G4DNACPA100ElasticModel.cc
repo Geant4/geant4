@@ -173,7 +173,7 @@ void G4DNACPA100ElasticModel::Initialise(const G4ParticleDefinition*
     
   // For final state
 
-  char *path = getenv("G4LEDATA");
+  const char *path = G4FindDataDir("G4LEDATA");
  
   if (!path)
   {

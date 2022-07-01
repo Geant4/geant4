@@ -57,8 +57,8 @@ class G4PhysicsVector;
 class G4VIonDEDXTable {
 
  public:
-   explicit G4VIonDEDXTable(); 
-   virtual ~G4VIonDEDXTable();  
+   explicit G4VIonDEDXTable() = default;
+   virtual ~G4VIonDEDXTable() = default;
 
    // Function for building a stopping power table for a material consisting of
    // a single element only.

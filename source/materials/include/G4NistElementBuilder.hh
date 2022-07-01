@@ -58,7 +58,6 @@
 
 #include "globals.hh"
 #include "G4Element.hh"
-#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -70,7 +69,7 @@ class G4NistElementBuilder
 public:
 
   explicit G4NistElementBuilder(G4int vb);
-  ~G4NistElementBuilder();
+  ~G4NistElementBuilder() = default;
 
   // Find or build a G4Element by atomic number
   inline G4Element* FindElement (G4int Z) const;
@@ -152,9 +151,6 @@ private:
   G4int      verbose;
 
   std::vector<G4String>    elmNames;
-#ifdef G4MULTITHREADED
-  static G4Mutex nistElementMutex;
-#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -106,7 +106,6 @@
 #include "G4SandiaTable.hh"
 #include "G4ElementVector.hh"
 #include "G4MaterialTable.hh"
-#include "G4Threading.hh"
 
 enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
@@ -238,7 +237,7 @@ public:  // with description
 
   void SetChemicalFormula(const G4String& chF);
 
-  void SetFreeElectronDensity(G4double);
+  void SetFreeElectronDensity(G4double val);
 
   void ComputeDensityEffectOnFly(G4bool);
       
@@ -307,10 +306,10 @@ private:
 
   // Copy pointers of base material
   void CopyPointersOfBaseMaterial();
-    
-private:
 
   void FillVectors();
+
+  G4bool IsLocked();
 
   static
   G4MaterialTable theMaterialTable;  // the material table
@@ -323,10 +322,10 @@ private:
   // computed from the basic data members
   //
   
-  G4ElementVector* theElementVector; // vector of constituent G4Elements
-  G4int* fAtomsVector;               // composition by atom count
-  G4double* fMassFractionVector;     // composition by fractional mass   
-  G4double* fVecNbOfAtomsPerVolume;  // number of atoms per volume
+  G4ElementVector* theElementVector;// vector of constituent G4Elements
+  G4int* fAtomsVector;             // composition by atom count
+  G4double* fMassFractionVector;   // composition by fractional mass   
+  G4double* fVecNbOfAtomsPerVolume;// number of atoms per volume
   
   G4IonisParamMat* fIonisation;    // ionisation parameters
   G4SandiaTable* fSandiaTable;     // Sandia table         
@@ -347,24 +346,20 @@ private:
   G4int fNumberOfElements;         // Number of G4Elements in the material
 
   // Class members used only at initialisation
-  G4int fNbComponents;             // Number of material components 
+  G4int fNbComponents;             // Number of components 
   G4int fIdxComponent;             // Index of a new component
   G4bool fMassFraction;            // Flag of the method to add components
 
   // For composites built 
-  std::vector<G4int>* fAtoms; 
-  std::vector<G4double>* fElmFrac; 
-  std::vector<const G4Element*>* fElm;
+  std::vector<G4int>* fAtoms = nullptr;
+  std::vector<G4double>* fElmFrac = nullptr;
+  std::vector<const G4Element*>* fElm = nullptr;
 
   // For composites built via AddMaterial()
   std::map<G4Material*, G4double> fMatComponents; 
 
   G4String fName;                  // Material name
   G4String fChemicalFormula;       // Material chemical formula
-
-#ifdef G4MULTITHREADED
-  static G4Mutex materialMutex;
-#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

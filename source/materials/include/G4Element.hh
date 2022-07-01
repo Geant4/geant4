@@ -183,9 +183,8 @@ public:  // with description
     
   //return pointer to an element, given its name:
   //
-  static
-  G4Element* GetElement(G4String name, G4bool warning=true);
-    
+  static G4Element* GetElement(const G4String& name, G4bool warning = true);
+
   //Coulomb correction factor:
   //
   inline G4double GetfCoulomb() const {return fCoulomb;}

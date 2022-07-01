@@ -4,8 +4,9 @@
 
 /*! \page ExampleTestEm15 Example TestEm15
 
+
   How to compute and plot the final state of Multiple Scattering 
-  considered as an isolated process.
+  or Gamma Conversion considered as an isolated processes.
   The method is exposed below : see \ref TestEm15_s4. 
   
 \section TestEm15_s1 GEOMETRY DEFINITION
@@ -35,10 +36,11 @@
    
 \section TestEm15_s4 PHYSICS
  
-  All discrete processes are inactivated (see provided macros),
-  so that Multiple Scattering is 'forced' to determine the first step of 
-  the primary particle. The step size and the final state are computed 
-  and plotted. Then the event is immediately killed.
+   All discrete processes are inactivated (see provided macros),
+   so that Multiple Scattering or Gamma Conversion is 'forced' to
+   determine the first step of the primary particle.
+   The step size and the final state are computed  and plotted.
+   Then the event is immediately killed.
   
   The result is compared with the 'input' data, i.e. with the cross
   sections stored in the PhysicsTables and used by Geant4.
@@ -67,6 +69,15 @@
    - 7 :  Multiple Scattering. Phi-position angle
    - 8 :  Multiple Scattering. Phi-direction angle
    - 9 :  Multiple Scattering. Correlation: cos(phiPos-phiDir)
+
+   - 10 : Gamma Conversion. Open Angle * Egamma
+   - 11 : Gamma Conversion. Log10(P recoil)
+   - 12 : Gamma Conversion. Phi P recoil angle
+   - 13 : Gamma Conversion. Phi P plus angle
+   - 14 : Gamma Conversion. 2 * cos(phiplus + phiminus) Asymmetry
+   - 15 : Gamma Conversion. E plus / E gamma
+   - 16 : Gamma Conversion. Phi of Gamma Polarization
+
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
@@ -119,6 +130,20 @@ Idle> type your commands
 ....
 Idle> exit
 \endverbatim
+
+\section TestEm15_s8 - MACROS
+
+ The examples of macros for Multiple Scattering:
+  - electron.mac
+  -  muon.mac
+  - proton.mac
+
+ The example of Gamma Conversion macro :
+  - gamma.mac - gamma to e+ e-
+  - gamma2mumu.mac gamma to mu+ mu-
   
+ See README.gamma for details about Gamma Conversion
+ macros and histograsms.
+
 */
  

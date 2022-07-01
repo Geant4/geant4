@@ -34,7 +34,7 @@
 #include "G4VRFileManager.hh"
 #include "globals.hh"
 
-#include "tools/hdf5/ntuple"
+#include "toolx/hdf5/ntuple"
 
 #include <map>
 #include <tuple>

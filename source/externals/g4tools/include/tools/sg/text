@@ -317,9 +317,6 @@ public:
     matrix* tsf = new matrix;
     m_sep.add(tsf);
 
-    float fw = width * wmargin_factor;
-    float fh = height * hmargin_factor;
-
     //sf<float> zfront ?
     float zz = back_visible.value()?0.01f:0;
 
@@ -364,9 +361,9 @@ public:
       if(hjust==center) {
         xtrans = 0;
       } else if(hjust==left) {
-        xtrans = -fw*0.5f+bxw*0.5f;
+        xtrans = bxw*0.5f;
       } else if(hjust==right) {
-        xtrans = fw*0.5f-bxw*0.5f;
+        xtrans = -bxw*0.5f;
       }
 
       float bxh = mx_y-mn_y;
@@ -374,19 +371,20 @@ public:
       if(vjust==middle) {
         ytrans = 0;
       } else if(vjust==bottom) {
-        ytrans = -fh*0.5f+bxh*0.5f;
+        ytrans = bxh*0.5f;
       } else if(vjust==top) {
-        ytrans = fh*0.5f-bxh*0.5f;
+        ytrans = -bxh*0.5f;
       }
 
       float xx = -(mn_x+mx_x)*0.5F+xtrans;
       float yy = -(mn_y+mx_y)*0.5F+ytrans;
       tsf->set_translate(xx,yy,zz);
-
       return;
     }
 
     if(enforce_front_width) {
+
+      float fh = height * hmargin_factor;
 
       float th = fh;
       float mn_x,mn_y,mn_z;
@@ -406,9 +404,9 @@ public:
       if(hjust==center) {
         xtrans = 0;
       } else if(hjust==left) {
-        xtrans = -fw*0.5f+bxw*0.5f;
+        xtrans = bxw*0.5f;
       } else if(hjust==right) {
-        xtrans = fw*0.5f-bxw*0.5f;
+        xtrans = -bxw*0.5f;
       }
 
       float bxh = mx_y-mn_y;
@@ -416,9 +414,9 @@ public:
       if(vjust==middle) {
         ytrans = 0;
       } else if(vjust==bottom) {
-        ytrans = -fh*0.5f+bxh*0.5f;
+        ytrans = bxh*0.5f;
       } else if(vjust==top) {
-        ytrans = fh*0.5f-bxw*0.5f;
+        ytrans = -bxh*0.5f;
       }
 
       float xx = -(mn_x+mx_x)*0.5F+xtrans;
@@ -426,15 +424,16 @@ public:
       tsf->set_translate(xx,yy,zz);
 
       m_base_text->height = bxh; //=th?
-
       return;
     }
 
     //various automatic text height strategies :
+    float fw = width * wmargin_factor;
+    float fh = height * hmargin_factor;
 
     if(confine) {
       // code common to freetype and hershey :
-
+      
       // try to adjust text within fw x fh (by attempting to be smart !).
       // the below assumes that text bounds are linear according
       // "text height".
@@ -488,7 +487,7 @@ public:
       } else if(vjust==bottom) {
         ytrans = -fh*0.5f+bxh*0.5f;
       } else if(vjust==top) {
-        ytrans = fh*0.5f-bxw*0.5f;
+        ytrans = fh*0.5f-bxh*0.5f;
       }
 
       float xx = -(mn_x+mx_x)*0.5F+xtrans;
@@ -498,7 +497,7 @@ public:
 
       }
 
-   } else {
+    } else {
 
       // we arrange yy so that two aside texts
       // with same height will have their text base lines aligned.
@@ -548,7 +547,7 @@ public:
       } else if(vjust==bottom) {
         ytrans = -fh*0.5f+bxh*0.5f;
       } else if(vjust==top) {
-        ytrans = fh*0.5f-bxw*0.5f;
+        ytrans = fh*0.5f-bxh*0.5f;
       }
 */
       float xx = -(mn_x+mx_x)*0.5F+xtrans;
@@ -563,6 +562,19 @@ public:
       }
       m_base_text->strings = labcut;}
     }
+  }
+
+  void map_back_area_to_text() {
+    if(!m_base_text) return;
+    
+    float mn_x,mn_y,mn_z;
+    float mx_x,mx_y,mx_z;
+    m_base_text->get_bounds(front_height,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+
+    float bxw = mx_x-mn_x;
+    float bxh = mx_y-mn_y;
+    parent::width = bxw/wmargin_factor;
+    parent::height = bxh/hmargin_factor;
   }
 
 protected:

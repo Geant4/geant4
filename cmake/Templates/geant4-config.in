@@ -48,6 +48,9 @@ scriptloc=`dirname $script`
 # Expansion and calculation of all needed variables
 #
 prefix=@GEANT4_CONFIG_INSTALL_PREFIX@
+# canonicalize path
+prefix=`cd "$prefix" 2>/dev/null; pwd -P`
+
 exec_prefix=@GEANT4_CONFIG_EXECPREFIX@
 libdir=@GEANT4_CONFIG_LIBDIR@
 includedirs="@GEANT4_CONFIG_INCLUDE_DIRS@"
@@ -113,16 +116,15 @@ done
 
 libs="-lG4interfaces \
 -lG4persistency \
+-lG4analysis \
 -lG4error_propagation \
 -lG4readout \
 -lG4physicslists \
--lG4tasking \
 -lG4run \
 -lG4event \
 -lG4tracking \
 -lG4parmodels \
 -lG4processes \
--lG4analysis \
 -lG4digits_hits \
 -lG4track \
 -lG4particles \
@@ -131,7 +133,6 @@ libs="-lG4interfaces \
 -lG4graphics_reps \
 -lG4intercoms \
 -lG4global \
--lG4tools \
 @G4_LINK_CXX_FILESYSTEM@"
 
 #-----------------------------------------------------------------------
@@ -224,6 +225,11 @@ fi
   geant4_uses_opengl="yes"
 fi
 
+# - QT3D
+have_qt3d="@G4_BUILTWITH_QT3D@"
+feature_list="${feature_list} qt3d[${have_qt3d}]"
+
+
 # - Motif
 have_motif="@G4_BUILTWITH_MOTIF@"
 feature_list="${feature_list} motif[${have_motif}]"
@@ -263,6 +269,11 @@ if test "x${have_openinventor}" = "xyes" ; then
   vis_cflags="${vis_cflags} -DG4VIS_USE_OI -DG4VIS_USE_OIX"
   vis_libs="-lG4OpenInventor ${vis_libs}"
 fi
+
+# - VTK
+have_vtk="@G4_BUILTWITH_VTK@"
+feature_list="${feature_list} vtk[${have_vtk}]"
+
 
 # - If we have any OpenGL based feature, then we need to add in the
 # OpenGL global define and the G4OpenGL/G4gl2ps libraries.
@@ -305,6 +316,36 @@ print_datasets()
 }
 
 #-----------------------------------------------------------------------
+# function print_datasets_sh
+#          print dataset information with one line per dataset and each
+#          line in the format
+#            export <ENVVARNAME>="<PATH>"
+print_datasets_sh()
+{
+  for ds in ${dataset_list} ; do
+    dataset_envvar=$(echo $ds | cut -d "|" -f2)
+    dataset_path=$(echo $ds | cut -d "|" -f3)
+    echo "export ${dataset_envvar}=\"${dataset_path}\""
+  done
+  exit 0
+}
+
+#-----------------------------------------------------------------------
+# function print_datasets_csh
+#          print dataset information with one line per dataset and each
+#          line in the format
+#            setenv <ENVVARNAME> "<PATH>";
+print_datasets_csh()
+{
+  for ds in ${dataset_list} ; do
+    dataset_envvar=$(echo $ds | cut -d "|" -f2)
+    dataset_path=$(echo $ds | cut -d "|" -f3)
+    echo "setenv ${dataset_envvar} \"${dataset_path}\";"
+  done
+  exit 0
+}
+
+#-----------------------------------------------------------------------
 # function check_datasets
 #          Check whether datasets exist as directories at the expected
 #          location. Print dataset name, path and install status
@@ -336,8 +377,15 @@ install_datasets()
 
   G4OPENSSL=$(which openssl)
   if test "x${G4OPENSSL}" = "x" ; then
-    echo "- error: no openssl executable found"
+      G4MD5SUM=$(which md5sum)
+      if test "x${G4MD5SUM}" = "x" ; then
+    echo "- error: no openssl or md5sum executable found"
     exit 1
+      else
+	  G4MD5CMD="${G4MD5SUM} --tag"
+      fi
+  else
+      G4MD5CMD="${G4OPENSSL} dgst -md5"
   fi
 
   G4TAR=$(which tar)
@@ -390,7 +438,7 @@ install_datasets()
 
       # Validate bundle hash (basic)
       dataset_md5=$(echo $ds | cut -d "|" -f5)
-      actual_md5=$(${G4OPENSSL} dgst -md5 ${g4downloaddir}/${dataset_file} | cut -d" " -f2)
+      actual_md5=$(${G4MD5CMD} ${g4downloaddir}/${dataset_file} | tr -d ' ' | cut -d"=" -f2)
       echo "+ checking md5 of ${dataset_file}"
       if [ "${actual_md5}" != "${dataset_md5}" ] ; then
         echo "- md5 mismatch for '${dataset_file}' : ${actual_md5}(actual) != ${dataset_md5}(expected)"
@@ -441,6 +489,21 @@ install_datasets()
 }
 
 #-----------------------------------------------------------------------
+# function list_features
+#          print list of enabled and disabled features.
+#
+list_features()
+{
+cat<<EOF
+Known Features:
+EOF
+  for f in ${feature_list} ; do
+    echo " $f"
+  done
+  exit 0
+}
+
+#-----------------------------------------------------------------------
 # function help
 #          print help on available command line arguments and enabled
 #          and disabled features of the toolkit
@@ -464,6 +527,16 @@ Usage: geant4-config [OPTION...]
 
   --has-feature FEATURE   output yes if FEATURE is supported,
                           or no if not supported
+
+  --features              print list of features
+
+  --sh                    print shell commands required to set environment
+                          variables for Geant4, which can be evaluated in
+                          the calling shell with "eval \$(geant4-config --sh)"
+
+  --csh                   print C shell commands required to set environment
+                          variables for Geant4, which can be evaluated in
+                          the calling shell with "eval \`geant4-config --csh\`"
 
   --datasets              output dataset name, environment variable
                           and path, with one line per dataset
@@ -514,14 +587,16 @@ fi
 while test $# -gt 0 ; do
   case "$1" in
     -*=*)
+      optflag=`echo "$1" | sed 's/=[-_a-zA-Z0-9]*//'`
       optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'`
       ;;
     *)
+      optflag=$1
       optarg=
       ;;
   esac
 
-  case "$1" in
+  case "$optflag" in
     --prefix)
       echo ${prefix}
       ;;
@@ -555,9 +630,17 @@ while test $# -gt 0 ; do
       ;;
 
     --has-feature)
-      shift
+      if [ x$optarg = x ]; then
+        if [  $# -gt 1 ]; then
+	  shift
+	  optarg=$1
+	else
+	  echo "$optflag - missing parameter"
+	  exit 1
+	fi
+      fi
 
-      case "$1" in
+      case "$optarg" in
         static)
           echo ${have_staticlibs}
           ;;
@@ -594,6 +677,12 @@ while test $# -gt 0 ; do
         qt)
           echo ${have_qt}
           ;;
+        qt3d)
+          echo ${have_qt3d}
+          ;;
+        vtk)
+          echo ${have_vtk}
+          ;;
         motif)
           echo ${have_motif}
           ;;
@@ -615,6 +704,10 @@ while test $# -gt 0 ; do
       esac
       ;;
 
+    --features)
+      list_features
+      ;;
+
     --datasets)
       print_datasets
       ;;
@@ -625,6 +718,14 @@ while test $# -gt 0 ; do
 
     --install-datasets)
       install_datasets
+      ;;
+
+    --sh)
+      print_datasets_sh
+      ;;
+
+    --csh)
+      print_datasets_csh
       ;;
 
     -?)

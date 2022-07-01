@@ -84,3 +84,7 @@ inline const G4VisAttributes* G4VViewer::GetApplicableVisAttributes
 inline void G4VViewer::SetNeedKernelVisit (G4bool need) {
   fNeedKernelVisit = need;
 }
+
+inline G4double G4VViewer::GetKernelVisitElapsedTimeSeconds () const {
+  return fKernelVisitElapsedTimeSeconds;
+}

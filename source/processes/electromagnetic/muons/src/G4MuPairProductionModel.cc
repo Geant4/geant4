@@ -117,7 +117,7 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
 		   4./(3.*CLHEP::pi)),
     sqrte(sqrt(G4Exp(1.))),
     minPairEnergy(4.*CLHEP::electron_mass_c2),
-    lowestKinEnergy(1.0*CLHEP::GeV)
+    lowestKinEnergy(0.85*CLHEP::GeV)
 {
   nist = G4NistManager::Instance();
 
@@ -126,10 +126,10 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
 
   if(nullptr != p) { 
     SetParticle(p); 
-    lowestKinEnergy = std::max(lowestKinEnergy,p->GetPDGMass()*8.0);  
+    lowestKinEnergy = std::max(lowestKinEnergy, p->GetPDGMass()*8.0);  
   }
   emin = lowestKinEnergy;
-  emax = 10.*TeV;
+  emax = emin*10000.;
   SetAngularDistribution(new G4ModifiedMephi());
 }
 
@@ -144,7 +144,7 @@ G4double G4MuPairProductionModel::MinPrimaryEnergy(const G4Material*,
                                                    const G4ParticleDefinition*,
                                                    G4double cut)
 {
-  return std::max(lowestKinEnergy,cut);
+  return std::max(lowestKinEnergy, cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -231,7 +231,7 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
 {
   G4double loss = 0.0;
 
-  G4double cut = std::min(cutEnergy,tmax);
+  G4double cut = std::min(cutEnergy, tmax);
   if(cut <= minPairEnergy) { return loss; }
 
   // calculate the rectricted loss
@@ -239,16 +239,14 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
   G4double aaa = G4Log(minPairEnergy);
   G4double bbb = G4Log(cut);
 
-  G4int    kkk = (G4int)((bbb-aaa)/ak1+ak2);
-  if (kkk > 8)      { kkk = 8; }
+  G4int kkk = (G4int)((bbb-aaa)/ak1+ak2);
+  if(kkk > 8) { kkk = 8; }
   else if (kkk < 1) { kkk = 1; }
-
   G4double hhh = (bbb-aaa)/(G4double)kkk;
   G4double x = aaa;
 
   for (G4int l=0 ; l<kkk; ++l) {
-    for (G4int ll=0; ll<8; ++ll)
-    {
+    for (G4int ll=0; ll<8; ++ll) {
       G4double ep = G4Exp(x+xgi[ll]*hhh);
       loss += wgi[ll]*ep*ep*ComputeDMicroscopicCrossSection(tkin, Z, ep);
     }
@@ -273,17 +271,15 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
 
   G4double aaa = G4Log(cut);
   G4double bbb = G4Log(tmax);
-  G4int kkk = (G4int)((bbb-aaa)/ak1 + ak2);
+  G4int kkk = ((bbb-aaa)/ak1 + ak2);
   if(kkk > 8) { kkk = 8; }
   else if (kkk < 1) { kkk = 1; }
 
-  G4double hhh = (bbb-aaa)/G4double(kkk);
+  G4double hhh = (bbb-aaa)/(G4double)(kkk);
   G4double x = aaa;
 
-  for(G4int l=0; l<kkk; ++l)
-  {
-    for(G4int i=0; i<8; ++i)
-    {
+  for(G4int l=0; l<kkk; ++l) {
+    for(G4int i=0; i<8; ++i) {
       G4double ep = G4Exp(x + xgi[i]*hhh);
       cross += ep*wgi[i]*ComputeDMicroscopicCrossSection(tkin, Z, ep);
     }
@@ -312,7 +308,7 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   static const G4double g1h  = 4.4e-5 ;
   static const G4double g2h  = 4.8e-5 ;
 
-  if (pairEnergy <= 4.0 * electron_mass_c2)
+  if (pairEnergy <= minPairEnergy)
     return 0.0;
 
   G4double totalEnergy  = tkin + particleMass;
@@ -381,10 +377,11 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   for (G4int i = 0; i < 8; ++i)
   {
     G4double yeu = (b40 + 5.0) + (b40 - 1.0) * rho2[i];
-    G4double yed = b62 * G4Log(3.0 + xii[i]) + (2.0 * beta - 1.0) * rho2[i] - b40;
+    G4double yed = b62*G4Log(3.0 + xii[i]) + (2.0 * beta - 1.0)*rho2[i] - b40;
 
     G4double ymu = b62 * (1.0 + rho2[i]) + 6.0;
-    G4double ymd = (b40 + 3.0) * (1.0 + rho2[i]) * G4Log(3.0 + xi[i]) + 2.0 - 3.0 * rho2[i];
+    G4double ymd = (b40 + 3.0)*(1.0 + rho2[i])*G4Log(3.0 + xi[i])
+      + 2.0 - 3.0 * rho2[i];
 
     ye1[i] = 1.0 + yeu / yed;
     ym1[i] = 1.0 + ymu / ymd;
@@ -393,40 +390,38 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double be[8];
   G4double bm[8];
 
-  for(G4int i = 0; i < 8; ++i)
-  {
+  for(G4int i = 0; i < 8; ++i) {
     if(xi[i] <= 1000.0) {
-      be[i] = ((2.0 + rho2[i]) * (1.0 + beta) + xi[i] * (3.0 + rho2[i])) *
-                G4Log(1.0 + xii[i]) + (1.0 - rho2[i] - beta) / xi1[i] - (3.0 + rho2[i]);
+      be[i] = ((2.0 + rho2[i])*(1.0 + beta) +
+	       xi[i]*(3.0 + rho2[i]))*G4Log(1.0 + xii[i]) +
+	(1.0 - rho2[i] - beta)/xi1[i] - (3.0 + rho2[i]);
     } else {
-      be[i] = 0.5 * (3.0 - rho2[i] + 2.0 * beta * (1.0 + rho2[i])) * xii[i];
+      be[i] = 0.5*(3.0 - rho2[i] + 2.0*beta*(1.0 + rho2[i]))*xii[i];
     }
 
     if(xi[i] >= 0.001) {
       G4double a10 = (1.0 + 2.0 * beta) * (1.0 - rho2[i]);
-      bm[i] = ((1.0 + rho2[i]) * (1.0 + 1.5 * beta) - a10 * xii[i]) * G4Log(xi1[i]) +
-                xi[i] * (1.0 - rho2[i] - beta) / xi1[i] + a10;
+      bm[i] = ((1.0 + rho2[i])*(1.0 + 1.5 * beta) - a10*xii[i])*G4Log(xi1[i]) +
+                xi[i] * (1.0 - rho2[i] - beta)/xi1[i] + a10;
     } else {
-      bm[i] = 0.5 * (5.0 - rho2[i] + beta * (3.0 + rho2[i])) * xi[i];
+      bm[i] = 0.5*(5.0 - rho2[i] + beta * (3.0 + rho2[i]))*xi[i];
     }
   }
 
   G4double sum = 0.0;
 
-  for (G4int i = 0; i < 8; ++i)
-  {
-    G4double screen = screen0*xi1[i]/(1.0-rho2[i]) ;
-    G4double ale = G4Log(bbb/z13*sqrt(xi1[i]*ye1[i])/(1.+screen*ye1[i])) ;
-    G4double cre = 0.5*G4Log(1.+2.25*z23*xi1[i]*ye1[i]*inv_massratio2) ;
+  for (G4int i = 0; i < 8; ++i) {
+    G4double screen = screen0*xi1[i]/(1.0 - rho2[i]);
+    G4double ale = G4Log(bbb/z13*sqrt(xi1[i]*ye1[i])/(1. + screen*ye1[i]));
+    G4double cre = 0.5*G4Log(1. + 2.25*z23*xi1[i]*ye1[i]*inv_massratio2);
 
     G4double fe = (ale-cre)*be[i];
-    fe *= (fe > 0.0);
+    fe = std::max(fe, 0.0);
 
-    G4double alm_crm = G4Log(bbb*massratio/(1.5*z23*(1.+screen*ym1[i])));
-    G4double fm = alm_crm*bm[i];
-    fm *= (fm > 0.0) * inv_massratio2;
+    G4double alm_crm = G4Log(bbb*massratio/(1.5*z23*(1. + screen*ym1[i])));
+    G4double fm = std::max(alm_crm*bm[i], 0.0)*inv_massratio2;
 
-    sum += wgi[i]*(1.0 + rho[i])*(fe+fm);
+    sum += wgi[i]*(1.0 + rho[i])*(fe + fm);
   }
 
   return -tmn*sum*factorForCross*z2*residEnergy/(totalEnergy*pairEnergy);
@@ -550,8 +545,8 @@ void G4MuPairProductionModel::SampleSecondaries(
   // define interval of energy transfer
   G4double maxPairEnergy = MaxSecondaryEnergyForElement(kinEnergy, 
                                                         anElement->GetZ());
-  G4double maxEnergy     = std::min(tmax, maxPairEnergy);
-  G4double minEnergy     = std::max(tmin, minPairEnergy);
+  G4double maxEnergy = std::min(tmax, maxPairEnergy);
+  G4double minEnergy = std::max(tmin, minPairEnergy);
 
   if(minEnergy >= maxEnergy) { return; }
   //G4cout << "emin= " << minEnergy << " emax= " << maxEnergy 
@@ -680,7 +675,7 @@ void G4MuPairProductionModel::StoreTables() const
   for (G4int iz=0; iz<nzdat; ++iz) {
     G4int Z = zdat[iz];
     G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
-    if(!pv) { 
+    if(nullptr == pv) { 
       DataCorrupted(Z, 1.0);
       return;
     }
@@ -695,7 +690,7 @@ void G4MuPairProductionModel::StoreTables() const
 
 G4bool G4MuPairProductionModel::RetrieveTables()
 {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   G4String dir("");
   if (path) { 
     std::ostringstream ost;

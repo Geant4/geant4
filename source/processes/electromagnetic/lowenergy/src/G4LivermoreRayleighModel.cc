@@ -100,7 +100,7 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
     InitialiseElementSelectors(particle, cuts);
 
     // Access to elements
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     const G4ElementTable* elemTable = G4Element::GetElementTable();
     size_t numElems                 = (*elemTable).size();
     for(size_t ie = 0; ie < numElems; ++ie)
@@ -142,7 +142,7 @@ void G4LivermoreRayleighModel::ReadData(size_t Z, const char* path)
 
   if(datadir == nullptr)
   {
-    datadir = std::getenv("G4LEDATA");
+    datadir = G4FindDataDir("G4LEDATA");
     if(datadir == nullptr)
     {
       G4Exception("G4LivermoreRayleighModelModel::ReadData()","em0006",

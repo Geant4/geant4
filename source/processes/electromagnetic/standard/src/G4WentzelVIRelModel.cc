@@ -61,27 +61,28 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4NistManager.hh"
 #include "G4EmParameters.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 std::vector<G4double> G4WentzelVIRelModel::effMass;
 
-#ifdef G4MULTITHREADED
-G4Mutex G4WentzelVIRelModel::WentzelVIRelModelMutex  = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex theWVIRelMutex = G4MUTEX_INITIALIZER;
+}
 
 G4WentzelVIRelModel::G4WentzelVIRelModel() :
   G4WentzelVIModel(true, "WentzelVIRel")
 {
   fNistManager = G4NistManager::Instance();
-  G4WentzelVIRelXSection* ptr = new G4WentzelVIRelXSection();
+  auto ptr = new G4WentzelVIRelXSection();
   SetWVICrossSection(static_cast<G4WentzelOKandVIxSection*>(ptr));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4WentzelVIRelModel::~G4WentzelVIRelModel()
-{}
+G4WentzelVIRelModel::~G4WentzelVIRelModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -154,10 +155,10 @@ void G4WentzelVIRelModel::ComputeEffectiveMass()
   const G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t ncouples = theCoupleTable->GetTableSize();
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4WentzelVIRelModel::WentzelVIRelModelMutex);
+  if(ncouples == effMass.size()) { return; }
+
+  G4AutoLock l(&theWVIRelMutex);
   if(ncouples != effMass.size()) {
-#endif
     effMass.resize(ncouples, 0.0);
     for(size_t i=0; i<ncouples; ++i) {
       const G4Material* mat = 
@@ -175,10 +176,8 @@ void G4WentzelVIRelModel::ComputeEffectiveMass()
       }
       effMass[i] = sum/norm;
     }
-#ifdef G4MULTITHREADED
   }
-  G4MUTEXUNLOCK(&G4WentzelVIRelModel::WentzelVIRelModelMutex);
-#endif
+  l.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

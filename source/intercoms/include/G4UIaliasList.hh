@@ -43,7 +43,7 @@ class G4UIaliasList
 {
   public:
 
-    G4UIaliasList();
+    G4UIaliasList() = default;
     ~G4UIaliasList();
 
     void RemoveAlias(const char* aliasName);

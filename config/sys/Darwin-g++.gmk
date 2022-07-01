@@ -1,6 +1,6 @@
 #
-# ------ MacOS-X ------
-#                                 macOS 11, gcc-9.3 and higher
+# ------ macOS ------
+#                                 macOS, gcc-9.3 and higher
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
@@ -18,6 +18,9 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   CXXFLAGS  += -std=c++17
 # CXXFLAGS  += -stdlib=libstdc++
   G4USE_STD17 := 1
+  ifdef G4MULTITHREADED
+    CXXFLAGS += -ftls-model=initial-exec -pthread
+  endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O3
     FCFLAGS   := -O3

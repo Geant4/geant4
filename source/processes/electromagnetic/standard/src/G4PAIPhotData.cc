@@ -102,22 +102,22 @@ G4PAIPhotData::~G4PAIPhotData()
       {
 	fPAIxscBank[i]->clearAndDestroy();
 	delete fPAIxscBank[i];
-	fPAIxscBank[i] = 0;
+	fPAIxscBank[i] = nullptr;
       }
       if(fPAIdEdxBank[i]) 
       {
 	fPAIdEdxBank[i]->clearAndDestroy();
 	delete fPAIdEdxBank[i];
-	fPAIdEdxBank[i]= 0;
+	fPAIdEdxBank[i] = nullptr;
       }
       delete fdEdxTable[i];
       delete fdNdxCutTable[i];
-      fdEdxTable[i] = 0;
-      fdNdxCutTable[i] = 0;
+      fdEdxTable[i] = nullptr;
+      fdNdxCutTable[i] = nullptr;
     }
   }
   delete fParticleEnergyVector;
-  fParticleEnergyVector = 0;
+  fParticleEnergyVector = nullptr;
   //G4cout << "G4PAIPhotData::~G4PAIPhotData() done for " << this << G4endl;  
 }
 
@@ -148,20 +148,20 @@ void G4PAIPhotData::Initialise(const G4MaterialCutsCouple* couple,
 
   // if( deltaCutInKineticEnergyNow != cut ) deltaCutInKineticEnergyNow = cut; // exception??
 
-  G4PhysicsLogVector* dEdxCutVector =
+  auto dEdxCutVector =
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
 			   fTotBin);
 
-  G4PhysicsLogVector* dNdxCutVector = 
+  auto dNdxCutVector =
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
 			   fTotBin);
-  G4PhysicsLogVector* dNdxCutPhotonVector = 
+  auto dNdxCutPhotonVector =
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
 			   fTotBin);
-  G4PhysicsLogVector* dNdxCutPlasmonVector = 
+  auto dNdxCutPlasmonVector =
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
 			   fTotBin);
@@ -169,12 +169,12 @@ void G4PAIPhotData::Initialise(const G4MaterialCutsCouple* couple,
   const G4Material* mat = couple->GetMaterial();     
   fSandia.Initialize(const_cast<G4Material*>(mat));
 
-  G4PhysicsTable* PAItransferTable = new G4PhysicsTable(fTotBin+1);
-  G4PhysicsTable* PAIphotonTable = new G4PhysicsTable(fTotBin+1);
-  G4PhysicsTable* PAIplasmonTable = new G4PhysicsTable(fTotBin+1);
+  auto PAItransferTable = new G4PhysicsTable(fTotBin+1);
+  auto PAIphotonTable = new G4PhysicsTable(fTotBin+1);
+  auto PAIplasmonTable = new G4PhysicsTable(fTotBin+1);
 
-  G4PhysicsTable* PAIdEdxTable = new G4PhysicsTable(fTotBin+1);
-  G4PhysicsLogVector* dEdxMeanVector =
+  auto PAIdEdxTable = new G4PhysicsTable(fTotBin+1);
+  auto dEdxMeanVector =
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
 			   fTotBin);
@@ -201,11 +201,11 @@ void G4PAIPhotData::Initialise(const G4MaterialCutsCouple* couple,
 
     G4int n = fPAIxSection.GetSplineSize();
 
-    G4PhysicsFreeVector* transferVector = new G4PhysicsFreeVector(n);
-    G4PhysicsFreeVector* photonVector   = new G4PhysicsFreeVector(n);
-    G4PhysicsFreeVector* plasmonVector  = new G4PhysicsFreeVector(n);
+    auto transferVector = new G4PhysicsFreeVector(n);
+    auto photonVector   = new G4PhysicsFreeVector(n);
+    auto plasmonVector  = new G4PhysicsFreeVector(n);
 
-    G4PhysicsFreeVector* dEdxVector     = new G4PhysicsFreeVector(n);
+    auto dEdxVector     = new G4PhysicsFreeVector(n);
 
     for( G4int k = 0; k < n; k++ )
     {
@@ -451,7 +451,7 @@ G4double G4PAIPhotData::SampleAlongStepTransfer(G4int coupleIndex,
 
   G4PhysicsLogVector* vcut = fdNdxCutTable[coupleIndex];
   G4PhysicsVector*      v1 = (*(fPAIxscBank[coupleIndex]))(iPlace);
-  G4PhysicsVector*      v2 = 0;
+  G4PhysicsVector*      v2 = nullptr;
 
   dNdxCut1    = (*vcut)[iPlace];
   G4double e1 = v1->Energy(0);
@@ -543,7 +543,7 @@ G4double G4PAIPhotData::SampleAlongStepPhotonTransfer(G4int coupleIndex,
 
   G4PhysicsLogVector* vcut = fdNdxCutPhotonTable[coupleIndex];
   G4PhysicsVector*      v1 = (*(fPAIphotonBank[coupleIndex]))(iPlace);
-  G4PhysicsVector*      v2 = 0;
+  G4PhysicsVector*      v2 = nullptr;
 
   dNdxCut1    = (*vcut)[iPlace];
   G4double e1 = v1->Energy(0);
@@ -635,7 +635,7 @@ G4double G4PAIPhotData::SampleAlongStepPlasmonTransfer(G4int coupleIndex,
 
   G4PhysicsLogVector* vcut = fdNdxCutPlasmonTable[coupleIndex];
   G4PhysicsVector*      v1 = (*(fPAIplasmonBank[coupleIndex]))(iPlace);
-  G4PhysicsVector*      v2 = 0;
+  G4PhysicsVector*      v2 = nullptr;
 
   dNdxCut1    = (*vcut)[iPlace];
   G4double e1 = v1->Energy(0);

@@ -1,0 +1,101 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Qt_sg_viewer
+#define toolx_Qt_sg_viewer
+
+#include "glarea"
+
+#include "session"
+
+#include <QtCore/qglobal.h> //For QT_VERSION.
+
+#if QT_VERSION < 0x050000
+#include <QtGui/qboxlayout.h>
+#else
+#include <QtWidgets/qboxlayout.h>
+#endif
+
+namespace toolx {
+namespace Qt {
+
+class sg_viewer : public sg::GL_viewer {
+  typedef sg::GL_viewer parent;
+public:
+  sg_viewer(session& a_session,
+            int a_x = 0,int a_y = 0,
+            unsigned int a_width = 500,unsigned int a_height = 500,
+            const std::string& a_win_title = "")
+  :parent(a_session.out(),a_width,a_height)
+  ,m_session(a_session)
+  ,m_shell(0)
+  ,m_own_shell(false)
+  ,m_glarea(0)
+  {
+    if(!m_session.is_valid()) return; //throw
+    m_shell = m_session.create_window(a_win_title.c_str(),a_x,a_y,a_width,a_height);
+    if(!m_shell) return; //throw
+    m_own_shell = true;
+
+    m_glarea = new Qt::glarea(0,*this);
+
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->setContentsMargins(0,0,0,0);
+    layout->addWidget(m_glarea);
+    m_shell->setLayout(layout);
+  }
+  virtual ~sg_viewer() {
+    if(m_glarea) m_glarea->set_device_interactor(0);
+    if(m_shell && m_own_shell) {
+      m_session.delete_window(m_shell);
+      //m_session.sync();
+    }
+  }
+protected:
+  sg_viewer(const sg_viewer& a_from)
+  :parent(a_from)
+  ,m_session(a_from.m_session)
+  ,m_shell(0)
+  ,m_own_shell(false)
+  ,m_glarea(0)
+  {}
+  sg_viewer& operator=(const sg_viewer& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  bool has_window() const {return m_shell?true:false;} //for SWIG
+
+  bool show() {
+    if(!m_shell) return false;
+    m_shell->show();
+    return true;
+  }
+
+  void win_render() {
+    if(!m_glarea) return;
+    m_glarea->update();
+  }
+public:
+  QWidget* shell() {return m_shell;}
+  void set_own_shell(bool a_value) {m_own_shell = a_value;}
+  Qt::glarea* glarea() {return m_glarea;}
+  void set_device_interactor(tools::sg::device_interactor* a_interactor) {  //we do not have ownership.
+    if(!m_glarea) return;
+    m_glarea->set_device_interactor(a_interactor);
+  }
+  void enable_keyboard_focus() {
+    if(!m_glarea) return;
+    m_glarea->setFocusPolicy(::Qt::StrongFocus);
+  }
+protected:
+  session& m_session;
+  QWidget* m_shell;
+  bool m_own_shell;
+  Qt::glarea* m_glarea;
+};
+
+}}
+
+#endif
+

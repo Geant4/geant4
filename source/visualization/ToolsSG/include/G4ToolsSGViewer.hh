@@ -109,8 +109,8 @@ public: //tools::sg::device_interactor interface.
       const G4double scale = 500;  // Empirically chosen
       fVP.MultiplyZoomFactor(1.+angleY/scale);
     } else {                              // Perspective projection
-      const G4double scale = fVP.GetFieldHalfAngle()/(10.*CLHEP::deg);  // Empirical
-      fVP.SetDolly(fVP.GetDolly()+angleY/scale);
+      const G4double delta = fSceneHandler.GetExtent().GetExtentRadius()/200.;  // Empirical
+      fVP.SetDolly(fVP.GetDolly()+angleY*delta);
     }
     SetView();
     DrawView();
@@ -309,8 +309,13 @@ public:
       //
       // Also, strictly, there is no need to rebuid run-duration models (detector),
       // but a complete rebuild is the easiest way (already imeplemented).
-      fNeedKernelVisit = true;
-      DrawView();  // Draw trajectories, etc., from kept events
+      //
+      // Only do this if there are end-of-event models (e.g., trajectories) that
+      // may require it.
+      if (fSceneHandler.GetScene()->GetEndOfEventModelList().size()) {
+        fNeedKernelVisit = true;
+        DrawView();  // Draw trajectories, etc., from kept events
+      }
     }
   }
 #endif
@@ -463,8 +468,8 @@ protected:
     }
   public:
     virtual void SetNewValue(G4UIcommand* a_cmd,G4String a_value) {
-      G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-      G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+      G4VisManager::Verbosity verbosity = GetVisManager()->GetVerbosity();
+      G4VViewer* viewer = GetVisManager()->GetCurrentViewer();
       if (!viewer) {
         if (verbosity >= G4VisManager::errors) G4cerr << "ERROR: No current viewer." << G4endl;
         return;

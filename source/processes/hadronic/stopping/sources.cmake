@@ -42,6 +42,7 @@ geant4_module_link_libraries(G4hadronic_stop
     G4bosons
     G4had_preequ_exciton
     G4had_string_diff
+    G4had_string_frag
     G4had_theo_max
     G4hadronic_bert_cascade
     G4hadronic_binary

@@ -23,29 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 
 #ifndef G4EmDNAPhysics_option1_h
 #define G4EmDNAPhysics_option1_h 1
 
-#include "G4VPhysicsConstructor.hh"
+#include "G4EmDNAPhysics.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmDNAPhysics_option1 : public G4VPhysicsConstructor
+class G4EmDNAPhysics_option1 : public G4EmDNAPhysics
 {
 public:
 
-  explicit G4EmDNAPhysics_option1(G4int ver=1, const G4String& name="");
+  explicit G4EmDNAPhysics_option1(G4int ver=1, const G4String& nam="G4EmDNAPhysics_option1");
 
-  virtual ~G4EmDNAPhysics_option1();
-
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-
-private:
-  G4int  verbose;
+  ~G4EmDNAPhysics_option1() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

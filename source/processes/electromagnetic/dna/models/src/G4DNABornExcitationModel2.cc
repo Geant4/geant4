@@ -100,7 +100,7 @@ void G4DNABornExcitationModel2::Initialise(const G4ParticleDefinition* particle,
   fParticleDefinition = particle;
 
   std::ostringstream fullFileName;
-  char *path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
 
   if(G4String(path) == "")
   {

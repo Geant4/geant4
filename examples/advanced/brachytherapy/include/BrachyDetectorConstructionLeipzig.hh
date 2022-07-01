@@ -52,7 +52,7 @@ class BrachyDetectorConstructionLeipzig
 {
 public:
   BrachyDetectorConstructionLeipzig();
-  ~BrachyDetectorConstructionLeipzig(); 
+  ~BrachyDetectorConstructionLeipzig()=default; 
   void ConstructLeipzig(G4VPhysicalVolume*);
   void CleanLeipzigApplicator();
 

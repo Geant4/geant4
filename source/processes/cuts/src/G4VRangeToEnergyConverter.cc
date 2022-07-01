@@ -34,35 +34,32 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4AutoLock.hh"
 
-#ifdef G4MULTITHREADED
-G4Mutex G4VRangeToEnergyConverter::theMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex theREMutex = G4MUTEX_INITIALIZER;
+}
 
-G4double  G4VRangeToEnergyConverter::Emin = 0.0;
-G4double  G4VRangeToEnergyConverter::Emax = 0.0;
+G4double G4VRangeToEnergyConverter::sEmin = 0.0;
+G4double G4VRangeToEnergyConverter::sEmax = 10000;
 
-std::vector<G4double>* G4VRangeToEnergyConverter::Energy = nullptr;
+std::vector<G4double>* G4VRangeToEnergyConverter::sEnergy = nullptr;
 
-G4int G4VRangeToEnergyConverter::NbinPerDecade = 50;
-G4int G4VRangeToEnergyConverter::Nbin = 350;
+G4int G4VRangeToEnergyConverter::sNbinPerDecade = 50;
+G4int G4VRangeToEnergyConverter::sNbin = 350;
 
 // --------------------------------------------------------------------
 G4VRangeToEnergyConverter::G4VRangeToEnergyConverter()
 {
-  if(nullptr == Energy)
+  if(nullptr == sEnergy)
   {
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&theMutex);
-    if(nullptr == Energy)
+    G4AutoLock l(&theREMutex);
+    if(nullptr == sEnergy)
     {
-#endif
       isFirstInstance = true;
-      Energy = new std::vector<G4double>(Nbin + 1);
-#ifdef G4MULTITHREADED
     }
-    G4MUTEXUNLOCK(&theMutex);
-#endif
+    l.unlock();
   }
   // this method defines lock itself
   if(isFirstInstance)
@@ -76,10 +73,10 @@ G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 {
   if(isFirstInstance)
   { 
-    delete Energy;
-    Energy = nullptr; 
-    Emin = 0.;
-    Emax = 0.;
+    delete sEnergy;
+    sEnergy = nullptr; 
+    sEmin = 0.;
+    sEmax = 10000.;
   }
 }
 
@@ -114,7 +111,7 @@ G4double G4VRangeToEnergyConverter::Convert(const G4double rangeCut,
     }
   }
 
-  cut = std::max(Emin, std::min(cut, Emax));
+  cut = std::max(sEmin, std::min(cut, sEmax));
   return cut;
 }
 
@@ -122,7 +119,7 @@ G4double G4VRangeToEnergyConverter::Convert(const G4double rangeCut,
 void G4VRangeToEnergyConverter::SetEnergyRange(const G4double lowedge,
                                                const G4double highedge)
 {
-  G4double ehigh = std::min(Emax, highedge);
+  G4double ehigh = std::min(10.*CLHEP::GeV, highedge);
   if(ehigh > lowedge)
   {
     FillEnergyVector(lowedge, ehigh);
@@ -132,28 +129,29 @@ void G4VRangeToEnergyConverter::SetEnergyRange(const G4double lowedge,
 // --------------------------------------------------------------------
 G4double G4VRangeToEnergyConverter::GetLowEdgeEnergy()
 {
-  return Emin;
+  return sEmin;
 }
     
 // --------------------------------------------------------------------
 G4double G4VRangeToEnergyConverter::GetHighEdgeEnergy()
 {
-  return Emax;
+  return sEmax;
 }
 
 // --------------------------------------------------------------------
 
 G4double G4VRangeToEnergyConverter::GetMaxEnergyCut()
 {
-  return Emax;
+  return sEmax;
 }
 
 // --------------------------------------------------------------------
 void G4VRangeToEnergyConverter::SetMaxEnergyCut(const G4double value)
 {
-  if(value > Emin)
+  G4double ehigh = std::min(10.*CLHEP::GeV, value);
+  if(ehigh > sEmin)
   {
-    FillEnergyVector(Emin, value);
+    FillEnergyVector(sEmin, ehigh);
   }
 }
 
@@ -161,25 +159,22 @@ void G4VRangeToEnergyConverter::SetMaxEnergyCut(const G4double value)
 void G4VRangeToEnergyConverter::FillEnergyVector(const G4double emin, 
                                                  const G4double emax)
 {
-  if(emin != Emin || emax != Emax) 
+  if(emin != sEmin || emax != sEmax || nullptr == sEnergy) 
   {
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&theMutex);
-    if(emin != Emin || emax != Emax) 
-    { 
-#endif
-      Emin = emin;
-      Emax = emax;
-      Nbin = NbinPerDecade*static_cast<G4int>(std::log10(emax/emin));
-      Energy->resize(Nbin + 1);
-      (*Energy)[0] = emin;
-      (*Energy)[Nbin] = emax;
-      G4double fact = G4Log(emax/emin)/Nbin;
-      for(G4int i=1; i<Nbin; ++i) { (*Energy)[i] = emin*G4Exp(i * fact); }
-#ifdef G4MULTITHREADED
+    G4AutoLock l(&theREMutex);
+    if(emin != sEmin || emax != sEmax || nullptr == sEnergy)
+    {
+      sEmin = emin;
+      sEmax = emax;
+      sNbin = sNbinPerDecade*static_cast<G4int>(std::log10(emax/emin));
+      if(nullptr == sEnergy) { sEnergy = new std::vector<G4double>; }
+      sEnergy->resize(sNbin + 1);
+      (*sEnergy)[0] = emin;
+      (*sEnergy)[sNbin] = emax;
+      G4double fact = G4Log(emax/emin)/sNbin;
+      for(G4int i=1; i<sNbin; ++i) { (*sEnergy)[i] = emin*G4Exp(i * fact); }
     }
-    G4MUTEXUNLOCK(&theMutex);
-#endif
+    l.unlock();
   }
 }
 
@@ -197,9 +192,9 @@ G4VRangeToEnergyConverter::ConvertForGamma(const G4double rangeCut,
   G4double range2 = 0.0;
   G4double e1 = 0.0;
   G4double e2 = 0.0;
-  for (G4int i=0; i<Nbin; ++i)
+  for (G4int i=0; i<sNbin; ++i)
   {
-    e2 = (*Energy)[i];
+    e2 = (*sEnergy)[i];
     G4double sig = 0.;
     
     for (G4int j=0; j<nelm; ++j)
@@ -237,9 +232,9 @@ G4VRangeToEnergyConverter::ConvertForElectron(const G4double rangeCut,
   G4double e1 = 0.0;
   G4double e2 = 0.0;
   G4double range = 0.;
-  for (G4int i=0; i<Nbin; ++i)
+  for (G4int i=0; i<sNbin; ++i)
   {
-    e2 = (*Energy)[i];
+    e2 = (*sEnergy)[i];
     dedx2 = 0.0;
     for (G4int j=0; j<nelm; ++j)
     {

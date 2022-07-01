@@ -63,7 +63,6 @@
 
 class G4ParticleChangeForMSC;
 class G4SafetyHelper;
-class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -119,7 +118,7 @@ private:
 
   inline G4double Randomizetlimit();
   
-  inline G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
+  inline G4double SimpleScattering();
 
   inline G4double ComputeStepmin();
 
@@ -130,9 +129,7 @@ private:
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* positron;
   G4ParticleChangeForMSC*     fParticleChange;
-
   const G4MaterialCutsCouple* couple;
-  G4LossTableManager*         theManager;
 
   G4double mass;
   G4double charge,chargeSquare;
@@ -174,14 +171,17 @@ private:
 
   G4double tlow;
   G4double invmev;
+  G4double xmeanth = 0.0;
+  G4double x2meanth = 1./3.;
   G4double rndmarray[2];
 
   struct mscData {
-    G4double ecut, Zeff, Z23, sqrtZ;
+    G4double ecut, Z23, sqrtZ;
     G4double coeffth1, coeffth2;
     G4double coeffc1, coeffc2, coeffc3, coeffc4;
     G4double stepmina, stepminb;
     G4double doverra, doverrb;
+    G4double posa, posb, posc, posd, pose;
   };
   static std::vector<mscData*> msc;
 
@@ -225,8 +225,7 @@ inline G4double G4UrbanMscModel::Randomizetlimit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
+inline G4double G4UrbanMscModel::SimpleScattering()
 {
   // 'large angle scattering'
   // 2 model functions with correct xmean and x2mean

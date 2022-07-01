@@ -153,6 +153,10 @@ class G4TransportationManager
      static G4ThreadLocal G4TransportationManager* fTransportationManager;
 
      static G4Navigator* fFirstTrackingNavigator;
+
+  public:
+
+    static constexpr G4int kMassNavigatorId = 0;
 };
 
 #include "G4TransportationManager.icc"

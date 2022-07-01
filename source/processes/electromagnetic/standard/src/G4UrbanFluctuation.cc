@@ -58,8 +58,7 @@ G4UrbanFluctuation::G4UrbanFluctuation(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4UrbanFluctuation::~G4UrbanFluctuation()
-{}
+G4UrbanFluctuation::~G4UrbanFluctuation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -1,43 +1,81 @@
--------------------------------------------------------------------
+# Category emstand History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-05-24 V.Ivanchenko (emstand-V11-00-13)
+- G4EmStandUtil - new utility class
+- G4eIonisation, G4hIonisation, G4ionIonisation - added selection of the model
+    of energy loss fluctuations using G4EmStandUtil
 
-04 March 2022: V.Ivanchenko (emstand-V10-07-29)
+## 2022-05-24 V.Ivanchenko (emstand-V11-00-12)
+- G4UrbanMscModel - L. Urban extended cache data with 5 variables for positrons,
+    removed used headers, minor saving of instructions, results should be unchanged
+- G4eBremsstrahlungRelModel, G4eBremParametrizedModel - cosmetic changes
+
+## 2022-04-29 Daren Sawkey (emstand-V11-00-11)
+- many files: run clang-tidy. Use keywords nullptr, default, auto; removed unneeded
+  nullptr checks when delete-ing
+
+## 2022-04-25 Ben Morgan (emstand-V11-00-10)
+- Add missing dependencies
+
+## 2022-04-14 V.Ivanchenko (emstand-V11-00-09)
+- G4UrbanMscModel - L.Urban move safety computation before
+    step limitation algorithms in order to save few instructions,
+    which should not affect results; comments to the code are improved
+- G4eBremsstrahlungRelModel, G4PairProductionRelModel - added headers 
+    of G4Exp, G4Pow to source
+- G4WentzelVIRelModel, G4WentzelOKandVIxSection, G4LindhardSorensenIonModel,
+  G4ICRU49NuclearStoppingModel - use G4AutoLock
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel - added G4Log, 
+    G4Exp headers
+- G4BetheHeitler5DModel - do not instantiate G4MuonPlus, G4MuonMinus
+    inside the model to allow usage of this class in physics lists 
+    without muons
+
+## 2022-04-07 V.Ivanchenko (emstand-V11-00-08)
+- G4hIonisation - improved initialisation
+
+## 2022-03-24 V.Ivanchenko (emstand-V11-00-07)
+- G4eBremsstrahlung - improved initialisation
+
+## 2022-03-07 V.Ivanchenko (emstand-V11-00-06)
+- G4UrbanMscModel - L.Urban added two extra class members
+
+## 2022-03-04 V.Ivanchenko (emstand-V11-00-05)
 - G4UniversalFluctuation - removed unnecessary "if"
 
-18 February 2022: V.Ivanchenko
+## 2022-02-18 V.Ivanchenko (emstand-V11-00-04)
 - G4UniversalFluctuation, G4UrbanFluctuation - L.Urban use the same fw=4 and a0=42
     parameters of the model providing similar results for small steps or thin 
     layers to Geant4 10.7 version of fluctuations (fixed #2466) 
 
-14 February 2022: V.Ivanchenko
+## 2022-02-14 V.Ivanchenko (emstand-V11-00-03)
 - G4UrbanMscModel - minor optimisation of arithmetic
 - G4UniversalFluctuation - introduced a new protected method SampleGlandz(..),
     which provides sampling of non-Gauss fluctuations; improved arithmetic;
-    results are identical to the version of the release 
+    results are identical to the version of the release 11.0 
 - G4UrbanFluctuation - reorganized version of fluctuation model from
     Geant4 10.7 in SampleGlandz(...) method
 - G4LossFluctuationDummy - new class with zero fluctuations
 
-24 January 22: V.Ivanchenko
+## 2022-01-24 V.Ivanchenko (emstand-V11-00-02)
 - G4UrbanMscModel - removed multiple initialisation of the cache data structure and
     possible data race
 
-08 January 22: V.Ivanchenko
+## 2022-01-08 V.Ivanchenko (emstand-V11-00-01)
 - G4CoulombScattering - for single scattering used in restriced interval of large
     angles use fEmIncreasing type of cross section shape
+
+## 2021-12-10 Ben Morgan (emstand-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 26 November 21: V.Ivanchenko  (emstand-V10-07-28)
 - G4PairProductionRelModel - reduce upper limit of parameterisation x-section 

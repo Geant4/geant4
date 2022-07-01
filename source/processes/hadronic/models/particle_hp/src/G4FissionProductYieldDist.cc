@@ -1041,7 +1041,7 @@ G4FFG_FUNCTIONENTER__
 
     // Generate the file location starting in the Geant4 data directory
     std::ostringstream DirectoryName;
-    DirectoryName << std::getenv("G4NEUTRONHPDATA") << G4FFGDefaultValues::ENDFFissionDataLocation;
+    DirectoryName << G4FindDataDir("G4NEUTRONHPDATA") << G4FFGDefaultValues::ENDFFissionDataLocation;
 
     // Return the directory structure
 G4FFG_FUNCTIONLEAVE__

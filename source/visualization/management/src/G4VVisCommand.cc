@@ -36,6 +36,9 @@
 #include <sstream>
 #include <cctype>
 
+#include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolume.hh"
+
 G4int           G4VVisCommand::fCurrentArrow3DLineSegmentsPerCircle = 6;
 G4Colour        G4VVisCommand::fCurrentColour = G4Colour::White();
 G4Colour        G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
@@ -49,7 +52,7 @@ G4PhysicalVolumeModel::TouchableProperties          G4VVisCommand::fCurrentTouch
 G4VisExtent                                         G4VVisCommand::fCurrentExtentForField;
 std::vector<G4PhysicalVolumesSearchScene::Findings> G4VVisCommand::fCurrrentPVFindingsForField;
 G4bool G4VVisCommand::fThereWasAViewer = false;
-G4ViewParameters G4VVisCommand::fVPExistingViewer;
+G4ViewParameters G4VVisCommand::fExistingVP;
 
 G4VVisCommand::G4VVisCommand () {}
 
@@ -323,13 +326,69 @@ void G4VVisCommand::InterpolateToNewView
   viewVector.push_back(oldVP);
   viewVector.push_back(newVP);
   viewVector.push_back(newVP);
-  
+
   InterpolateViews
   (currentViewer,
    viewVector,
    nInterpolationPoints,
    waitTimePerPointmilliseconds,
    exportString);
+}
+
+void G4VVisCommand::Twinkle
+// Twinkles the touchables in paths
+// /vis/viewer/centreOn to see its effect
+ (G4VViewer* currentViewer,
+  const G4ViewParameters& baseVP,
+  const std::vector<std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>>& paths)
+{
+  // Copy view parameters to temporary variables ready for adding VisAttributes Modifiers (VAMs)
+  auto loVP = baseVP;  // For black and solid VAMs
+  auto hiVP = baseVP;  // For white and solid VAMs
+
+  // Modify them with vis attribute modifiers (VAMs)
+  for (const auto& path: paths) {
+    const auto& touchable = path.back().GetPhysicalVolume();
+    auto loVisAtts
+    = *(currentViewer->GetApplicableVisAttributes
+        (touchable->GetLogicalVolume()->GetVisAttributes()));
+    auto hiVisAtts = loVisAtts;
+    loVisAtts.SetColour(G4Colour::Black());
+    loVisAtts.SetForceSolid();
+    hiVisAtts.SetColour(G4Colour::White());
+    hiVisAtts.SetForceSolid();
+    auto pvNameCopyNoPath
+    = G4PhysicalVolumeModel::GetPVNameCopyNoPath(path);
+
+    auto loVAMColour = G4ModelingParameters::VisAttributesModifier
+    (loVisAtts, G4ModelingParameters::VASColour, pvNameCopyNoPath);
+    loVP.AddVisAttributesModifier(loVAMColour);
+    auto loVAMStyle = G4ModelingParameters::VisAttributesModifier
+    (loVisAtts, G4ModelingParameters::VASForceSolid, pvNameCopyNoPath);
+    loVP.AddVisAttributesModifier(loVAMStyle);
+
+    auto hiVAMColour = G4ModelingParameters::VisAttributesModifier
+    (hiVisAtts, G4ModelingParameters::VASColour, pvNameCopyNoPath);
+    hiVP.AddVisAttributesModifier(hiVAMColour);
+    auto hiVAMStyle = G4ModelingParameters::VisAttributesModifier
+    (hiVisAtts, G4ModelingParameters::VASForceSolid, pvNameCopyNoPath);
+    hiVP.AddVisAttributesModifier(hiVAMStyle);
+  }
+
+  // Twinkle
+  std::vector<G4ViewParameters> viewVector;
+  viewVector.push_back(loVP);
+  viewVector.push_back(hiVP);
+  viewVector.push_back(loVP);
+  viewVector.push_back(hiVP);
+  viewVector.push_back(loVP);
+  viewVector.push_back(hiVP);
+  viewVector.push_back(loVP);
+  viewVector.push_back(hiVP);
+  viewVector.push_back(loVP);
+  viewVector.push_back(hiVP);
+  // Just 5 interpolation points for a reasonable twinkle rate
+  InterpolateViews(currentViewer,viewVector,5);
 }
 
 void G4VVisCommand::CopyGuidanceFrom
@@ -369,17 +428,6 @@ void G4VVisCommand::DrawExtent(const G4VisExtent& extent)
       fpVisManager->Draw(box,visAtts,G4Translate3D(centre));
     }
   }
-}
-
-void G4VVisCommand::CopyMostViewParameters
-(G4ViewParameters& target, const G4ViewParameters& from)
-{
-  // Copy view parameters except for autoRefresh and background...
-  auto targetAutoRefresh = target.IsAutoRefresh();
-  auto targetBackground  = target.GetBackgroundColour();
-  target = from;
-  target.SetAutoRefresh(targetAutoRefresh);
-  target.SetBackgroundColour(targetBackground);
 }
 
 void G4VVisCommand::CopyCameraParameters

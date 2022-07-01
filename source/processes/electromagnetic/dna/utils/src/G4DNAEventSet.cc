@@ -28,17 +28,17 @@
 #include "G4UnitsTable.hh"
 #include "G4DNAMolecularReactionTable.hh"
 
-Event::Event(G4double time, unsigned int key, ReactionData* pReactionData)
+Event::Event(const G4double& time, const Index& index, ReactionData* pReactionData)
   : fTimeStep(time)
-  , fKey(key)
+  , fIndex(index)
   , fData(std::pair<std::unique_ptr<JumpingData>, ReactionData*>(nullptr,
                                                                  pReactionData))
 {}
 
-Event::Event(G4double time, unsigned int key,
+Event::Event(const G4double& time, const Index& index,
              std::unique_ptr<JumpingData>&& jumping)
   : fTimeStep(time)
-  , fKey(key)
+  , fIndex(index)
   , fData(std::pair<std::unique_ptr<JumpingData>, ReactionData*>(
       std::move(jumping), nullptr))
 {}
@@ -48,7 +48,7 @@ Event::~Event() = default;
 void Event::PrintEvent() const
 {
   G4cout << "****PrintEvent::TimeStep : " << G4BestUnit(fTimeStep, "Time")
-         << " key : " << fKey << " action : ";
+         << " index : " << fIndex << " action : ";
   if(std::get<0>(fData) == nullptr)
   {
     G4cout << std::get<1>(fData)->GetReactant1()->GetName() << " + "
@@ -72,21 +72,21 @@ G4DNAEventSet::G4DNAEventSet()
   : fEventSet(comparatorEventSet())
 {}
 
-void G4DNAEventSet::CreateEvent(G4double time, Key key,
+void G4DNAEventSet::CreateEvent(const G4double& time, const Index& index,
                                 Event::ReactionData* pReactionData)
 {
-  auto pEvent = std::make_unique<Event>(time, key, pReactionData);
+  auto pEvent = std::make_unique<Event>(time, index, pReactionData);
   AddEvent(std::move(pEvent));
 }
 
-void G4DNAEventSet::CreateEvent(G4double time, Key key,
+void G4DNAEventSet::CreateEvent(const G4double& time, const Index& index,
                                 std::unique_ptr<Event::JumpingData> jum)
 {
-  auto pEvent = std::make_unique<Event>(time, key, std::move(jum));
+  auto pEvent = std::make_unique<Event>(time, index, std::move(jum));
   AddEvent(std::move(pEvent));
 }
 
-void G4DNAEventSet::RemoveEventOfVoxel(const size_t& key)
+void G4DNAEventSet::RemoveEventOfVoxel(const Index& key)
 {
   auto it = fEventMap.find(key);
   if(it != fEventMap.end())
@@ -98,14 +98,14 @@ void G4DNAEventSet::RemoveEventOfVoxel(const size_t& key)
 
 void G4DNAEventSet::RemoveEvent(EventSet::iterator iter)
 {
-  auto key = (*iter)->GetKey();
-  RemoveEventOfVoxel(key);
+  auto index = (*iter)->GetIndex();
+  RemoveEventOfVoxel(index);
 }
 
 void G4DNAEventSet::AddEvent(std::unique_ptr<Event> pEvent)
 {
   // idea is no 2 events in one key (or index)
-  auto key = pEvent->GetKey();
+  auto key = pEvent->GetIndex();
   RemoveEventOfVoxel(key);
   auto it        = fEventSet.emplace(std::move(pEvent));
   fEventMap[key] = std::get<0>(it);
@@ -117,11 +117,14 @@ G4DNAEventSet::~G4DNAEventSet() { RemoveEventSet(); }
 
 [[maybe_unused]] void G4DNAEventSet::PrintEventSet()
 {
-  G4cout << "G4DNAEventSet::PrintEventSet()" << G4endl;
+  G4cout<<G4endl;
+  G4cout << "*****************************************************" << G4endl;
+  G4cout << "G4DNAEventSet::PrintEventSet() of : "<< this->size()<<" events "<< G4endl;
   for(const auto& it : fEventSet)
   {
     (*it).PrintEvent();
   }
   G4cout << "End PrintEventSet()" << G4endl;
+  G4cout << "*****************************************************" << G4endl;
   G4cout << G4endl;
 }

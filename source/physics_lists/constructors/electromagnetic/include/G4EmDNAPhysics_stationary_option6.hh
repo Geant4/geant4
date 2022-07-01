@@ -26,26 +26,19 @@
 #ifndef G4EmDNAPhysics_stationary_option6_h
 #define G4EmDNAPhysics_stationary_option6_h 1
 
-#include "G4VPhysicsConstructor.hh"
+#include "G4EmDNAPhysics_option6.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmDNAPhysics_stationary_option6 : public G4VPhysicsConstructor
+class G4EmDNAPhysics_stationary_option6 : public G4EmDNAPhysics_option6
 {
 public:
 
-  G4EmDNAPhysics_stationary_option6(G4int ver = 1);
-  G4EmDNAPhysics_stationary_option6(G4int ver, const G4String& name);
+  explicit G4EmDNAPhysics_stationary_option6(G4int ver=1, const G4String& name="G4EmDNAPhysics_stationary_option6");
 
-  virtual ~G4EmDNAPhysics_stationary_option6();
+  ~G4EmDNAPhysics_stationary_option6() override = default;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-
-private:
-
-  G4int  verbose;
 };
 
 #endif

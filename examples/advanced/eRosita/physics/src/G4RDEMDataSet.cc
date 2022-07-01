@@ -312,7 +312,7 @@ size_t G4RDEMDataSet::FindLowerBound(G4double x, G4DataVector* values) const
 
 G4String G4RDEMDataSet::FullFileName(const G4String& name) const
 {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     G4Exception("G4RDEMDataSet::FullFileName()", "InvalidSetup",
                 FatalException, "G4LEDATA environment variable not set!");

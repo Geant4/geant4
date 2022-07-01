@@ -322,7 +322,7 @@ G4int G4DNAQuinnPlasmonExcitationModel::GetNValenceElectron(G4int z)
   
   if(!datadir)
   {
-     datadir = getenv("G4LEDATA");
+     datadir = G4FindDataDir("G4LEDATA");
      if(!datadir)
      {
        G4Exception("G4DNAQuinnPlasmonExcitationModel::GetNValenceElectron()"

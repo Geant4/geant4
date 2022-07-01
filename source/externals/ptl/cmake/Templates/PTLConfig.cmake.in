@@ -1,137 +1,80 @@
-#------------------------------------------------------------------------------#
-#
-#
-cmake_policy(SET CMP0012 NEW)
-
-get_filename_component(PTL_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-
-include(${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersion.cmake)
-include(CMakeFindDependencyMacro)
-
-set(_PTL_AVAILABLE_COMPONENTS )
-
-if(@BUILD_SHARED_LIBS@)
-    list(APPEND _PTL_AVAILABLE_COMPONENTS shared)
-endif()
-
-if(@BUILD_STATIC_LIBS@)
-    list(APPEND _PTL_AVAILABLE_COMPONENTS static)
-endif()
-
-#------------------------------------------------------------------------------#
-#   package initialization
+# -------------------------------------------------------------------------------------- #
+# package initialization
 #
 @PACKAGE_INIT@
 
+cmake_minimum_required(VERSION 3.8)
 
-#------------------------------------------------------------------------------#
-#   install or build tree
+# -------------------------------------------------------------------------------------- #
+# basic paths
 #
-set(_PTL_BUILD_TREE @BUILD_TREE@)
-if(NOT _PTL_BUILD_TREE)
-    set(_PTL_INSTALL_TREE ON)
+set_and_check(PTL_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+set_and_check(PTL_LIB_DIR "@PACKAGE_LIB_INSTALL_DIR@")
+
+# -------------------------------------------------------------------------------------- #
+# available components
+#
+set(PTL_shared_FOUND @BUILD_SHARED_LIBS@)
+set(PTL_static_FOUND @BUILD_STATIC_LIBS@)
+set(PTL_TBB_FOUND @PTL_USE_TBB@)
+
+# Early check so later setup doesn't need to check REQUIRED status
+check_required_components(PTL)
+
+# -------------------------------------------------------------------------------------- #
+# refind needed dependencies/targets
+#
+include(CMakeFindDependencyMacro)
+
+if(NOT Threads_FOUND)
+    set(CMAKE_THREAD_PREFER_PTHREAD @CMAKE_THREAD_PREFER_PTHREAD@)
+    set(THREADS_PREFER_PTHREAD_FLAG @THREADS_PREFER_PTHREAD_FLAG@)
+    find_dependency(Threads REQUIRED)
 endif()
 
+if(NOT TBB_FOUND AND PTL_TBB_FOUND)
+    list(INSERT CMAKE_MODULE_PATH 0 "@PACKAGE_CMAKE_MODULE_INSTALL_DIR@")
+    find_dependency(TBB @TBB_VERSION@ REQUIRED)
+    list(REMOVE_AT CMAKE_MODULE_PATH 0)
+endif()
 
-#------------------------------------------------------------------------------#
-#   configure lib and include
+# -------------------------------------------------------------------------------------- #
+# Include our targets file(s)
 #
-if(_PTL_INSTALL_TREE)
+include("${CMAKE_CURRENT_LIST_DIR}/PTLTargets.cmake")
 
-    set_and_check(@PROJECT_NAME@_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
-    set_and_check(@PROJECT_NAME@_LIB_DIR "@PACKAGE_LIB_INSTALL_DIR@")
-
-    include(${PTL_CMAKE_DIR}/@PROJECT_NAME@Targets.cmake)
-    check_required_components(@PROJECT_NAME@)
-
-    # get target
-    foreach(_COMPONENT ${_PTL_AVAILABLE_COMPONENTS})
-        # set the library
-        if(NOT @PROJECT_NAME@_LIBRARY)
-            set(@PROJECT_NAME@_LIBRARY ${_${_COMPONENT}_LOCATION} CACHE INTERNAL
-                "@PROJECT_NAME@ library")
-        endif()
-    endforeach()
-
-    if(@Threads_FOUND@)
-        set(CMAKE_THREAD_PREFER_PTHREAD @CMAKE_THREAD_PREFER_PTHREAD@)
-        set(THREADS_PREFER_PTHREAD_FLAG @THREADS_PREFER_PTHREAD_FLAG@)
-        find_package(Threads REQUIRED)
-    endif()
-
-    if(@TBB_FOUND@)
-        set(TBB_ROOT_DIR @TBB_ROOT_DIR@)
-        set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/PTL/Modules ${CMAKE_MODULE_PATH})
-        find_package(TBB @TBB_VERSION@ REQUIRED)
-    endif()
-
+# Set the default component based on what's available
+if(PTL_shared_FOUND)
+    set(_ptl_preferred_link "shared")
 else()
-
-    set(@PROJECT_NAME@_INCLUDE_DIR "@PROJECT_SOURCE_DIR@")
-    set(@PROJECT_NAME@_LIB_DIR "@PROJECT_BINARY_DIR@")
-
-    set(@PROJECT_NAME@_Threads_FOUND @Threads_FOUND@)
-    set(@PROJECT_NAME@_TBB_FOUND @TBB_FOUND@)
-
-    if(NOT Threads_FOUND AND @PROJECT_NAME@_Threads_FOUND)
-        set(CMAKE_THREAD_PREFER_PTHREAD @CMAKE_THREAD_PREFER_PTHREAD@)
-        set(THREADS_PREFER_PTHREAD_FLAG @THREADS_PREFER_PTHREAD_FLAG@)
-        find_package(Threads REQUIRED)
-    endif()
-
-    if(NOT TBB_FOUND AND @PROJECT_NAME@_TBB_FOUND)
-        set(TBB_ROOT_DIR @TBB_ROOT_DIR@)
-        set(CMAKE_MODULE_PATH @PROJECT_SOURCE_DIR@/cmake/Modules ${CMAKE_MODULE_PATH})
-        find_package(TBB @TBB_VERSION@ REQUIRED)
-    endif()
-
-    if(NOT TARGET @LIBNAME@-compile-options)
-      include("@PROJECT_BINARY_DIR@/@PROJECT_NAME@-interface.cmake")
-    endif()
-
-    foreach(_COMPONENT ${_PTL_AVAILABLE_COMPONENTS})
-        if(NOT TARGET @LIBNAME@-${_COMPONENT})
-            include("@PROJECT_BINARY_DIR@/@PROJECT_NAME@-${_COMPONENT}.cmake")
-        endif()
-        # set the library
-        if(NOT @PROJECT_NAME@_LIBRARY)
-            set(@PROJECT_NAME@_LIBRARY @LIBNAME@-${_COMPONENT})
-        endif()
-    endforeach()
-
-    set(PROJECT_DEPENDS ${@PROJECT_NAME@_LIBRARY})
-
+    set(_ptl_preferred_link "static")
 endif()
 
-
-#------------------------------------------------------------------------------#
-# internal PTL include directory
-#
-set(@PROJECT_NAME@_INCLUDE_DIRS ${@PROJECT_NAME@_INCLUDE_DIR})
-
-
-#------------------------------------------------------------------------------#
-#   Linking type
-#
-if(WIN32)
-    add_definitions(-D_PTL_ARCHIVE)
+# Override if user has specified "static" alone as a component. Earlier check handles case
+# that components are REQUIRED. Only change preferred link only changed if available to
+# cover OPTIONAL case
+if(("static" IN_LIST PTL_FIND_COMPONENTS) AND NOT ("shared" IN_LIST PTL_FIND_COMPONENTS))
+    if(PTL_static_FOUND)
+        set(_ptl_preferred_link "static")
+    endif()
 endif()
 
-
-#------------------------------------------------------------------------------#
-#   link target
+# -------------------------------------------------------------------------------------- #
+# Set old style variables for include/linking
 #
-set(@PROJECT_NAME@_LIBRARIES ${@PROJECT_NAME@_LIBRARY})
+set(PTL_INCLUDE_DIRS ${PTL_INCLUDE_DIR})
+set(PTL_LIBRARIES PTL::ptl-${_ptl_preferred_link})
 
-
-#------------------------------------------------------------------------------#
-#   Definitions
+# -------------------------------------------------------------------------------------- #
+# Create "transparent" link target that interfaces to shared/static on basis of
+# availability or requested linking option
 #
-set(PTL_USE_TBB @PTL_USE_TBB@)
-set(PTL_USE_GPU @PTL_USE_GPU@)
-set(PTL_USE_CUDA @PTL_USE_CUDA@)
-
-if(NOT _PTL_INSTALL_TREE)
-    list(APPEND @PROJECT_NAME@_LIBRARIES "@EXTERNAL_LIBRARIES@")
+if(NOT TARGET PTL::ptl)
+    add_library(PTL::ptl INTERFACE IMPORTED)
+    target_link_libraries(PTL::ptl INTERFACE ${PTL_LIBRARIES})
+    # Needed to distinguish DLL/Lib, but symbol never used in code. Should also be a
+    # public symbol of ptl-static
+    if(WIN32)
+        target_compile_definitions(PTL::ptl INTERFACE _PTL_ARCHIVE)
+    endif()
 endif()
-

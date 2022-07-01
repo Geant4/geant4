@@ -73,7 +73,7 @@ public :
     virtual void InitialiseToPrint(const G4MolecularConfiguration*) ;
     virtual G4double GetReactionRadius(const G4MolecularConfiguration*,
                                        const G4MolecularConfiguration*);
-    virtual G4double GetReactionRadius(const G4int);
+    virtual G4double GetReactionRadius(const G4int&);
 
     virtual G4bool FindReaction(const G4Track&,
                                 const G4Track&,

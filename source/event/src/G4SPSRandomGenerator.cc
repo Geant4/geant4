@@ -50,7 +50,7 @@
 
 G4SPSRandomGenerator::bweights_t::bweights_t()
 {
-  for ( G4int i=0 ; i<9 ; ++i )  { w[i] = 1; }
+  for (double & i : w)  { i = 1; }
 }
 
 G4double& G4SPSRandomGenerator::bweights_t::operator [](const G4int i)
@@ -246,93 +246,92 @@ G4double G4SPSRandomGenerator::GenRandX()
 {
   if (verbosityLevel >= 1)
     G4cout << "In GenRandX" << G4endl;
-  if (XBias == false)
+  if (!XBias)
   {
     // X is not biased
     G4double rndm = G4UniformRand();
     return (rndm);
   }
-  else
+  
+  // X is biased
+  // This is shared among threads, and we need to initialize
+  // only once. Multiple instances of this class can exists
+  // so we rely on a class-private, thread-private variable
+  // to check if we need an initialiation. We do not use a lock here
+  // because the Boolean on which we check is thread private
+  //
+  if ( !local_IPDFXBias.Get().val )
   {
-    // X is biased
-    // This is shared among threads, and we need to initialize
-    // only once. Multiple instances of this class can exists
-    // so we rely on a class-private, thread-private variable
-    // to check if we need an initialiation. We do not use a lock here
-    // because the Boolean on which we check is thread private
+    // For time that this thread arrived, here
+    // Now two cases are possible: it is the first time
+    // ANY thread has ever initialized this.
+    // Now we need a lock. In any case, the thread local
+    // variable can now be set to true
     //
-    if ( local_IPDFXBias.Get().val == false )
+    local_IPDFXBias.Get().val = true;
+    G4AutoLock l(&mutex);
+    if (!IPDFXBias)
     {
-      // For time that this thread arrived, here
-      // Now two cases are possible: it is the first time
-      // ANY thread has ever initialized this.
-      // Now we need a lock. In any case, the thread local
-      // variable can now be set to true
+      // IPDF has not been created, so create it
       //
-      local_IPDFXBias.Get().val = true;
-      G4AutoLock l(&mutex);
-      if (IPDFXBias == false)
+      G4double bins[1024], vals[1024], sum;
+      G4int ii;
+      G4int maxbin = G4int(XBiasH.GetVectorLength());
+      bins[0] = XBiasH.GetLowEdgeEnergy(std::size_t(0));
+      vals[0] = XBiasH(std::size_t(0));
+      sum = vals[0];
+      for (ii=1; ii<maxbin; ++ii)
       {
-        // IPDF has not been created, so create it
-        //
-        G4double bins[1024], vals[1024], sum;
-        G4int ii;
-        G4int maxbin = G4int(XBiasH.GetVectorLength());
-        bins[0] = XBiasH.GetLowEdgeEnergy(std::size_t(0));
-        vals[0] = XBiasH(std::size_t(0));
-        sum = vals[0];
-        for (ii=1; ii<maxbin; ++ii)
-        {
-          bins[ii] = XBiasH.GetLowEdgeEnergy(std::size_t(ii));
-          vals[ii] = XBiasH(std::size_t(ii)) + vals[ii - 1];
-          sum = sum + XBiasH(std::size_t(ii));
-        }
-
-        for (ii=0; ii<maxbin; ++ii)
-        {
-          vals[ii] = vals[ii] / sum;
-          IPDFXBiasH.InsertValues(bins[ii], vals[ii]);
-        }
-        IPDFXBias = true;
+        bins[ii] = XBiasH.GetLowEdgeEnergy(std::size_t(ii));
+        vals[ii] = XBiasH(std::size_t(ii)) + vals[ii - 1];
+        sum = sum + XBiasH(std::size_t(ii));
       }
-    }
-    
-    // IPDF has been create so carry on
 
-    G4double rndm = G4UniformRand();
-
-    // Calculate the weighting: Find the bin that the determined
-    // rndm is in and the weigthing will be the difference in the
-    // natural probability (from the x-axis) divided by the
-    // difference in the biased probability (the area)
-    //
-    std::size_t numberOfBin = IPDFXBiasH.GetVectorLength();
-    G4int biasn1 = 0;
-    G4int biasn2 = numberOfBin / 2;
-    G4int biasn3 = numberOfBin - 1;
-    while (biasn1 != biasn3 - 1)
-    {
-      if (rndm > IPDFXBiasH(biasn2))
-        { biasn1 = biasn2; }
-      else
-        { biasn3 = biasn2; }
-      biasn2 = biasn1 + (biasn3 - biasn1 + 1) / 2;
+      for (ii=0; ii<maxbin; ++ii)
+      {
+        vals[ii] = vals[ii] / sum;
+        IPDFXBiasH.InsertValues(bins[ii], vals[ii]);
+      }
+      IPDFXBias = true;
     }
-
-    // Retrieve the areas and then the x-axis values
-    //
-    bweights_t& w = bweights.Get();
-    w[0] = IPDFXBiasH(biasn2) - IPDFXBiasH(biasn2 - 1);
-    G4double xaxisl = IPDFXBiasH.GetLowEdgeEnergy(std::size_t(biasn2 - 1));
-    G4double xaxisu = IPDFXBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
-    G4double NatProb = xaxisu - xaxisl;
-    w[0] = NatProb / w[0];
-    if (verbosityLevel >= 1)
-    {
-      G4cout << "X bin weight " << w[0] << " " << rndm << G4endl;
-    }
-    return (IPDFXBiasH.GetEnergy(rndm));
   }
+  
+  // IPDF has been create so carry on
+
+  G4double rndm = G4UniformRand();
+
+  // Calculate the weighting: Find the bin that the determined
+  // rndm is in and the weigthing will be the difference in the
+  // natural probability (from the x-axis) divided by the
+  // difference in the biased probability (the area)
+  //
+  std::size_t numberOfBin = IPDFXBiasH.GetVectorLength();
+  G4int biasn1 = 0;
+  G4int biasn2 = numberOfBin / 2;
+  G4int biasn3 = numberOfBin - 1;
+  while (biasn1 != biasn3 - 1)
+  {
+    if (rndm > IPDFXBiasH(biasn2))
+      { biasn1 = biasn2; }
+    else
+      { biasn3 = biasn2; }
+    biasn2 = biasn1 + (biasn3 - biasn1 + 1) / 2;
+  }
+
+  // Retrieve the areas and then the x-axis values
+  //
+  bweights_t& w = bweights.Get();
+  w[0] = IPDFXBiasH(biasn2) - IPDFXBiasH(biasn2 - 1);
+  G4double xaxisl = IPDFXBiasH.GetLowEdgeEnergy(std::size_t(biasn2 - 1));
+  G4double xaxisu = IPDFXBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
+  G4double NatProb = xaxisu - xaxisl;
+  w[0] = NatProb / w[0];
+  if (verbosityLevel >= 1)
+  {
+    G4cout << "X bin weight " << w[0] << " " << rndm << G4endl;
+  }
+  return (IPDFXBiasH.GetEnergy(rndm));
+ 
 }
 
 G4double G4SPSRandomGenerator::GenRandY()
@@ -342,18 +341,17 @@ G4double G4SPSRandomGenerator::GenRandY()
     G4cout << "In GenRandY" << G4endl;
   }
 
-  if (YBias == false)  // Y is not biased
+  if (!YBias)  // Y is not biased
   {
     G4double rndm = G4UniformRand();
     return (rndm);
   }
-  else                 // Y is biased
-  {
-    if ( local_IPDFYBias.Get().val == false )
+                  // Y is biased
+      if ( !local_IPDFYBias.Get().val )
     {
       local_IPDFYBias.Get().val = true;
       G4AutoLock l(&mutex);
-      if (IPDFYBias == false)
+      if (!IPDFYBias)
       {
         // IPDF has not been created, so create it
         //
@@ -405,7 +403,7 @@ G4double G4SPSRandomGenerator::GenRandY()
       G4cout << "Y bin weight " << w[1] << " " << rndm << G4endl;
     }
     return (IPDFYBiasH.GetEnergy(rndm));
-  }
+ 
 }
 
 G4double G4SPSRandomGenerator::GenRandZ()
@@ -415,18 +413,17 @@ G4double G4SPSRandomGenerator::GenRandZ()
     G4cout << "In GenRandZ" << G4endl;
   }
 
-  if (ZBias == false)  // Z is not biased
+  if (!ZBias)  // Z is not biased
   {
     G4double rndm = G4UniformRand();
     return (rndm);
   }
-  else                 // Z is biased
-  {
-    if ( local_IPDFZBias.Get().val == false )
+                  // Z is biased
+      if ( !local_IPDFZBias.Get().val )
     {
       local_IPDFZBias.Get().val = true;
       G4AutoLock l(&mutex);
-      if (IPDFZBias == false)
+      if (!IPDFZBias)
       {
         // IPDF has not been created, so create it
         //
@@ -478,7 +475,7 @@ G4double G4SPSRandomGenerator::GenRandZ()
       G4cout << "Z bin weight " << w[2] << " " << rndm << G4endl;
     }
     return (IPDFZBiasH.GetEnergy(rndm));
-  }
+ 
 }
 
 G4double G4SPSRandomGenerator::GenRandTheta()
@@ -489,18 +486,17 @@ G4double G4SPSRandomGenerator::GenRandTheta()
     G4cout << "Verbosity " << verbosityLevel << G4endl;
   }
 
-  if (ThetaBias == false)  // Theta is not biased
+  if (!ThetaBias)  // Theta is not biased
   {
     G4double rndm = G4UniformRand();
     return (rndm);
   }
-  else                     // Theta is biased
-  {
-    if ( local_IPDFThetaBias.Get().val == false )
+                      // Theta is biased
+      if ( !local_IPDFThetaBias.Get().val )
     {
       local_IPDFThetaBias.Get().val = true;
       G4AutoLock l(&mutex);
-      if (IPDFThetaBias == false)
+      if (!IPDFThetaBias)
       {
         // IPDF has not been created, so create it
         //
@@ -552,7 +548,7 @@ G4double G4SPSRandomGenerator::GenRandTheta()
       G4cout << "Theta bin weight " << w[3] << " " << rndm << G4endl;
     }
     return (IPDFThetaBiasH.GetEnergy(rndm));
-  }
+ 
 }
 
 G4double G4SPSRandomGenerator::GenRandPhi()
@@ -562,18 +558,17 @@ G4double G4SPSRandomGenerator::GenRandPhi()
     G4cout << "In GenRandPhi" << G4endl;
   }
 
-  if (PhiBias == false)  // Phi is not biased
+  if (!PhiBias)  // Phi is not biased
   {
     G4double rndm = G4UniformRand();
     return (rndm);
   }
-  else                   // Phi is biased
-  {
-    if ( local_IPDFPhiBias.Get().val == false )
+                    // Phi is biased
+      if ( !local_IPDFPhiBias.Get().val )
     {
       local_IPDFPhiBias.Get().val = true;
       G4AutoLock l(&mutex);
-      if (IPDFPhiBias == false)
+      if (!IPDFPhiBias)
       {
         // IPDF has not been created, so create it
         //
@@ -625,7 +620,7 @@ G4double G4SPSRandomGenerator::GenRandPhi()
       G4cout << "Phi bin weight " << w[4] << " " << rndm << G4endl;
     }
     return (IPDFPhiBiasH.GetEnergy(rndm));
-  }
+ 
 }
 
 G4double G4SPSRandomGenerator::GenRandEnergy()
@@ -635,18 +630,17 @@ G4double G4SPSRandomGenerator::GenRandEnergy()
     G4cout << "In GenRandEnergy" << G4endl;
   }
 
-  if (EnergyBias == false)  // Energy is not biased
+  if (!EnergyBias)  // Energy is not biased
   {
     G4double rndm = G4UniformRand();
     return (rndm);
   }
-  else                      // Energy is biased
-  {
-    if ( local_IPDFEnergyBias.Get().val == false )
+                       // Energy is biased
+      if ( !local_IPDFEnergyBias.Get().val )
     {
       local_IPDFEnergyBias.Get().val = true;
       G4AutoLock l(&mutex);
-      if (IPDFEnergyBias == false)
+      if (!IPDFEnergyBias)
       {
         // IPDF has not been created, so create it
         //
@@ -698,7 +692,7 @@ G4double G4SPSRandomGenerator::GenRandEnergy()
       G4cout << "Energy bin weight " << w[5] << " " << rndm << G4endl;
     }
     return (IPDFEnergyBiasH.GetEnergy(rndm));
-  }
+ 
 }
 
 G4double G4SPSRandomGenerator::GenRandPosTheta()
@@ -709,18 +703,17 @@ G4double G4SPSRandomGenerator::GenRandPosTheta()
     G4cout << "Verbosity " << verbosityLevel << G4endl;
   }
 
-  if (PosThetaBias == false)  // Theta is not biased
+  if (!PosThetaBias)  // Theta is not biased
   {
     G4double rndm = G4UniformRand();
     return (rndm);
   }
-  else                        // Theta is biased
-  {
-    if ( local_IPDFPosThetaBias.Get().val == false )
+                         // Theta is biased
+      if ( !local_IPDFPosThetaBias.Get().val )
     {
       local_IPDFPosThetaBias.Get().val = true;
       G4AutoLock l(&mutex);
-      if (IPDFPosThetaBias == false)
+      if (!IPDFPosThetaBias)
       {
         // IPDF has not been created, so create it
         //
@@ -772,7 +765,7 @@ G4double G4SPSRandomGenerator::GenRandPosTheta()
       G4cout << "PosTheta bin weight " << w[6] << " " << rndm << G4endl;
     }
     return (IPDFPosThetaBiasH.GetEnergy(rndm));
-  }
+ 
 }
 
 G4double G4SPSRandomGenerator::GenRandPosPhi()
@@ -782,18 +775,17 @@ G4double G4SPSRandomGenerator::GenRandPosPhi()
     G4cout << "In GenRandPosPhi" << G4endl;
   }
 
-  if (PosPhiBias == false)  // PosPhi is not biased
+  if (!PosPhiBias)  // PosPhi is not biased
   {
     G4double rndm = G4UniformRand();
     return (rndm);
   }
-  else                      // PosPhi is biased
-  {
-    if (local_IPDFPosPhiBias.Get().val == false )
+                       // PosPhi is biased
+      if (!local_IPDFPosPhiBias.Get().val )
     {
       local_IPDFPosPhiBias.Get().val = true;
       G4AutoLock l(&mutex);
-      if (IPDFPosPhiBias == false)
+      if (!IPDFPosPhiBias)
       {
         // IPDF has not been created, so create it
         //
@@ -845,5 +837,5 @@ G4double G4SPSRandomGenerator::GenRandPosPhi()
       G4cout << "PosPhi bin weight " << w[7] << " " << rndm << G4endl;
     }
     return (IPDFPosPhiBiasH.GetEnergy(rndm));
-  }
+ 
 }

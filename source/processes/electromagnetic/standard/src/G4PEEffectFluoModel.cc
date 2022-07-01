@@ -80,8 +80,7 @@ G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PEEffectFluoModel::~G4PEEffectFluoModel()
-{}
+G4PEEffectFluoModel::~G4PEEffectFluoModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -190,7 +189,7 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
       G4int index = couple->GetIndex();
       if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
 	G4int Z = G4lrint(anElement->GetZ());
-	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
+	auto as = (G4AtomicShellEnumerator)(i);
 	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
         G4double eshell = shell->BindingEnergy();
         if(eshell > bindingEnergy && eshell <= energy) {
@@ -233,7 +232,7 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     //
     G4double elecKineEnergy = energy - bindingEnergy;
     if (elecKineEnergy > fminimalEnergy) {
-      G4DynamicParticle* aParticle = new G4DynamicParticle(theElectron, 
+      auto aParticle = new G4DynamicParticle(theElectron,
 	GetAngularDistribution()->SampleDirection(aDynamicPhoton, 
 						  elecKineEnergy,
 						  i, couple->GetMaterial()), 

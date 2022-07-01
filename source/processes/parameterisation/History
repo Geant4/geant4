@@ -1,20 +1,23 @@
--------------------------------------------------------------------
+# Category param History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2022-01-19 Witek Pokorski (param-V11-00-01)
+- Adding the 'flush' method to the fast simulation models.
+  This method allows to process the input buffer of the fast simulation model before
+  the end of the G4 event. It is used when particles are grouped together before the processing.
+  The 'flash' is triggered inside the event loop of G4EventManager, when the Geant4 stack is empty.
+  The fast simulation model may add secondaries to the Geant4 stack, which will then be processed
+  by Geant4.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2021-12-10 Ben Morgan (param-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 April 16, 2021 Ben Morgan (param-V10-07-00)
 - Migrate build to modular CMake API

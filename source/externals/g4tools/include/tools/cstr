@@ -56,11 +56,11 @@ inline char* str_from_buffer(const char* a_buffer,size_t a_len
     mem::increment(s_cstr().c_str());
   }
 #endif
-  char* s = (char*)::malloc(a_len+1);
-  if(s==NULL) return NULL;
-  s = ::strncpy(s,a_buffer,a_len);
-  s[a_len] = 0;
-  return s;
+  char* _s = (char*)::malloc(a_len+1);
+  if(_s==NULL) return NULL;
+  _s = ::strncpy(_s,a_buffer,a_len);
+  _s[a_len] = 0;
+  return _s;
 }
 
 inline void str_del(char*& a_cstr) {
@@ -76,33 +76,33 @@ inline void str_del(char*& a_cstr) {
 }
 
 inline char* str_new(size_t a_l = 0,char a_char = ' ') {
-  char* s = (char*)::malloc((a_l+1)*sizeof(char));
-  if(s==NULL) return NULL;
+  char* _s = (char*)::malloc((a_l+1)*sizeof(char));
+  if(_s==NULL) return NULL;
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_new : len %lu\n",a_l);
 #endif
   mem::increment(s_cstr().c_str());
 #endif
-  char* pos = s;
+  char* pos = _s;
   for(size_t c=0;c<a_l;c++,pos++) *pos = a_char;
-  *(s+a_l) = 0;
-  return s;
+  *(_s+a_l) = 0;
+  return _s;
 }
 
 inline bool str_cat(char*& a_1,const char a_c) {
   size_t l1 = ::strlen(a_1);
-  char* s = (char*)::malloc(l1+1+1);
-  if(!s) return false;
+  char* _s = (char*)::malloc(l1+1+1);
+  if(!_s) return false;
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_cat \"%s\", char %d\n",a_1,a_c);
 #endif
   mem::increment(s_cstr().c_str());
 #endif
-  ::memcpy(s,a_1,l1);
-  ::memcpy(s+l1,&a_c,1);
-  *(s+l1+1) = 0;
+  ::memcpy(_s,a_1,l1);
+  ::memcpy(_s+l1,&a_c,1);
+  *(_s+l1+1) = 0;
   ::free(a_1);
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
@@ -110,24 +110,24 @@ inline bool str_cat(char*& a_1,const char a_c) {
 #endif
   mem::decrement(s_cstr().c_str());
 #endif
-  a_1 = s;
+  a_1 = _s;
   return true;
 }
 
 inline bool str_cat(char*& a_1,const char* a_2) {
   size_t l1 = ::strlen(a_1);
   size_t l2 = ::strlen(a_2);
-  char* s = (char*)::malloc(l1+l2+1);
-  if(!s) return false;
+  char* _s = (char*)::malloc(l1+l2+1);
+  if(!_s) return false;
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_cat \"%s\" \"%s\"\n",a_1,a_2);
 #endif
   mem::increment(s_cstr().c_str());
 #endif
-  ::memcpy(s,a_1,l1);
-  ::memcpy(s+l1,a_2,l2);
-  *(s+l1+l2) = 0;
+  ::memcpy(_s,a_1,l1);
+  ::memcpy(_s+l1,a_2,l2);
+  *(_s+l1+l2) = 0;
   ::free(a_1);
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
@@ -135,7 +135,7 @@ inline bool str_cat(char*& a_1,const char* a_2) {
 #endif
   mem::decrement(s_cstr().c_str());
 #endif
-  a_1 = s;
+  a_1 = _s;
   return true;
 }
 
@@ -163,8 +163,8 @@ inline char* str_sub(const char* a_s,
   } else {
     ls = l-a_pos;
   }
-  char* s = (char*)::malloc(ls+1);
-  if(!s) return 0;
+  char* _s = (char*)::malloc(ls+1);
+  if(!_s) return 0;
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_sub \"%s\"\n",a_s);
@@ -173,9 +173,9 @@ inline char* str_sub(const char* a_s,
 #endif
   //abcdefgh  l=8
   //0123456789
-  ::memcpy(s,a_s+a_pos,ls);
-  *(s+ls) = 0;
-  return s;
+  ::memcpy(_s,a_s+a_pos,ls);
+  *(_s+ls) = 0;
+  return _s;
 }
 
 inline char* str_rep(const char* a_s,unsigned int a_pos,unsigned int a_sz,const char* a_new) {
@@ -190,19 +190,19 @@ inline char* str_rep(const char* a_s,unsigned int a_pos,unsigned int a_sz,const 
   //   p
   size_t le = las-(a_pos+a_sz);
   size_t ls = a_pos+num+le;
-  char* s = (char*)::malloc(ls+1);
-  if(!s) return 0;
+  char* _s = (char*)::malloc(ls+1);
+  if(!_s) return 0;
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_rep \"%s\"\n",a_s);
 #endif
   mem::increment(s_cstr().c_str());
 #endif
-  ::memcpy(s,a_s,a_pos);
-  ::memcpy(s+a_pos,a_new,num);
-  if(le) ::memcpy(s+a_pos+num,a_s+a_pos+a_sz,le);
-  *(s+ls) = 0;
-  return s;
+  ::memcpy(_s,a_s,a_pos);
+  ::memcpy(_s+a_pos,a_new,num);
+  if(le) ::memcpy(_s+a_pos+num,a_s+a_pos+a_sz,le);
+  *(_s+ls) = 0;
+  return _s;
 }
 
 inline void str_skip(char*& a_cstr,char a_c) {
@@ -280,23 +280,23 @@ inline size_t str_lcpy(char *dst, const char *src, size_t siz) {
   // Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>.
 
   /*register*/ char* d = dst;
-  /*register*/ const char* s = src;
+  /*register*/ const char* _s = src;
   /*register*/ size_t n = siz;
 
   // Copy as many bytes as will fit :
   if (n != 0 && --n != 0) {
     do {
-      if ((*d++ = *s++) == 0) break;
+      if ((*d++ = *_s++) == 0) break;
     } while (--n != 0);
   }
 
   // Not enough room in dst, add NUL and traverse rest of src :
   if (n == 0) {
     if (siz != 0) *d = '\0';  // NUL-terminate dst.
-    while (*s++);
+    while (*_s++);
   }
 
-  return(s - src - 1); // count does not include NUL.
+  return(_s - src - 1); // count does not include NUL.
 }
 
 inline size_t str_lcat(char *dst, const char *src, size_t siz) {
@@ -312,7 +312,7 @@ inline size_t str_lcat(char *dst, const char *src, size_t siz) {
   // Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>.
 
   /*register*/ char* d = dst;
-  /*register*/ const char* s = src;
+  /*register*/ const char* _s = src;
   /*register*/ size_t n = siz;
   size_t dlen;
 
@@ -321,18 +321,18 @@ inline size_t str_lcat(char *dst, const char *src, size_t siz) {
   dlen = d - dst;
   n = siz - dlen;
 
-  if (n == 0) return(dlen + strlen(s));
+  if (n == 0) return(dlen + strlen(_s));
 
-  while (*s != '\0') {
+  while (*_s != '\0') {
     if (n != 1) {
-      *d++ = *s;
+      *d++ = *_s;
       n--;
     }
-    s++;
+    _s++;
   }
   *d = '\0';
 
-  return(dlen + (s - src)); // count does not include NUL.
+  return(dlen + (_s - src)); // count does not include NUL.
 }
 
 template <class VECTOR>

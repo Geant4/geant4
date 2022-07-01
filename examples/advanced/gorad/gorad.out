@@ -1,0 +1,242 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+/event/verbose 0
+/tracking/verbose 0
+/process/verbose 0
+#######################################################
+# Geometry of the simulation
+#######################################################
+/gorad/geometry/selectGDML simpleCone.gdml
+##/gorad/geometry/selectGDML orion.gdml
+#######################################################
+# Define geometry importance biasing
+#######################################################
+/gorad/bias/geomImportance 5
+#######################################################
+# Physics of the simulation
+#######################################################
+/gorad/physics/EM Op_0
+/gorad/physics/Hadronic FTFP_BERT
+/gorad/physics/cuts/setParticleCut gamma 1.0 mm
+/gorad/physics/cuts/setParticleCut e- 1.0 mm
+/gorad/physics/cuts/setParticleCut e+ 1.0 mm
+/gorad/physics/cuts/setParticleCut proton 1.0 mm
+#######################################################
+# GORAD and Geant4 initialization
+#######################################################
+/gorad/initialize
+G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
+
+
+Creating FTFP_BERT physics list ################ 1
+Adding G4GenericBiasingPhysics for GeomBias ################ 
+Using 
+G4GDML: Reading 'simpleCone.gdml'...
+G4GDML: VALIDATION ERROR! ID attribute 'G4_Ni' is referenced but was never declared at line: 48
+G4GDML: VALIDATION ERROR! ID attribute 'G4_Fe' is referenced but was never declared at line: 48
+G4GDML: VALIDATION ERROR! ID attribute 'G4_Cr' is referenced but was never declared at line: 48
+G4GDML: VALIDATION ERROR! ID attribute 'G4_AIR' is referenced but was never declared at line: 48
+G4GDML: VALIDATION ERROR! ID attribute 'G4_Galactic' is referenced but was never declared at line: 48
+G4GDML: Reading definitions...
+G4GDML: Reading materials...
+G4GDML: Reading solids...
+G4GDML: Reading structure...
+G4GDML: Reading setup...
+G4GDML: Reading 'simpleCone.gdml' done!
+Stripping off GDML names of materials, solids and volumes ...
+############ Radius of the outermost biasing sphere is set to 2404 (mm)
+--- G4CoupledTransportation is used 
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+#######################################################
+# Selection of primary particle source
+#######################################################
+/gorad/source/define proton King.spec LW
+################ Radius of the GPS sphere is set to 2944.9 (mm)
+/gps/pos/shape Sphere
+/gps/pos/centre 0 0 0 mm
+/gps/pos/radius 2944.9 mm
+/gps/pos/type Surface
+/gps/number 1
+/gps/particle proton
+/gps/ang/type cos
+/gps/ang/maxtheta 90.0 deg
+/gps/ang/mintheta 0.0 deg
+/gps/ene/type LW
+/gps/hist/type arb
+/gps/hist/point 1.000000000000000021e-02 6.250767474401727752e-02
+/gps/hist/point 2.999999999999999889e-02 6.246034093579485441e-02
+/gps/hist/point 5.999999999999999778e-02 6.239272120976281644e-02
+/gps/hist/point 1.000000000000000056e-01 6.229805359331795633e-02
+/gps/hist/point 2.999999999999999889e-01 6.183147748369688390e-02
+/gps/hist/point 5.999999999999999778e-01 6.113499430556688236e-02
+/gps/hist/point 1.000000000000000000e+00 6.021536603153114509e-02
+/gps/hist/point 1.500000000000000000e+00 5.909287857939928695e-02
+/gps/hist/point 2.000000000000000000e+00 5.798391507247384336e-02
+/gps/hist/point 3.000000000000000000e+00 5.584036975725818752e-02
+/gps/hist/point 4.000000000000000000e+00 5.377120614067778387e-02
+/gps/hist/point 6.000000000000000000e+00 4.986278597602589874e-02
+/gps/hist/point 8.000000000000000000e+00 4.623836866070858698e-02
+/gps/hist/point 1.000000000000000000e+01 4.287766827691622679e-02
+/gps/hist/point 1.400000000000000000e+01 3.687303660527112281e-02
+/gps/hist/point 1.700000000000000000e+01 3.292404460500001490e-02
+/gps/hist/point 2.000000000000000000e+01 2.940105687873076010e-02
+/gps/hist/point 2.500000000000000000e+01 2.434310137153420858e-02
+/gps/hist/point 3.000000000000000000e+01 2.015744033015096429e-02
+/gps/hist/point 3.500000000000000000e+01 1.669531035731054366e-02
+/gps/hist/point 4.000000000000000000e+01 1.382147200094886730e-02
+/gps/hist/point 5.000000000000000000e+01 9.480285589691932191e-03
+/gps/hist/point 6.000000000000000000e+01 6.498255671678992464e-03
+/gps/hist/point 7.000000000000000000e+01 4.455463748251080672e-03
+/gps/hist/point 8.000000000000000000e+01 3.055059222127543082e-03
+/gps/hist/point 9.000000000000000000e+01 2.094859112472582593e-03
+/gps/hist/point 1.000000000000000000e+02 1.436242980920518324e-03
+/gps/hist/point 1.500000000000000000e+02 2.176678980971350462e-04
+/gps/hist/point 2.000000000000000000e+02 3.299166433103205585e-05
+/gps/hist/point 2.500000000000000000e+02 5.000478740069318830e-06
+/gps/hist/point 3.000000000000000000e+02 7.580171288191623523e-07
+/gps/hist/point 3.500000000000000000e+02 1.148859145284350496e-07
+/gps/hist/point 4.000000000000000000e+02 1.740531748064695778e-08
+/gps/hist/point 5.000000000000000000e+02 3.998354400274493587e-10
+/gps/hist/point 6.000000000000000000e+02 9.182758795150959465e-12
+/gps/hist/point 7.000000000000000000e+02 2.109735452199631176e-13
+/gps/hist/point 8.000000000000000000e+02 4.845629567455947928e-15
+/gps/hist/point 9.000000000000000000e+02 1.113020690487369669e-16
+/gps/hist/point 1.000000000000000000e+03 2.556701841271411993e-18
+/gps/hist/inter Lin
+##/gorad/source/define proton Trap.spec LW
+##/control/execute gps_point.mac
+##/control/execute gps_focus.mac
+#######################################################
+# Define probes and scorers
+#######################################################
+/score/create/probe Probes 5 cm
+/score/probe/material G4_WATER
+/score/probe/locate 0 0 0 cm
+/score/quantity/doseDeposit dose mGy
+/score/quantity/volumeFlux volFlx
+/score/quantity/volumeFlux protonFlux
+/score/filter/particle protonFilter proton
+/score/close
+#######################################################
+# Define histograms for batch mode
+#######################################################
+/control/doifBatch /gorad/analysis/verbose 0
+/gorad/analysis/verbose 0
+/control/doifBatch /gorad/analysis/file KingSpecBias
+/gorad/analysis/file KingSpecBias
+/control/doifBatch /gorad/analysis/1D/primary primPE false
+/gorad/analysis/1D/primary primPE false
+/control/doifBatch /gorad/analysis/1D/config 100 1.0 2.0e3 MeV log
+/gorad/analysis/1D/config 100 1.0 2.0e3 MeV log
+/control/doifBatch /gorad/analysis/1D/yaxisLog true
+/gorad/analysis/1D/yaxisLog true
+/control/doifBatch /gorad/analysis/1D/primary Weighted true
+/gorad/analysis/1D/primary Weighted true
+Previously opened histogram <99999> is closed.
+/control/doifBatch /gorad/analysis/1D/config 100 1.0 2.0e3 MeV log
+/gorad/analysis/1D/config 100 1.0 2.0e3 MeV log
+/control/doifBatch /gorad/analysis/1D/yaxisLog true
+/gorad/analysis/1D/yaxisLog true
+/control/doifBatch /gorad/analysis/1D/spectrum Probes volFlx
+/gorad/analysis/1D/spectrum Probes volFlx
+Previously opened histogram <99998> is closed.
+/control/doifBatch /gorad/analysis/1D/config 100 1.0e-2 2.0e3 MeV log
+/gorad/analysis/1D/config 100 1.0e-2 2.0e3 MeV log
+/control/doifBatch /gorad/analysis/1D/yaxisLog true
+/gorad/analysis/1D/yaxisLog true
+/control/doifBatch /gorad/analysis/1D/spectrum Probes protonFlux
+/gorad/analysis/1D/spectrum Probes protonFlux
+Previously opened histogram <10101> is closed.
+/control/doifBatch /gorad/analysis/1D/config 100 1.0e-2 2.0e3 MeV log
+/gorad/analysis/1D/config 100 1.0e-2 2.0e3 MeV log
+/control/doifBatch /gorad/analysis/1D/yaxisLog true
+/gorad/analysis/1D/yaxisLog true
+/control/doifBatch /gorad/analysis/plot -1
+/gorad/analysis/plot -1
+/control/doifBatch /analysis/plot/setLayout 1 2
+/analysis/plot/setLayout 1 2
+#######################################################
+# Run for batch mode
+#######################################################
+/control/doifBatch /run/eventModulo 0 1
+/run/eventModulo 0 1
+*** /run/eventModulo command is issued in sequential mode.
+Command is ignored.
+/control/doifBatch /run/beamOn 100000
+/run/beamOn 100000
+/run/geometryModified
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : STAINLESS-STEEL
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  20.8224 keV    e-  1.30828 MeV    e+  1.23589 MeV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes
+ Material : G4_WATER
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.93547 keV    e-  351.353 keV    e+  341.657 keV proton 100 keV
+ Region(s) which use this couple : 
+    Probes_region
+
+==================================================================
+
+### Run 0 starts.
+ Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=148.390000s Real=149.772271s Sys=0.020000s
+/control/doifBatch /score/dumpAllQuantitiesToFile Probes Probes.csv
+/score/dumpAllQuantitiesToFile Probes Probes.csv
+# Mesh or volume name: Probes  -- # Primitive scorer name: dose
+  bin 0,0,0 : statistical error 30.6435(%)
+   to reduce the statistical error below 10%, increase number of events approximately 9.39023 times.
+# Mesh or volume name: Probes  -- # Primitive scorer name: protonFlux
+  bin 0,0,0 : statistical error 29.4177(%)
+   to reduce the statistical error below 10%, increase number of events approximately 8.65399 times.
+# Mesh or volume name: Probes  -- # Primitive scorer name: volFlx
+  bin 0,0,0 : statistical error 25.4326(%)
+   to reduce the statistical error below 10%, increase number of events approximately 6.46819 times.
+G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 1.4 MB
+============================================================
+RunManagerKernel is deleted. Good bye :)

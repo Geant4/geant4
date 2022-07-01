@@ -173,7 +173,7 @@ G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   tlimit                 = 1.e+10*mm;
   presafety              = 0.*mm;
   //
-  particle               = 0;
+  particle               = nullptr;
   theManager             = G4LossTableManager::Instance();
   firstStep              = true;
   currentKinEnergy       = 0.0;

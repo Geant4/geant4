@@ -155,6 +155,13 @@ private:
   G4DNARuddIonisationModel & operator=(const  G4DNARuddIonisationModel &right);
   G4DNARuddIonisationModel(const  G4DNARuddIonisationModel&);
 
+  // Reusable particle definitions
+  G4ParticleDefinition* protonDef;
+  G4ParticleDefinition* hydrogenDef;
+  G4ParticleDefinition* alphaPlusPlusDef;
+  G4ParticleDefinition* alphaPlusDef;
+  G4ParticleDefinition* heliumDef;
+  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

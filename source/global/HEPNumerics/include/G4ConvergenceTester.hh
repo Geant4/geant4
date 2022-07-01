@@ -109,8 +109,8 @@ class G4ConvergenceTester
     void calc_stat_history();
     void check_stat_history(std::ostream& out = G4cout);
     G4double calc_Pearson_r(G4int,std::vector<G4double>,std::vector<G4double>);
-    G4bool is_monotonically_decrease(std::vector<G4double>);
-    void calc_slope_fit(std::vector<G4double>);
+    G4bool is_monotonically_decrease(const std::vector<G4double>&);
+    void calc_slope_fit(const std::vector<G4double>&);
     G4double slope_fitting_function(std::vector<G4double>);
 
   private:

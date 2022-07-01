@@ -1,0 +1,97 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Qt_glarea
+#define toolx_Qt_glarea
+
+#include "../sg/GL_viewer"
+
+#include <QtOpenGL/qgl.h>
+#include <QtGui/qevent.h>
+
+#include <tools/sg/device_interactor>
+
+namespace toolx {
+namespace Qt {
+
+class glarea : public QGLWidget {
+  typedef QGLWidget parent;
+public:
+  virtual void initialieGL() {}
+  virtual void resizeGL(int a_w,int a_h){
+    //::printf("debug : resize : %d %d\n",a_w,a_h);
+#if QT_VERSION < 0x050000
+#else
+    m_width = a_w;
+    m_height = a_h;
+#endif
+  }
+  //virtual void paintGL();
+  virtual void paintGL() {
+#if QT_VERSION < 0x050000
+    //::printf("debug : toolx::Qt::glarea::paintGL %d %d\n",width(),height());
+    m_viewer.set_size(width(),height());
+#else
+    //::printf("debug : toolx::Qt::glarea::paintGL %d %d\n",m_width,m_height);
+    m_viewer.set_size(m_width,m_height);
+#endif
+    m_viewer.render();
+  }
+
+  virtual void keyPressEvent(QKeyEvent* a_event) {
+    if(!m_interactor) return;
+    tools::sg::key_down_event event(convert(a_event->key()));
+    m_interactor->key_press(event);
+  }
+  virtual void keyReleaseEvent(QKeyEvent* a_event) {
+    if(!m_interactor) return;
+    tools::sg::key_up_event event(convert(a_event->key()));
+    m_interactor->key_release(event);
+  }
+  virtual void mousePressEvent(QMouseEvent* a_event) {
+    if(!m_interactor) return;
+    tools::sg::mouse_down_event event(a_event->x(),a_event->y());
+    m_interactor->mouse_press(event);
+  }
+  virtual void mouseReleaseEvent(QMouseEvent* a_event) {
+    if(!m_interactor) return;
+    tools::sg::mouse_up_event event(a_event->x(),a_event->y());
+    m_interactor->mouse_release(event);
+  }
+  virtual void mouseMoveEvent(QMouseEvent* a_event) {
+    if(!m_interactor) return;
+    tools::sg::mouse_move_event event(a_event->x(),a_event->y(),0,0,false);
+    m_interactor->mouse_move(event);
+  }
+//virtual void mouseDoubleClickEvent(QMouseEvent* a_event) {
+//  if(!m_interactor) return;
+//  tools::sg::mouse_double_click_event event(a_event->x(),a_event->y());
+//  m_interactor->mouse_double_click(event);
+//}
+  virtual void wheelEvent(QWheelEvent* a_event) {
+    if(!m_interactor) return;
+    tools::sg::wheel_rotate_event event(a_event->angleDelta().y());
+    m_interactor->wheel_rotate(event);
+  }
+
+public:
+  glarea(QWidget* a_parent,toolx::sg::GL_viewer& a_viewer):parent(a_parent),m_viewer(a_viewer),m_interactor(0){}
+  virtual ~glarea(){}
+public:
+  void set_device_interactor(tools::sg::device_interactor* a_interactor) {m_interactor = a_interactor;} //we do not have ownership.
+protected:
+  tools::key_code convert(/*Qt::Key*/int a_key) {return a_key;}
+protected:
+  toolx::sg::GL_viewer& m_viewer;
+#if QT_VERSION < 0x050000
+#else
+protected:
+  int m_width;
+  int m_height;
+#endif
+  tools::sg::device_interactor* m_interactor;
+};
+
+}}
+
+#endif

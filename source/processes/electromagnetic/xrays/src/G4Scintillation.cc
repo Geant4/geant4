@@ -209,9 +209,9 @@ void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
 
   for(size_t i = 0; i < numOfMaterials; ++i)
   {
-    G4PhysicsFreeVector* vector1 = new G4PhysicsFreeVector();
-    G4PhysicsFreeVector* vector2 = new G4PhysicsFreeVector();
-    G4PhysicsFreeVector* vector3 = new G4PhysicsFreeVector();
+    auto vector1 = new G4PhysicsFreeVector();
+    auto vector2 = new G4PhysicsFreeVector();
+    auto vector3 = new G4PhysicsFreeVector();
 
     // Retrieve vector of scintillation wavelength intensity for
     // the material from the material's optical properties table.
@@ -542,8 +542,7 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       photonPolarization = (cosp * photonPolarization + sinp * perp).unit();
 
       // Generate a new photon:
-      G4DynamicParticle* scintPhoton =
-        new G4DynamicParticle(opticalphoton, photonMomentum);
+      auto scintPhoton = new G4DynamicParticle(opticalphoton, photonMomentum);
       scintPhoton->SetPolarization(photonPolarization);
       scintPhoton->SetKineticEnergy(sampledEnergy);
 

@@ -52,7 +52,7 @@ class G4UIcommand
 {
   public:
 
-    G4UIcommand();
+    G4UIcommand() = default;
       // Dummy default constructor
 
     G4UIcommand(const char* theCommandPath, G4UImessenger* theMessenger,
@@ -94,11 +94,12 @@ class G4UIcommand
     static G4String ConvertToString(G4long longValue);
     static G4String ConvertToString(G4double doubleValue);
     static G4String ConvertToString(G4double doubleValue, const char* unitName);
-    static G4String ConvertToString(G4ThreeVector vec);
-    static G4String ConvertToString(G4ThreeVector vec, const char* unitName);
-      // Static methods for conversion from value(s) to a string.
-      // These methods are to be used by GetCurrentValues() methods
-      // of concrete messengers
+    static G4String ConvertToString(const G4ThreeVector& vec);
+    static G4String ConvertToString(const G4ThreeVector& vec,
+                                    const char* unitName);
+    // Static methods for conversion from value(s) to a string.
+    // These methods are to be used by GetCurrentValues() methods
+    // of concrete messengers
 
     static G4bool ConvertToBool(const char* st);
     static G4int ConvertToInt(const char* st);
@@ -159,14 +160,13 @@ class G4UIcommand
       // The first line of the guidance will be used as the title of the
       // command, i.e. one line list of the commands
     {
-      commandGuidance.push_back(G4String(aGuidance));
+      commandGuidance.emplace_back(aGuidance);
     }
 
     inline const G4String GetTitle() const
     {
-      return (commandGuidance.size() == 0)
-             ? G4String("...Title not available...")
-             : commandGuidance[0];
+      return (commandGuidance.empty()) ? G4String("...Title not available...")
+                                       : commandGuidance[0];
     }
 
     inline void SetToBeBroadcasted(G4bool val) { toBeBroadcasted = val; }
@@ -235,25 +235,25 @@ class G4UIcommand
     G4int IsDouble(const char* str);
     G4int ExpectExponent(const char* str);
     //  syntax nodes
-    yystype Expression(void);
-    yystype LogicalORExpression(void);
-    yystype LogicalANDExpression(void);
-    yystype EqualityExpression(void);
-    yystype RelationalExpression(void);
-    yystype AdditiveExpression(void);
-    yystype MultiplicativeExpression(void);
-    yystype UnaryExpression(void);
-    yystype PrimaryExpression(void);
+    yystype Expression();
+    yystype LogicalORExpression();
+    yystype LogicalANDExpression();
+    yystype EqualityExpression();
+    yystype RelationalExpression();
+    yystype AdditiveExpression();
+    yystype MultiplicativeExpression();
+    yystype UnaryExpression();
+    yystype PrimaryExpression();
     //  semantics routines
-    G4int Eval2(yystype arg1, G4int op, yystype arg2);
+    G4int Eval2(const yystype& arg1, G4int op, const yystype& arg2);
     G4int CompareInt(G4int arg1, G4int op, G4int arg2);
     G4int CompareLong(G4long arg1, G4int op, G4long arg2);
     G4int CompareDouble(G4double arg1, G4int op, G4double arg2);
     //  utility
-    tokenNum Yylex(void);               // returns next token
+    tokenNum Yylex();                   // returns next token
     unsigned IndexOf(const char*);      // returns the index of the var name
     unsigned IsParameter(const char*);  // returns 1 or 0
-    G4int G4UIpGetc(void);              // read one char from rangeBuf
+    G4int G4UIpGetc();                  // read one char from rangeBuf
     G4int G4UIpUngetc(G4int c);         // put back
     G4int Backslash(G4int c);
     G4int Follow(G4int expect, G4int ifyes, G4int ifno);

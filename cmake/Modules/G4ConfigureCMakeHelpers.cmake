@@ -225,7 +225,7 @@ configure_file(
 # - Generate Install Tree Configuration Files
 #-----------------------------------------------------------------------
 # Set needed variables for the install tree
-set(GEANT4_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION})
+set(GEANT4_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 # Header path for install tree is dependent on whether we have a relocatable
 # install.

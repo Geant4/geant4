@@ -78,10 +78,10 @@ G4UCNMaterialPropertiesTable::G4UCNMaterialPropertiesTable()
 
 G4UCNMaterialPropertiesTable::~G4UCNMaterialPropertiesTable()
 {
-  if (theMicroRoughnessTable)      delete theMicroRoughnessTable;
-  if (maxMicroRoughnessTable)      delete maxMicroRoughnessTable;
-  if (theMicroRoughnessTransTable) delete theMicroRoughnessTransTable;
-  if (maxMicroRoughnessTransTable) delete maxMicroRoughnessTransTable;
+  delete theMicroRoughnessTable;
+  delete maxMicroRoughnessTable;
+  delete theMicroRoughnessTransTable;
+  delete maxMicroRoughnessTransTable;
 }
 
 G4double* G4UCNMaterialPropertiesTable::GetMicroRoughnessTable ()
@@ -112,14 +112,18 @@ void G4UCNMaterialPropertiesTable::InitMicroRoughnessTables()
   G4int Nthetadim = 0;
 
   // Checks if the number of angles is available and stores it
- 
-  if (ConstPropertyExists("MR_NBTHETA"))
-     Nthetadim = G4int(GetConstProperty("MR_NBTHETA")+0.1);
+
+  if(ConstPropertyExists("MR_NBTHETA"))
+  {
+    Nthetadim = G4int(GetConstProperty("MR_NBTHETA") + 0.1);
+  }
 
   // Checks if the number of energies is available and stores it
 
-  if (ConstPropertyExists("MR_NBE"))
-     NEdim = G4int(GetConstProperty("MR_NBE")+0.1);
+  if(ConstPropertyExists("MR_NBE"))
+  {
+    NEdim = G4int(GetConstProperty("MR_NBE") + 0.1);
+  }
 
   //G4cout << "thetadim: " << Nthetadim << " , Edim: " << NEdim << G4endl;
 
@@ -127,14 +131,14 @@ void G4UCNMaterialPropertiesTable::InitMicroRoughnessTables()
   // delete old tables if existing and allocate memory for new tables
 
   if (Nthetadim*NEdim > 0) {
-     if (theMicroRoughnessTable) delete theMicroRoughnessTable;
-     theMicroRoughnessTable = new G4double[Nthetadim*NEdim];
-     if (maxMicroRoughnessTable) delete maxMicroRoughnessTable;
-     maxMicroRoughnessTable = new G4double[Nthetadim*NEdim];
-     if (theMicroRoughnessTransTable) delete theMicroRoughnessTransTable;
-     theMicroRoughnessTransTable = new G4double[Nthetadim*NEdim];
-     if (maxMicroRoughnessTransTable) delete maxMicroRoughnessTransTable;
-     maxMicroRoughnessTransTable = new G4double[Nthetadim*NEdim];
+    delete theMicroRoughnessTable;
+    theMicroRoughnessTable = new G4double[Nthetadim * NEdim];
+    delete maxMicroRoughnessTable;
+    maxMicroRoughnessTable = new G4double[Nthetadim * NEdim];
+    delete theMicroRoughnessTransTable;
+    theMicroRoughnessTransTable = new G4double[Nthetadim * NEdim];
+    delete maxMicroRoughnessTransTable;
+    maxMicroRoughnessTransTable = new G4double[Nthetadim * NEdim];
   }
 }
 
@@ -244,9 +248,10 @@ void G4UCNMaterialPropertiesTable::ComputeMicroRoughnessTables()
 G4double G4UCNMaterialPropertiesTable::
                   GetMRIntProbability(G4double theta_i, G4double Energy)
 {
-  if (!theMicroRoughnessTable) {
-     G4cout << "Do not have theMicroRoughnessTable" << G4endl;
-     return 0.;
+  if(theMicroRoughnessTable == nullptr)
+  {
+    G4cout << "Do not have theMicroRoughnessTable" << G4endl;
+    return 0.;
   }
 
   // if theta_i or energy outside the range for which the lookup table is
@@ -259,8 +264,11 @@ G4double G4UCNMaterialPropertiesTable::
   //       << " Emin: " << Emin/(1.e-9*eV) << "neV"
   //       << " Emax: " << Emax/(1.e-9*eV) << "neV" << G4endl;
 
-  if (theta_i<theta_i_min || theta_i>theta_i_max || Energy<Emin || Energy>Emax)
-     return 0.;
+  if(theta_i < theta_i_min || theta_i > theta_i_max || Energy < Emin ||
+     Energy > Emax)
+  {
+    return 0.;
+  }
 
   // Determines the nearest cell in the lookup table which contains
   // the probability
@@ -280,13 +288,19 @@ G4double G4UCNMaterialPropertiesTable::
 G4double G4UCNMaterialPropertiesTable::
                   GetMRIntTransProbability(G4double theta_i, G4double Energy)
 {
-  if (!theMicroRoughnessTransTable) return 0.;
+  if(theMicroRoughnessTransTable == nullptr)
+  {
+    return 0.;
+  }
 
   // if theta_i or energy outside the range for which the lookup table
   // is calculated, the probability is set to zero
 
-  if (theta_i<theta_i_min || theta_i>theta_i_max || Energy<Emin || Energy>Emax)
-     return 0.;
+  if(theta_i < theta_i_min || theta_i > theta_i_max || Energy < Emin ||
+     Energy > Emax)
+  {
+    return 0.;
+  }
 
   // Determines the nearest cell in the lookup table which contains
   // the probability
@@ -303,13 +317,19 @@ G4double G4UCNMaterialPropertiesTable::
 G4double G4UCNMaterialPropertiesTable::
                   GetMRMaxProbability(G4double theta_i, G4double Energy)
 {
-  if (!maxMicroRoughnessTable) return 0.;
+  if(maxMicroRoughnessTable == nullptr)
+  {
+    return 0.;
+  }
 
   // if theta_i or energy outside the range for which the lookup table
   // is calculated, the probability is set to zero
 
-  if (theta_i<theta_i_min || theta_i>theta_i_max || Energy<Emin || Energy>Emax)
-     return 0.;
+  if(theta_i < theta_i_min || theta_i > theta_i_max || Energy < Emin ||
+     Energy > Emax)
+  {
+    return 0.;
+  }
 
   // Determines the nearest cell in the lookup table which contains
   // the probability
@@ -326,36 +346,43 @@ G4double G4UCNMaterialPropertiesTable::
 void G4UCNMaterialPropertiesTable::
        SetMRMaxProbability(G4double theta_i, G4double Energy, G4double value)
 {
-  if (maxMicroRoughnessTable) {
+  if(maxMicroRoughnessTable != nullptr)
+  {
+    if(theta_i < theta_i_min || theta_i > theta_i_max || Energy < Emin ||
+       Energy > Emax)
+    {}
+    else
+    {
+      // Determines the nearest cell in the lookup table which contains
+      // the probability
 
-     if (theta_i<theta_i_min || theta_i>theta_i_max || 
-         Energy<Emin || Energy>Emax) {
-     } else {
+      G4int theta_i_pos = G4int((theta_i - theta_i_min) / theta_i_step + 0.5);
+      G4int E_pos       = G4int((Energy - Emin) / E_step + 0.5);
 
-         // Determines the nearest cell in the lookup table which contains
-         // the probability
- 
-         G4int theta_i_pos = G4int((theta_i-theta_i_min)/theta_i_step+0.5);
-         G4int E_pos = G4int((Energy-Emin)/E_step+0.5);
+      // lookup table is onedimensional (1 row), energy is in rows,
+      // theta_i in columns
 
-         // lookup table is onedimensional (1 row), energy is in rows,
-         // theta_i in columns
-
-         *(maxMicroRoughnessTable+E_pos+theta_i_pos*noE) = value;
-     }
+      *(maxMicroRoughnessTable + E_pos + theta_i_pos * noE) = value;
+    }
   }
 }
 
 G4double G4UCNMaterialPropertiesTable::
                   GetMRMaxTransProbability(G4double theta_i, G4double Energy)
 {
-  if (!maxMicroRoughnessTransTable) return 0.;
+  if(maxMicroRoughnessTransTable == nullptr)
+  {
+    return 0.;
+  }
 
   // if theta_i or energy outside the range for which the lookup table
   // is calculated, the probability is set to zero
 
-  if (theta_i<theta_i_min || theta_i>theta_i_max || Energy<Emin || Energy>Emax)
-     return 0.;
+  if(theta_i < theta_i_min || theta_i > theta_i_max || Energy < Emin ||
+     Energy > Emax)
+  {
+    return 0.;
+  }
 
   // Determines the nearest cell in the lookup table which contains
   // the probability
@@ -372,23 +399,24 @@ G4double G4UCNMaterialPropertiesTable::
 void G4UCNMaterialPropertiesTable::
      SetMRMaxTransProbability(G4double theta_i, G4double Energy, G4double value)
 {
-  if (maxMicroRoughnessTransTable) {
+  if(maxMicroRoughnessTransTable != nullptr)
+  {
+    if(theta_i < theta_i_min || theta_i > theta_i_max || Energy < Emin ||
+       Energy > Emax)
+    {}
+    else
+    {
+      // Determines the nearest cell in the lookup table which contains
+      // the probability
 
-     if (theta_i<theta_i_min || theta_i>theta_i_max ||
-         Energy<Emin || Energy>Emax) {
-     } else {
+      G4int theta_i_pos = G4int((theta_i - theta_i_min) / theta_i_step + 0.5);
+      G4int E_pos       = G4int((Energy - Emin) / E_step + 0.5);
 
-         // Determines the nearest cell in the lookup table which contains
-         // the probability
+      // lookup table is onedimensional (1 row), energy is in rows,
+      // theta_i in columns
 
-         G4int theta_i_pos = G4int((theta_i-theta_i_min)/theta_i_step+0.5);
-         G4int E_pos = G4int((Energy-Emin)/E_step+0.5);
- 
-         // lookup table is onedimensional (1 row), energy is in rows,
-         // theta_i in columns
-
-         *(maxMicroRoughnessTransTable+E_pos+theta_i_pos*noE) = value;
-     }
+      *(maxMicroRoughnessTransTable + E_pos + theta_i_pos * noE) = value;
+    }
   }
 }
 
@@ -426,8 +454,7 @@ G4bool G4UCNMaterialPropertiesTable::ConditionsValid(G4double E,
 
   // see eq. 17 of the Steyerl paper
 
-  if (2*b*k*std::cos(theta_i) < 1 && 2*b*k_l < 1) return true;
-  else return false;
+  return 2 * b * k * std::cos(theta_i) < 1 && 2 * b * k_l < 1;
 }
 
 G4bool G4UCNMaterialPropertiesTable::TransConditionsValid(G4double E,
@@ -437,7 +464,10 @@ G4bool G4UCNMaterialPropertiesTable::TransConditionsValid(G4double E,
   G4double k2   = 2*neutron_mass_c2*E      / hbarc_squared;
   G4double k_l2 = 2*neutron_mass_c2*VFermi / hbarc_squared;
 
-  if (E*(std::cos(theta_i)*std::cos(theta_i)) < VFermi) return false;
+  if(E * (std::cos(theta_i) * std::cos(theta_i)) < VFermi)
+  {
+    return false;
+  }
 
   G4double kS2 = k_l2 - k2;
 
@@ -446,8 +476,8 @@ G4bool G4UCNMaterialPropertiesTable::TransConditionsValid(G4double E,
 
   // see eq. 18 of the Steyerl paper
 
-  if (2*b*std::sqrt(kS2)*std::cos(theta_i) < 1 && 2*b*std::sqrt(k_l2) < 1) return true;
-  else return false;
+  return 2 * b * std::sqrt(kS2) * std::cos(theta_i) < 1 &&
+         2 * b * std::sqrt(k_l2) < 1;
 }
 
 void G4UCNMaterialPropertiesTable::
@@ -461,7 +491,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "Setting Microroughness Parameters...";
 
   // Removes an existing RMS roughness
-  if (ConstPropertyExists("MR_RRMS")) RemoveConstProperty("MR_RRMS");
+  if(ConstPropertyExists("MR_RRMS"))
+  {
+    RemoveConstProperty("MR_RRMS");
+  }
 
   // Adds a new RMS roughness
   AddConstProperty("MR_RRMS", bb);
@@ -469,7 +502,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "b: " << bb << G4endl;
 
   // Removes an existing correlation length
-  if (ConstPropertyExists("MR_CORRLEN")) RemoveConstProperty("MR_CORRLEN");
+  if(ConstPropertyExists("MR_CORRLEN"))
+  {
+    RemoveConstProperty("MR_CORRLEN");
+  }
 
   // Adds a new correlation length
   AddConstProperty("MR_CORRLEN", ww);
@@ -477,7 +513,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "w: " << ww << G4endl;
 
   // Removes an existing number of thetas
-  if (ConstPropertyExists("MR_NBTHETA")) RemoveConstProperty("MR_NBTHETA");
+  if(ConstPropertyExists("MR_NBTHETA"))
+  {
+    RemoveConstProperty("MR_NBTHETA");
+  }
 
   // Adds a new number of thetas
   AddConstProperty("MR_NBTHETA", (G4double)no_theta);
@@ -485,7 +524,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "no_theta: " << no_theta << G4endl;
 
   // Removes an existing number of Energies
-  if (ConstPropertyExists("MR_NBE")) RemoveConstProperty("MR_NBE");
+  if(ConstPropertyExists("MR_NBE"))
+  {
+    RemoveConstProperty("MR_NBE");
+  }
 
   // Adds a new number of Energies
   AddConstProperty("MR_NBE", (G4double)no_E);
@@ -493,7 +535,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "no_E: " << no_E << G4endl;
 
   // Removes an existing minimum theta
-  if (ConstPropertyExists("MR_THETAMIN")) RemoveConstProperty("MR_THETAMIN");
+  if(ConstPropertyExists("MR_THETAMIN"))
+  {
+    RemoveConstProperty("MR_THETAMIN");
+  }
 
   // Adds a new minimum theta
   AddConstProperty("MR_THETAMIN", theta_min);
@@ -501,7 +546,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "theta_min: " << theta_min << G4endl;
 
   // Removes an existing maximum theta
-  if (ConstPropertyExists("MR_THETAMAX")) RemoveConstProperty("MR_THETAMAX");
+  if(ConstPropertyExists("MR_THETAMAX"))
+  {
+    RemoveConstProperty("MR_THETAMAX");
+  }
 
   // Adds a new maximum theta
   AddConstProperty("MR_THETAMAX", theta_max);
@@ -509,7 +557,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "theta_max: " << theta_max << G4endl;
 
   // Removes an existing minimum energy
-  if (ConstPropertyExists("MR_EMIN")) RemoveConstProperty("MR_EMIN");
+  if(ConstPropertyExists("MR_EMIN"))
+  {
+    RemoveConstProperty("MR_EMIN");
+  }
 
   // Adds a new minimum energy
   AddConstProperty("MR_EMIN", E_min);
@@ -517,7 +568,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "Emin: " << E_min << G4endl;
 
   // Removes an existing maximum energy
-  if (ConstPropertyExists("MR_EMAX")) RemoveConstProperty("MR_EMAX");
+  if(ConstPropertyExists("MR_EMAX"))
+  {
+    RemoveConstProperty("MR_EMAX");
+  }
 
   // Adds a new maximum energy
   AddConstProperty("MR_EMAX", E_max);
@@ -525,7 +579,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "Emax: " << E_max << G4endl;
 
   // Removes an existing Theta angle number
-  if(ConstPropertyExists("MR_ANGNOTHETA"))RemoveConstProperty("MR_ANGNOTHETA");
+  if(ConstPropertyExists("MR_ANGNOTHETA"))
+  {
+    RemoveConstProperty("MR_ANGNOTHETA");
+  }
 
   // Adds a new Theta angle number
   AddConstProperty("MR_ANGNOTHETA", (G4double)AngNoTheta);
@@ -533,7 +590,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "AngNoTheta: " << AngNoTheta << G4endl;
 
   // Removes an existing Phi angle number
-  if (ConstPropertyExists("MR_ANGNOPHI")) RemoveConstProperty("MR_ANGNOPHI");
+  if(ConstPropertyExists("MR_ANGNOPHI"))
+  {
+    RemoveConstProperty("MR_ANGNOPHI");
+  }
 
   // Adds a new Phi angle number
   AddConstProperty("MR_ANGNOPHI", (G4double)AngNoPhi);
@@ -541,7 +601,10 @@ void G4UCNMaterialPropertiesTable::
   //G4cout << "AngNoPhi: " << AngNoPhi << G4endl;
 
   // Removes an existing angular cut
-  if (ConstPropertyExists("MR_ANGCUT")) RemoveConstProperty("MR_ANGCUT");
+  if(ConstPropertyExists("MR_ANGCUT"))
+  {
+    RemoveConstProperty("MR_ANGCUT");
+  }
 
   // Adds a new angle number
   AddConstProperty("MR_ANGCUT", AngularCut);

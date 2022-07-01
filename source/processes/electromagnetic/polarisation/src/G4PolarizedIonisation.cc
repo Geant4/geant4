@@ -195,7 +195,7 @@ G4double G4PolarizedIonisation::PostStepGetPhysicalInteractionLength(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4PolarizedIonisation::ComputeSaturationFactor(const G4Track& track)
 {
-  G4Material* aMaterial       = track.GetMaterial();
+  const G4Material* aMaterial = track.GetMaterial();
   G4VPhysicalVolume* aPVolume = track.GetVolume();
   G4LogicalVolume* aLVolume   = aPVolume->GetLogicalVolume();
 

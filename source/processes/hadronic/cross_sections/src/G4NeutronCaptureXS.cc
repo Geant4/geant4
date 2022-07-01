@@ -285,7 +285,7 @@ const G4String& G4NeutronCaptureXS::FindDirectoryPath()
   // check environment variable
   // build the complete string identifying the file with the data set
   if(gDataDirectory.empty()) {
-    char* path = std::getenv("G4PARTICLEXSDATA");
+    const char* path = G4FindDataDir("G4PARTICLEXSDATA");
     if (nullptr != path) {
       std::ostringstream ost;
       ost << path << "/neutron/cap";

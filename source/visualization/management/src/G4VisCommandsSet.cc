@@ -209,7 +209,8 @@ G4VisCommandSetLineWidth::G4VisCommandSetLineWidth ()
   G4bool omitable;
   fpCommand = new G4UIcmdWithADouble("/vis/set/lineWidth", this);
   fpCommand->SetGuidance
-  ("Defines line width for future \"/vis/scene/add/\" commands.");
+  ("Defines line width for future \"/vis/scene/add/\" commands."
+   "\nSee \"/vis/viewer/set/lineWidth\" for more information.");
   fpCommand->SetParameterName ("lineWidth", omitable = true);
   fpCommand->SetDefaultValue (1.);
   fpCommand->SetRange("lineWidth >= 1.");
@@ -231,11 +232,12 @@ void G4VisCommandSetLineWidth::SetNewValue (G4UIcommand*, G4String newValue)
 
   fCurrentLineWidth = fpCommand->GetNewDoubleValue(newValue);
 
-  if (verbosity >= G4VisManager::confirmations) {
+  if (verbosity >= G4VisManager::warnings) {
     G4cout <<
-    "Line width for future \"/vis/scene/add/\" commands has been set to "
-	   << fCurrentLineWidth
-	   << G4endl;
+    "Line width for *future* \"/vis/scene/add/\" commands has been set to "
+    << fCurrentLineWidth <<
+    "\nSee \"/vis/viewer/set/lineWidth\" for more information."
+    << G4endl;
   }
 }
 

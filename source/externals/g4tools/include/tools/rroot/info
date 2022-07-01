@@ -38,8 +38,8 @@ public: //iro
 
   virtual bool stream(buffer& a_buffer) {
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
     if(!Named_stream(a_buffer,fName,fTitle)) return false;
     if(!a_buffer.read(fType)) return false;
     if(!a_buffer.read(fSize)) return false;
@@ -47,16 +47,16 @@ public: //iro
     if(!a_buffer.read(fArrayDim)) return false;
     if(!a_buffer.read_fast_array<int>(fMaxIndex,5)) return false;
     if(!a_buffer.read(fTypeName)) return false;
-    return a_buffer.check_byte_count(s,c,s_store_class());
+    return a_buffer.check_byte_count(_s,_c,s_store_class());
   }
 public:
   virtual void out(std::ostream& aOut) const {
     std::string _fname;
     fullName(_fname);
-    char s[128];
-    snpf(s,sizeof(s),"  %-14s%-15s offset=%3d type=%2d %-20s",
+    char _s[128];
+    snpf(_s,sizeof(_s),"  %-14s%-15s offset=%3d type=%2d %-20s",
       fTypeName.c_str(),_fname.c_str(),fOffset,fType,fTitle.c_str());
-    aOut << s << std::endl;
+    aOut << _s << std::endl;
   }
 public:
   streamer_element()
@@ -130,13 +130,13 @@ public: //iro
     //the below code skips correctly the data in the file.
     uint32 startpos = a_buffer.length();
     short v;
-    unsigned int s,c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     if(!parent::stream(a_buffer)) return false;
 
-    a_buffer.set_offset(startpos+c+sizeof(unsigned int));
-    if(!a_buffer.check_byte_count(s,c,"dummy_streamer_element")) return false;
+    a_buffer.set_offset(startpos+_c+sizeof(unsigned int));
+    if(!a_buffer.check_byte_count(_s,_c,"dummy_streamer_element")) return false;
     return true;
   }
 public:
@@ -175,8 +175,8 @@ public: //iro
 
   virtual bool stream(buffer& a_buffer) {
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     if(!Named_stream(a_buffer,m_name,m_title)) return false;
     if(!a_buffer.read(m_check_sum)) return false;
@@ -196,7 +196,7 @@ public: //iro
     if(obj) m_elements.operator=(*obj);
     if(obj_created) delete obj;}
 
-    return a_buffer.check_byte_count(s,c,s_store_class());
+    return a_buffer.check_byte_count(_s,_c,s_store_class());
   }
 public:
   void out(std::ostream& a_out) const {

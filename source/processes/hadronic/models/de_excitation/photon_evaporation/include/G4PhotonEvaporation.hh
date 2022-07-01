@@ -66,33 +66,39 @@ public:
 
   explicit G4PhotonEvaporation(G4GammaTransition* ptr=nullptr);
 
-  virtual ~G4PhotonEvaporation();
+  ~G4PhotonEvaporation() override;
 
-  virtual void Initialise() final;
+  void Initialise() override;
 
   // one photon or e- emission
-  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus) final;
+  G4Fragment* EmittedFragment(G4Fragment* theNucleus) override;
 
   // returns "false", emitted gamma and e- are added to the results
-  virtual G4bool 
-  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus) final;
+  G4bool 
+  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus) override;
 
   // emitted gamma, e-, and residual fragment are added to the results
   G4FragmentVector* BreakItUp(const G4Fragment& theNucleus);
 
   // compute emission probability for both continum and discrete cases
   // must be called before any method above
-  virtual G4double GetEmissionProbability(G4Fragment* theNucleus) final;
+  G4double GetEmissionProbability(G4Fragment* theNucleus) override;
 
-  virtual G4double GetFinalLevelEnergy(G4int Z, G4int A, G4double energy) final;
+  // methods for unit tests
+  G4double ComputeInverseXSection(G4Fragment* theNucleus, 
+                                  G4double kinEnergy) override;
+  G4double ComputeProbability(G4Fragment* theNucleus, 
+			      G4double kinEnergy) override;
 
-  virtual G4double GetUpperLevelEnergy(G4int Z, G4int A) final;
+  G4double GetFinalLevelEnergy(G4int Z, G4int A, G4double energy);
+
+  G4double GetUpperLevelEnergy(G4int Z, G4int A);
 
   void SetGammaTransition(G4GammaTransition*);
 
-  virtual void SetICM(G4bool);
+  void SetICM(G4bool) override;
 
-  virtual void RDMForced (G4bool);
+  void RDMForced (G4bool) override;
   
   inline void SetVerboseLevel(G4int verbose);
 
@@ -139,13 +145,12 @@ private:
   G4double fStep;
   G4double fMaxLifeTime;
 
-  G4double Tolerance;
+  G4double fTolerance;
 
   G4bool   fICM;
   G4bool   fRDM;
   G4bool   fSampleTime;
   G4bool   fCorrelatedGamma;
-  G4bool   fIsomerFlag;
   G4bool   isInitialised;
 
 #ifdef G4MULTITHREADED

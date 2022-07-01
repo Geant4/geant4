@@ -48,7 +48,7 @@ class G4UIcmdWith3VectorAndUnit : public G4UIcommand
       // Constructor. The command string with full path directory
       // and the pointer to the messenger must be given
 
-    virtual G4int DoIt(G4String parameterList);
+    G4int DoIt(G4String parameterList) override;
 
     static G4ThreeVector GetNew3VectorValue(const char* paramString);
       // Convert string which represents three double values and a unit to
@@ -63,15 +63,15 @@ class G4UIcmdWith3VectorAndUnit : public G4UIcommand
       // Convert the unit string to the value of the unit. "paramString"
       // must contain three double values AND a unit string
 
-    G4String ConvertToStringWithBestUnit(G4ThreeVector vec);
-      // Convert a 3 vector value to a string of digits and unit. Best unit is
-      // chosen from the unit category of default unit (in case SetDefaultUnit()
-      // is defined) or category defined by SetUnitCategory()
+    G4String ConvertToStringWithBestUnit(const G4ThreeVector& vec);
+    // Convert a 3 vector value to a string of digits and unit. Best unit is
+    // chosen from the unit category of default unit (in case SetDefaultUnit()
+    // is defined) or category defined by SetUnitCategory()
 
-    G4String ConvertToStringWithDefaultUnit(G4ThreeVector vec);
-      // Convert a 3 vector value to a string of digits and unit. Best unit is
-      // chosen from the category defined by SetUnitCategory() in case default
-      // unit is not defined
+    G4String ConvertToStringWithDefaultUnit(const G4ThreeVector& vec);
+    // Convert a 3 vector value to a string of digits and unit. Best unit is
+    // chosen from the category defined by SetUnitCategory() in case default
+    // unit is not defined
 
     void SetParameterName(const char* theNameX, const char* theNameY,
                           const char* theNameZ, G4bool omittable,
@@ -86,10 +86,10 @@ class G4UIcmdWith3VectorAndUnit : public G4UIcommand
       // the user omit some of the parameters. If this flag is false, the values
       // given by the next SetDefaultValue() method are used
 
-    void SetDefaultValue(G4ThreeVector defVal);
-      // Set the default values of the parameters. These default values are used
-      // when the user of this command omits some of the parameter values, and
-      // "omittable" is true and "currentAsDefault" is false
+    void SetDefaultValue(const G4ThreeVector& defVal);
+    // Set the default values of the parameters. These default values are used
+    // when the user of this command omits some of the parameter values, and
+    // "omittable" is true and "currentAsDefault" is false
 
     void SetUnitCategory(const char* unitCategory);
     void SetUnitCandidates(const char* candidateList);

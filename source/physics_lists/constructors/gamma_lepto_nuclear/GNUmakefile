@@ -43,10 +43,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/electromagnetic/xrays/include \
             -I$(G4BASE)/processes/optical/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
-            -I$(G4BASE)/processes/hadronic/stopping/include \
             -I$(G4BASE)/processes/hadronic/management/include \
-            -I$(G4BASE)/processes/hadronic/processes/include \
-            -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
 	    -I$(G4BASE)/processes/hadronic/models/qmd/include \
@@ -69,6 +66,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
             -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
             -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
+            -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/materials/include
 

@@ -1,16 +1,18 @@
------------------------------------------------------
+# Example particleGun History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    ParticleGun History file
-                    ------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
+## 2022-21-01 mma (particleGunExample-V11-00-01)
+- Update reference in PrimaryGeneratorAction2.cc
+ 
+## 2021-12-10 Ben Morgan (particleGunExample-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
     
 06-10-21 I. Hrivnacova (particleGunExample-V10-07-02)
 - Migration to new G4AnalysisManager.hh header;

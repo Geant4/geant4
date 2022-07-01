@@ -51,9 +51,6 @@ G4UserStackingAction::G4UserStackingAction()
   }
 }
 
-G4UserStackingAction::~G4UserStackingAction()
-{;}
-
 G4ClassificationOfNewTrack
 G4UserStackingAction::ClassifyNewTrack(const G4Track*)
 {

@@ -35,7 +35,7 @@
 #include "G4ToolsAnalysisReader.hh"
 #include "globals.hh"
 
-#include "tools/raxml"
+#include "toolx/raxml"
 
 #include <memory>
 #include <string_view>

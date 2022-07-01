@@ -363,7 +363,7 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
         G4double e     = aVector->Energy(l);
         for(size_t k = 0; k < fForwardProcesses[i]->size(); ++k)
         {
-          totCS += (*fForwardProcesses[i])[k]->GetLambda(e, couple);
+          totCS += (*fForwardProcesses[i])[k]->GetCrossSection(e, couple);
         }
         for(size_t k = 0; k < fForwardLossProcesses[i]->size(); ++k)
         {

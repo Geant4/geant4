@@ -56,10 +56,10 @@ public:
     uint32 fMaxBaskets;
     int fOffset;
 
-    unsigned int s,c;
+    unsigned int _s,_c;
     //FIXME gROOT->SetReadingObject(kTRUE);
     short vers;
-    if(!a_buffer.read_version(vers,s,c)) return false;
+    if(!a_buffer.read_version(vers,_s,_c)) return false;
 
     //::printf("debug : branch::stream : version %d count %d\n",vers,c);
 
@@ -338,12 +338,12 @@ public:
           return false;
         }
         for(int i=0;i<n;i++) {
-          seek32 _s;
-          if(!a_buffer.read(_s)) {
+          seek32 _seek;
+          if(!a_buffer.read(_seek)) {
             _clear();
             return false;
           }
-          fBasketSeek[i] = _s;
+          fBasketSeek[i] = _seek;
         }
       }
 
@@ -389,12 +389,12 @@ public:
         }
       } else {
         for(uint32 i=0;i<fMaxBaskets;i++) {
-          seek32 _s;
-          if(!a_buffer.read(_s)) {
+          seek32 _seek;
+          if(!a_buffer.read(_seek)) {
             _clear();
             return false;
           }
-          fBasketSeek[i] = _s;
+          fBasketSeek[i] = _seek;
         }
       }}
 
@@ -458,7 +458,7 @@ public:
 
     //FIXME if(vers<4) SetAutoDelete(kTRUE);
     //FIXME gROOT->SetReadingObject(kFALSE);
-    if(!a_buffer.check_byte_count(s, c,"TBranch")) {
+    if(!a_buffer.check_byte_count(_s, _c,"TBranch")) {
       _clear();
       return false;
     }
@@ -749,10 +749,10 @@ public:
       num = mn<uint32>(num,10);
       if(!num) continue;
 
-     {std::string s;
+     {std::string _s;
       uint32 len = uint32(bl->name().size())+128;
-      sprintf(s,len," %-15s = ",bl->name().c_str());
-      a_out << s;}
+      sprintf(_s,len," %-15s = ",bl->name().c_str());
+      a_out << _s;}
 
       for(uint32 i=0;i<num;i++) {
         if(i) a_out << ", ";

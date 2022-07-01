@@ -32,8 +32,9 @@ geant4_module_link_libraries(G4phys_ctor_glnuclear
     G4had_gamma_nuclear
     G4had_lend
     G4had_preequ_exciton
-    G4had_theo_max
     G4hadronic_coherent_elastic
+    G4hadronic_deex_photon_evaporation
+    G4hadronic_mgt
     G4hadronic_util
     G4hadronic_xsect
     G4leptons

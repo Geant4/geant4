@@ -174,7 +174,7 @@ ComputeAccumulatedDepthVectorAlongBackRay(G4ThreeVector glob_pos,
         fLinearNavigator->LocateGlobalPointAndSetup(position);
   G4double newStep = fLinearNavigator->ComputeStep(position,direction,1.e50,
                                                    safety);
-  if (theAccumulatedDepthVector != nullptr) {delete theAccumulatedDepthVector;}
+  delete theAccumulatedDepthVector;
   theAccumulatedDepthVector = new G4PhysicsFreeVector();
 
   G4double acc_depth=0.;

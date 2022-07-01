@@ -168,9 +168,9 @@ public:
     const std::vector<iobj*>& columns() const {return m_cols;}
 
     std::string booking(bool a_xml_esc) const {
-      std::string s;
-      get_booking(m_cols,a_xml_esc,s);
-      return s;
+      std::string _s;
+      get_booking(m_cols,a_xml_esc,_s);
+      return _s;
     }
     void reset() {m_tmp.clear();}
     const std::string& value() const {return m_tmp;}
@@ -473,9 +473,9 @@ public:
   }
 
   std::string booking(bool a_xml_esc) const {
-    std::string s;
-    get_booking(m_cols,a_xml_esc,s);
-    return s;
+    std::string _s;
+    get_booking(m_cols,a_xml_esc,_s);
+    return _s;
   }
 
 protected:

@@ -72,8 +72,7 @@ G4EmSaturation::G4EmSaturation(G4int verb)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EmSaturation::~G4EmSaturation()
-{}
+G4EmSaturation::~G4EmSaturation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

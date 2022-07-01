@@ -140,7 +140,7 @@ void G4IonICRU73Data::Initialise()
 {
   // fill directory path
   if(fDataDirectory.empty()) {
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     if (nullptr != path) {
       std::ostringstream ost;
       ost << path << "/ion_stopping_data/";
@@ -239,8 +239,7 @@ void G4IonICRU73Data::ReadElementData(const G4Material* mat, G4bool useICRU90)
 	fMatData[Z]->push_back(v2);
         continue;
       }
-      G4PhysicsLogVector* v =
-	new G4PhysicsLogVector(fEmin, fEmax, fNbins, fSpline);
+      auto v = new G4PhysicsLogVector(fEmin, fEmax, fNbins, fSpline);
       for(G4int i=0; i<=fNbins; ++i) {
 	G4double dedx = 0;
         for(G4int j=0; j<nelm; ++j) {

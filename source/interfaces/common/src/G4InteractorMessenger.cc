@@ -47,7 +47,9 @@ G4InteractorMessenger::G4InteractorMessenger (
 
   G4UIparameter* parameter;
 
-  interactorDirectory = new G4UIdirectory("/gui/");
+  // gui commands should *not* be broadcast to workers
+  G4bool propagateToWorkers;
+  interactorDirectory = new G4UIdirectory("/gui/",propagateToWorkers=false);
   interactorDirectory->SetGuidance("UI interactors commands.");
 
   // /gui/addMenu :

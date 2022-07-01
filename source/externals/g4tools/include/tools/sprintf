@@ -13,20 +13,20 @@ inline bool vsprintf(std::string& a_string,int a_length,const char* a_format,va_
   a_string.clear();
   if(a_length<0) return false;
   if(!a_format) return false;
-  char* s = new char[a_length+1];
-  if(!s) return false;
-  s[a_length] = '\0';
-  int n = vsnpf(s,a_length+1,a_format,a_args);
+  char* _s = new char[a_length+1];
+  if(!_s) return false;
+  _s[a_length] = '\0';
+  int n = vsnpf(_s,a_length+1,a_format,a_args);
   if(n>a_length) {
-    delete [] s;
+    delete [] _s;
     return false;
   }
-  if(s[a_length]!='\0') {
-    delete [] s;
+  if(_s[a_length]!='\0') {
+    delete [] _s;
     return false;
   }
-  a_string = s;
-  delete [] s;
+  a_string = _s;
+  delete [] _s;
   return true;
 }
 
@@ -35,23 +35,23 @@ inline bool sprintf(std::string& a_string,int a_length,const char* a_format,...)
   a_string.clear();
   if(a_length<0) return false;
   if(!a_format) return false;
-  char* s = new char[a_length+1];
-  if(!s) return false;
-  s[a_length] = '\0';
+  char* _s = new char[a_length+1];
+  if(!_s) return false;
+  _s[a_length] = '\0';
   va_list args;
   va_start(args,a_format);
-  int n = vsnpf(s,a_length+1,a_format,args);
+  int n = vsnpf(_s,a_length+1,a_format,args);
   va_end(args);
   if(n>a_length) {
-    delete [] s;
+    delete [] _s;
     return false;
   }
-  if(s[a_length]!='\0') {
-    delete [] s;
+  if(_s[a_length]!='\0') {
+    delete [] _s;
     return false;
   }
-  a_string = s;
-  delete [] s;
+  a_string = _s;
+  delete [] _s;
   return true;
 }
 
@@ -59,14 +59,14 @@ inline bool print2sv(std::string& a_string,int a_length,const char* a_format,va_
   if(a_length<0) {a_string.clear();return false;}
   if(!a_format) {a_string.clear();return false;}
   a_string.assign(a_length,' '); //data = a_length+1
-  char* s = const_cast<char*>(a_string.c_str());
-  //s[a_length] shoulg be '\0'.
-  int n = vsnpf(s,a_length+1,a_format,a_args);
+  char* _s = const_cast<char*>(a_string.c_str());
+  //_s[a_length] shoulg be '\0'.
+  int n = vsnpf(_s,a_length+1,a_format,a_args);
   if(n>a_length) { //a_string is compromised.
     a_string.clear(); //we cross fingers.
     return false;
   }
-  if(s[a_length]!='\0') { //a_string is compromised.
+  if(_s[a_length]!='\0') { //a_string is compromised.
     a_string.clear(); //we cross fingers.
     return false;
   }
@@ -78,17 +78,17 @@ inline bool print2s(std::string& a_string,int a_length,const char* a_format,...)
   if(a_length<0) {a_string.clear();return false;}
   if(!a_format) {a_string.clear();return false;}
   a_string.assign(a_length,' '); //data = a_length+1
-  char* s = const_cast<char*>(a_string.c_str());
-  //s[a_length] shoulg be '\0'.
+  char* _s = const_cast<char*>(a_string.c_str());
+  //_s[a_length] shoulg be '\0'.
   va_list args;
   va_start(args,a_format);
-  int n = vsnpf(s,a_length+1,a_format,args);
+  int n = vsnpf(_s,a_length+1,a_format,args);
   va_end(args);
   if(n>a_length) { //a_string is compromised.
     a_string.clear(); //we cross fingers.
     return false;
   }
-  if(s[a_length]!='\0') { //a_string is compromised.
+  if(_s[a_length]!='\0') { //a_string is compromised.
     a_string.clear(); //we cross fingers.
     return false;
   }

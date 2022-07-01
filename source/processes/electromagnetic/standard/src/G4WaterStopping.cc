@@ -62,8 +62,7 @@ G4WaterStopping::G4WaterStopping(G4EmCorrections* corr, G4bool splineFlag)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4WaterStopping::~G4WaterStopping()
-{}
+G4WaterStopping::~G4WaterStopping() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -90,7 +89,7 @@ void G4WaterStopping::AddData(const G4double* energy,
 			      const G4double* stoppower, 
 			      G4double factor)
 {
-  G4PhysicsFreeVector* pv = 
+  auto pv =
     new G4PhysicsFreeVector(53,energy[0]*CLHEP::MeV,energy[52]*CLHEP::MeV,spline);
   dedx.push_back(pv);
   for(G4int i=0; i<53; ++i) {

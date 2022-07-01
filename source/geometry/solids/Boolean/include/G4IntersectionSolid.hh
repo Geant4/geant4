@@ -44,7 +44,7 @@
 
 class G4IntersectionSolid : public G4BooleanSolid
 {
-  public:  // with description
+  public:
 
     G4IntersectionSolid( const G4String& pName,
                                G4VSolid* pSolidA ,
@@ -66,8 +66,6 @@ class G4IntersectionSolid : public G4BooleanSolid
     G4GeometryType  GetEntityType() const;
 
     G4VSolid* Clone() const;
-
-  public:  // without description
 
     G4IntersectionSolid(__void__&);
       // Fake default constructor for usage restricted to direct object

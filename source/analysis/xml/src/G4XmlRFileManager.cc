@@ -31,7 +31,7 @@
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
 
-#include "tools/raxml"
+#include "toolx/raxml"
 
 using namespace G4Analysis;
 using namespace tools;
@@ -79,7 +79,7 @@ G4bool G4XmlRFileManager::OpenRFile(const G4String& fileName)
   }
 
   // create new file
-  auto newFile = new tools::raxml(*fReadFactory, G4cout, verbose);
+  auto newFile = new toolx::raxml(*fReadFactory, G4cout, verbose);
 
   // clear objects
   // (this should not be needed when starting a new raxml)
@@ -109,7 +109,7 @@ G4bool G4XmlRFileManager::OpenRFile(const G4String& fileName)
 }
 
 //_____________________________________________________________________________
-tools::raxml* G4XmlRFileManager::GetRFile(const G4String& fileName) const
+toolx::raxml* G4XmlRFileManager::GetRFile(const G4String& fileName) const
 {
   // Get full file name (add only extension)
   G4bool isPerThread = false;

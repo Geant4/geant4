@@ -58,8 +58,9 @@ G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron()
 G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron( const G4ReactionProduct& aPrimary ) :
   G4VSplitableHadron( aPrimary )
 {
-  PartonIndex = -2;
-  Parton[0] = NULL;
+  PartonIndex = -1;
+  Parton[0] = nullptr;
+  Parton[1] = nullptr;
 }
 
 
@@ -68,8 +69,9 @@ G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron( const G4ReactionProd
 G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron( const G4Nucleon& aNucleon ) :
   G4VSplitableHadron( aNucleon )
 {
-  PartonIndex = -2;
-  Parton[0] = NULL;
+  PartonIndex = -1;
+  Parton[0] = nullptr;
+  Parton[1] = nullptr;
 }
 
 
@@ -78,8 +80,9 @@ G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron( const G4Nucleon& aNu
 G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron( const G4VKineticNucleon* aNucleon ) :
   G4VSplitableHadron( aNucleon )
 {
-  PartonIndex = -2;
-  Parton[0] = NULL;
+  PartonIndex = -1;
+  Parton[0] = nullptr;
+  Parton[1] = nullptr;
 }
 
 
@@ -95,7 +98,7 @@ void G4DiffractiveSplitableHadron::SplitUp() {
   if ( IsSplit() ) return;
   Splitting();
   // Split once only...
-  if ( Parton[0] != NULL ) return;
+  if ( Parton[0] != nullptr ) return;
 
   // flavours of quark ends
   G4int PDGcode = GetDefinition()->GetPDGEncoding();
@@ -126,7 +129,7 @@ void G4DiffractiveSplitableHadron::SplitUp() {
 
 G4Parton* G4DiffractiveSplitableHadron::GetNextParton() {
   ++PartonIndex;
-  if ( PartonIndex > 1  ||  PartonIndex < 0 ) return NULL;
+  if ( PartonIndex > 1  ||  PartonIndex < 0 ) return nullptr;
   G4int PartonInd( PartonIndex );
   if ( PartonIndex == 1 ) PartonIndex = -1;
   return Parton[ PartonInd ];
@@ -137,7 +140,7 @@ G4Parton* G4DiffractiveSplitableHadron::GetNextParton() {
 
 G4Parton* G4DiffractiveSplitableHadron::GetNextAntiParton() {
   ++PartonIndex;
-  if ( PartonIndex > 1  ||  PartonIndex < 0 ) return NULL;
+  if ( PartonIndex > 1  ||  PartonIndex < 0 ) return nullptr;
   G4int PartonInd( PartonIndex );
   if ( PartonIndex == 1 ) PartonIndex = -1;
   return Parton[ PartonInd ];

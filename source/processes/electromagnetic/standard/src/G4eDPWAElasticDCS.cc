@@ -44,6 +44,8 @@
 
 #include "G4Physics2DVector.hh"
 
+#include "zlib.h"
+
 //
 // Global variables:
 //
@@ -181,7 +183,7 @@ void G4eDPWAElasticDCS::LoadDCSForZ(G4int iz) {
     // load the high energy part firt:
     // - with gNumThetas2 theta and gNumEnergies-gIndxEnergyLim energy values
     const std::size_t hNumEnergries = gNumEnergies-gIndxEnergyLim;
-    G4Physics2DVector* v2DHigh = new G4Physics2DVector(gNumThetas2, hNumEnergries);
+    auto v2DHigh = new G4Physics2DVector(gNumThetas2, hNumEnergries);
     v2DHigh->SetBicubicInterpolation(true);
     for (std::size_t it=0; it<gNumThetas2; ++it) {
       v2DHigh->PutX(it, gTheMus2[it]);
@@ -205,7 +207,7 @@ void G4eDPWAElasticDCS::LoadDCSForZ(G4int iz) {
     // - with gNumThetas1 theta and gIndxEnergyLim+1 energy values (the +1 is
     //   for including the firts DCS from the higher part above for being
     //   able to perform interpolation between the high and low energy DCS set)
-    G4Physics2DVector* v2DLow = new G4Physics2DVector(gNumThetas1, gIndxEnergyLim+1);
+    auto v2DLow = new G4Physics2DVector(gNumThetas1, gIndxEnergyLim+1);
     v2DLow->SetBicubicInterpolation(true);
     for (std::size_t it=0; it<gNumThetas1; ++it) {
       v2DLow->PutX(it, gTheMus1[it]);
@@ -236,7 +238,7 @@ void G4eDPWAElasticDCS::LoadDCSForZ(G4int iz) {
     fDCS[iz]    = v2DHigh;
   } else {
     // e+
-    G4Physics2DVector* v2D= new G4Physics2DVector(gNumThetas2, gNumEnergies);
+    auto v2D= new G4Physics2DVector(gNumThetas2, gNumEnergies);
     v2D->SetBicubicInterpolation(true);
     for (std::size_t it=0; it<gNumThetas2; ++it) {
       v2D->PutX(it, gTheMus2[it]);
@@ -322,7 +324,7 @@ void G4eDPWAElasticDCS::ComputeCSPerAtom(G4int iz, G4double ekin, G4double& elcs
 //       when restricted interval sampling is needed. This is controlled by
 //       the fIsRestrictedSamplingRequired flag (false by default).
 struct OneSamplingTable {
-  OneSamplingTable () {}
+  OneSamplingTable () = default;
   void SetSize(std::size_t nx, G4bool useAlias)  {
     fN = nx;
     // Alias
@@ -353,7 +355,7 @@ void G4eDPWAElasticDCS::BuildSmplingTableForZ(G4int iz) {
   if (fSamplingTables[iz]) return;
   // Do it otherwise:
   // allocate space
-  std::vector<OneSamplingTable>* sTables = new std::vector<OneSamplingTable>(gNumEnergies);
+  auto sTables = new std::vector<OneSamplingTable>(gNumEnergies);
   // read compressed sampling table data
   std::ostringstream oss;
   const G4String fname = fIsElectron ? "stables/el/" : "stables/pos/";
@@ -406,7 +408,7 @@ G4eDPWAElasticDCS::SampleCosineTheta(std::size_t iz, G4double lekin, G4double r1
   // determine the discrete ekin sampling table to be used:
   //  - statistical interpolation (i.e. linear) on log energy scale
   const G4double      rem = (lekin-gLogMinEkin)*gInvDelLogEkin;
-  const std::size_t     k = (std::size_t)rem;
+  const auto            k = (std::size_t)rem;
   const std::size_t iekin = (r1 < rem-k) ? k+1 : k;
   // sample the mu(t)=0.5(1-cos(t))
   const double mu    = SampleMu(iz, iekin, r2, r3);
@@ -431,7 +433,7 @@ G4eDPWAElasticDCS::SampleCosineThetaRestricted(std::size_t iz, G4double lekin,
   // determine the discrete ekin sampling table to be used:
   //  - statistical interpolation (i.e. linear) on log energy scale
   const G4double      rem = (lekin-gLogMinEkin)*gInvDelLogEkin;
-  const std::size_t     k = (size_t)rem;
+  const auto            k = (size_t)rem;
   const std::size_t iekin = (r1 < rem-k) ? k : k+1;
   // sample the mu(t)=0.5(1-cos(t))
   const G4double mu  = SampleMu(iz, iekin, r2, 0.5*(1.0-costMax), 0.5*(1.0-costMin));
@@ -445,7 +447,7 @@ G4eDPWAElasticDCS::SampleMu(std::size_t izet, std::size_t ie, G4double r1, G4dou
   OneSamplingTable& rtn = (*fSamplingTables[izet])[ie];
   // get the lower index of the bin by using the alias part
   const G4double rest = r1 * (rtn.fN - 1);
-  std::size_t indxl   = (std::size_t)rest;
+  auto indxl          = (std::size_t)rest;
   const G4double dum0 = rest - indxl;
   if (rtn.fW[indxl] < dum0) indxl = rtn.fI[indxl];
   // sample value within the selected bin by using ratin based numerical inversion
@@ -500,7 +502,7 @@ G4double G4eDPWAElasticDCS::SampleMu(std::size_t izet, std::size_t ie, G4double 
 const G4String& G4eDPWAElasticDCS::FindDirectoryPath() {
   // check environment variable
   if (gDataDirectory.empty()) {
-    const char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     if (path) {
       std::ostringstream ost;
       ost << path << "/dpwa/";

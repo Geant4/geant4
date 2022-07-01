@@ -38,9 +38,9 @@ public:
   }
 public:
   virtual bool stream(buffer& a_buffer) {
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     //printf("debug : tools::rroot::matrix::stream : version %d\n",v);
 
@@ -63,7 +63,7 @@ public:
     //Real_t* Elements; //[fNelems]
     if(!dummy_array_stream<float>(a_buffer,Nelems)) return false;
 
-    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    if(!a_buffer.check_byte_count(_s,_c,s_store_class())) return false;
     return true;
   }
 

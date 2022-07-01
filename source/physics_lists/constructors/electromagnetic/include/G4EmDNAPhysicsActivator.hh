@@ -23,7 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Geant4 header G4EmDNAPhysicsActivator
 //
+// Author V.Ivanchenko 
+//
+// Build DNA physics on top of standard physics for given region
+// 
 
 #ifndef G4EmDNAPhysicsActivator_h
 #define G4EmDNAPhysicsActivator_h 1
@@ -34,7 +39,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4EmParameters;
-class G4ProcessManager;
+class G4ParticleDefinition;
+class G4Region;
 
 class G4EmDNAPhysicsActivator : public G4VPhysicsConstructor
 {
@@ -42,36 +48,34 @@ public:
 
   explicit G4EmDNAPhysicsActivator(G4int ver = 1);
 
-  ~G4EmDNAPhysicsActivator() override;
+  ~G4EmDNAPhysicsActivator() override = default;
 
   void ConstructParticle() override;
   void ConstructProcess() override;
 
 private:
 
-  void AddElectronModels0(const G4String& region, G4bool emsc, G4double elimel);
-  void AddElectronModels2(const G4String& region, G4bool emsc, G4double elimel);
-  void AddElectronModels4(const G4String& region, G4bool emsc, G4double elimel);
-  void AddElectronModels4a(const G4String& region, G4bool emsc, G4double elimel);
-  void AddElectronModels6(const G4String& region, G4bool emsc, G4double elimel);
-  void AddElectronModels6a(const G4String& region, G4bool emsc, G4double elimel);
-  void AddElectronModels7(const G4String& region, G4bool emsc, G4double elimel);
+  void DeactivateElectronProcesses(const G4double emaxDNA,
+                                   const G4double emax,
+                                   const G4Region*);
 
-  void AddProtonModels0(const G4String& region, G4bool pmsc, 
-			G4double elimel, G4double pminbb, G4double pmax);
+  void DeactivateHadronProcesses(G4ParticleDefinition*,
+                                 const G4double emaxDNA,
+                                 const G4double emax,
+                                 const G4Region*);
 
-  void AddHeliumModels0(const G4String& region, G4bool a1msc, G4bool a2msc, 
-			G4double elimel, G4double pminbb, G4double pmax);
+  void DeactivateIonProcesses(G4ParticleDefinition*,
+                              const G4double emaxDNA,
+                              const G4double emax,
+                              const G4Region*);
 
-  void AddGenericIonModels0(const G4String& region, G4double pminbb);
-
-  void DeactivateNuclearStopping(G4ProcessManager*, G4double elimel);
+  void DeactivateNuclearStopping(const G4ParticleDefinition*,
+                                 const G4double emaxDNA,
+                                 const G4Region*);
  
-  G4bool HasMsc(G4ProcessManager*) const;
-
   G4bool IsVerbose() const;
 
-  G4int  verbose;
+  G4int verbose;
   G4EmParameters* theParameters;
 };
 

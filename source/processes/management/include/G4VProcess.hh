@@ -240,6 +240,10 @@ class G4VProcess
     static const G4String& GetProcessTypeName(G4ProcessType);
       // Returns the process type name
 
+    virtual const G4VProcess* GetCreatorProcess() const;
+      // Returns the process to be used as CreatorProcess for secondaries
+      // coming from this process
+
     virtual void StartTracking(G4Track*);
     virtual void EndTracking();
       // Inform Start/End of tracking for each track to the physics process 

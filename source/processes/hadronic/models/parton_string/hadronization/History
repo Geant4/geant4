@@ -1,18 +1,35 @@
--------------------------------------------------------------------
+# Category had-hadronization History
 
-       ==========================================================
-       Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-      History file for hadronic/models/parton_string/hadronization directory
-      -------------------------------------------------------------
+## 2022-06-07 Alberto Ribon (had-hadronization-V11-00-01)
+   Changes made by Vladimir Uzhinsky:
+-  G4HadronBuilder : a new argument is added in the constructor, and 
+   a new data member is added to the class.
+   This is needed to set a special mixing of pseudo-scalar and vector mesons
+   for s-sbar mesons. This is introduced to describe phi-meson production
+   in proton-proton interactions measured by NA61/SHINE.
+-  G4VLongitudinalStringDecay : the probability of pseudo-scalar meson
+   production has been tuned to describe K*0 meson production in
+   proton-proton interactions according to NA61/SHINE data. 
+   Moreover, a new parameter (probability of pseudo-scalar meson production
+   in s-sbar mesons) is introduced to increase the phi-meson
+   yield in proton-proton interactions.
+   Fixed also a bug in mixing eta_prime and phi mesons in the quark systems
+   d-dbar, u-ubar and s-sbar.
+-  G4LundStringFragmentation : few changes were introduced for a special
+   treatment of the last string decay in the case of ss-q or ss-qq, 
+   ss-sbar sbar last string decay. This improves the yield of anti-Xi
+   hyperons in proton-proton interactions according to the NA61/SHINE data.
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2021-12-10 Ben Morgan (had-hadronization-V11-00-00)
+- Change to new Markdown History format
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+---
+
+# History entries prior to 11.0
 
 16-Apr-2021 B. Morgan        (had-hadronization-V10-07-01)
 - Migrate build to modular CMake API

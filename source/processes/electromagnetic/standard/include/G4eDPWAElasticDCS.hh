@@ -88,7 +88,6 @@
 #include <sstream>
 
 #include "globals.hh"
-#include "zlib.h"
 #include "G4String.hh"
 #include "G4Physics2DVector.hh"
 
@@ -165,7 +164,7 @@ private:
   //       when restricted interval sampling is needed. This is controlled by
   //       the fIsRestrictedSamplingRequired flag (false by default).
   struct OneSamplingTable {
-    OneSamplingTable () {}
+    OneSamplingTable () = default;
     void SetSize(std::size_t nx, G4bool useAlias)  {
       fN = nx;
       // Alias

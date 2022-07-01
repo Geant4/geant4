@@ -42,7 +42,6 @@ endif()
 #
 # This module includes the following modules:
 include(CMakeDependentOption)
-include(Geant4MacroLibraryTargets)
 
 #-----------------------------------------------------------------------
 # CMAKE EXTENSIONS

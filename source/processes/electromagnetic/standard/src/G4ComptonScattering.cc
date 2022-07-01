@@ -56,8 +56,7 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4ComptonScattering::~G4ComptonScattering()
-{}
+G4ComptonScattering::~G4ComptonScattering() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -31,8 +31,8 @@
 // We would be very happy hearing from you, send us your feedback! :)
 //
 // In order for Geant4-DNA to be maintained and still open-source,
-// article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// article citations are crucial.
+// If you use Geant4-DNA chemistry and you publish papers about your software,
 // in addition to the general paper on Geant4-DNA:
 //
 // Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
@@ -41,7 +41,7 @@
 // reference papers on chemistry:
 //
 // J. Comput. Phys. 274 (2014) 841-882
-// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508
 
 #ifndef G4KDTREE_HH
 #define G4KDTREE_HH 1
@@ -51,26 +51,26 @@
 #include "G4KDTreeResult.hh"
 
 class G4KDMap;
-template<typename PointT> class G4KDNode;
+template <typename PointT>
+class G4KDNode;
 
 //__________________________________
 // Methods to act on kdnode
 // Methods defined in G4KDNode.cc :
 void InactiveNode(G4KDNode_Base*);
 void Free(G4KDNode_Base*&);
-//void* GetData(G4KDNode*);
-//const double* GetNodePosition(G4KDNode_Base*);
 //__________________________________
 
 /**
  * G4KDTree is used by the ITManager to locate the neareast neighbours.
- * A kdtree sorts out node in such a way that it reduces the number of node check.
- * The results of this search can be retrieved by G4KDTreeResultHandle.
+ * A kdtree sorts out node in such a way that it reduces the number of node
+ * check. The results of this search can be retrieved by G4KDTreeResultHandle.
  */
 class G4KDTree
 {
   friend class G4KDNode_Base;
-public:
+
+ public:
   G4KDTree(size_t dim = 3);
   ~G4KDTree();
   void Clear();
@@ -80,36 +80,33 @@ public:
   void NoticeNodeDeactivation()
   {
     fNbActiveNodes--;
-    if (fNbActiveNodes <= 0) Clear();
+    if(fNbActiveNodes <= 0)
+    {
+      Clear();
+    }
   }
 
-  size_t GetDim() const
-  {
-    return fDim;
-  }
-  int GetNbNodes() const
-  {
-    return fNbNodes;
-  }
-  G4KDNode_Base* GetRoot()
-  {
-    return fRoot;
-  }
+  size_t GetDim() const { return fDim; }
+  G4int GetNbNodes() const { return fNbNodes; }
+  G4KDNode_Base* GetRoot() { return fRoot; }
 
-  template<typename PointT>
-    G4KDNode_Base* InsertMap(PointT* pos);
+  template <typename PointT>
+  G4KDNode_Base* InsertMap(PointT* pos);
 
   // Insert and attache the data to a node at the specified position
   // In return, it gives you the corresponding node
-  template<typename PointT> G4KDNode_Base* Insert(PointT* pos); // 3D
+  template <typename PointT>
+  G4KDNode_Base* Insert(PointT* pos);  // 3D
 
-  template<typename PointT> G4KDNode_Base* Insert(const PointT& pos); // 3D
+  template <typename PointT>
+  G4KDNode_Base* Insert(const PointT& pos);  // 3D
 
   /* Find one of the nearest nodes from the specified point.
    *
    * This function returns a pointer to a result set with at most one element.
    */
-  template<typename Position> G4KDTreeResultHandle Nearest(const Position& pos);
+  template <typename Position>
+  G4KDTreeResultHandle Nearest(const Position& pos);
   G4KDTreeResultHandle Nearest(G4KDNode_Base* node);
 
   /* Find any nearest nodes from the specified point within a range.
@@ -119,36 +116,33 @@ public:
    * The returned pointer can be null as an indication of an error. Otherwise
    * a valid result set is always returned which may contain 0 or more elements.
    */
-  template<typename Position>
-    G4KDTreeResultHandle NearestInRange(const Position& pos,
-                                        const double& range);
-  G4KDTreeResultHandle NearestInRange(G4KDNode_Base* node, const double& range);
+  template <typename Position>
+  G4KDTreeResultHandle NearestInRange(const Position& pos, const G4double& range);
+  G4KDTreeResultHandle NearestInRange(G4KDNode_Base* node, const G4double& range);
 
-  void *operator new(size_t);
-  void operator delete(void *);
+  void* operator new(size_t);
+  void operator delete(void*);
 
-protected:
-
+ protected:
   //______________________________________________________________________
   class HyperRect
   {
-  public:
+   public:
     HyperRect(size_t dim)
-    {
-      fDim = dim;
-      fMin = new double[fDim];
-      fMax = new double[fDim];
-    }
+      : fDim(dim)
+      , fMin(new double[fDim])
+      , fMax(new double[fDim])
+    {}
 
-    template<typename Position>
-      void SetMinMax(const Position& min, const Position& max)
+    template <typename Position>
+    void SetMinMax(const Position& min, const Position& max)
+    {
+      for(size_t i = 0; i < fDim; i++)
       {
-        for (size_t i = 0; i < fDim; i++)
-        {
-          fMin[i] = min[i];
-          fMax[i] = max[i];
-        }
+        fMin[i] = min[i];
+        fMax[i] = max[i];
       }
+    }
 
     ~HyperRect()
     {
@@ -159,72 +153,65 @@ protected:
     HyperRect(const HyperRect& rect)
     {
       fDim = rect.fDim;
-      fMin = new double[fDim];
-      fMax = new double[fDim];
+      fMin = new G4double[fDim];
+      fMax = new G4double[fDim];
 
-      for (size_t i = 0; i < fDim; i++)
+      for(size_t i = 0; i < fDim; i++)
       {
         fMin[i] = rect.fMin[i];
         fMax[i] = rect.fMax[i];
       }
     }
 
-    template<typename Position>
-      void Extend(const Position& pos)
+    template <typename Position>
+    void Extend(const Position& pos)
+    {
+      for(size_t i = 0; i < fDim; i++)
       {
-        for (size_t i = 0; i < fDim; i++)
+        if(pos[i] < fMin[i])
         {
-          if (pos[i] < fMin[i])
-          {
-            fMin[i] = pos[i];
-          }
-          if (pos[i] > fMax[i])
-          {
-            fMax[i] = pos[i];
-          }
+          fMin[i] = pos[i];
+        }
+        if(pos[i] > fMax[i])
+        {
+          fMax[i] = pos[i];
+        }
+      }
+    }
+
+    template <typename Position>
+    bool CompareDistSqr(const Position& pos, const G4double* bestmatch)
+    {
+      G4double result = 0;
+
+      for(size_t i = 0; i < fDim; i++)
+      {
+        if(pos[i] < fMin[i])
+        {
+          result += sqr(fMin[i] - pos[i]);
+        }
+        else if(pos[i] > fMax[i])
+        {
+          result += sqr(fMax[i] - pos[i]);
+        }
+
+        if(result >= *bestmatch){
+          return false;
         }
       }
 
-    template<typename Position>
-      bool CompareDistSqr(const Position& pos, const double* bestmatch)
-      {
-        double result = 0;
-
-        for (size_t i = 0; i < fDim; i++)
-        {
-          if (pos[i] < fMin[i])
-          {
-            result += sqr(fMin[i] - pos[i]);
-          }
-          else if (pos[i] > fMax[i])
-          {
-            result += sqr(fMax[i] - pos[i]);
-          }
-
-          if (result >= *bestmatch) return false;
-        }
-
-        return true;
-      }
-
-    size_t GetDim()
-    {
-      return fDim;
-    }
-    double* GetMin()
-    {
-      return fMin;
-    }
-    double* GetMax()
-    {
-      return fMax;
+      return true;
     }
 
-  protected:
+    size_t GetDim() { return fDim; }
+    G4double* GetMin() { return fMin; }
+    G4double* GetMax() { return fMax; }
+
+   protected:
     size_t fDim;
-    double *fMin, *fMax; /* minimum/maximum coords */
+    G4double *fMin, *fMax; /* minimum/maximum coords */
 
-  private:
+   private:
     // should not be used
     HyperRect& operator=(const HyperRect& rhs)
     {
@@ -233,46 +220,36 @@ protected:
     }
   };
 
-protected:
-  void __InsertMap(G4KDNode_Base *node);
-  void __Clear_Rec(G4KDNode_Base *node);
+ protected:
+  void __InsertMap(G4KDNode_Base* node);
+  void __Clear_Rec(G4KDNode_Base* node);
 
-  template<typename Position>
-    int __NearestInRange(G4KDNode_Base *node,
-                         const Position& pos,
-                         const double& range_sq,
-                         const double& range,
-                         G4KDTreeResult& list,
-                         int ordered,
-                         G4KDNode_Base *source_node = 0);
+  template <typename Position>
+  G4int __NearestInRange(G4KDNode_Base* node, const Position& pos,
+                       const G4double& range_sq, const G4double& range,
+                       G4KDTreeResult& list, G4int ordered,
+                       G4KDNode_Base* source_node = nullptr);
 
-  template<typename Position>
-    void __NearestToPosition(G4KDNode_Base *node,
-                             const Position& pos,
-                             G4KDNode_Base *&result,
-                             double *result_dist_sq,
-                             HyperRect* fRect);
+  template <typename Position>
+  void __NearestToPosition(G4KDNode_Base* node, const Position& pos,
+                           G4KDNode_Base*& result, double* result_dist_sq,
+                           HyperRect* fRect);
 
-  template<typename Position>
-    void __NearestToNode(G4KDNode_Base *source_node,
-                         G4KDNode_Base *node,
-                         const Position& pos,
-                         std::vector<G4KDNode_Base*>& result,
-                         double *result_dist_sq,
-                         HyperRect* fRect,
-                         int& nbresult);
+  template <typename Position>
+  void __NearestToNode(G4KDNode_Base* source_node, G4KDNode_Base* node,
+                       const Position& pos, std::vector<G4KDNode_Base*>& result,
+                       G4double* result_dist_sq, HyperRect* fRect, G4int& nbresult);
 
-protected:
-  HyperRect *fRect;
-  G4KDNode_Base *fRoot;
+ protected:
+  HyperRect* fRect     = nullptr;
+  G4KDNode_Base* fRoot = nullptr;
   size_t fDim;
-  int fNbNodes;
-  int fNbActiveNodes;
+  G4int fNbNodes       = 0;
+  G4int fNbActiveNodes = 0;
   G4KDMap* fKDMap;
-
   static G4Allocator<G4KDTree>*& fgAllocator();
 };
 
 #include "G4KDTree.icc"
 
-#endif // G4KDTREE_HH
+#endif  // G4KDTREE_HH

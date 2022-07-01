@@ -67,19 +67,18 @@ void G4MTcoutDestination::SetDefaultOutput(G4bool addmasterDestination,
     std::ostringstream str;
     str << prefix;
     if(id != G4Threading::GENERICTHREAD_ID)
+    {
       str << id;
+    }
     str << " > " << msg;
     msg = str.str();
     return true;
   };
   // Block cout if not in correct state
   const auto filter_out = [this](G4String&) -> G4bool {
-    if(this->ignoreCout ||
-       (this->ignoreInit && this->stateMgr->GetCurrentState() == G4State_Init))
-    {
-      return false;
-    }
-    return true;
+    return !(
+      this->ignoreCout ||
+      (this->ignoreInit && this->stateMgr->GetCurrentState() == G4State_Init));
   };
 
   // Default behavior, add a destination that uses cout and uses a mutex
@@ -102,12 +101,9 @@ void G4MTcoutDestination::AddMasterOutput(G4bool formatAlsoMaster)
   auto forwarder = G4coutDestinationUPtr(new G4MasterForwardcoutDestination);
   ref_masterOut  = forwarder.get();
   const auto filter_out = [this](G4String&) -> G4bool {
-    if(this->ignoreCout ||
-       (this->ignoreInit && this->stateMgr->GetCurrentState() == G4State_Idle))
-    {
-      return false;
-    }
-    return true;
+    return !(
+      this->ignoreCout ||
+      (this->ignoreInit && this->stateMgr->GetCurrentState() == G4State_Idle));
   };
   forwarder->AddCoutTransformer(filter_out);
   if(formatAlsoMaster)
@@ -117,7 +113,9 @@ void G4MTcoutDestination::AddMasterOutput(G4bool formatAlsoMaster)
       std::ostringstream str;
       str << prefix;
       if(id != G4Threading::GENERICTHREAD_ID)
+      {
         str << id;
+      }
       str << " > " << msg;
       msg = str.str();
       return true;
@@ -132,7 +130,9 @@ void G4MTcoutDestination::AddMasterOutput(G4bool formatAlsoMaster)
 G4MTcoutDestination::~G4MTcoutDestination()
 {
   if(useBuffer)
+  {
     DumpBuffer();
+  }
 }
 
 // --------------------------------------------------------------------
@@ -143,7 +143,7 @@ void G4MTcoutDestination::Reset()
 }
 
 // --------------------------------------------------------------------
-void G4MTcoutDestination::HandleFileCout(G4String fileN, G4bool ifAppend,
+void G4MTcoutDestination::HandleFileCout(const G4String& fileN, G4bool ifAppend,
                                          G4bool suppressDefault)
 {
   // Logic: we create a file destination. We want this to get only the G4cout
@@ -162,13 +162,15 @@ void G4MTcoutDestination::HandleFileCout(G4String fileN, G4bool ifAppend,
   if(suppressDefault)
   {
     ref_defaultOut->AddCoutTransformer([](G4String&) { return false; });
-    if(ref_masterOut)
+    if(ref_masterOut != nullptr)
+    {
       ref_masterOut->AddCoutTransformer([](G4String&) { return false; });
+    }
   }
 }
 
 // --------------------------------------------------------------------
-void G4MTcoutDestination::HandleFileCerr(G4String fileN, G4bool ifAppend,
+void G4MTcoutDestination::HandleFileCerr(const G4String& fileN, G4bool ifAppend,
                                          G4bool suppressDefault)
 {
   // See HandleFileCout for explanation, switching cout with cerr
@@ -181,8 +183,10 @@ void G4MTcoutDestination::HandleFileCerr(G4String fileN, G4bool ifAppend,
   if(suppressDefault)
   {
     ref_defaultOut->AddCerrTransformer([](G4String&) { return false; });
-    if(ref_masterOut)
+    if(ref_masterOut != nullptr)
+    {
       ref_masterOut->AddCerrTransformer([](G4String&) { return false; });
+    }
   }
 }
 

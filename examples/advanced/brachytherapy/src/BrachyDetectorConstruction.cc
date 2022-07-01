@@ -179,17 +179,17 @@ void BrachyDetectorConstruction::ConstructPhantom()
 
   // World volume
   fWorld = new G4Box("World", fWorldSizeX, fWorldSizeY, fWorldSizeZ);
-  fWorldLog = new G4LogicalVolume(fWorld,air,"WorldLog",0,0,0);
-  fWorldPhys = new G4PVPlacement(0,G4ThreeVector(),"WorldPhys",fWorldLog,0,false,0);
+  fWorldLog = new G4LogicalVolume(fWorld,air,"WorldLog",nullptr,nullptr,nullptr);
+  fWorldPhys = new G4PVPlacement(nullptr,G4ThreeVector(),"WorldPhys",fWorldLog,nullptr,false,0);
 
   // Water Box
   fPhantom = new G4Box("Phantom", fPhantomSizeX, fPhantomSizeY, fPhantomSizeZ);
 
   // Logical volume
-  fPhantomLog = new G4LogicalVolume(fPhantom,water,"PhantomLog",0,0,0);
+  fPhantomLog = new G4LogicalVolume(fPhantom,water,"PhantomLog",nullptr,nullptr,nullptr);
 
   // Physical volume
-  fPhantomPhys = new G4PVPlacement(0,G4ThreeVector(), // Position: rotation and translation
+  fPhantomPhys = new G4PVPlacement(nullptr,G4ThreeVector(), // Position: rotation and translation
                                   "PhantomPhys", // Name
                                   fPhantomLog, // Associated logical volume
                                   fWorldPhys, // Mother volume
@@ -198,7 +198,7 @@ void BrachyDetectorConstruction::ConstructPhantom()
   fWorldLog -> SetVisAttributes (G4VisAttributes::GetInvisible());
 
   // Visualization attributes of the phantom
-  G4VisAttributes* simpleBoxVisAtt = new G4VisAttributes(lblue);
+  auto simpleBoxVisAtt = new G4VisAttributes(lblue);
   simpleBoxVisAtt -> SetVisibility(true);
   simpleBoxVisAtt -> SetForceWireframe(true);
   fPhantomLog -> SetVisAttributes(simpleBoxVisAtt);

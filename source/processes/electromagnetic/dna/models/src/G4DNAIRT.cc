@@ -243,6 +243,12 @@ void G4DNAIRT::Sampling(G4Track* track){
 
   auto fReactionDatas = fMolReactionTable->GetReactionData(molConfA);
   G4double index = -1;
+  //change the scavenging filter of the IRT beyond 1 us proposed by Naoki and Jose
+  if(timeMax > 1*us)
+  {
+    minTime = timeMax;
+  }
+  //
 
   for(size_t u=0; u<fReactionDatas->size();u++){
     if((*fReactionDatas)[u]->GetReactant2()->GetDiffusionCoefficient() == 0){

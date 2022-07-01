@@ -116,7 +116,7 @@ void G4DNARelativisticIonisationModel::Initialise(const G4ParticleDefinition* pa
 
     std::ostringstream eFullFileNameZ;
 
-    char *path = getenv("G4LEDATA");
+    const char *path = G4FindDataDir("G4LEDATA");
     if (!path)
     {
       G4Exception("G4DNARelativisticIonisationModel::Initialise","em0006",
@@ -404,7 +404,7 @@ void G4DNARelativisticIonisationModel::LoadAtomicStates(
   const char *datadir =  path;
   if(!datadir)
   {
-     datadir = getenv("G4LEDATA");
+     datadir = G4FindDataDir("G4LEDATA");
      if(!datadir)
      {
        G4Exception("G4DNARelativisticIonisationModel::LoadAtomicStates()",

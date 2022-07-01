@@ -1,0 +1,392 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_X11_base_session
+#define toolx_X11_base_session
+
+// pure X11 code, no GL.
+
+#include <ostream>
+#include <vector>
+
+#include "dispatcher"
+#include <tools/forit>
+
+#include <X11/Xatom.h>      //XA_INTEGER
+
+#include <X11/Xutil.h>      //XVisualInfo
+
+namespace toolx {
+namespace X11 {
+
+class base_session {
+public:
+  //virtual bool make_current(Window) const {
+  //  if(!m_display) return false;
+  //  return true;
+  //}
+  //virtual bool swap_buffers(Window) const {
+  //  if(!m_display) return false;
+  //  return true;
+  //}
+public:
+  base_session(std::ostream& a_out,unsigned int a_monitor = 0)
+  :m_out(a_out)
+  ,m_monitor(a_monitor)
+  ,m_display(0)
+  ,m_WM_DELETE_WINDOW_atom(None)
+  ,m_SESSION_EXIT_STEER_atom(None)
+  {
+    //NOTE : macOS : XOpenDisplay leaks 128 bytes.
+    m_display = ::XOpenDisplay(NULL);
+    if(!m_display) {
+      m_out << "toolx::X11::base_session::base_session : can't open display." << std::endl;
+      return;
+    }
+
+    int monitors = ::XScreenCount(m_display);
+    if(int(m_monitor)>=monitors) {
+      m_out << "toolx::X11::base_session::base_session : bad monitor index "
+            << m_monitor << ". (#monitors " << monitors << ")." << std::endl;
+      ::XCloseDisplay(m_display);
+      m_display = 0;
+      return;
+    }
+
+    m_WM_DELETE_WINDOW_atom = ::XInternAtom(m_display,"WM_DELETE_WINDOW",False);
+    if(m_WM_DELETE_WINDOW_atom==None) {
+      m_out << "toolx::X11::base_session::base_session : can't create WM_DELETE_WINDOW Atom." << std::endl;
+      ::XCloseDisplay(m_display);
+      m_display = 0;
+      return;
+    }
+
+    m_SESSION_EXIT_STEER_atom = ::XInternAtom(m_display,"TOOLX_X11_SESSION_EXIT_STEER",False);
+    if(m_SESSION_EXIT_STEER_atom==None) {
+      m_out << "toolx::X11::base_session::base_session :"
+            << " can't create TOOLX_X11_SESSION_EXIT_STEER Atom." << std::endl;
+      ::XCloseDisplay(m_display);
+      m_display = 0;
+      return;
+    }
+  }
+  virtual ~base_session() {
+    clear_dispatchers();
+    if(m_display) ::XCloseDisplay(m_display);
+    m_display = 0;
+    //std::cout << "debug : ~base_session" << std::endl;
+  }
+protected:
+  base_session(const base_session& a_from)
+  :m_out(a_from.m_out)
+  ,m_monitor(a_from.m_monitor)
+  ,m_display(0)
+  ,m_WM_DELETE_WINDOW_atom(None)
+  ,m_SESSION_EXIT_STEER_atom(None)
+  {}
+  base_session& operator=(const base_session& a_from){
+    if(&a_from==this) return *this;
+    return *this;
+  }
+public:
+  std::ostream& out() const {return m_out;}
+
+  Atom WM_DELETE_WINDOW_atom() const {return m_WM_DELETE_WINDOW_atom;}
+  Atom SESSION_EXIT_STEER_atom() const {return m_SESSION_EXIT_STEER_atom;}
+
+  bool is_valid() const {return m_display?true:false;}
+
+  Display* display() const {return m_display;}
+
+  bool steer() {
+    if(!m_display) return false;
+
+    while(true) {
+      XEvent xevent;
+      ::XNextEvent(m_display,&xevent);
+      if(xevent.type==ClientMessage) {
+        if(xevent.xclient.data.l[0]==(long)m_SESSION_EXIT_STEER_atom) break;
+      }
+      dispatch(xevent);
+    }
+
+    return true;
+  }
+
+  bool sync() {
+    if(!m_display) return false;
+  //::glXWaitX();
+    ::XSync(m_display,False);
+    while(true) {
+      XEvent xevent;
+      if(::XPending(m_display)) {
+        ::XNextEvent(m_display,&xevent);
+        if(xevent.type==ClientMessage) {
+          if(xevent.xclient.data.l[0]==(long)m_SESSION_EXIT_STEER_atom) return false;
+        }
+        dispatch(xevent);
+      } else {
+        break;
+      }
+    }
+    return true;
+  }
+
+  bool event_pending(bool& a_is) {
+    if(!m_display) {a_is = false;return false;}
+    a_is = ::XPending(m_display)?true:false;
+    return true;
+  }
+
+  bool next_event(bool& a_to_exit) {
+    if(!m_display) {a_to_exit = false;return false;}
+    XEvent xevent;
+    ::XNextEvent(m_display,&xevent);
+    if(xevent.type==ClientMessage) {
+      if(xevent.xclient.data.l[0]==(long)m_SESSION_EXIT_STEER_atom) {
+        a_to_exit = true;
+        return true;
+      }
+    }
+    dispatch(xevent);
+    a_to_exit = false;
+    return true;
+  }
+
+  bool flush() {
+    if(!m_display) return false;
+    ::XFlush(m_display);
+    return true;
+  }
+
+
+  //////////////////////////////////////////////////
+  //////////////////////////////////////////////////
+  //////////////////////////////////////////////////
+  Window create_window(const char* a_title,int a_x,int a_y,unsigned int a_width,unsigned int a_height) {
+    if(!m_display) return 0L;
+
+    XSetWindowAttributes swa;
+    swa.event_mask = StructureNotifyMask | ExposureMask
+       | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask
+       | PointerMotionMask
+       | KeyPressMask;
+
+    swa.background_pixel = ::XWhitePixel(m_display,m_monitor);
+
+    Window window = ::XCreateWindow(m_display,
+                                    ::XRootWindow(m_display,m_monitor),
+                                    a_x,a_y,a_width,a_height,
+				    0,
+                                    (int)CopyFromParent,
+                                    InputOutput,
+                                    (Visual*)CopyFromParent,
+				    CWEventMask|CWBackPixel,&swa);
+    if(window==0L) {
+      m_out << "toolx::X11::base_session::create_window : can't create a X11 window." << std::endl;
+      return 0L;
+    }
+
+    XTextProperty tp;
+    ::XStringListToTextProperty((char**)&a_title,1,&tp);
+    XSizeHints sh;
+    sh.flags = USPosition | USSize;
+    ::XSetWMProperties(m_display,window,&tp,&tp,0,0,&sh,0,0);
+    ::XFree(tp.value);
+
+    ::XSetWMProtocols(m_display,window,&m_WM_DELETE_WINDOW_atom,1);
+    return window;
+  }
+
+  void map_raise_window(Window a_window) const {
+    if(!m_display) return;
+    ::XMapWindow(m_display,a_window);
+    ::XRaiseWindow(m_display,a_window);
+  }
+
+  void show_window(Window a_window) const {
+    if(!m_display) return;
+
+    XWindowAttributes watbs;
+    ::XGetWindowAttributes(m_display,a_window,&watbs);
+    if(watbs.map_state!=IsUnmapped) return;
+
+    ::XMapWindow(m_display,a_window);
+    ::XRaiseWindow(m_display,a_window);
+
+   {XEvent event;
+    ::XIfEvent(m_display,&event,wait_map_notify,(char*)a_window);}
+  }
+
+  void hide_window(Window a_window) const {
+    if(!m_display) return;
+
+    XWindowAttributes watbs;
+    ::XGetWindowAttributes(m_display,a_window,&watbs);
+    if(watbs.map_state==IsUnmapped) return;
+
+    ::XUnmapWindow(m_display,a_window);
+
+   {XEvent event;
+    ::XIfEvent(m_display,&event,wait_unmap_notify,(char*)a_window);}
+  }
+
+  void resize_window(Window a_window,unsigned int a_width,unsigned int a_height) const {
+    if(!m_display) return;
+    unsigned int mask = CWWidth | CWHeight | CWBorderWidth;
+    XWindowChanges changes;
+    changes.border_width = 0;
+    changes.width = a_width;
+    changes.height = a_height;
+    ::XConfigureWindow(m_display,a_window,mask,&changes);
+  }
+
+  bool window_size(Window a_window,int& a_width,int& a_height) const {
+    if(!m_display) {a_width = 0;a_height = 0;return false;}
+    XWindowAttributes watbs;
+    if(!XGetWindowAttributes(m_display,a_window,&watbs)) {a_width = 0;a_height = 0;return false;}
+    a_width  = watbs.width;
+    a_height = watbs.height;
+    return true;
+  }
+
+  void delete_window(Window a_window) const {
+    if(!m_display) return;
+    ::XDestroyWindow(m_display,a_window);
+  }
+
+  void set_override_redirect(Window a_window) const {
+    //must be executed before window is mapped.
+    if(!m_display) return;
+    XSetWindowAttributes swa;
+    swa.override_redirect = True;
+    ::XChangeWindowAttributes(m_display,a_window,CWOverrideRedirect,&swa);
+  }
+
+  void set_wm_no_decorations(Window a_window) const {
+    //must be executed before window is mapped.
+    if(!m_display) return;
+
+    // struct, mwm_hints_decorations taken from OpenMotif MwmUtils.h.
+    struct{
+      unsigned long flags;
+      unsigned long functions;
+      unsigned long decorations;
+      long          inputMode;
+      unsigned long status;
+    } prop;
+
+    //unsigned long mwm_hints_functions = 1L << 0;
+    unsigned long mwm_hints_decorations  = 1L << 1;
+
+    Atom atom = ::XInternAtom(m_display,"_MOTIF_WM_HINTS",False);
+    if(atom==None) {
+      m_out << "toolx::X11::base_session::set_wm_no_decorations : can't create/get _MOTIF_WM_HINTS Atom." << std::endl;
+      return;
+    }
+    prop.flags = mwm_hints_decorations;
+    prop.functions = 0;
+    prop.decorations = 0;
+
+    ::XChangeProperty(m_display,a_window,atom,atom,32,PropModeReplace,(unsigned char*)&prop,5);
+  }
+
+  bool post(Window a_win,
+            long a_0 = 0,long a_1 = 0,
+            long a_2 = 0,long a_3 = 0,
+            long a_4 = 0) const {
+    if(!m_display) return false;
+    XEvent event;
+    event.type = ClientMessage;
+    event.xclient.display = m_display;
+    event.xclient.window = a_win;
+    event.xclient.message_type = XA_INTEGER;
+    event.xclient.format = 8;    /* put 8 because bug with 32 on VMCMS */
+    event.xclient.data.l[0] = a_0;
+    event.xclient.data.l[1] = a_1;
+    event.xclient.data.l[2] = a_2;
+    event.xclient.data.l[3] = a_3;
+    event.xclient.data.l[4] = a_4;
+    //lock();
+    Status stat = ::XSendEvent(m_display,a_win,False,0L,&event);
+    ::XFlush(m_display);
+    //unlock();
+    return (stat==0?false:true);
+  }
+
+  bool post_EXIT_STEER(Window a_win) {
+    return post(a_win,SESSION_EXIT_STEER_atom());
+  }
+
+  //////////////////////////////////////////////////
+  //////////////////////////////////////////////////
+  //////////////////////////////////////////////////
+  void add_dispatcher(dispatcher* a_dispatcher) {
+    m_dispatchers.push_back(a_dispatcher); //take ownership.
+  }
+
+  void invalidate_dispatchers_with_window(Window a_win){
+    tools_vforit(dispatcher*,m_dispatchers,it) {
+      if((*it)->window()==a_win) (*it)->invalidate();
+    }
+  }
+
+  void remove_dispatchers_with_window(Window a_win){
+    tools_vforit_npp(dispatcher*,m_dispatchers,it) {
+      if((*it)->window()==a_win) {
+        dispatcher* obj = *it;
+        it = m_dispatchers.erase(it);
+        delete obj;
+      } else {
+        it++;
+      }
+    }
+  }
+
+  bool dispatch(XEvent& a_event) {
+   {tools_vforit_npp(dispatcher*,m_dispatchers,it) {
+      if(!(*it)->is_valid()) {
+        dispatcher* obj = *it;
+        it = m_dispatchers.erase(it);
+        delete obj;
+      } else {
+        it++;
+      }
+    }}
+    tools_vforit(dispatcher*,m_dispatchers,it) {
+      if((*it)->is_valid()) {
+        if((*it)->dispatch(a_event)) return true;
+      }
+    }
+    return false;
+  }
+protected:
+  static Bool wait_map_notify(Display*,XEvent* a_event,char* a_arg){
+    return (a_event->type == MapNotify) && (a_event->xmap.window == (Window)a_arg);
+  }
+  static Bool wait_unmap_notify(Display*,XEvent* a_event,char* a_arg){
+    return (a_event->type == UnmapNotify) && (a_event->xmap.window == (Window)a_arg);
+  }
+  
+  void clear_dispatchers() {
+    tools_vforit_npp(dispatcher*,m_dispatchers,it) {
+      dispatcher* obj = *it;
+      it = m_dispatchers.erase(it);
+      delete obj;
+    }
+    m_dispatchers.clear();
+  }
+
+protected:
+  std::ostream& m_out;
+  unsigned int  m_monitor;
+  Display*      m_display;
+  Atom          m_WM_DELETE_WINDOW_atom;
+  Atom          m_SESSION_EXIT_STEER_atom;
+  std::vector<dispatcher*> m_dispatchers;
+};
+
+}}
+
+#endif
+
