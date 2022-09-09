@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
+ Geant4 version Name: geant4-10-07-patch-04    (9-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -42,7 +42,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.210000s Real=0.256642s Sys=0.000000s
+  User=0.230000s Real=0.388183s Sys=0.000000s
 ... write file : run3.root - done
 ... close file : run3.root - done
 G4 kernel has come to Quit state.

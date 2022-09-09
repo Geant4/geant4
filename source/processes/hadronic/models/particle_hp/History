@@ -14,6 +14,40 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 June 2022 Alberto Ribon (hadr-hpp-V10-06-16)
+-----------------------------------------------
+- G4ParticleHPContAngularPar.cc : added protections against evaluations of
+  arrays at negative index (-1), fixing rare reproducibility problems.
+
+10 June 2022 Alberto Ribon
+-----------------------------------------------
+- G4ParticleHPContEnergyAngular.hh : fixed Coverity report.
+  (Correction suggested by Dennis Wright; expected no effect).
+
+11 May 2022 Dennis Wright
+-----------------------------------------------
+- code cleanup of G4ParticleHPContEnergyAngular.cc and 
+  G4ParticleHPContAngularPar.cc : remove debug code, remove commented out code,
+  fix indentation of loops and if branches   
+
+27 April 2022 Dennis Wright
+-----------------------------------------------
+- fix of bug #2468: many or most photons generated from G4NDL/Capture/FSMF6 data
+  are too high in energy.  Bug reported and fixed by Sven Menke.
+- G4ParticleHPContEnergyAngular
+   ::Sample: do not call ClearHistories - needed in case of multiple photons
+   ::ClearHistories: check cache before clear
+- G4ParticleHPContAngularPar - much code replaced here
+   ::Sample: reduce remaining energy before sampling next photon
+   ::PrepareTableInterpolation: fix to handle table entries with identical energies
+                              : disable code that incorrectly assumes identical min
+                                and max energies for two different data sets
+   ::BuildByInterpolation: re-build interpolation table only if new interaction
+                         : re-write merge of two data sets to fix incorrect
+                           assignment of elements
+                         : disable and replace code with incorrect assignment of
+                           continuous energies
+
 22 October 2021 Alberto Ribon (hadr-hpp-V10-06-15)
 --------------------------------------------------
 - G4ParticleHPLabAngularEnergy : bug-fix made by Emilio Mendoza.

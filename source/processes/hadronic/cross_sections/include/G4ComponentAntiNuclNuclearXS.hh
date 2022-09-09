@@ -49,7 +49,7 @@
 #include "G4AntiTriton.hh"
 #include "G4AntiAlpha.hh"
 #include "G4Nucleus.hh"
-
+#include "G4Pow.hh"
 #include "G4VComponentCrossSection.hh"
 
 
@@ -83,7 +83,6 @@ class G4ComponentAntiNuclNuclearXS : public G4VComponentCrossSection {
 
   private:
     G4double fRadiusEff;  // Effective Radius for AntiNucleus 
-    G4double fRadiusNN2;  // Sqr of radius of NN collision
     G4double fTotalXsc, fElasticXsc, fInelasticXsc;
     G4double fAntiHadronNucleonTotXsc, fAntiHadronNucleonElXsc; 
     G4double Elab, S, SqrtS ;
@@ -95,6 +94,18 @@ class G4ComponentAntiNuclNuclearXS : public G4VComponentCrossSection {
     G4ParticleDefinition* theAAlpha;
     G4ParticleDefinition* theAHe3;
 
+    const G4double ReffTot[5][5] =  { {0.000, 3.800, 3.300, 3.300, 2.376},    // Pbar   + p, d, t, He3, He4
+                                      {3.800, 3.238, 3.144, 3.144, 2.544},    // Dbar   + p, d, t, He3, He4
+                                      {3.300, 3.144, 3.075, 3.075, 3.589},    // Tbar   + p, d, t, He3, He4
+                                      {3.300, 3.144, 3.075, 3.075, 2.589},    // He3bar + p, d, t, He3, He4
+                                      {2.376, 2.544, 3.589, 3.598, 2.241} };  // He4bar + p, d, t, He3, He4
+    const G4double ReffInel[5][5] = { {0.000, 3.582, 3.105, 3.105, 2.209},    // Pbar   + p, d, t, He3, He4
+                                      {3.582, 3.169, 3.066, 3.066, 2.498},    // Dbar   + p, d, t, He3, He4
+                                      {3.105, 3.066, 2.973, 2.973, 2.508},    // Tbar   + p, d, t, He3, He4
+                                      {3.105, 3.066, 2.973, 2.973, 2.508},    // He3bar + p, d, t, He3, He4
+                                      {2.209, 2.498, 2.508, 2.508, 2.158} };  // He4bar + p, d, t, He3, He4
+
+    const G4Pow* theG4Pow = G4Pow::GetInstance();
 };
 
 #endif

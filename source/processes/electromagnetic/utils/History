@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 August 22: V.Ivanchenko (emutils-V10-06-20)
+- G4EmExtraParameters - safe definition of StepFuction for the 
+    G4GenericIon, related to problem #2495
+
+19 June 22: V.Ivanchenko
+- G4EmExtraParametersMessenger - fixed typo (problem #2492)
+
 18 Aug 21: D.Sawkey (emutils-V10-06-19)
 - G4OpticalParameters messenger - fix #2392: UI command changes
     incorrect parameter

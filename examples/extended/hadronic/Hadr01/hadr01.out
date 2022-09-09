@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
+ Geant4 version Name: geant4-10-07-patch-04    (9-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -896,7 +896,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
      100.00         10k         1      197        200         0.00    Check
 ### Run 0 starts.
 ### Run 0 start
-Initialisation time:  User=1.840000s Real=12.357928s Sys=0.280000s
+Initialisation time:  User=1.740000s Real=6.028760s Sys=0.200000s
 EventAction: Event # 0 started
 EventAction: Event # 10 started
 EventAction: Event # 20 started
@@ -910,8 +910,8 @@ EventAction: Event # 90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.960000s Real=1.187091s Sys=0.000000s
-RunAction::EndOfRunAction:  User=0.970000s Real=1.192644s Sys=0.010000s
+  User=0.960000s Real=1.068326s Sys=0.000000s
+RunAction::EndOfRunAction:  User=0.960000s Real=1.068406s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

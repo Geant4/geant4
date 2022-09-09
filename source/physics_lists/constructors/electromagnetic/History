@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 July 2022, V.Ivanchenko (phys-ctor-em-V10-06-23)
+- G4GammaGeneralProcess - fixed problem of Compton scattering selection
+    in the low energy interval < 150 keV identified in test67
+
 24 April 2021, V.Ivanchenko (phys-ctor-em-V10-06-22)
 - G4EmStandardPhysics, G4EmStandardPhysicsGS - set default verbosity 1
 

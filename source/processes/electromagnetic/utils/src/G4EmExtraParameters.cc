@@ -207,7 +207,7 @@ void G4EmExtraParameters::FillStepFunction(const G4ParticleDefinition* part, G4V
     proc->SetStepFunction(dRoverRange, finalRange);
 
     // all heavy ions
-  } else if (part->IsGeneralIon()) {
+  } else if ("GenericIon" == part->GetParticleName()) {
     proc->SetStepFunction(dRoverRangeIons, finalRangeIons);
 
     // light nucleus and anti-nucleus

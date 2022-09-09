@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
+ Geant4 version Name: geant4-10-07-patch-04    (9-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -394,7 +394,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -855,13 +855,13 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   10 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
+     100.00         0.01         0.00            5k accWorldL
        0.00         0.00         0.00            0k worldL
-       0.00         0.00         0.00            5k accWorldL
        0.00         0.00         0.00            2k fullWaterPhantomLV
        0.00         0.00         0.00            2k RepY
        0.00         0.00         0.00            2k RepX
@@ -869,7 +869,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      47.50          4k        12       50        220         0.00    accWorldL
+      47.50          4k        12       50        220         0.01    accWorldL
       16.57          1k         1       30         30         0.00    fullWaterPhantomLV
       16.57          1k         1       30         30         0.00    RepY
       16.57          1k         1       30         30         0.00    RepX
@@ -889,10 +889,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=17.800000s Real=20.397336s Sys=0.000000s
+  User=16.430000s Real=17.956498s Sys=0.070000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 137
-loop elapsed time [s] : 17.84
+loop elapsed time [s] : 16.47
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1116,10 +1116,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=18.150000s Real=22.986666s Sys=0.020000s
+  User=16.590000s Real=17.525482s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 206
-loop elapsed time [s] : 18.19
+loop elapsed time [s] : 16.63
 
 ################ END NEW GEOMETRY ########################
 /run/geometryModified
@@ -1413,10 +1413,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=18.260000s Real=24.372016s Sys=0.010000s
+  User=16.410000s Real=16.700353s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 102
-loop elapsed time [s] : 18.31
+loop elapsed time [s] : 16.45
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1640,13 +1640,13 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=18.200000s Real=24.136635s Sys=0.040000s
+  User=16.220000s Real=16.527633s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 117
-loop elapsed time [s] : 18.26
+loop elapsed time [s] : 16.25
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 75.94
+loop elapsed time [s] : 69.06
 
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

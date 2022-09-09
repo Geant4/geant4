@@ -1,4 +1,4 @@
-Seed used : 1637157441
+Seed used : 1662627636
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
@@ -6,7 +6,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
+ Geant4 version Name: geant4-10-07-patch-04    (9-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -34,12 +34,10 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateQt (OGLIQt, OGLI)
-  OpenGLStoredQt (OGLSQt, OGL, OGLS)
-  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
-  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
-  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+  OpenGLImmediateXm (OGLIXm, OGLI)
+  OpenGLStoredXm (OGLSXm, OGL, OGLS)
+  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -269,21 +267,23 @@ H^0 + H^0 -> H_2^0                          1.2e+10                       0.2265
 ------------------------------------------------------------------------------------------------------------------------------
 DNAMolecularStepByStepModel will be used
 Start event 1
+ * PrimaryKiller: aborts event 1, energy loss is too large. 
+ * Energy loss by primary is: 27.74 keV. Event is aborted if the Eloss is > 2 keV
 Start event 2
- * PrimaryKiller: aborts event 2, energy loss is too large. 
- * Energy loss by primary is: 3.7219 keV. Event is aborted if the Eloss is > 2 keV
 Start event 3
 Start event 4
 Start event 5
 Start event 6
+ * PrimaryKiller: aborts event 6, energy loss is too large. 
+ * Energy loss by primary is: 3.0924 keV. Event is aborted if the Eloss is > 2 keV
 Start event 7
 Start event 8
 Start event 9
 
 --------------------End of Global Run-----------------------
-  The run has 9 events 
-Number of events recorded by the species scorer = 9
- Total energy deposited in the world volume : 9415.1 eV
+  The run has 8 events 
+Number of events recorded by the species scorer = 8
+ Total energy deposited in the world volume : 9432.3 eV
  ------------------------------------------------------------
 
 0 events have been kept for refreshing and/or reviewing.

@@ -30,6 +30,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+14th July 2022 - Ben Morgan (cmake-V10-06-54)
+- Address [Bugzilla 2485](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2485)
+  - Update extraction of include paths from VecGeom to use imported target
+    property.
+
 24th September 2021 - Ben Morgan (cmake-V10-06-53)
 - Rename Geant4::HDF5 to hdf5::hdf5 to be compatible with
   imported target provided since CMake 3.20.

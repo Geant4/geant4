@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
+ Geant4 version Name: geant4-10-07-patch-04    (9-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -176,7 +176,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.150000s Real=2.411574s Sys=0.000000s
+  User=2.180000s Real=2.212653s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -243,7 +243,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.360000s Real=2.586763s Sys=0.000000s
+  User=2.920000s Real=3.004112s Sys=0.000000s
 
  ======================== run summary ======================
 

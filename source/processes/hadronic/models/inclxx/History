@@ -14,6 +14,16 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+03 March 2022 - Alberto Ribon  (hadr-inclxx-V10-06-03)
+--------------------------------------------------------
+- G4INCLXXInterface : fixed treatment of kaon0, anti_kaon0, kaon0L, and kaon0S.
+  In current reference physics lists, INCLXX is never used for handling kaons,
+  although it is capable of doing so, but at process-level or in custom
+  physics lists one could observe crashes when trying to use INCLXX for
+  neutral kaon projectiles. The change (provided by Jean-Christophe David)
+  fixes this misbehavior.
+
 28 May 2020 - Ben Morgan       (hadr-inclxx-V10-06-02)
 --------------------------------------------------------
 -  Remove obsolete GRANULAR_DEPENDENCIES entries

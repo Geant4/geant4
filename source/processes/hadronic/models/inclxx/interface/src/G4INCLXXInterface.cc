@@ -504,19 +504,24 @@ G4ReactionProductVector* G4INCLXXInterface::Propagate(G4KineticTrackVector* , G4
 }
 
 G4INCL::ParticleType G4INCLXXInterface::toINCLParticleType(G4ParticleDefinition const * const pdef) const {
-  if(     pdef == G4Proton::Proton())           return G4INCL::Proton;
-  else if(pdef == G4Neutron::Neutron())         return G4INCL::Neutron;
-  else if(pdef == G4PionPlus::PionPlus())       return G4INCL::PiPlus;
-  else if(pdef == G4PionMinus::PionMinus())     return G4INCL::PiMinus;
-  else if(pdef == G4PionZero::PionZero())       return G4INCL::PiZero;
-  else if(pdef == G4KaonPlus::KaonPlus())       return G4INCL::KPlus;
-  else if(pdef == G4KaonMinus::KaonMinus())     return G4INCL::KMinus;
-  else if(pdef == G4Deuteron::Deuteron())       return G4INCL::Composite;
-  else if(pdef == G4Triton::Triton())           return G4INCL::Composite;
-  else if(pdef == G4He3::He3())                 return G4INCL::Composite;
-  else if(pdef == G4Alpha::Alpha())             return G4INCL::Composite;
+  if(     pdef == G4Proton::Proton())               return G4INCL::Proton;
+  else if(pdef == G4Neutron::Neutron())             return G4INCL::Neutron;
+  else if(pdef == G4PionPlus::PionPlus())           return G4INCL::PiPlus;
+  else if(pdef == G4PionMinus::PionMinus())         return G4INCL::PiMinus;
+  else if(pdef == G4PionZero::PionZero())           return G4INCL::PiZero;
+  else if(pdef == G4KaonPlus::KaonPlus())           return G4INCL::KPlus;
+  else if(pdef == G4KaonZero::KaonZero())           return G4INCL::KZero;
+  else if(pdef == G4KaonMinus::KaonMinus())         return G4INCL::KMinus;
+  else if(pdef == G4AntiKaonZero::AntiKaonZero())   return G4INCL::KZeroBar;
+  // For K0L & K0S we do not take into account K0/K0B oscillations
+  else if(pdef == G4KaonZeroLong::KaonZeroLong())   return G4UniformRand() < 0.5 ? G4INCL::KZeroBar : G4INCL::KZero;
+  else if(pdef == G4KaonZeroShort::KaonZeroShort()) return G4UniformRand() < 0.5 ? G4INCL::KZeroBar : G4INCL::KZero; 
+  else if(pdef == G4Deuteron::Deuteron())           return G4INCL::Composite;
+  else if(pdef == G4Triton::Triton())               return G4INCL::Composite;
+  else if(pdef == G4He3::He3())                     return G4INCL::Composite;
+  else if(pdef == G4Alpha::Alpha())                 return G4INCL::Composite;
   else if(pdef->GetParticleType() == G4GenericIon::GenericIon()->GetParticleType()) return G4INCL::Composite;
-  else                                            return G4INCL::UnknownParticle;
+  else                                              return G4INCL::UnknownParticle;
 }
 
 G4INCL::ParticleSpecies G4INCLXXInterface::toINCLParticleSpecies(G4HadProjectile const &aTrack) const {

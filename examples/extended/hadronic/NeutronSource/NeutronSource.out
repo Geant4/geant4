@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
+ Geant4 version Name: geant4-10-07-patch-04    (9-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -456,7 +456,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.310000s Real=13.318259s Sys=0.010000s
+  User=9.350000s Real=10.298508s Sys=0.040000s
 
  The run is 10000 Am241 of 0 meV within BeO (D =  3 cm  L = 6 cm )
 

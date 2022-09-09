@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
+ Geant4 version Name: geant4-10-07-patch-04    (9-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -257,7 +257,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -504,7 +504,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.470000s Real=6.281623s Sys=0.010000s
+  User=5.080000s Real=5.323445s Sys=0.000000s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -562,28 +562,28 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.880000s Real=1.986920s Sys=0.000000s
+  User=2.110000s Real=2.242795s Sys=0.010000s
 
  The run consists of 1000 C12 of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.4839 cm    rms= 479.302 um 
- Mean number of primary steps = 149.133
+ Projected Range= 16.4932 cm    rms= 471.227 um 
+ Mean number of primary steps = 265.415
  Total energy deposit= 3.49998 GeV
- niel energy deposit = 202.287 keV
+ niel energy deposit = 285.733 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	10.8584 GeV	0.31024 % 	0.000217464 Gy
- tally 1: 	 	12.33 GeV	0.352287 % 	0.000246936 Gy
- tally 2: 	 	15.0522 GeV	0.430064 % 	0.000301454 Gy
- tally 3: 	 	23.1992 GeV	0.662835 % 	0.000464616 Gy
+ tally 0: 	 	10.9391 GeV	0.312546 % 	0.00021908 Gy
+ tally 1: 	 	12.355 GeV	0.353001 % 	0.000247437 Gy
+ tally 2: 	 	14.0673 GeV	0.401923 % 	0.000281729 Gy
+ tally 3: 	 	21.5737 GeV	0.616393 % 	0.000432062 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1629194586, 1351788858
+ Current couple of seeds = 496662916, 115124955
 ----------------------------------------
 /testem/det/tallyNumber 0
 /testem/det/setMat G4_Cu
@@ -713,7 +713,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -952,24 +952,24 @@ Index : 2     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1629194586, 1351788858
+ Current couple of seeds = 496662916, 115124955
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.100000s Real=1.280237s Sys=0.000000s
+  User=1.000000s Real=1.039477s Sys=0.000000s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.13896 cm    rms= 1.90082 mm 
- Mean number of primary steps = 20.048
- Total energy deposit= 285.951 MeV
+ Projected Range= 2.15951 cm    rms= 1.19138 mm 
+ Mean number of primary steps = 20.243
+ Total energy deposit= 285.737 MeV
  niel energy deposit = 0 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 463834380, 599197979
+ Current couple of seeds = 1422624382, 1600501768
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /gun/particle alpha
@@ -1098,7 +1098,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -1342,13 +1342,13 @@ Index : 3     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 463834380, 599197979
+ Current couple of seeds = 1422624382, 1600501768
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.000000s Real=0.000491s Sys=0.000000s
+  User=0.000000s Real=0.000779s Sys=0.000000s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 mg/cm3)
 
@@ -1359,7 +1359,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1716531674, 1573889033
+ Current couple of seeds = 1851929926, 2143269151
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /gun/particle alpha
@@ -1488,7 +1488,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -1730,24 +1730,24 @@ Index : 3     used in the geometry : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1716531674, 1573889033
+ Current couple of seeds = 1851929926, 2143269151
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.007337s Sys=0.000000s
+  User=0.010000s Real=0.007217s Sys=0.000000s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 2.91055 mm    rms= 16.4859 um 
- Mean number of primary steps = 23.13
+ Projected Range= 2.91325 mm    rms= 15.337 um 
+ Mean number of primary steps = 23.16
  Total energy deposit= 100 MeV
- niel energy deposit = 927.69 eV 
+ niel energy deposit = 931.102 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 232798170, 279543115
+ Current couple of seeds = 1658568864, 1973043733
 ----------------------------------------
 /testem/det/setMat G4_Si
 /gun/particle ion
@@ -1878,7 +1878,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -2127,24 +2127,24 @@ Index : 4     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 232798170, 279543115
+ Current couple of seeds = 1658568864, 1973043733
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=3.960000s Real=4.690740s Sys=0.050000s
+  User=7.230000s Real=7.381594s Sys=0.060000s
 
  The run consists of 10 Xe131 of 1.217 GeV through 20 cm  of G4_Si (density: 2.33 g/cm3 )
 
- Projected Range= 91.4245 um    rms= 25.1654 um 
- Mean number of primary steps = 53684.2
- Total energy deposit= 1.21694 GeV
- niel energy deposit = 1.68369 MeV
+ Projected Range= 135.618 um    rms= 16.7572 um 
+ Mean number of primary steps = 103546
+ Total energy deposit= 1.21696 GeV
+ niel energy deposit = 6.41448 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1616050344, 465307266
+ Current couple of seeds = 1611603178, 503063501
 ----------------------------------------
 /testem/det/setMat Water_1.05
 /gun/particle proton
@@ -2276,7 +2276,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -2530,24 +2530,24 @@ Index : 5     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1616050344, 465307266
+ Current couple of seeds = 1611603178, 503063501
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.540000s Real=0.548831s Sys=0.000000s
+  User=0.490000s Real=0.536242s Sys=0.000000s
 
  The run consists of 1000 proton of 160 MeV through 20 cm  of Water_1.05 (density: 1.05 g/cm3 )
 
- Projected Range= 16.9147 cm    rms= 2.00155 mm 
- Mean number of primary steps = 179.997
+ Projected Range= 16.9128 cm    rms= 1.84489 mm 
+ Mean number of primary steps = 179.97
  Total energy deposit= 160 MeV
- niel energy deposit = 138.423 eV 
+ niel energy deposit = 120.974 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 923005615, 751782321
+ Current couple of seeds = 1677857476, 82654886
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

@@ -79,6 +79,31 @@ class G4ParticleHPContAngularPar
     adjustResult = true;
   }
 
+  G4ParticleHPContAngularPar(G4ParticleHPContAngularPar & val)
+  {
+    theEnergy         = val.theEnergy;
+    nEnergies         = val.nEnergies;
+    nDiscreteEnergies = val.nDiscreteEnergies;
+    nAngularParameters= val.nAngularParameters;
+    theProjectile     = val.theProjectile;
+    theManager        = val.theManager;
+    theInt            = val.theInt;
+    adjustResult      = val.adjustResult;
+    theMinEner        = val.theMinEner;
+    theMaxEner        = val.theMaxEner;
+    theEnergiesTransformed = val.theEnergiesTransformed;
+    theDiscreteEnergies = val.theDiscreteEnergies;
+    theDiscreteEnergiesOwn = val.theDiscreteEnergiesOwn;
+    fCache.Put(0);
+    theAngular        = new G4ParticleHPList[nEnergies];
+    for(G4int ie=0;ie<nEnergies;++ie) {
+      theAngular[ie].SetLabel(val.theAngular[ie].GetLabel());
+      for(G4int ip=0;ip<nAngularParameters;++ip) {
+	theAngular[ie].SetValue(ip,val.theAngular[ie].GetValue(ip));
+      }
+    }
+  }
+
   G4ParticleHPContAngularPar(G4ParticleDefinition* projectile); 
 
   ~G4ParticleHPContAngularPar()
@@ -92,7 +117,7 @@ class G4ParticleHPContAngularPar
   G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass, 
                             G4int angularRep, G4int interpol);
   
-  G4double GetEnergy()
+  G4double GetEnergy() const
   { 
     if( std::getenv("G4PHPTEST") )
       G4cout << this << " G4ParticleHPContAngularPar::GetEnergy "
@@ -125,7 +150,7 @@ class G4ParticleHPContAngularPar
              G4ParticleHPContAngularPar & store2);
     // NOTE: this interpolates legendre coefficients
 
-  void PrepareTableInterpolation(const G4ParticleHPContAngularPar* angularPrev);
+  void PrepareTableInterpolation();
   
   G4double MeanEnergyOfThisInteraction()
   {
@@ -182,7 +207,7 @@ class G4ParticleHPContAngularPar
     fCache.Get()->fresh = true;
   }
 
-  void Dump();
+  void Dump() const;
 
 private:
   
