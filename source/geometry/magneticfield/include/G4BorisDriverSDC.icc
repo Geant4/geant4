@@ -1,0 +1,257 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// G4BorisDriverSDC inline methods implementation
+
+// Author: Divyansh Tiwari, Google Summer of Code 2022
+// Supervision: John Apostolakis,Renee Fatemi, Soon Yung Jun
+// --------------------------------------------------------------------
+
+#include <cassert>
+
+#include "G4LineSection.hh"
+#include "G4FieldUtils.hh"
+#include "G4SystemOfUnits.hh"
+
+G4BorisDriverSDC::
+G4BorisDriverSDC( G4double hminimum, G4BorisSDC* Boris,
+                     G4int numberOfComponents, G4int statisticsVerbosity )
+  : fMinimumStep(hminimum),
+    fVerbosity(statisticsVerbosity),
+    boris(Boris)
+   
+      
+{
+    
+    assert(boris->GetNumberOfVariables() == numberOfComponents);
+    
+    if(boris->GetNumberOfVariables() != numberOfComponents)
+    {
+      std::ostringstream msg;
+      msg << "Disagreement in number of variables = "
+          << boris->GetNumberOfVariables()
+          << " vs no of components = " << numberOfComponents;
+      G4Exception("G4BorisDriverSDC Constructor:",
+                  "GeomField1001", FatalException, msg);       
+    }
+}
+
+G4bool G4BorisDriverSDC::
+AccurateAdvance( G4FieldTrack& track, G4double hstep,
+                 G4double eps, G4double hinitial)
+ {
+
+
+    // Driver with adaptive stepsize control. Integrate starting
+    // values at y_current over hstep x2 with accuracy eps.
+    // On output ystart is replaced by values at the end of the integration
+    // interval. RightHandSide is the right-hand side of ODE system.
+    // The source is similar to odeint routine from NRC p.721-722 .
+
+    //  Ensure that hstep > 0
+    if(hstep == 0)
+    {
+      std::ostringstream message;
+      message << "Proposed step is zero; hstep = " << hstep << " !";
+      G4Exception("G4BorisDriverSDC::AccurateAdvance()",
+                  "GeomField1001", JustWarning, message);
+
+      return true;
+    }
+    if(hstep < 0)
+    {
+        std::ostringstream message;
+        message << "Invalid run condition." << G4endl
+                << "Proposed step is negative; hstep = "
+                << hstep << "." << G4endl
+                << "Requested step cannot be negative! Aborting event.";
+        G4Exception("G4BorisDriverSDC::AccurateAdvance()",
+                    "GeomField0003", EventMustBeAborted, message);
+
+        return false;
+    }
+
+    // init first step size
+    //
+    G4double h = hstep;
+   // G4cout<<" BorisDriver::AccurateAdvance: Step Request "<<hstep<<" htrial = "<<h<<"Divide hstep/htrial: "<<hstep/h<<G4endl;
+    G4int noOfSteps = h/hstep;
+
+    // integration variables
+    //
+    track.DumpToArray(yCurrent);
+
+    // copy non-integration variables to out array
+    //
+    std::memcpy(yOut + GetNumberOfVarialbles(),
+                yCurrent + GetNumberOfVarialbles(),
+         sizeof(G4double)*(G4FieldTrack::ncompSVEC-GetNumberOfVarialbles()));
+
+    G4double startCurveLength = track.GetCurveLength();
+    G4double curveLength = startCurveLength;
+    G4double endCurveLength = startCurveLength + hstep;
+
+    
+    G4FieldTrack yFldTrk(track);
+    G4double dchord_step, dyerr, dyerr_len;  // What to do with these ?
+    yFldTrk.LoadFromArray(yCurrent, G4FieldTrack::ncompSVEC);
+    yFldTrk.SetCurveLength(curveLength);
+    yFldTrk.DumpToArray(yCurrent);
+     QuickAdvance(yFldTrk, dydxCurrent, h, dchord_step, dyerr_len);
+
+    
+
+
+    //upload new state
+    track.LoadFromArray(yOut, G4FieldTrack::ncompSVEC);
+    track.SetCurveLength(curveLength + h);
+
+   
+
+    return true;
+}
+
+G4bool G4BorisDriverSDC::
+QuickAdvance( G4FieldTrack& track, const G4double dydx[],
+              G4double hstep, G4double& missDist, G4double& dyerr)
+{
+    const auto nvar = boris->GetNumberOfVariables();
+    // G4cout<<" here "<<G4endl;
+    track.DumpToArray(yIn);
+    const G4double curveLength = track.GetCurveLength();
+   // G4cout<<yIn[0]<<" "<<yIn[1]<<" "<<yIn[2]<<" "<<yIn[3]<<" "<<yIn[4]<<" "<<yIn[5]<<G4endl;
+
+   // call the boris method for step length hstep
+   G4double restMass = track.GetRestMass();
+   G4double charge = track.GetCharge()*e_SI;
+
+
+    boris->DoStep(restMass, charge, yIn, yOut, hstep);
+    boris->DoStep(restMass, charge, yIn, yMid, hstep*0.5);
+
+   // G4cout<<yOut[0]<<yOut[1]<<yOut[2]<<yOut[3]<<yOut[4]<<yOut[5]<<G4endl;
+
+
+
+    // How to calculate chord length??
+    const auto mid = field_utils::makeVector(yMid,
+                     field_utils::Value3D::Position);
+    const auto in  = field_utils::makeVector(yIn,
+                     field_utils::Value3D::Position);
+    const auto out = field_utils::makeVector(yOut,
+                     field_utils::Value3D::Position);
+
+    missDist = G4LineSection::Distline(mid, in, out);
+
+    // figure out a way to calculate error
+    //
+    for (G4int i = 0; i < nvar; ++i)
+    {
+        yError[i] = 0;
+    }
+
+    dyerr = field_utils::absoluteError(yOut, yError, hstep);
+
+    // copy non-integrated variables to output array
+    //
+    std::memcpy(yOut + nvar, yIn + nvar,
+                sizeof(G4double) * (G4FieldTrack::ncompSVEC - nvar));
+
+    // set new state
+    //
+    track.LoadFromArray(yOut, G4FieldTrack::ncompSVEC);
+    track.SetCurveLength(curveLength +  hstep);
+
+    return true;
+}
+
+
+
+void G4BorisDriverSDC::
+GetDerivatives( const G4FieldTrack& track, G4double dydx[]) const
+{
+    
+}
+
+void G4BorisDriverSDC::
+GetDerivatives( const G4FieldTrack& track, G4double dydx[],
+                G4double field[]) const
+{
+    
+}
+
+void G4BorisDriverSDC::SetVerboseLevel(G4int level)
+{
+    fVerbosity = level;
+}
+
+G4int G4BorisDriverSDC::GetVerboseLevel() const
+{
+    return fVerbosity;
+}
+
+G4double G4BorisDriverSDC::
+ComputeNewStepSize( G4double /* errMaxNorm*/, G4double  hstepCurrent)
+{
+    return hstepCurrent;
+}
+
+G4EquationOfMotion* G4BorisDriverSDC::GetEquationOfMotion()
+{
+    auto eq = boris->GetEquationOfMotion();
+
+    return eq;
+}
+
+void G4BorisDriverSDC::
+SetEquationOfMotion( G4EquationOfMotion* equation )
+{
+    boris->SetEquationOfMotion(equation);
+    
+}
+
+G4int G4BorisDriverSDC::GetNumberOfVarialbles() const
+{
+    return boris->GetNumberOfVariables();
+}
+
+const G4MagIntegratorStepper*
+G4BorisDriverSDC::GetStepper() const
+{
+    return nullptr;
+}
+
+G4MagIntegratorStepper*
+G4BorisDriverSDC::GetStepper()
+{
+    return nullptr;
+}
+
+void
+G4BorisDriverSDC::StreamInfo( std::ostream& os ) const
+{
+  os << "State of G4BorisDriverSDC: " << std::endl;
+  os << "   Method is implemented, but gives no information. " << std::endl;
+}
