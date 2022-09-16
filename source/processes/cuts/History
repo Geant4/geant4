@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+June. 24th, 2022 - V.Ivantchenko (proccuts-V10-07-08)
+  ## 2022-05-07 Vladimir Ivantchenko
+- G4VRangeToEnergyConverter - fixed static methods to provide
+    initialisation of energy limits
+
 March. 14th, 2022 - I. Hrivnacova (proccuts-V10-07-07)
 - G4VRangeToEnergyConverter - fixed clearing of static data
     in destructor

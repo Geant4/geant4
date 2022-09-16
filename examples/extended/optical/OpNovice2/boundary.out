@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1133,14 +1133,14 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1156,7 +1156,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.210000s Real=0.209632s Sys=0.000000s
+  User=0.210000s Real=0.236986s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1225,14 +1225,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1245,7 +1245,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.120000s Real=0.120560s Sys=0.000000s
+  User=0.150000s Real=0.611545s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1332,14 +1332,14 @@ The MPT for the surface is now:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1352,7 +1352,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.136966s Sys=0.000000s
+  User=0.140000s Real=0.672817s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1445,14 +1445,14 @@ The MPT for the surface is now:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1465,7 +1465,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.140000s Real=0.139935s Sys=0.000000s
+  User=0.140000s Real=0.439085s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1525,14 +1525,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1545,7 +1545,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.153464s Sys=0.000000s
+  User=0.170000s Real=0.636444s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1605,14 +1605,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1625,7 +1625,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.750000s Real=0.759464s Sys=0.000000s
+  User=0.720000s Real=1.440228s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1689,14 +1689,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1709,7 +1709,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.750000s Real=0.757380s Sys=0.000000s
+  User=0.740000s Real=1.221830s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1778,14 +1778,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1798,7 +1798,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.141016s Sys=0.000000s
+  User=0.140000s Real=0.511336s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1858,14 +1858,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1878,7 +1878,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.156780s Sys=0.000000s
+  User=0.160000s Real=0.367967s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1953,14 +1953,14 @@ Set file name: glisur
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1973,7 +1973,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.110000s Real=0.119158s Sys=0.000000s
+  User=0.120000s Real=0.203437s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2060,14 +2060,14 @@ The MPT for the surface is now:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2080,7 +2080,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.132746s Sys=0.000000s
+  User=0.130000s Real=0.164070s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2175,14 +2175,14 @@ Surface polish set to: 0.2
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2195,7 +2195,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.140000s Real=0.137294s Sys=0.000000s
+  User=0.180000s Real=0.203015s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2264,14 +2264,14 @@ Surface polish set to: 1
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2284,7 +2284,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.140000s Real=0.139197s Sys=0.000000s
+  User=0.140000s Real=0.216323s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2344,14 +2344,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2364,7 +2364,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.350000s Real=0.360047s Sys=0.000000s
+  User=0.330000s Real=0.819811s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2425,14 +2425,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2445,7 +2445,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.151215s Sys=0.000000s
+  User=0.180000s Real=0.424235s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2508,14 +2508,14 @@ Surface polish set to: 0.2
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2528,7 +2528,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.360000s Real=0.371485s Sys=0.000000s
+  User=0.340000s Real=0.727390s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2597,14 +2597,14 @@ Surface polish set to: 1
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2617,7 +2617,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.140000s Real=0.139245s Sys=0.000000s
+  User=0.170000s Real=0.506101s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2680,14 +2680,14 @@ Surface polish set to: 0.2
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2700,7 +2700,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.160000s Real=0.156499s Sys=0.000000s
+  User=0.150000s Real=0.351885s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2776,14 +2776,14 @@ Set file name: davis_roughTeflon
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2796,7 +2796,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.160000s Real=1.170561s Sys=0.000000s
+  User=1.280000s Real=2.954888s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2860,14 +2860,14 @@ Set file name: davis_detector
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2880,7 +2880,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.050000s Real=0.049609s Sys=0.000000s
+  User=0.040000s Real=0.130464s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2949,14 +2949,14 @@ Set file name: lbnl_polishedLumirrorAir
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2969,7 +2969,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.080000s Real=0.086151s Sys=0.000000s
+  User=0.090000s Real=0.097173s Sys=0.000000s
 
     Run Summary
 ---------------------------------

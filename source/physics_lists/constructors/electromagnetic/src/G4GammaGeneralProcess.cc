@@ -589,7 +589,7 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
     if(preStepLambda*q <= peLambda) {
       SelectEmProcess(step, thePhotoElectric);
     } else {
-      if(theT[1] && preStepLambda*q < preStepLambda*GetProbability(1) + peLambda) {
+      if(theT[1] && preStepLambda*q < (preStepLambda - peLambda)*GetProbability(1) + peLambda) {
 	SelectEmProcess(step, theRayleigh);
       } else {
 	SelectEmProcess(step, theCompton);

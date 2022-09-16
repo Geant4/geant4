@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -18,7 +18,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
- creating G4RunManagerKernel 0x1724e70
+ creating G4RunManagerKernel 0x23d3eb0
 
 The materials defined are : 
 
@@ -93,15 +93,15 @@ G4Transportation:  Current values for thresholds related to  the killing of loop
     Important Energy = 250  ( above this tracks are given multiple chances ) 
     Extra Trials     = 10 'important' tracks, i.e. those above 'important' energy 
  G4Transportation constructor> set fShortStepOptimisation to false
-0x193fe50G4ErrorPhysicsList:: particle process manager e+ = 0x1944ef0
-0x193fcb0G4ErrorPhysicsList:: particle process manager e- = 0x1944090
-0x193fb10G4ErrorPhysicsList:: particle process manager gamma = 0x1945c40
-0x1941190G4ErrorPhysicsList:: particle process manager geantino = 0x19494b0
-0x193fff0G4ErrorPhysicsList:: particle process manager mu+ = 0x1949700
-0x19402e0G4ErrorPhysicsList:: particle process manager mu- = 0x1949950
-0x19406f0G4ErrorPhysicsList:: particle process manager pi+ = 0x1949ba0
-0x1940b40G4ErrorPhysicsList:: particle process manager pi- = 0x1949df0
-0x1940f60G4ErrorPhysicsList:: particle process manager proton = 0x194a040
+0x25ef9f0G4ErrorPhysicsList:: particle process manager e+ = 0x25f4a90
+0x25ef850G4ErrorPhysicsList:: particle process manager e- = 0x25f90f0
+0x25ef6b0G4ErrorPhysicsList:: particle process manager gamma = 0x25f9280
+0x25f0d30G4ErrorPhysicsList:: particle process manager geantino = 0x25f94d0
+0x25efb90G4ErrorPhysicsList:: particle process manager mu+ = 0x25f9720
+0x25efe80G4ErrorPhysicsList:: particle process manager mu- = 0x25f9970
+0x25f0290G4ErrorPhysicsList:: particle process manager pi+ = 0x25f9bc0
+0x25f06e0G4ErrorPhysicsList:: particle process manager pi- = 0x25f9e10
+0x25f0b00G4ErrorPhysicsList:: particle process manager proton = 0x25fa060
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 =======================================================================
@@ -206,28 +206,28 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  10000 km     e-  10000 km     e+  10000 km  proton 10000 km 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 1 PeV
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 PeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  10000 km     e-  10000 km     e+  10000 km  proton 10000 km 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 1 PeV
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 PeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_Al
  Range cuts        :  gamma  10000 km     e-  10000 km     e+  10000 km  proton 10000 km 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 1 PeV
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 PeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  10000 km     e-  10000 km     e+  10000 km  proton 10000 km 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 1 PeV
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 PeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 

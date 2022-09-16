@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -914,14 +914,14 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 GeV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Al
  Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 100 GeV
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -945,28 +945,28 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.090000s Real=0.168934s Sys=0.000000s
+  User=0.090000s Real=0.122463s Sys=0.000000s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.27   RMS(GeV) 4.325
-Average number of steps              54.1
-Average number of gamma              0.81
+Average energy deposit (GeV)         7.254   RMS(GeV) 4.129
+Average number of steps              62.37
+Average number of gamma              0.58
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           9.92
-Average number of protons            11.19
+Average number of neutrons           10.99
+Average number of protons            11.48
 Average number of antiprotons        0
-Average number of pi+ & pi-          6.36
-Average number of pi0                3.25
-Average number of kaons              0.12
+Average number of pi+ & pi-          6.98
+Average number of pi0                3.71
+Average number of kaons              0.16
 Average number of muons              0
-Average number of deuterons+tritons  2.86
-Average number of He3+alpha          1.07
-Average number of ions               1.09
+Average number of deuterons+tritons  2.34
+Average number of He3+alpha          0.97
+Average number of ions               1.06
 ========================================================
 
 0 events have been kept for refreshing and/or reviewing.

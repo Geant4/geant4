@@ -16,6 +16,12 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 16, 2022 Gabriele Cosmo (global-V10-07-40)
+- Updated tag IDs for geant4-11-00-patch-03.
+
+May 31, 2022 Gabriele Cosmo
+- Commented out debug printout in G4ThreadLocalSingleton constructor.
+
 May 23, 2022 Gabriele Cosmo (global-V10-07-39)
 - Updated tag IDs for geant4-11-00-patch-02.
 

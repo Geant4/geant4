@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -606,42 +606,42 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.04922 keV    e-  108.977 keV    e+  107.375 keV proton 10 keV
+ Energy thresholds :  gamma  1.0488 keV    e-  108.985 keV    e+  107.379 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_He
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  36.2806 keV    e-  351.89 keV    e+  338.072 keV proton 10 keV
+ Energy thresholds :  gamma  36.2784 keV    e-  351.887 keV    e+  338.074 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.20981 keV    e-  99.1101 keV    e+  97.6575 keV proton 10 keV
+ Energy thresholds :  gamma  1.20959 keV    e-  99.1194 keV    e+  97.66 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11083 keV    e-  85.0421 keV    e+  83.9054 keV proton 10 keV
+ Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -661,20 +661,20 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.120000s Real=4.168792s Sys=0.010000s
+  User=3.350000s Real=5.453926s Sys=0.010000s
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.09
-Average number of gamma                      19.56
-Average number of e+                         0.7536
-Average number of steps in the phantom       11.43
-Average number of e- steps in the target     17.98
-Average number of g  produced in the target  18.71
-Average number of e- produced in the target  20.9
-Average number of g produced in the phantom  0.4858
-Average number of e- produced in the phantom 5.88
-Total fGamma fluence in front of the phantom 7.938 MeV 
+Average number of e-                         32.97
+Average number of gamma                      19.51
+Average number of e+                         0.7655
+Average number of steps in the phantom       11.32
+Average number of e- steps in the target     18.09
+Average number of g  produced in the target  18.68
+Average number of e- produced in the target  20.91
+Average number of g produced in the phantom  0.4817
+Average number of e- produced in the phantom 5.848
+Total fGamma fluence in front of the phantom 7.978 MeV 
 ========================================================
 
 
@@ -682,7 +682,7 @@ Total fGamma fluence in front of the phantom 7.938 MeV
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={80155903184888790, 1214270660551936889, 1187340175138716126, 1180047102960670606, 2109949967223524904, 1188579360601364603, 1979034981166190257, 365040130156177234, 638072738608526119, 1435800275195716227, 586431693076429334, 529209901116836052, 699409495010838523, 1024819552013063027, 1002754902938848292, 1893509152542565972, 1034031409024371014} counter= 12sumtot= 2007556336014806312
+N=17 V[N]={751888656778767679, 852584469909826186, 1461997172147956660, 1893530399385362287, 354835268533465992, 1115565479201561417, 2207711953820944298, 1495264827895308591, 990210191037555698, 1159959174278720212, 75203051463953516, 540633112025752300, 1993264121826467906, 1094888442710261139, 2074432358777940121, 2173690864371241183, 1984482758971967349} counter= 14sumtot= 1467555220213806975
 ---------------------------------------
 #
 G4 kernel has come to Quit state.

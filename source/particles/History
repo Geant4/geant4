@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 12 August 2022 Alberto Ribon (particles-V10-07-12)
+  Fixed three bugs regarding the transportation of hypernuclei and anti-hypernuclei:
+- G4Ion : set (forgotten) isGeneralIon to false for hypernuclei and 
+  anti-hypernuclei (otherwise they would get the same processes as GenericIon).
+- G4DoubleHyperDoubleNeutron, G4AntiDoubleHyperDoubleNeutron : added (forgotten)
+  call to SetDecayTable (otherwise the decay table would not be defined for
+  these particles).
+- G4ParticleDefinition : protect the two methods GetNumberOfLambdasInHypernucleus()
+  and GetNumberOfAntiLambdasInAntiHypernucleus() against baryonic resonances
+  with high spins (such as N(2220), N(2250) and their anti-particles) which have
+  8-digits PDG codes, but which are not hypernuclei or anti-hypernuclei.
+
 - 09 February 2022 Gabriele Cosmo (particles-V10-07-11)
 - Fixed compilation warnings on Intel compiler for unused variables.
 

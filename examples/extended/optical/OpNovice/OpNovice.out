@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1221,14 +1221,14 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52535 keV    e-  277.593 keV    e+  270.769 keV proton 70 keV
+ Energy thresholds :  gamma  2.52493 keV    e-  277.585 keV    e+  270.777 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -3401,17 +3401,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    17    0.956   -0.265  -0.0145     0.255   0.0083   0.0388      1.29        Tank Cerenkov
    18    0.925   -0.282  -0.0139     0.249  0.00549   0.0365      1.33        Tank Cerenkov
    19    0.904   -0.296  -0.0096     0.245  0.00423   0.0261      1.36        Tank Cerenkov
-   20    0.896     -0.3 -0.00631     0.244  0.00131   0.0101      1.37        Tank Cerenkov
+   20    0.896     -0.3 -0.00632     0.244  0.00131   0.0101      1.37        Tank Cerenkov
    21    0.891   -0.301 -0.00526     0.243 0.000341  0.00509      1.37        Tank Cerenkov
    22    0.887   -0.302 -0.00442     0.243 0.000559   0.0038      1.38        Tank Cerenkov
-   23    0.886   -0.303 -0.00394     0.243 0.000259  0.00168      1.38        Tank Cerenkov
+   23    0.886   -0.303 -0.00395     0.243 0.000259  0.00168      1.38        Tank Cerenkov
    24    0.885   -0.303 -0.00376     0.243 0.000115   0.0007      1.38        Tank Cerenkov
    25    0.885   -0.303 -0.00369     0.242 6.63e-05 0.000266      1.38        Tank Cerenkov
-   26    0.885   -0.303 -0.00368     0.242 3.94e-06 1.51e-05      1.38        Tank Cerenkov
-   27    0.885   -0.303 -0.00368     0.242 3.69e-08 1.41e-07      1.38        Tank Cerenkov
-   28    0.885   -0.303 -0.00368     0.242 3.45e-10 1.32e-09      1.38        Tank Cerenkov
-   29    0.885   -0.303 -0.00368     0.242 3.22e-12 1.23e-11      1.38        Tank Cerenkov
-   30    0.885   -0.303 -0.00368     0.242 3.01e-14 1.15e-13      1.38        Tank Cerenkov
+   26    0.885   -0.303 -0.00368     0.242 3.92e-06  1.5e-05      1.38        Tank Cerenkov
+   27    0.885   -0.303 -0.00368     0.242 3.67e-08  1.4e-07      1.38        Tank Cerenkov
+   28    0.885   -0.303 -0.00368     0.242 3.43e-10 1.31e-09      1.38        Tank Cerenkov
+   29    0.885   -0.303 -0.00368     0.242 3.21e-12 1.23e-11      1.38        Tank Cerenkov
+   30    0.885   -0.303 -0.00368     0.242    3e-14 1.15e-13      1.38        Tank Cerenkov
    31    0.776   -0.335    0.028     0.162   0.0802    0.133      1.51        Tank eIoni
 
 *********************************************************************************************************
@@ -4933,7 +4933,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     6    0.538    0.029  -0.0433     0.323        0        0     0.561        Tank initStep
     7    0.585   0.0521  -0.0679     0.313   0.0102   0.0583     0.619        Tank Cerenkov
-    8    0.622   0.0758  -0.0975     0.307  0.00662   0.0547     0.674        Tank Cerenkov
+    8    0.622   0.0759  -0.0975     0.307  0.00662   0.0547     0.674        Tank Cerenkov
     9    0.663   0.0926   -0.122       0.3  0.00693   0.0524     0.726        Tank Cerenkov
 
 *********************************************************************************************************
@@ -4990,8 +4990,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    10    5e+03 -4.3e+03 2.31e+03   2.8e-06        0        0  2.52e+04        Tank Transportation
    11 4.59e+03   -5e+03 1.66e+03   2.8e-06        0 1.04e+03  2.63e+04     expHall Transportation
    12 4.59e+03   -5e+03 1.66e+03   2.8e-06        0        0  2.63e+04        Tank Transportation
-   13    5e+03     49.5   -3e+03   2.8e-06        0 6.88e+03  3.32e+04     expHall Transportation
-   14    5e+03     49.5   -3e+03   2.8e-06        0        0  3.32e+04        Tank Transportation
+   13    5e+03     49.6   -3e+03   2.8e-06        0 6.88e+03  3.32e+04     expHall Transportation
+   14    5e+03     49.6   -3e+03   2.8e-06        0        0  3.32e+04        Tank Transportation
    15 3.13e+03 2.63e+03   -5e+03   2.8e-06        0 3.76e+03  3.69e+04     expHall Transportation
    16 3.13e+03 2.63e+03   -5e+03   2.8e-06        0        0  3.69e+04        Tank Transportation
    17 1.77e+03    5e+03 -4.44e+03   2.8e-06        0 2.79e+03  3.97e+04     expHall Transportation
@@ -8048,7 +8048,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0    0.317   0.0414    0.265  3.49e-06        0        0         0        Tank initStep
     1     -205 3.99e+03    5e+03  3.49e-06        0  6.4e+03   6.4e+03     expHall Transportation
     2      969    1e+04 8.07e+03  3.49e-06        0 6.85e+03  1.33e+04       world Transportation
-    3 1.95e+03  1.5e+04 1.06e+04  3.49e-06        0  5.7e+03   1.9e+04  OutOfWorld Transportation
+    3 1.94e+03  1.5e+04 1.06e+04  3.49e-06        0  5.7e+03   1.9e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -8169,15 +8169,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2   -3e+03 -3.55e+03    5e+03  2.93e-06        0        0  6.83e+03        Tank Transportation
     3 -3.9e+03   -5e+03 3.95e+03  2.93e-06        0    2e+03  8.83e+03     expHall Transportation
     4 -3.9e+03   -5e+03 3.95e+03  2.93e-06        0        0  8.83e+03        Tank Transportation
-    5   -5e+03 -3.47e+03     -452  2.93e-06        0 4.78e+03  1.36e+04     expHall Transportation
+    5   -5e+03 -3.47e+03     -452  2.93e-06        0 4.79e+03  1.36e+04     expHall Transportation
     6   -5e+03 -3.47e+03     -452  2.93e-06        0        0  1.36e+04        Tank Transportation
-    7      892 -1.06e+03   -5e+03  2.93e-06        0 7.83e+03  2.14e+04     expHall Transportation
-    8      892 -1.06e+03   -5e+03  2.93e-06        0        0  2.14e+04        Tank Transportation
+    7      891 -1.06e+03   -5e+03  2.93e-06        0 7.83e+03  2.14e+04     expHall Transportation
+    8      891 -1.06e+03   -5e+03  2.93e-06        0        0  2.14e+04        Tank Transportation
     9 2.49e+03   -5e+03 -3.34e+03  2.93e-06        0 4.57e+03   2.6e+04     expHall Transportation
    10 2.49e+03   -5e+03 -3.34e+03  2.93e-06        0        0   2.6e+04        Tank Transportation
    11    5e+03 -2.8e+03 -3.93e+03  2.93e-06        0 3.39e+03  2.94e+04     expHall Transportation
    12    5e+03 -2.8e+03 -3.93e+03  2.93e-06        0        0  2.94e+04        Tank Transportation
-   13     -482  1.4e+03 -4.43e+03  2.93e-06 2.93e-06 6.93e+03  3.63e+04        Tank OpAbsorption
+   13     -482  1.4e+03 -4.44e+03  2.93e-06 2.93e-06 6.92e+03  3.63e+04        Tank OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -8313,7 +8313,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.359   -0.246    0.793  2.44e-06        0        0         0        Tank initStep
+    0     0.36   -0.246    0.793  2.44e-06        0        0         0        Tank initStep
     1      734 -4.14e+03    5e+03  2.44e-06        0 6.53e+03  6.53e+03     expHall Transportation
     2      734 -4.14e+03    5e+03  2.44e-06        0        0  6.53e+03        Tank Transportation
     3 1.32e+03   -5e+03 3.75e+03  2.44e-06        0 1.62e+03  8.15e+03     expHall Transportation
@@ -8385,7 +8385,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
    23    0.233   -0.513     1.04     0.188        0        0      1.57        Tank initStep
-   24    0.214   -0.538     1.04     0.181  0.00689   0.0311       1.6        Tank msc
+   24    0.215   -0.538     1.04     0.181  0.00689   0.0311       1.6        Tank msc
    25    0.159   -0.593     1.04     0.165   0.0167    0.089      1.69        Tank eIoni
 
 *********************************************************************************************************
@@ -8560,7 +8560,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
    36   0.0512   -0.591        1    0.0541        0        0      1.98        Tank initStep
    37   0.0518   -0.588        1    0.0516   0.0025  0.00366      1.99        Tank msc
-   38   0.0565   -0.573    0.995    0.0385   0.0132   0.0225      2.01        Tank eIoni
+   38   0.0566   -0.573    0.995    0.0385   0.0132   0.0225      2.01        Tank eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 45,   Parent ID = 1
@@ -8580,7 +8580,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-   38   0.0565   -0.573    0.995    0.0385        0        0      2.01        Tank initStep
+   38   0.0566   -0.573    0.995    0.0385        0        0      2.01        Tank initStep
    39   0.0566   -0.571    0.994    0.0364  0.00208    0.002      2.01        Tank msc
    40   0.0568   -0.563    0.987     0.018   0.0184    0.017      2.03        Tank eIoni
 
@@ -13685,7 +13685,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.233   0.0241  -0.0285   2.6e-06        0        0         0        Tank initStep
     1    5e+03 1.06e+03     51.9   2.6e-06        0 5.11e+03  5.11e+03     expHall Transportation
-    2    1e+04 2.06e+03     -396   2.6e-06        0 5.12e+03  1.02e+04       world Transportation
+    2    1e+04 2.06e+03     -395   2.6e-06        0 5.12e+03  1.02e+04       world Transportation
     3  1.5e+04 3.06e+03     -843   2.6e-06        0 5.12e+03  1.53e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -13814,7 +13814,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 19,   Parent ID = 1
-********************************************************************************
+********************************************************************
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
@@ -13826,17 +13826,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.650000s Real=1.666107s Sys=0.000000s
+  User=1.690000s Real=2.118023s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: e+ with energy 500 keV.
 Number of events: 1000
-Average number of Cerenkov photons created per event: 17.5 +- 6.78
-Average number of scintillation photons created per event: 67.1 +- 7.99
-Average number of optical Rayleigh interactions per event: 7.89 +- 3.11
-Average number of optical absorption interactions per event: 35 +- 6.17
-Average number of optical Mie interactions per event: 0.108 +- 0.326
-Average number of optical boundary interactions per event: 193 +- 31.4
+Average number of Cerenkov photons created per event: 17.3 +- 6.84
+Average number of scintillation photons created per event: 67.1 +- 8.19
+Average number of optical Rayleigh interactions per event: 7.95 +- 3.2
+Average number of optical absorption interactions per event: 35.1 +- 6.31
+Average number of optical Mie interactions per event: 0.109 +- 0.336
+Average number of optical boundary interactions per event: 193 +- 31.6
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

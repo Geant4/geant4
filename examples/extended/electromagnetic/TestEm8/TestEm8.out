@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -524,21 +524,21 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 0 fm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 0 eV 
+ Energy thresholds :  gamma  25 eV     e-  25 eV     e+  25 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 0 fm 
- Energy thresholds :  gamma  2.28758 keV    e-  264.814 keV    e+  258.4 keV proton 0 eV 
+ Energy thresholds :  gamma  2.28699 keV    e-  264.86 keV    e+  258.447 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : XeCH4C3H8
  Range cuts        :  gamma  1.8 mm     e-  1.8 mm     e+  1.8 mm  proton 1.8 mm 
- Energy thresholds :  gamma  1 keV    e-  5.2692 keV    e+  5.15611 keV proton 180 keV
+ Energy thresholds :  gamma  25 eV     e-  5.46873 keV    e+  5.35456 keV proton 180 keV
  Region(s) which use this couple : 
     GasDetector
 
@@ -555,8 +555,8 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.070000s Real=0.066956s Sys=0.000000s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0166649
+  User=0.060000s Real=0.154771s Sys=0.000000s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0158005
  ====================================================
    Beam Particle: proton
    Ekin(MeV)    = 200000
@@ -565,31 +565,31 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0166649
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 16.665 +- 0.46178 keV    RMS/Emean = 0.87627
-   Mean number of steps in absorber= 1.249  mean number of ion-clusters = 833.95 MeanCluster= 833.25
+   Mean energy deposit in absorber = 15.8 +- 0.27978 keV    RMS/Emean = 0.55995
+   Mean number of steps in absorber= 1.27  mean number of ion-clusters = 789.58 MeanCluster= 790.02
 
- ====== Energy deposit distribution   Noverflows= 0.02 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.008 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1         3           4       0.004
-    2         6          99       0.099
-    3         9         274       0.274
-    4        12         216       0.216
-    5        15         167       0.167
-    6        18         100         0.1
-    7        21          48       0.048
-    8        24          22       0.022
-    9        27           9       0.009
-   10        30          10        0.01
-   11        33           8       0.008
-   12        36           5       0.005
-   13        39           4       0.004
+    2         6         102       0.102
+    3         9         265       0.265
+    4        12         223       0.223
+    5        15         159       0.159
+    6        18         101       0.101
+    7        21          49       0.049
+    8        24          25       0.025
+    9        27          23       0.023
+   10        30           9       0.009
+   11        33           6       0.006
+   12        36           7       0.007
+   13        39           5       0.005
    14        42           2       0.002
-   15        45           5       0.005
-   16        48           2       0.002
-   17        51           1       0.001
-   18        54           1       0.001
-   19        57           3       0.003
+   15        45           4       0.004
+   16        48           3       0.003
+   17        51           2       0.002
+   18        54           3       0.003
+   19        57           0           0
  ================== run end ==========================
 ... write file : testem8.root - done
 ... close file : testem8.root - done

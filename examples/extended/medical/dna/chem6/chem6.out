@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -328,29 +328,29 @@ eIoni:  for e+  XStype:1  SubType=2
 DNAMolecularIRTModel will be used
 
 --------------------End of Global Run-----------------------
-  The run has 10 events 
-Number of events recorded by the species scorer = 10
- Total energy deposited in the world volume : 12053 eV
+  The run has 14 events 
+Number of events recorded by the species scorer = 14
+ Total energy deposited in the world volume : 16881 eV
  ------------------------------------------------------------
 
 ### Run 1 starts.
 ### Run 1 starts.
---> Event 0 starts.
-
---------------------End of Global Run-----------------------
-  The run has 9 events 
-Number of events recorded by the species scorer = 9
- Total energy deposited in the world volume : 14490 eV
- ------------------------------------------------------------
-
-### Run 2 starts.
-### Run 2 starts.
 --> Event 0 starts.
 
 --------------------End of Global Run-----------------------
   The run has 11 events 
 Number of events recorded by the species scorer = 11
- Total energy deposited in the world volume : 25440 eV
+ Total energy deposited in the world volume : 17697 eV
+ ------------------------------------------------------------
+
+### Run 2 starts.
+### Run 2 starts.
+--> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 16 events 
+Number of events recorded by the species scorer = 16
+ Total energy deposited in the world volume : 36994 eV
  ------------------------------------------------------------
 
 ### Run 3 starts.
@@ -358,9 +358,9 @@ Number of events recorded by the species scorer = 11
 --> Event 0 starts.
 
 --------------------End of Global Run-----------------------
-  The run has 2 events 
-Number of events recorded by the species scorer = 2
- Total energy deposited in the world volume : 7633 eV
+  The run has 7 events 
+Number of events recorded by the species scorer = 7
+ Total energy deposited in the world volume : 26690 eV
  ------------------------------------------------------------
 
 ### Run 4 starts.
@@ -370,7 +370,7 @@ Number of events recorded by the species scorer = 2
 --------------------End of Global Run-----------------------
   The run has 5 events 
 Number of events recorded by the species scorer = 5
- Total energy deposited in the world volume : 30060 eV
+ Total energy deposited in the world volume : 30080 eV
  ------------------------------------------------------------
 
 ### Run 5 starts.
@@ -378,9 +378,9 @@ Number of events recorded by the species scorer = 5
 --> Event 0 starts.
 
 --------------------End of Global Run-----------------------
-  The run has 6 events 
-Number of events recorded by the species scorer = 6
- Total energy deposited in the world volume : 48123 eV
+  The run has 5 events 
+Number of events recorded by the species scorer = 5
+ Total energy deposited in the world volume : 40111 eV
  ------------------------------------------------------------
 
 ### Run 6 starts.
@@ -388,8 +388,8 @@ Number of events recorded by the species scorer = 6
 --> Event 0 starts.
 
 --------------------End of Global Run-----------------------
-  The run has 4 events 
-Number of events recorded by the species scorer = 4
- Total energy deposited in the world volume : 40108 eV
+  The run has 5 events 
+Number of events recorded by the species scorer = 5
+ Total energy deposited in the world volume : 50127 eV
  ------------------------------------------------------------
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1322,16 +1322,16 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.217   -0.665     46.1      56.8      4.5     28.8      28.8   test.phys eBrem
     2    0.314   -0.655     50.7        56    0.513     4.62      33.5   test.phys eIoni
     3    0.312   -0.653     52.1      55.5    0.191     1.38      34.8   test.phys eIoni
-    4  -0.0718   -0.438     65.8      49.8     1.63     13.7      48.5   test.phys eBrem
+    4  -0.0718   -0.437     65.8      49.8     1.63     13.7      48.5   test.phys eBrem
     5   -0.356   -0.266     74.8      48.4      1.4     9.08      57.6   test.phys eBrem
     6   -0.428   -0.152     77.6      40.5    0.333     2.75      60.4   test.phys eBrem
     7   -0.458    0.447     83.1      39.4    0.799     5.53      65.9   test.phys eIoni
     8    -2.93     4.31      117      34.4     4.52     34.4       100   test.phys eBrem
     9    -3.86     5.28      124      33.1     0.72     7.13       107   test.phys eIoni
    10    -10.9     7.71      168      27.2     5.39     44.8       152   test.phys eBrem
-   11    -11.4     7.93      171      14.4    0.281      2.7       155   test.phys eBrem
+   11    -11.4     7.93      171      14.4     0.28      2.7       155   test.phys eBrem
    12    -18.1     9.72      194      11.3     3.18     24.5       179   test.phys eIoni
-   13    -18.7     9.73      196      10.2    0.371     1.96       181   test.phys eIoni
+   13    -18.7     9.73      196      10.2    0.371     1.95       181   test.phys eIoni
    14    -19.9     9.96      200      9.71    0.505     4.38       186       World Transportation
    15 -2.31e+03      782    1e+04      9.71 3.02e-22 1.01e+04  1.03e+04  OutOfWorld Transportation
 
@@ -1370,7 +1370,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -3.86     5.28      124     0.543        0        0         0   test.phys initStep
     1    -3.57     4.43      125     0.184    0.359     1.86      1.86   test.phys eIoni
-    2     -3.3     4.42      125         0    0.184    0.547      2.41   test.phys eIoni
+    2    -3.29     4.42      125         0    0.184    0.547      2.41   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 12,   Parent ID = 4
@@ -1421,15 +1421,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.356   -0.265     74.9    0.0043        0        0         0   test.phys initStep
-    1   -0.357   -0.266     74.9         0   0.0043 0.000833  0.000833   test.phys eIoni
+    1   -0.357   -0.266     74.9         0   0.0043 0.000832  0.000832   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 8,   Parent ID = 4
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  -0.0718   -0.438     65.8      4.06        0        0         0   test.phys initStep
-    1    -2.13     7.35      200      4.06        0      134       134       World Transportation
+    0  -0.0718   -0.437     65.8      4.06        0        0         0   test.phys initStep
+    1    -2.12     7.35      200      4.06        0      134       134       World Transportation
     2     -152      576    1e+04      4.06        0 9.82e+03  9.95e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -1467,7 +1467,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1     2.85     1.43       56      29.1     5.09       39        39   test.phys eIoni
     2        3     1.68     63.7        28    0.804     7.71      46.7   test.phys eIoni
     3     7.12     6.22      109        22     6.07       46      92.7   test.phys eIoni
-    4     7.18      6.3      110      21.6    0.113     0.59      93.3   test.phys eIoni
+    4     7.18      6.3      110      21.6    0.112    0.589      93.3   test.phys eIoni
     5     10.4     11.6      131      18.6     2.87     22.7       116   test.phys eBrem
     6     13.6     15.6      145      16.8     1.87     14.7       131   test.phys eBrem
     7     20.9     27.4      169        13     3.78     28.1       159   test.phys eIoni
@@ -1476,14 +1476,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    10     27.9     46.9      181      3.93    0.691     6.98       185   test.phys eBrem
    11     31.6     52.3      185         3    0.925     7.53       192   test.phys eIoni
    12     32.8     52.8      186      2.49    0.159     1.69       194   test.phys eIoni
-   13     33.4       53      186      2.34   0.0902     1.04       195   test.phys eBrem
+   13     33.4       53      186      2.34   0.0901     1.04       195   test.phys eBrem
    14     35.2     54.7      190      1.79    0.546     4.94       200   test.phys eIoni
    15     35.5     55.8      194      1.35    0.439     4.04       204   test.phys eIoni
    16     33.5     55.1      196      1.01    0.345     3.31       207   test.phys eIoni
-   17     31.5     53.6      197     0.676    0.333     2.72       210   test.phys eIoni
-   18     30.5     52.5      197     0.391    0.285     2.13       212   test.phys eIoni
-   19     29.9     52.3      198      0.15    0.241     1.49       213   test.phys eIoni
-   20     29.7     52.2      197         0     0.15    0.393       214   test.phys eIoni
+   17     31.5     53.6      197     0.676    0.333     2.73       210   test.phys eIoni
+   18     30.5     52.5      197     0.392    0.285     2.13       212   test.phys eIoni
+   19     29.8     52.3      198      0.15    0.241     1.49       213   test.phys eIoni
+   20     29.7     52.2      197         0     0.15    0.394       214   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 27,   Parent ID = 3
@@ -1594,10 +1594,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0     2.85     1.43       56      2.59        0        0         0   test.phys initStep
     1     2.75    -0.98     60.3      1.77    0.816     5.35      5.35   test.phys eIoni
     2     1.08    -2.99     62.7      1.16    0.614     4.01      9.36   test.phys eIoni
-    3    0.926    -4.73     64.5     0.802    0.358     2.98      12.3   test.phys eIoni
+    3    0.925    -4.73     64.5     0.802    0.358     2.98      12.3   test.phys eIoni
     4    0.915    -5.57     66.2     0.297    0.505     2.36      14.7   test.phys eIoni
-    5     1.49    -5.74     66.2    0.0766     0.22     1.14      15.8   test.phys eIoni
-    6     1.44    -5.71     66.1         0   0.0766    0.127        16   test.phys eIoni
+    5     1.49    -5.74     66.2    0.0765     0.22     1.14      15.8   test.phys eIoni
+    6     1.44    -5.71     66.1         0   0.0765    0.127        16   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -1643,14 +1643,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  -0.0428   0.0119      197    0.0115        0        0         0   test.phys initStep
-    1   -0.101 -0.00744      199         0 0.000405     1.58      1.58   test.phys biasWrapper(phot)
+    1   -0.101 -0.00743      199         0 0.000405     1.58      1.58   test.phys biasWrapper(phot)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.101 -0.00744      199    0.0111        0        0         0   test.phys initStep
+    0   -0.101 -0.00743      199    0.0111        0        0         0   test.phys initStep
     1   -0.102 -0.00592      199         0   0.0111  0.00428   0.00428   test.phys eIoni
 
 *********************************************************************************************************
@@ -1682,7 +1682,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2   -0.067     3.04      179      41.7      1.9     14.1      49.8   test.phys eBrem
     3   -0.539     2.68      199        39      2.7     19.6      69.4   test.phys eBrem
     4   -0.594     2.63      200      38.9    0.135     1.07      70.5       World Transportation
-    5     -424     -669    1e+04      38.9 3.34e-22 9.83e+03   9.9e+03  OutOfWorld Transportation
+    5     -424     -670    1e+04      38.9 3.33e-22 9.83e+03   9.9e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 7,   Parent ID = 4
@@ -1768,7 +1768,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    10     22.7     6.22      148      1.22    0.442     3.85      75.6   test.phys eIoni
    11     25.1     5.07      148     0.844     0.38     3.11      78.7   test.phys eIoni
    12     26.8      4.7      147     0.537    0.307     2.45      81.1   test.phys eIoni
-   13     26.8     4.68      147         0   0.0152   0.0784      81.2   test.phys annihil
+   13     26.8     4.68      147         0   0.0153   0.0789      81.2   test.phys annihil
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 9,   Parent ID = 4
@@ -1777,10 +1777,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     26.8     4.68      147      0.57        0        0         0   test.phys initStep
     1     22.8     34.8      129     0.434        0     35.3      35.3   test.phys biasWrapper(compt)
-    2     2.93      132      153     0.178        0      102       137   test.phys biasWrapper(compt)
+    2     2.95      132      153     0.178        0      102       137   test.phys biasWrapper(compt)
     3    -17.6      104      140     0.177        0     37.4       175   test.phys biasWrapper(compt)
-    4     -111    -3.96     63.6     0.174        0      162       336   test.phys biasWrapper(compt)
-    5     -149     -119 7.11e-15     0.174        0      136       473       World Transportation
+    4     -111    -3.97     63.6     0.174        0      162       336   test.phys biasWrapper(compt)
+    5     -149     -119        0     0.174        0      136       473       World Transportation
     6 -3.41e+03   -1e+04 -5.48e+03     0.174        0 1.18e+04  1.22e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -1788,8 +1788,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -111    -3.96     63.6   0.00366        0        0         0   test.phys initStep
-    1     -111    -3.96     63.6         0  0.00366 0.000635  0.000635   test.phys eIoni
+    0     -111    -3.97     63.6   0.00366        0        0         0   test.phys initStep
+    1     -111    -3.97     63.6         0  0.00366 0.000635  0.000635   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 9
@@ -1804,8 +1804,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.93      132      153     0.256        0        0         0   test.phys initStep
-    1     2.95      132      153         0    0.256    0.925     0.925   test.phys eIoni
+    0     2.95      132      153     0.256        0        0         0   test.phys initStep
+    1     2.96      132      153         0    0.256    0.925     0.925   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 9
@@ -1821,8 +1821,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     26.8     4.68      147     0.973        0        0         0   test.phys initStep
-    1      149     -207        0     0.973        0      285       285       World Transportation
-    2 5.83e+03   -1e+04 -6.82e+03     0.973        0 1.32e+04  1.35e+04  OutOfWorld Transportation
+    1      150     -207        0     0.973        0      285       285       World Transportation
+    2 5.83e+03   -1e+04 -6.81e+03     0.973        0 1.32e+04  1.35e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 4
@@ -1866,9 +1866,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.125   0.0491     95.1      86.4     1.16     8.17      8.17   test.phys eIoni
     2    0.184   0.0919     98.6      85.6    0.361     3.53      11.7   test.phys eIoni
     3     0.19   0.0958     99.2      72.5   0.0651    0.594      12.3   test.phys eBrem
-    4    0.614     2.18      144      66.8     5.65     44.4      56.7   test.phys eBrem
+    4    0.614     2.18      144      66.9     5.65     44.4      56.7   test.phys eBrem
     5   -0.235     4.78      200      59.2     7.69     56.7       113       World Transportation
-    6 -1.36e+03      461    1e+04      59.2 3.49e-22  9.9e+03     1e+04  OutOfWorld Transportation
+    6 -1.36e+03      461    1e+04      59.2 3.48e-22  9.9e+03     1e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 18,   Parent ID = 3
@@ -2215,15 +2215,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     2.59    -7.42      160    0.0193        0        0         0   test.phys initStep
-    1   -0.988    -8.19      160         0 0.000405     3.68      3.68   test.phys biasWrapper(phot)
+    1   -0.989    -8.19      160         0 0.000405     3.68      3.68   test.phys biasWrapper(phot)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 17,   Parent ID = 16
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.988    -8.19      160    0.0189        0        0         0   test.phys initStep
-    1   -0.988    -8.19      159         0   0.0189   0.0109    0.0109   test.phys eIoni
+    0   -0.989    -8.19      160    0.0189        0        0         0   test.phys initStep
+    1   -0.989    -8.19      159         0   0.0189   0.0109    0.0109   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 4
@@ -2277,19 +2277,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3     6.93     -2.7      141      11.8     2.05     13.2      49.5   test.phys eBrem
     4      5.9    -7.08      152      9.94     1.32     11.7      61.2   test.phys eIoni
     5     1.02    -11.6      168      7.72     2.22     17.2      78.4   test.phys eIoni
-    6   -0.239    -14.7      181      5.98     1.74     13.7      92.1   test.phys eIoni
+    6   -0.238    -14.7      181      5.98     1.74     13.7      92.1   test.phys eIoni
     7    -1.84    -15.4      185      5.17    0.802     4.63      96.7   test.phys eBrem
     8    -5.57    -18.6      193      4.08     1.09     9.55       106   test.phys eIoni
     9     -8.1    -20.4      200      3.23    0.846     7.78       114   test.phys eIoni
-   10    -8.02    -20.3      200      2.65   0.0136    0.188       114   test.phys eIoni
-   11    -5.78    -17.1      200       2.2    0.448     4.13       118       World Transportation
-   12    -5.78    -17.1      200       2.2        0        0       118   test.phys Transportation
-   13    -2.12    -15.8      198       1.7    0.507     4.72       123   test.phys eIoni
-   14    0.144    -15.8      195      1.28    0.418     3.88       127   test.phys eIoni
+   10    -8.02    -20.3      200      2.65   0.0135    0.187       114   test.phys eIoni
+   11    -5.77    -17.1      200       2.2    0.449     4.13       118       World Transportation
+   12    -5.77    -17.1      200       2.2        0        0       118   test.phys Transportation
+   13    -2.12    -15.7      198       1.7    0.506     4.72       123   test.phys eIoni
+   14    0.147    -15.8      195      1.28    0.418     3.88       127   test.phys eIoni
    15     1.35    -15.7      192     0.875    0.405     3.19       130   test.phys eIoni
-   16     2.36    -15.5      191      0.52    0.356     2.49       133   test.phys eIoni
+   16     2.36    -15.5      191     0.519    0.356     2.49       133   test.phys eIoni
    17     1.83    -16.3      190     0.265    0.254     1.81       134   test.phys eIoni
-   18     1.88    -16.1      190         0    0.265    0.974       135   test.phys eIoni
+   18     1.88    -16.1      190         0    0.265    0.973       135   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 23,   Parent ID = 3
@@ -2297,17 +2297,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -8.02    -20.3      200     0.566        0        0         0   test.phys initStep
-    1    -8.05    -20.1      200     0.506   0.0603    0.222     0.222   test.phys msc
-    2    -7.89      -20      200     0.476   0.0301    0.195     0.417   test.phys msc
+    1    -8.04    -20.1      200     0.506   0.0603    0.222     0.222   test.phys msc
+    2    -7.88      -20      200     0.476   0.0301    0.195     0.417   test.phys msc
     3    -7.74    -19.9      200     0.461   0.0149     0.17     0.587   test.phys msc
     4    -7.56    -19.8      200     0.426   0.0347    0.254     0.841   test.phys msc
     5    -7.43    -19.6      200     0.403   0.0228    0.187      1.03   test.phys msc
     6    -7.32    -19.5      200     0.311   0.0927    0.177       1.2   test.phys msc
     7    -7.25    -19.3      200     0.246    0.065    0.257      1.46   test.phys msc
     8     -7.2    -19.1      200     0.214   0.0316    0.214      1.68   test.phys msc
-    9    -7.13      -19      200      0.16   0.0543    0.216      1.89   test.phys msc
-   10    -7.09    -18.9      200     0.151  0.00892   0.0542      1.95       World Transportation
-   11    1e+04 1.62e+03 4.58e+03     0.151 5.75e-22  1.1e+04   1.1e+04  OutOfWorld Transportation
+    9    -7.12      -19      200      0.16   0.0543    0.216      1.89   test.phys msc
+   10    -7.08      -19      200      0.15  0.00916   0.0555      1.95       World Transportation
+   11    1e+04  1.6e+03 4.56e+03      0.15 5.74e-22  1.1e+04   1.1e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 22,   Parent ID = 3
@@ -2332,8 +2332,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      5.9    -7.08      152     0.582        0        0         0   test.phys initStep
     1     4.63    -7.33      153     0.296    0.286     1.95      1.95   test.phys eIoni
-    2     4.64    -7.81      153    0.0679    0.228     1.14      3.08   test.phys eIoni
-    3     4.68    -7.79      153         0   0.0679    0.103      3.18   test.phys eIoni
+    2     4.64    -7.81      153    0.0678    0.228     1.14      3.08   test.phys eIoni
+    3     4.68    -7.79      153         0   0.0678    0.103      3.18   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 20,   Parent ID = 3
@@ -2341,14 +2341,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     6.93     -2.7      141    0.0149        0        0         0   test.phys initStep
-    1     6.58    -6.11      153         0 0.000405     11.9      11.9   test.phys biasWrapper(phot)
+    1     6.58     -6.1      153         0 0.000405     11.9      11.9   test.phys biasWrapper(phot)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 25,   Parent ID = 20
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     6.58    -6.11      153    0.0145        0        0         0   test.phys initStep
+    0     6.58     -6.1      153    0.0145        0        0         0   test.phys initStep
     1     6.58     -6.1      153         0   0.0145  0.00684   0.00684   test.phys eIoni
 
 *********************************************************************************************************
@@ -2390,7 +2390,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2    -0.14     -1.5      122      91.4     2.93     21.6      58.9   test.phys eIoni
     3   -0.497    -1.63      128      85.3    0.629     5.68      64.6   test.phys eBrem
     4    -5.07    -4.09      200      75.9     9.39     72.8       137       World Transportation
-    5     -299     -320    1e+04      75.9 3.53e-22 9.81e+03  9.95e+03  OutOfWorld Transportation
+    5     -299     -320    1e+04      75.9 3.52e-22 9.81e+03  9.95e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 6,   Parent ID = 3
@@ -2417,15 +2417,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.338    -1.22      100    0.0182        0        0         0   test.phys initStep
     1    0.378    -1.52      111    0.0171        0     10.5      10.5   test.phys biasWrapper(compt)
-    2     5.35    -9.55     93.1         0 0.000405       20      30.6   test.phys biasWrapper(phot)
+    2     5.35    -9.55     93.2         0 0.000405       20      30.5   test.phys biasWrapper(phot)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 4
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     5.35    -9.55     93.1    0.0167        0        0         0   test.phys initStep
-    1     5.36    -9.55     93.1         0   0.0167  0.00871   0.00871   test.phys eIoni
+    0     5.35    -9.55     93.2    0.0167        0        0         0   test.phys initStep
+    1     5.36    -9.55     93.2         0   0.0167  0.00871   0.00871   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 4
@@ -2461,22 +2461,22 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     23.6      20.8        0        0         0   test.phys initStep
     1    -1.96    -3.63     57.7      16.7     4.12     34.6      34.6   test.phys eIoni
-    2     -2.9    -4.01     60.3      15.9    0.323     2.77      37.4   test.phys eIoni
+    2     -2.9       -4     60.3      15.9    0.323     2.77      37.4   test.phys eIoni
     3    -9.44    -6.98     85.8      12.8     3.06     26.7      64.2   test.phys eIoni
-    4    -9.54    -7.01     86.1      12.7    0.064    0.335      64.5   test.phys eBrem
+    4    -9.54    -7.01     86.1      12.7   0.0639    0.335      64.5   test.phys eBrem
     5    -10.3    -7.07     88.4      12.4    0.279     2.38      66.9   test.phys eBrem
-    6    -14.5    -5.97      109      9.76     2.67     21.3      88.2   test.phys eIoni
+    6    -14.5    -5.97      109      9.76     2.67     21.3      88.1   test.phys eIoni
     7    -14.9    -4.24      114      8.97    0.665     5.87        94   test.phys eBrem
-    8    -15.8    0.665      126      6.83     1.51     13.5       108   test.phys eIoni
-    9    -19.2     5.22      137      5.14     1.69     12.3       120   test.phys eIoni
-   10    -19.5     5.43      138      5.05   0.0829    0.989       121   test.phys annihil
-   11      -21     6.89      146      3.86      1.2     9.42       130   test.phys eIoni
+    8    -15.8    0.663      126      6.83     1.51     13.5       108   test.phys eIoni
+    9    -19.3     5.22      137      5.14     1.69     12.3       120   test.phys eIoni
+   10    -19.5     5.43      138      5.05   0.0831     0.99       121   test.phys annihil
+   11      -21     6.88      146      3.86      1.2     9.42       130   test.phys eIoni
    12    -25.3     7.51      152      2.99    0.865     7.47       138   test.phys eIoni
-   13    -30.5     9.27      151      1.96     1.03     6.05       144   test.phys eIoni
+   13    -30.5     9.26      151      1.96     1.03     6.05       144   test.phys eIoni
    14    -34.4      9.5      151      1.47    0.488     4.35       148   test.phys eIoni
-   15    -37.2     8.43      151      1.13    0.348     3.53       152   test.phys eIoni
-   16    -39.3     8.43      149     0.828    0.298     2.94       155   test.phys eIoni
-   17    -40.5     8.02      148     0.405    0.423     2.42       157   test.phys eIoni
+   15    -37.2     8.42      151      1.13    0.348     3.53       152   test.phys eIoni
+   16    -39.3     8.42      149     0.828    0.298     2.94       155   test.phys eIoni
+   17    -40.5     8.01      148     0.405    0.423     2.42       157   test.phys eIoni
    18      -41     8.22      147     0.187    0.219     1.52       159   test.phys eIoni
    19    -40.7     8.17      147         0    0.187    0.541       159   test.phys eIoni
    20    -40.7     8.17      147         0        0        0       159   test.phys annihil
@@ -2549,9 +2549,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -15.8    0.665      126     0.629        0        0         0   test.phys initStep
+    0    -15.8    0.663      126     0.629        0        0         0   test.phys initStep
     1      -15     1.65      127     0.395    0.234     2.04      2.04   test.phys eIoni
-    2    -14.2     2.12      127      0.15    0.246      1.5      3.54   test.phys eIoni
+    2    -14.2     2.11      127      0.15    0.246      1.5      3.54   test.phys eIoni
     3    -14.1     2.15      127         0     0.15    0.391      3.93   test.phys eIoni
 
 *********************************************************************************************************
@@ -2561,7 +2561,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -14.9    -4.24      114     0.131        0        0         0   test.phys initStep
     1    -14.3     24.7      200     0.131        0     90.5      90.5       World Transportation
-    2       55 3.33e+03    1e+04     0.131        0 1.03e+04  1.04e+04  OutOfWorld Transportation
+    2     54.4 3.33e+03    1e+04     0.131        0 1.03e+04  1.04e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 7,   Parent ID = 4
@@ -2600,8 +2600,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -2.9    -4.01     60.3     0.516        0        0         0   test.phys initStep
-    1    -2.67    -4.93       61     0.245    0.272     1.81      1.81   test.phys eIoni
+    0     -2.9       -4     60.3     0.516        0        0         0   test.phys initStep
+    1    -2.66    -4.93       61     0.245    0.272     1.81      1.81   test.phys eIoni
     2     -2.3    -5.09     61.2         0    0.245    0.861      2.67   test.phys eIoni
 
 *********************************************************************************************************
@@ -2622,11 +2622,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    10     2.53     3.63      129      44.4     2.52     19.8       106   test.phys eBrem
    11     2.73     4.24      138      43.3     1.01     8.59       115   test.phys eBrem
    12     2.71      4.3      139      42.5    0.119     1.05       116   test.phys eIoni
-   13     2.76     4.45      145      41.6    0.825     6.03       122   test.phys eBrem
+   13     2.76     4.44      145      41.6    0.825     6.03       122   test.phys eBrem
    14     2.81     4.33      150      24.9    0.617     4.75       127   test.phys eBrem
    15     3.84     4.27      161      23.3     1.24     11.2       138   test.phys eIoni
    16     4.85     4.34      168      22.4    0.944     6.66       144   test.phys eBrem
-   17       11     4.79      200      18.2     4.12     33.5       178       World Transportation
+   17       11     4.78      200      18.2     4.12     33.5       178       World Transportation
    18 5.33e+03 1.35e+03    1e+04      18.2 3.56e-22 1.12e+04  1.14e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -2651,7 +2651,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     3.84     4.27      161     0.364        0        0         0   test.phys initStep
-    1     3.48     4.83      161    0.0907    0.273      1.4       1.4   test.phys eIoni
+    1     3.48     4.82      161    0.0907    0.273      1.4       1.4   test.phys eIoni
     2     3.47     4.78      161         0   0.0907    0.169      1.57   test.phys eIoni
 
 *********************************************************************************************************
@@ -2668,7 +2668,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.76     4.45      145   0.00691        0        0         0   test.phys initStep
+    0     2.76     4.44      145   0.00691        0        0         0   test.phys initStep
     1     2.78     4.44      146         0 0.000405      0.7       0.7   test.phys biasWrapper(phot)
 
 *********************************************************************************************************
@@ -2676,8 +2676,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.78     4.44      146   0.00651        0        0         0   test.phys initStep
-    1     2.78     4.44      146         0  0.00651  0.00169   0.00169   test.phys eIoni
+    0     2.78     4.44      146    0.0065        0        0         0   test.phys initStep
+    1     2.78     4.44      146         0   0.0065  0.00169   0.00169   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 30,   Parent ID = 3
@@ -2711,7 +2711,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     2.53     3.63      129     0.205        0        0         0   test.phys initStep
-    1     4.73     10.3      200     0.205        0     70.9      70.9       World Transportation
+    1     4.74     10.3      200     0.205        0     70.9      70.9       World Transportation
     2      311      939    1e+04     0.205        0 9.85e+03  9.92e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -2720,21 +2720,21 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     1.76     1.77      110      16.3        0        0         0   test.phys initStep
-    1   -0.744      0.8      137      12.9      3.4     27.3      27.3   test.phys eIoni
-    2    -0.73    -2.49      155      10.2     2.37     19.1      46.4   test.phys eIoni
+    1   -0.744    0.801      137      12.9      3.4     27.3      27.3   test.phys eIoni
+    2   -0.731    -2.49      155      10.2     2.37     19.1      46.4   test.phys eIoni
     3     -3.2    -6.83      167      8.17     1.55     13.2      59.6   test.phys eIoni
     4    -5.63    -5.94      181      6.31     1.86     14.4        74   test.phys eIoni
     5    -7.26    -3.91      192      4.98     1.34     11.4      85.4   test.phys eIoni
-    6    -7.73    -3.41      194      4.49    0.253     1.91      87.3   test.phys eIoni
-    7    -8.43    -2.26      200      3.78    0.703     6.39      93.7       World Transportation
-    8 -7.43e+03 9.98e+03    1e+04      3.78 4.37e-22 1.58e+04  1.59e+04  OutOfWorld Transportation
+    6    -7.73     -3.4      194      4.49    0.253     1.91      87.3   test.phys eIoni
+    7    -8.43    -2.25      200      3.78    0.703      6.4      93.7       World Transportation
+    8 -7.43e+03 9.99e+03    1e+04      3.78 4.36e-22 1.58e+04  1.59e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 40,   Parent ID = 27
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -7.73    -3.41      194      0.24        0        0         0   test.phys initStep
+    0    -7.73     -3.4      194      0.24        0        0         0   test.phys initStep
     1    -8.13    -3.34      194         0     0.24    0.832     0.832   test.phys eIoni
 
 *********************************************************************************************************
@@ -2743,7 +2743,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     -3.2    -6.83      167     0.495        0        0         0   test.phys initStep
-    1    -4.09     -6.4      168     0.248    0.247     1.76      1.76   test.phys eIoni
+    1    -4.09    -6.39      168     0.248    0.247     1.76      1.76   test.phys eIoni
     2    -4.13    -5.95      168         0    0.248    0.878      2.64   test.phys eIoni
 
 *********************************************************************************************************
@@ -2751,9 +2751,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -0.73    -2.49      155     0.289        0        0         0   test.phys initStep
-    1   -0.243    -2.62      156    0.0685     0.22      1.1       1.1   test.phys eIoni
-    2   -0.194    -2.61      156         0   0.0685    0.104       1.2   test.phys eIoni
+    0   -0.731    -2.49      155     0.289        0        0         0   test.phys initStep
+    1   -0.244    -2.61      156    0.0685     0.22      1.1       1.1   test.phys eIoni
+    2   -0.195     -2.6      156         0   0.0685    0.104       1.2   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 26,   Parent ID = 3
@@ -2785,9 +2785,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.9     1.51     91.4     0.752        0        0         0   test.phys initStep
-    1     6.63     1.42      200     0.752        0      109       109       World Transportation
-    2      433    -6.85    1e+04     0.752        0 9.81e+03  9.92e+03  OutOfWorld Transportation
+    0      1.9     1.51     91.4     0.751        0        0         0   test.phys initStep
+    1     6.63     1.42      200     0.751        0      109       109       World Transportation
+    2      433    -6.85    1e+04     0.751        0 9.81e+03  9.92e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 24,   Parent ID = 3
@@ -2913,7 +2913,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     6     10.3     4.02     81.8      6.62     1.83     14.9      60.3   test.phys eIoni
     7     15.2     8.45     91.3      5.04     1.58       12      72.3   test.phys eIoni
     8     13.9     13.1     98.9      3.82     1.22      9.4      81.7   test.phys eIoni
-    9     13.1     16.8      103      3.21    0.544     5.63      87.3   test.phys eBrem
+    9     13.1     16.8      103      3.21    0.543     5.63      87.3   test.phys eBrem
    10     14.5     19.9      108      2.48    0.738     6.42      93.7   test.phys eIoni
    11     16.4     19.1      112      1.93    0.544      5.2      98.9   test.phys eIoni
    12     16.4     17.1      115       1.3    0.637      4.3       103   test.phys eIoni
@@ -2929,7 +2929,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     14.9     16.6      121     0.511        0        0         0   test.phys initStep
-    1     33.8     2.77      145     0.264        0     33.6      33.6   test.phys biasWrapper(compt)
+    1     33.8     2.76      145     0.264        0     33.6      33.6   test.phys biasWrapper(compt)
     2     22.4     -197     59.2      0.17        0      217       251   test.phys biasWrapper(compt)
     3     39.9     -247      200      0.17        0      151       402       World Transportation
     4 1.26e+03 -3.79e+03    1e+04      0.17        0 1.05e+04  1.09e+04  OutOfWorld Transportation
@@ -2947,7 +2947,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     33.8     2.77      145     0.247        0        0         0   test.phys initStep
+    0     33.8     2.76      145     0.247        0        0         0   test.phys initStep
     1       34     2.79      146         0    0.247    0.872     0.872   test.phys eIoni
 
 *********************************************************************************************************
@@ -2956,7 +2956,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     14.9     16.6      121     0.511        0        0         0   test.phys initStep
-    1    -79.6     86.3        0     0.511        0      169       169       World Transportation
+    1    -79.6     86.3 1.42e-14     0.511        0      169       169       World Transportation
     2 -7.89e+03 5.84e+03   -1e+04     0.511        0 1.39e+04  1.41e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -2968,19 +2968,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1     20.1     30.8      127     0.066        0     28.9      28.9   test.phys biasWrapper(compt)
     2     25.9     39.8      134    0.0535        0     12.9      41.9   test.phys biasWrapper(compt)
     3    -49.9     17.5     97.4    0.0496        0     87.2       129   test.phys biasWrapper(compt)
-    4    -58.5    -8.38      112    0.0496        0     30.7       160   test.phys biasWrapper(Rayl)
-    5    -83.6    -91.4      154    0.0418        0     96.6       256   test.phys biasWrapper(compt)
-    6    -82.3    -86.9      154    0.0418        0     4.77       261   test.phys biasWrapper(Rayl)
-    7    -36.8     38.2      151    0.0407        0      133       394   test.phys biasWrapper(compt)
+    4    -58.5    -8.39      112    0.0496        0     30.7       160   test.phys biasWrapper(Rayl)
+    5    -83.6    -91.5      154    0.0418        0     96.6       256   test.phys biasWrapper(compt)
+    6    -82.3    -86.9      154    0.0418        0     4.76       261   test.phys biasWrapper(Rayl)
+    7    -36.8     38.1      151    0.0407        0      133       394   test.phys biasWrapper(compt)
     8    -39.9     45.4      147    0.0373        0     8.64       403   test.phys biasWrapper(compt)
     9    -45.5     10.3      102    0.0373        0     57.6       461   test.phys biasWrapper(Rayl)
-   10    -48.9    0.471     87.6    0.0347        0     17.4       478   test.phys biasWrapper(compt)
+   10    -48.9    0.458     87.6    0.0347        0     17.4       478   test.phys biasWrapper(compt)
    11    -21.4     42.2     54.6    0.0345        0     59.9       538   test.phys biasWrapper(compt)
    12    -17.1     52.8       41    0.0316        0     17.8       556   test.phys biasWrapper(compt)
    13    -14.3     87.1      105    0.0286        0       73       629   test.phys biasWrapper(compt)
-   14    -55.9     8.04     74.4    0.0284        0     94.5       723   test.phys biasWrapper(compt)
+   14    -55.9     8.03     74.4    0.0284        0     94.5       723   test.phys biasWrapper(compt)
    15    -96.4    -34.3     73.3     0.027        0     58.6       782   test.phys biasWrapper(compt)
-   16      -95    -35.8     74.9         0 0.000405     2.64       785   test.phys biasWrapper(phot)
+   16      -95    -35.8     74.9         0 0.000405     2.63       784   test.phys biasWrapper(phot)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 27,   Parent ID = 10
@@ -3003,8 +3003,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -55.9     8.04     74.4  0.000137        0        0         0   test.phys initStep
-    1    -55.9     8.04     74.4         0 0.000137 1.02e-05  1.02e-05   test.phys eIoni
+    0    -55.9     8.03     74.4  0.000137        0        0         0   test.phys initStep
+    1    -55.9     8.03     74.4         0 0.000137 1.02e-05  1.02e-05   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 24,   Parent ID = 10
@@ -3035,8 +3035,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -48.9    0.471     87.6   0.00262        0        0         0   test.phys initStep
-    1    -48.9    0.471     87.6         0  0.00262 0.000367  0.000367   test.phys eIoni
+    0    -48.9    0.458     87.6   0.00262        0        0         0   test.phys initStep
+    1    -48.9    0.458     87.6         0  0.00262 0.000367  0.000367   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 20,   Parent ID = 10
@@ -3044,23 +3044,23 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -39.9     45.4      147   0.00343        0        0         0   test.phys initStep
-    1    -39.9     45.4      147         0  0.00343 0.000571  0.000571   test.phys eIoni
+    1    -39.9     45.4      147         0  0.00343  0.00057   0.00057   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 19,   Parent ID = 10
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -36.8     38.2      151   0.00107        0        0         0   test.phys initStep
-    1    -36.8     38.2      151         0  0.00107 9.24e-05  9.24e-05   test.phys eIoni
+    0    -36.8     38.1      151   0.00107        0        0         0   test.phys initStep
+    1    -36.8     38.1      151         0  0.00107 9.24e-05  9.24e-05   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 18,   Parent ID = 10
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -83.6    -91.4      154   0.00786        0        0         0   test.phys initStep
-    1    -83.6    -91.4      154         0  0.00786  0.00234   0.00234   test.phys eIoni
+    0    -83.6    -91.5      154   0.00786        0        0         0   test.phys initStep
+    1    -83.6    -91.5      154         0  0.00786  0.00234   0.00234   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 17,   Parent ID = 10
@@ -3110,8 +3110,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      2.4     1.66       47      0.41        0        0         0   test.phys initStep
-    1     3.26     1.78     47.4    0.0714    0.339     1.54      1.54   test.phys eIoni
-    2     3.23     1.77     47.5         0   0.0714    0.112      1.65   test.phys eIoni
+    1     3.26     1.78     47.4    0.0713    0.339     1.54      1.54   test.phys eIoni
+    2     3.23     1.77     47.5         0   0.0713    0.112      1.65   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 4
@@ -3145,18 +3145,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4  -0.0111     4.83      113      59.8     1.39     11.6      89.4   test.phys eIoni
     5  -0.0204     4.88      116      58.2     0.34     3.09      92.5   test.phys eIoni
     6     1.04     9.55      183      49.1     8.31     67.6       160   test.phys eIoni
-    7    0.106     10.9      194      47.6      1.5       11       171   test.phys eBrem
-    8   -0.405     11.4      200      46.8    0.703        6       177       World Transportation
-    9     -656      600    1e+04      46.8 3.39e-22 9.84e+03     1e+04  OutOfWorld Transportation
+    7    0.105     10.9      194      47.6      1.5       11       171   test.phys eBrem
+    8   -0.406     11.4      200      46.8    0.703        6       177       World Transportation
+    9     -656      599    1e+04      46.8 3.39e-22 9.84e+03     1e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 34,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.106     10.9      194    0.0675        0        0         0   test.phys initStep
-    1   -0.401     11.3      200    0.0675        0     5.99      5.99       World Transportation
-    2     -835      732    1e+04    0.0675        0 9.86e+03  9.87e+03  OutOfWorld Transportation
+    0    0.105     10.9      194    0.0675        0        0         0   test.phys initStep
+    1   -0.402     11.3      200    0.0675        0     5.99      5.99       World Transportation
+    2     -835      731    1e+04    0.0675        0 9.86e+03  9.87e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 33,   Parent ID = 3
@@ -3186,8 +3186,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  -0.0111     4.83      113     0.728        0        0         0   test.phys initStep
-    1     0.32     4.43      113     0.412   0.0932    0.735     0.735   test.phys eIoni
-    2    0.447     4.13      113     0.232    0.118    0.892      1.63   test.phys eBrem
+    1     0.32     4.43      113     0.412   0.0932    0.734     0.734   test.phys eIoni
+    2    0.446     4.13      113     0.232    0.118    0.892      1.63   test.phys eBrem
     3    0.253      3.8      112         0    0.232    0.791      2.42   test.phys eIoni
 
 *********************************************************************************************************
@@ -3195,18 +3195,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.447     4.13      113    0.0621        0        0         0   test.phys initStep
-    1    -1.96    -15.4      108    0.0621        0       20        20   test.phys biasWrapper(Rayl)
+    0    0.446     4.13      113    0.0621        0        0         0   test.phys initStep
+    1    -1.97    -15.4      108    0.0621        0       20        20   test.phys biasWrapper(Rayl)
     2     11.5    -32.6      103    0.0617        0     22.6      42.7   test.phys biasWrapper(compt)
     3      166     -234      123     0.056        0      255       297   test.phys biasWrapper(compt)
-    4      181     -226      122    0.0462        0     16.2       314   test.phys biasWrapper(compt)
+    4      180     -226      122    0.0462        0     16.2       314   test.phys biasWrapper(compt)
     5      118     -298      113    0.0398        0     95.9       409   test.phys biasWrapper(compt)
     6      170     -288      120    0.0351        0     53.5       463   test.phys biasWrapper(compt)
-    7      167     -289      117    0.0351        0     4.35       467   test.phys biasWrapper(Rayl)
+    7      167     -289      117    0.0351        0     4.34       467   test.phys biasWrapper(Rayl)
     8      157     -291      102    0.0351  4.7e-05     17.9       485   test.phys biasWrapper(compt)
     9      148     -290     88.3    0.0325        0     16.4       502   test.phys biasWrapper(compt)
    10      187     -375     75.3    0.0295        0     94.5       596   test.phys biasWrapper(compt)
-   11      186     -371     71.5         0 0.000405     5.55       602   test.phys biasWrapper(phot)
+   11      186     -371     71.5         0 0.000405     5.53       602   test.phys biasWrapper(phot)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 44,   Parent ID = 36
@@ -3253,8 +3253,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      181     -226      122   0.00977        0        0         0   test.phys initStep
-    1      181     -226      122         0  0.00977  0.00341   0.00341   test.phys eIoni
+    0      180     -226      122   0.00977        0        0         0   test.phys initStep
+    1      180     -226      122         0  0.00977  0.00341   0.00341   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 38,   Parent ID = 36
@@ -3320,8 +3320,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.432      3.2     74.5   0.00082        0        0         0   test.phys initStep
-    1    0.432      3.2     74.5         0  0.00082 6.32e-05  6.32e-05   test.phys eIoni
+    0    0.432      3.2     74.5  0.000819        0        0         0   test.phys initStep
+    1    0.432      3.2     74.5         0 0.000819 6.32e-05  6.32e-05   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 28,   Parent ID = 3

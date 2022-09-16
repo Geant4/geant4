@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -967,28 +967,28 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : Vacuum
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Al
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.84821 keV    e-  461.317 keV    e+  445.215 keV proton 70 keV
+ Energy thresholds :  gamma  5.84809 keV    e-  461.311 keV    e+  445.215 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : LXe
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  23.9007 keV    e-  392.975 keV    e+  377.543 keV proton 70 keV
+ Energy thresholds :  gamma  23.9005 keV    e-  392.984 keV    e+  377.557 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Glass
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.09818 keV    e-  281.681 keV    e+  274.857 keV proton 70 keV
+ Energy thresholds :  gamma  2.09772 keV    e-  281.684 keV    e+  274.852 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1019,17 +1019,17 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.750000s Real=3.822659s Sys=0.010000s
+  User=3.820000s Real=7.106688s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 10000 events.
-Number of hits per event:	 5.919 +- 0.04728
-Number of hits per event above threshold:	 5.481 +- 0.04225
+Number of hits per event:	 5.925 +- 0.0481
+Number of hits per event above threshold:	 5.476 +- 0.04288
 Number of scintillation photons per event :	 0 +- 0
-Number of Cerenkov photons per event:	 53.54 +- 0.3457
-Number of absorbed photons per event :	 35.51 +- 0.2347
-Number of photons absorbed at boundary per event:	 12.11 +- 0.07879
-Total energy deposition in scintillator per event:	 6736 +- 40.09 keV.
+Number of Cerenkov photons per event:	 53.42 +- 0.3465
+Number of absorbed photons per event :	 35.35 +- 0.2343
+Number of photons absorbed at boundary per event:	 12.14 +- 0.07967
+Total energy deposition in scintillator per event:	 6720 +- 40.12 keV.
 
 ... write file : cerenkov.root - done
 ... close file : cerenkov.root - done
@@ -1041,6 +1041,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 17 of which, static: 0
-Dynamic pools deleted: 17 / Total memory freed: 0.38 MB
+Dynamic pools deleted: 17 / Total memory freed: 0.39 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

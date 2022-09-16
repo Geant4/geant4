@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23-Jun-2022 A. Ribon       hadr-partonstring-mgt-V10-07-04
+- G4VSplitableHadron : changed the method Splitting() from "protected" to
+  "public" (this is needed to change the status of SplitableHadron in
+  G4FTFAnnihilation, to fix the non-isotropic angular distributions of
+  secondaries in annihilations at rest).
+  This change was made by Vladimir Uzhinsky.
+
 09-Feb-2022 G. Cosmo       hadr-partonstring-mgt-V10-07-03
 - Fixed compilation warning on Intel compilers for unused variable.
 

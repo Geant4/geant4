@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -314,6 +314,7 @@ hBrems:  for proton  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -383,6 +384,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -415,6 +417,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -447,6 +450,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -480,6 +484,7 @@ muBrems:  for mu+  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -513,6 +518,7 @@ muBrems:  for mu-  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -545,6 +551,7 @@ hBrems:  for pi+  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -577,6 +584,7 @@ hBrems:  for pi-  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -592,9 +600,9 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
-End of tracking primary particle, its final energy is :3.47619 GeV
+End of tracking primary particle, its final energy is :3.47571 GeV
 Physics stage ends
-End of tracking primary particle, its final energy is :3.47489 GeV
+End of tracking primary particle, its final energy is :3.47564 GeV
 Physics stage ends
 
  ======= The summary of simulation results 'neuron' ========
@@ -603,23 +611,20 @@ Physics stage ends
   Kinetic energy of beam         = 3480 A*MeV
   Particle traversals the neuron = 0 of 2
   Full LET of beam as formulas   = 12.865 keV/um
-  Mean LET of beam as simulation = 10.226 +- 1.3333 keV/um
-  Mean track length of beam      = 425.5 +- 0.029302 um
+  Mean LET of beam as simulation = 10.896 +- 0.35055 keV/um
+  Mean track length of beam      = 381.75 +- 0.014482 um
   Particle fluence               = 383.66 particles/cm^2
   Fluence dose (full)            = 7.9081e-06 Gy
   Fluence dose ber beam          = 3.954e-06 Gy
 
  List of generated physical process:
-                eBrem=      1
-                eIoni=    735
-              ionIoni=    531
-                  msc=   2239
-                 phot=      1
+                eIoni=   3453
+              ionIoni=   2168
+                  msc=   4860
 
 
  List of generated particles outside neuron structure:
-             e- :     630  Emean =  4.7207 keV	( 508.94 eV  --> 198.6 keV) 	Eflow/event = 1.487 MeV
-          gamma :       1  Emean =  1.4462 keV	( 1.4462 keV --> 1.4462 keV) 	Eflow/event = 723.1 eV 
+             e- :    2819  Emean =  1.3521 keV	( 242.18 eV  --> 305.62 keV) 	Eflow/event = 1.9058 MeV
 
  Number of secondary particles inside neuron structure:
 
@@ -627,8 +632,8 @@ Physics stage ends
     time: 1 ps - 10 ps 
 
  Total energy (MeV) deposition :
-  All volume:   8.7022
-   Bounding slice:  2.3401
+  All volume:   8.3193
+   Bounding slice:  2.6734
       Neuron:         0
         Soma:         0
     Dendrites:        0
@@ -649,7 +654,7 @@ Physics stage ends
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
- Calculation time                      = 3.24568 s 
+ Calculation time                      = 12.5487 s 
 
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -526,49 +526,49 @@ hPairProd:  for pi-  XStype:1  SubType=4
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_Ti
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  1.29108 keV    e-  42.6771 keV    e+  42.1263 keV proton 10 keV
+ Energy thresholds :  gamma  1.29117 keV    e-  42.6802 keV    e+  42.1262 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_PLEXIGLASS
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  17.8697 keV    e+  17.5111 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  17.8761 keV    e+  17.5151 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : G4_Al
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  34.1013 keV    e+  33.7203 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  34.1058 keV    e+  33.7225 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  13.8319 keV    e+  13.5659 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  13.8376 keV    e+  13.5698 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 6     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 0 fm 
- Energy thresholds :  gamma  1 keV    e-  13.8319 keV    e+  13.5659 keV proton 0 eV 
+ Energy thresholds :  gamma  990 eV     e-  13.8376 keV    e+  13.5698 keV proton 0 eV 
  Region(s) which use this couple : 
     DetectorLog
 
@@ -585,7 +585,7 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=11.500000s Real=12.103455s Sys=0.200000s
+  User=11.150000s Real=41.256119s Sys=0.370000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -595,6 +595,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.21 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.19 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

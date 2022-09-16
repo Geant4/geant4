@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -485,28 +485,28 @@ hPairProd:  for pi-  XStype:1  SubType=4
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : MedMat_0.80_0.20_0.00_0.00
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1 keV    e-  83.2112 keV    e+  82.1189 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  83.2045 keV    e+  82.1259 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_Ge
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  5.96323 keV    e-  174.298 keV    e+  169.99 keV proton 10 keV
+ Energy thresholds :  gamma  5.96401 keV    e-  174.289 keV    e+  169.994 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_Pb
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  29.3967 keV    e-  240.671 keV    e+  232.59 keV proton 10 keV
+ Energy thresholds :  gamma  29.3967 keV    e-  240.662 keV    e+  232.588 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -539,7 +539,7 @@ Setting was ignored.
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=24.300000s Real=35.052688s Sys=0.360000s
+  User=26.220000s Real=49.443025s Sys=0.330000s
 
 --------------------End of Global Run-----------------------
  The run had 1000000 events... write file : output.root - done
@@ -551,4 +551,4 @@ Dynamic pools deleted: 14 / Total memory freed: 0.025 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
 Execution completed
-User=26.070000s Real=37.154893s Sys=0.420000s
+User=27.940000s Real=56.100629s Sys=0.410000s

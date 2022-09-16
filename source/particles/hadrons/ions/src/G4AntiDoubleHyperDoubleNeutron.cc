@@ -85,6 +85,8 @@ G4AntiDoubleHyperDoubleNeutron* G4AntiDoubleHyperDoubleNeutron::Definition() {
     mode[2] = new G4PhaseSpaceDecayChannel( "anti_doublehyperdoubleneutron", br_lambda_to_n_piz, 5,
                                             "anti_neutron", "anti_neutron", "anti_lambda", "anti_neutron", "pi0" );
     for ( G4int index = 0; index < 3; ++index ) table->Insert( mode[index] );
+    delete [] mode;
+    anInstance->SetDecayTable( table );
   }
   theInstance = reinterpret_cast< G4AntiDoubleHyperDoubleNeutron* >( anInstance );
   return theInstance;

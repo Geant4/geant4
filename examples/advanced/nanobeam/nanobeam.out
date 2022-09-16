@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -276,13 +276,13 @@ ionIoni:  for alpha  XStype:1  SubType=2
 Index : 0     used in the geometry : Yes
  Material : Vacuum
  Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 eV 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
-##### Create analysis manager   0x1285f20
+##### Create analysis manager   0x198e940
 Using  analysis manager
 Ntuple-1 created
 Ntuple-2 created

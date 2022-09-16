@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -388,49 +388,49 @@ hIoni:  for pi-  XStype:1  SubType=2
 Index : 0     used in the geometry : Yes
  Material : Vacuum
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 200 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Nickel
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 200 keV
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Gold
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 200 keV
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  9.54993 GeV    e-  1.19054 GeV    e+  1.13191 GeV proton 200 keV
+ Energy thresholds :  gamma  9.54965 GeV    e-  1.19053 GeV    e+  1.1319 GeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Carbon Fibre
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  3.2976 MeV    e-  775.4 MeV    e+  740.751 MeV proton 200 keV
+ Energy thresholds :  gamma  3.29739 MeV    e-  775.401 MeV    e+  740.751 MeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : Titanium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  9.54993 GeV    e-  5.94716 GeV    e+  5.6228 GeV proton 200 keV
+ Energy thresholds :  gamma  9.54965 GeV    e-  5.94714 GeV    e+  5.62281 GeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 6     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  9.54993 GeV    e-  1.01353 GeV    e+  962.875 MeV proton 200 keV
+ Energy thresholds :  gamma  9.54965 GeV    e-  1.01354 GeV    e+  962.889 MeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -446,7 +446,7 @@ Opening output file xraytel ...  done
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.020000s Real=0.011495s Sys=0.000000s
+  User=0.010000s Real=0.033246s Sys=0.000000s
 ##########################################
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 0 events have been kept for refreshing and/or reviewing.

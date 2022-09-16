@@ -16,7 +16,12 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 5 2022 M.Asai (geommng-V10-07-08)
+August 8, 2022 G.Cosmo (geommng-V10-07-09)
+- Added protection in G4GeometryManager for Open/CloseGeometry() to
+  be executed only by master thread.
+  Addressing problem report #2502.
+
+March 5, 2022 M.Asai (geommng-V10-07-08)
 - G4SolidStore, G4LogicalVolumeStore, G4PhysicalVolumeStore:
   extend getter methods to optionally return the last-found object.
 

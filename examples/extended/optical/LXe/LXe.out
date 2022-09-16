@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -938,28 +938,28 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : Vacuum
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Al
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.84821 keV    e-  461.317 keV    e+  445.215 keV proton 70 keV
+ Energy thresholds :  gamma  5.84809 keV    e-  461.311 keV    e+  445.215 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : LXe
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  23.9007 keV    e-  392.975 keV    e+  377.543 keV proton 70 keV
+ Energy thresholds :  gamma  23.9005 keV    e-  392.984 keV    e+  377.557 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Glass
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.09818 keV    e-  281.681 keV    e+  274.857 keV proton 70 keV
+ Energy thresholds :  gamma  2.09772 keV    e-  281.684 keV    e+  274.852 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -996,7 +996,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 200
-  User=9.290000s Real=9.663098s Sys=0.090000s
+  User=9.670000s Real=21.164073s Sys=0.090000s
 
  ======================== run summary ======================
 The run was 200 events.
@@ -1034,28 +1034,28 @@ G4VisManager::Enable: WARNING: visualization remains disabled for
 Index : 0     used in the geometry : Yes
  Material : Vacuum
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Al
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.84821 keV    e-  461.317 keV    e+  445.215 keV proton 70 keV
+ Energy thresholds :  gamma  5.84809 keV    e-  461.311 keV    e+  445.215 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : LXe
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  23.9007 keV    e-  392.975 keV    e+  377.543 keV proton 70 keV
+ Energy thresholds :  gamma  23.9005 keV    e-  392.984 keV    e+  377.557 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Glass
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.09818 keV    e-  281.681 keV    e+  274.857 keV proton 70 keV
+ Energy thresholds :  gamma  2.09772 keV    e-  281.684 keV    e+  274.852 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1116,7 +1116,7 @@ Unaccounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.300000s Real=0.316209s Sys=0.000000s
+  User=0.250000s Real=0.464665s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 5 events.
@@ -1147,28 +1147,28 @@ Total energy deposition in scintillator per event:	 493.8 +- 38.53 keV.
 Index : 0     used in the geometry : Yes
  Material : Vacuum
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Al
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.84821 keV    e-  461.317 keV    e+  445.215 keV proton 70 keV
+ Energy thresholds :  gamma  5.84809 keV    e-  461.311 keV    e+  445.215 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : LXe
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  23.9007 keV    e-  392.975 keV    e+  377.543 keV proton 70 keV
+ Energy thresholds :  gamma  23.9005 keV    e-  392.984 keV    e+  377.557 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Glass
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.09818 keV    e-  281.681 keV    e+  274.857 keV proton 70 keV
+ Energy thresholds :  gamma  2.09772 keV    e-  281.684 keV    e+  274.852 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2091,7 +2091,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    -30.9       89     -101  7.03e-06        0     95.4      95.4     housing Transportation
     2    -30.9       89     -101  7.03e-06        0        0      95.4 scintillator Transportation
     3    -37.1     71.1     -103  7.03e-06 7.03e-06     19.1       114 scintillator OpAbsorption
-	Energy weighted position of hits in LXe : (-0.05397377831452965,-0.273933851376592,-88.65649067583557)
+	Energy weighted position of hits in LXe : (-0.05397377599782886,-0.2739338550235252,-88.65649067023672)
 	Total energy deposition in scintillator : 511.3321405735337 (keV)
 	Reconstructed position of hits in LXe : (0,7.469583333333333,18.88625)
 	Number of photons that hit PMTs in this event : 6
@@ -2105,7 +2105,7 @@ Unaccounted for photons in this event : 0
 ./currentEvent.rndm is copied to ./run2evt0.rndm Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.028424s Sys=0.010000s
+  User=0.000000s Real=0.185239s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 1 events.

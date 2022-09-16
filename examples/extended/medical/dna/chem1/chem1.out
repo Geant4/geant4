@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -213,7 +213,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -521,7 +521,7 @@ ___________________________________
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=89.520000s Real=90.967731s Sys=0.220000s
+  User=89.300000s Real=187.625771s Sys=0.040000s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

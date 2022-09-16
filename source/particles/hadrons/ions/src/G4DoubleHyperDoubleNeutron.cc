@@ -85,6 +85,8 @@ G4DoubleHyperDoubleNeutron* G4DoubleHyperDoubleNeutron::Definition() {
     mode[2] = new G4PhaseSpaceDecayChannel( "doublehyperdoubleneutron", br_lambda_to_n_piz, 5,
    					    "neutron", "neutron", "lambda", "neutron", "pi0" );
     for ( G4int index = 0; index < 3; ++index ) table->Insert( mode[index] );
+    delete [] mode;
+    anInstance->SetDecayTable( table );
   }
   theInstance = reinterpret_cast< G4DoubleHyperDoubleNeutron* >( anInstance );
   return theInstance;

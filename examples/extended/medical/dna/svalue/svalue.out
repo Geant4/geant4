@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -274,7 +274,7 @@ Threshold for very long decay time at rest        1e+27  ns
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -286,7 +286,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.240000s Real=0.241422s Sys=0.000000s
+  User=0.230000s Real=0.748048s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -317,7 +317,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -327,7 +327,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.420000s Real=0.430594s Sys=0.000000s
+  User=0.430000s Real=0.854540s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -358,7 +358,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -368,7 +368,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.610000s Real=0.619991s Sys=0.000000s
+  User=0.610000s Real=0.848747s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -399,7 +399,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -409,7 +409,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.810000s Real=0.812739s Sys=0.000000s
+  User=0.780000s Real=1.798104s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -440,7 +440,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -450,7 +450,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.990000s Real=1.003565s Sys=0.000000s
+  User=0.940000s Real=0.991110s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -481,7 +481,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -491,7 +491,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.200000s Real=1.206246s Sys=0.000000s
+  User=1.090000s Real=2.285701s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -522,7 +522,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -532,7 +532,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.370000s Real=1.386410s Sys=0.000000s
+  User=1.300000s Real=2.632364s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -563,7 +563,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -573,7 +573,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.580000s Real=1.591916s Sys=0.000000s
+  User=1.500000s Real=4.003032s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -604,7 +604,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -614,7 +614,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.750000s Real=1.817678s Sys=0.000000s
+  User=1.680000s Real=4.657850s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -645,7 +645,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -655,7 +655,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.930000s Real=1.949277s Sys=0.000000s
+  User=1.930000s Real=7.033719s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -686,7 +686,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -696,7 +696,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.870000s Real=3.908892s Sys=0.000000s
+  User=3.860000s Real=8.028948s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -727,7 +727,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -737,7 +737,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.230000s Real=6.373039s Sys=0.000000s
+  User=5.500000s Real=9.607260s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -768,7 +768,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -778,7 +778,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.710000s Real=7.784422s Sys=0.000000s
+  User=7.510000s Real=14.675731s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -809,7 +809,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -819,7 +819,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.710000s Real=9.798444s Sys=0.010000s
+  User=9.310000s Real=16.083684s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -850,7 +850,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -860,7 +860,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=11.520000s Real=11.632281s Sys=0.000000s
+  User=11.180000s Real=26.004701s Sys=0.010000s
 
  ======================== run summary =====================
 
@@ -891,7 +891,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -901,7 +901,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=13.330000s Real=13.492521s Sys=0.000000s
+  User=13.370000s Real=33.337720s Sys=0.010000s
 
  ======================== run summary =====================
 
@@ -932,7 +932,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -942,7 +942,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=15.340000s Real=15.482310s Sys=0.000000s
+  User=14.890000s Real=39.079057s Sys=0.010000s
 
  ======================== run summary =====================
 
@@ -973,7 +973,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -983,7 +983,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=17.220000s Real=17.432392s Sys=0.010000s
+  User=16.670000s Real=31.393205s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1014,7 +1014,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1024,7 +1024,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=19.620000s Real=19.823501s Sys=0.010000s
+  User=18.850000s Real=36.412223s Sys=0.010000s
 
  ======================== run summary =====================
 

@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01 Jul 2022 Alberto Ribon (hadr-hpp-V10-07-13)
+----------------------------------------------
+- G4ParticleHPContAngularPar.cc : added protections against evaluations of
+  arrays at negative index (-1), fixing rare reproducibility problems.
+- G4ParticleHPInelastic.cc, G4ParticleHPCapture.cc, G4ParticleHPFission.cc,
+  G4ParticleHPElastic.cc, G4ParticleHPThermalScattering.cc : replaced
+  the threshold used for checking the absolute energy non-conservation
+  from DLB_MAX (implying no checking at all) to 350 GeV (this value allows
+  for cases where the residual nucleus is not produced, even when super-heavy
+  nuclides are involved).
+
 11 May 2022 Dennis Wright (hadr-hpp-V10-07-12)
 ----------------------------------------------
 - code cleanup of G4ParticleHPContEnergyAngular.cc and 

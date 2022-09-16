@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 May 2022 V.Ivanchenko (emutils-V10-07-41)
+  ## 2022-06-19 V.Ivanchenko
+- G4EmExtraParametersMessenger - fixed typo (problem #2492)
+
 07 April 2022 V.Ivanchenko (emutils-V10-07-40)
 - G4VMultipleScattering - fix #2480 responsible for energy deposition shift of
     custom CMS Physics List FTFP_BERT_EMM

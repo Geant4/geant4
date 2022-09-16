@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -521,21 +521,21 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Pb
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  101.8 keV    e-  1.37159 MeV    e+  1.2826 MeV proton 100 keV
+ Energy thresholds :  gamma  101.797 keV    e-  1.37158 MeV    e+  1.2826 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_lAr
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.20143 keV    e-  347.469 keV    e+  336.38 keV proton 100 keV
+ Energy thresholds :  gamma  6.20202 keV    e-  347.457 keV    e+  336.377 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -547,28 +547,28 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.910000s Real=1.960183s Sys=0.000000s
+  User=1.480000s Real=1.945499s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 776.78 MeV :     16 MeV      2.06 +- 0.206 %      54.8 cm  +- 1.28 cm 
-        G4_lAr: 213.12 MeV :  14.62 MeV     6.859 +- 0.6859 %      1.05 m   +- 7.41 cm 
+         G4_Pb: 775.61 MeV :  15.29 MeV     1.972 +- 0.1972 %      54.8 cm  +- 1.22 cm 
+        G4_lAr: 214.15 MeV :  14.95 MeV     6.982 +- 0.6982 %      1.05 m   +- 7.32 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       510
- Mean number of e-          871
- Mean number of e+          54.6
- Mean number of charged steps  3645.75
- Mean number of neutral steps  3688.38
+ Mean number of gamma       506
+ Mean number of e-          868
+ Mean number of e+          53.1
+ Mean number of charged steps  3636.89
+ Mean number of neutral steps  3676.48
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 776.774 MeV
-    G4_lAr:	 213.037 MeV
+     G4_Pb:	 775.636 MeV
+    G4_lAr:	 214.061 MeV
 
 ------------------------------------------------------------
 
@@ -593,21 +593,21 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Pb
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  101.8 keV    e-  1.37159 MeV    e+  1.2826 MeV proton 100 keV
+ Energy thresholds :  gamma  101.797 keV    e-  1.37158 MeV    e+  1.2826 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_lAr
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.20143 keV    e-  347.469 keV    e+  336.38 keV proton 100 keV
+ Energy thresholds :  gamma  6.20202 keV    e-  347.457 keV    e+  336.377 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -619,28 +619,28 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.290000s Real=1.309749s Sys=0.010000s
+  User=1.240000s Real=1.502007s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 779.69 MeV :  21.21 MeV      2.72 +- 0.272 %      52.5 cm  +- 1.32 cm 
-        G4_lAr: 211.18 MeV :  17.75 MeV     8.404 +- 0.8404 %       100 cm  +- 8.45 cm 
+         G4_Pb: 775.66 MeV :  19.79 MeV     2.551 +- 0.2551 %      52.1 cm  +- 1.42 cm 
+        G4_lAr: 213.69 MeV :  17.78 MeV     8.321 +- 0.8321 %      1.01 m   +- 8.24 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
  Mean number of gamma       294
- Mean number of e-          561
- Mean number of e+          54.1
- Mean number of charged steps  3109.78
- Mean number of neutral steps  2948.59
+ Mean number of e-          562
+ Mean number of e+          53.8
+ Mean number of charged steps  3112.66
+ Mean number of neutral steps  2959.48
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 777.921 MeV
-    G4_lAr:	 212.965 MeV
+     G4_Pb:	 775.03 MeV
+    G4_lAr:	 214.233 MeV
 
 ------------------------------------------------------------
 
@@ -648,6 +648,6 @@ Run Summary
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.095 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.1 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

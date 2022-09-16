@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -988,63 +988,63 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 0 fm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 0 eV 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : LungInhale
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 0 fm 
- Energy thresholds :  gamma  1.31754 keV    e-  108.062 keV    e+  106.431 keV proton 0 eV 
+ Energy thresholds :  gamma  1.31725 keV    e-  108.069 keV    e+  106.431 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : LungExhale
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 0 fm 
- Energy thresholds :  gamma  1.88154 keV    e-  180.141 keV    e+  176.602 keV proton 0 eV 
+ Energy thresholds :  gamma  1.88193 keV    e-  180.152 keV    e+  176.601 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : AdiposeTissue
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 0 fm 
- Energy thresholds :  gamma  2.18096 keV    e-  275.022 keV    e+  268.401 keV proton 0 eV 
+ Energy thresholds :  gamma  2.18075 keV    e-  275.015 keV    e+  268.402 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Breast
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 0 fm 
- Energy thresholds :  gamma  2.25439 keV    e-  277.679 keV    e+  270.947 keV proton 0 eV 
+ Energy thresholds :  gamma  2.25478 keV    e-  277.672 keV    e+  270.955 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 0 fm 
- Energy thresholds :  gamma  2.52546 keV    e-  277.656 keV    e+  270.83 keV proton 0 eV 
+ Energy thresholds :  gamma  2.52504 keV    e-  277.648 keV    e+  270.838 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 6     used in the geometry : Yes
  Material : Muscle
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 0 fm 
- Energy thresholds :  gamma  2.54462 keV    e-  287.015 keV    e+  279.834 keV proton 0 eV 
+ Energy thresholds :  gamma  2.54445 keV    e-  287.023 keV    e+  279.831 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 7     used in the geometry : Yes
  Material : TrabecularBone
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 0 fm 
- Energy thresholds :  gamma  2.70643 keV    e-  299.808 keV    e+  292.113 keV proton 0 eV 
+ Energy thresholds :  gamma  2.70679 keV    e-  299.822 keV    e+  292.108 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 8     used in the geometry : Yes
  Material : Liver
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 0 fm 
- Energy thresholds :  gamma  2.55838 keV    e-  288.683 keV    e+  281.426 keV proton 0 eV 
+ Energy thresholds :  gamma  2.55839 keV    e-  288.67 keV    e+  281.428 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1158,11 +1158,11 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.068827s Sys=0.010000s
+  User=0.020000s Real=0.573454s Sys=0.010000s
 --------------------End of Global Run-----------------------
  The run was 100 events 
 LOCAL TOTAL DOSE : 	0 Gy
-      TOTAL DOSE : 	9.64464e-07 Gy
+      TOTAL DOSE : 	1.05046e-06 Gy
  ###### EndOfRunAction ###### 
 =============================================================
  Number of event processed : 100
@@ -1180,6 +1180,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.028 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.032 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

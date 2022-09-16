@@ -40,7 +40,7 @@ G4Mutex G4VRangeToEnergyConverter::theMutex = G4MUTEX_INITIALIZER;
 #endif
 
 G4double  G4VRangeToEnergyConverter::Emin = 0.0;
-G4double  G4VRangeToEnergyConverter::Emax = 0.0;
+G4double  G4VRangeToEnergyConverter::Emax = 10000.0;
 
 std::vector<G4double>* G4VRangeToEnergyConverter::Energy = nullptr;
 
@@ -58,7 +58,6 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter()
     {
 #endif
       isFirstInstance = true;
-      Energy = new std::vector<G4double>(Nbin + 1);
 #ifdef G4MULTITHREADED
     }
     G4MUTEXUNLOCK(&theMutex);
@@ -79,7 +78,7 @@ G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
     delete Energy;
     Energy = nullptr; 
     Emin = 0.;
-    Emax = 0.;
+    Emax = 10000.;
   }
 }
 
@@ -122,7 +121,7 @@ G4double G4VRangeToEnergyConverter::Convert(const G4double rangeCut,
 void G4VRangeToEnergyConverter::SetEnergyRange(const G4double lowedge,
                                                const G4double highedge)
 {
-  G4double ehigh = std::min(Emax, highedge);
+  G4double ehigh = std::min(10.*CLHEP::GeV, highedge);
   if(ehigh > lowedge)
   {
     FillEnergyVector(lowedge, ehigh);
@@ -151,7 +150,8 @@ G4double G4VRangeToEnergyConverter::GetMaxEnergyCut()
 // --------------------------------------------------------------------
 void G4VRangeToEnergyConverter::SetMaxEnergyCut(const G4double value)
 {
-  if(value > Emin)
+  G4double ehigh = std::min(10.*CLHEP::GeV, value);
+  if(ehigh > Emin)
   {
     FillEnergyVector(Emin, value);
   }
@@ -161,16 +161,17 @@ void G4VRangeToEnergyConverter::SetMaxEnergyCut(const G4double value)
 void G4VRangeToEnergyConverter::FillEnergyVector(const G4double emin, 
                                                  const G4double emax)
 {
-  if(emin != Emin || emax != Emax) 
+  if(emin != Emin || emax != Emax || nullptr == Energy) 
   {
 #ifdef G4MULTITHREADED
     G4MUTEXLOCK(&theMutex);
-    if(emin != Emin || emax != Emax) 
-    { 
+    if(emin != Emin || emax != Emax || nullptr == Energy)
+    {
 #endif
       Emin = emin;
       Emax = emax;
       Nbin = NbinPerDecade*static_cast<G4int>(std::log10(emax/emin));
+      if(nullptr == Energy) { Energy = new std::vector<G4double>; }
       Energy->resize(Nbin + 1);
       (*Energy)[0] = emin;
       (*Energy)[Nbin] = emax;

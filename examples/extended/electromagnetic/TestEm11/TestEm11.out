@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -514,14 +514,14 @@ hPairProd:  for pi-  XStype:1  SubType=4
 Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.93779 keV    e-  546.298 keV    e+  525.604 keV proton 100 keV
+ Energy thresholds :  gamma  6.93672 keV    e-  546.311 keV    e+  525.593 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -538,27 +538,27 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=0.650000s Real=0.656483s Sys=0.000000s
+  User=0.630000s Real=1.242922s Sys=0.010000s
 
  ======================== run summary =====================
 
  The run is 20000 e- of 500.00 keV through 1 absorbers: 
     1      1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
- Edep in absorber 1 = 447.593 keV	(14.281 keV-->500.000 keV)
+ Edep in absorber 1 = 447.407 keV	(14.281 keV-->500.000 keV)
 
- Track length of primary track = 881.771 um  +- 192.378 um 
+ Track length of primary track = 881.722 um  +- 192.138 um 
  Range from EmCalculator = 942.776 um  (from full dE/dx)
 
- Projected range               = 323.624 um  +- 195.124 um 
+ Projected range               = 323.465 um  +- 195.188 um 
 
- Nb of steps of primary track  = 12.02 +- 2.96	 Step size= 75.665 um  +- 19.239 um 
+ Nb of steps of primary track  = 12.02 +- 2.96	 Step size= 75.666 um  +- 19.231 um 
 
- absorbed = 77.34 %   transmit = 6.07 %   reflected = 16.59 %
+ absorbed = 77.24 %   transmit = 6.12 %   reflected = 16.64 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1548490251, 1478647226
+ Current couple of seeds = 1989205388, 753489856
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

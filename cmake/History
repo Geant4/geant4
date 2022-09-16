@@ -29,6 +29,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 July 2022 - Ben Morgan (cmake-V10-07-57)
+- Address [Bugzilla 2485](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2485)
+  - Update extraction of include paths from VecGeom to use imported target
+    property.
+
 06 April 2022 - Ben Morgan (cmake-V10-07-56)
 - Don't add CLHEP_INCLUDE_DIRS directly through include_directories to prevent potential
   issues with it holding relative paths (reported by Seth Johnson)

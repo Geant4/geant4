@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -193,35 +193,35 @@ The model AdjointPEEffect does not use cross section matrices
 Index : 0     used in the geometry : Yes
  Material : Vacuum
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 1 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Aluminum
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  1 keV    e-  34.1087 keV    e+  33.7276 keV proton 1 keV
+ Energy thresholds :  gamma  990 eV     e-  34.1132 keV    e+  33.7298 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 1 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  1 keV    e-  31.7001 keV    e+  31.3441 keV proton 1 keV
+ Energy thresholds :  gamma  990 eV     e-  31.6994 keV    e+  31.3501 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Tantalum
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  6.87412 keV    e-  74.7946 keV    e+  73.3238 keV proton 1 keV
+ Energy thresholds :  gamma  6.87436 keV    e-  74.8006 keV    e+  73.3227 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -396,14 +396,15 @@ nb event 155000
 nb event 160000
 nb event 165000
 nb event 170000
+nb event 175000
 1%  Precision reached!
  Run terminated.
 Run Summary
-  Run Aborted after 171668 events processed.
-  User=72.220000s Real=80.751766s Sys=0.150000s
+  Run Aborted after 175096 events processed.
+  User=76.150000s Real=137.780293s Sys=0.210000s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00163805
-error[MeV] = 1.63799e-05
+normalised edep [MeV] = 0.00165741
+error[MeV] = 1.65732e-05
 
 ----> Histogram Tree is saved in adjoint_sim.
 0 events have been kept for refreshing and/or reviewing.
@@ -414,6 +415,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 1
-Dynamic pools deleted: 13 / Total memory freed: 27 MB
+Dynamic pools deleted: 13 / Total memory freed: 28 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

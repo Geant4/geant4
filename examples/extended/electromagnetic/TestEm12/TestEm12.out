@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -517,7 +517,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  1 keV    e-  13.8319 keV    e+  13.5659 keV proton 1 keV
+ Energy thresholds :  gamma  990 eV     e-  13.8376 keV    e+  13.5698 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -542,24 +542,24 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.810000s Real=0.821229s Sys=0.000000s
+  User=0.740000s Real=1.543483s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 3.942 MeV +- 224.139 keV
+ Total Energy deposited        = 3.945 MeV +- 215.856 keV
 
- Track length of primary track = 2.050 cm  +- 2.799 mm 
+ Track length of primary track = 2.051 cm  +- 2.810 mm 
  Range from EmCalculator = 2.045 cm  (from full dE/dx)
 
- Projected range               = 1.323 cm  +- 3.580 mm 
+ Projected range               = 1.325 cm  +- 3.593 mm 
 
- Nb of steps of primary track  = 16.32 +- 3.07	 Step size= 1.295 mm  +- 281.353 um 
+ Nb of steps of primary track  = 16.33 +- 3.04	 Step size= 1.294 mm  +- 283.350 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 529388201, 79359120
+ Current couple of seeds = 679775027, 997615119
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

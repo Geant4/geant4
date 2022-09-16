@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -901,28 +901,28 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.52562 keV    e-  277.64 keV    e+  270.815 keV proton 70 keV
+ Energy thresholds :  gamma  2.52521 keV    e-  277.633 keV    e+  270.823 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_A-150_TISSUE
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.28364 keV    e-  301.335 keV    e+  293.733 keV proton 70 keV
+ Energy thresholds :  gamma  2.28343 keV    e-  301.331 keV    e+  293.733 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_BONE_COMPACT_ICRU
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  3.93535 keV    e-  398.373 keV    e+  386.308 keV proton 70 keV
+ Energy thresholds :  gamma  3.93604 keV    e-  398.36 keV    e+  386.306 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1095,7 +1095,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.001562s Sys=0.000000s
+  User=0.000000s Real=0.004211s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 5 gamma of 6 MeV
@@ -1132,28 +1132,28 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 69.99999999999999 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
- Energy thresholds :  gamma  2.525620909006347 keV    e-  277.6404681912384 keV    e+  270.8148294280157 keV proton 69.99999999999999 keV
+ Energy thresholds :  gamma  2.525205046753567 keV    e-  277.6325949648837 keV    e+  270.8225713625466 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_A-150_TISSUE
  Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
- Energy thresholds :  gamma  2.283643816825727 keV    e-  301.3346317840945 keV    e+  293.7333821937841 keV proton 69.99999999999999 keV
+ Energy thresholds :  gamma  2.283428025631864 keV    e-  301.3305178493645 keV    e+  293.732853832379 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_BONE_COMPACT_ICRU
  Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
- Energy thresholds :  gamma  3.935347501285622 keV    e-  398.3729057909528 keV    e+  386.3080862918633 keV proton 69.99999999999999 keV
+ Energy thresholds :  gamma  3.936040379512573 keV    e-  398.3596964735049 keV    e+  386.3056464871661 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1182,28 +1182,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     7     61.7    -4.42     58.5       101     12.6     19.5       209    Envelope hIoni
     8     60.8    -3.01     74.2      88.7     11.9     15.9       225    Envelope hIoni
     9     60.1    -1.81     86.9      78.3     10.5     12.7       238    Envelope hIoni
-   10       60    -1.59     89.6      75.7     2.52      2.7       240      Shape2 Transportation
-   11     59.7    -1.16     95.2        67     8.73     5.64       246      Shape2 hIoni
-   12     59.5   -0.802     99.7      58.4     8.63     4.56       251      Shape2 hIoni
-   13     59.5   -0.778      100      57.8    0.532    0.293       251    Envelope Transportation
-   14     59.3   -0.298      106      50.6     7.29     5.98       257    Envelope hIoni
-   15     59.3   0.0426      111      44.5     6.01     4.73       262    Envelope hIoni
-   16     59.3    0.255      114        39     5.55     3.79       265    Envelope hIoni
-   17     59.4    0.389      117      34.1     4.94     3.02       268    Envelope hIoni
-   18     59.4    0.458      120      29.8     4.21      2.4       271    Envelope hIoni
-   19     59.5    0.529      122      26.2     3.68     1.92       273    Envelope hIoni
-   20     59.5     0.59      123      22.7     3.42     1.55       274    Envelope hIoni
-   21     59.5     0.66      125      19.7     3.04     1.24       275    Envelope hIoni
-   22     59.6    0.691      126      16.9     2.78    0.991       276    Envelope hIoni
-   23     59.6    0.726      126      14.6     2.33    0.791       277    Envelope hIoni
-   24     59.6    0.755      127      12.5     2.13    0.642       278    Envelope hIoni
-   25     59.6    0.778      128      10.3     2.14    0.522       278    Envelope hIoni
-   26     59.6    0.794      128      8.29     2.02    0.415       279    Envelope hIoni
-   27     59.6     0.81      128       6.4     1.89    0.328       279    Envelope hIoni
-   28     59.6     0.82      129      4.48     1.93    0.258       279    Envelope hIoni
-   29     59.6    0.833      129      2.49     1.99    0.193       280    Envelope hIoni
-   30     59.6    0.841      129    0.0274     2.46    0.109       280    Envelope hIoni
-   31     59.6    0.841      129         0   0.0274 0.000787       280    Envelope hIoni
+   10       60    -1.58     89.6      75.7     2.56     2.74       240      Shape2 Transportation
+   11     59.7    -1.16     95.2        67     8.72     5.63       246      Shape2 hIoni
+   12     59.5   -0.798     99.7      58.4     8.63     4.56       251      Shape2 hIoni
+   13     59.5   -0.776      100      57.9    0.485    0.267       251    Envelope Transportation
+   14     59.3   -0.296      106      50.6     7.29     5.99       257    Envelope hIoni
+   15     59.3   0.0449      111      44.6     6.02     4.73       262    Envelope hIoni
+   16     59.3    0.257      114        39     5.55      3.8       265    Envelope hIoni
+   17     59.4    0.392      117      34.1     4.94     3.02       268    Envelope hIoni
+   18     59.4    0.461      120      29.9     4.21      2.4       271    Envelope hIoni
+   19     59.5    0.533      122      26.2     3.68     1.92       273    Envelope hIoni
+   20     59.5    0.594      123      22.8     3.43     1.55       274    Envelope hIoni
+   21     59.5    0.663      125      19.7     3.04     1.24       275    Envelope hIoni
+   22     59.6    0.695      126      16.9     2.78    0.992       276    Envelope hIoni
+   23     59.6     0.73      126      14.6     2.33    0.792       277    Envelope hIoni
+   24     59.6    0.758      127      12.5     2.13    0.643       278    Envelope hIoni
+   25     59.6    0.782      128      10.3     2.14    0.522       278    Envelope hIoni
+   26     59.6    0.797      128       8.3     2.02    0.415       279    Envelope hIoni
+   27     59.6    0.814      128      6.41     1.89    0.328       279    Envelope hIoni
+   28     59.6    0.823      129      4.48     1.93    0.258       279    Envelope hIoni
+   29     59.6    0.837      129       2.5     1.99    0.194       280    Envelope hIoni
+   30     59.6    0.845      129    0.0316     2.47    0.109       280    Envelope hIoni
+   31     59.6    0.845      129         0   0.0316 0.000852       280    Envelope hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -1224,11 +1224,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000611s Sys=0.000000s
+  User=0.000000s Real=0.000604s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1 proton of 210 MeV
- Dose in scoring volume : 1.655067991388278 picoGy  +- 0 picoGy 
+ Dose in scoring volume : 1.650137239538446 picoGy  +- 0 picoGy 
 ------------------------------------------------------------
 
 0 events have been kept for refreshing and/or reviewing.

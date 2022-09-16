@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -641,28 +641,28 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Aluminum
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.91818 keV    e-  597.592 keV    e+  574.294 keV proton 100 keV
+ Energy thresholds :  gamma  6.91691 keV    e-  597.603 keV    e+  574.29 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Acrylic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.77808 keV    e-  389.117 keV    e+  377.901 keV proton 100 keV
+ Energy thresholds :  gamma  2.77771 keV    e-  389.12 keV    e+  377.915 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Quartz
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.02652 keV    e-  614.656 keV    e+  591.024 keV proton 100 keV
+ Energy thresholds :  gamma  6.02536 keV    e-  614.656 keV    e+  591.029 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -691,8 +691,8 @@ See commands in /vis/modeling/trajectories/ for other options.
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1653387435
- float_seed_table[] = 0.679642 0.282378 0.22417 0.9985 0.0862005 0.282983 0.473305 0.903354 0.99085 0.984021 0.808208 0.749773 0.506064 0.683597 0.56733 0.21337 0.914387 0.414573 0.780641 0.711102 0.130292 0.648337 0.56436 0.362236 
+ Initial seed = 1663148848
+ float_seed_table[] = 0.848296 0.807266 0.999913 0.612896 0.518296 0.0867363 0.760748 0.578339 0.810571 0.285736 0.595412 0.00898355 0.643682 0.38296 0.96567 0.345889 0.420853 0.0156653 0.00843364 0.493776 0.980645 0.705676 0.971972 0.622586 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -703,7 +703,7 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.050000s Real=0.049342s Sys=0.000000s
+  User=0.060000s Real=0.132148s Sys=0.000000s
 ### Run 0 (global) ended.
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -735,12 +735,13 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0106 MB
-Pool ID '7G4Track', size : 0.0202 MB
+Pool ID '17G4DynamicParticle', size : 0.0221 MB
+Pool ID '7G4Track', size : 0.0433 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.053 MB
+Pool ID '15UltraOpticalHit', size : 0.00481 MB
+Number of memory pools allocated: 14 of which, static: 0
+Dynamic pools deleted: 14 / Total memory freed: 0.092 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

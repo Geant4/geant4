@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -705,8 +705,8 @@ See commands in /vis/modeling/trajectories/ for other options.
 --> Event 9000 starts.
 
 --------------------End of Global Run-----------------------
-  The run was 10000 events  Nb of 'good' e+ annihilations: 1314
- Total dose in patient : 305.474 picoGy 
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1296
+ Total dose in patient : 305.706 picoGy 
 ------------------------------------------------------------
 
 ... write file : scoring.root - done

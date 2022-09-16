@@ -138,8 +138,8 @@ G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTra
 
 const std::pair<G4double, G4double> G4ParticleHPElastic::GetFatalEnergyCheckLevels() const
 {
-   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
-   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+  // max energy non-conservation is mass of heavy nucleus
+  return std::pair<G4double, G4double>(10.0*perCent, 350.0*CLHEP::GeV);
 }
 
 

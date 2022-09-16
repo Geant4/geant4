@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1610,14 +1610,14 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_BGO
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  64.4517 keV    e-  770.196 keV    e+  731.436 keV proton 70 keV
+ Energy thresholds :  gamma  64.4521 keV    e-  770.195 keV    e+  731.433 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1634,7 +1634,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.630000s Real=2.664873s Sys=0.000000s
+  User=2.840000s Real=5.054209s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1643,11 +1643,11 @@ Number of events: 100
 Material of world: G4_AIR
 Material of tank:  G4_BGO
 
-Average energy of Cerenkov photons created per event: 2.2e+02 eV.
-Average number of Cerenkov photons created per event: 42
- Average energy per photon: 5.2 eV.
+Average energy of Cerenkov photons created per event: 2.3e+02 eV.
+Average number of Cerenkov photons created per event: 45
+ Average energy per photon: 5.1 eV.
 Average energy of scintillation photons created per event: 1.6e+04 eV.
-Average number of scintillation photons created per event: 2.9e+03
+Average number of scintillation photons created per event: 3e+03
  Average energy per photon: 5.4 eV.
 Average number of photons absorbed by WLS per event: 0 
 Average number of photons created by WLS per event: 0
@@ -1655,32 +1655,32 @@ Average energy of WLS photons created per event: 0 eV.
 Average number of photons absorbed by WLS2 per event: 0 
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
-Average number of OpRayleigh per event:   5.3e+03
-Average number of OpAbsorption per event: 2.7e+03
+Average number of OpRayleigh per event:   5.6e+03
+Average number of OpAbsorption per event: 2.9e+03
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:   154596
-Total # of surface events:     136700
+OpAbsorption before surface:   163009
+Total # of surface events:     140430
 
 Surface events by process:
-  Transmission:                 13583
-  Fresnel refraction:            4611
-  Lambertian reflection:        73560
-  Lobe reflection:               9726
-  Spike reflection:             10723
-  Backscattering:               10632
-  Absorption:                   12454
+  Transmission:                 13962
+  Fresnel refraction:            4916
+  Lambertian reflection:        75815
+  Lobe reflection:               9930
+  Spike reflection:             10816
+  Backscattering:               10700
+  Absorption:                   12880
   Detection:                     1411
- Sum:                          136700
+ Sum:                          140430
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Cerenkov spectrum: mean = 5.16587 eV rms = 1.72376 eV.
- Scintillation spectrum: mean = 5.43887 eV rms = 1.66316 eV.
- Scintillation time: mean = 48.2672 ns rms = 46.7552 ns.
+ Cerenkov spectrum: mean = 5.12738 eV rms = 1.73463 eV.
+ Scintillation spectrum: mean = 5.44065 eV rms = 1.66399 eV.
+ Scintillation time: mean = 48.2911 ns rms = 46.8715 ns.
 
 ... write file : electron.root - done
 ... close file : electron.root - done
@@ -1692,6 +1692,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.46 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.47 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

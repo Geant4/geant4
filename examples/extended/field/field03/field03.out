@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1073,7 +1073,7 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1089,23 +1089,23 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm   Radiator    initStep
-    1          0 fm  2.4772565 mm    21.9395 m         500 MeV0.12214578 meV 5.0081793 cm  5.0081793 cm   Radiator  Transportation           0 fm    98.830631 um   -995.10427 um 
-    2          0 fm  2.2749136 cm    21.8395 m         500 MeV 0.2492773 meV 10.220782 cm  15.228961 cm   RadSlice  Transportation           0 fm    296.49196 um   -955.03535 um 
-    3          0 fm  6.6086173 cm    21.7395 m         500 MeV0.26632715 meV 10.919854 cm  26.148815 cm   Radiator  Transportation           0 fm    494.15309 um    -869.3749 um 
-    4          0 fm  14.060739 cm    21.6395 m         500 MeV  0.304942 meV 12.503127 cm  38.651942 cm   RadSlice  Transportation           0 fm    691.81427 um    -722.0755 um 
-    5          0 fm  19.745298 cm    21.5885 m         500 MeV0.18643879 meV 7.6442989 cm  46.296241 cm   Radiator  Transportation           0 fm    792.62153 um   -609.71395 um 
-    6          0 fm  81.438088 cm    21.5885 m         500 MeV 1.6181246 meV 66.345788 cm  1.1264203 m       World  Transportation           0 fm    792.62217 um    609.71312 um 
-    7          0 fm  87.122639 cm    21.6395 m         500 MeV0.18643865 meV 7.6442933 cm  1.2028632 m    Radiator  Transportation           0 fm     691.8151 um    722.07469 um 
-    8          0 fm  94.574764 cm    21.7395 m         500 MeV0.30494206 meV 12.503129 cm  1.3278945 m    RadSlice  Transportation           0 fm    494.15406 um    869.37435 um 
-    9          0 fm  98.908478 cm    21.8395 m         500 MeV0.26632725 meV 10.919858 cm  1.4370931 m    Radiator  Transportation           0 fm    296.49295 um    955.03504 um 
-   10          0 fm   1.009356 m     21.9395 m         500 MeV0.24927701 meV  10.22077 cm  1.5393008 m    RadSlice  Transportation           0 fm     98.83189 um    995.10414 um 
-   11          0 fm  1.0118329 m     21.9895 m         500 MeV 0.1221457 meV 5.0081759 cm  1.5893826 m    Radiator  Transportation           0 fm    1.3322291 nm         1000 um 
-   12          0 fm  1.0118319 m     21.9905 m         500 MeV0.0024389275 meV 1.0000007 mm  1.5903826 m    Absorber  Transportation           0 fm   -1.9752789 um    999.99805 um 
-   13          0 fm  1.0117239 m          22 m         500 MeV0.023171635 meV  9.500754 mm  1.5998833 m  OutOfWorld  Transportation           0 fm   -20.753087 um    999.78463 um 
+    1          0 fm  2.4772565 mm    21.9395 m         500 MeV0.12209589 meV 5.0081793 cm  5.0081793 cm   Radiator  Transportation           0 fm    98.830631 um   -995.10427 um 
+    2          0 fm  2.2749136 cm    21.8395 m         500 MeV0.24917548 meV 10.220782 cm  15.228961 cm   RadSlice  Transportation           0 fm    296.49196 um   -955.03535 um 
+    3          0 fm  6.6086173 cm    21.7395 m         500 MeV0.26621837 meV 10.919854 cm  26.148815 cm   Radiator  Transportation           0 fm    494.15309 um    -869.3749 um 
+    4          0 fm  14.060739 cm    21.6395 m         500 MeV0.30481745 meV 12.503127 cm  38.651942 cm   RadSlice  Transportation           0 fm    691.81427 um    -722.0755 um 
+    5          0 fm  19.745298 cm    21.5885 m         500 MeV0.18636264 meV 7.6442989 cm  46.296241 cm   Radiator  Transportation           0 fm    792.62153 um   -609.71395 um 
+    6          0 fm  81.438088 cm    21.5885 m         500 MeV 1.6174637 meV 66.345788 cm  1.1264203 m       World  Transportation           0 fm    792.62217 um    609.71312 um 
+    7          0 fm  87.122639 cm    21.6395 m         500 MeV 0.1863625 meV 7.6442933 cm  1.2028632 m    Radiator  Transportation           0 fm     691.8151 um    722.07469 um 
+    8          0 fm  94.574764 cm    21.7395 m         500 MeV0.30481751 meV 12.503129 cm  1.3278945 m    RadSlice  Transportation           0 fm    494.15406 um    869.37435 um 
+    9          0 fm  98.908478 cm    21.8395 m         500 MeV0.26621847 meV 10.919858 cm  1.4370931 m    Radiator  Transportation           0 fm    296.49295 um    955.03504 um 
+   10          0 fm   1.009356 m     21.9395 m         500 MeV0.24917519 meV  10.22077 cm  1.5393008 m    RadSlice  Transportation           0 fm     98.83189 um    995.10414 um 
+   11          0 fm  1.0118329 m     21.9895 m         500 MeV0.12209581 meV 5.0081759 cm  1.5893826 m    Radiator  Transportation           0 fm    1.3322291 nm         1000 um 
+   12          0 fm  1.0118319 m     21.9905 m         500 MeV0.0024379313 meV 1.0000007 mm  1.5903826 m    Absorber  Transportation           0 fm   -1.9752789 um    999.99805 um 
+   13          0 fm  1.0117239 m          22 m         500 MeV0.02316217 meV  9.500754 mm  1.5998833 m  OutOfWorld  Transportation           0 fm   -20.753087 um    999.78463 um 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.001052s Sys=0.000000s
+  User=0.010000s Real=0.000895s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1115,7 +1115,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1127,7 +1127,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.010532s Sys=0.000000s
+  User=0.010000s Real=0.010519s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1138,7 +1138,7 @@ Set global field value to (0,0,1000) Gauss
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1149,7 +1149,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001453s Sys=0.000000s
+  User=0.000000s Real=0.001378s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1164,7 +1164,7 @@ Set local field value to (0,0,0) Gauss
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1179,23 +1179,23 @@ Index : 0     used in the geometry : Yes
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm   Radiator    initStep
-    1          0 fm          0 fm    21.9395 m         500 MeV0.12194629 meV         5 cm          5 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
-    2          0 fm          0 fm    21.8395 m         500 MeV0.24389259 meV        10 cm         15 cm   RadSlice  Transportation           0 fm            0 fm           -1 mm 
-    3          0 fm          0 fm    21.7395 m         500 MeV0.24389259 meV        10 cm         25 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
-    4          0 fm          0 fm    21.6395 m         500 MeV0.24389259 meV        10 cm         35 cm   RadSlice  Transportation           0 fm            0 fm           -1 mm 
-    5          0 fm          0 fm    21.5885 m         500 MeV0.12438522 meV       5.1 cm       40.1 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
-    6          0 fm  1.0118328 m     21.5885 m         500 MeV 3.8763879 meV 1.5893832 m   1.9903832 m       World  Transportation           0 fm   0.86275357 fm            1 mm 
-    7          0 fm  1.0118328 m     21.6395 m         500 MeV0.12438522 meV       5.1 cm  2.0413832 m    Radiator  Transportation           0 fm   0.86275357 fm            1 mm 
-    8          0 fm  1.0118328 m     21.7395 m         500 MeV0.24389259 meV        10 cm  2.1413832 m    RadSlice  Transportation           0 fm   0.86275357 fm            1 mm 
-    9          0 fm  1.0118328 m     21.8395 m         500 MeV0.24389259 meV        10 cm  2.2413832 m    Radiator  Transportation           0 fm   0.86275357 fm            1 mm 
-   10          0 fm  1.0118328 m     21.9395 m         500 MeV0.24389259 meV        10 cm  2.3413832 m    RadSlice  Transportation           0 fm   0.86275357 fm            1 mm 
-   11          0 fm  1.0118328 m     21.9895 m         500 MeV0.12194629 meV         5 cm  2.3913832 m    Radiator  Transportation           0 fm   0.86275357 fm            1 mm 
-   12          0 fm  1.0118318 m     21.9905 m         500 MeV0.0024389275 meV 1.0000007 mm  2.3923832 m    Absorber  Transportation           0 fm   -1.9766112 um    999.99805 um 
-   13          0 fm  1.0117238 m          22 m         500 MeV0.023171635 meV 9.5007541 mm   2.401884 m  OutOfWorld  Transportation           0 fm   -20.754419 um     999.7846 um 
+    1          0 fm          0 fm    21.9395 m         500 MeV0.12189649 meV         5 cm          5 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
+    2          0 fm          0 fm    21.8395 m         500 MeV0.24379297 meV        10 cm         15 cm   RadSlice  Transportation           0 fm            0 fm           -1 mm 
+    3          0 fm          0 fm    21.7395 m         500 MeV0.24379297 meV        10 cm         25 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
+    4          0 fm          0 fm    21.6395 m         500 MeV0.24379297 meV        10 cm         35 cm   RadSlice  Transportation           0 fm            0 fm           -1 mm 
+    5          0 fm          0 fm    21.5885 m         500 MeV0.12433442 meV       5.1 cm       40.1 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
+    6          0 fm  1.0118328 m     21.5885 m         500 MeV 3.8748046 meV 1.5893832 m   1.9903832 m       World  Transportation           0 fm   0.87087764 fm            1 mm 
+    7          0 fm  1.0118328 m     21.6395 m         500 MeV0.12433442 meV       5.1 cm  2.0413832 m    Radiator  Transportation           0 fm   0.87087764 fm            1 mm 
+    8          0 fm  1.0118328 m     21.7395 m         500 MeV0.24379297 meV        10 cm  2.1413832 m    RadSlice  Transportation           0 fm   0.87087764 fm            1 mm 
+    9          0 fm  1.0118328 m     21.8395 m         500 MeV0.24379297 meV        10 cm  2.2413832 m    Radiator  Transportation           0 fm   0.87087764 fm            1 mm 
+   10          0 fm  1.0118328 m     21.9395 m         500 MeV0.24379297 meV        10 cm  2.3413832 m    RadSlice  Transportation           0 fm   0.87087764 fm            1 mm 
+   11          0 fm  1.0118328 m     21.9895 m         500 MeV0.12189649 meV         5 cm  2.3913832 m    Radiator  Transportation           0 fm   0.87087764 fm            1 mm 
+   12          0 fm  1.0118318 m     21.9905 m         500 MeV0.0024379313 meV 1.0000007 mm  2.3923832 m    Absorber  Transportation           0 fm   -1.9766112 um    999.99805 um 
+   13          0 fm  1.0117238 m          22 m         500 MeV0.023162171 meV 9.5007541 mm   2.401884 m  OutOfWorld  Transportation           0 fm   -20.754419 um     999.7846 um 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000311s Sys=0.000000s
+  User=0.000000s Real=0.000393s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1246,21 +1246,21 @@ Checking overlaps for volume Absorber:0 (G4Tubs) ... OK!
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Kr20CO2
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Xe20CO2
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1.135618566062 keV    e+  1.1127384428498 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  1.1371297826313 keV    e+  1.1142639816587 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1271,7 +1271,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.180000s Real=0.182195s Sys=0.000000s
+  User=0.200000s Real=0.241869s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.

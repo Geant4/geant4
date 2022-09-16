@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -597,7 +597,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7499 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -629,13 +629,13 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.430000s Real=1.453049s Sys=0.000000s
+  User=1.590000s Real=3.464233s Sys=0.000000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	CoulombScat : 5609	muIoni : 465460	muPairProd : 63845	muBrems : 633
+ Number of process calls --->	CoulombScat : 5606	muIoni : 465388	muPairProd : 63821	muBrems : 632
 
- Simulation: total CrossSection = 0.53555 /cm	 MeanFreePath = 1.8672 cm 	 massicCrossSection = 0.068049 cm2/g
+ Simulation: total CrossSection = 0.53545 /cm	 MeanFreePath = 1.8676 cm 	 massicCrossSection = 0.068036 cm2/g
  Theory:     total CrossSection = 0.52947 /cm	 MeanFreePath = 1.8887 cm 	 massicCrossSection = 0.067277 cm2/g
 #
 /gun/particle pi+
@@ -659,7 +659,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7499 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -671,7 +671,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={235111648556098168, 316769674826657036, 1324819056878075668, 187519902960746374, 2009087781667608690, 499409753739204757, 315019246073380315, 890600977740292910, 1101614299214045087, 2159612907541538825, 270857188699032576, 1714019803938225423, 2267951935475200266, 1986260144364270885, 1667965121016590776, 525930192876433815, 1296107385891854908} counter= 5sumtot= 321912947749704871
+N=17 V[N]={1615058260612075446, 603296544326733478, 39886759627642209, 1517046508533182226, 1397919590821491277, 542227811764988555, 1008423051942448231, 2151283958469542261, 859807744382676979, 1658192437298181903, 2246059827159841103, 486248238082331718, 2004694568277313036, 555968556218040876, 681996116708915434, 961359161439405845, 2266842927300919165} counter= 3sumtot= 2149567989256178134
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -686,13 +686,13 @@ N=17 V[N]={235111648556098168, 316769674826657036, 1324819056878075668, 18751990
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.340000s Real=1.365755s Sys=0.000000s
+  User=1.300000s Real=1.702028s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 436817	hPairProd : 59767	CoulombScat : 5577	hBrems : 355
+ Number of process calls --->	hIoni : 436855	hPairProd : 59747	CoulombScat : 5564	hBrems : 358
 
- Simulation: total CrossSection = 0.50252 /cm	 MeanFreePath = 1.99 cm 	 massicCrossSection = 0.063852 cm2/g
+ Simulation: total CrossSection = 0.50252 /cm	 MeanFreePath = 1.99 cm 	 massicCrossSection = 0.063853 cm2/g
 #
 /gun/particle proton
 /run/beamOn 10000
@@ -715,7 +715,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7499 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -727,7 +727,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1508607969306287352, 1791867730457931969, 1738067224946617316, 2007935747096887633, 1306443592768877490, 992133989202938259, 1974062234776938355, 846884695187391062, 2152429126693427328, 715130086937459148, 1131541624573232947, 1993804955950227479, 2049477571311589037, 1926698848375365154, 250494825515888879, 1258619328067853475, 304836802032966014} counter= 14sumtot= 890606261064939387
+N=17 V[N]={281970074847582757, 1711183843497694787, 758612977160535474, 2129020382223922507, 783368626511470600, 653729520169611022, 408272735769892744, 2212976361066039935, 15487216663975892, 174449266659525455, 784832964772867105, 2214853159088951556, 550050493626644069, 1426888883359027582, 1066032368213016411, 2021980156300037746, 1592656668092912412} counter= 13sumtot= 339621624314156446
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -742,13 +742,13 @@ N=17 V[N]={1508607969306287352, 1791867730457931969, 1738067224946617316, 200793
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.290000s Real=1.346359s Sys=0.000000s
+  User=1.200000s Real=1.369854s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 435956	hPairProd : 34092	CoulombScat : 5620	hBrems : 6
+ Number of process calls --->	hIoni : 435823	hPairProd : 34152	CoulombScat : 5609	hBrems : 7
 
- Simulation: total CrossSection = 0.47567 /cm	 MeanFreePath = 2.1023 cm 	 massicCrossSection = 0.060441 cm2/g
+ Simulation: total CrossSection = 0.47559 /cm	 MeanFreePath = 2.1026 cm 	 massicCrossSection = 0.060431 cm2/g
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1969,14 +1969,14 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_BGO
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  64.4517 keV    e-  770.196 keV    e+  731.436 keV proton 70 keV
+ Energy thresholds :  gamma  64.4521 keV    e-  770.195 keV    e+  731.433 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1992,7 +1992,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=8.110000s Real=8.334753s Sys=0.010000s
+  User=8.700000s Real=16.401060s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2003,8 +2003,8 @@ Material of tank:  G4_BGO
 
 Average energy of Cerenkov photons created per event: 0 eV.
 Average number of Cerenkov photons created per event: 0
-Average energy of scintillation photons created per event: 1.8e+05 eV.
-Average number of scintillation photons created per event: 3.5e+04
+Average energy of scintillation photons created per event: 1.9e+05 eV.
+Average number of scintillation photons created per event: 3.7e+04
  Average energy per photon: 5 eV.
 Average number of photons absorbed by WLS per event: 0 
 Average number of photons created by WLS per event: 0
@@ -2013,22 +2013,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 3.5e+04
+Average number of OpAbsorption per event: 3.7e+04
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:  2167829
-Total # of surface events:    1325006
+OpAbsorption before surface:  2328124
+Total # of surface events:    1407375
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:             1325006
+ Unaccounted for:             1407375
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 5.01393 eV rms = 1.73109 eV.
- Scintillation time: mean = 28.7616 ns rms = 35.4658 ns.
+ Scintillation spectrum: mean = 5.01535 eV rms = 1.73153 eV.
+ Scintillation time: mean = 28.7454 ns rms = 35.4741 ns.
 
 ... write file : scint_by_particle.root - done
 ... close file : scint_by_particle.root - done
@@ -2043,14 +2043,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_BGO
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  64.4517 keV    e-  770.196 keV    e+  731.436 keV proton 70 keV
+ Energy thresholds :  gamma  64.4521 keV    e-  770.195 keV    e+  731.433 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2063,7 +2063,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.120000s Real=0.124204s Sys=0.000000s
+  User=0.120000s Real=0.241126s Sys=0.010000s
 
     Run Summary
 ---------------------------------
@@ -2088,18 +2088,18 @@ Average number of OpAbsorption per event: 5e+02
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:    25226
-Total # of surface events:      24284
+OpAbsorption before surface:    24889
+Total # of surface events:      24697
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:               24284
+ Unaccounted for:               24697
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 4.77431 eV rms = 1.71576 eV.
- Scintillation time: mean = 65.8159 ns rms = 56.8777 ns.
+ Scintillation spectrum: mean = 4.75773 eV rms = 1.71546 eV.
+ Scintillation time: mean = 66.1416 ns rms = 56.7421 ns.
 
 ... write file : scint_by_particle.root - done
 ... close file : scint_by_particle.root - done
@@ -2114,14 +2114,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_BGO
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  64.4517 keV    e-  770.196 keV    e+  731.436 keV proton 70 keV
+ Energy thresholds :  gamma  64.4521 keV    e-  770.195 keV    e+  731.433 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2134,7 +2134,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.190000s Real=1.226742s Sys=0.000000s
+  User=1.140000s Real=4.396287s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2159,18 +2159,18 @@ Average number of OpAbsorption per event: 5e+03
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:   251229
-Total # of surface events:     248377
+OpAbsorption before surface:   251185
+Total # of surface events:     247690
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:              248377
+ Unaccounted for:              247690
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 4.97217 eV rms = 1.73258 eV.
- Scintillation time: mean = 33.4972 ns rms = 40.7423 ns.
+ Scintillation spectrum: mean = 4.97181 eV rms = 1.73166 eV.
+ Scintillation time: mean = 33.6098 ns rms = 40.9329 ns.
 
 ... write file : scint_by_particle.root - done
 ... close file : scint_by_particle.root - done
@@ -2185,14 +2185,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_BGO
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  64.4517 keV    e-  770.196 keV    e+  731.436 keV proton 70 keV
+ Energy thresholds :  gamma  64.4521 keV    e-  770.195 keV    e+  731.433 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2205,7 +2205,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.120000s Real=0.116997s Sys=0.000000s
+  User=0.140000s Real=0.883496s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2217,7 +2217,7 @@ Material of tank:  G4_BGO
 Average energy of Cerenkov photons created per event: 0 eV.
 Average number of Cerenkov photons created per event: 0
 Average energy of scintillation photons created per event: 2.4e+03 eV.
-Average number of scintillation photons created per event: 4.9e+02
+Average number of scintillation photons created per event: 5e+02
  Average energy per photon: 4.9 eV.
 Average number of photons absorbed by WLS per event: 0 
 Average number of photons created by WLS per event: 0
@@ -2226,22 +2226,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 4.9e+02
+Average number of OpAbsorption per event: 5e+02
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:    25014
-Total # of surface events:      24147
+OpAbsorption before surface:    25141
+Total # of surface events:      24382
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:               24147
+ Unaccounted for:               24382
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 4.93806 eV rms = 1.73053 eV.
- Scintillation time: mean = 38.9336 ns rms = 45.426 ns.
+ Scintillation spectrum: mean = 4.94095 eV rms = 1.72998 eV.
+ Scintillation time: mean = 38.7745 ns rms = 45.1982 ns.
 
 ... write file : scint_by_particle.root - done
 ... close file : scint_by_particle.root - done
@@ -2257,14 +2257,14 @@ Surface events by process:
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_BGO
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  64.4517 keV    e-  770.196 keV    e+  731.436 keV proton 70 keV
+ Energy thresholds :  gamma  64.4521 keV    e-  770.195 keV    e+  731.433 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2277,7 +2277,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.120000s Real=0.121496s Sys=0.000000s
+  User=0.120000s Real=0.415597s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2289,7 +2289,7 @@ Material of tank:  G4_BGO
 Average energy of Cerenkov photons created per event: 0 eV.
 Average number of Cerenkov photons created per event: 0
 Average energy of scintillation photons created per event: 2.5e+03 eV.
-Average number of scintillation photons created per event: 5e+02
+Average number of scintillation photons created per event: 4.9e+02
  Average energy per photon: 5 eV.
 Average number of photons absorbed by WLS per event: 0 
 Average number of photons created by WLS per event: 0
@@ -2298,22 +2298,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 5e+02
+Average number of OpAbsorption per event: 4.9e+02
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:    24850
-Total # of surface events:      24706
+OpAbsorption before surface:    24566
+Total # of surface events:      24767
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:               24706
+ Unaccounted for:               24767
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 4.97619 eV rms = 1.73276 eV.
- Scintillation time: mean = 33.7374 ns rms = 41.0346 ns.
+ Scintillation spectrum: mean = 4.97235 eV rms = 1.73079 eV.
+ Scintillation time: mean = 33.6682 ns rms = 40.8736 ns.
 
 ... write file : scint_by_particle.root - done
 ... close file : scint_by_particle.root - done
@@ -2325,6 +2325,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 10 MB
+Dynamic pools deleted: 10 / Total memory freed: 8.1 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

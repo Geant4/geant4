@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -832,105 +832,105 @@ Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 2     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  24.8201 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
+ Energy thresholds :  gamma  24.8228 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 3     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.0129 keV    e-  468.81 keV    e+  454.405 keV proton 100 keV
+ Energy thresholds :  gamma  2.01246 keV    e-  468.814 keV    e+  454.419 keV proton 100 keV
  Region(s) which use this couple : 
     BeWindow
 
 Index : 4     used in the geometry : Yes
  Material : G4_KAPTON
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.97277 keV    e-  419.485 keV    e+  406.695 keV proton 100 keV
+ Energy thresholds :  gamma  2.97329 keV    e-  419.475 keV    e+  406.697 keV proton 100 keV
  Region(s) which use this couple : 
     ionizationChamber
 
 Index : 5     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
- Energy thresholds :  gamma  55.127 keV    e-  6.82825 MeV    e+  6.35094 MeV proton 500 keV
+ Energy thresholds :  gamma  55.118 keV    e-  6.8282 MeV    e+  6.351 MeV proton 500 keV
  Region(s) which use this couple : 
     flatfilterR
 
 Index : 6     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.01263 keV    e-  420.623 keV    e+  407.829 keV proton 100 keV
+ Energy thresholds :  gamma  3.01225 keV    e-  420.616 keV    e+  407.833 keV proton 100 keV
  Region(s) which use this couple : 
     Mirror
 
 Index : 7     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 8     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 9     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
- Energy thresholds :  gamma  60.6475 keV    e-  13.0434 MeV    e+  12.1452 MeV proton 1 MeV
+ Energy thresholds :  gamma  60.6431 keV    e-  13.0433 MeV    e+  12.1452 MeV proton 1 MeV
  Region(s) which use this couple : 
     MLCR
 
 Index : 10     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1XR
 
 Index : 11     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2XR
 
 Index : 12     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1YR
 
 Index : 13     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2YR
 
 Index : 14     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11083 keV    e-  85.0421 keV    e+  83.9054 keV proton 10 keV
+ Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 10 keV
  Region(s) which use this couple : 
     fullWaterPhantomR
 
@@ -974,10 +974,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=17.120000s Real=17.344744s Sys=0.010000s
+  User=16.510000s Real=34.613661s Sys=0.010000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 189
-loop elapsed time [s] : 17.16
+ Number of entries 168
+loop elapsed time [s] : 16.54
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1082,105 +1082,105 @@ Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 2     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  24.8201 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
+ Energy thresholds :  gamma  24.8228 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 3     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.0129 keV    e-  468.81 keV    e+  454.405 keV proton 100 keV
+ Energy thresholds :  gamma  2.01246 keV    e-  468.814 keV    e+  454.419 keV proton 100 keV
  Region(s) which use this couple : 
     BeWindow
 
 Index : 4     used in the geometry : Yes
  Material : G4_KAPTON
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.97277 keV    e-  419.485 keV    e+  406.695 keV proton 100 keV
+ Energy thresholds :  gamma  2.97329 keV    e-  419.475 keV    e+  406.697 keV proton 100 keV
  Region(s) which use this couple : 
     ionizationChamber
 
 Index : 5     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
- Energy thresholds :  gamma  55.127 keV    e-  6.82825 MeV    e+  6.35094 MeV proton 500 keV
+ Energy thresholds :  gamma  55.118 keV    e-  6.8282 MeV    e+  6.351 MeV proton 500 keV
  Region(s) which use this couple : 
     flatfilterR
 
 Index : 6     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.01263 keV    e-  420.623 keV    e+  407.829 keV proton 100 keV
+ Energy thresholds :  gamma  3.01225 keV    e-  420.616 keV    e+  407.833 keV proton 100 keV
  Region(s) which use this couple : 
     Mirror
 
 Index : 7     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 8     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 9     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
- Energy thresholds :  gamma  60.6475 keV    e-  13.0434 MeV    e+  12.1452 MeV proton 1 MeV
+ Energy thresholds :  gamma  60.6431 keV    e-  13.0433 MeV    e+  12.1452 MeV proton 1 MeV
  Region(s) which use this couple : 
     MLCR
 
 Index : 10     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1XR
 
 Index : 11     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2XR
 
 Index : 12     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1YR
 
 Index : 13     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2YR
 
 Index : 14     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11083 keV    e-  85.0421 keV    e+  83.9054 keV proton 10 keV
+ Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 10 keV
  Region(s) which use this couple : 
     fullWaterPhantomR
 
@@ -1201,10 +1201,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.840000s Real=17.022293s Sys=0.000000s
+  User=16.620000s Real=28.522364s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 167
-loop elapsed time [s] : 16.87
+ Number of entries 160
+loop elapsed time [s] : 16.66
 
 ################ END NEW GEOMETRY ########################
 /run/geometryModified
@@ -1356,105 +1356,105 @@ Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 2     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  24.8201 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
+ Energy thresholds :  gamma  24.8228 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 3     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.0129 keV    e-  468.81 keV    e+  454.405 keV proton 100 keV
+ Energy thresholds :  gamma  2.01246 keV    e-  468.814 keV    e+  454.419 keV proton 100 keV
  Region(s) which use this couple : 
     BeWindow
 
 Index : 4     used in the geometry : Yes
  Material : G4_KAPTON
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.97277 keV    e-  419.485 keV    e+  406.695 keV proton 100 keV
+ Energy thresholds :  gamma  2.97329 keV    e-  419.475 keV    e+  406.697 keV proton 100 keV
  Region(s) which use this couple : 
     ionizationChamber
 
 Index : 5     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
- Energy thresholds :  gamma  55.127 keV    e-  6.82825 MeV    e+  6.35094 MeV proton 500 keV
+ Energy thresholds :  gamma  55.118 keV    e-  6.8282 MeV    e+  6.351 MeV proton 500 keV
  Region(s) which use this couple : 
     flatfilterR
 
 Index : 6     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.01263 keV    e-  420.623 keV    e+  407.829 keV proton 100 keV
+ Energy thresholds :  gamma  3.01225 keV    e-  420.616 keV    e+  407.833 keV proton 100 keV
  Region(s) which use this couple : 
     Mirror
 
 Index : 7     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 8     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 9     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
- Energy thresholds :  gamma  60.6475 keV    e-  13.0434 MeV    e+  12.1452 MeV proton 1 MeV
+ Energy thresholds :  gamma  60.6431 keV    e-  13.0433 MeV    e+  12.1452 MeV proton 1 MeV
  Region(s) which use this couple : 
     MLCR
 
 Index : 10     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1XR
 
 Index : 11     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2XR
 
 Index : 12     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1YR
 
 Index : 13     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2YR
 
 Index : 14     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11083 keV    e-  85.0421 keV    e+  83.9054 keV proton 10 keV
+ Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 10 keV
  Region(s) which use this couple : 
     fullWaterPhantomR
 
@@ -1498,10 +1498,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.760000s Real=16.956064s Sys=0.010000s
+  User=16.010000s Real=32.782791s Sys=0.010000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 112
-loop elapsed time [s] : 16.79
+ Number of entries 136
+loop elapsed time [s] : 16.04
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1606,105 +1606,105 @@ Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 2     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  24.8201 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
+ Energy thresholds :  gamma  24.8228 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 3     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.0129 keV    e-  468.81 keV    e+  454.405 keV proton 100 keV
+ Energy thresholds :  gamma  2.01246 keV    e-  468.814 keV    e+  454.419 keV proton 100 keV
  Region(s) which use this couple : 
     BeWindow
 
 Index : 4     used in the geometry : Yes
  Material : G4_KAPTON
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.97277 keV    e-  419.485 keV    e+  406.695 keV proton 100 keV
+ Energy thresholds :  gamma  2.97329 keV    e-  419.475 keV    e+  406.697 keV proton 100 keV
  Region(s) which use this couple : 
     ionizationChamber
 
 Index : 5     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
- Energy thresholds :  gamma  55.127 keV    e-  6.82825 MeV    e+  6.35094 MeV proton 500 keV
+ Energy thresholds :  gamma  55.118 keV    e-  6.8282 MeV    e+  6.351 MeV proton 500 keV
  Region(s) which use this couple : 
     flatfilterR
 
 Index : 6     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.01263 keV    e-  420.623 keV    e+  407.829 keV proton 100 keV
+ Energy thresholds :  gamma  3.01225 keV    e-  420.616 keV    e+  407.833 keV proton 100 keV
  Region(s) which use this couple : 
     Mirror
 
 Index : 7     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 8     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 9     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
- Energy thresholds :  gamma  60.6475 keV    e-  13.0434 MeV    e+  12.1452 MeV proton 1 MeV
+ Energy thresholds :  gamma  60.6431 keV    e-  13.0433 MeV    e+  12.1452 MeV proton 1 MeV
  Region(s) which use this couple : 
     MLCR
 
 Index : 10     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1XR
 
 Index : 11     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2XR
 
 Index : 12     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1YR
 
 Index : 13     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2YR
 
 Index : 14     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11083 keV    e-  85.0421 keV    e+  83.9054 keV proton 10 keV
+ Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 10 keV
  Region(s) which use this couple : 
     fullWaterPhantomR
 
@@ -1725,13 +1725,13 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.950000s Real=17.204220s Sys=0.010000s
+  User=17.070000s Real=39.839968s Sys=0.010000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 72
-loop elapsed time [s] : 17
+ Number of entries 93
+loop elapsed time [s] : 17.1
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 71.11
+loop elapsed time [s] : 69.51
 
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1746,10 +1746,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 20
+Total navigation history collections cleaned: 24
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0288 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0346 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00577 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.00288 MB
@@ -1763,10 +1763,10 @@ Pool ID '7G4Track', size : 0.00673 MB
 Pool ID '18G4TouchableHistory', size : 0.00288 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '12G4Trajectory', size : 0.00288 MB
-Pool ID '17G4TrajectoryPoint', size : 0.0385 MB
+Pool ID '17G4TrajectoryPoint', size : 0.0356 MB
 Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
 Number of memory pools allocated: 16 of which, static: 0
-Dynamic pools deleted: 16 / Total memory freed: 0.099 MB
+Dynamic pools deleted: 16 / Total memory freed: 0.1 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

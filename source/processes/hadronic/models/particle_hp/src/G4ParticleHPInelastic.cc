@@ -345,9 +345,8 @@ throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do w
 
 const std::pair<G4double, G4double> G4ParticleHPInelastic::GetFatalEnergyCheckLevels() const
 {
-      // max energy non-conservation is mass of heavy nucleus
-      // This should be same to the hadron default value
-      return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+  // max energy non-conservation is mass of heavy nucleus
+  return std::pair<G4double, G4double>(10.0*perCent, 350.0*CLHEP::GeV);
 }
 
 /*

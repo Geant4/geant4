@@ -160,7 +160,7 @@ G4EmExtraParametersMessenger::G4EmExtraParametersMessenger(G4EmExtraParameters* 
   StepFuncCmd3->AvailableForStates(G4State_PreInit,G4State_Idle);
   StepFuncCmd3->SetToBeBroadcasted(false);
 
-  G4UIparameter* dRoverRPrm3 = new G4UIparameter("dRoverRMuHad",'d',false);
+  G4UIparameter* dRoverRPrm3 = new G4UIparameter("dRoverRIons",'d',false);
   dRoverRPrm3->SetParameterRange("dRoverRIons>0. && dRoverRIons<=1.");
   StepFuncCmd3->SetParameter(dRoverRPrm3);
 

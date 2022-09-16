@@ -223,9 +223,11 @@ G4bool G4ParticleDefinition::IsHypernucleus() const
 inline
 G4int G4ParticleDefinition::GetNumberOfLambdasInHypernucleus() const
 {
-  // PDG code of hypernuclei: 10LZZZAAAI
   G4int numberOfLambdas = 0;
-  if ( thePDGEncoding > 0 ) numberOfLambdas = (thePDGEncoding/10000000)%100;
+  // PDG code of hypernuclei: 10LZZZAAAI
+  if ( thePDGEncoding > 0  &&  thePDGEncoding/1000000000 != 0 ) {
+    numberOfLambdas = (thePDGEncoding/10000000)%100;
+  }
   return numberOfLambdas;
 }
 
@@ -239,8 +241,10 @@ G4bool G4ParticleDefinition::IsAntiHypernucleus() const
 inline
 G4int G4ParticleDefinition::GetNumberOfAntiLambdasInAntiHypernucleus() const
 {
-  // PDG code of anti-hypernuclei: -10LZZZAAAI
   G4int numberOfAntiLambdas = 0;
-  if ( thePDGEncoding < 0 ) numberOfAntiLambdas = (std::abs(thePDGEncoding)/10000000)%100;
+  // PDG code of anti-hypernuclei: -10LZZZAAAI
+  if ( thePDGEncoding < 0   &&  thePDGEncoding/1000000000 != 0 ) {
+    numberOfAntiLambdas = (std::abs(thePDGEncoding)/10000000)%100;
+  }
   return numberOfAntiLambdas;
 }

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -593,7 +593,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 Index : 0     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.91818 keV    e-  597.592 keV    e+  574.294 keV proton 100 keV
+ Energy thresholds :  gamma  6.91818 keV    e-  597.629 keV    e+  574.329 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -619,31 +619,31 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.240000s Real=1.251645s Sys=0.000000s
+  User=1.240000s Real=1.575573s Sys=0.010000s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit:   99.793 MeV
+ Total energy deposit:   99.832 MeV
  NIEL energy calculated: 0 eV 
 
- Nb tracks/event   neutral:  25.067   charged:  136.77
- Nb  steps/event   neutral:  138.94   charged:  202.53
+ Nb tracks/event   neutral:  25.279   charged:  137.18
+ Nb  steps/event   neutral:  139.36   charged:  203.21
 
  Process calls frequency :
-                 Rayl=  17578        Transportation=   1772               annihil=   2780
-                compt= 210162                  conv=   2763                 eBrem=  45811
-                eIoni= 356136                   msc=    323                  phot=  45606
+                 Rayl=  17754        Transportation=   1713               annihil=   2841
+                compt= 210403                  conv=   2832                 eBrem=  46084
+                eIoni= 357115                   msc=    374                  phot=  46026
 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 10.991 cm    rms = 3.7856 cm 
- proj Range = 9.559 cm    rms = 3.5027 cm 
- proj/true  = 0.8697
- transverse dispersion at end = 1.5917 cm 
-      mass true Range from simulation = 29.676 g/cm2 
+ true Range = 10.924 cm    rms = 3.9448 cm 
+ proj Range = 9.4977 cm    rms = 3.6472 cm 
+ proj/true  = 0.86942
+ transverse dispersion at end = 1.5939 cm 
+      mass true Range from simulation = 29.496 g/cm2 
        from PhysicsTable (csda range) = 32.101 g/cm2 
 ---------------------------------------------------------
 
@@ -651,7 +651,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1199157010510595525, 1644498781111636774, 1053149034509071624, 1714307047695650363, 871199266626458370, 68792630573611062, 1739960981233686301, 627819966774448655, 2065260925238679297, 978116403995403167, 499861741137701771, 1978837191135332926, 2255419265549163564, 289164191733428157, 1939027172259720987, 717558470551816425, 1607937049532363312} counter= 2sumtot= 497480047245522721
+N=17 V[N]={645357487595786767, 1205729091670118294, 546287949970375992, 1675730207162061992, 803348712271941576, 1245076301110029413, 930223588418082209, 653065376189429003, 577349237033467583, 756194389188745716, 838807717575504472, 1865344796037797290, 1877030740484307654, 1578470163860649337, 1813168395235874376, 427889217973871101, 779996316800059101} counter= 3sumtot= 2078168624082244219
 ---------------------------------------
 #
 /gun/particle proton
@@ -662,7 +662,7 @@ N=17 V[N]={1199157010510595525, 1644498781111636774, 1053149034509071624, 171430
 Index : 0     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.91818 keV    e-  597.592 keV    e+  574.294 keV proton 100 keV
+ Energy thresholds :  gamma  6.91818 keV    e-  597.629 keV    e+  574.329 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -673,7 +673,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1199157010510595525, 1644498781111636774, 1053149034509071624, 1714307047695650363, 871199266626458370, 68792630573611062, 1739960981233686301, 627819966774448655, 2065260925238679297, 978116403995403167, 499861741137701771, 1978837191135332926, 2255419265549163564, 289164191733428157, 1939027172259720987, 717558470551816425, 1607937049532363312} counter= 2sumtot= 497480047245522721
+N=17 V[N]={645357487595786767, 1205729091670118294, 546287949970375992, 1675730207162061992, 803348712271941576, 1245076301110029413, 930223588418082209, 653065376189429003, 577349237033467583, 756194389188745716, 838807717575504472, 1865344796037797290, 1877030740484307654, 1578470163860649337, 1813168395235874376, 427889217973871101, 779996316800059101} counter= 3sumtot= 2078168624082244219
 ---------------------------------------
 --> Event 0 starts.
 --> Event 200 starts.
@@ -688,29 +688,29 @@ N=17 V[N]={1199157010510595525, 1644498781111636774, 1053149034509071624, 171430
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.060000s Real=0.065089s Sys=0.010000s
+  User=0.060000s Real=0.098591s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 proton of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
  Total energy deposit:   100 MeV
- NIEL energy calculated: 241.36 eV 
+ NIEL energy calculated: 240.73 eV 
 
  Nb tracks/event   neutral:       0   charged:   1.007
- Nb  steps/event   neutral:       0   charged:  19.326
+ Nb  steps/event   neutral:       0   charged:  19.306
 
  Process calls frequency :
-          CoulombScat=     47             NoProcess=     14                 hIoni=  38576
+          CoulombScat=     42             NoProcess=     14                 hIoni=  38542
               ionIoni=     14 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 3.7113 cm    rms = 411.19 um 
- proj Range = 3.7032 cm    rms = 421.05 um 
- proj/true  = 0.99782
- transverse dispersion at end = 1.0938 mm 
-      mass true Range from simulation = 10.021 g/cm2 
+ true Range = 3.7108 cm    rms = 410.85 um 
+ proj Range = 3.7028 cm    rms = 421.31 um 
+ proj/true  = 0.99784
+ transverse dispersion at end = 1.0872 mm 
+      mass true Range from simulation = 10.019 g/cm2 
        from PhysicsTable (csda range) = 10.012 g/cm2 
 ---------------------------------------------------------
 
@@ -718,12 +718,12 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={431801811213743487, 854886199924416613, 260531773953405415, 2289446942256091459, 58527661204284952, 1766078178177857190, 483505007552547042, 810525114436391377, 1684840218395290208, 1272317455890027472, 1451155726963212329, 734293691582830903, 425424908876082454, 876482437178859190, 904717241713568241, 1060460907654252289, 154620842949410776} counter= 6sumtot= 1684558064640107691
+N=17 V[N]={1465805073781736470, 1434744750147555618, 949419322386146126, 1676514523022178129, 545838662316605307, 159628122511664634, 1635574051197419638, 536325045119098865, 1770226404935692011, 970950071931439680, 1192689609818547387, 1637806820547937624, 336890993456095770, 2087828933237152011, 1673509769214593637, 1784762800567265087, 432912514241134777} counter= 13sumtot= 1844683394722711163
 ---------------------------------------
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.036 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.038 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

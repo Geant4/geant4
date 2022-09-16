@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -286,6 +286,7 @@ hBrems:  for proton  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -370,6 +371,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -402,6 +404,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -434,6 +437,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -467,6 +471,7 @@ muBrems:  for mu+  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -500,6 +505,7 @@ muBrems:  for mu-  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -551,6 +557,7 @@ hBrems:  for pi+  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -583,6 +590,7 @@ hBrems:  for pi-  XStype:1  SubType=3
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+      ===== Limit on energy threshold has been applied 
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -892,28 +900,28 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 1 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 1 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_SILICON_DIOXIDE
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 1 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_Al
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 1 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 

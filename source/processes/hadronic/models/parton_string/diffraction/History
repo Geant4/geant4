@@ -14,6 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23-Jun-2022 A. Ribon          (hadr-string-diff-V10-07-05)
+- Fixes made by Vladimir Uzhinsky to fix the non-isotropic angular
+  distributions of secondaries in annihilations at rest:
+- G4DiffractiveSplitableHadron : set proper parton index.
+- G4DiffractiveExcitation : in the CreateStrings method, take into account
+  that strings are created in G4FTFAnnihilation; by default, the method 
+  CreateStrings creates a string from a wounded nucleon/hadron, but this 
+  is not needed in the case of annihilation.
+- G4FTFAnnihilation : splitting of hadron is removed; fixed bugs in the 
+  calculations of kinematical properties; set quark momenta at string ends
+  to properly account for string order on rapidity.
+
 10-Nov-2021 A. Ribon          (hadr-string-diff-V10-07-04)
 - G4FTFModel, G4FTFParticipants : Vladimir Uzhinsky interface extension
   of these two classes to provide the following information:

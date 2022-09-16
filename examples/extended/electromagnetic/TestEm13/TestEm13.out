@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -149,7 +149,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93516 keV    e-  351.296 keV    e+  341.588 keV proton 100 keV
+ Energy thresholds :  gamma  2.93516 keV    e-  351.334 keV    e+  341.625 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -179,7 +179,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.340000s Real=2.367493s Sys=0.000000s
+  User=2.540000s Real=5.020243s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -221,7 +221,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93516 keV    e-  351.296 keV    e+  341.588 keV proton 100 keV
+ Energy thresholds :  gamma  2.93516 keV    e-  351.334 keV    e+  341.625 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -246,24 +246,24 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.490000s Real=2.534999s Sys=0.000000s
+  User=2.230000s Real=2.665285s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 538236	eBrem = 281299	eIoni = 180465
+ Process calls frequency --->	Transportation = 538247	eBrem = 281308	eIoni = 180445
 
- Nb of incident particles unaltered after 1 cm  of Water : 538236 over 1000000 incident particles.  Ratio = 53.824 %
- ---> CrossSection per volume:	0.61946 cm^-1 	CrossSection per mass: 61.946 mm2/g 
+ Nb of incident particles unaltered after 1 cm  of Water : 538247 over 1000000 incident particles.  Ratio = 53.825 %
+ ---> CrossSection per volume:	0.61944 cm^-1 	CrossSection per mass: 61.944 mm2/g 
 
  Verification from G4EmCalculator: 
-	eBrem= 37.79 mm2/g 	eIoni= 24.206 mm2/g 	total= 61.997 mm2/g 
-	Expected ratio of transmitted particles= 53.796 %
+	eBrem= 37.79 mm2/g 	eIoni= 24.204 mm2/g 	total= 61.994 mm2/g 
+	Expected ratio of transmitted particles= 53.798 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1312526117, 166129892
+ Current couple of seeds = 1537749914, 1160203484
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

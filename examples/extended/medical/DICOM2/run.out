@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -993,63 +993,63 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 50 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : LungInhale
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  1.14429 keV    e-  88.7393 keV    e+  87.5313 keV proton 50 keV
+ Energy thresholds :  gamma  1.14419 keV    e-  88.7402 keV    e+  87.5261 keV proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : LungExhale
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  1.63383 keV    e-  146.769 keV    e+  144.198 keV proton 50 keV
+ Energy thresholds :  gamma  1.6341 keV    e-  146.767 keV    e+  144.195 keV proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : AdiposeTissue
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  1.90911 keV    e-  221.875 keV    e+  217.124 keV proton 50 keV
+ Energy thresholds :  gamma  1.90866 keV    e-  221.872 keV    e+  217.138 keV proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Breast
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  1.9701 keV    e-  223.951 keV    e+  219.126 keV proton 50 keV
+ Energy thresholds :  gamma  1.97053 keV    e-  223.955 keV    e+  219.114 keV proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  2.19131 keV    e-  223.888 keV    e+  218.997 keV proton 50 keV
+ Energy thresholds :  gamma  2.19083 keV    e-  223.892 keV    e+  218.985 keV proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 6     used in the geometry : Yes
  Material : Muscle
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  2.21034 keV    e-  231.222 keV    e+  226.053 keV proton 50 keV
+ Energy thresholds :  gamma  2.21011 keV    e-  231.216 keV    e+  226.063 keV proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 7     used in the geometry : Yes
  Material : TrabecularBone
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  2.34571 keV    e-  241.215 keV    e+  235.668 keV proton 50 keV
+ Energy thresholds :  gamma  2.34588 keV    e-  241.205 keV    e+  235.675 keV proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 8     used in the geometry : Yes
  Material : Liver
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  2.22201 keV    e-  232.513 keV    e+  227.313 keV proton 50 keV
+ Energy thresholds :  gamma  2.22194 keV    e-  232.51 keV    e+  227.327 keV proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1164,14 +1164,14 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.030000s Real=0.058336s Sys=0.010000s
+  User=0.030000s Real=0.703445s Sys=0.010000s
 
 [=========================================================== DICOM ===========================================================]
 
 --------------------End of Global Run-----------------------
  The run was 100 events 
 LOCAL TOTAL DOSE : 	0 Gy
-      TOTAL DOSE : 	1.61164e-06 Gy
+      TOTAL DOSE : 	1.62675e-06 Gy
  ###### EndOfRunAction ###### 
 =============================================================
  Number of event processed : 100
@@ -1194,8 +1194,8 @@ Finished : End of Run Action 0
  closed file dicom2-vector.out for dose output
 --------------------End of Global Run-----------------------
  The run was 100 events 
-      TOTAL DOSE : 	1.61164e-06 [sigma: 1.5989e-09 | error: 0.0339349 | coeff: 0.0339349 | eff: 1 | fom: 1 | r2int: 0.0011506 | r2eff: 0 | hits: 1170 ] Gy
- TOTAL DOSE/Bq-s : 	1.61164e-08 [sigma: 1.5989e-11 | error: 0.0339349 | coeff: 0.0339349 | eff: 1 | fom: 1 | r2int: 0.0011506 | r2eff: 0 | hits: 1170 ] Gy/Bq-s
+      TOTAL DOSE : 	1.62675e-06 [sigma: 1.80724e-09 | error: 0.0373781 | coeff: 0.0373781 | eff: 1 | fom: 1 | r2int: 0.00139589 | r2eff: 0 | hits: 1132 ] Gy
+ TOTAL DOSE/Bq-s : 	1.62675e-08 [sigma: 1.80724e-11 | error: 0.0373781 | coeff: 0.0373781 | eff: 1 | fom: 1 | r2int: 0.00139589 | r2eff: 0 | hits: 1132 ] Gy/Bq-s
 
 Finished : End of Run Action 0
 
@@ -1211,5 +1211,5 @@ Dynamic pools deleted: 11 / Total memory freed: 0.036 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
 
-[/build/jenkins/workspace/examples/extended/medical/DICOM2/dicom2] Primary execution time: User=8.990000s Real=11.241144s Sys=0.540000s
+[/build/jenkins/workspace/examples/extended/medical/DICOM2/dicom2] Primary execution time: User=8.350000s Real=44.561247s Sys=0.610000s
 

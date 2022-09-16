@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -976,35 +976,35 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Vacuum
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Polystyrene
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.10259 keV    e-  279.727 keV    e+  272.941 keV proton 70 keV
+ Energy thresholds :  gamma  2.1022 keV    e-  279.725 keV    e+  272.955 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Pethylene2
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.29547 keV    e-  361.059 keV    e+  351.286 keV proton 70 keV
+ Energy thresholds :  gamma  2.29489 keV    e-  361.071 keV    e+  351.281 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Pethylene1
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.16549 keV    e-  325.707 keV    e+  317.36 keV proton 70 keV
+ Energy thresholds :  gamma  2.1661 keV    e-  325.715 keV    e+  317.349 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : PMMA
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.41124 keV    e-  306.379 keV    e+  298.522 keV proton 70 keV
+ Energy thresholds :  gamma  2.41079 keV    e-  306.376 keV    e+  298.534 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1014,7 +1014,7 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   4 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
@@ -1047,15 +1047,15 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=35.840000s Real=36.237834s Sys=0.020000s
+  User=37.930000s Real=85.864238s Sys=0.040000s
 
  ======================== run summary ======================
 The run was 100 events.
 Number of hits per event:	 0 +- 0
 Number of hits per event above threshold:	 0 +- 0
-Number of scintillation photons per event :	 4525 +- 68.89
-Number of Cerenkov photons per event:	 21.71 +- 0.675
-Number of absorbed photons per event :	 4340 +- 66.02
+Number of scintillation photons per event :	 4573 +- 51.25
+Number of Cerenkov photons per event:	 22.44 +- 0.6955
+Number of absorbed photons per event :	 4383 +- 49
 Number of photons absorbed at boundary per event:	 0 +- 0
 Total energy deposition in scintillator per event:	 0 +- 0 keV.
 
@@ -1091,14 +1091,14 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.297 MB
-Pool ID '7G4Track', size : 0.593 MB
+Pool ID '17G4DynamicParticle', size : 0.335 MB
+Pool ID '7G4Track', size : 0.671 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '13LXeTrajectory', size : 0.000961 MB
 Pool ID '17G4TrajectoryPoint', size : 0.000961 MB
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 0.92 MB
+Dynamic pools deleted: 15 / Total memory freed: 1 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

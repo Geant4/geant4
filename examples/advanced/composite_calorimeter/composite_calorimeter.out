@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -903,42 +903,42 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.84837 keV    e-  461.336 keV    e+  445.232 keV proton 70 keV
+ Energy thresholds :  gamma  5.84824 keV    e-  461.329 keV    e+  445.233 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Polystyrene
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.09794 keV    e-  281.784 keV    e+  274.958 keV proton 70 keV
+ Energy thresholds :  gamma  2.09748 keV    e-  281.786 keV    e+  274.951 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Scintillator
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.09794 keV    e-  281.784 keV    e+  274.958 keV proton 70 keV
+ Energy thresholds :  gamma  2.09748 keV    e-  281.786 keV    e+  274.951 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Copper
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  20.5442 keV    e-  1.03402 MeV    e+  979.817 keV proton 70 keV
+ Energy thresholds :  gamma  20.5458 keV    e-  1.03402 MeV    e+  979.819 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : E_PbWO4
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  75.7807 keV    e-  842.499 keV    e+  797.838 keV proton 70 keV
+ Energy thresholds :  gamma  75.7771 keV    e-  842.498 keV    e+  797.834 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1029,7 +1029,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=19.120000s Real=19.370654s Sys=0.010000s
+  User=18.320000s Real=43.100986s Sys=0.000000s
 ### Run 0 end.
 ... write file : ccal.root - done
 ... close file : ccal.root - done
@@ -1047,10 +1047,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 49
+Total navigation history collections cleaned: 48
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0692 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0702 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00769 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.00385 MB
@@ -1059,14 +1059,14 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.211 MB
-Pool ID '7G4Track', size : 0.421 MB
+Pool ID '17G4DynamicParticle', size : 0.0779 MB
+Pool ID '7G4Track', size : 0.156 MB
 Pool ID '18G4TouchableHistory', size : 0.00577 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '17G4ReactionProduct', size : 0.0106 MB
-Pool ID '10G4Fragment', size : 0.00481 MB
+Pool ID '17G4ReactionProduct', size : 0.0135 MB
+Pool ID '10G4Fragment', size : 0.00577 MB
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 0.74 MB
+Dynamic pools deleted: 15 / Total memory freed: 0.35 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
