@@ -46,7 +46,7 @@ void create_pool(G4double*& buffer, G4int ps) { buffer = new G4double[ps]; }
 
 void destroy_pool(G4double*& buffer) { delete[] buffer; }
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(__MINGW32__)
 // No bother with WIN
 void create_pool_align(G4double*& buffer, G4int ps) { create_pool(buffer, ps); }
 void destroy_pool_align(G4double*& buffer) { destroy_pool(buffer); }

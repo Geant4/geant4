@@ -72,7 +72,7 @@
 #ifndef G4TIMER_HH
 #define G4TIMER_HH 1
 
-#ifndef WIN32
+#if !(defined(WIN32) || defined(__MINGW32__))
 #  include <sys/times.h>
 #  include <unistd.h>
 #else

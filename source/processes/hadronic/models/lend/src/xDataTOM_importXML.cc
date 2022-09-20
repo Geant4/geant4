@@ -11,7 +11,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__MINGW32__)
 #include <BaseTsd.h>
 #include <io.h>
 #include <windows.h>

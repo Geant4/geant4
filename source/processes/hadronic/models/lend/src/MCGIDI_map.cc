@@ -12,7 +12,7 @@
 #define PATH_MAX 4096
 #endif
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__MINGW32__)
 #include <windows.h>
 #define realpath( a, b ) GetFullPathName( a, PATH_MAX, b, NULL )
 #endif
