@@ -3,9 +3,9 @@
 #-----------------------------------------------------------------------
 # - Enforce an out-of-source builds before anything else
 #
-if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+if(${Geant4_SOURCE_DIR} STREQUAL ${Geant4_BINARY_DIR})
   message(STATUS "Geant4 requires an out-of-source build.")
-  message(STATUS "Please remove these files from ${CMAKE_BINARY_DIR} first:")
+  message(STATUS "Please remove these files from ${Geant4_BINARY_DIR} first:")
   message(STATUS "CMakeCache.txt")
   message(STATUS "CMakeFiles")
   message(STATUS "Once these files are removed, create a separate directory")
@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 3.16...3.21)
 
 # - Make overrides for default flags, so they appear in interfaces
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
-   ${CMAKE_SOURCE_DIR}/cmake/Modules/G4MakeRules_cxx.cmake)
+   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/G4MakeRules_cxx.cmake)
 
 #-----------------------------------------------------------------------
 # - Project definition and basic configuration
@@ -40,7 +40,7 @@ set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_
 # the base path will be used, so watch for incompatibilities!!
 #
 set(CMAKE_MODULE_PATH
-    ${PROJECT_SOURCE_DIR}/cmake/Modules
+    ${Geant4_SOURCE_DIR}/cmake/Modules
     ${CMAKE_MODULE_PATH})
 
 #-----------------------------------------------------------------------

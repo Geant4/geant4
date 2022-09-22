@@ -116,7 +116,7 @@ function(geant4_add_test test)
   endif()
 
   #- Locate the test driver
-  set(_driver ${CMAKE_SOURCE_DIR}/cmake/Modules/G4TestDriver.cmake)
+  set(_driver ${Geant4_SOURCE_DIR}/cmake/Modules/G4TestDriver.cmake)
   if(NOT EXISTS ${_driver})
     message(FATAL_ERROR "GEANT4_ADD_TEST: G4TestDriver.cmake not found!")
   endif()
@@ -157,7 +157,7 @@ function(geant4_add_test test)
         --build-noclean
         --build-options
           --no-warn-unused-cli
-          -DGeant4_DIR=${CMAKE_BINARY_DIR}
+          -DGeant4_DIR=${Geant4_BINARY_DIR}
           -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
           -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
           -DCMAKE_C_FLAGS_DEBUG=${CMAKE_C_FLAGS_DEBUG}
@@ -172,7 +172,7 @@ function(geant4_add_test test)
           -DCMAKE_CXX_FLAGS_RELWITHDEBINFO=${CMAKE_CXX_FLAGS_RELWITHDEBINFO}
           -DCMAKE_DISABLE_FIND_PACKAGE_ROOT=$<BOOL:${CMAKE_DISABLE_FIND_PACKAGE_ROOT}>
     )
-    set_property(TEST ${__build_test_name} PROPERTY ENVIRONMENT Geant4_DIR=${CMAKE_BINARY_DIR})
+    set_property(TEST ${__build_test_name} PROPERTY ENVIRONMENT Geant4_DIR=${Geant4_BINARY_DIR})
 
     # Build part of the test should have additional regex, and *must* have same labels
     if(ARG_FAILREGEX)

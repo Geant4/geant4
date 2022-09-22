@@ -89,7 +89,7 @@ set(EXVECGEOMNAVIGATION_SCRIPTS
 foreach(_script ${EXVECGEOMNAVIGATION_SCRIPTS})
   configure_file(
     ${_script}
-    ${CMAKE_BINARY_DIR}/${_script}
+    ${Geant4_BINARY_DIR}/${_script}
     COPYONLY
     )
 endforeach()

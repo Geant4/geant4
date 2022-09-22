@@ -249,7 +249,7 @@ function(geant4_add_unit_tests)
     if(IS_ABSOLUTE ${incdir})
       include_directories(${incdir})
     else()
-      include_directories(${CMAKE_SOURCE_DIR}/source/${incdir})
+      include_directories(${Geant4_SOURCE_DIR}/source/${incdir})
     endif()
   endforeach()
 
