@@ -66,6 +66,8 @@
 #include "G4Polyhedra.hh"
 #include "G4Tet.hh"
 #include "G4DisplacedSolid.hh"
+#include "G4UnionSolid.hh"
+#include "G4IntersectionSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
@@ -908,6 +910,62 @@ G4DisplacedSolid* G4VSceneHandler::CreateSectionSolid()
 
 G4DisplacedSolid* G4VSceneHandler::CreateCutawaySolid()
 {
+    std::vector<G4DisplacedSolid*> cutaway_solids;
+
+  const G4ViewParameters& vp = fpViewer->GetViewParameters();
+  if (vp.IsCutaway()) {
+
+    G4double radius = fpScene->GetExtent().GetExtentRadius();
+    G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
+    G4VSolid* cutawayBox =
+      new G4Box("_cutaway_box", safe, safe, safe);  // world box...
+
+    for (int plane_no = 0; plane_no < int(vp.GetCutawayPlanes().size()); plane_no++){
+
+      const G4Normal3D originalNormal(0,0,1);  // ...so this is original normal.
+
+      const G4Plane3D& sp = vp.GetCutawayPlanes()[plane_no]; //];
+      const G4double& a = sp.a();
+      const G4double& b = sp.b();
+      const G4double& c = sp.c();
+      const G4double& d = sp.d();
+      const G4Normal3D newNormal(a,b,c);
+
+      G4Transform3D requiredTransform;
+      // Rotate
+      if (newNormal != originalNormal) {
+        const G4double& angle = std::acos(newNormal.dot(originalNormal));
+        const G4Vector3D& axis = originalNormal.cross(newNormal);
+        requiredTransform = G4Rotate3D(angle, axis);
+      }
+
+      // Translate
+      requiredTransform = requiredTransform * G4TranslateZ3D(-d + safe);
+      cutaway_solids.push_back(new G4DisplacedSolid
+        ("_displaced_cutaway_box", cutawayBox, requiredTransform));
+    } 
+
+    if (cutaway_solids.size() == 1){
+      return (G4DisplacedSolid*) cutaway_solids[0];
+    } else if (vp.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
+      G4UnionSolid* union2 =
+        new G4UnionSolid("_union_2", cutaway_solids[0], cutaway_solids[1]);
+      if (cutaway_solids.size() == 2)
+        return (G4DisplacedSolid*)union2;
+      else
+        return (G4DisplacedSolid*) 
+          new G4UnionSolid("_union_3", union2, cutaway_solids[2]);
+    } else if (vp.GetCutawayMode() == G4ViewParameters::cutawayIntersection){
+      G4IntersectionSolid* intersection2 =
+        new G4IntersectionSolid("_intersection_2", cutaway_solids[0], cutaway_solids[1]);
+      if (cutaway_solids.size() == 2)
+        return (G4DisplacedSolid*)intersection2;
+      else
+        return (G4DisplacedSolid*) 
+          new G4IntersectionSolid("_intersection_3", intersection2, cutaway_solids[2]);
+    }
+  }
+
   // To be reviewed.
   return 0;
   /*** An alternative way of getting a cutaway is to use
