@@ -3,9 +3,9 @@
 #-----------------------------------------------------------------------
 # - Enforce an out-of-source builds before anything else
 #
-if(${Geant4_SOURCE_DIR} STREQUAL ${Geant4_BINARY_DIR})
+if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
   message(STATUS "Geant4 requires an out-of-source build.")
-  message(STATUS "Please remove these files from ${Geant4_BINARY_DIR} first:")
+  message(STATUS "Please remove these files from ${CMAKE_CURRENT_BINARY_DIR} first:")
   message(STATUS "CMakeCache.txt")
   message(STATUS "CMakeFiles")
   message(STATUS "Once these files are removed, create a separate directory")
@@ -40,7 +40,7 @@ set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_
 # the base path will be used, so watch for incompatibilities!!
 #
 set(CMAKE_MODULE_PATH
-    ${Geant4_SOURCE_DIR}/cmake/Modules
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules
     ${CMAKE_MODULE_PATH})
 
 #-----------------------------------------------------------------------
