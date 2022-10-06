@@ -404,23 +404,17 @@ function(geant4_install_dataset _name _destination _timeout)
 
   # - Dispatch to ExternalProject or our own implementation.
   # Use of URL_MD5 *and* TIMEOUT require CMake 2.8.2 or higher.
-  include(FetchContent)
-#  ExternalProject_Add(${_name}
-#    PREFIX Externals/${_name}-${_ds_version}
-#    SOURCE_DIR ${GEANT4_BUILD_FULL_DATADIR}/${_ds_dir}
-#    URL ${_ds_url}
-#    URL_MD5 ${_ds_md5sum}
-#    TIMEOUT ${_timeout}
-#    CONFIGURE_COMMAND ""
-#    BUILD_COMMAND ""
-#    INSTALL_COMMAND ""
-#    )
-  FetchContent_Declare(
-          ${_name}
-          URL          ${_ds_url}
-          URL_HASH     MD5=${_ds_md5sum} # release-1.10.0
-  )
-  FetchContent_MakeAvailable(${_name})
+  include(ExternalProject)
+  ExternalProject_Add(${_name}
+          PREFIX Externals/${_name}-${_ds_version}
+          SOURCE_DIR ${GEANT4_BUILD_FULL_DATADIR}/${_ds_dir}
+          URL ${_ds_url}
+          URL_MD5 ${_ds_md5sum}
+          TIMEOUT ${_timeout}
+          CONFIGURE_COMMAND ""
+          BUILD_COMMAND ""
+          INSTALL_COMMAND ""
+          )
   # - Configure the dataset's build and install locations
   geant4_set_dataset_property(${_name} BUILD_DIR "${PROJECT_BINARY_DIR}/data/${_ds_dir}")
   geant4_set_dataset_property(${_name} INSTALL_DIR "${_destination}/${_ds_dir}")
