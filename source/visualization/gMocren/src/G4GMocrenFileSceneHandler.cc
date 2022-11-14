@@ -322,7 +322,7 @@ void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
       kgMocrenIO->setModalityImageDensityMap(map);
       
     } else {
-      G4cout << "cann't open the file : " << fname << G4endl;
+      G4cout << "can't open the file : " << fname << G4endl;
     }
     */
 

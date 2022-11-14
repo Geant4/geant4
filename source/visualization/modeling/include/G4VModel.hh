@@ -32,7 +32,7 @@
 //
 // G4VModel is a base class for visualization models.  A model is a
 // graphics-system-indepedent description of a Geant4 component.
-// The key fuctionality of a model is to know how to describe itself
+// The key functionality of a model is to know how to describe itself
 // to a scene handler.  A scene is a collection of models.
 // A special case is made for G4PhysicalVolumeModel - a non-null pointer
 // is to be returned by G4PhysicalVolumeModel::GetG4PhysicalVolumeModel().
@@ -103,7 +103,7 @@ protected:
 
 private:
 
-  // Private copy constructor and assigment operator - copying and
+  // Private copy constructor and assignment operator - copying and
   // assignment not allowed.  Keeps CodeWizard happy.
   G4VModel (const G4VModel&);
   G4VModel& operator = (const G4VModel&);

@@ -76,7 +76,7 @@ public: // With description
 
 private:
 
-  // Private copy contructor and assignment to forbid use...
+  // Private copy constructor and assignment to forbid use...
   G4AxesModel (const G4AxesModel&);
   G4AxesModel& operator = (const G4AxesModel&);
 

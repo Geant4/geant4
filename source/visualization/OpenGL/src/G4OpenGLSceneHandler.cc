@@ -1165,7 +1165,7 @@ void G4OpenGLSceneHandler::glEndVBO()  {
       for (unsigned int a=0; a<fOglVertex.size(); a+=6*4) {
         vertices.insert (vertices.end(),fOglVertex.begin()+a,fOglVertex.begin()+a+1*6+6); // 0-1
         // if 2-3 == 4-5, do not add them
-        // if differents, we are obliged to create a new GL_TRIANGLE_STRIP
+        // if different, we are obliged to create a new GL_TRIANGLE_STRIP
         if (a+4*6+5 < fOglVertex.size()) {
           if ((fOglVertex[a+2*6+0] != fOglVertex[a+5*6+0]) || //Vx for 2 and 5
               (fOglVertex[a+2*6+1] != fOglVertex[a+5*6+1]) || //Vy for 2 and 5

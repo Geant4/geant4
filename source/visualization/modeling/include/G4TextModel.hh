@@ -55,7 +55,7 @@ public: // With description
 
 private:
 
-  // Private copy contructor and assignment to forbid use...
+  // Private copy constructor and assignment to forbid use...
   G4TextModel (const G4TextModel&);
   G4TextModel& operator = (const G4TextModel&);
 

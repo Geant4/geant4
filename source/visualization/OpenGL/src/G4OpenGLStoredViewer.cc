@@ -146,7 +146,7 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
   
-  // We moved these from G4OpenGLViewer to G4ViewParamaters. To avoid
+  // We moved these from G4OpenGLViewer to G4ViewParameters. To avoid
   // editing many lines below we introduce these convenient aliases.
 #define CONVENIENT_DOUBLE_ALIAS(q) const G4double& f##q = fVP.Get##q();
 #define CONVENIENT_BOOL_ALIAS(q) const G4bool& f##q = fVP.Is##q();

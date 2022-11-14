@@ -401,7 +401,7 @@ protected:
   void StandardSpecialMeshRendering(const G4Mesh&);
   // Standard way of special mesh rendering.
   // MySceneHandler::AddCompound(const G4Mesh& mesh) may use this if
-  // appropriate or implement its own special mesh rendereing.
+  // appropriate or implement its own special mesh rendering.
 
   void Draw3DRectMeshAsDots(const G4Mesh&);
   // For a rectangular 3-D mesh, draw as coloured dots by colour and material,

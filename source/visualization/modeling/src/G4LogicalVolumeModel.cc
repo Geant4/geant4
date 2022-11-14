@@ -59,11 +59,11 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
   // represent this logical volume.  It has no rotation and a null
   // translation so that the logical volume will be seen in its own
   // reference system.  It will be added to the physical volume store
-  // but it will not be part of the normal geometry heirarchy so it
+  // but it will not be part of the normal geometry hierarchy so it
   // has no mother.
   G4PhysicalVolumeModel
 (new G4PVPlacement (0,                   // No rotation.
-		    G4ThreeVector(),     // Null traslation.
+		    G4ThreeVector(),     // Null translation.
 		    "PhysVol representation of LogVol " + pLV -> GetName (),
 		    pLV,
 		    0,                   // No mother.

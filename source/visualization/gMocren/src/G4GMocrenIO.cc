@@ -26,7 +26,7 @@
 //
 //
 //
-// File I/O manager class for writing or reading calcuated dose
+// File I/O manager class for writing or reading calculated dose
 // distribution and some event information
 //
 // Created:  Mar. 31, 2009  Akinori Kimura : release for the gMocrenFile driver
@@ -703,7 +703,7 @@ bool G4GMocrenIO::storeData4() {
     calcDoseDistScale();
 
     for(int ndose = 0; ndose < nDoseDist; ndose++) {
-      // dose distrbution image size
+      // dose distribution image size
       kDose[ndose].getSize(size);
       if(kLittleEndianOutput) {
 	ofile.write((char *)size, 3*sizeof(int));
@@ -1171,7 +1171,7 @@ bool G4GMocrenIO::storeData3() {
     calcDoseDistScale();
 
     for(int ndose = 0; ndose < nDoseDist; ndose++) {
-      // dose distrbution image size
+      // dose distribution image size
       kDose[ndose].getSize(size);
       ofile.write((char *)size, 3*sizeof(int));
       if(DEBUG || kVerbose > 0) {
@@ -1459,7 +1459,7 @@ bool G4GMocrenIO::storeData2() {
   if(!isDoseEmpty()) {
     calcDoseDistScale();
 
-    // dose distrbution image size
+    // dose distribution image size
     kDose[0].getSize(size);
     ofile.write((char *)size, 3*sizeof(int));
     if(DEBUG || kVerbose > 0) {
@@ -1878,7 +1878,7 @@ bool G4GMocrenIO::retrieveData4() {
 
     newDoseDist();
 
-    // dose distrbution image size
+    // dose distribution image size
     ifile.read((char *)ctmp, 3*sizeof(int));
     convertEndian(ctmp, size[0]);
     convertEndian(ctmp+sizeof(int), size[1]);
@@ -2399,7 +2399,7 @@ bool G4GMocrenIO::retrieveData3() {
 
     newDoseDist();
 
-    // dose distrbution image size
+    // dose distribution image size
     ifile.read((char *)ctmp, 3*sizeof(int));
     convertEndian(ctmp, size[0]);
     convertEndian(ctmp+sizeof(int), size[1]);
@@ -2817,7 +2817,7 @@ bool G4GMocrenIO::retrieveData2() {
 
     newDoseDist();
 
-    // dose distrbution image size
+    // dose distribution image size
     ifile.read((char *)ctmp, 3*sizeof(int));
     convertEndian(ctmp, size[0]);
     convertEndian(ctmp+sizeof(int), size[1]);

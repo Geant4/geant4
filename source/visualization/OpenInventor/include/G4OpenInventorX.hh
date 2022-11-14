@@ -32,7 +32,7 @@
 #ifndef G4OPENINVENTORX_HH
 #define G4OPENINVENTORX_HH
 
-// For backward compatibilty.
+// For backward compatibility.
 
 #include "G4OpenInventorXt.hh"
 

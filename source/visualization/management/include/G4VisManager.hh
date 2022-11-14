@@ -157,7 +157,7 @@ public: // With description
 
 private:
 
-  // Private copy constructor and assigment operator - copying and
+  // Private copy constructor and assignment operator - copying and
   // assignment not allowed.  Keeps CodeWizard happy.
   G4VisManager (const G4VisManager&);
   G4VisManager& operator = (const G4VisManager&);
@@ -310,7 +310,7 @@ public: // With description
   // Used by run manager to notify change.
 
   void IgnoreStateChanges(G4bool);
-  // This method shoud be invoked by a class that has its own event loop,
+  // This method should be invoked by a class that has its own event loop,
   // such as the RayTracer, material scanner, etc. If the argument is true,
   // the following state changes among Idle, GeomClosed and EventProc are
   // caused by such a class, and thus not by the ordinary event simulation.

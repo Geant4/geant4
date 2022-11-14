@@ -1149,9 +1149,9 @@ void G4OpenInventorQtExaminerViewer::pickingCB(void *aThis,
             // FWJ DEBUG
             // G4cout << "FOUND trajectory LineSet" << trajectory << G4endl;
 
-       // The set of all trajectories is stored in a Seperator group node
+       // The set of all trajectories is stored in a Separator group node
        // one level above the LineSet that was picked. The nodes under that
-       // seperator are as follows (in this order): Material, LightModel,
+       // separator are as follows (in this order): Material, LightModel,
        // ResetTransform, MatrixTransform, Coordinate3, DrawStyle, LineSet
             SoSeparator * grpNode = 
                (SoSeparator*)(((SoFullPath*)path)->getNodeFromTail(1));

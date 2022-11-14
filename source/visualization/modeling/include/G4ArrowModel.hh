@@ -62,7 +62,7 @@ public: // With description
 
 private:
 
-  // Private copy contructor and assignment to forbid use...
+  // Private copy constructor and assignment to forbid use...
   G4ArrowModel (const G4ArrowModel&);
   G4ArrowModel& operator = (const G4ArrowModel&);
 

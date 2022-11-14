@@ -2573,7 +2573,7 @@ static void gl2psPrintPostScriptPixmap(GLfloat x, GLfloat y, GL2PSimage *im)
   /* FIXME: should we define an option for these? Or just keep the
      8-bit per component case? */
   int greyscale = 0; /* set to 1 to output greyscale image */
-  int nbit = 8; /* number of bits per color compoment (2, 4 or 8) */
+  int nbit = 8; /* number of bits per color component (2, 4 or 8) */
 
   if((width <= 0) || (height <= 0)) return;
 
@@ -3915,7 +3915,7 @@ static void gl2psPDFgroupListWriteMainStream(void)
                         prim->verts[0].xyz[0], prim->verts[0].xyz[1]);
         }
         else{
-          /* the two segements are connected, so we just append to the
+          /* the two segments are connected, so we just append to the
              current path */
           gl2ps->streamlength +=
             gl2psPrintf("%f %f l\n",

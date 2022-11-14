@@ -599,7 +599,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
     createRadioAction(fProjectionOrtho, fProjectionPerspective,SLOT(toggleProjection(bool)),2);
   }
 #else
-  // no more radioAction, not realy useful and could be confusing to use context menu and icon at the same time
+  // no more radioAction, not really useful and could be confusing to use context menu and icon at the same time
   fProjectionOrtho = mProjection->addAction("Orthographic", this, [this](){ this->toggleProjection(1); });
   fProjectionPerspective = mProjection->addAction("Perspective", this, [this](){ this->toggleProjection(2); });
 #endif
@@ -1703,7 +1703,7 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * evnt)
       rotateQtSceneToggle(-fRot_sens,0);
     }
 
-    // Rotatio +/-
+    // Rotation +/-
     if (evnt->key() == Qt::Key_Plus) {
       fRot_sens = fRot_sens/0.7;
       G4cout << "Auto-rotation set to : " << fRot_sens << G4endl;
@@ -2178,8 +2178,8 @@ QString G4OpenGLQtViewer::removeTempFolder() {
 }
 
 /**
-  Export image. Try to get the format according to the file extention.
-  If not present, the last one choosen by /vis/ogl/set/exportFormat
+  Export image. Try to get the format according to the file extension.
+  If not present, the last one chosen by /vis/ogl/set/exportFormat
   If not, will take the default format : eps
   Best format actually available is pdf (vectored and allow transparency)
   If name is not set, it will take the default name value given by /vis/ogl/set/printFilename
@@ -2190,7 +2190,7 @@ bool G4OpenGLQtViewer::exportImage(std::string name, int width, int height) {
   if (! qGLW) {
     return false;
   }
-  // If there is already an extention
+  // If there is already an extension
   bool increaseFileNumber = true;
   // if
   if (name.size() != name.substr(name.find_last_of(".") + 1).size()) {
@@ -2603,7 +2603,7 @@ void G4OpenGLQtViewer::createSceneTreeComponent(){
   fSceneTreeComponentTreeWidget->setHeaderLabel ("Scene tree : "+QString(GetName().data()));
   fSceneTreeComponentTreeWidget->setColumnHidden (1,true);  // copy number
   fSceneTreeComponentTreeWidget->setColumnHidden (2,true);  // PO index
-  fSceneTreeComponentTreeWidget->setColumnHidden (3,true);  // Informations
+  fSceneTreeComponentTreeWidget->setColumnHidden (3,true);  // Information
   //   data(0) : POindex
   //   data(1) : copy number
   //   data(2) : g4color
@@ -2983,7 +2983,7 @@ QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
     newItem->setToolTip (0,QString("double-click to change the color"));
   }
 
-  // special case: if alpha=0, it is a totally transparent objet,
+  // special case: if alpha=0, it is a totally transparent object,
   // then, do not redraw it
   if (color.GetAlpha() == 0) {
     state = Qt::Unchecked;
@@ -3040,7 +3040,7 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
   // - if so, go into this child
   // - if not : create it as invisible
 
-  // Realy quick check if the POindex is already there
+  // Really quick check if the POindex is already there
   QTreeWidgetItem* subItem = NULL;
   QList<QTreeWidgetItem *> parentItemList;
 
@@ -3218,7 +3218,7 @@ void G4OpenGLQtViewer::changeOpenCloseVisibleHiddenSelectedColorSceneTreeElement
     }
   }
 
-  // if found : retore old state
+  // if found : restore old state
   if (oldItem != NULL) {
     subItem->setFlags(oldItem->flags());   // flags
     subItem->setCheckState(0,oldItem->checkState(0)); // check state
@@ -3799,7 +3799,7 @@ void G4OpenGLQtViewer::changeDepthOnSceneTreeItem(
   double transparencyLevel = 0.;
 
   // look for a 2.2 depth and we are at level 3
-  // -> Set all theses items to Opaque
+  // -> Set all these items to Opaque
   // ONLY if it is a PV volume !
   if (isPVVolume(item)) {
     if ((lookForDepth-currentDepth) < 0) {
@@ -3898,7 +3898,7 @@ void G4OpenGLQtViewer::clearTreeWidget(){
       }
       fPositivePoIndexSceneTreeWidgetQuickMap.clear();
 
-      // put correct value in paramaters
+      // put correct value in parameters
       fOldLastSceneTreeWidgetAskForIterator = fOldPositivePoIndexSceneTreeWidgetQuickMap.begin();
       fOldLastSceneTreeWidgetAskForIteratorEnd = fOldPositivePoIndexSceneTreeWidgetQuickMap.end();
       fSceneTreeDepth = 1;
@@ -4746,7 +4746,7 @@ bool G4OpenGLQtViewer::isCurrentWidget(){
 }
 
 /**   Build the parameter list parameters in a QString<br>
- Reimplement partialy the G4UIparameter.cc
+ Reimplement partially the G4UIparameter.cc
  @param aCommand : command to list parameters
  @see G4UIparameter::List()
  @see G4UIcommand::List()

@@ -307,7 +307,7 @@ protected:
 
 private:
 
-  // Private copy constructor and assigment operator - copying and
+  // Private copy constructor and assignment operator - copying and
   // assignment not allowed.  Keeps CodeWizard happy.
   G4PhysicalVolumeModel (const G4PhysicalVolumeModel&);
   G4PhysicalVolumeModel& operator = (const G4PhysicalVolumeModel&);

@@ -227,7 +227,7 @@ void G4VVisCommand::CheckSceneAndNotifyHandlers(G4Scene* pScene)
     return;
   }
 
-  // Scene has changed.  If it is the scene of the currrent scene handler
+  // Scene has changed.  If it is the scene of the current scene handler
   // refresh viewers of all scene handlers using this scene. If not, it may be
   // a scene that the user is building up before attaching to a scene handler,
   // so do nothing.

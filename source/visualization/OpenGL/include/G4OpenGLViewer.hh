@@ -158,7 +158,7 @@ protected:
   bool setExportFilename(G4String name,G4bool inc = true);
   // set export filename.
   // if inc, then the filename will be increment by one each time
-  // try to guesss the correct format according to the extention
+  // try to guess the correct format according to the extension
 
   std::string getRealPrintFilename();
   unsigned int getWinWidth() const;

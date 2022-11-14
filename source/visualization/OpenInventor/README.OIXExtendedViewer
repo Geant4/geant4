@@ -178,7 +178,7 @@ Known problems:
    run more events.  Viewer will usually be o.k. afterwards.
 
    Unpredictable mode-switching behaviour: switching between
-   orthonormal and perspective camera may give wierd results.
+   orthonormal and perspective camera may give weird results.
    Navigation may appear "stuck" with orthonormal camera.
 
    Both the standard and extended viewers can crash the

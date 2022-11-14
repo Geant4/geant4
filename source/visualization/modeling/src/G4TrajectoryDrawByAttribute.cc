@@ -146,7 +146,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
   if (filter->GetValidElement(attVal, key)) {
 
     // Extract context corresponding to valid key.
-    // Single value match should have overriden interval match.
+    // Single value match should have overridden interval match.
     ContextMap::const_iterator iter = fContextMap.begin();
 
     G4bool gotContext(false);

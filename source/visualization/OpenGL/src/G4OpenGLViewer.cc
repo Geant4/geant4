@@ -1072,7 +1072,7 @@ bool G4OpenGLViewer::setExportFilename(G4String name,G4bool inc) {
   if (name.size() == 0) {
     name = getRealPrintFilename().c_str();
   } else {
-    // guess format by extention
+    // guess format by extension
     std::string extension = name.substr(name.find_last_of(".") + 1);
     // If there is a dot in the name the above might find rubbish, so...
     if (extension.size() >= 3 && extension.size() <= 4) {  // Possible extension

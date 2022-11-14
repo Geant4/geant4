@@ -136,7 +136,7 @@ void G4OpenGLStoredXmViewer::DrawView () {
 
 void G4OpenGLStoredXmViewer::FinishView () {
 //  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
-                //be propogated before progressing.
+                //be propagated before progressing.
 // JA: Commented out July 2021 - slows rendering down in some cases and I
 // don't see any adverse effects.
 

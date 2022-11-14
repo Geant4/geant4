@@ -92,7 +92,7 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   fSoSelection->addChild(group);
 
   //  Have a camera under fSoSelection in order
-  // that the below SceneGraphSensor be notifed
+  // that the below SceneGraphSensor be notified
   // when the viewer changes the camera type.
   //  But we put the camera under a SoGroup so that
   // the SceneGraphSensor be not triggered at each change
@@ -149,7 +149,7 @@ void G4OpenInventorViewer::KernelVisitDecision () {
       //??fG4OpenInventorSceneHandler.fPODLList.size() == 0 ||
       // We need a test for empty scene graph, such as
       // staticRoot.size() or something??????????  See temporary fix
-      // in contructor.  (John Allison Aug 2001)
+      // in constructor.  (John Allison Aug 2001)
       CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();
   }      
@@ -748,7 +748,7 @@ void G4OpenInventorViewer::SetReducedWireFrame(bool aValue) {
     break;
   }
   SetViewParameters(vp);
-  NeedKernelVisit(); // Just in case it was alread in wire framw.
+  NeedKernelVisit(); // Just in case it was already in wire frame.
   DrawDetector();
 }
 

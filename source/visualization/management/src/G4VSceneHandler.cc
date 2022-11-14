@@ -1026,7 +1026,7 @@ G4double G4VSceneHandler::GetLineWidth(const G4VisAttributes* pVisAttribs)
 G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
 (const G4VisAttributes* pVisAttribs) {
   // Drawing style is normally determined by the view parameters, but
-  // it can be overriddden by the ForceDrawingStyle flag in the vis
+  // it can be overridden by the ForceDrawingStyle flag in the vis
   // attributes.
   const G4ViewParameters& vp = fpViewer->GetViewParameters();
   const G4ViewParameters::DrawingStyle viewerStyle = vp.GetDrawingStyle();
@@ -1059,7 +1059,7 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
       case (G4VisAttributes::wireframe):
       default:
         // But if forced style is wireframe, do it, because one of its
-        // main uses is in displaying the consituent solids of a Boolean
+        // main uses is in displaying the constituent solids of a Boolean
         // solid and their surfaces overlap with the resulting Booean
         // solid, making a mess if hlr is specified.
         resultantStyle = G4ViewParameters::wireframe;
@@ -1118,7 +1118,7 @@ G4double G4VSceneHandler::GetMarkerSize
 G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
 {
   // No. of sides (lines segments per circle) is normally determined
-  // by the view parameters, but it can be overriddden by the
+  // by the view parameters, but it can be overridden by the
   // ForceLineSegmentsPerCircle in the vis attributes.
   G4int lineSegmentsPerCircle = fpViewer->GetViewParameters().GetNoOfSides();
   if (pVisAttribs) {
@@ -1205,7 +1205,7 @@ void G4VSceneHandler::PseudoSceneForTetVertices::AddSolid(const G4VSolid& solid)
 void G4VSceneHandler::StandardSpecialMeshRendering(const G4Mesh& mesh)
 // Standard way of special mesh rendering.
 // MySceneHandler::AddCompound(const G4Mesh& mesh) may use this if
-// appropriate or implement its own special mesh rendereing.
+// appropriate or implement its own special mesh rendering.
 {
   G4bool implemented = false;
   switch (mesh.GetMeshType()) {
@@ -1281,7 +1281,7 @@ void G4VSceneHandler::Draw3DRectMeshAsDots(const G4Mesh& mesh)
     // Instantiate a temporary G4PhysicalVolumeModel
     G4ModelingParameters tmpMP;
     tmpMP.SetCulling(true);  // This avoids drawing transparent...
-    tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+    tmpMP.SetCullingInvisible(true);  // ... or invisible volumes.
     const G4bool useFullExtent = true;  // To avoid calculating the extent
     G4PhysicalVolumeModel tmpPVModel
     (container,
@@ -1428,7 +1428,7 @@ void G4VSceneHandler::Draw3DRectMeshAsSurfaces(const G4Mesh& mesh)
     // Instantiate a temporary G4PhysicalVolumeModel
     G4ModelingParameters tmpMP;
     tmpMP.SetCulling(true);  // This avoids drawing transparent...
-    tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+    tmpMP.SetCullingInvisible(true);  // ... or invisible volumes.
     const G4bool useFullExtent = true;  // To avoid calculating the extent
     G4PhysicalVolumeModel tmpPVModel
     (container,
@@ -1572,7 +1572,7 @@ void G4VSceneHandler::DrawTetMeshAsDots(const G4Mesh& mesh)
     // Instantiate a temporary G4PhysicalVolumeModel
     G4ModelingParameters tmpMP;
     tmpMP.SetCulling(true);  // This avoids drawing transparent...
-    tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+    tmpMP.SetCullingInvisible(true);  // ... or invisible volumes.
     const G4bool useFullExtent = true;  // To avoid calculating the extent
     G4PhysicalVolumeModel tmpPVModel
     (container,
@@ -1733,7 +1733,7 @@ void G4VSceneHandler::DrawTetMeshAsSurfaces(const G4Mesh& mesh)
     // Instantiate a temporary G4PhysicalVolumeModel
     G4ModelingParameters tmpMP;
     tmpMP.SetCulling(true);  // This avoids drawing transparent...
-    tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
+    tmpMP.SetCullingInvisible(true);  // ... or invisible volumes.
     const G4bool useFullExtent = true;  // To avoid calculating the extent
     G4PhysicalVolumeModel tmpPVModel
     (container,

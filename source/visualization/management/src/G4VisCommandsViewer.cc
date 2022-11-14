@@ -925,7 +925,7 @@ G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
   fpCommand -> SetGuidance
   ("- single number, e.g., \"600\": square window;");
   fpCommand -> SetGuidance
-  ("- two numbers, e.g., \"800x600\": rectangluar window;");
+  ("- two numbers, e.g., \"800x600\": rectanguluar window;");
   fpCommand -> SetGuidance
   ("- two numbers plus placement hint, e.g., \"600x600-100+100\" places window of size"
    "\n  600x600 100 pixels left and 100 pixels down from top right corner.");
@@ -1089,7 +1089,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
       // Copy view parameters from existing viewer, except for...
       fExistingVP.SetAutoRefresh(vp.IsAutoRefresh());
       fExistingVP.SetBackgroundColour(vp.GetBackgroundColour());
-      // ...including window hint paramaters that have been set already above...
+      // ...including window hint parameters that have been set already above...
       fExistingVP.SetXGeometryString(vp.GetXGeometryString());
       vp = fExistingVP;
       newViewer->SetViewParameters(vp);

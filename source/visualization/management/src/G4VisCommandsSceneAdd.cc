@@ -1514,7 +1514,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
       if (axes) {
         if (axesSuccessful) {
           G4cout <<
-          "\n  Axes have also been added at the origin of local cooordinates.";
+          "\n  Axes have also been added at the origin of local coordinates.";
         } else {
           G4cout <<
           "\n  Axes have not been added for some reason possibly stated above.";

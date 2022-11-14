@@ -89,8 +89,8 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   if (!fpTopPV) {
 
     // In some circumstances creating an "empty" G4PhysicalVolumeModel is
-    // allowed, so I have supressed the G4Exception below.  If it proves to
-    // be a problem we might have to re-instate it, but it is unlikley to
+    // allowed, so I have suppressed the G4Exception below.  If it proves to
+    // be a problem we might have to re-instate it, but it is unlikely to
     // be used except by visualisation experts.  See, for example, /vis/list,
     // where it is used simply to get a list of G4AttDefs.
     //    G4Exception

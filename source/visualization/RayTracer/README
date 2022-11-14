@@ -64,7 +64,7 @@ d) /vis/rayTracer/column nColumn
     in default 640 pixels
 
 e) /vis/rayTracer/row nRow
-    number of virtical pixels
+    number of vertical pixels
     in default 640 pixels
 
 f) /vis/rayTracer/span angle unit

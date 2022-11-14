@@ -142,7 +142,7 @@ protected:
   void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
   
 #ifdef G4OPENGL_VERSION_2
-  // Special case for VBO, we want to have acces to the VBO drawer everywhere
+  // Special case for VBO, we want to have access to the VBO drawer everywhere
   // because instead of OpenGL call which are static, VBO openGL functions :
   // - Are functions of an WGLWidget object(G4OpenGLImmediateViewer in our case)
   // - Needs an access to the QGLSHader

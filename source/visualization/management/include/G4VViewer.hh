@@ -53,12 +53,12 @@ public: // With description
 
   virtual void Initialise ();
   // Called immediately after construction for those operations that
-  // must await complete contruction of viewer and all its bases.  For
+  // must await complete construction of viewer and all its bases.  For
   // example, if this class (G4VViewer) is inherited virtually, as in
   // the OpenGL sub-category, it will not be fully constructed until
   // *after* the the derived viewer (this is the rule about order of
   // construction for virtual inheritance), so the derived viewer may
-  // not use information in G4VViewer in its contructor.  Hence such
+  // not use information in G4VViewer in its constructor.  Hence such
   // code must be in Initialise().
 
   //////////////////////////////////////////////////////////////

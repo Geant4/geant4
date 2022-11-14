@@ -67,7 +67,7 @@ protected:
   G4Colour fColour;
 
 private:
-  // Private copy constructor and assigment operator - copying and
+  // Private copy constructor and assignment operator - copying and
   // assignment not allowed.  Keeps CodeWizard happy.
   G4GPSModel (const G4GPSModel&);
   G4GPSModel& operator = (const G4GPSModel&);

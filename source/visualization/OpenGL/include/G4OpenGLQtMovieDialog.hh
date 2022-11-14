@@ -39,7 +39,7 @@ class G4OpenGLQtViewer;
 
 class QGroupBox;
 
-/** The G4OpenGLQtMovieDialog class provide a Dialog displaying differents options
+/** The G4OpenGLQtMovieDialog class provide a Dialog displaying different options
     for each file format
 */
 class G4OpenGLQtMovieDialog : public QDialog

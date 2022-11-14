@@ -1058,9 +1058,9 @@ void G4OpenInventorXtExaminerViewer::pickingCB(void *aThis,
             // The trajectory is a set of lines stored in a LineSet
             SoLineSet * trajectory = (SoLineSet *)node;
 
-       // The set of all trajectories is stored in a Seperator group node
+       // The set of all trajectories is stored in a Separator group node
        // one level above the LineSet that was picked. The nodes under that
-       // seperator are as follows (in this order): Material, LightModel,
+       // separator are as follows (in this order): Material, LightModel,
        // ResetTransform, MatrixTransform, Coordinate3, DrawStyle, LineSet
             SoSeparator * grpNode = 
                (SoSeparator*)(((SoFullPath*)path)->getNodeFromTail(1));
@@ -2883,7 +2883,7 @@ void G4OpenInventorXtExaminerViewer::lookAtSceneElementCB(Widget,
 }
 
 
-// Destroyes listsDialog and resets necessary member fields.
+// Destroys listsDialog and resets necessary member fields.
 
 void G4OpenInventorXtExaminerViewer::closeListsDialogCB(Widget, 
                                          XtPointer client_data,
@@ -3617,7 +3617,7 @@ void G4OpenInventorXtExaminerViewer::popUpFileSelDialog(Widget &dialog,
 }
 
 
-// Generic fileSelectionDialog cancelation.
+// Generic fileSelectionDialog cancellation.
 
 void G4OpenInventorXtExaminerViewer::cancelFileSelDialogCB(Widget w,
                                                            XtPointer,

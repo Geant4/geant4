@@ -101,7 +101,7 @@
 #
 #        setenv G4DAWNFILE_MAX_FILENUM  1
 #
-#      The dafault value is "0", i.e., the batch mode is off.
+#      The default value is "0", i.e., the batch mode is off.
 #
 #  Example:
 #
@@ -190,14 +190,14 @@
 
 ###############################################
 ## Environmental variables to CUSTOMIZE      ##
-## Geant4 DAWN-Network visualization driver  ##  
+## Geant4 DAWN-Network visualization driver  ##
 ##                                           ##
 ##  Note: This driver should be used only    ##
-##        for remote visualizaton.)          ##
+##        for remote visualization.)         ##
 ###############################################
 
 #----- << G4DAWN_GUI_ALWAYS >>
-#      Boolean flag to control GUI invokation.
+#      Boolean flag to control GUI invocation.
 #      If this variable is set and the value is non-zero,
 #      DAWN connected with GEANT4 always pops up GUI menu.
 #      The default is "0", i.e., no GUI.

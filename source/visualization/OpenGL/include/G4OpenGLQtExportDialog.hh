@@ -43,7 +43,7 @@ class QLineEdit;
 
 class QGroupBox;
 
-/** The G4OpenGLQtExportDialog class provide a Dialog displaying differents options
+/** The G4OpenGLQtExportDialog class provide a Dialog displaying different options
     for each file format
 */
 class G4OpenGLQtExportDialog : public QDialog
@@ -73,7 +73,7 @@ class G4OpenGLQtExportDialog : public QDialog
       the original value  */
   int getHeight();
 
-  /** return if vector EPS is checked, if button does'nt exist, return 0 */
+  /** return if vector EPS is checked, if button doesn't exist, return 0 */
   bool getVectorEPS();
 
   public Q_SLOTS:

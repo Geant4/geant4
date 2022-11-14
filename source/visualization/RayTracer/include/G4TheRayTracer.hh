@@ -88,7 +88,7 @@ class G4TheRayTracer
   public: // with description
     virtual void Trace(const G4String& fileName);
     // The main entry point which triggers ray tracing. "fileName" is output
-    // file name, and it must contain extention (e.g. myFigure.jpg). This
+    // file name, and it must contain extension (e.g. myFigure.jpg). This
     // method is available only if Geant4 is at Idle state.
 
   protected:
@@ -97,7 +97,7 @@ class G4TheRayTracer
     void CreateFigureFile(const G4String& fileName);
     // Create figure file after an event loop
     G4bool GenerateColour(G4Event* anEvent);
-    // Calcurate RGB for one trajectory
+    // Calculate RGB for one trajectory
     virtual void StoreUserActions();
     virtual void RestoreUserActions();
     // Store and restore user action classes if defined

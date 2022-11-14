@@ -268,7 +268,7 @@ std::vector<G4String> G4GMocrenMessenger::getHitScorerNames() {
 }
 
 void G4GMocrenMessenger::list() {
-  G4cout << "  Current valuess of gMocren command parameters:" << G4endl;
+  G4cout << "  Current values of gMocren command parameters:" << G4endl;
   //
   G4cout << "    volume name:        " << kgMocrenVolumeName << G4endl;
   //

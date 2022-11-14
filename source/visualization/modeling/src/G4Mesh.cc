@@ -43,7 +43,7 @@
 //    /vis/viewer/set/specialMeshRendering
 //    /vis/viewer/set/specialMeshRenderingOption
 //    /vis/viewer/set/specialMeshVolumes
-// See guidance on the above commmands for more detail.
+// See guidance on the above commands for more detail.
 //
 // Note that if no special mesh volumes are specified,
 // G4PhysicalVolumeModel will test all volumes, and therefore

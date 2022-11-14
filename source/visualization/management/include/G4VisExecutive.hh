@@ -78,7 +78,7 @@
 //     with a verbosity string. e.g:
 //       G4VisManager* visManager = new G4VisExecutive("quiet");
 // (c) You can register your own graphics system like this.
-// (d) Your can intialise like this with C++ code or use /vis/initialize.
+// (d) Your can initialise like this with C++ code or use /vis/initialize.
 //
 // If you need to perform the instantiation and the initialisation in
 // separate files, e.g., to establish the verbosity before

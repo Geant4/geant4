@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// File I/O manager class for writing or reading calcuated dose
+// File I/O manager class for writing or reading calculated dose
 // distribution and some event information
 //
 //
@@ -338,7 +338,7 @@ public:
 
   //----- Dose distribution -----//
 
-  // instanciate a dose distribution data object
+  // instantiate a dose distribution data object
   void newDoseDist();
   // get number of dose distribion data
   int getNumDoseDist();
@@ -364,7 +364,7 @@ public:
   // set the dose distribution 
   void setDoseDist(double * _image, int _num = 0);
   double * getDoseDist(int _z, int _num = 0);
-  // add another dose ditribution map to this map
+  // add another dose distribution map to this map
   bool addDoseDist(std::vector<double *> & _image, int _num = 0);
 
   // get & get center position of calculated dose region
@@ -385,13 +385,13 @@ public:
 protected:
   // check whether dose variable is empty or not
   bool isDoseEmpty();
-  // calcuated scale value to convert dose distribution into image
+  // calculated scale value to convert dose distribution into image
   void calcDoseDistScale();
 
 public:
   //----- RoI -----//
 
-  // instanciate an RoI data object
+  // instantiate an RoI data object
   void newROI();
   // get number of RoI data
   int getNumROI();

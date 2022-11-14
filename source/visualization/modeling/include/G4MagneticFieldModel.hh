@@ -65,7 +65,7 @@ protected:
   // If (field==0), the function should do nothing; returning without error.
 
 private:
-  // Private copy contructor and assignment to forbid use...
+  // Private copy constructor and assignment to forbid use...
   G4MagneticFieldModel(const G4MagneticFieldModel&);
   G4MagneticFieldModel& operator=(const G4MagneticFieldModel&);
 };

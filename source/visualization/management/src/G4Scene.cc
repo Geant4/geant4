@@ -296,7 +296,7 @@ G4bool G4Scene::operator != (const G4Scene& scene) const {
   /* A complete comparison should, perhaps, include a comparison of
      individual models, but it is not easy to implement operator!= for
      all models.  Also, it would be unfeasible to ask users to
-     implement opeerator!= if we ever get round to allowing
+     implement operator!= if we ever get round to allowing
      user-defined models.  Moreover, there is no editing of G4Scene
      objects, apart from changing fRefreshAtEndOfEvent, etc; as far as
      models are concerned, all you can ever do is add them, so a test

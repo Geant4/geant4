@@ -39,10 +39,10 @@ public:
  void setFileName(const char*);
  void setExportImageFormat(unsigned int);
  bool enableFileWriting();
-  // return true if ok, false is an error occured
+  // return true if ok, false if an error occurred
 
  bool disableFileWriting();
-  // return true when OK, false if errror
+  // return true when OK, false if error
 
  bool fileWritingEnabled() const;
  void setLineWidth(int);

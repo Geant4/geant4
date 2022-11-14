@@ -71,7 +71,7 @@ void G4OpenGLXmViewer::ResetView () {
   // reset global parameters
   G4OpenGLViewer::ResetView();
 
-  //reset Xm parameteres
+  //reset Xm parameters
   zoom_high  = fVP.GetZoomFactor() * 10.0;
   zoom_low = fVP.GetZoomFactor() / 10.0;
   rot_sens_limit = 90.;

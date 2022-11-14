@@ -56,7 +56,7 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
     // Indicates that the widget has no background, i.e. when the widget receives paint events, the background is not automatically repainted. Note: Unlike WA_OpaquePaintEvent, newly exposed areas are never filled with the background (e.g., after showing a window for the first time the user can see "through" it until the application processes the paint events). This flag is set or cleared by the widget's author.
   QGLWidget::setAttribute (Qt::WA_NoSystemBackground);
 
-  setFocusPolicy(Qt::StrongFocus); // enable keybord events
+  setFocusPolicy(Qt::StrongFocus); // enable keyboard events
   fHasToRepaint = false;
   fPaintEventLock = false;
   fUpdateGLLock = false;

@@ -70,7 +70,7 @@ public: // With description
 
 private:
 
-  // Private copy constructor and assigment operator - copying and
+  // Private copy constructor and assignment operator - copying and
   // assignment not allowed.  Keeps Coverity happy.
   G4VisModelManager (const G4VisModelManager&);
   G4VisModelManager& operator = (const G4VisModelManager&);

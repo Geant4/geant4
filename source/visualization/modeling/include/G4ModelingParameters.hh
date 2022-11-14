@@ -63,7 +63,7 @@ public: // With description
   };
 
   // enums and nested class for communicating a modification to the vis
-  // attributes for a specfic touchable defined by PVNameCopyNoPath.
+  // attributes for a specific touchable defined by PVNameCopyNoPath.
   enum VisAttributesSignifier {
     VASVisibility,
     VASDaughtersInvisible,

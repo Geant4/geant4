@@ -789,7 +789,7 @@ void G4VtkSceneHandler::AddCompound(const G4Mesh& mesh)
   // Instantiate a temporary G4PhysicalVolumeModel
   G4ModelingParameters tmpMP;
   tmpMP.SetCulling(false);            // This avoids drawing transparent...
-  tmpMP.SetCullingInvisible(false);   // ... or invisble volumes.
+  tmpMP.SetCullingInvisible(false);   // ... or invisible volumes.
   const G4bool useFullExtent = false;  // To avoid calculating the extent
 
   G4PhysicalVolumeModel tmpPVModel(container, G4PhysicalVolumeModel::UNLIMITED,

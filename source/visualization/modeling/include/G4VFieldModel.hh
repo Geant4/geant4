@@ -65,7 +65,7 @@ public: // With description
   virtual void DescribeYourselfTo(G4VGraphicsScene& sceneHandler);
   // The main task of a model is to describe itself to the graphics scene.
   // Note: It is in this function that the extent for drawing the filed must
-  // be calcualted. If fExtentForField is null, pick up the extent from
+  // be calculated. If fExtentForField is null, pick up the extent from
   // the sceneHandler.
 
 protected:
@@ -79,7 +79,7 @@ protected:
 
 private:
 
-  // Private copy contructor and assignment to forbid use...
+  // Private copy constructor and assignment to forbid use...
   G4VFieldModel(const G4VFieldModel&);
   G4VFieldModel& operator=(const G4VFieldModel&);
 

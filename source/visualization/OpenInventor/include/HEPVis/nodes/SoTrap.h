@@ -66,7 +66,7 @@ class SoSFNode;
  * are tapezia, and their centres are not necessarily on a line parallel to
  * the z axis.
  *
- * Note that of the 11 parameters desribed below, only 9 are really
+ * Note that of the 11 parameters described below, only 9 are really
  * independent - a check for planarity is made in the calculation of the
  * equation for each plane. If the planes are not parallel, a call to
  * G4Exception is made.

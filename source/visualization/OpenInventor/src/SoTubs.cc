@@ -330,7 +330,7 @@ void SoTubs::updateChildren() {
     indices[5*4*NPHI +2] = 2*NPHI+3;
     indices[5*4*NPHI +3] = 2*NPHI+2;
     indices[5*4*NPHI +4] = SO_END_FACE_INDEX;
-    // aother odd side
+    // another odd side
     indices[5*4*NPHI +5 +0] = 0;
     indices[5*4*NPHI +5 +1] = NPOINTS-2;
     indices[5*4*NPHI +5 +2] = NPOINTS-1;
@@ -345,7 +345,7 @@ void SoTubs::updateChildren() {
     indices[5*4*NPHI +2] = 2*NPHI+3;
     indices[5*4*NPHI +3] = 2*NPHI+2;
     indices[5*4*NPHI +4] = SO_END_FACE_INDEX;
-    // aother odd side
+    // another odd side
     indices[5*4*NPHI +5 +0] = 0;
     indices[5*4*NPHI +5 +1] = NPOINTS-2;
     indices[5*4*NPHI +5 +2] = NPOINTS-1;
@@ -359,7 +359,7 @@ void SoTubs::updateChildren() {
     indices[5*4*NPHI +2] = SO_END_FACE_INDEX;
     indices[5*4*NPHI +3] = SO_END_FACE_INDEX;
     indices[5*4*NPHI +4] = SO_END_FACE_INDEX;
-    // aother odd side
+    // another odd side
     indices[5*4*NPHI +5 +0] = SO_END_FACE_INDEX;
     indices[5*4*NPHI +5 +1] = SO_END_FACE_INDEX;
     indices[5*4*NPHI +5 +2] = SO_END_FACE_INDEX;

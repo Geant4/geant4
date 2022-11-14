@@ -723,7 +723,7 @@ COMPACT_RTF            = NO
 RTF_HYPERLINKS         = NO
 
 # Load stylesheet definitions from file. Syntax is similar to doxygen's 
-# config file, i.e. a series of assigments. You only have to provide 
+# config file, i.e. a series of assignments. You only have to provide 
 # replacements, missing definitions are set to their default value.
 
 RTF_STYLESHEET_FILE    = 
@@ -908,7 +908,7 @@ EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 
 #---------------------------------------------------------------------------
-# Configuration::addtions related to external references   
+# Configuration::additions related to external references   
 #---------------------------------------------------------------------------
 
 # The TAGFILES option can be used to specify one or more tagfiles. 
@@ -990,7 +990,7 @@ CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
 
 # If the UML_LOOK tag is set to YES doxygen will generate inheritance and 
-# collaboration diagrams in a style similiar to the OMG's Unified Modeling 
+# collaboration diagrams in a style similar to the OMG's Unified Modeling 
 # Language.
 
 UML_LOOK               = NO
@@ -1084,7 +1084,7 @@ GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES
 
 #---------------------------------------------------------------------------
-# Configuration::addtions related to the search engine   
+# Configuration::additions related to the search engine   
 #---------------------------------------------------------------------------
 
 # The SEARCHENGINE tag specifies whether or not a search engine should be 

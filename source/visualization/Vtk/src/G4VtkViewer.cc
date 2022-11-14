@@ -89,7 +89,7 @@ void G4VtkViewer::Initialise()
   _renderWindow->SetPosition(positionX, positionY);
 #ifdef __APPLE__
   // Adjust window size for Apple to make it correspond to OpenGL.
-  // Maybe it's OpenGL that shoud be adjusted.
+  // Maybe it's OpenGL that should be adjusted.
   const G4double pixelFactor = 2.;
 #else
   const G4double pixelFactor = 1.;

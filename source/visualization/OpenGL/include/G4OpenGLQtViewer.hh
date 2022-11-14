@@ -247,10 +247,10 @@ private:
   void clearSceneTreeSelection(QTreeWidgetItem*);
   void clearTreeWidgetElements(QTreeWidgetItem* item);
 
-  // Get the tree wigdet item for POindex if exists
+  // Get the tree widget item for POindex if exists
   QTreeWidgetItem* getTreeWidgetItem(int POindex);
 
-  // Get the old tree wigdet item for POindex if exists
+  // Get the old tree widget item for POindex if exists
   QTreeWidgetItem* getOldTreeWidgetItem(int POindex);
 
 // parse the scene tree and return a string of status that can be saved

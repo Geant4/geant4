@@ -184,7 +184,7 @@ G4bool G4TheMTRayTracer::CreateBitMap()
   // Event loop
   G4int nEvent = nRow*nColumn;
 ////  mrm->BeamOn(nEvent);
-////  Temporary work-around until direct invokation of G4RunManager::BeamOn() works.
+////  Temporary work-around until direct invocation of G4RunManager::BeamOn() works.
   G4String str = "/run/beamOn " + G4UIcommand::ConvertToString(nEvent);
   G4UImanager::GetUIpointer()->ApplyCommand(str);
 

@@ -39,7 +39,7 @@
 //
 // The calculation is quite tricky, since it involves subtracting the
 // mass of that part of the mother that is occupied by each daughter and
-// then adding the mass of the daughter, and so on down the heirarchy.
+// then adding the mass of the daughter, and so on down the hierarchy.
 //
 // Usage for a given G4PhysicalVolumeModel* pvModel:
 //   G4PhysicalVolumeMassScene massScene(pvModel);

@@ -368,7 +368,7 @@ private:
   G4double     fDolly;           // Distance towards current target point.
   G4bool       fLightsMoveWithCamera;
   G4Vector3D   fRelativeLightpointDirection;
-  // i.e., rel. to object or camera accoding to G4bool fLightsMoveWithCamera.
+  // i.e., rel. to object or camera according to G4bool fLightsMoveWithCamera.
   G4Vector3D   fActualLightpointDirection;
   G4VisAttributes fDefaultVisAttributes;
   G4VisAttributes fDefaultTextVisAttributes;

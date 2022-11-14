@@ -54,7 +54,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 {
   fQGLWidgetInitialiseCompleted = false;
 
-  setFocusPolicy(Qt::StrongFocus); // enable keybord events
+  setFocusPolicy(Qt::StrongFocus); // enable keyboard events
   fHasToRepaint = false;
   fPaintEventLock = false;
 
@@ -143,7 +143,7 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 
   // Set the component visible
   
-  // and update it immediatly before wait for SessionStart() (batch mode)
+  // and update it immediately before wait for SessionStart() (batch mode)
 //  QCoreApplication::sendPostedEvents () ;
 
   // Set jpg as default export format for Qt viewer

@@ -61,7 +61,7 @@ public: // with description
   // commands.
 
   virtual void Initialize(G4int nRow, G4int nColumn);
-  // Intialises scanner for window with nRow rows and nColumn columns.
+  // Initialises scanner for window with nRow rows and nColumn columns.
 
   virtual G4bool Coords(G4int& iRow, G4int& iColumn);
   // Supplies coordinate (iRow,iColumn) and returns false when the

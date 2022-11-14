@@ -165,7 +165,7 @@ void G4OpenInventorWinViewer::Initialise() {
                             CW_USEDEFAULT, CW_USEDEFAULT, 
                             width,height,
                             0,menuBar,::GetModuleHandle(0),0);
-    // Retreive window and client sizez :
+    // Retrieve window and client sizez :
     RECT wrect,crect;
     GetWindowRect((HWND)fShell,&wrect);
     GetClientRect((HWND)fShell,&crect);

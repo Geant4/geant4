@@ -30,7 +30,7 @@
 #ifndef G4OPENINVENTORWIN32_HH
 #define G4OPENINVENTORWIN32_HH
 
-// For backward compatibilty.
+// For backward compatibility.
 
 #include "G4OpenInventorWin.hh"
 

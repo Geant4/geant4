@@ -68,7 +68,7 @@ protected:
 
 private:
 
-  // Private copy constructor and assigment operator - copying and
+  // Private copy constructor and assignment operator - copying and
   // assignment not allowed.  Keeps CodeWizard happy.
   G4CallbackModel (const G4CallbackModel&);
   G4CallbackModel& operator = (const G4CallbackModel&);

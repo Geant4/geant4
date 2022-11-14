@@ -105,7 +105,7 @@ inline void G4VisTrajContext::Print(std::ostream& ostr) const
   ostr<<"Name:                       "<<Name()<<G4endl;
   ostr<<"Line colour                 "<<GetLineColour()<<G4endl;
   ostr<<"Draw line ?                 "<<GetDrawLine()<<G4endl;
-  ostr<<"Line visibile ?             "<<GetLineVisible()<<G4endl;
+  ostr<<"Line visible ?              "<<GetLineVisible()<<G4endl;
   ostr<<"Draw auxiliary points ?     "<<GetDrawAuxPts()<<G4endl;
   ostr<<"Auxiliary points type       "<<GetAuxPtsType()<<G4endl;
   ostr<<"Auxiliary points size       "<<GetAuxPtsSize()<<G4endl;

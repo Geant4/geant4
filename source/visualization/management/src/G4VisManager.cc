@@ -1558,7 +1558,7 @@ void G4VisManager::RegisterEndOfRunUserVisAction
 void G4VisManager::SetCurrentScene (G4Scene* pScene) {
   if (pScene != fpScene) {
     // A change of scene.  Therefore reset transients drawn flags.  All
-    // memory of previous transient proceessing thereby erased...
+    // memory of previous transient processing thereby erased...
     ResetTransientsDrawnFlags();
   }
   fpScene = pScene;

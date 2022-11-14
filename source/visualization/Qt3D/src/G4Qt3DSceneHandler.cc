@@ -179,7 +179,7 @@ G4Qt3DQEntity* G4Qt3DSceneHandler::CreateNewNode()
   size_t iDepth = 1;
   while (iDepth < depth) {
     const auto& children = node->children();
-    const G4int nChildren = children.size();  // int size() (Qt covention?)
+    const G4int nChildren = children.size();  // int size() (Qt convention?)
     G4int iChild = 0;
     G4Qt3DQEntity* child = nullptr;
     for (; iChild < nChildren; ++iChild) {
@@ -833,7 +833,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       drawing_style == G4ViewParameters::hlhsr) {
 
     // Put vertices, normals into  QByteArray
-    // Accomodates both vertices and normals - hence 2*
+    // Accommodates both vertices and normals - hence 2*
     QByteArray vertexByteArray;
     const auto vertexBufferByteSize = 2*nVerts*vertexByteSize;
     vertexByteArray.resize(vertexBufferByteSize);

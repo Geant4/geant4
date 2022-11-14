@@ -657,7 +657,7 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
       else detectorTreeKit->setPreview(TRUE);
 
       // Colour, etc., for SoDetectorTreeKit.  Treated differently to
-      // othere SoNodes(?).  Use fpVisAttribs stored away in
+      // other SoNodes(?).  Use fpVisAttribs stored away in
       // PreAddSolid...
       const G4VisAttributes* pApplicableVisAttribs =
 	fpViewer->GetApplicableVisAttributes (fpVisAttribs);
